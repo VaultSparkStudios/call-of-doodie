@@ -90,6 +90,8 @@ const ACHIEVEMENTS = [
   { id: "landlord", name: "Eviction Notice", desc: "Defeat a Landlord", emoji: "🏠", check: (s) => s.landlordKills >= 1, tier: "silver" },
   { id: "crypto", name: "Market Correction", desc: "Defeat 10 Crypto Bros", emoji: "📉", check: (s) => s.cryptoKills >= 10, tier: "bronze" },
   { id: "survive_5m", name: "Patience of a Saint", desc: "Survive 5 minutes", emoji: "⏱️", check: (s) => s.timeSurvived >= 300, tier: "silver" },
+  { id: "guardian_angel", name: "Divine Intervention", desc: "Collect a Guardian Angel power-up", emoji: "😇", check: (s) => s.guardianAngels >= 1, tier: "gold" },
+  { id: "insane_wave5", name: "Certified Masochist", desc: "Reach wave 5 on INSANE difficulty", emoji: "🤡", check: (s) => s.wave >= 5 && s.difficulty === "insane", tier: "legendary" },
 ];
 
 const GRENADE_COOLDOWN = 8000;
@@ -98,6 +100,13 @@ const DASH_SPEED = 18;
 const DASH_DURATION = 8;
 const CRIT_CHANCE = 0.15;
 const CRIT_MULT = 2.0;
+
+const DIFFICULTIES = {
+  easy: { label: "Easy", emoji: "🟢", desc: "Chill mode. Enemies are weaker and slower.", healthMult: 0.7, speedMult: 0.8, spawnMult: 1.3, playerHP: 150, color: "#44CC44" },
+  normal: { label: "Normal", emoji: "🟡", desc: "The standard Call of Doodie experience.", healthMult: 1.0, speedMult: 1.0, spawnMult: 1.0, playerHP: 100, color: "#FFD700" },
+  hard: { label: "Hard", emoji: "🔴", desc: "Enemies hit harder and faster. Git gud.", healthMult: 1.4, speedMult: 1.2, spawnMult: 0.75, playerHP: 80, color: "#FF4444" },
+  insane: { label: "INSANE", emoji: "💀", desc: "You WILL die. Guaranteed. No refunds.", healthMult: 1.8, speedMult: 1.4, spawnMult: 0.5, playerHP: 60, color: "#FF00FF" },
+};
 
 const KILL_MILESTONES = {
   25: "Novice Exterminator",
@@ -112,8 +121,13 @@ const KILL_MILESTONES = {
 };
 
 // ===== STORAGE =====
+const storageKey = "cod-lb-v5";
+function hasWindowStorage() { try { return typeof window.storage !== "undefined" && window.storage && typeof window.storage.get === "function"; } catch { return false; } }
 async function loadLeaderboard() {
-  try { const r = await window.storage.get("cod-lb-v5", true); return r ? JSON.parse(r.value) : []; } catch { return []; }
+  try {
+    if (hasWindowStorage()) { const r = await window.storage.get(storageKey, true); return r ? JSON.parse(r.value) : []; }
+    const raw = localStorage.getItem(storageKey); return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
 }
 async function saveToLeaderboard(entry) {
   try {
@@ -121,7 +135,8 @@ async function saveToLeaderboard(entry) {
     board.push({ ...entry, ts: Date.now() });
     board.sort((a, b) => b.score - a.score);
     const top = board.slice(0, 100);
-    await window.storage.set("cod-lb-v5", JSON.stringify(top), true);
+    if (hasWindowStorage()) { await window.storage.set(storageKey, JSON.stringify(top), true); }
+    else { localStorage.setItem(storageKey, JSON.stringify(top)); }
     return top;
   } catch { return []; }
 }
@@ -174,6 +189,9 @@ export default function CallOfDoodie() {
   const [hoveredTool, setHoveredTool] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
   const [pauseView, setPauseView] = useState("main");
+  const [extraLives, setExtraLives] = useState(0);
+  const [difficulty, setDifficulty] = useState("normal");
+  const [guardianAngelFlash, setGuardianAngelFlash] = useState(false);
 
   const currentWeaponRef = useRef(0);
   const isReloadingRef = useRef(false);
@@ -187,10 +205,14 @@ export default function CallOfDoodie() {
   const startTimeRef = useRef(0);
   const timerRef = useRef(null);
   const pausedRef = useRef(false);
+  const extraLivesRef = useRef(0);
+  const difficultyRef = useRef("normal");
 
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
   useEffect(() => { isReloadingRef.current = isReloading; }, [isReloading]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
+  useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
+  useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 900 || "ontouchstart" in window);
@@ -222,7 +244,7 @@ export default function CallOfDoodie() {
   const GH = () => sizeRef.current.h;
 
   const checkAchievements = useCallback((gs) => {
-    const s = { kills: gs.kills, wave: gs.currentWave, maxCombo: comboRef.current.max, bestStreak: statsRef.current.bestStreak, nukes: statsRef.current.nukes, bossKills: statsRef.current.bossKills, dashes: statsRef.current.dashes, score: gs.score, grenades: statsRef.current.grenades, totalDamage: gs.totalDamage || 0, level: xpRef.current.level, crits: statsRef.current.crits, landlordKills: statsRef.current.landlordKills, cryptoKills: statsRef.current.cryptoKills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) };
+    const s = { kills: gs.kills, wave: gs.currentWave, maxCombo: comboRef.current.max, bestStreak: statsRef.current.bestStreak, nukes: statsRef.current.nukes, bossKills: statsRef.current.bossKills, dashes: statsRef.current.dashes, score: gs.score, grenades: statsRef.current.grenades, totalDamage: gs.totalDamage || 0, level: xpRef.current.level, crits: statsRef.current.crits, landlordKills: statsRef.current.landlordKills, cryptoKills: statsRef.current.cryptoKills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), guardianAngels: statsRef.current.guardianAngels, difficulty: difficultyRef.current };
     ACHIEVEMENTS.forEach(a => {
       if (!achievedRef.current.has(a.id) && a.check(s)) {
         achievedRef.current.add(a.id);
@@ -235,8 +257,9 @@ export default function CallOfDoodie() {
 
   const initGame = useCallback(() => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
+    const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     gsRef.current = {
-      player: { x: w / 2, y: h / 2, angle: 0, health: 100, speed: 4, invincible: 0 },
+      player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
@@ -248,7 +271,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0 };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0 };
     achievedRef.current = new Set();
     startTimeRef.current = Date.now();
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
@@ -275,9 +298,11 @@ export default function CallOfDoodie() {
     else if (side === 2) { x = Math.random() * w; y = h + 30; }
     else { x = -30; y = Math.random() * h; }
     const type = ENEMY_TYPES[ti];
+    const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+    const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult;
     gs.enemies.push({
-      x, y, health: type.health * (1 + wv * 0.12), maxHealth: type.health * (1 + wv * 0.12),
-      speed: type.speed * (1 + wv * 0.05), size: type.size, color: type.color,
+      x, y, health: eHealth, maxHealth: eHealth,
+      speed: type.speed * (1 + wv * 0.05) * diff.speedMult, size: type.size, color: type.color,
       name: type.name, points: type.points, deathQuote: type.deathQuote,
       emoji: type.emoji, typeIndex: ti, wobble: Math.random() * Math.PI * 2, hitFlash: 0,
       ranged: type.ranged || false, projSpeed: type.projSpeed || 0, projRate: type.projRate || 999,
@@ -346,14 +371,16 @@ export default function CallOfDoodie() {
   }, []);
 
   const startGame = () => {
+    const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
     initGame();
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
-    setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(100);
+    setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(diff.playerHP);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
     setBestStreak(0); setTotalDamage(0); setSubmitted(false); setLastWords("");
     setAchievementsUnlocked([]); setAchievementPopup(null); setTimeSurvived(0);
-    setPaused(false); setHoveredTool(null);
+    setPaused(false); setHoveredTool(null); setExtraLives(0); extraLivesRef.current = 0;
+    setGuardianAngelFlash(false);
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
@@ -391,6 +418,32 @@ export default function CallOfDoodie() {
     gs.screenShake = Math.max(gs.screenShake, weaponIdx===1?12:3);
     if (gs.ammoCount <= 0) doReload(weaponIdx);
   }, [doReload]);
+
+  const handlePlayerDeath = useCallback((gs) => {
+    if (extraLivesRef.current > 0) {
+      extraLivesRef.current--;
+      setExtraLives(extraLivesRef.current);
+      const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+      gs.player.health = diff.playerHP;
+      gs.player.invincible = 120;
+      setHealth(diff.playerHP);
+      gs.enemies.forEach(e => { e.health -= 30; e.hitFlash = 10; });
+      gs.enemyBullets = [];
+      gs.screenShake = 20;
+      addText(gs, gs.player.x, gs.player.y - 50, "GUARDIAN ANGEL!", "#FFD700", true);
+      addParticles(gs, gs.player.x, gs.player.y, "#FFD700", 30);
+      addParticles(gs, gs.player.x, gs.player.y, "#FFFFFF", 20);
+      setGuardianAngelFlash(true);
+      setTimeout(() => setGuardianAngelFlash(false), 1500);
+      return false;
+    }
+    setDeaths(dd => dd + 1);
+    setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
+    setTotalDamage(Math.floor(gs.totalDamage)); setBestStreak(statsRef.current.bestStreak);
+    setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
+    return true;
+  }, []);
 
   // ===== GAME LOOP =====
   const gameLoop = useCallback(() => {
@@ -450,7 +503,8 @@ export default function CallOfDoodie() {
     }
 
     gs.spawnTimer++;
-    const spawnRate = Math.max(18, 100 - gs.currentWave * 7);
+    const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+    const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult));
     if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
       gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
     }
@@ -485,13 +539,7 @@ export default function CallOfDoodie() {
           p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y-30, "-" + dmg, "#FF4444");
-          if (p.health <= 0) {
-            setDeaths(dd=>dd+1);
-            setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random()*DEATH_MESSAGES.length)]);
-            setTotalDamage(Math.floor(gs.totalDamage)); setBestStreak(statsRef.current.bestStreak);
-            setTimeSurvived(Math.floor((Date.now()-startTimeRef.current)/1000));
-            setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
-          }
+          if (p.health <= 0) { handlePlayerDeath(gs); }
         }
       });
     }
@@ -554,7 +602,10 @@ export default function CallOfDoodie() {
               gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
               gs.screenShake = 12;
             }
-            if (Math.random() < 0.25) {
+            const isBoss = e.typeIndex === 4 || e.typeIndex === 9;
+            if (isBoss && extraLivesRef.current === 0 && Math.random() < 0.12) {
+              gs.pickups.push({x:e.x,y:e.y,type:"guardian_angel",life:600});
+            } else if (Math.random() < 0.25) {
               const types = ["health","ammo","speed","nuke"];
               const weights = [0.4,0.35,0.2,0.05];
               let roll = Math.random(), cumul = 0, pType = "health";
@@ -590,13 +641,7 @@ export default function CallOfDoodie() {
           p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y-30, "-" + dmg + " HP", "#FF0000");
-          if (p.health <= 0) {
-            setDeaths(dd=>dd+1);
-            setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random()*DEATH_MESSAGES.length)]);
-            setTotalDamage(Math.floor(gs.totalDamage)); setBestStreak(statsRef.current.bestStreak);
-            setTimeSurvived(Math.floor((Date.now()-startTimeRef.current)/1000));
-            setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
-          }
+          if (p.health <= 0) { handlePlayerDeath(gs); }
         }
       }
     });
@@ -605,10 +650,11 @@ export default function CallOfDoodie() {
       pk.life--;
       const d2 = Math.hypot(p.x-pk.x, p.y-pk.y);
       if (d2 < 30) {
-        if (pk.type==="health") { p.health = Math.min(100,p.health+30); setHealth(p.health); addText(gs,pk.x,pk.y,"+30 HP","#00FF00"); }
+        if (pk.type==="health") { const maxHP = p.maxHealth || 100; p.health = Math.min(maxHP,p.health+30); setHealth(p.health); addText(gs,pk.x,pk.y,"+30 HP","#00FF00"); }
         else if (pk.type==="ammo") { gs.ammoCount = WEAPONS[wpnIdx].maxAmmo; setAmmo(gs.ammoCount); addText(gs,pk.x,pk.y,"MAX AMMO","#00BFFF"); }
         else if (pk.type==="speed") { p.speed = Math.min(8,p.speed+0.5); addText(gs,pk.x,pk.y,"SPEED!","#FFFF00"); setTimeout(()=>{if(gsRef.current)gsRef.current.player.speed=Math.max(4,gsRef.current.player.speed-0.5);},5000); }
         else if (pk.type==="nuke") { statsRef.current.nukes++; addText(gs,W/2,H/2,"TACTICAL NUKE!","#FF0000",true); gs.enemies.forEach(en=>{en.health=-999;gs.score+=en.points;addParticles(gs,en.x,en.y,en.color,10);}); gs.enemies=[]; gs.screenShake=20; setScore(gs.score); checkAchievements(gs); }
+        else if (pk.type==="guardian_angel") { extraLivesRef.current = 1; setExtraLives(1); statsRef.current.guardianAngels++; addText(gs,pk.x,pk.y-20,"GUARDIAN ANGEL!","#FFD700",true); addText(gs,pk.x,pk.y+10,"+1 EXTRA LIFE","#FFFFFF"); addParticles(gs,pk.x,pk.y,"#FFD700",25); addParticles(gs,pk.x,pk.y,"#FFFFFF",15); gs.screenShake=8; checkAchievements(gs); }
         addXp(50); return false;
       }
       return pk.life > 0;
@@ -642,10 +688,11 @@ export default function CallOfDoodie() {
       const bob = Math.sin(Date.now()/200+pk.x)*3;
       const ps = 1+Math.sin(Date.now()/300)*0.15;
       ctx.save(); ctx.translate(pk.x,pk.y+bob); ctx.scale(ps,ps);
-      const em = pk.type==="health"?"\uD83D\uDC8A":pk.type==="ammo"?"\uD83D\uDCE6":pk.type==="speed"?"\u26A1":"\u2622\uFE0F";
-      ctx.font="22px serif"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(em,0,0);
+      const em = pk.type==="health"?"\uD83D\uDC8A":pk.type==="ammo"?"\uD83D\uDCE6":pk.type==="speed"?"\u26A1":pk.type==="guardian_angel"?"\uD83D\uDE07":"\u2622\uFE0F";
+      ctx.font=pk.type==="guardian_angel"?"28px serif":"22px serif"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(em,0,0);
       ctx.globalAlpha=0.15;
-      ctx.fillStyle=pk.type==="health"?"#0F0":pk.type==="ammo"?"#0BF":pk.type==="speed"?"#FF0":"#F00";
+      ctx.fillStyle=pk.type==="health"?"#0F0":pk.type==="ammo"?"#0BF":pk.type==="speed"?"#FF0":pk.type==="guardian_angel"?"#FFD700":"#F00";
+      if(pk.type==="guardian_angel"){ctx.globalAlpha=0.25+Math.sin(Date.now()/200)*0.1;}
       ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; ctx.restore();
     });
 
@@ -757,7 +804,7 @@ export default function CallOfDoodie() {
 
     ctx.restore();
     frameRef.current = requestAnimationFrame(gameLoop);
-  }, [shoot, spawnEnemy, doReload, isMobile, checkAchievements, tip]);
+  }, [shoot, spawnEnemy, doReload, isMobile, checkAchievements, tip, handlePlayerDeath]);
 
   useEffect(() => {
     if (screen !== "game") { if (frameRef.current) cancelAnimationFrame(frameRef.current); return; }
@@ -860,7 +907,7 @@ export default function CallOfDoodie() {
       name: username, score, kills, wave, lastWords: lastWords.trim() || "...",
       rank: RANK_NAMES[Math.min(Math.floor(kills/10), RANK_NAMES.length-1)],
       bestStreak, totalDamage, level, time: fmtTime(timeSurvived),
-      achievements: achievementsUnlocked.length,
+      achievements: achievementsUnlocked.length, difficulty,
     };
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board); setSubmitted(true);
@@ -1017,6 +1064,7 @@ export default function CallOfDoodie() {
             <div>🔥 <strong style={{color:"#FF6B35"}}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
             <div>💥 <strong style={{color:"#FF6B35"}}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
             <div>💊 <strong style={{color:"#FF6B35"}}>Pickups:</strong> Enemies drop health, ammo, speed, or nukes</div>
+            <div>😇 <strong style={{color:"#FF6B35"}}>Guardian Angel:</strong> Super rare boss drop — grants 1 extra life!</div>
             <div>⚠️ <strong style={{color:"#FF6B35"}}>Ranged Foes:</strong> Glowing ring enemies shoot at you!</div>
             <div>💨 <strong style={{color:"#FF6B35"}}>Dash:</strong> Brief invincibility to dodge through danger</div>
             <div>⬆ <strong style={{color:"#FF6B35"}}>XP & Levels:</strong> Level up from kills to move faster</div>
@@ -1134,6 +1182,26 @@ export default function CallOfDoodie() {
               </div>
             ))}
           </div>
+          <div style={{...card,margin:"0 0 12px",textAlign:"left"}}>
+            <div style={{fontSize:12,color:"#DDD",marginBottom:8,letterSpacing:2,textAlign:"center",fontWeight:700}}>DIFFICULTY</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+              {Object.entries(DIFFICULTIES).map(([key,d]) => (
+                <button key={key} onClick={()=>setDifficulty(key)} style={{
+                  padding:"10px 8px",borderRadius:8,cursor:"pointer",textAlign:"left",
+                  fontFamily:"'Courier New',monospace",
+                  background:difficulty===key?"rgba(255,255,255,0.12)":"rgba(255,255,255,0.03)",
+                  border:difficulty===key?`2px solid ${d.color}`:"1px solid rgba(255,255,255,0.1)",
+                  color:"#FFF",transition:"all 0.15s",
+                }}>
+                  <div style={{fontSize:14,fontWeight:900,color:d.color}}>{d.emoji} {d.label}</div>
+                  <div style={{fontSize:10,color:"#CCC",marginTop:2}}>{d.desc}</div>
+                  <div style={{fontSize:9,color:"#999",marginTop:3}}>
+                    HP: {d.playerHP} · Enemy HP: {d.healthMult}x · Speed: {d.speedMult}x
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
           <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap",marginBottom:14}}>
             <button onClick={startGame} style={{...btnP,minWidth:150}}>DEPLOY</button>
             <button onClick={()=>{refreshLeaderboard();setShowLeaderboard(true);}} style={{...btnS,minWidth:150}}>LEADERBOARD</button>
@@ -1160,7 +1228,7 @@ export default function CallOfDoodie() {
             )}
           </div>
           <div style={{fontSize:12,color:"#DDD",marginTop:10,lineHeight:1.7,padding:"0 8px"}}>
-            Combos, Killstreaks, XP and Levels, Dash, Grenades, Radar, Nukes, Achievements
+            Combos, Killstreaks, XP & Levels, Dash, Grenades, Radar, Nukes, Guardian Angel, Achievements
           </div>
         </div>
       </div>
@@ -1175,7 +1243,10 @@ export default function CallOfDoodie() {
         <div style={{textAlign:"center",maxWidth:460,width:"100%"}}>
           <div style={{fontSize:48}}>💀</div>
           <h2 style={{fontSize:"clamp(24px,7vw,38px)",color:"#FF2222",margin:"4px 0",letterSpacing:3}}>YOU DIED</h2>
-          <p style={{color:"#FF6666",fontSize:14,fontStyle:"italic",margin:"4px 0 16px"}}>"{deathMessage}"</p>
+          <p style={{color:"#FF6666",fontSize:14,fontStyle:"italic",margin:"4px 0 8px"}}>"{deathMessage}"</p>
+          <div style={{fontSize:11,color:(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).color,marginBottom:12,fontWeight:700}}>
+            {(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).emoji} {(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).label.toUpperCase()} MODE
+          </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:12}}>
             {[
               [score.toLocaleString(),"SCORE","#FFD700"],
@@ -1226,7 +1297,7 @@ export default function CallOfDoodie() {
             </div>
           )}
           <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
-            <button onClick={respawn} style={{...btnP,minWidth:110,fontSize:15}}>RESPAWN</button>
+            <button onClick={startGame} style={{...btnP,minWidth:110,fontSize:15}}>PLAY AGAIN</button>
             <button onClick={()=>{refreshLeaderboard();setShowLeaderboard(true);}} style={{...btnS,minWidth:130,fontSize:15}}>LEADERBOARD</button>
             <button onClick={()=>setScreen("menu")} style={{...btnS,minWidth:110,fontSize:15}}>RAGE QUIT</button>
           </div>
@@ -1260,6 +1331,7 @@ export default function CallOfDoodie() {
             {wave>=15?"☠️ EXTREME":wave>=10?"🔥 HARD":wave>=5?"⚠️ MEDIUM":"✅ EASY"}
           </span>
           <span style={{color:"#CCC"}}>{fmtTime(timeSurvived)}</span>
+          {difficulty !== "normal" && <span style={{color:(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).color,fontSize:9}}>{(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).emoji}</span>}
         </div>
         <div style={{position:"absolute",top:8,right:56}}>
           <div style={{fontSize:10,color:"#CCC",textAlign:"right"}}>SCORE</div>
@@ -1289,10 +1361,14 @@ export default function CallOfDoodie() {
           ))}
         </div>
         <div style={{position:"absolute",bottom:8,left:12,width:isMobile?100:180}}>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#DDD",marginBottom:2}}><span>HP</span><span>{health}</span></div>
-          <div style={{background:"rgba(255,255,255,0.15)",borderRadius:3,height:6,overflow:"hidden"}}>
-            <div style={{width:health+"%",height:"100%",borderRadius:3,background:health>60?"#0F0":health>30?"#FA0":"#F00",transition:"width 0.2s"}} />
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"#DDD",marginBottom:2}}>
+            <span>HP{extraLives > 0 ? " 😇" : ""}</span>
+            <span>{health}/{(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).playerHP}</span>
           </div>
+          <div style={{background:"rgba(255,255,255,0.15)",borderRadius:3,height:6,overflow:"hidden"}}>
+            <div style={{width:Math.min(100, (health/(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).playerHP)*100)+"%",height:"100%",borderRadius:3,background:health>60?"#0F0":health>30?"#FA0":"#F00",transition:"width 0.2s"}} />
+          </div>
+          {extraLives > 0 && <div style={{fontSize:9,color:"#FFD700",marginTop:2}}>Guardian Angel Active</div>}
         </div>
         <div style={{position:"absolute",bottom:8,right:56,textAlign:"right"}}>
           <div style={{fontSize:11,color:weapon.color,marginBottom:1,fontWeight:600}}>{weapon.emoji} {weapon.name}</div>
@@ -1303,6 +1379,7 @@ export default function CallOfDoodie() {
           {isReloading && <div style={{fontSize:11,color:"#FFD700",animation:"blink 0.5s infinite"}}>RELOADING...</div>}
         </div>
         {health<30 && <div style={{position:"absolute",inset:0,boxShadow:"inset 0 0 "+(100-health*2)+"px rgba(255,0,0,"+(30-health)/60+")",pointerEvents:"none"}} />}
+        {guardianAngelFlash && <div style={{position:"absolute",inset:0,background:"radial-gradient(circle,rgba(255,215,0,0.3) 0%,transparent 70%)",pointerEvents:"none",animation:"blink 0.5s infinite"}} />}
       </div>
 
       {isMobile && (
