@@ -510,7 +510,34 @@ export default function CallOfDoodie() {
     }
     if (gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave) {
       gs.currentWave++; gs.enemiesThisWave = 0;
-      gs.maxEnemiesThisWave = 5 + gs.currentWave * 3;
+      gs.bossAlive = false;
+      const isBoss = gs.currentWave % 5 === 0;
+      gs.isBossWave = isBoss;
+      setIsBossWave(isBoss);
+      if (isBoss) {
+        gs.maxEnemiesThisWave = 1;
+        const bIdx = Math.min(Math.floor(gs.currentWave / 5) - 1, BOSS_WAVE_TYPES.length - 1);
+        const boss = BOSS_WAVE_TYPES[bIdx];
+        const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+        const bHealth = boss.health * (1 + gs.currentWave * 0.1) * diff.healthMult;
+        const side = Math.floor(Math.random() * 4);
+        let bx, by;
+        if (side === 0) { bx = W/2; by = -50; } else if (side === 1) { bx = W+50; by = H/2; } else if (side === 2) { bx = W/2; by = H+50; } else { bx = -50; by = H/2; }
+        gs.enemies.push({
+          x: bx, y: by, health: bHealth, maxHealth: bHealth,
+          speed: boss.speed * diff.speedMult, size: boss.size, color: boss.color,
+          name: boss.name, points: boss.points, deathQuote: boss.deathQuote,
+          emoji: boss.emoji, typeIndex: 99, wobble: 0, hitFlash: 0,
+          ranged: true, projSpeed: boss.projSpeed, projRate: boss.projRate,
+          shootTimer: 0, isBoss: true, special: boss.special, specialTimer: 0, shieldActive: false, shieldTimer: 0, shieldCooldown: 0,
+        });
+        gs.enemiesThisWave = 1; gs.bossAlive = true;
+        addText(gs, W/2, H/2-30, "BOSS WAVE!", "#FF0000", true);
+        addText(gs, W/2, H/2, boss.emoji + " " + boss.name.toUpperCase(), boss.color, true);
+        gs.screenShake = 15;
+      } else {
+        gs.maxEnemiesThisWave = 5 + gs.currentWave * 3;
+      }
       setWave(gs.currentWave);
       addText(gs, W/2, H/2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
       const waveBonus = gs.currentWave * 100;
@@ -553,7 +580,7 @@ export default function CallOfDoodie() {
         gs.screenShake = 15;
         gs.enemies.forEach(e => {
           const d = Math.hypot(e.x-g.x, e.y-g.y);
-          if (d < 130) { const dmg = 70*(1-d/130); e.health -= dmg; e.hitFlash = 10; gs.totalDamage += dmg; }
+          if (d < 130) { const rawDmg = 70*(1-d/130); const gShieldMult = (e.isBoss && e.shieldActive) ? 0.25 : 1; const dmg = rawDmg * gShieldMult; e.health -= dmg; e.hitFlash = 10; gs.totalDamage += dmg; }
         });
         return false;
       }
@@ -566,12 +593,15 @@ export default function CallOfDoodie() {
         if (d < e.size/2 + b.size) {
           const comboMult = 1 + comboRef.current.count * 0.1;
           const isCrit = Math.random() < CRIT_CHANCE;
-          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1);
+          const shieldMult = (e.isBoss && e.shieldActive) ? 0.25 : 1;
+          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1) * shieldMult;
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; b.life = 0; gs.totalDamage += dmg;
           if (isCrit) statsRef.current.crits++;
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
-          addText(gs, e.x+(Math.random()-0.5)*20, e.y-e.size/2-Math.random()*10, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random()*HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
+          const hitText = shieldMult < 1 ? "🛡 SHIELDED!" : isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random()*HITMARKERS.length)];
+          const hitColor = shieldMult < 1 ? "#00BFFF" : isCrit ? "#FFD700" : "#FFF";
+          addText(gs, e.x+(Math.random()-0.5)*20, e.y-e.size/2-Math.random()*10, hitText, hitColor);
           if (e.health <= 0) {
             comboRef.current.count++; comboRef.current.timer = 120;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
@@ -632,6 +662,17 @@ export default function CallOfDoodie() {
           e.shootTimer = 0;
           const pa = Math.atan2(p.y-e.y, p.x-e.x);
           gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(pa)*e.projSpeed, vy: Math.sin(pa)*e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
+        }
+        if (e.isBoss && (e.special === "shield" || e.special === "all")) {
+          e.shieldCooldown = (e.shieldCooldown||0) + 1;
+          if (e.shieldActive) {
+            e.shieldTimer = (e.shieldTimer||0) - 1;
+            if (e.shieldTimer <= 0) { e.shieldActive = false; e.shieldCooldown = 0; addText(gs, e.x, e.y - e.size/2 - 20, "SHIELD DOWN!", "#FF4444"); }
+          } else if (e.shieldCooldown >= 360) {
+            e.shieldActive = true; e.shieldTimer = 180; e.shieldCooldown = 0;
+            addText(gs, e.x, e.y - e.size/2 - 20, "SHIELD UP!", "#00BFFF");
+            addParticles(gs, e.x, e.y, "#00BFFF", 15);
+          }
         }
       }
       if (dashRef.current.active <= 0) {
@@ -715,7 +756,14 @@ export default function CallOfDoodie() {
       ctx.fillStyle = e.hitFlash>0?"#FFF":e.color;
       ctx.beginPath(); ctx.arc(0,0,e.size/2,0,Math.PI*2); ctx.fill();
       ctx.strokeStyle="rgba(0,0,0,0.4)"; ctx.lineWidth=2; ctx.stroke();
-      if (e.ranged) { ctx.strokeStyle = "rgba(255,100,100,"+(0.3+Math.sin(Date.now()/300)*0.2)+")"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,e.size/2+4,0,Math.PI*2); ctx.stroke(); }
+      if (e.isBoss) {
+        ctx.strokeStyle = e.color+"88"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,0,e.size/2+6,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle = "rgba(255,255,255,"+(0.15+Math.sin(Date.now()/200)*0.1)+")"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,e.size/2+10,0,Math.PI*2); ctx.stroke();
+        if (e.shieldActive) {
+          ctx.strokeStyle = "rgba(0,191,255,"+(0.5+Math.sin(Date.now()/150)*0.3)+")"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,0,e.size/2+14,0,Math.PI*2); ctx.stroke();
+          ctx.fillStyle = "rgba(0,191,255,"+(0.08+Math.sin(Date.now()/150)*0.05)+")"; ctx.beginPath(); ctx.arc(0,0,e.size/2+14,0,Math.PI*2); ctx.fill();
+        }
+      } else if (e.ranged) { ctx.strokeStyle = "rgba(255,100,100,"+(0.3+Math.sin(Date.now()/300)*0.2)+")"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,e.size/2+4,0,Math.PI*2); ctx.stroke(); }
       ctx.font=(e.size*0.55)+"px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
       ctx.fillText(e.emoji,0,-2);
       if (e.health<e.maxHealth) {
