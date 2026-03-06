@@ -245,6 +245,8 @@ export default function CallOfDoodie() {
   const [weaponUpgrades, setWeaponUpgrades] = useState({ ...defaultUpgrades });
   const [menuView, setMenuView] = useState("main");
   const [isBossWave, setIsBossWave] = useState(false);
+  const [showArmory, setShowArmory] = useState(false);
+  const [showCareer, setShowCareer] = useState(false);
 
   const currentWeaponRef = useRef(0);
   const isReloadingRef = useRef(false);
@@ -1474,10 +1476,6 @@ export default function CallOfDoodie() {
       </div>
     );
   };
-
-  // ======== MENU PANELS ========
-  const [showArmory, setShowArmory] = useState(false);
-  const [showCareer, setShowCareer] = useState(false);
 
   // ======== MENU ========
   if (screen === "menu") {
