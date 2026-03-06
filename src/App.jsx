@@ -141,6 +141,54 @@ async function saveToLeaderboard(entry) {
   } catch { return []; }
 }
 
+// ===== CAREER STATS STORAGE =====
+const careerKey = "cod-career-v1";
+const upgradesKey = "cod-upgrades-v1";
+const defaultCareer = { gamesPlayed: 0, totalKills: 0, totalDeaths: 0, totalScore: 0, bestScore: 0, highestWave: 0, totalTimePlayed: 0, rageQuits: 0, totalDamageDealt: 0, bossesDefeated: 0, nukesCollected: 0, guardianAngelsUsed: 0, achievementCounts: {}, prestigePoints: 0 };
+async function loadCareerStats() {
+  try {
+    if (hasWindowStorage()) { const r = await window.storage.get(careerKey, true); return r ? { ...defaultCareer, ...JSON.parse(r.value) } : { ...defaultCareer }; }
+    const raw = localStorage.getItem(careerKey); return raw ? { ...defaultCareer, ...JSON.parse(raw) } : { ...defaultCareer };
+  } catch { return { ...defaultCareer }; }
+}
+async function saveCareerStats(stats) {
+  try {
+    const json = JSON.stringify(stats);
+    if (hasWindowStorage()) { await window.storage.set(careerKey, json, true); }
+    else { localStorage.setItem(careerKey, json); }
+  } catch {}
+}
+const defaultUpgrades = { damage: [0,0,0,0], fireRate: [0,0,0,0], ammo: [0,0,0,0] };
+async function loadUpgrades() {
+  try {
+    if (hasWindowStorage()) { const r = await window.storage.get(upgradesKey, true); return r ? { ...defaultUpgrades, ...JSON.parse(r.value) } : { ...defaultUpgrades }; }
+    const raw = localStorage.getItem(upgradesKey); return raw ? { ...defaultUpgrades, ...JSON.parse(raw) } : { ...defaultUpgrades };
+  } catch { return { ...defaultUpgrades }; }
+}
+async function saveUpgrades(upgrades) {
+  try {
+    const json = JSON.stringify(upgrades);
+    if (hasWindowStorage()) { await window.storage.set(upgradesKey, json, true); }
+    else { localStorage.setItem(upgradesKey, json); }
+  } catch {}
+}
+const UPGRADE_COSTS = { damage: [500, 1500, 4000, 10000, 25000], fireRate: [800, 2000, 5000, 12000, 30000], ammo: [300, 1000, 3000, 8000, 20000] };
+const UPGRADE_MAX = 5;
+const UPGRADE_LABELS = { damage: { name: "Damage", emoji: "💥", desc: "+15% per level" }, fireRate: { name: "Fire Rate", emoji: "⚡", desc: "+10% per level" }, ammo: { name: "Ammo Capacity", emoji: "📦", desc: "+20% per level" } };
+function getUpgradedWeapon(wpnIdx, upgrades) {
+  const w = WEAPONS[wpnIdx];
+  const dLvl = upgrades.damage[wpnIdx] || 0, fLvl = upgrades.fireRate[wpnIdx] || 0, aLvl = upgrades.ammo[wpnIdx] || 0;
+  return { ...w, damage: Math.round(w.damage * (1 + dLvl * 0.15)), fireRate: Math.max(20, Math.round(w.fireRate * (1 - fLvl * 0.10))), ammo: Math.round(w.ammo * (1 + aLvl * 0.20)), maxAmmo: Math.round(w.maxAmmo * (1 + aLvl * 0.20)) };
+}
+
+// ===== BOSS WAVES =====
+const BOSS_WAVE_TYPES = [
+  { name: "Giga Karen", emoji: "👹", health: 800, speed: 0.5, size: 85, color: "#FF1493", points: 5000, deathQuote: "I'LL HAVE YOUR JOB!", ranged: true, projSpeed: 6, projRate: 50, special: "multi_shot" },
+  { name: "Regional Manager", emoji: "👔", health: 1200, speed: 0.35, size: 90, color: "#8B0000", points: 8000, deathQuote: "This wasn't in my KPIs...", ranged: true, projSpeed: 5, projRate: 70, special: "summon" },
+  { name: "HOA Overlord", emoji: "🏛️", health: 2000, speed: 0.3, size: 100, color: "#4B0082", points: 12000, deathQuote: "The bylaws... were wrong?!", ranged: true, projSpeed: 7, projRate: 40, special: "shield" },
+  { name: "Final Form Karen", emoji: "☠️", health: 3000, speed: 0.4, size: 110, color: "#FF0000", points: 20000, deathQuote: "I AM... the manager...", ranged: true, projSpeed: 8, projRate: 30, special: "all" },
+];
+
 // ===== COMPONENT =====
 export default function CallOfDoodie() {
   const canvasRef = useRef(null);
@@ -167,6 +215,7 @@ export default function CallOfDoodie() {
   const [deathMessage, setDeathMessage] = useState("");
   const [isReloading, setIsReloading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const [leaderboard, setLeaderboard] = useState([]);
   const [lastWords, setLastWords] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -192,6 +241,10 @@ export default function CallOfDoodie() {
   const [extraLives, setExtraLives] = useState(0);
   const [difficulty, setDifficulty] = useState("normal");
   const [guardianAngelFlash, setGuardianAngelFlash] = useState(false);
+  const [careerStats, setCareerStats] = useState({ ...defaultCareer });
+  const [weaponUpgrades, setWeaponUpgrades] = useState({ ...defaultUpgrades });
+  const [menuView, setMenuView] = useState("main");
+  const [isBossWave, setIsBossWave] = useState(false);
 
   const currentWeaponRef = useRef(0);
   const isReloadingRef = useRef(false);
@@ -207,15 +260,32 @@ export default function CallOfDoodie() {
   const pausedRef = useRef(false);
   const extraLivesRef = useRef(0);
   const difficultyRef = useRef("normal");
+  const weaponUpgradesRef = useRef({ ...defaultUpgrades });
+  const careerRef = useRef({ ...defaultCareer });
+  const gameEndedRef = useRef(false);
 
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
   useEffect(() => { isReloadingRef.current = isReloading; }, [isReloading]);
   useEffect(() => { pausedRef.current = paused; }, [paused]);
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+  useEffect(() => { weaponUpgradesRef.current = weaponUpgrades; }, [weaponUpgrades]);
+  useEffect(() => { careerRef.current = careerStats; }, [careerStats]);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 900 || "ontouchstart" in window);
+    (async () => {
+      const c = await loadCareerStats(); setCareerStats(c); careerRef.current = c;
+      const u = await loadUpgrades(); setWeaponUpgrades(u); weaponUpgradesRef.current = u;
+    })();
+  }, []);
+
+  useEffect(() => {
+    const check = () => {
+      const w = window.innerWidth;
+      const touch = "ontouchstart" in window;
+      setIsMobile(w <= 600 || (touch && w <= 900));
+      setIsTablet(w > 600 && w <= 1024);
+    };
     check(); window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
@@ -258,13 +328,15 @@ export default function CallOfDoodie() {
   const initGame = useCallback(() => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+    const wpn0 = getUpgradedWeapon(0, weaponUpgradesRef.current);
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
-      floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
+      floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: wpn0.ammo,
       damageFlash: 0, killFlash: 0, totalDamage: 0, trail: [],
+      isBossWave: false, bossAlive: false,
     };
     comboRef.current = { count: 0, timer: 0, max: 0 };
     killFeedRef.current = [];
@@ -373,14 +445,15 @@ export default function CallOfDoodie() {
   const startGame = () => {
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
     initGame();
+    const wpn0 = getUpgradedWeapon(0, weaponUpgradesRef.current);
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
-    setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(diff.playerHP);
+    setCurrentWeapon(0); setAmmo(wpn0.ammo); setHealth(diff.playerHP); setIsBossWave(false);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
     setBestStreak(0); setTotalDamage(0); setSubmitted(false); setLastWords("");
     setAchievementsUnlocked([]); setAchievementPopup(null); setTimeSurvived(0);
     setPaused(false); setHoveredTool(null); setExtraLives(0); extraLivesRef.current = 0;
-    setGuardianAngelFlash(false);
+    setGuardianAngelFlash(false); gameEndedRef.current = false;
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
@@ -395,15 +468,16 @@ export default function CallOfDoodie() {
   const doReload = useCallback((wpnIdx) => {
     if (isReloadingRef.current || pausedRef.current) return;
     setIsReloading(true); isReloadingRef.current = true;
+    const uw = getUpgradedWeapon(wpnIdx, weaponUpgradesRef.current);
     setTimeout(() => {
-      if (gsRef.current) { gsRef.current.ammoCount = WEAPONS[wpnIdx].maxAmmo; setAmmo(WEAPONS[wpnIdx].maxAmmo); }
+      if (gsRef.current) { gsRef.current.ammoCount = uw.maxAmmo; setAmmo(uw.maxAmmo); }
       setIsReloading(false); isReloadingRef.current = false;
-    }, WEAPONS[wpnIdx].reloadTime);
+    }, uw.reloadTime);
   }, []);
 
   const shoot = useCallback((gs, weaponIdx, angle) => {
     if (pausedRef.current) return;
-    const weapon = WEAPONS[weaponIdx];
+    const weapon = getUpgradedWeapon(weaponIdx, weaponUpgradesRef.current);
     const now = Date.now();
     if (now - lastShotRef.current < weapon.fireRate || gs.ammoCount <= 0 || isReloadingRef.current) return;
     lastShotRef.current = now; gs.ammoCount--; setAmmo(gs.ammoCount);
@@ -418,6 +492,31 @@ export default function CallOfDoodie() {
     gs.screenShake = Math.max(gs.screenShake, weaponIdx===1?12:3);
     if (gs.ammoCount <= 0) doReload(weaponIdx);
   }, [doReload]);
+
+  const updateCareerOnGameEnd = useCallback(async (gs, wasRageQuit = false) => {
+    if (gameEndedRef.current) return;
+    gameEndedRef.current = true;
+    const c = { ...careerRef.current };
+    c.gamesPlayed++;
+    c.totalKills += gs.kills;
+    c.totalDeaths++;
+    c.totalScore += gs.score;
+    if (gs.score > c.bestScore) c.bestScore = gs.score;
+    if (gs.currentWave > c.highestWave) c.highestWave = gs.currentWave;
+    c.totalTimePlayed += Math.floor((Date.now() - startTimeRef.current) / 1000);
+    c.totalDamageDealt += Math.floor(gs.totalDamage);
+    c.bossesDefeated += statsRef.current.bossKills;
+    c.nukesCollected += statsRef.current.nukes;
+    c.guardianAngelsUsed += statsRef.current.guardianAngels;
+    if (wasRageQuit) c.rageQuits++;
+    const earnedPP = Math.floor(gs.score / 10);
+    c.prestigePoints += earnedPP;
+    const counts = c.achievementCounts || {};
+    achievedRef.current.forEach(id => { counts[id] = (counts[id] || 0) + 1; });
+    c.achievementCounts = counts;
+    setCareerStats(c); careerRef.current = c;
+    await saveCareerStats(c);
+  }, []);
 
   const handlePlayerDeath = useCallback((gs) => {
     if (extraLivesRef.current > 0) {
@@ -441,9 +540,10 @@ export default function CallOfDoodie() {
     setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
     setTotalDamage(Math.floor(gs.totalDamage)); setBestStreak(statsRef.current.bestStreak);
     setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    updateCareerOnGameEnd(gs, false);
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
-  }, []);
+  }, [updateCareerOnGameEnd]);
 
   // ===== GAME LOOP =====
   const gameLoop = useCallback(() => {
@@ -539,10 +639,10 @@ export default function CallOfDoodie() {
         gs.maxEnemiesThisWave = 5 + gs.currentWave * 3;
       }
       setWave(gs.currentWave);
-      addText(gs, W/2, H/2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
-      const waveBonus = gs.currentWave * 100;
+      addText(gs, W/2, H/2+35, "WAVE " + gs.currentWave + (isBoss?" - BOSS":""), "#FFD700", true);
+      const waveBonus = isBoss ? gs.currentWave * 250 : gs.currentWave * 100;
       gs.score += waveBonus; setScore(gs.score);
-      addText(gs, W/2, H/2+30, "+" + waveBonus + " WAVE BONUS", "#00FF88");
+      addText(gs, W/2, H/2+60, "+" + waveBonus + " WAVE BONUS", "#00FF88");
       setTip(TIPS[Math.floor(Math.random()*TIPS.length)]);
     }
 
@@ -609,7 +709,7 @@ export default function CallOfDoodie() {
             const pts = Math.floor(e.points * comboMult);
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
-            if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
+            if (e.typeIndex === 4 || e.typeIndex === 9 || e.isBoss) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
@@ -632,8 +732,8 @@ export default function CallOfDoodie() {
               gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
               gs.screenShake = 12;
             }
-            const isBoss = e.typeIndex === 4 || e.typeIndex === 9;
-            if (isBoss && extraLivesRef.current === 0 && Math.random() < 0.12) {
+            const isABoss = e.typeIndex === 4 || e.typeIndex === 9 || e.isBoss;
+            if (isABoss && extraLivesRef.current === 0 && Math.random() < (e.isBoss ? 0.35 : 0.12)) {
               gs.pickups.push({x:e.x,y:e.y,type:"guardian_angel",life:600});
             } else if (Math.random() < 0.25) {
               const types = ["health","ammo","speed","nuke"];
@@ -661,17 +761,30 @@ export default function CallOfDoodie() {
         if (e.shootTimer >= e.projRate) {
           e.shootTimer = 0;
           const pa = Math.atan2(p.y-e.y, p.x-e.x);
-          gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(pa)*e.projSpeed, vy: Math.sin(pa)*e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
+          if (e.isBoss && (e.special === "multi_shot" || e.special === "all")) {
+            for (let si = -2; si <= 2; si++) {
+              const sa = pa + si * 0.25;
+              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(sa)*e.projSpeed, vy: Math.sin(sa)*e.projSpeed, life: 90, size: 6, color: e.color, damage: 12 });
+            }
+          } else {
+            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(pa)*e.projSpeed, vy: Math.sin(pa)*e.projSpeed, life: 90, size: e.isBoss?6:4, color: e.color, damage: e.isBoss ? 15 : 6 + e.typeIndex * 2 });
+          }
+        }
+        if (e.isBoss && (e.special === "summon" || e.special === "all")) {
+          e.specialTimer = (e.specialTimer||0) + 1;
+          if (e.specialTimer >= 300 && gs.enemies.filter(en=>!en.isBoss).length < 6) {
+            e.specialTimer = 0;
+            spawnEnemy(gs);
+            addText(gs, e.x, e.y - e.size/2 - 20, "SUMMON!", e.color);
+          }
         }
         if (e.isBoss && (e.special === "shield" || e.special === "all")) {
-          e.shieldCooldown = (e.shieldCooldown||0) + 1;
           if (e.shieldActive) {
-            e.shieldTimer = (e.shieldTimer||0) - 1;
-            if (e.shieldTimer <= 0) { e.shieldActive = false; e.shieldCooldown = 0; addText(gs, e.x, e.y - e.size/2 - 20, "SHIELD DOWN!", "#FF4444"); }
-          } else if (e.shieldCooldown >= 360) {
-            e.shieldActive = true; e.shieldTimer = 180; e.shieldCooldown = 0;
-            addText(gs, e.x, e.y - e.size/2 - 20, "SHIELD UP!", "#00BFFF");
-            addParticles(gs, e.x, e.y, "#00BFFF", 15);
+            e.shieldTimer = (e.shieldTimer||0) + 1;
+            if (e.shieldTimer >= 180) { e.shieldActive = false; e.shieldTimer = 0; e.shieldCooldown = 0; }
+          } else {
+            e.shieldCooldown = (e.shieldCooldown||0) + 1;
+            if (e.shieldCooldown >= 360) { e.shieldActive = true; e.shieldTimer = 0; e.shieldCooldown = 0; addText(gs, e.x, e.y - e.size/2 - 20, "🛡 SHIELD!", "#00BFFF"); }
           }
         }
       }
@@ -692,7 +805,7 @@ export default function CallOfDoodie() {
       const d2 = Math.hypot(p.x-pk.x, p.y-pk.y);
       if (d2 < 30) {
         if (pk.type==="health") { const maxHP = p.maxHealth || 100; p.health = Math.min(maxHP,p.health+30); setHealth(p.health); addText(gs,pk.x,pk.y,"+30 HP","#00FF00"); }
-        else if (pk.type==="ammo") { gs.ammoCount = WEAPONS[wpnIdx].maxAmmo; setAmmo(gs.ammoCount); addText(gs,pk.x,pk.y,"MAX AMMO","#00BFFF"); }
+        else if (pk.type==="ammo") { const uw=getUpgradedWeapon(wpnIdx,weaponUpgradesRef.current); gs.ammoCount = uw.maxAmmo; setAmmo(gs.ammoCount); addText(gs,pk.x,pk.y,"MAX AMMO","#00BFFF"); }
         else if (pk.type==="speed") { p.speed = Math.min(8,p.speed+0.5); addText(gs,pk.x,pk.y,"SPEED!","#FFFF00"); setTimeout(()=>{if(gsRef.current)gsRef.current.player.speed=Math.max(4,gsRef.current.player.speed-0.5);},5000); }
         else if (pk.type==="nuke") { statsRef.current.nukes++; addText(gs,W/2,H/2,"TACTICAL NUKE!","#FF0000",true); gs.enemies.forEach(en=>{en.health=-999;gs.score+=en.points;addParticles(gs,en.x,en.y,en.color,10);}); gs.enemies=[]; gs.screenShake=20; setScore(gs.score); checkAchievements(gs); }
         else if (pk.type==="guardian_angel") { extraLivesRef.current = 1; setExtraLives(1); statsRef.current.guardianAngels++; addText(gs,pk.x,pk.y-20,"GUARDIAN ANGEL!","#FFD700",true); addText(gs,pk.x,pk.y+10,"+1 EXTRA LIFE","#FFFFFF"); addParticles(gs,pk.x,pk.y,"#FFD700",25); addParticles(gs,pk.x,pk.y,"#FFFFFF",15); gs.screenShake=8; checkAchievements(gs); }
@@ -756,14 +869,20 @@ export default function CallOfDoodie() {
       ctx.fillStyle = e.hitFlash>0?"#FFF":e.color;
       ctx.beginPath(); ctx.arc(0,0,e.size/2,0,Math.PI*2); ctx.fill();
       ctx.strokeStyle="rgba(0,0,0,0.4)"; ctx.lineWidth=2; ctx.stroke();
+      if (e.ranged) { ctx.strokeStyle = "rgba(255,100,100,"+(0.3+Math.sin(Date.now()/300)*0.2)+")"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,e.size/2+4,0,Math.PI*2); ctx.stroke(); }
       if (e.isBoss) {
-        ctx.strokeStyle = e.color+"88"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,0,e.size/2+6,0,Math.PI*2); ctx.stroke();
-        ctx.strokeStyle = "rgba(255,255,255,"+(0.15+Math.sin(Date.now()/200)*0.1)+")"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,e.size/2+10,0,Math.PI*2); ctx.stroke();
+        ctx.strokeStyle = e.color; ctx.lineWidth=2; ctx.globalAlpha=0.3+Math.sin(Date.now()/200)*0.2;
+        ctx.beginPath(); ctx.arc(0,0,e.size/2+8,0,Math.PI*2); ctx.stroke();
+        ctx.beginPath(); ctx.arc(0,0,e.size/2+14,0,Math.PI*2); ctx.stroke();
+        ctx.globalAlpha=1;
         if (e.shieldActive) {
-          ctx.strokeStyle = "rgba(0,191,255,"+(0.5+Math.sin(Date.now()/150)*0.3)+")"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,0,e.size/2+14,0,Math.PI*2); ctx.stroke();
-          ctx.fillStyle = "rgba(0,191,255,"+(0.08+Math.sin(Date.now()/150)*0.05)+")"; ctx.beginPath(); ctx.arc(0,0,e.size/2+14,0,Math.PI*2); ctx.fill();
+          const pulse = 0.4+Math.sin(Date.now()/150)*0.3;
+          ctx.strokeStyle = `rgba(0,191,255,${pulse})`; ctx.lineWidth=3;
+          ctx.beginPath(); ctx.arc(0,0,e.size/2+20,0,Math.PI*2); ctx.stroke();
+          ctx.fillStyle = `rgba(0,100,255,${pulse*0.15})`;
+          ctx.beginPath(); ctx.arc(0,0,e.size/2+20,0,Math.PI*2); ctx.fill();
         }
-      } else if (e.ranged) { ctx.strokeStyle = "rgba(255,100,100,"+(0.3+Math.sin(Date.now()/300)*0.2)+")"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(0,0,e.size/2+4,0,Math.PI*2); ctx.stroke(); }
+      }
       ctx.font=(e.size*0.55)+"px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
       ctx.fillText(e.emoji,0,-2);
       if (e.health<e.maxHealth) {
@@ -805,6 +924,19 @@ export default function CallOfDoodie() {
     ctx.strokeStyle="#2D7D2D"; ctx.lineWidth=2; ctx.stroke();
     ctx.fillStyle="#336633"; ctx.beginPath(); ctx.arc(0,0,12,-Math.PI*0.8,Math.PI*0.8); ctx.fill();
     ctx.globalAlpha=1; ctx.shadowBlur=0; ctx.restore();
+
+    const activeBoss = gs.enemies.find(e => e.isBoss);
+    if (activeBoss) {
+      const bw = W * 0.5, bh = 8, bx = W/2 - bw/2, by = H - (isMobile ? 70 : 30);
+      ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(bx-2, by-16, bw+4, 28);
+      ctx.strokeStyle = activeBoss.color; ctx.lineWidth = 1; ctx.strokeRect(bx-2, by-16, bw+4, 28);
+      ctx.fillStyle = "#FFF"; ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+      ctx.fillText(activeBoss.emoji + " " + activeBoss.name.toUpperCase(), W/2, by-5);
+      ctx.fillStyle = "#333"; ctx.fillRect(bx, by+2, bw, bh);
+      const hpPct = Math.max(0, activeBoss.health / activeBoss.maxHealth);
+      ctx.fillStyle = hpPct > 0.5 ? "#FF1493" : hpPct > 0.25 ? "#FF4500" : "#FF0000";
+      ctx.fillRect(bx, by+2, bw * hpPct, bh);
+    }
 
     gs.floatingTexts.forEach(ft => {
       ctx.globalAlpha=ft.life/(ft.big?90:60); ctx.fillStyle=ft.color;
@@ -877,9 +1009,10 @@ export default function CallOfDoodie() {
       if (e.key === " " || e.key === "Shift") doDash();
       const num = parseInt(e.key);
       if (num >= 1 && num <= 4) {
+        const uw = getUpgradedWeapon(num-1, weaponUpgradesRef.current);
         setCurrentWeapon(num-1); currentWeaponRef.current = num-1;
-        setAmmo(WEAPONS[num-1].maxAmmo); setIsReloading(false); isReloadingRef.current = false;
-        if (gsRef.current) gsRef.current.ammoCount = WEAPONS[num-1].maxAmmo;
+        setAmmo(uw.maxAmmo); setIsReloading(false); isReloadingRef.current = false;
+        if (gsRef.current) gsRef.current.ammoCount = uw.maxAmmo;
       }
       if (["w","a","s","d","r","q","g","1","2","3","4","5"," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
     };
@@ -926,9 +1059,10 @@ export default function CallOfDoodie() {
   }, [screen]);
 
   const switchWeapon = (idx) => {
+    const uw = getUpgradedWeapon(idx, weaponUpgradesRef.current);
     setCurrentWeapon(idx); currentWeaponRef.current = idx;
-    setAmmo(WEAPONS[idx].maxAmmo); setIsReloading(false); isReloadingRef.current = false;
-    if (gsRef.current) gsRef.current.ammoCount = WEAPONS[idx].maxAmmo;
+    setAmmo(uw.maxAmmo); setIsReloading(false); isReloadingRef.current = false;
+    if (gsRef.current) gsRef.current.ammoCount = uw.maxAmmo;
   };
 
   const respawn = () => {
@@ -971,9 +1105,15 @@ export default function CallOfDoodie() {
     display:"flex", flexDirection:"column", position:"relative",
     touchAction:"none", userSelect:"none", WebkitUserSelect:"none",
   };
-  const btnP = { padding:"14px 40px", fontSize:18, fontWeight:900, fontFamily:"'Courier New',monospace", background:"linear-gradient(180deg,#FF6B35,#CC4400)", color:"#FFF", border:"none", borderRadius:6, cursor:"pointer", letterSpacing:2 };
-  const btnS = { ...btnP, background:"rgba(255,255,255,0.08)", color:"#CCC", border:"1px solid #444" };
-  const card = { background:"rgba(255,255,255,0.05)", borderRadius:10, border:"1px solid rgba(255,255,255,0.1)", padding:16 };
+  const scrollBase = {
+    ...base, overflow:"hidden auto", alignItems:"center",
+    color:"#fff", boxSizing:"border-box",
+  };
+  const btnP = { padding:isMobile?"12px 24px":"14px 40px", fontSize:isMobile?15:18, fontWeight:900, fontFamily:"'Courier New',monospace", background:"linear-gradient(180deg,#FF6B35,#CC4400)", color:"#FFF", border:"none", borderRadius:8, cursor:"pointer", letterSpacing:2, textTransform:"uppercase", boxShadow:"0 4px 15px rgba(255,107,53,0.3)", transition:"transform 0.1s, box-shadow 0.1s" };
+  const btnS = { ...btnP, background:"rgba(255,255,255,0.06)", color:"#CCC", border:"1px solid rgba(255,255,255,0.15)", boxShadow:"none" };
+  const card = { background:"rgba(255,255,255,0.04)", borderRadius:12, border:"1px solid rgba(255,255,255,0.08)", padding:isMobile?12:16 };
+  const menuWidth = isMobile ? "100%" : isTablet ? 560 : 620;
+  const sectionGap = isMobile ? 10 : 16;
 
   const Tooltip = ({ text, visible }) => {
     if (!visible) return null;
@@ -989,21 +1129,23 @@ export default function CallOfDoodie() {
   if (screen === "username") {
     return (
       <div style={{...base,alignItems:"center",justifyContent:"center",color:"#fff",padding:20,boxSizing:"border-box"}}>
-        <div style={{textAlign:"center",maxWidth:400,width:"100%"}}>
-          <div style={{fontSize:48,marginBottom:8}}>🎮</div>
-          <h1 style={{fontSize:"clamp(32px,8vw,56px)",fontWeight:900,margin:0,background:"linear-gradient(180deg,#FFD700,#FF6B00)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",letterSpacing:-1}}>CALL OF DOODIE</h1>
-          <p style={{color:"#DDD",fontSize:14,margin:"12px 0 28px"}}>Enter your callsign, soldier</p>
+        <div style={{position:"absolute",inset:0,backgroundImage:"radial-gradient(circle at 50% 30%, rgba(255,107,53,0.08) 0%, transparent 60%)"}} />
+        <div style={{textAlign:"center",maxWidth:420,width:"100%",position:"relative",zIndex:1}}>
+          <div style={{fontSize:56,marginBottom:12,filter:"drop-shadow(0 0 20px rgba(255,215,0,0.3))"}}>🎮</div>
+          <h1 style={{fontSize:"clamp(32px,8vw,56px)",fontWeight:900,margin:0,background:"linear-gradient(180deg,#FFD700,#FF6B00)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",letterSpacing:-1,filter:"drop-shadow(0 0 20px rgba(255,107,0,0.4))"}}>CALL OF DOODIE</h1>
+          <div style={{fontSize:"clamp(8px,2vw,12px)",color:"#FF6B35",letterSpacing:4,marginTop:4}}>MODERN WARFARE ON MOM'S WIFI</div>
+          <p style={{color:"#999",fontSize:13,margin:"20px 0 24px",letterSpacing:1}}>ENTER YOUR CALLSIGN, SOLDIER</p>
           <input type="text" value={username} maxLength={20}
             onChange={e => setUsername(e.target.value)}
             placeholder="xX_N00bSlayer_Xx"
-            style={{width:"100%",padding:"14px 16px",fontSize:18,fontFamily:"'Courier New',monospace",background:"rgba(255,255,255,0.06)",border:"2px solid rgba(255,255,255,0.2)",borderRadius:8,color:"#FFD700",textAlign:"center",outline:"none",letterSpacing:1,boxSizing:"border-box"}}
+            style={{width:"100%",padding:"14px 16px",fontSize:18,fontFamily:"'Courier New',monospace",background:"rgba(255,255,255,0.06)",border:"2px solid rgba(255,255,255,0.15)",borderRadius:8,color:"#FFD700",textAlign:"center",outline:"none",letterSpacing:1,boxSizing:"border-box",transition:"border-color 0.2s"}}
             onFocus={e=>e.target.style.borderColor="#FF6B35"}
-            onBlur={e=>e.target.style.borderColor="rgba(255,255,255,0.2)"}
+            onBlur={e=>e.target.style.borderColor="rgba(255,255,255,0.15)"}
             onKeyDown={e=>{if(e.key==="Enter"&&username.trim().length>=2)setScreen("menu");}}
           />
-          <div style={{fontSize:11,color:"#BBB",margin:"8px 0 20px"}}>2-20 characters, any text allowed</div>
+          <div style={{fontSize:11,color:"#666",margin:"8px 0 24px",letterSpacing:1}}>2-20 characters</div>
           <button onClick={()=>{if(username.trim().length>=2)setScreen("menu");}} disabled={username.trim().length<2}
-            style={{...btnP,opacity:username.trim().length<2?0.4:1,width:"100%",maxWidth:240}}>LOCK IN</button>
+            style={{...btnP,opacity:username.trim().length<2?0.4:1,width:"100%",maxWidth:260,fontSize:16,padding:"16px 40px"}}>LOCK IN</button>
         </div>
       </div>
     );
@@ -1168,7 +1310,7 @@ export default function CallOfDoodie() {
     if (pauseView === "bestiary") return (
       <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",zIndex:90,display:"flex",alignItems:"center",justifyContent:"center",padding:16,backdropFilter:"blur(6px)"}}>
         <div style={{...card,maxWidth:460,width:"100%",padding:"24px 20px",color:"#fff",border:"1px solid rgba(255,215,0,0.25)",maxHeight:"90vh",overflowY:"auto"}}>
-          <h3 style={{color:"#FFD700",margin:"0 0 12px",fontSize:18}}>👾 ENEMY BESTIARY</h3>
+          <h3 style={{color:"#FFD700",margin:"0 0 12px",fontSize:18}}>👾 MOST WANTED LIST</h3>
           {ENEMY_TYPES.map((e,i) => (
             <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 6px",borderRadius:6,marginBottom:4,background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.05)"}}>
               <span style={{fontSize:24}}>{e.emoji}</span>
@@ -1195,89 +1337,301 @@ export default function CallOfDoodie() {
             <button onClick={()=>{setPauseView("main");setPaused(false);}} style={{...pBtn,background:"linear-gradient(180deg,#FF6B35,#CC4400)",border:"none",fontSize:18}}>▶ RESUME</button>
             <button onClick={()=>setPauseView("rules")} style={pBtn}>📜 RULES</button>
             <button onClick={()=>setPauseView("controls")} style={pBtn}>⌨ CONTROLS</button>
-            <button onClick={()=>setPauseView("bestiary")} style={pBtn}>👾 BESTIARY</button>
+            <button onClick={()=>setPauseView("bestiary")} style={pBtn}>👾 MOST WANTED</button>
             <button onClick={()=>setShowAchievements(true)} style={pBtn}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
-            <button onClick={()=>{setPaused(false);setPauseView("main");setScreen("menu");}} style={{...pBtn,color:"#F66",borderColor:"rgba(255,100,100,0.3)",marginTop:4}}>🚪 LEAVE GAME</button>
+            <button onClick={()=>{setPaused(false);setPauseView("main"); if(gsRef.current) updateCareerOnGameEnd(gsRef.current,true); setScreen("menu");}} style={{...pBtn,color:"#F66",borderColor:"rgba(255,100,100,0.3)",marginTop:4}}>🚪 LEAVE GAME</button>
           </div>
         </div>
       </div>
     );
   };
 
-  // ======== MENU ========
-  if (screen === "menu") {
+  // ======== WEAPON ARMORY PANEL ========
+  const ArmoryPanel = ({onClose}) => {
+    const cs = careerStats;
+    const doUpgrade = async (stat, wpnIdx) => {
+      const lvl = weaponUpgrades[stat][wpnIdx] || 0;
+      if (lvl >= UPGRADE_MAX) return;
+      const cost = UPGRADE_COSTS[stat][lvl];
+      if (cs.prestigePoints < cost) return;
+      const newC = { ...cs, prestigePoints: cs.prestigePoints - cost };
+      const newU = { ...weaponUpgrades, [stat]: [...weaponUpgrades[stat]] };
+      newU[stat][wpnIdx] = lvl + 1;
+      setCareerStats(newC); careerRef.current = newC;
+      setWeaponUpgrades(newU); weaponUpgradesRef.current = newU;
+      await saveCareerStats(newC); await saveUpgrades(newU);
+    };
     return (
-      <div style={{...base,alignItems:"center",justifyContent:"center",color:"#fff",padding:20,boxSizing:"border-box",overflowY:"auto"}}>
-        {showLeaderboard && <LeaderboardPanel onClose={()=>setShowLeaderboard(false)} />}
-        {showAchievements && <AchievementsPanel onClose={()=>setShowAchievements(false)} />}
-        <div style={{position:"absolute",inset:0,backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px)"}} />
-        <div style={{position:"relative",zIndex:1,textAlign:"center",maxWidth:500,width:"100%"}}>
-          <div style={{fontSize:10,color:"#BBB",letterSpacing:6,marginBottom:6}}>ACTIVISION'T PRESENTS</div>
-          <h1 style={{fontSize:"clamp(34px,9vw,64px)",fontWeight:900,margin:0,background:"linear-gradient(180deg,#FFD700,#FF6B00)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",letterSpacing:-2,filter:"drop-shadow(0 0 20px rgba(255,107,0,0.5))"}}>CALL OF DOODIE</h1>
-          <div style={{fontSize:"clamp(10px,2.5vw,16px)",color:"#FF6B35",marginTop:-2,letterSpacing:3}}>MODERN WARFARE ON MOM'S WIFI</div>
-          <div style={{margin:"10px 0 6px",fontSize:13,color:"#FFD700"}}>
-            Deploying as: <span style={{fontWeight:900}}>{username}</span>
-            <span onClick={()=>setScreen("username")} style={{color:"#CCC",cursor:"pointer",marginLeft:8,fontSize:11,textDecoration:"underline"}}>(change)</span>
-          </div>
-          <div style={{...card,margin:"12px 0",textAlign:"left"}}>
-            <div style={{fontSize:12,color:"#DDD",marginBottom:6,letterSpacing:2,textAlign:"center",fontWeight:700}}>WEAPONS LOADOUT</div>
-            {WEAPONS.map((w,i)=>(
-              <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"5px 0",fontSize:12}}>
-                <span style={{width:20,textAlign:"center"}}>{w.emoji}</span>
-                <span style={{flex:1,fontWeight:700,color:w.color}}>{w.name}</span>
-                <span style={{color:"#CCC",fontSize:10}}>[{i+1}]</span>
-                <span style={{color:"#BBB",fontSize:10,fontStyle:"italic"}}>{w.desc}</span>
+      <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.9)",zIndex:110,display:"flex",alignItems:"center",justifyContent:"center",padding:12,backdropFilter:"blur(4px)"}}>
+        <div style={{...card,maxWidth:560,width:"100%",maxHeight:"88vh",overflow:"auto",position:"relative",border:"1px solid rgba(255,107,53,0.3)",padding:"18px 14px",color:"#fff"}}>
+          <button onClick={onClose} style={{position:"absolute",top:10,right:14,background:"none",border:"none",color:"#CCC",fontSize:20,cursor:"pointer",fontFamily:"monospace"}}>X</button>
+          <h3 style={{color:"#FF6B35",margin:"0 0 2px",fontSize:18,letterSpacing:2}}>WEAPON ARMORY</h3>
+          <div style={{fontSize:11,color:"#FFD700",marginBottom:12}}>Prestige Points: <strong>{cs.prestigePoints?.toLocaleString()}</strong> <span style={{color:"#999",fontSize:9}}>(earn 10% of score each run)</span></div>
+          {WEAPONS.map((w,wi) => {
+            const uw = getUpgradedWeapon(wi, weaponUpgrades);
+            return (
+              <div key={wi} style={{...card,marginBottom:8,padding:"10px 12px",border:"1px solid "+w.color+"33"}}>
+                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                  <span style={{fontSize:22}}>{w.emoji}</span>
+                  <div>
+                    <div style={{fontSize:14,fontWeight:900,color:w.color}}>{w.name}</div>
+                    <div style={{fontSize:10,color:"#CCC"}}>DMG: {uw.damage} · Rate: {uw.fireRate}ms · Ammo: {uw.maxAmmo}</div>
+                  </div>
+                </div>
+                <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                  {Object.entries(UPGRADE_LABELS).map(([stat,info]) => {
+                    const lvl = weaponUpgrades[stat][wi] || 0;
+                    const maxed = lvl >= UPGRADE_MAX;
+                    const cost = maxed ? 0 : UPGRADE_COSTS[stat][lvl];
+                    const canAfford = cs.prestigePoints >= cost;
+                    return (
+                      <div key={stat} style={{display:"flex",alignItems:"center",gap:6,fontSize:11}}>
+                        <span style={{width:16,textAlign:"center"}}>{info.emoji}</span>
+                        <span style={{width:80,color:"#DDD"}}>{info.name}</span>
+                        <div style={{flex:1,display:"flex",gap:2}}>
+                          {Array.from({length:UPGRADE_MAX}).map((_,i) => (
+                            <div key={i} style={{width:16,height:8,borderRadius:2,background:i<lvl?"linear-gradient(180deg,#FF6B35,#CC4400)":"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.15)"}} />
+                          ))}
+                        </div>
+                        {maxed ? <span style={{color:"#0F0",fontSize:10,fontWeight:700,width:70,textAlign:"right"}}>MAXED</span> : (
+                          <button onClick={()=>doUpgrade(stat,wi)} disabled={!canAfford} style={{
+                            padding:"2px 8px",fontSize:10,fontWeight:700,fontFamily:"'Courier New',monospace",borderRadius:4,cursor:canAfford?"pointer":"default",
+                            background:canAfford?"linear-gradient(180deg,#FF6B35,#CC4400)":"rgba(255,255,255,0.05)",
+                            color:canAfford?"#FFF":"#666",border:"none",opacity:canAfford?1:0.5,width:70,
+                          }}>{cost.toLocaleString()} PP</button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // ======== CAREER STATS PANEL ========
+  const CareerPanel = ({onClose}) => {
+    const cs = careerStats;
+    const tierColors = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF44FF" };
+    const avgScore = cs.gamesPlayed > 0 ? Math.round(cs.totalScore / cs.gamesPlayed) : 0;
+    const avgKills = cs.gamesPlayed > 0 ? Math.round(cs.totalKills / cs.gamesPlayed) : 0;
+    const kd = cs.totalDeaths > 0 ? (cs.totalKills / cs.totalDeaths).toFixed(1) : "0.0";
+    const rageRate = cs.gamesPlayed > 0 ? Math.round((cs.rageQuits / cs.gamesPlayed) * 100) : 0;
+    return (
+      <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.9)",zIndex:110,display:"flex",alignItems:"center",justifyContent:"center",padding:12,backdropFilter:"blur(4px)"}}>
+        <div style={{...card,maxWidth:540,width:"100%",maxHeight:"88vh",overflow:"auto",position:"relative",border:"1px solid rgba(255,215,0,0.25)",padding:"18px 14px",color:"#fff"}}>
+          <button onClick={onClose} style={{position:"absolute",top:10,right:14,background:"none",border:"none",color:"#CCC",fontSize:20,cursor:"pointer",fontFamily:"monospace"}}>X</button>
+          <h3 style={{color:"#FFD700",margin:"0 0 12px",fontSize:18,letterSpacing:2}}>CAREER SERVICE RECORD</h3>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}}>
+            {[
+              [cs.gamesPlayed,"GAMES PLAYED","#FF6B35"],
+              [cs.totalKills.toLocaleString(),"TOTAL KILLS","#0F0"],
+              [cs.totalDeaths,"TOTAL DEATHS","#F44"],
+              [cs.bestScore.toLocaleString(),"BEST SCORE","#FFD700"],
+              [cs.highestWave,"HIGHEST WAVE","#FF4500"],
+              [kd,"K/D RATIO","#00BFFF"],
+              [avgScore.toLocaleString(),"AVG SCORE","#E040FB"],
+              [avgKills,"AVG KILLS","#44CC44"],
+              [fmtTime(cs.totalTimePlayed),"TIME PLAYED","#CCC"],
+              [cs.bossesDefeated,"BOSSES SLAIN","#FF1493"],
+              [cs.nukesCollected,"NUKES FOUND","#FF0000"],
+              [cs.guardianAngelsUsed,"ANGELS USED","#FFD700"],
+              [cs.rageQuits,"RAGE QUITS","#F66"],
+              [rageRate+"%","RAGE RATE","#FF69B4"],
+              [(cs.prestigePoints||0).toLocaleString(),"PRESTIGE PTS","#FF6B35"],
+            ].map(([val,label,color],i) => (
+              <div key={i} style={{...card,padding:"6px 4px",textAlign:"center"}}>
+                <div style={{fontSize:15,fontWeight:900,color}}>{val}</div>
+                <div style={{fontSize:8,color:"#CCC",letterSpacing:1}}>{label}</div>
               </div>
             ))}
           </div>
-          <div style={{...card,margin:"0 0 12px",textAlign:"left"}}>
-            <div style={{fontSize:12,color:"#DDD",marginBottom:8,letterSpacing:2,textAlign:"center",fontWeight:700}}>DIFFICULTY</div>
+          <h4 style={{color:"#FFD700",fontSize:14,margin:"0 0 8px",letterSpacing:2}}>LIFETIME ACHIEVEMENTS</h4>
+          <div style={{fontSize:10,color:"#BBB",marginBottom:8}}>Times each achievement was earned across all runs</div>
+          {["legendary","gold","silver","bronze"].map(tier => {
+            const tierAchs = ACHIEVEMENTS.filter(a => a.tier === tier);
+            if (tierAchs.length === 0) return null;
+            return (
+              <div key={tier} style={{marginBottom:10}}>
+                <div style={{fontSize:9,color:tierColors[tier],fontWeight:900,letterSpacing:2,marginBottom:4,borderBottom:"1px solid "+tierColors[tier]+"44",paddingBottom:3}}>{tier.toUpperCase()}</div>
+                {tierAchs.map(a => {
+                  const count = (cs.achievementCounts || {})[a.id] || 0;
+                  return (
+                    <div key={a.id} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 4px",fontSize:11,opacity:count>0?1:0.4}}>
+                      <span style={{fontSize:16,filter:count>0?"none":"grayscale(1)"}}>{a.emoji}</span>
+                      <span style={{flex:1,color:count>0?tierColors[tier]:"#777"}}>{a.name}</span>
+                      <span style={{color:count>0?"#FFD700":"#555",fontWeight:900,fontSize:12}}>x{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // ======== MENU PANELS ========
+  const [showArmory, setShowArmory] = useState(false);
+  const [showCareer, setShowCareer] = useState(false);
+
+  // ======== MENU ========
+  if (screen === "menu") {
+    const menuBtnStyle = {...btnS,width:"100%",padding:"10px 14px",fontSize:13,textAlign:"left",display:"flex",alignItems:"center",gap:10};
+
+    const MenuRules = () => (
+      <div style={{...card,maxWidth:500,width:"100%",margin:"0 auto",padding:"20px 16px",textAlign:"left"}}>
+        <h3 style={{color:"#FFD700",margin:"0 0 10px",fontSize:16,textAlign:"center"}}>📜 RULES OF ENGAGEMENT</h3>
+        <div style={{fontSize:12,color:"#EEE",lineHeight:2}}>
+          <div>🎯 <strong style={{color:"#FF6B35"}}>Objective:</strong> Survive as many waves as possible</div>
+          <div>👾 <strong style={{color:"#FF6B35"}}>Enemies:</strong> Spawn in waves, each harder than the last</div>
+          <div>⚡ <strong style={{color:"#FF6B35"}}>Combos:</strong> Kill quickly for score multipliers (2s window)</div>
+          <div>🔥 <strong style={{color:"#FF6B35"}}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
+          <div>💥 <strong style={{color:"#FF6B35"}}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
+          <div>💊 <strong style={{color:"#FF6B35"}}>Pickups:</strong> Enemies drop health, ammo, speed, or nukes</div>
+          <div>😇 <strong style={{color:"#FF6B35"}}>Guardian Angel:</strong> Super rare boss drop — grants 1 extra life!</div>
+          <div>👹 <strong style={{color:"#FF6B35"}}>Boss Waves:</strong> Every 5th wave features a powerful boss fight!</div>
+          <div>⚠️ <strong style={{color:"#FF6B35"}}>Ranged Foes:</strong> Glowing ring enemies shoot at you!</div>
+          <div>💨 <strong style={{color:"#FF6B35"}}>Dash:</strong> Brief invincibility to dodge through danger</div>
+          <div>⬆ <strong style={{color:"#FF6B35"}}>XP & Levels:</strong> Level up from kills to move faster</div>
+          <div>🏆 <strong style={{color:"#FF6B35"}}>Leaderboard:</strong> Submit your score with famous last words</div>
+          <div>🔧 <strong style={{color:"#FF6B35"}}>Upgrades:</strong> Spend Prestige Points to upgrade weapons permanently</div>
+        </div>
+        <button onClick={()=>setMenuView("main")} style={{...btnP,marginTop:14,width:"100%",fontSize:14,padding:"10px"}}>← BACK</button>
+      </div>
+    );
+
+    const MenuControls = () => (
+      <div style={{...card,maxWidth:500,width:"100%",margin:"0 auto",padding:"20px 16px",textAlign:"left"}}>
+        <h3 style={{color:"#FFD700",margin:"0 0 10px",fontSize:16,textAlign:"center"}}>⌨ CONTROLS</h3>
+        {isMobile ? (
+          <div style={{fontSize:12,color:"#EEE",lineHeight:2.2}}>
+            <div>👆 <span style={{color:"#FF6B35",fontWeight:800}}>Left thumb</span> — Move soldier</div>
+            <div>👆 <span style={{color:"#FF6B35",fontWeight:800}}>Right thumb</span> — Aim & auto-fire</div>
+            <div>🎯 <span style={{color:"#EEE"}}>Move only → auto-aims nearest enemy</span></div>
+            <div>💨 <span style={{color:"#00E5FF",fontWeight:800}}>DASH button</span> — Invincible dodge</div>
+            <div>💣 <span style={{color:"#FF4500",fontWeight:800}}>GRENADE button</span> — AOE explosion</div>
+            <div>🔢 <span style={{color:"#FFD700",fontWeight:800}}>Weapon buttons</span> — Tap to swap</div>
+          </div>
+        ) : (
+          <div style={{fontSize:12,color:"#EEE",lineHeight:2.2}}>
+            <div>🏃 <span style={{color:"#FF6B35",fontWeight:800}}>W/A/S/D</span> — Move</div>
+            <div>🖱 <span style={{color:"#FF6B35",fontWeight:800}}>Mouse</span> — Aim</div>
+            <div>🔫 <span style={{color:"#FF6B35",fontWeight:800}}>Left Click</span> — Shoot</div>
+            <div>🔄 <span style={{color:"#FFD700",fontWeight:800}}>R</span> — Reload</div>
+            <div>🔢 <span style={{color:"#FFD700",fontWeight:800}}>1 / 2 / 3 / 4</span> — Switch weapons</div>
+            <div>💣 <span style={{color:"#FF4500",fontWeight:800}}>5 / Q / G</span> — Throw grenade</div>
+            <div>💨 <span style={{color:"#00E5FF",fontWeight:800}}>Space / Shift</span> — Dash</div>
+            <div>⏸ <span style={{color:"#FFD700",fontWeight:800}}>Escape</span> — Pause / Resume</div>
+          </div>
+        )}
+        <div style={{marginTop:12}}>
+          <div style={{fontSize:11,color:"#FFD700",fontWeight:700,marginBottom:4}}>WEAPONS</div>
+          {WEAPONS.map((w,i) => {
+            const uw = getUpgradedWeapon(i, weaponUpgrades);
+            return (
+              <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"3px 0",fontSize:11,color:"#EEE"}}>
+                <span style={{fontSize:14}}>{w.emoji}</span>
+                <span style={{color:w.color,fontWeight:700,minWidth:130}}>[{i+1}] {w.name}</span>
+                <span style={{color:"#CCC",fontSize:10}}>DMG:{uw.damage} Ammo:{uw.maxAmmo}</span>
+              </div>
+            );
+          })}
+        </div>
+        <button onClick={()=>setMenuView("main")} style={{...btnP,marginTop:14,width:"100%",fontSize:14,padding:"10px"}}>← BACK</button>
+      </div>
+    );
+
+    const MenuMostWanted = () => (
+      <div style={{...card,maxWidth:500,width:"100%",margin:"0 auto",padding:"20px 16px",textAlign:"left"}}>
+        <h3 style={{color:"#FFD700",margin:"0 0 10px",fontSize:16,textAlign:"center"}}>👾 MOST WANTED LIST</h3>
+        <div style={{fontSize:10,color:"#CCC",marginBottom:10,textAlign:"center"}}>Intel on all known hostiles. Study up, soldier.</div>
+        {ENEMY_TYPES.map((e,i) => (
+          <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 6px",borderRadius:6,marginBottom:3,background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.05)"}}>
+            <span style={{fontSize:22}}>{e.emoji}</span>
+            <div style={{flex:1}}>
+              <div style={{fontSize:12,fontWeight:700,color:e.color}}>{e.name}</div>
+              <div style={{fontSize:10,color:"#CCC"}}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED" : ""}</div>
+              <div style={{fontSize:9,color:"#FF69B4",fontStyle:"italic"}}>"{e.deathQuote}"</div>
+            </div>
+          </div>
+        ))}
+        <div style={{fontSize:11,color:"#FF4500",fontWeight:700,marginTop:10,marginBottom:6}}>BOSS ENCOUNTERS (Every 5 waves)</div>
+        {BOSS_WAVE_TYPES.map((b,i) => (
+          <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"7px 6px",borderRadius:6,marginBottom:3,background:"rgba(255,0,0,0.05)",border:"1px solid rgba(255,0,0,0.15)"}}>
+            <span style={{fontSize:26}}>{b.emoji}</span>
+            <div style={{flex:1}}>
+              <div style={{fontSize:12,fontWeight:700,color:b.color}}>{b.name} <span style={{fontSize:9,color:"#F44"}}>BOSS</span></div>
+              <div style={{fontSize:10,color:"#CCC"}}>HP: {b.health} · Speed: {b.speed} · Points: {b.points}</div>
+              <div style={{fontSize:9,color:"#FF69B4",fontStyle:"italic"}}>"{b.deathQuote}"</div>
+            </div>
+          </div>
+        ))}
+        <button onClick={()=>setMenuView("main")} style={{...btnP,marginTop:14,width:"100%",fontSize:14,padding:"10px"}}>← BACK</button>
+      </div>
+    );
+
+    return (
+      <div style={{...scrollBase,padding:0}}>
+        {showLeaderboard && <LeaderboardPanel onClose={()=>setShowLeaderboard(false)} />}
+        {showAchievements && <AchievementsPanel onClose={()=>setShowAchievements(false)} />}
+        {showArmory && <ArmoryPanel onClose={()=>setShowArmory(false)} />}
+        {showCareer && <CareerPanel onClose={()=>setShowCareer(false)} />}
+        <div style={{position:"fixed",inset:0,backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.02) 49px,rgba(255,255,255,0.02) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.02) 49px,rgba(255,255,255,0.02) 50px)",pointerEvents:"none",zIndex:0}} />
+        <div style={{position:"fixed",inset:0,backgroundImage:"radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.1) 0%, transparent 60%)",pointerEvents:"none",zIndex:0}} />
+        <div style={{position:"relative",zIndex:1,textAlign:"center",maxWidth:menuWidth,width:"100%",padding:isMobile?"20px 16px 32px":"32px 24px 40px"}}>
+          {menuView === "rules" ? <MenuRules /> : menuView === "controls" ? <MenuControls /> : menuView === "mostwanted" ? <MenuMostWanted /> : (<>
+          <div style={{fontSize:isMobile?9:10,color:"#666",letterSpacing:6,marginBottom:8}}>ACTIVISION'T PRESENTS</div>
+          <h1 style={{fontSize:"clamp(30px,8vw,58px)",fontWeight:900,margin:0,background:"linear-gradient(180deg,#FFD700,#FF8C00,#FF6B00)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",letterSpacing:-2,filter:"drop-shadow(0 0 30px rgba(255,107,0,0.4))",lineHeight:1.1}}>CALL OF DOODIE</h1>
+          <div style={{fontSize:"clamp(8px,2.2vw,13px)",color:"#FF6B35",marginTop:4,letterSpacing:isMobile?2:4,fontWeight:700}}>MODERN WARFARE ON MOM'S WIFI</div>
+          <div style={{margin:`${sectionGap}px 0 ${sectionGap-4}px`,fontSize:12,color:"#999"}}>
+            Deploying as: <span style={{fontWeight:900,color:"#FFD700"}}>{username}</span>
+            <span onClick={()=>setScreen("username")} style={{color:"#666",cursor:"pointer",marginLeft:8,fontSize:10,textDecoration:"underline"}}>(change)</span>
+          </div>
+
+          <button onClick={startGame} style={{...btnP,width:"100%",maxWidth:340,fontSize:isMobile?16:20,padding:isMobile?"14px 24px":"18px 40px",marginBottom:sectionGap,background:"linear-gradient(180deg,#FF6B35,#CC4400)",boxShadow:"0 6px 25px rgba(255,107,53,0.4)",letterSpacing:4}}>
+            ▶ DEPLOY
+          </button>
+
+          <div style={{...card,marginBottom:sectionGap,textAlign:"left"}}>
+            <div style={{fontSize:11,color:"#888",marginBottom:8,letterSpacing:3,textAlign:"center",fontWeight:700,textTransform:"uppercase"}}>Difficulty</div>
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
               {Object.entries(DIFFICULTIES).map(([key,d]) => (
                 <button key={key} onClick={()=>setDifficulty(key)} style={{
-                  padding:"10px 8px",borderRadius:8,cursor:"pointer",textAlign:"left",
+                  padding:isMobile?"8px 6px":"10px 10px",borderRadius:8,cursor:"pointer",textAlign:"left",
                   fontFamily:"'Courier New',monospace",
-                  background:difficulty===key?"rgba(255,255,255,0.12)":"rgba(255,255,255,0.03)",
-                  border:difficulty===key?`2px solid ${d.color}`:"1px solid rgba(255,255,255,0.1)",
+                  background:difficulty===key?"rgba(255,255,255,0.1)":"rgba(255,255,255,0.02)",
+                  border:difficulty===key?`2px solid ${d.color}`:"1px solid rgba(255,255,255,0.06)",
                   color:"#FFF",transition:"all 0.15s",
                 }}>
-                  <div style={{fontSize:14,fontWeight:900,color:d.color}}>{d.emoji} {d.label}</div>
-                  <div style={{fontSize:10,color:"#CCC",marginTop:2}}>{d.desc}</div>
-                  <div style={{fontSize:9,color:"#999",marginTop:3}}>
-                    HP: {d.playerHP} · Enemy HP: {d.healthMult}x · Speed: {d.speedMult}x
-                  </div>
+                  <div style={{fontSize:isMobile?12:14,fontWeight:900,color:d.color}}>{d.emoji} {d.label}</div>
+                  <div style={{fontSize:isMobile?9:10,color:"#888",marginTop:2}}>{d.desc}</div>
+                  {!isMobile && <div style={{fontSize:9,color:"#555",marginTop:3}}>HP: {d.playerHP} · Enemy: {d.healthMult}x · Speed: {d.speedMult}x</div>}
                 </button>
               ))}
             </div>
           </div>
-          <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap",marginBottom:14}}>
-            <button onClick={startGame} style={{...btnP,minWidth:150}}>DEPLOY</button>
-            <button onClick={()=>{refreshLeaderboard();setShowLeaderboard(true);}} style={{...btnS,minWidth:150}}>LEADERBOARD</button>
-            <button onClick={()=>setShowAchievements(true)} style={{...btnS,minWidth:150}}>🏅 ACHIEVEMENTS</button>
+
+          <div style={{display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr",gap:6,marginBottom:sectionGap}}>
+            <button onClick={()=>setMenuView("rules")} style={menuBtnStyle}>📜 Rules</button>
+            <button onClick={()=>setMenuView("controls")} style={menuBtnStyle}>⌨ Controls</button>
+            <button onClick={()=>setMenuView("mostwanted")} style={menuBtnStyle}>👾 Bestiary</button>
+            <button onClick={()=>{refreshLeaderboard();setShowLeaderboard(true);}} style={menuBtnStyle}>🏆 Leaderboard</button>
+            <button onClick={()=>setShowArmory(true)} style={menuBtnStyle}>🔧 Weapon Armory</button>
+            <button onClick={()=>setShowAchievements(true)} style={menuBtnStyle}>🏅 Achievements</button>
+            <button onClick={()=>setShowCareer(true)} style={{...menuBtnStyle,gridColumn:isMobile?"auto":"1/3"}}>📊 Career Stats</button>
           </div>
-          <div style={{...card,margin:"0 auto",maxWidth:440,padding:"14px 18px",background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.15)"}}>
-            <div style={{fontSize:13,color:"#FFF",letterSpacing:1,marginBottom:8,fontWeight:800}}>CONTROLS</div>
-            {isMobile ? (
-              <div style={{fontSize:13,color:"#F0F0F0",lineHeight:2.0}}>
-                <div><span style={{color:"#FF6B35",fontWeight:800}}>Left thumb</span> - Move your soldier</div>
-                <div><span style={{color:"#FF6B35",fontWeight:800}}>Right thumb</span> - Aim and auto-fire</div>
-                <div><span style={{color:"#DDD"}}>Move only = auto-aims nearest enemy</span></div>
-                <div><span style={{color:"#00E5FF",fontWeight:800}}>DASH button</span> - Dodge through enemies</div>
-                <div><span style={{color:"#FF4500",fontWeight:800}}>GRENADE button</span> - Boom time</div>
-                <div><span style={{color:"#FFD700",fontWeight:800}}>Buttons</span> - Swap weapons and reload</div>
-              </div>
-            ) : (
-              <div style={{fontSize:13,color:"#F0F0F0",lineHeight:2.0}}>
-                <div><span style={{color:"#FF6B35",fontWeight:800}}>WASD</span> Move, <span style={{color:"#FF6B35",fontWeight:800}}>Mouse</span> Aim, <span style={{color:"#FF6B35",fontWeight:800}}>Click</span> Shoot</div>
-                <div><span style={{color:"#FFD700",fontWeight:800}}>R</span> Reload, <span style={{color:"#FFD700",fontWeight:800}}>1-4</span> Switch weapons</div>
-                <div><span style={{color:"#FF4500",fontWeight:800}}>5/Q/G</span> Grenade, <span style={{color:"#00E5FF",fontWeight:800}}>Space/Shift</span> Dash</div>
-                <div><span style={{color:"#FFD700",fontWeight:800}}>Esc</span> Pause</div>
-              </div>
-            )}
-          </div>
-          <div style={{fontSize:12,color:"#DDD",marginTop:10,lineHeight:1.7,padding:"0 8px"}}>
-            Combos, Killstreaks, XP & Levels, Dash, Grenades, Radar, Nukes, Guardian Angel, Achievements
-          </div>
+
+          {careerStats.gamesPlayed > 0 && (
+            <div style={{fontSize:10,color:"#555",marginTop:4}}>
+              Games: {careerStats.gamesPlayed} · Best: {careerStats.bestScore.toLocaleString()} · Wave: {careerStats.highestWave} · PP: {(careerStats.prestigePoints||0).toLocaleString()}
+            </div>
+          )}
+          </>)}
         </div>
       </div>
     );
@@ -1286,16 +1640,16 @@ export default function CallOfDoodie() {
   // ======== DEATH ========
   if (screen === "death") {
     return (
-      <div style={{...base,alignItems:"center",justifyContent:"center",color:"#fff",background:"linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)",padding:16,boxSizing:"border-box",overflowY:"auto"}}>
+      <div style={{...scrollBase,background:"linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)",padding:0}}>
         {showLeaderboard && <LeaderboardPanel onClose={()=>setShowLeaderboard(false)} />}
-        <div style={{textAlign:"center",maxWidth:460,width:"100%"}}>
-          <div style={{fontSize:48}}>💀</div>
-          <h2 style={{fontSize:"clamp(24px,7vw,38px)",color:"#FF2222",margin:"4px 0",letterSpacing:3}}>YOU DIED</h2>
-          <p style={{color:"#FF6666",fontSize:14,fontStyle:"italic",margin:"4px 0 8px"}}>"{deathMessage}"</p>
+        <div style={{textAlign:"center",maxWidth:isMobile?400:480,width:"100%",padding:isMobile?"20px 16px 32px":"32px 24px 40px"}}>
+          <div style={{fontSize:48,filter:"drop-shadow(0 0 15px rgba(255,0,0,0.4))"}}>💀</div>
+          <h2 style={{fontSize:"clamp(22px,7vw,36px)",color:"#FF2222",margin:"4px 0",letterSpacing:3}}>YOU DIED</h2>
+          <p style={{color:"#FF6666",fontSize:isMobile?12:14,fontStyle:"italic",margin:"4px 0 8px"}}>"{deathMessage}"</p>
           <div style={{fontSize:11,color:(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).color,marginBottom:12,fontWeight:700}}>
             {(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).emoji} {(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).label.toUpperCase()} MODE
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:12}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:isMobile?4:6,marginBottom:12}}>
             {[
               [score.toLocaleString(),"SCORE","#FFD700"],
               [kills,"KILLS","#0F0"],
@@ -1307,47 +1661,47 @@ export default function CallOfDoodie() {
               [statsRef.current.crits || 0,"CRITS","#FFD700"],
               [statsRef.current.grenades || 0,"GRENADES","#FF4500"],
             ].map(([val,label,color],i) => (
-              <div key={i} style={{...card,padding:"8px 4px"}}>
-                <div style={{fontSize:17,fontWeight:900,color:color}}>{val}</div>
-                <div style={{fontSize:9,color:"#DDD",letterSpacing:1}}>{label}</div>
+              <div key={i} style={{...card,padding:isMobile?"6px 2px":"8px 4px"}}>
+                <div style={{fontSize:isMobile?14:17,fontWeight:900,color:color}}>{val}</div>
+                <div style={{fontSize:isMobile?8:9,color:"#999",letterSpacing:1}}>{label}</div>
               </div>
             ))}
           </div>
           {achievementsUnlocked.length > 0 && (
-            <div style={{marginBottom:10,fontSize:12,color:"#DDD"}}>
+            <div style={{marginBottom:10,fontSize:12,color:"#999"}}>
               {achievementsUnlocked.length} achievement{achievementsUnlocked.length>1?"s":""} unlocked:
               <span style={{color:"#FFD700",marginLeft:4}}>
                 {achievementsUnlocked.map(id=>{const a=ACHIEVEMENTS.find(x=>x.id===id);return a?a.emoji:"";}).join(" ")}
               </span>
             </div>
           )}
-          <div style={{marginBottom:10,color:"#EEE",fontSize:13}}>
+          <div style={{marginBottom:10,color:"#CCC",fontSize:13}}>
             Rank: <span style={{color:"#FFD700",fontWeight:700}}>{RANK_NAMES[rankIndex]}</span>
           </div>
           {!submitted ? (
-            <div style={{...card,marginBottom:12,border:"1px solid rgba(255,215,0,0.15)"}}>
-              <div style={{fontSize:12,color:"#FFD700",marginBottom:8,letterSpacing:1,fontWeight:700}}>SUBMIT TO HALL OF SHAME</div>
+            <div style={{...card,marginBottom:12,border:"1px solid rgba(255,215,0,0.1)"}}>
+              <div style={{fontSize:11,color:"#FFD700",marginBottom:8,letterSpacing:2,fontWeight:700}}>SUBMIT TO HALL OF SHAME</div>
               <input type="text" value={lastWords} maxLength={60}
                 onChange={e=>{const w=e.target.value.split(/\s+/).filter(Boolean);if(w.length<=5)setLastWords(e.target.value);}}
                 placeholder="Famous last words (5 words max)"
-                style={{width:"100%",padding:"10px 12px",fontSize:13,fontFamily:"'Courier New',monospace",fontStyle:"italic",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.15)",borderRadius:6,color:"#FF69B4",textAlign:"center",outline:"none",marginBottom:6,boxSizing:"border-box"}}
+                style={{width:"100%",padding:"10px 12px",fontSize:13,fontFamily:"'Courier New',monospace",fontStyle:"italic",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:8,color:"#FF69B4",textAlign:"center",outline:"none",marginBottom:6,boxSizing:"border-box"}}
                 onKeyDown={e=>{if(e.key==="Enter")submitScore();}}
               />
-              <div style={{fontSize:10,color:"#CCC",marginBottom:8}}>
-                {lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words - Visible on global leaderboard
+              <div style={{fontSize:10,color:"#666",marginBottom:8}}>
+                {lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words
               </div>
-              <button onClick={submitScore} style={{...btnP,width:"100%",fontSize:14,padding:"10px"}}>SUBMIT SCORE</button>
+              <button onClick={submitScore} style={{...btnP,width:"100%",fontSize:14,padding:"12px"}}>SUBMIT SCORE</button>
             </div>
           ) : (
-            <div style={{...card,marginBottom:12,border:"1px solid rgba(0,255,0,0.2)",background:"rgba(0,255,0,0.03)"}}>
+            <div style={{...card,marginBottom:12,border:"1px solid rgba(0,255,0,0.15)",background:"rgba(0,255,0,0.03)"}}>
               <div style={{color:"#0F0",fontSize:14,fontWeight:700}}>Score submitted!</div>
-              <div style={{color:"#CCC",fontSize:11,marginTop:4}}>Your shame is now public knowledge.</div>
+              <div style={{color:"#888",fontSize:11,marginTop:4}}>Your shame is now public knowledge.</div>
             </div>
           )}
           <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
-            <button onClick={startGame} style={{...btnP,minWidth:110,fontSize:15}}>PLAY AGAIN</button>
-            <button onClick={()=>{refreshLeaderboard();setShowLeaderboard(true);}} style={{...btnS,minWidth:130,fontSize:15}}>LEADERBOARD</button>
-            <button onClick={()=>setScreen("menu")} style={{...btnS,minWidth:110,fontSize:15}}>RAGE QUIT</button>
+            <button onClick={startGame} style={{...btnP,flex:1,minWidth:100,fontSize:isMobile?13:15}}>PLAY AGAIN</button>
+            <button onClick={()=>{refreshLeaderboard();setShowLeaderboard(true);}} style={{...btnS,flex:1,minWidth:100,fontSize:isMobile?13:15}}>LEADERBOARD</button>
+            <button onClick={()=>setScreen("menu")} style={{...btnS,flex:1,minWidth:100,fontSize:isMobile?13:15}}>MAIN MENU</button>
           </div>
         </div>
       </div>
@@ -1375,9 +1729,11 @@ export default function CallOfDoodie() {
       <div style={{position:"absolute",top:0,left:0,right:0,bottom:isMobile?56:0,pointerEvents:"none",color:"#fff"}}>
         <div style={{position:"absolute",top:6,left:"50%",transform:"translateX(-50%)",fontSize:11,color:"#FFF",background:"rgba(0,0,0,0.5)",padding:"3px 12px",borderRadius:10,fontWeight:700,display:"flex",gap:8,alignItems:"center"}}>
           <span>WAVE {wave}</span>
-          <span style={{color:wave>=15?"#FF0000":wave>=10?"#FF4500":wave>=5?"#FFD700":"#0F0",fontSize:9}}>
-            {wave>=15?"☠️ EXTREME":wave>=10?"🔥 HARD":wave>=5?"⚠️ MEDIUM":"✅ EASY"}
-          </span>
+          {isBossWave ? <span style={{color:"#FF0000",fontSize:9,fontWeight:900}}>👹 BOSS</span> : (
+            <span style={{color:wave>=15?"#FF0000":wave>=10?"#FF4500":wave>=5?"#FFD700":"#0F0",fontSize:9}}>
+              {wave>=15?"☠️ EXTREME":wave>=10?"🔥 HARD":wave>=5?"⚠️ MEDIUM":"✅ EASY"}
+            </span>
+          )}
           <span style={{color:"#CCC"}}>{fmtTime(timeSurvived)}</span>
           {difficulty !== "normal" && <span style={{color:(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).color,fontSize:9}}>{(DIFFICULTIES[difficulty]||DIFFICULTIES.normal).emoji}</span>}
         </div>
