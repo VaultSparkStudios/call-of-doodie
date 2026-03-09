@@ -2,8 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="description" content="Call of Doodie: Modern Warfare on Mom's WiFi - A browser-based shooter parody game" />
     <title>Call of Doodie</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body, #root { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; }
+      body { -webkit-overflow-scrolling: touch; overscroll-behavior: none; }
+      button { -webkit-tap-highlight-color: transparent; }
+      button:active { transform: scale(0.96) !important; opacity: 0.85; }
+      button:focus-visible { outline: 2px solid #FF6B35; outline-offset: 2px; }
+      @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+      @keyframes slideDown { from{opacity:0;transform:translateX(-50%) translateY(-10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+      @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+      @keyframes pulseGlow { 0%,100%{box-shadow:0 0 10px rgba(255,107,53,0.3)} 50%{box-shadow:0 0 25px rgba(255,107,53,0.6)} }
+      input:focus { outline: 2px solid #FF6B35; outline-offset: 0; }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+      @media (hover: hover) {
+        button:hover { filter: brightness(1.15); }
+      }
+      @media (max-width: 600px) {
+        ::-webkit-scrollbar { width: 3px; }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
