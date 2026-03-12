@@ -48,6 +48,10 @@ export default function CallOfDoodie() {
   const difficultyRef    = useRef("normal");
   const perkModsRef      = useRef({});   // active perk multipliers
   const perkPendingRef   = useRef(false); // blocks game loop like pause
+  const frameCountRef    = useRef(0);    // for throttling React state syncs
+  const ctxRef           = useRef(null); // cached canvas 2D context
+  const lastHitSoundRef  = useRef(0);    // throttle soundHit calls
+  const achCheckRef      = useRef(false);// batch achievement checks to once/frame
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState("username");
@@ -210,11 +214,13 @@ export default function CallOfDoodie() {
         addText(gsRef.current, GW() / 2, GH() / 2 - 60, "⬆ LEVEL " + ref.level + "!", "#00FF88", true);
         gsRef.current.player.speed = 4 + ref.level * 0.12;
       }
-      // Trigger perk selection
-      const opts = getRandomPerks(3);
-      setPerkOptions(opts);
-      setPerkPending(true);
-      perkPendingRef.current = true;
+      // Trigger perk selection every 3 level-ups
+      if (ref.level % 3 === 0) {
+        const opts = getRandomPerks(3);
+        setPerkOptions(opts);
+        setPerkPending(true);
+        perkPendingRef.current = true;
+      }
     }
     setXp(ref.xp);
   }, []);
@@ -466,7 +472,8 @@ export default function CallOfDoodie() {
     if (!gs) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
+    const ctx = ctxRef.current;
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
     if (pausedRef.current || perkPendingRef.current) {
@@ -520,8 +527,8 @@ export default function CallOfDoodie() {
     // ── Combo decay ──
     if (comboRef.current.timer > 0) {
       comboRef.current.timer--;
-      if (comboRef.current.timer <= 0) { comboRef.current.count = 0; setCombo(0); }
-      setComboTimer(comboRef.current.timer);
+      if (comboRef.current.timer <= 0) { comboRef.current.count = 0; setCombo(0); setComboTimer(0); }
+      else if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
     }
 
     // ── Wave / boss wave logic ──
@@ -635,7 +642,8 @@ export default function CallOfDoodie() {
             setHealth(Math.floor(p.health));
           }
           if (isCrit) statsRef.current.crits++;
-          soundHit(isCrit);
+          const _hn = performance.now();
+          if (_hn - lastHitSoundRef.current > 50) { soundHit(isCrit); lastHitSoundRef.current = _hn; }
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
           addText(gs, e.x + (Math.random() - 0.5) * 20, e.y - e.size / 2 - Math.random() * 10,
@@ -664,7 +672,7 @@ export default function CallOfDoodie() {
             addText(gs, e.x, e.y - 50, e.deathQuote, "#FF69B4");
             addKillFeed(e.name, WEAPONS[wpnIdx].name);
             addXp(pts); gs.killFlash = 6;
-            checkAchievements(gs);
+            achCheckRef.current = true;
             if (KILL_MILESTONES[gs.kills]) {
               addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
               addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
@@ -689,6 +697,7 @@ export default function CallOfDoodie() {
       });
     });
     gs.enemies = gs.enemies.filter(e => e.health > -999);
+    if (achCheckRef.current) { checkAchievements(gs); achCheckRef.current = false; }
 
     // ── Enemy movement & melee ──
     gs.enemies.forEach(e => {
@@ -779,6 +788,7 @@ export default function CallOfDoodie() {
     if (gs.muzzleFlash > 0) gs.muzzleFlash--;
     if (gs.damageFlash > 0) gs.damageFlash--;
     if (gs.killFlash > 0) gs.killFlash--;
+    frameCountRef.current++;
 
     // ────────────────── RENDER ────────────────────────────────────────────
     ctx.save();
