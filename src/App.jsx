@@ -182,6 +182,7 @@ export default function CallOfDoodie() {
     achievedRef.current = new Set();
     perkModsRef.current = {};
     perkPendingRef.current = false;
+    ctxRef.current = null;
     startTimeRef.current = Date.now();
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
   }, []);
