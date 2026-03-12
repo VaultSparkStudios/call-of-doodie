@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { WEAPONS, DIFFICULTIES, ACHIEVEMENTS } from "../constants.js";
+import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS } from "../constants.js";
 import { loadCareerStats } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
@@ -8,6 +8,9 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
+  const [showRules, setShowRules] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const [showBestiary, setShowBestiary] = useState(false);
   const [career, setCareer] = useState(null);
 
   useEffect(() => { setCareer(loadCareerStats()); }, []);
@@ -29,6 +32,95 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     <div style={{ ...base, alignItems: "center", justifyContent: "center", color: "#fff", padding: 20, boxSizing: "border-box", overflowY: "auto" }}>
       {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />}
       {showAchievements && <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />}
+
+      {/* Rules Modal */}
+      {showRules && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
+            <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
+              <div>🎯 <strong style={{ color: "#FF6B35" }}>Objective:</strong> Survive as many waves as possible</div>
+              <div>👾 <strong style={{ color: "#FF6B35" }}>Enemies:</strong> Spawn in waves, each harder than the last</div>
+              <div>⚠️ <strong style={{ color: "#FF6B35" }}>Boss Waves:</strong> Every 5th wave spawns a powerful boss!</div>
+              <div>⚡ <strong style={{ color: "#FF6B35" }}>Combos:</strong> Kill quickly for score multipliers (2s window)</div>
+              <div>🔥 <strong style={{ color: "#FF6B35" }}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
+              <div>💥 <strong style={{ color: "#FF6B35" }}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
+              <div>💊 <strong style={{ color: "#FF6B35" }}>Pickups:</strong> Enemies drop health, ammo, speed, nukes & upgrades</div>
+              <div>🔧 <strong style={{ color: "#FF6B35" }}>Weapon Upgrades:</strong> Rare drops — boost damage, fire rate & ammo!</div>
+              <div>😇 <strong style={{ color: "#FF6B35" }}>Guardian Angel:</strong> Super rare boss drop — grants 1 extra life!</div>
+              <div>✨ <strong style={{ color: "#FF6B35" }}>Perks:</strong> Pick one on every level-up. They stack!</div>
+              <div>⚠️ <strong style={{ color: "#FF6B35" }}>Ranged Foes:</strong> Glowing ring enemies shoot at you!</div>
+              <div>💨 <strong style={{ color: "#FF6B35" }}>Dash:</strong> Brief invincibility to dodge through danger</div>
+              <div>⬆ <strong style={{ color: "#FF6B35" }}>XP & Levels:</strong> Level up from kills — choose a perk each time</div>
+              <div>🏆 <strong style={{ color: "#FF6B35" }}>Leaderboard:</strong> Submit your score with famous last words</div>
+            </div>
+            <button onClick={() => setShowRules(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
+          </div>
+        </div>
+      )}
+
+      {/* Controls Modal */}
+      {showControls && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
+            {isMobile ? (
+              <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
+                <div>👆 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left thumb</span> — Move soldier</div>
+                <div>👆 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right thumb</span> — Aim & auto-fire</div>
+                <div>🎯 <span style={{ color: "#EEE" }}>Move only → auto-aims nearest enemy</span></div>
+                <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>DASH button</span> — Invincible dodge</div>
+                <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>GRENADE button</span> — AOE explosion</div>
+                <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>Weapon buttons</span> — Tap to swap</div>
+                <div>⟳ <span style={{ color: "#FFD700", fontWeight: 800 }}>R button</span> — Manual reload</div>
+                <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Pause button</span> — Pause menu</div>
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
+                <div>🏃 <span style={{ color: "#FF6B35", fontWeight: 800 }}>W/A/S/D</span> — Move</div>
+                <div>🖱 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Mouse</span> — Aim</div>
+                <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Click</span> — Shoot</div>
+                <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>R</span> — Reload</div>
+                <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>1 / 2 / 3 / 4</span> — Switch weapons</div>
+                <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>5 / Q / G</span> — Throw grenade</div>
+                <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>Space / Shift</span> — Dash</div>
+                <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
+              </div>
+            )}
+            <div style={{ marginTop: 14 }}>
+              <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 6 }}>WEAPONS</div>
+              {WEAPONS.map((w, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", fontSize: 12, color: "#EEE" }}>
+                  <span style={{ fontSize: 16 }}>{w.emoji}</span>
+                  <span style={{ color: w.color, fontWeight: 700, minWidth: 140 }}>[{i + 1}] {w.name}</span>
+                  <span style={{ color: "#CCC", fontSize: 11 }}>{w.desc}</span>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setShowControls(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
+          </div>
+        </div>
+      )}
+
+      {/* Most Wanted List Modal */}
+      {showBestiary && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
+            {ENEMY_TYPES.map((e, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <span style={{ fontSize: 24 }}>{e.emoji}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
+                  <div style={{ fontSize: 10, color: "#CCC" }}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED ⚡" : ""}</div>
+                  <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{e.deathQuote}"</div>
+                </div>
+              </div>
+            ))}
+            <button onClick={() => setShowBestiary(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
+          </div>
+        </div>
+      )}
 
       {/* Career Stats Modal */}
       {showCareer && career && (
@@ -112,27 +204,16 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <button onClick={onStart} style={{ ...btnP, minWidth: 150 }}>DEPLOY</button>
           <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 150 }}>LEADERBOARD</button>
         </div>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
           <button onClick={() => { setCareer(loadCareerStats()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150 }}>📊 CAREER STATS</button>
           <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} style={{ ...btnS, minWidth: 150 }}>🏅 ACHIEVEMENTS</button>
         </div>
-
-        {/* Controls reference */}
-        <div style={{ ...card, margin: "0 auto", maxWidth: 440, padding: "14px 18px", background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)" }}>
-          <div style={{ fontSize: 13, color: "#FFF", letterSpacing: 1, marginBottom: 8, fontWeight: 800 }}>CONTROLS</div>
-          {isMobile ? (
-            <div style={{ fontSize: 13, color: "#F0F0F0", lineHeight: 2.0 }}>
-              <div><span style={{ color: "#FF6B35", fontWeight: 800 }}>Left thumb</span> - Move · <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right thumb</span> - Aim &amp; fire</div>
-              <div><span style={{ color: "#00E5FF", fontWeight: 800 }}>DASH</span> - Dodge · <span style={{ color: "#FF4500", fontWeight: 800 }}>GRENADE</span> - Boom</div>
-            </div>
-          ) : (
-            <div style={{ fontSize: 13, color: "#F0F0F0", lineHeight: 2.0 }}>
-              <div><span style={{ color: "#FF6B35", fontWeight: 800 }}>WASD</span> Move · <span style={{ color: "#FF6B35", fontWeight: 800 }}>Mouse</span> Aim · <span style={{ color: "#FF6B35", fontWeight: 800 }}>Click</span> Shoot</div>
-              <div><span style={{ color: "#FFD700", fontWeight: 800 }}>R</span> Reload · <span style={{ color: "#FFD700", fontWeight: 800 }}>1–4</span> Weapons · <span style={{ color: "#FF4500", fontWeight: 800 }}>5/Q/G</span> Grenade</div>
-              <div><span style={{ color: "#00E5FF", fontWeight: 800 }}>Space/Shift</span> Dash · <span style={{ color: "#FFD700", fontWeight: 800 }}>Esc</span> Pause</div>
-            </div>
-          )}
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
+          <button onClick={() => setShowRules(true)} style={{ ...btnS, minWidth: 150 }}>📜 RULES</button>
+          <button onClick={() => setShowControls(true)} style={{ ...btnS, minWidth: 150 }}>⌨ CONTROLS</button>
+          <button onClick={() => setShowBestiary(true)} style={{ ...btnS, minWidth: 150 }}>👾 MOST WANTED</button>
         </div>
+
         <div style={{ fontSize: 11, color: "#888", marginTop: 8 }}>
           ✨ Perks on level-up · 🔧 Weapon upgrades · ⚠️ Boss waves every 5 waves
         </div>

@@ -2,13 +2,34 @@
 
 ## Project Overview
 
-**Call-Of-Doodie** is a Call of Duty parody browser-based shooter game built with Vite + React. It is deployed via GitHub Pages.
+**Call-Of-Doodie** is a Call of Duty parody browser-based shooter game built with Vite + React. Deployed via GitHub Pages.
 
 - **Repo**: `VaultSparkStudios/Call-Of-Doodie`
 - **Default branch**: `main`
 - **Deployment**: GitHub Pages via GitHub Actions (`.github/workflows/deploy.yml`)
 - **Domain**: vaultsparkstudios.com (custom domain configured)
-- **URL base slug**: `/call-of-doodie/` (lowercase — this is the standard, set in `vite.config.js`)
+- **URL base slug**: `/call-of-doodie/` ← **lowercase is the standard** (set in `vite.config.js`)
+
+---
+
+## Git State
+
+Clean. Commit `bbd3592` is pushed to `origin/main`. All features from session 2 are live.
+
+---
+
+## Pending Work
+
+### 1. Studio Deployment Standards compliance
+The studio owner mentioned an **AGENTS file** and **Studio Deployment Standards** in a separate studio site repo. This session did not have access to that repo. Next session must:
+- Locate the studio site repo and read the AGENTS file and Deployment Standards
+- Audit `call-of-doodie` against those standards
+- Make any required changes (file naming, structure, config, metadata, etc.)
+
+### 2. Game memory file
+The studio owner requested a game-specific memory file be created. Deferred until standards doc is reviewed so the format matches requirements.
+
+---
 
 ## Tech Stack
 
@@ -19,87 +40,84 @@
 | Language  | JavaScript (JSX) |
 | Hosting   | GitHub Pages     |
 
+---
+
 ## Project Structure
 
 ```
 Call-Of-Doodie/
 ├── index.html
 ├── package.json
-├── vite.config.js          # base: "/call-of-doodie/" (lowercase)
-├── HANDOFF.md
+├── vite.config.js              # base: "/call-of-doodie/" (lowercase — standard)
+├── HANDOFF.md                  # this file
 ├── .github/workflows/deploy.yml
 └── src/
-    ├── main.jsx            # Entry point
-    ├── App.jsx             # Game loop + state orchestrator (~700 lines)
-    ├── constants.js        # All game constants, PERKS, ACHIEVEMENTS, etc.
-    ├── storage.js          # Leaderboard + persistent career stats
-    ├── sounds.js           # Web Audio API synthesis (no audio files)
+    ├── main.jsx                # Entry point (unchanged)
+    ├── App.jsx                 # Game loop + state orchestrator (~700 lines)
+    ├── constants.js            # WEAPONS, ENEMY_TYPES, PERKS, ACHIEVEMENTS, DIFFICULTIES, etc.
+    ├── storage.js              # Leaderboard (cod-lb-v5) + career stats (cod-career-v1)
+    ├── sounds.js               # Web Audio API synthesis — no audio files needed
     └── components/
         ├── UsernameScreen.jsx
-        ├── MenuScreen.jsx       # Includes career stats panel
+        ├── MenuScreen.jsx      # Main menu — includes Rules, Controls, Most Wanted, Career, Achievements
         ├── DeathScreen.jsx
-        ├── HUD.jsx              # In-game overlay + desktop toolbar
-        ├── PauseMenu.jsx        # Rules / Controls / Most Wanted List
+        ├── HUD.jsx             # In-game overlay + desktop weapon toolbar
+        ├── PauseMenu.jsx       # Rules / Controls / Most Wanted List sub-views (also in pause)
         ├── LeaderboardPanel.jsx
         ├── AchievementsPanel.jsx
-        └── PerkModal.jsx        # Roguelite perk picker (new)
+        └── PerkModal.jsx       # Roguelite perk picker
 ```
+
+---
+
+## Features Implemented (sessions 1–3)
+
+| Feature | Details |
+|---------|---------|
+| **Boss waves** | Every 5th wave — Mega Karen (5–9), Landlord (10–14), both (15+). Red bg, pulsing radar, guaranteed drops |
+| **Weapon upgrades** | 🔧 pickup, up to ⭐⭐⭐ per weapon. +25% dmg, −10% fire delay, +25% ammo per star |
+| **Roguelite perks** | 12 perks, one chosen on every level-up from 3 random options. All stackable |
+| **Sound effects** | Full Web Audio API synthesis — unique sounds for every game event, zero audio files |
+| **Career stats** | Persistent across runs in localStorage (`cod-career-v1`) |
+| **Component refactor** | App.jsx split from 1484 → ~700 lines; all UI moved to `src/components/` |
+| **38 achievements** | Includes perks, upgrades, boss wave clears |
+| **Lowercase URL slug** | `vite.config.js` base changed from `/Call-Of-Doodie/` → `/call-of-doodie/` |
+| **Main menu info panels** | Rules, Controls, and Most Wanted List now accessible from main menu (not just pause) |
+
+---
+
+## Architecture Notes
+
+- Game loop: single `gameLoop` useCallback in `App.jsx` — heavy use of refs to avoid stale closures
+- `perkModsRef.current` active fields: `damageMult`, `critBonus`, `lifesteal`, `pickupRange`, `pierce`, `ammoMult`, `grenadeCDMult`, `dashCDMult`, `comboTimerMult`, `xpMult`
+- `perkPendingRef` halts the game loop (same mechanism as `pausedRef`) while perk modal is open
+- Weapon upgrade levels stored in `gsRef.current.weaponUpgrades[0..3]`
+- React 19 — hook rules enforced; all hooks must be unconditional at top level
+
+---
 
 ## Scripts
 
 ```bash
 npm run dev      # Local dev server
-npm run build    # Production build
+npm run build    # Production build (must pass before any push)
 npm run preview  # Preview production build
 ```
 
-## Git Configuration
+## Git / Deploy Standards
 
-- **user.name**: `VaultSparkStudios`
-- **user.email**: `founder@vaultsparkstudios.com`
+- **Deploy trigger**: push to `main` → GitHub Actions auto-deploys to GitHub Pages
+- **Branch naming**: `claude/<description>-<sessionId>`
+- **URL slug**: always lowercase `/call-of-doodie/` in `vite.config.js`
+- **Git config**: user.name `VaultSparkStudios` · user.email `founder@vaultsparkstudios.com`
+- **Build must pass** (`npm run build`) before any push or PR
 
-## Recent Development History
+---
 
-| Commit | Description |
-|--------|-------------|
-| (latest) | Refactor into components; add boss waves, weapon upgrades, perks, sounds, career stats |
-| `5e0c26e` | Revert: Add home screen menus, career stats, weapon upgrades, boss waves |
-| `9a526b3` | Fix leaderboard, respawn system, add Guardian Angel power-up and difficulty levels |
-| `fc40772` | Set up Vite + React project for GitHub Pages deployment |
+## Known Limitations / Future Work
 
-## Key Features Implemented
-
-- **Boss waves** — Every 5th wave spawns a scaled boss (Mega Karen → Landlord → both at wave 15+)
-- **Weapon upgrades** — 🔧 pickup drops; up to ⭐⭐⭐ per weapon (+25% dmg, −10% fire delay, +25% ammo)
-- **Roguelite perks** — 12 perks picked on every level-up, all stackable (damage, crit, lifesteal, pierce, etc.)
-- **Sound effects** — Full Web Audio API synthesis; no audio files required
-- **Persistent career stats** — Cross-run totals in localStorage (`cod-career-v1`)
-- **Leaderboard** — Local top-100, stored in localStorage (`cod-lb-v5`)
-- **38 achievements** — Including boss wave, perk, and upgrade achievements
-- **Difficulty levels** — Easy / Normal / Hard / INSANE
-- **Combo / killstreak / XP / dash / grenade / Guardian Angel / nuke / radar**
-- **Mobile** — Dual virtual joystick controls
-- **"Most Wanted List"** (renamed from Bestiary)
-
-## Architecture Notes
-
-- Game loop is a single `gameLoop` useCallback in `App.jsx` — uses refs heavily to avoid stale closures
-- `perkModsRef.current` holds all active perk multipliers: `damageMult`, `critBonus`, `lifesteal`, `pickupRange`, `pierce`, `ammoMult`, `grenadeCDMult`, `dashCDMult`, `comboTimerMult`, `xpMult`
-- `perkPendingRef` pauses the game loop (same as `pausedRef`) while perk modal is open
-- Weapon upgrade levels are tracked in `gsRef.current.weaponUpgrades[0..3]`
-- React 19 in use — hook rules are strict; always define hooks unconditionally at top level
-
-## Known Considerations / Future Work
-
-- No backend — leaderboard is localStorage only (not truly global)
+- Leaderboard is localStorage only — not truly global (no backend)
 - No gamepad/controller support
-- Boss shield mechanic (from a previously reverted PR) not reimplemented yet
-- Game loop could be extracted to a custom `useGameLoop` hook for further cleanliness
-
-## Transition Notes for Terminal-Based AI Agent
-
-1. **Local setup**: Run `npm install` if `node_modules` is missing or stale.
-2. **URL slug standard**: Always use lowercase `/call-of-doodie/` as the `base` in `vite.config.js`.
-3. **Testing changes**: Use `npm run dev` to test locally before pushing.
-4. **Deploying**: Push to `main` — GitHub Actions builds and deploys automatically.
-5. **Branch naming**: Claude Code branches follow the pattern `claude/<description>-<sessionId>`.
+- Boss shield mechanic (reverted in a prior PR) not reimplemented
+- Game loop could be extracted to a `useGameLoop` hook
+- Studio Deployment Standards compliance not yet verified (pending access to studio site repo + AGENTS file)
