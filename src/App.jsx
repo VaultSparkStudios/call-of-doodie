@@ -1207,14 +1207,27 @@ export default function CallOfDoodie() {
     bgGrad.addColorStop(1, gs.bossWave ? "#0e0000" : "#0e0e1a");
     ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
 
-    // ── Floor zone patches (large tinted areas, themed per run) ──
-    const FZ_COLORS = ["rgba(75,65,105,", "rgba(45,75,45,", "rgba(72,65,45,", "rgba(85,55,28,"];
-    const fzColor = gs.bossWave ? "rgba(90,28,28," : FZ_COLORS[gs.mapTheme || 0];
+    // ── Floor zone panels (room sections with tile grid, themed per run) ──
+    const FZ_FILL = ["rgba(62,55,92,", "rgba(35,62,35,", "rgba(60,54,36,", "rgba(72,46,22,"];
+    const FZ_TILE = ["rgba(88,76,125,", "rgba(50,85,50,", "rgba(82,74,48,", "rgba(98,62,28,"];
+    const fzFill = gs.bossWave ? "rgba(82,22,22," : FZ_FILL[gs.mapTheme || 0];
+    const fzTile = gs.bossWave ? "rgba(112,30,30," : FZ_TILE[gs.mapTheme || 0];
     (gs.floorZones || []).forEach(fz => {
       ctx.save(); ctx.translate(fz.x, fz.y); ctx.rotate(fz.rot);
-      ctx.globalAlpha = fz.alpha * (gs.bossWave ? 0.7 : 1);
-      ctx.fillStyle = fzColor + "1)";
-      ctx.beginPath(); ctx.ellipse(0, 0, fz.rx, fz.ry, 0, 0, Math.PI * 2); ctx.fill();
+      const ba = fz.alpha * 2.8 * (gs.bossWave ? 0.75 : 1);
+      // Panel fill
+      ctx.globalAlpha = ba;
+      ctx.fillStyle = fzFill + "1)";
+      ctx.beginPath(); ctx.roundRect(-fz.rx, -fz.ry, fz.rx * 2, fz.ry * 2, 5); ctx.fill();
+      // Internal tile grid
+      ctx.globalAlpha = ba * 0.5;
+      ctx.strokeStyle = fzTile + "1)"; ctx.lineWidth = 0.7;
+      const TS = 26;
+      for (let tx = -fz.rx + TS; tx < fz.rx; tx += TS) { ctx.beginPath(); ctx.moveTo(tx, -fz.ry); ctx.lineTo(tx, fz.ry); ctx.stroke(); }
+      for (let ty = -fz.ry + TS; ty < fz.ry; ty += TS) { ctx.beginPath(); ctx.moveTo(-fz.rx, ty); ctx.lineTo(fz.rx, ty); ctx.stroke(); }
+      // Panel border
+      ctx.globalAlpha = ba * 0.65; ctx.strokeStyle = fzTile + "1)"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(-fz.rx, -fz.ry, fz.rx * 2, fz.ry * 2, 5); ctx.stroke();
       ctx.globalAlpha = 1; ctx.restore();
     });
 
@@ -1314,82 +1327,157 @@ export default function CallOfDoodie() {
       ctx.beginPath(); ctx.arc(0, 0, eb.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     });
 
-    // Obstacles — themed colors per run, red-tinted on boss waves
+    // Obstacles — themed, floor shadow + 3D top-left highlight + internal stripes
     const WALL_T = [
-      ["rgba(52,52,92,0.93)", "rgba(108,108,192,0.72)", "#6464CC"], // office
-      ["rgba(32,58,32,0.93)", "rgba(68,128,68,0.72)",   "#44AA44"], // bunker
-      ["rgba(58,52,36,0.93)", "rgba(128,112,72,0.72)",  "#AA9944"], // factory
-      ["rgba(68,46,24,0.93)", "rgba(142,102,58,0.72)",  "#BB8844"], // ruins
+      ["rgba(50,50,90,0.95)", "rgba(105,105,190,0.75)", "#6060CC", [88,88,155]],   // office
+      ["rgba(30,56,30,0.95)", "rgba(65,125,65,0.75)",   "#42AA42", [52,102,52]],   // bunker
+      ["rgba(56,50,34,0.95)", "rgba(125,110,68,0.75)",  "#A89540", [102,88,52]],   // factory
+      ["rgba(66,44,22,0.95)", "rgba(140,100,55,0.75)",  "#B88440", [115,78,40]],   // ruins
     ];
-    const wt = gs.bossWave ? ["rgba(78,22,22,0.93)", "rgba(168,48,48,0.72)", "#CC3333"] : WALL_T[gs.mapTheme || 0];
+    const wt = gs.bossWave
+      ? ["rgba(76,20,20,0.95)", "rgba(165,45,45,0.75)", "#CC3030", [135,32,32]]
+      : WALL_T[gs.mapTheme || 0];
     (gs.obstacles || []).forEach(ob => {
+      // Cast shadow
+      ctx.fillStyle = "rgba(0,0,0,0.32)"; ctx.fillRect(ob.x + 5, ob.y + 5, ob.w, ob.h);
+      // Main fill
       ctx.fillStyle = wt[0]; ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+      // Internal stripe detail
+      const [sr, sg, sb] = wt[3];
+      ctx.strokeStyle = `rgba(${sr},${sg},${sb},0.22)`; ctx.lineWidth = 1;
+      const isH = ob.w > ob.h;
+      const step = isH ? Math.max(6, Math.floor(ob.h / 3)) : Math.max(6, Math.floor(ob.w / 3));
+      if (isH) { for (let sy = ob.y + step; sy < ob.y + ob.h - 1; sy += step) { ctx.beginPath(); ctx.moveTo(ob.x + 2, sy); ctx.lineTo(ob.x + ob.w - 2, sy); ctx.stroke(); } }
+      else      { for (let sx = ob.x + step; sx < ob.x + ob.w - 1; sx += step) { ctx.beginPath(); ctx.moveTo(sx, ob.y + 2); ctx.lineTo(sx, ob.y + ob.h - 2); ctx.stroke(); } }
+      // Top-left 3D highlight edge
+      ctx.globalAlpha = 0.38;
+      ctx.strokeStyle = `rgba(${Math.min(255,sr+50)},${Math.min(255,sg+50)},${Math.min(255,sb+50)},0.85)`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(ob.x, ob.y + ob.h); ctx.lineTo(ob.x, ob.y); ctx.lineTo(ob.x + ob.w, ob.y); ctx.stroke();
+      ctx.globalAlpha = 1;
+      // Glow outline
       ctx.strokeStyle = wt[1]; ctx.lineWidth = 2; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h);
-      ctx.shadowColor = wt[2]; ctx.shadowBlur = 7; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
+      ctx.shadowColor = wt[2]; ctx.shadowBlur = 8; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
     });
 
     // Enemies
     gs.enemies.forEach(e => {
       ctx.save(); ctx.translate(e.x, e.y);
+      const r = e.size / 2;
+      const faceA = Math.atan2(p.y - e.y, p.x - e.x);
+      const dn = Date.now();
+
+      // Drop shadow
       ctx.fillStyle = "rgba(0,0,0,0.3)";
-      ctx.beginPath(); ctx.ellipse(0, e.size / 2, e.size / 2, e.size / 6, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = e.hitFlash > 0 ? "#FFF" : e.color;
-      ctx.beginPath(); ctx.arc(0, 0, e.size / 2, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "rgba(0,0,0,0.4)"; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(0, r + 3, r * 0.7, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Boss: under-body glow pool
+      if (e.isBossEnemy) {
+        const rgb = e.enrageTriggered ? "255,80,0" : "220,0,0";
+        ctx.globalAlpha = 0.18 + Math.sin(dn / 200) * 0.06;
+        ctx.fillStyle = `rgba(${rgb},1)`;
+        ctx.beginPath(); ctx.arc(0, 0, r + 22, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Body base
+      ctx.fillStyle = e.color;
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      // Hit-flash white overlay
+      if (e.hitFlash > 0) {
+        ctx.globalAlpha = Math.min(0.9, e.hitFlash / 12);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+      // Inner depth ring (darker ring for body volume)
+      ctx.globalAlpha = 0.32;
+      ctx.strokeStyle = "rgba(0,0,0,0.7)"; ctx.lineWidth = r * 0.28;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = 1;
+      // Top-left highlight
+      ctx.fillStyle = "rgba(255,255,255,0.13)";
+      ctx.beginPath(); ctx.arc(-r * 0.28, -r * 0.28, r * 0.38, 0, Math.PI * 2); ctx.fill();
+      // Outer border
+      ctx.strokeStyle = e.hitFlash > 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)";
+      ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+
+      // Eyes facing player (skip during hit flash)
+      if (e.hitFlash <= 4) {
+        ctx.save(); ctx.rotate(faceA);
+        const er = Math.max(1.8, r * 0.18);
+        [-1, 1].forEach(side => {
+          ctx.fillStyle = "rgba(255,255,255,0.92)";
+          ctx.beginPath(); ctx.ellipse(r * 0.42, side * r * 0.3, er * 1.4, er, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = e.isBossEnemy ? "#FF0000" : "#111";
+          ctx.beginPath(); ctx.arc(r * 0.5, side * r * 0.3, er * 0.72, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,0.65)";
+          ctx.beginPath(); ctx.arc(r * 0.44, side * r * 0.3 - er * 0.3, er * 0.32, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.restore();
+      }
+
       // Boss glow ring
       if (e.isBossEnemy) {
-        const bossRingColor = e.enrageTriggered ? "255,80,0" : "255,0,0";
-        ctx.strokeStyle = `rgba(${bossRingColor},${0.4 + Math.sin(Date.now() / 200) * 0.3})`;
-        ctx.lineWidth = e.enrageTriggered ? 4 : 3;
-        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 6, 0, Math.PI * 2); ctx.stroke();
+        const rgb = e.enrageTriggered ? "255,80,0" : "255,0,0";
+        ctx.strokeStyle = `rgba(${rgb},${0.55 + Math.sin(dn / 200) * 0.25})`;
+        ctx.lineWidth = e.enrageTriggered ? 4.5 : 3;
+        ctx.beginPath(); ctx.arc(0, 0, r + 8, 0, Math.PI * 2); ctx.stroke();
       }
       // Shield pulse visual
       if (e.shieldPulseActive) {
-        const sAlpha = 0.5 + Math.sin(Date.now() / 80) * 0.3;
-        ctx.strokeStyle = `rgba(0,191,255,${sAlpha})`;
-        ctx.lineWidth = 5;
-        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 14, 0, Math.PI * 2); ctx.stroke();
-        ctx.globalAlpha = 0.18;
-        ctx.fillStyle = "#00BFFF";
-        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 14, 0, Math.PI * 2); ctx.fill();
+        const sA = 0.55 + Math.sin(dn / 80) * 0.3;
+        ctx.strokeStyle = `rgba(0,191,255,${sA})`; ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.arc(0, 0, r + 14, 0, Math.PI * 2); ctx.stroke();
+        ctx.globalAlpha = 0.2; ctx.fillStyle = "#00BFFF";
+        ctx.beginPath(); ctx.arc(0, 0, r + 14, 0, Math.PI * 2); ctx.fill();
         ctx.globalAlpha = 1;
       }
       // Enrage aura
       if (e.enrageTriggered) {
-        const eAlpha = 0.3 + Math.sin(Date.now() / 70) * 0.2;
-        ctx.strokeStyle = `rgba(255,100,0,${eAlpha})`;
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 22, 0, Math.PI * 2); ctx.stroke();
+        const eA = 0.32 + Math.sin(dn / 70) * 0.18;
+        ctx.strokeStyle = `rgba(255,100,0,${eA})`; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.arc(0, 0, r + 22, 0, Math.PI * 2); ctx.stroke();
       }
       // Sergeant aura
       if (e.typeIndex === 13) {
-        ctx.strokeStyle = "rgba(255,136,0," + (0.3 + Math.sin(Date.now() / 250) * 0.2) + ")";
-        ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+        ctx.strokeStyle = "rgba(255,136,0," + (0.3 + Math.sin(dn / 250) * 0.18) + ")";
+        ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
         ctx.beginPath(); ctx.arc(0, 0, 90, 0, Math.PI * 2); ctx.stroke();
         ctx.setLineDash([]);
       }
-      // Shield Guy visual
+      // Shield Guy arc
       if (e.typeIndex === 11) {
-        const shieldAngle = Math.atan2(p.y - e.y, p.x - e.x);
-        ctx.strokeStyle = "rgba(100,150,255,0.7)"; ctx.lineWidth = 4;
-        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 8, shieldAngle - 0.9, shieldAngle + 0.9); ctx.stroke();
+        const sa = Math.atan2(p.y - e.y, p.x - e.x);
+        ctx.strokeStyle = "rgba(120,170,255,0.8)"; ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.arc(0, 0, r + 9, sa - 0.9, sa + 0.9); ctx.stroke();
         ctx.lineWidth = 1;
       }
+      // Ranged ring
       if (e.ranged && !e.isBossEnemy) {
-        ctx.strokeStyle = "rgba(255,100,100," + (0.3 + Math.sin(Date.now() / 300) * 0.2) + ")";
-        ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = "rgba(255,100,100," + (0.28 + Math.sin(dn / 300) * 0.15) + ")";
+        ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, r + 5, 0, Math.PI * 2); ctx.stroke();
       }
-      ctx.font = (e.size * 0.55) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText(e.emoji, 0, -2);
+
+      // Emoji
+      ctx.font = Math.floor(r * 0.72) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.globalAlpha = e.hitFlash > 6 ? 0.15 : 0.88;
+      ctx.fillText(e.emoji, 0, 1);
+      ctx.globalAlpha = 1;
+
+      // HP bar
       if (e.health < e.maxHealth) {
-        const bw = e.size;
-        ctx.fillStyle = "#222"; ctx.fillRect(-bw / 2, -e.size / 2 - 12, bw, 5);
-        ctx.fillStyle = e.health > e.maxHealth * 0.5 ? "#0F0" : e.health > e.maxHealth * 0.25 ? "#FA0" : "#F00";
-        ctx.fillRect(-bw / 2, -e.size / 2 - 12, bw * (e.health / e.maxHealth), 5);
+        const bw = e.size + 4;
+        ctx.fillStyle = "#1a1a1a"; ctx.fillRect(-bw / 2, -r - 14, bw, 6);
+        ctx.fillStyle = e.health > e.maxHealth * 0.5 ? "#00EE44" : e.health > e.maxHealth * 0.25 ? "#FFAA00" : "#FF2222";
+        ctx.fillRect(-bw / 2, -r - 14, bw * Math.max(0, e.health / e.maxHealth), 6);
+        ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 1; ctx.strokeRect(-bw / 2, -r - 14, bw, 6);
       }
-      ctx.fillStyle = e.isBossEnemy ? "#FF4444" : "#FFF";
-      ctx.font = "bold " + (e.isBossEnemy ? 10 : 9) + "px monospace"; ctx.textAlign = "center";
-      ctx.fillText(e.name, 0, e.size / 2 + 13);
+      // Name label
+      ctx.fillStyle = e.isBossEnemy ? "#FF5555" : "rgba(255,255,255,0.85)";
+      ctx.font = "bold " + (e.isBossEnemy ? 11 : 9) + "px monospace"; ctx.textAlign = "center";
+      ctx.strokeStyle = "rgba(0,0,0,0.7)"; ctx.lineWidth = 2.5;
+      ctx.strokeText(e.name, 0, r + 14); ctx.fillText(e.name, 0, r + 14);
       ctx.restore();
     });
 
@@ -1417,23 +1505,66 @@ export default function CallOfDoodie() {
     });
     ctx.globalAlpha = 1;
 
-    // Player
+    // Player — layered soldier: shadow → legs → [rotate] → gun → vest → helmet
     ctx.save(); ctx.translate(p.x, p.y);
-    ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(0, 15, 18, 6, 0, 0, Math.PI * 2); ctx.fill();
+    // Ground shadow
+    ctx.fillStyle = "rgba(0,0,0,0.28)";
+    ctx.beginPath(); ctx.ellipse(2, 14, 17, 5, 0, 0, Math.PI * 2); ctx.fill();
+    // Invincible blink / dash glow
+    const _blink = p.invincible > 0 && Math.floor(p.invincible / 3) % 2 === 0;
+    if (_blink) ctx.globalAlpha = 0.35;
+    if (dashRef.current.active > 0) { ctx.globalAlpha = _blink ? 0.35 : 0.68; ctx.shadowColor = "#00FFFF"; ctx.shadowBlur = 22; }
+    // Legs (unrotated — bob south)
+    const _lb = Math.sin(frameCountRef.current * 0.28) * 3.5;
+    ctx.fillStyle = "#284A28";
+    ctx.beginPath(); ctx.ellipse(-5 + _lb * 0.5, 11, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(4 - _lb * 0.5, 11, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+    // === Rotate to aim angle ===
     ctx.rotate(p.angle);
-    if (p.invincible > 0 && Math.floor(p.invincible / 3) % 2 === 0) ctx.globalAlpha = 0.4;
-    if (dashRef.current.active > 0) { ctx.globalAlpha = 0.6; ctx.shadowColor = "#0FF"; ctx.shadowBlur = 15; }
     const curWpn = WEAPONS[wpnIdx];
-    ctx.fillStyle = "#666"; ctx.fillRect(10, -3, 20, 6);
-    ctx.fillStyle = curWpn.color; ctx.fillRect(25, -4, 8, 8);
+    // Gun grip + barrel
+    ctx.fillStyle = "#444"; ctx.fillRect(8, -3, 6, 6);         // grip
+    ctx.fillStyle = "#505050"; ctx.fillRect(13, -2.5, 16, 5);  // barrel body
+    ctx.fillStyle = "#3A3A3A"; ctx.fillRect(24, -3.5, 6, 7);   // suppressor base
+    ctx.fillStyle = curWpn.color; ctx.fillRect(28, -2.5, 6, 5); // muzzle color
+    // Tactical vest body
+    ctx.fillStyle = "#3A6A3A";
+    ctx.beginPath(); ctx.ellipse(0, 0, 13, 11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#244E24"; ctx.lineWidth = 2; ctx.stroke();
+    // Vest strap lines
+    ctx.strokeStyle = "rgba(18,45,18,0.7)"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(-4, -8); ctx.lineTo(-4, 8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(3, -8); ctx.lineTo(3, 8); ctx.stroke();
+    // Small pouch on vest
+    ctx.fillStyle = "rgba(28,55,28,0.8)";
+    ctx.fillRect(-8, -4, 5, 5);
+    ctx.strokeStyle = "rgba(18,45,18,0.5)"; ctx.lineWidth = 0.8; ctx.strokeRect(-8, -4, 5, 5);
+    // Chest highlight
+    ctx.fillStyle = "rgba(255,255,255,0.07)";
+    ctx.beginPath(); ctx.ellipse(-1, -3, 6, 4, 0, 0, Math.PI * 2); ctx.fill();
+    // Helmet
+    ctx.fillStyle = "#2A5A2A";
+    ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#183C18"; ctx.lineWidth = 1.5; ctx.stroke();
+    // Helmet brim detail
+    ctx.strokeStyle = "rgba(45,90,45,0.55)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(0, 0, 10, Math.PI * 0.6, Math.PI * 1.4); ctx.stroke();
+    // Visor slit (green HUD glow)
+    ctx.fillStyle = "rgba(70,240,110,0.55)";
+    ctx.beginPath(); ctx.ellipse(6, 0, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "rgba(0,200,80,0.4)"; ctx.lineWidth = 1; ctx.stroke();
+    // Helmet highlight
+    ctx.fillStyle = "rgba(255,255,255,0.1)";
+    ctx.beginPath(); ctx.arc(-3, -4, 4, 0, Math.PI * 2); ctx.fill();
+    // Reset alpha before muzzle flash (so flash is always bright)
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
     if (gs.muzzleFlash > 0) {
-      ctx.fillStyle = "rgba(255,255,100," + (gs.muzzleFlash / 4) + ")";
-      ctx.beginPath(); ctx.arc(35, 0, 10 + gs.muzzleFlash * 2, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowColor = "#FFD740"; ctx.shadowBlur = gs.muzzleFlash * 5;
+      ctx.fillStyle = `rgba(255,220,60,${gs.muzzleFlash / 4})`;
+      ctx.beginPath(); ctx.arc(35, 0, 5 + gs.muzzleFlash * 2, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0;
     }
-    ctx.fillStyle = "#44AA44"; ctx.beginPath(); ctx.arc(0, 0, 15, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = "#2D7D2D"; ctx.lineWidth = 2; ctx.stroke();
-    ctx.fillStyle = "#336633"; ctx.beginPath(); ctx.arc(0, 0, 12, -Math.PI * 0.8, Math.PI * 0.8); ctx.fill();
-    ctx.globalAlpha = 1; ctx.shadowBlur = 0; ctx.restore();
+    ctx.restore();
 
     // Floating texts
     gs.floatingTexts.forEach(ft => {

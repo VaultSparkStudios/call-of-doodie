@@ -60,8 +60,19 @@ Last updated: 2026-03-12 (Session 6)
 - starterLoadout added to entry object and useCallback deps
 - Supabase table has starterLoadout column (ALTER TABLE run manually)
 
+### Multi-ricochet bullets + wall spacing + visual terrain (68bfb50)
+- Bullets bounce up to 10 times (multi-wall ricochets possible)
+- Wall count 4–6, overlap margin 50px (was 18px) — more open layouts
+- H/V wall orientation balance tracked per run (biases toward underrepresented axis)
+- Terrain decorations: 22–36 seeded objects per run (stains, cracks, rubble, worn tiles), purely visual
+
+### Achievement tooltips + mobile scroll fixes (4515423)
+- Death screen: each unlocked achievement is an interactive badge — hover (desktop) or tap (mobile) shows name, description, and tier with color coding
+- Death screen: fixed `touchAction: "none"` blocking native scroll on mobile (→ `pan-y`)
+- Menu screen: same `touchAction` fix; career stats modal got `maxHeight: 90vh + overflowY: auto`
+
 ## What is mid-flight
-- Nothing — all changes committed, built, and deployed (`1220a5d`)
+- Nothing — all changes committed, built, and deployed (`4515423`)
 
 ## What to do next
 1. Playtest wall ricochet feel — may want to adjust bullet life extension on bounce if it feels too short
