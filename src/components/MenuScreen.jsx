@@ -136,7 +136,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Career Stats Modal */}
       {showCareer && career && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 400, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div style={{ ...card, maxWidth: 420, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <button onClick={() => setShowCareer(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
             <h3 style={{ color: "#00E5FF", margin: "0 0 8px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
             {meta && (
@@ -146,25 +146,53 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 <span style={{ color: "#AAA", fontSize: 11 }}>career points · spend in 🎖️ UPGRADES</span>
               </div>
             )}
-            {[
-              ["🎮 Total Runs", career.totalRuns],
-              ["☠️ Total Kills", career.totalKills.toLocaleString()],
-              ["💀 Total Deaths", career.totalDeaths],
-              ["🏆 Best Score", career.bestScore.toLocaleString()],
-              ["🌊 Best Wave", career.bestWave],
-              ["🔥 Best Streak", career.bestStreak],
-              ["⚔️ Total Damage", career.totalDamage.toLocaleString()],
-              ["⏱️ Total Play Time", fmtTime(career.totalPlayTime)],
-              ["🏅 Achievements", `${career.achievementsEver?.length || 0} / ${ACHIEVEMENTS.length}`],
-            ].map(([label, value]) => (
-              <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 13 }}>
-                <span style={{ color: "#CCC" }}>{label}</span>
-                <span style={{ color: "#FFF", fontWeight: 700 }}>{value}</span>
-              </div>
-            ))}
-            {career.totalRuns === 0 && (
+            {career.totalRuns === 0 ? (
               <p style={{ color: "#666", fontSize: 12, textAlign: "center", marginTop: 12 }}>No runs yet. Get out there and die!</p>
-            )}
+            ) : (() => {
+              const runs = career.totalRuns || 1;
+              const avgScore = career.totalScore ? Math.floor(career.totalScore / runs) : 0;
+              const kd = career.totalDeaths > 0 ? (career.totalKills / career.totalDeaths).toFixed(1) : career.totalKills.toFixed(1);
+              const avgKills = Math.floor(career.totalKills / runs);
+              const Section = ({ label }) => (
+                <div style={{ fontSize: 9, color: "#00E5FF", fontWeight: 700, letterSpacing: 2, padding: "10px 0 4px", borderBottom: "1px solid rgba(0,229,255,0.15)", marginBottom: 2 }}>
+                  {label}
+                </div>
+              );
+              const Row = ({ label, value, color }) => (
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: 13 }}>
+                  <span style={{ color: "#CCC" }}>{label}</span>
+                  <span style={{ color: color || "#FFF", fontWeight: 700 }}>{value}</span>
+                </div>
+              );
+              return (
+                <>
+                  <Section label="SCORE" />
+                  <Row label="🏆 Best Score" value={career.bestScore.toLocaleString()} color="#FFD700" />
+                  <Row label="📈 Total Score" value={(career.totalScore || 0).toLocaleString()} color="#FFD700" />
+                  <Row label="📊 Avg Score / Run" value={avgScore.toLocaleString()} />
+
+                  <Section label="COMBAT" />
+                  <Row label="☠️ Total Kills" value={career.totalKills.toLocaleString()} color="#00FF88" />
+                  <Row label="🎯 Best Kills / Run" value={career.bestKills || 0} color="#00FF88" />
+                  <Row label="⚡ Avg Kills / Run" value={avgKills} />
+                  <Row label="💀 K/D Ratio" value={kd} color={parseFloat(kd) >= 10 ? "#FFD700" : "#FFF"} />
+                  <Row label="⚔️ Total Damage" value={career.totalDamage.toLocaleString()} color="#E040FB" />
+                  <Row label="💥 Total Crits" value={(career.totalCrits || 0).toLocaleString()} color="#FF4500" />
+                  <Row label="💣 Grenades Thrown" value={(career.totalGrenades || 0).toLocaleString()} />
+                  <Row label="💨 Total Dashes" value={(career.totalDashes || 0).toLocaleString()} />
+                  <Row label="👹 Boss Kills" value={(career.totalBossKills || 0).toLocaleString()} color="#FF4444" />
+
+                  <Section label="PROGRESSION" />
+                  <Row label="🎮 Total Runs" value={career.totalRuns} />
+                  <Row label="🌊 Best Wave" value={career.bestWave} color="#00BFFF" />
+                  <Row label="🔥 Best Streak" value={career.bestStreak} color="#FF4500" />
+                  <Row label="🌪️ Best Combo" value={`×${career.bestCombo || 0}`} color="#FF4500" />
+                  <Row label="⬆️ Best Level" value={career.bestLevel || 0} color="#00FF88" />
+                  <Row label="⏱️ Total Play Time" value={fmtTime(career.totalPlayTime)} />
+                  <Row label="🏅 Achievements" value={`${career.achievementsEver?.length || 0} / ${ACHIEVEMENTS.length}`} color="#FFD700" />
+                </>
+              );
+            })()}
           </div>
         </div>
       )}

@@ -55,9 +55,17 @@ const DEFAULT_CAREER = {
   totalDeaths: 0,
   totalRuns: 0,
   bestScore: 0,
+  totalScore: 0,
   bestWave: 0,
   bestStreak: 0,
+  bestKills: 0,
+  bestCombo: 0,
+  bestLevel: 0,
   totalDamage: 0,
+  totalCrits: 0,
+  totalGrenades: 0,
+  totalDashes: 0,
+  totalBossKills: 0,
   totalPlayTime: 0,
   achievementsEver: [],
 };
@@ -141,15 +149,23 @@ export function purchaseMetaUpgrade(upgradeId, cost) {
   saveMetaProgress(meta); return { success: true, meta };
 }
 
-export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds }) {
+export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {
   const career = loadCareerStats();
   career.totalRuns += 1;
   career.totalKills += (kills || 0);
   career.totalDeaths += (deaths || 0);
+  career.totalScore = (career.totalScore || 0) + (score || 0);
   career.bestScore = Math.max(career.bestScore, score || 0);
   career.bestWave = Math.max(career.bestWave, wave || 0);
   career.bestStreak = Math.max(career.bestStreak, streak || 0);
+  career.bestKills = Math.max(career.bestKills || 0, kills || 0);
+  career.bestCombo = Math.max(career.bestCombo || 0, combo || 0);
+  career.bestLevel = Math.max(career.bestLevel || 0, level || 0);
   career.totalDamage += Math.floor(damage || 0);
+  career.totalCrits = (career.totalCrits || 0) + (crits || 0);
+  career.totalGrenades = (career.totalGrenades || 0) + (grenades || 0);
+  career.totalDashes = (career.totalDashes || 0) + (dashes || 0);
+  career.totalBossKills = (career.totalBossKills || 0) + (bossKills || 0);
   career.totalPlayTime += Math.floor(playTime || 0);
   if (achievementIds?.length) {
     const all = new Set([...career.achievementsEver, ...achievementIds]);

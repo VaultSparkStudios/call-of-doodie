@@ -562,6 +562,12 @@ export default function CallOfDoodie() {
       streak: statsRef.current.bestStreak, damage: gs.totalDamage,
       playTime: (Date.now() - startTimeRef.current) / 1000,
       achievementIds: [...achievedRef.current],
+      crits: statsRef.current.crits,
+      grenades: statsRef.current.grenades,
+      dashes: statsRef.current.dashes,
+      level: xpRef.current.level,
+      combo: comboRef.current.max,
+      bossKills: statsRef.current.bossKills,
     });
     const mProgress = {};
     missionDoneRef.current.forEach(i => { mProgress[i] = true; });
