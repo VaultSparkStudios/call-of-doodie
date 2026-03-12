@@ -573,6 +573,8 @@ export default function CallOfDoodie() {
         if (gs.currentWave >= 15) { spawnBoss(gs, 4); spawnBoss(gs, 9); }
         else if (gs.currentWave >= 10) { spawnBoss(gs, 9); }
         else { spawnBoss(gs, 4); }
+        // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
+        gs.enemiesThisWave = gs.maxEnemiesThisWave;
         addParticles(gs, W / 2, H / 2, "#FF0000", 40);
       } else {
         addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
@@ -1158,27 +1160,43 @@ export default function CallOfDoodie() {
 
       {/* Mobile action bar */}
       {isMobile && (
-        <div style={{ height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 6px", background: "rgba(10,10,10,0.95)", borderTop: "1px solid rgba(255,255,255,0.12)", flexShrink: 0, gap: 3 }}>
-          <div style={{ display: "flex", gap: 3 }}>
+        <div style={{ height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 4px", background: "rgba(10,10,10,0.95)", borderTop: "1px solid rgba(255,255,255,0.12)", flexShrink: 0, gap: 2 }}>
+          <div style={{ display: "flex", gap: 2, flex: 1 }}>
             {WEAPONS.map((w, i) => (
-              <button key={i} onClick={() => switchWeapon(i)} style={{
-                width: 38, height: 42, borderRadius: 8, position: "relative",
-                background: i === currentWeapon ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.04)",
-                border: i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.12)",
-                color: i === currentWeapon ? w.color : "#BBB",
-                fontSize: 16, fontFamily: "'Courier New',monospace",
-                display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-              }}>
+              <button key={i}
+                onTouchStart={(e) => { e.preventDefault(); switchWeapon(i); }}
+                onClick={() => switchWeapon(i)}
+                style={{
+                  flex: 1, height: 44, borderRadius: 8, position: "relative",
+                  background: i === currentWeapon ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.04)",
+                  border: i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.12)",
+                  color: i === currentWeapon ? w.color : "#BBB",
+                  fontSize: "clamp(14px,4vw,18px)", fontFamily: "'Courier New',monospace",
+                  display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                }}>
                 {w.emoji}
                 <span style={{ position: "absolute", top: 1, right: 3, fontSize: 8, color: "#999", fontWeight: 900 }}>{i + 1}</span>
                 {weaponUpgrades[i] > 0 && <span style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", fontSize: 7, color: "#AA44FF", lineHeight: 1 }}>{"⭐".repeat(weaponUpgrades[i])}</span>}
               </button>
             ))}
           </div>
-          <button onClick={() => doReload(currentWeaponRef.current)} style={{ padding: "8px 10px", borderRadius: 8, fontSize: 12, fontWeight: 900, fontFamily: "'Courier New',monospace", background: isReloading ? "rgba(255,215,0,0.15)" : "rgba(255,255,255,0.08)", color: isReloading ? "#FFD700" : "#FFF", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", height: 42 }}>{isReloading ? ".." : "R"}</button>
-          <button onClick={doDash} style={{ width: 42, height: 42, borderRadius: 8, background: dashReady ? "rgba(0,229,255,0.12)" : "rgba(255,255,255,0.04)", border: dashReady ? "1px solid rgba(0,229,255,0.4)" : "1px solid rgba(255,255,255,0.08)", color: dashReady ? "#00E5FF" : "#777", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontFamily: "monospace" }}>💨</button>
-          <button onClick={throwGrenade} style={{ width: 42, height: 42, borderRadius: 8, position: "relative", background: grenadeReady ? "rgba(255,69,0,0.15)" : "rgba(255,255,255,0.04)", border: grenadeReady ? "1px solid rgba(255,69,0,0.4)" : "1px solid rgba(255,255,255,0.08)", color: grenadeReady ? "#FF4500" : "#777", fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>💣</button>
-          <button onClick={() => setPaused(true)} style={{ width: 42, height: 42, borderRadius: 8, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontFamily: "monospace", letterSpacing: 1 }}>II</button>
+          <button
+            onTouchStart={(e) => { e.preventDefault(); doReload(currentWeaponRef.current); }}
+            onClick={() => doReload(currentWeaponRef.current)}
+            style={{ width: "clamp(32px,8vw,44px)", height: 44, borderRadius: 8, fontSize: 12, fontWeight: 900, fontFamily: "'Courier New',monospace", background: isReloading ? "rgba(255,215,0,0.15)" : "rgba(255,255,255,0.08)", color: isReloading ? "#FFD700" : "#FFF", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", flexShrink: 0 }}
+          >{isReloading ? ".." : "R"}</button>
+          <button
+            onTouchStart={(e) => { e.preventDefault(); doDash(); }}
+            onClick={doDash}
+            style={{ width: "clamp(36px,9vw,46px)", height: 44, borderRadius: 8, background: dashReady ? "rgba(0,229,255,0.12)" : "rgba(255,255,255,0.04)", border: dashReady ? "2px solid rgba(0,229,255,0.6)" : "1px solid rgba(255,255,255,0.08)", color: dashReady ? "#00E5FF" : "#777", fontSize: "clamp(14px,4vw,18px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>💨</button>
+          <button
+            onTouchStart={(e) => { e.preventDefault(); throwGrenade(); }}
+            onClick={throwGrenade}
+            style={{ width: "clamp(36px,9vw,46px)", height: 44, borderRadius: 8, background: grenadeReady ? "rgba(255,69,0,0.15)" : "rgba(255,255,255,0.04)", border: grenadeReady ? "2px solid rgba(255,69,0,0.6)" : "1px solid rgba(255,255,255,0.08)", color: grenadeReady ? "#FF4500" : "#777", fontSize: "clamp(14px,4vw,18px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>💣</button>
+          <button
+            onTouchStart={(e) => { e.preventDefault(); setPaused(true); }}
+            onClick={() => setPaused(true)}
+            style={{ width: "clamp(32px,8vw,42px)", height: 44, borderRadius: 8, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontFamily: "monospace", letterSpacing: 1, flexShrink: 0 }}>II</button>
         </div>
       )}
 
