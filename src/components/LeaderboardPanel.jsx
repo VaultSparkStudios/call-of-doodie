@@ -8,6 +8,8 @@ const DIFF_TABS = [
   { key: "insane", label: "INSANE", emoji: "💀", color: "#FF00FF" },
 ];
 
+const LOADOUT_EMOJI = { standard: "⚖️", cannon: "💀", tank: "🛡️", speedster: "⚡" };
+
 export default function LeaderboardPanel({ leaderboard, lbLoading, username, onClose }) {
   const [activeDiff, setActiveDiff] = useState(null);
 
@@ -21,10 +23,10 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-      <div style={{ ...card, maxWidth: 580, width: "100%", maxHeight: "88vh", overflow: "auto", position: "relative", border: "1px solid rgba(255,215,0,0.2)", padding: "18px 14px", color: "#fff" }}>
+      <div style={{ ...card, maxWidth: 640, width: "100%", maxHeight: "88vh", overflow: "auto", position: "relative", border: "1px solid rgba(255,215,0,0.2)", padding: "18px 14px", color: "#fff" }}>
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
 
-        <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>HALL OF SHAME</h3>
+        <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
         <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 10px" }}>Top 100 · Global leaderboard</p>
 
         {/* Difficulty filter tabs */}
@@ -66,10 +68,12 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
           </p>
         ) : (
           <div style={{ fontSize: 11 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "28px 1fr 65px 36px 44px 52px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
+            {/* Header */}
+            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 30px 38px 50px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
               <span>#</span>
               <span>PLAYER</span>
               <span style={{ textAlign: "right" }}>SCORE</span>
+              <span style={{ textAlign: "right" }}>KILLS</span>
               <span style={{ textAlign: "right" }}>W</span>
               <span style={{ textAlign: "right" }}>TIME</span>
               <span style={{ textAlign: "right", paddingRight: 4 }}>DIFF</span>
@@ -79,18 +83,21 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
               const medal = i < 3 ? ["🥇", "🥈", "🥉"][i] : String(i + 1);
               const rowColor = i < 3 ? ["#FFD700", "#E0E0E0", "#CD7F32"][i] : "#EEE";
               const diffTab = DIFF_TABS.find(t => t.key === e.difficulty);
+              const loadoutEmoji = LOADOUT_EMOJI[e.starterLoadout] || "";
               return (
                 <div
                   key={i}
-                  style={{ display: "grid", gridTemplateColumns: "28px 1fr 65px 36px 44px 52px", gap: 4, padding: "7px 2px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: rowColor, background: isMe ? "rgba(255,107,53,0.12)" : "transparent", borderRadius: 4, alignItems: "center" }}
+                  style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 30px 38px 50px", gap: 4, padding: "7px 2px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: rowColor, background: isMe ? "rgba(255,107,53,0.12)" : "transparent", borderRadius: 4, alignItems: "center" }}
                   title={e.lastWords ? `"${e.lastWords}"` : ""}
                 >
                   <span style={{ fontWeight: 900, fontSize: i < 3 ? 14 : 11 }}>{medal}</span>
                   <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     <span style={{ fontWeight: 700 }}>{e.name}</span>
                     {e.level && <span style={{ color: "#BBB", fontSize: 9, marginLeft: 4 }}>Lv{e.level}</span>}
+                    {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
+                  <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>
                   <span style={{ textAlign: "right", color: "#CCC", fontSize: 10 }}>{e.wave}</span>
                   <span style={{ textAlign: "right", color: "#BBB", fontSize: 10, fontVariantNumeric: "tabular-nums" }}>{e.time || "--"}</span>
                   <span style={{ textAlign: "right", paddingRight: 4, fontSize: 9, color: diffTab?.color || "#888", fontWeight: 700 }}>
@@ -106,7 +113,6 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
   );
 }
 
-// Converts "#RRGGBB" to "R,G,B" for rgba() usage
 function hexToRgb(hex) {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);

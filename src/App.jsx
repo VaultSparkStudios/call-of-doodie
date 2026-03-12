@@ -257,15 +257,30 @@ export default function CallOfDoodie() {
       gsRef.current.player.speed = 5.4;
       perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.60;
     }
-    // Generate obstacles
-    gsRef.current.obstacles = [
-      { x: w * 0.18, y: h * 0.28 - 10, w: 90, h: 20 },
-      { x: w * 0.72, y: h * 0.65 - 10, w: 90, h: 20 },
-      { x: w * 0.47, y: h * 0.15,       w: 20, h: 85 },
-      { x: w * 0.47, y: h * 0.72,       w: 20, h: 85 },
-      { x: w * 0.12, y: h * 0.58 - 10, w: 65, h: 20 },
-      { x: w * 0.76, y: h * 0.32 - 10, w: 65, h: 20 },
-    ];
+    // Generate seeded random obstacles (reproducible per run seed)
+    let _ws = seed;
+    const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
+    const SPAWN_SAFE = 110; // clear radius around center spawn
+    const wallCount = 5 + Math.floor(_sr() * 3); // 5–7 walls
+    const walls = [];
+    for (let _wi = 0; _wi < wallCount; _wi++) {
+      let wx, wy, ww, wh, _att = 0;
+      do {
+        const isH = _sr() < 0.55;
+        ww = isH ? Math.floor(60 + _sr() * 90) : Math.floor(14 + _sr() * 8);
+        wh = isH ? Math.floor(14 + _sr() * 8) : Math.floor(60 + _sr() * 90);
+        wx = w * 0.07 + _sr() * (w * 0.86 - ww);
+        wy = h * 0.07 + _sr() * (h * 0.86 - wh);
+        const tooClose = Math.hypot(wx + ww / 2 - w / 2, wy + wh / 2 - h / 2) < SPAWN_SAFE;
+        const overlap = walls.some(prev =>
+          wx < prev.x + prev.w + 18 && wx + ww > prev.x - 18 &&
+          wy < prev.y + prev.h + 18 && wy + wh > prev.y - 18
+        );
+        if (!tooClose && !overlap) break;
+      } while (++_att < 15);
+      walls.push({ x: wx, y: wy, w: ww, h: wh });
+    }
+    gsRef.current.obstacles = walls;
     // Show meta toast if upgrades active
     const metaActive = META_UPGRADES.filter(u => (new Set(loadMetaProgress().unlocks || [])).has(u.id));
     if (metaActive.length > 0) {
@@ -460,6 +475,7 @@ export default function CallOfDoodie() {
       life: weapon.bulletLife || 60,
       size: weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4),
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
+      bouncesLeft: weaponIdx === 1 ? 0 : 1, // RPG doesn't bounce; all others get 1 ricochet
     });
     gs.muzzleFlash = 4;
     gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : weaponIdx === 4 ? 18 : 3);
@@ -578,10 +594,11 @@ export default function CallOfDoodie() {
       name: username, score, kills, wave, lastWords,
       rank, bestStreak, totalDamage, level,
       time: fmtTime(timeSurvived), achievements: achievementsUnlocked.length, difficulty,
+      starterLoadout,
     };
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board);
-  }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty]);
+  }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout]);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
   const gameLoop = useCallback(() => {
@@ -720,8 +737,22 @@ export default function CallOfDoodie() {
     gs.bullets = gs.bullets.filter(b => {
       b.x += b.vx; b.y += b.vy; b.life--;
       if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
-      const hitWall = (gs.obstacles || []).some(ob => b.x >= ob.x && b.x <= ob.x + ob.w && b.y >= ob.y && b.y <= ob.y + ob.h);
-      if (hitWall) { addParticles(gs, b.x, b.y, b.color, 3); return false; }
+      for (const ob of (gs.obstacles || [])) {
+        if (b.x >= ob.x && b.x <= ob.x + ob.w && b.y >= ob.y && b.y <= ob.y + ob.h) {
+          if (b.bouncesLeft > 0) {
+            const prevX = b.x - b.vx, prevY = b.y - b.vy;
+            // Determine which face was hit based on pre-collision position
+            if (prevX < ob.x || prevX > ob.x + ob.w) b.vx = -b.vx; else b.vy = -b.vy;
+            b.bouncesLeft--;
+            b.x = prevX + b.vx; b.y = prevY + b.vy; // reposition from pre-hit point with new trajectory
+            addParticles(gs, b.x, b.y, "#FFFFFF", 4);
+            gs.screenShake = Math.max(gs.screenShake, 1);
+          } else {
+            addParticles(gs, b.x, b.y, b.color, 3); return false;
+          }
+          break;
+        }
+      }
       return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
     });
 
@@ -991,6 +1022,20 @@ export default function CallOfDoodie() {
           e.health = -999;
         }
       }
+      // ── Enemy-wall collision (push-out, same logic as player) ──
+      (gs.obstacles || []).forEach(ob => {
+        const ecx = Math.max(ob.x, Math.min(e.x, ob.x + ob.w));
+        const ecy = Math.max(ob.y, Math.min(e.y, ob.y + ob.h));
+        const ed = Math.hypot(e.x - ecx, e.y - ecy);
+        const er = e.size / 2 + 2;
+        if (ed < er) {
+          const ea = ed > 0 ? Math.atan2(e.y - ecy, e.x - ecx) : 0;
+          e.x = ecx + Math.cos(ea) * (er + 1);
+          e.y = ecy + Math.sin(ea) * (er + 1);
+          e.x = Math.max(e.size / 2, Math.min(W - e.size / 2, e.x));
+          e.y = Math.max(e.size / 2, Math.min(H - e.size / 2, e.y));
+        }
+      });
       if (dashRef.current.active <= 0) {
         const d2 = Math.hypot(p.x - e.x, p.y - e.y);
         if (d2 < e.size / 2 + 15 && p.invincible <= 0) {
