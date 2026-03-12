@@ -12,6 +12,124 @@ export default function DeathScreen({
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [sharing, setSharing] = useState(false);
+
+  const generateScoreCard = () => new Promise((resolve) => {
+    const W = 1200, H = 630;
+    const cvs = document.createElement("canvas");
+    cvs.width = W; cvs.height = H;
+    const c = cvs.getContext("2d");
+    const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
+    const rank = RANK_NAMES[Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1)];
+
+    // Background
+    const bg = c.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, "#0a0a0a"); bg.addColorStop(0.5, "#12082a"); bg.addColorStop(1, "#1a0505");
+    c.fillStyle = bg; c.fillRect(0, 0, W, H);
+
+    // Grid overlay
+    c.strokeStyle = "rgba(255,255,255,0.03)"; c.lineWidth = 1;
+    for (let x = 0; x < W; x += 50) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); }
+    for (let y = 0; y < H; y += 50) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+
+    // Orange accent bar at top
+    const accent = c.createLinearGradient(0, 0, W, 0);
+    accent.addColorStop(0, "#FF6B35"); accent.addColorStop(0.5, "#FFD700"); accent.addColorStop(1, "#FF6B35");
+    c.fillStyle = accent; c.fillRect(0, 0, W, 5);
+
+    // Studio label
+    c.font = "bold 18px 'Courier New', monospace";
+    c.fillStyle = "#888"; c.textAlign = "center";
+    c.fillText("VAULTSPARK STUDIOS PRESENTS", W / 2, 40);
+
+    // Game title
+    const titleGrad = c.createLinearGradient(0, 50, 0, 130);
+    titleGrad.addColorStop(0, "#FFD700"); titleGrad.addColorStop(1, "#FF6B00");
+    c.font = "bold 90px 'Courier New', monospace";
+    c.fillStyle = titleGrad;
+    c.shadowColor = "rgba(255,107,0,0.6)"; c.shadowBlur = 30;
+    c.fillText("CALL OF DOODIE", W / 2, 130);
+    c.shadowBlur = 0;
+
+    // Subtitle
+    c.font = "bold 20px 'Courier New', monospace";
+    c.fillStyle = "#FF6B35"; c.fillText("MODERN WARFARE ON MOM'S WIFI", W / 2, 160);
+
+    // Divider
+    c.strokeStyle = "rgba(255,215,0,0.3)"; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(80, 180); c.lineTo(W - 80, 180); c.stroke();
+
+    // Player name + rank + difficulty
+    c.font = "bold 24px 'Courier New', monospace";
+    c.fillStyle = "#CCC"; c.fillText("DEPLOYED AS:", W / 2, 215);
+    c.font = "bold 32px 'Courier New', monospace";
+    c.fillStyle = "#FFD700"; c.fillText(username.toUpperCase() + "  ·  " + rank.toUpperCase(), W / 2, 252);
+    c.font = "bold 18px 'Courier New', monospace";
+    c.fillStyle = diff.color || "#CCC"; c.fillText(diff.emoji + " " + diff.label.toUpperCase() + " MODE", W / 2, 278);
+
+    // Stats grid (3 columns)
+    const stats = [
+      { val: score.toLocaleString(), label: "SCORE", color: "#FFD700" },
+      { val: kills, label: "KILLS", color: "#00FF88" },
+      { val: "WAVE " + wave, label: "WAVE REACHED", color: "#FF4444" },
+      { val: "LV " + level, label: "LEVEL", color: "#00E5FF" },
+      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "#00BFFF" },
+      { val: bestStreak, label: "BEST STREAK", color: "#FF4500" },
+    ];
+    const colW = (W - 160) / 3, startX = 80, startY = 305;
+    stats.forEach((s, i) => {
+      const col = i % 3, row = Math.floor(i / 3);
+      const x = startX + col * colW + colW / 2;
+      const y = startY + row * 90;
+      c.fillStyle = "rgba(255,255,255,0.05)";
+      c.beginPath(); c.roundRect(startX + col * colW, y - 44, colW - 10, 78, 8); c.fill();
+      c.strokeStyle = "rgba(255,255,255,0.08)"; c.lineWidth = 1;
+      c.beginPath(); c.roundRect(startX + col * colW, y - 44, colW - 10, 78, 8); c.stroke();
+      c.font = "bold 36px 'Courier New', monospace";
+      c.fillStyle = s.color; c.fillText(s.val, x, y);
+      c.font = "11px 'Courier New', monospace";
+      c.fillStyle = "#AAA"; c.fillText(s.label, x, y + 20);
+    });
+
+    // Death message
+    c.font = "italic 18px 'Courier New', monospace";
+    c.fillStyle = "#FF69B4"; c.fillText('"' + deathMessage + '"', W / 2, 510);
+
+    // CTA
+    c.font = "bold 22px 'Courier New', monospace";
+    c.fillStyle = "#FFF"; c.fillText("💀  CAN YOU SURVIVE LONGER?  💀", W / 2, 548);
+
+    // URL
+    c.font = "16px 'Courier New', monospace";
+    c.fillStyle = "#FF6B35"; c.fillText("vaultsparkstudios.com/call-of-doodie", W / 2, 575);
+
+    // Bottom accent bar
+    c.fillStyle = accent; c.fillRect(0, H - 5, W, 5);
+
+    cvs.toBlob(blob => resolve({ blob, cvs }), "image/png");
+  });
+
+  const handleShare = async () => {
+    setSharing(true);
+    try {
+      const { blob } = await generateScoreCard();
+      const file = new File([blob], "call-of-doodie-score.png", { type: "image/png" });
+      const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave} in Call of Doodie! 💀 Can you beat me?`;
+      const shareUrl = "https://vaultsparkstudios.com/call-of-doodie";
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: "Call of Doodie Score", text: shareText, url: shareUrl });
+      } else {
+        // Fallback: download the image
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "call-of-doodie-score.png"; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      }
+    } catch (e) {
+      if (e.name !== "AbortError") console.error("Share failed", e);
+    }
+    setSharing(false);
+  };
 
   const btnP = { padding: "14px 40px", fontSize: 18, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
   const btnS = { ...btnP, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
@@ -96,6 +214,16 @@ export default function DeathScreen({
             <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
           </div>
         )}
+
+        <div style={{ marginBottom: 10 }}>
+          <button
+            onClick={handleShare}
+            disabled={sharing}
+            style={{ ...btnS, width: "100%", fontSize: 15, background: "linear-gradient(180deg,rgba(255,107,53,0.2),rgba(255,107,53,0.1))", border: "1px solid rgba(255,107,53,0.5)", color: sharing ? "#888" : "#FF6B35" }}
+          >
+            {sharing ? "⏳ GENERATING..." : "📸 SHARE SCORE"}
+          </button>
+        </div>
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
           <button onClick={onStartGame} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
