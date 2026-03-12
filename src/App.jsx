@@ -1815,11 +1815,6 @@ export default function CallOfDoodie() {
   // ── Start / stop animation ─────────────────────────────────────────────────
   useEffect(() => {
     if (screen !== "game") { if (frameRef.current) cancelAnimationFrame(frameRef.current); return; }
-    if (gsRef.current) {
-      const upgLevel = gsRef.current.weaponUpgrades?.[currentWeaponRef.current] || 0;
-      const maxAmmo = Math.floor(WEAPONS[currentWeaponRef.current].maxAmmo * (1 + upgLevel * 0.25));
-      gsRef.current.ammoCount = maxAmmo;
-    }
     frameRef.current = requestAnimationFrame(gameLoop);
     return () => { if (frameRef.current) cancelAnimationFrame(frameRef.current); };
   }, [screen, gameLoop]);
