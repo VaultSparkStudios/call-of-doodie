@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ACHIEVEMENTS, RANK_NAMES } from "../constants.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 
+const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
+
 export default function DeathScreen({
   score, kills, deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, achievementsUnlocked,
@@ -13,6 +15,7 @@ export default function DeathScreen({
   const [lastWords, setLastWords] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [activeTooltip, setActiveTooltip] = useState(null);
 
   const generateScoreCard = () => new Promise((resolve) => {
     const W = 1200, H = 630;
@@ -147,7 +150,7 @@ export default function DeathScreen({
   };
 
   return (
-    <div style={{ ...base, alignItems: "center", justifyContent: "center", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", padding: 16, boxSizing: "border-box", overflowY: "auto" }}>
+    <div style={{ ...base, touchAction: "pan-y", overflow: "hidden auto", alignItems: "center", justifyContent: "center", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", padding: 16, boxSizing: "border-box" }}>
       {showLeaderboard && (
         <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />
       )}
@@ -179,11 +182,56 @@ export default function DeathScreen({
         </div>
 
         {achievementsUnlocked.length > 0 && (
-          <div style={{ marginBottom: 10, fontSize: 12, color: "#DDD" }}>
-            {achievementsUnlocked.length} achievement{achievementsUnlocked.length > 1 ? "s" : ""} unlocked:{" "}
-            <span style={{ color: "#FFD700" }}>
-              {achievementsUnlocked.map(id => { const a = ACHIEVEMENTS.find(x => x.id === id); return a ? a.emoji : ""; }).join(" ")}
-            </span>
+          <div style={{ marginBottom: 10 }}>
+            <div style={{ fontSize: 11, color: "#AAA", letterSpacing: 1, marginBottom: 6 }}>
+              {achievementsUnlocked.length} ACHIEVEMENT{achievementsUnlocked.length > 1 ? "S" : ""} UNLOCKED
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
+              {achievementsUnlocked.map(id => {
+                const a = ACHIEVEMENTS.find(x => x.id === id);
+                if (!a) return null;
+                const tc = TIER_COLORS[a.tier] || "#DDD";
+                const isOpen = activeTooltip === id;
+                return (
+                  <div
+                    key={id}
+                    style={{ position: "relative", display: "inline-block" }}
+                    onMouseEnter={() => setActiveTooltip(id)}
+                    onMouseLeave={() => setActiveTooltip(null)}
+                    onClick={() => setActiveTooltip(isOpen ? null : id)}
+                  >
+                    <div style={{
+                      fontSize: 22, padding: "5px 7px", borderRadius: 7, cursor: "pointer",
+                      background: isOpen ? `rgba(255,255,255,0.12)` : "rgba(255,255,255,0.05)",
+                      border: `1px solid ${isOpen ? tc : "rgba(255,255,255,0.12)"}`,
+                      boxShadow: isOpen ? `0 0 8px ${tc}55` : "none",
+                      transition: "border-color 0.15s, box-shadow 0.15s",
+                      userSelect: "none",
+                    }}>
+                      {a.emoji}
+                    </div>
+                    {isOpen && (
+                      <div style={{
+                        position: "absolute", top: "calc(100% + 6px)", left: "50%",
+                        transform: "translateX(-50%)", zIndex: 200,
+                        background: "#111", border: `1px solid ${tc}`,
+                        borderRadius: 8, padding: "8px 10px", width: 170,
+                        boxShadow: `0 4px 16px rgba(0,0,0,0.85)`,
+                        pointerEvents: "none", textAlign: "left",
+                      }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: tc, letterSpacing: 1, marginBottom: 3 }}>
+                          {a.emoji} {a.name}
+                        </div>
+                        <div style={{ fontSize: 10, color: "#CCC", lineHeight: 1.4 }}>{a.desc}</div>
+                        <div style={{ fontSize: 9, color: tc, marginTop: 5, textTransform: "uppercase", letterSpacing: 1, opacity: 0.8 }}>
+                          {a.tier}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 

@@ -39,7 +39,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   };
 
   return (
-    <div style={{ ...base, overflow: "hidden", alignItems: "center", color: "#fff", boxSizing: "border-box" }}>
+    <div style={{ ...base, touchAction: "pan-y", overflow: "hidden", alignItems: "center", color: "#fff", boxSizing: "border-box" }}>
       <div style={{ position: "absolute", inset: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: 20, boxSizing: "border-box" }}>
       {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />}
       {showAchievements && <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />}
@@ -136,7 +136,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Career Stats Modal */}
       {showCareer && career && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 400, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff" }}>
+          <div style={{ ...card, maxWidth: 400, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <button onClick={() => setShowCareer(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
             <h3 style={{ color: "#00E5FF", margin: "0 0 8px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
             {meta && (
