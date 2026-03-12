@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
-import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade } from "../storage.js";
+import { useState, useEffect, useCallback } from "react";
+import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES } from "../constants.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
+
+const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
+const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
 
 export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -13,13 +16,17 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showBestiary, setShowBestiary] = useState(false);
   const [showMissions, setShowMissions] = useState(false);
   const [showUpgrades, setShowUpgrades] = useState(false);
+  const [showNewFeatures, setShowNewFeatures] = useState(false);
+  const [showPrestigeConfirm, setShowPrestigeConfirm] = useState(false);
   const [career, setCareer] = useState(null);
   const [missions, setMissions] = useState([]);
   const [missionProgress, setMissionProgress] = useState({});
   const [meta, setMeta] = useState(null);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
-    setCareer(loadCareerStats());
+    const c = loadCareerStats();
+    setCareer(c);
     setMissions(getDailyMissions());
     setMissionProgress(loadMissionProgress());
     setMeta(loadMetaProgress());
@@ -36,6 +43,134 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     const m = Math.floor((s % 3600) / 60);
     const sec = s % 60;
     return h > 0 ? `${h}h ${m}m` : `${m}:${String(sec).padStart(2, "0")}`;
+  };
+
+  const accountLevel = career ? getAccountLevel(career.totalKills) : 1;
+  const prestige = meta?.prestige || 0;
+  const PRESTIGE_REQUIRED_LEVEL = 25;
+  const canPrestige = accountLevel >= PRESTIGE_REQUIRED_LEVEL;
+
+  // Generate social share card for New Features
+  const generateFeatureCard = useCallback(() => new Promise((resolve) => {
+    const W = 1200, H = 630;
+    const cvs = document.createElement("canvas");
+    cvs.width = W; cvs.height = H;
+    const c = cvs.getContext("2d");
+
+    // Background gradient
+    const bg = c.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, "#0a0a12");
+    bg.addColorStop(0.5, "#110808");
+    bg.addColorStop(1, "#080a0a");
+    c.fillStyle = bg;
+    c.fillRect(0, 0, W, H);
+
+    // Grid overlay
+    c.strokeStyle = "rgba(255,255,255,0.03)";
+    c.lineWidth = 1;
+    for (let x = 0; x < W; x += 50) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); }
+    for (let y = 0; y < H; y += 50) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+
+    // Left accent bar
+    const accentGrad = c.createLinearGradient(0, 0, 0, H);
+    accentGrad.addColorStop(0, "#FF6B35");
+    accentGrad.addColorStop(1, "#CC2200");
+    c.fillStyle = accentGrad;
+    c.fillRect(0, 0, 7, H);
+
+    // Title
+    c.font = "900 76px Arial, sans-serif";
+    c.fillStyle = "#FF6B35";
+    c.shadowColor = "rgba(255,107,53,0.7)";
+    c.shadowBlur = 36;
+    c.fillText("CALL OF DOODIE", 60, 108);
+    c.shadowBlur = 0;
+
+    // Subtitle
+    c.font = "bold 22px 'Courier New', monospace";
+    c.fillStyle = "#FFD700";
+    c.fillText("MODERN WARFARE ON MOM'S WIFI", 62, 148);
+
+    // Divider
+    c.strokeStyle = "rgba(255,107,53,0.35)";
+    c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(60, 170); c.lineTo(W - 60, 170); c.stroke();
+
+    // What's new label
+    c.font = "900 18px 'Courier New', monospace";
+    c.fillStyle = "#FF6B35";
+    c.fillText("✦  WHAT'S NEW", 60, 208);
+
+    // Features — 2 columns of 3
+    c.font = "bold 21px 'Courier New', monospace";
+    c.fillStyle = "#EEEEEE";
+    (NEW_FEATURES || []).forEach((f, i) => {
+      const col = i < 3 ? 0 : 1;
+      const row = i % 3;
+      c.fillText(f, 60 + col * 570, 252 + row * 52);
+    });
+
+    // Player stats card
+    if (career && career.totalRuns > 0) {
+      const sy = H - 148;
+      c.fillStyle = "rgba(255,255,255,0.04)";
+      c.strokeStyle = "rgba(255,215,0,0.2)";
+      c.lineWidth = 1;
+      c.beginPath();
+      c.roundRect(60, sy, 520, 82, 8);
+      c.fill(); c.stroke();
+
+      const lvlLabel = prestige > 0 ? `P${prestige} · LVL ${accountLevel}` : `LVL ${accountLevel}`;
+      c.font = "bold 15px 'Courier New', monospace";
+      c.fillStyle = "#FFD700";
+      c.fillText(`${username || "SOLDIER"}  ·  ${lvlLabel}`, 80, sy + 30);
+      c.font = "13px 'Courier New', monospace";
+      c.fillStyle = "#BBBBBB";
+      c.fillText(`${(career.totalKills || 0).toLocaleString()} kills  ·  Best ${(career.bestScore || 0).toLocaleString()} pts  ·  Wave ${career.bestWave || 0}`, 80, sy + 56);
+    }
+
+    // CTA
+    c.font = "900 30px 'Courier New', monospace";
+    c.fillStyle = "#FFFFFF";
+    c.shadowColor = "rgba(255,107,53,0.9)";
+    c.shadowBlur = 24;
+    c.fillText("▶  PLAY FREE AT VAULTSPARKSTUDIOS.COM", 60, H - 34);
+    c.shadowBlur = 0;
+
+    // Watermark
+    c.font = "11px 'Courier New', monospace";
+    c.fillStyle = "rgba(255,255,255,0.22)";
+    c.fillText("VAULTSPARK STUDIOS", W - 210, H - 18);
+
+    cvs.toBlob(blob => resolve({ blob }), "image/png");
+  }), [career, username, prestige, accountLevel]);
+
+  const handleShareFeatures = async () => {
+    setSharing(true);
+    try {
+      const { blob } = await generateFeatureCard();
+      const file = new File([blob], "call-of-doodie-whats-new.png", { type: "image/png" });
+      const shareText = "Call of Doodie just dropped new features — global leaderboard, map themes, prestige system & more. Play free:";
+      const shareUrl = "https://vaultsparkstudios.com/call-of-doodie";
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: "Call of Doodie — What's New", text: shareText, url: shareUrl });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "call-of-doodie-whats-new.png"; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      }
+    } catch (e) {
+      if (e.name !== "AbortError") console.error("Share failed", e);
+    }
+    setSharing(false);
+  };
+
+  const handlePrestige = () => {
+    const updated = prestigeAccount();
+    setMeta(updated);
+    setShowPrestigeConfirm(false);
+    setShowUpgrades(false);
   };
 
   return (
@@ -230,59 +365,172 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </div>
       )}
 
+      {/* Prestige Confirm Modal */}
+      {showPrestigeConfirm && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.96)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, backdropFilter: "blur(6px)" }}>
+          <div style={{ ...card, maxWidth: 400, width: "100%", border: "1px solid rgba(255,215,0,0.4)", padding: "28px 20px", color: "#fff", textAlign: "center" }}>
+            <div style={{ fontSize: 52, marginBottom: 10 }}>⭐</div>
+            <h2 style={{ color: "#FFD700", margin: "0 0 10px", fontSize: 22, letterSpacing: 2 }}>PRESTIGE {prestige + 1}</h2>
+            <div style={{ fontSize: 13, color: "#CCC", lineHeight: 1.9, marginBottom: 16 }}>
+              <div style={{ color: "#FF4444" }}>✗ All meta upgrades reset</div>
+              <div style={{ color: "#FF4444" }}>✗ Career points reset to 0</div>
+              <div style={{ color: "#00FF88", marginTop: 4 }}>✓ Prestige {prestige + 1} badge earned</div>
+              <div style={{ color: "#00FF88" }}>✓ All difficulties +{(prestige + 1) * 10}% harder (more glory)</div>
+            </div>
+            <div style={{ fontSize: 11, color: "#666", marginBottom: 20 }}>Kill records & achievements are preserved forever.</div>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+              <button onClick={() => setShowPrestigeConfirm(false)} style={{ ...btnS, padding: "10px 24px", fontSize: 14 }}>CANCEL</button>
+              <button onClick={handlePrestige} style={{ ...btnP, padding: "10px 24px", fontSize: 14, background: "linear-gradient(180deg,#FFD700,#AA7700)", color: "#000" }}>
+                PRESTIGE ★
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Meta Upgrades Modal */}
       {showUpgrades && meta && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div style={{ ...card, maxWidth: 520, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-              <p style={{ color: "#888", fontSize: 11, margin: 0 }}>Permanent bonuses — active every run</p>
-              <div style={{ background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, padding: "4px 10px", fontSize: 13, fontWeight: 900, color: "#FFD700" }}>
-                ⭐ {meta.careerPoints || 0} pts
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+              <p style={{ color: "#888", fontSize: 11, margin: 0 }}>Permanent bonuses · 3 tiers each · sequential purchase required</p>
+              <div style={{ background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, padding: "4px 10px", fontSize: 13, fontWeight: 900, color: "#FFD700", flexShrink: 0 }}>
+                ⭐ {(meta.careerPoints || 0).toLocaleString()}
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+            {/* Prestige section */}
+            <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: prestige > 0 ? "rgba(255,215,0,0.07)" : "rgba(255,255,255,0.03)", border: `1px solid ${prestige > 0 ? "rgba(255,215,0,0.35)" : "rgba(255,255,255,0.1)"}` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 22, flexShrink: 0 }}>⭐</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: prestige > 0 ? "#FFD700" : "#FFF" }}>
+                    PRESTIGE {prestige > 0 ? `${prestige} — Reach P${prestige + 1}` : "— Reset & Rise"}
+                  </div>
+                  <div style={{ fontSize: 10, color: "#999", marginTop: 2 }}>
+                    {prestige > 0
+                      ? `Active: enemies +${prestige * 10}% health & speed on all difficulties.`
+                      : "Resets all upgrades & points. Permanently raises difficulty. Earn prestige badge."}
+                  </div>
+                  {!canPrestige && (
+                    <div style={{ fontSize: 10, color: "#FF6B35", marginTop: 2 }}>
+                      Requires Account Level {PRESTIGE_REQUIRED_LEVEL} · You are Level {accountLevel}
+                    </div>
+                  )}
+                </div>
+                <button
+                  disabled={!canPrestige}
+                  onClick={() => setShowPrestigeConfirm(true)}
+                  style={{
+                    padding: "7px 12px", borderRadius: 6, flexShrink: 0,
+                    cursor: canPrestige ? "pointer" : "not-allowed",
+                    background: canPrestige ? "linear-gradient(180deg,#FFD700,#AA7700)" : "rgba(255,255,255,0.05)",
+                    color: canPrestige ? "#000" : "#444", border: "none",
+                    fontFamily: "'Courier New',monospace", fontSize: 11, fontWeight: 900,
+                  }}
+                >
+                  PRESTIGE ★
+                </button>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
               {META_UPGRADES.map((u) => {
-                const owned = (meta.unlocks || []).includes(u.id);
-                const canAfford = (meta.careerPoints || 0) >= u.cost;
+                const ownedTier = (meta.upgradeTiers || {})[u.id] || 0;
+                const nextTier = ownedTier + 1;
+                const isMaxed = ownedTier >= u.tiers.length;
+                const nextCost = isMaxed ? 0 : u.tiers[nextTier - 1].cost;
+                const canAfford = !isMaxed && (meta.careerPoints || 0) >= nextCost;
+                const activeTierDesc = ownedTier > 0 ? u.tiers[ownedTier - 1].desc : null;
                 return (
                   <div key={u.id} style={{
-                    display: "flex", alignItems: "center", gap: 12, padding: "12px 14px",
-                    borderRadius: 8, background: owned ? "rgba(255,107,53,0.08)" : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${owned ? "rgba(255,107,53,0.4)" : "rgba(255,255,255,0.1)"}`,
+                    display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 8,
+                    background: isMaxed ? "rgba(255,215,0,0.05)" : ownedTier > 0 ? "rgba(255,107,53,0.05)" : "rgba(255,255,255,0.025)",
+                    border: `1px solid ${isMaxed ? "rgba(255,215,0,0.35)" : ownedTier > 0 ? "rgba(255,107,53,0.3)" : "rgba(255,255,255,0.07)"}`,
                   }}>
-                    <span style={{ fontSize: 26, flexShrink: 0 }}>{u.emoji}</span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: owned ? "#FF6B35" : "#FFF" }}>{u.name}</div>
-                      <div style={{ fontSize: 11, color: "#CCC", marginTop: 1 }}>{u.desc}</div>
+                    <span style={{ fontSize: 20, flexShrink: 0 }}>{u.emoji}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: isMaxed ? "#FFD700" : ownedTier > 0 ? "#FF6B35" : "#EEE" }}>{u.name}</span>
+                        {/* Tier pips */}
+                        <div style={{ display: "flex", gap: 3 }}>
+                          {u.tiers.map((_, ti) => (
+                            <div key={ti} style={{
+                              width: 10, height: 10, borderRadius: 2,
+                              background: ti < ownedTier ? TIER_COLORS[ti + 1] : "rgba(255,255,255,0.1)",
+                              border: `1px solid ${ti < ownedTier ? TIER_COLORS[ti + 1] : "rgba(255,255,255,0.18)"}`,
+                            }} />
+                          ))}
+                        </div>
+                        {isMaxed && <span style={{ fontSize: 9, color: "#FFD700", fontWeight: 900 }}>MAX</span>}
+                      </div>
+                      <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.4 }}>
+                        {activeTierDesc
+                          ? <span style={{ color: "#CCC" }}>{activeTierDesc}</span>
+                          : <span style={{ color: "#777" }}>{u.tiers[0].desc}</span>
+                        }
+                      </div>
+                      {!isMaxed && ownedTier > 0 && (
+                        <div style={{ fontSize: 9, color: "#888", marginTop: 1 }}>▲ Next: {u.tiers[nextTier - 1].desc}</div>
+                      )}
                     </div>
-                    {owned ? (
-                      <div style={{ fontSize: 11, color: "#FF6B35", fontWeight: 700, flexShrink: 0 }}>OWNED ✓</div>
+                    {isMaxed ? (
+                      <div style={{ fontSize: 14, color: "#FFD700", flexShrink: 0 }}>★★★</div>
                     ) : (
                       <button
                         disabled={!canAfford}
                         onClick={() => {
-                          const result = purchaseMetaUpgrade(u.id, u.cost);
+                          const result = purchaseMetaUpgrade(u.id, nextTier, nextCost);
                           if (result.success) setMeta(result.meta);
                         }}
                         style={{
-                          padding: "6px 12px", borderRadius: 6, cursor: canAfford ? "pointer" : "not-allowed",
-                          background: canAfford ? "linear-gradient(180deg,#FF6B35,#CC4400)" : "rgba(255,255,255,0.05)",
-                          color: canAfford ? "#FFF" : "#555", border: "none",
-                          fontFamily: "'Courier New',monospace", fontSize: 12, fontWeight: 700, flexShrink: 0,
+                          padding: "5px 9px", borderRadius: 6, flexShrink: 0,
+                          cursor: canAfford ? "pointer" : "not-allowed",
+                          background: canAfford ? "linear-gradient(180deg,#FF6B35,#CC4400)" : "rgba(255,255,255,0.04)",
+                          color: canAfford ? "#FFF" : "#444", border: "none",
+                          fontFamily: "'Courier New',monospace", fontSize: 10, fontWeight: 700, whiteSpace: "nowrap",
                         }}
                       >
-                        ⭐ {u.cost}
+                        {TIER_LABELS[nextTier]} ⭐{nextCost.toLocaleString()}
                       </button>
                     )}
                   </div>
                 );
               })}
             </div>
-            <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.2)", fontSize: 12, color: "#CCC" }}>
-              💡 Earn career points by killing enemies in any run (1 pt per kill).
+
+            <div style={{ marginTop: 12, padding: "9px 12px", borderRadius: 8, background: "rgba(255,107,53,0.05)", border: "1px solid rgba(255,107,53,0.18)", fontSize: 10, color: "#AAA" }}>
+              💡 Earn 1 career pt per kill · Daily missions grant bonus pts · Upgrades persist between runs (reset on prestige)
             </div>
-            <button onClick={() => setShowUpgrades(false)} style={{ ...btnP, marginTop: 16, width: "100%" }}>← BACK</button>
+            <button onClick={() => setShowUpgrades(false)} style={{ ...btnP, marginTop: 14, width: "100%" }}>← BACK</button>
+          </div>
+        </div>
+      )}
+
+      {/* New Features Modal */}
+      {showNewFeatures && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div style={{ ...card, maxWidth: 460, width: "100%", border: "1px solid rgba(255,107,53,0.4)", padding: "20px 16px", color: "#fff" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+              <h3 style={{ color: "#FF6B35", margin: 0, fontSize: 17, letterSpacing: 2 }}>✦ WHAT'S NEW</h3>
+              <button onClick={() => setShowNewFeatures(false)} style={{ background: "none", border: "none", color: "#666", fontSize: 18, cursor: "pointer", fontFamily: "monospace", lineHeight: 1 }}>✕</button>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+              {NEW_FEATURES.map((f, i) => (
+                <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4 }}>
+                  {f}
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={handleShareFeatures}
+              disabled={sharing}
+              style={{ ...btnP, width: "100%", fontSize: 14, background: sharing ? "rgba(255,255,255,0.05)" : "linear-gradient(180deg,#FF6B35,#CC4400)", color: sharing ? "#555" : "#FFF" }}
+            >
+              {sharing ? "GENERATING..." : "📤 SHARE THIS UPDATE"}
+            </button>
+            <div style={{ fontSize: 10, color: "#444", textAlign: "center", marginTop: 8 }}>Generates a shareable image card · no login required</div>
           </div>
         </div>
       )}
@@ -297,13 +545,45 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </h1>
         <div style={{ fontSize: "clamp(10px,2.5vw,16px)", color: "#FF6B35", marginTop: -2, letterSpacing: 3 }}>MODERN WARFARE ON MOM'S WIFI</div>
 
-        <div style={{ margin: "10px 0 6px", fontSize: 13, color: "#FFD700" }}>
-          Deploying as: <span style={{ fontWeight: 900 }}>{username}</span>
-          <span onClick={onChangeUsername} style={{ color: "#CCC", cursor: "pointer", marginLeft: 8, fontSize: 11, textDecoration: "underline" }}>(change)</span>
+        {/* Username + Account Level badge */}
+        <div style={{ margin: "10px 0 6px", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+          <div style={{ fontSize: 13, color: "#FFD700" }}>
+            Deploying as: <span style={{ fontWeight: 900 }}>{username}</span>
+            <span onClick={onChangeUsername} style={{ color: "#CCC", cursor: "pointer", marginLeft: 8, fontSize: 11, textDecoration: "underline" }}>(change)</span>
+          </div>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 4, padding: "3px 9px", borderRadius: 20,
+            background: prestige > 0 ? "rgba(255,215,0,0.14)" : "rgba(255,255,255,0.07)",
+            border: `1px solid ${prestige > 0 ? "rgba(255,215,0,0.45)" : "rgba(255,255,255,0.18)"}`,
+          }}>
+            {prestige > 0 && <span style={{ fontSize: 11, color: "#FFD700", fontWeight: 900 }}>P{prestige}</span>}
+            <span style={{ fontSize: 11, color: prestige > 0 ? "#FFD700" : "#AAA", fontWeight: 700 }}>LVL {accountLevel}</span>
+          </div>
+        </div>
+
+        {/* New Features banner */}
+        <div
+          onClick={() => setShowNewFeatures(true)}
+          style={{ ...card, margin: "6px 0 10px", padding: "9px 14px", cursor: "pointer", border: "1px solid rgba(255,107,53,0.35)", background: "rgba(255,107,53,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}
+        >
+          <div style={{ textAlign: "left" }}>
+            <div style={{ fontSize: 10, color: "#FF6B35", fontWeight: 900, letterSpacing: 2 }}>✦ WHAT'S NEW</div>
+            <div style={{ fontSize: 10, color: "#AAA", marginTop: 2 }}>Tiered upgrades · Prestige · Map themes · Global leaderboard</div>
+          </div>
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
+            <button
+              onClick={(e) => { e.stopPropagation(); handleShareFeatures(); }}
+              disabled={sharing}
+              style={{ padding: "4px 9px", borderRadius: 4, cursor: "pointer", background: "rgba(255,107,53,0.18)", border: "1px solid rgba(255,107,53,0.45)", color: "#FF6B35", fontFamily: "'Courier New',monospace", fontSize: 10, fontWeight: 700, whiteSpace: "nowrap" }}
+            >
+              {sharing ? "..." : "📤 SHARE"}
+            </button>
+            <span style={{ color: "#666", fontSize: 13 }}>›</span>
+          </div>
         </div>
 
         {/* Weapons loadout */}
-        <div style={{ ...card, margin: "12px 0", textAlign: "left" }}>
+        <div style={{ ...card, margin: "0 0 10px", textAlign: "left" }}>
           <div style={{ fontSize: 12, color: "#DDD", marginBottom: 6, letterSpacing: 2, textAlign: "center", fontWeight: 700 }}>WEAPONS LOADOUT</div>
           {WEAPONS.map((w, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0", fontSize: 12 }}>
@@ -316,8 +596,11 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </div>
 
         {/* Difficulty */}
-        <div style={{ ...card, margin: "0 0 12px", textAlign: "left" }}>
-          <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, textAlign: "center", fontWeight: 700 }}>DIFFICULTY</div>
+        <div style={{ ...card, margin: "0 0 10px", textAlign: "left" }}>
+          <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, textAlign: "center", fontWeight: 700 }}>
+            DIFFICULTY
+            {prestige > 0 && <span style={{ color: "#FFD700", fontSize: 9, marginLeft: 8, fontWeight: 700 }}>+{prestige * 10}% HARDER (P{prestige})</span>}
+          </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
             {Object.entries(DIFFICULTIES).map(([key, d]) => (
               <button key={key} onClick={() => setDifficulty(key)} style={{
@@ -329,14 +612,16 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: d.color }}>{d.emoji} {d.label}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{d.desc}</div>
-                <div style={{ fontSize: 9, color: "#999", marginTop: 3 }}>HP: {d.playerHP} · Enemy HP: {d.healthMult}x · Speed: {d.speedMult}x</div>
+                <div style={{ fontSize: 9, color: "#999", marginTop: 3 }}>
+                  HP: {d.playerHP} · Enemy HP: {prestige > 0 ? (d.healthMult * (1 + prestige * 0.1)).toFixed(2) : d.healthMult}x · Speed: {prestige > 0 ? (d.speedMult * (1 + prestige * 0.1)).toFixed(2) : d.speedMult}x
+                </div>
               </button>
             ))}
           </div>
         </div>
 
         {/* Starter Loadout */}
-        <div style={{ ...card, margin: "0 0 12px", textAlign: "left" }}>
+        <div style={{ ...card, margin: "0 0 10px", textAlign: "left" }}>
           <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, textAlign: "center", fontWeight: 700 }}>STARTER LOADOUT</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
             {STARTER_LOADOUTS.map((l) => (

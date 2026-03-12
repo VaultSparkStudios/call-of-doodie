@@ -228,18 +228,73 @@ export default function CallOfDoodie() {
     ctxRef.current = null;
     startTimeRef.current = Date.now();
     statsRef.current.grenadeKills = 0;
-    // Apply meta upgrades
+    // Apply tiered meta upgrades
     const meta = loadMetaProgress();
-    const unlocks = new Set(meta.unlocks || []);
-    if (unlocks.has("veteran"))     perkModsRef.current.xpMult = 1.20;
-    if (unlocks.has("swift_boots")) perkModsRef.current.dashCDMult = 0.80;
-    if (unlocks.has("deep_mag"))    perkModsRef.current.ammoMult = 1.25;
-    if (unlocks.has("hardened"))    perkModsRef.current.damageMult = 1.15;
-    if (unlocks.has("scavenger"))   perkModsRef.current.pickupRange = 45;
-    if (unlocks.has("field_medic")) {
-      gsRef.current.player.health += 25;
-      gsRef.current.player.maxHealth += 25;
+    const ut = meta.upgradeTiers || {};
+    gsRef.current.prestigeMult = 1 + (meta.prestige || 0) * 0.10;
+
+    // XP gain (veteran)
+    const vtier = ut.veteran || 0;
+    if (vtier >= 3) perkModsRef.current.xpMult = 1.75;
+    else if (vtier >= 2) perkModsRef.current.xpMult = 1.45;
+    else if (vtier >= 1) perkModsRef.current.xpMult = 1.20;
+
+    // Dash cooldown (swift_boots)
+    const btier = ut.swift_boots || 0;
+    if (btier >= 3) perkModsRef.current.dashCDMult = 0.40;
+    else if (btier >= 2) perkModsRef.current.dashCDMult = 0.60;
+    else if (btier >= 1) perkModsRef.current.dashCDMult = 0.80;
+
+    // Ammo (deep_mag)
+    const atier = ut.deep_mag || 0;
+    if (atier >= 3) perkModsRef.current.ammoMult = 2.00;
+    else if (atier >= 2) perkModsRef.current.ammoMult = 1.60;
+    else if (atier >= 1) perkModsRef.current.ammoMult = 1.25;
+
+    // Damage (hardened)
+    const htier = ut.hardened || 0;
+    if (htier >= 3) perkModsRef.current.damageMult = 1.50;
+    else if (htier >= 2) perkModsRef.current.damageMult = 1.30;
+    else if (htier >= 1) perkModsRef.current.damageMult = 1.15;
+
+    // Pickup range (scavenger)
+    const stier = ut.scavenger || 0;
+    if (stier >= 3) perkModsRef.current.pickupRange = 90;
+    else if (stier >= 2) perkModsRef.current.pickupRange = 67;
+    else if (stier >= 1) perkModsRef.current.pickupRange = 45;
+
+    // HP (field_medic)
+    const mtier = ut.field_medic || 0;
+    const bonusHP = [0, 20, 50, 100][mtier] || 0;
+    if (bonusHP > 0) {
+      gsRef.current.player.health += bonusHP;
+      gsRef.current.player.maxHealth += bonusHP;
     }
+
+    // Grenade cooldown (grenadier)
+    const gtier = ut.grenadier || 0;
+    if (gtier >= 3) perkModsRef.current.grenadeCDMult = 0.35;
+    else if (gtier >= 2) perkModsRef.current.grenadeCDMult = 0.55;
+    else if (gtier >= 1) perkModsRef.current.grenadeCDMult = 0.75;
+
+    // Crit chance (crit_master)
+    const ctier = ut.crit_master || 0;
+    if (ctier >= 3) perkModsRef.current.critBonus = 0.20;
+    else if (ctier >= 2) perkModsRef.current.critBonus = 0.12;
+    else if (ctier >= 1) perkModsRef.current.critBonus = 0.05;
+
+    // Move speed (speedster)
+    const sptier = ut.speedster || 0;
+    if (sptier >= 1 && gsRef.current.player) {
+      const smult = [1, 1.10, 1.22, 1.38][sptier];
+      gsRef.current.player.speed *= smult;
+    }
+
+    // Lifesteal (vampire_bite)
+    const vbtier = ut.vampire_bite || 0;
+    if (vbtier >= 3) perkModsRef.current.lifesteal = 0.10;
+    else if (vbtier >= 2) perkModsRef.current.lifesteal = 0.06;
+    else if (vbtier >= 1) perkModsRef.current.lifesteal = 0.03;
     // Load daily missions
     dailyMissionsRef.current = getDailyMissions();
     missionDoneRef.current = new Set(
@@ -343,9 +398,14 @@ export default function CallOfDoodie() {
     gsRef.current.props = props;
 
     // Show meta toast if upgrades active
-    const metaActive = META_UPGRADES.filter(u => (new Set(loadMetaProgress().unlocks || [])).has(u.id));
+    const metaSnap = loadMetaProgress();
+    const ut2 = metaSnap.upgradeTiers || {};
+    const tierLabels = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
+    const metaActive = META_UPGRADES.filter(u => (ut2[u.id] || 0) > 0);
     if (metaActive.length > 0) {
-      setMetaToast(metaActive.map(u => u.emoji + " " + u.name).join("  ·  "));
+      const toastParts = metaActive.map(u => `${u.emoji} ${u.name} ${tierLabels[ut2[u.id] || 0]}`);
+      if ((metaSnap.prestige || 0) > 0) toastParts.unshift(`⭐ P${metaSnap.prestige}`);
+      setMetaToast(toastParts.join("  ·  "));
       setTimeout(() => setMetaToast(null), 4000);
     }
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
@@ -416,8 +476,9 @@ export default function CallOfDoodie() {
     const W = GW(), H = GH();
     const type = ENEMY_TYPES[typeIndex];
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+    const pm = gs.prestigeMult || 1;
     const wv = gs.currentWave;
-    const bossHealth = type.health * (1 + wv * 0.12) * diff.healthMult * 2.5;
+    const bossHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * 2.5;
     const side = Math.floor(Math.random() * 4);
     let x, y;
     if (side === 0) { x = W / 2; y = -50; }
@@ -426,7 +487,7 @@ export default function CallOfDoodie() {
     else { x = -50; y = H / 2; }
     gs.enemies.push({
       x, y, health: bossHealth, maxHealth: bossHealth,
-      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * 0.8,
+      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * 0.8,
       size: type.size * 1.5, color: type.color,
       name: "☠ " + type.name, points: type.points * 3,
       deathQuote: type.deathQuote, emoji: type.emoji,
@@ -477,10 +538,11 @@ export default function CallOfDoodie() {
     else { x = -30; y = Math.random() * h; }
     const type = ENEMY_TYPES[ti];
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-    const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult;
+    const pm = gs.prestigeMult || 1;
+    const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm;
     gs.enemies.push({
       x, y, health: eHealth, maxHealth: eHealth,
-      speed: type.speed * (1 + wv * 0.05) * diff.speedMult,
+      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm,
       size: type.size, color: type.color, name: type.name, points: type.points,
       deathQuote: type.deathQuote, emoji: type.emoji, typeIndex: ti,
       wobble: Math.random() * Math.PI * 2, hitFlash: 0,

@@ -128,25 +128,63 @@ export function saveMissionProgress(completed) {
 }
 
 // ===== META PROGRESSION =====
-const META_KEY = "cod-meta-v1";
-const DEFAULT_META = { careerPoints: 0, unlocks: [] };
+const META_KEY = "cod-meta-v2";
+const DEFAULT_META = { careerPoints: 0, upgradeTiers: {}, prestige: 0 };
+
 export function loadMetaProgress() {
-  try { const raw = localStorage.getItem(META_KEY); return raw ? { ...DEFAULT_META, ...JSON.parse(raw) } : { ...DEFAULT_META }; } catch { return { ...DEFAULT_META }; }
+  try {
+    const raw = localStorage.getItem(META_KEY);
+    if (!raw) return { ...DEFAULT_META };
+    const parsed = JSON.parse(raw);
+    // migrate old v1 schema (unlocks array → upgradeTiers tier 1)
+    if (parsed.unlocks && !parsed.upgradeTiers) {
+      const ut = {};
+      ["veteran","field_medic","swift_boots","deep_mag","hardened","scavenger"].forEach(id => {
+        if ((parsed.unlocks || []).includes(id)) ut[id] = 1;
+      });
+      parsed.upgradeTiers = ut;
+      delete parsed.unlocks;
+    }
+    return { ...DEFAULT_META, ...parsed };
+  } catch { return { ...DEFAULT_META }; }
 }
+
 export function saveMetaProgress(meta) {
   try { localStorage.setItem(META_KEY, JSON.stringify(meta)); } catch {}
 }
+
 export function addCareerPoints(amount) {
   const meta = loadMetaProgress();
   meta.careerPoints = (meta.careerPoints || 0) + amount;
   saveMetaProgress(meta); return meta;
 }
-export function purchaseMetaUpgrade(upgradeId, cost) {
+
+// Purchase the next sequential tier (1, 2, or 3) of a tiered upgrade group.
+export function purchaseMetaUpgrade(groupId, tier, cost) {
   const meta = loadMetaProgress();
-  if ((meta.careerPoints || 0) < cost || (meta.unlocks || []).includes(upgradeId)) return { success: false, meta };
+  const currentTier = (meta.upgradeTiers || {})[groupId] || 0;
+  if (tier !== currentTier + 1) return { success: false, meta };
+  if ((meta.careerPoints || 0) < cost) return { success: false, meta };
   meta.careerPoints -= cost;
-  meta.unlocks = [...(meta.unlocks || []), upgradeId];
-  saveMetaProgress(meta); return { success: true, meta };
+  meta.upgradeTiers = { ...(meta.upgradeTiers || {}), [groupId]: tier };
+  saveMetaProgress(meta);
+  return { success: true, meta };
+}
+
+// Prestige: resets career points + all upgrade tiers. Increments prestige counter.
+// Career kill records and achievements are preserved separately.
+export function prestigeAccount() {
+  const meta = loadMetaProgress();
+  meta.prestige = (meta.prestige || 0) + 1;
+  meta.upgradeTiers = {};
+  meta.careerPoints = 0;
+  saveMetaProgress(meta);
+  return meta;
+}
+
+// Account level derived from total career kills (never resets on prestige).
+export function getAccountLevel(totalKills) {
+  return Math.floor(Math.sqrt((totalKills || 0) / 20)) + 1;
 }
 
 export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {

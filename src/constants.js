@@ -121,14 +121,99 @@ export const STARTER_LOADOUTS = [
   { id: "speedster", name: "Speed Freak",    emoji: "⚡", desc: "+35% move speed · −40% dash cooldown.",                   color: "#00FFAA" },
 ];
 
-// ===== META UPGRADES =====
+// ===== META UPGRADES (tiered — 3 tiers each) =====
+// Storage key "cod-meta-v2" maps upgradeTiers: { groupId: tierOwned (1-3) }
 export const META_UPGRADES = [
-  { id: "veteran",     name: "Veteran",       emoji: "🎖️", cost: 50,  desc: "Start each run with +20% XP" },
-  { id: "field_medic", name: "Field Medic",   emoji: "💊",  cost: 60,  desc: "Start each run with +25 HP" },
-  { id: "swift_boots", name: "Swift Boots",   emoji: "👟",  cost: 75,  desc: "Start each run with −20% dash CD" },
-  { id: "deep_mag",    name: "Deep Magazine", emoji: "📦",  cost: 50,  desc: "Start each run with +25% ammo" },
-  { id: "hardened",    name: "Hardened",      emoji: "🛡️", cost: 100, desc: "Start each run with +15% damage" },
-  { id: "scavenger",   name: "Scavenger",     emoji: "🧲",  cost: 80,  desc: "Start each run with +50% pickup range" },
+  {
+    id: "veteran", name: "Veteran", emoji: "🎖️",
+    tiers: [
+      { cost: 200,  desc: "Start each run with +20% XP gain" },
+      { cost: 700,  desc: "Start each run with +45% XP gain" },
+      { cost: 2000, desc: "Start each run with +75% XP gain" },
+    ],
+  },
+  {
+    id: "field_medic", name: "Field Medic", emoji: "💊",
+    tiers: [
+      { cost: 250,  desc: "Start each run with +20 max HP" },
+      { cost: 800,  desc: "Start each run with +50 max HP" },
+      { cost: 2500, desc: "Start each run with +100 max HP" },
+    ],
+  },
+  {
+    id: "swift_boots", name: "Swift Boots", emoji: "👟",
+    tiers: [
+      { cost: 300,  desc: "Start with −20% dash cooldown" },
+      { cost: 900,  desc: "Start with −40% dash cooldown" },
+      { cost: 2800, desc: "Start with −60% dash cooldown" },
+    ],
+  },
+  {
+    id: "deep_mag", name: "Deep Magazine", emoji: "📦",
+    tiers: [
+      { cost: 200,  desc: "Start with +25% max ammo on all weapons" },
+      { cost: 700,  desc: "Start with +60% max ammo on all weapons" },
+      { cost: 2000, desc: "Start with +100% max ammo on all weapons" },
+    ],
+  },
+  {
+    id: "hardened", name: "Hardened", emoji: "🛡️",
+    tiers: [
+      { cost: 400,  desc: "Start each run with +15% bullet damage" },
+      { cost: 1200, desc: "Start each run with +30% bullet damage" },
+      { cost: 3500, desc: "Start each run with +50% bullet damage" },
+    ],
+  },
+  {
+    id: "scavenger", name: "Scavenger", emoji: "🧲",
+    tiers: [
+      { cost: 300,  desc: "Start with +50% pickup range" },
+      { cost: 1000, desc: "Start with +125% pickup range" },
+      { cost: 3000, desc: "Start with +225% pickup range" },
+    ],
+  },
+  {
+    id: "grenadier", name: "Grenadier", emoji: "💣",
+    tiers: [
+      { cost: 400,  desc: "Start with −25% grenade cooldown" },
+      { cost: 1200, desc: "Start with −45% grenade cooldown" },
+      { cost: 3500, desc: "Start with −65% grenade cooldown" },
+    ],
+  },
+  {
+    id: "crit_master", name: "Crit Master", emoji: "🎯",
+    tiers: [
+      { cost: 400,  desc: "Start each run with +5% crit chance" },
+      { cost: 1200, desc: "Start each run with +12% crit chance" },
+      { cost: 3500, desc: "Start each run with +20% crit chance" },
+    ],
+  },
+  {
+    id: "speedster", name: "Speedster", emoji: "⚡",
+    tiers: [
+      { cost: 500,  desc: "Start each run with +10% move speed" },
+      { cost: 1500, desc: "Start each run with +22% move speed" },
+      { cost: 4000, desc: "Start each run with +38% move speed" },
+    ],
+  },
+  {
+    id: "vampire_bite", name: "Vampire Bite", emoji: "🧛",
+    tiers: [
+      { cost: 600,  desc: "Start with 3% lifesteal on every hit" },
+      { cost: 1800, desc: "Start with 6% lifesteal on every hit" },
+      { cost: 5000, desc: "Start with 10% lifesteal on every hit" },
+    ],
+  },
+];
+
+// ===== NEW FEATURES (changelog panel + share card) =====
+export const NEW_FEATURES = [
+  "🌍 Global Leaderboard — compete worldwide",
+  "🗺️ Random Map Themes — Office, Bunker, Factory, Ruins",
+  "🔄 Bullet Ricochet — bullets bounce off walls",
+  "🧠 Smarter AI — enemies navigate around obstacles",
+  "🎖️ Tiered Meta Upgrades — 10 upgrades × 3 tiers",
+  "⭐ Prestige System — reset & raise the stakes",
 ];
 
 // ===== KILLSTREAKS =====
