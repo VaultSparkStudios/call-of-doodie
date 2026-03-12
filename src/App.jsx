@@ -54,6 +54,7 @@ export default function CallOfDoodie() {
   const achCheckRef      = useRef(false);// batch achievement checks to once/frame
   const dailyMissionsRef = useRef([]);   // today's 3 missions
   const missionDoneRef   = useRef(new Set()); // indices of completed missions this run
+  const autoAimRef       = useRef(false); // mobile auto-aim toggle
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState("username");
@@ -94,6 +95,7 @@ export default function CallOfDoodie() {
   const [perkPending, setPerkPending] = useState(false);
   const [perkOptions, setPerkOptions] = useState([]);
   const [bossWaveActive, setBossWaveActive] = useState(false);
+  const [autoAim, setAutoAim]             = useState(false);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -106,6 +108,8 @@ export default function CallOfDoodie() {
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 900 || "ontouchstart" in window);
     check(); window.addEventListener("resize", check);
+    const saved = localStorage.getItem("cod-autoaim") === "1";
+    setAutoAim(saved); autoAimRef.current = saved;
     return () => window.removeEventListener("resize", check);
   }, []);
 
@@ -563,12 +567,12 @@ export default function CallOfDoodie() {
       const rect = canvas.getBoundingClientRect();
       p.angle = Math.atan2((mouse.y - rect.top) * (H / rect.height) - p.y, (mouse.x - rect.left) * (W / rect.width) - p.x);
     }
-    if (js.active && !ss.active && gs.enemies.length > 0) {
+    if (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0) {
       let nearest = null, nd = Infinity;
       gs.enemies.forEach(e => { const d = Math.hypot(e.x - p.x, e.y - p.y); if (d < nd) { nd = d; nearest = e; } });
       if (nearest) p.angle = Math.atan2(nearest.y - p.y, nearest.x - p.x);
     }
-    const shouldShoot = mouse.down || ss.shooting || (js.active && !ss.active && gs.enemies.length > 0);
+    const shouldShoot = mouse.down || ss.shooting || (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0);
     if (shouldShoot && !isReloadingRef.current && gs.ammoCount > 0) shoot(gs, wpnIdx, p.angle);
     if (p.invincible > 0) p.invincible--;
 
@@ -1280,6 +1284,19 @@ export default function CallOfDoodie() {
             onTouchStart={(e) => { e.preventDefault(); throwGrenade(); }}
             onClick={throwGrenade}
             style={{ width: "clamp(36px,9vw,46px)", height: 44, borderRadius: 8, background: grenadeReady ? "rgba(255,69,0,0.15)" : "rgba(255,255,255,0.04)", border: grenadeReady ? "2px solid rgba(255,69,0,0.6)" : "1px solid rgba(255,255,255,0.08)", color: grenadeReady ? "#FF4500" : "#777", fontSize: "clamp(14px,4vw,18px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>💣</button>
+          <button
+            onTouchStart={(e) => {
+              e.preventDefault();
+              const next = !autoAimRef.current;
+              autoAimRef.current = next; setAutoAim(next);
+              localStorage.setItem("cod-autoaim", next ? "1" : "0");
+            }}
+            onClick={() => {
+              const next = !autoAimRef.current;
+              autoAimRef.current = next; setAutoAim(next);
+              localStorage.setItem("cod-autoaim", next ? "1" : "0");
+            }}
+            style={{ width: "clamp(32px,8vw,42px)", height: 44, borderRadius: 8, background: autoAim ? "rgba(255,215,0,0.18)" : "rgba(255,255,255,0.06)", border: autoAim ? "2px solid rgba(255,215,0,0.7)" : "1px solid rgba(255,255,255,0.15)", color: autoAim ? "#FFD700" : "#888", fontSize: 15, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>🎯</button>
           <button
             onTouchStart={(e) => { e.preventDefault(); setPaused(true); }}
             onClick={() => setPaused(true)}
