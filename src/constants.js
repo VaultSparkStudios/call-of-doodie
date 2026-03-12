@@ -4,6 +4,8 @@ export const WEAPONS = [
   { name: "Rubber Chicken RPG", emoji: "🐔", damage: 80, fireRate: 1200, ammo: 3, maxAmmo: 3, reloadTime: 3000, color: "#FF6B35", sound: "BAWK!", spread: 0, desc: "Massive damage, slow reload. BAWK!" },
   { name: "Nerf Minigun", emoji: "🔫", damage: 5, fireRate: 50, ammo: 200, maxAmmo: 200, reloadTime: 4000, color: "#FF4444", sound: "pew pew", spread: 0.12, desc: "Spray & pray. 200 foam darts of fury." },
   { name: "Plunger Launcher", emoji: "🪠", damage: 40, fireRate: 600, ammo: 8, maxAmmo: 8, reloadTime: 2000, color: "#8B4513", sound: "THWONK!", spread: 0.02, desc: "Mid-range plunger justice. THWONK!" },
+  { name: "Sniper-ator 3000", emoji: "🎯", damage: 120, fireRate: 1800, ammo: 5, maxAmmo: 5, reloadTime: 2500, color: "#00FFAA", sound: "CRACK!", spread: 0.005, bulletLife: 110, bulletSize: 7, bulletTrail: true, bulletSpeed: 18, desc: "One-tap precision. Enemies won't get a second chance." },
+  { name: "Spicy Squirt Gun", emoji: "🌶️", damage: 4, fireRate: 28, ammo: 100, maxAmmo: 100, reloadTime: 2800, color: "#FF5500", sound: "FWOOSH!", spread: 0.22, bulletLife: 14, bulletSize: 3, bulletTrail: false, bulletSpeed: 8, desc: "Short range, ridiculous fire rate. 100 shots of burning regret." },
 ];
 
 // ===== ENEMIES =====
@@ -19,6 +21,9 @@ export const ENEMY_TYPES = [
   { name: "Conspiracy Bro", health: 90, speed: 1.6, size: 42, color: "#AAFF00", points: 450, deathQuote: "The frogs... were right...", emoji: "🛸", ranged: true, projSpeed: 3.5, projRate: 180 },
   { name: "Landlord", health: 250, speed: 0.5, size: 56, color: "#8B6914", points: 900, deathQuote: "Rent was due yesterday...", emoji: "🏠", ranged: true, projSpeed: 4, projRate: 100 },
   { name: "Crypto Bro", health: 30, speed: 3.0, size: 28, color: "#00D4AA", points: 600, deathQuote: "HODL...", emoji: "📈", ranged: false },
+  { name: "Shield Guy", health: 90, speed: 1.0, size: 44, color: "#4488FF", points: 350, deathQuote: "My shield... shattered!", emoji: "🛡️", ranged: false },
+  { name: "YOLO Bomber", health: 20, speed: 3.8, size: 28, color: "#FF4400", points: 500, deathQuote: "Worth every HP!", emoji: "💥", ranged: false },
+  { name: "Sergeant Karen", health: 55, speed: 0.8, size: 40, color: "#FF8800", points: 450, deathQuote: "Tell my troops... git gud", emoji: "📣", ranged: false },
 ];
 
 // ===== PERKS =====
@@ -33,7 +38,7 @@ export const PERKS = [
   },
   {
     id: "adrenaline", name: "Adrenaline Rush", desc: "+15% move speed", emoji: "⚡", tier: "common",
-    apply: (mods, gs) => { if (gs?.player) gs.player.speed *= 1.15; },
+    apply: (mods, gs) => { if (gs?.player) gs.player.speed *= 1.15; mods.hasAdrenaline = true; },
   },
   {
     id: "iron_gut", name: "Iron Gut", desc: "+30 max HP & current HP", emoji: "🛡️", tier: "common",
@@ -53,7 +58,7 @@ export const PERKS = [
   },
   {
     id: "vampire", name: "Vampire", desc: "Heal 8% of damage dealt", emoji: "🧛", tier: "uncommon",
-    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; },
+    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; },
   },
   {
     id: "deep_pockets", name: "Deep Pockets", desc: "+50% max ammo on all weapons", emoji: "📦", tier: "uncommon",
@@ -70,6 +75,16 @@ export const PERKS = [
   {
     id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy", emoji: "🔫", tier: "rare",
     apply: (mods) => { mods.pierce = (mods.pierce || 0) + 1; },
+  },
+  {
+    id: "bloodlust", name: "Bloodlust", emoji: "🩸", tier: "uncommon",
+    desc: "+30% dmg. Synergy: +15% lifesteal if Vampire active",
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.30; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + 0.15; },
+  },
+  {
+    id: "turbo_boots", name: "Turbo Boots", emoji: "🚀", tier: "uncommon",
+    desc: "−30% dash CD. Synergy: +20% speed if Adrenaline active",
+    apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.70; if (mods.hasAdrenaline && gs?.player) gs.player.speed *= 1.20; },
   },
 ];
 
@@ -97,6 +112,14 @@ export const CURSED_PERKS = [
 
 export const PERK_TIER_COLORS = { common: "#AAAAAA", uncommon: "#44BB44", rare: "#4488FF", legendary: "#FF44FF", cursed: "#FF2244" };
 export const PERK_TIER_WEIGHTS = { common: 5, uncommon: 3, rare: 1, cursed: 0 };
+
+// ===== STARTER LOADOUTS =====
+export const STARTER_LOADOUTS = [
+  { id: "standard",  name: "Standard Issue", emoji: "⚖️", desc: "Default soldier. Versatile and balanced.",                 color: "#AAAAAA" },
+  { id: "cannon",    name: "Glass Cannon",   emoji: "💀", desc: "+50% damage · start with only 60% HP.",                   color: "#FF4444" },
+  { id: "tank",      name: "Iron Tank",      emoji: "🛡️", desc: "+60 max HP · −20% move speed.",                          color: "#4488FF" },
+  { id: "speedster", name: "Speed Freak",    emoji: "⚡", desc: "+35% move speed · −40% dash cooldown.",                   color: "#00FFAA" },
+];
 
 // ===== META UPGRADES =====
 export const META_UPGRADES = [
@@ -152,6 +175,9 @@ export const TIPS = [
   "Tip: Boss waves hit every 5 waves. Prepare accordingly.",
   "Tip: Vampire perk + Nerf Minigun = free healthcare.",
   "Tip: Penetrator perk makes every bullet worth more.",
+  "Tip: Sniper-ator 3000 pierces the soul. One shot, one vibe.",
+  "Tip: Spicy Squirt Gun works best when you're basically touching the enemy.",
+  "Tip: Sergeant Karen buffs nearby enemies. Eliminate her first.",
 ];
 
 // ===== ACHIEVEMENTS =====

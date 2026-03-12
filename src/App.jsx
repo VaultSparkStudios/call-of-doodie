@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
-  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
+  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress } from "./storage.js";
 import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
@@ -55,6 +55,7 @@ export default function CallOfDoodie() {
   const dailyMissionsRef = useRef([]);   // today's 3 missions
   const missionDoneRef   = useRef(new Set()); // indices of completed missions this run
   const autoAimRef       = useRef(false); // mobile auto-aim toggle
+  const starterLoadoutRef = useRef("standard");
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState("username");
@@ -90,12 +91,15 @@ export default function CallOfDoodie() {
   const [extraLives, setExtraLives]   = useState(0);
   const [difficulty, setDifficulty]   = useState("normal");
   const [guardianAngelFlash, setGuardianAngelFlash] = useState(false);
-  const [weaponUpgrades, setWeaponUpgrades] = useState([0, 0, 0, 0]);
+  const [weaponUpgrades, setWeaponUpgrades] = useState(() => WEAPONS.map(() => 0));
   const [activePerks, setActivePerks] = useState([]);
   const [perkPending, setPerkPending] = useState(false);
   const [perkOptions, setPerkOptions] = useState([]);
   const [bossWaveActive, setBossWaveActive] = useState(false);
   const [autoAim, setAutoAim]             = useState(false);
+  const [starterLoadout, setStarterLoadout] = useState("standard");
+  const [runSeed, setRunSeed]             = useState(0);
+  const [metaToast, setMetaToast]         = useState(null);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -191,15 +195,22 @@ export default function CallOfDoodie() {
   const initGame = useCallback(() => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+    const seed = Math.floor(Math.random() * 999999);
+    const career = loadCareerStats();
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
+      dyingEnemies: [], obstacles: [],
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
       damageFlash: 0, killFlash: 0, totalDamage: 0, trail: [],
-      weaponUpgrades: [0, 0, 0, 0], bossWave: false,
+      weaponUpgrades: WEAPONS.map(() => 0), bossWave: false,
+      runSeed: seed,
+      careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
+      newBestScore: false, newBestWave: false,
     };
+    setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
     killFeedRef.current = [];
     xpRef.current = { xp: 0, level: 1 };
@@ -229,6 +240,33 @@ export default function CallOfDoodie() {
     missionDoneRef.current = new Set(
       Object.keys(loadMissionProgress()).map(Number).filter(i => loadMissionProgress()[i])
     );
+    // Apply starter loadout
+    const loadout = starterLoadoutRef.current;
+    if (loadout === "cannon") {
+      perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.50;
+      gsRef.current.player.health = Math.max(20, Math.floor(gsRef.current.player.maxHealth * 0.60));
+    } else if (loadout === "tank") {
+      gsRef.current.player.health += 60; gsRef.current.player.maxHealth += 60;
+      gsRef.current.player.speed = 3.2;
+    } else if (loadout === "speedster") {
+      gsRef.current.player.speed = 5.4;
+      perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.60;
+    }
+    // Generate obstacles
+    gsRef.current.obstacles = [
+      { x: w * 0.18, y: h * 0.28 - 10, w: 90, h: 20 },
+      { x: w * 0.72, y: h * 0.65 - 10, w: 90, h: 20 },
+      { x: w * 0.47, y: h * 0.15,       w: 20, h: 85 },
+      { x: w * 0.47, y: h * 0.72,       w: 20, h: 85 },
+      { x: w * 0.12, y: h * 0.58 - 10, w: 65, h: 20 },
+      { x: w * 0.76, y: h * 0.32 - 10, w: 65, h: 20 },
+    ];
+    // Show meta toast if upgrades active
+    const metaActive = META_UPGRADES.filter(u => (new Set(loadMetaProgress().unlocks || [])).has(u.id));
+    if (metaActive.length > 0) {
+      setMetaToast(metaActive.map(u => u.emoji + " " + u.name).join("  ·  "));
+      setTimeout(() => setMetaToast(null), 4000);
+    }
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
   }, []);
 
@@ -320,16 +358,19 @@ export default function CallOfDoodie() {
     const w = GW(), h = GH(), wv = gs.currentWave;
     let ti = 0;
     const r = Math.random();
-    if (wv >= 12 && r < 0.06) ti = 9;
-    else if (wv >= 10 && r < 0.12) ti = 4;
-    else if (wv >= 9 && r < 0.17) ti = 10;
-    else if (wv >= 8 && r < 0.22) ti = 3;
-    else if (wv >= 7 && r < 0.27) ti = 8;
-    else if (wv >= 6 && r < 0.33) ti = 7;
-    else if (wv >= 5 && r < 0.39) ti = 6;
-    else if (wv >= 4 && r < 0.45) ti = 2;
-    else if (wv >= 3 && r < 0.51) ti = 5;
-    else if (wv >= 2 && r < 0.58) ti = 1;
+    if      (wv >= 15 && r < 0.05) ti = 13;     // Sergeant Karen
+    else if (wv >= 13 && r < 0.10) ti = 12;     // YOLO Bomber
+    else if (wv >= 10 && r < 0.15) ti = 11;     // Shield Guy
+    else if (wv >= 12 && r < 0.21) ti = 9;      // Landlord
+    else if (wv >= 10 && r < 0.27) ti = 4;      // Mega Karen
+    else if (wv >= 9  && r < 0.33) ti = 10;     // Crypto Bro
+    else if (wv >= 8  && r < 0.38) ti = 3;      // HOA President
+    else if (wv >= 7  && r < 0.43) ti = 8;      // Conspiracy Bro
+    else if (wv >= 6  && r < 0.49) ti = 7;      // Influencer
+    else if (wv >= 5  && r < 0.55) ti = 6;      // Gym Bro
+    else if (wv >= 4  && r < 0.61) ti = 2;      // Florida Man
+    else if (wv >= 3  && r < 0.67) ti = 5;      // IT Guy
+    else if (wv >= 2  && r < 0.74) ti = 1;      // Karen
     const side = Math.floor(Math.random() * 4);
     let x, y;
     if (side === 0) { x = Math.random() * w; y = -30; }
@@ -392,13 +433,14 @@ export default function CallOfDoodie() {
     const pierce = perkModsRef.current.pierce || 0;
     gs.bullets.push({
       x: p.x + Math.cos(angle) * 25, y: p.y + Math.sin(angle) * 25,
-      vx: Math.cos(a) * 12, vy: Math.sin(a) * 12,
-      damage: weapon.damage * damageMult, color: weapon.color, life: 60,
-      size: weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4,
-      trail: weaponIdx === 1, pierceLeft: pierce,
+      vx: Math.cos(a) * (weapon.bulletSpeed || 12), vy: Math.sin(a) * (weapon.bulletSpeed || 12),
+      damage: weapon.damage * damageMult, color: weapon.color,
+      life: weapon.bulletLife || 60,
+      size: weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4),
+      trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
     });
     gs.muzzleFlash = 4;
-    gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : 3);
+    gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : weaponIdx === 4 ? 18 : 3);
     if (gs.ammoCount <= 0) doReload(weaponIdx);
   }, [doReload]);
 
@@ -485,12 +527,13 @@ export default function CallOfDoodie() {
     setBestStreak(0); setTotalDamage(0);
     setAchievementsUnlocked([]); setAchievementPopup(null); setTimeSurvived(0);
     setPaused(false); setExtraLives(0); extraLivesRef.current = 0;
-    setGuardianAngelFlash(false); setWeaponUpgrades([0, 0, 0, 0]);
+    setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
+    starterLoadoutRef.current = starterLoadout;
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
-  }, [difficulty, initGame]);
+  }, [difficulty, initGame, starterLoadout]);
 
   useEffect(() => {
     if (screen !== "game" && timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
@@ -555,6 +598,12 @@ export default function CallOfDoodie() {
     if (dashRef.current.active <= 0) { p.x += dx * p.speed; p.y += dy * p.speed; }
     p.x = Math.max(20, Math.min(W - 20, p.x));
     p.y = Math.max(20, Math.min(H - 20, p.y));
+    (gs.obstacles || []).forEach(ob => {
+      const cx = Math.max(ob.x, Math.min(p.x, ob.x + ob.w));
+      const cy = Math.max(ob.y, Math.min(p.y, ob.y + ob.h));
+      const dist = Math.hypot(p.x - cx, p.y - cy);
+      if (dist < 16) { const ang = Math.atan2(p.y - cy, p.x - cx); p.x = cx + Math.cos(ang) * 17; p.y = cy + Math.sin(ang) * 17; }
+    });
     if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (Math.random() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
     gs.trail = gs.trail.filter(t => { t.life--; return t.life > 0; });
 
@@ -609,6 +658,10 @@ export default function CallOfDoodie() {
         gs.maxEnemiesThisWave = 5 + gs.currentWave * 3;
       }
       setWave(gs.currentWave);
+      if (!gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
+        gs.newBestWave = true;
+        addText(gs, W / 2, H / 2 - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
+      }
       const waveBonus = gs.currentWave * 100;
       gs.score += waveBonus; setScore(gs.score);
       setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
@@ -638,12 +691,16 @@ export default function CallOfDoodie() {
     gs.bullets = gs.bullets.filter(b => {
       b.x += b.vx; b.y += b.vy; b.life--;
       if (b.trail) addParticles(gs, b.x, b.y, b.color, 1);
+      const hitWall = (gs.obstacles || []).some(ob => b.x >= ob.x && b.x <= ob.x + ob.w && b.y >= ob.y && b.y <= ob.y + ob.h);
+      if (hitWall) { addParticles(gs, b.x, b.y, b.color, 3); return false; }
       return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
     });
 
     // ── Enemy bullet movement ──
     gs.enemyBullets = gs.enemyBullets.filter(eb => {
       eb.x += eb.vx; eb.y += eb.vy; eb.life--;
+      const hitWall = (gs.obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
+      if (hitWall) return false;
       return eb.life > 0 && eb.x > -10 && eb.x < W + 10 && eb.y > -10 && eb.y < H + 10;
     });
 
@@ -693,7 +750,12 @@ export default function CallOfDoodie() {
           const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0);
           const isCrit = Math.random() < effectiveCrit;
           const lastResortMult = (perkModsRef.current.lastResort && p.health < p.maxHealth * 0.25) ? 3.0 : 1.0;
-          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1) * lastResortMult;
+          // Shield Guy (ti=11): 20% damage from front, 160% from behind
+          const moveAngle = Math.atan2(p.y - e.y, p.x - e.x);
+          const bulletAngle = Math.atan2(b.vy, b.vx);
+          const angleDiff = Math.abs(Math.atan2(Math.sin(bulletAngle - moveAngle), Math.cos(bulletAngle - moveAngle)));
+          const shieldMult = (e.typeIndex === 11) ? (angleDiff < Math.PI / 2 ? 0.20 : 1.60) : 1.0;
+          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1) * lastResortMult * shieldMult;
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Lifesteal
           if (perkModsRef.current.lifesteal) {
@@ -726,12 +788,19 @@ export default function CallOfDoodie() {
             if (e.isBossEnemy) soundBossKill();
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
+            if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
+              gs.newBestScore = true;
+              addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
+              gs.screenShake = Math.max(gs.screenShake, 8);
+            }
             addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
             addText(gs, e.x, e.y - 50, e.deathQuote, "#FF69B4");
             addKillFeed(e.name, WEAPONS[wpnIdx].name);
             if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
             addXp(pts); gs.killFlash = 6;
+            gs.dyingEnemies = gs.dyingEnemies || [];
+            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
             achCheckRef.current = true;
             if (KILL_MILESTONES[gs.kills]) {
               addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
@@ -759,13 +828,18 @@ export default function CallOfDoodie() {
     gs.enemies = gs.enemies.filter(e => e.health > -999);
     if (achCheckRef.current) { checkAchievements(gs); checkDailyMissions(gs); achCheckRef.current = false; }
 
+    // ── Sergeant Karen aura ──
+    const sergeantPositions = gs.enemies.filter(e => e.typeIndex === 13).map(e => ({ x: e.x, y: e.y }));
+    gs.enemies.forEach(e => { e.buffed = sergeantPositions.length > 0 && sergeantPositions.some(s => Math.hypot(e.x - s.x, e.y - s.y) < 150) && e.typeIndex !== 13; });
+
     // ── Enemy movement & melee ──
     gs.enemies.forEach(e => {
       const a = Math.atan2(p.y - e.y, p.x - e.x);
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
-      e.x += Math.cos(a) * e.speed + Math.sin(e.wobble) * 0.5 + Math.cos(a + Math.PI / 2) * zigzag;
-      e.y += Math.sin(a) * e.speed + Math.cos(e.wobble) * 0.5 + Math.sin(a + Math.PI / 2) * zigzag;
+      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1);
+      e.x += Math.cos(a) * buffedSpeed + Math.sin(e.wobble) * 0.5 + Math.cos(a + Math.PI / 2) * zigzag;
+      e.y += Math.sin(a) * buffedSpeed + Math.cos(e.wobble) * 0.5 + Math.sin(a + Math.PI / 2) * zigzag;
       if (e.hitFlash > 0) e.hitFlash--;
       if (e.ranged) {
         e.shootTimer++;
@@ -807,6 +881,23 @@ export default function CallOfDoodie() {
             addText(gs, e.x, e.y - 65, "PAY RENT OR VACATE!", "#8B6914", true);
             gs.screenShake = 6; addParticles(gs, e.x, e.y, "#8B6914", 12);
           }
+        }
+      }
+      // ── Kamikaze (ti=12) ──
+      if (e.typeIndex === 12 && dashRef.current.active <= 0) {
+        const kd = Math.hypot(p.x - e.x, p.y - e.y);
+        if (kd < e.size / 2 + 38) {
+          addParticles(gs, e.x, e.y, "#FF4400", 25); addParticles(gs, e.x, e.y, "#FFD700", 10);
+          addText(gs, e.x, e.y, "💥 BOOM!", "#FF4400", true); gs.screenShake = 12;
+          gs.dyingEnemies = gs.dyingEnemies || [];
+          gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+          if (p.invincible <= 0) {
+            p.health -= 35; p.invincible = 40; gs.damageFlash = 12;
+            setHealth(Math.max(0, p.health));
+            addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
+            if (p.health <= 0) handlePlayerDeath(gs);
+          }
+          e.health = -999;
         }
       }
       if (dashRef.current.active <= 0) {
@@ -878,6 +969,7 @@ export default function CallOfDoodie() {
     // ── Particles / floats ──
     gs.particles = gs.particles.filter(pt => { pt.x += pt.vx; pt.y += pt.vy; pt.vx *= 0.95; pt.vy *= 0.95; pt.life--; return pt.life > 0; });
     gs.floatingTexts = gs.floatingTexts.filter(ft => { ft.y += ft.vy; ft.life--; return ft.life > 0; });
+    gs.dyingEnemies = (gs.dyingEnemies || []).filter(de => { de.life--; return de.life > 0; });
     if (gs.screenShake > 0) gs.screenShake *= 0.85;
     if (gs.muzzleFlash > 0) gs.muzzleFlash--;
     if (gs.damageFlash > 0) gs.damageFlash--;
@@ -897,6 +989,15 @@ export default function CallOfDoodie() {
     ctx.lineWidth = 1;
     for (let gx = 0; gx < W; gx += 50) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
     for (let gy = 0; gy < H; gy += 50) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+
+    // Arena border
+    const bPulse = 0.25 + Math.sin(Date.now() / 900) * 0.12;
+    ctx.strokeStyle = gs.bossWave ? `rgba(255,60,60,${bPulse})` : `rgba(80,80,220,${bPulse})`;
+    ctx.lineWidth = 3; ctx.strokeRect(4, 4, W - 8, H - 8); ctx.lineWidth = 1;
+    const cSz = 18; ctx.strokeStyle = gs.bossWave ? "#FF5555" : "#8888FF";
+    [[4,4,1,1],[W-4,4,-1,1],[4,H-4,1,-1],[W-4,H-4,-1,-1]].forEach(([cx,cy,sx,sy]) => {
+      ctx.beginPath(); ctx.moveTo(cx + sx*cSz, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy*cSz); ctx.stroke();
+    });
 
     // Trail
     gs.trail.forEach(t => {
@@ -935,6 +1036,13 @@ export default function CallOfDoodie() {
       ctx.beginPath(); ctx.arc(0, 0, eb.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     });
 
+    // Obstacles
+    (gs.obstacles || []).forEach(ob => {
+      ctx.fillStyle = "rgba(60,60,100,0.92)"; ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+      ctx.strokeStyle = "rgba(110,110,200,0.7)"; ctx.lineWidth = 2; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h);
+      ctx.shadowColor = "#6666DD"; ctx.shadowBlur = 6; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
+    });
+
     // Enemies
     gs.enemies.forEach(e => {
       ctx.save(); ctx.translate(e.x, e.y);
@@ -947,6 +1055,20 @@ export default function CallOfDoodie() {
       if (e.isBossEnemy) {
         ctx.strokeStyle = "rgba(255,0,0," + (0.4 + Math.sin(Date.now() / 200) * 0.3) + ")";
         ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 6, 0, Math.PI * 2); ctx.stroke();
+      }
+      // Sergeant aura
+      if (e.typeIndex === 13) {
+        ctx.strokeStyle = "rgba(255,136,0," + (0.3 + Math.sin(Date.now() / 250) * 0.2) + ")";
+        ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.arc(0, 0, 90, 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      // Shield Guy visual
+      if (e.typeIndex === 11) {
+        const shieldAngle = Math.atan2(p.y - e.y, p.x - e.x);
+        ctx.strokeStyle = "rgba(100,150,255,0.7)"; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 8, shieldAngle - 0.9, shieldAngle + 0.9); ctx.stroke();
+        ctx.lineWidth = 1;
       }
       if (e.ranged && !e.isBossEnemy) {
         ctx.strokeStyle = "rgba(255,100,100," + (0.3 + Math.sin(Date.now() / 300) * 0.2) + ")";
@@ -977,6 +1099,16 @@ export default function CallOfDoodie() {
     gs.particles.forEach(pt => {
       ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
       ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // Dying enemy animations
+    (gs.dyingEnemies || []).forEach(de => {
+      const t = de.life / de.maxLife; // 1→0
+      ctx.save(); ctx.translate(de.x, de.y - (1 - t) * 25);
+      ctx.globalAlpha = t; ctx.scale(1 + (1 - t) * 0.6, 1 + (1 - t) * 0.6);
+      ctx.font = (de.size * 0.55) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(de.emoji, 0, 0); ctx.restore();
     });
     ctx.globalAlpha = 1;
 
@@ -1084,7 +1216,7 @@ export default function CallOfDoodie() {
       if (e.key === "q" || e.key === "g" || e.key === "5") throwGrenade();
       if (e.key === " " || e.key === "Shift") doDash();
       const num = parseInt(e.key);
-      if (num >= 1 && num <= 4) switchWeapon(num - 1);
+      if (num >= 1 && num <= WEAPONS.length) switchWeapon(num - 1);
       if (["w","a","s","d","r","q","g","1","2","3","4","5"," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
     };
     const ku = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
@@ -1169,6 +1301,7 @@ export default function CallOfDoodie() {
         isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading}
         onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
         onChangeUsername={() => setScreen("username")}
+        starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
       />
     );
   }
@@ -1179,7 +1312,7 @@ export default function CallOfDoodie() {
         score={score} kills={kills} deaths={deaths} wave={wave} level={level}
         bestStreak={bestStreak} timeSurvived={timeSurvived} totalDamage={totalDamage}
         crits={statsRef.current.crits} grenades={statsRef.current.grenades}
-        deathMessage={deathMessage} difficulty={difficulty}
+        deathMessage={deathMessage} difficulty={difficulty} runSeed={runSeed}
         achievementsUnlocked={achievementsUnlocked}
         leaderboard={leaderboard} lbLoading={lbLoading} username={username}
         DIFFICULTIES={DIFFICULTIES}
@@ -1223,6 +1356,14 @@ export default function CallOfDoodie() {
           <div style={{ fontSize: 22 }}>{achievementPopup.emoji}</div>
           <div>{achievementPopup.name}</div>
           <div style={{ fontSize: 10, color: "#CCC", fontWeight: 400 }}>{achievementPopup.desc}</div>
+        </div>
+      )}
+
+      {/* Meta upgrades toast */}
+      {metaToast && !paused && !perkPending && (
+        <div style={{ position: "absolute", top: 50, left: "50%", transform: "translateX(-50%)", background: "rgba(255,107,53,0.88)", border: "1px solid rgba(255,107,53,0.95)", borderRadius: 10, padding: "7px 16px", color: "#FFF", fontSize: 12, fontWeight: 700, zIndex: 50, textAlign: "center", pointerEvents: "none", maxWidth: 340, animation: "slideDown 0.3s ease-out", boxShadow: "0 0 15px rgba(255,107,53,0.4)" }}>
+          <div style={{ fontSize: 10, color: "#FFD700", marginBottom: 2, letterSpacing: 1 }}>META UPGRADES ACTIVE</div>
+          {metaToast}
         </div>
       )}
 

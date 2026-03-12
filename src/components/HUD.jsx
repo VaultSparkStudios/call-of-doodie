@@ -64,8 +64,11 @@ export default function HUD({
       {/* Level / XP bar */}
       <div style={{ position: "absolute", top: 26, left: 12 }}>
         <div style={{ fontSize: 10, color: "#DDD" }}>Lv {level}</div>
-        <div style={{ width: 60, height: 3, background: "rgba(255,255,255,0.15)", borderRadius: 2, overflow: "hidden" }}>
+        <div style={{ width: 70, height: 3, background: "rgba(255,255,255,0.15)", borderRadius: 2, overflow: "hidden" }}>
           <div style={{ width: (xp / xpNeeded) * 100 + "%", height: "100%", background: "#00FF88", borderRadius: 2 }} />
+        </div>
+        <div style={{ fontSize: 9, color: level % 3 === 0 ? "#00FF88" : "#888", marginTop: 1 }}>
+          {level % 3 === 0 ? "✨ PERK NOW!" : `Perk in ${3 - (level % 3)} lvl${3 - (level % 3) > 1 ? "s" : ""}`}
         </div>
       </div>
 
