@@ -29,7 +29,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   };
 
   return (
-    <div style={{ ...base, alignItems: "center", justifyContent: "center", color: "#fff", padding: 20, boxSizing: "border-box", overflowY: "auto" }}>
+    <div style={{ ...base, overflow: "hidden", alignItems: "center", color: "#fff", boxSizing: "border-box" }}>
+      <div style={{ position: "absolute", inset: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: 20, boxSizing: "border-box" }}>
       {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />}
       {showAchievements && <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />}
 
@@ -152,10 +153,10 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Grid background */}
-      <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px)" }} />
+      <div style={{ position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px)", pointerEvents: "none" }} />
 
-      <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 500, width: "100%" }}>
-        <div style={{ fontSize: 10, color: "#BBB", letterSpacing: 6, marginBottom: 6 }}>ACTIVISION'T PRESENTS</div>
+      <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 500, width: "100%", margin: "auto" }}>
+        <div style={{ fontSize: 10, color: "#BBB", letterSpacing: 6, marginBottom: 6 }}>VAULTSPARK STUDIOS PRESENTS</div>
         <h1 style={{ fontSize: "clamp(34px,9vw,64px)", fontWeight: 900, margin: 0, background: "linear-gradient(180deg,#FFD700,#FF6B00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: -2, filter: "drop-shadow(0 0 20px rgba(255,107,0,0.5))" }}>
           CALL OF DOODIE
         </h1>
@@ -217,6 +218,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         <div style={{ fontSize: 11, color: "#888", marginTop: 8 }}>
           ✨ Perks on level-up · 🔧 Weapon upgrades · ⚠️ Boss waves every 5 waves
         </div>
+      </div>
       </div>
     </div>
   );
