@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES } from "../constants.js";
+import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, onStart, onRefreshLeaderboard, onChangeUsername }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -302,6 +302,25 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 <div style={{ fontSize: 14, fontWeight: 900, color: d.color }}>{d.emoji} {d.label}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{d.desc}</div>
                 <div style={{ fontSize: 9, color: "#999", marginTop: 3 }}>HP: {d.playerHP} · Enemy HP: {d.healthMult}x · Speed: {d.speedMult}x</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Starter Loadout */}
+        <div style={{ ...card, margin: "0 0 12px", textAlign: "left" }}>
+          <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, textAlign: "center", fontWeight: 700 }}>STARTER LOADOUT</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+            {STARTER_LOADOUTS.map((l) => (
+              <button key={l.id} onClick={() => setStarterLoadout?.(l.id)} style={{
+                padding: "9px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left",
+                fontFamily: "'Courier New',monospace",
+                background: starterLoadout === l.id ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
+                border: starterLoadout === l.id ? `2px solid ${l.color}` : "1px solid rgba(255,255,255,0.1)",
+                color: "#FFF", transition: "all 0.15s",
+              }}>
+                <div style={{ fontSize: 13, fontWeight: 900, color: l.color }}>{l.emoji} {l.name}</div>
+                <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{l.desc}</div>
               </button>
             ))}
           </div>
