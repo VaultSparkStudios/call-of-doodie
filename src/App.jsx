@@ -209,6 +209,7 @@ export default function CallOfDoodie() {
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
+      weaponAmmos: WEAPONS.map(w => w.ammo), // per-weapon ammo state
       damageFlash: 0, killFlash: 0, totalDamage: 0, trail: [],
       weaponUpgrades: WEAPONS.map(() => 0), bossWave: false,
       runSeed: seed,
@@ -426,7 +427,13 @@ export default function CallOfDoodie() {
       if (!big) return; // drop small texts when full
       gs.floatingTexts.splice(0, 3); // evict oldest 3 to make room for big text
     }
-    gs.floatingTexts.push({ x, y, text, color, life: big ? 90 : 60, vy: big ? -1 : -2, big });
+    const isQuote = big === "quote";
+    gs.floatingTexts.push({
+      x, y, text, color,
+      life: isQuote ? 110 : big ? 90 : 60,
+      vy: isQuote ? -0.65 : big ? -1 : -2,
+      big: big === true, quote: isQuote,
+    });
   };
   const addKillFeed = (enemyName, weaponName) => {
     const entry = { enemy: enemyName, weapon: weaponName, id: Date.now() + Math.random() };
@@ -490,7 +497,7 @@ export default function CallOfDoodie() {
       speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * 0.8,
       size: type.size * 1.5, color: type.color,
       name: "☠ " + type.name, points: type.points * 3,
-      deathQuote: type.deathQuote, emoji: type.emoji,
+      deathQuotes: type.deathQuotes, emoji: type.emoji,
       typeIndex, wobble: 0, hitFlash: 0,
       ranged: type.ranged || false,
       projSpeed: (type.projSpeed || 0) * 1.3,
@@ -544,7 +551,7 @@ export default function CallOfDoodie() {
       x, y, health: eHealth, maxHealth: eHealth,
       speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm,
       size: type.size, color: type.color, name: type.name, points: type.points,
-      deathQuote: type.deathQuote, emoji: type.emoji, typeIndex: ti,
+      deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
       wobble: Math.random() * Math.PI * 2, hitFlash: 0,
       ranged: type.ranged || false, projSpeed: type.projSpeed || 0, projRate: type.projRate || 999,
       shootTimer: Math.floor(Math.random() * 60), isBossEnemy: false,
@@ -570,6 +577,7 @@ export default function CallOfDoodie() {
         const upgLevel = gsRef.current.weaponUpgrades?.[wpnIdx] || 0;
         const maxAmmo = Math.floor(WEAPONS[wpnIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
         gsRef.current.ammoCount = maxAmmo;
+        gsRef.current.weaponAmmos[wpnIdx] = maxAmmo;
         setAmmo(maxAmmo);
       }
       setIsReloading(false); isReloadingRef.current = false;
@@ -584,7 +592,7 @@ export default function CallOfDoodie() {
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
     const fireRateMult = 1 - upgLevel * 0.10;
     if (now - lastShotRef.current < weapon.fireRate * fireRateMult || gs.ammoCount <= 0 || isReloadingRef.current) return;
-    lastShotRef.current = now; gs.ammoCount--; setAmmo(gs.ammoCount);
+    lastShotRef.current = now; gs.ammoCount--; gs.weaponAmmos[weaponIdx] = gs.ammoCount; setAmmo(gs.ammoCount);
     soundShoot(weaponIdx);
     const p = gs.player;
     const spread = (Math.random() - 0.5) * weapon.spread;
@@ -708,12 +716,18 @@ export default function CallOfDoodie() {
 
   // ── Weapon switch ─────────────────────────────────────────────────────────
   const switchWeapon = useCallback((idx) => {
-    setCurrentWeapon(idx); currentWeaponRef.current = idx;
-    if (gsRef.current) {
-      const upgLevel = gsRef.current.weaponUpgrades?.[idx] || 0;
+    const gs = gsRef.current;
+    if (gs) {
+      // Save current ammo for the weapon being left
+      gs.weaponAmmos[currentWeaponRef.current] = gs.ammoCount;
+      // Load saved ammo for the new weapon (init to max if first equip)
+      const upgLevel = gs.weaponUpgrades?.[idx] || 0;
       const maxAmmo = Math.floor(WEAPONS[idx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
-      gsRef.current.ammoCount = maxAmmo; setAmmo(maxAmmo);
+      const savedAmmo = gs.weaponAmmos[idx] ?? maxAmmo;
+      gs.ammoCount = savedAmmo;
+      setAmmo(savedAmmo);
     }
+    setCurrentWeapon(idx); currentWeaponRef.current = idx;
     setIsReloading(false); isReloadingRef.current = false;
   }, []);
 
@@ -989,7 +1003,8 @@ export default function CallOfDoodie() {
             }
             addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
-            addText(gs, e.x, e.y - 50, e.deathQuote, "#FF69B4");
+            const dq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : (e.deathQuote || "...");
+            addText(gs, e.x, e.y - 54, `"${dq}"`, "#FF88CC", "quote");
             addKillFeed(e.name, WEAPONS[wpnIdx].name);
             if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
             addXp(pts); gs.killFlash = 6;
@@ -1464,6 +1479,106 @@ export default function CallOfDoodie() {
       ctx.strokeStyle = e.hitFlash > 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)";
       ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
 
+      // Type-specific visual details
+      if (e.hitFlash <= 6) {
+        switch (e.typeIndex) {
+          case 0: { // Mall Cop — gold star badge on chest
+            const bs = Math.max(5, r * 0.3);
+            ctx.fillStyle = "#FFD700"; ctx.globalAlpha = 0.9; ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+              const a1 = (i * 4 * Math.PI / 5) - Math.PI / 2;
+              const a2 = ((i * 4 + 2) * Math.PI / 5) - Math.PI / 2;
+              i === 0 ? ctx.moveTo(Math.cos(a1) * bs, r * 0.18 + Math.sin(a1) * bs)
+                      : ctx.lineTo(Math.cos(a1) * bs, r * 0.18 + Math.sin(a1) * bs);
+              ctx.lineTo(Math.cos(a2) * bs * 0.42, r * 0.18 + Math.sin(a2) * bs * 0.42);
+            }
+            ctx.closePath(); ctx.fill(); ctx.globalAlpha = 1; break;
+          }
+          case 1: { // Karen — spiky blonde hair
+            ctx.strokeStyle = "#FFD700"; ctx.lineCap = "round";
+            ctx.lineWidth = Math.max(2, r * 0.15);
+            for (let i = 0; i < 6; i++) {
+              const ha = -Math.PI + (i / 5) * Math.PI;
+              ctx.beginPath();
+              ctx.moveTo(Math.cos(ha) * (r - 2), Math.sin(ha) * (r - 2));
+              ctx.lineTo(Math.cos(ha) * (r + 9 + (i % 2) * 5), Math.sin(ha) * (r + 9 + (i % 2) * 5));
+              ctx.stroke();
+            }
+            ctx.lineCap = "butt"; break;
+          }
+          case 2: { // Florida Man — croc scale dots
+            ctx.fillStyle = "rgba(0,0,0,0.22)";
+            [[-0.38, 0], [0, -0.38], [0.38, 0], [0, 0.38], [0, 0]].forEach(([dx, dy]) => {
+              ctx.beginPath(); ctx.arc(dx * r, dy * r, r * 0.13, 0, Math.PI * 2); ctx.fill();
+            }); break;
+          }
+          case 3: { // HOA President — clipboard
+            ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.strokeStyle = "rgba(255,255,255,0.18)"; ctx.lineWidth = 1;
+            ctx.fillRect(-r * 0.36, -r * 0.36, r * 0.72, r * 0.62); ctx.strokeRect(-r * 0.36, -r * 0.36, r * 0.72, r * 0.62);
+            ctx.fillStyle = "rgba(40,40,40,0.55)";
+            [-0.18, 0.03, 0.24].forEach(dy => ctx.fillRect(-r * 0.28, dy * r, r * 0.56, r * 0.11)); break;
+          }
+          case 5: { // IT Guy — thick glasses
+            ctx.strokeStyle = "#2a2a2a"; ctx.lineWidth = Math.max(1.5, r * 0.09); ctx.fillStyle = "rgba(160,230,255,0.28)";
+            [-1, 1].forEach(s => {
+              ctx.beginPath(); ctx.arc(s * r * 0.34, -r * 0.12, r * 0.24, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            });
+            ctx.beginPath(); ctx.moveTo(-r * 0.1, -r * 0.12); ctx.lineTo(r * 0.1, -r * 0.12); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(-r * 0.58, -r * 0.12); ctx.lineTo(-r * 0.76, -r * 0.22); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(r * 0.58, -r * 0.12); ctx.lineTo(r * 0.76, -r * 0.22); ctx.stroke(); break;
+          }
+          case 6: { // Gym Bro — bulging arms either side
+            ctx.fillStyle = e.color; ctx.strokeStyle = "rgba(0,0,0,0.3)"; ctx.lineWidth = 1.5;
+            [-1, 1].forEach(s => {
+              ctx.beginPath(); ctx.ellipse(s * r * 0.92, r * 0.06, r * 0.32, r * 0.44, s * 0.22, 0, Math.PI * 2);
+              ctx.fill(); ctx.stroke();
+            }); break;
+          }
+          case 7: { // Influencer — animated ring-light halo
+            ctx.strokeStyle = `rgba(255,220,50,${0.5 + Math.sin(dn / 180) * 0.3})`; ctx.lineWidth = 3.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath(); ctx.arc(0, 0, r + 13, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); break;
+          }
+          case 8: { // Conspiracy Bro — tinfoil hat
+            ctx.fillStyle = "rgba(210,210,220,0.88)"; ctx.strokeStyle = "rgba(160,160,170,0.6)"; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(0, -r - 15); ctx.lineTo(-r * 0.62, -r + 1); ctx.lineTo(r * 0.62, -r + 1);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = "rgba(255,255,255,0.4)"; ctx.lineWidth = 1;
+            [[-.28, -r - 7, -.18, -r + 1], [.12, -r - 9, .2, -r + 1]].forEach(([x1, y1, x2, y2]) => {
+              ctx.beginPath(); ctx.moveTo(x1 * r, y1); ctx.lineTo(x2 * r, y2); ctx.stroke();
+            }); break;
+          }
+          case 9: { // Landlord — gold $ on chest
+            ctx.font = `bold ${Math.floor(r * 0.54)}px monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.fillStyle = "#FFD700"; ctx.globalAlpha = 0.82;
+            ctx.fillText("$", r * 0.08, r * 0.2); ctx.globalAlpha = 1; break;
+          }
+          case 10: { // Crypto Bro — zigzag chart line
+            ctx.strokeStyle = "#00FFD0"; ctx.lineWidth = 2; ctx.globalAlpha = 0.78; ctx.lineCap = "round";
+            ctx.beginPath();
+            [[-r*.44,-r*.08],[-r*.22,r*.22],[0,-r*.24],[r*.22,r*.08],[r*.44,-r*.28]].forEach(([x, y], i) =>
+              i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y));
+            ctx.stroke(); ctx.globalAlpha = 1; ctx.lineCap = "butt"; break;
+          }
+          case 12: { // YOLO Bomber — hazard stripes clipped to circle
+            ctx.save(); ctx.beginPath(); ctx.arc(0, 0, r - 1, 0, Math.PI * 2); ctx.clip();
+            ctx.globalAlpha = 0.38;
+            for (let i = -5; i <= 5; i++) {
+              ctx.fillStyle = i % 2 === 0 ? "#FFD700" : "#CC1100";
+              ctx.fillRect(-r + (i + 5) * (r * 0.22), -r, r * 0.22, r * 2);
+            }
+            ctx.globalAlpha = 1; ctx.restore(); break;
+          }
+          case 13: { // Sergeant Karen — rank chevrons
+            ctx.strokeStyle = "rgba(255,255,255,0.78)"; ctx.lineWidth = 2; ctx.lineCap = "round";
+            [r * 0.36, r * 0.1].forEach(cy => {
+              ctx.beginPath(); ctx.moveTo(-r * 0.32, cy); ctx.lineTo(0, cy - r * 0.23); ctx.lineTo(r * 0.32, cy); ctx.stroke();
+            }); ctx.lineCap = "butt"; break;
+          }
+          default: break;
+        }
+      }
+
       // Eyes facing player (skip during hit flash)
       if (e.hitFlash <= 4) {
         ctx.save(); ctx.rotate(faceA);
@@ -1630,9 +1745,19 @@ export default function CallOfDoodie() {
 
     // Floating texts
     gs.floatingTexts.forEach(ft => {
-      ctx.globalAlpha = ft.life / (ft.big ? 90 : 60); ctx.fillStyle = ft.color;
-      ctx.font = ft.big ? "bold 22px monospace" : "bold 13px monospace"; ctx.textAlign = "center";
-      ctx.strokeStyle = "#000"; ctx.lineWidth = ft.big ? 4 : 3;
+      const maxLife = ft.big ? 90 : ft.quote ? 110 : 60;
+      ctx.globalAlpha = Math.min(1, ft.life / maxLife);
+      ctx.fillStyle = ft.color; ctx.textAlign = "center";
+      if (ft.quote) {
+        ctx.font = "bold italic 16px monospace";
+        ctx.strokeStyle = "rgba(0,0,0,0.85)"; ctx.lineWidth = 4;
+      } else if (ft.big) {
+        ctx.font = "bold 22px monospace";
+        ctx.strokeStyle = "#000"; ctx.lineWidth = 4;
+      } else {
+        ctx.font = "bold 13px monospace";
+        ctx.strokeStyle = "#000"; ctx.lineWidth = 3;
+      }
       ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillText(ft.text, ft.x, ft.y);
     });
     ctx.globalAlpha = 1;

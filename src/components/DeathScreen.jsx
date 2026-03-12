@@ -150,12 +150,13 @@ export default function DeathScreen({
   };
 
   return (
-    <div style={{ ...base, touchAction: "pan-y", overflow: "hidden auto", alignItems: "center", justifyContent: "center", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", padding: 16, boxSizing: "border-box" }}>
+    <div style={{ ...base, touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
       {showLeaderboard && (
         <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />
       )}
-      <div style={{ textAlign: "center", maxWidth: 460, width: "100%" }}>
-        <div style={{ fontSize: 48 }}>💀</div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px 24px", boxSizing: "border-box" }}>
+      <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>
+        <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>💀</div>
         <h2 style={{ fontSize: "clamp(24px,7vw,38px)", color: "#FF2222", margin: "4px 0", letterSpacing: 3 }}>YOU DIED</h2>
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
         <div style={{ fontSize: 11, color: diff.color, marginBottom: 12, fontWeight: 700 }}>
@@ -278,6 +279,7 @@ export default function DeathScreen({
           <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
           <button onClick={onMenu} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
+      </div>
       </div>
     </div>
   );
