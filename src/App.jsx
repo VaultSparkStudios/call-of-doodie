@@ -561,7 +561,7 @@ export default function CallOfDoodie() {
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = (gs, ex, ey, isBoss) => {
     const types    = ["health", "ammo", "speed", "nuke", "upgrade"];
-    const weights  = isBoss ? [0.25, 0.20, 0.15, 0.10, 0.30] : [0.38, 0.33, 0.19, 0.05, 0.05];
+    const weights  = isBoss ? [0.25, 0.15, 0.10, 0.10, 0.40] : [0.48, 0.10, 0.22, 0.05, 0.15];
     let roll = Math.random(), cumul = 0, pType = "health";
     for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
     gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
@@ -1223,7 +1223,7 @@ export default function CallOfDoodie() {
         } else if (pk.type === "ammo") {
           const upgLevel = gs.weaponUpgrades?.[wpnIdx] || 0;
           const maxAmmo = Math.floor(WEAPONS[wpnIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
-          gs.ammoCount = maxAmmo; setAmmo(gs.ammoCount);
+          gs.ammoCount = maxAmmo; gs.weaponAmmos[wpnIdx] = maxAmmo; setAmmo(gs.ammoCount);
           addText(gs, pk.x, pk.y, "MAX AMMO", "#00BFFF");
         } else if (pk.type === "speed") {
           p.speed = Math.min(8, p.speed + 0.5); addText(gs, pk.x, pk.y, "SPEED!", "#FFFF00");
