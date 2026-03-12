@@ -205,7 +205,7 @@ export default function CallOfDoodie() {
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
-      dyingEnemies: [], obstacles: [], terrain: [],
+      dyingEnemies: [], obstacles: [], terrain: [], floorZones: [], props: [], mapTheme: 0,
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
@@ -306,6 +306,42 @@ export default function CallOfDoodie() {
       });
     }
     gsRef.current.terrain = terrain;
+
+    // Map theme + floor zones + props
+    const mapTheme = Math.floor(_sr() * 4); // 0=office 1=bunker 2=factory 3=ruins
+    gsRef.current.mapTheme = mapTheme;
+    const THEME_PROPS = [
+      ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️"], // office
+      ["📦","🪖","🔦","⛽","🪝","🗝️","🧱","🪜"], // bunker
+      ["⚙️","🔧","🔩","⛽","📦","🪛","🏭","🔌"], // factory
+      ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴"], // ruins
+    ];
+    // Floor zones: large irregular colored patches for visual variety
+    const floorZones = [];
+    for (let _fz = 0; _fz < 4 + Math.floor(_sr() * 4); _fz++) {
+      floorZones.push({
+        x: w * 0.04 + _sr() * w * 0.92,
+        y: h * 0.04 + _sr() * h * 0.92,
+        rx: 55 + _sr() * 120, ry: 35 + _sr() * 80,
+        rot: _sr() * Math.PI,
+        alpha: 0.04 + _sr() * 0.05,
+      });
+    }
+    gsRef.current.floorZones = floorZones;
+    // Props: themed decorative emoji on the floor (no collision)
+    const propsPool = THEME_PROPS[mapTheme];
+    const props = [];
+    for (let _pi = 0; _pi < 8 + Math.floor(_sr() * 5); _pi++) {
+      const px = w * 0.06 + _sr() * w * 0.88;
+      const py = h * 0.06 + _sr() * h * 0.88;
+      const onWall = walls.some(ob => px > ob.x - 10 && px < ob.x + ob.w + 10 && py > ob.y - 10 && py < ob.y + ob.h + 10);
+      const nearCenter = Math.hypot(px - w / 2, py - h / 2) < 90;
+      if (!onWall && !nearCenter) {
+        props.push({ x: px, y: py, emoji: propsPool[Math.floor(_sr() * propsPool.length)], rot: _sr() * Math.PI * 2, scale: 0.7 + _sr() * 0.5 });
+      }
+    }
+    gsRef.current.props = props;
+
     // Show meta toast if upgrades active
     const metaActive = META_UPGRADES.filter(u => (new Set(loadMetaProgress().unlocks || [])).has(u.id));
     if (metaActive.length > 0) {
@@ -1171,6 +1207,17 @@ export default function CallOfDoodie() {
     bgGrad.addColorStop(1, gs.bossWave ? "#0e0000" : "#0e0e1a");
     ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
 
+    // ── Floor zone patches (large tinted areas, themed per run) ──
+    const FZ_COLORS = ["rgba(75,65,105,", "rgba(45,75,45,", "rgba(72,65,45,", "rgba(85,55,28,"];
+    const fzColor = gs.bossWave ? "rgba(90,28,28," : FZ_COLORS[gs.mapTheme || 0];
+    (gs.floorZones || []).forEach(fz => {
+      ctx.save(); ctx.translate(fz.x, fz.y); ctx.rotate(fz.rot);
+      ctx.globalAlpha = fz.alpha * (gs.bossWave ? 0.7 : 1);
+      ctx.fillStyle = fzColor + "1)";
+      ctx.beginPath(); ctx.ellipse(0, 0, fz.rx, fz.ry, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1; ctx.restore();
+    });
+
     // ── Terrain decorations (floor level, below grid) ──
     (gs.terrain || []).forEach(t => {
       ctx.save();
@@ -1204,6 +1251,16 @@ export default function CallOfDoodie() {
       }
       ctx.globalAlpha = 1;
       ctx.restore();
+    });
+
+    // ── Props (themed decorative emoji — no collision) ──
+    (gs.props || []).forEach(pr => {
+      ctx.save(); ctx.translate(pr.x, pr.y);
+      ctx.globalAlpha = gs.bossWave ? 0.18 : 0.32;
+      ctx.font = `${Math.floor(14 * (pr.scale || 1))}px serif`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(pr.emoji, 0, 0);
+      ctx.globalAlpha = 1; ctx.restore();
     });
 
     ctx.strokeStyle = gs.bossWave ? "rgba(180,50,50,0.08)" : "rgba(100,100,180,0.06)";
@@ -1257,11 +1314,18 @@ export default function CallOfDoodie() {
       ctx.beginPath(); ctx.arc(0, 0, eb.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     });
 
-    // Obstacles
+    // Obstacles — themed colors per run, red-tinted on boss waves
+    const WALL_T = [
+      ["rgba(52,52,92,0.93)", "rgba(108,108,192,0.72)", "#6464CC"], // office
+      ["rgba(32,58,32,0.93)", "rgba(68,128,68,0.72)",   "#44AA44"], // bunker
+      ["rgba(58,52,36,0.93)", "rgba(128,112,72,0.72)",  "#AA9944"], // factory
+      ["rgba(68,46,24,0.93)", "rgba(142,102,58,0.72)",  "#BB8844"], // ruins
+    ];
+    const wt = gs.bossWave ? ["rgba(78,22,22,0.93)", "rgba(168,48,48,0.72)", "#CC3333"] : WALL_T[gs.mapTheme || 0];
     (gs.obstacles || []).forEach(ob => {
-      ctx.fillStyle = "rgba(60,60,100,0.92)"; ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
-      ctx.strokeStyle = "rgba(110,110,200,0.7)"; ctx.lineWidth = 2; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h);
-      ctx.shadowColor = "#6666DD"; ctx.shadowBlur = 6; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
+      ctx.fillStyle = wt[0]; ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+      ctx.strokeStyle = wt[1]; ctx.lineWidth = 2; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h);
+      ctx.shadowColor = wt[2]; ctx.shadowBlur = 7; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
     });
 
     // Enemies
