@@ -4,6 +4,33 @@ Chronological record of all AI-assisted sessions.
 
 ---
 
+## 2026-03-12 — Session 6 (Claude Sonnet 4.6)
+
+**Focus:** Performance fixes, boss scaling, Supabase integration, wall randomization, bullet ricochet, enemy-wall collision, leaderboard upgrades
+
+**Completed:**
+- Deep-game lag fixes: particle cap (200), floatingText cap (30), dyingEnemy cap (20), wave enemy cap (40), throttled trail particles, limited nuke burst
+- Boss ability ramp: Shield Pulse (wave 20+), Minion Surge (wave 25+), Enrage (wave 30+), Teleport Blink (wave 35+), Rent Nuke (wave 40+)
+- Supabase global leaderboard: @supabase/supabase-js installed, src/supabase.js, storage.js updated, GitHub secrets set, .env.local created, RLS table created
+- Leaderboard UI: title → GLOBAL LEADERBOARD, difficulty tabs, kills column, loadout badge, last words as tooltip
+- Wall randomization: seeded LCG per run, 5–7 walls, safe spawn zone, overlap check
+- Bullet ricochet: 1 bounce for all weapons except RPG, reflect-by-face logic, white spark
+- Enemy-wall collision: closest-point push-out, arena clamp, applied after all movement
+- submitScore: starterLoadout added to entry + Supabase column added
+
+**Key commits:** `a9775bf`, `c04ac8b`, `1220a5d`
+
+**Files changed:**
+- `src/App.jsx` — perf caps, boss abilities, wall gen, bullet bounce, enemy-wall collision, submitScore
+- `src/storage.js` — Supabase leaderboard read/write with localStorage fallback
+- `src/supabase.js` — new file, Supabase client init
+- `src/components/LeaderboardPanel.jsx` — full UI rewrite with tabs, kills, loadout
+- `.github/workflows/deploy.yml` — env vars injected into build step
+- `package.json` / `package-lock.json` — @supabase/supabase-js added
+- `.env.local` — created locally, gitignored
+
+---
+
 ## 2026-03-12 — Session 5 (Claude Sonnet 4.6)
 
 **Focus:** Studio compliance closeout
@@ -12,7 +39,7 @@ Chronological record of all AI-assisted sessions.
 - Committed and pushed 7 Studio System Template files created at end of session 4 but not yet in the repo: `context/PROJECT_BRIEF.md`, `context/CURRENT_STATE.md`, `context/DECISIONS.md`, `context/TASK_BOARD.md`, `handoffs/LATEST_HANDOFF.md`, `logs/SESSION_LOG.md`, `prompts/bootstrap_prompt.md`
 - Ran full session closeout (write-back to all context/handoffs/logs docs)
 
-**Key commits:** `19b9f51`
+**Key commits:** `19b9f51`, `2c31b89`
 
 ---
 
