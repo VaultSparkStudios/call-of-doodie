@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS } from "../constants.js";
-import { loadCareerStats } from "../storage.js";
+import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES } from "../constants.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 
@@ -11,9 +11,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showRules, setShowRules] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showBestiary, setShowBestiary] = useState(false);
+  const [showMissions, setShowMissions] = useState(false);
+  const [showUpgrades, setShowUpgrades] = useState(false);
   const [career, setCareer] = useState(null);
+  const [missions, setMissions] = useState([]);
+  const [missionProgress, setMissionProgress] = useState({});
+  const [meta, setMeta] = useState(null);
 
-  useEffect(() => { setCareer(loadCareerStats()); }, []);
+  useEffect(() => {
+    setCareer(loadCareerStats());
+    setMissions(getDailyMissions());
+    setMissionProgress(loadMissionProgress());
+    setMeta(loadMetaProgress());
+  }, []);
 
   const btnP = { padding: "14px 40px", fontSize: 18, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
   const btnS = { ...btnP, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
@@ -128,7 +138,14 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div style={{ ...card, maxWidth: 400, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff" }}>
             <button onClick={() => setShowCareer(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
-            <h3 style={{ color: "#00E5FF", margin: "0 0 14px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
+            <h3 style={{ color: "#00E5FF", margin: "0 0 8px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
+            {meta && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, padding: "7px 12px", borderRadius: 6, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.25)" }}>
+                <span style={{ fontSize: 16 }}>⭐</span>
+                <span style={{ color: "#FFD700", fontWeight: 900, fontSize: 14 }}>{meta.careerPoints || 0}</span>
+                <span style={{ color: "#AAA", fontSize: 11 }}>career points · spend in 🎖️ UPGRADES</span>
+              </div>
+            )}
             {[
               ["🎮 Total Runs", career.totalRuns],
               ["☠️ Total Kills", career.totalKills.toLocaleString()],
@@ -148,6 +165,96 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             {career.totalRuns === 0 && (
               <p style={{ color: "#666", fontSize: 12, textAlign: "center", marginTop: 12 }}>No runs yet. Get out there and die!</p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Daily Missions Modal */}
+      {showMissions && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <h3 style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
+            <p style={{ color: "#888", fontSize: 11, margin: "0 0 14px" }}>Resets at midnight · Complete for career point bonuses</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {missions.map((m, i) => {
+                const done = !!missionProgress[i];
+                return (
+                  <div key={i} style={{
+                    display: "flex", alignItems: "center", gap: 12, padding: "12px 14px",
+                    borderRadius: 8, background: done ? "rgba(0,255,136,0.07)" : "rgba(255,255,255,0.04)",
+                    border: `1px solid ${done ? "rgba(0,255,136,0.35)" : "rgba(255,255,255,0.1)"}`,
+                  }}>
+                    <span style={{ fontSize: 26, flexShrink: 0 }}>{m.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: done ? "#00FF88" : "#FFF" }}>{m.text}</div>
+                      <div style={{ fontSize: 10, color: "#888", marginTop: 2 }}>Reward: +{m.goal} career pts on completion</div>
+                    </div>
+                    <div style={{ fontSize: 20, flexShrink: 0 }}>{done ? "✅" : "⬜"}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: "rgba(255,215,0,0.06)", border: "1px solid rgba(255,215,0,0.2)", fontSize: 12, color: "#CCC" }}>
+              💡 Missions are tracked automatically in-game. Progress saves on run end.
+            </div>
+            <button onClick={() => setShowMissions(false)} style={{ ...btnP, marginTop: 16, width: "100%" }}>← BACK</button>
+          </div>
+        </div>
+      )}
+
+      {/* Meta Upgrades Modal */}
+      {showUpgrades && meta && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+              <p style={{ color: "#888", fontSize: 11, margin: 0 }}>Permanent bonuses — active every run</p>
+              <div style={{ background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, padding: "4px 10px", fontSize: 13, fontWeight: 900, color: "#FFD700" }}>
+                ⭐ {meta.careerPoints || 0} pts
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {META_UPGRADES.map((u) => {
+                const owned = (meta.unlocks || []).includes(u.id);
+                const canAfford = (meta.careerPoints || 0) >= u.cost;
+                return (
+                  <div key={u.id} style={{
+                    display: "flex", alignItems: "center", gap: 12, padding: "12px 14px",
+                    borderRadius: 8, background: owned ? "rgba(255,107,53,0.08)" : "rgba(255,255,255,0.04)",
+                    border: `1px solid ${owned ? "rgba(255,107,53,0.4)" : "rgba(255,255,255,0.1)"}`,
+                  }}>
+                    <span style={{ fontSize: 26, flexShrink: 0 }}>{u.emoji}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: owned ? "#FF6B35" : "#FFF" }}>{u.name}</div>
+                      <div style={{ fontSize: 11, color: "#CCC", marginTop: 1 }}>{u.desc}</div>
+                    </div>
+                    {owned ? (
+                      <div style={{ fontSize: 11, color: "#FF6B35", fontWeight: 700, flexShrink: 0 }}>OWNED ✓</div>
+                    ) : (
+                      <button
+                        disabled={!canAfford}
+                        onClick={() => {
+                          const result = purchaseMetaUpgrade(u.id, u.cost);
+                          if (result.success) setMeta(result.meta);
+                        }}
+                        style={{
+                          padding: "6px 12px", borderRadius: 6, cursor: canAfford ? "pointer" : "not-allowed",
+                          background: canAfford ? "linear-gradient(180deg,#FF6B35,#CC4400)" : "rgba(255,255,255,0.05)",
+                          color: canAfford ? "#FFF" : "#555", border: "none",
+                          fontFamily: "'Courier New',monospace", fontSize: 12, fontWeight: 700, flexShrink: 0,
+                        }}
+                      >
+                        ⭐ {u.cost}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.2)", fontSize: 12, color: "#CCC" }}>
+              💡 Earn career points by killing enemies in any run (1 pt per kill).
+            </div>
+            <button onClick={() => setShowUpgrades(false)} style={{ ...btnP, marginTop: 16, width: "100%" }}>← BACK</button>
           </div>
         </div>
       )}
@@ -206,8 +313,12 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 150 }}>LEADERBOARD</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setCareer(loadCareerStats()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150 }}>📊 CAREER STATS</button>
+          <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150 }}>📊 CAREER STATS</button>
           <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} style={{ ...btnS, minWidth: 150 }}>🏅 ACHIEVEMENTS</button>
+        </div>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
+          <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} style={{ ...btnS, minWidth: 150 }}>📋 MISSIONS</button>
+          <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} style={{ ...btnS, minWidth: 150 }}>🎖️ UPGRADES</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
           <button onClick={() => setShowRules(true)} style={{ ...btnS, minWidth: 150 }}>📜 RULES</button>

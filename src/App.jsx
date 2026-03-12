@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
-  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES,
+  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress } from "./storage.js";
 import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
@@ -52,6 +52,8 @@ export default function CallOfDoodie() {
   const ctxRef           = useRef(null); // cached canvas 2D context
   const lastHitSoundRef  = useRef(0);    // throttle soundHit calls
   const achCheckRef      = useRef(false);// batch achievement checks to once/frame
+  const dailyMissionsRef = useRef([]);   // today's 3 missions
+  const missionDoneRef   = useRef(new Set()); // indices of completed missions this run
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState("username");
@@ -160,6 +162,27 @@ export default function CallOfDoodie() {
     });
   }, []);
 
+  // ── Daily mission checking ─────────────────────────────────────────────────
+  const checkDailyMissions = useCallback((gs) => {
+    const missions = dailyMissionsRef.current;
+    if (!missions?.length) return;
+    const s = {
+      kills: gs.kills, wave: gs.currentWave, maxCombo: comboRef.current.max,
+      totalDamage: gs.totalDamage, dashes: statsRef.current.dashes,
+      timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      crits: statsRef.current.crits, grenadeKills: statsRef.current.grenadeKills || 0,
+    };
+    missions.forEach((m, idx) => {
+      if (missionDoneRef.current.has(idx)) return;
+      if ((s[m.track] || 0) >= m.goal) {
+        missionDoneRef.current.add(idx);
+        addText(gs, GW() / 2, GH() / 2 - 100, "📋 MISSION COMPLETE!", "#FFD700", true);
+        addText(gs, GW() / 2, GH() / 2 - 70, m.text, "#FFF");
+        soundAchievement();
+      }
+    });
+  }, []);
+
   // ── Init game ─────────────────────────────────────────────────────────────
   const initGame = useCallback(() => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
@@ -184,6 +207,24 @@ export default function CallOfDoodie() {
     perkPendingRef.current = false;
     ctxRef.current = null;
     startTimeRef.current = Date.now();
+    statsRef.current.grenadeKills = 0;
+    // Apply meta upgrades
+    const meta = loadMetaProgress();
+    const unlocks = new Set(meta.unlocks || []);
+    if (unlocks.has("veteran"))     perkModsRef.current.xpMult = 1.20;
+    if (unlocks.has("swift_boots")) perkModsRef.current.dashCDMult = 0.80;
+    if (unlocks.has("deep_mag"))    perkModsRef.current.ammoMult = 1.25;
+    if (unlocks.has("hardened"))    perkModsRef.current.damageMult = 1.15;
+    if (unlocks.has("scavenger"))   perkModsRef.current.pickupRange = 45;
+    if (unlocks.has("field_medic")) {
+      gsRef.current.player.health += 25;
+      gsRef.current.player.maxHealth += 25;
+    }
+    // Load daily missions
+    dailyMissionsRef.current = getDailyMissions();
+    missionDoneRef.current = new Set(
+      Object.keys(loadMissionProgress()).map(Number).filter(i => loadMissionProgress()[i])
+    );
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
   }, []);
 
@@ -264,6 +305,9 @@ export default function CallOfDoodie() {
       projSpeed: (type.projSpeed || 0) * 1.3,
       projRate: type.projRate ? Math.floor(type.projRate * 0.65) : 999,
       shootTimer: 0, isBossEnemy: true,
+      // Boss-specific mechanic fields
+      chargeTimer: 0, chargeActive: false, chargeDx: 0, chargeDy: 0, chargeDuration: 0,
+      summonTimer: 0,
     });
   }, []);
 
@@ -412,13 +456,16 @@ export default function CallOfDoodie() {
     setTotalDamage(Math.floor(gs.totalDamage));
     setBestStreak(statsRef.current.bestStreak);
     setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
-    // Save career stats
+    // Save career stats + mission progress
     updateCareerStats({
       kills: gs.kills, deaths: 1, score: gs.score, wave: gs.currentWave,
       streak: statsRef.current.bestStreak, damage: gs.totalDamage,
       playTime: (Date.now() - startTimeRef.current) / 1000,
       achievementIds: [...achievedRef.current],
     });
+    const mProgress = {};
+    missionDoneRef.current.forEach(i => { mProgress[i] = true; });
+    saveMissionProgress(mProgress);
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
   }, []);
@@ -620,7 +667,11 @@ export default function CallOfDoodie() {
         gs.screenShake = 15;
         gs.enemies.forEach(e => {
           const d = Math.hypot(e.x - g.x, e.y - g.y);
-          if (d < 130) { const dmg = 70 * (1 - d / 130); e.health -= dmg; e.hitFlash = 10; gs.totalDamage += dmg; }
+          if (d < 130) {
+            const dmg = 70 * (1 - d / 130) * (perkModsRef.current.grenadeDamageMult || 1);
+            e.health -= dmg; e.hitFlash = 10; gs.totalDamage += dmg;
+            e.lastDmgSource = "grenade";
+          }
         });
         return false;
       }
@@ -637,7 +688,8 @@ export default function CallOfDoodie() {
           const comboMult = 1 + comboRef.current.count * 0.1;
           const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0);
           const isCrit = Math.random() < effectiveCrit;
-          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1);
+          const lastResortMult = (perkModsRef.current.lastResort && p.health < p.maxHealth * 0.25) ? 3.0 : 1.0;
+          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1) * lastResortMult;
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Lifesteal
           if (perkModsRef.current.lifesteal) {
@@ -674,6 +726,7 @@ export default function CallOfDoodie() {
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
             addText(gs, e.x, e.y - 50, e.deathQuote, "#FF69B4");
             addKillFeed(e.name, WEAPONS[wpnIdx].name);
+            if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
             addXp(pts); gs.killFlash = 6;
             achCheckRef.current = true;
             if (KILL_MILESTONES[gs.kills]) {
@@ -700,7 +753,7 @@ export default function CallOfDoodie() {
       });
     });
     gs.enemies = gs.enemies.filter(e => e.health > -999);
-    if (achCheckRef.current) { checkAchievements(gs); achCheckRef.current = false; }
+    if (achCheckRef.current) { checkAchievements(gs); checkDailyMissions(gs); achCheckRef.current = false; }
 
     // ── Enemy movement & melee ──
     gs.enemies.forEach(e => {
@@ -715,7 +768,41 @@ export default function CallOfDoodie() {
         if (e.shootTimer >= e.projRate) {
           e.shootTimer = 0;
           const pa = Math.atan2(p.y - e.y, p.x - e.x);
-          gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(pa) * e.projSpeed, vy: Math.sin(pa) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
+          // Mega Karen phase 2: 5-bullet spread
+          const isMKP2 = e.typeIndex === 4 && e.isBossEnemy && e.health < e.maxHealth * 0.5;
+          const bCount = isMKP2 ? 5 : 1;
+          for (let bi = 0; bi < bCount; bi++) {
+            const angle = pa + (bi - Math.floor(bCount / 2)) * 0.28;
+            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
+          }
+        }
+      }
+      // ── Boss special mechanics ──────────────────────────────────────────────
+      if (e.isBossEnemy) {
+        if (e.typeIndex === 4) { // Mega Karen: charge attack
+          const phaseTwo = e.health < e.maxHealth * 0.5;
+          e.chargeTimer++;
+          if (!e.chargeActive && e.chargeTimer >= (phaseTwo ? 150 : 280)) {
+            e.chargeTimer = 0; e.chargeActive = true; e.chargeDuration = 20;
+            const ca = Math.atan2(p.y - e.y, p.x - e.x);
+            e.chargeDx = Math.cos(ca); e.chargeDy = Math.sin(ca);
+            addText(gs, e.x, e.y - 65, phaseTwo ? "⚡ ULTRA RAGE!!" : "I WANT YOUR MANAGER!", "#FF1493", true);
+            gs.screenShake = 10; addParticles(gs, e.x, e.y, "#FF1493", 15);
+          }
+          if (e.chargeActive) {
+            e.x += e.chargeDx * 11; e.y += e.chargeDy * 11;
+            if (--e.chargeDuration <= 0) e.chargeActive = false;
+          }
+        }
+        if (e.typeIndex === 9) { // Landlord: summon tenants
+          e.summonTimer++;
+          if (e.summonTimer >= 360) {
+            e.summonTimer = 0;
+            spawnEnemy(gs);
+            if (gs.currentWave >= 12) spawnEnemy(gs);
+            addText(gs, e.x, e.y - 65, "PAY RENT OR VACATE!", "#8B6914", true);
+            gs.screenShake = 6; addParticles(gs, e.x, e.y, "#8B6914", 12);
+          }
         }
       }
       if (dashRef.current.active <= 0) {
@@ -964,7 +1051,7 @@ export default function CallOfDoodie() {
 
     ctx.restore();
     frameRef.current = requestAnimationFrame(gameLoop);
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, tip, handlePlayerDeath, addXp, spawnPickup]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useEffect(() => {

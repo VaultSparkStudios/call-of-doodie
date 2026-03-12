@@ -73,8 +73,40 @@ export const PERKS = [
   },
 ];
 
-export const PERK_TIER_COLORS = { common: "#AAAAAA", uncommon: "#44BB44", rare: "#4488FF", legendary: "#FF44FF" };
-export const PERK_TIER_WEIGHTS = { common: 5, uncommon: 3, rare: 1 };
+// ===== CURSED PERKS =====
+export const CURSED_PERKS = [
+  { id: "glass_cannon",  name: "Glass Cannon",  emoji: "💀", tier: "cursed",
+    desc: "+75% damage dealt · −40% max HP",
+    apply: (mods, gs) => { mods.damageMult = (mods.damageMult||1)*1.75; if(gs?.player){const m=Math.max(15,Math.floor(gs.player.maxHealth*0.6));gs.player.maxHealth=m;gs.player.health=Math.min(gs.player.health,m);} } },
+  { id: "berserker",     name: "Berserker",     emoji: "😡", tier: "cursed",
+    desc: "+20% lifesteal · dash cooldown ×2",
+    apply: (mods) => { mods.lifesteal=(mods.lifesteal||0)+0.20; mods.dashCDMult=(mods.dashCDMult||1)*2.0; } },
+  { id: "tunnel_vision", name: "Tunnel Vision", emoji: "🔍", tier: "cursed",
+    desc: "+60% damage · −50% ammo capacity",
+    apply: (mods) => { mods.damageMult=(mods.damageMult||1)*1.60; mods.ammoMult=(mods.ammoMult||1)*0.5; } },
+  { id: "speed_demon",   name: "Speed Demon",   emoji: "👹", tier: "cursed",
+    desc: "+50% move speed · −45% max HP",
+    apply: (mods, gs) => { if(gs?.player){gs.player.speed*=1.5;const m=Math.max(15,Math.floor(gs.player.maxHealth*0.55));gs.player.maxHealth=m;gs.player.health=Math.min(gs.player.health,m);} } },
+  { id: "pyromaniac",    name: "Pyromaniac",    emoji: "🔥", tier: "cursed",
+    desc: "Grenade dmg ×2 · −25% bullet damage",
+    apply: (mods) => { mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*2.0; mods.damageMult=(mods.damageMult||1)*0.75; } },
+  { id: "last_resort",   name: "Last Resort",   emoji: "💔", tier: "cursed",
+    desc: "+200% dmg below 25% HP · start at 25% HP",
+    apply: (mods, gs) => { mods.lastResort=true; if(gs?.player){gs.player.health=Math.max(1,Math.floor(gs.player.maxHealth*0.25));} } },
+];
+
+export const PERK_TIER_COLORS = { common: "#AAAAAA", uncommon: "#44BB44", rare: "#4488FF", legendary: "#FF44FF", cursed: "#FF2244" };
+export const PERK_TIER_WEIGHTS = { common: 5, uncommon: 3, rare: 1, cursed: 0 };
+
+// ===== META UPGRADES =====
+export const META_UPGRADES = [
+  { id: "veteran",     name: "Veteran",       emoji: "🎖️", cost: 50,  desc: "Start each run with +20% XP" },
+  { id: "field_medic", name: "Field Medic",   emoji: "💊",  cost: 60,  desc: "Start each run with +25 HP" },
+  { id: "swift_boots", name: "Swift Boots",   emoji: "👟",  cost: 75,  desc: "Start each run with −20% dash CD" },
+  { id: "deep_mag",    name: "Deep Magazine", emoji: "📦",  cost: 50,  desc: "Start each run with +25% ammo" },
+  { id: "hardened",    name: "Hardened",      emoji: "🛡️", cost: 100, desc: "Start each run with +15% damage" },
+  { id: "scavenger",   name: "Scavenger",     emoji: "🧲",  cost: 80,  desc: "Start each run with +50% pickup range" },
+];
 
 // ===== KILLSTREAKS =====
 export const KILLSTREAKS = [
