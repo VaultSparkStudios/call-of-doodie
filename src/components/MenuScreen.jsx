@@ -101,13 +101,20 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     c.fillStyle = "#FF6B35";
     c.fillText("✦  WHAT'S NEW", 60, 208);
 
-    // Features — 2 columns of 3
-    c.font = "bold 21px 'Courier New', monospace";
+    // Features — single column, font scales down if any line is too wide
+    const MAX_FEAT_W = W - 120; // 60px margin each side
+    let featFontSize = 20;
+    c.font = `bold ${featFontSize}px 'Courier New', monospace`;
+    (NEW_FEATURES || []).forEach(f => {
+      while (c.measureText(f).width > MAX_FEAT_W && featFontSize > 13) {
+        featFontSize--;
+        c.font = `bold ${featFontSize}px 'Courier New', monospace`;
+      }
+    });
     c.fillStyle = "#EEEEEE";
+    const rowH = Math.max(featFontSize + 18, 36);
     (NEW_FEATURES || []).forEach((f, i) => {
-      const col = i < 3 ? 0 : 1;
-      const row = i % 3;
-      c.fillText(f, 60 + col * 570, 252 + row * 52);
+      c.fillText(f, 60, 248 + i * rowH);
     });
 
     // Player stats card
