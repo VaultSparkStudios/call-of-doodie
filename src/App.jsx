@@ -205,7 +205,7 @@ export default function CallOfDoodie() {
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
-      dyingEnemies: [], obstacles: [],
+      dyingEnemies: [], obstacles: [], terrain: [],
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
@@ -257,30 +257,46 @@ export default function CallOfDoodie() {
       gsRef.current.player.speed = 5.4;
       perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.60;
     }
-    // Generate seeded random obstacles (reproducible per run seed)
+    // Generate seeded random obstacles + terrain (reproducible per run seed)
     let _ws = seed;
     const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
-    const SPAWN_SAFE = 110; // clear radius around center spawn
-    const wallCount = 5 + Math.floor(_sr() * 3); // 5–7 walls
+    const SPAWN_SAFE = 115;
+    const wallCount = 4 + Math.floor(_sr() * 3); // 4–6 walls with generous spacing
     const walls = [];
+    let _hWalls = 0, _vWalls = 0;
     for (let _wi = 0; _wi < wallCount; _wi++) {
       let wx, wy, ww, wh, _att = 0;
       do {
-        const isH = _sr() < 0.55;
-        ww = isH ? Math.floor(60 + _sr() * 90) : Math.floor(14 + _sr() * 8);
-        wh = isH ? Math.floor(14 + _sr() * 8) : Math.floor(60 + _sr() * 90);
-        wx = w * 0.07 + _sr() * (w * 0.86 - ww);
-        wy = h * 0.07 + _sr() * (h * 0.86 - wh);
+        // Balance H vs V: bias toward whichever is underrepresented
+        const isH = _hWalls <= _vWalls ? (_sr() < 0.65) : (_sr() < 0.35);
+        ww = isH ? Math.floor(70 + _sr() * 100) : Math.floor(14 + _sr() * 10);
+        wh = isH ? Math.floor(14 + _sr() * 10) : Math.floor(70 + _sr() * 100);
+        wx = w * 0.08 + _sr() * (w * 0.84 - ww);
+        wy = h * 0.08 + _sr() * (h * 0.84 - wh);
         const tooClose = Math.hypot(wx + ww / 2 - w / 2, wy + wh / 2 - h / 2) < SPAWN_SAFE;
         const overlap = walls.some(prev =>
-          wx < prev.x + prev.w + 18 && wx + ww > prev.x - 18 &&
-          wy < prev.y + prev.h + 18 && wy + wh > prev.y - 18
+          wx < prev.x + prev.w + 50 && wx + ww > prev.x - 50 &&
+          wy < prev.y + prev.h + 50 && wy + wh > prev.y - 50
         );
-        if (!tooClose && !overlap) break;
-      } while (++_att < 15);
+        if (!tooClose && !overlap) { if (isH) _hWalls++; else _vWalls++; break; }
+      } while (++_att < 20);
       walls.push({ x: wx, y: wy, w: ww, h: wh });
     }
     gsRef.current.obstacles = walls;
+
+    // Generate terrain decorations (visual only — no collision)
+    const terrainCount = 22 + Math.floor(_sr() * 14); // 22–36 decorations
+    const terrain = [];
+    for (let _ti = 0; _ti < terrainCount; _ti++) {
+      terrain.push({
+        x: w * 0.03 + _sr() * w * 0.94,
+        y: h * 0.03 + _sr() * h * 0.94,
+        type: Math.floor(_sr() * 4), // 0=stain, 1=crack, 2=rubble, 3=worn tile
+        size: 14 + _sr() * 40,
+        rot: _sr() * Math.PI * 2,
+      });
+    }
+    gsRef.current.terrain = terrain;
     // Show meta toast if upgrades active
     const metaActive = META_UPGRADES.filter(u => (new Set(loadMetaProgress().unlocks || [])).has(u.id));
     if (metaActive.length > 0) {
@@ -475,7 +491,7 @@ export default function CallOfDoodie() {
       life: weapon.bulletLife || 60,
       size: weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4),
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
-      bouncesLeft: weaponIdx === 1 ? 0 : 1, // RPG doesn't bounce; all others get 1 ricochet
+      bouncesLeft: weaponIdx === 1 ? 0 : 10, // RPG doesn't bounce; all others ricochet until bullet life expires
     });
     gs.muzzleFlash = 4;
     gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : weaponIdx === 4 ? 18 : 3);
@@ -1121,6 +1137,42 @@ export default function CallOfDoodie() {
     bgGrad.addColorStop(0, gs.bossWave ? "#1a0000" : "#1e1e3a");
     bgGrad.addColorStop(1, gs.bossWave ? "#0e0000" : "#0e0e1a");
     ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
+
+    // ── Terrain decorations (floor level, below grid) ──
+    (gs.terrain || []).forEach(t => {
+      ctx.save();
+      ctx.translate(t.x, t.y);
+      if (t.type === 0) { // stain / puddle
+        ctx.globalAlpha = 0.09;
+        ctx.fillStyle = gs.bossWave ? "#3a0808" : "#1c1c3c";
+        ctx.beginPath(); ctx.ellipse(0, 0, t.size, t.size * 0.55, t.rot, 0, Math.PI * 2); ctx.fill();
+      } else if (t.type === 1) { // floor cracks
+        ctx.strokeStyle = gs.bossWave ? "rgba(90,20,20,0.30)" : "rgba(70,70,115,0.28)";
+        ctx.lineWidth = 1;
+        [[t.rot, t.size * 0.9], [t.rot + 2.1, t.size * 0.6], [t.rot + 3.9, t.size * 0.45]].forEach(([a, l]) => {
+          ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * l, Math.sin(a) * l); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(Math.cos(a) * l * 0.5, Math.sin(a) * l * 0.5);
+          ctx.lineTo(Math.cos(a + 0.55) * l * 0.3, Math.sin(a + 0.55) * l * 0.3); ctx.stroke();
+        });
+      } else if (t.type === 2) { // rubble / debris dots
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle = gs.bossWave ? "#4a2020" : "#2a2a4e";
+        for (let di = 0; di < 5; di++) {
+          const da = t.rot + di * 1.26, dr = t.size * (0.28 + Math.abs(Math.sin(di * 2.3)) * 0.25);
+          const ds = 1.5 + Math.abs(Math.sin(di + t.rot)) * 3;
+          ctx.beginPath(); ctx.arc(Math.cos(da) * dr, Math.sin(da) * dr, ds, 0, Math.PI * 2); ctx.fill();
+        }
+      } else { // worn tile / scuff mark
+        ctx.globalAlpha = 0.07;
+        ctx.fillStyle = gs.bossWave ? "#2a0a0a" : "#20203e";
+        ctx.save(); ctx.rotate(t.rot);
+        ctx.fillRect(-t.size * 0.5, -t.size * 0.3, t.size, t.size * 0.6);
+        ctx.restore();
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    });
+
     ctx.strokeStyle = gs.bossWave ? "rgba(180,50,50,0.08)" : "rgba(100,100,180,0.06)";
     ctx.lineWidth = 1;
     for (let gx = 0; gx < W; gx += 50) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
