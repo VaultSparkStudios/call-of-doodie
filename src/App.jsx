@@ -19,6 +19,11 @@ import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
 import PerkModal, { getRandomPerks } from "./components/PerkModal.jsx";
 
+// ── Performance caps ─────────────────────────────────────────────────────────
+const MAX_PARTICLES  = 200;  // hard cap on concurrent particle objects
+const MAX_FLOAT_TEXTS = 30;  // hard cap on floating damage/event texts
+const MAX_DYING_ANIM  = 20;  // hard cap on death animation objects
+
 export default function CallOfDoodie() {
   // ── Refs ──────────────────────────────────────────────────────────────────
   const canvasRef      = useRef(null);
@@ -272,12 +277,19 @@ export default function CallOfDoodie() {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   const addParticles = (gs, x, y, color, count = 8) => {
-    for (let i = 0; i < count; i++) {
+    const space = MAX_PARTICLES - gs.particles.length;
+    if (space <= 0) return;
+    const n = Math.min(count, space);
+    for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 4;
       gs.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 30 + Math.random() * 20, maxLife: 50, color, size: 2 + Math.random() * 4 });
     }
   };
   const addText = (gs, x, y, text, color = "#FFF", big = false) => {
+    if (gs.floatingTexts.length >= MAX_FLOAT_TEXTS) {
+      if (!big) return; // drop small texts when full
+      gs.floatingTexts.splice(0, 3); // evict oldest 3 to make room for big text
+    }
     gs.floatingTexts.push({ x, y, text, color, life: big ? 90 : 60, vy: big ? -1 : -2, big });
   };
   const addKillFeed = (enemyName, weaponName) => {
@@ -350,6 +362,16 @@ export default function CallOfDoodie() {
       // Boss-specific mechanic fields
       chargeTimer: 0, chargeActive: false, chargeDx: 0, chargeDy: 0, chargeDuration: 0,
       summonTimer: 0,
+      // Wave-scaling boss abilities (unlocked based on wave number)
+      hasShieldPulse: typeIndex === 4 && gs.currentWave >= 20,
+      shieldPulseActive: false, shieldPulseCooldown: 300, shieldPulseTimer: 0,
+      hasEnrage: gs.currentWave >= 30,
+      enrageTriggered: false,
+      hasTeleport: typeIndex === 4 && gs.currentWave >= 35,
+      teleportTimer: 0,
+      hasMinionSurge: typeIndex === 9 && gs.currentWave >= 25,
+      hasRentNuke: typeIndex === 9 && gs.currentWave >= 40,
+      rentNukeTimer: 0,
     });
   }, []);
 
@@ -655,7 +677,7 @@ export default function CallOfDoodie() {
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
       } else {
-        gs.maxEnemiesThisWave = 5 + gs.currentWave * 3;
+        gs.maxEnemiesThisWave = Math.min(5 + gs.currentWave * 3, 40);
       }
       setWave(gs.currentWave);
       if (!gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
@@ -673,6 +695,13 @@ export default function CallOfDoodie() {
         gs.screenShake = 20;
         addText(gs, W / 2, H / 2 - 30, "⚠ BOSS WAVE ⚠", "#FF0000", true);
         addText(gs, W / 2, H / 2 + 10, "WAVE " + gs.currentWave, "#FFD700", true);
+        // Escalating ability warnings
+        const _wv = gs.currentWave;
+        if (_wv >= 40)      addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
+        else if (_wv >= 35) addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
+        else if (_wv >= 30) addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE", "#FF6600");
+        else if (_wv >= 25) addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE", "#FF6600");
+        else if (_wv >= 20) addText(gs, W / 2, H / 2 + 45, "🛡 NEW ABILITY: SHIELD PULSE!", "#FF6600");
         // Spawn boss(es) — Mega Karen up to wave 9, Landlord 10-14, both 15+
         if (gs.currentWave >= 15) { spawnBoss(gs, 4); spawnBoss(gs, 9); }
         else if (gs.currentWave >= 10) { spawnBoss(gs, 9); }
@@ -690,7 +719,7 @@ export default function CallOfDoodie() {
     // ── Bullet movement ──
     gs.bullets = gs.bullets.filter(b => {
       b.x += b.vx; b.y += b.vy; b.life--;
-      if (b.trail) addParticles(gs, b.x, b.y, b.color, 1);
+      if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
       const hitWall = (gs.obstacles || []).some(ob => b.x >= ob.x && b.x <= ob.x + ob.w && b.y >= ob.y && b.y <= ob.y + ob.h);
       if (hitWall) { addParticles(gs, b.x, b.y, b.color, 3); return false; }
       return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
@@ -746,6 +775,11 @@ export default function CallOfDoodie() {
         if (e.health <= -999) return;
         const d = Math.hypot(b.x - e.x, b.y - e.y);
         if (d < e.size / 2 + b.size) {
+          // Shield pulse blocks all damage
+          if (e.shieldPulseActive) {
+            addParticles(gs, b.x, b.y, "#00BFFF", 4);
+            b.life = 0; return;
+          }
           const comboMult = 1 + comboRef.current.count * 0.1;
           const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0);
           const isCrit = Math.random() < effectiveCrit;
@@ -800,7 +834,8 @@ export default function CallOfDoodie() {
             if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
             addXp(pts); gs.killFlash = 6;
             gs.dyingEnemies = gs.dyingEnemies || [];
-            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+            if (gs.dyingEnemies.length < MAX_DYING_ANIM)
+              gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
             achCheckRef.current = true;
             if (KILL_MILESTONES[gs.kills]) {
               addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
@@ -874,12 +909,67 @@ export default function CallOfDoodie() {
         }
         if (e.typeIndex === 9) { // Landlord: summon tenants
           e.summonTimer++;
-          if (e.summonTimer >= 360) {
+          const summonCD    = e.hasMinionSurge ? 240 : 360;
+          const summonCount = e.hasMinionSurge ? 4 : (gs.currentWave >= 12 ? 2 : 1);
+          if (e.summonTimer >= summonCD) {
             e.summonTimer = 0;
-            spawnEnemy(gs);
-            if (gs.currentWave >= 12) spawnEnemy(gs);
-            addText(gs, e.x, e.y - 65, "PAY RENT OR VACATE!", "#8B6914", true);
+            for (let _si = 0; _si < summonCount; _si++) spawnEnemy(gs);
+            const summonMsg = e.hasMinionSurge ? "RENT STRIKE! ALL TENANTS, ATTACK!" : "PAY RENT OR VACATE!";
+            addText(gs, e.x, e.y - 65, summonMsg, "#8B6914", true);
             gs.screenShake = 6; addParticles(gs, e.x, e.y, "#8B6914", 12);
+          }
+          if (e.hasRentNuke) {
+            e.rentNukeTimer++;
+            if (e.rentNukeTimer >= 600) { // every 10 seconds
+              e.rentNukeTimer = 0;
+              addText(gs, e.x, e.y - 80, "💸 RENT IS DUE!!", "#FFD700", true);
+              addParticles(gs, e.x, e.y, "#FFD700", 20);
+              gs.screenShake = 15;
+              const rentDist = Math.hypot(p.x - e.x, p.y - e.y);
+              if (rentDist < 220 && p.invincible <= 0) {
+                p.health -= 25; p.invincible = 30; gs.damageFlash = 12;
+                setHealth(Math.max(0, p.health));
+                addText(gs, p.x, p.y - 30, "-25 RENT DUE!", "#FFD700");
+                if (p.health <= 0) handlePlayerDeath(gs);
+              }
+            }
+          }
+        }
+        // ── Shared boss abilities (scale per wave) ──────────────────────────
+        if (e.hasShieldPulse) {
+          if (!e.shieldPulseActive) {
+            e.shieldPulseCooldown--;
+            if (e.shieldPulseCooldown <= 0) {
+              e.shieldPulseActive = true;
+              e.shieldPulseTimer  = 180; // active 3 seconds
+              e.shieldPulseCooldown = 480; // recharge 8 seconds
+              addText(gs, e.x, e.y - 80, "🛡 SHIELD PULSE!", "#00BFFF", true);
+              addParticles(gs, e.x, e.y, "#00BFFF", 12);
+              gs.screenShake = 5;
+            }
+          } else {
+            if (--e.shieldPulseTimer <= 0) e.shieldPulseActive = false;
+          }
+        }
+        if (e.hasEnrage && !e.enrageTriggered && e.health < e.maxHealth * 0.33) {
+          e.enrageTriggered = true;
+          e.speed    *= 1.8;
+          e.projRate  = Math.max(30, Math.floor(e.projRate * 0.5));
+          addText(gs, e.x, e.y - 80, "⚡ ENRAGED!!", "#FF0000", true);
+          addParticles(gs, e.x, e.y, "#FF4400", 25);
+          gs.screenShake = 12;
+        }
+        if (e.hasTeleport) {
+          e.teleportTimer++;
+          if (e.teleportTimer >= 480) { // every 8 seconds
+            e.teleportTimer = 0;
+            const tAngle = Math.random() * Math.PI * 2;
+            const tDist  = 110 + Math.random() * 70;
+            e.x = Math.max(e.size, Math.min(W - e.size, p.x + Math.cos(tAngle) * tDist));
+            e.y = Math.max(e.size, Math.min(H - e.size, p.y + Math.sin(tAngle) * tDist));
+            addText(gs, e.x, e.y - 65, "🌀 BLINKED!", "#FF1493", true);
+            addParticles(gs, e.x, e.y, "#FF1493", 15);
+            gs.screenShake = 8;
           }
         }
       }
@@ -890,7 +980,8 @@ export default function CallOfDoodie() {
           addParticles(gs, e.x, e.y, "#FF4400", 25); addParticles(gs, e.x, e.y, "#FFD700", 10);
           addText(gs, e.x, e.y, "💥 BOOM!", "#FF4400", true); gs.screenShake = 12;
           gs.dyingEnemies = gs.dyingEnemies || [];
-          gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+          if (gs.dyingEnemies.length < MAX_DYING_ANIM)
+            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
             p.health -= 35; p.invincible = 40; gs.damageFlash = 12;
             setHealth(Math.max(0, p.health));
@@ -933,7 +1024,7 @@ export default function CallOfDoodie() {
         } else if (pk.type === "nuke") {
           statsRef.current.nukes++;
           addText(gs, W / 2, H / 2, "TACTICAL NUKE!", "#FF0000", true);
-          gs.enemies.forEach(en => { en.health = -999; gs.score += en.points; addParticles(gs, en.x, en.y, en.color, 10); });
+          gs.enemies.forEach((en, _ni) => { en.health = -999; gs.score += en.points; if (_ni < 12) addParticles(gs, en.x, en.y, en.color, 8); });
           gs.enemies = []; gs.screenShake = 20; setScore(gs.score); checkAchievements(gs);
         } else if (pk.type === "guardian_angel") {
           extraLivesRef.current = 1; setExtraLives(1); statsRef.current.guardianAngels++;
@@ -1053,8 +1144,28 @@ export default function CallOfDoodie() {
       ctx.strokeStyle = "rgba(0,0,0,0.4)"; ctx.lineWidth = 2; ctx.stroke();
       // Boss glow ring
       if (e.isBossEnemy) {
-        ctx.strokeStyle = "rgba(255,0,0," + (0.4 + Math.sin(Date.now() / 200) * 0.3) + ")";
-        ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 6, 0, Math.PI * 2); ctx.stroke();
+        const bossRingColor = e.enrageTriggered ? "255,80,0" : "255,0,0";
+        ctx.strokeStyle = `rgba(${bossRingColor},${0.4 + Math.sin(Date.now() / 200) * 0.3})`;
+        ctx.lineWidth = e.enrageTriggered ? 4 : 3;
+        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 6, 0, Math.PI * 2); ctx.stroke();
+      }
+      // Shield pulse visual
+      if (e.shieldPulseActive) {
+        const sAlpha = 0.5 + Math.sin(Date.now() / 80) * 0.3;
+        ctx.strokeStyle = `rgba(0,191,255,${sAlpha})`;
+        ctx.lineWidth = 5;
+        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 14, 0, Math.PI * 2); ctx.stroke();
+        ctx.globalAlpha = 0.18;
+        ctx.fillStyle = "#00BFFF";
+        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 14, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+      // Enrage aura
+      if (e.enrageTriggered) {
+        const eAlpha = 0.3 + Math.sin(Date.now() / 70) * 0.2;
+        ctx.strokeStyle = `rgba(255,100,0,${eAlpha})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(0, 0, e.size / 2 + 22, 0, Math.PI * 2); ctx.stroke();
       }
       // Sergeant aura
       if (e.typeIndex === 13) {

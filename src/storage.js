@@ -1,30 +1,48 @@
 // ===== LEADERBOARD =====
-const LB_KEY = "cod-lb-v5";
+import { supabase } from "./supabase.js";
 
-function hasWindowStorage() {
-  try { return typeof window.storage !== "undefined" && window.storage && typeof window.storage.get === "function"; }
-  catch { return false; }
-}
+const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
 
 export async function loadLeaderboard() {
-  try {
-    if (hasWindowStorage()) {
-      const r = await window.storage.get(LB_KEY, true);
-      return r ? JSON.parse(r.value) : [];
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("leaderboard")
+        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts")
+        .order("score", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.warn("[leaderboard] Supabase read failed, using local cache:", err.message);
     }
+  }
+  // Fallback: localStorage
+  try {
     const raw = localStorage.getItem(LB_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
 }
 
 export async function saveToLeaderboard(entry) {
+  const row = { ...entry, ts: Date.now() };
+
+  if (supabase) {
+    try {
+      const { error } = await supabase.from("leaderboard").insert([row]);
+      if (error) throw error;
+      return await loadLeaderboard();
+    } catch (err) {
+      console.warn("[leaderboard] Supabase write failed, saving locally:", err.message);
+    }
+  }
+  // Fallback: localStorage
   try {
-    const board = await loadLeaderboard();
-    board.push({ ...entry, ts: Date.now() });
+    const board = JSON.parse(localStorage.getItem(LB_KEY) || "[]");
+    board.push(row);
     board.sort((a, b) => b.score - a.score);
     const top = board.slice(0, 100);
-    if (hasWindowStorage()) { await window.storage.set(LB_KEY, JSON.stringify(top), true); }
-    else { localStorage.setItem(LB_KEY, JSON.stringify(top)); }
+    localStorage.setItem(LB_KEY, JSON.stringify(top));
     return top;
   } catch { return []; }
 }
