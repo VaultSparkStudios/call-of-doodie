@@ -1851,6 +1851,9 @@ export default function CallOfDoodie() {
 
   // ── Touch controls ────────────────────────────────────────────────────────
   useEffect(() => {
+    // Always reset sticks on screen change so stale active state never carries over
+    joystickRef.current   = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null };
+    shootStickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false };
     if (screen !== "game") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
