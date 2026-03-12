@@ -261,24 +261,33 @@ export default function CallOfDoodie() {
     let _ws = seed;
     const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
     const SPAWN_SAFE = 115;
-    const wallCount = 4 + Math.floor(_sr() * 3); // 4–6 walls with generous spacing
+    const wallCount = 4 + Math.floor(_sr() * 3); // 4–6 walls
     const walls = [];
+    // Divide arena into 3×2 grid; shuffle zones so walls are spread across the full map
+    const COLS = 3, ROWS = 2;
+    const gwZ = w * 0.84 / COLS, ghZ = h * 0.84 / ROWS;
+    const zOrder = [0, 1, 2, 3, 4, 5];
+    for (let _i = 5; _i > 0; _i--) {
+      const _j = Math.floor(_sr() * (_i + 1));
+      const _t = zOrder[_i]; zOrder[_i] = zOrder[_j]; zOrder[_j] = _t;
+    }
     let _hWalls = 0, _vWalls = 0;
     for (let _wi = 0; _wi < wallCount; _wi++) {
+      const zi = zOrder[_wi];
+      const col = zi % COLS, row = Math.floor(zi / COLS);
+      const zx0 = w * 0.08 + col * gwZ;
+      const zy0 = h * 0.08 + row * ghZ;
       let wx, wy, ww, wh, _att = 0;
       do {
-        // Balance H vs V: bias toward whichever is underrepresented
         const isH = _hWalls <= _vWalls ? (_sr() < 0.65) : (_sr() < 0.35);
-        ww = isH ? Math.floor(70 + _sr() * 100) : Math.floor(14 + _sr() * 10);
-        wh = isH ? Math.floor(14 + _sr() * 10) : Math.floor(70 + _sr() * 100);
-        wx = w * 0.08 + _sr() * (w * 0.84 - ww);
-        wy = h * 0.08 + _sr() * (h * 0.84 - wh);
+        ww = isH ? Math.floor(70 + _sr() * 80) : Math.floor(14 + _sr() * 10);
+        wh = isH ? Math.floor(14 + _sr() * 10) : Math.floor(70 + _sr() * 80);
+        wx = zx0 + _sr() * Math.max(1, gwZ - ww);
+        wy = zy0 + _sr() * Math.max(1, ghZ - wh);
+        wx = Math.max(w * 0.04, Math.min(w * 0.96 - ww, wx));
+        wy = Math.max(h * 0.06, Math.min(h * 0.94 - wh, wy));
         const tooClose = Math.hypot(wx + ww / 2 - w / 2, wy + wh / 2 - h / 2) < SPAWN_SAFE;
-        const overlap = walls.some(prev =>
-          wx < prev.x + prev.w + 50 && wx + ww > prev.x - 50 &&
-          wy < prev.y + prev.h + 50 && wy + wh > prev.y - 50
-        );
-        if (!tooClose && !overlap) { if (isH) _hWalls++; else _vWalls++; break; }
+        if (!tooClose) { if (isH) _hWalls++; else _vWalls++; break; }
       } while (++_att < 20);
       walls.push({ x: wx, y: wy, w: ww, h: wh });
     }
@@ -926,8 +935,26 @@ export default function CallOfDoodie() {
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
       const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1);
-      e.x += Math.cos(a) * buffedSpeed + Math.sin(e.wobble) * 0.5 + Math.cos(a + Math.PI / 2) * zigzag;
-      e.y += Math.sin(a) * buffedSpeed + Math.cos(e.wobble) * 0.5 + Math.sin(a + Math.PI / 2) * zigzag;
+      // Wall-avoidance steering: repulse away from nearby walls, blend with toward-player
+      let sx = Math.cos(a), sy = Math.sin(a);
+      if (!e.chargeActive) {
+        (gs.obstacles || []).forEach(ob => {
+          const nx = Math.max(ob.x, Math.min(e.x, ob.x + ob.w));
+          const ny = Math.max(ob.y, Math.min(e.y, ob.y + ob.h));
+          const rdx = e.x - nx, rdy = e.y - ny;
+          const rdist = Math.hypot(rdx, rdy);
+          const AVOID_R = e.size / 2 + 32;
+          if (rdist < AVOID_R && rdist > 0) {
+            const str = (AVOID_R - rdist) / AVOID_R;
+            sx += (rdx / rdist) * str * 3.5;
+            sy += (rdy / rdist) * str * 3.5;
+          }
+        });
+        const slen = Math.hypot(sx, sy);
+        if (slen > 0) { sx /= slen; sy /= slen; }
+      }
+      e.x += sx * buffedSpeed + Math.sin(e.wobble) * 0.5 + (-sy) * zigzag;
+      e.y += sy * buffedSpeed + Math.cos(e.wobble) * 0.5 + sx * zigzag;
       if (e.hitFlash > 0) e.hitFlash--;
       if (e.ranged) {
         e.shootTimer++;
