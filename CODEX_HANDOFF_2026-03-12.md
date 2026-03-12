@@ -14,7 +14,7 @@
 
 ## Current build status
 
-- Latest commit: `36f4081`
+- Latest commit: `19b9f51`
 - Build: passing (`npm run build` clean)
 - Deployed: yes, live at public URL above
 
@@ -79,6 +79,16 @@
 |------|--------|
 | `.github/workflows/deploy.yml` | Active — builds and deploys on push to `main` |
 
+## Studio System Template (added session 5)
+
+Repo now has full Studio System Template folder structure committed:
+- `context/` — PROJECT_BRIEF, CURRENT_STATE, DECISIONS, TASK_BOARD
+- `handoffs/LATEST_HANDOFF.md`
+- `logs/SESSION_LOG.md`
+- `prompts/bootstrap_prompt.md`
+- `AGENTS.md` (added session 4)
+- `CODEX_HANDOFF_2026-03-12.md` (this file, added session 4)
+
 ## Known issues / next steps
 
 - Leaderboard is localStorage only (no global backend)
@@ -91,5 +101,5 @@
 
 ```bash
 npm run build   # clean
-git push origin main  # deployed 2026-03-12
+git push origin main  # last pushed 2026-03-12, commit 19b9f51
 ```

@@ -2,7 +2,7 @@
 
 Build status:
 - Build: passing (`npm run build` clean)
-- Latest commit: `606b1f2`
+- Latest commit: `19b9f51`
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
 - Branch: `main`, up to date with `origin/main`
 
