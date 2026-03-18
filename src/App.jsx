@@ -15,7 +15,7 @@ import {
   soundGrenade, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
-  setMusicVibe, MUSIC_VIBES,
+  setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
 } from "./sounds.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -25,6 +25,23 @@ import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
 import PerkModal, { getRandomPerks } from "./components/PerkModal.jsx";
 import WaveShopModal from "./components/WaveShopModal.jsx";
+
+// ── Gamepad rumble ────────────────────────────────────────────────────────────
+// Fires haptic feedback on the first connected gamepad if the Vibration Actuator
+// API is available (Chrome 68+). Silently no-ops on unsupported browsers/devices.
+function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
+  try {
+    const gp = navigator.getGamepads?.()[0];
+    if (gp?.vibrationActuator) {
+      gp.vibrationActuator.playEffect("dual-rumble", {
+        startDelay: 0,
+        duration: durationMs,
+        weakMagnitude,
+        strongMagnitude,
+      });
+    }
+  } catch (_) { /* not supported */ }
+}
 
 // ── Flow field pathfinding ────────────────────────────────────────────────────
 // BFS from player position, producing direction vectors for each grid cell.
@@ -236,7 +253,7 @@ export default function CallOfDoodie() {
     setMuted(next);
     setMusicMuted(next);
     localStorage.setItem("cod-music-muted", next ? "1" : "0");
-    if (next) stopMusic(); else if (gsRef.current) startMusic(gsRef.current.bossWave);
+    if (next) { stopMusic(); stopAmbient(); } else if (gsRef.current) { startMusic(gsRef.current.bossWave); startAmbient(gsRef.current.mapTheme ?? 0); }
   }, []);
 
   const toggleColorblind = useCallback(() => {
@@ -1000,8 +1017,9 @@ export default function CallOfDoodie() {
       return false;
     }
     if (gs) gs.waveStreak = 0; // reset streak on death
-    stopMusic();
+    stopMusic(); stopAmbient();
     soundDeath();
+    rumbleGamepad(0.7, 1.0, 600);
     setDeaths(dd => dd + 1);
     setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
     setTotalDamage(Math.floor(gs.totalDamage));
@@ -1067,7 +1085,7 @@ export default function CallOfDoodie() {
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback((forceSeed) => {
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
-    stopMusic();
+    stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
     initGame(forceSeed);
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
@@ -1084,7 +1102,10 @@ export default function CallOfDoodie() {
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
-    setTimeout(() => startMusic(false), 200); // small delay to let audio context resume
+    setTimeout(() => {
+      startMusic(false);
+      startAmbient(gsRef.current?.mapTheme ?? 0);
+    }, 200); // small delay to let audio context resume
   }, [difficulty, initGame, starterLoadout]);
 
   useEffect(() => {
@@ -1356,6 +1377,7 @@ export default function CallOfDoodie() {
           p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg), "#FF4444");
+          rumbleGamepad(0.3, 0.45, 100);
           if (p.health <= 0) handlePlayerDeath(gs);
         }
       });
@@ -1476,7 +1498,7 @@ export default function CallOfDoodie() {
           }
           if (isCrit) statsRef.current.crits++;
           const _hn = performance.now();
-          if (_hn - lastHitSoundRef.current > 50) { soundHit(isCrit); lastHitSoundRef.current = _hn; }
+          if (_hn - lastHitSoundRef.current > 50) { soundHit(isCrit); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); }
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
           addText(gs, e.x + (Math.random() - 0.5) * 20, e.y - e.size / 2 - Math.random() * 10,
@@ -1502,6 +1524,7 @@ export default function CallOfDoodie() {
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             if (e.isBossEnemy) {
               soundBossKill();
+              rumbleGamepad(0.5, 1.0, 500);
               gs.bossKillFlash = 22; // golden flash overlay
               gs.screenShake = Math.max(gs.screenShake, 30);
               addParticles(gs, e.x, e.y, e.color, 50);
@@ -1682,6 +1705,7 @@ export default function CallOfDoodie() {
                 p.health -= 25; p.invincible = 30; gs.damageFlash = 12;
                 setHealth(Math.max(0, p.health));
                 addText(gs, p.x, p.y - 30, "-25 RENT DUE!", "#FFD700");
+                rumbleGamepad(0.4, 0.6, 150);
                 if (p.health <= 0) handlePlayerDeath(gs);
               }
             }
@@ -1770,6 +1794,7 @@ export default function CallOfDoodie() {
               p.health -= gs.glassjaw ? Math.round(18 * (gs.glassjawMult || 2)) : 18; p.invincible = 25; gs.damageFlash = 10;
               setHealth(Math.max(0, p.health));
               addText(gs, p.x, p.y - 30, "-18 SLAM!", "#FF4400");
+              rumbleGamepad(0.4, 0.65, 150);
               if (p.health <= 0) handlePlayerDeath(gs);
             }
             if (e.groundSlamRadius >= 230) e.groundSlamActive = false;
@@ -1789,6 +1814,7 @@ export default function CallOfDoodie() {
             p.health -= gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35; p.invincible = 40; gs.damageFlash = 12;
             setHealth(Math.max(0, p.health));
             addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
+            rumbleGamepad(0.5, 0.7, 200);
             if (p.health <= 0) handlePlayerDeath(gs);
           }
           e.health = -999;
@@ -1817,6 +1843,7 @@ export default function CallOfDoodie() {
           p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg) + " HP", "#FF0000");
+          rumbleGamepad(0.35, 0.5, 120);
           if (p.health <= 0) handlePlayerDeath(gs);
         }
       }
@@ -2120,7 +2147,7 @@ export default function CallOfDoodie() {
         activePerks={activePerks} missionsSummary={missionsSummary}
         leaderboard={leaderboard} lbLoading={lbLoading} username={username}
         DIFFICULTIES={DIFFICULTIES}
-        onStartGame={startGame} onMenu={() => { stopMusic(); setScreen("menu"); }}
+        onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); setScreen("menu"); }}
         onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
         highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
         fmtTime={fmtTime}
@@ -2148,7 +2175,7 @@ export default function CallOfDoodie() {
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           onResume={() => setPaused(false)}
-          onLeave={() => { stopMusic(); setPaused(false); setScreen("menu"); }}
+          onLeave={() => { stopMusic(); stopAmbient(); setPaused(false); setScreen("menu"); }}
         />
       )}
 

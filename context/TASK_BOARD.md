@@ -1,19 +1,21 @@
 # Task Board
 
 ## Now (playtest + polish)
-- Playtest all new content: synergies, heat gauge, streak bonus, boomerang/railgun sounds
+- Playtest gamepad rumble + ambient sounds
 - Run Supabase SQL migration in console to activate server-side callsign enforcement (SQL in storage.js comments)
 
 ## Next
-- Gamepad: vibration/rumble on hit using Gamepad Haptics API
-- Sound improvements: ambient background noise, room tone per map theme
-
-## Later
 - Leaderboard pagination (currently top 100 only)
 - App.jsx further extraction: gameHelpers.js for spawnEnemy, spawnBoss, addXp, checkAchievements
+
+## Later
 - Capacitor wrapper for iOS App Store submission
 - More daily mission types (no-hit runs, single-weapon challenge)
 - More map variety / new map themes
+
+## Done (session 10)
+- ✅ Gamepad vibration/rumble: `rumbleGamepad(weak, strong, ms)` module-level helper; fires on enemy hit (40ms light), crit (80ms medium), player hit by bullet/contact/slam/kamikaze/rent (100–200ms medium-heavy), boss kill (500ms strong), player death (600ms maximum)
+- ✅ Ambient room tone: `startAmbient(themeIndex)` / `stopAmbient()` in sounds.js; 6 themed loops — office (HVAC hiss + keyboard), bunker (deep drone + metal thud), factory (machinery hum + steam), ruins (wind + drip echo), desert (wind sweep + heat shimmer), forest (cricket chirp + breeze); called alongside startMusic/stopMusic
 
 ## Done (session 9)
 - ✅ Perk synergies: Storm Vampire (chain_lightning+vampire), Pyro Grenadier (grenadier+pyromaniac), Dead Eye (eagle_eye+penetrator); synergy announcement on unlock
