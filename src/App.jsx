@@ -11,6 +11,7 @@ import {
   soundGrenade, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
+  setMusicVibe, MUSIC_VIBES,
 } from "./sounds.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -121,6 +122,10 @@ export default function CallOfDoodie() {
   const autoAimRef       = useRef(false); // mobile auto-aim toggle
   const starterLoadoutRef = useRef("standard");
   const shopPendingRef   = useRef(false); // blocks game loop like perkPending
+  const frameBufferRef   = useRef([]);    // rolling frame buffer for highlight GIF
+  const bestMomentRef    = useRef({ ts: 0, score: 0 }); // highest-excitement timestamp
+  const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
+  const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -170,7 +175,12 @@ export default function CallOfDoodie() {
   const [shopPending, setShopPending]         = useState(false);
   const [shopOptions, setShopOptions]         = useState([]);
   const [musicMuted, setMusicMuted]           = useState(() => { const s = localStorage.getItem("cod-music-muted") === "1"; setMuted(s); return s; });
+  // Sync saved vibe to sounds module on first render
+  useState(() => { const v = localStorage.getItem("cod-music-vibe"); if (v) setMusicVibe(v); });
   const [colorblindMode, setColorblindMode]   = useState(() => localStorage.getItem("cod-colorblind") === "1");
+  const [highlightGifUrl, setHighlightGifUrl] = useState(null);
+  const [gifEncoding, setGifEncoding]         = useState(false);
+  const [musicVibe, setMusicVibeState]        = useState(() => localStorage.getItem("cod-music-vibe") || "action");
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -305,6 +315,10 @@ export default function CallOfDoodie() {
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
     killFeedRef.current = [];
+    frameBufferRef.current = [];
+    bestMomentRef.current = { ts: 0, score: 0 };
+    if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
+    setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
@@ -891,6 +905,39 @@ export default function CallOfDoodie() {
     const _missions = dailyMissionsRef.current || [];
     const _done = missionDoneRef.current || new Set();
     setMissionsSummary(_missions.map((m, i) => ({ text: m.text, icon: m.icon, completed: _done.has(i) })));
+    // Encode highlight GIF from rolling frame buffer
+    setGifEncoding(true);
+    (async () => {
+      try {
+        const buf = frameBufferRef.current;
+        if (buf.length >= 8) {
+          const { GIFEncoder, quantize, applyPalette } = await import("gifenc");
+          const oc = gifOffscreenRef.current;
+          const gw = oc?.width || 320, gh = oc?.height || 180;
+          const best = bestMomentRef.current;
+          const midTs = best.score > 0 ? best.ts : (buf[buf.length - 1]?.ts || 0);
+          let frames = buf.filter(f => f.ts >= midTs - 1000 && f.ts <= midTs + 3000);
+          if (frames.length < 8) frames = buf.slice(-30);
+          frames = frames.slice(0, 40);
+          if (frames.length > 0) {
+            const enc = GIFEncoder();
+            for (const frame of frames) {
+              const rgba = new Uint8Array(frame.data);
+              const palette = quantize(rgba, 256);
+              const index = applyPalette(rgba, palette);
+              enc.writeFrame(index, gw, gh, { palette, delay: 100 });
+            }
+            enc.finish();
+            const blob = new Blob([enc.bytes()], { type: "image/gif" });
+            if (highlightUrlRef.current) URL.revokeObjectURL(highlightUrlRef.current);
+            const objUrl = URL.createObjectURL(blob);
+            highlightUrlRef.current = objUrl;
+            setHighlightGifUrl(objUrl);
+          }
+        }
+      } catch (err) { console.warn("[GIF] encode failed:", err); }
+      setGifEncoding(false);
+    })();
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
   }, []);
@@ -1019,6 +1066,25 @@ export default function CallOfDoodie() {
       comboRef.current.timer--;
       if (comboRef.current.timer <= 0) { comboRef.current.count = 0; setCombo(0); setComboTimer(0); }
       else if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
+    }
+
+    // ── Frame capture for highlight GIF (~10fps) ──
+    if (frameCountRef.current % 6 === 0 && canvasRef.current) {
+      const cv = canvasRef.current;
+      if (!gifOffscreenRef.current) {
+        const scale = Math.min(1, 320 / cv.width);
+        const oc = document.createElement("canvas");
+        oc.width = Math.floor(cv.width * scale);
+        oc.height = Math.floor(cv.height * scale);
+        gifOffscreenRef.current = oc;
+      }
+      const oc = gifOffscreenRef.current;
+      const octx = oc.getContext("2d", { willReadFrequently: true });
+      octx.drawImage(cv, 0, 0, oc.width, oc.height);
+      const id = octx.getImageData(0, 0, oc.width, oc.height);
+      const buf = frameBufferRef.current;
+      buf.push({ data: new Uint8Array(id.data.buffer), ts: Date.now() });
+      if (buf.length > 90) buf.shift();
     }
 
     // ── Wave / boss wave logic ──
@@ -1209,10 +1275,12 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
+            { const _cc = comboRef.current.count; const _cs = _cc >= 10 ? 80 : _cc >= 5 ? 50 : 0; if (_cs > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: _cs }; }
             const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
+            if (gs.killstreakCount >= 10 && 70 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 70 };
             if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
@@ -1224,6 +1292,7 @@ export default function CallOfDoodie() {
               addParticles(gs, e.x, e.y, "#FFD700", 30);
               addParticles(gs, e.x, e.y, "#FFFFFF", 20);
               addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
+              if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
             }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
@@ -2284,6 +2353,7 @@ export default function CallOfDoodie() {
         DIFFICULTIES={DIFFICULTIES}
         onStartGame={startGame} onMenu={() => { stopMusic(); setScreen("menu"); }}
         onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
+        highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
         fmtTime={fmtTime}
       />
     );
@@ -2305,6 +2375,7 @@ export default function CallOfDoodie() {
           wave={wave} timeSurvived={timeSurvived} score={score} isMobile={isMobile}
           achievementsUnlocked={achievementsUnlocked} fmtTime={fmtTime}
           musicMuted={musicMuted} onToggleMute={toggleMusicMuted}
+          musicVibe={musicVibe} onSetMusicVibe={(v) => { setMusicVibe(v); setMusicVibeState(v); localStorage.setItem("cod-music-vibe", v); }}
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           onResume={() => setPaused(false)}
           onLeave={() => { stopMusic(); setPaused(false); setScreen("menu"); }}

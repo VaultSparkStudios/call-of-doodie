@@ -150,6 +150,26 @@ let _musicActive = false;
 let _musicBoss = false;
 let _musicBeat = 0;
 let _musicTimer = null;
+let _musicVibe = "action";
+
+export const MUSIC_VIBES = [
+  { id: "chill",   name: "Chill",   emoji: "😌" },
+  { id: "action",  name: "Action",  emoji: "⚡" },
+  { id: "intense", name: "Intense", emoji: "🔥" },
+  { id: "retro",   name: "Retro",   emoji: "👾" },
+  { id: "spooky",  name: "Spooky",  emoji: "👻" },
+];
+
+const _VIBE_PRESETS = {
+  chill:   { bpm: 76,  bassNotes: [41,41,49,41,37,41,44,41],       bassVol: 0.05,  kickVol: 0.07, hats: false },
+  action:  { bpm: 108, bassNotes: [55,55,65,55,49,55,58,55],       bassVol: 0.065, kickVol: 0.10, hats: true  },
+  intense: { bpm: 134, bassNotes: [55,65,73,65,49,58,73,58],       bassVol: 0.08,  kickVol: 0.12, hats: true  },
+  retro:   { bpm: 120, bassNotes: [110,110,130,110,98,110,116,110], bassVol: 0.045, kickVol: 0.09, hats: true  },
+  spooky:  { bpm: 88,  bassNotes: [55,52,49,52,46,49,52,55],       bassVol: 0.055, kickVol: 0.07, hats: false },
+};
+
+export function getMusicVibe() { return _musicVibe; }
+export function setMusicVibe(vibe) { _musicVibe = vibe; }
 
 export function startMusic(isBossWave = false) {
   if (_musicActive) return;
@@ -170,16 +190,16 @@ export function setMusicIntensity(isBossWave) {
 
 function _scheduleMusicBeat() {
   if (!_musicActive) return;
-  const ctx = getCtx(); // respects muted flag
-  const BPM = _musicBoss ? 138 : 108;
-  const beat = 60 / BPM;
+  const ctx = getCtx();
+  const preset = _musicBoss ? { ..._VIBE_PRESETS.intense, bpm: 138 } : (_VIBE_PRESETS[_musicVibe] || _VIBE_PRESETS.action);
+  const beat = 60 / preset.bpm;
   const bar = _musicBeat % 8;
+  const vol = _musicBoss ? 1.4 : 1.0;
 
   if (ctx) {
-    const vol = _musicBoss ? 1.4 : 1.0; // slightly louder during boss
     // Kick: beats 0 and 4
     if (bar === 0 || bar === 4) {
-      tone(75, beat * 0.45, "sine", 0.10 * vol, 38);
+      tone(75, beat * 0.45, "sine", preset.kickVol * vol, 38);
       noise(beat * 0.18, 0.07 * vol);
     }
     // Snare: beats 2 and 6
@@ -187,20 +207,35 @@ function _scheduleMusicBeat() {
       noise(beat * 0.22, 0.08 * vol);
       tone(220, beat * 0.15, "square", 0.03 * vol, 160);
     }
-    // Open hi-hat: beats 1, 3, 5, 7 (off-beats)
+    // Open hi-hat: off-beats
     if (bar % 2 === 1) {
       tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
     }
-    // Closed hi-hat: every beat
-    tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
-    // Bass line (pentatonic walk, different for boss)
-    const bassNormal = [55, 55, 65, 55, 49, 55, 58, 55];
-    const bassBoss   = [55, 65, 73, 65, 49, 58, 73, 58];
-    const bassFreq = (_musicBoss ? bassBoss : bassNormal)[bar];
-    tone(bassFreq, beat * 0.38, "sawtooth", 0.065 * vol, bassFreq * 0.88);
-    // Boss: add a tense high-pitched pulse on beat 0
+    // Closed hi-hat: only on hats-enabled vibes
+    if (preset.hats) {
+      tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
+    }
+    // Bass line
+    const bassFreq = preset.bassNotes[bar];
+    const bassType = (_musicVibe === "retro" && !_musicBoss) ? "square" : "sawtooth";
+    tone(bassFreq, beat * 0.38, bassType, preset.bassVol * vol, bassFreq * 0.88);
+    // Boss: tense high pulse on beat 0
     if (_musicBoss && bar === 0) {
       tone(330, beat * 0.12, "square", 0.025, 280);
+    }
+    // Retro: bright arpeggio every beat
+    if (_musicVibe === "retro" && !_musicBoss) {
+      const arp = [220, 262, 330, 392, 440, 392, 330, 262];
+      tone(arp[bar], beat * 0.15, "square", 0.018);
+    }
+    // Spooky: eerie sustained high note on beat 0
+    if (_musicVibe === "spooky" && !_musicBoss && bar === 0) {
+      tone(880, beat * 1.8, "sine", 0.014, 660);
+    }
+    // Chill: soft pad chord on beat 0
+    if (_musicVibe === "chill" && !_musicBoss && bar === 0) {
+      tone(220, beat * 2.2, "sine", 0.012);
+      tone(277, beat * 2.2, "sine", 0.009);
     }
   }
 

@@ -10,6 +10,7 @@ export default function DeathScreen({
   activePerks, missionsSummary,
   leaderboard, lbLoading, username, DIFFICULTIES,
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
+  highlightGifUrl, gifEncoding,
   fmtTime,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -316,6 +317,37 @@ export default function DeathScreen({
             {sharing ? "⏳ GENERATING..." : "📸 SHARE SCORE"}
           </button>
         </div>
+
+        {/* Highlight GIF */}
+        {(gifEncoding || highlightGifUrl) && (
+          <div style={{ marginBottom: 12, textAlign: "center" }}>
+            <div style={{ fontSize: 10, color: "#FF6B35", fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>🎬 BEST MOMENT</div>
+            {gifEncoding ? (
+              <div style={{ width: "100%", maxWidth: 320, height: 90, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,107,53,0.25)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#666", margin: "0 auto", fontFamily: "'Courier New',monospace" }}>
+                ⏳ encoding highlight...
+              </div>
+            ) : (
+              <>
+                <img src={highlightGifUrl} alt="Best moment" style={{ maxWidth: "100%", width: 320, borderRadius: 6, border: "1px solid rgba(255,107,53,0.35)", display: "block", margin: "0 auto" }} />
+                <button
+                  onClick={async () => {
+                    try {
+                      const res = await fetch(highlightGifUrl);
+                      const blob = await res.blob();
+                      const file = new File([blob], "cod-highlight.gif", { type: "image/gif" });
+                      if (navigator.canShare?.({ files: [file] })) {
+                        await navigator.share({ files: [file], title: "Call of Doodie Best Moment", text: `Check out my highlight — Score: ${score.toLocaleString()} on wave ${wave}! 🎮` });
+                      } else {
+                        const a = document.createElement("a"); a.href = highlightGifUrl; a.download = "cod-highlight.gif"; a.click();
+                      }
+                    } catch {}
+                  }}
+                  style={{ marginTop: 7, padding: "7px 18px", background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.45)", color: "#FF6B35", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700, fontFamily: "'Courier New',monospace" }}
+                >📤 SHARE BEST MOMENT</button>
+              </>
+            )}
+          </div>
+        )}
 
         {runSeed > 0 && (
           <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>

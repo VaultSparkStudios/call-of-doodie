@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
+import { MUSIC_VIBES } from "../sounds.js";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, colorblindMode, onToggleColorblind }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
 
@@ -119,6 +120,19 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF" }}>
             {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}
           </button>
+          {!musicMuted && (
+            <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 300 }}>
+              {MUSIC_VIBES.map(v => (
+                <button
+                  key={v.id}
+                  onClick={() => onSetMusicVibe(v.id)}
+                  style={{ padding: "6px 11px", borderRadius: 6, fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", background: musicVibe === v.id ? "rgba(0,229,255,0.18)" : "rgba(255,255,255,0.05)", border: musicVibe === v.id ? "1px solid rgba(0,229,255,0.5)" : "1px solid rgba(255,255,255,0.12)", color: musicVibe === v.id ? "#0EF" : "#888", fontWeight: musicVibe === v.id ? 900 : 400 }}
+                >
+                  {v.emoji} {v.name}
+                </button>
+              ))}
+            </div>
+          )}
           <button onClick={onToggleColorblind} style={{ ...pBtn, color: colorblindMode ? "#FFD700" : "#AAA" }}>
             {colorblindMode ? "🎨 COLORBLIND: ON" : "🎨 COLORBLIND: OFF"}
           </button>
