@@ -1,65 +1,68 @@
 # Latest Handoff
 
-Last updated: 2026-03-18 (Session 10 — gamepad rumble + ambient room tone)
+Last updated: 2026-03-18 (Session 11 — leaderboard pagination, gameHelpers.js, new missions, 2 map themes)
 
 ## What was completed this session
 
-### Commit `53ac0c5` — Gamepad rumble and ambient room tone
+### Commit `57667af`
 
-**Gamepad Haptics / rumble (App.jsx)**
+**1. Leaderboard pagination (storage.js + LeaderboardPanel.jsx + App.jsx + MenuScreen.jsx + DeathScreen.jsx)**
 
-Added `rumbleGamepad(weakMagnitude, strongMagnitude, durationMs)` module-level helper (placed before `buildFlowField`). Calls `navigator.getGamepads()[0]?.vibrationActuator.playEffect("dual-rumble", {...})` — Chrome 68+ only, wrapped in try/catch for silent no-op elsewhere.
+- `loadLeaderboard(offset = 0, limit = 50)` — uses Supabase `.range(offset, offset+limit-1)` instead of `.limit(100)`. localStorage fallback uses `.slice(offset, offset+limit)`.
+- App.jsx: `lbHasMore` state + `lbOffsetRef` ref. `refreshLeaderboard()` resets offset to 0, sets `lbHasMore = data.length >= 50`. `loadMoreLeaderboard()` fetches next page and appends to `leaderboard` state.
+- `LeaderboardPanel`: accepts `lbHasMore` + `onLoadMore` props. "LOAD MORE ↓" button shown when `lbHasMore && !lbLoading && filtered.length > 0`. "Loading…" message when fetching more pages. Subtitle shows current count.
+- Props threaded: App.jsx → MenuScreen → LeaderboardPanel and App.jsx → DeathScreen → LeaderboardPanel.
 
-Rumble fires at:
-- **Enemy hit** (inside `soundHit` throttle block): weak=0.05, strong=0.10, 40ms for normal; weak=0.25, strong=0.35, 80ms for crit
-- **Player hit by enemy bullet**: weak=0.30, strong=0.45, 100ms
-- **Player hit by enemy contact**: weak=0.35, strong=0.50, 120ms
-- **Player hit by rent nuke**: weak=0.40, strong=0.60, 150ms
-- **Player hit by ground slam**: weak=0.40, strong=0.65, 150ms
-- **Player hit by kamikaze explosion**: weak=0.50, strong=0.70, 200ms
-- **Boss kill**: weak=0.50, strong=1.00, 500ms (with `soundBossKill()`)
-- **Player death**: weak=0.70, strong=1.00, 600ms (with `soundDeath()`)
+**2. gameHelpers.js — extract spawnEnemy + spawnBoss (new file)**
 
-**Ambient room tone (sounds.js)**
+- `src/gameHelpers.js`: exports `spawnEnemy(gs, W, H, difficultyId)` and `spawnBoss(gs, W, H, difficultyId, typeIndex)` as pure module-level functions (no React deps; import only from constants.js).
+- `spawnEnemy` pushes enemy to `gs.enemies` with full elite variant logic (armored/fast/explosive).
+- `spawnBoss` pushes boss with all wave-scaling ability flags (shieldPulse, enrage, teleport, minionSurge, rentNuke, bulletRing, groundSlam, sharedAbilityCooldown).
+- App.jsx: `spawnEnemy` and `spawnBoss` useCallbacks are now thin wrappers: `useCallback((gs) => _spawnEnemy(gs, GW(), GH(), difficultyRef.current), [])`.
+- ~100 lines removed from App.jsx; all call sites unchanged.
 
-Added `startAmbient(themeIndex)` / `stopAmbient()` / `_tickAmbient()` / `_playAmbientTick(theme, beat)` — independent setInterval-style timer running alongside background music at very low volumes (~0.004–0.018).
+**3. New daily mission types (storage.js + App.jsx)**
 
-6 themes (matching `gs.mapTheme` 0–5):
-- **0 = office**: HVAC noise burst (vol 0.007, 0.5s) + rare keyboard click (1500Hz square, vol 0.003)
-- **1 = bunker**: deep sine drone 38Hz (vol 0.013, 0.6s) + every-8-beats metal thud (noise + 80Hz sawtooth)
-- **2 = factory**: sawtooth machinery hum 58Hz (vol 0.013, 0.45s) + steam bursts + clank every 8 beats
-- **3 = ruins**: long wind noise (vol 0.005, 0.6s) + drip ping 750Hz (vol 0.007) + echo 380Hz (vol 0.005)
-- **4 = desert**: long wind noise (vol 0.004, 0.8s) + heat shimmer sine 200Hz (vol 0.005, 0.38s)
-- **5 = forest**: cricket chirp (3800–4160Hz sine, vol 0.006) + breeze noise every 8 beats
+Two new mission types added to MISSION_DEFS and MISSION_PARAMS:
 
-Tick intervals per theme (ms): `[900, 700, 550, 1400, 1900, 950]`
+- `no_hit_wave` 🛡️ — "Clear N waves without taking damage" (N = 1/2/3).
+  - `gs.damageThisWave` counter: initialized to 0 in gs, incremented at every damage site (5 sites: enemy bullet, contact, slam, kamikaze, rent nuke), reset to 0 at each wave clear.
+  - `statsRef.current.noHitWaves`: incremented at wave clear when `gs.damageThisWave === 0`.
+  - Tracked in `checkDailyMissions` via `s.noHitWaves`.
+- `single_weapon` 🎯 — "Get N kills with a single weapon" (N = 5/10/20).
+  - All bullets carry `wpnIdx: weaponIdx` field (added to `makeBullet` in shoot()).
+  - `statsRef.current.weaponKills[wpnIdx]` incremented on each kill (bullet-enemy + hitscan/railgun paths).
+  - `checkDailyMissions` exposes `singleWeaponKills = Math.max(...weaponKills)`.
 
-`startAmbient` called in `startGame` (same `setTimeout` block as `startMusic`), passing `gsRef.current.mapTheme`.
-`stopAmbient` called at: player death (`handlePlayerDeath`), `startGame` (before music restart), mute toggle off, pause→menu leave, death screen→menu.
+**4. 2 new map themes (App.jsx + drawGame.js + sounds.js)**
+
+Theme count: 6 → 8. `initGame` now uses `Math.floor(_sr() * 8)`.
+
+- **Theme 6: Space** — deep black-purple backdrop; walls: dark purple metal `["rgba(14,8,34,.."]`; border glow: purple `"rgba(150,70,255,"`; props: 🚀🛸🌌👾⭐🪐🌙🌟; ambient: 1100ms tick, low 28Hz sine hum + sine blips at bars 0/4.
+- **Theme 7: Arctic** — cold midnight blue backdrop; walls: blue ice `["rgba(22,42,66,.."]`; border glow: icy blue `"rgba(75,150,220,"`; props: ❄️🏔️🐧🌨️🦭⛷️🐻‍❄️🧊; ambient: 1600ms tick, wind noise + descending sine tone (160Hz) + ice creak at bar 4.
+
+All theme color arrays in drawGame.js extended: THEME_BG, FZ_FILL, FZ_TILE, TC (terrain), GRID_CLR, BORDER_CLR, WALL_T.
 
 ## What is mid-flight
 
-Nothing — session 10 is a clean, complete feature drop.
+Nothing — all 4 features are complete and build-verified.
 
 ## What to do next
 
-1. **Push main** → GitHub Actions deploys automatically
-2. **Playtest rumble** — requires Chrome + wired/Bluetooth gamepad; test all rumble tiers (hit, crit, damage, boss kill, death)
-3. **Playtest ambient** — start runs on each of the 6 themes; verify volumes are pleasant and not distracting
-4. **Supabase callsign enforcement** — still pending manual SQL migration in Supabase console (SQL in storage.js comments)
-5. **Leaderboard pagination** — next feature on task board (currently shows only top 100)
+1. **Push `main`** → auto-deploy via GitHub Actions
+2. **Playtest space + arctic themes** — check ambient feels right, wall/floor colors are distinct
+3. **Verify "Load More"** in production with Supabase real data (hard to test locally without 50+ entries)
+4. **Run Supabase SQL migration** — callsign enforcement SQL is in storage.js comments, needs manual run in Supabase console
+5. **Capacitor wrapper** — next item on task board (iOS App Store submission)
 
 ## Important constraints
 
 - `npm run build` must pass before any push
 - Vite base must stay `/call-of-doodie/` (lowercase) in vite.config.js
 - All game logic in single RAF loop in App.jsx — use refs, not state, for loop-internal values
-- drawGame.js is pure render — never call React setters inside it, never decrement gs fields inside it
-- bossKillFlash / adrenalineRushTimer / lightningArcs decremented in App.jsx game loop ONLY
-- `rumbleGamepad` is module-level (no React context needed) — can be called freely from game loop
-- `startAmbient` / `stopAmbient` must be kept in sync with `startMusic` / `stopMusic` at all call sites
+- drawGame.js is pure render — never call React setters inside it
+- `spawnEnemy` and `spawnBoss` are now in gameHelpers.js — if adding new enemy fields, update BOTH gameHelpers.js AND App.jsx (spawnBoss thin wrapper only passes the 4 fixed args)
+- Map theme count is now 8 — any new code that branches on `gs.mapTheme` needs to handle indices 0–7
+- `gs.damageThisWave` resets at wave clear — do NOT reset at death (handlePlayerDeath), only at wave clear
+- `statsRef.current.weaponKills` is a length-10 array; if new weapons are added, update the array size in both useRef init and statsRef reset
 - localStorage keys: `cod-lb-v5`, `cod-career-v1`, `cod-meta-v2`, `cod-missions-YYYY-MM-DD`, `cod-callsign-v1`, `cod-music-muted`, `cod-colorblind`, `cod-settings-v1`, `cod-presets-v1`
-- Supabase anon key is public (in JS bundle) — RLS policies are the only protection layer
-- Never commit .env.local (gitignored via *.local)
-- RPG (index 1) has no ricochet; all other weapons ricochet up to 10 times
-- gs.mapTheme is set during `initGame` and does not change mid-run — safe to read in startGame setTimeout

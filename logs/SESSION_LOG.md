@@ -4,6 +4,32 @@ Chronological record of all AI-assisted sessions.
 
 ---
 
+## 2026-03-18 — Session 11 (Claude Sonnet 4.6)
+
+**Focus:** Leaderboard pagination, gameHelpers.js extraction, new daily missions, 2 new map themes
+
+**Completed:**
+
+*Features:*
+- Leaderboard pagination: `loadLeaderboard(offset, limit=50)` with Supabase `.range()`; "LOAD MORE ↓" button in LeaderboardPanel; `lbHasMore` state + `loadMoreLeaderboard` callback in App.jsx; props threaded through MenuScreen/DeathScreen
+- gameHelpers.js: `spawnEnemy(gs, W, H, difficultyId)` + `spawnBoss(gs, W, H, difficultyId, typeIndex)` extracted as pure module-level functions; App.jsx useCallbacks are thin wrappers (~100 lines removed)
+- 2 new daily missions: `no_hit_wave` (clear N waves without taking damage; `gs.damageThisWave` tracks hits per wave) and `single_weapon` (get N kills with one weapon; bullets carry `wpnIdx`, `statsRef.weaponKills[]` per weapon)
+- 2 new map themes: space (6 — deep purple, cosmic props 🚀🛸🌌, sine hum + blips ambient) and arctic (7 — cold blue, icy props ❄🐧🦭, wind + ice creak ambient); theme count 6→8 across all theme arrays
+
+**Key commit:** `57667af`
+
+**Files changed:**
+- `src/gameHelpers.js` — new file, spawnEnemy + spawnBoss
+- `src/App.jsx` — gameHelpers import + thin wrapper useCallbacks; lbHasMore/loadMoreLeaderboard; damageThisWave tracking; weaponKills tracking; makeBullet wpnIdx; noHitWaves tracking at wave clear; checkDailyMissions new fields; THEME_PROPS extended; theme count 8
+- `src/storage.js` — loadLeaderboard pagination (offset/limit/.range()); no_hit_wave + single_weapon mission types + params
+- `src/drawGame.js` — all theme color arrays extended for themes 6+7
+- `src/sounds.js` — _AMBIENT_TICK extended; cases 6+7 in _playAmbientTick
+- `src/components/LeaderboardPanel.jsx` — lbHasMore/onLoadMore props; Load More button; subtitle shows count
+- `src/components/MenuScreen.jsx` — pass-through lbHasMore/onLoadMore props
+- `src/components/DeathScreen.jsx` — pass-through lbHasMore/onLoadMore props
+
+---
+
 ## 2026-03-18 — Session 10 (Claude Sonnet 4.6)
 
 **Focus:** Gamepad haptics and ambient room tone audio
