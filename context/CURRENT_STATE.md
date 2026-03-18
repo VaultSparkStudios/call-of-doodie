@@ -12,7 +12,6 @@ Current priorities:
 3. Supabase anonymous auth to enforce callsign locking server-side (RLS update needed)
 
 Known issues:
-- 3 new perks are stubs (chain_lightning, dead_mans_hand, adrenaline_rush) — they appear in perk selection but have no game effect beyond a gs flag
 - Boss ground slam: random initial stagger (0–179 frames) can shorten the 90-frame warning window on the very first slam cycle
 - Overclocked perk: taking it twice resets overclockedShots mid-game (minor edge case)
 - ID "scavenger" exists in both PERKS and META_UPGRADES arrays — no runtime collision, naming hazard only

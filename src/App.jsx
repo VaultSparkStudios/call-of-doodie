@@ -922,6 +922,21 @@ export default function CallOfDoodie() {
 
   // ── Player death ──────────────────────────────────────────────────────────
   const handlePlayerDeath = useCallback((gs) => {
+    // Dead Man's Hand: massive AOE + grant a free guardian angel (once per run)
+    if (gs?.deadMansHand && !gs.deadMansHandUsed) {
+      gs.deadMansHandUsed = true;
+      const dmhRadius = 250;
+      (gs.enemies || []).forEach(e => {
+        const d = Math.hypot(e.x - gs.player.x, e.y - gs.player.y);
+        if (d < dmhRadius) { e.health -= Math.floor(200 * (1 - d / dmhRadius)); e.hitFlash = 15; }
+      });
+      addParticles(gs, gs.player.x, gs.player.y, "#FFD700", 40);
+      addParticles(gs, gs.player.x, gs.player.y, "#FF4400", 25);
+      addParticles(gs, gs.player.x, gs.player.y, "#FFFFFF", 15);
+      addText(gs, gs.player.x, gs.player.y - 50, "💀 DEAD MAN'S HAND!", "#FFD700", true);
+      gs.screenShake = 25;
+      if (extraLivesRef.current === 0) { extraLivesRef.current = 1; setExtraLives(1); }
+    }
     if (extraLivesRef.current > 0) {
       extraLivesRef.current--; setExtraLives(extraLivesRef.current);
       const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
@@ -1090,7 +1105,8 @@ export default function CallOfDoodie() {
     if (js.active) { const dist = Math.hypot(js.dx, js.dy); if (dist > 5) { dx += js.dx / Math.max(dist, 50); dy += js.dy / Math.max(dist, 50); } }
     const len = Math.hypot(dx, dy);
     if (len > 0) { dx /= len; dy /= len; }
-    if (dashRef.current.active <= 0) { p.x += dx * p.speed; p.y += dy * p.speed; }
+    const _rushMult = (gs.adrenalineRushTimer || 0) > 0 ? 2.0 : 1.0;
+    if (dashRef.current.active <= 0) { p.x += dx * p.speed * _rushMult; p.y += dy * p.speed * _rushMult; }
     p.x = Math.max(20, Math.min(W - 20, p.x));
     p.y = Math.max(20, Math.min(H - 20, p.y));
     (gs.obstacles || []).forEach(ob => {
@@ -1321,6 +1337,23 @@ export default function CallOfDoodie() {
           const shieldMult = (e.typeIndex === 11) ? (angleDiff < Math.PI / 2 ? 0.20 : 1.60) : 1.0;
           const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * lastResortMult * shieldMult * (e.dmgMult || 1);
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
+          // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
+          if (gs.chainLightning && Math.random() < 0.20) {
+            const arcRange = 200;
+            let arcTarget = null, arcDist = arcRange;
+            gs.enemies.forEach(ne => {
+              if (ne !== e && ne.health > 0) {
+                const nd = Math.hypot(ne.x - e.x, ne.y - e.y);
+                if (nd < arcDist) { arcDist = nd; arcTarget = ne; }
+              }
+            });
+            if (arcTarget) {
+              const arcDmg = dmg * 0.5;
+              arcTarget.health -= arcDmg; arcTarget.hitFlash = 8; gs.totalDamage += arcDmg;
+              gs.lightningArcs = gs.lightningArcs || [];
+              gs.lightningArcs.push({ x1: e.x, y1: e.y, x2: arcTarget.x, y2: arcTarget.y, life: 8, maxLife: 8 });
+            }
+          }
           // Lifesteal
           if (perkModsRef.current.lifesteal) {
             p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal);
@@ -1377,6 +1410,12 @@ export default function CallOfDoodie() {
             if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
             addXp(pts); gs.killFlash = 6;
             if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
+            // Adrenaline Rush: kill while <30% HP → 2s double speed
+            if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
+              gs.adrenalineRushTimer = 120;
+              addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
+              addParticles(gs, p.x, p.y, "#FF6600", 12);
+            }
             gs.dyingEnemies = gs.dyingEnemies || [];
             if (gs.dyingEnemies.length < MAX_DYING_ANIM)
               gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
@@ -1732,6 +1771,8 @@ export default function CallOfDoodie() {
     if (gs.damageFlash > 0) gs.damageFlash--;
     if (gs.killFlash > 0) gs.killFlash--;
     if ((gs.bossKillFlash || 0) > 0) gs.bossKillFlash--;
+    if ((gs.adrenalineRushTimer || 0) > 0) gs.adrenalineRushTimer--;
+    if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
     frameCountRef.current++;
 
     // ────────────────── RENDER ──────────────────────────────────────────────

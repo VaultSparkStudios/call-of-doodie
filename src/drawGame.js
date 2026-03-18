@@ -475,6 +475,26 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   });
   ctx.globalAlpha = 1;
 
+  // Chain Lightning arcs
+  if (gs.lightningArcs && gs.lightningArcs.length > 0) {
+    gs.lightningArcs.forEach(arc => {
+      const alpha = arc.life / arc.maxLife;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = "#00E5FF"; ctx.shadowColor = "#00E5FF"; ctx.shadowBlur = 14; ctx.lineWidth = 2;
+      const ldx = arc.x2 - arc.x1, ldy = arc.y2 - arc.y1;
+      const steps = Math.max(3, Math.floor(Math.hypot(ldx, ldy) / 22));
+      ctx.beginPath(); ctx.moveTo(arc.x1, arc.y1);
+      for (let i = 1; i < steps; i++) {
+        const t = i / steps;
+        ctx.lineTo(arc.x1 + ldx * t + (Math.random() - 0.5) * 18, arc.y1 + ldy * t + (Math.random() - 0.5) * 18);
+      }
+      ctx.lineTo(arc.x2, arc.y2); ctx.stroke();
+      ctx.shadowBlur = 0; ctx.restore();
+    });
+    ctx.globalAlpha = 1;
+  }
+
   // Dying enemy animations
   (gs.dyingEnemies || []).forEach(de => {
     const t = de.life / de.maxLife; // 1→0
@@ -494,6 +514,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   const _blink = p.invincible > 0 && Math.floor(p.invincible / 3) % 2 === 0;
   if (_blink) ctx.globalAlpha = 0.35;
   if (dashRef.current.active > 0) { ctx.globalAlpha = _blink ? 0.35 : 0.68; ctx.shadowColor = "#00FFFF"; ctx.shadowBlur = 22; }
+  // Adrenaline Rush speed-burst glow ring
+  if ((gs.adrenalineRushTimer || 0) > 0) {
+    const _rA = 0.55 + Math.sin(dn / 55) * 0.3;
+    ctx.globalAlpha = _rA; ctx.strokeStyle = "#FF6600"; ctx.shadowColor = "#FF6600"; ctx.shadowBlur = 18; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
+  }
   // Legs (unrotated — bob south)
   const _lb = Math.sin(frameCountRef.current * 0.28) * 3.5;
   ctx.fillStyle = "#284A28";

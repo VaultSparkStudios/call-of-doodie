@@ -1,6 +1,6 @@
 # Latest Handoff
 
-Last updated: 2026-03-18 (Session 8 — full feature + test cycle)
+Last updated: 2026-03-18 (Session 9 — stub perk implementation)
 
 ## What was completed this session
 
@@ -88,26 +88,40 @@ This was a large feature + test session across two continuation commits.
 
 ## What is mid-flight
 
-3 stub perks with no game effect yet:
-- `adrenaline_rush` — trigger: kill while HP <30%, effect: 2s double speed
-- `chain_lightning` — trigger: any hit, 20% chance, arc to 1 nearby enemy at 50% damage
-- `dead_mans_hand` — trigger: on death, AOE explosion + activate guardian angel if available
+Nothing — all 3 formerly-stub perks are now fully implemented.
+
+## What was completed this session (Session 9)
+
+**Chain Lightning (App.jsx + drawGame.js)**
+- In bullet-enemy collision: after damage, if `gs.chainLightning && Math.random() < 0.20`, finds nearest enemy within 200px, deals 50% of hit damage, pushes `{ x1, y1, x2, y2, life:8 }` to `gs.lightningArcs`
+- Arc lifetimes decremented and filtered in the game loop timer block
+- drawGame.js: renders each arc as a jagged cyan line with glow (randomized zigzag per frame = natural flicker)
+
+**Adrenaline Rush (App.jsx + drawGame.js)**
+- Kill trigger: if `perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30` → sets `gs.adrenalineRushTimer = 120` (2s @ 60fps), shows "⚡ ADRENALINE!" text + orange particles
+- Movement: `const _rushMult = (gs.adrenalineRushTimer || 0) > 0 ? 2.0 : 1.0` applied to `p.speed` in the movement line (doesn't modify `p.speed` directly — avoids conflicts with level-up speed recalculation)
+- Timer decremented in the game loop timer block
+- drawGame.js: pulsing orange ring around player when rush active
+
+**Dead Man's Hand (App.jsx)**
+- In `handlePlayerDeath`, fires before the `extraLivesRef.current > 0` check
+- If `gs.deadMansHand && !gs.deadMansHandUsed`: 250px AOE deals up to 200 damage (linear falloff), gold+red particles, screen shake 25, sets `gs.deadMansHandUsed = true`
+- If player had no guardian angel, grants one free (`extraLivesRef.current = 1`) so the AOE explosion is paired with a second life — perk effectively guarantees one free death per run
 
 ## What to do next
 
-1. **Playtest** in browser — especially elite enemies at wave 12+, gamepad feel, Glass Jaw difficulty
-2. **Implement stub perks** — chain lightning is most impactful visually; adrenaline rush is most feel-good
-3. **Supabase callsign enforcement** — anonymous auth + RLS policy to lock names server-side
-4. **More weapons** — boomerang (bounces back), railgun (hitscan, penetrates all enemies)
+1. **Playtest** the 3 new perks — especially Dead Man's Hand as a "survival perk" at low HP
+2. **Supabase callsign enforcement** — anonymous auth + RLS policy to lock names server-side
+3. **More weapons** — boomerang (bounces back), railgun (hitscan, penetrates all enemies)
 
 ## Important constraints
 - `npm run build` must pass before any push
 - Vite base must stay `/call-of-doodie/` (lowercase) in vite.config.js
 - All game logic in single RAF loop in App.jsx — use refs, not state, for loop-internal values
 - drawGame.js is pure render — never call React setters inside it, never decrement gs fields inside it
-- bossKillFlash must be decremented in App.jsx game loop ONLY
+- bossKillFlash must be decremented in App.jsx game loop ONLY (adrenalineRushTimer and lightningArcs also decremented in that same block)
 - localStorage keys: `cod-lb-v5`, `cod-career-v1`, `cod-meta-v2`, `cod-missions-YYYY-MM-DD`, `cod-callsign-v1`, `cod-music-muted`, `cod-colorblind`, `cod-settings-v1`, `cod-presets-v1`
 - Supabase anon key is public (in JS bundle) — RLS policies are the only protection layer
 - Never commit .env.local (gitignored via *.local)
 - RPG (index 1) has no ricochet; all other weapons ricochet up to 10 times
-- Stub perk IDs in play: chain_lightning, adrenaline_rush, dead_mans_hand — check for these before treating perk apply as complete
+- `gs.adrenalineRushTimer` speed boost is a runtime multiplier on movement — do NOT modify `p.speed` directly for timed effects (level-up recalculates `p.speed` and would discard permanent changes)

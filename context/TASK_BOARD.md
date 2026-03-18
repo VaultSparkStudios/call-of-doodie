@@ -1,8 +1,7 @@
 # Task Board
 
 ## Now (playtest + polish)
-- Playtest session 8 additions: elite enemies (wave 10+), gamepad feel, new perks, boss warning timing, wave shop pacing
-- Implement full effects for 3 stub perks: Chain Lightning (arc 20% chance to 1 nearby enemy), Adrenaline Rush (2s double speed when kill at <30% HP), Dead Man's Hand (death explosion + guardian angel trigger)
+- Playtest all three implemented perks in-browser: Chain Lightning, Adrenaline Rush, Dead Man's Hand
 - Verify Glass Jaw balance — double damage taken is brutal; may need HP scaling or cooldown on perk offer at harder difficulties
 
 ## Next
@@ -10,7 +9,6 @@
 - More weapons: boomerang (returns to player), railgun (instant line hitscan, penetrates all)
 - End-of-wave boss scaling review at wave 40+ (ability spam at high prestige)
 - Gamepad: vibration/rumble on hit using Gamepad Haptics API
-- Chain Lightning visual (arc spark between enemies)
 
 ## Later
 - Leaderboard pagination (currently top 100 only)
@@ -22,6 +20,11 @@
 - Overclocked perk visual: heat gauge on HUD when perk active
 
 ## Done (this session)
+- ✅ Chain Lightning perk: 20% on-hit arc to nearest enemy (200px range, 50% dmg), cyan bolt visual
+- ✅ Adrenaline Rush perk: kill at <30% HP triggers 2s double speed + orange glow ring
+- ✅ Dead Man's Hand perk: on death → 250px AOE explosion (200 falloff dmg) + free guardian angel
+
+## Done (session 8)
 - ✅ Elite enemy variants (armored/fast/explosive) from wave 10+
 - ✅ Gamepad/controller full support with 🎮 HUD indicator
 - ✅ 8 new perks (5 in PERKS, 2 in CURSED_PERKS, 3 are stubs)
