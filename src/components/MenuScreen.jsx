@@ -517,27 +517,50 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
       {/* New Features Modal */}
       {showNewFeatures && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 460, width: "100%", border: "1px solid rgba(255,107,53,0.4)", padding: "20px 16px", color: "#fff" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+        <div
+          onClick={() => setShowNewFeatures(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 12px env(safe-area-inset-bottom,12px)", backdropFilter: "blur(4px)" }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ ...card, maxWidth: 460, width: "100%", border: "1px solid rgba(255,107,53,0.4)", padding: 0, color: "#fff", display: "flex", flexDirection: "column", maxHeight: "90dvh", overflow: "hidden" }}
+          >
+            {/* Sticky header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
               <h3 style={{ color: "#FF6B35", margin: 0, fontSize: 17, letterSpacing: 2 }}>✦ WHAT'S NEW</h3>
-              <button onClick={() => setShowNewFeatures(false)} style={{ background: "none", border: "none", color: "#666", fontSize: 18, cursor: "pointer", fontFamily: "monospace", lineHeight: 1 }}>✕</button>
+              <button
+                onClick={() => setShowNewFeatures(false)}
+                style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#CCC", fontSize: 16, cursor: "pointer", fontFamily: "monospace", lineHeight: 1, borderRadius: 6, width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center" }}
+                aria-label="Close"
+              >✕</button>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
-              {NEW_FEATURES.map((f, i) => (
-                <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4 }}>
-                  {f}
+
+            {/* Scrollable list with bottom fade hint */}
+            <div style={{ position: "relative", flex: 1, minHeight: 0 }}>
+              <div style={{ overflowY: "auto", WebkitOverflowScrolling: "touch", height: "100%", padding: "12px 16px 0" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: 12 }}>
+                  {NEW_FEATURES.map((f, i) => (
+                    <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4, flexShrink: 0 }}>
+                      {f}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+              {/* Fade gradient scroll hint */}
+              <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 32, background: "linear-gradient(to bottom, transparent, rgba(20,20,20,0.95))", pointerEvents: "none" }} />
             </div>
-            <button
-              onClick={handleShareFeatures}
-              disabled={sharing}
-              style={{ ...btnP, width: "100%", fontSize: 14, background: sharing ? "rgba(255,255,255,0.05)" : "linear-gradient(180deg,#FF6B35,#CC4400)", color: sharing ? "#555" : "#FFF" }}
-            >
-              {sharing ? "GENERATING..." : "📤 SHARE THIS UPDATE"}
-            </button>
-            <div style={{ fontSize: 10, color: "#444", textAlign: "center", marginTop: 8 }}>Generates a shareable image card · no login required</div>
+
+            {/* Sticky footer */}
+            <div style={{ padding: "12px 16px", borderTop: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
+              <button
+                onClick={handleShareFeatures}
+                disabled={sharing}
+                style={{ ...btnP, width: "100%", fontSize: 14, background: sharing ? "rgba(255,255,255,0.05)" : "linear-gradient(180deg,#FF6B35,#CC4400)", color: sharing ? "#555" : "#FFF" }}
+              >
+                {sharing ? "GENERATING..." : "📤 SHARE THIS UPDATE"}
+              </button>
+              <div style={{ fontSize: 10, color: "#444", textAlign: "center", marginTop: 8 }}>Generates a shareable image card · no login required</div>
+            </div>
           </div>
         </div>
       )}
