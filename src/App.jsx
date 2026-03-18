@@ -399,13 +399,13 @@ export default function CallOfDoodie() {
     let _ws = seed;
     const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
     const SPAWN_SAFE = 115;
-    const wallCount = 4 + Math.floor(_sr() * 3); // 4–6 walls
+    const wallCount = 3 + Math.floor(_sr() * 4); // 3–6 walls
     const walls = [];
-    // Divide arena into 3×2 grid; shuffle zones so walls are spread across the full map
-    const COLS = 3, ROWS = 2;
-    const gwZ = w * 0.84 / COLS, ghZ = h * 0.84 / ROWS;
-    const zOrder = [0, 1, 2, 3, 4, 5];
-    for (let _i = 5; _i > 0; _i--) {
+    // Divide arena into 4×3 grid for wider, more random spread across the full map
+    const COLS = 4, ROWS = 3;
+    const gwZ = w * 0.90 / COLS, ghZ = h * 0.90 / ROWS;
+    const zOrder = [0,1,2,3,4,5,6,7,8,9,10,11];
+    for (let _i = 11; _i > 0; _i--) {
       const _j = Math.floor(_sr() * (_i + 1));
       const _t = zOrder[_i]; zOrder[_i] = zOrder[_j]; zOrder[_j] = _t;
     }
@@ -446,13 +446,15 @@ export default function CallOfDoodie() {
     gsRef.current.terrain = terrain;
 
     // Map theme + floor zones + props
-    const mapTheme = Math.floor(_sr() * 4); // 0=office 1=bunker 2=factory 3=ruins
+    const mapTheme = Math.floor(_sr() * 6); // 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest
     gsRef.current.mapTheme = mapTheme;
     const THEME_PROPS = [
-      ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️"], // office
-      ["📦","🪖","🔦","⛽","🪝","🗝️","🧱","🪜"], // bunker
-      ["⚙️","🔧","🔩","⛽","📦","🪛","🏭","🔌"], // factory
-      ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴"], // ruins
+      ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️"],       // office
+      ["📦","🪖","🔦","⛽","🪝","🗝️","🧱","🪜"],       // bunker
+      ["⚙️","🔧","🔩","⛽","📦","🪛","🏭","🔌"],       // factory
+      ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴"],     // ruins
+      ["🌵","🏜️","🦂","🪨","⛺","🐍","🦎","☀️"],     // desert
+      ["🌲","🌿","🍄","🦊","🐾","🌱","🪵","🦋"],       // forest
     ];
     // Floor zones: large irregular colored patches for visual variety
     const floorZones = [];
@@ -1472,17 +1474,26 @@ export default function CallOfDoodie() {
     ctx.save();
     if (gs.screenShake > 0.5) ctx.translate((Math.random() - 0.5) * gs.screenShake * 2, (Math.random() - 0.5) * gs.screenShake * 2);
 
-    // Background
+    // Background — per-theme gradient
+    const THEME_BG = [
+      ["#1e1e3a","#0e0e1a"], // office: dark indigo
+      ["#0c1e0c","#060e06"], // bunker: deep military green
+      ["#201508","#100a04"], // factory: dark amber
+      ["#1a1008","#0a0804"], // ruins: dark sepia
+      ["#261808","#140c04"], // desert: deep warm ochre
+      ["#081a0c","#040e06"], // forest: deep forest green
+    ];
+    const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : (THEME_BG[gs.mapTheme] || THEME_BG[0]);
     const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
-    bgGrad.addColorStop(0, gs.bossWave ? "#1a0000" : "#1e1e3a");
-    bgGrad.addColorStop(1, gs.bossWave ? "#0e0000" : "#0e0e1a");
+    bgGrad.addColorStop(0, bgC0);
+    bgGrad.addColorStop(1, bgC1);
     ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
 
     // ── Floor zone panels (room sections with tile grid, themed per run) ──
-    const FZ_FILL = ["rgba(62,55,92,", "rgba(35,62,35,", "rgba(60,54,36,", "rgba(72,46,22,"];
-    const FZ_TILE = ["rgba(88,76,125,", "rgba(50,85,50,", "rgba(82,74,48,", "rgba(98,62,28,"];
-    const fzFill = gs.bossWave ? "rgba(82,22,22," : FZ_FILL[gs.mapTheme || 0];
-    const fzTile = gs.bossWave ? "rgba(112,30,30," : FZ_TILE[gs.mapTheme || 0];
+    const FZ_FILL = ["rgba(62,55,92,","rgba(35,62,35,","rgba(60,54,36,","rgba(72,46,22,","rgba(90,68,30,","rgba(28,62,28,"];
+    const FZ_TILE = ["rgba(88,76,125,","rgba(50,85,50,","rgba(82,74,48,","rgba(98,62,28,","rgba(125,95,42,","rgba(42,90,42,"];
+    const fzFill = gs.bossWave ? "rgba(82,22,22," : (FZ_FILL[gs.mapTheme] || FZ_FILL[0]);
+    const fzTile = gs.bossWave ? "rgba(112,30,30," : (FZ_TILE[gs.mapTheme] || FZ_TILE[0]);
     (gs.floorZones || []).forEach(fz => {
       ctx.save(); ctx.translate(fz.x, fz.y); ctx.rotate(fz.rot);
       const ba = fz.alpha * 2.8 * (gs.bossWave ? 0.75 : 1);
@@ -1503,15 +1514,23 @@ export default function CallOfDoodie() {
     });
 
     // ── Terrain decorations (floor level, below grid) ──
+    const TC = gs.bossWave ? { s:"#3a0808",c:"rgba(90,20,20,0.30)",r:"#4a2020",t:"#2a0a0a" } : [
+      { s:"#1c1c3c", c:"rgba(70,70,115,0.28)",  r:"#2a2a4e", t:"#20203e" }, // office
+      { s:"#0c200c", c:"rgba(40,100,40,0.28)",   r:"#182818", t:"#122012" }, // bunker
+      { s:"#201408", c:"rgba(100,88,40,0.28)",   r:"#281a08", t:"#1e1408" }, // factory
+      { s:"#1a1008", c:"rgba(90,65,35,0.28)",    r:"#241808", t:"#1a1208" }, // ruins
+      { s:"#201408", c:"rgba(120,92,42,0.28)",   r:"#2a1a08", t:"#201408" }, // desert
+      { s:"#0a1c0a", c:"rgba(38,90,38,0.28)",    r:"#101e10", t:"#0a160a" }, // forest
+    ][gs.mapTheme] || { s:"#1c1c3c",c:"rgba(70,70,115,0.28)",r:"#2a2a4e",t:"#20203e" };
     (gs.terrain || []).forEach(t => {
       ctx.save();
       ctx.translate(t.x, t.y);
       if (t.type === 0) { // stain / puddle
         ctx.globalAlpha = 0.09;
-        ctx.fillStyle = gs.bossWave ? "#3a0808" : "#1c1c3c";
+        ctx.fillStyle = TC.s;
         ctx.beginPath(); ctx.ellipse(0, 0, t.size, t.size * 0.55, t.rot, 0, Math.PI * 2); ctx.fill();
       } else if (t.type === 1) { // floor cracks
-        ctx.strokeStyle = gs.bossWave ? "rgba(90,20,20,0.30)" : "rgba(70,70,115,0.28)";
+        ctx.strokeStyle = TC.c;
         ctx.lineWidth = 1;
         [[t.rot, t.size * 0.9], [t.rot + 2.1, t.size * 0.6], [t.rot + 3.9, t.size * 0.45]].forEach(([a, l]) => {
           ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * l, Math.sin(a) * l); ctx.stroke();
@@ -1520,7 +1539,7 @@ export default function CallOfDoodie() {
         });
       } else if (t.type === 2) { // rubble / debris dots
         ctx.globalAlpha = 0.18;
-        ctx.fillStyle = gs.bossWave ? "#4a2020" : "#2a2a4e";
+        ctx.fillStyle = TC.r;
         for (let di = 0; di < 5; di++) {
           const da = t.rot + di * 1.26, dr = t.size * (0.28 + Math.abs(Math.sin(di * 2.3)) * 0.25);
           const ds = 1.5 + Math.abs(Math.sin(di + t.rot)) * 3;
@@ -1528,7 +1547,7 @@ export default function CallOfDoodie() {
         }
       } else { // worn tile / scuff mark
         ctx.globalAlpha = 0.07;
-        ctx.fillStyle = gs.bossWave ? "#2a0a0a" : "#20203e";
+        ctx.fillStyle = TC.t;
         ctx.save(); ctx.rotate(t.rot);
         ctx.fillRect(-t.size * 0.5, -t.size * 0.3, t.size, t.size * 0.6);
         ctx.restore();
@@ -1547,16 +1566,32 @@ export default function CallOfDoodie() {
       ctx.globalAlpha = 1; ctx.restore();
     });
 
-    ctx.strokeStyle = gs.bossWave ? "rgba(180,50,50,0.08)" : "rgba(100,100,180,0.06)";
+    const GRID_CLR = gs.bossWave ? "rgba(180,50,50,0.08)" : [
+      "rgba(100,100,180,0.06)", // office
+      "rgba(55,120,55,0.06)",   // bunker
+      "rgba(140,115,55,0.06)",  // factory
+      "rgba(120,85,45,0.06)",   // ruins
+      "rgba(160,125,55,0.06)",  // desert
+      "rgba(45,120,45,0.06)",   // forest
+    ][gs.mapTheme] || "rgba(100,100,180,0.06)";
+    const BORDER_CLR = gs.bossWave ? null : [
+      "rgba(80,80,220,",  // office
+      "rgba(55,160,55,",  // bunker
+      "rgba(175,145,55,", // factory
+      "rgba(155,110,55,", // ruins
+      "rgba(200,155,55,", // desert
+      "rgba(55,165,55,",  // forest
+    ][gs.mapTheme] || "rgba(80,80,220,";
+    ctx.strokeStyle = GRID_CLR;
     ctx.lineWidth = 1;
     for (let gx = 0; gx < W; gx += 50) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
     for (let gy = 0; gy < H; gy += 50) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
 
     // Arena border
     const bPulse = 0.25 + Math.sin(Date.now() / 900) * 0.12;
-    ctx.strokeStyle = gs.bossWave ? `rgba(255,60,60,${bPulse})` : `rgba(80,80,220,${bPulse})`;
+    ctx.strokeStyle = gs.bossWave ? `rgba(255,60,60,${bPulse})` : `${BORDER_CLR}${bPulse})`;
     ctx.lineWidth = 3; ctx.strokeRect(4, 4, W - 8, H - 8); ctx.lineWidth = 1;
-    const cSz = 18; ctx.strokeStyle = gs.bossWave ? "#FF5555" : "#8888FF";
+    const cSz = 18; ctx.strokeStyle = gs.bossWave ? "#FF5555" : (BORDER_CLR + "0.9)");
     [[4,4,1,1],[W-4,4,-1,1],[4,H-4,1,-1],[W-4,H-4,-1,-1]].forEach(([cx,cy,sx,sy]) => {
       ctx.beginPath(); ctx.moveTo(cx + sx*cSz, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy*cSz); ctx.stroke();
     });
@@ -1600,14 +1635,16 @@ export default function CallOfDoodie() {
 
     // Obstacles — themed, floor shadow + 3D top-left highlight + internal stripes
     const WALL_T = [
-      ["rgba(50,50,90,0.95)", "rgba(105,105,190,0.75)", "#6060CC", [88,88,155]],   // office
-      ["rgba(30,56,30,0.95)", "rgba(65,125,65,0.75)",   "#42AA42", [52,102,52]],   // bunker
-      ["rgba(56,50,34,0.95)", "rgba(125,110,68,0.75)",  "#A89540", [102,88,52]],   // factory
-      ["rgba(66,44,22,0.95)", "rgba(140,100,55,0.75)",  "#B88440", [115,78,40]],   // ruins
+      ["rgba(50,50,90,0.95)",  "rgba(105,105,190,0.75)", "#6060CC", [88,88,155]],   // office
+      ["rgba(30,56,30,0.95)",  "rgba(65,125,65,0.75)",   "#42AA42", [52,102,52]],   // bunker
+      ["rgba(56,50,34,0.95)",  "rgba(125,110,68,0.75)",  "#A89540", [102,88,52]],   // factory
+      ["rgba(66,44,22,0.95)",  "rgba(140,100,55,0.75)",  "#B88440", [115,78,40]],   // ruins
+      ["rgba(90,72,38,0.95)",  "rgba(178,148,85,0.75)",  "#C8A855", [148,120,65]],  // desert: sand/sandstone
+      ["rgba(24,54,24,0.95)",  "rgba(52,115,52,0.75)",   "#368A36", [44,90,44]],    // forest: bark green
     ];
     const wt = gs.bossWave
       ? ["rgba(76,20,20,0.95)", "rgba(165,45,45,0.75)", "#CC3030", [135,32,32]]
-      : WALL_T[gs.mapTheme || 0];
+      : (WALL_T[gs.mapTheme] || WALL_T[0]);
     (gs.obstacles || []).forEach(ob => {
       // Cast shadow
       ctx.fillStyle = "rgba(0,0,0,0.32)"; ctx.fillRect(ob.x + 5, ob.y + 5, ob.w, ob.h);
