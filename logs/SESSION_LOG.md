@@ -4,6 +4,57 @@ Chronological record of all AI-assisted sessions.
 
 ---
 
+## 2026-03-18 — Session 8 (Claude Sonnet 4.6)
+
+**Focus:** Full feature + test cycle — elite enemies, gamepad, perks, wave shop, boss telegraphing, render refactor, PWA, two-pass code review with bug fixes
+
+**Completed:**
+
+*Features:*
+- Elite enemy variants (wave 10+): armored (dmgMult 0.45, +50% HP), fast (2× speed, 0.75× size), explosive (chain AOE 85px/35dmg on death) — distinct colored rings in render
+- Gamepad/controller support: left stick=move, right stick=aim+fire, A=dash, B=grenade, LB/RB=weapon cycle, Start=pause. 🎮 HUD indicator. Edge-triggered buttons. Cleanup on unmount.
+- 8 new perks: tungsten_rounds, scavenger, overclocked (all fully implemented); glass_jaw, paranoia (cursed, fully implemented); adrenaline_rush, chain_lightning, dead_mans_hand (stubs — in perk pool, effects pending)
+- Wave shop: every wave 1–4, then every 2nd wave from wave 5+ (boss waves unchanged)
+- Boss ability telegraphing: 60-frame orange pulsing ring before bullet ring, 90-frame red warning circle before ground slam
+- drawGame.js extracted (~620 lines) — render decoupled from game loop; App.jsx ~1150 lines now
+- PWA: manifest.json + sw.js + SVG icon + SW registration in index.html
+- Settings panel desc subtitles on every setting
+- soundUIOpen/soundUIClose added to sounds.js
+- Seed replay button on death screen (🔄 REPLAY #seed)
+- 5 distinct music vibes (Chill/Action/Intense/Retro/Spooky) with separate BPM and beat functions
+- Custom seed input on menu screen; mobile pause button (⏸)
+- "Rage Quit" button in PauseMenu; grenade hotkey Q/G only (removed 5 conflict)
+- NEW_FEATURES changelog updated with 7 new entries
+
+*Bug fixes (found via two-pass automated code review):*
+- bossKillFlash-- moved from drawGame.js to App.jsx (was causing double-decrement risk)
+- PWA manifest data URI icon → file-based SVG (browsers reject data URIs in manifests)
+- soundUIClose dead import removed from PauseMenu
+- Scavenger perk: current weapon ammo overwrite fixed (partial restore now preserved)
+- Glass Jaw: kamikaze and ground slam damage now correctly doubled
+- Gamepad: setGamepadConnected throttled to only fire on connection state change
+
+**Key commits:** `d5ff539`, `8498828`, `bbc59cc`, `ea4f054`
+
+**Files changed:**
+- `src/App.jsx` — gamepad refs+polling, elite variants, glassjaw/overclocked/scavenger effects, boss telegraphing timers, wave shop condition, bug fixes throughout
+- `src/drawGame.js` — new file (~620 lines), extracted render + elite rings + boss warning visuals
+- `src/sounds.js` — soundUIOpen, soundUIClose, 5 music vibe functions (MUSIC_VIBES, getMusicVibe, setMusicVibe)
+- `src/settings.js` — new file, SETTINGS_DEFAULTS, loadSettings/saveSettings, loadPresets/savePresets
+- `src/constants.js` — 8 new perks, 2 new cursed perks, 7 new NEW_FEATURES entries
+- `src/components/SettingsPanel.jsx` — new file, full settings panel with tabs/sliders/presets/desc
+- `src/components/DeathScreen.jsx` — seed replay button, GIF highlight props
+- `src/components/HUD.jsx` — mobile pause button, 🎮 gamepad indicator
+- `src/components/PauseMenu.jsx` — settings button, music vibes, rage quit, soundUIOpen, Q/G grenade
+- `src/components/MenuScreen.jsx` — settings button, custom seed input
+- `src/components/LeaderboardPanel.jsx` — difficulty filter tabs (had already existed)
+- `public/manifest.json` — new file
+- `public/sw.js` — new file
+- `public/icon.svg` — new file
+- `index.html` — manifest link, SW registration
+
+---
+
 ## 2026-03-12 — Session 6 (Claude Sonnet 4.6)
 
 **Focus:** Performance fixes, boss scaling, Supabase integration, wall randomization, bullet ricochet, enemy-wall collision, leaderboard upgrades
