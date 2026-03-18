@@ -2,13 +2,14 @@
 
 Build status:
 - Build: passing (`npm run build` clean)
-- Latest commit: `ea4f054` — pushed and deploying
+- Latest commit: `5372ab8` — session 9 changes
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
-- Branch: `main`, fully committed and pushed
+- Branch: `main`, needs push to deploy
 
 Current priorities:
-1. Playtest all new perks + weapons in-browser
-2. Run Supabase SQL migration (callsign_claims table + updated leaderboard RLS) in console to activate server-side callsign enforcement
+1. Push main to trigger deploy
+2. Playtest synergies, heat gauge, streak bonus, new sounds
+3. Run Supabase SQL migration (callsign_claims table + updated leaderboard RLS) in console
 
 Known issues:
 - Boss ground slam: random initial stagger (0–179 frames) can shorten the 90-frame warning window on the very first slam cycle
@@ -16,13 +17,14 @@ Known issues:
 - ID "scavenger" exists in both PERKS and META_UPGRADES arrays — no runtime collision, naming hazard only
 - Callsign locking is localStorage-only (no server-side enforcement — RLS still allows any name)
 - starterLoadout column in Supabase only populates on future score submissions (old rows show no loadout badge)
-- Mobile action bar may be tight with 6 weapons on very small screens
 
 Architecture:
-- App.jsx: ~1150 lines (render extracted to drawGame.js in session 8)
+- App.jsx: ~1450 lines (render extracted to drawGame.js in session 8)
 - drawGame.js: ~620 lines — pure render, no React setters. Called once per frame from gameLoop
 - drawGame signature: `drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx })`
-- bossKillFlash is decremented in App.jsx game loop ONLY — not inside drawGame (bug fixed this session)
+- bossKillFlash is decremented in App.jsx game loop ONLY — not inside drawGame (bug fixed session 8)
+- gs.waveStreak: tracks consecutive wave clears without dying; reset in handlePlayerDeath
+- gs.sharedAbilityCooldown on boss entities: prevents multiple abilities firing simultaneously
 
 Backend:
 - Supabase global leaderboard live (`fjnpzjjyhnpmunfoycrp.supabase.co`)
