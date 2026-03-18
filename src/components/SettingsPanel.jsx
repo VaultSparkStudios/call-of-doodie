@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../settings.js";
+import { soundUIClose } from "../sounds.js";
 
 const TABS = ["Gameplay", "Visual", "Controls"];
 
 const META = {
-  enemySpawnMult:    { label: "Enemy Spawn Rate",     tab: "Gameplay", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  enemyHealthMult:   { label: "Enemy Health",          tab: "Gameplay", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  enemySpeedMult:    { label: "Enemy Speed",           tab: "Gameplay", type: "slider", min: 0.5,  max: 1.5, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  playerSpeedMult:   { label: "Player Speed",          tab: "Gameplay", type: "slider", min: 0.75, max: 1.5, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  xpGainMult:        { label: "XP Gain Rate",          tab: "Gameplay", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  pickupMagnet:      { label: "Pickup Magnet Range",   tab: "Gameplay", type: "slider", min: 1.0,  max: 4.0, step: 0.5,  fmt: v => v === 1 ? "Normal" : `${v.toFixed(1)}×` },
-  screenShakeMult:   { label: "Screen Shake",          tab: "Visual",   type: "slider", min: 0.0,  max: 2.0, step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  particlesMult:     { label: "Particles",             tab: "Visual",   type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
-  crosshair:         { label: "Crosshair Style",       tab: "Visual",   type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
-  showDPS:           { label: "Show DPS Counter",      tab: "Visual",   type: "toggle" },
-  grenadeRadiusMult: { label: "Grenade Blast Radius",  tab: "Controls", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  autoReload:        { label: "Auto Reload on Empty",  tab: "Controls", type: "toggle" },
+  enemySpawnMult:    { label: "Enemy Spawn Rate",     desc: "How frequently enemies appear each wave",          tab: "Gameplay", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  enemyHealthMult:   { label: "Enemy Health",          desc: "Scales all enemy HP — lower = faster kills",      tab: "Gameplay", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  enemySpeedMult:    { label: "Enemy Speed",           desc: "How fast enemies move toward you",                tab: "Gameplay", type: "slider", min: 0.5,  max: 1.5, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  playerSpeedMult:   { label: "Player Speed",          desc: "Your soldier's movement speed",                   tab: "Gameplay", type: "slider", min: 0.75, max: 1.5, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  xpGainMult:        { label: "XP Gain Rate",          desc: "XP from kills — levels up faster at higher values",tab: "Gameplay", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  pickupMagnet:      { label: "Pickup Magnet Range",   desc: "Auto-collect radius for health, ammo & upgrades", tab: "Gameplay", type: "slider", min: 1.0,  max: 4.0, step: 0.5,  fmt: v => v === 1 ? "Normal" : `${v.toFixed(1)}×` },
+  screenShakeMult:   { label: "Screen Shake",          desc: "Camera shake intensity on hits & explosions",     tab: "Visual",   type: "slider", min: 0.0,  max: 2.0, step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  particlesMult:     { label: "Particles",             desc: "Explosion & death particle density — affects performance", tab: "Visual", type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
+  crosshair:         { label: "Crosshair Style",       desc: "Visual style of your aiming cursor",              tab: "Visual",   type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
+  showDPS:           { label: "Show DPS Counter",      desc: "Display live damage-per-second on the canvas",    tab: "Visual",   type: "toggle" },
+  grenadeRadiusMult: { label: "Grenade Blast Radius",  desc: "Explosion size — bigger = more enemies hit",      tab: "Controls", type: "slider", min: 0.5,  max: 2.0, step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  autoReload:        { label: "Auto Reload on Empty",  desc: "Automatically reload when magazine hits zero",    tab: "Controls", type: "toggle" },
 };
 
 export default function SettingsPanel({ settings, onSave, onClose }) {
@@ -28,7 +29,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
   const set = (k, v) => setW(prev => ({ ...prev, [k]: v }));
   const val = k => w[k] ?? SETTINGS_DEFAULTS[k];
 
-  const apply = () => { saveSettings(w); onSave(w); onClose(); };
+  const apply = () => { saveSettings(w); onSave(w); soundUIClose(); onClose(); };
 
   const doSavePreset = () => {
     const name = nameInput.trim(); if (!name) return;
@@ -66,10 +67,11 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {tabEntries.map(([key, meta]) => (
               <div key={key}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 7, fontSize: 12, color: "#CCC" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: "#CCC" }}>
                   <span>{meta.label}</span>
                   {meta.type === "slider" && <span style={{ color: "#FF6B35", fontWeight: 700, minWidth: 60, textAlign: "right", fontFamily: "monospace", fontSize: 11 }}>{meta.fmt(val(key))}</span>}
                 </div>
+                {meta.desc && <div style={{ fontSize: 10, color: "#555", marginBottom: 7, lineHeight: 1.3 }}>{meta.desc}</div>}
                 {meta.type === "slider" && (
                   <input type="range" min={meta.min} max={meta.max} step={meta.step} value={val(key)}
                     onChange={e => set(key, parseFloat(e.target.value))}

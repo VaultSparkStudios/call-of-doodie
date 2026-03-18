@@ -144,6 +144,15 @@ export function soundPerkSelect() {
   tone(880, 0.2, "sine", 0.06, null, 0.18);
 }
 
+export function soundUIOpen() {
+  tone(800, 0.06, "square", 0.04, 1000);
+  tone(1200, 0.05, "triangle", 0.03, null, 0.05);
+}
+
+export function soundUIClose() {
+  tone(1000, 0.05, "square", 0.04, 700);
+}
+
 // ===== BACKGROUND MUSIC =====
 // Procedural 8-beat loop — kicks, snares, hats, bass. No audio files.
 let _musicActive = false;

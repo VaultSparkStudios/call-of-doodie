@@ -1,0 +1,21 @@
+{
+  "name": "Call of Doodie: Modern Warfare on Mom's WiFi",
+  "short_name": "Call of Doodie",
+  "description": "A browser-based top-down shooter parody game. Survive waves of Karens and HOA presidents!",
+  "start_url": "/call-of-doodie/",
+  "scope": "/call-of-doodie/",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a0a0a' rx='24'/><text y='130' x='96' font-size='120' text-anchor='middle'>💣</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "lang": "en-US"
+}
