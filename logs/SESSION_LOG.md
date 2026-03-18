@@ -4,6 +4,49 @@ Chronological record of all AI-assisted sessions.
 
 ---
 
+## 2026-03-18 — Session 10 (Claude Sonnet 4.6)
+
+**Focus:** Gamepad haptics and ambient room tone audio
+
+**Completed:**
+
+*Features:*
+- Gamepad vibration/rumble via Vibration Actuator API (Chrome 68+): `rumbleGamepad(weak, strong, ms)` module-level helper; 8 distinct rumble events — enemy hit (40ms), crit hit (80ms), player bullet damage (100ms), enemy contact (120ms), rent nuke/ground slam (150ms), kamikaze explosion (200ms), boss kill (500ms), player death (600ms)
+- Ambient room tone: `startAmbient(themeIndex)` / `stopAmbient()` in sounds.js; 6 procedural themes (office HVAC, bunker drone, factory machinery, ruins wind+drip, desert wind+shimmer, forest crickets); runs as independent timer loop alongside background music at low volume (0.004–0.018 vol range)
+
+**Key commit:** `53ac0c5`
+
+**Files changed:**
+- `src/App.jsx` — `rumbleGamepad` helper + 8 rumble call sites; `startAmbient`/`stopAmbient` imports + call sites alongside `startMusic`/`stopMusic`
+- `src/sounds.js` — `startAmbient`, `stopAmbient`, `_tickAmbient`, `_playAmbientTick`, 6 ambient theme functions, `_AMBIENT_TICK` intervals array
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md` — updated
+
+---
+
+## 2026-03-18 — Session 9 (Claude Sonnet 4.6)
+
+**Focus:** Perk synergies, boss scaling, new weapon sounds, daily mission types, heat gauge, wave streak bonus
+
+**Completed:**
+
+*Features:*
+- Perk synergies: Storm Vampire (chain_lightning+vampire → lifesteal+chain together), Pyro Grenadier (grenadier+pyromaniac → grenade damage ×1.5), Dead Eye (eagle_eye+penetrator → +15% crit+pierce)
+- Boss scaling at wave 30+/40+: `gs.sharedAbilityCooldown = 120` after any ability fires; bullet ring + ground slam timers scale ×1.2 (wave 30+) or ×1.4 (wave 40+)
+- Weapon sounds: Boomerang WHOOSH (sawtooth sweep 600→180Hz + noise), Railgun CRACK (noise burst + 3200→700Hz sawtooth)
+- 4 new daily mission types: perk_collector (pick N perks), nuke_user (use N nukes), high_roller (score N pts), arms_race (collect N weapon upgrades)
+- Overclocked heat gauge: HUD bar 0–20 shot heat, color ramp yellow→orange→red, shown only when overclocked perk active
+- Wave streak bonus: consecutive wave clears without dying tracked in `gs.waveStreak`; ≥3 shows "🔥 STREAK ×N" badge in HUD + score bonus 200×(streak-2) per wave clear
+
+**Key commits:** `5372ab8`, `1f4d40f`
+
+**Files changed:**
+- `src/App.jsx` — perk synergy detection in applyPerk, boss ability timer scaling, checkDailyMissions tracking for 4 new types, waveStreak increment/reset/bonus
+- `src/sounds.js` — case 8 (boomerang) and case 9 (railgun) in soundShoot()
+- `src/components/HUD.jsx` — heat gauge bar, wave streak badge
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md` — updated
+
+---
+
 ## 2026-03-18 — Session 8 (Claude Sonnet 4.6)
 
 **Focus:** Full feature + test cycle — elite enemies, gamepad, perks, wave shop, boss telegraphing, render refactor, PWA, two-pass code review with bug fixes

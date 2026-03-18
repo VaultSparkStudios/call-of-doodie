@@ -2,13 +2,13 @@
 
 Build status:
 - Build: passing (`npm run build` clean)
-- Latest commit: session 10 changes
+- Latest commit: `53ac0c5` — Session 10: gamepad rumble and ambient room tone
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
 - Branch: `main`, needs push to deploy
 
 Current priorities:
 1. Push main to trigger deploy
-2. Playtest gamepad rumble + ambient sounds
+2. Playtest gamepad rumble + ambient sounds in-browser (Chrome required for rumble)
 3. Run Supabase SQL migration (callsign_claims table + updated leaderboard RLS) in console
 
 Known issues:
@@ -17,15 +17,17 @@ Known issues:
 - ID "scavenger" exists in both PERKS and META_UPGRADES arrays — no runtime collision, naming hazard only
 - Callsign locking is localStorage-only (no server-side enforcement — RLS still allows any name)
 - starterLoadout column in Supabase only populates on future score submissions (old rows show no loadout badge)
+- Gamepad rumble requires Chrome 68+ / Vibration Actuator API support; silent no-op on Firefox/Safari
 
 Architecture:
-- App.jsx: ~1470 lines (render extracted to drawGame.js in session 8)
+- App.jsx: ~1475 lines (render extracted to drawGame.js in session 8)
 - drawGame.js: ~620 lines — pure render, no React setters. Called once per frame from gameLoop
 - drawGame signature: `drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx })`
 - bossKillFlash is decremented in App.jsx game loop ONLY — not inside drawGame (bug fixed session 8)
 - gs.waveStreak: tracks consecutive wave clears without dying; reset in handlePlayerDeath
 - gs.sharedAbilityCooldown on boss entities: prevents multiple abilities firing simultaneously
-- `rumbleGamepad(weak, strong, ms)` — module-level helper in App.jsx using Gamepad Haptics API
+- `rumbleGamepad(weak, strong, ms)` — module-level helper before buildFlowField; calls gp.vibrationActuator.playEffect
+- `startAmbient(themeIndex)` / `stopAmbient()` — in sounds.js; independent setInterval loop alongside music
 
 Backend:
 - Supabase global leaderboard live (`fjnpzjjyhnpmunfoycrp.supabase.co`)
