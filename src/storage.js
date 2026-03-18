@@ -42,14 +42,14 @@ export async function claimCallsign(name) {
 
 const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
 
-export async function loadLeaderboard() {
+export async function loadLeaderboard(offset = 0, limit = 50) {
   if (supabase) {
     try {
       const { data, error } = await supabase
         .from("leaderboard")
         .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts")
         .order("score", { ascending: false })
-        .limit(100);
+        .range(offset, offset + limit - 1);
       if (error) throw error;
       return data || [];
     } catch (err) {
@@ -59,7 +59,8 @@ export async function loadLeaderboard() {
   // Fallback: localStorage
   try {
     const raw = localStorage.getItem(LB_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const all = raw ? JSON.parse(raw) : [];
+    return all.slice(offset, offset + limit);
   } catch { return []; }
 }
 
@@ -138,6 +139,8 @@ const MISSION_DEFS = [
   { id: "nuke_user",     icon: "☢️",  make: (n) => ({ text: `Use ${n} tactical nuke${n>1?"s":""}`,   goal: n, track: "nukes"         }) },
   { id: "high_roller",   icon: "🎰",  make: (n) => ({ text: `Score ${n.toLocaleString()} points`,    goal: n, track: "score"         }) },
   { id: "arms_race",     icon: "🔧",  make: (n) => ({ text: `Collect ${n} weapon upgrade${n>1?"s":""}`, goal: n, track: "weaponUpgradesCollected" }) },
+  { id: "no_hit_wave",   icon: "🛡️", make: (n) => ({ text: `Clear ${n} wave${n>1?"s":""} without taking damage`, goal: n, track: "noHitWaves" }) },
+  { id: "single_weapon", icon: "🎯",  make: (n) => ({ text: `Get ${n} kills with a single weapon`,            goal: n, track: "singleWeaponKills" }) },
 ];
 const MISSION_PARAMS = {
   kill_any: [15,20,25], reach_wave: [5,6,7], combo: [5,8,10],
@@ -145,6 +148,7 @@ const MISSION_PARAMS = {
   grenade_kills: [3,5,8], survive: [60,90,120],
   boss_kills: [1,2,3], killstreak: [5,8,10], dash_kills: [3,5,8],
   perk_collector: [3,5,7], nuke_user: [1,2,3], high_roller: [5000,10000,25000], arms_race: [1,2,3],
+  no_hit_wave: [1,2,3], single_weapon: [5,10,20],
 };
 function lcg(s) { return Math.abs((Math.imul(s, 1664525) + 1013904223) | 0); }
 

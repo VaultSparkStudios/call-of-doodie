@@ -16,6 +16,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ["#1a1008","#0a0804"], // ruins: dark sepia
     ["#261808","#140c04"], // desert: deep warm ochre
     ["#081a0c","#040e06"], // forest: deep forest green
+    ["#060010","#020008"], // space: deep black-purple
+    ["#0a1220","#050a14"], // arctic: cold midnight blue
   ];
   const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : (THEME_BG[gs.mapTheme] || THEME_BG[0]);
   const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
@@ -24,8 +26,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
 
   // ── Floor zone panels (room sections with tile grid, themed per run) ──
-  const FZ_FILL = ["rgba(62,55,92,","rgba(35,62,35,","rgba(60,54,36,","rgba(72,46,22,","rgba(90,68,30,","rgba(28,62,28,"];
-  const FZ_TILE = ["rgba(88,76,125,","rgba(50,85,50,","rgba(82,74,48,","rgba(98,62,28,","rgba(125,95,42,","rgba(42,90,42,"];
+  const FZ_FILL = ["rgba(62,55,92,","rgba(35,62,35,","rgba(60,54,36,","rgba(72,46,22,","rgba(90,68,30,","rgba(28,62,28,","rgba(25,12,55,","rgba(40,60,90,"];
+  const FZ_TILE = ["rgba(88,76,125,","rgba(50,85,50,","rgba(82,74,48,","rgba(98,62,28,","rgba(125,95,42,","rgba(42,90,42,","rgba(70,35,155,","rgba(65,100,148,"];
   const fzFill = gs.bossWave ? "rgba(82,22,22," : (FZ_FILL[gs.mapTheme] || FZ_FILL[0]);
   const fzTile = gs.bossWave ? "rgba(112,30,30," : (FZ_TILE[gs.mapTheme] || FZ_TILE[0]);
   (gs.floorZones || []).forEach(fz => {
@@ -55,6 +57,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     { s:"#1a1008", c:"rgba(90,65,35,0.28)",    r:"#241808", t:"#1a1208" }, // ruins
     { s:"#201408", c:"rgba(120,92,42,0.28)",   r:"#2a1a08", t:"#201408" }, // desert
     { s:"#0a1c0a", c:"rgba(38,90,38,0.28)",    r:"#101e10", t:"#0a160a" }, // forest
+    { s:"#0e0820", c:"rgba(90,42,200,0.28)",   r:"#1a1030", t:"#0c0818" }, // space
+    { s:"#0c1a28", c:"rgba(60,100,155,0.28)",  r:"#142230", t:"#0c1820" }, // arctic
   ][gs.mapTheme] || { s:"#1c1c3c",c:"rgba(70,70,115,0.28)",r:"#2a2a4e",t:"#20203e" };
   (gs.terrain || []).forEach(t => {
     ctx.save();
@@ -107,6 +111,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     "rgba(120,85,45,0.06)",   // ruins
     "rgba(160,125,55,0.06)",  // desert
     "rgba(45,120,45,0.06)",   // forest
+    "rgba(110,55,220,0.07)",  // space
+    "rgba(70,120,190,0.06)",  // arctic
   ][gs.mapTheme] || "rgba(100,100,180,0.06)";
   const BORDER_CLR = gs.bossWave ? null : [
     "rgba(80,80,220,",  // office
@@ -115,6 +121,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     "rgba(155,110,55,", // ruins
     "rgba(200,155,55,", // desert
     "rgba(55,165,55,",  // forest
+    "rgba(150,70,255,", // space
+    "rgba(75,150,220,", // arctic
   ][gs.mapTheme] || "rgba(80,80,220,";
   ctx.strokeStyle = GRID_CLR;
   ctx.lineWidth = 1;
@@ -175,6 +183,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ["rgba(66,44,22,0.95)",  "rgba(140,100,55,0.75)",  "#B88440", [115,78,40]],   // ruins
     ["rgba(90,72,38,0.95)",  "rgba(178,148,85,0.75)",  "#C8A855", [148,120,65]],  // desert: sand/sandstone
     ["rgba(24,54,24,0.95)",  "rgba(52,115,52,0.75)",   "#368A36", [44,90,44]],    // forest: bark green
+    ["rgba(14,8,34,0.95)",   "rgba(65,32,140,0.75)",   "#7030C0", [52,24,112]],   // space: dark purple metal
+    ["rgba(22,42,66,0.95)",  "rgba(55,95,148,0.75)",   "#4878B8", [44,76,118]],   // arctic: blue ice
   ];
   const wt = gs.bossWave
     ? ["rgba(76,20,20,0.95)", "rgba(165,45,45,0.75)", "#CC3030", [135,32,32]]

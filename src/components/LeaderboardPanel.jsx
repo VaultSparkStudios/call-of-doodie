@@ -10,7 +10,7 @@ const DIFF_TABS = [
 
 const LOADOUT_EMOJI = { standard: "⚖️", cannon: "💀", tank: "🛡️", speedster: "⚡" };
 
-export default function LeaderboardPanel({ leaderboard, lbLoading, username, onClose }) {
+export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, onLoadMore, username, onClose }) {
   const [activeDiff, setActiveDiff] = useState(null);
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
@@ -27,7 +27,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
 
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
-        <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 10px" }}>Top 100 · Global leaderboard</p>
+        <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 10px" }}>Global leaderboard · showing {leaderboard.length}</p>
 
         {/* Difficulty filter tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 14, flexWrap: "wrap" }}>
@@ -107,6 +107,21 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
               );
             })}
           </div>
+        )}
+
+        {/* Load More */}
+        {(lbHasMore || lbLoading) && !lbLoading && filtered.length > 0 && (
+          <div style={{ textAlign: "center", marginTop: 12 }}>
+            <button
+              onClick={onLoadMore}
+              style={{ padding: "7px 24px", fontSize: 11, fontFamily: "'Courier New', monospace", fontWeight: 700, letterSpacing: 1, cursor: "pointer", borderRadius: 4, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "#FFD700" }}
+            >
+              LOAD MORE ↓
+            </button>
+          </div>
+        )}
+        {lbLoading && leaderboard.length > 0 && (
+          <p style={{ textAlign: "center", color: "#888", fontSize: 11, marginTop: 10 }}>Loading…</p>
         )}
       </div>
     </div>
