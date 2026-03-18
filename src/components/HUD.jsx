@@ -156,13 +156,16 @@ export default function HUD({
 
 function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady, isReloading, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
   const [hoveredTool, setHoveredTool] = useState(null);
+  // Shrink weapon buttons when there are many weapons so the bar stays on-screen
+  const btnSize = WEAPONS.length > 8 ? 32 : 38;
+  const btnFont = WEAPONS.length > 8 ? 14 : 17;
 
   return (
-    <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 4, alignItems: "center", background: "rgba(0,0,0,0.4)", padding: "4px 8px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.08)", pointerEvents: "all" }}>
+    <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 3, alignItems: "center", background: "rgba(0,0,0,0.4)", padding: "4px 8px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.08)", pointerEvents: "all", maxWidth: "calc(100vw - 24px)", flexWrap: "nowrap", overflowX: "auto" }}>
       {WEAPONS.map((w, i) => (
         <div key={i} style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("wpn-" + i)} onMouseLeave={() => setHoveredTool(null)}>
           <div
-            style={{ width: 38, height: 38, borderRadius: 6, position: "relative", background: i === currentWeapon ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.05)", border: i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, cursor: "pointer" }}
+            style={{ width: btnSize, height: btnSize, borderRadius: 6, position: "relative", background: i === currentWeapon ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.05)", border: i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: btnFont, cursor: "pointer" }}
             onClick={() => onSwitchWeapon(i)}
           >
             {w.emoji}

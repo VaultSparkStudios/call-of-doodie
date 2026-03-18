@@ -7,9 +7,8 @@ Build status:
 - Branch: `main`, fully committed and pushed
 
 Current priorities:
-1. Playtest session 8 additions in-browser: elite enemies, gamepad, new perks, boss telegraphing, wave shop pacing
-2. Implement full game effects for stub perks: Chain Lightning, Adrenaline Rush, Dead Man's Hand
-3. Supabase anonymous auth to enforce callsign locking server-side (RLS update needed)
+1. Playtest all new perks + weapons in-browser
+2. Run Supabase SQL migration (callsign_claims table + updated leaderboard RLS) in console to activate server-side callsign enforcement
 
 Known issues:
 - Boss ground slam: random initial stagger (0–179 frames) can shorten the 90-frame warning window on the very first slam cycle

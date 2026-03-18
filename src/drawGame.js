@@ -461,11 +461,39 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   });
 
+  // Railgun beams
+  if (gs.beams && gs.beams.length > 0) {
+    gs.beams.forEach(bm => {
+      const alpha = bm.life / bm.maxLife;
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.9;
+      ctx.strokeStyle = bm.color; ctx.shadowColor = bm.color; ctx.shadowBlur = 20 * alpha; ctx.lineWidth = 3 + alpha * 4;
+      ctx.beginPath(); ctx.moveTo(bm.x1, bm.y1); ctx.lineTo(bm.x2, bm.y2); ctx.stroke();
+      // Bright core line
+      ctx.globalAlpha = alpha * 0.6;
+      ctx.strokeStyle = "#FFFFFF"; ctx.shadowBlur = 0; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(bm.x1, bm.y1); ctx.lineTo(bm.x2, bm.y2); ctx.stroke();
+      ctx.restore();
+    });
+    ctx.globalAlpha = 1;
+  }
+
   // Player bullets
   gs.bullets.forEach(b => {
     ctx.save(); ctx.translate(b.x, b.y);
-    ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 10;
-    ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    if (b.boomerang) {
+      // Boomerang: spinning curved disc
+      ctx.rotate(Date.now() / 80);
+      ctx.fillStyle = b.returning ? "#FFD700" : b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, b.size * 1.4, b.size * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#FFF"; ctx.lineWidth = 1; ctx.globalAlpha = 0.4;
+      ctx.beginPath(); ctx.ellipse(0, 0, b.size * 1.4, b.size * 0.5, 0, 0, Math.PI * 2); ctx.stroke();
+    } else {
+      ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
   });
 
   // Particles

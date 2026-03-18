@@ -6,7 +6,8 @@ import {
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign } from "./storage.js";
+import { initAnonAuth } from "./supabase.js";
 import { loadSettings } from "./settings.js";
 import SettingsPanel from "./components/SettingsPanel.jsx";
 import {
@@ -198,6 +199,9 @@ export default function CallOfDoodie() {
   useEffect(() => { pausedRef.current = paused; }, [paused]);
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+
+  // ── Anonymous auth init ──────────────────────────────────────────────────
+  useEffect(() => { initAnonAuth(); }, []);
 
   // ── Responsive ────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -635,6 +639,11 @@ export default function CallOfDoodie() {
   // ── Perk application ─────────────────────────────────────────────────────
   const applyPerk = useCallback((perk) => {
     perk.apply(perkModsRef.current, gsRef.current);
+    // Calibrate Glass Jaw incoming-damage multiplier by difficulty (less brutal at Hard/Insane)
+    if (gsRef.current?.glassjaw && !gsRef.current.glassjawMult) {
+      const d = difficultyRef.current;
+      gsRef.current.glassjawMult = d === "insane" ? 1.4 : d === "hard" ? 1.65 : 2.0;
+    }
     statsRef.current.perksSelected++;
     setActivePerks(prev => [...prev, perk]);
     setPerkPending(false);
@@ -876,6 +885,21 @@ export default function CallOfDoodie() {
           gsRef.current.bullets.push(makeBullet(ba));
         }, bi * (weapon.burstDelay || 90));
       }
+    } else if (weapon.boomerang) {
+      // Boomerang — curves, returns to player, pierces all enemies
+      const bul = makeBullet(a);
+      bul.pierceLeft = 99; bul.bouncesLeft = 0;
+      bul.boomerang = true; bul.returning = false;
+      bul.outboundLife = Math.floor(bLife * 0.45); // reverses at ~55% life remaining
+      gs.bullets.push(bul);
+    } else if (weapon.hitscan) {
+      // Railgun — instant hitscan, queued for game loop processing this frame
+      const cos = Math.cos(a), sin = Math.sin(a);
+      const ox = p.x + cos * 25, oy = p.y + sin * 25;
+      const maxT = Math.hypot(W, H) * 1.2;
+      gs.pendingBeam = { ox, oy, cos, sin, maxT, weaponIdx, color: weapon.color };
+      gs.beams = gs.beams || [];
+      gs.beams.push({ x1: ox, y1: oy, x2: ox + cos * maxT, y2: oy + sin * maxT, life: 14, maxLife: 14, color: weapon.color });
     } else {
       gs.bullets.push(makeBullet(a));
     }
@@ -1247,6 +1271,21 @@ export default function CallOfDoodie() {
 
     // ── Bullet movement ──
     gs.bullets = gs.bullets.filter(b => {
+      // Boomerang: curve outbound, then steer back to player
+      if (b.boomerang) {
+        if (!b.returning) {
+          const rot = 0.055; // curve angle per frame
+          const nvx = b.vx * Math.cos(rot) - b.vy * Math.sin(rot);
+          const nvy = b.vx * Math.sin(rot) + b.vy * Math.cos(rot);
+          b.vx = nvx; b.vy = nvy;
+          if (b.life <= b.outboundLife) b.returning = true;
+        } else {
+          const bdx = p.x - b.x, bdy = p.y - b.y, bdist = Math.hypot(bdx, bdy);
+          if (bdist < 24) return false; // caught by player
+          const spd = Math.hypot(b.vx, b.vy);
+          b.vx = (bdx / bdist) * spd; b.vy = (bdy / bdist) * spd;
+        }
+      }
       b.x += b.vx; b.y += b.vy; b.life--;
       if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
       for (const ob of (gs.obstacles || [])) {
@@ -1283,7 +1322,7 @@ export default function CallOfDoodie() {
         if (Math.hypot(eb.x - p.x, eb.y - p.y) < 18 && p.invincible <= 0) {
           eb.life = 0;
           let dmg = eb.damage || 8;
-          if (gs.glassjaw) dmg *= 2;
+          if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
           p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg), "#FF4444");
@@ -1313,6 +1352,52 @@ export default function CallOfDoodie() {
       }
       return true;
     });
+
+    // ── Railgun beam: instant hitscan damage ──
+    if (gs.pendingBeam) {
+      const { ox, oy, cos, sin, maxT, weaponIdx: pbWpn } = gs.pendingBeam;
+      gs.pendingBeam = null;
+      const pbWeapon = WEAPONS[pbWpn];
+      const pbDmgMult = (perkModsRef.current.damageMult || 1) * (1 + (gs.weaponUpgrades?.[pbWpn] || 0) * 0.25);
+      const pbComboMult = 1 + comboRef.current.count * 0.1;
+      gs.enemies.forEach(e => {
+        if (e.health <= 0) return;
+        const ex = e.x - ox, ey = e.y - oy;
+        const proj = ex * cos + ey * sin;
+        const perp = Math.abs(ex * sin - ey * cos);
+        if (proj > 0 && proj < maxT && perp < e.size / 2 + 7) {
+          const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0) + (gs.critBonus || 0);
+          const isCrit = Math.random() < effectiveCrit;
+          const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1);
+          e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
+          if (perkModsRef.current.lifesteal) { p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal); setHealth(Math.floor(p.health)); }
+          if (isCrit) statsRef.current.crits++;
+          addParticles(gs, e.x, e.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
+          addText(gs, e.x, e.y - e.size / 2 - 8, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random() * HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
+          if (e.health <= 0) {
+            const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
+            comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
+            if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
+            setCombo(comboRef.current.count);
+            const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1));
+            gs.score += pts; gs.kills++; gs.killstreakCount++;
+            if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
+            setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
+            if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
+            addParticles(gs, e.x, e.y, e.color, 15);
+            addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
+            addKillFeed(e.name, pbWeapon.name);
+            addXp(pts); gs.killFlash = 6;
+            gs.dyingEnemies = gs.dyingEnemies || [];
+            if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+            e.health = -999;
+            achCheckRef.current = true;
+          }
+        }
+      });
+      gs.enemies = gs.enemies.filter(en => en.health > -999);
+      gs.screenShake = Math.max(gs.screenShake, 10);
+    }
 
     // ── Bullet-enemy collision ──
     gs.bullets.forEach(b => {
@@ -1642,7 +1727,7 @@ export default function CallOfDoodie() {
             e.groundSlamRadius += 6;
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
-              p.health -= gs.glassjaw ? 36 : 18; p.invincible = 25; gs.damageFlash = 10;
+              p.health -= gs.glassjaw ? Math.round(18 * (gs.glassjawMult || 2)) : 18; p.invincible = 25; gs.damageFlash = 10;
               setHealth(Math.max(0, p.health));
               addText(gs, p.x, p.y - 30, "-18 SLAM!", "#FF4400");
               if (p.health <= 0) handlePlayerDeath(gs);
@@ -1661,7 +1746,7 @@ export default function CallOfDoodie() {
           if (gs.dyingEnemies.length < MAX_DYING_ANIM)
             gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
-            p.health -= gs.glassjaw ? 70 : 35; p.invincible = 40; gs.damageFlash = 12;
+            p.health -= gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35; p.invincible = 40; gs.damageFlash = 12;
             setHealth(Math.max(0, p.health));
             addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
             if (p.health <= 0) handlePlayerDeath(gs);
@@ -1688,7 +1773,7 @@ export default function CallOfDoodie() {
         const d2 = Math.hypot(p.x - e.x, p.y - e.y);
         if (d2 < e.size / 2 + 15 && p.invincible <= 0) {
           let dmg = 10 + e.typeIndex * 5;
-          if (gs.glassjaw) dmg *= 2;
+          if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
           p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg) + " HP", "#FF0000");
@@ -1773,6 +1858,7 @@ export default function CallOfDoodie() {
     if ((gs.bossKillFlash || 0) > 0) gs.bossKillFlash--;
     if ((gs.adrenalineRushTimer || 0) > 0) gs.adrenalineRushTimer--;
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
+    if (gs.beams) gs.beams = gs.beams.filter(bm => { bm.life--; return bm.life > 0; });
     frameCountRef.current++;
 
     // ────────────────── RENDER ──────────────────────────────────────────────
@@ -1965,7 +2051,7 @@ export default function CallOfDoodie() {
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   if (screen === "username") {
-    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { lockCallsign(username.trim()); setScreen("menu"); } }} />;
+    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { const n = username.trim(); lockCallsign(n); claimCallsign(n); setScreen("menu"); } }} />;
   }
 
   if (screen === "menu") {
@@ -2090,24 +2176,22 @@ export default function CallOfDoodie() {
       {/* Mobile action bar */}
       {isMobile && (
         <div style={{ height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 4px", background: "rgba(10,10,10,0.95)", borderTop: "1px solid rgba(255,255,255,0.12)", flexShrink: 0, gap: 2 }}>
-          <div style={{ display: "flex", gap: 2, flex: 1 }}>
-            {WEAPONS.map((w, i) => (
-              <button key={i}
-                onTouchStart={(e) => { e.preventDefault(); switchWeapon(i); }}
-                onClick={() => switchWeapon(i)}
-                style={{
-                  flex: 1, height: 44, borderRadius: 8, position: "relative",
-                  background: i === currentWeapon ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.04)",
-                  border: i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.12)",
-                  color: i === currentWeapon ? w.color : "#BBB",
-                  fontSize: "clamp(14px,4vw,18px)", fontFamily: "'Courier New',monospace",
-                  display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-                }}>
-                {w.emoji}
-                <span style={{ position: "absolute", top: 1, right: 3, fontSize: 8, color: "#999", fontWeight: 900 }}>{i + 1}</span>
-                {weaponUpgrades[i] > 0 && <span style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", fontSize: 7, color: "#AA44FF", lineHeight: 1 }}>{"⭐".repeat(weaponUpgrades[i])}</span>}
-              </button>
-            ))}
+          {/* Weapon prev/current/next cycle — scales to any number of weapons */}
+          <div style={{ display: "flex", alignItems: "center", gap: 2, flex: 1, minWidth: 0 }}>
+            <button
+              onTouchStart={(e) => { e.preventDefault(); switchWeapon(((currentWeapon - 1) + WEAPONS.length) % WEAPONS.length); }}
+              onClick={() => switchWeapon(((currentWeapon - 1) + WEAPONS.length) % WEAPONS.length)}
+              style={{ width: 30, height: 44, borderRadius: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 16, cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>◀</button>
+            <div style={{ flex: 1, height: 44, borderRadius: 8, background: "rgba(255,255,255,0.12)", border: "2px solid " + WEAPONS[currentWeapon].color, display: "flex", alignItems: "center", justifyContent: "center", gap: 4, minWidth: 0, position: "relative" }}>
+              <span style={{ fontSize: 20 }}>{WEAPONS[currentWeapon].emoji}</span>
+              <span style={{ fontSize: 10, color: WEAPONS[currentWeapon].color, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "60%" }}>{WEAPONS[currentWeapon].name}</span>
+              {weaponUpgrades[currentWeapon] > 0 && <span style={{ position: "absolute", top: 2, right: 4, fontSize: 8, color: "#AA44FF" }}>{"⭐".repeat(weaponUpgrades[currentWeapon])}</span>}
+              <span style={{ position: "absolute", bottom: 2, left: 5, fontSize: 8, color: "#666" }}>{currentWeapon + 1}/{WEAPONS.length}</span>
+            </div>
+            <button
+              onTouchStart={(e) => { e.preventDefault(); switchWeapon((currentWeapon + 1) % WEAPONS.length); }}
+              onClick={() => switchWeapon((currentWeapon + 1) % WEAPONS.length)}
+              style={{ width: 30, height: 44, borderRadius: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 16, cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>▶</button>
           </div>
           <button
             onTouchStart={(e) => { e.preventDefault(); doReload(currentWeaponRef.current); }}

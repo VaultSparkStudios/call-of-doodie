@@ -1,5 +1,44 @@
 // ===== LEADERBOARD =====
-import { supabase } from "./supabase.js";
+import { supabase, getAuthUid } from "./supabase.js";
+
+// ===== CALLSIGN OWNERSHIP =====
+// Requires the following SQL run once in Supabase console:
+//
+//   CREATE TABLE IF NOT EXISTS callsign_claims (
+//     name TEXT PRIMARY KEY,
+//     uid  UUID NOT NULL DEFAULT auth.uid(),
+//     claimed_at TIMESTAMPTZ DEFAULT NOW()
+//   );
+//   ALTER TABLE callsign_claims ENABLE ROW LEVEL SECURITY;
+//   CREATE POLICY "public_read"  ON callsign_claims FOR SELECT USING (true);
+//   CREATE POLICY "claim_new"    ON callsign_claims FOR INSERT
+//     WITH CHECK (auth.uid() IS NOT NULL);
+//
+//   -- Update leaderboard INSERT policy to verify callsign ownership:
+//   DROP POLICY IF EXISTS "allow_insert" ON leaderboard;
+//   CREATE POLICY "verified_insert" ON leaderboard FOR INSERT WITH CHECK (
+//     score BETWEEN 1 AND 10000000
+//     AND (
+//       NOT EXISTS (SELECT 1 FROM callsign_claims WHERE name = NEW.name)
+//       OR EXISTS (SELECT 1 FROM callsign_claims WHERE name = NEW.name AND uid = auth.uid())
+//     )
+//   );
+export async function claimCallsign(name) {
+  if (!supabase || !name) return false;
+  try {
+    const uid = await getAuthUid();
+    if (!uid) return false;
+    const { error } = await supabase
+      .from("callsign_claims")
+      .upsert([{ name, uid }], { onConflict: "name", ignoreDuplicates: true });
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    // Fails silently until SQL migration is applied in Supabase console
+    console.warn("[callsign] Claim failed (run SQL migration in Supabase console):", err.message);
+    return false;
+  }
+}
 
 const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
 

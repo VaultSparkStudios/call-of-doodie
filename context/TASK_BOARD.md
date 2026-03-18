@@ -1,12 +1,10 @@
 # Task Board
 
 ## Now (playtest + polish)
-- Playtest all three implemented perks in-browser: Chain Lightning, Adrenaline Rush, Dead Man's Hand
-- Verify Glass Jaw balance — double damage taken is brutal; may need HP scaling or cooldown on perk offer at harder difficulties
+- Playtest all new content: 3 new perks, boomerang, railgun, glass jaw rebalance
+- Run Supabase SQL migration in console to activate server-side callsign enforcement (SQL in storage.js comments)
 
 ## Next
-- Supabase anonymous auth to enforce callsign locking server-side (RLS update needed)
-- More weapons: boomerang (returns to player), railgun (instant line hitscan, penetrates all)
 - End-of-wave boss scaling review at wave 40+ (ability spam at high prestige)
 - Gamepad: vibration/rumble on hit using Gamepad Haptics API
 
@@ -23,6 +21,12 @@
 - ✅ Chain Lightning perk: 20% on-hit arc to nearest enemy (200px range, 50% dmg), cyan bolt visual
 - ✅ Adrenaline Rush perk: kill at <30% HP triggers 2s double speed + orange glow ring
 - ✅ Dead Man's Hand perk: on death → 250px AOE explosion (200 falloff dmg) + free guardian angel
+- ✅ Glass Jaw rebalance: incoming damage multiplier scales by difficulty (2.0× Easy/Normal, 1.65× Hard, 1.4× Insane)
+- ✅ Supabase anonymous auth: client-side signInAnonymously() + claimCallsign(); SQL migration documented in storage.js
+- ✅ Boomerang Blaster (weapon 9): curves outbound, returns to player, pierces all enemies; orange spinning disc visual
+- ✅ Railgun (weapon 10): instant hitscan beam, penetrates all enemies in line, cyan beam visual with bright core
+- ✅ Mobile action bar: replaced flat weapon row with prev/next cycle control (scales to any weapon count)
+- ✅ Desktop toolbar: buttons shrink to 32px when >8 weapons; toolbar scrollable/no-overflow
 
 ## Done (session 8)
 - ✅ Elite enemy variants (armored/fast/explosive) from wave 10+

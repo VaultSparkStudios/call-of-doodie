@@ -8,6 +8,8 @@ export const WEAPONS = [
   { name: "Spicy Squirt Gun", emoji: "🌶️", damage: 4, fireRate: 28, ammo: 100, maxAmmo: 100, reloadTime: 2800, color: "#FF5500", sound: "FWOOSH!", spread: 0.22, bulletLife: 14, bulletSize: 3, bulletTrail: false, bulletSpeed: 8, desc: "Short range, ridiculous fire rate. 100 shots of burning regret." },
   { name: "Confetti Cannon", emoji: "🎊", damage: 12, fireRate: 900, ammo: 18, maxAmmo: 18, reloadTime: 2000, color: "#FF69B4", sound: "POP!", spread: 0.55, bulletLife: 22, bulletSize: 3, bulletSpeed: 9, pellets: 6, desc: "6 confetti pellets per blast. Close range chaos." },
   { name: "Shock Zapper", emoji: "⚡", damage: 32, fireRate: 1100, ammo: 15, maxAmmo: 15, reloadTime: 2400, color: "#00E5FF", sound: "ZAP!", spread: 0.06, bulletLife: 75, bulletSize: 5, bulletSpeed: 15, burst: 3, burstDelay: 90, desc: "3-shot burst, medium range. Zap zap zap." },
+  { name: "Boomerang Blaster", emoji: "🪃", damage: 28, fireRate: 1100, ammo: 5, maxAmmo: 5, reloadTime: 1800, color: "#FFA500", sound: "WHOOSH!", spread: 0, bulletLife: 100, bulletSize: 9, bulletSpeed: 6, boomerang: true, desc: "Curves out, returns to you. Pierces every enemy both ways." },
+  { name: "Railgun", emoji: "🔦", damage: 160, fireRate: 2800, ammo: 4, maxAmmo: 4, reloadTime: 3500, color: "#00FFFF", sound: "CRACK!", spread: 0, hitscan: true, desc: "Instant hitscan beam. Penetrates every enemy in a straight line." },
 ];
 
 // ===== ENEMIES =====
@@ -290,6 +292,8 @@ export const NEW_FEATURES = [
   "⚙️ Custom Settings — tweak enemy speed, particles, crosshair & more",
   "⚠️ Boss Telegraphing — visual warning before bullet rings and ground slams",
   "📱 Install as App — PWA support, add to home screen on any device",
+  "🪃 Boomerang Blaster — curves out and returns, pierces all enemies",
+  "🔦 Railgun — instant hitscan beam, penetrates every enemy in its path",
 ];
 
 // ===== KILLSTREAKS =====
