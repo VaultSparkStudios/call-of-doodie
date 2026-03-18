@@ -103,6 +103,40 @@ export const PERKS = [
     desc: "−30% dash CD. Synergy: +20% speed if Adrenaline active",
     apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.70; if (mods.hasAdrenaline && gs?.player) gs.player.speed *= 1.20; },
   },
+  {
+    id: "tungsten_rounds", name: "Tungsten Rounds", emoji: "🔩", tier: "uncommon",
+    desc: "+20% bullet damage, bullets pierce 1 extra enemy",
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.20; mods.pierce = (mods.pierce || 0) + 1; },
+  },
+  {
+    id: "adrenaline_rush", name: "Adrenaline Rush", emoji: "💉", tier: "uncommon",
+    desc: "Killing an enemy while below 30% HP grants 2s of double speed",
+    apply: (mods) => { mods.adrenalineRush = true; },
+  },
+  {
+    id: "chain_lightning", name: "Chain Lightning", emoji: "⚡", tier: "rare",
+    desc: "Hits have 20% chance to arc to 1 nearby enemy for 50% damage",
+    apply: (mods, gs) => { if (gs) gs.chainLightning = true; },
+  },
+  {
+    id: "dead_mans_hand", name: "Dead Man's Hand", emoji: "🃏", tier: "rare",
+    desc: "On death, trigger a massive explosion. Activates guardian angel if available",
+    apply: (mods, gs) => { if (gs) gs.deadMansHand = true; },
+  },
+  {
+    id: "overclocked", name: "Overclocked", emoji: "🔧", tier: "uncommon",
+    desc: "+35% fire rate, -15% damage. Every 20 shots triggers a forced 1s reload",
+    apply: (mods, gs) => {
+      mods.damageMult = (mods.damageMult || 1) * 0.85;
+      mods.fireRateMult = (mods.fireRateMult || 1) * 0.65;
+      if (gs) { gs.overclockedShots = 0; gs.overclocked = true; }
+    },
+  },
+  {
+    id: "scavenger", name: "Scavenger", emoji: "🎒", tier: "common",
+    desc: "Enemies drop ammo 40% more often. Ammo pickups restore 30% more ammo",
+    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; },
+  },
 ];
 
 // ===== CURSED PERKS =====
@@ -125,6 +159,12 @@ export const CURSED_PERKS = [
   { id: "last_resort",   name: "Last Resort",   emoji: "💔", tier: "cursed",
     desc: "+200% dmg below 25% HP · start at 25% HP",
     apply: (mods, gs) => { mods.lastResort=true; if(gs?.player){gs.player.health=Math.max(1,Math.floor(gs.player.maxHealth*0.25));} } },
+  { id: "paranoia", name: "Paranoia", emoji: "👁", tier: "cursed",
+    desc: "All enemies move 25% faster, but you gain +40% XP",
+    apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.4; if (gs) gs.enemySpeedMult = (gs.enemySpeedMult || 1) * 1.25; } },
+  { id: "glass_jaw", name: "Glass Jaw", emoji: "💎", tier: "cursed",
+    desc: "You take double damage but deal +50% damage",
+    apply: (mods, gs) => { mods.damageMult = (mods.damageMult || 1) * 1.5; if (gs) gs.glassjaw = true; } },
 ];
 
 export const PERK_TIER_COLORS = { common: "#AAAAAA", uncommon: "#44BB44", rare: "#4488FF", legendary: "#FF44FF", cursed: "#FF2244" };
@@ -244,6 +284,12 @@ export const NEW_FEATURES = [
   "🌿 Desert & Forest Map Themes — 6 total seasonal arenas",
   "🔢 Shareable Run Seeds — copy your seed from the death screen",
   "📅 Expanded Daily Missions — boss kills, killstreaks, dash kills",
+  "👹 Elite Enemies — Armored, Fast & Explosive variants from wave 10+",
+  "🎮 Gamepad Support — full controller play with dual-stick aim & fire",
+  "🔄 Seed Replay — replay any run from the death screen",
+  "⚙️ Custom Settings — tweak enemy speed, particles, crosshair & more",
+  "⚠️ Boss Telegraphing — visual warning before bullet rings and ground slams",
+  "📱 Install as App — PWA support, add to home screen on any device",
 ];
 
 // ===== KILLSTREAKS =====

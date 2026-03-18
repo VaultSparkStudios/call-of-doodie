@@ -130,6 +130,9 @@ export default function CallOfDoodie() {
   const bestMomentRef    = useRef({ ts: 0, score: 0 }); // highest-excitement timestamp
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
+  const gamepadShootRef  = useRef(false); // gamepad right-stick fire signal
+  const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
+  const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -187,6 +190,7 @@ export default function CallOfDoodie() {
   const [musicVibe, setMusicVibeState]        = useState(() => localStorage.getItem("cod-music-vibe") || "action");
   const [gameSettings, setGameSettings]       = useState(() => loadSettings());
   const [showSettings, setShowSettings]       = useState(false);
+  const [gamepadConnected, setGamepadConnected] = useState(false);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -791,7 +795,13 @@ export default function CallOfDoodie() {
   const spawnPickup = (gs, ex, ey, isBoss) => {
     const types    = ["health", "ammo", "speed", "nuke", "upgrade"];
     // Vampire mode: no health drops — replace with ammo
-    const weights  = isBoss ? [gs.vampireMode ? 0 : 0.25, gs.vampireMode ? 0.40 : 0.15, 0.10, 0.10, 0.40] : [gs.vampireMode ? 0 : 0.48, gs.vampireMode ? 0.58 : 0.10, 0.22, 0.05, 0.15];
+    // Scavenger perk boosts ammo drop weight by ammoDropMult
+    const ammoBoost = perkModsRef.current.ammoDropMult || 1;
+    const baseAmmoW = isBoss ? (gs.vampireMode ? 0.40 : 0.15) : (gs.vampireMode ? 0.58 : 0.10);
+    const ammoW = Math.min(baseAmmoW * ammoBoost, 0.70);
+    const weights  = isBoss
+      ? [gs.vampireMode ? 0 : 0.25, ammoW, 0.10, 0.10, 0.40]
+      : [gs.vampireMode ? 0 : 0.48, ammoW, 0.22, 0.05, 0.15];
     let roll = Math.random(), cumul = 0, pType = "health";
     for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
     gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
@@ -820,9 +830,18 @@ export default function CallOfDoodie() {
     const weapon = WEAPONS[weaponIdx];
     const now = Date.now();
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
-    const fireRateMult = 1 - upgLevel * 0.10;
+    const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1);
     if (now - lastShotRef.current < weapon.fireRate * fireRateMult || gs.ammoCount <= 0 || isReloadingRef.current) return;
     lastShotRef.current = now; gs.ammoCount--; gs.weaponAmmos[weaponIdx] = gs.ammoCount; setAmmo(gs.ammoCount);
+    // Overclocked perk: track shots, force reload every 20
+    if (gs.overclocked) {
+      gs.overclockedShots = (gs.overclockedShots || 0) + 1;
+      if (gs.overclockedShots >= 20) {
+        gs.overclockedShots = 0;
+        addText(gs, gs.player.x, gs.player.y - 40, "🔧 OVERHEATED!", "#FF8800", true);
+        doReload(weaponIdx);
+      }
+    }
     soundShoot(weaponIdx);
     const p = gs.player;
     const spread = (Math.random() - 0.5) * weapon.spread;
@@ -1087,8 +1106,9 @@ export default function CallOfDoodie() {
     const ss = shootStickRef.current;
     if (ss.active && Math.hypot(ss.dx, ss.dy) > 10) { p.angle = Math.atan2(ss.dy, ss.dx); ss.shooting = true; }
     else if (ss.active) { ss.shooting = false; }
+    if (gamepadAngleRef.current !== null) { p.angle = gamepadAngleRef.current; }
     const mouse = mouseRef.current;
-    if (!js.active && !ss.active && (mouse.down || mouse.moved)) {
+    if (!js.active && !ss.active && gamepadAngleRef.current === null && (mouse.down || mouse.moved)) {
       const rect = canvas.getBoundingClientRect();
       p.angle = Math.atan2((mouse.y - rect.top) * (H / rect.height) - p.y, (mouse.x - rect.left) * (W / rect.width) - p.x);
     }
@@ -1097,7 +1117,7 @@ export default function CallOfDoodie() {
       gs.enemies.forEach(e => { const d = Math.hypot(e.x - p.x, e.y - p.y); if (d < nd) { nd = d; nearest = e; } });
       if (nearest) p.angle = Math.atan2(nearest.y - p.y, nearest.x - p.x);
     }
-    const shouldShoot = mouse.down || ss.shooting || (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0);
+    const shouldShoot = mouse.down || ss.shooting || gamepadShootRef.current || (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0);
     if (shouldShoot && !isReloadingRef.current && gs.ammoCount > 0) shoot(gs, wpnIdx, p.angle);
     if (p.invincible > 0) p.invincible--;
 
@@ -1198,11 +1218,14 @@ export default function CallOfDoodie() {
         addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
         addText(gs, W / 2, H / 2 + 30, "+" + waveBonus + " WAVE BONUS", "#00FF88");
         soundWaveClear();
-        // Trigger wave shop — pick a free reward before next wave
-        const opts = getShopOptions(gs, currentWeaponRef.current);
-        setShopOptions(opts);
-        setShopPending(true);
-        shopPendingRef.current = true;
+        // Trigger wave shop — every wave for waves 1-4, every 2nd wave for wave 5+
+        const showShop = gs.currentWave < 5 || gs.currentWave % 2 === 0;
+        if (showShop) {
+          const opts = getShopOptions(gs, currentWeaponRef.current);
+          setShopOptions(opts);
+          setShopPending(true);
+          shopPendingRef.current = true;
+        }
       }
     }
 
@@ -1243,7 +1266,8 @@ export default function CallOfDoodie() {
       gs.enemyBullets.forEach(eb => {
         if (Math.hypot(eb.x - p.x, eb.y - p.y) < 18 && p.invincible <= 0) {
           eb.life = 0;
-          const dmg = eb.damage || 8;
+          let dmg = eb.damage || 8;
+          if (gs.glassjaw) dmg *= 2;
           p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg), "#FF4444");
@@ -1549,8 +1573,11 @@ export default function CallOfDoodie() {
         // ── Bullet Ring (wave 10+): fires 8 bullets in 360° pattern ──────────
         if (e.hasBulletRing) {
           e.bulletRingTimer++;
+          // Warning flash: 1 second (60 frames) before the ring fires
+          e.bulletRingWarning = e.bulletRingTimer >= 300 && e.bulletRingTimer < 360;
           if (e.bulletRingTimer >= 360) {
             e.bulletRingTimer = 0;
+            e.bulletRingWarning = false;
             for (let _ri = 0; _ri < 8; _ri++) {
               const ba = (_ri / 8) * Math.PI * 2;
               gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12 });
@@ -1564,8 +1591,10 @@ export default function CallOfDoodie() {
         if (e.hasGroundSlam) {
           if (!e.groundSlamActive) {
             e.groundSlamTimer++;
+            // Warning flash: 1.5 seconds (90 frames) before the slam triggers
+            e.groundSlamWarning = e.groundSlamTimer >= 330 && e.groundSlamTimer < 420;
             if (e.groundSlamTimer >= 420) {
-              e.groundSlamTimer = 0; e.groundSlamActive = true; e.groundSlamRadius = 0;
+              e.groundSlamTimer = 0; e.groundSlamWarning = false; e.groundSlamActive = true; e.groundSlamRadius = 0;
               addText(gs, e.x, e.y - 80, "💥 GROUND SLAM!", "#FF4400", true);
               addParticles(gs, e.x, e.y, "#FF4400", 20);
               gs.screenShake = 14;
@@ -1574,7 +1603,7 @@ export default function CallOfDoodie() {
             e.groundSlamRadius += 6;
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
-              p.health -= 18; p.invincible = 25; gs.damageFlash = 10;
+              p.health -= gs.glassjaw ? 36 : 18; p.invincible = 25; gs.damageFlash = 10;
               setHealth(Math.max(0, p.health));
               addText(gs, p.x, p.y - 30, "-18 SLAM!", "#FF4400");
               if (p.health <= 0) handlePlayerDeath(gs);
@@ -1593,7 +1622,7 @@ export default function CallOfDoodie() {
           if (gs.dyingEnemies.length < MAX_DYING_ANIM)
             gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
-            p.health -= 35; p.invincible = 40; gs.damageFlash = 12;
+            p.health -= gs.glassjaw ? 70 : 35; p.invincible = 40; gs.damageFlash = 12;
             setHealth(Math.max(0, p.health));
             addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
             if (p.health <= 0) handlePlayerDeath(gs);
@@ -1619,10 +1648,11 @@ export default function CallOfDoodie() {
       if (dashRef.current.active <= 0) {
         const d2 = Math.hypot(p.x - e.x, p.y - e.y);
         if (d2 < e.size / 2 + 15 && p.invincible <= 0) {
-          const dmg = 10 + e.typeIndex * 5;
+          let dmg = 10 + e.typeIndex * 5;
+          if (gs.glassjaw) dmg *= 2;
           p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
           setHealth(Math.max(0, p.health));
-          addText(gs, p.x, p.y - 30, "-" + dmg + " HP", "#FF0000");
+          addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg) + " HP", "#FF0000");
           if (p.health <= 0) handlePlayerDeath(gs);
         }
       }
@@ -1641,8 +1671,19 @@ export default function CallOfDoodie() {
         } else if (pk.type === "ammo") {
           const upgLevel = gs.weaponUpgrades?.[wpnIdx] || 0;
           const maxAmmo = Math.floor(WEAPONS[wpnIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
-          gs.ammoCount = maxAmmo; gs.weaponAmmos[wpnIdx] = maxAmmo; setAmmo(gs.ammoCount);
-          addText(gs, pk.x, pk.y, "MAX AMMO", "#00BFFF");
+          // Scavenger: restore 30% more ammo (partial restore for all weapons)
+          const ammoRestoreMult = perkModsRef.current.ammoRestoreMult || 1;
+          if (ammoRestoreMult > 1) {
+            // Scavenger mode: restore 30% of max ammo across ALL weapons
+            WEAPONS.forEach((w, wi) => {
+              const wUpg = gs.weaponUpgrades?.[wi] || 0;
+              const wMax = Math.floor(w.maxAmmo * (1 + wUpg * 0.25) * (perkModsRef.current.ammoMult || 1));
+              gs.weaponAmmos[wi] = Math.min(wMax, (gs.weaponAmmos[wi] || 0) + Math.floor(wMax * 0.30 * ammoRestoreMult));
+            });
+          }
+          if (ammoRestoreMult <= 1) gs.weaponAmmos[wpnIdx] = maxAmmo; // normal: full refill current weapon
+          gs.ammoCount = gs.weaponAmmos[wpnIdx]; setAmmo(gs.ammoCount);
+          addText(gs, pk.x, pk.y, ammoRestoreMult > 1 ? "MAX AMMO + RESUPPLY!" : "MAX AMMO", "#00BFFF");
         } else if (pk.type === "speed") {
           p.speed = Math.min(8, p.speed + 0.5); addText(gs, pk.x, pk.y, "SPEED!", "#FFFF00");
           setTimeout(() => { if (gsRef.current) gsRef.current.player.speed = Math.max(4, gsRef.current.player.speed - 0.5); }, 5000);
@@ -1690,6 +1731,7 @@ export default function CallOfDoodie() {
     if (gs.muzzleFlash > 0) gs.muzzleFlash--;
     if (gs.damageFlash > 0) gs.damageFlash--;
     if (gs.killFlash > 0) gs.killFlash--;
+    if ((gs.bossKillFlash || 0) > 0) gs.bossKillFlash--;
     frameCountRef.current++;
 
     // ────────────────── RENDER ──────────────────────────────────────────────
@@ -1774,6 +1816,90 @@ export default function CallOfDoodie() {
       canvas.removeEventListener("touchend", te); canvas.removeEventListener("touchcancel", te);
     };
   }, [screen]);
+
+  // ── Gamepad polling ───────────────────────────────────────────────────────
+  useEffect(() => {
+    const STICK_DEAD = 0.2;
+    let lastLB = false, lastRB = false, lastStart = false;
+    let lastBtnA = false, lastBtnB = false;
+    let lastGpConnected = false;
+
+    const poll = () => {
+      const gp = navigator.getGamepads ? navigator.getGamepads()[0] : null;
+      const connected = !!gp;
+      if (connected !== lastGpConnected) { lastGpConnected = connected; setGamepadConnected(connected); }
+      if (!gp) return;
+
+      if (pausedRef.current || perkPendingRef.current || shopPendingRef.current) {
+        // While paused still handle Start button to unpause
+        const start = gp.buttons[9]?.pressed;
+        if (start && !lastStart) setPaused(p => !p);
+        lastStart = !!start;
+        // Clear movement so player doesn't keep moving when unpaused
+        keysRef.current["w"] = false;
+        keysRef.current["a"] = false;
+        keysRef.current["s"] = false;
+        keysRef.current["d"] = false;
+        gamepadShootRef.current = false;
+        gamepadAngleRef.current = null;
+        return;
+      }
+
+      // Left stick → movement (synthesise WASD)
+      const lx = gp.axes[0] ?? 0;
+      const ly = gp.axes[1] ?? 0;
+      keysRef.current["w"] = ly < -STICK_DEAD;
+      keysRef.current["s"] = ly >  STICK_DEAD;
+      keysRef.current["a"] = lx < -STICK_DEAD;
+      keysRef.current["d"] = lx >  STICK_DEAD;
+
+      // Right stick → aim + shoot
+      const rx = gp.axes[2] ?? 0;
+      const ry = gp.axes[3] ?? 0;
+      const rMag = Math.hypot(rx, ry);
+      if (rMag > STICK_DEAD) {
+        gamepadAngleRef.current = Math.atan2(ry, rx);
+        gamepadShootRef.current = true;
+      } else {
+        gamepadAngleRef.current = null;
+        gamepadShootRef.current = false;
+      }
+
+      // Button 0 (A/Cross) → dash (edge-triggered)
+      const btnA = gp.buttons[0]?.pressed;
+      if (btnA && !lastBtnA) doDash();
+      lastBtnA = !!btnA;
+
+      // Button 1 (B/Circle) → grenade (edge-triggered)
+      const btnB = gp.buttons[1]?.pressed;
+      if (btnB && !lastBtnB) throwGrenade();
+      lastBtnB = !!btnB;
+
+      // Button 4 (LB) → prev weapon, Button 5 (RB) → next weapon (edge-triggered)
+      const lb = gp.buttons[4]?.pressed;
+      const rb = gp.buttons[5]?.pressed;
+      if (lb && !lastLB) switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
+      if (rb && !lastRB) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
+      lastLB = !!lb; lastRB = !!rb;
+
+      // Button 9 (Start/Options) → toggle pause (edge-triggered)
+      const start = gp.buttons[9]?.pressed;
+      if (start && !lastStart) setPaused(p => !p);
+      lastStart = !!start;
+    };
+
+    gamepadPollRef.current = setInterval(poll, 16);
+    return () => {
+      clearInterval(gamepadPollRef.current);
+      // Clear any synthesised key state on unmount
+      keysRef.current["w"] = false;
+      keysRef.current["a"] = false;
+      keysRef.current["s"] = false;
+      keysRef.current["d"] = false;
+      gamepadShootRef.current = false;
+      gamepadAngleRef.current = null;
+    };
+  }, [doDash, throwGrenade, switchWeapon]);
 
   // ── Respawn (from death screen) ───────────────────────────────────────────
   const respawn = useCallback(() => {
@@ -1895,6 +2021,13 @@ export default function CallOfDoodie() {
           <div style={{ fontSize: "clamp(28px,6vw,48px)", fontWeight: 900, color: "#FF0000", textShadow: "0 0 20px #FF0000,0 0 40px #FF000088", letterSpacing: 4, fontFamily: "'Courier New',monospace" }}>
             ⚠ BOSS WAVE ⚠
           </div>
+        </div>
+      )}
+
+      {/* Gamepad connected indicator */}
+      {gamepadConnected && (
+        <div style={{ position: "absolute", top: 8, right: 8, fontSize: 12, color: "#00FF88", background: "rgba(0,0,0,0.55)", borderRadius: 6, padding: "2px 6px", pointerEvents: "none", zIndex: 50, letterSpacing: 1 }}>
+          🎮
         </div>
       )}
 

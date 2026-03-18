@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
-import { MUSIC_VIBES, soundUIOpen, soundUIClose } from "../sounds.js";
+import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
 

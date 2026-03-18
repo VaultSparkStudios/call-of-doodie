@@ -376,6 +376,27 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.lineWidth = e.enrageTriggered ? 4.5 : 3;
       ctx.beginPath(); ctx.arc(0, 0, r + 8, 0, Math.PI * 2); ctx.stroke();
     }
+    // Bullet ring warning — pulsing orange arc ~1s before ring fires
+    if (e.bulletRingWarning) {
+      const pulse = 0.45 + Math.sin(dn / 60) * 0.45;
+      ctx.globalAlpha = pulse;
+      ctx.strokeStyle = "#FF6600"; ctx.lineWidth = 4;
+      ctx.shadowColor = "#FF6600"; ctx.shadowBlur = 14;
+      ctx.beginPath(); ctx.arc(0, 0, r + 80, 0, Math.PI * 2); ctx.stroke();
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    }
+    // Ground slam warning — faint expanding danger circle before slam
+    if (e.groundSlamWarning) {
+      const pulse = 0.15 + Math.sin(dn / 80) * 0.12;
+      ctx.globalAlpha = pulse;
+      ctx.strokeStyle = "#FF2200"; ctx.lineWidth = 5;
+      ctx.shadowColor = "#FF2200"; ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.arc(0, 0, r + 100, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalAlpha = pulse * 0.4;
+      ctx.fillStyle = "#FF2200";
+      ctx.beginPath(); ctx.arc(0, 0, r + 100, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    }
     // Shield pulse visual
     if (e.shieldPulseActive) {
       const sA = 0.55 + Math.sin(dn / 80) * 0.3;
@@ -563,7 +584,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   if ((gs.bossKillFlash || 0) > 0) {
     ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
     ctx.fillRect(0, 0, W, H);
-    gs.bossKillFlash--;
   }
   // Damage / kill flash
   if (gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
