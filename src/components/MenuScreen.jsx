@@ -3,11 +3,12 @@ import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTE
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
+import SettingsPanel from "./SettingsPanel.jsx";
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -18,6 +19,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showUpgrades, setShowUpgrades] = useState(false);
   const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [showPrestigeConfirm, setShowPrestigeConfirm] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [customSeed, setCustomSeed] = useState("");
   const [career, setCareer] = useState(null);
   const [missions, setMissions] = useState([]);
   const [missionProgress, setMissionProgress] = useState({});
@@ -561,6 +564,15 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </>
       )}
 
+      {/* Settings Panel */}
+      {showSettings && gameSettings && (
+        <SettingsPanel
+          settings={gameSettings}
+          onSave={s => { onSaveSettings(s); }}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+
       {/* Grid background */}
       <div style={{ position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px)", pointerEvents: "none" }} />
 
@@ -666,9 +678,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </div>
 
         {/* Action buttons */}
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 10 }}>
-          <button onClick={onStart} style={{ ...btnP, minWidth: 150 }}>DEPLOY</button>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
+          <button onClick={() => onStart(customSeed || undefined)} style={{ ...btnP, minWidth: 150 }}>DEPLOY</button>
           <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 150 }}>LEADERBOARD</button>
+        </div>
+        {/* Seed + Settings row */}
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
+          <input
+            value={customSeed} onChange={e => setCustomSeed(e.target.value.replace(/\D/g, ""))}
+            placeholder="Seed # (optional)"
+            maxLength={6}
+            style={{ width: 120, padding: "6px 10px", fontSize: 11, fontFamily: "monospace", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center" }}
+          />
+          <button onClick={() => setShowSettings(true)} style={{ ...btnS, padding: "6px 14px", fontSize: 11 }}>⚙ SETTINGS</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
           <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150 }}>📊 CAREER STATS</button>

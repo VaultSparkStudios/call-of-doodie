@@ -27,6 +27,13 @@ export default function HUD({
   return (
     <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: isMobile ? 56 : 0, pointerEvents: "none", color: "#fff" }}>
 
+      {/* Mobile pause button */}
+      {isMobile && (
+        <div style={{ position: "absolute", top: 6, right: 8, pointerEvents: "all" }}>
+          <button onClick={onPause} style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 15, width: 34, height: 34, borderRadius: 6, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>⏸</button>
+        </div>
+      )}
+
       {/* Wave / Timer */}
       <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", fontSize: 11, color: "#FFF", background: "rgba(0,0,0,0.5)", padding: "3px 12px", borderRadius: 10, fontWeight: 700, display: "flex", gap: 8, alignItems: "center" }}>
         <span>WAVE {wave}</span>
@@ -175,7 +182,7 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady
           💣
           <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: grenadeReady ? "#FF4500" : "#777", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>5</span>
         </div>
-        <Tooltip text="[5/Q/G] Grenade — AOE explosion" visible={hoveredTool === "grenade"} />
+        <Tooltip text="[Q/G] Grenade — AOE explosion" visible={hoveredTool === "grenade"} />
       </div>
 
       <div style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("dash")} onMouseLeave={() => setHoveredTool(null)}>

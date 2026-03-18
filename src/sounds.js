@@ -160,13 +160,77 @@ export const MUSIC_VIBES = [
   { id: "spooky",  name: "Spooky",  emoji: "👻" },
 ];
 
-const _VIBE_PRESETS = {
-  chill:   { bpm: 76,  bassNotes: [41,41,49,41,37,41,44,41],       bassVol: 0.05,  kickVol: 0.07, hats: false },
-  action:  { bpm: 108, bassNotes: [55,55,65,55,49,55,58,55],       bassVol: 0.065, kickVol: 0.10, hats: true  },
-  intense: { bpm: 134, bassNotes: [55,65,73,65,49,58,73,58],       bassVol: 0.08,  kickVol: 0.12, hats: true  },
-  retro:   { bpm: 120, bassNotes: [110,110,130,110,98,110,116,110], bassVol: 0.045, kickVol: 0.09, hats: true  },
-  spooky:  { bpm: 88,  bassNotes: [55,52,49,52,46,49,52,55],       bassVol: 0.055, kickVol: 0.07, hats: false },
-};
+// Per-vibe beat functions — each has a genuinely distinct feel
+function _beatChill(ctx, beat, bar) {
+  // 72 BPM · sine-only · no snare · deep drone bass · chord pads
+  if (bar === 0 || bar === 4) tone(50, beat * 0.65, "sine", 0.07, 32);
+  if (bar === 2 || bar === 6) noise(beat * 0.08, 0.018); // whisper brush
+  const bass = [41,41,44,41,37,37,44,41];
+  tone(bass[bar], beat * 0.75, "sine", 0.055, bass[bar] * 0.93);
+  if (bar === 0) { tone(220, beat * 3.8, "sine", 0.011); tone(277, beat * 3.8, "sine", 0.008); tone(330, beat * 3.8, "sine", 0.006); }
+  if (bar === 4) { tone(196, beat * 3.8, "sine", 0.011); tone(247, beat * 3.8, "sine", 0.008); }
+}
+
+function _beatAction(ctx, beat, bar) {
+  // 108 BPM · original default — unchanged
+  const vol = 1.0;
+  if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
+  if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
+  if (bar % 2 === 1) tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
+  tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
+  const bass = [55, 55, 65, 55, 49, 55, 58, 55];
+  tone(bass[bar], beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * 0.88);
+}
+
+function _beatIntense(ctx, beat, bar) {
+  // 150 BPM · kick every beat · sawtooth everything · synth stab · lead riff
+  tone(62, beat * 0.32, "sine", 0.14, 28); noise(beat * 0.10, 0.10); // kick every beat
+  if (bar === 2 || bar === 6) { noise(beat * 0.20, 0.13); tone(180, beat * 0.09, "sawtooth", 0.04, 110); }
+  if (bar % 2 === 1) { noise(beat * 0.07, 0.05); tone(8000, beat * 0.025, "square", 0.011, 5500); }
+  tone(10000, beat * 0.02, "square", 0.009, 7000);
+  const bass = [55, 73, 82, 73, 49, 65, 82, 65];
+  tone(bass[bar], beat * 0.30, "sawtooth", 0.095, bass[bar] * 0.84);
+  if (bar === 0) { tone(330, beat * 0.07, "sawtooth", 0.04, 260); tone(415, beat * 0.07, "sawtooth", 0.03, 330); }
+  const riff = [0, 392, 0, 466, 0, 392, 349, 0];
+  if (riff[bar]) tone(riff[bar], beat * 0.11, "sawtooth", 0.026, riff[bar] * 0.9);
+}
+
+function _beatRetro(ctx, beat, bar) {
+  // 120 BPM · square waves ONLY · chiptune percussion · arpeggio melody
+  if (bar === 0 || bar === 4) { tone(120, beat * 0.10, "square", 0.10, 38); noise(beat * 0.05, 0.08); }
+  if (bar === 2 || bar === 6) { noise(beat * 0.09, 0.10); tone(440, beat * 0.07, "square", 0.025, 220); }
+  if (bar % 2 === 1) tone(6500, beat * 0.035, "square", 0.01, 4200);
+  const bass = [110,110,131,110,98,110,131,147];
+  tone(bass[bar], beat * 0.26, "square", 0.052, bass[bar] * 0.91);
+  const arp  = [330, 392, 440, 392, 330, 294, 330, 392];
+  const arp2 = [262, 330, 349, 330, 262, 247, 262, 330];
+  tone(arp[bar],  beat * 0.17, "square", 0.022, arp[bar]  * 0.95);
+  tone(arp2[bar] * 2, beat * 0.09, "square", 0.011);
+}
+
+function _beatSpooky(ctx, beat, bar) {
+  // 82 BPM · NO kick · minor key drone · eerie descending sine melody · dissonance
+  if (bar === 0) { tone(28, beat * 0.9, "sine", 0.09, 22); noise(beat * 0.45, 0.028); }
+  if (bar === 2 || bar === 6) noise(beat * 0.12, 0.020);
+  const drone = [41,41,41,44,37,37,41,41];
+  tone(drone[bar], beat * 0.92, "sine", 0.052, drone[bar] * 0.96);
+  const mel = [440, 415, 392, 415, 370, 370, 392, 415];
+  if (bar % 2 === 0) tone(mel[bar], beat * 1.7, "sine", 0.017, mel[bar] * 0.93);
+  if (bar === 4) tone(466, beat * 0.55, "sine", 0.012, 415); // tritone tension
+  if (bar === 0) tone(1760, beat * 0.28, "sine", 0.007, 1320); // ethereal ping
+}
+
+function _beatBoss(ctx, beat, bar) {
+  // Boss override — original boss mode, vol boosted
+  const vol = 1.4;
+  if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
+  if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
+  if (bar % 2 === 1) tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
+  tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
+  const bass = [55, 65, 73, 65, 49, 58, 73, 58];
+  tone(bass[bar], beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * 0.88);
+  if (bar === 0) tone(330, beat * 0.12, "square", 0.025, 280);
+}
 
 export function getMusicVibe() { return _musicVibe; }
 export function setMusicVibe(vibe) { _musicVibe = vibe; }
@@ -188,57 +252,25 @@ export function setMusicIntensity(isBossWave) {
   _musicBoss = isBossWave;
 }
 
+const _BPM = { chill: 72, action: 108, intense: 150, retro: 120, spooky: 82, boss: 138 };
+
 function _scheduleMusicBeat() {
   if (!_musicActive) return;
   const ctx = getCtx();
-  const preset = _musicBoss ? { ..._VIBE_PRESETS.intense, bpm: 138 } : (_VIBE_PRESETS[_musicVibe] || _VIBE_PRESETS.action);
-  const beat = 60 / preset.bpm;
+  const vibe = _musicBoss ? "boss" : (_musicVibe || "action");
+  const beat = 60 / (_BPM[vibe] || 108);
   const bar = _musicBeat % 8;
-  const vol = _musicBoss ? 1.4 : 1.0;
-
   if (ctx) {
-    // Kick: beats 0 and 4
-    if (bar === 0 || bar === 4) {
-      tone(75, beat * 0.45, "sine", preset.kickVol * vol, 38);
-      noise(beat * 0.18, 0.07 * vol);
-    }
-    // Snare: beats 2 and 6
-    if (bar === 2 || bar === 6) {
-      noise(beat * 0.22, 0.08 * vol);
-      tone(220, beat * 0.15, "square", 0.03 * vol, 160);
-    }
-    // Open hi-hat: off-beats
-    if (bar % 2 === 1) {
-      tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
-    }
-    // Closed hi-hat: only on hats-enabled vibes
-    if (preset.hats) {
-      tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
-    }
-    // Bass line
-    const bassFreq = preset.bassNotes[bar];
-    const bassType = (_musicVibe === "retro" && !_musicBoss) ? "square" : "sawtooth";
-    tone(bassFreq, beat * 0.38, bassType, preset.bassVol * vol, bassFreq * 0.88);
-    // Boss: tense high pulse on beat 0
-    if (_musicBoss && bar === 0) {
-      tone(330, beat * 0.12, "square", 0.025, 280);
-    }
-    // Retro: bright arpeggio every beat
-    if (_musicVibe === "retro" && !_musicBoss) {
-      const arp = [220, 262, 330, 392, 440, 392, 330, 262];
-      tone(arp[bar], beat * 0.15, "square", 0.018);
-    }
-    // Spooky: eerie sustained high note on beat 0
-    if (_musicVibe === "spooky" && !_musicBoss && bar === 0) {
-      tone(880, beat * 1.8, "sine", 0.014, 660);
-    }
-    // Chill: soft pad chord on beat 0
-    if (_musicVibe === "chill" && !_musicBoss && bar === 0) {
-      tone(220, beat * 2.2, "sine", 0.012);
-      tone(277, beat * 2.2, "sine", 0.009);
+    switch (vibe) {
+      case "chill":   _beatChill(ctx, beat, bar);   break;
+      case "action":  _beatAction(ctx, beat, bar);  break;
+      case "intense": _beatIntense(ctx, beat, bar); break;
+      case "retro":   _beatRetro(ctx, beat, bar);   break;
+      case "spooky":  _beatSpooky(ctx, beat, bar);  break;
+      case "boss":    _beatBoss(ctx, beat, bar);    break;
+      default:        _beatAction(ctx, beat, bar);
     }
   }
-
   _musicBeat++;
   _musicTimer = setTimeout(_scheduleMusicBeat, beat * 1000 - 8);
 }

@@ -6,6 +6,8 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign } from "./storage.js";
+import { loadSettings } from "./settings.js";
+import SettingsPanel from "./components/SettingsPanel.jsx";
 import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
@@ -122,6 +124,7 @@ export default function CallOfDoodie() {
   const autoAimRef       = useRef(false); // mobile auto-aim toggle
   const starterLoadoutRef = useRef("standard");
   const shopPendingRef   = useRef(false); // blocks game loop like perkPending
+  const settingsRef      = useRef(loadSettings()); // game settings
   const frameBufferRef   = useRef([]);    // rolling frame buffer for highlight GIF
   const bestMomentRef    = useRef({ ts: 0, score: 0 }); // highest-excitement timestamp
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
@@ -181,6 +184,8 @@ export default function CallOfDoodie() {
   const [highlightGifUrl, setHighlightGifUrl] = useState(null);
   const [gifEncoding, setGifEncoding]         = useState(false);
   const [musicVibe, setMusicVibeState]        = useState(() => localStorage.getItem("cod-music-vibe") || "action");
+  const [gameSettings, setGameSettings]       = useState(() => loadSettings());
+  const [showSettings, setShowSettings]       = useState(false);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -293,10 +298,10 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Init game ─────────────────────────────────────────────────────────────
-  const initGame = useCallback(() => {
+  const initGame = useCallback((forceSeed) => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-    const seed = Math.floor(Math.random() * 999999);
+    const seed = (forceSeed && !isNaN(parseInt(forceSeed))) ? Math.abs(parseInt(forceSeed)) % 999999 : Math.floor(Math.random() * 999999);
     const career = loadCareerStats();
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
@@ -453,6 +458,21 @@ export default function CallOfDoodie() {
       default: break;
     }
 
+    // Apply user settings to this run
+    const sett = settingsRef.current;
+    gsRef.current.player.speed *= sett.playerSpeedMult;
+    gsRef.current.settSpawnMult       = sett.enemySpawnMult;
+    gsRef.current.settEnemyHealthMult = sett.enemyHealthMult;
+    gsRef.current.settEnemySpeedMult  = sett.enemySpeedMult;
+    gsRef.current.settScreenShakeMult = sett.screenShakeMult;
+    gsRef.current.settParticlesMult   = sett.particlesMult;
+    gsRef.current.settGrenadeRadMult  = sett.grenadeRadiusMult;
+    gsRef.current.settAutoReload      = sett.autoReload;
+    gsRef.current.settShowDPS         = sett.showDPS;
+    gsRef.current.settCrosshair       = sett.crosshair;
+    perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
+    if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
+
     // Generate seeded random obstacles + terrain (reproducible per run seed)
     let _ws = seed;
     const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
@@ -558,6 +578,7 @@ export default function CallOfDoodie() {
   const addParticles = (gs, x, y, color, count = 8) => {
     const space = MAX_PARTICLES - gs.particles.length;
     if (space <= 0) return;
+    count = Math.max(1, Math.floor(count * (gs.settParticlesMult || 1)));
     const n = Math.min(count, space);
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 4;
@@ -736,10 +757,10 @@ export default function CallOfDoodie() {
     const type = ENEMY_TYPES[ti];
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     const pm = gs.prestigeMult || 1;
-    const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm;
+    const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * (gs.settEnemyHealthMult || 1);
     gs.enemies.push({
       x, y, health: eHealth, maxHealth: eHealth,
-      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm,
+      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1),
       size: type.size, color: type.color, name: type.name, points: type.points,
       deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
       wobble: Math.random() * Math.PI * 2, hitFlash: 0,
@@ -916,9 +937,9 @@ export default function CallOfDoodie() {
           const gw = oc?.width || 320, gh = oc?.height || 180;
           const best = bestMomentRef.current;
           const midTs = best.score > 0 ? best.ts : (buf[buf.length - 1]?.ts || 0);
-          let frames = buf.filter(f => f.ts >= midTs - 1000 && f.ts <= midTs + 3000);
-          if (frames.length < 8) frames = buf.slice(-30);
-          frames = frames.slice(0, 40);
+          let frames = buf.filter(f => f.ts >= midTs - 2000 && f.ts <= midTs + 4000);
+          if (frames.length < 8) frames = buf.slice(-60);
+          frames = frames.slice(0, 60);
           if (frames.length > 0) {
             const enc = GIFEncoder();
             for (const frame of frames) {
@@ -943,10 +964,11 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Start game ────────────────────────────────────────────────────────────
-  const startGame = useCallback(() => {
+  const startGame = useCallback((forceSeed) => {
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
     stopMusic();
-    initGame();
+    settingsRef.current = loadSettings(); // refresh settings at game start
+    initGame(forceSeed);
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
     setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
@@ -1069,6 +1091,9 @@ export default function CallOfDoodie() {
     }
 
     // ── Frame capture for highlight GIF (~10fps) ──
+    // Auto-reload when ammo empty (setting)
+    if (gs.ammoCount === 0 && !isReloadingRef.current && gs.settAutoReload) doReload(currentWeaponRef.current);
+
     if (frameCountRef.current % 6 === 0 && canvasRef.current) {
       const cv = canvasRef.current;
       if (!gifOffscreenRef.current) {
@@ -1084,14 +1109,14 @@ export default function CallOfDoodie() {
       const id = octx.getImageData(0, 0, oc.width, oc.height);
       const buf = frameBufferRef.current;
       buf.push({ data: new Uint8Array(id.data.buffer), ts: Date.now() });
-      if (buf.length > 90) buf.shift();
+      if (buf.length > 120) buf.shift(); // keep ~12s at 10fps
     }
 
     // ── Wave / boss wave logic ──
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     if (!gs.bossWave) {
       gs.spawnTimer++;
-      const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult));
+      const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
       }
@@ -1219,8 +1244,9 @@ export default function CallOfDoodie() {
         gs.screenShake = 15;
         gs.enemies.forEach(e => {
           const d = Math.hypot(e.x - g.x, e.y - g.y);
-          if (d < 130) {
-            const dmg = 70 * (1 - d / 130) * (perkModsRef.current.grenadeDamageMult || 1);
+          const _gradius = 130 * (gs.settGrenadeRadMult || 1);
+          if (d < _gradius) {
+            const dmg = 70 * (1 - d / _gradius) * (perkModsRef.current.grenadeDamageMult || 1);
             e.health -= dmg; e.hitFlash = 10; gs.totalDamage += dmg;
             e.lastDmgSource = "grenade";
           }
@@ -1637,7 +1663,7 @@ export default function CallOfDoodie() {
 
     // ────────────────── RENDER ────────────────────────────────────────────
     ctx.save();
-    if (gs.screenShake > 0.5) ctx.translate((Math.random() - 0.5) * gs.screenShake * 2, (Math.random() - 0.5) * gs.screenShake * 2);
+    if (gs.screenShake > 0.5) { const _sm = gs.settScreenShakeMult ?? 1; ctx.translate((Math.random() - 0.5) * gs.screenShake * 2 * _sm, (Math.random() - 0.5) * gs.screenShake * 2 * _sm); }
 
     // Background — per-theme gradient
     const THEME_BG = [
@@ -2220,6 +2246,25 @@ export default function CallOfDoodie() {
       ctx.fillText(tip, W / 2, H - 10); ctx.globalAlpha = 1;
     }
 
+    // DPS counter (settings)
+    if (gs.settShowDPS) {
+      const elapsed = (Date.now() - startTimeRef.current) / 1000;
+      const dps = elapsed > 1 ? Math.round(gs.totalDamage / elapsed) : 0;
+      ctx.font = "bold 11px monospace"; ctx.textAlign = "left"; ctx.fillStyle = "#FF6B35"; ctx.globalAlpha = 0.85;
+      ctx.fillText("DPS " + dps.toLocaleString(), 12, H - 22); ctx.globalAlpha = 1;
+    }
+
+    // Custom crosshair
+    const _ch = gs.settCrosshair;
+    if (_ch && _ch !== "cross" && !isMobile) {
+      const mx = mouseRef.current.x, my = mouseRef.current.y;
+      ctx.save();
+      ctx.strokeStyle = "#FFF"; ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.85;
+      if (_ch === "dot") { ctx.beginPath(); ctx.arc(mx, my, 3, 0, Math.PI * 2); ctx.fill(); }
+      else if (_ch === "circle") { ctx.beginPath(); ctx.arc(mx, my, 10, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(mx, my, 1.5, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+    }
+
     ctx.restore();
     frameRef.current = requestAnimationFrame(gameLoop);
   }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup]);
@@ -2243,7 +2288,7 @@ export default function CallOfDoodie() {
       if (pausedRef.current || perkPendingRef.current) return;
       keysRef.current[e.key.toLowerCase()] = true;
       if (e.key === "r") doReload(currentWeaponRef.current);
-      if (e.key === "q" || e.key === "g" || e.key === "5") throwGrenade();
+      if (e.key === "q" || e.key === "g") throwGrenade();
       if (e.key === " " || e.key === "Shift") doDash();
       const num = parseInt(e.key);
       if (num >= 1 && num <= WEAPONS.length) switchWeapon(num - 1);
@@ -2335,6 +2380,8 @@ export default function CallOfDoodie() {
         onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
         onChangeUsername={() => { clearLockedCallsign(); setUsername(""); setScreen("username"); }}
         starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
+        gameSettings={gameSettings}
+        onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
       />
     );
   }
@@ -2365,7 +2412,7 @@ export default function CallOfDoodie() {
     <div ref={containerRef} style={base}>
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: isMobile ? "calc(100% - 56px)" : "100%", display: "block", cursor: isMobile ? "default" : "crosshair",
+        style={{ width: "100%", height: isMobile ? "calc(100% - 56px)" : "100%", display: "block", cursor: isMobile ? "default" : (gameSettings.crosshair !== "cross" ? "none" : "crosshair"),
           filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
       />
 
@@ -2377,6 +2424,7 @@ export default function CallOfDoodie() {
           musicMuted={musicMuted} onToggleMute={toggleMusicMuted}
           musicVibe={musicVibe} onSetMusicVibe={(v) => { setMusicVibe(v); setMusicVibeState(v); localStorage.setItem("cod-music-vibe", v); }}
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
+          gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           onResume={() => setPaused(false)}
           onLeave={() => { stopMusic(); setPaused(false); setScreen("menu"); }}
         />

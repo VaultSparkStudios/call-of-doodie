@@ -2,10 +2,12 @@ import { useState } from "react";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { MUSIC_VIBES } from "../sounds.js";
 import AchievementsPanel from "./AchievementsPanel.jsx";
+import SettingsPanel from "./SettingsPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
   const pBtn = { padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.08)", color: "#FFF", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300 };
@@ -15,6 +17,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "#fff", border: "1px solid rgba(255,215,0,0.25)", maxHeight: "90vh", overflowY: "auto" };
 
   if (showAch) return <AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} />;
+  if (showSettings && gameSettings) return <SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} />;
 
   if (view === "rules") return (
     <div style={overlay}>
@@ -63,7 +66,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Click</span> — Shoot</div>
             <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>R</span> — Reload</div>
             <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>1 / 2 / 3 / 4</span> — Switch weapons</div>
-            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>5 / Q / G</span> — Throw grenade</div>
+            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>Q / G</span> — Throw grenade</div>
             <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>Space / Shift</span> — Dash</div>
             <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
           </div>
@@ -117,6 +120,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <button onClick={() => setView("controls")} style={pBtn}>⌨ CONTROLS</button>
           <button onClick={() => setView("bestiary")} style={pBtn}>👾 MOST WANTED LIST</button>
           <button onClick={() => setShowAch(true)} style={pBtn}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
+          <button onClick={() => setShowSettings(true)} style={pBtn}>⚙ SETTINGS</button>
           <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF" }}>
             {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}
           </button>
@@ -136,7 +140,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <button onClick={onToggleColorblind} style={{ ...pBtn, color: colorblindMode ? "#FFD700" : "#AAA" }}>
             {colorblindMode ? "🎨 COLORBLIND: ON" : "🎨 COLORBLIND: OFF"}
           </button>
-          <button onClick={onLeave} style={{ ...pBtn, color: "#F66", borderColor: "rgba(255,100,100,0.3)", marginTop: 4 }}>🚪 LEAVE GAME</button>
+          <button onClick={onLeave} style={{ ...pBtn, color: "#F66", borderColor: "rgba(255,100,100,0.3)", marginTop: 4 }}>🚪 RAGE QUIT</button>
         </div>
       </div>
     </div>
