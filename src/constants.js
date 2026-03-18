@@ -239,6 +239,11 @@ export const NEW_FEATURES = [
   "🔄 Bullet Ricochet — bullets bounce off walls up to 10 times",
   "🎖️ Tiered Meta Upgrades — 10 upgrades × 3 tiers",
   "⭐ Prestige System — reset & raise the stakes",
+  "🎲 Run Modifiers — 8 game-changers like Glass Cannon, Vampire, Ricochet+",
+  "👹 Boss Tier Mechanics — bullet rings at wave 10, ground slam at wave 15",
+  "🌿 Desert & Forest Map Themes — 6 total seasonal arenas",
+  "🔢 Shareable Run Seeds — copy your seed from the death screen",
+  "📅 Expanded Daily Missions — boss kills, killstreaks, dash kills",
 ];
 
 // ===== KILLSTREAKS =====
@@ -246,6 +251,19 @@ export const KILLSTREAKS = [
   "Uber Eats Delivery Drone", "Roomba Strike", "Tactical Crocs Airdrop",
   "AC-130 (Guy with leaf blower)", "Nuclear (Microwave fish in office)",
   "Swarm of Angry Geese", "Mom With a Chancla",
+];
+
+// ===== RUN MODIFIERS =====
+// One modifier is applied per run (seeded). Each modifier has a clear upside + tradeoff.
+export const RUN_MODIFIERS = [
+  { id: "glass_cannon",   emoji: "💥", name: "Glass Cannon",   desc: "Deal 2× damage. Start at 50% HP." },
+  { id: "vampire",        emoji: "🧛", name: "Vampire Mode",   desc: "Kills heal +3 HP. No health drops." },
+  { id: "speed_freak",    emoji: "⚡", name: "Speed Freak",    desc: "Move 30% faster. Enemies are 20% faster too." },
+  { id: "double_trouble", emoji: "👥", name: "Double Trouble", desc: "Twice the enemies per wave. +50% score per kill." },
+  { id: "lightweight",    emoji: "💨", name: "Lightweight",    desc: "Dash cooldown halved. Move 15% faster." },
+  { id: "headhunter",     emoji: "🎯", name: "Headhunter",     desc: "30% crit chance (was 15%). Crits deal 3× damage." },
+  { id: "ricochet_plus",  emoji: "🔄", name: "Ricochet+",      desc: "Bullets bounce 20× instead of 10." },
+  { id: "blessed",        emoji: "😇", name: "Blessed",        desc: "Start at 150% max HP. Move 10% faster." },
 ];
 
 // ===== TEXT POOLS =====

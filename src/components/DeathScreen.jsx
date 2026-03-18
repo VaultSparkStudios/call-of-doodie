@@ -6,7 +6,7 @@ const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", leg
 
 export default function DeathScreen({
   score, kills, deaths, wave, level, bestStreak, timeSurvived, totalDamage,
-  crits, grenades, deathMessage, difficulty, achievementsUnlocked,
+  crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
   leaderboard, lbLoading, username, DIFFICULTIES,
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
@@ -160,9 +160,16 @@ export default function DeathScreen({
         <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>💀</div>
         <h2 style={{ fontSize: "clamp(24px,7vw,38px)", color: "#FF2222", margin: "4px 0", letterSpacing: 3 }}>YOU DIED</h2>
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
-        <div style={{ fontSize: 11, color: diff.color, marginBottom: 12, fontWeight: 700 }}>
+        <div style={{ fontSize: 11, color: diff.color, marginBottom: 6, fontWeight: 700 }}>
           {diff.emoji} {diff.label.toUpperCase()} MODE
         </div>
+
+        {runModifier && (
+          <div style={{ marginBottom: 10, padding: "5px 14px", borderRadius: 8, border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.06)", display: "inline-block" }}>
+            <span style={{ color: "#FFD700", fontSize: 11, fontWeight: 700 }}>{runModifier.emoji} {runModifier.name.toUpperCase()}</span>
+            <span style={{ color: "#888", fontSize: 10, marginLeft: 8 }}>{runModifier.desc}</span>
+          </div>
+        )}
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 12 }}>
           {[
@@ -309,6 +316,16 @@ export default function DeathScreen({
             {sharing ? "⏳ GENERATING..." : "📸 SHARE SCORE"}
           </button>
         </div>
+
+        {runSeed > 0 && (
+          <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+            <span style={{ fontSize: 10, color: "#555", letterSpacing: 1 }}>SEED #{runSeed}</span>
+            <button
+              onClick={() => navigator.clipboard?.writeText?.(String(runSeed))}
+              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #333", borderRadius: 4, color: "#666", cursor: "pointer", letterSpacing: 1 }}
+            >📋 COPY</button>
+          </div>
+        )}
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
           <button onClick={onStartGame} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>

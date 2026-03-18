@@ -3,7 +3,7 @@ import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
-  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE,
+  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign } from "./storage.js";
 import {
@@ -164,6 +164,7 @@ export default function CallOfDoodie() {
   const [autoAim, setAutoAim]             = useState(false);
   const [starterLoadout, setStarterLoadout] = useState("standard");
   const [runSeed, setRunSeed]             = useState(0);
+  const [runModifier, setRunModifier]     = useState(null);
   const [metaToast, setMetaToast]         = useState(null);
   const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
   const [shopPending, setShopPending]         = useState(false);
@@ -266,6 +267,9 @@ export default function CallOfDoodie() {
       totalDamage: gs.totalDamage, dashes: statsRef.current.dashes,
       timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000),
       crits: statsRef.current.crits, grenadeKills: statsRef.current.grenadeKills || 0,
+      bossKills: statsRef.current.bossKills || 0,
+      bestStreak: statsRef.current.bestStreak || 0,
+      dashKills: statsRef.current.dashKills || 0,
     };
     missions.forEach((m, idx) => {
       if (missionDoneRef.current.has(idx)) return;
@@ -304,7 +308,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0 };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0 };
     achievedRef.current = new Set();
     perkModsRef.current = {};
     perkPendingRef.current = false;
@@ -395,6 +399,46 @@ export default function CallOfDoodie() {
       gsRef.current.player.speed = 5.4;
       perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.60;
     }
+    // ── Apply run modifier (seeded, one per run) ──────────────────────────────
+    const _mod = RUN_MODIFIERS[seed % RUN_MODIFIERS.length];
+    gsRef.current.runModifier = _mod.id;
+    setRunModifier(_mod.id);
+    switch (_mod.id) {
+      case "glass_cannon":
+        perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 2.0;
+        gsRef.current.player.health = Math.max(10, Math.floor(gsRef.current.player.health * 0.5));
+        gsRef.current.player.maxHealth = Math.max(10, Math.floor(gsRef.current.player.maxHealth * 0.5));
+        break;
+      case "vampire":
+        gsRef.current.vampireMode = true;
+        break;
+      case "speed_freak":
+        gsRef.current.player.speed *= 1.3;
+        gsRef.current.enemySpeedMult = 1.2;
+        break;
+      case "double_trouble":
+        gsRef.current.waveEnemyMult = 2;
+        gsRef.current.killScoreMult = 1.5;
+        break;
+      case "lightweight":
+        perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.5;
+        gsRef.current.player.speed *= 1.15;
+        break;
+      case "headhunter":
+        gsRef.current.critBonus = 0.15;
+        gsRef.current.critMultBonus = 1.0;
+        break;
+      case "ricochet_plus":
+        gsRef.current.extraBounces = 10;
+        break;
+      case "blessed":
+        gsRef.current.player.health = Math.floor(gsRef.current.player.health * 1.5);
+        gsRef.current.player.maxHealth = Math.floor(gsRef.current.player.maxHealth * 1.5);
+        gsRef.current.player.speed *= 1.10;
+        break;
+      default: break;
+    }
+
     // Generate seeded random obstacles + terrain (reproducible per run seed)
     let _ws = seed;
     const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
@@ -642,6 +686,12 @@ export default function CallOfDoodie() {
       hasMinionSurge: typeIndex === 9 && gs.currentWave >= 25,
       hasRentNuke: typeIndex === 9 && gs.currentWave >= 40,
       rentNukeTimer: 0,
+      // New tier abilities
+      hasBulletRing: gs.currentWave >= 10,
+      bulletRingTimer: 0,
+      hasGroundSlam: gs.currentWave >= 15,
+      groundSlamTimer: Math.floor(Math.random() * 180), // stagger so bosses don't slam simultaneously
+      groundSlamActive: false, groundSlamRadius: 0,
     });
   }, []);
 
@@ -687,7 +737,8 @@ export default function CallOfDoodie() {
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = (gs, ex, ey, isBoss) => {
     const types    = ["health", "ammo", "speed", "nuke", "upgrade"];
-    const weights  = isBoss ? [0.25, 0.15, 0.10, 0.10, 0.40] : [0.48, 0.10, 0.22, 0.05, 0.15];
+    // Vampire mode: no health drops — replace with ammo
+    const weights  = isBoss ? [gs.vampireMode ? 0 : 0.25, gs.vampireMode ? 0.40 : 0.15, 0.10, 0.10, 0.40] : [gs.vampireMode ? 0 : 0.48, gs.vampireMode ? 0.58 : 0.10, 0.22, 0.05, 0.15];
     let roll = Math.random(), cumul = 0, pType = "health";
     for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
     gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
@@ -735,7 +786,7 @@ export default function CallOfDoodie() {
       damage: weapon.damage * damageMult, color: weapon.color,
       life: bLife, size: bSize,
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
-      bouncesLeft: noRicochet ? 0 : 10,
+      bouncesLeft: noRicochet ? 0 : 10 + (gs.extraBounces || 0),
     });
     if (weapon.pellets) {
       // Shotgun — fire N pellets with independent spread
@@ -850,7 +901,7 @@ export default function CallOfDoodie() {
     stopMusic();
     initGame();
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
-    setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(diff.playerHP);
+    setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
     setBestStreak(0); setTotalDamage(0);
@@ -993,7 +1044,7 @@ export default function CallOfDoodie() {
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
       } else {
-        gs.maxEnemiesThisWave = Math.min(5 + gs.currentWave * 3, 40);
+        gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), 60);
       }
       setWave(gs.currentWave);
       if (!gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
@@ -1016,13 +1067,20 @@ export default function CallOfDoodie() {
         const _wv = gs.currentWave;
         if (_wv >= 40)      addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
         else if (_wv >= 35) addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
-        else if (_wv >= 30) addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE", "#FF6600");
-        else if (_wv >= 25) addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE", "#FF6600");
-        else if (_wv >= 20) addText(gs, W / 2, H / 2 + 45, "🛡 NEW ABILITY: SHIELD PULSE!", "#FF6600");
+        else if (_wv >= 30) addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
+        else if (_wv >= 25) addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
+        else if (_wv >= 20) addText(gs, W / 2, H / 2 + 45, "🛡 SHIELD PULSE · 💥 GROUND SLAM · 🔥 BULLET RING", "#FF6600");
+        else if (_wv >= 15) addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
+        else if (_wv >= 10) addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
+        else if (_wv >= 7)  addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
         // Spawn boss(es) — Mega Karen up to wave 9, Landlord 10-14, both 15+
         if (gs.currentWave >= 15) { spawnBoss(gs, 4); spawnBoss(gs, 9); }
         else if (gs.currentWave >= 10) { spawnBoss(gs, 9); }
-        else { spawnBoss(gs, 4); }
+        else {
+          spawnBoss(gs, 4);
+          // Wave 7+ early boss gets escort minions
+          if (gs.currentWave >= 7) { spawnEnemy(gs); spawnEnemy(gs); gs.maxEnemiesThisWave += 2; gs.enemiesThisWave += 2; }
+        }
         // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
         gs.enemiesThisWave = gs.maxEnemiesThisWave;
         addParticles(gs, W / 2, H / 2, "#FF0000", 40);
@@ -1119,7 +1177,7 @@ export default function CallOfDoodie() {
             b.life = 0; return;
           }
           const comboMult = 1 + comboRef.current.count * 0.1;
-          const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0);
+          const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0) + (gs.critBonus || 0);
           const isCrit = Math.random() < effectiveCrit;
           const lastResortMult = (perkModsRef.current.lastResort && p.health < p.maxHealth * 0.25) ? 3.0 : 1.0;
           // Shield Guy (ti=11): 20% damage from front, 160% from behind
@@ -1127,7 +1185,7 @@ export default function CallOfDoodie() {
           const bulletAngle = Math.atan2(b.vy, b.vx);
           const angleDiff = Math.abs(Math.atan2(Math.sin(bulletAngle - moveAngle), Math.cos(bulletAngle - moveAngle)));
           const shieldMult = (e.typeIndex === 11) ? (angleDiff < Math.PI / 2 ? 0.20 : 1.60) : 1.0;
-          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1) * lastResortMult * shieldMult;
+          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * lastResortMult * shieldMult;
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Lifesteal
           if (perkModsRef.current.lifesteal) {
@@ -1151,8 +1209,9 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            const pts = Math.floor(e.points * comboMult);
+            const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
+            if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
             if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
@@ -1180,6 +1239,7 @@ export default function CallOfDoodie() {
             addKillFeed(e.name, WEAPONS[wpnIdx].name);
             if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
             addXp(pts); gs.killFlash = 6;
+            if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
             gs.dyingEnemies = gs.dyingEnemies || [];
             if (gs.dyingEnemies.length < MAX_DYING_ANIM)
               gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
@@ -1226,7 +1286,7 @@ export default function CallOfDoodie() {
     gs.enemies.forEach(e => {
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
-      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1);
+      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1);
       // Flow field steering: sample flow field, fall back to direct angle if no cell data
       const ff = gs.flowField;
       let sx, sy;
@@ -1358,6 +1418,42 @@ export default function CallOfDoodie() {
             addText(gs, e.x, e.y - 65, "🌀 BLINKED!", "#FF1493", true);
             addParticles(gs, e.x, e.y, "#FF1493", 15);
             gs.screenShake = 8;
+          }
+        }
+        // ── Bullet Ring (wave 10+): fires 8 bullets in 360° pattern ──────────
+        if (e.hasBulletRing) {
+          e.bulletRingTimer++;
+          if (e.bulletRingTimer >= 360) {
+            e.bulletRingTimer = 0;
+            for (let _ri = 0; _ri < 8; _ri++) {
+              const ba = (_ri / 8) * Math.PI * 2;
+              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12 });
+            }
+            addText(gs, e.x, e.y - 80, "🔥 BULLET RING!", "#FF6600", true);
+            addParticles(gs, e.x, e.y, "#FF6600", 14);
+            gs.screenShake = 6;
+          }
+        }
+        // ── Ground Slam (wave 15+): expanding shockwave ring ─────────────────
+        if (e.hasGroundSlam) {
+          if (!e.groundSlamActive) {
+            e.groundSlamTimer++;
+            if (e.groundSlamTimer >= 420) {
+              e.groundSlamTimer = 0; e.groundSlamActive = true; e.groundSlamRadius = 0;
+              addText(gs, e.x, e.y - 80, "💥 GROUND SLAM!", "#FF4400", true);
+              addParticles(gs, e.x, e.y, "#FF4400", 20);
+              gs.screenShake = 14;
+            }
+          } else {
+            e.groundSlamRadius += 6;
+            const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
+            if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
+              p.health -= 18; p.invincible = 25; gs.damageFlash = 10;
+              setHealth(Math.max(0, p.health));
+              addText(gs, p.x, p.y - 30, "-18 SLAM!", "#FF4400");
+              if (p.health <= 0) handlePlayerDeath(gs);
+            }
+            if (e.groundSlamRadius >= 230) e.groundSlamActive = false;
           }
         }
       }
@@ -1678,6 +1774,16 @@ export default function CallOfDoodie() {
       // Drop shadow
       ctx.fillStyle = "rgba(0,0,0,0.3)";
       ctx.beginPath(); ctx.ellipse(0, r + 3, r * 0.7, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
+
+      // Ground slam expanding shockwave ring
+      if (e.groundSlamActive && e.groundSlamRadius > 0) {
+        const ringAlpha = Math.max(0, 1 - e.groundSlamRadius / 230) * 0.75;
+        ctx.globalAlpha = ringAlpha;
+        ctx.strokeStyle = "#FF4400"; ctx.lineWidth = 7;
+        ctx.shadowColor = "#FF4400"; ctx.shadowBlur = 18;
+        ctx.beginPath(); ctx.arc(0, 0, e.groundSlamRadius, 0, Math.PI * 2); ctx.stroke();
+        ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+      }
 
       // Boss: under-body glow pool
       if (e.isBossEnemy) {
@@ -2171,6 +2277,7 @@ export default function CallOfDoodie() {
         bestStreak={bestStreak} timeSurvived={timeSurvived} totalDamage={totalDamage}
         crits={statsRef.current.crits} grenades={statsRef.current.grenades}
         deathMessage={deathMessage} difficulty={difficulty} runSeed={runSeed}
+        runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
         achievementsUnlocked={achievementsUnlocked}
         activePerks={activePerks} missionsSummary={missionsSummary}
         leaderboard={leaderboard} lbLoading={lbLoading} username={username}
@@ -2252,6 +2359,7 @@ export default function CallOfDoodie() {
         grenadeReady={grenadeReady} dashReady={dashReady} extraLives={extraLives}
         guardianAngelFlash={guardianAngelFlash} difficulty={difficulty} isMobile={isMobile}
         weaponUpgrades={weaponUpgrades} activePerks={activePerks}
+        runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
         onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)}
         onDash={doDash} onGrenade={throwGrenade} onPause={() => setPaused(true)}
         fmtTime={fmtTime}

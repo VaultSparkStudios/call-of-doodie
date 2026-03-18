@@ -5,7 +5,7 @@ export default function HUD({
   wave, timeSurvived, score, kills, deaths, health, ammo, isReloading,
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
-  difficulty, isMobile, weaponUpgrades, activePerks,
+  difficulty, isMobile, weaponUpgrades, activePerks, runModifier,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
 }) {
@@ -36,6 +36,13 @@ export default function HUD({
         <span style={{ color: "#CCC" }}>{fmtTime(timeSurvived)}</span>
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
+
+      {/* Run modifier badge */}
+      {runModifier && (
+        <div style={{ position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)", fontSize: 9, color: "#FFD700", background: "rgba(0,0,0,0.55)", padding: "2px 9px", borderRadius: 8, fontWeight: 700, letterSpacing: 1, border: "1px solid rgba(255,215,0,0.28)", whiteSpace: "nowrap" }} title={runModifier.desc}>
+          {runModifier.emoji} {runModifier.name.toUpperCase()}
+        </div>
+      )}
 
       {/* Score */}
       <div style={{ position: "absolute", top: 8, right: 56 }}>

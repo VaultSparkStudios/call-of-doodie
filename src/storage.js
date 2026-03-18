@@ -84,19 +84,23 @@ export function saveCareerStats(stats) {
 
 // ===== DAILY MISSIONS =====
 const MISSION_DEFS = [
-  { id: "kill_any",      icon: "☠️",  make: (n) => ({ text: `Kill ${n} enemies`,              goal: n, track: "kills"        }) },
-  { id: "reach_wave",    icon: "🌊",  make: (n) => ({ text: `Reach wave ${n}`,                goal: n, track: "wave"         }) },
-  { id: "combo",         icon: "🌪️", make: (n) => ({ text: `Land a ×${n} combo`,             goal: n, track: "maxCombo"     }) },
-  { id: "damage",        icon: "⚔️",  make: (n) => ({ text: `Deal ${n.toLocaleString()} dmg`, goal: n, track: "totalDamage"  }) },
-  { id: "dashes",        icon: "💨",  make: (n) => ({ text: `Dash ${n} times`,                goal: n, track: "dashes"       }) },
-  { id: "crits",         icon: "🎯",  make: (n) => ({ text: `Land ${n} crits`,                goal: n, track: "crits"        }) },
-  { id: "grenade_kills", icon: "💣",  make: (n) => ({ text: `Kill ${n} with grenades`,        goal: n, track: "grenadeKills" }) },
-  { id: "survive",       icon: "⏱️",  make: (n) => ({ text: `Survive ${n}s`,                 goal: n, track: "timeSurvived" }) },
+  { id: "kill_any",      icon: "☠️",  make: (n) => ({ text: `Kill ${n} enemies`,                     goal: n, track: "kills"        }) },
+  { id: "reach_wave",    icon: "🌊",  make: (n) => ({ text: `Reach wave ${n}`,                       goal: n, track: "wave"         }) },
+  { id: "combo",         icon: "🌪️", make: (n) => ({ text: `Land a ×${n} combo`,                   goal: n, track: "maxCombo"     }) },
+  { id: "damage",        icon: "⚔️",  make: (n) => ({ text: `Deal ${n.toLocaleString()} dmg`,        goal: n, track: "totalDamage"  }) },
+  { id: "dashes",        icon: "💨",  make: (n) => ({ text: `Dash ${n} times`,                       goal: n, track: "dashes"       }) },
+  { id: "crits",         icon: "🎯",  make: (n) => ({ text: `Land ${n} crits`,                       goal: n, track: "crits"        }) },
+  { id: "grenade_kills", icon: "💣",  make: (n) => ({ text: `Kill ${n} with grenades`,               goal: n, track: "grenadeKills" }) },
+  { id: "survive",       icon: "⏱️",  make: (n) => ({ text: `Survive ${n}s`,                        goal: n, track: "timeSurvived" }) },
+  { id: "boss_kills",    icon: "👹",  make: (n) => ({ text: `Slay ${n} boss${n > 1 ? "es" : ""}`,   goal: n, track: "bossKills"    }) },
+  { id: "killstreak",    icon: "🔥",  make: (n) => ({ text: `Land a ×${n} killstreak`,               goal: n, track: "bestStreak"   }) },
+  { id: "dash_kills",    icon: "💨",  make: (n) => ({ text: `Kill ${n} enemies while dashing`,       goal: n, track: "dashKills"    }) },
 ];
 const MISSION_PARAMS = {
   kill_any: [15,20,25], reach_wave: [5,6,7], combo: [5,8,10],
   damage: [2000,5000,8000], dashes: [10,15,20], crits: [10,20,25],
   grenade_kills: [3,5,8], survive: [60,90,120],
+  boss_kills: [1,2,3], killstreak: [5,8,10], dash_kills: [3,5,8],
 };
 function lcg(s) { return Math.abs((Math.imul(s, 1664525) + 1013904223) | 0); }
 
