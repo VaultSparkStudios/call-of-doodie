@@ -5,11 +5,12 @@ import {
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign } from "./storage.js";
 import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
+  startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
 } from "./sounds.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -18,6 +19,64 @@ import PauseMenu from "./components/PauseMenu.jsx";
 import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
 import PerkModal, { getRandomPerks } from "./components/PerkModal.jsx";
+import WaveShopModal from "./components/WaveShopModal.jsx";
+
+// ── Flow field pathfinding ────────────────────────────────────────────────────
+// BFS from player position, producing direction vectors for each grid cell.
+// Enemies sample their cell and move toward the player while navigating around walls.
+const FF_CELL = 24; // grid cell size in px
+function buildFlowField(W, H, px, py, obstacles) {
+  const cols = Math.ceil(W / FF_CELL);
+  const rows = Math.ceil(H / FF_CELL);
+  const blocked = new Uint8Array(cols * rows);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cx = (c + 0.5) * FF_CELL, cy = (r + 0.5) * FF_CELL;
+      for (const ob of obstacles) {
+        if (cx > ob.x - 10 && cx < ob.x + ob.w + 10 && cy > ob.y - 10 && cy < ob.y + ob.h + 10) {
+          blocked[r * cols + c] = 1; break;
+        }
+      }
+    }
+  }
+  const fdx = new Float32Array(cols * rows);
+  const fdy = new Float32Array(cols * rows);
+  const visited = new Uint8Array(cols * rows);
+  const pc = Math.min(cols - 1, Math.max(0, Math.floor(px / FF_CELL)));
+  const pr = Math.min(rows - 1, Math.max(0, Math.floor(py / FF_CELL)));
+  visited[pr * cols + pc] = 1;
+  const queue = [[pc, pr]]; let qi = 0;
+  const DIRS = [[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[-1,1],[1,-1],[1,1]];
+  while (qi < queue.length) {
+    const [cc, cr] = queue[qi++];
+    for (const [dc, dr] of DIRS) {
+      const nc = cc + dc, nr = cr + dr;
+      if (nc < 0 || nc >= cols || nr < 0 || nr >= rows) continue;
+      if (visited[nr * cols + nc] || blocked[nr * cols + nc]) continue;
+      visited[nr * cols + nc] = 1;
+      const ddx = cc - nc, ddy = cr - nr, dl = Math.hypot(ddx, ddy);
+      fdx[nr * cols + nc] = ddx / dl;
+      fdy[nr * cols + nc] = ddy / dl;
+      queue.push([nc, nr]);
+    }
+  }
+  return { fdx, fdy, cols, rows };
+}
+
+// ── Wave shop options ─────────────────────────────────────────────────────────
+function getShopOptions(gs, wpnIdx) {
+  const p = gs.player;
+  const pool = [
+    { id: "health",  emoji: "💊", name: "Field Medkit",   desc: "Restore 50 HP",              available: p.health < p.maxHealth },
+    { id: "ammo",    emoji: "📦", name: "Resupply Crate", desc: "Fully refill all weapons",    available: true },
+    { id: "upgrade", emoji: "🔧", name: "Field Upgrade",  desc: `Upgrade ${WEAPONS[wpnIdx].emoji} (+1 ⭐)`, available: (gs.weaponUpgrades?.[wpnIdx] || 0) < 3 },
+    { id: "speed",   emoji: "👟", name: "Combat Stim",    desc: "+10% move speed (permanent)", available: true },
+    { id: "maxhp",   emoji: "❤️", name: "HP Canister",    desc: "+25 max HP (permanent)",      available: true },
+    { id: "damage",  emoji: "🔥", name: "Damage Boost",   desc: "+15% bullet damage",          available: true },
+  ].filter(o => o.available);
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return pool.slice(0, 3);
+}
 
 // ── Performance caps ─────────────────────────────────────────────────────────
 const MAX_PARTICLES  = 200;  // hard cap on concurrent particle objects
@@ -61,10 +120,11 @@ export default function CallOfDoodie() {
   const missionDoneRef   = useRef(new Set()); // indices of completed missions this run
   const autoAimRef       = useRef(false); // mobile auto-aim toggle
   const starterLoadoutRef = useRef("standard");
+  const shopPendingRef   = useRef(false); // blocks game loop like perkPending
 
   // ── State ─────────────────────────────────────────────────────────────────
-  const [screen, setScreen]           = useState("username");
-  const [username, setUsername]       = useState("");
+  const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
+  const [username, setUsername]       = useState(() => getLockedCallsign() || "");
   const [score, setScore]             = useState(0);
   const [kills, setKills]             = useState(0);
   const [deaths, setDeaths]           = useState(0);
@@ -105,6 +165,11 @@ export default function CallOfDoodie() {
   const [starterLoadout, setStarterLoadout] = useState("standard");
   const [runSeed, setRunSeed]             = useState(0);
   const [metaToast, setMetaToast]         = useState(null);
+  const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
+  const [shopPending, setShopPending]         = useState(false);
+  const [shopOptions, setShopOptions]         = useState([]);
+  const [musicMuted, setMusicMuted]           = useState(() => { const s = localStorage.getItem("cod-music-muted") === "1"; setMuted(s); return s; });
+  const [colorblindMode, setColorblindMode]   = useState(() => localStorage.getItem("cod-colorblind") === "1");
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -137,6 +202,23 @@ export default function CallOfDoodie() {
   const GW = () => sizeRef.current.w;
   const GH = () => sizeRef.current.h;
   const fmtTime = (s) => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+
+  // ── Music / colorblind toggles ─────────────────────────────────────────────
+  const toggleMusicMuted = useCallback(() => {
+    const next = !getMuted();
+    setMuted(next);
+    setMusicMuted(next);
+    localStorage.setItem("cod-music-muted", next ? "1" : "0");
+    if (next) stopMusic(); else if (gsRef.current) startMusic(gsRef.current.bossWave);
+  }, []);
+
+  const toggleColorblind = useCallback(() => {
+    setColorblindMode(prev => {
+      const next = !prev;
+      localStorage.setItem("cod-colorblind", next ? "1" : "0");
+      return next;
+    });
+  }, []);
 
   // ── Leaderboard ───────────────────────────────────────────────────────────
   const refreshLeaderboard = useCallback(async () => {
@@ -478,6 +560,48 @@ export default function CallOfDoodie() {
     checkAchievements(gsRef.current || {});
   }, [checkAchievements]);
 
+  // ── Wave shop apply ───────────────────────────────────────────────────────
+  const applyShopOption = useCallback((optionId) => {
+    const gs = gsRef.current, p = gs?.player;
+    if (!gs || !p) return;
+    const wpnIdx = currentWeaponRef.current;
+    switch (optionId) {
+      case "health":
+        p.health = Math.min(p.maxHealth, p.health + 50);
+        setHealth(Math.floor(p.health));
+        break;
+      case "ammo":
+        gs.weaponAmmos = WEAPONS.map((w, i) => {
+          const ul = gs.weaponUpgrades?.[i] || 0;
+          return Math.floor(w.maxAmmo * (1 + ul * 0.25) * (perkModsRef.current.ammoMult || 1));
+        });
+        gs.ammoCount = gs.weaponAmmos[wpnIdx];
+        setAmmo(gs.ammoCount);
+        break;
+      case "upgrade":
+        if ((gs.weaponUpgrades?.[wpnIdx] || 0) < 3) {
+          gs.weaponUpgrades[wpnIdx]++;
+          statsRef.current.weaponUpgradesCollected++;
+          statsRef.current.maxWeaponLevel = Math.max(statsRef.current.maxWeaponLevel, gs.weaponUpgrades[wpnIdx]);
+          setWeaponUpgrades([...gs.weaponUpgrades]);
+        }
+        break;
+      case "speed":
+        p.speed *= 1.10;
+        break;
+      case "maxhp":
+        p.maxHealth += 25; p.health = Math.min(p.maxHealth, p.health + 25);
+        setHealth(Math.floor(p.health));
+        break;
+      case "damage":
+        perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.15;
+        break;
+      default: break;
+    }
+    shopPendingRef.current = false;
+    setShopPending(false);
+  }, []);
+
   // ── Boss spawning ─────────────────────────────────────────────────────────
   const spawnBoss = useCallback((gs, typeIndex) => {
     const W = GW(), H = GH();
@@ -599,15 +723,37 @@ export default function CallOfDoodie() {
     const a = angle + spread;
     const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25);
     const pierce = perkModsRef.current.pierce || 0;
-    gs.bullets.push({
+    const bSize = weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4);
+    const bLife = weapon.bulletLife || 60;
+    const bSpeed = weapon.bulletSpeed || 12;
+    const noRicochet = weaponIdx === 1; // RPG only
+    const makeBullet = (ang) => ({
       x: p.x + Math.cos(angle) * 25, y: p.y + Math.sin(angle) * 25,
-      vx: Math.cos(a) * (weapon.bulletSpeed || 12), vy: Math.sin(a) * (weapon.bulletSpeed || 12),
+      vx: Math.cos(ang) * bSpeed, vy: Math.sin(ang) * bSpeed,
       damage: weapon.damage * damageMult, color: weapon.color,
-      life: weapon.bulletLife || 60,
-      size: weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4),
+      life: bLife, size: bSize,
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
-      bouncesLeft: weaponIdx === 1 ? 0 : 10, // RPG doesn't bounce; all others ricochet until bullet life expires
+      bouncesLeft: noRicochet ? 0 : 10,
     });
+    if (weapon.pellets) {
+      // Shotgun — fire N pellets with independent spread
+      for (let pi = 0; pi < weapon.pellets; pi++) {
+        const pa = angle + (Math.random() - 0.5) * weapon.spread;
+        gs.bullets.push(makeBullet(pa));
+      }
+    } else if (weapon.burst) {
+      // Burst fire — first shot immediate, rest scheduled
+      gs.bullets.push(makeBullet(a));
+      for (let bi = 1; bi < weapon.burst; bi++) {
+        setTimeout(() => {
+          if (!gsRef.current || pausedRef.current) return;
+          const ba = angle + (Math.random() - 0.5) * weapon.spread;
+          gsRef.current.bullets.push(makeBullet(ba));
+        }, bi * (weapon.burstDelay || 90));
+      }
+    } else {
+      gs.bullets.push(makeBullet(a));
+    }
     gs.muzzleFlash = 4;
     gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : weaponIdx === 4 ? 18 : 3);
     if (gs.ammoCount <= 0) doReload(weaponIdx);
@@ -665,6 +811,7 @@ export default function CallOfDoodie() {
       setTimeout(() => setGuardianAngelFlash(false), 1500);
       return false;
     }
+    stopMusic();
     soundDeath();
     setDeaths(dd => dd + 1);
     setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
@@ -687,6 +834,10 @@ export default function CallOfDoodie() {
     const mProgress = {};
     missionDoneRef.current.forEach(i => { mProgress[i] = true; });
     saveMissionProgress(mProgress);
+    // Capture missions summary for death screen (refs become stale after screen change)
+    const _missions = dailyMissionsRef.current || [];
+    const _done = missionDoneRef.current || new Set();
+    setMissionsSummary(_missions.map((m, i) => ({ text: m.text, icon: m.icon, completed: _done.has(i) })));
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
   }, []);
@@ -694,6 +845,7 @@ export default function CallOfDoodie() {
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(() => {
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
+    stopMusic();
     initGame();
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
     setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(diff.playerHP);
@@ -705,9 +857,11 @@ export default function CallOfDoodie() {
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
+    setShopPending(false); setShopOptions([]); shopPendingRef.current = false;
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    setTimeout(() => startMusic(false), 200); // small delay to let audio context resume
   }, [difficulty, initGame, starterLoadout]);
 
   useEffect(() => {
@@ -753,7 +907,7 @@ export default function CallOfDoodie() {
     const ctx = ctxRef.current;
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
-    if (pausedRef.current || perkPendingRef.current) {
+    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current) {
       frameRef.current = requestAnimationFrame(gameLoop);
       return;
     }
@@ -852,6 +1006,7 @@ export default function CallOfDoodie() {
         gs.bossWave = true;
         setBossWaveActive(true);
         soundBossWave();
+        setMusicIntensity(true);
         gs.screenShake = 20;
         addText(gs, W / 2, H / 2 - 30, "⚠ BOSS WAVE ⚠", "#FF0000", true);
         addText(gs, W / 2, H / 2 + 10, "WAVE " + gs.currentWave, "#FFD700", true);
@@ -870,9 +1025,15 @@ export default function CallOfDoodie() {
         gs.enemiesThisWave = gs.maxEnemiesThisWave;
         addParticles(gs, W / 2, H / 2, "#FF0000", 40);
       } else {
+        setMusicIntensity(false);
         addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
         addText(gs, W / 2, H / 2 + 30, "+" + waveBonus + " WAVE BONUS", "#00FF88");
         soundWaveClear();
+        // Trigger wave shop — pick a free reward before next wave
+        const opts = getShopOptions(gs, currentWeaponRef.current);
+        setShopOptions(opts);
+        setShopPending(true);
+        shopPendingRef.current = true;
       }
     }
 
@@ -888,6 +1049,7 @@ export default function CallOfDoodie() {
             if (prevX < ob.x || prevX > ob.x + ob.w) b.vx = -b.vx; else b.vy = -b.vy;
             b.bouncesLeft--;
             b.x = prevX + b.vx; b.y = prevY + b.vy; // reposition from pre-hit point with new trajectory
+            b.life = Math.max(b.life, 35); // extend life so ricocheted bullets can travel full distance
             addParticles(gs, b.x, b.y, "#FFFFFF", 4);
             gs.screenShake = Math.max(gs.screenShake, 1);
           } else {
@@ -993,7 +1155,15 @@ export default function CallOfDoodie() {
             if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
-            if (e.isBossEnemy) soundBossKill();
+            if (e.isBossEnemy) {
+              soundBossKill();
+              gs.bossKillFlash = 22; // golden flash overlay
+              gs.screenShake = Math.max(gs.screenShake, 30);
+              addParticles(gs, e.x, e.y, e.color, 50);
+              addParticles(gs, e.x, e.y, "#FFD700", 30);
+              addParticles(gs, e.x, e.y, "#FFFFFF", 20);
+              addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
+            }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -1038,18 +1208,41 @@ export default function CallOfDoodie() {
     gs.enemies = gs.enemies.filter(e => e.health > -999);
     if (achCheckRef.current) { checkAchievements(gs); checkDailyMissions(gs); achCheckRef.current = false; }
 
+    // ── Flow field rebuild (every 30 frames or on significant player movement) ──
+    gs._ffTimer = (gs._ffTimer || 0) + 1;
+    const _ffPx = gs._ffPx || 0, _ffPy = gs._ffPy || 0;
+    if (gs._ffTimer >= 30 || Math.hypot(p.x - _ffPx, p.y - _ffPy) > 48) {
+      gs._ffTimer = 0; gs._ffPx = p.x; gs._ffPy = p.y;
+      gs.flowField = buildFlowField(W, H, p.x, p.y, gs.obstacles || []);
+    }
+
     // ── Sergeant Karen aura ──
     const sergeantPositions = gs.enemies.filter(e => e.typeIndex === 13).map(e => ({ x: e.x, y: e.y }));
     gs.enemies.forEach(e => { e.buffed = sergeantPositions.length > 0 && sergeantPositions.some(s => Math.hypot(e.x - s.x, e.y - s.y) < 150) && e.typeIndex !== 13; });
 
     // ── Enemy movement & melee ──
     gs.enemies.forEach(e => {
-      const a = Math.atan2(p.y - e.y, p.x - e.x);
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
       const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1);
-      // Wall-avoidance steering: repulse away from nearby walls, blend with toward-player
-      let sx = Math.cos(a), sy = Math.sin(a);
+      // Flow field steering: sample flow field, fall back to direct angle if no cell data
+      const ff = gs.flowField;
+      let sx, sy;
+      if (ff && !e.chargeActive) {
+        const fc = Math.min(ff.cols - 1, Math.max(0, Math.floor(e.x / FF_CELL)));
+        const fr = Math.min(ff.rows - 1, Math.max(0, Math.floor(e.y / FF_CELL)));
+        const idx = fr * ff.cols + fc;
+        if (ff.fdx[idx] !== 0 || ff.fdy[idx] !== 0) {
+          sx = ff.fdx[idx]; sy = ff.fdy[idx];
+        } else {
+          const a = Math.atan2(p.y - e.y, p.x - e.x);
+          sx = Math.cos(a); sy = Math.sin(a);
+        }
+      } else {
+        const a = Math.atan2(p.y - e.y, p.x - e.x);
+        sx = Math.cos(a); sy = Math.sin(a);
+      }
+      // Wall-avoidance steering: repulse from close walls (keeps enemies from clipping)
       if (!e.chargeActive) {
         (gs.obstacles || []).forEach(ob => {
           const nx = Math.max(ob.x, Math.min(e.x, ob.x + ob.w));
@@ -1191,7 +1384,8 @@ export default function CallOfDoodie() {
         const ed = Math.hypot(e.x - ecx, e.y - ecy);
         const er = e.size / 2 + 2;
         if (ed < er) {
-          const ea = ed > 0 ? Math.atan2(e.y - ecy, e.x - ecx) : 0;
+          // When ed===0 the enemy is dead-center in a wall; use a random ejection angle to avoid oscillation
+          const ea = ed > 0 ? Math.atan2(e.y - ecy, e.x - ecx) : Math.random() * Math.PI * 2;
           e.x = ecx + Math.cos(ea) * (er + 1);
           e.y = ecy + Math.sin(ea) * (er + 1);
           e.x = Math.max(e.size / 2, Math.min(W - e.size / 2, e.x));
@@ -1777,6 +1971,12 @@ export default function CallOfDoodie() {
     });
     ctx.globalAlpha = 1;
 
+    // Boss kill golden flash
+    if ((gs.bossKillFlash || 0) > 0) {
+      ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
+      ctx.fillRect(0, 0, W, H);
+      gs.bossKillFlash--;
+    }
     // Damage / kill flash
     if (gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
     if (gs.killFlash > 0) { ctx.fillStyle = "rgba(255,215,0," + (gs.killFlash * 0.015) + ")"; ctx.fillRect(0, 0, W, H); }
@@ -1912,7 +2112,7 @@ export default function CallOfDoodie() {
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   if (screen === "username") {
-    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) setScreen("menu"); }} />;
+    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { lockCallsign(username.trim()); setScreen("menu"); } }} />;
   }
 
   if (screen === "menu") {
@@ -1921,7 +2121,7 @@ export default function CallOfDoodie() {
         username={username} difficulty={difficulty} setDifficulty={setDifficulty}
         isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading}
         onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
-        onChangeUsername={() => setScreen("username")}
+        onChangeUsername={() => { clearLockedCallsign(); setUsername(""); setScreen("username"); }}
         starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
       />
     );
@@ -1935,9 +2135,10 @@ export default function CallOfDoodie() {
         crits={statsRef.current.crits} grenades={statsRef.current.grenades}
         deathMessage={deathMessage} difficulty={difficulty} runSeed={runSeed}
         achievementsUnlocked={achievementsUnlocked}
+        activePerks={activePerks} missionsSummary={missionsSummary}
         leaderboard={leaderboard} lbLoading={lbLoading} username={username}
         DIFFICULTIES={DIFFICULTIES}
-        onStartGame={startGame} onMenu={() => setScreen("menu")}
+        onStartGame={startGame} onMenu={() => { stopMusic(); setScreen("menu"); }}
         onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
         fmtTime={fmtTime}
       />
@@ -1950,7 +2151,8 @@ export default function CallOfDoodie() {
     <div ref={containerRef} style={base}>
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: isMobile ? "calc(100% - 56px)" : "100%", display: "block", cursor: isMobile ? "default" : "crosshair" }}
+        style={{ width: "100%", height: isMobile ? "calc(100% - 56px)" : "100%", display: "block", cursor: isMobile ? "default" : "crosshair",
+          filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
       />
 
       {/* Pause menu */}
@@ -1958,9 +2160,16 @@ export default function CallOfDoodie() {
         <PauseMenu
           wave={wave} timeSurvived={timeSurvived} score={score} isMobile={isMobile}
           achievementsUnlocked={achievementsUnlocked} fmtTime={fmtTime}
+          musicMuted={musicMuted} onToggleMute={toggleMusicMuted}
+          colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           onResume={() => setPaused(false)}
-          onLeave={() => { setPaused(false); setScreen("menu"); }}
+          onLeave={() => { stopMusic(); setPaused(false); setScreen("menu"); }}
         />
+      )}
+
+      {/* Wave clear shop */}
+      {shopPending && (
+        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} />
       )}
 
       {/* Perk selection modal */}

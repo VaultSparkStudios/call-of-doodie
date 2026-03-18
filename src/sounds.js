@@ -65,6 +65,8 @@ export function soundShoot(weaponIdx) {
     case 1: tone(120, 0.35, "sawtooth", 0.13, 60); noise(0.2, 0.1); break; // RPG: low thud
     case 2: tone(1400, 0.018, "square", 0.04, 1000); break;       // Minigun: high tick
     case 3: tone(280, 0.12, "square", 0.08, 180); break;           // Plunger: thwonk
+    case 6: noise(0.09, 0.14); tone(300, 0.05, "square", 0.05, 180); break; // Confetti Cannon: pop blast
+    case 7: tone(1200, 0.04, "square", 0.06, 900); tone(1000, 0.04, "triangle", 0.04, 800, 0.04); tone(900, 0.04, "square", 0.05, 700, 0.08); break; // Shock Zapper: triple zap
     default: tone(600, 0.05, "square", 0.06);
   }
 }
@@ -140,4 +142,68 @@ export function soundPerkSelect() {
   tone(440, 0.1, "sine", 0.08);
   tone(660, 0.15, "triangle", 0.07, null, 0.08);
   tone(880, 0.2, "sine", 0.06, null, 0.18);
+}
+
+// ===== BACKGROUND MUSIC =====
+// Procedural 8-beat loop — kicks, snares, hats, bass. No audio files.
+let _musicActive = false;
+let _musicBoss = false;
+let _musicBeat = 0;
+let _musicTimer = null;
+
+export function startMusic(isBossWave = false) {
+  if (_musicActive) return;
+  _musicActive = true;
+  _musicBoss = isBossWave;
+  _musicBeat = 0;
+  _scheduleMusicBeat();
+}
+
+export function stopMusic() {
+  _musicActive = false;
+  if (_musicTimer) { clearTimeout(_musicTimer); _musicTimer = null; }
+}
+
+export function setMusicIntensity(isBossWave) {
+  _musicBoss = isBossWave;
+}
+
+function _scheduleMusicBeat() {
+  if (!_musicActive) return;
+  const ctx = getCtx(); // respects muted flag
+  const BPM = _musicBoss ? 138 : 108;
+  const beat = 60 / BPM;
+  const bar = _musicBeat % 8;
+
+  if (ctx) {
+    const vol = _musicBoss ? 1.4 : 1.0; // slightly louder during boss
+    // Kick: beats 0 and 4
+    if (bar === 0 || bar === 4) {
+      tone(75, beat * 0.45, "sine", 0.10 * vol, 38);
+      noise(beat * 0.18, 0.07 * vol);
+    }
+    // Snare: beats 2 and 6
+    if (bar === 2 || bar === 6) {
+      noise(beat * 0.22, 0.08 * vol);
+      tone(220, beat * 0.15, "square", 0.03 * vol, 160);
+    }
+    // Open hi-hat: beats 1, 3, 5, 7 (off-beats)
+    if (bar % 2 === 1) {
+      tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
+    }
+    // Closed hi-hat: every beat
+    tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
+    // Bass line (pentatonic walk, different for boss)
+    const bassNormal = [55, 55, 65, 55, 49, 55, 58, 55];
+    const bassBoss   = [55, 65, 73, 65, 49, 58, 73, 58];
+    const bassFreq = (_musicBoss ? bassBoss : bassNormal)[bar];
+    tone(bassFreq, beat * 0.38, "sawtooth", 0.065 * vol, bassFreq * 0.88);
+    // Boss: add a tense high-pitched pulse on beat 0
+    if (_musicBoss && bar === 0) {
+      tone(330, beat * 0.12, "square", 0.025, 280);
+    }
+  }
+
+  _musicBeat++;
+  _musicTimer = setTimeout(_scheduleMusicBeat, beat * 1000 - 8);
 }

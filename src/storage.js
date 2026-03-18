@@ -187,6 +187,22 @@ export function getAccountLevel(totalKills) {
   return Math.floor(Math.sqrt((totalKills || 0) / 20)) + 1;
 }
 
+// ===== CALLSIGN LOCK =====
+// Persists the player's chosen callsign so return visits skip the username screen.
+const CALLSIGN_KEY = "cod-callsign-v1";
+
+export function getLockedCallsign() {
+  try { return localStorage.getItem(CALLSIGN_KEY) || null; } catch { return null; }
+}
+
+export function lockCallsign(name) {
+  try { if (name) localStorage.setItem(CALLSIGN_KEY, name); } catch {}
+}
+
+export function clearLockedCallsign() {
+  try { localStorage.removeItem(CALLSIGN_KEY); } catch {}
+}
+
 export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {
   const career = loadCareerStats();
   career.totalRuns += 1;

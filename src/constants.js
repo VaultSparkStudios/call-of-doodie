@@ -6,6 +6,8 @@ export const WEAPONS = [
   { name: "Plunger Launcher", emoji: "🪠", damage: 40, fireRate: 600, ammo: 8, maxAmmo: 8, reloadTime: 2000, color: "#8B4513", sound: "THWONK!", spread: 0.02, desc: "Mid-range plunger justice. THWONK!" },
   { name: "Sniper-ator 3000", emoji: "🎯", damage: 120, fireRate: 1800, ammo: 5, maxAmmo: 5, reloadTime: 2500, color: "#00FFAA", sound: "CRACK!", spread: 0.005, bulletLife: 110, bulletSize: 7, bulletTrail: true, bulletSpeed: 18, desc: "One-tap precision. Enemies won't get a second chance." },
   { name: "Spicy Squirt Gun", emoji: "🌶️", damage: 4, fireRate: 28, ammo: 100, maxAmmo: 100, reloadTime: 2800, color: "#FF5500", sound: "FWOOSH!", spread: 0.22, bulletLife: 14, bulletSize: 3, bulletTrail: false, bulletSpeed: 8, desc: "Short range, ridiculous fire rate. 100 shots of burning regret." },
+  { name: "Confetti Cannon", emoji: "🎊", damage: 12, fireRate: 900, ammo: 18, maxAmmo: 18, reloadTime: 2000, color: "#FF69B4", sound: "POP!", spread: 0.55, bulletLife: 22, bulletSize: 3, bulletSpeed: 9, pellets: 6, desc: "6 confetti pellets per blast. Close range chaos." },
+  { name: "Shock Zapper", emoji: "⚡", damage: 32, fireRate: 1100, ammo: 15, maxAmmo: 15, reloadTime: 2400, color: "#00E5FF", sound: "ZAP!", spread: 0.06, bulletLife: 75, bulletSize: 5, bulletSpeed: 15, burst: 3, burstDelay: 90, desc: "3-shot burst, medium range. Zap zap zap." },
 ];
 
 // ===== ENEMIES =====
@@ -223,10 +225,18 @@ export const META_UPGRADES = [
 
 // ===== NEW FEATURES (changelog panel + share card) =====
 export const NEW_FEATURES = [
+  "🎊 Confetti Cannon — shotgun that fires 6 pellets",
+  "⚡ Shock Zapper — 3-shot burst rifle with medium range",
+  "🧠 Flow Field AI — enemies now pathfind around walls",
+  "🎵 Background Music — procedural chiptune, boss battle mode included",
+  "🛒 Wave Clear Shop — pick a free reward after every wave",
+  "☠️ Boss Kill Flash — golden screen flash when a boss goes down",
+  "🎨 Colorblind Mode — toggle in pause menu",
+  "📋 Run Summary — perks taken + mission status on death screen",
+  "👤 Callsign Lock — returning players skip straight to the menu",
   "🌍 Global Leaderboard — compete worldwide",
   "🗺️ Random Map Themes — Office, Bunker, Factory, Ruins",
-  "🔄 Bullet Ricochet — bullets bounce off walls",
-  "🧠 Smarter AI — enemies navigate around obstacles",
+  "🔄 Bullet Ricochet — bullets bounce off walls up to 10 times",
   "🎖️ Tiered Meta Upgrades — 10 upgrades × 3 tiers",
   "⭐ Prestige System — reset & raise the stakes",
 ];

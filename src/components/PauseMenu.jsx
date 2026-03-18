@@ -2,7 +2,7 @@ import { useState } from "react";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, colorblindMode, onToggleColorblind }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
 
@@ -116,6 +116,12 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <button onClick={() => setView("controls")} style={pBtn}>⌨ CONTROLS</button>
           <button onClick={() => setView("bestiary")} style={pBtn}>👾 MOST WANTED LIST</button>
           <button onClick={() => setShowAch(true)} style={pBtn}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
+          <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF" }}>
+            {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}
+          </button>
+          <button onClick={onToggleColorblind} style={{ ...pBtn, color: colorblindMode ? "#FFD700" : "#AAA" }}>
+            {colorblindMode ? "🎨 COLORBLIND: ON" : "🎨 COLORBLIND: OFF"}
+          </button>
           <button onClick={onLeave} style={{ ...pBtn, color: "#F66", borderColor: "rgba(255,100,100,0.3)", marginTop: 4 }}>🚪 LEAVE GAME</button>
         </div>
       </div>

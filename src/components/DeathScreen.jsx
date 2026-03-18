@@ -7,6 +7,7 @@ const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", leg
 export default function DeathScreen({
   score, kills, deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, achievementsUnlocked,
+  activePerks, missionsSummary,
   leaderboard, lbLoading, username, DIFFICULTIES,
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
   fmtTime,
@@ -181,6 +182,41 @@ export default function DeathScreen({
             </div>
           ))}
         </div>
+
+        {/* Run summary: perks taken + daily missions */}
+        {((activePerks && activePerks.length > 0) || (missionsSummary && missionsSummary.length > 0)) && (
+          <div style={{ ...card, marginBottom: 10, padding: "10px 12px" }}>
+            {activePerks && activePerks.length > 0 && (
+              <div style={{ marginBottom: missionsSummary && missionsSummary.length > 0 ? 8 : 0 }}>
+                <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 5 }}>
+                  PERKS TAKEN ({activePerks.length})
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center" }}>
+                  {activePerks.map((p, i) => (
+                    <span key={i} style={{ fontSize: 11, background: p.cursed ? "rgba(180,20,20,0.25)" : "rgba(255,255,255,0.07)", border: `1px solid ${p.cursed ? "rgba(220,50,50,0.5)" : "rgba(255,255,255,0.15)"}`, borderRadius: 5, padding: "3px 7px", color: p.cursed ? "#FF6666" : "#DDD", whiteSpace: "nowrap" }}>
+                      {p.emoji} {p.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {missionsSummary && missionsSummary.length > 0 && (
+              <div>
+                <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 5 }}>
+                  DAILY MISSIONS
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                  {missionsSummary.map((m, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: m.completed ? "#00FF88" : "#777" }}>
+                      <span>{m.completed ? "✅" : "⬜"}</span>
+                      <span>{m.icon} {m.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {achievementsUnlocked.length > 0 && (
           <div style={{ marginBottom: 10 }}>

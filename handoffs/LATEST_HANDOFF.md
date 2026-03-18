@@ -1,89 +1,65 @@
 # Latest Handoff
 
-Last updated: 2026-03-12 (Session 6)
+Last updated: 2026-03-17 (Session 7 — part 2)
 
 ## What was completed this session
 
-### Performance fixes (lag at deep waves)
-- Particle hard cap: MAX_PARTICLES = 200 (was unbounded — main lag cause at wave 20+)
-- FloatingText cap: MAX_FLOAT_TEXTS = 30 (big texts always get through, small ones dropped when full)
-- DyingEnemy animation cap: MAX_DYING_ANIM = 20
-- Wave enemy count capped at 40 (was `5 + wave * 3` unbounded)
-- Bullet trail particles throttled to every 2nd frame
-- Nuke particle burst limited to first 12 enemies only
+### 2 New weapons (constants.js)
+- **🎊 Confetti Cannon** (index 6): shotgun, 6 pellets per shot, wide spread (0.55), short range (bulletLife 22), 18 ammo. Uses new `pellets` field in shoot().
+- **⚡ Shock Zapper** (index 7): 3-shot burst, medium range, 32 dmg × 3 = 96/burst, 15 ammo (triggers). Uses new `burst` + `burstDelay` fields in shoot(). Burst shots scheduled via setTimeout, direction captured at trigger time.
+- Custom sounds for both in soundShoot() (cases 6 and 7)
 
-### Boss ability ramp-up (per wave tier)
-- Wave 20+: Mega Karen gets Shield Pulse (3s immunity every 8s, cyan glow)
-- Wave 25+: Landlord gets Minion Surge (4 tenants, 4s CD vs normal 6s)
-- Wave 30+: Both bosses get Enrage at 33% HP (1.8× speed, 2× fire rate, orange aura)
-- Wave 35+: Mega Karen gets Teleport Blink (warps near player every 8s)
-- Wave 40+: Landlord gets Rent Nuke (AoE pulse every 10s, damages player within 220px)
-- Boss wave announcement text now shows active abilities for that tier
+### Background music (sounds.js)
+- Procedural 8-beat loop: kick on beats 0/4, snare on 2/6, hi-hat every beat + off-beat, sawtooth bass pentatonic walk
+- BPM: 108 normal → 138 on boss waves
+- Exports: `startMusic(isBossWave)`, `stopMusic()`, `setMusicIntensity(isBossWave)`
+- Called: startMusic() in startGame(), stopMusic() on death/menu/leave, setMusicIntensity(true/false) on boss wave trigger/clear
+- Mute toggle in PauseMenu persists to localStorage `cod-music-muted`
 
-### Supabase global leaderboard
-- Installed @supabase/supabase-js
-- Created src/supabase.js (createClient, null fallback if env vars missing)
-- Updated storage.js loadLeaderboard + saveToLeaderboard to use Supabase with localStorage fallback
-- GitHub Actions workflow updated to inject VITE_SUPABASE_* secrets into build
-- GitHub secrets set via gh CLI: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
-- .env.local created locally (gitignored via *.local)
-- Supabase table created with RLS: public SELECT + INSERT (score 1–10M only)
+### Flow field pathfinding (App.jsx)
+- `buildFlowField(W, H, px, py, obstacles)` — module-level BFS function, 24px grid cells, TypedArrays (Float32Array + Uint8Array) for performance
+- Rebuilt every 30 frames OR when player moves >48px
+- Stored in `gs.flowField { fdx, fdy, cols, rows }`
+- Enemy movement: samples flow field cell → if non-zero, uses that direction; fallback to direct angle
+- Wall-avoidance steering (close-range repulsion) still applied on top of flow field direction
+- Result: enemies navigate around obstacles instead of walking into them
 
-### Leaderboard UI updates
-- Title: "HALL OF SHAME" → "GLOBAL LEADERBOARD"
-- Difficulty filter tabs (ALL / EASY / NORMAL / HARD / INSANE) with entry counts
-- Difficulty column per row (color-coded badge)
-- Kills column added (was stored, not displayed)
-- Starter loadout emoji badge in player name cell (⚖️💀🛡️⚡)
-- Last Words moved to hover tooltip
+### Wave clear shop (WaveShopModal.jsx + App.jsx)
+- Triggers after every non-boss wave clear
+- `shopPendingRef` blocks game loop (parallel to perkPendingRef)
+- `getShopOptions(gs, wpnIdx)` — module-level function, returns 3 shuffled options from pool of 6: health restore, ammo refill, weapon upgrade, speed boost (+10%), max HP (+25), damage boost (+15%)
+- `applyShopOption(id)` useCallback handles all option effects
+- New component `WaveShopModal.jsx` matches game visual style
 
-### Wall randomization
-- Obstacles are now seeded-random per run (5–7 walls)
-- Uses LCG seeded from runSeed for reproducible layouts
-- Guaranteed 110px clear spawn zone at center
-- Overlap check prevents walls stacking
-- Mix of horizontal and vertical walls, varied sizes
+### Boss kill hit-stop (App.jsx)
+- `gs.bossKillFlash = 22` set on boss kill (alongside existing soundBossKill)
+- Renders a gold/white overlay that fades over 22 frames (~360ms at 60fps)
+- +30 screen shake, 50+30+20 particles in 3 colors, "☠ BOSS ELIMINATED ☠" floating text
+- Visual-only (no physics freeze — would require refactoring interleaved update/render loop)
 
-### Bullet ricochet
-- All player bullets except RPG get 1 wall bounce (bouncesLeft field)
-- Reflect logic: detect which face was hit via pre-collision position, flip vx or vy
-- Bullet repositioned from pre-hit point with new trajectory
-- White spark particle on bounce
-- RPG: 0 bounces (would be OP)
+### Colorblind mode (App.jsx + PauseMenu.jsx)
+- Toggle in PauseMenu: 🎨 COLORBLIND: ON/OFF
+- Applies CSS filter to canvas: `saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)` — deuteranopia-approximate, boosts contrast for red/green distinction
+- State initialized from localStorage `cod-colorblind`
+- Persists across sessions
 
-### Enemy-wall collision
-- Enemies push out from walls using closest-point-on-rect math
-- Applied after all movement (normal movement, boss charge, zigzag, teleport)
-- Arena bounds clamp after push-out to prevent corner oscillation
-
-### submitScore
-- starterLoadout added to entry object and useCallback deps
-- Supabase table has starterLoadout column (ALTER TABLE run manually)
-
-### Multi-ricochet bullets + wall spacing + visual terrain (68bfb50)
-- Bullets bounce up to 10 times (multi-wall ricochets possible)
-- Wall count 4–6, overlap margin 50px (was 18px) — more open layouts
-- H/V wall orientation balance tracked per run (biases toward underrepresented axis)
-- Terrain decorations: 22–36 seeded objects per run (stains, cracks, rubble, worn tiles), purely visual
-
-### Achievement tooltips + mobile scroll fixes (4515423)
-- Death screen: each unlocked achievement is an interactive badge — hover (desktop) or tap (mobile) shows name, description, and tier with color coding
-- Death screen: fixed `touchAction: "none"` blocking native scroll on mobile (→ `pan-y`)
-- Menu screen: same `touchAction` fix; career stats modal got `maxHeight: 90vh + overflowY: auto`
+### Also from earlier this session (callsign lock, run summary)
+- See previous handoff section — all committed and deployed
 
 ## What is mid-flight
-- Nothing — all changes committed, built, and deployed (`4515423`)
+- All changes coded, build passes — not yet committed
 
 ## What to do next
-1. Playtest wall ricochet feel — may want to adjust bullet life extension on bounce if it feels too short
-2. Check if enemies get visibly stuck in tight wall gaps — if so, consider a small jitter on push-out
-3. Add Supabase anonymous auth if name impersonation becomes a problem
-4. Consider enemy pathfinding (A* or flow field) as the next major gameplay upgrade
+1. Commit + push to deploy
+2. Playtest: music feel, shop pacing (every wave may be too frequent → consider every 2), shotgun range/damage, burst weapon feel
+3. Check flow field at wave 1 (no obstacles yet — should fall back gracefully to direct path)
+4. Supabase anonymous auth (callsign server-side enforcement)
 
 ## Important constraints
 - `npm run build` must pass before any push
 - Vite base must stay `/call-of-doodie/` (lowercase) in vite.config.js
 - All game logic runs in a single RAF loop in App.jsx — use refs, not state, for loop-internal values
-- localStorage keys are versioned (e.g. `cod-lb-v5`) — bump version if schema changes
+- localStorage keys: `cod-lb-v5`, `cod-career-v1`, `cod-meta-v2`, `cod-missions-YYYY-MM-DD`, `cod-callsign-v1`, `cod-music-muted`, `cod-colorblind`
 - Supabase anon key is public (in JS bundle) — RLS policies are the only protection layer
 - Never commit .env.local (gitignored via *.local in .gitignore)
+- Weapon index 1 is still RPG (no ricochet) — new weapons at index 6/7 both ricochet normally
