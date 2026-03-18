@@ -69,12 +69,12 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
         ) : (
           <div style={{ fontSize: 11 }}>
             {/* Header */}
-            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 30px 38px 50px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
               <span>#</span>
               <span>PLAYER</span>
               <span style={{ textAlign: "right" }}>SCORE</span>
               <span style={{ textAlign: "right" }}>KILLS</span>
-              <span style={{ textAlign: "right" }}>W</span>
+              <span style={{ textAlign: "right" }} title="Wave reached">WAVE</span>
               <span style={{ textAlign: "right" }}>TIME</span>
               <span style={{ textAlign: "right", paddingRight: 4 }}>DIFF</span>
             </div>
@@ -87,18 +87,18 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, username, onC
               return (
                 <div
                   key={i}
-                  style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 30px 38px 50px", gap: 4, padding: "7px 2px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: rowColor, background: isMe ? "rgba(255,107,53,0.12)" : "transparent", borderRadius: 4, alignItems: "center" }}
+                  style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px", gap: 4, padding: "7px 2px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: rowColor, background: isMe ? "rgba(255,107,53,0.12)" : "transparent", borderRadius: 4, alignItems: "center" }}
                   title={e.lastWords ? `"${e.lastWords}"` : ""}
                 >
                   <span style={{ fontWeight: 900, fontSize: i < 3 ? 14 : 11 }}>{medal}</span>
                   <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     <span style={{ fontWeight: 700 }}>{e.name}</span>
-                    {e.level && <span style={{ color: "#BBB", fontSize: 9, marginLeft: 4 }}>Lv{e.level}</span>}
+                    {e.level && <span style={{ color: "#888", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
                     {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>
-                  <span style={{ textAlign: "right", color: "#CCC", fontSize: 10 }}>{e.wave}</span>
+                  <span style={{ textAlign: "right", color: "#CCC", fontSize: 10, fontVariantNumeric: "tabular-nums" }}>{e.wave ?? "—"}</span>
                   <span style={{ textAlign: "right", color: "#BBB", fontSize: 10, fontVariantNumeric: "tabular-nums" }}>{e.time || "--"}</span>
                   <span style={{ textAlign: "right", paddingRight: 4, fontSize: 9, color: diffTab?.color || "#888", fontWeight: 700 }}>
                     {diffTab ? diffTab.emoji : ""} {e.difficulty?.toUpperCase() || "?"}
