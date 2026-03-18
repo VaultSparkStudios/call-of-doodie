@@ -8,7 +8,7 @@ export default function DeathScreen({
   score, kills, deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
-  leaderboard, lbLoading, username, DIFFICULTIES,
+  leaderboard, lbLoading, lbHasMore, onLoadMore, username, DIFFICULTIES,
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
   highlightGifUrl, gifEncoding,
   fmtTime,
@@ -154,7 +154,7 @@ export default function DeathScreen({
   return (
     <div style={{ ...base, touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
       {showLeaderboard && (
-        <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />
+        <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
       )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px 24px", boxSizing: "border-box" }}>
       <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>

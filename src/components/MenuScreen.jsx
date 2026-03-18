@@ -8,7 +8,7 @@ import SettingsPanel from "./SettingsPanel.jsx";
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -186,7 +186,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   return (
     <div style={{ ...base, touchAction: "pan-y", overflow: "hidden", alignItems: "center", color: "#fff", boxSizing: "border-box" }}>
       <div style={{ position: "absolute", inset: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: 20, boxSizing: "border-box" }}>
-      {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} username={username} onClose={() => setShowLeaderboard(false)} />}
+      {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />}
       {showAchievements && <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />}
 
       {/* Rules Modal */}

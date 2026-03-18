@@ -7,6 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign } from "./storage.js";
+import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings } from "./settings.js";
 import SettingsPanel from "./components/SettingsPanel.jsx";
@@ -125,7 +126,7 @@ export default function CallOfDoodie() {
   const xpRef            = useRef({ xp: 0, level: 1 });
   const grenadeRef       = useRef({ ready: true, lastUse: 0 });
   const dashRef          = useRef({ ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 });
-  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0 });
+  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(10).fill(0) });
   const achievedRef      = useRef(new Set());
   const startTimeRef     = useRef(0);
   const timerRef         = useRef(null);
@@ -175,6 +176,8 @@ export default function CallOfDoodie() {
   const [grenadeReady, setGrenadeReady] = useState(true);
   const [bestStreak, setBestStreak]   = useState(0);
   const [lbLoading, setLbLoading]     = useState(false);
+  const [lbHasMore, setLbHasMore]     = useState(true);
+  const lbOffsetRef                   = useRef(0);
   const [totalDamage, setTotalDamage] = useState(0);
   const [dashReady, setDashReady]     = useState(true);
   const [achievementsUnlocked, setAchievementsUnlocked] = useState([]);
@@ -267,9 +270,25 @@ export default function CallOfDoodie() {
   // ── Leaderboard ───────────────────────────────────────────────────────────
   const refreshLeaderboard = useCallback(async () => {
     setLbLoading(true);
-    const board = await loadLeaderboard();
-    setLeaderboard(board); setLbLoading(false);
+    lbOffsetRef.current = 0;
+    const data = await loadLeaderboard(0, 50);
+    setLeaderboard(data);
+    setLbHasMore(data.length >= 50);
+    setLbLoading(false);
   }, []);
+
+  const loadMoreLeaderboard = useCallback(async () => {
+    if (lbLoading) return;
+    setLbLoading(true);
+    const nextOffset = lbOffsetRef.current + 50;
+    const data = await loadLeaderboard(nextOffset, 50);
+    if (data.length > 0) {
+      lbOffsetRef.current = nextOffset;
+      setLeaderboard(prev => [...prev, ...data]);
+    }
+    setLbHasMore(data.length >= 50);
+    setLbLoading(false);
+  }, [lbLoading]);
 
   useEffect(() => { refreshLeaderboard(); }, [refreshLeaderboard]);
 
@@ -317,6 +336,8 @@ export default function CallOfDoodie() {
       nukes: statsRef.current.nukes || 0,
       score: gs.score || 0,
       weaponUpgradesCollected: statsRef.current.weaponUpgradesCollected || 0,
+      noHitWaves: statsRef.current.noHitWaves || 0,
+      singleWeaponKills: Math.max(...(statsRef.current.weaponKills || [0])),
     };
     missions.forEach((m, idx) => {
       if (missionDoneRef.current.has(idx)) return;
@@ -340,7 +361,7 @@ export default function CallOfDoodie() {
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
       dyingEnemies: [], obstacles: [], terrain: [], floorZones: [], props: [], mapTheme: 0,
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
-      currentWave: 1, score: 0, kills: 0, killstreakCount: 0,
+      currentWave: 1, score: 0, kills: 0, killstreakCount: 0, damageThisWave: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
       weaponAmmos: WEAPONS.map(w => w.ammo), // per-weapon ammo state
       damageFlash: 0, killFlash: 0, totalDamage: 0, trail: [],
@@ -359,7 +380,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0 };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(10).fill(0) };
     achievedRef.current = new Set();
     perkModsRef.current = {};
     perkPendingRef.current = false;
@@ -556,7 +577,7 @@ export default function CallOfDoodie() {
     gsRef.current.terrain = terrain;
 
     // Map theme + floor zones + props
-    const mapTheme = Math.floor(_sr() * 6); // 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest
+    const mapTheme = Math.floor(_sr() * 8); // 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest 6=space 7=arctic
     gsRef.current.mapTheme = mapTheme;
     const THEME_PROPS = [
       ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️"],       // office
@@ -565,6 +586,8 @@ export default function CallOfDoodie() {
       ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴"],     // ruins
       ["🌵","🏜️","🦂","🪨","⛺","🐍","🦎","☀️"],     // desert
       ["🌲","🌿","🍄","🦊","🐾","🌱","🪵","🦋"],       // forest
+      ["🚀","🛸","🌙","⭐","🪐","🌌","👾","🌟"],       // space
+      ["❄️","🏔️","🐧","🌨️","🦭","⛷️","🐻‍❄️","🧊"], // arctic
     ];
     // Floor zones: large irregular colored patches for visual variety
     const floorZones = [];
@@ -735,108 +758,9 @@ export default function CallOfDoodie() {
     setShopPending(false);
   }, []);
 
-  // ── Boss spawning ─────────────────────────────────────────────────────────
-  const spawnBoss = useCallback((gs, typeIndex) => {
-    const W = GW(), H = GH();
-    const type = ENEMY_TYPES[typeIndex];
-    const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-    const pm = gs.prestigeMult || 1;
-    const wv = gs.currentWave;
-    const bossHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * 2.5;
-    const side = Math.floor(Math.random() * 4);
-    let x, y;
-    if (side === 0) { x = W / 2; y = -50; }
-    else if (side === 1) { x = W + 50; y = H / 2; }
-    else if (side === 2) { x = W / 2; y = H + 50; }
-    else { x = -50; y = H / 2; }
-    gs.enemies.push({
-      x, y, health: bossHealth, maxHealth: bossHealth,
-      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * 0.8,
-      size: type.size * 1.5, color: type.color,
-      name: "☠ " + type.name, points: type.points * 3,
-      deathQuotes: type.deathQuotes, emoji: type.emoji,
-      typeIndex, wobble: 0, hitFlash: 0,
-      ranged: type.ranged || false,
-      projSpeed: (type.projSpeed || 0) * 1.3,
-      projRate: type.projRate ? Math.floor(type.projRate * 0.65) : 999,
-      shootTimer: 0, isBossEnemy: true,
-      // Boss-specific mechanic fields
-      chargeTimer: 0, chargeActive: false, chargeDx: 0, chargeDy: 0, chargeDuration: 0,
-      summonTimer: 0,
-      // Wave-scaling boss abilities (unlocked based on wave number)
-      hasShieldPulse: typeIndex === 4 && gs.currentWave >= 20,
-      shieldPulseActive: false, shieldPulseCooldown: 300, shieldPulseTimer: 0,
-      hasEnrage: gs.currentWave >= 30,
-      enrageTriggered: false,
-      hasTeleport: typeIndex === 4 && gs.currentWave >= 35,
-      teleportTimer: 0,
-      hasMinionSurge: typeIndex === 9 && gs.currentWave >= 25,
-      hasRentNuke: typeIndex === 9 && gs.currentWave >= 40,
-      rentNukeTimer: 0,
-      // New tier abilities
-      hasBulletRing: gs.currentWave >= 10,
-      bulletRingTimer: 0,
-      hasGroundSlam: gs.currentWave >= 15,
-      groundSlamTimer: Math.floor(Math.random() * 180), // stagger so bosses don't slam simultaneously
-      groundSlamActive: false, groundSlamRadius: 0,
-    });
-  }, []);
-
-  // ── Enemy spawning ────────────────────────────────────────────────────────
-  const spawnEnemy = useCallback((gs) => {
-    const w = GW(), h = GH(), wv = gs.currentWave;
-    let ti = 0;
-    const r = Math.random();
-    if      (wv >= 15 && r < 0.05) ti = 13;     // Sergeant Karen
-    else if (wv >= 13 && r < 0.10) ti = 12;     // YOLO Bomber
-    else if (wv >= 10 && r < 0.15) ti = 11;     // Shield Guy
-    else if (wv >= 12 && r < 0.21) ti = 9;      // Landlord
-    else if (wv >= 10 && r < 0.27) ti = 4;      // Mega Karen
-    else if (wv >= 9  && r < 0.33) ti = 10;     // Crypto Bro
-    else if (wv >= 8  && r < 0.38) ti = 3;      // HOA President
-    else if (wv >= 7  && r < 0.43) ti = 8;      // Conspiracy Bro
-    else if (wv >= 6  && r < 0.49) ti = 7;      // Influencer
-    else if (wv >= 5  && r < 0.55) ti = 6;      // Gym Bro
-    else if (wv >= 4  && r < 0.61) ti = 2;      // Florida Man
-    else if (wv >= 3  && r < 0.67) ti = 5;      // IT Guy
-    else if (wv >= 2  && r < 0.74) ti = 1;      // Karen
-    const side = Math.floor(Math.random() * 4);
-    let x, y;
-    if (side === 0) { x = Math.random() * w; y = -30; }
-    else if (side === 1) { x = w + 30; y = Math.random() * h; }
-    else if (side === 2) { x = Math.random() * w; y = h + 30; }
-    else { x = -30; y = Math.random() * h; }
-    const type = ENEMY_TYPES[ti];
-    const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-    const pm = gs.prestigeMult || 1;
-    const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * (gs.settEnemyHealthMult || 1);
-    gs.enemies.push({
-      x, y, health: eHealth, maxHealth: eHealth,
-      speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1),
-      size: type.size, color: type.color, name: type.name, points: type.points,
-      deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
-      wobble: Math.random() * Math.PI * 2, hitFlash: 0,
-      ranged: type.ranged || false, projSpeed: type.projSpeed || 0, projRate: type.projRate || 999,
-      shootTimer: Math.floor(Math.random() * 60), isBossEnemy: false,
-    });
-    // Elite variants (wave 10+, regular enemies only)
-    if (wv >= 10) {
-      const elite = gs.enemies[gs.enemies.length - 1];
-      const er = Math.random();
-      if (wv >= 15 && er < 0.10) {
-        elite.eliteType = "explosive"; // chain AOE on death
-      } else if (wv >= 12 && er < 0.25) {
-        elite.eliteType = "fast";
-        elite.speed *= 2;
-        elite.size *= 0.75;
-      } else if (er < 0.20) {
-        elite.eliteType = "armored";
-        elite.dmgMult = 0.45; // takes 45% damage
-        elite.health *= 1.5;
-        elite.maxHealth = elite.health;
-      }
-    }
-  }, []);
+  // ── Boss / enemy spawning (logic lives in gameHelpers.js) ────────────────
+  const spawnBoss  = useCallback((gs, typeIndex) => _spawnBoss(gs, GW(), GH(), difficultyRef.current, typeIndex), []);
+  const spawnEnemy = useCallback((gs)            => _spawnEnemy(gs, GW(), GH(), difficultyRef.current), []);
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = (gs, ex, ey, isBoss) => {
@@ -909,6 +833,7 @@ export default function CallOfDoodie() {
       life: bLife, size: bSize,
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
       bouncesLeft: noRicochet ? 0 : 10 + (gs.extraBounces || 0),
+      wpnIdx: weaponIdx,
     });
     if (weapon.pellets) {
       // Shotgun — fire N pellets with independent spread
@@ -1266,6 +1191,9 @@ export default function CallOfDoodie() {
         gs.newBestWave = true;
         addText(gs, W / 2, H / 2 - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
       }
+      // No-hit wave tracking (reset after check)
+      if (!gs.damageThisWave) statsRef.current.noHitWaves = (statsRef.current.noHitWaves || 0) + 1;
+      gs.damageThisWave = 0;
       // Wave streak: consecutive clears without dying
       gs.waveStreak = (gs.waveStreak || 0) + 1;
       setWaveStreak(gs.waveStreak);
@@ -1375,6 +1303,7 @@ export default function CallOfDoodie() {
           let dmg = eb.damage || 8;
           if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
           p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
+          gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg), "#FF4444");
           rumbleGamepad(0.3, 0.45, 100);
@@ -1434,6 +1363,7 @@ export default function CallOfDoodie() {
             const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
+            statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
             addParticles(gs, e.x, e.y, e.color, 15);
@@ -1517,6 +1447,7 @@ export default function CallOfDoodie() {
             const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
+            if (b.wpnIdx != null) { statsRef.current.weaponKills[b.wpnIdx] = (statsRef.current.weaponKills[b.wpnIdx] || 0) + 1; }
             if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
             if (gs.killstreakCount >= 10 && 70 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 70 };
             if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
@@ -1703,6 +1634,7 @@ export default function CallOfDoodie() {
               const rentDist = Math.hypot(p.x - e.x, p.y - e.y);
               if (rentDist < 220 && p.invincible <= 0) {
                 p.health -= 25; p.invincible = 30; gs.damageFlash = 12;
+                gs.damageThisWave = (gs.damageThisWave || 0) + 1;
                 setHealth(Math.max(0, p.health));
                 addText(gs, p.x, p.y - 30, "-25 RENT DUE!", "#FFD700");
                 rumbleGamepad(0.4, 0.6, 150);
@@ -1792,6 +1724,7 @@ export default function CallOfDoodie() {
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
               p.health -= gs.glassjaw ? Math.round(18 * (gs.glassjawMult || 2)) : 18; p.invincible = 25; gs.damageFlash = 10;
+              gs.damageThisWave = (gs.damageThisWave || 0) + 1;
               setHealth(Math.max(0, p.health));
               addText(gs, p.x, p.y - 30, "-18 SLAM!", "#FF4400");
               rumbleGamepad(0.4, 0.65, 150);
@@ -1812,6 +1745,7 @@ export default function CallOfDoodie() {
             gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
             p.health -= gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35; p.invincible = 40; gs.damageFlash = 12;
+            gs.damageThisWave = (gs.damageThisWave || 0) + 1;
             setHealth(Math.max(0, p.health));
             addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
             rumbleGamepad(0.5, 0.7, 200);
@@ -1841,6 +1775,7 @@ export default function CallOfDoodie() {
           let dmg = 10 + e.typeIndex * 5;
           if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
           p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
+          gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg) + " HP", "#FF0000");
           rumbleGamepad(0.35, 0.5, 120);
@@ -2125,7 +2060,7 @@ export default function CallOfDoodie() {
     return (
       <MenuScreen
         username={username} difficulty={difficulty} setDifficulty={setDifficulty}
-        isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading}
+        isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard}
         onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
         onChangeUsername={() => { clearLockedCallsign(); setUsername(""); setScreen("username"); }}
         starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
@@ -2145,7 +2080,7 @@ export default function CallOfDoodie() {
         runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
         achievementsUnlocked={achievementsUnlocked}
         activePerks={activePerks} missionsSummary={missionsSummary}
-        leaderboard={leaderboard} lbLoading={lbLoading} username={username}
+        leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard} username={username}
         DIFFICULTIES={DIFFICULTIES}
         onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); setScreen("menu"); }}
         onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}

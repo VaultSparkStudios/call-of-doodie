@@ -164,7 +164,7 @@ let _ambientTheme = 0;
 let _ambientBeat = 0;
 let _ambientTimer = null;
 
-const _AMBIENT_TICK = [900, 700, 550, 1400, 1900, 950]; // ms between ticks per theme
+const _AMBIENT_TICK = [900, 700, 550, 1400, 1900, 950, 1100, 1600]; // ms between ticks per theme
 
 function _playAmbientTick(theme, beat) {
   const ctx = getCtx();
@@ -196,6 +196,16 @@ function _playAmbientTick(theme, beat) {
     case 5: // forest — cricket chirp + soft breeze
       tone(3800 + (b % 3) * 180, 0.055, "sine", 0.006);
       if (b === 0) noise(0.20, 0.004);
+      break;
+    case 6: // space — low sine hum + electronic blip
+      tone(28, 0.9, "sine", 0.010, 24);
+      if (b === 0) tone(880, 0.04, "sine", 0.004, 660);
+      if (b === 4) tone(1320, 0.03, "triangle", 0.003, 990);
+      break;
+    case 7: // arctic — wind howl + ice creak
+      noise(0.9, 0.005);
+      if (b === 0) tone(160, 0.45, "sine", 0.006, 100);
+      if (b === 4) tone(400, 0.06, "triangle", 0.004, 320); // ice creak
       break;
     default:
       break;
