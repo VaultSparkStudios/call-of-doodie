@@ -535,17 +535,14 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               </div>
 
               {/* Scrollable list */}
-              <div style={{ position: "relative", flex: 1, minHeight: 0 }}>
-                <div className="wnscroll" style={{ overflowY: "auto", WebkitOverflowScrolling: "touch", height: "100%", padding: "12px 16px 0" }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: 12 }}>
-                    {NEW_FEATURES.map((f, i) => (
-                      <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4, flexShrink: 0 }}>
-                        {f}
-                      </div>
-                    ))}
-                  </div>
+              <div className="wnscroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "12px 16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: 4 }}>
+                  {NEW_FEATURES.map((f, i) => (
+                    <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4, flexShrink: 0 }}>
+                      {f}
+                    </div>
+                  ))}
                 </div>
-                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 28, background: "linear-gradient(to bottom, transparent, rgba(15,15,15,0.95))", pointerEvents: "none" }} />
               </div>
 
               {/* Sticky footer */}
