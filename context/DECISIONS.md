@@ -32,9 +32,9 @@
 
 - **vite.config.js base `/call-of-doodie/`**: Lowercase slug matches the GitHub repo name and studio URL standard. Previously was `/Call-Of-Doodie/` (capital letters broke routing).
 
-- **App.jsx refactor plan (not yet executed)**: Recommended extraction order:
-  1. `src/drawGame.js` — all `ctx.*` draw calls (~400 lines). Pure function `drawGame(ctx, gs, W, H, renderState)`. Zero React deps, safe to extract.
-  2. `src/gameHelpers.js` — `spawnEnemy`, `spawnBoss`, `spawnPickup`, `buildFlowField`, `getShopOptions`. These mutate gs refs but don't touch React state.
-  3. `src/useInputHandlers.js` — keyboard/mouse/touch event handler useEffects.
-  4. The RAF loop itself stays in App.jsx — it closes over too many refs to safely decouple without a Context refactor.
-  Rationale: file is large but the architecture is intentional. Extract only pure/safe pieces. Don't touch the RAF loop until there's a test harness.
+- **App.jsx refactor — partially executed**:
+  - ✅ `src/drawGame.js` extracted (session 8) — ~640 lines. Pure function `drawGame(ctx, canvas, W, H, gs, refs)`. Zero React deps. Called once per frame from gameLoop.
+  - ✅ `src/gameHelpers.js` extracted (session 11) — ~100 lines. `spawnEnemy(gs,W,H,diffId)` and `spawnBoss(gs,W,H,diffId,typeIndex)`. Pure module-level functions; App.jsx useCallbacks are thin wrappers.
+  - `buildFlowField` and `getShopOptions` remain as module-level helpers in App.jsx (safe, no React deps, but not yet moved).
+  - Input handler useEffects remain in App.jsx.
+  - The RAF loop stays in App.jsx — closes over too many refs to safely decouple without a Context refactor. Don't move it until there's a test harness.

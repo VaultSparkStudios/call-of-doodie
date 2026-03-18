@@ -1,98 +1,112 @@
 # Session Handoff — Call-Of-Doodie
 
+> **Legacy document** — kept for repo history. See `AGENTS.md` for agent instructions and `context/CURRENT_STATE.md` for the live state of the project.
+
 ## Project Overview
 
-**Call-Of-Doodie** is a Call of Duty parody browser-based shooter game built with Vite + React. Deployed via GitHub Pages.
+**Call-Of-Doodie** is a Call of Duty parody browser-based top-down arcade shooter built with React 19 + Vite 6. Deployed via GitHub Pages at `https://vaultsparkstudios.com/call-of-doodie/`.
 
-- **Repo**: `VaultSparkStudios/Call-Of-Doodie`
+- **Repo**: `VaultSparkStudios/call-of-doodie`
 - **Default branch**: `main`
 - **Deployment**: GitHub Pages via GitHub Actions (`.github/workflows/deploy.yml`)
-- **Domain**: vaultsparkstudios.com (custom domain configured)
-- **URL base slug**: `/call-of-doodie/` ← **lowercase is the standard** (set in `vite.config.js`)
+- **URL base slug**: `/call-of-doodie/` (lowercase — set in `vite.config.js`)
 
 ---
 
-## Git State
+## Git State (as of session 12)
 
-Clean. Commit `bbd3592` is pushed to `origin/main`. All features from session 2 are live.
-
----
-
-## Pending Work
-
-### 1. Studio Deployment Standards compliance
-The studio owner mentioned an **AGENTS file** and **Studio Deployment Standards** in a separate studio site repo. This session did not have access to that repo. Next session must:
-- Locate the studio site repo and read the AGENTS file and Deployment Standards
-- Audit `call-of-doodie` against those standards
-- Make any required changes (file naming, structure, config, metadata, etc.)
-
-### 2. Game memory file
-The studio owner requested a game-specific memory file be created. Deferred until standards doc is reviewed so the format matches requirements.
+Clean. Commit `a031204` pushed to `origin/main`. All session 12 features are live.
 
 ---
 
 ## Tech Stack
 
-| Layer     | Technology       |
-|-----------|------------------|
-| Framework | React 19         |
-| Bundler   | Vite 6           |
-| Language  | JavaScript (JSX) |
-| Hosting   | GitHub Pages     |
+| Layer     | Technology                          |
+|-----------|-------------------------------------|
+| Framework | React 19                            |
+| Bundler   | Vite 6                              |
+| Language  | JavaScript (JSX)                    |
+| Hosting   | GitHub Pages                        |
+| Backend   | Supabase (leaderboard + anon auth)  |
 
 ---
 
 ## Project Structure
 
 ```
-Call-Of-Doodie/
+call-of-doodie/
 ├── index.html
 ├── package.json
-├── vite.config.js              # base: "/call-of-doodie/" (lowercase — standard)
-├── HANDOFF.md                  # this file
+├── vite.config.js              # base: "/call-of-doodie/"
+├── AGENTS.md                   # agent instructions (authoritative)
+├── HANDOFF.md                  # this file (legacy)
+├── context/
+│   ├── CURRENT_STATE.md        # live build + priority status
+│   ├── TASK_BOARD.md           # current + upcoming work
+│   ├── DECISIONS.md            # architecture decisions log
+│   └── PROJECT_BRIEF.md        # design pillars
 ├── .github/workflows/deploy.yml
 └── src/
-    ├── main.jsx                # Entry point (unchanged)
-    ├── App.jsx                 # Game loop + state orchestrator (~700 lines)
-    ├── constants.js            # WEAPONS, ENEMY_TYPES, PERKS, ACHIEVEMENTS, DIFFICULTIES, etc.
-    ├── storage.js              # Leaderboard (cod-lb-v5) + career stats (cod-career-v1)
-    ├── sounds.js               # Web Audio API synthesis — no audio files needed
+    ├── main.jsx
+    ├── App.jsx                 # Game loop + state orchestrator (~1400 lines)
+    ├── drawGame.js             # Extracted render function (~640 lines) — pure, no React deps
+    ├── gameHelpers.js          # spawnEnemy, spawnBoss — pure module-level helpers
+    ├── constants.js            # WEAPONS, ENEMY_TYPES, PERKS, ACHIEVEMENTS, DIFFICULTIES, META_UPGRADES, etc.
+    ├── settings.js             # SETTINGS_DEFAULTS, loadSettings(), saveSettings(), loadPresets(), savePresets()
+    ├── storage.js              # Leaderboard (Supabase + localStorage fallback), career stats, meta, missions
+    ├── supabase.js             # Supabase client + initAnonAuth() + getAuthUid()
+    ├── sounds.js               # Web Audio API synthesis — zero audio files
     └── components/
         ├── UsernameScreen.jsx
-        ├── MenuScreen.jsx      # Main menu — includes Rules, Controls, Most Wanted, Career, Achievements
+        ├── MenuScreen.jsx
         ├── DeathScreen.jsx
-        ├── HUD.jsx             # In-game overlay + desktop weapon toolbar
-        ├── PauseMenu.jsx       # Rules / Controls / Most Wanted List sub-views (also in pause)
+        ├── HUD.jsx
+        ├── PauseMenu.jsx
         ├── LeaderboardPanel.jsx
         ├── AchievementsPanel.jsx
-        └── PerkModal.jsx       # Roguelite perk picker
+        ├── PerkModal.jsx
+        ├── WaveShopModal.jsx
+        └── SettingsPanel.jsx
 ```
 
 ---
 
-## Features Implemented (sessions 1–3)
+## Features Implemented (sessions 1–12)
 
 | Feature | Details |
 |---------|---------|
-| **Boss waves** | Every 5th wave — Mega Karen (5–9), Landlord (10–14), both (15+). Red bg, pulsing radar, guaranteed drops |
-| **Weapon upgrades** | 🔧 pickup, up to ⭐⭐⭐ per weapon. +25% dmg, −10% fire delay, +25% ammo per star |
-| **Roguelite perks** | 12 perks, one chosen on every level-up from 3 random options. All stackable |
-| **Sound effects** | Full Web Audio API synthesis — unique sounds for every game event, zero audio files |
-| **Career stats** | Persistent across runs in localStorage (`cod-career-v1`) |
-| **Component refactor** | App.jsx split from 1484 → ~700 lines; all UI moved to `src/components/` |
-| **38 achievements** | Includes perks, upgrades, boss wave clears |
-| **Lowercase URL slug** | `vite.config.js` base changed from `/Call-Of-Doodie/` → `/call-of-doodie/` |
-| **Main menu info panels** | Rules, Controls, and Most Wanted List now accessible from main menu (not just pause) |
+| **10 weapons** | Banana Blaster, RPG, Nerf Minigun, Plunger Launcher, Sniper-ator, Spicy Squirt Gun, Confetti Cannon (shotgun), Shock Zapper (burst:3), Boomerang Blaster, Railgun (hitscan) |
+| **15 enemy types** | 4 difficulty modes; elite variants (armored/fast/explosive) from wave 10+ |
+| **Boss waves** | Every 5th wave — Mega Karen, Landlord, both (15+). Telegraphed with bulletRingWarning + groundSlamWarning |
+| **Wave shop** | Every wave 1–4; every 2nd wave from wave 5+. Free reward options |
+| **Weapon upgrades** | 🔧 pickup, up to ⭐⭐⭐. +25% dmg, −10% fire delay, +25% ammo per star |
+| **30+ perks** | Roguelite perk system, every 3rd level-up. Cursed perks at 35% chance. Perk synergies |
+| **38 achievements** | Persistent via localStorage |
+| **Daily missions** | 8+ mission types tracked per calendar day |
+| **Meta-progression** | Persistent upgrades across runs (`cod-meta-v2`) |
+| **Supabase leaderboard** | Global, paginated (50/page, Load More). Anonymous auth via `initAnonAuth()` |
+| **Callsign locking** | localStorage enforcement live; server-side SQL migration pending |
+| **Gamepad support** | Full controller support + rumble; 🎮 HUD indicator |
+| **Mobile** | Dual-joystick, weapon cycle bar, auto-aim toggle |
+| **Flow field pathfinding** | BFS, 24px grid, TypedArrays, rebuilt every 30 frames |
+| **Seed replay** | Deterministic RNG with shareable seed (0–999998) |
+| **GIF highlight reel** | End-of-run GIF capture |
+| **Share Score** | Native share API |
+| **5 music vibes** | Procedural Web Audio background music |
+| **8 map themes** | office, bunker, factory, ruins, desert, forest, space, arctic |
+| **Colorblind mode** | CSS filter toggle, persisted in localStorage |
+| **PWA** | manifest.json + service worker (network-first nav, cache-first assets) |
+| **Settings panel** | 7 gameplay multipliers, up to 3 named presets |
 
 ---
 
 ## Architecture Notes
 
 - Game loop: single `gameLoop` useCallback in `App.jsx` — heavy use of refs to avoid stale closures
-- `perkModsRef.current` active fields: `damageMult`, `critBonus`, `lifesteal`, `pickupRange`, `pierce`, `ammoMult`, `grenadeCDMult`, `dashCDMult`, `comboTimerMult`, `xpMult`
-- `perkPendingRef` halts the game loop (same mechanism as `pausedRef`) while perk modal is open
-- Weapon upgrade levels stored in `gsRef.current.weaponUpgrades[0..3]`
-- React 19 — hook rules enforced; all hooks must be unconditional at top level
+- Render extracted to `drawGame(ctx, canvas, W, H, gs, refs)` — pure drawing, no React setters
+- Spawn logic extracted to `gameHelpers.js` — `spawnEnemy(gs,W,H,diffId)`, `spawnBoss(gs,W,H,diffId,typeIndex)`
+- `perkPendingRef` and `shopPendingRef` both halt the game loop while modals are open
+- `perkModsRef.current` active fields: `damageMult`, `critBonus`, `lifesteal`, `pickupRange`, `pierce`, `ammoMult`, `grenadeCDMult`, `grenadeDamageMult`, `dashCDMult`, `comboTimerMult`, `xpMult`, `lastResort`, `fireRateMult`, `adrenalineRush`, `ammoDropMult`, `ammoRestoreMult`
 
 ---
 
@@ -104,20 +118,12 @@ npm run build    # Production build (must pass before any push)
 npm run preview  # Preview production build
 ```
 
-## Git / Deploy Standards
-
-- **Deploy trigger**: push to `main` → GitHub Actions auto-deploys to GitHub Pages
-- **Branch naming**: `claude/<description>-<sessionId>`
-- **URL slug**: always lowercase `/call-of-doodie/` in `vite.config.js`
-- **Git config**: user.name `VaultSparkStudios` · user.email `founder@vaultsparkstudios.com`
-- **Build must pass** (`npm run build`) before any push or PR
-
 ---
 
-## Known Limitations / Future Work
+## Known Issues / Pending Work
 
-- Leaderboard is localStorage only — not truly global (no backend)
-- No gamepad/controller support
-- Boss shield mechanic (reverted in a prior PR) not reimplemented
-- Game loop could be extracted to a `useGameLoop` hook
-- Studio Deployment Standards compliance not yet verified (pending access to studio site repo + AGENTS file)
+- Callsign server-side enforcement: SQL migration in `storage.js` comments needs manual run in Supabase console
+- Add `customSettings` column to Supabase leaderboard (`ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean`) so ⚙️ badge shows for all entries
+- Railgun sound reuses Sniper-ator's CRACK! — may want distinct sound
+- Boss ground slam: random initial stagger can shorten the 90-frame warning window on first slam cycle
+- Gamepad rumble: silent no-op on Firefox/Safari (requires Chrome 68+ Vibration Actuator API)
