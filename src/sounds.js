@@ -155,6 +155,73 @@ export function soundUIClose() {
   tone(1000, 0.05, "square", 0.04, 700);
 }
 
+// ===== AMBIENT ROOM TONE =====
+// Low-volume procedural ambience per map theme. Layered under music.
+// 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest
+
+let _ambientActive = false;
+let _ambientTheme = 0;
+let _ambientBeat = 0;
+let _ambientTimer = null;
+
+const _AMBIENT_TICK = [900, 700, 550, 1400, 1900, 950]; // ms between ticks per theme
+
+function _playAmbientTick(theme, beat) {
+  const ctx = getCtx();
+  if (!ctx) return;
+  const b = beat % 8;
+  switch (theme) {
+    case 0: // office — HVAC hiss + rare keyboard click
+      noise(0.5, 0.007);
+      if (b === 0) tone(1500, 0.012, "square", 0.003);
+      break;
+    case 1: // bunker — deep drone + distant metal thud
+      tone(38, 0.6, "sine", 0.013, 32);
+      if (b === 0) { noise(0.10, 0.018); tone(80, 0.08, "sawtooth", 0.007, 50); }
+      break;
+    case 2: // factory — machinery hum + steam burst
+      tone(58, 0.45, "sawtooth", 0.013, 54);
+      if (b % 2 === 0) noise(0.06, 0.017);
+      if (b === 0) tone(110, 0.05, "square", 0.006, 88);
+      break;
+    case 3: // ruins — wind + drip echo
+      noise(0.6, 0.005);
+      if (b === 0) tone(750, 0.04, "sine", 0.007, 280);
+      if (b === 4) tone(380, 0.06, "sine", 0.005, 140);
+      break;
+    case 4: // desert — wind sweep + heat shimmer tone
+      noise(0.8, 0.004);
+      if (b === 0) tone(200, 0.38, "sine", 0.005, 110);
+      break;
+    case 5: // forest — cricket chirp + soft breeze
+      tone(3800 + (b % 3) * 180, 0.055, "sine", 0.006);
+      if (b === 0) noise(0.20, 0.004);
+      break;
+    default:
+      break;
+  }
+}
+
+export function startAmbient(themeIndex) {
+  stopAmbient();
+  _ambientActive = true;
+  _ambientTheme = themeIndex ?? 0;
+  _ambientBeat = 0;
+  _tickAmbient();
+}
+
+export function stopAmbient() {
+  _ambientActive = false;
+  if (_ambientTimer) { clearTimeout(_ambientTimer); _ambientTimer = null; }
+}
+
+function _tickAmbient() {
+  if (!_ambientActive) return;
+  _playAmbientTick(_ambientTheme, _ambientBeat);
+  _ambientBeat++;
+  _ambientTimer = setTimeout(_tickAmbient, _AMBIENT_TICK[_ambientTheme] ?? 900);
+}
+
 // ===== BACKGROUND MUSIC =====
 // Procedural 8-beat loop — kicks, snares, hats, bass. No audio files.
 let _musicActive = false;

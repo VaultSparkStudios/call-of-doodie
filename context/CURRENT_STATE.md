@@ -2,13 +2,13 @@
 
 Build status:
 - Build: passing (`npm run build` clean)
-- Latest commit: `5372ab8` — session 9 changes
+- Latest commit: session 10 changes
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
 - Branch: `main`, needs push to deploy
 
 Current priorities:
 1. Push main to trigger deploy
-2. Playtest synergies, heat gauge, streak bonus, new sounds
+2. Playtest gamepad rumble + ambient sounds
 3. Run Supabase SQL migration (callsign_claims table + updated leaderboard RLS) in console
 
 Known issues:
@@ -19,12 +19,13 @@ Known issues:
 - starterLoadout column in Supabase only populates on future score submissions (old rows show no loadout badge)
 
 Architecture:
-- App.jsx: ~1450 lines (render extracted to drawGame.js in session 8)
+- App.jsx: ~1470 lines (render extracted to drawGame.js in session 8)
 - drawGame.js: ~620 lines — pure render, no React setters. Called once per frame from gameLoop
 - drawGame signature: `drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx })`
 - bossKillFlash is decremented in App.jsx game loop ONLY — not inside drawGame (bug fixed session 8)
 - gs.waveStreak: tracks consecutive wave clears without dying; reset in handlePlayerDeath
 - gs.sharedAbilityCooldown on boss entities: prevents multiple abilities firing simultaneously
+- `rumbleGamepad(weak, strong, ms)` — module-level helper in App.jsx using Gamepad Haptics API
 
 Backend:
 - Supabase global leaderboard live (`fjnpzjjyhnpmunfoycrp.supabase.co`)
