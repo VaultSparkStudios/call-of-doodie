@@ -4,6 +4,27 @@ Chronological record of all AI-assisted sessions.
 
 ---
 
+## 2026-03-18 — Session 12 (Claude Sonnet 4.6)
+
+**Focus:** Seed info in Rules modal, custom-settings ⚙️ leaderboard badge
+
+**Completed:**
+
+*Features:*
+- Rules modal seed entries: 🌱 Seeds (explains seed range 0–999998, map control, custom seed input) and 🔄 Replay (explains replay button on death screen)
+- Custom settings badge: `submitScore` computes `customSettings` boolean by comparing 7 gameplay-affecting settings fields vs `SETTINGS_DEFAULTS`; stored in leaderboard entry; `saveToLeaderboard` strips field from Supabase INSERT (no column yet), preserves in localStorage row; LeaderboardPanel shows ⚙️ badge on entries where `e.customSettings` is truthy
+
+**Key commit:** `a031204`
+
+**Files changed:**
+- `src/components/MenuScreen.jsx` — 2 new Rules modal entries (Seeds + Replay)
+- `src/App.jsx` — SETTINGS_DEFAULTS import; customSettings computed in submitScore
+- `src/storage.js` — strip customSettings from Supabase INSERT; preserve in localStorage row
+- `src/components/LeaderboardPanel.jsx` — ⚙️ badge for custom-settings entries
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `handoffs/LATEST_HANDOFF.md` — updated
+
+---
+
 ## 2026-03-18 — Session 11 (Claude Sonnet 4.6)
 
 **Focus:** Leaderboard pagination, gameHelpers.js extraction, new daily missions, 2 new map themes

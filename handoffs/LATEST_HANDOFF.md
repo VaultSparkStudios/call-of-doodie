@@ -1,58 +1,39 @@
 # Latest Handoff
 
-Last updated: 2026-03-18 (Session 11 — leaderboard pagination, gameHelpers.js, new missions, 2 map themes)
+Last updated: 2026-03-18 (Session 12 — seed info in Rules modal, custom-settings leaderboard badge)
 
 ## What was completed this session
 
-### Commit `57667af`
+### Commit `a031204`
 
-**1. Leaderboard pagination (storage.js + LeaderboardPanel.jsx + App.jsx + MenuScreen.jsx + DeathScreen.jsx)**
+**1. Seed info in Rules modal (MenuScreen.jsx)**
 
-- `loadLeaderboard(offset = 0, limit = 50)` — uses Supabase `.range(offset, offset+limit-1)` instead of `.limit(100)`. localStorage fallback uses `.slice(offset, offset+limit)`.
-- App.jsx: `lbHasMore` state + `lbOffsetRef` ref. `refreshLeaderboard()` resets offset to 0, sets `lbHasMore = data.length >= 50`. `loadMoreLeaderboard()` fetches next page and appends to `leaderboard` state.
-- `LeaderboardPanel`: accepts `lbHasMore` + `onLoadMore` props. "LOAD MORE ↓" button shown when `lbHasMore && !lbLoading && filtered.length > 0`. "Loading…" message when fetching more pages. Subtitle shows current count.
-- Props threaded: App.jsx → MenuScreen → LeaderboardPanel and App.jsx → DeathScreen → LeaderboardPanel.
+Two new entries added at the bottom of the Rules modal (after the Leaderboard entry):
 
-**2. gameHelpers.js — extract spawnEnemy + spawnBoss (new file)**
+- 🌱 **Seeds:** Each run uses a unique seed (0–999998) controlling map layout, walls, terrain, and theme. Enter a custom seed on the menu to replay any run!
+- 🔄 **Replay:** After death, hit 🔄 REPLAY to rerun the exact same map with the same seed
 
-- `src/gameHelpers.js`: exports `spawnEnemy(gs, W, H, difficultyId)` and `spawnBoss(gs, W, H, difficultyId, typeIndex)` as pure module-level functions (no React deps; import only from constants.js).
-- `spawnEnemy` pushes enemy to `gs.enemies` with full elite variant logic (armored/fast/explosive).
-- `spawnBoss` pushes boss with all wave-scaling ability flags (shieldPulse, enrage, teleport, minionSurge, rentNuke, bulletRing, groundSlam, sharedAbilityCooldown).
-- App.jsx: `spawnEnemy` and `spawnBoss` useCallbacks are now thin wrappers: `useCallback((gs) => _spawnEnemy(gs, GW(), GH(), difficultyRef.current), [])`.
-- ~100 lines removed from App.jsx; all call sites unchanged.
+**2. Custom settings ⚙️ badge on leaderboard (App.jsx + storage.js + LeaderboardPanel.jsx)**
 
-**3. New daily mission types (storage.js + App.jsx)**
+- `App.jsx` — `import { loadSettings, SETTINGS_DEFAULTS }` (added SETTINGS_DEFAULTS import). In `submitScore`, computes `customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k])` where `GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"]`. Field added to `entry` object.
+- `storage.js` — `saveToLeaderboard`: destructures `customSettings` out before Supabase INSERT (`const { customSettings: _cs, ...supabaseRow } = row`). The full `row` (including `customSettings`) is still used in the localStorage fallback.
+- `LeaderboardPanel.jsx` — After the `loadoutEmoji` badge, renders `{e.customSettings && <span title="Custom settings used">⚙️</span>}`.
 
-Two new mission types added to MISSION_DEFS and MISSION_PARAMS:
-
-- `no_hit_wave` 🛡️ — "Clear N waves without taking damage" (N = 1/2/3).
-  - `gs.damageThisWave` counter: initialized to 0 in gs, incremented at every damage site (5 sites: enemy bullet, contact, slam, kamikaze, rent nuke), reset to 0 at each wave clear.
-  - `statsRef.current.noHitWaves`: incremented at wave clear when `gs.damageThisWave === 0`.
-  - Tracked in `checkDailyMissions` via `s.noHitWaves`.
-- `single_weapon` 🎯 — "Get N kills with a single weapon" (N = 5/10/20).
-  - All bullets carry `wpnIdx: weaponIdx` field (added to `makeBullet` in shoot()).
-  - `statsRef.current.weaponKills[wpnIdx]` incremented on each kill (bullet-enemy + hitscan/railgun paths).
-  - `checkDailyMissions` exposes `singleWeaponKills = Math.max(...weaponKills)`.
-
-**4. 2 new map themes (App.jsx + drawGame.js + sounds.js)**
-
-Theme count: 6 → 8. `initGame` now uses `Math.floor(_sr() * 8)`.
-
-- **Theme 6: Space** — deep black-purple backdrop; walls: dark purple metal `["rgba(14,8,34,.."]`; border glow: purple `"rgba(150,70,255,"`; props: 🚀🛸🌌👾⭐🪐🌙🌟; ambient: 1100ms tick, low 28Hz sine hum + sine blips at bars 0/4.
-- **Theme 7: Arctic** — cold midnight blue backdrop; walls: blue ice `["rgba(22,42,66,.."]`; border glow: icy blue `"rgba(75,150,220,"`; props: ❄️🏔️🐧🌨️🦭⛷️🐻‍❄️🧊; ambient: 1600ms tick, wind noise + descending sine tone (160Hz) + ice creak at bar 4.
-
-All theme color arrays in drawGame.js extended: THEME_BG, FZ_FILL, FZ_TILE, TC (terrain), GRID_CLR, BORDER_CLR, WALL_T.
+**Note:** ⚙️ badge only shows for locally-submitted entries until the `customSettings` boolean column is added to the Supabase leaderboard table:
+```sql
+ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean;
+```
 
 ## What is mid-flight
 
-Nothing — all 4 features are complete and build-verified.
+Nothing — all features are complete and build-verified (`a031204`).
 
 ## What to do next
 
-1. **Push `main`** → auto-deploy via GitHub Actions
-2. **Playtest space + arctic themes** — check ambient feels right, wall/floor colors are distinct
-3. **Verify "Load More"** in production with Supabase real data (hard to test locally without 50+ entries)
-4. **Run Supabase SQL migration** — callsign enforcement SQL is in storage.js comments, needs manual run in Supabase console
+1. **Run Supabase SQL migration** — `ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean;` — to enable the ⚙️ badge for all leaderboard entries (currently only shows for localStorage-fallback entries)
+2. **Run callsign enforcement SQL** — documented in storage.js comments, needs manual run in Supabase console
+3. **Playtest space + arctic themes** — check ambient feels right, wall/floor colors are distinct
+4. **Verify "Load More"** in production with Supabase real data (hard to test locally without 50+ entries)
 5. **Capacitor wrapper** — next item on task board (iOS App Store submission)
 
 ## Important constraints
@@ -65,4 +46,5 @@ Nothing — all 4 features are complete and build-verified.
 - Map theme count is now 8 — any new code that branches on `gs.mapTheme` needs to handle indices 0–7
 - `gs.damageThisWave` resets at wave clear — do NOT reset at death (handlePlayerDeath), only at wave clear
 - `statsRef.current.weaponKills` is a length-10 array; if new weapons are added, update the array size in both useRef init and statsRef reset
+- `customSettings` is stripped from Supabase INSERT until the column is added — add the SQL migration before expecting it in leaderboard queries
 - localStorage keys: `cod-lb-v5`, `cod-career-v1`, `cod-meta-v2`, `cod-missions-YYYY-MM-DD`, `cod-callsign-v1`, `cod-music-muted`, `cod-colorblind`, `cod-settings-v1`, `cod-presets-v1`
