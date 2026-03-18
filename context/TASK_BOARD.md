@@ -4,6 +4,7 @@
 - Playtest space + arctic map themes, no-hit-wave + single-weapon missions
 - Verify leaderboard "Load More" in production
 - Run Supabase SQL migration in console to activate server-side callsign enforcement (SQL in storage.js comments)
+- Add `customSettings` column to Supabase leaderboard table (ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean) so ⚙️ badge shows for all entries, not just localStorage ones
 
 ## Next
 - Capacitor wrapper for iOS App Store submission
@@ -11,6 +12,10 @@
 ## Later
 - More daily mission types
 - More map variety / new map themes
+
+## Done (session 12)
+- ✅ Seeds + Replay entries added to Rules modal in MenuScreen.jsx — explains seed range (0–999998), what it controls, and how to use replay
+- ✅ Custom settings ⚙️ badge: submitScore computes `customSettings` by comparing settingsRef vs SETTINGS_DEFAULTS gameplay keys (7 numeric multipliers); saveToLeaderboard strips field from Supabase INSERT (no column yet), preserves in localStorage; LeaderboardPanel shows ⚙️ badge on `e.customSettings` truthy entries
 
 ## Done (session 11)
 - ✅ Leaderboard pagination: loadLeaderboard(offset, limit=50) using Supabase .range(); "LOAD MORE ↓" button in LeaderboardPanel; lbHasMore + loadMoreLeaderboard threaded through App→MenuScreen/DeathScreen→LeaderboardPanel
