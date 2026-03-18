@@ -67,6 +67,8 @@ export function soundShoot(weaponIdx) {
     case 3: tone(280, 0.12, "square", 0.08, 180); break;           // Plunger: thwonk
     case 6: noise(0.09, 0.14); tone(300, 0.05, "square", 0.05, 180); break; // Confetti Cannon: pop blast
     case 7: tone(1200, 0.04, "square", 0.06, 900); tone(1000, 0.04, "triangle", 0.04, 800, 0.04); tone(900, 0.04, "square", 0.05, 700, 0.08); break; // Shock Zapper: triple zap
+    case 8: tone(600, 0.28, "sawtooth", 0.09, 180); noise(0.18, 0.04, 0.04); break; // Boomerang: WHOOSH sweep
+    case 9: noise(0.07, 0.20); tone(3200, 0.05, "sawtooth", 0.09, 700); break;      // Railgun: sharp CRACK
     default: tone(600, 0.05, "square", 0.06);
   }
 }

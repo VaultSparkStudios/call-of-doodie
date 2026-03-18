@@ -8,6 +8,7 @@ export default function HUD({
   difficulty, isMobile, weaponUpgrades, activePerks, runModifier,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
+  overclockedActive, overclockedShots, waveStreak,
 }) {
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -115,6 +116,25 @@ export default function HUD({
         </div>
         {extraLives > 0 && <div style={{ fontSize: 9, color: "#FFD700", marginTop: 2 }}>Guardian Angel Active</div>}
       </div>
+
+      {/* Overclocked heat gauge */}
+      {overclockedActive && (
+        <div style={{ position: "absolute", bottom: isMobile ? 70 : 52, right: isMobile ? 8 : 56, textAlign: "right", minWidth: 80 }}>
+          <div style={{ fontSize: 9, color: overclockedShots >= 15 ? "#FF4400" : "#FF8800", marginBottom: 2 }}>
+            🔧 HEAT {overclockedShots}/20
+          </div>
+          <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 3, height: 4, overflow: "hidden" }}>
+            <div style={{ width: (overclockedShots / 20) * 100 + "%", height: "100%", borderRadius: 3, background: overclockedShots >= 15 ? "#FF2200" : overclockedShots >= 10 ? "#FF8800" : "#FFCC00", transition: "width 0.05s" }} />
+          </div>
+        </div>
+      )}
+
+      {/* Wave streak badge */}
+      {(waveStreak || 0) >= 3 && (
+        <div style={{ position: "absolute", top: 8, left: killstreak >= 3 ? 110 : 12, background: "rgba(255,120,0,0.2)", padding: "3px 10px", borderRadius: 4, border: "1px solid rgba(255,120,0,0.4)", fontSize: 11, color: "#FF8800", fontWeight: 700 }}>
+          🔥 {waveStreak}-STREAK
+        </div>
+      )}
 
       {/* Ammo / weapon */}
       <div style={{ position: "absolute", bottom: 8, right: isMobile ? 8 : 56, textAlign: "right" }}>

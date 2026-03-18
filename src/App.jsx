@@ -192,6 +192,8 @@ export default function CallOfDoodie() {
   const [gameSettings, setGameSettings]       = useState(() => loadSettings());
   const [showSettings, setShowSettings]       = useState(false);
   const [gamepadConnected, setGamepadConnected] = useState(false);
+  const [overclockedShots, setOverclockedShots] = useState(0);
+  const [waveStreak, setWaveStreak]             = useState(0);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -294,6 +296,10 @@ export default function CallOfDoodie() {
       bossKills: statsRef.current.bossKills || 0,
       bestStreak: statsRef.current.bestStreak || 0,
       dashKills: statsRef.current.dashKills || 0,
+      perksSelected: statsRef.current.perksSelected || 0,
+      nukes: statsRef.current.nukes || 0,
+      score: gs.score || 0,
+      weaponUpgradesCollected: statsRef.current.weaponUpgradesCollected || 0,
     };
     missions.forEach((m, idx) => {
       if (missionDoneRef.current.has(idx)) return;
@@ -644,6 +650,21 @@ export default function CallOfDoodie() {
       const d = difficultyRef.current;
       gsRef.current.glassjawMult = d === "insane" ? 1.4 : d === "hard" ? 1.65 : 2.0;
     }
+    // Announce perk synergies
+    const pm = perkModsRef.current;
+    const _synergies = [
+      [pm.hasVampire && pm.hasChainLightning && !pm._synergyStormVampire, "⚡🧛 STORM VAMPIRE", "_synergyStormVampire"],
+      [pm.hasGrenadier && pm.hasPyromaniac && !pm._synergyPyroGrenadier, "💣🔥 PYRO GRENADIER", "_synergyPyroGrenadier"],
+      [pm.hasEagleEye && pm.pierce > 0 && !pm._synergyDeadEye, "🎯🔫 DEAD EYE", "_synergyDeadEye"],
+    ];
+    for (const [cond, label, flag] of _synergies) {
+      if (cond) {
+        pm[flag] = true;
+        if (gsRef.current) addText(gsRef.current, GW() / 2, GH() / 2 - 85, "🔗 SYNERGY: " + label + "!", "#FF88FF", true);
+        soundLevelUp();
+        break;
+      }
+    }
     statsRef.current.perksSelected++;
     setActivePerks(prev => [...prev, perk]);
     setPerkPending(false);
@@ -830,6 +851,7 @@ export default function CallOfDoodie() {
         setAmmo(maxAmmo);
       }
       setIsReloading(false); isReloadingRef.current = false;
+      if (gsRef.current?.overclocked) { gsRef.current.overclockedShots = 0; setOverclockedShots(0); }
     }, WEAPONS[wpnIdx].reloadTime);
   }, []);
 
@@ -845,8 +867,10 @@ export default function CallOfDoodie() {
     // Overclocked perk: track shots, force reload every 20
     if (gs.overclocked) {
       gs.overclockedShots = (gs.overclockedShots || 0) + 1;
+      setOverclockedShots(gs.overclockedShots);
       if (gs.overclockedShots >= 20) {
         gs.overclockedShots = 0;
+        setOverclockedShots(0);
         addText(gs, gs.player.x, gs.player.y - 40, "🔧 OVERHEATED!", "#FF8800", true);
         doReload(weaponIdx);
       }
@@ -975,6 +999,7 @@ export default function CallOfDoodie() {
       setTimeout(() => setGuardianAngelFlash(false), 1500);
       return false;
     }
+    if (gs) gs.waveStreak = 0; // reset streak on death
     stopMusic();
     soundDeath();
     setDeaths(dd => dd + 1);
@@ -1220,7 +1245,11 @@ export default function CallOfDoodie() {
         gs.newBestWave = true;
         addText(gs, W / 2, H / 2 - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
       }
-      const waveBonus = gs.currentWave * 100;
+      // Wave streak: consecutive clears without dying
+      gs.waveStreak = (gs.waveStreak || 0) + 1;
+      setWaveStreak(gs.waveStreak);
+      const streakBonus = gs.waveStreak >= 3 ? (gs.waveStreak - 2) * 200 : 0;
+      const waveBonus = gs.currentWave * 100 + streakBonus;
       gs.score += waveBonus; setScore(gs.score);
       setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
 
@@ -1256,7 +1285,8 @@ export default function CallOfDoodie() {
       } else {
         setMusicIntensity(false);
         addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
-        addText(gs, W / 2, H / 2 + 30, "+" + waveBonus + " WAVE BONUS", "#00FF88");
+        addText(gs, W / 2, H / 2 + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
+        if (gs.waveStreak >= 3) addText(gs, W / 2, H / 2 + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
         soundWaveClear();
         // Trigger wave shop — every wave for waves 1-4, every 2nd wave for wave 5+
         const showShop = gs.currentWave < 5 || gs.currentWave % 2 === 0;
@@ -1657,6 +1687,11 @@ export default function CallOfDoodie() {
             }
           }
         }
+        // ── Shared ability stagger: prevents multiple abilities firing simultaneously ──
+        if ((e.sharedAbilityCooldown || 0) > 0) e.sharedAbilityCooldown--;
+        const _abilityReady = (e.sharedAbilityCooldown || 0) <= 0;
+        // At high waves (40+) scale ability timers up so they're less frequent
+        const _waveScale = gs.currentWave >= 40 ? 1.4 : gs.currentWave >= 30 ? 1.2 : 1.0;
         // ── Shared boss abilities (scale per wave) ──────────────────────────
         if (e.hasShieldPulse) {
           if (!e.shieldPulseActive) {
@@ -1683,8 +1718,9 @@ export default function CallOfDoodie() {
         }
         if (e.hasTeleport) {
           e.teleportTimer++;
-          if (e.teleportTimer >= 480) { // every 8 seconds
+          if (_abilityReady && e.teleportTimer >= Math.floor(480 * _waveScale)) {
             e.teleportTimer = 0;
+            e.sharedAbilityCooldown = 90;
             const tAngle = Math.random() * Math.PI * 2;
             const tDist  = 110 + Math.random() * 70;
             e.x = Math.max(e.size, Math.min(W - e.size, p.x + Math.cos(tAngle) * tDist));
@@ -1697,11 +1733,13 @@ export default function CallOfDoodie() {
         // ── Bullet Ring (wave 10+): fires 8 bullets in 360° pattern ──────────
         if (e.hasBulletRing) {
           e.bulletRingTimer++;
+          const _brCap = Math.floor(360 * _waveScale);
           // Warning flash: 1 second (60 frames) before the ring fires
-          e.bulletRingWarning = e.bulletRingTimer >= 300 && e.bulletRingTimer < 360;
-          if (e.bulletRingTimer >= 360) {
+          e.bulletRingWarning = _abilityReady && e.bulletRingTimer >= _brCap - 60 && e.bulletRingTimer < _brCap;
+          if (_abilityReady && e.bulletRingTimer >= _brCap) {
             e.bulletRingTimer = 0;
             e.bulletRingWarning = false;
+            e.sharedAbilityCooldown = 120;
             for (let _ri = 0; _ri < 8; _ri++) {
               const ba = (_ri / 8) * Math.PI * 2;
               gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12 });
@@ -1715,10 +1753,12 @@ export default function CallOfDoodie() {
         if (e.hasGroundSlam) {
           if (!e.groundSlamActive) {
             e.groundSlamTimer++;
+            const _gsCap = Math.floor(420 * _waveScale);
             // Warning flash: 1.5 seconds (90 frames) before the slam triggers
-            e.groundSlamWarning = e.groundSlamTimer >= 330 && e.groundSlamTimer < 420;
-            if (e.groundSlamTimer >= 420) {
+            e.groundSlamWarning = _abilityReady && e.groundSlamTimer >= _gsCap - 90 && e.groundSlamTimer < _gsCap;
+            if (_abilityReady && e.groundSlamTimer >= _gsCap) {
               e.groundSlamTimer = 0; e.groundSlamWarning = false; e.groundSlamActive = true; e.groundSlamRadius = 0;
+              e.sharedAbilityCooldown = 120;
               addText(gs, e.x, e.y - 80, "💥 GROUND SLAM!", "#FF4400", true);
               addParticles(gs, e.x, e.y, "#FF4400", 20);
               gs.screenShake = 14;
@@ -2171,6 +2211,9 @@ export default function CallOfDoodie() {
         onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)}
         onDash={doDash} onGrenade={throwGrenade} onPause={() => setPaused(true)}
         fmtTime={fmtTime}
+        overclockedActive={activePerks.some(p => p.id === "overclocked")}
+        overclockedShots={overclockedShots}
+        waveStreak={waveStreak}
       />
 
       {/* Mobile action bar */}

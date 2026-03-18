@@ -134,12 +134,17 @@ const MISSION_DEFS = [
   { id: "boss_kills",    icon: "👹",  make: (n) => ({ text: `Slay ${n} boss${n > 1 ? "es" : ""}`,   goal: n, track: "bossKills"    }) },
   { id: "killstreak",    icon: "🔥",  make: (n) => ({ text: `Land a ×${n} killstreak`,               goal: n, track: "bestStreak"   }) },
   { id: "dash_kills",    icon: "💨",  make: (n) => ({ text: `Kill ${n} enemies while dashing`,       goal: n, track: "dashKills"    }) },
+  { id: "perk_collector",icon: "✨",  make: (n) => ({ text: `Pick up ${n} perks`,                    goal: n, track: "perksSelected" }) },
+  { id: "nuke_user",     icon: "☢️",  make: (n) => ({ text: `Use ${n} tactical nuke${n>1?"s":""}`,   goal: n, track: "nukes"         }) },
+  { id: "high_roller",   icon: "🎰",  make: (n) => ({ text: `Score ${n.toLocaleString()} points`,    goal: n, track: "score"         }) },
+  { id: "arms_race",     icon: "🔧",  make: (n) => ({ text: `Collect ${n} weapon upgrade${n>1?"s":""}`, goal: n, track: "weaponUpgradesCollected" }) },
 ];
 const MISSION_PARAMS = {
   kill_any: [15,20,25], reach_wave: [5,6,7], combo: [5,8,10],
   damage: [2000,5000,8000], dashes: [10,15,20], crits: [10,20,25],
   grenade_kills: [3,5,8], survive: [60,90,120],
   boss_kills: [1,2,3], killstreak: [5,8,10], dash_kills: [3,5,8],
+  perk_collector: [3,5,7], nuke_user: [1,2,3], high_roller: [5000,10000,25000], arms_race: [1,2,3],
 };
 function lcg(s) { return Math.abs((Math.imul(s, 1664525) + 1013904223) | 0); }
 

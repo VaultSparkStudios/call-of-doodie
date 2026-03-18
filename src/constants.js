@@ -52,8 +52,8 @@ export const PERKS = [
     apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.25; },
   },
   {
-    id: "eagle_eye", name: "Eagle Eye", desc: "+10% crit chance", emoji: "🎯", tier: "common",
-    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.10; },
+    id: "eagle_eye", name: "Eagle Eye", desc: "+10% crit chance. Synergy: +10% crit with Penetrator", emoji: "🎯", tier: "common",
+    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.10; mods.hasEagleEye = true; if (mods.pierce > 0) mods.critBonus += 0.10; },
   },
   {
     id: "adrenaline", name: "Adrenaline Rush", desc: "+15% move speed", emoji: "⚡", tier: "common",
@@ -68,16 +68,16 @@ export const PERKS = [
     apply: (mods) => { mods.xpMult = (mods.xpMult || 1) * 1.30; },
   },
   {
-    id: "grenadier", name: "Grenadier", desc: "−35% grenade cooldown", emoji: "💣", tier: "uncommon",
-    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.65; },
+    id: "grenadier", name: "Grenadier", desc: "−35% grenade cooldown. Synergy: +50% grenade dmg with Pyromaniac", emoji: "💣", tier: "uncommon",
+    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.65; mods.hasGrenadier = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.5; },
   },
   {
     id: "parkour_pro", name: "Parkour Pro", desc: "−40% dash cooldown", emoji: "🏃", tier: "uncommon",
     apply: (mods) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.60; },
   },
   {
-    id: "vampire", name: "Vampire", desc: "Heal 8% of damage dealt", emoji: "🧛", tier: "uncommon",
-    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; },
+    id: "vampire", name: "Vampire", desc: "Heal 8% of damage dealt. Synergy: +6% more lifesteal with Chain Lightning", emoji: "🧛", tier: "uncommon",
+    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; if (mods.hasChainLightning) mods.lifesteal += 0.06; },
   },
   {
     id: "deep_pockets", name: "Deep Pockets", desc: "+50% max ammo on all weapons", emoji: "📦", tier: "uncommon",
@@ -92,8 +92,8 @@ export const PERKS = [
     apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * 2; },
   },
   {
-    id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy", emoji: "🔫", tier: "rare",
-    apply: (mods) => { mods.pierce = (mods.pierce || 0) + 1; },
+    id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy. Synergy: +10% crit with Eagle Eye", emoji: "🔫", tier: "rare",
+    apply: (mods) => { mods.pierce = (mods.pierce || 0) + 1; if (mods.hasEagleEye) mods.critBonus = (mods.critBonus || 0) + 0.10; },
   },
   {
     id: "bloodlust", name: "Bloodlust", emoji: "🩸", tier: "uncommon",
@@ -117,8 +117,8 @@ export const PERKS = [
   },
   {
     id: "chain_lightning", name: "Chain Lightning", emoji: "⚡", tier: "rare",
-    desc: "Hits have 20% chance to arc to 1 nearby enemy for 50% damage",
-    apply: (mods, gs) => { if (gs) gs.chainLightning = true; },
+    desc: "Hits have 20% chance to arc to 1 nearby enemy for 50% damage. Synergy: +6% lifesteal with Vampire",
+    apply: (mods, gs) => { if (gs) gs.chainLightning = true; mods.hasChainLightning = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + 0.06; },
   },
   {
     id: "dead_mans_hand", name: "Dead Man's Hand", emoji: "🃏", tier: "rare",
@@ -156,8 +156,8 @@ export const CURSED_PERKS = [
     desc: "+50% move speed · −45% max HP",
     apply: (mods, gs) => { if(gs?.player){gs.player.speed*=1.5;const m=Math.max(15,Math.floor(gs.player.maxHealth*0.55));gs.player.maxHealth=m;gs.player.health=Math.min(gs.player.health,m);} } },
   { id: "pyromaniac",    name: "Pyromaniac",    emoji: "🔥", tier: "cursed",
-    desc: "Grenade dmg ×2 · −25% bullet damage",
-    apply: (mods) => { mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*2.0; mods.damageMult=(mods.damageMult||1)*0.75; } },
+    desc: "Grenade dmg ×2 · −25% bullet damage. Synergy: +50% more grenade dmg with Grenadier",
+    apply: (mods) => { mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*2.0; mods.damageMult=(mods.damageMult||1)*0.75; mods.hasPyromaniac=true; if (mods.hasGrenadier) mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*1.5; } },
   { id: "last_resort",   name: "Last Resort",   emoji: "💔", tier: "cursed",
     desc: "+200% dmg below 25% HP · start at 25% HP",
     apply: (mods, gs) => { mods.lastResort=true; if(gs?.player){gs.player.health=Math.max(1,Math.floor(gs.player.maxHealth*0.25));} } },
