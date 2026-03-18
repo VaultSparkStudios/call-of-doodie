@@ -95,6 +95,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                     <span style={{ fontWeight: 700 }}>{e.name}</span>
                     {e.level && <span style={{ color: "#888", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
                     {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
+                    {e.customSettings && <span style={{ fontSize: 9, marginLeft: 4 }} title="Custom settings used">⚙️</span>}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>

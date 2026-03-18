@@ -69,7 +69,9 @@ export async function saveToLeaderboard(entry) {
 
   if (supabase) {
     try {
-      const { error } = await supabase.from("leaderboard").insert([row]);
+      // Strip customSettings — no Supabase column yet; kept in localStorage entry only
+      const { customSettings: _cs, ...supabaseRow } = row;
+      const { error } = await supabase.from("leaderboard").insert([supabaseRow]);
       if (error) throw error;
       return await loadLeaderboard();
     } catch (err) {

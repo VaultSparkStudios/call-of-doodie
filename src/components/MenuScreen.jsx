@@ -209,6 +209,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div>💨 <strong style={{ color: "#FF6B35" }}>Dash:</strong> Brief invincibility to dodge through danger</div>
               <div>⬆ <strong style={{ color: "#FF6B35" }}>XP & Levels:</strong> Level up from kills — choose a perk each time</div>
               <div>🏆 <strong style={{ color: "#FF6B35" }}>Leaderboard:</strong> Submit your score with famous last words</div>
+              <div>🌱 <strong style={{ color: "#FF6B35" }}>Seeds:</strong> Each run uses a unique seed (0–999998) controlling map layout, walls, terrain, and theme. Enter a custom seed on the menu to replay any run!</div>
+              <div>🔄 <strong style={{ color: "#FF6B35" }}>Replay:</strong> After death, hit 🔄 REPLAY to rerun the exact same map with the same seed</div>
             </div>
             <button onClick={() => setShowRules(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
           </div>

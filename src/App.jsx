@@ -9,7 +9,7 @@ import {
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
-import { loadSettings } from "./settings.js";
+import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
 import SettingsPanel from "./components/SettingsPanel.jsx";
 import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
@@ -1056,11 +1056,14 @@ export default function CallOfDoodie() {
 
   // ── Score submit ──────────────────────────────────────────────────────────
   const submitScore = useCallback(async ({ lastWords, rank }) => {
+    const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
+    const sett = settingsRef.current;
+    const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
     const entry = {
       name: username, score, kills, wave, lastWords,
       rank, bestStreak, totalDamage, level,
       time: fmtTime(timeSurvived), achievements: achievementsUnlocked.length, difficulty,
-      starterLoadout,
+      starterLoadout, customSettings,
     };
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board);
