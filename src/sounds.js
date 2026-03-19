@@ -65,10 +65,12 @@ export function soundShoot(weaponIdx) {
     case 1: tone(120, 0.35, "sawtooth", 0.13, 60); noise(0.2, 0.1); break; // RPG: low thud
     case 2: tone(1400, 0.018, "square", 0.04, 1000); break;       // Minigun: high tick
     case 3: tone(280, 0.12, "square", 0.08, 180); break;           // Plunger: thwonk
+    case 4: noise(0.03, 0.16); tone(2600, 0.05, "sawtooth", 0.09, 400); break; // Sniper-ator: sharp crack
+    case 5: tone(600, 0.018, "square", 0.05, 1800); break; // Squirt Gun: high squirt tick
     case 6: noise(0.09, 0.14); tone(300, 0.05, "square", 0.05, 180); break; // Confetti Cannon: pop blast
     case 7: tone(1200, 0.04, "square", 0.06, 900); tone(1000, 0.04, "triangle", 0.04, 800, 0.04); tone(900, 0.04, "square", 0.05, 700, 0.08); break; // Shock Zapper: triple zap
     case 8: tone(600, 0.28, "sawtooth", 0.09, 180); noise(0.18, 0.04, 0.04); break; // Boomerang: WHOOSH sweep
-    case 9: noise(0.07, 0.20); tone(3200, 0.05, "sawtooth", 0.09, 700); break;      // Railgun: sharp CRACK
+    case 9: tone(55, 0.18, "sawtooth", 0.16, 180); tone(4200, 0.10, "square", 0.07, 200, 0.02); noise(0.06, 0.14, 0.01); break; // Railgun: deep electric rail discharge
     default: tone(600, 0.05, "square", 0.06);
   }
 }
@@ -153,6 +155,18 @@ export function soundUIOpen() {
 
 export function soundUIClose() {
   tone(1000, 0.05, "square", 0.04, 700);
+}
+
+export function soundGamepadConnect() {
+  tone(440, 0.07, "triangle", 0.05, 660);
+  tone(660, 0.10, "sine", 0.06, 880, 0.07);
+  tone(880, 0.12, "triangle", 0.05, 1100, 0.16);
+}
+
+export function soundGamepadDisconnect() {
+  tone(880, 0.07, "triangle", 0.05, 600);
+  tone(600, 0.09, "sine", 0.05, 360, 0.07);
+  tone(360, 0.12, "triangle", 0.04, 220, 0.14);
 }
 
 // ===== AMBIENT ROOM TONE =====

@@ -1,6 +1,19 @@
 // ===== LEADERBOARD =====
 import { supabase, getAuthUid } from "./supabase.js";
 
+// ===== SUPABASE SQL MIGRATIONS =====
+// Run these in the Supabase SQL console (one time, in order):
+//
+//   -- 1. Enable anonymous sign-ins in Supabase Auth > Settings > Anonymous sign-ins
+//
+//   -- 2. Add missing leaderboard columns:
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "customSettings" boolean;
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "inputDevice" text;
+//   -- After running #2, remove the stripping in saveToLeaderboard above
+//
+//   -- 3. Callsign ownership table (see below)
+//
+
 // ===== CALLSIGN OWNERSHIP =====
 // Requires the following SQL run once in Supabase console:
 //
@@ -69,8 +82,8 @@ export async function saveToLeaderboard(entry) {
 
   if (supabase) {
     try {
-      // Strip customSettings — no Supabase column yet; kept in localStorage entry only
-      const { customSettings: _cs, ...supabaseRow } = row;
+      // Strip columns that don't exist in Supabase yet — run SQL migrations below to enable them
+      const { customSettings: _cs, inputDevice: _id, ...supabaseRow } = row;
       const { error } = await supabase.from("leaderboard").insert([supabaseRow]);
       if (error) throw error;
       return await loadLeaderboard();

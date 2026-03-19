@@ -15,6 +15,7 @@ import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
+  soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
 } from "./sounds.js";
@@ -242,6 +243,14 @@ export default function CallOfDoodie() {
   // ── Sync rumble flag from settings ────────────────────────────────────────
   useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);
 
+  // ── Gamepad connect/disconnect sounds ─────────────────────────────────────
+  const isFirstGpMount = useRef(true);
+  useEffect(() => {
+    if (isFirstGpMount.current) { isFirstGpMount.current = false; return; }
+    if (gamepadConnected) soundGamepadConnect();
+    else soundGamepadDisconnect();
+  }, [gamepadConnected]);
+
   // ── Responsive ────────────────────────────────────────────────────────────
   useEffect(() => {
     const check = () => {
@@ -329,6 +338,8 @@ export default function CallOfDoodie() {
       weaponUpgradesCollected: statsRef.current.weaponUpgradesCollected,
       maxWeaponLevel: statsRef.current.maxWeaponLevel,
       bossWavesCleared: statsRef.current.bossWavesCleared,
+      dashKills: statsRef.current.dashKills || 0,
+      noHitWaves: statsRef.current.noHitWaves || 0,
     };
     ACHIEVEMENTS.forEach(a => {
       if (!achievedRef.current.has(a.id) && a.check(s)) {
@@ -2168,6 +2179,7 @@ export default function CallOfDoodie() {
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           onResume={() => setPaused(false)}
           onLeave={() => { stopMusic(); stopAmbient(); setPaused(false); setScreen("menu"); }}
+          gamepadConnected={gamepadConnected} controllerType={controllerType}
         />
       )}
 

@@ -811,6 +811,20 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         <div style={{ fontSize: 11, color: "#bbb", marginTop: 8 }}>
           ✨ Perks on level-up · 🔧 Weapon upgrades · ⚠️ Boss waves every 5 waves
         </div>
+
+        {/* Community footer */}
+        <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+          <a href="https://vaultsparkstudios.com" target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 10, color: "#888", textDecoration: "none", letterSpacing: 1 }}>
+            🌐 VAULTSPARKSTUDIOS.COM
+          </a>
+          {/* Add your Discord invite link here when ready */}
+          {/* <a href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 10, color: "#7289DA", textDecoration: "none", letterSpacing: 1, fontWeight: 700 }}>
+            💬 JOIN DISCORD
+          </a> */}
+          <span style={{ fontSize: 10, color: "#555" }}>© 2025 VaultSpark Studios</span>
+        </div>
       </div>
       </div>
     </div>

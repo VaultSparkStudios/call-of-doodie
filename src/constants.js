@@ -9,7 +9,9 @@ export const WEAPONS = [
   { name: "Confetti Cannon", emoji: "🎊", damage: 12, fireRate: 900, ammo: 18, maxAmmo: 18, reloadTime: 2000, color: "#FF69B4", sound: "POP!", spread: 0.55, bulletLife: 22, bulletSize: 3, bulletSpeed: 9, pellets: 6, desc: "6 confetti pellets per blast. Close range chaos." },
   { name: "Shock Zapper", emoji: "⚡", damage: 32, fireRate: 1100, ammo: 15, maxAmmo: 15, reloadTime: 2400, color: "#00E5FF", sound: "ZAP!", spread: 0.06, bulletLife: 75, bulletSize: 5, bulletSpeed: 15, burst: 3, burstDelay: 90, desc: "3-shot burst, medium range. Zap zap zap." },
   { name: "Boomerang Blaster", emoji: "🪃", damage: 28, fireRate: 1100, ammo: 5, maxAmmo: 5, reloadTime: 1800, color: "#FFA500", sound: "WHOOSH!", spread: 0, bulletLife: 100, bulletSize: 9, bulletSpeed: 6, boomerang: true, desc: "Curves out, returns to you. Pierces every enemy both ways." },
-  { name: "Railgun", emoji: "🔦", damage: 160, fireRate: 2800, ammo: 4, maxAmmo: 4, reloadTime: 3500, color: "#00FFFF", sound: "CRACK!", spread: 0, hitscan: true, desc: "Instant hitscan beam. Penetrates every enemy in a straight line." },
+  { name: "Railgun", emoji: "🔦", damage: 160, fireRate: 2800, ammo: 4, maxAmmo: 4, reloadTime: 3500, color: "#00FFFF", sound: "ZORCH!", spread: 0, hitscan: true, desc: "Instant hitscan beam. Penetrates every enemy in a straight line." },
+  { name: "Ricochet Pistol", emoji: "🎱", damage: 35, fireRate: 340, ammo: 18, maxAmmo: 18, reloadTime: 1800, color: "#7FFF00", sound: "PING!", spread: 0.04, bulletLife: 90, bulletSize: 6, bulletSpeed: 12, bouncesLeft: 10, desc: "Bounces up to 10 times per shot. Angles are your best friend." },
+  { name: "Nuclear Kazoo", emoji: "🎵", damage: 22, fireRate: 260, ammo: 24, maxAmmo: 24, reloadTime: 2000, color: "#FF00FF", sound: "HONK!", spread: 0.20, bulletLife: 48, bulletSize: 5, bulletSpeed: 10, pellets: 3, desc: "3-wide shots per fire. Annoyingly effective in crowds." },
 ];
 
 // ===== ENEMIES =====
@@ -43,6 +45,10 @@ export const ENEMY_TYPES = [
     deathQuotes: ["YOLO! (Only once, apparently)", "10/10 would explode again.", "Worth every HP!", "Boom. No regrets.", "I lived fast and died in a fireball."] },
   { name: "Sergeant Karen", health: 55, speed: 0.8, size: 40, color: "#FF8800", points: 450, emoji: "📣", ranged: false,
     deathQuotes: ["Tell my troops... git gud", "FALL BACK— oh wait, too late.", "I demand a formal debrief!", "This. Is. NOT. Regulation!", "I want a full written report on my death!"] },
+  { name: "Life Coach", health: 70, speed: 2.4, size: 34, color: "#FFCC00", points: 500, emoji: "📚", ranged: false,
+    deathQuotes: ["You just killed my VIBE!", "Your potential was wasted!", "I was THIS close to unlocking your greatness!", "Wrong mindset... and also you shot me.", "The real enemy was within you all along."] },
+  { name: "Tech CEO", health: 320, speed: 0.3, size: 66, color: "#00BFFF", points: 1500, emoji: "💼", ranged: true, projSpeed: 5, projRate: 80,
+    deathQuotes: ["I'll pivot from this.", "My VCs will hear about this.", "Disrupting... the concept of living.", "Series D? More like series DEAD.", "I was about to IPO..."] },
 ];
 
 // ===== PERKS =====
@@ -424,6 +430,25 @@ export const ACHIEVEMENTS = [
   { id: "max_upgrade", name: "Fully Pimped", desc: "Max out a weapon (level 3)", emoji: "⭐", check: (s) => s.maxWeaponLevel >= 3, tier: "gold" },
   { id: "boss_wave_clear", name: "Bouncer", desc: "Clear your first boss wave", emoji: "🚫", check: (s) => s.bossWavesCleared >= 1, tier: "silver" },
   { id: "boss_wave_5", name: "Boss Rush Mode", desc: "Clear 5 boss waves", emoji: "💀", check: (s) => s.bossWavesCleared >= 5, tier: "legendary" },
+  // Wave milestones
+  { id: "wave_25", name: "Silver Soldier", desc: "Reach wave 25", emoji: "🥈", check: (s) => s.wave >= 25, tier: "legendary" },
+  // Survival
+  { id: "survive_10m", name: "Couch Commander", desc: "Survive 10 minutes", emoji: "🛋️", check: (s) => s.timeSurvived >= 600, tier: "gold" },
+  // Combat
+  { id: "kills_500", name: "Certified War Criminal", desc: "Get 500 kills in one run", emoji: "💀", check: (s) => s.kills >= 500, tier: "legendary" },
+  { id: "nukes_3", name: "Nuclear Option", desc: "Collect 3 nukes in one run", emoji: "☢️", check: (s) => s.nukes >= 3, tier: "gold" },
+  { id: "crits_100", name: "Lucky Duck", desc: "Land 100 critical hits in one run", emoji: "🍀", check: (s) => s.crits >= 100, tier: "gold" },
+  { id: "grenades_50", name: "Spam Legends", desc: "Throw 50 grenades", emoji: "💣", check: (s) => s.grenades >= 50, tier: "gold" },
+  // Progression
+  { id: "level_15", name: "Build Enjoyer", desc: "Reach level 15 in one run", emoji: "🔬", check: (s) => s.level >= 15, tier: "legendary" },
+  // Score
+  { id: "score_200k", name: "Doodie Millionaire", desc: "Score 200,000+ points", emoji: "💰", check: (s) => s.score >= 200000, tier: "legendary" },
+  // Dash kills
+  { id: "dash_kills_10", name: "Speed Bump", desc: "Kill 10 enemies while dashing", emoji: "💨", check: (s) => s.dashKills >= 10, tier: "silver" },
+  // Perfect waves
+  { id: "no_hit_waves_3", name: "Ghost Protocol", desc: "Complete 3 waves without taking damage", emoji: "👻", check: (s) => s.noHitWaves >= 3, tier: "gold" },
+  // Boss
+  { id: "boss_kills_10", name: "Boss Collector", desc: "Defeat 10 bosses across a single run", emoji: "👑", check: (s) => s.bossKills >= 10, tier: "legendary" },
 ];
 
 // ===== GAME CONSTANTS =====

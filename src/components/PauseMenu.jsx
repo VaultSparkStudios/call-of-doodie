@@ -1,13 +1,44 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+
+  // ── Gamepad nav (main view only) ─────────────────────────────────────────
+  const mainItems = [
+    { key: "resume",      action: onResume },
+    { key: "rules",       action: () => setView("rules") },
+    { key: "controls",    action: () => setView("controls") },
+    { key: "bestiary",    action: () => setView("bestiary") },
+    { key: "achievements",action: () => setShowAch(true) },
+    { key: "settings",    action: () => { soundUIOpen(); setShowSettings(true); } },
+    { key: "music",       action: onToggleMute },
+    ...(musicMuted ? [] : MUSIC_VIBES.map(v => ({ key: `vibe_${v.id}`, action: () => onSetMusicVibe(v.id) }))),
+    { key: "colorblind",  action: onToggleColorblind },
+    { key: "ragequit",    action: onLeave },
+  ];
+  const mainItemsRef = useRef(mainItems);
+  mainItemsRef.current = mainItems;
+
+  const isMainView = view === "main" && !showAch && !showSettings;
+  const navFocusIdx = useGamepadNav({
+    count: mainItems.length, cols: 1, enabled: isMainView,
+    disableLR: true,
+    onConfirm: (idx) => mainItemsRef.current[idx]?.action(),
+    onBack: onResume,
+  });
+  const gfocus = (key) => {
+    if (!isMainView) return false;
+    const idx = mainItems.findIndex(i => i.key === key);
+    return navFocusIdx === idx;
+  };
+  const focusRing = { outline: "2px solid #FF6B35", outlineOffset: 2, boxShadow: "0 0 12px rgba(255,107,53,0.45)" };
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
   const pBtn = { padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.08)", color: "#FFF", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300 };
@@ -71,6 +102,26 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
           </div>
         )}
+        {/* Controller bindings */}
+        <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+            🎮 CONTROLLER
+            {controllerType === "xbox" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(16,124,16,0.2)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900 }}>Xbox</span>}
+            {controllerType === "ps" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900 }}>PS</span>}
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", fontSize: 12, color: "#EEE", lineHeight: 2 }}>
+            <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Stick</span> — Move</div>
+            <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
+            <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
+            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3 (click stick)</span> — Dash</div>
+            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
+            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / Square</span> — Reload</div>
+            <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>
+            <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>RB / R1</span> — Next weapon</div>
+            <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Start / Options</span> — Pause</div>
+            <div>⬆ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad</span> — Navigate menus</div>
+          </div>
+        </div>
         <div style={{ marginTop: 14 }}>
           <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 6 }}>WEAPONS</div>
           {WEAPONS.map((w, i) => (
@@ -115,13 +166,13 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           Wave {wave} · {fmtTime(timeSurvived)} · Score: {score.toLocaleString()}
         </p>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <button onClick={onResume} style={{ ...pBtn, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none", fontSize: 18 }}>▶ RESUME</button>
-          <button onClick={() => setView("rules")} style={pBtn}>📜 RULES</button>
-          <button onClick={() => setView("controls")} style={pBtn}>⌨ CONTROLS</button>
-          <button onClick={() => setView("bestiary")} style={pBtn}>👾 MOST WANTED LIST</button>
-          <button onClick={() => setShowAch(true)} style={pBtn}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
-          <button onClick={() => { soundUIOpen(); setShowSettings(true); }} style={pBtn}>⚙ SETTINGS</button>
-          <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF" }}>
+          <button onClick={onResume} style={{ ...pBtn, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none", fontSize: 18, ...(gfocus("resume") ? focusRing : {}) }}>▶ RESUME</button>
+          <button onClick={() => setView("rules")} style={{ ...pBtn, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
+          <button onClick={() => setView("controls")} style={{ ...pBtn, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
+          <button onClick={() => setView("bestiary")} style={{ ...pBtn, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED LIST</button>
+          <button onClick={() => setShowAch(true)} style={{ ...pBtn, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
+          <button onClick={() => { soundUIOpen(); setShowSettings(true); }} style={{ ...pBtn, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
+          <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF", ...(gfocus("music") ? focusRing : {}) }}>
             {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}
           </button>
           {!musicMuted && (
@@ -130,17 +181,17 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
                 <button
                   key={v.id}
                   onClick={() => onSetMusicVibe(v.id)}
-                  style={{ padding: "6px 11px", borderRadius: 6, fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", background: musicVibe === v.id ? "rgba(0,229,255,0.18)" : "rgba(255,255,255,0.05)", border: musicVibe === v.id ? "1px solid rgba(0,229,255,0.5)" : "1px solid rgba(255,255,255,0.12)", color: musicVibe === v.id ? "#0EF" : "#888", fontWeight: musicVibe === v.id ? 900 : 400 }}
+                  style={{ padding: "6px 11px", borderRadius: 6, fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", background: musicVibe === v.id ? "rgba(0,229,255,0.18)" : "rgba(255,255,255,0.05)", border: musicVibe === v.id ? "1px solid rgba(0,229,255,0.5)" : "1px solid rgba(255,255,255,0.12)", color: musicVibe === v.id ? "#0EF" : "#888", fontWeight: musicVibe === v.id ? 900 : 400, ...(gfocus(`vibe_${v.id}`) ? focusRing : {}) }}
                 >
                   {v.emoji} {v.name}
                 </button>
               ))}
             </div>
           )}
-          <button onClick={onToggleColorblind} style={{ ...pBtn, color: colorblindMode ? "#FFD700" : "#AAA" }}>
+          <button onClick={onToggleColorblind} style={{ ...pBtn, color: colorblindMode ? "#FFD700" : "#AAA", ...(gfocus("colorblind") ? focusRing : {}) }}>
             {colorblindMode ? "🎨 COLORBLIND: ON" : "🎨 COLORBLIND: OFF"}
           </button>
-          <button onClick={onLeave} style={{ ...pBtn, color: "#F66", borderColor: "rgba(255,100,100,0.3)", marginTop: 4 }}>🚪 RAGE QUIT</button>
+          <button onClick={onLeave} style={{ ...pBtn, color: "#F66", borderColor: "rgba(255,100,100,0.3)", marginTop: 4, ...(gfocus("ragequit") ? focusRing : {}) }}>🚪 RAGE QUIT</button>
         </div>
       </div>
     </div>
