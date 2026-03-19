@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel } from "../storage.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
@@ -8,8 +8,14 @@ import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
+const PLAYER_SKINS = [
+  { emoji: "",   label: "Soldier",  required: 0 },
+  { emoji: "🤖", label: "Robot",    required: 1 },
+  { emoji: "👾", label: "Alien",    required: 2 },
+  { emoji: "🐸", label: "Frog",     required: 3 },
+];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -577,6 +583,38 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               </div>
             </div>
 
+            {/* Player Skin selector */}
+            <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#EEE", marginBottom: 8 }}>🎨 PLAYER SKIN</div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {PLAYER_SKINS.map(s => {
+                  const unlocked = prestige >= s.required;
+                  const selected = (meta.playerSkin || "") === s.emoji;
+                  return (
+                    <button
+                      key={s.emoji || "default"}
+                      disabled={!unlocked}
+                      onClick={() => {
+                        if (!unlocked) return;
+                        const updated = { ...meta, playerSkin: s.emoji };
+                        saveMetaProgress(updated);
+                        setMeta(updated);
+                      }}
+                      title={unlocked ? s.label : `Requires Prestige ${s.required}`}
+                      style={{ padding: "8px 14px", borderRadius: 8, cursor: unlocked ? "pointer" : "not-allowed",
+                        background: selected ? "rgba(255,215,0,0.15)" : unlocked ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)",
+                        border: selected ? "2px solid #FFD700" : unlocked ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(255,255,255,0.06)",
+                        color: unlocked ? "#FFF" : "#444", fontFamily: "'Courier New',monospace" }}>
+                      <div style={{ fontSize: 20, marginBottom: 3 }}>{s.emoji || "🪖"}</div>
+                      <div style={{ fontSize: 9, color: unlocked ? "#AAA" : "#444" }}>
+                        {unlocked ? s.label : `P${s.required}`}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
               {META_UPGRADES.map((u) => {
                 const ownedTier = (meta.upgradeTiers || {})[u.id] || 0;
@@ -803,6 +841,29 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 </div>
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Game Mode */}
+        <div style={{ ...card, margin: "0 0 10px", textAlign: "center" }}>
+          <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, fontWeight: 700 }}>GAME MODE</div>
+          <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+            <button
+              onClick={() => onSetScoreAttackMode?.(false)}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: !scoreAttackMode ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
+                border: !scoreAttackMode ? "2px solid #FFD700" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#FFD700" }}>🎯 NORMAL</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Survive as long as you can</div>
+            </button>
+            <button
+              onClick={() => onSetScoreAttackMode?.(true)}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: scoreAttackMode ? "rgba(255,100,0,0.15)" : "rgba(255,255,255,0.03)",
+                border: scoreAttackMode ? "2px solid #FF6600" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#FF6600" }}>⏱ SCORE ATTACK</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>5 min · faster spawns · max score</div>
+            </button>
           </div>
         </div>
 

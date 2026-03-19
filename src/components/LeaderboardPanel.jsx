@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+const MODE_TABS = [
+  { key: null,           label: "ALL",          color: "#AAA" },
+  { key: "normal",       label: "🎯 NORMAL",     color: "#FFD700" },
+  { key: "score_attack", label: "⏱ SCORE ATK",  color: "#FF6600" },
+];
+
 // ── Input device badge ────────────────────────────────────────────────────────
 function InputDeviceBadge({ device }) {
   if (!device) return null;
@@ -60,12 +66,19 @@ const LOADOUT_EMOJI = { standard: "⚖️", cannon: "💀", tank: "🛡️", spe
 
 export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, onLoadMore, username, onClose }) {
   const [activeDiff, setActiveDiff] = useState(null);
+  const [activeMode, setActiveMode] = useState(null);
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
 
+  const modeFiltered = activeMode === "score_attack"
+    ? leaderboard.filter(e => e.mode === "score_attack")
+    : activeMode === "normal"
+      ? leaderboard.filter(e => !e.mode || e.mode === "normal")
+      : leaderboard;
+
   const filtered = activeDiff
-    ? leaderboard.filter(e => e.difficulty === activeDiff)
-    : leaderboard;
+    ? modeFiltered.filter(e => e.difficulty === activeDiff)
+    : modeFiltered;
 
   const activeTab = DIFF_TABS.find(t => t.key === activeDiff);
 
@@ -76,6 +89,28 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
 
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
         <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 10px" }}>Global leaderboard · showing {leaderboard.length}</p>
+
+        {/* Mode filter tabs */}
+        <div style={{ display: "flex", gap: 4, marginBottom: 8, flexWrap: "wrap" }}>
+          {MODE_TABS.map(tab => {
+            const isActive = activeMode === tab.key;
+            return (
+              <button
+                key={String(tab.key)}
+                onClick={() => setActiveMode(tab.key)}
+                style={{
+                  padding: "3px 10px", fontSize: 10, fontWeight: 700,
+                  fontFamily: "'Courier New', monospace", letterSpacing: 1,
+                  cursor: "pointer", borderRadius: 4,
+                  background: isActive ? `rgba(${hexToRgb(tab.color)},0.18)` : "rgba(255,255,255,0.04)",
+                  border: isActive ? `1px solid ${tab.color}` : "1px solid rgba(255,255,255,0.1)",
+                  color: isActive ? tab.color : "#666",
+                  transition: "all 0.15s",
+                }}
+              >{tab.label}</button>
+            );
+          })}
+        </div>
 
         {/* Difficulty filter tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 14, flexWrap: "wrap" }}>

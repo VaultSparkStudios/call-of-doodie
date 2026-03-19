@@ -697,6 +697,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // Helmet highlight
   ctx.fillStyle = "rgba(255,255,255,0.1)";
   ctx.beginPath(); ctx.arc(-3, -4, 4, 0, Math.PI * 2); ctx.fill();
+  // Player skin emoji overlay (prestige unlocks)
+  if (gs.playerSkin) {
+    ctx.font = "12px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(gs.playerSkin, 0, 0);
+  }
   // Reset alpha before muzzle flash (so flash is always bright)
   ctx.globalAlpha = 1; ctx.shadowBlur = 0;
   if (gs.muzzleFlash > 0) {
@@ -780,6 +785,26 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
   };
   drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+
+  // Score attack countdown
+  if (gs.scoreAttackMode && (gs.scoreAttackTimeLeft || 0) > 0) {
+    const secs = Math.ceil(gs.scoreAttackTimeLeft / 60);
+    const mins = Math.floor(secs / 60);
+    const rem  = secs % 60;
+    const urgent = secs <= 30;
+    const timerStr = `⏱ ${mins}:${String(rem).padStart(2, "0")}`;
+    ctx.font = "bold 15px monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = urgent ? "#FF4444" : "#FFD700";
+    ctx.shadowColor = urgent ? "#FF4444" : "#FFD700"; ctx.shadowBlur = urgent ? 16 : 8;
+    if (urgent) {
+      ctx.globalAlpha = 0.7 + Math.sin(Date.now() / 120) * 0.3;
+    }
+    ctx.fillText(timerStr, W / 2, isMobile ? 48 : 42);
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    // "SCORE ATTACK" label
+    ctx.font = "bold 9px monospace"; ctx.fillStyle = urgent ? "#FF4444" : "#FF8800";
+    ctx.fillText("SCORE ATTACK", W / 2, isMobile ? 60 : 54);
+  }
 
   // Wave event banner (persists for the whole wave)
   if (gs.waveEvent) {

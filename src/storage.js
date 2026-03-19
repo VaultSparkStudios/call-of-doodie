@@ -11,7 +11,8 @@ import { supabase, getAuthUid } from "./supabase.js";
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "inputDevice" text;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "seed" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "accountLevel" integer;
-//   -- After running #2, remove the stripping in saveToLeaderboard above
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;
+//   -- After running above, remove the stripping in saveToLeaderboard
 //
 //   -- 3. Callsign ownership table (see below)
 //
@@ -84,7 +85,9 @@ export async function saveToLeaderboard(entry) {
 
   if (supabase) {
     try {
-      const { error } = await supabase.from("leaderboard").insert([row]);
+      // Strip `mode` until its Supabase column migration is run
+      const { mode: _mode, ...supabaseRow } = row;
+      const { error } = await supabase.from("leaderboard").insert([supabaseRow]);
       if (error) throw error;
       return await loadLeaderboard();
     } catch (err) {
@@ -200,7 +203,7 @@ export function saveMissionProgress(completed) {
 
 // ===== META PROGRESSION =====
 const META_KEY = "cod-meta-v2";
-const DEFAULT_META = { careerPoints: 0, upgradeTiers: {}, prestige: 0 };
+const DEFAULT_META = { careerPoints: 0, upgradeTiers: {}, prestige: 0, playerSkin: "" };
 
 export function loadMetaProgress() {
   try {
