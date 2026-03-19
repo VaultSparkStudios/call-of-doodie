@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ACHIEVEMENTS, RANK_NAMES } from "../constants.js";
+import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 
@@ -14,6 +14,7 @@ export default function DeathScreen({
   highlightGifUrl, gifEncoding,
   fmtTime,
   gamepadConnected, onInstallApp,
+  weaponKills, scoreAttackMode,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -166,6 +167,7 @@ export default function DeathScreen({
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
         <div style={{ fontSize: 11, color: diff.color, marginBottom: 6, fontWeight: 700 }}>
           {diff.emoji} {diff.label.toUpperCase()} MODE
+          {scoreAttackMode && <span style={{ marginLeft: 8, color: "#FF6600" }}>⏱ SCORE ATTACK</span>}
         </div>
 
         {runModifier && (
@@ -193,6 +195,29 @@ export default function DeathScreen({
             </div>
           ))}
         </div>
+
+        {/* Weapon kill breakdown — top 3 weapons */}
+        {weaponKills && weaponKills.some(k => k > 0) && (() => {
+          const top3 = weaponKills
+            .map((k, i) => ({ kills: k, wpn: WEAPONS[i] }))
+            .filter(x => x.kills > 0 && x.wpn)
+            .sort((a, b) => b.kills - a.kills)
+            .slice(0, 3);
+          return (
+            <div style={{ ...card, marginBottom: 10, padding: "10px 12px" }}>
+              <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 7 }}>TOP WEAPONS</div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+                {top3.map(({ kills, wpn }, i) => (
+                  <div key={wpn.name} style={{ textAlign: "center", background: "rgba(255,255,255,0.05)", borderRadius: 8, padding: "8px 14px", border: i === 0 ? "1px solid rgba(255,215,0,0.35)" : "1px solid rgba(255,255,255,0.08)" }}>
+                    <div style={{ fontSize: 22 }}>{wpn.emoji}</div>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: i === 0 ? "#FFD700" : "#CCC", marginTop: 2 }}>{kills}</div>
+                    <div style={{ fontSize: 8, color: "#888", letterSpacing: 0.5 }}>{wpn.name.slice(0, 14).toUpperCase()}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Run summary: perks taken + daily missions */}
         {((activePerks && activePerks.length > 0) || (missionsSummary && missionsSummary.length > 0)) && (

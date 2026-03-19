@@ -164,6 +164,7 @@ export default function CallOfDoodie() {
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
+  const scoreAttackRef   = useRef(false); // synced with scoreAttackMode state for game loop
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
@@ -215,6 +216,8 @@ export default function CallOfDoodie() {
   const [starterLoadout, setStarterLoadout] = useState("standard");
   const [runSeed, setRunSeed]             = useState(0);
   const [runModifier, setRunModifier]     = useState(null);
+  const [scoreAttackMode, setScoreAttackMode] = useState(false);
+  const [weaponKillsSnapshot, setWeaponKillsSnapshot] = useState([]);
   const [metaToast, setMetaToast]         = useState(null);
   const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
   const [shopPending, setShopPending]         = useState(false);
@@ -438,6 +441,9 @@ export default function CallOfDoodie() {
     const meta = loadMetaProgress();
     const ut = meta.upgradeTiers || {};
     gsRef.current.prestigeMult = 1 + (meta.prestige || 0) * 0.10;
+    gsRef.current.scoreAttackMode = scoreAttackRef.current;
+    gsRef.current.scoreAttackTimeLeft = scoreAttackRef.current ? 300 * 60 : 0;
+    gsRef.current.playerSkin = meta.playerSkin || "";
 
     // XP gain (veteran)
     const vtier = ut.veteran || 0;
@@ -1003,8 +1009,9 @@ export default function CallOfDoodie() {
     soundDeath();
     rumbleGamepad(0.7, 1.0, 600);
     setDeaths(dd => dd + 1);
-    setDeathMessage(DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
+    setDeathMessage(gs?.scoreAttackDone ? "⏱ TIME's UP! Your final score stands." : DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
     setTotalDamage(Math.floor(gs.totalDamage));
+    setWeaponKillsSnapshot([...(statsRef.current.weaponKills || [])]);
     setBestStreak(statsRef.current.bestStreak);
     setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
     // Save career stats + mission progress
@@ -1124,6 +1131,7 @@ export default function CallOfDoodie() {
       inputDevice: inputDeviceRef.current,
       seed: runSeed,
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
+      mode: scoreAttackRef.current ? "score_attack" : undefined,
     };
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board);
@@ -1244,10 +1252,22 @@ export default function CallOfDoodie() {
       if (buf.length > 120) buf.shift(); // keep ~12s at 10fps
     }
 
+    // ── Score attack: countdown + forced end when time expires ──
+    if (gs.scoreAttackMode && !gs.scoreAttackDone) {
+      gs.scoreAttackTimeLeft = Math.max(0, (gs.scoreAttackTimeLeft || 0) - 1);
+      if (gs.scoreAttackTimeLeft <= 0) {
+        gs.scoreAttackDone = true;
+        gs.deadMansHand = false;
+        extraLivesRef.current = 0; setExtraLives(0);
+        handlePlayerDeath(gs);
+        return;
+      }
+    }
+
     // ── Wave / boss wave logic ──
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     if (!gs.bossWave) {
-      gs.spawnTimer++;
+      gs.spawnTimer += gs.scoreAttackMode ? 1.5 : 1;
       const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
@@ -2444,6 +2464,8 @@ export default function CallOfDoodie() {
         gameSettings={gameSettings}
         onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
+        scoreAttackMode={scoreAttackMode}
+        onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; }}
       />
     );
   }
@@ -2465,6 +2487,7 @@ export default function CallOfDoodie() {
         highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
         fmtTime={fmtTime}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
+        weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
         onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
       />
     );
