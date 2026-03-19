@@ -63,7 +63,7 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
     try {
       const { data, error } = await supabase
         .from("leaderboard")
-        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel")
+        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode")
         .order("score", { ascending: false })
         .range(offset, offset + limit - 1);
       if (error) throw error;
@@ -85,9 +85,7 @@ export async function saveToLeaderboard(entry) {
 
   if (supabase) {
     try {
-      // Strip `mode` until its Supabase column migration is run
-      const { mode: _mode, ...supabaseRow } = row;
-      const { error } = await supabase.from("leaderboard").insert([supabaseRow]);
+      const { error } = await supabase.from("leaderboard").insert([row]);
       if (error) throw error;
       return await loadLeaderboard();
     } catch (err) {
