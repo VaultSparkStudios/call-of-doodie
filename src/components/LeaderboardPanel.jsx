@@ -21,6 +21,33 @@ function InputDeviceBadge({ device }) {
   );
 }
 
+// ── Account level badge ───────────────────────────────────────────────────────
+const LEVEL_TIERS = [
+  { min: 100, color: "#CC44FF", bg: "rgba(160,0,255,0.18)", border: "#AA22FF", label: "👑" },
+  { min: 50,  color: "#FFD700", bg: "rgba(255,215,0,0.18)",  border: "#CC9900", label: "★" },
+  { min: 25,  color: "#C0C0C0", bg: "rgba(200,200,200,0.15)", border: "#A0A0A0", label: "◈" },
+  { min: 10,  color: "#CD7F32", bg: "rgba(160,90,40,0.2)",   border: "#A05820", label: "◆" },
+  { min: 1,   color: "#888888", bg: "rgba(120,120,120,0.12)", border: "#555",   label: "·" },
+];
+
+function AccountLevelBadge({ level }) {
+  if (!level || level < 1) return null;
+  const tier = LEVEL_TIERS.find(t => level >= t.min) || LEVEL_TIERS[LEVEL_TIERS.length - 1];
+  return (
+    <span
+      title={`Account Level ${level}`}
+      style={{
+        fontSize: 8, padding: "1px 4px", borderRadius: 3,
+        background: tier.bg, border: `1px solid ${tier.border}`,
+        color: tier.color, fontWeight: 900, letterSpacing: 0.5, flexShrink: 0,
+        fontFamily: "'Courier New', monospace",
+      }}
+    >
+      {tier.label}{level}
+    </span>
+  );
+}
+
 const DIFF_TABS = [
   { key: null,     label: "ALL",    emoji: "🌐", color: "#AAA" },
   { key: "easy",   label: "EASY",   emoji: "🟢", color: "#44CC44" },
@@ -112,12 +139,22 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   title={e.lastWords ? `"${e.lastWords}"` : ""}
                 >
                   <span style={{ fontWeight: 900, fontSize: i < 3 ? 14 : 11 }}>{medal}</span>
-                  <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    <span style={{ fontWeight: 700 }}>{e.name}</span>
-                    {e.level && <span style={{ color: "#bbb", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
-                    {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
-                    {e.customSettings && <span style={{ fontSize: 9, marginLeft: 4 }} title="Custom settings used">⚙️</span>}
-                    <span style={{ marginLeft: 4 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
+                  <div style={{ overflow: "hidden", minWidth: 0 }}>
+                    {/* Top row: badges + name */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "nowrap", overflow: "hidden" }}>
+                      {e.accountLevel > 0 && <AccountLevelBadge level={e.accountLevel} />}
+                      <span style={{ fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.name}</span>
+                      {e.level && <span style={{ color: "#bbb", fontSize: 9, flexShrink: 0 }} title="In-run XP level">⬆{e.level}</span>}
+                      {loadoutEmoji && <span style={{ fontSize: 9, flexShrink: 0 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
+                      {e.customSettings && <span style={{ fontSize: 9, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
+                      <span style={{ flexShrink: 0 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
+                    </div>
+                    {/* Bottom row: seed */}
+                    {e.seed > 0 && (
+                      <div style={{ fontSize: 8, color: "#666", marginTop: 1, fontFamily: "'Courier New', monospace", letterSpacing: 0.5 }}>
+                        seed #{e.seed}
+                      </div>
+                    )}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>
