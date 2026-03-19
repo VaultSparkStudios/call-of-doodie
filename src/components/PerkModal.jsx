@@ -81,7 +81,7 @@ export default function PerkModal({ options, level, onSelect }) {
           })}
         </div>
 
-        <p style={{ color: "#555", fontSize: 10, marginTop: 16 }}>Game paused — take your time</p>
+        <p style={{ color: "#aaa", fontSize: 10, marginTop: 16 }}>Game paused — take your time</p>
       </div>
     </div>
   );

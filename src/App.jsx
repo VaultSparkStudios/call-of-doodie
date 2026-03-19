@@ -1446,13 +1446,11 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            { const _cc = comboRef.current.count; const _cs = _cc >= 10 ? 80 : _cc >= 5 ? 50 : 0; if (_cs > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: _cs }; }
             const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (b.wpnIdx != null) { statsRef.current.weaponKills[b.wpnIdx] = (statsRef.current.weaponKills[b.wpnIdx] || 0) + 1; }
-            if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
-            if (gs.killstreakCount >= 10 && 70 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 70 };
+            if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
             if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
@@ -2194,7 +2192,7 @@ export default function CallOfDoodie() {
               <span style={{ fontSize: 20 }}>{WEAPONS[currentWeapon].emoji}</span>
               <span style={{ fontSize: 10, color: WEAPONS[currentWeapon].color, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "60%" }}>{WEAPONS[currentWeapon].name}</span>
               {weaponUpgrades[currentWeapon] > 0 && <span style={{ position: "absolute", top: 2, right: 4, fontSize: 8, color: "#AA44FF" }}>{"⭐".repeat(weaponUpgrades[currentWeapon])}</span>}
-              <span style={{ position: "absolute", bottom: 2, left: 5, fontSize: 8, color: "#666" }}>{currentWeapon + 1}/{WEAPONS.length}</span>
+              <span style={{ position: "absolute", bottom: 2, left: 5, fontSize: 8, color: "#aaa" }}>{currentWeapon + 1}/{WEAPONS.length}</span>
             </div>
             <button
               onTouchStart={(e) => { e.preventDefault(); switchWeapon((currentWeapon + 1) % WEAPONS.length); }}

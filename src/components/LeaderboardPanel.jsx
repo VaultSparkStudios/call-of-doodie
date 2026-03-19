@@ -93,7 +93,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   <span style={{ fontWeight: 900, fontSize: i < 3 ? 14 : 11 }}>{medal}</span>
                   <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     <span style={{ fontWeight: 700 }}>{e.name}</span>
-                    {e.level && <span style={{ color: "#888", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
+                    {e.level && <span style={{ color: "#bbb", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
                     {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                     {e.customSettings && <span style={{ fontSize: 9, marginLeft: 4 }} title="Custom settings used">⚙️</span>}
                   </div>
@@ -122,7 +122,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           </div>
         )}
         {lbLoading && leaderboard.length > 0 && (
-          <p style={{ textAlign: "center", color: "#888", fontSize: 11, marginTop: 10 }}>Loading…</p>
+          <p style={{ textAlign: "center", color: "#bbb", fontSize: 11, marginTop: 10 }}>Loading…</p>
         )}
       </div>
     </div>

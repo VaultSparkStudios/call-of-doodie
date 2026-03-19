@@ -71,7 +71,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                   <span>{meta.label}</span>
                   {meta.type === "slider" && <span style={{ color: "#FF6B35", fontWeight: 700, minWidth: 60, textAlign: "right", fontFamily: "monospace", fontSize: 11 }}>{meta.fmt(val(key))}</span>}
                 </div>
-                {meta.desc && <div style={{ fontSize: 10, color: "#555", marginBottom: 7, lineHeight: 1.3 }}>{meta.desc}</div>}
+                {meta.desc && <div style={{ fontSize: 10, color: "#aaa", marginBottom: 7, lineHeight: 1.3 }}>{meta.desc}</div>}
                 {meta.type === "slider" && (
                   <input type="range" min={meta.min} max={meta.max} step={meta.step} value={val(key)}
                     onChange={e => set(key, parseFloat(e.target.value))}
@@ -81,7 +81,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                   <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
                     {meta.options.map(opt => (
                       <button key={opt.v} onClick={() => set(key, opt.v)}
-                        style={{ ...base, fontSize: 11, padding: "6px 12px", background: val(key) === opt.v ? "rgba(255,107,53,0.2)" : "rgba(255,255,255,0.04)", border: val(key) === opt.v ? "1px solid rgba(255,107,53,0.55)" : "1px solid rgba(255,255,255,0.1)", color: val(key) === opt.v ? "#FF6B35" : "#777" }}>
+                        style={{ ...base, fontSize: 11, padding: "6px 12px", background: val(key) === opt.v ? "rgba(255,107,53,0.2)" : "rgba(255,255,255,0.04)", border: val(key) === opt.v ? "1px solid rgba(255,107,53,0.55)" : "1px solid rgba(255,255,255,0.1)", color: val(key) === opt.v ? "#FF6B35" : "#bbb" }}>
                         {opt.l}
                       </button>
                     ))}
@@ -89,7 +89,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                 )}
                 {meta.type === "toggle" && (
                   <button onClick={() => set(key, !val(key))}
-                    style={{ ...base, fontSize: 11, padding: "8px 18px", background: val(key) ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.04)", border: val(key) ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.1)", color: val(key) ? "#00FF88" : "#666" }}>
+                    style={{ ...base, fontSize: 11, padding: "8px 18px", background: val(key) ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.04)", border: val(key) ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.1)", color: val(key) ? "#00FF88" : "#aaa" }}>
                     {val(key) ? "✓ ON" : "OFF"}
                   </button>
                 )}
@@ -100,13 +100,13 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
 
         {/* Presets */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", padding: "10px 16px", flexShrink: 0 }}>
-          <div style={{ fontSize: 10, color: "#555", letterSpacing: 1, marginBottom: 7 }}>PRESETS</div>
+          <div style={{ fontSize: 10, color: "#aaa", letterSpacing: 1, marginBottom: 7 }}>PRESETS</div>
           <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center" }}>
-            <button onClick={() => setW({ ...SETTINGS_DEFAULTS })} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#888" }}>↩ Default</button>
+            <button onClick={() => setW({ ...SETTINGS_DEFAULTS })} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", color: "#ccc" }}>↩ Default</button>
             {presets.map(p => (
               <div key={p.name} style={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <button onClick={() => setW({ ...SETTINGS_DEFAULTS, ...p.settings })} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "#FFD700" }}>{p.name}</button>
-                <button onClick={() => { const u = presets.filter(x => x.name !== p.name); setPresets(u); savePresets(u); }} style={{ padding: "3px 5px", cursor: "pointer", background: "transparent", border: "none", color: "#444", fontSize: 11 }}>✕</button>
+                <button onClick={() => { const u = presets.filter(x => x.name !== p.name); setPresets(u); savePresets(u); }} style={{ padding: "3px 5px", cursor: "pointer", background: "transparent", border: "none", color: "#aaa", fontSize: 11 }}>✕</button>
               </div>
             ))}
             {presets.length < 3 && (
@@ -118,7 +118,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                       style={{ padding: "4px 8px", fontSize: 11, fontFamily: "monospace", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 5, color: "#EEE", outline: "none", width: 90 }} />
                     <button onClick={doSavePreset} style={{ ...base, fontSize: 11, padding: "4px 9px", background: "rgba(0,255,136,0.12)", border: "1px solid rgba(0,255,136,0.35)", color: "#00FF88" }}>✓</button>
                   </div>
-                : <button onClick={() => setShowSave(true)} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", color: "#555" }}>+ Save</button>
+                : <button onClick={() => setShowSave(true)} style={{ ...base, fontSize: 11, padding: "5px 10px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", color: "#aaa" }}>+ Save</button>
             )}
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
           <button onClick={apply} style={{ width: "100%", padding: 11, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none", borderRadius: 7, color: "#FFF", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace", cursor: "pointer", letterSpacing: 1 }}>
             ✓ APPLY SETTINGS
           </button>
-          <div style={{ fontSize: 10, color: "#444", textAlign: "center", marginTop: 6 }}>Settings apply from the next game started · current run unaffected</div>
+          <div style={{ fontSize: 10, color: "#aaa", textAlign: "center", marginTop: 6 }}>Settings apply from the next game started · current run unaffected</div>
         </div>
       </div>
     </div>

@@ -290,11 +290,11 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, padding: "7px 12px", borderRadius: 6, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.25)" }}>
                 <span style={{ fontSize: 16 }}>⭐</span>
                 <span style={{ color: "#FFD700", fontWeight: 900, fontSize: 14 }}>{meta.careerPoints || 0}</span>
-                <span style={{ color: "#AAA", fontSize: 11 }}>career points · spend in 🎖️ UPGRADES</span>
+                <span style={{ color: "#CCC", fontSize: 11 }}>career points · spend in 🎖️ UPGRADES</span>
               </div>
             )}
             {career.totalRuns === 0 ? (
-              <p style={{ color: "#666", fontSize: 12, textAlign: "center", marginTop: 12 }}>No runs yet. Get out there and die!</p>
+              <p style={{ color: "#aaa", fontSize: 12, textAlign: "center", marginTop: 12 }}>No runs yet. Get out there and die!</p>
             ) : (() => {
               const runs = career.totalRuns || 1;
               const avgScore = career.totalScore ? Math.floor(career.totalScore / runs) : 0;
@@ -349,7 +349,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
-            <p style={{ color: "#888", fontSize: 11, margin: "0 0 14px" }}>Resets at midnight · Complete for career point bonuses</p>
+            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Resets at midnight · Complete for career point bonuses</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {missions.map((m, i) => {
                 const done = !!missionProgress[i];
@@ -362,7 +362,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                     <span style={{ fontSize: 26, flexShrink: 0 }}>{m.icon}</span>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: done ? "#00FF88" : "#FFF" }}>{m.text}</div>
-                      <div style={{ fontSize: 10, color: "#888", marginTop: 2 }}>Reward: +{m.goal} career pts on completion</div>
+                      <div style={{ fontSize: 10, color: "#bbb", marginTop: 2 }}>Reward: +{m.goal} career pts on completion</div>
                     </div>
                     <div style={{ fontSize: 20, flexShrink: 0 }}>{done ? "✅" : "⬜"}</div>
                   </div>
@@ -389,7 +389,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div style={{ color: "#00FF88", marginTop: 4 }}>✓ Prestige {prestige + 1} badge earned</div>
               <div style={{ color: "#00FF88" }}>✓ All difficulties +{(prestige + 1) * 10}% harder (more glory)</div>
             </div>
-            <div style={{ fontSize: 11, color: "#666", marginBottom: 20 }}>Kill records & achievements are preserved forever.</div>
+            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 20 }}>Kill records & achievements are preserved forever.</div>
             <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
               <button onClick={() => setShowPrestigeConfirm(false)} style={{ ...btnS, padding: "10px 24px", fontSize: 14 }}>CANCEL</button>
               <button onClick={handlePrestige} style={{ ...btnP, padding: "10px 24px", fontSize: 14, background: "linear-gradient(180deg,#FFD700,#AA7700)", color: "#000" }}>
@@ -406,7 +406,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <div style={{ ...card, maxWidth: 520, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-              <p style={{ color: "#888", fontSize: 11, margin: 0 }}>Permanent bonuses · 3 tiers each · sequential purchase required</p>
+              <p style={{ color: "#bbb", fontSize: 11, margin: 0 }}>Permanent bonuses · 3 tiers each · sequential purchase required</p>
               <div style={{ background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, padding: "4px 10px", fontSize: 13, fontWeight: 900, color: "#FFD700", flexShrink: 0 }}>
                 ⭐ {(meta.careerPoints || 0).toLocaleString()}
               </div>
@@ -420,7 +420,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                   <div style={{ fontSize: 13, fontWeight: 700, color: prestige > 0 ? "#FFD700" : "#FFF" }}>
                     PRESTIGE {prestige > 0 ? `${prestige} — Reach P${prestige + 1}` : "— Reset & Rise"}
                   </div>
-                  <div style={{ fontSize: 10, color: "#999", marginTop: 2 }}>
+                  <div style={{ fontSize: 10, color: "#bbb", marginTop: 2 }}>
                     {prestige > 0
                       ? `Active: enemies +${prestige * 10}% health & speed on all difficulties.`
                       : "Resets all upgrades & points. Permanently raises difficulty. Earn prestige badge."}
@@ -438,7 +438,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                     padding: "7px 12px", borderRadius: 6, flexShrink: 0,
                     cursor: canPrestige ? "pointer" : "not-allowed",
                     background: canPrestige ? "linear-gradient(180deg,#FFD700,#AA7700)" : "rgba(255,255,255,0.05)",
-                    color: canPrestige ? "#000" : "#444", border: "none",
+                    color: canPrestige ? "#000" : "#aaa", border: "none",
                     fontFamily: "'Courier New',monospace", fontSize: 11, fontWeight: 900,
                   }}
                 >
@@ -480,11 +480,11 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                       <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.4 }}>
                         {activeTierDesc
                           ? <span style={{ color: "#CCC" }}>{activeTierDesc}</span>
-                          : <span style={{ color: "#777" }}>{u.tiers[0].desc}</span>
+                          : <span style={{ color: "#bbb" }}>{u.tiers[0].desc}</span>
                         }
                       </div>
                       {!isMaxed && ownedTier > 0 && (
-                        <div style={{ fontSize: 9, color: "#888", marginTop: 1 }}>▲ Next: {u.tiers[nextTier - 1].desc}</div>
+                        <div style={{ fontSize: 9, color: "#bbb", marginTop: 1 }}>▲ Next: {u.tiers[nextTier - 1].desc}</div>
                       )}
                     </div>
                     {isMaxed ? (
@@ -555,11 +555,11 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 <button
                   onClick={handleShareFeatures}
                   disabled={sharing}
-                  style={{ ...btnP, width: "100%", fontSize: 14, padding: "12px 20px", background: sharing ? "rgba(255,255,255,0.05)" : "linear-gradient(180deg,#FF6B35,#CC4400)", color: sharing ? "#555" : "#FFF" }}
+                  style={{ ...btnP, width: "100%", fontSize: 14, padding: "12px 20px", background: sharing ? "rgba(255,255,255,0.05)" : "linear-gradient(180deg,#FF6B35,#CC4400)", color: sharing ? "#aaa" : "#FFF" }}
                 >
                   {sharing ? "GENERATING..." : "📤 SHARE THIS UPDATE"}
                 </button>
-                <div style={{ fontSize: 10, color: "#444", textAlign: "center", marginTop: 8 }}>Generates a shareable image card · no login required</div>
+                <div style={{ fontSize: 10, color: "#aaa", textAlign: "center", marginTop: 8 }}>Generates a shareable image card · no login required</div>
               </div>
             </div>
           </div>
@@ -618,7 +618,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             >
               {sharing ? "..." : "📤 SHARE"}
             </button>
-            <span style={{ color: "#666", fontSize: 13 }}>›</span>
+            <span style={{ color: "#aaa", fontSize: 13 }}>›</span>
           </div>
         </div>
 
@@ -652,7 +652,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: d.color }}>{d.emoji} {d.label}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{d.desc}</div>
-                <div style={{ fontSize: 9, color: "#999", marginTop: 3 }}>
+                <div style={{ fontSize: 9, color: "#bbb", marginTop: 3 }}>
                   HP: {d.playerHP} · Enemy HP: {prestige > 0 ? (d.healthMult * (1 + prestige * 0.1)).toFixed(2) : d.healthMult}x · Speed: {prestige > 0 ? (d.speedMult * (1 + prestige * 0.1)).toFixed(2) : d.speedMult}x
                 </div>
               </button>
@@ -708,7 +708,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <button onClick={() => setShowBestiary(true)} style={{ ...btnS, minWidth: 150 }}>👾 MOST WANTED</button>
         </div>
 
-        <div style={{ fontSize: 11, color: "#888", marginTop: 8 }}>
+        <div style={{ fontSize: 11, color: "#bbb", marginTop: 8 }}>
           ✨ Perks on level-up · 🔧 Weapon upgrades · ⚠️ Boss waves every 5 waves
         </div>
       </div>

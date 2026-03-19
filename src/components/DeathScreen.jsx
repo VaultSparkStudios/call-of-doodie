@@ -44,7 +44,7 @@ export default function DeathScreen({
 
     // Studio label
     c.font = "bold 18px 'Courier New', monospace";
-    c.fillStyle = "#888"; c.textAlign = "center";
+    c.fillStyle = "#BBB"; c.textAlign = "center";
     c.fillText("VAULTSPARK STUDIOS PRESENTS", W / 2, 40);
 
     // Game title
@@ -66,7 +66,7 @@ export default function DeathScreen({
 
     // Player name + rank + difficulty
     c.font = "bold 24px 'Courier New', monospace";
-    c.fillStyle = "#CCC"; c.fillText("DEPLOYED AS:", W / 2, 215);
+    c.fillStyle = "#EEE"; c.fillText("DEPLOYED AS:", W / 2, 215);
     c.font = "bold 32px 'Courier New', monospace";
     c.fillStyle = "#FFD700"; c.fillText(username.toUpperCase() + "  ·  " + rank.toUpperCase(), W / 2, 252);
     c.font = "bold 18px 'Courier New', monospace";
@@ -93,7 +93,7 @@ export default function DeathScreen({
       c.font = "bold 36px 'Courier New', monospace";
       c.fillStyle = s.color; c.fillText(s.val, x, y);
       c.font = "11px 'Courier New', monospace";
-      c.fillStyle = "#AAA"; c.fillText(s.label, x, y + 20);
+      c.fillStyle = "#CCC"; c.fillText(s.label, x, y + 20);
     });
 
     // Death message
@@ -168,7 +168,7 @@ export default function DeathScreen({
         {runModifier && (
           <div style={{ marginBottom: 10, padding: "5px 14px", borderRadius: 8, border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.06)", display: "inline-block" }}>
             <span style={{ color: "#FFD700", fontSize: 11, fontWeight: 700 }}>{runModifier.emoji} {runModifier.name.toUpperCase()}</span>
-            <span style={{ color: "#888", fontSize: 10, marginLeft: 8 }}>{runModifier.desc}</span>
+            <span style={{ color: "#bbb", fontSize: 10, marginLeft: 8 }}>{runModifier.desc}</span>
           </div>
         )}
 
@@ -323,7 +323,7 @@ export default function DeathScreen({
           <div style={{ marginBottom: 12, textAlign: "center" }}>
             <div style={{ fontSize: 10, color: "#FF6B35", fontWeight: 700, letterSpacing: 2, marginBottom: 6 }}>🎬 BEST MOMENT</div>
             {gifEncoding ? (
-              <div style={{ width: "100%", maxWidth: 320, height: 90, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,107,53,0.25)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#666", margin: "0 auto", fontFamily: "'Courier New',monospace" }}>
+              <div style={{ width: "100%", maxWidth: 320, height: 90, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,107,53,0.25)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#aaa", margin: "0 auto", fontFamily: "'Courier New',monospace" }}>
                 ⏳ encoding highlight...
               </div>
             ) : (
@@ -351,10 +351,10 @@ export default function DeathScreen({
 
         {runSeed > 0 && (
           <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-            <span style={{ fontSize: 10, color: "#555", letterSpacing: 1 }}>SEED #{runSeed}</span>
+            <span style={{ fontSize: 10, color: "#aaa", letterSpacing: 1 }}>SEED #{runSeed}</span>
             <button
               onClick={() => navigator.clipboard?.writeText?.(String(runSeed))}
-              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #333", borderRadius: 4, color: "#666", cursor: "pointer", letterSpacing: 1 }}
+              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
             >📋 COPY</button>
           </div>
         )}
