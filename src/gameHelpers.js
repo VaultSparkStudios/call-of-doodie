@@ -126,11 +126,12 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
   }
   // ── Summoner (18): summons elites, invulnerable while summons live ──
   if (typeIndex === 18) {
-    boss.summonerTimer = 180;       // frames until first summon
-    boss.summonerCount = 0;         // currently alive summons
+    boss.summonerTimer = 180;         // frames until first summon
+    boss.summonerCount = 0;           // currently alive summons
     boss.summonerMaxCount = 3;
-    boss.summonerVulnTimer = 0;     // frames of vulnerability remaining
+    boss.summonerVulnTimer = 0;       // frames of vulnerability remaining
     boss.summonerId = Date.now() + Math.random(); // unique ID
-    boss.summonerInvuln = false;    // true while summons alive
+    boss.summonerInvuln = false;      // true while summons alive
+    boss.summonerFirstSummon = true;  // portal VFX shown before first summon
   }
 }

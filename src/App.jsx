@@ -15,6 +15,7 @@ import {
   soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup, soundEnemyDeath,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
+  soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
@@ -1304,20 +1305,46 @@ export default function CallOfDoodie() {
         gs.screenShake = 20;
         addText(gs, W / 2, H / 2 - 30, "⚠ BOSS WAVE ⚠", "#FF0000", true);
         addText(gs, W / 2, H / 2 + 10, "WAVE " + gs.currentWave, "#FFD700", true);
-        // Escalating ability warnings
-        const _wv = gs.currentWave;
-        if (_wv >= 40)      addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
-        else if (_wv >= 35) addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
-        else if (_wv >= 30) addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
-        else if (_wv >= 25) addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
-        else if (_wv >= 20) addText(gs, W / 2, H / 2 + 45, "🛡 SHIELD PULSE · 💥 GROUND SLAM · 🔥 BULLET RING", "#FF6600");
-        else if (_wv >= 15) addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
-        else if (_wv >= 10) addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
-        else if (_wv >= 7)  addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
         const _bSlot = (Math.floor(gs.currentWave / 5) - 1) % BOSS_ROTATION.length;
         const _bType = BOSS_ROTATION[_bSlot];
         const _bType2 = BOSS_ROTATION[(_bSlot + 1) % BOSS_ROTATION.length];
+        // Boss name announcement
+        const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT" };
+        const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00" };
+        addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
+        if (gs.currentWave >= 15) {
+          addText(gs, W / 2, H / 2 - 50, "+ " + (_bossNames[_bType2] || ENEMY_TYPES[_bType2].name.toUpperCase()), _bossColors[_bType2] || "#FF8844");
+        }
+        // Ability warnings: boss-specific first, then general escalation
+        const _wv = gs.currentWave;
+        const _primaryBoss = _bType;
+        const _secondBoss = gs.currentWave >= 15 ? _bType2 : null;
+        if (_primaryBoss === 16) {
+          addText(gs, W / 2, H / 2 + 45, "💔 SPLITS INTO 3 SHARDS AT LOW HP · 🔥 BULLET RING", "#FF6688");
+        } else if (_primaryBoss === 17 || _secondBoss === 17) {
+          addText(gs, W / 2, H / 2 + 45, "🦏 ARMORED SHIELD ABSORBS DAMAGE · CHARGE ATTACKS!", "#CC4400");
+          if (_secondBoss === 18 || _primaryBoss === 18)
+            addText(gs, W / 2, H / 2 + 65, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE", "#8844FF");
+        } else if (_primaryBoss === 18 || _secondBoss === 18) {
+          addText(gs, W / 2, H / 2 + 45, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE!", "#8844FF");
+        } else if (_wv >= 40) {
+          addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
+        } else if (_wv >= 35) {
+          addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
+        } else if (_wv >= 30) {
+          addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
+        } else if (_wv >= 25) {
+          addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
+        } else if (_wv >= 20) {
+          addText(gs, W / 2, H / 2 + 45, "🛡 SHIELD PULSE · 💥 GROUND SLAM · 🔥 BULLET RING", "#FF6600");
+        } else if (_wv >= 15) {
+          addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
+        } else if (_wv >= 10) {
+          addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
+        } else if (_wv >= 7) {
+          addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
+        }
         if (gs.currentWave >= 15) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
         else {
           spawnBoss(gs, _bType);
@@ -1536,7 +1563,13 @@ export default function CallOfDoodie() {
           if (e.typeIndex === 17 && (e.jugShield || 0) > 0) {
             const rawDmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1);
             e.jugShield = Math.max(0, e.jugShield - rawDmg);
-            if (e.jugShield <= 0) { e.jugShieldRegenDelay = 240; addText(gs, e.x, e.y - 40, "🛡 SHIELD BROKEN!", "#FF6600"); }
+            if (e.jugShield <= 0) {
+              e.jugShieldRegenDelay = 240;
+              addText(gs, e.x, e.y - 40, "🛡 SHIELD BROKEN!", "#FF6600");
+              addText(gs, W / 2, H / 3, "🦏 SHIELD SHATTERED!", "#FF6600", true);
+              gs.screenShake = Math.max(gs.screenShake, 14);
+              addParticles(gs, e.x, e.y, "#5599FF", 20);
+            }
           }
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
@@ -1647,7 +1680,14 @@ export default function CallOfDoodie() {
               gs.screenShake = 12;
             }
             // Enemy death sound (non-boss only — boss kill has soundBossKill)
-            if (!e.isBossEnemy) soundEnemyDeath(e.typeIndex);
+            if (!e.isBossEnemy) {
+              if (e.summonedBy) {
+                soundSummonDismissed();
+                addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
+              } else {
+                soundEnemyDeath(e.typeIndex);
+              }
+            }
             // Splitter: split into 3 mini-copies on death
             if (e.splitOnDeath && !e.splitDone) {
               e.splitDone = true;
@@ -1671,12 +1711,15 @@ export default function CallOfDoodie() {
               }
               addParticles(gs, e.x, e.y, "#FF6688", 30);
             }
-            // Pickup drops (skip during siege mode)
+            // Pickup drops (skip during siege mode; Splitter shards never drop)
             const isBossEnemy = e.isBossEnemy;
-            if (isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) {
-              gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
-            } else if ((isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) {
-              spawnPickup(gs, e.x, e.y, isBossEnemy);
+            const isShard = e.typeIndex === 16 && !isBossEnemy;
+            if (!isShard) {
+              if (isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) {
+                gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
+              } else if ((isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) {
+                spawnPickup(gs, e.x, e.y, isBossEnemy);
+              }
             }
             e.health = -999;
           }
@@ -1948,10 +1991,19 @@ export default function CallOfDoodie() {
         e.summonerInvuln = _aliveCount > 0;
         if (_aliveCount === 0 && (e.summonerVulnTimer || 0) > 0) e.summonerVulnTimer--;
         if (_aliveCount === 0 && (e.summonerVulnTimer || 0) <= 0) {
+          // Portal VFX during first-summon windup (every 25 frames while timer counts down)
+          if (e.summonerFirstSummon && (e.summonerTimer || 0) > 0) {
+            if (frameCountRef.current % 25 === 0) {
+              addParticles(gs, e.x, e.y, "#CC88FF", 6);
+              const _pa = Math.random() * Math.PI * 2, _pr = 60 + Math.random() * 40;
+              addParticles(gs, e.x + Math.cos(_pa) * _pr, e.y + Math.sin(_pa) * _pr, "#8844FF", 4);
+            }
+          }
           // Summon timer
           e.summonerTimer = (e.summonerTimer || 0) - 1;
           if (e.summonerTimer <= 0 && _aliveCount < e.summonerMaxCount) {
             e.summonerTimer = 280;
+            e.summonerFirstSummon = false;
             const _sCount = Math.min(3, e.summonerMaxCount - _aliveCount);
             for (let _si = 0; _si < _sCount; _si++) {
               const _sa = Math.random() * Math.PI * 2, _sd = 80 + Math.random() * 60;
@@ -1964,7 +2016,7 @@ export default function CallOfDoodie() {
               else if (_ne.eliteType === "armored") { _ne.dmgMult = 0.45; _ne.health *= 1.5; _ne.maxHealth = _ne.health; }
             }
             addText(gs, e.x, e.y - 70, "🌀 SUMMONING!", "#8844FF", true);
-            addParticles(gs, e.x, e.y, "#8844FF", 20);
+            addParticles(gs, e.x, e.y, "#8844FF", 25);
             e.summonerVulnTimer = 360; // re-enters invuln after summons die
           }
         }

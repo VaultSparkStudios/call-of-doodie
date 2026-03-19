@@ -1,11 +1,17 @@
 # Task Board
 
 ## Now (next session)
-- **Boss variety**: Splitter (splits into 3 on death), Shielded Juggernaut (charges walls, stuns), Summoner (spawns elites, must expose first). Rotate per wave 5 / 10 / 15 / 20 etc.
-- **Wave events**: Special modifier every 3 waves — Fast Round (enemies 2× speed), Siege (double spawn, no pickups), Elite Only, Fog of War (enemies hidden until close)
-- **Enemy death sounds per type**: Per-enemy death synth in sounds.js (16 enemy types → at least 6–8 distinct sounds)
-- **Distinct arena layouts**: 4–5 named seeded layouts (corridor, open square with pillars, cross-shaped rooms, ring arena) — more tactical depth than pure random walls
-- **More pickup types**: Rage (temp damage burst), Magnet (pulls all pickups), Freeze (slows enemies 3s)
+- **Score attack mode**: timed 5-minute run, enemies scale faster, leaderboard-ranked by score (no wave survival metric)
+- **Prestige skin unlocks**: at prestige 1/2/3 unlock player emoji skin options (e.g. 🤖, 👾, 🐸) shown in settings
+- **Weapon-specific kill UI**: show weapon emoji + kill count on DeathScreen (top 3 weapons used)
+
+## Done (session 16)
+- ✅ Boss rotation story text: boss name announced on wave start ("🦏 THE JUGGERNAUT APPROACHES" etc.)
+- ✅ Boss-specific ability warnings: per-boss-type hints replace generic wave-level warnings for Splitter/Juggernaut/Summoner waves
+- ✅ Summoner portal VFX: purple particle bursts every 25 frames during first-summon windup
+- ✅ Juggernaut shield-break screen text + shake: "🦏 SHIELD SHATTERED!" centered + screen shake 14 + blue particles
+- ✅ Summon dismissed: soundSummonDismissed() + "✨ SUMMON DISMISSED" float text when a summoned minion dies
+- ✅ Splitter shards confirmed: isShard check prevents shards (typeIndex 16, !isBossEnemy) from dropping pickups
 
 ## Pending Supabase steps (manual)
 - Enable "Anonymous sign-ins" in Supabase Auth > Settings
@@ -18,6 +24,13 @@
 - Capacitor wrapper for iOS App Store submission
 - More boss abilities at wave 40+ (currently rent nuke + teleport is the cap)
 - Discord link in MenuScreen footer (commented out — fill in when ready)
+
+## Done (session 15)
+- ✅ Boss variety: Splitter (💔 splits into 3 shards on death), Juggernaut (🦏 shield + charge), Summoner (🌀 summons elites, invulnerable while alive). Rotate: Karen→Splitter→Juggernaut→Summoner→Landlord
+- ✅ Wave events: every 3rd non-boss wave → ⚡ Fast Round, 🪖 Siege, 👑 Elite Only, 🌫️ Fog of War. Persistent canvas banner.
+- ✅ Enemy death sounds: soundEnemyDeath(typeIndex) — 8 distinct synth groups across 16 enemy types
+- ✅ Distinct arena layouts: 4 named seeded layouts (Pillars, Corridors, Cross-Rooms, Bunker). Layout name shown on run start.
+- ✅ New pickups: 🔥 Rage (+75% dmg 5s), 🧲 Magnet (pulls all pickups), ❄️ Freeze (35% enemy slowdown 3s). Sounds + glow rings + player auras.
 
 ## Done (session 14)
 - ✅ 7 new perks: combo_lifesteal, overdrive, hoarder, glass_mind, bullet_hose, crit_cascade (🌩️), grenade_chain

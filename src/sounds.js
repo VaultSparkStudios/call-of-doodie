@@ -188,6 +188,13 @@ export function soundEnemyDeath(typeIndex) {
   }
 }
 
+// Distinct sound when a Summoner's summoned minion is destroyed
+export function soundSummonDismissed() {
+  tone(800, 0.14, "sine", 0.07, 200);
+  tone(1200, 0.09, "triangle", 0.05, 350, 0.06);
+  noise(0.07, 0.035, 0.03);
+}
+
 export function soundGamepadConnect() {
   tone(440, 0.07, "triangle", 0.05, 660);
   tone(660, 0.10, "sine", 0.06, 880, 0.07);
