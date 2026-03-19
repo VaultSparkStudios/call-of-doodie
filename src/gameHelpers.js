@@ -5,6 +5,9 @@
 
 import { ENEMY_TYPES, DIFFICULTIES } from "./constants.js";
 
+// Boss type rotation: wave 5→Karen, 10→Splitter, 15→Juggernaut, 20→Summoner, 25→Landlord, repeats
+export const BOSS_ROTATION = [4, 16, 17, 18, 9];
+
 // ── spawnEnemy ────────────────────────────────────────────────────────────────
 export function spawnEnemy(gs, W, H, difficultyId) {
   const wv = gs.currentWave;
@@ -37,7 +40,7 @@ export function spawnEnemy(gs, W, H, difficultyId) {
   const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * (gs.settEnemyHealthMult || 1);
   gs.enemies.push({
     x, y, health: eHealth, maxHealth: eHealth,
-    speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1),
+    speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1) * (gs.waveEventSpeedMult || 1),
     size: type.size, color: type.color, name: type.name, points: type.points,
     deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
     wobble: Math.random() * Math.PI * 2, hitFlash: 0,
@@ -102,4 +105,32 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     sharedAbilityCooldown: 0,
     bulletRingWarning: false, groundSlamWarning: false,
   });
+  const boss = gs.enemies[gs.enemies.length - 1];
+  // ── Splitter (16): splits into 3 mini-bosses on death ──
+  if (typeIndex === 16) {
+    boss.splitOnDeath = true;
+    boss.splitDone = false;
+  }
+  // ── Juggernaut (17): shield + charge ──
+  if (typeIndex === 17) {
+    const shieldHP = bossHealth * 0.45;
+    boss.jugShield = shieldHP;
+    boss.jugShieldMax = shieldHP;
+    boss.jugShieldRegenDelay = 0;  // frames until shield starts recharging
+    boss.jugChargeWindup = 0;       // frames of windup remaining
+    boss.jugCharging = false;
+    boss.jugChargeDx = 0; boss.jugChargeDy = 0;
+    boss.jugChargeFrames = 0;
+    boss.jugChargeCooldown = 220;   // start with a brief cooldown
+    boss.jugStunned = 0;            // frames stunned after wall-hit
+  }
+  // ── Summoner (18): summons elites, invulnerable while summons live ──
+  if (typeIndex === 18) {
+    boss.summonerTimer = 180;       // frames until first summon
+    boss.summonerCount = 0;         // currently alive summons
+    boss.summonerMaxCount = 3;
+    boss.summonerVulnTimer = 0;     // frames of vulnerability remaining
+    boss.summonerId = Date.now() + Math.random(); // unique ID
+    boss.summonerInvuln = false;    // true while summons alive
+  }
 }

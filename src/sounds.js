@@ -107,6 +107,9 @@ export function soundPickup(type) {
     case "upgrade":
       [440, 554, 659, 880].forEach((f, i) => tone(f, 0.12, "triangle", 0.08, null, i * 0.07));
       break;
+    case "rage":          tone(500, 0.08, "sawtooth", 0.08, 1200); tone(800, 0.12, "square", 0.07, 1600, 0.06); break;
+    case "magnet":        tone(440, 0.10, "sine", 0.07, 880); tone(880, 0.08, "sine", 0.05, 1320, 0.08); break;
+    case "freeze":        tone(1600, 0.14, "triangle", 0.07, 350); tone(1200, 0.10, "triangle", 0.05, 280, 0.08); break;
     default:              tone(880, 0.10, "triangle", 0.06, 1100);
   }
 }
@@ -157,6 +160,32 @@ export function soundUIOpen() {
 
 export function soundUIClose() {
   tone(1000, 0.05, "square", 0.04, 700);
+}
+
+// Per-enemy-type death synths — 8 distinct sound groups
+export function soundEnemyDeath(typeIndex) {
+  switch (typeIndex) {
+    case 0: case 13: case 14: // mall cop, sergeant karen, life coach — low thud
+      tone(100, 0.14, "sawtooth", 0.09, 50); noise(0.07, 0.06); break;
+    case 1: case 4: // karen, mega karen — shrill screech
+      tone(900, 0.10, "square", 0.07, 250); tone(1100, 0.08, "square", 0.05, 200, 0.04); break;
+    case 2: case 6: // florida man, gym bro — grunt thud
+      noise(0.12, 0.11); tone(180, 0.09, "sawtooth", 0.06, 70); break;
+    case 3: case 9: case 15: // hoa president, landlord, tech ceo — bureaucratic ding
+      tone(880, 0.10, "triangle", 0.07, 660); tone(660, 0.08, "triangle", 0.05, 440, 0.06); break;
+    case 5: case 7: // it guy, influencer — digital blip
+      tone(1800, 0.06, "square", 0.05, 600); break;
+    case 8: // conspiracy bro — weird alien blip
+      tone(400, 0.07, "sine", 0.06, 180); tone(1200, 0.05, "square", 0.04, 400, 0.05); break;
+    case 10: // crypto bro — descending beep (number go down)
+      tone(1200, 0.10, "square", 0.07, 150); break;
+    case 11: // shield guy — metallic clank
+      noise(0.05, 0.08); tone(350, 0.09, "square", 0.06, 260); break;
+    case 12: // yolo bomber — mini-explosion
+      noise(0.18, 0.13); tone(90, 0.14, "sawtooth", 0.07, 35); break;
+    default: // new bosses / fallback — generic pop
+      tone(300, 0.08, "triangle", 0.05, 120); break;
+  }
 }
 
 export function soundGamepadConnect() {

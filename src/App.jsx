@@ -7,12 +7,12 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign } from "./storage.js";
-import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss } from "./gameHelpers.js";
+import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
 import SettingsPanel from "./components/SettingsPanel.jsx";
 import {
-  soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup,
+  soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup, soundEnemyDeath,
   soundGrenade, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
   soundGamepadConnect, soundGamepadDisconnect,
@@ -572,40 +572,50 @@ export default function CallOfDoodie() {
     perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
     if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
 
-    // Generate seeded random obstacles + terrain (reproducible per run seed)
+    // Generate seeded arena layout (4 named layouts, reproducible per seed)
     let _ws = seed;
     const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
     const SPAWN_SAFE = 115;
-    const wallCount = 3 + Math.floor(_sr() * 4); // 3–6 walls
-    const walls = [];
-    // Divide arena into 4×3 grid for wider, more random spread across the full map
-    const COLS = 4, ROWS = 3;
-    const gwZ = w * 0.90 / COLS, ghZ = h * 0.90 / ROWS;
-    const zOrder = [0,1,2,3,4,5,6,7,8,9,10,11];
-    for (let _i = 11; _i > 0; _i--) {
-      const _j = Math.floor(_sr() * (_i + 1));
-      const _t = zOrder[_i]; zOrder[_i] = zOrder[_j]; zOrder[_j] = _t;
-    }
-    let _hWalls = 0, _vWalls = 0;
-    for (let _wi = 0; _wi < wallCount; _wi++) {
-      const zi = zOrder[_wi];
-      const col = zi % COLS, row = Math.floor(zi / COLS);
-      const zx0 = w * 0.08 + col * gwZ;
-      const zy0 = h * 0.08 + row * ghZ;
-      let wx, wy, ww, wh, _att = 0;
-      do {
-        const isH = _hWalls <= _vWalls ? (_sr() < 0.65) : (_sr() < 0.35);
-        ww = isH ? Math.floor(70 + _sr() * 80) : Math.floor(14 + _sr() * 10);
-        wh = isH ? Math.floor(14 + _sr() * 10) : Math.floor(70 + _sr() * 80);
-        wx = zx0 + _sr() * Math.max(1, gwZ - ww);
-        wy = zy0 + _sr() * Math.max(1, ghZ - wh);
-        wx = Math.max(w * 0.04, Math.min(w * 0.96 - ww, wx));
-        wy = Math.max(h * 0.06, Math.min(h * 0.94 - wh, wy));
-        const tooClose = Math.hypot(wx + ww / 2 - w / 2, wy + wh / 2 - h / 2) < SPAWN_SAFE;
-        if (!tooClose) { if (isH) _hWalls++; else _vWalls++; break; }
-      } while (++_att < 20);
-      walls.push({ x: wx, y: wy, w: ww, h: wh });
-    }
+    // ── Named arena layouts ──
+    const _LAYOUT_NAMES = ["Pillars", "Corridors", "Cross-Rooms", "Bunker"];
+    const _layouts = [
+      // 0: Pillars — 8 square pillars in a loose grid
+      () => {
+        const pts = [[.18,.22],[.50,.12],[.82,.22],[.12,.50],[.88,.50],[.18,.78],[.50,.88],[.82,.78]];
+        return pts.map(([rx,ry]) => ({ x: w*rx-15, y: h*ry-15, w:30, h:30 }))
+          .filter(ob => Math.hypot(ob.x+15-w/2, ob.y+15-h/2) > SPAWN_SAFE);
+      },
+      // 1: Corridors — two long horizontal walls with center gaps, tri-lane arena
+      () => [
+        { x: w*.07, y: h*.34, w: w*.36, h: 18 },
+        { x: w*.57, y: h*.34, w: w*.36, h: 18 },
+        { x: w*.07, y: h*.63, w: w*.36, h: 18 },
+        { x: w*.57, y: h*.63, w: w*.36, h: 18 },
+        { x: w*.08, y: h*.10, w: 18, h: h*.22 },
+        { x: w*.74, y: h*.10, w: 18, h: h*.22 },
+        { x: w*.08, y: h*.68, w: 18, h: h*.22 },
+        { x: w*.74, y: h*.68, w: 18, h: h*.22 },
+      ],
+      // 2: Cross-Rooms — L-shaped walls in each corner, open center
+      () => [
+        { x: w*.05, y: h*.05, w: w*.20, h: 14 }, { x: w*.05, y: h*.05, w: 14, h: h*.22 },
+        { x: w*.75, y: h*.05, w: w*.20, h: 14 }, { x: w*.81, y: h*.05, w: 14, h: h*.22 },
+        { x: w*.05, y: h*.81, w: w*.20, h: 14 }, { x: w*.05, y: h*.73, w: 14, h: h*.22 },
+        { x: w*.75, y: h*.81, w: w*.20, h: 14 }, { x: w*.81, y: h*.73, w: 14, h: h*.22 },
+      ],
+      // 3: Bunker — central cover + flanking vertical walls
+      () => [
+        { x: w*.34, y: h*.28, w: w*.32, h: 18 },
+        { x: w*.34, y: h*.54, w: w*.32, h: 18 },
+        { x: w*.10, y: h*.18, w: 16, h: h*.28 },
+        { x: w*.74, y: h*.18, w: 16, h: h*.28 },
+        { x: w*.10, y: h*.54, w: 16, h: h*.28 },
+        { x: w*.74, y: h*.54, w: 16, h: h*.28 },
+      ],
+    ];
+    const layoutIdx = Math.floor(_sr() * _layouts.length);
+    const walls = _layouts[layoutIdx]();
+    gsRef.current._layoutName = _LAYOUT_NAMES[layoutIdx];
     gsRef.current.obstacles = walls;
 
     // Generate terrain decorations (visual only — no collision)
@@ -810,15 +820,15 @@ export default function CallOfDoodie() {
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = (gs, ex, ey, isBoss) => {
-    const types    = ["health", "ammo", "speed", "nuke", "upgrade"];
+    const types    = ["health", "ammo", "speed", "nuke", "upgrade", "rage", "magnet", "freeze"];
     // Vampire mode: no health drops — replace with ammo
     // Scavenger perk boosts ammo drop weight by ammoDropMult
     const ammoBoost = perkModsRef.current.ammoDropMult || 1;
     const baseAmmoW = isBoss ? (gs.vampireMode ? 0.40 : 0.15) : (gs.vampireMode ? 0.58 : 0.10);
     const ammoW = Math.min(baseAmmoW * ammoBoost, 0.70);
     const weights  = isBoss
-      ? [gs.vampireMode ? 0 : 0.25, ammoW, 0.10, 0.10, 0.40]
-      : [gs.vampireMode ? 0 : 0.48, ammoW, 0.22, 0.05, 0.15];
+      ? [gs.vampireMode ? 0 : 0.20, ammoW, 0.08, 0.08, 0.35, 0.10, 0.07, 0.07]
+      : [gs.vampireMode ? 0 : 0.40, ammoW, 0.18, 0.04, 0.12, 0.10, 0.08, 0.08];
     let roll = Math.random(), cumul = 0, pType = "health";
     for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
     gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
@@ -1238,6 +1248,16 @@ export default function CallOfDoodie() {
       const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
+        // Apply elite-only event override after spawn
+        if (gs.waveEliteOnly) {
+          const ne = gs.enemies[gs.enemies.length - 1];
+          if (!ne.eliteType) {
+            const et = ["armored","fast","explosive"][Math.floor(Math.random()*3)];
+            ne.eliteType = et;
+            if (et === "fast") { ne.speed *= 2; ne.size *= 0.75; }
+            else if (et === "armored") { ne.dmgMult = 0.45; ne.health *= 1.5; ne.maxHealth = ne.health; }
+          }
+        }
       }
     }
     // Wave cleared
@@ -1247,6 +1267,9 @@ export default function CallOfDoodie() {
         soundWaveClear();
         checkAchievements(gs);
       }
+      // Clear previous wave event flags
+      gs.waveEvent = null; gs.waveEventSpeedMult = 1;
+      gs.waveEliteOnly = false; gs.siegeMode = false; gs.fogOfWar = false;
       gs.bossWave = false;
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
@@ -1291,12 +1314,13 @@ export default function CallOfDoodie() {
         else if (_wv >= 15) addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
         else if (_wv >= 10) addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
         else if (_wv >= 7)  addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
-        // Spawn boss(es) — Mega Karen up to wave 9, Landlord 10-14, both 15+
-        if (gs.currentWave >= 15) { spawnBoss(gs, 4); spawnBoss(gs, 9); }
-        else if (gs.currentWave >= 10) { spawnBoss(gs, 9); }
+        // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
+        const _bSlot = (Math.floor(gs.currentWave / 5) - 1) % BOSS_ROTATION.length;
+        const _bType = BOSS_ROTATION[_bSlot];
+        const _bType2 = BOSS_ROTATION[(_bSlot + 1) % BOSS_ROTATION.length];
+        if (gs.currentWave >= 15) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
         else {
-          spawnBoss(gs, 4);
-          // Wave 7+ early boss gets escort minions
+          spawnBoss(gs, _bType);
           if (gs.currentWave >= 7) { spawnEnemy(gs); spawnEnemy(gs); gs.maxEnemiesThisWave += 2; gs.enemiesThisWave += 2; }
         }
         // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
@@ -1304,6 +1328,31 @@ export default function CallOfDoodie() {
         addParticles(gs, W / 2, H / 2, "#FF0000", 40);
       } else {
         setMusicIntensity(false);
+        // ── Wave event: every 3rd non-boss wave ──
+        gs._nonBossWaveCount = (gs._nonBossWaveCount || 0) + 1;
+        if (gs._nonBossWaveCount % 3 === 0 && gs.currentWave > 2) {
+          const _evts = ["fast_round", "siege", "elite_only", "fog_of_war"];
+          gs.waveEvent = _evts[Math.floor(Math.random() * _evts.length)];
+          switch (gs.waveEvent) {
+            case "fast_round":
+              gs.waveEventSpeedMult = 2.0;
+              addText(gs, W / 2, H / 2 + 70, "⚡ FAST ROUND — Enemies 2× speed!", "#FF8800");
+              break;
+            case "siege":
+              gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80);
+              gs.siegeMode = true;
+              addText(gs, W / 2, H / 2 + 70, "🪖 SIEGE — 2× enemies, no pickups!", "#FF4444");
+              break;
+            case "elite_only":
+              gs.waveEliteOnly = true;
+              addText(gs, W / 2, H / 2 + 70, "👑 ELITE ONLY — Every enemy is elite!", "#FFD700");
+              break;
+            case "fog_of_war":
+              gs.fogOfWar = true;
+              addText(gs, W / 2, H / 2 + 70, "🌫️ FOG OF WAR — Enemies hidden until close!", "#88CCFF");
+              break;
+          }
+        }
         addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
         addText(gs, W / 2, H / 2 + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
         if (gs.waveStreak >= 3) addText(gs, W / 2, H / 2 + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
@@ -1418,9 +1467,12 @@ export default function CallOfDoodie() {
         const proj = ex * cos + ey * sin;
         const perp = Math.abs(ex * sin - ey * cos);
         if (proj > 0 && proj < maxT && perp < e.size / 2 + 7) {
+          if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, e.x, e.y, "#8844FF", 3); return; }
           const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0) + (gs.critBonus || 0);
           const isCrit = Math.random() < effectiveCrit;
-          const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1);
+          const _pbRageMult = (gs.rageTimer || 0) > 0 ? 1.75 : 1.0;
+          const _pbJugMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
+          const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1) * _pbRageMult * _pbJugMult;
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           if (perkModsRef.current.lifesteal) { p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal); setHealth(Math.floor(p.health)); }
           if (isCrit) statsRef.current.crits++;
@@ -1440,6 +1492,7 @@ export default function CallOfDoodie() {
             addParticles(gs, e.x, e.y, e.color, 15);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
             addKillFeed(e.name, pbWeapon.name);
+            if (!e.isBossEnemy) soundEnemyDeath(e.typeIndex);
             addXp(pts); gs.killFlash = 6;
             gs.dyingEnemies = gs.dyingEnemies || [];
             if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
@@ -1473,7 +1526,18 @@ export default function CallOfDoodie() {
           const bulletAngle = Math.atan2(b.vy, b.vx);
           const angleDiff = Math.abs(Math.atan2(Math.sin(bulletAngle - moveAngle), Math.cos(bulletAngle - moveAngle)));
           const shieldMult = (e.typeIndex === 11) ? (angleDiff < Math.PI / 2 ? 0.20 : 1.60) : 1.0;
-          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * lastResortMult * shieldMult * (e.dmgMult || 1);
+          const rageMult = (gs.rageTimer || 0) > 0 ? 1.75 : 1.0;
+          // Juggernaut shield: reduce damage while shield up
+          const jugShieldMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
+          // Summoner invulnerability while summons alive
+          if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, b.x, b.y, "#8844FF", 3); b.life = 0; return; }
+          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * lastResortMult * shieldMult * (e.dmgMult || 1) * rageMult * jugShieldMult;
+          // Drain juggernaut shield if active
+          if (e.typeIndex === 17 && (e.jugShield || 0) > 0) {
+            const rawDmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1);
+            e.jugShield = Math.max(0, e.jugShield - rawDmg);
+            if (e.jugShield <= 0) { e.jugShieldRegenDelay = 240; addText(gs, e.x, e.y - 40, "🛡 SHIELD BROKEN!", "#FF6600"); }
+          }
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
           if (gs.chainLightning && Math.random() < 0.20) {
@@ -1582,11 +1646,36 @@ export default function CallOfDoodie() {
               gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
               gs.screenShake = 12;
             }
-            // Pickup drops
+            // Enemy death sound (non-boss only — boss kill has soundBossKill)
+            if (!e.isBossEnemy) soundEnemyDeath(e.typeIndex);
+            // Splitter: split into 3 mini-copies on death
+            if (e.splitOnDeath && !e.splitDone) {
+              e.splitDone = true;
+              addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
+              const diff2 = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+              for (let _si = 0; _si < 3; _si++) {
+                const _sa = (_si / 3) * Math.PI * 2 + 0.5;
+                const _sx = e.x + Math.cos(_sa) * 55, _sy = e.y + Math.sin(_sa) * 55;
+                const _sHP = e.maxHealth * 0.35;
+                gs.enemies.push({
+                  x: _sx, y: _sy, health: _sHP, maxHealth: _sHP,
+                  speed: e.speed * 1.4 * (gs.waveEventSpeedMult || 1),
+                  size: e.size * 0.58, color: "#FF8899",
+                  name: "Splitter Shard", points: Math.floor(e.points * 0.25),
+                  deathQuotes: ["..."], emoji: "💔", typeIndex: 16,
+                  wobble: Math.random() * Math.PI * 2, hitFlash: 0,
+                  ranged: false, projSpeed: 0, projRate: 999,
+                  shootTimer: 60, isBossEnemy: false,
+                  splitOnDeath: false,
+                });
+              }
+              addParticles(gs, e.x, e.y, "#FF6688", 30);
+            }
+            // Pickup drops (skip during siege mode)
             const isBossEnemy = e.isBossEnemy;
             if (isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) {
               gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
-            } else if (isBossEnemy || Math.random() < 0.25) {
+            } else if ((isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) {
               spawnPickup(gs, e.x, e.y, isBossEnemy);
             }
             e.health = -999;
@@ -1613,7 +1702,8 @@ export default function CallOfDoodie() {
     gs.enemies.forEach(e => {
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
-      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1);
+      const freezeMult = (gs.freezeTimer || 0) > 0 ? 0.35 : 1;
+      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult;
       // Flow field steering: sample flow field, fall back to direct angle if no cell data
       const ff = gs.flowField;
       let sx, sy;
@@ -1648,8 +1738,12 @@ export default function CallOfDoodie() {
         const slen = Math.hypot(sx, sy);
         if (slen > 0) { sx /= slen; sy /= slen; }
       }
-      e.x += sx * buffedSpeed + Math.sin(e.wobble) * 0.5 + (-sy) * zigzag;
-      e.y += sy * buffedSpeed + Math.cos(e.wobble) * 0.5 + sx * zigzag;
+      // Skip regular movement for Juggernaut during charge/stun (those are handled above)
+      const _skipMove = e.typeIndex === 17 && (e.jugCharging || (e.jugStunned || 0) > 0);
+      if (!_skipMove) {
+        e.x += sx * buffedSpeed + Math.sin(e.wobble) * 0.5 + (-sy) * zigzag;
+        e.y += sy * buffedSpeed + Math.cos(e.wobble) * 0.5 + sx * zigzag;
+      }
       if (e.hitFlash > 0) e.hitFlash--;
       if (e.ranged) {
         e.shootTimer++;
@@ -1803,6 +1897,78 @@ export default function CallOfDoodie() {
           }
         }
       }
+      // ── Juggernaut (17): shield regen + charge ──
+      if (e.typeIndex === 17 && e.isBossEnemy) {
+        // Shield regen
+        if ((e.jugShield || 0) < e.jugShieldMax) {
+          if ((e.jugShieldRegenDelay || 0) > 0) { e.jugShieldRegenDelay--; }
+          else { e.jugShield = Math.min(e.jugShieldMax, (e.jugShield || 0) + e.jugShieldMax * 0.003); }
+        }
+        // Charge logic
+        if (e.jugStunned > 0) { e.jugStunned--; }
+        else if (e.jugCharging) {
+          // Move in charge direction at high speed
+          e.x += e.jugChargeDx * 9; e.y += e.jugChargeDy * 9;
+          e.jugChargeFrames--;
+          // Check wall hit
+          const hitWall = (gs.obstacles || []).some(ob => e.x > ob.x && e.x < ob.x + ob.w && e.y > ob.y && e.y < ob.y + ob.h);
+          if (hitWall || e.jugChargeFrames <= 0) {
+            e.jugCharging = false; e.jugStunned = 60; e.jugChargeCooldown = 300;
+            if (hitWall) { gs.screenShake = 12; addText(gs, e.x, e.y - 50, "💥 WALL HIT!", "#FF8800"); addParticles(gs, e.x, e.y, "#CC4400", 15); }
+          }
+          // Hit player while charging
+          if (Math.hypot(p.x - e.x, p.y - e.y) < e.size / 2 + 18 && p.invincible <= 0) {
+            let cdmg = 30; if (gs.glassjaw) cdmg *= (gs.glassjawMult || 2);
+            p.health -= cdmg; p.invincible = 35; gs.damageFlash = 12; gs.damageThisWave = (gs.damageThisWave || 0) + 1;
+            setHealth(Math.max(0, p.health)); addText(gs, p.x, p.y - 30, "-" + Math.floor(cdmg) + " CHARGE!", "#FF4400");
+            rumbleGamepad(0.5, 0.8, 200);
+            if (p.health <= 0) handlePlayerDeath(gs);
+          }
+        } else {
+          // Charge windup
+          if ((e.jugChargeCooldown || 0) > 0) { e.jugChargeCooldown--; }
+          else {
+            e.jugChargeWindup = (e.jugChargeWindup || 0) + 1;
+            if (e.jugChargeWindup === 1) addText(gs, e.x, e.y - 60, "⚠ CHARGING...", "#FF6600");
+            if (e.jugChargeWindup >= 90) {
+              e.jugChargeWindup = 0; e.jugCharging = true; e.jugChargeFrames = 55;
+              const _ca = Math.atan2(p.y - e.y, p.x - e.x);
+              e.jugChargeDx = Math.cos(_ca); e.jugChargeDy = Math.sin(_ca);
+              addText(gs, e.x, e.y - 60, "🦏 CHARGE!", "#FF4400", true);
+              addParticles(gs, e.x, e.y, "#CC4400", 20);
+            }
+          }
+        }
+      }
+      // ── Summoner (18): summon elites + invulnerability ──
+      if (e.typeIndex === 18 && e.isBossEnemy) {
+        // Count alive summons
+        const _aliveCount = gs.enemies.filter(ne => ne !== e && ne.summonedBy === e.summonerId).length;
+        e.summonerCount = _aliveCount;
+        e.summonerInvuln = _aliveCount > 0;
+        if (_aliveCount === 0 && (e.summonerVulnTimer || 0) > 0) e.summonerVulnTimer--;
+        if (_aliveCount === 0 && (e.summonerVulnTimer || 0) <= 0) {
+          // Summon timer
+          e.summonerTimer = (e.summonerTimer || 0) - 1;
+          if (e.summonerTimer <= 0 && _aliveCount < e.summonerMaxCount) {
+            e.summonerTimer = 280;
+            const _sCount = Math.min(3, e.summonerMaxCount - _aliveCount);
+            for (let _si = 0; _si < _sCount; _si++) {
+              const _sa = Math.random() * Math.PI * 2, _sd = 80 + Math.random() * 60;
+              spawnEnemy(gs);
+              const _ne = gs.enemies[gs.enemies.length - 1];
+              _ne.x = e.x + Math.cos(_sa) * _sd; _ne.y = e.y + Math.sin(_sa) * _sd;
+              _ne.summonedBy = e.summonerId;
+              _ne.eliteType = ["armored","fast","explosive"][Math.floor(Math.random()*3)];
+              if (_ne.eliteType === "fast") { _ne.speed *= 2; _ne.size *= 0.75; }
+              else if (_ne.eliteType === "armored") { _ne.dmgMult = 0.45; _ne.health *= 1.5; _ne.maxHealth = _ne.health; }
+            }
+            addText(gs, e.x, e.y - 70, "🌀 SUMMONING!", "#8844FF", true);
+            addParticles(gs, e.x, e.y, "#8844FF", 20);
+            e.summonerVulnTimer = 360; // re-enters invuln after summons die
+          }
+        }
+      }
       // ── Kamikaze (ti=12) ──
       if (e.typeIndex === 12 && dashRef.current.active <= 0) {
         const kd = Math.hypot(p.x - e.x, p.y - e.y);
@@ -1911,6 +2077,23 @@ export default function CallOfDoodie() {
             addText(gs, pk.x, pk.y - 30, "MAX LEVEL! +2000", "#AA44FF", true);
           }
           checkAchievements(gs);
+        } else if (pk.type === "rage") {
+          gs.rageTimer = 300; // 5s at 60fps
+          addText(gs, pk.x, pk.y - 20, "🔥 RAGE! +75% DMG 5s", "#FF4400", true);
+          addParticles(gs, pk.x, pk.y, "#FF4400", 20);
+          addParticles(gs, pk.x, pk.y, "#FF8800", 12);
+          gs.screenShake = Math.max(gs.screenShake, 6);
+        } else if (pk.type === "magnet") {
+          // Pull all pickups to player instantly
+          addText(gs, pk.x, pk.y - 20, "🧲 MAGNET!", "#FF88FF", true);
+          addParticles(gs, pk.x, pk.y, "#FF88FF", 18);
+          gs.pickups.forEach(other => { if (other !== pk) { other.x = p.x; other.y = p.y; } });
+        } else if (pk.type === "freeze") {
+          gs.freezeTimer = 180; // 3s
+          addText(gs, pk.x, pk.y - 20, "❄️ FREEZE! 3s", "#88CCFF", true);
+          addParticles(gs, pk.x, pk.y, "#88CCFF", 18);
+          addParticles(gs, pk.x, pk.y, "#FFFFFF", 10);
+          gs.screenShake = Math.max(gs.screenShake, 5);
         }
         addXp(50);
         return false;
@@ -1928,6 +2111,8 @@ export default function CallOfDoodie() {
     if (gs.killFlash > 0) gs.killFlash--;
     if ((gs.bossKillFlash || 0) > 0) gs.bossKillFlash--;
     if ((gs.adrenalineRushTimer || 0) > 0) gs.adrenalineRushTimer--;
+    if ((gs.rageTimer || 0) > 0) gs.rageTimer--;
+    if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
     if (gs.beams) gs.beams = gs.beams.filter(bm => { bm.life--; return bm.life > 0; });
     frameCountRef.current++;

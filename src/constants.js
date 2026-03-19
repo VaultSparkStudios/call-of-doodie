@@ -49,6 +49,13 @@ export const ENEMY_TYPES = [
     deathQuotes: ["You just killed my VIBE!", "Your potential was wasted!", "I was THIS close to unlocking your greatness!", "Wrong mindset... and also you shot me.", "The real enemy was within you all along."] },
   { name: "Tech CEO", health: 320, speed: 0.3, size: 66, color: "#00BFFF", points: 1500, emoji: "💼", ranged: true, projSpeed: 5, projRate: 80,
     deathQuotes: ["I'll pivot from this.", "My VCs will hear about this.", "Disrupting... the concept of living.", "Series D? More like series DEAD.", "I was about to IPO..."] },
+  // ── Boss-rotation types (indices 16–18) ──
+  { name: "Splitter", health: 450, speed: 1.0, size: 64, color: "#FF6688", points: 3000, emoji: "💔", ranged: true, projSpeed: 4.2, projRate: 110,
+    deathQuotes: ["We are many...", "Division is power!", "I multiply in death!", "One becomes three!", "You can't kill us all!"] },
+  { name: "Juggernaut", health: 900, speed: 0.55, size: 78, color: "#CC4400", points: 3500, emoji: "🦏", ranged: false, projSpeed: 0, projRate: 999,
+    deathQuotes: ["My shield... broken!", "Unstoppable was wrong.", "Charged too hard...", "The wall didn't yield.", "Fine. You win this round."] },
+  { name: "Summoner", health: 320, speed: 0.4, size: 60, color: "#8844FF", points: 4000, emoji: "🌀", ranged: true, projSpeed: 3.5, projRate: 190,
+    deathQuotes: ["My minions... avenge me!", "The circle is broken!", "Without my summons...", "I was too vulnerable!", "The portal... closes..."] },
 ];
 
 // ===== PERKS =====

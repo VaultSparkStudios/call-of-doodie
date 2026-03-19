@@ -170,13 +170,22 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const bob = Math.sin(Date.now() / 200 + pk.x) * 3;
     const ps = 1 + Math.sin(Date.now() / 300) * 0.15;
     ctx.save(); ctx.translate(pk.x, pk.y + bob); ctx.scale(ps, ps);
-    const em = pk.type === "health" ? "💊" : pk.type === "ammo" ? "📦" : pk.type === "speed" ? "⚡" : pk.type === "guardian_angel" ? "😇" : pk.type === "upgrade" ? "🔧" : "☢️";
-    ctx.font = pk.type === "guardian_angel" ? "28px serif" : pk.type === "upgrade" ? "24px serif" : "22px serif";
+    const _pkEmojis = { health:"💊", ammo:"📦", speed:"⚡", guardian_angel:"😇", upgrade:"🔧", nuke:"☢️", rage:"🔥", magnet:"🧲", freeze:"❄️" };
+    const _pkColors = { health:"#0F0", ammo:"#0BF", speed:"#FF0", guardian_angel:"#FFD700", upgrade:"#AA44FF", nuke:"#F00", rage:"#FF4400", magnet:"#FF88FF", freeze:"#88CCFF" };
+    const em = _pkEmojis[pk.type] || "✨";
+    const isSpecial = pk.type === "guardian_angel" || pk.type === "upgrade";
+    const isNew = pk.type === "rage" || pk.type === "magnet" || pk.type === "freeze";
+    ctx.font = isSpecial ? "28px serif" : "22px serif";
     ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(em, 0, 0);
-    ctx.globalAlpha = 0.15;
-    ctx.fillStyle = pk.type === "upgrade" ? "#AA44FF" : pk.type === "health" ? "#0F0" : pk.type === "ammo" ? "#0BF" : pk.type === "speed" ? "#FF0" : pk.type === "guardian_angel" ? "#FFD700" : "#F00";
-    if (pk.type === "guardian_angel" || pk.type === "upgrade") ctx.globalAlpha = 0.25 + Math.sin(Date.now() / 200) * 0.1;
+    ctx.globalAlpha = (isSpecial || isNew) ? 0.25 + Math.sin(Date.now() / 200) * 0.12 : 0.15;
+    ctx.fillStyle = _pkColors[pk.type] || "#FFF";
     ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI * 2); ctx.fill();
+    // New pickup types: extra outer glow ring
+    if (isNew) {
+      ctx.globalAlpha = 0.18 + Math.sin(Date.now() / 150) * 0.10;
+      ctx.strokeStyle = _pkColors[pk.type]; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI * 2); ctx.stroke();
+    }
     ctx.globalAlpha = 1; ctx.restore();
   });
 
@@ -231,8 +240,18 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.shadowColor = wt[2]; ctx.shadowBlur = 8; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
   });
 
+  // Fog of War overlay (wave event): draw dark fog, punch holes around player and near enemies
+  if (gs.fogOfWar) {
+    const _fog = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 200);
+    _fog.addColorStop(0, "rgba(0,0,0,0)");
+    _fog.addColorStop(1, "rgba(0,0,12,0.88)");
+    ctx.fillStyle = _fog; ctx.fillRect(0, 0, W, H);
+  }
+
   // Enemies
   gs.enemies.forEach(e => {
+    // Fog of War: skip rendering enemies beyond 195px (they become visible at ~160px)
+    if (gs.fogOfWar && !e.isBossEnemy && Math.hypot(e.x - p.x, e.y - p.y) > 195) return;
     ctx.save(); ctx.translate(e.x, e.y);
     const r = e.size / 2;
     const faceA = Math.atan2(p.y - e.y, p.x - e.x);
@@ -404,6 +423,50 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.strokeStyle = `rgba(${rgb},${0.55 + Math.sin(dn / 200) * 0.25})`;
       ctx.lineWidth = e.enrageTriggered ? 4.5 : 3;
       ctx.beginPath(); ctx.arc(0, 0, r + 8, 0, Math.PI * 2); ctx.stroke();
+    }
+    // Juggernaut (17): shield bar above HP bar
+    if (e.typeIndex === 17 && e.isBossEnemy && (e.jugShieldMax || 0) > 0) {
+      const sbw = e.size + 4;
+      const shieldFrac = Math.max(0, (e.jugShield || 0) / e.jugShieldMax);
+      // Shield bar track
+      ctx.fillStyle = "#111"; ctx.fillRect(-sbw / 2, -r - 26, sbw, 5);
+      ctx.fillStyle = shieldFrac > 0.5 ? "#00BFFF" : shieldFrac > 0 ? "#FF8800" : "#333";
+      ctx.fillRect(-sbw / 2, -r - 26, sbw * shieldFrac, 5);
+      ctx.strokeStyle = "rgba(0,191,255,0.5)"; ctx.lineWidth = 1; ctx.strokeRect(-sbw / 2, -r - 26, sbw, 5);
+      // Shield glow ring when active
+      if ((e.jugShield || 0) > 0) {
+        const sA = 0.35 + Math.sin(dn / 120) * 0.18;
+        ctx.strokeStyle = `rgba(0,191,255,${sA})`; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(0, 0, r + 16, 0, Math.PI * 2); ctx.stroke();
+      }
+      // Charging wind-up warning arc
+      if ((e.jugChargeWindup || 0) > 0) {
+        const chPct = e.jugChargeWindup / 90;
+        ctx.strokeStyle = `rgba(255,100,0,${0.6 + Math.sin(dn / 50) * 0.3})`; ctx.lineWidth = 5;
+        ctx.shadowColor = "#FF6600"; ctx.shadowBlur = 16;
+        ctx.beginPath(); ctx.arc(0, 0, r + 28, -Math.PI/2, -Math.PI/2 + chPct * Math.PI * 2); ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+    }
+    // Summoner (18): invulnerability glow + summon count ring
+    if (e.typeIndex === 18 && e.isBossEnemy) {
+      if (e.summonerInvuln) {
+        const invA = 0.45 + Math.sin(dn / 100) * 0.25;
+        ctx.strokeStyle = `rgba(136,68,255,${invA})`; ctx.lineWidth = 5;
+        ctx.shadowColor = "#8844FF"; ctx.shadowBlur = 20;
+        ctx.beginPath(); ctx.arc(0, 0, r + 18, 0, Math.PI * 2); ctx.stroke();
+        ctx.globalAlpha = 0.15; ctx.fillStyle = "#8844FF";
+        ctx.beginPath(); ctx.arc(0, 0, r + 18, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+      }
+    }
+    // Splitter (16): pulsing split-warning aura at low HP
+    if (e.typeIndex === 16 && e.splitOnDeath && !e.splitDone && e.health < e.maxHealth * 0.35) {
+      const spA = 0.4 + Math.sin(dn / 80) * 0.35;
+      ctx.strokeStyle = `rgba(255,102,136,${spA})`; ctx.lineWidth = 3;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath(); ctx.arc(0, 0, r + 14, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
     }
     // Bullet ring warning — pulsing orange arc ~1s before ring fires
     if (e.bulletRingWarning) {
@@ -578,6 +641,20 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI * 2); ctx.stroke();
     ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
   }
+  // Rage glow ring
+  if ((gs.rageTimer || 0) > 0) {
+    const _rgA = 0.5 + Math.sin(dn / 40) * 0.35;
+    ctx.globalAlpha = _rgA; ctx.strokeStyle = "#FF4400"; ctx.shadowColor = "#FF4400"; ctx.shadowBlur = 22; ctx.lineWidth = 3.5;
+    ctx.beginPath(); ctx.arc(0, 0, 22, 0, Math.PI * 2); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
+  }
+  // Freeze aura
+  if ((gs.freezeTimer || 0) > 0) {
+    const _fzA = 0.35 + Math.sin(dn / 90) * 0.20;
+    ctx.globalAlpha = _fzA; ctx.strokeStyle = "#88CCFF"; ctx.shadowColor = "#88CCFF"; ctx.shadowBlur = 14; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 0, 23, 0, Math.PI * 2); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
+  }
   // Legs (unrotated — bob south)
   const _lb = Math.sin(frameCountRef.current * 0.28) * 3.5;
   ctx.fillStyle = "#284A28";
@@ -664,6 +741,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   });
   ctx.globalAlpha = 1;
 
+  // Rage active: red pulse overlay
+  if ((gs.rageTimer || 0) > 0) {
+    const rageAlpha = Math.min(gs.rageTimer / 300, 1) * (0.06 + Math.sin(Date.now() / 120) * 0.03);
+    ctx.fillStyle = `rgba(255,68,0,${rageAlpha})`; ctx.fillRect(0, 0, W, H);
+  }
+  // Freeze active: blue tint + frost vignette
+  if ((gs.freezeTimer || 0) > 0) {
+    const freezeAlpha = Math.min(gs.freezeTimer / 180, 1) * 0.10;
+    ctx.fillStyle = `rgba(120,200,255,${freezeAlpha})`; ctx.fillRect(0, 0, W, H);
+  }
   // Boss kill golden flash
   if ((gs.bossKillFlash || 0) > 0) {
     ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
@@ -693,6 +780,29 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
   };
   drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+
+  // Wave event banner (persists for the whole wave)
+  if (gs.waveEvent) {
+    const _evLabels = { fast_round: "⚡ FAST ROUND", siege: "🪖 SIEGE", elite_only: "👑 ELITE ONLY", fog_of_war: "🌫️ FOG OF WAR" };
+    const _evColors = { fast_round: "#FF8800", siege: "#FF4444", elite_only: "#FFD700", fog_of_war: "#88CCFF" };
+    const _evLabel = _evLabels[gs.waveEvent] || gs.waveEvent.toUpperCase();
+    const _evColor = _evColors[gs.waveEvent] || "#FFF";
+    const _blink = Math.sin(Date.now() / 400) > 0;
+    ctx.globalAlpha = _blink ? 0.85 : 0.65;
+    ctx.font = "bold 11px monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = _evColor;
+    ctx.shadowColor = _evColor; ctx.shadowBlur = 10;
+    ctx.fillText(_evLabel, W / 2, 28);
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+  }
+
+  // Arena layout name (first 4 seconds)
+  if (gs._layoutName && (Date.now() - (gs._layoutShowTime || (gs._layoutShowTime = Date.now()))) < 4000) {
+    ctx.globalAlpha = Math.max(0, 1 - (Date.now() - gs._layoutShowTime) / 4000) * 0.6;
+    ctx.font = "bold 12px monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = "#AAA"; ctx.fillText("🗺 " + gs._layoutName, W / 2, H - 24);
+    ctx.globalAlpha = 1;
+  }
 
   // Tips (early waves)
   if (gs.currentWave <= 3) {
