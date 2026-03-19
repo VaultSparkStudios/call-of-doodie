@@ -183,7 +183,18 @@ export function soundEnemyDeath(typeIndex) {
       noise(0.05, 0.08); tone(350, 0.09, "square", 0.06, 260); break;
     case 12: // yolo bomber — mini-explosion
       noise(0.18, 0.13); tone(90, 0.14, "sawtooth", 0.07, 35); break;
-    default: // new bosses / fallback — generic pop
+    case 19: // Doomscroller — notification buzz + sad descending chime
+      tone(880, 0.04, "square", 0.06, 400);
+      tone(600, 0.10, "triangle", 0.04, 150, 0.04);
+      noise(0.05, 0.025, 0.06);
+      break;
+    case 20: // The Algorithm — glitchy error cascade (content_terminated)
+      tone(1800, 0.05, "square", 0.07, 100);
+      tone(1100, 0.06, "square", 0.05, 80, 0.04);
+      tone(500, 0.09, "sawtooth", 0.06, 40, 0.09);
+      noise(0.14, 0.08, 0.10);
+      break;
+    default: // fallback — generic pop
       tone(300, 0.08, "triangle", 0.05, 120); break;
   }
 }

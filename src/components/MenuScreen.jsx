@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel } from "../storage.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
@@ -13,9 +13,11 @@ const PLAYER_SKINS = [
   { emoji: "🤖", label: "Robot",    required: 1 },
   { emoji: "👾", label: "Alien",    required: 2 },
   { emoji: "🐸", label: "Frog",     required: 3 },
+  { emoji: "🦊", label: "Fox",      required: 4 },
+  { emoji: "🐉", label: "Dragon",   required: 5 },
 ];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -33,7 +35,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [missionProgress, setMissionProgress] = useState({});
   const [meta, setMeta] = useState(null);
   const [sharing, setSharing] = useState(false);
-  const [challengeMode, setChallengeMode] = useState(null); // { seed, diff } if launched via challenge link
+  const [challengeMode, setChallengeMode] = useState(null); // { seed, diff, vs, vsName } if via challenge link
 
   useEffect(() => {
     const c = loadCareerStats();
@@ -42,16 +44,22 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     setMissionProgress(loadMissionProgress());
     setMeta(loadMetaProgress());
 
-    // Parse challenge link URL params (?seed=XXXXX&diff=normal)
+    // Parse challenge link URL params (?seed=XXXXX&diff=normal&vs=12345&vsName=Player)
     const params = new URLSearchParams(window.location.search);
-    const urlSeed = params.get("seed");
-    const urlDiff = params.get("diff");
+    const urlSeed   = params.get("seed");
+    const urlDiff   = params.get("diff");
+    const urlVs     = params.get("vs");
+    const urlVsName = params.get("vsName");
     if (urlSeed && !isNaN(parseInt(urlSeed))) {
       setCustomSeed(urlSeed);
       if (urlDiff && Object.keys(DIFFICULTIES).includes(urlDiff)) {
         setDifficulty(urlDiff);
       }
-      setChallengeMode({ seed: urlSeed, diff: urlDiff || null });
+      setChallengeMode({
+        seed: urlSeed, diff: urlDiff || null,
+        vs: urlVs ? parseInt(urlVs) : null,
+        vsName: urlVsName || null,
+      });
     }
   }, []);
 
@@ -67,7 +75,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const NAV_ITEMS = [
     ...diffKeys.map(k => ({ key: `diff_${k}`,    action: () => setDifficulty(k) })),
     ...loadoutKeys.map(k => ({ key: `lo_${k}`,   action: () => setStarterLoadout?.(k) })),
-    { key: "deploy",      action: () => onStart(customSeed || undefined) },
+    { key: "deploy",      action: () => onStart(dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined), challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {}) },
     { key: "leaderboard", action: () => { onRefreshLeaderboard(); setShowLeaderboard(true); } },
     { key: "career",      action: () => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); } },
     { key: "achievements",action: () => { setCareer(loadCareerStats()); setShowAchievements(true); } },
@@ -864,6 +872,15 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FF6600" }}>⏱ SCORE ATTACK</div>
               <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>5 min · faster spawns · max score</div>
             </button>
+            <button
+              onClick={() => onSetDailyChallengeMode?.(true)}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: dailyChallengeMode ? "rgba(0,229,255,0.12)" : "rgba(255,255,255,0.03)",
+                border: dailyChallengeMode ? "2px solid #00E5FF" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#00E5FF" }}>📅 DAILY</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Same seed · global ranking</div>
+              {hasDailyChallengeSubmitted() && <div style={{ fontSize: 8, color: "#00E5FF", marginTop: 1 }}>✓ PLAYED TODAY</div>}
+            </button>
           </div>
         </div>
 
@@ -891,18 +908,23 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
         {/* Challenge link banner */}
         {challengeMode && (
-          <div style={{ marginBottom: 8, padding: "7px 14px", borderRadius: 8, border: "1px solid rgba(255,107,53,0.5)", background: "rgba(255,107,53,0.1)", textAlign: "center" }}>
+          <div style={{ marginBottom: 8, padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,107,53,0.5)", background: "rgba(255,107,53,0.08)", textAlign: "center" }}>
             <div style={{ color: "#FF6B35", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>⚔️ CHALLENGE LINK DETECTED</div>
-            <div style={{ color: "#CCC", fontSize: 10, marginTop: 2 }}>
-              Seed #{challengeMode.seed}{challengeMode.diff ? ` · ${challengeMode.diff.toUpperCase()}` : ""} · Deploy to accept the challenge!
+            <div style={{ color: "#CCC", fontSize: 10, marginTop: 3 }}>
+              Seed #{challengeMode.seed}{challengeMode.diff ? ` · ${challengeMode.diff.toUpperCase()}` : ""}
             </div>
-            <button onClick={() => { setCustomSeed(""); setChallengeMode(null); setDifficulty("normal"); }} style={{ marginTop: 5, padding: "2px 10px", fontSize: 9, background: "transparent", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, color: "#888", cursor: "pointer", fontFamily: "'Courier New',monospace" }}>✕ dismiss</button>
+            {challengeMode.vs && (
+              <div style={{ color: "#FFD700", fontSize: 12, fontWeight: 900, marginTop: 4 }}>
+                🎯 BEAT {challengeMode.vsName ? `@${challengeMode.vsName}` : "their score"}: {challengeMode.vs.toLocaleString()} pts
+              </div>
+            )}
+            <button onClick={() => { setCustomSeed(""); setChallengeMode(null); setDifficulty("normal"); }} style={{ marginTop: 6, padding: "2px 10px", fontSize: 9, background: "transparent", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, color: "#888", cursor: "pointer", fontFamily: "'Courier New',monospace" }}>✕ dismiss</button>
           </div>
         )}
 
         {/* Action buttons */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => onStart(customSeed || undefined)} {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
+          <button onClick={() => onStart(dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined), challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {})} {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
           <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} {...(gfocus("leaderboard") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
         </div>
         {/* Seed + Settings row */}

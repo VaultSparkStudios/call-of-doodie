@@ -6,7 +6,7 @@ import {
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
@@ -164,7 +164,8 @@ export default function CallOfDoodie() {
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
-  const scoreAttackRef   = useRef(false); // synced with scoreAttackMode state for game loop
+  const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
+  const dailyChallengeRef     = useRef(false); // synced with dailyChallengeMode
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
@@ -216,12 +217,16 @@ export default function CallOfDoodie() {
   const [starterLoadout, setStarterLoadout] = useState("standard");
   const [runSeed, setRunSeed]             = useState(0);
   const [runModifier, setRunModifier]     = useState(null);
-  const [scoreAttackMode, setScoreAttackMode] = useState(false);
+  const [scoreAttackMode, setScoreAttackMode]       = useState(false);
+  const [dailyChallengeMode, setDailyChallengeMode] = useState(false);
+  const [challengeVsScore, setChallengeVsScore]     = useState(null);
+  const [challengeVsName, setChallengeVsName]       = useState(null);
   const [weaponKillsSnapshot, setWeaponKillsSnapshot] = useState([]);
   const [metaToast, setMetaToast]         = useState(null);
   const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
   const [shopPending, setShopPending]         = useState(false);
   const [shopOptions, setShopOptions]         = useState([]);
+  const [shopHistory, setShopHistory]         = useState([]); // items bought this run
   const [musicMuted, setMusicMuted]           = useState(() => { const s = localStorage.getItem("cod-music-muted") === "1"; setMuted(s); return s; });
   // Sync saved vibe to sounds module on first render
   useState(() => { const v = localStorage.getItem("cod-music-vibe"); if (v) setMusicVibe(v); });
@@ -823,6 +828,17 @@ export default function CallOfDoodie() {
     }
     shopPendingRef.current = false;
     setShopPending(false);
+    // Record in run history
+    const allOpts = [
+      { id: "health",  emoji: "💊", name: "Field Medkit" },
+      { id: "ammo",    emoji: "📦", name: "Resupply Crate" },
+      { id: "upgrade", emoji: "🔧", name: "Field Upgrade" },
+      { id: "speed",   emoji: "👟", name: "Combat Stim" },
+      { id: "maxhp",   emoji: "❤️", name: "HP Canister" },
+      { id: "damage",  emoji: "🔥", name: "Damage Boost" },
+    ];
+    const picked = allOpts.find(o => o.id === optionId);
+    if (picked) setShopHistory(h => [...h, { emoji: picked.emoji, name: picked.name }]);
   }, []);
 
   // ── Boss / enemy spawning (logic lives in gameHelpers.js) ────────────────
@@ -1076,7 +1092,10 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Start game ────────────────────────────────────────────────────────────
-  const startGame = useCallback((forceSeed) => {
+  const startGame = useCallback((forceSeed, challengeOpts = {}) => {
+    // Store challenge vs data for HUD + DeathScreen
+    setChallengeVsScore(challengeOpts.vs ?? null);
+    setChallengeVsName(challengeOpts.vsName ?? null);
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
@@ -1091,7 +1110,7 @@ export default function CallOfDoodie() {
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
-    setShopPending(false); setShopOptions([]); shopPendingRef.current = false;
+    setShopPending(false); setShopOptions([]); shopPendingRef.current = false; setShopHistory([]);
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
@@ -1135,8 +1154,9 @@ export default function CallOfDoodie() {
       inputDevice: inputDeviceRef.current,
       seed: runSeed,
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
-      mode: scoreAttackRef.current ? "score_attack" : undefined,
+      mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : undefined,
     };
+    if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board);
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
@@ -1550,6 +1570,7 @@ export default function CallOfDoodie() {
               addParticles(gs, e.x, e.y, e.color, 50); addParticles(gs, e.x, e.y, "#FFD700", 30); addParticles(gs, e.x, e.y, "#FFFFFF", 20);
               addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
+              if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
@@ -1705,6 +1726,7 @@ export default function CallOfDoodie() {
               addParticles(gs, e.x, e.y, "#FFFFFF", 20);
               addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
+              if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
@@ -2515,7 +2537,9 @@ export default function CallOfDoodie() {
         onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
         scoreAttackMode={scoreAttackMode}
-        onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; }}
+        onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; } }}
+        dailyChallengeMode={dailyChallengeMode}
+        onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; } }}
       />
     );
   }
@@ -2538,7 +2562,9 @@ export default function CallOfDoodie() {
         fmtTime={fmtTime}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
         weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
+        dailyChallengeMode={dailyChallengeMode}
         playerSkin={gsRef.current?.playerSkin || ""}
+        vsScore={challengeVsScore} vsName={challengeVsName}
         onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
       />
     );
@@ -2566,12 +2592,15 @@ export default function CallOfDoodie() {
           onResume={() => setPaused(false)}
           onLeave={() => { stopMusic(); stopAmbient(); setPaused(false); setScreen("menu"); }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
+          leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore}
+          onLoadMore={loadMoreLeaderboard} onRefreshLeaderboard={refreshLeaderboard}
+          username={username}
         />
       )}
 
       {/* Wave clear shop */}
       {shopPending && (
-        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} />
+        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} />
       )}
 
       {/* Perk selection modal */}
@@ -2637,6 +2666,7 @@ export default function CallOfDoodie() {
         overclockedShots={overclockedShots}
         waveStreak={waveStreak}
         mapTheme={mapTheme}
+        vsScore={challengeVsScore} vsName={challengeVsName}
       />
 
       {/* Mobile action bar */}

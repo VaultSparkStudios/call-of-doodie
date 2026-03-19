@@ -466,6 +466,21 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         ctx.globalAlpha = 1; ctx.shadowBlur = 0;
       }
     }
+    // Doomscroller (19): frozen "doomscrolling" indicator
+    if (e.typeIndex === 19 && e.doomscrolling) {
+      const zA = 0.6 + Math.sin(dn / 55) * 0.3;
+      ctx.globalAlpha = zA;
+      ctx.strokeStyle = "#7B68EE"; ctx.lineWidth = 2.5;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath(); ctx.arc(0, 0, r + 13, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+      ctx.fillStyle = "#7B68EE";
+      ctx.strokeStyle = "rgba(0,0,0,0.8)"; ctx.lineWidth = 2.5;
+      ctx.strokeText("zzz 📱", 0, -r - 18);
+      ctx.fillText("zzz 📱", 0, -r - 18);
+      ctx.globalAlpha = 1;
+    }
     // Splitter (16): pulsing split-warning aura at low HP
     if (e.typeIndex === 16 && e.splitOnDeath && !e.splitDone && e.health < e.maxHealth * 0.35) {
       const spA = 0.4 + Math.sin(dn / 80) * 0.35;

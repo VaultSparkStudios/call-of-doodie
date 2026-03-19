@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getDailyChallengeSeed } from "../storage.js";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -69,6 +70,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
   const [activeDiff, setActiveDiff] = useState(null);
   const [activeMode, setActiveMode] = useState(null);
   const [copiedRow, setCopiedRow] = useState(null);
+  const todaySeed = getDailyChallengeSeed();
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
 
@@ -200,12 +202,15 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       {e.customSettings && <span style={{ fontSize: 9, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
                       <span style={{ flexShrink: 0 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
                     </div>
-                    {/* Bottom row: seed */}
-                    {e.seed > 0 && (
-                      <div style={{ fontSize: 8, color: "#666", marginTop: 1, fontFamily: "'Courier New', monospace", letterSpacing: 0.5 }}>
-                        seed #{e.seed}
-                      </div>
-                    )}
+                    {/* Bottom row: seed + today badge */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}>
+                      {e.seed > 0 && (
+                        <span style={{ fontSize: 8, color: "#666", fontFamily: "'Courier New', monospace", letterSpacing: 0.5 }}>seed #{e.seed}</span>
+                      )}
+                      {activeMode === "daily_challenge" && e.seed === todaySeed && (
+                        <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(0,229,255,0.18)", border: "1px solid rgba(0,229,255,0.5)", color: "#00E5FF", fontWeight: 900, letterSpacing: 0.5 }}>TODAY</span>
+                      )}
+                    </div>
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>

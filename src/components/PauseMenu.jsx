@@ -4,11 +4,13 @@ import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
+import LeaderboardPanel from "./LeaderboardPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showLb, setShowLb] = useState(false);
 
   // ── Gamepad nav (main view only) ─────────────────────────────────────────
   const mainItems = [
@@ -17,6 +19,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     { key: "controls",    action: () => setView("controls") },
     { key: "bestiary",    action: () => setView("bestiary") },
     { key: "achievements",action: () => setShowAch(true) },
+    { key: "leaderboard", action: () => { onRefreshLeaderboard?.(); setShowLb(true); } },
     { key: "settings",    action: () => { soundUIOpen(); setShowSettings(true); } },
     { key: "music",       action: onToggleMute },
     ...(musicMuted ? [] : MUSIC_VIBES.map(v => ({ key: `vibe_${v.id}`, action: () => onSetMusicVibe(v.id) }))),
@@ -49,6 +52,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
 
   if (showAch) return <AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} />;
   if (showSettings && gameSettings) return <SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} />;
+  if (showLb) return <LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} />;
 
   if (view === "rules") return (
     <div style={overlay}>
@@ -173,6 +177,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
           <button onClick={() => setView("controls")} style={{ ...pBtn, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
           <button onClick={() => setView("bestiary")} style={{ ...pBtn, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED LIST</button>
           <button onClick={() => setShowAch(true)} style={{ ...pBtn, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS ({achievementsUnlocked.length}/{ACHIEVEMENTS.length})</button>
+          <button onClick={() => { onRefreshLeaderboard?.(); setShowLb(true); }} style={{ ...pBtn, color: "#00E5FF", borderColor: "rgba(0,229,255,0.25)", ...(gfocus("leaderboard") ? focusRing : {}) }}>⚔️ LEADERBOARD</button>
           <button onClick={() => { soundUIOpen(); setShowSettings(true); }} style={{ ...pBtn, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
           <button onClick={onToggleMute} style={{ ...pBtn, color: musicMuted ? "#888" : "#0EF", ...(gfocus("music") ? focusRing : {}) }}>
             {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}

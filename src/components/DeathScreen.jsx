@@ -23,6 +23,7 @@ export default function DeathScreen({
   const [sharing, setSharing] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
+  const [copiedChallenge, setCopiedChallenge] = useState(false);
 
   const generateScoreCard = () => new Promise((resolve) => {
     const W = 1200, H = 630;
@@ -445,9 +446,11 @@ export default function DeathScreen({
                 if (username) params.set("vsName", username);
                 const url = `${location.origin}${location.pathname}?${params.toString()}`;
                 navigator.clipboard?.writeText?.(url);
+                setCopiedChallenge(true);
+                setTimeout(() => setCopiedChallenge(false), 1500);
               }}
-              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,107,53,0.08)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: "#FF6B35", cursor: "pointer", letterSpacing: 1 }}
-            >⚔️ COPY CHALLENGE LINK</button>
+              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: copiedChallenge ? "rgba(0,255,136,0.1)" : "rgba(255,107,53,0.08)", border: copiedChallenge ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: copiedChallenge ? "#00FF88" : "#FF6B35", cursor: "pointer", letterSpacing: 1, transition: "all 0.2s" }}
+            >{copiedChallenge ? "✓ COPIED!" : "⚔️ COPY CHALLENGE LINK"}</button>
           </div>
         )}
 

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
-export default function WaveShopModal({ options, wave, onSelect }) {
+export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [] }) {
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
@@ -31,6 +31,19 @@ export default function WaveShopModal({ options, wave, onSelect }) {
           Choose your reward — one pick only.
           <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A</span>
         </p>
+
+        {boughtHistory.length > 0 && (
+          <div style={{ marginBottom: 14, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
+            <div style={{ fontSize: 9, color: "#888", letterSpacing: 1, marginBottom: 6 }}>BOUGHT THIS RUN</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {boughtHistory.map((item, i) => (
+                <span key={i} style={{ fontSize: 11, background: "rgba(255,215,0,0.07)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 5, padding: "3px 8px", color: "#CCC" }}>
+                  {item.emoji} {item.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {options.map((opt, i) => {
