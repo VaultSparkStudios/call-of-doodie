@@ -13,9 +13,9 @@
 
 ---
 
-## Git State (as of session 13)
+## Git State (as of session 14)
 
-Clean. Commit `3061b71` pushed to `origin/main`. All session 13 features are live.
+Clean. Commit `f2d82e7` pushed to `origin/main`. All session 14 features are live.
 
 ---
 
@@ -75,14 +75,14 @@ call-of-doodie/
 
 | Feature | Details |
 |---------|---------|
-| **10 weapons** | Banana Blaster, RPG, Nerf Minigun, Plunger Launcher, Sniper-ator, Spicy Squirt Gun, Confetti Cannon (shotgun), Shock Zapper (burst:3), Boomerang Blaster, Railgun (hitscan) |
-| **15 enemy types** | 4 difficulty modes; elite variants (armored/fast/explosive) from wave 10+ |
+| **12 weapons** | Banana Blaster, RPG, Nerf Minigun, Plunger Launcher, Sniper-ator, Spicy Squirt Gun, Confetti Cannon (shotgun), Shock Zapper (burst:3), Boomerang Blaster, Railgun (hitscan), Ricochet Pistol (bouncesLeft:10), Nuclear Kazoo (pellets:3) |
+| **16 enemy types** | 4 difficulty modes; elite variants (armored/fast/explosive) from wave 10+; Life Coach + Tech CEO added |
 | **Boss waves** | Every 5th wave — Mega Karen, Landlord, both (15+). Telegraphed with bulletRingWarning + groundSlamWarning |
 | **Wave shop** | Every wave 1–4; every 2nd wave from wave 5+. Free reward options |
 | **Weapon upgrades** | 🔧 pickup, up to ⭐⭐⭐. +25% dmg, −10% fire delay, +25% ammo per star |
-| **30+ perks** | Roguelite perk system, every 3rd level-up. Cursed perks at 35% chance. Perk synergies |
-| **38 achievements** | Persistent via localStorage |
-| **Daily missions** | 8+ mission types tracked per calendar day |
+| **40+ perks** | Roguelite perk system, every 3rd level-up. Cursed perks at 35% chance. Perk synergies. 7 new session 14 perks + 3 new cursed |
+| **49 achievements** | Persistent via localStorage |
+| **Daily missions** | 21 mission types tracked per calendar day |
 | **Meta-progression** | Persistent upgrades across runs (`cod-meta-v2`) |
 | **Supabase leaderboard** | Global, paginated (50/page, Load More). Anonymous auth via `initAnonAuth()` |
 | **Callsign locking** | localStorage enforcement live; server-side SQL migration pending |
@@ -99,6 +99,11 @@ call-of-doodie/
 | **Settings panel** | 7 gameplay multipliers, up to 3 named presets |
 | **GIF highlight reel** | Centers on peak killstreak moment (`bestMomentRef` score = streak×10); boss kill is fallback |
 | **Text legibility** | All secondary/tertiary UI text bumped from dark grays (#444–#888) to #aaa/#bbb across all components |
+| **Challenge links** | `?seed=XXXXX&diff=normal` URL params parsed in MenuScreen; copy button on DeathScreen |
+| **Tutorial overlay** | First-run wave-1 hints (`TutorialOverlay.jsx`); PC/mobile/controller input-mode aware |
+| **PWA install prompt** | `beforeinstallprompt` captured; "Install App" button on DeathScreen |
+| **HUD theme name** | Map theme emoji + name shown in wave bar (e.g. 🏭 FACTORY) |
+| **Map theme vignette** | Per-theme radial atmosphere overlay in drawGame.js; 12 emojis per theme |
 
 ---
 
@@ -124,8 +129,9 @@ npm run preview  # Preview production build
 
 ## Known Issues / Pending Work
 
-- Callsign server-side enforcement: SQL migration in `storage.js` comments needs manual run in Supabase console; "Anonymous sign-ins" must be enabled in Supabase Auth settings
-- Add `customSettings` column to Supabase leaderboard (`ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean`) so ⚙️ badge shows for all entries (not just localStorage)
-- Railgun sound reuses Sniper-ator's CRACK! — may want distinct sound
+- Supabase SQL migrations pending (4 steps in `storage.js` comments): anon auth, `customSettings` boolean column, `inputDevice` text column, callsign_claims table + updated RLS
+- Until migrations run: `customSettings` + `inputDevice` badges stripped from all Supabase leaderboard INSERTs
+- Boss variety: only Mega Karen + Landlord — adding Splitter / Juggernaut / Summoner is the next major gameplay work
 - Boss ground slam: random initial stagger can shorten the 90-frame warning window on first slam cycle
 - Gamepad rumble: silent no-op on Firefox/Safari (requires Chrome 68+ Vibration Actuator API)
+- Discord link in MenuScreen footer commented out (fill in when invite URL is ready)
