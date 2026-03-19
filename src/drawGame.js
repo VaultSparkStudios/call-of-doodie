@@ -7,6 +7,12 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // ────────────────── RENDER ────────────────────────────────────────────
   ctx.save();
   if (gs.screenShake > 0.5) { const _sm = gs.settScreenShakeMult ?? 1; ctx.translate((Math.random() - 0.5) * gs.screenShake * 2 * _sm, (Math.random() - 0.5) * gs.screenShake * 2 * _sm); }
+  // ADS zoom: scale 1.28× centered on player for aim-down-sights effect
+  if (gs.adsZoom && p) {
+    ctx.translate(p.x, p.y);
+    ctx.scale(1.28, 1.28);
+    ctx.translate(-p.x, -p.y);
+  }
 
   // Background — per-theme gradient
   const THEME_BG = [
@@ -855,4 +861,30 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   ctx.restore();
+
+  // ── ADS scope overlay (drawn in screen space, outside zoom) ──
+  if (gs.adsZoom) {
+    // Dark vignette around edges
+    const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.22, W / 2, H / 2, Math.min(W, H) * 0.65);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(0,0,0,0.72)");
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    // Scope ring
+    ctx.save();
+    ctx.strokeStyle = "rgba(0,229,255,0.55)"; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.8;
+    const sr = Math.min(W, H) * 0.22;
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, sr, 0, Math.PI * 2); ctx.stroke();
+    // Crosshair lines through ring
+    ctx.strokeStyle = "rgba(0,229,255,0.4)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W / 2 - sr, H / 2); ctx.lineTo(W / 2 + sr, H / 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W / 2, H / 2 - sr); ctx.lineTo(W / 2, H / 2 + sr); ctx.stroke();
+    // Center dot
+    ctx.fillStyle = "rgba(0,229,255,0.9)"; ctx.shadowColor = "#00E5FF"; ctx.shadowBlur = 6;
+    ctx.beginPath(); ctx.arc(W / 2, H / 2, 2.5, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    // ADS label
+    ctx.font = "bold 10px 'Courier New',monospace"; ctx.fillStyle = "rgba(0,229,255,0.6)";
+    ctx.textAlign = "center"; ctx.fillText("ADS", W / 2, H / 2 + sr + 18);
+    ctx.restore();
+  }
 }

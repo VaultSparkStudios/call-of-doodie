@@ -14,7 +14,7 @@ export default function DeathScreen({
   highlightGifUrl, gifEncoding,
   fmtTime,
   gamepadConnected, onInstallApp,
-  weaponKills, scoreAttackMode,
+  weaponKills, scoreAttackMode, playerSkin,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -68,11 +68,13 @@ export default function DeathScreen({
     c.strokeStyle = "rgba(255,215,0,0.3)"; c.lineWidth = 1;
     c.beginPath(); c.moveTo(80, 180); c.lineTo(W - 80, 180); c.stroke();
 
-    // Player name + rank + difficulty
+    // Player name + rank + difficulty (with skin emoji if prestige unlocked)
     c.font = "bold 24px 'Courier New', monospace";
     c.fillStyle = "#EEE"; c.fillText("DEPLOYED AS:", W / 2, 215);
     c.font = "bold 32px 'Courier New', monospace";
-    c.fillStyle = "#FFD700"; c.fillText(username.toUpperCase() + "  ·  " + rank.toUpperCase(), W / 2, 252);
+    c.fillStyle = "#FFD700";
+    const _nameStr = (playerSkin ? playerSkin + " " : "") + username.toUpperCase() + "  ·  " + rank.toUpperCase();
+    c.fillText(_nameStr, W / 2, 252);
     c.font = "bold 18px 'Courier New', monospace";
     c.fillStyle = diff.color || "#CCC"; c.fillText(diff.emoji + " " + diff.label.toUpperCase() + " MODE", W / 2, 278);
 
