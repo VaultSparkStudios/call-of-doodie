@@ -1,5 +1,26 @@
 import { useState } from "react";
 
+// ── Input device badge ────────────────────────────────────────────────────────
+function InputDeviceBadge({ device }) {
+  if (!device) return null;
+  if (device === "xbox") return (
+    <span title="Xbox Controller" style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(16,124,16,0.18)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900, letterSpacing: 0.5, flexShrink: 0 }}>Xbox</span>
+  );
+  if (device === "ps") return (
+    <span title="PlayStation Controller" style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900, letterSpacing: 0.5, flexShrink: 0 }}>PS</span>
+  );
+  if (device === "controller" || device === "generic") return (
+    <span title="Controller" style={{ fontSize: 10, flexShrink: 0 }}>🎮</span>
+  );
+  if (device === "mobile") return (
+    <span title="Mobile / Touch" style={{ fontSize: 10, flexShrink: 0 }}>📱</span>
+  );
+  // "mouse" or anything else
+  return (
+    <span title="Mouse & Keyboard" style={{ fontSize: 10, flexShrink: 0 }}>🖱️</span>
+  );
+}
+
 const DIFF_TABS = [
   { key: null,     label: "ALL",    emoji: "🌐", color: "#AAA" },
   { key: "easy",   label: "EASY",   emoji: "🟢", color: "#44CC44" },
@@ -96,6 +117,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                     {e.level && <span style={{ color: "#bbb", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
                     {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                     {e.customSettings && <span style={{ fontSize: 9, marginLeft: 4 }} title="Custom settings used">⚙️</span>}
+                    {e.inputDevice && <span style={{ marginLeft: 4 }}><InputDeviceBadge device={e.inputDevice} /></span>}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>

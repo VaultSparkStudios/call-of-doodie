@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel } from "../storage.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
+import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -34,6 +35,68 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     setMissionProgress(loadMissionProgress());
     setMeta(loadMetaProgress());
   }, []);
+
+  // ── Gamepad menu navigation ──────────────────────────────────────────────
+  const anyModalOpen = showLeaderboard || showAchievements || showCareer || showRules ||
+    showControls || showBestiary || showMissions || showUpgrades || showNewFeatures ||
+    showPrestigeConfirm || showSettings;
+
+  // Ordered flat list of main-menu actions (indices used for focus tracking)
+  const diffKeys     = Object.keys(DIFFICULTIES);                          // 0-3
+  const loadoutKeys  = STARTER_LOADOUTS.map(l => l.id);                   // 4-7
+  // Primary buttons: 8-9, secondary 10-15, tertiary 16
+  const NAV_ITEMS = [
+    ...diffKeys.map(k => ({ key: `diff_${k}`,    action: () => setDifficulty(k) })),
+    ...loadoutKeys.map(k => ({ key: `lo_${k}`,   action: () => setStarterLoadout?.(k) })),
+    { key: "deploy",      action: () => onStart(customSeed || undefined) },
+    { key: "leaderboard", action: () => { onRefreshLeaderboard(); setShowLeaderboard(true); } },
+    { key: "career",      action: () => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); } },
+    { key: "achievements",action: () => { setCareer(loadCareerStats()); setShowAchievements(true); } },
+    { key: "missions",    action: () => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); } },
+    { key: "upgrades",    action: () => { setMeta(loadMetaProgress()); setShowUpgrades(true); } },
+    { key: "rules",       action: () => setShowRules(true) },
+    { key: "controls",    action: () => setShowControls(true) },
+    { key: "bestiary",    action: () => setShowBestiary(true) },
+    { key: "settings",    action: () => setShowSettings(true) },
+  ];
+
+  const actionsRef = useRef(NAV_ITEMS);
+  actionsRef.current = NAV_ITEMS;
+
+  const navFocusIdx = useGamepadNav({
+    count:     NAV_ITEMS.length,
+    cols:      1,
+    enabled:   !anyModalOpen,
+    disableLR: false,
+    onConfirm: (idx) => actionsRef.current[idx]?.action(),
+    onBack:    undefined,
+  });
+
+  // B button closes any open modal
+  useEffect(() => {
+    if (!anyModalOpen) return;
+    let lastB = false;
+    const id = setInterval(() => {
+      const gp = navigator.getGamepads?.()[0];
+      if (!gp) return;
+      const bNow = gp.buttons[1]?.pressed;
+      if (bNow && !lastB) {
+        setShowLeaderboard(false); setShowAchievements(false); setShowCareer(false);
+        setShowRules(false); setShowControls(false); setShowBestiary(false);
+        setShowMissions(false); setShowUpgrades(false); setShowNewFeatures(false);
+        setShowPrestigeConfirm(false);
+        // Don't close SettingsPanel — it handles its own B button
+      }
+      lastB = !!bNow;
+    }, 80);
+    return () => clearInterval(id);
+  }, [anyModalOpen]);
+
+  const gfocus = (key) => {
+    const idx = NAV_ITEMS.findIndex(i => i.key === key);
+    return navFocusIdx === idx && !anyModalOpen;
+  };
+  const focusRing = { outline: "2px solid #FF6B35", outlineOffset: 2, boxShadow: "0 0 12px rgba(255,107,53,0.45)" };
 
   const btnP = { padding: "14px 40px", fontSize: 18, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
   const btnS = { ...btnP, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
@@ -245,6 +308,28 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
               </div>
             )}
+            {/* Controller section */}
+            <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+              <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                🎮 CONTROLLER
+                {controllerType === "xbox" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(16,124,16,0.2)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900 }}>Xbox</span>}
+                {controllerType === "ps" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900 }}>PS</span>}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", fontSize: 12, color: "#EEE", lineHeight: 2 }}>
+                <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Stick</span> — Move</div>
+                <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
+                <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
+                <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3 (click stick)</span> — Dash</div>
+                <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
+                <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / Square</span> — Reload</div>
+                <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>
+                <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>RB / R1</span> — Next weapon</div>
+                <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Start / Options</span> — Pause</div>
+                <div>✅ <span style={{ color: "#AAA", fontWeight: 800 }}>A / Cross</span> — Confirm (menus)</div>
+                <div>❌ <span style={{ color: "#AAA", fontWeight: 800 }}>B / Circle</span> — Back (menus)</div>
+                <div>⬆ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad</span> — Navigate menus</div>
+              </div>
+            </div>
             <div style={{ marginTop: 14 }}>
               <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 6 }}>WEAPONS</div>
               {WEAPONS.map((w, i) => (
@@ -601,6 +686,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           </div>
         </div>
 
+        {/* Controller indicator */}
+        {gamepadConnected && (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 6, fontSize: 10, color: "#AAA" }}>
+            <span>🎮</span>
+            <span>
+              {controllerType === "xbox" && <span style={{ color: "#4DBD61", fontWeight: 700 }}>Xbox Controller</span>}
+              {controllerType === "ps" && <span style={{ color: "#6699FF", fontWeight: 700 }}>PlayStation Controller</span>}
+              {controllerType !== "xbox" && controllerType !== "ps" && <span style={{ color: "#CCC", fontWeight: 700 }}>Controller</span>}
+              {" "}connected · D-pad navigates · A to select
+            </span>
+          </div>
+        )}
+
         {/* New Features banner */}
         <div
           onClick={() => setShowNewFeatures(true)}
@@ -649,6 +747,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 background: difficulty === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
                 border: difficulty === key ? `2px solid ${d.color}` : "1px solid rgba(255,255,255,0.1)",
                 color: "#FFF", transition: "all 0.15s",
+                ...(gfocus(`diff_${key}`) ? focusRing : {}),
               }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: d.color }}>{d.emoji} {d.label}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{d.desc}</div>
@@ -671,6 +770,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 background: starterLoadout === l.id ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
                 border: starterLoadout === l.id ? `2px solid ${l.color}` : "1px solid rgba(255,255,255,0.1)",
                 color: "#FFF", transition: "all 0.15s",
+                ...(gfocus(`lo_${l.id}`) ? focusRing : {}),
               }}>
                 <div style={{ fontSize: 13, fontWeight: 900, color: l.color }}>{l.emoji} {l.name}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{l.desc}</div>
@@ -681,8 +781,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
         {/* Action buttons */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => onStart(customSeed || undefined)} style={{ ...btnP, minWidth: 150 }}>DEPLOY</button>
-          <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 150 }}>LEADERBOARD</button>
+          <button onClick={() => onStart(customSeed || undefined)} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
+          <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
         </div>
         {/* Seed + Settings row */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
@@ -692,20 +792,20 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             maxLength={6}
             style={{ width: 120, padding: "6px 10px", fontSize: 11, fontFamily: "monospace", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center" }}
           />
-          <button onClick={() => setShowSettings(true)} style={{ ...btnS, padding: "6px 14px", fontSize: 11 }}>⚙ SETTINGS</button>
+          <button onClick={() => setShowSettings(true)} style={{ ...btnS, padding: "6px 14px", fontSize: 11, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150 }}>📊 CAREER STATS</button>
-          <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} style={{ ...btnS, minWidth: 150 }}>🏅 ACHIEVEMENTS</button>
+          <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("career") ? focusRing : {}) }}>📊 CAREER STATS</button>
+          <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} style={{ ...btnS, minWidth: 150 }}>📋 MISSIONS</button>
-          <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} style={{ ...btnS, minWidth: 150 }}>🎖️ UPGRADES</button>
+          <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("missions") ? focusRing : {}) }}>📋 MISSIONS</button>
+          <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
-          <button onClick={() => setShowRules(true)} style={{ ...btnS, minWidth: 150 }}>📜 RULES</button>
-          <button onClick={() => setShowControls(true)} style={{ ...btnS, minWidth: 150 }}>⌨ CONTROLS</button>
-          <button onClick={() => setShowBestiary(true)} style={{ ...btnS, minWidth: 150 }}>👾 MOST WANTED</button>
+          <button onClick={() => setShowRules(true)} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
+          <button onClick={() => setShowControls(true)} style={{ ...btnS, minWidth: 150, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
+          <button onClick={() => setShowBestiary(true)} style={{ ...btnS, minWidth: 150, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED</button>
         </div>
 
         <div style={{ fontSize: 11, color: "#bbb", marginTop: 8 }}>

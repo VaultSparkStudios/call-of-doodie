@@ -27,10 +27,21 @@ import AchievementsPanel from "./components/AchievementsPanel.jsx";
 import PerkModal, { getRandomPerks } from "./components/PerkModal.jsx";
 import WaveShopModal from "./components/WaveShopModal.jsx";
 
-// ── Gamepad rumble ────────────────────────────────────────────────────────────
+// ── Controller helpers ────────────────────────────────────────────────────────
+let _rumbleEnabled = true; // gated by settings.rumble
+
+function detectControllerType(gp) {
+  if (!gp) return "controller";
+  const id = (gp.id || "").toLowerCase();
+  if (id.includes("045e") || id.includes("xinput") || id.includes("xbox")) return "xbox";
+  if (id.includes("054c") || id.includes("dualshock") || id.includes("dualsense") || id.includes("playstation")) return "ps";
+  return "controller";
+}
+
 // Fires haptic feedback on the first connected gamepad if the Vibration Actuator
 // API is available (Chrome 68+). Silently no-ops on unsupported browsers/devices.
 function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
+  if (!_rumbleEnabled) return;
   try {
     const gp = navigator.getGamepads?.()[0];
     if (gp?.vibrationActuator) {
@@ -149,9 +160,11 @@ export default function CallOfDoodie() {
   const bestMomentRef    = useRef({ ts: 0, score: 0 }); // highest-excitement timestamp
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
-  const gamepadShootRef  = useRef(false); // gamepad right-stick fire signal
+  const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
+  const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
+  const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -212,6 +225,7 @@ export default function CallOfDoodie() {
   const [gameSettings, setGameSettings]       = useState(() => loadSettings());
   const [showSettings, setShowSettings]       = useState(false);
   const [gamepadConnected, setGamepadConnected] = useState(false);
+  const [controllerType, setControllerType] = useState("controller");
   const [overclockedShots, setOverclockedShots] = useState(0);
   const [waveStreak, setWaveStreak]             = useState(0);
 
@@ -225,9 +239,16 @@ export default function CallOfDoodie() {
   // ── Anonymous auth init ──────────────────────────────────────────────────
   useEffect(() => { initAnonAuth(); }, []);
 
+  // ── Sync rumble flag from settings ────────────────────────────────────────
+  useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);
+
   // ── Responsive ────────────────────────────────────────────────────────────
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 900 || "ontouchstart" in window);
+    const check = () => {
+      const mobile = window.innerWidth <= 900 || "ontouchstart" in window;
+      setIsMobile(mobile);
+      if (mobile) inputDeviceRef.current = "mobile";
+    };
     check(); window.addEventListener("resize", check);
     const saved = localStorage.getItem("cod-autoaim") === "1";
     setAutoAim(saved); autoAimRef.current = saved;
@@ -1064,6 +1085,7 @@ export default function CallOfDoodie() {
       rank, bestStreak, totalDamage, level,
       time: fmtTime(timeSurvived), achievements: achievementsUnlocked.length, difficulty,
       starterLoadout, customSettings,
+      inputDevice: inputDeviceRef.current,
     };
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board);
@@ -1120,11 +1142,31 @@ export default function CallOfDoodie() {
     const ss = shootStickRef.current;
     if (ss.active && Math.hypot(ss.dx, ss.dy) > 10) { p.angle = Math.atan2(ss.dy, ss.dx); ss.shooting = true; }
     else if (ss.active) { ss.shooting = false; }
-    if (gamepadAngleRef.current !== null) { p.angle = gamepadAngleRef.current; }
+    if (gamepadAngleRef.current !== null) {
+      // Aim assist: snap to nearest enemy within range when using right stick
+      if (settingsRef.current.aimAssist && gs.enemies.length > 0) {
+        let nearestAngle = gamepadAngleRef.current, nearestScore = Infinity;
+        const ASSIST_RADIUS = 160;
+        for (const e of gs.enemies) {
+          const dist = Math.hypot(e.x - p.x, e.y - p.y);
+          if (dist < ASSIST_RADIUS) {
+            const eAngle = Math.atan2(e.y - p.y, e.x - p.x);
+            let diff = Math.abs(eAngle - gamepadAngleRef.current);
+            if (diff > Math.PI) diff = 2 * Math.PI - diff;
+            const score = dist * 0.5 + diff * 80;
+            if (score < nearestScore) { nearestScore = score; nearestAngle = eAngle; }
+          }
+        }
+        p.angle = nearestAngle;
+      } else {
+        p.angle = gamepadAngleRef.current;
+      }
+    }
     const mouse = mouseRef.current;
     if (!js.active && !ss.active && gamepadAngleRef.current === null && (mouse.down || mouse.moved)) {
       const rect = canvas.getBoundingClientRect();
       p.angle = Math.atan2((mouse.y - rect.top) * (H / rect.height) - p.y, (mouse.x - rect.left) * (W / rect.width) - p.x);
+      inputDeviceRef.current = "mouse";
     }
     if (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0) {
       let nearest = null, nd = Infinity;
@@ -1949,16 +1991,24 @@ export default function CallOfDoodie() {
 
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {
-    const STICK_DEAD = 0.2;
     let lastLB = false, lastRB = false, lastStart = false;
-    let lastBtnA = false, lastBtnB = false;
+    let lastBtnB = false, lastR3 = false;
     let lastGpConnected = false;
 
     const poll = () => {
       const gp = navigator.getGamepads ? navigator.getGamepads()[0] : null;
       const connected = !!gp;
-      if (connected !== lastGpConnected) { lastGpConnected = connected; setGamepadConnected(connected); }
+      if (connected !== lastGpConnected) {
+        lastGpConnected = connected;
+        setGamepadConnected(connected);
+        if (!connected) { controllerTypeRef.current = "controller"; setControllerType("controller"); }
+      }
       if (!gp) return;
+
+      // Detect controller type
+      const cType = detectControllerType(gp);
+      if (cType !== controllerTypeRef.current) { controllerTypeRef.current = cType; setControllerType(cType); }
+      inputDeviceRef.current = cType;
 
       if (pausedRef.current || perkPendingRef.current || shopPendingRef.current) {
         // While paused still handle Start button to unpause
@@ -1975,37 +2025,41 @@ export default function CallOfDoodie() {
         return;
       }
 
+      const deadZone = settingsRef.current.controllerDeadZone ?? 0.2;
+
       // Left stick → movement (synthesise WASD)
       const lx = gp.axes[0] ?? 0;
       const ly = gp.axes[1] ?? 0;
-      keysRef.current["w"] = ly < -STICK_DEAD;
-      keysRef.current["s"] = ly >  STICK_DEAD;
-      keysRef.current["a"] = lx < -STICK_DEAD;
-      keysRef.current["d"] = lx >  STICK_DEAD;
+      keysRef.current["w"] = ly < -deadZone;
+      keysRef.current["s"] = ly >  deadZone;
+      keysRef.current["a"] = lx < -deadZone;
+      keysRef.current["d"] = lx >  deadZone;
 
-      // Right stick → aim + shoot
+      // Right stick → aim ONLY (no shooting from stick)
       const rx = gp.axes[2] ?? 0;
       const ry = gp.axes[3] ?? 0;
       const rMag = Math.hypot(rx, ry);
-      if (rMag > STICK_DEAD) {
+      if (rMag > deadZone) {
         gamepadAngleRef.current = Math.atan2(ry, rx);
-        gamepadShootRef.current = true;
       } else {
         gamepadAngleRef.current = null;
-        gamepadShootRef.current = false;
       }
 
-      // Button 0 (A/Cross) → dash (edge-triggered)
-      const btnA = gp.buttons[0]?.pressed;
-      if (btnA && !lastBtnA) doDash();
-      lastBtnA = !!btnA;
+      // RT (button 7) → shoot (analog-aware)
+      const rtValue = gp.buttons[7]?.value ?? (gp.buttons[7]?.pressed ? 1 : 0);
+      gamepadShootRef.current = rtValue > 0.3;
+
+      // R3 (button 11, right stick click) → dash (edge-triggered)
+      const r3 = gp.buttons[11]?.pressed;
+      if (r3 && !lastR3) doDash();
+      lastR3 = !!r3;
 
       // Button 1 (B/Circle) → grenade (edge-triggered)
       const btnB = gp.buttons[1]?.pressed;
       if (btnB && !lastBtnB) throwGrenade();
       lastBtnB = !!btnB;
 
-      // Button 4 (LB) → prev weapon, Button 5 (RB) → next weapon (edge-triggered)
+      // Button 4 (LB/L1) → prev weapon, Button 5 (RB/R1) → next weapon (edge-triggered)
       const lb = gp.buttons[4]?.pressed;
       const rb = gp.buttons[5]?.pressed;
       if (lb && !lastLB) switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
@@ -2067,6 +2121,7 @@ export default function CallOfDoodie() {
         starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
         gameSettings={gameSettings}
         onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
+        gamepadConnected={gamepadConnected} controllerType={controllerType}
       />
     );
   }
@@ -2087,6 +2142,7 @@ export default function CallOfDoodie() {
         onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
         highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
         fmtTime={fmtTime}
+        gamepadConnected={gamepadConnected} controllerType={controllerType}
       />
     );
   }

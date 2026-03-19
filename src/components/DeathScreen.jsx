@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ACHIEVEMENTS, RANK_NAMES } from "../constants.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
+import VirtualKeyboard from "./VirtualKeyboard.jsx";
 
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
@@ -12,12 +13,14 @@ export default function DeathScreen({
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
   highlightGifUrl, gifEncoding,
   fmtTime,
+  gamepadConnected,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
+  const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
 
   const generateScoreCard = () => new Promise((resolve) => {
     const W = 1200, H = 630;
@@ -284,6 +287,16 @@ export default function DeathScreen({
           Rank: <span style={{ color: "#FFD700", fontWeight: 700 }}>{RANK_NAMES[rankIndex]}</span>
         </div>
 
+        {showLastWordsKeyboard && (
+          <VirtualKeyboard
+            value={lastWords}
+            onChange={v => { const w = v.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(v); }}
+            onConfirm={() => setShowLastWordsKeyboard(false)}
+            maxLength={60}
+            title="FAMOUS LAST WORDS (5 WORDS MAX)"
+          />
+        )}
+
         {!submitted ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>
             <div style={{ fontSize: 12, color: "#FFD700", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>SUBMIT TO HALL OF SHAME</div>
@@ -296,8 +309,13 @@ export default function DeathScreen({
               style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FF69B4", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}
               onKeyDown={e => { if (e.key === "Enter") handleSubmit(); }}
             />
-            <div style={{ fontSize: 10, color: "#CCC", marginBottom: 8 }}>
-              {lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ fontSize: 10, color: "#CCC" }}>{lastWords.trim().split(/\s+/).filter(Boolean).length}/5 words</div>
+              {gamepadConnected && (
+                <button onClick={() => setShowLastWordsKeyboard(true)} style={{ fontSize: 10, padding: "3px 8px", background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 4, color: "#FF6B35", cursor: "pointer", fontFamily: "'Courier New',monospace", fontWeight: 700 }}>
+                  🎮 Keyboard
+                </button>
+              )}
             </div>
             <button onClick={handleSubmit} style={{ ...btnP, width: "100%", fontSize: 14, padding: "10px" }}>SUBMIT SCORE</button>
           </div>

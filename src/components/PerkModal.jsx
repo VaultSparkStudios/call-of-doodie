@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { PERKS, CURSED_PERKS, PERK_TIER_COLORS, PERK_TIER_WEIGHTS } from "../constants.js";
+import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
 /** Pick `count` random perks. One slot has a 35% chance to be a cursed perk. */
 export function getRandomPerks(count = 3) {
@@ -29,6 +31,18 @@ export function getRandomPerks(count = 3) {
 export default function PerkModal({ options, level, onSelect }) {
   const tierLabel = { common: "COMMON", uncommon: "UNCOMMON", rare: "RARE", legendary: "LEGENDARY", cursed: "⚠ CURSED" };
 
+  // Gamepad nav: up/down through options, A to confirm
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
+  const focusIdx = useGamepadNav({
+    count:     options.length,
+    cols:      1,
+    enabled:   true,
+    disableLR: true,
+    onConfirm: (idx) => onSelectRef.current(options[idx]),
+  });
+
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 200,
@@ -41,14 +55,18 @@ export default function PerkModal({ options, level, onSelect }) {
         <h2 style={{ fontSize: "clamp(18px,5vw,28px)", fontWeight: 900, margin: "0 0 4px", color: "#00FF88", letterSpacing: 2 }}>
           LEVEL {level} — PERK SELECT
         </h2>
-        <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 16px" }}>Choose one upgrade. They stack!</p>
+        <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 16px" }}>
+          Choose one upgrade. They stack!
+          <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A to pick</span>
+        </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {options.map((perk) => {
-            const isCursed = perk.tier === "cursed";
-            const tierColor = PERK_TIER_COLORS[perk.tier] || "#AAA";
-            const baseBg = isCursed ? "rgba(255,30,60,0.08)" : "rgba(255,255,255,0.05)";
-            const hoverBg = isCursed ? "rgba(255,30,60,0.18)" : "rgba(255,255,255,0.12)";
+          {options.map((perk, i) => {
+            const isCursed   = perk.tier === "cursed";
+            const tierColor  = PERK_TIER_COLORS[perk.tier] || "#AAA";
+            const isFocused  = focusIdx === i;
+            const baseBg     = isCursed ? "rgba(255,30,60,0.08)"  : "rgba(255,255,255,0.05)";
+            const focusBg    = isCursed ? "rgba(255,30,60,0.22)"  : "rgba(255,255,255,0.14)";
             return (
               <button
                 key={perk.id}
@@ -56,14 +74,18 @@ export default function PerkModal({ options, level, onSelect }) {
                 style={{
                   display: "flex", alignItems: "center", gap: 14,
                   padding: "14px 18px", borderRadius: 10, cursor: "pointer",
-                  background: baseBg,
-                  border: "2px solid " + tierColor + (isCursed ? "99" : "55"),
+                  background: isFocused ? focusBg : baseBg,
+                  border: `2px solid ${tierColor}${isFocused ? "ee" : (isCursed ? "99" : "55")}`,
                   color: "#FFF", fontFamily: "'Courier New',monospace",
-                  textAlign: "left", transition: "all 0.15s",
-                  boxShadow: isCursed ? "0 0 12px rgba(255,30,60,0.2)" : "none",
+                  textAlign: "left", transition: "all 0.1s",
+                  boxShadow: isFocused
+                    ? `0 0 18px ${isCursed ? "rgba(255,30,60,0.45)" : tierColor + "55"}`
+                    : (isCursed ? "0 0 12px rgba(255,30,60,0.2)" : "none"),
+                  outline: isFocused ? `2px solid ${tierColor}` : "none",
+                  outlineOffset: 3,
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = hoverBg; e.currentTarget.style.borderColor = tierColor; }}
-                onMouseLeave={e => { e.currentTarget.style.background = baseBg; e.currentTarget.style.borderColor = tierColor + (isCursed ? "99" : "55"); }}
+                onMouseEnter={e => { e.currentTarget.style.background = focusBg; e.currentTarget.style.borderColor = tierColor; }}
+                onMouseLeave={e => { if (focusIdx !== i) { e.currentTarget.style.background = baseBg; e.currentTarget.style.borderColor = tierColor + (isCursed ? "99" : "55"); } }}
               >
                 <span style={{ fontSize: 32, flexShrink: 0 }}>{perk.emoji}</span>
                 <div style={{ flex: 1 }}>
@@ -81,7 +103,7 @@ export default function PerkModal({ options, level, onSelect }) {
           })}
         </div>
 
-        <p style={{ color: "#aaa", fontSize: 10, marginTop: 16 }}>Game paused — take your time</p>
+        <p style={{ color: "#555", fontSize: 10, marginTop: 16 }}>Game paused — take your time</p>
       </div>
     </div>
   );

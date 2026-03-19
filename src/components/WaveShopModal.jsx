@@ -1,4 +1,19 @@
+import { useRef } from "react";
+import { useGamepadNav } from "../hooks/useGamepadNav.js";
+
 export default function WaveShopModal({ options, wave, onSelect }) {
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
+  // Gamepad nav: up/down through shop options, A to buy
+  const focusIdx = useGamepadNav({
+    count:     options.length,
+    cols:      1,
+    enabled:   true,
+    disableLR: true,
+    onConfirm: (idx) => onSelectRef.current(options[idx].id),
+  });
+
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 200,
@@ -12,32 +27,41 @@ export default function WaveShopModal({ options, wave, onSelect }) {
         <h2 style={{ fontSize: "clamp(16px,4vw,24px)", fontWeight: 900, margin: "0 0 4px", color: "#FFD700", letterSpacing: 2 }}>
           WAVE {wave - 1} CLEAR!
         </h2>
-        <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 18px" }}>Choose your reward — one pick only.</p>
+        <p style={{ color: "#AAA", fontSize: 12, margin: "0 0 18px" }}>
+          Choose your reward — one pick only.
+          <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A</span>
+        </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {options.map((opt) => (
-            <button
-              key={opt.id}
-              onClick={() => onSelect(opt.id)}
-              style={{
-                display: "flex", alignItems: "center", gap: 14,
-                padding: "14px 18px", borderRadius: 10, cursor: "pointer",
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,215,0,0.25)",
-                color: "#fff", fontFamily: "'Courier New',monospace",
-                textAlign: "left", width: "100%",
-                transition: "background 0.15s, border-color 0.15s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,215,0,0.12)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.6)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.25)"; }}
-            >
-              <span style={{ fontSize: 32, lineHeight: 1 }}>{opt.emoji}</span>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700", marginBottom: 2 }}>{opt.name}</div>
-                <div style={{ fontSize: 12, color: "#CCC" }}>{opt.desc}</div>
-              </div>
-            </button>
-          ))}
+          {options.map((opt, i) => {
+            const isFocused = focusIdx === i;
+            return (
+              <button
+                key={opt.id}
+                onClick={() => onSelect(opt.id)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 14,
+                  padding: "14px 18px", borderRadius: 10, cursor: "pointer",
+                  background: isFocused ? "rgba(255,215,0,0.16)" : "rgba(255,255,255,0.05)",
+                  border: isFocused ? "2px solid rgba(255,215,0,0.75)" : "1px solid rgba(255,215,0,0.25)",
+                  color: "#fff", fontFamily: "'Courier New',monospace",
+                  textAlign: "left", width: "100%",
+                  transition: "all 0.1s",
+                  boxShadow: isFocused ? "0 0 18px rgba(255,215,0,0.3)" : "none",
+                  outline: isFocused ? "2px solid rgba(255,215,0,0.6)" : "none",
+                  outlineOffset: 3,
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,215,0,0.12)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.6)"; }}
+                onMouseLeave={e => { if (focusIdx !== i) { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.25)"; } }}
+              >
+                <span style={{ fontSize: 32, lineHeight: 1 }}>{opt.emoji}</span>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700", marginBottom: 2 }}>{opt.name}</div>
+                  <div style={{ fontSize: 12, color: "#CCC" }}>{opt.desc}</div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
