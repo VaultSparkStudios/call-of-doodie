@@ -6,7 +6,7 @@ import {
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
@@ -1122,10 +1122,12 @@ export default function CallOfDoodie() {
       time: fmtTime(timeSurvived), achievements: achievementsUnlocked.length, difficulty,
       starterLoadout, customSettings,
       inputDevice: inputDeviceRef.current,
+      seed: runSeed,
+      accountLevel: getAccountLevel(loadCareerStats().totalKills),
     };
     const board = await saveToLeaderboard(entry);
     setLeaderboard(board);
-  }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout]);
+  }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
   const gameLoop = useCallback(() => {

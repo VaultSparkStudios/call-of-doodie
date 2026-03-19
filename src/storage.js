@@ -9,6 +9,8 @@ import { supabase, getAuthUid } from "./supabase.js";
 //   -- 2. Add missing leaderboard columns:
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "customSettings" boolean;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "inputDevice" text;
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "seed" integer;
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "accountLevel" integer;
 //   -- After running #2, remove the stripping in saveToLeaderboard above
 //
 //   -- 3. Callsign ownership table (see below)
@@ -60,7 +62,7 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
     try {
       const { data, error } = await supabase
         .from("leaderboard")
-        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts")
+        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel")
         .order("score", { ascending: false })
         .range(offset, offset + limit - 1);
       if (error) throw error;
@@ -83,7 +85,7 @@ export async function saveToLeaderboard(entry) {
   if (supabase) {
     try {
       // Strip columns that don't exist in Supabase yet — run SQL migrations below to enable them
-      const { customSettings: _cs, inputDevice: _id, ...supabaseRow } = row;
+      const { customSettings: _cs, inputDevice: _id, seed: _seed, accountLevel: _al, ...supabaseRow } = row;
       const { error } = await supabase.from("leaderboard").insert([supabaseRow]);
       if (error) throw error;
       return await loadLeaderboard();
