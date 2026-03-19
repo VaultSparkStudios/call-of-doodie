@@ -15,6 +15,7 @@ export default function DeathScreen({
   fmtTime,
   gamepadConnected, onInstallApp,
   weaponKills, scoreAttackMode, playerSkin,
+  dailyChallengeMode, vsScore, vsName,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -170,7 +171,44 @@ export default function DeathScreen({
         <div style={{ fontSize: 11, color: diff.color, marginBottom: 6, fontWeight: 700 }}>
           {diff.emoji} {diff.label.toUpperCase()} MODE
           {scoreAttackMode && <span style={{ marginLeft: 8, color: "#FF6600" }}>⏱ SCORE ATTACK</span>}
+          {dailyChallengeMode && <span style={{ marginLeft: 8, color: "#00E5FF" }}>📅 DAILY CHALLENGE</span>}
         </div>
+
+        {/* Challenge result card */}
+        {vsScore != null && (
+          <div style={{
+            ...card,
+            marginBottom: 12,
+            border: score >= vsScore
+              ? "1px solid rgba(0,255,136,0.4)"
+              : "1px solid rgba(255,100,53,0.4)",
+            background: score >= vsScore
+              ? "rgba(0,255,136,0.04)"
+              : "rgba(255,80,0,0.04)",
+            textAlign: "center",
+          }}>
+            {score >= vsScore ? (
+              <>
+                <div style={{ fontSize: 28, marginBottom: 4 }}>🏆</div>
+                <div style={{ fontSize: 16, fontWeight: 900, color: "#00FF88", letterSpacing: 2 }}>CHALLENGE BEATEN!</div>
+                <div style={{ fontSize: 11, color: "#CCC", marginTop: 4 }}>
+                  You beat {vsName ? <span style={{ color: "#FFD700" }}>@{vsName}</span> : "their score"} by{" "}
+                  <span style={{ color: "#00FF88", fontWeight: 900 }}>+{(score - vsScore).toLocaleString()} pts</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ fontSize: 28, marginBottom: 4 }}>💀</div>
+                <div style={{ fontSize: 16, fontWeight: 900, color: "#FF4444", letterSpacing: 2 }}>CHALLENGE FAILED</div>
+                <div style={{ fontSize: 11, color: "#CCC", marginTop: 4 }}>
+                  {vsName ? <span style={{ color: "#FFD700" }}>@{vsName}</span> : "They"} beat you by{" "}
+                  <span style={{ color: "#FF4444", fontWeight: 900 }}>{(vsScore - score).toLocaleString()} pts</span>
+                </div>
+                <div style={{ fontSize: 10, color: "#888", marginTop: 3 }}>Target: {vsScore.toLocaleString()} pts</div>
+              </>
+            )}
+          </div>
+        )}
 
         {runModifier && (
           <div style={{ marginBottom: 10, padding: "5px 14px", borderRadius: 8, border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.06)", display: "inline-block" }}>
@@ -403,7 +441,9 @@ export default function DeathScreen({
             >📋 COPY</button>
             <button
               onClick={() => {
-                const url = `${location.origin}${location.pathname}?seed=${runSeed}&diff=${difficulty}`;
+                const params = new URLSearchParams({ seed: runSeed, diff: difficulty, vs: score });
+                if (username) params.set("vsName", username);
+                const url = `${location.origin}${location.pathname}?${params.toString()}`;
                 navigator.clipboard?.writeText?.(url);
               }}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,107,53,0.08)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: "#FF6B35", cursor: "pointer", letterSpacing: 1 }}

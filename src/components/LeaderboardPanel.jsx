@@ -1,9 +1,10 @@
 import { useState } from "react";
 
 const MODE_TABS = [
-  { key: null,           label: "ALL",          color: "#AAA" },
-  { key: "normal",       label: "🎯 NORMAL",     color: "#FFD700" },
-  { key: "score_attack", label: "⏱ SCORE ATK",  color: "#FF6600" },
+  { key: null,              label: "ALL",          color: "#AAA" },
+  { key: "normal",          label: "🎯 NORMAL",     color: "#FFD700" },
+  { key: "score_attack",    label: "⏱ SCORE ATK",  color: "#FF6600" },
+  { key: "daily_challenge", label: "📅 DAILY",      color: "#00E5FF" },
 ];
 
 // ── Input device badge ────────────────────────────────────────────────────────
@@ -67,14 +68,17 @@ const LOADOUT_EMOJI = { standard: "⚖️", cannon: "💀", tank: "🛡️", spe
 export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, onLoadMore, username, onClose }) {
   const [activeDiff, setActiveDiff] = useState(null);
   const [activeMode, setActiveMode] = useState(null);
+  const [copiedRow, setCopiedRow] = useState(null);
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
 
   const modeFiltered = activeMode === "score_attack"
     ? leaderboard.filter(e => e.mode === "score_attack")
-    : activeMode === "normal"
-      ? leaderboard.filter(e => !e.mode || e.mode === "normal")
-      : leaderboard;
+    : activeMode === "daily_challenge"
+      ? leaderboard.filter(e => e.mode === "daily_challenge")
+      : activeMode === "normal"
+        ? leaderboard.filter(e => !e.mode || e.mode === "normal")
+        : leaderboard;
 
   const filtered = activeDiff
     ? modeFiltered.filter(e => e.difficulty === activeDiff)
@@ -152,7 +156,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         ) : (
           <div style={{ fontSize: 11 }}>
             {/* Header */}
-            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px 28px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
               <span>#</span>
               <span>PLAYER</span>
               <span style={{ textAlign: "right" }}>SCORE</span>
@@ -160,6 +164,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
               <span style={{ textAlign: "right" }} title="Wave reached">WAVE</span>
               <span style={{ textAlign: "right" }}>TIME</span>
               <span style={{ textAlign: "right", paddingRight: 4 }}>DIFF</span>
+              <span></span>
             </div>
             {filtered.map((e, i) => {
               const isMe = e.name === username;
@@ -167,10 +172,21 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
               const rowColor = i < 3 ? ["#FFD700", "#E0E0E0", "#CD7F32"][i] : "#EEE";
               const diffTab = DIFF_TABS.find(t => t.key === e.difficulty);
               const loadoutEmoji = LOADOUT_EMOJI[e.starterLoadout] || "";
+              const handleCopyChallenge = () => {
+                const params = new URLSearchParams();
+                if (e.seed > 0) params.set("seed", e.seed);
+                if (e.difficulty) params.set("diff", e.difficulty);
+                params.set("vs", e.score);
+                if (e.name) params.set("vsName", e.name);
+                const url = `${location.origin}${location.pathname}?${params.toString()}`;
+                navigator.clipboard?.writeText?.(url);
+                setCopiedRow(i);
+                setTimeout(() => setCopiedRow(r => r === i ? null : r), 1500);
+              };
               return (
                 <div
                   key={i}
-                  style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px", gap: 4, padding: "7px 2px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: rowColor, background: isMe ? "rgba(255,107,53,0.12)" : "transparent", borderRadius: 4, alignItems: "center" }}
+                  style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px 28px", gap: 4, padding: "7px 2px", borderBottom: "1px solid rgba(255,255,255,0.06)", color: rowColor, background: isMe ? "rgba(255,107,53,0.12)" : "transparent", borderRadius: 4, alignItems: "center" }}
                   title={e.lastWords ? `"${e.lastWords}"` : ""}
                 >
                   <span style={{ fontWeight: 900, fontSize: i < 3 ? 14 : 11 }}>{medal}</span>
@@ -198,6 +214,11 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   <span style={{ textAlign: "right", paddingRight: 4, fontSize: 9, color: diffTab?.color || "#888", fontWeight: 700 }}>
                     {diffTab ? diffTab.emoji : ""} {e.difficulty?.toUpperCase() || "?"}
                   </span>
+                  <button
+                    onClick={handleCopyChallenge}
+                    title="Copy challenge link"
+                    style={{ padding: "3px 5px", fontSize: 10, cursor: "pointer", background: copiedRow === i ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.05)", border: copiedRow === i ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.12)", borderRadius: 4, color: copiedRow === i ? "#00FF88" : "#888", fontFamily: "'Courier New',monospace", lineHeight: 1 }}
+                  >{copiedRow === i ? "✓" : "⚔️"}</button>
                 </div>
               );
             })}
