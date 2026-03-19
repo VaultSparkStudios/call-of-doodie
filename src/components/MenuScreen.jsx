@@ -75,6 +75,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
   const actionsRef = useRef(NAV_ITEMS);
   actionsRef.current = NAV_ITEMS;
+  const mainScrollRef = useRef(null);
 
   const navFocusIdx = useGamepadNav({
     count:     NAV_ITEMS.length,
@@ -84,6 +85,37 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     onConfirm: (idx) => actionsRef.current[idx]?.action(),
     onBack:    undefined,
   });
+
+  // Scroll focused main-menu item into view when gamepad navigates
+  useEffect(() => {
+    if (anyModalOpen || !mainScrollRef.current) return;
+    const el = mainScrollRef.current.querySelector('[data-gp-focused]');
+    if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [navFocusIdx, anyModalOpen]);
+
+  // Modal scroll via left stick Y / D-pad when any modal is open
+  useEffect(() => {
+    if (!anyModalOpen) return;
+    const DEAD = 0.22;
+    let lastDU = false, lastDD = false;
+    const id = setInterval(() => {
+      const gp = navigator.getGamepads?.()[0];
+      if (!gp) return;
+      const ly = gp.axes[1] ?? 0;
+      const dU = gp.buttons[12]?.pressed;
+      const dD = gp.buttons[13]?.pressed;
+      // Edge-trigger for D-pad, continuous for analog stick
+      const delta = Math.abs(ly) > DEAD ? ly * 18
+        : (dU && !lastDU) ? -60
+        : (dD && !lastDD) ? 60 : 0;
+      if (delta !== 0) {
+        const el = document.querySelector('[data-gamepad-scroll]');
+        if (el) el.scrollTop += delta;
+      }
+      lastDU = !!dU; lastDD = !!dD;
+    }, 50);
+    return () => clearInterval(id);
+  }, [anyModalOpen]);
 
   // B button closes any open modal
   useEffect(() => {
@@ -261,14 +293,14 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
   return (
     <div style={{ ...base, touchAction: "pan-y", overflow: "hidden", alignItems: "center", color: "#fff", boxSizing: "border-box" }}>
-      <div style={{ position: "absolute", inset: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: 20, boxSizing: "border-box" }}>
+      <div ref={mainScrollRef} style={{ position: "absolute", inset: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: 20, boxSizing: "border-box" }}>
       {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />}
       {showAchievements && <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />}
 
       {/* Rules Modal */}
       {showRules && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
             <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
               <div>🎯 <strong style={{ color: "#FF6B35" }}>Objective:</strong> Survive as many waves as possible</div>
@@ -296,7 +328,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Controls Modal */}
       {showControls && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
             {isMobile ? (
               <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
@@ -361,7 +393,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Most Wanted List Modal */}
       {showBestiary && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
             {ENEMY_TYPES.map((e, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
@@ -381,7 +413,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Career Stats Modal */}
       {showCareer && career && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 420, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 420, width: "100%", position: "relative", border: "1px solid rgba(0,229,255,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <button onClick={() => setShowCareer(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
             <h3 style={{ color: "#00E5FF", margin: "0 0 8px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
             {meta && (
@@ -445,7 +477,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Daily Missions Modal */}
       {showMissions && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
             <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Resets at midnight · Complete for career point bonuses</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -501,7 +533,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Meta Upgrades Modal */}
       {showUpgrades && meta && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div style={{ ...card, maxWidth: 520, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 520, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
               <p style={{ color: "#bbb", fontSize: 11, margin: 0 }}>Permanent bonuses · 3 tiers each · sequential purchase required</p>
@@ -638,7 +670,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               </div>
 
               {/* Scrollable list */}
-              <div className="wnscroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "12px 16px" }}>
+              <div data-gamepad-scroll="" className="wnscroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "12px 16px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: 4 }}>
                   {NEW_FEATURES.map((f, i) => (
                     <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4, flexShrink: 0 }}>
@@ -707,7 +739,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               {controllerType === "xbox" && <span style={{ color: "#4DBD61", fontWeight: 700 }}>Xbox Controller</span>}
               {controllerType === "ps" && <span style={{ color: "#6699FF", fontWeight: 700 }}>PlayStation Controller</span>}
               {controllerType !== "xbox" && controllerType !== "ps" && <span style={{ color: "#CCC", fontWeight: 700 }}>Controller</span>}
-              {" "}connected · D-pad navigates · A to select
+              {" "}connected · D-pad/stick navigates · A confirm · B back · stick scrolls modals
             </span>
           </div>
         )}
@@ -754,14 +786,16 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
             {Object.entries(DIFFICULTIES).map(([key, d]) => (
-              <button key={key} onClick={() => setDifficulty(key)} style={{
-                padding: "10px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left",
-                fontFamily: "'Courier New',monospace",
-                background: difficulty === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
-                border: difficulty === key ? `2px solid ${d.color}` : "1px solid rgba(255,255,255,0.1)",
-                color: "#FFF", transition: "all 0.15s",
-                ...(gfocus(`diff_${key}`) ? focusRing : {}),
-              }}>
+              <button key={key} onClick={() => setDifficulty(key)}
+                {...(gfocus(`diff_${key}`) ? { "data-gp-focused": "" } : {})}
+                style={{
+                  padding: "10px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left",
+                  fontFamily: "'Courier New',monospace",
+                  background: difficulty === key ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
+                  border: difficulty === key ? `2px solid ${d.color}` : "1px solid rgba(255,255,255,0.1)",
+                  color: "#FFF", transition: "all 0.15s",
+                  ...(gfocus(`diff_${key}`) ? focusRing : {}),
+                }}>
                 <div style={{ fontSize: 14, fontWeight: 900, color: d.color }}>{d.emoji} {d.label}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{d.desc}</div>
                 <div style={{ fontSize: 9, color: "#bbb", marginTop: 3 }}>
@@ -777,14 +811,16 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, textAlign: "center", fontWeight: 700 }}>STARTER LOADOUT</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
             {STARTER_LOADOUTS.map((l) => (
-              <button key={l.id} onClick={() => setStarterLoadout?.(l.id)} style={{
-                padding: "9px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left",
-                fontFamily: "'Courier New',monospace",
-                background: starterLoadout === l.id ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
-                border: starterLoadout === l.id ? `2px solid ${l.color}` : "1px solid rgba(255,255,255,0.1)",
-                color: "#FFF", transition: "all 0.15s",
-                ...(gfocus(`lo_${l.id}`) ? focusRing : {}),
-              }}>
+              <button key={l.id} onClick={() => setStarterLoadout?.(l.id)}
+                {...(gfocus(`lo_${l.id}`) ? { "data-gp-focused": "" } : {})}
+                style={{
+                  padding: "9px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left",
+                  fontFamily: "'Courier New',monospace",
+                  background: starterLoadout === l.id ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
+                  border: starterLoadout === l.id ? `2px solid ${l.color}` : "1px solid rgba(255,255,255,0.1)",
+                  color: "#FFF", transition: "all 0.15s",
+                  ...(gfocus(`lo_${l.id}`) ? focusRing : {}),
+                }}>
                 <div style={{ fontSize: 13, fontWeight: 900, color: l.color }}>{l.emoji} {l.name}</div>
                 <div style={{ fontSize: 10, color: "#CCC", marginTop: 2 }}>{l.desc}</div>
               </button>
@@ -805,8 +841,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
         {/* Action buttons */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => onStart(customSeed || undefined)} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
-          <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
+          <button onClick={() => onStart(customSeed || undefined)} {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
+          <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} {...(gfocus("leaderboard") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
         </div>
         {/* Seed + Settings row */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
@@ -816,20 +852,20 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             maxLength={6}
             style={{ width: 120, padding: "6px 10px", fontSize: 11, fontFamily: "monospace", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center" }}
           />
-          <button onClick={() => setShowSettings(true)} style={{ ...btnS, padding: "6px 14px", fontSize: 11, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
+          <button onClick={() => setShowSettings(true)} {...(gfocus("settings") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, padding: "6px 14px", fontSize: 11, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("career") ? focusRing : {}) }}>📊 CAREER STATS</button>
-          <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS</button>
+          <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} {...(gfocus("career") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("career") ? focusRing : {}) }}>📊 CAREER STATS</button>
+          <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} {...(gfocus("achievements") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("missions") ? focusRing : {}) }}>📋 MISSIONS</button>
-          <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
+          <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} {...(gfocus("missions") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("missions") ? focusRing : {}) }}>📋 MISSIONS</button>
+          <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} {...(gfocus("upgrades") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
-          <button onClick={() => setShowRules(true)} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
-          <button onClick={() => setShowControls(true)} style={{ ...btnS, minWidth: 150, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
-          <button onClick={() => setShowBestiary(true)} style={{ ...btnS, minWidth: 150, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED</button>
+          <button onClick={() => setShowRules(true)} {...(gfocus("rules") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
+          <button onClick={() => setShowControls(true)} {...(gfocus("controls") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
+          <button onClick={() => setShowBestiary(true)} {...(gfocus("bestiary") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED</button>
         </div>
 
         <div style={{ fontSize: 11, color: "#bbb", marginTop: 8 }}>

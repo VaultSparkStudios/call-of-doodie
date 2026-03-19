@@ -44,7 +44,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-      <div style={{ ...card, maxWidth: 640, width: "100%", maxHeight: "88vh", overflow: "auto", position: "relative", border: "1px solid rgba(255,215,0,0.2)", padding: "18px 14px", color: "#fff" }}>
+      <div style={{ ...card, maxWidth: 820, width: "100%", maxHeight: "92vh", overflow: "auto", position: "relative", border: "1px solid rgba(255,215,0,0.2)", padding: "18px 16px", color: "#fff" }}>
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
 
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
@@ -117,7 +117,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                     {e.level && <span style={{ color: "#bbb", fontSize: 9, marginLeft: 4 }} title="In-run XP level">⬆{e.level}</span>}
                     {loadoutEmoji && <span style={{ fontSize: 9, marginLeft: 4 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                     {e.customSettings && <span style={{ fontSize: 9, marginLeft: 4 }} title="Custom settings used">⚙️</span>}
-                    {e.inputDevice && <span style={{ marginLeft: 4 }}><InputDeviceBadge device={e.inputDevice} /></span>}
+                    <span style={{ marginLeft: 4 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>

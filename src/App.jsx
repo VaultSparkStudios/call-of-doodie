@@ -1512,19 +1512,66 @@ export default function CallOfDoodie() {
             setCombo(comboRef.current.count);
             const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
-            if (gs.killstreakCount > statsRef.current.bestStreak) statsRef.current.bestStreak = gs.killstreakCount;
-            statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
+            if (dashRef.current.active > 0) statsRef.current.dashKills++;
+            if (pbWpn != null) statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
+            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18) statsRef.current.bossKills++;
+            if (e.typeIndex === 9) statsRef.current.landlordKills++;
+            if (e.typeIndex === 10) statsRef.current.cryptoKills++;
+            if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
+            if (e.isBossEnemy) {
+              soundBossKill(); rumbleGamepad(0.5, 1.0, 500);
+              gs.bossKillFlash = 22; gs.screenShake = Math.max(gs.screenShake, 30);
+              addParticles(gs, e.x, e.y, e.color, 50); addParticles(gs, e.x, e.y, "#FFD700", 30); addParticles(gs, e.x, e.y, "#FFFFFF", 20);
+              addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
+              if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
+            }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
-            if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
-            addParticles(gs, e.x, e.y, e.color, 15);
+            setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
+            if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
+              gs.newBestScore = true; addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
+            }
+            addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
+            const _rbDq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : "...";
+            addText(gs, e.x, e.y - 54, `"${_rbDq}"`, "#FF88CC", "quote");
             addKillFeed(e.name, pbWeapon.name);
-            if (!e.isBossEnemy) soundEnemyDeath(e.typeIndex);
-            addXp(pts); gs.killFlash = 6;
+            if (!e.isBossEnemy) {
+              if (e.summonedBy) { soundSummonDismissed(); addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF"); }
+              else if ((gs._deathSoundsThisFrame || 0) < 2) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeath(e.typeIndex); }
+            }
+            if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
+            if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
+              gs.adrenalineRushTimer = 120; addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
+            }
             gs.dyingEnemies = gs.dyingEnemies || [];
             if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
-            e.health = -999;
+            if (e.splitOnDeath && !e.splitDone) {
+              e.splitDone = true; addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
+              for (let _si = 0; _si < 3; _si++) {
+                const _sa = (_si / 3) * Math.PI * 2 + 0.5;
+                gs.enemies.push({ x: e.x + Math.cos(_sa) * 55, y: e.y + Math.sin(_sa) * 55, health: e.maxHealth * 0.35, maxHealth: e.maxHealth * 0.35, speed: e.speed * 1.4, size: e.size * 0.58, color: "#FF8899", name: "Splitter Shard", points: Math.floor(e.points * 0.25), deathQuotes: ["..."], emoji: "💔", typeIndex: 16, wobble: Math.random() * Math.PI * 2, hitFlash: 0, ranged: false, projSpeed: 0, projRate: 999, shootTimer: 60, isBossEnemy: false, splitOnDeath: false });
+              }
+              addParticles(gs, e.x, e.y, "#FF6688", 30);
+            }
+            const _rIsShd = e.typeIndex === 16 && !e.isBossEnemy;
+            if (!_rIsShd) {
+              if (e.isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) { gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 }); }
+              else if ((e.isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) { spawnPickup(gs, e.x, e.y, e.isBossEnemy); }
+            }
+            if (KILL_MILESTONES[gs.kills]) {
+              addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
+              addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
+              gs.screenShake = 10;
+            }
+            if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
+              const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
+              addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
+              gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
+              gs.screenShake = 12;
+            }
+            addXp(pts); gs.killFlash = 6;
             achCheckRef.current = true;
+            e.health = -999;
           }
         }
       });
@@ -1537,8 +1584,11 @@ export default function CallOfDoodie() {
       if (b.life <= 0) return;
       gs.enemies.forEach(e => {
         if (e.health <= -999) return;
+        const maxR = e.size / 2 + b.size;
+        // Fast AABB reject before expensive hypot
+        if (Math.abs(b.x - e.x) > maxR || Math.abs(b.y - e.y) > maxR) return;
         const d = Math.hypot(b.x - e.x, b.y - e.y);
-        if (d < e.size / 2 + b.size) {
+        if (d < maxR) {
           // Shield pulse blocks all damage
           if (e.shieldPulseActive) {
             addParticles(gs, b.x, b.y, "#00BFFF", 4);
@@ -1679,12 +1729,13 @@ export default function CallOfDoodie() {
               gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
               gs.screenShake = 12;
             }
-            // Enemy death sound (non-boss only — boss kill has soundBossKill)
+            // Enemy death sound (non-boss only — boss kill has soundBossKill; max 2/frame to avoid audio pile-up)
             if (!e.isBossEnemy) {
               if (e.summonedBy) {
                 soundSummonDismissed();
                 addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
-              } else {
+              } else if ((gs._deathSoundsThisFrame || 0) < 2) {
+                gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
                 soundEnemyDeath(e.typeIndex);
               }
             }
@@ -2167,6 +2218,7 @@ export default function CallOfDoodie() {
     if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
     if (gs.beams) gs.beams = gs.beams.filter(bm => { bm.life--; return bm.life > 0; });
+    gs._deathSoundsThisFrame = 0; // reset death-sound throttle each frame
     frameCountRef.current++;
 
     // ────────────────── RENDER ──────────────────────────────────────────────
@@ -2255,7 +2307,7 @@ export default function CallOfDoodie() {
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {
     let lastLB = false, lastRB = false, lastStart = false;
-    let lastBtnB = false, lastR3 = false;
+    let lastBtnB = false, lastR3 = false, lastBtnX = false;
     let lastGpConnected = false;
 
     const poll = () => {
@@ -2321,6 +2373,11 @@ export default function CallOfDoodie() {
       const btnB = gp.buttons[1]?.pressed;
       if (btnB && !lastBtnB) throwGrenade();
       lastBtnB = !!btnB;
+
+      // Button 2 (X/Square) → reload (edge-triggered)
+      const btnX = gp.buttons[2]?.pressed;
+      if (btnX && !lastBtnX) doReload(currentWeaponRef.current);
+      lastBtnX = !!btnX;
 
       // Button 4 (LB/L1) → prev weapon, Button 5 (RB/R1) → next weapon (edge-triggered)
       const lb = gp.buttons[4]?.pressed;

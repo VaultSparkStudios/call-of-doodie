@@ -159,7 +159,7 @@ export default function DeathScreen({
       {showLeaderboard && (
         <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
       )}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px 24px", boxSizing: "border-box" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px", paddingBottom: "max(56px, env(safe-area-inset-bottom, 24px))", boxSizing: "border-box" }}>
       <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>
         <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>💀</div>
         <h2 style={{ fontSize: "clamp(24px,7vw,38px)", color: "#FF2222", margin: "4px 0", letterSpacing: 3 }}>YOU DIED</h2>
