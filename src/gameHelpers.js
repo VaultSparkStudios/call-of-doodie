@@ -5,8 +5,8 @@
 
 import { ENEMY_TYPES, DIFFICULTIES } from "./constants.js";
 
-// Boss type rotation: wave 5→Karen, 10→Splitter, 15→Juggernaut, 20→Summoner, 25→Landlord, repeats
-export const BOSS_ROTATION = [4, 16, 17, 18, 9];
+// Boss type rotation: wave 5→Karen, 10→Splitter, 15→Juggernaut, 20→Summoner, 25→Landlord, 30→Algorithm, repeats
+export const BOSS_ROTATION = [4, 16, 17, 18, 9, 20];
 
 // ── spawnEnemy ────────────────────────────────────────────────────────────────
 export function spawnEnemy(gs, W, H, difficultyId) {
@@ -19,13 +19,14 @@ export function spawnEnemy(gs, W, H, difficultyId) {
   else if (wv >= 12 && r < 0.21) ti = 9;
   else if (wv >= 10 && r < 0.27) ti = 4;
   else if (wv >= 9  && r < 0.33) ti = 10;
-  else if (wv >= 8  && r < 0.38) ti = 3;
-  else if (wv >= 7  && r < 0.43) ti = 8;
-  else if (wv >= 6  && r < 0.49) ti = 7;
-  else if (wv >= 5  && r < 0.55) ti = 6;
-  else if (wv >= 4  && r < 0.61) ti = 2;
-  else if (wv >= 3  && r < 0.67) ti = 5;
-  else if (wv >= 2  && r < 0.74) ti = 1;
+  else if (wv >= 9  && r < 0.39) ti = 19; // Doomscroller
+  else if (wv >= 8  && r < 0.44) ti = 3;
+  else if (wv >= 7  && r < 0.49) ti = 8;
+  else if (wv >= 6  && r < 0.55) ti = 7;
+  else if (wv >= 5  && r < 0.61) ti = 6;
+  else if (wv >= 4  && r < 0.67) ti = 2;
+  else if (wv >= 3  && r < 0.73) ti = 5;
+  else if (wv >= 2  && r < 0.80) ti = 1;
 
   const side = Math.floor(Math.random() * 4);
   let x, y;
@@ -133,5 +134,12 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     boss.summonerId = Date.now() + Math.random(); // unique ID
     boss.summonerInvuln = false;      // true while summons alive
     boss.summonerFirstSummon = true;  // portal VFX shown before first summon
+  }
+  // ── The Algorithm (20): viral surge — triples spawn rate briefly every ~360 frames ──
+  if (typeIndex === 20) {
+    boss.viralSurgeCooldown = 420;    // frames until first surge
+    boss.viralSurgeTimer = 420;
+    boss.viralSurgeActive = 0;        // frames remaining in current surge
+    boss.algoSpreadTimer = 0;         // for 3-shot burst spread
   }
 }

@@ -29,7 +29,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   const isMainView = view === "main" && !showAch && !showSettings;
   const navFocusIdx = useGamepadNav({
     count: mainItems.length, cols: 1, enabled: isMainView,
-    disableLR: true,
+    disableLR: false,
     onConfirm: (idx) => mainItemsRef.current[idx]?.action(),
     onBack: onResume,
   });
@@ -113,13 +113,15 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Stick</span> — Move</div>
             <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
             <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3 (click stick)</span> — Dash</div>
-            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
-            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / Square</span> — Reload</div>
-            <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>
+            <div>🔭 <span style={{ color: "#00E5FF", fontWeight: 800 }}>LT / L2</span> — ADS Zoom</div>
+            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3</span> — Dash</div>
+            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>LB / L1</span> — Grenade</div>
+            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / ☐</span> — Reload</div>
+            <div>💣 <span style={{ color: "#888", fontWeight: 800 }}>B / ○</span> — Grenade (alt)</div>
+            <div>◀▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>D-pad L/R</span> — Prev/Next weapon</div>
             <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>RB / R1</span> — Next weapon</div>
             <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Start / Options</span> — Pause</div>
-            <div>⬆ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad</span> — Navigate menus</div>
+            <div>⬆⬇ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad U/D</span> — Navigate menus</div>
           </div>
         </div>
         <div style={{ marginTop: 14 }}>
@@ -176,16 +178,23 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             {musicMuted ? "🔇 MUSIC: OFF" : "🔊 MUSIC: ON"}
           </button>
           {!musicMuted && (
-            <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 300 }}>
-              {MUSIC_VIBES.map(v => (
-                <button
-                  key={v.id}
-                  onClick={() => onSetMusicVibe(v.id)}
-                  style={{ padding: "6px 11px", borderRadius: 6, fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", background: musicVibe === v.id ? "rgba(0,229,255,0.18)" : "rgba(255,255,255,0.05)", border: musicVibe === v.id ? "1px solid rgba(0,229,255,0.5)" : "1px solid rgba(255,255,255,0.12)", color: musicVibe === v.id ? "#0EF" : "#888", fontWeight: musicVibe === v.id ? 900 : 400, ...(gfocus(`vibe_${v.id}`) ? focusRing : {}) }}
-                >
-                  {v.emoji} {v.name}
-                </button>
-              ))}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+              <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap", maxWidth: 320 }}>
+                {MUSIC_VIBES.map(v => (
+                  <button
+                    key={v.id}
+                    onClick={() => onSetMusicVibe(v.id)}
+                    style={{ padding: "6px 11px", borderRadius: 6, fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", background: musicVibe === v.id ? "rgba(0,229,255,0.18)" : "rgba(255,255,255,0.05)", border: musicVibe === v.id ? "1px solid rgba(0,229,255,0.5)" : "1px solid rgba(255,255,255,0.12)", color: musicVibe === v.id ? "#0EF" : "#888", fontWeight: musicVibe === v.id ? 900 : 400, ...(gfocus(`vibe_${v.id}`) ? focusRing : {}) }}
+                  >
+                    {v.emoji} {v.name}
+                  </button>
+                ))}
+              </div>
+              {gamepadConnected && !musicMuted && (
+                <div style={{ fontSize: 9, color: "#555", fontFamily: "'Courier New',monospace" }}>
+                  ◀ D-pad · A to select ▶
+                </div>
+              )}
             </div>
           )}
           <button onClick={onToggleColorblind} style={{ ...pBtn, color: colorblindMode ? "#FFD700" : "#AAA", ...(gfocus("colorblind") ? focusRing : {}) }}>

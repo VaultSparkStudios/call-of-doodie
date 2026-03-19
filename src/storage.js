@@ -12,7 +12,7 @@ import { supabase, getAuthUid } from "./supabase.js";
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "seed" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "accountLevel" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;
-//   -- After running above, remove the stripping in saveToLeaderboard
+//   -- ✅ Migration complete — mode column live, no stripping needed
 //
 //   -- 3. Callsign ownership table (see below)
 //
@@ -160,6 +160,10 @@ const MISSION_DEFS = [
   { id: "level_reach",   icon: "⬆️",  make: (n) => ({ text: `Reach level ${n}`,                       goal: n, track: "level"            }) },
   { id: "boss_clear",    icon: "☠️",  make: (n) => ({ text: `Clear ${n} boss wave${n>1?"s":""}`,        goal: n, track: "bossWavesCleared" }) },
   { id: "max_weapon",    icon: "⭐",  make: (n) => ({ text: `Max out ${n} weapon${n>1?"s":""}`,          goal: n, track: "maxWeaponLevel"   }) },
+  // ── Score Attack–specific missions ──
+  { id: "sa_score",  icon: "⏱️", make: (n) => ({ text: `Score ${n.toLocaleString()} pts in Score Attack`,  goal: n, track: "saScore"  }) },
+  { id: "sa_kills",  icon: "⏱️", make: (n) => ({ text: `Kill ${n} enemies in Score Attack`,                goal: n, track: "saKills"  }) },
+  { id: "sa_wave",   icon: "⏱️", make: (n) => ({ text: `Reach wave ${n} in Score Attack`,                  goal: n, track: "saWave"   }) },
 ];
 const MISSION_PARAMS = {
   kill_any: [15,20,25], reach_wave: [5,6,7], combo: [5,8,10],
@@ -169,6 +173,7 @@ const MISSION_PARAMS = {
   perk_collector: [3,5,7], nuke_user: [1,2,3], high_roller: [5000,10000,25000], arms_race: [1,2,3],
   no_hit_wave: [1,2,3], single_weapon: [5,10,20],
   level_reach: [5, 8, 12], boss_clear: [1, 2, 3], max_weapon: [1, 2, 3],
+  sa_score: [5000, 15000, 30000], sa_kills: [30, 60, 100], sa_wave: [3, 5, 7],
 };
 function lcg(s) { return Math.abs((Math.imul(s, 1664525) + 1013904223) | 0); }
 

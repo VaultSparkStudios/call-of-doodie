@@ -116,7 +116,7 @@ function getShopOptions(gs, wpnIdx) {
 }
 
 // ── Performance caps ─────────────────────────────────────────────────────────
-const MAX_PARTICLES  = 200;  // hard cap on concurrent particle objects
+const MAX_PARTICLES  = 150;  // hard cap on concurrent particle objects
 const MAX_FLOAT_TEXTS = 30;  // hard cap on floating damage/event texts
 const MAX_DYING_ANIM  = 20;  // hard cap on death animation objects
 
@@ -388,6 +388,10 @@ export default function CallOfDoodie() {
       level: xpRef.current.level || 1,
       bossWavesCleared: statsRef.current.bossWavesCleared || 0,
       maxWeaponLevel: statsRef.current.maxWeaponLevel || 0,
+      // Score Attack–specific tracking (only count when in SA mode)
+      saScore: gs.scoreAttackMode ? (gs.score || 0) : 0,
+      saKills: gs.scoreAttackMode ? (gs.kills || 0) : 0,
+      saWave:  gs.scoreAttackMode ? (gs.currentWave || 1) : 0,
     };
     missions.forEach((m, idx) => {
       if (missionDoneRef.current.has(idx)) return;
@@ -1267,7 +1271,7 @@ export default function CallOfDoodie() {
     // ── Wave / boss wave logic ──
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     if (!gs.bossWave) {
-      gs.spawnTimer += gs.scoreAttackMode ? 1.5 : 1;
+      gs.spawnTimer += gs.scoreAttackMode ? 1.5 : (gs.algorithmSurge ? 2.5 : 1);
       const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
@@ -1332,8 +1336,8 @@ export default function CallOfDoodie() {
         const _bType = BOSS_ROTATION[_bSlot];
         const _bType2 = BOSS_ROTATION[(_bSlot + 1) % BOSS_ROTATION.length];
         // Boss name announcement
-        const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT" };
-        const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00" };
+        const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT", 20:"📊 THE ALGORITHM GOES VIRAL" };
+        const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00", 20:"#1DA1F2" };
         addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
         if (gs.currentWave >= 15) {
           addText(gs, W / 2, H / 2 - 50, "+ " + (_bossNames[_bType2] || ENEMY_TYPES[_bType2].name.toUpperCase()), _bossColors[_bType2] || "#FF8844");
@@ -1536,7 +1540,7 @@ export default function CallOfDoodie() {
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (pbWpn != null) statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
-            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18) statsRef.current.bossKills++;
+            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18 || e.typeIndex === 20) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
@@ -1559,7 +1563,7 @@ export default function CallOfDoodie() {
             addKillFeed(e.name, pbWeapon.name);
             if (!e.isBossEnemy) {
               if (e.summonedBy) { soundSummonDismissed(); addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF"); }
-              else if ((gs._deathSoundsThisFrame || 0) < 2) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeath(e.typeIndex); }
+              else if ((gs._deathSoundsThisFrame || 0) < 1) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeath(e.typeIndex); }
             }
             if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
             if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
@@ -1854,8 +1858,14 @@ export default function CallOfDoodie() {
         const slen = Math.hypot(sx, sy);
         if (slen > 0) { sx /= slen; sy /= slen; }
       }
-      // Skip regular movement for Juggernaut during charge/stun (those are handled above)
-      const _skipMove = e.typeIndex === 17 && (e.jugCharging || (e.jugStunned || 0) > 0);
+      // Doomscroller: periodically freezes while doomscrolling (every 280 frames, stops for 70)
+      if (e.typeIndex === 19 && !e.isBossEnemy) {
+        e.doomscrollTimer = (e.doomscrollTimer || 0) + 1;
+        e.doomscrolling = (e.doomscrollTimer % 280) < 70;
+        if ((e.doomscrollTimer % 280) === 0) addParticles(gs, e.x, e.y - 20, "#7B68EE", 3);
+      }
+      // Skip regular movement for Juggernaut during charge/stun, or Doomscroller while frozen
+      const _skipMove = (e.typeIndex === 17 && (e.jugCharging || (e.jugStunned || 0) > 0)) || (e.typeIndex === 19 && e.doomscrolling);
       if (!_skipMove) {
         e.x += sx * buffedSpeed + Math.sin(e.wobble) * 0.5 + (-sy) * zigzag;
         e.y += sy * buffedSpeed + Math.cos(e.wobble) * 0.5 + sx * zigzag;
@@ -2091,6 +2101,34 @@ export default function CallOfDoodie() {
             addText(gs, e.x, e.y - 70, "🌀 SUMMONING!", "#8844FF", true);
             addParticles(gs, e.x, e.y, "#8844FF", 25);
             e.summonerVulnTimer = 360; // re-enters invuln after summons die
+          }
+        }
+      }
+      // ── The Algorithm (20): viral surge + 3-shot spread ──
+      if (e.typeIndex === 20 && e.isBossEnemy) {
+        e.viralSurgeTimer = (e.viralSurgeTimer || 0) - 1;
+        if (e.viralSurgeActive > 0) {
+          e.viralSurgeActive--;
+          gs.algorithmSurge = e.viralSurgeActive > 0;
+          if (e.viralSurgeActive === 0) {
+            gs.algorithmSurge = false;
+            addText(gs, e.x, e.y - 70, "📊 SURGE ENDED", "#1DA1F2");
+          }
+        } else if (e.viralSurgeTimer <= 0) {
+          e.viralSurgeTimer = 480;
+          e.viralSurgeActive = 180; // 3 seconds of viral surge
+          gs.algorithmSurge = true;
+          gs.screenShake = 10;
+          addText(gs, e.x, e.y - 80, "📊 GOING VIRAL!", "#1DA1F2", true);
+          addParticles(gs, e.x, e.y, "#1DA1F2", 25);
+        }
+        // 3-shot spread every projRate instead of 1 shot
+        if (e.ranged && e.shootTimer >= e.projRate) {
+          e.shootTimer = 0;
+          const _pa = Math.atan2(p.y - e.y, p.x - e.x);
+          for (let _bi = -1; _bi <= 1; _bi++) {
+            const _ang = _pa + _bi * 0.32;
+            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * e.projSpeed, vy: Math.sin(_ang) * e.projSpeed, life: 100, size: 5, color: "#1DA1F2", damage: 8 });
           }
         }
       }
@@ -2330,6 +2368,7 @@ export default function CallOfDoodie() {
   useEffect(() => {
     let lastLB = false, lastRB = false, lastStart = false;
     let lastBtnB = false, lastR3 = false, lastBtnX = false;
+    let lastDLeft = false, lastDRight = false;
     let lastGpConnected = false;
 
     const poll = () => {
@@ -2391,22 +2430,33 @@ export default function CallOfDoodie() {
       if (r3 && !lastR3) doDash();
       lastR3 = !!r3;
 
-      // Button 1 (B/Circle) → grenade (edge-triggered)
+      // Button 1 (B/Circle) → grenade (kept as secondary; LB is primary)
       const btnB = gp.buttons[1]?.pressed;
       if (btnB && !lastBtnB) throwGrenade();
       lastBtnB = !!btnB;
 
-      // Button 2 (X/Square) → reload (edge-triggered)
+      // Button 2 (X/Square / ☐) → reload (edge-triggered)
       const btnX = gp.buttons[2]?.pressed;
       if (btnX && !lastBtnX) doReload(currentWeaponRef.current);
       lastBtnX = !!btnX;
 
-      // Button 4 (LB/L1) → prev weapon, Button 5 (RB/R1) → next weapon (edge-triggered)
+      // LT (button 6) → ADS / zoom (analog-aware)
+      const ltValue = gp.buttons[6]?.value ?? (gp.buttons[6]?.pressed ? 1 : 0);
+      if (gsRef.current) gsRef.current.adsZoom = ltValue > 0.3;
+
+      // LB (button 4) → grenade (primary), RB (button 5) → next weapon
       const lb = gp.buttons[4]?.pressed;
       const rb = gp.buttons[5]?.pressed;
-      if (lb && !lastLB) switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
+      if (lb && !lastLB) throwGrenade();
       if (rb && !lastRB) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
       lastLB = !!lb; lastRB = !!rb;
+
+      // D-pad left/right → prev/next weapon (edge-triggered)
+      const dLeft  = gp.buttons[14]?.pressed;
+      const dRight = gp.buttons[15]?.pressed;
+      if (dLeft  && !lastDLeft)  switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
+      if (dRight && !lastDRight) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
+      lastDLeft = !!dLeft; lastDRight = !!dRight;
 
       // Button 9 (Start/Options) → toggle pause (edge-triggered)
       const start = gp.buttons[9]?.pressed;
@@ -2488,6 +2538,7 @@ export default function CallOfDoodie() {
         fmtTime={fmtTime}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
         weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
+        playerSkin={gsRef.current?.playerSkin || ""}
         onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
       />
     );

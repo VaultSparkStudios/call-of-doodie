@@ -56,6 +56,12 @@ export const ENEMY_TYPES = [
     deathQuotes: ["My shield... broken!", "Unstoppable was wrong.", "Charged too hard...", "The wall didn't yield.", "Fine. You win this round."] },
   { name: "Summoner", health: 320, speed: 0.4, size: 60, color: "#8844FF", points: 4000, emoji: "🌀", ranged: true, projSpeed: 3.5, projRate: 190,
     deathQuotes: ["My minions... avenge me!", "The circle is broken!", "Without my summons...", "I was too vulnerable!", "The portal... closes..."] },
+  // ── Regular enemy: index 19 ──
+  { name: "Doomscroller", health: 55, speed: 1.5, size: 36, color: "#7B68EE", points: 380, emoji: "📱", ranged: false,
+    deathQuotes: ["Just... one more... scroll...", "I missed the red flag. I was doomscrolling.", "At least my screen time hits zero.", "Worth it. I think.", "Finally... offline."] },
+  // ── Boss-rotation type: index 20 ──
+  { name: "The Algorithm", health: 700, speed: 0.5, size: 68, color: "#1DA1F2", points: 4500, emoji: "📊", ranged: true, projSpeed: 4.0, projRate: 85,
+    deathQuotes: ["Error 404: Engagement not found.", "My reach... declining...", "The metrics... flatlined...", "Shadow-banned. From life.", "Content... terminated."] },
 ];
 
 // ===== PERKS =====
