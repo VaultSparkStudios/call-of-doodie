@@ -12,6 +12,7 @@ export default function HUD({
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
   overclockedActive, overclockedShots, waveStreak, mapTheme,
+  vsScore, vsName,
 }) {
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -50,6 +51,23 @@ export default function HUD({
         )}
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
+
+      {/* Challenge score tracker */}
+      {vsScore != null && (
+        <div style={{
+          position: "absolute", top: 46, left: "50%", transform: "translateX(-50%)",
+          fontSize: 10, fontFamily: "'Courier New',monospace", fontWeight: 900,
+          background: "rgba(0,0,0,0.6)", padding: "3px 12px", borderRadius: 8,
+          border: score >= vsScore ? "1px solid rgba(0,255,136,0.5)" : "1px solid rgba(255,100,0,0.4)",
+          color: score >= vsScore ? "#00FF88" : "#FF6B35",
+          letterSpacing: 1, whiteSpace: "nowrap",
+        }}>
+          {score >= vsScore
+            ? `🏆 BEATING ${vsName ? "@" + vsName : "THEM"} +${(score - vsScore).toLocaleString()}`
+            : `⚔️ BEHIND ${vsName ? "@" + vsName : "THEM"} -${(vsScore - score).toLocaleString()}`
+          }
+        </div>
+      )}
 
       {/* Run modifier badge */}
       {runModifier && (
