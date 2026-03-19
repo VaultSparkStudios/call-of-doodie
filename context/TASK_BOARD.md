@@ -12,6 +12,12 @@
 ## Later
 - More daily mission types
 - More map variety / new map themes
+- Distinct railgun sound (currently reuses Sniper-ator CRACK!)
+
+## Done (session 13)
+- ✅ GIF highlight reel: `bestMomentRef` now updates on every new run-best killstreak kill (score = streak×10); GIF centers on peak killstreak moment; boss kill remains fallback (score 100)
+- ✅ Gray text legibility pass: all dark grays (#444–#888) across DeathScreen, LeaderboardPanel, MenuScreen, PerkModal, SettingsPanel, and HUD weapon counter bumped to #aaa/#bbb; canvas stat labels #AAA→#CCC, studio label #888→#BBB, "DEPLOYED AS:" #CCC→#EEE
+- ✅ Docs updated: HANDOFF.md, README.md, AGENTS.md, context/DECISIONS.md all brought current to session 12 state
 
 ## Done (session 12)
 - ✅ Seeds + Replay entries added to Rules modal in MenuScreen.jsx — explains seed range (0–999998), what it controls, and how to use replay

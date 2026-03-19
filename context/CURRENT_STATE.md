@@ -2,7 +2,7 @@
 
 Build status:
 - Build: passing (`npm run build` clean)
-- Latest commit: `a031204` — Session 12: seed info in Rules modal, custom-settings ⚙️ badge on leaderboard
+- Latest commit: `3061b71` — Session 13: GIF centers on peak killstreak; gray text legibility pass
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
 - Branch: `main`, pushed
 
@@ -10,7 +10,7 @@ Current priorities:
 1. Playtest new map themes (space + arctic) and new daily missions (no-hit wave, single weapon)
 2. Verify leaderboard "Load More" works in production (requires Supabase with real data)
 3. Run Supabase SQL migration (callsign_claims table + updated leaderboard RLS) in console
-4. Future: add `customSettings` column to Supabase leaderboard table so the ⚙️ badge shows for all entries (not just local)
+4. Add `customSettings` column to Supabase leaderboard (`ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean`) so ⚙️ badge shows for all entries
 
 Known issues:
 - Boss ground slam: random initial stagger (0–179 frames) can shorten the 90-frame warning window on the very first slam cycle

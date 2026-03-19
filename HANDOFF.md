@@ -13,9 +13,9 @@
 
 ---
 
-## Git State (as of session 12)
+## Git State (as of session 13)
 
-Clean. Commit `a031204` pushed to `origin/main`. All session 12 features are live.
+Clean. Commit `3061b71` pushed to `origin/main`. All session 13 features are live.
 
 ---
 
@@ -97,6 +97,8 @@ call-of-doodie/
 | **Colorblind mode** | CSS filter toggle, persisted in localStorage |
 | **PWA** | manifest.json + service worker (network-first nav, cache-first assets) |
 | **Settings panel** | 7 gameplay multipliers, up to 3 named presets |
+| **GIF highlight reel** | Centers on peak killstreak moment (`bestMomentRef` score = streak×10); boss kill is fallback |
+| **Text legibility** | All secondary/tertiary UI text bumped from dark grays (#444–#888) to #aaa/#bbb across all components |
 
 ---
 
@@ -122,8 +124,8 @@ npm run preview  # Preview production build
 
 ## Known Issues / Pending Work
 
-- Callsign server-side enforcement: SQL migration in `storage.js` comments needs manual run in Supabase console
-- Add `customSettings` column to Supabase leaderboard (`ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean`) so ⚙️ badge shows for all entries
+- Callsign server-side enforcement: SQL migration in `storage.js` comments needs manual run in Supabase console; "Anonymous sign-ins" must be enabled in Supabase Auth settings
+- Add `customSettings` column to Supabase leaderboard (`ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean`) so ⚙️ badge shows for all entries (not just localStorage)
 - Railgun sound reuses Sniper-ator's CRACK! — may want distinct sound
 - Boss ground slam: random initial stagger can shorten the 90-frame warning window on first slam cycle
 - Gamepad rumble: silent no-op on Firefox/Safari (requires Chrome 68+ Vibration Actuator API)
