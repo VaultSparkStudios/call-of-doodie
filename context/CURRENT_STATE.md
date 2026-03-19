@@ -2,7 +2,7 @@
 
 Build status:
 - Build: passing (`npm run build` clean)
-- Latest commit: `fc76906` — Session 17: Score Attack mode, prestige skins, weapon kill breakdown
+- Latest commit: `61d6a10` — Enable mode column after Supabase migration
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
 - Branch: `main`, pushed
 
@@ -18,7 +18,7 @@ Known issues:
 - Callsign locking: callsign_claims SQL migration still needs to be run manually in Supabase console
 - Gamepad rumble requires Chrome 68+; silent no-op on Firefox/Safari
 - Discord link in MenuScreen footer is commented out — fill in with actual invite URL when ready
-- `mode` field stripped from Supabase insert until migration run — score attack entries only visible in localStorage leaderboard for now
+- Gamepad rumble requires Chrome 68+; silent no-op on Firefox/Safari
 
 Architecture:
 - App.jsx: ~1520 lines (spawn logic in gameHelpers.js)
@@ -35,7 +35,7 @@ Backend:
 - Supabase global leaderboard live (`fjnpzjjyhnpmunfoycrp.supabase.co`)
 - RLS enabled: public SELECT + INSERT (score 1–10M), no UPDATE/DELETE
 - Table columns (live): id, name, score, kills, wave, lastWords, rank, bestStreak, totalDamage, level, time, achievements, difficulty, starterLoadout, customSettings, inputDevice, seed, accountLevel, ts, created_at
-- Pending column: `mode` text — run migration then remove strip in saveToLeaderboard
+- `mode` text column: live. Score attack entries tag globally; leaderboard filter works.
 - Secrets set in GitHub Actions: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
 
 PWA:

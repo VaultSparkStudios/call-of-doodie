@@ -15,7 +15,6 @@
 - ✅ `playerSkin: ""` added to DEFAULT_META in storage.js.
 
 ## Pending Supabase steps (manual)
-- `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;` — then remove `mode` strip in saveToLeaderboard
 - Run callsign_claims table + policies SQL (full SQL in storage.js comments)
 
 ## Done (session 16)
