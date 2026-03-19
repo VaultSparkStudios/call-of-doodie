@@ -71,6 +71,8 @@ export function soundShoot(weaponIdx) {
     case 7: tone(1200, 0.04, "square", 0.06, 900); tone(1000, 0.04, "triangle", 0.04, 800, 0.04); tone(900, 0.04, "square", 0.05, 700, 0.08); break; // Shock Zapper: triple zap
     case 8: tone(600, 0.28, "sawtooth", 0.09, 180); noise(0.18, 0.04, 0.04); break; // Boomerang: WHOOSH sweep
     case 9: tone(55, 0.18, "sawtooth", 0.16, 180); tone(4200, 0.10, "square", 0.07, 200, 0.02); noise(0.06, 0.14, 0.01); break; // Railgun: deep electric rail discharge
+    case 10: tone(2200, 0.04, "triangle", 0.08, 3200); tone(1800, 0.06, "triangle", 0.04, 800, 0.04); break; // Ricochet Pistol: metallic high ping
+    case 11: tone(180, 0.12, "sawtooth", 0.10, 120); tone(220, 0.08, "square", 0.06, 160, 0.06); break; // Nuclear Kazoo: low nasal honk
     default: tone(600, 0.05, "square", 0.06);
   }
 }

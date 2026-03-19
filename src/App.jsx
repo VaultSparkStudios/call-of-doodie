@@ -27,6 +27,7 @@ import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
 import PerkModal, { getRandomPerks } from "./components/PerkModal.jsx";
 import WaveShopModal from "./components/WaveShopModal.jsx";
+import TutorialOverlay from "./components/TutorialOverlay.jsx";
 
 // ── Controller helpers ────────────────────────────────────────────────────────
 let _rumbleEnabled = true; // gated by settings.rumble
@@ -166,6 +167,7 @@ export default function CallOfDoodie() {
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
+  const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -229,6 +231,8 @@ export default function CallOfDoodie() {
   const [controllerType, setControllerType] = useState("controller");
   const [overclockedShots, setOverclockedShots] = useState(0);
   const [waveStreak, setWaveStreak]             = useState(0);
+  const [pwaPromptReady, setPwaPromptReady]     = useState(false);
+  const [mapTheme, setMapTheme]                 = useState(0);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -239,6 +243,13 @@ export default function CallOfDoodie() {
 
   // ── Anonymous auth init ──────────────────────────────────────────────────
   useEffect(() => { initAnonAuth(); }, []);
+
+  // ── PWA install prompt ────────────────────────────────────────────────────
+  useEffect(() => {
+    const handler = (e) => { e.preventDefault(); pwaPromptRef.current = e; setPwaPromptReady(true); };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
   useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);
@@ -370,6 +381,9 @@ export default function CallOfDoodie() {
       weaponUpgradesCollected: statsRef.current.weaponUpgradesCollected || 0,
       noHitWaves: statsRef.current.noHitWaves || 0,
       singleWeaponKills: Math.max(...(statsRef.current.weaponKills || [0])),
+      level: xpRef.current.level || 1,
+      bossWavesCleared: statsRef.current.bossWavesCleared || 0,
+      maxWeaponLevel: statsRef.current.maxWeaponLevel || 0,
     };
     missions.forEach((m, idx) => {
       if (missionDoneRef.current.has(idx)) return;
@@ -412,7 +426,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(10).fill(0) };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0) };
     achievedRef.current = new Set();
     perkModsRef.current = {};
     perkPendingRef.current = false;
@@ -612,14 +626,14 @@ export default function CallOfDoodie() {
     const mapTheme = Math.floor(_sr() * 8); // 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest 6=space 7=arctic
     gsRef.current.mapTheme = mapTheme;
     const THEME_PROPS = [
-      ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️"],       // office
-      ["📦","🪖","🔦","⛽","🪝","🗝️","🧱","🪜"],       // bunker
-      ["⚙️","🔧","🔩","⛽","📦","🪛","🏭","🔌"],       // factory
-      ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴"],     // ruins
-      ["🌵","🏜️","🦂","🪨","⛺","🐍","🦎","☀️"],     // desert
-      ["🌲","🌿","🍄","🦊","🐾","🌱","🪵","🦋"],       // forest
-      ["🚀","🛸","🌙","⭐","🪐","🌌","👾","🌟"],       // space
-      ["❄️","🏔️","🐧","🌨️","🦭","⛷️","🐻‍❄️","🧊"], // arctic
+      ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️","📎","🖨️","📞","🗃️"],            // office
+      ["📦","🪖","🔦","⛽","🪝","🗝️","🧱","🪜","🪤","🔒","💣","🪃"],            // bunker
+      ["⚙️","🔧","🔩","⛽","📦","🪛","🏭","🔌","🪚","🛢️","🔋","⚗️"],            // factory
+      ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴","🧟","🕯️","📜","🗡️"],          // ruins
+      ["🌵","🏜️","🦂","🪨","⛺","🐍","🦎","☀️","🌡️","🪬","🌾","🐪"],           // desert
+      ["🌲","🌿","🍄","🦊","🐾","🌱","🪵","🦋","🐸","🌳","🍃","🦝"],            // forest
+      ["🚀","🛸","🌙","⭐","🪐","🌌","👾","🌟","🛰️","🌠","🔭","👽"],            // space
+      ["❄️","🏔️","🐧","🌨️","🦭","⛷️","🐻‍❄️","🧊","🌬️","🏂","🎿","🦌"],      // arctic
     ];
     // Floor zones: large irregular colored patches for visual variety
     const floorZones = [];
@@ -636,7 +650,7 @@ export default function CallOfDoodie() {
     // Props: themed decorative emoji on the floor (no collision)
     const propsPool = THEME_PROPS[mapTheme];
     const props = [];
-    for (let _pi = 0; _pi < 8 + Math.floor(_sr() * 5); _pi++) {
+    for (let _pi = 0; _pi < 12 + Math.floor(_sr() * 6); _pi++) {
       const px = w * 0.06 + _sr() * w * 0.88;
       const py = h * 0.06 + _sr() * h * 0.88;
       const onWall = walls.some(ob => px > ob.x - 10 && px < ob.x + ob.w + 10 && py > ob.y - 10 && py < ob.y + ob.h + 10);
@@ -1243,6 +1257,7 @@ export default function CallOfDoodie() {
         gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), 60);
       }
       setWave(gs.currentWave);
+      setMapTheme(gs.mapTheme ?? 0);
       if (!gs.newBestWave && gs.currentWave > (gs.careerBest?.wave || 0)) {
         gs.newBestWave = true;
         addText(gs, W / 2, H / 2 - 150, "🌊 NEW BEST WAVE!", "#00FFAA", true);
@@ -2154,6 +2169,7 @@ export default function CallOfDoodie() {
         highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
         fmtTime={fmtTime}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
+        onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
       />
     );
   }
@@ -2229,6 +2245,11 @@ export default function CallOfDoodie() {
         </div>
       )}
 
+      {/* Tutorial overlay — first-run hints */}
+      {!paused && !perkPending && !shopPending && (
+        <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} wave={wave} />
+      )}
+
       {/* HUD overlay */}
       <HUD
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
@@ -2245,6 +2266,7 @@ export default function CallOfDoodie() {
         overclockedActive={activePerks.some(p => p.id === "overclocked")}
         overclockedShots={overclockedShots}
         waveStreak={waveStreak}
+        mapTheme={mapTheme}
       />
 
       {/* Mobile action bar */}

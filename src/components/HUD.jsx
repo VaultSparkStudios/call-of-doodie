@@ -1,6 +1,9 @@
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
 import { PERK_TIER_COLORS } from "../constants.js";
 
+const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
+const THEME_EMOJIS = ["🏢","🪖","🏭","🏚️","🌵","🌲","🚀","🧊"];
+
 export default function HUD({
   wave, timeSurvived, score, kills, deaths, health, ammo, isReloading,
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
@@ -8,7 +11,7 @@ export default function HUD({
   difficulty, isMobile, weaponUpgrades, activePerks, runModifier,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
-  overclockedActive, overclockedShots, waveStreak,
+  overclockedActive, overclockedShots, waveStreak, mapTheme,
 }) {
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -42,6 +45,9 @@ export default function HUD({
           {wave >= 15 ? "☠️ EXTREME" : wave >= 10 ? "🔥 HARD" : wave >= 5 ? "⚠️ MEDIUM" : "✅ EASY"}
         </span>
         <span style={{ color: "#CCC" }}>{fmtTime(timeSurvived)}</span>
+        {mapTheme != null && (
+          <span style={{ color: "#999", fontSize: 9 }} title="Map theme">{THEME_EMOJIS[mapTheme] || ""} {THEME_NAMES[mapTheme] || ""}</span>
+        )}
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
 

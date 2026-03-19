@@ -156,6 +156,9 @@ const MISSION_DEFS = [
   { id: "arms_race",     icon: "🔧",  make: (n) => ({ text: `Collect ${n} weapon upgrade${n>1?"s":""}`, goal: n, track: "weaponUpgradesCollected" }) },
   { id: "no_hit_wave",   icon: "🛡️", make: (n) => ({ text: `Clear ${n} wave${n>1?"s":""} without taking damage`, goal: n, track: "noHitWaves" }) },
   { id: "single_weapon", icon: "🎯",  make: (n) => ({ text: `Get ${n} kills with a single weapon`,            goal: n, track: "singleWeaponKills" }) },
+  { id: "level_reach",   icon: "⬆️",  make: (n) => ({ text: `Reach level ${n}`,                       goal: n, track: "level"            }) },
+  { id: "boss_clear",    icon: "☠️",  make: (n) => ({ text: `Clear ${n} boss wave${n>1?"s":""}`,        goal: n, track: "bossWavesCleared" }) },
+  { id: "max_weapon",    icon: "⭐",  make: (n) => ({ text: `Max out ${n} weapon${n>1?"s":""}`,          goal: n, track: "maxWeaponLevel"   }) },
 ];
 const MISSION_PARAMS = {
   kill_any: [15,20,25], reach_wave: [5,6,7], combo: [5,8,10],
@@ -164,6 +167,7 @@ const MISSION_PARAMS = {
   boss_kills: [1,2,3], killstreak: [5,8,10], dash_kills: [3,5,8],
   perk_collector: [3,5,7], nuke_user: [1,2,3], high_roller: [5000,10000,25000], arms_race: [1,2,3],
   no_hit_wave: [1,2,3], single_weapon: [5,10,20],
+  level_reach: [5, 8, 12], boss_clear: [1, 2, 3], max_weapon: [1, 2, 3],
 };
 function lcg(s) { return Math.abs((Math.imul(s, 1664525) + 1013904223) | 0); }
 

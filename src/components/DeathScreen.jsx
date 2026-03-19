@@ -13,7 +13,7 @@ export default function DeathScreen({
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
   highlightGifUrl, gifEncoding,
   fmtTime,
-  gamepadConnected,
+  gamepadConnected, onInstallApp,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -368,12 +368,28 @@ export default function DeathScreen({
         )}
 
         {runSeed > 0 && (
-          <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontSize: 10, color: "#aaa", letterSpacing: 1 }}>SEED #{runSeed}</span>
             <button
               onClick={() => navigator.clipboard?.writeText?.(String(runSeed))}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
             >📋 COPY</button>
+            <button
+              onClick={() => {
+                const url = `${location.origin}${location.pathname}?seed=${runSeed}&diff=${difficulty}`;
+                navigator.clipboard?.writeText?.(url);
+              }}
+              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,107,53,0.08)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: "#FF6B35", cursor: "pointer", letterSpacing: 1 }}
+            >⚔️ COPY CHALLENGE LINK</button>
+          </div>
+        )}
+
+        {onInstallApp && (
+          <div style={{ marginBottom: 10 }}>
+            <button
+              onClick={onInstallApp}
+              style={{ ...btnS, width: "100%", fontSize: 14, background: "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", color: "#00E5FF" }}
+            >📲 INSTALL APP</button>
           </div>
         )}
 

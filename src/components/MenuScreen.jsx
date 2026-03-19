@@ -27,6 +27,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [missionProgress, setMissionProgress] = useState({});
   const [meta, setMeta] = useState(null);
   const [sharing, setSharing] = useState(false);
+  const [challengeMode, setChallengeMode] = useState(null); // { seed, diff } if launched via challenge link
 
   useEffect(() => {
     const c = loadCareerStats();
@@ -34,6 +35,18 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     setMissions(getDailyMissions());
     setMissionProgress(loadMissionProgress());
     setMeta(loadMetaProgress());
+
+    // Parse challenge link URL params (?seed=XXXXX&diff=normal)
+    const params = new URLSearchParams(window.location.search);
+    const urlSeed = params.get("seed");
+    const urlDiff = params.get("diff");
+    if (urlSeed && !isNaN(parseInt(urlSeed))) {
+      setCustomSeed(urlSeed);
+      if (urlDiff && Object.keys(DIFFICULTIES).includes(urlDiff)) {
+        setDifficulty(urlDiff);
+      }
+      setChallengeMode({ seed: urlSeed, diff: urlDiff || null });
+    }
   }, []);
 
   // ── Gamepad menu navigation ──────────────────────────────────────────────
@@ -778,6 +791,17 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             ))}
           </div>
         </div>
+
+        {/* Challenge link banner */}
+        {challengeMode && (
+          <div style={{ marginBottom: 8, padding: "7px 14px", borderRadius: 8, border: "1px solid rgba(255,107,53,0.5)", background: "rgba(255,107,53,0.1)", textAlign: "center" }}>
+            <div style={{ color: "#FF6B35", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>⚔️ CHALLENGE LINK DETECTED</div>
+            <div style={{ color: "#CCC", fontSize: 10, marginTop: 2 }}>
+              Seed #{challengeMode.seed}{challengeMode.diff ? ` · ${challengeMode.diff.toUpperCase()}` : ""} · Deploy to accept the challenge!
+            </div>
+            <button onClick={() => { setCustomSeed(""); setChallengeMode(null); setDifficulty("normal"); }} style={{ marginTop: 5, padding: "2px 10px", fontSize: 9, background: "transparent", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, color: "#888", cursor: "pointer", fontFamily: "'Courier New',monospace" }}>✕ dismiss</button>
+          </div>
+        )}
 
         {/* Action buttons */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>

@@ -138,6 +138,25 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.beginPath(); ctx.moveTo(cx + sx*cSz, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy*cSz); ctx.stroke();
   });
 
+  // Theme atmosphere — radial vignette overlay tinted per map theme
+  if (!gs.bossWave) {
+    const VIGNETTE_CLR = [
+      "60,60,120",   // office: cool indigo
+      "20,55,20",    // bunker: military green
+      "80,55,15",    // factory: amber soot
+      "55,35,10",    // ruins: sepia brown
+      "100,70,10",   // desert: warm ochre
+      "10,50,10",    // forest: deep green
+      "30,0,80",     // space: void purple
+      "5,30,70",     // arctic: cold blue
+    ];
+    const vc = VIGNETTE_CLR[gs.mapTheme] || VIGNETTE_CLR[0];
+    const vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.28, W / 2, H / 2, W * 0.72);
+    vig.addColorStop(0, `rgba(${vc},0)`);
+    vig.addColorStop(1, `rgba(${vc},0.22)`);
+    ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
+  }
+
   // Trail
   gs.trail.forEach(t => {
     ctx.globalAlpha = t.life / 15 * 0.2;

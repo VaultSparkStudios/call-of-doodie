@@ -145,6 +145,41 @@ export const PERKS = [
     desc: "Enemies drop ammo 40% more often. Ammo pickups restore 30% more ammo",
     apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; },
   },
+  {
+    id: "combo_lifesteal", name: "Combo Lifesteal", emoji: "🩸", tier: "uncommon",
+    desc: "+6% lifesteal · +60% combo window",
+    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.06; mods.comboTimerMult = (mods.comboTimerMult || 1) * 1.60; },
+  },
+  {
+    id: "overdrive", name: "Overdrive", emoji: "🚀", tier: "uncommon",
+    desc: "+40% fire rate · +10% damage",
+    apply: (mods) => { mods.fireRateMult = (mods.fireRateMult || 1) * 0.60; mods.damageMult = (mods.damageMult || 1) * 1.10; },
+  },
+  {
+    id: "hoarder", name: "Hoarder", emoji: "🧺", tier: "uncommon",
+    desc: "+80% pickup range · +50% ammo drops",
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * 1.80; mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; },
+  },
+  {
+    id: "glass_mind", name: "Glass Mind", emoji: "🧠", tier: "rare",
+    desc: "+80% XP gain · −25 max HP",
+    apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.80; if (gs?.player) { const m = Math.max(15, gs.player.maxHealth - 25); gs.player.maxHealth = m; gs.player.health = Math.min(gs.player.health, m); } },
+  },
+  {
+    id: "bullet_hose", name: "Bullet Hose", emoji: "🔃", tier: "uncommon",
+    desc: "+100% max ammo · +40% ammo restore",
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; },
+  },
+  {
+    id: "crit_cascade", name: "Crit Cascade", emoji: "🌩️", tier: "rare",
+    desc: "+12% crit chance. Synergy: +10% crit with Eagle Eye; +8% crit with Penetrator",
+    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.12; if (mods.hasEagleEye) mods.critBonus += 0.10; if (mods.pierce > 0) mods.critBonus += 0.08; },
+  },
+  {
+    id: "grenade_chain", name: "Grenade Chain", emoji: "💥", tier: "rare",
+    desc: "−50% grenade CD · +25% grenade damage. Synergy: +50% more dmg with Pyromaniac",
+    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.50; mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.25; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.50; },
+  },
 ];
 
 // ===== CURSED PERKS =====
@@ -173,6 +208,15 @@ export const CURSED_PERKS = [
   { id: "glass_jaw", name: "Glass Jaw", emoji: "💎", tier: "cursed",
     desc: "You take double damage but deal +50% damage",
     apply: (mods, gs) => { mods.damageMult = (mods.damageMult || 1) * 1.5; if (gs) gs.glassjaw = true; } },
+  { id: "glass_legs", name: "Glass Legs", emoji: "🦿", tier: "cursed",
+    desc: "+80% bullet damage · dash cooldown ×3",
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.80; mods.dashCDMult = (mods.dashCDMult || 1) * 3.0; } },
+  { id: "xp_curse", name: "XP Curse", emoji: "📉", tier: "cursed",
+    desc: "+120% bullet damage · −70% XP gain",
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 2.20; mods.xpMult = (mods.xpMult || 1) * 0.30; } },
+  { id: "haste_poison", name: "Haste Poison", emoji: "☠️", tier: "cursed",
+    desc: "+70% fire rate · ammo capacity ×0.3",
+    apply: (mods) => { mods.fireRateMult = (mods.fireRateMult || 1) * 0.30; mods.ammoMult = (mods.ammoMult || 1) * 0.30; } },
 ];
 
 export const PERK_TIER_COLORS = { common: "#AAAAAA", uncommon: "#44BB44", rare: "#4488FF", legendary: "#FF44FF", cursed: "#FF2244" };
