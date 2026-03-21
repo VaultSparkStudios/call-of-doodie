@@ -1,50 +1,62 @@
 # Task Board
 
-## Now (next session)
-- **Score Attack global leaderboard column**: run `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;` in Supabase, then remove the mode strip in storage.js so score attack entries show on a dedicated tab
-- **Skin visible on share card**: include the player's skin emoji on the DeathScreen score PNG (generateScoreCard)
-- **New enemy or boss**: expand roster (more boss variety, new civilian type, etc.)
-- **More daily mission types**: based on score attack (e.g. reach X score in score attack)
+## Pending (manual Supabase action — non-blocking)
+- Run callsign_claims table + RLS policies SQL (full SQL in `storage.js` comments) in Supabase console
+- Enable "Anonymous sign-ins" in Supabase Auth settings (required for server-side callsign enforcement)
 
-## Done (session 17)
-- ✅ Score Attack mode: 5-min countdown, 1.5× spawn rate, forced game over when timer hits 0 (guardian angel + dead man's hand bypassed). Timer displayed top-center in drawGame (pulses red ≤30s). `scoreAttackMode` state + `scoreAttackRef` in App.jsx.
-- ✅ Prestige skin unlocks: 🤖 Robot (P1), 👾 Alien (P2), 🐸 Frog (P3). Selector in Upgrades modal (skin selector section). `meta.playerSkin` persisted to localStorage. Drawn as emoji overlay on player helmet in drawGame.js.
-- ✅ Weapon kill breakdown on DeathScreen: top-3 weapons by kill count. `weaponKillsSnapshot` state captured at death. Gold border on #1 weapon. WEAPONS import added to DeathScreen.
-- ✅ Leaderboard mode filter tabs: ALL / 🎯 NORMAL / ⏱ SCORE ATK rows added to LeaderboardPanel. Filters by `e.mode` field (null/"normal" = normal, "score_attack" = score attack).
-- ✅ `mode` field added to submitScore entry; stripped from Supabase insert until migration run. Migration noted in storage.js comments.
-- ✅ `playerSkin: ""` added to DEFAULT_META in storage.js.
-
-## Pending Supabase steps (manual)
-- Run callsign_claims table + policies SQL (full SQL in storage.js comments)
-
-## Done (session 16)
-- ✅ Boss name announcements + per-boss ability warnings
-- ✅ Summoner portal VFX, shield-break screen text + shake, soundSummonDismissed()
-- ✅ Splitter shard pickup guard
-- ✅ Railgun kill completeness (fully matches bullet kill path)
-- ✅ What's New updated (sessions 13–16)
-- ✅ Controller scroll + X/□ reload (button 2)
-- ✅ Death screen bottom padding, leaderboard panel larger
-- ✅ Device icon always shown (|| "mouse" fallback)
-- ✅ Swarm lag fix (AABB pre-check + death sound throttle)
-- ✅ Seed + Account Level on leaderboard (AccountLevelBadge component)
-- ✅ All Supabase column migrations run (customSettings, inputDevice, seed, accountLevel, starterLoadout)
-
-## Later
+## Later / backlog
 - Capacitor wrapper for iOS App Store submission
 - More boss abilities at wave 40+
-- Discord link in MenuScreen footer (commented out — fill in when ready)
+- Discord link in MenuScreen footer (commented out — fill in when invite URL ready)
+- Consider `customSettings` boolean column migration for Supabase (⚙️ badge visible for all entries)
+- Wave 40+ difficulty scaling / new boss types
+- Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
+
+## Done (session 19 — 2026-03-20)
+- ✅ `gs.algorithmSurge` cleared on The Algorithm boss death (both kill paths in App.jsx)
+- ✅ Doomscroller (19): "zzz 📱" frozen visual — pulsing purple ring + text above enemy when doomscrolling
+- ✅ `soundEnemyDeath(19)`: phone-buzz + sad descending chime
+- ✅ `soundEnemyDeath(20)`: glitchy cascading error sound
+- ✅ DeathScreen challenge link copy: ✓ COPIED! flash with green transition (1.5s)
+- ✅ WaveShopModal: "BOUGHT THIS RUN" history strip — `shopHistory` state in App.jsx, `boughtHistory` prop
+- ✅ LeaderboardPanel DAILY tab: TODAY badge on entries matching `getDailyChallengeSeed()`
+- ✅ Prestige skins P4 🦊 Fox (prestige 4) and P5 🐉 Dragon (prestige 5) added
+- ✅ PauseMenu ⚔️ LEADERBOARD button — opens full LeaderboardPanel mid-run for challenge browsing
+
+## Done (session 18 — 2026-03-20)
+- ✅ `mode` column migration complete — score_attack/daily_challenge tags live, no stripping
+- ✅ Prestige skin on share card (`generateScoreCard` — "DEPLOYED AS: 🤖 NAME · RANK")
+- ✅ Doomscroller enemy (typeIndex 19): wave 9+, freezes periodically (70/280 frames), color=#7B68EE
+- ✅ The Algorithm boss (typeIndex 20): 700HP, 3-shot spread, Viral Surge ability (gs.algorithmSurge)
+- ✅ Score Attack daily missions: sa_score, sa_kills, sa_wave (3 new MISSION_DEFS in storage.js)
+- ✅ TutorialOverlay redesign: 6-step sequential with progress dots, NEXT/SKIP/LET'S GO, auto-advance 6s
+- ✅ Controller ADS zoom: LT/L2 → gs.adsZoom → 1.28× scale in drawGame + scope ring overlay
+- ✅ Controller LB/L1 = Grenade (primary); D-pad L/R = prev/next weapon
+- ✅ PauseMenu controller bindings: both Xbox + PlayStation button labels shown
+- ✅ PauseMenu D-pad music vibe navigation fixed (`disableLR: false`)
+- ✅ MAX_PARTICLES=150, death sound throttle max 1/frame (lag/latency reduction)
+- ✅ Daily Challenge mode: fixed LCG seed per day, `getDailyChallengeSeed()`, `mode: "daily_challenge"` on submit
+- ✅ Ghost mode (challenge vs tracking): vsScore/vsName from URL `?vs=&vsName=` → HUD tracker + DeathScreen result card
+- ✅ Challenge link enhancements: includes vs+vsName; LeaderboardPanel per-row ⚔️ copy button
+- ✅ LeaderboardPanel DAILY tab: filters `mode === "daily_challenge"`
+
+## Done (session 17)
+- ✅ Score Attack mode, prestige skins (P1–P3), weapon kill breakdown on DeathScreen
+- ✅ Leaderboard mode filter tabs (ALL/NORMAL/SCORE ATK), `mode` field in submitScore
+
+## Done (session 16)
+- ✅ Boss announcements, Summoner portal VFX, shield-break effects, soundSummonDismissed
+- ✅ Railgun kill completeness, device icon fallback, AccountLevelBadge, swarm lag fix
+- ✅ All Supabase column migrations run (customSettings, inputDevice, seed, accountLevel, starterLoadout)
 
 ## Done (session 15)
-- ✅ Boss variety: Splitter, Juggernaut, Summoner. Rotate: Karen→Splitter→Juggernaut→Summoner→Landlord
-- ✅ Wave events: Fast Round, Siege, Elite Only, Fog of War (every 3rd non-boss wave)
-- ✅ Enemy death sounds: soundEnemyDeath(typeIndex) — 8 distinct synth groups
-- ✅ Named arena layouts: Pillars, Corridors, Cross-Rooms, Bunker (seeded)
-- ✅ New pickups: Rage, Magnet, Freeze
+- ✅ Boss variety: Splitter, Juggernaut, Summoner
+- ✅ Wave events: Fast Round, Siege, Elite Only, Fog of War
+- ✅ soundEnemyDeath(typeIndex), named arena layouts, Rage/Magnet/Freeze pickups
 
 ## Done (sessions 1–14)
 - ✅ Core game, 12 weapons, flow field, boss waves, wave shop, weapon upgrades, 40+ perks + cursed perks
-- ✅ Daily missions (21 types), meta-progression, prestige, 49 achievements, seed replay
-- ✅ Supabase leaderboard + anon auth + callsign locking
+- ✅ Daily missions (24 types), meta-progression, prestige, 49 achievements, seed replay
+- ✅ Supabase leaderboard + anon auth + callsign locking (client-side)
 - ✅ Mobile dual-joystick, gamepad + rumble, colorblind mode, PWA, settings panel, 5 music vibes
 - ✅ GIF highlight reel, Share Score, 8 map themes, challenge links, TutorialOverlay

@@ -1,44 +1,69 @@
 # Current State
 
-Build status:
-- Build: passing (`npm run build` clean)
-- Latest commit: `61d6a10` — Enable mode column after Supabase migration
+## Build
+- Status: ✅ passing (`npm run build` clean, 3.4s)
+- Latest commit: `ec94066` — Session 19 polish — all outstanding items resolved
+- Branch: `main`, pushed to `origin/main`
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
-- Branch: `main`, pushed
 
-Current priorities:
-1. Run Supabase migration: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;` then remove `mode` strip in storage.js
-2. Score attack leaderboard visibility (after migration)
-3. Skin visible on share card (generateScoreCard in DeathScreen.jsx)
+## Architecture sizes
+- `App.jsx`: ~1530 lines (game loop + state orchestrator)
+- `drawGame.js`: ~700 lines (pure render, no React setters)
+- `gameHelpers.js`: ~140 lines — spawnEnemy/spawnBoss
+- `constants.js`: large — WEAPONS(12), ENEMY_TYPES(21), PERKS(40+), CURSED_PERKS, ACHIEVEMENTS(49), DIFFICULTIES, STARTER_LOADOUTS, etc.
 
-Known issues:
-- Boss ground slam: random initial stagger (0–179 frames) can shorten 90-frame warning on first cycle
+## Supabase leaderboard columns (all live)
+- id, name, score, kills, wave, lastWords, rank, bestStreak, totalDamage, level, time
+- achievements, difficulty, starterLoadout, customSettings, inputDevice, seed, accountLevel, ts, created_at
+- `mode` text column: ✅ live — score_attack / daily_challenge / null(=normal)
+
+## Active game modes
+- **Normal**: standard run
+- **Score Attack**: 5-min countdown, 1.5× spawn, forced game-over on timer. `scoreAttackRef` synced to `scoreAttackMode` state. `gs.scoreAttackMode`, `gs.scoreAttackTimeLeft`, `gs.scoreAttackDone`.
+- **Daily Challenge**: fixed LCG seed per day (`getDailyChallengeSeed()`). Marks `cod-daily-YYYY-MM-DD` in localStorage. `dailyChallengeRef` / `dailyChallengeMode` state.
+
+## Social / challenge features (all live)
+- **Ghost mode**: `challengeVsScore` / `challengeVsName` parsed from `?vs=&vsName=` URL params. Shown in HUD as "BEATING/BEHIND @name ±pts". Challenge result card on DeathScreen (BEATEN🏆/FAILED💀).
+- **Challenge links**: DeathScreen "⚔️ COPY CHALLENGE LINK" includes seed+diff+vs+vsName. ✓ COPIED! flash on click.
+- **Leaderboard per-row ⚔️ button**: copies pre-filled challenge URL.
+- **DAILY tab**: filters `mode === "daily_challenge"`. Shows TODAY badge where `e.seed === getDailyChallengeSeed()`.
+
+## Enemy roster (21 types, indices 0–20)
+- Regular: 0–15, 19
+- Boss-only: 4 (Mega Karen), 16 (Splitter), 17 (Juggernaut), 18 (Summoner), 9 (Landlord), 20 (The Algorithm)
+- Doomscroller (19): wave 9+; freezes 70/280 frames; "zzz 📱" visual + purple ring when frozen; soundEnemyDeath(19) = buzz+chime
+- The Algorithm (20): boss, fires 3-shot spread; Viral Surge every ~480 frames — triples spawn rate; soundEnemyDeath(20) = glitch cascade; `gs.algorithmSurge` cleared on death
+- BOSS_ROTATION: [4, 16, 17, 18, 9, 20]
+
+## Prestige skins (PLAYER_SKINS in MenuScreen.jsx)
+- P0: "" Soldier (default)
+- P1: 🤖 Robot
+- P2: 👾 Alien
+- P3: 🐸 Frog
+- P4: 🦊 Fox
+- P5: 🐉 Dragon
+- `meta.playerSkin` persisted in `cod-meta-v2`. Drawn in drawGame as emoji on helmet. Shown in share card.
+
+## Wave shop
+- Options: Field Medkit, Resupply Crate, Field Upgrade, Combat Stim, HP Canister, Damage Boost
+- `shopHistory` state in App.jsx (array of {emoji, name}) — passed to WaveShopModal as `boughtHistory`
+- WaveShopModal shows "BOUGHT THIS RUN" strip above options
+
+## PauseMenu
+- ⚔️ LEADERBOARD button opens full LeaderboardPanel mid-run (receives `leaderboard`, `lbLoading`, `lbHasMore`, `onLoadMore`, `onRefreshLeaderboard`, `username` from App.jsx)
+
+## Known issues (minor, low priority)
+- Boss ground slam: random stagger can shorten 90-frame warning on first cycle
 - Overclocked perk: taking it twice resets overclockedShots mid-game (minor edge case)
-- ID "scavenger" exists in both PERKS and META_UPGRADES — no runtime collision, naming hazard only
-- Callsign locking: callsign_claims SQL migration still needs to be run manually in Supabase console
+- `scavenger` id exists in both PERKS and META_UPGRADES — no runtime collision, naming hazard only
 - Gamepad rumble requires Chrome 68+; silent no-op on Firefox/Safari
-- Discord link in MenuScreen footer is commented out — fill in with actual invite URL when ready
-- Gamepad rumble requires Chrome 68+; silent no-op on Firefox/Safari
+- Discord link in MenuScreen footer commented out — fill in when invite URL ready
 
-Architecture:
-- App.jsx: ~1520 lines (spawn logic in gameHelpers.js)
-- drawGame.js: ~660 lines — pure render, no React setters
-- gameHelpers.js: ~106 lines — spawnEnemy(gs, W, H, difficultyId), spawnBoss(gs, W, H, difficultyId, typeIndex)
-- `scoreAttackRef` — synced with `scoreAttackMode` state; read by game loop and submitScore
-- `weaponKillsSnapshot` state — captured at player death, passed to DeathScreen
+## Pending Supabase (manual, non-blocking)
+- Callsign_claims table + RLS migration (full SQL in storage.js comments) — not yet run. Callsign locking is client-side only until then.
+- "Anonymous sign-ins" must be enabled in Supabase Auth settings for callsign server enforcement
 
-Map themes: 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest 6=space 7=arctic
-Leaderboard: paginated 50/page, Load More in LeaderboardPanel. loadLeaderboard(offset, limit)
-Leaderboard filters: mode tabs (ALL / NORMAL / SCORE ATK) + difficulty tabs (ALL / EASY / NORMAL / HARD / INSANE)
-
-Backend:
-- Supabase global leaderboard live (`fjnpzjjyhnpmunfoycrp.supabase.co`)
-- RLS enabled: public SELECT + INSERT (score 1–10M), no UPDATE/DELETE
-- Table columns (live): id, name, score, kills, wave, lastWords, rank, bestStreak, totalDamage, level, time, achievements, difficulty, starterLoadout, customSettings, inputDevice, seed, accountLevel, ts, created_at
-- `mode` text column: live. Score attack entries tag globally; leaderboard filter works.
-- Secrets set in GitHub Actions: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
-
-PWA:
-- public/manifest.json + public/sw.js deployed
+## PWA
+- `public/manifest.json` + `public/sw.js` deployed
 - SW strategy: network-first navigation, cache-first assets
-- Install prompt captured via `beforeinstallprompt` → `pwaPromptRef`; surfaced as "Install App" button on DeathScreen
+- Install prompt: `beforeinstallprompt` → `pwaPromptRef` → "Install App" on DeathScreen
