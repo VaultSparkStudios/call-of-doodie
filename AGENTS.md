@@ -34,6 +34,17 @@ changes, read these files from the studio repo first:
 - `npm run build` must pass before any commit is pushed.
 - Update `CODEX_HANDOFF_YYYY-MM-DD.md` after any significant session of work.
 - Never commit `.env` files, credentials, or large binaries.
+- `context/LATEST_HANDOFF.md` is the single authoritative session handoff file.
+- `handoffs/LATEST_HANDOFF.md` is legacy and should not be used as the active write target.
+
+## Session aliases
+
+If the user says only `start`, run the startup protocol in `prompts/start.md`.
+
+If the user says only `closeout`, run the closeout protocol in
+`prompts/closeout.md`.
+
+These aliases are mandatory shortcuts, not suggestions.
 
 ## Tech stack
 
@@ -56,10 +67,33 @@ call-of-doodie/
 ├── AGENTS.md                   # this file
 ├── HANDOFF.md                  # legacy handoff (superseded)
 ├── context/
-│   ├── CURRENT_STATE.md        # live build status + priorities (update each session)
-│   ├── TASK_BOARD.md           # current + upcoming work
-│   ├── DECISIONS.md            # architecture decisions log
-│   └── PROJECT_BRIEF.md        # design pillars
+│   ├── PROJECT_BRIEF.md
+│   ├── SOUL.md
+│   ├── BRAIN.md
+│   ├── CURRENT_STATE.md
+│   ├── DECISIONS.md
+│   ├── TASK_BOARD.md
+│   ├── OPEN_QUESTIONS.md
+│   ├── ASSUMPTIONS_REGISTER.md
+│   ├── RISK_REGISTER.md
+│   ├── TRUTH_MAP.md
+│   └── LATEST_HANDOFF.md       # authoritative session handoff
+├── docs/
+│   ├── README.md
+│   ├── GAME_LOOP.md
+│   ├── PLAYER_EXPERIENCE_PRINCIPLES.md
+│   ├── BRAND_SYSTEM.md
+│   ├── CREATIVE_DIRECTION_RECORD.md
+│   ├── RIGHTS_PROVENANCE.md
+│   └── INNOVATION_PIPELINE.md
+├── handoffs/
+│   └── LATEST_HANDOFF.md       # legacy redirect only
+├── logs/
+│   └── SESSION_LOG.md
+├── prompts/
+│   ├── bootstrap_prompt.md
+│   ├── start.md
+│   └── closeout.md
 ├── .github/workflows/deploy.yml
 └── src/
     ├── main.jsx
@@ -119,6 +153,35 @@ call-of-doodie/
 | File | Purpose |
 |------|---------|
 | `.github/workflows/deploy.yml` | Build + deploy to GitHub Pages on push to `main` |
+
+## Gold-standard session protocol
+
+### Startup read order
+
+1. `prompts/start.md`
+2. `context/PROJECT_BRIEF.md`
+3. `context/SOUL.md`
+4. `context/BRAIN.md`
+5. `context/CURRENT_STATE.md`
+6. `context/DECISIONS.md`
+7. `context/TRUTH_MAP.md`
+8. `context/TASK_BOARD.md`
+9. `context/LATEST_HANDOFF.md`
+10. only then any task-specific code or docs
+
+### Mandatory closeout write-back
+
+After meaningful work, update:
+
+- `context/CURRENT_STATE.md`
+- `context/TASK_BOARD.md`
+- `context/LATEST_HANDOFF.md`
+- `logs/SESSION_LOG.md`
+- `context/DECISIONS.md` when reasoning changed
+- `docs/CREATIVE_DIRECTION_RECORD.md` when human creative direction changed
+- `docs/INNOVATION_PIPELINE.md` when a strong new idea emerged
+
+Do not end a meaningful work session without write-back.
 
 ## Scripts
 

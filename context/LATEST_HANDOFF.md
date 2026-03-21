@@ -1,4 +1,10 @@
 # Latest Handoff — Session 19 Closeout
+
+This is the authoritative active handoff file for this repo.
+
+If this file conflicts with `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, or
+`CODEX_HANDOFF_*.md`, this file wins.
+
 **Date:** 2026-03-20
 **Last commit:** `ec94066` — Session 19 polish — all outstanding items resolved
 **Branch:** `main`, clean, pushed

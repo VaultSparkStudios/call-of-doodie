@@ -1,5 +1,10 @@
 # Latest Handoff
 
+Legacy handoff archive only.
+
+Do not use this file as the active session handoff. The authoritative handoff
+for this repo is `context/LATEST_HANDOFF.md`.
+
 Last updated: 2026-03-19 (Session 14 — new perks, map themes, bug fixes, challenge links, tutorial, PWA)
 
 ## What was completed this session
