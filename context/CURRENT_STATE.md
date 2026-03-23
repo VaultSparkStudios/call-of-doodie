@@ -12,6 +12,11 @@
 - `gameHelpers.js`: ~140 lines — spawnEnemy/spawnBoss
 - `constants.js`: large — WEAPONS(12), ENEMY_TYPES(21), PERKS(40+), CURSED_PERKS, ACHIEVEMENTS(49), DIFFICULTIES, STARTER_LOADOUTS, etc.
 
+## Operating docs
+- Gold-standard game overlays now include `docs/SYSTEMS.md`, `docs/CONTENT_PLAN.md`, `docs/LIVE_OPS.md`, and `docs/QUALITY_BAR.md`
+- Quick memory map now lives in `context/MEMORY_INDEX.md`
+- Studio planning overlays now live in `plans/CONSTRAINTS_LEDGER.md` and `plans/EXPERIMENT_REGISTRY.md`
+
 ## Supabase leaderboard columns (all live)
 - id, name, score, kills, wave, lastWords, rank, bestStreak, totalDamage, level, time
 - achievements, difficulty, starterLoadout, customSettings, inputDevice, seed, accountLevel, ts, created_at

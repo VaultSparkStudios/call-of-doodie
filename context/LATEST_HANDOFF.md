@@ -11,6 +11,15 @@ If this file conflicts with `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, or
 
 ---
 
+## 2026-03-21 addendum
+
+- Added operating overlays for `SYSTEMS`, `CONTENT_PLAN`, `LIVE_OPS`, and `QUALITY_BAR`
+- Added `context/MEMORY_INDEX.md` for faster cold-start session loading
+- Added `plans/CONSTRAINTS_LEDGER.md` and `plans/EXPERIMENT_REGISTRY.md`
+- Updated startup and closeout prompts so these files are part of the gold-standard read and write path
+
+---
+
 ## What was done this session (sessions 18 + 19)
 
 ### Session 18

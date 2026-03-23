@@ -15,7 +15,10 @@ If meaningful work happened this session, update in this order:
 5. `context/DECISIONS.md` if reasoning changed
 6. `docs/CREATIVE_DIRECTION_RECORD.md` if human creative direction changed
 7. `docs/INNOVATION_PIPELINE.md` if a high-value idea emerged
-8. any project-type or repo-specific files whose truth changed
+8. `plans/CONSTRAINTS_LEDGER.md` if constraints changed
+9. `plans/EXPERIMENT_REGISTRY.md` if experiments changed
+10. `docs/QUALITY_BAR.md` if release expectations changed
+11. any project-type or repo-specific files whose truth changed
 
 ## Closeout rules
 

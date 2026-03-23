@@ -36,6 +36,7 @@ changes, read these files from the studio repo first:
 - Never commit `.env` files, credentials, or large binaries.
 - `context/LATEST_HANDOFF.md` is the single authoritative session handoff file.
 - `handoffs/LATEST_HANDOFF.md` is legacy and should not be used as the active write target.
+- `context/MEMORY_INDEX.md` should be used as the quick map of where project truth lives.
 
 ## Session aliases
 
@@ -77,11 +78,16 @@ call-of-doodie/
 │   ├── ASSUMPTIONS_REGISTER.md
 │   ├── RISK_REGISTER.md
 │   ├── TRUTH_MAP.md
+│   ├── MEMORY_INDEX.md
 │   └── LATEST_HANDOFF.md       # authoritative session handoff
 ├── docs/
 │   ├── README.md
 │   ├── GAME_LOOP.md
+│   ├── SYSTEMS.md
+│   ├── CONTENT_PLAN.md
+│   ├── LIVE_OPS.md
 │   ├── PLAYER_EXPERIENCE_PRINCIPLES.md
+│   ├── QUALITY_BAR.md
 │   ├── BRAND_SYSTEM.md
 │   ├── CREATIVE_DIRECTION_RECORD.md
 │   ├── RIGHTS_PROVENANCE.md
@@ -90,6 +96,9 @@ call-of-doodie/
 │   └── LATEST_HANDOFF.md       # legacy redirect only
 ├── logs/
 │   └── SESSION_LOG.md
+├── plans/
+│   ├── CONSTRAINTS_LEDGER.md
+│   └── EXPERIMENT_REGISTRY.md
 ├── prompts/
 │   ├── bootstrap_prompt.md
 │   ├── start.md
@@ -178,7 +187,10 @@ After meaningful work, update:
 - `context/LATEST_HANDOFF.md`
 - `logs/SESSION_LOG.md`
 - `context/DECISIONS.md` when reasoning changed
+- `plans/CONSTRAINTS_LEDGER.md` when constraints changed
+- `plans/EXPERIMENT_REGISTRY.md` when experiments changed
 - `docs/CREATIVE_DIRECTION_RECORD.md` when human creative direction changed
+- `docs/QUALITY_BAR.md` when the release bar changed
 - `docs/INNOVATION_PIPELINE.md` when a strong new idea emerged
 
 Do not end a meaningful work session without write-back.

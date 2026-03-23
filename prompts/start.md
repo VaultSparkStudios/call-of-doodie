@@ -16,7 +16,14 @@ Treat that one word as a full startup command.
 8. `context/TRUTH_MAP.md`
 9. `context/TASK_BOARD.md`
 10. `context/LATEST_HANDOFF.md`
-11. only then task-specific files
+11. `context/MEMORY_INDEX.md`
+12. `docs/SYSTEMS.md`
+13. `docs/CONTENT_PLAN.md`
+14. `docs/LIVE_OPS.md`
+15. `docs/QUALITY_BAR.md`
+16. `plans/CONSTRAINTS_LEDGER.md`
+17. `plans/EXPERIMENT_REGISTRY.md`
+18. only then task-specific files
 
 ## Startup rules
 

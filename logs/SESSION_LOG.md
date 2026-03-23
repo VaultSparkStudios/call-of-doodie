@@ -229,3 +229,23 @@ Sessions 1–2 established the core game: React 19 + Vite 6, canvas shooter,
 4 weapons, 11 enemies, boss waves, weapon upgrades, perk system, leaderboard,
 career stats, achievements, share score, mobile controls, performance fixes.
 See CODEX_HANDOFF_2026-03-12.md for full feature list.
+
+---
+
+## 2026-03-21 — Studio System Expansion
+
+**Focus:** Strengthen Call of Doodie as the game-side gold-standard repo.
+
+**Completed:**
+- Added `context/MEMORY_INDEX.md`
+- Added `docs/SYSTEMS.md`
+- Added `docs/CONTENT_PLAN.md`
+- Added `docs/LIVE_OPS.md`
+- Added `docs/QUALITY_BAR.md`
+- Added `plans/CONSTRAINTS_LEDGER.md`
+- Added `plans/EXPERIMENT_REGISTRY.md`
+- Updated `AGENTS.md`, `docs/README.md`, `prompts/start.md`, and `prompts/closeout.md` to include the new overlays
+
+**Notes:**
+- No runtime code or deployment files were changed
+- Left existing dirty `src/storage.js` and `.claude/` untouched
