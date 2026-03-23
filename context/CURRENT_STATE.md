@@ -14,7 +14,7 @@
 
 ## Operating docs
 - Gold-standard game overlays now include `docs/SYSTEMS.md`, `docs/CONTENT_PLAN.md`, `docs/LIVE_OPS.md`, and `docs/QUALITY_BAR.md`
-- Quick memory map now lives in `context/MEMORY_INDEX.md`
+- Quick memory map now lives in `context/MEMORY_INDEX.md` `r`n- The project now owns `context/PORTFOLIO_CARD.md` and `context/PROJECT_STATUS.json` for studio-wide portfolio tracking
 - Studio planning overlays now live in `plans/CONSTRAINTS_LEDGER.md` and `plans/EXPERIMENT_REGISTRY.md`
 
 ## Supabase leaderboard columns (all live)
@@ -72,3 +72,4 @@
 - `public/manifest.json` + `public/sw.js` deployed
 - SW strategy: network-first navigation, cache-first assets
 - Install prompt: `beforeinstallprompt` → `pwaPromptRef` → "Install App" on DeathScreen
+

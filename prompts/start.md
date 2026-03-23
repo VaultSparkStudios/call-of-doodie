@@ -9,21 +9,22 @@ Treat that one word as a full startup command.
 1. `AGENTS.md`
 2. `docs/README.md`
 3. `context/PROJECT_BRIEF.md`
-4. `context/SOUL.md`
-5. `context/BRAIN.md`
-6. `context/CURRENT_STATE.md`
-7. `context/DECISIONS.md`
-8. `context/TRUTH_MAP.md`
-9. `context/TASK_BOARD.md`
-10. `context/LATEST_HANDOFF.md`
-11. `context/MEMORY_INDEX.md`
-12. `docs/SYSTEMS.md`
-13. `docs/CONTENT_PLAN.md`
-14. `docs/LIVE_OPS.md`
-15. `docs/QUALITY_BAR.md`
-16. `plans/CONSTRAINTS_LEDGER.md`
-17. `plans/EXPERIMENT_REGISTRY.md`
-18. only then task-specific files
+4. `context/PORTFOLIO_CARD.md`
+5. `context/SOUL.md`
+6. `context/BRAIN.md`
+7. `context/CURRENT_STATE.md`
+8. `context/DECISIONS.md`
+9. `context/TRUTH_MAP.md`
+10. `context/TASK_BOARD.md`
+11. `context/LATEST_HANDOFF.md`
+12. `context/MEMORY_INDEX.md`
+13. `docs/SYSTEMS.md`
+14. `docs/CONTENT_PLAN.md`
+15. `docs/LIVE_OPS.md`
+16. `docs/QUALITY_BAR.md`
+17. `plans/CONSTRAINTS_LEDGER.md`
+18. `plans/EXPERIMENT_REGISTRY.md`
+19. only then task-specific files
 
 ## Startup rules
 

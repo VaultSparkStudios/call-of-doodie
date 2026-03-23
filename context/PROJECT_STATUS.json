@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "name": "Call of Doodie",
+  "slug": "call-of-doodie",
+  "medium": "game",
+  "status": "active",
+  "stage": "live-browser-build",
+  "priority": "high",
+  "owner": "VaultSpark Studios",
+  "health": "green",
+  "summary": "Humor-first browser shooter with a live public build and a stable gold-standard operating layer.",
+  "currentFocus": "Protect the live build while expanding systems, content, and replayability.",
+  "nextMilestone": "Next gameplay and content expansion pass.",
+  "launchWindow": "Live now",
+  "repo": "VaultSparkStudios/call-of-doodie",
+  "runtimeUrl": "https://vaultsparkstudios.com/call-of-doodie/",
+  "lastUpdated": "2026-03-23",
+  "lastHandoffDate": "2026-03-20",
+  "riskLevel": "medium",
+  "consumerReady": true,
+  "innovationScore": 85,
+  "franchiseValue": "medium",
+  "topBlockers": [
+    "Future feature work must preserve build stability and performance.",
+    "Storage and leaderboard evolution need discipline as the game grows."
+  ],
+  "readFirst": [
+    "context/PROJECT_BRIEF.md",
+    "context/PORTFOLIO_CARD.md",
+    "context/LATEST_HANDOFF.md"
+  ]
+}

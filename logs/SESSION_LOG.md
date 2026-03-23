@@ -249,3 +249,9 @@ See CODEX_HANDOFF_2026-03-12.md for full feature list.
 **Notes:**
 - No runtime code or deployment files were changed
 - Left existing dirty `src/storage.js` and `.claude/` untouched
+
+## 2026-03-23 portfolio layer
+
+- Added `context/PORTFOLIO_CARD.md` and `context/PROJECT_STATUS.json` so Call of Doodie participates in the studio-wide portfolio registry.
+- Updated AGENTS, startup, closeout, and memory-index docs so the portfolio layer becomes part of the standard gold-standard workflow.
+

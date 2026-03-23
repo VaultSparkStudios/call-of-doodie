@@ -168,7 +168,8 @@ call-of-doodie/
 ### Startup read order
 
 1. `prompts/start.md`
-2. `context/PROJECT_BRIEF.md`
+2. `context/PROJECT_BRIEF.md` 
+3. `context/PORTFOLIO_CARD.md`
 3. `context/SOUL.md`
 4. `context/BRAIN.md`
 5. `context/CURRENT_STATE.md`
@@ -212,3 +213,5 @@ npm run preview  # Preview production build
 - App.jsx is ~1400 lines — the RAF loop stays (closes over too many refs), but further extraction is possible
 - No backend — `play-` and `api-` origins are reserved but not active
 - Capacitor/PWA wrapping for App Store not yet started
+
+
