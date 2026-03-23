@@ -9,16 +9,18 @@ Treat that one word as a full closeout command.
 If meaningful work happened this session, update in this order:
 
 1. `context/CURRENT_STATE.md`
-2. `context/TASK_BOARD.md`
-3. `context/LATEST_HANDOFF.md`
-4. `logs/SESSION_LOG.md`
-5. `context/DECISIONS.md` if reasoning changed
-6. `docs/CREATIVE_DIRECTION_RECORD.md` if human creative direction changed
-7. `docs/INNOVATION_PIPELINE.md` if a high-value idea emerged
-8. `plans/CONSTRAINTS_LEDGER.md` if constraints changed
-9. `plans/EXPERIMENT_REGISTRY.md` if experiments changed
-10. `docs/QUALITY_BAR.md` if release expectations changed
-11. any project-type or repo-specific files whose truth changed
+2. `context/PORTFOLIO_CARD.md` when portfolio truth changed
+3. `context/PROJECT_STATUS.json` when machine-readable status changed
+4. `context/TASK_BOARD.md`
+5. `context/LATEST_HANDOFF.md`
+6. `logs/SESSION_LOG.md`
+7. `context/DECISIONS.md` if reasoning changed
+8. `docs/CREATIVE_DIRECTION_RECORD.md` if human creative direction changed
+9. `docs/INNOVATION_PIPELINE.md` if a high-value idea emerged
+10. `plans/CONSTRAINTS_LEDGER.md` if constraints changed
+11. `plans/EXPERIMENT_REGISTRY.md` if experiments changed
+12. `docs/QUALITY_BAR.md` if release expectations changed
+13. any project-type or repo-specific files whose truth changed
 
 ## Closeout rules
 

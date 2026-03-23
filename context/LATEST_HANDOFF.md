@@ -148,3 +148,9 @@ Suggested priorities for next session:
 2. Wave 40+ difficulty scaling / new boss type or ability
 3. iOS Capacitor wrapper research
 4. Any Discord link / community feature when an invite URL is ready
+
+## 2026-03-23 portfolio addendum
+
+- Added `context/PORTFOLIO_CARD.md` and `context/PROJECT_STATUS.json`
+- Updated AGENTS, startup, closeout, and memory-index docs so portfolio status is part of standard project operation
+
