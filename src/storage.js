@@ -80,8 +80,60 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
   } catch { return []; }
 }
 
+// ── Vault Member integration (silent, non-blocking) ─────────────────────────
+// If the player has a Vault Member session on this domain, their game session
+// is recorded and they earn vault points. No redirect, no login prompt.
+// Vault Members are players who registered at vaultsparkstudios.com/vault-member/
+async function _tryAwardVaultPoints(entry) {
+  if (!supabase) return;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+
+    // Only award points to real vault members (not anonymous sessions)
+    if (session.user.is_anonymous) return;
+
+    const { data: member } = await supabase
+      .from('vault_members')
+      .select('id')
+      .eq('id', session.user.id)
+      .maybeSingle();
+    if (!member) return;
+
+    // Write game session
+    await supabase.from('game_sessions').insert([{
+      user_id:    session.user.id,
+      game_slug:  'call-of-doodie',
+      score:      entry.score      || 0,
+      duration_s: entry.timeSurvived || 0,
+      metadata: {
+        kills:       entry.kills,
+        wave:        entry.wave,
+        level:       entry.level,
+        difficulty:  entry.difficulty,
+        mode:        entry.mode || 'standard',
+        bestStreak:  entry.bestStreak,
+        achievements: entry.achievements,
+      },
+    }]);
+
+    // Award vault points (3 pts per game session)
+    await supabase.rpc('award_vault_points', {
+      p_user_id:    session.user.id,
+      p_event_type: 'game_session',
+      p_points:     3,
+      p_metadata:   { game: 'call-of-doodie', score: entry.score, wave: entry.wave },
+    });
+  } catch {
+    // Non-critical — never surface vault errors to the player
+  }
+}
+
 export async function saveToLeaderboard(entry) {
   const row = { ...entry, ts: Date.now() };
+
+  // Fire vault integration in parallel — does not block leaderboard submit
+  _tryAwardVaultPoints(entry);
 
   if (supabase) {
     try {
@@ -176,6 +228,20 @@ const MISSION_PARAMS = {
   sa_score: [5000, 15000, 30000], sa_kills: [30, 60, 100], sa_wave: [3, 5, 7],
 };
 function lcg(s) { return Math.abs((Math.imul(s, 1664525) + 1013904223) | 0); }
+
+// ── Daily Challenge ──────────────────────────────────────────────────────────
+export function getDailyChallengeSeed() {
+  const d = new Date();
+  let s = d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+  s = lcg(s); s = lcg(s); s = lcg(s); // 3 rounds for better distribution
+  return s % 999999;
+}
+export function hasDailyChallengeSubmitted() {
+  return !!localStorage.getItem("cod-daily-" + getTodayKey());
+}
+export function markDailyChallengeSubmitted() {
+  localStorage.setItem("cod-daily-" + getTodayKey(), "1");
+}
 
 export function getTodayKey() {
   const d = new Date();
