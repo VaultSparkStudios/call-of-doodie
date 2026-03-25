@@ -5,9 +5,19 @@ This is the authoritative active handoff file for this repo.
 If this file conflicts with `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, or
 `CODEX_HANDOFF_*.md`, this file wins.
 
-**Date:** 2026-03-20
+**Date:** 2026-03-24
 **Last commit:** `ec94066` — Session 19 polish — all outstanding items resolved
 **Branch:** `main`, clean, pushed
+
+---
+
+## 2026-03-24 addendum — Vault Member Integration
+
+- `src/storage.js`: added `_tryAwardVaultPoints()` — fires silently after every `saveToLeaderboard()` call
+- Checks for non-anonymous Vault Member session → writes `game_sessions` row → awards 3 vault points
+- `game_sessions` RLS insert policy added in Supabase SQL Editor
+- Studio-wide Vault Member Integration Standard documented in `VaultSparkStudios.github.io/AGENTS.md`
+- call-of-doodie is the canonical Tier 2 (open game) reference implementation
 
 ---
 

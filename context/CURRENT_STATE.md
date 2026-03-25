@@ -64,6 +64,13 @@
 - Gamepad rumble requires Chrome 68+; silent no-op on Firefox/Safari
 - Discord link in MenuScreen footer commented out — fill in when invite URL ready
 
+## Vault Member Integration (live as of 2026-03-24)
+- `src/storage.js` — `_tryAwardVaultPoints()` fires after every leaderboard submit
+- Writes to `game_sessions` table (game_slug: 'call-of-doodie') + calls `award_vault_points` RPC (3 pts)
+- Silent and non-blocking — zero impact on players without Vault accounts
+- RLS insert policy for `game_sessions` added in Supabase SQL Editor
+- Same Supabase project as studio: `fjnpzjjyhnpmunfoycrp.supabase.co`
+
 ## Pending Supabase (manual, non-blocking)
 - Callsign_claims table + RLS migration (full SQL in storage.js comments) — not yet run. Callsign locking is client-side only until then.
 - "Anonymous sign-ins" must be enabled in Supabase Auth settings for callsign server enforcement
