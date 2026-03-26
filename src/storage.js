@@ -30,11 +30,11 @@ async function _signRow(row) {
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "game_id" text DEFAULT 'cod';
 //   -- ✅ Migration complete — mode column live, no stripping needed
 //
-//   -- 3. Callsign ownership table (see below)
+//   -- 3. Callsign ownership table (see below) ✅ DONE 2026-03-26
 //
 
 // ===== CALLSIGN OWNERSHIP =====
-// Requires the following SQL run once in Supabase console:
+// ✅ SQL migration run 2026-03-26. callsign_claims table live, cod_verified_insert policy active.
 //
 //   CREATE TABLE IF NOT EXISTS callsign_claims (
 //     name TEXT PRIMARY KEY,
