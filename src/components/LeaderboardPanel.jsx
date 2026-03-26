@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { getDailyChallengeSeed } from "../storage.js";
+import { useState, useEffect, useRef } from "react";
+import { getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -8,6 +8,7 @@ const MODE_TABS = [
   { key: "daily_challenge", label: "📅 DAILY",      color: "#00E5FF" },
   { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "#FF3333" },
   { key: "cursed",          label: "☠ CURSED",      color: "#CC00FF" },
+  { key: "__today__",       label: "🌅 TODAY",      color: "#00FF88" },
 ];
 
 // ── Input device badge ────────────────────────────────────────────────────────
@@ -72,21 +73,53 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
   const [activeDiff, setActiveDiff] = useState(null);
   const [activeMode, setActiveMode] = useState(null);
   const [copiedRow, setCopiedRow] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState(null); // null = not searching
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [todayData, setTodayData] = useState(null);
+  const [todayLoading, setTodayLoading] = useState(false);
+  const searchTimeout = useRef(null);
   const todaySeed = getDailyChallengeSeed();
+
+  // Load today's data when Today tab is selected
+  useEffect(() => {
+    if (activeMode === "__today__" && todayData === null && !todayLoading) {
+      setTodayLoading(true);
+      loadLeaderboardToday().then(data => { setTodayData(data); setTodayLoading(false); });
+    }
+  }, [activeMode, todayData, todayLoading]);
+
+  // Debounced search — local filter first, remote search on demand
+  const handleSearchChange = (val) => {
+    setSearchQuery(val);
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    if (!val.trim()) { setSearchResults(null); return; }
+    searchTimeout.current = setTimeout(async () => {
+      setSearchLoading(true);
+      const results = await searchLeaderboard(val);
+      setSearchResults(results);
+      setSearchLoading(false);
+    }, 400);
+  };
 
   const card = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: 16 };
 
-  const modeFiltered = activeMode === "score_attack"
-    ? leaderboard.filter(e => e.mode === "score_attack")
-    : activeMode === "daily_challenge"
-      ? leaderboard.filter(e => e.mode === "daily_challenge")
-      : activeMode === "boss_rush"
-        ? leaderboard.filter(e => e.mode === "boss_rush")
-        : activeMode === "cursed"
-          ? leaderboard.filter(e => e.mode === "cursed")
-          : activeMode === "normal"
-            ? leaderboard.filter(e => !e.mode || e.mode === "normal")
-            : leaderboard;
+  // Source data: search results > today data > normal filtered
+  const isToday = activeMode === "__today__";
+  const sourceData = searchResults !== null
+    ? searchResults
+    : isToday
+      ? (todayData || [])
+      : leaderboard;
+
+  const modeFiltered = (isToday || searchResults !== null) ? sourceData : (
+    activeMode === "score_attack"    ? leaderboard.filter(e => e.mode === "score_attack")
+    : activeMode === "daily_challenge" ? leaderboard.filter(e => e.mode === "daily_challenge")
+    : activeMode === "boss_rush"       ? leaderboard.filter(e => e.mode === "boss_rush")
+    : activeMode === "cursed"          ? leaderboard.filter(e => e.mode === "cursed")
+    : activeMode === "normal"          ? leaderboard.filter(e => !e.mode || e.mode === "normal")
+    : leaderboard
+  );
 
   const filtered = activeDiff
     ? modeFiltered.filter(e => e.difficulty === activeDiff)
@@ -100,7 +133,33 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
 
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
-        <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 10px" }}>Global leaderboard · showing {leaderboard.length}</p>
+        <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
+
+        {/* Search bar */}
+        <div style={{ position: "relative", marginBottom: 10 }}>
+          <input
+            type="text"
+            placeholder="🔍  Search player name..."
+            value={searchQuery}
+            onChange={e => handleSearchChange(e.target.value)}
+            style={{
+              width: "100%", boxSizing: "border-box",
+              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: 6, padding: "7px 36px 7px 12px",
+              color: "#FFF", fontSize: 12, fontFamily: "'Courier New', monospace",
+              outline: "none",
+            }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => handleSearchChange("")}
+              style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14, lineHeight: 1 }}
+            >×</button>
+          )}
+          {searchLoading && (
+            <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: "#666", fontSize: 10 }}>...</span>
+          )}
+        </div>
 
         {/* Mode filter tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 8, flexWrap: "wrap" }}>
@@ -153,13 +212,17 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           })}
         </div>
 
-        {lbLoading ? (
+        {(lbLoading && !isToday && searchResults === null) || (isToday && todayLoading) || (searchResults === null && searchLoading) ? (
           <p style={{ color: "#DDD", fontSize: 13 }}>Loading...</p>
         ) : filtered.length === 0 ? (
           <p style={{ color: "#CCC", fontStyle: "italic", fontSize: 13 }}>
-            {activeDiff
-              ? `No ${activeTab?.label} entries yet. Be the first!`
-              : "No entries yet. Be the first to die gloriously!"}
+            {searchResults !== null
+              ? `No players found matching "${searchQuery}".`
+              : isToday
+                ? "No runs submitted today yet. Be the first!"
+                : activeDiff
+                  ? `No ${activeTab?.label} entries yet. Be the first!`
+                  : "No entries yet. Be the first to die gloriously!"}
           </p>
         ) : (
           <div style={{ fontSize: 11 }}>
@@ -238,8 +301,8 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           </div>
         )}
 
-        {/* Load More */}
-        {(lbHasMore || lbLoading) && !lbLoading && filtered.length > 0 && (
+        {/* Load More — hidden during search / today tab */}
+        {(lbHasMore || lbLoading) && !lbLoading && filtered.length > 0 && !isToday && searchResults === null && (
           <div style={{ textAlign: "center", marginTop: 12 }}>
             <button
               onClick={onLoadMore}

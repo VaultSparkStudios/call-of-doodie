@@ -470,6 +470,80 @@ export const WEAPON_SYNERGIES = [
   },
 ];
 
+// ===== WAVE ROUTES =====
+// Shown after each non-boss wave clear (wave 2+, not in Score Attack / Daily Challenge).
+// Player picks from 3 options (Standard always included). apply(gs, perkMods) is called immediately.
+export const WAVE_ROUTES = [
+  {
+    id: "standard",
+    emoji: "⚔️",
+    name: "Standard Wave",
+    desc: "Normal wave. No modifiers.",
+    color: "#AAAAAA",
+    apply: () => {},
+  },
+  {
+    id: "boss_fork",
+    emoji: "💀",
+    name: "Boss Gauntlet",
+    desc: "Force a boss wave next. Kills this wave worth 2× score.",
+    color: "#FF3333",
+    apply: (gs) => { gs.routeForceBoss = true; gs.routeKillScoreMult = (gs.routeKillScoreMult || 1) * 2; },
+  },
+  {
+    id: "mutation",
+    emoji: "🧬",
+    name: "Mutation Wave",
+    desc: "A random mutation hits this wave. +50% XP.",
+    color: "#CC44FF",
+    apply: (gs, perkMods) => {
+      const ROUTE_MUTS = [
+        g => { g.mutEnemySizeMult = (g.mutEnemySizeMult || 1) * 0.65; },
+        g => { g.mutEnemySizeMult = (g.mutEnemySizeMult || 1) * 1.5; },
+        g => { g.mutAlwaysEnraged = true; },
+        g => { g.mutEnemySpeedExtra = (g.mutEnemySpeedExtra || 1) * 1.5; },
+        g => { g.mutAllExplosive = true; },
+        g => { g.mutSpawnFrozen = 120; },
+        g => { g.waveEnemyMult = (g.waveEnemyMult || 1) * 1.5; g.mutEnemyHPMult = (g.mutEnemyHPMult || 1) * 0.6; },
+      ];
+      ROUTE_MUTS[Math.floor(Math.random() * ROUTE_MUTS.length)](gs);
+      perkMods.xpMult = (perkMods.xpMult || 1) * 1.5;
+    },
+  },
+  {
+    id: "double_trouble",
+    emoji: "👥",
+    name: "Double Trouble",
+    desc: "2× enemies this wave. Kills worth +60% score.",
+    color: "#FF8800",
+    apply: (gs) => { gs.routeDoubleEnemies = true; gs.routeKillScoreMult = (gs.routeKillScoreMult || 1) * 1.6; },
+  },
+  {
+    id: "elite_surge",
+    emoji: "⭐",
+    name: "Elite Surge",
+    desc: "All enemies are elites. +40% XP this wave.",
+    color: "#FFD700",
+    apply: (gs, perkMods) => { gs.routeEliteWave = true; perkMods.xpMult = (perkMods.xpMult || 1) * 1.4; },
+  },
+  {
+    id: "armory_run",
+    emoji: "🔧",
+    name: "Armory Run",
+    desc: "Weapon upgrade drops 3× more often this wave.",
+    color: "#00FF88",
+    apply: (gs) => { gs.routeArmoryRun = true; },
+  },
+  {
+    id: "blitz",
+    emoji: "⚡",
+    name: "Blitz",
+    desc: "Enemies spawn 3× faster. Kills worth +25% score.",
+    color: "#00E5FF",
+    apply: (gs) => { gs.routeBlitz = true; gs.routeKillScoreMult = (gs.routeKillScoreMult || 1) * 1.25; },
+  },
+];
+
 // ===== TEXT POOLS =====
 export const HITMARKERS = ["bonk!", "oof!", "yeet!", "bruh!", "no cap!", "sheesh!", "ratio'd!", "L + bozo!", "skill issue!", "rekt!", "gg ez!", "cope!", "slay!", "W!", "cancelled!"];
 

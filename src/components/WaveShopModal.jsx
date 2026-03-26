@@ -38,7 +38,7 @@ function WeaponStatBars({ weaponIdx }) {
   );
 }
 
-export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0 }) {
+export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy }) {
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
@@ -58,6 +58,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
       display: "flex", alignItems: "center", justifyContent: "center",
       padding: 16, backdropFilter: "blur(8px)",
       fontFamily: "'Courier New',monospace", color: "#fff",
+      overflowY: "auto",
     }}>
       <div style={{ maxWidth: 480, width: "100%", textAlign: "center" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>📦</div>
@@ -114,6 +115,61 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
             );
           })}
         </div>
+
+        {/* 💩 Doodie Coin Shop */}
+        {coinShopOptions.length > 0 && (
+          <div style={{ marginTop: 22 }}>
+            {/* Divider */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <div style={{ flex: 1, height: 1, background: "rgba(200,160,0,0.2)" }} />
+              <div style={{ fontSize: 9, color: "#C8A000", letterSpacing: 3, fontWeight: 700 }}>💩 DOODIE COIN SHOP</div>
+              <div style={{ flex: 1, height: 1, background: "rgba(200,160,0,0.2)" }} />
+            </div>
+
+            {/* Coin balance */}
+            <div style={{ marginBottom: 10, fontSize: 12, color: "#C8A000", fontWeight: 700, letterSpacing: 1 }}>
+              BALANCE: <span style={{ color: "#FFD700" }}>💩 {coins}</span>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {coinShopOptions.map(opt => {
+                const canAfford = coins >= opt.cost;
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => canAfford && onCoinBuy && onCoinBuy(opt.id, opt.cost)}
+                    disabled={!canAfford}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 12,
+                      padding: "11px 16px", borderRadius: 9, cursor: canAfford ? "pointer" : "not-allowed",
+                      background: canAfford ? "rgba(200,160,0,0.08)" : "rgba(255,255,255,0.02)",
+                      border: `1px solid ${canAfford ? "rgba(200,160,0,0.35)" : "rgba(255,255,255,0.08)"}`,
+                      color: canAfford ? "#fff" : "#555", fontFamily: "'Courier New',monospace",
+                      textAlign: "left", width: "100%", opacity: canAfford ? 1 : 0.5,
+                      transition: "all 0.1s",
+                    }}
+                    onMouseEnter={e => { if (canAfford) { e.currentTarget.style.background = "rgba(200,160,0,0.16)"; e.currentTarget.style.borderColor = "rgba(200,160,0,0.65)"; } }}
+                    onMouseLeave={e => { if (canAfford) { e.currentTarget.style.background = "rgba(200,160,0,0.08)"; e.currentTarget.style.borderColor = "rgba(200,160,0,0.35)"; } }}
+                  >
+                    <span style={{ fontSize: 26, lineHeight: 1 }}>{opt.emoji}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 900, color: canAfford ? "#FFD700" : "#666", marginBottom: 1 }}>{opt.name}</div>
+                      <div style={{ fontSize: 11, color: canAfford ? "#BBB" : "#444" }}>{opt.desc}</div>
+                    </div>
+                    <div style={{
+                      fontSize: 12, fontWeight: 900, color: canAfford ? "#C8A000" : "#444",
+                      background: canAfford ? "rgba(200,160,0,0.12)" : "rgba(255,255,255,0.04)",
+                      border: `1px solid ${canAfford ? "rgba(200,160,0,0.3)" : "rgba(255,255,255,0.06)"}`,
+                      borderRadius: 5, padding: "3px 8px", whiteSpace: "nowrap",
+                    }}>
+                      💩 {opt.cost}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

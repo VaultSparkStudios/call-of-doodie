@@ -740,6 +740,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.beginPath(); ctx.arc(0, 0, 23, 0, Math.PI * 2); ctx.stroke();
     ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
   }
+  // Time dilation aura — pulsing violet ring
+  if ((gs.timeDilationTimer || 0) > 0) {
+    const _tdA = 0.55 + Math.sin(dn / 25) * 0.30;
+    ctx.globalAlpha = _tdA; ctx.strokeStyle = "#CC88FF"; ctx.shadowColor = "#CC88FF"; ctx.shadowBlur = 20; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI * 2); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
+  }
   // Legs (unrotated — bob south)
   const _lb = Math.sin(frameCountRef.current * 0.28) * 3.5;
   ctx.fillStyle = "#284A28";
@@ -840,6 +847,24 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   if ((gs.freezeTimer || 0) > 0) {
     const freezeAlpha = Math.min(gs.freezeTimer / 180, 1) * 0.10;
     ctx.fillStyle = `rgba(120,200,255,${freezeAlpha})`; ctx.fillRect(0, 0, W, H);
+  }
+  // Time dilation: purple vignette + chromatic edge + HUD countdown
+  if ((gs.timeDilationTimer || 0) > 0) {
+    const _td = gs.timeDilationTimer;
+    const _tdAlpha = Math.min(_td / 360, 1) * 0.12;
+    ctx.fillStyle = `rgba(160,80,255,${_tdAlpha})`; ctx.fillRect(0, 0, W, H);
+    // Vignette edge
+    const _vigGrad = ctx.createRadialGradient(W/2, H/2, H*0.25, W/2, H/2, H*0.75);
+    _vigGrad.addColorStop(0, "rgba(0,0,0,0)");
+    _vigGrad.addColorStop(1, `rgba(80,0,160,${Math.min(_td/360,1)*0.25})`);
+    ctx.fillStyle = _vigGrad; ctx.fillRect(0, 0, W, H);
+    // HUD countdown label
+    const _secs = Math.ceil(_td / 60);
+    ctx.globalAlpha = 0.92; ctx.font = "bold 13px 'Courier New',monospace";
+    ctx.textAlign = "center"; ctx.fillStyle = "#CC88FF";
+    ctx.shadowColor = "#CC88FF"; ctx.shadowBlur = 10;
+    ctx.fillText(`⏳ BULLET TIME ${_secs}s`, W / 2, 52);
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
   }
   // Boss kill golden flash
   if ((gs.bossKillFlash || 0) > 0) {
