@@ -13,9 +13,11 @@
       "src": "/call-of-doodie/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
+  "screenshots": [],
+  "prefer_related_applications": false,
   "categories": ["games", "entertainment"],
   "lang": "en-US"
 }

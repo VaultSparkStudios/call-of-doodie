@@ -6,6 +6,8 @@ const MODE_TABS = [
   { key: "normal",          label: "🎯 NORMAL",     color: "#FFD700" },
   { key: "score_attack",    label: "⏱ SCORE ATK",  color: "#FF6600" },
   { key: "daily_challenge", label: "📅 DAILY",      color: "#00E5FF" },
+  { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "#FF3333" },
+  { key: "cursed",          label: "☠ CURSED",      color: "#CC00FF" },
 ];
 
 // ── Input device badge ────────────────────────────────────────────────────────
@@ -78,9 +80,13 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
     ? leaderboard.filter(e => e.mode === "score_attack")
     : activeMode === "daily_challenge"
       ? leaderboard.filter(e => e.mode === "daily_challenge")
-      : activeMode === "normal"
-        ? leaderboard.filter(e => !e.mode || e.mode === "normal")
-        : leaderboard;
+      : activeMode === "boss_rush"
+        ? leaderboard.filter(e => e.mode === "boss_rush")
+        : activeMode === "cursed"
+          ? leaderboard.filter(e => e.mode === "cursed")
+          : activeMode === "normal"
+            ? leaderboard.filter(e => !e.mode || e.mode === "normal")
+            : leaderboard;
 
   const filtered = activeDiff
     ? modeFiltered.filter(e => e.difficulty === activeDiff)
@@ -200,6 +206,8 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       {e.level && <span style={{ color: "#bbb", fontSize: 9, flexShrink: 0 }} title="In-run XP level">⬆{e.level}</span>}
                       {loadoutEmoji && <span style={{ fontSize: 9, flexShrink: 0 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
                       {e.customSettings && <span style={{ fontSize: 9, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
+                      {e.mode === "boss_rush" && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.5)", color: "#FF3333", fontWeight: 900, flexShrink: 0 }}>☠BR</span>}
+                      {e.mode === "cursed"    && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(204,0,255,0.18)", border: "1px solid rgba(204,0,255,0.5)", color: "#CC00FF", fontWeight: 900, flexShrink: 0 }}>☠CU</span>}
                       <span style={{ flexShrink: 0 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
                     </div>
                     {/* Bottom row: seed + today badge */}

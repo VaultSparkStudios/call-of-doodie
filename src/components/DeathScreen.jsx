@@ -15,11 +15,11 @@ export default function DeathScreen({
   fmtTime,
   gamepadConnected, onInstallApp,
   weaponKills, scoreAttackMode, playerSkin,
-  dailyChallengeMode, vsScore, vsName,
+  dailyChallengeMode, bossRushMode, cursedRunMode, vsScore, vsName,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // null | 'pending' | 'online' | 'local'
   const [sharing, setSharing] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
@@ -33,91 +33,118 @@ export default function DeathScreen({
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
     const rank = RANK_NAMES[Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1)];
 
-    // Background
+    // ── Background: dark with scanlines + vignette ────────────────────────────
     const bg = c.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, "#0a0a0a"); bg.addColorStop(0.5, "#12082a"); bg.addColorStop(1, "#1a0505");
+    bg.addColorStop(0, "#0d0005"); bg.addColorStop(0.45, "#140a1a"); bg.addColorStop(1, "#0a0200");
     c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    // Scanlines
+    c.fillStyle = "rgba(0,0,0,0.18)";
+    for (let y = 0; y < H; y += 4) { c.fillRect(0, y, W, 2); }
+    // Vignette
+    const vig = c.createRadialGradient(W / 2, H / 2, H * 0.2, W / 2, H / 2, H * 0.82);
+    vig.addColorStop(0, "rgba(0,0,0,0)"); vig.addColorStop(1, "rgba(0,0,0,0.75)");
+    c.fillStyle = vig; c.fillRect(0, 0, W, H);
 
-    // Grid overlay
-    c.strokeStyle = "rgba(255,255,255,0.03)"; c.lineWidth = 1;
-    for (let x = 0; x < W; x += 50) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); }
-    for (let y = 0; y < H; y += 50) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+    // ── Stream chrome: top bar ────────────────────────────────────────────────
+    c.fillStyle = "rgba(0,0,0,0.72)"; c.fillRect(0, 0, W, 52);
+    // LIVE badge
+    c.fillStyle = "#E00000"; c.beginPath(); c.roundRect(16, 12, 68, 28, 5); c.fill();
+    c.font = "bold 16px 'Courier New', monospace"; c.textAlign = "left";
+    c.fillStyle = "#FFF"; c.fillText("● LIVE", 24, 31);
+    // Channel name (centre)
+    c.textAlign = "center";
+    c.font = "bold 20px 'Courier New', monospace"; c.fillStyle = "#FFF";
+    c.fillText("📺  CALL OF DOODIE  ·  MODERN WARFARE ON MOM'S WIFI", W / 2, 32);
+    // Viewer count (right)
+    const _viewers = ((score / 100 + kills * 3 + wave * 50) | 0).toLocaleString();
+    c.textAlign = "right"; c.font = "14px 'Courier New', monospace"; c.fillStyle = "#CCC";
+    c.fillText("👥 " + _viewers + " watching", W - 18, 20);
+    c.fillStyle = "#888"; c.fillText("vaultsparkstudios.com/call-of-doodie", W - 18, 38);
 
-    // Orange accent bar at top
-    const accent = c.createLinearGradient(0, 0, W, 0);
-    accent.addColorStop(0, "#FF6B35"); accent.addColorStop(0.5, "#FFD700"); accent.addColorStop(1, "#FF6B35");
-    c.fillStyle = accent; c.fillRect(0, 0, W, 5);
-
-    // Studio label
-    c.font = "bold 18px 'Courier New', monospace";
-    c.fillStyle = "#BBB"; c.textAlign = "center";
-    c.fillText("VAULTSPARK STUDIOS PRESENTS", W / 2, 40);
-
-    // Game title
-    const titleGrad = c.createLinearGradient(0, 50, 0, 130);
-    titleGrad.addColorStop(0, "#FFD700"); titleGrad.addColorStop(1, "#FF6B00");
-    c.font = "bold 90px 'Courier New', monospace";
-    c.fillStyle = titleGrad;
-    c.shadowColor = "rgba(255,107,0,0.6)"; c.shadowBlur = 30;
-    c.fillText("CALL OF DOODIE", W / 2, 130);
+    // ── KILLCAM banner ────────────────────────────────────────────────────────
+    c.textAlign = "center";
+    c.fillStyle = "rgba(180,0,0,0.82)"; c.fillRect(0, 52, W, 50);
+    c.font = "bold 30px 'Courier New', monospace";
+    c.fillStyle = "#FFF"; c.shadowColor = "#F00"; c.shadowBlur = 20;
+    const _modeLabel = bossRushMode ? "  ·  ☠ BOSS RUSH" : cursedRunMode ? "  ·  ☠ CURSED" : scoreAttackMode ? "  ·  ⏱ SCORE ATTACK" : dailyChallengeMode ? "  ·  📅 DAILY" : "";
+    c.fillText("💀  KILLCAM  ·  " + (playerSkin || "🪖") + " " + username.toUpperCase() + "  HAS FALLEN" + _modeLabel, W / 2, 86);
     c.shadowBlur = 0;
 
-    // Subtitle
-    c.font = "bold 20px 'Courier New', monospace";
-    c.fillStyle = "#FF6B35"; c.fillText("MODERN WARFARE ON MOM'S WIFI", W / 2, 160);
-
-    // Divider
-    c.strokeStyle = "rgba(255,215,0,0.3)"; c.lineWidth = 1;
-    c.beginPath(); c.moveTo(80, 180); c.lineTo(W - 80, 180); c.stroke();
-
-    // Player name + rank + difficulty (with skin emoji if prestige unlocked)
-    c.font = "bold 24px 'Courier New', monospace";
-    c.fillStyle = "#EEE"; c.fillText("DEPLOYED AS:", W / 2, 215);
-    c.font = "bold 32px 'Courier New', monospace";
-    c.fillStyle = "#FFD700";
-    const _nameStr = (playerSkin ? playerSkin + " " : "") + username.toUpperCase() + "  ·  " + rank.toUpperCase();
-    c.fillText(_nameStr, W / 2, 252);
-    c.font = "bold 18px 'Courier New', monospace";
-    c.fillStyle = diff.color || "#CCC"; c.fillText(diff.emoji + " " + diff.label.toUpperCase() + " MODE", W / 2, 278);
-
-    // Stats grid (3 columns)
-    const stats = [
-      { val: score.toLocaleString(), label: "SCORE", color: "#FFD700" },
-      { val: kills, label: "KILLS", color: "#00FF88" },
-      { val: "WAVE " + wave, label: "WAVE REACHED", color: "#FF4444" },
-      { val: "LV " + level, label: "LEVEL", color: "#00E5FF" },
-      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "#00BFFF" },
-      { val: bestStreak, label: "BEST STREAK", color: "#FF4500" },
+    // ── Match HUD: left side stat pills ───────────────────────────────────────
+    const _pillY = 120, _pillH = 36, _pillGap = 8;
+    const _pills = [
+      { label: "WAVE", val: String(wave), color: "#FF3333" },
+      { label: "KILLS", val: String(kills), color: "#00FF88" },
+      { label: "STREAK", val: String(bestStreak), color: "#FF8800" },
     ];
-    const colW = (W - 160) / 3, startX = 80, startY = 305;
-    stats.forEach((s, i) => {
-      const col = i % 3, row = Math.floor(i / 3);
-      const x = startX + col * colW + colW / 2;
-      const y = startY + row * 90;
-      c.fillStyle = "rgba(255,255,255,0.05)";
-      c.beginPath(); c.roundRect(startX + col * colW, y - 44, colW - 10, 78, 8); c.fill();
-      c.strokeStyle = "rgba(255,255,255,0.08)"; c.lineWidth = 1;
-      c.beginPath(); c.roundRect(startX + col * colW, y - 44, colW - 10, 78, 8); c.stroke();
-      c.font = "bold 36px 'Courier New', monospace";
-      c.fillStyle = s.color; c.fillText(s.val, x, y);
-      c.font = "11px 'Courier New', monospace";
-      c.fillStyle = "#CCC"; c.fillText(s.label, x, y + 20);
+    let _px = 18;
+    _pills.forEach(p => {
+      const tw = Math.max(90, p.val.length * 18 + 60);
+      c.fillStyle = "rgba(0,0,0,0.7)"; c.beginPath(); c.roundRect(_px, _pillY, tw, _pillH, 6); c.fill();
+      c.strokeStyle = p.color + "88"; c.lineWidth = 1.5; c.beginPath(); c.roundRect(_px, _pillY, tw, _pillH, 6); c.stroke();
+      c.textAlign = "left"; c.font = "10px 'Courier New', monospace"; c.fillStyle = p.color;
+      c.fillText(p.label, _px + 8, _pillY + 14);
+      c.font = "bold 18px 'Courier New', monospace"; c.fillStyle = "#FFF";
+      c.fillText(p.val, _px + 8, _pillY + _pillH - 8);
+      _px += tw + _pillGap;
     });
 
-    // Death message
-    c.font = "italic 18px 'Courier New', monospace";
-    c.fillStyle = "#FF69B4"; c.fillText('"' + deathMessage + '"', W / 2, 510);
+    // ── Rank + difficulty pill (right side) ───────────────────────────────────
+    c.textAlign = "right";
+    c.font = "bold 16px 'Courier New', monospace"; c.fillStyle = diff.color || "#CCC";
+    c.fillText(diff.emoji + " " + diff.label.toUpperCase() + "  ·  " + rank.toUpperCase(), W - 18, _pillY + _pillH - 6);
+    c.font = "13px 'Courier New', monospace"; c.fillStyle = "#888";
+    c.fillText("⏱ " + fmtTime(timeSurvived) + "  survived", W - 18, _pillY + 14);
 
-    // CTA
-    c.font = "bold 22px 'Courier New', monospace";
-    c.fillStyle = "#FFF"; c.fillText("💀  CAN YOU SURVIVE LONGER?  💀", W / 2, 548);
+    // ── Big score in the middle ───────────────────────────────────────────────
+    c.textAlign = "center";
+    const scoreGrad = c.createLinearGradient(0, 190, 0, 300);
+    scoreGrad.addColorStop(0, "#FFD700"); scoreGrad.addColorStop(1, "#FF6B00");
+    c.font = "bold 140px 'Courier New', monospace";
+    c.fillStyle = scoreGrad;
+    c.shadowColor = "rgba(255,150,0,0.55)"; c.shadowBlur = 40;
+    c.fillText(score.toLocaleString(), W / 2, 295);
+    c.shadowBlur = 0;
+    c.font = "bold 20px 'Courier New', monospace"; c.fillStyle = "#CCC";
+    c.fillText("FINAL SCORE", W / 2, 325);
 
-    // URL
-    c.font = "16px 'Courier New', monospace";
-    c.fillStyle = "#FF6B35"; c.fillText("vaultsparkstudios.com/call-of-doodie", W / 2, 575);
+    // ── Stats row ─────────────────────────────────────────────────────────────
+    const _stats = [
+      { val: "LV " + level, label: "LEVEL", color: "#00E5FF" },
+      { val: kills, label: "ELIMINATED", color: "#00FF88" },
+      { val: "WAVE " + wave, label: "REACHED", color: "#FF4444" },
+      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "#00BFFF" },
+    ];
+    const _sw = W / _stats.length;
+    _stats.forEach((s, i) => {
+      const sx = _sw * i + _sw / 2;
+      c.fillStyle = "rgba(255,255,255,0.05)";
+      c.beginPath(); c.roundRect(_sw * i + 10, 348, _sw - 20, 80, 6); c.fill();
+      c.strokeStyle = s.color + "44"; c.lineWidth = 1;
+      c.beginPath(); c.roundRect(_sw * i + 10, 348, _sw - 20, 80, 6); c.stroke();
+      c.textAlign = "center";
+      c.font = "bold 30px 'Courier New', monospace"; c.fillStyle = s.color;
+      c.shadowColor = s.color; c.shadowBlur = 8;
+      c.fillText(s.val, sx, 390);
+      c.shadowBlur = 0;
+      c.font = "11px 'Courier New', monospace"; c.fillStyle = "#888";
+      c.fillText(s.label, sx, 416);
+    });
 
-    // Bottom accent bar
-    c.fillStyle = accent; c.fillRect(0, H - 5, W, 5);
+    // ── Death quote ───────────────────────────────────────────────────────────
+    c.textAlign = "center";
+    c.font = "italic 17px 'Courier New', monospace";
+    c.fillStyle = "#FF8888"; c.fillText('"' + deathMessage + '"', W / 2, 462);
+
+    // ── Bottom bar: CTA ───────────────────────────────────────────────────────
+    c.fillStyle = "rgba(0,0,0,0.8)"; c.fillRect(0, H - 72, W, 72);
+    const ctaGrad = c.createLinearGradient(0, 0, W, 0);
+    ctaGrad.addColorStop(0, "#FF6B35"); ctaGrad.addColorStop(0.5, "#FFD700"); ctaGrad.addColorStop(1, "#FF6B35");
+    c.fillStyle = ctaGrad; c.fillRect(0, H - 72, W, 4);
+    c.font = "bold 24px 'Courier New', monospace"; c.fillStyle = "#FFF";
+    c.fillText("💀  CAN YOU BEAT " + username.toUpperCase() + "?  ·  vaultsparkstudios.com/call-of-doodie  💀", W / 2, H - 32);
+    c.font = "13px 'Courier New', monospace"; c.fillStyle = "#888";
+    c.fillText("FREE TO PLAY IN YOUR BROWSER  ·  SHARE YOUR SCORE  ·  #CallOfDoodie", W / 2, H - 12);
 
     cvs.toBlob(blob => resolve({ blob, cvs }), "image/png");
   });
@@ -127,7 +154,8 @@ export default function DeathScreen({
     try {
       const { blob } = await generateScoreCard();
       const file = new File([blob], "call-of-doodie-score.png", { type: "image/png" });
-      const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave} in Call of Doodie! 💀 Can you beat me?`;
+      const _modeTag = bossRushMode ? " [BOSS RUSH]" : cursedRunMode ? " [CURSED]" : scoreAttackMode ? " [SCORE ATTACK]" : dailyChallengeMode ? " [DAILY]" : "";
+      const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave}${_modeTag} in Call of Doodie! 💀 Can you beat me?`;
       const shareUrl = "https://vaultsparkstudios.com/call-of-doodie";
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: "Call of Doodie Score", text: shareText, url: shareUrl });
@@ -155,8 +183,13 @@ export default function DeathScreen({
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
     if (words.length > 5) { setLastWords(words.slice(0, 5).join(" ")); return; }
-    await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex] });
-    setSubmitted(true);
+    setSubmitStatus('pending');
+    try {
+      const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex] });
+      setSubmitStatus(result?.online ? 'online' : 'local');
+    } catch {
+      setSubmitStatus('local');
+    }
   };
 
   return (
@@ -171,8 +204,10 @@ export default function DeathScreen({
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
         <div style={{ fontSize: 11, color: diff.color, marginBottom: 6, fontWeight: 700 }}>
           {diff.emoji} {diff.label.toUpperCase()} MODE
-          {scoreAttackMode && <span style={{ marginLeft: 8, color: "#FF6600" }}>⏱ SCORE ATTACK</span>}
+          {scoreAttackMode  && <span style={{ marginLeft: 8, color: "#FF6600" }}>⏱ SCORE ATTACK</span>}
           {dailyChallengeMode && <span style={{ marginLeft: 8, color: "#00E5FF" }}>📅 DAILY CHALLENGE</span>}
+          {bossRushMode     && <span style={{ marginLeft: 8, color: "#FF3333", fontWeight: 900 }}>☠ BOSS RUSH</span>}
+          {cursedRunMode    && <span style={{ marginLeft: 8, color: "#CC00FF", fontWeight: 900 }}>☠ CURSED</span>}
         </div>
 
         {/* Challenge result card */}
@@ -363,7 +398,7 @@ export default function DeathScreen({
           />
         )}
 
-        {!submitted ? (
+        {!submitStatus || submitStatus === 'pending' ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>
             <div style={{ fontSize: 12, color: "#FFD700", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>SUBMIT TO HALL OF SHAME</div>
             <input
@@ -383,12 +418,19 @@ export default function DeathScreen({
                 </button>
               )}
             </div>
-            <button onClick={handleSubmit} style={{ ...btnP, width: "100%", fontSize: 14, padding: "10px" }}>SUBMIT SCORE</button>
+            <button onClick={handleSubmit} disabled={submitStatus === 'pending'} style={{ ...btnP, width: "100%", fontSize: 14, padding: "10px", opacity: submitStatus === 'pending' ? 0.6 : 1 }}>
+              {submitStatus === 'pending' ? 'SUBMITTING...' : 'SUBMIT SCORE'}
+            </button>
+          </div>
+        ) : submitStatus === 'online' ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,255,0,0.2)", background: "rgba(0,255,0,0.03)" }}>
+            <div style={{ color: "#0F0", fontSize: 14, fontWeight: 700 }}>✅ Score submitted!</div>
+            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
           </div>
         ) : (
-          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,255,0,0.2)", background: "rgba(0,255,0,0.03)" }}>
-            <div style={{ color: "#0F0", fontSize: 14, fontWeight: 700 }}>Score submitted!</div>
-            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,180,0,0.3)", background: "rgba(255,140,0,0.05)" }}>
+            <div style={{ color: "#FFA500", fontSize: 14, fontWeight: 700 }}>Saved locally</div>
+            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Couldn't reach the server — score saved on this device.</div>
           </div>
         )}
 

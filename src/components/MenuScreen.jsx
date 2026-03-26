@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES } from "../constants.js";
+import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted } from "../storage.js";
+import { supabase } from "../supabase.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
@@ -17,7 +18,7 @@ const PLAYER_SKINS = [
   { emoji: "🐉", label: "Dragon",   required: 5 },
 ];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode, cursedRunMode, onSetCursedRunMode, bossRushMode, onSetBossRushMode }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -36,6 +37,22 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [meta, setMeta] = useState(null);
   const [sharing, setSharing] = useState(false);
   const [challengeMode, setChallengeMode] = useState(null); // { seed, diff, vs, vsName } if via challenge link
+  const [onlinePlayers, setOnlinePlayers] = useState(null);
+
+  // ── Live player count via Supabase Realtime presence ──────────────────────
+  useEffect(() => {
+    if (!supabase) return;
+    const channel = supabase.channel("cod-presence", { config: { presence: { key: Math.random().toString(36).slice(2) } } });
+    channel
+      .on("presence", { event: "sync" }, () => {
+        const state = channel.presenceState();
+        setOnlinePlayers(Object.keys(state).length);
+      })
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") await channel.track({ t: Date.now() });
+      });
+    return () => { supabase.removeChannel(channel); };
+  }, []);
 
   useEffect(() => {
     const c = loadCareerStats();
@@ -493,7 +510,16 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
-            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Resets at midnight · Complete for career point bonuses</p>
+            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>
+              {(() => {
+                const now = new Date();
+                const midnight = new Date(now); midnight.setHours(24, 0, 0, 0);
+                const msLeft = midnight - now;
+                const h = Math.floor(msLeft / 3600000);
+                const m = Math.floor((msLeft % 3600000) / 60000);
+                return `Resets in ${h}h ${m}m · Complete for career point bonuses`;
+              })()}
+            </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {missions.map((m, i) => {
                 const done = !!missionProgress[i];
@@ -881,8 +907,37 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Same seed · global ranking</div>
               {hasDailyChallengeSubmitted() && <div style={{ fontSize: 8, color: "#00E5FF", marginTop: 1 }}>✓ PLAYED TODAY</div>}
             </button>
+            <button
+              onClick={() => onSetCursedRunMode?.(!cursedRunMode)}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: cursedRunMode ? "rgba(180,0,255,0.15)" : "rgba(255,255,255,0.03)",
+                border: cursedRunMode ? "2px solid #CC00FF" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#CC00FF" }}>☠ CURSED</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>All cursed perks · 3× score</div>
+            </button>
+            <button
+              onClick={() => onSetBossRushMode?.(!bossRushMode)}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: bossRushMode ? "rgba(255,50,50,0.15)" : "rgba(255,255,255,0.03)",
+                border: bossRushMode ? "2px solid #FF3333" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#FF3333" }}>☠ BOSS RUSH</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Every wave is a boss · chaos</div>
+            </button>
           </div>
         </div>
+
+        {/* Weekly Mutation banner */}
+        {(() => {
+          const mut = getWeeklyMutation();
+          if (!mut) return null;
+          return (
+            <div style={{ ...card, margin: "0 0 10px", background: "rgba(255,180,0,0.06)", border: "1px solid rgba(255,180,0,0.25)", textAlign: "center" }}>
+              <div style={{ fontSize: 9, color: "#FFB300", letterSpacing: 2, fontWeight: 900, marginBottom: 4 }}>⚡ THIS WEEK'S MUTATION</div>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#FFF" }}>{mut.emoji} {mut.name}</div>
+              <div style={{ fontSize: 10, color: "#CCC", marginTop: 3 }}>{mut.desc}</div>
+            </div>
+          );
+        })()}
 
         {/* Starter Loadout */}
         <div style={{ ...card, margin: "0 0 10px", textAlign: "left" }}>
@@ -966,6 +1021,11 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             style={{ fontSize: 10, color: "#7289DA", textDecoration: "none", letterSpacing: 1, fontWeight: 700 }}>
             💬 JOIN DISCORD
           </a> */}
+          {onlinePlayers !== null && (
+            <span style={{ fontSize: 10, color: "#0F0", letterSpacing: 1 }}>
+              ● {onlinePlayers} ONLINE
+            </span>
+          )}
           <span style={{ fontSize: 10, color: "#555" }}>© 2025 VaultSpark Studios</span>
         </div>
       </div>

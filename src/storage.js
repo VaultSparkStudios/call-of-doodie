@@ -1,6 +1,20 @@
 // ===== LEADERBOARD =====
 import { supabase, getAuthUid } from "./supabase.js";
 
+// ── Score integrity checksum ──────────────────────────────────────────────────
+// Lightweight fingerprint — not cryptographically secure (key is client-visible)
+// but raises the bar significantly against casual devtools manipulation.
+const _SIG_KEY = "c0d-v1-integrity";
+async function _signRow(row) {
+  const payload = `${row.score}|${row.kills}|${row.wave}|${row.seed ?? ""}|${row.ts}`;
+  try {
+    const enc = new TextEncoder();
+    const keyMat = await crypto.subtle.importKey("raw", enc.encode(_SIG_KEY), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+    const sig = await crypto.subtle.sign("HMAC", keyMat, enc.encode(payload));
+    return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
+  } catch { return "00000000"; }
+}
+
 // ===== SUPABASE SQL MIGRATIONS =====
 // Run these in the Supabase SQL console (one time, in order):
 //
@@ -12,6 +26,8 @@ import { supabase, getAuthUid } from "./supabase.js";
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "seed" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "accountLevel" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "sig" text;
+//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "game_id" text DEFAULT 'cod';
 //   -- ✅ Migration complete — mode column live, no stripping needed
 //
 //   -- 3. Callsign ownership table (see below)
@@ -130,7 +146,9 @@ async function _tryAwardVaultPoints(entry) {
 }
 
 export async function saveToLeaderboard(entry) {
-  const row = { ...entry, ts: Date.now() };
+  const ts = Date.now();
+  const sig = await _signRow({ ...entry, ts });
+  const row = { ...entry, ts, game_id: 'cod', sig };
 
   // Fire vault integration in parallel — does not block leaderboard submit
   _tryAwardVaultPoints(entry);
@@ -139,7 +157,8 @@ export async function saveToLeaderboard(entry) {
     try {
       const { error } = await supabase.from("leaderboard").insert([row]);
       if (error) throw error;
-      return await loadLeaderboard();
+      const board = await loadLeaderboard();
+      return { board, online: true };
     } catch (err) {
       console.warn("[leaderboard] Supabase write failed, saving locally:", err.message);
     }
@@ -151,8 +170,8 @@ export async function saveToLeaderboard(entry) {
     board.sort((a, b) => b.score - a.score);
     const top = board.slice(0, 100);
     localStorage.setItem(LB_KEY, JSON.stringify(top));
-    return top;
-  } catch { return []; }
+    return { board: top, online: false };
+  } catch { return { board: [], online: false }; }
 }
 
 // ===== CAREER STATS =====

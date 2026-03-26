@@ -544,12 +544,23 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.strokeStyle = "rgba(255,100,100," + (0.28 + Math.sin(dn / 300) * 0.15) + ")";
       ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, r + 5, 0, Math.PI * 2); ctx.stroke();
     }
-    // Elite variant ring
+    // Elite variant ring — color + dash pattern for colorblind accessibility
     if (e.eliteType) {
-      const eliteRgb = e.eliteType === "armored" ? "255,215,0" : e.eliteType === "fast" ? "0,229,255" : "255,100,0";
-      ctx.strokeStyle = `rgba(${eliteRgb},${0.72 + Math.sin(dn / 140) * 0.22})`;
+      const eliteRgb = e.eliteType === "armored" ? "255,215,0" : e.eliteType === "fast" ? "0,229,255" : e.eliteType === "berserker" ? "255,0,200" : "255,100,0";
+      const alpha = 0.72 + Math.sin(dn / 140) * 0.22;
+      ctx.strokeStyle = `rgba(${eliteRgb},${alpha})`;
       ctx.lineWidth = 2.5;
+      // Distinct dash pattern per type (colorblind-friendly)
+      if (e.eliteType === "armored")       ctx.setLineDash([6, 4]);
+      else if (e.eliteType === "fast")     ctx.setLineDash([2, 3]);
+      else if (e.eliteType === "berserker") { ctx.setLineDash([]); ctx.lineWidth = 2; }
+      else                                 ctx.setLineDash([]); // explosive = solid
       ctx.beginPath(); ctx.arc(0, 0, r + 11, 0, Math.PI * 2); ctx.stroke();
+      // Berserker: second ring to distinguish
+      if (e.eliteType === "berserker") {
+        ctx.beginPath(); ctx.arc(0, 0, r + 16, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.setLineDash([]);
     }
 
     // Emoji
@@ -565,6 +576,25 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.fillStyle = e.health > e.maxHealth * 0.5 ? "#00EE44" : e.health > e.maxHealth * 0.25 ? "#FFAA00" : "#FF2222";
       ctx.fillRect(-bw / 2, -r - 14, bw * Math.max(0, e.health / e.maxHealth), 6);
       ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 1; ctx.strokeRect(-bw / 2, -r - 14, bw, 6);
+    }
+    // Boss ability telegraph bars (show next-ability cooldown as thin bar under HP bar)
+    if (e.isBossEnemy) {
+      const bw = e.size + 4;
+      const _waveScale = (gs.currentWave || 1) >= 40 ? 1.4 : (gs.currentWave || 1) >= 30 ? 1.2 : 1.0;
+      // Collect active ability cooldowns — show the one with most progress (nearest firing)
+      const bars = [];
+      if (e.hasBulletRing)  bars.push({ timer: e.bulletRingTimer || 0,  cap: Math.floor(360 * _waveScale), color: "#FF6600", label: "🔥" });
+      if (e.hasGroundSlam && !e.groundSlamActive) bars.push({ timer: e.groundSlamTimer || 0, cap: Math.floor(420 * _waveScale), color: "#FF4400", label: "💥" });
+      if (e.hasTeleport)    bars.push({ timer: e.teleportTimer || 0,    cap: Math.floor(480 * _waveScale), color: "#FF1493", label: "🌀" });
+      if (bars.length > 0) {
+        // Pick the bar with highest progress ratio
+        bars.sort((a, b) => (b.timer / b.cap) - (a.timer / a.cap));
+        const bar = bars[0];
+        const ratio = Math.min(1, bar.timer / bar.cap);
+        const by = -r - 22; // just above HP bar
+        ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(-bw / 2, by, bw, 3);
+        ctx.fillStyle = bar.color; ctx.fillRect(-bw / 2, by, bw * ratio, 3);
+      }
     }
     // Name label
     ctx.fillStyle = e.isBossEnemy ? "#FF5555" : "rgba(255,255,255,0.85)";
@@ -645,6 +675,40 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillText(de.emoji, 0, 0); ctx.restore();
   });
   ctx.globalAlpha = 1;
+
+  // Ghost race: render previous-run ghost at matching frame position
+  if (gs.ghost && gs.ghost.length > 0) {
+    const _gf = frameCountRef.current;
+    // Binary-search for nearest ghost sample to current frame
+    let _lo = 0, _hi = gs.ghost.length - 1, _mid;
+    while (_lo < _hi) { _mid = (_lo + _hi) >> 1; if (gs.ghost[_mid].f < _gf) _lo = _mid + 1; else _hi = _mid; }
+    const _gp = gs.ghost[Math.min(_lo, gs.ghost.length - 1)];
+    if (_gp) {
+      // Ghost still has frames left → draw ghost dot
+      const _ghostAlive = _lo < gs.ghost.length - 1;
+      ctx.save();
+      ctx.globalAlpha = _ghostAlive ? 0.35 : 0.15;
+      ctx.translate(_gp.x, _gp.y);
+      ctx.beginPath(); ctx.arc(0, 0, 14, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(100,220,255,0.45)"; ctx.fill();
+      ctx.strokeStyle = _ghostAlive ? "rgba(100,220,255,0.75)" : "rgba(100,220,255,0.25)"; ctx.lineWidth = 2; ctx.stroke();
+      ctx.font = "bold 8px monospace"; ctx.textAlign = "center"; ctx.fillStyle = "#88FFFF";
+      ctx.fillText(_ghostAlive ? "GHOST" : "✓ BEAT", 0, -20);
+      ctx.restore();
+
+      // AHEAD / BEHIND indicator (top-centre, below wave bar)
+      const _dist = Math.hypot(p.x - _gp.x, p.y - _gp.y);
+      const _ahead = !_ghostAlive || _gf > _gp.f + 60; // ahead if ghost is dead or lagging 1s
+      ctx.save();
+      ctx.textAlign = "center"; ctx.font = "bold 10px monospace";
+      ctx.fillStyle = _ahead ? "#00FF88" : "#FF4444";
+      ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 8;
+      ctx.globalAlpha = 0.9;
+      ctx.fillText(_ahead ? "▲ AHEAD OF GHOST" : "▼ BEHIND GHOST  +" + Math.round(_dist) + "px", W / 2, isMobile ? 72 : 66);
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+  }
 
   // Player — layered soldier: shadow → legs → [rotate] → gun → vest → helmet
   ctx.save(); ctx.translate(p.x, p.y);
@@ -807,6 +871,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   };
   drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
 
+  // Boss Rush mode badge
+  if (gs.bossRushMode) {
+    ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = "#FF3333"; ctx.shadowColor = "#FF3333"; ctx.shadowBlur = 10;
+    ctx.globalAlpha = 0.8 + Math.sin(Date.now() / 300) * 0.2;
+    ctx.fillText("☠ BOSS RUSH", W / 2, isMobile ? 60 : 54);
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+  }
+
   // Score attack countdown
   if (gs.scoreAttackMode && (gs.scoreAttackTimeLeft || 0) > 0) {
     const secs = Math.ceil(gs.scoreAttackTimeLeft / 60);
@@ -839,6 +912,19 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillStyle = _evColor;
     ctx.shadowColor = _evColor; ctx.shadowBlur = 10;
     ctx.fillText(_evLabel, W / 2, 28);
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+  }
+
+  // Active weapon synergies (bottom-right)
+  if (gs.activeSynergies && gs.activeSynergies.length > 0) {
+    ctx.textAlign = "right"; ctx.globalAlpha = 0.85;
+    let _sy = H - (isMobile ? 90 : 60);
+    for (const syn of gs.activeSynergies) {
+      ctx.font = "bold 9px monospace"; ctx.fillStyle = syn.color || "#FFD700";
+      ctx.shadowColor = syn.color || "#FFD700"; ctx.shadowBlur = 6;
+      ctx.fillText(syn.emoji + " " + syn.name.toUpperCase(), W - 10, _sy);
+      _sy -= 13;
+    }
     ctx.shadowBlur = 0; ctx.globalAlpha = 1;
   }
 

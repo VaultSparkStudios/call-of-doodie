@@ -38,21 +38,38 @@ export function spawnEnemy(gs, W, H, difficultyId) {
   const type = ENEMY_TYPES[ti];
   const diff = DIFFICULTIES[difficultyId] || DIFFICULTIES.normal;
   const pm = gs.prestigeMult || 1;
-  const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * (gs.settEnemyHealthMult || 1);
+  const sizeMut = gs.mutEnemySizeMult || 1;
+  const hpMut   = gs.mutEnemyHPMult  || 1;
+  const eHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * (gs.settEnemyHealthMult || 1) * hpMut;
+  const projRateMut = gs.mutEnemyFireRateMult || 1;
   gs.enemies.push({
     x, y, health: eHealth, maxHealth: eHealth,
-    speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1) * (gs.waveEventSpeedMult || 1),
-    size: type.size, color: type.color, name: type.name, points: type.points,
+    speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1) * (gs.waveEventSpeedMult || 1) * (gs.mutEnemySpeedExtra || 1),
+    size: type.size * sizeMut, color: type.color, name: type.name, points: type.points,
     deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
     wobble: Math.random() * Math.PI * 2, hitFlash: 0,
-    ranged: type.ranged || false, projSpeed: type.projSpeed || 0, projRate: type.projRate || 999,
+    ranged: type.ranged || false, projSpeed: (type.projSpeed || 0) * (gs.mutEnemyProjSpeed || 1),
+    projRate: type.projRate ? Math.floor(type.projRate * projRateMut) : 999,
     shootTimer: Math.floor(Math.random() * 60), isBossEnemy: false,
+    // Weekly mutation: spawn frozen
+    freezeTimer: gs.mutSpawnFrozen || 0,
   });
   // Elite variants (wave 10+, regular enemies only)
   if (wv >= 10) {
     const elite = gs.enemies[gs.enemies.length - 1];
     const er = Math.random();
-    if (wv >= 15 && er < 0.10) {
+    // Weekly mutation overrides
+    if (gs.mutAlwaysEnraged)  { elite.enrageTriggered = true; elite.speed *= 1.8; }
+    if (gs.mutAllExplosive)   { elite.eliteType = "explosive"; }
+    if (wv >= 40 && er < 0.15 && !gs.mutAllExplosive) {
+      // Berserker: fast + armored combined
+      elite.eliteType = "berserker";
+      elite.speed    *= 1.7;
+      elite.size     *= 0.8;
+      elite.dmgMult   = 0.5;
+      elite.health   *= 1.3;
+      elite.maxHealth = elite.health;
+    } else if (wv >= 15 && er < 0.10) {
       elite.eliteType = "explosive";
     } else if (wv >= 12 && er < 0.25) {
       elite.eliteType = "fast";
@@ -93,14 +110,15 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     shootTimer: 0, isBossEnemy: true,
     chargeTimer: 0, chargeActive: false, chargeDx: 0, chargeDy: 0, chargeDuration: 0,
     summonTimer: 0,
-    hasShieldPulse: typeIndex === 4 && wv >= 20,
+    // mutBossEarly: abilities unlock N waves sooner (mutation "Boss Party")
+    hasShieldPulse: typeIndex === 4 && wv >= 20 - (gs.mutBossEarly || 0),
     shieldPulseActive: false, shieldPulseCooldown: 300, shieldPulseTimer: 0,
-    hasEnrage: wv >= 30, enrageTriggered: false,
-    hasTeleport: typeIndex === 4 && wv >= 35, teleportTimer: 0,
-    hasMinionSurge: typeIndex === 9 && wv >= 25,
-    hasRentNuke: typeIndex === 9 && wv >= 40, rentNukeTimer: 0,
-    hasBulletRing: wv >= 10, bulletRingTimer: 0,
-    hasGroundSlam: wv >= 15,
+    hasEnrage: wv >= 30 - (gs.mutBossEarly || 0), enrageTriggered: false,
+    hasTeleport: typeIndex === 4 && wv >= 35 - (gs.mutBossEarly || 0), teleportTimer: 0,
+    hasMinionSurge: typeIndex === 9 && wv >= 25 - (gs.mutBossEarly || 0),
+    hasRentNuke: typeIndex === 9 && wv >= 40 - (gs.mutBossEarly || 0), rentNukeTimer: 0,
+    hasBulletRing: wv >= 10 - (gs.mutBossEarly || 0), bulletRingTimer: 0,
+    hasGroundSlam: wv >= 15 - (gs.mutBossEarly || 0),
     groundSlamTimer: Math.floor(Math.random() * 180),
     groundSlamActive: false, groundSlamRadius: 0,
     sharedAbilityCooldown: 0,

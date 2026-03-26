@@ -5,15 +5,32 @@ let muted = false;
 export function setMuted(val) { muted = val; }
 export function getMuted() { return muted; }
 
+// iOS / Safari require AudioContext to be created & resumed inside a user gesture.
+// This one-shot listener fires on first pointer interaction and unlocks audio globally.
+function _unlockAudio() {
+  if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { /* ignore */ }
+  }
+}
+document.addEventListener("pointerdown", _unlockAudio, { once: true });
+
 function getCtx() {
   if (muted) return null;
   if (!audioCtx) {
     try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; }
   }
-  // Resume if suspended (browser autoplay policy)
+  // Resume if suspended (browser autoplay policy / iOS background)
   if (audioCtx.state === "suspended") audioCtx.resume();
   return audioCtx;
 }
+
+// Re-unlock on visibility change (iOS suspends AudioContext when app backgrounds)
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+});
 
 function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, startDelay = 0) {
   const ctx = getCtx();

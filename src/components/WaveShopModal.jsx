@@ -1,7 +1,44 @@
 import { useRef } from "react";
+import { WEAPONS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
-export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [] }) {
+// Derive a 0-1 score for a weapon stat for the mini bar
+function _wpnStatBar(label, weapon) {
+  if (label === "DMG") {
+    // bulletDamage range ~8 (pistol) to ~120 (railgun) — normalize 0-120
+    return Math.min(1, (weapon.bulletDamage || 10) / 90);
+  }
+  if (label === "RATE") {
+    // fireRate: lower = faster. Range ~4 (minigun) to ~45 (sniper). Invert.
+    return Math.min(1, 1 - ((weapon.fireRate || 20) - 4) / 50);
+  }
+  if (label === "RANGE") {
+    const life = weapon.bulletLife || 40;
+    const spd  = weapon.bulletSpeed || 9;
+    return Math.min(1, (life * spd) / 600);
+  }
+  return 0;
+}
+
+function WeaponStatBars({ weaponIdx }) {
+  const w = WEAPONS[weaponIdx];
+  if (!w) return null;
+  const stats = [["DMG", _wpnStatBar("DMG", w)], ["RATE", _wpnStatBar("RATE", w)], ["RANGE", _wpnStatBar("RANGE", w)]];
+  return (
+    <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+      {stats.map(([label, val]) => (
+        <div key={label} style={{ flex: 1 }}>
+          <div style={{ fontSize: 8, color: "#888", marginBottom: 2, letterSpacing: 1 }}>{label}</div>
+          <div style={{ height: 4, background: "#222", borderRadius: 2, overflow: "hidden" }}>
+            <div style={{ width: `${Math.round(val * 100)}%`, height: "100%", background: val > 0.7 ? "#FF6600" : val > 0.4 ? "#FFD700" : "#00CC88", borderRadius: 2 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0 }) {
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
@@ -68,9 +105,10 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                 onMouseLeave={e => { if (focusIdx !== i) { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.25)"; } }}
               >
                 <span style={{ fontSize: 32, lineHeight: 1 }}>{opt.emoji}</span>
-                <div>
+                <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700", marginBottom: 2 }}>{opt.name}</div>
                   <div style={{ fontSize: 12, color: "#CCC" }}>{opt.desc}</div>
+                  {opt.id === "upgrade" && <WeaponStatBars weaponIdx={currentWeapon} />}
                 </div>
               </button>
             );

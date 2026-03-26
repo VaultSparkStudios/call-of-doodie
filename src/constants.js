@@ -355,6 +355,13 @@ export const NEW_FEATURES = [
   "📱 Install as App — PWA support, add to home screen on any device",
   "🪃 Boomerang Blaster — curves out and returns, pierces all enemies",
   "🔦 Railgun — instant hitscan beam, penetrates every enemy in its path",
+  "☠ Boss Rush Mode — every wave is a boss wave, dual-bosses from wave 3",
+  "☠ Cursed Run — all cursed perks, 3× score multiplier for the brave",
+  "⚡ Weekly Mutations — new game-wide modifier every Monday",
+  "🔗 Weapon Synergies — upgrade two matching weapons to unlock combo bonuses",
+  "👻 Ghost Race — run against the shadow of your last run in real time",
+  "📺 Broadcast Share Card — stream-style kill-cam thumbnail when you share your score",
+  "💥 Berserker Elite — fast + armoured nightmare that spawns at wave 40+",
 ];
 
 // ===== KILLSTREAKS =====
@@ -375,6 +382,92 @@ export const RUN_MODIFIERS = [
   { id: "headhunter",     emoji: "🎯", name: "Headhunter",     desc: "30% crit chance (was 15%). Crits deal 3× damage." },
   { id: "ricochet_plus",  emoji: "🔄", name: "Ricochet+",      desc: "Bullets bounce 20× instead of 10." },
   { id: "blessed",        emoji: "😇", name: "Blessed",        desc: "Start at 150% max HP. Move 10% faster." },
+];
+
+// ===== WEEKLY MUTATIONS =====
+// One active per week, selected by date seed. Stacks on top of normal game.
+// Effects are applied via gs fields at game start.
+export const WEEKLY_MUTATIONS = [
+  { id: "speed_bullets",  emoji: "💨", name: "Bullet Blitz",    desc: "All projectiles move 2× faster — yours and theirs.", apply: gs => { gs.mutBulletSpeed = 2.0; gs.mutEnemyProjSpeed = 2.0; } },
+  { id: "tiny_enemies",   emoji: "🔬", name: "Ant Farm",        desc: "All enemies are 60% of their normal size.", apply: gs => { gs.mutEnemySizeMult = 0.6; } },
+  { id: "giant_enemies",  emoji: "🐋", name: "Kaiju Mode",      desc: "All enemies are 150% of their normal size.", apply: gs => { gs.mutEnemySizeMult = 1.5; } },
+  { id: "rage_mode",      emoji: "🔴", name: "Permanent Rage",  desc: "All enemies spawn already enraged.", apply: gs => { gs.mutAlwaysEnraged = true; } },
+  { id: "magnet_world",   emoji: "🧲", name: "Magnetism",       desc: "Max pickup magnet radius for all players.", apply: gs => { gs.settPickupMagnet = 3; } },
+  { id: "speed_demons",   emoji: "👹", name: "Speed Demons",    desc: "Enemies move 1.6× faster.", apply: gs => { gs.mutEnemySpeedExtra = 1.6; } },
+  { id: "bullet_hell",    emoji: "🌀", name: "Bullet Hell",     desc: "Ranged enemies fire 40% faster.", apply: gs => { gs.mutEnemyFireRateMult = 0.6; } },
+  { id: "zombie_horde",   emoji: "🧟", name: "Zombie Horde",    desc: "2× enemies per wave but each has 50% HP.", apply: gs => { gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 2; gs.mutEnemyHPMult = 0.5; } },
+  { id: "glass_floor",    emoji: "💎", name: "Glass Floor",     desc: "All enemies are explosive elites.", apply: gs => { gs.mutAllExplosive = true; } },
+  { id: "freeze_world",   emoji: "❄️", name: "Cryogenic",       desc: "All enemies spawn frozen for 2 seconds.", apply: gs => { gs.mutSpawnFrozen = 120; } },
+  { id: "jackpot",        emoji: "🎰", name: "Jackpot",         desc: "3× score per kill, 2× XP, pickups everywhere.", apply: gs => { gs.killScoreMult = (gs.killScoreMult || 1) * 3; gs.mutXpMult = 2; gs.mutPickupRate = 3; } },
+  { id: "boss_party",     emoji: "👑", name: "Boss Party",      desc: "Boss abilities unlock 5 waves early.", apply: gs => { gs.mutBossEarly = 5; } },
+];
+
+/** Get the mutation active this week (deterministic, changes every Monday). */
+export function getWeeklyMutation() {
+  const weekNum = Math.floor(Date.now() / (7 * 24 * 3600 * 1000));
+  return WEEKLY_MUTATIONS[weekNum % WEEKLY_MUTATIONS.length];
+}
+
+// ===== WEAPON SYNERGIES =====
+// Activate when BOTH weapons have been upgraded at least once (upgrades[i] > 0).
+// Each synergy adds multipliers stored in gs fields; rechecked every 30 frames.
+export const WEAPON_SYNERGIES = [
+  {
+    id: "tropical_heat",
+    weapons: [0, 5],          // Banana Blaster + Spicy Squirt Gun
+    emoji: "🌴🌶️",
+    name: "Tropical Heat",
+    desc: "+20% fire rate for all weapons",
+    color: "#FF8C00",
+    fireRateMult: 0.80,       // multiplied into fire-rate (lower = faster)
+  },
+  {
+    id: "precision_protocol",
+    weapons: [4, 9],          // Sniper-ator + Railgun
+    emoji: "🎯🔦",
+    name: "Precision Protocol",
+    desc: "+30% damage (all weapons)",
+    color: "#00FFAA",
+    damageMult: 1.30,
+  },
+  {
+    id: "party_crasher",
+    weapons: [6, 11],         // Confetti Cannon + Nuclear Kazoo
+    emoji: "🎊🎵",
+    name: "Party Crasher",
+    desc: "+1 extra pellet on multi-shot weapons",
+    color: "#FF69B4",
+    extraPellets: 1,
+  },
+  {
+    id: "arc_ricochet",
+    weapons: [7, 10],         // Shock Zapper + Ricochet Pistol
+    emoji: "⚡🎱",
+    name: "Arc Ricochet",
+    desc: "+3 bounces · burst zapper hits harder",
+    color: "#00E5FF",
+    extraBounces: 3,
+    damageMult: 1.15,
+  },
+  {
+    id: "scorched_earth",
+    weapons: [1, 5],          // RPG + Spicy Squirt Gun
+    emoji: "🐔🌶️",
+    name: "Scorched Earth",
+    desc: "+25% damage, enemies leave fire trails",
+    color: "#FF4400",
+    damageMult: 1.25,
+  },
+  {
+    id: "full_auto_frenzy",
+    weapons: [2, 11],         // Nerf Minigun + Nuclear Kazoo
+    emoji: "🔫🎵",
+    name: "Full Auto Frenzy",
+    desc: "+15% fire rate · +10% damage",
+    color: "#FF4444",
+    fireRateMult: 0.85,
+    damageMult: 1.10,
+  },
 ];
 
 // ===== TEXT POOLS =====
@@ -504,7 +597,74 @@ export const ACHIEVEMENTS = [
   { id: "no_hit_waves_3", name: "Ghost Protocol", desc: "Complete 3 waves without taking damage", emoji: "👻", check: (s) => s.noHitWaves >= 3, tier: "gold" },
   // Boss
   { id: "boss_kills_10", name: "Boss Collector", desc: "Defeat 10 bosses across a single run", emoji: "👑", check: (s) => s.bossKills >= 10, tier: "legendary" },
+  // ── Boss Rush achievements ──
+  { id: "boss_rush_5",    name: "The Gauntlet",      desc: "Survive 5 waves in Boss Rush mode",    emoji: "⚔️", check: (s) => s.bossRushMode && s.wave >= 5,  tier: "silver" },
+  { id: "boss_rush_10",   name: "Boss Rush Legend",  desc: "Survive 10 waves in Boss Rush mode",   emoji: "☠️", check: (s) => s.bossRushMode && s.wave >= 10, tier: "gold" },
+  { id: "boss_rush_20",   name: "Unstoppable Force", desc: "Survive 20 waves in Boss Rush mode",   emoji: "💀", check: (s) => s.bossRushMode && s.wave >= 20, tier: "legendary" },
+  // ── Cursed Run achievements ──
+  { id: "cursed_run_w5",  name: "Glutton for Punishment", desc: "Survive wave 5 in Cursed Run",    emoji: "🩸", check: (s) => s.cursedRunMode && s.wave >= 5,  tier: "silver" },
+  { id: "cursed_run_w10", name: "Masochist Legend",       desc: "Survive wave 10 in Cursed Run",   emoji: "☠️", check: (s) => s.cursedRunMode && s.wave >= 10, tier: "gold" },
+  // ── Weapon synergy achievements ──
+  { id: "synergy_first",  name: "Better Together",   desc: "Activate a weapon synergy",            emoji: "🔗", check: (s) => s.activeSynergies >= 1, tier: "bronze" },
+  { id: "synergy_double", name: "Arsenal Architect", desc: "Have 2 synergies active simultaneously", emoji: "⚡", check: (s) => s.activeSynergies >= 2, tier: "gold" },
+  // ── Berserker hunter ──
+  { id: "berserker_5",    name: "Berserker Slayer",   desc: "Kill 5 Berserker elites (wave 40+)",  emoji: "💥", check: (s) => s.berserkersKilled >= 5,  tier: "gold" },
+  { id: "berserker_20",   name: "Berserker Nemesis",  desc: "Kill 20 Berserker elites (wave 40+)", emoji: "🔥", check: (s) => s.berserkersKilled >= 20, tier: "legendary" },
 ];
+
+// ===== ACHIEVEMENT PROGRESS TRACKING =====
+// Maps achievement ID → [statKey, target] so the panel can show "X / target"
+// statKey matches keys available in career stats + run stats passed to check(s)
+export const ACHIEVEMENT_PROGRESS = {
+  combo_5:         ["maxCombo",    5],
+  combo_10:        ["maxCombo",    10],
+  combo_20:        ["maxCombo",    20],
+  wave_5:          ["wave",        5],
+  wave_10:         ["wave",        10],
+  wave_15:         ["wave",        15],
+  wave_20:         ["wave",        20],
+  wave_25:         ["wave",        25],
+  kills_50:        ["kills",       50],
+  kills_100:       ["kills",       100],
+  kills_200:       ["kills",       200],
+  kills_500:       ["kills",       500],
+  streak_10:       ["bestStreak",  10],
+  streak_25:       ["bestStreak",  25],
+  karen_boss_5:    ["bossKills",   5],
+  boss_kills_10:   ["bossKills",   10],
+  dash_20:         ["dashes",      20],
+  dash_100:        ["dashes",      100],
+  dash_kills_10:   ["dashKills",   10],
+  score_10k:       ["score",       10000],
+  score_50k:       ["score",       50000],
+  score_100k:      ["score",       100000],
+  score_200k:      ["score",       200000],
+  grenades_10:     ["grenades",    10],
+  grenades_50:     ["grenades",    50],
+  dmg_10k:         ["totalDamage", 10000],
+  crits_50:        ["crits",       50],
+  crits_100:       ["crits",       100],
+  nukes_3:         ["nukes",       3],
+  crypto:          ["cryptoKills", 10],
+  perk_5:          ["perksSelected", 5],
+  perk_10:         ["perksSelected", 10],
+  boss_wave_5:     ["bossWavesCleared", 5],
+  no_hit_waves_3:  ["noHitWaves",  3],
+  survive_5m:      ["timeSurvived", 300],
+  survive_10m:     ["timeSurvived", 600],
+  level_10:        ["level",       10],
+  level_15:        ["level",       15],
+  // New mode + system achievements
+  boss_rush_5:     ["wave",        5],
+  boss_rush_10:    ["wave",        10],
+  boss_rush_20:    ["wave",        20],
+  cursed_run_w5:   ["wave",        5],
+  cursed_run_w10:  ["wave",        10],
+  synergy_first:   ["activeSynergies", 1],
+  synergy_double:  ["activeSynergies", 2],
+  berserker_5:     ["berserkersKilled", 5],
+  berserker_20:    ["berserkersKilled", 20],
+};
 
 // ===== GAME CONSTANTS =====
 export const GRENADE_COOLDOWN = 8000;

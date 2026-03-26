@@ -4,7 +4,7 @@ import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
-  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS,
+  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
@@ -20,13 +20,14 @@ import {
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
 } from "./sounds.js";
+import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
 import DeathScreen from "./components/DeathScreen.jsx";
 import PauseMenu from "./components/PauseMenu.jsx";
 import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
-import PerkModal, { getRandomPerks } from "./components/PerkModal.jsx";
+import PerkModal, { getRandomPerks, getFullyCursedPerks } from "./components/PerkModal.jsx";
 import WaveShopModal from "./components/WaveShopModal.jsx";
 import TutorialOverlay from "./components/TutorialOverlay.jsx";
 
@@ -163,9 +164,12 @@ export default function CallOfDoodie() {
   const bestMomentRef    = useRef({ ts: 0, score: 0 }); // highest-excitement timestamp
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
+  const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
   const dailyChallengeRef     = useRef(false); // synced with dailyChallengeMode
+  const cursedRunRef          = useRef(false); // synced with cursedRunMode
+  const bossRushRef           = useRef(false); // synced with bossRushMode
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
@@ -219,6 +223,8 @@ export default function CallOfDoodie() {
   const [runModifier, setRunModifier]     = useState(null);
   const [scoreAttackMode, setScoreAttackMode]       = useState(false);
   const [dailyChallengeMode, setDailyChallengeMode] = useState(false);
+  const [cursedRunMode, setCursedRunMode]           = useState(false);
+  const [bossRushMode, setBossRushMode]             = useState(false);
   const [challengeVsScore, setChallengeVsScore]     = useState(null);
   const [challengeVsName, setChallengeVsName]       = useState(null);
   const [weaponKillsSnapshot, setWeaponKillsSnapshot] = useState([]);
@@ -240,6 +246,7 @@ export default function CallOfDoodie() {
   const [controllerType, setControllerType] = useState("controller");
   const [overclockedShots, setOverclockedShots] = useState(0);
   const [waveStreak, setWaveStreak]             = useState(0);
+  const [berserkersKilled, setBerserkersKilled] = useState(0);
   const [pwaPromptReady, setPwaPromptReady]     = useState(false);
   const [mapTheme, setMapTheme]                 = useState(0);
 
@@ -259,6 +266,15 @@ export default function CallOfDoodie() {
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
+
+  // ── Warn before accidental tab close / refresh during a run ───────────────
+  useEffect(() => {
+    const handler = (e) => { e.preventDefault(); e.returnValue = ""; };
+    if (screen === "game") {
+      window.addEventListener("beforeunload", handler);
+      return () => window.removeEventListener("beforeunload", handler);
+    }
+  }, [screen]);
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
   useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);
@@ -360,6 +376,10 @@ export default function CallOfDoodie() {
       bossWavesCleared: statsRef.current.bossWavesCleared,
       dashKills: statsRef.current.dashKills || 0,
       noHitWaves: statsRef.current.noHitWaves || 0,
+      bossRushMode: gs.bossRushMode || false,
+      cursedRunMode: gs.cursedRunMode || false,
+      activeSynergies: (gs.activeSynergies || []).length,
+      berserkersKilled: statsRef.current.berserkersKilled || 0,
     };
     ACHIEVEMENTS.forEach(a => {
       if (!achievedRef.current.has(a.id) && a.check(s)) {
@@ -434,6 +454,14 @@ export default function CallOfDoodie() {
     killFeedRef.current = [];
     frameBufferRef.current = [];
     bestMomentRef.current = { ts: 0, score: 0 };
+    // Ghost race: load previous run's ghost for same mode, reset recorder
+    ghostRecordRef.current = [];
+    try {
+      const _gKey = "cod-ghost-" + (bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
+      gsRef.current._ghostKey = _gKey;
+      const _raw = sessionStorage.getItem(_gKey);
+      gsRef.current.ghost = _raw ? JSON.parse(_raw) : null;
+    } catch { gsRef.current.ghost = null; }
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -452,6 +480,12 @@ export default function CallOfDoodie() {
     gsRef.current.prestigeMult = 1 + (meta.prestige || 0) * 0.10;
     gsRef.current.scoreAttackMode = scoreAttackRef.current;
     gsRef.current.scoreAttackTimeLeft = scoreAttackRef.current ? 300 * 60 : 0;
+    gsRef.current.cursedRunMode = cursedRunRef.current;
+    if (cursedRunRef.current) gsRef.current.killScoreMult = (gsRef.current.killScoreMult || 1) * 3;
+    gsRef.current.bossRushMode = bossRushRef.current;
+    // Apply weekly mutation on top of normal game
+    const _weeklyMut = getWeeklyMutation();
+    if (_weeklyMut) _weeklyMut.apply(gsRef.current);
     gsRef.current.playerSkin = meta.playerSkin || "";
 
     // XP gain (veteran)
@@ -745,7 +779,7 @@ export default function CallOfDoodie() {
       }
       // Trigger perk selection every 3 level-ups
       if (ref.level % 3 === 0) {
-        const opts = getRandomPerks(3);
+        const opts = cursedRunRef.current ? getFullyCursedPerks(3) : getRandomPerks(3);
         setPerkOptions(opts);
         setPerkPending(true);
         perkPendingRef.current = true;
@@ -885,7 +919,7 @@ export default function CallOfDoodie() {
     const weapon = WEAPONS[weaponIdx];
     const now = Date.now();
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
-    const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1);
+    const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1) * (gs.synergyFireRateMult || 1);
     if (now - lastShotRef.current < weapon.fireRate * fireRateMult || gs.ammoCount <= 0 || isReloadingRef.current) return;
     lastShotRef.current = now; gs.ammoCount--; gs.weaponAmmos[weaponIdx] = gs.ammoCount; setAmmo(gs.ammoCount);
     // Overclocked perk: track shots, force reload every 20
@@ -903,7 +937,7 @@ export default function CallOfDoodie() {
     const p = gs.player;
     const spread = (Math.random() - 0.5) * weapon.spread;
     const a = angle + spread;
-    const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25);
+    const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1);
     const pierce = perkModsRef.current.pierce || 0;
     const bSize = weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4);
     const bLife = weapon.bulletLife || 60;
@@ -915,12 +949,13 @@ export default function CallOfDoodie() {
       damage: weapon.damage * damageMult, color: weapon.color,
       life: bLife, size: bSize,
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
-      bouncesLeft: noRicochet ? 0 : 10 + (gs.extraBounces || 0),
+      bouncesLeft: noRicochet ? 0 : 10 + (gs.extraBounces || 0) + (gs.synergyExtraBounces || 0),
       wpnIdx: weaponIdx,
     });
     if (weapon.pellets) {
-      // Shotgun — fire N pellets with independent spread
-      for (let pi = 0; pi < weapon.pellets; pi++) {
+      // Shotgun — fire N pellets with independent spread (+ synergy extra)
+      const totalPellets = weapon.pellets + (gs.synergyExtraPellets || 0);
+      for (let pi = 0; pi < totalPellets; pi++) {
         const pa = angle + (Math.random() - 0.5) * weapon.spread;
         gs.bullets.push(makeBullet(pa));
       }
@@ -1025,6 +1060,12 @@ export default function CallOfDoodie() {
       return false;
     }
     if (gs) gs.waveStreak = 0; // reset streak on death
+    // Ghost race: persist this run's positions under mode-specific key
+    try {
+      const _gKey = gsRef.current?._ghostKey || "cod-ghost-normal-v1";
+      if (ghostRecordRef.current.length > 10)
+        sessionStorage.setItem(_gKey, JSON.stringify(ghostRecordRef.current));
+    } catch { /* storage full — silent fail */ }
     stopMusic(); stopAmbient();
     soundDeath();
     rumbleGamepad(0.7, 1.0, 600);
@@ -1104,7 +1145,7 @@ export default function CallOfDoodie() {
     setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
-    setBestStreak(0); setTotalDamage(0);
+    setBestStreak(0); setTotalDamage(0); setBerserkersKilled(0);
     setAchievementsUnlocked([]); setAchievementPopup(null); setTimeSurvived(0);
     setPaused(false); setExtraLives(0); extraLivesRef.current = 0;
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
@@ -1154,11 +1195,12 @@ export default function CallOfDoodie() {
       inputDevice: inputDeviceRef.current,
       seed: runSeed,
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
-      mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : undefined,
+      mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : undefined,
     };
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
-    const board = await saveToLeaderboard(entry);
+    const { board, online } = await saveToLeaderboard(entry);
     setLeaderboard(board);
+    return { online };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
@@ -1172,7 +1214,6 @@ export default function CallOfDoodie() {
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
     if (pausedRef.current || perkPendingRef.current || shopPendingRef.current) {
-      frameRef.current = requestAnimationFrame(gameLoop);
       return;
     }
 
@@ -1288,6 +1329,26 @@ export default function CallOfDoodie() {
       }
     }
 
+    // ── Weapon synergy check (every 30 frames) ──
+    // ── Ghost race: record player position every 6 frames (~10 samples/sec) ──
+    if (frameCountRef.current % 6 === 1 && p) {
+      ghostRecordRef.current.push({ x: Math.round(p.x), y: Math.round(p.y), f: frameCountRef.current });
+      // Cap at 18000 samples (~30 min) to bound memory
+      if (ghostRecordRef.current.length > 18000) ghostRecordRef.current.shift();
+    }
+
+    if (frameCountRef.current % 30 === 0) {
+      const upgrades = gs.weaponUpgrades || [];
+      const active = WEAPON_SYNERGIES.filter(s =>
+        upgrades[s.weapons[0]] > 0 && upgrades[s.weapons[1]] > 0
+      );
+      gs.activeSynergies = active;
+      gs.synergyDamageMult = active.reduce((acc, s) => acc * (s.damageMult || 1), 1);
+      gs.synergyFireRateMult = active.reduce((acc, s) => acc * (s.fireRateMult || 1), 1);
+      gs.synergyExtraBounces = active.reduce((acc, s) => acc + (s.extraBounces || 0), 0);
+      gs.synergyExtraPellets = active.reduce((acc, s) => acc + (s.extraPellets || 0), 0);
+    }
+
     // ── Wave / boss wave logic ──
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     if (!gs.bossWave) {
@@ -1320,11 +1381,16 @@ export default function CallOfDoodie() {
       gs.bossWave = false;
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
-      const nextIsBoss = gs.currentWave % 5 === 0;
+      // Boss Rush: bosses start wave 3+ (2-wave warmup to let player find cover)
+      const _bossInterval = gs.bossRushMode ? 1 : 5;
+      const nextIsBoss = gs.bossRushMode
+        ? gs.currentWave >= 3
+        : gs.currentWave % _bossInterval === 0;
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
       } else {
-        gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), 60);
+        const _waveMax = gs.currentWave >= 40 ? 100 : 60;
+        gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), _waveMax);
       }
       setWave(gs.currentWave);
       setMapTheme(gs.mapTheme ?? 0);
@@ -1352,7 +1418,9 @@ export default function CallOfDoodie() {
         addText(gs, W / 2, H / 2 - 30, "⚠ BOSS WAVE ⚠", "#FF0000", true);
         addText(gs, W / 2, H / 2 + 10, "WAVE " + gs.currentWave, "#FFD700", true);
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
-        const _bSlot = (Math.floor(gs.currentWave / 5) - 1) % BOSS_ROTATION.length;
+        const _bSlot = gs.bossRushMode
+          ? (gs.currentWave - 1) % BOSS_ROTATION.length
+          : (Math.floor(gs.currentWave / 5) - 1) % BOSS_ROTATION.length;
         const _bType = BOSS_ROTATION[_bSlot];
         const _bType2 = BOSS_ROTATION[(_bSlot + 1) % BOSS_ROTATION.length];
         // Boss name announcement
@@ -1391,7 +1459,8 @@ export default function CallOfDoodie() {
         } else if (_wv >= 7) {
           addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
         }
-        if (gs.currentWave >= 15) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
+        const _dualBossThreshold = gs.bossRushMode ? 3 : 15;
+        if (gs.currentWave >= _dualBossThreshold) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
         else {
           spawnBoss(gs, _bType);
           if (gs.currentWave >= 7) { spawnEnemy(gs); spawnEnemy(gs); gs.maxEnemiesThisWave += 2; gs.enemiesThisWave += 2; }
@@ -1752,6 +1821,11 @@ export default function CallOfDoodie() {
             gs.dyingEnemies = gs.dyingEnemies || [];
             if (gs.dyingEnemies.length < MAX_DYING_ANIM)
               gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+            // Track berserker kills (wave 40+ elite)
+            if (e.eliteType === "berserker") {
+              statsRef.current.berserkersKilled = (statsRef.current.berserkersKilled || 0) + 1;
+              setBerserkersKilled(statsRef.current.berserkersKilled);
+            }
             // Explosive elite: chain AOE on death
             if (e.eliteType === "explosive") {
               const expRadius = 85;
@@ -2007,8 +2081,9 @@ export default function CallOfDoodie() {
             e.bulletRingTimer = 0;
             e.bulletRingWarning = false;
             e.sharedAbilityCooldown = 120;
-            for (let _ri = 0; _ri < 8; _ri++) {
-              const ba = (_ri / 8) * Math.PI * 2;
+            const _brCount = gs.currentWave >= 40 ? 12 : 8;
+            for (let _ri = 0; _ri < _brCount; _ri++) {
+              const ba = (_ri / _brCount) * Math.PI * 2;
               gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12 });
             }
             addText(gs, e.x, e.y - 80, "🔥 BULLET RING!", "#FF6600", true);
@@ -2034,10 +2109,11 @@ export default function CallOfDoodie() {
             e.groundSlamRadius += 6;
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
-              p.health -= gs.glassjaw ? Math.round(18 * (gs.glassjawMult || 2)) : 18; p.invincible = 25; gs.damageFlash = 10;
+              const _slamDmg = gs.currentWave >= 40 ? 25 : 18;
+              p.health -= gs.glassjaw ? Math.round(_slamDmg * (gs.glassjawMult || 2)) : _slamDmg; p.invincible = 25; gs.damageFlash = 10;
               gs.damageThisWave = (gs.damageThisWave || 0) + 1;
               setHealth(Math.max(0, p.health));
-              addText(gs, p.x, p.y - 30, "-18 SLAM!", "#FF4400");
+              addText(gs, p.x, p.y - 30, "-" + _slamDmg + " SLAM!", "#FF4400");
               rumbleGamepad(0.4, 0.65, 150);
               if (p.health <= 0) handlePlayerDeath(gs);
             }
@@ -2306,15 +2382,10 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-    frameRef.current = requestAnimationFrame(gameLoop);
   }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
-  useEffect(() => {
-    if (screen !== "game") { if (frameRef.current) cancelAnimationFrame(frameRef.current); return; }
-    frameRef.current = requestAnimationFrame(gameLoop);
-    return () => { if (frameRef.current) cancelAnimationFrame(frameRef.current); };
-  }, [screen, gameLoop]);
+  useGameLoop(gameLoop, screen === "game", frameRef);
 
   // ── Keyboard ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -2537,9 +2608,13 @@ export default function CallOfDoodie() {
         onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
         gamepadConnected={gamepadConnected} controllerType={controllerType}
         scoreAttackMode={scoreAttackMode}
-        onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; } }}
+        onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
         dailyChallengeMode={dailyChallengeMode}
-        onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; } }}
+        onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+        cursedRunMode={cursedRunMode}
+        onSetCursedRunMode={v => { setCursedRunMode(v); cursedRunRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+        bossRushMode={bossRushMode}
+        onSetBossRushMode={v => { setBossRushMode(v); bossRushRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; } }}
       />
     );
   }
@@ -2563,6 +2638,7 @@ export default function CallOfDoodie() {
         gamepadConnected={gamepadConnected} controllerType={controllerType}
         weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
         dailyChallengeMode={dailyChallengeMode}
+        bossRushMode={bossRushMode} cursedRunMode={cursedRunMode}
         playerSkin={gsRef.current?.playerSkin || ""}
         vsScore={challengeVsScore} vsName={challengeVsName}
         onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
@@ -2600,7 +2676,7 @@ export default function CallOfDoodie() {
 
       {/* Wave clear shop */}
       {shopPending && (
-        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} />
+        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} />
       )}
 
       {/* Perk selection modal */}
@@ -2612,11 +2688,12 @@ export default function CallOfDoodie() {
       {showAchievements && <AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAchievements(false)} />}
 
       {/* Achievement popup */}
-      {achievementPopup && !paused && !perkPending && (
-        <div style={{ position: "absolute", top: 60, left: "50%", transform: "translateX(-50%)", background: "rgba(0,0,0,0.85)", border: "1px solid #FFD700", borderRadius: 10, padding: "10px 20px", color: "#FFD700", fontSize: 13, fontWeight: 700, zIndex: 50, textAlign: "center", pointerEvents: "none", animation: "slideDown 0.3s ease-out", boxShadow: "0 0 20px rgba(255,215,0,0.3)" }}>
-          <div style={{ fontSize: 22 }}>{achievementPopup.emoji}</div>
-          <div>{achievementPopup.name}</div>
-          <div style={{ fontSize: 10, color: "#CCC", fontWeight: 400 }}>{achievementPopup.desc}</div>
+      {achievementPopup && !paused && (
+        <div style={{ position: "absolute", top: 70, right: 16, background: "rgba(0,0,0,0.9)", border: "1px solid #FFD700", borderRadius: 10, padding: "10px 16px", color: "#FFD700", fontSize: 12, fontWeight: 700, zIndex: 60, textAlign: "right", pointerEvents: "none", boxShadow: "0 0 20px rgba(255,215,0,0.3)", maxWidth: 200 }}>
+          <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 2 }}>ACHIEVEMENT UNLOCKED</div>
+          <div style={{ fontSize: 20 }}>{achievementPopup.emoji}</div>
+          <div style={{ fontSize: 13 }}>{achievementPopup.name}</div>
+          <div style={{ fontSize: 10, color: "#CCC", fontWeight: 400, marginTop: 2 }}>{achievementPopup.desc}</div>
         </div>
       )}
 
@@ -2625,6 +2702,13 @@ export default function CallOfDoodie() {
         <div style={{ position: "absolute", top: 50, left: "50%", transform: "translateX(-50%)", background: "rgba(255,107,53,0.88)", border: "1px solid rgba(255,107,53,0.95)", borderRadius: 10, padding: "7px 16px", color: "#FFF", fontSize: 12, fontWeight: 700, zIndex: 50, textAlign: "center", pointerEvents: "none", maxWidth: 340, animation: "slideDown 0.3s ease-out", boxShadow: "0 0 15px rgba(255,107,53,0.4)" }}>
           <div style={{ fontSize: 10, color: "#FFD700", marginBottom: 2, letterSpacing: 1 }}>META UPGRADES ACTIVE</div>
           {metaToast}
+        </div>
+      )}
+
+      {/* Berserker kill counter (wave 40+) */}
+      {wave >= 40 && berserkersKilled > 0 && screen === "game" && !paused && (
+        <div style={{ position: "absolute", top: 30, right: 16, background: "rgba(255,0,200,0.15)", border: "1px solid rgba(255,0,200,0.5)", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#FF00CC", fontWeight: 700, pointerEvents: "none", zIndex: 30 }}>
+          💀 BERSERKERS: {berserkersKilled}
         </div>
       )}
 

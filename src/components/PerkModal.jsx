@@ -2,6 +2,21 @@ import { useRef } from "react";
 import { PERKS, CURSED_PERKS, PERK_TIER_COLORS, PERK_TIER_WEIGHTS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
+/** Pick `count` perks — all cursed (for Cursed Run mode). */
+export function getFullyCursedPerks(count = 3) {
+  if (CURSED_PERKS.length === 0) return getRandomPerks(count);
+  const chosen = [];
+  const used = new Set();
+  let attempts = 0;
+  while (chosen.length < count && attempts < 200) {
+    attempts++;
+    const p = CURSED_PERKS[Math.floor(Math.random() * CURSED_PERKS.length)];
+    if (!used.has(p.id)) { used.add(p.id); chosen.push(p); }
+  }
+  while (chosen.length < count) chosen.push(CURSED_PERKS[Math.floor(Math.random() * CURSED_PERKS.length)]);
+  return chosen;
+}
+
 /** Pick `count` random perks. One slot has a 35% chance to be a cursed perk. */
 export function getRandomPerks(count = 3) {
   const pool = [];
