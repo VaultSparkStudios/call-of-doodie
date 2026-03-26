@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "project": "call-of-doodie",
+  "date": "2026-03-26",
+  "session": 0,
+  "label": "Bootstrap Baseline",
+  "calibration": true,
+  "scores": {
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": 5
+  },
+  "total": 5,
+  "maxScore": 50,
+  "velocity": 0,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": null,
+    "total": null
+  },
+  "topWin": "Studio OS applied to a live game with real SOUL, BRAIN, and PROJECT_BRIEF in place",
+  "topGap": "No SIL velocity or engagement tracking; no CI metrics instrumented yet",
+  "intentOutcome": "Bootstrap initiation — Layer 1 SIL format applied; project ready for Foundation session"
+}

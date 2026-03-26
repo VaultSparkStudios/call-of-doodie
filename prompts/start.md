@@ -2,7 +2,34 @@
 # Use this when the user says only `start`.
 # ─────────────────────────────────────────────────────────────────────────────
 
-## Phase 1 — Load Context
+## Phase 0 — Mode Declaration
+
+Before reading any files, determine session mode:
+
+| Mode | Trigger | Focus |
+|---|---|---|
+| **BUILDER MODE** | Default (no qualifier) | Deep work on this project only |
+| **FOUNDER MODE** | User says "start: founder mode" | Cross-project strategy; reads STUDIO_BRAIN.md first |
+
+In **Builder Mode:** read only project files. Skip STUDIO_BRAIN.md unless a specific studio flag is relevant.
+
+In **Founder Mode:** read `portfolio/STUDIO_BRAIN.md` first for studio-wide context, then proceed with project files.
+
+---
+
+## Phase 1 — Initiation Type Detection
+
+Check `context/SELF_IMPROVEMENT_LOOP.md`:
+
+| Condition | Type | Action |
+|---|---|---|
+| File missing or no dated entries | **A — Bootstrap** | Follow `prompts/initiate.md` — do not proceed with Phase 2 |
+| 1 entry labeled "Bootstrap Baseline" / "Foundation Baseline" and core files are still template-only | **B — Foundation** | Follow `prompts/initiate.md` Section B |
+| 2+ dated entries with real scores | **C — Returning** | Continue with Phase 2 |
+
+---
+
+## Phase 2 — Load Context
 
 Read in this exact order. Do not skip or reorder.
 
@@ -16,23 +43,24 @@ Read in this exact order. Do not skip or reorder.
 | 6 | `context/DECISIONS.md` | Key decisions with rationale |
 | 7 | `context/TASK_BOARD.md` | Now / Next / Blocked / Later tasks |
 | 8 | `context/LATEST_HANDOFF.md` | Authoritative handoff from last session |
-| 9 | `context/SELF_IMPROVEMENT_LOOP.md` | Last audit scores + open brainstorm items |
+| 9 | `context/SELF_IMPROVEMENT_LOOP.md` — **header only** | Rolling Status block: sparkline, averages, last scores |
 | 10 | Task-specific files | Only after all above are read |
 
 ---
 
-## Phase 2 — SIL Escalation Check
+## Phase 3 — SIL Escalation Check
 
-After reading `context/SELF_IMPROVEMENT_LOOP.md`:
+After reading the SIL Rolling Status header:
 
-- Note last audit scores and trajectory (↑ ↓ →) per category
+- Note the sparkline — is the 5-session trajectory ↑ ↓ flat?
+- Note rolling averages — which category is the lowest? Flag if any avg is below 5.0
 - Identify any `[SIL]` items on TASK_BOARD not yet actioned
 - **If a `[SIL]` item was skipped 2+ sessions → escalate to Now on TASK_BOARD and flag in brief**
 - Surface the top unactioned brainstorm idea from the last SIL entry
 
 ---
 
-## Phase 3 — Startup Rules
+## Phase 4 — Startup Rules
 
 - Treat repo files as source of truth — not prior chat memory
 - Do not edit code during startup unless user immediately asks for implementation
@@ -42,14 +70,14 @@ After reading `context/SELF_IMPROVEMENT_LOOP.md`:
 
 ---
 
-## Phase 4 — Output: Startup Brief
+## Phase 5 — Output: Startup Brief
 
 Reply using this exact structure:
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   STARTUP BRIEF — {Project Name}
-  {YYYY-MM-DD}
+  {YYYY-MM-DD} · {BUILDER MODE / FOUNDER MODE}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   IDENTITY     {type} · {status} · {owner}
@@ -59,18 +87,30 @@ Reply using this exact structure:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   LAST AUDIT   {total}/50 · {date}
+  SPARKLINE    {▁▂▃▄▅▆▇█} (last 5 sessions, oldest→newest)
 
-  Dev Health        {n}/10  {↑↓→}
-  Creative Align    {n}/10  {↑↓→}
-  Momentum          {n}/10  {↑↓→}
-  Engagement        {n}/10  {↑↓→}
-  Process Quality   {n}/10  {↑↓→}
+  Dev Health        {n}/10  {↑↓→}  3-avg: {n.n}
+  Creative Align    {n}/10  {↑↓→}  3-avg: {n.n}
+  Momentum          {n}/10  {↑↓→}  3-avg: {n.n}
+  Engagement        {n}/10  {↑↓→}  3-avg: {n.n}
+  Process Quality   {n}/10  {↑↓→}  3-avg: {n.n}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  VELOCITY     Last session: {N} tasks · Trend: {↑↓→}
+  DEBT         {→ stable / ↑ growing / ↓ shrinking}
   NEXT MOVE    {specific recommended action}
   BLOCKERS     {open blockers or "None"}
   [SIL] FLAGS  {escalated items or "None"}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-After the brief, ask: **"What are we working on today?"**
+---
+
+## Phase 6 — Session Intent Declaration
+
+After delivering the startup brief, ask:
+
+> **"What is the primary goal for this session?"** (one sentence)
+
+Log the declared intent in `context/LATEST_HANDOFF.md` under a `Session Intent:` field at the top.
+This is checked and logged at closeout.

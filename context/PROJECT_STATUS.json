@@ -24,9 +24,14 @@
     "Future feature work must preserve build stability and performance.",
     "Storage and leaderboard evolution need discipline as the game grows."
   ],
+  "silScore": 5,
+  "silAvg3": null,
+  "silVelocity": 0,
+  "silDebt": "→",
+  "silLastSession": "2026-03-26",
   "readFirst": [
-    "context/PROJECT_BRIEF.md",
-    "context/PORTFOLIO_CARD.md",
-    "context/LATEST_HANDOFF.md"
+    "context/LATEST_HANDOFF.md",
+    "context/SELF_IMPROVEMENT_LOOP.md",
+    "context/TASK_BOARD.md"
   ]
 }
