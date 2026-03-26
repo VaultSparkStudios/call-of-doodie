@@ -4,16 +4,16 @@ import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
-  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
+  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES, WAVE_ROUTES,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
 import SettingsPanel from "./components/SettingsPanel.jsx";
 import {
-  soundShoot, soundHit, soundDeath, soundLevelUp, soundPickup, soundEnemyDeath,
-  soundGrenade, soundBossWave, soundAchievement, soundReload,
+  soundShoot, soundHit, soundHitAt, soundDeath, soundLevelUp, soundPickup, soundPickupAt, soundEnemyDeath, soundEnemyDeathAt,
+  soundGrenade, soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
   soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
@@ -29,6 +29,7 @@ import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
 import PerkModal, { getRandomPerks, getFullyCursedPerks } from "./components/PerkModal.jsx";
 import WaveShopModal from "./components/WaveShopModal.jsx";
+import RouteSelectModal, { getRouteOptions } from "./components/RouteSelectModal.jsx";
 import TutorialOverlay from "./components/TutorialOverlay.jsx";
 
 // ── Controller helpers ────────────────────────────────────────────────────────
@@ -116,6 +117,22 @@ function getShopOptions(gs, wpnIdx) {
   return pool.slice(0, 3);
 }
 
+// ── Doodie Coin shop options ───────────────────────────────────────────────────
+function getCoinShopOptions(gs) {
+  const p = gs.player;
+  const pool = [
+    { id: "cs_fullhp",   emoji: "💖", name: "Full Restore",    desc: "Restore to full HP",           cost: 20, available: p.health < p.maxHealth },
+    { id: "cs_nuke",     emoji: "💣", name: "Pocket Nuke",     desc: "Nuke all enemies on screen",   cost: 28, available: true },
+    { id: "cs_timedil",  emoji: "⏳", name: "Bullet Time",     desc: "6 seconds of time dilation",   cost: 14, available: true },
+    { id: "cs_grenade",  emoji: "💥", name: "Grenade Restock", desc: "Grenade instantly ready",      cost: 8,  available: true },
+    { id: "cs_extralife",emoji: "👼", name: "Guardian Angel",  desc: "+1 extra life",                cost: 45, available: true },
+    { id: "cs_maxhp",    emoji: "❤️‍🔥", name: "HP Augment",     desc: "+30 permanent max HP",         cost: 22, available: true },
+    { id: "cs_ammo",     emoji: "🔋", name: "Full Battery",    desc: "Refill all weapons",           cost: 10, available: true },
+  ].filter(o => o.available);
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return pool.slice(0, 3);
+}
+
 // ── Performance caps ─────────────────────────────────────────────────────────
 const MAX_PARTICLES  = 150;  // hard cap on concurrent particle objects
 const MAX_FLOAT_TEXTS = 30;  // hard cap on floating damage/event texts
@@ -175,6 +192,8 @@ export default function CallOfDoodie() {
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
   const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
+  const routePendingRef  = useRef(false); // blocks game loop like perkPending
+  const bossCutsceneRef  = useRef(false); // blocks game loop during boss intro card
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -217,6 +236,8 @@ export default function CallOfDoodie() {
   const [perkPending, setPerkPending] = useState(false);
   const [perkOptions, setPerkOptions] = useState([]);
   const [bossWaveActive, setBossWaveActive] = useState(false);
+  const [bossCutscene, setBossCutscene]     = useState(null); // { emoji, name, title, quote, wave }
+  const [coins, setCoins]                   = useState(0);   // 💩 Doodie Coins per run
   const [autoAim, setAutoAim]             = useState(false);
   const [starterLoadout, setStarterLoadout] = useState("standard");
   const [runSeed, setRunSeed]             = useState(0);
@@ -232,6 +253,7 @@ export default function CallOfDoodie() {
   const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
   const [shopPending, setShopPending]         = useState(false);
   const [shopOptions, setShopOptions]         = useState([]);
+  const [coinShopOptions, setCoinShopOptions] = useState([]);
   const [shopHistory, setShopHistory]         = useState([]); // items bought this run
   const [musicMuted, setMusicMuted]           = useState(() => { const s = localStorage.getItem("cod-music-muted") === "1"; setMuted(s); return s; });
   // Sync saved vibe to sounds module on first render
@@ -249,6 +271,8 @@ export default function CallOfDoodie() {
   const [berserkersKilled, setBerserkersKilled] = useState(0);
   const [pwaPromptReady, setPwaPromptReady]     = useState(false);
   const [mapTheme, setMapTheme]                 = useState(0);
+  const [routePending, setRoutePending]         = useState(false);
+  const [routeOptions, setRouteOptions]         = useState([]);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -875,21 +899,64 @@ export default function CallOfDoodie() {
     if (picked) setShopHistory(h => [...h, { emoji: picked.emoji, name: picked.name }]);
   }, []);
 
+  // ── Coin shop apply ───────────────────────────────────────────────────────
+  const applyCoinShopItem = useCallback((optionId, cost) => {
+    const gs = gsRef.current, p = gs?.player;
+    if (!gs || !p || (gs.coins || 0) < cost) return;
+    gs.coins = (gs.coins || 0) - cost;
+    setCoins(gs.coins);
+    const wpnIdx = currentWeaponRef.current;
+    switch (optionId) {
+      case "cs_fullhp":
+        p.health = p.maxHealth; setHealth(Math.floor(p.health)); break;
+      case "cs_nuke":
+        gs.enemies.forEach((en, ni) => { en.health = -999; gs.score += en.points; if (ni < 12) addParticles(gs, en.x, en.y, en.color, 8); });
+        gs.enemies = []; gs.screenShake = 20; setScore(gs.score); break;
+      case "cs_timedil":
+        gs.timeDilationTimer = 360; break;
+      case "cs_grenade":
+        grenadeRef.current.ready = true; setGrenadeReady(true); break;
+      case "cs_extralife":
+        extraLivesRef.current = (extraLivesRef.current || 0) + 1; setExtraLives(extraLivesRef.current); break;
+      case "cs_maxhp":
+        p.maxHealth += 30; p.health = Math.min(p.maxHealth, p.health + 30); setHealth(Math.floor(p.health)); break;
+      case "cs_ammo":
+        gs.weaponAmmos = WEAPONS.map((w, i) => {
+          const ul = gs.weaponUpgrades?.[i] || 0;
+          return Math.floor(w.maxAmmo * (1 + ul * 0.25) * (perkModsRef.current.ammoMult || 1));
+        });
+        gs.ammoCount = gs.weaponAmmos[wpnIdx]; setAmmo(gs.ammoCount); break;
+      default: break;
+    }
+    soundPerkSelect();
+  }, []);
+
+  // ── Wave route apply ──────────────────────────────────────────────────────
+  const applyRoute = useCallback((route) => {
+    const gs = gsRef.current;
+    if (!gs) return;
+    route.apply(gs, perkModsRef.current);
+    routePendingRef.current = false;
+    setRoutePending(false);
+    setRouteOptions([]);
+  }, []);
+
   // ── Boss / enemy spawning (logic lives in gameHelpers.js) ────────────────
   const spawnBoss  = useCallback((gs, typeIndex) => _spawnBoss(gs, GW(), GH(), difficultyRef.current, typeIndex), []);
   const spawnEnemy = useCallback((gs)            => _spawnEnemy(gs, GW(), GH(), difficultyRef.current), []);
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = (gs, ex, ey, isBoss) => {
-    const types    = ["health", "ammo", "speed", "nuke", "upgrade", "rage", "magnet", "freeze"];
+    const types    = ["health", "ammo", "speed", "nuke", "upgrade", "rage", "magnet", "freeze", "time_dilation"];
     // Vampire mode: no health drops — replace with ammo
     // Scavenger perk boosts ammo drop weight by ammoDropMult
     const ammoBoost = perkModsRef.current.ammoDropMult || 1;
     const baseAmmoW = isBoss ? (gs.vampireMode ? 0.40 : 0.15) : (gs.vampireMode ? 0.58 : 0.10);
     const ammoW = Math.min(baseAmmoW * ammoBoost, 0.70);
+    const _upgradeW = gs.routeArmoryRun ? 0.36 : 0.12;
     const weights  = isBoss
-      ? [gs.vampireMode ? 0 : 0.20, ammoW, 0.08, 0.08, 0.35, 0.10, 0.07, 0.07]
-      : [gs.vampireMode ? 0 : 0.40, ammoW, 0.18, 0.04, 0.12, 0.10, 0.08, 0.08];
+      ? [gs.vampireMode ? 0 : 0.19, ammoW, 0.07, 0.07, 0.34, 0.09, 0.06, 0.06, 0.05]
+      : [gs.vampireMode ? 0 : 0.38, ammoW, 0.17, 0.04, _upgradeW, 0.09, 0.07, 0.07, 0.03];
     let roll = Math.random(), cumul = 0, pType = "health";
     for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
     gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
@@ -997,8 +1064,8 @@ export default function CallOfDoodie() {
     const gs = gsRef.current;
     if (!gs || !grenadeRef.current.ready || pausedRef.current || perkPendingRef.current) return;
     grenadeRef.current.ready = false; setGrenadeReady(false);
-    soundGrenade();
     const p = gs.player;
+    soundGrenadeAt(p.x, GW());
     gs.grenades.push({ x: p.x, y: p.y, vx: Math.cos(p.angle) * 8, vy: Math.sin(p.angle) * 8, life: 45, size: 8 });
     statsRef.current.grenades++;
     const cd = GRENADE_COOLDOWN * (perkModsRef.current.grenadeCDMult || 1);
@@ -1151,10 +1218,13 @@ export default function CallOfDoodie() {
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
-    setShopPending(false); setShopOptions([]); shopPendingRef.current = false; setShopHistory([]);
+    setShopPending(false); setShopOptions([]); setCoinShopOptions([]); shopPendingRef.current = false; setShopHistory([]);
+    setRoutePending(false); setRouteOptions([]); routePendingRef.current = false;
+    setBossCutscene(null); bossCutsceneRef.current = false;
+    setCoins(0);
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setTimeout(() => {
       startMusic(false);
       startAmbient(gsRef.current?.mapTheme ?? 0);
@@ -1200,7 +1270,8 @@ export default function CallOfDoodie() {
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const { board, online } = await saveToLeaderboard(entry);
     setLeaderboard(board);
-    return { online };
+    const globalRank = await getPlayerGlobalRank(score);
+    return { online, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
@@ -1213,7 +1284,7 @@ export default function CallOfDoodie() {
     const ctx = ctxRef.current;
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
-    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current) {
+    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current) {
       return;
     }
 
@@ -1370,6 +1441,20 @@ export default function CallOfDoodie() {
     }
     // Wave cleared
     if (gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave) {
+      // Show route select on non-boss waves (wave 2+, not special competitive modes)
+      const _showRoute = !gs.bossWave && gs.currentWave >= 2
+        && !gs.bossRushMode && !gs.scoreAttackMode && !gs.dailyChallengeMode
+        && !gs._routeSelectDone;
+      if (_showRoute) {
+        gs._routeSelectDone = true; // prevent re-entry next frame
+        const rOpts = getRouteOptions(gs);
+        setRouteOptions(rOpts);
+        setRoutePending(true);
+        routePendingRef.current = true;
+        return; // game loop will pause; resumes after player picks a route
+      }
+      gs._routeSelectDone = false; // reset for next wave
+
       if (gs.bossWave) {
         statsRef.current.bossWavesCleared++;
         soundWaveClear();
@@ -1378,19 +1463,26 @@ export default function CallOfDoodie() {
       // Clear previous wave event flags
       gs.waveEvent = null; gs.waveEventSpeedMult = 1;
       gs.waveEliteOnly = false; gs.siegeMode = false; gs.fogOfWar = false;
+      gs.routeKillScoreMult = 1; // reset per-wave score bonus
+      gs.routeArmoryRun = false; gs.routeBlitz = false;
       gs.bossWave = false;
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
       // Boss Rush: bosses start wave 3+ (2-wave warmup to let player find cover)
       const _bossInterval = gs.bossRushMode ? 1 : 5;
-      const nextIsBoss = gs.bossRushMode
+      const nextIsBoss = gs.routeForceBoss || (gs.bossRushMode
         ? gs.currentWave >= 3
-        : gs.currentWave % _bossInterval === 0;
+        : gs.currentWave % _bossInterval === 0);
+      gs.routeForceBoss = false; // consume the flag
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
       } else {
         const _waveMax = gs.currentWave >= 40 ? 100 : 60;
         gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), _waveMax);
+        // Apply route modifiers to the upcoming wave
+        if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
+        if (gs.routeEliteWave)    { gs.waveEliteOnly = true; gs.routeEliteWave = false; }
+        if (gs.routeBlitz)        { gs.settSpawnMult = (gs.settSpawnMult || 1) * 3; }
       }
       setWave(gs.currentWave);
       setMapTheme(gs.mapTheme ?? 0);
@@ -1415,8 +1507,6 @@ export default function CallOfDoodie() {
         soundBossWave();
         setMusicIntensity(true);
         gs.screenShake = 20;
-        addText(gs, W / 2, H / 2 - 30, "⚠ BOSS WAVE ⚠", "#FF0000", true);
-        addText(gs, W / 2, H / 2 + 10, "WAVE " + gs.currentWave, "#FFD700", true);
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
         const _bSlot = gs.bossRushMode
           ? (gs.currentWave - 1) % BOSS_ROTATION.length
@@ -1426,8 +1516,21 @@ export default function CallOfDoodie() {
         // Boss name announcement
         const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT", 20:"📊 THE ALGORITHM GOES VIRAL" };
         const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00", 20:"#1DA1F2" };
+        const _BOSS_CARDS = {
+          4:  { emoji:"👩", name:"KAREN",         title:"DEMANDS A MANAGER",   quote:"I want to speak to whoever designed this game.", color:"#FF44AA" },
+          16: { emoji:"💔", name:"THE SPLITTER",  title:"MULTIPLIES ON DEATH", quote:"You can't kill what just keeps coming.",           color:"#FF6688" },
+          17: { emoji:"🦏", name:"THE JUGGERNAUT",title:"UNSTOPPABLE FORCE",   quote:"Nothing can stop me. Absolutely nothing.",         color:"#CC4400" },
+          18: { emoji:"🌀", name:"THE SUMMONER",  title:"RAISES AN ARMY",      quote:"Why fight when you can delegate?",                 color:"#8844FF" },
+          9:  { emoji:"🏠", name:"THE LANDLORD",  title:"RAISES YOUR RENT",    quote:"Market rate. Non-negotiable. Also, you're evicted.", color:"#FFAA00" },
+          20: { emoji:"📊", name:"THE ALGORITHM", title:"GOES VIRAL",          quote:"Your engagement metrics are... unsatisfactory.",   color:"#1DA1F2" },
+        };
+        const _card = _BOSS_CARDS[_bType] || { emoji:"☠", name:"BOSS", title:"APPROACHES", quote:"...", color:"#FF4400" };
+        const _isDual = gs.currentWave >= (gs.bossRushMode ? 3 : 15);
+        bossCutsceneRef.current = true;
+        setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null });
+        setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
         addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
-        if (gs.currentWave >= 15) {
+        if (_isDual) {
           addText(gs, W / 2, H / 2 - 50, "+ " + (_bossNames[_bType2] || ENEMY_TYPES[_bType2].name.toUpperCase()), _bossColors[_bType2] || "#FF8844");
         }
         // Ability warnings: boss-specific first, then general escalation
@@ -1504,6 +1607,7 @@ export default function CallOfDoodie() {
         if (showShop) {
           const opts = getShopOptions(gs, currentWeaponRef.current);
           setShopOptions(opts);
+          setCoinShopOptions(getCoinShopOptions(gs));
           setShopPending(true);
           shopPendingRef.current = true;
         }
@@ -1551,7 +1655,8 @@ export default function CallOfDoodie() {
 
     // ── Enemy bullet movement ──
     gs.enemyBullets = gs.enemyBullets.filter(eb => {
-      eb.x += eb.vx; eb.y += eb.vy; eb.life--;
+      const _tdm = (gs.timeDilationTimer || 0) > 0 ? 0.2 : 1;
+      eb.x += eb.vx * _tdm; eb.y += eb.vy * _tdm; eb.life--;
       const hitWall = (gs.obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
       if (hitWall) return false;
       return eb.life > 0 && eb.x > -10 && eb.x < W + 10 && eb.y > -10 && eb.y < H + 10;
@@ -1625,7 +1730,7 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1));
+            const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (pbWpn != null) statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
@@ -1641,6 +1746,9 @@ export default function CallOfDoodie() {
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
               if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
+            // 💩 Doodie Coin drop
+            const _coinDrop = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            if (_coinDrop > 0) { gs.coins = (gs.coins || 0) + _coinDrop; setCoins(gs.coins); addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000"); }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -1653,7 +1761,7 @@ export default function CallOfDoodie() {
             addKillFeed(e.name, pbWeapon.name);
             if (!e.isBossEnemy) {
               if (e.summonedBy) { soundSummonDismissed(); addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF"); }
-              else if ((gs._deathSoundsThisFrame || 0) < 1) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeath(e.typeIndex); }
+              else if ((gs._deathSoundsThisFrame || 0) < 1) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeathAt(e.typeIndex, e.x, W); }
             }
             if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
             if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
@@ -1762,7 +1870,7 @@ export default function CallOfDoodie() {
           }
           if (isCrit) statsRef.current.crits++;
           const _hn = performance.now();
-          if (_hn - lastHitSoundRef.current > 50) { soundHit(isCrit); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); }
+          if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); }
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
           addText(gs, e.x + (Math.random() - 0.5) * 20, e.y - e.size / 2 - Math.random() * 10,
@@ -1777,7 +1885,7 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1));
+            const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (b.wpnIdx != null) { statsRef.current.weaponKills[b.wpnIdx] = (statsRef.current.weaponKills[b.wpnIdx] || 0) + 1; }
@@ -1797,6 +1905,9 @@ export default function CallOfDoodie() {
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
               if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
+            // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
+            const _cd2 = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            if (_cd2 > 0) { gs.coins = (gs.coins || 0) + _cd2; setCoins(gs.coins); }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -1858,7 +1969,7 @@ export default function CallOfDoodie() {
                 addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
               } else if ((gs._deathSoundsThisFrame || 0) < 2) {
                 gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
-                soundEnemyDeath(e.typeIndex);
+                soundEnemyDeathAt(e.typeIndex, e.x, W);
               }
             }
             // Splitter: split into 3 mini-copies on death
@@ -1919,7 +2030,8 @@ export default function CallOfDoodie() {
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
       const freezeMult = (gs.freezeTimer || 0) > 0 ? 0.35 : 1;
-      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult;
+      const timeDilMult = (gs.timeDilationTimer || 0) > 0 ? 0.18 : 1;
+      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult * timeDilMult;
       // Flow field steering: sample flow field, fall back to direct angle if no cell data
       const ff = gs.flowField;
       let sx, sy;
@@ -2286,7 +2398,7 @@ export default function CallOfDoodie() {
       pk.life--;
       const d2 = Math.hypot(p.x - pk.x, p.y - pk.y);
       if (d2 < pickupRange) {
-        soundPickup(pk.type);
+        soundPickupAt(pk.type, pk.x, W);
         if (pk.type === "health") {
           const maxHP = p.maxHealth || 100; p.health = Math.min(maxHP, p.health + 30);
           setHealth(p.health); addText(gs, pk.x, pk.y, "+30 HP", "#00FF00");
@@ -2355,6 +2467,12 @@ export default function CallOfDoodie() {
           addParticles(gs, pk.x, pk.y, "#88CCFF", 18);
           addParticles(gs, pk.x, pk.y, "#FFFFFF", 10);
           gs.screenShake = Math.max(gs.screenShake, 5);
+        } else if (pk.type === "time_dilation") {
+          gs.timeDilationTimer = 360; // 6s at 60fps
+          addText(gs, pk.x, pk.y - 20, "⏳ BULLET TIME! 6s", "#CC88FF", true);
+          addParticles(gs, pk.x, pk.y, "#AA66FF", 24);
+          addParticles(gs, pk.x, pk.y, "#FFFFFF", 12);
+          gs.screenShake = Math.max(gs.screenShake, 6);
         }
         addXp(50);
         return false;
@@ -2374,6 +2492,7 @@ export default function CallOfDoodie() {
     if ((gs.adrenalineRushTimer || 0) > 0) gs.adrenalineRushTimer--;
     if ((gs.rageTimer || 0) > 0) gs.rageTimer--;
     if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
+    if ((gs.timeDilationTimer || 0) > 0) gs.timeDilationTimer--;
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
     if (gs.beams) gs.beams = gs.beams.filter(bm => { bm.life--; return bm.life > 0; });
     gs._deathSoundsThisFrame = 0; // reset death-sound throttle each frame
@@ -2382,7 +2501,7 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, applyRoute]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef);
@@ -2479,7 +2598,7 @@ export default function CallOfDoodie() {
       if (cType !== controllerTypeRef.current) { controllerTypeRef.current = cType; setControllerType(cType); }
       inputDeviceRef.current = cType;
 
-      if (pausedRef.current || perkPendingRef.current || shopPendingRef.current) {
+      if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current) {
         // While paused still handle Start button to unpause
         const start = gp.buttons[9]?.pressed;
         if (start && !lastStart) setPaused(p => !p);
@@ -2674,9 +2793,14 @@ export default function CallOfDoodie() {
         />
       )}
 
+      {/* Wave route select */}
+      {routePending && (
+        <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} />
+      )}
+
       {/* Wave clear shop */}
       {shopPending && (
-        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} />
+        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} />
       )}
 
       {/* Perk selection modal */}
@@ -2712,8 +2836,56 @@ export default function CallOfDoodie() {
         </div>
       )}
 
-      {/* Boss wave banner */}
-      {bossWaveActive && !paused && !perkPending && (
+      {/* Boss pre-wave cutscene card */}
+      {bossCutscene && !paused && (
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 180, display: "flex",
+          alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.82)", backdropFilter: "blur(8px)",
+          animation: "bossIn 0.45s cubic-bezier(0.22,1,0.36,1) forwards",
+          pointerEvents: "none",
+        }}>
+          {/* Scanline overlay */}
+          <div style={{ position:"absolute", inset:0, backgroundImage:"repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.18) 3px,rgba(0,0,0,0.18) 4px)", pointerEvents:"none" }} />
+          <div style={{ position:"relative", textAlign:"center", padding:"0 24px", maxWidth:520, width:"100%" }}>
+            {/* Incoming label */}
+            <div style={{ fontSize:10, letterSpacing:6, color:"#FF4400", fontFamily:"'Courier New',monospace", marginBottom:16, fontWeight:700 }}>
+              ── INCOMING THREAT ──
+            </div>
+            {/* Boss emoji */}
+            <div style={{ fontSize:"clamp(64px,14vw,96px)", lineHeight:1, marginBottom:12, filter:"drop-shadow(0 0 24px " + bossCutscene.color + "88)" }}>
+              {bossCutscene.emoji}
+            </div>
+            {/* Boss name */}
+            <div style={{ fontSize:"clamp(26px,7vw,44px)", fontWeight:900, color:bossCutscene.color, textShadow:"0 0 30px " + bossCutscene.color + "99", letterSpacing:3, fontFamily:"'Courier New',monospace", marginBottom:4 }}>
+              {bossCutscene.name}
+            </div>
+            {/* Subtitle */}
+            <div style={{ fontSize:"clamp(11px,2.5vw,14px)", color:"#999", letterSpacing:3, fontFamily:"'Courier New',monospace", marginBottom:20, fontWeight:700 }}>
+              {bossCutscene.title}
+            </div>
+            {/* Divider */}
+            <div style={{ width:"60%", height:1, background:`linear-gradient(90deg,transparent,${bossCutscene.color}66,transparent)`, margin:"0 auto 16px" }} />
+            {/* Quote */}
+            <div style={{ fontSize:"clamp(12px,2.8vw,15px)", color:"#CCC", fontStyle:"italic", lineHeight:1.6, marginBottom:20, maxWidth:380, margin:"0 auto 20px" }}>
+              "{bossCutscene.quote}"
+            </div>
+            {/* Dual boss tag */}
+            {bossCutscene.dual && (
+              <div style={{ fontSize:11, color:"#FF8844", fontFamily:"'Courier New',monospace", letterSpacing:2, marginBottom:16 }}>
+                + {bossCutscene.dual.emoji} {bossCutscene.dual.name} INCOMING
+              </div>
+            )}
+            {/* Wave badge */}
+            <div style={{ display:"inline-block", background:"rgba(255,68,0,0.15)", border:"1px solid #FF440044", borderRadius:6, padding:"4px 14px", fontSize:11, color:"#FF6622", fontFamily:"'Courier New',monospace", letterSpacing:2 }}>
+              WAVE {bossCutscene.wave}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Boss wave banner — shown during the fight (after cutscene) */}
+      {bossWaveActive && !bossCutscene && !paused && !perkPending && (
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none", textAlign: "center", animation: "bossIn 0.5s ease-out forwards" }}>
           <div style={{ fontSize: "clamp(28px,6vw,48px)", fontWeight: 900, color: "#FF0000", textShadow: "0 0 20px #FF0000,0 0 40px #FF000088", letterSpacing: 4, fontFamily: "'Courier New',monospace" }}>
             ⚠ BOSS WAVE ⚠
@@ -2729,7 +2901,7 @@ export default function CallOfDoodie() {
       )}
 
       {/* Tutorial overlay — first-run hints */}
-      {!paused && !perkPending && !shopPending && (
+      {!paused && !perkPending && !shopPending && !routePending && (
         <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} wave={wave} />
       )}
 

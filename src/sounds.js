@@ -32,14 +32,37 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, startDelay = 0) {
+// ===== SPATIAL AUDIO =====
+// Converts world-space X into a stereo pan value in [-0.85, 0.85].
+// Returns 0 (center) if position/canvas data is missing.
+function _pan(x, W) {
+  if (x == null || !W) return 0;
+  return Math.max(-0.85, Math.min(0.85, ((x - W / 2) / (W / 2)) * 0.8));
+}
+
+// Creates a StereoPannerNode → destination chain and returns it as a sink node.
+// Falls back to ctx.destination if StereoPannerNode is unsupported.
+function _destAt(pan) {
+  const ctx = getCtx();
+  if (!ctx) return null;
+  try {
+    const p = ctx.createStereoPanner();
+    p.pan.value = pan;
+    p.connect(ctx.destination);
+    return p;
+  } catch {
+    return ctx.destination;
+  }
+}
+
+function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, startDelay = 0, dest = null) {
   const ctx = getCtx();
   if (!ctx) return;
   try {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(dest || ctx.destination);
     osc.type = type;
     const t = ctx.currentTime + startDelay;
     osc.frequency.setValueAtTime(freq, t);
@@ -51,7 +74,7 @@ function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, start
   } catch {}
 }
 
-function noise(duration, vol = 0.15, startDelay = 0) {
+function noise(duration, vol = 0.15, startDelay = 0, dest = null) {
   const ctx = getCtx();
   if (!ctx) return;
   try {
@@ -66,7 +89,7 @@ function noise(duration, vol = 0.15, startDelay = 0) {
     const gain = ctx.createGain();
     src.buffer = buf;
     src.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(dest || ctx.destination);
     const t = ctx.currentTime + startDelay;
     gain.gain.setValueAtTime(vol, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
@@ -103,6 +126,77 @@ export function soundHit(isCrit) {
   }
 }
 
+// Spatially positioned variants — pass world x and canvas W for stereo pan.
+export function soundHitAt(isCrit, x, W) {
+  const d = _destAt(_pan(x, W));
+  if (isCrit) {
+    tone(440, 0.04, "square", 0.07, null, 0, d);
+    tone(880, 0.08, "triangle", 0.06, 660, 0.02, d);
+  } else {
+    tone(180, 0.03, "sawtooth", 0.05, 100, 0, d);
+  }
+}
+
+export function soundEnemyDeathAt(typeIndex, x, W) {
+  const d = _destAt(_pan(x, W));
+  switch (typeIndex) {
+    case 0: case 13: case 14:
+      tone(100, 0.14, "sawtooth", 0.09, 50, 0, d); noise(0.07, 0.06, 0, d); break;
+    case 1: case 4:
+      tone(900, 0.10, "square", 0.07, 250, 0, d); tone(1100, 0.08, "square", 0.05, 200, 0.04, d); break;
+    case 2: case 6:
+      noise(0.12, 0.11, 0, d); tone(180, 0.09, "sawtooth", 0.06, 70, 0, d); break;
+    case 3: case 9: case 15:
+      tone(880, 0.10, "triangle", 0.07, 660, 0, d); tone(660, 0.08, "triangle", 0.05, 440, 0.06, d); break;
+    case 5: case 7:
+      tone(1800, 0.06, "square", 0.05, 600, 0, d); break;
+    case 8:
+      tone(400, 0.07, "sine", 0.06, 180, 0, d); tone(1200, 0.05, "square", 0.04, 400, 0.05, d); break;
+    case 10:
+      tone(1200, 0.10, "square", 0.07, 150, 0, d); break;
+    case 11:
+      noise(0.05, 0.08, 0, d); tone(350, 0.09, "square", 0.06, 260, 0, d); break;
+    case 12:
+      noise(0.18, 0.13, 0, d); tone(90, 0.14, "sawtooth", 0.07, 35, 0, d); break;
+    case 19:
+      tone(880, 0.04, "square", 0.06, 400, 0, d);
+      tone(600, 0.10, "triangle", 0.04, 150, 0.04, d);
+      noise(0.05, 0.025, 0.06, d); break;
+    case 20:
+      tone(1800, 0.05, "square", 0.07, 100, 0, d);
+      tone(1100, 0.06, "square", 0.05, 80, 0.04, d);
+      tone(500, 0.09, "sawtooth", 0.06, 40, 0.09, d);
+      noise(0.14, 0.08, 0.10, d); break;
+    default:
+      tone(300, 0.08, "triangle", 0.05, 120, 0, d); break;
+  }
+}
+
+export function soundPickupAt(type, x, W) {
+  const d = _destAt(_pan(x, W));
+  switch (type) {
+    case "health":        tone(523, 0.15, "triangle", 0.08, 659, 0, d); break;
+    case "ammo":          tone(660, 0.12, "square",   0.07, 880, 0, d); break;
+    case "speed":         tone(880, 0.08, "triangle", 0.07, 1100, 0, d); break;
+    case "nuke":          tone(80, 0.9, "sawtooth",   0.18, 40, 0, d); noise(0.5, 0.15, 0, d); break;
+    case "guardian_angel":
+      [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.18, "sine", 0.09, null, i * 0.09, d)); break;
+    case "upgrade":
+      [440, 554, 659, 880].forEach((f, i) => tone(f, 0.12, "triangle", 0.08, null, i * 0.07, d)); break;
+    case "rage":          tone(500, 0.08, "sawtooth", 0.08, 1200, 0, d); tone(800, 0.12, "square", 0.07, 1600, 0.06, d); break;
+    case "magnet":        tone(440, 0.10, "sine", 0.07, 880, 0, d); tone(880, 0.08, "sine", 0.05, 1320, 0.08, d); break;
+    case "freeze":        tone(1600, 0.14, "triangle", 0.07, 350, 0, d); tone(1200, 0.10, "triangle", 0.05, 280, 0.08, d); break;
+    case "time_dilation": tone(600, 0.55, "sine", 0.07, 200, 0, d); tone(1200, 0.30, "triangle", 0.05, 600, 0.10, d); tone(300, 0.45, "sine", 0.04, 80, 0.20, d); break;
+    default:              tone(880, 0.10, "triangle", 0.06, 1100, 0, d); break;
+  }
+}
+
+export function soundGrenadeAt(x, W) {
+  const d = _destAt(_pan(x, W));
+  noise(0.45, 0.22, 0, d);
+  tone(80, 0.4, "sawtooth", 0.10, 40, 0, d);
+}
+
 export function soundDeath() {
   tone(280, 0.6, "sawtooth", 0.12, 50);
   tone(150, 0.8, "square",   0.06, 40, 0.1);
@@ -127,6 +221,7 @@ export function soundPickup(type) {
     case "rage":          tone(500, 0.08, "sawtooth", 0.08, 1200); tone(800, 0.12, "square", 0.07, 1600, 0.06); break;
     case "magnet":        tone(440, 0.10, "sine", 0.07, 880); tone(880, 0.08, "sine", 0.05, 1320, 0.08); break;
     case "freeze":        tone(1600, 0.14, "triangle", 0.07, 350); tone(1200, 0.10, "triangle", 0.05, 280, 0.08); break;
+    case "time_dilation": tone(600, 0.55, "sine", 0.07, 200); tone(1200, 0.30, "triangle", 0.05, 600, 0.10); tone(300, 0.45, "sine", 0.04, 80, 0.20); break;
     default:              tone(880, 0.10, "triangle", 0.06, 1100);
   }
 }

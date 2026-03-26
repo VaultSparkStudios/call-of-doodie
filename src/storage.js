@@ -174,6 +174,64 @@ export async function saveToLeaderboard(entry) {
   } catch { return { board: [], online: false }; }
 }
 
+// ===== LEADERBOARD — TODAY / SEARCH / RANK =====
+
+/** Fetch today's top 50 entries (since midnight UTC). Optional mode + difficulty filters. */
+export async function loadLeaderboardToday(mode = null, difficulty = null) {
+  if (!supabase) return [];
+  try {
+    const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
+    let q = supabase
+      .from("leaderboard")
+      .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,created_at")
+      .gte("created_at", midnight.toISOString())
+      .order("score", { ascending: false })
+      .limit(50);
+    if (mode) q = q.eq("mode", mode);
+    if (difficulty) q = q.eq("difficulty", difficulty);
+    const { data, error } = await q;
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.warn("[leaderboard] Today query failed:", err.message);
+    return [];
+  }
+}
+
+/** Search leaderboard by player name (case-insensitive partial match). */
+export async function searchLeaderboard(nameQuery) {
+  if (!supabase || !nameQuery.trim()) return [];
+  try {
+    const { data, error } = await supabase
+      .from("leaderboard")
+      .select("name,score,kills,wave,difficulty,mode,ts,accountLevel,inputDevice,starterLoadout,seed,level,time,lastWords,bestStreak,totalDamage,achievements,rank,customSettings")
+      .ilike("name", `%${nameQuery.trim()}%`)
+      .order("score", { ascending: false })
+      .limit(20);
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.warn("[leaderboard] Search failed:", err.message);
+    return [];
+  }
+}
+
+/** Returns the global rank for a given score (1-based). */
+export async function getPlayerGlobalRank(score) {
+  if (!supabase || score == null) return null;
+  try {
+    const { count, error } = await supabase
+      .from("leaderboard")
+      .select("*", { count: "exact", head: true })
+      .gt("score", score);
+    if (error) throw error;
+    return (count || 0) + 1;
+  } catch (err) {
+    console.warn("[leaderboard] Rank query failed:", err.message);
+    return null;
+  }
+}
+
 // ===== CAREER STATS =====
 const CAREER_KEY = "cod-career-v1";
 

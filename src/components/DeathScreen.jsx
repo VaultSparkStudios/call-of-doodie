@@ -20,6 +20,7 @@ export default function DeathScreen({
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
   const [submitStatus, setSubmitStatus] = useState(null); // null | 'pending' | 'online' | 'local'
+  const [globalRank, setGlobalRank] = useState(null);
   const [sharing, setSharing] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
@@ -187,6 +188,7 @@ export default function DeathScreen({
     try {
       const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex] });
       setSubmitStatus(result?.online ? 'online' : 'local');
+      if (result?.globalRank) setGlobalRank(result.globalRank);
     } catch {
       setSubmitStatus('local');
     }
@@ -425,6 +427,11 @@ export default function DeathScreen({
         ) : submitStatus === 'online' ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,255,0,0.2)", background: "rgba(0,255,0,0.03)" }}>
             <div style={{ color: "#0F0", fontSize: 14, fontWeight: 700 }}>✅ Score submitted!</div>
+            {globalRank && (
+              <div style={{ color: "#FFD700", fontSize: 13, fontWeight: 900, marginTop: 6, letterSpacing: 1 }}>
+                🌍 Global Rank: <span style={{ color: "#FFF" }}>#{globalRank.toLocaleString()}</span>
+              </div>
+            )}
             <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
           </div>
         ) : (
