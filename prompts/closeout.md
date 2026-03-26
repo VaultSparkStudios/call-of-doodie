@@ -2,42 +2,72 @@
 
 Use this when the user says only `closeout`.
 
-Treat that one word as a full closeout command.
+## Required write-back
 
-## Closeout actions
-
-If meaningful work happened this session, update in this order:
+If meaningful work happened, update in this order:
 
 1. `context/CURRENT_STATE.md`
-2. `context/PORTFOLIO_CARD.md` when portfolio truth changed
-3. `context/PROJECT_STATUS.json` when machine-readable status changed
-4. `context/TASK_BOARD.md`
-5. `context/LATEST_HANDOFF.md`
-6. `logs/SESSION_LOG.md`
-7. `context/DECISIONS.md` if reasoning changed
-8. `docs/CREATIVE_DIRECTION_RECORD.md` if human creative direction changed
-9. `docs/INNOVATION_PIPELINE.md` if a high-value idea emerged
-10. `plans/CONSTRAINTS_LEDGER.md` if constraints changed
-11. `plans/EXPERIMENT_REGISTRY.md` if experiments changed
-12. `docs/QUALITY_BAR.md` if release expectations changed
-13. any project-type or repo-specific files whose truth changed
+2. `context/TASK_BOARD.md`
+3. `context/LATEST_HANDOFF.md`
+4. `logs/WORK_LOG.md`
+5. `context/DECISIONS.md` — when reasoning changed
+6. `context/SELF_IMPROVEMENT_LOOP.md` — MANDATORY (see below)
+7. `docs/CREATIVE_DIRECTION_RECORD.md` — MANDATORY if human gave any creative direction this session
+8. Any project-type or repo-specific files whose truth changed
 
-## Closeout rules
+## Self-Improvement Loop — closeout (mandatory)
 
-- `context/LATEST_HANDOFF.md` is the authoritative handoff file
-- do not write the active session handoff into `handoffs/LATEST_HANDOFF.md`
-- if no meaningful work happened, say so explicitly and do not fabricate updates
-- if code changed, mention whether validation ran
-- if assumptions were made, record them in the appropriate memory file
-- if deployment, launch, or external configuration changed, update the relevant repo-specific docs too
+Append a new entry to `context/SELF_IMPROVEMENT_LOOP.md`:
+
+### Step 1 — Score
+
+Rate each category 0–10:
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | | | code quality, CI, debt |
+| Creative Alignment | | | adherence to SOUL.md + CDR |
+| Momentum | | | velocity, milestone progress |
+| Engagement | | | community / user signals |
+| Process Quality | | | handoff freshness, Studio OS compliance |
+| **Total** | **/ 50** | | |
+
+### Step 2 — Reflect
+
+- **Top win this session:**
+- **Top gap this session:**
+
+### Step 3 — Brainstorm
+
+Generate 3–5 innovative solutions, features, or improvements. Push past the obvious. Consider:
+- What would make this 10x more engaging?
+- What's the one thing players/users keep asking for?
+- What technical debt is silently costing velocity?
+- What creative direction has drifted from the SOUL?
+- What competitive move would surprise and delight?
+
+### Step 4 — Commit
+
+Pick 1–2 brainstorm items. Add them to `context/TASK_BOARD.md` labeled `[SIL]`.
+
+## Creative Direction Record — closeout check
+
+Review the session. Did the human give any:
+- Creative direction (features, feel, scope)?
+- Feature assignments or explicit goals?
+- Brand, tone, visual, or quality guidance?
+- Any "do this / don't do this"?
+
+If yes → append to `docs/CREATIVE_DIRECTION_RECORD.md` (ADDITIVE ONLY, never edit existing entries).
 
 ## Required closeout output
 
 Reply with a concise `Session Closeout` containing:
 
-1. what was completed
-2. files changed
-3. validation status
-4. open problems
-5. recommended next action
-6. exact files the next AI should read first
+1. What was completed
+2. Files changed
+3. Validation status
+4. Self-Improvement Loop summary (scores, top win, top gap, brainstorm highlights, committed items)
+5. Open problems
+6. Recommended next action
+7. Exact files the next agent should read first
