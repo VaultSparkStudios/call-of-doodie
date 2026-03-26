@@ -110,6 +110,40 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1; ctx.restore();
   });
 
+  // ── Hazard tiles ──────────────────────────────────────────────────────────
+  for (const hz of (gs.hazards || [])) {
+    const _pulse = 0.5 + Math.sin((hz.pulseTimer || 0) / 120 * Math.PI * 2) * 0.25;
+    ctx.save();
+    ctx.globalAlpha = 0.35 + _pulse * 0.2;
+    if (hz.type === "acid") {
+      ctx.fillStyle = "#22FF44";
+      ctx.shadowColor = "#22FF44"; ctx.shadowBlur = 12;
+    } else if (hz.type === "electro") {
+      ctx.fillStyle = "#FFFF00";
+      ctx.shadowColor = "#FFFF00"; ctx.shadowBlur = 14;
+    } else {
+      ctx.fillStyle = "#886644";
+      ctx.shadowColor = "#AA8855"; ctx.shadowBlur = 6;
+    }
+    ctx.beginPath();
+    ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 0.6 + _pulse * 0.15;
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    // Icon
+    ctx.globalAlpha = 0.5 + _pulse * 0.3;
+    ctx.font = `${Math.floor(hz.radius * 0.5)}px serif`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(hz.type === "acid" ? "\u2620" : hz.type === "electro" ? "\u26a1" : "\uD83E\uDEA8", hz.x, hz.y);
+    ctx.textBaseline = "alphabetic";
+    ctx.restore();
+  }
+
   const GRID_CLR = gs.bossWave ? "rgba(180,50,50,0.08)" : [
     "rgba(100,100,180,0.06)", // office
     "rgba(55,120,55,0.06)",   // bunker
@@ -570,7 +604,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
 
     // HP bar
-    if (e.health < e.maxHealth) {
+    if (gs.settShowEnemyHealthBars || e.health < e.maxHealth) {
       const bw = e.size + 4;
       ctx.fillStyle = "#1a1a1a"; ctx.fillRect(-bw / 2, -r - 14, bw, 6);
       ctx.fillStyle = e.health > e.maxHealth * 0.5 ? "#00EE44" : e.health > e.maxHealth * 0.25 ? "#FFAA00" : "#FF2222";
@@ -806,15 +840,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   // Floating texts
   gs.floatingTexts.forEach(ft => {
-    const maxLife = ft.big ? 90 : ft.quote ? 110 : 60;
+    const _ftBig = ft.big === true || (typeof ft.text === "string" && ft.text.includes("💥"));
+    const maxLife = _ftBig ? 90 : ft.quote ? 110 : 60;
     ctx.globalAlpha = Math.min(1, ft.life / maxLife);
     ctx.fillStyle = ft.color; ctx.textAlign = "center";
     if (ft.quote) {
       ctx.font = "bold italic 16px monospace";
       ctx.strokeStyle = "rgba(0,0,0,0.85)"; ctx.lineWidth = 4;
-    } else if (ft.big) {
-      ctx.font = "bold 22px monospace";
-      ctx.strokeStyle = "#000"; ctx.lineWidth = 4;
+    } else if (_ftBig) {
+      ctx.font = "bold 31px monospace";
+      ctx.strokeStyle = "#000"; ctx.lineWidth = 5;
     } else {
       ctx.font = "bold 13px monospace";
       ctx.strokeStyle = "#000"; ctx.lineWidth = 3;

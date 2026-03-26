@@ -3,7 +3,7 @@
 // React refs or setters, making them safe to call from the game loop and easy
 // to test in isolation.
 
-import { ENEMY_TYPES, DIFFICULTIES } from "./constants.js";
+import { ENEMY_TYPES, DIFFICULTIES, BOSS_ABILITY_POOL } from "./constants.js";
 
 // Boss type rotation: wave 5→Karen, 10→Splitter, 15→Juggernaut, 20→Summoner, 25→Landlord, 30→Algorithm, repeats
 export const BOSS_ROTATION = [4, 16, 17, 18, 9, 20];
@@ -44,7 +44,7 @@ export function spawnEnemy(gs, W, H, difficultyId) {
   const projRateMut = gs.mutEnemyFireRateMult || 1;
   gs.enemies.push({
     x, y, health: eHealth, maxHealth: eHealth,
-    speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1) * (gs.waveEventSpeedMult || 1) * (gs.mutEnemySpeedExtra || 1),
+    speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1) * (gs.waveEventSpeedMult || 1) * (gs.mutEnemySpeedExtra || 1) * (gs.hyperspeedActive ? 1.4 : 1),
     size: type.size * sizeMut, color: type.color, name: type.name, points: type.points,
     deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
     wobble: Math.random() * Math.PI * 2, hitFlash: 0,
@@ -159,5 +159,33 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     boss.viralSurgeTimer = 420;
     boss.viralSurgeActive = 0;        // frames remaining in current surge
     boss.algoSpreadTimer = 0;         // for 3-shot burst spread
+  }
+  // ── The Developer (21): debug mode, hotfix, merge conflict ──
+  if (typeIndex === 21) {
+    boss.hasDebugMode = true;
+    boss.debugModeTimer = 0;
+    boss.debugModeCooldown = 480; // 8s
+    boss.hasHotfix = true;
+    boss.hotfixUsed = false;
+    boss.hasMergeConflict = true;
+    boss.mergeConflictTimer = 0;
+    boss.mergeConflictCooldown = 360;
+  }
+  // ── Assign 2 random bonus abilities from the pool ──
+  // Developer boss (21) already has complex abilities; skip pool for him
+  if (typeIndex !== 21) {
+    const _usedIds = new Set();
+    let _attempts = 0;
+    while ((!boss._bonusAbilities || boss._bonusAbilities.length < 2) && _attempts < 20) {
+      _attempts++;
+      const _idx = Math.floor(Math.random() * BOSS_ABILITY_POOL.length);
+      const _ab = BOSS_ABILITY_POOL[_idx];
+      if (!_usedIds.has(_ab.id)) {
+        _usedIds.add(_ab.id);
+        _ab.apply(boss, gs.currentWave || 1);
+        if (!boss._bonusAbilities) boss._bonusAbilities = [];
+        boss._bonusAbilities.push(_ab.id);
+      }
+    }
   }
 }

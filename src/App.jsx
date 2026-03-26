@@ -6,7 +6,7 @@ import {
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES, WAVE_ROUTES,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
@@ -19,6 +19,7 @@ import {
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
+  setDangerIntensity, stopDangerDrone,
 } from "./sounds.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
@@ -31,6 +32,7 @@ import PerkModal, { getRandomPerks, getFullyCursedPerks } from "./components/Per
 import WaveShopModal from "./components/WaveShopModal.jsx";
 import RouteSelectModal, { getRouteOptions } from "./components/RouteSelectModal.jsx";
 import TutorialOverlay from "./components/TutorialOverlay.jsx";
+import DraftScreen from "./components/DraftScreen.jsx";
 
 // ── Controller helpers ────────────────────────────────────────────────────────
 let _rumbleEnabled = true; // gated by settings.rumble
@@ -194,6 +196,7 @@ export default function CallOfDoodie() {
   const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
   const routePendingRef  = useRef(false); // blocks game loop like perkPending
   const bossCutsceneRef  = useRef(false); // blocks game loop during boss intro card
+  const waveAnnouncePendingRef = useRef(false);
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -246,6 +249,10 @@ export default function CallOfDoodie() {
   const [dailyChallengeMode, setDailyChallengeMode] = useState(false);
   const [cursedRunMode, setCursedRunMode]           = useState(false);
   const [bossRushMode, setBossRushMode]             = useState(false);
+  const [draftPending, setDraftPending]             = useState(false);
+  const [draftOptions, setDraftOptions]             = useState([]);
+  const draftShownRef  = useRef(false);
+  const draftChosenRef = useRef(null);
   const [challengeVsScore, setChallengeVsScore]     = useState(null);
   const [challengeVsName, setChallengeVsName]       = useState(null);
   const [weaponKillsSnapshot, setWeaponKillsSnapshot] = useState([]);
@@ -273,6 +280,10 @@ export default function CallOfDoodie() {
   const [mapTheme, setMapTheme]                 = useState(0);
   const [routePending, setRoutePending]         = useState(false);
   const [routeOptions, setRouteOptions]         = useState([]);
+  const [missionToast, setMissionToast]         = useState(null);
+  const [waveAnnounce, setWaveAnnounce]         = useState(null);
+  const [synergyChargeReady, setSynergyChargeReady] = useState(false);
+  const synergyChargeCooldownRef = useRef(0);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -449,6 +460,8 @@ export default function CallOfDoodie() {
         addText(gs, GW() / 2, GH() / 2 - 100, "📋 MISSION COMPLETE!", "#FFD700", true);
         addText(gs, GW() / 2, GH() / 2 - 70, m.text, "#FFF");
         soundAchievement();
+        setMissionToast(m.text || m.name || "Mission Complete!");
+        setTimeout(() => setMissionToast(null), 2500);
       }
     });
   }, []);
@@ -462,7 +475,7 @@ export default function CallOfDoodie() {
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
-      dyingEnemies: [], obstacles: [], terrain: [], floorZones: [], props: [], mapTheme: 0,
+      dyingEnemies: [], obstacles: [], terrain: [], floorZones: [], props: [], hazards: [], mapTheme: 0,
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0, damageThisWave: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
@@ -472,6 +485,7 @@ export default function CallOfDoodie() {
       runSeed: seed,
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
+      coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
     };
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -502,11 +516,14 @@ export default function CallOfDoodie() {
     const meta = loadMetaProgress();
     const ut = meta.upgradeTiers || {};
     gsRef.current.prestigeMult = 1 + (meta.prestige || 0) * 0.10;
+    gsRef.current.blitzCount = 0;
+    gsRef.current.hyperspeedActive = false;
     gsRef.current.scoreAttackMode = scoreAttackRef.current;
     gsRef.current.scoreAttackTimeLeft = scoreAttackRef.current ? 300 * 60 : 0;
     gsRef.current.cursedRunMode = cursedRunRef.current;
     if (cursedRunRef.current) gsRef.current.killScoreMult = (gsRef.current.killScoreMult || 1) * 3;
     gsRef.current.bossRushMode = bossRushRef.current;
+    gsRef.current.developerBossSpawned = false;
     // Apply weekly mutation on top of normal game
     const _weeklyMut = getWeeklyMutation();
     if (_weeklyMut) _weeklyMut.apply(gsRef.current);
@@ -640,9 +657,10 @@ export default function CallOfDoodie() {
     gsRef.current.settScreenShakeMult = sett.screenShakeMult;
     gsRef.current.settParticlesMult   = sett.particlesMult;
     gsRef.current.settGrenadeRadMult  = sett.grenadeRadiusMult;
-    gsRef.current.settAutoReload      = sett.autoReload;
-    gsRef.current.settShowDPS         = sett.showDPS;
-    gsRef.current.settCrosshair       = sett.crosshair;
+    gsRef.current.settAutoReload            = sett.autoReload;
+    gsRef.current.settShowDPS               = sett.showDPS;
+    gsRef.current.settCrosshair             = sett.crosshair;
+    gsRef.current.settShowEnemyHealthBars   = sett.showEnemyHealthBars ?? false;
     perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
     if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
 
@@ -745,6 +763,19 @@ export default function CallOfDoodie() {
     }
     gsRef.current.props = props;
 
+    // Generate arena hazards (3-6 per map, seeded)
+    const _hTypes = ["acid", "electro", "rubble"];
+    const _hCount = 3 + Math.floor(_sr() * 4); // 3-6 hazards
+    const hazards = [];
+    for (let hi = 0; hi < _hCount; hi++) {
+      const _hType = _hTypes[Math.floor(_sr() * _hTypes.length)];
+      const _hx = 80 + _sr() * (w - 160);
+      const _hy = 80 + _sr() * (h - 160);
+      const _hr = 35 + _sr() * 30; // radius 35-65
+      hazards.push({ x: _hx, y: _hy, radius: _hr, type: _hType, pulseTimer: Math.floor(_sr() * 120) });
+    }
+    gsRef.current.hazards = hazards;
+
     // Show meta toast if upgrades active
     const metaSnap = loadMetaProgress();
     const ut2 = metaSnap.upgradeTiers || {};
@@ -835,6 +866,27 @@ export default function CallOfDoodie() {
         break;
       }
     }
+    // ── Perk synergy combo check (run after each perk pick) ──
+    const _perkSynergies = [
+      { a: "hasVampire",     b: "hasLastResort",  key: "_synVampireLastResort", bonus: () => { pm.lifesteal = (pm.lifesteal || 0) + 0.04; pm.critBonus = (pm.critBonus || 0) + 0.1; },                                                  name: "⚡ DEATH'S DOOR",   desc: "+4% lifesteal & +10% crit at low HP" },
+      { a: "hasAdrenaline",  b: "hasDash",        key: "_synAdrenalineDash",    bonus: () => { pm.dashCDMult = (pm.dashCDMult || 1) * 0.6; },                                                                                             name: "💨 AFTERBURNER",    desc: "Dash cooldown cut by 40%" },
+      { a: "hasOverclocked", b: "hasLastResort",  key: "_synOCGlass",           bonus: () => { pm.damageMult = (pm.damageMult || 1) * 1.25; },                                                                                            name: "💥 FRAGILE FURY",   desc: "+25% damage while at low HP" },
+      { a: "hasScavenger",   b: "hasAmmoBoost",   key: "_synScavAmmo",          bonus: () => { pm.ammoMult = (pm.ammoMult || 1) * 1.3; pm.ammoDropMult = (pm.ammoDropMult || 1) * 1.5; },                                               name: "🎒 PACK RAT",       desc: "+30% max ammo & 50% more ammo drops" },
+      { a: "hasEagleEye",    b: "pierce",         key: "_synEaglePierce",       bonus: () => { pm.pierce = (pm.pierce || 0) + 1; pm.critBonus = (pm.critBonus || 0) + 0.08; },                                                          name: "🦅 SNIPER'S MARK",  desc: "+1 pierce & +8% crit chance" },
+    ];
+    _perkSynergies.forEach(syn => {
+      const condA = pm[syn.a];
+      const condB = syn.b === "pierce" ? (pm.pierce || 0) > 0 : pm[syn.b];
+      if (condA && condB && !pm[syn.key]) {
+        pm[syn.key] = true;
+        syn.bonus();
+        if (gsRef.current) {
+          addText(gsRef.current, GW() / 2, GH() / 2 - 50, syn.name, "#FF88FF", true);
+          addText(gsRef.current, GW() / 2, GH() / 2 - 20, syn.desc, "#CC88CC");
+        }
+        soundLevelUp();
+      }
+    });
     statsRef.current.perksSelected++;
     setActivePerks(prev => [...prev, perk]);
     setPerkPending(false);
@@ -845,6 +897,28 @@ export default function CallOfDoodie() {
     }
     checkAchievements(gsRef.current || {});
   }, [checkAchievements]);
+
+  // ── Synergy charge burst ──────────────────────────────────────────────────
+  const fireSynergyCharge = useCallback(() => {
+    const gs = gsRef.current;
+    if (!gs?.synergyChargeReady) return;
+    synergyChargeCooldownRef.current = 300; // 5s cooldown at 60fps
+    gs.synergyChargeReady = false;
+    setSynergyChargeReady(false);
+    const p = gs.player;
+    if (!p) return;
+    for (let ang = 0; ang < Math.PI * 2; ang += Math.PI / 6) {
+      gs.bullets.push({
+        x: p.x, y: p.y, vx: Math.cos(ang) * 12, vy: Math.sin(ang) * 12,
+        damage: (WEAPONS[currentWeaponRef.current]?.bulletDamage || 20) * 3 * (perkModsRef.current.damageMult || 1),
+        pierce: (perkModsRef.current.pierce || 0) + 2,
+        life: 40, color: "#FF88FF", wpnIdx: currentWeaponRef.current,
+        size: 8, bounces: 0, boomerang: false, bouncesLeft: 0,
+      });
+    }
+    addText(gs, p.x, p.y - 40, "⚡ SYNERGY BURST!", "#FF88FF", true);
+    gs.screenShake = 12;
+  }, []);
 
   // ── Wave shop apply ───────────────────────────────────────────────────────
   const applyShopOption = useCallback((optionId) => {
@@ -1133,7 +1207,7 @@ export default function CallOfDoodie() {
       if (ghostRecordRef.current.length > 10)
         sessionStorage.setItem(_gKey, JSON.stringify(ghostRecordRef.current));
     } catch { /* storage full — silent fail */ }
-    stopMusic(); stopAmbient();
+    stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0);
     soundDeath();
     rumbleGamepad(0.7, 1.0, 600);
     setDeaths(dd => dd + 1);
@@ -1195,12 +1269,36 @@ export default function CallOfDoodie() {
       } catch (err) { console.warn("[GIF] encode failed:", err); }
       setGifEncoding(false);
     })();
+    saveRunToHistory({
+      score: gs.score,
+      kills: gs.kills,
+      wave: gs.currentWave,
+      time: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      difficulty,
+      mode: scoreAttackRef.current ? "score_attack" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : dailyChallengeRef.current ? "daily_challenge" : null,
+      runSeed,
+      modifier: gs.runModifier || null,
+      ts: Date.now(),
+    });
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
   }, []);
 
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback((forceSeed, challengeOpts = {}) => {
+    // Show pre-deployment perk draft (skip in Daily Challenge to preserve seed fairness)
+    if (!draftShownRef.current && !dailyChallengeMode) {
+      const opts = getRandomPerks(3, [], false);
+      setDraftOptions(opts);
+      setDraftPending(true);
+      draftShownRef.current = true;
+      // Store args so applyDraftPerk can finish starting the game
+      draftShownRef._forceSeed = forceSeed;
+      draftShownRef._challengeOpts = challengeOpts;
+      return;
+    }
+    // Reset draft gate for next run
+    draftShownRef.current = false;
     // Store challenge vs data for HUD + DeathScreen
     setChallengeVsScore(challengeOpts.vs ?? null);
     setChallengeVsName(challengeOpts.vsName ?? null);
@@ -1218,18 +1316,37 @@ export default function CallOfDoodie() {
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
+    // Apply draft perk if one was chosen — defer so applyPerk runs after state resets
+    const _draftPerk = draftChosenRef.current;
+    draftChosenRef.current = null;
+    if (_draftPerk) {
+      setTimeout(() => applyPerk(_draftPerk), 80);
+    }
     setShopPending(false); setShopOptions([]); setCoinShopOptions([]); shopPendingRef.current = false; setShopHistory([]);
     setRoutePending(false); setRouteOptions([]); routePendingRef.current = false;
     setBossCutscene(null); bossCutsceneRef.current = false;
     setCoins(0);
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setTimeout(() => {
       startMusic(false);
       startAmbient(gsRef.current?.mapTheme ?? 0);
     }, 200); // small delay to let audio context resume
   }, [difficulty, initGame, starterLoadout]);
+
+  // ── Draft perk selection ───────────────────────────────────────────────────
+  const applyDraftPerk = useCallback((perk) => {
+    setDraftPending(false);
+    setDraftOptions([]);
+    draftChosenRef.current = perk; // null = skip
+    // Resume game start with the stored args
+    const forceSeed = draftShownRef._forceSeed;
+    const challengeOpts = draftShownRef._challengeOpts || {};
+    draftShownRef._forceSeed = undefined;
+    draftShownRef._challengeOpts = undefined;
+    startGame(forceSeed, challengeOpts);
+  }, [startGame]);
 
   useEffect(() => {
     if (screen !== "game" && timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
@@ -1265,6 +1382,7 @@ export default function CallOfDoodie() {
       inputDevice: inputDeviceRef.current,
       seed: runSeed,
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
+      prestige: loadMetaProgress()?.prestige || 0,
       mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : undefined,
     };
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
@@ -1284,7 +1402,7 @@ export default function CallOfDoodie() {
     const ctx = ctxRef.current;
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
-    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current) {
+    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current) {
       return;
     }
 
@@ -1308,7 +1426,8 @@ export default function CallOfDoodie() {
     const len = Math.hypot(dx, dy);
     if (len > 0) { dx /= len; dy /= len; }
     const _rushMult = (gs.adrenalineRushTimer || 0) > 0 ? 2.0 : 1.0;
-    if (dashRef.current.active <= 0) { p.x += dx * p.speed * _rushMult; p.y += dy * p.speed * _rushMult; }
+    const _rubbleMult = gs._rubbleSlowed ? 0.6 : 1;
+    if (dashRef.current.active <= 0) { p.x += dx * p.speed * _rushMult * _rubbleMult; p.y += dy * p.speed * _rushMult * _rubbleMult; }
     p.x = Math.max(20, Math.min(W - 20, p.x));
     p.y = Math.max(20, Math.min(H - 20, p.y));
     (gs.obstacles || []).forEach(ob => {
@@ -1418,13 +1537,27 @@ export default function CallOfDoodie() {
       gs.synergyFireRateMult = active.reduce((acc, s) => acc * (s.fireRateMult || 1), 1);
       gs.synergyExtraBounces = active.reduce((acc, s) => acc + (s.extraBounces || 0), 0);
       gs.synergyExtraPellets = active.reduce((acc, s) => acc + (s.extraPellets || 0), 0);
+      const _dangerLevel = Math.min(1, (gs.enemies?.length || 0) / 25);
+      setDangerIntensity(_dangerLevel);
+      // Synergy charge: ready when active synergies exist AND both weapons above 50% ammo
+      if (synergyChargeCooldownRef.current > 0) synergyChargeCooldownRef.current -= 30; // decrement by 30 (once per 30-frame block)
+      if (synergyChargeCooldownRef.current < 0) synergyChargeCooldownRef.current = 0;
+      const _chargeReady = active.length > 0 && synergyChargeCooldownRef.current === 0 && (() => {
+        const s = active[0];
+        if (!s) return false;
+        const a = s.weapons[0], b = s.weapons[1];
+        return (gs.weaponAmmos?.[a] || 0) > (WEAPONS[a]?.maxAmmo || 30) * 0.5 &&
+               (gs.weaponAmmos?.[b] || 0) > (WEAPONS[b]?.maxAmmo || 30) * 0.5;
+      })();
+      gs.synergyChargeReady = _chargeReady;
+      setSynergyChargeReady(_chargeReady);
     }
 
     // ── Wave / boss wave logic ──
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     if (!gs.bossWave) {
       gs.spawnTimer += gs.scoreAttackMode ? 1.5 : (gs.algorithmSurge ? 2.5 : 1);
-      const spawnRate = Math.max(18, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1)));
+      const spawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         // Apply elite-only event override after spawn
@@ -1464,7 +1597,15 @@ export default function CallOfDoodie() {
       gs.waveEvent = null; gs.waveEventSpeedMult = 1;
       gs.waveEliteOnly = false; gs.siegeMode = false; gs.fogOfWar = false;
       gs.routeKillScoreMult = 1; // reset per-wave score bonus
-      gs.routeArmoryRun = false; gs.routeBlitz = false;
+      // Non-blitz routes reset the blitz streak
+      if (!gs.routeBlitz) gs.blitzCount = 0;
+      gs.routeArmoryRun = false; gs.routeBlitz = false; gs.blitzSpawnMult = 1;
+      // 2× Blitz in a row → Hyperspeed mode (persistent for the run)
+      if ((gs.blitzCount || 0) >= 2 && !gs.hyperspeedActive) {
+        gs.hyperspeedActive = true;
+        addText(gsRef.current, GW() / 2, GH() / 2 - 40, "⚡⚡ HYPERSPEED UNLOCKED!", "#00E5FF", true);
+        addText(gsRef.current, GW() / 2, GH() / 2, "Enemies are now faster all run", "#88CCFF");
+      }
       gs.bossWave = false;
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
@@ -1514,8 +1655,8 @@ export default function CallOfDoodie() {
         const _bType = BOSS_ROTATION[_bSlot];
         const _bType2 = BOSS_ROTATION[(_bSlot + 1) % BOSS_ROTATION.length];
         // Boss name announcement
-        const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT", 20:"📊 THE ALGORITHM GOES VIRAL" };
-        const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00", 20:"#1DA1F2" };
+        const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT", 20:"📊 THE ALGORITHM GOES VIRAL", 21:"💻 THE DEVELOPER DEPLOYS" };
+        const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00", 20:"#1DA1F2", 21:"#00FF88" };
         const _BOSS_CARDS = {
           4:  { emoji:"👩", name:"KAREN",         title:"DEMANDS A MANAGER",   quote:"I want to speak to whoever designed this game.", color:"#FF44AA" },
           16: { emoji:"💔", name:"THE SPLITTER",  title:"MULTIPLIES ON DEATH", quote:"You can't kill what just keeps coming.",           color:"#FF6688" },
@@ -1523,50 +1664,64 @@ export default function CallOfDoodie() {
           18: { emoji:"🌀", name:"THE SUMMONER",  title:"RAISES AN ARMY",      quote:"Why fight when you can delegate?",                 color:"#8844FF" },
           9:  { emoji:"🏠", name:"THE LANDLORD",  title:"RAISES YOUR RENT",    quote:"Market rate. Non-negotiable. Also, you're evicted.", color:"#FFAA00" },
           20: { emoji:"📊", name:"THE ALGORITHM", title:"GOES VIRAL",          quote:"Your engagement metrics are... unsatisfactory.",   color:"#1DA1F2" },
+          21: { emoji:"💻", name:"THE DEVELOPER", title:"PUSHES TO PRODUCTION", quote:"I'll fix it in the next sprint. Probably.",       color:"#00FF88" },
         };
-        const _card = _BOSS_CARDS[_bType] || { emoji:"☠", name:"BOSS", title:"APPROACHES", quote:"...", color:"#FF4400" };
-        const _isDual = gs.currentWave >= (gs.bossRushMode ? 3 : 15);
-        bossCutsceneRef.current = true;
-        setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null });
-        setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
-        addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
-        if (_isDual) {
-          addText(gs, W / 2, H / 2 - 50, "+ " + (_bossNames[_bType2] || ENEMY_TYPES[_bType2].name.toUpperCase()), _bossColors[_bType2] || "#FF8844");
-        }
-        // Ability warnings: boss-specific first, then general escalation
-        const _wv = gs.currentWave;
-        const _primaryBoss = _bType;
-        const _secondBoss = gs.currentWave >= 15 ? _bType2 : null;
-        if (_primaryBoss === 16) {
-          addText(gs, W / 2, H / 2 + 45, "💔 SPLITS INTO 3 SHARDS AT LOW HP · 🔥 BULLET RING", "#FF6688");
-        } else if (_primaryBoss === 17 || _secondBoss === 17) {
-          addText(gs, W / 2, H / 2 + 45, "🦏 ARMORED SHIELD ABSORBS DAMAGE · CHARGE ATTACKS!", "#CC4400");
-          if (_secondBoss === 18 || _primaryBoss === 18)
-            addText(gs, W / 2, H / 2 + 65, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE", "#8844FF");
-        } else if (_primaryBoss === 18 || _secondBoss === 18) {
-          addText(gs, W / 2, H / 2 + 45, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE!", "#8844FF");
-        } else if (_wv >= 40) {
-          addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
-        } else if (_wv >= 35) {
-          addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
-        } else if (_wv >= 30) {
-          addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
-        } else if (_wv >= 25) {
-          addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
-        } else if (_wv >= 20) {
-          addText(gs, W / 2, H / 2 + 45, "🛡 SHIELD PULSE · 💥 GROUND SLAM · 🔥 BULLET RING", "#FF6600");
-        } else if (_wv >= 15) {
-          addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
-        } else if (_wv >= 10) {
-          addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
-        } else if (_wv >= 7) {
-          addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
-        }
-        const _dualBossThreshold = gs.bossRushMode ? 3 : 15;
-        if (gs.currentWave >= _dualBossThreshold) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
-        else {
-          spawnBoss(gs, _bType);
-          if (gs.currentWave >= 7) { spawnEnemy(gs); spawnEnemy(gs); gs.maxEnemiesThisWave += 2; gs.enemiesThisWave += 2; }
+        // ── Secret Developer boss at wave 50+ (non-boss-rush only, once per run) ──
+        const _isDeveloperWave = gs.currentWave >= 50 && !gs.developerBossSpawned && !gs.bossRushMode;
+        if (_isDeveloperWave) {
+          gs.developerBossSpawned = true;
+          const _devCard = _BOSS_CARDS[21];
+          bossCutsceneRef.current = true;
+          setBossCutscene({ ..._devCard, wave: gs.currentWave, dual: null });
+          setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
+          addText(gs, W / 2, H / 2 - 70, _bossNames[21], "#00FF88", true);
+          addText(gs, W / 2, H / 2 + 45, "🐛 DEBUG MODE · 🩹 HOTFIX · ⚠️ MERGE CONFLICT!", "#00FF88");
+          spawnBoss(gs, 21);
+        } else {
+          const _card = _BOSS_CARDS[_bType] || { emoji:"☠", name:"BOSS", title:"APPROACHES", quote:"...", color:"#FF4400" };
+          const _isDual = gs.currentWave >= (gs.bossRushMode ? 3 : 15);
+          bossCutsceneRef.current = true;
+          setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null });
+          setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
+          addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
+          if (_isDual) {
+            addText(gs, W / 2, H / 2 - 50, "+ " + (_bossNames[_bType2] || ENEMY_TYPES[_bType2].name.toUpperCase()), _bossColors[_bType2] || "#FF8844");
+          }
+          // Ability warnings: boss-specific first, then general escalation
+          const _wv = gs.currentWave;
+          const _primaryBoss = _bType;
+          const _secondBoss = gs.currentWave >= 15 ? _bType2 : null;
+          if (_primaryBoss === 16) {
+            addText(gs, W / 2, H / 2 + 45, "💔 SPLITS INTO 3 SHARDS AT LOW HP · 🔥 BULLET RING", "#FF6688");
+          } else if (_primaryBoss === 17 || _secondBoss === 17) {
+            addText(gs, W / 2, H / 2 + 45, "🦏 ARMORED SHIELD ABSORBS DAMAGE · CHARGE ATTACKS!", "#CC4400");
+            if (_secondBoss === 18 || _primaryBoss === 18)
+              addText(gs, W / 2, H / 2 + 65, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE", "#8844FF");
+          } else if (_primaryBoss === 18 || _secondBoss === 18) {
+            addText(gs, W / 2, H / 2 + 45, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE!", "#8844FF");
+          } else if (_wv >= 40) {
+            addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
+          } else if (_wv >= 35) {
+            addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
+          } else if (_wv >= 30) {
+            addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
+          } else if (_wv >= 25) {
+            addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
+          } else if (_wv >= 20) {
+            addText(gs, W / 2, H / 2 + 45, "🛡 SHIELD PULSE · 💥 GROUND SLAM · 🔥 BULLET RING", "#FF6600");
+          } else if (_wv >= 15) {
+            addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
+          } else if (_wv >= 10) {
+            addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
+          } else if (_wv >= 7) {
+            addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
+          }
+          const _dualBossThreshold = gs.bossRushMode ? 3 : 15;
+          if (gs.currentWave >= _dualBossThreshold) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
+          else {
+            spawnBoss(gs, _bType);
+            if (gs.currentWave >= 7) { spawnEnemy(gs); spawnEnemy(gs); gs.maxEnemiesThisWave += 2; gs.enemiesThisWave += 2; }
+          }
         }
         // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
         gs.enemiesThisWave = gs.maxEnemiesThisWave;
@@ -1597,6 +1752,22 @@ export default function CallOfDoodie() {
               addText(gs, W / 2, H / 2 + 70, "🌫️ FOG OF WAR — Enemies hidden until close!", "#88CCFF");
               break;
           }
+          if (gs.waveEvent) {
+            const _evtLabels = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
+            const _lbl = _evtLabels[gs.waveEvent] || gs.waveEvent;
+            waveAnnouncePendingRef.current = true;
+            setWaveAnnounce(_lbl);
+            setTimeout(() => { waveAnnouncePendingRef.current = false; setWaveAnnounce(null); }, 1800);
+          }
+        }
+        // ── Cursed Run: escalating chaos events ──
+        if (gs.cursedRunMode) {
+          const cw = gs.currentWave;
+          if (cw === 5)  { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: ENEMIES ENRAGED", "#CC00FF", true); gs.mutAlwaysEnraged = true; }
+          if (cw === 10) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: SCORE HIDDEN", "#CC00FF", true); gs.cursedHideScore = true; }
+          if (cw === 15) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: ACID TRAILS", "#CC00FF", true); gs.cursedAcidTrails = true; }
+          if (cw === 20) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: ALL EXPLOSIVE", "#CC00FF", true); gs.mutAllExplosive = true; }
+          if (cw === 25) { addText(gs, W / 2, H / 2 - 60, "☠ CURSED: SPAWNS DOUBLED", "#CC00FF", true); gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 2; }
         }
         addText(gs, W / 2, H / 2, "WAVE " + gs.currentWave + "!", "#FFD700", true);
         addText(gs, W / 2, H / 2 + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
@@ -1732,9 +1903,17 @@ export default function CallOfDoodie() {
             setCombo(comboRef.current.count);
             const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
+            gs.coinStreakKills++;
+            gs.coinStreakTimer = 180; // reset 3s window
+            if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
+              gs.coinMultActive = true;
+              gs.coinMultTimer = 600; // 10s
+              gs.coinStreakKills = 0;
+              addText(gs, p.x, p.y - 80, "💩×2 COIN FRENZY! 10s", "#C8A000", true);
+            }
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (pbWpn != null) statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
-            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18 || e.typeIndex === 20) statsRef.current.bossKills++;
+            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18 || e.typeIndex === 20 || e.typeIndex === 21) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
@@ -1747,12 +1926,16 @@ export default function CallOfDoodie() {
               if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
             // 💩 Doodie Coin drop
-            const _coinDrop = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            const _coinDrop = _coinDropBase * (gs.coinMultActive ? 2 : 1);
             if (_coinDrop > 0) { gs.coins = (gs.coins || 0) + _coinDrop; setCoins(gs.coins); addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000"); }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
               gs.newBestScore = true; addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
+              addParticles(gs, p.x, p.y - 60, "#FFD700", 25);
+              addParticles(gs, p.x, p.y - 60, "#FF4400", 15);
+              addParticles(gs, p.x, p.y - 60, "#FFFFFF", 10);
             }
             addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
@@ -1887,10 +2070,18 @@ export default function CallOfDoodie() {
             setCombo(comboRef.current.count);
             const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
+            gs.coinStreakKills++;
+            gs.coinStreakTimer = 180; // reset 3s window
+            if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
+              gs.coinMultActive = true;
+              gs.coinMultTimer = 600; // 10s
+              gs.coinStreakKills = 0;
+              addText(gs, p.x, p.y - 80, "💩×2 COIN FRENZY! 10s", "#C8A000", true);
+            }
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (b.wpnIdx != null) { statsRef.current.weaponKills[b.wpnIdx] = (statsRef.current.weaponKills[b.wpnIdx] || 0) + 1; }
             if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
-            if (e.typeIndex === 4 || e.typeIndex === 9) statsRef.current.bossKills++;
+            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18 || e.typeIndex === 20 || e.typeIndex === 21) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             if (e.isBossEnemy) {
@@ -1906,13 +2097,17 @@ export default function CallOfDoodie() {
               if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
             // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
-            const _cd2 = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            const _cd2Base = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            const _cd2 = _cd2Base * (gs.coinMultActive ? 2 : 1);
             if (_cd2 > 0) { gs.coins = (gs.coins || 0) + _cd2; setCoins(gs.coins); }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
               gs.newBestScore = true;
               addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
+              addParticles(gs, p.x, p.y - 60, "#FFD700", 25);
+              addParticles(gs, p.x, p.y - 60, "#FF4400", 15);
+              addParticles(gs, p.x, p.y - 60, "#FFFFFF", 10);
               gs.screenShake = Math.max(gs.screenShake, 8);
             }
             addParticles(gs, e.x, e.y, e.color, 20);
@@ -2077,6 +2272,12 @@ export default function CallOfDoodie() {
       if (!_skipMove) {
         e.x += sx * buffedSpeed + Math.sin(e.wobble) * 0.5 + (-sy) * zigzag;
         e.y += sy * buffedSpeed + Math.cos(e.wobble) * 0.5 + sx * zigzag;
+        // Cursed Run: acid trail particles
+        if (gs.cursedAcidTrails && !e.isBossEnemy && Math.random() < 0.15) {
+          if ((gs.particles?.length || 0) < MAX_PARTICLES) {
+            gs.particles.push({ x: e.x, y: e.y, vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5, life: 50, color: "#44FF44", size: 3 });
+          }
+        }
       }
       if (e.hitFlash > 0) e.hitFlash--;
       if (e.ranged) {
@@ -2233,6 +2434,67 @@ export default function CallOfDoodie() {
           }
         }
       }
+      // ── Procedural boss abilities (bonus abilities assigned on spawn) ──────
+      if (e.isBossEnemy) {
+        // Shield regen: restore HP while not recently hit (reset timer on any hit)
+        if (e.hasShieldRegen && e.maxHealth !== undefined) {
+          if (e.hitFlash > 0) { e.shieldRegenTimer = 0; }
+          else { e.shieldRegenTimer = (e.shieldRegenTimer || 0) + 1; }
+          if (e.shieldRegenTimer > 120) {
+            e.health = Math.min(e.maxHealth, (e.health || 0) + (e.shieldRegenRate || 0.5));
+          }
+        }
+        // Speed surge: brief double-speed burst
+        if (e.hasSpeedSurge) {
+          e.speedSurgeTimer = (e.speedSurgeTimer || 0) + 1;
+          if (e.speedSurgeTimer >= e.speedSurgeCooldown) {
+            e.speedSurgeTimer = 0;
+            e.speedSurgeActive = true;
+            setTimeout(() => { if (e) e.speedSurgeActive = false; }, 2000);
+            addText(gs, e.x, e.y - 50, "⚡ SPEED SURGE!", "#FF8800");
+          }
+        }
+        if (e.speedSurgeActive) { e.speed = (e._baseSpeed || e.speed) * 2; }
+        else if (e._baseSpeed) { e.speed = e._baseSpeed; }
+        else { e._baseSpeed = e.speed; }
+        // Bullet spray: ring of 8 bullets
+        if (e.hasBulletSpray) {
+          e.bulletSprayTimer = (e.bulletSprayTimer || 0) + 1;
+          if (e.bulletSprayTimer >= e.bulletSprayCooldown) {
+            e.bulletSprayTimer = 0;
+            for (let _ang = 0; _ang < Math.PI * 2; _ang += Math.PI / 4) {
+              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, vy: Math.sin(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, damage: 8, life: 60, size: 5, color: "#FF4400" });
+            }
+          }
+        }
+        // Enrage threshold: permanent enrage below 40% HP
+        if (e.hasEnrageThreshold && !e.enrageThresholdFired && e.health < e.maxHealth * 0.4) {
+          e.enrageThresholdFired = true;
+          e.enraged = true;
+          e.speed *= 1.4;
+          addText(gs, e.x, e.y - 60, "🔥 ENRAGED!", "#FF0000", true);
+          gs.screenShake = 10;
+        }
+        // Ground mines: drop proximity mines below 60% HP
+        if (e.hasGroundMines && e.health < e.maxHealth * 0.6) {
+          e.mineDropTimer = (e.mineDropTimer || 0) + 1;
+          if (e.mineDropTimer >= e.mineDropCooldown) {
+            e.mineDropTimer = 0;
+            gs.pickups.push({ x: e.x + (Math.random() - 0.5) * 100, y: e.y + (Math.random() - 0.5) * 100, type: "mine", life: 600 });
+          }
+        }
+        // Magnet pull: deflect nearby player bullets
+        if (e.hasMagnetPull && e.magnetRadius) {
+          gs.bullets.forEach(b => {
+            const _md = Math.hypot(b.x - e.x, b.y - e.y);
+            if (_md < e.magnetRadius) {
+              const _ma = Math.atan2(b.y - e.y, b.x - e.x);
+              b.vx += Math.cos(_ma + Math.PI / 2) * 0.8;
+              b.vy += Math.sin(_ma + Math.PI / 2) * 0.8;
+            }
+          });
+        }
+      }
       // ── Juggernaut (17): shield regen + charge ──
       if (e.typeIndex === 17 && e.isBossEnemy) {
         // Shield regen
@@ -2342,6 +2604,46 @@ export default function CallOfDoodie() {
           }
         }
       }
+      // ── The Developer (21): debug mode, hotfix, merge conflict ──
+      if (e.typeIndex === 21 && e.isBossEnemy) {
+        // Debug Mode: temporarily removes a random obstacle
+        if (e.hasDebugMode) {
+          e.debugModeTimer = (e.debugModeTimer || 0) + 1;
+          if (e.debugModeTimer >= e.debugModeCooldown && gs.obstacles && gs.obstacles.length > 0) {
+            e.debugModeTimer = 0;
+            const _ob = gs.obstacles[Math.floor(Math.random() * gs.obstacles.length)];
+            if (_ob && (_ob._devSaved === undefined)) {
+              const _savedW = _ob.w; const _savedH = _ob.h;
+              _ob._devSaved = true;
+              addText(gs, e.x, e.y - 60, "🐛 DEBUGGING ARENA...", "#00FF88");
+              _ob.w = 0; _ob.h = 0;
+              setTimeout(() => { if (_ob) { _ob.w = _savedW; _ob.h = _savedH; _ob._devSaved = undefined; } }, 4000);
+            }
+          }
+        }
+        // Hotfix: one-time self-heal to 75% when below 50% HP
+        if (e.hasHotfix && !e.hotfixUsed && e.health < e.maxHealth * 0.5) {
+          e.hotfixUsed = true;
+          e.health = e.maxHealth * 0.75;
+          addText(gs, e.x, e.y - 70, "🩹 HOTFIX DEPLOYED!", "#00FF88", true);
+          addParticles(gs, e.x, e.y, "#00FF88", 20);
+        }
+        // Merge Conflict: fires 6 bullets in 3 directions simultaneously
+        if (e.hasMergeConflict) {
+          e.mergeConflictTimer = (e.mergeConflictTimer || 0) + 1;
+          if (e.mergeConflictTimer >= e.mergeConflictCooldown) {
+            e.mergeConflictTimer = 0;
+            addText(gs, e.x, e.y - 55, "⚠️ MERGE CONFLICT!", "#FF8800");
+            for (let _set = 0; _set < 3; _set++) {
+              const _baseAng = (_set / 3) * Math.PI * 2;
+              for (let _spread = -1; _spread <= 1; _spread++) {
+                const _ang = _baseAng + _spread * 0.3;
+                gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * 5, vy: Math.sin(_ang) * 5, damage: 12, life: 80, size: 5, color: "#FF8800" });
+              }
+            }
+          }
+        }
+      }
       // ── Kamikaze (ti=12) ──
       if (e.typeIndex === 12 && dashRef.current.active <= 0) {
         const kd = Math.hypot(p.x - e.x, p.y - e.y);
@@ -2392,11 +2694,59 @@ export default function CallOfDoodie() {
       }
     });
 
+    // ── Hazard tile effects ──────────────────────────────────────────────────
+    gs._rubbleSlowed = false;
+    for (const hz of (gs.hazards || [])) {
+      hz.pulseTimer = ((hz.pulseTimer || 0) + 1) % 120;
+      const _hDist = Math.hypot(p.x - hz.x, p.y - hz.y);
+      if (_hDist < hz.radius) {
+        if (hz.type === "acid") {
+          // Acid pool: 0.8 damage per frame
+          const _acidDmg = 0.8 * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
+          p.health -= _acidDmg;
+          if (frameCountRef.current % 30 === 0) {
+            addText(gs, p.x, p.y - 30, `-${Math.round(_acidDmg * 30)} ACID`, "#44FF44");
+          }
+          setHealth(Math.floor(p.health));
+          if (p.health <= 0) handlePlayerDeath(gs);
+        } else if (hz.type === "electro") {
+          // Electro grid: zap for 15 damage every 90 frames
+          if (hz.pulseTimer === 0) {
+            const _elDmg = 15 * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
+            p.health -= _elDmg;
+            setHealth(Math.floor(p.health));
+            addText(gs, p.x, p.y - 30, `ZAP! -${Math.round(_elDmg)}`, "#FFFF00", true);
+            gs.screenShake = Math.max(gs.screenShake, 4);
+            if (p.health <= 0) handlePlayerDeath(gs);
+          }
+        } else if (hz.type === "rubble") {
+          // Rubble pile: slow player movement by 40%
+          gs._rubbleSlowed = true;
+        }
+      }
+    }
+
     // ── Pickup collection ──
     const pickupRange = perkModsRef.current.pickupRange || 30;
     gs.pickups = gs.pickups.filter(pk => {
       pk.life--;
       const d2 = Math.hypot(p.x - pk.x, p.y - pk.y);
+      // ── Proximity mine: explode when player gets within 40px ──
+      if (pk.type === "mine") {
+        if (d2 < 40 && p.invincible <= 0) {
+          const _mineDmg = 25 * (gsRef.current?.glassjawMult || 1);
+          p.health -= _mineDmg; setHealth(Math.floor(p.health));
+          p.invincible = 30; gs.damageFlash = 12;
+          gs.damageThisWave = (gs.damageThisWave || 0) + 1;
+          addText(gs, pk.x, pk.y - 20, "💥 MINE! -" + Math.round(_mineDmg), "#FF4400", true);
+          addParticles(gs, pk.x, pk.y, "#FF4400", 16);
+          gs.screenShake = 12;
+          rumbleGamepad(0.5, 0.7, 200);
+          if (p.health <= 0) handlePlayerDeath(gs);
+          return false;
+        }
+        return pk.life > 0;
+      }
       if (d2 < pickupRange) {
         soundPickupAt(pk.type, pk.x, W);
         if (pk.type === "health") {
@@ -2493,6 +2843,8 @@ export default function CallOfDoodie() {
     if ((gs.rageTimer || 0) > 0) gs.rageTimer--;
     if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
     if ((gs.timeDilationTimer || 0) > 0) gs.timeDilationTimer--;
+    if (gs.coinMultTimer > 0) { gs.coinMultTimer--; if (gs.coinMultTimer === 0) { gs.coinMultActive = false; } }
+    if (gs.coinStreakTimer > 0) { gs.coinStreakTimer--; if (gs.coinStreakTimer === 0) { gs.coinStreakKills = 0; } }
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
     if (gs.beams) gs.beams = gs.beams.filter(bm => { bm.life--; return bm.life > 0; });
     gs._deathSoundsThisFrame = 0; // reset death-sound throttle each frame
@@ -2520,9 +2872,10 @@ export default function CallOfDoodie() {
       if (e.key === "r") doReload(currentWeaponRef.current);
       if (e.key === "q" || e.key === "g") throwGrenade();
       if (e.key === " " || e.key === "Shift") doDash();
+      if (e.key === "e") fireSynergyCharge();
       const num = parseInt(e.key);
       if (num >= 1 && num <= WEAPONS.length) switchWeapon(num - 1);
-      if (["w","a","s","d","r","q","g","1","2","3","4","5"," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
+      if (["w","a","s","d","r","q","g","e","1","2","3","4","5"," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
     };
     const ku = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
     const mm = (e) => { mouseRef.current.x = e.clientX; mouseRef.current.y = e.clientY; mouseRef.current.moved = true; };
@@ -2534,7 +2887,7 @@ export default function CallOfDoodie() {
       window.removeEventListener("keydown", kd); window.removeEventListener("keyup", ku);
       window.removeEventListener("mousemove", mm); window.removeEventListener("mousedown", md); window.removeEventListener("mouseup", mu);
     };
-  }, [doReload, throwGrenade, doDash, switchWeapon, screen]);
+  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, screen]);
 
   // ── Touch controls ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -2702,7 +3055,7 @@ export default function CallOfDoodie() {
     }
     startTimeRef.current = Date.now(); setTimeSurvived(0);
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setScreen("game");
   }, []);
 
@@ -2716,6 +3069,9 @@ export default function CallOfDoodie() {
   }
 
   if (screen === "menu") {
+    if (draftPending) {
+      return <DraftScreen options={draftOptions} onSelect={applyDraftPerk} />;
+    }
     return (
       <MenuScreen
         username={username} difficulty={difficulty} setDifficulty={setDifficulty}
@@ -2750,7 +3106,7 @@ export default function CallOfDoodie() {
         activePerks={activePerks} missionsSummary={missionsSummary}
         leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard} username={username}
         DIFFICULTIES={DIFFICULTIES}
-        onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); setScreen("menu"); }}
+        onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); }}
         onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
         highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
         fmtTime={fmtTime}
@@ -2760,6 +3116,7 @@ export default function CallOfDoodie() {
         bossRushMode={bossRushMode} cursedRunMode={cursedRunMode}
         playerSkin={gsRef.current?.playerSkin || ""}
         vsScore={challengeVsScore} vsName={challengeVsName}
+        ghostKey={gsRef.current?._ghostKey}
         onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
       />
     );
@@ -2785,11 +3142,12 @@ export default function CallOfDoodie() {
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           onResume={() => setPaused(false)}
-          onLeave={() => { stopMusic(); stopAmbient(); setPaused(false); setScreen("menu"); }}
+          onLeave={() => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPaused(false); setScreen("menu"); }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore}
           onLoadMore={loadMoreLeaderboard} onRefreshLeaderboard={refreshLeaderboard}
           username={username}
+          gsSnapshot={gsRef.current}
         />
       )}
 
@@ -2826,6 +3184,35 @@ export default function CallOfDoodie() {
         <div style={{ position: "absolute", top: 50, left: "50%", transform: "translateX(-50%)", background: "rgba(255,107,53,0.88)", border: "1px solid rgba(255,107,53,0.95)", borderRadius: 10, padding: "7px 16px", color: "#FFF", fontSize: 12, fontWeight: 700, zIndex: 50, textAlign: "center", pointerEvents: "none", maxWidth: 340, animation: "slideDown 0.3s ease-out", boxShadow: "0 0 15px rgba(255,107,53,0.4)" }}>
           <div style={{ fontSize: 10, color: "#FFD700", marginBottom: 2, letterSpacing: 1 }}>META UPGRADES ACTIVE</div>
           {metaToast}
+        </div>
+      )}
+
+      {/* Mission complete toast */}
+      {missionToast && (
+        <div style={{
+          position: "absolute", top: 70, left: "50%", transform: "translateX(-50%)",
+          background: "rgba(0,200,100,0.92)", color: "#000", fontFamily: "'Courier New',monospace",
+          fontWeight: 900, fontSize: 13, padding: "8px 18px", borderRadius: 8,
+          letterSpacing: 1, zIndex: 300, boxShadow: "0 4px 16px rgba(0,200,100,0.4)",
+          animation: "slideDown 0.3s ease-out",
+          pointerEvents: "none",
+        }}>
+          🎯 MISSION COMPLETE — {missionToast}
+        </div>
+      )}
+
+      {/* Wave event pre-announcement */}
+      {waveAnnounce && !paused && (
+        <div style={{
+          position: "absolute", top: "35%", left: "50%", transform: "translate(-50%,-50%)",
+          pointerEvents: "none", textAlign: "center",
+          animation: "bossIn 0.4s ease-out forwards",
+        }}>
+          <div style={{ fontSize: "clamp(18px,5vw,32px)", fontWeight: 900, color: "#FFD700",
+            textShadow: "0 0 20px #FFD70088", letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>
+            {waveAnnounce}
+          </div>
+          <div style={{ fontSize: 11, color: "#888", marginTop: 6, letterSpacing: 2 }}>INCOMING</div>
         </div>
       )}
 
@@ -2923,6 +3310,9 @@ export default function CallOfDoodie() {
         waveStreak={waveStreak}
         mapTheme={mapTheme}
         vsScore={challengeVsScore} vsName={challengeVsName}
+        synergyChargeReady={synergyChargeReady}
+        onSynergyCharge={fireSynergyCharge}
+        cursedHideScore={gsRef.current?.cursedHideScore || false}
       />
 
       {/* Mobile action bar */}

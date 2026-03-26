@@ -339,6 +339,9 @@ let _ambientTheme = 0;
 let _ambientBeat = 0;
 let _ambientTimer = null;
 
+let _dangerDrone = null;
+let _dangerGain = null;
+
 const _AMBIENT_TICK = [900, 700, 550, 1400, 1900, 950, 1100, 1600]; // ms between ticks per theme
 
 function _playAmbientTick(theme, beat) {
@@ -398,6 +401,35 @@ export function startAmbient(themeIndex) {
 export function stopAmbient() {
   _ambientActive = false;
   if (_ambientTimer) { clearTimeout(_ambientTimer); _ambientTimer = null; }
+  stopDangerDrone();
+}
+
+export function stopDangerDrone() {
+  try {
+    if (_dangerGain) {
+      const ctx = getCtx();
+      if (ctx) _dangerGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
+    }
+  } catch { /* ignore */ }
+}
+
+export function setDangerIntensity(level) {
+  const ctx = getCtx();
+  if (!ctx) return;
+  try {
+    if (!_dangerDrone) {
+      _dangerDrone = ctx.createOscillator();
+      _dangerGain = ctx.createGain();
+      _dangerDrone.type = "sine";
+      _dangerDrone.frequency.value = 55;
+      _dangerDrone.connect(_dangerGain);
+      _dangerGain.connect(ctx.destination);
+      _dangerGain.gain.value = 0;
+      _dangerDrone.start();
+    }
+    const targetVol = Math.max(0, Math.min(0.06, level * 0.06));
+    _dangerGain.gain.linearRampToValueAtTime(targetVol, ctx.currentTime + 0.5);
+  } catch { /* ignore */ }
 }
 
 function _tickAmbient() {

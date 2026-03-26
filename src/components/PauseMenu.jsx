@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
@@ -6,7 +6,7 @@ import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -162,6 +162,54 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     </div>
   );
 
+  // ── Mini-map ──────────────────────────────────────────────────────────────
+  const mapRef = useRef(null);
+  useEffect(() => {
+    const gs = gsSnapshot;
+    const canvas = mapRef.current;
+    if (!canvas || !gs) return;
+    const ctx = canvas.getContext("2d");
+    const MW = 200, MH = 150;
+    canvas.width = MW; canvas.height = MH;
+    const GW = gs.arenaW || 1200;
+    const GH = gs.arenaH || 900;
+    const sx = MW / GW, sy = MH / GH;
+    // Background
+    ctx.fillStyle = "#0A0A0A"; ctx.fillRect(0, 0, MW, MH);
+    // Border
+    ctx.strokeStyle = "#333"; ctx.lineWidth = 1; ctx.strokeRect(0, 0, MW, MH);
+    // Obstacles
+    ctx.fillStyle = "#333";
+    (gs.obstacles || []).forEach(ob => {
+      ctx.fillRect(ob.x * sx, ob.y * sy, ob.w * sx, ob.h * sy);
+    });
+    // Enemies
+    (gs.enemies || []).forEach(en => {
+      ctx.fillStyle = en.isBossEnemy ? "#FF4400" : en.elite ? "#FFD700" : en.color || "#FF8888";
+      ctx.beginPath();
+      ctx.arc(en.x * sx, en.y * sy, Math.max(2, (en.size || 16) * sx * 0.5), 0, Math.PI * 2);
+      ctx.fill();
+    });
+    // Pickups
+    ctx.fillStyle = "#00FF88";
+    (gs.pickups || []).forEach(pk => {
+      ctx.fillRect(pk.x * sx - 2, pk.y * sy - 2, 4, 4);
+    });
+    // Player
+    const p = gs.player;
+    if (p) {
+      ctx.fillStyle = "#00FFFF";
+      ctx.beginPath();
+      ctx.arc(p.x * sx, p.y * sy, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(p.x * sx, p.y * sy);
+      ctx.lineTo((p.x + Math.cos(p.angle) * 30) * sx, (p.y + Math.sin(p.angle) * 30) * sy);
+      ctx.stroke();
+    }
+  }, [gsSnapshot]);
+
   // Main pause view
   return (
     <div style={overlay}>
@@ -206,6 +254,12 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             {colorblindMode ? "🎨 COLORBLIND: ON" : "🎨 COLORBLIND: OFF"}
           </button>
           <button onClick={onLeave} style={{ ...pBtn, color: "#F66", borderColor: "rgba(255,100,100,0.3)", marginTop: 4, ...(gfocus("ragequit") ? focusRing : {}) }}>🚪 RAGE QUIT</button>
+        </div>
+        {/* Mini-map */}
+        <div style={{ marginTop: 16 }}>
+          <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 6, fontFamily: "'Courier New',monospace" }}>── ARENA MAP ──</div>
+          <canvas ref={mapRef} style={{ border: "1px solid #222", borderRadius: 4, display: "block", maxWidth: "100%" }} />
+          <div style={{ fontSize: 8, color: "#444", marginTop: 4 }}>🔵 YOU  🔴 BOSS  🟡 ELITE</div>
         </div>
       </div>
     </div>

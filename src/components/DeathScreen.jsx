@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
+import { qrEncode } from "../utils/qrEncode.js";
 
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
@@ -16,6 +17,7 @@ export default function DeathScreen({
   gamepadConnected, onInstallApp,
   weaponKills, scoreAttackMode, playerSkin,
   dailyChallengeMode, bossRushMode, cursedRunMode, vsScore, vsName,
+  ghostKey,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -25,6 +27,71 @@ export default function DeathScreen({
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
   const [copiedChallenge, setCopiedChallenge] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+  const qrCanvasRef = useRef(null);
+
+  // ── Ghost path visualization ───────────────────────────────────────────────
+  const [ghostData, setGhostData] = useState(null);
+  const ghostCanvasRef = useRef(null);
+
+  useEffect(() => {
+    if (!ghostKey) return;
+    try {
+      const raw = sessionStorage.getItem(ghostKey);
+      if (raw) setGhostData(JSON.parse(raw));
+    } catch {}
+  }, [ghostKey]);
+
+  useEffect(() => {
+    if (!ghostData || !ghostCanvasRef.current) return;
+    const canvas = ghostCanvasRef.current;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.fillStyle = "#050505"; ctx.fillRect(0, 0, W, H);
+    if (ghostData.length < 2) return;
+    let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
+    ghostData.forEach(pt => { minX = Math.min(minX, pt.x); minY = Math.min(minY, pt.y); maxX = Math.max(maxX, pt.x); maxY = Math.max(maxY, pt.y); });
+    const rangeX = Math.max(maxX - minX, 100), rangeY = Math.max(maxY - minY, 100);
+    const toC = (x, y) => [(x - minX) / rangeX * (W - 20) + 10, (y - minY) / rangeY * (H - 20) + 10];
+    ctx.beginPath();
+    const [sx0, sy0] = toC(ghostData[0].x, ghostData[0].y);
+    ctx.moveTo(sx0, sy0);
+    ghostData.forEach((pt, i) => {
+      if (i === 0) return;
+      const [cx, cy] = toC(pt.x, pt.y);
+      ctx.lineTo(cx, cy);
+    });
+    ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.7; ctx.stroke();
+    ctx.globalAlpha = 1;
+    const [ex, ey] = toC(ghostData[ghostData.length - 1].x, ghostData[ghostData.length - 1].y);
+    ctx.fillStyle = "#FF4444"; ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI * 2); ctx.fill();
+    const [stx, sty] = toC(ghostData[0].x, ghostData[0].y);
+    ctx.fillStyle = "#00FF88"; ctx.beginPath(); ctx.arc(stx, sty, 4, 0, Math.PI * 2); ctx.fill();
+  }, [ghostData]);
+
+  // ── QR code rendering ─────────────────────────────────────────────────────
+  const challengeUrl = runSeed > 0 ? (() => {
+    const params = new URLSearchParams({ seed: runSeed, diff: difficulty, vs: score });
+    if (username) params.set("vsName", username);
+    return `${location.origin}${location.pathname}?${params.toString()}`;
+  })() : null;
+
+  useEffect(() => {
+    if (!showQR || !qrCanvasRef.current || !challengeUrl) return;
+    try {
+      const { matrix, size } = qrEncode(challengeUrl);
+      const scale = 6;
+      const canvas = qrCanvasRef.current;
+      canvas.width = (size + 8) * scale;
+      canvas.height = (size + 8) * scale;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#000000";
+      for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+        if (matrix[r][c]) ctx.fillRect((c + 4) * scale, (r + 4) * scale, scale, scale);
+      }
+    } catch (e) { console.warn("QR encode failed:", e); }
+  }, [showQR, challengeUrl]);
 
   const generateScoreCard = () => new Promise((resolve) => {
     const W = 1200, H = 630;
@@ -332,6 +399,17 @@ export default function DeathScreen({
           </div>
         )}
 
+        {/* Ghost path visualization */}
+        {ghostData && ghostData.length > 10 && (
+          <div style={{ ...card, marginBottom: 12 }}>
+            <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 10, fontFamily: "'Courier New',monospace" }}>── GHOST RACE — YOUR PATH ──</div>
+            <canvas ref={ghostCanvasRef} width={280} height={140} style={{ borderRadius: 6, border: "1px solid #1A1A1A", display: "block", margin: "0 auto" }} />
+            <div style={{ fontSize: 9, color: "#444", marginTop: 6, textAlign: "center" }}>
+              🟢 START  🔴 DEATH  — {ghostData.length} position samples
+            </div>
+          </div>
+        )}
+
         {achievementsUnlocked.length > 0 && (
           <div style={{ marginBottom: 10 }}>
             <div style={{ fontSize: 11, color: "#AAA", letterSpacing: 1, marginBottom: 6 }}>
@@ -407,6 +485,7 @@ export default function DeathScreen({
               type="text"
               value={lastWords}
               maxLength={60}
+              autoFocus
               onChange={e => { const w = e.target.value.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(e.target.value); }}
               placeholder="Famous last words (5 words max)"
               style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FF69B4", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}
@@ -500,6 +579,10 @@ export default function DeathScreen({
               }}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: copiedChallenge ? "rgba(0,255,136,0.1)" : "rgba(255,107,53,0.08)", border: copiedChallenge ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: copiedChallenge ? "#00FF88" : "#FF6B35", cursor: "pointer", letterSpacing: 1, transition: "all 0.2s" }}
             >{copiedChallenge ? "✓ COPIED!" : "⚔️ COPY CHALLENGE LINK"}</button>
+            <button
+              onClick={() => setShowQR(true)}
+              style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
+            >📷 QR</button>
           </div>
         )}
 
@@ -522,6 +605,17 @@ export default function DeathScreen({
         </div>
       </div>
       </div>
+
+      {/* QR Code modal */}
+      {showQR && challengeUrl && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 400, background: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setShowQR(false)}>
+          <div style={{ background: "#111", border: "1px solid #333", borderRadius: 12, padding: 24, textAlign: "center" }} onClick={e => e.stopPropagation()}>
+            <div style={{ fontSize: 11, color: "#888", letterSpacing: 2, marginBottom: 12, fontFamily: "'Courier New',monospace" }}>SCAN TO CHALLENGE</div>
+            <canvas ref={qrCanvasRef} style={{ imageRendering: "pixelated" }} />
+            <div style={{ fontSize: 10, color: "#555", marginTop: 10 }}>tap outside to close</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

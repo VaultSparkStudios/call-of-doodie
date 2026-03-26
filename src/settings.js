@@ -11,6 +11,7 @@ export const SETTINGS_DEFAULTS = {
   showDPS:             false,
   autoReload:          false,
   grenadeRadiusMult:   1.0,  // grenade blast radius (0.5–2×)
+  showEnemyHealthBars: false,  // show health bars above all enemies at all times
   // Controller settings
   rumble:              true,  // haptic vibration feedback
   controllerDeadZone:  0.2,   // analog stick dead zone (0.05–0.4)

@@ -1,17 +1,17 @@
 // ===== WEAPONS =====
 export const WEAPONS = [
-  { name: "Banana Blaster", emoji: "🍌", damage: 15, fireRate: 200, ammo: 30, maxAmmo: 30, reloadTime: 1500, color: "#FFE135", sound: "PEEL!", spread: 0.03, desc: "Reliable sidearm. Peel & deal." },
-  { name: "Rubber Chicken RPG", emoji: "🐔", damage: 80, fireRate: 1200, ammo: 3, maxAmmo: 3, reloadTime: 3000, color: "#FF6B35", sound: "BAWK!", spread: 0, desc: "Massive damage, slow reload. BAWK!" },
-  { name: "Nerf Minigun", emoji: "🔫", damage: 5, fireRate: 50, ammo: 200, maxAmmo: 200, reloadTime: 4000, color: "#FF4444", sound: "pew pew", spread: 0.12, desc: "Spray & pray. 200 foam darts of fury." },
-  { name: "Plunger Launcher", emoji: "🪠", damage: 40, fireRate: 600, ammo: 8, maxAmmo: 8, reloadTime: 2000, color: "#8B4513", sound: "THWONK!", spread: 0.02, desc: "Mid-range plunger justice. THWONK!" },
-  { name: "Sniper-ator 3000", emoji: "🎯", damage: 120, fireRate: 1800, ammo: 5, maxAmmo: 5, reloadTime: 2500, color: "#00FFAA", sound: "CRACK!", spread: 0.005, bulletLife: 110, bulletSize: 7, bulletTrail: true, bulletSpeed: 18, desc: "One-tap precision. Enemies won't get a second chance." },
-  { name: "Spicy Squirt Gun", emoji: "🌶️", damage: 4, fireRate: 28, ammo: 100, maxAmmo: 100, reloadTime: 2800, color: "#FF5500", sound: "FWOOSH!", spread: 0.22, bulletLife: 14, bulletSize: 3, bulletTrail: false, bulletSpeed: 8, desc: "Short range, ridiculous fire rate. 100 shots of burning regret." },
-  { name: "Confetti Cannon", emoji: "🎊", damage: 12, fireRate: 900, ammo: 18, maxAmmo: 18, reloadTime: 2000, color: "#FF69B4", sound: "POP!", spread: 0.55, bulletLife: 22, bulletSize: 3, bulletSpeed: 9, pellets: 6, desc: "6 confetti pellets per blast. Close range chaos." },
-  { name: "Shock Zapper", emoji: "⚡", damage: 32, fireRate: 1100, ammo: 15, maxAmmo: 15, reloadTime: 2400, color: "#00E5FF", sound: "ZAP!", spread: 0.06, bulletLife: 75, bulletSize: 5, bulletSpeed: 15, burst: 3, burstDelay: 90, desc: "3-shot burst, medium range. Zap zap zap." },
-  { name: "Boomerang Blaster", emoji: "🪃", damage: 28, fireRate: 1100, ammo: 5, maxAmmo: 5, reloadTime: 1800, color: "#FFA500", sound: "WHOOSH!", spread: 0, bulletLife: 100, bulletSize: 9, bulletSpeed: 6, boomerang: true, desc: "Curves out, returns to you. Pierces every enemy both ways." },
-  { name: "Railgun", emoji: "🔦", damage: 160, fireRate: 2800, ammo: 4, maxAmmo: 4, reloadTime: 3500, color: "#00FFFF", sound: "ZORCH!", spread: 0, hitscan: true, desc: "Instant hitscan beam. Penetrates every enemy in a straight line." },
-  { name: "Ricochet Pistol", emoji: "🎱", damage: 35, fireRate: 340, ammo: 18, maxAmmo: 18, reloadTime: 1800, color: "#7FFF00", sound: "PING!", spread: 0.04, bulletLife: 90, bulletSize: 6, bulletSpeed: 12, bouncesLeft: 10, desc: "Bounces up to 10 times per shot. Angles are your best friend." },
-  { name: "Nuclear Kazoo", emoji: "🎵", damage: 22, fireRate: 260, ammo: 24, maxAmmo: 24, reloadTime: 2000, color: "#FF00FF", sound: "HONK!", spread: 0.20, bulletLife: 48, bulletSize: 5, bulletSpeed: 10, pellets: 3, desc: "3-wide shots per fire. Annoyingly effective in crowds." },
+  { name: "Banana Blaster", upgradedName: "BLASTER PRIME", emoji: "🍌", damage: 15, fireRate: 200, ammo: 30, maxAmmo: 30, reloadTime: 1500, color: "#FFE135", sound: "PEEL!", spread: 0.03, desc: "Reliable sidearm. Peel & deal." },
+  { name: "Rubber Chicken RPG", upgradedName: "MEGA LAUNCHER", emoji: "🐔", damage: 80, fireRate: 1200, ammo: 3, maxAmmo: 3, reloadTime: 3000, color: "#FF6B35", sound: "BAWK!", spread: 0, desc: "Massive damage, slow reload. BAWK!" },
+  { name: "Nerf Minigun", upgradedName: "HYPERGUN 9000", emoji: "🔫", damage: 5, fireRate: 50, ammo: 200, maxAmmo: 200, reloadTime: 4000, color: "#FF4444", sound: "pew pew", spread: 0.12, desc: "Spray & pray. 200 foam darts of fury." },
+  { name: "Plunger Launcher", upgradedName: "SEWAGE CANNON", emoji: "🪠", damage: 40, fireRate: 600, ammo: 8, maxAmmo: 8, reloadTime: 2000, color: "#8B4513", sound: "THWONK!", spread: 0.02, desc: "Mid-range plunger justice. THWONK!" },
+  { name: "Sniper-ator 3000", upgradedName: "VOID STRIKER", emoji: "🎯", damage: 120, fireRate: 1800, ammo: 5, maxAmmo: 5, reloadTime: 2500, color: "#00FFAA", sound: "CRACK!", spread: 0.005, bulletLife: 110, bulletSize: 7, bulletTrail: true, bulletSpeed: 18, desc: "One-tap precision. Enemies won't get a second chance." },
+  { name: "Spicy Squirt Gun", upgradedName: "INFERNO SQUIRTER", emoji: "🌶️", damage: 4, fireRate: 28, ammo: 100, maxAmmo: 100, reloadTime: 2800, color: "#FF5500", sound: "FWOOSH!", spread: 0.22, bulletLife: 14, bulletSize: 3, bulletTrail: false, bulletSpeed: 8, desc: "Short range, ridiculous fire rate. 100 shots of burning regret." },
+  { name: "Confetti Cannon", upgradedName: "CHAOS CANNON", emoji: "🎊", damage: 12, fireRate: 900, ammo: 18, maxAmmo: 18, reloadTime: 2000, color: "#FF69B4", sound: "POP!", spread: 0.55, bulletLife: 22, bulletSize: 3, bulletSpeed: 9, pellets: 6, desc: "6 confetti pellets per blast. Close range chaos." },
+  { name: "Shock Zapper", upgradedName: "THUNDER GOD", emoji: "⚡", damage: 32, fireRate: 1100, ammo: 15, maxAmmo: 15, reloadTime: 2400, color: "#00E5FF", sound: "ZAP!", spread: 0.06, bulletLife: 75, bulletSize: 5, bulletSpeed: 15, burst: 3, burstDelay: 90, desc: "3-shot burst, medium range. Zap zap zap." },
+  { name: "Boomerang Blaster", upgradedName: "ORBITAL BOOM", emoji: "🪃", damage: 28, fireRate: 1100, ammo: 5, maxAmmo: 5, reloadTime: 1800, color: "#FFA500", sound: "WHOOSH!", spread: 0, bulletLife: 100, bulletSize: 9, bulletSpeed: 6, boomerang: true, desc: "Curves out, returns to you. Pierces every enemy both ways." },
+  { name: "Railgun", upgradedName: "ANTIMATTER RAIL", emoji: "🔦", damage: 160, fireRate: 2800, ammo: 4, maxAmmo: 4, reloadTime: 3500, color: "#00FFFF", sound: "ZORCH!", spread: 0, hitscan: true, desc: "Instant hitscan beam. Penetrates every enemy in a straight line." },
+  { name: "Ricochet Pistol", upgradedName: "INFINITE BOUNCE", emoji: "🎱", damage: 35, fireRate: 340, ammo: 18, maxAmmo: 18, reloadTime: 1800, color: "#7FFF00", sound: "PING!", spread: 0.04, bulletLife: 90, bulletSize: 6, bulletSpeed: 12, bouncesLeft: 10, desc: "Bounces up to 10 times per shot. Angles are your best friend." },
+  { name: "Nuclear Kazoo", upgradedName: "DOOMSDAY KAZOO", emoji: "🎵", damage: 22, fireRate: 260, ammo: 24, maxAmmo: 24, reloadTime: 2000, color: "#FF00FF", sound: "HONK!", spread: 0.20, bulletLife: 48, bulletSize: 5, bulletSpeed: 10, pellets: 3, desc: "3-wide shots per fire. Annoyingly effective in crowds." },
 ];
 
 // ===== ENEMIES =====
@@ -62,6 +62,9 @@ export const ENEMY_TYPES = [
   // ── Boss-rotation type: index 20 ──
   { name: "The Algorithm", health: 700, speed: 0.5, size: 68, color: "#1DA1F2", points: 4500, emoji: "📊", ranged: true, projSpeed: 4.0, projRate: 85,
     deathQuotes: ["Error 404: Engagement not found.", "My reach... declining...", "The metrics... flatlined...", "Shadow-banned. From life.", "Content... terminated."] },
+  // ── Secret boss: index 21 (wave 50+) ──
+  { name: "The Developer", health: 2000, speed: 0.4, size: 75, color: "#00FF88", points: 10000, emoji: "💻", ranged: true, projSpeed: 4.5, projRate: 50,
+    deathQuotes: ["git push --force", "Have you tried turning it off and on again?", "It's not a bug, it's a feature.", "Undefined behavior detected.", "// TODO: fix this later", "Works on my machine."] },
 ];
 
 // ===== PERKS =====
@@ -92,15 +95,15 @@ export const PERKS = [
   },
   {
     id: "parkour_pro", name: "Parkour Pro", desc: "−40% dash cooldown", emoji: "🏃", tier: "uncommon",
-    apply: (mods) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.60; },
+    apply: (mods) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.60; mods.hasDash = true; },
   },
   {
     id: "vampire", name: "Vampire", desc: "Heal 8% of damage dealt. Synergy: +6% more lifesteal with Chain Lightning", emoji: "🧛", tier: "uncommon",
-    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; if (mods.hasChainLightning) mods.lifesteal += 0.06; },
+    apply: (mods) => { mods.lifesteal = (mods.lifesteal || 0) + 0.08; mods.hasVampire = true; mods.hasBloodRegen = true; if (mods.hasChainLightning) mods.lifesteal += 0.06; },
   },
   {
     id: "deep_pockets", name: "Deep Pockets", desc: "+50% max ammo on all weapons", emoji: "📦", tier: "uncommon",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 1.50; },
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 1.50; mods.hasAmmoBoost = true; },
   },
   {
     id: "combo_master", name: "Combo Master", desc: "+50% combo window time", emoji: "🌪️", tier: "uncommon",
@@ -150,13 +153,14 @@ export const PERKS = [
     apply: (mods, gs) => {
       mods.damageMult = (mods.damageMult || 1) * 0.85;
       mods.fireRateMult = (mods.fireRateMult || 1) * 0.65;
+      mods.hasOverclocked = true;
       if (gs) { gs.overclockedShots = 0; gs.overclocked = true; }
     },
   },
   {
     id: "scavenger", name: "Scavenger", emoji: "🎒", tier: "common",
     desc: "Enemies drop ammo 40% more often. Ammo pickups restore 30% more ammo",
-    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; },
+    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; mods.hasScavenger = true; },
   },
   {
     id: "combo_lifesteal", name: "Combo Lifesteal", emoji: "🩸", tier: "uncommon",
@@ -214,7 +218,7 @@ export const CURSED_PERKS = [
     apply: (mods) => { mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*2.0; mods.damageMult=(mods.damageMult||1)*0.75; mods.hasPyromaniac=true; if (mods.hasGrenadier) mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*1.5; } },
   { id: "last_resort",   name: "Last Resort",   emoji: "💔", tier: "cursed",
     desc: "+200% dmg below 25% HP · start at 25% HP",
-    apply: (mods, gs) => { mods.lastResort=true; if(gs?.player){gs.player.health=Math.max(1,Math.floor(gs.player.maxHealth*0.25));} } },
+    apply: (mods, gs) => { mods.lastResort=true; mods.hasLastResort=true; if(gs?.player){gs.player.health=Math.max(1,Math.floor(gs.player.maxHealth*0.25));} } },
   { id: "paranoia", name: "Paranoia", emoji: "👁", tier: "cursed",
     desc: "All enemies move 25% faster, but you gain +40% XP",
     apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.4; if (gs) gs.enemySpeedMult = (gs.enemySpeedMult || 1) * 1.25; } },
@@ -470,6 +474,60 @@ export const WEAPON_SYNERGIES = [
   },
 ];
 
+// ===== BOSS ABILITY POOL =====
+// Each boss gets 2 random bonus abilities on spawn (in addition to core identity abilities).
+// apply(boss, wave) mutates the boss object with new fields.
+export const BOSS_ABILITY_POOL = [
+  {
+    id: "shield_regen",
+    name: "Shield Regen",
+    desc: "Regenerates shield HP while not taking damage",
+    apply: (boss) => { boss.hasShieldRegen = true; boss.shieldRegenTimer = 0; boss.shieldRegenRate = 0.5; },
+  },
+  {
+    id: "speed_surge",
+    name: "Speed Surge",
+    desc: "Periodically surges to double speed for 2s",
+    apply: (boss) => { boss.hasSpeedSurge = true; boss.speedSurgeTimer = 0; boss.speedSurgeCooldown = 300; },
+  },
+  {
+    id: "bullet_spray",
+    name: "Bullet Spray",
+    desc: "Periodically fires a ring of 8 bullets",
+    apply: (boss, wave) => { boss.hasBulletSpray = true; boss.bulletSprayTimer = 0; boss.bulletSprayCooldown = Math.max(180, 360 - wave * 4); },
+  },
+  {
+    id: "clone_decoy",
+    name: "Clone Decoy",
+    desc: "Spawns a harmless decoy at half HP",
+    apply: (boss) => { boss.hasCloneDecoy = true; boss.cloneDecoySpawned = false; },
+  },
+  {
+    id: "enrage_threshold",
+    name: "Berserker Threshold",
+    desc: "Enrages permanently when below 40% HP",
+    apply: (boss) => { boss.hasEnrageThreshold = true; boss.enrageThresholdFired = false; },
+  },
+  {
+    id: "magnet_pull",
+    name: "Magnet Pull",
+    desc: "Pulls player bullets off-course near the boss",
+    apply: (boss) => { boss.hasMagnetPull = true; boss.magnetRadius = 120; },
+  },
+  {
+    id: "ground_mines",
+    name: "Ground Mines",
+    desc: "Drops proximity mines when below 60% HP",
+    apply: (boss) => { boss.hasGroundMines = true; boss.mineDropCooldown = 180; boss.mineDropTimer = 0; },
+  },
+  {
+    id: "lifesteal",
+    name: "Lifesteal",
+    desc: "Heals 2 HP per enemy bullet that hits the player",
+    apply: (boss) => { boss.hasLifesteal = true; },
+  },
+];
+
 // ===== WAVE ROUTES =====
 // Shown after each non-boss wave clear (wave 2+, not in Score Attack / Daily Challenge).
 // Player picks from 3 options (Standard always included). apply(gs, perkMods) is called immediately.
@@ -540,7 +598,7 @@ export const WAVE_ROUTES = [
     name: "Blitz",
     desc: "Enemies spawn 3× faster. Kills worth +25% score.",
     color: "#00E5FF",
-    apply: (gs) => { gs.routeBlitz = true; gs.routeKillScoreMult = (gs.routeKillScoreMult || 1) * 1.25; },
+    apply: (gs) => { gs.routeBlitz = true; gs.blitzSpawnMult = 3; gs.routeKillScoreMult = (gs.routeKillScoreMult || 1) * 1.25; gs.blitzCount = (gs.blitzCount || 0) + 1; },
   },
 ];
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted } from "../storage.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout } from "../storage.js";
 import { supabase } from "../supabase.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
@@ -30,6 +30,13 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [showPrestigeConfirm, setShowPrestigeConfirm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showRunHistory, setShowRunHistory] = useState(false);
+  const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
+  const [customLoadouts, setCustomLoadouts] = useState(() => loadCustomLoadouts());
+  const [editingSlot, setEditingSlot] = useState(null); // null or slot index 0-2
+  const [editName, setEditName] = useState("");
+  const [editWeaponIdx, setEditWeaponIdx] = useState(0);
+  const [editStarterLoadout, setEditStarterLoadout] = useState("standard");
   const [customSeed, setCustomSeed] = useState("");
   const [career, setCareer] = useState(null);
   const [missions, setMissions] = useState([]);
@@ -83,7 +90,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   // ── Gamepad menu navigation ──────────────────────────────────────────────
   const anyModalOpen = showLeaderboard || showAchievements || showCareer || showRules ||
     showControls || showBestiary || showMissions || showUpgrades || showNewFeatures ||
-    showPrestigeConfirm || showSettings;
+    showPrestigeConfirm || showSettings || showRunHistory || showLoadoutBuilder;
 
   // Ordered flat list of main-menu actions (indices used for focus tracking)
   const diffKeys     = Object.keys(DIFFICULTIES);                          // 0-3
@@ -160,7 +167,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         setShowLeaderboard(false); setShowAchievements(false); setShowCareer(false);
         setShowRules(false); setShowControls(false); setShowBestiary(false);
         setShowMissions(false); setShowUpgrades(false); setShowNewFeatures(false);
-        setShowPrestigeConfirm(false);
+        setShowPrestigeConfirm(false); setShowRunHistory(false); setShowLoadoutBuilder(false);
         // Don't close SettingsPanel — it handles its own B button
       }
       lastB = !!bNow;
@@ -441,6 +448,173 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </div>
       )}
 
+      {/* Run History Modal */}
+      {showRunHistory && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 480, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <button onClick={() => setShowRunHistory(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
+            <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>📜 RUN HISTORY</h3>
+            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Last 10 runs — saved locally on your device</p>
+            {(() => {
+              const history = loadRunHistory();
+              if (history.length === 0) {
+                return <p style={{ color: "#aaa", fontSize: 13, textAlign: "center", marginTop: 20 }}>No runs yet — get out there!</p>;
+              }
+              const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR" };
+              const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
+              return (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {history.map((run, i) => {
+                    const date = new Date(run.ts);
+                    const dateStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+                    const timeFmt = run.time != null ? (run.time >= 3600 ? `${Math.floor(run.time/3600)}h${Math.floor((run.time%3600)/60)}m` : `${Math.floor(run.time/60)}:${String(run.time%60).padStart(2,"0")}`) : "--:--";
+                    const modeLabel = run.mode ? MODE_LABELS[run.mode] : null;
+                    const diffColor = DIFF_COLORS[run.difficulty] || "#AAA";
+                    return (
+                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                        <div style={{ background: "rgba(255,107,53,0.18)", border: "1px solid rgba(255,107,53,0.4)", borderRadius: 6, padding: "4px 8px", textAlign: "center", flexShrink: 0, minWidth: 38 }}>
+                          <div style={{ fontSize: 9, color: "#FF6B35", fontWeight: 700 }}>W</div>
+                          <div style={{ fontSize: 16, fontWeight: 900, color: "#FF6B35", lineHeight: 1 }}>{run.wave ?? "?"}</div>
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
+                            <span style={{ fontSize: 13, fontWeight: 900, color: "#FFD700" }}>{(run.score || 0).toLocaleString()}</span>
+                            <span style={{ fontSize: 11, color: "#00FF88" }}>☠ {run.kills ?? 0}</span>
+                            {modeLabel && <span style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.4)", color: "#FF6666", fontWeight: 900 }}>{modeLabel}</span>}
+                            <span style={{ fontSize: 9, fontWeight: 700, color: diffColor }}>{(run.difficulty || "normal").toUpperCase()}</span>
+                          </div>
+                          <div style={{ display: "flex", gap: 8, marginTop: 3, fontSize: 9, color: "#888" }}>
+                            <span>⏱ {timeFmt}</span>
+                            {run.modifier && <span>🎲 {run.modifier}</span>}
+                            <span style={{ marginLeft: "auto" }}>{dateStr}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+            <button onClick={() => setShowRunHistory(false)} style={{ ...btnP, marginTop: 16, width: "100%" }}>← CLOSE</button>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Loadout Builder Modal */}
+      {showLoadoutBuilder && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
+          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 500, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.35)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+            <button onClick={() => { setShowLoadoutBuilder(false); setEditingSlot(null); }} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
+            <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>⚙️ CUSTOM LOADOUTS</h3>
+            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 16px" }}>Save up to 3 custom weapon + loadout presets.</p>
+
+            {editingSlot !== null ? (
+              /* ── Create/Edit form ── */
+              <div>
+                <div style={{ fontSize: 11, color: "#FFD700", marginBottom: 12, fontWeight: 900 }}>SLOT {editingSlot + 1} — CONFIGURE</div>
+                {/* Name */}
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, color: "#888", marginBottom: 4, letterSpacing: 1 }}>LOADOUT NAME (max 20 chars)</div>
+                  <input
+                    value={editName} maxLength={20}
+                    onChange={e => setEditName(e.target.value)}
+                    style={{ width: "100%", boxSizing: "border-box", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,107,53,0.4)", borderRadius: 6, padding: "8px 10px", color: "#fff", fontFamily: "'Courier New',monospace", fontSize: 13, outline: "none" }}
+                    placeholder="e.g. Glass Cannon Speedrun"
+                  />
+                </div>
+                {/* Weapon selector */}
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, color: "#888", marginBottom: 6, letterSpacing: 1 }}>STARTING WEAPON</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {WEAPONS.map((w, i) => (
+                      <button key={i} onClick={() => setEditWeaponIdx(i)} style={{
+                        padding: "6px 10px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6,
+                        background: editWeaponIdx === i ? "rgba(255,107,53,0.25)" : "rgba(255,255,255,0.05)",
+                        border: editWeaponIdx === i ? "1px solid #FF6B35" : "1px solid rgba(255,255,255,0.1)",
+                        color: editWeaponIdx === i ? "#FF6B35" : "#CCC",
+                      }}>
+                        {w.emoji} {w.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {/* Starter loadout selector */}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ fontSize: 10, color: "#888", marginBottom: 6, letterSpacing: 1 }}>STARTER LOADOUT</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {STARTER_LOADOUTS.map(lo => (
+                      <button key={lo.id} onClick={() => setEditStarterLoadout(lo.id)} style={{
+                        padding: "6px 10px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6,
+                        background: editStarterLoadout === lo.id ? "rgba(255,215,0,0.18)" : "rgba(255,255,255,0.05)",
+                        border: editStarterLoadout === lo.id ? "1px solid #FFD700" : "1px solid rgba(255,255,255,0.1)",
+                        color: editStarterLoadout === lo.id ? "#FFD700" : "#CCC",
+                      }}>
+                        {lo.emoji} {lo.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={() => {
+                    if (!editName.trim()) return;
+                    const lo = { name: editName.trim(), weaponIdx: editWeaponIdx, starterLoadout: editStarterLoadout };
+                    saveCustomLoadout(editingSlot, lo);
+                    setCustomLoadouts(loadCustomLoadouts());
+                    setEditingSlot(null);
+                  }} style={{ ...btnP, flex: 1, fontSize: 13, padding: "10px 16px" }}>
+                    💾 SAVE
+                  </button>
+                  <button onClick={() => setEditingSlot(null)} style={{ ...btnS, flex: 1, fontSize: 13, padding: "10px 16px" }}>
+                    ✕ CANCEL
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* ── Slot list ── */
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {customLoadouts.map((lo, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: lo ? "1px solid rgba(255,107,53,0.25)" : "1px solid rgba(255,255,255,0.07)" }}>
+                    <div style={{ background: "rgba(255,107,53,0.16)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 6, padding: "4px 8px", textAlign: "center", flexShrink: 0, minWidth: 32 }}>
+                      <div style={{ fontSize: 9, color: "#FF6B35", fontWeight: 700 }}>#{i + 1}</div>
+                    </div>
+                    {lo ? (
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 13, fontWeight: 900, color: "#FF6B35", marginBottom: 2 }}>{lo.name}</div>
+                        <div style={{ fontSize: 10, color: "#AAA" }}>
+                          {WEAPONS[lo.weaponIdx]?.emoji} {WEAPONS[lo.weaponIdx]?.name}
+                          {" · "}
+                          {STARTER_LOADOUTS.find(sl => sl.id === lo.starterLoadout)?.emoji} {STARTER_LOADOUTS.find(sl => sl.id === lo.starterLoadout)?.name}
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ flex: 1, fontSize: 12, color: "#555", fontStyle: "italic" }}>Empty slot</div>
+                    )}
+                    <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                      {lo && (
+                        <button onClick={() => {
+                          saveCustomLoadout(i, null);
+                          setCustomLoadouts(loadCustomLoadouts());
+                        }} style={{ padding: "4px 10px", fontSize: 10, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 5, background: "rgba(255,60,60,0.12)", border: "1px solid rgba(255,60,60,0.3)", color: "#FF6666" }}>
+                          DEL
+                        </button>
+                      )}
+                      <button onClick={() => {
+                        setEditingSlot(i);
+                        setEditName(lo?.name || "");
+                        setEditWeaponIdx(lo?.weaponIdx ?? 0);
+                        setEditStarterLoadout(lo?.starterLoadout || "standard");
+                      }} style={{ padding: "4px 10px", fontSize: 10, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 5, background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", color: "#FF6B35" }}>
+                        {lo ? "EDIT" : "CREATE"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Career Stats Modal */}
       {showCareer && career && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
@@ -550,9 +724,13 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       {/* Prestige Confirm Modal */}
       {showPrestigeConfirm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.96)", zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, backdropFilter: "blur(6px)" }}>
-          <div style={{ ...card, maxWidth: 400, width: "100%", border: "1px solid rgba(255,215,0,0.4)", padding: "28px 20px", color: "#fff", textAlign: "center" }}>
+          <div style={{ ...card, maxWidth: 400, width: "100%", border: "1px solid rgba(255,50,50,0.5)", padding: "28px 20px", color: "#fff", textAlign: "center" }}>
             <div style={{ fontSize: 52, marginBottom: 10 }}>⭐</div>
-            <h2 style={{ color: "#FFD700", margin: "0 0 10px", fontSize: 22, letterSpacing: 2 }}>PRESTIGE {prestige + 1}</h2>
+            <h2 style={{ color: "#FFD700", margin: "0 0 6px", fontSize: 22, letterSpacing: 2 }}>PRESTIGE {prestige + 1}</h2>
+            <div style={{ fontSize: 12, color: "#FF6B35", fontWeight: 700, marginBottom: 12, letterSpacing: 1 }}>CURRENT LEVEL: {accountLevel}</div>
+            <div style={{ fontSize: 12, color: "#FF9999", lineHeight: 1.7, marginBottom: 14, padding: "10px 14px", background: "rgba(255,50,50,0.08)", border: "1px solid rgba(255,50,50,0.2)", borderRadius: 8 }}>
+              This will reset all career points and meta upgrades. Your callsign, kills record, and prestige count will be preserved.
+            </div>
             <div style={{ fontSize: 13, color: "#CCC", lineHeight: 1.9, marginBottom: 16 }}>
               <div style={{ color: "#FF4444" }}>✗ All meta upgrades reset</div>
               <div style={{ color: "#FF4444" }}>✗ Career points reset to 0</div>
@@ -562,8 +740,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             <div style={{ fontSize: 11, color: "#aaa", marginBottom: 20 }}>Kill records & achievements are preserved forever.</div>
             <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
               <button onClick={() => setShowPrestigeConfirm(false)} style={{ ...btnS, padding: "10px 24px", fontSize: 14 }}>CANCEL</button>
-              <button onClick={handlePrestige} style={{ ...btnP, padding: "10px 24px", fontSize: 14, background: "linear-gradient(180deg,#FFD700,#AA7700)", color: "#000" }}>
-                PRESTIGE ★
+              <button onClick={handlePrestige} style={{ ...btnP, padding: "10px 24px", fontSize: 14, background: "linear-gradient(180deg,#FF3333,#AA0000)", color: "#FFF", border: "1px solid rgba(255,50,50,0.6)" }}>
+                CONFIRM PRESTIGE
               </button>
             </div>
           </div>
@@ -999,6 +1177,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
           <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} {...(gfocus("missions") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("missions") ? focusRing : {}) }}>📋 MISSIONS</button>
           <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} {...(gfocus("upgrades") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
+          <button onClick={() => setShowRunHistory(true)} style={{ ...btnS, minWidth: 150 }}>📜 HISTORY</button>
+          <button onClick={() => setShowLoadoutBuilder(true)} style={{ ...btnS, minWidth: 150 }}>⚙️ LOADOUTS</button>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
           <button onClick={() => setShowRules(true)} {...(gfocus("rules") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>

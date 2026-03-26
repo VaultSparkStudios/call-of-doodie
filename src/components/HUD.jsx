@@ -13,6 +13,8 @@ export default function HUD({
   fmtTime,
   overclockedActive, overclockedShots, waveStreak, mapTheme,
   vsScore, vsName,
+  synergyChargeReady, onSynergyCharge,
+  cursedHideScore,
 }) {
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -79,9 +81,26 @@ export default function HUD({
       {/* Score */}
       <div style={{ position: "absolute", top: 8, right: 56 }}>
         <div style={{ fontSize: 10, color: "#CCC", textAlign: "right" }}>SCORE</div>
-        <div style={{ fontSize: 20, fontWeight: 900, color: "#FFD700", textAlign: "right" }}>{score.toLocaleString()}</div>
+        <div style={{ fontSize: 20, fontWeight: 900, color: cursedHideScore ? "#CC00FF" : "#FFD700", textAlign: "right" }}>{cursedHideScore ? "???" : score.toLocaleString()}</div>
         <div style={{ fontSize: 10, color: "#DDD", textAlign: "right" }}>K:<span style={{ color: "#0F0" }}>{kills}</span> D:<span style={{ color: "#F44" }}>{deaths}</span></div>
       </div>
+
+      {/* Synergy Burst button */}
+      {synergyChargeReady && (
+        <div
+          onClick={onSynergyCharge}
+          style={{
+            position: "fixed", bottom: 90, right: 16,
+            background: "rgba(255,136,255,0.2)", border: "2px solid #FF88FF",
+            borderRadius: 8, padding: "6px 12px", cursor: "pointer",
+            fontFamily: "'Courier New',monospace", fontSize: 11, color: "#FF88FF",
+            fontWeight: 900, letterSpacing: 1, animation: "pulseGlow 1s infinite",
+            boxShadow: "0 0 16px #FF88FF44", pointerEvents: "all",
+          }}
+        >
+          ⚡ SYNERGY BURST [E]
+        </div>
+      )}
 
       {/* Combo */}
       {combo >= 2 && (
@@ -162,11 +181,11 @@ export default function HUD({
 
       {/* Ammo / weapon */}
       <div style={{ position: "absolute", bottom: 8, right: isMobile ? 8 : 56, textAlign: "right" }}>
-        <div style={{ fontSize: 11, color: weapon.color, marginBottom: 1, fontWeight: 600 }}>
-          {weapon.emoji} {weapon.name}
-          {weaponUpgrades?.[currentWeapon] > 0 && (
-            <span style={{ color: "#AA44FF", marginLeft: 4, fontSize: 10 }}>{upgStars(currentWeapon)}</span>
-          )}
+        <div style={{ fontSize: 11, color: weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName ? "#FFD700" : weapon.color, marginBottom: 1, fontWeight: 600 }}>
+          {weapon.emoji} {weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName
+            ? <span style={{ color: "#FFD700", textShadow: "0 0 8px rgba(255,215,0,0.6)" }}>⭐⭐⭐ {weapon.upgradedName}</span>
+            : <>{weapon.name}{weaponUpgrades?.[currentWeapon] > 0 && <span style={{ color: "#AA44FF", marginLeft: 4, fontSize: 10 }}>{upgStars(currentWeapon)}</span>}</>
+          }
         </div>
         <div style={{ fontSize: 20, fontWeight: 900 }}>
           <span style={{ color: ammo > 0 ? "#FFF" : "#F44" }}>{ammo}</span>

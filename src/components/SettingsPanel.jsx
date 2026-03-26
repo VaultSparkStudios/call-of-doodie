@@ -15,6 +15,7 @@ const META = {
   particlesMult:       { label: "Particles",               desc: "Explosion & death particle density — affects performance", tab: "Visual",   type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
   crosshair:           { label: "Crosshair Style",         desc: "Visual style of your aiming cursor",                       tab: "Visual",   type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
   showDPS:             { label: "Show DPS Counter",        desc: "Display live damage-per-second on the canvas",             tab: "Visual",   type: "toggle" },
+  showEnemyHealthBars: { label: "Enemy HP Bars",           desc: "Show health bars above all enemies at all times",           tab: "Visual",   type: "toggle" },
   grenadeRadiusMult:   { label: "Grenade Blast Radius",    desc: "Explosion size — bigger = more enemies hit",               tab: "Controls", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   autoReload:          { label: "Auto Reload on Empty",    desc: "Automatically reload when magazine hits zero",             tab: "Controls", type: "toggle" },
   rumble:              { label: "Controller Rumble",       desc: "Haptic vibration feedback when using a gamepad",           tab: "Controls", type: "toggle" },
@@ -207,13 +208,40 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                       style={{ width: "100%", accentColor: "#FF6B35", cursor: "pointer", height: 4 }} />
                   )}
                   {meta.type === "options" && (
-                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                      {meta.options.map(opt => (
-                        <button key={opt.v} onClick={() => set(key, opt.v)}
-                          style={{ ...base, fontSize: 11, padding: "6px 12px", background: val(key) === opt.v ? "rgba(255,107,53,0.2)" : "rgba(255,255,255,0.04)", border: val(key) === opt.v ? "1px solid rgba(255,107,53,0.55)" : "1px solid rgba(255,255,255,0.1)", color: val(key) === opt.v ? "#FF6B35" : "#bbb" }}>
-                          {opt.l}
-                        </button>
-                      ))}
+                    <div>
+                      <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                        {meta.options.map(opt => (
+                          <button key={opt.v} onClick={() => set(key, opt.v)}
+                            style={{ ...base, fontSize: 11, padding: "6px 12px", background: val(key) === opt.v ? "rgba(255,107,53,0.2)" : "rgba(255,255,255,0.04)", border: val(key) === opt.v ? "1px solid rgba(255,107,53,0.55)" : "1px solid rgba(255,255,255,0.1)", color: val(key) === opt.v ? "#FF6B35" : "#bbb" }}>
+                            {opt.l}
+                          </button>
+                        ))}
+                      </div>
+                      {key === "crosshair" && (() => {
+                        const cv = val("crosshair");
+                        return (
+                          <div style={{ marginTop: 8, width: 32, height: 32, background: "#111", borderRadius: 4, border: "1px solid rgba(255,255,255,0.12)", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {cv === "cross" && (
+                              <>
+                                <div style={{ position: "absolute", width: 18, height: 2, background: "#FFF", borderRadius: 1 }} />
+                                <div style={{ position: "absolute", width: 2, height: 18, background: "#FFF", borderRadius: 1 }} />
+                              </>
+                            )}
+                            {cv === "dot" && (
+                              <div style={{ width: 5, height: 5, background: "#FFF", borderRadius: "50%" }} />
+                            )}
+                            {cv === "circle" && (
+                              <div style={{ width: 14, height: 14, border: "2px solid #FFF", borderRadius: "50%", background: "transparent" }} />
+                            )}
+                            {cv === "none" && (
+                              <>
+                                <div style={{ position: "absolute", width: 16, height: 2, background: "#888", borderRadius: 1, transform: "rotate(45deg)" }} />
+                                <div style={{ position: "absolute", width: 16, height: 2, background: "#888", borderRadius: 1, transform: "rotate(-45deg)" }} />
+                              </>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   )}
                   {meta.type === "toggle" && (

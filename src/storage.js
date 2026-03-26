@@ -79,7 +79,7 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
     try {
       const { data, error } = await supabase
         .from("leaderboard")
-        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode")
+        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige")
         .order("score", { ascending: false })
         .range(offset, offset + limit - 1);
       if (error) throw error;
@@ -145,6 +145,7 @@ async function _tryAwardVaultPoints(entry) {
   }
 }
 
+// Note: requires Supabase migration: ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;
 export async function saveToLeaderboard(entry) {
   const ts = Date.now();
   const sig = await _signRow({ ...entry, ts });
@@ -183,7 +184,7 @@ export async function loadLeaderboardToday(mode = null, difficulty = null) {
     const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
     let q = supabase
       .from("leaderboard")
-      .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,created_at")
+      .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,created_at")
       .gte("created_at", midnight.toISOString())
       .order("score", { ascending: false })
       .limit(50);
@@ -204,7 +205,7 @@ export async function searchLeaderboard(nameQuery) {
   try {
     const { data, error } = await supabase
       .from("leaderboard")
-      .select("name,score,kills,wave,difficulty,mode,ts,accountLevel,inputDevice,starterLoadout,seed,level,time,lastWords,bestStreak,totalDamage,achievements,rank,customSettings")
+      .select("name,score,kills,wave,difficulty,mode,ts,accountLevel,inputDevice,starterLoadout,seed,level,time,lastWords,bestStreak,totalDamage,achievements,rank,customSettings,prestige")
       .ilike("name", `%${nameQuery.trim()}%`)
       .order("score", { ascending: false })
       .limit(20);
@@ -423,6 +424,24 @@ export function clearLockedCallsign() {
   try { localStorage.removeItem(CALLSIGN_KEY); } catch {}
 }
 
+// ===== RUN HISTORY =====
+const RUN_HISTORY_KEY = "cod-run-history-v1";
+
+export function saveRunToHistory(run) {
+  // run: { score, kills, wave, time, difficulty, mode, runSeed, modifier, ts }
+  try {
+    const history = JSON.parse(localStorage.getItem(RUN_HISTORY_KEY) || "[]");
+    history.unshift({ ...run, ts: Date.now() });
+    localStorage.setItem(RUN_HISTORY_KEY, JSON.stringify(history.slice(0, 10)));
+  } catch {}
+}
+
+export function loadRunHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(RUN_HISTORY_KEY) || "[]");
+  } catch { return []; }
+}
+
 export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {
   const career = loadCareerStats();
   career.totalRuns += 1;
@@ -449,4 +468,21 @@ export function updateCareerStats({ kills, deaths, score, wave, streak, damage, 
   // Credit career points (1 per kill)
   if (kills > 0) addCareerPoints(kills);
   return career;
+}
+
+// ===== CUSTOM LOADOUTS =====
+const CUSTOM_LOADOUTS_KEY = "cod-custom-loadouts-v1";
+
+export function loadCustomLoadouts() {
+  try { return JSON.parse(localStorage.getItem(CUSTOM_LOADOUTS_KEY) || "[null,null,null]"); }
+  catch { return [null, null, null]; }
+}
+
+export function saveCustomLoadout(idx, loadout) {
+  // loadout: { name, weaponIdx, starterLoadout } | null (to clear)
+  try {
+    const slots = loadCustomLoadouts();
+    slots[idx] = loadout;
+    localStorage.setItem(CUSTOM_LOADOUTS_KEY, JSON.stringify(slots));
+  } catch {}
 }
