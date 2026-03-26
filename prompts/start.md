@@ -2,48 +2,43 @@
 
 Use this when the user says only `start`.
 
-Treat that one word as a full startup command.
-
 ## Read order
 
 1. `AGENTS.md`
-2. `docs/README.md`
-3. `context/PROJECT_BRIEF.md`
-4. `context/PORTFOLIO_CARD.md`
-5. `context/SOUL.md`
-6. `context/BRAIN.md`
-7. `context/CURRENT_STATE.md`
-8. `context/DECISIONS.md`
-9. `context/TRUTH_MAP.md`
-10. `context/TASK_BOARD.md`
-11. `context/LATEST_HANDOFF.md`
-12. `context/MEMORY_INDEX.md`
-13. `docs/SYSTEMS.md`
-14. `docs/CONTENT_PLAN.md`
-15. `docs/LIVE_OPS.md`
-16. `docs/QUALITY_BAR.md`
-17. `plans/CONSTRAINTS_LEDGER.md`
-18. `plans/EXPERIMENT_REGISTRY.md`
-19. only then task-specific files
+2. `context/PROJECT_BRIEF.md`
+3. `context/SOUL.md`
+4. `context/BRAIN.md`
+5. `context/CURRENT_STATE.md`
+6. `context/DECISIONS.md`
+7. `context/TASK_BOARD.md`
+8. `context/LATEST_HANDOFF.md`
+9. `context/SELF_IMPROVEMENT_LOOP.md`
+10. only then task-specific files
 
 ## Startup rules
 
-- treat repository files as source of truth, not prior chat memory
-- do not change code during startup unless the user explicitly asks for implementation immediately
-- use `context/LATEST_HANDOFF.md` as the only active handoff source
-- treat `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, and `CODEX_HANDOFF_*.md` as historical context only
-- if the user has extra context not yet in the repo, ask only for the current goal and any external changes that are not written down
-- preserve existing functionality unless explicitly told otherwise
-- note assumptions clearly
+- Treat repo files as source of truth, not prior chat memory
+- Do not edit code during startup unless the user explicitly asks for implementation immediately
+- Use `context/LATEST_HANDOFF.md` as the active handoff source
+- Treat legacy handoff docs as historical context only
+- Note assumptions clearly
+
+## Self-Improvement Loop — startup check
+
+After reading `context/SELF_IMPROVEMENT_LOOP.md`:
+- Note the last audit scores and trajectory per category
+- Identify any open brainstorm ideas not yet actioned
+- Check if prior `[SIL]` TASK_BOARD commitments were completed
+- If a `[SIL]` item appears skipped 2+ sessions in a row, flag it as **Now** on TASK_BOARD and note it in the Startup Brief
 
 ## Required startup output
 
 Reply with a concise `Startup Brief` containing:
 
-1. project identity
-2. current state
-3. active priorities
-4. important constraints
-5. likely next best move
-6. any blockers or ambiguities
-7. exact files that matter most for this session
+1. Project identity
+2. Current state
+3. Active priorities (including any flagged `[SIL]` escalations)
+4. Important constraints
+5. Last audit scores and dominant trajectory
+6. Likely next best move
+7. Blockers or ambiguities
