@@ -1,217 +1,122 @@
-# Agent Instructions — Call of Doodie
+# Project Agent Guide
 
-## Studio identity
+## Studio OS
 
-- Studio site repo: `VaultSparkStudios/VaultSparkStudios.github.io`
-- Studio public URL: `https://vaultsparkstudios.com/`
-- Game repos live under: `VaultSparkStudios/`
+This project runs under the VaultSpark Studio OS.
+Local path: `C:\Users\p4cka\documents\development\vaultspark-studio-ops`
+GitHub: https://github.com/VaultSparkStudios/vaultspark-studio-ops
 
-## Per-game identity
+Read `vaultspark-studio-ops/docs/templates/` for canonical templates and conventions.
+Read `vaultspark-studio-ops/portfolio/PROJECT_REGISTRY.md` for all active studio projects.
+Read `vaultspark-studio-ops/docs/STUDIO_HUB_ONBOARDING.md` for hub acceptance requirements.
 
-- Repo name: `call-of-doodie`
-- Public slug: `call-of-doodie`
-- Public URL: `https://vaultsparkstudios.com/call-of-doodie/`
-- Gameplay origin: `https://play-call-of-doodie.vaultsparkstudios.com` (reserved — no backend yet, frontend-only game)
-- API origin: `https://api-call-of-doodie.vaultsparkstudios.com` (reserved — no backend yet)
+## Read order
 
-## Deployment standards
+1. `context/PROJECT_BRIEF.md`
+2. `context/SOUL.md`
+3. `context/BRAIN.md`
+4. `context/CURRENT_STATE.md`
+5. `context/DECISIONS.md`
+6. `context/TASK_BOARD.md`
+7. `context/LATEST_HANDOFF.md`
+8. `context/SELF_IMPROVEMENT_LOOP.md`
 
-Before making deployment, domain, GitHub Pages, or studio-site integration
-changes, read these files from the studio repo first:
+## Required Studio OS files
 
-- `docs/STUDIO_DEPLOYMENT_STANDARD.md`
-- `docs/STUDIO_BACKEND_PLAN.md`
-- `docs/DEPLOY_PAGES.md`
-- `docs/templates/deploy-pages.template.yml`
-- `docs/templates/GAME_LAUNCH_CHECKLIST.template.md`
+Every session should confirm these files exist and are current:
 
-## Required behavior
+| File | When to update |
+|---|---|
+| `context/LATEST_HANDOFF.md` | Every closeout — primary handoff |
+| `context/CURRENT_STATE.md` | When shipped behavior changes |
+| `context/TASK_BOARD.md` | When tasks complete or new ones are added |
+| `context/DECISIONS.md` | When a meaningful decision is made |
+| `context/PROJECT_BRIEF.md` | When scope or purpose changes |
+| `context/SELF_IMPROVEMENT_LOOP.md` | Every closeout — append audit + brainstorm entry |
+| `docs/CREATIVE_DIRECTION_RECORD.md` | Every time the human gives creative direction (ADDITIVE ONLY) |
+| `logs/WORK_LOG.md` | Every closeout — append session entry |
 
-- Treat `STUDIO_DEPLOYMENT_STANDARD.md` as the default studio-wide policy.
-- Game repo name and public slug are identical: `call-of-doodie`.
-- The Vite base path must stay `/call-of-doodie/` (lowercase) in `vite.config.js`.
-- GitHub Pages source is set to **GitHub Actions** (already configured).
-- `npm run build` must pass before any commit is pushed.
-- Update `CODEX_HANDOFF_YYYY-MM-DD.md` after any significant session of work.
-- Never commit `.env` files, credentials, or large binaries.
-- `context/LATEST_HANDOFF.md` is the single authoritative session handoff file.
-- `handoffs/LATEST_HANDOFF.md` is legacy and should not be used as the active write target.
-- `context/MEMORY_INDEX.md` should be used as the quick map of where project truth lives.
+## Closeout write-back (mandatory)
+
+After any meaningful session, write back in this order:
+1. `context/CURRENT_STATE.md`
+2. `context/TASK_BOARD.md`
+3. `context/LATEST_HANDOFF.md`
+4. `logs/WORK_LOG.md`
+5. `context/DECISIONS.md` (if decisions made)
+6. `context/SELF_IMPROVEMENT_LOOP.md` — score, brainstorm, commit 1–2 items to TASK_BOARD
+7. `docs/CREATIVE_DIRECTION_RECORD.md` — append if human gave any creative direction this session
+
+## Self-Improvement Loop (mandatory)
+
+Every closeout MUST include a Self-Improvement Loop entry in `context/SELF_IMPROVEMENT_LOOP.md`:
+
+1. Score project across 5 categories (Dev Health / Creative Alignment / Momentum / Engagement / Process Quality)
+2. Compare to prior scores — note ↑ ↓ → per category
+3. Name 1 top win and 1 top gap
+4. Brainstorm 3–5 innovative solutions or features
+5. Commit 1–2 brainstorm items to TASK_BOARD labeled `[SIL]`
+
+At session start, read `context/SELF_IMPROVEMENT_LOOP.md` and check if prior `[SIL]` commitments were actioned. If a `[SIL]` item has been skipped 2+ sessions, escalate it to **Now** on TASK_BOARD.
+
+## Creative Direction Record (mandatory enforcement)
+
+`docs/CREATIVE_DIRECTION_RECORD.md` is ADDITIVE ONLY.
+
+**Agents MUST append an entry whenever the human provides:**
+- Any creative direction (features, feel, scope)
+- Feature assignments or explicit goals
+- Brand, tone, visual, or quality guidance
+- Canon-affecting decisions
+- Explicit "do this / don't do this" instruction
+
+**Agents MUST NOT:**
+- Add CDR entries autonomously without human input
+- Modify or delete existing CDR entries
+- Skip CDR even for "small" directions — every human direction counts
+
+## Studio Hub integration
+
+This project is tracked in the VaultSpark Studio Hub at `vaultsparkstudios.com/studio-hub/`.
+The hub reads `context/PROJECT_STATUS.json` from this repo via GitHub API.
+
+For hub visibility, keep `context/PROJECT_STATUS.json` current with:
+- `status` — incubating / active / live / maintained / archived
+- `health` — green / yellow / red
+- `currentFocus` — one-line description of active work
+- `nextMilestone` — next concrete deliverable
+- `blockers` — array of blocking items (empty if none)
+- `lastUpdated` — ISO date of last update
+
+## Active Session Beacon
+
+To show an active session indicator in the Studio Hub, add these hooks to your `CLAUDE.md`:
+
+```bash
+# On session start — replace PROJECT_ID and GIST_ID:
+gh gist edit GIST_ID -f active.json <<EOF
+{"active":[{"project":"PROJECT_ID","agent":"claude-code","since":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}]}
+EOF
+
+# On session end:
+gh gist edit GIST_ID -f active.json <<EOF
+{"active":[]}
+EOF
+```
+
+Get the Gist ID from Hub Settings → "Active Session Beacon — GitHub Gist ID".
+Get PROJECT_ID from the project's `id` field in `src/data/studioRegistry.js`.
 
 ## Session aliases
 
-If the user says only `start`, run the startup protocol in `prompts/start.md`.
+If the user says only `start`, follow `prompts/start.md`.
 
-If the user says only `closeout`, run the closeout protocol in
-`prompts/closeout.md`.
+If the user says only `closeout`, follow `prompts/closeout.md`.
 
-These aliases are mandatory shortcuts, not suggestions.
+## Escalate before changing
 
-## Tech stack
-
-| Layer      | Technology                         |
-|------------|------------------------------------|
-| Framework  | React 19                           |
-| Bundler    | Vite 6                             |
-| Language   | JavaScript (JSX)                   |
-| Hosting    | GitHub Pages                       |
-| Backend    | Supabase (leaderboard + anon auth) |
-| Storage    | Supabase (primary) + localStorage (fallback) |
-
-## Project structure
-
-```
-call-of-doodie/
-├── index.html
-├── package.json
-├── vite.config.js              # base: "/call-of-doodie/"
-├── AGENTS.md                   # this file
-├── HANDOFF.md                  # legacy handoff (superseded)
-├── context/
-│   ├── PROJECT_BRIEF.md
-│   ├── SOUL.md
-│   ├── BRAIN.md
-│   ├── CURRENT_STATE.md
-│   ├── DECISIONS.md
-│   ├── TASK_BOARD.md
-│   ├── OPEN_QUESTIONS.md
-│   ├── ASSUMPTIONS_REGISTER.md
-│   ├── RISK_REGISTER.md
-│   ├── TRUTH_MAP.md
-│   ├── MEMORY_INDEX.md
-│   └── LATEST_HANDOFF.md       # authoritative session handoff
-├── docs/
-│   ├── README.md
-│   ├── GAME_LOOP.md
-│   ├── SYSTEMS.md
-│   ├── CONTENT_PLAN.md
-│   ├── LIVE_OPS.md
-│   ├── PLAYER_EXPERIENCE_PRINCIPLES.md
-│   ├── QUALITY_BAR.md
-│   ├── BRAND_SYSTEM.md
-│   ├── CREATIVE_DIRECTION_RECORD.md
-│   ├── RIGHTS_PROVENANCE.md
-│   └── INNOVATION_PIPELINE.md
-├── handoffs/
-│   └── LATEST_HANDOFF.md       # legacy redirect only
-├── logs/
-│   └── SESSION_LOG.md
-├── plans/
-│   ├── CONSTRAINTS_LEDGER.md
-│   └── EXPERIMENT_REGISTRY.md
-├── prompts/
-│   ├── bootstrap_prompt.md
-│   ├── start.md
-│   └── closeout.md
-├── .github/workflows/deploy.yml
-└── src/
-    ├── main.jsx
-    ├── App.jsx                 # Game loop + state orchestrator (~1400 lines)
-    ├── drawGame.js             # Extracted render function (~640 lines) — pure, no React deps
-    ├── gameHelpers.js          # spawnEnemy, spawnBoss — pure module-level helpers
-    ├── constants.js            # WEAPONS, ENEMY_TYPES, PERKS, ACHIEVEMENTS, DIFFICULTIES, META_UPGRADES, STARTER_LOADOUTS, etc.
-    ├── settings.js             # SETTINGS_DEFAULTS, loadSettings(), saveSettings(), loadPresets(), savePresets()
-    ├── storage.js              # Leaderboard (Supabase + localStorage), career stats, meta, missions, callsign
-    ├── supabase.js             # Supabase client + initAnonAuth() + getAuthUid()
-    ├── sounds.js               # Web Audio API synthesis — zero audio files
-    └── components/
-        ├── UsernameScreen.jsx
-        ├── MenuScreen.jsx
-        ├── DeathScreen.jsx
-        ├── HUD.jsx
-        ├── PauseMenu.jsx
-        ├── LeaderboardPanel.jsx
-        ├── AchievementsPanel.jsx
-        ├── PerkModal.jsx
-        ├── WaveShopModal.jsx
-        └── SettingsPanel.jsx
-```
-
-## Key architecture notes
-
-- All game logic lives in a single `gameLoop` useCallback in `App.jsx`.
-- Heavy use of refs (gsRef, perkModsRef, statsRef, etc.) to avoid stale closures in the RAF loop.
-- React state is used only for UI rendering; refs drive all game-loop logic.
-- `perkPendingRef` and `shopPendingRef` both halt the game loop while their modals are open.
-- Canvas 2D context is cached in `ctxRef` for performance.
-- Render is extracted to `drawGame(ctx, canvas, W, H, gs, refs)` in `drawGame.js` — pure drawing, no React setters. Called once per frame from `App.jsx` gameLoop.
-- Spawn logic is extracted to `gameHelpers.js` — `spawnEnemy(gs,W,H,diffId)`, `spawnBoss(gs,W,H,diffId,typeIndex)`.
-
-## localStorage keys
-
-| Key | Purpose |
-|-----|---------|
-| `cod-lb-v5` | Leaderboard fallback (Supabase is primary) |
-| `cod-career-v1` | Career stats |
-| `cod-meta-v2` | Meta-progression |
-| `cod-missions-YYYY-MM-DD` | Daily mission progress |
-| `cod-callsign-v1` | Locked callsign for return visits |
-| `cod-music-muted` | Music mute preference (`"1"`/`"0"`) |
-| `cod-colorblind` | Colorblind mode preference (`"1"`/`"0"`) |
-| `cod-settings-v1` | Settings panel values |
-| `cod-presets-v1` | Up to 3 named settings presets |
-
-## Active perkModsRef fields
-
-`damageMult`, `critBonus`, `lifesteal`, `pickupRange`, `pierce`, `ammoMult`,
-`grenadeCDMult`, `grenadeDamageMult`, `dashCDMult`, `comboTimerMult`, `xpMult`,
-`lastResort`, `fireRateMult`, `adrenalineRush`, `ammoDropMult`, `ammoRestoreMult`
-
-## Workflows
-
-| File | Purpose |
-|------|---------|
-| `.github/workflows/deploy.yml` | Build + deploy to GitHub Pages on push to `main` |
-
-## Gold-standard session protocol
-
-### Startup read order
-
-1. `prompts/start.md`
-2. `context/PROJECT_BRIEF.md` 
-3. `context/PORTFOLIO_CARD.md`
-3. `context/SOUL.md`
-4. `context/BRAIN.md`
-5. `context/CURRENT_STATE.md`
-6. `context/DECISIONS.md`
-7. `context/TRUTH_MAP.md`
-8. `context/TASK_BOARD.md`
-9. `context/LATEST_HANDOFF.md`
-10. only then any task-specific code or docs
-
-### Mandatory closeout write-back
-
-After meaningful work, update:
-
-- `context/CURRENT_STATE.md`
-- `context/TASK_BOARD.md`
-- `context/LATEST_HANDOFF.md`
-- `logs/SESSION_LOG.md`
-- `context/DECISIONS.md` when reasoning changed
-- `plans/CONSTRAINTS_LEDGER.md` when constraints changed
-- `plans/EXPERIMENT_REGISTRY.md` when experiments changed
-- `docs/CREATIVE_DIRECTION_RECORD.md` when human creative direction changed
-- `docs/QUALITY_BAR.md` when the release bar changed
-- `docs/INNOVATION_PIPELINE.md` when a strong new idea emerged
-
-Do not end a meaningful work session without write-back.
-
-## Scripts
-
-```bash
-npm run dev      # Local dev server
-npm run build    # Production build (must pass before any push)
-npm run preview  # Preview production build
-```
-
-## Known limitations / future work
-
-- Callsign server-side enforcement: SQL migration in `storage.js` comments needs manual run in Supabase console; also requires "Anonymous sign-ins" enabled in Supabase Auth settings
-- Add `customSettings` column to Supabase leaderboard (`ALTER TABLE leaderboard ADD COLUMN "customSettings" boolean`) so ⚙️ badge appears for all entries (not just localStorage ones)
-- Railgun sound reuses Sniper-ator's CRACK! — may want a distinct sound in `sounds.js`
-- Gamepad rumble is a silent no-op on Firefox/Safari (requires Chrome 68+ Vibration Actuator API)
-- App.jsx is ~1400 lines — the RAF loop stays (closes over too many refs), but further extraction is possible
-- No backend — `play-` and `api-` origins are reserved but not active
-- Capacitor/PWA wrapping for App Store not yet started
-
-
+- canon
+- public promises
+- rights or provenance
+- launch dates
+- security or data handling
