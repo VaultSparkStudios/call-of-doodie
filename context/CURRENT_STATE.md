@@ -1,18 +1,28 @@
 # Current State
 
 ## Build
-- Status: ✅ passing (`npm run build` clean, 4.4s, 757KB bundle)
-- Latest commit: `dd3c36d` — Session 26
-- Branch: `main`, pushed to `origin/main`
+- Status: ✅ passing (`npm run build` clean, 765KB bundle; `npm test` 65/65 passing; 0 lint errors)
+- Latest commit: `158c459` — Session 28
+- Branch: `main`, clean, pushed to `origin/main`
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
 
 ## Architecture sizes (approx)
-- `App.jsx`: ~3400+ lines (game loop + state orchestrator)
+- `App.jsx`: ~3500 lines (game loop + state orchestrator)
 - `drawGame.js`: ~1050 lines (pure render, no React setters)
 - `gameHelpers.js`: ~200 lines — spawnEnemy/spawnBoss/BOSS_ROTATION
-- `constants.js`: large — WEAPONS(12), ENEMY_TYPES(22), PERKS(40+), CURSED_PERKS, ACHIEVEMENTS(57), DIFFICULTIES, META_TREE, getWeeklyGauntlet, etc.
+- `constants.js`: large — WEAPONS(12), ENEMY_TYPES(22), PERKS(27+cursed), ACHIEVEMENTS(57), DIFFICULTIES, META_TREE, getWeeklyGauntlet, etc.
 - `sounds.js`: ~571 lines — Web Audio API synthesis + procedural background music
 - `storage.js`: ~400 lines — Supabase + localStorage, career, meta, missions, meta tree, run history
+
+## CI / Quality gate
+- `quality` job: ESLint (`--max-warnings -1`) + `npm test` (65 tests) runs before build/deploy
+- `build` job: `needs: quality` → `deploy` job: `needs: build`
+- 68 pre-existing warnings in codebase (not errors); CI blocks only on new errors
+
+## Test suite (65 tests — Vitest 2 + jsdom 25)
+- `src/utils/loadoutCode.test.js` — 26 tests (encodeLoadout, decodeLoadout, isValidLoadoutCode)
+- `src/storage.test.js` — 11 tests (getAccountLevel edge cases + tier thresholds)
+- `src/constants.test.js` — 28 tests (shape validation, uniqueness, required fields)
 
 ## Active game modes (all mutually exclusive)
 - **Normal**: standard run — mode: null
@@ -38,6 +48,29 @@
 - mode (score_attack/daily_challenge/cursed/boss_rush/speedrun/gauntlet/null), game_id ('cod'), sig (HMAC)
 - callsign_claims table + RLS policy ✅ live 2026-03-26
 - prestige column: ⚠ PENDING — run `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;`
+- supporter column: ⚠ PENDING — run `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
+- callsign_claims.supporter: ⚠ PENDING — run `ALTER TABLE callsign_claims ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
+
+## Analytics (PostHog — gated on VITE_POSTHOG_KEY)
+- Events tracked: game_start, mode_start, death, wave_reached, wave_milestone, perk_chosen, perk_skipped, weapon_switch
+- `gameCtx({difficulty, mode, wave, score})` — standard context builder
+- `resolveMode(...)` — canonical mode string from boolean refs
+- `identify(name, {accountLevel, prestige})` — called on username continue
+- ⚠ VITE_POSTHOG_KEY not yet in GitHub Actions secrets (silent no-op until added)
+
+## Accessibility (Session 28)
+- Skip link: `<a href="#game-canvas" className="skip-link">` — keyboard users bypass nav
+- aria-live region: `<div aria-live="polite">` announces wave start + boss cutscene
+- Canvas: `id="game-canvas"` for skip-link target
+- `:focus-visible` gold outline CSS (3px solid #FFD700, outline-offset 2px)
+- `.skip-link` CSS: off-screen until focused, then visible
+- `useFocusTrap(ref, enabled)` hook — Tab/Shift+Tab trap + focus restore on unmount
+
+## Supporter system (Session 28 — cosmetic only)
+- `src/utils/supporter.js` — isSupporter(), setSupporter() (localStorage `cod-supporter-v1`)
+- `src/components/SupporterModal.jsx` — Ko-fi link + "already supported" claim; role="dialog", aria-modal
+- `LeaderboardPanel.jsx` — ⭐ badge on rows where `e.supporter === true`
+- `MenuScreen.jsx` — "❤️ SUPPORT THE DEV" / "⭐ SUPPORTER" footer button
 
 ## localStorage keys (complete)
 | Key | Purpose |
@@ -51,22 +84,26 @@
 | `cod-callsign-v1` | Locked callsign |
 | `cod-run-history-v1` | Last 10 run summaries |
 | `cod-custom-loadouts-v1` | 3-slot custom loadout presets |
+| `cod-supporter-v1` | Supporter badge claim (localStorage Option A) |
 | `cod-ghost-{mode}-v1` | sessionStorage per-mode ghost positions |
 | `cod-music-muted` / `cod-music-vibe` / `cod-colorblind` / `cod-settings-v1` / `cod-presets-v1` / `cod-tutorial-v1` | Prefs |
 
-## New utilities (session 26)
-- `src/utils/analytics.js` — PostHog CDN loader (VITE_POSTHOG_KEY gated)
-- `src/utils/loadoutCode.js` — 3-char hex loadout share code
-- `src/components/MetaTreePanel.jsx` — META_TREE browser UI
-- `eslint.config.js` — ESLint 9 flat config
+## New utilities (session 28)
+- `src/hooks/useFocusTrap.js` — focus trap + restore for modals
+- `src/utils/supporter.js` — isSupporter(), setSupporter()
+- `src/components/SupporterModal.jsx` — Ko-fi supporter modal
+- Test files: loadoutCode.test.js, storage.test.js, constants.test.js
 
 ## Vault Member Integration (live as of 2026-03-24)
 - `src/storage.js` — `_tryAwardVaultPoints()` fires after every leaderboard submit
 - Writes to `game_sessions` table (game_slug: 'call-of-doodie') + calls `award_vault_points` RPC (3 pts)
-- Silent and non-blocking
 
 ## Deferred (user action, non-blocking)
 - Supabase: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;`
+- Supabase: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
+- Supabase: `ALTER TABLE callsign_claims ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
+- VITE_POSTHOG_KEY → add to GitHub Actions secrets when PostHog project created
+- VITE_SENTRY_DSN → add to GitHub Actions secrets when Sentry project created
 - Discord URL: uncomment footer link in `MenuScreen.jsx` when invite URL available
 
 ## PWA
@@ -74,6 +111,7 @@
 - SW strategy: cache-first assets, stale-while-revalidate shell, network-only API, offline fallback
 
 ## Known issues (minor, low priority)
+- Speedrun leaderboard: sorts by score (wrong — should sort by time ascending)
 - Boss ground slam: random stagger can shorten 90-frame warning on first cycle
 - Overclocked perk: taking it twice resets overclockedShots mid-game
 - Gamepad rumble requires Chrome 68+

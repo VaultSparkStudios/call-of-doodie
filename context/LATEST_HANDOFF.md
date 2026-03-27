@@ -1,66 +1,97 @@
-# Latest Handoff — Session 26 Closeout
+# Latest Handoff — Session 28 Closeout
 
 This is the authoritative active handoff file for this repo.
 
-**Date:** 2026-03-26
+**Date:** 2026-03-27
 **Branch:** `main`, clean, pushed
-**Build:** ✅ passes (`npm run build` — 757KB bundle, no errors)
+**Build:** ✅ passes (`npm run build` — 765KB bundle, 0 errors; `npm test` — 65/65 passing; `npm run lint` — 0 errors)
 
 ---
 
-## Deferred (user to action — non-blocking)
-
-| Item | What to do |
-|------|-----------|
-| **Supabase prestige migration** | Run in Supabase SQL Editor: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;` — enables prestige ★ badge on leaderboard rows |
-| **Discord invite URL** | When ready, add URL to `MenuScreen.jsx` footer — search for `// no game Discord yet` comment |
+## Where We Left Off (Session 28)
+- Shipped: 19 improvements across 4 groups — analytics, accessibility, testing/CI, monetization
+- Tests: 65 passing (loadoutCode 26 / storage 11 / constants 28) · delta: +65 this session
+- Deploy: deployed to github-pages (commit 158c459)
 
 ---
 
-## What was done this session (Session 26)
+## Human Action Required
 
-### Audit + quality pass
-- Fixed critical QR mask bug (`qrEncode.js`) — mask was never applied because function-module check used post-fill state; added separate `fn[][]` boolean matrix
-- Added QR error fallback in `DeathScreen.jsx` — shows raw URL as selectable text on encode failure
-- Acid pool damage tuned: 0.8→0.5 dmg/frame (~30/sec, ~3.3s TTK on Normal)
-- Boss Rush warmup extended: bosses now start at wave 4 (was wave 3)
+- [ ] **Supabase prestige migration** — Run in SQL Editor: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;` — enables prestige ★ badge on leaderboard rows
+- [ ] **Supabase supporter migration** — Run: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;` AND `ALTER TABLE callsign_claims ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;` — enables ⭐ badge sync when Option B webhook ships
+- [ ] **PostHog setup** — Create PostHog project → add `VITE_POSTHOG_KEY` to GitHub Actions secrets → analytics will start tracking immediately
+- [ ] **Sentry setup** — Create Sentry project → add `VITE_SENTRY_DSN` to GitHub Actions secrets → error reporting will activate
 
-### New systems shipped
-- **ESLint 9 flat config** — `eslint.config.js` + `npm run lint` script; react-hooks + react-refresh plugins
-- **PostHog analytics** — `src/utils/analytics.js`; gated on `VITE_POSTHOG_KEY` env var; no-op when absent
-- **Sentry error tracking** — `@sentry/react` in `main.jsx` + `ErrorBoundary.jsx`; gated on `VITE_SENTRY_DSN`
-- **Loadout Code** — `src/utils/loadoutCode.js`; 3-char hex share code (weapon + starter); import/export in loadout builder modal
-- **Reactive Soundtrack** — `setMusicTier(0-2)` in `sounds.js`; combo count drives vibe upward every 60 frames
-- **Reduced-Motion mode** — `reducedMotion` setting in `settings.js`; screens shake / flashes / pulses gated in `drawGame.js`; toggle in SettingsPanel Visual tab; also auto-detects `prefers-reduced-motion` media query
-- **META_TREE** — 4-branch permanent upgrade tree (Offense/Defense/Utility/Chaos × 4 nodes each) in `constants.js`; `loadMetaTree()`/`unlockMetaNode()` in `storage.js`; `MetaTreePanel.jsx` UI; full bonus application in `App.jsx` `initGame`
-- **Gauntlet Mode** — weekly fixed-weapon challenge via `getWeeklyGauntlet()` (Mulberry32 PRNG seeded by week#); no shop; leaderboard mode: `"gauntlet"`
-- **Speedrun Mode** — live green timer in HUD (⏱ MM:SS, 500ms tick); leaderboard mode: `"speedrun"`
-- **Adaptive Difficulty Assist** — tracks `_waveDeaths` per wave; after 3 deaths offers +50HP assist button in MenuScreen (once per wave, once per run)
-- **Perk Synergy Combos** — 5 combos fire toast on matching perk pair (Death's Door, Afterburner, Fragile Fury, Pack Rat, Sniper's Mark)
-- **Kill Frenzy** (META_TREE off4) — 1.2× move speed for 1s after each kill; `_killFrenzyTimer` countdown in game loop
-- **META_TREE armor** (`_treeArmorMult`) applied to all 5 player damage points: enemy bullets, rent explosion, ground slam, charge, melee
+---
 
-### Files added
-- `eslint.config.js`
-- `src/utils/analytics.js`
-- `src/utils/loadoutCode.js`
-- `src/components/MetaTreePanel.jsx`
+## What was done this session (Session 28)
 
-### Files modified
-- `src/App.jsx` — initGame META bonuses, Kill Frenzy, armor mult, setMusicTier, speedrun/gauntlet mode wiring, new props to MenuScreen/HUD/DeathScreen
-- `src/constants.js` — META_TREE, META_TREE_NODE_IDS, getWeeklyGauntlet()
-- `src/storage.js` — loadMetaTree(), _saveMetaTree(), unlockMetaNode()
-- `src/sounds.js` — setMusicTier(), _musicComboTier
-- `src/settings.js` — reducedMotion default
-- `src/drawGame.js` — _rm gate on shake/flash/pulse
-- `src/main.jsx` — Sentry init
-- `src/components/ErrorBoundary.jsx` — Sentry.captureException
-- `src/components/HUD.jsx` — speedrunMode + startTime props, live timer, tick interval
-- `src/components/MenuScreen.jsx` — Speedrun + Gauntlet mode buttons, Meta Tree button, Assist button, Loadout Code I/O, MetaTreePanel render
-- `src/components/SettingsPanel.jsx` — reducedMotion toggle (Visual tab)
-- `src/utils/qrEncode.js` — fn[][] mask fix
-- `src/components/DeathScreen.jsx` — qrError fallback
-- `package.json` — ESLint devDeps + lint script + @sentry/react
+### Focus: Analytics, Accessibility, Testing & CI, Monetization
+
+### Analytics
+- Added `gameCtx({difficulty, mode, wave, score})` helper + `resolveMode(...)` to `analytics.js`
+- `identify(name, {accountLevel, prestige})` called on username continue
+- `perk_chosen` + `perk_skipped` events in `applyPerk` (includes all non-chosen perk options)
+- `game_start` + conditional `mode_start` events at end of `startGame`
+- `death` event before death screen transition
+- `wave_reached` + `wave_milestone` (waves 5/10/20/50) in wave increment logic
+- `weapon_switch` event throttled to once per 2s via `weaponSwitchTrackRef`
+- Added `perkOptionsRef` mirror of `perkOptions` state for stale-closure-safe access in game loop
+
+### Accessibility
+- Skip link: `<a href="#game-canvas" className="skip-link">Skip to game</a>` in App.jsx
+- `aria-live="polite"` region announces wave start + boss cutscene name
+- Canvas: `id="game-canvas"` for skip-link target
+- Global CSS: `:focus-visible` gold outline (3px solid #FFD700) + `.skip-link` off-screen-until-focused
+- `src/hooks/useFocusTrap.js` — Tab/Shift+Tab trap within modal container + focus restore on unmount
+- Applied `useFocusTrap` to `SupporterModal.jsx`
+
+### Testing & CI
+- `src/utils/loadoutCode.test.js` — 26 tests (all weapons 0-12, starters, edge cases, clamping, case-insensitivity)
+- `src/storage.test.js` — 11 tests (getAccountLevel: 0/null/undefined/specific values/monotonic/tier thresholds)
+- `src/constants.test.js` — 28 tests (WEAPONS, ENEMY_TYPES, DIFFICULTIES, PERKS, ACHIEVEMENTS shape + uniqueness)
+- `vite.config.js` — `test:` block added (jsdom env, globals, include patterns, coverage config)
+- `package.json` — `"test"`, `"test:watch"`, `"test:coverage"` scripts + vitest/jsdom devDeps
+- `.github/workflows/deploy.yml` — `quality` job (lint + test) added; `build` now `needs: quality`
+
+### Monetization
+- `src/utils/supporter.js` — `isSupporter()` + `setSupporter()` (localStorage `cod-supporter-v1`)
+- `src/components/SupporterModal.jsx` — Ko-fi link + "I already supported" claim; `role="dialog"` + `aria-modal` + `useFocusTrap` + Escape-to-close
+- `src/components/LeaderboardPanel.jsx` — `SupporterBadge` component; ⭐ badge rendered on rows where `e.supporter === true`
+- `src/components/MenuScreen.jsx` — "❤️ SUPPORT THE DEV" / "⭐ SUPPORTER" footer button; `SupporterModal` render
+
+### Bug fix
+- `src/components/PauseMenu.jsx` — `useRef(null)` and `useEffect` for mini-map were after early `return` statements (react-hooks/rules-of-hooks error); moved both to before first early return
+
+---
+
+## Files added (session 28)
+- `src/hooks/useFocusTrap.js`
+- `src/utils/supporter.js`
+- `src/components/SupporterModal.jsx`
+- `src/utils/loadoutCode.test.js`
+- `src/storage.test.js`
+- `src/constants.test.js`
+
+## Files modified (session 28)
+- `src/utils/analytics.js` — gameCtx(), resolveMode()
+- `src/App.jsx` — analytics tracking (7 sites), perkOptionsRef, weaponSwitchTrackRef, liveAnnounce state, skip link, aria-live, canvas id, global CSS
+- `src/components/PauseMenu.jsx` — hooks-after-return bug fix
+- `src/components/LeaderboardPanel.jsx` — SupporterBadge
+- `src/components/MenuScreen.jsx` — supporter button + SupporterModal
+- `vite.config.js` — test block
+- `package.json` — test scripts + vitest devDeps
+- `.github/workflows/deploy.yml` — quality gate job
+
+---
+
+## Suggested next session priorities
+
+1. Fix Speedrun leaderboard sort: time ascending (currently sorts by score — **wrong**)
+2. Achievements for Speedrun + Gauntlet modes (0 currently)
+3. Gauntlet difficulty sub-tabs (parity with Boss Rush)
+4. Run Supabase migrations (prestige + supporter columns — see Human Action Required above)
+5. Add PostHog + Sentry env vars to GitHub Actions secrets
 
 ---
 
@@ -78,31 +109,6 @@ This is the authoritative active handoff file for this repo.
 
 ---
 
-## META_TREE nodes (constants.js)
-
-| Branch | id | Bonus |
-|---|---|---|
-| Offense | off1 | +5% damage |
-| | off2 | +10% fire rate |
-| | off3 | +8% crit chance |
-| | off4 | Kill Frenzy: +20% speed 1s/kill |
-| Defense | def1 | +15 max HP |
-| | def2 | -8% incoming damage (_treeArmorMult) |
-| | def3 | +8 HP on wave clear |
-| | def4 | Last Stand: 50 HP restore once/run |
-| Utility | util1 | +15% ammo capacity |
-| | util2 | +10% XP gain |
-| | util3 | +10% coin drops |
-| | util4 | Free first wave shop |
-| Chaos | cha1 | +10% weekly mutation boost |
-| | cha2 | +50% coin drops (stacks with util3) |
-| | cha3 | Extra Gauntlet perk slot |
-| | cha4 | Pandemonium: random modifier each run |
-
-Storage key: `cod-meta-tree-v1`
-
----
-
 ## Key env vars (GitHub Actions secrets)
 
 | Var | Purpose |
@@ -110,16 +116,5 @@ Storage key: `cod-meta-tree-v1`
 | `VITE_SUPABASE_URL` | Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon key |
 | `VITE_SCORE_HMAC_SECRET` | Score integrity HMAC |
-| `VITE_POSTHOG_KEY` | PostHog analytics (optional) |
-| `VITE_SENTRY_DSN` | Sentry error tracking (optional) |
-
----
-
-## Suggested next session priorities
-
-1. Playtest Speedrun + Gauntlet modes — balance, leaderboard display
-2. Add Speedrun/Gauntlet tabs to `LeaderboardPanel.jsx`
-3. Balance playtest: Meta Tree node costs, Kill Frenzy duration, Adaptive Assist threshold
-4. QR code scanner test on mobile device
-5. Run Supabase prestige migration (see Deferred above)
-6. Discord URL when ready
+| `VITE_POSTHOG_KEY` | PostHog analytics (optional — silent no-op if absent) |
+| `VITE_SENTRY_DSN` | Sentry error tracking (optional — silent no-op if absent) |

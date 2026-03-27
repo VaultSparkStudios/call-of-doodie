@@ -7,10 +7,10 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▁▇ (bootstrap → s26)
-3-session avg: Dev 8 | Align 9 | Momentum 9 | Engage 8 | Process 8
-Avg total: 42 / 50  |  Velocity trend: ↑ +37  |  Debt: →
-Last session: 2026-03-26 | Session 26 | Total: 42/50 | Velocity: +37
+Sparkline (last 5 totals): ▁▆▆
+3-session avg: Dev 8.5 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 7.3
+Avg total: 30.3 / 50  |  Velocity trend: →  |  Debt: →
+Last session: 2026-03-27 | Session 28 | Total: 44/50 | Velocity: 11
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -93,3 +93,32 @@ SIL brainstorm for next session:
 **Committed to TASK_BOARD:**
 - [SIL] Instrument play-session counter for Engagement tracking
 - [SIL] Define next content milestone (enemy type or perk set)
+
+---
+
+## 2026-03-27 — Session 28 | Total: 44/50 | Velocity: 11 | Debt: →
+Rolling avg (last 3): Dev 8.5 [N=2] | Align 9.0 [N=2] | Momentum 9.0 [N=2] | Engage 8.0 [N=2] | Process 7.3 [N=3]
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | ↑ | 65 tests added, CI quality gate enforced, hooks bug fixed, 0 lint errors |
+| Creative Alignment | 9 | → | Ko-fi cosmetic-only monetization aligns with no-pay-to-win SOUL |
+| Momentum | 9 | → | 4 failing audit areas closed in one session; 19 distinct improvements |
+| Engagement | 8 | → | Supporter path added, analytics now capturing 7+ events |
+| Process Quality | 9 | ↑ | CI enforces quality pre-deploy; test suite is authoritative; handoff complete |
+| **Total** | **44/50** | ↑ | |
+
+**Top win:** 65-test suite + CI quality gate shipped in one session — codebase now has machine-enforced quality before every deploy.
+**Top gap:** Speedrun leaderboard still sorts by score (wrong — should be time ascending); Speedrun/Gauntlet have 0 achievements.
+**Intent outcome:** Achieved — all four targeted audit areas (Analytics C+, Accessibility D+, Testing F, Monetization F) implemented.
+
+**IGNIS note:** Four failing audit categories addressed in one session by scoping each to its minimum viable improvement rather than over-engineering any single area.
+
+**Brainstorm**
+1. Fix Speedrun leaderboard sort to time ascending — high leverage, trivially small fix, high visibility
+2. Achievements for Speedrun + Gauntlet modes — content gap, easy to spec from existing achievement patterns
+3. Ko-fi webhook → Supabase Edge Function for cloud supporter sync — closes the honor-system gap in Option A
+4. Gauntlet difficulty sub-tabs — parity with Boss Rush, low complexity
+5. ARIA labels pass on MenuScreen + DeathScreen — accessibility pass 2, completes the a11y story
+
+**Committed to TASK_BOARD:** [SIL] Fix Speedrun LB sort: time ascending · [SIL] Achievements for Speedrun + Gauntlet modes

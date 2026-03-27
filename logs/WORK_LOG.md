@@ -36,3 +36,20 @@ Append chronological entries.
   - Added: META Tree node costs are estimates — need playtest balance pass
   - Added: VITE_POSTHOG_KEY + VITE_SENTRY_DSN not yet in GitHub Actions secrets (analytics/errors silently disabled until added)
 - Recommended next move: Add Speedrun/Gauntlet leaderboard tabs; playtest META Tree; add env vars to GitHub Actions; run Supabase prestige migration
+
+---
+
+### 2026-03-27 — Session 28: Analytics, Accessibility, Testing & CI, Monetization
+
+- Goal: Close all four failing audit areas (Analytics C+, Accessibility D+, Testing F, Monetization F)
+- What changed: 19 improvements across analytics, accessibility, test suite, CI gate, supporter system
+- Files or systems touched:
+  - NEW: src/hooks/useFocusTrap.js, src/utils/supporter.js, src/components/SupporterModal.jsx, src/utils/loadoutCode.test.js, src/storage.test.js, src/constants.test.js
+  - MOD: src/utils/analytics.js (gameCtx/resolveMode), src/App.jsx (7 analytics sites + a11y + refs), src/components/PauseMenu.jsx (hooks bug fix), src/components/LeaderboardPanel.jsx (SupporterBadge), src/components/MenuScreen.jsx (supporter button), vite.config.js (test block), package.json (test scripts + devDeps), .github/workflows/deploy.yml (quality gate)
+  - DOCS: context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, logs/WORK_LOG.md, context/SELF_IMPROVEMENT_LOOP.md, docs/CREATIVE_DIRECTION_RECORD.md, context/PROJECT_STATUS.json, audits/2026-03-27.json
+- Risks created or removed:
+  - Removed: 0 lint errors (was 2 errors from PauseMenu hooks-after-return)
+  - Removed: CI now rejects broken code before deploy (quality gate enforced)
+  - Added: Speedrun LB sort is wrong (sorts by score, should be time ascending) — needs fix next session
+  - Added: Supabase supporter + prestige columns not yet migrated — ⭐ badge won't sync until user runs migrations
+- Recommended next move: Fix Speedrun LB sort (time asc); add achievements for Speedrun/Gauntlet; run Supabase migrations; add PostHog/Sentry env vars to GitHub Actions

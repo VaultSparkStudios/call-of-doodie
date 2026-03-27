@@ -39,3 +39,15 @@ brief, README, AGENTS notes, and session handoffs.
 - Approval source: shipped challenge-link and ghost-mode feature direction
 - Evidence link or reference: `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`
 - Supersedes prior entry: none
+
+### 2026-03-27 - Cosmetic-only monetization via Ko-fi; no pay-to-win
+
+- Area: monetization + product identity
+- Human decision or guidance: focus the session on monetization as a failing audit area; the direction was explicitly cosmetic-only (badge, title) with Ko-fi as the payment channel — not Stripe, not in-game currency, no gameplay advantage
+- Previous state: no monetization path
+- New required direction: any supporter/monetization features must be cosmetic-only; the ⭐ badge is a recognition layer, not a gameplay advantage; "100% cosmetic. No pay-to-win." is the official product copy
+- Why this matters: preserves the humor-first, community-positive identity; pay-to-win would directly contradict the project's brand and player trust
+- Impact on canon / brand / production: future monetization features (e.g. cosmetic skins, title packs) should follow this pattern; any feature that grants gameplay advantage is off-limits
+- Approval source: user session directive (Session 28); copy written in `SupporterModal.jsx` confirms the intent
+- Evidence link or reference: `src/components/SupporterModal.jsx`, `context/LATEST_HANDOFF.md` Session 28
+- Supersedes prior entry: none

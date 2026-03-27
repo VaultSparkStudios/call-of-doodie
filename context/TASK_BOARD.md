@@ -1,11 +1,23 @@
 # Task Board
 
-## Deferred (user action required — non-blocking)
-- ⏳ Run Supabase prestige migration: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;`
+## Human Action Required
+- [ ] **Supabase prestige migration** — Run in SQL Editor: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;`
+- [ ] **Supabase supporter migration (leaderboard)** — Run: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
+- [ ] **Supabase supporter migration (callsign_claims)** — Run: `ALTER TABLE callsign_claims ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
+- [ ] **PostHog project setup** — Create project at posthog.com, add `VITE_POSTHOG_KEY` to GitHub Actions secrets → enables analytics tracking
+- [ ] **Sentry project setup** — Create project at sentry.io, add `VITE_SENTRY_DSN` to GitHub Actions secrets → enables error tracking
+
+## Deferred (non-blocking)
 - ⏳ Discord invite URL → uncomment footer link in `MenuScreen.jsx` (search `// no game Discord yet`)
 
+## Now
+- [SIL] Fix Speedrun leaderboard: sort by time ascending (currently sorts by score — wrong)
+- [SIL] Achievements for Speedrun + Gauntlet modes (0 currently)
+
 ## Backlog
-- Add Speedrun + Gauntlet tabs to `LeaderboardPanel.jsx`
+- Gauntlet difficulty sub-tabs (like Boss Rush has)
+- Ko-fi webhook → Supabase Edge Function for cloud supporter verification (Option B)
+- ARIA labels pass on MenuScreen + DeathScreen buttons (accessibility pass 2)
 - Balance playtest: META Tree node costs, Kill Frenzy duration, Adaptive Assist threshold
 - QR code scanner test on mobile device
 - iOS Capacitor wrapper (requires Mac + Xcode 15+ + Apple Developer $99/yr)
@@ -13,8 +25,32 @@
 - Boss Rush balance (warmup at wave 4; may need further tuning)
 - Consider `customSettings` boolean column migration for Supabase (⚙️ badge visible for all entries)
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
-- PostHog `VITE_POSTHOG_KEY` — add to GitHub Actions secrets when PostHog project created
-- Sentry `VITE_SENTRY_DSN` — add to GitHub Actions secrets when Sentry project created
+
+## Done (session 28 — 2026-03-27)
+- ✅ Analytics: `gameCtx()` + `resolveMode()` helpers in `analytics.js`
+- ✅ Analytics: `identify()` called on username continue (accountLevel + prestige)
+- ✅ Analytics: `perk_chosen` + `perk_skipped` events (all non-chosen perks)
+- ✅ Analytics: `game_start` + `mode_start` events
+- ✅ Analytics: `death` event with full context
+- ✅ Analytics: `wave_reached` + `wave_milestone` (waves 5/10/20/50)
+- ✅ Analytics: `weapon_switch` throttled 2s
+- ✅ Accessibility: skip link (`<a href="#game-canvas" className="skip-link">`)
+- ✅ Accessibility: `aria-live="polite"` region for wave/boss announcements
+- ✅ Accessibility: `:focus-visible` gold outline CSS + `.skip-link` CSS
+- ✅ Accessibility: `useFocusTrap.js` hook (Tab/Shift+Tab trap + focus restore)
+- ✅ Testing: 65 tests — loadoutCode(26) + storage(11) + constants(28) — all passing
+- ✅ CI: `quality` job (lint + test) gates build/deploy in `deploy.yml`
+- ✅ Monetization: `SupporterModal.jsx` — Ko-fi link + badge claim
+- ✅ Monetization: `supporter.js` localStorage helpers
+- ✅ Monetization: ⭐ badge in `LeaderboardPanel.jsx`
+- ✅ Monetization: Support button in `MenuScreen.jsx` footer
+- ✅ Bug fix: `PauseMenu.jsx` hooks-after-return (react-hooks/rules-of-hooks — was 2 errors)
+
+## Done (session 27 — 2026-03-26)
+- ✅ Speedrun + Gauntlet leaderboard tabs in `LeaderboardPanel.jsx` (🏃 / 🏋 tab buttons)
+- ✅ Speedrun/Gauntlet leaderboard rows display mode badge
+- ✅ Wave 40+ berserker elite enemy variants (harder, faster, red glow)
+- ✅ All context/handoff files updated and committed
 
 ## Done (session 26 — 2026-03-26)
 - ✅ ESLint 9 flat config (`eslint.config.js`) + `npm run lint` script
