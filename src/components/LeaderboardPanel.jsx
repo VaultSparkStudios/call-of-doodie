@@ -8,6 +8,8 @@ const MODE_TABS = [
   { key: "daily_challenge", label: "📅 DAILY",      color: "#00E5FF" },
   { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "#FF3333" },
   { key: "cursed",          label: "☠ CURSED",      color: "#CC00FF" },
+  { key: "speedrun",        label: "🏃 SPEEDRUN",   color: "#00FF88" },
+  { key: "gauntlet",        label: "🏋️ GAUNTLET",   color: "#AA44FF" },
   { key: "__today__",       label: "🌅 TODAY",      color: "#00FF88" },
 ];
 
@@ -118,6 +120,8 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
     : activeMode === "daily_challenge" ? leaderboard.filter(e => e.mode === "daily_challenge")
     : activeMode === "boss_rush"       ? leaderboard.filter(e => e.mode === "boss_rush")
     : activeMode === "cursed"          ? leaderboard.filter(e => e.mode === "cursed")
+    : activeMode === "speedrun"        ? leaderboard.filter(e => e.mode === "speedrun")
+    : activeMode === "gauntlet"        ? leaderboard.filter(e => e.mode === "gauntlet")
     : activeMode === "normal"          ? leaderboard.filter(e => !e.mode || e.mode === "normal")
     : leaderboard
   );
@@ -307,6 +311,8 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       {e.customSettings && <span style={{ fontSize: 9, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
                       {e.mode === "boss_rush" && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.5)", color: "#FF3333", fontWeight: 900, flexShrink: 0 }}>☠BR</span>}
                       {e.mode === "cursed"    && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(204,0,255,0.18)", border: "1px solid rgba(204,0,255,0.5)", color: "#CC00FF", fontWeight: 900, flexShrink: 0 }}>☠CU</span>}
+                      {e.mode === "speedrun"  && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(0,255,136,0.15)", border: "1px solid rgba(0,255,136,0.5)", color: "#00FF88", fontWeight: 900, flexShrink: 0 }}>🏃SR</span>}
+                      {e.mode === "gauntlet"  && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(170,68,255,0.18)", border: "1px solid rgba(170,68,255,0.5)", color: "#AA44FF", fontWeight: 900, flexShrink: 0 }}>🏋GT</span>}
                       <span style={{ flexShrink: 0 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
                     </div>
                     {/* Bottom row: seed + today badge + prestige label */}

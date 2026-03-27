@@ -833,37 +833,37 @@ export const META_TREE = {
   offense: {
     label: "Offense", emoji: "⚔️", color: "#FF4444",
     nodes: [
-      { id: "off1", name: "Sharp Rounds",  emoji: "🔫", desc: "+5% bullet damage (all weapons)",              cost: 60  },
-      { id: "off2", name: "Hair Trigger",  emoji: "⚡", desc: "+10% fire rate",                               cost: 120, requires: "off1" },
-      { id: "off3", name: "Critical Mass", emoji: "🎯", desc: "+8% crit chance",                              cost: 240, requires: "off2" },
-      { id: "off4", name: "Kill Frenzy",   emoji: "🩸", desc: "+20% move speed for 1s after each kill",       cost: 500, requires: "off3" },
+      { id: "off1", name: "Sharp Rounds",  emoji: "🔫", desc: "+5% bullet damage (all weapons)",              cost: 50  },
+      { id: "off2", name: "Hair Trigger",  emoji: "⚡", desc: "+10% fire rate",                               cost: 100, requires: "off1" },
+      { id: "off3", name: "Critical Mass", emoji: "🎯", desc: "+8% crit chance",                              cost: 200, requires: "off2" },
+      { id: "off4", name: "Kill Frenzy",   emoji: "🩸", desc: "+20% move speed for 1.5s after each kill",     cost: 450, requires: "off3" },
     ],
   },
   defense: {
     label: "Defense", emoji: "🛡️", color: "#4488FF",
     nodes: [
-      { id: "def1", name: "Field Rations", emoji: "💊", desc: "+20 max HP at run start",                      cost: 60  },
-      { id: "def2", name: "Trauma Plates", emoji: "🪖", desc: "-8% incoming damage",                          cost: 120, requires: "def1" },
-      { id: "def3", name: "Field Medic",   emoji: "🏥", desc: "Heal 6 HP on each wave clear",                 cost: 240, requires: "def2" },
-      { id: "def4", name: "Last Stand",    emoji: "👊", desc: "Survive one lethal hit per run (restore 50 HP)", cost: 500, requires: "def3" },
+      { id: "def1", name: "Field Rations", emoji: "💊", desc: "+20 max HP at run start",                      cost: 50  },
+      { id: "def2", name: "Trauma Plates", emoji: "🪖", desc: "-8% incoming damage",                          cost: 100, requires: "def1" },
+      { id: "def3", name: "Field Medic",   emoji: "🏥", desc: "Heal 6 HP on each wave clear",                 cost: 200, requires: "def2" },
+      { id: "def4", name: "Last Stand",    emoji: "👊", desc: "Survive one lethal hit per run (restore 50 HP)", cost: 450, requires: "def3" },
     ],
   },
   utility: {
     label: "Utility", emoji: "🔧", color: "#44CC44",
     nodes: [
-      { id: "util1", name: "Deep Pockets",  emoji: "🎒", desc: "+20% ammo capacity",                          cost: 60  },
-      { id: "util2", name: "Scholar",        emoji: "📚", desc: "+25% XP gain",                               cost: 120, requires: "util1" },
-      { id: "util3", name: "Scavenger Pro",  emoji: "💰", desc: "Enemies drop 30% more 💩 coins",             cost: 240, requires: "util2" },
-      { id: "util4", name: "Supply Drop",    emoji: "📦", desc: "Wave shop includes 1 guaranteed free item",  cost: 500, requires: "util3" },
+      { id: "util1", name: "Deep Pockets",  emoji: "🎒", desc: "+20% ammo capacity",                          cost: 50  },
+      { id: "util2", name: "Scholar",        emoji: "📚", desc: "+25% XP gain",                               cost: 100, requires: "util1" },
+      { id: "util3", name: "Scavenger Pro",  emoji: "💰", desc: "Enemies drop 30% more 💩 coins",             cost: 200, requires: "util2" },
+      { id: "util4", name: "Supply Drop",    emoji: "📦", desc: "Wave shop includes 1 guaranteed free item",  cost: 450, requires: "util3" },
     ],
   },
   chaos: {
     label: "Chaos", emoji: "🌀", color: "#AA44FF",
     nodes: [
-      { id: "cha1", name: "Mutation Affinity", emoji: "🧬", desc: "Weekly mutation bonus effects +25%",       cost: 60  },
-      { id: "cha2", name: "Coin Magnet+",      emoji: "🪙", desc: "+40% Doodie Coin drops all run",          cost: 120, requires: "cha1" },
-      { id: "cha3", name: "Gauntlet Ready",    emoji: "🏋️", desc: "Start Gauntlet runs with a bonus perk choice", cost: 240, requires: "cha2" },
-      { id: "cha4", name: "Pandemonium",       emoji: "💀", desc: "Cursed Runs grant 2× score multiplier",   cost: 500, requires: "cha3" },
+      { id: "cha1", name: "Mutation Affinity", emoji: "🧬", desc: "Weekly mutation bonus effects +25%",       cost: 50  },
+      { id: "cha2", name: "Coin Magnet+",      emoji: "🪙", desc: "+40% Doodie Coin drops all run",          cost: 100, requires: "cha1" },
+      { id: "cha3", name: "Gauntlet Ready",    emoji: "🏋️", desc: "Start Gauntlet runs with a bonus perk choice", cost: 200, requires: "cha2" },
+      { id: "cha4", name: "Pandemonium",       emoji: "💀", desc: "Cursed Runs grant 2× score multiplier",   cost: 450, requires: "cha3" },
     ],
   },
 };

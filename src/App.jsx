@@ -1254,7 +1254,7 @@ export default function CallOfDoodie() {
       gs.waveStreak = 0; // reset streak on death
       // Adaptive difficulty: track deaths on this wave — offer assist after 3
       gs._waveDeaths = (gs._waveDeaths || 0) + 1;
-      if (gs._waveDeaths >= 3 && !gs._assistUsed) setAssistAvailable(true);
+      if (gs._waveDeaths >= 2 && !gs._assistUsed) setAssistAvailable(true);
     }
     // Ghost race: persist this run's positions under mode-specific key
     try {
@@ -1697,7 +1697,7 @@ export default function CallOfDoodie() {
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
       } else {
-        const _waveMax = gs.currentWave >= 40 ? 100 : 60;
+        const _waveMax = gs.currentWave >= 50 ? 100 : gs.currentWave >= 40 ? 80 : 60;
         gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), _waveMax);
         // Apply route modifiers to the upcoming wave
         if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
@@ -2011,7 +2011,7 @@ export default function CallOfDoodie() {
             const _coinDrop = Math.floor(_coinDropBase * (gs.coinMultActive ? 2 : 1) * _coinTreeMult);
             if (_coinDrop > 0) { gs.coins = (gs.coins || 0) + _coinDrop; setCoins(gs.coins); addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000"); }
             // META TREE off4: Kill Frenzy — speed burst
-            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 60; }
+            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 90; }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -2183,7 +2183,7 @@ export default function CallOfDoodie() {
             const _cd2Base = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
             const _cd2 = Math.floor(_cd2Base * (gs.coinMultActive ? 2 : 1) * (gs._treeCoinBonus || 1));
             if (_cd2 > 0) { gs.coins = (gs.coins || 0) + _cd2; setCoins(gs.coins); }
-            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 60; }
+            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 90; }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {

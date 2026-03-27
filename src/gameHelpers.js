@@ -61,8 +61,8 @@ export function spawnEnemy(gs, W, H, difficultyId) {
     // Weekly mutation overrides
     if (gs.mutAlwaysEnraged)  { elite.enrageTriggered = true; elite.speed *= 1.8; }
     if (gs.mutAllExplosive)   { elite.eliteType = "explosive"; }
-    if (wv >= 40 && er < 0.15 && !gs.mutAllExplosive) {
-      // Berserker: fast + armored combined
+    if (wv >= 40 && er < (wv >= 50 ? 0.25 : 0.15) && !gs.mutAllExplosive) {
+      // Berserker: fast + armored combined (15% wave 40-49, 25% wave 50+)
       elite.eliteType = "berserker";
       elite.speed    *= 1.7;
       elite.size     *= 0.8;
