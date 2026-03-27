@@ -7,10 +7,10 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▁ (bootstrap)
-3-session avg: Dev — | Align — | Momentum — | Engage — | Process —
-Avg total: — / 50  |  Velocity trend: —  |  Debt: →
-Last session: 2026-03-26 | Session 0 | Total: 5/50 | Velocity: 0
+Sparkline (last 5 totals): ▁▇ (bootstrap → s26)
+3-session avg: Dev 8 | Align 9 | Momentum 9 | Engage 8 | Process 8
+Avg total: 42 / 50  |  Velocity trend: ↑ +37  |  Debt: →
+Last session: 2026-03-26 | Session 26 | Total: 42/50 | Velocity: +37
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -56,6 +56,19 @@ Rate 0–10 per category at each closeout:
 
 ## 2026-03-26 — Session 0 | Bootstrap Baseline | Total: 5/50 | Velocity: 0 | Debt: →
 Rolling avg (last 3): [N/A — bootstrap]
+
+## 2026-03-26 — Session 26 | ESLint + Analytics + Sentry + META Tree + Speedrun + Gauntlet + Loadout Code + Reduced Motion | Total: 42/50 | Velocity: +37 | Debt: →
+Rolling avg (last 3): [insufficient history — single scored session]
+Scores: Dev 8 | Align 9 | Momentum 9 | Engage 8 | Process 8
+Top win: META_TREE permanent upgrade system + Speedrun/Gauntlet modes shipped in one session; clean 757KB build
+Top gap: Speedrun/Gauntlet leaderboard tabs not yet added to LeaderboardPanel; META Tree node costs unplaytested
+Intent outcome: Achieved — all highest-leverage + highest-ceiling audit brainstorm items implemented
+SIL brainstorm for next session:
+  1. Speedrun/Gauntlet leaderboard tabs in LeaderboardPanel (low effort, high visibility)
+  2. META Tree balance pass — cost tuning after playtest data
+  3. PostHog + Sentry env vars wired into GitHub Actions secrets
+  4. Leaderboard mode badge display for speedrun/gauntlet rows
+  5. Gauntlet weekly reveal banner on MenuScreen (show weapon + diff for the week)
 
 | Category | Score | vs Last | Notes |
 |---|---|---|---|

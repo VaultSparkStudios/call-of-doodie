@@ -11,9 +11,11 @@ Before reading any files, determine session mode:
 | **BUILDER MODE** | Default (no qualifier) | Deep work on this project only |
 | **FOUNDER MODE** | User says "start: founder mode" | Cross-project strategy; reads STUDIO_BRAIN.md first |
 
-In **Builder Mode:** read only project files. Skip STUDIO_BRAIN.md unless a specific studio flag is relevant.
+In **Builder Mode:** read only project files. Skip STUDIO_BRAIN.md unless a specific studio flag
+is relevant to this session.
 
-In **Founder Mode:** read `portfolio/STUDIO_BRAIN.md` first for studio-wide context, then proceed with project files.
+In **Founder Mode:** read `portfolio/STUDIO_BRAIN.md` first for studio-wide context, then
+proceed with project files.
 
 ---
 
@@ -43,8 +45,10 @@ Read in this exact order. Do not skip or reorder.
 | 6 | `context/DECISIONS.md` | Key decisions with rationale |
 | 7 | `context/TASK_BOARD.md` | Now / Next / Blocked / Later tasks |
 | 8 | `context/LATEST_HANDOFF.md` | Authoritative handoff from last session |
-| 9 | `context/SELF_IMPROVEMENT_LOOP.md` — **header only** | Rolling Status block: sparkline, averages, last scores |
+| 9 | `context/SELF_IMPROVEMENT_LOOP.md` — **header only** | Rolling Status block: sparkline, averages, last scores. No need to read full entry history. |
 | 10 | Task-specific files | Only after all above are read |
+
+**Founder Mode only:** Also read `portfolio/STUDIO_BRAIN.md` (read between steps 9 and 10).
 
 ---
 
@@ -58,6 +62,10 @@ After reading the SIL Rolling Status header:
 - **If a `[SIL]` item was skipped 2+ sessions → escalate to Now on TASK_BOARD and flag in brief**
 - Surface the top unactioned brainstorm idea from the last SIL entry
 
+**Studio benchmarking (no extra reads required):**
+If STUDIO_BRAIN.md has been read (Founder Mode), note in brief:
+> Studio avg SIL: [X]/50 · This project last session: [X]/50 [↑↓→ vs studio avg]
+
 ---
 
 ## Phase 4 — Startup Rules
@@ -67,6 +75,10 @@ After reading the SIL Rolling Status header:
 - Use `context/LATEST_HANDOFF.md` as the active handoff source
 - Treat any other handoff docs as historical context only
 - Note any assumptions before acting on them
+- **If resuming from a compacted/interrupted session:** check whether the prior session's human
+  direction was recorded in `docs/CREATIVE_DIRECTION_RECORD.md`. If the last CDR entry predates
+  work described in LATEST_HANDOFF.md, flag the gap in the startup brief and recover it at
+  next closeout.
 
 ---
 
@@ -77,13 +89,21 @@ Reply using this exact structure:
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   STARTUP BRIEF — {Project Name}
-  {YYYY-MM-DD} · {BUILDER MODE / FOUNDER MODE}
+  {YYYY-MM-DD} · Session {N} · {BUILDER / FOUNDER MODE}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   IDENTITY     {type} · {status} · {owner}
   STATE        {current phase and overall health}
   PRIORITIES   Now: {task} · Next: {task}
   CONSTRAINTS  {key constraints or limits}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHERE WE LEFT OFF  (Session {N-1})
+  Shipped    {N improvements across N groups — group1, group2, ...}
+             {or: "N tasks completed" if no improvement groups defined}
+  Tests      {N passing (N core / N server / N client) · delta: +N/-N}
+             {or: "N/A" if project has no test suite}
+  Deploy     {deployed to {env} · auto-deploy active / manual / N/A}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   LAST AUDIT   {total}/50 · {date}
@@ -101,8 +121,22 @@ Reply using this exact structure:
   NEXT MOVE    {specific recommended action}
   BLOCKERS     {open blockers or "None"}
   [SIL] FLAGS  {escalated items or "None"}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  IGNIS INSIGHT
+  {One synthesised observation from portfolio/IGNIS_CORE.md
+   specific to this project — e.g. velocity trend, engagement
+   gap, creative drift signal, or stall pattern warning.
+   Write "— insufficient data" if no project entry exists yet.}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**WHERE WE LEFT OFF** data comes from `context/LATEST_HANDOFF.md` — the closeout protocol
+writes it there. If no prior session exists, omit the section entirely.
+
+**IGNIS INSIGHT** data comes from `portfolio/IGNIS_CORE.md` — read only the project-specific
+section (search for the project slug). Do not read the full file. If the file does not exist
+or has no entry for this project, write "— insufficient data for project-specific insight."
 
 ---
 
