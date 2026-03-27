@@ -16,6 +16,7 @@ const META = {
   crosshair:           { label: "Crosshair Style",         desc: "Visual style of your aiming cursor",                       tab: "Visual",   type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
   showDPS:             { label: "Show DPS Counter",        desc: "Display live damage-per-second on the canvas",             tab: "Visual",   type: "toggle" },
   showEnemyHealthBars: { label: "Enemy HP Bars",           desc: "Show health bars above all enemies at all times",           tab: "Visual",   type: "toggle" },
+  reducedMotion:       { label: "Reduced Motion",           desc: "Disables screen shake, flashes & other intense effects",    tab: "Visual",   type: "toggle" },
   grenadeRadiusMult:   { label: "Grenade Blast Radius",    desc: "Explosion size — bigger = more enemies hit",               tab: "Controls", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   autoReload:          { label: "Auto Reload on Empty",    desc: "Automatically reload when magazine hits zero",             tab: "Controls", type: "toggle" },
   rumble:              { label: "Controller Rumble",       desc: "Haptic vibration feedback when using a gamepad",           tab: "Controls", type: "toggle" },

@@ -1,166 +1,125 @@
-# Latest Handoff — Session 19 Closeout
+# Latest Handoff — Session 26 Closeout
 
 This is the authoritative active handoff file for this repo.
 
-If this file conflicts with `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, or
-`CODEX_HANDOFF_*.md`, this file wins.
-
-**Date:** 2026-03-24
-**Last commit:** `ec94066` — Session 19 polish — all outstanding items resolved
+**Date:** 2026-03-26
 **Branch:** `main`, clean, pushed
+**Build:** ✅ passes (`npm run build` — 757KB bundle, no errors)
 
 ---
 
-## 2026-03-24 addendum — Vault Member Integration
+## Deferred (user to action — non-blocking)
 
-- `src/storage.js`: added `_tryAwardVaultPoints()` — fires silently after every `saveToLeaderboard()` call
-- Checks for non-anonymous Vault Member session → writes `game_sessions` row → awards 3 vault points
-- `game_sessions` RLS insert policy added in Supabase SQL Editor
-- Studio-wide Vault Member Integration Standard documented in `VaultSparkStudios.github.io/AGENTS.md`
-- call-of-doodie is the canonical Tier 2 (open game) reference implementation
-
----
-
-## 2026-03-21 addendum
-
-- Added operating overlays for `SYSTEMS`, `CONTENT_PLAN`, `LIVE_OPS`, and `QUALITY_BAR`
-- Added `context/MEMORY_INDEX.md` for faster cold-start session loading
-- Added `plans/CONSTRAINTS_LEDGER.md` and `plans/EXPERIMENT_REGISTRY.md`
-- Updated startup and closeout prompts so these files are part of the gold-standard read and write path
+| Item | What to do |
+|------|-----------|
+| **Supabase prestige migration** | Run in Supabase SQL Editor: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;` — enables prestige ★ badge on leaderboard rows |
+| **Discord invite URL** | When ready, add URL to `MenuScreen.jsx` footer — search for `// no game Discord yet` comment |
 
 ---
 
-## What was done this session (sessions 18 + 19)
+## What was done this session (Session 26)
 
-### Session 18
-Two new enemy types, controller overhaul, multiplayer alternatives:
+### Audit + quality pass
+- Fixed critical QR mask bug (`qrEncode.js`) — mask was never applied because function-module check used post-fill state; added separate `fn[][]` boolean matrix
+- Added QR error fallback in `DeathScreen.jsx` — shows raw URL as selectable text on encode failure
+- Acid pool damage tuned: 0.8→0.5 dmg/frame (~30/sec, ~3.3s TTK on Normal)
+- Boss Rush warmup extended: bosses now start at wave 4 (was wave 3)
 
-**Enemies:**
-- **Doomscroller** (typeIndex 19): regular enemy, wave 9+. Periodically freezes 70/280 frames while "doomscrolling". Color #7B68EE. Defined in `constants.js`, spawned in `gameHelpers.js`.
-- **The Algorithm** (typeIndex 20): boss-only. 700HP, 3-shot spread, Viral Surge ability every ~480 frames (`gs.algorithmSurge` triples spawn rate for 3s). `BOSS_ROTATION = [4, 16, 17, 18, 9, 20]`.
+### New systems shipped
+- **ESLint 9 flat config** — `eslint.config.js` + `npm run lint` script; react-hooks + react-refresh plugins
+- **PostHog analytics** — `src/utils/analytics.js`; gated on `VITE_POSTHOG_KEY` env var; no-op when absent
+- **Sentry error tracking** — `@sentry/react` in `main.jsx` + `ErrorBoundary.jsx`; gated on `VITE_SENTRY_DSN`
+- **Loadout Code** — `src/utils/loadoutCode.js`; 3-char hex share code (weapon + starter); import/export in loadout builder modal
+- **Reactive Soundtrack** — `setMusicTier(0-2)` in `sounds.js`; combo count drives vibe upward every 60 frames
+- **Reduced-Motion mode** — `reducedMotion` setting in `settings.js`; screens shake / flashes / pulses gated in `drawGame.js`; toggle in SettingsPanel Visual tab; also auto-detects `prefers-reduced-motion` media query
+- **META_TREE** — 4-branch permanent upgrade tree (Offense/Defense/Utility/Chaos × 4 nodes each) in `constants.js`; `loadMetaTree()`/`unlockMetaNode()` in `storage.js`; `MetaTreePanel.jsx` UI; full bonus application in `App.jsx` `initGame`
+- **Gauntlet Mode** — weekly fixed-weapon challenge via `getWeeklyGauntlet()` (Mulberry32 PRNG seeded by week#); no shop; leaderboard mode: `"gauntlet"`
+- **Speedrun Mode** — live green timer in HUD (⏱ MM:SS, 500ms tick); leaderboard mode: `"speedrun"`
+- **Adaptive Difficulty Assist** — tracks `_waveDeaths` per wave; after 3 deaths offers +50HP assist button in MenuScreen (once per wave, once per run)
+- **Perk Synergy Combos** — 5 combos fire toast on matching perk pair (Death's Door, Afterburner, Fragile Fury, Pack Rat, Sniper's Mark)
+- **Kill Frenzy** (META_TREE off4) — 1.2× move speed for 1s after each kill; `_killFrenzyTimer` countdown in game loop
+- **META_TREE armor** (`_treeArmorMult`) applied to all 5 player damage points: enemy bullets, rent explosion, ground slam, charge, melee
 
-**Controller:**
-- LT/L2 = ADS zoom (1.28× centered on player, scope ring overlay in screen space in `drawGame.js`)
-- LB/L1 = Grenade (primary); D-pad L/R = prev/next weapon
-- PauseMenu shows both Xbox + PlayStation button labels
+### Files added
+- `eslint.config.js`
+- `src/utils/analytics.js`
+- `src/utils/loadoutCode.js`
+- `src/components/MetaTreePanel.jsx`
 
-**Social / challenge:**
-- **Daily Challenge mode**: `getDailyChallengeSeed()` LCG, `cod-daily-YYYY-MM-DD` localStorage marker. `dailyChallengeRef` + `dailyChallengeMode` state in App.jsx. Submits `mode: "daily_challenge"`.
-- **Ghost mode**: `?vs=SCORE&vsName=NAME` URL params → `challengeVsScore`/`challengeVsName` state → HUD challenge tracker + DeathScreen result card (BEATEN/FAILED).
-- **LeaderboardPanel**: DAILY tab, per-row ⚔️ challenge link button.
-- `mode` column live in Supabase, `score_attack` and `daily_challenge` tagged correctly.
-
-**Other:**
-- Score Attack daily missions (sa_score, sa_kills, sa_wave) in `storage.js`
-- TutorialOverlay redesigned: 6-step, progress dots, auto-advance, NEXT/SKIP/LET'S GO
-- `MAX_PARTICLES=150`, death sound max 1/frame
-- Prestige skin on share card
-
-### Session 19
-Polish pass on all outstanding items:
-
-- `gs.algorithmSurge` now cleared on The Algorithm boss death (both kill paths in App.jsx)
-- Doomscroller frozen visual: pulsing purple ring + "zzz 📱" label above enemy in `drawGame.js`
-- `soundEnemyDeath(19)`: phone-buzz + sad chime; `soundEnemyDeath(20)`: glitch cascade
-- DeathScreen challenge link: ✓ COPIED! green flash (1.5s) via `copiedChallenge` state
-- WaveShopModal: "BOUGHT THIS RUN" history strip (`shopHistory` state in App.jsx → `boughtHistory` prop)
-- LeaderboardPanel DAILY tab: TODAY badge where `e.seed === getDailyChallengeSeed()`
-- Prestige skins P4 🦊 Fox (required: 4), P5 🐉 Dragon (required: 5) in `MenuScreen.jsx`
-- PauseMenu: ⚔️ LEADERBOARD button opens full `LeaderboardPanel` mid-run (receives `leaderboard`, `lbLoading`, `lbHasMore`, `onLoadMore`, `onRefreshLeaderboard`, `username`)
-
----
-
-## Key file map (updated)
-
-| File | Role |
-|------|------|
-| `src/App.jsx` | ~1530 lines. Game loop, all state, refs, startGame, submitScore, applyShopOption, challenge/daily logic |
-| `src/drawGame.js` | ~700 lines. Pure render. ADS zoom scale + scope overlay. Doomscroller zzz visual. |
-| `src/gameHelpers.js` | ~140 lines. spawnEnemy (wave table incl. Doomscroller at wave 9+), spawnBoss (Algorithm init) |
-| `src/constants.js` | WEAPONS(12), ENEMY_TYPES(21 incl. Doomscroller+Algorithm), PERKS, CURSED_PERKS, ACHIEVEMENTS(49), DIFFICULTIES, BOSS_ROTATION |
-| `src/storage.js` | Supabase LB, career stats, meta (cod-meta-v2), missions(24 types incl. sa_*), getDailyChallengeSeed(), hasDailyChallengeSubmitted(), markDailyChallengeSubmitted() |
-| `src/sounds.js` | soundEnemyDeath now handles all 21 types. soundSummonDismissed(). |
-| `src/components/MenuScreen.jsx` | PLAYER_SKINS: 6 entries (P0–P5). getDailyChallengeSeed import. Daily Challenge button. Challenge banner shows vs score. |
-| `src/components/HUD.jsx` | vsScore/vsName props → challenge tracker bar at top:46 |
-| `src/components/DeathScreen.jsx` | vsScore/vsName/dailyChallengeMode props → challenge result card. copiedChallenge state. |
-| `src/components/LeaderboardPanel.jsx` | MODE_TABS: ALL/NORMAL/SCORE ATK/DAILY. todaySeed from getDailyChallengeSeed(). Per-row ⚔️ button. |
-| `src/components/WaveShopModal.jsx` | boughtHistory prop → "BOUGHT THIS RUN" strip |
-| `src/components/PauseMenu.jsx` | ⚔️ LEADERBOARD button. showLb state. LeaderboardPanel import. |
-| `src/components/TutorialOverlay.jsx` | 6-step sequential onboarding, auto-advance 6s, input-mode aware |
+### Files modified
+- `src/App.jsx` — initGame META bonuses, Kill Frenzy, armor mult, setMusicTier, speedrun/gauntlet mode wiring, new props to MenuScreen/HUD/DeathScreen
+- `src/constants.js` — META_TREE, META_TREE_NODE_IDS, getWeeklyGauntlet()
+- `src/storage.js` — loadMetaTree(), _saveMetaTree(), unlockMetaNode()
+- `src/sounds.js` — setMusicTier(), _musicComboTier
+- `src/settings.js` — reducedMotion default
+- `src/drawGame.js` — _rm gate on shake/flash/pulse
+- `src/main.jsx` — Sentry init
+- `src/components/ErrorBoundary.jsx` — Sentry.captureException
+- `src/components/HUD.jsx` — speedrunMode + startTime props, live timer, tick interval
+- `src/components/MenuScreen.jsx` — Speedrun + Gauntlet mode buttons, Meta Tree button, Assist button, Loadout Code I/O, MetaTreePanel render
+- `src/components/SettingsPanel.jsx` — reducedMotion toggle (Visual tab)
+- `src/utils/qrEncode.js` — fn[][] mask fix
+- `src/components/DeathScreen.jsx` — qrError fallback
+- `package.json` — ESLint devDeps + lint script + @sentry/react
 
 ---
 
-## Important gs fields (game loop state)
+## Game Modes (all mutually exclusive, leaderboard mode field)
 
-```js
-gs.scoreAttackMode       // bool — score attack active
-gs.scoreAttackTimeLeft   // frames remaining (18000 at start)
-gs.scoreAttackDone       // bool — timer expired
-gs.adsZoom               // bool — LT/L2 held on controller
-gs.algorithmSurge        // bool — Algorithm Viral Surge active (cleared on boss death)
-gs.playerSkin            // emoji string for helmet overlay ("" = soldier)
-gs.bossKillFlash         // decremented in App.jsx game loop
-gs._deathSoundsThisFrame // reset 0/frame; caps death sounds at 1/frame
-```
-
----
-
-## Refs added in sessions 18–19
-
-```js
-dailyChallengeRef     // useRef(false) — synced with dailyChallengeMode state
-scoreAttackRef        // useRef(false) — synced with scoreAttackMode state
-```
+| Mode | Ref | mode string |
+|------|-----|-------------|
+| Normal | — | null |
+| Score Attack | `scoreAttackRef` | `"score_attack"` |
+| Daily Challenge | `dailyChallengeRef` | `"daily_challenge"` |
+| Cursed Run | `cursedRunRef` | `"cursed"` |
+| Boss Rush | `bossRushRef` | `"boss_rush"` |
+| Speedrun | `speedrunRef` | `"speedrun"` |
+| Gauntlet | `gauntletRef` | `"gauntlet"` |
 
 ---
 
-## State added in sessions 18–19
+## META_TREE nodes (constants.js)
 
-```js
-dailyChallengeMode       // useState(false)
-challengeVsScore         // useState(null) — parsed from ?vs= or set by challenge start
-challengeVsName          // useState(null) — parsed from ?vsName=
-shopHistory              // useState([]) — [{emoji, name}] — reset on startGame
-```
+| Branch | id | Bonus |
+|---|---|---|
+| Offense | off1 | +5% damage |
+| | off2 | +10% fire rate |
+| | off3 | +8% crit chance |
+| | off4 | Kill Frenzy: +20% speed 1s/kill |
+| Defense | def1 | +15 max HP |
+| | def2 | -8% incoming damage (_treeArmorMult) |
+| | def3 | +8 HP on wave clear |
+| | def4 | Last Stand: 50 HP restore once/run |
+| Utility | util1 | +15% ammo capacity |
+| | util2 | +10% XP gain |
+| | util3 | +10% coin drops |
+| | util4 | Free first wave shop |
+| Chaos | cha1 | +10% weekly mutation boost |
+| | cha2 | +50% coin drops (stacks with util3) |
+| | cha3 | Extra Gauntlet perk slot |
+| | cha4 | Pandemonium: random modifier each run |
+
+Storage key: `cod-meta-tree-v1`
 
 ---
 
-## localStorage keys (complete)
+## Key env vars (GitHub Actions secrets)
 
-| Key | Purpose |
+| Var | Purpose |
 |-----|---------|
-| `cod-lb-v5` | Leaderboard fallback |
-| `cod-career-v1` | Career stats |
-| `cod-meta-v2` | Meta progression (prestige, playerSkin, upgradeTiers, careerPoints) |
-| `cod-missions-YYYY-MM-DD` | Daily mission progress |
-| `cod-daily-YYYY-MM-DD` | Daily challenge submitted marker |
-| `cod-callsign-v1` | Locked callsign |
-| `cod-music-muted` | Music mute pref |
-| `cod-music-vibe` | Music vibe id |
-| `cod-colorblind` | Colorblind mode |
-| `cod-settings-v1` | Settings panel values |
-| `cod-presets-v1` | Named settings presets |
-| `cod-tutorial-v1` | Tutorial seen flag |
+| `VITE_SUPABASE_URL` | Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anon key |
+| `VITE_SCORE_HMAC_SECRET` | Score integrity HMAC |
+| `VITE_POSTHOG_KEY` | PostHog analytics (optional) |
+| `VITE_SENTRY_DSN` | Sentry error tracking (optional) |
 
 ---
 
-## Pending (manual, non-blocking)
+## Suggested next session priorities
 
-1. **Callsign_claims SQL migration** — full SQL in `storage.js` comments. Must be run in Supabase console. Also requires "Anonymous sign-ins" enabled in Supabase Auth settings.
-2. Nothing else is blocking gameplay or leaderboard functionality.
-
----
-
-## What to tackle next
-
-Suggested priorities for next session:
-1. Run the callsign_claims SQL migration in Supabase console (client-side enforcement is already live)
-2. Wave 40+ difficulty scaling / new boss type or ability
-3. iOS Capacitor wrapper research
-4. Any Discord link / community feature when an invite URL is ready
-
-## 2026-03-23 portfolio addendum
-
-- Added `context/PORTFOLIO_CARD.md` and `context/PROJECT_STATUS.json`
-- Updated AGENTS, startup, closeout, and memory-index docs so portfolio status is part of standard project operation
-
+1. Playtest Speedrun + Gauntlet modes — balance, leaderboard display
+2. Add Speedrun/Gauntlet tabs to `LeaderboardPanel.jsx`
+3. Balance playtest: Meta Tree node costs, Kill Frenzy duration, Adaptive Assist threshold
+4. QR code scanner test on mobile device
+5. Run Supabase prestige migration (see Deferred above)
+6. Discord URL when ready

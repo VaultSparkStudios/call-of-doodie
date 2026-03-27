@@ -28,6 +28,7 @@ export default function DeathScreen({
   const [showLastWordsKeyboard, setShowLastWordsKeyboard] = useState(false);
   const [copiedChallenge, setCopiedChallenge] = useState(false);
   const [showQR, setShowQR] = useState(false);
+  const [qrError, setQrError] = useState(false);
   const qrCanvasRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
@@ -77,7 +78,9 @@ export default function DeathScreen({
   })() : null;
 
   useEffect(() => {
-    if (!showQR || !qrCanvasRef.current || !challengeUrl) return;
+    if (!showQR || !challengeUrl) return;
+    setQrError(false);
+    if (!qrCanvasRef.current) return;
     try {
       const { matrix, size } = qrEncode(challengeUrl);
       const scale = 6;
@@ -90,7 +93,7 @@ export default function DeathScreen({
       for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
         if (matrix[r][c]) ctx.fillRect((c + 4) * scale, (r + 4) * scale, scale, scale);
       }
-    } catch (e) { console.warn("QR encode failed:", e); }
+    } catch (e) { console.warn("QR encode failed:", e); setQrError(true); }
   }, [showQR, challengeUrl]);
 
   const generateScoreCard = () => new Promise((resolve) => {
@@ -609,9 +612,16 @@ export default function DeathScreen({
       {/* QR Code modal */}
       {showQR && challengeUrl && (
         <div style={{ position: "fixed", inset: 0, zIndex: 400, background: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setShowQR(false)}>
-          <div style={{ background: "#111", border: "1px solid #333", borderRadius: 12, padding: 24, textAlign: "center" }} onClick={e => e.stopPropagation()}>
+          <div style={{ background: "#111", border: "1px solid #333", borderRadius: 12, padding: 24, textAlign: "center", maxWidth: 320 }} onClick={e => e.stopPropagation()}>
             <div style={{ fontSize: 11, color: "#888", letterSpacing: 2, marginBottom: 12, fontFamily: "'Courier New',monospace" }}>SCAN TO CHALLENGE</div>
-            <canvas ref={qrCanvasRef} style={{ imageRendering: "pixelated" }} />
+            {qrError ? (
+              <div style={{ padding: "12px 0" }}>
+                <div style={{ fontSize: 11, color: "#FF4444", marginBottom: 8 }}>QR generation failed</div>
+                <div style={{ fontSize: 9, color: "#888", wordBreak: "break-all", fontFamily: "'Courier New',monospace", userSelect: "all" }}>{challengeUrl}</div>
+              </div>
+            ) : (
+              <canvas ref={qrCanvasRef} style={{ imageRendering: "pixelated" }} />
+            )}
             <div style={{ fontSize: 10, color: "#555", marginTop: 10 }}>tap outside to close</div>
           </div>
         </div>

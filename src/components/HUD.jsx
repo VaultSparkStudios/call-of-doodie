@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
 import { PERK_TIER_COLORS } from "../constants.js";
 
@@ -15,11 +16,20 @@ export default function HUD({
   vsScore, vsName,
   synergyChargeReady, onSynergyCharge,
   cursedHideScore,
+  speedrunMode, startTime,
 }) {
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
   const upgStars = (idx) => "⭐".repeat(weaponUpgrades?.[idx] || 0);
+
+  // Tick state for speedrun timer re-rendering
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (!speedrunMode) return;
+    const id = setInterval(() => setTick(t => t + 1), 500);
+    return () => clearInterval(id);
+  }, [speedrunMode]);
 
   const Tooltip = ({ text, visible }) => {
     if (!visible) return null;
@@ -70,6 +80,18 @@ export default function HUD({
           }
         </div>
       )}
+
+      {/* Speedrun timer */}
+      {speedrunMode && startTime != null && (() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
+        const ss = String(elapsed % 60).padStart(2, "0");
+        return (
+          <div style={{ position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)", fontSize: 20, fontWeight: 900, color: "#00FF80", fontFamily: "'Courier New',monospace", letterSpacing: 3, textShadow: "0 0 12px rgba(0,255,128,0.6)", background: "rgba(0,0,0,0.55)", padding: "2px 12px", borderRadius: 8, border: "1px solid rgba(0,255,128,0.35)", whiteSpace: "nowrap" }}>
+            ⏱ {mm}:{ss}
+          </div>
+        );
+      })()}
 
       {/* Run modifier badge */}
       {runModifier && (
@@ -267,5 +289,3 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady
   );
 }
 
-// useState needed inside DesktopToolbar
-import { useState } from "react";

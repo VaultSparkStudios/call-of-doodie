@@ -2,11 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { drawGame } from "./drawGame.js";
 import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
-  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS,
+  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS, PERKS,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES, WAVE_ROUTES,
+  META_TREE, getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
@@ -19,8 +20,9 @@ import {
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
-  setDangerIntensity, stopDangerDrone,
+  setDangerIntensity, stopDangerDrone, setMusicTier,
 } from "./sounds.js";
+import { analyticsInit, track, identify } from "./utils/analytics.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -249,6 +251,12 @@ export default function CallOfDoodie() {
   const [dailyChallengeMode, setDailyChallengeMode] = useState(false);
   const [cursedRunMode, setCursedRunMode]           = useState(false);
   const [bossRushMode, setBossRushMode]             = useState(false);
+  const [speedrunMode, setSpeedrunMode]             = useState(false);
+  const [gauntletMode, setGauntletMode]             = useState(false);
+  const [assistAvailable, setAssistAvailable]       = useState(false);
+  const [assistUsed, setAssistUsed]                 = useState(false);
+  const speedrunRef  = useRef(false);
+  const gauntletRef  = useRef(false);
   const [draftPending, setDraftPending]             = useState(false);
   const [draftOptions, setDraftOptions]             = useState([]);
   const draftShownRef  = useRef(false);
@@ -292,8 +300,8 @@ export default function CallOfDoodie() {
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
 
-  // ── Anonymous auth init ──────────────────────────────────────────────────
-  useEffect(() => { initAnonAuth(); }, []);
+  // ── Anonymous auth + analytics init ─────────────────────────────────────
+  useEffect(() => { initAnonAuth(); analyticsInit(); }, []);
 
   // ── PWA install prompt ────────────────────────────────────────────────────
   useEffect(() => {
@@ -591,6 +599,38 @@ export default function CallOfDoodie() {
     if (vbtier >= 3) perkModsRef.current.lifesteal = 0.10;
     else if (vbtier >= 2) perkModsRef.current.lifesteal = 0.06;
     else if (vbtier >= 1) perkModsRef.current.lifesteal = 0.03;
+
+    // ── META TREE bonuses ──────────────────────────────────────────────────
+    const _treeUnlocked = loadMetaTree();
+    if (_treeUnlocked.has("off1")) perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.05;
+    if (_treeUnlocked.has("off2")) perkModsRef.current.fireRateMult = (perkModsRef.current.fireRateMult || 1) * 1.10;
+    if (_treeUnlocked.has("off3")) perkModsRef.current.critBonus = (perkModsRef.current.critBonus || 0) + 0.08;
+    if (_treeUnlocked.has("off4")) gsRef.current._killFrenzyUnlocked = true;
+    if (_treeUnlocked.has("def1")) { gsRef.current.player.health += 20; gsRef.current.player.maxHealth += 20; }
+    if (_treeUnlocked.has("def2")) gsRef.current._treeArmorMult = 0.92; // 8% damage reduction applied at hit
+    if (_treeUnlocked.has("def3")) gsRef.current._treeWaveHeal = 6;
+    if (_treeUnlocked.has("def4")) gsRef.current._treeLastStand = true;
+    if (_treeUnlocked.has("util1")) perkModsRef.current.ammoMult = (perkModsRef.current.ammoMult || 1) * 1.20;
+    if (_treeUnlocked.has("util2")) perkModsRef.current.xpMult = (perkModsRef.current.xpMult || 1) * 1.25;
+    if (_treeUnlocked.has("util3")) gsRef.current._treeCoinBonus = 1.30;
+    if (_treeUnlocked.has("util4")) gsRef.current._treeFreeShopItem = true;
+    if (_treeUnlocked.has("cha1")) gsRef.current._treeMutBoost = 1.25;
+    if (_treeUnlocked.has("cha2")) gsRef.current._treeCoinBonus = (gsRef.current._treeCoinBonus || 1) * 1.40;
+    if (_treeUnlocked.has("cha3")) gsRef.current._treeGauntletBonusPerk = true;
+    if (_treeUnlocked.has("cha4") && gsRef.current.cursedRunMode) gsRef.current.killScoreMult = (gsRef.current.killScoreMult || 1) * 2;
+
+    // Kill Frenzy base speed captured after all speed mods applied
+    if (gsRef.current._killFrenzyUnlocked) gsRef.current._killFrenzyBaseSpeed = gsRef.current.player.speed;
+
+    // ── Reduced motion sync ────────────────────────────────────────────────
+    gsRef.current.reducedMotion = settingsRef.current.reducedMotion === true
+      || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+    // ── Gauntlet mode init ─────────────────────────────────────────────────
+    gsRef.current.gauntletMode = gauntletRef.current;
+    gsRef.current.speedrunMode = speedrunRef.current;
+    gsRef.current._waveDeaths = 0;   // per-wave death counter for adaptive assist
+
     // Load daily missions
     dailyMissionsRef.current = getDailyMissions();
     missionDoneRef.current = new Set(
@@ -1186,6 +1226,16 @@ export default function CallOfDoodie() {
       gs.screenShake = 25;
       if (extraLivesRef.current === 0) { extraLivesRef.current = 1; setExtraLives(1); }
     }
+    // META TREE def4: Last Stand — survive one lethal hit, restore 50 HP
+    if (gs?._treeLastStand && !gs._treeLastStandUsed) {
+      gs._treeLastStandUsed = true;
+      gs.player.health = 50; gs.player.invincible = 120;
+      setHealth(50);
+      addText(gs, gs.player.x, gs.player.y - 50, "👊 LAST STAND!", "#4488FF", true);
+      addParticles(gs, gs.player.x, gs.player.y, "#4488FF", 25);
+      gs.screenShake = 12;
+      return false;
+    }
     if (extraLivesRef.current > 0) {
       extraLivesRef.current--; setExtraLives(extraLivesRef.current);
       const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
@@ -1200,7 +1250,12 @@ export default function CallOfDoodie() {
       setTimeout(() => setGuardianAngelFlash(false), 1500);
       return false;
     }
-    if (gs) gs.waveStreak = 0; // reset streak on death
+    if (gs) {
+      gs.waveStreak = 0; // reset streak on death
+      // Adaptive difficulty: track deaths on this wave — offer assist after 3
+      gs._waveDeaths = (gs._waveDeaths || 0) + 1;
+      if (gs._waveDeaths >= 3 && !gs._assistUsed) setAssistAvailable(true);
+    }
     // Ghost race: persist this run's positions under mode-specific key
     try {
       const _gKey = gsRef.current?._ghostKey || "cod-ghost-normal-v1";
@@ -1275,7 +1330,7 @@ export default function CallOfDoodie() {
       wave: gs.currentWave,
       time: Math.floor((Date.now() - startTimeRef.current) / 1000),
       difficulty,
-      mode: scoreAttackRef.current ? "score_attack" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : dailyChallengeRef.current ? "daily_challenge" : null,
+      mode: scoreAttackRef.current ? "score_attack" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : dailyChallengeRef.current ? "daily_challenge" : speedrunRef.current ? "speedrun" : gauntletRef.current ? "gauntlet" : null,
       runSeed,
       modifier: gs.runModifier || null,
       ts: Date.now(),
@@ -1383,7 +1438,7 @@ export default function CallOfDoodie() {
       seed: runSeed,
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
       prestige: loadMetaProgress()?.prestige || 0,
-      mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : undefined,
+      mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : speedrunRef.current ? "speedrun" : gauntletRef.current ? "gauntlet" : undefined,
     };
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const { board, online } = await saveToLeaderboard(entry);
@@ -1483,6 +1538,18 @@ export default function CallOfDoodie() {
       comboRef.current.timer--;
       if (comboRef.current.timer <= 0) { comboRef.current.count = 0; setCombo(0); setComboTimer(0); }
       else if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
+    }
+
+    // ── Reactive soundtrack tier (every 60 frames) ──
+    if (frameCountRef.current % 60 === 0) {
+      const _cc = comboRef.current.count;
+      setMusicTier(_cc >= 5 ? 2 : _cc >= 2 ? 1 : 0);
+    }
+
+    // ── Kill Frenzy (META_TREE off4): +20% speed for 60f after kill ──
+    if ((gs._killFrenzyTimer || 0) > 0) { gs._killFrenzyTimer--; gs.player.speed = gs._killFrenzyBaseSpeed * 1.20; }
+    else if (gs._killFrenzyUnlocked && gs.player.speed === (gs._killFrenzyBaseSpeed || 0) * 1.20) {
+      gs.player.speed = gs._killFrenzyBaseSpeed;
     }
 
     // ── Frame capture for highlight GIF (~10fps) ──
@@ -1587,6 +1654,18 @@ export default function CallOfDoodie() {
         return; // game loop will pause; resumes after player picks a route
       }
       gs._routeSelectDone = false; // reset for next wave
+      gs._waveDeaths = 0;          // reset per-wave death counter for adaptive assist
+      setAssistAvailable(false);
+      setAssistUsed(false);
+
+      // META TREE def3: heal on wave clear
+      if (gs._treeWaveHeal && p) {
+        p.health = Math.min(p.maxHealth, p.health + gs._treeWaveHeal);
+        setHealth(Math.floor(p.health));
+      }
+
+      // Analytics: wave clear event (every 5 waves to avoid spam)
+      if (gs.currentWave % 5 === 0) track("wave_reached", { wave: gs.currentWave, score: gs.score, mode: gs.gauntletMode ? "gauntlet" : gs.speedrunMode ? "speedrun" : null });
 
       if (gs.bossWave) {
         statsRef.current.bossWavesCleared++;
@@ -1609,10 +1688,10 @@ export default function CallOfDoodie() {
       gs.bossWave = false;
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
-      // Boss Rush: bosses start wave 3+ (2-wave warmup to let player find cover)
+      // Boss Rush: bosses start wave 4+ (3-wave warmup to let player gear up)
       const _bossInterval = gs.bossRushMode ? 1 : 5;
       const nextIsBoss = gs.routeForceBoss || (gs.bossRushMode
-        ? gs.currentWave >= 3
+        ? gs.currentWave >= 4
         : gs.currentWave % _bossInterval === 0);
       gs.routeForceBoss = false; // consume the flag
       if (nextIsBoss) {
@@ -1773,8 +1852,8 @@ export default function CallOfDoodie() {
         addText(gs, W / 2, H / 2 + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
         if (gs.waveStreak >= 3) addText(gs, W / 2, H / 2 + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
         soundWaveClear();
-        // Trigger wave shop — every wave for waves 1-4, every 2nd wave for wave 5+
-        const showShop = gs.currentWave < 5 || gs.currentWave % 2 === 0;
+        // Trigger wave shop — every wave for waves 1-4, every 2nd wave for wave 5+; disabled in Gauntlet
+        const showShop = !gs.gauntletMode && (gs.currentWave < 5 || gs.currentWave % 2 === 0);
         if (showShop) {
           const opts = getShopOptions(gs, currentWeaponRef.current);
           setShopOptions(opts);
@@ -1840,6 +1919,7 @@ export default function CallOfDoodie() {
           eb.life = 0;
           let dmg = eb.damage || 8;
           if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
+          dmg *= (gs._treeArmorMult || 1);
           p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
@@ -1927,8 +2007,11 @@ export default function CallOfDoodie() {
             }
             // 💩 Doodie Coin drop
             const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
-            const _coinDrop = _coinDropBase * (gs.coinMultActive ? 2 : 1);
+            const _coinTreeMult = gs._treeCoinBonus || 1;
+            const _coinDrop = Math.floor(_coinDropBase * (gs.coinMultActive ? 2 : 1) * _coinTreeMult);
             if (_coinDrop > 0) { gs.coins = (gs.coins || 0) + _coinDrop; setCoins(gs.coins); addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000"); }
+            // META TREE off4: Kill Frenzy — speed burst
+            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 60; }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -2098,8 +2181,9 @@ export default function CallOfDoodie() {
             }
             // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
             const _cd2Base = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
-            const _cd2 = _cd2Base * (gs.coinMultActive ? 2 : 1);
+            const _cd2 = Math.floor(_cd2Base * (gs.coinMultActive ? 2 : 1) * (gs._treeCoinBonus || 1));
             if (_cd2 > 0) { gs.coins = (gs.coins || 0) + _cd2; setCoins(gs.coins); }
+            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 60; }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
             if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
@@ -2331,7 +2415,7 @@ export default function CallOfDoodie() {
               gs.screenShake = 15;
               const rentDist = Math.hypot(p.x - e.x, p.y - e.y);
               if (rentDist < 220 && p.invincible <= 0) {
-                p.health -= 25; p.invincible = 30; gs.damageFlash = 12;
+                p.health -= 25 * (gs._treeArmorMult || 1); p.invincible = 30; gs.damageFlash = 12;
                 gs.damageThisWave = (gs.damageThisWave || 0) + 1;
                 setHealth(Math.max(0, p.health));
                 addText(gs, p.x, p.y - 30, "-25 RENT DUE!", "#FFD700");
@@ -2422,7 +2506,7 @@ export default function CallOfDoodie() {
             e.groundSlamRadius += 6;
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
-              const _slamDmg = gs.currentWave >= 40 ? 25 : 18;
+              const _slamDmg = (gs.currentWave >= 40 ? 25 : 18) * (gs._treeArmorMult || 1);
               p.health -= gs.glassjaw ? Math.round(_slamDmg * (gs.glassjawMult || 2)) : _slamDmg; p.invincible = 25; gs.damageFlash = 10;
               gs.damageThisWave = (gs.damageThisWave || 0) + 1;
               setHealth(Math.max(0, p.health));
@@ -2516,7 +2600,7 @@ export default function CallOfDoodie() {
           }
           // Hit player while charging
           if (Math.hypot(p.x - e.x, p.y - e.y) < e.size / 2 + 18 && p.invincible <= 0) {
-            let cdmg = 30; if (gs.glassjaw) cdmg *= (gs.glassjawMult || 2);
+            let cdmg = 30; if (gs.glassjaw) cdmg *= (gs.glassjawMult || 2); cdmg *= (gs._treeArmorMult || 1);
             p.health -= cdmg; p.invincible = 35; gs.damageFlash = 12; gs.damageThisWave = (gs.damageThisWave || 0) + 1;
             setHealth(Math.max(0, p.health)); addText(gs, p.x, p.y - 30, "-" + Math.floor(cdmg) + " CHARGE!", "#FF4400");
             rumbleGamepad(0.5, 0.8, 200);
@@ -2654,7 +2738,7 @@ export default function CallOfDoodie() {
           if (gs.dyingEnemies.length < MAX_DYING_ANIM)
             gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
-            p.health -= gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35; p.invincible = 40; gs.damageFlash = 12;
+            p.health -= (gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35) * (gs._treeArmorMult || 1); p.invincible = 40; gs.damageFlash = 12;
             gs.damageThisWave = (gs.damageThisWave || 0) + 1;
             setHealth(Math.max(0, p.health));
             addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
@@ -2684,6 +2768,7 @@ export default function CallOfDoodie() {
         if (d2 < e.size / 2 + 15 && p.invincible <= 0) {
           let dmg = 10 + e.typeIndex * 5;
           if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
+          dmg *= (gs._treeArmorMult || 1);
           p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
@@ -2701,8 +2786,8 @@ export default function CallOfDoodie() {
       const _hDist = Math.hypot(p.x - hz.x, p.y - hz.y);
       if (_hDist < hz.radius) {
         if (hz.type === "acid") {
-          // Acid pool: 0.8 damage per frame
-          const _acidDmg = 0.8 * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
+          // Acid pool: 0.5 damage per frame (~30/sec)
+          const _acidDmg = 0.5 * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
           p.health -= _acidDmg;
           if (frameCountRef.current % 30 === 0) {
             addText(gs, p.x, p.y - 30, `-${Math.round(_acidDmg * 30)} ACID`, "#44FF44");
@@ -3090,6 +3175,12 @@ export default function CallOfDoodie() {
         onSetCursedRunMode={v => { setCursedRunMode(v); cursedRunRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
         bossRushMode={bossRushMode}
         onSetBossRushMode={v => { setBossRushMode(v); bossRushRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; } }}
+        speedrunMode={speedrunMode}
+        onSetSpeedrunMode={v => { setSpeedrunMode(v); speedrunRef.current = v; if (v) { setGauntletMode(false); gauntletRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+        gauntletMode={gauntletMode}
+        onSetGauntletMode={v => { setGauntletMode(v); gauntletRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+        assistAvailable={assistAvailable}
+        onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
       />
     );
   }
@@ -3113,7 +3204,7 @@ export default function CallOfDoodie() {
         gamepadConnected={gamepadConnected} controllerType={controllerType}
         weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
         dailyChallengeMode={dailyChallengeMode}
-        bossRushMode={bossRushMode} cursedRunMode={cursedRunMode}
+        bossRushMode={bossRushMode} cursedRunMode={cursedRunMode} speedrunMode={speedrunMode} gauntletMode={gauntletMode}
         playerSkin={gsRef.current?.playerSkin || ""}
         vsScore={challengeVsScore} vsName={challengeVsName}
         ghostKey={gsRef.current?._ghostKey}
@@ -3313,6 +3404,8 @@ export default function CallOfDoodie() {
         synergyChargeReady={synergyChargeReady}
         onSynergyCharge={fireSynergyCharge}
         cursedHideScore={gsRef.current?.cursedHideScore || false}
+        speedrunMode={speedrunMode}
+        startTime={startTimeRef.current}
       />
 
       {/* Mobile action bar */}

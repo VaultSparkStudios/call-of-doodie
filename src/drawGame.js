@@ -5,8 +5,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   const p = gs.player;
 
   // ────────────────── RENDER ────────────────────────────────────────────
+  const _rm = gs.reducedMotion === true;
   ctx.save();
-  if (gs.screenShake > 0.5) { const _sm = gs.settScreenShakeMult ?? 1; ctx.translate((Math.random() - 0.5) * gs.screenShake * 2 * _sm, (Math.random() - 0.5) * gs.screenShake * 2 * _sm); }
+  if (!_rm && gs.screenShake > 0.5) { const _sm = gs.settScreenShakeMult ?? 1; ctx.translate((Math.random() - 0.5) * gs.screenShake * 2 * _sm, (Math.random() - 0.5) * gs.screenShake * 2 * _sm); }
   // ADS zoom: scale 1.28× centered on player for aim-down-sights effect
   if (gs.adsZoom && p) {
     ctx.translate(p.x, p.y);
@@ -902,15 +903,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.shadowBlur = 0; ctx.globalAlpha = 1;
   }
   // Boss kill golden flash
-  if ((gs.bossKillFlash || 0) > 0) {
+  if (!_rm && (gs.bossKillFlash || 0) > 0) {
     ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
     ctx.fillRect(0, 0, W, H);
   }
   // Damage / kill flash
-  if (gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
-  if (gs.killFlash > 0) { ctx.fillStyle = "rgba(255,215,0," + (gs.killFlash * 0.015) + ")"; ctx.fillRect(0, 0, W, H); }
+  if (!_rm && gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
+  if (!_rm && gs.killFlash > 0) { ctx.fillStyle = "rgba(255,215,0," + (gs.killFlash * 0.015) + ")"; ctx.fillRect(0, 0, W, H); }
   // Boss wave red pulse
-  if (gs.bossWave) {
+  if (!_rm && gs.bossWave) {
     ctx.fillStyle = "rgba(255,0,0," + (0.03 + Math.sin(Date.now() / 300) * 0.02) + ")";
     ctx.fillRect(0, 0, W, H);
   }
