@@ -1,17 +1,17 @@
-# Latest Handoff — Session 28 Closeout
+# Latest Handoff — Session 29 Closeout
 
 This is the authoritative active handoff file for this repo.
 
 **Date:** 2026-03-27
 **Branch:** `main`, clean, pushed
-**Build:** ✅ passes (`npm run build` — 765KB bundle, 0 errors; `npm test` — 65/65 passing; `npm run lint` — 0 errors)
+**Build:** ✅ passes (`npm run build` — 765KB bundle, 0 errors)
 
 ---
 
-## Where We Left Off (Session 28)
-- Shipped: 19 improvements across 4 groups — analytics, accessibility, testing/CI, monetization
-- Tests: 65 passing (loadoutCode 26 / storage 11 / constants 28) · delta: +65 this session
-- Deploy: deployed to github-pages (commit 158c459)
+## Where We Left Off (Session 29)
+- Fixed weapon hotkeys for slots 10-12 (keys 0, -, =)
+- Fixed stale grenade HUD label (was "5", now "Q")
+- Deploy: pushed to main (commit d1142a4)
 
 ---
 
@@ -24,64 +24,16 @@ This is the authoritative active handoff file for this repo.
 
 ---
 
-## What was done this session (Session 28)
+## What was done this session (Session 29)
 
-### Focus: Analytics, Accessibility, Testing & CI, Monetization
+### Bug fix: Weapon hotkeys for slots 10-12
+- **Problem:** `parseInt(e.key)` only handles digits 1-9. Weapons 10, 11, 12 had no keyboard hotkeys.
+- **Fix (App.jsx):** Keys `1`-`9` → weapons 1-9; `0` → weapon 10; `-` → weapon 11; `=` → weapon 12. Updated `preventDefault` list to include all weapon keys.
+- **Fix (HUD.jsx):** Added `WEAPON_HOTKEYS` array `["1","2","3","4","5","6","7","8","9","0","-","="]`. Hotkey labels and tooltips now show the correct key. Also fixed grenade button label from stale "5" to "Q".
 
-### Analytics
-- Added `gameCtx({difficulty, mode, wave, score})` helper + `resolveMode(...)` to `analytics.js`
-- `identify(name, {accountLevel, prestige})` called on username continue
-- `perk_chosen` + `perk_skipped` events in `applyPerk` (includes all non-chosen perk options)
-- `game_start` + conditional `mode_start` events at end of `startGame`
-- `death` event before death screen transition
-- `wave_reached` + `wave_milestone` (waves 5/10/20/50) in wave increment logic
-- `weapon_switch` event throttled to once per 2s via `weaponSwitchTrackRef`
-- Added `perkOptionsRef` mirror of `perkOptions` state for stale-closure-safe access in game loop
-
-### Accessibility
-- Skip link: `<a href="#game-canvas" className="skip-link">Skip to game</a>` in App.jsx
-- `aria-live="polite"` region announces wave start + boss cutscene name
-- Canvas: `id="game-canvas"` for skip-link target
-- Global CSS: `:focus-visible` gold outline (3px solid #FFD700) + `.skip-link` off-screen-until-focused
-- `src/hooks/useFocusTrap.js` — Tab/Shift+Tab trap within modal container + focus restore on unmount
-- Applied `useFocusTrap` to `SupporterModal.jsx`
-
-### Testing & CI
-- `src/utils/loadoutCode.test.js` — 26 tests (all weapons 0-12, starters, edge cases, clamping, case-insensitivity)
-- `src/storage.test.js` — 11 tests (getAccountLevel: 0/null/undefined/specific values/monotonic/tier thresholds)
-- `src/constants.test.js` — 28 tests (WEAPONS, ENEMY_TYPES, DIFFICULTIES, PERKS, ACHIEVEMENTS shape + uniqueness)
-- `vite.config.js` — `test:` block added (jsdom env, globals, include patterns, coverage config)
-- `package.json` — `"test"`, `"test:watch"`, `"test:coverage"` scripts + vitest/jsdom devDeps
-- `.github/workflows/deploy.yml` — `quality` job (lint + test) added; `build` now `needs: quality`
-
-### Monetization
-- `src/utils/supporter.js` — `isSupporter()` + `setSupporter()` (localStorage `cod-supporter-v1`)
-- `src/components/SupporterModal.jsx` — Ko-fi link + "I already supported" claim; `role="dialog"` + `aria-modal` + `useFocusTrap` + Escape-to-close
-- `src/components/LeaderboardPanel.jsx` — `SupporterBadge` component; ⭐ badge rendered on rows where `e.supporter === true`
-- `src/components/MenuScreen.jsx` — "❤️ SUPPORT THE DEV" / "⭐ SUPPORTER" footer button; `SupporterModal` render
-
-### Bug fix
-- `src/components/PauseMenu.jsx` — `useRef(null)` and `useEffect` for mini-map were after early `return` statements (react-hooks/rules-of-hooks error); moved both to before first early return
-
----
-
-## Files added (session 28)
-- `src/hooks/useFocusTrap.js`
-- `src/utils/supporter.js`
-- `src/components/SupporterModal.jsx`
-- `src/utils/loadoutCode.test.js`
-- `src/storage.test.js`
-- `src/constants.test.js`
-
-## Files modified (session 28)
-- `src/utils/analytics.js` — gameCtx(), resolveMode()
-- `src/App.jsx` — analytics tracking (7 sites), perkOptionsRef, weaponSwitchTrackRef, liveAnnounce state, skip link, aria-live, canvas id, global CSS
-- `src/components/PauseMenu.jsx` — hooks-after-return bug fix
-- `src/components/LeaderboardPanel.jsx` — SupporterBadge
-- `src/components/MenuScreen.jsx` — supporter button + SupporterModal
-- `vite.config.js` — test block
-- `package.json` — test scripts + vitest devDeps
-- `.github/workflows/deploy.yml` — quality gate job
+## Files modified (session 29)
+- `src/App.jsx` — keydown handler weapon switching logic
+- `src/components/HUD.jsx` — WEAPON_HOTKEYS array, label + tooltip display, grenade label fix
 
 ---
 
