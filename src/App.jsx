@@ -22,7 +22,7 @@ import {
   setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
 } from "./sounds.js";
-import { analyticsInit, track, identify } from "./utils/analytics.js";
+import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -257,6 +257,8 @@ export default function CallOfDoodie() {
   const [assistUsed, setAssistUsed]                 = useState(false);
   const speedrunRef  = useRef(false);
   const gauntletRef  = useRef(false);
+  const perkOptionsRef        = useRef([]); // mirrors perkOptions state for analytics (no stale closure)
+  const weaponSwitchTrackRef  = useRef(0);  // throttle weapon_switch analytics to once per 2s
   const [draftPending, setDraftPending]             = useState(false);
   const [draftOptions, setDraftOptions]             = useState([]);
   const draftShownRef  = useRef(false);
@@ -291,6 +293,7 @@ export default function CallOfDoodie() {
   const [missionToast, setMissionToast]         = useState(null);
   const [waveAnnounce, setWaveAnnounce]         = useState(null);
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
+  const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const synergyChargeCooldownRef = useRef(0);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
@@ -876,6 +879,7 @@ export default function CallOfDoodie() {
       if (ref.level % 3 === 0) {
         const opts = cursedRunRef.current ? getFullyCursedPerks(3) : getRandomPerks(3);
         setPerkOptions(opts);
+        perkOptionsRef.current = opts;
         setPerkPending(true);
         perkPendingRef.current = true;
       }
@@ -928,6 +932,13 @@ export default function CallOfDoodie() {
       }
     });
     statsRef.current.perksSelected++;
+    // ── Perk pick-rate analytics ──
+    const _gs = gsRef.current;
+    const _mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    track("perk_chosen", { perkId: perk.id, perkName: perk.name, perkTier: perk.tier, offeredIds: perkOptionsRef.current.map(p => p.id), wave: _gs?.currentWave, difficulty: difficultyRef.current, mode: _mode });
+    perkOptionsRef.current.filter(p => p.id !== perk.id).forEach(skipped => {
+      track("perk_skipped", { perkId: skipped.id, perkTier: skipped.tier, chosenId: perk.id, wave: _gs?.currentWave, mode: _mode });
+    });
     setActivePerks(prev => [...prev, perk]);
     setPerkPending(false);
     perkPendingRef.current = false;
@@ -1335,6 +1346,8 @@ export default function CallOfDoodie() {
       modifier: gs.runModifier || null,
       ts: Date.now(),
     });
+    // ── Analytics: death ──
+    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
   }, []);
@@ -1388,6 +1401,10 @@ export default function CallOfDoodie() {
       startMusic(false);
       startAmbient(gsRef.current?.mapTheme ?? 0);
     }, 200); // small delay to let audio context resume
+    // ── Analytics: game start ──
+    const _startMode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[0]?.name, starterLoadout });
+    if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
   }, [difficulty, initGame, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
@@ -1422,6 +1439,12 @@ export default function CallOfDoodie() {
     }
     setCurrentWeapon(idx); currentWeaponRef.current = idx;
     setIsReloading(false); isReloadingRef.current = false;
+    // ── Analytics: weapon switch (throttled to once per 2s) ──
+    const _now = Date.now();
+    if (_now - weaponSwitchTrackRef.current > 2000) {
+      weaponSwitchTrackRef.current = _now;
+      track("weapon_switch", { from: WEAPONS[currentWeaponRef.current]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current) });
+    }
   }, []);
 
   // ── Score submit ──────────────────────────────────────────────────────────
@@ -1665,7 +1688,13 @@ export default function CallOfDoodie() {
       }
 
       // Analytics: wave clear event (every 5 waves to avoid spam)
-      if (gs.currentWave % 5 === 0) track("wave_reached", { wave: gs.currentWave, score: gs.score, mode: gs.gauntletMode ? "gauntlet" : gs.speedrunMode ? "speedrun" : null });
+      if (gs.currentWave % 5 === 0) {
+        const _wCtx = gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score });
+        track("wave_reached", _wCtx);
+        if (gs.currentWave === 5 || gs.currentWave === 10 || gs.currentWave === 20 || gs.currentWave === 50) {
+          track("wave_milestone", { ..._wCtx, milestone: gs.currentWave });
+        }
+      }
 
       if (gs.bossWave) {
         statsRef.current.bossWavesCleared++;
@@ -1688,6 +1717,7 @@ export default function CallOfDoodie() {
       gs.bossWave = false;
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
+      setLiveAnnounce("Wave " + gs.currentWave + " started");
       // Boss Rush: bosses start wave 4+ (3-wave warmup to let player gear up)
       const _bossInterval = gs.bossRushMode ? 1 : 5;
       const nextIsBoss = gs.routeForceBoss || (gs.bossRushMode
@@ -1761,6 +1791,7 @@ export default function CallOfDoodie() {
           const _isDual = gs.currentWave >= (gs.bossRushMode ? 3 : 15);
           bossCutsceneRef.current = true;
           setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null });
+          setLiveAnnounce("Boss wave! " + (_card.name || "Boss") + " incoming on wave " + gs.currentWave);
           setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
           addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
           if (_isDual) {
@@ -3150,7 +3181,7 @@ export default function CallOfDoodie() {
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   if (screen === "username") {
-    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { const n = username.trim(); lockCallsign(n); claimCallsign(n); setScreen("menu"); } }} />;
+    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { const n = username.trim(); lockCallsign(n); claimCallsign(n); identify(n, { accountLevel: getAccountLevel(loadCareerStats().totalKills || 0), prestige: loadMetaProgress()?.prestige || 0 }); setScreen("menu"); } }} />;
   }
 
   if (screen === "menu") {
@@ -3217,7 +3248,12 @@ export default function CallOfDoodie() {
   const xpNeeded = level * 500;
   return (
     <div ref={containerRef} style={base}>
+      {/* Accessibility: skip-to-game link for keyboard users */}
+      <a href="#game-canvas" className="skip-link">Skip to game</a>
+      {/* Accessibility: aria-live region announces wave/boss events to screen readers */}
+      <div aria-live="polite" aria-atomic="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>{liveAnnounce}</div>
       <canvas
+        id="game-canvas"
         ref={canvasRef}
         style={{ width: "100%", height: isMobile ? "calc(100% - 56px)" : "100%", display: "block", cursor: isMobile ? "default" : (gameSettings.crosshair !== "cross" ? "none" : "crosshair"),
           filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
@@ -3468,6 +3504,10 @@ export default function CallOfDoodie() {
         * { box-sizing:border-box; margin:0 }
         body { margin:0; overflow:hidden }
         input::placeholder { color:#999 }
+        :focus-visible { outline: 3px solid #FFD700 !important; outline-offset: 3px !important; border-radius: 4px; }
+        button:focus-visible { box-shadow: 0 0 0 3px rgba(255,215,0,0.5) !important; }
+        .skip-link { position:absolute; top:-9999px; left:0; z-index:9999; padding:8px 16px; background:#FFD700; color:#000; font-weight:900; text-decoration:none; border-radius:0 0 6px 0; font-family:'Courier New',monospace; }
+        .skip-link:focus { top:0; }
       `}</style>
     </div>
   );

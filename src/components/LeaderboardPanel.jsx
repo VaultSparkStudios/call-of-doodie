@@ -43,6 +43,22 @@ const LEVEL_TIERS = [
   { min: 1,   color: "#888888", bg: "rgba(120,120,120,0.12)", border: "#555",   label: "·" },
 ];
 
+function SupporterBadge({ supporter }) {
+  if (!supporter) return null;
+  return (
+    <span
+      title="Supporter"
+      style={{
+        fontSize: 8, padding: "1px 4px", borderRadius: 3,
+        background: "rgba(255,215,0,0.15)",
+        border: "1px solid rgba(255,215,0,0.5)",
+        color: "#FFD700", fontWeight: 900, flexShrink: 0,
+        fontFamily: "'Courier New', monospace",
+      }}
+    >⭐</span>
+  );
+}
+
 function AccountLevelBadge({ level }) {
   if (!level || level < 1) return null;
   const tier = LEVEL_TIERS.find(t => level >= t.min) || LEVEL_TIERS[LEVEL_TIERS.length - 1];
@@ -296,6 +312,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                     {/* Top row: badges + name */}
                     <div style={{ display: "flex", alignItems: "center", gap: 3, flexWrap: "nowrap", overflow: "hidden" }}>
                       {e.accountLevel > 0 && <AccountLevelBadge level={e.accountLevel} />}
+                      <SupporterBadge supporter={e.supporter} />
                       {(e.prestige > 0) && (
                         <span style={{
                           fontSize: 9, fontWeight: 900, marginRight: 4,
