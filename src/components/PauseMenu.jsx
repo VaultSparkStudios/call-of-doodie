@@ -50,6 +50,38 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   const overlay = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, backdropFilter: "blur(6px)" };
   const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "#fff", border: "1px solid rgba(255,215,0,0.25)", maxHeight: "90vh", overflowY: "auto" };
 
+  // ── Mini-map ref + effect — MUST be before any early returns (Rules of Hooks) ──
+  const mapRef = useRef(null);
+  useEffect(() => {
+    const gs = gsSnapshot;
+    const canvas = mapRef.current;
+    if (!canvas || !gs) return;
+    const ctx = canvas.getContext("2d");
+    const MW = 200, MH = 150;
+    canvas.width = MW; canvas.height = MH;
+    const GW = gs.arenaW || 1200;
+    const GH = gs.arenaH || 900;
+    const sx = MW / GW, sy = MH / GH;
+    ctx.fillStyle = "#0A0A0A"; ctx.fillRect(0, 0, MW, MH);
+    ctx.strokeStyle = "#333"; ctx.lineWidth = 1; ctx.strokeRect(0, 0, MW, MH);
+    ctx.fillStyle = "#333";
+    (gs.obstacles || []).forEach(ob => { ctx.fillRect(ob.x * sx, ob.y * sy, ob.w * sx, ob.h * sy); });
+    (gs.enemies || []).forEach(en => {
+      ctx.fillStyle = en.isBossEnemy ? "#FF4400" : en.elite ? "#FFD700" : en.color || "#FF8888";
+      ctx.beginPath(); ctx.arc(en.x * sx, en.y * sy, Math.max(2, (en.size || 16) * sx * 0.5), 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.fillStyle = "#00FF88";
+    (gs.pickups || []).forEach(pk => { ctx.fillRect(pk.x * sx - 2, pk.y * sy - 2, 4, 4); });
+    const p = gs.player;
+    if (p) {
+      ctx.fillStyle = "#00FFFF"; ctx.beginPath(); ctx.arc(p.x * sx, p.y * sy, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.moveTo(p.x * sx, p.y * sy);
+      ctx.lineTo((p.x + Math.cos(p.angle) * 30) * sx, (p.y + Math.sin(p.angle) * 30) * sy);
+      ctx.stroke();
+    }
+  }, [gsSnapshot]);
+
   if (showAch) return <AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} />;
   if (showSettings && gameSettings) return <SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} />;
   if (showLb) return <LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} />;
@@ -161,54 +193,6 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
       </div>
     </div>
   );
-
-  // ── Mini-map ──────────────────────────────────────────────────────────────
-  const mapRef = useRef(null);
-  useEffect(() => {
-    const gs = gsSnapshot;
-    const canvas = mapRef.current;
-    if (!canvas || !gs) return;
-    const ctx = canvas.getContext("2d");
-    const MW = 200, MH = 150;
-    canvas.width = MW; canvas.height = MH;
-    const GW = gs.arenaW || 1200;
-    const GH = gs.arenaH || 900;
-    const sx = MW / GW, sy = MH / GH;
-    // Background
-    ctx.fillStyle = "#0A0A0A"; ctx.fillRect(0, 0, MW, MH);
-    // Border
-    ctx.strokeStyle = "#333"; ctx.lineWidth = 1; ctx.strokeRect(0, 0, MW, MH);
-    // Obstacles
-    ctx.fillStyle = "#333";
-    (gs.obstacles || []).forEach(ob => {
-      ctx.fillRect(ob.x * sx, ob.y * sy, ob.w * sx, ob.h * sy);
-    });
-    // Enemies
-    (gs.enemies || []).forEach(en => {
-      ctx.fillStyle = en.isBossEnemy ? "#FF4400" : en.elite ? "#FFD700" : en.color || "#FF8888";
-      ctx.beginPath();
-      ctx.arc(en.x * sx, en.y * sy, Math.max(2, (en.size || 16) * sx * 0.5), 0, Math.PI * 2);
-      ctx.fill();
-    });
-    // Pickups
-    ctx.fillStyle = "#00FF88";
-    (gs.pickups || []).forEach(pk => {
-      ctx.fillRect(pk.x * sx - 2, pk.y * sy - 2, 4, 4);
-    });
-    // Player
-    const p = gs.player;
-    if (p) {
-      ctx.fillStyle = "#00FFFF";
-      ctx.beginPath();
-      ctx.arc(p.x * sx, p.y * sy, 4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(p.x * sx, p.y * sy);
-      ctx.lineTo((p.x + Math.cos(p.angle) * 30) * sx, (p.y + Math.sin(p.angle) * 30) * sy);
-      ctx.stroke();
-    }
-  }, [gsSnapshot]);
 
   // Main pause view
   return (

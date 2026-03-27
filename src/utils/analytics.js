@@ -60,3 +60,31 @@ export function analyticsReset() {
   if (!KEY) return;
   try { _ph()?.reset(); } catch { /* ignore */ }
 }
+
+/**
+ * Build a standard context object from game-loop state.
+ * Spread this into any track() call to ensure consistent event shape.
+ * @param {{ difficulty?: string, mode?: string, wave?: number, score?: number }} opts
+ */
+export function gameCtx({ difficulty, mode, wave, score } = {}) {
+  return {
+    difficulty: difficulty ?? undefined,
+    mode:       mode       ?? "standard",
+    wave:       wave       ?? undefined,
+    score:      score      ?? undefined,
+  };
+}
+
+/**
+ * Resolve the canonical mode string from ref values.
+ * Pass boolean values (not refs) — call with ref.current at each site.
+ */
+export function resolveMode(scoreAttack, dailyChallenge, cursed, bossRush, speedrun, gauntlet) {
+  if (scoreAttack)    return "score_attack";
+  if (dailyChallenge) return "daily_challenge";
+  if (cursed)         return "cursed";
+  if (bossRush)       return "boss_rush";
+  if (speedrun)       return "speedrun";
+  if (gauntlet)       return "gauntlet";
+  return "standard";
+}

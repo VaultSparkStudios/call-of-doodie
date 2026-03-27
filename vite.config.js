@@ -18,4 +18,14 @@ export default defineConfig({
     // Silence the 500kB warning — game bundles are expected to be large
     chunkSizeWarningLimit: 800,
   },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}"],
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      include: ["src/utils/**", "src/storage.js", "src/constants.js"],
+    },
+  },
 });

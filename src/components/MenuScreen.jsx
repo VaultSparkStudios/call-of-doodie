@@ -8,6 +8,8 @@ import SettingsPanel from "./SettingsPanel.jsx";
 import MetaTreePanel from "./MetaTreePanel.jsx";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
+import SupporterModal from "./SupporterModal.jsx";
+import { isSupporter } from "../utils/supporter.js";
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
@@ -35,6 +37,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showRunHistory, setShowRunHistory] = useState(false);
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
+  const [showSupporter, setShowSupporter] = useState(false);
   const [loadoutCodeInput, setLoadoutCodeInput] = useState("");
   const [loadoutCodeError, setLoadoutCodeError] = useState("");
   const [customLoadouts, setCustomLoadouts] = useState(() => loadCustomLoadouts());
@@ -1262,10 +1265,18 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               ● {onlinePlayers} ONLINE
             </span>
           )}
+          <button
+            onClick={() => setShowSupporter(true)}
+            aria-label="Support the developer"
+            style={{ background: "none", border: "none", color: isSupporter() ? "#FFD700" : "#888", fontSize: 10, cursor: "pointer", padding: "2px 6px", letterSpacing: 1, fontFamily: "'Courier New',monospace", textDecoration: "underline dotted" }}
+          >
+            {isSupporter() ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
+          </button>
           <span style={{ fontSize: 10, color: "#555" }}>© 2025 VaultSpark Studios</span>
         </div>
       </div>
       </div>
+      {showSupporter && <SupporterModal onClose={() => setShowSupporter(false)} />}
     </div>
   );
 }
