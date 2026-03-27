@@ -11,6 +11,7 @@
   "summary": "Humor-first browser shooter with a live public build and a stable gold-standard operating layer.",
   "currentFocus": "Fix Speedrun LB sort (time asc); add Speedrun/Gauntlet achievements; run Supabase migrations.",
   "nextMilestone": "Speedrun LB sort fix + Speedrun/Gauntlet achievements + Supabase migrations.",
+  "lastSession": "Session 29: Fixed weapon hotkeys for slots 10-12 (0/-/= keys) + grenade HUD label fix.",
   "launchWindow": "Live now",
   "repo": "VaultSparkStudios/call-of-doodie",
   "runtimeUrl": "https://vaultsparkstudios.com/call-of-doodie/",
@@ -22,19 +23,21 @@
   "franchiseValue": "medium",
   "topBlockers": [
     "Supabase prestige + supporter column migrations pending (non-blocking, user action).",
-    "Speedrun leaderboard sorts by score instead of time — wrong behavior."
+    "Speedrun leaderboard sorts by score instead of time \u2014 wrong behavior."
   ],
   "silScore": 44,
   "silAvg3": 30.3,
   "silVelocity": 11,
-  "silDebt": "→",
+  "silDebt": "\u2192",
   "silLastSession": "2026-03-27",
-  "ignisScore": null,
+  "ignisScore": 25,
   "testsTotal": 65,
   "lastDeployStatus": "deployed",
   "readFirst": [
     "context/LATEST_HANDOFF.md",
     "context/SELF_IMPROVEMENT_LOOP.md",
     "context/TASK_BOARD.md"
-  ]
+  ],
+  "ignisGrade": "DARK-ZONE",
+  "ignisLastComputed": "2026-03-27"
 }
