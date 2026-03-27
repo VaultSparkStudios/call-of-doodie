@@ -13,6 +13,8 @@ Before writing any files, compare the session's actual work against the declared
 - **Partial** — some scope drifted; note what and why
 - **Redirected** — focus changed significantly; log the reason
 
+This outcome is included in the closeout output and the `logs/WORK_LOG.md` entry.
+
 ---
 
 ## Required write-back
@@ -21,12 +23,31 @@ If meaningful work happened, update in this order:
 
 1. `context/CURRENT_STATE.md`
 2. `context/TASK_BOARD.md`
-3. `context/LATEST_HANDOFF.md`
+3. `context/LATEST_HANDOFF.md` — include **Where We Left Off** block (see below)
 4. `logs/WORK_LOG.md`
 5. `context/DECISIONS.md` — when reasoning changed
 6. `context/SELF_IMPROVEMENT_LOOP.md` — MANDATORY (see below)
 7. `docs/CREATIVE_DIRECTION_RECORD.md` — MANDATORY if human gave any creative direction this session
 8. Any project-type or repo-specific files whose truth changed
+
+### Where We Left Off — write to LATEST_HANDOFF.md
+
+At the top of `context/LATEST_HANDOFF.md`, maintain a `## Where We Left Off` block.
+This is read directly into the startup brief next session.
+
+```markdown
+## Where We Left Off (Session N)
+- Shipped: {N improvements across N groups — group1, group2 ...}
+  {or: "N tasks completed" if no improvement group breakdown applies}
+- Tests: {N passing (N core / N server / N client) · delta: +N this session}
+  {or: "N/A — no test suite"}
+- Deploy: {deployed to {env} / pending / N/A}
+```
+
+Rules:
+- **Improvements / groups** — count concrete shipped items (features, fixes, improvements). Group by type (e.g. auth, content, DX, observability). Use whatever groups make sense for the project. If it was a process/protocol session with no shipped code, write "0 code changes — protocol/infra session."
+- **Tests** — total passing count + breakdown by type if the project has a test suite. Delta = this session's total minus last session's total from the prior audit JSON. Write "N/A" for projects without test suites.
+- **Deploy** — "deployed to {env}" if a deploy happened this session or was already live; "pending" if commit exists but deploy not confirmed; "N/A" for pre-deploy projects.
 
 ---
 
@@ -44,11 +65,13 @@ Exclude `[SIL]` meta-tasks. Record as integer: `Velocity: N`
 - `→` if debt was unchanged or no `[DEBT]` items exist
 
 **Rolling 3-session averages:**
-Look back at the last 3 SIL entries and compute per-category averages (round to 1 decimal).
-Label `[N=n]` if fewer than 3 entries exist.
+Look back at the last 3 SIL entries in `context/SELF_IMPROVEMENT_LOOP.md` and compute:
+- `Avg Dev Health` = (score1 + score2 + score3) / 3 — round to 1 decimal
+- Same calculation for all 5 categories
+- If fewer than 3 prior entries exist, average what is available and label with `[N=n]`
 
 **Sparkline:**
-Collect Total scores from last 5 SIL entries. Map each:
+Collect the Total scores from the last 5 SIL entries (including this session). Map each to a bar:
 
 | Range | Bar |
 |---|---|
@@ -61,7 +84,8 @@ Collect Total scores from last 5 SIL entries. Map each:
 | 45–47 | ▇ |
 | 48–50 | █ |
 
-Write oldest → newest. Use only available data if fewer than 5 sessions.
+Write oldest → newest: e.g. `▃▅▆▇█`
+If fewer than 5 sessions, use only available data.
 
 ---
 
@@ -69,7 +93,18 @@ Write oldest → newest. Use only available data if fewer than 5 sessions.
 
 The top of `context/SELF_IMPROVEMENT_LOOP.md` contains a `## Rolling Status` block between
 `<!-- rolling-status-start -->` and `<!-- rolling-status-end -->` markers.
-**Overwrite** this block (do not append) with fresh values.
+**Overwrite** this block (do not append) with fresh values:
+
+```
+<!-- rolling-status-start -->
+## Rolling Status (auto-updated each closeout)
+Sparkline (last 5 totals): ▃▅▆▇█
+3-session avg: Dev X.X | Align X.X | Momentum X.X | Engage X.X | Process X.X
+Avg total: XX.X / 50  |  Velocity trend: ↑↓→  |  Debt: ↑↓→
+Last session: YYYY-MM-DD | Session N | Total: XX/50 | Velocity: N
+─────────────────────────────────────────────────────────────────────
+<!-- rolling-status-end -->
+```
 
 ---
 
@@ -88,6 +123,17 @@ Rate each category 0–10:
 
 ---
 
+### Step 3.5 — IGNIS note
+
+After scoring, record one sentence for IGNIS to learn from this session.
+
+**IGNIS note:** [What made this session distinctive, what would you do differently,
+what pattern is emerging — one sentence max]
+
+This is written into the `ignisNote` field of the audit JSON in Step 8.
+
+---
+
 ### Step 4 — Reflect
 
 - **Top win this session:**
@@ -100,7 +146,7 @@ Rate each category 0–10:
 
 Generate 3–5 innovative solutions, features, or improvements. Push past the obvious. Consider:
 - What would make this 10x more engaging?
-- What's the one thing players keep asking for?
+- What's the one thing players/users keep asking for?
 - What technical debt is silently costing velocity?
 - What creative direction has drifted from the SOUL?
 - What competitive move would surprise and delight?
@@ -146,16 +192,20 @@ Rolling avg (last 3): Dev X.X | Align X.X | Momentum X.X | Engage X.X | Process 
 
 ### Step 8 — Write session audit record
 
-Create `audits/YYYY-MM-DD.json`. If today's file already exists, suffix with `-2`, `-3`, etc.
+Create `audits/YYYY-MM-DD.json`. If today's file already exists (multiple sessions in one day),
+suffix with `-2`, `-3`, etc. (e.g. `audits/2026-03-26-2.json`).
+
+This is the machine-readable complement to the Markdown SIL entry. It enables the Studio Hub
+and Studio Review agent to aggregate scores programmatically without parsing Markdown.
 
 ```json
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "project": "{slug from context/PROJECT_STATUS.json}",
   "date": "YYYY-MM-DD",
   "session": N,
-  "label": null,
-  "calibration": false,
+  "label": "{entry label, e.g. 'Bootstrap Baseline', or null}",
+  "calibration": true,
   "scores": {
     "devHealth": N,
     "creativeAlignment": N,
@@ -168,38 +218,63 @@ Create `audits/YYYY-MM-DD.json`. If today's file already exists, suffix with `-2
   "velocity": N,
   "debt": "→",
   "rollingAvg3": {
-    "devHealth": N,
-    "creativeAlignment": N,
-    "momentum": N,
-    "engagement": N,
-    "processQuality": N,
-    "total": N
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": null,
+    "total": null
   },
   "topWin": "...",
   "topGap": "...",
-  "intentOutcome": "Achieved"
+  "intentOutcome": "Achieved",
+  "improvementsShipped": null,
+  "improvementGroups": {},
+  "testsTotal": null,
+  "testsByType": {},
+  "testsDelta": null,
+  "deployStatus": "not-applicable",
+  "ignisFlags": [],
+  "ignisNote": null
 }
 ```
 
-Use `null` for scores not assessed. Set `"calibration": true` for sessions 1–3.
+Use `null` for any score that could not be assessed (bootstrap/calibration sessions).
+Set `"calibration": false` once the project is past Session 3.
 
-Also update `context/PROJECT_STATUS.json` SIL fields:
-`silScore` · `silAvg3` · `silVelocity` · `silDebt` · `silLastSession`
+**ignisFlags** — choose from: `high-velocity`, `low-velocity`, `creative-drift`, `debt-spike`, `debt-clear`, `intent-achieved`, `intent-redirected`, `compacted-resume`, `cdr-gap-recovered`, `blocker-cleared`, `sil-escalation`. Leave `[]` if none apply.
+
+**ignisNote** — the sentence written in Step 3.5. Copy it here verbatim.
+
+Also update `context/PROJECT_STATUS.json` SIL fields to match this session:
+- `silScore` → this session's `total`
+- `silAvg3` → `rollingAvg3.total` (or `null` during calibration)
+- `silVelocity` → `velocity`
+- `silDebt` → `debt`
+- `silLastSession` → `date`
 
 ---
 
 ## Creative Direction Record — closeout (mandatory)
 
-Review the full session for any human direction given. Append an entry to
-`docs/CREATIVE_DIRECTION_RECORD.md` for each of the following that occurred:
+Review the full session for any human direction given. This step is required at every closeout.
+
+**If this session was picked up from a prior compacted/interrupted session (i.e. the conversation
+started with a summary rather than a fresh `start`), also review the summary for direction from
+that prior session. CDR entries must be written for ALL human direction — not just the current
+session window.**
+
+Append an entry to `docs/CREATIVE_DIRECTION_RECORD.md` for each of the following that occurred:
 - Creative direction of any kind (features, feel, scope, priorities)
 - Feature assignments or explicit goals set by the human
 - Brand, tone, visual, or quality guidance
+- Canon-affecting decisions
 - Any "do this / don't do this" instruction
 
 **ADDITIVE ONLY — never edit or delete existing entries.**
 
-If no direction was given, confirm in closeout output that CDR was reviewed and no new entries were needed.
+If no direction was given this session, do not add a blank entry — simply confirm in the closeout
+output that CDR was reviewed and no new entries were needed.
 
 ---
 
