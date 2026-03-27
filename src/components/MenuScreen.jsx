@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation } from "../constants.js";
+import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout } from "../storage.js";
 import { supabase } from "../supabase.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
+import MetaTreePanel from "./MetaTreePanel.jsx";
+import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
@@ -18,7 +20,7 @@ const PLAYER_SKINS = [
   { emoji: "🐉", label: "Dragon",   required: 5 },
 ];
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode, cursedRunMode, onSetCursedRunMode, bossRushMode, onSetBossRushMode }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode, cursedRunMode, onSetCursedRunMode, bossRushMode, onSetBossRushMode, speedrunMode, onSetSpeedrunMode, gauntletMode, onSetGauntletMode, assistAvailable, onApplyAssist }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -32,6 +34,9 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showSettings, setShowSettings] = useState(false);
   const [showRunHistory, setShowRunHistory] = useState(false);
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
+  const [showMetaTree, setShowMetaTree] = useState(false);
+  const [loadoutCodeInput, setLoadoutCodeInput] = useState("");
+  const [loadoutCodeError, setLoadoutCodeError] = useState("");
   const [customLoadouts, setCustomLoadouts] = useState(() => loadCustomLoadouts());
   const [editingSlot, setEditingSlot] = useState(null); // null or slot index 0-2
   const [editName, setEditName] = useState("");
@@ -90,7 +95,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   // ── Gamepad menu navigation ──────────────────────────────────────────────
   const anyModalOpen = showLeaderboard || showAchievements || showCareer || showRules ||
     showControls || showBestiary || showMissions || showUpgrades || showNewFeatures ||
-    showPrestigeConfirm || showSettings || showRunHistory || showLoadoutBuilder;
+    showPrestigeConfirm || showSettings || showRunHistory || showLoadoutBuilder || showMetaTree;
 
   // Ordered flat list of main-menu actions (indices used for focus tracking)
   const diffKeys     = Object.keys(DIFFICULTIES);                          // 0-3
@@ -570,8 +575,36 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 </div>
               </div>
             ) : (
-              /* ── Slot list ── */
+              /* ── Slot list + Code I/O ── */
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {/* Loadout Code import/export */}
+                <div style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,215,0,0.2)" }}>
+                  <div style={{ fontSize: 10, color: "#FFD700", letterSpacing: 1, fontWeight: 700, marginBottom: 8 }}>LOADOUT CODE SHARE</div>
+                  <div style={{ fontSize: 9, color: "#888", marginBottom: 8 }}>Share a 3-char code to export your current weapon + starter selection.</div>
+                  <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 6 }}>
+                    <input
+                      value={loadoutCodeInput}
+                      onChange={e => { setLoadoutCodeInput(e.target.value.toUpperCase()); setLoadoutCodeError(""); }}
+                      placeholder="e.g. 02B"
+                      maxLength={3}
+                      style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: `1px solid ${loadoutCodeError ? "#FF6666" : "rgba(255,215,0,0.35)"}`, borderRadius: 6, padding: "6px 10px", color: "#fff", fontFamily: "'Courier New',monospace", fontSize: 14, outline: "none", textTransform: "uppercase", letterSpacing: 3 }}
+                    />
+                    <button onClick={() => {
+                      if (!isValidLoadoutCode(loadoutCodeInput)) { setLoadoutCodeError("Invalid code"); return; }
+                      const decoded = decodeLoadout(loadoutCodeInput);
+                      setEditWeaponIdx(decoded.weaponIdx);
+                      setEditStarterLoadout(decoded.starterLoadout);
+                      setLoadoutCodeError("");
+                      setLoadoutCodeInput("");
+                    }} style={{ padding: "6px 12px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6, background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.4)", color: "#FFD700", whiteSpace: "nowrap" }}>
+                      IMPORT
+                    </button>
+                  </div>
+                  {loadoutCodeError && <div style={{ fontSize: 10, color: "#FF6666", marginBottom: 4 }}>{loadoutCodeError}</div>}
+                  <div style={{ fontSize: 10, color: "#888" }}>
+                    Your current: <span style={{ color: "#FFD700", letterSpacing: 2, fontFamily: "monospace" }}>{encodeLoadout({ weaponIdx: editWeaponIdx, starterLoadout: editStarterLoadout })}</span>
+                  </div>
+                </div>
                 {customLoadouts.map((lo, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: lo ? "1px solid rgba(255,107,53,0.25)" : "1px solid rgba(255,255,255,0.07)" }}>
                     <div style={{ background: "rgba(255,107,53,0.16)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 6, padding: "4px 8px", textAlign: "center", flexShrink: 0, minWidth: 32 }}>
@@ -955,6 +988,9 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         />
       )}
 
+      {/* Meta Tree Panel */}
+      {showMetaTree && <MetaTreePanel onClose={() => setShowMetaTree(false)} />}
+
       {/* Grid background */}
       <div style={{ position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px)", pointerEvents: "none" }} />
 
@@ -1101,6 +1137,22 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FF3333" }}>☠ BOSS RUSH</div>
               <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Every wave is a boss · chaos</div>
             </button>
+            <button
+              onClick={() => onSetSpeedrunMode?.(!speedrunMode)}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: speedrunMode ? "rgba(0,255,128,0.12)" : "rgba(255,255,255,0.03)",
+                border: speedrunMode ? "2px solid #00FF80" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#00FF80" }}>⏱ SPEEDRUN</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Race the clock · live timer</div>
+            </button>
+            <button
+              onClick={() => { const g = getWeeklyGauntlet(); onSetGauntletMode?.(!gauntletMode); }}
+              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+                background: gauntletMode ? "rgba(255,200,0,0.12)" : "rgba(255,255,255,0.03)",
+                border: gauntletMode ? "2px solid #FFC800" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#FFC800" }}>🏆 GAUNTLET</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Weekly fixed challenge · no shop</div>
+            </button>
           </div>
         </div>
 
@@ -1179,6 +1231,10 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} {...(gfocus("upgrades") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
           <button onClick={() => setShowRunHistory(true)} style={{ ...btnS, minWidth: 150 }}>📜 HISTORY</button>
           <button onClick={() => setShowLoadoutBuilder(true)} style={{ ...btnS, minWidth: 150 }}>⚙️ LOADOUTS</button>
+          <button onClick={() => setShowMetaTree(true)} style={{ ...btnS, minWidth: 150 }}>🌳 META TREE</button>
+          {assistAvailable && (
+            <button onClick={onApplyAssist} style={{ ...btnS, minWidth: 150, borderColor: "#44FF88", color: "#44FF88" }}>🛡️ ASSIST +50HP</button>
+          )}
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
           <button onClick={() => setShowRules(true)} {...(gfocus("rules") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>

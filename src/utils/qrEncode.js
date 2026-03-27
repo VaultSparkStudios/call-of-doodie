@@ -94,7 +94,8 @@ export function qrEncode(text) {
 
   // Place modules
   const m = Array.from({length: size}, () => new Array(size).fill(null)); // null=unset, true=dark, false=light
-  const set = (r, c, v) => { if (r >= 0 && r < size && c >= 0 && c < size) m[r][c] = v; };
+  const fn = Array.from({length: size}, () => new Array(size).fill(false)); // function module mask
+  const set = (r, c, v) => { if (r >= 0 && r < size && c >= 0 && c < size) { m[r][c] = v; fn[r][c] = true; } };
 
   // Finder patterns
   const finder = (r, c) => {
@@ -133,7 +134,6 @@ export function qrEncode(text) {
   for (const cw of codewords) for (let b = 7; b >= 0; b--) dataStream.push((cw >> b) & 1);
 
   let di = 0;
-  const isFunction = (r, c) => m[r]?.[c] !== null;
   for (let col = size-1; col >= 1; col -= 2) {
     if (col === 6) col--;
     const upward = Math.floor((size-1-col)/2) % 2 === 0;
@@ -141,16 +141,16 @@ export function qrEncode(text) {
       const r = upward ? (size-1-i) : i;
       for (let dc = 0; dc <= 1; dc++) {
         const c = col - dc;
-        if (!isFunction(r, c) && di < dataStream.length) {
+        if (!fn[r][c] && di < dataStream.length) {
           m[r][c] = dataStream[di++] === 1;
         }
       }
     }
   }
 
-  // Apply mask pattern 0 (i+j) % 2 === 0
+  // Apply mask pattern 0 (i+j) % 2 === 0 — only to data modules, never function modules
   for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
-    if (m[r][c] !== null && !isFunction(r, c)) {
+    if (!fn[r][c] && m[r][c] !== null) {
       if ((r + c) % 2 === 0) m[r][c] = !m[r][c];
     }
   }

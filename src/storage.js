@@ -486,3 +486,36 @@ export function saveCustomLoadout(idx, loadout) {
     localStorage.setItem(CUSTOM_LOADOUTS_KEY, JSON.stringify(slots));
   } catch {}
 }
+
+// ===== META PROGRESSION TREE =====
+const META_TREE_KEY = "cod-meta-tree-v1";
+
+/** Returns Set of unlocked node IDs. */
+export function loadMetaTree() {
+  try {
+    const raw = localStorage.getItem(META_TREE_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch { return new Set(); }
+}
+
+/** Saves a Set of unlocked node IDs. */
+function _saveMetaTree(unlocked) {
+  try { localStorage.setItem(META_TREE_KEY, JSON.stringify([...unlocked])); } catch {}
+}
+
+/**
+ * Unlock a META_TREE node, deducting its cost from career points.
+ * Returns { success, reason } — caller should re-load meta progress after success.
+ */
+export function unlockMetaNode(nodeId, cost) {
+  const unlocked = loadMetaTree();
+  if (unlocked.has(nodeId)) return { success: false, reason: "already_unlocked" };
+  const meta = loadMetaProgress();
+  const points = meta.careerPoints || 0;
+  if (points < cost) return { success: false, reason: "insufficient_points" };
+  meta.careerPoints = points - cost;
+  saveMetaProgress(meta);
+  unlocked.add(nodeId);
+  _saveMetaTree(unlocked);
+  return { success: true };
+}

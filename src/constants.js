@@ -825,3 +825,78 @@ export const KILL_MILESTONES = {
   300: "Literally Unstoppable",
   500: "You Need Professional Help",
 };
+
+// ===== META PROGRESSION TREE =====
+// 4 branches × 4 nodes. Each node costs career points.
+// requires: id of parent node that must be unlocked first.
+export const META_TREE = {
+  offense: {
+    label: "Offense", emoji: "⚔️", color: "#FF4444",
+    nodes: [
+      { id: "off1", name: "Sharp Rounds",  emoji: "🔫", desc: "+5% bullet damage (all weapons)",              cost: 60  },
+      { id: "off2", name: "Hair Trigger",  emoji: "⚡", desc: "+10% fire rate",                               cost: 120, requires: "off1" },
+      { id: "off3", name: "Critical Mass", emoji: "🎯", desc: "+8% crit chance",                              cost: 240, requires: "off2" },
+      { id: "off4", name: "Kill Frenzy",   emoji: "🩸", desc: "+20% move speed for 1s after each kill",       cost: 500, requires: "off3" },
+    ],
+  },
+  defense: {
+    label: "Defense", emoji: "🛡️", color: "#4488FF",
+    nodes: [
+      { id: "def1", name: "Field Rations", emoji: "💊", desc: "+20 max HP at run start",                      cost: 60  },
+      { id: "def2", name: "Trauma Plates", emoji: "🪖", desc: "-8% incoming damage",                          cost: 120, requires: "def1" },
+      { id: "def3", name: "Field Medic",   emoji: "🏥", desc: "Heal 6 HP on each wave clear",                 cost: 240, requires: "def2" },
+      { id: "def4", name: "Last Stand",    emoji: "👊", desc: "Survive one lethal hit per run (restore 50 HP)", cost: 500, requires: "def3" },
+    ],
+  },
+  utility: {
+    label: "Utility", emoji: "🔧", color: "#44CC44",
+    nodes: [
+      { id: "util1", name: "Deep Pockets",  emoji: "🎒", desc: "+20% ammo capacity",                          cost: 60  },
+      { id: "util2", name: "Scholar",        emoji: "📚", desc: "+25% XP gain",                               cost: 120, requires: "util1" },
+      { id: "util3", name: "Scavenger Pro",  emoji: "💰", desc: "Enemies drop 30% more 💩 coins",             cost: 240, requires: "util2" },
+      { id: "util4", name: "Supply Drop",    emoji: "📦", desc: "Wave shop includes 1 guaranteed free item",  cost: 500, requires: "util3" },
+    ],
+  },
+  chaos: {
+    label: "Chaos", emoji: "🌀", color: "#AA44FF",
+    nodes: [
+      { id: "cha1", name: "Mutation Affinity", emoji: "🧬", desc: "Weekly mutation bonus effects +25%",       cost: 60  },
+      { id: "cha2", name: "Coin Magnet+",      emoji: "🪙", desc: "+40% Doodie Coin drops all run",          cost: 120, requires: "cha1" },
+      { id: "cha3", name: "Gauntlet Ready",    emoji: "🏋️", desc: "Start Gauntlet runs with a bonus perk choice", cost: 240, requires: "cha2" },
+      { id: "cha4", name: "Pandemonium",       emoji: "💀", desc: "Cursed Runs grant 2× score multiplier",   cost: 500, requires: "cha3" },
+    ],
+  },
+};
+
+// All META_TREE node IDs flat — used for storage validation
+export const META_TREE_NODE_IDS = Object.values(META_TREE).flatMap(b => b.nodes.map(n => n.id));
+
+// ===== WEEKLY GAUNTLET =====
+// Fixed-loadout weekly challenge: one weapon, one forced perk, no free perk-ups mid-run.
+// Seeded deterministically by week number so every player sees the same config.
+export function getWeeklyGauntlet() {
+  const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+  const EPOCH = new Date("2024-01-01T00:00:00Z").getTime();
+  const weekNum = Math.floor((Date.now() - EPOCH) / MS_PER_WEEK);
+
+  // Mulberry32 seeded PRNG — fast, deterministic, good distribution
+  let _s = (weekNum * 0x9e3779b9) >>> 0;
+  const rand = () => { _s += 0x6D2B79F5; let t = _s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 0xFFFFFFFF; };
+
+  const weaponIdx = Math.floor(rand() * 12);            // 0-11 (skip Nuclear Kazoo edge)
+  const diffKeys  = ["easy", "normal", "hard"];
+  const diffId    = diffKeys[Math.floor(rand() * 3)];
+  // Pick a non-cursed starting perk by index (resolved in App.jsx against PERKS array)
+  const startPerkRoll = rand();
+
+  return {
+    weekNum,
+    seed: weekNum * 13 + 7,   // deterministic run seed
+    weaponIdx,
+    diffId,
+    startPerkRoll,             // App.jsx maps this × PERKS.length to a perk index
+    noShop: true,              // no wave shop
+    noPerkChoice: true,        // level-up grants stat boosts only, no perk pick
+    label: `WEEK ${weekNum} GAUNTLET`,
+  };
+}

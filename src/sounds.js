@@ -446,6 +446,19 @@ let _musicBoss = false;
 let _musicBeat = 0;
 let _musicTimer = null;
 let _musicVibe = "action";
+// Reactive combo tier: 0=normal, 1=action-bump, 2=intense
+let _musicComboTier = 0;
+
+/**
+ * Drive the music energy tier from combo count.
+ * tier 0 = use player's chosen vibe as-is
+ * tier 1 = boost chill→action (combo 2-4)
+ * tier 2 = force intense     (combo 5+)
+ * retro / spooky / boss are never overridden.
+ */
+export function setMusicTier(tier) {
+  _musicComboTier = Math.max(0, Math.min(2, tier));
+}
 
 export const MUSIC_VIBES = [
   { id: "chill",   name: "Chill",   emoji: "😌" },
@@ -552,7 +565,12 @@ const _BPM = { chill: 72, action: 108, intense: 150, retro: 120, spooky: 82, bos
 function _scheduleMusicBeat() {
   if (!_musicActive) return;
   const ctx = getCtx();
-  const vibe = _musicBoss ? "boss" : (_musicVibe || "action");
+  let vibe = _musicBoss ? "boss" : (_musicVibe || "action");
+  // Reactive: boost energy tier based on combo — never override retro/spooky/boss
+  if (!_musicBoss && vibe !== "retro" && vibe !== "spooky") {
+    if (_musicComboTier >= 2) vibe = "intense";
+    else if (_musicComboTier >= 1 && vibe === "chill") vibe = "action";
+  }
   const beat = 60 / (_BPM[vibe] || 108);
   const bar = _musicBeat % 8;
   if (ctx) {
