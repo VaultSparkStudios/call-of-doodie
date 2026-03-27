@@ -239,6 +239,8 @@ export default function HUD({
   );
 }
 
+const WEAPON_HOTKEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
+
 function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady, isReloading, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
   const [hoveredTool, setHoveredTool] = useState(null);
   // Shrink weapon buttons when there are many weapons so the bar stays on-screen
@@ -254,12 +256,12 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady
             onClick={() => onSwitchWeapon(i)}
           >
             {w.emoji}
-            <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: i === currentWeapon ? w.color : "#AAA", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>{i + 1}</span>
+            <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: i === currentWeapon ? w.color : "#AAA", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>{WEAPON_HOTKEYS[i] || i + 1}</span>
             {weaponUpgrades?.[i] > 0 && (
               <span style={{ position: "absolute", bottom: -1, left: "50%", transform: "translateX(-50%)", fontSize: 7, color: "#AA44FF", lineHeight: 1 }}>{"⭐".repeat(weaponUpgrades[i])}</span>
             )}
           </div>
-          <Tooltip text={"[" + String(i + 1) + "] " + w.name + " — " + w.desc} visible={hoveredTool === "wpn-" + i} />
+          <Tooltip text={"[" + (WEAPON_HOTKEYS[i] || i + 1) + "] " + w.name + " — " + w.desc} visible={hoveredTool === "wpn-" + i} />
         </div>
       ))}
 
@@ -268,7 +270,7 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady
       <div style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("grenade")} onMouseLeave={() => setHoveredTool(null)}>
         <div onClick={onGrenade} style={{ width: 38, height: 38, borderRadius: 6, position: "relative", background: grenadeReady ? "rgba(255,69,0,0.15)" : "rgba(255,255,255,0.05)", border: grenadeReady ? "1px solid rgba(255,69,0,0.4)" : "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, cursor: "pointer" }}>
           💣
-          <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: grenadeReady ? "#FF4500" : "#777", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>5</span>
+          <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: grenadeReady ? "#FF4500" : "#777", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>Q</span>
         </div>
         <Tooltip text="[Q/G] Grenade — AOE explosion" visible={hoveredTool === "grenade"} />
       </div>

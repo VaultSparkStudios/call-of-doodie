@@ -2990,8 +2990,11 @@ export default function CallOfDoodie() {
       if (e.key === " " || e.key === "Shift") doDash();
       if (e.key === "e") fireSynergyCharge();
       const num = parseInt(e.key);
-      if (num >= 1 && num <= WEAPONS.length) switchWeapon(num - 1);
-      if (["w","a","s","d","r","q","g","e","1","2","3","4","5"," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
+      if (num >= 1 && num <= 9 && num <= WEAPONS.length) switchWeapon(num - 1);
+      if (e.key === "0" && WEAPONS.length >= 10) switchWeapon(9);
+      if (e.key === "-" && WEAPONS.length >= 11) switchWeapon(10);
+      if (e.key === "=" && WEAPONS.length >= 12) switchWeapon(11);
+      if (["w","a","s","d","r","q","g","e","1","2","3","4","5","6","7","8","9","0","-","="," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
     };
     const ku = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
     const mm = (e) => { mouseRef.current.x = e.clientX; mouseRef.current.y = e.clientY; mouseRef.current.moved = true; };
