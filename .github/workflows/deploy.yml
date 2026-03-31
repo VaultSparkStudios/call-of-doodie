@@ -31,8 +31,8 @@ jobs:
         run: npm ci
 
       - name: Lint
-        # --max-warnings -1 allows pre-existing warnings but blocks on errors
-        run: npx eslint src --ext .js,.jsx --max-warnings -1
+        # Flat config: plain lint run blocks on errors; strict warning cleanup stays local/optional for now
+        run: npx eslint src --report-unused-disable-directives
 
       - name: Test
         run: npm test

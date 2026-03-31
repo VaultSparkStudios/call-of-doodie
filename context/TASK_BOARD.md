@@ -1,18 +1,18 @@
 # Task Board
 
 ## Human Action Required
-- [ ] **Supabase prestige migration** — Run in SQL Editor: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;`
-- [ ] **Supabase supporter migration (leaderboard)** — Run: `ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
-- [ ] **Supabase supporter migration (callsign_claims)** — Run: `ALTER TABLE callsign_claims ADD COLUMN IF NOT EXISTS supporter boolean DEFAULT false;`
-- [ ] **PostHog project setup** — Create project at posthog.com, add `VITE_POSTHOG_KEY` to GitHub Actions secrets → enables analytics tracking
-- [ ] **Sentry project setup** — Create project at sentry.io, add `VITE_SENTRY_DSN` to GitHub Actions secrets → enables error tracking
+- [ ] **Run launch security migration** — Apply `supabase/migrations/2026-03-30_launch_security.sql` to Supabase
+- [ ] **Supabase function deploy secrets** — Add `SUPABASE_ACCESS_TOKEN` and `SUPABASE_PROJECT_REF` to GitHub Actions secrets so `deploy-supabase-function.yml` can deploy `issue-run-token` + `submit-score`
+- [ ] **Supabase function env secrets** — Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for the new Edge Functions
 
 ## Deferred (non-blocking)
+- ⏳ PostHog project setup → add `VITE_POSTHOG_KEY` to GitHub Actions secrets when analytics is ready to turn on
+- ⏳ Sentry project setup → add `VITE_SENTRY_DSN` to GitHub Actions secrets when error tracking is ready to turn on
 - ⏳ Discord invite URL → uncomment footer link in `MenuScreen.jsx` (search `// no game Discord yet`)
 
 ## Now
-- [SIL] Fix Speedrun leaderboard: sort by time ascending (currently sorts by score — wrong)
-- [SIL] Achievements for Speedrun + Gauntlet modes (0 currently)
+- [SIL] Reduce warning debt below 25 warnings so `lint:strict` becomes realistic again
+- [SIL] Add a menu-level "Play Today's Seed / Beat This Score" hero panel for campaign traffic and creator challenges
 
 ## Backlog
 - Gauntlet difficulty sub-tabs (like Boss Rush has)
@@ -25,6 +25,22 @@
 - Boss Rush balance (warmup at wave 4; may need further tuning)
 - Consider `customSettings` boolean column migration for Supabase (⚙️ badge visible for all entries)
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
+
+## Done (session 30 — 2026-03-30)
+- ✅ Speedrun leaderboard rows now sort by time ascending in UI and post-submit rank lookup
+- ✅ Added 4 new achievements for Speedrun + Gauntlet mode coverage
+- ✅ Leaderboard entries now normalize/clamp client-submitted fields before save/read
+- ✅ Supporter badge state now persists through leaderboard save/read paths
+- ✅ Marketing metadata pass: stronger title/description/canonical/OG/Twitter tags in `index.html`
+- ✅ Dedicated OG social card asset added at `public/og-image.svg`
+- ✅ Server-side score submit path added at `supabase/functions/submit-score/index.ts`
+- ✅ One-time run token issue path added at `supabase/functions/issue-run-token/index.ts`
+- ✅ Security migration added at `supabase/migrations/2026-03-30_launch_security.sql`
+- ✅ GitHub Actions workflow added for Supabase function deployment
+- ✅ Marketing copy refresh in `README.md`, `manifest.json`, and menu share text
+- ✅ Tests updated and expanded to 70 passing total
+- ✅ Lint command and CI step aligned for ESLint 9 flat-config usage; `npm run lint` passes again
+- ✅ Callsign claim path fixed to import `getAuthUid()` correctly
 
 ## Done (session 28 — 2026-03-27)
 - ✅ Analytics: `gameCtx()` + `resolveMode()` helpers in `analytics.js`

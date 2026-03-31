@@ -314,7 +314,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     try {
       const { blob } = await generateFeatureCard();
       const file = new File([blob], "call-of-doodie-whats-new.png", { type: "image/png" });
-      const shareText = "Call of Doodie just dropped new features — global leaderboard, map themes, prestige system & more. Play free:";
+      const shareText = "Call of Doodie is live: a free browser roguelite shooter with daily challenges, boss rushes, gauntlets, leaderboards, and ridiculous perk builds. Play free:";
       const shareUrl = "https://vaultsparkstudios.com/call-of-doodie";
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: "Call of Doodie — What's New", text: shareText, url: shareUrl });

@@ -1,0 +1,228 @@
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
+const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
+const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
+
+function clampInt(value: unknown, min: number, max: number, fallback = min) {
+  const num = Number.parseInt(String(value ?? ""), 10);
+  if (!Number.isFinite(num)) return fallback;
+  return Math.min(max, Math.max(min, num));
+}
+
+function cleanText(value: unknown, maxLen: number, fallback = "") {
+  const text = String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
+  return text ? text.slice(0, maxLen) : fallback;
+}
+
+function parseRunTime(value: string) {
+  const match = value.match(/^(\d+):([0-5]\d)$/);
+  if (!match) return 0;
+  return Number.parseInt(match[1], 10) * 60 + Number.parseInt(match[2], 10);
+}
+
+function normalizeEntry(entry: Record<string, unknown>) {
+  const mode = VALID_MODES.has(String(entry.mode ?? "")) ? String(entry.mode) : null;
+  return {
+    name: cleanText(entry.name, 24, "Anonymous"),
+    score: clampInt(entry.score, 0, 10000000, 0),
+    kills: clampInt(entry.kills, 0, 1000000, 0),
+    wave: clampInt(entry.wave, 1, 10000, 1),
+    lastWords: cleanText(entry.lastWords, 60, "..."),
+    rank: cleanText(entry.rank, 40, "Noob Potato"),
+    bestStreak: clampInt(entry.bestStreak, 0, 100000, 0),
+    totalDamage: clampInt(entry.totalDamage, 0, 100000000, 0),
+    level: clampInt(entry.level, 1, 9999, 1),
+    time: cleanText(entry.time, 8, "0:00"),
+    achievements: clampInt(entry.achievements, 0, 999, 0),
+    difficulty: VALID_DIFFICULTIES.has(String(entry.difficulty ?? "")) ? String(entry.difficulty) : "normal",
+    starterLoadout: cleanText(entry.starterLoadout, 24, "standard"),
+    customSettings: Boolean(entry.customSettings),
+    inputDevice: VALID_INPUT_DEVICES.has(String(entry.inputDevice ?? "")) ? String(entry.inputDevice) : "mouse",
+    seed: entry.seed == null ? null : clampInt(entry.seed, 0, 999999999, 0),
+    accountLevel: clampInt(entry.accountLevel, 1, 9999, 1),
+    prestige: clampInt(entry.prestige, 0, 99, 0),
+    mode,
+    game_id: "cod",
+  };
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    if (!supabaseUrl || !anonKey || !serviceRoleKey) {
+      return new Response(JSON.stringify({ error: "Missing Supabase env configuration." }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const userClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const serviceClient = createClient(supabaseUrl, serviceRoleKey);
+
+    const {
+      data: { user },
+      error: userError,
+    } = await userClient.auth.getUser();
+
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: "Authenticated session required." }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const rawBody = await req.json();
+    const runToken = typeof rawBody.runToken === "string" ? rawBody.runToken.trim() : "";
+    if (!runToken) {
+      return new Response(JSON.stringify({ error: "Missing run token." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const payload = normalizeEntry(rawBody);
+
+    const { data: tokenRow, error: tokenError } = await serviceClient
+      .from("run_tokens")
+      .select("token,uid,mode,difficulty,seed,created_at,expires_at,used_at")
+      .eq("token", runToken)
+      .maybeSingle();
+    if (tokenError) throw tokenError;
+    if (!tokenRow || tokenRow.uid !== user.id) {
+      return new Response(JSON.stringify({ error: "Invalid run token." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (tokenRow.used_at) {
+      return new Response(JSON.stringify({ error: "Run token already used." }), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (new Date(tokenRow.expires_at).getTime() <= Date.now()) {
+      return new Response(JSON.stringify({ error: "Run token expired." }), {
+        status: 410,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if ((tokenRow.mode || null) !== payload.mode) {
+      return new Response(JSON.stringify({ error: "Run token mode mismatch." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (tokenRow.difficulty !== payload.difficulty) {
+      return new Response(JSON.stringify({ error: "Run token difficulty mismatch." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if ((tokenRow.seed ?? null) !== (payload.seed ?? null)) {
+      return new Response(JSON.stringify({ error: "Run token seed mismatch." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const reportedTime = parseRunTime(payload.time);
+    const runAgeSeconds = Math.max(0, Math.floor((Date.now() - new Date(tokenRow.created_at).getTime()) / 1000));
+    if (reportedTime > runAgeSeconds + 5) {
+      return new Response(JSON.stringify({ error: "Reported run time exceeds token age." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { data: claim } = await serviceClient
+      .from("callsign_claims")
+      .select("uid,supporter")
+      .eq("name", payload.name)
+      .maybeSingle();
+
+    if (claim?.uid && claim.uid !== user.id) {
+      return new Response(JSON.stringify({ error: "Callsign already claimed by another player." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supporter = Boolean(claim?.supporter);
+    const row = { ...payload, supporter, ts: Date.now() };
+
+    const { data: consumeRows, error: consumeError } = await serviceClient
+      .from("run_tokens")
+      .update({ used_at: new Date().toISOString() })
+      .eq("token", runToken)
+      .is("used_at", null)
+      .select("token");
+    if (consumeError) throw consumeError;
+    if (!consumeRows || consumeRows.length !== 1) {
+      return new Response(JSON.stringify({ error: "Run token could not be consumed." }), {
+        status: 409,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { error: insertError } = await serviceClient.from("leaderboard").insert([row]);
+    if (insertError) throw insertError;
+
+    const { data: member } = await serviceClient
+      .from("vault_members")
+      .select("id")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (member) {
+      await serviceClient.from("game_sessions").insert([{
+        user_id: user.id,
+        game_slug: "call-of-doodie",
+        score: row.score,
+        duration_s: parseRunTime(row.time),
+        metadata: {
+          kills: row.kills,
+          wave: row.wave,
+          level: row.level,
+          difficulty: row.difficulty,
+          mode: row.mode || "standard",
+          bestStreak: row.bestStreak,
+          achievements: row.achievements,
+        },
+      }]);
+
+      await serviceClient.rpc("award_vault_points", {
+        p_user_id: user.id,
+        p_event_type: "game_session",
+        p_points: 3,
+        p_metadata: { game: "call-of-doodie", score: row.score, wave: row.wave },
+      });
+    }
+
+    return new Response(JSON.stringify({ ok: true, entry: row }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown submit-score failure";
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});

@@ -178,8 +178,8 @@ describe("PERKS", () => {
 // ── ACHIEVEMENTS ──────────────────────────────────────────────────────────────
 
 describe("ACHIEVEMENTS", () => {
-  it("has exactly 57 achievements", () => {
-    expect(ACHIEVEMENTS).toHaveLength(57);
+  it("has exactly 61 achievements", () => {
+    expect(ACHIEVEMENTS).toHaveLength(61);
   });
 
   it("every achievement has required fields", () => {

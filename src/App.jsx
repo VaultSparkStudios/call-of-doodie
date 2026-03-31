@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES, WAVE_ROUTES,
   META_TREE, getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
 import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
@@ -191,6 +191,7 @@ export default function CallOfDoodie() {
   const dailyChallengeRef     = useRef(false); // synced with dailyChallengeMode
   const cursedRunRef          = useRef(false); // synced with cursedRunMode
   const bossRushRef           = useRef(false); // synced with bossRushMode
+  const runTokenRef           = useRef(null);  // server-issued one-time token for score submit
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
@@ -424,6 +425,8 @@ export default function CallOfDoodie() {
       noHitWaves: statsRef.current.noHitWaves || 0,
       bossRushMode: gs.bossRushMode || false,
       cursedRunMode: gs.cursedRunMode || false,
+      speedrunMode: gs.speedrunMode || false,
+      gauntletMode: gs.gauntletMode || false,
       activeSynergies: (gs.activeSynergies || []).length,
       berserkersKilled: statsRef.current.berserkersKilled || 0,
     };
@@ -831,6 +834,7 @@ export default function CallOfDoodie() {
       setTimeout(() => setMetaToast(null), 4000);
     }
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
+    return seed;
   }, []);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
@@ -1353,7 +1357,7 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Start game ────────────────────────────────────────────────────────────
-  const startGame = useCallback((forceSeed, challengeOpts = {}) => {
+  const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     // Show pre-deployment perk draft (skip in Daily Challenge to preserve seed fairness)
     if (!draftShownRef.current && !dailyChallengeMode) {
       const opts = getRandomPerks(3, [], false);
@@ -1370,10 +1374,9 @@ export default function CallOfDoodie() {
     // Store challenge vs data for HUD + DeathScreen
     setChallengeVsScore(challengeOpts.vs ?? null);
     setChallengeVsName(challengeOpts.vsName ?? null);
-    const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
-    initGame(forceSeed);
+    const seed = initGame(forceSeed);
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
     setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
@@ -1394,6 +1397,7 @@ export default function CallOfDoodie() {
     setRoutePending(false); setRouteOptions([]); routePendingRef.current = false;
     setBossCutscene(null); bossCutsceneRef.current = false;
     setCoins(0);
+    runTokenRef.current = null;
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
@@ -1403,6 +1407,15 @@ export default function CallOfDoodie() {
     }, 200); // small delay to let audio context resume
     // ── Analytics: game start ──
     const _startMode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    issueRunToken({
+      mode: _startMode === "standard" ? null : _startMode,
+      difficulty,
+      seed,
+    }).then(token => {
+      runTokenRef.current = token;
+    }).catch(() => {
+      runTokenRef.current = null;
+    });
     track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[0]?.name, starterLoadout });
     if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
   }, [difficulty, initGame, starterLoadout]);
@@ -1462,11 +1475,13 @@ export default function CallOfDoodie() {
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
       prestige: loadMetaProgress()?.prestige || 0,
       mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : speedrunRef.current ? "speedrun" : gauntletRef.current ? "gauntlet" : undefined,
+      runToken: runTokenRef.current,
     };
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const { board, online } = await saveToLeaderboard(entry);
+    runTokenRef.current = null;
     setLeaderboard(board);
-    const globalRank = await getPlayerGlobalRank(score);
+    const globalRank = await getPlayerGlobalRank(score, entry.mode || null, entry.time);
     return { online, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 

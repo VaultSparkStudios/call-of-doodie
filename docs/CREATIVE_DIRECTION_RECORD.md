@@ -51,3 +51,27 @@ brief, README, AGENTS notes, and session handoffs.
 - Approval source: user session directive (Session 28); copy written in `SupporterModal.jsx` confirms the intent
 - Evidence link or reference: `src/components/SupporterModal.jsx`, `context/LATEST_HANDOFF.md` Session 28
 - Supersedes prior entry: none
+
+### 2026-03-30 - Prepare the game for a marketing push with real audit follow-through
+
+- Area: launch-readiness / marketing / security
+- Human decision or guidance: analyze the game for improvements, refinements, and security issues, then prepare it for a marketing push
+- Previous state: live game with good feature depth but stale marketing metadata and unresolved correctness/security follow-up items
+- New required direction: prioritize fixes that improve public presentation, trust, and first-contact conversion instead of only adding more content
+- Why this matters: a marketing push amplifies the rough edges too; correctness, metadata, and credibility issues need to be reduced before traffic increases
+- Impact on canon / brand / production: launch-facing work should favor accurate positioning, stronger share surfaces, and cleaner integrity paths
+- Approval source: user session directive
+- Evidence link or reference: Session 30 request in terminal; `index.html`, `README.md`, `src/storage.js`
+- Supersedes prior entry: none
+
+### 2026-03-30 - Finish the security pass and reduce the next-task list to true launch blockers
+
+- Area: launch execution / security / process hygiene
+- Human decision or guidance: implement all needed security updates and finish the needed next task list after updating memory, handoff, and context
+- Previous state: repo-side security work was mostly in place, but the handoff/task files still mixed true launch blockers with optional follow-up items
+- New required direction: complete the security implementation in-repo, then make the operating docs accurately reflect that only deploy/config actions remain for launch
+- Why this matters: launch planning gets unreliable when ops documents overstate or misclassify blockers
+- Impact on canon / brand / production: security and launch-readiness work should end with precise operational state, not just code changes
+- Approval source: user session directive
+- Evidence link or reference: Session 31 request in terminal; `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `context/PROJECT_STATUS.json`
+- Supersedes prior entry: none

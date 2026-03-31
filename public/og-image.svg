@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Call of Doodie social preview</title>
+  <desc id="desc">A comedy-first browser shooter with absurd enemies, boss rushes, daily challenges, and leaderboard rivalry.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#120406"/>
+      <stop offset="55%" stop-color="#26110c"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </linearGradient>
+    <linearGradient id="flare" x1="0" x2="1">
+      <stop offset="0%" stop-color="#ff6b35"/>
+      <stop offset="55%" stop-color="#ffd54a"/>
+      <stop offset="100%" stop-color="#ff6b35"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.35"/>
+  <circle cx="940" cy="140" r="180" fill="#ff6b35" opacity="0.12"/>
+  <circle cx="240" cy="520" r="220" fill="#ffd54a" opacity="0.08"/>
+
+  <g opacity="0.95">
+    <rect x="64" y="58" width="164" height="44" rx="8" fill="#8f0f12"/>
+    <text x="88" y="88" fill="#fff" font-family="'Courier New', monospace" font-size="28" font-weight="700">● LIVE</text>
+    <text x="1130" y="88" text-anchor="end" fill="#ffcf8f" font-family="'Courier New', monospace" font-size="22">FREE IN BROWSER</text>
+  </g>
+
+  <rect x="64" y="130" width="1072" height="8" rx="4" fill="url(#flare)"/>
+
+  <text x="72" y="246" fill="#f7eee5" font-family="'Arial Black', Impact, sans-serif" font-size="102" letter-spacing="2">CALL OF DOODIE</text>
+  <text x="76" y="306" fill="#ff8757" font-family="'Courier New', monospace" font-size="34" font-weight="700">ROGUELITE SHOOTER  •  DAILY CHALLENGES  •  BOSS RUSH  •  GAUNTLET</text>
+
+  <g transform="translate(72 360)">
+    <rect width="322" height="170" rx="18" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text x="28" y="48" fill="#ffd54a" font-family="'Courier New', monospace" font-size="24" font-weight="700">ABSURD ENEMIES</text>
+    <text x="28" y="88" fill="#f7eee5" font-family="'Courier New', monospace" font-size="48">💀 👩 📉 🤖</text>
+    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Humor-first chaos that still feels sharp</text>
+  </g>
+
+  <g transform="translate(438 360)">
+    <rect width="322" height="170" rx="18" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text x="28" y="48" fill="#00ff9c" font-family="'Courier New', monospace" font-size="24" font-weight="700">BUILD VARIETY</text>
+    <text x="28" y="92" fill="#f7eee5" font-family="'Courier New', monospace" font-size="40">12 weapons  •  27+ perks</text>
+    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Synergies, cursed picks, seeded rivalry runs</text>
+  </g>
+
+  <g transform="translate(804 360)">
+    <rect width="332" height="170" rx="18" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text x="28" y="48" fill="#7dd3ff" font-family="'Courier New', monospace" font-size="24" font-weight="700">CHASE THE BOARD</text>
+    <text x="28" y="92" fill="#f7eee5" font-family="'Courier New', monospace" font-size="40">🏃 Speedrun  •  📅 Daily</text>
+    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Share scores. Copy challenge links. Run it back.</text>
+  </g>
+
+  <text x="72" y="592" fill="#ffffff" font-family="'Courier New', monospace" font-size="30" font-weight="700" filter="url(#glow)">vaultsparkstudios.com/call-of-doodie</text>
+  <text x="1128" y="592" text-anchor="end" fill="#b7aba0" font-family="'Courier New', monospace" font-size="20">VAULTSPARK STUDIOS</text>
+</svg>

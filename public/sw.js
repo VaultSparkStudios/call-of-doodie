@@ -11,6 +11,7 @@ const SHELL_ASSETS = [
   "/call-of-doodie/index.html",
   "/call-of-doodie/manifest.json",
   "/call-of-doodie/icon.svg",
+  "/call-of-doodie/og-image.svg",
 ];
 const BASE = "/call-of-doodie/";
 

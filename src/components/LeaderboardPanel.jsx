@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
+import { compareLeaderboardEntries, getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -147,6 +147,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
     : activeDiff
       ? modeFiltered.filter(e => e.difficulty === activeDiff)
       : modeFiltered;
+  const sorted = [...filtered].sort((a, b) => compareLeaderboardEntries(a, b, activeMode === "__today__" ? null : activeMode));
 
   const activeTab = DIFF_TABS.find(t => t.key === activeDiff);
 
@@ -261,7 +262,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
 
         {(lbLoading && !isToday && searchResults === null) || (isToday && todayLoading) || (searchResults === null && searchLoading) ? (
           <p style={{ color: "#DDD", fontSize: 13 }}>Loading...</p>
-        ) : filtered.length === 0 ? (
+        ) : sorted.length === 0 ? (
           <p style={{ color: "#CCC", fontStyle: "italic", fontSize: 13 }}>
             {searchResults !== null
               ? `No players found matching "${searchQuery}".`
@@ -284,7 +285,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
               <span style={{ textAlign: "right", paddingRight: 4 }}>DIFF</span>
               <span></span>
             </div>
-            {filtered.map((e, i) => {
+            {sorted.map((e, i) => {
               const isMe = e.name === username;
               const medal = i < 3 ? ["🥇", "🥈", "🥉"][i] : String(i + 1);
               const rowColor = i < 3 ? ["#FFD700", "#E0E0E0", "#CD7F32"][i] : "#EEE";
@@ -364,7 +365,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         )}
 
         {/* Load More — hidden during search / today tab */}
-        {(lbHasMore || lbLoading) && !lbLoading && filtered.length > 0 && !isToday && searchResults === null && (
+        {(lbHasMore || lbLoading) && !lbLoading && sorted.length > 0 && !isToday && searchResults === null && (
           <div style={{ textAlign: "center", marginTop: 12 }}>
             <button
               onClick={onLoadMore}

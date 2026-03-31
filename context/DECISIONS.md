@@ -38,3 +38,13 @@
   - `buildFlowField` and `getShopOptions` remain as module-level helpers in App.jsx (safe, no React deps, but not yet moved).
   - Input handler useEffects remain in App.jsx.
   - The RAF loop stays in App.jsx — closes over too many refs to safely decouple without a Context refactor. Don't move it until there's a test harness.
+
+- **Speedrun ranking is time-first at the client layer**: Until Supabase gets a dedicated speedrun ranking path, the leaderboard UI and post-submit rank lookup sort `mode === "speedrun"` by parsed `MM:SS` time ascending instead of score. This fixes the user-visible ranking bug without changing the whole storage model.
+
+- **Leaderboard payloads are normalized before persistence**: Callsign text, last words, numeric stats, input device, and mode values are now normalized/clamped in `storage.js` before save/read. This is a pragmatic client-side integrity step for a browser game, even though authoritative anti-cheat still requires a server-side submit path.
+
+- **Online score submission now goes through a Supabase Edge Function**: Browser clients no longer insert leaderboard rows directly. `submit-score` verifies auth, re-checks callsign ownership, normalizes payloads again server-side, and handles Vault point awards. This is the first authoritative boundary for launch integrity.
+
+- **Lint commands align with ESLint 9 flat config**: Local and CI lint now use plain `eslint src --report-unused-disable-directives`. Warning debt still exists, but the command contract is now consistent and non-broken.
+
+- **Score submission is gated by one-time run tokens**: A run must obtain a token from `issue-run-token` at start, and `submit-score` will only accept a matching unused token for the same mode, difficulty, and seed. This does not make the game cheat-proof, but it materially raises the cost of fabricated submissions and gives the server a real issuance/consumption flow.

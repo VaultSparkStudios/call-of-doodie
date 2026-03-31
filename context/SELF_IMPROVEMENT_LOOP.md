@@ -7,10 +7,10 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▁▆▆
-3-session avg: Dev 8.5 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 7.3
-Avg total: 30.3 / 50  |  Velocity trend: →  |  Debt: →
-Last session: 2026-03-27 | Session 28 | Total: 44/50 | Velocity: 11
+Sparkline (last 5 totals): ▁▆▆▆▆
+3-session avg: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 9.0
+Avg total: 43.7 / 50  |  Velocity trend: →  |  Debt: →
+Last session: 2026-03-30 | Session 31 | Total: 44/50 | Velocity: 9
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -122,3 +122,57 @@ Rolling avg (last 3): Dev 8.5 [N=2] | Align 9.0 [N=2] | Momentum 9.0 [N=2] | Eng
 5. ARIA labels pass on MenuScreen + DeathScreen — accessibility pass 2, completes the a11y story
 
 **Committed to TASK_BOARD:** [SIL] Fix Speedrun LB sort: time ascending · [SIL] Achievements for Speedrun + Gauntlet modes
+
+---
+
+## 2026-03-30 — Session 30 | Total: 43/50 | Velocity: 8 | Debt: →
+Rolling avg (last 3): Dev 8.3 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 8.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | ↓ | Speedrun correctness fixed and tests expanded to 70 passing, but the repo truth is that lint still hard-fails on 68 warnings |
+| Creative Alignment | 9 | → | Marketing prep stayed aligned with the humor-first browser-shooter identity rather than generic FPS framing |
+| Momentum | 9 | → | Cleared the two highest-leverage SIL items and shipped launch-facing metadata improvements in one session |
+| Engagement | 8 | → | Better share/SEO surface and mode achievement coverage help marketing readiness, but no live player-data loop was added |
+| Process Quality | 9 | → | Studio OS files updated, CDR captured, and stale lint assumptions were corrected in the repo context |
+| **Total** | **43/50** | ↓ | |
+
+**Top win:** The session converted audit findings into user-facing launch fixes instead of just notes: speedrun ranking now behaves correctly, supporter badges persist, and the public metadata finally matches the real game.
+**Top gap:** Score integrity is still fundamentally client-trusting; the current HMAC is visible in the browser and only deters casual tampering.
+**Intent outcome:** Achieved — the game is more accurate, more marketable, and clearer about its remaining security/ops limits.
+
+**Brainstorm**
+1. Generate a dedicated OG/social card image with brand-consistent art so shared links convert better than text-only previews
+2. Move leaderboard submission behind a Supabase Edge Function that verifies payload rules server-side before insert
+3. Add a featured "Play the Daily / Beat This Seed" hero panel on the menu for marketing campaigns and creator challenges
+4. Add a public patch-notes / what's-new strip fed from a lightweight JSON so marketing beats are visible in-game
+5. Add a session replay seed card with one-tap copy/share from the main menu, not just the death screen
+
+**Committed to TASK_BOARD:** [SIL] Add dedicated OG/share image · [SIL] Server-side leaderboard verification path
+
+---
+
+## 2026-03-30 — Session 31 | Total: 44/50 | Velocity: 9 | Debt: →
+Rolling avg (last 3): Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 9.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | ↑ | Verified submit path now uses one-time run tokens, launch migration is checked in, tests/build/lint all pass |
+| Creative Alignment | 9 | → | Security and marketing work stayed pragmatic without diluting the comedy-first identity |
+| Momentum | 9 | → | The remaining launch list was reduced to concrete deploy/config actions instead of vague cleanup |
+| Engagement | 8 | → | Share surfaces and launch trust improved, but no new live audience loop shipped this session |
+| Process Quality | 9 | → | Studio OS files, handoff, status JSON, and task board now match the real post-security state |
+| **Total** | **44/50** | ↑ | |
+
+**Top win:** The repo now has a real server-issued/server-consumed score submission contract instead of a purely client-trusting leaderboard path.
+**Top gap:** Production still needs the Supabase migration and function secrets/deploy to make the hardened path live.
+**Intent outcome:** Achieved — needed repo-side security work is implemented, and the remaining launch checklist is now cleanly narrowed to external ops steps.
+
+**Brainstorm**
+1. Add a menu hero for "Today's seed" and featured creator challenge links so launch traffic gets a clear first click
+2. Introduce lightweight anomaly logging for impossible score/time combinations in `submit-score`
+3. Add a minimal admin review view for flagged leaderboard runs before any future featured-events push
+4. Convert the patch-notes strip idea into a small JSON-fed "What's new" card in the menu
+5. Add rate limiting or cooldown heuristics per user/IP at the Edge Function layer if abuse appears post-launch
+
+**Committed to TASK_BOARD:** [SIL] Reduce warning debt below 25 warnings · [SIL] Add a menu-level "Play Today's Seed / Beat This Score" hero panel

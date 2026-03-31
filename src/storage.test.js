@@ -2,7 +2,7 @@
 // Functions that touch localStorage or Supabase are excluded — only pure logic is tested here.
 
 import { describe, it, expect } from "vitest";
-import { getAccountLevel } from "./storage.js";
+import { compareLeaderboardEntries, getAccountLevel, normalizeLeaderboardEntry, parseRunTime } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
 // Tier labels: 1-9 gray, 10-24 bronze, 25-49 silver, 50-99 gold, 100+ purple
@@ -60,5 +60,51 @@ describe("getAccountLevel", () => {
     [0, 1, 5, 10, 100, 10000].forEach(k => {
       expect(getAccountLevel(k)).toBeGreaterThan(0);
     });
+  });
+});
+
+describe("parseRunTime", () => {
+  it("parses MM:SS values into seconds", () => {
+    expect(parseRunTime("3:07")).toBe(187);
+  });
+
+  it("returns infinity for invalid values", () => {
+    expect(parseRunTime("oops")).toBe(Number.POSITIVE_INFINITY);
+  });
+});
+
+describe("compareLeaderboardEntries", () => {
+  it("sorts speedrun entries by lower time first", () => {
+    const faster = { mode: "speedrun", time: "2:45", score: 12000 };
+    const slower = { mode: "speedrun", time: "3:10", score: 999999 };
+    expect(compareLeaderboardEntries(faster, slower, "speedrun")).toBeLessThan(0);
+  });
+
+  it("sorts non-speedrun entries by score descending", () => {
+    const higher = { score: 5000 };
+    const lower = { score: 3000 };
+    expect(compareLeaderboardEntries(higher, lower)).toBeLessThan(0);
+  });
+});
+
+describe("normalizeLeaderboardEntry", () => {
+  it("sanitizes text and clamps numeric fields", () => {
+    const entry = normalizeLeaderboardEntry({
+      name: "  Player\u0007 ",
+      lastWords: "  too many tabs\t\t",
+      score: "99999999",
+      kills: "-5",
+      wave: "0",
+      inputDevice: "weird",
+      mode: "fake_mode",
+    });
+
+    expect(entry.name).toBe("Player");
+    expect(entry.lastWords).toBe("too many tabs");
+    expect(entry.score).toBe(10000000);
+    expect(entry.kills).toBe(0);
+    expect(entry.wave).toBe(1);
+    expect(entry.inputDevice).toBe("mouse");
+    expect(entry.mode).toBeNull();
   });
 });

@@ -736,6 +736,12 @@ export const ACHIEVEMENTS = [
   // ── Cursed Run achievements ──
   { id: "cursed_run_w5",  name: "Glutton for Punishment", desc: "Survive wave 5 in Cursed Run",    emoji: "🩸", check: (s) => s.cursedRunMode && s.wave >= 5,  tier: "silver" },
   { id: "cursed_run_w10", name: "Masochist Legend",       desc: "Survive wave 10 in Cursed Run",   emoji: "☠️", check: (s) => s.cursedRunMode && s.wave >= 10, tier: "gold" },
+  // ── Speedrun achievements ──
+  { id: "speedrun_w5",    name: "Any% Toilet%",     desc: "Reach wave 5 in Speedrun mode",         emoji: "🏃", check: (s) => s.speedrunMode && s.wave >= 5, tier: "silver" },
+  { id: "speedrun_sub4",  name: "Clip It",          desc: "Reach wave 10 in under 4 minutes in Speedrun mode", emoji: "⏱️", check: (s) => s.speedrunMode && s.wave >= 10 && s.timeSurvived <= 240, tier: "legendary" },
+  // ── Gauntlet achievements ──
+  { id: "gauntlet_w5",    name: "Fixed Odds",       desc: "Reach wave 5 in Gauntlet mode",         emoji: "🏋️", check: (s) => s.gauntletMode && s.wave >= 5, tier: "silver" },
+  { id: "gauntlet_w10",   name: "No-Shop Warrior",  desc: "Reach wave 10 in Gauntlet mode",        emoji: "🧱", check: (s) => s.gauntletMode && s.wave >= 10, tier: "gold" },
   // ── Weapon synergy achievements ──
   { id: "synergy_first",  name: "Better Together",   desc: "Activate a weapon synergy",            emoji: "🔗", check: (s) => s.activeSynergies >= 1, tier: "bronze" },
   { id: "synergy_double", name: "Arsenal Architect", desc: "Have 2 synergies active simultaneously", emoji: "⚡", check: (s) => s.activeSynergies >= 2, tier: "gold" },
@@ -792,6 +798,10 @@ export const ACHIEVEMENT_PROGRESS = {
   boss_rush_20:    ["wave",        20],
   cursed_run_w5:   ["wave",        5],
   cursed_run_w10:  ["wave",        10],
+  speedrun_w5:     ["wave",        5],
+  speedrun_sub4:   ["timeSurvived", 240],
+  gauntlet_w5:     ["wave",        5],
+  gauntlet_w10:    ["wave",        10],
   synergy_first:   ["activeSynergies", 1],
   synergy_double:  ["activeSynergies", 2],
   berserker_5:     ["berserkersKilled", 5],

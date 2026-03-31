@@ -1,19 +1,6 @@
 // ===== LEADERBOARD =====
 import { supabase, getAuthUid } from "./supabase.js";
-
-// ── Score integrity checksum ──────────────────────────────────────────────────
-// Lightweight fingerprint — not cryptographically secure (key is client-visible)
-// but raises the bar significantly against casual devtools manipulation.
-const _SIG_KEY = "c0d-v1-integrity";
-async function _signRow(row) {
-  const payload = `${row.score}|${row.kills}|${row.wave}|${row.seed ?? ""}|${row.ts}`;
-  try {
-    const enc = new TextEncoder();
-    const keyMat = await crypto.subtle.importKey("raw", enc.encode(_SIG_KEY), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-    const sig = await crypto.subtle.sign("HMAC", keyMat, enc.encode(payload));
-    return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
-  } catch { return "00000000"; }
-}
+import { isSupporter } from "./utils/supporter.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
 // Run these in the Supabase SQL console (one time, in order):
@@ -26,7 +13,6 @@ async function _signRow(row) {
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "seed" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "accountLevel" integer;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "mode" text;
-//   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "sig" text;
 //   ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS "game_id" text DEFAULT 'cod';
 //   -- ✅ Migration complete — mode column live, no stripping needed
 //
@@ -73,17 +59,81 @@ export async function claimCallsign(name) {
 }
 
 const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
+const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
+const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
+const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
+
+function _clampInt(value, min, max, fallback = min) {
+  const num = Number.parseInt(value, 10);
+  if (!Number.isFinite(num)) return fallback;
+  return Math.min(max, Math.max(min, num));
+}
+
+function _cleanText(value, maxLen, fallback = "") {
+  const text = String(value ?? "")
+    .replace(/[\u0000-\u001f\u007f]/g, "")
+    .trim();
+  return text ? text.slice(0, maxLen) : fallback;
+}
+
+export function parseRunTime(value) {
+  if (typeof value !== "string") return Number.POSITIVE_INFINITY;
+  const match = value.trim().match(/^(\d+):([0-5]\d)$/);
+  if (!match) return Number.POSITIVE_INFINITY;
+  return Number.parseInt(match[1], 10) * 60 + Number.parseInt(match[2], 10);
+}
+
+export function compareLeaderboardEntries(a, b, mode = null) {
+  const effectiveMode = mode || ((a?.mode && a?.mode === b?.mode) ? a.mode : null);
+  if (effectiveMode === "speedrun") {
+    const timeDelta = parseRunTime(a?.time) - parseRunTime(b?.time);
+    if (timeDelta !== 0) return timeDelta;
+    return (b?.score || 0) - (a?.score || 0);
+  }
+  return (b?.score || 0) - (a?.score || 0);
+}
+
+export function normalizeLeaderboardEntry(entry) {
+  const mode = VALID_MODES.has(entry?.mode) ? entry.mode : null;
+  const difficulty = VALID_DIFFICULTIES.has(entry?.difficulty) ? entry.difficulty : "normal";
+  const inputDevice = VALID_INPUT_DEVICES.has(entry?.inputDevice) ? entry.inputDevice : "mouse";
+  return {
+    name: _cleanText(entry?.name, 24, "Anonymous"),
+    lastWords: _cleanText(entry?.lastWords, 60, "..."),
+    rank: _cleanText(entry?.rank, 40, "Noob Potato"),
+    score: _clampInt(entry?.score, 0, 10000000, 0),
+    kills: _clampInt(entry?.kills, 0, 1000000, 0),
+    wave: _clampInt(entry?.wave, 1, 10000, 1),
+    bestStreak: _clampInt(entry?.bestStreak, 0, 100000, 0),
+    totalDamage: _clampInt(entry?.totalDamage, 0, 100000000, 0),
+    level: _clampInt(entry?.level, 1, 9999, 1),
+    achievements: _clampInt(entry?.achievements, 0, 999, 0),
+    accountLevel: _clampInt(entry?.accountLevel, 1, 9999, 1),
+    prestige: _clampInt(entry?.prestige, 0, 99, 0),
+    time: _cleanText(entry?.time, 8, "0:00"),
+    difficulty,
+    inputDevice,
+    starterLoadout: _cleanText(entry?.starterLoadout, 24, "standard"),
+    mode,
+    customSettings: Boolean(entry?.customSettings),
+    supporter: Boolean(entry?.supporter),
+    seed: entry?.seed == null ? null : _clampInt(entry.seed, 0, 999999999, 0),
+    ts: entry?.ts ?? null,
+    created_at: entry?.created_at ?? null,
+    game_id: entry?.game_id ?? "cod",
+  };
+}
 
 export async function loadLeaderboard(offset = 0, limit = 50) {
   if (supabase) {
     try {
       const { data, error } = await supabase
         .from("leaderboard")
-        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige")
+        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,supporter")
         .order("score", { ascending: false })
         .range(offset, offset + limit - 1);
       if (error) throw error;
-      return data || [];
+      return (data || []).map(normalizeLeaderboardEntry);
     } catch (err) {
       console.warn("[leaderboard] Supabase read failed, using local cache:", err.message);
     }
@@ -92,87 +142,57 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
   try {
     const raw = localStorage.getItem(LB_KEY);
     const all = raw ? JSON.parse(raw) : [];
-    return all.slice(offset, offset + limit);
+    return all.map(normalizeLeaderboardEntry).slice(offset, offset + limit);
   } catch { return []; }
 }
 
-// ── Vault Member integration (silent, non-blocking) ─────────────────────────
-// If the player has a Vault Member session on this domain, their game session
-// is recorded and they earn vault points. No redirect, no login prompt.
-// Vault Members are players who registered at vaultsparkstudios.com/vault-member/
-async function _tryAwardVaultPoints(entry) {
-  if (!supabase) return;
-  try {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-
-    // Only award points to real vault members (not anonymous sessions)
-    if (session.user.is_anonymous) return;
-
-    const { data: member } = await supabase
-      .from('vault_members')
-      .select('id')
-      .eq('id', session.user.id)
-      .maybeSingle();
-    if (!member) return;
-
-    // Write game session
-    await supabase.from('game_sessions').insert([{
-      user_id:    session.user.id,
-      game_slug:  'call-of-doodie',
-      score:      entry.score      || 0,
-      duration_s: entry.timeSurvived || 0,
-      metadata: {
-        kills:       entry.kills,
-        wave:        entry.wave,
-        level:       entry.level,
-        difficulty:  entry.difficulty,
-        mode:        entry.mode || 'standard',
-        bestStreak:  entry.bestStreak,
-        achievements: entry.achievements,
-      },
-    }]);
-
-    // Award vault points (3 pts per game session)
-    await supabase.rpc('award_vault_points', {
-      p_user_id:    session.user.id,
-      p_event_type: 'game_session',
-      p_points:     3,
-      p_metadata:   { game: 'call-of-doodie', score: entry.score, wave: entry.wave },
-    });
-  } catch {
-    // Non-critical — never surface vault errors to the player
-  }
-}
-
 // Note: requires Supabase migration: ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;
+// Online submit path expects the Supabase Edge Function `submit-score` to be deployed.
 export async function saveToLeaderboard(entry) {
-  const ts = Date.now();
-  const sig = await _signRow({ ...entry, ts });
-  const row = { ...entry, ts, game_id: 'cod', sig };
-
-  // Fire vault integration in parallel — does not block leaderboard submit
-  _tryAwardVaultPoints(entry);
+  const rawRunToken = typeof entry?.runToken === "string" ? entry.runToken.trim() : "";
+  const safeEntry = normalizeLeaderboardEntry({ ...entry, supporter: isSupporter() });
 
   if (supabase) {
     try {
-      const { error } = await supabase.from("leaderboard").insert([row]);
+      const { error } = await supabase.functions.invoke("submit-score", {
+        body: { ...safeEntry, runToken: rawRunToken },
+      });
       if (error) throw error;
       const board = await loadLeaderboard();
       return { board, online: true };
     } catch (err) {
-      console.warn("[leaderboard] Supabase write failed, saving locally:", err.message);
+      console.warn("[leaderboard] Edge submit failed, saving locally:", err.message);
     }
   }
   // Fallback: localStorage
   try {
     const board = JSON.parse(localStorage.getItem(LB_KEY) || "[]");
-    board.push(row);
-    board.sort((a, b) => b.score - a.score);
-    const top = board.slice(0, 100);
+    board.push({ ...safeEntry, ts: Date.now(), game_id: "cod" });
+    const top = board
+      .map(normalizeLeaderboardEntry)
+      .sort((a, b) => compareLeaderboardEntries(a, b, a.mode || b.mode || null))
+      .slice(0, 100);
     localStorage.setItem(LB_KEY, JSON.stringify(top));
     return { board: top, online: false };
   } catch { return { board: [], online: false }; }
+}
+
+export async function issueRunToken({ mode = null, difficulty = "normal", seed = null } = {}) {
+  if (!supabase) return null;
+  try {
+    const { data, error } = await supabase.functions.invoke("issue-run-token", {
+      body: {
+        mode: VALID_MODES.has(mode) ? mode : null,
+        difficulty: VALID_DIFFICULTIES.has(difficulty) ? difficulty : "normal",
+        seed: seed == null ? null : _clampInt(seed, 0, 999999999, 0),
+      },
+    });
+    if (error) throw error;
+    return typeof data?.token === "string" ? data.token : null;
+  } catch (err) {
+    console.warn("[leaderboard] Run token issue failed:", err.message);
+    return null;
+  }
 }
 
 // ===== LEADERBOARD — TODAY / SEARCH / RANK =====
@@ -184,7 +204,7 @@ export async function loadLeaderboardToday(mode = null, difficulty = null) {
     const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
     let q = supabase
       .from("leaderboard")
-      .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,created_at")
+      .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,supporter,created_at")
       .gte("created_at", midnight.toISOString())
       .order("score", { ascending: false })
       .limit(50);
@@ -192,7 +212,7 @@ export async function loadLeaderboardToday(mode = null, difficulty = null) {
     if (difficulty) q = q.eq("difficulty", difficulty);
     const { data, error } = await q;
     if (error) throw error;
-    return data || [];
+    return (data || []).map(normalizeLeaderboardEntry);
   } catch (err) {
     console.warn("[leaderboard] Today query failed:", err.message);
     return [];
@@ -205,12 +225,12 @@ export async function searchLeaderboard(nameQuery) {
   try {
     const { data, error } = await supabase
       .from("leaderboard")
-      .select("name,score,kills,wave,difficulty,mode,ts,accountLevel,inputDevice,starterLoadout,seed,level,time,lastWords,bestStreak,totalDamage,achievements,rank,customSettings,prestige")
+      .select("name,score,kills,wave,difficulty,mode,ts,accountLevel,inputDevice,starterLoadout,seed,level,time,lastWords,bestStreak,totalDamage,achievements,rank,customSettings,prestige,supporter")
       .ilike("name", `%${nameQuery.trim()}%`)
       .order("score", { ascending: false })
       .limit(20);
     if (error) throw error;
-    return data || [];
+    return (data || []).map(normalizeLeaderboardEntry);
   } catch (err) {
     console.warn("[leaderboard] Search failed:", err.message);
     return [];
@@ -218,13 +238,29 @@ export async function searchLeaderboard(nameQuery) {
 }
 
 /** Returns the global rank for a given score (1-based). */
-export async function getPlayerGlobalRank(score) {
+export async function getPlayerGlobalRank(score, mode = null, time = null) {
   if (!supabase || score == null) return null;
   try {
-    const { count, error } = await supabase
+    if (mode === "speedrun" && time) {
+      const timeRows = await supabase
+        .from("leaderboard")
+        .select("time,score", { count: "exact" })
+        .eq("mode", "speedrun")
+        .limit(2000);
+      if (timeRows.error) throw timeRows.error;
+      const sorted = (timeRows.data || [])
+        .map(normalizeLeaderboardEntry)
+        .sort((a, b) => compareLeaderboardEntries(a, b, "speedrun"));
+      const idx = sorted.findIndex(row => row.time === time && row.score === score);
+      return (idx === -1 ? sorted.length : idx) + 1;
+    }
+
+    let query = supabase
       .from("leaderboard")
       .select("*", { count: "exact", head: true })
       .gt("score", score);
+    if (mode) query = query.eq("mode", mode);
+    const { count, error } = await query;
     if (error) throw error;
     return (count || 0) + 1;
   } catch (err) {

@@ -53,3 +53,40 @@ Append chronological entries.
   - Added: Speedrun LB sort is wrong (sorts by score, should be time ascending) — needs fix next session
   - Added: Supabase supporter + prestige columns not yet migrated — ⭐ badge won't sync until user runs migrations
 - Recommended next move: Fix Speedrun LB sort (time asc); add achievements for Speedrun/Gauntlet; run Supabase migrations; add PostHog/Sentry env vars to GitHub Actions
+
+---
+
+### 2026-03-30 — Session 30: Launch-readiness audit, leaderboard hardening, marketing metadata pass
+
+- Goal: Audit the live game for improvements/refinements/security issues and prepare it for a marketing push
+- What changed: Fixed speedrun leaderboard ranking behavior, added Speedrun/Gauntlet achievements, normalized leaderboard payloads, restored supporter badge persistence, moved online score submission to a Supabase Edge Function contract, added a dedicated OG social card asset, refreshed SEO/share/manifest/README copy, and aligned lint commands with ESLint 9 flat-config behavior
+- Files or systems touched:
+  - MOD: src/storage.js, src/components/LeaderboardPanel.jsx, src/App.jsx, src/constants.js, src/components/MenuScreen.jsx, index.html, public/manifest.json, public/sw.js, README.md, package.json, .github/workflows/deploy.yml
+  - NEW: public/og-image.svg, supabase/functions/submit-score/index.ts, supabase/functions/README.md, .github/workflows/deploy-supabase-function.yml
+  - TESTS: src/storage.test.js, src/constants.test.js
+  - DOCS: context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, context/DECISIONS.md, context/SELF_IMPROVEMENT_LOOP.md, docs/CREATIVE_DIRECTION_RECORD.md, logs/WORK_LOG.md, context/PROJECT_STATUS.json
+- Risks created or removed:
+  - Removed: speedrun runs no longer display/rank by score in the client experience
+  - Removed: supporter leaderboard badges now survive read/write flow
+  - Reduced: client-side leaderboard payloads are now sanitized/clamped instead of trusting raw values
+  - Removed: browser clients no longer submit leaderboard rows directly; verified path now exists in repo
+  - Reduced: lint command mismatch is gone; warning debt remains but is no longer blocking local or CI lint
+- Added: Edge Function deployment still depends on Supabase/GitHub secrets being present
+- Recommended next move: add the remaining Supabase deploy/env secrets, run the supporter/prestige migrations, and start paying down warning debt
+
+---
+
+### 2026-03-30 — Session 31: Run-token security completion and Studio OS closeout
+
+- Goal: Finish the needed repo-side security work, narrow the launch checklist to true blockers, and update all required Studio OS memory/handoff files
+- What changed: Added a one-time run-token issuance/consumption flow around online score submission, checked in the launch security migration, corrected the callsign auth path, and refreshed Current State, Task Board, Handoff, Decisions, SIL, CDR, Work Log, and Project Status so they all reflect the same post-security reality
+- Files or systems touched:
+  - MOD: src/storage.js, src/App.jsx, src/components/LeaderboardPanel.jsx, src/constants.js
+  - NEW: supabase/functions/issue-run-token/index.ts, supabase/migrations/2026-03-30_launch_security.sql
+  - MOD: supabase/functions/submit-score/index.ts, context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, context/DECISIONS.md, context/SELF_IMPROVEMENT_LOOP.md, context/PROJECT_STATUS.json, docs/CREATIVE_DIRECTION_RECORD.md, logs/WORK_LOG.md
+- Risks created or removed:
+  - Removed: direct client leaderboard inserts are no longer the intended online trust boundary
+  - Reduced: fabricated submissions now need a valid issued run token tied to auth, mode, difficulty, and seed
+  - Clarified: launch blockers are now limited to migration/deploy/config work rather than mixed with optional analytics tooling
+  - Remaining: the hardened path is not live until the migration runs and Supabase function secrets/deploy are completed
+- Recommended next move: run `supabase/migrations/2026-03-30_launch_security.sql`, set the GitHub/Supabase function secrets, deploy both Edge Functions, then push the live build

@@ -1,7 +1,7 @@
 {
   "name": "Call of Doodie: Modern Warfare on Mom's WiFi",
   "short_name": "Call of Doodie",
-  "description": "A browser-based top-down shooter parody game. Survive waves of Karens and HOA presidents!",
+  "description": "A free browser roguelite shooter with absurd enemies, boss rushes, daily challenges, and build-defining perks.",
   "start_url": "/call-of-doodie/",
   "scope": "/call-of-doodie/",
   "display": "standalone",
