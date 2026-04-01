@@ -18,7 +18,7 @@
     "Verify other games/platforms sharing the same Supabase `leaderboard` table still behave correctly after direct client insert policies were removed.",
     "67 lint warnings remain as technical debt even though lint now passes."
   ],
-  "lastUpdated": "2026-03-31",
+  "lastUpdated": "2026-04-01",
   "silScore": 45,
   "silAvg3": 44,
   "silVelocity": 0,
