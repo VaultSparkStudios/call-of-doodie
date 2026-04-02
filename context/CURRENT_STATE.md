@@ -1,10 +1,10 @@
 # Current State
 
 ## Build
-- Status: ✅ build passing (`npm run build` clean, 771KB bundle); ✅ tests passing (`npm test` 70/70); ✅ lint passes (`npm run lint`) with 13 warnings and 0 errors
-- Latest commit: Session 35 (live bug fixes + icon/favicon)
-- Branch: `main`, pushed — sessions 33+34+35 all deployed via GitHub Actions
-- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/` (session 35 bundle live)
+- Status: ✅ build passing (`npm run build` clean, 771KB bundle); ✅ tests passing (`npm test` 83/83); ✅ lint passes (`npm run lint`) with 13 warnings and 0 errors
+- Latest commit: Session 36 (NEW_FEATURES update + What's New strip teaser dynamic + 13 new tests)
+- Branch: `main`, pushed — sessions 33–36 all deployed via GitHub Actions
+- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`; Edge Functions redeploy triggered via session 36 push
 
 ## Architecture sizes (approx)
 - `App.jsx`: ~3500 lines (game loop + state orchestrator)
@@ -19,10 +19,10 @@
 - `build` job: `needs: quality` → `deploy` job: `needs: build`
 - Local `npm run lint` now matches CI and passes on warnings; `npm run lint:strict` remains available for warning-debt cleanup
 
-## Test suite (70 tests — Vitest 2 + jsdom 25)
+## Test suite (83 tests — Vitest 2 + jsdom 25)
 - `src/utils/loadoutCode.test.js` — 26 tests (encodeLoadout, decodeLoadout, isValidLoadoutCode)
 - `src/storage.test.js` — 16 tests (getAccountLevel + leaderboard normalization/time sorting helpers)
-- `src/constants.test.js` — 28 tests (shape validation, uniqueness, required fields)
+- `src/constants.test.js` — 41 tests (shape validation, uniqueness, required fields; NEW_FEATURES shape; ACHIEVEMENT_PROGRESS integrity; mode-gated achievement behavioral regression)
 
 ## Active game modes (all mutually exclusive)
 - **Normal**: standard run — mode: null

@@ -1,68 +1,67 @@
-# Latest Handoff — Session 35 Closeout
+# Latest Handoff — Session 36 Closeout
 
 This is the authoritative active handoff file for this repo.
 
-**Session Intent (Session 35):** Identify what to refine or improve to take the game live and acquire users — strategy + live bug fixes + icon/branding.
+**Session Intent (Session 36):** Complete next moves — Speedrun/Gauntlet achievements, What's New strip, Edge Function redeploy.
 **Date:** 2026-04-02
-**Branch:** `main`, pushed — sessions 33+34+35 all live
-**Build:** ✅ `npm run build` passes (771KB bundle) · ✅ `npm test` passes (70/70) · ✅ `npm run lint` passes (13 warnings, 0 errors)
+**Branch:** `main`, pushed — sessions 33–36 all live
+**Build:** ✅ `npm run build` passes (771KB bundle) · ✅ `npm test` passes (83/83) · ✅ `npm run lint` passes (13 warnings, 0 errors)
 
 ---
 
-## Where We Left Off (Session 35)
-- Shipped: 8 improvements across 3 groups — live bug fixes (3), branding/favicon (4), launch planning (1)
-- Tests: 70 passing (26 loadout / 16 storage / 28 constants) · delta: +0
-- Deploy: deployed to GitHub Pages — sessions 33+34+35 all live as of this session
+## Where We Left Off (Session 36)
+- Shipped: 3 improvements across 2 groups — What's New content + strip (2), test suite expansion (1); Edge Functions redeploy triggered
+- Tests: 83 passing (26 loadout / 16 storage / 41 constants) · delta: +13 this session
+- Deploy: deployed to GitHub Pages; Edge Functions redeploy triggered via git push (confirm in Actions tab)
 
 ---
 
 ## Human Action Required
 
-- [ ] **Re-deploy Edge Functions** — `supabase functions deploy issue-run-token submit-score` OR push triggers the workflow. Session 33 changes are NOT live. Leaderboard submit returns 401 until this is done.
-- [ ] **Validate live submit path** — After Edge Function redeploy, run one real game and confirm leaderboard submit works end-to-end.
-- [ ] **Spot-check shared-project safety** — Verify any other app using this shared Supabase `leaderboard` table still works after old direct-insert policies were removed.
+- [~] **Confirm Edge Function redeploy** — Check GitHub Actions → `Deploy Supabase Function` job succeeded for session 36 push. If it failed, run `supabase functions deploy issue-run-token submit-score` manually.
+- [ ] **Validate live submit path** — After Edge Function redeploy confirmed, play one production run and confirm leaderboard submit works end-to-end (no 401).
+- [ ] **Spot-check shared-project compatibility** — Verify any other app using this shared Supabase `leaderboard` table still works after old direct-insert policies were removed.
+- [ ] **itch.io game page** — No code needed. Create game page at itch.io with embed URL `https://vaultsparkstudios.com/call-of-doodie/`, screenshots, and description from README. High ROI for discoverability.
 
 ---
 
-## What was done this session (Session 35)
+## What was done this session (Session 36)
 
-### Launch readiness planning
-- Delivered prioritized 4-tier launch readiness plan: deploy blockers → zero-code wins → content polish → user acquisition tactics
-- Identified itch.io, Reddit, Product Hunt, and TikTok as primary distribution channels (no code needed)
+### Stale [SIL] audit
+- Investigated the 5-sessions-overdue Speedrun/Gauntlet achievements [SIL] item — confirmed **fully implemented in session 30**: 4 achievements (`speedrun_w5`, `speedrun_sub4`, `gauntlet_w5`, `gauntlet_w10`) in constants.js + wired in `checkAchievements`. Task was never cleared from TASK_BOARD. Cleared.
 
-### Live production bug fixes (3 bugs, all deployed)
-1. **CRITICAL: `Tooltip is not defined` app crash** — `DesktopToolbar` in `HUD.jsx` destructured the `Tooltip` prop as `Tooltip: _Tooltip` (ESLint unused-var rename) but JSX used `<Tooltip>`. ReferenceError crashed the app on every load via ErrorBoundary. Fix: restored destructuring to `Tooltip`.
-2. **CSP block: inline SW script** — The `<script>` in `index.html` for service worker registration was blocked by the enforced `script-src` CSP (no `unsafe-inline`, no hash). Fix: extracted to `public/register-sw.js` — covered by `'self'` in the CSP.
-3. **CSP block: Supabase WebSocket** — `supabase-js` auto-opens a `wss://` WebSocket to Supabase Realtime on init. The `connect-src` CSP had `https://` but not `wss://` for the Supabase domain. Fix: `createClient` now passes `{ realtime: { enabled: false } }`. Game doesn't use realtime subscriptions; this also eliminates an unnecessary persistent connection.
+### What's New strip — completed
+- `src/constants.js` — Added 4 missing entries to `NEW_FEATURES`: Speedrun Mode, Gauntlet Mode, META Tree, Run Draft (the list hadn't been updated since session 25)
+- `src/components/MenuScreen.jsx:1043` — Replaced hardcoded teaser text with `{NEW_FEATURES.slice(-4).map(f => f.split(" — ")[0]).join(" · ")}` — now auto-updates whenever `NEW_FEATURES` gets new entries
 
-### Icon / favicon / branding (4 assets, all deployed)
-4. **`public/icon.svg`** — custom poop mascot: `clipPath` union of 6 ellipses for seamless silhouette, radial gradient (warm brown highlight → deep shadow), sheen highlight layer, cute eyes + smirk, army beret with ★ badge, orange crosshair badge top-right, subtle background grid, orange brand accent bar at bottom.
-5. **`public/favicon.svg`** — minimal poop mascot for browser tab (eyes + smile + orange dot; stripped of beret/crosshair for clarity at 16–32px).
-6. **`index.html`** — added `<link rel="icon" href="/call-of-doodie/favicon.svg">` — fixes the favicon 404 on every page load.
-7. **`public/manifest.json`** — updated icons array with explicit 192/512 entries (from single `any maskable`).
+### Test suite — +13 tests (70 → 83)
+- `src/constants.test.js` — Added 3 new describe blocks:
+  - `ACHIEVEMENT_PROGRESS` — all keys reference real achievement IDs; targets are positive `[string, number]` tuples; speedrun/gauntlet entries present
+  - Mode-gated achievement regression — `speedrun_w5`, `speedrun_sub4` (incl. time threshold), `gauntlet_w5`, `gauntlet_w10`, `boss_rush_5/10/20`, `cursed_run_w5/w10` each tested with passing + failing mock stats
+  - `NEW_FEATURES` — non-empty strings, ` — ` separator in every entry, no duplicates, required entries present
+
+### Edge Functions redeploy
+- Triggered via `git push` — GitHub Actions `deploy.yml` runs `Deploy Supabase Function` job for `issue-run-token` and `submit-score`
 
 ---
 
-## Files modified (session 35)
+## Files modified (session 36)
 
-- `src/components/HUD.jsx` — fixed `Tooltip: _Tooltip` → `Tooltip` in DesktopToolbar params
-- `src/supabase.js` — `createClient` now passes `{ realtime: { enabled: false } }`
-- `index.html` — inline SW script replaced with `<script src="...register-sw.js">`, favicon link added
-- `public/register-sw.js` — NEW: extracted SW registration script
-- `public/icon.svg` — NEW: custom poop mascot (replaced bomb emoji placeholder)
-- `public/favicon.svg` — NEW: minimal poop mascot for browser tab
-- `public/manifest.json` — updated icons array
-- `context/LATEST_HANDOFF.md` — session intent logged at start
+- `src/constants.js` — 4 new entries appended to `NEW_FEATURES`
+- `src/components/MenuScreen.jsx` — What's New strip teaser now dynamic from `NEW_FEATURES.slice(-4)`
+- `src/constants.test.js` — +113 lines: 3 new describe blocks, 13 new tests
+- `context/TASK_BOARD.md` — stale [SIL] items cleared, session 36 Done entries added, 2 new SIL items
+- `context/CURRENT_STATE.md` — test count, deploy status, architecture updated
 
 ---
 
 ## Suggested next session priorities
 
-1. Re-deploy Edge Functions (human action — required before leaderboard submit works)
-2. Validate live submit end-to-end
-3. **[SIL escalated — 5 sessions overdue]** Add achievements for Speedrun + Gauntlet modes
-4. Submit game to itch.io for browser-game discoverability (no code, high ROI)
-5. "What's New" JSON-fed menu strip
+1. Confirm Edge Function redeploy succeeded (check GitHub Actions)
+2. Validate live leaderboard submit end-to-end
+3. **[SIL]** Per-weapon kill stats on DeathScreen (`statsRef.weaponKills` already tracked — small JSX addition)
+4. **[SIL]** Seeded lightning arc rendering (trivial Math.random → deterministic fix)
+5. itch.io game page (human action, no code, 20 min)
 
-## ⚠ Low Momentum Runway
-Runway estimate: ~1.5 sessions at current velocity. Pre-load TASK_BOARD Now bucket before the next implementation sprint. The achievements item (5 sessions overdue) should be the first task started next session.
+## Momentum Runway
+Runway estimate: ~3.0 sessions at current velocity (1 committed Now item + 2 new SIL items, velocity avg 0.33 last 3). Two new SIL items are small and agent-actionable next session.
