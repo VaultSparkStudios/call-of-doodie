@@ -5,7 +5,9 @@ const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // If env vars aren't set (e.g. local dev without .env.local), export null
 // and the storage functions fall back to localStorage gracefully.
-export const supabase = (url && key) ? createClient(url, key) : null;
+export const supabase = (url && key) ? createClient(url, key, {
+  realtime: { enabled: false },
+}) : null;
 
 // Returns a stable client-side UUID that persists across sessions.
 // Used as the "user identity" when Supabase anonymous auth is unavailable
