@@ -64,6 +64,30 @@ brief, README, AGENTS notes, and session handoffs.
 - Evidence link or reference: Session 30 request in terminal; `index.html`, `README.md`, `src/storage.js`
 - Supersedes prior entry: none
 
+### 2026-04-01 - Music vibes must be audibly distinct; reactive override was too aggressive
+
+- Area: audio / player experience
+- Human decision or guidance: "The 'chill' and 'intense' music modes seem to be the same as action now — add more music variety"
+- Previous state: reactive combo override fired at 2 kills (tier 1) and 5 kills (tier 2), meaning chill was overridden to action almost immediately and intense was overridden to intense (from action) within seconds of any active play
+- New required direction: music vibe selection should be meaningful and perceptible to the player for the majority of a normal run; escalation thresholds must be high enough that the player can actually hear the chosen vibe
+- Why this matters: the chill and intense settings exist to let players control the feel of their run; if they're immediately masked by the reactive system, the feature is effectively broken and the game feels like it has one music setting
+- Impact on canon / brand / production: combo thresholds raised to 8/15 kills; chill/intense override logic refined so only chill→action at tier 1 and chill/action→intense at tier 2; future music/reactive changes should be tested with normal-pace play, not max-combo scenarios
+- Approval source: user report in terminal (Session 33)
+- Evidence link or reference: `src/sounds.js` lines 568–577; `src/App.jsx` combo threshold update
+- Supersedes prior entry: none
+
+### 2026-04-01 - Last words input text must be white, not pink
+
+- Area: UI / visual quality
+- Human decision or guidance: "the last words text entry should be white text, not pink"
+- Previous state: `DeathScreen.jsx` last words `<input>` had `color: "#FF69B4"` (hot pink)
+- New required direction: last words text input must use white text for readability; pink is not appropriate for a text entry field in this UI context
+- Why this matters: pink text on a dark input background is harder to read and feels unintentional / inconsistent with the rest of the death screen
+- Impact on canon / brand / production: `color: "#FF69B4"` → `color: "#FFF"` in `DeathScreen.jsx`; any future text input fields should default to white unless a deliberate accent color is being applied
+- Approval source: user report in terminal (Session 33)
+- Evidence link or reference: `src/components/DeathScreen.jsx` line 494
+- Supersedes prior entry: none
+
 ### 2026-03-30 - Finish the security pass and reduce the next-task list to true launch blockers
 
 - Area: launch execution / security / process hygiene
