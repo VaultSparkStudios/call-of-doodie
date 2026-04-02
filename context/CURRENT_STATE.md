@@ -2,9 +2,9 @@
 
 ## Build
 - Status: ✅ build passing (`npm run build` clean, 771KB bundle); ✅ tests passing (`npm test` 70/70); ✅ lint passes (`npm run lint`) with 13 warnings and 0 errors
-- Latest commit: Session 34 (bug-fix refinement session)
-- Branch: `main`, unpushed — deploy via push to main triggers GitHub Actions
-- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/` (still session 32 bundle until push)
+- Latest commit: Session 35 (live bug fixes + icon/favicon)
+- Branch: `main`, pushed — sessions 33+34+35 all deployed via GitHub Actions
+- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/` (session 35 bundle live)
 
 ## Architecture sizes (approx)
 - `App.jsx`: ~3500 lines (game loop + state orchestrator)
@@ -152,10 +152,33 @@
 - MEDIUM: Respawn timer now pauses during shop/route/cutscene (matches startGame)
 - LOW: statsRef.weaponKills initial array size fixed from 10 to WEAPONS.length (12)
 
+## Session 35 fixes (live prod bugs — deployed)
+- CRITICAL: HUD.jsx `DesktopToolbar` — `Tooltip` prop destructured as `_Tooltip` but JSX used `<Tooltip>` → ReferenceError crashed app via ErrorBoundary on every load
+- CSP: Inline SW registration script blocked by enforced `script-src` CSP — moved to `public/register-sw.js` (covered by `'self'`)
+- CSP: Supabase realtime WebSocket blocked by `connect-src` — realtime disabled in `createClient` options (unused feature)
+- Favicon 404 fixed — `<link rel="icon" href="/call-of-doodie/favicon.svg">` added to `index.html`
+
+## Icon / Branding (Session 35)
+- `public/icon.svg` — custom-drawn poop mascot: clipPath union silhouette, radial gradient, sheen highlight, soldier beret + star badge, orange crosshair badge, subtle grid bg, brand accent bar
+- `public/favicon.svg` — minimal version for browser tab (poop + eyes + orange dot at 64×64 viewBox)
+- `public/manifest.json` — updated icons array with explicit 192/512 entries
+- `public/register-sw.js` — extracted from inline `<script>` in index.html
+
+## Supabase realtime (Session 35 change)
+- `createClient` now passes `{ realtime: { enabled: false } }` — game does not use realtime subscriptions; auto-open of WebSocket caused `connect-src wss://` CSP violation
+
+## Deferred (user action, non-blocking)
+- Re-deploy Edge Functions: `supabase functions deploy issue-run-token submit-score` (session 33 changes not yet deployed)
+- Validate one live Call of Doodie leaderboard submission end-to-end in production
+- Spot-check any other game/platform sharing this Supabase `leaderboard` table to confirm the policy change did not break legacy direct-submit flows
+- VITE_POSTHOG_KEY → add to GitHub Actions secrets when PostHog project created
+- VITE_SENTRY_DSN → add to GitHub Actions secrets when Sentry project created
+- Discord URL: uncomment footer link in `MenuScreen.jsx` when invite URL available
+
 ## Known issues (minor, low priority)
 - Boss ground slam: random stagger can shorten 90-frame warning on first cycle
 - Gamepad rumble requires Chrome 68+
 - Discord link in MenuScreen footer commented out
-- Warning debt reduced to 13 (was 67) — react-hooks/exhaustive-deps in 2 non-game files; lint:strict not yet a gate
+- Warning debt: 13 warnings — react-hooks/exhaustive-deps in 2 non-game files; lint:strict not yet a gate
 - mutAlwaysEnraged + berserker elite compounds speed (~3x) — may be intentional difficulty scaling
 - Lightning arcs jitter every frame (Math.random per frame) — cosmetic only

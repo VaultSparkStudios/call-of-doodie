@@ -149,3 +149,21 @@ Append chronological entries.
   - Removed: Callsign theft returning false success
   - Remaining: session 33 + 34 commits not yet pushed; Edge Functions need redeploy
 - Recommended next move: push to main, re-deploy Edge Functions, validate live submit, then add Speedrun/Gauntlet achievements (4-session SIL overdue)
+
+---
+
+### 2026-04-02 — Session 35: Live bug fixes, branding, launch readiness
+
+- Goal: Identify refinements to take the game live and acquire users; fix live production errors; create polished icon/favicon
+- What changed: 3 live prod bugs fixed and deployed; custom poop mascot icon + favicon created; launch readiness plan delivered; all sessions 33+34+35 now live on production
+- Files or systems touched:
+  - MOD: src/components/HUD.jsx (Tooltip prop fix), src/supabase.js (realtime disabled), index.html (SW script externalized + favicon link), public/manifest.json (icon entries)
+  - NEW: public/register-sw.js, public/icon.svg, public/favicon.svg
+  - DOCS: context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, context/SELF_IMPROVEMENT_LOOP.md, context/PROJECT_STATUS.json, context/TRUTH_AUDIT.md, docs/CREATIVE_DIRECTION_RECORD.md, logs/WORK_LOG.md, audits/2026-04-02-2.json
+- Risks created or removed:
+  - Removed: App crash on every page load (Tooltip ReferenceError via ErrorBoundary)
+  - Removed: SW script blocked by CSP — service worker no longer silently failing to register
+  - Removed: Supabase WebSocket opening unnecessarily (unused feature + CSP violation)
+  - Removed: favicon 404 on every page load
+  - Remaining: Edge Functions not yet re-deployed (session 33 changes); leaderboard submit returns 401
+- Recommended next move: re-deploy Edge Functions, validate live submit, then action [SIL] Speedrun/Gauntlet achievements (5 sessions overdue) and submit to itch.io

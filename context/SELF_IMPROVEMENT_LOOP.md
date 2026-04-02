@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▆▇▇▇
-Avgs — 3: 45.3 | 5: 44.6 | all: 39.3 [N=8]
-  └ 3-session: Dev 9.7 | Align 9.0 | Momentum 8.7 | Engage 8.0 | Process 10.0
-Velocity trend: →↑→  |  Protocol velocity: →  |  Debt: → (13 warnings)
-Momentum runway: ~3.0 sessions  |  Intent rate: 100% (last 7)
-Last session: 2026-04-02 | Session 34 | Total: 45/50 | Velocity: 0 | protocolVelocity: 0
+Sparkline (last 5 totals): ▆▇▇▇▇
+Avgs — 3: 45.3 | 5: 45.0 | all: 44.3 [N=9]
+  └ 3-session: Dev 9.7 | Align 9.3 | Momentum 8.3 | Engage 8.0 | Process 10.0
+Velocity trend: ↓→↑  |  Protocol velocity: ↑  |  Debt: → (13 warnings)
+Momentum runway: ~1.5 sessions ⚠ LOW — pre-load TASK_BOARD before next sprint  |  Intent rate: 100% (last 5)
+Last session: 2026-04-02 | Session 35 | Total: 45/50 | Velocity: 1 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -263,3 +263,33 @@ Avgs — 3: 45.3 | 5: 44.6 | all: 39.3 [N=8]
 5. Seeded lightning arc rendering — replace Math.random() with frame-based deterministic offsets for stable visual arcs; implementation path: use frameCount % period for offset calculation; execution probability: High
 
 **Committed to TASK_BOARD:** [SIL] "What's New" JSON-fed menu strip · [SIL] Anomaly logging in submit-score for impossible payloads
+
+---
+
+## 2026-04-02 — Session 35 | Total: 45/50 | Velocity: 1 | Debt: →
+Avgs — 3: 45.3 | 5: 45.0 | all: 44.3 [N=9]
+  └ 3-session: Dev 9.7 | Align 9.3 | Momentum 8.3 | Engage 8.0 | Process 10.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | ↓ | 3 live prod bugs fixed + deployed; realtime disabled; no new tests added |
+| Creative Alignment | 10 | ↑ | Poop mascot icon perfectly executes comedy-first + polished identity; launch plan follows SOUL/BRAIN |
+| Momentum | 8 | → | Sessions 33+34+35 finally deployed; icon + live fixes shipped; [SIL] achievements still 5 sessions overdue |
+| Engagement | 8 | → | Favicon 404 fixed; polished icon for PWA/social; launch plan delivered; no new gameplay engagement feature |
+| Process Quality | 10 | → | Full CDR (2 entries), decisions logged, all files updated, clean closeout |
+| **Total** | **45/50** | → | |
+
+**Top win:** Deployed 3 sessions' worth of fixes in one push — including the app-killing Tooltip crash that was breaking every page load on production.
+**Top gap:** Speedrun + Gauntlet achievements are now 5 sessions overdue; low momentum runway (~1.5 sessions) signals TASK_BOARD needs pre-loading before next sprint.
+**Intent outcome:** Achieved — delivered launch readiness plan, fixed 3 live prod errors, created polished branding assets, and deployed everything.
+
+**IGNIS note:** The gap between "code is done" and "code is live" is a recurring velocity drain — same-session push cycles (commit → push → done) are significantly higher leverage than multi-session batching.
+
+**Brainstorm**
+1. **itch.io submission** — Submit the game to itch.io for browser-game discoverability; implementation path: create itch.io game page with embed URL, screenshots, and description from README; execution probability: High
+2. **Speedrun + Gauntlet achievements** — 5-session overdue SIL item; 4 achievements (2 per mode) following the existing achievement pattern; implementation path: add entries to ACHIEVEMENTS array in constants.js + wire unlock conditions in App.jsx; execution probability: High
+3. **"What's New" JSON-fed menu strip** — Small JSON file + MenuScreen card shows returning players what changed; implementation path: `public/whats-new.json` + single card component in MenuScreen.jsx; execution probability: High
+4. **Per-weapon kill stats on DeathScreen** — `statsRef.weaponKills` is already tracked; collapsible breakdown panel on DeathScreen showing each weapon's kill count; implementation path: add a section to DeathScreen.jsx reading the statsRef prop; execution probability: High
+5. **Discord community** — Create a Discord server and uncomment the footer link in MenuScreen.jsx; implementation path: create Discord server → get invite URL → uncomment one line; execution probability: High
+
+**Committed to TASK_BOARD:** [SIL] itch.io game page setup · [SIL] "What's New" JSON-fed menu strip

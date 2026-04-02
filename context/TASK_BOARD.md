@@ -1,6 +1,7 @@
 # Task Board
 
 ## Human Action Required
+- [ ] **Re-deploy Edge Functions** — `supabase functions deploy issue-run-token submit-score` — session 33 changes not yet deployed; leaderboard submit returns 401 until this runs
 - [ ] **Validate live submit path** — Play one production run and confirm Call of Doodie can mint a run token and submit to the live leaderboard successfully
 - [ ] **Spot-check shared-project compatibility** — Because this Supabase project serves multiple games/platforms, verify any other app that writes to the shared `leaderboard` table still works after the old direct-insert policies were removed
 
@@ -10,13 +11,12 @@
 - ⏳ Discord invite URL → uncomment footer link in `MenuScreen.jsx` (search `// no game Discord yet`)
 
 ## Now
-- [ ] **Push to deploy** — `git push` to trigger GitHub Actions: ships session 33 + 34 bug fixes
-- [ ] **Re-deploy Edge Functions** — session 33 changes to `issue-run-token` and `submit-score` need `supabase functions deploy` or push-trigger to take effect
-- [SIL] Add achievements for Speedrun + Gauntlet modes (currently 0 each) — escalated from Backlog (skipped 4 sessions)
+- [SIL] Add achievements for Speedrun + Gauntlet modes (currently 0 each) — escalated 5 sessions in a row; must action next session
+- [SIL] itch.io game page setup — submit to itch.io for browser-game discoverability (free, high ROI, no code required)
+- [SIL] "What's New" JSON-fed menu strip — makes shipped features visible to returning players; small JSON + MenuScreen card
 
 ## Backlog
 - [SIL] Anomaly logging in submit-score for impossible score/time/wave payloads
-- [SIL] "What's New" JSON-fed menu strip — makes shipped features visible to players
 - Ko-fi webhook → Supabase Edge Function for cloud supporter verification (Option B)
 - Balance playtest: META Tree node costs, Kill Frenzy duration, Adaptive Assist threshold
 - QR code scanner test on mobile device
@@ -27,7 +27,19 @@
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
 - Wire PostHog + Sentry env vars into GitHub Actions secrets
 - RouteSelectModal + DraftScreen: add gamepad nav support (controller players stuck)
+- Per-weapon kill stats breakdown on DeathScreen (weaponKills array already tracked)
 - Overclocked perk: use ??= to avoid counter reset on re-pick (minor)
+
+## Done (session 35 — 2026-04-02)
+- ✅ Deployed sessions 33+34+35 to production via `git push` (GitHub Actions)
+- ✅ CRITICAL: Fixed `Tooltip is not defined` app crash — HUD.jsx `DesktopToolbar` prop renamed from `_Tooltip` back to `Tooltip`
+- ✅ CSP: Moved inline SW registration script to `public/register-sw.js` (blocked by enforced script-src)
+- ✅ CSP: Disabled Supabase realtime WebSocket in `createClient` (unused; caused wss:// connect-src violation)
+- ✅ Favicon 404 fixed — `<link rel="icon" href="/call-of-doodie/favicon.svg">` added to `index.html`
+- ✅ New `public/icon.svg` — custom poop mascot (soldier beret, crosshair badge, gradient silhouette)
+- ✅ New `public/favicon.svg` — minimal poop mascot for browser tab
+- ✅ `public/manifest.json` updated with explicit 192/512 icon entries
+- ✅ Launch readiness plan delivered — prioritized 4-tier checklist (deploy blockers → zero-code wins → content → acquisition)
 
 ## Done (session 34 — 2026-04-02)
 - ✅ CRITICAL: Fixed drawGame.js `dn` out-of-scope crash — player auras work again

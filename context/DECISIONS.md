@@ -64,3 +64,11 @@
 - **Callsign claims verify ownership after upsert (Session 34)**: `ignoreDuplicates: true` in the Supabase upsert silently skips if the name already exists with a different uid. The function now reads back the row after upsert and returns `false` if the stored uid doesn't match the current user. This prevents the caller from thinking they claimed a name that actually belongs to someone else.
 
 - **Renamed speed-boost perk to "Speed Surge" (Session 34)**: Two perks shared the display name "Adrenaline Rush" — the +15% speed perk (id: "adrenaline") and the below-30%-HP double-speed perk (id: "adrenaline_rush"). Players couldn't distinguish them in the perk selection UI. The simpler speed perk was renamed to "Speed Surge" while the conditional trigger perk keeps "Adrenaline Rush".
+
+- **Inline SW registration script externalized (Session 35)**: The `<script>` block in `index.html` registering the service worker was blocked by the site's enforced `Content-Security-Policy: script-src 'self' ...` header (no `unsafe-inline`, no hash). Moved to `public/register-sw.js` so it is covered by `'self'` without requiring CSP modification.
+
+- **Supabase realtime disabled at client init (Session 35)**: `supabase-js` v2 auto-opens a WebSocket to `wss://[project].supabase.co/realtime/v1/websocket` on client creation. The game does not use any realtime subscriptions. The auto-connect caused a `connect-src` CSP violation (CSP had `https://` but not `wss://`). Fix: pass `{ realtime: { enabled: false } }` to `createClient`. Eliminates the CSP error and removes an unnecessary persistent connection.
+
+- **Icon uses SVG clipPath union for seamless silhouette (Session 35)**: Rather than individual stacked ellipses (which show seams between gradients), the icon body uses a `<clipPath>` containing all 6 poop-blob ellipses clipped to a single gradient rect. SVG clipPath computes the union, yielding a smooth, single-gradient silhouette with no visible seam artifacts at any scale.
+
+- **Favicon is a separate minimal SVG (Session 35)**: `favicon.svg` is a stripped-down version of `icon.svg` — same poop shape and eyes, no beret/crosshair/grid. At 16–32px these details become unreadable noise; the minimal version stays legible and brand-consistent.

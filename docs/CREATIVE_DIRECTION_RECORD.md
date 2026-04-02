@@ -111,3 +111,27 @@ brief, README, AGENTS notes, and session handoffs.
 - Approval source: user directive in session 34 terminal
 - Evidence link or reference: session 34 conversation; 14 bugs found and fixed
 - Supersedes prior entry: none
+
+### 2026-04-02 — Create silly, simple, polished high-quality icon/logo and favicon
+
+- Area: brand identity / visual assets
+- Human decision or guidance: "create a silly, simple, polished high-quality icon/logo and favicon for call-of-doodie and deploy it on the game site" — explicit quality constraints: silly + simple + polished + high-quality, all four simultaneously
+- Previous state: `public/icon.svg` was a 💣 emoji on a dark background (placeholder); no favicon.svg; `favicon.ico` returned 404
+- New required direction: the icon must be a purpose-built mascot asset — not an emoji placeholder — that reads as both silly (comedy identity) and polished (high quality, not cheap). Custom-drawn SVG poop mascot with brand color palette, detail at full size, legibility at 16px.
+- Why this matters: the icon is the first thing players see in browser tabs, share previews, and PWA install prompts. A placeholder bomb emoji undercuts the brand; a polished mascot reinforces it.
+- Impact on canon / brand / production: the poop mascot (soldier beret + crosshair badge) is now the canonical visual identity anchor for Call of Doodie. Future marketing assets, social posts, and thumbnails should be consistent with this design language.
+- Approval source: direct user instruction this session
+- Evidence link or reference: `public/icon.svg`, `public/favicon.svg`
+- Supersedes prior entry: none
+
+### 2026-04-02 — Launch readiness: take it live and get users
+
+- Area: product strategy / distribution
+- Human decision or guidance: "tell me what to refine or improve about this game to take it live and get users" — direction to produce a prioritized launch readiness plan rather than continue feature work
+- Previous state: game was feature-complete but undeployed (sessions 33+34 local), no icon, no distribution presence, analytics not wired
+- New required direction: prioritize deploy → analytics → content gaps → distribution in that order. itch.io is the first distribution action. Speedrun/Gauntlet achievements are the most overdue content gap.
+- Why this matters: the game is ready but invisible; the next phase of value is acquisition and polish, not new systems
+- Impact on canon / brand / production: positions Call of Doodie as "ready to go live" with a specific acquisition funnel (itch.io → Reddit → Product Hunt → social clips)
+- Approval source: direct user instruction this session
+- Evidence link or reference: context/LATEST_HANDOFF.md, context/TASK_BOARD.md
+- Supersedes prior entry: none

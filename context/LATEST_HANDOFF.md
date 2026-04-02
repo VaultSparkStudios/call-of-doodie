@@ -1,81 +1,68 @@
-# Latest Handoff — Session 34 Closeout
-
-**Session Intent (Session 35):** Identify what to refine or improve to take the game live and acquire users — strategy + prioritized execution plan.
+# Latest Handoff — Session 35 Closeout
 
 This is the authoritative active handoff file for this repo.
 
-**Session Intent (Session 34):** Run game tests and refine the current game — bug-fix/refinement focus, no new features.
+**Session Intent (Session 35):** Identify what to refine or improve to take the game live and acquire users — strategy + live bug fixes + icon/branding.
 **Date:** 2026-04-02
-**Branch:** `main`, commits ahead of origin — push needed to deploy
+**Branch:** `main`, pushed — sessions 33+34+35 all live
 **Build:** ✅ `npm run build` passes (771KB bundle) · ✅ `npm test` passes (70/70) · ✅ `npm run lint` passes (13 warnings, 0 errors)
 
 ---
 
-## Where We Left Off (Session 34)
-- Shipped: 14 bug fixes across 4 severity tiers — 4 critical, 6 high, 3 medium, 1 low
+## Where We Left Off (Session 35)
+- Shipped: 8 improvements across 3 groups — live bug fixes (3), branding/favicon (4), launch planning (1)
 - Tests: 70 passing (26 loadout / 16 storage / 28 constants) · delta: +0
-- Deploy: NOT yet pushed — session 33 + 34 commits are local only
+- Deploy: deployed to GitHub Pages — sessions 33+34+35 all live as of this session
 
 ---
 
 ## Human Action Required
 
-- [ ] **Push to deploy** — `git push` triggers GitHub Actions (build → deploy to GitHub Pages); ships CAPTCHA crash fix + all 14 session 34 bug fixes
-- [ ] **Re-deploy Edge Functions** — run `supabase functions deploy issue-run-token submit-score` OR let the push trigger the workflow
-- [ ] **Validate live submit path** — After push + Edge Function deploy, run one production game and confirm leaderboard submit works
-- [ ] **Spot-check shared-project safety** — Verify any other app using this shared Supabase `leaderboard` table still works
+- [ ] **Re-deploy Edge Functions** — `supabase functions deploy issue-run-token submit-score` OR push triggers the workflow. Session 33 changes are NOT live. Leaderboard submit returns 401 until this is done.
+- [ ] **Validate live submit path** — After Edge Function redeploy, run one real game and confirm leaderboard submit works end-to-end.
+- [ ] **Spot-check shared-project safety** — Verify any other app using this shared Supabase `leaderboard` table still works after old direct-insert policies were removed.
 
 ---
 
-## What was done this session (Session 34)
+## What was done this session (Session 35)
 
-### Deep audit + 14 bug fixes (no new features)
+### Launch readiness planning
+- Delivered prioritized 4-tier launch readiness plan: deploy blockers → zero-code wins → content polish → user acquisition tactics
+- Identified itch.io, Reddit, Product Hunt, and TikTok as primary distribution channels (no code needed)
 
-**CRITICAL (4 game-breaking bugs fixed):**
-1. `drawGame.js` — `dn` (Date.now()) was declared inside enemy forEach callback but referenced in player aura drawing code. Adrenaline rush, rage, freeze, and time dilation auras all crashed with ReferenceError. Fix: moved `const dn = Date.now()` to function scope.
-2. `App.jsx` — Railgun hitscan beam referenced `W`/`H` which don't exist in `shoot()` scope. `maxT = NaN`, beam never hit anything. Fix: `W`/`H` → `GW()`/`GH()`.
-3. `App.jsx` — Blitz route permanently mutated `settSpawnMult` (user's spawn rate setting) by ×3 each wave. Also was dead code (flag cleared before check). Fix: saved flag before clearing, uses `blitzSpawnMult` instead.
-4. `SupporterModal.jsx` — `useState(isSupporter)` passed the function reference instead of calling it. Modal always showed "You're a Supporter!" regardless. Fix: `useState(() => isSupporter())`.
+### Live production bug fixes (3 bugs, all deployed)
+1. **CRITICAL: `Tooltip is not defined` app crash** — `DesktopToolbar` in `HUD.jsx` destructured the `Tooltip` prop as `Tooltip: _Tooltip` (ESLint unused-var rename) but JSX used `<Tooltip>`. ReferenceError crashed the app on every load via ErrorBoundary. Fix: restored destructuring to `Tooltip`.
+2. **CSP block: inline SW script** — The `<script>` in `index.html` for service worker registration was blocked by the enforced `script-src` CSP (no `unsafe-inline`, no hash). Fix: extracted to `public/register-sw.js` — covered by `'self'` in the CSP.
+3. **CSP block: Supabase WebSocket** — `supabase-js` auto-opens a `wss://` WebSocket to Supabase Realtime on init. The `connect-src` CSP had `https://` but not `wss://` for the Supabase domain. Fix: `createClient` now passes `{ realtime: { enabled: false } }`. Game doesn't use realtime subscriptions; this also eliminates an unnecessary persistent connection.
 
-**HIGH (6 significant gameplay/data bugs fixed):**
-5. Level-up speed reset — overwrote all speed bonuses with `4 + level * 0.12`. Fix: `speed += 0.12`.
-6. Synergy burst damage — used non-existent `bulletDamage` property, always fell back to 60. Fix: `damage`.
-7. Weapon switch analytics — `from` and `to` were always the same weapon. Fix: capture `prevIdx` before updating ref.
-8. Duplicate perk name — two "Adrenaline Rush" perks. Fix: renamed speed-boost one to "Speed Surge".
-9. Callsign claim — upsert silently succeeded even when name owned by another user. Fix: verify ownership after upsert.
-10. Mixed-mode leaderboard sort — local fallback used `a.mode` for both entries. Fix: pass `null` (score-based for mixed).
-
-**MEDIUM (3 balance/accuracy bugs fixed):**
-11. Ground slam + Glass Jaw — damage text showed base damage, player took 2×. Fix: show actual damage.
-12. Acid hazard — only damage source missing `_treeArmorMult`. Fix: applied it.
-13. Respawn timer — ticked during shop/route/cutscene unlike startGame. Fix: added missing conditions.
-
-**LOW (1 latent defect fixed):**
-14. `weaponKills` initial array size 10 → `WEAPONS.length` (12).
+### Icon / favicon / branding (4 assets, all deployed)
+4. **`public/icon.svg`** — custom poop mascot: `clipPath` union of 6 ellipses for seamless silhouette, radial gradient (warm brown highlight → deep shadow), sheen highlight layer, cute eyes + smirk, army beret with ★ badge, orange crosshair badge top-right, subtle background grid, orange brand accent bar at bottom.
+5. **`public/favicon.svg`** — minimal poop mascot for browser tab (eyes + smile + orange dot; stripped of beret/crosshair for clarity at 16–32px).
+6. **`index.html`** — added `<link rel="icon" href="/call-of-doodie/favicon.svg">` — fixes the favicon 404 on every page load.
+7. **`public/manifest.json`** — updated icons array with explicit 192/512 entries (from single `any maskable`).
 
 ---
 
-## Files modified (session 34)
+## Files modified (session 35)
 
-- `src/drawGame.js` — moved `const dn = Date.now()` to function scope; removed from enemy forEach
-- `src/App.jsx` — railgun GW()/GH(); blitz blitzSpawnMult; level-up speed +=0.12; synergy .damage; weapon switch prevIdx; slam damage text; acid _treeArmorMult; respawn timer conditions; weaponKills array size
-- `src/constants.js` — renamed "Adrenaline Rush" → "Speed Surge" (id: "adrenaline")
-- `src/storage.js` — claimCallsign ownership verify; local leaderboard sort fix
-- `src/components/SupporterModal.jsx` — useState(() => isSupporter())
+- `src/components/HUD.jsx` — fixed `Tooltip: _Tooltip` → `Tooltip` in DesktopToolbar params
+- `src/supabase.js` — `createClient` now passes `{ realtime: { enabled: false } }`
+- `index.html` — inline SW script replaced with `<script src="...register-sw.js">`, favicon link added
+- `public/register-sw.js` — NEW: extracted SW registration script
+- `public/icon.svg` — NEW: custom poop mascot (replaced bomb emoji placeholder)
+- `public/favicon.svg` — NEW: minimal poop mascot for browser tab
+- `public/manifest.json` — updated icons array
+- `context/LATEST_HANDOFF.md` — session intent logged at start
 
 ---
 
 ## Suggested next session priorities
 
-1. Push session 33 + 34 commits to deploy (user action)
-2. Re-deploy Edge Functions (user action or workflow)
-3. Validate live submit end-to-end
-4. Add achievements for Speedrun + Gauntlet modes (escalated SIL item, 4 sessions overdue)
-5. Anomaly logging in submit-score Edge Function
+1. Re-deploy Edge Functions (human action — required before leaderboard submit works)
+2. Validate live submit end-to-end
+3. **[SIL escalated — 5 sessions overdue]** Add achievements for Speedrun + Gauntlet modes
+4. Submit game to itch.io for browser-game discoverability (no code, high ROI)
+5. "What's New" JSON-fed menu strip
 
-## Optional follow-up
-
-1. Wire PostHog + Sentry env vars into GitHub Actions secrets
-2. "What's New" JSON-fed menu strip
-3. RouteSelectModal + DraftScreen: add gamepad nav support
-4. Ko-fi webhook → Supabase Edge Function for cloud supporter verification
+## ⚠ Low Momentum Runway
+Runway estimate: ~1.5 sessions at current velocity. Pre-load TASK_BOARD Now bucket before the next implementation sprint. The achievements item (5 sessions overdue) should be the first task started next session.

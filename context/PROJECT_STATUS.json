@@ -11,19 +11,19 @@
   "localPath": "C:\\Users\\p4cka\\documents\\development\\Call-Of-Doodie",
   "github": "https://github.com/VaultSparkStudios/call-of-doodie",
   "liveUrl": "https://vaultsparkstudios.com/call-of-doodie/",
-  "currentFocus": "Session 34: 14 bug fixes (4 critical, 6 high, 3 medium, 1 low) from deep audit. Pending: push + validate live submit.",
-  "nextMilestone": "Push session 33 + 34 commits, validate live leaderboard submit, then add Speedrun + Gauntlet achievements.",
+  "currentFocus": "Session 35: deployed all pending fixes + icon/favicon. Next: re-deploy Edge Functions, validate live submit, Speedrun/Gauntlet achievements, itch.io launch.",
+  "nextMilestone": "Re-deploy Edge Functions → validate live leaderboard submit → add Speedrun/Gauntlet achievements → submit to itch.io",
   "blockers": [
-    "Push session 33 + 34 commits to deploy (user action).",
-    "Re-deploy Edge Functions and validate live leaderboard submit end-to-end."
+    "Re-deploy Edge Functions (supabase functions deploy issue-run-token submit-score) — leaderboard submit returns 401 until done.",
+    "Validate live leaderboard submit end-to-end after Edge Function redeploy."
   ],
   "lastUpdated": "2026-04-02",
   "silScore": 45,
   "silAvg3": 45.3,
-  "silVelocity": 0,
+  "silVelocity": 1,
   "silDebt": "→",
   "silLastSession": "2026-04-02",
-  "silSparkline": ["▆", "▆", "▇", "▇", "▇"],
+  "silSparkline": ["▆", "▇", "▇", "▇", "▇"],
   "ignisScore": 36778,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-03-28",
@@ -33,8 +33,8 @@
   "truthAuditLastRun": "2026-04-02",
   "medium": "game",
   "priority": "high",
-  "summary": "Humor-first browser shooter. Session 34: deep audit found and fixed 14 bugs including 4 critical game-breaking issues.",
-  "lastSession": "Session 34: Deep audit + 14 bug fixes — railgun, player auras, blitz spawn, supporter modal, level-up speed, synergy burst, callsign claim, and more.",
+  "summary": "Humor-first browser shooter. Session 35: deployed all pending fixes (incl. app-killing Tooltip crash), created polished poop mascot icon/favicon, delivered launch readiness plan.",
+  "lastSession": "Session 35: Live bug fixes (Tooltip crash, CSP blocks, favicon 404), polished icon/favicon, all sessions deployed.",
   "launchWindow": "Live now",
   "repo": "VaultSparkStudios/call-of-doodie",
   "runtimeUrl": "https://vaultsparkstudios.com/call-of-doodie/",
@@ -44,8 +44,8 @@
   "innovationScore": 91,
   "franchiseValue": "medium",
   "topBlockers": [
-    "Push session 33 + 34 commits to deploy.",
-    "Re-deploy Edge Functions and validate live leaderboard submit."
+    "Re-deploy Edge Functions — leaderboard submit returns 401.",
+    "Validate live leaderboard submit end-to-end."
   ],
   "readFirst": [
     "context/LATEST_HANDOFF.md",
