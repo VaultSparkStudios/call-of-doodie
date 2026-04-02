@@ -2,7 +2,7 @@
 
 ## Build
 - Status: ✅ build passing (`npm run build` clean, 771KB bundle); ✅ tests passing (`npm test` 70/70); ✅ lint passes (`npm run lint`) with 13 warnings and 0 errors
-- Latest commit: `43bc9e9` — Session 33
+- Latest commit: Session 34 (bug-fix refinement session)
 - Branch: `main`, unpushed — deploy via push to main triggers GitHub Actions
 - Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/` (still session 32 bundle until push)
 
@@ -136,9 +136,26 @@
 |-----|---------|
 | `cod-client-uid-v1` | Stable anonymous client UUID — replaces Supabase anon auth |
 
+## Session 34 bug fixes (14 total)
+- CRITICAL: drawGame.js `dn` scope — player auras (adrenaline/rage/freeze/time dilation) no longer crash
+- CRITICAL: Railgun hitscan beam now uses GW()/GH() instead of undefined W/H — weapon is functional
+- CRITICAL: Blitz route no longer permanently mutates settSpawnMult — uses blitzSpawnMult correctly
+- CRITICAL: SupporterModal useState now calls isSupporter() instead of passing function ref
+- HIGH: Level-up no longer resets player speed to base (preserves loadout/perk/shop bonuses)
+- HIGH: Synergy burst uses weapon.damage instead of non-existent bulletDamage
+- HIGH: Weapon switch analytics now captures previous weapon before updating ref
+- HIGH: Renamed speed-boost perk from "Adrenaline Rush" to "Speed Surge" (removes duplicate name)
+- HIGH: claimCallsign now verifies ownership after upsert (no more silent false-success)
+- HIGH: Local leaderboard fallback sort no longer uses a.mode for mixed-mode comparisons
+- MEDIUM: Ground slam damage text now shows actual damage dealt (including Glass Jaw multiplier)
+- MEDIUM: Acid hazard now applies _treeArmorMult like all other damage sources
+- MEDIUM: Respawn timer now pauses during shop/route/cutscene (matches startGame)
+- LOW: statsRef.weaponKills initial array size fixed from 10 to WEAPONS.length (12)
+
 ## Known issues (minor, low priority)
 - Boss ground slam: random stagger can shorten 90-frame warning on first cycle
-- Overclocked perk: taking it twice resets overclockedShots mid-game
 - Gamepad rumble requires Chrome 68+
 - Discord link in MenuScreen footer commented out
 - Warning debt reduced to 13 (was 67) — react-hooks/exhaustive-deps in 2 non-game files; lint:strict not yet a gate
+- mutAlwaysEnraged + berserker elite compounds speed (~3x) — may be intentional difficulty scaling
+- Lightning arcs jitter every frame (Math.random per frame) — cosmetic only

@@ -18,7 +18,7 @@ const PERKS = [
 ];
 
 export default function SupporterModal({ onClose }) {
-  const [claimed, setClaimed] = useState(isSupporter);
+  const [claimed, setClaimed] = useState(() => isSupporter());
   const panelRef = useRef(null);
   useFocusTrap(panelRef, true);
 

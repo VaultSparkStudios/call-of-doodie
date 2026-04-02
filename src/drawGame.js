@@ -3,6 +3,7 @@ import { WEAPONS } from "./constants.js";
 export function drawGame(ctx, canvas, W, H, gs, refs) {
   const { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx } = refs;
   const p = gs.player;
+  const dn = Date.now();
 
   // ────────────────── RENDER ────────────────────────────────────────────
   const _rm = gs.reducedMotion === true;
@@ -296,8 +297,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.save(); ctx.translate(e.x, e.y);
     const r = e.size / 2;
     const faceA = Math.atan2(p.y - e.y, p.x - e.x);
-    const dn = Date.now();
-
     // Drop shadow
     ctx.fillStyle = "rgba(0,0,0,0.3)";
     ctx.beginPath(); ctx.ellipse(0, r + 3, r * 0.7, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();

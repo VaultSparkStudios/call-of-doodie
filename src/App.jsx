@@ -159,7 +159,7 @@ export default function CallOfDoodie() {
   const xpRef            = useRef({ xp: 0, level: 1 });
   const grenadeRef       = useRef({ ready: true, lastUse: 0 });
   const dashRef          = useRef({ ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 });
-  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(10).fill(0) });
+  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0) });
   const achievedRef      = useRef(new Set());
   const startTimeRef     = useRef(0);
   const timerRef         = useRef(null);
@@ -874,7 +874,7 @@ export default function CallOfDoodie() {
       soundLevelUp();
       if (gsRef.current) {
         addText(gsRef.current, GW() / 2, GH() / 2 - 60, "⬆ LEVEL " + ref.level + "!", "#00FF88", true);
-        gsRef.current.player.speed = 4 + ref.level * 0.12;
+        gsRef.current.player.speed += 0.12;
       }
       // Trigger perk selection every 3 level-ups
       if (ref.level % 3 === 0) {
@@ -962,7 +962,7 @@ export default function CallOfDoodie() {
     for (let ang = 0; ang < Math.PI * 2; ang += Math.PI / 6) {
       gs.bullets.push({
         x: p.x, y: p.y, vx: Math.cos(ang) * 12, vy: Math.sin(ang) * 12,
-        damage: (WEAPONS[currentWeaponRef.current]?.bulletDamage || 20) * 3 * (perkModsRef.current.damageMult || 1),
+        damage: (WEAPONS[currentWeaponRef.current]?.damage || 20) * 3 * (perkModsRef.current.damageMult || 1),
         pierce: (perkModsRef.current.pierce || 0) + 2,
         life: 40, color: "#FF88FF", wpnIdx: currentWeaponRef.current,
         size: 8, bounces: 0, boomerang: false, bouncesLeft: 0,
@@ -1173,7 +1173,7 @@ export default function CallOfDoodie() {
       // Railgun — instant hitscan, queued for game loop processing this frame
       const cos = Math.cos(a), sin = Math.sin(a);
       const ox = p.x + cos * 25, oy = p.y + sin * 25;
-      const maxT = Math.hypot(W, H) * 1.2;
+      const maxT = Math.hypot(GW(), GH()) * 1.2;
       gs.pendingBeam = { ox, oy, cos, sin, maxT, weaponIdx, color: weapon.color };
       gs.beams = gs.beams || [];
       gs.beams.push({ x1: ox, y1: oy, x2: ox + cos * maxT, y2: oy + sin * maxT, life: 14, maxLife: 14, color: weapon.color });
@@ -1447,13 +1447,14 @@ export default function CallOfDoodie() {
       gs.ammoCount = savedAmmo;
       setAmmo(savedAmmo);
     }
+    const prevIdx = currentWeaponRef.current;
     setCurrentWeapon(idx); currentWeaponRef.current = idx;
     setIsReloading(false); isReloadingRef.current = false;
     // ── Analytics: weapon switch (throttled to once per 2s) ──
     const _now = Date.now();
     if (_now - weaponSwitchTrackRef.current > 2000) {
       weaponSwitchTrackRef.current = _now;
-      track("weapon_switch", { from: WEAPONS[currentWeaponRef.current]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current) });
+      track("weapon_switch", { from: WEAPONS[prevIdx]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current) });
     }
   }, []);
 
@@ -1718,7 +1719,8 @@ export default function CallOfDoodie() {
       gs.waveEliteOnly = false; gs.siegeMode = false; gs.fogOfWar = false;
       gs.routeKillScoreMult = 1; // reset per-wave score bonus
       // Non-blitz routes reset the blitz streak
-      if (!gs.routeBlitz) gs.blitzCount = 0;
+      const _wasBlitz = gs.routeBlitz;
+      if (!_wasBlitz) gs.blitzCount = 0;
       gs.routeArmoryRun = false; gs.routeBlitz = false; gs.blitzSpawnMult = 1;
       // 2× Blitz in a row → Hyperspeed mode (persistent for the run)
       if ((gs.blitzCount || 0) >= 2 && !gs.hyperspeedActive) {
@@ -1744,7 +1746,7 @@ export default function CallOfDoodie() {
         // Apply route modifiers to the upcoming wave
         if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
         if (gs.routeEliteWave)    { gs.waveEliteOnly = true; gs.routeEliteWave = false; }
-        if (gs.routeBlitz)        { gs.settSpawnMult = (gs.settSpawnMult || 1) * 3; }
+        if (_wasBlitz)            { gs.blitzSpawnMult = 3; }
       }
       setWave(gs.currentWave);
       setMapTheme(gs.mapTheme ?? 0);
@@ -2549,8 +2551,9 @@ export default function CallOfDoodie() {
             e.groundSlamRadius += 6;
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
-              const _slamDmg = (gs.currentWave >= 40 ? 25 : 18) * (gs._treeArmorMult || 1);
-              p.health -= gs.glassjaw ? Math.round(_slamDmg * (gs.glassjawMult || 2)) : _slamDmg; p.invincible = 25; gs.damageFlash = 10;
+              const _slamBase = (gs.currentWave >= 40 ? 25 : 18) * (gs._treeArmorMult || 1);
+              const _slamDmg = gs.glassjaw ? Math.round(_slamBase * (gs.glassjawMult || 2)) : _slamBase;
+              p.health -= _slamDmg; p.invincible = 25; gs.damageFlash = 10;
               gs.damageThisWave = (gs.damageThisWave || 0) + 1;
               setHealth(Math.max(0, p.health));
               addText(gs, p.x, p.y - 30, "-" + _slamDmg + " SLAM!", "#FF4400");
@@ -2830,7 +2833,7 @@ export default function CallOfDoodie() {
       if (_hDist < hz.radius) {
         if (hz.type === "acid") {
           // Acid pool: 0.5 damage per frame (~30/sec)
-          const _acidDmg = 0.5 * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
+          const _acidDmg = 0.5 * (gs._treeArmorMult || 1) * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
           p.health -= _acidDmg;
           if (frameCountRef.current % 30 === 0) {
             addText(gs, p.x, p.y - 30, `-${Math.round(_acidDmg * 30)} ACID`, "#44FF44");
@@ -3186,7 +3189,7 @@ export default function CallOfDoodie() {
     }
     startTimeRef.current = Date.now(); setTimeSurvived(0);
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setScreen("game");
   }, []);
 
