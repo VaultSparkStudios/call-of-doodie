@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▆▆▇▇
-Avgs — 3: 44.3 | 5: 43.6 | all: 37.7 [N=6]
-  └ 3-session: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 9.7
-Velocity trend: ↑↑→  |  Protocol velocity: →  |  Debt: ↑ (13 warnings, was 67)
-Momentum runway: ~0.5 sessions  |  Intent rate: 100% (last 6)
-Last session: 2026-04-01 | Session 33 | Total: 46/50 | Velocity: +3 | protocolVelocity: 0
+Sparkline (last 5 totals): ▆▆▇▇▇
+Avgs — 3: 45.3 | 5: 44.6 | all: 39.3 [N=8]
+  └ 3-session: Dev 9.7 | Align 9.0 | Momentum 8.7 | Engage 8.0 | Process 10.0
+Velocity trend: →↑→  |  Protocol velocity: →  |  Debt: → (13 warnings)
+Momentum runway: ~3.0 sessions  |  Intent rate: 100% (last 7)
+Last session: 2026-04-02 | Session 34 | Total: 45/50 | Velocity: 0 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -233,3 +233,33 @@ Avgs — 3: 44.3 | 5: 43.6 | all: 37.7 [N=6]
 5. "What's new" JSON-fed strip on MenuScreen — makes each session's shipped features visible to players at launch
 
 **Committed to TASK_BOARD:** [SIL] Add achievements for Speedrun + Gauntlet modes · [SIL] Anomaly logging in submit-score for impossible payloads
+
+---
+
+## 2026-04-02 — Session 34 | Total: 45/50 | Velocity: 0 | Debt: →
+Avgs — 3: 45.3 | 5: 44.6 | all: 39.3 [N=8]
+  └ 3-session: Dev 9.7 | Align 9.0 | Momentum 8.7 | Engage 8.0 | Process 10.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 10 | → | 14 bugs fixed (4 critical), build/test/lint all green, 70/70 tests, 0 errors |
+| Creative Alignment | 9 | → | Refinement session serves "controls must feel sharp" SOUL mandate; no feature drift |
+| Momentum | 8 | ↓ | No new features or formal task-board items completed; but 14 fixes improve game quality materially |
+| Engagement | 8 | → | No new engagement features, but fixing the railgun + supporter modal + speed builds improves player experience |
+| Process Quality | 10 | → | Full closeout with all Studio OS files updated; CDR entry for refinement directive |
+| **Total** | **45/50** | ↓ | |
+
+**Top win:** Deep 4-agent parallel audit discovered and fixed 4 critical game-breaking bugs (broken railgun, crashing player auras, compounding spawn rates, always-supporter modal) that had been shipping undetected.
+**Top gap:** No formal TASK_BOARD velocity — the session was redirected to refinement, so no feature/backlog items progressed. Speedrun/Gauntlet achievements remain 4 sessions overdue.
+**Intent outcome:** Achieved — user redirected from feature work to "run tests and refine the current game"; 14 bugs identified and fixed.
+
+**IGNIS note:** A dedicated refinement session with multi-agent parallel auditing found critical bugs that feature-focused sessions missed — scheduling periodic audit sessions is high-leverage for game quality.
+
+**Brainstorm**
+1. "What's New" JSON-fed menu strip — makes each session's shipped features/fixes visible to players at launch; implementation path: small JSON file + MenuScreen card; execution probability: High
+2. Automated gameplay smoke test — headless canvas run that validates weapons fire, enemies spawn, no crashes through wave 5; implementation path: Vitest + jsdom mock of game loop with minimal gs fixture; execution probability: Medium
+3. Per-weapon kill stats dashboard on DeathScreen — show weapon effectiveness breakdown from weaponKills array; implementation path: add a collapsible section in DeathScreen reading statsRef.weaponKills; execution probability: High
+4. Enemy variant death sounds — distinct audio for elite/berserker/boss deaths vs. regular; implementation path: add type checks in soundEnemyDeath for elite/boss flags; execution probability: Medium
+5. Seeded lightning arc rendering — replace Math.random() with frame-based deterministic offsets for stable visual arcs; implementation path: use frameCount % period for offset calculation; execution probability: High
+
+**Committed to TASK_BOARD:** [SIL] "What's New" JSON-fed menu strip · [SIL] Anomaly logging in submit-score for impossible payloads

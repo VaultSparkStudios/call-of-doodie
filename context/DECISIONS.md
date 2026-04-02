@@ -56,3 +56,11 @@
 - **ESLint 9 flat config now includes eslint-plugin-react (Session 33)**: Without the plugin, JSX component references were not recognized as variable usages, producing 50+ false-positive "unused import" warnings. Adding `react/jsx-uses-vars` eliminated the false positives. Also added `caughtErrors: "none"` to suppress `catch (_)` warnings. Warning count: 67 → 13.
 
 - **Music reactive thresholds raised to 8/15 combo kills (Session 33)**: The previous thresholds (2/5) meant chill was overridden to action almost immediately after the first wave started. Raising to 8/15 makes the vibe selection meaningful during early and mid-game waves. Intense still triggers on sustained 15-kill streaks.
+
+- **Level-up speed is additive, not absolute (Session 34)**: Previously `player.speed = 4 + level * 0.12` overwrote all accumulated speed bonuses from loadouts, perks, shop purchases, and meta tree on every level-up. Changed to `player.speed += 0.12` so speed bonuses are preserved. This means total speed scales with both build investment and level, which is the intended RPG-style stacking behavior.
+
+- **Blitz route uses blitzSpawnMult, not settSpawnMult (Session 34)**: The Blitz route modifier was mutating the user's `settSpawnMult` (settings-based spawn multiplier) permanently, compounding on consecutive Blitz picks. Fixed to use `blitzSpawnMult`, which is already in the spawn rate formula and gets reset each wave. This preserves the user's spawn rate setting while still applying the Blitz speed-up for one wave.
+
+- **Callsign claims verify ownership after upsert (Session 34)**: `ignoreDuplicates: true` in the Supabase upsert silently skips if the name already exists with a different uid. The function now reads back the row after upsert and returns `false` if the stored uid doesn't match the current user. This prevents the caller from thinking they claimed a name that actually belongs to someone else.
+
+- **Renamed speed-boost perk to "Speed Surge" (Session 34)**: Two perks shared the display name "Adrenaline Rush" — the +15% speed perk (id: "adrenaline") and the below-30%-HP double-speed perk (id: "adrenaline_rush"). Players couldn't distinguish them in the perk selection UI. The simpler speed perk was renamed to "Speed Surge" while the conditional trigger perk keeps "Adrenaline Rush".

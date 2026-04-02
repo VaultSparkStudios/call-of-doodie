@@ -99,3 +99,15 @@ brief, README, AGENTS notes, and session handoffs.
 - Approval source: user session directive
 - Evidence link or reference: Session 31 request in terminal; `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `context/PROJECT_STATUS.json`
 - Supersedes prior entry: none
+
+### 2026-04-02 - Focus on testing and refinement over new features
+
+- Area: development process / quality priorities
+- Human decision or guidance: "Instead of adding features, run game tests and refine the current game"
+- Previous state: session was set up to implement audit recommendations (PostHog, achievements, anomaly logging, etc.)
+- New required direction: prioritize game quality, bug finding, and refinement over feature velocity; run comprehensive testing before shipping new content
+- Why this matters: the game has accumulated undetected critical bugs (broken railgun, crashing auras, compounding spawn rates) that feature-focused sessions missed; periodic refinement passes catch these
+- Impact on canon / brand / production: establishes that quality gates and refinement sessions are a valid session type, not just feature sprints
+- Approval source: user directive in session 34 terminal
+- Evidence link or reference: session 34 conversation; 14 bugs found and fixed
+- Supersedes prior entry: none

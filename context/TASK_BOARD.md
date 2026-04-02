@@ -10,12 +10,13 @@
 - ⏳ Discord invite URL → uncomment footer link in `MenuScreen.jsx` (search `// no game Discord yet`)
 
 ## Now
-- [ ] **Push to deploy** — `git push` to trigger GitHub Actions: new bundle fixes CAPTCHA crash and ships all session 33 work
+- [ ] **Push to deploy** — `git push` to trigger GitHub Actions: ships session 33 + 34 bug fixes
 - [ ] **Re-deploy Edge Functions** — session 33 changes to `issue-run-token` and `submit-score` need `supabase functions deploy` or push-trigger to take effect
+- [SIL] Add achievements for Speedrun + Gauntlet modes (currently 0 each) — escalated from Backlog (skipped 4 sessions)
 
 ## Backlog
-- [SIL] Add achievements for Speedrun + Gauntlet modes (currently 0 each)
 - [SIL] Anomaly logging in submit-score for impossible score/time/wave payloads
+- [SIL] "What's New" JSON-fed menu strip — makes shipped features visible to players
 - Ko-fi webhook → Supabase Edge Function for cloud supporter verification (Option B)
 - Balance playtest: META Tree node costs, Kill Frenzy duration, Adaptive Assist threshold
 - QR code scanner test on mobile device
@@ -24,7 +25,25 @@
 - Boss Rush balance (warmup at wave 4; may need further tuning)
 - Consider `customSettings` boolean column migration for Supabase (⚙️ badge visible for all entries)
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
-- Add achievements for Speedrun + Gauntlet modes (currently 0)
+- Wire PostHog + Sentry env vars into GitHub Actions secrets
+- RouteSelectModal + DraftScreen: add gamepad nav support (controller players stuck)
+- Overclocked perk: use ??= to avoid counter reset on re-pick (minor)
+
+## Done (session 34 — 2026-04-02)
+- ✅ CRITICAL: Fixed drawGame.js `dn` out-of-scope crash — player auras work again
+- ✅ CRITICAL: Fixed railgun hitscan W/H undefined — weapon now functional
+- ✅ CRITICAL: Fixed Blitz route settSpawnMult compounding — uses blitzSpawnMult correctly
+- ✅ CRITICAL: Fixed SupporterModal useState passing function ref instead of result
+- ✅ HIGH: Fixed level-up resetting player speed (wiped all speed bonuses)
+- ✅ HIGH: Fixed synergy burst using non-existent bulletDamage property
+- ✅ HIGH: Fixed weapon switch analytics logging same weapon for from/to
+- ✅ HIGH: Fixed duplicate "Adrenaline Rush" perk name → renamed to "Speed Surge"
+- ✅ HIGH: Fixed claimCallsign silently succeeding when name owned by another user
+- ✅ HIGH: Fixed mixed-mode leaderboard sort in local fallback
+- ✅ MEDIUM: Fixed ground slam damage text lying with Glass Jaw active
+- ✅ MEDIUM: Fixed acid hazard ignoring _treeArmorMult
+- ✅ MEDIUM: Fixed respawn timer ticking during shop/route/cutscene
+- ✅ LOW: Fixed weaponKills initial array size (10 → WEAPONS.length)
 
 ## Done (session 33 — 2026-04-01)
 - ✅ ESLint: installed eslint-plugin-react; jsx-uses-vars rule added; 67 → 13 warnings (0 errors)

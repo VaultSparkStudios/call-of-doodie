@@ -50,7 +50,13 @@ export async function claimCallsign(name) {
       .from("callsign_claims")
       .upsert([{ name, uid }], { onConflict: "name", ignoreDuplicates: true });
     if (error) throw error;
-    return true;
+    // Verify the claim is actually ours (ignoreDuplicates silently skips if name is taken)
+    const { data: row } = await supabase
+      .from("callsign_claims")
+      .select("uid")
+      .eq("name", name)
+      .single();
+    return row?.uid === uid;
   } catch (err) {
     // Fails silently until SQL migration is applied in Supabase console
     console.warn("[callsign] Claim failed (run SQL migration in Supabase console):", err.message);
@@ -170,7 +176,7 @@ export async function saveToLeaderboard(entry) {
     board.push({ ...safeEntry, ts: Date.now(), game_id: "cod" });
     const top = board
       .map(normalizeLeaderboardEntry)
-      .sort((a, b) => compareLeaderboardEntries(a, b, a.mode || b.mode || null))
+      .sort((a, b) => compareLeaderboardEntries(a, b, null))
       .slice(0, 100);
     localStorage.setItem(LB_KEY, JSON.stringify(top));
     return { board: top, online: false };

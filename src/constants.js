@@ -78,7 +78,7 @@ export const PERKS = [
     apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.10; mods.hasEagleEye = true; if (mods.pierce > 0) mods.critBonus += 0.10; },
   },
   {
-    id: "adrenaline", name: "Adrenaline Rush", desc: "+15% move speed", emoji: "⚡", tier: "common",
+    id: "adrenaline", name: "Speed Surge", desc: "+15% move speed", emoji: "⚡", tier: "common",
     apply: (mods, gs) => { if (gs?.player) gs.player.speed *= 1.15; mods.hasAdrenaline = true; },
   },
   {
