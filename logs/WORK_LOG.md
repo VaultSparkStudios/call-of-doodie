@@ -2,12 +2,12 @@
 
 Append chronological entries.
 
-### YYYY-MM-DD - Session title
+### 2026-04-02 - Session 38 — Live production debugging + refinement/marketing strategy
 
-- Goal:
-- What changed:
-- Files or systems touched:
-- Risks created or removed:
+- Goal: Answer "what is needed to refine this game and market it to the public?" and validate live submit path
+- What changed: Fixed 401 Edge Function deploys (--no-verify-jwt); fixed SW response clone race; updated Cloudflare Worker with CoD-specific CSP (blob:, wss:, normalize()); validated leaderboard submit and GIF end-to-end in production
+- Files or systems touched: `.github/workflows/deploy-supabase-function.yml`, `public/sw.js`, Cloudflare Worker (dashboard-only, not in repo), all context/logs files
+- Risks created or removed: Removed — leaderboard submit was silently failing in production; GIF was CSP-blocked. Both confirmed working. Risk: Cloudflare Worker not tracked in repo — future CSP changes require dashboard access + editor friction.
 - Recommended next move:
 
 ---

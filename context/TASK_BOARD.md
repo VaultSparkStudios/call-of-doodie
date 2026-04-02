@@ -1,9 +1,9 @@
 # Task Board
 
 ## Human Action Required
-- [~] **Re-deploy Edge Functions** — triggered via session 36 git push (GitHub Actions workflow); confirm the `Deploy Supabase Function` job succeeded in Actions tab
-- [ ] **Validate live submit path** — Play one production run and confirm Call of Doodie can mint a run token and submit to the live leaderboard successfully
-- [ ] **Spot-check shared-project compatibility** — Because this Supabase project serves multiple games/platforms, verify any other app that writes to the shared `leaderboard` table still works after the old direct-insert policies were removed
+- [ ] **itch.io game page** — Create game page at itch.io with embed URL, screenshots, and description from README. Free, ~20 min, highest discoverability ROI.
+- [ ] **Take screenshots** — Capture 4–6 in-game screenshots (boss fight, death screen, perk select, leaderboard) for itch.io and social sharing.
+- [ ] **Spot-check shared-project compatibility** — Verify any other app writing to the shared Supabase `leaderboard` table still works after old direct-insert policies were removed.
 
 ## Deferred (non-blocking)
 - ⏳ PostHog project setup → add `VITE_POSTHOG_KEY` to GitHub Actions secrets when analytics is ready to turn on
@@ -27,6 +27,13 @@
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
 - Wire PostHog + Sentry env vars into GitHub Actions secrets
 - RouteSelectModal + DraftScreen: add gamepad nav support (controller players stuck)
+
+## Done (session 38 — 2026-04-02)
+- ✅ Edge Functions redeployed with `--no-verify-jwt` — fixed 401 on leaderboard submit (sb_publishable_* key not a JWT; infra-level verification bypassed; functions handle own auth via clientUid)
+- ✅ SW response clone race fixed — `res.clone()` now called synchronously before async `caches.open()` callback in `sw.js`
+- ✅ Cloudflare Worker updated with CoD-specific CSP (`/call-of-doodie/*` path): `blob:` in img-src, `wss://` in connect-src, cloudflareinsights.com in script-src; `normalize()` function added to strip newlines before header setting
+- ✅ Live leaderboard submit validated end-to-end in production
+- ✅ GIF Best Moments confirmed working after hard refresh
 
 ## Done (session 37 — 2026-04-02)
 - ✅ [SIL] Seeded lightning arc rendering — replaced `Math.random()` per frame with deterministic sin-hash on arc endpoints + step index; arcs stable shape, no jitter

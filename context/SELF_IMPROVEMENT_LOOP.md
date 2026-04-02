@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇▇▇▆▆
-Avgs — 3: 44.3 | 5: 44.8 | 10: 44.2 [N=10] | 25: — | all: 40.6 [N=11]
-  └ 3-session: Dev 9.0 | Align 9.3 | Momentum 8.0 | Engage 8.0 | Process 10.0
+Sparkline (last 5 totals): ▇▆▆▆▆
+Avgs — 3: 43.0 | 5: 43.8 | 10: 44.1 [N=10] | 25: — | all: 40.7 [N=12]
+  └ 3-session: Dev 8.7 | Align 8.7 | Momentum 7.7 | Engage 8.3 | Process 9.7
 Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: → (13 warnings)
-Momentum runway: ~3.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-02 | Session 37 | Total: 44/50 | Velocity: 0 | protocolVelocity: 1
+Momentum runway: N/A — velocity avg 0 last 3; pre-load TASK_BOARD before next sprint  |  Intent rate: 80% (last 5)
+Last session: 2026-04-02 | Session 38 | Total: 41/50 | Velocity: 0 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -354,3 +354,33 @@ Avgs — 3: 44.3 | 5: 44.8 | 10: 44.2 [N=10] | 25: — | all: 40.6 [N=11]
 5. **Discord server** — create Discord server → uncomment 1 line in MenuScreen.jsx footer; execution probability: High (human action: create server + get invite URL)
 
 **Committed to TASK_BOARD:** [SIL] Gameplay smoke test through wave 3 · [SIL] Health check script for Edge Function validation
+
+---
+
+## 2026-04-02 — Session 38 | Total: 41/50 | Velocity: 0 | Debt: →
+Avgs — 3: 43.0 | 5: 43.8 | 10: 44.1 [N=10] | 25: — | all: 40.7 [N=12]
+  └ 3-session: Dev 8.7 | Align 8.7 | Momentum 7.7 | Engage 8.3 | Process 9.7
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 8 | ↓ | 2 infra fixes (--no-verify-jwt, SW clone race); live submit validated; CF Worker took 10+ attempts to deploy |
+| Creative Alignment | 8 | ↓ | Ops-heavy session; marketing strategy delivered but no creative feature shipped |
+| Momentum | 7 | ↓ | 0 formal velocity; significant churn on CF Worker deployment; Now bucket unchanged |
+| Engagement | 9 | ↑ | Leaderboard submit + GIF both now confirmed working for real players — tangible player experience win |
+| Process Quality | 9 | ↓ | Files updated correctly; session had notable back-and-forth friction; CF Worker not tracked in repo |
+| **Total** | **41/50** | ↓ | |
+
+**Top win:** Leaderboard submit and GIF Best Moments both validated working in production — two features that were silently broken for players despite being correctly implemented in code.
+**Top gap:** Cloudflare Worker not tracked in repo — CSP changes require dashboard editor access and are vulnerable to copy-paste encoding issues; needs Wrangler-based deployment from a local file.
+**Intent outcome:** Partial — marketing strategy question answered in full with a two-track roadmap, but session was dominated by live production debugging rather than marketing execution.
+
+**IGNIS note:** Infrastructure issues that are invisible in local dev (401 from key format, CSP from Cloudflare Worker) can silently block player-facing features for multiple sessions — a post-deploy validation checklist would catch these immediately.
+
+**Brainstorm**
+1. **Store CF Worker in repo + Wrangler deploy** — Track `vaultspark-security-headers` worker.js in studio-ops or this repo; deploy via `wrangler deploy` in CI; eliminates dashboard editor copy-paste friction; implementation path: add worker.js + wrangler.toml + GitHub Actions step; execution probability: Medium
+2. **Health check script** (SIL, 2 sessions overdue) — Node script pinging Edge Functions with expected payloads; validates 400/401/200 matrix; implementation path: `scripts/health-check.js` using native fetch; execution probability: High
+3. **Gameplay smoke test** (SIL, 2 sessions overdue) — Vitest/jsdom test ticking gs fixture through wave 3; implementation path: minimal gs fixture + mock rAF in new test file; execution probability: Medium
+4. **itch.io submission** (SIL, 4 sessions overdue, human-only) — Create game page with embed URL + screenshots; highest marketing ROI available; execution probability: High (human action)
+5. **Post-deploy validation checklist** — A 5-point checklist (leaderboard submit, GIF, CSP headers, Edge Function status, SW version) run after every deploy; implementation path: add to LATEST_HANDOFF template or create a `scripts/smoke-check.sh`; execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Health check script (escalated — 2 sessions overdue) · [SIL] Gameplay smoke test (escalated — 2 sessions overdue)

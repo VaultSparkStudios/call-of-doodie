@@ -135,3 +135,15 @@ brief, README, AGENTS notes, and session handoffs.
 - Approval source: direct user instruction this session
 - Evidence link or reference: context/LATEST_HANDOFF.md, context/TASK_BOARD.md
 - Supersedes prior entry: none
+
+### 2026-04-02 — Two-track strategy: refine + market simultaneously; live ops debugging in session
+
+- Area: product strategy / distribution + live infrastructure
+- Human decision or guidance: "what is needed to refine this game and market it to the public?" — direction to operate in two parallel tracks: (1) ongoing refinement (ops, balance, gamepad nav) and (2) marketing (itch.io, screenshots, social clip, Discord, Reddit, ProductHunt)
+- Previous state: game live at vaultsparkstudios.com but with broken Edge Functions (401), 4 CSP violations (GIF broken), and no distribution presence
+- New required direction: itch.io page is the single highest-ROI marketing action (~20 min, free, significant discoverability). Screenshots are a prerequisite and should be captured before itch.io submission. ops health check and gameplay smoke test are the highest-priority agent-actionable refinement items.
+- Why this matters: game is feature-complete and live, but invisible; distribution and live-ops stability are the next phase of value
+- Impact on canon / brand / production: confirmed that the game is in "ship and grow" phase — not feature phase. Future sessions should default to quality, stability, and distribution rather than new systems.
+- Approval source: direct user instruction this session
+- Evidence link or reference: context/LATEST_HANDOFF.md, context/TASK_BOARD.md, context/DECISIONS.md (sessions 38 entries)
+- Supersedes prior entry: none
