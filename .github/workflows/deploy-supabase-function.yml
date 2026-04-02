@@ -31,7 +31,7 @@ jobs:
           fi
 
       - name: Deploy issue-run-token function
-        run: supabase functions deploy issue-run-token --project-ref "$SUPABASE_PROJECT_REF"
+        run: supabase functions deploy issue-run-token --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
 
       - name: Deploy submit-score function
-        run: supabase functions deploy submit-score --project-ref "$SUPABASE_PROJECT_REF"
+        run: supabase functions deploy submit-score --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
