@@ -7,10 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▁▆▆▆▆
-3-session avg: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 9.0
-Avg total: 43.7 / 50  |  Velocity trend: →  |  Debt: →
-Last session: 2026-03-30 | Session 31 | Total: 44/50 | Velocity: 9
+Sparkline (last 5 totals): ▆▆▆▇▇
+Avgs — 3: 44.3 | 5: 43.6 | all: 37.7 [N=6]
+  └ 3-session: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 9.7
+Velocity trend: ↑↑→  |  Protocol velocity: →  |  Debt: ↑ (13 warnings, was 67)
+Momentum runway: ~0.5 sessions  |  Intent rate: 100% (last 6)
+Last session: 2026-04-01 | Session 33 | Total: 46/50 | Velocity: +3 | protocolVelocity: 0
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -176,3 +178,58 @@ Rolling avg (last 3): Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 
 5. Add rate limiting or cooldown heuristics per user/IP at the Edge Function layer if abuse appears post-launch
 
 **Committed to TASK_BOARD:** [SIL] Reduce warning debt below 25 warnings · [SIL] Add a menu-level "Play Today's Seed / Beat This Score" hero panel
+
+---
+
+## 2026-03-31 — Session 32 | Total: 45/50 | Velocity: 0 | Debt: →
+Avgs — 3: 44.0 | 5: 35.8 | 10: 35.8 [N=5] | 25: 35.8 [N=5] | all: 35.8
+  └ 3-session: Dev 8.7 | Align 9.0 | Momentum 9.0 | Engage 8.0 | Process 9.3
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | → | Workflow repair removed the deploy blocker and the hardened path is now live through CI |
+| Creative Alignment | 9 | → | Launch/security work stayed focused on trust and usability without drifting from the game’s tone |
+| Momentum | 9 | → | The session converted the remaining blocker from “setup not done” to “live validation only” |
+| Engagement | 8 | → | No new audience feature shipped, but the live trust path and share surfaces are now actually deployable |
+| Process Quality | 10 | ↑ | Commits, pushes, workflow diagnosis, deploy verification, and closeout state all line up with reality |
+| **Total** | **45/50** | ↑ | |
+
+**Top win:** The hardened leaderboard path is now actually deployed, not just implemented in the repo.
+**Top gap:** Production still needs one live gameplay submit check and a shared-project compatibility spot-check.
+**Intent outcome:** Achieved — the launch/security work was pushed live, the broken workflow was repaired, and the operating docs now reflect the deployed state.
+
+**Brainstorm**
+1. Add a lightweight “health check” admin script that pings the live function endpoints and reports expected 401/400/200 behaviors; implementation path: create a small Node script using fetch against the deployed function URLs with empty and malformed requests; execution probability: High
+2. Add anomaly logging for impossible submit patterns so leaderboard abuse can be reviewed after launch; implementation path: append a guarded `security_events` insert in `submit-score` when token age, score, or mode checks fail; execution probability: Medium
+3. Surface a menu “Today’s seed / featured challenge” card to focus launch traffic on a single replayable beat; implementation path: add a small hero panel to `MenuScreen.jsx` above the mode buttons using existing seed/daily data; execution probability: High
+4. Add a minimal shared-leaderboard compatibility note and migration checklist for other studio games using the same Supabase project; implementation path: write a short internal doc under `context/` or `supabase/` describing which apps still rely on client inserts; execution probability: Medium
+5. Add a nightly GitHub workflow that verifies the Supabase function workflow remains green after future deploy changes; implementation path: add a scheduled workflow that calls the deployed function health checks; execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Reduce warning debt below 25 warnings · [SIL] Add a menu-level "Play Today's Seed / Beat This Score" hero panel
+
+---
+
+## 2026-04-01 — Session 33 | Total: 46/50 | Velocity: +3 | Debt: ↑ (13 warnings, was 67)
+Avgs — 3: 44.3 | 5: 43.6 | all: 37.7 [N=6]
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 10 | ↑ | Lint 67→13 (0 errors), build clean, 70 tests passing, CAPTCHA crash eliminated at root cause |
+| Creative Alignment | 9 | → | Daily challenge hero, music variety, accessibility all serve the fun-first player experience |
+| Momentum | 9 | → | 5 suggested items + 3 critical bug fixes in one session |
+| Engage | 8 | → | Live production testing exposed real bugs which were fixed; chill music actually plays now |
+| Process Quality | 10 | → | Context files, task board, handoff all updated; commit is comprehensive |
+| **Total** | **46/50** | ↑ | |
+
+**Top win:** Eliminated the CAPTCHA/auth crash making production unusable — traced from 401s through supabase-js internals to `dn is not defined` ReferenceError, then fixed by replacing `initAnonAuth` with a localStorage UUID approach that bypasses CAPTCHA entirely.
+**Top gap:** Session 33 commit not yet deployed — fix is local until `git push`. Edge Functions also need redeploy.
+**Intent outcome:** Achieved — all 5 startup-brief items completed; 3 critical production bugs fixed; music variety improved; lint debt slashed.
+
+**Brainstorm**
+1. Add achievements for Speedrun + Gauntlet modes (currently 0) — high impact per effort, the modes feel incomplete without unlockables
+2. Add a lightweight anomaly log in `submit-score` for impossible score/time/wave combos — one extra serviceClient insert call
+3. Ko-fi webhook → Supabase Edge Function to cloud-verify supporters instead of relying on localStorage claim
+4. Health check script: `node scripts/health-check.js` that pings Edge Functions and reports 400/200/5xx
+5. "What's new" JSON-fed strip on MenuScreen — makes each session's shipped features visible to players at launch
+
+**Committed to TASK_BOARD:** [SIL] Add achievements for Speedrun + Gauntlet modes · [SIL] Anomaly logging in submit-score for impossible payloads

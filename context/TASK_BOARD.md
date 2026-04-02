@@ -1,9 +1,8 @@
 # Task Board
 
 ## Human Action Required
-- [ ] **Run launch security migration** — Apply `supabase/migrations/2026-03-30_launch_security.sql` to Supabase
-- [ ] **Supabase function deploy secrets** — Add `SUPABASE_ACCESS_TOKEN` and `SUPABASE_PROJECT_REF` to GitHub Actions secrets so `deploy-supabase-function.yml` can deploy `issue-run-token` + `submit-score`
-- [ ] **Supabase function env secrets** — Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for the new Edge Functions
+- [ ] **Validate live submit path** — Play one production run and confirm Call of Doodie can mint a run token and submit to the live leaderboard successfully
+- [ ] **Spot-check shared-project compatibility** — Because this Supabase project serves multiple games/platforms, verify any other app that writes to the shared `leaderboard` table still works after the old direct-insert policies were removed
 
 ## Deferred (non-blocking)
 - ⏳ PostHog project setup → add `VITE_POSTHOG_KEY` to GitHub Actions secrets when analytics is ready to turn on
@@ -11,13 +10,13 @@
 - ⏳ Discord invite URL → uncomment footer link in `MenuScreen.jsx` (search `// no game Discord yet`)
 
 ## Now
-- [SIL] Reduce warning debt below 25 warnings so `lint:strict` becomes realistic again
-- [SIL] Add a menu-level "Play Today's Seed / Beat This Score" hero panel for campaign traffic and creator challenges
+- [ ] **Push to deploy** — `git push` to trigger GitHub Actions: new bundle fixes CAPTCHA crash and ships all session 33 work
+- [ ] **Re-deploy Edge Functions** — session 33 changes to `issue-run-token` and `submit-score` need `supabase functions deploy` or push-trigger to take effect
 
 ## Backlog
-- Gauntlet difficulty sub-tabs (like Boss Rush has)
+- [SIL] Add achievements for Speedrun + Gauntlet modes (currently 0 each)
+- [SIL] Anomaly logging in submit-score for impossible score/time/wave payloads
 - Ko-fi webhook → Supabase Edge Function for cloud supporter verification (Option B)
-- ARIA labels pass on MenuScreen + DeathScreen buttons (accessibility pass 2)
 - Balance playtest: META Tree node costs, Kill Frenzy duration, Adaptive Assist threshold
 - QR code scanner test on mobile device
 - iOS Capacitor wrapper (requires Mac + Xcode 15+ + Apple Developer $99/yr)
@@ -25,6 +24,26 @@
 - Boss Rush balance (warmup at wave 4; may need further tuning)
 - Consider `customSettings` boolean column migration for Supabase (⚙️ badge visible for all entries)
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
+- Add achievements for Speedrun + Gauntlet modes (currently 0)
+
+## Done (session 33 — 2026-04-01)
+- ✅ ESLint: installed eslint-plugin-react; jsx-uses-vars rule added; 67 → 13 warnings (0 errors)
+- ✅ Daily Challenge hero panel on MenuScreen (seed, today's best, one-click play)
+- ✅ ARIA labels pass: MenuScreen (deploy, leaderboard, seed input), DeathScreen (all buttons + last words input)
+- ✅ Gauntlet difficulty sub-tabs in LeaderboardPanel (GT DIFF, gold color scheme, matches Boss Rush pattern)
+- ✅ Fix Supabase CAPTCHA crash: replaced initAnonAuth with getOrCreateClientUid (localStorage UUID)
+- ✅ Both Edge Functions updated to accept clientUid fallback — no more 401 for CAPTCHA-protected projects
+- ✅ Fix `dn is not defined` crash: root cause was auth failure triggering supabase-js error path; now prevented
+- ✅ Fix last words text color: #FF69B4 (pink) → #FFF (white)
+- ✅ Music variety: combo thresholds raised (2/5 → 8/15 kills) so chill/intense vibes actually play
+- ✅ Music reactive logic: intense override only escalates chill/action → intense (not action at tier 1)
+
+## Done (session 32 — 2026-03-31)
+- ✅ User ran the launch security migration in Supabase
+- ✅ Supabase Edge Function runtime secrets confirmed/set by the user
+- ✅ `Deploy to GitHub Pages` workflow succeeded for the launch/security push
+- ✅ `Deploy Supabase Function` workflow was repaired and succeeded for `issue-run-token` + `submit-score`
+- ✅ Launch/security changes were committed and pushed on `main` (`1d8b697`, `607b93a`)
 
 ## Done (session 30 — 2026-03-30)
 - ✅ Speedrun leaderboard rows now sort by time ascending in UI and post-submit rank lookup

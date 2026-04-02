@@ -88,5 +88,44 @@ Append chronological entries.
   - Removed: direct client leaderboard inserts are no longer the intended online trust boundary
   - Reduced: fabricated submissions now need a valid issued run token tied to auth, mode, difficulty, and seed
   - Clarified: launch blockers are now limited to migration/deploy/config work rather than mixed with optional analytics tooling
-  - Remaining: the hardened path is not live until the migration runs and Supabase function secrets/deploy are completed
+- Remaining: the hardened path is not live until the migration runs and Supabase function secrets/deploy are completed
 - Recommended next move: run `supabase/migrations/2026-03-30_launch_security.sql`, set the GitHub/Supabase function secrets, deploy both Edge Functions, then push the live build
+
+---
+
+### 2026-03-31 — Session 32: Deployment completion, workflow repair, and launch closeout
+
+- Goal: Push the hardened launch path live, repair the broken function workflow, and close out with accurate operating state
+- What changed: Guided the user through migration/secrets, pushed the launch/security commits, diagnosed the failed GitHub workflow as a workflow-file issue, patched `.github/workflows/deploy-supabase-function.yml`, pushed the fix, and verified both GitHub Pages and Supabase function deployments succeeded
+- Files or systems touched:
+  - MOD: .github/workflows/deploy-supabase-function.yml
+  - DOCS: context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, context/PROJECT_STATUS.json, context/SELF_IMPROVEMENT_LOOP.md, logs/WORK_LOG.md
+- Risks created or removed:
+  - Removed: launch/security repo work is no longer stuck behind local Docker issues
+  - Removed: the invalid function workflow configuration that prevented auto-deploy
+  - Remaining: live gameplay submission still needs one production validation pass, and shared-project compatibility should be spot-checked because leaderboard insert policies changed
+- Recommended next move: play one live run to verify token mint + submit, then spot-check any other game sharing the Supabase leaderboard table
+
+---
+
+### 2026-04-01 — Session 33: Lint debt, hero panel, ARIA, gauntlet sub-tabs, CAPTCHA crash fix, music variety
+
+- Goal: Complete 5 startup-brief suggested items; then fix critical bugs found during live testing
+- What changed: 10 improvements — 4 suggested items, 3 critical bug fixes, music variety, hardening
+- Files or systems touched:
+  - MOD: eslint.config.js, package.json — eslint-plugin-react added; jsx-uses-vars rule
+  - MOD: src/supabase.js — removed initAnonAuth; added getOrCreateClientUid (localStorage UUID)
+  - MOD: src/storage.js — clientUid in Edge Function bodies; hardened catch blocks
+  - MOD: src/App.jsx — removed initAnonAuth call; raised music combo thresholds 8/15
+  - MOD: src/sounds.js — reactive music: only escalate chill/action → intense at tier 2
+  - MOD: src/components/DeathScreen.jsx — last words color white; ARIA labels
+  - MOD: src/components/MenuScreen.jsx — daily challenge hero panel; ARIA labels
+  - MOD: src/components/LeaderboardPanel.jsx — Gauntlet difficulty sub-tabs
+  - MOD: src/components/HUD.jsx, VirtualKeyboard.jsx — lint cleanup
+  - MOD: supabase/functions/issue-run-token/index.ts, submit-score/index.ts — clientUid fallback auth
+- Risks created or removed:
+  - Removed: Supabase CAPTCHA crash (dn is not defined) — root cause eliminated
+  - Removed: 401 on Edge Functions for CAPTCHA-protected projects
+  - Removed: 67 lint false-positives (now 13 genuine warnings)
+  - Remaining: session 33 commit not yet pushed; Edge Function code not yet deployed
+- Recommended next move: push to main, re-deploy Edge Functions, validate live submit

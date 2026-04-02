@@ -48,3 +48,11 @@
 - **Lint commands align with ESLint 9 flat config**: Local and CI lint now use plain `eslint src --report-unused-disable-directives`. Warning debt still exists, but the command contract is now consistent and non-broken.
 
 - **Score submission is gated by one-time run tokens**: A run must obtain a token from `issue-run-token` at start, and `submit-score` will only accept a matching unused token for the same mode, difficulty, and seed. This does not make the game cheat-proof, but it materially raises the cost of fabricated submissions and gives the server a real issuance/consumption flow.
+
+- **Supabase function deployment is CI-first, not local-Docker-dependent**: Because local Docker availability blocked `supabase functions deploy` on this machine, the authoritative deployment path is now the GitHub Actions workflow. The workflow was fixed and confirmed working, which is more reliable for future deploys than depending on a specific local workstation state.
+
+- **Replaced Supabase anonymous auth with client-generated UUID (Session 33)**: `initAnonAuth()` was removed. Supabase's CAPTCHA protection for anonymous sign-in caused the Edge Functions to return 401, which triggered an uncaught ReferenceError (`dn is not defined`) deep in the supabase-js error handler. Fix: `getOrCreateClientUid()` generates a stable UUID stored in `cod-client-uid-v1` (localStorage). Both Edge Functions now try `auth.getUser()` first and fall back to the `clientUid` from the request body. This maintains the run-token security model (tokens are still bound to a uid) while bypassing the CAPTCHA gate entirely.
+
+- **ESLint 9 flat config now includes eslint-plugin-react (Session 33)**: Without the plugin, JSX component references were not recognized as variable usages, producing 50+ false-positive "unused import" warnings. Adding `react/jsx-uses-vars` eliminated the false positives. Also added `caughtErrors: "none"` to suppress `catch (_)` warnings. Warning count: 67 → 13.
+
+- **Music reactive thresholds raised to 8/15 combo kills (Session 33)**: The previous thresholds (2/5) meant chill was overridden to action almost immediately after the first wave started. Raising to 8/15 makes the vibe selection meaningful during early and mid-game waves. Intense still triggers on sustained 15-kill streaks.

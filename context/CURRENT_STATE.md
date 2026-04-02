@@ -1,10 +1,10 @@
 # Current State
 
 ## Build
-- Status: ✅ build passing (`npm run build` clean, 768.25KB bundle); ✅ tests passing (`npm test` 70/70); ✅ lint passes (`npm run lint`) with 67 warnings and 0 errors
-- Latest commit: `d1142a4` — Session 29
-- Branch: `main`, working tree dirty (Session 30 changes not yet committed)
-- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`
+- Status: ✅ build passing (`npm run build` clean, 771KB bundle); ✅ tests passing (`npm test` 70/70); ✅ lint passes (`npm run lint`) with 13 warnings and 0 errors
+- Latest commit: `43bc9e9` — Session 33
+- Branch: `main`, unpushed — deploy via push to main triggers GitHub Actions
+- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/` (still session 32 bundle until push)
 
 ## Architecture sizes (approx)
 - `App.jsx`: ~3500 lines (game loop + state orchestrator)
@@ -79,7 +79,7 @@
 - Repo path: online leaderboard submission now targets the Supabase Edge Function `submit-score` instead of direct browser inserts
 - Repo path: `issue-run-token` mints one-time run tokens bound to mode/difficulty/seed; `submit-score` now requires and consumes them
 - Repo path: `submit-score` verifies auth, re-checks callsign ownership server-side, validates token age/shape, normalizes payloads, and awards Vault points for real members
-- Live state caveat: these protections are not active in production until the new Supabase migration is applied and both functions are deployed
+- Live state: migration was run by the user and both GitHub Actions workflows succeeded on 2026-03-31, so the hardened online submit path is now deployed
 
 ## Marketing surface (Session 30)
 - `index.html` now has stronger SEO/share metadata: improved title, description, canonical, Open Graph, and Twitter tags
@@ -115,9 +115,8 @@
 - Writes to `game_sessions` table (game_slug: 'call-of-doodie') + calls `award_vault_points` RPC (3 pts)
 
 ## Deferred (user action, non-blocking)
-- Run `supabase/migrations/2026-03-30_launch_security.sql` against the project
-- GitHub Actions secrets: `SUPABASE_ACCESS_TOKEN` + `SUPABASE_PROJECT_REF` to enable `.github/workflows/deploy-supabase-function.yml`
-- Supabase Edge Function secrets: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`
+- Validate one live Call of Doodie leaderboard submission end-to-end in production
+- Spot-check any other game/platform sharing this Supabase `leaderboard` table to confirm the policy change did not break legacy direct-submit flows
 - VITE_POSTHOG_KEY → add to GitHub Actions secrets when PostHog project created
 - VITE_SENTRY_DSN → add to GitHub Actions secrets when Sentry project created
 - Discord URL: uncomment footer link in `MenuScreen.jsx` when invite URL available
@@ -126,9 +125,20 @@
 - `public/manifest.json` + `public/sw.js` v3 deployed
 - SW strategy: cache-first assets, stale-while-revalidate shell, network-only API, offline fallback
 
+## Auth (Session 33 change)
+- `initAnonAuth()` removed — was CAPTCHA-gated and caused `dn is not defined` crash via supabase-js error handler
+- Replaced with `getOrCreateClientUid()` — generates/persists a UUID in `cod-client-uid-v1` (localStorage)
+- Both Edge Functions (`issue-run-token`, `submit-score`) now accept `clientUid` from request body as fallback when no Supabase user session; anon auth no longer required
+- Existing Supabase sessions (stored from before CAPTCHA was enabled) still work via `auth.getUser()` check
+
+## localStorage keys (complete, session 33 addition)
+| Key | Purpose |
+|-----|---------|
+| `cod-client-uid-v1` | Stable anonymous client UUID — replaces Supabase anon auth |
+
 ## Known issues (minor, low priority)
 - Boss ground slam: random stagger can shorten 90-frame warning on first cycle
 - Overclocked perk: taking it twice resets overclockedShots mid-game
 - Gamepad rumble requires Chrome 68+
 - Discord link in MenuScreen footer commented out
-- Warning debt still exists (67 warnings), but it is no longer a launch blocker because local lint and CI now agree
+- Warning debt reduced to 13 (was 67) — react-hooks/exhaustive-deps in 2 non-game files; lint:strict not yet a gate
