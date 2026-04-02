@@ -11,9 +11,7 @@
 - ⏳ Discord invite URL → uncomment footer link in `MenuScreen.jsx` (search `// no game Discord yet`)
 
 ## Now
-- [SIL] Add achievements for Speedrun + Gauntlet modes (currently 0 each) — escalated 5 sessions in a row; must action next session
 - [SIL] itch.io game page setup — submit to itch.io for browser-game discoverability (free, high ROI, no code required)
-- [SIL] "What's New" JSON-fed menu strip — makes shipped features visible to returning players; small JSON + MenuScreen card
 
 ## Backlog
 - [SIL] Anomaly logging in submit-score for impossible score/time/wave payloads
@@ -29,6 +27,10 @@
 - RouteSelectModal + DraftScreen: add gamepad nav support (controller players stuck)
 - Per-weapon kill stats breakdown on DeathScreen (weaponKills array already tracked)
 - Overclocked perk: use ??= to avoid counter reset on re-pick (minor)
+
+## Done (session 36 — 2026-04-02)
+- ✅ [SIL] Speedrun + Gauntlet achievements — confirmed fully implemented in session 30 (4 achievements: speedrun_w5, speedrun_sub4, gauntlet_w5, gauntlet_w10); stale [SIL] task cleared
+- ✅ [SIL] "What's New" menu strip — NEW_FEATURES updated with 4 missing features (Speedrun, Gauntlet, META Tree, Run Draft); strip teaser now dynamically shows last 4 entries from NEW_FEATURES
 
 ## Done (session 35 — 2026-04-02)
 - ✅ Deployed sessions 33+34+35 to production via `git push` (GitHub Actions)

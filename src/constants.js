@@ -366,6 +366,10 @@ export const NEW_FEATURES = [
   "👻 Ghost Race — run against the shadow of your last run in real time",
   "📺 Broadcast Share Card — stream-style kill-cam thumbnail when you share your score",
   "💥 Berserker Elite — fast + armoured nightmare that spawns at wave 40+",
+  "🏃 Speedrun Mode — race the clock with a live HUD timer; fastest run earns the leaderboard crown",
+  "🏋️ Gauntlet Mode — weekly locked weapon + perk loadout, no shop; pure skill on a shared build",
+  "🌳 META Tree — 16 permanent upgrade nodes across 4 branches; bonuses carry into every run forever",
+  "🃏 Run Draft — pick one bonus perk before deploying; reshuffles every run for fresh builds",
 ];
 
 // ===== KILLSTREAKS =====

@@ -1040,7 +1040,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         >
           <div style={{ textAlign: "left" }}>
             <div style={{ fontSize: 10, color: "#FF6B35", fontWeight: 900, letterSpacing: 2 }}>✦ WHAT'S NEW</div>
-            <div style={{ fontSize: 10, color: "#AAA", marginTop: 2 }}>Tiered upgrades · Prestige · Map themes · Global leaderboard</div>
+            <div style={{ fontSize: 10, color: "#AAA", marginTop: 2 }}>{NEW_FEATURES.slice(-4).map(f => f.split(" — ")[0]).join(" · ")}</div>
           </div>
           <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
             <button
