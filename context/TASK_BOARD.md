@@ -1,7 +1,7 @@
 # Task Board
 
 ## Human Action Required
-- [ ] **Re-deploy Edge Functions** — `supabase functions deploy issue-run-token submit-score` — session 33 changes not yet deployed; leaderboard submit returns 401 until this runs
+- [~] **Re-deploy Edge Functions** — triggered via session 36 git push (GitHub Actions workflow); confirm the `Deploy Supabase Function` job succeeded in Actions tab
 - [ ] **Validate live submit path** — Play one production run and confirm Call of Doodie can mint a run token and submit to the live leaderboard successfully
 - [ ] **Spot-check shared-project compatibility** — Because this Supabase project serves multiple games/platforms, verify any other app that writes to the shared `leaderboard` table still works after the old direct-insert policies were removed
 
@@ -12,6 +12,8 @@
 
 ## Now
 - [SIL] itch.io game page setup — submit to itch.io for browser-game discoverability (free, high ROI, no code required)
+- [SIL] Per-weapon kill stats on DeathScreen — `statsRef.weaponKills` already tracked; add collapsible breakdown section to DeathScreen.jsx showing kills per weapon
+- [SIL] Seeded lightning arc rendering — replace `Math.random()` per frame with deterministic frame-based offsets; stops arcs jittering every frame
 
 ## Backlog
 - [SIL] Anomaly logging in submit-score for impossible score/time/wave payloads

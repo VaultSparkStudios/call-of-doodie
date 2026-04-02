@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▇▇▇▇
-Avgs — 3: 45.3 | 5: 45.0 | all: 44.3 [N=9]
-  └ 3-session: Dev 9.7 | Align 9.3 | Momentum 8.3 | Engage 8.0 | Process 10.0
-Velocity trend: ↓→↑  |  Protocol velocity: ↑  |  Debt: → (13 warnings)
-Momentum runway: ~1.5 sessions ⚠ LOW — pre-load TASK_BOARD before next sprint  |  Intent rate: 100% (last 5)
-Last session: 2026-04-02 | Session 35 | Total: 45/50 | Velocity: 1 | protocolVelocity: 1
+Sparkline (last 5 totals): ▇▇▇▇▆
+Avgs — 3: 44.7 | 5: 45.0 | 10: 44.2 [N=10] | 25: — | all: 44.2 [N=10]
+  └ 3-session: Dev 9.3 | Align 9.3 | Momentum 8.0 | Engage 8.0 | Process 10.0
+Velocity trend: ↑↓  |  Protocol velocity: ↑  |  Debt: → (13 warnings)
+Momentum runway: ~3.0 sessions  |  Intent rate: 100% (last 5)
+Last session: 2026-04-02 | Session 36 | Total: 44/50 | Velocity: 0 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -293,3 +293,33 @@ Avgs — 3: 45.3 | 5: 45.0 | all: 44.3 [N=9]
 5. **Discord community** — Create a Discord server and uncomment the footer link in MenuScreen.jsx; implementation path: create Discord server → get invite URL → uncomment one line; execution probability: High
 
 **Committed to TASK_BOARD:** [SIL] itch.io game page setup · [SIL] "What's New" JSON-fed menu strip
+
+---
+
+## 2026-04-02 — Session 36 | Total: 44/50 | Velocity: 0 | Debt: →
+Avgs — 3: 44.7 | 5: 45.0 | 10: 44.2 [N=10] | 25: — | all: 44.2 [N=10]
+  └ 3-session: Dev 9.3 | Align 9.3 | Momentum 8.0 | Engage 8.0 | Process 10.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | → | 83/83 tests (+13), green CI, green lint; no bugs fixed this session |
+| Creative Alignment | 9 | ↓ | What's New content update stays aligned; minor content session |
+| Momentum | 8 | → | Edge Function redeploy triggered; stale [SIL] tasks cleared; small code footprint |
+| Engagement | 8 | → | What's New strip now surfaces recent features to returning players |
+| Process Quality | 10 | → | Stale [SIL] audited + cleared, test coverage expanded, TASK_BOARD clean |
+| **Total** | **44/50** | ↓ | |
+
+**Top win:** Discovered 2 [SIL] items were already done or misclassified — verified before implementing saved writing 4 achievements that were fully wired since session 30, and cleared 2 overdue tasks in one pass.
+**Top gap:** itch.io is 3+ sessions unactioned; it's a 20-minute human task with no agent blocker — the only thing stopping this is prioritizing it.
+**Intent outcome:** Achieved — all agent-actionable next moves completed; itch.io remains as human-only task.
+
+**IGNIS note:** Verification before implementation ("is this already done?") is high-leverage — reading the codebase to confirm an achievement was wired took 2 minutes and saved implementing code that already existed.
+
+**Brainstorm**
+1. **Per-weapon kill stats on DeathScreen** — `statsRef.weaponKills` already tracked; add collapsible breakdown section to DeathScreen.jsx; implementation path: small JSX section reading existing prop; execution probability: High
+2. **Seeded lightning arc rendering** — replace `Math.random()` per frame with deterministic frame-based offsets so arcs don't jitter visually; implementation path: use `(frameCount % period) / period` for arc offset; execution probability: High
+3. **Discord server + footer link** — create Discord → get invite URL → uncomment 1 line in MenuScreen.jsx footer; execution probability: High (needs human to create server)
+4. **Gameplay smoke test** — jsdom test validating weapons fire + enemies spawn through wave 3 with no crash; implementation path: minimal gs fixture + game loop tick; execution probability: Medium
+5. **Health check script** — Node script pinging deployed Edge Functions with known-bad payloads to verify expected 400/401/200 responses; execution probability: Medium
+
+**Committed to TASK_BOARD:** [SIL] Per-weapon kill stats on DeathScreen · [SIL] Seeded lightning arc rendering

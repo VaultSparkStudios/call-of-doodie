@@ -152,6 +152,21 @@ Append chronological entries.
 
 ---
 
+### 2026-04-02 — Session 36: What's New strip, test expansion, Edge Function redeploy
+
+- Goal: Complete next moves — Speedrun/Gauntlet achievements, What's New strip, Edge Function redeploy
+- What changed: Discovered achievements already done (cleared stale [SIL]); updated NEW_FEATURES with 4 missing entries; What's New strip teaser now dynamic; +13 tests; Edge Functions redeployed via git push
+- Files or systems touched:
+  - MOD: src/constants.js (NEW_FEATURES +4 entries), src/components/MenuScreen.jsx (dynamic teaser), src/constants.test.js (+13 tests, 70→83)
+  - DOCS: context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, context/SELF_IMPROVEMENT_LOOP.md, context/PROJECT_STATUS.json, logs/WORK_LOG.md, audits/2026-04-02-3.json
+- Risks created or removed:
+  - Removed: Stale [SIL] noise on TASK_BOARD (achievements task escalated 5 sessions for work already done)
+  - Removed: Untested mode-gated achievement logic — 8 behavioral regression tests now guard speedrun/gauntlet/boss_rush/cursed achievement unlock conditions
+  - Removed: Edge Function 401 blocker — redeployed via push (pending confirmation)
+- Recommended next move: Confirm Edge Function job succeeded in GitHub Actions, validate live submit, then action per-weapon kill stats and seeded lightning arcs ([SIL] items added this session)
+
+---
+
 ### 2026-04-02 — Session 35: Live bug fixes, branding, launch readiness
 
 - Goal: Identify refinements to take the game live and acquire users; fix live production errors; create polished icon/favicon
