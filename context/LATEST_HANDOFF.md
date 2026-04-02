@@ -1,18 +1,18 @@
-# Latest Handoff — Session 36 Closeout
+# Latest Handoff — Session 37 Closeout
 
 This is the authoritative active handoff file for this repo.
 
-**Session Intent (Session 36):** Complete next moves — Speedrun/Gauntlet achievements, What's New strip, Edge Function redeploy.
+**Session Intent (Session 37):** Complete two SIL items (per-weapon kill stats, seeded lightning arcs) and audit for remaining refinements.
 **Date:** 2026-04-02
-**Branch:** `main`, pushed — sessions 33–36 all live
+**Branch:** `main`, pushing — sessions 33–37 live via GitHub Actions
 **Build:** ✅ `npm run build` passes (771KB bundle) · ✅ `npm test` passes (83/83) · ✅ `npm run lint` passes (13 warnings, 0 errors)
 
 ---
 
-## Where We Left Off (Session 36)
-- Shipped: 3 improvements across 2 groups — What's New content + strip (2), test suite expansion (1); Edge Functions redeploy triggered
-- Tests: 83 passing (26 loadout / 16 storage / 41 constants) · delta: +13 this session
-- Deploy: deployed to GitHub Pages; Edge Functions redeploy triggered via git push (confirm in Actions tab)
+## Where We Left Off (Session 37)
+- Shipped: 3 improvements across 2 groups — visual fix + UX expansion (2), bug fix (1)
+- Tests: 83 passing (26 loadout / 16 storage / 41 constants) · delta: 0 this session
+- Deploy: deployed to GitHub Pages (push this session); Edge Functions redeploy still pending confirmation from session 36
 
 ---
 
@@ -25,33 +25,37 @@ This is the authoritative active handoff file for this repo.
 
 ---
 
-## What was done this session (Session 36)
+## What was done this session (Session 37)
 
-### Stale [SIL] audit
-- Investigated the 5-sessions-overdue Speedrun/Gauntlet achievements [SIL] item — confirmed **fully implemented in session 30**: 4 achievements (`speedrun_w5`, `speedrun_sub4`, `gauntlet_w5`, `gauntlet_w10`) in constants.js + wired in `checkAchievements`. Task was never cleared from TASK_BOARD. Cleared.
+### [SIL] Seeded lightning arc rendering — `src/drawGame.js:693-697`
+- Replaced two `Math.random()` calls per segment per frame with deterministic `sin`-hash based on `arc.x1, arc.y1, arc.x2, arc.y2, i` (step index)
+- Arc shape is now stable across frames — same jag pattern each render, no visual jitter
+- Formula: `jx = ((Math.sin(arc.x1*127.1 + arc.y1*311.7 + i*74.3) * 43758.5453) % 1)`; similar for `jy` using `arc.x2, arc.y2`
 
-### What's New strip — completed
-- `src/constants.js` — Added 4 missing entries to `NEW_FEATURES`: Speedrun Mode, Gauntlet Mode, META Tree, Run Draft (the list hadn't been updated since session 25)
-- `src/components/MenuScreen.jsx:1043` — Replaced hardcoded teaser text with `{NEW_FEATURES.slice(-4).map(f => f.split(" — ")[0]).join(" · ")}` — now auto-updates whenever `NEW_FEATURES` gets new entries
+### [SIL] Per-weapon kill stats — `src/components/DeathScreen.jsx:347–375`
+- The top-3 "TOP WEAPONS" widget already existed; it was not yet collapsible
+- Added `showAllWeapons` state + toggle button that appears when >3 weapons were used
+- "▼ +N MORE" expands to show all weapons with kills sorted by descending kills; "▲ SHOW LESS" collapses back to top 3
+- Gold border on rank-1 weapon preserved in compact view only
 
-### Test suite — +13 tests (70 → 83)
-- `src/constants.test.js` — Added 3 new describe blocks:
-  - `ACHIEVEMENT_PROGRESS` — all keys reference real achievement IDs; targets are positive `[string, number]` tuples; speedrun/gauntlet entries present
-  - Mode-gated achievement regression — `speedrun_w5`, `speedrun_sub4` (incl. time threshold), `gauntlet_w5`, `gauntlet_w10`, `boss_rush_5/10/20`, `cursed_run_w5/w10` each tested with passing + failing mock stats
-  - `NEW_FEATURES` — non-empty strings, ` — ` separator in every entry, no duplicates, required entries present
+### Overclocked perk ??= fix — `src/constants.js:157`
+- `gs.overclockedShots = 0` → `gs.overclockedShots ??= 0`
+- Prevents counter reset when the perk is picked a second time (e.g. from a coin shop re-roll that lands on Overclocked again); counter now preserves existing value on re-pick
 
-### Edge Functions redeploy
-- Triggered via `git push` — GitHub Actions `deploy.yml` runs `Deploy Supabase Function` job for `issue-run-token` and `submit-score`
+### Audit findings
+- Lint: 13 warnings are all intentional patterns — game loop ref deps, stable setter omissions, fast-refresh cosmetic. No fixes needed.
+- Per-weapon stats: already partially implemented; enhanced to full collapsible breakdown.
+- All other backlog items: human-action, design/balance, or larger feature scope.
 
 ---
 
-## Files modified (session 36)
+## Files modified (session 37)
 
-- `src/constants.js` — 4 new entries appended to `NEW_FEATURES`
-- `src/components/MenuScreen.jsx` — What's New strip teaser now dynamic from `NEW_FEATURES.slice(-4)`
-- `src/constants.test.js` — +113 lines: 3 new describe blocks, 13 new tests
-- `context/TASK_BOARD.md` — stale [SIL] items cleared, session 36 Done entries added, 2 new SIL items
-- `context/CURRENT_STATE.md` — test count, deploy status, architecture updated
+- `src/drawGame.js` — seeded lightning arc: `Math.random()` → deterministic hash (lines 694-696)
+- `src/components/DeathScreen.jsx` — `showAllWeapons` state + collapsible weapon breakdown toggle
+- `src/constants.js` — Overclocked perk: `overclockedShots = 0` → `overclockedShots ??= 0`
+- `context/CURRENT_STATE.md` — latest commit updated
+- `context/TASK_BOARD.md` — 2 SIL items moved to Done; Overclocked backlog item cleared; session 37 Done block added
 
 ---
 
@@ -59,9 +63,9 @@ This is the authoritative active handoff file for this repo.
 
 1. Confirm Edge Function redeploy succeeded (check GitHub Actions)
 2. Validate live leaderboard submit end-to-end
-3. **[SIL]** Per-weapon kill stats on DeathScreen (`statsRef.weaponKills` already tracked — small JSX addition)
-4. **[SIL]** Seeded lightning arc rendering (trivial Math.random → deterministic fix)
-5. itch.io game page (human action, no code, 20 min)
+3. **itch.io game page** — human action, no code, ~20 min, high discoverability ROI
+4. **[SIL]** Gameplay smoke test — jsdom Vitest test ticking game loop through wave 3
+5. **[SIL]** Health check Node script — pings deployed Edge Functions for ops validation
 
 ## Momentum Runway
-Runway estimate: ~3.0 sessions at current velocity (1 committed Now item + 2 new SIL items, velocity avg 0.33 last 3). Two new SIL items are small and agent-actionable next session.
+Runway estimate: ~3.0 sessions at current velocity (1 open Now item [itch.io, human-only], velocity avg 0.33 last 3).

@@ -182,3 +182,22 @@ Append chronological entries.
   - Removed: favicon 404 on every page load
   - Remaining: Edge Functions not yet re-deployed (session 33 changes); leaderboard submit returns 401
 - Recommended next move: re-deploy Edge Functions, validate live submit, then action [SIL] Speedrun/Gauntlet achievements (5 sessions overdue) and submit to itch.io
+
+---
+
+### 2026-04-02 — Session 37: SIL items — seeded arcs, collapsible weapon breakdown, Overclocked fix
+
+- Goal: Complete two SIL items (seeded lightning arcs, per-weapon kill stats) and audit for remaining refinements
+- What changed:
+  - Fixed lightning arc jitter — `drawGame.js` loop now uses deterministic sin-hash of arc endpoints + step index instead of `Math.random()` per frame; arcs have stable shape
+  - Enhanced weapon kill breakdown — `DeathScreen.jsx` TOP WEAPONS card now collapsible; shows all weapons with kills via "▼ +N MORE" toggle when >3 weapons used
+  - Fixed Overclocked perk re-pick reset — `constants.js` `gs.overclockedShots = 0` → `gs.overclockedShots ??= 0`; counter preserved on re-pick
+  - Context audit: lint warnings confirmed all intentional; no behavioral bugs found beyond above three
+- Files or systems touched:
+  - MOD: src/drawGame.js (seeded arcs), src/components/DeathScreen.jsx (collapsible weapon breakdown), src/constants.js (Overclocked ??=)
+  - DOCS: context/CURRENT_STATE.md, context/TASK_BOARD.md, context/LATEST_HANDOFF.md, context/SELF_IMPROVEMENT_LOOP.md, context/PROJECT_STATUS.json, logs/WORK_LOG.md, audits/2026-04-02-4.json
+- Risks created or removed:
+  - Removed: Lightning arcs triggering Math.random() 6–12 times per frame per active arc — minor CPU saving + visual stability
+  - Removed: Overclocked perk counter silently resetting mid-run on re-pick
+  - Removed: Per-weapon kill data being truncated at top 3 with no way to see full run breakdown
+- Recommended next move: Confirm Edge Function redeploy, validate live submit, action itch.io game page (human step), then gameplay smoke test

@@ -29,6 +29,7 @@ export default function DeathScreen({
   const [copiedChallenge, setCopiedChallenge] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const [qrError, setQrError] = useState(false);
+  const [showAllWeapons, setShowAllWeapons] = useState(false);
   const qrCanvasRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
@@ -344,25 +345,30 @@ export default function DeathScreen({
           ))}
         </div>
 
-        {/* Weapon kill breakdown — top 3 weapons */}
+        {/* Weapon kill breakdown */}
         {weaponKills && weaponKills.some(k => k > 0) && (() => {
-          const top3 = weaponKills
+          const all = weaponKills
             .map((k, i) => ({ kills: k, wpn: WEAPONS[i] }))
             .filter(x => x.kills > 0 && x.wpn)
-            .sort((a, b) => b.kills - a.kills)
-            .slice(0, 3);
+            .sort((a, b) => b.kills - a.kills);
+          const displayed = showAllWeapons ? all : all.slice(0, 3);
           return (
             <div style={{ ...card, marginBottom: 10, padding: "10px 12px" }}>
               <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 7 }}>TOP WEAPONS</div>
               <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-                {top3.map(({ kills, wpn }, i) => (
-                  <div key={wpn.name} style={{ textAlign: "center", background: "rgba(255,255,255,0.05)", borderRadius: 8, padding: "8px 14px", border: i === 0 ? "1px solid rgba(255,215,0,0.35)" : "1px solid rgba(255,255,255,0.08)" }}>
+                {displayed.map(({ kills, wpn }, i) => (
+                  <div key={wpn.name} style={{ textAlign: "center", background: "rgba(255,255,255,0.05)", borderRadius: 8, padding: "8px 14px", border: i === 0 && !showAllWeapons ? "1px solid rgba(255,215,0,0.35)" : "1px solid rgba(255,255,255,0.08)" }}>
                     <div style={{ fontSize: 22 }}>{wpn.emoji}</div>
-                    <div style={{ fontSize: 13, fontWeight: 900, color: i === 0 ? "#FFD700" : "#CCC", marginTop: 2 }}>{kills}</div>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: i === 0 && !showAllWeapons ? "#FFD700" : "#CCC", marginTop: 2 }}>{kills}</div>
                     <div style={{ fontSize: 8, color: "#888", letterSpacing: 0.5 }}>{wpn.name.slice(0, 14).toUpperCase()}</div>
                   </div>
                 ))}
               </div>
+              {all.length > 3 && (
+                <button onClick={() => setShowAllWeapons(v => !v)} style={{ marginTop: 8, background: "none", border: "none", color: "#888", fontSize: 10, cursor: "pointer", letterSpacing: 0.5 }}>
+                  {showAllWeapons ? "▲ SHOW LESS" : `▼ +${all.length - 3} MORE`}
+                </button>
+              )}
             </div>
           );
         })()}

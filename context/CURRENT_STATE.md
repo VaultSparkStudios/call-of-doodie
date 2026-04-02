@@ -2,9 +2,9 @@
 
 ## Build
 - Status: ✅ build passing (`npm run build` clean, 771KB bundle); ✅ tests passing (`npm test` 83/83); ✅ lint passes (`npm run lint`) with 13 warnings and 0 errors
-- Latest commit: Session 36 (NEW_FEATURES update + What's New strip teaser dynamic + 13 new tests)
-- Branch: `main`, pushed — sessions 33–36 all deployed via GitHub Actions
-- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`; Edge Functions redeploy triggered via session 36 push
+- Latest commit: Session 37 (seeded lightning arcs, collapsible weapon breakdown, Overclocked ??= fix)
+- Branch: `main`, pushing — sessions 33–37 deployed via GitHub Actions
+- Deployed: live at `https://vaultsparkstudios.com/call-of-doodie/`; Edge Functions redeploy triggered via session 36 push (confirm Actions tab)
 
 ## Architecture sizes (approx)
 - `App.jsx`: ~3500 lines (game loop + state orchestrator)

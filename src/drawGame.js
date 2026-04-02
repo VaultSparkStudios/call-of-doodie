@@ -692,7 +692,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.moveTo(arc.x1, arc.y1);
       for (let i = 1; i < steps; i++) {
         const t = i / steps;
-        ctx.lineTo(arc.x1 + ldx * t + (Math.random() - 0.5) * 18, arc.y1 + ldy * t + (Math.random() - 0.5) * 18);
+        const jx = ((Math.sin(arc.x1 * 127.1 + arc.y1 * 311.7 + i * 74.3) * 43758.5453) % 1);
+        const jy = ((Math.sin(arc.x2 * 127.1 + arc.y2 * 311.7 + i * 74.3) * 43758.5453) % 1);
+        ctx.lineTo(arc.x1 + ldx * t + (jx - 0.5) * 18, arc.y1 + ldy * t + (jy - 0.5) * 18);
       }
       ctx.lineTo(arc.x2, arc.y2); ctx.stroke();
       ctx.shadowBlur = 0; ctx.restore();
