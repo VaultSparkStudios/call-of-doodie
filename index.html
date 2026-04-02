@@ -51,10 +51,6 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => navigator.serviceWorker.register("/call-of-doodie/sw.js"));
-      }
-    </script>
+    <script src="/call-of-doodie/register-sw.js"></script>
   </body>
 </html>

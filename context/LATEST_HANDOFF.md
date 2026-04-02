@@ -1,5 +1,7 @@
 # Latest Handoff — Session 34 Closeout
 
+**Session Intent (Session 35):** Identify what to refine or improve to take the game live and acquire users — strategy + prioritized execution plan.
+
 This is the authoritative active handoff file for this repo.
 
 **Session Intent (Session 34):** Run game tests and refine the current game — bug-fix/refinement focus, no new features.
