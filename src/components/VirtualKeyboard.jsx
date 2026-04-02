@@ -129,7 +129,7 @@ export default function VirtualKeyboard({
     else if (value.length < maxLength)    { onChange(value + key); }
   };
 
-  const focused = rows[row]?.[clampCol(row, col)];
+  const _focused = rows[row]?.[clampCol(row, col)];
 
   return (
     <div style={{

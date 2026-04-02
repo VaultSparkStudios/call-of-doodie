@@ -75,17 +75,10 @@ Deno.serve(async (req) => {
     });
     const serviceClient = createClient(supabaseUrl, serviceRoleKey);
 
-    const {
-      data: { user },
-      error: userError,
-    } = await userClient.auth.getUser();
-
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Authenticated session required." }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Try Supabase user auth first; fall back to client-provided stable UUID.
+    // This supports projects with CAPTCHA protection enabled where anonymous
+    // sign-in is unavailable from the browser.
+    const { data: { user } } = await userClient.auth.getUser().catch(() => ({ data: { user: null } }));
 
     const rawBody = await req.json();
     const runToken = typeof rawBody.runToken === "string" ? rawBody.runToken.trim() : "";
@@ -96,6 +89,12 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Resolve the caller's identity: prefer real Supabase user, fall back to
+    // a client-generated stable UUID passed in the request body.
+    const uid: string = user?.id
+      ?? (typeof rawBody.clientUid === "string" && /^[0-9a-f-]{36}$/i.test(rawBody.clientUid) ? rawBody.clientUid : null)
+      ?? "";
+
     const payload = normalizeEntry(rawBody);
 
     const { data: tokenRow, error: tokenError } = await serviceClient
@@ -104,7 +103,7 @@ Deno.serve(async (req) => {
       .eq("token", runToken)
       .maybeSingle();
     if (tokenError) throw tokenError;
-    if (!tokenRow || tokenRow.uid !== user.id) {
+    if (!tokenRow || tokenRow.uid !== uid) {
       return new Response(JSON.stringify({ error: "Invalid run token." }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -183,15 +182,15 @@ Deno.serve(async (req) => {
     const { error: insertError } = await serviceClient.from("leaderboard").insert([row]);
     if (insertError) throw insertError;
 
-    const { data: member } = await serviceClient
+    const { data: member } = uid ? await serviceClient
       .from("vault_members")
       .select("id")
-      .eq("id", user.id)
-      .maybeSingle();
+      .eq("id", uid)
+      .maybeSingle() : { data: null };
 
     if (member) {
       await serviceClient.from("game_sessions").insert([{
-        user_id: user.id,
+        user_id: uid,
         game_slug: "call-of-doodie",
         score: row.score,
         duration_s: parseRunTime(row.time),
@@ -207,7 +206,7 @@ Deno.serve(async (req) => {
       }]);
 
       await serviceClient.rpc("award_vault_points", {
-        p_user_id: user.id,
+        p_user_id: uid,
         p_event_type: "game_session",
         p_points: 3,
         p_metadata: { game: "call-of-doodie", score: row.score, wave: row.wave },

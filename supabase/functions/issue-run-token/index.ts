@@ -37,19 +37,17 @@ Deno.serve(async (req) => {
     });
     const serviceClient = createClient(supabaseUrl, serviceRoleKey);
 
-    const {
-      data: { user },
-      error: userError,
-    } = await userClient.auth.getUser();
-
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Authenticated session required." }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Try Supabase user auth first; fall back to client-provided stable UUID.
+    // This supports projects with CAPTCHA protection enabled where anonymous
+    // sign-in is unavailable from the browser.
+    const { data: { user } } = await userClient.auth.getUser().catch(() => ({ data: { user: null } }));
 
     const body = await req.json().catch(() => ({}));
+
+    const uid: string = user?.id
+      ?? (typeof body.clientUid === "string" && /^[0-9a-f-]{36}$/i.test(body.clientUid) ? body.clientUid : null)
+      ?? crypto.randomUUID();
+
     const mode = VALID_MODES.has(String(body.mode ?? "")) ? String(body.mode) : null;
     const difficulty = VALID_DIFFICULTIES.has(String(body.difficulty ?? "")) ? String(body.difficulty) : "normal";
     const seed = body.seed == null ? null : clampInt(body.seed, 0, 999999999, 0);
@@ -59,7 +57,7 @@ Deno.serve(async (req) => {
 
     const { error: insertError } = await serviceClient.from("run_tokens").insert([{
       token,
-      uid: user.id,
+      uid,
       mode,
       difficulty,
       seed,

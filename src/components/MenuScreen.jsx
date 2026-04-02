@@ -1149,7 +1149,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
               <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Race the clock · live timer</div>
             </button>
             <button
-              onClick={() => { const g = getWeeklyGauntlet(); onSetGauntletMode?.(!gauntletMode); }}
+              onClick={() => { const _g = getWeeklyGauntlet(); onSetGauntletMode?.(!gauntletMode); }}
               style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
                 background: gauntletMode ? "rgba(255,200,0,0.12)" : "rgba(255,255,255,0.03)",
                 border: gauntletMode ? "2px solid #FFC800" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
@@ -1210,14 +1210,59 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           </div>
         )}
 
+        {/* Daily Challenge Hero Panel */}
+        {(() => {
+          const todaySeed = getDailyChallengeSeed();
+          const todaySeedStr = String(todaySeed);
+          const alreadyPlayed = hasDailyChallengeSubmitted();
+          const topEntry = (leaderboard || [])
+            .filter(e => e.mode === "daily_challenge" && e.seed === todaySeedStr)
+            .sort((a, b) => b.score - a.score)[0] || null;
+          const today = new Date();
+          const dateStr = `${today.getMonth() + 1}/${today.getDate()}`;
+          return (
+            <div style={{ ...card, margin: "0 0 10px", background: "rgba(0,229,255,0.05)", border: `1px solid ${alreadyPlayed ? "rgba(0,229,255,0.2)" : "rgba(0,229,255,0.45)"}`, textAlign: "center" }}>
+              <div style={{ fontSize: 9, color: "#00E5FF", letterSpacing: 2, fontWeight: 900, marginBottom: 8 }}>
+                📅 TODAY'S DAILY CHALLENGE · {dateStr}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, flexWrap: "wrap" }}>
+                <div>
+                  <div style={{ fontSize: 9, color: "#666", letterSpacing: 1 }}>SEED</div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "#00E5FF", letterSpacing: 2 }}>#{todaySeed}</div>
+                </div>
+                {topEntry && (
+                  <div>
+                    <div style={{ fontSize: 9, color: "#666", letterSpacing: 1 }}>TODAY'S BEST</div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700" }}>{topEntry.score.toLocaleString()}</div>
+                    <div style={{ fontSize: 9, color: "#aaa" }}>by {topEntry.name}</div>
+                  </div>
+                )}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                  {alreadyPlayed && (
+                    <div style={{ fontSize: 9, color: "#00E5FF", fontWeight: 700, letterSpacing: 1 }}>✓ PLAYED TODAY</div>
+                  )}
+                  <button
+                    aria-label={alreadyPlayed ? "Play today's daily challenge again" : "Play today's daily challenge"}
+                    onClick={() => { onSetDailyChallengeMode?.(true); onStart(todaySeedStr, {}); }}
+                    style={{ padding: "8px 22px", fontSize: 13, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "rgba(0,229,255,0.15)", color: "#00E5FF", border: "2px solid #00E5FF", borderRadius: 6, cursor: "pointer", letterSpacing: 1 }}
+                  >
+                    {alreadyPlayed ? "🔄 PLAY AGAIN" : "▶ PLAY TODAY"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Action buttons */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => onStart(dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined), challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {})} {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
-          <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} {...(gfocus("leaderboard") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
+          <button aria-label="Deploy — start game" onClick={() => onStart(dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined), challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {})} {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
+          <button aria-label="View leaderboard" onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} {...(gfocus("leaderboard") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
         </div>
         {/* Seed + Settings row */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
           <input
+            aria-label="Custom seed number (0–999998)"
             value={customSeed} onChange={e => setCustomSeed(e.target.value.replace(/\D/g, ""))}
             placeholder="Seed # (optional)"
             maxLength={6}

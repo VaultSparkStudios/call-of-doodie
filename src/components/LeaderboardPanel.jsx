@@ -91,6 +91,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
   const [activeDiff, setActiveDiff] = useState(null);
   const [activeMode, setActiveMode] = useState(null);
   const [bossRushDiff, setBossRushDiff] = useState(null);
+  const [gauntletDiff, setGauntletDiff] = useState(null);
   const [copiedRow, setCopiedRow] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null); // null = not searching
@@ -144,9 +145,11 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
 
   const filtered = activeMode === "boss_rush" && bossRushDiff
     ? modeFiltered.filter(e => e.difficulty === bossRushDiff)
-    : activeDiff
-      ? modeFiltered.filter(e => e.difficulty === activeDiff)
-      : modeFiltered;
+    : activeMode === "gauntlet" && gauntletDiff
+      ? modeFiltered.filter(e => e.difficulty === gauntletDiff)
+      : activeDiff
+        ? modeFiltered.filter(e => e.difficulty === activeDiff)
+        : modeFiltered;
   const sorted = [...filtered].sort((a, b) => compareLeaderboardEntries(a, b, activeMode === "__today__" ? null : activeMode));
 
   const activeTab = DIFF_TABS.find(t => t.key === activeDiff);
@@ -192,7 +195,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
             return (
               <button
                 key={String(tab.key)}
-                onClick={() => { setActiveMode(tab.key); if (tab.key !== "boss_rush") setBossRushDiff(null); }}
+                onClick={() => { setActiveMode(tab.key); if (tab.key !== "boss_rush") setBossRushDiff(null); if (tab.key !== "gauntlet") setGauntletDiff(null); }}
                 style={{
                   padding: "3px 10px", fontSize: 10, fontWeight: 700,
                   fontFamily: "'Courier New', monospace", letterSpacing: 1,
@@ -224,6 +227,30 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                     background: isActive ? "rgba(255,51,51,0.2)" : "rgba(255,255,255,0.04)",
                     border: isActive ? "1px solid rgba(255,51,51,0.6)" : "1px solid rgba(255,255,255,0.1)",
                     color: isActive ? "#FF3333" : "#666",
+                  }}
+                >{st.label}</button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Gauntlet difficulty sub-tabs */}
+        {activeMode === "gauntlet" && (
+          <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap", paddingLeft: 4 }}>
+            <span style={{ fontSize: 8, color: "#FFC800", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>GT DIFF:</span>
+            {[{ key: null, label: "ALL" }, { key: "easy", label: "EASY" }, { key: "normal", label: "NRM" }, { key: "hard", label: "HARD" }, { key: "insane", label: "INS" }].map(st => {
+              const isActive = gauntletDiff === st.key;
+              return (
+                <button
+                  key={String(st.key)}
+                  onClick={() => setGauntletDiff(st.key)}
+                  style={{
+                    padding: "2px 7px", fontSize: 9, fontWeight: 700,
+                    fontFamily: "'Courier New', monospace", letterSpacing: 0.5,
+                    cursor: "pointer", borderRadius: 3,
+                    background: isActive ? "rgba(255,200,0,0.2)" : "rgba(255,255,255,0.04)",
+                    border: isActive ? "1px solid rgba(255,200,0,0.6)" : "1px solid rgba(255,255,255,0.1)",
+                    color: isActive ? "#FFC800" : "#666",
                   }}
                 >{st.label}</button>
               );

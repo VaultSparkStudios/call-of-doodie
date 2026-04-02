@@ -7,20 +7,18 @@ const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
 // and the storage functions fall back to localStorage gracefully.
 export const supabase = (url && key) ? createClient(url, key) : null;
 
-// Initialize (or resume) an anonymous Supabase auth session.
-// Requires "Anonymous sign-ins" enabled in Supabase Auth settings.
-// Returns the user UID or null if unavailable.
-export async function initAnonAuth() {
-  if (!supabase) return null;
+// Returns a stable client-side UUID that persists across sessions.
+// Used as the "user identity" when Supabase anonymous auth is unavailable
+// (e.g. CAPTCHA protection enabled on the project).
+export function getOrCreateClientUid() {
   try {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user?.id) return session.user.id;
-    const { data, error } = await supabase.auth.signInAnonymously();
-    if (error) throw error;
-    return data.user?.id || null;
-  } catch (err) {
-    console.warn("[auth] Anonymous sign-in unavailable:", err.message);
-    return null;
+    const stored = localStorage.getItem("cod-client-uid-v1");
+    if (stored) return stored;
+    const uid = crypto.randomUUID();
+    localStorage.setItem("cod-client-uid-v1", uid);
+    return uid;
+  } catch {
+    return crypto.randomUUID();
   }
 }
 
