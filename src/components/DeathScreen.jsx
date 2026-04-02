@@ -7,7 +7,7 @@ import { qrEncode } from "../utils/qrEncode.js";
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
 export default function DeathScreen({
-  score, kills, deaths, wave, level, bestStreak, timeSurvived, totalDamage,
+  score, kills, deaths: _deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
   leaderboard, lbLoading, lbHasMore, onLoadMore, username, DIFFICULTIES,
@@ -491,7 +491,7 @@ export default function DeathScreen({
               autoFocus
               onChange={e => { const w = e.target.value.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(e.target.value); }}
               placeholder="Famous last words (5 words max)"
-              style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FF69B4", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}
+              style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FFF", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}
               onKeyDown={e => { if (e.key === "Enter") handleSubmit(); }}
             />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
@@ -568,6 +568,7 @@ export default function DeathScreen({
           <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontSize: 10, color: "#aaa", letterSpacing: 1 }}>SEED #{runSeed}</span>
             <button
+              aria-label="Copy seed to clipboard"
               onClick={() => navigator.clipboard?.writeText?.(String(runSeed))}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
             >📋 COPY</button>
@@ -583,6 +584,7 @@ export default function DeathScreen({
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: copiedChallenge ? "rgba(0,255,136,0.1)" : "rgba(255,107,53,0.08)", border: copiedChallenge ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: copiedChallenge ? "#00FF88" : "#FF6B35", cursor: "pointer", letterSpacing: 1, transition: "all 0.2s" }}
             >{copiedChallenge ? "✓ COPIED!" : "⚔️ COPY CHALLENGE LINK"}</button>
             <button
+              aria-label="Show QR code for challenge link"
               onClick={() => setShowQR(true)}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
             >📷 QR</button>
@@ -599,12 +601,12 @@ export default function DeathScreen({
         )}
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onStartGame} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
+          <button aria-label="Play again — start a new run" onClick={onStartGame} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
           {runSeed > 0 && (
-            <button onClick={() => onStartGame(runSeed)} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
+            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => onStartGame(runSeed)} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
           )}
-          <button onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button onClick={onMenu} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
+          <button aria-label="View leaderboard" onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
+          <button aria-label="Return to main menu" onClick={onMenu} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
       </div>
       </div>

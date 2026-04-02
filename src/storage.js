@@ -1,5 +1,5 @@
 // ===== LEADERBOARD =====
-import { supabase, getAuthUid } from "./supabase.js";
+import { supabase, getAuthUid, getOrCreateClientUid } from "./supabase.js";
 import { isSupporter } from "./utils/supporter.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
@@ -155,13 +155,13 @@ export async function saveToLeaderboard(entry) {
   if (supabase) {
     try {
       const { error } = await supabase.functions.invoke("submit-score", {
-        body: { ...safeEntry, runToken: rawRunToken },
+        body: { ...safeEntry, runToken: rawRunToken, clientUid: getOrCreateClientUid() },
       });
       if (error) throw error;
       const board = await loadLeaderboard();
       return { board, online: true };
     } catch (err) {
-      console.warn("[leaderboard] Edge submit failed, saving locally:", err.message);
+      console.warn("[leaderboard] Edge submit failed, saving locally:", err?.message ?? String(err));
     }
   }
   // Fallback: localStorage
@@ -185,12 +185,13 @@ export async function issueRunToken({ mode = null, difficulty = "normal", seed =
         mode: VALID_MODES.has(mode) ? mode : null,
         difficulty: VALID_DIFFICULTIES.has(difficulty) ? difficulty : "normal",
         seed: seed == null ? null : _clampInt(seed, 0, 999999999, 0),
+        clientUid: getOrCreateClientUid(),
       },
     });
     if (error) throw error;
     return typeof data?.token === "string" ? data.token : null;
   } catch (err) {
-    console.warn("[leaderboard] Run token issue failed:", err.message);
+    console.warn("[leaderboard] Run token issue failed:", err?.message ?? String(err));
     return null;
   }
 }

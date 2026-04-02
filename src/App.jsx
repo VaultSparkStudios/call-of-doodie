@@ -1,25 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { drawGame } from "./drawGame.js";
 import {
-  WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, RANK_NAMES, TIPS,
-  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES, STARTER_LOADOUTS, PERKS,
+  WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, TIPS,
+  ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
-  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES, WAVE_ROUTES,
-  META_TREE, getWeeklyGauntlet,
+  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
-import { initAnonAuth } from "./supabase.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
-import SettingsPanel from "./components/SettingsPanel.jsx";
 import {
-  soundShoot, soundHit, soundHitAt, soundDeath, soundLevelUp, soundPickup, soundPickupAt, soundEnemyDeath, soundEnemyDeathAt,
-  soundGrenade, soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
+  soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
+  soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
   soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
-  setMusicVibe, MUSIC_VIBES, startAmbient, stopAmbient,
+  setMusicVibe, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
@@ -281,7 +278,7 @@ export default function CallOfDoodie() {
   const [gifEncoding, setGifEncoding]         = useState(false);
   const [musicVibe, setMusicVibeState]        = useState(() => localStorage.getItem("cod-music-vibe") || "action");
   const [gameSettings, setGameSettings]       = useState(() => loadSettings());
-  const [showSettings, setShowSettings]       = useState(false);
+  const [_showSettings, _setShowSettings]       = useState(false);
   const [gamepadConnected, setGamepadConnected] = useState(false);
   const [controllerType, setControllerType] = useState("controller");
   const [overclockedShots, setOverclockedShots] = useState(0);
@@ -304,8 +301,8 @@ export default function CallOfDoodie() {
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
 
-  // ── Anonymous auth + analytics init ─────────────────────────────────────
-  useEffect(() => { initAnonAuth(); analyticsInit(); }, []);
+  // ── Analytics init ────────────────────────────────────────────────────────
+  useEffect(() => { analyticsInit(); }, []);
 
   // ── PWA install prompt ────────────────────────────────────────────────────
   useEffect(() => {
@@ -1581,7 +1578,7 @@ export default function CallOfDoodie() {
     // ── Reactive soundtrack tier (every 60 frames) ──
     if (frameCountRef.current % 60 === 0) {
       const _cc = comboRef.current.count;
-      setMusicTier(_cc >= 5 ? 2 : _cc >= 2 ? 1 : 0);
+      setMusicTier(_cc >= 15 ? 2 : _cc >= 8 ? 1 : 0);
     }
 
     // ── Kill Frenzy (META_TREE off4): +20% speed for 60f after kill ──
@@ -2301,7 +2298,7 @@ export default function CallOfDoodie() {
             if (e.splitOnDeath && !e.splitDone) {
               e.splitDone = true;
               addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
-              const diff2 = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+              const _diff2 = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
               for (let _si = 0; _si < 3; _si++) {
                 const _sa = (_si / 3) * Math.PI * 2 + 0.5;
                 const _sx = e.x + Math.cos(_sa) * 55, _sy = e.y + Math.sin(_sa) * 55;
@@ -3177,7 +3174,7 @@ export default function CallOfDoodie() {
   }, [doDash, throwGrenade, switchWeapon]);
 
   // ── Respawn (from death screen) ───────────────────────────────────────────
-  const respawn = useCallback(() => {
+  const _respawn = useCallback(() => {
     const gs = gsRef.current, W = GW(), H = GH();
     if (gs) {
       gs.player.health = 100; gs.player.x = W / 2; gs.player.y = H / 2; gs.player.invincible = 60;

@@ -566,10 +566,15 @@ function _scheduleMusicBeat() {
   if (!_musicActive) return;
   const ctx = getCtx();
   let vibe = _musicBoss ? "boss" : (_musicVibe || "action");
-  // Reactive: boost energy tier based on combo — never override retro/spooky/boss
+  // Reactive: boost energy based on combo streak — never override retro/spooky/boss.
+  // Tier 1 (8+ combo): escalate chill → action.
+  // Tier 2 (15+ combo): escalate chill/action → intense.
   if (!_musicBoss && vibe !== "retro" && vibe !== "spooky") {
-    if (_musicComboTier >= 2) vibe = "intense";
-    else if (_musicComboTier >= 1 && vibe === "chill") vibe = "action";
+    if (_musicComboTier >= 2) {
+      if (vibe === "chill" || vibe === "action") vibe = "intense";
+    } else if (_musicComboTier >= 1 && vibe === "chill") {
+      vibe = "action";
+    }
   }
   const beat = 60 / (_BPM[vibe] || 108);
   const bar = _musicBeat % 8;

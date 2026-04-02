@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
-import { PERK_TIER_COLORS } from "../constants.js";
 
 const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
 const THEME_EMOJIS = ["🏢","🪖","🏭","🏚️","🌵","🌲","🚀","🧊"];
@@ -241,7 +240,7 @@ export default function HUD({
 
 const WEAPON_HOTKEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
 
-function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady, isReloading, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
+function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady, isReloading, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip: _Tooltip }) {
   const [hoveredTool, setHoveredTool] = useState(null);
   // Shrink weapon buttons when there are many weapons so the bar stays on-screen
   const btnSize = WEAPONS.length > 8 ? 32 : 38;
