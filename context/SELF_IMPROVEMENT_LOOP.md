@@ -7,12 +7,12 @@ The Rolling Status header is overwritten each closeout. Entries are append-only 
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇▇▇▇▆
-Avgs — 3: 44.7 | 5: 45.0 | 10: 44.2 [N=10] | 25: — | all: 44.2 [N=10]
-  └ 3-session: Dev 9.3 | Align 9.3 | Momentum 8.0 | Engage 8.0 | Process 10.0
-Velocity trend: ↑↓  |  Protocol velocity: ↑  |  Debt: → (13 warnings)
+Sparkline (last 5 totals): ▇▇▇▆▆
+Avgs — 3: 44.3 | 5: 44.8 | 10: 44.2 [N=10] | 25: — | all: 40.6 [N=11]
+  └ 3-session: Dev 9.0 | Align 9.3 | Momentum 8.0 | Engage 8.0 | Process 10.0
+Velocity trend: ↓  |  Protocol velocity: ↑  |  Debt: → (13 warnings)
 Momentum runway: ~3.0 sessions  |  Intent rate: 100% (last 5)
-Last session: 2026-04-02 | Session 36 | Total: 44/50 | Velocity: 0 | protocolVelocity: 1
+Last session: 2026-04-02 | Session 37 | Total: 44/50 | Velocity: 0 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -323,3 +323,34 @@ Avgs — 3: 44.7 | 5: 45.0 | 10: 44.2 [N=10] | 25: — | all: 44.2 [N=10]
 5. **Health check script** — Node script pinging deployed Edge Functions with known-bad payloads to verify expected 400/401/200 responses; execution probability: Medium
 
 **Committed to TASK_BOARD:** [SIL] Per-weapon kill stats on DeathScreen · [SIL] Seeded lightning arc rendering
+
+---
+
+## 2026-04-02 — Session 37 | Total: 44/50 | Velocity: 0 | Debt: →
+Avgs — 3: 44.3 | 5: 44.8 | 10: 44.2 [N=10] | 25: — | all: 40.6 [N=11]
+  └ 3-session: Dev 9.0 | Align 9.3 | Momentum 8.0 | Engage 8.0 | Process 10.0
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 9 | → | 3 concrete fixes (arc jitter, weapon breakdown, overclocked perk); 83/83 tests, green CI |
+| Creative Alignment | 9 | → | Refinement serves "controls must feel sharp" SOUL mandate; collapsible weapon breakdown improves post-run feedback |
+| Momentum | 8 | → | Both SIL items shipped; Overclocked backlog cleared; but formal velocity = 0 (all were SIL/backlog, not Now items) |
+| Engagement | 8 | → | Weapon breakdown is meaningful player engagement touchpoint; no new community features |
+| Process Quality | 10 | → | TASK_BOARD cleaned, SIL cleared, all context files updated, full closeout |
+| **Total** | **44/50** | → | |
+
+**Top win:** Both SIL items shipped in one focused session — lightning arcs stable, weapon breakdown fully collapsible, Overclocked counter preserved on re-pick.
+**Top gap:** Formal velocity remains 0 for the third session; itch.io continues unactioned (human step); Now bucket only has 1 item remaining.
+
+**Intent outcome:** Achieved — both SIL items completed, refinement audit conducted, Overclocked fix landed.
+
+**IGNIS note:** Small refinement sessions with targeted fixes (arc jitter, perk counter, UI toggle) compound game polish incrementally — the sessions that look boring from outside are what separate a good game from a polished one.
+
+**Brainstorm**
+1. **Gameplay smoke test** — jsdom/Vitest test that ticks a minimal gs fixture through wave 3, validating no crash + weapons fire + enemies spawn; implementation path: minimal gs fixture + mock rAF loop in a new test file; execution probability: Medium
+2. **Health check Node script** — `node scripts/health-check.js` pings deployed Edge Functions with edge-case payloads and reports 400/401/200 matrix; implementation path: small fetch script, no deps; execution probability: High — directly supports "validate live submit" human action
+3. **Per-weapon damage tracking** — track `weaponDamage` alongside `weaponKills` in statsRef; show damage dealt per weapon in the expanded DeathScreen breakdown for deeper build analysis; implementation path: +1 array in statsRef init + increment on bullet hit; execution probability: Medium
+4. **Tutorial weapon showcase** — add 2-3 weapon highlight steps to TutorialOverlay to reduce time-to-first-successful-build; implementation path: extend STEPS array with weapon cards; execution probability: Medium
+5. **Discord server** — create Discord server → uncomment 1 line in MenuScreen.jsx footer; execution probability: High (human action: create server + get invite URL)
+
+**Committed to TASK_BOARD:** [SIL] Gameplay smoke test through wave 3 · [SIL] Health check script for Edge Function validation

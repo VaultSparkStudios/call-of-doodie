@@ -12,8 +12,8 @@
 
 ## Now
 - [SIL] itch.io game page setup — submit to itch.io for browser-game discoverability (free, high ROI, no code required)
-- [SIL] Per-weapon kill stats on DeathScreen — `statsRef.weaponKills` already tracked; add collapsible breakdown section to DeathScreen.jsx showing kills per weapon
-- [SIL] Seeded lightning arc rendering — replace `Math.random()` per frame with deterministic frame-based offsets; stops arcs jittering every frame
+- [SIL] Gameplay smoke test — jsdom/Vitest test ticking minimal gs fixture through wave 3; validates no crash, weapons fire, enemies spawn
+- [SIL] Health check script — Node fetch script pinging deployed Edge Functions with edge-case payloads; validates 400/401/200 matrix; supports live submit validation
 
 ## Backlog
 - [SIL] Anomaly logging in submit-score for impossible score/time/wave payloads
@@ -27,8 +27,11 @@
 - Consider soundEnemyDeath distinct sounds for elite variant deaths vs. regular
 - Wire PostHog + Sentry env vars into GitHub Actions secrets
 - RouteSelectModal + DraftScreen: add gamepad nav support (controller players stuck)
-- Per-weapon kill stats breakdown on DeathScreen (weaponKills array already tracked)
-- Overclocked perk: use ??= to avoid counter reset on re-pick (minor)
+
+## Done (session 37 — 2026-04-02)
+- ✅ [SIL] Seeded lightning arc rendering — replaced `Math.random()` per frame with deterministic sin-hash on arc endpoints + step index; arcs stable shape, no jitter
+- ✅ [SIL] Per-weapon kill stats on DeathScreen — expanded existing top-3 widget to full collapsible breakdown: shows all weapons with kills, "▼ +N MORE" toggle when >3 used
+- ✅ Overclocked perk ??= fix — `gs.overclockedShots ??= 0` preserves counter on re-pick instead of resetting it
 
 ## Done (session 36 — 2026-04-02)
 - ✅ [SIL] Speedrun + Gauntlet achievements — confirmed fully implemented in session 30 (4 achievements: speedrun_w5, speedrun_sub4, gauntlet_w5, gauntlet_w10); stale [SIL] task cleared

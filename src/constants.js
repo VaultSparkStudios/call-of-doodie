@@ -154,7 +154,7 @@ export const PERKS = [
       mods.damageMult = (mods.damageMult || 1) * 0.85;
       mods.fireRateMult = (mods.fireRateMult || 1) * 0.65;
       mods.hasOverclocked = true;
-      if (gs) { gs.overclockedShots = 0; gs.overclocked = true; }
+      if (gs) { gs.overclockedShots ??= 0; gs.overclocked = true; }
     },
   },
   {
