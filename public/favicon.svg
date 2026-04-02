@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="pg" cx="30%" cy="20%" r="80%" gradientUnits="userSpaceOnUse" x1="5" y1="3" x2="59" y2="62">
+      <stop offset="0%"   stop-color="#C08050"/>
+      <stop offset="40%"  stop-color="#7A4022"/>
+      <stop offset="100%" stop-color="#3A1608"/>
+    </radialGradient>
+    <clipPath id="pc">
+      <ellipse cx="32" cy="53" rx="20" ry="8"/>
+      <ellipse cx="32" cy="43" rx="18" ry="13"/>
+      <ellipse cx="32" cy="30" rx="14" ry="14"/>
+      <ellipse cx="33" cy="18" rx="10" ry="11"/>
+      <ellipse cx="34" cy="8"  rx="7"  ry="7"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="#0D0602"/>
+
+  <!-- Poop -->
+  <rect x="12" y="1" width="40" height="61" fill="url(#pg)" clip-path="url(#pc)"/>
+
+  <!-- Eyes -->
+  <circle cx="26" cy="37" r="3.5" fill="white"/>
+  <circle cx="38" cy="37" r="3.5" fill="white"/>
+  <circle cx="27" cy="37.5" r="2"   fill="#150600"/>
+  <circle cx="39" cy="37.5" r="2"   fill="#150600"/>
+  <circle cx="27.8" cy="36.8" r="0.8" fill="white"/>
+  <circle cx="39.8" cy="36.8" r="0.8" fill="white"/>
+
+  <!-- Smile -->
+  <path d="M 26 44 Q 32 49 38 44" stroke="#2A0C00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Orange dot accent top-right -->
+  <circle cx="56" cy="8" r="5" fill="#FF6B35"/>
+</svg>

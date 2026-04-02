@@ -1,4 +1,100 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" fill="#0a0a0a" rx="24"/>
-  <text y="130" x="96" font-size="120" text-anchor="middle">💣</text>
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="bg" cx="40%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#1c0d08"/>
+      <stop offset="100%" stop-color="#06030202"/>
+    </radialGradient>
+    <!-- Poop fill gradient (light upper-left → dark lower-right) -->
+    <radialGradient id="pg" cx="30%" cy="22%" r="80%" gradientUnits="userSpaceOnUse" x1="38" y1="13" x2="154" y2="175">
+      <stop offset="0%"   stop-color="#B87848"/>
+      <stop offset="35%"  stop-color="#7A4022"/>
+      <stop offset="75%"  stop-color="#4E2010"/>
+      <stop offset="100%" stop-color="#2E1008"/>
+    </radialGradient>
+    <!-- Sheen overlay gradient -->
+    <radialGradient id="sheen" cx="32%" cy="28%" r="55%" gradientUnits="userSpaceOnUse" x1="38" y1="13" x2="154" y2="130">
+      <stop offset="0%"  stop-color="white" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Clip: union of all poop-blob ellipses → seamless silhouette -->
+    <clipPath id="pc">
+      <ellipse cx="96"  cy="155" rx="58" ry="21"/>
+      <ellipse cx="96"  cy="128" rx="52" ry="35"/>
+      <ellipse cx="96"  cy="95"  rx="41" ry="39"/>
+      <ellipse cx="97"  cy="63"  rx="29" ry="31"/>
+      <ellipse cx="100" cy="39"  rx="20" ry="22"/>
+      <ellipse cx="103" cy="22"  rx="10" ry="11"/>
+    </clipPath>
+    <!-- Drop shadow filter -->
+    <filter id="ds" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="5" stdDeviation="9" flood-color="#000" flood-opacity="0.65"/>
+    </filter>
+    <!-- Orange glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background tile -->
+  <rect width="192" height="192" rx="30" fill="url(#bg)"/>
+
+  <!-- Subtle background grid lines -->
+  <g stroke="#FF6B35" stroke-width="0.8" opacity="0.07">
+    <line x1="48"  y1="0"   x2="48"  y2="192"/>
+    <line x1="96"  y1="0"   x2="96"  y2="192"/>
+    <line x1="144" y1="0"   x2="144" y2="192"/>
+    <line x1="0"   y1="48"  x2="192" y2="48"/>
+    <line x1="0"   y1="96"  x2="192" y2="96"/>
+    <line x1="0"   y1="144" x2="192" y2="144"/>
+  </g>
+
+  <!-- Orange ambient glow behind poop -->
+  <ellipse cx="97" cy="104" rx="54" ry="54" fill="#FF6B35" opacity="0.09" filter="url(#glow)"/>
+
+  <!-- ── POOP ── -->
+  <!-- Shadow pass -->
+  <g filter="url(#ds)" opacity="0.9">
+    <rect x="38" y="13" width="116" height="163" fill="#3A1608" clip-path="url(#pc)"/>
+  </g>
+  <!-- Color fill (gradient) -->
+  <rect x="38" y="13" width="116" height="163" fill="url(#pg)" clip-path="url(#pc)"/>
+  <!-- Sheen highlight -->
+  <rect x="38" y="13" width="116" height="163" fill="url(#sheen)" clip-path="url(#pc)"/>
+
+  <!-- ── FACE ── -->
+  <!-- Eye whites -->
+  <circle cx="81"  cy="117" r="9"   fill="white"/>
+  <circle cx="111" cy="117" r="9"   fill="white"/>
+  <!-- Pupils -->
+  <circle cx="83"  cy="118.5" r="5.5" fill="#150600"/>
+  <circle cx="113" cy="118.5" r="5.5" fill="#150600"/>
+  <!-- Pupil shines -->
+  <circle cx="85"  cy="117"   r="2"   fill="white"/>
+  <circle cx="115" cy="117"   r="2"   fill="white"/>
+  <!-- Slight smirk -->
+  <path d="M 81 133 Q 96 144 111 133" stroke="#2A0C00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- ── SOLDIER BERET ── -->
+  <!-- Beret shadow band -->
+  <ellipse cx="97" cy="17" rx="29" ry="9" fill="#2A3220" opacity="0.8"/>
+  <!-- Beret body -->
+  <ellipse cx="95" cy="12" rx="24" ry="12" fill="#3D5230"/>
+  <!-- Beret top puff -->
+  <circle  cx="91" cy="5"  r="6"   fill="#4A6438"/>
+  <!-- Beret badge (gold star) -->
+  <text x="100" y="18" text-anchor="middle" font-size="11" font-family="serif" fill="#FFD700">★</text>
+
+  <!-- ── CROSSHAIR BADGE (top-right corner) ── -->
+  <circle cx="164" cy="30" r="15" fill="#FF6B35"/>
+  <circle cx="164" cy="30" r="11" fill="none" stroke="white" stroke-width="1.5"/>
+  <circle cx="164" cy="30" r="2.5" fill="white"/>
+  <line x1="164" y1="19" x2="164" y2="26" stroke="white" stroke-width="2"   stroke-linecap="round"/>
+  <line x1="164" y1="34" x2="164" y2="41" stroke="white" stroke-width="2"   stroke-linecap="round"/>
+  <line x1="153" y1="30" x2="160" y2="30" stroke="white" stroke-width="2"   stroke-linecap="round"/>
+  <line x1="168" y1="30" x2="175" y2="30" stroke="white" stroke-width="2"   stroke-linecap="round"/>
+
+  <!-- Orange brand accent bar at bottom -->
+  <rect x="28" y="179" width="136" height="4" rx="2" fill="#FF6B35" opacity="0.55"/>
 </svg>
