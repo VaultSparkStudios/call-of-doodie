@@ -3,7 +3,7 @@
 // They also serve as living documentation for what each constant must contain.
 
 import { describe, it, expect } from "vitest";
-import { WEAPONS, ENEMY_TYPES, PERKS, DIFFICULTIES, STARTER_LOADOUTS, ACHIEVEMENTS } from "./constants.js";
+import { WEAPONS, ENEMY_TYPES, PERKS, DIFFICULTIES, STARTER_LOADOUTS, ACHIEVEMENTS, ACHIEVEMENT_PROGRESS, NEW_FEATURES } from "./constants.js";
 
 // ── WEAPONS ──────────────────────────────────────────────────────────────────
 
@@ -201,5 +201,116 @@ describe("ACHIEVEMENTS", () => {
     ACHIEVEMENTS.forEach((a, i) => {
       expect(VALID_TIERS, `ACHIEVEMENTS[${i}].tier "${a.tier}"`).toContain(a.tier);
     });
+  });
+});
+
+// ── ACHIEVEMENT_PROGRESS ──────────────────────────────────────────────────────
+
+describe("ACHIEVEMENT_PROGRESS", () => {
+  const achievementIds = new Set(ACHIEVEMENTS.map(a => a.id));
+
+  it("every key matches a real achievement id", () => {
+    Object.keys(ACHIEVEMENT_PROGRESS).forEach(key => {
+      expect(achievementIds, `ACHIEVEMENT_PROGRESS key "${key}" has no matching achievement`).toContain(key);
+    });
+  });
+
+  it("every entry is a [statKey: string, target: number] tuple with positive target", () => {
+    Object.entries(ACHIEVEMENT_PROGRESS).forEach(([key, val]) => {
+      expect(Array.isArray(val), `ACHIEVEMENT_PROGRESS["${key}"] should be an array`).toBe(true);
+      expect(typeof val[0], `ACHIEVEMENT_PROGRESS["${key}"][0] should be string`).toBe("string");
+      expect(typeof val[1], `ACHIEVEMENT_PROGRESS["${key}"][1] should be number`).toBe("number");
+      expect(val[1], `ACHIEVEMENT_PROGRESS["${key}"][1] should be > 0`).toBeGreaterThan(0);
+    });
+  });
+
+  it("speedrun and gauntlet achievements have progress entries", () => {
+    ["speedrun_w5", "speedrun_sub4", "gauntlet_w5", "gauntlet_w10"].forEach(id => {
+      expect(ACHIEVEMENT_PROGRESS, `ACHIEVEMENT_PROGRESS missing entry for "${id}"`).toHaveProperty(id);
+    });
+  });
+});
+
+// ── Mode-gated achievement behaviour ─────────────────────────────────────────
+
+describe("mode-gated achievements", () => {
+  const find = id => ACHIEVEMENTS.find(a => a.id === id);
+
+  it("speedrun_w5 requires speedrunMode=true and wave >= 5", () => {
+    const a = find("speedrun_w5");
+    expect(a.check({ speedrunMode: true,  wave: 5 })).toBe(true);
+    expect(a.check({ speedrunMode: false, wave: 5 })).toBe(false);
+    expect(a.check({ speedrunMode: true,  wave: 4 })).toBe(false);
+  });
+
+  it("speedrun_sub4 requires speedrunMode, wave >= 10, and timeSurvived <= 240", () => {
+    const a = find("speedrun_sub4");
+    expect(a.check({ speedrunMode: true,  wave: 10, timeSurvived: 200 })).toBe(true);
+    expect(a.check({ speedrunMode: true,  wave: 10, timeSurvived: 241 })).toBe(false);
+    expect(a.check({ speedrunMode: false, wave: 10, timeSurvived: 200 })).toBe(false);
+    expect(a.check({ speedrunMode: true,  wave:  9, timeSurvived: 200 })).toBe(false);
+  });
+
+  it("gauntlet_w5 requires gauntletMode=true and wave >= 5", () => {
+    const a = find("gauntlet_w5");
+    expect(a.check({ gauntletMode: true,  wave: 5 })).toBe(true);
+    expect(a.check({ gauntletMode: false, wave: 5 })).toBe(false);
+    expect(a.check({ gauntletMode: true,  wave: 4 })).toBe(false);
+  });
+
+  it("gauntlet_w10 requires gauntletMode=true and wave >= 10", () => {
+    const a = find("gauntlet_w10");
+    expect(a.check({ gauntletMode: true,  wave: 10 })).toBe(true);
+    expect(a.check({ gauntletMode: false, wave: 10 })).toBe(false);
+    expect(a.check({ gauntletMode: true,  wave:  9 })).toBe(false);
+  });
+
+  it("boss_rush achievements require bossRushMode=true", () => {
+    ["boss_rush_5", "boss_rush_10", "boss_rush_20"].forEach(id => {
+      const a = find(id);
+      const wave = parseInt(id.split("_").pop());
+      expect(a.check({ bossRushMode: true,  wave })).toBe(true);
+      expect(a.check({ bossRushMode: false, wave })).toBe(false);
+    });
+  });
+
+  it("cursed run achievements require cursedRunMode=true", () => {
+    const a5  = find("cursed_run_w5");
+    const a10 = find("cursed_run_w10");
+    expect(a5.check({ cursedRunMode: true,  wave: 5  })).toBe(true);
+    expect(a5.check({ cursedRunMode: false, wave: 5  })).toBe(false);
+    expect(a10.check({ cursedRunMode: true,  wave: 10 })).toBe(true);
+    expect(a10.check({ cursedRunMode: false, wave: 10 })).toBe(false);
+  });
+});
+
+// ── NEW_FEATURES ──────────────────────────────────────────────────────────────
+
+describe("NEW_FEATURES", () => {
+  it("is a non-empty array of strings", () => {
+    expect(Array.isArray(NEW_FEATURES)).toBe(true);
+    expect(NEW_FEATURES.length).toBeGreaterThan(0);
+    NEW_FEATURES.forEach((f, i) => {
+      expect(typeof f, `NEW_FEATURES[${i}]`).toBe("string");
+      expect(f.length, `NEW_FEATURES[${i}] should not be empty`).toBeGreaterThan(0);
+    });
+  });
+
+  it("every entry contains a ' — ' separator for emoji+title / description split", () => {
+    NEW_FEATURES.forEach((f, i) => {
+      expect(f, `NEW_FEATURES[${i}] missing ' — ' separator`).toContain(" — ");
+    });
+  });
+
+  it("no duplicate entries", () => {
+    expect(new Set(NEW_FEATURES).size).toBe(NEW_FEATURES.length);
+  });
+
+  it("includes entries for Speedrun, Gauntlet, META Tree, and Run Draft", () => {
+    const titles = NEW_FEATURES.map(f => f.split(" — ")[0]);
+    expect(titles.some(t => t.includes("Speedrun"))).toBe(true);
+    expect(titles.some(t => t.includes("Gauntlet"))).toBe(true);
+    expect(titles.some(t => t.includes("META Tree"))).toBe(true);
+    expect(titles.some(t => t.includes("Run Draft"))).toBe(true);
   });
 });
