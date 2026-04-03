@@ -1296,10 +1296,14 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
         {/* Community footer */}
         <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
-          <a href="https://vaultsparkstudios.com" target="_blank" rel="noopener noreferrer"
-            style={{ fontSize: 10, color: "#888", textDecoration: "none", letterSpacing: 1 }}>
-            🌐 VAULTSPARKSTUDIOS.COM
-          </a>
+          <span style={{ fontSize: 10, color: "#777", letterSpacing: 1 }}>
+            A{" "}
+            <a href="https://vaultsparkstudios.com/" rel="author" target="_blank"
+              style={{ color: "#999", textDecoration: "none" }}>
+              VaultSpark Studios
+            </a>
+            {" "}Game
+          </span>
           {/* Add your Discord invite link here when ready */}
           {/* <a href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noopener noreferrer"
             style={{ fontSize: 10, color: "#7289DA", textDecoration: "none", letterSpacing: 1, fontWeight: 700 }}>
@@ -1317,7 +1321,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           >
             {isSupporter() ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
           </button>
-          <span style={{ fontSize: 10, color: "#555" }}>© 2025 VaultSpark Studios</span>
+          <span style={{ fontSize: 10, color: "#555" }}>© 2026 VaultSpark Studios</span>
         </div>
       </div>
       </div>
