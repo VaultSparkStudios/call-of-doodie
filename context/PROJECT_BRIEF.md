@@ -1,11 +1,7 @@
 # Project Brief
 
-Name: Call of Doodie
-Type: Browser-based top-down arcade shooter (React + Canvas)
-Core fantasy: A chaotic, comedy-first shooter where absurdity is the weapon and every run feels different.
-Non-goals: Not a serious military sim, not a multiplayer game, not a native app (yet).
+This public repository contains deployable project code and public-safe documentation.
 
-Design pillars:
-- Humor first — every enemy, perk, weapon, and death message should get a laugh
-- Roguelite replayability — perks, cursed perks, synergy builds, starter loadouts, and daily missions keep runs fresh
-- Accessible depth — easy to pick up on mobile or desktop, hard to master
+Boundary:
+- keep deployable code and browser-safe configuration in this repo
+- keep internal planning, operator workflows, credentials, detailed handoffs, work logs, and private roadmap material in the private Studio OS / ops repository
