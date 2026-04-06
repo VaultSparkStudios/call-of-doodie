@@ -22,6 +22,15 @@ const PLAYER_SKINS = [
   { emoji: "🐉", label: "Dragon",   required: 5 },
 ];
 
+function canUseRealtimePresence() {
+  if (typeof window === "undefined") return false;
+
+  const { protocol, hostname } = window.location;
+  if (protocol === "https:") return true;
+  if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") return true;
+  return false;
+}
+
 export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode, cursedRunMode, onSetCursedRunMode, bossRushMode, onSetBossRushMode, speedrunMode, onSetSpeedrunMode, gauntletMode, onSetGauntletMode, assistAvailable, onApplyAssist }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
@@ -57,16 +66,47 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   // ── Live player count via Supabase Realtime presence ──────────────────────
   useEffect(() => {
     if (!supabase) return;
-    const channel = supabase.channel("cod-presence", { config: { presence: { key: Math.random().toString(36).slice(2) } } });
-    channel
-      .on("presence", { event: "sync" }, () => {
-        const state = channel.presenceState();
-        setOnlinePlayers(Object.keys(state).length);
-      })
-      .subscribe(async (status) => {
-        if (status === "SUBSCRIBED") await channel.track({ t: Date.now() });
+    if (!canUseRealtimePresence()) {
+      setOnlinePlayers(null);
+      return;
+    }
+
+    let channel = null;
+    let disposed = false;
+
+    try {
+      channel = supabase.channel("cod-presence", {
+        config: { presence: { key: Math.random().toString(36).slice(2) } },
       });
-    return () => { supabase.removeChannel(channel); };
+
+      channel
+        .on("presence", { event: "sync" }, () => {
+          if (disposed) return;
+          const state = channel.presenceState();
+          setOnlinePlayers(Object.keys(state).length);
+        })
+        .subscribe(async (status) => {
+          if (disposed) return;
+          if (status === "SUBSCRIBED") {
+            try {
+              await channel.track({ t: Date.now() });
+            } catch (error) {
+              console.warn("[MenuScreen] Presence tracking unavailable:", error);
+              setOnlinePlayers(null);
+            }
+          } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+            setOnlinePlayers(null);
+          }
+        });
+    } catch (error) {
+      console.warn("[MenuScreen] Presence subscription unavailable:", error);
+      setOnlinePlayers(null);
+    }
+
+    return () => {
+      disposed = true;
+      if (channel) supabase.removeChannel(channel);
+    };
   }, []);
 
   useEffect(() => {
