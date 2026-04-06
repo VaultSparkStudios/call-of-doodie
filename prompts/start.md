@@ -25,19 +25,48 @@ Overwrite if a stale lock exists. Lock is cleared at closeout.
 
 ---
 
-## 2 · Initiation Type
+## 2 · Internal Context Overlay  *(required when a public repo has been sanitized)*
+
+Before classifying initiation type, detect whether this repo is a public-safe shell rather than the full internal workspace.
+
+Use this order:
+
+1. `context/internal-startup.local.json` if present
+2. sibling private Studio OS repo at `..\vaultspark-studio-ops`
+3. latest local backup matching `%USERPROFILE%\.codex\memories\public-repo-sanitization-backup-*\{projectSlug}`
+
+Treat the repo as **sanitized/public-safe** if one or more are true:
+
+- `context/SELF_IMPROVEMENT_LOOP.md` has no dated entries or only says details are maintained privately
+- `context/LATEST_HANDOFF.md` is a public-safe placeholder
+- `prompts/initiate.md` is missing
+- context files explicitly say detailed state moved to the private Studio OS / ops repository
+
+When sanitized/public-safe and internal sources exist:
+
+- Use the local private sources as the working startup context
+- Project-specific truth comes from the internal project backup when available
+- Cross-project founder intelligence comes from the private Studio OS repo
+- Keep code edits in this repo unless the user explicitly asks to modify the private repo
+- State clearly that startup is running with an **internal overlay**
+
+If no internal sources are found, continue with the public-safe repo only and label redacted metrics as `private/redacted` instead of inventing missing values.
+
+---
+
+## 3 · Initiation Type
 
 Check `context/SELF_IMPROVEMENT_LOOP.md`:
 
 | Condition | Type | Action |
 |---|---|---|
-| File missing or no dated entries | **A — Bootstrap** | Follow `prompts/initiate.md` — stop here |
+| File missing or no dated entries | **A — Bootstrap** | Follow `prompts/initiate.md` — stop here unless an internal overlay provides richer project context |
 | 1 "Bootstrap/Foundation Baseline" entry; core files still template-only | **B — Foundation** | Follow `prompts/initiate.md` §B — stop here |
 | 2+ dated entries with real scores | **C — Returning** | Continue below |
 
 ---
 
-## 3 · Load Context  *(read in order — do not skip or reorder)*
+## 4 · Load Context  *(read in order — do not skip or reorder)*
 
 | # | File | Purpose |
 |---|---|---|
@@ -55,9 +84,11 @@ Check `context/SELF_IMPROVEMENT_LOOP.md`:
 
 *Founder Mode: read `portfolio/STUDIO_BRAIN.md` between steps 9 and 10.*
 
+If an internal overlay is active, read the same files from the overlay source instead of the sanitized placeholders in this repo wherever both exist.
+
 ---
 
-## 4 · SIL Escalation Check
+## 5 · SIL Escalation Check
 
 From the Rolling Status header (no extra reads):
 
@@ -69,25 +100,28 @@ From the Rolling Status header (no extra reads):
 
 ---
 
-## 5 · Startup Rules
+## 6 · Startup Rules
 
 - Repo files are source of truth — not prior chat memory
 - `PROJECT_STATUS.json` and registry JSON beat derived Markdown when values conflict
 - No code edits during startup unless immediately requested
 - `context/LATEST_HANDOFF.md` is the active handoff; all other handoff docs are historical
 - Note assumptions before acting on them
+- If an internal overlay is active, the overlay files outrank sanitized placeholders in this public repo for startup reporting only
 - **Compacted/interrupted session:** Check if human direction is in `docs/CREATIVE_DIRECTION_RECORD.md`. If the last CDR entry predates work described in `LATEST_HANDOFF.md`, flag the gap and recover at closeout.
 - **⛔ Momentum Runway ≤ 2.0:** Begin with TASK_BOARD pre-loading before any feature or protocol work. Surface as first item in PRIORITIES.
 
 ---
 
-## 6 · Output — Startup Brief
+## 7 · Output — Startup Brief
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   STARTUP BRIEF — {Project Name}
   {YYYY-MM-DD} · Session {N} · {BUILDER / FOUNDER MODE}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  SOURCE       {public repo only | internal overlay: project backup + studio ops}
 
   IDENTITY     {type} · {lifecycle}/{audience} · {owner}
   STATE        {current phase and overall health}
@@ -142,6 +176,8 @@ From the Rolling Status header (no extra reads):
 | TRUTH / Genome | `context/TRUTH_AUDIT.md` (or `unknown` if absent) |
 | Compliance count | `context/CURRENT_STATE.md` |
 
+If startup is using sanitized public files without internal overlay, render unavailable internal fields as `private/redacted`.
+
 **SIL bar:** 20 chars · █ per 25 pts · ░ remainder
 
 **SIGNALS thresholds:**
@@ -157,7 +193,7 @@ From the Rolling Status header (no extra reads):
 
 ---
 
-## 7 · Session Intent
+## 8 · Session Intent
 
 If the user did not provide a session goal, ask:
 

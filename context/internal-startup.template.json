@@ -1,0 +1,6 @@
+{
+  "studioOpsPath": "..\\vaultspark-studio-ops",
+  "projectBackupPath": "%USERPROFILE%\\.codex\\memories\\public-repo-sanitization-backup-YYYY-MM-DD\\Call-Of-Doodie",
+  "projectSlug": "Call-Of-Doodie",
+  "notes": "Copy this file to context/internal-startup.local.json and replace the placeholder paths with your local internal sources. This file is ignored by git."
+}
