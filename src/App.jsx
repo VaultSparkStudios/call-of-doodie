@@ -347,14 +347,16 @@ export default function CallOfDoodie() {
   useEffect(() => {
     const resize = () => {
       if (containerRef.current) {
-        const w = containerRef.current.clientWidth, h = containerRef.current.clientHeight;
+        const w = containerRef.current.clientWidth;
+        const actionBarHeight = isMobile ? 56 : 0;
+        const h = Math.max(0, containerRef.current.clientHeight - actionBarHeight);
         sizeRef.current = { w, h };
         if (canvasRef.current) { canvasRef.current.width = w; canvasRef.current.height = h; }
       }
     };
     resize(); window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, [screen]);
+  }, [screen, isMobile]);
 
   const GW = () => sizeRef.current.w;
   const GH = () => sizeRef.current.h;
