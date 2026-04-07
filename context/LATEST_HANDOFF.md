@@ -7,12 +7,14 @@
 
 Public-safe handoff summary:
 - session intent: complete next moves, remove blockers, and fix flags
-- intent outcome: Achieved for repo-side work; remaining blockers are only human/device/manual verification items
+- intent outcome: Achieved for repo-side work; remaining blockers are now only human/device/manual publication items
 - session intent: prepare Call of Doodie to be fully ready for end-user launch
 - launch planning is now execution-ready in the public repo, not just described
 - completed this session: added `cloudflare/` with the source-controlled security-header worker and the Call of Doodie path-specific CSP override
 - completed this session: added `docs/LAUNCH_EXECUTION.md` with Itch.io copy, screenshot shot list, launch sequence, and the explicit decision that PostHog/Sentry are post-launch follow-up
 - completed this session: added `npm run launch:verify` and tightened the launch smoke assertion so the startup-to-game path verifies the run-token request shape, not just canvas render
-- validation baseline now: 84/84 tests passing, lint passing with existing warning debt only, and `npm run launch:verify` passing against the live backend and live site shell
-- immediate implementation focus: physical-only QA on a real device/browser, screenshot capture, Itch.io publication, and the one shared-table compatibility check
+- completed this session: added launch-surface visibility checks and shared-table auditing, then ran them successfully against production
+- completed this session: prepared a ready-to-upload launch media pack in `public/launch-assets/`, removing screenshots as a launch blocker
+- validation baseline now: 84/84 tests passing, lint passing with existing warning debt only, and `npm run launch:verify` passing against the live backend, live site shell, launch surfaces, and shared-table read path
+- immediate implementation focus: physical-only QA on a real device/browser and Itch.io publication
 - detailed handoff history remains in the private Studio OS / ops repository

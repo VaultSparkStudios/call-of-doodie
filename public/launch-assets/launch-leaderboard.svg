@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Call of Doodie launch leaderboard still</title>
+  <desc id="desc">Promotional still showing leaderboard competition in Call of Doodie.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#070b14"/>
+      <stop offset="55%" stop-color="#0e1626"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <text x="120" y="155" fill="#00e5ff" font-size="28" font-family="'Courier New', monospace" letter-spacing="6">GLOBAL RIVALRY</text>
+  <text x="120" y="225" fill="#ffffff" font-size="86" font-weight="900" font-family="'Trebuchet MS', sans-serif">Hall of Shame</text>
+  <rect x="120" y="300" width="1360" height="470" rx="28" fill="#0d1320" stroke="#00e5ff" stroke-opacity="0.28"/>
+  <text x="180" y="370" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">RANK</text>
+  <text x="340" y="370" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">CALLSIGN</text>
+  <text x="980" y="370" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">MODE</text>
+  <text x="1240" y="370" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">SCORE</text>
+  <g fill="#ffffff" font-family="'Courier New', monospace" font-size="28">
+    <text x="180" y="455">#1</text><text x="340" y="455">LaunchTester</text><text x="980" y="455">NORMAL</text><text x="1240" y="455">1,875</text>
+    <text x="180" y="535">#2</text><text x="340" y="535">PoopMarshal</text><text x="980" y="535">BOSS RUSH</text><text x="1240" y="535">1,640</text>
+    <text x="180" y="615">#3</text><text x="340" y="615">WifiWarlord</text><text x="980" y="615">SPEEDRUN</text><text x="1240" y="615">3:42</text>
+    <text x="180" y="695">#4</text><text x="340" y="695">MegaKarenBait</text><text x="980" y="695">DAILY</text><text x="1240" y="695">1,210</text>
+  </g>
+  <text x="120" y="825" fill="#8ddfff" font-size="24" font-family="'Courier New', monospace">Challenge links, seeded runs, and global score chasing turn short sessions into rivalry.</text>
+</svg>

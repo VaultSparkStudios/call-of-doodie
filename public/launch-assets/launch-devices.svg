@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Call of Doodie launch devices still</title>
+  <desc id="desc">Promotional still for Call of Doodie covering mobile, desktop, controller, and PWA support.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d0a05"/>
+      <stop offset="50%" stop-color="#1f180c"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <text x="120" y="155" fill="#ffd700" font-size="28" font-family="'Courier New', monospace" letter-spacing="6">PLAY ANYWHERE</text>
+  <text x="120" y="225" fill="#ffffff" font-size="84" font-weight="900" font-family="'Trebuchet MS', sans-serif">Desktop, Mobile, Gamepad, PWA</text>
+  <g transform="translate(180 330)">
+    <rect width="450" height="320" rx="22" fill="#111" stroke="#ffd700" stroke-opacity="0.32"/>
+    <rect x="28" y="28" width="394" height="220" rx="16" fill="#171717"/>
+    <circle cx="225" cy="278" r="16" fill="#ffd700"/>
+    <text x="225" y="305" text-anchor="middle" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">Desktop</text>
+  </g>
+  <g transform="translate(700 300)">
+    <rect width="220" height="380" rx="34" fill="#111" stroke="#00e5ff" stroke-opacity="0.35"/>
+    <rect x="22" y="40" width="176" height="260" rx="18" fill="#171717"/>
+    <circle cx="110" cy="337" r="15" fill="#00e5ff"/>
+    <text x="110" y="370" text-anchor="middle" fill="#00e5ff" font-size="22" font-family="'Courier New', monospace">Mobile</text>
+  </g>
+  <g transform="translate(1030 360)">
+    <rect x="0" y="72" width="280" height="120" rx="60" fill="#111" stroke="#8affcf" stroke-opacity="0.35"/>
+    <circle cx="68" cy="132" r="16" fill="#8affcf"/>
+    <circle cx="212" cy="132" r="16" fill="#8affcf"/>
+    <rect x="126" y="106" width="28" height="54" rx="14" fill="#8affcf"/>
+    <rect x="113" y="119" width="54" height="28" rx="14" fill="#8affcf"/>
+    <text x="140" y="250" text-anchor="middle" fill="#8affcf" font-size="22" font-family="'Courier New', monospace">Controller</text>
+  </g>
+  <text x="120" y="775" fill="#ffffff" font-size="26" font-family="'Courier New', monospace">Installable, controller-aware, and built for quick sessions across devices.</text>
+</svg>

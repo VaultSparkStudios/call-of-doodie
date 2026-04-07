@@ -22,3 +22,6 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Tightened `src/App.launch.test.jsx` to assert the startup run-token payload shape
 - Reduced repo-side launch ambiguity so the remaining blockers are execution-only human/device checks
 - Verified `npm run launch:verify` successfully against the live backend and live site after sandbox escalation
+- Added `scripts/launch-surface-check.mjs` and confirmed homepage, sitemap, live game page branding, and `/games/` visibility on production
+- Added `scripts/shared-leaderboard-check.mjs` and confirmed no non-`cod` rows are visible in the latest 200 readable leaderboard entries
+- Added `public/launch-assets/` with a ready-to-upload launch media pack so listing publication is no longer blocked on manual screenshot capture

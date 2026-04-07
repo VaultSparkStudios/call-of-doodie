@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Call of Doodie launch build still</title>
+  <desc id="desc">Promotional still showing perks, synergies, and run variety for Call of Doodie.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#07110f"/>
+      <stop offset="50%" stop-color="#0b241f"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <text x="120" y="150" fill="#8affcf" font-size="28" font-family="'Courier New', monospace" letter-spacing="6">RUN VARIETY</text>
+  <text x="120" y="220" fill="#ffffff" font-size="86" font-weight="900" font-family="'Trebuchet MS', sans-serif">Perks That Mutate Runs</text>
+  <text x="120" y="280" fill="#b4fff0" font-size="30" font-family="'Courier New', monospace">Starter loadouts, cursed picks, synergies, gauntlets, speedruns, daily seeds.</text>
+  <g transform="translate(120 360)">
+    <rect width="360" height="250" rx="22" fill="#0d1715" stroke="#00e5ff" stroke-opacity="0.35"/>
+    <text x="34" y="54" fill="#ffd700" font-size="18" font-family="'Courier New', monospace">PERK PICK</text>
+    <text x="34" y="110" fill="#ffffff" font-size="34" font-weight="800" font-family="'Trebuchet MS', sans-serif">Speed Surge</text>
+    <text x="34" y="150" fill="#b7c3c0" font-size="22" font-family="'Courier New', monospace">+15% move speed</text>
+    <text x="34" y="192" fill="#00e5ff" font-size="20" font-family="'Courier New', monospace">Clean mobility build fuel</text>
+  </g>
+  <g transform="translate(540 360)">
+    <rect width="360" height="250" rx="22" fill="#181010" stroke="#ff3b30" stroke-opacity="0.35"/>
+    <text x="34" y="54" fill="#ff6b35" font-size="18" font-family="'Courier New', monospace">CURSED PICK</text>
+    <text x="34" y="110" fill="#ffffff" font-size="34" font-weight="800" font-family="'Trebuchet MS', sans-serif">Glass Jaw</text>
+    <text x="34" y="150" fill="#f3c6c0" font-size="22" font-family="'Courier New', monospace">Huge damage, harsher punishment</text>
+    <text x="34" y="192" fill="#ffb68a" font-size="20" font-family="'Courier New', monospace">Funny, risky, run-defining</text>
+  </g>
+  <g transform="translate(960 360)">
+    <rect width="420" height="250" rx="22" fill="#121212" stroke="#ffd700" stroke-opacity="0.35"/>
+    <text x="34" y="54" fill="#ffd700" font-size="18" font-family="'Courier New', monospace">MODES</text>
+    <text x="34" y="110" fill="#ffffff" font-size="32" font-weight="800" font-family="'Trebuchet MS', sans-serif">Daily • Boss Rush • Speedrun</text>
+    <text x="34" y="150" fill="#d3d3d3" font-size="22" font-family="'Courier New', monospace">Gauntlet • Cursed Run • Score Attack</text>
+    <text x="34" y="192" fill="#8affcf" font-size="20" font-family="'Courier New', monospace">Built for repeat sessions and rivalry</text>
+  </g>
+  <text x="120" y="760" fill="#ffffff" font-size="26" font-family="'Courier New', monospace">Every run should feel like a different joke that still plays fair.</text>
+</svg>

@@ -124,4 +124,4 @@ src/
 ```
 
 See `AGENTS.md` for agent/contributor instructions and `context/` for architecture decisions and current state.
-Launch execution details live in `docs/LAUNCH_EXECUTION.md`.
+Launch execution details live in `docs/LAUNCH_EXECUTION.md`, and ready-to-upload launch media assets live in `public/launch-assets/`.

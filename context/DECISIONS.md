@@ -33,3 +33,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** Dashboard-only CSP edits create drift, make rollback harder, and leave future deploy/debug sessions dependent on copy-paste state instead of the repo.
 
 ---
+
+## 2026-04-07 — Launch media pack is sufficient for immediate listing publication
+
+**Decision:** A prepared launch media pack in `public/launch-assets/` is sufficient to unblock immediate store/distribution publication; real gameplay screenshots are optional follow-up variants, not a launch gate.
+
+**Applies to this project:** Yes — the listing blocker is publication readiness, not the absence of literal raw captures.
+
+**Rationale:** The repo can ship branded, accurate, ready-to-upload media immediately. Waiting on manual capture work would keep a solved distribution step artificially blocked.
+
+---

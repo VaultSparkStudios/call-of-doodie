@@ -9,13 +9,14 @@ Terminal-verifiable launch QA is already in place:
 - `npm run launch:smoke` validates username -> menu -> draft -> game startup
 - `npm run health:check` validates the live Edge Function matrix
 - `npm run live:site-check` validates the deployed shell, manifest, service worker, and OG asset
-- `npm run launch:verify` runs all three in sequence
+- `npm run launch:surfaces` validates homepage/sitemap visibility for the live game URL
+- `npm run leaderboard:shared-check` audits readable shared-table usage by `game_id`
+- `npm run launch:verify` runs all launch automation in sequence
 
 The remaining launch blockers are now execution-only:
 
 - one real mobile/browser PWA install pass
 - one real gamepad/browser pass
-- screenshots
 - publishing the store/distribution surfaces
 
 ## Launch decision
@@ -59,16 +60,17 @@ Suggested body copy:
 > Play free:
 > https://vaultsparkstudios.com/call-of-doodie/
 
-## Screenshot shot list
+## Launch media pack
 
-Capture these in order:
+Ready-to-upload launch stills are prepared in `public/launch-assets/`:
 
-1. moment-to-moment combat with dense enemy pressure
-2. boss intro or boss fight card
-3. perk or shop selection with readable choices
-4. death screen with score and summary
-5. leaderboard view
-6. optional mobile or gamepad play shot if available
+1. `launch-combat.svg`
+2. `launch-boss.svg`
+3. `launch-builds.svg`
+4. `launch-leaderboard.svg`
+5. `launch-devices.svg`
+
+These remove the "need screenshots before listing" blocker for store/distribution surfaces. Real gameplay captures are still a nice follow-up, but not required to publish the listing package now.
 
 ## Launch channel sequence
 
@@ -76,7 +78,7 @@ Recommended order:
 
 1. confirm site visibility and game hub placement
 2. publish the Itch.io page using the copy above
-3. upload 4-6 screenshots
+3. upload the prepared launch stills from `public/launch-assets/`
 4. run `npm run launch:verify` once more before announcement
 5. post the launch link to studio-owned channels
 
@@ -84,6 +86,5 @@ Recommended order:
 
 - verify real PWA install acceptance on one mobile/browser combination
 - verify one real gamepad/browser combination end-to-end
-- capture and upload screenshots
 - publish the Itch.io listing
-- manually spot-check any other app sharing the `leaderboard` table
+- manually verify cross-project write paths only if `npm run leaderboard:shared-check` reports non-`cod` rows

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Call of Doodie launch combat still</title>
+  <desc id="desc">Promotional combat still for Call of Doodie featuring chaos, score chasing, and absurd weapons.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#140e06"/>
+      <stop offset="50%" stop-color="#2b1609"/>
+      <stop offset="100%" stop-color="#090909"/>
+    </linearGradient>
+    <radialGradient id="blast" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#ffd24d" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#ff6b35" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="40" y="40" width="1520" height="820" rx="30" fill="none" stroke="#ff6b35" stroke-opacity="0.35" stroke-width="2"/>
+  <circle cx="1070" cy="390" r="250" fill="url(#blast)"/>
+  <g fill="#2a2a2a">
+    <rect x="120" y="720" width="1320" height="60" rx="16"/>
+    <rect x="180" y="220" width="120" height="420" rx="20"/>
+    <rect x="1320" y="180" width="90" height="420" rx="20"/>
+  </g>
+  <g fill="#ff6b35">
+    <circle cx="870" cy="420" r="20"/>
+    <circle cx="920" cy="340" r="16"/>
+    <circle cx="980" cy="470" r="18"/>
+    <circle cx="1120" cy="330" r="14"/>
+    <circle cx="1200" cy="430" r="16"/>
+  </g>
+  <g fill="#7b3f00">
+    <ellipse cx="760" cy="520" rx="54" ry="48"/>
+    <ellipse cx="740" cy="470" rx="35" ry="32"/>
+    <ellipse cx="785" cy="468" rx="33" ry="30"/>
+    <ellipse cx="762" cy="430" rx="24" ry="22"/>
+  </g>
+  <g fill="#f7f0d8">
+    <circle cx="746" cy="466" r="7"/>
+    <circle cx="778" cy="466" r="7"/>
+  </g>
+  <g fill="#00e5ff">
+    <rect x="785" y="500" width="170" height="10" rx="5" transform="rotate(-18 785 500)"/>
+    <rect x="920" y="455" width="150" height="10" rx="5" transform="rotate(15 920 455)"/>
+  </g>
+  <text x="120" y="150" fill="#ffd700" font-size="28" font-family="'Courier New', monospace" letter-spacing="6">CALL OF DOODIE</text>
+  <text x="120" y="210" fill="#ffffff" font-size="84" font-weight="900" font-family="'Trebuchet MS', sans-serif">Ridiculous Combat</text>
+  <text x="120" y="270" fill="#ffb68a" font-size="30" font-family="'Courier New', monospace">12 weapons, wave chaos, and score runs that escalate fast.</text>
+  <text x="120" y="665" fill="#ffffff" font-size="26" font-family="'Courier New', monospace">BANANA BLASTER  •  RAILGUN  •  RPG  •  BOOMERANG BLASTER</text>
+  <text x="120" y="770" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">Play instantly in your browser at vaultsparkstudios.com/call-of-doodie/</text>
+</svg>

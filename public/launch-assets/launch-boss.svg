@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Call of Doodie launch boss still</title>
+  <desc id="desc">Promotional boss-wave still for Call of Doodie.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#120606"/>
+      <stop offset="50%" stop-color="#26090c"/>
+      <stop offset="100%" stop-color="#050608"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="90" y="80" width="1420" height="740" rx="28" fill="rgba(0,0,0,0.28)" stroke="#ff3b30" stroke-width="3" stroke-opacity="0.45"/>
+  <text x="800" y="165" text-anchor="middle" fill="#ff6b35" font-size="26" font-family="'Courier New', monospace" letter-spacing="7">INCOMING THREAT</text>
+  <text x="800" y="305" text-anchor="middle" fill="#ffffff" font-size="118" font-weight="900" font-family="'Trebuchet MS', sans-serif">THE ALGORITHM</text>
+  <text x="800" y="370" text-anchor="middle" fill="#ff9a7a" font-size="32" font-family="'Courier New', monospace">Boss waves interrupt the joke with actual danger.</text>
+  <circle cx="800" cy="520" r="170" fill="#2d0f15" stroke="#ff3b30" stroke-width="5"/>
+  <circle cx="740" cy="485" r="20" fill="#ffd700"/>
+  <circle cx="860" cy="485" r="20" fill="#ffd700"/>
+  <rect x="715" y="565" width="170" height="18" rx="9" fill="#ff3b30"/>
+  <rect x="320" y="640" width="960" height="84" rx="18" fill="#0f0f0f" stroke="#ff6b35" stroke-opacity="0.25"/>
+  <text x="800" y="694" text-anchor="middle" fill="#ffffff" font-size="26" font-family="'Courier New', monospace">Boss Rush • secret encounters • escalating wave cards • absurd enemy archetypes</text>
+  <text x="800" y="782" text-anchor="middle" fill="#ffd700" font-size="22" font-family="'Courier New', monospace">Built for browser play, short runs, and “one more try” score chasing</text>
+</svg>
