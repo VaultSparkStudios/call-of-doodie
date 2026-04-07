@@ -217,5 +217,10 @@ describe("CallOfDoodie launch smoke", () => {
 
     expect(container.querySelector("#game-canvas")).not.toBeNull();
     expect(issueRunTokenMock).toHaveBeenCalledTimes(1);
+    expect(issueRunTokenMock).toHaveBeenCalledWith({
+      mode: null,
+      difficulty: "normal",
+      seed: expect.any(Number),
+    });
   });
 });
