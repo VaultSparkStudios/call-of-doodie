@@ -40,6 +40,7 @@ npm install
 npm run dev      # local dev server at http://localhost:5173/call-of-doodie/
 npm run build    # production build — must pass before any push
 npm run preview  # preview production build
+npm run launch:verify  # launch smoke + live function check + live site check
 ```
 
 Env vars for local dev (create `.env.local`, gitignored):
@@ -123,3 +124,4 @@ src/
 ```
 
 See `AGENTS.md` for agent/contributor instructions and `context/` for architecture decisions and current state.
+Launch execution details live in `docs/LAUNCH_EXECUTION.md`.

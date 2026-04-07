@@ -1,0 +1,6 @@
+{
+  "name": "vaultspark-security-headers",
+  "main": "vaultspark-security-headers.js",
+  "compatibility_date": "2026-04-07",
+  "workers_dev": false
+}
