@@ -27,3 +27,7 @@ Public-safe launch roadmap summary.
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready
 - [ ] Warning-debt cleanup beyond launch-critical issues
+
+## Deferred to Project Agents
+
+- cross-repo item owned by another repo agent:
