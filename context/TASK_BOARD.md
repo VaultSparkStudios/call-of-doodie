@@ -9,6 +9,13 @@ Public-safe launch roadmap summary.
 
 ## Next
 - [ ] Optional: capture real gameplay screenshots later for marketing variants beyond the prepared launch media pack
+- [ ] Add VITE_POSTHOG_KEY and VITE_SENTRY_DSN to GitHub repo Settings → Secrets → Actions (workflow already wired)
+
+## Done (Session 40)
+- [x] Confirmed Edge Function redeploy succeeded (deploy-supabase-function.yml — last run 2026-04-02, success)
+- [x] Validated live leaderboard submit end-to-end: `npm run health:check` → 5/5 assertions passed against production
+- [x] Gameplay smoke test — `src/gameHelpers.test.js` (26 tests: spawnEnemy wave 1–3, spawnBoss, BOSS_ROTATION, mutation flags)
+- [x] Wired VITE_POSTHOG_KEY + VITE_SENTRY_DSN into deploy.yml build env (secrets to be added via GitHub UI)
 
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)

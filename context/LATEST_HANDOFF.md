@@ -18,3 +18,16 @@ Public-safe handoff summary:
 - validation baseline now: 84/84 tests passing, lint passing with existing warning debt only, and `npm run launch:verify` passing against the live backend, live site shell, launch surfaces, and shared-table read path
 - immediate implementation focus: physical-only QA on a real device/browser and Itch.io publication
 - detailed handoff history remains in the private Studio OS / ops repository
+
+## Where We Left Off (Session 40)
+- Shipped: 4 improvements — Edge Function confirmation, live leaderboard end-to-end validation, gameplay smoke tests (wave 1–3), PostHog/Sentry wired into CI build env
+- Tests: 110 passing · delta: +26
+- Deploy: pending push to main
+
+- session intent: complete next moves — confirm Edge Function redeploy, validate live leaderboard submit, add gameplay smoke test, wire PostHog/Sentry env vars
+- intent outcome: Achieved — all 4 agent-actionable next moves completed
+- completed this session: confirmed Edge Function redeploy (deploy-supabase-function.yml last ran 2026-04-02, success)
+- completed this session: validated live leaderboard submit end-to-end via `npm run health:check` → 5/5 assertions passed against production
+- completed this session: added `src/gameHelpers.test.js` (26 tests covering spawnEnemy wave 1–3 logic, spawnBoss, BOSS_ROTATION, mutation flag propagation)
+- completed this session: wired VITE_POSTHOG_KEY + VITE_SENTRY_DSN into deploy.yml build env — secrets to be added via GitHub Settings → Secrets → Actions
+- immediate next: human adds PostHog/Sentry secrets to GitHub repo settings; then physical QA + Itch.io publication remain as only outstanding blockers
