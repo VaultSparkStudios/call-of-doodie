@@ -22,7 +22,43 @@
       "purpose": "maskable"
     }
   ],
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "/call-of-doodie/launch-assets/launch-combat.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Combat — Survive waves of absurd enemies"
+    },
+    {
+      "src": "/call-of-doodie/launch-assets/launch-boss.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Boss fight — Phase 2 boss encounters"
+    },
+    {
+      "src": "/call-of-doodie/launch-assets/launch-builds.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Perk builds — Stack run-defining combos"
+    },
+    {
+      "src": "/call-of-doodie/launch-assets/launch-leaderboard.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "Leaderboard — Compete globally"
+    },
+    {
+      "src": "/call-of-doodie/launch-assets/launch-devices.svg",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "Mobile — Play on any device"
+    }
+  ],
   "prefer_related_applications": false,
   "categories": ["games", "entertainment"],
   "lang": "en-US"
