@@ -25,3 +25,13 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Added `scripts/launch-surface-check.mjs` and confirmed homepage, sitemap, live game page branding, and `/games/` visibility on production
 - Added `scripts/shared-leaderboard-check.mjs` and confirmed no non-`cod` rows are visible in the latest 200 readable leaderboard entries
 - Added `public/launch-assets/` with a ready-to-upload launch media pack so listing publication is no longer blocked on manual screenshot capture
+
+## 2026-04-13 (Session 40)
+
+- Confirmed Edge Function redeploy: `deploy-supabase-function.yml` last ran 2026-04-02 with success
+- Validated live leaderboard submit end-to-end: `npm run health:check` → 5/5 assertions passed against production
+- Added `src/gameHelpers.test.js` — 26 tests covering spawnEnemy wave 1–3 logic, spawnBoss, BOSS_ROTATION, and mutation flag propagation; total suite now 110/110
+- Wired `VITE_POSTHOG_KEY` and `VITE_SENTRY_DSN` into `deploy.yml` build env (secrets to be added via GitHub Settings)
+- Populated `public/manifest.json` screenshots (5 entries: 4 wide/desktop, 1 narrow/mobile) to satisfy Chrome desktop PWA install prompt requirement
+- Added `apple-mobile-web-app-title` to `index.html` for correct iOS home screen label
+- Pushed 2 commits to main; CI confirmed in progress

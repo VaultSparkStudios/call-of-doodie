@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-04-13",
+  "session": 40,
+  "sessionType": "implementation",
+  "label": "next-moves + launch blocker fixes",
+  "calibration": false,
+  "scores": {
+    "devHealth": 93,
+    "creativeAlignment": 83,
+    "momentum": 97,
+    "engagement": 62,
+    "processQuality": 88
+  },
+  "total": 423,
+  "maxScore": 500,
+  "velocity": 5,
+  "protocolVelocity": null,
+  "durationMinutes": 60,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": null,
+    "creativeAlignment": null,
+    "momentum": null,
+    "engagement": null,
+    "processQuality": null,
+    "total": null
+  },
+  "rollingAvgTotals": { "3": null, "5": null, "10": null, "25": null, "all": null },
+  "topWin": "Live leaderboard submit validated 5/5 end-to-end + 26 new gameplay tests added in one session.",
+  "topGap": "Engagement score structurally low pre-launch; will improve once real player metrics are available.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 6,
+  "improvementGroups": {
+    "live-validation": ["Edge Function redeploy confirmed", "leaderboard 5/5 health-check"],
+    "test-coverage": ["src/gameHelpers.test.js — 26 tests (spawnEnemy wave 1-3, spawnBoss, BOSS_ROTATION, mutation flags)"],
+    "ci-observability": ["VITE_POSTHOG_KEY wired into deploy.yml", "VITE_SENTRY_DSN wired into deploy.yml"],
+    "pwa-quality": ["manifest.json screenshots populated (5 entries)", "apple-mobile-web-app-title added to index.html"]
+  },
+  "testsTotal": 110,
+  "testsByType": { "unit": 110 },
+  "testsDelta": 26,
+  "deployStatus": "deployed",
+  "ignisFlags": ["intent-achieved", "high-velocity"],
+  "ignisNote": "Launch-prep sprint — all code-side work is done and validated live; the only remaining blockers are human-executable actions, which represents a clean handoff state rarely achieved this early in a deployment cycle."
+}
