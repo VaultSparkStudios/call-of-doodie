@@ -106,26 +106,26 @@ export const PERKS = [
     apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 1.50; mods.hasAmmoBoost = true; },
   },
   {
-    id: "combo_master", name: "Combo Master", desc: "+50% combo window time", emoji: "🌪️", tier: "uncommon",
-    apply: (mods) => { mods.comboTimerMult = (mods.comboTimerMult || 1) * 1.50; },
+    id: "combo_master", name: "Combo Master", desc: "+50% combo window time. Synergy: lifesteal doubles during combo with Vampire", emoji: "🌪️", tier: "uncommon",
+    apply: (mods) => { mods.comboTimerMult = (mods.comboTimerMult || 1) * 1.50; mods.hasComboMaster = true; if (mods.hasVampire) mods.comboVampireMult = true; },
   },
   {
-    id: "magnetism", name: "Magnetism", desc: "2× pickup collection range", emoji: "🧲", tier: "rare",
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * 2; },
+    id: "magnetism", name: "Magnetism", desc: "2× pickup collection range. Synergy: 5× range with Hoarder", emoji: "🧲", tier: "rare",
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * (mods.hasHoarder ? 5 : 2); },
   },
   {
-    id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy. Synergy: +10% crit with Eagle Eye", emoji: "🔫", tier: "rare",
-    apply: (mods) => { mods.pierce = (mods.pierce || 0) + 1; if (mods.hasEagleEye) mods.critBonus = (mods.critBonus || 0) + 0.10; },
+    id: "penetrator", name: "Penetrator", desc: "Bullets pierce through 1 extra enemy. Synergy: +10% crit with Eagle Eye; +12% lifesteal per pierce with Bloodlust", emoji: "🔫", tier: "rare",
+    apply: (mods) => { mods.pierce = (mods.pierce || 0) + 1; if (mods.hasEagleEye) mods.critBonus = (mods.critBonus || 0) + 0.10; if (mods.hasBloodlust) mods.piercedLifesteal = (mods.piercedLifesteal || 0) + 0.12; },
   },
   {
     id: "bloodlust", name: "Bloodlust", emoji: "🩸", tier: "uncommon",
-    desc: "+30% dmg. Synergy: +15% lifesteal if Vampire active",
-    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.30; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + 0.15; },
+    desc: "+30% dmg. Synergy: +15% lifesteal with Vampire; +12% lifesteal per pierce with Penetrator",
+    apply: (mods) => { mods.damageMult = (mods.damageMult || 1) * 1.30; mods.hasBloodlust = true; if (mods.hasVampire) mods.lifesteal = (mods.lifesteal || 0) + 0.15; if (mods.pierce > 0) mods.piercedLifesteal = (mods.piercedLifesteal || 0) + 0.12; },
   },
   {
     id: "turbo_boots", name: "Turbo Boots", emoji: "🚀", tier: "uncommon",
-    desc: "−30% dash CD. Synergy: +20% speed if Adrenaline active",
-    apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.70; if (mods.hasAdrenaline && gs?.player) gs.player.speed *= 1.20; },
+    desc: "−30% dash CD. Synergy: +20% speed & Adrenaline Rush lasts 4s with Speed Surge",
+    apply: (mods, gs) => { mods.dashCDMult = (mods.dashCDMult || 1) * 0.70; mods.hasTurboBoots = true; if (mods.hasAdrenaline && gs?.player) { gs.player.speed *= 1.20; mods.adrenalineRushDuration = 240; } },
   },
   {
     id: "tungsten_rounds", name: "Tungsten Rounds", emoji: "🔩", tier: "uncommon",
@@ -134,8 +134,8 @@ export const PERKS = [
   },
   {
     id: "adrenaline_rush", name: "Adrenaline Rush", emoji: "💉", tier: "uncommon",
-    desc: "Killing an enemy while below 30% HP grants 2s of double speed",
-    apply: (mods) => { mods.adrenalineRush = true; },
+    desc: "Killing an enemy while below 30% HP grants 2s of double speed. Synergy: extends to 4s with Turbo Boots",
+    apply: (mods) => { mods.adrenalineRush = true; if (mods.hasTurboBoots) mods.adrenalineRushDuration = 240; },
   },
   {
     id: "chain_lightning", name: "Chain Lightning", emoji: "⚡", tier: "rare",
@@ -144,23 +144,25 @@ export const PERKS = [
   },
   {
     id: "dead_mans_hand", name: "Dead Man's Hand", emoji: "🃏", tier: "rare",
-    desc: "On death, trigger a massive explosion. Activates guardian angel if available",
-    apply: (mods, gs) => { if (gs) gs.deadMansHand = true; },
+    desc: "On death, trigger a massive explosion. Synergy: explosion triples with Last Resort",
+    apply: (mods, gs) => { if (gs) gs.deadMansHand = true; if (mods.hasLastResort) mods.deadManTripleExplosion = true; },
   },
   {
     id: "overclocked", name: "Overclocked", emoji: "🔧", tier: "uncommon",
-    desc: "+35% fire rate, -15% damage. Every 20 shots triggers a forced 1s reload",
+    desc: "+35% fire rate, -15% damage. Every 20 shots forces a reload. Synergy: reload drops ammo with Scavenger; throws grenade with Grenade Chain",
     apply: (mods, gs) => {
       mods.damageMult = (mods.damageMult || 1) * 0.85;
       mods.fireRateMult = (mods.fireRateMult || 1) * 0.65;
       mods.hasOverclocked = true;
+      if (mods.hasScavenger) mods.reloadDropsAmmo = true;
+      if (mods.hasGrenadeChain) mods.reloadFreesGrenade = true;
       if (gs) { gs.overclockedShots ??= 0; gs.overclocked = true; }
     },
   },
   {
     id: "scavenger", name: "Scavenger", emoji: "🎒", tier: "common",
-    desc: "Enemies drop ammo 40% more often. Ammo pickups restore 30% more ammo",
-    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; mods.hasScavenger = true; },
+    desc: "Enemies drop ammo 40% more often. Ammo pickups restore 30% more ammo. Synergy: forced reloads drop ammo with Overclocked",
+    apply: (mods) => { mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.40; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.30; mods.hasScavenger = true; if (mods.hasOverclocked) mods.reloadDropsAmmo = true; },
   },
   {
     id: "combo_lifesteal", name: "Combo Lifesteal", emoji: "🩸", tier: "uncommon",
@@ -174,28 +176,28 @@ export const PERKS = [
   },
   {
     id: "hoarder", name: "Hoarder", emoji: "🧺", tier: "uncommon",
-    desc: "+80% pickup range · +50% ammo drops",
-    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * 1.80; mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; },
+    desc: "+80% pickup range · +50% ammo drops. Synergy: 5× total range with Magnetism",
+    apply: (mods) => { mods.pickupRange = (mods.pickupRange || 30) * 1.80; mods.ammoDropMult = (mods.ammoDropMult || 1) * 1.50; mods.hasHoarder = true; },
   },
   {
     id: "glass_mind", name: "Glass Mind", emoji: "🧠", tier: "rare",
-    desc: "+80% XP gain · −25 max HP",
-    apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.80; if (gs?.player) { const m = Math.max(15, gs.player.maxHealth - 25); gs.player.maxHealth = m; gs.player.health = Math.min(gs.player.health, m); } },
+    desc: "+80% XP gain · −25 max HP. Synergy: crits grant +10 bonus XP with Crit Cascade",
+    apply: (mods, gs) => { mods.xpMult = (mods.xpMult || 1) * 1.80; mods.hasGlassMind = true; if (gs?.player) { const m = Math.max(15, gs.player.maxHealth - 25); gs.player.maxHealth = m; gs.player.health = Math.min(gs.player.health, m); } },
   },
   {
     id: "bullet_hose", name: "Bullet Hose", emoji: "🔃", tier: "uncommon",
-    desc: "+100% max ammo · +40% ammo restore",
-    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; },
+    desc: "+100% max ammo · +40% ammo restore. Synergy: +50% more ammo stacks with Deep Pockets",
+    apply: (mods) => { mods.ammoMult = (mods.ammoMult || 1) * 2.0; mods.ammoRestoreMult = (mods.ammoRestoreMult || 1) * 1.40; mods.hasBulletHose = true; if (mods.hasAmmoBoost) mods.ammoMult = (mods.ammoMult || 1) * 1.50; },
   },
   {
     id: "crit_cascade", name: "Crit Cascade", emoji: "🌩️", tier: "rare",
-    desc: "+12% crit chance. Synergy: +10% crit with Eagle Eye; +8% crit with Penetrator",
-    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.12; if (mods.hasEagleEye) mods.critBonus += 0.10; if (mods.pierce > 0) mods.critBonus += 0.08; },
+    desc: "+12% crit chance. Synergy: +10% crit with Eagle Eye; +8% crit with Penetrator; crits grant +10 XP with Glass Mind",
+    apply: (mods) => { mods.critBonus = (mods.critBonus || 0) + 0.12; mods.hasCritCascade = true; if (mods.hasEagleEye) mods.critBonus += 0.10; if (mods.pierce > 0) mods.critBonus += 0.08; if (mods.hasGlassMind) mods.critGrantsXp = true; },
   },
   {
     id: "grenade_chain", name: "Grenade Chain", emoji: "💥", tier: "rare",
-    desc: "−50% grenade CD · +25% grenade damage. Synergy: +50% more dmg with Pyromaniac",
-    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.50; mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.25; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.50; },
+    desc: "−50% grenade CD · +25% grenade damage. Synergy: +50% more dmg with Pyromaniac; forced reloads throw grenade with Overclocked",
+    apply: (mods) => { mods.grenadeCDMult = (mods.grenadeCDMult || 1) * 0.50; mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.25; mods.hasGrenadeChain = true; if (mods.hasPyromaniac) mods.grenadeDamageMult = (mods.grenadeDamageMult || 1) * 1.50; if (mods.hasOverclocked) mods.reloadFreesGrenade = true; },
   },
 ];
 
@@ -217,7 +219,7 @@ export const CURSED_PERKS = [
     desc: "Grenade dmg ×2 · −25% bullet damage. Synergy: +50% more grenade dmg with Grenadier",
     apply: (mods) => { mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*2.0; mods.damageMult=(mods.damageMult||1)*0.75; mods.hasPyromaniac=true; if (mods.hasGrenadier) mods.grenadeDamageMult=(mods.grenadeDamageMult||1)*1.5; } },
   { id: "last_resort",   name: "Last Resort",   emoji: "💔", tier: "cursed",
-    desc: "+200% dmg below 25% HP · start at 25% HP",
+    desc: "+200% dmg below 25% HP · start at 25% HP. Synergy: Dead Man's Hand explosion triples",
     apply: (mods, gs) => { mods.lastResort=true; mods.hasLastResort=true; if(gs?.player){gs.player.health=Math.max(1,Math.floor(gs.player.maxHealth*0.25));} } },
   { id: "paranoia", name: "Paranoia", emoji: "👁", tier: "cursed",
     desc: "All enemies move 25% faster, but you gain +40% XP",
@@ -415,6 +417,21 @@ export function getWeeklyMutation() {
   const weekNum = Math.floor(Date.now() / (7 * 24 * 3600 * 1000));
   return WEEKLY_MUTATIONS[weekNum % WEEKLY_MUTATIONS.length];
 }
+
+// ===== WAVE CHALLENGE MUTATIONS =====
+// Offered every 5th non-boss wave. Player accepts a buff on enemies in exchange for bonus coins.
+export const WAVE_CHALLENGE_MUTATIONS = [
+  { id: "iron_storm",    emoji: "🦾", name: "Iron Storm",    reward: 15, desc: "Enemies have +80% HP this wave.",           apply: gs => { gs.mutEnemyHPMult    = (gs.mutEnemyHPMult    || 1) * 1.8; } },
+  { id: "bullet_hell",   emoji: "🌀", name: "Bullet Hell",   reward: 12, desc: "Ranged enemies fire 50% faster.",           apply: gs => { gs.mutEnemyFireRateMult = (gs.mutEnemyFireRateMult || 1) * 0.5; } },
+  { id: "speed_surge",   emoji: "⚡", name: "Speed Surge",   reward: 18, desc: "Enemies move 70% faster this wave.",        apply: gs => { gs.mutEnemySpeedExtra = (gs.mutEnemySpeedExtra || 1) * 1.7; } },
+  { id: "giant_horde",   emoji: "🐋", name: "Giant Horde",   reward: 20, desc: "Enemies 50% larger + 30% more spawn.",      apply: gs => { gs.mutEnemySizeMult = (gs.mutEnemySizeMult || 1) * 1.5; gs.waveEnemyMult = (gs.waveEnemyMult || 1) * 1.3; gs.maxEnemiesThisWave = Math.floor(gs.maxEnemiesThisWave * 1.3); } },
+  { id: "elite_only",    emoji: "👑", name: "Elite Surge",   reward: 22, desc: "Every enemy spawns as an elite.",           apply: gs => { gs.waveEliteOnly = true; } },
+  { id: "acid_rain",     emoji: "☣️", name: "Acid Rain",     reward: 16, desc: "Enemies leave damaging acid pools.",        apply: gs => { gs.cursedAcidTrails = true; } },
+  { id: "double_wave",   emoji: "👥", name: "Double Wave",   reward: 25, desc: "2× enemies this wave.",                    apply: gs => { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); } },
+  { id: "fog_of_war",    emoji: "🌫️", name: "Fog of War",    reward: 10, desc: "Enemies hidden until very close.",          apply: gs => { gs.fogOfWar = true; } },
+  { id: "explosive_all", emoji: "💥", name: "Landmine Zone", reward: 20, desc: "All enemies explode on death.",             apply: gs => { gs.mutAllExplosive = true; } },
+  { id: "berserker",     emoji: "🔴", name: "Berserk Mode",  reward: 14, desc: "All enemies spawn pre-enraged.",            apply: gs => { gs.mutAlwaysEnraged = true; } },
+];
 
 // ===== WEAPON SYNERGIES =====
 // Activate when BOTH weapons have been upgraded at least once (upgrades[i] > 0).

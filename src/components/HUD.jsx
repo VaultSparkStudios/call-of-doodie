@@ -8,7 +8,7 @@ export default function HUD({
   wave, timeSurvived, score, kills, deaths, health, ammo, isReloading,
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
-  difficulty, isMobile, weaponUpgrades, activePerks, runModifier,
+  difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponAmmos, weaponMods,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
   overclockedActive, overclockedShots, waveStreak, mapTheme,
@@ -16,6 +16,7 @@ export default function HUD({
   synergyChargeReady, onSynergyCharge,
   cursedHideScore,
   speedrunMode, startTime,
+  missions, missionDoneSet,
 }) {
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -225,11 +226,35 @@ export default function HUD({
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle,rgba(255,215,0,0.3) 0%,transparent 70%)", pointerEvents: "none", animation: "blink 0.5s infinite" }} />
       )}
 
+      {/* In-game mission progress widget */}
+      {missions && missions.length > 0 && (
+        <div style={{ position: "absolute", top: 44, left: 12, maxWidth: 190, pointerEvents: "none" }}>
+          {missions.map((m, idx) => {
+            const done = missionDoneSet?.has(idx);
+            return (
+              <div key={idx} style={{ marginBottom: 5, opacity: done ? 0.45 : 0.88 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9, color: done ? "#00FF88" : "#CCC", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <span>{m.icon}</span>
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{done ? "✓ " : ""}{m.text}</span>
+                </div>
+                {!done && (
+                  <div style={{ width: 120, height: 2, background: "rgba(255,255,255,0.1)", borderRadius: 1, marginTop: 2, overflow: "hidden" }}>
+                    <div style={{ width: Math.min(100, ((m._progress || 0) / m.goal) * 100) + "%", height: "100%", background: "#FFD700", borderRadius: 1, transition: "width 0.3s" }} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* Desktop weapon toolbar */}
       {!isMobile && (
         <DesktopToolbar
           currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades}
+          weaponAmmos={weaponAmmos} ammo={ammo}
           grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading}
+          weaponMods={weaponMods}
           onSwitchWeapon={onSwitchWeapon} onGrenade={onGrenade} onDash={onDash} onReload={onReload}
           Tooltip={Tooltip}
         />
@@ -240,7 +265,7 @@ export default function HUD({
 
 const WEAPON_HOTKEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
 
-function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady, isReloading, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
+function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, grenadeReady, dashReady, isReloading, weaponMods, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
   const [hoveredTool, setHoveredTool] = useState(null);
   // Shrink weapon buttons when there are many weapons so the bar stays on-screen
   const btnSize = WEAPONS.length > 8 ? 32 : 38;
@@ -248,21 +273,41 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, grenadeReady, dashReady
 
   return (
     <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 3, alignItems: "center", background: "rgba(0,0,0,0.4)", padding: "4px 8px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.08)", pointerEvents: "all", maxWidth: "calc(100vw - 24px)", flexWrap: "nowrap", overflowX: "auto" }}>
-      {WEAPONS.map((w, i) => (
-        <div key={i} style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("wpn-" + i)} onMouseLeave={() => setHoveredTool(null)}>
-          <div
-            style={{ width: btnSize, height: btnSize, borderRadius: 6, position: "relative", background: i === currentWeapon ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.05)", border: i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: btnFont, cursor: "pointer" }}
-            onClick={() => onSwitchWeapon(i)}
-          >
-            {w.emoji}
-            <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: i === currentWeapon ? w.color : "#AAA", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>{WEAPON_HOTKEYS[i] || i + 1}</span>
-            {weaponUpgrades?.[i] > 0 && (
-              <span style={{ position: "absolute", bottom: -1, left: "50%", transform: "translateX(-50%)", fontSize: 7, color: "#AA44FF", lineHeight: 1 }}>{"⭐".repeat(weaponUpgrades[i])}</span>
-            )}
+      {WEAPONS.map((w, i) => {
+        const curAmmo = i === currentWeapon ? ammo : (weaponAmmos?.[i] ?? w.maxAmmo);
+        const maxAmmo = w.maxAmmo;
+        const ammoPct = Math.min(1, curAmmo / maxAmmo);
+        const ammoColor = ammoPct > 0.5 ? "#00CC66" : ammoPct > 0.2 ? "#FFD700" : "#FF3322";
+        const wMod = weaponMods?.[i];
+        const isCursed  = !!(wMod?.cursed);
+        const isBlessed = !!(wMod?.blessed);
+        const modBorderColor = isCursed ? "#CC00FF" : isBlessed ? "#FFD700" : null;
+        return (
+          <div key={i} style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("wpn-" + i)} onMouseLeave={() => setHoveredTool(null)}>
+            <div
+              style={{ width: btnSize, height: btnSize + 6, borderRadius: 6, position: "relative", background: i === currentWeapon ? "rgba(255,255,255,0.2)" : isCursed ? "rgba(180,0,255,0.08)" : isBlessed ? "rgba(255,215,0,0.1)" : "rgba(255,255,255,0.05)", border: modBorderColor ? `2px solid ${modBorderColor}` : i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontSize: btnFont, cursor: "pointer", paddingBottom: 4 }}
+              onClick={() => onSwitchWeapon(i)}
+            >
+              {w.emoji}
+              <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: i === currentWeapon ? w.color : "#AAA", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>{WEAPON_HOTKEYS[i] || i + 1}</span>
+              {weaponUpgrades?.[i] > 0 && (
+                <span style={{ position: "absolute", top: 0, left: 2, fontSize: 7, color: "#AA44FF", lineHeight: 1 }}>{"⭐".repeat(weaponUpgrades[i])}</span>
+              )}
+              {/* Curse/bless icon */}
+              {(isCursed || isBlessed) && (
+                <span style={{ position: "absolute", bottom: 6, right: 1, fontSize: 8, lineHeight: 1 }}>
+                  {isCursed ? "☠️" : "✨"}
+                </span>
+              )}
+              {/* Ammo bar */}
+              <div style={{ position: "absolute", bottom: 2, left: 3, right: 3, height: 3, background: "rgba(0,0,0,0.5)", borderRadius: 2, overflow: "hidden" }}>
+                <div style={{ width: ammoPct * 100 + "%", height: "100%", background: ammoColor, borderRadius: 2, transition: i === currentWeapon ? "width 0.08s" : "none" }} />
+              </div>
+            </div>
+            <Tooltip text={"[" + (WEAPON_HOTKEYS[i] || i + 1) + "] " + w.name + " — " + w.desc + " (" + curAmmo + "/" + maxAmmo + ")" + (isBlessed ? " ✨ BLESSED" : isCursed ? " ☠️ CURSED" : "")} visible={hoveredTool === "wpn-" + i} />
           </div>
-          <Tooltip text={"[" + (WEAPON_HOTKEYS[i] || i + 1) + "] " + w.name + " — " + w.desc} visible={hoveredTool === "wpn-" + i} />
-        </div>
-      ))}
+        );
+      })}
 
       <div style={{ width: 1, height: 26, background: "rgba(255,255,255,0.15)", margin: "0 2px" }} />
 

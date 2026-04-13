@@ -55,20 +55,40 @@ export default function DeathScreen({
     ghostData.forEach(pt => { minX = Math.min(minX, pt.x); minY = Math.min(minY, pt.y); maxX = Math.max(maxX, pt.x); maxY = Math.max(maxY, pt.y); });
     const rangeX = Math.max(maxX - minX, 100), rangeY = Math.max(maxY - minY, 100);
     const toC = (x, y) => [(x - minX) / rangeX * (W - 20) + 10, (y - minY) / rangeY * (H - 20) + 10];
-    ctx.beginPath();
-    const [sx0, sy0] = toC(ghostData[0].x, ghostData[0].y);
-    ctx.moveTo(sx0, sy0);
-    ghostData.forEach((pt, i) => {
-      if (i === 0) return;
-      const [cx, cy] = toC(pt.x, pt.y);
-      ctx.lineTo(cx, cy);
-    });
-    ctx.strokeStyle = "#00FFFF"; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.7; ctx.stroke();
-    ctx.globalAlpha = 1;
-    const [ex, ey] = toC(ghostData[ghostData.length - 1].x, ghostData[ghostData.length - 1].y);
-    ctx.fillStyle = "#FF4444"; ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI * 2); ctx.fill();
+    const total = ghostData.length;
+    // Draw path in color-coded segments: green → yellow → red (early → mid → final)
+    for (let i = 1; i < total; i++) {
+      const t = i / total; // 0=start, 1=end
+      // Interpolate color: green(0) → yellow(0.5) → red(1)
+      let r, g, b;
+      if (t < 0.5) { const s = t * 2; r = Math.round(s * 255); g = Math.round(180 + (1 - s) * 55); b = Math.round((1 - s) * 80); }
+      else { const s = (t - 0.5) * 2; r = 255; g = Math.round(180 * (1 - s)); b = 0; }
+      const alpha = 0.45 + t * 0.45;
+      const [px1, py1] = toC(ghostData[i - 1].x, ghostData[i - 1].y);
+      const [px2, py2] = toC(ghostData[i].x, ghostData[i].y);
+      ctx.beginPath(); ctx.moveTo(px1, py1); ctx.lineTo(px2, py2);
+      ctx.strokeStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+      ctx.lineWidth = 1.5 + t; // path gets slightly thicker toward end
+      ctx.stroke();
+    }
+    // Start marker (green dot)
     const [stx, sty] = toC(ghostData[0].x, ghostData[0].y);
-    ctx.fillStyle = "#00FF88"; ctx.beginPath(); ctx.arc(stx, sty, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#00FF88"; ctx.beginPath(); ctx.arc(stx, sty, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#002200"; ctx.font = "bold 7px monospace"; ctx.textAlign = "center";
+    ctx.fillText("▶", stx, sty + 3);
+    // End marker (skull)
+    const [ex, ey] = toC(ghostData[ghostData.length - 1].x, ghostData[ghostData.length - 1].y);
+    ctx.fillStyle = "#FF2222"; ctx.beginPath(); ctx.arc(ex, ey, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.font = "bold 7px monospace"; ctx.textAlign = "center";
+    ctx.fillText("☠", ex, ey + 3);
+    // Legend
+    ctx.globalAlpha = 0.65; ctx.font = "7px monospace"; ctx.textAlign = "left";
+    const legend = [["#00B450","EARLY"],["#FFB000","MID"],["#FF2222","FINAL"]];
+    legend.forEach(([col, label], i) => {
+      ctx.fillStyle = col; ctx.fillRect(4, H - 22 + i * 8, 10, 5);
+      ctx.fillStyle = "#CCC"; ctx.fillText(label, 17, H - 17 + i * 8);
+    });
+    ctx.globalAlpha = 1;
   }, [ghostData]);
 
   // ── QR code rendering ─────────────────────────────────────────────────────

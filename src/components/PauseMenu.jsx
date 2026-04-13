@@ -6,7 +6,7 @@ import AchievementsPanel from "./AchievementsPanel.jsx";
 import SettingsPanel from "./SettingsPanel.jsx";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot, activePerks, perkMods, activeSynergiesData }) {
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -15,6 +15,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   // ── Gamepad nav (main view only) ─────────────────────────────────────────
   const mainItems = [
     { key: "resume",      action: onResume },
+    { key: "build",       action: () => setView("build") },
     { key: "rules",       action: () => setView("rules") },
     { key: "controls",    action: () => setView("controls") },
     { key: "bestiary",    action: () => setView("bestiary") },
@@ -185,7 +186,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
               <div style={{ fontSize: 10, color: "#CCC" }}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED ⚡" : ""}</div>
-              <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{e.deathQuote}"</div>
+              <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : (e.deathQuote || "...")}"</div>
             </div>
           </div>
         ))}
@@ -193,6 +194,96 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
       </div>
     </div>
   );
+
+  if (view === "build") {
+    const pm = perkMods || {};
+    const perks = activePerks || [];
+    const synergies = activeSynergiesData || [];
+    // Compute a human-readable stat summary from perkMods
+    const stats = [];
+    if ((pm.damageMult || 1) > 1)         stats.push({ label: "Damage",      val: `×${pm.damageMult.toFixed(2)}`,       color: "#FF4444" });
+    if ((pm.fireRateMult || 1) < 1)       stats.push({ label: "Fire Rate",   val: `×${(1/pm.fireRateMult).toFixed(1)} faster`, color: "#FF8800" });
+    if ((pm.speedMult || 1) > 1)          stats.push({ label: "Speed",       val: `×${pm.speedMult.toFixed(2)}`,        color: "#00E5FF" });
+    if ((pm.lifesteal || 0) > 0)          stats.push({ label: "Lifesteal",   val: `${Math.round(pm.lifesteal*100)}% per hit`, color: "#FF0066" });
+    if ((pm.pierce || 0) > 0)             stats.push({ label: "Pierce",      val: `+${pm.pierce} targets`,             color: "#FFAA00" });
+    if ((pm.maxAmmoMult || pm.ammoMult || 1) > 1) stats.push({ label: "Max Ammo", val: `×${(pm.maxAmmoMult || pm.ammoMult || 1).toFixed(1)}`, color: "#00FF88" });
+    if ((pm.reloadMult || 1) < 1)         stats.push({ label: "Reload",      val: `×${pm.reloadMult.toFixed(2)} faster`, color: "#AAAAFF" });
+    if ((pm.xpMult || 1) > 1)             stats.push({ label: "XP Gain",     val: `×${pm.xpMult.toFixed(1)}`,          color: "#FFD700" });
+    if ((pm.pickupRange || 0) > 30)       stats.push({ label: "Pickup Range",val: `${pm.pickupRange}px`,               color: "#00FFCC" });
+    if (pm.bounces > 0)                   stats.push({ label: "Bounces",     val: `+${pm.bounces} extra`,              color: "#7FFF00" });
+    if (pm.extraPellets > 0)              stats.push({ label: "Pellets",     val: `+${pm.extraPellets} per shot`,      color: "#FF69B4" });
+    return (
+      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, backdropFilter: "blur(6px)" }}>
+        <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,215,0,0.25)", padding: "24px 20px", maxWidth: 480, width: "100%", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+          <h3 style={{ color: "#FF88FF", margin: "0 0 4px", fontSize: 18, fontFamily: "'Courier New',monospace", letterSpacing: 2 }}>🔧 YOUR BUILD</h3>
+          <p style={{ fontSize: 10, color: "#888", margin: "0 0 16px", letterSpacing: 1 }}>Active perks, synergies & stat bonuses this run</p>
+
+          {/* Active perks */}
+          {perks.length > 0 ? (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 10, color: "#CCC", letterSpacing: 2, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── PERKS ({perks.length}) ──</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                {perks.map((p, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "8px 10px", border: "1px solid rgba(255,255,255,0.08)", display: "flex", gap: 8, alignItems: "flex-start" }}>
+                    <span style={{ fontSize: 20, flexShrink: 0 }}>{p.emoji}</span>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: p.cursed ? "#CC00FF" : "#FFD700", lineHeight: 1.2 }}>{p.name}</div>
+                      <div style={{ fontSize: 10, color: "#AAA", marginTop: 2, lineHeight: 1.3 }}>{p.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div style={{ fontSize: 12, color: "#555", marginBottom: 16, fontStyle: "italic" }}>No perks yet — level up to earn some!</div>
+          )}
+
+          {/* Active weapon synergies */}
+          {synergies.length > 0 && (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 10, color: "#CCC", letterSpacing: 2, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── WEAPON SYNERGIES ──</div>
+              {synergies.map((s, i) => (
+                <div key={i} style={{ background: "rgba(0,229,255,0.06)", borderRadius: 8, padding: "8px 12px", border: "1px solid rgba(0,229,255,0.15)", marginBottom: 6, display: "flex", gap: 8, alignItems: "center" }}>
+                  <span style={{ fontSize: 18 }}>{s.emoji}</span>
+                  <div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: s.color || "#00E5FF" }}>{s.name}</div>
+                    <div style={{ fontSize: 10, color: "#AAA" }}>{s.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Perk synergies (active _synXxx flags) */}
+          {pm._synComboVamp    && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>🌪️ BLOODCOMBO: Lifesteal doubled in combo</div>}
+          {pm._synTurboAdrenaline && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>⚡ NITRO RUSH: Adrenaline lasts 4s</div>}
+          {pm._synDeadLastResort  && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>💀 DEATH'S GAMBIT: Triple explosion at low HP</div>}
+          {pm._synGlassCrit    && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>🧠 FOCUSED FURY: Crits grant +10 XP</div>}
+          {pm._synOCSav        && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>🔧 RELOAD SALVAGE: Forced reloads drop ammo</div>}
+          {pm._synGrenadeOC    && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>💥 CHAIN REACTION: Forced reload readies grenade</div>}
+          {pm._synBloodPierce  && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>🩸 BLOODSHOT: +12% lifesteal on pierced targets</div>}
+          {pm._synFullArmory   && <div style={{ fontSize: 11, color: "#FF88FF", marginBottom: 4 }}>📦 FULL ARMORY: +50% max ammo</div>}
+
+          {/* Computed stat deltas */}
+          {stats.length > 0 && (
+            <div>
+              <div style={{ fontSize: 10, color: "#CCC", letterSpacing: 2, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── STAT BONUSES ──</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                {stats.map((s, i) => (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 6, padding: "6px 10px", border: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 10, color: "#999" }}>{s.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 900, color: s.color }}>{s.val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <button onClick={() => setView("main")} style={{ padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300, marginTop: 20 }}>← BACK</button>
+        </div>
+      </div>
+    );
+  }
 
   // Main pause view
   return (
@@ -205,6 +296,7 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
         </p>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
           <button onClick={onResume} style={{ ...pBtn, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none", fontSize: 18, ...(gfocus("resume") ? focusRing : {}) }}>▶ RESUME</button>
+          <button onClick={() => setView("build")} style={{ ...pBtn, color: "#FF88FF", borderColor: "rgba(255,136,255,0.25)", ...(gfocus("build") ? focusRing : {}) }}>🔧 BUILD SUMMARY {(activePerks?.length || 0) > 0 ? `(${activePerks.length} perks)` : ""}</button>
           <button onClick={() => setView("rules")} style={{ ...pBtn, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
           <button onClick={() => setView("controls")} style={{ ...pBtn, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
           <button onClick={() => setView("bestiary")} style={{ ...pBtn, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED LIST</button>

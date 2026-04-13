@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { WAVE_ROUTES } from "../constants.js";
+import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
 /**
  * Returns 3 route options: Standard always included, 2 more randomly chosen.
@@ -21,6 +22,13 @@ export function getRouteOptions(gs) {
 
 export default function RouteSelectModal({ options, wave, onSelect }) {
   const [hovered, setHovered] = useState(null);
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
+  const focusIdx = useGamepadNav({
+    count: options.length, cols: 1, enabled: true, disableLR: true,
+    onConfirm: (idx) => onSelectRef.current?.(options[idx]),
+  });
 
   return (
     <div style={{
@@ -54,8 +62,8 @@ export default function RouteSelectModal({ options, wave, onSelect }) {
 
         {/* Route cards */}
         <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-          {options.map(route => {
-            const isHov = hovered === route.id;
+          {options.map((route, rIdx) => {
+            const isHov = hovered === route.id || focusIdx === rIdx;
             return (
               <button
                 key={route.id}
@@ -69,6 +77,8 @@ export default function RouteSelectModal({ options, wave, onSelect }) {
                     ? `linear-gradient(160deg, ${route.color}28 0%, rgba(0,0,0,0.65) 100%)`
                     : "linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.6) 100%)",
                   border: `2px solid ${isHov ? route.color : route.color + "33"}`,
+                  outline: focusIdx === rIdx ? `2px solid ${route.color}` : "none",
+                  outlineOffset: 2,
                   borderRadius: 14,
                   padding: "22px 14px 18px",
                   cursor: "pointer",
@@ -112,7 +122,7 @@ export default function RouteSelectModal({ options, wave, onSelect }) {
           marginTop: 20, fontSize: 10,
           color: "#444", fontFamily: "'Courier New', monospace", letterSpacing: 1,
         }}>
-          [CLICK TO SELECT · AFFECTS NEXT WAVE ONLY]
+          [CLICK / D-PAD + A TO SELECT · AFFECTS NEXT WAVE ONLY]
         </div>
       </div>
     </div>
