@@ -5,6 +5,7 @@ import {
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
+  WAVE_CHALLENGE_MUTATIONS,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
@@ -106,6 +107,10 @@ function buildFlowField(W, H, px, py, obstacles) {
 // ── Wave shop options ─────────────────────────────────────────────────────────
 function getShopOptions(gs, wpnIdx) {
   const p = gs.player;
+  // Pick a random non-active weapon to bless (prefer weapons not already blessed/cursed)
+  const _unblessedIdx = WEAPONS.map((_,i) => i).filter(i => i !== wpnIdx && !(gs.weaponMods?.[i]?.blessed) && !(gs.weaponMods?.[i]?.cursed));
+  const _blessTarget  = _unblessedIdx.length > 0 ? _unblessedIdx[Math.floor(Math.random() * _unblessedIdx.length)] : wpnIdx;
+  const _alreadyCursed = !!(gs.weaponMods?.[wpnIdx]?.cursed);
   const pool = [
     { id: "health",  emoji: "💊", name: "Field Medkit",   desc: "Restore 50 HP",              available: p.health < p.maxHealth },
     { id: "ammo",    emoji: "📦", name: "Resupply Crate", desc: "Fully refill all weapons",    available: true },
@@ -113,6 +118,14 @@ function getShopOptions(gs, wpnIdx) {
     { id: "speed",   emoji: "👟", name: "Combat Stim",    desc: "+10% move speed (permanent)", available: true },
     { id: "maxhp",   emoji: "❤️", name: "HP Canister",    desc: "+25 max HP (permanent)",      available: true },
     { id: "damage",  emoji: "🔥", name: "Damage Boost",   desc: "+15% bullet damage",          available: true },
+    // Weapon bless: permanently buff a random weapon
+    { id: `bless_${_blessTarget}`, emoji: "✨", name: `Bless ${WEAPONS[_blessTarget].emoji}`,
+      desc: `${WEAPONS[_blessTarget].name}: +30% dmg, 20% faster fire (permanent)`,
+      available: gs.currentWave >= 3 && !(gs.weaponMods?.[_blessTarget]?.blessed) },
+    // Weapon curse: curse active weapon in exchange for a bonus
+    { id: `curse_${wpnIdx}`, emoji: "☠️", name: `Devil's Pact`,
+      desc: `Curse ${WEAPONS[wpnIdx].emoji} (−30% dmg) → gain +50 max HP`,
+      available: gs.currentWave >= 4 && !_alreadyCursed },
   ].filter(o => o.available);
   for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
   return pool.slice(0, 3);
@@ -197,6 +210,8 @@ export default function CallOfDoodie() {
   const routePendingRef  = useRef(false); // blocks game loop like perkPending
   const bossCutsceneRef  = useRef(false); // blocks game loop during boss intro card
   const waveAnnouncePendingRef = useRef(false);
+  const mutationPendingRef      = useRef(false); // blocks game loop during mutation offer
+  const postMutationShopRef     = useRef(false); // whether to show shop after mutation resolves
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -290,6 +305,8 @@ export default function CallOfDoodie() {
   const [routeOptions, setRouteOptions]         = useState([]);
   const [missionToast, setMissionToast]         = useState(null);
   const [waveAnnounce, setWaveAnnounce]         = useState(null);
+  const [mutationPending, setMutationPending]   = useState(false);
+  const [mutationOptions, setMutationOptions]   = useState([]);
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const synergyChargeCooldownRef = useRef(0);
@@ -493,6 +510,7 @@ export default function CallOfDoodie() {
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0, damageThisWave: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
       weaponAmmos: WEAPONS.map(w => w.ammo), // per-weapon ammo state
+      weaponMods: {},  // per-weapon curse/bless modifiers: { [idx]: { damageMult, fireRateMult, blessed, cursed } }
       damageFlash: 0, killFlash: 0, totalDamage: 0, trail: [],
       weaponUpgrades: WEAPONS.map(() => 0), bossWave: false,
       runSeed: seed,
@@ -915,15 +933,24 @@ export default function CallOfDoodie() {
     }
     // ── Perk synergy combo check (run after each perk pick) ──
     const _perkSynergies = [
-      { a: "hasVampire",     b: "hasLastResort",  key: "_synVampireLastResort", bonus: () => { pm.lifesteal = (pm.lifesteal || 0) + 0.04; pm.critBonus = (pm.critBonus || 0) + 0.1; },                                                  name: "⚡ DEATH'S DOOR",   desc: "+4% lifesteal & +10% crit at low HP" },
-      { a: "hasAdrenaline",  b: "hasDash",        key: "_synAdrenalineDash",    bonus: () => { pm.dashCDMult = (pm.dashCDMult || 1) * 0.6; },                                                                                             name: "💨 AFTERBURNER",    desc: "Dash cooldown cut by 40%" },
-      { a: "hasOverclocked", b: "hasLastResort",  key: "_synOCGlass",           bonus: () => { pm.damageMult = (pm.damageMult || 1) * 1.25; },                                                                                            name: "💥 FRAGILE FURY",   desc: "+25% damage while at low HP" },
-      { a: "hasScavenger",   b: "hasAmmoBoost",   key: "_synScavAmmo",          bonus: () => { pm.ammoMult = (pm.ammoMult || 1) * 1.3; pm.ammoDropMult = (pm.ammoDropMult || 1) * 1.5; },                                               name: "🎒 PACK RAT",       desc: "+30% max ammo & 50% more ammo drops" },
-      { a: "hasEagleEye",    b: "pierce",         key: "_synEaglePierce",       bonus: () => { pm.pierce = (pm.pierce || 0) + 1; pm.critBonus = (pm.critBonus || 0) + 0.08; },                                                          name: "🦅 SNIPER'S MARK",  desc: "+1 pierce & +8% crit chance" },
+      { a: "hasVampire",     b: "hasLastResort",  key: "_synVampireLastResort", bonus: () => { pm.lifesteal = (pm.lifesteal || 0) + 0.04; pm.critBonus = (pm.critBonus || 0) + 0.1; },                                                  name: "⚡ DEATH'S DOOR",      desc: "+4% lifesteal & +10% crit at low HP" },
+      { a: "hasAdrenaline",  b: "hasDash",        key: "_synAdrenalineDash",    bonus: () => { pm.dashCDMult = (pm.dashCDMult || 1) * 0.6; },                                                                                             name: "💨 AFTERBURNER",       desc: "Dash cooldown cut by 40%" },
+      { a: "hasOverclocked", b: "hasLastResort",  key: "_synOCGlass",           bonus: () => { pm.damageMult = (pm.damageMult || 1) * 1.25; },                                                                                            name: "💥 FRAGILE FURY",      desc: "+25% damage while at low HP" },
+      { a: "hasScavenger",   b: "hasAmmoBoost",   key: "_synScavAmmo",          bonus: () => { pm.ammoMult = (pm.ammoMult || 1) * 1.3; pm.ammoDropMult = (pm.ammoDropMult || 1) * 1.5; },                                               name: "🎒 PACK RAT",          desc: "+30% max ammo & 50% more ammo drops" },
+      { a: "hasEagleEye",    b: "pierce",         key: "_synEaglePierce",       bonus: () => { pm.pierce = (pm.pierce || 0) + 1; pm.critBonus = (pm.critBonus || 0) + 0.08; },                                                          name: "🦅 SNIPER'S MARK",     desc: "+1 pierce & +8% crit chance" },
+      // ── New synergies ──
+      { a: "hasComboMaster", b: "hasVampire",     key: "_synComboVamp",         bonus: () => { pm.comboVampireMult = true; },                                                                                                             name: "🌪️ BLOODCOMBO",       desc: "Lifesteal doubles during active combo" },
+      { a: "hasTurboBoots",  b: "hasAdrenaline",  key: "_synTurboAdrenaline",   bonus: () => { pm.adrenalineRushDuration = 240; },                                                                                                        name: "⚡ NITRO RUSH",        desc: "Adrenaline Rush lasts 4s instead of 2s" },
+      { a: "hasLastResort",  b: "deadManTriple",  key: "_synDeadLastResort",    bonus: () => { pm.deadManTripleExplosion = true; },                                                                                                        name: "💀 DEATH'S GAMBIT",    desc: "Dead Man's Hand explosion triples at low HP" },
+      { a: "hasGlassMind",   b: "hasCritCascade", key: "_synGlassCrit",         bonus: () => { pm.critGrantsXp = true; },                                                                                                                 name: "🧠 FOCUSED FURY",      desc: "Every crit grants +10 bonus XP" },
+      { a: "hasOverclocked", b: "hasScavenger",   key: "_synOCSav",             bonus: () => { pm.reloadDropsAmmo = true; },                                                                                                              name: "🔧 RELOAD SALVAGE",    desc: "Forced reloads drop an ammo crate" },
+      { a: "hasGrenadeChain",b: "hasOverclocked", key: "_synGrenadeOC",         bonus: () => { pm.reloadFreesGrenade = true; },                                                                                                           name: "💥 CHAIN REACTION",    desc: "Forced reload instantly readies your grenade" },
+      { a: "hasBloodlust",   b: "pierce",         key: "_synBloodPierce",       bonus: () => { pm.piercedLifesteal = (pm.piercedLifesteal || 0) + 0.12; },                                                                               name: "🩸 BLOODSHOT",         desc: "+12% lifesteal on every pierced target" },
+      { a: "hasBulletHose",  b: "hasAmmoBoost",   key: "_synFullArmory",        bonus: () => { pm.ammoMult = (pm.ammoMult || 1) * 1.50; },                                                                                               name: "📦 FULL ARMORY",       desc: "+50% extra max ammo on top of existing boost" },
     ];
     _perkSynergies.forEach(syn => {
       const condA = pm[syn.a];
-      const condB = syn.b === "pierce" ? (pm.pierce || 0) > 0 : pm[syn.b];
+      const condB = (syn.b === "pierce" || syn.b === "deadManTriple") ? (syn.b === "pierce" ? (pm.pierce || 0) > 0 : pm.deadManTripleExplosion || pm.hasLastResort) : pm[syn.b];
       if (condA && condB && !pm[syn.key]) {
         pm[syn.key] = true;
         syn.bonus();
@@ -1010,7 +1037,28 @@ export default function CallOfDoodie() {
       case "damage":
         perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.15;
         break;
-      default: break;
+      default:
+        // Weapon bless: id is "bless_N"
+        if (optionId.startsWith("bless_")) {
+          const _bIdx = parseInt(optionId.slice(6), 10);
+          if (!isNaN(_bIdx) && _bIdx >= 0 && _bIdx < WEAPONS.length) {
+            gs.weaponMods = gs.weaponMods || {};
+            gs.weaponMods[_bIdx] = { ...(gs.weaponMods[_bIdx] || {}), damageMult: 1.30, fireRateMult: 0.80, blessed: true };
+            addText(gs, gs.player.x, gs.player.y - 60, `✨ ${WEAPONS[_bIdx].name} BLESSED!`, "#FFD700", true);
+          }
+        }
+        // Weapon curse: id is "curse_N"
+        if (optionId.startsWith("curse_")) {
+          const _cIdx = parseInt(optionId.slice(6), 10);
+          if (!isNaN(_cIdx) && _cIdx >= 0 && _cIdx < WEAPONS.length) {
+            gs.weaponMods = gs.weaponMods || {};
+            gs.weaponMods[_cIdx] = { ...(gs.weaponMods[_cIdx] || {}), damageMult: 0.70, cursed: true };
+            p.maxHealth += 50; p.health = Math.min(p.maxHealth, p.health + 25);
+            setHealth(Math.floor(p.health));
+            addText(gs, gs.player.x, gs.player.y - 60, `☠️ PACT SEALED! +50 MAX HP`, "#CC00FF", true);
+          }
+        }
+        break;
     }
     shopPendingRef.current = false;
     setShopPending(false);
@@ -1023,7 +1071,9 @@ export default function CallOfDoodie() {
       { id: "maxhp",   emoji: "❤️", name: "HP Canister" },
       { id: "damage",  emoji: "🔥", name: "Damage Boost" },
     ];
-    const picked = allOpts.find(o => o.id === optionId);
+    const picked = allOpts.find(o => o.id === optionId)
+      || (optionId.startsWith("bless_") ? { emoji: "✨", name: `Bless ${WEAPONS[parseInt(optionId.slice(6))]?.name}` } : null)
+      || (optionId.startsWith("curse_") ? { emoji: "☠️", name: "Devil's Pact" } : null);
     if (picked) setShopHistory(h => [...h, { emoji: picked.emoji, name: picked.name }]);
   }, []);
 
@@ -1058,6 +1108,41 @@ export default function CallOfDoodie() {
     }
     soundPerkSelect();
   }, []);
+
+  // ── Wave mutation challenge: accept or skip ──────────────────────────────
+  const _triggerShopIfNeeded = useCallback(() => {
+    if (postMutationShopRef.current) {
+      postMutationShopRef.current = false;
+      const gs = gsRef.current;
+      if (!gs) return;
+      const opts = getShopOptions(gs, currentWeaponRef.current);
+      setShopOptions(opts);
+      setCoinShopOptions(getCoinShopOptions(gs));
+      setShopPending(true);
+      shopPendingRef.current = true;
+    }
+  }, []);
+
+  const applyMutation = useCallback((mutation) => {
+    const gs = gsRef.current;
+    if (!gs) return;
+    mutation.apply(gs);
+    const reward = mutation.reward || 0;
+    gs.coins = (gs.coins || 0) + reward;
+    setCoins(gs.coins);
+    addText(gs, GW() / 2, GH() / 2 - 80, `+${reward} 💩 CHALLENGE ACCEPTED!`, "#FFD700", true);
+    mutationPendingRef.current = false;
+    setMutationPending(false);
+    setMutationOptions([]);
+    _triggerShopIfNeeded();
+  }, [_triggerShopIfNeeded]);
+
+  const skipMutation = useCallback(() => {
+    mutationPendingRef.current = false;
+    setMutationPending(false);
+    setMutationOptions([]);
+    _triggerShopIfNeeded();
+  }, [_triggerShopIfNeeded]);
 
   // ── Wave route apply ──────────────────────────────────────────────────────
   const applyRoute = useCallback((route) => {
@@ -1114,7 +1199,8 @@ export default function CallOfDoodie() {
     const weapon = WEAPONS[weaponIdx];
     const now = Date.now();
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
-    const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1) * (gs.synergyFireRateMult || 1);
+    const _wpnMod = gs.weaponMods?.[weaponIdx] || {};
+    const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1) * (gs.synergyFireRateMult || 1) * (_wpnMod.fireRateMult || 1);
     if (now - lastShotRef.current < weapon.fireRate * fireRateMult || gs.ammoCount <= 0 || isReloadingRef.current) return;
     lastShotRef.current = now; gs.ammoCount--; gs.weaponAmmos[weaponIdx] = gs.ammoCount; setAmmo(gs.ammoCount);
     // Overclocked perk: track shots, force reload every 20
@@ -1126,13 +1212,24 @@ export default function CallOfDoodie() {
         setOverclockedShots(0);
         addText(gs, gs.player.x, gs.player.y - 40, "🔧 OVERHEATED!", "#FF8800", true);
         doReload(weaponIdx);
+        // Synergy: Overclocked + Scavenger → drop ammo crate on forced reload
+        if (perkModsRef.current.reloadDropsAmmo) {
+          gs.pickups.push({ x: gs.player.x + (Math.random()-0.5)*60, y: gs.player.y + (Math.random()-0.5)*60, type: "ammo", life: 300 });
+          addText(gs, gs.player.x, gs.player.y - 70, "🎒 AMMO DROP!", "#00BFFF");
+        }
+        // Synergy: Grenade Chain + Overclocked → forced reload readies grenade
+        if (perkModsRef.current.reloadFreesGrenade) {
+          grenadeRef.current.ready = true;
+          setGrenadeReady(true);
+          addText(gs, gs.player.x, gs.player.y - 90, "💥 GRENADE READY!", "#FF4500");
+        }
       }
     }
     soundShoot(weaponIdx);
     const p = gs.player;
     const spread = (Math.random() - 0.5) * weapon.spread;
     const a = angle + spread;
-    const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1);
+    const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1) * (_wpnMod.damageMult || 1);
     const pierce = perkModsRef.current.pierce || 0;
     const bSize = weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4);
     const bLife = weapon.bulletLife || 60;
@@ -1399,7 +1496,7 @@ export default function CallOfDoodie() {
     runTokenRef.current = null;
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setTimeout(() => {
       startMusic(false);
       startAmbient(gsRef.current?.mapTheme ?? 0);
@@ -1495,7 +1592,7 @@ export default function CallOfDoodie() {
     const ctx = ctxRef.current;
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
-    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current) {
+    if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current || mutationPendingRef.current) {
       return;
     }
 
@@ -1878,13 +1975,6 @@ export default function CallOfDoodie() {
               addText(gs, W / 2, H / 2 + 70, "🌫️ FOG OF WAR — Enemies hidden until close!", "#88CCFF");
               break;
           }
-          if (gs.waveEvent) {
-            const _evtLabels = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
-            const _lbl = _evtLabels[gs.waveEvent] || gs.waveEvent;
-            waveAnnouncePendingRef.current = true;
-            setWaveAnnounce(_lbl);
-            setTimeout(() => { waveAnnouncePendingRef.current = false; setWaveAnnounce(null); }, 1800);
-          }
         }
         // ── Cursed Run: escalating chaos events ──
         if (gs.cursedRunMode) {
@@ -1899,15 +1989,38 @@ export default function CallOfDoodie() {
         addText(gs, W / 2, H / 2 + 30, "+" + (gs.currentWave * 100) + " WAVE BONUS" + (streakBonus > 0 ? " +" + streakBonus + " STREAK" : ""), "#00FF88");
         if (gs.waveStreak >= 3) addText(gs, W / 2, H / 2 + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
         soundWaveClear();
-        // Trigger wave shop — every wave for waves 1-4, every 2nd wave for wave 5+; disabled in Gauntlet
-        const showShop = !gs.gauntletMode && (gs.currentWave < 5 || gs.currentWave % 2 === 0);
-        if (showShop) {
-          const opts = getShopOptions(gs, currentWeaponRef.current);
-          setShopOptions(opts);
-          setCoinShopOptions(getCoinShopOptions(gs));
-          setShopPending(true);
-          shopPendingRef.current = true;
-        }
+
+        // ── Wave incoming preview card (always shown) then chain mutation/shop ──
+        const _evtMap = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
+        waveAnnouncePendingRef.current = true;
+        setWaveAnnounce({
+          waveNum: gs.currentWave,
+          isBoss: nextIsBoss,
+          eventLabel: gs.waveEvent ? (_evtMap[gs.waveEvent] || gs.waveEvent) : null,
+          estimatedCount: nextIsBoss ? (gs.currentWave >= 15 ? 2 : 1) : gs.maxEnemiesThisWave,
+        });
+        // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
+        const _showMutation = !nextIsBoss && !gs.gauntletMode && !gs.bossRushMode
+          && !gs.scoreAttackMode && !gs.dailyChallengeMode && gs.currentWave % 5 === 0;
+        const _showShop = !gs.gauntletMode && (gs.currentWave < 5 || gs.currentWave % 2 === 0);
+        postMutationShopRef.current = _showShop;
+        setTimeout(() => {
+          waveAnnouncePendingRef.current = false;
+          setWaveAnnounce(null);
+          if (_showMutation) {
+            const _pool = [...WAVE_CHALLENGE_MUTATIONS].sort(() => Math.random() - 0.5).slice(0, 2);
+            setMutationOptions(_pool);
+            setMutationPending(true);
+            mutationPendingRef.current = true;
+            // Shop (if applicable) triggers from applyMutation / skipMutation callbacks
+          } else if (_showShop) {
+            const opts = getShopOptions(gsRef.current, currentWeaponRef.current);
+            setShopOptions(opts);
+            setCoinShopOptions(getCoinShopOptions(gsRef.current));
+            setShopPending(true);
+            shopPendingRef.current = true;
+          }
+        }, 2200);
       }
     }
 
@@ -2019,8 +2132,15 @@ export default function CallOfDoodie() {
           const _pbJugMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
           const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1) * _pbRageMult * _pbJugMult;
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
-          if (perkModsRef.current.lifesteal) { p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal); setHealth(Math.floor(p.health)); }
-          if (isCrit) statsRef.current.crits++;
+          if (perkModsRef.current.lifesteal) {
+            const _lsMult = (perkModsRef.current.comboVampireMult && comboRef.current.count > 0) ? 2 : 1;
+            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal * _lsMult);
+            setHealth(Math.floor(p.health));
+          }
+          if (isCrit) {
+            statsRef.current.crits++;
+            if (perkModsRef.current.critGrantsXp) addXp(10);
+          }
           addParticles(gs, e.x, e.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           addText(gs, e.x, e.y - e.size / 2 - 8, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random() * HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
           if (e.health <= 0) {
@@ -2178,10 +2298,19 @@ export default function CallOfDoodie() {
           }
           // Lifesteal
           if (perkModsRef.current.lifesteal) {
-            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal);
+            const _lsMult2 = (perkModsRef.current.comboVampireMult && comboRef.current.count > 0) ? 2 : 1;
+            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal * _lsMult2);
             setHealth(Math.floor(p.health));
           }
-          if (isCrit) statsRef.current.crits++;
+          // Pierced lifesteal: Bloodlust + Penetrator synergy
+          if (perkModsRef.current.piercedLifesteal && b.pierceLeft > 0) {
+            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.piercedLifesteal);
+            setHealth(Math.floor(p.health));
+          }
+          if (isCrit) {
+            statsRef.current.crits++;
+            if (perkModsRef.current.critGrantsXp) addXp(10);
+          }
           const _hn = performance.now();
           if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); }
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
@@ -2251,7 +2380,7 @@ export default function CallOfDoodie() {
             if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
             // Adrenaline Rush: kill while <30% HP → 2s double speed
             if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
-              gs.adrenalineRushTimer = 120;
+              gs.adrenalineRushTimer = perkModsRef.current.adrenalineRushDuration || 120;
               addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
               addParticles(gs, p.x, p.y, "#FF6600", 12);
             }
@@ -2776,6 +2905,19 @@ export default function CallOfDoodie() {
           }
         }
       }
+      // ── Universal boss phase 2 at 50% HP ─────────────────────────────────
+      if (e.isBossEnemy && !e.bossPhase2 && e.health > 0 && e.health < e.maxHealth * 0.5) {
+        e.bossPhase2 = true;
+        e.speed *= 1.35;
+        if (e._baseSpeed)  e._baseSpeed  *= 1.35;
+        if (e._baseSpeed2) e._baseSpeed2 *= 1.35;
+        if (e.projRate)    e.projRate     = Math.max(25, Math.floor(e.projRate * 0.7));
+        addText(gs, e.x, e.y - 90, "⚡ PHASE 2!", "#FF2200", true);
+        gs.screenShake = Math.max(gs.screenShake, 18);
+        addParticles(gs, e.x, e.y, "#FF2200", 35);
+        addParticles(gs, e.x, e.y, "#FF8800", 20);
+        soundWaveClear(); // reuse dramatic sting
+      }
       // ── Kamikaze (ti=12) ──
       if (e.typeIndex === 12 && dashRef.current.active <= 0) {
         const kd = Math.hypot(p.x - e.x, p.y - e.y);
@@ -3191,7 +3333,7 @@ export default function CallOfDoodie() {
     }
     startTimeRef.current = Date.now(); setTimeSurvived(0);
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setScreen("game");
   }, []);
 
@@ -3295,12 +3437,57 @@ export default function CallOfDoodie() {
           onLoadMore={loadMoreLeaderboard} onRefreshLeaderboard={refreshLeaderboard}
           username={username}
           gsSnapshot={gsRef.current}
+          activePerks={activePerks}
+          perkMods={perkModsRef.current}
+          activeSynergiesData={gsRef.current?.activeSynergies || []}
         />
       )}
 
       {/* Wave route select */}
       {routePending && (
         <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} />
+      )}
+
+      {/* Wave mutation challenge */}
+      {mutationPending && mutationOptions.length > 0 && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 95, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, backdropFilter: "blur(8px)" }}>
+          <div style={{ background: "rgba(15,5,30,0.98)", border: "1px solid rgba(180,0,255,0.35)", borderRadius: 14, padding: "28px 24px", maxWidth: 460, width: "100%", color: "#FFF", boxShadow: "0 0 40px rgba(150,0,255,0.2)" }}>
+            <div style={{ textAlign: "center", marginBottom: 20 }}>
+              <div style={{ fontSize: 10, color: "#CC44FF", letterSpacing: 3, fontFamily: "'Courier New',monospace", marginBottom: 6 }}>── CHALLENGE ──</div>
+              <div style={{ fontSize: 22, fontWeight: 900, color: "#CC44FF", fontFamily: "'Courier New',monospace", letterSpacing: 2 }}>🧬 MUTATION PACT</div>
+              <div style={{ fontSize: 12, color: "#AAA", marginTop: 6, lineHeight: 1.5 }}>Accept an enemy buff this wave. The harder the deal, the bigger the reward.</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
+              {mutationOptions.map((mut) => (
+                <button key={mut.id} onClick={() => applyMutation(mut)} style={{
+                  background: "rgba(180,0,255,0.1)", border: "1px solid rgba(180,0,255,0.4)", borderRadius: 10,
+                  padding: "14px 18px", color: "#FFF", cursor: "pointer", textAlign: "left",
+                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+                  transition: "background 0.15s", fontFamily: "inherit",
+                }}>
+                  <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                    <span style={{ fontSize: 26 }}>{mut.emoji}</span>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 900, color: "#CC44FF", letterSpacing: 1 }}>{mut.name}</div>
+                      <div style={{ fontSize: 12, color: "#CCC", marginTop: 2 }}>{mut.desc}</div>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ fontSize: 18, fontWeight: 900, color: "#FFD700" }}>+{mut.reward}</div>
+                    <div style={{ fontSize: 10, color: "#AA8800" }}>💩 COINS</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <button onClick={skipMutation} style={{
+              width: "100%", padding: "10px 0", background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, color: "#888",
+              fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
+            }}>
+              ✗ SKIP — No thanks
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Wave clear shop */}
@@ -3348,20 +3535,38 @@ export default function CallOfDoodie() {
         </div>
       )}
 
-      {/* Wave event pre-announcement */}
-      {waveAnnounce && !paused && (
-        <div style={{
-          position: "absolute", top: "35%", left: "50%", transform: "translate(-50%,-50%)",
-          pointerEvents: "none", textAlign: "center",
-          animation: "bossIn 0.4s ease-out forwards",
-        }}>
-          <div style={{ fontSize: "clamp(18px,5vw,32px)", fontWeight: 900, color: "#FFD700",
-            textShadow: "0 0 20px #FFD70088", letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>
-            {waveAnnounce}
+      {/* Wave incoming preview card */}
+      {waveAnnounce && !paused && (() => {
+        const wa = waveAnnounce;
+        const isBoss = wa.isBoss;
+        const accentColor = isBoss ? "#FF4400" : "#FFD700";
+        return (
+          <div style={{
+            position: "absolute", top: "30%", left: "50%", transform: "translate(-50%,-50%)",
+            pointerEvents: "none", textAlign: "center", animation: "bossIn 0.35s ease-out forwards",
+            background: "rgba(0,0,0,0.7)", border: `1px solid ${accentColor}44`,
+            borderRadius: 14, padding: "18px 32px", minWidth: 220,
+            backdropFilter: "blur(4px)", boxShadow: `0 0 24px ${accentColor}22`,
+          }}>
+            <div style={{ fontSize: 9, color: "#777", letterSpacing: 3, fontFamily: "'Courier New',monospace", marginBottom: 4 }}>
+              ── INCOMING ──
+            </div>
+            <div style={{ fontSize: "clamp(20px,5vw,34px)", fontWeight: 900, color: accentColor,
+              textShadow: `0 0 18px ${accentColor}88`, letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>
+              {isBoss ? "⚠️ BOSS WAVE" : `WAVE ${wa.waveNum}`}
+            </div>
+            {wa.eventLabel && (
+              <div style={{ fontSize: 13, color: "#FF8844", fontFamily: "'Courier New',monospace", marginTop: 6, fontWeight: 700 }}>
+                {wa.eventLabel}
+              </div>
+            )}
+            <div style={{ fontSize: 10, color: "#888", marginTop: 8, display: "flex", justifyContent: "center", gap: 16 }}>
+              <span>{isBoss ? "⚠️ Boss" : `👾 ~${wa.estimatedCount} enemies`}</span>
+              {!isBoss && wa.waveNum % 5 === 0 && <span style={{ color: "#CC44FF" }}>🧬 Mutation offer</span>}
+            </div>
           </div>
-          <div style={{ fontSize: 11, color: "#888", marginTop: 6, letterSpacing: 2 }}>INCOMING</div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Berserker kill counter (wave 40+) */}
       {wave >= 40 && berserkersKilled > 0 && screen === "game" && !paused && (
@@ -3448,6 +3653,8 @@ export default function CallOfDoodie() {
         grenadeReady={grenadeReady} dashReady={dashReady} extraLives={extraLives}
         guardianAngelFlash={guardianAngelFlash} difficulty={difficulty} isMobile={isMobile}
         weaponUpgrades={weaponUpgrades} activePerks={activePerks}
+        weaponAmmos={gsRef.current?.weaponAmmos || []}
+        weaponMods={gsRef.current?.weaponMods || {}}
         runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
         onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)}
         onDash={doDash} onGrenade={throwGrenade} onPause={() => setPaused(true)}
@@ -3462,6 +3669,28 @@ export default function CallOfDoodie() {
         cursedHideScore={gsRef.current?.cursedHideScore || false}
         speedrunMode={speedrunMode}
         startTime={startTimeRef.current}
+        missions={screen === "game" ? (() => {
+          const gs = gsRef.current;
+          if (!gs || !dailyMissionsRef.current?.length) return [];
+          const s = {
+            kills: gs.kills || 0, wave: gs.currentWave || 1,
+            maxCombo: comboRef.current?.max || 0,
+            totalDamage: gs.totalDamage || 0,
+            dashes: statsRef.current?.dashes || 0,
+            timeSurvived: startTimeRef.current ? Math.floor((Date.now() - startTimeRef.current) / 1000) : 0,
+            crits: statsRef.current?.crits || 0,
+            grenadeKills: statsRef.current?.grenadeKills || 0,
+            bossKills: statsRef.current?.bossKills || 0,
+            bestStreak: statsRef.current?.bestStreak || 0,
+            score: gs.score || 0,
+            level: xpRef.current?.level || 1,
+            saScore: gs.scoreAttackMode ? (gs.score || 0) : 0,
+            saKills: gs.scoreAttackMode ? (gs.kills || 0) : 0,
+            saWave: gs.scoreAttackMode ? (gs.currentWave || 1) : 0,
+          };
+          return dailyMissionsRef.current.map(m => ({ ...m, _progress: s[m.track] || 0 }));
+        })() : []}
+        missionDoneSet={missionDoneRef.current}
       />
 
       {/* Mobile action bar */}

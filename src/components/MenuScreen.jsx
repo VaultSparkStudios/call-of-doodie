@@ -487,7 +487,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
                   <div style={{ fontSize: 10, color: "#CCC" }}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED ⚡" : ""}</div>
-                  <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{e.deathQuote}"</div>
+                  <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : (e.deathQuote || "...")}"</div>
                 </div>
               </div>
             ))}

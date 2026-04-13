@@ -3,12 +3,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Launch execution is narrowed to human-only steps: real-device QA and Itch.io publication. Repo-side verification, launch-surface visibility, and readable shared-table auditing all pass.",
-  "nextMilestone": "Complete the real-device PWA install and gamepad/browser checks and publish the Itch.io page using the prepared launch package.",
+  "currentFocus": "Post-launch depth sprint: 11 features shipped — boss phase 2, wave mutation contracts, weapon curse/bless, perk build summary, wave preview card, mission HUD widget, per-weapon ammo bars, 8 new perk synergies, gamepad nav for all modals, death heatmap, bestiary fix.",
+  "nextMilestone": "Publish Itch.io page and validate live leaderboard submit end-to-end after Edge Function confirm.",
   "blockers": [],
-  "lastUpdated": "2026-04-07",
+  "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-04-07"
+  "truthAuditLastRun": "2026-04-07",
+  "ignisScore": 34331,
+  "ignisGrade": "FLARE",
+  "ignisLastComputed": "2026-04-13"
 }
