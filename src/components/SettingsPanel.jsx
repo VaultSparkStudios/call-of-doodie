@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../settings.js";
 import { soundUIClose } from "../sounds.js";
 
@@ -34,7 +34,12 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
   const set = (k, v) => setW(prev => ({ ...prev, [k]: v }));
   const val = k => w[k] ?? SETTINGS_DEFAULTS[k];
 
-  const apply = () => { saveSettings(w); onSave(w); soundUIClose(); onClose(); };
+  const apply = useCallback(() => {
+    saveSettings(w);
+    onSave(w);
+    soundUIClose();
+    onClose();
+  }, [onClose, onSave, w]);
 
   const doSavePreset = () => {
     const name = nameInput.trim(); if (!name) return;
@@ -160,7 +165,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     }, 50);
 
     return () => { clearInterval(id); clearTimeout(repeatTimeout); };
-  }, [tab]); // re-run when tab changes so doMoveUD has correct itemCount
+  }, [apply, tab]); // re-run when tab changes so doMoveUD has correct itemCount
 
   const base = { fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6, fontWeight: 700 };
 

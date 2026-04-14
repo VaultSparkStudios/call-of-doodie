@@ -22,6 +22,8 @@ import {
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
+import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
+import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -29,9 +31,9 @@ import DeathScreen from "./components/DeathScreen.jsx";
 import PauseMenu from "./components/PauseMenu.jsx";
 import HUD from "./components/HUD.jsx";
 import AchievementsPanel from "./components/AchievementsPanel.jsx";
-import PerkModal, { getRandomPerks, getFullyCursedPerks } from "./components/PerkModal.jsx";
+import PerkModal from "./components/PerkModal.jsx";
 import WaveShopModal from "./components/WaveShopModal.jsx";
-import RouteSelectModal, { getRouteOptions } from "./components/RouteSelectModal.jsx";
+import RouteSelectModal from "./components/RouteSelectModal.jsx";
 import TutorialOverlay from "./components/TutorialOverlay.jsx";
 import DraftScreen from "./components/DraftScreen.jsx";
 
@@ -1199,7 +1201,7 @@ export default function CallOfDoodie() {
   const spawnEnemy = useCallback((gs)            => _spawnEnemy(gs, GW(), GH(), difficultyRef.current), []);
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
-  const spawnPickup = (gs, ex, ey, isBoss) => {
+  const spawnPickup = useCallback((gs, ex, ey, isBoss) => {
     const types    = ["health", "ammo", "speed", "nuke", "upgrade", "rage", "magnet", "freeze", "time_dilation"];
     // Vampire mode: no health drops — replace with ammo
     // Scavenger perk boosts ammo drop weight by ammoDropMult
@@ -1213,7 +1215,7 @@ export default function CallOfDoodie() {
     let roll = Math.random(), cumul = 0, pType = "health";
     for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
     gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
-  };
+  }, []);
 
   // ── Reload ────────────────────────────────────────────────────────────────
   const doReload = useCallback((wpnIdx) => {
@@ -1490,7 +1492,7 @@ export default function CallOfDoodie() {
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     return true;
-  }, []);
+  }, [difficulty, runSeed]);
 
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
@@ -1556,7 +1558,7 @@ export default function CallOfDoodie() {
     });
     track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[0]?.name, starterLoadout });
     if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
-  }, [difficulty, initGame, starterLoadout]);
+  }, [applyPerk, dailyChallengeMode, difficulty, initGame, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {
@@ -3170,7 +3172,7 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, applyRoute]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef);
@@ -3349,18 +3351,19 @@ export default function CallOfDoodie() {
       lastStart = !!start;
     };
 
+    const keys = keysRef.current;
     gamepadPollRef.current = setInterval(poll, 16);
     return () => {
       clearInterval(gamepadPollRef.current);
       // Clear any synthesised key state on unmount
-      keysRef.current["w"] = false;
-      keysRef.current["a"] = false;
-      keysRef.current["s"] = false;
-      keysRef.current["d"] = false;
+      keys["w"] = false;
+      keys["a"] = false;
+      keys["s"] = false;
+      keys["d"] = false;
       gamepadShootRef.current = false;
       gamepadAngleRef.current = null;
     };
-  }, [doDash, throwGrenade, switchWeapon]);
+  }, [doDash, doReload, throwGrenade, switchWeapon]);
 
   // ── Respawn (from death screen) ───────────────────────────────────────────
   const _respawn = useCallback(() => {

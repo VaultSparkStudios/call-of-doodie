@@ -1,48 +1,7 @@
 import { useRef } from "react";
-import { PERKS, CURSED_PERKS, PERK_TIER_COLORS, PERK_TIER_WEIGHTS } from "../constants.js";
+import { PERK_TIER_COLORS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { getPerkArchetypeMatches } from "../utils/buildArchetypes.js";
-
-/** Pick `count` perks — all cursed (for Cursed Run mode). */
-export function getFullyCursedPerks(count = 3) {
-  if (CURSED_PERKS.length === 0) return getRandomPerks(count);
-  const chosen = [];
-  const used = new Set();
-  let attempts = 0;
-  while (chosen.length < count && attempts < 200) {
-    attempts++;
-    const p = CURSED_PERKS[Math.floor(Math.random() * CURSED_PERKS.length)];
-    if (!used.has(p.id)) { used.add(p.id); chosen.push(p); }
-  }
-  while (chosen.length < count) chosen.push(CURSED_PERKS[Math.floor(Math.random() * CURSED_PERKS.length)]);
-  return chosen;
-}
-
-/** Pick `count` random perks. One slot has a 35% chance to be a cursed perk. */
-export function getRandomPerks(count = 3) {
-  const pool = [];
-  PERKS.forEach(p => {
-    const w = PERK_TIER_WEIGHTS[p.tier] || 1;
-    for (let i = 0; i < w; i++) pool.push(p);
-  });
-
-  const chosen = [];
-  const used = new Set();
-  let attempts = 0;
-  while (chosen.length < count && attempts < 200) {
-    attempts++;
-    const p = pool[Math.floor(Math.random() * pool.length)];
-    if (!used.has(p.id)) { used.add(p.id); chosen.push(p); }
-  }
-  while (chosen.length < count) chosen.push(PERKS[Math.floor(Math.random() * PERKS.length)]);
-
-  // 35% chance: replace the last option with a random cursed perk
-  if (Math.random() < 0.35 && CURSED_PERKS.length > 0) {
-    const cursed = CURSED_PERKS[Math.floor(Math.random() * CURSED_PERKS.length)];
-    chosen[chosen.length - 1] = cursed;
-  }
-  return chosen;
-}
 
 export default function PerkModal({ options, level, onSelect, buildArchetype, unlockedArchetypes = [] }) {
   const tierLabel = { common: "COMMON", uncommon: "UNCOMMON", rare: "RARE", legendary: "LEGENDARY", cursed: "⚠ CURSED" };

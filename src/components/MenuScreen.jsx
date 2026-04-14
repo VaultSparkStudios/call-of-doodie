@@ -1,15 +1,20 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout } from "../storage.js";
 import { supabase } from "../supabase.js";
-import LeaderboardPanel from "./LeaderboardPanel.jsx";
-import AchievementsPanel from "./AchievementsPanel.jsx";
-import SettingsPanel from "./SettingsPanel.jsx";
-import MetaTreePanel from "./MetaTreePanel.jsx";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
-import SupporterModal from "./SupporterModal.jsx";
 import { isSupporter } from "../utils/supporter.js";
+
+const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
+const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
+const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
+const MetaTreePanel = lazy(() => import("./MetaTreePanel.jsx"));
+const SupporterModal = lazy(() => import("./SupporterModal.jsx"));
+
+function LazyPanel({ children }) {
+  return <Suspense fallback={null}>{children}</Suspense>;
+}
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
@@ -133,7 +138,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         vsName: urlVsName || null,
       });
     }
-  }, []);
+  }, [setDifficulty]);
 
   // ── Gamepad menu navigation ──────────────────────────────────────────────
   const anyModalOpen = showLeaderboard || showAchievements || showCareer || showRules ||
@@ -401,8 +406,16 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   return (
     <div style={{ ...base, touchAction: "pan-y", overflow: "hidden", alignItems: "center", color: "#fff", boxSizing: "border-box" }}>
       <div ref={mainScrollRef} style={{ position: "absolute", inset: 0, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", padding: 20, boxSizing: "border-box" }}>
-      {showLeaderboard && <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />}
-      {showAchievements && <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />}
+      {showLeaderboard && (
+        <LazyPanel>
+          <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
+        </LazyPanel>
+      )}
+      {showAchievements && (
+        <LazyPanel>
+          <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />
+        </LazyPanel>
+      )}
 
       {/* Rules Modal */}
       {showRules && (
@@ -1045,15 +1058,21 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
       {/* Settings Panel */}
       {showSettings && gameSettings && (
-        <SettingsPanel
-          settings={gameSettings}
-          onSave={s => { onSaveSettings(s); }}
-          onClose={() => setShowSettings(false)}
-        />
+        <LazyPanel>
+          <SettingsPanel
+            settings={gameSettings}
+            onSave={s => { onSaveSettings(s); }}
+            onClose={() => setShowSettings(false)}
+          />
+        </LazyPanel>
       )}
 
       {/* Meta Tree Panel */}
-      {showMetaTree && <MetaTreePanel onClose={() => setShowMetaTree(false)} />}
+      {showMetaTree && (
+        <LazyPanel>
+          <MetaTreePanel onClose={() => setShowMetaTree(false)} />
+        </LazyPanel>
+      )}
 
       {/* Grid background */}
       <div style={{ position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.03) 49px,rgba(255,255,255,0.03) 50px)", pointerEvents: "none" }} />
@@ -1402,7 +1421,11 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         </div>
       </div>
       </div>
-      {showSupporter && <SupporterModal onClose={() => setShowSupporter(false)} />}
+      {showSupporter && (
+        <LazyPanel>
+          <SupporterModal onClose={() => setShowSupporter(false)} />
+        </LazyPanel>
+      )}
     </div>
   );
 }

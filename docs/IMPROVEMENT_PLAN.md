@@ -1,31 +1,32 @@
 # Improvement Plan
 
-Public-safe roadmap derived from the Session 42 audit.
+Public-safe roadmap derived from the Session 43 audit refresh.
 
 ## Current rating
 
-- Overall: 8.4/10
-- Strengths: feature breadth, replay variety, launch readiness, comedy-first identity
-- Primary constraints: monolithic runtime architecture, weak post-run coaching, limited server-side plausibility validation, and UI complexity at first contact
+- Overall: 8.7/10
+- Strengths: feature breadth, replay variety, launch readiness, comedy-first identity, and a stronger trust/feedback baseline than the prior session
+- Primary constraints: monolithic runtime architecture, heuristics-based leaderboard validation, UI complexity at first contact, high initial JS weight, and limited telemetry-guided balancing
 
 ## Ranked implementation order
 
-1. Score plausibility validation in `submit-score` so leaderboard trust improves before content expansion
-2. Post-run command debrief so every death teaches the player what to do next
-3. Front-door strategy guidance so the menu helps players choose a mode/loadout intentionally
-4. Build identity layer: archetypes, capstones, stronger synergy fantasy, clearer power spikes
-5. Wave director pacing: tension, recovery, elite telegraph rhythm, event cadence
+1. Domain refactor of `src/App.jsx` into combat, progression, pacing, rewards, and session modules
+2. Front-door simplification so the menu recommends the next best action instead of exposing the full system wall immediately
+3. Leaderboard trust v2: signed run summaries, event-derived validation, and anomaly logging beyond plausibility envelopes
+4. Post-run coaching v2: cause-of-death breakdown, missed-value callouts, and one-click corrective rematches
+5. Wave director pacing: tension, recovery, elite telegraph rhythm, authored encounter cadence
 6. Combat readability pass: stronger silhouettes, less visual competition, clearer threat language
-7. Economy clarity: route/shop previews, stronger risk-reward communication, less opaque randomness
-8. Social retention layer: weekly contracts, rival ghosts, studio seeds, async competition
-9. Render/update optimization pass for mobile headroom and safer future content growth
-10. Domain refactor of `src/App.jsx` into combat, progression, pacing, rewards, and session modules
+7. Build identity depth: irreversible forks, stronger archetype capstones, and clearer power spikes
+8. Economy clarity v2: route/shop forecasting, stronger risk-reward language, and less opaque randomness
+9. Social retention layer: weekly contracts, rival ghosts, studio seeds, async competition
+10. Render/update optimization pass for mobile headroom and safer future content growth
+11. Telemetry/balance loop: instrument where runs fail, what choices players make, and what advice actually changes behavior
+12. Warning-debt cleanup and UI architecture separation so future feature work lands on a cleaner surface
 
 ## Current execution slice
 
-- Ship the anti-cheat plausibility gate
-- Upgrade the death screen into a tactical debrief
-- Add menu-side strategic guidance for the selected mode/loadout
-- Add a build-identity layer with archetype capstones tied to perk composition
-- Thread that archetype model through perk/shop/route UI so the economy teaches stronger decisions
-- Record the full roadmap in durable project context so future sessions inherit it
+- Record the expanded audit and execution sequence in durable project context
+- Strip helper logic out of component files where it blocks fast-refresh and inflates coupling
+- Lazy-load non-core menu surfaces so first-contact payload and UI cost shrink modestly before deeper code-splitting
+- Continue the `src/App.jsx` domain split by extracting self-contained systems instead of growing the file further
+- Treat leaderboard trust, front-door UX, post-run coaching, readability, and performance as one linked quality program rather than separate polish buckets
