@@ -4,6 +4,7 @@ dist
 *.local
 .claude/
 context/internal-startup.local.json
+context/.session-lock
 docs/CREATIVE_DIRECTION_RECORD.md
 docs/INNOVATION_PIPELINE.md
 docs/RIGHTS_PROVENANCE.md
