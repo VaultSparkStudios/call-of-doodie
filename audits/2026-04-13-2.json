@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-04-13",
+  "session": 41,
+  "sessionType": "implementation",
+  "label": "launch-readiness audit + in-repo gap fixes",
+  "calibration": false,
+  "scores": {
+    "devHealth": 92,
+    "creativeAlignment": 83,
+    "momentum": 94,
+    "engagement": 62,
+    "processQuality": 88
+  },
+  "total": 427,
+  "maxScore": 500,
+  "velocity": 2,
+  "protocolVelocity": null,
+  "durationMinutes": 75,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": 92.5,
+    "creativeAlignment": 83.0,
+    "momentum": 95.5,
+    "engagement": 62.0,
+    "processQuality": 88.0,
+    "total": 425.0
+  },
+  "rollingAvgTotals": { "3": 425.0, "5": null, "10": null, "25": null, "all": 425.0 },
+  "topWin": "Closed both [SIL] items in Now — PNG icon pipeline is CI-integrated, Ko-fi webhook is deploy-ready once human sets secret + runs migration.",
+  "topGap": "Launch smoke test timing is host-sensitive (1.2s-5.5s); raised timeout as a stop-gap, but deeper fix is reducing the test's dependency count.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 3,
+  "improvementGroups": {
+    "pwa-quality": ["scripts/generate-icons.mjs (sharp)", "public/icon-192.png + icon-512.png", "manifest.json PNG entries + maskable", "index.html PNG icon + apple-touch-icon links", "public/sw.js bumped to cod-v4", "prebuild hook + icons:generate script"],
+    "monetization-backend": ["supabase/functions/kofi-webhook/index.ts", "supabase/migrations/2026-04-14_kofi_webhook.sql (kofi_events table)", "deploy-supabase-function.yml auto-deploys kofi-webhook", "functions README updated"],
+    "ci-stability": ["vite.config.js testTimeout: 15000"]
+  },
+  "testsTotal": 110,
+  "testsByType": { "unit": 110 },
+  "testsDelta": 0,
+  "deployStatus": "pending",
+  "ignisFlags": ["intent-achieved", "sil-escalation"],
+  "ignisNote": "Audit-driven session: identified 3 in-repo launch gaps and shipped 2 meaningful fixes; the third (robots.txt) was correctly skipped with explicit rationale — a good example of distinguishing fixable from non-fixable rather than doing work for its own sake."
+}

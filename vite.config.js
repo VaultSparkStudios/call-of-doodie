@@ -22,6 +22,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}"],
+    testTimeout: 15000,
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],

@@ -8,13 +8,15 @@ Public-safe launch roadmap summary.
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
+- [ ] Apply `supabase/migrations/2026-04-14_kofi_webhook.sql` in the Supabase SQL editor (creates `kofi_events` audit table)
+- [ ] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret, then paste the webhook URL into Ko-fi → More → Settings → API & Webhooks
 
 ## Now
-- [ ] [SIL] PNG icon generation — add build-time conversion of `icon.svg` → `icon-192.png` + `icon-512.png` to fix iOS home screen icon and improve Chrome desktop PWA install quality
-- [ ] [SIL] Ko-fi webhook Edge Function — create `supabase/functions/kofi-webhook/index.ts` with HMAC validation to automate supporter status on purchase
+- [ ] [SIL] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
+- [ ] [SIL] Score plausibility validation in Edge Function — reject runs whose kills/damage ratios exceed realistic ceilings for the reported wave
 
 ## Next
-- [ ] Optional: capture real gameplay screenshots (PNG) for Itch.io and manifest — replaces SVG launch-assets for better cross-browser PWA install prompt support
+- [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
@@ -35,6 +37,9 @@ Public-safe launch roadmap summary.
 - [x] Wired VITE_POSTHOG_KEY + VITE_SENTRY_DSN into deploy.yml build env
 - [x] PWA manifest screenshots populated — 5 screenshots added to `public/manifest.json` (4 wide/desktop, 1 narrow/mobile)
 - [x] `apple-mobile-web-app-title` added to `index.html` for correct iOS home screen label
+- [x] [SIL] PNG icon build pipeline — `scripts/generate-icons.mjs` (sharp), `icon-192.png` + `icon-512.png` committed, manifest + index.html wired, sw.js bumped to `cod-v4`, `prebuild` hook ensures PNGs stay in sync with `icon.svg`
+- [x] [SIL] Ko-fi webhook Edge Function — `supabase/functions/kofi-webhook/index.ts` with verification-token validation, idempotent `kofi_events` audit log, callsign extraction from Ko-fi `message`, auto-deploy wired into `.github/workflows/deploy-supabase-function.yml`, migration `2026-04-14_kofi_webhook.sql` added
+- [x] CI stability — raised Vitest `testTimeout` to 15000ms in `vite.config.js` after observing launch-smoke variance (1.2s–5.5s) near the 5s default
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready

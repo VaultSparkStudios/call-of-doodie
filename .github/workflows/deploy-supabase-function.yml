@@ -35,3 +35,6 @@ jobs:
 
       - name: Deploy submit-score function
         run: supabase functions deploy submit-score --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
+
+      - name: Deploy kofi-webhook function
+        run: supabase functions deploy kofi-webhook --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt

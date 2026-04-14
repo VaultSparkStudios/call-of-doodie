@@ -3,8 +3,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Final launch execution: all code-side preparation complete. Remaining actions are human-only — physical device QA (PWA + gamepad) and Itch.io publication.",
-  "nextMilestone": "Itch.io listing published + physical device QA confirmed.",
+  "currentFocus": "Final launch execution: all code-side preparation complete, supporter monetization backend ready. Remaining actions are human-only — physical device QA (PWA + gamepad), Itch.io publication, and applying the kofi_events migration + setting KOFI_VERIFICATION_TOKEN.",
+  "nextMilestone": "Itch.io listing published + physical device QA confirmed + kofi-webhook live.",
   "blockers": [],
   "lastUpdated": "2026-04-13",
   "lifecycle": "deployed",
@@ -14,8 +14,11 @@
   "ignisScore": 34331,
   "ignisGrade": "FLARE",
   "ignisLastComputed": "2026-04-13",
-  "silSession": 40,
-  "silScore": 423,
-  "silVelocity": 5,
-  "silDebt": "stable"
+  "silSession": 41,
+  "silScore": 427,
+  "silAvg3": 425.0,
+  "silVelocity": 2,
+  "silDebt": "stable",
+  "silLastSession": "2026-04-13",
+  "currentSession": 42
 }

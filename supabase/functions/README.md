@@ -56,3 +56,39 @@ Optional GitHub Actions secrets for automatic deploy on push:
 - `SUPABASE_PROJECT_REF`
 
 If `callsign_claims.supporter` has been migrated, the function will use that field as the authoritative source of the leaderboard supporter badge.
+
+## `kofi-webhook`
+
+Receives Ko-fi purchase/donation webhooks and flips the `supporter` flag on a matching `callsign_claims` row.
+
+Behaviour:
+- Validates `verification_token` in the posted payload against `KOFI_VERIFICATION_TOKEN`
+- Extracts the player's callsign from the Ko-fi `message` field (buyer pastes it at checkout); falls back to `from_name`
+- Upserts `callsign_claims.supporter = true` for that name
+- Logs the event to `kofi_events` keyed by `message_id` for idempotency
+
+Required function secrets:
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `KOFI_VERIFICATION_TOKEN` — paste the token from Ko-fi → More → Settings → API & Webhooks
+
+```bash
+supabase secrets set \
+  KOFI_VERIFICATION_TOKEN=YOUR_KOFI_TOKEN \
+  --project-ref <project-ref>
+```
+
+Deploy:
+
+```bash
+supabase functions deploy kofi-webhook --project-ref <project-ref>
+```
+
+Webhook URL to paste into Ko-fi:
+
+```
+https://<project-ref>.supabase.co/functions/v1/kofi-webhook
+```
+
+Required DB migration:
+- `supabase/migrations/2026-04-14_kofi_webhook.sql`

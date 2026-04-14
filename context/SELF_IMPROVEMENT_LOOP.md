@@ -4,12 +4,12 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): — (prior entries private)
-Avgs — 3: — | 5: — | 10: — | 25: — | all: — [UNTRACKED — SIL history in private ops repo]
-  └ 3-session: Dev — | Align — | Momentum — | Engage — | Process —
-Velocity trend: ↑  |  Protocol velocity: —  |  Debt: →
-Momentum runway: ~N/A (Now bucket pre-loaded with 2 SIL items for next session)  |  Intent rate: 100% (last 1 tracked)
-Last session: 2026-04-13 | Session 40 | Total: 423/500 | Velocity: 5 | protocolVelocity: —
+Sparkline (last 5 totals): ▆▆ (prior entries private)
+Avgs — 3: 425.0 [N=2] | 5: — | 10: — | 25: — | all: 425.0 [N=2, SIL history in private ops repo]
+  └ 3-session: Dev 92.5 | Align 83.0 | Momentum 95.5 | Engage 62.0 | Process 88.0 [N=2]
+Velocity trend: →  |  Protocol velocity: —  |  Debt: →
+Momentum runway: ~2.0 sessions (2 open Now items / avg velocity 1)  |  Intent rate: 100% (last 2 tracked)
+Last session: 2026-04-13 | Session 41 | Total: 427/500 | Velocity: 2 | protocolVelocity: —
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -34,3 +34,27 @@ Last session: 2026-04-13 | Session 40 | Total: 423/500 | Velocity: 5 | protocolV
 3. Replay snapshot ring buffer — minimal gs state captured 1/sec during run, "Watch Replay" on death screen; Low probability (large scope)
 
 **Committed to TASK_BOARD:** [SIL] PNG icon generation · [SIL] Ko-fi webhook Edge Function
+
+## 2026-04-13 — Session 41 | Total: 427/500 | Velocity: 2 | Debt: →
+Avgs — 3: 425.0 [N=2] | 5: — | 10: — | 25: — | all: 425.0 [N=2]
+  └ 3-session: Dev 92.5 | Align 83.0 | Momentum 95.5 | Engage 62.0 | Process 88.0 [N=2]
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 92 | → | 110/110 tests + launch:verify 14/14 live, CI stability improved (+10s headroom), 2 SIL items shipped |
+| Creative Alignment | 83 | → | Derived from TASK_BOARD; no creative drift; decisions section untouched |
+| Momentum | 94 | → | Both Now items → Done, 1 bonus CI fix, 0 new blockers; 2 new Human-Required items created (kofi secret + migration) |
+| Engagement | 62 | → | Pre-launch baseline — no real player metrics yet |
+| Process Quality | 88 | → | All context files updated, truth audit refreshed, no CDR gap, handoff pre-loaded |
+| **Total** | **427/500** | +4 | |
+
+**Top win:** Closed both [SIL] items in Now — PNG icon pipeline is CI-integrated, Ko-fi webhook is deploy-ready once human sets secret + runs migration.
+**Top gap:** Launch smoke test timing is host-sensitive (1.2s–5.5s) — bumped to 15s timeout, but deeper fix is reducing the test's dependency count.
+**Intent outcome:** Achieved — audit identified 3 in-repo gaps, shipped 2 with code + 1 bonus CI fix; skipped robots.txt with explicit rationale (subpath deploy — origin-root robots.txt is out-of-scope for this repo).
+
+**Brainstorm**
+1. Score plausibility validation — add server-side ceilings to `submit-score` based on wave (e.g., max kills ≤ f(wave), damage/time ratios); reject cheating submissions before they hit the leaderboard. Implementation: extend `normalizeEntry` with a `plausibleForWave(row)` predicate. High probability.
+2. Real PNG gameplay screenshots — capture from a live playthrough at 1280×720, replace the 5 `launch-assets/*.svg` placeholders. Improves Itch.io listing and Chrome install-card quality. Human-executable; Medium probability.
+3. `kofi_events` → supporter dashboard — surface recent supporter activity in a read-only admin page (offline HTML using service role key from env) for transparency. Low probability (nice-to-have, post-launch).
+
+**Committed to TASK_BOARD:** [SIL] Replace launch-asset SVGs with real PNG gameplay screenshots · [SIL] Score plausibility validation in Edge Function

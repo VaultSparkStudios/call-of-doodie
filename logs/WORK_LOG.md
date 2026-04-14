@@ -2,6 +2,21 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-13 (Session 41)
+
+- Launch-readiness audit: ran `npm test` (110/110), `npm run lint` (0 errors), `npm run launch:verify` (14/14 live assertions) — baseline clean
+- Identified in-repo fixable gaps: PNG icons missing, Ko-fi webhook absent, flaky launch smoke near 5s timeout
+- Shipped `scripts/generate-icons.mjs` using sharp; generated `public/icon-192.png` + `public/icon-512.png`
+- Wired PNG icons into `public/manifest.json` (any + maskable), `index.html` (icon + apple-touch-icon links), `public/sw.js` (cache version bumped to cod-v4)
+- Added `prebuild` npm script so icons regenerate on every `npm run build`; added manual `icons:generate` script
+- Added sharp to devDependencies
+- Shipped `supabase/functions/kofi-webhook/index.ts`: Ko-fi verification-token validation, callsign extraction from `message`/`from_name`, idempotent via `kofi_events.message_id`
+- Added `supabase/migrations/2026-04-14_kofi_webhook.sql` with `kofi_events` audit table + RLS
+- Extended `.github/workflows/deploy-supabase-function.yml` to auto-deploy the kofi-webhook function on push
+- Updated `supabase/functions/README.md` with kofi-webhook deploy instructions
+- Raised Vitest `testTimeout` to 15000ms in `vite.config.js` after observing launch-smoke variance of 1.2s–5.5s
+- Re-verified end-to-end: `npm test` 110/110, `npm run build` produces working dist/ including generated PNGs, `npm run launch:verify` 14/14 live assertions
+
 ## 2026-04-06
 
 - Public-safe summary: launch-prep session opened

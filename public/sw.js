@@ -5,12 +5,14 @@
 //  • Supabase / external API calls → network-only (never cache)
 //  • Navigation → network-first with offline fallback to index.html
 
-const CACHE_NAME = "cod-v3";
+const CACHE_NAME = "cod-v4";
 const SHELL_ASSETS = [
   "/call-of-doodie/",
   "/call-of-doodie/index.html",
   "/call-of-doodie/manifest.json",
   "/call-of-doodie/icon.svg",
+  "/call-of-doodie/icon-192.png",
+  "/call-of-doodie/icon-512.png",
   "/call-of-doodie/og-image.svg",
 ];
 const BASE = "/call-of-doodie/";

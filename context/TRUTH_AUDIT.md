@@ -5,6 +5,22 @@ Overall status: green
 Last reviewed: 2026-04-13
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-04-13 — Session 41 changes
+
+- `context/PROJECT_STATUS.json` updated: currentFocus, nextMilestone, silSession, silScore, silAvg3, silVelocity, silLastSession, currentSession
+- `public/manifest.json` updated: PNG icon entries (192/512 any + 512 maskable) added alongside the existing SVG fallback
+- `public/icon-192.png` + `public/icon-512.png` added as generated artefacts (regenerable via `npm run icons:generate`)
+- `scripts/generate-icons.mjs` added: build-time sharp-based SVG→PNG converter
+- `index.html` updated: PNG icon + apple-touch-icon links added
+- `public/sw.js` updated: cache version bumped to cod-v4 and PNG icons added to SHELL_ASSETS
+- `package.json` updated: `prebuild` hook, `icons:generate` script, sharp devDependency
+- `supabase/functions/kofi-webhook/index.ts` added: new Edge Function
+- `supabase/migrations/2026-04-14_kofi_webhook.sql` added: new `kofi_events` audit table
+- `.github/workflows/deploy-supabase-function.yml` updated: now also deploys the kofi-webhook function
+- `supabase/functions/README.md` updated: kofi-webhook deploy instructions
+- `vite.config.js` updated: testTimeout raised to 15000 for CI stability
+- No contradictions introduced. Source-of-truth hierarchy unchanged.
+
 ## 2026-04-13 — Session 40 changes
 
 - `context/PROJECT_STATUS.json` updated: currentFocus, nextMilestone, truthAuditLastRun, silSession, silScore, silVelocity, silDebt
