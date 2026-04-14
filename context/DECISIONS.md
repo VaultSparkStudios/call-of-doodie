@@ -53,3 +53,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** New content added into an unclear decision loop compounds noise. Strengthening trust, feedback, and build direction improves retention and makes later pacing/readability work more valuable.
 
 ---
+
+## 2026-04-14 — Protocol syncs must preserve repo-local executability
+
+**Decision:** When syncing this repo to newer Studio OS prompt/protocol versions, prompt text may not be copied blindly if it would leave `start` or `closeout` pointing at commands that do not exist in this repo.
+
+**Applies to this project:** Yes — this public game repo consumes Studio OS prompts but does not carry the full Studio OS script inventory locally.
+
+**Rationale:** A nominal prompt upgrade that references missing commands is worse than staying on an older protocol because it creates false procedural guarantees. This repo now keeps local wrappers/templates for required checks while delegating shared operations to the sibling `vaultspark-studio-ops` repo where appropriate.
+
+---

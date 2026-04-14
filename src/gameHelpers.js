@@ -7,6 +7,25 @@ import { ENEMY_TYPES, DIFFICULTIES, BOSS_ABILITY_POOL } from "./constants.js";
 
 // Boss type rotation: wave 5→Karen, 10→Splitter, 15→Juggernaut, 20→Summoner, 25→Landlord, 30→Algorithm, repeats
 export const BOSS_ROTATION = [4, 16, 17, 18, 9, 20];
+export const ELITE_TYPES = ["armored", "fast", "explosive"];
+
+export function getRandomEliteType(random = Math.random) {
+  return ELITE_TYPES[Math.floor(random() * ELITE_TYPES.length)];
+}
+
+export function applyEliteType(enemy, eliteType) {
+  if (!enemy || enemy.isBossEnemy || enemy.eliteType) return enemy;
+  enemy.eliteType = eliteType;
+  if (eliteType === "fast") {
+    enemy.speed *= 2;
+    enemy.size *= 0.75;
+  } else if (eliteType === "armored") {
+    enemy.dmgMult = 0.45;
+    enemy.health *= 1.5;
+    enemy.maxHealth = enemy.health;
+  }
+  return enemy;
+}
 
 // ── spawnEnemy ────────────────────────────────────────────────────────────────
 export function spawnEnemy(gs, W, H, difficultyId) {
@@ -60,7 +79,7 @@ export function spawnEnemy(gs, W, H, difficultyId) {
     const er = Math.random();
     // Weekly mutation overrides
     if (gs.mutAlwaysEnraged)  { elite.enrageTriggered = true; elite.speed *= 1.8; }
-    if (gs.mutAllExplosive)   { elite.eliteType = "explosive"; }
+    if (gs.mutAllExplosive)   { applyEliteType(elite, "explosive"); }
     if (wv >= 40 && er < (wv >= 50 ? 0.25 : 0.15) && !gs.mutAllExplosive) {
       // Berserker: fast + armored combined (15% wave 40-49, 25% wave 50+)
       elite.eliteType = "berserker";
@@ -70,16 +89,11 @@ export function spawnEnemy(gs, W, H, difficultyId) {
       elite.health   *= 1.3;
       elite.maxHealth = elite.health;
     } else if (wv >= 15 && er < 0.10) {
-      elite.eliteType = "explosive";
+      applyEliteType(elite, "explosive");
     } else if (wv >= 12 && er < 0.25) {
-      elite.eliteType = "fast";
-      elite.speed *= 2;
-      elite.size  *= 0.75;
+      applyEliteType(elite, "fast");
     } else if (er < 0.20) {
-      elite.eliteType = "armored";
-      elite.dmgMult   = 0.45;
-      elite.health   *= 1.5;
-      elite.maxHealth = elite.health;
+      applyEliteType(elite, "armored");
     }
   }
 }

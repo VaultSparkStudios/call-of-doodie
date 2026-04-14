@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-04-14",
+  "session": 43,
+  "sessionType": "implementation",
+  "label": null,
+  "calibration": false,
+  "scores": {
+    "devHealth": 96,
+    "creativeAlignment": 89,
+    "momentum": 90,
+    "engagement": 73,
+    "processQuality": 97
+  },
+  "total": 445,
+  "maxScore": 500,
+  "velocity": 1,
+  "protocolVelocity": 1,
+  "durationMinutes": null,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": 94.0,
+    "creativeAlignment": 85.7,
+    "momentum": 92.0,
+    "engagement": 68.7,
+    "processQuality": 93.0,
+    "total": 436.0
+  },
+  "rollingAvgTotals": {
+    "3": 436.0,
+    "5": null,
+    "10": null,
+    "25": null,
+    "all": 432.8
+  },
+  "topWin": "Shipped the pacing layer the roadmap had been pointing at, then closed the protocol drift that would have left start/closeout referencing missing commands.",
+  "topGap": "Combat readability and trust/coaching follow-through still matter more than adding yet more content breadth.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 4,
+  "improvementGroups": {
+    "gameplay_systems": 2,
+    "protocol_process": 2
+  },
+  "testsTotal": 121,
+  "testsByType": {
+    "client": 117,
+    "server": 0,
+    "core": 4
+  },
+  "testsDelta": 5,
+  "deployStatus": "pending",
+  "ignisFlags": [
+    "intent-achieved"
+  ],
+  "ignisNote": "The highest-return move was not another content drop; it was making encounter pacing feel authored and then restoring protocol accuracy so the repo can sustain that quality bar."
+}

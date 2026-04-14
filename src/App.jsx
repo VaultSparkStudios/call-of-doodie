@@ -8,7 +8,7 @@ import {
   WAVE_CHALLENGE_MUTATIONS,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken } from "./storage.js";
-import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION } from "./gameHelpers.js";
+import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
 import {
   soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
@@ -36,6 +36,12 @@ import RouteSelectModal from "./components/RouteSelectModal.jsx";
 import TutorialOverlay from "./components/TutorialOverlay.jsx";
 import DraftScreen from "./components/DraftScreen.jsx";
 import { getCoinShopOptions, getShopOptions } from "./systems/shopOptions.js";
+import {
+  createWaveDirectorPlan,
+  getGuaranteedEliteType,
+  getWaveDirectorState,
+  getWaveSpawnRate,
+} from "./systems/waveDirector.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 
@@ -482,6 +488,7 @@ export default function CallOfDoodie() {
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
+      waveDirector: null, waveDirectorStage: -1,
     };
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -1762,19 +1769,24 @@ export default function CallOfDoodie() {
     const diffS = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     if (!gs.bossWave) {
       gs.spawnTimer += gs.scoreAttackMode ? 1.5 : (gs.algorithmSurge ? 2.5 : 1);
-      const spawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1)));
+      const directorState = gs.waveDirector
+        ? getWaveDirectorState(gs.waveDirector, gs.enemiesThisWave, gs.maxEnemiesThisWave, gs.enemies.length)
+        : null;
+      if (directorState && directorState.stageIndex !== gs.waveDirectorStage) {
+        gs.waveDirectorStage = directorState.stageIndex;
+        if (directorState.telegraph) {
+          addText(gs, W / 2, H / 2 - 92, directorState.telegraph, "#FFD700", true);
+          setLiveAnnounce(`${gs.waveDirector.label}. ${directorState.telegraph.replace(/[^\w\s]/g, " ").trim()}`);
+        }
+      }
+      const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1)));
+      const spawnRate = getWaveSpawnRate(baseSpawnRate, directorState);
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
-        // Apply elite-only event override after spawn
-        if (gs.waveEliteOnly) {
-          const ne = gs.enemies[gs.enemies.length - 1];
-          if (!ne.eliteType) {
-            const et = ["armored","fast","explosive"][Math.floor(Math.random()*3)];
-            ne.eliteType = et;
-            if (et === "fast") { ne.speed *= 2; ne.size *= 0.75; }
-            else if (et === "armored") { ne.dmgMult = 0.45; ne.health *= 1.5; ne.maxHealth = ne.health; }
-          }
-        }
+        const ne = gs.enemies[gs.enemies.length - 1];
+        const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
+        if (directorEliteType) applyEliteType(ne, directorEliteType);
+        if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
       }
     }
     // Wave cleared
@@ -1842,6 +1854,8 @@ export default function CallOfDoodie() {
       gs.routeForceBoss = false; // consume the flag
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
+        gs.waveDirector = null;
+        gs.waveDirectorStage = -1;
       } else {
         const _waveMax = gs.currentWave >= 50 ? 100 : gs.currentWave >= 40 ? 80 : 60;
         gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), _waveMax);
@@ -1849,6 +1863,16 @@ export default function CallOfDoodie() {
         if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
         if (gs.routeEliteWave)    { gs.waveEliteOnly = true; gs.routeEliteWave = false; }
         if (_wasBlitz)            { gs.blitzSpawnMult = 3; }
+        gs._nonBossWaveCount = (gs._nonBossWaveCount || 0) + 1;
+        gs.waveDirector = createWaveDirectorPlan({
+          wave: gs.currentWave,
+          maxEnemies: gs.maxEnemiesThisWave,
+          nonBossWaveCount: gs._nonBossWaveCount,
+          scoreAttackMode: gs.scoreAttackMode,
+          gauntletMode: gs.gauntletMode,
+          dailyChallengeMode: gs.dailyChallengeMode,
+        });
+        gs.waveDirectorStage = -1;
       }
       setWave(gs.currentWave);
       setMapTheme(gs.mapTheme ?? 0);
@@ -1954,11 +1978,9 @@ export default function CallOfDoodie() {
         addParticles(gs, W / 2, H / 2, "#FF0000", 40);
       } else {
         setMusicIntensity(false);
-        // ── Wave event: every 3rd non-boss wave ──
-        gs._nonBossWaveCount = (gs._nonBossWaveCount || 0) + 1;
-        if (gs._nonBossWaveCount % 3 === 0 && gs.currentWave > 2) {
-          const _evts = ["fast_round", "siege", "elite_only", "fog_of_war"];
-          gs.waveEvent = _evts[Math.floor(Math.random() * _evts.length)];
+        // ── Wave director event layer ──
+        if (gs.waveDirector?.event) {
+          gs.waveEvent = gs.waveDirector.event;
           switch (gs.waveEvent) {
             case "fast_round":
               gs.waveEventSpeedMult = 2.0;
@@ -2001,6 +2023,8 @@ export default function CallOfDoodie() {
           isBoss: nextIsBoss,
           eventLabel: gs.waveEvent ? (_evtMap[gs.waveEvent] || gs.waveEvent) : null,
           estimatedCount: nextIsBoss ? (gs.currentWave >= 15 ? 2 : 1) : gs.maxEnemiesThisWave,
+          tempoLabel: !nextIsBoss ? gs.waveDirector?.label : null,
+          threatHint: !nextIsBoss ? gs.waveDirector?.hint : null,
         });
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
         const _showMutation = !nextIsBoss && !gs.gauntletMode && !gs.bossRushMode
@@ -3566,6 +3590,16 @@ export default function CallOfDoodie() {
             {wa.eventLabel && (
               <div style={{ fontSize: 13, color: "#FF8844", fontFamily: "'Courier New',monospace", marginTop: 6, fontWeight: 700 }}>
                 {wa.eventLabel}
+              </div>
+            )}
+            {wa.tempoLabel && (
+              <div style={{ fontSize: 12, color: "#8bd3ff", fontFamily: "'Courier New',monospace", marginTop: 6, fontWeight: 700 }}>
+                {wa.tempoLabel}
+              </div>
+            )}
+            {wa.threatHint && (
+              <div style={{ fontSize: 11, color: "#c6c6c6", maxWidth: 320, margin: "8px auto 0", lineHeight: 1.45 }}>
+                {wa.threatHint}
               </div>
             )}
             <div style={{ fontSize: 10, color: "#888", marginTop: 8, display: "flex", justifyContent: "center", gap: 16 }}>
