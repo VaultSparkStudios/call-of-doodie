@@ -1,5 +1,21 @@
 # Latest Handoff
 
+## Where We Left Off (Session 42)
+- Shipped: 5 improvements across 4 groups — security/trust (score plausibility validation), run-feedback (tactical death debrief), pre-run UX (command briefing), build depth/economy clarity (archetype capstones + build-fit recommendations)
+- Tests: 116/116 passing · delta: +6 (2 new utility test files, launch smoke still green)
+- Deploy: pending — ready to push; no post-push live verification run in this session
+
+Public-safe handoff summary:
+- session intent: audit the project, rank the biggest opportunities, then ship the highest-value refinement blocks instead of diluting effort across the full roadmap
+- intent outcome: Achieved — encoded the roadmap in repo memory, shipped the top trust/feedback/build-identity improvements, and left the remaining work ranked by payoff
+- completed this session: `docs/IMPROVEMENT_PLAN.md` added and linked from project memory; `TASK_BOARD`, `CURRENT_STATE`, and `LATEST_HANDOFF` updated to carry the ranked roadmap forward
+- completed this session: `supabase/functions/submit-score/index.ts` now rejects implausible runs via score/kills/damage/time envelopes and fixes claimed-callsign comparison to use resolved `uid`
+- completed this session: `src/utils/runDebrief.js` + tests added; `src/components/DeathScreen.jsx` now renders a tactical debrief with verdict, build identity, strengths, and next-best moves
+- completed this session: `src/components/MenuScreen.jsx` now renders a command brief for the selected mode/loadout and weekly mutation before deploy
+- completed this session: `src/utils/buildArchetypes.js` + tests added; aligned perk picks now unlock build capstones (Vanguard, Gunslinger, Demolitionist, Tempo) and the current build is surfaced in the HUD
+- completed this session: `PerkModal`, `WaveShopModal`, and `RouteSelectModal` now mark build-fit recommendations so players can steer into coherent builds
+- validation baseline: `npm test` 116/116, `npm run lint` 0 errors / 13 existing warnings
+
 ## Where We Left Off (Session 41)
 - Shipped: 3 improvements across 3 groups — pwa-quality (PNG icon build pipeline), monetization-backend (Ko-fi webhook Edge Function), ci-stability (testTimeout bump)
 - Tests: 110/110 passing · delta: 0 (no new test files; behaviour covered by existing launch:verify)
@@ -17,7 +33,7 @@ Public-safe handoff summary:
 - completed this session: `npm run launch:verify` re-run against production — 14/14 live assertions pass (health check 5/5, live site 5/5, launch surface 4/4, shared leaderboard 1/1)
 - validation baseline: `npm test` 110/110, `npm run lint` 0 errors / 13 intentional warnings, `npm run build` produces working dist/ with prebuild icon step wired in
 
-## Human Action Required (Session 41)
+## Human Action Required (Session 42)
 - [ ] Physical launch QA — verify PWA install prompt/accept on a real mobile/browser combo
 - [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
 - [ ] Create Itch.io listing — use copy from `docs/LAUNCH_EXECUTION.md`, upload media from `public/launch-assets/`

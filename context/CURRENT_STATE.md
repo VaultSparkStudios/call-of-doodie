@@ -17,8 +17,12 @@ Public-safe summary:
 - the launch execution package is prepared in `docs/LAUNCH_EXECUTION.md`, including itch.io copy, launch channel order, and a ready-to-upload launch media pack in `public/launch-assets/`
 - supporter purchases can now be automated: `supabase/functions/kofi-webhook/` validates Ko-fi's `verification_token`, extracts the callsign from the `message` field, flips `callsign_claims.supporter = true`, and logs to the new `kofi_events` audit table (migration `2026-04-14_kofi_webhook.sql`); GitHub Actions auto-deploys the function on push
 - `vite.config.js` sets `testTimeout: 15000` so the launch smoke test is stable on slow CI runners (observed range 1.2s–5.5s)
+- Session 42 added a ranked refinement roadmap in `docs/IMPROVEMENT_PLAN.md`; the highest-value in-repo focus is now leaderboard trust, stronger post-run coaching, and clearer mode/loadout guidance before deeper content expansion
+- the score-submit Edge Function now performs plausibility checks across score, kills, damage, level, and time envelopes before writing leaderboard rows
+- a build-identity layer now exists in-run: aligned perk compositions unlock archetype capstones (Vanguard, Gunslinger, Demolitionist, Tempo), and perk/shop/route screens expose build-fit recommendations so choices are more legible
+- the death screen now acts as a tactical debrief instead of a pure stat dump, and the menu now frames the selected mode/loadout before deployment
 - the remaining launch actions are now exclusively human-executable: real PWA install acceptance on a real device, one real gamepad/browser combo, and Itch.io publication
-- local validation baseline: `npm test` passes with 110/110 tests; `npm run lint` passes with 13 warnings and 0 errors; `npm run launch:verify` passes 14/14 live assertions
+- local validation baseline: `npm test` passes with 116/116 tests; `npm run lint` passes with 13 warnings and 0 errors; `npm run launch:verify` last known passing baseline remains 14/14 live assertions
 - internal operational records were sanitized for public-repo safety on 2026-04-03
 - detailed internal state now lives in the private Studio OS / ops repository
-- last updated: 2026-04-13
+- last updated: 2026-04-14

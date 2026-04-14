@@ -21,6 +21,7 @@ import {
   setDangerIntensity, stopDangerDrone, setMusicTier,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
+import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
@@ -251,6 +252,7 @@ export default function CallOfDoodie() {
   const [guardianAngelFlash, setGuardianAngelFlash] = useState(false);
   const [weaponUpgrades, setWeaponUpgrades] = useState(() => WEAPONS.map(() => 0));
   const [activePerks, setActivePerks] = useState([]);
+  const [unlockedArchetypes, setUnlockedArchetypes] = useState([]);
   const [perkPending, setPerkPending] = useState(false);
   const [perkOptions, setPerkOptions] = useState([]);
   const [bossWaveActive, setBossWaveActive] = useState(false);
@@ -310,6 +312,7 @@ export default function CallOfDoodie() {
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const synergyChargeCooldownRef = useRef(0);
+  const archetypeUnlocksRef = useRef(new Set());
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -320,6 +323,7 @@ export default function CallOfDoodie() {
 
   // ── Analytics init ────────────────────────────────────────────────────────
   useEffect(() => { analyticsInit(); }, []);
+  const dominantArchetype = getDominantArchetype(activePerks);
 
   // ── PWA install prompt ────────────────────────────────────────────────────
   useEffect(() => {
@@ -969,7 +973,43 @@ export default function CallOfDoodie() {
     perkOptionsRef.current.filter(p => p.id !== perk.id).forEach(skipped => {
       track("perk_skipped", { perkId: skipped.id, perkTier: skipped.tier, chosenId: perk.id, wave: _gs?.currentWave, mode: _mode });
     });
-    setActivePerks(prev => [...prev, perk]);
+    const nextActivePerks = [...activePerks, perk];
+    setActivePerks(nextActivePerks);
+    const newlyUnlockedArchetypes = getNewlyUnlockedArchetypes(nextActivePerks, [...archetypeUnlocksRef.current]);
+    if (newlyUnlockedArchetypes.length > 0) {
+      newlyUnlockedArchetypes.forEach(archetype => {
+        archetypeUnlocksRef.current.add(archetype.id);
+        switch (archetype.id) {
+          case "vanguard":
+            perkModsRef.current.lifesteal = (perkModsRef.current.lifesteal || 0) + 0.03;
+            if (gsRef.current) gsRef.current._treeArmorMult = (gsRef.current._treeArmorMult || 1) * 0.92;
+            break;
+          case "gunslinger":
+            perkModsRef.current.critBonus = (perkModsRef.current.critBonus || 0) + 0.10;
+            perkModsRef.current.fireRateMult = (perkModsRef.current.fireRateMult || 1) * 0.88;
+            break;
+          case "demolitionist":
+            perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.12;
+            perkModsRef.current.grenadeCDMult = (perkModsRef.current.grenadeCDMult || 1) * 0.80;
+            perkModsRef.current.grenadeDamageMult = (perkModsRef.current.grenadeDamageMult || 1) * 1.20;
+            break;
+          case "tempo":
+            perkModsRef.current.comboTimerMult = (perkModsRef.current.comboTimerMult || 1) * 1.15;
+            perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.80;
+            perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, Math.round((perkModsRef.current.pickupRange || 30) * 1.2));
+            if (gsRef.current?.player) gsRef.current.player.speed *= 1.08;
+            break;
+          default:
+            break;
+        }
+        if (gsRef.current) {
+          addText(gsRef.current, GW() / 2, GH() / 2 - 112, `${archetype.emoji} CAPSTONE: ${archetype.capstoneName}!`, archetype.color, true);
+          addText(gsRef.current, GW() / 2, GH() / 2 - 84, archetype.capstoneDesc, "#DDD");
+        }
+        soundLevelUp();
+      });
+      setUnlockedArchetypes([...archetypeUnlocksRef.current]);
+    }
     setPerkPending(false);
     perkPendingRef.current = false;
     soundPerkSelect();
@@ -977,7 +1017,7 @@ export default function CallOfDoodie() {
       addText(gsRef.current, GW() / 2, GH() / 2 - 40, perk.emoji + " " + perk.name + "!", "#00FF88", true);
     }
     checkAchievements(gsRef.current || {});
-  }, [checkAchievements]);
+  }, [activePerks, checkAchievements]);
 
   // ── Synergy charge burst ──────────────────────────────────────────────────
   const fireSynergyCharge = useCallback(() => {
@@ -1483,6 +1523,8 @@ export default function CallOfDoodie() {
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
+    archetypeUnlocksRef.current = new Set();
+    setUnlockedArchetypes([]);
     // Apply draft perk if one was chosen — defer so applyPerk runs after state resets
     const _draftPerk = draftChosenRef.current;
     draftChosenRef.current = null;
@@ -3445,7 +3487,7 @@ export default function CallOfDoodie() {
 
       {/* Wave route select */}
       {routePending && (
-        <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} />
+        <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} />
       )}
 
       {/* Wave mutation challenge */}
@@ -3492,12 +3534,12 @@ export default function CallOfDoodie() {
 
       {/* Wave clear shop */}
       {shopPending && (
-        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} />
+        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} />
       )}
 
       {/* Perk selection modal */}
       {perkPending && (
-        <PerkModal options={perkOptions} level={level} onSelect={applyPerk} />
+        <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} />
       )}
 
       {/* Achievements panel (in-game) */}
@@ -3653,6 +3695,8 @@ export default function CallOfDoodie() {
         grenadeReady={grenadeReady} dashReady={dashReady} extraLives={extraLives}
         guardianAngelFlash={guardianAngelFlash} difficulty={difficulty} isMobile={isMobile}
         weaponUpgrades={weaponUpgrades} activePerks={activePerks}
+        buildArchetype={dominantArchetype}
+        unlockedArchetypes={unlockedArchetypes}
         weaponAmmos={gsRef.current?.weaponAmmos || []}
         weaponMods={gsRef.current?.weaponMods || {}}
         runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}

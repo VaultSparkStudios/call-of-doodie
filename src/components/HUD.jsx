@@ -9,6 +9,7 @@ export default function HUD({
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
   difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponAmmos, weaponMods,
+  buildArchetype, unlockedArchetypes,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
   overclockedActive, overclockedShots, waveStreak, mapTheme,
@@ -167,6 +168,22 @@ export default function HUD({
           {activePerks.map((p, i) => (
             <span key={i} style={{ fontSize: 14, opacity: 0.85 }} title={p.name}>{p.emoji}</span>
           ))}
+        </div>
+      )}
+
+      {buildArchetype && (
+        <div style={{ position: "absolute", bottom: isMobile ? 104 : 90, left: 12, background: "rgba(0,0,0,0.55)", border: `1px solid ${buildArchetype.color}66`, borderRadius: 6, padding: "5px 8px", maxWidth: 220 }}>
+          <div style={{ fontSize: 10, color: buildArchetype.color, fontWeight: 900, letterSpacing: 1 }}>
+            {buildArchetype.emoji} {buildArchetype.name.toUpperCase()} {buildArchetype.count >= buildArchetype.unlockAt ? "CAPSTONE" : `${buildArchetype.count}/${buildArchetype.unlockAt}`}
+          </div>
+          <div style={{ fontSize: 9, color: "#BBB", marginTop: 2 }}>
+            {buildArchetype.capstoneDesc}
+          </div>
+          {unlockedArchetypes?.length > 1 && (
+            <div style={{ fontSize: 8, color: "#888", marginTop: 3 }}>
+              Unlocked: {unlockedArchetypes.length}
+            </div>
+          )}
         </div>
       )}
 

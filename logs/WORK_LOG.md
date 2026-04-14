@@ -2,6 +2,17 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-14 (Session 42)
+
+- Audited the project surface and converted the findings into a durable roadmap in `docs/IMPROVEMENT_PLAN.md`
+- Hardened `supabase/functions/submit-score/index.ts` with plausibility gates for kills, damage, score, level, and rate-based envelopes
+- Fixed claimed-callsign validation in the score submit path to compare against the resolved caller uid
+- Added `src/utils/runDebrief.js` + tests and upgraded the death screen into a tactical debrief with verdict, identity, strengths, and next-step guidance
+- Added a command briefing to the main menu so mode/loadout selection is framed before the player deploys
+- Added `src/utils/buildArchetypes.js` + tests and wired archetype capstone unlocks into the perk flow
+- Surfaced current build identity in the HUD and tagged build-fit recommendations in the perk, shop, and route modals
+- Re-verified the client suite: `npm test` 116/116 and `npm run lint` 0 errors / 13 baseline warnings
+
 ## 2026-04-13 (Session 41)
 
 - Launch-readiness audit: ran `npm test` (110/110), `npm run lint` (0 errors), `npm run launch:verify` (14/14 live assertions) — baseline clean

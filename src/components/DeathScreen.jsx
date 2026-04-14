@@ -3,6 +3,7 @@ import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
 import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
+import { buildRunDebrief } from "../utils/runDebrief.js";
 
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
@@ -271,6 +272,25 @@ export default function DeathScreen({
 
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const rankIndex = Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1);
+  const debrief = buildRunDebrief({
+    score,
+    kills,
+    wave,
+    level,
+    bestStreak,
+    timeSurvived,
+    totalDamage,
+    crits,
+    grenades,
+    activePerks,
+    missionsSummary,
+    weaponKills,
+    scoreAttackMode,
+    dailyChallengeMode,
+    bossRushMode,
+    cursedRunMode,
+    vsScore,
+  });
 
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
@@ -363,6 +383,34 @@ export default function DeathScreen({
               <div style={{ fontSize: 9, color: "#DDD", letterSpacing: 1 }}>{label}</div>
             </div>
           ))}
+        </div>
+
+        <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
+          <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>TACTICAL DEBRIEF</div>
+          <div style={{ fontSize: 18, color: "#FFF", fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }}>
+            {debrief.verdict}
+          </div>
+          <div style={{ fontSize: 12, color: "#FFD7B8", marginTop: 4, marginBottom: 10 }}>
+            Build identity: <span style={{ color: "#FFF", fontWeight: 700 }}>{debrief.identity}</span>
+          </div>
+
+          <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 5 }}>WHAT WORKED</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
+            {debrief.strengths.map((line, index) => (
+              <div key={`strength-${index}`} style={{ fontSize: 11, color: "#DDD", lineHeight: 1.45 }}>
+                ✓ {line}
+              </div>
+            ))}
+          </div>
+
+          <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 5 }}>NEXT BEST MOVES</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {debrief.actions.map((line, index) => (
+              <div key={`action-${index}`} style={{ fontSize: 11, color: "#DDD", lineHeight: 1.45 }}>
+                {index + 1}. {line}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Weapon kill breakdown */}

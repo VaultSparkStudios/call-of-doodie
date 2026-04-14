@@ -1,0 +1,40 @@
+{
+  "vectorVersion": "1.0",
+  "generatedAt": "2026-04-14",
+  "generatedAtMs": 1776146523928,
+  "session": 43,
+  "vectorHash": "c4491fcc9dcc5f94",
+  "silTotal": 436,
+  "silAvg3": 428.7,
+  "velocity": null,
+  "debt": "stable",
+  "runway": "~1.3 sessions (3 open Now items / avg velocity 2.3)",
+  "intentRate": "100% (last 3 tracked)",
+  "openNow": 3,
+  "openNext": 5,
+  "openBlocked": 0,
+  "topNow": [
+    "[SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots",
+    "[SIL] Wave director pacing — stronger tension/release rhythm, elite telegraphs, ",
+    "[SIL] Combat readability pass — clearer enemy silhouettes, less visual competiti"
+  ],
+  "topNext": [
+    "Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a rea",
+    "[SIL] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mech",
+    "Social retention layer — weekly contracts, rival ghosts, and studio seeds"
+  ],
+  "health": "green",
+  "truthStatus": "green",
+  "genome": null,
+  "ignisScore": 44792,
+  "ignisGrade": "FORGE",
+  "ignisAgeDays": 0,
+  "name": "Call-Of-Doodie",
+  "slug": null,
+  "type": null,
+  "lifecycle": "deployed",
+  "nextMilestone": "Itch.io listing published + physical device QA confirmed + kofi-webhook live, with wave pacing/readability queued as the next major product pass.",
+  "currentFocus": "Launch-adjacent refinement: leaderboard trust, tactical feedback, and build identity have been strengthened in-repo. Remaining true launch blockers are still human-only — physical device QA, Itch.io publication, and applying the kofi_events migration + KOFI_VERIFICATION_TOKEN.",
+  "lastShipped": "5 improvements across 4 groups — security/trust (score plausibility validation), run-feedback (tactical death debrief), pre-run UX (command briefing), build depth/economy clarity (archetype capstones + build-fit recommendations)",
+  "blockers": []
+}

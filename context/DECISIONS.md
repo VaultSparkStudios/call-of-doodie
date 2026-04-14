@@ -43,3 +43,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** The repo can ship branded, accurate, ready-to-upload media immediately. Waiting on manual capture work would keep a solved distribution step artificially blocked.
 
 ---
+
+## 2026-04-14 — Trust, feedback, and build identity outrank broad feature expansion
+
+**Decision:** Near-term in-repo work should prioritize leaderboard trust, stronger post-run guidance, and clearer build identity before broadening content breadth further.
+
+**Applies to this project:** Yes — the product already has high feature breadth, and the higher-return gap is clarity/cohesion rather than raw count of modes or perks.
+
+**Rationale:** New content added into an unclear decision loop compounds noise. Strengthening trust, feedback, and build direction improves retention and makes later pacing/readability work more valuable.
+
+---

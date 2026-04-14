@@ -2,8 +2,23 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-13
+Last reviewed: 2026-04-14
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-04-14 — Session 42 changes
+
+- `docs/IMPROVEMENT_PLAN.md` added: ranked roadmap for trust, UX, build depth, pacing, performance, and architecture
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `context/MEMORY_INDEX.md` updated to reflect the Session 42 roadmap and shipped slice
+- `audits/2026-04-14.json`, `context/STATE_VECTOR.json`, `context/GENOME_HISTORY.json`, and `docs/GENOME_HISTORY.md` generated during closeout
+- `supabase/functions/submit-score/index.ts` updated: plausibility validation added for score submission; claimed-callsign check now compares against resolved `uid`
+- `src/utils/runDebrief.js` + `src/utils/runDebrief.test.js` added: reusable run debrief logic and coverage
+- `src/components/DeathScreen.jsx` updated: tactical debrief added
+- `src/utils/buildArchetypes.js` + `src/utils/buildArchetypes.test.js` added: archetype/capstone model and coverage
+- `src/App.jsx` updated: archetype capstone unlocks wired into perk flow and HUD/modals now receive build context
+- `src/components/HUD.jsx`, `PerkModal.jsx`, `WaveShopModal.jsx`, `RouteSelectModal.jsx` updated: build-fit guidance surfaced to players
+- `ignis/output/predictions.json` and `ignis/output/score-history.json` refreshed during IGNIS re-score
+- `prompts/start.md` + `prompts/closeout.md` updated in worktree: template sync paths now reference the sibling `vaultspark-studio-ops` repo
+- No contradictions introduced. Source-of-truth hierarchy unchanged.
 
 ## 2026-04-13 — Session 41 changes
 

@@ -12,11 +12,16 @@ Public-safe launch roadmap summary.
 - [ ] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret, then paste the webhook URL into Ko-fi → More → Settings → API & Webhooks
 
 ## Now
-- [ ] [SIL] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
-- [ ] [SIL] Score plausibility validation in Edge Function — reject runs whose kills/damage ratios exceed realistic ceilings for the reported wave
+- [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
+- [ ] [SIL] Wave director pacing — stronger tension/release rhythm, elite telegraphs, and encounter budgeting
+- [ ] [SIL] Combat readability pass — clearer enemy silhouettes, less visual competition, and stronger threat language during crowded fights
 
 ## Next
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
+- [ ] [SIL] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
+- [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
+- [ ] Render/update optimization pass — buy back mobile and future-content headroom
+- [ ] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration
 
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
@@ -40,6 +45,13 @@ Public-safe launch roadmap summary.
 - [x] [SIL] PNG icon build pipeline — `scripts/generate-icons.mjs` (sharp), `icon-192.png` + `icon-512.png` committed, manifest + index.html wired, sw.js bumped to `cod-v4`, `prebuild` hook ensures PNGs stay in sync with `icon.svg`
 - [x] [SIL] Ko-fi webhook Edge Function — `supabase/functions/kofi-webhook/index.ts` with verification-token validation, idempotent `kofi_events` audit log, callsign extraction from Ko-fi `message`, auto-deploy wired into `.github/workflows/deploy-supabase-function.yml`, migration `2026-04-14_kofi_webhook.sql` added
 - [x] CI stability — raised Vitest `testTimeout` to 15000ms in `vite.config.js` after observing launch-smoke variance (1.2s–5.5s) near the 5s default
+- [x] Session 42 audit recorded in `docs/IMPROVEMENT_PLAN.md` with ranked implementation order for trust, UX, depth, speed, and architecture
+- [x] Session 42 execution slice expanded: perk-driven build archetypes now unlock capstone bonuses, and perk/shop/route surfaces now mark build-fit recommendations
+- [x] [SIL] Score plausibility validation in Edge Function — reject runs whose kills/damage ratios exceed realistic ceilings for the reported wave
+- [x] [SIL] Upgrade the death screen into a tactical debrief — show build identity, strengths, and next-step guidance after each run
+- [x] [SIL] Add menu-side command briefing — surface mode/loadout strategy and weekly mutation context before deploy
+- [x] [SIL] Build identity layer — archetypes/capstones so runs feel more memorable than “more perks”
+- [x] [SIL] Economy clarity pass, slice 1 — perk/shop/route screens now signal build fit instead of presenting flat choices
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready
