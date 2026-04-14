@@ -15,13 +15,12 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 ## 2026-04-14 (Session 43)
 
-- Expanded the durable roadmap so architecture split, guided front door, real code-splitting, wave direction, readability, social rivalry, telemetry, and trust hardening are tracked as one linked quality program
-- Updated `context/TASK_BOARD.md`, `context/CURRENT_STATE.md`, and `context/PROJECT_STATUS.json` so the repo memory reflects the combined audit and the next execution tranche
-- Began the implementation tranche focused on menu simplification, bundle-split cleanup, and the first App-domain extraction rather than diffusing effort across disconnected polish tasks
-- Reworked `src/components/MenuScreen.jsx` into a more guided front door: recommended-next-action hero, Daily Challenge shortcut, Challenge Friend copy flow, and a progressive `Command Center` for deeper systems
-- Converted App/Pause/Death panel imports to real `lazy()` + `Suspense` boundaries so the build now emits separate Achievements, Settings, and Leaderboard chunks
-- Extracted wave-shop and coin-shop option generation into `src/systems/shopOptions.js` as the first concrete `src/App.jsx` domain split
-- Re-verified the baseline after the tranche: `npm test` 116/116, `npm run lint` clean, `npm run build` passing with the main chunk reduced from ~800.74 kB to ~773.89 kB and new async UI chunks emitted
+- Shipped `src/systems/waveDirector.js` plus `src/systems/waveDirector.test.js` to give non-boss waves authored scouting/pressure/climax/recovery pacing instead of a single shrinking spawn timer
+- Wired `src/App.jsx` into the director plan so spawn cadence now reacts to alive-budget saturation, preview cards surface wave identity/hints, and stage telegraphs announce incoming elite spikes
+- Standardized elite mutation application in `src/gameHelpers.js`, reducing duplicated enemy-stat edits in the main loop and making director-forced elite surges reuse the existing combat model
+- Synced `prompts/start.md` and `prompts/closeout.md` to the latest Studio OS `v3.1` protocol and added `START_PROMPT.template.md` plus `CLOSEOUT_PROMPT.template.md` so the template-alignment check no longer drifts by missing-file default
+- Added repo-local protocol helpers: `scripts/detect-session-mode.mjs`, `scripts/check-secrets.mjs`, `scripts/lib/secrets.mjs`, `scripts/ops.mjs`, and `scripts/closeout-autopilot.mjs`
+- Verified the gameplay + protocol baseline: `npm test` 121/121, `npm run lint` clean, `npm run build` passing, `node scripts/ops.mjs help`, `node scripts/detect-session-mode.mjs --json`, `node scripts/check-secrets.mjs --json`, and `node scripts/closeout-autopilot.mjs --dry-run`
 
 ## 2026-04-13 (Session 41)
 

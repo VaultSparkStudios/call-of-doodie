@@ -1,6 +1,6 @@
 <!-- template-version: 3.1 -->
 <!-- synced-from: studio-ops/prompts/closeout.md @ Session 73 (2026-04-14) -->
-<!-- v3.1 changes: closeout autopilot at step 11 — `node scripts/ops.mjs closeout` bundles doctor sync + project status stamp + git diff preview + CONFIRMATION + commit + push + beacon/lock clear -->
+<!-- v3.1 changes: closeout autopilot at step 11 — `node scripts/ops.mjs closeout` bundles doctor + write-back verification + git diff preview + CONFIRMATION + commit + push + beacon/lock clear -->
 # CLOSEOUT
 
 Executed when the user says only `closeout`.
@@ -33,7 +33,7 @@ Classify: **Achieved** · **Partial** *(note scope drift)* · **Redirected** *(l
     ```bash
     node scripts/ops.mjs closeout
     ```
-    Runs: doctor sync → stamp PROJECT_STATUS → git status + diff preview → **HUMAN CONFIRMATION** → commit (conventional msg) → push → clear lock + beacon → print STATUS BOARD. Never skip confirmation. `--dry-run` shows the plan without writing.
+    Runs: doctor --loop → refresh startup brief → stamp PROJECT_STATUS → git status + diff preview → **HUMAN CONFIRMATION** → commit (conventional msg) → push → clear lock + beacon → print STATUS BOARD. Never skip confirmation. `--dry-run` shows the plan without writing.
 
 ### Where We Left Off  *(write to top of LATEST_HANDOFF.md)*
 

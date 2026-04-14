@@ -5,6 +5,17 @@ Overall status: green
 Last reviewed: 2026-04-14
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-04-14 — Session 43 changes
+
+- `src/systems/waveDirector.js` + `src/systems/waveDirector.test.js` added: four-phase non-boss pacing planner with event selection, alive-budget-aware cadence, and telegraphed elite surges
+- `src/App.jsx` updated: wave progression now consumes director state for pacing, preview-card hints, event selection, and stage announcements
+- `src/gameHelpers.js` updated: elite application logic extracted into shared helpers so wave-director surges reuse the existing enemy-mutation model cleanly
+- `prompts/start.md` and `prompts/closeout.md` synced to Studio OS `v3.1`, then adapted so command references remain executable in this repo
+- `START_PROMPT.template.md` + `CLOSEOUT_PROMPT.template.md` added: template-alignment checks now have local files to compare against
+- `scripts/detect-session-mode.mjs`, `scripts/check-secrets.mjs`, `scripts/lib/secrets.mjs`, `scripts/ops.mjs`, and `scripts/closeout-autopilot.mjs` added: local protocol scaffolding for mode detection, secrets discovery, and closeout automation
+- `context/CURRENT_STATE.md`, `context/TASK_BOARD.md`, `context/LATEST_HANDOFF.md`, `context/SELF_IMPROVEMENT_LOOP.md`, `logs/WORK_LOG.md`, and `context/DECISIONS.md` updated to reflect the shipped pacing slice and protocol sync
+- No contradictions introduced. Source-of-truth hierarchy unchanged.
+
 ## 2026-04-14 — Session 42 changes
 
 - `docs/IMPROVEMENT_PLAN.md` added: ranked roadmap for trust, UX, build depth, pacing, performance, and architecture

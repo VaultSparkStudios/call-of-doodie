@@ -4,12 +4,12 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▆▆ (prior entries private)
-Avgs — 3: 428.7 | 5: — | 10: — | 25: — | all: 428.7 [N=3, SIL history in private ops repo]
-  └ 3-session: Dev 93.0 | Align 84.0 | Momentum 94.3 | Engage 64.7 | Process 90.0 [N=3]
-Velocity trend: ↓  |  Protocol velocity: —  |  Debt: →
-Momentum runway: ~1.3 sessions (3 open Now items / avg velocity 2.3)  |  Intent rate: 100% (last 3 tracked)
-Last session: 2026-04-14 | Session 42 | Total: 436/500 | Velocity: 0 | protocolVelocity: —
+Sparkline (last 5 totals): ▆▆▆▆ (prior entries private)
+Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4, SIL history in private ops repo]
+  └ 3-session: Dev 94.0 | Align 85.7 | Momentum 92.0 | Engage 68.7 | Process 93.0 [N=3]
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
+Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 4 tracked)
+Last session: 2026-04-14 | Session 43 | Total: 445/500 | Velocity: 1 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -82,3 +82,27 @@ Avgs — 3: 428.7 | 5: — | 10: — | 25: — | all: 428.7
 3. Route forecast panel — preview likely next-wave outcomes before route selection using build-aware heuristics. Implementation: enrich `RouteSelectModal` with risk/reward tags driven by archetype + current wave. Medium probability.
 
 **Committed to TASK_BOARD:** [SIL] Wave director pacing · [SIL] Combat readability pass
+
+## 2026-04-14 — Session 43 | Total: 445/500 | Velocity: 1 | Debt: →
+Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
+  └ 3-session: Dev 94.0 | Align 85.7 | Momentum 92.0 | Engage 68.7 | Process 93.0 [N=3]
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 96 | ↑ | 121/121 tests, build + lint clean, wave-director system landed with reusable helper cleanup |
+| Creative Alignment | 89 | ↑ | Pacing now matches the project’s absurd-but-authored combat fantasy more closely; no soul drift |
+| Momentum | 90 | ↓ | One high-value Now item closed and protocol sync completed, but the refinement queue remains deep |
+| Engagement | 73 | ↑ | Player-facing wave identity, telegraphed elite pressure, and better anticipation improve pre-launch feel |
+| Process Quality | 97 | ↑ | Prompt/template drift corrected, local protocol scaffolding added, truth surfaces refreshed, closeout path restored |
+| **Total** | **445/500** | +9 | |
+
+**Top win:** Shipped the pacing layer the roadmap had been pointing at, then closed the protocol drift that would have left start/closeout referencing missing commands.
+**Top gap:** Combat readability and trust/coaching follow-through still matter more than adding yet more content breadth.
+**Intent outcome:** Achieved — the active Genius Hit List item landed cleanly and the repo now speaks the current Studio OS protocol without fake command references.
+
+**Brainstorm**
+1. Boss-wave anticipation pass — teach each boss wave with concrete dodge verbs and escort pressure rather than generic warning copy. Implementation: extend the boss preview/cutscene layer with attack-family tags and first-5-second advice. High probability.
+2. Director telemetry hooks — capture stage transitions, alive-budget saturation, and elite-climax deaths so pacing can be tuned from real player runs. Implementation: emit analytics events when the wave director changes stage or overfills its encounter budget. High probability.
+3. Threat forecast HUD — show the next pacing phase and elite cadence during non-boss waves so players can reposition proactively. Implementation: expose `waveDirector` state through HUD with a subtle progress band and climax marker. Medium probability.
+
+**Committed to TASK_BOARD:** [SIL] Boss-wave anticipation pass · [SIL] Director telemetry hooks

@@ -1,23 +1,24 @@
 # Latest Handoff
 
+Session Intent: Ship the wave-director pacing pass at production quality, then bring the repo onto the latest Studio OS/ops start/closeout protocol without leaving any prompt commands broken locally.
+
 ## Where We Left Off (Session 43)
-- Shipped: architecture/perf/polish groundwork — context refresh, helper extraction, modal lazy-loading, warning cleanup, and Route Select bugfix
-- Tests: `116/116` passing
+- Shipped: 4 improvements across 2 groups — gameplay systems (wave director pacing, elite helper cleanup) and protocol/process (prompt sync, local protocol scaffolding)
+- Tests: `121/121` passing · delta: +5
 - Deploy: pending
 
 Public-safe handoff summary:
-- session intent: convert the audit into durable project memory and begin the highest-leverage implementation slice instead of scattering effort across all roadmap items
-- intent outcome: Partial and correct — roadmap/context were upgraded, and the first architecture/perf cleanup slice was shipped; the deeper roadmap items remain queued rather than falsely marked complete
-- completed this session: `docs/IMPROVEMENT_PLAN.md`, `context/TASK_BOARD.md`, and `context/CURRENT_STATE.md` updated to carry the expanded ranked roadmap forward
-- completed this session: component-bound helper exports were extracted into `src/utils/perkOptions.js` and `src/utils/routeOptions.js`, reducing fast-refresh debt and untangling `App.jsx` imports from component files
-- completed this session: `MenuScreen.jsx` now lazy-loads non-core overlay panels (`LeaderboardPanel`, `AchievementsPanel`, `SettingsPanel`, `MetaTreePanel`, `SupporterModal`) so first-contact UI cost is lower
-- completed this session: `RouteSelectModal.jsx` no longer overrides its focused outline with a duplicate style key
-- completed this session: touched UI files (`MenuScreen`, `TutorialOverlay`, `SettingsPanel`, `SupporterModal`, `PerkModal`, `RouteSelectModal`) were cleaned to reduce warning debt and make future UI decomposition safer
-- completed this session: `src/App.jsx` hook dependency cleanup removed the remaining lint warnings without regressing the launch smoke path
-- validation baseline: `npm test` 116/116, `npm run build` passes, `npm run lint` 0 errors / 0 warnings
+- session intent: ship the active Genius Hit List item at production quality, then sync the repo to the latest Studio OS start/closeout workflow
+- intent outcome: Achieved — the wave pacing system landed with test coverage and the prompt/protocol sync was completed with executable local wrappers instead of dead references
+- completed this session: `src/systems/waveDirector.js` + `src/systems/waveDirector.test.js` added — non-boss waves now run through scouting/pressure/climax/recovery plans with encounter budgeting and elite telegraphs
+- completed this session: `src/App.jsx` now consumes the wave director for spawn cadence, wave preview copy, and live telegraph announcements instead of relying on one global spawn-rate curve
+- completed this session: `src/gameHelpers.js` now exposes shared elite-application helpers so director-driven surges reuse the existing combat model cleanly
+- completed this session: `prompts/start.md`, `prompts/closeout.md`, `START_PROMPT.template.md`, and `CLOSEOUT_PROMPT.template.md` synced to Studio OS `v3.1` with repo-specific command/path corrections
+- completed this session: `scripts/detect-session-mode.mjs`, `scripts/check-secrets.mjs`, `scripts/lib/secrets.mjs`, `scripts/ops.mjs`, and `scripts/closeout-autopilot.mjs` added so the synced protocol is runnable inside this repo
+- validation baseline: `npm test` 121/121, `npm run build` passes, `npm run lint` 0 errors / 0 warnings, local protocol dry-runs succeed
 
 ## Next Recommended Slice
-- [ ] Continue the `src/App.jsx` split with one concrete domain extraction, not a broad rewrite
+- [ ] Combat readability pass — stronger silhouettes, damage language, and threat ordering for crowded waves
 - [ ] Rework the menu around recommended next action and progressive disclosure
 - [ ] Upgrade leaderboard trust from heuristics-only plausibility checks to richer server validation
 - [ ] Turn the death debrief into a cause-of-death and corrective-rematch loop

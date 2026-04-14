@@ -8,16 +8,16 @@
 
 ---
 
-## Dimension Heatmap (last 1 sessions)
+## Dimension Heatmap (last 2 sessions)
 
-| Dimension | Trend | S43 |
-|---|:---:|:---:|
-| Schema alignment | → | 🔴 |
-| Prompt/template alignment | → | 🔴 |
-| Derived-view freshness | → | 🔴 |
-| Handoff continuity | → | 🔴 |
-| Contradiction density | → | 🔴 |
-| **Overall status** | | 🟢 |
+| Dimension | Trend | S43 | S44 |
+|---|:---:|:---:|:---:|
+| Schema alignment | → | 🔴 | 🔴 |
+| Prompt/template alignment | → | 🔴 | 🔴 |
+| Derived-view freshness | → | 🔴 | 🔴 |
+| Handoff continuity | → | 🔴 | 🔴 |
+| Contradiction density | → | 🔴 | 🔴 |
+| **Overall status** | | 🟢 | 🟢 |
 
 ---
 
@@ -26,12 +26,13 @@
 | Date | Session | Total | Status | Delta | Notes |
 |---|---|---|---|---|---|
 | 2026-04-14 | S43 | 0/25 | 🟢 green | — | Launch-adjacent refinement: leaderboard trust, tactical feed |
+| 2026-04-14 | S44 | 0/25 | 🟢 green | 0 | Execution-quality refinement remains the core track, but the |
 
 ---
 
 ## Statistics
 
-- Sessions tracked: **1**
+- Sessions tracked: **2**
 - Average genome score: **0.0/25**
 - Peak: **0/25** · Low: **0/25**
 - Current: **0/25** (green)

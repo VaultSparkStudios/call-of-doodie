@@ -2,7 +2,7 @@
 
 Public-safe summary:
 - this repo remains deployable and the live game is publicly reachable
-- the current focus is final launch execution — all code-side launch preparation is complete
+- the current focus is execution-quality refinement while the remaining launch blockers stay human-only: physical device QA, Itch.io publication, and final Ko-fi secret/migration setup
 - the live Edge Function health check is implemented in `scripts/health-check.mjs` and passed 5/5 against production this session
 - the launch smoke path has automated coverage in `src/App.launch.test.jsx`
 - repeatable live-site verification is implemented in `scripts/live-site-check.mjs`; `npm run launch:qa` passes against production
@@ -27,8 +27,12 @@ Public-safe summary:
 - The first implementation slice of that program is now partially shipped: the menu leads with a recommended-next-action card, Daily Challenge, Challenge Friend, and a progressive `Command Center`; deep systems are no longer the first thing the player has to parse
 - Shared panel loading is now materially cleaner: Achievements, Settings, and Leaderboard surfaces are lazy-loaded from App/Pause/Death, and the production build now emits those as separate chunks instead of forcing them into the main bundle
 - The first real App-domain extraction has landed in `src/systems/shopOptions.js`, moving shop option generation out of `src/App.jsx` and establishing a cleaner pattern for the broader split
+- a dedicated wave-director system now exists in `src/systems/waveDirector.js`: non-boss waves are planned into scouting/pressure/climax/recovery phases, spawn cadence reacts to alive-budget saturation instead of only wave number, and climax windows telegraph guaranteed elite spikes
+- `src/App.jsx` now consumes wave-director state for pacing, preview-card copy, aria announcements, and event selection, so incoming waves communicate their identity instead of feeling uniformly random
+- elite application is now standardized in `src/gameHelpers.js`, letting director-forced elite surges reuse the same mutation logic instead of duplicating enemy-stat edits in the main loop
+- startup/closeout protocol is now synced to Studio OS `v3.1`: `prompts/start.md`, `prompts/closeout.md`, `START_PROMPT.template.md`, and `CLOSEOUT_PROMPT.template.md` are present, while local helpers (`scripts/detect-session-mode.mjs`, `scripts/check-secrets.mjs`, `scripts/ops.mjs`, `scripts/closeout-autopilot.mjs`) keep the synced prompts executable inside this repo
 - the remaining launch actions are now exclusively human-executable: real PWA install acceptance on a real device, one real gamepad/browser combo, and Itch.io publication
-- local validation baseline after Session 43 changes: `npm test` passes with 116/116 tests; `npm run build` passes; `npm run lint` passes with 0 warnings / 0 errors; `npm run launch:verify` last known passing baseline remains 14/14 live assertions
+- local validation baseline after Session 43 changes: `npm test` passes with 121/121 tests; `npm run build` passes; `npm run lint` passes with 0 warnings / 0 errors; `node scripts/ops.mjs help`, `node scripts/detect-session-mode.mjs --json`, `node scripts/check-secrets.mjs --json`, and `node scripts/closeout-autopilot.mjs --dry-run` all execute cleanly
 - internal operational records were sanitized for public-repo safety on 2026-04-03
 - detailed internal state now lives in the private Studio OS / ops repository
 - last updated: 2026-04-14

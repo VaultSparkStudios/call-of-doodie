@@ -12,28 +12,29 @@ Public-safe launch roadmap summary.
 - [ ] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret, then paste the webhook URL into Ko-fi → More → Settings → API & Webhooks
 
 ## Now
-- [ ] [SIL:1] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
-- [ ] [SIL:1] Front-door simplification — continue refining the new recommended-next-action menu flow with even stronger mode/onboarding guidance
-- [ ] [SIL:1] Leaderboard trust v2 — signed run summaries, server-side recomputation, and anomaly logging beyond heuristic plausibility checks
-- [ ] [SIL:1] Post-run coaching v2 — cause-of-death readout, missed-value hints, and seeded corrective rematch flows
-- [ ] [SIL:1] Render/update optimization pass — continue beyond the shipped chunk split cleanup into runtime instrumentation and mobile frame-budget policy
-- [ ] [SIL] Wave director pacing — stronger tension/release rhythm, elite telegraphs, and encounter budgeting
-- [ ] [SIL] Combat readability pass — clearer enemy silhouettes, less visual competition, and stronger threat language during crowded fights
-- [ ] [SIL] Front-door action stack — `Play Now`, `Daily Challenge`, `Best Next Upgrade`, and `Challenge Friend` should dominate first contact
-- [ ] [SIL] Bundle split cleanup — keep pushing the initial chunk down after the shipped panel split cleanup
-- [ ] [SIL] Balance telemetry v2 — capture first-death wave, mode abandonment, perk/shop pick rates, and debrief follow-through
-- [ ] [SIL] User feedback clarity pass — explain local-save fallback, score rejection reasons, mode stakes, and mutation/shop consequences in plainer language
+- [ ] [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
+- [ ] [SIL:2⛔] Front-door simplification — continue refining the new recommended-next-action menu flow with even stronger mode/onboarding guidance
+- [ ] [SIL:2⛔] Leaderboard trust v2 — signed run summaries, server-side recomputation, and anomaly logging beyond heuristic plausibility checks
+- [ ] [SIL:2⛔] Post-run coaching v2 — cause-of-death readout, missed-value hints, and seeded corrective rematch flows
+- [ ] [SIL:2⛔] Render/update optimization pass — continue beyond the shipped chunk split cleanup into runtime instrumentation and mobile frame-budget policy
+- [ ] [SIL:1] Combat readability pass — clearer enemy silhouettes, less visual competition, and stronger threat language during crowded fights
+- [ ] [SIL:1] Front-door action stack — `Play Now`, `Daily Challenge`, `Best Next Upgrade`, and `Challenge Friend` should dominate first contact
+- [ ] [SIL:1] Bundle split cleanup — keep pushing the initial chunk down after the shipped panel split cleanup
+- [ ] [SIL:1] Balance telemetry v2 — capture first-death wave, mode abandonment, perk/shop pick rates, and debrief follow-through
+- [ ] [SIL:1] User feedback clarity pass — explain local-save fallback, score rejection reasons, mode stakes, and mutation/shop consequences in plainer language
 
 ## Next
-- [ ] [SIL] Build identity depth — irreversible forks, stronger archetype capstones, and clearer build milestones
+- [ ] [SIL:1] Build identity depth — irreversible forks, stronger archetype capstones, and clearer build milestones
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
-- [ ] [SIL] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
+- [ ] [SIL:1] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
 - [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
 - [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, and async competitions that feel native to the game
 - [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
-- [ ] [SIL] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
+- [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
 - [ ] Meta clarity pass — recommended next unlock, recommended spend, and player weakness-aware loadout advice
 - [ ] Security/trust v2 ops surface — anomaly review logs and clearer rejection telemetry around suspicious leaderboard submissions
+- [ ] [SIL] Boss-wave anticipation pass — teach concrete boss attack verbs and escort pressure in the preview/cutscene layer instead of relying on generic danger copy
+- [ ] [SIL] Director telemetry hooks — record stage transitions, alive-budget saturation, and elite-climax deaths so pacing can be tuned from real run data after launch
 
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
@@ -70,6 +71,8 @@ Public-safe launch roadmap summary.
 - [x] [SIL] Front-door simplification, slice 1 — menu now leads with a recommended-next-action card plus Daily Challenge, Challenge Friend, and a progressive `Command Center` reveal for deep systems
 - [x] [SIL] Bundle split cleanup, slice 1 — converted App/Pause/Death panel imports to real `lazy()` boundaries so the build now emits separate Achievements, Settings, and Leaderboard chunks
 - [x] [SIL] App domain extraction, slice 1 — wave shop and coin shop option generation moved from `src/App.jsx` into `src/systems/shopOptions.js`
+- [x] [SIL] Wave director pacing — non-boss waves now run through scouting/pressure/climax/recovery pacing plans with alive-budget-aware spawn cadence, telegraphed elite spikes, and clearer incoming-wave identity
+- [x] Protocol sync — start/closeout prompts, prompt templates, mode/secrets helpers, and local closeout wrapper now align with the latest Studio OS/ops workflow without pointing at missing repo-local commands
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready

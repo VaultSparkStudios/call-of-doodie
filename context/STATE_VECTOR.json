@@ -1,27 +1,27 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-04-14",
-  "generatedAtMs": 1776146523928,
-  "session": 43,
-  "vectorHash": "c4491fcc9dcc5f94",
-  "silTotal": 436,
-  "silAvg3": 428.7,
-  "velocity": null,
+  "generatedAtMs": 1776205592345,
+  "session": 44,
+  "vectorHash": "fc994cfe511d4963",
+  "silTotal": 445,
+  "silAvg3": 436,
+  "velocity": 1,
   "debt": "stable",
-  "runway": "~1.3 sessions (3 open Now items / avg velocity 2.3)",
-  "intentRate": "100% (last 3 tracked)",
-  "openNow": 3,
-  "openNext": 5,
+  "runway": "~10.0 sessions",
+  "intentRate": "100% (last 4 tracked)",
+  "openNow": 10,
+  "openNext": 11,
   "openBlocked": 0,
   "topNow": [
-    "[SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots",
-    "[SIL] Wave director pacing — stronger tension/release rhythm, elite telegraphs, ",
-    "[SIL] Combat readability pass — clearer enemy silhouettes, less visual competiti"
+    "[SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, progression, rewards, ",
+    "[SIL:2⛔] Front-door simplification — continue refining the new recommended-next-",
+    "[SIL:2⛔] Leaderboard trust v2 — signed run summaries, server-side recomputation,"
   ],
   "topNext": [
+    "[SIL:1] Build identity depth — irreversible forks, stronger archetype capstones,",
     "Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a rea",
-    "[SIL] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mech",
-    "Social retention layer — weekly contracts, rival ghosts, and studio seeds"
+    "[SIL:1] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock me"
   ],
   "health": "green",
   "truthStatus": "green",
@@ -33,8 +33,8 @@
   "slug": null,
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Itch.io listing published + physical device QA confirmed + kofi-webhook live, with wave pacing/readability queued as the next major product pass.",
-  "currentFocus": "Launch-adjacent refinement: leaderboard trust, tactical feedback, and build identity have been strengthened in-repo. Remaining true launch blockers are still human-only — physical device QA, Itch.io publication, and applying the kofi_events migration + KOFI_VERIFICATION_TOKEN.",
-  "lastShipped": "5 improvements across 4 groups — security/trust (score plausibility validation), run-feedback (tactical death debrief), pre-run UX (command briefing), build depth/economy clarity (archetype capstones + build-fit recommendations)",
+  "nextMilestone": "Land the next refinement tranche after wave pacing: combat readability, stronger front-door guidance, and richer trust/coaching signals without regressing the deployable build or protocol surfaces.",
+  "currentFocus": "Execution-quality refinement remains the core track, but the pacing slice is now shipped: the next in-repo focus is combat readability, stronger front-door guidance, and trust/coaching follow-through while human-only launch blockers stay external.",
+  "lastShipped": "4 improvements across 2 groups — gameplay systems (wave director pacing, elite helper cleanup) and protocol/process (prompt sync, local protocol scaffolding)",
   "blockers": []
 }

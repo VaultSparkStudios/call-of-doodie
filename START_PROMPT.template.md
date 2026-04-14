@@ -1,6 +1,6 @@
 <!-- template-version: 3.1 -->
-<!-- v3.1 changes: unified genius list, secrets discovery rule, project-title brief header, last-completed + test-it-now blocks, auto session-mode detection -->
 <!-- synced-from: studio-ops/prompts/start.md @ Session 73 (2026-04-14) -->
+<!-- v3.1 changes: unified genius list, secrets discovery rule, project-title brief header, last-completed + test-it-now blocks, auto session-mode detection -->
 # START
 
 Executed when the user says only `start`.
@@ -36,18 +36,22 @@ Get values from Hub Settings → "Active Session Beacon". The Stop hook clears t
 
 **Session mode (v3.1 — auto-detected):**
 
-Immediately after the session lock, run:
+Run the mode detector immediately after the session lock:
 ```bash
 node scripts/detect-session-mode.mjs --explain
 ```
-Auto-classifies the session and updates `context/PROJECT_STATUS.json → sessionMode` if a flip is detected. Re-run when the user gives cross-project directives.
+It classifies the session as BUILDER (this-project) or FOUNDER (portfolio-wide) by heuristic on TASK_BOARD scope + LATEST_HANDOFF content + any passed-in user messages. If the classification would flip the current mode, it auto-updates `context/PROJECT_STATUS.json` → `sessionMode`. Re-run mid-session if the user issues a cross-project directive.
 
 | Mode | Trigger | Focus |
 |---|---|---|
 | **BUILDER** | Default / single-project scope | This project only |
-| **FOUNDER** | Detected: cross-project keywords, portfolio-wide scope, cross-project refs | Cross-project strategy; read `portfolio/STUDIO_BRAIN.md` + `../vaultspark-studio-ops/STUDIO_PULSE.md` first |
+| **FOUNDER** | Detected: portfolio-wide scope, cross-project refs, `portfolio/STUDIO_BRAIN.md` or `STUDIO_PULSE.md` referenced | Cross-project strategy; read `portfolio/STUDIO_BRAIN.md` + `STUDIO_PULSE.md` first |
 
-**v3.1 secrets discovery rule (mandatory):** Never label an item "Human Action Required" without running `node scripts/check-secrets.mjs --for <capability>` first. If the capability is READY in `secrets/`, proceed autonomously via `scripts/lib/secrets.mjs` `getSecret(key, capability)`.
+**v3.1 secrets discovery rule (mandatory):** Before labeling any item "Human Action Required" or "human-blocked", run:
+```bash
+node scripts/check-secrets.mjs --for <capability>
+```
+If the capability is READY, proceed autonomously using `scripts/lib/secrets.mjs` `getSecret(key, capability)`. The phantom-blocker pattern is forbidden.
 
 ---
 
@@ -193,7 +197,7 @@ Render the startup brief using box-drawing UI. If `docs/STARTUP_BRIEF.md` exists
 | Templates | Compare `template-version:` in `prompts/start.md` vs `START_PROMPT.template.md` |
 | Revenue signals | `Generated:` date in `portfolio/REVENUE_SIGNALS.md` vs today |
 | Prediction | `docs/SESSION_PLAN.md` `generated-at` comment; include only if < 48h old |
-| Genius Hit List | `docs/GENIUS_LIST.md` if present; else call `node ../vaultspark-studio-ops/scripts/ops.mjs genius-list --brief` |
+| Genius Hit List | `docs/GENIUS_LIST.md` if present; else call `scripts/generate-genius-list.mjs --brief` |
 
 **Signal thresholds:**
 - Tests: ✓ passing + delta ≥0 · ⚠ delta <0 · ⛔ failing
