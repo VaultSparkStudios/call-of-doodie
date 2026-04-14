@@ -7,8 +7,6 @@ import { useState, useRef, useEffect } from "react";
 import { useFocusTrap } from "../hooks/useFocusTrap.js";
 import { isSupporter, setSupporter } from "../utils/supporter.js";
 
-export { isSupporter } from "../utils/supporter.js";
-
 const KOFI_URL = "https://ko-fi.com/vaultsparkstudios";
 
 const PERKS = [

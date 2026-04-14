@@ -21,8 +21,10 @@ Public-safe summary:
 - the score-submit Edge Function now performs plausibility checks across score, kills, damage, level, and time envelopes before writing leaderboard rows
 - a build-identity layer now exists in-run: aligned perk compositions unlock archetype capstones (Vanguard, Gunslinger, Demolitionist, Tempo), and perk/shop/route screens expose build-fit recommendations so choices are more legible
 - the death screen now acts as a tactical debrief instead of a pure stat dump, and the menu now frames the selected mode/loadout before deployment
+- Session 43 reframed the roadmap around execution quality rather than raw feature count: architecture split, front-door simplification, leaderboard trust v2, post-run coaching v2, readability, pacing, and telemetry now form the main quality program
+- Session 43 also shipped groundwork for that program: perk/route helper logic moved out of component files into dedicated utilities, non-core menu panels now lazy-load, the Route Select focus-outline bug was fixed, and the remaining `src/App.jsx` hook warnings were eliminated
 - the remaining launch actions are now exclusively human-executable: real PWA install acceptance on a real device, one real gamepad/browser combo, and Itch.io publication
-- local validation baseline: `npm test` passes with 116/116 tests; `npm run lint` passes with 13 warnings and 0 errors; `npm run launch:verify` last known passing baseline remains 14/14 live assertions
+- local validation baseline after Session 43 changes: `npm test` passes with 116/116 tests; `npm run build` passes; `npm run lint` passes with 0 warnings / 0 errors; `npm run launch:verify` last known passing baseline remains 14/14 live assertions
 - internal operational records were sanitized for public-repo safety on 2026-04-03
 - detailed internal state now lives in the private Studio OS / ops repository
 - last updated: 2026-04-14

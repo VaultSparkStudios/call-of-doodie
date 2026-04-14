@@ -141,6 +141,9 @@ vi.mock("./components/PerkModal.jsx", () => ({
   default: function PerkModalMock() {
     return <div>perk-modal</div>;
   },
+}));
+
+vi.mock("./utils/perkOptions.js", () => ({
   getRandomPerks: () => [],
   getFullyCursedPerks: () => [],
 }));
@@ -155,6 +158,9 @@ vi.mock("./components/RouteSelectModal.jsx", () => ({
   default: function RouteSelectModalMock() {
     return <div>route-select</div>;
   },
+}));
+
+vi.mock("./utils/routeOptions.js", () => ({
   getRouteOptions: () => [],
 }));
 

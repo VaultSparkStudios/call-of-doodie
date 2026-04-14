@@ -1,25 +1,6 @@
 import { useState, useRef } from "react";
-import { WAVE_ROUTES } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { getRouteRecommendation } from "../utils/buildArchetypes.js";
-
-/**
- * Returns 3 route options: Standard always included, 2 more randomly chosen.
- * Filters out Boss Gauntlet if the next wave is already a boss wave.
- */
-export function getRouteOptions(gs) {
-  const nextWave = (gs.currentWave || 1) + 1;
-  const nextIsAlreadyBoss = nextWave % 5 === 0;
-
-  const pool = WAVE_ROUTES.filter(r => {
-    if (r.id === "standard") return false;
-    if (r.id === "boss_fork" && nextIsAlreadyBoss) return false;
-    return true;
-  });
-
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  return [WAVE_ROUTES[0], ...shuffled.slice(0, 2)];
-}
 
 export default function RouteSelectModal({ options, wave, onSelect, buildArchetype }) {
   const [hovered, setHovered] = useState(null);
@@ -94,7 +75,6 @@ export default function RouteSelectModal({ options, wave, onSelect, buildArchety
                   transform: isHov ? "translateY(-3px)" : "translateY(0)",
                   boxShadow: isHov ? `0 6px 24px ${route.color}33` : "none",
                   transition: "all 0.14s ease",
-                  outline: "none",
                   position: "relative",
                   overflow: "hidden",
                 }}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const TUTORIAL_KEY = "cod-tutorial-v1";
 
@@ -78,6 +78,22 @@ export default function TutorialOverlay({ isMobile, controllerConnected, wave, o
   }, []);
 
   // Auto-advance steps every 6 seconds
+  const handleDismiss = useCallback(() => {
+    setVisible(false);
+    setDismissed(true);
+    localStorage.setItem(TUTORIAL_KEY, "1");
+    onDismiss?.();
+  }, [onDismiss]);
+
+  const goNext = useCallback(() => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setStep(s => s + 1);
+      setAnimating(false);
+    }, 160);
+  }, [animating]);
+
   useEffect(() => {
     if (!visible || dismissed) return;
     clearTimeout(autoTimerRef.current);
@@ -86,28 +102,11 @@ export default function TutorialOverlay({ isMobile, controllerConnected, wave, o
       else goNext();
     }, 6000);
     return () => clearTimeout(autoTimerRef.current);
-  }, [visible, step, dismissed]);
+  }, [dismissed, goNext, handleDismiss, isLast, visible]);
 
-  // Auto-dismiss when leaving wave 1
   useEffect(() => {
     if (wave > 1 && visible) handleDismiss();
-  }, [wave]);
-
-  const handleDismiss = () => {
-    setVisible(false);
-    setDismissed(true);
-    localStorage.setItem(TUTORIAL_KEY, "1");
-    onDismiss?.();
-  };
-
-  const goNext = () => {
-    if (animating) return;
-    setAnimating(true);
-    setTimeout(() => {
-      setStep(s => s + 1);
-      setAnimating(false);
-    }, 160);
-  };
+  }, [handleDismiss, visible, wave]);
 
   if (!visible || dismissed) return null;
 

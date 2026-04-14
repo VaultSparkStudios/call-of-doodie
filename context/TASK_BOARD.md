@@ -12,16 +12,21 @@ Public-safe launch roadmap summary.
 - [ ] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret, then paste the webhook URL into Ko-fi → More → Settings → API & Webhooks
 
 ## Now
-- [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
+- [ ] [SIL:1] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
+- [ ] [SIL:1] Front-door simplification — restructure the menu around recommended next action, recommended mode/loadout, and progressive disclosure for deep systems
+- [ ] [SIL:1] Leaderboard trust v2 — signed run summaries, server-side recomputation, and anomaly logging beyond heuristic plausibility checks
+- [ ] [SIL:1] Post-run coaching v2 — cause-of-death readout, missed-value hints, and seeded corrective rematch flows
+- [ ] [SIL:1] Render/update optimization pass — buy back mobile and future-content headroom with code-splitting and runtime cleanup
 - [ ] [SIL] Wave director pacing — stronger tension/release rhythm, elite telegraphs, and encounter budgeting
 - [ ] [SIL] Combat readability pass — clearer enemy silhouettes, less visual competition, and stronger threat language during crowded fights
 
 ## Next
+- [ ] [SIL] Build identity depth — irreversible forks, stronger archetype capstones, and clearer build milestones
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 - [ ] [SIL] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
 - [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
-- [ ] Render/update optimization pass — buy back mobile and future-content headroom
-- [ ] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration
+- [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
+- [ ] [SIL] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
 
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
@@ -52,10 +57,11 @@ Public-safe launch roadmap summary.
 - [x] [SIL] Add menu-side command briefing — surface mode/loadout strategy and weekly mutation context before deploy
 - [x] [SIL] Build identity layer — archetypes/capstones so runs feel more memorable than “more perks”
 - [x] [SIL] Economy clarity pass, slice 1 — perk/shop/route screens now signal build fit instead of presenting flat choices
+- [x] [SIL] Session 43 architecture/perf groundwork — extracted perk/route helper logic from component files, lazy-loaded non-core menu panels, fixed RouteSelect focus outline bug, and reduced UI-layer warning debt
+- [x] [SIL] Session 43 closeout — cleared the remaining `src/App.jsx` lint warnings; validation baseline is now lint-clean (`0` warnings / `0` errors)
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready
-- [ ] Warning-debt cleanup beyond launch-critical issues
 
 ## Deferred to Project Agents
 
