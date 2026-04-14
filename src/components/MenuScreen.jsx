@@ -52,6 +52,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
+  const [showCommandCenter, setShowCommandCenter] = useState(false);
   const [loadoutCodeInput, setLoadoutCodeInput] = useState("");
   const [loadoutCodeError, setLoadoutCodeError] = useState("");
   const [customLoadouts, setCustomLoadouts] = useState(() => loadCustomLoadouts());
@@ -67,6 +68,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [sharing, setSharing] = useState(false);
   const [challengeMode, setChallengeMode] = useState(null); // { seed, diff, vs, vsName } if via challenge link
   const [onlinePlayers, setOnlinePlayers] = useState(null);
+  const [copiedChallengeLink, setCopiedChallengeLink] = useState(false);
 
   // ── Live player count via Supabase Realtime presence ──────────────────────
   useEffect(() => {
@@ -254,6 +256,12 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const weeklyMutation = getWeeklyMutation();
   const selectedLoadout = STARTER_LOADOUTS.find(loadout => loadout.id === starterLoadout) || STARTER_LOADOUTS[0];
   const currentModeLabel = bossRushMode ? "Boss Rush" : cursedRunMode ? "Cursed" : scoreAttackMode ? "Score Attack" : dailyChallengeMode ? "Daily Challenge" : speedrunMode ? "Speedrun" : gauntletMode ? "Gauntlet" : "Standard";
+  const deployArgs = {
+    seed: dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined),
+    challenge: challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {},
+  };
+  const todaySeedStr = String(getDailyChallengeSeed());
+  const dailyAlreadyPlayed = hasDailyChallengeSubmitted();
   const commandBrief = (() => {
     const actions = [];
     if (bossRushMode) actions.push("Take burst damage and sustain seriously; boss mistakes snowball harder than normal wave attrition.");
@@ -272,6 +280,68 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     if (weeklyMutation) actions.push(`${weeklyMutation.emoji} This week's mutation is ${weeklyMutation.name}: ${weeklyMutation.desc}`);
     return actions.slice(0, 3);
   })();
+  const incompleteMissionCount = missions.filter(m => !missionProgress[m.id]).length;
+  const canSpendMeta = (meta?.careerPoints || 0) >= 10;
+  const recommendedAction = (() => {
+    if (challengeMode?.vs) {
+      return {
+        title: "Beat the challenge link",
+        detail: `Run seed #${challengeMode.seed} and clear ${challengeMode.vs?.toLocaleString?.() || "the posted"} score.`,
+        cta: "⚔️ ACCEPT CHALLENGE",
+        action: () => onStart(deployArgs.seed, deployArgs.challenge),
+        accent: "#FFB36B",
+      };
+    }
+    if (!dailyAlreadyPlayed) {
+      return {
+        title: "Play the daily while the field is fresh",
+        detail: `Today's shared seed is #${todaySeedStr}. One run gets you into the public race immediately.`,
+        cta: "📅 PLAY TODAY'S DAILY",
+        action: () => { onSetDailyChallengeMode?.(true); onStart(todaySeedStr, {}); },
+        accent: "#00E5FF",
+      };
+    }
+    if (canSpendMeta) {
+      return {
+        title: "Spend your meta points",
+        detail: `${meta?.careerPoints || 0} career points are idle. Buy power before the next run.`,
+        cta: "🎖️ OPEN UPGRADES",
+        action: () => { setMeta(loadMetaProgress()); setShowUpgrades(true); },
+        accent: "#FFD700",
+      };
+    }
+    if (incompleteMissionCount > 0) {
+      return {
+        title: "Close today's mission gaps",
+        detail: `${incompleteMissionCount} daily mission${incompleteMissionCount === 1 ? "" : "s"} still have free value on the table.`,
+        cta: "📋 REVIEW MISSIONS",
+        action: () => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); },
+        accent: "#7CFF8A",
+      };
+    }
+    return {
+      title: "Deploy into your strongest current setup",
+      detail: `${selectedLoadout.name} on ${currentModeLabel} is ready. Use the command brief and push for a cleaner run.`,
+      cta: "▶ PLAY NOW",
+      action: () => onStart(deployArgs.seed, deployArgs.challenge),
+      accent: "#FF6B35",
+    };
+  })();
+
+  const handleCopyChallengeLink = async () => {
+    try {
+      const seed = customSeed || todaySeedStr;
+      const params = new URLSearchParams({ seed, diff: difficulty });
+      if (challengeMode?.vs) params.set("vs", String(challengeMode.vs));
+      if (challengeMode?.vsName) params.set("vsName", challengeMode.vsName);
+      const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+      await navigator.clipboard?.writeText?.(url);
+      setCopiedChallengeLink(true);
+      setTimeout(() => setCopiedChallengeLink(false), 1500);
+    } catch {
+      setCopiedChallengeLink(false);
+    }
+  };
 
   // Generate social share card for New Features
   const generateFeatureCard = useCallback(() => new Promise((resolve) => {
@@ -1350,11 +1420,56 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           </div>
         </div>
 
-        {/* Action buttons */}
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button aria-label="Deploy — start game" onClick={() => onStart(dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined), challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {})} {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})} style={{ ...btnP, minWidth: 150, ...(gfocus("deploy") ? focusRing : {}) }}>DEPLOY</button>
-          <button aria-label="View leaderboard" onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} {...(gfocus("leaderboard") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("leaderboard") ? focusRing : {}) }}>LEADERBOARD</button>
+        <div style={{ ...card, margin: "0 0 10px", border: `1px solid ${recommendedAction.accent}44`, background: `linear-gradient(180deg,${recommendedAction.accent}16,rgba(255,255,255,0.04))`, textAlign: "left" }}>
+          <div style={{ fontSize: 9, color: recommendedAction.accent, letterSpacing: 2, fontWeight: 900, marginBottom: 8, textAlign: "center" }}>
+            RECOMMENDED NEXT ACTION
+          </div>
+          <div style={{ fontSize: 18, color: "#FFF", fontWeight: 900, textAlign: "center", marginBottom: 6 }}>
+            {recommendedAction.title}
+          </div>
+          <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, textAlign: "center", marginBottom: 12 }}>
+            {recommendedAction.detail}
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+            <button
+              aria-label={recommendedAction.title}
+              onClick={recommendedAction.action}
+              {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})}
+              style={{ ...btnP, minWidth: 220, ...(gfocus("deploy") ? focusRing : {}) }}
+            >
+              {recommendedAction.cta}
+            </button>
+            <button
+              aria-label="View leaderboard"
+              onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }}
+              {...(gfocus("leaderboard") ? { "data-gp-focused": "" } : {})}
+              style={{ ...btnS, minWidth: 170, ...(gfocus("leaderboard") ? focusRing : {}) }}
+            >
+              ⚔️ LEADERBOARD
+            </button>
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 8 }}>
+            <button
+              onClick={() => { onSetDailyChallengeMode?.(true); onStart(todaySeedStr, {}); }}
+              style={{ ...btnS, minWidth: 170, borderColor: "rgba(0,229,255,0.35)", color: "#00E5FF" }}
+            >
+              📅 DAILY CHALLENGE
+            </button>
+            <button
+              onClick={handleCopyChallengeLink}
+              style={{ ...btnS, minWidth: 170, borderColor: copiedChallengeLink ? "rgba(0,255,136,0.45)" : "rgba(255,255,255,0.18)", color: copiedChallengeLink ? "#00FF88" : "#CCC" }}
+            >
+              {copiedChallengeLink ? "✓ LINK COPIED" : "🔗 CHALLENGE FRIEND"}
+            </button>
+            <button
+              onClick={() => setShowCommandCenter(v => !v)}
+              style={{ ...btnS, minWidth: 170 }}
+            >
+              {showCommandCenter ? "▲ HIDE SYSTEMS" : "▼ OPEN COMMAND CENTER"}
+            </button>
+          </div>
         </div>
+
         {/* Seed + Settings row */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
           <input
@@ -1366,25 +1481,34 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           />
           <button onClick={() => setShowSettings(true)} {...(gfocus("settings") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, padding: "6px 14px", fontSize: 11, ...(gfocus("settings") ? focusRing : {}) }}>⚙ SETTINGS</button>
         </div>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} {...(gfocus("career") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("career") ? focusRing : {}) }}>📊 CAREER STATS</button>
-          <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} {...(gfocus("achievements") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS</button>
-        </div>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
-          <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} {...(gfocus("missions") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("missions") ? focusRing : {}) }}>📋 MISSIONS</button>
-          <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} {...(gfocus("upgrades") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
-          <button onClick={() => setShowRunHistory(true)} style={{ ...btnS, minWidth: 150 }}>📜 HISTORY</button>
-          <button onClick={() => setShowLoadoutBuilder(true)} style={{ ...btnS, minWidth: 150 }}>⚙️ LOADOUTS</button>
-          <button onClick={() => setShowMetaTree(true)} style={{ ...btnS, minWidth: 150 }}>🌳 META TREE</button>
-          {assistAvailable && (
-            <button onClick={onApplyAssist} style={{ ...btnS, minWidth: 150, borderColor: "#44FF88", color: "#44FF88" }}>🛡️ ASSIST +50HP</button>
-          )}
-        </div>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 14 }}>
-          <button onClick={() => setShowRules(true)} {...(gfocus("rules") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
-          <button onClick={() => setShowControls(true)} {...(gfocus("controls") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
-          <button onClick={() => setShowBestiary(true)} {...(gfocus("bestiary") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED</button>
-        </div>
+        {showCommandCenter && (
+          <>
+            <div style={{ ...card, margin: "0 0 10px", border: "1px solid rgba(255,255,255,0.12)" }}>
+              <div style={{ fontSize: 9, color: "#AAA", letterSpacing: 2, fontWeight: 900, marginBottom: 8, textAlign: "center" }}>
+                COMMAND CENTER
+              </div>
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
+                <button onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareer(true); }} {...(gfocus("career") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("career") ? focusRing : {}) }}>📊 CAREER STATS</button>
+                <button onClick={() => { setCareer(loadCareerStats()); setShowAchievements(true); }} {...(gfocus("achievements") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("achievements") ? focusRing : {}) }}>🏅 ACHIEVEMENTS</button>
+              </div>
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>
+                <button onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }} {...(gfocus("missions") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("missions") ? focusRing : {}) }}>📋 MISSIONS</button>
+                <button onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }} {...(gfocus("upgrades") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("upgrades") ? focusRing : {}) }}>🎖️ UPGRADES</button>
+                <button onClick={() => setShowRunHistory(true)} style={{ ...btnS, minWidth: 150 }}>📜 HISTORY</button>
+                <button onClick={() => setShowLoadoutBuilder(true)} style={{ ...btnS, minWidth: 150 }}>⚙️ LOADOUTS</button>
+                <button onClick={() => setShowMetaTree(true)} style={{ ...btnS, minWidth: 150 }}>🌳 META TREE</button>
+                {assistAvailable && (
+                  <button onClick={onApplyAssist} style={{ ...btnS, minWidth: 150, borderColor: "#44FF88", color: "#44FF88" }}>🛡️ ASSIST +50HP</button>
+                )}
+              </div>
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 4 }}>
+                <button onClick={() => setShowRules(true)} {...(gfocus("rules") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("rules") ? focusRing : {}) }}>📜 RULES</button>
+                <button onClick={() => setShowControls(true)} {...(gfocus("controls") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("controls") ? focusRing : {}) }}>⌨ CONTROLS</button>
+                <button onClick={() => setShowBestiary(true)} {...(gfocus("bestiary") ? { "data-gp-focused": "" } : {})} style={{ ...btnS, minWidth: 150, ...(gfocus("bestiary") ? focusRing : {}) }}>👾 MOST WANTED</button>
+              </div>
+            </div>
+          </>
+        )}
 
         <div style={{ fontSize: 11, color: "#bbb", marginTop: 8 }}>
           ✨ Perks on level-up · 🔧 Weapon upgrades · ⚠️ Boss waves every 5 waves

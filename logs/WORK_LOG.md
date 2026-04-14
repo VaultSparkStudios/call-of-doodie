@@ -13,6 +13,16 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Surfaced current build identity in the HUD and tagged build-fit recommendations in the perk, shop, and route modals
 - Re-verified the client suite: `npm test` 116/116 and `npm run lint` 0 errors / 13 baseline warnings
 
+## 2026-04-14 (Session 43)
+
+- Expanded the durable roadmap so architecture split, guided front door, real code-splitting, wave direction, readability, social rivalry, telemetry, and trust hardening are tracked as one linked quality program
+- Updated `context/TASK_BOARD.md`, `context/CURRENT_STATE.md`, and `context/PROJECT_STATUS.json` so the repo memory reflects the combined audit and the next execution tranche
+- Began the implementation tranche focused on menu simplification, bundle-split cleanup, and the first App-domain extraction rather than diffusing effort across disconnected polish tasks
+- Reworked `src/components/MenuScreen.jsx` into a more guided front door: recommended-next-action hero, Daily Challenge shortcut, Challenge Friend copy flow, and a progressive `Command Center` for deeper systems
+- Converted App/Pause/Death panel imports to real `lazy()` + `Suspense` boundaries so the build now emits separate Achievements, Settings, and Leaderboard chunks
+- Extracted wave-shop and coin-shop option generation into `src/systems/shopOptions.js` as the first concrete `src/App.jsx` domain split
+- Re-verified the baseline after the tranche: `npm test` 116/116, `npm run lint` clean, `npm run build` passing with the main chunk reduced from ~800.74 kB to ~773.89 kB and new async UI chunks emitted
+
 ## 2026-04-13 (Session 41)
 
 - Launch-readiness audit: ran `npm test` (110/110), `npm run lint` (0 errors), `npm run launch:verify` (14/14 live assertions) — baseline clean

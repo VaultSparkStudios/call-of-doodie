@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
-import LeaderboardPanel from "./LeaderboardPanel.jsx";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
+
+const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
@@ -308,7 +309,9 @@ export default function DeathScreen({
   return (
     <div style={{ ...base, touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
       {showLeaderboard && (
-        <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
+        <Suspense fallback={null}>
+          <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
+        </Suspense>
       )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px", paddingBottom: "max(56px, env(safe-area-inset-bottom, 24px))", boxSizing: "border-box" }}>
       <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>

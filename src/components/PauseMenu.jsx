@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
-import AchievementsPanel from "./AchievementsPanel.jsx";
-import SettingsPanel from "./SettingsPanel.jsx";
-import LeaderboardPanel from "./LeaderboardPanel.jsx";
+
+const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
+const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
+const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
 export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot, activePerks, perkMods, activeSynergiesData }) {
   const [view, setView] = useState("main");
@@ -83,9 +84,9 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     }
   }, [gsSnapshot]);
 
-  if (showAch) return <AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} />;
-  if (showSettings && gameSettings) return <SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} />;
-  if (showLb) return <LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} />;
+  if (showAch) return <Suspense fallback={null}><AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} /></Suspense>;
+  if (showSettings && gameSettings) return <Suspense fallback={null}><SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} /></Suspense>;
+  if (showLb) return <Suspense fallback={null}><LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} /></Suspense>;
 
   if (view === "rules") return (
     <div style={overlay}>

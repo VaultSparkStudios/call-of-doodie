@@ -13,20 +13,27 @@ Public-safe launch roadmap summary.
 
 ## Now
 - [ ] [SIL:1] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
-- [ ] [SIL:1] Front-door simplification — restructure the menu around recommended next action, recommended mode/loadout, and progressive disclosure for deep systems
+- [ ] [SIL:1] Front-door simplification — continue refining the new recommended-next-action menu flow with even stronger mode/onboarding guidance
 - [ ] [SIL:1] Leaderboard trust v2 — signed run summaries, server-side recomputation, and anomaly logging beyond heuristic plausibility checks
 - [ ] [SIL:1] Post-run coaching v2 — cause-of-death readout, missed-value hints, and seeded corrective rematch flows
-- [ ] [SIL:1] Render/update optimization pass — buy back mobile and future-content headroom with code-splitting and runtime cleanup
+- [ ] [SIL:1] Render/update optimization pass — continue beyond the shipped chunk split cleanup into runtime instrumentation and mobile frame-budget policy
 - [ ] [SIL] Wave director pacing — stronger tension/release rhythm, elite telegraphs, and encounter budgeting
 - [ ] [SIL] Combat readability pass — clearer enemy silhouettes, less visual competition, and stronger threat language during crowded fights
+- [ ] [SIL] Front-door action stack — `Play Now`, `Daily Challenge`, `Best Next Upgrade`, and `Challenge Friend` should dominate first contact
+- [ ] [SIL] Bundle split cleanup — keep pushing the initial chunk down after the shipped panel split cleanup
+- [ ] [SIL] Balance telemetry v2 — capture first-death wave, mode abandonment, perk/shop pick rates, and debrief follow-through
+- [ ] [SIL] User feedback clarity pass — explain local-save fallback, score rejection reasons, mode stakes, and mutation/shop consequences in plainer language
 
 ## Next
 - [ ] [SIL] Build identity depth — irreversible forks, stronger archetype capstones, and clearer build milestones
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 - [ ] [SIL] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
 - [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
+- [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, and async competitions that feel native to the game
 - [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
 - [ ] [SIL] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
+- [ ] Meta clarity pass — recommended next unlock, recommended spend, and player weakness-aware loadout advice
+- [ ] Security/trust v2 ops surface — anomaly review logs and clearer rejection telemetry around suspicious leaderboard submissions
 
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
@@ -59,6 +66,10 @@ Public-safe launch roadmap summary.
 - [x] [SIL] Economy clarity pass, slice 1 — perk/shop/route screens now signal build fit instead of presenting flat choices
 - [x] [SIL] Session 43 architecture/perf groundwork — extracted perk/route helper logic from component files, lazy-loaded non-core menu panels, fixed RouteSelect focus outline bug, and reduced UI-layer warning debt
 - [x] [SIL] Session 43 closeout — cleared the remaining `src/App.jsx` lint warnings; validation baseline is now lint-clean (`0` warnings / `0` errors)
+- [x] Session 43 audit expansion — combined refinement roadmap now explicitly ranks architecture split, front-door simplification, pacing/readability, social rivalry, telemetry, trust, and bundle cleanup as one quality program
+- [x] [SIL] Front-door simplification, slice 1 — menu now leads with a recommended-next-action card plus Daily Challenge, Challenge Friend, and a progressive `Command Center` reveal for deep systems
+- [x] [SIL] Bundle split cleanup, slice 1 — converted App/Pause/Death panel imports to real `lazy()` boundaries so the build now emits separate Achievements, Settings, and Leaderboard chunks
+- [x] [SIL] App domain extraction, slice 1 — wave shop and coin shop option generation moved from `src/App.jsx` into `src/systems/shopOptions.js`
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready

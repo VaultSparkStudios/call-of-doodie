@@ -4,6 +4,28 @@ Chronological record of all AI-assisted sessions.
 
 ---
 
+## 2026-04-14 — Session 43 (Codex)
+
+**Focus:** Durable roadmap write-back, front-door simplification, real code-splitting cleanup, first App-domain extraction
+
+**Completed:**
+
+*Context + planning:*
+- Updated `context/TASK_BOARD.md`, `context/CURRENT_STATE.md`, `context/PROJECT_STATUS.json`, and `logs/WORK_LOG.md` so the repo memory reflects the combined refinement roadmap and the immediate execution tranche
+- Updated `docs/IMPROVEMENT_PLAN.md` to reflect the shipped slice and the new execution order
+
+*Features / architecture / performance:*
+- Menu front door reworked in `src/components/MenuScreen.jsx`: recommended-next-action hero, Daily Challenge shortcut, Challenge Friend copy flow, and progressive `Command Center` disclosure for deep systems
+- Real async panel splitting: `AchievementsPanel`, `SettingsPanel`, and `LeaderboardPanel` are now lazy-loaded from `App.jsx`, `PauseMenu.jsx`, and `DeathScreen.jsx`
+- First App-domain extraction landed: `src/systems/shopOptions.js` now owns wave shop / coin shop option generation, removing that logic from `src/App.jsx`
+
+*Validation:*
+- `npm test` → 116/116 passing
+- `npm run lint` → clean
+- `npm run build` → passing; main bundle reduced from ~800.74 kB to ~773.89 kB and now emits separate Achievements/Settings/Leaderboard chunks
+
+---
+
 ## 2026-03-18 — Session 12 (Claude Sonnet 4.6)
 
 **Focus:** Seed info in Rules modal, custom-settings ⚙️ leaderboard badge

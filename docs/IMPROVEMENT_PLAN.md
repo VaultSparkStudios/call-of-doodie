@@ -26,7 +26,15 @@ Public-safe roadmap derived from the Session 43 audit refresh.
 ## Current execution slice
 
 - Record the expanded audit and execution sequence in durable project context
-- Strip helper logic out of component files where it blocks fast-refresh and inflates coupling
-- Lazy-load non-core menu surfaces so first-contact payload and UI cost shrink modestly before deeper code-splitting
+- Rework the menu around a recommended-next-action front door, fast Daily access, and progressive disclosure for deep systems
+- Remove static imports that defeat lazy-loading so leaderboard/settings/achievements panels split into real async chunks
 - Continue the `src/App.jsx` domain split by extracting self-contained systems instead of growing the file further
 - Treat leaderboard trust, front-door UX, post-run coaching, readability, and performance as one linked quality program rather than separate polish buckets
+
+## Last shipped slice
+
+- Durable context updated so the combined roadmap and execution order live in `context/` and `logs/`
+- `src/components/MenuScreen.jsx` now leads with a recommended-next-action hero plus Daily Challenge, Challenge Friend, and a progressive `Command Center`
+- Shared panel loading is now real rather than nominal: App/Pause/Death lazily load Achievements, Settings, and Leaderboard surfaces
+- `src/systems/shopOptions.js` now owns wave-shop and coin-shop option generation as the first concrete `src/App.jsx` domain extraction
+- Validation after the slice: `npm test` 116/116, `npm run lint` clean, `npm run build` passing, main bundle reduced from ~800.74 kB to ~773.89 kB with new async UI chunks emitted
