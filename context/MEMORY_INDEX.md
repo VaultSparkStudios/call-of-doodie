@@ -21,6 +21,7 @@
 | Game loop | `docs/GAME_LOOP.md` | Player-facing core loop |
 | Systems | `docs/SYSTEMS.md` | Mechanical systems map |
 | Content | `docs/CONTENT_PLAN.md` | Enemy, perk, wave, and reward expansion planning |
+| Improvement roadmap | `docs/IMPROVEMENT_PLAN.md` | Ranked refinement plan from the Session 42 audit |
 | IP protection | `docs/CREATIVE_DIRECTION_RECORD.md` and `docs/RIGHTS_PROVENANCE.md` | Human direction and provenance |
 
 ## Notes for new agents
@@ -28,6 +29,7 @@
 - Treat `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, and dated handoffs as history only
 - Use the docs in `plans/` for ongoing constraints and experiments
 - Preserve comedy-first tone while respecting the live deployed build
+- Use `docs/IMPROVEMENT_PLAN.md` when deciding whether a feature is polish, depth, trust, pacing, or architecture work
 
 
 

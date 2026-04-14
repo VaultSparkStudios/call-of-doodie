@@ -246,6 +246,27 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const prestige = meta?.prestige || 0;
   const PRESTIGE_REQUIRED_LEVEL = 25;
   const canPrestige = accountLevel >= PRESTIGE_REQUIRED_LEVEL;
+  const weeklyMutation = getWeeklyMutation();
+  const selectedLoadout = STARTER_LOADOUTS.find(loadout => loadout.id === starterLoadout) || STARTER_LOADOUTS[0];
+  const currentModeLabel = bossRushMode ? "Boss Rush" : cursedRunMode ? "Cursed" : scoreAttackMode ? "Score Attack" : dailyChallengeMode ? "Daily Challenge" : speedrunMode ? "Speedrun" : gauntletMode ? "Gauntlet" : "Standard";
+  const commandBrief = (() => {
+    const actions = [];
+    if (bossRushMode) actions.push("Take burst damage and sustain seriously; boss mistakes snowball harder than normal wave attrition.");
+    else if (cursedRunMode) actions.push("Treat this as a volatility run: secure survivability first, then cash in on damage multipliers.");
+    else if (scoreAttackMode) actions.push("Play for tempo and streaks; crowd-clear and movement matter more than slow, safe attrition.");
+    else if (dailyChallengeMode) actions.push("Use the first run as reconnaissance, then replay the same seed with cleaner routing.");
+    else if (speedrunMode) actions.push("Skip indecisive pathing and commit to the fastest build line available.");
+    else if (gauntletMode) actions.push("Respect the forced build; learn its strengths instead of fighting the loadout.");
+    else actions.push("Pick two weapons to invest in early so synergies and upgrades create a memorable build identity.");
+
+    if (selectedLoadout.id === "tank") actions.push("Your loadout buys time, not burst; play for uptime, route safety, and boss consistency.");
+    else if (selectedLoadout.id === "cannon") actions.push("Glass Cannon wants initiative; delete threats first and avoid attrition trades.");
+    else if (selectedLoadout.id === "speedster") actions.push("Use mobility proactively for positioning and streak upkeep, not only as an escape valve.");
+    else actions.push("Standard Issue is best when you let the run tell you which identity to specialize into.");
+
+    if (weeklyMutation) actions.push(`${weeklyMutation.emoji} This week's mutation is ${weeklyMutation.name}: ${weeklyMutation.desc}`);
+    return actions.slice(0, 3);
+  })();
 
   // Generate social share card for New Features
   const generateFeatureCard = useCallback(() => new Promise((resolve) => {
@@ -1293,6 +1314,22 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </div>
           );
         })()}
+
+        <div style={{ ...card, margin: "0 0 10px", textAlign: "left", border: "1px solid rgba(255,107,53,0.2)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
+          <div style={{ fontSize: 9, color: "#FFB36B", letterSpacing: 2, fontWeight: 900, marginBottom: 8, textAlign: "center" }}>
+            COMMAND BRIEF · {currentModeLabel.toUpperCase()}
+          </div>
+          <div style={{ fontSize: 11, color: "#FFD7B8", marginBottom: 8, textAlign: "center" }}>
+            Loadout locked: <span style={{ color: "#FFF", fontWeight: 700 }}>{selectedLoadout.emoji} {selectedLoadout.name}</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            {commandBrief.map((line, index) => (
+              <div key={`brief-${index}`} style={{ fontSize: 11, color: "#DDD", lineHeight: 1.45 }}>
+                {index + 1}. {line}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Action buttons */}
         <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 6 }}>

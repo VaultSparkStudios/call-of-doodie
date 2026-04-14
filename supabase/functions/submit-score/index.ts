@@ -27,6 +27,53 @@ function parseRunTime(value: string) {
   return Number.parseInt(match[1], 10) * 60 + Number.parseInt(match[2], 10);
 }
 
+function getDifficultyMultiplier(difficulty: string) {
+  switch (difficulty) {
+    case "easy": return 0.85;
+    case "hard": return 1.15;
+    case "insane": return 1.3;
+    default: return 1;
+  }
+}
+
+function getModeMultiplier(mode: string | null) {
+  switch (mode) {
+    case "score_attack": return 1.35;
+    case "daily_challenge": return 1.15;
+    case "boss_rush": return 1.55;
+    case "cursed": return 1.4;
+    case "speedrun": return 1.2;
+    case "gauntlet": return 1.25;
+    default: return 1;
+  }
+}
+
+function collectPlausibilityFailures(entry: ReturnType<typeof normalizeEntry>, reportedTime: number) {
+  const reasons: string[] = [];
+  const modeMult = getModeMultiplier(entry.mode);
+  const difficultyMult = getDifficultyMultiplier(entry.difficulty);
+  const scale = modeMult * difficultyMult;
+  const safeTime = Math.max(reportedTime, 1);
+
+  const maxKills = Math.floor((80 + entry.wave * 28 + entry.wave * entry.wave * 1.6 + safeTime * 14) * scale);
+  const maxDamage = Math.floor((120000 + entry.kills * 4500 + entry.wave * 18000 + safeTime * 10000) * scale);
+  const maxScore = Math.floor((250000 + entry.kills * 18000 + entry.wave * 250000 + safeTime * 120000) * scale);
+  const maxLevel = Math.floor(25 + entry.wave * 3 + safeTime / 4);
+
+  if (entry.kills > maxKills) reasons.push("kills exceed plausible wave/time envelope");
+  if (entry.totalDamage > maxDamage) reasons.push("damage exceeds plausible combat envelope");
+  if (entry.score > maxScore) reasons.push("score exceeds plausible kill/wave envelope");
+  if (entry.bestStreak > entry.kills) reasons.push("best streak exceeds total kills");
+  if (entry.level > maxLevel) reasons.push("level exceeds plausible progression envelope");
+
+  const killsPerSecond = entry.kills / safeTime;
+  const damagePerSecond = entry.totalDamage / safeTime;
+  if (killsPerSecond > 18 * scale) reasons.push("kills per second exceed cap");
+  if (damagePerSecond > 65000 * scale) reasons.push("damage per second exceed cap");
+
+  return reasons;
+}
+
 function normalizeEntry(entry: Record<string, unknown>) {
   const mode = VALID_MODES.has(String(entry.mode ?? "")) ? String(entry.mode) : null;
   return {
@@ -148,6 +195,16 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const plausibilityFailures = collectPlausibilityFailures(payload, reportedTime);
+    if (plausibilityFailures.length > 0) {
+      return new Response(JSON.stringify({
+        error: "Run rejected by plausibility validation.",
+        reasons: plausibilityFailures.slice(0, 3),
+      }), {
+        status: 422,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const { data: claim } = await serviceClient
       .from("callsign_claims")
@@ -155,7 +212,7 @@ Deno.serve(async (req) => {
       .eq("name", payload.name)
       .maybeSingle();
 
-    if (claim?.uid && claim.uid !== user.id) {
+    if (claim?.uid && claim.uid !== uid) {
       return new Response(JSON.stringify({ error: "Callsign already claimed by another player." }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

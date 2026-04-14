@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "project": "unknown",
+  "snapshots": [
+    {
+      "date": "2026-04-14",
+      "session": 43,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "green",
+      "lastReviewed": "2026-04-14",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": null,
+      "cause": "Launch-adjacent refinement: leaderboard trust, tactical feedback, and build identity have been strengthened in-repo. Rem"
+    }
+  ]
+}

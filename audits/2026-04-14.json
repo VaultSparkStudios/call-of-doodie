@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-04-14",
+  "session": 42,
+  "sessionType": "implementation",
+  "label": null,
+  "calibration": false,
+  "scores": {
+    "devHealth": 94,
+    "creativeAlignment": 86,
+    "momentum": 92,
+    "engagement": 70,
+    "processQuality": 94
+  },
+  "total": 436,
+  "maxScore": 500,
+  "velocity": 0,
+  "protocolVelocity": null,
+  "durationMinutes": null,
+  "debt": "→",
+  "rollingAvg3": {
+    "devHealth": 93.0,
+    "creativeAlignment": 84.0,
+    "momentum": 94.3,
+    "engagement": 64.7,
+    "processQuality": 90.0,
+    "total": 428.7
+  },
+  "rollingAvgTotals": {
+    "3": 428.7,
+    "5": null,
+    "10": null,
+    "25": null,
+    "all": 428.7
+  },
+  "topWin": "Turned the audit into shipped product value instead of a speculative roadmap: trust checks, better debriefing, and build identity all landed in one session.",
+  "topGap": "The next ceiling is encounter pacing/readability, not more horizontal feature count.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 5,
+  "improvementGroups": {
+    "security_trust": 1,
+    "run_feedback": 1,
+    "pre_run_ux": 1,
+    "build_depth_economy_clarity": 2
+  },
+  "testsTotal": 116,
+  "testsByType": {
+    "client": 112,
+    "server": 0,
+    "core": 4
+  },
+  "testsDelta": 6,
+  "deployStatus": "pending",
+  "ignisFlags": [
+    "intent-achieved"
+  ],
+  "ignisNote": "The project already had breadth; this session proved the faster path is making choices clearer and the leaderboard more trustworthy before adding more systems."
+}

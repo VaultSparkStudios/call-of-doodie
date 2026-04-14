@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { PERKS, CURSED_PERKS, PERK_TIER_COLORS, PERK_TIER_WEIGHTS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
+import { getPerkArchetypeMatches } from "../utils/buildArchetypes.js";
 
 /** Pick `count` perks — all cursed (for Cursed Run mode). */
 export function getFullyCursedPerks(count = 3) {
@@ -43,7 +44,7 @@ export function getRandomPerks(count = 3) {
   return chosen;
 }
 
-export default function PerkModal({ options, level, onSelect }) {
+export default function PerkModal({ options, level, onSelect, buildArchetype, unlockedArchetypes = [] }) {
   const tierLabel = { common: "COMMON", uncommon: "UNCOMMON", rare: "RARE", legendary: "LEGENDARY", cursed: "⚠ CURSED" };
 
   // Gamepad nav: up/down through options, A to confirm
@@ -74,12 +75,24 @@ export default function PerkModal({ options, level, onSelect }) {
           Choose one upgrade. They stack!
           <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A to pick</span>
         </p>
+        {buildArchetype && (
+          <div style={{ marginBottom: 12, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: `1px solid ${buildArchetype.color}44`, textAlign: "left" }}>
+            <div style={{ fontSize: 10, color: buildArchetype.color, fontWeight: 900, letterSpacing: 1 }}>
+              {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()} {buildArchetype.unlocked ? "CAPSTONE ACTIVE" : `${buildArchetype.count}/${buildArchetype.unlockAt}`}
+            </div>
+            <div style={{ fontSize: 10, color: "#AAA", marginTop: 3 }}>
+              {unlockedArchetypes.length > 0 ? `Unlocked capstones: ${unlockedArchetypes.length}` : "Three aligned perks unlock a capstone bonus."}
+            </div>
+          </div>
+        )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {options.map((perk, i) => {
             const isCursed   = perk.tier === "cursed";
             const tierColor  = PERK_TIER_COLORS[perk.tier] || "#AAA";
             const isFocused  = focusIdx === i;
+            const archetypeMatches = getPerkArchetypeMatches(perk);
+            const favoredMatch = buildArchetype ? archetypeMatches.find(match => match.id === buildArchetype.id) : null;
             const baseBg     = isCursed ? "rgba(255,30,60,0.08)"  : "rgba(255,255,255,0.05)";
             const focusBg    = isCursed ? "rgba(255,30,60,0.22)"  : "rgba(255,255,255,0.14)";
             return (
@@ -111,6 +124,15 @@ export default function PerkModal({ options, level, onSelect }) {
                     </span>
                   </div>
                   <div style={{ fontSize: 13, color: isCursed ? "#FF9999" : "#CCC" }}>{perk.desc}</div>
+                  {archetypeMatches.length > 0 && (
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginTop: 6 }}>
+                      {archetypeMatches.map(match => (
+                        <span key={match.id} style={{ fontSize: 9, color: favoredMatch?.id === match.id ? "#FFF" : match.color, background: favoredMatch?.id === match.id ? `${match.color}44` : `${match.color}22`, border: `1px solid ${match.color}55`, borderRadius: 4, padding: "2px 5px", letterSpacing: 0.5 }}>
+                          {match.emoji} {favoredMatch?.id === match.id ? "FITS BUILD" : match.name.toUpperCase()}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <span style={{ fontSize: 20, color: tierColor, flexShrink: 0 }}>{isCursed ? "⚠" : "→"}</span>
               </button>

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { WEAPONS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
+import { getShopRecommendation } from "../utils/buildArchetypes.js";
 
 // Derive a 0-1 score for a weapon stat for the mini bar
 function _wpnStatBar(label, weapon) {
@@ -38,7 +39,7 @@ function WeaponStatBars({ weaponIdx }) {
   );
 }
 
-export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy }) {
+export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy, buildArchetype }) {
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
 
@@ -69,6 +70,16 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
           Choose your reward — one pick only.
           <span style={{ color: "#555", marginLeft: 8 }}>🎮 D-pad + A</span>
         </p>
+        {buildArchetype && (
+          <div style={{ marginBottom: 14, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: `1px solid ${buildArchetype.color}44`, textAlign: "left" }}>
+            <div style={{ fontSize: 10, color: buildArchetype.color, fontWeight: 900, letterSpacing: 1 }}>
+              {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()}
+            </div>
+            <div style={{ fontSize: 10, color: "#AAA", marginTop: 3 }}>
+              Favor picks that keep the build coherent instead of flattening into generic stats.
+            </div>
+          </div>
+        )}
 
         {boughtHistory.length > 0 && (
           <div style={{ marginBottom: 14, padding: "8px 12px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -86,6 +97,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {options.map((opt, i) => {
             const isFocused = focusIdx === i;
+            const recommended = buildArchetype ? getShopRecommendation(buildArchetype.id, opt.id, currentWeapon) : false;
             return (
               <button
                 key={opt.id}
@@ -109,6 +121,11 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700", marginBottom: 2 }}>{opt.name}</div>
                   <div style={{ fontSize: 12, color: "#CCC" }}>{opt.desc}</div>
+                  {recommended && buildArchetype && (
+                    <div style={{ fontSize: 9, color: buildArchetype.color, marginTop: 5, letterSpacing: 0.5 }}>
+                      {buildArchetype.emoji} RECOMMENDED FOR {buildArchetype.name.toUpperCase()}
+                    </div>
+                  )}
                   {opt.id === "upgrade" && <WeaponStatBars weaponIdx={currentWeapon} />}
                 </div>
               </button>
@@ -134,6 +151,7 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {coinShopOptions.map(opt => {
                 const canAfford = coins >= opt.cost;
+                const recommended = buildArchetype ? getShopRecommendation(buildArchetype.id, opt.id, currentWeapon) : false;
                 return (
                   <button
                     key={opt.id}
@@ -155,6 +173,11 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 900, color: canAfford ? "#FFD700" : "#666", marginBottom: 1 }}>{opt.name}</div>
                       <div style={{ fontSize: 11, color: canAfford ? "#BBB" : "#444" }}>{opt.desc}</div>
+                      {recommended && buildArchetype && (
+                        <div style={{ fontSize: 9, color: canAfford ? buildArchetype.color : "#555", marginTop: 4, letterSpacing: 0.5 }}>
+                          {buildArchetype.emoji} RECOMMENDED FOR {buildArchetype.name.toUpperCase()}
+                        </div>
+                      )}
                     </div>
                     <div style={{
                       fontSize: 12, fontWeight: 900, color: canAfford ? "#C8A000" : "#444",

@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { WAVE_ROUTES } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
+import { getRouteRecommendation } from "../utils/buildArchetypes.js";
 
 /**
  * Returns 3 route options: Standard always included, 2 more randomly chosen.
@@ -20,7 +21,7 @@ export function getRouteOptions(gs) {
   return [WAVE_ROUTES[0], ...shuffled.slice(0, 2)];
 }
 
-export default function RouteSelectModal({ options, wave, onSelect }) {
+export default function RouteSelectModal({ options, wave, onSelect, buildArchetype }) {
   const [hovered, setHovered] = useState(null);
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
@@ -58,12 +59,18 @@ export default function RouteSelectModal({ options, wave, onSelect }) {
           <div style={{ fontSize: 11, color: "#666" }}>
             This shapes the next wave
           </div>
+          {buildArchetype && (
+            <div style={{ fontSize: 10, color: buildArchetype.color, marginTop: 8, letterSpacing: 1, fontWeight: 700 }}>
+              {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()}
+            </div>
+          )}
         </div>
 
         {/* Route cards */}
         <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
           {options.map((route, rIdx) => {
             const isHov = hovered === route.id || focusIdx === rIdx;
+            const recommended = buildArchetype ? getRouteRecommendation(buildArchetype.id, route.id) : false;
             return (
               <button
                 key={route.id}
@@ -112,6 +119,11 @@ export default function RouteSelectModal({ options, wave, onSelect }) {
                 <div style={{ fontSize: 11, color: isHov ? "#DDD" : "#888", lineHeight: 1.5 }}>
                   {route.desc}
                 </div>
+                {recommended && buildArchetype && (
+                  <div style={{ marginTop: 8, fontSize: 9, color: buildArchetype.color, letterSpacing: 0.5 }}>
+                    {buildArchetype.emoji} STRONG FIT FOR {buildArchetype.name.toUpperCase()}
+                  </div>
+                )}
               </button>
             );
           })}
