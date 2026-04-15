@@ -37,7 +37,9 @@ import TutorialOverlay from "./components/TutorialOverlay.jsx";
 import DraftScreen from "./components/DraftScreen.jsx";
 import { getCoinShopOptions, getShopOptions } from "./systems/shopOptions.js";
 import {
+  buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
+  getBossWaveGuidance,
   getGuaranteedEliteType,
   getWaveDirectorState,
   getWaveSpawnRate,
@@ -488,7 +490,7 @@ export default function CallOfDoodie() {
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
-      waveDirector: null, waveDirectorStage: -1,
+      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null,
     };
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -1772,12 +1774,36 @@ export default function CallOfDoodie() {
       const directorState = gs.waveDirector
         ? getWaveDirectorState(gs.waveDirector, gs.enemiesThisWave, gs.maxEnemiesThisWave, gs.enemies.length)
         : null;
+      const telemetrySnapshot = directorState
+        ? buildWaveTelemetrySnapshot(gs.waveDirector, directorState, gs.currentWave)
+        : null;
       if (directorState && directorState.stageIndex !== gs.waveDirectorStage) {
         gs.waveDirectorStage = directorState.stageIndex;
         if (directorState.telegraph) {
           addText(gs, W / 2, H / 2 - 92, directorState.telegraph, "#FFD700", true);
           setLiveAnnounce(`${gs.waveDirector.label}. ${directorState.telegraph.replace(/[^\w\s]/g, " ").trim()}`);
         }
+        track("wave_director_stage", {
+          ...gameCtx({
+            difficulty: difficultyRef.current,
+            mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+            wave: gs.currentWave,
+            score: gs.score,
+          }),
+          ...telemetrySnapshot,
+        });
+      }
+      if (telemetrySnapshot?.pressureBand && telemetrySnapshot.pressureBand !== gs.waveTelemetryBand) {
+        gs.waveTelemetryBand = telemetrySnapshot.pressureBand;
+        track("wave_pressure_band", {
+          ...gameCtx({
+            difficulty: difficultyRef.current,
+            mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+            wave: gs.currentWave,
+            score: gs.score,
+          }),
+          ...telemetrySnapshot,
+        });
       }
       const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1)));
       const spawnRate = getWaveSpawnRate(baseSpawnRate, directorState);
@@ -1920,8 +1946,14 @@ export default function CallOfDoodie() {
         if (_isDeveloperWave) {
           gs.developerBossSpawned = true;
           const _devCard = _BOSS_CARDS[21];
+          const _bossGuidance = getBossWaveGuidance(21, null);
           bossCutsceneRef.current = true;
-          setBossCutscene({ ..._devCard, wave: gs.currentWave, dual: null });
+          setBossCutscene({ ..._devCard, wave: gs.currentWave, dual: null, guidance: _bossGuidance });
+          track("boss_wave_preview", {
+            ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score }),
+            boss: _bossGuidance.headline,
+            verb: _bossGuidance.verb,
+          });
           setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
           addText(gs, W / 2, H / 2 - 70, _bossNames[21], "#00FF88", true);
           addText(gs, W / 2, H / 2 + 45, "🐛 DEBUG MODE · 🩹 HOTFIX · ⚠️ MERGE CONFLICT!", "#00FF88");
@@ -1929,9 +1961,15 @@ export default function CallOfDoodie() {
         } else {
           const _card = _BOSS_CARDS[_bType] || { emoji:"☠", name:"BOSS", title:"APPROACHES", quote:"...", color:"#FF4400" };
           const _isDual = gs.currentWave >= (gs.bossRushMode ? 3 : 15);
+          const _bossGuidance = getBossWaveGuidance(_bType, _isDual ? _bType2 : null);
           bossCutsceneRef.current = true;
-          setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null });
+          setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null, guidance: _bossGuidance });
           setLiveAnnounce("Boss wave! " + (_card.name || "Boss") + " incoming on wave " + gs.currentWave);
+          track("boss_wave_preview", {
+            ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score }),
+            boss: _bossGuidance.headline,
+            verb: _bossGuidance.verb,
+          });
           setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
           addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
           if (_isDual) {
@@ -2025,6 +2063,7 @@ export default function CallOfDoodie() {
           estimatedCount: nextIsBoss ? (gs.currentWave >= 15 ? 2 : 1) : gs.maxEnemiesThisWave,
           tempoLabel: !nextIsBoss ? gs.waveDirector?.label : null,
           threatHint: !nextIsBoss ? gs.waveDirector?.hint : null,
+          telemetryBand: !nextIsBoss ? gs.waveTelemetryBand : null,
         });
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
         const _showMutation = !nextIsBoss && !gs.gauntletMode && !gs.bossRushMode
@@ -3602,6 +3641,11 @@ export default function CallOfDoodie() {
                 {wa.threatHint}
               </div>
             )}
+            {wa.telemetryBand && (
+              <div style={{ fontSize: 10, color: wa.telemetryBand === "overrun" ? "#FF8A8A" : wa.telemetryBand === "light" ? "#88FFCC" : "#B5D4FF", marginTop: 7, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+                {wa.telemetryBand === "overrun" ? "PRESSURE: OVER BUDGET" : wa.telemetryBand === "light" ? "PRESSURE: LIGHT WINDOW" : "PRESSURE: STABLE"}
+              </div>
+            )}
             <div style={{ fontSize: 10, color: "#888", marginTop: 8, display: "flex", justifyContent: "center", gap: 16 }}>
               <span>{isBoss ? "⚠️ Boss" : `👾 ~${wa.estimatedCount} enemies`}</span>
               {!isBoss && wa.waveNum % 5 === 0 && <span style={{ color: "#CC44FF" }}>🧬 Mutation offer</span>}
@@ -3651,6 +3695,16 @@ export default function CallOfDoodie() {
             <div style={{ fontSize:"clamp(12px,2.8vw,15px)", color:"#CCC", fontStyle:"italic", lineHeight:1.6, marginBottom:20, maxWidth:380, margin:"0 auto 20px" }}>
               "{bossCutscene.quote}"
             </div>
+            {bossCutscene.guidance && (
+              <div style={{ maxWidth: 420, margin: "0 auto 18px", display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ fontSize: 12, color: "#FFD7B8", lineHeight: 1.55 }}>
+                  {bossCutscene.guidance.verb}
+                </div>
+                <div style={{ fontSize: 10, color: "#999", letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+                  {bossCutscene.guidance.pressure}
+                </div>
+              </div>
+            )}
             {/* Dual boss tag */}
             {bossCutscene.dual && (
               <div style={{ fontSize:11, color:"#FF8844", fontFamily:"'Courier New',monospace", letterSpacing:2, marginBottom:16 }}>

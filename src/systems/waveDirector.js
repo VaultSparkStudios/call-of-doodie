@@ -29,6 +29,44 @@ const WAVE_THEMES = [
   },
 ];
 
+const BOSS_GUIDANCE = {
+  4: {
+    title: "Karen",
+    verb: "Strafe wide and break line of fire before the complaint volley stacks up.",
+    pressure: "Escort pressure matters more than greed damage on Karen waves.",
+  },
+  9: {
+    title: "Landlord",
+    verb: "Keep moving diagonally so rent shots miss while you clear escorts.",
+    pressure: "Do not face-tank rent volleys just to keep DPS uptime.",
+  },
+  16: {
+    title: "Splitter",
+    verb: "Save space before the split. Finishing damage is only safe if the arena has room for shards.",
+    pressure: "Treat low-health splitter phases as a spacing check, not a victory lap.",
+  },
+  17: {
+    title: "Juggernaut",
+    verb: "Respect the charge lane. Dodge first, punish second.",
+    pressure: "If Juggernaut is on screen, movement discipline beats greedy close-range damage.",
+  },
+  18: {
+    title: "Summoner",
+    verb: "Delete summons fast, then collapse back onto the boss while the arena is clean.",
+    pressure: "Summoner waves fail when adds stay alive longer than your burst window.",
+  },
+  20: {
+    title: "Algorithm",
+    verb: "Break the projectile rhythm with short lateral cuts instead of long panic drifts.",
+    pressure: "Algorithm pressure scales when you let bullet patterns own the center lane.",
+  },
+  21: {
+    title: "Developer",
+    verb: "Play patient and survive the gimmicks. The joke boss still kills sloppy runs.",
+    pressure: "Treat the spectacle as a real boss check, not a free wave.",
+  },
+};
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -132,4 +170,46 @@ export function getGuaranteedEliteType(plan, state, enemiesSpawned) {
   const spawnNumber = enemiesSpawned + 1;
   if (spawnNumber % state.eliteEvery !== 0) return null;
   return plan.eliteType;
+}
+
+export function getPressureBand(state) {
+  if (!state) return "stable";
+  if (state.pressureRatio >= 1.15) return "overrun";
+  if (state.pressureRatio <= 0.55) return "light";
+  return "stable";
+}
+
+export function buildWaveTelemetrySnapshot(plan, state, wave) {
+  return {
+    wave,
+    themeId: plan?.themeId ?? null,
+    stageId: state?.stageId ?? null,
+    stageLabel: state?.stageLabel ?? null,
+    pressureBand: getPressureBand(state),
+    pressureRatio: state ? Number(state.pressureRatio.toFixed(2)) : null,
+    aliveBudget: state?.aliveBudget ?? null,
+    eliteEvery: state?.eliteEvery ?? 0,
+    event: plan?.event ?? null,
+  };
+}
+
+export function getBossWaveGuidance(primaryBossType, secondaryBossType = null) {
+  const primary = BOSS_GUIDANCE[primaryBossType] || {
+    title: "Boss",
+    verb: "Dodge first, then cash in on the recovery window.",
+    pressure: "Boss waves punish greed faster than normal waves do.",
+  };
+  const secondary = secondaryBossType != null ? BOSS_GUIDANCE[secondaryBossType] : null;
+
+  return {
+    headline: secondary
+      ? `${primary.title} + ${secondary.title}`
+      : primary.title,
+    verb: secondary
+      ? `${primary.verb} ${secondary.verb}`
+      : primary.verb,
+    pressure: secondary
+      ? `${primary.pressure} ${secondary.pressure}`
+      : primary.pressure,
+  };
 }

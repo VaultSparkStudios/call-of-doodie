@@ -291,6 +291,7 @@ export default function DeathScreen({
     bossRushMode,
     cursedRunMode,
     vsScore,
+    runSeed,
   });
 
   const handleSubmit = async () => {
@@ -414,6 +415,37 @@ export default function DeathScreen({
               </div>
             ))}
           </div>
+
+          <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginTop: 10, marginBottom: 5 }}>CAUSE OF COLLAPSE</div>
+          <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, marginBottom: 10 }}>
+            {debrief.collapseReason}
+          </div>
+
+          {debrief.missedValue.length > 0 && (
+            <>
+              <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 5 }}>MISSED VALUE</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
+                {debrief.missedValue.map((line, index) => (
+                  <div key={`missed-${index}`} style={{ fontSize: 11, color: "#DDD", lineHeight: 1.45 }}>
+                    • {line}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {debrief.rematchPlan.length > 0 && (
+            <>
+              <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginBottom: 5 }}>CORRECTIVE REMATCH</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                {debrief.rematchPlan.map((line, index) => (
+                  <div key={`rematch-${index}`} style={{ fontSize: 11, color: "#DDD", lineHeight: 1.45 }}>
+                    {index + 1}. {line}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Weapon kill breakdown */}

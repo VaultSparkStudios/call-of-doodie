@@ -49,6 +49,32 @@ function pushUnique(list, text) {
   if (text && !list.includes(text)) list.push(text);
 }
 
+function collapseReason({ wave, bestStreak, grenades, bossRushMode, cursedRunMode, scoreAttackMode }) {
+  if (bossRushMode && wave < 6) return "Boss tempo outpaced survivability before the build stabilized.";
+  if (cursedRunMode && wave < 10) return "Cursed volatility punished greed before the run found a safe backbone.";
+  if (scoreAttackMode && bestStreak < 20) return "Score pressure stayed low because kill chains kept collapsing under crowd load.";
+  if (wave < 10) return "The run died before its build identity came online.";
+  if (grenades === 0) return "Tempo tools stayed unused, so pressure windows never turned into recovery windows.";
+  if (bestStreak < 15) return "Arena control slipped. Small breaks in momentum became permanent pressure debt.";
+  if (wave >= 25) return "The run had real legs; the failure point was converting a good build into a disciplined finish.";
+  return "The build was viable, but the run lost efficiency when pressure rose faster than decision quality.";
+}
+
+function rematchPlan({ runSeed, vsScore, top, bestStreak, grenades, completedMissions, missionsSummary }) {
+  const actions = [];
+  if (vsScore != null && runSeed > 0) pushUnique(actions, `Replay seed #${runSeed} and target ${vsScore.toLocaleString()} points. Iterating the same seed is the fastest way to convert knowledge into a better result.`);
+  else if (runSeed > 0) pushUnique(actions, `Replay seed #${runSeed} once with a cleaner opening. The shortest route to improvement is proving you can fix the same run, not rolling a fresh one.`);
+
+  if (top?.share >= 0.58 && top.weapon?.name) pushUnique(actions, `Route earlier into ${top.weapon.name} upgrades and pair it with one support weapon instead of splitting power evenly.`);
+  else pushUnique(actions, "Lock into a two-weapon plan by the early waves so upgrades and perk picks reinforce each other.");
+
+  if (bestStreak < 20) pushUnique(actions, "Treat the next run as a chain-control drill: preserve streak windows before chasing greed picks or side goals.");
+  if (grenades === 0) pushUnique(actions, "Use grenades proactively on the first crowded spike each wave. Saving every cooldown is equivalent to wasting it.");
+  if (missionsSummary.length > 0 && completedMissions === 0) pushUnique(actions, "Force one route/shop choice toward an unfinished daily mission so failed runs still advance account power.");
+
+  return actions.slice(0, 3);
+}
+
 export function buildRunDebrief(input) {
   const {
     score = 0,
@@ -61,6 +87,7 @@ export function buildRunDebrief(input) {
     missionsSummary = [],
     weaponKills = [],
     vsScore = null,
+    runSeed = 0,
   } = input;
 
   const top = topWeapon(weaponKills);
@@ -68,6 +95,7 @@ export function buildRunDebrief(input) {
   const mode = modeLabel(input);
   const strengths = [];
   const actions = [];
+  const missedValue = [];
 
   pushUnique(strengths, top?.weapon ? `${top.weapon.emoji} ${top.weapon.name} carried ${Math.round(top.share * 100)}% of your kills.` : "No single weapon dominated the run, which usually means the build stayed flexible.");
   pushUnique(strengths, bestStreak >= 25 ? `Kill-chain discipline was strong: best streak ${bestStreak}.` : `Momentum ceiling is still low: best streak ${bestStreak}.`);
@@ -87,11 +115,18 @@ export function buildRunDebrief(input) {
   if (grenades === 0) pushUnique(actions, "Use grenades as tempo tools, not panic buttons; unused cooldowns are lost damage and lost breathing room.");
   if (crits < Math.max(6, kills * 0.12)) pushUnique(actions, "Try a precision lane next run: stack crit-oriented perks or weapons so elite kills happen faster.");
   if (missionsSummary.length > 0 && completedMissions === 0) pushUnique(actions, "Pivot one decision per run toward an unfinished daily mission so progression advances even on failed pushes.");
+  if (grenades === 0) pushUnique(missedValue, "Grenade cooldowns finished the run unused.");
+  if (missionsSummary.length > 0 && completedMissions === 0) pushUnique(missedValue, "Daily mission progress was left untouched.");
+  if (top?.share == null || top.share < 0.45) pushUnique(missedValue, "Weapon investment stayed too flat to produce a sharp build identity.");
+  if (bestStreak < 20 && kills >= 40) pushUnique(missedValue, "Kill-chain value leaked away during crowd transitions.");
 
   return {
     verdict: verdict(input),
     identity: identity(input),
     strengths: strengths.slice(0, 3),
     actions: actions.slice(0, 4),
+    collapseReason: collapseReason(input),
+    missedValue: missedValue.slice(0, 3),
+    rematchPlan: rematchPlan({ runSeed, vsScore, top, bestStreak, grenades, completedMissions, missionsSummary }),
   };
 }

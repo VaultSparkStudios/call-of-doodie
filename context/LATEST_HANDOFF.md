@@ -1,6 +1,20 @@
 # Latest Handoff
 
-Session Intent: Ship the wave-director pacing pass at production quality, then bring the repo onto the latest Studio OS/ops start/closeout protocol without leaving any prompt commands broken locally.
+Session Intent: Recover and validate the interrupted refinement slice from the prior overnight session, then realign repo memory to the actual code state.
+
+## Where We Left Off (Session 44 — interrupted slice recovered)
+- Shipped: 4 improvements across 3 groups — front-door UX (action stack + extracted guidance utility), post-run coaching (collapse reason / missed value / seeded rematch plan), and pacing telemetry (boss guidance + wave pressure telemetry hooks)
+- Tests: `126/126` passing · delta: +5
+- Deploy: pending — changes validated locally, not committed
+
+Public-safe handoff summary:
+- session intent: recover the interrupted overnight slice, verify whether it was complete, and bring the handoff/context back in sync with the code
+- intent outcome: Achieved — the worktree slice was coherent, one `MenuScreen.jsx` hook-dependency warning was fixed, and the recovered feature set now validates cleanly
+- completed this session: `src/utils/menuGuidance.js` + tests added — command-brief generation and the front-door recommended-action stack now live in a dedicated utility instead of hardcoded menu branches
+- completed this session: `src/components/MenuScreen.jsx` now routes recommended actions through stable action IDs so `Play Now`, `Daily Challenge`, upgrade prompts, mission cleanup, and challenge-link flows can be prioritized consistently
+- completed this session: `src/utils/runDebrief.js` + `src/components/DeathScreen.jsx` now surface collapse reason, missed value, and seeded corrective rematch guidance instead of stopping at strengths/next moves
+- completed this session: `src/systems/waveDirector.js`, tests, and `src/App.jsx` now add boss-wave guidance plus telemetry snapshots for director stage transitions and wave pressure bands
+- validation baseline: `npm test` 126/126, `npm run build` passes, `npm run lint` passes with 0 warnings / 0 errors
 
 ## Where We Left Off (Session 43)
 - Shipped: 4 improvements across 2 groups — gameplay systems (wave director pacing, elite helper cleanup) and protocol/process (prompt sync, local protocol scaffolding)

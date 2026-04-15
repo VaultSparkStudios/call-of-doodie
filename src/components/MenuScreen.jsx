@@ -3,6 +3,7 @@ import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTE
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout } from "../storage.js";
 import { supabase } from "../supabase.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
+import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { isSupporter } from "../utils/supporter.js";
 
@@ -262,73 +263,32 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   };
   const todaySeedStr = String(getDailyChallengeSeed());
   const dailyAlreadyPlayed = hasDailyChallengeSubmitted();
-  const commandBrief = (() => {
-    const actions = [];
-    if (bossRushMode) actions.push("Take burst damage and sustain seriously; boss mistakes snowball harder than normal wave attrition.");
-    else if (cursedRunMode) actions.push("Treat this as a volatility run: secure survivability first, then cash in on damage multipliers.");
-    else if (scoreAttackMode) actions.push("Play for tempo and streaks; crowd-clear and movement matter more than slow, safe attrition.");
-    else if (dailyChallengeMode) actions.push("Use the first run as reconnaissance, then replay the same seed with cleaner routing.");
-    else if (speedrunMode) actions.push("Skip indecisive pathing and commit to the fastest build line available.");
-    else if (gauntletMode) actions.push("Respect the forced build; learn its strengths instead of fighting the loadout.");
-    else actions.push("Pick two weapons to invest in early so synergies and upgrades create a memorable build identity.");
-
-    if (selectedLoadout.id === "tank") actions.push("Your loadout buys time, not burst; play for uptime, route safety, and boss consistency.");
-    else if (selectedLoadout.id === "cannon") actions.push("Glass Cannon wants initiative; delete threats first and avoid attrition trades.");
-    else if (selectedLoadout.id === "speedster") actions.push("Use mobility proactively for positioning and streak upkeep, not only as an escape valve.");
-    else actions.push("Standard Issue is best when you let the run tell you which identity to specialize into.");
-
-    if (weeklyMutation) actions.push(`${weeklyMutation.emoji} This week's mutation is ${weeklyMutation.name}: ${weeklyMutation.desc}`);
-    return actions.slice(0, 3);
-  })();
+  const modeId = bossRushMode ? "boss_rush"
+    : cursedRunMode ? "cursed"
+      : scoreAttackMode ? "score_attack"
+        : dailyChallengeMode ? "daily_challenge"
+          : speedrunMode ? "speedrun"
+            : gauntletMode ? "gauntlet"
+              : "standard";
+  const commandBrief = buildCommandBrief({
+    mode: modeId,
+    selectedLoadout,
+    weeklyMutation,
+  });
   const incompleteMissionCount = missions.filter(m => !missionProgress[m.id]).length;
   const canSpendMeta = (meta?.careerPoints || 0) >= 10;
-  const recommendedAction = (() => {
-    if (challengeMode?.vs) {
-      return {
-        title: "Beat the challenge link",
-        detail: `Run seed #${challengeMode.seed} and clear ${challengeMode.vs?.toLocaleString?.() || "the posted"} score.`,
-        cta: "⚔️ ACCEPT CHALLENGE",
-        action: () => onStart(deployArgs.seed, deployArgs.challenge),
-        accent: "#FFB36B",
-      };
-    }
-    if (!dailyAlreadyPlayed) {
-      return {
-        title: "Play the daily while the field is fresh",
-        detail: `Today's shared seed is #${todaySeedStr}. One run gets you into the public race immediately.`,
-        cta: "📅 PLAY TODAY'S DAILY",
-        action: () => { onSetDailyChallengeMode?.(true); onStart(todaySeedStr, {}); },
-        accent: "#00E5FF",
-      };
-    }
-    if (canSpendMeta) {
-      return {
-        title: "Spend your meta points",
-        detail: `${meta?.careerPoints || 0} career points are idle. Buy power before the next run.`,
-        cta: "🎖️ OPEN UPGRADES",
-        action: () => { setMeta(loadMetaProgress()); setShowUpgrades(true); },
-        accent: "#FFD700",
-      };
-    }
-    if (incompleteMissionCount > 0) {
-      return {
-        title: "Close today's mission gaps",
-        detail: `${incompleteMissionCount} daily mission${incompleteMissionCount === 1 ? "" : "s"} still have free value on the table.`,
-        cta: "📋 REVIEW MISSIONS",
-        action: () => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); },
-        accent: "#7CFF8A",
-      };
-    }
-    return {
-      title: "Deploy into your strongest current setup",
-      detail: `${selectedLoadout.name} on ${currentModeLabel} is ready. Use the command brief and push for a cleaner run.`,
-      cta: "▶ PLAY NOW",
-      action: () => onStart(deployArgs.seed, deployArgs.challenge),
-      accent: "#FF6B35",
-    };
-  })();
+  const actionStack = buildFrontDoorActionStack({
+    challenge: challengeMode?.vs ? { seed: challengeMode.seed, vsScore: challengeMode.vs, vsName: challengeMode.vsName } : null,
+    dailyAlreadyPlayed,
+    canSpendMeta,
+    incompleteMissionCount,
+    selectedLoadout,
+    currentModeLabel,
+    todaySeed: todaySeedStr,
+  });
+  const recommendedAction = actionStack[0];
 
-  const handleCopyChallengeLink = async () => {
+  const handleCopyChallengeLink = useCallback(async () => {
     try {
       const seed = customSeed || todaySeedStr;
       const params = new URLSearchParams({ seed, diff: difficulty });
@@ -341,7 +301,34 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     } catch {
       setCopiedChallengeLink(false);
     }
-  };
+  }, [challengeMode?.vs, challengeMode?.vsName, customSeed, difficulty, todaySeedStr]);
+
+  const runFrontDoorAction = useCallback((actionId) => {
+    switch (actionId) {
+      case "accept_challenge":
+      case "play_now":
+        onStart(deployArgs.seed, deployArgs.challenge);
+        break;
+      case "daily_challenge":
+        onSetDailyChallengeMode?.(true);
+        onStart(todaySeedStr, {});
+        break;
+      case "best_next_upgrade":
+        setMeta(loadMetaProgress());
+        setShowUpgrades(true);
+        break;
+      case "mission_cleanup":
+        setMissions(getDailyMissions());
+        setMissionProgress(loadMissionProgress());
+        setShowMissions(true);
+        break;
+      case "challenge_friend":
+        handleCopyChallengeLink();
+        break;
+      default:
+        onStart(deployArgs.seed, deployArgs.challenge);
+    }
+  }, [deployArgs.challenge, deployArgs.seed, handleCopyChallengeLink, onSetDailyChallengeMode, onStart, todaySeedStr]);
 
   // Generate social share card for New Features
   const generateFeatureCard = useCallback(() => new Promise((resolve) => {
@@ -1425,19 +1412,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             RECOMMENDED NEXT ACTION
           </div>
           <div style={{ fontSize: 18, color: "#FFF", fontWeight: 900, textAlign: "center", marginBottom: 6 }}>
-            {recommendedAction.title}
+            {recommendedAction?.title}
           </div>
           <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, textAlign: "center", marginBottom: 12 }}>
-            {recommendedAction.detail}
+            {recommendedAction?.detail}
           </div>
           <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
             <button
-              aria-label={recommendedAction.title}
-              onClick={recommendedAction.action}
+              aria-label={recommendedAction?.title || "Recommended action"}
+              onClick={() => runFrontDoorAction(recommendedAction?.id)}
               {...(gfocus("deploy") ? { "data-gp-focused": "" } : {})}
               style={{ ...btnP, minWidth: 220, ...(gfocus("deploy") ? focusRing : {}) }}
             >
-              {recommendedAction.cta}
+              {recommendedAction?.cta || "▶ DEPLOY"}
             </button>
             <button
               aria-label="View leaderboard"
@@ -1449,18 +1436,24 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
           </div>
           <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 8 }}>
-            <button
-              onClick={() => { onSetDailyChallengeMode?.(true); onStart(todaySeedStr, {}); }}
-              style={{ ...btnS, minWidth: 170, borderColor: "rgba(0,229,255,0.35)", color: "#00E5FF" }}
-            >
-              📅 DAILY CHALLENGE
-            </button>
-            <button
-              onClick={handleCopyChallengeLink}
-              style={{ ...btnS, minWidth: 170, borderColor: copiedChallengeLink ? "rgba(0,255,136,0.45)" : "rgba(255,255,255,0.18)", color: copiedChallengeLink ? "#00FF88" : "#CCC" }}
-            >
-              {copiedChallengeLink ? "✓ LINK COPIED" : "🔗 CHALLENGE FRIEND"}
-            </button>
+            {actionStack.slice(1).map((action) => (
+              <button
+                key={action.id}
+                onClick={() => runFrontDoorAction(action.id)}
+                style={{
+                  ...btnS,
+                  minWidth: 170,
+                  borderColor: action.id === "challenge_friend"
+                    ? (copiedChallengeLink ? "rgba(0,255,136,0.45)" : `${action.accent}55`)
+                    : `${action.accent}55`,
+                  color: action.id === "challenge_friend"
+                    ? (copiedChallengeLink ? "#00FF88" : action.accent)
+                    : action.accent,
+                }}
+              >
+                {action.id === "challenge_friend" && copiedChallengeLink ? "✓ LINK COPIED" : action.cta}
+              </button>
+            ))}
             <button
               onClick={() => setShowCommandCenter(v => !v)}
               style={{ ...btnS, minWidth: 170 }}

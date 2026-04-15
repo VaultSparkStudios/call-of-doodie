@@ -15,11 +15,14 @@ describe("buildRunDebrief", () => {
       activePerks: [],
       missionsSummary: [{ completed: false }],
       vsScore: 25000,
+      runSeed: 4242,
     });
 
     expect(result.verdict).toBe("promising run");
     expect(result.identity).toContain("specialist");
     expect(result.actions.some(action => action.includes("Replay the same seed"))).toBe(true);
+    expect(result.rematchPlan[0]).toContain("Replay seed");
+    expect(result.missedValue.some(item => item.includes("Daily mission"))).toBe(true);
   });
 
   test("recognizes high-momentum score-attack runs", () => {
@@ -40,5 +43,6 @@ describe("buildRunDebrief", () => {
     expect(result.verdict).toBe("breakout run");
     expect(result.identity).toBe("streak chaser");
     expect(result.strengths.some(line => line.includes("Kill-chain discipline"))).toBe(true);
+    expect(result.collapseReason).toContain("disciplined finish");
   });
 });

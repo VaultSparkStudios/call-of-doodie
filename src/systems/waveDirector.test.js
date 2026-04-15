@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
   getGuaranteedEliteType,
+  getBossWaveGuidance,
+  getPressureBand,
   getWaveDirectorState,
   getWaveSpawnRate,
 } from "./waveDirector.js";
@@ -43,5 +46,20 @@ describe("waveDirector", () => {
     expect(state.stageId).toBe("climax");
     expect(getGuaranteedEliteType(plan, state, 32)).toBe(plan.eliteType);
     expect(getGuaranteedEliteType(plan, state, 33)).toBe(null);
+  });
+
+  it("summarizes telemetry snapshots with a pressure band", () => {
+    const plan = createWaveDirectorPlan({ wave: 18, maxEnemies: 40, nonBossWaveCount: 4, random: () => 0 });
+    const state = getWaveDirectorState(plan, 26, 40, 14);
+    const snapshot = buildWaveTelemetrySnapshot(plan, state, 18);
+
+    expect(snapshot.stageId).toBe("climax");
+    expect(snapshot.pressureBand).toBe(getPressureBand(state));
+  });
+
+  it("returns concrete boss guidance for paired boss waves", () => {
+    const guidance = getBossWaveGuidance(17, 18);
+    expect(guidance.headline).toContain("Juggernaut");
+    expect(guidance.pressure).toContain("Summoner");
   });
 });
