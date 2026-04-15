@@ -21,6 +21,7 @@ Public-safe handoff summary:
 - completed this session: `src/systems/progressionFlow.js` now owns queued perk consumption and wave-clear reward sequencing, pulling another real gameplay orchestration slice out of `src/App.jsx`
 - completed this session: `src/systems/perkResolution.js` now owns perk-synergy mutations and archetype capstone bonus application, trimming another dense rules block out of the perk-pick path in `src/App.jsx`
 - completed this session: `src/systems/shopResolution.js` now owns regular shop and coin-shop gameplay mutations, including bless/curse resolution, ammo refill math, and nuke/extra-life handling
+- completed this session: public-facing feature copy was refreshed across `README.md`, `docs/LAUNCH_EXECUTION.md`, `public/manifest.json`, `public/og-image.svg`, and `MenuScreen` share text so the shipped game is described accurately again
 - validation baseline: `npm test` 131/131, targeted pacing/regression coverage 71/71, `npm run build` passes, `npm run lint` passes with 0 warnings / 0 errors
 
 ## Where We Left Off (Session 43)

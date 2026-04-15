@@ -8,13 +8,14 @@ A comedy-first top-down roguelite shooter. Play free in your browser.
 
 ## What it is
 
-Survive endless waves of absurd enemies using increasingly ridiculous weapons. Each run is different thanks to perk builds, challenge modes, seeded runs, daily missions, and multiple difficulty paths. Pick your loadout, chase the leaderboard, and see how far you get.
+Survive endless waves of absurd enemies using increasingly ridiculous weapons. Each run is different thanks to archetype-driven perk builds, challenge modes, seeded runs, daily missions, guided front-door recommendations, and multiple difficulty paths. Pick your loadout, chase the leaderboard, and see how far you get.
 
 - 12 weapons — Banana Blaster, RPG, Railgun, Boomerang Blaster, and more
 - 22 enemy types including bosses, elites, hazards, and a secret developer encounter
-- 27+ perks plus cursed perks, starter loadouts, and synergy combos
+- 27+ perks plus cursed perks, starter loadouts, synergy combos, and archetype capstones
 - 7 run modes: Normal, Score Attack, Daily Challenge, Cursed Run, Boss Rush, Speedrun, and Gauntlet
-- Global leaderboard (Supabase), career stats, meta progression, and 57+ achievements
+- Tactical run debriefs, rematch guidance, boss-wave telegraphs, and safer wave-clear perk timing
+- Global leaderboard (Supabase), signed run-claim trust hardening, career stats, meta progression, and 57+ achievements
 - Mobile and desktop — gamepad supported
 - PWA installable
 

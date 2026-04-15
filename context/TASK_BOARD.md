@@ -73,6 +73,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL] App domain extraction, slice 3 — progression reward sequencing now routes through `src/systems/progressionFlow.js` instead of being hand-wired inline in `src/App.jsx`
 - [x] [SIL] App domain extraction, slice 4 — perk synergy resolution and archetype capstone effects now live in `src/systems/perkResolution.js` instead of being embedded inside the perk-pick callback
 - [x] [SIL] App domain extraction, slice 5 — regular shop and coin-shop consequence rules now live in `src/systems/shopResolution.js` instead of long inline `switch` blocks in `src/App.jsx`
+- [x] Public-facing copy refresh — README, launch/store copy, manifest metadata, OG preview text, and in-product share copy now match the current shipped feature set
 - [x] [SIL] Wave director pacing — non-boss waves now run through scouting/pressure/climax/recovery pacing plans with alive-budget-aware spawn cadence, telegraphed elite spikes, and clearer incoming-wave identity
 - [x] [SIL:2⛔] Post-run coaching v2 — death screen now includes collapse reason, missed-value hints, and seeded corrective rematch guidance
 - [x] [SIL] Boss-wave anticipation pass — boss preview/cutscene layer now includes concrete dodge verbs and escort-pressure guidance

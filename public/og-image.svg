@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">Call of Doodie social preview</title>
-  <desc id="desc">A comedy-first browser shooter with absurd enemies, boss rushes, daily challenges, and leaderboard rivalry.</desc>
+  <desc id="desc">A comedy-first browser shooter with absurd enemies, doctrine builds, boss telegraphs, and leaderboard rivalry.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0%" stop-color="#120406"/>
@@ -50,15 +50,15 @@
   <g transform="translate(438 360)">
     <rect width="322" height="170" rx="18" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
     <text x="28" y="48" fill="#00ff9c" font-family="'Courier New', monospace" font-size="24" font-weight="700">BUILD VARIETY</text>
-    <text x="28" y="92" fill="#f7eee5" font-family="'Courier New', monospace" font-size="40">12 weapons  •  27+ perks</text>
-    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Synergies, cursed picks, seeded rivalry runs</text>
+    <text x="28" y="92" fill="#f7eee5" font-family="'Courier New', monospace" font-size="34">12 weapons  •  27+ perks  •  capstones</text>
+    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Synergies, cursed picks, doctrine lanes, seeded rivalry runs</text>
   </g>
 
   <g transform="translate(804 360)">
     <rect width="332" height="170" rx="18" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
     <text x="28" y="48" fill="#7dd3ff" font-family="'Courier New', monospace" font-size="24" font-weight="700">CHASE THE BOARD</text>
     <text x="28" y="92" fill="#f7eee5" font-family="'Courier New', monospace" font-size="40">🏃 Speedrun  •  📅 Daily</text>
-    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Share scores. Copy challenge links. Run it back.</text>
+    <text x="28" y="134" fill="#d6cdc4" font-family="'Courier New', monospace" font-size="22">Share scores. Copy challenge links. Trust the board. Run it back.</text>
   </g>
 
   <text x="72" y="592" fill="#ffffff" font-family="'Courier New', monospace" font-size="30" font-weight="700" filter="url(#glow)">vaultsparkstudios.com/call-of-doodie</text>

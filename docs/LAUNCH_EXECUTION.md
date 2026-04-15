@@ -37,7 +37,7 @@ Recommended page title:
 
 Short description:
 
-`A comedy-first browser shooter with absurd weapons, chaotic perks, daily runs, and leaderboard chasing.`
+`A comedy-first browser shooter with absurd weapons, build-defining perks, boss telegraphs, and leaderboard rivalry.`
 
 Primary call-to-action:
 
@@ -47,13 +47,14 @@ Suggested body copy:
 
 > Call of Doodie is a fast, ridiculous top-down arcade shooter built for short runs and replayable chaos.
 > 
-> Survive waves of absurd enemies, stack run-defining perks, and push your score across multiple challenge modes including Daily Challenge, Boss Rush, Speedrun, and Gauntlet.
+> Survive waves of absurd enemies, stack run-defining perks into doctrine capstones, and push your score across multiple challenge modes including Daily Challenge, Boss Rush, Speedrun, and Gauntlet.
 > 
 > Features:
 > - 12 weapons
 > - 22 enemy types including bosses and hazards
-> - roguelite perk builds, starter loadouts, and weapon synergies
-> - global leaderboard, achievements, and meta progression
+> - roguelite perk builds, cursed perks, starter loadouts, weapon synergies, and archetype capstones
+> - tactical debriefs, rematch guidance, boss-wave telegraphs, and safer wave-clear upgrade timing
+> - global leaderboard, achievements, meta progression, and stronger score-submit trust
 > - desktop, mobile, and gamepad support
 > - installable PWA
 > 

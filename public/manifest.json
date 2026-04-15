@@ -1,7 +1,7 @@
 {
   "name": "Call of Doodie: Modern Warfare on Mom's WiFi",
   "short_name": "Call of Doodie",
-  "description": "A free browser roguelite shooter with absurd enemies, boss rushes, daily challenges, and build-defining perks.",
+  "description": "A free browser roguelite shooter with absurd enemies, archetype perk builds, boss telegraphs, daily challenges, and leaderboard rivalry.",
   "start_url": "/call-of-doodie/",
   "scope": "/call-of-doodie/",
   "display": "standalone",
