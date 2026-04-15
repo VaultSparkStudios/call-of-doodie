@@ -28,11 +28,20 @@ function header(title) {
   console.log(`╚${bar}╝\n`);
 }
 
+function run(command, args = [], cwd = ROOT) {
+  return spawnSync(command, args, {
+    cwd,
+    encoding: "utf8",
+    stdio: "pipe",
+  });
+}
+
 function sh(command, cwd = ROOT) {
   return spawnSync(command, {
     shell: true,
     cwd,
     encoding: "utf8",
+    stdio: "pipe",
   });
 }
 
@@ -122,29 +131,32 @@ function commitAndPush(skipPush) {
     return { committed: false, pushed: false };
   }
 
-  const add = sh("git add -A");
+  const add = run("git", ["add", "-A"]);
   if ((add.status ?? 1) !== 0) {
-    process.stderr.write(add.stderr || "");
-    process.exit(add.status ?? 1);
+    throw new Error(add.stderr || "git add failed");
   }
 
-  const diffCached = sh("git diff --cached --quiet");
+  const diffCached = run("git", ["diff", "--cached", "--quiet"]);
   if ((diffCached.status ?? 1) === 0) {
     console.log("No staged changes to commit");
     return { committed: false, pushed: false };
   }
 
-  const commit = sh(`git commit -m "${defaultCommitMessage().replace(/"/g, '\\"')}"`);
+  const commit = run("git", ["commit", "-m", defaultCommitMessage()]);
   process.stdout.write(commit.stdout || "");
   process.stderr.write(commit.stderr || "");
-  if ((commit.status ?? 1) !== 0) process.exit(commit.status ?? 1);
+  if ((commit.status ?? 1) !== 0) {
+    throw new Error(commit.stderr || "git commit failed");
+  }
 
   if (skipPush) return { committed: true, pushed: false };
 
-  const push = sh("git push");
+  const push = run("git", ["push"]);
   process.stdout.write(push.stdout || "");
   process.stderr.write(push.stderr || "");
-  if ((push.status ?? 1) !== 0) process.exit(push.status ?? 1);
+  if ((push.status ?? 1) !== 0) {
+    throw new Error(push.stderr || "git push failed");
+  }
   return { committed: true, pushed: true };
 }
 
@@ -155,21 +167,27 @@ function printBoard(result) {
   console.log(`Lock cleared: ${!fs.existsSync(LOCK_PATH) || DRY ? "yes" : "no"}`);
 }
 
-bestEffortDoctor();
-stampStatus();
-showGitPreview();
+try {
+  bestEffortDoctor();
+  stampStatus();
+  showGitPreview();
 
-const answer = YES ? "yes" : await prompt("Commit + push the current project changes?");
-if (answer === "n" || answer === "no") {
-  console.log("Closeout autopilot cancelled before git operations.");
-  process.exit(0);
+  const answer = YES ? "yes" : await prompt("Commit + push the current project changes?");
+  if (answer === "n" || answer === "no") {
+    console.log("Closeout autopilot cancelled before git operations.");
+    process.exit(0);
+  }
+
+  if (answer === "dry" && !DRY) {
+    console.log("Dry-run preview requested. Re-run with --dry-run for a full non-writing pass.");
+    process.exit(0);
+  }
+
+  const result = commitAndPush(SKIP_PUSH);
+  clearSessionArtifacts();
+  printBoard(result);
+} catch (err) {
+  const message = err instanceof Error ? err.message : String(err);
+  console.error(message);
+  process.exit(1);
 }
-
-if (answer === "dry" && !DRY) {
-  console.log("Dry-run preview requested. Re-run with --dry-run for a full non-writing pass.");
-  process.exit(0);
-}
-
-const result = commitAndPush(SKIP_PUSH);
-clearSessionArtifacts();
-printBoard(result);

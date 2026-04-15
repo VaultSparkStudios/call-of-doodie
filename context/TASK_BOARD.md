@@ -74,6 +74,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL] App domain extraction, slice 4 — perk synergy resolution and archetype capstone effects now live in `src/systems/perkResolution.js` instead of being embedded inside the perk-pick callback
 - [x] [SIL] App domain extraction, slice 5 — regular shop and coin-shop consequence rules now live in `src/systems/shopResolution.js` instead of long inline `switch` blocks in `src/App.jsx`
 - [x] Public-facing copy refresh — README, launch/store copy, manifest metadata, OG preview text, and in-product share copy now match the current shipped feature set
+- [x] Closeout wrapper hardening — `scripts/closeout-autopilot.mjs` now uses argv-based git execution and top-level error handling so non-interactive closeout runs finish their cleanup/status path reliably
 - [x] [SIL] Wave director pacing — non-boss waves now run through scouting/pressure/climax/recovery pacing plans with alive-budget-aware spawn cadence, telegraphed elite spikes, and clearer incoming-wave identity
 - [x] [SIL:2⛔] Post-run coaching v2 — death screen now includes collapse reason, missed-value hints, and seeded corrective rematch guidance
 - [x] [SIL] Boss-wave anticipation pass — boss preview/cutscene layer now includes concrete dodge verbs and escort-pressure guidance
