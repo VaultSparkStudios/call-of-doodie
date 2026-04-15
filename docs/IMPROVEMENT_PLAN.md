@@ -23,18 +23,33 @@ Public-safe roadmap derived from the Session 43 audit refresh.
 11. Telemetry/balance loop: instrument where runs fail, what choices players make, and what advice actually changes behavior
 12. Warning-debt cleanup and UI architecture separation so future feature work lands on a cleaner surface
 
+## Next 10 non-human execution steps
+
+1. Continue the `src/App.jsx` split by extracting another self-contained runtime domain instead of growing orchestration logic in place.
+2. Turn the front door into a stronger onboarding surface with explicit "why now" guidance, action prioritization, and lower first-contact clutter.
+3. Push leaderboard trust from envelope checks to signed run claims, anomaly logging, and clearer server-side rejection semantics.
+4. Expand post-run coaching into a true corrective loop: debrief diagnosis, missed-value coaching, follow-through tracking, and fast rematch actions.
+5. Finish the combat readability pass so high-pressure waves communicate danger earlier and with less visual competition.
+6. Deepen build identity with clearer milestones, stronger doctrine language, and more meaningful archetype commitment.
+7. Improve player-facing feedback around score submission, offline fallback, mode stakes, and risk/reward consequences.
+8. Add telemetry that captures not only pacing state but also run failure points, choice patterns, and whether coaching changes player behaviour.
+9. Extend social rivalry hooks around seeded rematches, challenge-link reuse, and replayable async competition loops.
+10. Continue bundle/runtime optimization with a specific focus on reducing the main game chunk and protecting mobile frame budget.
+
 ## Current execution slice
 
 - Record the expanded audit and execution sequence in durable project context
-- Rework the menu around a recommended-next-action front door, fast Daily access, and progressive disclosure for deep systems
-- Remove static imports that defeat lazy-loading so leaderboard/settings/achievements panels split into real async chunks
+- Keep moving the front door from "menu of systems" to "recommended next move plus rationale"
+- Harden leaderboard trust without silently degrading into misleading local-save behaviour on rejected competitive runs
+- Turn the death screen into a stronger rematch/replay surface rather than a passive result dump
 - Continue the `src/App.jsx` domain split by extracting self-contained systems instead of growing the file further
-- Treat leaderboard trust, front-door UX, post-run coaching, readability, and performance as one linked quality program rather than separate polish buckets
+- Treat leaderboard trust, front-door UX, post-run coaching, readability, telemetry, and performance as one linked quality program rather than separate polish buckets
 
 ## Last shipped slice
 
 - Durable context updated so the combined roadmap and execution order live in `context/` and `logs/`
-- `src/components/MenuScreen.jsx` now leads with a recommended-next-action hero plus Daily Challenge, Challenge Friend, and a progressive `Command Center`
-- Shared panel loading is now real rather than nominal: App/Pause/Death lazily load Achievements, Settings, and Leaderboard surfaces
-- `src/systems/shopOptions.js` now owns wave-shop and coin-shop option generation as the first concrete `src/App.jsx` domain extraction
-- Validation after the slice: `npm test` 116/116, `npm run lint` clean, `npm run build` passing, main bundle reduced from ~800.74 kB to ~773.89 kB with new async UI chunks emitted
+- `src/utils/runSubmission.js` now owns run-claim / leaderboard-entry construction as a small but real `src/App.jsx` extraction instead of inlining submit-shape logic in the main component
+- `src/storage.js` now distinguishes trusted server rejection from real offline fallback, so competitive runs are not mislabeled as "saved locally" when the server explicitly rejects them
+- `issue-run-token` now returns a signed run summary claim, while `submit-score` validates that claim and best-effort logs anomalies to the optional `run_anomalies` table (`supabase/migrations/2026-04-15_run_anomalies.sql`)
+- Front-door guidance, build-archetype milestone language, and debrief action telemetry were tightened across `MenuScreen`, `HUD`, `PerkModal`, `WaveShopModal`, `RouteSelectModal`, and `DeathScreen`
+- Validation after the slice: targeted tests passing, `npm run lint` clean, `npm run build` passing

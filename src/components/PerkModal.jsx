@@ -40,7 +40,12 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
               {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()} {buildArchetype.unlocked ? "CAPSTONE ACTIVE" : `${buildArchetype.count}/${buildArchetype.unlockAt}`}
             </div>
             <div style={{ fontSize: 10, color: "#AAA", marginTop: 3 }}>
-              {unlockedArchetypes.length > 0 ? `Unlocked capstones: ${unlockedArchetypes.length}` : "Three aligned perks unlock a capstone bonus."}
+              {buildArchetype.statusDetail}
+            </div>
+            <div style={{ fontSize: 10, color: "#777", marginTop: 3 }}>
+              {buildArchetype.unlocked
+                ? (unlockedArchetypes.length > 0 ? `Unlocked capstones: ${unlockedArchetypes.length}` : "Capstone online.")
+                : `Next milestone: ${buildArchetype.nextMilestoneLabel}`}
             </div>
           </div>
         )}

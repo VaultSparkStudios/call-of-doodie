@@ -227,6 +227,7 @@ describe("CallOfDoodie launch smoke", () => {
       mode: null,
       difficulty: "normal",
       seed: expect.any(Number),
+      starterLoadout: "standard",
     });
   });
 });

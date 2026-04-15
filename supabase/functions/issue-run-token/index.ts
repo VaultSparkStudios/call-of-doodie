@@ -8,11 +8,56 @@ const corsHeaders = {
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
+const encoder = new TextEncoder();
 
 function clampInt(value: unknown, min: number, max: number, fallback = min) {
   const num = Number.parseInt(String(value ?? ""), 10);
   if (!Number.isFinite(num)) return fallback;
   return Math.min(max, Math.max(min, num));
+}
+
+function cleanText(value: unknown, maxLen: number, fallback = "") {
+  const text = String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
+  return text ? text.slice(0, maxLen) : fallback;
+}
+
+function canonicalSummary(parts: {
+  uid: string;
+  token: string;
+  mode: string | null;
+  difficulty: string;
+  seed: number | null;
+  starterLoadout: string;
+  expiresAt: string;
+}) {
+  return [
+    parts.uid,
+    parts.token,
+    parts.mode ?? "",
+    parts.difficulty,
+    parts.seed ?? "",
+    parts.starterLoadout,
+    parts.expiresAt,
+  ].join("|");
+}
+
+function toBase64Url(buffer: ArrayBuffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+async function signSummary(secret: string, parts: Parameters<typeof canonicalSummary>[0]) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(canonicalSummary(parts)));
+  return toBase64Url(signature);
 }
 
 Deno.serve(async (req) => {
@@ -51,9 +96,22 @@ Deno.serve(async (req) => {
     const mode = VALID_MODES.has(String(body.mode ?? "")) ? String(body.mode) : null;
     const difficulty = VALID_DIFFICULTIES.has(String(body.difficulty ?? "")) ? String(body.difficulty) : "normal";
     const seed = body.seed == null ? null : clampInt(body.seed, 0, 999999999, 0);
+    const starterLoadout = cleanText(body.starterLoadout, 24, "standard");
     const token = crypto.randomUUID();
     const createdAt = new Date();
     const expiresAt = new Date(createdAt.getTime() + 6 * 60 * 60 * 1000);
+    const summarySig = await signSummary(
+      Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? serviceRoleKey,
+      {
+        uid,
+        token,
+        mode,
+        difficulty,
+        seed,
+        starterLoadout,
+        expiresAt: expiresAt.toISOString(),
+      },
+    );
 
     const { error: insertError } = await serviceClient.from("run_tokens").insert([{
       token,
@@ -68,6 +126,7 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({
       ok: true,
       token,
+      summarySig,
       expiresAt: expiresAt.toISOString(),
     }), {
       status: 200,

@@ -4,6 +4,7 @@ import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgres
 import { supabase } from "../supabase.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
+import { track } from "../utils/analytics.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { isSupporter } from "../utils/supporter.js";
 
@@ -304,6 +305,13 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   }, [challengeMode?.vs, challengeMode?.vsName, customSeed, difficulty, todaySeedStr]);
 
   const runFrontDoorAction = useCallback((actionId) => {
+    track("front_door_action", {
+      actionId: actionId || "play_now",
+      mode: modeId,
+      loadout: selectedLoadout.id,
+      dailyAlreadyPlayed,
+      challengeActive: Boolean(challengeMode?.vs),
+    });
     switch (actionId) {
       case "accept_challenge":
       case "play_now":
@@ -328,7 +336,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       default:
         onStart(deployArgs.seed, deployArgs.challenge);
     }
-  }, [deployArgs.challenge, deployArgs.seed, handleCopyChallengeLink, onSetDailyChallengeMode, onStart, todaySeedStr]);
+  }, [challengeMode?.vs, dailyAlreadyPlayed, deployArgs.challenge, deployArgs.seed, handleCopyChallengeLink, modeId, onSetDailyChallengeMode, onStart, selectedLoadout.id, todaySeedStr]);
 
   // Generate social share card for New Features
   const generateFeatureCard = useCallback(() => new Promise((resolve) => {
@@ -1417,6 +1425,13 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, textAlign: "center", marginBottom: 12 }}>
             {recommendedAction?.detail}
           </div>
+          {recommendedAction?.whyNow && (
+            <div style={{ marginBottom: 10, padding: "8px 10px", borderRadius: 8, background: "rgba(255,255,255,0.04)" }}>
+              <div style={{ fontSize: 9, color: "#AAA", letterSpacing: 1, marginBottom: 4 }}>WHY THIS NOW</div>
+              <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.45 }}>{recommendedAction.whyNow}</div>
+              <div style={{ fontSize: 10, color: recommendedAction.accent, marginTop: 5 }}>{recommendedAction.urgency}</div>
+            </div>
+          )}
           <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
             <button
               aria-label={recommendedAction?.title || "Recommended action"}

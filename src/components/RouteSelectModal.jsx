@@ -41,9 +41,14 @@ export default function RouteSelectModal({ options, wave, onSelect, buildArchety
             This shapes the next wave
           </div>
           {buildArchetype && (
-            <div style={{ fontSize: 10, color: buildArchetype.color, marginTop: 8, letterSpacing: 1, fontWeight: 700 }}>
-              {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()}
-            </div>
+            <>
+              <div style={{ fontSize: 10, color: buildArchetype.color, marginTop: 8, letterSpacing: 1, fontWeight: 700 }}>
+                {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()}
+              </div>
+              <div style={{ fontSize: 10, color: "#777", marginTop: 4 }}>
+                {buildArchetype.statusDetail}
+              </div>
+            </>
           )}
         </div>
 

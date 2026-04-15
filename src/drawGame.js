@@ -1,5 +1,121 @@
 import { WEAPONS } from "./constants.js";
 
+function getEnemyReadabilityStyle(enemy, timeNow) {
+  if (enemy.isBossEnemy) {
+    return {
+      ringColor: enemy.enrageTriggered ? "#FF7A30" : "#FF4D4D",
+      contrastColor: "rgba(255,255,255,0.9)",
+      haloAlpha: 0.18 + Math.sin(timeNow / 150) * 0.04,
+      backdropAlpha: 0.16,
+      marker: "boss",
+    };
+  }
+  if (enemy.eliteType) {
+    const eliteMap = {
+      armored:   { ringColor: "#FFD700", marker: "armor" },
+      fast:      { ringColor: "#00E5FF", marker: "fast" },
+      berserker: { ringColor: "#FF00C8", marker: "rage" },
+      explosive: { ringColor: "#FF6400", marker: "blast" },
+    };
+    const elite = eliteMap[enemy.eliteType] || eliteMap.explosive;
+    return {
+      ringColor: elite.ringColor,
+      contrastColor: "rgba(255,255,255,0.82)",
+      haloAlpha: 0.14 + Math.sin(timeNow / 120) * 0.05,
+      backdropAlpha: 0.12,
+      marker: elite.marker,
+    };
+  }
+  if (enemy.typeIndex === 12) {
+    return {
+      ringColor: "#FF7A30",
+      contrastColor: "rgba(255,248,220,0.85)",
+      haloAlpha: 0.12,
+      backdropAlpha: 0.10,
+      marker: "blast",
+    };
+  }
+  if (enemy.typeIndex === 11) {
+    return {
+      ringColor: "#6FB2FF",
+      contrastColor: "rgba(255,255,255,0.8)",
+      haloAlpha: 0.11,
+      backdropAlpha: 0.09,
+      marker: "shield",
+    };
+  }
+  if (enemy.ranged) {
+    return {
+      ringColor: "#FF9B45",
+      contrastColor: "rgba(255,245,230,0.78)",
+      haloAlpha: 0.1,
+      backdropAlpha: 0.08,
+      marker: "ranged",
+    };
+  }
+  return null;
+}
+
+function drawThreatBrackets(ctx, radius, color, marker) {
+  const offset = radius + 8;
+  const tick = Math.max(4, radius * 0.28);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(-offset, -tick); ctx.lineTo(-offset, tick);
+  ctx.moveTo(offset, -tick); ctx.lineTo(offset, tick);
+  ctx.moveTo(-tick, -offset); ctx.lineTo(tick, -offset);
+  ctx.moveTo(-tick, offset); ctx.lineTo(tick, offset);
+  ctx.stroke();
+
+  if (marker === "ranged") {
+    ctx.beginPath();
+    ctx.moveTo(offset + 4, 0); ctx.lineTo(offset + 10, 0);
+    ctx.moveTo(-offset - 4, 0); ctx.lineTo(-offset - 10, 0);
+    ctx.stroke();
+  } else if (marker === "blast") {
+    ctx.beginPath();
+    ctx.moveTo(0, -offset - 4); ctx.lineTo(4, -offset - 10); ctx.lineTo(-4, -offset - 10); ctx.closePath();
+    ctx.stroke();
+  } else if (marker === "shield") {
+    ctx.beginPath();
+    ctx.arc(0, 0, offset + 3, -0.45, 0.45);
+    ctx.stroke();
+  } else if (marker === "rage") {
+    ctx.beginPath();
+    ctx.moveTo(-6, -offset - 2); ctx.lineTo(0, -offset - 12); ctx.lineTo(6, -offset - 2);
+    ctx.stroke();
+  }
+}
+
+function drawRangedAimTelegraph(ctx, enemy, player, radius, timeNow) {
+  const progress = (enemy.shootTimer || 0) / Math.max(1, enemy.projRate || 1);
+  if (!enemy.ranged || enemy.isBossEnemy || progress < 0.72) return;
+  const angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+  const distance = Math.min(190, Math.hypot(player.x - enemy.x, player.y - enemy.y) - radius);
+  if (distance <= 10) return;
+
+  ctx.save();
+  ctx.rotate(angle);
+  ctx.globalAlpha = 0.16 + (progress - 0.72) * 1.6 + Math.sin(timeNow / 80) * 0.04;
+  ctx.strokeStyle = "#FFB36B";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 5]);
+  ctx.beginPath();
+  ctx.moveTo(radius + 8, 0);
+  ctx.lineTo(radius + 8 + distance, 0);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#FFB36B";
+  ctx.beginPath();
+  ctx.moveTo(radius + 12 + distance, 0);
+  ctx.lineTo(radius + 4 + distance, -4);
+  ctx.lineTo(radius + 4 + distance, 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
 export function drawGame(ctx, canvas, W, H, gs, refs) {
   const { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx } = refs;
   const p = gs.player;
@@ -297,9 +413,17 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.save(); ctx.translate(e.x, e.y);
     const r = e.size / 2;
     const faceA = Math.atan2(p.y - e.y, p.x - e.x);
+    const readability = getEnemyReadabilityStyle(e, dn);
     // Drop shadow
     ctx.fillStyle = "rgba(0,0,0,0.3)";
     ctx.beginPath(); ctx.ellipse(0, r + 3, r * 0.7, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
+
+    if (readability?.backdropAlpha) {
+      ctx.globalAlpha = readability.backdropAlpha;
+      ctx.fillStyle = "#050505";
+      ctx.beginPath(); ctx.arc(0, 0, r + 10, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
 
     // Ground slam expanding shockwave ring
     if (e.groundSlamActive && e.groundSlamRadius > 0) {
@@ -321,6 +445,12 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     }
 
     // Body base
+    if (readability?.haloAlpha) {
+      ctx.globalAlpha = readability.haloAlpha;
+      ctx.fillStyle = readability.ringColor;
+      ctx.beginPath(); ctx.arc(0, 0, r + 6, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
     ctx.fillStyle = e.color;
     ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
     // Hit-flash white overlay
@@ -341,6 +471,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     // Outer border
     ctx.strokeStyle = e.hitFlash > 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)";
     ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+    if (readability) {
+      ctx.strokeStyle = readability.contrastColor;
+      ctx.lineWidth = e.isBossEnemy ? 2.8 : 1.8;
+      ctx.beginPath(); ctx.arc(0, 0, r + 1.5, 0, Math.PI * 2); ctx.stroke();
+    }
 
     // Type-specific visual details
     if (e.hitFlash <= 6) {
@@ -577,6 +712,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     if (e.ranged && !e.isBossEnemy) {
       ctx.strokeStyle = "rgba(255,100,100," + (0.28 + Math.sin(dn / 300) * 0.15) + ")";
       ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, r + 5, 0, Math.PI * 2); ctx.stroke();
+      drawRangedAimTelegraph(ctx, e, p, r, dn);
     }
     // Elite variant ring — color + dash pattern for colorblind accessibility
     if (e.eliteType) {
@@ -595,6 +731,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         ctx.beginPath(); ctx.arc(0, 0, r + 16, 0, Math.PI * 2); ctx.stroke();
       }
       ctx.setLineDash([]);
+    }
+    if (readability) {
+      drawThreatBrackets(ctx, r, readability.ringColor, readability.marker);
     }
 
     // Emoji

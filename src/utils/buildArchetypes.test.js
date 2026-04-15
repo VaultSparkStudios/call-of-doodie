@@ -30,5 +30,7 @@ describe("build archetypes", () => {
     const progress = getArchetypeProgress([{ id: "combo_master" }, { id: "turbo_boots" }]);
     expect(progress[0].id).toBe("tempo");
     expect(progress[0].remaining).toBe(1);
+    expect(progress[0].statusLabel).toBe("FORMING");
+    expect(progress[0].nextMilestoneLabel).toBe("Momentum Engine");
   });
 });

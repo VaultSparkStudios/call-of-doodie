@@ -22,6 +22,8 @@ import {
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
+import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice } from "./utils/levelFlow.js";
+import { buildLeaderboardEntry, buildRunClaim } from "./utils/runSubmission.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -172,6 +174,7 @@ export default function CallOfDoodie() {
   const cursedRunRef          = useRef(false); // synced with cursedRunMode
   const bossRushRef           = useRef(false); // synced with bossRushMode
   const runTokenRef           = useRef(null);  // server-issued one-time token for score submit
+  const runSummarySigRef      = useRef("");
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
@@ -182,6 +185,10 @@ export default function CallOfDoodie() {
   const waveAnnouncePendingRef = useRef(false);
   const mutationPendingRef      = useRef(false); // blocks game loop during mutation offer
   const postMutationShopRef     = useRef(false); // whether to show shop after mutation resolves
+  const bankedPerkChoicesRef    = useRef(0);
+  const deferredMutationOptionsRef = useRef([]);
+  const deferredMutationPendingRef = useRef(false);
+  const deferredShopPendingRef     = useRef(false);
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
@@ -274,6 +281,7 @@ export default function CallOfDoodie() {
   const [mapTheme, setMapTheme]                 = useState(0);
   const [routePending, setRoutePending]         = useState(false);
   const [routeOptions, setRouteOptions]         = useState([]);
+  const [bankedPerkChoices, setBankedPerkChoices] = useState(0);
   const [missionToast, setMissionToast]         = useState(null);
   const [waveAnnounce, setWaveAnnounce]         = useState(null);
   const [mutationPending, setMutationPending]   = useState(false);
@@ -857,11 +865,43 @@ export default function CallOfDoodie() {
     killFeedRef.current = [entry, ...killFeedRef.current].slice(0, 5);
     setKillFeed([...killFeedRef.current]);
   };
+  const openQueuedPerkSelection = useCallback(() => {
+    if (bankedPerkChoicesRef.current <= 0) return false;
+    const opts = cursedRunRef.current ? getFullyCursedPerks(3) : getRandomPerks(3);
+    bankedPerkChoicesRef.current = Math.max(0, bankedPerkChoicesRef.current - 1);
+    setBankedPerkChoices(bankedPerkChoicesRef.current);
+    setPerkOptions(opts);
+    perkOptionsRef.current = opts;
+    setPerkPending(true);
+    perkPendingRef.current = true;
+    return true;
+  }, []);
+  const resolveDeferredPerkFlow = useCallback(() => {
+    if (openQueuedPerkSelection()) return;
+    if (deferredMutationPendingRef.current) {
+      deferredMutationPendingRef.current = false;
+      setMutationOptions(deferredMutationOptionsRef.current);
+      setMutationPending(true);
+      mutationPendingRef.current = true;
+      deferredMutationOptionsRef.current = [];
+      return;
+    }
+    if (deferredShopPendingRef.current) {
+      deferredShopPendingRef.current = false;
+      const gs = gsRef.current;
+      if (!gs) return;
+      const opts = getShopOptions(gs, currentWeaponRef.current);
+      setShopOptions(opts);
+      setCoinShopOptions(getCoinShopOptions(gs));
+      setShopPending(true);
+      shopPendingRef.current = true;
+    }
+  }, [openQueuedPerkSelection]);
   const addXp = useCallback((amount) => {
     const ref = xpRef.current;
     const gain = Math.floor(amount * (perkModsRef.current.xpMult || 1));
     ref.xp += gain;
-    const needed = ref.level * 500;
+    const needed = getLevelXpNeeded(ref.level);
     if (ref.xp >= needed) {
       ref.xp -= needed; ref.level++;
       setLevel(ref.level);
@@ -870,13 +910,13 @@ export default function CallOfDoodie() {
         addText(gsRef.current, GW() / 2, GH() / 2 - 60, "⬆ LEVEL " + ref.level + "!", "#00FF88", true);
         gsRef.current.player.speed += 0.12;
       }
-      // Trigger perk selection every 3 level-ups
-      if (ref.level % 3 === 0) {
-        const opts = cursedRunRef.current ? getFullyCursedPerks(3) : getRandomPerks(3);
-        setPerkOptions(opts);
-        perkOptionsRef.current = opts;
-        setPerkPending(true);
-        perkPendingRef.current = true;
+      if (shouldAwardPerkChoice(ref.level)) {
+        bankedPerkChoicesRef.current += 1;
+        setBankedPerkChoices(bankedPerkChoicesRef.current);
+        if (gsRef.current) {
+          addText(gsRef.current, GW() / 2, GH() / 2 - 92, "✨ DOCTRINE READY", "#FFD700", true);
+          addText(gsRef.current, GW() / 2, GH() / 2 - 66, `Next safe pause unlocks ${bankedPerkChoicesRef.current > 1 ? `${bankedPerkChoicesRef.current} perk picks` : "a perk pick"}.`, "#DDD");
+        }
       }
     }
     setXp(ref.xp);
@@ -949,6 +989,13 @@ export default function CallOfDoodie() {
     if (newlyUnlockedArchetypes.length > 0) {
       newlyUnlockedArchetypes.forEach(archetype => {
         archetypeUnlocksRef.current.add(archetype.id);
+        track("build_capstone_unlock", {
+          archetype: archetype.id,
+          wave: _gs?.currentWave,
+          mode: _mode,
+          difficulty: difficultyRef.current,
+          perksSelected: nextActivePerks.length,
+        });
         switch (archetype.id) {
           case "vanguard":
             perkModsRef.current.lifesteal = (perkModsRef.current.lifesteal || 0) + 0.03;
@@ -986,8 +1033,9 @@ export default function CallOfDoodie() {
     if (gsRef.current) {
       addText(gsRef.current, GW() / 2, GH() / 2 - 40, perk.emoji + " " + perk.name + "!", "#00FF88", true);
     }
+    resolveDeferredPerkFlow();
     checkAchievements(gsRef.current || {});
-  }, [activePerks, checkAchievements]);
+  }, [activePerks, checkAchievements, resolveDeferredPerkFlow]);
 
   // ── Synergy charge burst ──────────────────────────────────────────────────
   const fireSynergyCharge = useCallback(() => {
@@ -1503,9 +1551,15 @@ export default function CallOfDoodie() {
     }
     setShopPending(false); setShopOptions([]); setCoinShopOptions([]); shopPendingRef.current = false; setShopHistory([]);
     setRoutePending(false); setRouteOptions([]); routePendingRef.current = false;
+    bankedPerkChoicesRef.current = 0;
+    setBankedPerkChoices(0);
+    deferredMutationOptionsRef.current = [];
+    deferredMutationPendingRef.current = false;
+    deferredShopPendingRef.current = false;
     setBossCutscene(null); bossCutsceneRef.current = false;
     setCoins(0);
     runTokenRef.current = null;
+    runSummarySigRef.current = "";
     currentWeaponRef.current = 0; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
@@ -1515,14 +1569,18 @@ export default function CallOfDoodie() {
     }, 200); // small delay to let audio context resume
     // ── Analytics: game start ──
     const _startMode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
-    issueRunToken({
-      mode: _startMode === "standard" ? null : _startMode,
+    const runClaim = buildRunClaim({
+      mode: _startMode,
       difficulty,
       seed,
-    }).then(token => {
-      runTokenRef.current = token;
+      starterLoadout,
+    });
+    issueRunToken(runClaim).then(runTicket => {
+      runTokenRef.current = runTicket?.token || null;
+      runSummarySigRef.current = runTicket?.summarySig || "";
     }).catch(() => {
       runTokenRef.current = null;
+      runSummarySigRef.current = "";
     });
     track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[0]?.name, starterLoadout });
     if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
@@ -1574,24 +1632,45 @@ export default function CallOfDoodie() {
     const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
     const sett = settingsRef.current;
     const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
-    const entry = {
-      name: username, score, kills, wave, lastWords,
-      rank, bestStreak, totalDamage, level,
-      time: fmtTime(timeSurvived), achievements: achievementsUnlocked.length, difficulty,
-      starterLoadout, customSettings,
+    const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    const entry = buildLeaderboardEntry({
+      username,
+      score,
+      kills,
+      wave,
+      lastWords,
+      rank,
+      bestStreak,
+      totalDamage,
+      level,
+      time: fmtTime(timeSurvived),
+      achievements: achievementsUnlocked.length,
+      difficulty,
+      starterLoadout,
+      customSettings,
       inputDevice: inputDeviceRef.current,
       seed: runSeed,
       accountLevel: getAccountLevel(loadCareerStats().totalKills),
       prestige: loadMetaProgress()?.prestige || 0,
-      mode: scoreAttackRef.current ? "score_attack" : dailyChallengeRef.current ? "daily_challenge" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : speedrunRef.current ? "speedrun" : gauntletRef.current ? "gauntlet" : undefined,
+      mode,
       runToken: runTokenRef.current,
-    };
+      summarySig: runSummarySigRef.current,
+    });
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
-    const { board, online } = await saveToLeaderboard(entry);
+    const result = await saveToLeaderboard(entry);
     runTokenRef.current = null;
-    setLeaderboard(board);
-    const globalRank = await getPlayerGlobalRank(score, entry.mode || null, entry.time);
-    return { online, globalRank };
+    runSummarySigRef.current = "";
+    setLeaderboard(result.board);
+    const globalRank = result.submission === "online"
+      ? await getPlayerGlobalRank(score, entry.mode || null, entry.time)
+      : null;
+    track("score_submit_result", {
+      ...gameCtx({ difficulty, mode, wave, score }),
+      submission: result.submission,
+      rejected: result.submission === "rejected",
+      reason: result.rejectionReason || null,
+    });
+    return { ...result, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
@@ -2073,8 +2152,15 @@ export default function CallOfDoodie() {
         setTimeout(() => {
           waveAnnouncePendingRef.current = false;
           setWaveAnnounce(null);
-          if (_showMutation) {
-            const _pool = [...WAVE_CHALLENGE_MUTATIONS].sort(() => Math.random() - 0.5).slice(0, 2);
+          const _pool = _showMutation
+            ? [...WAVE_CHALLENGE_MUTATIONS].sort(() => Math.random() - 0.5).slice(0, 2)
+            : [];
+          if (bankedPerkChoicesRef.current > 0) {
+            deferredMutationPendingRef.current = _showMutation;
+            deferredMutationOptionsRef.current = _pool;
+            deferredShopPendingRef.current = !_showMutation && _showShop;
+            openQueuedPerkSelection();
+          } else if (_showMutation) {
             setMutationOptions(_pool);
             setMutationPending(true);
             mutationPendingRef.current = true;
@@ -3194,7 +3280,7 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef);
@@ -3474,7 +3560,8 @@ export default function CallOfDoodie() {
   }
 
   // ── GAME SCREEN ───────────────────────────────────────────────────────────
-  const xpNeeded = level * 500;
+  const xpNeeded = getLevelXpNeeded(level);
+  const nextPerkLevel = getNextPerkLevel(level);
   return (
     <div ref={containerRef} style={base}>
       {/* Accessibility: skip-to-game link for keyboard users */}
@@ -3746,6 +3833,7 @@ export default function CallOfDoodie() {
         health={health} ammo={ammo} isReloading={isReloading} currentWeapon={currentWeapon}
         combo={combo} comboTimer={comboTimer} killstreak={killstreak}
         level={level} xp={xp} xpNeeded={xpNeeded} killFeed={killFeed} username={username}
+        bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
         grenadeReady={grenadeReady} dashReady={dashReady} extraLives={extraLives}
         guardianAngelFlash={guardianAngelFlash} difficulty={difficulty} isMobile={isMobile}
         weaponUpgrades={weaponUpgrades} activePerks={activePerks}

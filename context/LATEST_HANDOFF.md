@@ -1,20 +1,24 @@
 # Latest Handoff
 
-Session Intent: Recover and validate the interrupted refinement slice from the prior overnight session, then realign repo memory to the actual code state.
+Session Intent: Encode the full next-step execution stack in repo memory, then ship the next multi-system refinement tranche across trust, front-door clarity, coaching follow-through, and build guidance.
 
-## Where We Left Off (Session 44 — interrupted slice recovered)
-- Shipped: 4 improvements across 3 groups — front-door UX (action stack + extracted guidance utility), post-run coaching (collapse reason / missed value / seeded rematch plan), and pacing telemetry (boss guidance + wave pressure telemetry hooks)
-- Tests: `126/126` passing · delta: +5
-- Deploy: pending — changes validated locally, not committed
+## Where We Left Off (Session 45 — refinement tranche)
+- Shipped: 6 improvements across 5 groups — roadmap encoding, trust v2 groundwork, submit-feedback clarity, App extraction, build-guidance depth, and debrief follow-through telemetry
+- Tests: targeted utility/system tests passing · `npm run lint` clean · `npm run build` passing
+- Deploy: pending — repo-local changes validated, not deployed
 
 Public-safe handoff summary:
-- session intent: recover the interrupted overnight slice, verify whether it was complete, and bring the handoff/context back in sync with the code
-- intent outcome: Achieved — the worktree slice was coherent, one `MenuScreen.jsx` hook-dependency warning was fixed, and the recovered feature set now validates cleanly
-- completed this session: `src/utils/menuGuidance.js` + tests added — command-brief generation and the front-door recommended-action stack now live in a dedicated utility instead of hardcoded menu branches
-- completed this session: `src/components/MenuScreen.jsx` now routes recommended actions through stable action IDs so `Play Now`, `Daily Challenge`, upgrade prompts, mission cleanup, and challenge-link flows can be prioritized consistently
-- completed this session: `src/utils/runDebrief.js` + `src/components/DeathScreen.jsx` now surface collapse reason, missed value, and seeded corrective rematch guidance instead of stopping at strengths/next moves
-- completed this session: `src/systems/waveDirector.js`, tests, and `src/App.jsx` now add boss-wave guidance plus telemetry snapshots for director stage transitions and wave pressure bands
-- validation baseline: `npm test` 126/126, `npm run build` passes, `npm run lint` passes with 0 warnings / 0 errors
+- session intent: record the full next execution stack in durable context, then ship the next quality tranche across trust, front door, build guidance, and coaching follow-through
+- intent outcome: Achieved — the repo memory now encodes the full next 10 non-human steps, while the shipped code advances several of them together instead of as isolated polish edits
+- completed this session: `docs/IMPROVEMENT_PLAN.md`, `context/TASK_BOARD.md`, and `context/CURRENT_STATE.md` now encode the explicit 10-step non-human execution stack and the newest shipped slice
+- completed this session: `src/utils/runSubmission.js` + tests added — run-claim and leaderboard-entry shaping moved out of `src/App.jsx` into a dedicated utility
+- completed this session: `src/storage.js` now distinguishes trusted server rejection from real offline fallback, so rejected competitive runs surface real reasons instead of being mislabeled as local saves
+- completed this session: `supabase/functions/issue-run-token/index.ts` now returns a signed run summary claim; `supabase/functions/submit-score/index.ts` validates it and best-effort logs anomalies via the optional `supabase/migrations/2026-04-15_run_anomalies.sql`
+- completed this session: `src/components/MenuScreen.jsx` now adds "why this now" rationale to the recommended action surface, while `DeathScreen` and `App.jsx` emit follow-through telemetry for submit/replay/copy actions
+- completed this session: `src/utils/buildArchetypes.js`, `HUD`, `PerkModal`, `WaveShopModal`, and `RouteSelectModal` now expose doctrine status + next milestone language instead of only raw capstone counts
+- completed this session: `src/drawGame.js` now gives bosses/elites/ranged threats clearer contrast, outer threat brackets, and ranged prefire aim telegraphs so crowded fights communicate priority earlier
+- completed this session: `src/utils/levelFlow.js`, `src/App.jsx`, and `src/components/HUD.jsx` now bank perk choices during combat, show when doctrine picks are ready, and defer the actual perk modal to wave-clear safe points instead of interrupting active fights
+- validation baseline: `npm test` 131/131, targeted pacing/regression coverage 71/71, `npm run build` passes, `npm run lint` passes with 0 warnings / 0 errors
 
 ## Where We Left Off (Session 43)
 - Shipped: 4 improvements across 2 groups — gameplay systems (wave director pacing, elite helper cleanup) and protocol/process (prompt sync, local protocol scaffolding)
@@ -32,10 +36,10 @@ Public-safe handoff summary:
 - validation baseline: `npm test` 121/121, `npm run build` passes, `npm run lint` 0 errors / 0 warnings, local protocol dry-runs succeed
 
 ## Next Recommended Slice
-- [ ] Combat readability pass — stronger silhouettes, damage language, and threat ordering for crowded waves
-- [ ] Rework the menu around recommended next action and progressive disclosure
-- [ ] Upgrade leaderboard trust from heuristics-only plausibility checks to richer server validation
-- [ ] Turn the death debrief into a cause-of-death and corrective-rematch loop
+- [ ] Continue `src/App.jsx` domain extraction — progression/reward cadence is now split conceptually, but the orchestration still lives in the main file
+- [ ] Front-door simplification, slice 2 — keep reducing menu first-contact clutter and sharpen onboarding/rationale around recommended actions
+- [ ] Leaderboard trust v2, slice 2 — move from signed claims + anomaly logging into stronger server recomputation and review tooling
+- [ ] Level-flow cadence, slice 2 — verify the new banked-perk cadence in live play and tune mutation/shop/perk ordering if the safe-point chain still feels stacked
 
 ## Where We Left Off (Session 42)
 - Shipped: 5 improvements across 4 groups — security/trust (score plausibility validation), run-feedback (tactical death debrief), pre-run UX (command briefing), build depth/economy clarity (archetype capstones + build-fit recommendations)

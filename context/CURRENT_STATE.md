@@ -4,6 +4,7 @@ Public-safe summary:
 - this repo remains deployable and the live game is publicly reachable
 - the current focus is execution-quality refinement while the remaining launch blockers stay human-only: physical device QA, Itch.io publication, and final Ko-fi secret/migration setup
 - an interrupted overnight refinement slice has now been recovered and validated locally instead of being left as ambiguous worktree drift
+- the full next 10 non-human execution steps are now explicitly encoded in `docs/IMPROVEMENT_PLAN.md` and `context/TASK_BOARD.md`, rather than being implicit in scattered session notes
 - the live Edge Function health check is implemented in `scripts/health-check.mjs` and passed 5/5 against production this session
 - the launch smoke path has automated coverage in `src/App.launch.test.jsx`
 - repeatable live-site verification is implemented in `scripts/live-site-check.mjs`; `npm run launch:qa` passes against production
@@ -27,8 +28,15 @@ Public-safe summary:
 - The audit has now been consolidated into one ranked execution stack: architecture split, guided front door, real code-splitting, wave direction, readability, stronger post-run coaching, social rivalry loops, telemetry, and trust hardening are treated as one connected refinement program rather than isolated polish tasks
 - The first implementation slice of that program is now partially shipped: the menu leads with a recommended-next-action card, Daily Challenge, Challenge Friend, and a progressive `Command Center`; deep systems are no longer the first thing the player has to parse
 - the front door now has a dedicated guidance utility in `src/utils/menuGuidance.js`, and the menu's first-contact actions are prioritized through a reusable action stack instead of one-off inline recommendation logic
+- the front door has advanced again: recommended actions now include explicit "why this now" rationale and urgency language instead of presenting the next CTA without context
 - post-run coaching now goes beyond strengths/actions: the death screen can surface a concrete collapse reason, missed-value callouts, and seeded rematch guidance
+- the debrief loop now also records follow-through: replay/copy actions and score-submit outcomes emit analytics events so coaching effectiveness can be measured later
 - wave pacing instrumentation expanded again: boss previews now teach concrete attack verbs, while `App.jsx` emits wave-director stage and pressure-band telemetry snapshots for future tuning
+- leaderboard trust moved forward again without silently harming UX: the browser now sends signed run claims, the submit Edge Function validates them, anomaly logging can be persisted via `supabase/migrations/2026-04-15_run_anomalies.sql`, and trusted server rejections are surfaced as rejections instead of fake "saved locally" wins
+- build identity surfaces now explain doctrine state and next milestones across HUD/perk/shop/route UI instead of only showing capstone count
+- `src/utils/runSubmission.js` now owns run-claim and leaderboard-entry shaping, marking another small but real extraction away from `src/App.jsx`
+- combat readability improved in `src/drawGame.js`: bosses/elites/ranged threats now get clearer contrast treatment, danger brackets, and ranged prefire aim telegraphs instead of relying mostly on local decorative detail
+- level-flow pacing is materially less interruptive: perk choices are now banked during combat, surfaced in the HUD, and opened at the next wave-clear safe point through `src/utils/levelFlow.js` + `src/App.jsx` instead of hard-pausing the run the moment a threshold is crossed
 - Shared panel loading is now materially cleaner: Achievements, Settings, and Leaderboard surfaces are lazy-loaded from App/Pause/Death, and the production build now emits those as separate chunks instead of forcing them into the main bundle
 - The first real App-domain extraction has landed in `src/systems/shopOptions.js`, moving shop option generation out of `src/App.jsx` and establishing a cleaner pattern for the broader split
 - a dedicated wave-director system now exists in `src/systems/waveDirector.js`: non-boss waves are planned into scouting/pressure/climax/recovery phases, spawn cadence reacts to alive-budget saturation instead of only wave number, and climax windows telegraph guaranteed elite spikes
@@ -36,7 +44,7 @@ Public-safe summary:
 - elite application is now standardized in `src/gameHelpers.js`, letting director-forced elite surges reuse the same mutation logic instead of duplicating enemy-stat edits in the main loop
 - startup/closeout protocol is now synced to Studio OS `v3.1`: `prompts/start.md`, `prompts/closeout.md`, `START_PROMPT.template.md`, and `CLOSEOUT_PROMPT.template.md` are present, while local helpers (`scripts/detect-session-mode.mjs`, `scripts/check-secrets.mjs`, `scripts/ops.mjs`, `scripts/closeout-autopilot.mjs`) keep the synced prompts executable inside this repo
 - the remaining launch actions are now exclusively human-executable: real PWA install acceptance on a real device, one real gamepad/browser combo, and Itch.io publication
-- local validation baseline after the recovered Session 44 slice: `npm test` passes with 126/126 tests; `npm run build` passes; `npm run lint` passes with 0 warnings / 0 errors; the prior protocol dry-run baseline from Session 43 remains intact
+- local validation baseline after the current refinement tranche: `npm test` passes (`131/131`), targeted pacing/regression coverage passes (`71/71`), `npm run build` passes, and `npm run lint` passes with 0 warnings / 0 errors; the prior protocol dry-run baseline from Session 43 remains intact
 - internal operational records were sanitized for public-repo safety on 2026-04-03
 - detailed internal state now lives in the private Studio OS / ops repository
 - last updated: 2026-04-15

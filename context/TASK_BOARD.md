@@ -13,24 +13,26 @@ Public-safe launch roadmap summary.
 
 ## Now
 - [ ] [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
-- [ ] [SIL:2⛔] Front-door simplification — continue refining the new recommended-next-action menu flow beyond the shipped action stack and extracted guidance utility with even stronger mode/onboarding guidance
-- [ ] [SIL:2⛔] Leaderboard trust v2 — signed run summaries, server-side recomputation, and anomaly logging beyond heuristic plausibility checks
+- [ ] [SIL:2⛔] Front-door simplification — continue refining the recommended-next-action flow beyond the shipped action stack + "why now" layer with even stronger onboarding and lower first-contact clutter
+- [ ] [SIL:2⛔] Leaderboard trust v2 — continue beyond signed run claims + anomaly logging into richer server-side recomputation and review tooling
+- [ ] [SIL:2⛔] Post-run coaching follow-through — measure which debrief actions players actually take and tighten replay/rematch loops from that data
 - [ ] [SIL:2⛔] Render/update optimization pass — continue beyond the shipped chunk split cleanup into runtime instrumentation and mobile frame-budget policy
-- [ ] [SIL:1] Combat readability pass — clearer enemy silhouettes, less visual competition, and stronger threat language during crowded fights
+- [ ] [SIL:1] Level-flow cadence pass, slice 2 — tune reward cadence further with safer mutation/shop/perk sequencing and verify live feel after the new perk banking policy
+- [ ] [SIL:1] Build identity depth — move beyond capstones into stronger doctrine milestones, sharper commitment, and more irreversible forks
 - [ ] [SIL:1] Bundle split cleanup — keep pushing the initial chunk down after the shipped panel split cleanup
 - [ ] [SIL:1] Balance telemetry v2 — capture first-death wave, mode abandonment, perk/shop pick rates, and debrief follow-through
 - [ ] [SIL:1] User feedback clarity pass — explain local-save fallback, score rejection reasons, mode stakes, and mutation/shop consequences in plainer language
 
 ## Next
-- [ ] [SIL:1] Build identity depth — irreversible forks, stronger archetype capstones, and clearer build milestones
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 - [ ] [SIL:1] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
 - [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
-- [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, and async competitions that feel native to the game
+- [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, seeded rematch reuse, and async competitions that feel native to the game
 - [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
 - [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
 - [ ] Meta clarity pass — recommended next unlock, recommended spend, and player weakness-aware loadout advice
 - [ ] Security/trust v2 ops surface — anomaly review logs and clearer rejection telemetry around suspicious leaderboard submissions
+- [ ] App-runtime architecture pass — extract another production domain from `src/App.jsx` after the run-submission slice
 ## Done
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
 - [x] Phase 1 launch validation — minimal launch smoke test added at `src/App.launch.test.jsx` and passing in the full suite
@@ -67,10 +69,17 @@ Public-safe launch roadmap summary.
 - [x] [SIL] Front-door action stack — `Play Now`, `Daily Challenge`, `Best Next Upgrade`, and `Challenge Friend` now run through a reusable priority stack backed by `src/utils/menuGuidance.js`
 - [x] [SIL] Bundle split cleanup, slice 1 — converted App/Pause/Death panel imports to real `lazy()` boundaries so the build now emits separate Achievements, Settings, and Leaderboard chunks
 - [x] [SIL] App domain extraction, slice 1 — wave shop and coin shop option generation moved from `src/App.jsx` into `src/systems/shopOptions.js`
+- [x] [SIL] App domain extraction, slice 2 — leaderboard/run-claim payload shaping moved into `src/utils/runSubmission.js` instead of staying embedded in `src/App.jsx`
 - [x] [SIL] Wave director pacing — non-boss waves now run through scouting/pressure/climax/recovery pacing plans with alive-budget-aware spawn cadence, telegraphed elite spikes, and clearer incoming-wave identity
 - [x] [SIL:2⛔] Post-run coaching v2 — death screen now includes collapse reason, missed-value hints, and seeded corrective rematch guidance
 - [x] [SIL] Boss-wave anticipation pass — boss preview/cutscene layer now includes concrete dodge verbs and escort-pressure guidance
 - [x] [SIL] Director telemetry hooks — wave-director stage transitions and pressure bands now emit telemetry snapshots for future tuning
+- [x] [SIL] Trust v2 groundwork — `issue-run-token` now returns a signed run summary claim, `submit-score` validates it, and optional anomaly logging is wired via `supabase/migrations/2026-04-15_run_anomalies.sql`
+- [x] [SIL] Score-submit clarity pass — rejected competitive runs now report server reasons instead of being mislabeled as local-save fallbacks
+- [x] [SIL] Build-identity milestone pass — HUD/perk/shop/route surfaces now explain doctrine state and the next archetype milestone
+- [x] [SIL] Debrief follow-through telemetry — replay/copy actions and score-submit outcomes now emit analytics events
+- [x] [SIL:1] Combat readability pass, slice 1 — dangerous enemies now get stronger contrast rings, threat brackets, and ranged prefire telegraphs in `src/drawGame.js`
+- [x] [SIL:1] Level-flow cadence pass, slice 1 — perk rewards are now banked during combat, opened at the next wave-clear safe point, exposed in the HUD, and shifted onto a softer perk-breakpoint curve via `src/utils/levelFlow.js`
 - [x] Protocol sync — start/closeout prompts, prompt templates, mode/secrets helpers, and local closeout wrapper now align with the latest Studio OS/ops workflow without pointing at missing repo-local commands
 
 ## Deferred

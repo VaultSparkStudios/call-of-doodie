@@ -45,16 +45,52 @@ function perksById(activePerks = []) {
   return new Set(activePerks.map(perk => perk.id));
 }
 
+function getArchetypeMilestoneState(archetype, count) {
+  const maxCount = archetype.perkIds.length;
+  if (count <= 0) {
+    return {
+      statusLabel: "UNFORMED",
+      statusDetail: `No ${archetype.name.toLowerCase()} lane yet. One aligned perk starts the doctrine.`,
+      nextMilestoneAt: 1,
+      nextMilestoneLabel: "Lane identified",
+    };
+  }
+  if (count < archetype.unlockAt) {
+    return {
+      statusLabel: "FORMING",
+      statusDetail: `${archetype.unlockAt - count} more aligned perk${archetype.unlockAt - count === 1 ? "" : "s"} to activate ${archetype.capstoneName}.`,
+      nextMilestoneAt: archetype.unlockAt,
+      nextMilestoneLabel: archetype.capstoneName,
+    };
+  }
+  if (count < maxCount) {
+    return {
+      statusLabel: "CAPSTONE ONLINE",
+      statusDetail: archetype.capstoneDesc,
+      nextMilestoneAt: maxCount,
+      nextMilestoneLabel: "Mastery push",
+    };
+  }
+  return {
+    statusLabel: "MASTERED",
+    statusDetail: `${archetype.name} has every aligned perk online. Lean fully into its win condition.`,
+    nextMilestoneAt: null,
+    nextMilestoneLabel: "Complete",
+  };
+}
+
 export function getArchetypeProgress(activePerks = []) {
   const owned = perksById(activePerks);
   return BUILD_ARCHETYPES.map(archetype => {
     const count = archetype.perkIds.filter(id => owned.has(id)).length;
+    const milestone = getArchetypeMilestoneState(archetype, count);
     return {
       ...archetype,
       count,
       active: count > 0,
       unlocked: count >= archetype.unlockAt,
       remaining: Math.max(0, archetype.unlockAt - count),
+      ...milestone,
     };
   }).sort((a, b) => b.count - a.count);
 }

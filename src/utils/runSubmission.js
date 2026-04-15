@@ -1,0 +1,61 @@
+function cleanMode(mode) {
+  return mode || "standard";
+}
+
+export function buildRunClaim({ mode = null, difficulty = "normal", seed = null, starterLoadout = "standard" } = {}) {
+  return {
+    mode: cleanMode(mode) === "standard" ? null : cleanMode(mode),
+    difficulty,
+    seed,
+    starterLoadout,
+  };
+}
+
+export function buildLeaderboardEntry({
+  username,
+  score,
+  kills,
+  wave,
+  lastWords,
+  rank,
+  bestStreak,
+  totalDamage,
+  level,
+  time,
+  achievements,
+  difficulty,
+  starterLoadout,
+  customSettings,
+  inputDevice,
+  seed,
+  accountLevel,
+  prestige,
+  mode,
+  runToken,
+  summarySig,
+} = {}) {
+  const claim = buildRunClaim({ mode, difficulty, seed, starterLoadout });
+  return {
+    name: username,
+    score,
+    kills,
+    wave,
+    lastWords,
+    rank,
+    bestStreak,
+    totalDamage,
+    level,
+    time,
+    achievements,
+    difficulty: claim.difficulty,
+    starterLoadout: claim.starterLoadout,
+    customSettings,
+    inputDevice,
+    seed: claim.seed,
+    accountLevel,
+    prestige,
+    mode: claim.mode ?? undefined,
+    runToken,
+    summarySig,
+  };
+}

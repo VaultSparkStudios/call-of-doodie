@@ -43,6 +43,8 @@ export function buildFrontDoorActionStack({
       id: "accept_challenge",
       title: "Beat the challenge link",
       detail: `Replay seed #${challenge.seed} and clear ${challenge.vsScore.toLocaleString()} points against ${challenge.vsName ? `@${challenge.vsName}` : "the posted score"}.`,
+      whyNow: "Rivalry links are the cleanest high-stakes next run because the target is concrete and the seed is fixed.",
+      urgency: "Best when your routing memory is still fresh.",
       accent: "#FFB36B",
       cta: "⚔️ ACCEPT CHALLENGE",
     }, 0));
@@ -53,6 +55,8 @@ export function buildFrontDoorActionStack({
       id: "daily_challenge",
       title: "Daily Challenge",
       detail: `Today's shared seed is #${todaySeed}. One run gets you into the live race immediately.`,
+      whyNow: "Shared seeds create the strongest comparison point because everyone is solving the same battlefield.",
+      urgency: "Best before the daily pool gets crowded.",
       accent: "#00E5FF",
       cta: "📅 PLAY TODAY",
     }, actions.length));
@@ -63,6 +67,8 @@ export function buildFrontDoorActionStack({
       id: "best_next_upgrade",
       title: "Best Next Upgrade",
       detail: "Idle career points are pure lost power. Spend them before the next run instead of carrying dead value.",
+      whyNow: "Meta power compounds future attempts more reliably than another underpowered run.",
+      urgency: "Take this first if you have enough points to buy a meaningful unlock.",
       accent: "#FFD700",
       cta: "🎖️ OPEN UPGRADES",
     }, actions.length));
@@ -73,6 +79,8 @@ export function buildFrontDoorActionStack({
       id: "mission_cleanup",
       title: "Mission Cleanup",
       detail: `${incompleteMissionCount} daily mission${incompleteMissionCount === 1 ? "" : "s"} still have free progression available.`,
+      whyNow: "Mission cleanup converts even average runs into account progress instead of pure variance.",
+      urgency: "Worth prioritizing when your next clean run is uncertain.",
       accent: "#7CFF8A",
       cta: "📋 REVIEW MISSIONS",
     }, actions.length));
@@ -82,6 +90,8 @@ export function buildFrontDoorActionStack({
     id: "play_now",
     title: "Play Now",
     detail: `${selectedLoadout.name} on ${currentModeLabel} is ready. Push a cleaner run while your current brief is fresh.`,
+    whyNow: "Direct deployment is strongest when your selected mode and loadout already have a clear plan attached.",
+    urgency: "Use this when there is no higher-leverage prep still sitting idle.",
     accent: "#FF6B35",
     cta: "▶ DEPLOY",
   }, actions.length));
@@ -90,6 +100,8 @@ export function buildFrontDoorActionStack({
     id: "challenge_friend",
     title: "Challenge Friend",
     detail: "Share a seeded rivalry link instead of sending a generic leaderboard screenshot.",
+    whyNow: "Seeded links create repeatable competition, not one-off bragging.",
+    urgency: "Best after a run worth avenging or defending.",
     accent: "#C69CFF",
     cta: "🔗 COPY CHALLENGE",
   }, actions.length));

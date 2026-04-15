@@ -28,6 +28,7 @@ describe("menuGuidance", () => {
 
     expect(stack[0].id).toBe("accept_challenge");
     expect(stack[0].detail).toContain("42,000");
+    expect(stack[0].whyNow).toContain("seed");
   });
 
   test("builds a command brief that reflects the selected mode and loadout", () => {

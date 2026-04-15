@@ -3,6 +3,7 @@ import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
+import { track } from "../utils/analytics.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -24,6 +25,7 @@ export default function DeathScreen({
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
   const [submitStatus, setSubmitStatus] = useState(null); // null | 'pending' | 'online' | 'local'
+  const [submitFeedback, setSubmitFeedback] = useState(null);
   const [globalRank, setGlobalRank] = useState(null);
   const [sharing, setSharing] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
@@ -298,12 +300,15 @@ export default function DeathScreen({
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
     if (words.length > 5) { setLastWords(words.slice(0, 5).join(" ")); return; }
     setSubmitStatus('pending');
+    setSubmitFeedback(null);
     try {
       const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex] });
-      setSubmitStatus(result?.online ? 'online' : 'local');
+      setSubmitStatus(result?.submission || (result?.online ? "online" : "local"));
+      setSubmitFeedback(result || null);
       if (result?.globalRank) setGlobalRank(result.globalRank);
     } catch {
       setSubmitStatus('local');
+      setSubmitFeedback(null);
     }
   };
 
@@ -625,6 +630,25 @@ export default function DeathScreen({
             )}
             <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
           </div>
+        ) : submitStatus === "rejected" ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,90,90,0.35)", background: "rgba(255,70,70,0.05)" }}>
+            <div style={{ color: "#FF8888", fontSize: 14, fontWeight: 700 }}>Submission rejected</div>
+            <div style={{ color: "#DDD", fontSize: 11, marginTop: 4 }}>
+              {submitFeedback?.rejectionReason || "The server rejected this run."}
+            </div>
+            {submitFeedback?.rejectionReasons?.length > 0 && (
+              <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+                {submitFeedback.rejectionReasons.map((reason, index) => (
+                  <div key={`reject-${index}`} style={{ color: "#FFB5B5", fontSize: 10, lineHeight: 1.4 }}>
+                    • {reason}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{ color: "#999", fontSize: 10, marginTop: 8 }}>
+              Local fallback was intentionally skipped because the server treated this as an invalid competitive run, not a network outage.
+            </div>
+          </div>
         ) : (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,180,0,0.3)", background: "rgba(255,140,0,0.05)" }}>
             <div style={{ color: "#FFA500", fontSize: 14, fontWeight: 700 }}>Saved locally</div>
@@ -678,7 +702,10 @@ export default function DeathScreen({
             <span style={{ fontSize: 10, color: "#aaa", letterSpacing: 1 }}>SEED #{runSeed}</span>
             <button
               aria-label="Copy seed to clipboard"
-              onClick={() => navigator.clipboard?.writeText?.(String(runSeed))}
+              onClick={() => {
+                track("debrief_copy_seed", { seed: runSeed, score, wave });
+                navigator.clipboard?.writeText?.(String(runSeed));
+              }}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", border: "1px solid #555", borderRadius: 4, color: "#aaa", cursor: "pointer", letterSpacing: 1 }}
             >📋 COPY</button>
             <button
@@ -686,6 +713,7 @@ export default function DeathScreen({
                 const params = new URLSearchParams({ seed: runSeed, diff: difficulty, vs: score });
                 if (username) params.set("vsName", username);
                 const url = `${location.origin}${location.pathname}?${params.toString()}`;
+                track("debrief_copy_challenge", { seed: runSeed, score, wave, difficulty });
                 navigator.clipboard?.writeText?.(url);
                 setCopiedChallenge(true);
                 setTimeout(() => setCopiedChallenge(false), 1500);
@@ -710,9 +738,9 @@ export default function DeathScreen({
         )}
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button aria-label="Play again — start a new run" onClick={onStartGame} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
+          <button aria-label="Play again — start a new run" onClick={() => { track("debrief_play_again", { score, wave, runSeed }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
           {runSeed > 0 && (
-            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => onStartGame(runSeed)} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
+            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
           )}
           <button aria-label="View leaderboard" onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
           <button aria-label="Return to main menu" onClick={onMenu} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>

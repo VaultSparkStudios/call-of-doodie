@@ -9,6 +9,7 @@ const corsHeaders = {
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
+const encoder = new TextEncoder();
 
 function clampInt(value: unknown, min: number, max: number, fallback = min) {
   const num = Number.parseInt(String(value ?? ""), 10);
@@ -25,6 +26,53 @@ function parseRunTime(value: string) {
   const match = value.match(/^(\d+):([0-5]\d)$/);
   if (!match) return 0;
   return Number.parseInt(match[1], 10) * 60 + Number.parseInt(match[2], 10);
+}
+
+function toBase64Url(buffer: ArrayBuffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function canonicalSummary(parts: {
+  uid: string;
+  token: string;
+  mode: string | null;
+  difficulty: string;
+  seed: number | null;
+  starterLoadout: string;
+  expiresAt: string;
+}) {
+  return [
+    parts.uid,
+    parts.token,
+    parts.mode ?? "",
+    parts.difficulty,
+    parts.seed ?? "",
+    parts.starterLoadout,
+    parts.expiresAt,
+  ].join("|");
+}
+
+async function signSummary(secret: string, parts: Parameters<typeof canonicalSummary>[0]) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(canonicalSummary(parts)));
+  return toBase64Url(signature);
+}
+
+async function logRunAnomaly(serviceClient: ReturnType<typeof createClient>, payload: Record<string, unknown>) {
+  try {
+    await serviceClient.from("run_anomalies").insert([payload]);
+  } catch {
+    // Optional table; keep trust path compatible until migration is applied.
+  }
 }
 
 function getDifficultyMultiplier(difficulty: string) {
@@ -129,6 +177,7 @@ Deno.serve(async (req) => {
 
     const rawBody = await req.json();
     const runToken = typeof rawBody.runToken === "string" ? rawBody.runToken.trim() : "";
+    const summarySig = typeof rawBody.summarySig === "string" ? rawBody.summarySig.trim() : "";
     if (!runToken) {
       return new Response(JSON.stringify({ error: "Missing run token." }), {
         status: 400,
@@ -151,6 +200,12 @@ Deno.serve(async (req) => {
       .maybeSingle();
     if (tokenError) throw tokenError;
     if (!tokenRow || tokenRow.uid !== uid) {
+      await logRunAnomaly(serviceClient, {
+        token: runToken,
+        uid,
+        reason: "invalid_run_token",
+        metadata: { mode: payload.mode, difficulty: payload.difficulty, seed: payload.seed },
+      });
       return new Response(JSON.stringify({ error: "Invalid run token." }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -186,6 +241,35 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    const expectedSummarySig = await signSummary(
+      Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? serviceRoleKey,
+      {
+        uid,
+        token: tokenRow.token,
+        mode: tokenRow.mode || null,
+        difficulty: tokenRow.difficulty,
+        seed: tokenRow.seed ?? null,
+        starterLoadout: payload.starterLoadout,
+        expiresAt: tokenRow.expires_at,
+      },
+    );
+    if (!summarySig || summarySig !== expectedSummarySig) {
+      await logRunAnomaly(serviceClient, {
+        token: runToken,
+        uid,
+        reason: "run_summary_signature_mismatch",
+        metadata: {
+          mode: payload.mode,
+          difficulty: payload.difficulty,
+          seed: payload.seed,
+          starterLoadout: payload.starterLoadout,
+        },
+      });
+      return new Response(JSON.stringify({ error: "Run summary signature mismatch." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const reportedTime = parseRunTime(payload.time);
     const runAgeSeconds = Math.max(0, Math.floor((Date.now() - new Date(tokenRow.created_at).getTime()) / 1000));
@@ -197,6 +281,18 @@ Deno.serve(async (req) => {
     }
     const plausibilityFailures = collectPlausibilityFailures(payload, reportedTime);
     if (plausibilityFailures.length > 0) {
+      await logRunAnomaly(serviceClient, {
+        token: runToken,
+        uid,
+        reason: "plausibility_reject",
+        metadata: {
+          mode: payload.mode,
+          difficulty: payload.difficulty,
+          wave: payload.wave,
+          score: payload.score,
+          reasons: plausibilityFailures.slice(0, 5),
+        },
+      });
       return new Response(JSON.stringify({
         error: "Run rejected by plausibility validation.",
         reasons: plausibilityFailures.slice(0, 3),
@@ -213,6 +309,12 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (claim?.uid && claim.uid !== uid) {
+      await logRunAnomaly(serviceClient, {
+        token: runToken,
+        uid,
+        reason: "callsign_claim_mismatch",
+        metadata: { name: payload.name },
+      });
       return new Response(JSON.stringify({ error: "Callsign already claimed by another player." }), {
         status: 403,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

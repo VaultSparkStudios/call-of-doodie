@@ -8,6 +8,7 @@ export default function HUD({
   wave, timeSurvived, score, kills, deaths, health, ammo, isReloading,
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
+  bankedPerkChoices, nextPerkLevel,
   difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponAmmos, weaponMods,
   buildArchetype, unlockedArchetypes,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
@@ -148,8 +149,15 @@ export default function HUD({
         <div style={{ width: 70, height: 3, background: "rgba(255,255,255,0.15)", borderRadius: 2, overflow: "hidden" }}>
           <div style={{ width: (xp / xpNeeded) * 100 + "%", height: "100%", background: "#00FF88", borderRadius: 2 }} />
         </div>
-        <div style={{ fontSize: 9, color: level % 3 === 0 ? "#00FF88" : "#888", marginTop: 1 }}>
-          {level % 3 === 0 ? "✨ PERK NOW!" : `Perk in ${3 - (level % 3)} lvl${3 - (level % 3) > 1 ? "s" : ""}`}
+        <div style={{ fontSize: 9, color: bankedPerkChoices > 0 ? "#00FF88" : "#888", marginTop: 1 }}>
+          {bankedPerkChoices > 0
+            ? `✨ PERK READY x${bankedPerkChoices}`
+            : `Next doctrine: Lv ${nextPerkLevel}`}
+        </div>
+        <div style={{ fontSize: 8, color: bankedPerkChoices > 0 ? "#9FFFD3" : "#666", marginTop: 2, maxWidth: 112, lineHeight: 1.25 }}>
+          {bankedPerkChoices > 0
+            ? "Opens after the wave-clear chain."
+            : "Safe-point upgrades reduce mid-fight disruption."}
         </div>
       </div>
 
@@ -177,8 +185,13 @@ export default function HUD({
             {buildArchetype.emoji} {buildArchetype.name.toUpperCase()} {buildArchetype.count >= buildArchetype.unlockAt ? "CAPSTONE" : `${buildArchetype.count}/${buildArchetype.unlockAt}`}
           </div>
           <div style={{ fontSize: 9, color: "#BBB", marginTop: 2 }}>
-            {buildArchetype.capstoneDesc}
+            {buildArchetype.statusDetail}
           </div>
+          {!buildArchetype.unlocked && (
+            <div style={{ fontSize: 8, color: "#888", marginTop: 3 }}>
+              Next: {buildArchetype.nextMilestoneLabel}
+            </div>
+          )}
           {unlockedArchetypes?.length > 1 && (
             <div style={{ fontSize: 8, color: "#888", marginTop: 3 }}>
               Unlocked: {unlockedArchetypes.length}

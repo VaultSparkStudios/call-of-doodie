@@ -1,5 +1,5 @@
 // ===== LEADERBOARD =====
-import { supabase, getAuthUid, getOrCreateClientUid } from "./supabase.js";
+import { supabase, supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUid } from "./supabase.js";
 import { isSupporter } from "./utils/supporter.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
@@ -130,6 +130,35 @@ export function normalizeLeaderboardEntry(entry) {
   };
 }
 
+async function getFunctionHeaders() {
+  const headers = {
+    apikey: supabaseAnonKey,
+    "Content-Type": "application/json",
+  };
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
+  } catch {}
+  return headers;
+}
+
+async function invokeEdgeFunction(name, body) {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error("Supabase function env missing");
+  }
+
+  const res = await fetch(`${supabaseUrl}/functions/v1/${name}`, {
+    method: "POST",
+    headers: await getFunctionHeaders(),
+    body: JSON.stringify(body),
+  });
+
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch { data = text || null; }
+  return { ok: res.ok, status: res.status, data };
+}
+
 export async function loadLeaderboard(offset = 0, limit = 50) {
   if (supabase) {
     try {
@@ -158,14 +187,29 @@ export async function saveToLeaderboard(entry) {
   const rawRunToken = typeof entry?.runToken === "string" ? entry.runToken.trim() : "";
   const safeEntry = normalizeLeaderboardEntry({ ...entry, supporter: isSupporter() });
 
-  if (supabase) {
+  if (supabase && supabaseUrl && supabaseAnonKey) {
     try {
-      const { error } = await supabase.functions.invoke("submit-score", {
-        body: { ...safeEntry, runToken: rawRunToken, clientUid: getOrCreateClientUid() },
+      const response = await invokeEdgeFunction("submit-score", {
+        ...safeEntry,
+        runToken: rawRunToken,
+        clientUid: getOrCreateClientUid(),
+        summarySig: typeof entry?.summarySig === "string" ? entry.summarySig.trim() : "",
       });
-      if (error) throw error;
+      if (!response.ok) {
+        const failure = {
+          board: await loadLeaderboard(),
+          online: false,
+          submission: "rejected",
+          rejectionReason: response.data?.error || "Score submission rejected.",
+          rejectionReasons: Array.isArray(response.data?.reasons) ? response.data.reasons : [],
+        };
+        if (response.status >= 400 && response.status < 500) {
+          return failure;
+        }
+        throw new Error(failure.rejectionReason);
+      }
       const board = await loadLeaderboard();
-      return { board, online: true };
+      return { board, online: true, submission: "online", rejectionReason: null, rejectionReasons: [] };
     } catch (err) {
       console.warn("[leaderboard] Edge submit failed, saving locally:", err?.message ?? String(err));
     }
@@ -179,23 +223,27 @@ export async function saveToLeaderboard(entry) {
       .sort((a, b) => compareLeaderboardEntries(a, b, null))
       .slice(0, 100);
     localStorage.setItem(LB_KEY, JSON.stringify(top));
-    return { board: top, online: false };
-  } catch { return { board: [], online: false }; }
+    return { board: top, online: false, submission: "local", rejectionReason: null, rejectionReasons: [] };
+  } catch { return { board: [], online: false, submission: "local", rejectionReason: null, rejectionReasons: [] }; }
 }
 
-export async function issueRunToken({ mode = null, difficulty = "normal", seed = null } = {}) {
-  if (!supabase) return null;
+export async function issueRunToken({ mode = null, difficulty = "normal", seed = null, starterLoadout = "standard" } = {}) {
+  if (!supabase || !supabaseUrl || !supabaseAnonKey) return null;
   try {
-    const { data, error } = await supabase.functions.invoke("issue-run-token", {
-      body: {
-        mode: VALID_MODES.has(mode) ? mode : null,
-        difficulty: VALID_DIFFICULTIES.has(difficulty) ? difficulty : "normal",
-        seed: seed == null ? null : _clampInt(seed, 0, 999999999, 0),
-        clientUid: getOrCreateClientUid(),
-      },
+    const response = await invokeEdgeFunction("issue-run-token", {
+      mode: VALID_MODES.has(mode) ? mode : null,
+      difficulty: VALID_DIFFICULTIES.has(difficulty) ? difficulty : "normal",
+      seed: seed == null ? null : _clampInt(seed, 0, 999999999, 0),
+      starterLoadout: _cleanText(starterLoadout, 24, "standard"),
+      clientUid: getOrCreateClientUid(),
     });
-    if (error) throw error;
-    return typeof data?.token === "string" ? data.token : null;
+    if (!response.ok) throw new Error(response.data?.error || "Run token issue failed.");
+    return typeof response.data?.token === "string"
+      ? {
+          token: response.data.token,
+          summarySig: typeof response.data?.summarySig === "string" ? response.data.summarySig : "",
+        }
+      : null;
   } catch (err) {
     console.warn("[leaderboard] Run token issue failed:", err?.message ?? String(err));
     return null;

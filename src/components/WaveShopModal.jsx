@@ -76,7 +76,10 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
               {buildArchetype.emoji} CURRENT BUILD: {buildArchetype.name.toUpperCase()}
             </div>
             <div style={{ fontSize: 10, color: "#AAA", marginTop: 3 }}>
-              Favor picks that keep the build coherent instead of flattening into generic stats.
+              {buildArchetype.statusDetail}
+            </div>
+            <div style={{ fontSize: 10, color: "#777", marginTop: 3 }}>
+              {buildArchetype.unlocked ? "Capstone is online. Pick for tempo, not just raw numbers." : `Next milestone: ${buildArchetype.nextMilestoneLabel}`}
             </div>
           </div>
         )}
