@@ -70,6 +70,9 @@ Public-safe launch roadmap summary.
 - [x] [SIL] Bundle split cleanup, slice 1 — converted App/Pause/Death panel imports to real `lazy()` boundaries so the build now emits separate Achievements, Settings, and Leaderboard chunks
 - [x] [SIL] App domain extraction, slice 1 — wave shop and coin shop option generation moved from `src/App.jsx` into `src/systems/shopOptions.js`
 - [x] [SIL] App domain extraction, slice 2 — leaderboard/run-claim payload shaping moved into `src/utils/runSubmission.js` instead of staying embedded in `src/App.jsx`
+- [x] [SIL] App domain extraction, slice 3 — progression reward sequencing now routes through `src/systems/progressionFlow.js` instead of being hand-wired inline in `src/App.jsx`
+- [x] [SIL] App domain extraction, slice 4 — perk synergy resolution and archetype capstone effects now live in `src/systems/perkResolution.js` instead of being embedded inside the perk-pick callback
+- [x] [SIL] App domain extraction, slice 5 — regular shop and coin-shop consequence rules now live in `src/systems/shopResolution.js` instead of long inline `switch` blocks in `src/App.jsx`
 - [x] [SIL] Wave director pacing — non-boss waves now run through scouting/pressure/climax/recovery pacing plans with alive-budget-aware spawn cadence, telegraphed elite spikes, and clearer incoming-wave identity
 - [x] [SIL:2⛔] Post-run coaching v2 — death screen now includes collapse reason, missed-value hints, and seeded corrective rematch guidance
 - [x] [SIL] Boss-wave anticipation pass — boss preview/cutscene layer now includes concrete dodge verbs and escort-pressure guidance

@@ -39,6 +39,13 @@ import TutorialOverlay from "./components/TutorialOverlay.jsx";
 import DraftScreen from "./components/DraftScreen.jsx";
 import { getCoinShopOptions, getShopOptions } from "./systems/shopOptions.js";
 import {
+  consumeBankedPerkChoice,
+  createWaveRewardPlan,
+  resolveQueuedReward,
+} from "./systems/progressionFlow.js";
+import { applyArchetypeCapstone, applyPerkSynergies } from "./systems/perkResolution.js";
+import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolution.js";
+import {
   buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
   getBossWaveGuidance,
@@ -866,27 +873,41 @@ export default function CallOfDoodie() {
     setKillFeed([...killFeedRef.current]);
   };
   const openQueuedPerkSelection = useCallback(() => {
-    if (bankedPerkChoicesRef.current <= 0) return false;
-    const opts = cursedRunRef.current ? getFullyCursedPerks(3) : getRandomPerks(3);
-    bankedPerkChoicesRef.current = Math.max(0, bankedPerkChoicesRef.current - 1);
+    const perkSelection = consumeBankedPerkChoice({
+      bankedPerkChoices: bankedPerkChoicesRef.current,
+      isCursedRun: cursedRunRef.current,
+      getRandomPerks,
+      getFullyCursedPerks,
+    });
+    if (!perkSelection) return false;
+    bankedPerkChoicesRef.current = perkSelection.bankedPerkChoices;
     setBankedPerkChoices(bankedPerkChoicesRef.current);
-    setPerkOptions(opts);
-    perkOptionsRef.current = opts;
+    setPerkOptions(perkSelection.perkOptions);
+    perkOptionsRef.current = perkSelection.perkOptions;
     setPerkPending(true);
     perkPendingRef.current = true;
     return true;
   }, []);
   const resolveDeferredPerkFlow = useCallback(() => {
-    if (openQueuedPerkSelection()) return;
-    if (deferredMutationPendingRef.current) {
+    const nextReward = resolveQueuedReward({
+      hasBankedPerkChoices: bankedPerkChoicesRef.current > 0,
+      deferredMutationPending: deferredMutationPendingRef.current,
+      deferredMutationOptions: deferredMutationOptionsRef.current,
+      deferredShopPending: deferredShopPendingRef.current,
+    });
+    if (nextReward.action === "perk") {
+      openQueuedPerkSelection();
+      return;
+    }
+    if (nextReward.action === "mutation") {
       deferredMutationPendingRef.current = false;
-      setMutationOptions(deferredMutationOptionsRef.current);
+      setMutationOptions(nextReward.mutationOptions);
       setMutationPending(true);
       mutationPendingRef.current = true;
       deferredMutationOptionsRef.current = [];
       return;
     }
-    if (deferredShopPendingRef.current) {
+    if (nextReward.action === "shop") {
       deferredShopPendingRef.current = false;
       const gs = gsRef.current;
       if (!gs) return;
@@ -930,51 +951,17 @@ export default function CallOfDoodie() {
       const d = difficultyRef.current;
       gsRef.current.glassjawMult = d === "insane" ? 1.4 : d === "hard" ? 1.65 : 2.0;
     }
-    // Announce perk synergies
-    const pm = perkModsRef.current;
-    const _synergies = [
-      [pm.hasVampire && pm.hasChainLightning && !pm._synergyStormVampire, "⚡🧛 STORM VAMPIRE", "_synergyStormVampire"],
-      [pm.hasGrenadier && pm.hasPyromaniac && !pm._synergyPyroGrenadier, "💣🔥 PYRO GRENADIER", "_synergyPyroGrenadier"],
-      [pm.hasEagleEye && pm.pierce > 0 && !pm._synergyDeadEye, "🎯🔫 DEAD EYE", "_synergyDeadEye"],
-    ];
-    for (const [cond, label, flag] of _synergies) {
-      if (cond) {
-        pm[flag] = true;
-        if (gsRef.current) addText(gsRef.current, GW() / 2, GH() / 2 - 85, "🔗 SYNERGY: " + label + "!", "#FF88FF", true);
-        soundLevelUp();
-        break;
-      }
-    }
-    // ── Perk synergy combo check (run after each perk pick) ──
-    const _perkSynergies = [
-      { a: "hasVampire",     b: "hasLastResort",  key: "_synVampireLastResort", bonus: () => { pm.lifesteal = (pm.lifesteal || 0) + 0.04; pm.critBonus = (pm.critBonus || 0) + 0.1; },                                                  name: "⚡ DEATH'S DOOR",      desc: "+4% lifesteal & +10% crit at low HP" },
-      { a: "hasAdrenaline",  b: "hasDash",        key: "_synAdrenalineDash",    bonus: () => { pm.dashCDMult = (pm.dashCDMult || 1) * 0.6; },                                                                                             name: "💨 AFTERBURNER",       desc: "Dash cooldown cut by 40%" },
-      { a: "hasOverclocked", b: "hasLastResort",  key: "_synOCGlass",           bonus: () => { pm.damageMult = (pm.damageMult || 1) * 1.25; },                                                                                            name: "💥 FRAGILE FURY",      desc: "+25% damage while at low HP" },
-      { a: "hasScavenger",   b: "hasAmmoBoost",   key: "_synScavAmmo",          bonus: () => { pm.ammoMult = (pm.ammoMult || 1) * 1.3; pm.ammoDropMult = (pm.ammoDropMult || 1) * 1.5; },                                               name: "🎒 PACK RAT",          desc: "+30% max ammo & 50% more ammo drops" },
-      { a: "hasEagleEye",    b: "pierce",         key: "_synEaglePierce",       bonus: () => { pm.pierce = (pm.pierce || 0) + 1; pm.critBonus = (pm.critBonus || 0) + 0.08; },                                                          name: "🦅 SNIPER'S MARK",     desc: "+1 pierce & +8% crit chance" },
-      // ── New synergies ──
-      { a: "hasComboMaster", b: "hasVampire",     key: "_synComboVamp",         bonus: () => { pm.comboVampireMult = true; },                                                                                                             name: "🌪️ BLOODCOMBO",       desc: "Lifesteal doubles during active combo" },
-      { a: "hasTurboBoots",  b: "hasAdrenaline",  key: "_synTurboAdrenaline",   bonus: () => { pm.adrenalineRushDuration = 240; },                                                                                                        name: "⚡ NITRO RUSH",        desc: "Adrenaline Rush lasts 4s instead of 2s" },
-      { a: "hasLastResort",  b: "deadManTriple",  key: "_synDeadLastResort",    bonus: () => { pm.deadManTripleExplosion = true; },                                                                                                        name: "💀 DEATH'S GAMBIT",    desc: "Dead Man's Hand explosion triples at low HP" },
-      { a: "hasGlassMind",   b: "hasCritCascade", key: "_synGlassCrit",         bonus: () => { pm.critGrantsXp = true; },                                                                                                                 name: "🧠 FOCUSED FURY",      desc: "Every crit grants +10 bonus XP" },
-      { a: "hasOverclocked", b: "hasScavenger",   key: "_synOCSav",             bonus: () => { pm.reloadDropsAmmo = true; },                                                                                                              name: "🔧 RELOAD SALVAGE",    desc: "Forced reloads drop an ammo crate" },
-      { a: "hasGrenadeChain",b: "hasOverclocked", key: "_synGrenadeOC",         bonus: () => { pm.reloadFreesGrenade = true; },                                                                                                           name: "💥 CHAIN REACTION",    desc: "Forced reload instantly readies your grenade" },
-      { a: "hasBloodlust",   b: "pierce",         key: "_synBloodPierce",       bonus: () => { pm.piercedLifesteal = (pm.piercedLifesteal || 0) + 0.12; },                                                                               name: "🩸 BLOODSHOT",         desc: "+12% lifesteal on every pierced target" },
-      { a: "hasBulletHose",  b: "hasAmmoBoost",   key: "_synFullArmory",        bonus: () => { pm.ammoMult = (pm.ammoMult || 1) * 1.50; },                                                                                               name: "📦 FULL ARMORY",       desc: "+50% extra max ammo on top of existing boost" },
-    ];
-    _perkSynergies.forEach(syn => {
-      const condA = pm[syn.a];
-      const condB = (syn.b === "pierce" || syn.b === "deadManTriple") ? (syn.b === "pierce" ? (pm.pierce || 0) > 0 : pm.deadManTripleExplosion || pm.hasLastResort) : pm[syn.b];
-      if (condA && condB && !pm[syn.key]) {
-        pm[syn.key] = true;
-        syn.bonus();
-        if (gsRef.current) {
-          addText(gsRef.current, GW() / 2, GH() / 2 - 50, syn.name, "#FF88FF", true);
-          addText(gsRef.current, GW() / 2, GH() / 2 - 20, syn.desc, "#CC88CC");
+    const unlockedSynergies = applyPerkSynergies(perkModsRef.current);
+    if (unlockedSynergies.length > 0 && gsRef.current) {
+      unlockedSynergies.forEach((synergy, index) => {
+        const yOffset = index === 0 ? -85 : -50 - ((index - 1) * 30);
+        addText(gsRef.current, GW() / 2, GH() / 2 + yOffset, synergy.desc ? synergy.name : "🔗 SYNERGY: " + synergy.name + "!", "#FF88FF", true);
+        if (synergy.desc) {
+          addText(gsRef.current, GW() / 2, GH() / 2 + yOffset + 30, synergy.desc, "#CC88CC");
         }
         soundLevelUp();
-      }
-    });
+      });
+    }
     statsRef.current.perksSelected++;
     // ── Perk pick-rate analytics ──
     const _gs = gsRef.current;
@@ -996,29 +983,7 @@ export default function CallOfDoodie() {
           difficulty: difficultyRef.current,
           perksSelected: nextActivePerks.length,
         });
-        switch (archetype.id) {
-          case "vanguard":
-            perkModsRef.current.lifesteal = (perkModsRef.current.lifesteal || 0) + 0.03;
-            if (gsRef.current) gsRef.current._treeArmorMult = (gsRef.current._treeArmorMult || 1) * 0.92;
-            break;
-          case "gunslinger":
-            perkModsRef.current.critBonus = (perkModsRef.current.critBonus || 0) + 0.10;
-            perkModsRef.current.fireRateMult = (perkModsRef.current.fireRateMult || 1) * 0.88;
-            break;
-          case "demolitionist":
-            perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.12;
-            perkModsRef.current.grenadeCDMult = (perkModsRef.current.grenadeCDMult || 1) * 0.80;
-            perkModsRef.current.grenadeDamageMult = (perkModsRef.current.grenadeDamageMult || 1) * 1.20;
-            break;
-          case "tempo":
-            perkModsRef.current.comboTimerMult = (perkModsRef.current.comboTimerMult || 1) * 1.15;
-            perkModsRef.current.dashCDMult = (perkModsRef.current.dashCDMult || 1) * 0.80;
-            perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, Math.round((perkModsRef.current.pickupRange || 30) * 1.2));
-            if (gsRef.current?.player) gsRef.current.player.speed *= 1.08;
-            break;
-          default:
-            break;
-        }
+        applyArchetypeCapstone(archetype.id, perkModsRef.current, gsRef.current);
         if (gsRef.current) {
           addText(gsRef.current, GW() / 2, GH() / 2 - 112, `${archetype.emoji} CAPSTONE: ${archetype.capstoneName}!`, archetype.color, true);
           addText(gsRef.current, GW() / 2, GH() / 2 - 84, archetype.capstoneDesc, "#DDD");
@@ -1061,108 +1026,63 @@ export default function CallOfDoodie() {
 
   // ── Wave shop apply ───────────────────────────────────────────────────────
   const applyShopOption = useCallback((optionId) => {
-    const gs = gsRef.current, p = gs?.player;
-    if (!gs || !p) return;
-    const wpnIdx = currentWeaponRef.current;
-    switch (optionId) {
-      case "health":
-        p.health = Math.min(p.maxHealth, p.health + 50);
-        setHealth(Math.floor(p.health));
-        break;
-      case "ammo":
-        gs.weaponAmmos = WEAPONS.map((w, i) => {
-          const ul = gs.weaponUpgrades?.[i] || 0;
-          return Math.floor(w.maxAmmo * (1 + ul * 0.25) * (perkModsRef.current.ammoMult || 1));
-        });
-        gs.ammoCount = gs.weaponAmmos[wpnIdx];
-        setAmmo(gs.ammoCount);
-        break;
-      case "upgrade":
-        if ((gs.weaponUpgrades?.[wpnIdx] || 0) < 3) {
-          gs.weaponUpgrades[wpnIdx]++;
-          statsRef.current.weaponUpgradesCollected++;
-          statsRef.current.maxWeaponLevel = Math.max(statsRef.current.maxWeaponLevel, gs.weaponUpgrades[wpnIdx]);
-          setWeaponUpgrades([...gs.weaponUpgrades]);
-        }
-        break;
-      case "speed":
-        p.speed *= 1.10;
-        break;
-      case "maxhp":
-        p.maxHealth += 25; p.health = Math.min(p.maxHealth, p.health + 25);
-        setHealth(Math.floor(p.health));
-        break;
-      case "damage":
-        perkModsRef.current.damageMult = (perkModsRef.current.damageMult || 1) * 1.15;
-        break;
-      default:
-        // Weapon bless: id is "bless_N"
-        if (optionId.startsWith("bless_")) {
-          const _bIdx = parseInt(optionId.slice(6), 10);
-          if (!isNaN(_bIdx) && _bIdx >= 0 && _bIdx < WEAPONS.length) {
-            gs.weaponMods = gs.weaponMods || {};
-            gs.weaponMods[_bIdx] = { ...(gs.weaponMods[_bIdx] || {}), damageMult: 1.30, fireRateMult: 0.80, blessed: true };
-            addText(gs, gs.player.x, gs.player.y - 60, `✨ ${WEAPONS[_bIdx].name} BLESSED!`, "#FFD700", true);
-          }
-        }
-        // Weapon curse: id is "curse_N"
-        if (optionId.startsWith("curse_")) {
-          const _cIdx = parseInt(optionId.slice(6), 10);
-          if (!isNaN(_cIdx) && _cIdx >= 0 && _cIdx < WEAPONS.length) {
-            gs.weaponMods = gs.weaponMods || {};
-            gs.weaponMods[_cIdx] = { ...(gs.weaponMods[_cIdx] || {}), damageMult: 0.70, cursed: true };
-            p.maxHealth += 50; p.health = Math.min(p.maxHealth, p.health + 25);
-            setHealth(Math.floor(p.health));
-            addText(gs, gs.player.x, gs.player.y - 60, `☠️ PACT SEALED! +50 MAX HP`, "#CC00FF", true);
-          }
-        }
-        break;
+    const gs = gsRef.current;
+    if (!gs?.player) return;
+    const resolution = applyShopOptionEffect({
+      optionId,
+      gameState: gs,
+      weaponIndex: currentWeaponRef.current,
+      weapons: WEAPONS,
+      perkMods: perkModsRef.current,
+    });
+    if (!resolution) return;
+    if (resolution.health != null) setHealth(resolution.health);
+    if (resolution.ammo != null) setAmmo(resolution.ammo);
+    if (resolution.weaponUpgrades) setWeaponUpgrades(resolution.weaponUpgrades);
+    if (resolution.stats.weaponUpgradeCollected) {
+      statsRef.current.weaponUpgradesCollected++;
+    }
+    if (resolution.stats.maxWeaponLevel != null) {
+      statsRef.current.maxWeaponLevel = Math.max(statsRef.current.maxWeaponLevel, resolution.stats.maxWeaponLevel);
+    }
+    if (resolution.floatingText) {
+      addText(gs, gs.player.x, gs.player.y - 60, resolution.floatingText.text, resolution.floatingText.color, true);
     }
     shopPendingRef.current = false;
     setShopPending(false);
-    // Record in run history
-    const allOpts = [
-      { id: "health",  emoji: "💊", name: "Field Medkit" },
-      { id: "ammo",    emoji: "📦", name: "Resupply Crate" },
-      { id: "upgrade", emoji: "🔧", name: "Field Upgrade" },
-      { id: "speed",   emoji: "👟", name: "Combat Stim" },
-      { id: "maxhp",   emoji: "❤️", name: "HP Canister" },
-      { id: "damage",  emoji: "🔥", name: "Damage Boost" },
-    ];
-    const picked = allOpts.find(o => o.id === optionId)
-      || (optionId.startsWith("bless_") ? { emoji: "✨", name: `Bless ${WEAPONS[parseInt(optionId.slice(6))]?.name}` } : null)
-      || (optionId.startsWith("curse_") ? { emoji: "☠️", name: "Devil's Pact" } : null);
-    if (picked) setShopHistory(h => [...h, { emoji: picked.emoji, name: picked.name }]);
+    if (resolution.shopHistoryEntry) {
+      setShopHistory(h => [...h, resolution.shopHistoryEntry]);
+    }
   }, []);
 
   // ── Coin shop apply ───────────────────────────────────────────────────────
   const applyCoinShopItem = useCallback((optionId, cost) => {
-    const gs = gsRef.current, p = gs?.player;
-    if (!gs || !p || (gs.coins || 0) < cost) return;
-    gs.coins = (gs.coins || 0) - cost;
-    setCoins(gs.coins);
-    const wpnIdx = currentWeaponRef.current;
-    switch (optionId) {
-      case "cs_fullhp":
-        p.health = p.maxHealth; setHealth(Math.floor(p.health)); break;
-      case "cs_nuke":
-        gs.enemies.forEach((en, ni) => { en.health = -999; gs.score += en.points; if (ni < 12) addParticles(gs, en.x, en.y, en.color, 8); });
-        gs.enemies = []; gs.screenShake = 20; setScore(gs.score); break;
-      case "cs_timedil":
-        gs.timeDilationTimer = 360; break;
-      case "cs_grenade":
-        grenadeRef.current.ready = true; setGrenadeReady(true); break;
-      case "cs_extralife":
-        extraLivesRef.current = (extraLivesRef.current || 0) + 1; setExtraLives(extraLivesRef.current); break;
-      case "cs_maxhp":
-        p.maxHealth += 30; p.health = Math.min(p.maxHealth, p.health + 30); setHealth(Math.floor(p.health)); break;
-      case "cs_ammo":
-        gs.weaponAmmos = WEAPONS.map((w, i) => {
-          const ul = gs.weaponUpgrades?.[i] || 0;
-          return Math.floor(w.maxAmmo * (1 + ul * 0.25) * (perkModsRef.current.ammoMult || 1));
-        });
-        gs.ammoCount = gs.weaponAmmos[wpnIdx]; setAmmo(gs.ammoCount); break;
-      default: break;
+    const gs = gsRef.current;
+    if (!gs?.player || (gs.coins || 0) < cost) return;
+    const resolution = applyCoinShopEffect({
+      optionId,
+      cost,
+      gameState: gs,
+      weaponIndex: currentWeaponRef.current,
+      weapons: WEAPONS,
+      perkMods: perkModsRef.current,
+      extraLives: extraLivesRef.current,
+    });
+    if (!resolution) return;
+    setCoins(resolution.coins);
+    if (resolution.defeatedEnemies?.length) {
+      resolution.defeatedEnemies.forEach((en, ni) => { if (ni < 12) addParticles(gs, en.x, en.y, en.color, 8); });
+    }
+    if (resolution.health != null) setHealth(resolution.health);
+    if (resolution.ammo != null) setAmmo(resolution.ammo);
+    if (resolution.score != null) setScore(resolution.score);
+    if (resolution.grenadeReady) {
+      grenadeRef.current.ready = true;
+      setGrenadeReady(true);
+    }
+    if (resolution.extraLives !== extraLivesRef.current) {
+      extraLivesRef.current = resolution.extraLives;
+      setExtraLives(extraLivesRef.current);
     }
     soundPerkSelect();
   }, []);
@@ -2155,17 +2075,23 @@ export default function CallOfDoodie() {
           const _pool = _showMutation
             ? [...WAVE_CHALLENGE_MUTATIONS].sort(() => Math.random() - 0.5).slice(0, 2)
             : [];
-          if (bankedPerkChoicesRef.current > 0) {
-            deferredMutationPendingRef.current = _showMutation;
-            deferredMutationOptionsRef.current = _pool;
-            deferredShopPendingRef.current = !_showMutation && _showShop;
+          const rewardPlan = createWaveRewardPlan({
+            hasBankedPerkChoices: bankedPerkChoicesRef.current > 0,
+            showMutation: _showMutation,
+            showShop: _showShop,
+            mutationOptions: _pool,
+          });
+          deferredMutationPendingRef.current = rewardPlan.deferredMutationPending;
+          deferredMutationOptionsRef.current = rewardPlan.deferredMutationOptions;
+          deferredShopPendingRef.current = rewardPlan.deferredShopPending;
+          if (rewardPlan.action === "perk") {
             openQueuedPerkSelection();
-          } else if (_showMutation) {
-            setMutationOptions(_pool);
+          } else if (rewardPlan.action === "mutation") {
+            setMutationOptions(rewardPlan.mutationOptions);
             setMutationPending(true);
             mutationPendingRef.current = true;
             // Shop (if applicable) triggers from applyMutation / skipMutation callbacks
-          } else if (_showShop) {
+          } else if (rewardPlan.action === "shop") {
             const opts = getShopOptions(gsRef.current, currentWeaponRef.current);
             setShopOptions(opts);
             setCoinShopOptions(getCoinShopOptions(gsRef.current));

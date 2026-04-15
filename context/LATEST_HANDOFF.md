@@ -18,6 +18,9 @@ Public-safe handoff summary:
 - completed this session: `src/utils/buildArchetypes.js`, `HUD`, `PerkModal`, `WaveShopModal`, and `RouteSelectModal` now expose doctrine status + next milestone language instead of only raw capstone counts
 - completed this session: `src/drawGame.js` now gives bosses/elites/ranged threats clearer contrast, outer threat brackets, and ranged prefire aim telegraphs so crowded fights communicate priority earlier
 - completed this session: `src/utils/levelFlow.js`, `src/App.jsx`, and `src/components/HUD.jsx` now bank perk choices during combat, show when doctrine picks are ready, and defer the actual perk modal to wave-clear safe points instead of interrupting active fights
+- completed this session: `src/systems/progressionFlow.js` now owns queued perk consumption and wave-clear reward sequencing, pulling another real gameplay orchestration slice out of `src/App.jsx`
+- completed this session: `src/systems/perkResolution.js` now owns perk-synergy mutations and archetype capstone bonus application, trimming another dense rules block out of the perk-pick path in `src/App.jsx`
+- completed this session: `src/systems/shopResolution.js` now owns regular shop and coin-shop gameplay mutations, including bless/curse resolution, ammo refill math, and nuke/extra-life handling
 - validation baseline: `npm test` 131/131, targeted pacing/regression coverage 71/71, `npm run build` passes, `npm run lint` passes with 0 warnings / 0 errors
 
 ## Where We Left Off (Session 43)
@@ -37,6 +40,7 @@ Public-safe handoff summary:
 
 ## Next Recommended Slice
 - [ ] Continue `src/App.jsx` domain extraction — progression/reward cadence is now split conceptually, but the orchestration still lives in the main file
+- [ ] Continue `src/App.jsx` domain extraction — progression/reward cadence is now partially extracted, but combat/session orchestration still lives in the main file
 - [ ] Front-door simplification, slice 2 — keep reducing menu first-contact clutter and sharpen onboarding/rationale around recommended actions
 - [ ] Leaderboard trust v2, slice 2 — move from signed claims + anomaly logging into stronger server recomputation and review tooling
 - [ ] Level-flow cadence, slice 2 — verify the new banked-perk cadence in live play and tune mutation/shop/perk ordering if the safe-point chain still feels stacked
