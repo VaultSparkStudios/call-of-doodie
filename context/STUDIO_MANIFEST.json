@@ -1,0 +1,149 @@
+{
+  "schemaVersion": "1.0",
+  "generatedFrom": "ops runtime-pack synthesized manifest",
+  "synthesized": true,
+  "identity": {
+    "slug": "call-of-doodie",
+    "name": "Call of Doodie",
+    "repo": "VaultSparkStudios/call-of-doodie",
+    "owner": "VaultSpark Studios",
+    "type": "game",
+    "lifecycle": "deployed",
+    "audience": "public-unlaunched",
+    "vaultStatus": "FORGE"
+  },
+  "studioOs": {
+    "applied": true,
+    "templateVersion": "3.2",
+    "complianceVersion": "1.5",
+    "sessionModeDefault": "builder",
+    "requiredFilesPresent": false
+  },
+  "listingMetadata": {
+    "canonicalSummary": "Humor-first browser shooter with a live build. Comedy-first multiplayer parody.",
+    "tagline": "Marketing plan development. CLAUDE.md deployed for agent routing.",
+    "tags": [
+      "game",
+      "live",
+      "deployed"
+    ],
+    "categories": [
+      "game",
+      "public-unlaunched"
+    ],
+    "hubDescription": "Marketing plan development. CLAUDE.md deployed for agent routing.",
+    "websiteDescription": "Humor-first browser shooter with a live build. Comedy-first multiplayer parody.",
+    "socialDescription": "Humor-first browser shooter with a live build. Comedy-first multiplayer parody.",
+    "brandingLabel": "Powered by VaultSpark Studios"
+  },
+  "surfaces": {
+    "local": [
+      {
+        "label": "workspace",
+        "path": "C:\\Users\\p4cka\\documents\\development\\Call-Of-Doodie"
+      }
+    ],
+    "staging": [],
+    "production": [
+      {
+        "label": "live",
+        "url": "https://vaultsparkstudios.com/call-of-doodie/"
+      }
+    ],
+    "preview": [],
+    "admin": [],
+    "api": [],
+    "docs": [],
+    "github": [
+      {
+        "label": "repo",
+        "url": "https://github.com/VaultSparkStudios/call-of-doodie"
+      }
+    ],
+    "testing": []
+  },
+  "capabilities": {
+    "auth": false,
+    "payments": false,
+    "analytics": false,
+    "email": false,
+    "ai": false,
+    "publishing": false,
+    "community": false,
+    "storage": false,
+    "cron": false
+  },
+  "integrations": {
+    "studioHub": {
+      "enabled": true,
+      "mode": "private"
+    },
+    "website": {
+      "enabled": true,
+      "mode": "public-safe"
+    },
+    "socialDashboard": {
+      "enabled": true,
+      "mode": "private"
+    },
+    "sparkFunnel": {
+      "enabled": true,
+      "mode": "growth"
+    },
+    "ignis": {
+      "enabled": true,
+      "mode": "portfolio-intelligence"
+    },
+    "founderQueue": {
+      "enabled": true,
+      "mode": "private"
+    }
+  },
+  "secretsCapabilities": [],
+  "hosting": {
+    "hostingProvider": "github-pages",
+    "liveUrl": "https://vaultsparkstudios.com/call-of-doodie/",
+    "stagingUrl": null,
+    "privatePreviewUrl": null,
+    "localDevUrl": null,
+    "deployStatus": "deployed-unannounced",
+    "testInstructions": []
+  },
+  "capacity": {
+    "currentPlanTier": "unknown",
+    "freePlanCeilings": [],
+    "fitsCurrentCapacity": true,
+    "preferredRuntime": "github-pages",
+    "fallbackRuntime": "hetzner",
+    "notes": ""
+  },
+  "publicMetadata": {
+    "privateByDefault": true,
+    "publicReady": false,
+    "publicRepoSanitized": false,
+    "brandingRequired": true,
+    "brandingCompliant": true,
+    "footerAttribution": "A VaultSpark Studios Game",
+    "websiteListingRequired": true
+  },
+  "automation": {
+    "safeActions": [
+      "refresh-generated-surfaces"
+    ],
+    "guardedActions": [
+      "propagate-templates"
+    ],
+    "blockedActions": [
+      "change-canon",
+      "flip-repo-public",
+      "alter-licensing"
+    ]
+  },
+  "contracts": {
+    "hub": "context/contracts/hub.json",
+    "websitePublic": "context/contracts/website-public.json",
+    "socialDashboard": "context/contracts/social-dashboard.json",
+    "sparkFunnel": "context/contracts/sparkfunnel.json",
+    "ignis": "context/contracts/ignis.json"
+  }
+}
