@@ -2,6 +2,18 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-17 (Session 47)
+
+- Updated `context/TASK_BOARD.md`, `docs/IMPROVEMENT_PLAN.md`, `context/CURRENT_STATE.md`, `context/LATEST_HANDOFF.md`, and `context/PROJECT_STATUS.json` with the Run Intelligence Spine / integrated refinement stack and follow-up queue.
+- Added `src/utils/runIntelligence.js` plus tests for menu recommendation, post-run diagnosis, rivalry prompts, compact event digests, Studio event shape, and rule-based roast callouts.
+- Wired run intelligence into `MenuScreen` and `DeathScreen`, including history-aware recommendations, debrief drills, rivalry prompts, local Studio event persistence, and local rivalry outcome recording.
+- Added local Studio event and rivalry persistence helpers in `src/storage.js` with test coverage.
+- Upgraded event digests to v2 timeline bands and updated `supabase/functions/submit-score/index.ts` to validate digest timeline coherence before leaderboard insert.
+- Extracted digest-aware leaderboard payload shaping into `buildSessionSubmission` and routed `App.jsx` through that helper.
+- Lazy-loaded `DeathScreen` from `App.jsx`, keeping the death/debrief surface in a separate production chunk.
+- Added local protocol repair helpers: `scripts/ops.mjs action-queue`, `scripts/ops.mjs blocker-preflight`, `scripts/render-startup-brief.mjs`, and `scripts/validate-brief-format.mjs`.
+- Validation baseline: `npm test` 149/149, `npm run lint` clean, `npm run build` passing.
+
 ## 2026-04-14 (Session 42)
 
 - Audited the project surface and converted the findings into a durable roadmap in `docs/IMPROVEMENT_PLAN.md`

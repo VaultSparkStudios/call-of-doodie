@@ -122,6 +122,43 @@ function collectPlausibilityFailures(entry: ReturnType<typeof normalizeEntry>, r
   return reasons;
 }
 
+function collectDigestFailures(entry: ReturnType<typeof normalizeEntry>, digest: Record<string, unknown> | null) {
+  const reasons: string[] = [];
+  if (!digest) return reasons;
+
+  if (digest.v !== 1 && digest.v !== 2) reasons.push("event digest version is unsupported");
+  if (digest.mode && digest.mode !== (entry.mode || "standard")) reasons.push("event digest mode mismatch");
+  if (digest.difficulty && digest.difficulty !== entry.difficulty) reasons.push("event digest difficulty mismatch");
+  if ((digest.seed ?? null) !== (entry.seed ?? null)) reasons.push("event digest seed mismatch");
+
+  const scoreBand = Math.floor(entry.score / 5000);
+  const killBand = Math.floor(entry.kills / 10);
+  const damageBand = Math.floor(entry.totalDamage / 25000);
+  const streakBand = Math.floor(entry.bestStreak / 10);
+  if (Number(digest.scoreBand) !== scoreBand) reasons.push("event digest score band mismatch");
+  if (Number(digest.killBand) !== killBand) reasons.push("event digest kill band mismatch");
+  if (Number(digest.damageBand) !== damageBand) reasons.push("event digest damage band mismatch");
+  if (Number(digest.streakBand) !== streakBand) reasons.push("event digest streak band mismatch");
+  if (digest.v === 2) {
+    const expectedParts = [
+      `m:${entry.mode || "standard"}`,
+      `d:${entry.difficulty}`,
+      `w:${Math.floor(entry.wave / 5)}`,
+      `s:${scoreBand}`,
+      `k:${killBand}`,
+      `l:${entry.level}`,
+      `p:${Number(digest.perkCount) || 0}`,
+      `a:${Number(digest.achievementCount) || 0}`,
+    ];
+    const timeline = typeof digest.timeline === "string" ? digest.timeline : "";
+    for (const part of expectedParts) {
+      if (!timeline.includes(part)) reasons.push(`event digest timeline missing ${part}`);
+    }
+  }
+
+  return reasons;
+}
+
 function normalizeEntry(entry: Record<string, unknown>) {
   const mode = VALID_MODES.has(String(entry.mode ?? "")) ? String(entry.mode) : null;
   return {
@@ -192,6 +229,9 @@ Deno.serve(async (req) => {
       ?? "";
 
     const payload = normalizeEntry(rawBody);
+    const eventDigest = rawBody.eventDigest && typeof rawBody.eventDigest === "object"
+      ? rawBody.eventDigest as Record<string, unknown>
+      : null;
 
     const { data: tokenRow, error: tokenError } = await serviceClient
       .from("run_tokens")
@@ -296,6 +336,29 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({
         error: "Run rejected by plausibility validation.",
         reasons: plausibilityFailures.slice(0, 3),
+      }), {
+        status: 422,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const digestFailures = collectDigestFailures(payload, eventDigest);
+    if (digestFailures.length > 0) {
+      await logRunAnomaly(serviceClient, {
+        token: runToken,
+        uid,
+        reason: "event_digest_mismatch",
+        metadata: {
+          mode: payload.mode,
+          difficulty: payload.difficulty,
+          wave: payload.wave,
+          score: payload.score,
+          reasons: digestFailures.slice(0, 5),
+        },
+      });
+      return new Response(JSON.stringify({
+        error: "Run rejected by event digest validation.",
+        reasons: digestFailures.slice(0, 3),
       }), {
         status: 422,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -1,6 +1,6 @@
-<!-- template-version: 3.1 -->
-<!-- synced-from: studio-ops/prompts/closeout.md @ Session 73 (2026-04-14) -->
-<!-- v3.1 changes: closeout autopilot at step 11 — `node scripts/ops.mjs closeout` bundles doctor sync + project status stamp + git diff preview + CONFIRMATION + commit + push + beacon/lock clear -->
+<!-- template-version: 3.2 -->
+<!-- synced-from: studio-ops/prompts/closeout.md @ Session 76 (2026-04-14) -->
+<!-- v3.2 changes: blocker preflight required before retaining Human Action Required items -->
 # CLOSEOUT
 
 Executed when the user says only `closeout`.
@@ -33,7 +33,7 @@ Classify: **Achieved** · **Partial** *(note scope drift)* · **Redirected** *(l
     ```bash
     node scripts/ops.mjs closeout
     ```
-    Runs: doctor sync → stamp PROJECT_STATUS → git status + diff preview → **HUMAN CONFIRMATION** → commit (conventional msg) → push → clear lock + beacon → print STATUS BOARD. Never skip confirmation. `--dry-run` shows the plan without writing.
+    Runs: doctor --loop → refresh startup brief → stamp PROJECT_STATUS → git status + diff preview → **HUMAN CONFIRMATION** → commit (conventional msg) → push → clear lock + beacon → print STATUS BOARD. Never skip confirmation. `--dry-run` shows the plan without writing.
 
 ### Where We Left Off  *(write to top of LATEST_HANDOFF.md)*
 
@@ -200,6 +200,15 @@ Write both into the Rolling Status header (Step 2).
 ### Step 4.5 · Human Action Required  *(mandatory — never skip)*
 
 Scan the full session for items only the Studio Owner can resolve: external service setup, manual approvals, financial actions, legal, decisions only the human can make.
+
+**Mandatory blocker preflight before adding or retaining any item here:**
+```bash
+node scripts/ops.mjs blocker-preflight
+```
+Rules:
+- Run secrets discovery first for any mapped capability.
+- If the blocker is agent-attemptable, try the elevated/admin/API path before leaving it here.
+- Only keep an item in `Human Action Required` when the agent-side attempt failed, access is genuinely absent, or the action is truly owner-only.
 
 **If items exist:** write a `## Human Action Required` section in `context/LATEST_HANDOFF.md` and add to `context/TASK_BOARD.md` under `## Human Action Required` (separate from `## Blocked` — blocked = agent-resolvable).
 
@@ -449,6 +458,14 @@ No direction this session → confirm "CDR reviewed — no new entries" in close
 
 Reply with the **CLOSEOUT STATUS BOARD** below. Fill every field — do not omit sections.
 Use `✓` for done, `□` for pending/skipped (with reason), `—` for not-applicable.
+
+Before presenting it, validate the candidate board with:
+
+```bash
+node scripts/validate-closeout-board-format.mjs --stdin
+```
+
+If validation fails, repair the board first. Do not replace the canonical closeout board with prose.
 
 **Score bars:** 20-char progress bar for each /100 score: `█` per 5 pts.
 **Overall bar:** 24-char bar for /500 total.

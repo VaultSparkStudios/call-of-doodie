@@ -33,7 +33,20 @@ Public-safe launch roadmap summary.
 - [ ] Meta clarity pass — recommended next unlock, recommended spend, and player weakness-aware loadout advice
 - [ ] Security/trust v2 ops surface — anomaly review logs and clearer rejection telemetry around suspicious leaderboard submissions
 - [ ] App-runtime architecture pass — extract another production domain from `src/App.jsx` after the run-submission slice
+- [ ] Roast Director — rule-based comedic announcer/callout layer tied to structured run events, with rate limits and player control
+- [ ] Studio Hub/Social Dashboard event contract — normalize game session, challenge, anomaly, debrief, and rivalry events for downstream Studio OS surfaces
 ## Done
+- [x] [SIL:3⛔] Run Intelligence Spine — reusable intelligence foundation shipped across front door, post-run diagnosis, rematch/rivalry prompts, balance telemetry, Studio event shape, and trust digest slices
+- [x] [SIL:3⛔] Integrated refinement tranche — coordinated slices shipped across App extraction, coaching, telemetry, trust, performance, rivalry, roast/personality, and protocol repair
+- [x] [SIL] Run Intelligence Spine, slice 2 — menu recommendations now consider recent run history and unresolved rivalry losses instead of only current mode/loadout context
+- [x] [SIL] Leaderboard trust v3, slice 1 — compact event digest upgraded to v2 timeline bands, and the submit Edge Function validates timeline coherence before accepting leaderboard rows
+- [x] [SIL] Studio Hub/Social Dashboard event contract, slice 1 — local `vaultspark.game-event.v1` event persistence now captures front-door and debrief intelligence events for downstream Studio surfaces
+- [x] [SIL] Rivalry network, slice 1 — local rivalry history records seed, target score, win/loss, delta, mode, difficulty, and wave, then feeds rematch recommendations back into the menu
+- [x] [SIL] App-domain extraction, slice 6 — score/session submission now routes through `buildSessionSubmission`, keeping the digest-aware leaderboard payload out of `App.jsx`
+- [x] [SIL] Run Intelligence Spine, slice 1 — `src/utils/runIntelligence.js` now centralizes menu recommendations, post-run diagnosis, rivalry prompts, compact trust digests, Studio event shape, and a first rule-based roast callout layer
+- [x] [SIL] Integrated refinement tranche, slice 1 — menu run intel, death-screen run intelligence, debrief telemetry, event-digest score submission, DeathScreen code-splitting, and startup/action-queue protocol repair shipped together
+- [x] [SIL] Protocol repair — `scripts/ops.mjs action-queue`, `scripts/ops.mjs blocker-preflight`, `scripts/render-startup-brief.mjs`, and `scripts/validate-brief-format.mjs` now exist and pass local dry runs
+- [x] [SIL] Bundle split cleanup, slice 2 — `DeathScreen` is lazy-loaded from `App.jsx`; production build now emits a separate `DeathScreen` chunk and reduces the main app chunk
 - [x] Phase 1 launch validation — live Edge Function health check added at `scripts/health-check.mjs` and passed against production (`issue-run-token` + `submit-score`)
 - [x] Phase 1 launch validation — minimal launch smoke test added at `src/App.launch.test.jsx` and passing in the full suite
 - [x] Phase 1 live QA (terminal-verifiable) — repeatable live site checks added at `scripts/live-site-check.mjs`

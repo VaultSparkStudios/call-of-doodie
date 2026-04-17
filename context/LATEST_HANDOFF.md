@@ -1,6 +1,53 @@
 # Latest Handoff
 
-Session Intent: Encode the full next-step execution stack in repo memory, then ship the next multi-system refinement tranche across trust, front-door clarity, coaching follow-through, and build guidance.
+Session Intent: Update memory/task board with the next highest-impact refinement stack, then implement one integrated highest-quality pass across run intelligence, UX coaching, rivalry, telemetry, trust, performance, and Studio OS protocol repair.
+
+## Where We Left Off (Session 47 — intelligence/rivalry/trust follow-up)
+- Shipped: 5 improvements across 5 groups — history-aware recommendations, local Studio event persistence, local rivalry network, v2 event timeline digest validation, and session-submission extraction
+- Tests: `npm test` 149/149 · `npm run lint` clean · `npm run build` passing
+- Deploy: pending — repo-local changes validated, not deployed
+
+Public-safe handoff summary:
+- session intent: implement the next five highest-impact ideas from the prior handoff queue
+- intent outcome: Achieved — each item shipped as a focused production slice without adding LLM/API token spend
+- completed this session: `src/utils/runIntelligence.js` now uses recent run history and unresolved rivalry losses to choose menu focus, so advice can become player-specific across sessions
+- completed this session: `src/storage.js` now persists normalized local Studio game events and local rivalry results, including seed, target score, win/loss, delta, mode, difficulty, and wave
+- completed this session: `MenuScreen` now loads run/rivalry history and saves front-door Studio events before tracking analytics
+- completed this session: `DeathScreen` now saves debrief Studio events and records rivalry outcomes when a seeded run ends
+- completed this session: `buildRunEventDigest` now emits v2 timeline bands, and `submit-score` validates timeline coherence in addition to final stat bands
+- completed this session: `src/utils/runSubmission.js` now exposes `buildSessionSubmission`, and `App.jsx` uses it for digest-aware leaderboard payload shaping
+- validation baseline: `npm test` 149/149, `npm run lint` clean, `npm run build` passes; build still reports the pre-existing non-blocking `register-sw.js` non-module bundling warning
+
+## Next Recommended Slice
+- [ ] Studio Hub/Social Dashboard integration, slice 2 — sync the local `vaultspark.game-event.v1` queue to a Supabase/Hub endpoint when credentials and schema are ready
+- [ ] Rivalry network, slice 2 — add a visible rivalry history/rematch panel and challenge streak copy so the stored data becomes a stronger player-facing loop
+- [ ] Trust v3, slice 2 — sign the v2 digest/timeline client-side with the issued run claim so replay tampering becomes harder
+- [ ] App-domain extraction, slice 7 — move submit-score side effects and analytics/event persistence into a dedicated session completion module
+- [ ] Intelligence v3 — use stored Studio/debrief events to detect whether the player follows coaching and whether rematches improve outcomes
+
+## Where We Left Off (Session 46 — Run Intelligence Spine tranche)
+- Shipped: 6 improvements across 6 groups — run-intelligence utility, front-door intel, post-run diagnosis/roast layer, compact event-digest trust validation, DeathScreen chunk split, and local startup protocol repair
+- Tests: `npm test` 144/144 · `npm run lint` clean · `npm run build` passing
+- Deploy: pending — repo-local changes validated, not deployed
+
+Public-safe handoff summary:
+- session intent: update durable memory/task board with the combined 10-item quality stack, then ship a coordinated first slice instead of scattering work across unrelated polish
+- intent outcome: Achieved as a first integrated slice — the impossible full 10-item rewrite was scoped into production-safe foundations that advance every category without destabilizing the game
+- completed this session: `context/TASK_BOARD.md`, `docs/IMPROVEMENT_PLAN.md`, and `context/CURRENT_STATE.md` now record the Run Intelligence Spine and integrated refinement tranche as active public-safe priorities
+- completed this session: `src/utils/runIntelligence.js` + tests added — menu recommendation, post-run diagnosis, rivalry prompt, compact event digest, Studio event shape, and rule-based roast callout logic now share one reusable layer
+- completed this session: `src/components/MenuScreen.jsx` now shows a Run Intel card and tracks front-door actions with the shared intelligence focus and Studio event payload
+- completed this session: `src/components/DeathScreen.jsx` now shows Run Intelligence diagnosis/drill/rivalry guidance, emits debrief intelligence telemetry, includes the first rule-based roast callout, and submits a compact event digest with score submissions
+- completed this session: `src/utils/runSubmission.js`, `src/storage.js`, `src/App.jsx`, and `supabase/functions/submit-score/index.ts` now carry and validate compact event-digest bands before leaderboard insert, adding a first event-derived trust layer beyond final-score plausibility
+- completed this session: `src/App.jsx` now lazy-loads `DeathScreen`, producing a separate `DeathScreen` chunk and reducing the main production app chunk from the prior ~798.60 kB raw / 234.45 kB gzip baseline to 766.47 kB raw / 224.69 kB gzip
+- completed this session: `scripts/ops.mjs action-queue`, `scripts/ops.mjs blocker-preflight`, `scripts/render-startup-brief.mjs`, and `scripts/validate-brief-format.mjs` now exist; action queue, blocker preflight, render, and validate dry-runs pass
+- validation baseline: `npm test` 144/144, `npm run lint` clean, `npm run build` passes; build still reports the pre-existing non-blocking `register-sw.js` non-module bundling warning
+
+## Next Recommended Slice
+- [ ] Run Intelligence Spine, slice 2 — feed recent run history into menu recommendations so advice becomes player-specific across sessions, not just current context aware
+- [ ] Leaderboard trust v3, slice 2 — evolve the compact digest into a signed event timeline summary with wave-clear/checkpoint coherence
+- [ ] Studio Hub/Social Dashboard integration — persist normalized `vaultspark.game-event.v1` events server-side for sessions, challenges, anomalies, and debrief follow-through
+- [ ] Rivalry network, slice 1 — store challenge seed history and win/loss deltas locally, then surface rematch streaks in menu/debrief
+- [ ] App-domain extraction, next slice — extract score-submit/session-completion orchestration around the new event digest path
 
 ## Where We Left Off (Session 45 — refinement tranche)
 - Shipped: 6 improvements across 5 groups — roadmap encoding, trust v2 groundwork, submit-feedback clarity, App extraction, build-guidance depth, and debrief follow-through telemetry

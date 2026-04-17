@@ -194,6 +194,7 @@ export async function saveToLeaderboard(entry) {
         runToken: rawRunToken,
         clientUid: getOrCreateClientUid(),
         summarySig: typeof entry?.summarySig === "string" ? entry.summarySig.trim() : "",
+        eventDigest: entry?.eventDigest && typeof entry.eventDigest === "object" ? entry.eventDigest : null,
       });
       if (!response.ok) {
         const failure = {
@@ -531,6 +532,50 @@ export function loadRunHistory() {
   try {
     return JSON.parse(localStorage.getItem(RUN_HISTORY_KEY) || "[]");
   } catch { return []; }
+}
+
+// ===== STUDIO EVENTS / RIVALRY HISTORY =====
+const STUDIO_EVENTS_KEY = "cod-studio-events-v1";
+const RIVALRY_HISTORY_KEY = "cod-rivalry-history-v1";
+
+export function saveStudioGameEvent(event) {
+  try {
+    const events = JSON.parse(localStorage.getItem(STUDIO_EVENTS_KEY) || "[]");
+    events.unshift(event);
+    localStorage.setItem(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, 50)));
+  } catch {}
+}
+
+export function loadStudioGameEvents() {
+  try { return JSON.parse(localStorage.getItem(STUDIO_EVENTS_KEY) || "[]"); }
+  catch { return []; }
+}
+
+export function recordRivalryResult({ seed, vsScore = null, vsName = null, score = 0, wave = 1, mode = "standard", difficulty = "normal" } = {}) {
+  if (!seed) return null;
+  const result = {
+    seed,
+    vsScore,
+    vsName,
+    score,
+    wave,
+    mode,
+    difficulty,
+    won: vsScore == null ? null : score >= vsScore,
+    delta: vsScore == null ? null : score - vsScore,
+    ts: Date.now(),
+  };
+  try {
+    const history = JSON.parse(localStorage.getItem(RIVALRY_HISTORY_KEY) || "[]");
+    history.unshift(result);
+    localStorage.setItem(RIVALRY_HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+  } catch {}
+  return result;
+}
+
+export function loadRivalryHistory() {
+  try { return JSON.parse(localStorage.getItem(RIVALRY_HISTORY_KEY) || "[]"); }
+  catch { return []; }
 }
 
 export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {

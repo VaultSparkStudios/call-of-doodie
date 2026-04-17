@@ -33,6 +33,7 @@ export function buildLeaderboardEntry({
   mode,
   runToken,
   summarySig,
+  eventDigest,
 } = {}) {
   const claim = buildRunClaim({ mode, difficulty, seed, starterLoadout });
   return {
@@ -57,5 +58,56 @@ export function buildLeaderboardEntry({
     mode: claim.mode ?? undefined,
     runToken,
     summarySig,
+    eventDigest,
   };
+}
+
+export function buildSessionSubmission({
+  username,
+  score,
+  kills,
+  wave,
+  lastWords,
+  rank,
+  bestStreak,
+  totalDamage,
+  level,
+  time,
+  achievements,
+  difficulty,
+  starterLoadout,
+  customSettings,
+  inputDevice,
+  seed,
+  accountLevel,
+  prestige,
+  mode,
+  runToken,
+  summarySig,
+  eventDigest,
+} = {}) {
+  return buildLeaderboardEntry({
+    username,
+    score,
+    kills,
+    wave,
+    lastWords,
+    rank,
+    bestStreak,
+    totalDamage,
+    level,
+    time,
+    achievements,
+    difficulty,
+    starterLoadout,
+    customSettings,
+    inputDevice,
+    seed,
+    accountLevel,
+    prestige,
+    mode,
+    runToken,
+    summarySig,
+    eventDigest,
+  });
 }

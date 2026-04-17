@@ -2,7 +2,16 @@
 // Functions that touch localStorage or Supabase are excluded — only pure logic is tested here.
 
 import { describe, it, expect } from "vitest";
-import { compareLeaderboardEntries, getAccountLevel, normalizeLeaderboardEntry, parseRunTime } from "./storage.js";
+import {
+  compareLeaderboardEntries,
+  getAccountLevel,
+  loadRivalryHistory,
+  loadStudioGameEvents,
+  normalizeLeaderboardEntry,
+  parseRunTime,
+  recordRivalryResult,
+  saveStudioGameEvent,
+} from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
 // Tier labels: 1-9 gray, 10-24 bronze, 25-49 silver, 50-99 gold, 100+ purple
@@ -106,5 +115,23 @@ describe("normalizeLeaderboardEntry", () => {
     expect(entry.wave).toBe(1);
     expect(entry.inputDevice).toBe("mouse");
     expect(entry.mode).toBeNull();
+  });
+});
+
+describe("local Studio event and rivalry persistence", () => {
+  it("stores Studio game events locally", () => {
+    localStorage.clear();
+    saveStudioGameEvent({ type: "debrief", payload: { cause: "chain_control" } });
+
+    expect(loadStudioGameEvents()[0].type).toBe("debrief");
+  });
+
+  it("records rivalry win/loss deltas locally", () => {
+    localStorage.clear();
+    const result = recordRivalryResult({ seed: 123, vsScore: 20000, score: 18000, wave: 9 });
+
+    expect(result.won).toBe(false);
+    expect(result.delta).toBe(-2000);
+    expect(loadRivalryHistory()[0].seed).toBe(123);
   });
 });

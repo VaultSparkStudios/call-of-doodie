@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { buildLeaderboardEntry, buildRunClaim } from "./runSubmission.js";
+import { buildLeaderboardEntry, buildRunClaim, buildSessionSubmission } from "./runSubmission.js";
 
 describe("runSubmission", () => {
   test("normalizes the standard run claim", () => {
@@ -28,11 +28,30 @@ describe("runSubmission", () => {
       mode: "boss_rush",
       runToken: "token-123",
       summarySig: "sig-abc",
+      eventDigest: { v: 1, scoreBand: 2 },
     });
 
     expect(entry.name).toBe("Doodie");
     expect(entry.mode).toBe("boss_rush");
     expect(entry.runToken).toBe("token-123");
     expect(entry.summarySig).toBe("sig-abc");
+    expect(entry.eventDigest).toEqual({ v: 1, scoreBand: 2 });
+  });
+
+  test("builds a session submission through the same normalized leaderboard path", () => {
+    const entry = buildSessionSubmission({
+      username: "SessionDood",
+      score: 20000,
+      kills: 101,
+      wave: 14,
+      difficulty: "hard",
+      starterLoadout: "speedster",
+      mode: "standard",
+      eventDigest: { v: 2, timeline: "m:standard|s:4" },
+    });
+
+    expect(entry.name).toBe("SessionDood");
+    expect(entry.mode).toBeUndefined();
+    expect(entry.eventDigest.v).toBe(2);
   });
 });

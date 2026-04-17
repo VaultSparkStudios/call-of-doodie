@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout } from "../storage.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent } from "../storage.js";
 import { supabase } from "../supabase.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
+import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { isSupporter } from "../utils/supporter.js";
@@ -58,6 +59,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [loadoutCodeInput, setLoadoutCodeInput] = useState("");
   const [loadoutCodeError, setLoadoutCodeError] = useState("");
   const [customLoadouts, setCustomLoadouts] = useState(() => loadCustomLoadouts());
+  const [runHistory, setRunHistory] = useState(() => loadRunHistory());
+  const [rivalryHistory, setRivalryHistory] = useState(() => loadRivalryHistory());
   const [editingSlot, setEditingSlot] = useState(null); // null or slot index 0-2
   const [editName, setEditName] = useState("");
   const [editWeaponIdx, setEditWeaponIdx] = useState(0);
@@ -124,6 +127,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     setMissions(getDailyMissions());
     setMissionProgress(loadMissionProgress());
     setMeta(loadMetaProgress());
+    setRunHistory(loadRunHistory());
+    setRivalryHistory(loadRivalryHistory());
 
     // Parse challenge link URL params (?seed=XXXXX&diff=normal&vs=12345&vsName=Player)
     const params = new URLSearchParams(window.location.search);
@@ -287,6 +292,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     currentModeLabel,
     todaySeed: todaySeedStr,
   });
+  const runIntel = buildMenuIntelligence({
+    mode: modeId,
+    selectedLoadout,
+    missions,
+    missionProgress,
+    meta,
+    career,
+    challenge: challengeMode?.vs ? { seed: challengeMode.seed, vsScore: challengeMode.vs, vsName: challengeMode.vsName } : null,
+    dailyAlreadyPlayed,
+    todaySeed: todaySeedStr,
+    runHistory,
+    rivalryHistory,
+  });
   const recommendedAction = actionStack[0];
 
   const handleCopyChallengeLink = useCallback(async () => {
@@ -305,12 +323,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   }, [challengeMode?.vs, challengeMode?.vsName, customSeed, difficulty, todaySeedStr]);
 
   const runFrontDoorAction = useCallback((actionId) => {
+    const studioEvent = buildStudioGameEvent("front_door_action", {
+      actionId: actionId || "play_now",
+      ...runIntel.telemetry,
+    });
+    saveStudioGameEvent(studioEvent);
     track("front_door_action", {
       actionId: actionId || "play_now",
       mode: modeId,
       loadout: selectedLoadout.id,
       dailyAlreadyPlayed,
       challengeActive: Boolean(challengeMode?.vs),
+      intelligenceFocus: runIntel.focus,
+      studioEvent,
     });
     switch (actionId) {
       case "accept_challenge":
@@ -336,7 +361,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       default:
         onStart(deployArgs.seed, deployArgs.challenge);
     }
-  }, [challengeMode?.vs, dailyAlreadyPlayed, deployArgs.challenge, deployArgs.seed, handleCopyChallengeLink, modeId, onSetDailyChallengeMode, onStart, selectedLoadout.id, todaySeedStr]);
+  }, [challengeMode?.vs, dailyAlreadyPlayed, deployArgs.challenge, deployArgs.seed, handleCopyChallengeLink, modeId, onSetDailyChallengeMode, onStart, runIntel.focus, runIntel.telemetry, selectedLoadout.id, todaySeedStr]);
 
   // Generate social share card for New Features
   const generateFeatureCard = useCallback(() => new Promise((resolve) => {
@@ -1412,6 +1437,18 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 {index + 1}. {line}
               </div>
             ))}
+          </div>
+        </div>
+
+        <div style={{ ...card, margin: "0 0 10px", textAlign: "left", border: "1px solid rgba(0,229,255,0.18)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
+          <div style={{ fontSize: 9, color: "#00E5FF", letterSpacing: 2, fontWeight: 900, marginBottom: 6, textAlign: "center" }}>
+            RUN INTEL · {runIntel.focus.replace(/_/g, " ").toUpperCase()}
+          </div>
+          <div style={{ fontSize: 12, color: "#EAFBFF", lineHeight: 1.45, textAlign: "center" }}>
+            {runIntel.directive}
+          </div>
+          <div style={{ fontSize: 10, color: "#8FEFFF", lineHeight: 1.45, textAlign: "center", marginTop: 5 }}>
+            {runIntel.recommendation}
           </div>
         </div>
 

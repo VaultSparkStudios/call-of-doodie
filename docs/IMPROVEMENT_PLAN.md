@@ -10,6 +10,7 @@ Public-safe roadmap derived from the Session 43 audit refresh.
 
 ## Ranked implementation order
 
+0. Run Intelligence Spine: one reusable layer for menu recommendations, post-run diagnosis, rematch/rivalry prompts, balance telemetry, and Studio Hub event shape
 1. Domain refactor of `src/App.jsx` into combat, progression, pacing, rewards, and session modules
 2. Front-door simplification so the menu recommends the next best action instead of exposing the full system wall immediately
 3. Leaderboard trust v2: signed run summaries, event-derived validation, and anomaly logging beyond plausibility envelopes
@@ -22,6 +23,14 @@ Public-safe roadmap derived from the Session 43 audit refresh.
 10. Render/update optimization pass for mobile headroom and safer future content growth
 11. Telemetry/balance loop: instrument where runs fail, what choices players make, and what advice actually changes behavior
 12. Warning-debt cleanup and UI architecture separation so future feature work lands on a cleaner surface
+
+## 2026-04-17 integrated tranche target
+
+- Implement a first production slice of the Run Intelligence Spine so existing systems share the same diagnosis/recommendation language.
+- Improve the front door and debrief loop with the shared intelligence output instead of adding another isolated recommendation widget.
+- Add telemetry primitives that can feed balance, coaching, rivalry, and Studio Hub/Social Dashboard surfaces without introducing LLM/API token spend.
+- Push trust and performance forward with compact event-digest foundations and lazy/deferred non-first-run work.
+- Repair local protocol drift enough that startup/action-queue helpers stop being missing-command blockers.
 
 ## Next 10 non-human execution steps
 
