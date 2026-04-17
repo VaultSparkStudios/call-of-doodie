@@ -3,7 +3,9 @@ import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
+import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
+import { recordRivalryResult, saveStudioGameEvent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -275,6 +277,11 @@ export default function DeathScreen({
 
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const rankIndex = Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1);
+  const mode = bossRushMode ? "boss_rush"
+    : cursedRunMode ? "cursed"
+      : scoreAttackMode ? "score_attack"
+        : dailyChallengeMode ? "daily_challenge"
+          : "standard";
   const debrief = buildRunDebrief({
     score,
     kills,
@@ -295,6 +302,55 @@ export default function DeathScreen({
     vsScore,
     runSeed,
   });
+  const postRunIntel = buildPostRunIntelligence({
+    score,
+    kills,
+    wave,
+    bestStreak,
+    grenades,
+    crits,
+    timeSurvived,
+    vsScore,
+    runSeed,
+    mode,
+  });
+  const eventDigest = buildRunEventDigest({
+    mode,
+    difficulty,
+    seed: runSeed ?? null,
+    wave,
+    score,
+    kills,
+    level,
+    bestStreak,
+    totalDamage,
+    time: fmtTime(timeSurvived),
+    perkCount: activePerks?.length || 0,
+    achievementCount: achievementsUnlocked?.length || 0,
+    cause: postRunIntel.cause,
+    actionCount: debrief.actions.length,
+  });
+
+  useEffect(() => {
+    const studioEvent = buildStudioGameEvent("debrief_intelligence", postRunIntel.telemetry);
+    saveStudioGameEvent(studioEvent);
+    if (runSeed > 0) {
+      recordRivalryResult({
+        seed: runSeed,
+        vsScore,
+        vsName,
+        score,
+        wave,
+        mode,
+        difficulty,
+      });
+    }
+    track("debrief_intelligence_view", {
+      ...postRunIntel.telemetry,
+      digestVersion: eventDigest.v,
+      studioEvent,
+    });
+  }, [difficulty, eventDigest.v, mode, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
 
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
@@ -302,7 +358,7 @@ export default function DeathScreen({
     setSubmitStatus('pending');
     setSubmitFeedback(null);
     try {
-      const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex] });
+      const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex], eventDigest });
       setSubmitStatus(result?.submission || (result?.online ? "online" : "local"));
       setSubmitFeedback(result || null);
       if (result?.globalRank) setGlobalRank(result.globalRank);
@@ -450,6 +506,24 @@ export default function DeathScreen({
                 ))}
               </div>
             </>
+          )}
+        </div>
+
+        <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(0,229,255,0.18)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
+          <div style={{ fontSize: 10, color: "#00E5FF", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>RUN INTELLIGENCE</div>
+          <div style={{ fontSize: 12, color: "#EAFBFF", lineHeight: 1.5 }}>
+            Diagnosis: <span style={{ color: "#FFF", fontWeight: 700 }}>{postRunIntel.cause.replace(/_/g, " ")}</span>
+          </div>
+          <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, marginTop: 5 }}>
+            {postRunIntel.drill}
+          </div>
+          <div style={{ fontSize: 11, color: "#FFB36B", lineHeight: 1.5, marginTop: 6, fontStyle: "italic" }}>
+            "{postRunIntel.callout}"
+          </div>
+          {postRunIntel.rivalry && (
+            <div style={{ fontSize: 11, color: "#8FEFFF", lineHeight: 1.5, marginTop: 6 }}>
+              {postRunIntel.rivalry.prompt}
+            </div>
           )}
         </div>
 
@@ -738,9 +812,9 @@ export default function DeathScreen({
         )}
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button aria-label="Play again — start a new run" onClick={() => { track("debrief_play_again", { score, wave, runSeed }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
+          <button aria-label="Play again — start a new run" onClick={() => { track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
           {runSeed > 0 && (
-            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
+            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
           )}
           <button aria-label="View leaderboard" onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
           <button aria-label="Return to main menu" onClick={onMenu} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>

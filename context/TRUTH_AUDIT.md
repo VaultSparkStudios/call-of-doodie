@@ -2,8 +2,20 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-14
+Last reviewed: 2026-04-17
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-04-17 — Session 47 changes
+
+- `src/utils/runIntelligence.js` + tests added: shared run-intelligence utility now owns menu focus selection, post-run diagnosis, rivalry prompts, compact event digests, Studio event shape, and rule-based callouts.
+- `src/components/MenuScreen.jsx` updated: loads run/rivalry history, shows run-intelligence guidance, saves local Studio events, and tracks intelligence focus with front-door actions.
+- `src/components/DeathScreen.jsx` updated: shows post-run intelligence, saves debrief Studio events, records local rivalry results, and submits v2 event digests.
+- `src/storage.js` + tests updated: local Studio event queue and rivalry history persistence added.
+- `src/utils/runSubmission.js` + tests updated: `buildSessionSubmission` now owns digest-aware leaderboard payload shaping.
+- `src/App.jsx` updated: uses `buildSessionSubmission` and lazy-loads `DeathScreen` into a separate production chunk.
+- `supabase/functions/submit-score/index.ts` updated: accepts v1/v2 digests and validates v2 timeline bands before leaderboard insert.
+- `scripts/ops.mjs`, `scripts/render-startup-brief.mjs`, and `scripts/validate-brief-format.mjs` updated/added so local startup/action queue/brief validation commands exist.
+- Source-of-truth hierarchy unchanged. No contradictions introduced.
 
 ## 2026-04-14 — Session 43 changes
 

@@ -4,14 +4,36 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▆▆▆ (prior entries private)
-Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4, SIL history in private ops repo]
-  └ 3-session: Dev 94.0 | Align 85.7 | Momentum 92.0 | Engage 68.7 | Process 93.0 [N=3]
+Sparkline (last 5 totals): ▆▆▆▆▇
+Avgs — 3: 447.0 | 5: 438.2 | 10: — | 25: — | all: 438.2 [N=5, SIL history in private ops repo]
+  └ 3-session: Dev 95.7 | Align 88.7 | Momentum 92.3 | Engage 75.0 | Process 95.3 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
-Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 4 tracked)
-Last session: 2026-04-14 | Session 43 | Total: 445/500 | Velocity: 1 | protocolVelocity: 1
+Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
+Last session: 2026-04-17 | Session 47 | Total: 460/500 | Velocity: 5 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-17 — Session 47 | Total: 460/500 | Velocity: 5 | Debt: →
+
+| Category | Score | vs Last | Notes |
+|---|---|---|---|
+| Dev Health | 97 | ↑ | `npm test` 149/149, lint clean, build passing; digest trust, storage, and App extraction covered by focused + full tests |
+| Creative Alignment | 91 | ↑ | Work strengthened the comedy-first improvement loop with run intelligence, rivalry memory, and rule-based roast feedback without drifting into generic live-service bloat |
+| Momentum | 95 | ↑ | Completed the requested next-five tranche plus memory/task updates; remaining work is now a clearer follow-up queue |
+| Engagement | 82 | ↑ | Menu recommendations now use run/rivalry history, debriefs persist intelligence events, and rivalry losses feed back into rematch prompts |
+| Process Quality | 95 | ↓ | Startup/protocol helpers work and memory is updated; still carrying broader prompt-template drift and untracked local artifacts that should be handled deliberately |
+| **Total** | **460/500** | +15 | |
+
+**Top win:** Converted the prior audit into shipped product systems: history-aware recommendations, rivalry memory, v2 trust digests, Studio event shape, and session submission extraction all landed together.
+**Top gap:** The intelligence layer is still local-only; the next leap is syncing Studio events to Hub/Social Dashboard and making rivalry history visible as a player-facing panel.
+**Intent outcome:** Achieved — updated memory/task board, implemented the integrated tranche and next-five follow-up, and validated with full tests, lint, and build.
+
+**Brainstorm**
+1. Rivalry Rematch Panel — expose stored rivalry losses/wins on the menu with streaks, revenge CTA, and best delta; High probability.
+2. Signed Digest Timeline — bind the v2 event digest to the issued run token so tampering requires breaking the signed claim path, not just matching bands; High probability.
+3. Studio Event Sync Queue — batch local `vaultspark.game-event.v1` events to Hub when credentials/schema are ready, with offline retry and redaction; Medium probability.
+
+**Committed to TASK_BOARD:** [SIL] Studio Hub/Social Dashboard integration slice 2 · [SIL] Rivalry network slice 2 · [SIL] Trust v3 slice 2
 
 ## 2026-04-13 — Session 40 | Total: 423/500 | Velocity: 5 | Debt: →
 

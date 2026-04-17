@@ -23,13 +23,12 @@ import {
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice } from "./utils/levelFlow.js";
-import { buildLeaderboardEntry, buildRunClaim } from "./utils/runSubmission.js";
+import { buildRunClaim, buildSessionSubmission } from "./utils/runSubmission.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
-import DeathScreen from "./components/DeathScreen.jsx";
 import PauseMenu from "./components/PauseMenu.jsx";
 import HUD from "./components/HUD.jsx";
 import PerkModal from "./components/PerkModal.jsx";
@@ -55,6 +54,7 @@ import {
 } from "./systems/waveDirector.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
+const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
 
 // ── Controller helpers ────────────────────────────────────────────────────────
 let _rumbleEnabled = true; // gated by settings.rumble
@@ -1548,12 +1548,12 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Score submit ──────────────────────────────────────────────────────────
-  const submitScore = useCallback(async ({ lastWords, rank }) => {
+  const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {
     const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
     const sett = settingsRef.current;
     const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
     const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
-    const entry = buildLeaderboardEntry({
+    const entry = buildSessionSubmission({
       username,
       score,
       kills,
@@ -1575,6 +1575,7 @@ export default function CallOfDoodie() {
       mode,
       runToken: runTokenRef.current,
       summarySig: runSummarySigRef.current,
+      eventDigest,
     });
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const result = await saveToLeaderboard(entry);
@@ -1589,6 +1590,7 @@ export default function CallOfDoodie() {
       submission: result.submission,
       rejected: result.submission === "rejected",
       reason: result.rejectionReason || null,
+      eventDigestVersion: eventDigest?.v || null,
     });
     return { ...result, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
@@ -3459,29 +3461,31 @@ export default function CallOfDoodie() {
 
   if (screen === "death") {
     return (
-      <DeathScreen
-        score={score} kills={kills} deaths={deaths} wave={wave} level={level}
-        bestStreak={bestStreak} timeSurvived={timeSurvived} totalDamage={totalDamage}
-        crits={statsRef.current.crits} grenades={statsRef.current.grenades}
-        deathMessage={deathMessage} difficulty={difficulty} runSeed={runSeed}
-        runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
-        achievementsUnlocked={achievementsUnlocked}
-        activePerks={activePerks} missionsSummary={missionsSummary}
-        leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard} username={username}
-        DIFFICULTIES={DIFFICULTIES}
-        onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); }}
-        onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
-        highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
-        fmtTime={fmtTime}
-        gamepadConnected={gamepadConnected} controllerType={controllerType}
-        weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
-        dailyChallengeMode={dailyChallengeMode}
-        bossRushMode={bossRushMode} cursedRunMode={cursedRunMode} speedrunMode={speedrunMode} gauntletMode={gauntletMode}
-        playerSkin={gsRef.current?.playerSkin || ""}
-        vsScore={challengeVsScore} vsName={challengeVsName}
-        ghostKey={gsRef.current?._ghostKey}
-        onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
-      />
+      <Suspense fallback={null}>
+        <DeathScreen
+          score={score} kills={kills} deaths={deaths} wave={wave} level={level}
+          bestStreak={bestStreak} timeSurvived={timeSurvived} totalDamage={totalDamage}
+          crits={statsRef.current.crits} grenades={statsRef.current.grenades}
+          deathMessage={deathMessage} difficulty={difficulty} runSeed={runSeed}
+          runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
+          achievementsUnlocked={achievementsUnlocked}
+          activePerks={activePerks} missionsSummary={missionsSummary}
+          leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard} username={username}
+          DIFFICULTIES={DIFFICULTIES}
+          onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); }}
+          onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
+          highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
+          fmtTime={fmtTime}
+          gamepadConnected={gamepadConnected} controllerType={controllerType}
+          weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
+          dailyChallengeMode={dailyChallengeMode}
+          bossRushMode={bossRushMode} cursedRunMode={cursedRunMode} speedrunMode={speedrunMode} gauntletMode={gauntletMode}
+          playerSkin={gsRef.current?.playerSkin || ""}
+          vsScore={challengeVsScore} vsName={challengeVsName}
+          ghostKey={gsRef.current?._ghostKey}
+          onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
+        />
+      </Suspense>
     );
   }
 

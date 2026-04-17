@@ -1,6 +1,11 @@
 # Current State
 
 Public-safe summary:
+- active session focus: ship an integrated refinement tranche centered on a Run Intelligence Spine, connecting current front-door guidance, death debrief coaching, rivalry/rematch hooks, telemetry, trust, performance, and Studio OS protocol repair
+- current session shipped the first Run Intelligence Spine slice: menu and death-screen surfaces now share a reusable diagnosis/recommendation utility, debriefs include concrete run-intelligence drills and a rate-limited rule-based roast callout, score submissions carry a compact event digest, and the submit Edge Function rejects digest mismatches before leaderboard insert
+- follow-up implementation shipped the next five refinement slices: menu intelligence now uses recent run history and unresolved rivalry losses, local Studio game events are persisted in a normalized `vaultspark.game-event.v1` shape, rivalry outcomes are stored locally and feed rematch recommendations, event digests are upgraded to v2 timeline bands with Edge Function validation, and `App.jsx` now delegates digest-aware leaderboard payload shaping to `buildSessionSubmission`
+- current session also repaired local startup protocol gaps (`action-queue`, `blocker-preflight`, startup renderer, brief validator) and split `DeathScreen` into its own production chunk; validation baseline is now `npm test` 144/144, `npm run lint` clean, and `npm run build` passing with main chunk reduced to 766.47 kB raw / 224.69 kB gzip
+- updated validation baseline after the follow-up slice: `npm test` passes 149/149, `npm run lint` passes, and `npm run build` passes with main chunk at 769.49 kB raw / 225.51 kB gzip and `DeathScreen` at 38.79 kB raw / 13.12 kB gzip
 - this repo remains deployable and the live game is publicly reachable
 - the current focus is execution-quality refinement while the remaining launch blockers stay human-only: physical device QA, Itch.io publication, and final Ko-fi secret/migration setup
 - an interrupted overnight refinement slice has now been recovered and validated locally instead of being left as ambiguous worktree drift
