@@ -33,6 +33,35 @@ describe("menuGuidance", () => {
     expect(stack[0].whyNow).toContain("seed");
   });
 
+  test("first-run players get a single stripped action (no clutter)", () => {
+    const stack = buildFrontDoorActionStack({
+      totalRuns: 0,
+      canSpendMeta: true,
+      incompleteMissionCount: 5,
+      todaySeed: 99999,
+    });
+    expect(stack).toHaveLength(1);
+    expect(stack[0].id).toBe("play_now");
+    expect(stack[0].title).toBe("Your First Drop");
+  });
+
+  test("best_next_upgrade action includes metaRec when career analysis yields a recommendation", () => {
+    const career = { totalRuns: 10, totalKills: 500, totalDeaths: 5, bestWave: 12 };
+    const stack = buildFrontDoorActionStack({
+      canSpendMeta: true,
+      totalRuns: 10,
+      unlocked: [],
+      meta: { careerPoints: 500, unlocked: [] },
+      career,
+      selectedLoadout: { name: "Standard Issue" },
+      currentModeLabel: "Standard",
+    });
+    const upgradeAction = stack.find(a => a.id === "best_next_upgrade");
+    expect(upgradeAction).toBeDefined();
+    expect(upgradeAction.metaRec).not.toBeNull();
+    expect(upgradeAction.metaRec.node).toBeDefined();
+  });
+
   test("builds a command brief that reflects the selected mode and loadout", () => {
     const brief = buildCommandBrief({
       mode: "boss_rush",
