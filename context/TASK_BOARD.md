@@ -8,8 +8,9 @@ Public-safe launch roadmap summary.
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
-- [ ] Apply `supabase/migrations/2026-04-14_kofi_webhook.sql` in the Supabase SQL editor (creates `kofi_events` audit table)
-- [ ] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret, then paste the webhook URL into Ko-fi → More → Settings → API & Webhooks
+- [x] Apply `supabase/migrations/2026-04-14_kofi_webhook.sql` in the Supabase SQL editor — applied 2026-04-21 via `supabase db query --linked --file` against project ref `fjnpzjjyhnpmunfoycrp`; `kofi_events` table verified in `pg_tables`
+- [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
+- [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
 - [ ] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback

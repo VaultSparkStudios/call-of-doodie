@@ -7,6 +7,7 @@ context/internal-startup.local.json
 context/.session-lock
 logs/dev-server*.log
 secrets/
+supabase/.temp/
 docs/CREATIVE_DIRECTION_RECORD.md
 docs/INNOVATION_PIPELINE.md
 docs/RIGHTS_PROVENANCE.md
