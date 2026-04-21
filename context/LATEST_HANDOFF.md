@@ -1,11 +1,13 @@
 # Latest Handoff
 
-Session Intent: Redesign the homepage from the 20-block scroll wall into a single-viewport "Drop Pod" layout optimized for <1s comprehension and <2s to play — ship all four phases (foundation, clarity wins, demo canvas, flip-to-default) in one session with a feature flag for safe rollback, and fix the SIL max-score display regression.
+Session Intent: Redesign the homepage into a single-viewport "Drop Pod" layout, ship all four phases in one session with a feature flag, fix the SIL /500 → /1000 display regression — then pivot mid-session to activate the dormant Ko-fi webhook end-to-end (Supabase secrets, migration, schema fix) and clean up legacy operator handoff docs from the public repo per CLAUDE.md policy.
 
-## Where We Left Off (Session 48 — Drop Pod homepage redesign)
-- Shipped: HomeV2 homepage (DEPLOY split-button, merged Intel Ticker, tabbed Career/Codex/Settings/Support nav, lazy DemoCanvas background) + SIL `/500` → `/1000` display fix + HomeV2 smoke tests + v2 flipped to default with ?home=v1 opt-out
-- Tests: `npm test` 151/151 (added 2) · `npm run lint` clean · `npm run build` 792.29 kB raw / 230.92 kB gzipped (index), build 9.20s
-- Deploy: pending push — feature flag guards the rollout (`?home=v1` reverts instantly)
+## Where We Left Off (Session 48 — Drop Pod homepage redesign + Ko-fi activation + repo hygiene)
+- Shipped part 1 (commit `9a0955f`): HomeV2 homepage (DEPLOY split-button with mode/diff/seed dropdown, merged Intel Ticker, tabbed Career/Codex/Settings/Support nav, lazy DemoCanvas background) + SIL `/500` → `/1000` display fix + HomeV2 smoke tests + v2 flipped to default with ?home=v1 opt-out
+- Shipped part 2 (commit `e316537`): Ko-fi webhook unblocked — root cause was `callsign_claims.uid NOT NULL DEFAULT auth.uid()` silently 500'ing every ping because `auth.uid()` returns NULL in service-role Edge Functions. Fix: migration `2026-04-21_callsign_claims_uid_nullable.sql`. Live end-to-end verified via two real Ko-fi test webhooks (Donation + Subscription) that both landed in `kofi_events` and flipped `callsign_claims.supporter=true`. KOFI_VERIFICATION_TOKEN set in Supabase secrets; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi. Three HAR items checked off with dated evidence
+- Shipped part 3 (commit `65e4d1d`): Legacy handoff docs (`CODEX_HANDOFF_2026-03-12.md`, `CODEX_HANDOFF_2026-03-12_S6.md`, `HANDOFF.md`) archived to private Studio Ops repo per CLAUDE.md public-repo policy; `context/TRUTH_MAP.md` pointer updated; SESSION_LOG historical references left intact (append-only log rule)
+- Tests: `npm test` 151/151 · `npm run lint` clean · `npm run build` 792.29 kB raw / 230.92 kB gzipped
+- Deploy: all three commits pushed to main; GitHub Actions redeploys v2 homepage to vaultsparkstudios.com; Ko-fi webhook accepts live traffic
 
 Public-safe handoff summary:
 - session intent: redesign the homepage to eliminate the 7-button mode row, 3 overlapping guidance cards, and vertical clutter that pushed the DEPLOY button below multiple folds; validate fully before flipping default

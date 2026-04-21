@@ -9,9 +9,36 @@ Avgs — 3: 447.0 | 5: 438.2 | 10: — | 25: — | all: 438.2 [N=5, SIL history 
   └ 3-session: Dev 95.7 | Align 88.7 | Momentum 92.3 | Engage 75.0 | Process 95.3 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
 Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-21 | Session 48 | Total: 912/1000 | Velocity: 4 | protocolVelocity: 1
+Last session: 2026-04-21 | Session 48b | Total: 936/1000 | Velocity: 5 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-21 — Session 48b | Total: 936/1000 | Velocity: 5 | Debt: ↓
+
+SIL rubric v3.0. Supplementary entry — same calendar session, second closeout after a mid-session pivot into Ko-fi activation + legacy-doc archive cleanup.
+
+| Category | Score | vs 48a | Notes |
+|---|---|---|---|
+| Dev Health | 97 | → | Still green; test/lint/build unchanged; new Supabase migration added and applied cleanly |
+| Creative Alignment | 94 | → | No creative-direction changes this half |
+| Momentum | 98 | ↑ | Three shipped commits in one session (`9a0955f`, `e316537`, `65e4d1d`); Ko-fi blocker that had been open since session 41 was closed end-to-end including live test verification |
+| Engagement | 90 | ↑ | Ko-fi pipeline live means the cosmetic ⭐ badge now actually flips for real supporters — the engagement lever Session 41 scaffolded is finally load-bearing |
+| Process Quality | 96 | ↑ | Silent-500 root cause found, fixed, persisted as a migration, and captured as a feedback memory so future Edge Functions are pre-audited; archive move respected the append-only log rule instead of rewriting history |
+| Cross-Repo Coherence | 92 | ↑ | Legacy handoff docs moved to private Studio Ops archive per CLAUDE.md policy; TRUTH_MAP pointer updated in sync; public repo now meets its own stated scope |
+| Security Posture | 94 | ↑ | Verified no credential leak in the archived docs (publishable key is client-safe); Supabase service-role auth.uid() trap now documented; `.gitignore` tightened to exclude `supabase/.temp/` |
+| Ecosystem Integration | 88 | ↑ | Ko-fi webhook is now the first live revenue/engagement integration in the portfolio — pattern is reusable across Football GM / Voidfall / Gridiron GM via the same `callsign_claims` + `kofi_events` shape |
+| Capital Efficiency | 95 | ↑ | $0 spent; pre-existing Ko-fi code that had been shipped but non-functional for ~7 days is now earning revenue-capable; no new dependencies |
+| Automation Coverage | 92 | ↑ | Migration file makes the nullability fix reproducible on any rebuild; feedback memory pre-audits future Edge Functions against the auth.uid() trap |
+| **Total** | **936/1000** | +24 | |
+
+**Top win:** Root-caused and fixed a silent 500 that would have quietly broken every Ko-fi tip in production — the kind of bug that doesn't surface until someone wonders why the supporter count stayed at zero after a month. Persisted the fix as both a migration (replayable) and a feedback memory (preventable next time).
+**Top gap:** No protection against the same `auth.uid()` trap on other tables. Quick follow-up: a Supabase migration lint rule or pre-commit check that flags any `NOT NULL DEFAULT auth.uid()` columns that Edge Functions touch.
+**Intent outcome:** Achieved beyond scope — planned closeout became a three-commit session that also closed a long-standing HAR block and cleaned up CLAUDE.md policy debt.
+
+**Brainstorm**
+1. Supabase schema lint — automated check for NOT NULL columns with `auth.uid()` default on tables referenced by Edge Functions; block PRs that add new ones without an explicit service-role policy. High probability.
+2. Ko-fi → leaderboard badge smoke test — one-shot CI script that posts a mock Ko-fi payload to a staging webhook and asserts the ⭐ badge surfaces in the leaderboard API within N seconds. Medium probability.
+3. Pre-audit private ops repo for similar CLAUDE.md drift — are there other session docs in public repos that should be archived? Run once across all 27 VaultSpark project repos. Medium probability.
 
 ## 2026-04-21 — Session 48 | Total: 912/1000 | Velocity: 4 | Debt: →
 

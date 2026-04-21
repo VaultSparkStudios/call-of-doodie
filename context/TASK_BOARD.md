@@ -16,6 +16,7 @@ Public-safe launch roadmap summary.
 - [ ] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
 - [ ] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 - [ ] [SIL:1] HomeV2 mobile polish — verify DEPLOY split-button layout on iPhone SE (375px) and dismiss intel-ticker sticks across sessions
+- [ ] [SIL:1] Supabase schema lint — automated check that flags any `NOT NULL DEFAULT auth.uid()` columns on tables referenced by Edge Functions (the trap that silent-500'd the Ko-fi webhook for 7 days). Block PRs that introduce new ones without explicit service-role policies
 - [ ] [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
 - [ ] [SIL:2⛔] Front-door simplification — continue refining the recommended-next-action flow beyond the shipped action stack + "why now" layer with even stronger onboarding and lower first-contact clutter
 - [ ] [SIL:2⛔] Leaderboard trust v2 — continue beyond signed run claims + anomaly logging into richer server-side recomputation and review tooling
