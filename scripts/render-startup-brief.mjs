@@ -31,7 +31,8 @@ const shipped = match(handoff, /- Shipped:\s*(.*)/, "see LATEST_HANDOFF");
 const tests = match(handoff, /- Tests:\s*(.*)/, "see LATEST_HANDOFF");
 const deploy = match(handoff, /- Deploy:\s*(.*)/, "unknown");
 const lastSession = match(sil, /Last session:\s*([0-9-]+)/, status.silLastSession || "unknown");
-const score = Number(status.silScore || match(sil, /Total:\s*(\d+)\/500/, 0));
+const silMax = Number(status.silMax || 1000);
+const score = Number(status.silScore || match(sil, new RegExp(`Total:\\s*(\\d+)\\/${silMax}`), 0) || match(sil, /Total:\s*(\d+)\/500/, 0));
 const avg3 = Number(status.silAvg3 || match(sil, /Avgs .*?3:\s*([0-9.]+)/, 0));
 const runway = match(sil, /Momentum runway:\s*~?([0-9.]+ sessions)/, "unknown");
 const contextAge = match(currentState, /last updated:\s*([0-9-]+)/i, status.lastUpdated || "unknown");
@@ -45,7 +46,7 @@ const lines = [
   "╚══════════════════════════════════════════════════════════════════╝",
   "",
   "╔══ SCORE ═════════════════════════════════════════════════════════╗",
-  `║  ${score}/500  ·  Avg3: ${avg3}  ·  Last session: ${lastSession}`.padEnd(67) + "║",
+  `║  ${score}/${silMax}  ·  Avg3: ${avg3}  ·  Last session: ${lastSession}`.padEnd(67) + "║",
   `║  IGNIS ${status.ignisScore || "unknown"} ${status.ignisGrade || ""}  ·  Entropy ${status.entropyScore ?? "unknown"}  ·  Runway ${runway}`.padEnd(67) + "║",
   "╚══════════════════════════════════════════════════════════════════╝",
   "",

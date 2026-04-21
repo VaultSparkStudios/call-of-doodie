@@ -29,6 +29,7 @@ import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
+import HomeV2 from "./components/HomeV2.jsx";
 import PauseMenu from "./components/PauseMenu.jsx";
 import HUD from "./components/HUD.jsx";
 import PerkModal from "./components/PerkModal.jsx";
@@ -3431,8 +3432,19 @@ export default function CallOfDoodie() {
     if (draftPending) {
       return <DraftScreen options={draftOptions} onSelect={applyDraftPerk} />;
     }
+    const homeV2 = (() => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("home") === "v2") { localStorage.setItem("cod-home-v2", "1"); return true; }
+        if (params.get("home") === "v1") { localStorage.setItem("cod-home-v2", "0"); return false; }
+        const stored = localStorage.getItem("cod-home-v2");
+        if (stored === "0") return false;
+        return true; // v2 is now default — opt out via ?home=v1
+      } catch { return true; }
+    })();
+    const Home = homeV2 ? HomeV2 : MenuScreen;
     return (
-      <MenuScreen
+      <Home
         username={username} difficulty={difficulty} setDifficulty={setDifficulty}
         isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard}
         onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}

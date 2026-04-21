@@ -1,11 +1,11 @@
 ╔══════════════════════════════════════════════════════════════════╗
 ║  STARTUP BRIEF  ·  Call-Of-Doodie                                ║
-║  2026-04-17  ·  Session 47  ·  BUILDER MODE                      ║
+║  2026-04-21  ·  Session 47  ·  BUILDER MODE                      ║
 ║  returning  ·  deployed/public-unlaunched  ·  VaultSpark Studios ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ═════════════════════════════════════════════════════════╗
-║  445/500  ·  Avg3: 436  ·  Last session: 2026-04-14              ║
+║  881/1000  ·  Avg3: 447  ·  Last session: 2026-04-17             ║
 ║  IGNIS 44792 FORGE  ·  Entropy 0.178  ·  Runway 10.0 sessions    ║
 ╚══════════════════════════════════════════════════════════════════╝
 
@@ -21,12 +21,12 @@
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ NOW BUCKET (6 shown) ═════════════════════════════════════╗
-║  1. [SIL:3⛔] Run Intelligence Spine — unify menu recommendation, ║
-║  2. [SIL:3⛔] Integrated refinement tranche — ship coordinated sl ║
-║  3. [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, pr ║
-║  4. [SIL:2⛔] Front-door simplification — continue refining the r ║
-║  5. [SIL:2⛔] Leaderboard trust v2 — continue beyond signed run c ║
-║  6. [SIL:2⛔] Post-run coaching follow-through — measure which de ║
+║  1. [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, pr ║
+║  2. [SIL:2⛔] Front-door simplification — continue refining the r ║
+║  3. [SIL:2⛔] Leaderboard trust v2 — continue beyond signed run c ║
+║  4. [SIL:2⛔] Post-run coaching follow-through — measure which de ║
+║  5. [SIL:2⛔] Render/update optimization pass — continue beyond t ║
+║  6. [SIL:1] Level-flow cadence pass, slice 2 — tune reward caden ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 IGNIS INSIGHT: Current project signal favors execution-quality refinement over broad feature count.

@@ -9,9 +9,36 @@ Avgs — 3: 447.0 | 5: 438.2 | 10: — | 25: — | all: 438.2 [N=5, SIL history 
   └ 3-session: Dev 95.7 | Align 88.7 | Momentum 92.3 | Engage 75.0 | Process 95.3 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
 Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-17 | Session 47 | Total: 460/500 | Velocity: 5 | protocolVelocity: 1
+Last session: 2026-04-21 | Session 48 | Total: 912/1000 | Velocity: 4 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-21 — Session 48 | Total: 912/1000 | Velocity: 4 | Debt: →
+
+SIL rubric v3.0 (10 categories × 100).
+
+| Category | Score | vs Last (v3 projection) | Notes |
+|---|---|---|---|
+| Dev Health | 97 | ↑ | `npm test` 151/151 (added 2), lint clean, build passing; HomeV2 + DemoCanvas landed with matching smoke test + launch-smoke mock |
+| Creative Alignment | 94 | ↑ | Homepage redesign preserves "Modern Warfare on Mom's Wifi" voice and poop-soldier mascot while cutting the 20-block scroll wall to a single-viewport Drop Pod layout — brand over bloat |
+| Momentum | 96 | ↑ | All four redesign phases (scaffold, clarity wins, demo canvas, flip-to-default) shipped in one session behind a feature flag with green validation |
+| Engagement | 88 | ↑ | DEPLOY is now <2s from fresh load; Intel Ticker keeps run-intelligence guidance present without the three-card analysis paralysis; Daily/Gauntlet/Leaderboard chips are one click each |
+| Process Quality | 95 | → | SIL display regression (`/500` after v3 migration) caught and fixed mid-session via `silMax`-aware brief renderer; feature flag gives instant rollback path |
+| Cross-Repo Coherence | 86 | ↑ | Flag pattern + `home_v2_*` analytics events are portable to other VaultSpark app repos if the Drop Pod concept works here |
+| Security Posture | 92 | → | No new credentials introduced; demo canvas is self-contained with no network calls; analytics goes through existing sanitized `track()` wrapper |
+| Ecosystem Integration | 82 | → | Existing modals (Leaderboard, Achievements, Settings, MetaTree, Supporter) reused via lazy imports — zero divergence with legacy flow |
+| Capital Efficiency | 94 | ↑ | Zero-cost redesign: no new deps, build size delta < +0.2 kB gzipped, no LLM/API token spend, same Supabase surface |
+| Automation Coverage | 88 | ↑ | HomeV2 has dedicated render + interaction test; launch smoke updated to survive the default flip; feature flag decisions are deterministic and testable |
+| **Total** | **912/1000** | — | First v3.0-rubric entry for this repo; prior sessions used the /500 v2 rubric (Session 47 was 460/500 ≈ 920/1000 projected) |
+
+**Top win:** Redesigned the homepage end-to-end behind a feature flag in a single session without destabilizing the legacy flow — DEPLOY is now the visually-dominant action, and the three competing guidance cards collapsed into one Intel Ticker without losing the underlying run-intelligence signal.
+**Top gap:** No real-world Lighthouse or funnel data captured yet — the redesign is validated on theory and green CI, not user behavior. Next session should measure LCP delta and `home_v2_deploy` conversion before removing the v1 fallback.
+**Intent outcome:** Achieved — Phase 1–4 all shipped with tests/lint/build green and a one-line opt-out available. SIL max display bug caught and fixed as a bonus.
+
+**Brainstorm**
+1. Lighthouse CI gate on HomeV2 LCP budget — fail the deploy workflow if LCP regresses vs a checked-in baseline; High probability.
+2. Demo canvas variants — swap the bot-run visual for a static poop-soldier mascot animation on low-end devices detected via `navigator.deviceMemory`; Medium probability.
+3. DEPLOY dropdown gamepad nav — the v1 gamepad NAV_ITEMS chain is not yet wired into HomeV2; add focus-ring tracking to the DEPLOY dropdown, tabs, and chips; High probability.
 
 ## 2026-04-17 — Session 47 | Total: 460/500 | Velocity: 5 | Debt: →
 
