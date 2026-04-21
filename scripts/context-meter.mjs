@@ -26,7 +26,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { contextWindowForAgent } from './lib/model-router.mjs';
+// Inline context window sizes — keeps this script self-contained for propagation to all project repos.
+// Update here if new models are added to the studio fleet.
+function contextWindowForAgent(agent) {
+  if (agent === 'codex') return 1_000_000;
+  if (agent === 'claude-code') return 200_000;
+  return 200_000; // safe default (sonnet-200k)
+}
 
 const ROOT = process.cwd();
 const args = process.argv.slice(2);
@@ -76,7 +82,6 @@ if (fs.existsSync(lockPath)) {
   if (m) sessionStart = new Date(m[1]).getTime();
   if (a) agent = a[1];
 }
-// Context window size comes from the model-router chokepoint — never hardcode IDs.
 const limit = contextWindowForAgent(agent);
 const model = agent === 'claude-code' ? (process.env.CLAUDE_CONTEXT_LIMIT === '1000000' ? 'opus-1m' : 'sonnet-200k') : agent === 'codex' ? 'codex-1m' : 'default';
 
