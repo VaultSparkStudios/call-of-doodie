@@ -9,7 +9,7 @@ Use this file to define which records are authoritative when sources conflict.
 - Active next actions: `context/TASK_BOARD.md`
 - Design and architecture reasoning: `context/DECISIONS.md`
 - Live session handoff for this repo right now: `context/LATEST_HANDOFF.md`
-- Historical handoff archive only: `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, `CODEX_HANDOFF_*.md`
+- Historical handoff archive only: `handoffs/LATEST_HANDOFF.md` (legacy root-level `HANDOFF.md` + `CODEX_HANDOFF_*.md` moved to the private Studio Ops archive on 2026-04-21 per CLAUDE.md public-repo policy)
 - Brand and creative direction: `docs/BRAND_SYSTEM.md`, `docs/CREATIVE_DIRECTION_RECORD.md`
 - IP protection and origin trail: `docs/RIGHTS_PROVENANCE.md`
 - Gameplay structure: `docs/GAME_LOOP.md`, `docs/PLAYER_EXPERIENCE_PRINCIPLES.md`
