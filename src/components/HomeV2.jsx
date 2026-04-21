@@ -150,6 +150,9 @@ export default function HomeV2(props) {
       currentModeLabel: selectedMode.label,
       todaySeed: todaySeedStr,
       totalRuns: career?.totalRuns || 0,
+      unlocked: meta?.unlocked || [],
+      meta,
+      career: career || {},
     }),
     [challengeMode, dailyAlreadyPlayed, meta, missions, missionProgress, selectedLoadout, selectedMode.label, todaySeedStr, career],
   );

@@ -1,3 +1,5 @@
+import { getRecommendedMetaUpgrade, getMetaRecommendationLabel } from "./metaClarity.js";
+
 export function buildCommandBrief({
   mode = "standard",
   selectedLoadout = { id: "standard", name: "Standard Issue" },
@@ -36,6 +38,9 @@ export function buildFrontDoorActionStack({
   currentModeLabel = "Standard",
   todaySeed = null,
   totalRuns = 0,
+  unlocked = [],
+  meta = {},
+  career = {},
 }) {
   // First-run players get a stripped action stack — just deploy
   if (totalRuns === 0) {
@@ -77,14 +82,19 @@ export function buildFrontDoorActionStack({
   }
 
   if (canSpendMeta) {
+    const rec = getRecommendedMetaUpgrade(unlocked, meta, career);
+    const recLabel = getMetaRecommendationLabel(rec);
     actions.push(normalizeAction({
       id: "best_next_upgrade",
       title: "Best Next Upgrade",
-      detail: "Idle career points are pure lost power. Spend them before the next run instead of carrying dead value.",
-      whyNow: "Meta power compounds future attempts more reliably than another underpowered run.",
-      urgency: "Take this first if you have enough points to buy a meaningful unlock.",
+      detail: recLabel || "Idle career points are pure lost power. Spend them before the next run instead of carrying dead value.",
+      whyNow: rec?.reason || "Meta power compounds future attempts more reliably than another underpowered run.",
+      urgency: rec?.affordable
+        ? `${rec.node.name} is unlockable right now.`
+        : "Take this first if you have enough points to buy a meaningful unlock.",
       accent: "#FFD700",
       cta: "🎖️ OPEN UPGRADES",
+      metaRec: rec,
     }, actions.length));
   }
 

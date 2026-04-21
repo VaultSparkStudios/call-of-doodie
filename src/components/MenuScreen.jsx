@@ -291,6 +291,10 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     selectedLoadout,
     currentModeLabel,
     todaySeed: todaySeedStr,
+    totalRuns: career?.totalRuns || 0,
+    unlocked: meta?.unlocked || [],
+    meta,
+    career: career || {},
   });
   const runIntel = buildMenuIntelligence({
     mode: modeId,
