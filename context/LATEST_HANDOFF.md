@@ -1,6 +1,28 @@
 # Latest Handoff
 
-Session Intent: Update memory/task board with the next highest-impact refinement stack, then implement one integrated highest-quality pass across run intelligence, UX coaching, rivalry, telemetry, trust, performance, and Studio OS protocol repair.
+Session Intent: Redesign the homepage from the 20-block scroll wall into a single-viewport "Drop Pod" layout optimized for <1s comprehension and <2s to play — ship all four phases (foundation, clarity wins, demo canvas, flip-to-default) in one session with a feature flag for safe rollback, and fix the SIL max-score display regression.
+
+## Where We Left Off (Session 48 — Drop Pod homepage redesign)
+- Shipped: HomeV2 homepage (DEPLOY split-button, merged Intel Ticker, tabbed Career/Codex/Settings/Support nav, lazy DemoCanvas background) + SIL `/500` → `/1000` display fix + HomeV2 smoke tests + v2 flipped to default with ?home=v1 opt-out
+- Tests: `npm test` 151/151 (added 2) · `npm run lint` clean · `npm run build` 792.29 kB raw / 230.92 kB gzipped (index), build 9.20s
+- Deploy: pending push — feature flag guards the rollout (`?home=v1` reverts instantly)
+
+Public-safe handoff summary:
+- session intent: redesign the homepage to eliminate the 7-button mode row, 3 overlapping guidance cards, and vertical clutter that pushed the DEPLOY button below multiple folds; validate fully before flipping default
+- intent outcome: Achieved across all four phases — Phase 1 (feature flag scaffold), Phase 2 (clarity wins), Phase 3 (demo canvas), Phase 4 (flip to default with instant opt-out) all shipped with green validation
+- completed this session: `src/components/HomeV2.jsx` is new — single DEPLOY split-button with mode/difficulty/seed dropdown, merged Intel Ticker consolidating Command Brief + Run Intel + Recommended Action into one dismissible line with (?) popover, slim top bar with username/level/gear/help, quick-access chips for Daily/Gauntlet/Leaderboard/Achievements, and a tabbed Career/Codex/Settings/Support sub-nav that moves the weapons list/bestiary/rules/what's new content off the main fold
+- completed this session: `src/components/DemoCanvas.jsx` is new — self-contained 2D canvas sim (player drifts, enemies spawn from edges and are gunned down with particle bursts), 30fps capped, deferred via `requestIdleCallback`, pauses on hidden tab, honors `prefers-reduced-motion`, does not reuse `drawGame.js` so it has no game-state coupling
+- completed this session: `src/App.jsx` routes the menu screen through a feature flag reading `?home=` query param and `cod-home-v2` localStorage, defaulting to v2; legacy `MenuScreen.jsx` is untouched and still reachable via `?home=v1`
+- completed this session: `scripts/render-startup-brief.mjs` now reads `silMax` from `PROJECT_STATUS.json` and renders `881/1000` instead of the stale `/500` max left over from the SIL v2 → v3 rubric migration
+- completed this session: `src/components/HomeV2.test.jsx` added (2 tests — hero + DEPLOY action + tab labels); `src/App.launch.test.jsx` gets a matching `HomeV2` mock so the launch smoke continues to pass now that v2 is default
+- validation baseline: `npm test` 151/151, `npm run lint` clean, `npm run build` passes (792.29 kB raw / 230.92 kB gzipped index); rollback is `?home=v1` or localStorage `cod-home-v2=0`
+
+## Next Recommended Slice
+- [ ] Capture real-world Lighthouse LCP/CLS deltas on production for HomeV2 vs legacy MenuScreen; if ≥200ms LCP improvement confirmed, remove the v1 fallback code path
+- [ ] Compare `home_v2_deploy` funnel conversion vs legacy `front_door_action` after 48h of traffic; gate further homepage simplification on that data
+- [ ] Mobile polish pass for HomeV2 on iPhone SE (375px) — verify DEPLOY split-button wrapping and that Intel Ticker dismiss persists across sessions
+- [ ] Studio Hub/Social Dashboard integration, slice 2 — sync the local `vaultspark.game-event.v1` queue to a Supabase/Hub endpoint when credentials/schema are ready
+- [ ] Rivalry network, slice 2 — add a visible rivalry history/rematch panel and challenge streak copy
 
 ## Where We Left Off (Session 47 — intelligence/rivalry/trust follow-up)
 - Shipped: 5 improvements across 5 groups — history-aware recommendations, local Studio event persistence, local rivalry network, v2 event timeline digest validation, and session-submission extraction

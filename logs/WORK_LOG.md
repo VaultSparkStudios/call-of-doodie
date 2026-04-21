@@ -2,6 +2,15 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-21 (Session 48)
+
+- Added `src/components/HomeV2.jsx` — "Drop Pod" homepage redesign with single DEPLOY split-button (mode/difficulty/seed dropdown), merged Intel Ticker (Command Brief + Run Intel + Recommended Action in one dismissible line + (?) popover), quick-access chips (Daily/Gauntlet/Leaderboard/Achievements), slim top bar, and tabbed Career/Codex/Settings/Support sub-nav.
+- Added `src/components/DemoCanvas.jsx` — self-contained 30fps background firefight sim (player drifts, enemies spawn from edges, particle bursts on kill). Deferred via `requestIdleCallback`, pauses on hidden tab, honors `prefers-reduced-motion`, does not import `drawGame.js`.
+- Feature-flagged HomeV2 in `src/App.jsx` via `?home=v2` / `?home=v1` query params and `cod-home-v2` localStorage; v2 is now the default, v1 remains available for instant rollback. Legacy `MenuScreen.jsx` is untouched.
+- Fixed `scripts/render-startup-brief.mjs` to read `silMax` from `context/PROJECT_STATUS.json` so the startup brief shows `881/1000` (SIL v3.0 rubric) instead of the stale hardcoded `/500`.
+- Added `src/components/HomeV2.test.jsx` (2 tests: hero title + DEPLOY click → onStart, all 4 tab labels present) and updated `src/App.launch.test.jsx` with a matching HomeV2 mock so the launch smoke continues to pass now that v2 is default.
+- Validation baseline: `npm test` 151/151, `npm run lint` clean, `npm run build` passes (792.29 kB raw / 230.92 kB gzipped index, 9.20s).
+
 ## 2026-04-17 (Session 47)
 
 - Updated `context/TASK_BOARD.md`, `docs/IMPROVEMENT_PLAN.md`, `context/CURRENT_STATE.md`, `context/LATEST_HANDOFF.md`, and `context/PROJECT_STATUS.json` with the Run Intelligence Spine / integrated refinement stack and follow-up queue.

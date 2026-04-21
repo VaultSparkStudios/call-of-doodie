@@ -107,6 +107,12 @@ vi.mock("./components/MenuScreen.jsx", () => ({
   },
 }));
 
+vi.mock("./components/HomeV2.jsx", () => ({
+  default: function HomeV2Mock({ onStart }) {
+    return <button onClick={() => onStart()}>start</button>;
+  },
+}));
+
 vi.mock("./components/DraftScreen.jsx", () => ({
   default: function DraftScreenMock({ onSelect }) {
     return <button onClick={() => onSelect(null)}>draft-skip</button>;
