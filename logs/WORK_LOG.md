@@ -2,6 +2,16 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-21 (Session 49)
+
+- Added `src/components/MenuPanels.jsx` — nine shared panels extracted from MenuScreen: RulesPanel, ControlsPanel, MostWantedPanel (renamed from Bestiary), RunHistoryPanel, LoadoutBuilderPanel, CareerStatsPanel (with advanced analytics), MissionsPanel, UpgradesPanel (with inline prestige confirm + player-skin picker), NewFeaturesPanel
+- Wired those panels into `src/components/HomeV2.jsx` via a new ⚙ COMMAND CENTER chip row (10 buttons: STATS / MISSIONS / UPGRADES / META TREE / HISTORY / LOADOUTS / RULES / CONTROLS / MOST WANTED / WHAT'S NEW), lazy-loaded under Suspense so the home chunk stays thin
+- Renamed the HomeV2 Codex tab Bestiary section to "MOST WANTED" (state key `bestiary` → `mostwanted`); legacy term no longer appears in HomeV2
+- Added `isMobile` to HomeV2's destructured props so ControlsPanel receives it
+- CareerStatsPanel now computes accuracy %, crit rate %, kills/min, avg damage/run, survival rate, and total upgrade tiers on top of the original Score/Combat/Progression/Meta sections
+- Legacy `src/components/MenuScreen.jsx` left untouched; `?home=v1` opt-out still works as a full rollback
+- Validation: `npm test` 151/151 passing; lint clean on touched files
+
 ## 2026-04-21 (Session 48)
 
 - Added `src/components/HomeV2.jsx` — "Drop Pod" homepage redesign with single DEPLOY split-button (mode/difficulty/seed dropdown), merged Intel Ticker (Command Brief + Run Intel + Recommended Action in one dismissible line + (?) popover), quick-access chips (Daily/Gauntlet/Leaderboard/Achievements), slim top bar, and tabbed Career/Codex/Settings/Support sub-nav.

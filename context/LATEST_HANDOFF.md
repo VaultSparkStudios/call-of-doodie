@@ -1,6 +1,30 @@
 # Latest Handoff
 
-Session Intent: Redesign the homepage into a single-viewport "Drop Pod" layout, ship all four phases in one session with a feature flag, fix the SIL /500 → /1000 display regression — then pivot mid-session to activate the dormant Ko-fi webhook end-to-end (Supabase secrets, migration, schema fix) and clean up legacy operator handoff docs from the public repo per CLAUDE.md policy.
+Session Intent: Restore every menu panel the session-48 "Drop Pod" homepage redesign had dropped, rename the stale "Bestiary" label to "MOST WANTED", and add a full advanced statistics/analytics page — all wired into HomeV2 via a Command Center chip row without touching the legacy MenuScreen.
+
+## Where We Left Off (Session 49 — HomeV2 menu panel restoration + MOST WANTED rename + advanced analytics)
+- Added `src/components/MenuPanels.jsx` — nine shared panel components extracted from MenuScreen for reuse in HomeV2: `RulesPanel`, `ControlsPanel`, `MostWantedPanel` (replaces the stale "Bestiary" label), `RunHistoryPanel`, `LoadoutBuilderPanel` (with 3-char loadout share code import/export + custom slots + CRUD), `CareerStatsPanel` (advanced analytics — accuracy %, crit rate %, kills/min, avg damage/run, survival rate, total upgrade tiers, alongside the original Score/Combat/Progression/Meta sections), `MissionsPanel`, `UpgradesPanel` (with inline prestige confirm flow + player-skin selector), `NewFeaturesPanel`. Each panel is self-contained with its own overlay wrapper and manages its own state for storage calls (`saveCustomLoadout`, `purchaseMetaUpgrade`, `prestigeAccount`, etc.)
+- `src/components/HomeV2.jsx` now opts every panel in:
+  - new lazy imports for the nine MenuPanels exports
+  - new state: `showCareerStats`, `showRules`, `showControls`, `showMostWanted`, `showMissions`, `showUpgrades`, `showRunHistory`, `showLoadoutBuilder`, `showNewFeatures`
+  - new ⚙ COMMAND CENTER section below the quick-chip row with ten buttons: STATS, MISSIONS, UPGRADES, META TREE, HISTORY, LOADOUTS, RULES, CONTROLS, MOST WANTED, WHAT'S NEW
+  - new `isMobile` prop consumed for ControlsPanel
+  - Codex tab button label renamed Bestiary → MOST WANTED, and the state key renamed from `bestiary` → `mostwanted`
+- Legacy `src/components/MenuScreen.jsx` was not touched — opting out via `?home=v1` still shows the original inline panel set, so nothing regresses for users on the fallback
+- Validation baseline: `npm test` 151/151 · `npx eslint src/components/HomeV2.jsx src/components/MenuPanels.jsx --quiet` clean
+- Deploy: local-only; the session-49 changes are staged as a new commit, not yet pushed
+
+Public-safe handoff summary:
+- session intent: put back every panel the Drop Pod redesign dropped, rename the stale Bestiary label, and give the new homepage a real advanced analytics page
+- intent outcome: Achieved — every panel MenuScreen had is now reachable from HomeV2 via a single Command Center row, the Bestiary text is gone from HomeV2, and CareerStatsPanel exposes six net-new analytics rows on top of the original sections
+- completed this session: `src/components/MenuPanels.jsx` is new — nine shared panel components with their own state and storage wiring
+- completed this session: `src/components/HomeV2.jsx` adds a Command Center chip row with 10 buttons, renames the Codex Bestiary tab to MOST WANTED, threads `isMobile` through to ControlsPanel, and lazy-loads every panel via Suspense so the home chunk is not inflated
+- validation baseline: `npm test` 151/151; lint clean on edited files
+
+## Next Recommended Slice
+- [ ] Wire the new Command Center chip buttons into `useGamepadNav` so controller users can reach panels without a pointer
+- [ ] Verify the Command Center chip row wraps cleanly on iPhone SE (375px); keep the row below three rows total to avoid pushing the tab nav below the fold
+- [ ] CareerStatsPanel backfill: accuracy/crit-rate rows currently hide when `career.totalShots` is missing. Decide between backfilling pre-Session-49 records on first load or rendering "—" so the rows always appear
 
 ## Where We Left Off (Session 48 — Drop Pod homepage redesign + Ko-fi activation + repo hygiene)
 - Shipped part 1 (commit `9a0955f`): HomeV2 homepage (DEPLOY split-button with mode/diff/seed dropdown, merged Intel Ticker, tabbed Career/Codex/Settings/Support nav, lazy DemoCanvas background) + SIL `/500` → `/1000` display fix + HomeV2 smoke tests + v2 flipped to default with ?home=v1 opt-out

@@ -16,6 +16,15 @@ const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
 const MetaTreePanel = lazy(() => import("./MetaTreePanel.jsx"));
 const SupporterModal = lazy(() => import("./SupporterModal.jsx"));
+const MP_Rules          = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.RulesPanel })));
+const MP_Controls       = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.ControlsPanel })));
+const MP_MostWanted     = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.MostWantedPanel })));
+const MP_RunHistory     = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.RunHistoryPanel })));
+const MP_LoadoutBuilder = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.LoadoutBuilderPanel })));
+const MP_CareerStats    = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.CareerStatsPanel })));
+const MP_Missions       = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.MissionsPanel })));
+const MP_Upgrades       = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.UpgradesPanel })));
+const MP_NewFeatures    = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.NewFeaturesPanel })));
 
 const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" };
 
@@ -41,7 +50,7 @@ function currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bos
 
 export default function HomeV2(props) {
   const {
-    username, difficulty, setDifficulty, leaderboard, lbLoading, lbHasMore, onLoadMore,
+    username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore,
     onStart, onRefreshLeaderboard, onChangeUsername,
     starterLoadout,
     gameSettings, onSaveSettings,
@@ -76,6 +85,15 @@ export default function HomeV2(props) {
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
   const [tickerDismissed, setTickerDismissed] = useState(false);
+  const [showCareerStats, setShowCareerStats] = useState(false);
+  const [showRules, setShowRules] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const [showMostWanted, setShowMostWanted] = useState(false);
+  const [showMissions, setShowMissions] = useState(false);
+  const [showUpgrades, setShowUpgrades] = useState(false);
+  const [showRunHistory, setShowRunHistory] = useState(false);
+  const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
+  const [showNewFeatures, setShowNewFeatures] = useState(false);
 
   useEffect(() => {
     setCareer(loadCareerStats());
@@ -345,6 +363,23 @@ export default function HomeV2(props) {
           )}
         </div>
 
+        {/* Command Center — full panel access */}
+        <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          <div style={{ fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, textAlign: "center", marginBottom: 8 }}>⚙ COMMAND CENTER</div>
+          <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+            <button style={quickBtn} onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); }}>📊 STATS</button>
+            <button style={quickBtn} onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }}>📋 MISSIONS</button>
+            <button style={quickBtn} onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }}>🎖️ UPGRADES</button>
+            <button style={quickBtn} onClick={() => setShowMetaTree(true)}>🌳 META TREE</button>
+            <button style={quickBtn} onClick={() => { setRunHistory(loadRunHistory()); setShowRunHistory(true); }}>📜 HISTORY</button>
+            <button style={quickBtn} onClick={() => setShowLoadoutBuilder(true)}>⚙️ LOADOUTS</button>
+            <button style={quickBtn} onClick={() => setShowRules(true)}>📜 RULES</button>
+            <button style={quickBtn} onClick={() => setShowControls(true)}>⌨ CONTROLS</button>
+            <button style={quickBtn} onClick={() => setShowMostWanted(true)}>👾 MOST WANTED</button>
+            <button style={quickBtn} onClick={() => setShowNewFeatures(true)}>✦ WHAT'S NEW</button>
+          </div>
+        </div>
+
         {/* Intel Ticker — merges Command Brief + Run Intel + Recommended Action */}
         {intelLine && (
           <div style={tickerCard} role="status" aria-live="polite">
@@ -455,6 +490,51 @@ export default function HomeV2(props) {
           <SupporterModal onClose={() => setShowSupporter(false)} />
         </Suspense>
       )}
+      {showCareerStats && (
+        <Suspense fallback={null}>
+          <MP_CareerStats career={career} meta={meta} onClose={() => setShowCareerStats(false)} />
+        </Suspense>
+      )}
+      {showRules && (
+        <Suspense fallback={null}>
+          <MP_Rules onClose={() => setShowRules(false)} />
+        </Suspense>
+      )}
+      {showControls && (
+        <Suspense fallback={null}>
+          <MP_Controls isMobile={isMobile} controllerType={controllerType} onClose={() => setShowControls(false)} />
+        </Suspense>
+      )}
+      {showMostWanted && (
+        <Suspense fallback={null}>
+          <MP_MostWanted onClose={() => setShowMostWanted(false)} />
+        </Suspense>
+      )}
+      {showMissions && (
+        <Suspense fallback={null}>
+          <MP_Missions missions={missions} missionProgress={missionProgress} onClose={() => setShowMissions(false)} />
+        </Suspense>
+      )}
+      {showUpgrades && (
+        <Suspense fallback={null}>
+          <MP_Upgrades meta={meta} accountLevel={accountLevel} onClose={() => { setMeta(loadMetaProgress()); setShowUpgrades(false); }} />
+        </Suspense>
+      )}
+      {showRunHistory && (
+        <Suspense fallback={null}>
+          <MP_RunHistory onClose={() => setShowRunHistory(false)} />
+        </Suspense>
+      )}
+      {showLoadoutBuilder && (
+        <Suspense fallback={null}>
+          <MP_LoadoutBuilder onClose={() => setShowLoadoutBuilder(false)} />
+        </Suspense>
+      )}
+      {showNewFeatures && (
+        <Suspense fallback={null}>
+          <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
+        </Suspense>
+      )}
     </div>
   );
 }
@@ -498,7 +578,7 @@ function CodexTab() {
     <div>
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
         <button style={btn(section === "arsenal")}  onClick={() => setSection("arsenal")}>🔫 ARSENAL</button>
-        <button style={btn(section === "bestiary")} onClick={() => setSection("bestiary")}>👾 BESTIARY</button>
+        <button style={btn(section === "mostwanted")} onClick={() => setSection("mostwanted")}>👾 MOST WANTED</button>
         <button style={btn(section === "rules")}    onClick={() => setSection("rules")}>📜 RULES</button>
         <button style={btn(section === "news")}     onClick={() => setSection("news")}>✦ WHAT'S NEW</button>
       </div>
@@ -514,7 +594,7 @@ function CodexTab() {
           ))}
         </div>
       )}
-      {section === "bestiary" && (
+      {section === "mostwanted" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(140px,1fr))", gap: 6 }}>
           {ENEMY_TYPES.map((e, i) => (
             <div key={i} style={{ padding: "6px 8px", fontSize: 11, background: "rgba(255,255,255,0.03)", borderRadius: 6, textAlign: "center" }}>

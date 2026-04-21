@@ -2,8 +2,15 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-17
+Last reviewed: 2026-04-21
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-04-21 — Session 49 changes
+
+- `src/components/MenuPanels.jsx` added — new shared source-of-truth for nine menu panels (Rules, Controls, MostWanted, RunHistory, LoadoutBuilder, CareerStats, Missions, Upgrades, NewFeatures). HomeV2 is the only current consumer; MenuScreen still owns its own inline copies (follow-up to dedupe later).
+- `src/components/HomeV2.jsx` updated: lazy imports for the nine new panels, nine new `show*` state toggles, new ⚙ COMMAND CENTER chip row, `isMobile` prop now threaded through, Codex tab state key renamed `bestiary` → `mostwanted`, button label changed Bestiary → MOST WANTED.
+- No contradictions introduced. Source-of-truth hierarchy unchanged — MenuPanels.jsx is purely additive and matches MenuScreen's existing storage helpers exactly (`loadCustomLoadouts`, `saveCustomLoadout`, `purchaseMetaUpgrade`, `prestigeAccount`, `saveMetaProgress`).
+- `context/PROJECT_STATUS.json` updated: `silSession` 48 → 49, `silScore` 936 → 942, `silVelocity` 5 → 2, `currentSession` 48 → 49, `truthAuditLastRun` 2026-04-17 → 2026-04-21, new per-category scores reflect refined rubric values, `currentFocus` + `nextMilestone` rewritten for session 49.
 
 ## 2026-04-17 — Session 47 changes
 

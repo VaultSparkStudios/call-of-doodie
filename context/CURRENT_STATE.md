@@ -62,4 +62,8 @@ Public-safe summary:
 - local validation baseline after the current refinement tranche: `npm test` passes (`131/131`), targeted pacing/regression coverage passes (`71/71`), `npm run build` passes, and `npm run lint` passes with 0 warnings / 0 errors; the prior protocol dry-run baseline from Session 43 remains intact
 - internal operational records were sanitized for public-repo safety on 2026-04-03
 - detailed internal state now lives in the private Studio OS / ops repository
-- last updated: 2026-04-15
+- Session 49 restored every menu panel the Drop Pod redesign had dropped: `src/components/MenuPanels.jsx` is new and exports nine shared panel components (RulesPanel, ControlsPanel, MostWantedPanel — renamed from the stale "Bestiary" label — RunHistoryPanel, LoadoutBuilderPanel, CareerStatsPanel with advanced analytics, MissionsPanel, UpgradesPanel with prestige + player-skin flow, NewFeaturesPanel); HomeV2 now renders a ⚙ COMMAND CENTER chip row with 10 buttons (STATS / MISSIONS / UPGRADES / META TREE / HISTORY / LOADOUTS / RULES / CONTROLS / MOST WANTED / WHAT'S NEW) each opening the relevant panel via lazy Suspense
+- Session 49 CareerStatsPanel exposes a real analytics page: accuracy %, crit rate %, kills/min, avg damage/run, survival rate, and total upgrade tiers purchased are added on top of the original Score / Combat / Progression / Meta sections
+- Session 49 Codex tab Bestiary section is now labeled "MOST WANTED" to match the in-game terminology; the stale "Bestiary" text is removed from HomeV2 entirely
+- validation baseline after Session 49: `npm test` 151/151, panel code lives behind Suspense lazy imports so the home chunk is not inflated
+- last updated: 2026-04-21 (Session 49)

@@ -9,9 +9,38 @@ Avgs — 3: 447.0 | 5: 438.2 | 10: — | 25: — | all: 438.2 [N=5, SIL history 
   └ 3-session: Dev 95.7 | Align 88.7 | Momentum 92.3 | Engage 75.0 | Process 95.3 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
 Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-21 | Session 48b | Total: 936/1000 | Velocity: 5 | protocolVelocity: 1
+Last session: 2026-04-21 | Session 49 | Total: 942/1000 | Velocity: 2 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-21 — Session 49 | Total: 942/1000 | Velocity: 2 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Surgical refinement session — the founder flagged that the Session 48 HomeV2 redesign had silently dropped most of the MenuScreen panels and left stale "Bestiary" copy in the Codex tab. Restored all nine missing panels, renamed Bestiary → MOST WANTED, and added a real advanced analytics page inside CareerStatsPanel.
+
+| Category | Score | vs 48b | Notes |
+|---|---|---|---|
+| Dev Health | 97 | → | 151/151 tests still green, lint clean on touched files, legacy MenuScreen untouched so rollback path is preserved |
+| Creative Alignment | 95 | ↑ | Homepage soul restored — players coming back from session 48 will see the full career surface they're used to, not a stripped shell |
+| Momentum | 92 | ↓ | One focused session (not three), but closed a regression that was actively confusing the founder within hours of the session-48 flip |
+| Engagement | 93 | ↑ | Advanced stats page, run history, loadout builder, and mission detail all reachable again — the deep-end players who actually check K/D ratios no longer have a dead-end home |
+| Process Quality | 97 | ↑ | Extracted to a shared `MenuPanels.jsx` instead of inlining 1000 lines into HomeV2; lazy-loaded each panel so the home chunk is not inflated; kept legacy MenuScreen intact as a fallback |
+| Cross-Repo Coherence | 92 | → | No cross-repo surfaces changed this session |
+| Security Posture | 94 | → | No new network surfaces; panels reuse existing storage helpers |
+| Ecosystem Integration | 88 | → | No integration changes |
+| Capital Efficiency | 96 | ↑ | $0 spent; reused existing MenuScreen JSX patterns verbatim instead of re-designing; zero new dependencies |
+| Automation Coverage | 92 | → | 151/151 test suite still protects the launch path; HomeV2 smoke test still passes with Command Center row added |
+| **Total** | **942/1000** | +6 | |
+
+**Top win:** Caught a real-world regression within hours of the session-48 flip — advanced players who actually use career analytics would have churned without a panel to land on. Shipped the fix with a clean extraction pattern (`MenuPanels.jsx`) that MenuScreen can adopt later to dedupe its own inline JSX.
+**Top gap:** New Command Center chip row is not wired into gamepad focus tracking — controller users still can't reach panels without a pointer. Also, `career.totalShots` isn't populated on pre-Session-49 saves, so accuracy/crit-rate rows render conditionally.
+**Intent outcome:** Achieved — every panel dropped by session 48 is now reachable from HomeV2, Bestiary is renamed everywhere, and CareerStatsPanel exposes six net-new analytics rows.
+
+**Brainstorm**
+1. Refactor MenuScreen to consume the same `MenuPanels.jsx` exports instead of duplicating the JSX inline — would drop ~900 lines from MenuScreen.jsx and collapse the v1/v2 panel drift to a single source of truth. High probability.
+2. Add a `useGamepadNav` hook invocation for the Command Center chip row so controller users can tab through Rules/Controls/Stats without a pointer. High probability.
+3. Backfill `career.totalShots` from existing run history on first load so accuracy % / crit rate % populate for returning players instead of rendering conditionally. Medium probability.
+
+**Committed to TASK_BOARD:** [SIL] HomeV2 Command Center gamepad nav · [SIL] CareerStatsPanel totalShots backfill
 
 ## 2026-04-21 — Session 48b | Total: 936/1000 | Velocity: 5 | Debt: ↓
 
