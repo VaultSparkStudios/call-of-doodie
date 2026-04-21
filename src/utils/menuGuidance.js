@@ -35,7 +35,21 @@ export function buildFrontDoorActionStack({
   selectedLoadout = { name: "Standard Issue" },
   currentModeLabel = "Standard",
   todaySeed = null,
+  totalRuns = 0,
 }) {
+  // First-run players get a stripped action stack — just deploy
+  if (totalRuns === 0) {
+    return [{
+      id: "play_now",
+      title: "Your First Drop",
+      detail: "Move with WASD, aim with mouse, shoot automatically. Survive as many waves as you can.",
+      whyNow: "No prep needed. The first run is a scouting mission — your real run starts after you see the terrain.",
+      urgency: "The rest of the menu unlocks as you play.",
+      accent: "#FF6B35",
+      cta: "▶ DEPLOY",
+      order: 0,
+    }];
+  }
   const actions = [];
 
   if (challenge?.vsScore != null) {

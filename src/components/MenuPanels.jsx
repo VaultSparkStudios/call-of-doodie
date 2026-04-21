@@ -387,8 +387,8 @@ export function CareerStatsPanel({ career, meta, onClose }) {
             <Row label="⚔️ Total Damage" value={(career.totalDamage || 0).toLocaleString()} color="#E040FB" />
             <Row label="📈 Avg Damage / Run" value={dmgPerRun.toLocaleString()} />
             <Row label="💥 Total Crits" value={(career.totalCrits || 0).toLocaleString()} color="#FF4500" />
-            {accuracy && <Row label="🎯 Accuracy" value={`${accuracy}%`} />}
-            {critRate && <Row label="🎯 Crit Rate" value={`${critRate}%`} />}
+            <Row label="🎯 Accuracy" value={accuracy != null ? `${accuracy}%` : "—"} />
+            <Row label="🎯 Crit Rate" value={critRate != null ? `${critRate}%` : "—"} />
             <Row label="💣 Grenades Thrown" value={(career.totalGrenades || 0).toLocaleString()} />
             <Row label="💨 Total Dashes" value={(career.totalDashes || 0).toLocaleString()} />
             <Row label="👹 Boss Kills" value={(career.totalBossKills || 0).toLocaleString()} color="#FF4444" />

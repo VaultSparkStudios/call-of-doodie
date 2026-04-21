@@ -1,32 +1,32 @@
 ╔══════════════════════════════════════════════════════════════════╗
 ║  STARTUP BRIEF  ·  Call-Of-Doodie                                ║
-║  2026-04-21  ·  Session 47  ·  BUILDER MODE                      ║
+║  2026-04-21  ·  Session 49  ·  BUILDER MODE                      ║
 ║  returning  ·  deployed/public-unlaunched  ·  VaultSpark Studios ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ═════════════════════════════════════════════════════════╗
-║  881/1000  ·  Avg3: 447  ·  Last session: 2026-04-17             ║
+║  942/1000  ·  Avg3: 797  ·  Last session: 2026-04-21             ║
 ║  IGNIS 44792 FORGE  ·  Entropy 0.178  ·  Runway 10.0 sessions    ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF · Session 47 — intelligence/rivalry/trust follow-up ════════════════════════════╗
+╔══ WHERE WE LEFT OFF · Session 49 — HomeV2 menu panel restoration + MOST WANTED rename + advanced analytics ════════════════════════════╗
 ║  Shipped: 5 improvements across 5 groups — history-aware recomme ║
-║  Tests: `npm test` 149/149 · `npm run lint` clean · `npm run bui ║
-║  Deploy: pending — repo-local changes validated, not deployed    ║
+║  Tests: `npm test` 151/151 · `npm run lint` clean · `npm run bui ║
+║  Deploy: local-only; the session-49 changes are staged as a new  ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═══════════════════════════════════════════════════════╗
-║  Truth: green  ·  Context: 2026-04-15  ·  Mode: builder          ║
-║  Focus: Run Intelligence Spine slice 2 is now active: recent r   ║
+║  Truth: green  ·  Context: 2026-04-21  ·  Mode: builder          ║
+║  Focus: Session 49 restored every menu panel the Drop Pod home   ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 ╔══ NOW BUCKET (6 shown) ═════════════════════════════════════╗
-║  1. [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, pr ║
-║  2. [SIL:2⛔] Front-door simplification — continue refining the r ║
-║  3. [SIL:2⛔] Leaderboard trust v2 — continue beyond signed run c ║
-║  4. [SIL:2⛔] Post-run coaching follow-through — measure which de ║
-║  5. [SIL:2⛔] Render/update optimization pass — continue beyond t ║
-║  6. [SIL:1] Level-flow cadence pass, slice 2 — tune reward caden ║
+║  1. [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CL ║
+║  2. [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` v ║
+║  3. [SIL:1] HomeV2 mobile polish — verify DEPLOY split-button la ║
+║  4. [SIL:1] HomeV2 Command Center gamepad nav — wire the 10 Comm ║
+║  5. [SIL:1] CareerStatsPanel backfill — accuracy % and crit-rate ║
+║  6. [SIL:1] Supabase schema lint — automated check that flags an ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 IGNIS INSIGHT: Current project signal favors execution-quality refinement over broad feature count.

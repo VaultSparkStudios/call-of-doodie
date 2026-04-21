@@ -18,6 +18,6 @@ describe("levelFlow", () => {
   test("finds the next perk level breakpoint", () => {
     expect(getNextPerkLevel(2)).toBe(3);
     expect(getNextPerkLevel(9)).toBe(12);
-    expect(getNextPerkLevel(12)).toBe(16);
+    expect(getNextPerkLevel(12)).toBe(15); // cadence: every 3 levels through level 18
   });
 });

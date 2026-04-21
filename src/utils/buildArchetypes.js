@@ -8,6 +8,9 @@ export const BUILD_ARCHETYPES = [
     unlockAt: 3,
     capstoneName: "Frontline Doctrine",
     capstoneDesc: "+8% damage reduction and +3% lifesteal.",
+    doctrineForgeAt: 5,
+    doctrineName: "Wall of Flesh",
+    doctrineDesc: "Your commitment is irreversible. +15% damage reduction, lifesteal on every hit. You are the front line — stop running.",
   },
   {
     id: "gunslinger",
@@ -18,6 +21,9 @@ export const BUILD_ARCHETYPES = [
     unlockAt: 3,
     capstoneName: "Killbox Protocol",
     capstoneDesc: "+10% crit chance and 12% faster fire rate.",
+    doctrineForgeAt: 5,
+    doctrineName: "Glass Cannon Oath",
+    doctrineDesc: "You've locked in. +20% crit damage, max fire rate bonus. No survivability perks will feel as good as your next kill.",
   },
   {
     id: "demolitionist",
@@ -28,6 +34,9 @@ export const BUILD_ARCHETYPES = [
     unlockAt: 3,
     capstoneName: "Siegebreaker",
     capstoneDesc: "+12% damage and 20% faster grenade cooldown.",
+    doctrineForgeAt: 4,
+    doctrineName: "Scorched Earth Compact",
+    doctrineDesc: "Everything burns. +25% AOE radius, grenades chain twice as fast. The arena is a kill zone — own it.",
   },
   {
     id: "tempo",
@@ -38,6 +47,9 @@ export const BUILD_ARCHETYPES = [
     unlockAt: 3,
     capstoneName: "Momentum Engine",
     capstoneDesc: "+15% combo duration, +20% pickup range, and 20% faster dash cooldown.",
+    doctrineForgeAt: 5,
+    doctrineName: "Perpetual Motion Doctrine",
+    doctrineDesc: "You never stop moving. Combo timers don't drop below 50% on dash. Speed is your armor — stopping is death.",
   },
 ];
 
@@ -47,12 +59,15 @@ function perksById(activePerks = []) {
 
 function getArchetypeMilestoneState(archetype, count) {
   const maxCount = archetype.perkIds.length;
+  const forgeAt = archetype.doctrineForgeAt ?? archetype.unlockAt + 2;
+
   if (count <= 0) {
     return {
       statusLabel: "UNFORMED",
       statusDetail: `No ${archetype.name.toLowerCase()} lane yet. One aligned perk starts the doctrine.`,
       nextMilestoneAt: 1,
       nextMilestoneLabel: "Lane identified",
+      doctrineForged: false,
     };
   }
   if (count < archetype.unlockAt) {
@@ -61,22 +76,48 @@ function getArchetypeMilestoneState(archetype, count) {
       statusDetail: `${archetype.unlockAt - count} more aligned perk${archetype.unlockAt - count === 1 ? "" : "s"} to activate ${archetype.capstoneName}.`,
       nextMilestoneAt: archetype.unlockAt,
       nextMilestoneLabel: archetype.capstoneName,
+      doctrineForged: false,
+    };
+  }
+  if (count < forgeAt) {
+    return {
+      statusLabel: "CAPSTONE ONLINE",
+      statusDetail: archetype.capstoneDesc,
+      nextMilestoneAt: forgeAt,
+      nextMilestoneLabel: archetype.doctrineName,
+      doctrineForged: false,
     };
   }
   if (count < maxCount) {
     return {
-      statusLabel: "CAPSTONE ONLINE",
-      statusDetail: archetype.capstoneDesc,
+      statusLabel: "DOCTRINE FORGED",
+      statusDetail: archetype.doctrineDesc,
       nextMilestoneAt: maxCount,
-      nextMilestoneLabel: "Mastery push",
+      nextMilestoneLabel: "Full Mastery",
+      doctrineForged: true,
     };
   }
   return {
     statusLabel: "MASTERED",
-    statusDetail: `${archetype.name} has every aligned perk online. Lean fully into its win condition.`,
+    statusDetail: `${archetype.name} — every perk online. ${archetype.doctrineDesc}`,
     nextMilestoneAt: null,
     nextMilestoneLabel: "Complete",
+    doctrineForged: true,
   };
+}
+
+/**
+ * Returns the ordered milestone roadmap for a given archetype so the PauseMenu
+ * can render a progress track.
+ */
+export function getDoctrineMilestones(archetype) {
+  const forgeAt = archetype.doctrineForgeAt ?? archetype.unlockAt + 2;
+  return [
+    { at: 1,                label: "Lane Identified",      tier: "forming" },
+    { at: archetype.unlockAt, label: archetype.capstoneName, tier: "capstone" },
+    { at: forgeAt,          label: archetype.doctrineName,  tier: "doctrine" },
+    { at: archetype.perkIds.length, label: "Mastered",     tier: "mastered" },
+  ];
 }
 
 export function getArchetypeProgress(activePerks = []) {

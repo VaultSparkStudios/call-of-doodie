@@ -29,9 +29,12 @@ import { execSync } from 'node:child_process';
 // Inline context window sizes — keeps this script self-contained for propagation to all project repos.
 // Update here if new models are added to the studio fleet.
 function contextWindowForAgent(agent) {
+  // Env override: CLAUDE_CONTEXT_LIMIT=200000 for standard-context plans
+  if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
   if (agent === 'codex') return 1_000_000;
-  if (agent === 'claude-code') return 200_000;
-  return 200_000; // safe default (sonnet-200k)
+  // Studio Ops founder runs Opus 4.7 1M exclusively across all Claude Code sessions.
+  if (agent === 'claude-code') return 1_000_000;
+  return 200_000;
 }
 
 const ROOT = process.cwd();
@@ -83,7 +86,7 @@ if (fs.existsSync(lockPath)) {
   if (a) agent = a[1];
 }
 const limit = contextWindowForAgent(agent);
-const model = agent === 'claude-code' ? (process.env.CLAUDE_CONTEXT_LIMIT === '1000000' ? 'opus-1m' : 'sonnet-200k') : agent === 'codex' ? 'codex-1m' : 'default';
+const model = agent === 'claude-code' ? (limit === 200_000 ? 'sonnet-200k' : 'opus-1m') : agent === 'codex' ? 'codex-1m' : 'default';
 
 // --- Used-tokens estimate (ADVISORY — heuristic only, not a real token count)
 //
@@ -125,10 +128,23 @@ function hotFilesBytes() {
 
 let ctxBytes = STARTUP_BASELINE + hotFilesBytes();
 
-// Working-tree churn = proxy for tool-output volume this session
-const diffStat = sh('git diff --shortstat').trim();
-const churnMatch = diffStat.match(/(\d+) insertions.*?(\d+) deletions/);
-const churnBytes = churnMatch ? (parseInt(churnMatch[1], 10) + parseInt(churnMatch[2], 10)) * 80 : 0;
+// Working-tree churn — ONLY count diff for files modified after sessionStart.
+// Raw `git diff --shortstat` includes pre-existing uncommitted work from prior
+// sessions, which inflates the meter to phantom-CLOSEOUT on a fresh terminal
+// when a repo has a dirty working tree. Filter to session-hot files only.
+let churnBytes = 0;
+try {
+  const dirtyList = sh('git diff --name-only').split('\n').map((s) => s.trim()).filter(Boolean);
+  const sessionHot = dirtyList.filter((f) => {
+    try { return fs.statSync(path.join(ROOT, f)).mtimeMs > sessionStart; } catch { return false; }
+  });
+  if (sessionHot.length) {
+    const shellList = sessionHot.map((f) => `"${f.replace(/"/g, '\\"')}"`).join(' ');
+    const stat = sh(`git diff --shortstat -- ${shellList}`).trim();
+    const m = stat.match(/(\d+) insertions.*?(\d+) deletions/);
+    if (m) churnBytes = (parseInt(m[1], 10) + parseInt(m[2], 10)) * 80;
+  }
+} catch { /* keep 0 */ }
 
 // (c) hook-observed turns (optional)
 const metricsDir = path.join(ROOT, '.claude/metrics');

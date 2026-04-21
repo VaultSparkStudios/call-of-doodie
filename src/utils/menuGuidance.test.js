@@ -10,6 +10,7 @@ describe("menuGuidance", () => {
       selectedLoadout: { name: "Standard Issue" },
       currentModeLabel: "Standard",
       todaySeed: 12345,
+      totalRuns: 5,
     });
 
     expect(stack[0].id).toBe("daily_challenge");
@@ -24,6 +25,7 @@ describe("menuGuidance", () => {
       selectedLoadout: { name: "Glass Cannon" },
       currentModeLabel: "Hard",
       todaySeed: 7788,
+      totalRuns: 10,
     });
 
     expect(stack[0].id).toBe("accept_challenge");

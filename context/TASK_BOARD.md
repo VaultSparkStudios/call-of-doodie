@@ -15,20 +15,6 @@ Public-safe launch roadmap summary.
 ## Now
 - [ ] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
 - [ ] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
-- [ ] [SIL:1] HomeV2 mobile polish — verify DEPLOY split-button layout on iPhone SE (375px), new Command Center chip-row wrap, and dismiss intel-ticker sticks across sessions
-- [ ] [SIL:1] HomeV2 Command Center gamepad nav — wire the 10 Command Center chip buttons into `useGamepadNav` focus tracking (currently only top-row DEPLOY / tabs / quick chips get focus rings)
-- [ ] [SIL:1] CareerStatsPanel backfill — accuracy % and crit-rate % rows render only when `career.totalShots` is present; either backfill pre-Session-49 records or show "—" placeholder instead of hiding the row
-- [ ] [SIL:1] Supabase schema lint — automated check that flags any `NOT NULL DEFAULT auth.uid()` columns on tables referenced by Edge Functions (the trap that silent-500'd the Ko-fi webhook for 7 days). Block PRs that introduce new ones without explicit service-role policies
-- [ ] [SIL:2⛔] Domain refactor of `src/App.jsx` — split combat, progression, rewards, pacing, and session orchestration into dedicated modules
-- [ ] [SIL:2⛔] Front-door simplification — continue refining the recommended-next-action flow beyond the shipped action stack + "why now" layer with even stronger onboarding and lower first-contact clutter
-- [ ] [SIL:2⛔] Leaderboard trust v2 — continue beyond signed run claims + anomaly logging into richer server-side recomputation and review tooling
-- [ ] [SIL:2⛔] Post-run coaching follow-through — measure which debrief actions players actually take and tighten replay/rematch loops from that data
-- [ ] [SIL:2⛔] Render/update optimization pass — continue beyond the shipped chunk split cleanup into runtime instrumentation and mobile frame-budget policy
-- [ ] [SIL:1] Level-flow cadence pass, slice 2 — tune reward cadence further with safer mutation/shop/perk sequencing and verify live feel after the new perk banking policy
-- [ ] [SIL:1] Build identity depth — move beyond capstones into stronger doctrine milestones, sharper commitment, and more irreversible forks
-- [ ] [SIL:1] Bundle split cleanup — keep pushing the initial chunk down after the shipped panel split cleanup
-- [ ] [SIL:1] Balance telemetry v2 — capture first-death wave, mode abandonment, perk/shop pick rates, and debrief follow-through
-- [ ] [SIL:1] User feedback clarity pass — explain local-save fallback, score rejection reasons, mode stakes, and mutation/shop consequences in plainer language
 
 ## Next
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
@@ -43,6 +29,7 @@ Public-safe launch roadmap summary.
 - [ ] Roast Director — rule-based comedic announcer/callout layer tied to structured run events, with rate limits and player control
 - [ ] Studio Hub/Social Dashboard event contract — normalize game session, challenge, anomaly, debrief, and rivalry events for downstream Studio OS surfaces
 ## Done
+- [x] [SIL] Session 50 NOW bucket — HomeV2 intel ticker sessionStorage persistence, CareerStatsPanel "—" placeholder for pre-49 saves, Command Center gamepad nav (useGamepadNav + focus rings), `scripts/schema-lint.mjs` (`npm run schema:lint`), balance telemetry v2 (`shop_buy`, `coin_shop_buy`, `mode_abandon`, `debrief_view_leaderboard`, `debrief_menu` events), user feedback clarity (local-save fallback + rejection copy), bundle split cleanup slice 3 (PauseMenu + PerkModal + WaveShopModal + RouteSelectModal + TutorialOverlay + DraftScreen all lazy), front-door simplification (first-run stripped action stack + collapsible Command Center auto-expanded for returning players), level-flow cadence slice 2 (every-3-levels through level 18 + `getWaveSurvivalBonus` + `getPerkBankingState`), build identity depth (DOCTRINE FORGED milestone + `getDoctrineMilestones()` + irreversible-fork doctrine text per archetype), App.jsx domain refactor slice 7 (`src/systems/mutationResolution.js` + wired into App.jsx), leaderboard trust v2 (`scripts/leaderboard-audit.mjs` + `npm run leaderboard:audit`), render/update optimization (frame budget monitor in `useGameLoop.js` dev-only — warns on >16ms frames).
 - [x] [SIL:3⛔] Run Intelligence Spine — reusable intelligence foundation shipped across front door, post-run diagnosis, rematch/rivalry prompts, balance telemetry, Studio event shape, and trust digest slices
 - [x] [SIL:3⛔] Integrated refinement tranche — coordinated slices shipped across App extraction, coaching, telemetry, trust, performance, rivalry, roast/personality, and protocol repair
 - [x] [SIL] Run Intelligence Spine, slice 2 — menu recommendations now consider recent run history and unresolved rivalry losses instead of only current mode/loadout context
