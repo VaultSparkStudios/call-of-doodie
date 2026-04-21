@@ -95,6 +95,7 @@ function audit(entry) {
 
 /**
  * Return the value of a secret key, or `null` if missing.
+ * Resolution order: process.env → secrets/*.env → Anthropic Credential Vault (if configured).
  * `capability` is a free-form string for auditing (e.g. "claude.api").
  */
 export function getSecret(key, capability = 'unspecified') {
@@ -102,6 +103,40 @@ export function getSecret(key, capability = 'unspecified') {
   const val = env[key] ?? process.env[key] ?? null;
   audit({ key, capability, result: val ? 'FOUND' : 'MISSING' });
   return val;
+}
+
+/**
+ * Resolve a secret, falling back to the Anthropic Credential Vault if not found locally.
+ * Vault is only consulted for MCP-related capabilities (sentry.mcp, google.calendar, etc.)
+ * when ANTHROPIC_VAULT_ID is set in secrets/anthropic.env.
+ * Returns { value, source: 'env'|'vault'|null }.
+ */
+export async function getSecretWithVaultFallback(key, capability = 'unspecified') {
+  const local = getSecret(key, capability);
+  if (local) return { value: local, source: 'env' };
+
+  // Only attempt vault lookup for MCP capabilities
+  const map = loadCapMap();
+  const capDef = map.capabilities?.[capability] ?? {};
+  if (!capDef.vault) return { value: null, source: null };
+
+  const vaultId = loadEnv()['ANTHROPIC_VAULT_ID'] ?? process.env.ANTHROPIC_VAULT_ID;
+  const apiKey = loadEnv()['ANTHROPIC_API_KEY'] ?? process.env.ANTHROPIC_API_KEY;
+  if (!vaultId || !apiKey) return { value: null, source: null };
+
+  try {
+    // Lazy import to avoid loading vault-client when not needed
+    const { VaultClient } = await import('./vault-client.mjs');
+    const vault = new VaultClient(apiKey);
+    const creds = await vault.listCredentials(vaultId);
+    const match = creds.find(c => c.display_name === key || c.display_name === capability);
+    if (match) {
+      audit({ key, capability, result: 'VAULT_HIT', credentialId: match.id });
+      return { value: match.id, source: 'vault' };
+    }
+  } catch { /* vault unavailable — not an error */ }
+
+  return { value: null, source: null };
 }
 
 /**

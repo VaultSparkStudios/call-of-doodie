@@ -719,14 +719,17 @@ export default function DeathScreen({
                 ))}
               </div>
             )}
-            <div style={{ color: "#999", fontSize: 10, marginTop: 8 }}>
-              Local fallback was intentionally skipped because the server treated this as an invalid competitive run, not a network outage.
+            <div style={{ color: "#999", fontSize: 10, marginTop: 8, lineHeight: 1.5 }}>
+              Local fallback skipped — this was a server-side validity check, not a network outage. Common causes: impossibly high kill/damage ratio for the reported wave, or a corrupted run token. Your career stats are still updated locally.
             </div>
           </div>
         ) : (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,180,0,0.3)", background: "rgba(255,140,0,0.05)" }}>
-            <div style={{ color: "#FFA500", fontSize: 14, fontWeight: 700 }}>Saved locally</div>
-            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Couldn't reach the server — score saved on this device.</div>
+            <div style={{ color: "#FFA500", fontSize: 14, fontWeight: 700 }}>📡 Saved locally</div>
+            <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Couldn't reach the server — score saved on this device only.</div>
+            <div style={{ color: "#999", fontSize: 10, marginTop: 6, lineHeight: 1.5 }}>
+              This usually means a network blip. Your score will <em>not</em> appear on the global leaderboard, but it counts toward your local career stats. Try submitting again next session — the game keeps your run data.
+            </div>
           </div>
         )}
 
@@ -816,8 +819,8 @@ export default function DeathScreen({
           {runSeed > 0 && (
             <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
           )}
-          <button aria-label="View leaderboard" onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button aria-label="Return to main menu" onClick={onMenu} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
+          <button aria-label="View leaderboard" onClick={() => { track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
+          <button aria-label="Return to main menu" onClick={() => { track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause }); onMenu(); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
       </div>
       </div>

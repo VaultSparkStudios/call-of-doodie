@@ -22,7 +22,7 @@ import {
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
-import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice } from "./utils/levelFlow.js";
+import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildRunClaim, buildSessionSubmission } from "./utils/runSubmission.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
@@ -30,13 +30,13 @@ import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
 import MenuScreen from "./components/MenuScreen.jsx";
 import HomeV2 from "./components/HomeV2.jsx";
-import PauseMenu from "./components/PauseMenu.jsx";
 import HUD from "./components/HUD.jsx";
-import PerkModal from "./components/PerkModal.jsx";
-import WaveShopModal from "./components/WaveShopModal.jsx";
-import RouteSelectModal from "./components/RouteSelectModal.jsx";
-import TutorialOverlay from "./components/TutorialOverlay.jsx";
-import DraftScreen from "./components/DraftScreen.jsx";
+const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
+const PerkModal       = lazy(() => import("./components/PerkModal.jsx"));
+const WaveShopModal   = lazy(() => import("./components/WaveShopModal.jsx"));
+const RouteSelectModal = lazy(() => import("./components/RouteSelectModal.jsx"));
+const TutorialOverlay = lazy(() => import("./components/TutorialOverlay.jsx"));
+const DraftScreen     = lazy(() => import("./components/DraftScreen.jsx"));
 import { getCoinShopOptions, getShopOptions } from "./systems/shopOptions.js";
 import {
   consumeBankedPerkChoice,
@@ -45,6 +45,7 @@ import {
 } from "./systems/progressionFlow.js";
 import { applyArchetypeCapstone, applyPerkSynergies } from "./systems/perkResolution.js";
 import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolution.js";
+import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import {
   buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
@@ -1054,6 +1055,7 @@ export default function CallOfDoodie() {
     if (resolution.shopHistoryEntry) {
       setShopHistory(h => [...h, resolution.shopHistoryEntry]);
     }
+    track("shop_buy", { itemId: optionId, wave: gs.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current });
   }, []);
 
   // ── Coin shop apply ───────────────────────────────────────────────────────
@@ -1086,6 +1088,7 @@ export default function CallOfDoodie() {
       setExtraLives(extraLivesRef.current);
     }
     soundPerkSelect();
+    track("coin_shop_buy", { itemId: optionId, cost, wave: gs.currentWave, coinsAfter: resolution.coins, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current });
   }, []);
 
   // ── Wave mutation challenge: accept or skip ──────────────────────────────
@@ -1105,11 +1108,11 @@ export default function CallOfDoodie() {
   const applyMutation = useCallback((mutation) => {
     const gs = gsRef.current;
     if (!gs) return;
-    mutation.apply(gs);
-    const reward = mutation.reward || 0;
-    gs.coins = (gs.coins || 0) + reward;
-    setCoins(gs.coins);
-    addText(gs, GW() / 2, GH() / 2 - 80, `+${reward} 💩 CHALLENGE ACCEPTED!`, "#FFD700", true);
+    const delta = _acceptMutation(gs, mutation);
+    if (!delta) return;
+    gs.coins = delta.coins;
+    setCoins(delta.coins);
+    addText(gs, GW() / 2, GH() / 2 - 80, delta.floatingText.text, delta.floatingText.color, true);
     mutationPendingRef.current = false;
     setMutationPending(false);
     setMutationOptions([]);
@@ -1832,6 +1835,12 @@ export default function CallOfDoodie() {
         return; // game loop will pause; resumes after player picks a route
       }
       gs._routeSelectDone = false; // reset for next wave
+      // Survival bonus XP: awarded before resetting _waveDeaths
+      if ((gs._waveDeaths || 0) === 0 && !gs.bossWave) {
+        const bonus = getWaveSurvivalBonus(gs.currentWave, xpRef.current.level);
+        addXp(bonus);
+        if (gs.currentWave >= 3) addText(gs, GW() / 2, GH() / 2 - 100, `+${bonus} XP FLAWLESS WAVE!`, "#44FF88", true);
+      }
       gs._waveDeaths = 0;          // reset per-wave death counter for adaptive assist
       setAssistAvailable(false);
       setAssistUsed(false);
@@ -3430,7 +3439,7 @@ export default function CallOfDoodie() {
 
   if (screen === "menu") {
     if (draftPending) {
-      return <DraftScreen options={draftOptions} onSelect={applyDraftPerk} />;
+      return <Suspense fallback={null}><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></Suspense>;
     }
     const homeV2 = (() => {
       try {
@@ -3519,7 +3528,7 @@ export default function CallOfDoodie() {
 
       {/* Pause menu */}
       {paused && (
-        <PauseMenu
+        <Suspense fallback={null}><PauseMenu
           wave={wave} timeSurvived={timeSurvived} score={score} isMobile={isMobile}
           achievementsUnlocked={achievementsUnlocked} fmtTime={fmtTime}
           musicMuted={musicMuted} onToggleMute={toggleMusicMuted}
@@ -3527,7 +3536,7 @@ export default function CallOfDoodie() {
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           onResume={() => setPaused(false)}
-          onLeave={() => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPaused(false); setScreen("menu"); }}
+          onLeave={() => { track("mode_abandon", { wave, score, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) }); stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPaused(false); setScreen("menu"); }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore}
           onLoadMore={loadMoreLeaderboard} onRefreshLeaderboard={refreshLeaderboard}
@@ -3536,12 +3545,14 @@ export default function CallOfDoodie() {
           activePerks={activePerks}
           perkMods={perkModsRef.current}
           activeSynergiesData={gsRef.current?.activeSynergies || []}
-        />
+        /></Suspense>
       )}
 
       {/* Wave route select */}
       {routePending && (
-        <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} />
+        <Suspense fallback={null}>
+          <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} />
+        </Suspense>
       )}
 
       {/* Wave mutation challenge */}
@@ -3588,12 +3599,16 @@ export default function CallOfDoodie() {
 
       {/* Wave clear shop */}
       {shopPending && (
-        <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} />
+        <Suspense fallback={null}>
+          <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} />
+        </Suspense>
       )}
 
       {/* Perk selection modal */}
       {perkPending && (
-        <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} />
+        <Suspense fallback={null}>
+          <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} />
+        </Suspense>
       )}
 
       {/* Achievements panel (in-game) */}
@@ -3766,7 +3781,9 @@ export default function CallOfDoodie() {
 
       {/* Tutorial overlay — first-run hints */}
       {!paused && !perkPending && !shopPending && !routePending && (
-        <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} wave={wave} />
+        <Suspense fallback={null}>
+          <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} wave={wave} />
+        </Suspense>
       )}
 
       {/* HUD overlay */}

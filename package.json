@@ -24,7 +24,9 @@
     "audit:env": "node scripts/audit-env.mjs",
     "audit:env:site": "node scripts/audit-env.mjs site",
     "audit:env:functions": "node scripts/audit-env.mjs functions",
-    "audit:env:deploy": "node scripts/audit-env.mjs deploy"
+    "audit:env:deploy": "node scripts/audit-env.mjs deploy",
+    "schema:lint": "node scripts/schema-lint.mjs",
+    "leaderboard:audit": "node scripts/leaderboard-audit.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",

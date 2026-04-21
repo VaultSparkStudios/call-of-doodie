@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef, lazy, Suspense } from "react";
+import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import {
   loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress,
@@ -84,7 +85,7 @@ export default function HomeV2(props) {
   const [showSettings, setShowSettings] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
-  const [tickerDismissed, setTickerDismissed] = useState(false);
+  const [tickerDismissed, setTickerDismissed] = useState(() => sessionStorage.getItem("cod-ticker-dismissed") === "1");
   const [showCareerStats, setShowCareerStats] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -94,14 +95,18 @@ export default function HomeV2(props) {
   const [showRunHistory, setShowRunHistory] = useState(false);
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showNewFeatures, setShowNewFeatures] = useState(false);
+  const [cmdCenterExpanded, setCmdCenterExpanded] = useState(false);
 
   useEffect(() => {
-    setCareer(loadCareerStats());
+    const loaded = loadCareerStats();
+    setCareer(loaded);
     setMissions(getDailyMissions());
     setMissionProgress(loadMissionProgress());
     setMeta(loadMetaProgress());
     setRunHistory(loadRunHistory());
     setRivalryHistory(loadRivalryHistory());
+    // Auto-expand Command Center for returning players; first-timers see DEPLOY only
+    if ((loaded?.totalRuns || 0) > 0) setCmdCenterExpanded(true);
     track("home_v2_view");
     const params = new URLSearchParams(window.location.search);
     const urlSeed = params.get("seed");
@@ -144,8 +149,9 @@ export default function HomeV2(props) {
       selectedLoadout,
       currentModeLabel: selectedMode.label,
       todaySeed: todaySeedStr,
+      totalRuns: career?.totalRuns || 0,
     }),
-    [challengeMode, dailyAlreadyPlayed, meta, missions, missionProgress, selectedLoadout, selectedMode.label, todaySeedStr],
+    [challengeMode, dailyAlreadyPlayed, meta, missions, missionProgress, selectedLoadout, selectedMode.label, todaySeedStr, career],
   );
   const recommendedAction = actionStack[0];
 
@@ -176,6 +182,31 @@ export default function HomeV2(props) {
   }, []);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+
+  const CMD_ACTIONS = useMemo(() => [
+    () => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); },
+    () => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); },
+    () => { setMeta(loadMetaProgress()); setShowUpgrades(true); },
+    () => setShowMetaTree(true),
+    () => { setRunHistory(loadRunHistory()); setShowRunHistory(true); },
+    () => setShowLoadoutBuilder(true),
+    () => setShowRules(true),
+    () => setShowControls(true),
+    () => setShowMostWanted(true),
+    () => setShowNewFeatures(true),
+  ], []);  // setters are stable
+
+  const cmdBtnRefs = useRef([]);
+  const cmdFocusIdx = useGamepadNav({
+    count: CMD_ACTIONS.length,
+    cols: 5,
+    enabled: !!gamepadConnected,
+    onConfirm: (i) => CMD_ACTIONS[i]?.(),
+  });
+
+  useEffect(() => {
+    if (gamepadConnected) cmdBtnRefs.current[cmdFocusIdx]?.focus();
+  }, [cmdFocusIdx, gamepadConnected]);
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const page = {
@@ -365,19 +396,39 @@ export default function HomeV2(props) {
 
         {/* Command Center — full panel access */}
         <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <div style={{ fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, textAlign: "center", marginBottom: 8 }}>⚙ COMMAND CENTER</div>
-          <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
-            <button style={quickBtn} onClick={() => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); }}>📊 STATS</button>
-            <button style={quickBtn} onClick={() => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); }}>📋 MISSIONS</button>
-            <button style={quickBtn} onClick={() => { setMeta(loadMetaProgress()); setShowUpgrades(true); }}>🎖️ UPGRADES</button>
-            <button style={quickBtn} onClick={() => setShowMetaTree(true)}>🌳 META TREE</button>
-            <button style={quickBtn} onClick={() => { setRunHistory(loadRunHistory()); setShowRunHistory(true); }}>📜 HISTORY</button>
-            <button style={quickBtn} onClick={() => setShowLoadoutBuilder(true)}>⚙️ LOADOUTS</button>
-            <button style={quickBtn} onClick={() => setShowRules(true)}>📜 RULES</button>
-            <button style={quickBtn} onClick={() => setShowControls(true)}>⌨ CONTROLS</button>
-            <button style={quickBtn} onClick={() => setShowMostWanted(true)}>👾 MOST WANTED</button>
-            <button style={quickBtn} onClick={() => setShowNewFeatures(true)}>✦ WHAT'S NEW</button>
-          </div>
+          <button
+            onClick={() => setCmdCenterExpanded(v => !v)}
+            style={{ width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, textAlign: "center", marginBottom: cmdCenterExpanded ? 8 : 0, fontFamily: "inherit", padding: 0 }}
+            aria-expanded={cmdCenterExpanded}
+          >
+            ⚙ COMMAND CENTER {cmdCenterExpanded ? "▴" : "▾"}
+          </button>
+          {cmdCenterExpanded && <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+            {[
+              ["📊 STATS",       CMD_ACTIONS[0]],
+              ["📋 MISSIONS",    CMD_ACTIONS[1]],
+              ["🎖️ UPGRADES",   CMD_ACTIONS[2]],
+              ["🌳 META TREE",   CMD_ACTIONS[3]],
+              ["📜 HISTORY",     CMD_ACTIONS[4]],
+              ["⚙️ LOADOUTS",   CMD_ACTIONS[5]],
+              ["📜 RULES",       CMD_ACTIONS[6]],
+              ["⌨ CONTROLS",    CMD_ACTIONS[7]],
+              ["👾 MOST WANTED", CMD_ACTIONS[8]],
+              ["✦ WHAT'S NEW",   CMD_ACTIONS[9]],
+            ].map(([label, action], i) => (
+              <button
+                key={label}
+                ref={el => { cmdBtnRefs.current[i] = el; }}
+                style={{
+                  ...quickBtn,
+                  ...(gamepadConnected && cmdFocusIdx === i ? { borderColor: "rgba(0,229,255,0.7)", outline: "2px solid rgba(0,229,255,0.5)", outlineOffset: 1 } : {}),
+                }}
+                onClick={action}
+              >
+                {label}
+              </button>
+            ))}
+          </div>}
         </div>
 
         {/* Intel Ticker — merges Command Brief + Run Intel + Recommended Action */}
@@ -399,7 +450,7 @@ export default function HomeV2(props) {
                 {runIntel.recommendation && <div style={{ marginTop: 6, color: "#8FEFFF" }}>{runIntel.recommendation}</div>}
               </div>
             </details>
-            <button onClick={() => setTickerDismissed(true)} aria-label="Dismiss intel" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
+            <button onClick={() => { sessionStorage.setItem("cod-ticker-dismissed", "1"); setTickerDismissed(true); }} aria-label="Dismiss intel" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
 
