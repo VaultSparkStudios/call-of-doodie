@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { getRouteRecommendation } from "../utils/buildArchetypes.js";
+import { getRouteForecast } from "../utils/routeForecast.js";
 
-export default function RouteSelectModal({ options, wave, onSelect, buildArchetype }) {
+export default function RouteSelectModal({ options, wave, onSelect, buildArchetype, gs }) {
   const [hovered, setHovered] = useState(null);
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
@@ -104,6 +105,15 @@ export default function RouteSelectModal({ options, wave, onSelect, buildArchety
                 <div style={{ fontSize: 11, color: isHov ? "#DDD" : "#888", lineHeight: 1.5 }}>
                   {route.desc}
                 </div>
+                {isHov && (() => {
+                  const fc = getRouteForecast(route, gs);
+                  return (
+                    <div style={{ marginTop: 10, fontSize: 10, color: "#AAA", lineHeight: 1.5, textAlign: "left" }}>
+                      <div style={{ color: route.color, fontWeight: 700, marginBottom: 3 }}>{fc.headline}</div>
+                      {fc.tip && <div>{fc.tip}</div>}
+                    </div>
+                  );
+                })()}
                 {recommended && buildArchetype && (
                   <div style={{ marginTop: 8, fontSize: 9, color: buildArchetype.color, letterSpacing: 0.5 }}>
                     {buildArchetype.emoji} STRONG FIT FOR {buildArchetype.name.toUpperCase()}

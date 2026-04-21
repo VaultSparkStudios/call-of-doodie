@@ -3551,7 +3551,7 @@ export default function CallOfDoodie() {
       {/* Wave route select */}
       {routePending && (
         <Suspense fallback={null}>
-          <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} />
+          <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} gs={gsRef.current} />
         </Suspense>
       )}
 
