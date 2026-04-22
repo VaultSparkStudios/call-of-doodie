@@ -18,7 +18,7 @@ Public-safe launch roadmap summary.
 
 ## Next
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
-- [ ] [SIL:1] Economy clarity pass, slice 2 (partial) — route forecasting done (routeForecast.js wired into RouteSelectModal); remaining: reroll/lock mechanics and shop tradeoff language
+- [x] [SIL:1] Economy clarity pass, slice 2 — **DONE S51**: route forecasting (routeForecast.js + RouteSelectModal hover panel) + shop tradeoff language (shopForecast.js + WaveShopModal hover advisories, urgency-rated by game state); reroll/lock mechanics deferred as a game design decision
 - [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
 - [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, seeded rematch reuse, and async competitions that feel native to the game
 - [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
