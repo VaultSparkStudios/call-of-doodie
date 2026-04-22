@@ -47,6 +47,7 @@ import { applyArchetypeCapstone, applyPerkSynergies } from "./systems/perkResolu
 import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolution.js";
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
+import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import {
   buildWaveTelemetrySnapshot,
@@ -309,6 +310,14 @@ export default function CallOfDoodie() {
   useEffect(() => { pausedRef.current = paused; }, [paused]);
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+  useEffect(() => {
+    const gs = gsRef.current;
+    if (screen !== "game" || !gs?.player || health <= 0) return;
+    const maxHealth = gs.player.maxHealth || 100;
+    if (health > maxHealth * 0.2) return;
+    const roast = getRoastCallout("near_death", roastCooldowns.current, gs.currentWave, 2);
+    if (roast) addText(gs, gs.player.x, gs.player.y - 72, roast, "#FF7B9C", true);
+  }, [health, screen]);
 
   // ── Analytics init ────────────────────────────────────────────────────────
   useEffect(() => { analyticsInit(); }, []);
@@ -1153,6 +1162,14 @@ export default function CallOfDoodie() {
   const doReload = useCallback((wpnIdx) => {
     if (isReloadingRef.current || pausedRef.current) return;
     setIsReloading(true); isReloadingRef.current = true;
+    const gs = gsRef.current;
+    if (gs?.player) {
+      const nearbyEnemies = (gs.enemies || []).filter((enemy) => Math.hypot(enemy.x - gs.player.x, enemy.y - gs.player.y) < 220).length;
+      if (nearbyEnemies >= 4) {
+        const roast = getRoastCallout("reload_under_pressure", roastCooldowns.current, gs.currentWave, 1);
+        if (roast) addText(gs, gs.player.x, gs.player.y - 64, roast, "#FFD166", true);
+      }
+    }
     soundReload();
     setTimeout(() => {
       if (gsRef.current) {
@@ -1201,6 +1218,12 @@ export default function CallOfDoodie() {
     }
     soundShoot(weaponIdx);
     const p = gs.player;
+    const maxAmmo = Math.floor(WEAPONS[weaponIdx].maxAmmo * (1 + upgLevel * 0.25) * (perkModsRef.current.ammoMult || 1));
+    const lowAmmoThreshold = Math.max(1, Math.min(3, Math.floor(maxAmmo * 0.2)));
+    if (gs.ammoCount > 0 && gs.ammoCount <= lowAmmoThreshold) {
+      const lowAmmoRoast = getRoastCallout("low_ammo", roastCooldowns.current, gs.currentWave, 1);
+      if (lowAmmoRoast) addText(gs, p.x, p.y - 68, lowAmmoRoast, "#FFE082", true);
+    }
     const spread = (Math.random() - 0.5) * weapon.spread;
     const a = angle + spread;
     const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1) * (_wpnMod.damageMult || 1);
@@ -2304,6 +2327,10 @@ export default function CallOfDoodie() {
               addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
               gs.screenShake = 10;
             }
+            if (gs.kills === 1) {
+              const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
+              if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
+            }
             if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
               const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
               addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
@@ -2497,6 +2524,10 @@ export default function CallOfDoodie() {
               addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
               gs.screenShake = 10; addParticles(gs, W / 2, H / 2 - 80, "#FF44FF", 20);
             }
+            if (gs.kills === 1) {
+              const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
+              if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
+            }
             if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
               const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
               addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
@@ -2634,8 +2665,7 @@ export default function CallOfDoodie() {
           e.shootTimer = 0;
           const pa = Math.atan2(p.y - e.y, p.x - e.x);
           // Mega Karen phase 2: 5-bullet spread
-          const isMKP2 = e.typeIndex === 4 && e.isBossEnemy && e.health < e.maxHealth * 0.5;
-          const bCount = isMKP2 ? 5 : 1;
+          const bCount = getBossRangedBurstCount(e);
           for (let bi = 0; bi < bCount; bi++) {
             const angle = pa + (bi - Math.floor(bCount / 2)) * 0.28;
             gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
@@ -2994,18 +3024,7 @@ export default function CallOfDoodie() {
         }
       }
       // ── Universal boss phase 2 at 50% HP ─────────────────────────────────
-      if (e.isBossEnemy && !e.bossPhase2 && e.health > 0 && e.health < e.maxHealth * 0.5) {
-        e.bossPhase2 = true;
-        e.speed *= 1.35;
-        if (e._baseSpeed)  e._baseSpeed  *= 1.35;
-        if (e._baseSpeed2) e._baseSpeed2 *= 1.35;
-        if (e.projRate)    e.projRate     = Math.max(25, Math.floor(e.projRate * 0.7));
-        addText(gs, e.x, e.y - 90, "⚡ PHASE 2!", "#FF2200", true);
-        gs.screenShake = Math.max(gs.screenShake, 18);
-        addParticles(gs, e.x, e.y, "#FF2200", 35);
-        addParticles(gs, e.x, e.y, "#FF8800", 20);
-        soundWaveClear(); // reuse dramatic sting
-      }
+      triggerBossPhaseTwoTransition({ enemy: e, gs, addText, addParticles, soundWaveClear });
       // ── Kamikaze (ti=12) ──
       if (e.typeIndex === 12 && dashRef.current.active <= 0) {
         const kd = Math.hypot(p.x - e.x, p.y - e.y);

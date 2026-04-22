@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { WEAPONS, ENEMY_TYPES, STARTER_LOADOUTS, ACHIEVEMENTS, META_UPGRADES, NEW_FEATURES } from "../constants.js";
 import {
-  loadCustomLoadouts, saveCustomLoadout, loadRunHistory,
+  loadCustomLoadouts, saveCustomLoadout, loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
   saveMetaProgress, purchaseMetaUpgrade, prestigeAccount,
 } from "../storage.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
@@ -29,6 +29,59 @@ function fmtTime(s) {
   const m = Math.floor((s % 3600) / 60);
   const sec = s % 60;
   return h > 0 ? `${h}h ${m}m` : `${m}:${String(sec).padStart(2, "0")}`;
+}
+
+function summarizeRivalryHistory(rivalryHistory = []) {
+  const settled = rivalryHistory.filter((entry) => entry?.won != null);
+  const wins = settled.filter((entry) => entry.won).length;
+  const losses = settled.filter((entry) => entry.won === false).length;
+  const unresolved = rivalryHistory.find((entry) => entry?.won === false && entry.seed);
+  const bestWin = settled.filter((entry) => entry.won && Number.isFinite(entry.delta)).sort((a, b) => b.delta - a.delta)[0] || null;
+  const worstLoss = settled.filter((entry) => entry.won === false && Number.isFinite(entry.delta)).sort((a, b) => a.delta - b.delta)[0] || null;
+  return { wins, losses, unresolved, bestWin, worstLoss };
+}
+
+function buildWeeklyContract(runHistory = [], rivalryHistory = []) {
+  const unresolved = rivalryHistory.find((entry) => entry?.won === false && entry.seed);
+  if (unresolved) {
+    return {
+      title: "Revenge Contract",
+      detail: `Replay seed #${unresolved.seed} and erase the ${Math.abs(unresolved.delta || 0).toLocaleString()} point gap.`,
+      reward: "Turns stored rivalry data into a visible improvement loop.",
+    };
+  }
+
+  if (runHistory.length === 0) {
+    return {
+      title: "Warm Body Contract",
+      detail: "Deploy one scouting run and bank a real baseline seed.",
+      reward: "Unlocks meaningful history, rivalry, and routing targets.",
+    };
+  }
+
+  const recent = runHistory.slice(0, 5);
+  const bestWave = recent.reduce((max, run) => Math.max(max, Number(run?.wave || 1)), 1);
+  const avgScore = Math.round(recent.reduce((sum, run) => sum + Number(run?.score || 0), 0) / recent.length);
+  const featured = recent.find((run) => run?.runSeed);
+  return {
+    title: "Studio Seed Contract",
+    detail: featured?.runSeed
+      ? `Beat ${Math.max(avgScore + 5000, avgScore * 1.15 | 0).toLocaleString()} on seed #${featured.runSeed} or push to wave ${bestWave + 2}.`
+      : `Raise your next five-run average above ${Math.max(avgScore + 5000, 15000).toLocaleString()} and push to wave ${bestWave + 2}.`,
+    reward: "A concrete weekly target keeps the home screen from becoming passive wallpaper.",
+  };
+}
+
+function summarizeStudioEvents(studioEvents = []) {
+  const recent = studioEvents.slice(0, 20);
+  const trust = recent.filter((event) => event?.category === "trust");
+  const frontDoor = recent.filter((event) => event?.type === "front_door_action");
+  const debrief = recent.filter((event) => event?.category === "debrief");
+  return {
+    trust,
+    frontDoorCount: frontDoor.length,
+    debriefCount: debrief.length,
+  };
 }
 
 // ── RULES ────────────────────────────────────────────────────────────────────
@@ -150,16 +203,69 @@ export function MostWantedPanel({ onClose }) {
 }
 
 // ── RUN HISTORY ──────────────────────────────────────────────────────────────
-export function RunHistoryPanel({ onClose }) {
-  const history = loadRunHistory();
+export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = null, studioEvents = null }) {
+  const history = Array.isArray(runHistory) ? runHistory : loadRunHistory();
+  const rivalry = Array.isArray(rivalryHistory) ? rivalryHistory : loadRivalryHistory();
+  const events = Array.isArray(studioEvents) ? studioEvents : loadStudioGameEvents();
   const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR", speedrun: "🏃 SR", gauntlet: "🏋 GT" };
   const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
+  const rivalrySummary = summarizeRivalryHistory(rivalry);
+  const trustSummary = summarizeStudioEvents(events);
+  const weeklyContract = buildWeeklyContract(history, rivalry);
   return (
     <div style={OVERLAY}>
-      <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 480, border: "1px solid rgba(255,107,53,0.3)" }}>
+      <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 520, border: "1px solid rgba(255,107,53,0.3)" }}>
         <button onClick={onClose} style={CLOSE_X}>X</button>
         <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>📜 RUN HISTORY</h3>
-        <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Last 10 runs — saved locally on your device</p>
+        <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Runs, rivalries, and trust signals saved locally on your device</p>
+        <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(255,215,0,0.06)", border: "1px solid rgba(255,215,0,0.22)" }}>
+          <div style={{ color: "#FFD700", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>{weeklyContract.title}</div>
+          <div style={{ color: "#EEE", fontSize: 12, marginTop: 5, lineHeight: 1.45 }}>{weeklyContract.detail}</div>
+          <div style={{ color: "#AAA", fontSize: 10, marginTop: 6 }}>{weeklyContract.reward}</div>
+        </div>
+        <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(0,229,255,0.04)", border: "1px solid rgba(0,229,255,0.18)" }}>
+          <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>⚔️ RIVALRY NETWORK</div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#00FF88", border: "1px solid rgba(0,255,136,0.2)" }}>Wins {rivalrySummary.wins}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FF8888", border: "1px solid rgba(255,120,120,0.2)" }}>Losses {rivalrySummary.losses}</span>
+            {rivalrySummary.unresolved && (
+              <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,107,53,0.12)", color: "#FFB36B", border: "1px solid rgba(255,107,53,0.28)" }}>
+                Revenge seed #{rivalrySummary.unresolved.seed}
+              </span>
+            )}
+          </div>
+          {rivalrySummary.bestWin && <div style={{ color: "#CCC", fontSize: 10, marginBottom: 4 }}>Best flex: seed #{rivalrySummary.bestWin.seed} by +{Math.abs(rivalrySummary.bestWin.delta).toLocaleString()}.</div>}
+          {rivalrySummary.worstLoss && <div style={{ color: "#CCC", fontSize: 10, marginBottom: 6 }}>Biggest unpaid loss: seed #{rivalrySummary.worstLoss.seed} by {Math.abs(rivalrySummary.worstLoss.delta).toLocaleString()}.</div>}
+          {rivalry.length === 0 ? (
+            <div style={{ color: "#888", fontSize: 10 }}>No rivalry history yet — shared seeds become meaningful once one real challenge lands.</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {rivalry.slice(0, 4).map((entry, index) => (
+                <div key={`rival-${index}`} style={{ fontSize: 10, color: "#DDD", display: "flex", justifyContent: "space-between", gap: 8 }}>
+                  <span>#{entry.seed} {entry.vsName ? `vs @${entry.vsName}` : "fixed-seed rivalry"} {entry.won === true ? "won" : entry.won === false ? "lost" : "logged"}</span>
+                  {entry.delta != null && <span style={{ color: entry.delta >= 0 ? "#00FF88" : "#FF8888" }}>{entry.delta >= 0 ? "+" : ""}{entry.delta.toLocaleString()}</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div style={{ marginBottom: 14, padding: "10px 12px", borderRadius: 8, background: "rgba(255,70,70,0.04)", border: "1px solid rgba(255,120,120,0.18)" }}>
+          <div style={{ color: "#FFB5B5", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>🛡️ TRUST OPS</div>
+          <div style={{ fontSize: 10, color: "#AAA", marginBottom: 6 }}>Front-door events: {trustSummary.frontDoorCount} · Debriefs: {trustSummary.debriefCount} · Trust flags: {trustSummary.trust.length}</div>
+          {trustSummary.trust.length === 0 ? (
+            <div style={{ color: "#BBB", fontSize: 10 }}>No recent trust/anomaly events logged locally.</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+              {trustSummary.trust.slice(0, 4).map((event, index) => (
+                <div key={`trust-${index}`} style={{ fontSize: 10, color: "#DDD", lineHeight: 1.4 }}>
+                  <div style={{ color: "#FF8888", fontWeight: 700 }}>{event.summary || event.type}</div>
+                  {event.payload?.reason && <div>{event.payload.reason}</div>}
+                  {Array.isArray(event.payload?.reasons) && event.payload.reasons[0] && <div style={{ color: "#FFC7C7" }}>Top flag: {event.payload.reasons[0]}</div>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {history.length === 0 ? (
           <p style={{ color: "#aaa", fontSize: 13, textAlign: "center", marginTop: 20 }}>No runs yet — get out there!</p>
         ) : (

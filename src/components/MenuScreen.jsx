@@ -328,7 +328,13 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
   const runFrontDoorAction = useCallback((actionId) => {
     const studioEvent = buildStudioGameEvent("front_door_action", {
+      surface: "menu_v1",
       actionId: actionId || "play_now",
+      mode: modeId,
+      difficulty,
+      loadout: selectedLoadout.id,
+      challengeActive: Boolean(challengeMode?.vs),
+      dailyAlreadyPlayed,
       ...runIntel.telemetry,
     });
     saveStudioGameEvent(studioEvent);
@@ -365,7 +371,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       default:
         onStart(deployArgs.seed, deployArgs.challenge);
     }
-  }, [challengeMode?.vs, dailyAlreadyPlayed, deployArgs.challenge, deployArgs.seed, handleCopyChallengeLink, modeId, onSetDailyChallengeMode, onStart, runIntel.focus, runIntel.telemetry, selectedLoadout.id, todaySeedStr]);
+  }, [challengeMode?.vs, dailyAlreadyPlayed, deployArgs.challenge, deployArgs.seed, difficulty, handleCopyChallengeLink, modeId, onSetDailyChallengeMode, onStart, runIntel.focus, runIntel.telemetry, selectedLoadout.id, todaySeedStr]);
 
   // Generate social share card for New Features
   const generateFeatureCard = useCallback(() => new Promise((resolve) => {

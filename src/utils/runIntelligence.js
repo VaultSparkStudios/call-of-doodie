@@ -3,6 +3,21 @@ function safeNumber(value, fallback = 0) {
   return Number.isFinite(num) ? num : fallback;
 }
 
+function safeNullableNumber(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+}
+
+function compactObject(obj) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => {
+      if (value == null || value === "") return false;
+      if (Array.isArray(value) && value.length === 0) return false;
+      return true;
+    }),
+  );
+}
+
 function completedMissionCount(missions = [], missionProgress = {}) {
   return missions.filter(mission => missionProgress?.[mission.id]).length;
 }
@@ -229,11 +244,97 @@ export function buildRunEventDigest({
 }
 
 export function buildStudioGameEvent(type, payload = {}) {
+  const category = type === "front_door_action"
+    ? "front_door"
+    : type.startsWith("debrief")
+      ? "debrief"
+      : type.includes("rival")
+        ? "rivalry"
+        : type.includes("reject") || type.includes("anomaly") || type.includes("submit")
+          ? "trust"
+          : "system";
+  const surface = payload.surface
+    || (category === "debrief" ? "death_screen"
+      : category === "front_door" ? "front_door"
+        : category === "rivalry" ? "social"
+          : "ops");
+  const normalizedPayload = type === "front_door_action"
+    ? compactObject({
+        actionId: payload.actionId || "play_now",
+        mode: payload.mode || null,
+        difficulty: payload.difficulty || null,
+        loadout: payload.loadout || null,
+        focus: payload.focus || payload.intelligenceFocus || null,
+        seed: safeNullableNumber(payload.seed),
+        targetScore: safeNullableNumber(payload.targetScore),
+        delta: safeNullableNumber(payload.delta),
+        challengeActive: Boolean(payload.challengeActive),
+        dailyAlreadyPlayed: Boolean(payload.dailyAlreadyPlayed),
+        source: payload.source || null,
+      })
+    : type === "debrief_intelligence"
+      ? compactObject({
+          mode: payload.mode || null,
+          cause: payload.cause || null,
+          score: safeNullableNumber(payload.score),
+          kills: safeNullableNumber(payload.kills),
+          wave: safeNullableNumber(payload.wave),
+          scorePerMinute: safeNullableNumber(payload.scorePerMinute),
+          killsPerMinute: safeNullableNumber(payload.killsPerMinute),
+          targetDelta: safeNullableNumber(payload.targetDelta),
+        })
+      : type === "rivalry_result"
+        ? compactObject({
+            seed: safeNullableNumber(payload.seed),
+            score: safeNullableNumber(payload.score),
+            vsScore: safeNullableNumber(payload.vsScore),
+            delta: safeNullableNumber(payload.delta),
+            won: typeof payload.won === "boolean" ? payload.won : null,
+            vsName: payload.vsName || null,
+            mode: payload.mode || null,
+            difficulty: payload.difficulty || null,
+          })
+        : type === "submission_rejected"
+          ? compactObject({
+              mode: payload.mode || null,
+              difficulty: payload.difficulty || null,
+              score: safeNullableNumber(payload.score),
+              wave: safeNullableNumber(payload.wave),
+              seed: safeNullableNumber(payload.seed),
+              digestVersion: safeNullableNumber(payload.digestVersion),
+              reason: payload.reason || null,
+              reasons: Array.isArray(payload.reasons) ? payload.reasons.filter(Boolean).slice(0, 6) : [],
+            })
+          : type === "score_submit_result"
+            ? compactObject({
+                mode: payload.mode || null,
+                difficulty: payload.difficulty || null,
+                score: safeNullableNumber(payload.score),
+                wave: safeNullableNumber(payload.wave),
+                seed: safeNullableNumber(payload.seed),
+                submission: payload.submission || null,
+                globalRank: safeNullableNumber(payload.globalRank),
+              })
+            : compactObject(payload);
+  const summary = type === "front_door_action"
+    ? `${normalizedPayload.actionId || "action"} via ${surface}`
+    : type === "debrief_intelligence"
+      ? `${normalizedPayload.cause || "debrief"} at wave ${normalizedPayload.wave ?? "?"}`
+      : type === "rivalry_result"
+        ? `seed ${normalizedPayload.seed ?? "?"} ${normalizedPayload.won ? "won" : normalizedPayload.won === false ? "lost" : "logged"}`
+        : type === "submission_rejected"
+          ? normalizedPayload.reason || "submission rejected"
+          : type === "score_submit_result"
+            ? `submission ${normalizedPayload.submission || "unknown"}`
+            : type;
   return {
     schema: "vaultspark.game-event.v1",
     game: "call-of-doodie",
     type,
+    category,
+    surface,
     createdAt: new Date().toISOString(),
-    payload,
+    summary,
+    payload: normalizedPayload,
   };
 }

@@ -1,33 +1,102 @@
-╔══════════════════════════════════════════════════════════════════╗
-║  STARTUP BRIEF  ·  Call-Of-Doodie                                ║
-║  2026-04-21  ·  Session 49  ·  BUILDER MODE                      ║
-║  returning  ·  deployed/public-unlaunched  ·  VaultSpark Studios ║
-╚══════════════════════════════════════════════════════════════════╝
+<!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
+<!-- generated-at: 2026-04-22 (Session 51 closeout) -->
+<!-- fast-boot-valid-until: next session if within 24h -->
 
-╔══ SCORE ═════════════════════════════════════════════════════════╗
-║  942/1000  ·  Avg3: 797  ·  Last session: 2026-04-21             ║
-║  IGNIS 44792 FORGE  ·  Entropy 0.178  ·  Runway 10.0 sessions    ║
-╚══════════════════════════════════════════════════════════════════╝
+# Startup Brief — Call-Of-Doodie
 
-╔══ WHERE WE LEFT OFF · Session 49 — HomeV2 menu panel restoration + MOST WANTED rename + advanced analytics ════════════════════════════╗
-║  Shipped: 5 improvements across 5 groups — history-aware recomme ║
-║  Tests: `npm test` 151/151 · `npm run lint` clean · `npm run bui ║
-║  Deploy: local-only; the session-49 changes are staged as a new  ║
-╚══════════════════════════════════════════════════════════════════╝
+> **Fast-boot brief** — generated at Session 51 closeout · 2026-04-22.
+> Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
-╔══ SIGNALS ═══════════════════════════════════════════════════════╗
-║  Truth: green  ·  Context: 2026-04-21  ·  Mode: builder          ║
-║  Focus: Session 49 restored every menu panel the Drop Pod home   ║
-╚══════════════════════════════════════════════════════════════════╝
+---
 
-╔══ NOW BUCKET (6 shown) ═════════════════════════════════════╗
-║  1. [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CL ║
-║  2. [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` v ║
-║  3. [SIL:1] HomeV2 mobile polish — verify DEPLOY split-button la ║
-║  4. [SIL:1] HomeV2 Command Center gamepad nav — wire the 10 Comm ║
-║  5. [SIL:1] CareerStatsPanel backfill — accuracy % and crit-rate ║
-║  6. [SIL:1] Supabase schema lint — automated check that flags an ║
-╚══════════════════════════════════════════════════════════════════╝
+```
+╔════════════════════════════════════════════════════════════════╗
+║  🚀 CALL-OF-DOODIE                                               ║
+║  project · deployed/public-unlaunched · FORGE                    ║
+║  Session 52 · 2026-04-22 · BUILDER MODE                          ║
+║  Owner: VaultSpark Studios                                       ║
+╚════════════════════════════════════════════════════════════════╝
 
-IGNIS INSIGHT: Current project signal favors execution-quality refinement over broad feature count.
-CANON CHECK: Proprietary-first public repo rules still apply; keep internal ops detail out of this repository.
+
+
+╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
+║  (no testing surfaces registered — add to PROJECT_STATUS.json)   ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SCORE ═══════════════════════════════════════════════════════╗
+║                                                                  ║
+║    948/1000   ██████████████████████░░   95%                     ║
+║    SIL v3.0  ·  Avg3: 946  ·  Velocity 6↑                        ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Trend  ▄▄▄▂▆  ↑  (last 5 sessions)                            ║
+║                                                                  ║
+║    Category         Score  Bar        Spark   Δ                  ║
+║    ─────────────── ────── ────────── ──────── ─                  ║
+║    Dev Health        99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Alignment         94    █████████░  ▇▆▆▇▇▇▇▇ →                ║
+║    Momentum          97    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Engagement        93    █████████░  ▅▅▅▆▇▇▇▇ →                ║
+║    Process Qual      97    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Coherence         90    █████████░  ········ →                ║
+║    Security          94    █████████░  ········ →                ║
+║    Ecosystem         89    █████████░  ········ →                ║
+║    Capital           98    ██████████  ········ →                ║
+║    Automation        97    ██████████  ········ →                ║
+║                                                                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ WHERE WE LEFT OFF  ·  Session 51 ════════════════════════════╗
+║  Shipped:  see LATEST_HANDOFF.md                                 ║
+║  Tests:    ? passing  ·  Deploy: N/A                             ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SIGNALS ═════════════════════════════════════════════════════╗
+║  ⚠  Tests         ?/? passing                                    ║
+║  ✓  Velocity      6 ↑  ·  Debt: ↓                                ║
+║  ✓  Runway        ~10.0 sessions                                 ║
+║  ✓  Headroom      97% remaining · ~9 large item(s) fit           ║
+║  ⛔  Context age   ?d                                             ║
+║  ⚠  IGNIS         44792 FORGE  ·  8d old                         ║
+║  ✓  Truth         green  ·  Genome: ?                            ║
+║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
+║  ✓  Genome dims   all stable  (0/25)                             ║
+║  ✓  Entropy       0.178  (healthy)                               ║
+║  ✓  CDR           no gap detected                                ║
+║  ✓  Patterns      no recurring pressure detected                 ║
+║  ✓  Templates     v3.3 aligned                                   ║
+║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
+║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
+║  ⚠  Doctor        not yet tracked — run: node scripts/ops.mjs d  ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
+║  Single founder actions that reopen sprint surface:              ║
+║                                                                  ║
+║  today · Physical launch QA                                      ║
+║  today · Physical launch QA                                      ║
+║  today · Create Itch.io listing and publish the prepared la      ║
+║  today · Add `VITE_POSTHOG_KEY` to GitHub repo Settings → S      ║
+║  today · Add `VITE_SENTRY_DSN` to GitHub repo Settings → Se      ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SESSION VOICE ═══════════════════════════════════════════════╗
+║  "Public-facing creative summary only. Detailed creative s"      ║
+║    — from SOUL.md                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ MOMENTUM METER ══════════════════════════════════════════════╗
+║  Velocity:   ▄▄▄▂▆  6↑  (last 5 sessions)                        ║
+║  Intent:     100% achieved last 5                                ║
+║  Streak:     ✓ 9 consecutive achieved-intent sessions            ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
+║  Run `node scripts/ops.mjs genius-list` to generate fresh recom  ║
+╚════════════════════════════════════════════════════════════════╝
+
+```
+
+---
+
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 51 closeout · 2026-04-22*
+*Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -335,7 +335,7 @@ export default function DeathScreen({
     const studioEvent = buildStudioGameEvent("debrief_intelligence", postRunIntel.telemetry);
     saveStudioGameEvent(studioEvent);
     if (runSeed > 0) {
-      recordRivalryResult({
+      const rivalryResult = recordRivalryResult({
         seed: runSeed,
         vsScore,
         vsName,
@@ -344,6 +344,12 @@ export default function DeathScreen({
         mode,
         difficulty,
       });
+      if (rivalryResult) {
+        saveStudioGameEvent(buildStudioGameEvent("rivalry_result", {
+          surface: "death_screen",
+          ...rivalryResult,
+        }));
+      }
     }
     track("debrief_intelligence_view", {
       ...postRunIntel.telemetry,
@@ -362,9 +368,31 @@ export default function DeathScreen({
       setSubmitStatus(result?.submission || (result?.online ? "online" : "local"));
       setSubmitFeedback(result || null);
       if (result?.globalRank) setGlobalRank(result.globalRank);
+      saveStudioGameEvent(buildStudioGameEvent(result?.submission === "rejected" ? "submission_rejected" : "score_submit_result", {
+        surface: "death_screen",
+        mode,
+        difficulty,
+        score,
+        wave,
+        seed: runSeed,
+        submission: result?.submission || null,
+        globalRank: result?.globalRank || null,
+        digestVersion: eventDigest?.v || null,
+        reason: result?.rejectionReason || null,
+        reasons: result?.rejectionReasons || [],
+      }));
     } catch {
       setSubmitStatus('local');
       setSubmitFeedback(null);
+      saveStudioGameEvent(buildStudioGameEvent("score_submit_result", {
+        surface: "death_screen",
+        mode,
+        difficulty,
+        score,
+        wave,
+        seed: runSeed,
+        submission: "local",
+      }));
     }
   };
 
