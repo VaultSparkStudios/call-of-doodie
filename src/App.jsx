@@ -46,6 +46,8 @@ import {
 import { applyArchetypeCapstone, applyPerkSynergies } from "./systems/perkResolution.js";
 import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolution.js";
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
+import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
+import { getRoastCallout } from "./utils/roastDirector.js";
 import {
   buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
@@ -177,6 +179,7 @@ export default function CallOfDoodie() {
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
   const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
+  const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
   const dailyChallengeRef     = useRef(false); // synced with dailyChallengeMode
@@ -528,6 +531,7 @@ export default function CallOfDoodie() {
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
     statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0) };
+    roastCooldowns.current = {};
     achievedRef.current = new Set();
     perkModsRef.current = {};
     perkPendingRef.current = false;
@@ -1142,19 +1146,7 @@ export default function CallOfDoodie() {
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = useCallback((gs, ex, ey, isBoss) => {
-    const types    = ["health", "ammo", "speed", "nuke", "upgrade", "rage", "magnet", "freeze", "time_dilation"];
-    // Vampire mode: no health drops — replace with ammo
-    // Scavenger perk boosts ammo drop weight by ammoDropMult
-    const ammoBoost = perkModsRef.current.ammoDropMult || 1;
-    const baseAmmoW = isBoss ? (gs.vampireMode ? 0.40 : 0.15) : (gs.vampireMode ? 0.58 : 0.10);
-    const ammoW = Math.min(baseAmmoW * ammoBoost, 0.70);
-    const _upgradeW = gs.routeArmoryRun ? 0.36 : 0.12;
-    const weights  = isBoss
-      ? [gs.vampireMode ? 0 : 0.19, ammoW, 0.07, 0.07, 0.34, 0.09, 0.06, 0.06, 0.05]
-      : [gs.vampireMode ? 0 : 0.38, ammoW, 0.17, 0.04, _upgradeW, 0.09, 0.07, 0.07, 0.03];
-    let roll = Math.random(), cumul = 0, pType = "health";
-    for (let i = 0; i < types.length; i++) { cumul += weights[i]; if (roll < cumul) { pType = types[i]; break; } }
-    gs.pickups.push({ x: ex, y: ey, type: pType, life: 450 });
+    _spawnPickup(gs, ex, ey, isBoss, { ammoDropMult: perkModsRef.current.ammoDropMult || 1 });
   }, []);
 
   // ── Reload ────────────────────────────────────────────────────────────────
@@ -2261,6 +2253,8 @@ export default function CallOfDoodie() {
               addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
               if (e.typeIndex === 20) gs.algorithmSurge = false;
+              const _bossRoast = getRoastCallout("boss_kill", roastCooldowns.current, gs.currentWave, 3);
+              if (_bossRoast) addText(gs, W / 2, H / 3 + 36, _bossRoast, "#FFD700");
             }
             // 💩 Doodie Coin drop
             const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
@@ -2313,6 +2307,8 @@ export default function CallOfDoodie() {
             if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
               const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
               addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
+              const _streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
+              if (_streakRoast) addText(gs, W / 2, 108, _streakRoast, "#FF8855");
               gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
               gs.screenShake = 12;
             }
@@ -2504,6 +2500,8 @@ export default function CallOfDoodie() {
             if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
               const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
               addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
+              const _streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
+              if (_streakRoast) addText(gs, W / 2, 108, _streakRoast, "#FF8855");
               gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
               gs.screenShake = 12;
             }
