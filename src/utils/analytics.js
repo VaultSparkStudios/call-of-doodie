@@ -35,6 +35,13 @@ export function analyticsInit() {
   _load();
 }
 
+export function getAnalyticsStatus() {
+  return {
+    enabled: Boolean(KEY),
+    provider: KEY ? "posthog" : "none",
+  };
+}
+
 /**
  * Track a game event.
  * @param {string} event  - e.g. "game_start", "wave_reached", "death"

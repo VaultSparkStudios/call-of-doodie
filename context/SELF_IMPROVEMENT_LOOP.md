@@ -5,13 +5,42 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): ▅▆▇▇█
-Avgs — 3: 954.0 | 5: — | 10: — | 25: — | all: 951.5 [N=4, SIL history in private ops repo]
-  └ 3-session: Dev 99.0 | Align 94.7 | Momentum 96.3 | Engage 94.7 | Process 96.7 [N=3]
+Avgs — 3: 960.7 | 5: — | 10: — | 25: — | all: 954.8 [N=5, SIL history in private ops repo]
+  └ 3-session: Dev 99.0 | Align 95.0 | Momentum 96.7 | Engage 95.3 | Process 97.0 [N=3]
 Velocity trend: →  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-22 | Session 53 | Total: 960/1000 | Velocity: 2 | protocolVelocity: 1
+Last session: 2026-04-22 | Session 54 | Total: 968/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-22 — Session 54 | Total: 968/1000 | Velocity: 3 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Closeout-focused refinement session — the remaining repo-side leverage was not new content but removing friction around replay and launch execution. Session flow is now extracted into a dedicated runtime helper, seeded rivalry/history items are actionable from Run History itself, launch stills export to PNG in one command, and launch readiness now reports the remaining owner-only blockers directly. Validation: `npm run lint` clean, `npm test` 264/264, `npm run build` clean, `npm run launch:readiness` confirms 5/5 raster launch assets present.
+
+| Category | Score | vs S53 | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Full suite green at 264/264; another `App.jsx` lifecycle branch extracted without regressions |
+| Creative Alignment | 95 | → | Replay/rematch surfacing strengthens the competitive-comedy loop rather than adding generic utility clutter |
+| Momentum | 98 | ↑ | Three concrete repo-side wins shipped after the queue had already thinned to human/data-gated work |
+| Engagement | 97 | ↑ | Seeded replays now exist where players browse their own history, not only at death, tightening the repeat hook |
+| Process Quality | 98 | ↑ | Launch-readiness and raster-asset generation are now explicit commands instead of tribal knowledge |
+| Cross-Repo Coherence | 92 | ↑ | Shared challenge-link/session-flow utilities reduce drift across front-door, debrief, and trust surfaces |
+| Security Posture | 96 | → | No new privileged surfaces; launch readiness reports missing keys without leaking values |
+| Ecosystem Integration | 95 | ↑ | The repo now exposes clearer telemetry/launch state for future release work without needing private ops context first |
+| Capital Efficiency | 98 | → | Zero-spend refinement tranche; reused existing SVG launch pack and local event history rather than introducing new services |
+| Automation Coverage | 100 | → | Added focused tests for challenge-link and session-flow helpers; build/lint/test/readiness all run clean |
+| **Total** | **968/1000** | +8 | |
+
+**Top win:** Seeded rivalry/history data is no longer trapped behind passive summaries. The same stored information now directly drives rematches and link sharing where players actually inspect their past runs.
+**Top gap:** Launch completion still depends on real-world execution: adding analytics keys, waiting for live traffic, real-device QA, and publishing the Itch page.
+**Intent outcome:** Achieved — the highest-impact remaining repo-side refinements shipped, closeout write-back is complete, and only true owner-side launch tasks remain.
+
+**Brainstorm**
+1. Replace the static launch still exports with a scripted real-gameplay capture pass once the live listing exists. Medium probability.
+2. Add a small replay-priority heuristic so Run History highlights the single strongest rematch seed above the rest. High probability.
+3. Fold more session-completion orchestration out of `App.jsx` once the next dense branch is identified, keeping the pure-helper extraction pattern intact. High probability.
+
+**Committed to TASK_BOARD:** App-runtime architecture pass slice 10 complete · Replay loop hardening complete · Launch readiness tooling complete
 
 ## 2026-04-22 — Session 53 | Total: 960/1000 | Velocity: 2 | Debt: ↓
 

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-04-22",
+  "session": 54,
+  "project": "call-of-doodie",
+  "intent": "Implement the highest-impact remaining repo-side improvements, close out, and leave only true owner-side launch execution plus live measurement unresolved.",
+  "intentOutcome": "Achieved",
+  "shipped": [
+    "runSession lifecycle extraction for run start, death bookkeeping, and score-submit event generation",
+    "shared challenge-link utility for seeded replay/rivalry URLs",
+    "Run History replay/rematch/copy-link actions across rivalry rows, featured seeds, ghosts, and seeded history",
+    "HomeV2 measurement-readiness surface plus seeded replay launch path from history",
+    "launch asset PNG export pipeline and launch-readiness summary command"
+  ],
+  "deferred": [
+    "HomeV2 Lighthouse measurement on production",
+    "HomeV2 analytics funnel comparison after 48h live traffic",
+    "real mobile/browser PWA install QA",
+    "real gamepad/browser QA",
+    "Itch.io publication"
+  ],
+  "validation": {
+    "tests": "264/264 passing",
+    "lint": "pass",
+    "build": "passing",
+    "launchReadiness": "5/5 PNG assets present; telemetry keys missing"
+  },
+  "sil": {
+    "total": 968,
+    "velocity": 3,
+    "debt": "improving"
+  }
+}

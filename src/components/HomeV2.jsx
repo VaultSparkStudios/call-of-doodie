@@ -8,7 +8,8 @@ import {
 } from "../storage.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
-import { track } from "../utils/analytics.js";
+import { getAnalyticsStatus, track } from "../utils/analytics.js";
+import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -160,6 +161,8 @@ export default function HomeV2(props) {
     [challengeMode, dailyAlreadyPlayed, meta, missions, missionProgress, selectedLoadout, selectedMode.label, todaySeedStr, career],
   );
   const recommendedAction = actionStack[0];
+  const analyticsStatus = getAnalyticsStatus();
+  const telemetrySummary = useMemo(() => summarizeStudioEvents(studioEvents), [studioEvents]);
 
   const recordFrontDoorAction = useCallback((actionId, extra = {}) => {
     const studioEvent = buildStudioGameEvent("front_door_action", {
@@ -201,6 +204,24 @@ export default function HomeV2(props) {
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const launchHistorySeed = useCallback((seed, challenge = {}) => {
+    if (!seed) return;
+    const studioEvent = recordFrontDoorAction("history_replay", {
+      source: "run_history",
+      seed,
+      challengeActive: Boolean(challenge?.vs),
+    });
+    track("front_door_action", {
+      actionId: "history_replay",
+      surface: "home_v2",
+      mode: modeId,
+      difficulty,
+      loadout: selectedLoadout.id,
+      intelligenceFocus: runIntel.focus,
+      studioEvent,
+    });
+    onStart(String(seed), challenge);
+  }, [difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id]);
 
   const CMD_ACTIONS = useMemo(() => [
     () => { recordFrontDoorAction("open_career_stats", { source: "command_center" }); setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); },
@@ -511,6 +532,23 @@ export default function HomeV2(props) {
             </span>
           </div>
         )}
+        {(!analyticsStatus.enabled || telemetrySummary.pendingSyncCount > 0 || telemetrySummary.failedSyncCount > 0) && (
+          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(127,230,255,0.05)", borderColor: "rgba(127,230,255,0.22)", color: "#D9F8FF" }}>
+            <span style={{ fontSize: 14 }}>📈</span>
+            <span style={{ flex: 1 }}>
+              <strong style={{ color: "#7FE6FF" }}>MEASUREMENT STATUS:</strong>{" "}
+              {analyticsStatus.enabled ? "PostHog armed" : "PostHog key missing"}
+              {" · "}
+              {telemetrySummary.failedSyncCount > 0
+                ? `${telemetrySummary.failedSyncCount} event sync retr${telemetrySummary.failedSyncCount === 1 ? "y" : "ies"} needed`
+                : telemetrySummary.pendingSyncCount > 0
+                  ? `${telemetrySummary.pendingSyncCount} local event${telemetrySummary.pendingSyncCount === 1 ? "" : "s"} queued for mirror sync`
+                  : telemetrySummary.syncedCount > 0
+                    ? `${telemetrySummary.syncedCount} recent event${telemetrySummary.syncedCount === 1 ? "" : "s"} mirrored`
+                    : "local Studio events ready but no recent mirror confirmations yet"}
+            </span>
+          </div>
+        )}
 
         {/* Tabbed nav */}
         <div style={tabsRow}>
@@ -609,7 +647,14 @@ export default function HomeV2(props) {
       )}
       {showRunHistory && (
         <Suspense fallback={null}>
-          <MP_RunHistory runHistory={runHistory} rivalryHistory={rivalryHistory} studioEvents={studioEvents} onClose={() => setShowRunHistory(false)} />
+          <MP_RunHistory
+            runHistory={runHistory}
+            rivalryHistory={rivalryHistory}
+            studioEvents={studioEvents}
+            username={username}
+            onLaunchSeed={launchHistorySeed}
+            onClose={() => setShowRunHistory(false)}
+          />
         </Suspense>
       )}
       {showLoadoutBuilder && (

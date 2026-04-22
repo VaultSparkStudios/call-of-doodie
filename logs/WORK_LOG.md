@@ -4,6 +4,20 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 ## 2026-04-22 (Session 53)
 
+## 2026-04-22 (Session 54)
+
+- Added `src/systems/runSession.js` + tests and moved run-start artifact creation, run-history entry shaping, death-event generation, and score-submit event generation out of `src/App.jsx`
+- Added `src/utils/challengeLinks.js` + tests so seeded rivalry/replay URLs are built and copied from one shared helper
+- Updated `src/components/DeathScreen.jsx` to use the shared challenge-link helper instead of duplicating query-param logic
+- Upgraded `src/components/MenuPanels.jsx` Run History with direct replay/rematch/copy-link actions for rivalry rows, featured seeds, ghost-board cards, weekly-contract rematches, and seeded run-history entries
+- Updated `src/components/HomeV2.jsx` to surface measurement readiness (analytics key + local Studio-event sync state) and launch seeded replays from Run History back into the menu deploy flow
+- Added `scripts/generate-launch-assets.mjs` / `npm run launch:assets` and generated raster launch stills in `public/launch-assets/*.png`
+- Added `scripts/launch-readiness.mjs` / `npm run launch:readiness` to summarize raster asset readiness, telemetry-key status, and remaining owner-side launch gates
+- Updated `docs/LAUNCH_EXECUTION.md` and `context/TASK_BOARD.md` to reflect the new launch tooling and shipped S54 slice
+- Validation: `npm run lint` clean, `npm test` 264/264, `npm run build` passing, `npm run launch:readiness` reports 5/5 PNG assets present
+
+## 2026-04-22 (Session 53)
+
 - Added browser-local Studio event queue metadata in `src/storage.js` (`clientEventId`, sync status, retry metadata) plus opportunistic sync helpers
 - Added `supabase/functions/sync-studio-events/index.ts` and migration `supabase/migrations/2026-04-22_studio_game_events.sql` so front-door/debrief/trust/social events can be mirrored server-side with idempotent upserts
 - Wired `HomeV2`, `MenuScreen`, and `DeathScreen` to request Studio event sync without making any gameplay or trust surface network-dependent

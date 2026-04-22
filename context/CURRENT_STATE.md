@@ -1,6 +1,13 @@
 # Current State
 
 Public-safe summary:
+- Session 54 shipped the next post-launch-readiness refinement slice: run-session bookkeeping is now extracted out of `App.jsx`, seeded replay/challenge actions are available directly from Run History instead of only from the death screen, and launch/readiness tooling now exports raster launch assets plus a one-command asset/telemetry gate summary
+- `src/systems/runSession.js` now owns run-start artifact generation, run-history entry shaping, death-screen Studio event generation, and score-submit event generation; `src/App.jsx` delegates those lifecycle branches instead of continuing to grow its inline session orchestration
+- `src/utils/challengeLinks.js` now centralizes seeded rivalry/replay link creation and clipboard copy behavior; `src/components/DeathScreen.jsx` and `src/components/MenuPanels.jsx` now use the same link builder instead of duplicating URL composition
+- `src/components/MenuPanels.jsx` Run History is no longer passive archive UI: rivalry rows, weekly contract rematches, featured seeds, ghost-board cards, and seeded history rows now expose direct `PLAY` / `REMATCH` / `COPY LINK` actions wired back into HomeV2
+- `src/components/HomeV2.jsx` now surfaces measurement readiness directly on the front door: PostHog availability and local Studio event sync state are visible without leaving the menu, and Run History can launch seeded replays straight back into the deploy flow
+- `scripts/generate-launch-assets.mjs` + `npm run launch:assets` now export PNG launch stills from the existing SVG media pack; `scripts/launch-readiness.mjs` + `npm run launch:readiness` report launch PNG readiness plus telemetry-key presence and the remaining owner-only finish line
+- validation baseline for this slice: `npm run lint` clean, `npm test` 264/264 passing, `npm run build` passing, `npm run launch:readiness` reports 5/5 PNG assets present
 - Session 53 shipped the next compounding in-repo pass while the launch queue remains human/data-gated: browser-local Studio events now persist queue metadata and mirror through a new Supabase sync path, Run History trust ops surfaces now report sync health, and Roast Director's remaining live hooks were finished so every shipped roast pool is now exercised in runtime
 - `src/storage.js` now normalizes `vaultspark.game-event.v1` records with `clientEventId`, sync metadata, retry state, and opportunistic `sync-studio-events` batching; menu/debrief surfaces trigger sync without changing the local-first UX contract
 - `supabase/functions/sync-studio-events/` + migration `2026-04-22_studio_game_events.sql` added: browser-local Studio events can now be mirrored server-side with idempotent upserts on `client_event_id`
@@ -91,4 +98,4 @@ Public-safe summary:
 - Session 49 CareerStatsPanel exposes a real analytics page: accuracy %, crit rate %, kills/min, avg damage/run, survival rate, and total upgrade tiers purchased are added on top of the original Score / Combat / Progression / Meta sections
 - Session 49 Codex tab Bestiary section is now labeled "MOST WANTED" to match the in-game terminology; the stale "Bestiary" text is removed from HomeV2 entirely
 - validation baseline after Session 49: `npm test` 151/151, panel code lives behind Suspense lazy imports so the home chunk is not inflated
-- last updated: 2026-04-21 (Session 49)
+- last updated: 2026-04-22 (Session 54)

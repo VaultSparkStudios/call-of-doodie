@@ -5,7 +5,15 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock("../supabase.js", () => ({ supabase: null, getOrCreateClientUid: () => "test-uid", getAuthUid: () => null }));
-vi.mock("../utils/analytics.js", () => ({ track: vi.fn(), analyticsInit: vi.fn(), identify: vi.fn(), analyticsReset: vi.fn(), gameCtx: () => ({}), resolveMode: () => "standard" }));
+vi.mock("../utils/analytics.js", () => ({
+  track: vi.fn(),
+  analyticsInit: vi.fn(),
+  identify: vi.fn(),
+  analyticsReset: vi.fn(),
+  gameCtx: () => ({}),
+  resolveMode: () => "standard",
+  getAnalyticsStatus: () => ({ enabled: false, provider: "none" }),
+}));
 
 import HomeV2 from "./HomeV2.jsx";
 

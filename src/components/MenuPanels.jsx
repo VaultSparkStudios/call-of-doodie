@@ -5,6 +5,7 @@ import {
   saveMetaProgress, purchaseMetaUpgrade, prestigeAccount,
 } from "../storage.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
+import { copyChallengeUrl } from "../utils/challengeLinks.js";
 import {
   buildFeaturedSeeds,
   buildGhostBoard,
@@ -21,6 +22,7 @@ const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "
 const BTN_P = { padding: "12px 24px", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
 const BTN_S = { ...BTN_P, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
 const CLOSE_X = { position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" };
+const MINI_BTN = { padding: "5px 8px", fontSize: 9, fontWeight: 800, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.05)", color: "#DDD", border: "1px solid rgba(255,255,255,0.16)", borderRadius: 5, cursor: "pointer", letterSpacing: 1 };
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
 const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
@@ -160,7 +162,14 @@ export function MostWantedPanel({ onClose }) {
 }
 
 // ── RUN HISTORY ──────────────────────────────────────────────────────────────
-export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = null, studioEvents = null }) {
+export function RunHistoryPanel({
+  onClose,
+  runHistory = null,
+  rivalryHistory = null,
+  studioEvents = null,
+  username = "",
+  onLaunchSeed = null,
+}) {
   const history = Array.isArray(runHistory) ? runHistory : loadRunHistory();
   const rivalry = Array.isArray(rivalryHistory) ? rivalryHistory : loadRivalryHistory();
   const events = Array.isArray(studioEvents) ? studioEvents : loadStudioGameEvents();
@@ -172,6 +181,14 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
   const featuredSeeds = buildFeaturedSeeds(history, rivalry);
   const ghostBoard = buildGhostBoard(history, rivalry);
   const trustRecommendations = buildTrustRecommendations(trustSummary);
+  const launchSeed = (seed, challenge = null) => {
+    if (!seed || typeof onLaunchSeed !== "function") return;
+    onLaunchSeed(seed, challenge || {});
+    onClose?.();
+  };
+  const copySeedChallenge = async (seed, difficulty = "normal", vsScore = null, vsName = username) => {
+    await copyChallengeUrl({ seed, difficulty, vsScore, vsName });
+  };
   return (
     <div style={OVERLAY}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 520, border: "1px solid rgba(255,107,53,0.3)" }}>
@@ -183,6 +200,22 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
           <div style={{ color: "#EEE", fontSize: 12, marginTop: 5, lineHeight: 1.45 }}>{weeklyContract.detail}</div>
           <div style={{ color: "#AAA", fontSize: 10, marginTop: 6 }}>{weeklyContract.reward}</div>
           <div style={{ color: "#FFD79C", fontSize: 10, marginTop: 6 }}>Progress: {weeklyContract.progress}</div>
+          {rivalrySummary.unresolved && (
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 10 }}>
+              <button
+                onClick={() => launchSeed(rivalrySummary.unresolved.seed, { vs: rivalrySummary.unresolved.vsScore, vsName: rivalrySummary.unresolved.vsName })}
+                style={{ ...MINI_BTN, color: "#FFD79C", borderColor: "rgba(255,179,107,0.28)" }}
+              >
+                ▶ REMATCH
+              </button>
+              <button
+                onClick={() => copySeedChallenge(rivalrySummary.unresolved.seed, rivalrySummary.unresolved.difficulty || "normal", rivalrySummary.unresolved.vsScore, rivalrySummary.unresolved.vsName || username)}
+                style={MINI_BTN}
+              >
+                🔗 COPY LINK
+              </button>
+            </div>
+          )}
         </div>
         <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(0,229,255,0.04)", border: "1px solid rgba(0,229,255,0.18)" }}>
           <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>⚔️ RIVALRY NETWORK</div>
@@ -207,9 +240,12 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               {rivalry.slice(0, 4).map((entry, index) => (
-                <div key={`rival-${index}`} style={{ fontSize: 10, color: "#DDD", display: "flex", justifyContent: "space-between", gap: 8 }}>
+                <div key={`rival-${index}`} style={{ fontSize: 10, color: "#DDD", display: "flex", justifyContent: "space-between", gap: 8, alignItems: "center" }}>
                   <span>#{entry.seed} {entry.vsName ? `vs @${entry.vsName}` : "fixed-seed rivalry"} {entry.won === true ? "won" : entry.won === false ? "lost" : "logged"}</span>
-                  {entry.delta != null && <span style={{ color: entry.delta >= 0 ? "#00FF88" : "#FF8888" }}>{entry.delta >= 0 ? "+" : ""}{entry.delta.toLocaleString()}</span>}
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                    {entry.delta != null && <span style={{ color: entry.delta >= 0 ? "#00FF88" : "#FF8888" }}>{entry.delta >= 0 ? "+" : ""}{entry.delta.toLocaleString()}</span>}
+                    <button onClick={() => launchSeed(entry.seed, { vs: entry.vsScore, vsName: entry.vsName })} style={MINI_BTN}>▶ PLAY</button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -222,6 +258,10 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
                   <div style={{ color: "#FFF", fontSize: 12, marginTop: 5 }}>Seed #{card.seed}</div>
                   <div style={{ color: "#BBB", fontSize: 10, marginTop: 4, lineHeight: 1.45 }}>{card.detail}</div>
                   <div style={{ color: "#DDD", fontSize: 10, marginTop: 6 }}>{card.target}</div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
+                    <button onClick={() => launchSeed(card.seed)} style={{ ...MINI_BTN, color: card.accent, borderColor: `${card.accent}55` }}>▶ PLAY</button>
+                    <button onClick={() => copySeedChallenge(card.seed)} style={MINI_BTN}>🔗 COPY</button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -231,9 +271,12 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
               <div style={{ color: "#AAA", fontSize: 10, marginBottom: 6 }}>Async competition board</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 {ghostBoard.map((ghost) => (
-                  <div key={ghost.id} style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 10, color: "#DDD", padding: "6px 8px", borderRadius: 6, background: "rgba(255,255,255,0.025)" }}>
+                  <div key={ghost.id} style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 10, color: "#DDD", padding: "6px 8px", borderRadius: 6, background: "rgba(255,255,255,0.025)", alignItems: "center" }}>
                     <span><span style={{ color: ghost.accent }}>{ghost.title}</span> · seed #{ghost.seed} · wave {ghost.wave}</span>
-                    <span>{ghost.score.toLocaleString()} pts</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                      <span>{ghost.score.toLocaleString()} pts</span>
+                      <button onClick={() => launchSeed(ghost.seed)} style={MINI_BTN}>▶ PLAY</button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -297,10 +340,17 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
                     </div>
                     <div style={{ display: "flex", gap: 8, marginTop: 3, fontSize: 9, color: "#888" }}>
                       <span>⏱ {timeFmt}</span>
+                      {run.runSeed ? <span>🌱 #{run.runSeed}</span> : null}
                       {run.modifier && <span>🎲 {run.modifier}</span>}
                       <span style={{ marginLeft: "auto" }}>{dateStr}</span>
                     </div>
                   </div>
+                  {run.runSeed ? (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, flexShrink: 0 }}>
+                      <button onClick={() => launchSeed(run.runSeed)} style={MINI_BTN}>▶ REPLAY</button>
+                      <button onClick={() => copySeedChallenge(run.runSeed, run.difficulty)} style={MINI_BTN}>🔗 LINK</button>
+                    </div>
+                  ) : null}
                 </div>
               );
             })}

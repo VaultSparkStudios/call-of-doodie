@@ -5,6 +5,7 @@ import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
+import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -98,11 +99,12 @@ export default function DeathScreen({
   }, [ghostData]);
 
   // ── QR code rendering ─────────────────────────────────────────────────────
-  const challengeUrl = runSeed > 0 ? (() => {
-    const params = new URLSearchParams({ seed: runSeed, diff: difficulty, vs: score });
-    if (username) params.set("vsName", username);
-    return `${location.origin}${location.pathname}?${params.toString()}`;
-  })() : null;
+  const challengeUrl = buildChallengeUrl({
+    seed: runSeed,
+    difficulty,
+    vsScore: score,
+    vsName: username,
+  });
 
   useEffect(() => {
     if (!showQR || !challengeUrl) return;
@@ -818,13 +820,12 @@ export default function DeathScreen({
             >📋 COPY</button>
             <button
               onClick={() => {
-                const params = new URLSearchParams({ seed: runSeed, diff: difficulty, vs: score });
-                if (username) params.set("vsName", username);
-                const url = `${location.origin}${location.pathname}?${params.toString()}`;
                 track("debrief_copy_challenge", { seed: runSeed, score, wave, difficulty });
-                navigator.clipboard?.writeText?.(url);
-                setCopiedChallenge(true);
-                setTimeout(() => setCopiedChallenge(false), 1500);
+                copyChallengeUrl({ seed: runSeed, difficulty, vsScore: score, vsName: username }).then((url) => {
+                  if (!url) return;
+                  setCopiedChallenge(true);
+                  setTimeout(() => setCopiedChallenge(false), 1500);
+                });
               }}
               style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: copiedChallenge ? "rgba(0,255,136,0.1)" : "rgba(255,107,53,0.08)", border: copiedChallenge ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,107,53,0.35)", borderRadius: 4, color: copiedChallenge ? "#00FF88" : "#FF6B35", cursor: "pointer", letterSpacing: 1, transition: "all 0.2s" }}
             >{copiedChallenge ? "✓ COPIED!" : "⚔️ COPY CHALLENGE LINK"}</button>

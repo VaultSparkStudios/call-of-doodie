@@ -19,6 +19,11 @@ The remaining launch blockers are now execution-only:
 - one real gamepad/browser pass
 - publishing the store/distribution surfaces
 
+Helpful commands:
+
+- `npm run launch:assets` exports PNG versions of the prepared launch stills
+- `npm run launch:readiness` prints the current telemetry/assets/human-gate status
+
 ## Launch decision
 
 PostHog and Sentry are explicit post-launch follow-up items, not launch gates.
@@ -70,6 +75,7 @@ Ready-to-upload launch stills are prepared in `public/launch-assets/`:
 3. `launch-builds.svg`
 4. `launch-leaderboard.svg`
 5. `launch-devices.svg`
+6. `npm run launch:assets` generates matching `.png` exports for store uploads that prefer raster files
 
 These remove the "need screenshots before listing" blocker for store/distribution surfaces. Real gameplay captures are still a nice follow-up, but not required to publish the listing package now.
 

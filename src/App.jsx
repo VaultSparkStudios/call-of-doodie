@@ -23,7 +23,7 @@ import {
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
-import { buildRunClaim, buildSessionSubmission } from "./utils/runSubmission.js";
+import { buildSessionSubmission } from "./utils/runSubmission.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -59,6 +59,13 @@ import {
   getWaveSpawnRate,
 } from "./systems/waveDirector.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
+import {
+  createDeathStudioEvents,
+  createRunHistoryEntry,
+  createRunStartArtifacts,
+  createScoreSubmitStudioEvents,
+  resolveRunModeFromFlags,
+} from "./systems/runSession.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -1463,36 +1470,32 @@ export default function CallOfDoodie() {
       } catch (err) { console.warn("[GIF] encode failed:", err); }
       setGifEncoding(false);
     })();
-    saveRunToHistory({
+    const runFlags = {
+      scoreAttack: scoreAttackRef.current,
+      dailyChallenge: dailyChallengeRef.current,
+      cursed: cursedRunRef.current,
+      bossRush: bossRushRef.current,
+      speedrun: speedrunRef.current,
+      gauntlet: gauntletRef.current,
+    };
+    saveRunToHistory(createRunHistoryEntry({
       score: gs.score,
       kills: gs.kills,
       wave: gs.currentWave,
-      time: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      timeSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000),
       difficulty,
-      mode: scoreAttackRef.current ? "score_attack" : cursedRunRef.current ? "cursed" : bossRushRef.current ? "boss_rush" : dailyChallengeRef.current ? "daily_challenge" : speedrunRef.current ? "speedrun" : gauntletRef.current ? "gauntlet" : null,
+      flags: runFlags,
       runSeed,
       modifier: gs.runModifier || null,
-      ts: Date.now(),
-    });
-    saveStudioGameEvent(buildStudioGameEvent("weekly_contract_progress", {
-      surface: "death_screen",
-      contractId: runSeed ? "seeded_progress" : "baseline_progress",
-      progressLabel: runSeed
-        ? `Seed #${runSeed} banked at wave ${gs.currentWave}`
-        : `Wave ${gs.currentWave} baseline recorded`,
-      seed: runSeed || null,
-      mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
-      score: gs.score,
-      wave: gs.currentWave,
     }));
-    saveStudioGameEvent(buildStudioGameEvent("first_death_wave", {
-      surface: "death_screen",
-      mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
-      difficulty: difficultyRef.current,
-      wave: gs.currentWave,
+    createDeathStudioEvents({
       score: gs.score,
       kills: gs.kills,
-    }));
+      wave: gs.currentWave,
+      difficulty: difficultyRef.current,
+      flags: runFlags,
+      runSeed,
+    }).forEach(saveStudioGameEvent);
     const deathRoast = getRoastCallout("death", roastCooldowns.current, gs.currentWave, 1);
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
@@ -1559,13 +1562,21 @@ export default function CallOfDoodie() {
       startAmbient(gsRef.current?.mapTheme ?? 0);
     }, 200); // small delay to let audio context resume
     // ── Analytics: game start ──
-    const _startMode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
-    const runClaim = buildRunClaim({
-      mode: _startMode,
+    const startArtifacts = createRunStartArtifacts({
       difficulty,
-      seed,
       starterLoadout,
+      seed,
+      flags: {
+        scoreAttack: scoreAttackRef.current,
+        dailyChallenge: dailyChallengeRef.current,
+        cursed: cursedRunRef.current,
+        bossRush: bossRushRef.current,
+        speedrun: speedrunRef.current,
+        gauntlet: gauntletRef.current,
+      },
     });
+    const _startMode = startArtifacts.mode;
+    const runClaim = startArtifacts.runClaim;
     issueRunToken(runClaim).then(runTicket => {
       runTokenRef.current = runTicket?.token || null;
       runSummarySigRef.current = runTicket?.summarySig || "";
@@ -1623,7 +1634,14 @@ export default function CallOfDoodie() {
     const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
     const sett = settingsRef.current;
     const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
-    const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    const mode = resolveRunModeFromFlags({
+      scoreAttack: scoreAttackRef.current,
+      dailyChallenge: dailyChallengeRef.current,
+      cursed: cursedRunRef.current,
+      bossRush: bossRushRef.current,
+      speedrun: speedrunRef.current,
+      gauntlet: gauntletRef.current,
+    });
     const entry = buildSessionSubmission({
       username,
       score,
@@ -1663,29 +1681,23 @@ export default function CallOfDoodie() {
       reason: result.rejectionReason || null,
       eventDigestVersion: eventDigest?.v || null,
     });
-    saveStudioGameEvent(buildStudioGameEvent("score_submit_result", {
-      surface: "death_screen",
-      mode,
+    createScoreSubmitStudioEvents({
       difficulty,
       score,
       wave,
-      seed: runSeed,
-      submission: result.submission,
+      runSeed,
+      flags: {
+        scoreAttack: scoreAttackRef.current,
+        dailyChallenge: dailyChallengeRef.current,
+        cursed: cursedRunRef.current,
+        bossRush: bossRushRef.current,
+        speedrun: speedrunRef.current,
+        gauntlet: gauntletRef.current,
+      },
       globalRank,
-    }));
-    if (result.submission === "rejected") {
-      saveStudioGameEvent(buildStudioGameEvent("submission_rejected", {
-        surface: "death_screen",
-        mode,
-        difficulty,
-        score,
-        wave,
-        seed: runSeed,
-        digestVersion: eventDigest?.v || null,
-        reason: result.rejectionReason || "Score submission rejected.",
-        reasons: result.rejectionReasons || [],
-      }));
-    }
+      result,
+      eventDigest,
+    }).events.forEach(saveStudioGameEvent);
     return { ...result, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 

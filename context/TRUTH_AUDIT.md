@@ -5,6 +5,19 @@ Overall status: green
 Last reviewed: 2026-04-22
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-04-22 — Session 54 changes
+
+- `src/systems/runSession.js` + `src/systems/runSession.test.js` added: run-start artifact creation, run-history entry shaping, death-event generation, and score-submit event generation now live in a dedicated runtime helper module
+- `src/App.jsx` updated: run lifecycle bookkeeping delegates to `runSession.js`; source-of-truth behavior is unchanged, but another orchestration branch is now outside the main component
+- `src/utils/challengeLinks.js` + `src/utils/challengeLinks.test.js` added: seeded challenge/replay URLs now come from one canonical builder/copy helper
+- `src/components/DeathScreen.jsx` updated: challenge-link copy path now uses the canonical helper instead of hand-built querystring logic
+- `src/components/MenuPanels.jsx` updated: Run History exposes direct replay/rematch/copy-link actions for rivalry rows, featured seeds, ghost-board cards, and seeded run-history entries
+- `src/components/HomeV2.jsx` updated: measurement readiness (`PostHog` key status + local Studio-event sync state) is visible on the front door, and Run History can launch seeded replays back into the deploy flow
+- `scripts/generate-launch-assets.mjs` added: existing SVG launch stills can now be exported to PNG; `public/launch-assets/*.png` added as generated, source-controlled outputs
+- `scripts/launch-readiness.mjs` added: launch readiness now reports raster asset coverage plus telemetry-key presence without exposing sensitive values
+- `docs/LAUNCH_EXECUTION.md`, `context/TASK_BOARD.md`, `context/CURRENT_STATE.md`, `context/LATEST_HANDOFF.md`, `logs/WORK_LOG.md`, and `context/SELF_IMPROVEMENT_LOOP.md` updated for Session 54 closeout state
+- No contradictions introduced. Source-of-truth hierarchy unchanged — launch readiness remains advisory, and replay/challenge links remain a client-side convenience layer over existing seeded-run behavior.
+
 ## 2026-04-22 — Session 53 changes
 
 - `src/storage.js` updated: local Studio events are now normalized with `clientEventId`, sync status, retry metadata, and an opportunistic `syncStudioGameEvents()` / `requestStudioEventSync()` path

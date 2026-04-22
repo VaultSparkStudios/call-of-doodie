@@ -9,6 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "icons:generate": "node scripts/generate-icons.mjs",
+    "launch:assets": "node scripts/generate-launch-assets.mjs",
+    "launch:readiness": "node scripts/launch-readiness.mjs",
     "lint": "eslint src --report-unused-disable-directives",
     "lint:strict": "eslint src --report-unused-disable-directives --max-warnings 0",
     "test": "vitest run",
