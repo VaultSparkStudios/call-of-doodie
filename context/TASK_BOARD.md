@@ -18,15 +18,15 @@ Public-safe launch roadmap summary.
 
 ## Next
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
-- [ ] [SIL:1] Economy clarity pass, slice 2 — deeper route forecasting, reroll/lock mechanics, and stronger shop tradeoff language
+- [ ] [SIL:1] Economy clarity pass, slice 2 (partial) — route forecasting done (routeForecast.js wired into RouteSelectModal); remaining: reroll/lock mechanics and shop tradeoff language
 - [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
 - [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, seeded rematch reuse, and async competitions that feel native to the game
 - [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
-- [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation
-- [ ] Meta clarity pass — recommended next unlock, recommended spend, and player weakness-aware loadout advice
+- [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation (human action: screenshot capture)
+- [x] Meta clarity pass — **DONE S51**: `metaClarity.js` + wired into `menuGuidance.js`, HomeV2, MenuScreen; career-weakness-targeted upgrade recommendations in front-door action stack
 - [ ] Security/trust v2 ops surface — anomaly review logs and clearer rejection telemetry around suspicious leaderboard submissions
-- [ ] App-runtime architecture pass — extract another production domain from `src/App.jsx` after the run-submission slice
-- [ ] Roast Director — rule-based comedic announcer/callout layer tied to structured run events, with rate limits and player control
+- [x] App-runtime architecture pass, slice 8 — **DONE S51**: pickup spawning extracted to `src/systems/pickupSpawning.js` (pure fn + `getPickupWeights`); App.jsx wrapper collapses to 2 lines; 11 tests
+- [x] Roast Director — **DONE S51**: `src/utils/roastDirector.js` with 10 event pools, per-event wave-cooldown rate limiting; wired in game loop at kill_streak (every 5 kills) and boss_kill; 12 tests
 - [ ] Studio Hub/Social Dashboard event contract — normalize game session, challenge, anomaly, debrief, and rivalry events for downstream Studio OS surfaces
 ## Done
 - [x] [SIL] Session 50 NOW bucket — HomeV2 intel ticker sessionStorage persistence, CareerStatsPanel "—" placeholder for pre-49 saves, Command Center gamepad nav (useGamepadNav + focus rings), `scripts/schema-lint.mjs` (`npm run schema:lint`), balance telemetry v2 (`shop_buy`, `coin_shop_buy`, `mode_abandon`, `debrief_view_leaderboard`, `debrief_menu` events), user feedback clarity (local-save fallback + rejection copy), bundle split cleanup slice 3 (PauseMenu + PerkModal + WaveShopModal + RouteSelectModal + TutorialOverlay + DraftScreen all lazy), front-door simplification (first-run stripped action stack + collapsible Command Center auto-expanded for returning players), level-flow cadence slice 2 (every-3-levels through level 18 + `getWaveSurvivalBonus` + `getPerkBankingState`), build identity depth (DOCTRINE FORGED milestone + `getDoctrineMilestones()` + irreversible-fork doctrine text per archetype), App.jsx domain refactor slice 7 (`src/systems/mutationResolution.js` + wired into App.jsx), leaderboard trust v2 (`scripts/leaderboard-audit.mjs` + `npm run leaderboard:audit`), render/update optimization (frame budget monitor in `useGameLoop.js` dev-only — warns on >16ms frames).
