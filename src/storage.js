@@ -542,7 +542,7 @@ export function saveStudioGameEvent(event) {
   try {
     const events = JSON.parse(localStorage.getItem(STUDIO_EVENTS_KEY) || "[]");
     events.unshift(event);
-    localStorage.setItem(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, 50)));
+    localStorage.setItem(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, 100)));
   } catch {}
 }
 

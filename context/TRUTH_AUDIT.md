@@ -2,8 +2,21 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-21
+Last reviewed: 2026-04-22
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-04-22 — Session 52 changes
+
+- `src/utils/socialRetention.js` + `src/utils/socialRetention.test.js` added: weekly contracts, rivalry summaries, featured seed cards, and ghost-board summaries now live in a pure utility module
+- `src/utils/studioEventOps.js` + `src/utils/studioEventOps.test.js` added: local Studio event summaries now produce trust-op counts, rejection summaries, and telemetry guidance
+- `src/systems/bossWaveFlow.js` + `src/systems/bossWaveFlow.test.js` added: boss preview/spawn planning extracted from `src/App.jsx` into a pure planner covering developer boss, dual-boss thresholds, preview-card metadata, and warning text
+- `src/utils/runIntelligence.js` updated: Studio event contract upgraded to `contractVersion: 2`; telemetry event types added for `perk_choice`, `route_choice`, `mode_abandon`, `first_death_wave`, and `weekly_contract_progress`
+- `src/App.jsx` updated: local Studio events now persist score-submit results/rejections, perk picks, route picks, weekly-contract progress, first-death wave, and pause-menu abandonments; boss-wave preview/spawn branch now delegates to `createBossWavePlan()`
+- `src/components/MenuPanels.jsx` updated: Run History now surfaces weekly-contract progress, rivalry streaks, featured seeds, ghost-board summaries, trust-op counts, rejection summaries, and telemetry counts using the new utility modules
+- `src/storage.js` updated: local Studio event retention window expanded from 50 → 100 records to support the richer trust/telemetry history
+- `context/TASK_BOARD.md` updated: social retention, social rivalry loop, telemetry/balance loop, security/trust ops surface, Studio Hub event contract, and App extraction slice 9 marked complete; human/data-gated Lighthouse + funnel items explicitly reclassified
+- `context/PROJECT_STATUS.json` updated: session fields and current focus/next milestone now reflect Session 52
+- No contradictions introduced. Source-of-truth hierarchy unchanged — all new modules are additive pure utilities or pure planners, and the local Studio event schema remains browser-local only.
 
 ## 2026-04-21 — Session 51 changes
 

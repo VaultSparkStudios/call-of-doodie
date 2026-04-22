@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
 import {
@@ -49,6 +49,7 @@ import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
+import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import {
   buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
@@ -57,6 +58,7 @@ import {
   getWaveDirectorState,
   getWaveSpawnRate,
 } from "./systems/waveDirector.js";
+import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -982,6 +984,15 @@ export default function CallOfDoodie() {
     const _gs = gsRef.current;
     const _mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
     track("perk_chosen", { perkId: perk.id, perkName: perk.name, perkTier: perk.tier, offeredIds: perkOptionsRef.current.map(p => p.id), wave: _gs?.currentWave, difficulty: difficultyRef.current, mode: _mode });
+    saveStudioGameEvent(buildStudioGameEvent("perk_choice", {
+      surface: "perk_modal",
+      perkId: perk.id,
+      perkTier: perk.tier,
+      offeredIds: perkOptionsRef.current.map((p) => p.id),
+      wave: _gs?.currentWave,
+      mode: _mode,
+      difficulty: difficultyRef.current,
+    }));
     perkOptionsRef.current.filter(p => p.id !== perk.id).forEach(skipped => {
       track("perk_skipped", { perkId: skipped.id, perkTier: skipped.tier, chosenId: perk.id, wave: _gs?.currentWave, mode: _mode });
     });
@@ -1144,6 +1155,24 @@ export default function CallOfDoodie() {
     const gs = gsRef.current;
     if (!gs) return;
     route.apply(gs, perkModsRef.current);
+    const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    track("route_chosen", {
+      routeId: route.id,
+      wave: gs.currentWave,
+      mode,
+      difficulty: difficultyRef.current,
+      hp: gs.player?.health,
+      coins: gs.coins,
+    });
+    saveStudioGameEvent(buildStudioGameEvent("route_choice", {
+      surface: "route_modal",
+      routeId: route.id,
+      wave: gs.currentWave,
+      mode,
+      difficulty: difficultyRef.current,
+      hp: gs.player?.health,
+      coins: gs.coins,
+    }));
     routePendingRef.current = false;
     setRoutePending(false);
     setRouteOptions([]);
@@ -1443,6 +1472,25 @@ export default function CallOfDoodie() {
       modifier: gs.runModifier || null,
       ts: Date.now(),
     });
+    saveStudioGameEvent(buildStudioGameEvent("weekly_contract_progress", {
+      surface: "death_screen",
+      contractId: runSeed ? "seeded_progress" : "baseline_progress",
+      progressLabel: runSeed
+        ? `Seed #${runSeed} banked at wave ${gs.currentWave}`
+        : `Wave ${gs.currentWave} baseline recorded`,
+      seed: runSeed || null,
+      mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+      score: gs.score,
+      wave: gs.currentWave,
+    }));
+    saveStudioGameEvent(buildStudioGameEvent("first_death_wave", {
+      surface: "death_screen",
+      mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+      difficulty: difficultyRef.current,
+      wave: gs.currentWave,
+      score: gs.score,
+      kills: gs.kills,
+    }));
     // ── Analytics: death ──
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
@@ -1611,6 +1659,29 @@ export default function CallOfDoodie() {
       reason: result.rejectionReason || null,
       eventDigestVersion: eventDigest?.v || null,
     });
+    saveStudioGameEvent(buildStudioGameEvent("score_submit_result", {
+      surface: "death_screen",
+      mode,
+      difficulty,
+      score,
+      wave,
+      seed: runSeed,
+      submission: result.submission,
+      globalRank,
+    }));
+    if (result.submission === "rejected") {
+      saveStudioGameEvent(buildStudioGameEvent("submission_rejected", {
+        surface: "death_screen",
+        mode,
+        difficulty,
+        score,
+        wave,
+        seed: runSeed,
+        digestVersion: eventDigest?.v || null,
+        reason: result.rejectionReason || "Score submission rejected.",
+        reasons: result.rejectionReasons || [],
+      }));
+    }
     return { ...result, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
 
@@ -1950,92 +2021,37 @@ export default function CallOfDoodie() {
         setMusicIntensity(true);
         gs.screenShake = 20;
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
-        const _bSlot = gs.bossRushMode
-          ? (gs.currentWave - 1) % BOSS_ROTATION.length
-          : (Math.floor(gs.currentWave / 5) - 1) % BOSS_ROTATION.length;
-        const _bType = BOSS_ROTATION[_bSlot];
-        const _bType2 = BOSS_ROTATION[(_bSlot + 1) % BOSS_ROTATION.length];
-        // Boss name announcement
-        const _bossNames = { 4:"👩 KAREN DEMANDS A MANAGER", 16:"💔 THE SPLITTER APPROACHES", 17:"🦏 THE JUGGERNAUT APPROACHES", 18:"🌀 THE SUMMONER RISES", 9:"🏠 THE LANDLORD RAISES RENT", 20:"📊 THE ALGORITHM GOES VIRAL", 21:"💻 THE DEVELOPER DEPLOYS" };
-        const _bossColors = { 4:"#FF44AA", 16:"#FF6688", 17:"#CC4400", 18:"#8844FF", 9:"#FFAA00", 20:"#1DA1F2", 21:"#00FF88" };
-        const _BOSS_CARDS = {
-          4:  { emoji:"👩", name:"KAREN",         title:"DEMANDS A MANAGER",   quote:"I want to speak to whoever designed this game.", color:"#FF44AA" },
-          16: { emoji:"💔", name:"THE SPLITTER",  title:"MULTIPLIES ON DEATH", quote:"You can't kill what just keeps coming.",           color:"#FF6688" },
-          17: { emoji:"🦏", name:"THE JUGGERNAUT",title:"UNSTOPPABLE FORCE",   quote:"Nothing can stop me. Absolutely nothing.",         color:"#CC4400" },
-          18: { emoji:"🌀", name:"THE SUMMONER",  title:"RAISES AN ARMY",      quote:"Why fight when you can delegate?",                 color:"#8844FF" },
-          9:  { emoji:"🏠", name:"THE LANDLORD",  title:"RAISES YOUR RENT",    quote:"Market rate. Non-negotiable. Also, you're evicted.", color:"#FFAA00" },
-          20: { emoji:"📊", name:"THE ALGORITHM", title:"GOES VIRAL",          quote:"Your engagement metrics are... unsatisfactory.",   color:"#1DA1F2" },
-          21: { emoji:"💻", name:"THE DEVELOPER", title:"PUSHES TO PRODUCTION", quote:"I'll fix it in the next sprint. Probably.",       color:"#00FF88" },
-        };
-        // ── Secret Developer boss at wave 50+ (non-boss-rush only, once per run) ──
-        const _isDeveloperWave = gs.currentWave >= 50 && !gs.developerBossSpawned && !gs.bossRushMode;
-        if (_isDeveloperWave) {
-          gs.developerBossSpawned = true;
-          const _devCard = _BOSS_CARDS[21];
-          const _bossGuidance = getBossWaveGuidance(21, null);
-          bossCutsceneRef.current = true;
-          setBossCutscene({ ..._devCard, wave: gs.currentWave, dual: null, guidance: _bossGuidance });
-          track("boss_wave_preview", {
-            ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score }),
-            boss: _bossGuidance.headline,
-            verb: _bossGuidance.verb,
-          });
-          setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
-          addText(gs, W / 2, H / 2 - 70, _bossNames[21], "#00FF88", true);
-          addText(gs, W / 2, H / 2 + 45, "🐛 DEBUG MODE · 🩹 HOTFIX · ⚠️ MERGE CONFLICT!", "#00FF88");
-          spawnBoss(gs, 21);
-        } else {
-          const _card = _BOSS_CARDS[_bType] || { emoji:"☠", name:"BOSS", title:"APPROACHES", quote:"...", color:"#FF4400" };
-          const _isDual = gs.currentWave >= (gs.bossRushMode ? 3 : 15);
-          const _bossGuidance = getBossWaveGuidance(_bType, _isDual ? _bType2 : null);
-          bossCutsceneRef.current = true;
-          setBossCutscene({ ..._card, wave: gs.currentWave, dual: _isDual ? (_BOSS_CARDS[_bType2] || null) : null, guidance: _bossGuidance });
-          setLiveAnnounce("Boss wave! " + (_card.name || "Boss") + " incoming on wave " + gs.currentWave);
-          track("boss_wave_preview", {
-            ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score }),
-            boss: _bossGuidance.headline,
-            verb: _bossGuidance.verb,
-          });
-          setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
-          addText(gs, W / 2, H / 2 - 70, _bossNames[_bType] || "☠ BOSS APPROACHES", _bossColors[_bType] || "#FF4400", true);
-          if (_isDual) {
-            addText(gs, W / 2, H / 2 - 50, "+ " + (_bossNames[_bType2] || ENEMY_TYPES[_bType2].name.toUpperCase()), _bossColors[_bType2] || "#FF8844");
-          }
-          // Ability warnings: boss-specific first, then general escalation
-          const _wv = gs.currentWave;
-          const _primaryBoss = _bType;
-          const _secondBoss = gs.currentWave >= 15 ? _bType2 : null;
-          if (_primaryBoss === 16) {
-            addText(gs, W / 2, H / 2 + 45, "💔 SPLITS INTO 3 SHARDS AT LOW HP · 🔥 BULLET RING", "#FF6688");
-          } else if (_primaryBoss === 17 || _secondBoss === 17) {
-            addText(gs, W / 2, H / 2 + 45, "🦏 ARMORED SHIELD ABSORBS DAMAGE · CHARGE ATTACKS!", "#CC4400");
-            if (_secondBoss === 18 || _primaryBoss === 18)
-              addText(gs, W / 2, H / 2 + 65, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE", "#8844FF");
-          } else if (_primaryBoss === 18 || _secondBoss === 18) {
-            addText(gs, W / 2, H / 2 + 45, "🌀 SUMMONS ELITES · INVULNERABLE WHILE ALIVE!", "#8844FF");
-          } else if (_wv >= 40) {
-            addText(gs, W / 2, H / 2 + 45, "💸 RENT NUKE · 🌀 TELEPORT · 🛡 SHIELD · ⚡ ENRAGE", "#FF6600");
-          } else if (_wv >= 35) {
-            addText(gs, W / 2, H / 2 + 45, "🌀 TELEPORT · 🛡 SHIELD PULSE · ⚡ ENRAGE", "#FF6600");
-          } else if (_wv >= 30) {
-            addText(gs, W / 2, H / 2 + 45, "⚡ ENRAGE at 33% HP · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
-          } else if (_wv >= 25) {
-            addText(gs, W / 2, H / 2 + 45, "👥 MINION SURGE · 🛡 SHIELD PULSE · 💥 SLAM", "#FF6600");
-          } else if (_wv >= 20) {
-            addText(gs, W / 2, H / 2 + 45, "🛡 SHIELD PULSE · 💥 GROUND SLAM · 🔥 BULLET RING", "#FF6600");
-          } else if (_wv >= 15) {
-            addText(gs, W / 2, H / 2 + 45, "💥 GROUND SLAM · 🔥 BULLET RING UNLOCKED!", "#FF6600");
-          } else if (_wv >= 10) {
-            addText(gs, W / 2, H / 2 + 45, "🔥 NEW: BULLET RING!", "#FF6600");
-          } else if (_wv >= 7) {
-            addText(gs, W / 2, H / 2 + 45, "⚠️ BOSS + ESCORTS!", "#FF6600");
-          }
-          const _dualBossThreshold = gs.bossRushMode ? 3 : 15;
-          if (gs.currentWave >= _dualBossThreshold) { spawnBoss(gs, _bType); spawnBoss(gs, _bType2); }
-          else {
-            spawnBoss(gs, _bType);
-            if (gs.currentWave >= 7) { spawnEnemy(gs); spawnEnemy(gs); gs.maxEnemiesThisWave += 2; gs.enemiesThisWave += 2; }
-          }
+        const bossPlan = createBossWavePlan({
+          currentWave: gs.currentWave,
+          bossRushMode: gs.bossRushMode,
+          developerBossSpawned: gs.developerBossSpawned,
+          bossRotation: BOSS_ROTATION,
+          enemyTypes: ENEMY_TYPES,
+        });
+        if (bossPlan.markDeveloperBossSpawned) gs.developerBossSpawned = true;
+        const _bossGuidance = getBossWaveGuidance(bossPlan.primaryBoss, bossPlan.secondaryBoss);
+        bossCutsceneRef.current = true;
+        setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
+        if (bossPlan.setLiveAnnounce) {
+          setLiveAnnounce("Boss wave! " + (bossPlan.previewCard.name || "Boss") + " incoming on wave " + gs.currentWave);
+        }
+        track("boss_wave_preview", {
+          ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score }),
+          boss: _bossGuidance.headline,
+          verb: _bossGuidance.verb,
+        });
+        setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
+        bossPlan.announceLines.forEach((line, index) => {
+          addText(gs, W / 2, H / 2 - 70 + (index * 20), line.text, line.color, line.emphasize);
+        });
+        bossPlan.warningLines.forEach((line, index) => {
+          addText(gs, W / 2, H / 2 + 45 + (index * 20), line.text, line.color);
+        });
+        bossPlan.spawnBosses.forEach((bossType) => spawnBoss(gs, bossType));
+        if (bossPlan.escortCount > 0) {
+          for (let escortIdx = 0; escortIdx < bossPlan.escortCount; escortIdx++) spawnEnemy(gs);
+          gs.maxEnemiesThisWave += bossPlan.escortCount;
+          gs.enemiesThisWave += bossPlan.escortCount;
         }
         // Mark all boss enemies as "spawned" so the wave-clear condition can trigger
         gs.enemiesThisWave = gs.maxEnemiesThisWave;
@@ -3553,7 +3569,13 @@ export default function CallOfDoodie() {
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           onResume={() => setPaused(false)}
-          onLeave={() => { track("mode_abandon", { wave, score, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) }); stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPaused(false); setScreen("menu"); }}
+          onLeave={() => {
+            const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+            const abandonPayload = { wave, score, mode, difficulty: difficultyRef.current, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) };
+            track("mode_abandon", abandonPayload);
+            saveStudioGameEvent(buildStudioGameEvent("mode_abandon", { surface: "pause_menu", ...abandonPayload }));
+            stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPaused(false); setScreen("menu");
+          }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore}
           onLoadMore={loadMoreLeaderboard} onRefreshLeaderboard={refreshLeaderboard}

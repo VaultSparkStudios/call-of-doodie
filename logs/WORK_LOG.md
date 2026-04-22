@@ -2,6 +2,17 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-22 (Session 52)
+
+- Added `src/utils/socialRetention.js` + tests — weekly contracts, rivalry summaries, featured seed cards, and ghost-board helpers extracted into pure utilities
+- Added `src/utils/studioEventOps.js` + tests — trust-op and telemetry summarization for local Studio events
+- Added `src/systems/bossWaveFlow.js` + tests — pure boss-wave planner extracted from `src/App.jsx` covering developer boss, dual-boss planning, preview cards, and warning text
+- Expanded `src/utils/runIntelligence.js` Studio event contract to `contractVersion: 2`, adding telemetry event types for perk/route/abandon/death/contract progress
+- Expanded `src/App.jsx` local Studio event persistence to log perk picks, route picks, score-submit outcomes/rejections, weekly-contract progress, first-death wave, and mode abandonment
+- Upgraded `src/components/MenuPanels.jsx` Run History surface with rivalry streaks, featured seeds, ghost-board cards, weekly-contract progress, trust-op counts, rejection summaries, and telemetry guidance
+- Updated `context/TASK_BOARD.md` and `context/PROJECT_STATUS.json` so the remaining queue is explicitly split between human/data-gated work and completed in-repo items
+- Validation: `npm test` 258/258 passing, `npm run build` passing, `npm run lint` passing with one pre-existing warning in `src/systems/pickupSpawning.test.js`
+
 ## 2026-04-21 (Session 49)
 
 - Added `src/components/MenuPanels.jsx` — nine shared panels extracted from MenuScreen: RulesPanel, ControlsPanel, MostWantedPanel (renamed from Bestiary), RunHistoryPanel, LoadoutBuilderPanel, CareerStatsPanel (with advanced analytics), MissionsPanel, UpgradesPanel (with inline prestige confirm + player-skin picker), NewFeaturesPanel

@@ -1,6 +1,16 @@
 # Current State
 
 Public-safe summary:
+- Session 52 shipped the remaining unblocked in-repo refinement stack: social retention surfaces, trust/telemetry ops, Studio event contract v2, and App-runtime architecture slice 9 (boss-wave flow extraction)
+- `src/utils/socialRetention.js` — pure helpers for weekly contracts, rivalry summaries, featured seeds, and ghost-board cards; wired into `RunHistoryPanel` so the stored run/rivalry history now creates visible async-competition prompts instead of sitting as passive logs
+- `src/utils/studioEventOps.js` — pure helpers that summarize local Studio events into trust-op counts, rejection summaries, and telemetry guidance; `RunHistoryPanel` now surfaces front-door/debrief/trust counts, top rejection flags, decision telemetry, and abandonment totals
+- `src/utils/runIntelligence.js` now emits Studio event contract `v2` payloads for telemetry-oriented events (`perk_choice`, `route_choice`, `mode_abandon`, `first_death_wave`, `weekly_contract_progress`) in addition to the earlier front-door/debrief/rivalry/trust events
+- `src/App.jsx` now persists normalized local Studio events for perk picks, route picks, weekly-contract progress, first-death wave, score-submit results/rejections, and pause-menu abandonments; this closes the telemetry/balance loop locally without needing live analytics credentials
+- `src/systems/bossWaveFlow.js` — pure boss-wave planner extracted from App.jsx; owns boss-card metadata, dual-boss/developer-boss planning, preview lines, warning copy, and spawn-plan calculation; App.jsx now consumes the plan instead of owning the full inline preview/spawn tree
+- `src/components/MenuPanels.jsx` now gives Run History a stronger player-facing social layer: rivalry streak chip, featured seed cards, revenge-link language, ghost-board summaries, contract progress line, and richer trust ops summaries
+- new validation coverage: `src/utils/socialRetention.test.js` (3), `src/utils/studioEventOps.test.js` (2), `src/systems/bossWaveFlow.test.js` (3)
+- validation baseline: `npm test` 258/258 passing, `npm run build` passes, `npm run lint` passes with one pre-existing warning in `src/systems/pickupSpawning.test.js`
+- the remaining top-priority items are now explicitly split between human/data-gated work (Lighthouse, live funnel measurement, physical launch QA, Itch.io publication) and optional next in-repo follow-up (remaining Roast Director hooks, eventual server sync of the local Studio event queue)
 - Session 51 shipped six items across two /go sprints: meta clarity pass, route forecasting, App.jsx pickup-spawning extraction (slice 8), Roast Director, shop tradeoff language advisories, and test backfill for 4 uncommitted session-50 test files
 - `src/utils/metaClarity.js` — career-weakness-targeted META_TREE upgrade recommendations (defense/offense/utility/chaos); wired into `buildFrontDoorActionStack` so Intel ticker "Best Next Upgrade" action carries specific node + rationale; 13 tests
 - `src/utils/routeForecast.js` — context-aware next-wave descriptions (headline + tradeoff + tip per route, accounting for HP%, coin balance, weapon level, wave number, boss imminence); wired into RouteSelectModal hover panel; 12 tests
