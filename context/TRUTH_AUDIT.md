@@ -5,6 +5,23 @@ Overall status: green
 Last reviewed: 2026-04-21
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-04-21 — Session 51 changes
+
+- `src/utils/metaClarity.js` added — `identifyWeakness(career)` + `getRecommendedMetaUpgrade()` + `getMetaRecommendationLabel()`; career-weakness-targeted META_TREE upgrade recs; 13 tests
+- `src/utils/routeForecast.js` added — `getRouteForecast(route, gs)` + `getRouteForecastOneliner()`; context-aware next-wave descriptions (headline + tradeoff + tip); 12 tests
+- `src/systems/pickupSpawning.js` added — `spawnPickup()` + `getPickupWeights()` pure fns extracted from App.jsx; ammoDropMult param supported; 11 tests; App.jsx wrapper collapses to 3 lines
+- `src/utils/roastDirector.js` added — `getRoastCallout(event, cooldowns, currentWave, cooldownWaves)` with 10 event pools, per-event wave-based rate limiting; 12 tests
+- `src/utils/shopForecast.js` added — `getShopAdvisory(option, gs, wpnIdx)` + `getAdvisoryColor(urgency)` returning urgency-rated advisories per item type; 17 tests
+- `src/utils/menuGuidance.js` extended — `buildFrontDoorActionStack` now accepts `unlocked`, `meta`, `career` params and enriches best_next_upgrade with `metaRec` + `detail` + `whyNow`; 2 new tests
+- `src/components/HomeV2.jsx` extended — passes `unlocked`, `meta`, `career` to `buildFrontDoorActionStack`
+- `src/components/MenuScreen.jsx` extended — passes `unlocked`, `meta`, `career` to `buildFrontDoorActionStack`
+- `src/components/RouteSelectModal.jsx` extended — accepts `gs` prop; renders route forecast panel on hover
+- `src/components/WaveShopModal.jsx` extended — accepts `gs` prop; renders shop advisory on hover/focus per item; coin shop rows also advisory-annotated
+- `src/App.jsx` extended — imports `spawnPickup` from pickupSpawning.js, `getRoastCallout` from roastDirector.js; adds `roastCooldowns` ref; roast fires at boss_kill (cooldown 3) and kill_streak (cooldown 2); passes `gs` to WaveShopModal
+- Test backfill committed: `src/systems/mutationResolution.test.js` (8), `src/systems/shopOptions.test.js` (8), `src/utils/perkOptions.test.js` (6), `src/utils/routeOptions.test.js` (5) — written session 50, committed session 51
+- `context/PROJECT_STATUS.json` updated: `silSession` 49 → 51, `silScore` 936 → 948, `silVelocity` 2 → 6, `currentSession` 49 → 51, per-category scores updated
+- No contradictions introduced. Source-of-truth hierarchy unchanged — all new modules are pure utilities with no novel storage keys.
+
 ## 2026-04-21 — Session 49 changes
 
 - `src/components/MenuPanels.jsx` added — new shared source-of-truth for nine menu panels (Rules, Controls, MostWanted, RunHistory, LoadoutBuilder, CareerStats, Missions, Upgrades, NewFeatures). HomeV2 is the only current consumer; MenuScreen still owns its own inline copies (follow-up to dedupe later).

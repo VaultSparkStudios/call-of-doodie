@@ -1,6 +1,15 @@
 # Current State
 
 Public-safe summary:
+- Session 51 shipped six items across two /go sprints: meta clarity pass, route forecasting, App.jsx pickup-spawning extraction (slice 8), Roast Director, shop tradeoff language advisories, and test backfill for 4 uncommitted session-50 test files
+- `src/utils/metaClarity.js` — career-weakness-targeted META_TREE upgrade recommendations (defense/offense/utility/chaos); wired into `buildFrontDoorActionStack` so Intel ticker "Best Next Upgrade" action carries specific node + rationale; 13 tests
+- `src/utils/routeForecast.js` — context-aware next-wave descriptions (headline + tradeoff + tip per route, accounting for HP%, coin balance, weapon level, wave number, boss imminence); wired into RouteSelectModal hover panel; 12 tests
+- `src/systems/pickupSpawning.js` — pure pickup drop logic extracted from App.jsx (spawnPickup + getPickupWeights, passes ammoDropMult param); App.jsx wrapper collapses to 2 lines; 11 tests
+- `src/utils/roastDirector.js` — rate-limited rule-based announcer with 10 event pools (kill_streak, boss_kill, wave_clear, near_death, first_blood, reload_under_pressure, low_ammo, coin_milestone, perk_chosen, death); per-event wave cooldown; wired in game loop at kill_streak (every 5 kills) and boss_kill; 12 tests
+- `src/utils/shopForecast.js` — urgency-rated shop tradeoff advisories (high/medium/low) per item keyed to HP%, ammo level, wave number, weapon upgrade tier, coin balance, enemy count; wired into WaveShopModal hover for both wave shop and coin shop rows; 17 tests
+- test backfill: mutationResolution.test.js (8), shopOptions.test.js (8), perkOptions.test.js (6), routeOptions.test.js (5) — all written in session 50 but not committed until this session
+- validation baseline: `npm test` 248/248, `npm run lint` clean, `npm run build` passes (main chunk 763.06 kB raw / 225.81 kB gzip)
+- TASK_BOARD: economy clarity slice 2 complete (route forecast + shop advisories); meta clarity complete; App extraction slice 8 complete; Roast Director complete
 - session 48 shipped "Drop Pod" homepage redesign (HomeV2): one DEPLOY split-button (mode + difficulty + seed dropdown) replaces the 7-button mode row + 4-button difficulty grid + 4-button loadout grid; Command Brief/Run Intel/Recommended Action merged into one dismissible Intel Ticker with (?) popover for detail; Weapons list/Bestiary/Rules/What's New moved into a Codex tab; Career/Settings/Support surfaced as tabs; new lightweight background DemoCanvas (30fps, respects prefers-reduced-motion, pauses on hidden tab) gives brand immersion without reusing drawGame.js
 - homepage is feature-flagged: `?home=v2` / `?home=v1` query params override, otherwise v2 is now the default; opt-out persists via `cod-home-v2=0` localStorage; legacy `MenuScreen.jsx` is untouched and still code-path reachable
 - new tests: `src/components/HomeV2.test.jsx` (2 tests — hero renders + DEPLOY click → onStart; all 4 tabs present); `src/App.launch.test.jsx` adds HomeV2 mock so smoke test still passes against the v2 default

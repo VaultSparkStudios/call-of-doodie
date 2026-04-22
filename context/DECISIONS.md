@@ -63,3 +63,23 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** A nominal prompt upgrade that references missing commands is worse than staying on an older protocol because it creates false procedural guarantees. This repo now keeps local wrappers/templates for required checks while delegating shared operations to the sibling `vaultspark-studio-ops` repo where appropriate.
 
 ---
+
+## 2026-04-21 — Pure domain extraction pattern formalized
+
+**Decision:** Each App.jsx extraction should produce a pure function module with no React deps, accepting explicit params for any mutable ref values (e.g., `ammoDropMult` instead of `perkModsRef.current`). App.jsx keeps a thin wrapper that passes those values.
+
+**Applies to this project:** Yes — pickup spawning extraction established this pattern; future slices (boss phase transitions, reload logic) should follow it.
+
+**Rationale:** Pure functions are testable in isolation and reduce the blast radius of App.jsx changes. The thin wrapper preserves React ownership of mutable refs while keeping domain logic clean.
+
+---
+
+## 2026-04-21 — Rate-limited in-game announcer (Roast Director) pattern
+
+**Decision:** In-game event callouts should be rate-limited per category using a caller-owned cooldown state object (wave-based), not a singleton or global. The caller (App.jsx) owns the ref and resets it on new run.
+
+**Applies to this project:** Yes — establishes the pattern for any future announcer extensions (near_death, wave_clear, etc.) beyond kill_streak and boss_kill.
+
+**Rationale:** Stateless functions are testable without side effects; per-category wave cooldowns prevent callout spam without requiring global cooldown state.
+
+---
