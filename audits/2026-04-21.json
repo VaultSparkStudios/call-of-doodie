@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-04-21",
+  "session": 51,
+  "sessionType": "implementation",
+  "label": "expansion-sprint",
+  "calibration": false,
+  "scores": {
+    "devHealth": 99,
+    "creativeAlignment": 94,
+    "momentum": 97,
+    "engagement": 93,
+    "processQuality": 97,
+    "crossRepoCoherence": 90,
+    "securityPosture": 94,
+    "ecosystemIntegration": 89,
+    "capitalEfficiency": 98,
+    "automationCoverage": 97
+  },
+  "total": 948,
+  "maxScore": 1000,
+  "velocity": 6,
+  "protocolVelocity": 2,
+  "durationMinutes": null,
+  "debt": "↓",
+  "rollingAvg3": {
+    "devHealth": 98.3,
+    "creativeAlignment": 94.0,
+    "momentum": 95.3,
+    "engagement": 92.7,
+    "processQuality": 97.0,
+    "total": 946.0
+  },
+  "rollingAvgTotals": {
+    "3": 946.0,
+    "5": null,
+    "10": null,
+    "25": null,
+    "all": 945.0
+  },
+  "topWin": "Expansion protocol worked as designed — human-blocked primary queue triggered compound refinement that shipped 6 items with 57 net-new tests, growing test count from 191 to 248.",
+  "topGap": "Pickup weight table is not normalized (sums ~1.07); time_dilation pickup remains unreachable by Math.random(). Preserved for behavioral parity — needs a design decision.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 6,
+  "improvementGroups": {
+    "meta_clarity": 1,
+    "route_forecasting": 1,
+    "app_extraction": 1,
+    "roast_director": 1,
+    "shop_advisories": 1,
+    "test_backfill": 1
+  },
+  "testsTotal": 248,
+  "testsByType": {
+    "client": 248,
+    "server": 0,
+    "core": 0
+  },
+  "testsDelta": 57,
+  "deployStatus": "deployed",
+  "ignisFlags": [
+    "intent-achieved",
+    "expansion-protocol-fired"
+  ],
+  "ignisNote": "Session demonstrated the expansion protocol adds real value when the primary queue is human-blocked — compound refinement produced a full sprint of work from what would otherwise have been a stall."
+}
