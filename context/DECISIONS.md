@@ -83,3 +83,13 @@ Public-safe decisions only. Detailed internal decision history is maintained pri
 **Rationale:** Stateless functions are testable without side effects; per-category wave cooldowns prevent callout spam without requiring global cooldown state.
 
 ---
+
+## 2026-04-22 — Studio event analytics stay local-first and mirror opportunistically
+
+**Decision:** Runtime Studio events remain browser-local source-of-truth first, then sync to Supabase opportunistically via an idempotent mirror path with retry metadata. Gameplay and trust surfaces must not depend on the mirror being available.
+
+**Applies to this project:** Yes — `vaultspark.game-event.v1` now powers front-door, debrief, telemetry, rivalry, and trust surfaces locally, while `sync-studio-events` mirrors that queue server-side.
+
+**Rationale:** The game needs post-run analysis and cross-surface telemetry without turning the player experience into a network-dependent live service. Local-first keeps UX resilient; opportunistic sync preserves downstream balancing and trust-review value.
+
+---

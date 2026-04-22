@@ -3,7 +3,7 @@ import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import {
   loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress,
-  getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, saveStudioGameEvent,
+  getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, requestStudioEventSync, saveStudioGameEvent,
   loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
 } from "../storage.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
@@ -122,6 +122,7 @@ export default function HomeV2(props) {
         vsName: params.get("vsName") || null,
       });
     }
+    requestStudioEventSync({ limit: 25 }).catch(() => {});
   }, [setDifficulty]);
 
   const accountLevel = career ? getAccountLevel(career.totalKills) : 1;
@@ -198,11 +199,6 @@ export default function HomeV2(props) {
     track("home_v2_deploy", { mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
     onStart(seed, challenge);
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
-
-  const prefetchGame = useCallback(() => {
-    // Best-effort: warm critical chunks on hover/focus
-    import("./HUD.jsx").catch(() => {});
-  }, []);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
 
@@ -339,8 +335,6 @@ export default function HomeV2(props) {
         <div style={deployRow}>
           <button
             onClick={deploy}
-            onMouseEnter={prefetchGame}
-            onFocus={prefetchGame}
             aria-label={`Deploy — ${selectedMode.label}, ${selectedDiff.label}`}
             style={deployBtn}
           >

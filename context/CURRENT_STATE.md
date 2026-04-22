@@ -1,6 +1,12 @@
 # Current State
 
 Public-safe summary:
+- Session 53 shipped the next compounding in-repo pass while the launch queue remains human/data-gated: browser-local Studio events now persist queue metadata and mirror through a new Supabase sync path, Run History trust ops surfaces now report sync health, and Roast Director's remaining live hooks were finished so every shipped roast pool is now exercised in runtime
+- `src/storage.js` now normalizes `vaultspark.game-event.v1` records with `clientEventId`, sync metadata, retry state, and opportunistic `sync-studio-events` batching; menu/debrief surfaces trigger sync without changing the local-first UX contract
+- `supabase/functions/sync-studio-events/` + migration `2026-04-22_studio_game_events.sql` added: browser-local Studio events can now be mirrored server-side with idempotent upserts on `client_event_id`
+- `src/utils/studioEventOps.js` + `src/components/MenuPanels.jsx` now expose queue/sync health (`synced`, `queued`, `retry`) alongside trust and telemetry summaries so the operator-facing loop reflects real backend state instead of only local counts
+- `src/App.jsx` now fires the remaining Roast Director pools in runtime: `wave_clear`, `perk_chosen`, `coin_milestone`, and `death`; the stale follow-up note about `near_death` / `first_blood` / `low_ammo` being unwired is no longer true
+- validation baseline for this slice: `npm test` 258/258 passing, `npm run lint` passing, `npm run build` passing; the previous `pickupSpawning.test.js` warning and the build-side `register-sw.js` / ineffective `HUD.jsx` prefetch warnings are now cleared
 - Session 52 shipped the remaining unblocked in-repo refinement stack: social retention surfaces, trust/telemetry ops, Studio event contract v2, and App-runtime architecture slice 9 (boss-wave flow extraction)
 - `src/utils/socialRetention.js` — pure helpers for weekly contracts, rivalry summaries, featured seeds, and ghost-board cards; wired into `RunHistoryPanel` so the stored run/rivalry history now creates visible async-competition prompts instead of sitting as passive logs
 - `src/utils/studioEventOps.js` — pure helpers that summarize local Studio events into trust-op counts, rejection summaries, and telemetry guidance; `RunHistoryPanel` now surfaces front-door/debrief/trust counts, top rejection flags, decision telemetry, and abandonment totals
@@ -10,7 +16,7 @@ Public-safe summary:
 - `src/components/MenuPanels.jsx` now gives Run History a stronger player-facing social layer: rivalry streak chip, featured seed cards, revenge-link language, ghost-board summaries, contract progress line, and richer trust ops summaries
 - new validation coverage: `src/utils/socialRetention.test.js` (3), `src/utils/studioEventOps.test.js` (2), `src/systems/bossWaveFlow.test.js` (3)
 - validation baseline: `npm test` 258/258 passing, `npm run build` passes, `npm run lint` passes with one pre-existing warning in `src/systems/pickupSpawning.test.js`
-- the remaining top-priority items are now explicitly split between human/data-gated work (Lighthouse, live funnel measurement, physical launch QA, Itch.io publication) and optional next in-repo follow-up (remaining Roast Director hooks, eventual server sync of the local Studio event queue)
+- the remaining top-priority items are now explicitly split between human/data-gated work (Lighthouse, live funnel measurement, physical launch QA, Itch.io publication) and optional backend/live follow-up (observe the new Studio event mirror in production and use it for balance/trust dashboards)
 - Session 51 shipped six items across two /go sprints: meta clarity pass, route forecasting, App.jsx pickup-spawning extraction (slice 8), Roast Director, shop tradeoff language advisories, and test backfill for 4 uncommitted session-50 test files
 - `src/utils/metaClarity.js` — career-weakness-targeted META_TREE upgrade recommendations (defense/offense/utility/chaos); wired into `buildFrontDoorActionStack` so Intel ticker "Best Next Upgrade" action carries specific node + rationale; 13 tests
 - `src/utils/routeForecast.js` — context-aware next-wave descriptions (headline + tradeoff + tip per route, accounting for HP%, coin balance, weapon level, wave number, boss imminence); wired into RouteSelectModal hover panel; 12 tests

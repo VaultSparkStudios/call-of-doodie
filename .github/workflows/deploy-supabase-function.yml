@@ -38,3 +38,6 @@ jobs:
 
       - name: Deploy kofi-webhook function
         run: supabase functions deploy kofi-webhook --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
+
+      - name: Deploy sync-studio-events function
+        run: supabase functions deploy sync-studio-events --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt

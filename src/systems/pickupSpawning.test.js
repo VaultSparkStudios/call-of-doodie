@@ -30,7 +30,6 @@ describe("spawnPickup", () => {
   });
 
   test("never drops health in vampire mode", () => {
-    const gs = makeGs({ vampireMode: true });
     // Run 100 times — vampire mode health weight is 0
     for (let i = 0; i < 100; i++) {
       const g = makeGs({ vampireMode: true });

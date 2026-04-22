@@ -537,18 +537,180 @@ export function loadRunHistory() {
 // ===== STUDIO EVENTS / RIVALRY HISTORY =====
 const STUDIO_EVENTS_KEY = "cod-studio-events-v1";
 const RIVALRY_HISTORY_KEY = "cod-rivalry-history-v1";
+const MAX_STUDIO_EVENTS = 100;
+const STUDIO_SYNC_THROTTLE_MS = 15000;
+let studioEventSyncPromise = null;
+let studioEventLastAttemptAt = 0;
 
-export function saveStudioGameEvent(event) {
+function makeStudioEventId() {
   try {
-    const events = JSON.parse(localStorage.getItem(STUDIO_EVENTS_KEY) || "[]");
-    events.unshift(event);
-    localStorage.setItem(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, 100)));
+    if (typeof crypto?.randomUUID === "function") return crypto.randomUUID();
+  } catch {}
+  return `studio-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function normalizeStudioGameEvent(event = {}) {
+  const syncStatus = event?.syncedAt
+    ? "synced"
+    : event?.syncStatus === "failed"
+      ? "failed"
+      : "pending";
+  return {
+    schema: event?.schema || "vaultspark.game-event.v1",
+    contractVersion: _clampInt(event?.contractVersion, 1, 99, 1),
+    game: event?.game || "call-of-doodie",
+    type: _cleanText(event?.type, 40, "unknown"),
+    category: _cleanText(event?.category, 24, "system"),
+    surface: _cleanText(event?.surface, 40, "gameplay"),
+    createdAt: _cleanText(event?.createdAt, 40, new Date().toISOString()),
+    summary: _cleanText(event?.summary, 140, ""),
+    payload: event?.payload && typeof event.payload === "object" ? event.payload : {},
+    clientEventId: _cleanText(event?.clientEventId, 80, makeStudioEventId()),
+    syncStatus,
+    syncAttempts: _clampInt(event?.syncAttempts, 0, 999, 0),
+    lastSyncAttemptAt: event?.lastSyncAttemptAt || null,
+    syncedAt: event?.syncedAt || null,
+    lastSyncError: event?.lastSyncError ? _cleanText(event.lastSyncError, 160, "") : null,
+  };
+}
+
+function persistStudioGameEvents(events) {
+  try {
+    localStorage.setItem(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, MAX_STUDIO_EVENTS)));
   } catch {}
 }
 
+function getPendingStudioGameEvents(limit = 25) {
+  return loadStudioGameEvents()
+    .filter((event) => event.syncStatus !== "synced")
+    .slice()
+    .reverse()
+    .slice(0, limit);
+}
+
+function serializeStudioEventForSync(event) {
+  return {
+    clientEventId: event.clientEventId,
+    schema: event.schema,
+    contractVersion: event.contractVersion,
+    game: event.game,
+    type: event.type,
+    category: event.category,
+    surface: event.surface,
+    createdAt: event.createdAt,
+    summary: event.summary,
+    payload: event.payload,
+  };
+}
+
+export function saveStudioGameEvent(event) {
+  const normalized = normalizeStudioGameEvent(event);
+  try {
+    const events = loadStudioGameEvents();
+    events.unshift(normalized);
+    persistStudioGameEvents(events);
+  } catch {}
+  return normalized;
+}
+
 export function loadStudioGameEvents() {
-  try { return JSON.parse(localStorage.getItem(STUDIO_EVENTS_KEY) || "[]"); }
+  try {
+    return JSON.parse(localStorage.getItem(STUDIO_EVENTS_KEY) || "[]")
+      .map((event) => normalizeStudioGameEvent(event));
+  }
   catch { return []; }
+}
+
+export async function syncStudioGameEvents({ limit = 25 } = {}) {
+  const pending = getPendingStudioGameEvents(limit);
+  if (pending.length === 0) {
+    return { ok: true, synced: 0, pending: 0, failed: 0, reason: "empty" };
+  }
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return { ok: false, synced: 0, pending: pending.length, failed: 0, reason: "env_missing" };
+  }
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    return { ok: false, synced: 0, pending: pending.length, failed: 0, reason: "offline" };
+  }
+
+  const attemptAt = new Date().toISOString();
+  const pendingIds = new Set(pending.map((event) => event.clientEventId));
+  const attempted = loadStudioGameEvents().map((event) => (
+    pendingIds.has(event.clientEventId)
+      ? {
+          ...event,
+          syncAttempts: event.syncAttempts + 1,
+          lastSyncAttemptAt: attemptAt,
+          lastSyncError: null,
+        }
+      : event
+  ));
+  persistStudioGameEvents(attempted);
+
+  try {
+    const response = await invokeEdgeFunction("sync-studio-events", {
+      clientUid: getOrCreateClientUid(),
+      events: pending.map(serializeStudioEventForSync),
+    });
+    if (!response.ok) {
+      throw new Error(response.data?.error || "Studio event sync failed.");
+    }
+
+    const syncedAt = new Date().toISOString();
+    const updated = loadStudioGameEvents().map((event) => (
+      pendingIds.has(event.clientEventId)
+        ? {
+            ...event,
+            syncStatus: "synced",
+            syncedAt,
+            lastSyncError: null,
+          }
+        : event
+    ));
+    persistStudioGameEvents(updated);
+    const failed = updated.filter((event) => event.syncStatus === "failed").length;
+    const remainingPending = updated.filter((event) => event.syncStatus !== "synced").length;
+    return {
+      ok: true,
+      synced: pending.length,
+      pending: remainingPending,
+      failed,
+      inserted: _clampInt(response.data?.inserted, 0, pending.length, pending.length),
+      deduped: _clampInt(response.data?.deduped, 0, pending.length, 0),
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Studio event sync failed.";
+    const updated = loadStudioGameEvents().map((event) => (
+      pendingIds.has(event.clientEventId)
+        ? {
+            ...event,
+            syncStatus: "failed",
+            lastSyncError: _cleanText(message, 160, "Studio event sync failed."),
+          }
+        : event
+    ));
+    persistStudioGameEvents(updated);
+    return {
+      ok: false,
+      synced: 0,
+      pending: updated.filter((event) => event.syncStatus === "pending").length,
+      failed: updated.filter((event) => event.syncStatus === "failed").length,
+      reason: message,
+    };
+  }
+}
+
+export function requestStudioEventSync({ limit = 25, force = false } = {}) {
+  if (studioEventSyncPromise) return studioEventSyncPromise;
+  const now = Date.now();
+  if (!force && now - studioEventLastAttemptAt < STUDIO_SYNC_THROTTLE_MS) {
+    const pending = loadStudioGameEvents().filter((event) => event.syncStatus !== "synced").length;
+    return Promise.resolve({ ok: true, synced: 0, pending, failed: 0, reason: "throttled" });
+  }
+  studioEventLastAttemptAt = now;
+  studioEventSyncPromise = syncStudioGameEvents({ limit })
+    .finally(() => { studioEventSyncPromise = null; });
+  return studioEventSyncPromise;
 }
 
 export function recordRivalryResult({ seed, vsScore = null, vsName = null, score = 0, wave = 1, mode = "standard", difficulty = "normal" } = {}) {

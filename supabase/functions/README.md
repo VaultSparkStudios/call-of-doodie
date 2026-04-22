@@ -92,3 +92,26 @@ https://<project-ref>.supabase.co/functions/v1/kofi-webhook
 
 Required DB migration:
 - `supabase/migrations/2026-04-14_kofi_webhook.sql`
+
+## `sync-studio-events`
+
+Server-side mirror for browser-local Studio event history.
+
+Purpose:
+- Accepts batched front-door, debrief, telemetry, rivalry, and trust events
+- Preserves the game's local-first UX while making downstream analysis possible
+- Deduplicates on `client_event_id` so retries are safe
+
+Required function secrets:
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+Deploy:
+
+```bash
+supabase functions deploy sync-studio-events --project-ref <project-ref>
+```
+
+Required DB migration:
+- `supabase/migrations/2026-04-22_studio_game_events.sql`

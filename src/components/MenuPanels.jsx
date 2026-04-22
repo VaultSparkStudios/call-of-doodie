@@ -177,7 +177,7 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 520, border: "1px solid rgba(255,107,53,0.3)" }}>
         <button onClick={onClose} style={CLOSE_X}>X</button>
         <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>📜 RUN HISTORY</h3>
-        <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Runs, rivalries, and trust signals saved locally on your device</p>
+        <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Runs, rivalries, and trust signals saved locally, then mirrored when the secure event sync path is available</p>
         <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(255,215,0,0.06)", border: "1px solid rgba(255,215,0,0.22)" }}>
           <div style={{ color: "#FFD700", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>{weeklyContract.title}</div>
           <div style={{ color: "#EEE", fontSize: 12, marginTop: 5, lineHeight: 1.45 }}>{weeklyContract.detail}</div>
@@ -249,6 +249,9 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#E6E6E6", border: "1px solid rgba(255,255,255,0.12)" }}>Perk picks {trustSummary.perkChoiceCount}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#E6E6E6", border: "1px solid rgba(255,255,255,0.12)" }}>Route picks {trustSummary.routeChoiceCount}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#E6E6E6", border: "1px solid rgba(255,255,255,0.12)" }}>Abandons {trustSummary.abandonmentCount}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#9BE7FF", border: "1px solid rgba(0,229,255,0.18)" }}>Synced {trustSummary.syncedCount}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFD79C", border: "1px solid rgba(255,215,156,0.18)" }}>Queued {trustSummary.pendingSyncCount}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFB5B5", border: "1px solid rgba(255,120,120,0.2)" }}>Retry {trustSummary.failedSyncCount}</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
             {trustRecommendations.map((line, index) => (

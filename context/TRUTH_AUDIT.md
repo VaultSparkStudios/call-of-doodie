@@ -5,6 +5,19 @@ Overall status: green
 Last reviewed: 2026-04-22
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-04-22 — Session 53 changes
+
+- `src/storage.js` updated: local Studio events are now normalized with `clientEventId`, sync status, retry metadata, and an opportunistic `syncStudioGameEvents()` / `requestStudioEventSync()` path
+- `supabase/functions/sync-studio-events/index.ts` added: browser-local Studio events can now be mirrored server-side through idempotent upserts on `client_event_id`
+- `supabase/migrations/2026-04-22_studio_game_events.sql` added: new `studio_game_events` mirror table with dedupe key, created/received timestamps, and RLS locked to no public reads
+- `src/components/HomeV2.jsx`, `src/components/MenuScreen.jsx`, and `src/components/DeathScreen.jsx` updated: front-door and debrief surfaces now opportunistically trigger Studio event sync without changing the local-first UX contract
+- `src/utils/studioEventOps.js` + `src/components/MenuPanels.jsx` updated: Run History trust ops now exposes sync-health counts (`synced`, `queued`, `retry`) in addition to trust and telemetry counts
+- `src/App.jsx` updated: the remaining Roast Director runtime hooks (`wave_clear`, `perk_chosen`, `coin_milestone`, `death`) now fire in live gameplay; the prior note that some roast hooks were still unwired is no longer accurate
+- `src/systems/pickupSpawning.test.js` updated: stale local variable removed, clearing the previous lint warning
+- `index.html`, `public/register-sw.js`, and `src/components/HomeV2.jsx` updated: build-side warnings for the legacy service-worker script path and ineffective `HUD.jsx` prefetch are resolved
+- `context/TASK_BOARD.md`, `context/CURRENT_STATE.md`, `context/PROJECT_STATUS.json`, and agent memory updated to reflect Session 53 closeout state
+- No contradictions introduced. Source-of-truth hierarchy unchanged — gameplay/trust surfaces still read from the local event queue first, and the new mirror path is additive rather than authoritative.
+
 ## 2026-04-22 — Session 52 changes
 
 - `src/utils/socialRetention.js` + `src/utils/socialRetention.test.js` added: weekly contracts, rivalry summaries, featured seed cards, and ghost-board summaries now live in a pure utility module
