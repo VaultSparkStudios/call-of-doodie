@@ -5,7 +5,7 @@ import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
-import { recordRivalryResult, saveStudioGameEvent } from "../storage.js";
+import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -356,6 +356,7 @@ export default function DeathScreen({
       digestVersion: eventDigest.v,
       studioEvent,
     });
+    requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
   }, [difficulty, eventDigest.v, mode, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
 
   const handleSubmit = async () => {
@@ -381,6 +382,7 @@ export default function DeathScreen({
         reason: result?.rejectionReason || null,
         reasons: result?.rejectionReasons || [],
       }));
+      requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
     } catch {
       setSubmitStatus('local');
       setSubmitFeedback(null);
@@ -393,6 +395,7 @@ export default function DeathScreen({
         seed: runSeed,
         submission: "local",
       }));
+      requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
     }
   };
 

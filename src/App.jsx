@@ -993,6 +993,8 @@ export default function CallOfDoodie() {
       mode: _mode,
       difficulty: difficultyRef.current,
     }));
+    const perkRoast = getRoastCallout("perk_chosen", roastCooldowns.current, _gs?.currentWave || 1, 1);
+    if (perkRoast && _gs) addText(_gs, GW() / 2, GH() / 2 - 16, perkRoast, "#FFE082");
     perkOptionsRef.current.filter(p => p.id !== perk.id).forEach(skipped => {
       track("perk_skipped", { perkId: skipped.id, perkTier: skipped.tier, chosenId: perk.id, wave: _gs?.currentWave, mode: _mode });
     });
@@ -1491,6 +1493,8 @@ export default function CallOfDoodie() {
       score: gs.score,
       kills: gs.kills,
     }));
+    const deathRoast = getRoastCallout("death", roastCooldowns.current, gs.currentWave, 1);
+    if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
@@ -1945,6 +1949,8 @@ export default function CallOfDoodie() {
           track("wave_milestone", { ..._wCtx, milestone: gs.currentWave });
         }
       }
+      const waveClearRoast = getRoastCallout("wave_clear", roastCooldowns.current, gs.currentWave, 1);
+      if (waveClearRoast) addText(gs, GW() / 2, GH() / 2 - 126, waveClearRoast, "#9BE7FF", true);
 
       if (gs.bossWave) {
         statsRef.current.bossWavesCleared++;
@@ -2299,7 +2305,16 @@ export default function CallOfDoodie() {
             const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
             const _coinTreeMult = gs._treeCoinBonus || 1;
             const _coinDrop = Math.floor(_coinDropBase * (gs.coinMultActive ? 2 : 1) * _coinTreeMult);
-            if (_coinDrop > 0) { gs.coins = (gs.coins || 0) + _coinDrop; setCoins(gs.coins); addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000"); }
+            if (_coinDrop > 0) {
+              gs.coins = (gs.coins || 0) + _coinDrop;
+              setCoins(gs.coins);
+              addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000");
+              if ((Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
+                gs.lastCoinRoastMilestone = gs.coins;
+                const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
+                if (coinRoast) addText(gs, e.x, e.y - 74, coinRoast, "#FFE082");
+              }
+            }
             // META TREE off4: Kill Frenzy — speed burst
             if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 90; }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
@@ -2487,7 +2502,15 @@ export default function CallOfDoodie() {
             // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
             const _cd2Base = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
             const _cd2 = Math.floor(_cd2Base * (gs.coinMultActive ? 2 : 1) * (gs._treeCoinBonus || 1));
-            if (_cd2 > 0) { gs.coins = (gs.coins || 0) + _cd2; setCoins(gs.coins); }
+            if (_cd2 > 0) {
+              gs.coins = (gs.coins || 0) + _cd2;
+              setCoins(gs.coins);
+              if ((Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
+                gs.lastCoinRoastMilestone = gs.coins;
+                const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
+                if (coinRoast) addText(gs, e.x, e.y - 60, coinRoast, "#FFE082");
+              }
+            }
             if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 90; }
             setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
             setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));

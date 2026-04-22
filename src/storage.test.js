@@ -121,9 +121,11 @@ describe("normalizeLeaderboardEntry", () => {
 describe("local Studio event and rivalry persistence", () => {
   it("stores Studio game events locally", () => {
     localStorage.clear();
-    saveStudioGameEvent({ type: "debrief", payload: { cause: "chain_control" } });
+    const stored = saveStudioGameEvent({ type: "debrief", payload: { cause: "chain_control" } });
 
     expect(loadStudioGameEvents()[0].type).toBe("debrief");
+    expect(stored.clientEventId).toBeTruthy();
+    expect(loadStudioGameEvents()[0].syncStatus).toBe("pending");
   });
 
   it("records rivalry win/loss deltas locally", () => {

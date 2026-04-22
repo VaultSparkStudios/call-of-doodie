@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent } from "../storage.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent } from "../storage.js";
 import { supabase } from "../supabase.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
@@ -147,6 +147,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         vsName: urlVsName || null,
       });
     }
+    requestStudioEventSync({ limit: 25 }).catch(() => {});
   }, [setDifficulty]);
 
   // ── Gamepad menu navigation ──────────────────────────────────────────────

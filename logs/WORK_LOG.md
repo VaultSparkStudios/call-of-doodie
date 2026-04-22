@@ -2,6 +2,17 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-04-22 (Session 53)
+
+- Added browser-local Studio event queue metadata in `src/storage.js` (`clientEventId`, sync status, retry metadata) plus opportunistic sync helpers
+- Added `supabase/functions/sync-studio-events/index.ts` and migration `supabase/migrations/2026-04-22_studio_game_events.sql` so front-door/debrief/trust/social events can be mirrored server-side with idempotent upserts
+- Wired `HomeV2`, `MenuScreen`, and `DeathScreen` to request Studio event sync without making any gameplay or trust surface network-dependent
+- Expanded `RunHistoryPanel` trust ops summary to show sync health (`synced`, `queued`, `retry`) alongside trust flags and telemetry counts
+- Finished the remaining live Roast Director hooks in `src/App.jsx`: `wave_clear`, `perk_chosen`, `coin_milestone`, and `death`
+- Cleared the stale warning in `src/systems/pickupSpawning.test.js`
+- Removed the ineffective HomeV2 `HUD.jsx` prefetch and converted `register-sw.js` to a base-aware module path so the production build no longer emits those warnings
+- Validation: `npm test` 258/258 passing, `npm run lint` passing, `npm run build` passing
+
 ## 2026-04-22 (Session 52)
 
 - Added `src/utils/socialRetention.js` + tests — weekly contracts, rivalry summaries, featured seed cards, and ghost-board helpers extracted into pure utilities

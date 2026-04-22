@@ -18,6 +18,8 @@ Public-safe launch roadmap summary.
 
 ## Next
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
+- [x] [SIL:1] Studio event queue server sync — **DONE S53**: browser-local Studio events now carry queue metadata, sync through `sync-studio-events`, surface sync health in Run History trust ops, and deploy via migration `2026-04-22_studio_game_events.sql`
+- [x] [SIL:1] Roast Director runtime completion — **DONE S53**: completed remaining live hooks (`wave_clear`, `perk_chosen`, `coin_milestone`, `death`) and cleared the stale note that `near_death` / `first_blood` / `low_ammo` were still unwired
 - [x] [SIL:1] Economy clarity pass, slice 2 — **DONE S51**: route forecasting (routeForecast.js + RouteSelectModal hover panel) + shop tradeoff language (shopForecast.js + WaveShopModal hover advisories, urgency-rated by game state); reroll/lock mechanics deferred as a game design decision
 - [x] Social retention layer — **DONE S52**: `socialRetention.js` now drives weekly contracts, featured seeds, revenge links, fresh ghost cards, and async competition prompts in `RunHistoryPanel`
 - [x] Social rivalry loop — **DONE S52**: rivalry streaks, featured seed cards, revenge links, and ghost-board summaries now surface stored rivalry data as a visible player-facing loop
