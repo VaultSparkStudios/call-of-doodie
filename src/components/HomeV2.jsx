@@ -3,11 +3,11 @@ import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import {
   loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress,
-  getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted,
-  loadRunHistory, loadRivalryHistory,
+  getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, saveStudioGameEvent,
+  loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
 } from "../storage.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
-import { buildMenuIntelligence } from "../utils/runIntelligence.js";
+import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
 import { isSupporter } from "../utils/supporter.js";
 
@@ -76,6 +76,7 @@ export default function HomeV2(props) {
   const [missionProgress, setMissionProgress] = useState({});
   const [runHistory, setRunHistory] = useState([]);
   const [rivalryHistory, setRivalryHistory] = useState([]);
+  const [studioEvents, setStudioEvents] = useState([]);
   const [customSeed, setCustomSeed] = useState("");
   const [challengeMode, setChallengeMode] = useState(null);
   const [tab, setTab] = useState("career");
@@ -105,6 +106,7 @@ export default function HomeV2(props) {
     setMeta(loadMetaProgress());
     setRunHistory(loadRunHistory());
     setRivalryHistory(loadRivalryHistory());
+    setStudioEvents(loadStudioGameEvents());
     // Auto-expand Command Center for returning players; first-timers see DEPLOY only
     if ((loaded?.totalRuns || 0) > 0) setCmdCenterExpanded(true);
     track("home_v2_view");
@@ -158,6 +160,23 @@ export default function HomeV2(props) {
   );
   const recommendedAction = actionStack[0];
 
+  const recordFrontDoorAction = useCallback((actionId, extra = {}) => {
+    const studioEvent = buildStudioGameEvent("front_door_action", {
+      surface: "home_v2",
+      actionId,
+      mode: modeId,
+      difficulty,
+      loadout: selectedLoadout.id,
+      focus: runIntel.focus,
+      challengeActive: Boolean(challengeMode?.vs),
+      dailyAlreadyPlayed,
+      ...runIntel.telemetry,
+      ...extra,
+    });
+    saveStudioGameEvent(studioEvent);
+    return studioEvent;
+  }, [challengeMode?.vs, dailyAlreadyPlayed, difficulty, modeId, runIntel.focus, runIntel.telemetry, selectedLoadout.id]);
+
   const selectMode = useCallback((id) => {
     const setters = {
       standard:        () => { onSetScoreAttackMode?.(false); onSetDailyChallengeMode?.(false); onSetCursedRunMode?.(false); onSetBossRushMode?.(false); onSetSpeedrunMode?.(false); onSetGauntletMode?.(false); },
@@ -172,12 +191,13 @@ export default function HomeV2(props) {
   }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode]);
 
   const deploy = useCallback(() => {
-    track("home_v2_deploy", { mode: modeId, difficulty, loadout: selectedLoadout.id });
-    // Preload game assets on deploy intent (already triggered by hover; this is the action)
     const seed = dailyChallengeMode ? todaySeedStr : (customSeed || undefined);
     const challenge = challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {};
+    const studioEvent = recordFrontDoorAction("deploy", { source: "deploy_button", seed: seed || null });
+    track("front_door_action", { actionId: "deploy", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
+    track("home_v2_deploy", { mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
     onStart(seed, challenge);
-  }, [modeId, difficulty, selectedLoadout.id, dailyChallengeMode, todaySeedStr, customSeed, challengeMode, onStart]);
+  }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const prefetchGame = useCallback(() => {
     // Best-effort: warm critical chunks on hover/focus
@@ -187,17 +207,17 @@ export default function HomeV2(props) {
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
 
   const CMD_ACTIONS = useMemo(() => [
-    () => { setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); },
-    () => { setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); },
-    () => { setMeta(loadMetaProgress()); setShowUpgrades(true); },
-    () => setShowMetaTree(true),
-    () => { setRunHistory(loadRunHistory()); setShowRunHistory(true); },
-    () => setShowLoadoutBuilder(true),
-    () => setShowRules(true),
-    () => setShowControls(true),
-    () => setShowMostWanted(true),
-    () => setShowNewFeatures(true),
-  ], []);  // setters are stable
+    () => { recordFrontDoorAction("open_career_stats", { source: "command_center" }); setCareer(loadCareerStats()); setMeta(loadMetaProgress()); setShowCareerStats(true); },
+    () => { recordFrontDoorAction("open_missions", { source: "command_center" }); setMissions(getDailyMissions()); setMissionProgress(loadMissionProgress()); setShowMissions(true); },
+    () => { recordFrontDoorAction("open_upgrades", { source: "command_center" }); setMeta(loadMetaProgress()); setShowUpgrades(true); },
+    () => { recordFrontDoorAction("open_meta_tree", { source: "command_center" }); setShowMetaTree(true); },
+    () => { recordFrontDoorAction("open_run_history", { source: "command_center" }); setRunHistory(loadRunHistory()); setRivalryHistory(loadRivalryHistory()); setStudioEvents(loadStudioGameEvents()); setShowRunHistory(true); },
+    () => { recordFrontDoorAction("open_loadouts", { source: "command_center" }); setShowLoadoutBuilder(true); },
+    () => { recordFrontDoorAction("open_rules", { source: "command_center" }); setShowRules(true); },
+    () => { recordFrontDoorAction("open_controls", { source: "command_center" }); setShowControls(true); },
+    () => { recordFrontDoorAction("open_most_wanted", { source: "command_center" }); setShowMostWanted(true); },
+    () => { recordFrontDoorAction("open_whats_new", { source: "command_center" }); setShowNewFeatures(true); },
+  ], [recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
   const cmdFocusIdx = useGamepadNav({
@@ -378,16 +398,35 @@ export default function HomeV2(props) {
 
         {/* Quick chips */}
         <div style={quickRow}>
-          <button style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.4)", color: "#00E5FF" }} onClick={() => { onSetDailyChallengeMode?.(true); onStart(todaySeedStr, {}); }}>
+          <button style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.4)", color: "#00E5FF" }} onClick={() => {
+            const studioEvent = recordFrontDoorAction("daily_challenge", { source: "quick_chip", seed: todaySeedStr });
+            track("front_door_action", { actionId: "daily_challenge", surface: "home_v2", mode: "daily_challenge", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
+            onSetDailyChallengeMode?.(true);
+            onStart(todaySeedStr, {});
+          }}>
             📅 {dailyAlreadyPlayed ? "DAILY (REPLAY)" : `DAILY #${todaySeedStr}`}
           </button>
-          <button style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => { onSetGauntletMode?.(true); getWeeklyGauntlet(); }}>
+          <button style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => {
+            const studioEvent = recordFrontDoorAction("gauntlet_focus", { source: "quick_chip" });
+            track("front_door_action", { actionId: "gauntlet_focus", surface: "home_v2", mode: "gauntlet", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
+            onSetGauntletMode?.(true);
+            getWeeklyGauntlet();
+          }}>
             🏆 GAUNTLET
           </button>
-          <button style={quickBtn} onClick={() => { onRefreshLeaderboard(); setShowLeaderboard(true); }}>
+          <button style={quickBtn} onClick={() => {
+            const studioEvent = recordFrontDoorAction("open_leaderboard", { source: "quick_chip" });
+            track("front_door_action", { actionId: "open_leaderboard", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
+            onRefreshLeaderboard();
+            setShowLeaderboard(true);
+          }}>
             ⚔️ LEADERBOARD
           </button>
-          <button style={quickBtn} onClick={() => setShowAchievements(true)}>
+          <button style={quickBtn} onClick={() => {
+            const studioEvent = recordFrontDoorAction("open_achievements", { source: "quick_chip" });
+            track("front_door_action", { actionId: "open_achievements", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
+            setShowAchievements(true);
+          }}>
             🏅 ACHIEVEMENTS
           </button>
           {assistAvailable && (
@@ -576,7 +615,7 @@ export default function HomeV2(props) {
       )}
       {showRunHistory && (
         <Suspense fallback={null}>
-          <MP_RunHistory onClose={() => setShowRunHistory(false)} />
+          <MP_RunHistory runHistory={runHistory} rivalryHistory={rivalryHistory} studioEvents={studioEvents} onClose={() => setShowRunHistory(false)} />
         </Suspense>
       )}
       {showLoadoutBuilder && (

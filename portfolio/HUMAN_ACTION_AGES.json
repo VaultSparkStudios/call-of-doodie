@@ -1,0 +1,18 @@
+{
+  "Physical launch QA": {
+    "firstSeen": "2026-04-22",
+    "session": null
+  },
+  "Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`": {
+    "firstSeen": "2026-04-22",
+    "session": null
+  },
+  "Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)": {
+    "firstSeen": "2026-04-22",
+    "session": null
+  },
+  "Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)": {
+    "firstSeen": "2026-04-22",
+    "session": null
+  }
+}

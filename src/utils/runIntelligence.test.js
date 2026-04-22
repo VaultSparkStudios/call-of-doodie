@@ -81,11 +81,20 @@ describe("runIntelligence", () => {
   });
 
   test("normalizes Studio OS event shape", () => {
-    const event = buildStudioGameEvent("debrief", { cause: "chain_control" });
+    const event = buildStudioGameEvent("submission_rejected", {
+      surface: "death_screen",
+      mode: "daily_challenge",
+      wave: 12,
+      reason: "Run rejected by plausibility validation.",
+      reasons: ["kills exceed plausible wave/time envelope"],
+    });
 
     expect(event.schema).toBe("vaultspark.game-event.v1");
     expect(event.game).toBe("call-of-doodie");
-    expect(event.type).toBe("debrief");
-    expect(event.payload.cause).toBe("chain_control");
+    expect(event.type).toBe("submission_rejected");
+    expect(event.category).toBe("trust");
+    expect(event.surface).toBe("death_screen");
+    expect(event.payload.mode).toBe("daily_challenge");
+    expect(event.payload.reasons[0]).toContain("kills exceed");
   });
 });

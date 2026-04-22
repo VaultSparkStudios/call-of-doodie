@@ -76,6 +76,11 @@ function onboard() {
   const required = [
     "scripts/render-startup-brief.mjs",
     "scripts/validate-brief-format.mjs",
+    "scripts/lib/brief-blocks.mjs",
+    "scripts/lib/task-board.mjs",
+    "scripts/lib/cross-repo-tasks.mjs",
+    "scripts/lib/ignis-insight.mjs",
+    "scripts/lib/human-action-ages.mjs",
   ];
   const missing = required.filter(rel => !fs.existsSync(path.join(ROOT, rel)));
   if (missing.length === 0) {
