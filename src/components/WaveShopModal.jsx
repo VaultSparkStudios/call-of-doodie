@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { WEAPONS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { getShopRecommendation } from "../utils/buildArchetypes.js";
+import { getShopAdvisory, getAdvisoryColor } from "../utils/shopForecast.js";
 
 // Derive a 0-1 score for a weapon stat for the mini bar
 function _wpnStatBar(label, weapon) {
@@ -39,9 +40,10 @@ function WeaponStatBars({ weaponIdx }) {
   );
 }
 
-export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy, buildArchetype }) {
+export default function WaveShopModal({ options, wave, onSelect, boughtHistory = [], currentWeapon = 0, coins = 0, coinShopOptions = [], onCoinBuy, buildArchetype, gs }) {
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  const [hoveredId, setHoveredId] = useState(null);
 
   // Gamepad nav: up/down through shop options, A to buy
   const focusIdx = useGamepadNav({
@@ -105,6 +107,8 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
               <button
                 key={opt.id}
                 onClick={() => onSelect(opt.id)}
+                onMouseEnter={e => { setHoveredId(opt.id); e.currentTarget.style.background = "rgba(255,215,0,0.12)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.6)"; }}
+                onMouseLeave={e => { setHoveredId(null); if (focusIdx !== i) { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.25)"; } }}
                 style={{
                   display: "flex", alignItems: "center", gap: 14,
                   padding: "14px 18px", borderRadius: 10, cursor: "pointer",
@@ -117,13 +121,19 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                   outline: isFocused ? "2px solid rgba(255,215,0,0.6)" : "none",
                   outlineOffset: 3,
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,215,0,0.12)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.6)"; }}
-                onMouseLeave={e => { if (focusIdx !== i) { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.borderColor = "rgba(255,215,0,0.25)"; } }}
               >
                 <span style={{ fontSize: 32, lineHeight: 1 }}>{opt.emoji}</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 15, fontWeight: 900, color: "#FFD700", marginBottom: 2 }}>{opt.name}</div>
                   <div style={{ fontSize: 12, color: "#CCC" }}>{opt.desc}</div>
+                  {(isFocused || hoveredId === opt.id) && (() => {
+                    const { advisory, urgency } = getShopAdvisory(opt, gs, currentWeapon);
+                    return advisory ? (
+                      <div style={{ marginTop: 6, fontSize: 10, color: getAdvisoryColor(urgency), lineHeight: 1.5 }}>
+                        {advisory}
+                      </div>
+                    ) : null;
+                  })()}
                   {recommended && buildArchetype && (
                     <div style={{ fontSize: 9, color: buildArchetype.color, marginTop: 5, letterSpacing: 0.5 }}>
                       {buildArchetype.emoji} RECOMMENDED FOR {buildArchetype.name.toUpperCase()}
@@ -160,6 +170,8 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                     key={opt.id}
                     onClick={() => canAfford && onCoinBuy && onCoinBuy(opt.id, opt.cost)}
                     disabled={!canAfford}
+                    onMouseEnter={e => { setHoveredId(opt.id); if (canAfford) { e.currentTarget.style.background = "rgba(200,160,0,0.16)"; e.currentTarget.style.borderColor = "rgba(200,160,0,0.65)"; } }}
+                    onMouseLeave={e => { setHoveredId(null); if (canAfford) { e.currentTarget.style.background = "rgba(200,160,0,0.08)"; e.currentTarget.style.borderColor = "rgba(200,160,0,0.35)"; } }}
                     style={{
                       display: "flex", alignItems: "center", gap: 12,
                       padding: "11px 16px", borderRadius: 9, cursor: canAfford ? "pointer" : "not-allowed",
@@ -169,13 +181,19 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
                       textAlign: "left", width: "100%", opacity: canAfford ? 1 : 0.5,
                       transition: "all 0.1s",
                     }}
-                    onMouseEnter={e => { if (canAfford) { e.currentTarget.style.background = "rgba(200,160,0,0.16)"; e.currentTarget.style.borderColor = "rgba(200,160,0,0.65)"; } }}
-                    onMouseLeave={e => { if (canAfford) { e.currentTarget.style.background = "rgba(200,160,0,0.08)"; e.currentTarget.style.borderColor = "rgba(200,160,0,0.35)"; } }}
                   >
                     <span style={{ fontSize: 26, lineHeight: 1 }}>{opt.emoji}</span>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 900, color: canAfford ? "#FFD700" : "#666", marginBottom: 1 }}>{opt.name}</div>
                       <div style={{ fontSize: 11, color: canAfford ? "#BBB" : "#444" }}>{opt.desc}</div>
+                      {hoveredId === opt.id && canAfford && (() => {
+                        const { advisory, urgency } = getShopAdvisory(opt, gs, currentWeapon);
+                        return advisory ? (
+                          <div style={{ marginTop: 5, fontSize: 10, color: getAdvisoryColor(urgency), lineHeight: 1.5 }}>
+                            {advisory}
+                          </div>
+                        ) : null;
+                      })()}
                       {recommended && buildArchetype && (
                         <div style={{ fontSize: 9, color: canAfford ? buildArchetype.color : "#555", marginTop: 4, letterSpacing: 0.5 }}>
                           {buildArchetype.emoji} RECOMMENDED FOR {buildArchetype.name.toUpperCase()}

@@ -3598,7 +3598,7 @@ export default function CallOfDoodie() {
       {/* Wave clear shop */}
       {shopPending && (
         <Suspense fallback={null}>
-          <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} />
+          <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} gs={gsRef.current} />
         </Suspense>
       )}
 
