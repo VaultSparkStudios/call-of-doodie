@@ -246,17 +246,22 @@ export function buildRunEventDigest({
 export function buildStudioGameEvent(type, payload = {}) {
   const category = type === "front_door_action"
     ? "front_door"
+    : type === "weekly_contract_progress"
+      ? "social"
     : type.startsWith("debrief")
       ? "debrief"
       : type.includes("rival")
         ? "rivalry"
         : type.includes("reject") || type.includes("anomaly") || type.includes("submit")
           ? "trust"
+          : type.includes("perk") || type.includes("route") || type.includes("abandon") || type.includes("first_death")
+            ? "telemetry"
           : "system";
   const surface = payload.surface
     || (category === "debrief" ? "death_screen"
       : category === "front_door" ? "front_door"
         : category === "rivalry" ? "social"
+          : category === "telemetry" ? "gameplay"
           : "ops");
   const normalizedPayload = type === "front_door_action"
     ? compactObject({
@@ -315,7 +320,50 @@ export function buildStudioGameEvent(type, payload = {}) {
                 submission: payload.submission || null,
                 globalRank: safeNullableNumber(payload.globalRank),
               })
-            : compactObject(payload);
+            : type === "perk_choice"
+              ? compactObject({
+                  perkId: payload.perkId || null,
+                  perkTier: safeNullableNumber(payload.perkTier),
+                  wave: safeNullableNumber(payload.wave),
+                  mode: payload.mode || null,
+                  difficulty: payload.difficulty || null,
+                  offeredIds: Array.isArray(payload.offeredIds) ? payload.offeredIds.slice(0, 6) : [],
+                })
+              : type === "route_choice"
+                ? compactObject({
+                    routeId: payload.routeId || null,
+                    wave: safeNullableNumber(payload.wave),
+                    mode: payload.mode || null,
+                    difficulty: payload.difficulty || null,
+                    hp: safeNullableNumber(payload.hp),
+                    coins: safeNullableNumber(payload.coins),
+                  })
+                : type === "mode_abandon"
+                  ? compactObject({
+                      mode: payload.mode || null,
+                      difficulty: payload.difficulty || null,
+                      wave: safeNullableNumber(payload.wave),
+                      score: safeNullableNumber(payload.score),
+                      timeSurvived: safeNullableNumber(payload.timeSurvived),
+                    })
+                  : type === "first_death_wave"
+                    ? compactObject({
+                        mode: payload.mode || null,
+                        difficulty: payload.difficulty || null,
+                        wave: safeNullableNumber(payload.wave),
+                        score: safeNullableNumber(payload.score),
+                        kills: safeNullableNumber(payload.kills),
+                      })
+                    : type === "weekly_contract_progress"
+                      ? compactObject({
+                          contractId: payload.contractId || null,
+                          progressLabel: payload.progressLabel || null,
+                          seed: safeNullableNumber(payload.seed),
+                          mode: payload.mode || null,
+                          score: safeNullableNumber(payload.score),
+                          wave: safeNullableNumber(payload.wave),
+                        })
+          : compactObject(payload);
   const summary = type === "front_door_action"
     ? `${normalizedPayload.actionId || "action"} via ${surface}`
     : type === "debrief_intelligence"
@@ -326,9 +374,20 @@ export function buildStudioGameEvent(type, payload = {}) {
           ? normalizedPayload.reason || "submission rejected"
           : type === "score_submit_result"
             ? `submission ${normalizedPayload.submission || "unknown"}`
+            : type === "perk_choice"
+              ? `perk ${normalizedPayload.perkId || "unknown"} chosen`
+              : type === "route_choice"
+                ? `route ${normalizedPayload.routeId || "unknown"} chosen`
+                : type === "mode_abandon"
+                  ? `abandon at wave ${normalizedPayload.wave ?? "?"}`
+                  : type === "first_death_wave"
+                    ? `first death on wave ${normalizedPayload.wave ?? "?"}`
+                    : type === "weekly_contract_progress"
+                      ? normalizedPayload.progressLabel || "contract progress"
             : type;
   return {
     schema: "vaultspark.game-event.v1",
+    contractVersion: 2,
     game: "call-of-doodie",
     type,
     category,

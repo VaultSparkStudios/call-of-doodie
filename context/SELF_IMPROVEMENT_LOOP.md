@@ -4,14 +4,43 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▆▆▇█
-Avgs — 3: 946.0 | 5: — | 10: — | 25: — | all: 945.0 [N=3, SIL history in private ops repo]
-  └ 3-session: Dev 98.3 | Align 94.0 | Momentum 95.3 | Engage 92.7 | Process 97.0 [N=3]
+Sparkline (last 5 totals): ▅▆▇▇█
+Avgs — 3: 948.0 | 5: — | 10: — | 25: — | all: 947.3 [N=3, SIL history in private ops repo]
+  └ 3-session: Dev 98.3 | Align 94.3 | Momentum 94.7 | Engage 93.3 | Process 97.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-21 | Session 51 | Total: 948/1000 | Velocity: 6 | protocolVelocity: 2
+Last session: 2026-04-22 | Session 52 | Total: 954/1000 | Velocity: 5 | protocolVelocity: 2
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-22 — Session 52 | Total: 954/1000 | Velocity: 5 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Full unblocked closeout sprint — the active `Now` items were still human/data-gated, so the remaining in-repo stack was executed end-to-end: social retention surface, social rivalry loop, telemetry/balance instrumentation, trust-ops surface, Studio event contract normalization, and App-runtime architecture slice 9 (boss-wave flow extraction). Validation: `npm test` 258/258, `npm run build` passing, lint clean except one pre-existing warning in `pickupSpawning.test.js`.
+
+| Category | Score | vs S51 | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Full suite green at 258/258; pure helper + pure planner extraction pattern maintained |
+| Creative Alignment | 95 | ↑ | Rivalry/ghost/contract surfaces strengthen the game's social-trash-talk identity without adding generic meta clutter |
+| Momentum | 97 | → | All remaining unblocked in-repo queue items shipped in one pass; only true human/data blockers remain |
+| Engagement | 95 | ↑ | Weekly contracts, featured seeds, ghost-board prompts, and richer Run History turn stored data into real replay hooks |
+| Process Quality | 97 | → | Closeout write-back, contract normalization, and task-board reclassification all landed cleanly |
+| Cross-Repo Coherence | 90 | → | Event contract now better matches downstream Studio surfaces, but no cross-repo writes happened here |
+| Security Posture | 95 | ↑ | Trust-op visibility improved through local rejection/anomaly summaries and normalized submit-result events |
+| Ecosystem Integration | 91 | ↑ | Local Studio event queue is now structurally ready for future Hub/server sync instead of being shape-fragmented |
+| Capital Efficiency | 98 | → | Zero-spend refinement tranche; all gains came from code reorganization + local telemetry surfaces |
+| Automation Coverage | 97 | → | +8 new tests; full-suite validation stayed green after the extraction/wiring pass |
+| **Total** | **954/1000** | +6 | |
+
+**Top win:** The repo now has a coherent local intelligence surface: trust ops, social rivalry hooks, and telemetry events all reinforce each other instead of living as disconnected partial implementations.
+**Top gap:** Launch gating is no longer an in-repo code problem. The real remaining blockers are live measurement, physical device QA, and Itch.io publication.
+**Intent outcome:** Achieved — memory/task board updated, all unblocked items shipped, and only genuine human/data-gated work remains deferred.
+
+**Brainstorm**
+1. Server-sync the local `vaultspark.game-event.v1` queue to a Hub/Supabase endpoint with retry + redaction once credentials/schema are ready. High probability.
+2. Wire remaining Roast Director hooks (`near_death`, `first_blood`, `low_ammo`) so the new telemetry/event layer also powers more reactive personality. High probability.
+3. Add a compact operator timeline panel that groups local trust events by seed/run to accelerate leaderboard review. Medium probability.
+
+**Committed to TASK_BOARD:** Social retention layer complete · Social rivalry loop complete · Telemetry/balance loop complete · Security/trust v2 ops surface complete · Studio Hub/Social Dashboard event contract complete · App extraction slice 9 complete
 
 ## 2026-04-21 — Session 51 | Total: 948/1000 | Velocity: 6 | Debt: ↓
 

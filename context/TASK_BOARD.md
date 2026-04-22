@@ -13,21 +13,22 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
-- [ ] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
-- [ ] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
+- [ ] [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
+- [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 - [x] [SIL:1] Economy clarity pass, slice 2 — **DONE S51**: route forecasting (routeForecast.js + RouteSelectModal hover panel) + shop tradeoff language (shopForecast.js + WaveShopModal hover advisories, urgency-rated by game state); reroll/lock mechanics deferred as a game design decision
-- [ ] Social retention layer — weekly contracts, rival ghosts, and studio seeds
-- [ ] Social rivalry loop — featured seeds, revenge links, rival ghosts, seeded rematch reuse, and async competitions that feel native to the game
-- [ ] Telemetry/balance loop — instrument first-death wave, abandonment points, perk picks, route picks, and debrief follow-through
+- [x] Social retention layer — **DONE S52**: `socialRetention.js` now drives weekly contracts, featured seeds, revenge links, fresh ghost cards, and async competition prompts in `RunHistoryPanel`
+- [x] Social rivalry loop — **DONE S52**: rivalry streaks, featured seed cards, revenge links, and ghost-board summaries now surface stored rivalry data as a visible player-facing loop
+- [x] Telemetry/balance loop — **DONE S52**: normalized local Studio events now capture perk picks, route picks, first-death wave, abandonments, score-submit results/rejections, and weekly contract progress
 - [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation (human action: screenshot capture)
 - [x] Meta clarity pass — **DONE S51**: `metaClarity.js` + wired into `menuGuidance.js`, HomeV2, MenuScreen; career-weakness-targeted upgrade recommendations in front-door action stack
-- [ ] Security/trust v2 ops surface — anomaly review logs and clearer rejection telemetry around suspicious leaderboard submissions
+- [x] Security/trust v2 ops surface — **DONE S52**: `RunHistoryPanel` now exposes trust-op counts, rejection summaries, anomaly guidance, and score-submit outcome telemetry backed by normalized local Studio events
 - [x] App-runtime architecture pass, slice 8 — **DONE S51**: pickup spawning extracted to `src/systems/pickupSpawning.js` (pure fn + `getPickupWeights`); App.jsx wrapper collapses to 2 lines; 11 tests
+- [x] App-runtime architecture pass, slice 9 — **DONE S52**: boss-wave preview/spawn planning extracted to `src/systems/bossWaveFlow.js`; `App.jsx` now consumes a boss-wave plan instead of owning the full inline preview/spawn decision tree
 - [x] Roast Director — **DONE S51**: `src/utils/roastDirector.js` with 10 event pools, per-event wave-cooldown rate limiting; wired in game loop at kill_streak (every 5 kills) and boss_kill; 12 tests
-- [ ] Studio Hub/Social Dashboard event contract — normalize game session, challenge, anomaly, debrief, and rivalry events for downstream Studio OS surfaces
+- [x] Studio Hub/Social Dashboard event contract — **DONE S52**: `buildStudioGameEvent()` now emits contract v2 payloads across front-door, trust, telemetry, debrief, rivalry, and weekly-contract surfaces for downstream Studio OS consumers
 ## Done
 - [x] [SIL] Session 50 NOW bucket — HomeV2 intel ticker sessionStorage persistence, CareerStatsPanel "—" placeholder for pre-49 saves, Command Center gamepad nav (useGamepadNav + focus rings), `scripts/schema-lint.mjs` (`npm run schema:lint`), balance telemetry v2 (`shop_buy`, `coin_shop_buy`, `mode_abandon`, `debrief_view_leaderboard`, `debrief_menu` events), user feedback clarity (local-save fallback + rejection copy), bundle split cleanup slice 3 (PauseMenu + PerkModal + WaveShopModal + RouteSelectModal + TutorialOverlay + DraftScreen all lazy), front-door simplification (first-run stripped action stack + collapsible Command Center auto-expanded for returning players), level-flow cadence slice 2 (every-3-levels through level 18 + `getWaveSurvivalBonus` + `getPerkBankingState`), build identity depth (DOCTRINE FORGED milestone + `getDoctrineMilestones()` + irreversible-fork doctrine text per archetype), App.jsx domain refactor slice 7 (`src/systems/mutationResolution.js` + wired into App.jsx), leaderboard trust v2 (`scripts/leaderboard-audit.mjs` + `npm run leaderboard:audit`), render/update optimization (frame budget monitor in `useGameLoop.js` dev-only — warns on >16ms frames).
 - [x] [SIL:3⛔] Run Intelligence Spine — reusable intelligence foundation shipped across front door, post-run diagnosis, rematch/rivalry prompts, balance telemetry, Studio event shape, and trust digest slices

@@ -5,6 +5,16 @@ import {
   saveMetaProgress, purchaseMetaUpgrade, prestigeAccount,
 } from "../storage.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
+import {
+  buildFeaturedSeeds,
+  buildGhostBoard,
+  buildWeeklyContract,
+  summarizeRivalryHistory,
+} from "../utils/socialRetention.js";
+import {
+  buildTrustRecommendations,
+  summarizeStudioEvents,
+} from "../utils/studioEventOps.js";
 
 const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" };
 const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto", width: "100%", position: "relative" };
@@ -29,59 +39,6 @@ function fmtTime(s) {
   const m = Math.floor((s % 3600) / 60);
   const sec = s % 60;
   return h > 0 ? `${h}h ${m}m` : `${m}:${String(sec).padStart(2, "0")}`;
-}
-
-function summarizeRivalryHistory(rivalryHistory = []) {
-  const settled = rivalryHistory.filter((entry) => entry?.won != null);
-  const wins = settled.filter((entry) => entry.won).length;
-  const losses = settled.filter((entry) => entry.won === false).length;
-  const unresolved = rivalryHistory.find((entry) => entry?.won === false && entry.seed);
-  const bestWin = settled.filter((entry) => entry.won && Number.isFinite(entry.delta)).sort((a, b) => b.delta - a.delta)[0] || null;
-  const worstLoss = settled.filter((entry) => entry.won === false && Number.isFinite(entry.delta)).sort((a, b) => a.delta - b.delta)[0] || null;
-  return { wins, losses, unresolved, bestWin, worstLoss };
-}
-
-function buildWeeklyContract(runHistory = [], rivalryHistory = []) {
-  const unresolved = rivalryHistory.find((entry) => entry?.won === false && entry.seed);
-  if (unresolved) {
-    return {
-      title: "Revenge Contract",
-      detail: `Replay seed #${unresolved.seed} and erase the ${Math.abs(unresolved.delta || 0).toLocaleString()} point gap.`,
-      reward: "Turns stored rivalry data into a visible improvement loop.",
-    };
-  }
-
-  if (runHistory.length === 0) {
-    return {
-      title: "Warm Body Contract",
-      detail: "Deploy one scouting run and bank a real baseline seed.",
-      reward: "Unlocks meaningful history, rivalry, and routing targets.",
-    };
-  }
-
-  const recent = runHistory.slice(0, 5);
-  const bestWave = recent.reduce((max, run) => Math.max(max, Number(run?.wave || 1)), 1);
-  const avgScore = Math.round(recent.reduce((sum, run) => sum + Number(run?.score || 0), 0) / recent.length);
-  const featured = recent.find((run) => run?.runSeed);
-  return {
-    title: "Studio Seed Contract",
-    detail: featured?.runSeed
-      ? `Beat ${Math.max(avgScore + 5000, avgScore * 1.15 | 0).toLocaleString()} on seed #${featured.runSeed} or push to wave ${bestWave + 2}.`
-      : `Raise your next five-run average above ${Math.max(avgScore + 5000, 15000).toLocaleString()} and push to wave ${bestWave + 2}.`,
-    reward: "A concrete weekly target keeps the home screen from becoming passive wallpaper.",
-  };
-}
-
-function summarizeStudioEvents(studioEvents = []) {
-  const recent = studioEvents.slice(0, 20);
-  const trust = recent.filter((event) => event?.category === "trust");
-  const frontDoor = recent.filter((event) => event?.type === "front_door_action");
-  const debrief = recent.filter((event) => event?.category === "debrief");
-  return {
-    trust,
-    frontDoorCount: frontDoor.length,
-    debriefCount: debrief.length,
-  };
 }
 
 // ── RULES ────────────────────────────────────────────────────────────────────
@@ -211,7 +168,10 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
   const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
   const rivalrySummary = summarizeRivalryHistory(rivalry);
   const trustSummary = summarizeStudioEvents(events);
-  const weeklyContract = buildWeeklyContract(history, rivalry);
+  const weeklyContract = buildWeeklyContract(history, rivalry, events);
+  const featuredSeeds = buildFeaturedSeeds(history, rivalry);
+  const ghostBoard = buildGhostBoard(history, rivalry);
+  const trustRecommendations = buildTrustRecommendations(trustSummary);
   return (
     <div style={OVERLAY}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 520, border: "1px solid rgba(255,107,53,0.3)" }}>
@@ -222,12 +182,18 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
           <div style={{ color: "#FFD700", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>{weeklyContract.title}</div>
           <div style={{ color: "#EEE", fontSize: 12, marginTop: 5, lineHeight: 1.45 }}>{weeklyContract.detail}</div>
           <div style={{ color: "#AAA", fontSize: 10, marginTop: 6 }}>{weeklyContract.reward}</div>
+          <div style={{ color: "#FFD79C", fontSize: 10, marginTop: 6 }}>Progress: {weeklyContract.progress}</div>
         </div>
         <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(0,229,255,0.04)", border: "1px solid rgba(0,229,255,0.18)" }}>
           <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>⚔️ RIVALRY NETWORK</div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#00FF88", border: "1px solid rgba(0,255,136,0.2)" }}>Wins {rivalrySummary.wins}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FF8888", border: "1px solid rgba(255,120,120,0.2)" }}>Losses {rivalrySummary.losses}</span>
+            {rivalrySummary.streak !== 0 && (
+              <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: rivalrySummary.streak > 0 ? "#A8FFCE" : "#FFC0C0", border: "1px solid rgba(255,255,255,0.12)" }}>
+                {rivalrySummary.streak > 0 ? `Win streak ${rivalrySummary.streak}` : `Loss streak ${Math.abs(rivalrySummary.streak)}`}
+              </span>
+            )}
             {rivalrySummary.unresolved && (
               <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,107,53,0.12)", color: "#FFB36B", border: "1px solid rgba(255,107,53,0.28)" }}>
                 Revenge seed #{rivalrySummary.unresolved.seed}
@@ -248,10 +214,47 @@ export function RunHistoryPanel({ onClose, runHistory = null, rivalryHistory = n
               ))}
             </div>
           )}
+          {featuredSeeds.length > 0 && (
+            <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}>
+              {featuredSeeds.map((card) => (
+                <div key={card.id} style={{ padding: "10px 10px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: `1px solid ${card.accent}33` }}>
+                  <div style={{ color: card.accent, fontSize: 10, fontWeight: 900, letterSpacing: 1 }}>{card.label}</div>
+                  <div style={{ color: "#FFF", fontSize: 12, marginTop: 5 }}>Seed #{card.seed}</div>
+                  <div style={{ color: "#BBB", fontSize: 10, marginTop: 4, lineHeight: 1.45 }}>{card.detail}</div>
+                  <div style={{ color: "#DDD", fontSize: 10, marginTop: 6 }}>{card.target}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {ghostBoard.length > 0 && (
+            <div style={{ marginTop: 10 }}>
+              <div style={{ color: "#AAA", fontSize: 10, marginBottom: 6 }}>Async competition board</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {ghostBoard.map((ghost) => (
+                  <div key={ghost.id} style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 10, color: "#DDD", padding: "6px 8px", borderRadius: 6, background: "rgba(255,255,255,0.025)" }}>
+                    <span><span style={{ color: ghost.accent }}>{ghost.title}</span> · seed #{ghost.seed} · wave {ghost.wave}</span>
+                    <span>{ghost.score.toLocaleString()} pts</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div style={{ marginBottom: 14, padding: "10px 12px", borderRadius: 8, background: "rgba(255,70,70,0.04)", border: "1px solid rgba(255,120,120,0.18)" }}>
           <div style={{ color: "#FFB5B5", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>🛡️ TRUST OPS</div>
-          <div style={{ fontSize: 10, color: "#AAA", marginBottom: 6 }}>Front-door events: {trustSummary.frontDoorCount} · Debriefs: {trustSummary.debriefCount} · Trust flags: {trustSummary.trust.length}</div>
+          <div style={{ fontSize: 10, color: "#AAA", marginBottom: 6 }}>
+            Front-door events: {trustSummary.frontDoorCount} · Debriefs: {trustSummary.debriefCount} · Trust flags: {trustSummary.trust.length} · Rejections: {trustSummary.rejectionCount}
+          </div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#E6E6E6", border: "1px solid rgba(255,255,255,0.12)" }}>Perk picks {trustSummary.perkChoiceCount}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#E6E6E6", border: "1px solid rgba(255,255,255,0.12)" }}>Route picks {trustSummary.routeChoiceCount}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#E6E6E6", border: "1px solid rgba(255,255,255,0.12)" }}>Abandons {trustSummary.abandonmentCount}</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
+            {trustRecommendations.map((line, index) => (
+              <div key={`trust-line-${index}`} style={{ color: "#FFD6D6", fontSize: 10, lineHeight: 1.4 }}>{line}</div>
+            ))}
+          </div>
           {trustSummary.trust.length === 0 ? (
             <div style={{ color: "#BBB", fontSize: 10 }}>No recent trust/anomaly events logged locally.</div>
           ) : (

@@ -1,6 +1,29 @@
 # Latest Handoff
 
-Session Intent: Complete the NOW bucket from Session 50 and run /go autonomous expansion — shipping the meta clarity pass, route forecasting, economy clarity slice 2 (shop tradeoff language), App.jsx pickup spawning extraction (slice 8), Roast Director, and 4 uncommitted test files from session 50.
+Session Intent: Update memory/task board if needed, then implement the full remaining unblocked in-repo priority stack in one pass and leave only true human/data-gated items deferred.
+
+## Where We Left Off (Session 52 — social retention + trust ops + boss-wave flow closeout)
+
+**Intent outcome:** Achieved — all remaining unblocked in-repo items from the active queue shipped; only genuine human/data-gated items remain deferred.
+
+- `src/utils/socialRetention.js` — weekly contracts, rivalry summary, featured seeds, and ghost-board helpers now turn local run/rivalry history into visible async-competition prompts
+- `src/utils/studioEventOps.js` — local Studio event summarization now powers trust-op counts, rejection summaries, decision-telemetry counts, and operator-facing guidance lines
+- `src/utils/runIntelligence.js` — Studio event contract upgraded to `contractVersion: 2`; telemetry event types added for `perk_choice`, `route_choice`, `mode_abandon`, `first_death_wave`, and `weekly_contract_progress`
+- `src/App.jsx` — local Studio event persistence expanded to cover perk picks, route picks, score-submit results/rejections, first-death wave, weekly contract progress, and pause-menu abandonments
+- `src/components/MenuPanels.jsx` — Run History now shows weekly-contract progress, rivalry streaks, featured seed cards, ghost-board cards, richer trust-op chips, rejection summaries, and telemetry counts
+- `src/systems/bossWaveFlow.js` — boss preview/spawn planning extracted from App.jsx into a pure planner covering developer boss, dual boss thresholds, warning text, and preview-card metadata
+- Validation: `npm test` 258/258 · `npm run build` passes · `npm run lint` passes with one pre-existing warning in `src/systems/pickupSpawning.test.js`
+- Deploy: ready to commit/push; no human-only launch work performed in this session
+
+**Public-safe summary:** The remaining executable stack is now shipped. Local event telemetry, trust review, and social rivalry surfaces are coherent enough to support future server sync, and boss-wave planning is no longer embedded inline in App.jsx.
+
+## Next Recommended Slice
+- [ ] [Human/Data] HomeV2 Lighthouse measurement — LCP/CLS delta vs legacy on production; gate v1 removal on ≥200ms win
+- [ ] [Human/Data] HomeV2 analytics funnel — `home_v2_deploy` vs `front_door_action` after 48h traffic; needs real data
+- [ ] [Human] Physical launch QA — real mobile/browser PWA install pass
+- [ ] [Human] Physical launch QA — one real gamepad/browser pass end-to-end
+- [ ] [Human] Create Itch.io listing — use `docs/LAUNCH_EXECUTION.md` and `public/launch-assets/`
+- [ ] Optional follow-up: wire remaining Roast Director hooks (`near_death`, `first_blood`, `low_ammo`) now that the event infrastructure is in place
 
 ## Where We Left Off (Session 51 — /go expansion sprint)
 
