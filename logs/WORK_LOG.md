@@ -103,3 +103,17 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Populated `public/manifest.json` screenshots (5 entries: 4 wide/desktop, 1 narrow/mobile) to satisfy Chrome desktop PWA install prompt requirement
 - Added `apple-mobile-web-app-title` to `index.html` for correct iOS home screen label
 - Pushed 2 commits to main; CI confirmed in progress
+
+
+## 2026-04-21 (Session 51)
+
+- Meta clarity pass: `src/utils/metaClarity.js` — `getRecommendedMetaUpgrade()` identifies player weakness (defense/offense/utility/chaos) from career stats; wired into `buildFrontDoorActionStack` via `menuGuidance.js`, `HomeV2.jsx`, `MenuScreen.jsx`; `metaRec` attached to `best_next_upgrade` action; 13 tests
+- Route forecasting: `src/utils/routeForecast.js` — `getRouteForecast()` returns context-aware headline/tradeoff/tip per route accounting for HP%, coins, weapon level, wave number, boss imminence; hover panel wired into `RouteSelectModal`; `gs` prop added; 12 tests
+- App.jsx extraction slice 8: `src/systems/pickupSpawning.js` — pure `spawnPickup()` + `getPickupWeights()` extracted from App.jsx; App wrapper collapses to 2 lines passing `ammoDropMult`; 11 tests
+- Roast Director: `src/utils/roastDirector.js` — 10 event pools, per-event wave cooldown, `getRoastCallout()` API; wired in game loop at kill_streak (every 5 kills, 2-wave cooldown) and boss_kill (3-wave cooldown); `roastCooldowns` ref resets on new run start; 12 tests
+- Test backfill: mutationResolution.test.js (8), shopOptions.test.js (8), perkOptions.test.js (6), routeOptions.test.js (5) — written S50 but uncommitted; committed this session
+- Archetype doctrine coverage: 3 new tests for `getDoctrineMilestones` + DOCTRINE FORGED tier; 2 new menuGuidance tests for first-run stack + metaRec wiring
+- Economy clarity slice 2 — shop tradeoff: `src/utils/shopForecast.js` — `getShopAdvisory()` returns urgency-rated one-line advisory per shop item keyed to HP%, ammo, wave, weapon level, enemy count; `WaveShopModal` shows advisory on hover (wave shop + coin shop); `gs` prop added; 17 tests
+- TASK_BOARD: meta clarity, pickup extraction, Roast Director, economy clarity slice 2 all marked DONE S51
+- Validation: `npm test` 248/248 · `npm run lint` clean · `npm run build` clean
+- All commits pushed to main (8 commits, 0bf4f20 latest)

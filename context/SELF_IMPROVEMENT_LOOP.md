@@ -4,14 +4,43 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▆▆▆▇
-Avgs — 3: 447.0 | 5: 438.2 | 10: — | 25: — | all: 438.2 [N=5, SIL history in private ops repo]
-  └ 3-session: Dev 95.7 | Align 88.7 | Momentum 92.3 | Engage 75.0 | Process 95.3 [N=3]
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: →
+Sparkline (last 5 totals): ▆▆▆▇█
+Avgs — 3: 946.0 | 5: — | 10: — | 25: — | all: 945.0 [N=3, SIL history in private ops repo]
+  └ 3-session: Dev 98.3 | Align 94.0 | Momentum 95.3 | Engage 92.7 | Process 97.0 [N=3]
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-21 | Session 49 | Total: 942/1000 | Velocity: 2 | protocolVelocity: 1
+Last session: 2026-04-21 | Session 51 | Total: 948/1000 | Velocity: 6 | protocolVelocity: 2
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-21 — Session 51 | Total: 948/1000 | Velocity: 6 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Expansion sprint — primary /go queue was human-blocked (Lighthouse + analytics funnel both require real browser/traffic), so the expansion protocol fired and shipped 6 concrete items across 2 /go invocations: meta clarity pass, route forecasting, App.jsx pickup-spawning extraction (slice 8), Roast Director, shop tradeoff language advisories, and test backfill for 4 uncommitted session-50 test files. Test count: 191 → 248 (+57 net new).
+
+| Category | Score | vs S49 | Notes |
+|---|---|---|---|
+| Dev Health | 99 | ↑ | 248/248 tests green (up from 151), lint/build clean, all new modules are pure fns with no side-effect coupling |
+| Creative Alignment | 94 | → | Roast Director gives the game a voice; meta clarity + route/shop advisories make choices legible; all align with the "decision clarity" mandate |
+| Momentum | 97 | ↑ | 6 deliverables across 2 /go sprints; expansion protocol fired correctly and produced concrete work instead of stalling |
+| Engagement | 93 | → | Shop urgency advisories + route tradeoff forecasts + rate-limited roast callouts are all player-facing engagement wins |
+| Process Quality | 97 | → | Pure fn extraction pattern maintained; pickup weights preserved faithfully (not normalized) for behavioral parity; all items test-first |
+| Cross-Repo Coherence | 90 | → | No cross-repo surfaces changed |
+| Security Posture | 94 | → | No new network surfaces; roast + forecast utilities are fully client-side |
+| Ecosystem Integration | 89 | ↑ | No integration changes; slight bump for cleaner module graph |
+| Capital Efficiency | 98 | ↑ | $0 spent; 6 items shipped via expansion protocol with no wasted cycles |
+| Automation Coverage | 97 | ↑ | +57 net new tests in pure-fn modules; backfill cleared 4 uncommitted session-50 files |
+| **Total** | **948/1000** | +6 | |
+
+**Top win:** Expansion protocol worked exactly as designed — human-blocked primary queue triggered innovation-pack compound refinement that produced 6 shippable items. Test count grew from 191 to 248 in one session.
+**Top gap:** Pickup weight table is not normalized (sums to ~1.07/1.08); time_dilation pickup remains unreachable by Math.random(). Preserved for behavioral parity, but should be a design decision in a future pacing pass.
+**Intent outcome:** Achieved — expansion protocol fired, 6 items shipped, all with tests, no regressions.
+
+**Brainstorm**
+1. Normalize pickup weights and make time_dilation actually reachable — low probability (design change, not pure refactor).
+2. Wire roast callouts to additional events (near_death, first_blood, low_ammo) now that the infrastructure exists — high probability next session.
+3. Add live route-forecast data to wave-director stage so forecasts account for scouting/pressure/climax phases — medium probability.
+
+**Committed to TASK_BOARD:** Meta clarity complete · Route forecast complete · Pickup extraction slice 8 complete · Roast Director complete · Shop tradeoff advisories complete
 
 ## 2026-04-21 — Session 49 | Total: 942/1000 | Velocity: 2 | Debt: ↓
 
