@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 
-const TIER_COLORS = { common: "#AAA", uncommon: "#00CC88", rare: "#6688FF", legendary: "#FFD700", cursed: "#CC00FF" };
+const TIER_COLORS = { common: "#AAAAAA", uncommon: "#00CC88", rare: "#6688FF", legendary: "#FFD700", cursed: "#CC00FF" };
 
 export default function DraftScreen({ options, onSelect }) {
   const [hovered, setHovered] = useState(null);
@@ -42,8 +42,8 @@ export default function DraftScreen({ options, onSelect }) {
                 onMouseEnter={() => setHovered(perk.id)} onMouseLeave={() => setHovered(null)}
                 style={{
                   flex: "1 1 160px", maxWidth: 190,
-                  background: isHov ? `linear-gradient(160deg, ${col}20, rgba(0,0,0,0.7))` : "rgba(255,255,255,0.04)",
-                  border: `2px solid ${isHov ? col : col + "44"}`,
+                  background: isHov ? `linear-gradient(160deg, ${col}33, rgba(0,0,0,0.85))` : "rgba(0,0,0,0.55)",
+                  border: `2px solid ${isHov ? col : col + "66"}`,
                   borderRadius: 14, padding: "20px 14px 16px", cursor: "pointer",
                   color: "#fff", textAlign: "center",
                   transform: isHov ? "translateY(-4px)" : "translateY(0)",

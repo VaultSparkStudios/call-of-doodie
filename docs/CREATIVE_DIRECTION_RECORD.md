@@ -5,6 +5,18 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-04-30 (Session 55)
+
+- **Founder direction:** the game is too laggy and has too many customization options; the weapon list is overwhelming and should feel like a level-up reward instead of a flat picker; the Best Moments GIF doesn't work reliably; one of the initial cards on join was unreadable (white text on white card); confirm the user-account system is real (or not); evaluate splitting the game off the studio domain
+- **Public-safe implementation summary:**
+  - Performance: GIF capture and encode were the heaviest CPU cost in the loop; throttled, smaller offscreen canvas, single shared palette, and skipped entirely on mobile and when sustained frame drops are detected. Adaptive quality is now a first-class runtime concept (`window.__codReducedEffects`), surfaced to the player via a HUD chip
+  - Surface area: SettingsPanel split into Quick (6 most-used) + Advanced; default tab = Quick. New Reset-to-defaults button. Goal — a first-time player should never feel they need to read every slider before playing
+  - Progression identity: 12 weapons no longer all available from L1. Loadout builder gates weapons behind account-level thresholds tuned so the full arsenal arrives by ~L16 (~2,400 lifetime kills). Existing custom loadouts whose weapon is now locked stay usable as `🔒legacy` so we never punish a player retroactively. Locked weapons can still appear in shops mid-run, preserving discovery
+  - Trust + readability: the white-on-white perk card was a same-color text-on-bg pattern in PerkModal plus an invalid-hex bug in DraftScreen; both fixed defensively rather than cosmetically
+- **Creative posture decisions documented for future sessions:**
+  - User accounts: real auth is not yet a player-facing problem at this scale; trigger Supabase Auth implementation when traffic warrants (≥500 lifetime players) or a paid tier ships, per `docs/AUTH_INTEGRATION_PLAN.md`. Until then, callsign + anon UUID is the explicit, accepted identity model
+  - Domain split: defer until ≥1k MAU or paid tier; benefits don't outweigh the operational + analytics fragmentation cost at the current stage
+
 ## 2026-04-06
 
 - Founder direction: prepare Call of Doodie to be completely ready for launch to end users

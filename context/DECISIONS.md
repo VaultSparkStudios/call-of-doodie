@@ -2,6 +2,22 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-04-30 — Session 55 — Adaptive performance via global flag, not gs field
+
+**Decision:** The runtime perf-reduction signal is a `window.__codReducedEffects` boolean toggled by `makeFrameMonitor` in `src/hooks/useGameLoop.js`, with hysteresis (flip ON ≥20% over-budget, flip OFF only when ≥60% under hysteresis margin). Read sites (`drawGame.js`, `App.jsx` GIF capture path, `HUD.jsx` chip) check `typeof window !== "undefined" && window.__codReducedEffects`.
+
+**Rationale:** The flag must be readable from non-React code (`drawGame.js`, the App.jsx game loop's inline path) without prop drilling, and it changes too rarely (every ~120 frames worst case) to justify a useState round-trip. Using `gs` (game state ref) was considered but `gs` doesn't outlive a run, while perf can be sustained across runs. A module-level singleton was also considered but `window.*` is testable in jsdom and visible in DevTools. Hysteresis prevents UI flicker when frame budget oscillates near the threshold.
+
+**Trade-off accepted:** SSR / non-browser build paths (we don't have any today) would need to guard reads. All current readers do.
+
+## 2026-04-30 — Session 55 — Weapon unlock gating is a builder-only restriction, not a runtime block
+
+**Decision:** `WEAPON_UNLOCK_LEVELS` gates which weapons appear as the *starter* in the LoadoutBuilder UI. Weapons remain spawnable in the wave shop regardless of account level, and any custom loadout saved before this session whose weapon is now locked is honored at runtime (the builder shows it as `🔒legacy` and keeps it selectable).
+
+**Rationale:** Locking discovery would punish curiosity — players who never built a custom loadout would never see the locked weapons exist. Locking the starter slot is enough to make leveling feel earned without sealing off the rest of the game. Grandfathering is mandatory because we shipped without progression gates and breaking saves on a refresh would be hostile.
+
+**Trade-off accepted:** A new player who was sent a `?loadout=` shareable link to a high-level loadout will run with weapons they don't yet "own" — that's a positive moment, not a bug.
+
 ## 2026-04-06 — CANON-008: All VaultSpark IP is proprietary by default
 
 **Decision:** All code, content, assets, and designs created by VaultSpark Studios are proprietary and all rights are reserved by VaultSpark Studios LLC unless an open-source license is explicitly declared and approved by the Studio Owner. No agent may apply or imply an open-source license without Studio Owner direction.

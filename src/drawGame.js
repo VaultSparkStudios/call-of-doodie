@@ -812,11 +812,20 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   });
 
-  // Particles
-  gs.particles.forEach(pt => {
-    ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
-    ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
-  });
+  // Particles — when frame budget is hot, render only every other particle.
+  const _reduced = typeof window !== "undefined" && window.__codReducedEffects;
+  if (_reduced) {
+    for (let i = 0; i < gs.particles.length; i += 2) {
+      const pt = gs.particles[i];
+      ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
+      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
+    }
+  } else {
+    gs.particles.forEach(pt => {
+      ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
+      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
+    });
+  }
   ctx.globalAlpha = 1;
 
   // Chain Lightning arcs

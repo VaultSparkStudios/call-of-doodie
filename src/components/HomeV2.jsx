@@ -88,6 +88,7 @@ export default function HomeV2(props) {
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
   const [tickerDismissed, setTickerDismissed] = useState(() => sessionStorage.getItem("cod-ticker-dismissed") === "1");
+  const [mutationDismissed, setMutationDismissed] = useState(() => sessionStorage.getItem("cod-mutation-dismissed") === "1");
   const [showCareerStats, setShowCareerStats] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -524,12 +525,13 @@ export default function HomeV2(props) {
         )}
 
         {/* Weekly mutation banner */}
-        {weeklyMutation && (
+        {weeklyMutation && !mutationDismissed && (
           <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,180,0,0.06)", borderColor: "rgba(255,180,0,0.3)", color: "#FFE8B3" }}>
             <span style={{ fontSize: 14 }}>⚡</span>
             <span style={{ flex: 1 }}>
               <strong style={{ color: "#FFB300" }}>THIS WEEK'S MUTATION:</strong> {weeklyMutation.emoji} {weeklyMutation.name} — <span style={{ color: "#CCC" }}>{weeklyMutation.desc}</span>
             </span>
+            <button onClick={() => { sessionStorage.setItem("cod-mutation-dismissed", "1"); setMutationDismissed(true); }} aria-label="Dismiss mutation banner" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
         {(!analyticsStatus.enabled || telemetrySummary.pendingSyncCount > 0 || telemetrySummary.failedSyncCount > 0) && (

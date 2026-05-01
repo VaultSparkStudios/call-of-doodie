@@ -5,20 +5,33 @@ import { useEffect, useRef } from "react";
 // Aggregates: reports once per 300 frames to avoid console spam.
 
 const DEV = import.meta.env.DEV;
-const BUDGET_MS   = 16.67;
+const BUDGET_MS    = 16.67;
 const REPORT_EVERY = 300; // frames
+const ADAPT_WINDOW = 120; // frames (~2s @ 60fps) for adaptive quality
+const ADAPT_THRESHOLD = 0.20; // >20% frames over budget → reduce effects
 
-function makeFrameMonitor() {
-  if (!DEV) return null;
+// Adaptive quality flag: window.__codReducedEffects becomes true when
+// sustained frame drops are detected. Read by drawGame + emit paths.
+export function makeFrameMonitor() {
   let drops = 0, total = 0, maxMs = 0;
+  let adaptDrops = 0, adaptTotal = 0;
   return {
     record(ms) {
-      total++;
-      if (ms > BUDGET_MS) { drops++; maxMs = Math.max(maxMs, ms); }
-      if (total % REPORT_EVERY === 0 && drops > 0) {
+      total++; adaptTotal++;
+      const over = ms > BUDGET_MS;
+      if (over) { drops++; maxMs = Math.max(maxMs, ms); adaptDrops++; }
+      if (DEV && total % REPORT_EVERY === 0 && drops > 0) {
         const pct = ((drops / REPORT_EVERY) * 100).toFixed(0);
         console.warn(`[GameLoop] ${pct}% frames over budget in last ${REPORT_EVERY} (worst: ${maxMs.toFixed(1)}ms)`);
         drops = 0; maxMs = 0;
+      }
+      if (adaptTotal >= ADAPT_WINDOW) {
+        const pct = adaptDrops / adaptTotal;
+        if (typeof window !== "undefined") {
+          if (pct >= ADAPT_THRESHOLD) window.__codReducedEffects = true;
+          else if (pct < ADAPT_THRESHOLD * 0.4) window.__codReducedEffects = false;
+        }
+        adaptDrops = 0; adaptTotal = 0;
       }
     },
   };
@@ -49,9 +62,9 @@ export function useGameLoop(callback, active, rafRef) {
     }
     let handle;
     const loop = () => {
-      const t0 = DEV ? performance.now() : 0;
+      const t0 = performance.now();
       cbRef.current();
-      if (DEV) monRef.current?.record(performance.now() - t0);
+      monRef.current?.record(performance.now() - t0);
       handle = requestAnimationFrame(loop);
       if (rafRef) rafRef.current = handle;
     };

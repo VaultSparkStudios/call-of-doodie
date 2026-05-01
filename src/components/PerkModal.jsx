@@ -83,7 +83,7 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
                     <span style={{ fontWeight: 900, fontSize: 15, color: isCursed ? "#FF6677" : "#FFF" }}>{perk.name}</span>
-                    <span style={{ fontSize: 9, color: tierColor, fontWeight: 700, letterSpacing: 1, background: tierColor + "22", padding: "2px 6px", borderRadius: 4 }}>
+                    <span style={{ fontSize: 9, color: "#000", fontWeight: 900, letterSpacing: 1, background: tierColor, padding: "2px 6px", borderRadius: 4 }}>
                       {tierLabel[perk.tier] || perk.tier.toUpperCase()}
                     </span>
                   </div>

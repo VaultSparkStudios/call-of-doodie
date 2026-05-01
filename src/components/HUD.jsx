@@ -1,4 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
+
+// Subscribe to the adaptive-effects flag set by useGameLoop. Polls once a
+// second so we don't churn on every frame.
+function useReducedEffects() {
+  return useSyncExternalStore(
+    (cb) => { const id = setInterval(cb, 1000); return () => clearInterval(id); },
+    () => (typeof window !== "undefined" && window.__codReducedEffects) ? 1 : 0,
+    () => 0,
+  );
+}
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
 
 const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
@@ -33,6 +43,8 @@ export default function HUD({
     return () => clearInterval(id);
   }, [speedrunMode]);
 
+  const reducedEffects = useReducedEffects();
+
   const Tooltip = ({ text, visible }) => {
     if (!visible) return null;
     return (
@@ -52,6 +64,14 @@ export default function HUD({
           <button onClick={onPause} style={{ background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 15, width: 34, height: 34, borderRadius: 6, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>⏸</button>
         </div>
       )}
+
+      {/* Reduced-effects indicator (auto-flipped by adaptive frame monitor) */}
+      {reducedEffects ? (
+        <div title="Effects automatically reduced to keep your framerate stable. Lower 'Particles' in settings to make it permanent."
+             style={{ position: "absolute", top: 8, left: 8, background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,180,0,0.45)", color: "#FFC355", padding: "3px 8px", borderRadius: 4, fontSize: 9, fontWeight: 800, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+          ⚡ PERF MODE
+        </div>
+      ) : null}
 
       {/* Wave / Timer */}
       <div style={{ position: "absolute", top: 6, left: "50%", transform: "translateX(-50%)", fontSize: 11, color: "#FFF", background: "rgba(0,0,0,0.5)", padding: "3px 12px", borderRadius: 10, fontWeight: 700, display: "flex", gap: 8, alignItems: "center" }}>

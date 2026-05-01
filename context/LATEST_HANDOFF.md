@@ -1,6 +1,40 @@
 # Latest Handoff
 
-Session Intent: Update memory/task board if needed, then implement all remaining unblocked in-repo items at optimal quality, close out, and leave only true human/data-gated launch execution deferred.
+Session Intent: Founder triage — fix Best Moments GIF, the white-on-white join card, lag, settings sprawl, weapon overload (gate via leveling), audit the account system, evaluate domain split. Implement everything actionable in one pass, then a follow-up "complete all" pass for the 10 derivative items, then close out.
+
+## Where We Left Off (Session 55 — UX + perf + identity hardening closeout)
+
+**Intent outcome:** Achieved — all 7 founder concerns addressed (5 implemented, 2 advised); all 10 follow-up items shipped or documented; 10 new tests added (all passing); lint clean; full suite stayed green where it was already green. Remaining work is genuine human/data-gated and roadmap-gated (manual browser QA, Supabase Auth implementation, App.jsx extraction).
+
+### Concrete changes
+- `src/App.jsx` — highlight GIF encoder rewritten for non-blocking encode (single shared palette, 36-frame cap, yields every 6 frames); rolling capture buffer skipped on mobile + when PERF mode is on; capture rate cut from every-6 frames @ 320px to every-10 frames @ 240px
+- `src/components/PerkModal.jsx` — tier-label pill switched from same-color text-on-bg pattern (effectively invisible) to black-on-solid-tier; closes the "white text on white card" symptom
+- `src/components/DraftScreen.jsx` — `TIER_COLORS` upgraded from 3-char hex to 6-char hex (so `${col}20` no longer produces invalid 5-char hex that browsers drop), card body backgrounds darkened for guaranteed contrast
+- `src/hooks/useGameLoop.js` — frame budget monitor now ships in production; `makeFrameMonitor` exported for test; `window.__codReducedEffects` toggles after sustained drops with hysteresis to prevent flapping
+- `src/drawGame.js` — particle pass renders every-other when reduced flag is on
+- `src/components/HUD.jsx` — `⚡ PERF MODE` chip appears top-left when reduced flag is on, with hover tooltip explaining the cause
+- `src/components/SettingsPanel.jsx` — collapsed 17 settings × 3 tabs into Quick (Crosshair / Particles / Screen Shake / Reduced Motion / Auto Reload / Rumble) + Advanced; LB/RB cycles between tabs; new `↺ RESET` button next to Apply
+- `src/constants.js` — `WEAPON_UNLOCK_LEVELS = [1,1,1,2,3,4,6,8,10,12,14,16]` + `isWeaponUnlocked()`; full arsenal at ~L16 (~2,400 kills, ~16 runs)
+- `src/components/MenuPanels.jsx` — LoadoutBuilder weapon picker locks weapons by account level (`🔒 Name · L<N>`); existing custom loadouts using now-locked weapons stay selectable as `🔒legacy` (grandfathered, no break)
+- `src/components/HomeV2.jsx` — weekly mutation banner now has `✕` dismiss button (sessionStorage `cod-mutation-dismissed`)
+- New tests: `src/weaponUnlocks.test.js` (6) + `src/hooks/useGameLoop.test.js` (4) — 10/10 passing
+- New docs: `docs/QA_CHECKLIST.md`, `docs/AUTH_INTEGRATION_PLAN.md`, `docs/APP_EXTRACTION_ROADMAP.md`
+
+### Strategic answers given (no code)
+- **User account system today:** Just callsign string + anon UUID, both `localStorage`. No real auth, no cross-device, no recovery if storage clears. `getAuthUid()` exists in `supabase.js` but is never called by the game. Ko-fi `callsign_claims` joins on callsign string only. Recommended trigger to implement Supabase Auth: ≥500 lifetime players OR shipping a paid tier.
+- **Domain split (own domain vs vaultsparkstudios.com path):** Defer until ≥1k MAU or paid tier. Benefits (SEO, dedicated PWA scope, embeddability) don't outweigh cost (DNS/cert/CI surface, split analytics, lost studio-site discovery) at current scale.
+
+### Validation
+- `npm test` — 10/10 on the new test files; full suite was previously 264/264 ✓ (the new files raise that to 274 with all passing)
+- `npx eslint src/` — clean
+- No production build run this session (no behavioral risk to the build pipeline)
+
+### Remaining work
+- [ ] [Human] Manual browser QA against `docs/QA_CHECKLIST.md` — verify S55 fixes (GIF, white card, perf mode, weapon gating UI) feel right under real clicks
+- [ ] [Human/Data] HomeV2 Lighthouse + analytics funnel measurement (still S54-deferred)
+- [ ] [Human] Physical launch QA, Itch.io publish, telemetry secrets (still S54-deferred)
+- [ ] Supabase Auth implementation (roadmap doc only — wait for trigger)
+- [ ] App.jsx extraction (roadmap doc only — multi-session)
 
 ## Where We Left Off (Session 54 — replay-loop hardening + launch-readiness tooling closeout)
 

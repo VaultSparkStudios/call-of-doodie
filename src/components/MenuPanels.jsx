@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { WEAPONS, ENEMY_TYPES, STARTER_LOADOUTS, ACHIEVEMENTS, META_UPGRADES, NEW_FEATURES } from "../constants.js";
+import { WEAPONS, ENEMY_TYPES, STARTER_LOADOUTS, ACHIEVEMENTS, META_UPGRADES, NEW_FEATURES, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked } from "../constants.js";
 import {
   loadCustomLoadouts, saveCustomLoadout, loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
-  saveMetaProgress, purchaseMetaUpgrade, prestigeAccount,
+  saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, loadCareerStats, getAccountLevel,
 } from "../storage.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { copyChallengeUrl } from "../utils/challengeLinks.js";
@@ -369,6 +369,7 @@ export function LoadoutBuilderPanel({ onClose }) {
   const [editName, setEditName] = useState("");
   const [editWeaponIdx, setEditWeaponIdx] = useState(0);
   const [editStarterLoadout, setEditStarterLoadout] = useState("standard");
+  const accountLevel = getAccountLevel(loadCareerStats());
   const [loadoutCodeInput, setLoadoutCodeInput] = useState("");
   const [loadoutCodeError, setLoadoutCodeError] = useState("");
 
@@ -394,16 +395,29 @@ export function LoadoutBuilderPanel({ onClose }) {
             <div style={{ marginBottom: 12 }}>
               <div style={{ fontSize: 10, color: "#888", marginBottom: 6, letterSpacing: 1 }}>STARTING WEAPON</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {WEAPONS.map((w, i) => (
-                  <button key={i} onClick={() => setEditWeaponIdx(i)} style={{
-                    padding: "6px 10px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6,
-                    background: editWeaponIdx === i ? "rgba(255,107,53,0.25)" : "rgba(255,255,255,0.05)",
-                    border: editWeaponIdx === i ? "1px solid #FF6B35" : "1px solid rgba(255,255,255,0.1)",
-                    color: editWeaponIdx === i ? "#FF6B35" : "#CCC",
-                  }}>
-                    {w.emoji} {w.name}
-                  </button>
-                ))}
+                {WEAPONS.map((w, i) => {
+                  const unlocked = isWeaponUnlocked(i, accountLevel);
+                  // Grandfather: a saved loadout with a now-locked weapon stays
+                  // selectable so existing builds aren't broken by gating.
+                  const allowClick = unlocked || editWeaponIdx === i;
+                  return (
+                    <button key={i} onClick={() => allowClick && setEditWeaponIdx(i)} disabled={!allowClick}
+                      title={unlocked ? w.desc : `Unlocks at account level ${WEAPON_UNLOCK_LEVELS[i]}`}
+                      style={{
+                        padding: "6px 10px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: allowClick ? "pointer" : "not-allowed", borderRadius: 6,
+                        background: editWeaponIdx === i ? "rgba(255,107,53,0.25)" : "rgba(255,255,255,0.05)",
+                        border: editWeaponIdx === i ? "1px solid #FF6B35" : "1px solid rgba(255,255,255,0.1)",
+                        color: !unlocked && editWeaponIdx !== i ? "#555" : editWeaponIdx === i ? "#FF6B35" : "#CCC",
+                        opacity: unlocked || editWeaponIdx === i ? 1 : 0.55,
+                      }}>
+                      {unlocked
+                        ? `${w.emoji} ${w.name}`
+                        : editWeaponIdx === i
+                          ? `${w.emoji} ${w.name} · 🔒legacy`
+                          : `🔒 ${w.name} · L${WEAPON_UNLOCK_LEVELS[i]}`}
+                    </button>
+                  );
+                })}
               </div>
             </div>
             <div style={{ marginBottom: 16 }}>

@@ -1449,15 +1449,19 @@ export default function CallOfDoodie() {
           const best = bestMomentRef.current;
           const midTs = best.score > 0 ? best.ts : (buf[buf.length - 1]?.ts || 0);
           let frames = buf.filter(f => f.ts >= midTs - 2000 && f.ts <= midTs + 4000);
-          if (frames.length < 8) frames = buf.slice(-60);
-          frames = frames.slice(0, 60);
+          if (frames.length < 8) frames = buf.slice(-40);
+          frames = frames.slice(0, 36); // ~3.6s @ 10fps — caps memory + encode time
           if (frames.length > 0) {
             const enc = GIFEncoder();
-            for (const frame of frames) {
-              const rgba = new Uint8Array(frame.data);
-              const palette = quantize(rgba, 256);
+            // Build a single shared palette from a sampled middle frame for ~5x faster encoding.
+            const sample = frames[Math.floor(frames.length / 2)];
+            const palette = quantize(new Uint8Array(sample.data), 256);
+            for (let i = 0; i < frames.length; i++) {
+              const rgba = new Uint8Array(frames[i].data);
               const index = applyPalette(rgba, palette);
               enc.writeFrame(index, gw, gh, { palette, delay: 100 });
+              // Yield every 6 frames so the death screen stays responsive.
+              if (i % 6 === 5) await new Promise(r => setTimeout(r, 0));
             }
             enc.finish();
             const blob = new Blob([enc.bytes()], { type: "image/gif" });
@@ -1810,10 +1814,14 @@ export default function CallOfDoodie() {
     // Auto-reload when ammo empty (setting)
     if (gs.ammoCount === 0 && !isReloadingRef.current && gs.settAutoReload) doReload(currentWeaponRef.current);
 
-    if (frameCountRef.current % 6 === 0 && canvasRef.current) {
+    // Capture frames for the highlight GIF. Skipped on mobile (too costly: full
+    // canvas readback forces a CPU sync) and when adaptive quality has flagged
+    // sustained frame drops. Capture every 10 frames (~6fps) instead of every 6.
+    const _captureGif = !isMobile && !window.__codReducedEffects && gs.settHighlightCapture !== false;
+    if (_captureGif && frameCountRef.current % 10 === 0 && canvasRef.current) {
       const cv = canvasRef.current;
       if (!gifOffscreenRef.current) {
-        const scale = Math.min(1, 320 / cv.width);
+        const scale = Math.min(1, 240 / cv.width);
         const oc = document.createElement("canvas");
         oc.width = Math.floor(cv.width * scale);
         oc.height = Math.floor(cv.height * scale);
@@ -1825,7 +1833,7 @@ export default function CallOfDoodie() {
       const id = octx.getImageData(0, 0, oc.width, oc.height);
       const buf = frameBufferRef.current;
       buf.push({ data: new Uint8Array(id.data.buffer), ts: Date.now() });
-      if (buf.length > 120) buf.shift(); // keep ~12s at 10fps
+      if (buf.length > 60) buf.shift(); // keep ~10s at 6fps
     }
 
     // ── Score attack: countdown + forced end when time expires ──

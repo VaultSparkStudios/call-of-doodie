@@ -13,10 +13,20 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [ ] [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
 - [ ] [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+- [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
+- [ ] [SIL:1] App.jsx extraction roadmap per `docs/APP_EXTRACTION_ROADMAP.md` — slice 1 is the game loop (player/bullet/enemy update); pure `step(gs, frame)` modules with their own tests
+- [ ] [SIL:1] Weapon unlock telemetry — track which level players hit each unlock and whether grandfathered legacy loadouts get reused vs reset; informs whether the curve still needs tuning
+- [x] [SIL:2] **DONE S55** GIF highlight encoder — non-blocking palette reuse + 36-frame cap + 6-frame yields + skip on mobile/PERF mode
+- [x] [SIL:2] **DONE S55** First-card readability — PerkModal tier pill black-on-solid + DraftScreen 6-char hex + dark card body
+- [x] [SIL:2] **DONE S55** Frame-budget adaptive quality — `window.__codReducedEffects` flips on sustained drops; particle render halved; HUD `⚡ PERF MODE` chip surfaces it; GIF capture skipped while active
+- [x] [SIL:1] **DONE S55** SettingsPanel Quick / Advanced split + Reset-to-defaults button
+- [x] [SIL:2] **DONE S55** Weapon unlock progression — `WEAPON_UNLOCK_LEVELS` + grandfathered legacy loadouts in builder
+- [x] [SIL:1] **DONE S55** Mutation banner dismissible (sessionStorage) and roadmap docs (auth plan, extraction plan, QA checklist) committed
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 - [x] [SIL:1] App-runtime architecture pass, slice 10 — **DONE S54**: extracted run-start/death/score-submit session flow helpers to `src/systems/runSession.js`, reducing more of the lifecycle bookkeeping burden in `src/App.jsx`
 - [x] [SIL:1] Replay loop hardening — **DONE S54**: Run History now turns rivalry rows, featured seeds, ghost-board cards, and seeded history into direct replay/challenge actions instead of passive summaries

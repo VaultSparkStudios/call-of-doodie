@@ -14,6 +14,17 @@ export const WEAPONS = [
   { name: "Nuclear Kazoo", upgradedName: "DOOMSDAY KAZOO", emoji: "🎵", damage: 22, fireRate: 260, ammo: 24, maxAmmo: 24, reloadTime: 2000, color: "#FF00FF", sound: "HONK!", spread: 0.20, bulletLife: 48, bulletSize: 5, bulletSpeed: 10, pellets: 3, desc: "3-wide shots per fire. Annoyingly effective in crowds." },
 ];
 
+// ===== WEAPON UNLOCK PROGRESSION =====
+// Account-level gates per weapon index. Levels 1-3 are starter; later weapons
+// unlock as the player accumulates kills (account level = sqrt(totalKills/20)+1).
+// Tuned so a casual player reaches the full arsenal in ~30 runs (~5,000 kills,
+// ~L16). Earliest unlocks are tight to give early-game momentum, later ones
+// space out so the arsenal isn't given away in two sessions.
+export const WEAPON_UNLOCK_LEVELS = [1, 1, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16];
+export function isWeaponUnlocked(weaponIdx, accountLevel) {
+  return (accountLevel || 1) >= (WEAPON_UNLOCK_LEVELS[weaponIdx] ?? 1);
+}
+
 // ===== ENEMIES =====
 // deathQuotes: array — one is picked randomly on death
 export const ENEMY_TYPES = [

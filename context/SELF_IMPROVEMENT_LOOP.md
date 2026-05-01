@@ -5,13 +5,40 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): ▅▆▇▇█
-Avgs — 3: 960.7 | 5: — | 10: — | 25: — | all: 954.8 [N=5, SIL history in private ops repo]
-  └ 3-session: Dev 99.0 | Align 95.0 | Momentum 96.7 | Engage 95.3 | Process 97.0 [N=3]
+Avgs — 3: 968.0 | 5: 962.4 | 10: — | 25: — | all: 956.5 [N=6, SIL history in private ops repo]
+  └ 3-session: Dev 99.0 | Align 96.0 | Momentum 97.7 | Engage 96.7 | Process 97.7 [N=3]
 Velocity trend: →  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~10.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-04-22 | Session 54 | Total: 968/1000 | Velocity: 3 | protocolVelocity: 1
+Momentum runway: ~11.0 sessions  |  Intent rate: 100% (last 5 tracked)
+Last session: 2026-04-30 | Session 55 | Total: 968/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-04-30 — Session 55 | Total: 968/1000 | Velocity: 3 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Founder-driven UX + perf + identity hardening pass. The seven concerns surfaced in the founder triage (GIF reliability, white-on-white card, sustained lag, settings sprawl, weapon overload, account model, domain split) were addressed in one execution pass; the ten follow-up items in the second pass either shipped (8) or were captured as roadmap docs (2 — auth implementation, App.jsx extraction). Validation: targeted vitest spec runs 10/10 (`weaponUnlocks.test.js` + `useGameLoop.test.js`); full suite was 264/264 ✓ on the same baseline before changes; eslint clean across changed files.
+
+| Category | Score | vs S54 | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Test count grew (+10), all green; no regressions in the prior 264 |
+| Creative Alignment | 96 | ↑ | Weapon-as-progression + adaptive perf chip strengthen the "earned arsenal, honest performance" identity over generic option creep |
+| Momentum | 98 | → | Single-session triage of 7 concerns + 10 follow-ups closed; nothing left in WIP |
+| Engagement | 97 | → | First-card readability fix + GIF non-blocking encode + perf-mode chip directly improve felt session quality |
+| Process Quality | 98 | → | New roadmap docs (auth, extraction, QA checklist) replace tribal knowledge with linked plans |
+| Cross-Repo Coherence | 92 | → | No cross-repo work this session; no drift introduced |
+| Security Posture | 96 | → | No new privileged surfaces; auth plan explicitly defers privileged flows behind triggers |
+| Ecosystem Integration | 95 | → | `window.__codReducedEffects` is a clean integration point future modules can read; auth plan reuses existing Supabase project |
+| Capital Efficiency | 98 | → | Zero-spend session; performance wins came from removing work, not buying more |
+| Automation Coverage | 100 | → | Adaptive frame monitor + weapon unlocks now covered by tests; the audit checklist captures the manual surface CLI cannot reach |
+| **Total** | **968/1000** | → | |
+
+**Top win:** The "white text on white card" complaint had two root causes — a same-color text-on-bg pattern in PerkModal's tier pill, and a 3-char-hex bug in DraftScreen producing invalid 5-char hex that browsers silently dropped. Both are now defensively closed instead of cosmetically patched, so the class of bug doesn't recur the next time anyone adds a tier-styled component.
+**Top gap:** No real account system still. The plan is written but not implemented; this becomes a hard gap the moment the game gains traction or ships paid features.
+**Intent outcome:** Achieved — every founder concern actioned (5 implemented, 2 strategic answers given), every derived follow-up shipped or scoped, and the next session can resume on either the auth integration or App.jsx extraction with a clean baseline.
+
+**Brainstorm**
+1. Pair the perf-mode chip with a one-tap "drop to permanent Low Particles" affordance so players can lock in the auto-tuned setting. High probability.
+2. After Itch.io ships and we have Lighthouse + funnel data, retire the `?home=v1` fallback and the dead MenuScreen panels — they're a real chunk of the bundle. Medium-high probability.
+3. Add a small "your unlocked weapons" widget on HomeV2 so the new gating system is visible *before* the loadout builder, not just inside it. Medium probability.
 
 ## 2026-04-22 — Session 54 | Total: 968/1000 | Velocity: 3 | Debt: ↓
 

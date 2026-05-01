@@ -4,6 +4,23 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 ## 2026-04-22 (Session 53)
 
+## 2026-04-30 (Session 55)
+
+- Rewrote `src/App.jsx` highlight-GIF encoder — single shared palette (sampled mid-frame) instead of per-frame quantization; capped at 36 frames (~3.6s); yields every 6 frames so the death screen stays interactive
+- Throttled rolling frame capture in `src/App.jsx` from every-6 frames @ 320px → every-10 frames @ 240px; capture buffer skipped entirely on mobile and when adaptive-quality flag is on
+- Replaced `src/components/PerkModal.jsx` tier-label pill colors (text and bg were both `tierColor`, ~invisible) with black-on-solid-tier
+- Upgraded `src/components/DraftScreen.jsx` `TIER_COLORS` from 3-char to 6-char hex so `${col}20` no longer yields invalid 5-char hex; darkened unhovered card bg to `rgba(0,0,0,0.55)`
+- Promoted `useGameLoop.js` frame-budget monitor from DEV-only to production; exposed `makeFrameMonitor` for testing; flips `window.__codReducedEffects` after sustained drops with hysteresis
+- Wired `src/drawGame.js` particle pass to render every-other particle when reduced flag is on
+- Added `⚡ PERF MODE` HUD chip in `src/components/HUD.jsx` (poll-subscribed via `useSyncExternalStore`)
+- Collapsed `src/components/SettingsPanel.jsx` from 17 settings × 3 tabs into `Quick` (6 essentials) + `Advanced` (the rest); default tab = Quick; LB/RB cycles
+- Added `↺ RESET` button to SettingsPanel footer that previews `SETTINGS_DEFAULTS` without saving
+- Added `WEAPON_UNLOCK_LEVELS` + `isWeaponUnlocked()` to `src/constants.js`
+- Wired weapon-unlock gating into `src/components/MenuPanels.jsx` LoadoutBuilder weapon grid; saved-but-now-locked weapons remain selectable as `🔒legacy` (grandfathered)
+- Added `✕` dismiss button to weekly mutation banner in `src/components/HomeV2.jsx` with sessionStorage persistence (`cod-mutation-dismissed`)
+- Added `src/weaponUnlocks.test.js` (6 tests) and `src/hooks/useGameLoop.test.js` (4 tests); 10/10 passing
+- Wrote `docs/QA_CHECKLIST.md` (60+ browser-driven QA checks), `docs/AUTH_INTEGRATION_PLAN.md` (4-phase Supabase Auth migration plan), `docs/APP_EXTRACTION_ROADMAP.md` (App.jsx extraction priorities for S56-S58)
+
 ## 2026-04-22 (Session 54)
 
 - Added `src/systems/runSession.js` + tests and moved run-start artifact creation, run-history entry shaping, death-event generation, and score-submit event generation out of `src/App.jsx`

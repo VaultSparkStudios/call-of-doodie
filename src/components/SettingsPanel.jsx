@@ -2,31 +2,36 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../settings.js";
 import { soundUIClose } from "../sounds.js";
 
-const TABS = ["Gameplay", "Visual", "Controls"];
+const TABS = ["Quick", "Advanced"];
 
+// Settings flagged `quick: true` show in the default Quick tab. Everything else
+// is hidden in Advanced so first-time players aren't overwhelmed by 17 sliders.
+// Original `tab` values are kept as labels inside Advanced for grouping.
 const META = {
+  // ── Quick (most-used) ────────────────────────────────────────────────────
+  crosshair:           { label: "Crosshair Style",         desc: "Visual style of your aiming cursor",                       tab: "Visual",   quick: true, type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
+  particlesMult:       { label: "Particles",               desc: "Explosion & death particle density — lower for better FPS", tab: "Visual",   quick: true, type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
+  screenShakeMult:     { label: "Screen Shake",            desc: "Camera shake intensity on hits & explosions",              tab: "Visual",   quick: true, type: "slider",  min: 0.0,  max: 2.0,  step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
+  reducedMotion:       { label: "Reduced Motion",           desc: "Disables screen shake, flashes & other intense effects",    tab: "Visual",   quick: true, type: "toggle" },
+  autoReload:          { label: "Auto Reload on Empty",    desc: "Automatically reload when magazine hits zero",             tab: "Controls", quick: true, type: "toggle" },
+  rumble:              { label: "Controller Rumble",       desc: "Haptic vibration feedback when using a gamepad",           tab: "Controls", quick: true, type: "toggle" },
+  // ── Advanced ─────────────────────────────────────────────────────────────
   enemySpawnMult:      { label: "Enemy Spawn Rate",       desc: "How frequently enemies appear each wave",                   tab: "Gameplay", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   enemyHealthMult:     { label: "Enemy Health",            desc: "Scales all enemy HP — lower = faster kills",               tab: "Gameplay", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   enemySpeedMult:      { label: "Enemy Speed",             desc: "How fast enemies move toward you",                         tab: "Gameplay", type: "slider",  min: 0.5,  max: 1.5,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   playerSpeedMult:     { label: "Player Speed",            desc: "Your soldier's movement speed",                            tab: "Gameplay", type: "slider",  min: 0.75, max: 1.5,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   xpGainMult:          { label: "XP Gain Rate",            desc: "XP from kills — levels up faster at higher values",        tab: "Gameplay", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   pickupMagnet:        { label: "Pickup Magnet Range",     desc: "Auto-collect radius for health, ammo & upgrades",          tab: "Gameplay", type: "slider",  min: 1.0,  max: 4.0,  step: 0.5,  fmt: v => v === 1 ? "Normal" : `${v.toFixed(1)}×` },
-  screenShakeMult:     { label: "Screen Shake",            desc: "Camera shake intensity on hits & explosions",              tab: "Visual",   type: "slider",  min: 0.0,  max: 2.0,  step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  particlesMult:       { label: "Particles",               desc: "Explosion & death particle density — affects performance", tab: "Visual",   type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
-  crosshair:           { label: "Crosshair Style",         desc: "Visual style of your aiming cursor",                       tab: "Visual",   type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
   showDPS:             { label: "Show DPS Counter",        desc: "Display live damage-per-second on the canvas",             tab: "Visual",   type: "toggle" },
   showEnemyHealthBars: { label: "Enemy HP Bars",           desc: "Show health bars above all enemies at all times",           tab: "Visual",   type: "toggle" },
-  reducedMotion:       { label: "Reduced Motion",           desc: "Disables screen shake, flashes & other intense effects",    tab: "Visual",   type: "toggle" },
   grenadeRadiusMult:   { label: "Grenade Blast Radius",    desc: "Explosion size — bigger = more enemies hit",               tab: "Controls", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
-  autoReload:          { label: "Auto Reload on Empty",    desc: "Automatically reload when magazine hits zero",             tab: "Controls", type: "toggle" },
-  rumble:              { label: "Controller Rumble",       desc: "Haptic vibration feedback when using a gamepad",           tab: "Controls", type: "toggle" },
   controllerDeadZone:  { label: "Controller Dead Zone",   desc: "Analog stick dead zone — increase if your stick drifts",   tab: "Controls", type: "slider",  min: 0.05, max: 0.40, step: 0.05, fmt: v => v.toFixed(2) },
   aimAssist:           { label: "Aim Assist (Controller)", desc: "Gently snaps aim toward the nearest enemy when using RT to shoot", tab: "Controls", type: "toggle" },
 };
 
 export default function SettingsPanel({ settings, onSave, onClose }) {
   const [w, setW]         = useState({ ...settings });
-  const [tab, setTab]     = useState("Gameplay");
+  const [tab, setTab]     = useState("Quick");
   const [presets, setPresets] = useState(() => loadPresets());
   const [nameInput, setNameInput] = useState("");
   const [showSave, setShowSave]   = useState(false);
@@ -47,7 +52,8 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     setPresets(updated); savePresets(updated); setShowSave(false); setNameInput("");
   };
 
-  const tabEntries = Object.entries(META).filter(([, m]) => m.tab === tab);
+  const _filterTab = (entries) => entries.filter(([, m]) => tab === "Quick" ? m.quick : !m.quick);
+  const tabEntries = _filterTab(Object.entries(META));
 
   // ── Gamepad navigation ──────────────────────────────────────────────────
   // Items: [0..tabEntries.length-1] = settings rows, then Apply button
@@ -70,7 +76,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     let lastA = false, lastB = false, lastLB = false, lastRB = false;
 
     // Total items = tabEntries.length + 1 (Apply)
-    const itemCount = () => Object.entries(META).filter(([, m]) => m.tab === tab).length + 1;
+    const itemCount = () => _filterTab(Object.entries(META)).length + 1;
 
     const doMoveUD = (dir) => {
       const n = itemCount();
@@ -80,7 +86,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     };
 
     const adjustLR = (dir) => {
-      const entries = Object.entries(META).filter(([, m]) => m.tab === tab);
+      const entries = _filterTab(Object.entries(META));
       const fi = focusIdxRef.current;
       if (fi >= entries.length) return; // Apply button
       const [key, meta] = entries[fi];
@@ -142,7 +148,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
       const rbNow = gp.buttons[5]?.pressed;
 
       if (aNow && !lastA) {
-        const entries = Object.entries(META).filter(([, m]) => m.tab === tab);
+        const entries = _filterTab(Object.entries(META));
         const fi = focusIdxRef.current;
         if (fi >= entries.length) { apply(); } // Apply button
         else {
@@ -287,19 +293,32 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
           </div>
         </div>
 
-        {/* Footer — Apply (gamepad-focusable) */}
+        {/* Footer — Apply (gamepad-focusable) + Reset */}
         <div style={{ borderTop: "1px solid rgba(255,107,53,0.2)", padding: "10px 16px", flexShrink: 0 }}>
-          <button
-            onClick={apply}
-            style={{
-              width: "100%", padding: 11, background: "linear-gradient(180deg,#FF6B35,#CC4400)",
-              border: "none", borderRadius: 7, color: "#FFF", fontSize: 14,
-              fontWeight: 900, fontFamily: "'Courier New',monospace", cursor: "pointer", letterSpacing: 1,
-              ...(focusIdx === tabEntries.length ? focusStyle : {}),
-            }}
-          >
-            ✓ APPLY SETTINGS
-          </button>
+          <div style={{ display: "flex", gap: 6 }}>
+            <button
+              onClick={apply}
+              style={{
+                flex: 1, padding: 11, background: "linear-gradient(180deg,#FF6B35,#CC4400)",
+                border: "none", borderRadius: 7, color: "#FFF", fontSize: 14,
+                fontWeight: 900, fontFamily: "'Courier New',monospace", cursor: "pointer", letterSpacing: 1,
+                ...(focusIdx === tabEntries.length ? focusStyle : {}),
+              }}
+            >
+              ✓ APPLY SETTINGS
+            </button>
+            <button
+              onClick={() => setW({ ...SETTINGS_DEFAULTS })}
+              title="Reset all settings to defaults (preview only — click APPLY to save)"
+              style={{
+                padding: "11px 14px", background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.18)", borderRadius: 7, color: "#CCC", fontSize: 12,
+                fontWeight: 800, fontFamily: "'Courier New',monospace", cursor: "pointer", letterSpacing: 1,
+              }}
+            >
+              ↺ RESET
+            </button>
+          </div>
           <div style={{ fontSize: 10, color: "#aaa", textAlign: "center", marginTop: 6 }}>Settings apply from the next game started · current run unaffected</div>
         </div>
       </div>
