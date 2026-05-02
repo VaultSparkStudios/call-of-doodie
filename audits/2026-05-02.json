@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-02",
+  "session": 56,
+  "project": "call-of-doodie",
+  "intent": "Diagnose temporary outage at vaultsparkstudios.com/call-of-doodie/ (resolved upstream on its own), then evaluate moving the game to its own domain with full scored hosting + domain comparison and a parody/fair-use legal analysis, ship a parody disclaimer to harden trademark defense, and start the migration to Cloudflare Pages with elevated credential access.",
+  "intentOutcome": "Achieved on strategy + code-edit; partially achieved on migration (paused at correct manual-action gate)",
+  "shipped": [
+    "parody disclaimer footer in HomeV2.jsx and MenuScreen.jsx with Activision Publishing, Inc. + Call of Duty trademark non-affiliation language",
+    "scored 8 hosting deployment options (Cloudflare Pages chosen at 57/60) and 3 domain candidates (.wtf chosen canonical at 49/60, .com hedge at 47/60)",
+    "public-safe parody / fair-use analysis covering copyright + trademark dilution + Activision enforcement posture + practical mitigations",
+    "docs/DOMAIN_MIGRATION_PLAN.md with full step-by-step migration ordering across DNS prep, code changes, CF Pages setup, custom domain attachment, backend allowlists, cutover, cleanup, plus risks + credentials reference",
+    "Cloudflare API token verification + zone listing + zone-create attempts (surfaced token-scope blocker for next session)",
+    "agent memory entry for session 56 + MEMORY.md index pointer + canonical apex/CF account / NS pair / parody-posture facts"
+  ],
+  "deferred": [
+    "founder must add callofdoodie.wtf and playcallofdoodie.com as zones in the Cloudflare dashboard (stored tokens lack zone-create)",
+    "founder must swap nameservers for both domains to the CF NS pair in the Namecheap UI",
+    "founder must update Namecheap API IP allowlist to current public IP 45.144.114.159",
+    "next session resumes Phase B–F of docs/DOMAIN_MIGRATION_PLAN.md: code changes on feat/standalone-domain branch, CF Pages project, wrangler GitHub Actions workflow, custom domain attachment, 301 redirect, Supabase CORS update, retire GH Pages, old-path 301 in apex repo"
+  ],
+  "validation": {
+    "tests": "no test run this session (additive footer text only, no behavioral risk)",
+    "lint": "pass (npx eslint src/components/HomeV2.jsx src/components/MenuScreen.jsx — clean)",
+    "build": "not run",
+    "migrationReadiness": "Phase A blocked on 2 founder UI gates; all CF + Namecheap creds inspected and routed in docs"
+  },
+  "sil": {
+    "total": 970,
+    "velocity": 2,
+    "debt": "improving"
+  }
+}

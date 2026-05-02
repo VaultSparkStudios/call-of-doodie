@@ -2,6 +2,22 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-05-02 — Session 56 — Standalone domain canonical = `.wtf`, `.com` 301-only
+
+**Decision:** `callofdoodie.wtf` is the canonical public URL once migration completes. `playcallofdoodie.com` is purchased as a hedge and serves only as a 301 redirect to the canonical, configured via Cloudflare Bulk Redirect on the `playcallofdoodie.com` zone. The migration target is Cloudflare Pages (free tier), not Vercel, Netlify, GH Pages, or self-hosted.
+
+**Rationale:** `.wtf` scored 49/60 vs `playcallofdoodie.com` at 47/60 in a six-axis comparison (cost / memorability / brand-fit / trust / SEO / shareability). Decisive factors — the TLD itself is part of the comedy bit (free marketing compounding), the domain is shorter to say correctly out loud (streamers/word-of-mouth land it more reliably), the unmistakably non-corporate TLD strengthens the parody legal posture by reducing any "likelihood of confusion" angle with the Call of Duty mark, and `.wtf` renews ~$3/yr cheaper than `.com`. The `.com` is a hedge for ad-network/press-coverage scenarios where `.wtf` is filtered or treated as low-trust; one canonical eliminates split-brand/SEO-dilution risk. Cloudflare Pages was chosen over Vercel/Netlify (also 57/60) because its free tier is unlimited bandwidth — Vercel/Netlify cap at 100GB and Vercel's free tier is "non-commercial only," which Ko-fi tips arguably trip.
+
+**Trade-off accepted:** `.wtf` is filtered by some corporate/school proxies and is treated with lower trust by ad networks; this is the cost we pay for the comedic upside. If the game ever pursues paid acquisition or formal press, the `.com` hedge is ready to be promoted to canonical without re-buying.
+
+## 2026-05-02 — Session 56 — Parody disclaimer is the trademark-defense floor
+
+**Decision:** Both home variants (`HomeV2.jsx` default and `MenuScreen.jsx` legacy) render a footer disclaimer naming Activision Publishing, Inc. and the Call of Duty&reg; mark as unaffiliated/non-endorsed/non-sponsored. The disclaimer text is identical on both surfaces, only styling differs (sans-serif on v2, Courier on v1). This is the minimum, not the ceiling.
+
+**Rationale:** The trademark-dilution-by-tarnishment lane (15 USC §1125(c)) is the live legal risk for a parody that names a famous mark. Activision has used this theory before. The §1125(c)(3)(A) noncommercial-parody safe-harbor is weakened by Ko-fi tips, so we cannot rely on it alone. The non-affiliation disclaimer is the textbook safe-harbor pattern recognized in *Louis Vuitton v. Haute Diggity Dog* and similar parody-defense cases — it's nearly free to ship and materially improves the dilution analysis. Placing it on every game-entry surface (rather than a hidden About page) closes the "consumers were confused" angle decisively.
+
+**Trade-off accepted:** A small footer takes a few px of vertical space on the menu screens. This is a non-issue against the cost of a C&D + forced rename.
+
 ## 2026-04-30 — Session 55 — Adaptive performance via global flag, not gs field
 
 **Decision:** The runtime perf-reduction signal is a `window.__codReducedEffects` boolean toggled by `makeFrameMonitor` in `src/hooks/useGameLoop.js`, with hysteresis (flip ON ≥20% over-budget, flip OFF only when ≥60% under hysteresis margin). Read sites (`drawGame.js`, `App.jsx` GIF capture path, `HUD.jsx` chip) check `typeof window !== "undefined" && window.__codReducedEffects`.

@@ -3,6 +3,10 @@
 Public-safe launch roadmap summary.
 
 ## Human Action Required
+- [ ] [S56] Add zones to Cloudflare dashboard — `callofdoodie.wtf` + `playcallofdoodie.com` at https://dash.cloudflare.com/2d737158a4dde61a7a476a9fda51af2f/add-site (Free plan, both)
+- [ ] [S56] Swap Namecheap nameservers for both domains to the CF NS pair (likely `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`) — Namecheap dashboard → each domain → Nameservers → Custom DNS
+- [ ] [S56] Update Namecheap API IP allowlist to `45.144.114.159` (current public IP) at https://ap.www.namecheap.com/Profile/Tools/ApiAccess; then update `NAMECHEAP_WHITELIST_IP` in `vaultspark-studio-ops/secrets/namecheap.env`
+- [ ] [S56] (Optional) Generate a new Cloudflare API token with broader scope (Zone:Edit, DNS:Edit, Pages:Edit, all zones in account) — stored tokens lack zone-create permission
 - [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination
 - [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
@@ -13,6 +17,7 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [ ] [SIL:3] [S56] Resume standalone-domain migration after Cloudflare zones + Namecheap NS are live: create CF Pages project (`call-of-doodie`), wire GitHub Actions wrangler deploy workflow to replace `deploy.yml`, attach `callofdoodie.wtf` + `playcallofdoodie.com` to the Pages project, set up CF Bulk Redirect from `playcallofdoodie.com` → `callofdoodie.wtf`, change `vite.config.js` `base` from `/call-of-doodie/` to `/`, sweep `public/sw.js` paths and bump cache `cod-v4` → `cod-v5`, update `public/manifest.json` `start_url`, add Supabase CORS allowlist for new domain, add 301 redirect in `VaultSparkStudios.github.io` for old `vaultsparkstudios.com/call-of-doodie/` path; full plan in `docs/DOMAIN_MIGRATION_PLAN.md`
 - [ ] [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
 - [ ] [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
@@ -27,6 +32,9 @@ Public-safe launch roadmap summary.
 - [x] [SIL:1] **DONE S55** SettingsPanel Quick / Advanced split + Reset-to-defaults button
 - [x] [SIL:2] **DONE S55** Weapon unlock progression — `WEAPON_UNLOCK_LEVELS` + grandfathered legacy loadouts in builder
 - [x] [SIL:1] **DONE S55** Mutation banner dismissible (sessionStorage) and roadmap docs (auth plan, extraction plan, QA checklist) committed
+- [x] [SIL:2] **DONE S56** Parody disclaimer footer added to `HomeV2.jsx` + `MenuScreen.jsx` (Activision/Call of Duty&reg; non-affiliation language) — closes the trademark-dilution risk lane that the parody name exposed; the footer is the textbook safe-harbor pattern
+- [x] [SIL:1] **DONE S56** Domain selection scored — `.wtf` (49/60) chosen as canonical, `playcallofdoodie.com` (47/60) chosen as 301-target hedge, `.win` (35/60) rejected as spam-tainted TLD; rationale in `docs/DOMAIN_MIGRATION_PLAN.md`
+- [x] [SIL:1] **DONE S56** Hosting evaluation — Cloudflare Pages (57/60) chosen over Vercel/Netlify on bandwidth-cap headroom (CF Pages free tier is unlimited; Vercel/Netlify cap at 100GB); Itch.io retained as a secondary distribution channel rather than the canonical home
 - [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through
 - [x] [SIL:1] App-runtime architecture pass, slice 10 — **DONE S54**: extracted run-start/death/score-submit session flow helpers to `src/systems/runSession.js`, reducing more of the lifecycle bookkeeping burden in `src/App.jsx`
 - [x] [SIL:1] Replay loop hardening — **DONE S54**: Run History now turns rivalry rows, featured seeds, ghost-board cards, and seeded history into direct replay/challenge actions instead of passive summaries

@@ -4,6 +4,20 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 ## 2026-04-22 (Session 53)
 
+## 2026-05-02 (Session 56)
+
+- Diagnosed transient outage report at `vaultsparkstudios.com/call-of-doodie/` — confirmed via `git log` that `deploy.yml`, `vite.config.js`, and CNAME state in this repo were unchanged from S41 baseline; routed the issue to the apex-domain repo (`VaultSparkStudios.github.io`); founder reported the path resolved on its own
+- Scored 8 hosting deployment options for the game (GH Pages, Cloudflare Pages, Vercel, Netlify, Itch.io, R2+Pages, AWS S3+CloudFront, self-hosted VPS) across cost/perf/DX/reliability/features/migration-effort; Cloudflare Pages and Vercel tied at 57/60, CF Pages chosen on bandwidth-cap headroom
+- Scored 3 domain candidates (`callofdoodie.wtf` 49/60, `playcallofdoodie.com` 47/60, `callofdoodie.win` 35/60); founder purchased both `.wtf` and `.com` per the hedge recommendation
+- Drafted public-safe parody / fair-use analysis: copyright fair use is favorable, trademark dilution-by-tarnishment is the live risk lane (Ko-fi tips weaken the §1125(c)(3)(A) noncommercial-parody safe-harbor), specified non-affiliation disclaimer + no-Activision-assets + no-CoD-keyword-ads + no-paid-loot-boxes + don't-trademark-the-name
+- Added parody disclaimer footer to `src/components/HomeV2.jsx` (line 586, default `?home=v2` surface) — text: "Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners."
+- Mirrored the same disclaimer into `src/components/MenuScreen.jsx` (line 1601, legacy `?home=v1` surface) using monospace `Courier New` styling for parity with the older footer
+- Verified ESLint clean on both edited files (`npx eslint src/components/HomeV2.jsx src/components/MenuScreen.jsx` → exit 0, no warnings)
+- Began Cloudflare migration: verified `CLOUDFLARE_API_TOKEN` is active via `/user/tokens/verify`; listed existing zones (4 — promogrind.app, promogrind.bet, usemindframe.com, vaultsparkstudios.com); confirmed all use NS pair `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`
+- Attempted to create new zones via API; both stored tokens (`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_DNS_TOKEN`) returned `Requires permission "com.cloudflare.api.account.zone.create"` — surfaced two unblock paths (manual dashboard add ~60s, or generate a broader-scope token)
+- Confirmed Namecheap API is blocked from this machine — public IP `45.144.114.159` does not match allowlisted `52.124.42.65`; flagged the IP-allowlist update as a manual step regardless
+- Wrote the migration step ordering with the founder explicitly to lock in the cutover sequence (zones → NS swap → code changes on `feat/standalone-domain` branch → CF Pages project → custom domains → 301 → CORS update → retire GH Pages → old-path 301 in apex repo); session paused at the "founder must add zones to CF dashboard + swap Namecheap NS" gate
+
 ## 2026-04-30 (Session 55)
 
 - Rewrote `src/App.jsx` highlight-GIF encoder — single shared palette (sampled mid-frame) instead of per-frame quantization; capped at 36 frames (~3.6s); yields every 6 frames so the death screen stays interactive

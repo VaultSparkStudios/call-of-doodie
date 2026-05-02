@@ -583,6 +583,9 @@ export default function HomeV2(props) {
           <button style={linkBtn} onClick={() => setShowSupporter(true)}>{isSupporter() ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}</button>
           <span style={{ color: "#555" }}>© 2026 VaultSpark Studios</span>
         </div>
+        <div style={{ marginTop: 6, padding: "0 8px", fontSize: 9, lineHeight: 1.5, color: "#666", textAlign: "center", maxWidth: 720, marginLeft: "auto", marginRight: "auto" }}>
+          Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
+        </div>
       </div>
 
       {/* Modals (lazy) */}
