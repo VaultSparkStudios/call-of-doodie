@@ -2,8 +2,21 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-04-22
+Last reviewed: 2026-05-09
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-09 — Session 57 changes
+
+- `src/systems/heatMeter.js` (+test) — new source-of-truth for `gs.heat`. Replaces the combo-count branch in `App.jsx` for music tier selection (combo still drives score multiplier + on-screen text).
+- `src/systems/scoreLedger.js` (+test) — new source-of-truth for kill-point composition. Both kill sites in `App.jsx` now delegate to `computeKillPoints()`.
+- `src/systems/objectiveDirector.js` (+test) — new source-of-truth for active dynamic objective lifecycle (pick + tick + lifecycle resolution). `gs.activeObjective` is the canonical run-time field.
+- `src/systems/combatResolution.js` — scaffold only; ships `pointInCircle` + `dist2`. Full bullet-vs-enemy resolver still owned by `App.jsx` (deferred to S58 — a multi-session extraction because of React-ref tangling).
+- `src/utils/runCoach.js` (+test) — new derivation surface composing `metaClarity` + `runDebrief` + recent-deaths-by-enemy ledger. Pure derivation; not a source-of-truth itself.
+- `src/utils/replayCode.js` (+test) — new portable encoding for shareable run conditions. The 12-char hex code with mod-16 checksum is the canonical share format; URL params remain the in-game challenge format (used by LeaderboardPanel "copy challenge" button).
+- `src/utils/cosmeticTrack.js` (+test) — new source-of-truth for cosmetic ownership. Reads `cod-supporter-v1` localStorage (existing flag) + career stats; writes `cod-cosmetic-track-v1` localStorage. Cosmetic-only — never affects gameplay state.
+- `src/storage.js` — adds `getDailyChampion()` (top of today's daily-challenge leaderboard, derived); adds `recordDeathByEnemy(typeId)` + `getTelegraphMultiplier(typeId)` (rolling 20-death window stored on `cod-career-v1` under `recentDeathsByEnemy`).
+- `src/settings.js` — adds `hudDensity` setting + `hudFlags(density)` exporter. The flag becomes a derived view on the canonical `cod-settings-v1` key — no new storage key.
+- `supabase/functions/validate-replay/index.ts` — new Edge Function. Heuristic-only Phase 1; logs anomalies to existing `run_anomalies` table. Phase 2 (deterministic resim) deferred until combat extraction lands.
 
 ## 2026-04-22 — Session 54 changes
 

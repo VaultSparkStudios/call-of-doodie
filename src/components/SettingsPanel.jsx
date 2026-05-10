@@ -10,6 +10,7 @@ const TABS = ["Quick", "Advanced"];
 const META = {
   // ── Quick (most-used) ────────────────────────────────────────────────────
   crosshair:           { label: "Crosshair Style",         desc: "Visual style of your aiming cursor",                       tab: "Visual",   quick: true, type: "options", options: [{v:"cross",l:"✛ Cross"},{v:"dot",l:"• Dot"},{v:"circle",l:"○ Circle"},{v:"none",l:"✕ None"}] },
+  hudDensity:          { label: "HUD Density",              desc: "Minimal hides everything but vitals (great for streamers); Tactical shows everything", tab: "Visual", quick: true, type: "options", options: [{v:"minimal",l:"Minimal"},{v:"standard",l:"Standard"},{v:"tactical",l:"Tactical"}] },
   particlesMult:       { label: "Particles",               desc: "Explosion & death particle density — lower for better FPS", tab: "Visual",   quick: true, type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
   screenShakeMult:     { label: "Screen Shake",            desc: "Camera shake intensity on hits & explosions",              tab: "Visual",   quick: true, type: "slider",  min: 0.0,  max: 2.0,  step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   reducedMotion:       { label: "Reduced Motion",           desc: "Disables screen shake, flashes & other intense effects",    tab: "Visual",   quick: true, type: "toggle" },

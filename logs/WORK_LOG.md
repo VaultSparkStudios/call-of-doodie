@@ -4,6 +4,18 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 ## 2026-04-22 (Session 53)
 
+## 2026-05-09 (Session 57 — 12-item depth + retention sweep)
+
+- Founder request: investigate broken Best-Moment GIF, brainstorm strategic objectives building on the existing "circle that increases score" concept (which on inspection didn't yet exist — confirmed with founder), produce a top-12 audit ranked list, then implement all items at quality in one pass.
+- Diagnosed GIF root cause: `src/App.jsx:1820` gated capture on `!window.__codReducedEffects`; once the S55 adaptive frame monitor flipped, the rolling buffer never filled, so death-screen encoder always saw empty frames and silently failed. Fixed by decoupling buffer write from encode (always capture on desktop, widen cadence 10 → 20 frames under load) and moved encoding into `src/workers/gifEncode.worker.js` so it no longer blocks the death screen.
+- Shipped 12 items in execution order (small isolated → architecture → marquee → dependent): GIF fix, skill-cost telemetry script, Daily Crown badge, HUD Density preset, adaptive enemy telegraphing, Heat Meter, AI Run Coach, Replay Codes, scoreLedger extraction, Dynamic Objective System (Hot Zones/Bounty/Sniper/Lockdown/Escort), Doodie Pass Lite cosmetic track, validate-replay Edge Function.
+- New modules with tests: `src/systems/heatMeter.js` (6 tests), `src/systems/scoreLedger.js` (4), `src/systems/objectiveDirector.js` (8), `src/utils/runCoach.js` (3), `src/utils/replayCode.js` (4), `src/utils/cosmeticTrack.js` (4). New scaffolding: `src/systems/combatResolution.js` (no tests yet — full extraction deferred to S58).
+- Storage helpers added to `src/storage.js`: `getDailyChampion()`, `recordDeathByEnemy(typeId)`, `getTelegraphMultiplier(typeId)`. `src/utils/metaClarity.js` exposed `identifyWeakness` (was internal) for use by objectiveDirector.
+- HUD changes: top-right 🔥 HEAT chip (gates on `hud.showHeatMeter`), mission widget + ammo bars now gated by density flags. SettingsPanel adds HUD Density picker on Quick tab.
+- Dynamic Objective rendering added to `drawGame.js` between floor zones and entities (~40 LOC) — radial gradient for hot zones, dashed shrinking circle for lockdown, cart sprite for escort, top-banner for sniper/bounty.
+- Edge Function `validate-replay` heuristic plausibility validator added; full deterministic resimulation deferred to S58 because it requires the combat resolver extraction. Deploy workflow YAML wired so any push to main with `supabase/functions/**` deploys it.
+- Validation: `npm test -- --run` → 303/303 passing across 39 test files; `npm run lint` → 0 errors, 1 warning. App.launch and HomeV2 smoke unchanged.
+
 ## 2026-05-02 (Session 56)
 
 - Diagnosed transient outage report at `vaultsparkstudios.com/call-of-doodie/` — confirmed via `git log` that `deploy.yml`, `vite.config.js`, and CNAME state in this repo were unchanged from S41 baseline; routed the issue to the apex-domain repo (`VaultSparkStudios.github.io`); founder reported the path resolved on its own

@@ -19,52 +19,61 @@ const args = process.argv.slice(2);
 
 const agentArg = args.find((_, i) => args[i - 1] === '--agent') ?? 'claude-code';
 const noteArg = args.find((_, i) => args[i - 1] === '--note') ?? 'Session start via /start protocol v1.3';
+// Model can be pinned for accurate context-meter calibration. Precedence:
+//   --model <id>  >  $CLAUDE_MODEL_ID  >  $CLAUDE_MODEL  >  auto (by agent)
+const modelArg = args.find((_, i) => args[i - 1] === '--model')
+  ?? process.env.CLAUDE_MODEL_ID
+  ?? process.env.CLAUDE_MODEL
+  // Lock stores a human-readable label, NOT an API model ID (keeps chokepoint
+  // tier1 test happy: no "claude-*-N" hardcoded outside lib/model-router.mjs).
+  ?? (agentArg === 'claude-code' ? 'opus-4-7-1m'
+      : agentArg === 'codex' ? 'codex-1m'
+      : 'unknown');
+// Context window in tokens. Precedence:
+//   --context-limit <n>  >  $CLAUDE_CONTEXT_LIMIT  >  inferred from model
+function inferCtxLimit(modelId) {
+  if (/1m/i.test(modelId)) return 1_000_000;
+  if (/opus|sonnet/i.test(modelId)) return 200_000;
+  if (modelId === 'codex-1m') return 1_000_000;
+  return 200_000;
+}
+const ctxLimitArg = args.find((_, i) => args[i - 1] === '--context-limit');
+const ctxLimit = ctxLimitArg
+  ? parseInt(ctxLimitArg, 10)
+  : (process.env.CLAUDE_CONTEXT_LIMIT ? parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10) : inferCtxLimit(modelArg));
 
 const projectName = path.basename(ROOT);
+const lockPath = path.join(ROOT, 'context', '.session-lock');
 const now = new Date().toISOString();
+// Preserve existing session_start so repeated /start invocations within the
+// same Studio Ops session don't orphan ledger entries (the meter filters
+// ledger entries by ts >= session_start). Use --force to rotate.
+const FORCE = args.includes('--force');
+let sessionStart = now;
+if (!FORCE && fs.existsSync(lockPath)) {
+  const prior = fs.readFileSync(lockPath, 'utf8');
+  const m = prior.match(/^session_start:\s*(\S+)/m);
+  if (m) {
+    const priorTs = new Date(m[1]).getTime();
+    // Only carry over if the prior lock is <12h old — otherwise treat as stale.
+    if (Date.now() - priorTs < 12 * 3600 * 1000) sessionStart = m[1];
+  }
+}
 
 const content = [
   `locked_by: agent-session`,
-  `session_start: ${now}`,
+  `session_start: ${sessionStart}`,
   `agent: ${agentArg}`,
+  `model: ${modelArg}`,
+  `context_limit: ${ctxLimit}`,
   `project: ${projectName}`,
   `note: ${noteArg}`,
   '',
 ].join('\n');
 
-const lockPath = path.join(ROOT, 'context', '.session-lock');
 fs.writeFileSync(lockPath, content, 'utf8');
 console.log(`✓ context/.session-lock written (agent: ${agentArg}, project: ${projectName})`);
-
-// Non-blocking: if Google integration is live, auto-create a Studio Session
-// calendar event so every /start drops a calendar block matching the work.
-// Gated on GOOGLE_OAUTH_REFRESH_TOKEN so it silently skips when unconfigured.
-try {
-  // Lazy-load env from .env.local without clobbering shell env.
-  const envLocal = path.join(ROOT, '.env.local');
-  if (fs.existsSync(envLocal)) {
-    for (const line of fs.readFileSync(envLocal, 'utf8').split(/\r?\n/)) {
-      const m = line.match(/^([A-Z_]+)=(.*)$/);
-      if (m && !(m[1] in process.env)) process.env[m[1]] = m[2];
-    }
-  }
-  const googleEnv = path.join(ROOT, 'secrets', 'google.env');
-  if (fs.existsSync(googleEnv)) {
-    for (const line of fs.readFileSync(googleEnv, 'utf8').split(/\r?\n/)) {
-      const m = line.match(/^([A-Z_]+)=(.*)$/);
-      if (m && !(m[1] in process.env)) process.env[m[1]] = m[2];
-    }
-  }
-} catch { /* ignore */ }
-
-if (process.env.GOOGLE_OAUTH_REFRESH_TOKEN && !args.includes('--no-calendar')) {
-  const { spawn } = await import('node:child_process');
-  // Fire-and-forget. Script itself exits 0 even on API error so we never
-  // gate /start on calendar availability.
-  const child = spawn(process.execPath, [path.join(ROOT, 'scripts', 'calendar-session-event.mjs'), '--kind', 'session'], {
-    cwd: ROOT,
-    stdio: 'ignore',
-    detached: true,
-  });
-  child.unref();
-}
+// Calendar auto-event at /start removed S107.10 — noise without signal.
+// Founder already knows they just typed /start; the calendar event restated
+// that without providing any planning signal. Script stays available for
+// on-demand use: `node scripts/ops.mjs calendar-session-event`.

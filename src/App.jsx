@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, lazy, Suspense } from "react";
 import { drawGame } from "./drawGame.js";
 import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, TIPS,
@@ -7,9 +7,13 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
-import { loadSettings, SETTINGS_DEFAULTS } from "./settings.js";
+import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
+import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
+import { computeKillPoints } from "./systems/scoreLedger.js";
+import { pickObjective, tickObjective } from "./systems/objectiveDirector.js";
+import { identifyWeakness as _identifyWeakness } from "./utils/metaClarity.js";
 import {
   soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
   soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
@@ -350,6 +354,7 @@ export default function CallOfDoodie() {
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
   useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);
+  const hudFlagsMemo = useMemo(() => hudFlags(gameSettings.hudDensity || "standard"), [gameSettings.hudDensity]);
 
   // ── Gamepad connect/disconnect sounds ─────────────────────────────────────
   const isFirstGpMount = useRef(true);
@@ -1401,6 +1406,19 @@ export default function CallOfDoodie() {
       // Adaptive difficulty: track deaths on this wave — offer assist after 3
       gs._waveDeaths = (gs._waveDeaths || 0) + 1;
       if (gs._waveDeaths >= 2 && !gs._assistUsed) setAssistAvailable(true);
+      // Adaptive telegraphing: record likely-killer (last damage source, fall back to nearest enemy)
+      try {
+        let killerType = gs._lastDamageBy;
+        if (killerType == null && gs.enemies?.length && gs.player) {
+          let best = null, bd = Infinity;
+          for (const e of gs.enemies) {
+            const d = Math.hypot(e.x - gs.player.x, e.y - gs.player.y);
+            if (d < bd) { bd = d; best = e; }
+          }
+          if (best) killerType = best.type;
+        }
+        if (killerType != null) recordDeathByEnemy(killerType);
+      } catch { /* non-fatal */ }
     }
     // Ghost race: persist this run's positions under mode-specific key
     try {
@@ -1437,38 +1455,35 @@ export default function CallOfDoodie() {
     const _missions = dailyMissionsRef.current || [];
     const _done = missionDoneRef.current || new Set();
     setMissionsSummary(_missions.map((m, i) => ({ text: m.text, icon: m.icon, completed: _done.has(i) })));
-    // Encode highlight GIF from rolling frame buffer
+    // Encode highlight GIF from rolling frame buffer (off-thread via Web Worker)
     setGifEncoding(true);
     (async () => {
       try {
         const buf = frameBufferRef.current;
         if (buf.length >= 8) {
-          const { GIFEncoder, quantize, applyPalette } = await import("gifenc");
           const oc = gifOffscreenRef.current;
           const gw = oc?.width || 320, gh = oc?.height || 180;
           const best = bestMomentRef.current;
           const midTs = best.score > 0 ? best.ts : (buf[buf.length - 1]?.ts || 0);
           let frames = buf.filter(f => f.ts >= midTs - 2000 && f.ts <= midTs + 4000);
           if (frames.length < 8) frames = buf.slice(-40);
-          frames = frames.slice(0, 36); // ~3.6s @ 10fps — caps memory + encode time
+          frames = frames.slice(0, 36);
           if (frames.length > 0) {
-            const enc = GIFEncoder();
-            // Build a single shared palette from a sampled middle frame for ~5x faster encoding.
-            const sample = frames[Math.floor(frames.length / 2)];
-            const palette = quantize(new Uint8Array(sample.data), 256);
-            for (let i = 0; i < frames.length; i++) {
-              const rgba = new Uint8Array(frames[i].data);
-              const index = applyPalette(rgba, palette);
-              enc.writeFrame(index, gw, gh, { palette, delay: 100 });
-              // Yield every 6 frames so the death screen stays responsive.
-              if (i % 6 === 5) await new Promise(r => setTimeout(r, 0));
+            const worker = new Worker(new URL("./workers/gifEncode.worker.js", import.meta.url), { type: "module" });
+            const result = await new Promise((resolve, reject) => {
+              const t = setTimeout(() => reject(new Error("encode timeout")), 15000);
+              worker.onmessage = (ev) => { clearTimeout(t); resolve(ev.data); };
+              worker.onerror = (err) => { clearTimeout(t); reject(err); };
+              worker.postMessage({ frames, width: gw, height: gh, delay: 100 });
+            });
+            worker.terminate();
+            if (result && result.ok && result.bytes) {
+              const blob = new Blob([result.bytes], { type: "image/gif" });
+              if (highlightUrlRef.current) URL.revokeObjectURL(highlightUrlRef.current);
+              const objUrl = URL.createObjectURL(blob);
+              highlightUrlRef.current = objUrl;
+              setHighlightGifUrl(objUrl);
             }
-            enc.finish();
-            const blob = new Blob([enc.bytes()], { type: "image/gif" });
-            if (highlightUrlRef.current) URL.revokeObjectURL(highlightUrlRef.current);
-            const objUrl = URL.createObjectURL(blob);
-            highlightUrlRef.current = objUrl;
-            setHighlightGifUrl(objUrl);
           }
         }
       } catch (err) { console.warn("[GIF] encode failed:", err); }
@@ -1529,6 +1544,21 @@ export default function CallOfDoodie() {
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
     const seed = initGame(forceSeed);
+    // Adaptive telegraph: precompute per-enemy-type warning multiplier from
+    // recent deaths. Read once per run; written by handlePlayerDeath.
+    try {
+      const career = loadCareerStats();
+      const arr = Array.isArray(career.recentDeathsByEnemy) ? career.recentDeathsByEnemy : [];
+      const counts = {};
+      for (const d of arr) counts[d.t] = (counts[d.t] || 0) + 1;
+      const tmap = {};
+      for (const t of Object.keys(counts)) {
+        tmap[t] = counts[t] >= 3 ? 2.0 : counts[t] >= 2 ? 1.5 : 1;
+      }
+      gsRef.current._telegraphMult = tmap;
+    } catch { gsRef.current._telegraphMult = {}; }
+    resetHeat(gsRef.current);
+    gsRef.current._lastHeatTier = 0;
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
     setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
@@ -1798,11 +1828,7 @@ export default function CallOfDoodie() {
       else if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
     }
 
-    // ── Reactive soundtrack tier (every 60 frames) ──
-    if (frameCountRef.current % 60 === 0) {
-      const _cc = comboRef.current.count;
-      setMusicTier(_cc >= 15 ? 2 : _cc >= 8 ? 1 : 0);
-    }
+    // Reactive soundtrack tier handled below by Heat Meter (#8); combo no longer drives music directly.
 
     // ── Kill Frenzy (META_TREE off4): +20% speed for 60f after kill ──
     if ((gs._killFrenzyTimer || 0) > 0) { gs._killFrenzyTimer--; gs.player.speed = gs._killFrenzyBaseSpeed * 1.20; }
@@ -1810,15 +1836,52 @@ export default function CallOfDoodie() {
       gs.player.speed = gs._killFrenzyBaseSpeed;
     }
 
+    // ── Dynamic Objective tick + reward resolution ──
+    if (gs.activeObjective) {
+      const r = tickObjective(gs);
+      if (r.completed) {
+        const obj = gs.activeObjective;
+        if (obj.reward === "score") {
+          const bonus = 250 + (gs.currentWave * 25);
+          gs.score += bonus;
+          addText(gs, GW() / 2, GH() / 2, `+${bonus} ${obj.label} CLEARED!`, obj.color, true);
+        } else if (obj.reward === "coins") {
+          const coinBonus = 5 + Math.floor(gs.currentWave / 3);
+          gs.coins = (gs.coins || 0) + coinBonus;
+          addText(gs, GW() / 2, GH() / 2, `+${coinBonus}💩 ${obj.label} CLEARED!`, obj.color, true);
+        } else if (obj.reward === "perk_reroll") {
+          bankedPerkChoicesRef.current++;
+          setBankedPerkChoices(bankedPerkChoicesRef.current);
+          addText(gs, GW() / 2, GH() / 2, `🎁 ${obj.label} CLEARED · +1 PERK CHOICE`, obj.color, true);
+        }
+        gs.screenShake = Math.max(gs.screenShake || 0, 8);
+        gs.activeObjective = null;
+      } else if (r.expired) {
+        addText(gs, GW() / 2, GH() / 2, `${gs.activeObjective.label} FAILED`, "#FF3333");
+        gs.activeObjective = null;
+      }
+    }
     // ── Frame capture for highlight GIF (~10fps) ──
+    // Heat decay + adaptive music tier
+    decayHeat(gs);
+    const _ht = heatTier(gs.heat || 0);
+    if (gs._lastHeatTier !== _ht) {
+      gs._lastHeatTier = _ht;
+      try { setMusicTier(_ht); } catch {}
+    }
     // Auto-reload when ammo empty (setting)
     if (gs.ammoCount === 0 && !isReloadingRef.current && gs.settAutoReload) doReload(currentWeaponRef.current);
 
     // Capture frames for the highlight GIF. Skipped on mobile (too costly: full
     // canvas readback forces a CPU sync) and when adaptive quality has flagged
     // sustained frame drops. Capture every 10 frames (~6fps) instead of every 6.
-    const _captureGif = !isMobile && !window.__codReducedEffects && gs.settHighlightCapture !== false;
-    if (_captureGif && frameCountRef.current % 10 === 0 && canvasRef.current) {
+    // Always capture frames into the rolling buffer when desktop + setting on.
+    // Under sustained frame drops we widen the cadence so capture itself never
+    // becomes the cause of drops — but never disable, or the death-screen GIF
+    // is silently empty (the bug Session 57 fixed).
+    const _captureGif = !isMobile && gs.settHighlightCapture !== false;
+    const _captureCadence = window.__codReducedEffects ? 20 : 10; // ~3fps under load, ~6fps normal
+    if (_captureGif && frameCountRef.current % _captureCadence === 0 && canvasRef.current) {
       const cv = canvasRef.current;
       if (!gifOffscreenRef.current) {
         const scale = Math.min(1, 240 / cv.width);
@@ -1995,6 +2058,26 @@ export default function CallOfDoodie() {
       setBossWaveActive(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
       setLiveAnnounce("Wave " + gs.currentWave + " started");
+      // Dynamic Objective: at most one per non-boss wave, weighted by player weakness
+      gs.activeObjective = null;
+      try {
+        const _bossNext = gs.routeForceBoss || (gs.bossRushMode ? gs.currentWave >= 4 : gs.currentWave % 5 === 0);
+        if (!_bossNext) {
+          const career = loadCareerStats();
+          const weakness = _identifyWeakness(career);
+          const obj = pickObjective({
+            wave: gs.currentWave,
+            weakness,
+            bossWave: false,
+            world: { W: GW(), H: GH() },
+          });
+          if (obj) {
+            gs.activeObjective = obj;
+            addText(gs, GW() / 2, GH() / 2 - 90, obj.label + " ACTIVE", obj.color, true);
+            addText(gs, GW() / 2, GH() / 2 - 70, obj.description, "#DDDDDD");
+          }
+        }
+      } catch { /* objective failure must never crash the game loop */ }
       // Boss Rush: bosses start wave 4+ (3-wave warmup to let player gear up)
       const _bossInterval = gs.bossRushMode ? 1 : 5;
       const nextIsBoss = gs.routeForceBoss || (gs.bossRushMode
@@ -2295,8 +2378,16 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            const pts = Math.floor(e.points * pbComboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
+            const pts = computeKillPoints({
+              basePoints: e.points,
+              comboMult: pbComboMult,
+              killScoreMult: gs.killScoreMult || 1,
+              routeKillScoreMult: gs.routeKillScoreMult || 1,
+              activeObjective: gs.activeObjective || null,
+              playerPos: gs.player,
+            });
             gs.score += pts; gs.kills++; gs.killstreakCount++;
+            addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
             gs.coinStreakKills++;
             gs.coinStreakTimer = 180; // reset 3s window
             if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
@@ -2493,6 +2584,7 @@ export default function CallOfDoodie() {
             setCombo(comboRef.current.count);
             const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
             gs.score += pts; gs.kills++; gs.killstreakCount++;
+            addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
             gs.coinStreakKills++;
             gs.coinStreakTimer = 180; // reset 3s window
             if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
@@ -2826,7 +2918,9 @@ export default function CallOfDoodie() {
           e.bulletRingTimer++;
           const _brCap = Math.floor(360 * _waveScale);
           // Warning flash: 1 second (60 frames) before the ring fires
-          e.bulletRingWarning = _abilityReady && e.bulletRingTimer >= _brCap - 60 && e.bulletRingTimer < _brCap;
+          // Adaptive widen if player has been dying to this enemy type recently
+          const _brWarn = Math.floor(60 * (gs._telegraphMult?.[e.type] || 1));
+          e.bulletRingWarning = _abilityReady && e.bulletRingTimer >= _brCap - _brWarn && e.bulletRingTimer < _brCap;
           if (_abilityReady && e.bulletRingTimer >= _brCap) {
             e.bulletRingTimer = 0;
             e.bulletRingWarning = false;
@@ -2847,7 +2941,8 @@ export default function CallOfDoodie() {
             e.groundSlamTimer++;
             const _gsCap = Math.floor(420 * _waveScale);
             // Warning flash: 1.5 seconds (90 frames) before the slam triggers
-            e.groundSlamWarning = _abilityReady && e.groundSlamTimer >= _gsCap - 90 && e.groundSlamTimer < _gsCap;
+            const _gsWarn = Math.floor(90 * (gs._telegraphMult?.[e.type] || 1));
+            e.groundSlamWarning = _abilityReady && e.groundSlamTimer >= _gsCap - _gsWarn && e.groundSlamTimer < _gsCap;
             if (_abilityReady && e.groundSlamTimer >= _gsCap) {
               e.groundSlamTimer = 0; e.groundSlamWarning = false; e.groundSlamActive = true; e.groundSlamRadius = 0;
               e.sharedAbilityCooldown = 120;
@@ -3918,6 +4013,8 @@ export default function CallOfDoodie() {
           return dailyMissionsRef.current.map(m => ({ ...m, _progress: s[m.track] || 0 }));
         })() : []}
         missionDoneSet={missionDoneRef.current}
+        hud={hudFlagsMemo}
+        heat={gsRef.current?.heat || 0}
       />
 
       {/* Mobile action bar */}

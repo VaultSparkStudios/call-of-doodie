@@ -14,5 +14,21 @@
   "Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)": {
     "firstSeen": "2026-04-22",
     "session": null
+  },
+  "[S56] Add zones to Cloudflare dashboard": {
+    "firstSeen": "2026-05-08",
+    "session": null
+  },
+  "[S56] Swap Namecheap nameservers for both domains to the CF NS pair (likely `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`)": {
+    "firstSeen": "2026-05-08",
+    "session": null
+  },
+  "[S56] Update Namecheap API IP allowlist to `45.144.114.159` (current public IP) at https://ap.www.namecheap.com/Profile/Tools/ApiAccess; then update `NAMECHEAP_WHITELIST_IP` in `vaultspark-studio-ops/secrets/namecheap.env`": {
+    "firstSeen": "2026-05-08",
+    "session": null
+  },
+  "[S56] (Optional) Generate a new Cloudflare API token with broader scope (Zone:Edit, DNS:Edit, Pages:Edit, all zones in account)": {
+    "firstSeen": "2026-05-08",
+    "session": null
   }
 }

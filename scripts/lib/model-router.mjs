@@ -186,7 +186,7 @@ export function buildHeaders(apiKey, { useThinking = false, longCache = false, f
  * @param {object} [opts.thinking] - extended thinking config
  * @returns {Promise<object>} parsed API response
  */
-export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false }, httpsModule) {
+export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null }, httpsModule) {
   const body = { model, max_tokens: maxTokens, messages };
   if (system) body.system = system;
   if (thinking) body.thinking = thinking;
@@ -213,7 +213,19 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
         try {
           const parsed = JSON.parse(data);
           if (parsed.error) reject(new Error(`API error: ${parsed.error.message}`));
-          else resolve(parsed);
+          else {
+            // Auto-log to ledger. Script identifier from explicit logAs,
+            // then env (OPS_SCRIPT_NAME), else 'unknown'. Never throws.
+            try {
+              logMetrics({
+                script: logAs || process.env.OPS_SCRIPT_NAME || 'unknown',
+                model,
+                usage: parsed.usage,
+                mode: useThinking ? 'think' : (autoLong ? 'long-cache' : null),
+              });
+            } catch { /* metrics must never break callers */ }
+            resolve(parsed);
+          }
         } catch (e) {
           reject(new Error(`JSON parse error: ${e.message}`));
         }

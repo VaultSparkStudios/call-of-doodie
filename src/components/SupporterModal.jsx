@@ -6,6 +6,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useFocusTrap } from "../hooks/useFocusTrap.js";
 import { isSupporter, setSupporter } from "../utils/supporter.js";
+import { COSMETICS, currentTrackWeek, reconcileOwnership } from "../utils/cosmeticTrack.js";
+import { loadCareerStats } from "../storage.js";
 
 const KOFI_URL = "https://ko-fi.com/vaultsparkstudios";
 
@@ -112,6 +114,45 @@ export default function SupporterModal({ onClose }) {
         <p style={{ color: "#555", fontSize: 10, margin: "16px 0 0", textAlign: "center" }}>
           Badge is stored locally. Cloud sync coming soon.
         </p>
+
+        {/* Doodie Pass Lite — cosmetic track */}
+        <CosmeticTrackBlock />
+      </div>
+    </div>
+  );
+}
+
+function CosmeticTrackBlock() {
+  const [career] = useState(() => loadCareerStats());
+  const [reco]   = useState(() => reconcileOwnership(career));
+  const week     = currentTrackWeek();
+  const owned    = new Set(reco.owned);
+  const supporter = isSupporter();
+  return (
+    <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid rgba(255,215,0,0.18)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+        <div style={{ color: "#FFD700", fontWeight: 900, fontSize: 13, letterSpacing: 1 }}>🎟 DOODIE PASS LITE</div>
+        <div style={{ fontSize: 10, color: "#888" }}>Week {week + 1} of 4 · {supporter ? "Supporter" : "Free"}</div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6 }}>
+        {COSMETICS.map(c => {
+          const have = owned.has(c.id);
+          const lockedByWeek = c.week > week || (!supporter && c.week >= week);
+          return (
+            <div key={c.id} title={c.name + (have ? " — owned" : lockedByWeek ? " — drops later" : c.milestone ? ` — ${c.milestone.kind}: ${c.milestone.n}` : " — supporter only")} style={{
+              padding: "6px 4px", borderRadius: 6, textAlign: "center",
+              background: have ? "rgba(255,215,0,0.12)" : "rgba(255,255,255,0.04)",
+              border: have ? "1px solid rgba(255,215,0,0.45)" : "1px solid rgba(255,255,255,0.08)",
+              opacity: have ? 1 : (lockedByWeek ? 0.35 : 0.7),
+            }}>
+              <div style={{ fontSize: 18 }}>{c.emoji}</div>
+              <div style={{ fontSize: 8, color: have ? "#FFD700" : "#888", marginTop: 2, lineHeight: 1.2 }}>{c.name}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ fontSize: 10, color: "#666", marginTop: 8, textAlign: "center" }}>
+        Free unlocks via career milestones. Supporters unlock everything + early access.
       </div>
     </div>
   );

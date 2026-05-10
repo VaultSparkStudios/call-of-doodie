@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 
-const W = 62;
+const W  = 62;
 const BW = W + 4;
 
 function pad(s, w) { const str = String(s ?? ''); return str.length >= w ? str.slice(0, w) : str + ' '.repeat(w - str.length); }
@@ -30,12 +30,12 @@ function bottom() { return '╚' + '═'.repeat(W + 2) + '╝'; }
  */
 export function renderTitleHeader({ name, type, lifecycle, audience, vaultStatus, session, date, mode = 'BUILDER', owner }) {
   const emoji = {
-    game: '🎮',
-    app: '📱',
-    platform: '🌐',
+    game:           '🎮',
+    app:            '📱',
+    platform:       '🌐',
     infrastructure: '⚙️ ',
-    novel: '📖',
-    tool: '🔧',
+    novel:          '📖',
+    tool:           '🔧',
   }[type] || '🚀';
   const nameUpper = (name || 'Project').toUpperCase();
   const modeLabel = mode.toUpperCase();
@@ -55,7 +55,7 @@ export function renderTitleHeader({ name, type, lifecycle, audience, vaultStatus
 export function renderLastCompleted(summary) {
   if (!summary) return '';
   const header = top(`LAST SESSION (S${summary.session}) · WHAT SHIPPED`);
-  const shipLines = (summary.shipped || []).slice(0, 5).map((s) => row(`✓ ${s.slice(0, W - 2)}`));
+  const shipLines = (summary.shipped || []).slice(0, 5).map(s => row(`✓ ${s.slice(0, W - 2)}`));
   return [
     header,
     ...shipLines,
@@ -76,24 +76,24 @@ export function renderTestItNow({ name, testingSurfaces = [] }) {
     return [header, row('(no testing surfaces registered — add to PROJECT_STATUS.json)'), bottom()].join('\n');
   }
   const typeLabel = {
-    local: 'Local dev     →',
-    tests: 'Unit tests    →',
-    doctor: 'Doctor        →',
-    staging: 'Staging       →',
-    production: 'Production    →',
-    preview: 'Preview       →',
-    supabase: 'Supabase      →',
-    github: 'GitHub        →',
-    vercel: 'Vercel        →',
-    netlify: 'Netlify       →',
-    cloudflare: 'CF Pages      →',
-    render: 'Render        →',
-    railway: 'Railway       →',
-    hetzner: 'Hetzner       →',
-    custom: 'Custom        →',
+    local:       'Local dev     →',
+    tests:       'Unit tests    →',
+    doctor:      'Doctor        →',
+    staging:     'Staging       →',
+    production:  'Production    →',
+    preview:     'Preview       →',
+    supabase:    'Supabase      →',
+    github:      'GitHub        →',
+    vercel:      'Vercel        →',
+    netlify:     'Netlify       →',
+    cloudflare:  'CF Pages      →',
+    render:      'Render        →',
+    railway:     'Railway       →',
+    hetzner:     'Hetzner       →',
+    custom:      'Custom        →',
   };
   const statusIcon = { green: '✓', yellow: '⚠', red: '⛔', unknown: '·' };
-  const lines = testingSurfaces.slice(0, 8).map((s) => {
+  const lines = testingSurfaces.slice(0, 8).map(s => {
     const label = typeLabel[s.type] || `${s.type.padEnd(12)} →`;
     const icon = statusIcon[s.status || 'unknown'] || '·';
     const target = s.url || s.command || '—';

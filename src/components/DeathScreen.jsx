@@ -3,10 +3,11 @@ import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
+import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
-import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent } from "../storage.js";
+import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -304,6 +305,19 @@ export default function DeathScreen({
     vsScore,
     runSeed,
   });
+  const _topWpn = (() => {
+    const wk = weaponKills || [];
+    const total = wk.reduce((s, v) => s + (v || 0), 0);
+    if (!total) return null;
+    let bi = 0;
+    for (let i = 1; i < wk.length; i++) if ((wk[i] || 0) > (wk[bi] || 0)) bi = i;
+    return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
+  })();
+  const runCoach = buildRunCoach({
+    career: loadCareerStats(),
+    meta: loadMetaProgress(),
+    runSummary: { wave, bestStreak, crits, topWeapon: _topWpn },
+  });
   const postRunIntel = buildPostRunIntelligence({
     score,
     kills,
@@ -481,6 +495,20 @@ export default function DeathScreen({
               <div style={{ fontSize: 9, color: "#DDD", letterSpacing: 1 }}>{label}</div>
             </div>
           ))}
+        </div>
+
+        {/* AI Run Coach — 3-line verdict */}
+        <div style={{ ...card, marginBottom: 8, textAlign: "left", border: "1px solid rgba(0,229,255,0.25)", background: "linear-gradient(180deg,rgba(0,229,255,0.06),rgba(255,255,255,0.03))" }}>
+          <div style={{ fontSize: 10, color: "#5CE6FF", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>🧠 AI RUN COACH</div>
+          <div style={{ fontSize: 11, color: "#FFB3B3", lineHeight: 1.45, marginBottom: 4 }}>
+            <span style={{ color: "#FF6B6B", fontWeight: 700 }}>Killed by:</span> {runCoach.killedBy}
+          </div>
+          <div style={{ fontSize: 11, color: "#FFE5B3", lineHeight: 1.45, marginBottom: 4 }}>
+            <span style={{ color: "#FFC800", fontWeight: 700 }}>Try next:</span> {runCoach.tryNext}
+          </div>
+          <div style={{ fontSize: 11, color: "#B3FFB3", lineHeight: 1.45 }}>
+            <span style={{ color: "#00FF88", fontWeight: 700 }}>Working:</span> {runCoach.working}
+          </div>
         </div>
 
         <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>

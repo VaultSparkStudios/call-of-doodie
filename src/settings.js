@@ -18,7 +18,37 @@ export const SETTINGS_DEFAULTS = {
   aimAssist:           false, // snap aim toward nearest enemy when using gamepad
   // Accessibility
   reducedMotion:       false, // disable screen shake, flashes, trails (photosensitivity)
+  // HUD density preset: "minimal" (HP/ammo/score only), "standard" (default), "tactical" (everything)
+  hudDensity:          "standard",
 };
+
+// HUD widget visibility derived from density preset.
+// Minimal: streamer-friendly, just survival vitals.
+// Standard: same as pre-Session-57 default.
+// Tactical: everything including DPS + enemy bars + danger overlay.
+export function hudFlags(density) {
+  switch (density) {
+    case "minimal":
+      return {
+        showMissionWidget: false, showWaveIncoming: false, showHeatMeter: false,
+        showAmmoBars: false, showSynergyChips: false, showBuildSummary: false,
+        showMutationBanner: false, showCoinStreak: false,
+      };
+    case "tactical":
+      return {
+        showMissionWidget: true, showWaveIncoming: true, showHeatMeter: true,
+        showAmmoBars: true, showSynergyChips: true, showBuildSummary: true,
+        showMutationBanner: true, showCoinStreak: true,
+      };
+    case "standard":
+    default:
+      return {
+        showMissionWidget: true, showWaveIncoming: true, showHeatMeter: true,
+        showAmmoBars: true, showSynergyChips: true, showBuildSummary: false,
+        showMutationBanner: true, showCoinStreak: true,
+      };
+  }
+}
 
 const SK = "cod-settings-v1";
 const PK = "cod-presets-v1";

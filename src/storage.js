@@ -275,6 +275,28 @@ export async function loadLeaderboardToday(mode = null, difficulty = null) {
   }
 }
 
+/** Today's #1 daily-challenge entry (the 👑 Crown holder). Returns null if none. */
+export async function getDailyChampion() {
+  if (!supabase) return null;
+  try {
+    const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
+    const todaySeed = String(getDailyChallengeSeed());
+    const { data, error } = await supabase
+      .from("leaderboard")
+      .select("name,score,wave,kills,supporter,prestige,accountLevel,seed,mode,created_at")
+      .eq("mode", "daily_challenge")
+      .eq("seed", Number(todaySeed))
+      .gte("created_at", midnight.toISOString())
+      .order("score", { ascending: false })
+      .limit(1);
+    if (error) throw error;
+    return (data && data[0]) ? normalizeLeaderboardEntry(data[0]) : null;
+  } catch (err) {
+    console.warn("[crown] daily champion lookup failed:", err.message);
+    return null;
+  }
+}
+
 /** Search leaderboard by player name (case-insensitive partial match). */
 export async function searchLeaderboard(nameQuery) {
   if (!supabase || !nameQuery.trim()) return [];
@@ -738,6 +760,38 @@ export function recordRivalryResult({ seed, vsScore = null, vsName = null, score
 export function loadRivalryHistory() {
   try { return JSON.parse(localStorage.getItem(RIVALRY_HISTORY_KEY) || "[]"); }
   catch { return []; }
+}
+
+/**
+ * Record an enemy-type death in the rolling "recent deaths" window used by
+ * adaptive enemy telegraphing (#7). Caller passes the enemy type id (string
+ * or number from ENEMY_TYPES). We keep the last 20 deaths.
+ */
+export function recordDeathByEnemy(typeId) {
+  if (typeId == null) return;
+  const career = loadCareerStats();
+  const arr = Array.isArray(career.recentDeathsByEnemy) ? career.recentDeathsByEnemy : [];
+  arr.unshift({ t: String(typeId), ts: Date.now() });
+  career.recentDeathsByEnemy = arr.slice(0, 20);
+  try { localStorage.setItem(CAREER_KEY, JSON.stringify(career)); } catch {}
+}
+
+/**
+ * Returns a multiplier (1.0 → 2.0) applied to enemy ability warning windows.
+ * 1.0 = no help (player is fine vs this enemy); 2.0 = double the warning
+ * window because the player has died to this type 3+ times in last 5 runs.
+ * Always returns 1.0 if the player has < 3 recent deaths to this type.
+ */
+export function getTelegraphMultiplier(typeId) {
+  if (typeId == null) return 1;
+  try {
+    const career = loadCareerStats();
+    const arr = Array.isArray(career.recentDeathsByEnemy) ? career.recentDeathsByEnemy : [];
+    const matches = arr.filter(d => d.t === String(typeId)).length;
+    if (matches >= 3) return 2.0;
+    if (matches >= 2) return 1.5;
+    return 1;
+  } catch { return 1; }
 }
 
 export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {

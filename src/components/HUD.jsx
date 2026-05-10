@@ -29,7 +29,14 @@ export default function HUD({
   cursedHideScore,
   speedrunMode, startTime,
   missions, missionDoneSet,
+  hud, heat,
 }) {
+  // Default to standard if missing (e.g. when called from older callers/tests).
+  const HUD_FLAGS = hud || {
+    showMissionWidget: true, showWaveIncoming: true, showHeatMeter: true,
+    showAmmoBars: true, showSynergyChips: true, showBuildSummary: false,
+    showMutationBanner: true, showCoinStreak: true,
+  };
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
@@ -277,7 +284,7 @@ export default function HUD({
       )}
 
       {/* In-game mission progress widget */}
-      {missions && missions.length > 0 && (
+      {HUD_FLAGS.showMissionWidget && missions && missions.length > 0 && (
         <div style={{ position: "absolute", top: 44, left: 12, maxWidth: 190, pointerEvents: "none" }}>
           {missions.map((m, idx) => {
             const done = missionDoneSet?.has(idx);
@@ -305,9 +312,17 @@ export default function HUD({
           weaponAmmos={weaponAmmos} ammo={ammo}
           grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading}
           weaponMods={weaponMods}
+          showAmmoBars={HUD_FLAGS.showAmmoBars}
           onSwitchWeapon={onSwitchWeapon} onGrenade={onGrenade} onDash={onDash} onReload={onReload}
           Tooltip={Tooltip}
         />
+      )}
+
+      {/* Heat meter (top-right) */}
+      {HUD_FLAGS.showHeatMeter && typeof heat === "number" && heat > 5 && (
+        <div title={`Heat ${Math.round(heat)} — kills + multikills increase, decays over time`} style={{ position: "absolute", top: 8, right: 8, padding: "3px 9px", background: "rgba(0,0,0,0.55)", border: `1px solid rgba(255,${Math.max(40, 200 - heat * 1.6)},0,0.6)`, borderRadius: 999, fontSize: 10, color: heat >= 70 ? "#FF3300" : heat >= 40 ? "#FF8800" : "#FFC800", fontWeight: 900, letterSpacing: 1.5 }}>
+          🔥 HEAT {Math.round(heat)}{heat >= 70 ? " · OVERDRIVE" : ""}
+        </div>
       )}
     </div>
   );
@@ -315,7 +330,7 @@ export default function HUD({
 
 const WEAPON_HOTKEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
 
-function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, grenadeReady, dashReady, isReloading, weaponMods, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
+function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, grenadeReady, dashReady, isReloading, weaponMods, showAmmoBars = true, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
   const [hoveredTool, setHoveredTool] = useState(null);
   // Shrink weapon buttons when there are many weapons so the bar stays on-screen
   const btnSize = WEAPONS.length > 8 ? 32 : 38;
@@ -350,9 +365,11 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, gren
                 </span>
               )}
               {/* Ammo bar */}
-              <div style={{ position: "absolute", bottom: 2, left: 3, right: 3, height: 3, background: "rgba(0,0,0,0.5)", borderRadius: 2, overflow: "hidden" }}>
-                <div style={{ width: ammoPct * 100 + "%", height: "100%", background: ammoColor, borderRadius: 2, transition: i === currentWeapon ? "width 0.08s" : "none" }} />
-              </div>
+              {showAmmoBars && (
+                <div style={{ position: "absolute", bottom: 2, left: 3, right: 3, height: 3, background: "rgba(0,0,0,0.5)", borderRadius: 2, overflow: "hidden" }}>
+                  <div style={{ width: ammoPct * 100 + "%", height: "100%", background: ammoColor, borderRadius: 2, transition: i === currentWeapon ? "width 0.08s" : "none" }} />
+                </div>
+              )}
             </div>
             <Tooltip text={"[" + (WEAPON_HOTKEYS[i] || i + 1) + "] " + w.name + " — " + w.desc + " (" + curAmmo + "/" + maxAmmo + ")" + (isBlessed ? " ✨ BLESSED" : isCursed ? " ☠️ CURSED" : "")} visible={hoveredTool === "wpn-" + i} />
           </div>

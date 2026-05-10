@@ -41,3 +41,6 @@ jobs:
 
       - name: Deploy sync-studio-events function
         run: supabase functions deploy sync-studio-events --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt
+
+      - name: Deploy validate-replay function
+        run: supabase functions deploy validate-replay --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt

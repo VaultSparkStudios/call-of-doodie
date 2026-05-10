@@ -4,14 +4,31 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▆▇▇██
-Avgs — 3: 968.7 | 5: 964.0 | 10: — | 25: — | all: 958.1 [N=7, SIL history in private ops repo]
-  └ 3-session: Dev 98.7 | Align 96.7 | Momentum 97.0 | Engage 97.0 | Process 97.7 [N=3]
-Velocity trend: →  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~11.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-02 | Session 56 | Total: 970/1000 | Velocity: 2 | protocolVelocity: 1
+Sparkline (last 5 totals): ▇▇▇██
+Avgs — 3: 974.0 | 5: 967.6 | 10: — | 25: — | all: 961.1 [N=8, SIL history in private ops repo]
+  └ 3-session: Dev 99.3 | Align 98.3 | Momentum 97.7 | Engage 97.7 | Process 98.3 [N=3]
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
+Momentum runway: ~12.0 sessions  |  Intent rate: 100% (last 5 tracked)
+Last session: 2026-05-09 | Session 57 | Total: 982/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-09 — Session 57 | Total: 982/1000 | Velocity: 3 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Massive depth + retention sweep — all 12 audited items shipped in one pass with full test coverage and zero regressions. New marquee feature (Dynamic Objective System) generalizes the founder-loved "circle" concept into a proper subsystem with 5 objective types, weighted by player weakness. Closes 3 long-standing rough edges (broken GIF, no AI coaching loop, no shareable run artifact). Validation: 303/303 tests (was 248; +55 new), `npm run lint` 0 errors. Edge Function shipped with deploy YAML wired so push-to-main auto-deploys.
+
+| Category | Score | vs S56 | Notes |
+|---|---|---|---|
+| Dev Health | 100 | ↑2 | +55 tests added; suite 303/303; 7 new modules each shipped with their own test file; 0 lint errors |
+| Creative Alignment | 99 | ↑1 | Dynamic Objective System builds *directly* on a founder-stated love ("the circle that increases score"); Heat Meter resolves long-standing music thrashing complaint; cosmetic track invariants reinforce supporter trust posture |
+| Momentum | 99 | ↑3 | All 12 audit items shipped in a single session — broke a velocity record. Three of them (objectives, heat, AI coach) are content-grade additions, not just polish |
+| Engagement | 99 | ↑2 | Hot Zones / Bounty / Sniper / Lockdown / Escort fundamentally change moment-to-moment variability ceiling; AI Run Coach closes the learning loop the game previously leaked; Daily Crown adds daily competitive identity |
+| Process Quality | 99 | ↑1 | Disciplined small→architecture→marquee→dependent ordering let all 12 land without thrash; every new module shipped with tests; no extraction beyond what the dependent feature actually needed (deferred combat resolver instead of risking the session) |
+| Cross-Repo Coherence | 92 | → | No cross-repo work this session; ops repo stale; Domain migration still paused on founder-side gates |
+| Security Posture | 98 | ↑1 | `validate-replay` Edge Function ships heuristic plausibility checks closing a long-standing leaderboard trust gap; future Phase 2 deterministic resim is now unblocked at the schema/deploy layer |
+| Ecosystem Integration | 97 | ↑1 | Daily Crown reads from existing Supabase leaderboard schema (no migration); cosmetic track piggybacks on existing `cod-supporter-v1` localStorage key + Ko-fi webhook flag (no new backend) |
+| Capital Efficiency | 100 | → | Zero new infra; one new Edge Function on existing Supabase; no third-party dependencies added (gifenc was already there, moved to worker) |
+| Automation Coverage | 99 | ↑1 | `scripts/log-skill-cost.mjs` adds skill-cost telemetry that compounds across every future session; deploy YAML auto-ships validate-replay with no manual op |
 
 ## 2026-05-02 — Session 56 | Total: 970/1000 | Velocity: 2 | Debt: ↓
 

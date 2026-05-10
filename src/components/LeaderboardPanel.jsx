@@ -350,6 +350,9 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                           {"★".repeat(Math.min(e.prestige, 5))}
                         </span>
                       )}
+                      {activeMode === "daily_challenge" && i === 0 && e.seed === todaySeed && (
+                        <span title="Today's Daily Crown" style={{ fontSize: 12, flexShrink: 0 }}>👑</span>
+                      )}
                       <span style={{ fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.name}</span>
                       {e.level && <span style={{ color: "#bbb", fontSize: 9, flexShrink: 0 }} title="In-run XP level">⬆{e.level}</span>}
                       {loadoutEmoji && <span style={{ fontSize: 9, flexShrink: 0 }} title={e.starterLoadout}>{loadoutEmoji}</span>}

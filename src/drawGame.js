@@ -173,6 +173,42 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1; ctx.restore();
   });
 
+  // ── Active dynamic objective (Hot Zone / Lockdown / Escort / Sniper / Bounty) ──
+  const _obj = gs.activeObjective;
+  if (_obj && !_obj.completed && !_obj.expired) {
+    ctx.save();
+    const _pulse = 0.55 + 0.3 * Math.sin(dn / 220);
+    if (_obj.type === "hot_zone" && _obj.cx != null) {
+      const grad = ctx.createRadialGradient(_obj.cx, _obj.cy, 0, _obj.cx, _obj.cy, _obj.r);
+      grad.addColorStop(0, "rgba(255,102,0,0.18)");
+      grad.addColorStop(0.7, "rgba(255,102,0,0.10)");
+      grad.addColorStop(1, "rgba(255,102,0,0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(_obj.cx, _obj.cy, _obj.r, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = `rgba(255,102,0,${_pulse})`; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(_obj.cx, _obj.cy, _obj.r, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "rgba(255,102,0,0.85)"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("🔥 HOT ZONE x" + (_obj.scoreMult || 2), _obj.cx, _obj.cy - _obj.r - 8);
+    } else if (_obj.type === "lockdown" && _obj.cx != null) {
+      ctx.strokeStyle = `rgba(136,204,255,${_pulse})`; ctx.lineWidth = 3;
+      ctx.setLineDash([10, 8]);
+      ctx.beginPath(); ctx.arc(_obj.cx, _obj.cy, _obj.r, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "rgba(136,204,255,0.9)"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("🛡 LOCKDOWN · " + Math.ceil((_obj.timeLeft || 0) / 60) + "s", _obj.cx, _obj.cy - _obj.r - 8);
+    } else if (_obj.type === "escort" && _obj.cart) {
+      ctx.fillStyle = "rgba(170,68,255,0.95)"; ctx.font = "20px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("🚚", _obj.cart.x, _obj.cart.y);
+      ctx.fillStyle = "rgba(170,68,255,0.85)"; ctx.font = "bold 10px sans-serif";
+      ctx.fillText("ESCORT · HP " + Math.max(0, Math.round(_obj.cart.hp)), _obj.cart.x, _obj.cart.y - 22);
+    } else if (_obj.type === "sniper" || _obj.type === "bounty") {
+      ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(W / 2 - 130, 36, 260, 22);
+      ctx.fillStyle = _obj.color || "#FFD700"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center";
+      ctx.fillText(_obj.label + " · " + Math.ceil((_obj.timeLeft || 0) / 60) + "s", W / 2, 51);
+    }
+    ctx.restore();
+  }
+
   // ── Terrain decorations (floor level, below grid) ──
   const TC = gs.bossWave ? { s:"#3a0808",c:"rgba(90,20,20,0.30)",r:"#4a2020",t:"#2a0a0a" } : [
     { s:"#1c1c3c", c:"rgba(70,70,115,0.28)",  r:"#2a2a4e", t:"#20203e" }, // office

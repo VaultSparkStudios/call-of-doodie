@@ -23,7 +23,7 @@ function nextNodeInBranch(branch, unlockedSet) {
  * Identify the player's primary weakness from career stats.
  * @returns {"defense"|"offense"|"utility"|"chaos"|null}
  */
-function identifyWeakness(career = {}) {
+export function identifyWeakness(career = {}) {
   const runs = career.totalRuns || 0;
   if (runs < 2) return null; // too early to read
 

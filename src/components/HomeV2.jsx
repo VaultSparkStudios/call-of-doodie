@@ -4,13 +4,14 @@ import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, get
 import {
   loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress,
   getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, requestStudioEventSync, saveStudioGameEvent,
-  loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
+  loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion,
 } from "../storage.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { getAnalyticsStatus, track } from "../utils/analytics.js";
 import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
+import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -99,6 +100,9 @@ export default function HomeV2(props) {
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [cmdCenterExpanded, setCmdCenterExpanded] = useState(false);
+  const [dailyChampion, setDailyChampion] = useState(null);
+  const [replayInput, setReplayInput] = useState("");
+  const [replayCopied, setReplayCopied] = useState(false);
 
   useEffect(() => {
     const loaded = loadCareerStats();
@@ -125,6 +129,7 @@ export default function HomeV2(props) {
       });
     }
     requestStudioEventSync({ limit: 25 }).catch(() => {});
+    getDailyChampion().then(c => { if (c) setDailyChampion(c); }).catch(() => {});
   }, [setDifficulty]);
 
   const accountLevel = career ? getAccountLevel(career.totalKills) : 1;
@@ -351,6 +356,19 @@ export default function HomeV2(props) {
         <div style={hero}>
           <h1 style={title}>CALL OF DOODIE</h1>
           <div style={tag}>MODERN WARFARE ON MOM'S WIFI</div>
+          {dailyChampion && (
+            <div
+              title={`Today's Daily Challenge #1 — score ${dailyChampion.score.toLocaleString()}, wave ${dailyChampion.wave}`}
+              style={{
+                marginTop: 8, padding: "4px 10px", display: "inline-block",
+                fontSize: 11, letterSpacing: 1.5, fontWeight: 800,
+                color: "#FFD700", background: "rgba(255,215,0,0.08)",
+                border: "1px solid rgba(255,215,0,0.45)", borderRadius: 999,
+              }}
+            >
+              👑 TODAY'S CHAMPION: {dailyChampion.name.toUpperCase()} · {dailyChampion.score.toLocaleString()}
+            </div>
+          )}
         </div>
 
         {/* DEPLOY split-button */}
@@ -408,6 +426,43 @@ export default function HomeV2(props) {
                 style={{ width: 120, padding: "5px 8px", fontSize: 11, fontFamily: "monospace", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center" }}
               />
               <span style={{ fontSize: 10, color: "#666", marginLeft: "auto" }}>Loadout: <strong style={{ color: selectedLoadout.color }}>{selectedLoadout.emoji} {selectedLoadout.name}</strong></span>
+            </div>
+            {/* Replay code share + paste */}
+            <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>REPLAY</label>
+              <input
+                value={replayInput}
+                onChange={e => setReplayInput(e.target.value.toUpperCase().replace(/[^0-9A-F]/g, "").slice(0, 12))}
+                placeholder="paste 12-char code"
+                maxLength={12}
+                style={{ width: 140, padding: "5px 8px", fontSize: 11, fontFamily: "monospace", background: "rgba(0,0,0,0.4)", border: `1px solid ${isValidReplayCode(replayInput) ? "rgba(0,255,136,0.5)" : "rgba(255,255,255,0.14)"}`, borderRadius: 6, color: "#EEE", outline: "none", textAlign: "center", letterSpacing: 1.5 }}
+              />
+              <button
+                disabled={!isValidReplayCode(replayInput)}
+                onClick={() => {
+                  const r = decodeReplayCode(replayInput);
+                  if (!r) return;
+                  selectMode(r.mode);
+                  setDifficulty(r.difficulty);
+                  setCustomSeed(String(r.seed));
+                  track("front_door_action", { actionId: "replay_code_apply", surface: "home_v2" });
+                }}
+                style={{ padding: "5px 10px", fontSize: 10, fontWeight: 800, letterSpacing: 1, color: isValidReplayCode(replayInput) ? "#00FF88" : "#666", background: isValidReplayCode(replayInput) ? "rgba(0,255,136,0.1)" : "rgba(255,255,255,0.05)", border: `1px solid ${isValidReplayCode(replayInput) ? "rgba(0,255,136,0.45)" : "rgba(255,255,255,0.1)"}`, borderRadius: 6, cursor: isValidReplayCode(replayInput) ? "pointer" : "default" }}
+              >LOAD</button>
+              <button
+                onClick={() => {
+                  const code = encodeReplayCode({
+                    seed: parseInt(customSeed || todaySeedStr, 10) || 0,
+                    mode: modeId, difficulty, weaponIdx: 0, starterLoadout: selectedLoadout.id,
+                  });
+                  navigator.clipboard?.writeText?.(code);
+                  setReplayCopied(true);
+                  setTimeout(() => setReplayCopied(false), 1500);
+                  track("front_door_action", { actionId: "replay_code_share", surface: "home_v2", code });
+                }}
+                title="Copy a 12-char replay code for the currently configured run"
+                style={{ marginLeft: "auto", padding: "5px 10px", fontSize: 10, fontWeight: 800, letterSpacing: 1, color: replayCopied ? "#00FF88" : "#FFD700", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, cursor: "pointer" }}
+              >{replayCopied ? "✓ COPIED" : "📋 SHARE CODE"}</button>
             </div>
           </div>
         )}

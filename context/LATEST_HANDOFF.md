@@ -1,6 +1,39 @@
 # Latest Handoff
 
-Session Intent: Diagnose the temporary outage at `vaultsparkstudios.com/call-of-doodie/` (apex resolved on its own — issue was in the org-pages repo, not this one), then evaluate moving the game to its own domain with a full scored hosting/domain comparison, analyze the parody/fair-use posture against Call of Duty&reg;, ship a parody disclaimer to harden trademark defense, and start the migration to Cloudflare Pages with elevated credential access.
+Session Intent: Audit + ship a 12-item depth/UX/security/perf/AI sweep in one pass — fix the broken Best-Moment GIF, brainstorm strategic objectives building on the founder-loved "circle that increases score" concept, then implement the entire combined top-12 list at quality (dynamic objectives, AI run coach, replay codes, heat meter, HUD density, adaptive telegraphing, cosmetic track, server-side replay validation, score-ledger extraction, daily crown, skill-cost telemetry).
+
+## Where We Left Off (Session 57 — 12-item depth + retention sweep, all shipped)
+
+**Intent outcome:** Achieved end-to-end. All 12 items shipped, 303/303 tests green (was 248 — added 55 new tests across 7 new modules), 0 lint errors.
+
+### What shipped (in execution order)
+- **#2 GIF fix + Web Worker** — `src/workers/gifEncode.worker.js` (new); `src/App.jsx:1820` decoupled buffer capture from encode (always capture on desktop, widen cadence 10 → 20 frames under load instead of disabling); encode moved off main thread via worker with 15s timeout
+- **#12 Skill-cost telemetry** — `scripts/log-skill-cost.mjs` (new) appends per-invocation `{ts, session, skill, model, tokens, ms}` to `ignis/output/agent-spend.json` (rolling last 200), prints top-5 skills by spend
+- **#11 Daily Crown 👑** — `src/storage.js` adds `getDailyChampion()`; `src/components/HomeV2.jsx` shows hero banner "👑 TODAY'S CHAMPION: NAME · score"; `LeaderboardPanel.jsx` adds 👑 badge to row 0 of daily-challenge tab
+- **#10 HUD Density preset** — `src/settings.js` adds `hudDensity` ("minimal"|"standard"|"tactical") + `hudFlags(density)` exporter; SettingsPanel exposes the picker on Quick tab; `HUD.jsx` gates mission widget + ammo bars + heat meter via flags; minimal hides everything but vitals
+- **#7 Adaptive enemy telegraphing** — `src/storage.js` adds `recordDeathByEnemy(typeId)` + `getTelegraphMultiplier(typeId)` (rolling 20-death window); App.jsx precomputes `gs._telegraphMult[type]` once per run; Bullet Ring + Ground Slam warning windows widen 1.5x at 2 deaths, 2x at 3+ deaths to that enemy type
+- **#8 Heat Meter + adaptive music** — `src/systems/heatMeter.js` (+test, 6 cases) adds `gs.heat` 0..100, +3/kill +5/+8 streak +20 boss, decays 0.20/frame; HUD shows 🔥 HEAT chip top-right; replaces combo-driven `setMusicTier` swap (S55 logic removed)
+- **#3 AI Run Coach** — `src/utils/runCoach.js` (+test, 3 cases) composes `metaClarity` + `runDebrief` + recent-deaths ledger into 3 lines: "Killed by:" / "Try next:" / "Working:"; rendered on DeathScreen above existing TACTICAL DEBRIEF block
+- **#4 Replay Codes** — `src/utils/replayCode.js` (+test, 4 cases) — 12 hex chars with mod-16 checksum encoding {seed, mode, difficulty, weaponIdx, starterLoadout}; HomeV2 deploy dropdown exposes paste-to-load + 📋 SHARE CODE buttons; routes/mutations stay player choices by design
+- **#6 scoreLedger + combatResolution scaffold** — `src/systems/scoreLedger.js` (+test, 4 cases) owns `computeKillPoints({basePoints, comboMult, killScoreMult, routeKillScoreMult, activeObjective, playerPos})`; both kill sites in App.jsx now delegate; `src/systems/combatResolution.js` ships `pointInCircle` + `dist2` (used by Hot Zones); full bullet-vs-enemy resolver extraction deferred to S58
+- **#1 Dynamic Objective System** — `src/systems/objectiveDirector.js` (+test, 8 cases) — `pickObjective({wave, weakness, bossWave, world, rng})` returns one of {hot_zone, bounty, sniper, lockdown, escort} or null (35% trigger rate, weighted by `metaClarity.identifyWeakness`); `tickObjective(gs)` returns `{completed, expired}` per frame; rewards: hot_zone/sniper → +score (250 + wave×25), bounty/escort → +💩 coins, lockdown → +1 banked perk choice; `drawGame.js` renders zone geometry + radar banner + countdown
+- **#9 Doodie Pass Lite** — `src/utils/cosmeticTrack.js` (+test, 4 cases) — 10 cosmetics over 4 weeks anchored 2026-05-04; free track unlocks 4 via career milestones (runs/deaths/bestWave/totalKills); supporter unlocks all + week-of-release access; rendered in `SupporterModal.jsx` as 5×2 grid; cosmetic-only, never gameplay
+- **#5 validate-replay Edge Function** — `supabase/functions/validate-replay/index.ts` heuristic plausibility (kills/wave ≤140, score/kill ≤ mode cap × diff mult, time/wave ≥4s, bestStreak ≤ kills, damage/kill in [5..200000]); writes anomalies to existing `run_anomalies`; deploy YAML wired in `.github/workflows/deploy-supabase-function.yml`; full deterministic resimulation gated on combat extraction in S58
+
+### Validation
+- `npm test -- --run` → **303/303 passing** across 39 test files (was 248 across 32 files)
+- `npm run lint` → 0 errors, 1 warning (pre-existing baseline)
+- `App.launch.test.jsx` smoke unchanged
+- `HomeV2.test.jsx` unchanged
+
+### Remaining work (in order)
+- [ ] [S58] Full combat resolver extraction → `src/systems/combatResolution.js`. Required by deterministic resim in `validate-replay` Phase 2 and by Hot-Zone-aware achievements
+- [ ] [S58] Wire Heat Meter into `drawGame.js` for screen palette tint at heat ≥ 70 (currently only swaps music tier)
+- [ ] [S58] Per-objective achievement chain (3 hot zones in a row, 5 bounties, etc.)
+- [ ] [Carryover S56] Founder-side: add CF zones, swap Namecheap NS, update IP allowlist (see Human Action Required in TASK_BOARD)
+
+## Next Recommended Slice (S58)
+- [ ] Combat resolver extraction (slice 10) — hardest piece left in App.jsx; unblocks deterministic replay validation Phase 2
 
 ## Where We Left Off (Session 56 — parody hardening + standalone-domain migration kickoff)
 

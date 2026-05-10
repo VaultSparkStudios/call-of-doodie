@@ -11,3 +11,7 @@ supabase/.temp/
 docs/CREATIVE_DIRECTION_RECORD.md
 docs/INNOVATION_PIPELINE.md
 docs/RIGHTS_PROVENANCE.md
+.env.local
+*.tmp
+.test-out.txt
+.cache/

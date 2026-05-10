@@ -24,7 +24,9 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
-const SECRETS_DIR = path.join(REPO_ROOT, 'secrets');
+// Tests can redirect lookups with VAULTSPARK_SECRETS_DIR_OVERRIDE (see
+// scripts/test/lib/credential-mocks.mjs). Production code never sets this.
+const SECRETS_DIR = process.env.VAULTSPARK_SECRETS_DIR_OVERRIDE || path.join(REPO_ROOT, 'secrets');
 const CAP_MAP_PATH = path.join(SECRETS_DIR, 'CAPABILITY_MAP.json');
 const ACCESS_LOG = path.join(SECRETS_DIR, '.access.log');
 

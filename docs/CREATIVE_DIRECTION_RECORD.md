@@ -5,6 +5,27 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-09 (Session 57)
+
+- **Founder direction:** Two-part request — fix the broken Best-Moment GIF after death, *and* signal that "I really like the circle concept added that increases points/score" with a request to brainstorm additional strategic objectives. Then immediately followed with: "Audit project … recommend the top items in one combined list … be as creative and innovative as possible" → "Implement all items at the highest/optimal quality in one pass."
+- **Creative read:** The "circle" wasn't yet a feature in code — confirmed with founder. The signal was that the founder wants *moment-to-moment dynamic objectives that hijack player attention without breaking flow*. The right answer was to generalize the concept into a proper subsystem (5 objective types: Hot Zone, Bounty, Sniper, Lockdown, Escort), weighted by player weakness via `metaClarity`, and ship it as the marquee item in a 12-item combined audit list. Founder approved the entire combined list and asked for full implementation in one pass.
+- **Locked-in invariants this session reinforced:**
+  1. **Cosmetic track stays cosmetic-only** — no gameplay impact, ever; supporter unlock buys early-access + breadth, never power. The supporter-trust posture is a load-bearing brand asset.
+  2. **Replay codes share challenges, not solutions** — encode initial conditions only; player choices (routes, mutations, perks) are the *content* and stay player-owned.
+  3. **Heat Meter, not combo, drives music tier** — integrative metrics beat reset-prone instantaneous metrics for matching player-felt tension.
+
+## 2026-05-02 (Session 56)
+
+- **Founder direction:** the game is back online again at `vaultsparkstudios.com/call-of-doodie/` (the apex outage resolved on its own); pivot to evaluating a move onto the game's own domain — score every option in detail, analyze whether the comedy/parody framing gives the project any free-use protection from Activision's IP, recommend a domain, recommend a host, then start the migration with elevated credential access. Founder approved the recommendation and bought both `callofdoodie.wtf` and `playcallofdoodie.com` from Namecheap.
+- **Public-safe implementation summary:**
+  - Strategic comparison shipped: 8 hosting options scored, 3 domain candidates scored, parody/fair-use analysis written. The recommendation was Cloudflare Pages + `callofdoodie.wtf` canonical with `.com` hedge.
+  - Parody disclaimer footer added to both `HomeV2.jsx` and `MenuScreen.jsx`. The disclaimer names Activision Publishing, Inc. and the Call of Duty&reg; mark with explicit non-affiliation/non-endorsement/non-sponsorship language. This closes the trademark-dilution-by-tarnishment lane that the parody name itself opens.
+  - Migration kickoff began: verified Cloudflare API token, listed existing zones, attempted to create the new zones via API. Both stored CF tokens lack `zone:create` at account scope, so the zone-add step is a manual UI action. Namecheap API is blocked from this machine because the public IP changed since the allowlist was set.
+- **Creative posture decisions documented for future sessions:**
+  - The poop mascot is now a **legal-defense asset**, not just brand. It's the single biggest reason a parody C&D is unlikely to find consumer confusion. Future creative direction must keep the mascot prominent and must not drift toward CoD-style military aesthetics, camo, soldier silhouettes, or `Modern Warfare` / `Black Ops` / `Warzone` sub-titling.
+  - "Call of Doodie" must never be filed as a trademark. Filing would invite an opposition proceeding from Activision and is more provocative than just continuing to use it. The unregistered parody name is the safer position.
+  - Paid CoD-keyword advertising is off-limits. Ad spend that bids on Activision's mark is bad-faith use and is the fastest way to a C&D.
+
 ## 2026-04-30 (Session 55)
 
 - **Founder direction:** the game is too laggy and has too many customization options; the weapon list is overwhelming and should feel like a level-up reward instead of a flat picker; the Best Moments GIF doesn't work reliably; one of the initial cards on join was unreadable (white text on white card); confirm the user-account system is real (or not); evaluate splitting the game off the studio domain
