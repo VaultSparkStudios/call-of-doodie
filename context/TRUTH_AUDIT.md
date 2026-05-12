@@ -2,8 +2,21 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-05-09
+Last reviewed: 2026-05-11
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-11 — Session 58 changes
+
+- `src/systems/combatResolution.js` (+test) — promoted from geometry scaffold to deterministic combat-math helper module. It now owns bullet/enemy overlap, crit rolls, juggernaut shield-facing multiplier, lightning-chain target selection, pierce decrement, and obstacle-bounce resolution. `App.jsx` still owns React refs, particles, and mutable game-state orchestration.
+- `src/systems/objectiveDirector.js` (+test) — adds objective-chain stat derivation and per-objective result recording. These stats drive achievements only; active objective lifecycle remains the existing `gs.activeObjective` path.
+- `src/constants.js` / `src/constants.test.js` — achievement source of truth grows from 61 to 65 with objective mastery achievements: hot-zone hat trick, 5 bounties, perfect escort, and clutch lockdown.
+- `src/utils/runBrain.js` (+test) — new local, zero-token derivation surface for post-run guidance. It reads run history, Studio events, and current death pressure; it does not write authoritative game state.
+- `src/utils/runCoach.js` (+test) and `src/components/DeathScreen.jsx` — Run Coach now includes Run Brain context; DeathScreen renders a next-experiment/follow-through cue beside the existing debrief.
+- `src/utils/socialRetention.js` (+test), `src/components/MenuPanels.jsx`, and `src/components/HomeV2.jsx` — Run History now derives fixed-seed bounty cards from existing run/daily/rivalry data; HomeV2 passes the daily champion into that panel.
+- `src/components/HomeV2.jsx` — first-three-run onboarding arc added on the front door. It is presentational guidance only; mode/loadout/gameplay source-of-truth remains unchanged.
+- `src/drawGame.js` — Heat Meter now has a visual treatment in addition to the existing music/HUD behavior. Reduced-motion guard remains authoritative.
+- `supabase/functions/validate-replay/index.ts` — replay validation now reports confidence (`heuristic`, `replay_contract`, `quarantine`) and warns when competitive seeded submissions omit `inputHash`. This is still not full deterministic resimulation; Phase 2B remains open.
+- `src/App.jsx` — legacy `MenuScreen` is lazy-loaded. HomeV2 remains the default front door; `?home=v1` still functions as a fallback.
 
 ## 2026-05-09 — Session 57 changes
 

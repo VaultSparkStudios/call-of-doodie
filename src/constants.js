@@ -780,6 +780,11 @@ export const ACHIEVEMENTS = [
   // ── Berserker hunter ──
   { id: "berserker_5",    name: "Berserker Slayer",   desc: "Kill 5 Berserker elites (wave 40+)",  emoji: "💥", check: (s) => s.berserkersKilled >= 5,  tier: "gold" },
   { id: "berserker_20",   name: "Berserker Nemesis",  desc: "Kill 20 Berserker elites (wave 40+)", emoji: "🔥", check: (s) => s.berserkersKilled >= 20, tier: "legendary" },
+  // ── Dynamic objective mastery ──
+  { id: "hot_zone_hat_trick", name: "Zoning Violation", desc: "Clear 3 Hot Zones in a row", emoji: "🔥", check: (s) => s.hotZoneStreak >= 3, tier: "gold" },
+  { id: "bounty_5", name: "Contractor Problems", desc: "Clear 5 bounty objectives in one run", emoji: "🎯", check: (s) => s.bountyKills >= 5, tier: "gold" },
+  { id: "perfect_escort", name: "Special Delivery", desc: "Clear an escort with the cart untouched", emoji: "🚚", check: (s) => s.perfectEscorts >= 1, tier: "silver" },
+  { id: "clutch_lockdown", name: "Panic Room", desc: "Survive a lockdown objective to the final 30 seconds", emoji: "🛡️", check: (s) => s.clutchLockdowns >= 1, tier: "silver" },
 ];
 
 // ===== ACHIEVEMENT PROGRESS TRACKING =====
@@ -838,6 +843,10 @@ export const ACHIEVEMENT_PROGRESS = {
   synergy_double:  ["activeSynergies", 2],
   berserker_5:     ["berserkersKilled", 5],
   berserker_20:    ["berserkersKilled", 20],
+  hot_zone_hat_trick: ["hotZoneStreak", 3],
+  bounty_5:        ["bountyKills", 5],
+  perfect_escort:  ["perfectEscorts", 1],
+  clutch_lockdown: ["clutchLockdowns", 1],
 };
 
 // ===== GAME CONSTANTS =====

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { buildFeaturedSeeds, buildGhostBoard, buildWeeklyContract, summarizeRivalryHistory } from "./socialRetention.js";
+import { buildBountyBoard, buildFeaturedSeeds, buildGhostBoard, buildWeeklyContract, summarizeRivalryHistory } from "./socialRetention.js";
 
 describe("socialRetention", () => {
   test("summarizes rivalry wins, losses, and unresolved entries", () => {
@@ -32,5 +32,15 @@ describe("socialRetention", () => {
     expect(featured.length).toBeGreaterThan(0);
     expect(featured[0].seed).toBe(51);
     expect(ghostBoard[0].title).toBe("Rival Ghost");
+  });
+
+  test("builds a prioritized bounty board from rivalry, daily, and personal ghosts", () => {
+    const bounties = buildBountyBoard(
+      [{ runSeed: 51, score: 19000, wave: 10 }],
+      [{ seed: 88, won: false, delta: -1200, vsScore: 22000, vsName: "Boss" }],
+      { seed: 77, score: 30000, name: "Crown" },
+    );
+    expect(bounties.map((b) => b.label)).toEqual(["Revenge Bounty", "Daily Crown", "Personal Ghost"]);
+    expect(bounties[0].challenge.vs).toBe(22000);
   });
 });

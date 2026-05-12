@@ -12,7 +12,16 @@ import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, appl
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { computeKillPoints } from "./systems/scoreLedger.js";
-import { pickObjective, tickObjective } from "./systems/objectiveDirector.js";
+import { pickObjective, recordObjectiveResult, tickObjective } from "./systems/objectiveDirector.js";
+import {
+  bulletEnemyCollision,
+  computeBulletDamage,
+  computeJuggernautShieldDamage,
+  findLightningChainTarget,
+  resolveObstacleBounce,
+  resolvePierce,
+  rollCrit,
+} from "./systems/combatResolution.js";
 import { identifyWeakness as _identifyWeakness } from "./utils/metaClarity.js";
 import {
   soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
@@ -32,9 +41,9 @@ import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
-import MenuScreen from "./components/MenuScreen.jsx";
 import HomeV2 from "./components/HomeV2.jsx";
 import HUD from "./components/HUD.jsx";
+const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
 const PerkModal       = lazy(() => import("./components/PerkModal.jsx"));
 const WaveShopModal   = lazy(() => import("./components/WaveShopModal.jsx"));
@@ -169,7 +178,7 @@ export default function CallOfDoodie() {
   const xpRef            = useRef({ xp: 0, level: 1 });
   const grenadeRef       = useRef({ ready: true, lastUse: 0 });
   const dashRef          = useRef({ ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 });
-  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0) });
+  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {} });
   const achievedRef      = useRef(new Set());
   const startTimeRef     = useRef(0);
   const timerRef         = useRef(null);
@@ -461,6 +470,10 @@ export default function CallOfDoodie() {
       gauntletMode: gs.gauntletMode || false,
       activeSynergies: (gs.activeSynergies || []).length,
       berserkersKilled: statsRef.current.berserkersKilled || 0,
+      hotZoneStreak: statsRef.current.objectiveChains?.hotZoneStreak || 0,
+      bountyKills: statsRef.current.objectiveChains?.bountyKills || 0,
+      perfectEscorts: statsRef.current.objectiveChains?.perfectEscorts || 0,
+      clutchLockdowns: statsRef.current.objectiveChains?.clutchLockdowns || 0,
     };
     ACHIEVEMENTS.forEach(a => {
       if (!achievedRef.current.has(a.id) && a.check(s)) {
@@ -553,7 +566,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0) };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {} };
     roastCooldowns.current = {};
     achievedRef.current = new Set();
     perkModsRef.current = {};
@@ -1841,6 +1854,7 @@ export default function CallOfDoodie() {
       const r = tickObjective(gs);
       if (r.completed) {
         const obj = gs.activeObjective;
+        statsRef.current.objectiveChains = recordObjectiveResult(statsRef.current.objectiveChains, obj, r);
         if (obj.reward === "score") {
           const bonus = 250 + (gs.currentWave * 25);
           gs.score += bonus;
@@ -1856,7 +1870,9 @@ export default function CallOfDoodie() {
         }
         gs.screenShake = Math.max(gs.screenShake || 0, 8);
         gs.activeObjective = null;
+        achCheckRef.current = true;
       } else if (r.expired) {
+        statsRef.current.objectiveChains = recordObjectiveResult(statsRef.current.objectiveChains, gs.activeObjective, r);
         addText(gs, GW() / 2, GH() / 2, `${gs.activeObjective.label} FAILED`, "#FF3333");
         gs.activeObjective = null;
       }
@@ -2274,19 +2290,21 @@ export default function CallOfDoodie() {
       b.x += b.vx; b.y += b.vy; b.life--;
       if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
       for (const ob of (gs.obstacles || [])) {
-        if (b.x >= ob.x && b.x <= ob.x + ob.w && b.y >= ob.y && b.y <= ob.y + ob.h) {
-          if (b.bouncesLeft > 0) {
-            const prevX = b.x - b.vx, prevY = b.y - b.vy;
-            // Determine which face was hit based on pre-collision position
-            if (prevX < ob.x || prevX > ob.x + ob.w) b.vx = -b.vx; else b.vy = -b.vy;
-            b.bouncesLeft--;
-            b.x = prevX + b.vx; b.y = prevY + b.vy; // reposition from pre-hit point with new trajectory
-            b.life = Math.max(b.life, 35); // extend life so ricocheted bullets can travel full distance
-            addParticles(gs, b.x, b.y, "#FFFFFF", 4);
-            gs.screenShake = Math.max(gs.screenShake, 1);
-          } else {
-            addParticles(gs, b.x, b.y, b.color, 3); return false;
-          }
+        const bounce = resolveObstacleBounce(b, ob);
+        if (bounce.bounced) {
+          Object.assign(b, {
+            x: bounce.x, y: bounce.y, vx: bounce.vx, vy: bounce.vy,
+            bouncesLeft: bounce.bouncesLeft, life: bounce.life,
+          });
+          addParticles(gs, b.x, b.y, "#FFFFFF", 4);
+          gs.screenShake = Math.max(gs.screenShake, 1);
+          break;
+        }
+        if (bounce.consumed) {
+          addParticles(gs, b.x, b.y, b.color, 3);
+          return false;
+        }
+        if (bounce.bounced || bounce.consumed) {
           break;
         }
       }
@@ -2496,34 +2514,34 @@ export default function CallOfDoodie() {
       if (b.life <= 0) return;
       gs.enemies.forEach(e => {
         if (e.health <= -999) return;
-        const maxR = e.size / 2 + b.size;
-        // Fast AABB reject before expensive hypot
-        if (Math.abs(b.x - e.x) > maxR || Math.abs(b.y - e.y) > maxR) return;
-        const d = Math.hypot(b.x - e.x, b.y - e.y);
-        if (d < maxR) {
+        if (bulletEnemyCollision(b, e).hit) {
           // Shield pulse blocks all damage
           if (e.shieldPulseActive) {
             addParticles(gs, b.x, b.y, "#00BFFF", 4);
             b.life = 0; return;
           }
           const comboMult = 1 + comboRef.current.count * 0.1;
-          const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0) + (gs.critBonus || 0);
-          const isCrit = Math.random() < effectiveCrit;
-          const lastResortMult = (perkModsRef.current.lastResort && p.health < p.maxHealth * 0.25) ? 3.0 : 1.0;
-          // Shield Guy (ti=11): 20% damage from front, 160% from behind
-          const moveAngle = Math.atan2(p.y - e.y, p.x - e.x);
-          const bulletAngle = Math.atan2(b.vy, b.vx);
-          const angleDiff = Math.abs(Math.atan2(Math.sin(bulletAngle - moveAngle), Math.cos(bulletAngle - moveAngle)));
-          const shieldMult = (e.typeIndex === 11) ? (angleDiff < Math.PI / 2 ? 0.20 : 1.60) : 1.0;
-          const rageMult = (gs.rageTimer || 0) > 0 ? 1.75 : 1.0;
-          // Juggernaut shield: reduce damage while shield up
-          const jugShieldMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
+          const { isCrit } = rollCrit({
+            baseCrit: CRIT_CHANCE,
+            perkCrit: perkModsRef.current.critBonus || 0,
+            runCrit: gs.critBonus || 0,
+          });
           // Summoner invulnerability while summons alive
           if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, b.x, b.y, "#8844FF", 3); b.life = 0; return; }
-          const dmg = b.damage * comboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * lastResortMult * shieldMult * (e.dmgMult || 1) * rageMult * jugShieldMult;
+          const { damage: dmg } = computeBulletDamage({
+            bullet: b,
+            enemy: e,
+            player: p,
+            comboCount: comboRef.current.count,
+            critMult: CRIT_MULT,
+            critMultBonus: gs.critMultBonus || 0,
+            isCrit,
+            lastResort: !!perkModsRef.current.lastResort,
+            rageActive: (gs.rageTimer || 0) > 0,
+          });
           // Drain juggernaut shield if active
           if (e.typeIndex === 17 && (e.jugShield || 0) > 0) {
-            const rawDmg = b.damage * comboMult * (isCrit ? CRIT_MULT : 1);
+            const rawDmg = computeJuggernautShieldDamage({ bulletDamage: b.damage, comboCount: comboRef.current.count, isCrit, critMult: CRIT_MULT });
             e.jugShield = Math.max(0, e.jugShield - rawDmg);
             if (e.jugShield <= 0) {
               e.jugShieldRegenDelay = 240;
@@ -2536,14 +2554,7 @@ export default function CallOfDoodie() {
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
           if (gs.chainLightning && Math.random() < 0.20) {
-            const arcRange = 200;
-            let arcTarget = null, arcDist = arcRange;
-            gs.enemies.forEach(ne => {
-              if (ne !== e && ne.health > 0) {
-                const nd = Math.hypot(ne.x - e.x, ne.y - e.y);
-                if (nd < arcDist) { arcDist = nd; arcTarget = ne; }
-              }
-            });
+            const arcTarget = findLightningChainTarget(gs.enemies, e, { range: 200 });
             if (arcTarget) {
               const arcDmg = dmg * 0.5;
               arcTarget.health -= arcDmg; arcTarget.hitFlash = 8; gs.totalDamage += arcDmg;
@@ -2574,15 +2585,23 @@ export default function CallOfDoodie() {
             isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random() * HITMARKERS.length)],
             isCrit ? "#FFD700" : "#FFF");
           // Pierce logic
-          if (b.pierceLeft > 0) { b.pierceLeft--; }
-          else { b.life = 0; }
+          const pierce = resolvePierce({ pierceLeft: b.pierceLeft || 0 });
+          b.pierceLeft = pierce.nextPierceLeft;
+          if (pierce.consumeBullet) b.life = 0;
 
           if (e.health <= 0) {
             const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            const pts = Math.floor(e.points * comboMult * (gs.killScoreMult || 1) * (gs.routeKillScoreMult || 1));
+            const pts = computeKillPoints({
+              basePoints: e.points,
+              comboMult,
+              killScoreMult: gs.killScoreMult || 1,
+              routeKillScoreMult: gs.routeKillScoreMult || 1,
+              activeObjective: gs.activeObjective || null,
+              playerPos: gs.player,
+            });
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
             gs.coinStreakKills++;
@@ -3624,30 +3643,32 @@ export default function CallOfDoodie() {
     })();
     const Home = homeV2 ? HomeV2 : MenuScreen;
     return (
-      <Home
-        username={username} difficulty={difficulty} setDifficulty={setDifficulty}
-        isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard}
-        onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
-        onChangeUsername={() => { clearLockedCallsign(); setUsername(""); setScreen("username"); }}
-        starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
-        gameSettings={gameSettings}
-        onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
-        gamepadConnected={gamepadConnected} controllerType={controllerType}
-        scoreAttackMode={scoreAttackMode}
-        onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
-        dailyChallengeMode={dailyChallengeMode}
-        onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
-        cursedRunMode={cursedRunMode}
-        onSetCursedRunMode={v => { setCursedRunMode(v); cursedRunRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
-        bossRushMode={bossRushMode}
-        onSetBossRushMode={v => { setBossRushMode(v); bossRushRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; } }}
-        speedrunMode={speedrunMode}
-        onSetSpeedrunMode={v => { setSpeedrunMode(v); speedrunRef.current = v; if (v) { setGauntletMode(false); gauntletRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
-        gauntletMode={gauntletMode}
-        onSetGauntletMode={v => { setGauntletMode(v); gauntletRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
-        assistAvailable={assistAvailable}
-        onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
-      />
+      <Suspense fallback={null}>
+        <Home
+          username={username} difficulty={difficulty} setDifficulty={setDifficulty}
+          isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard}
+          onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
+          onChangeUsername={() => { clearLockedCallsign(); setUsername(""); setScreen("username"); }}
+          starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
+          gameSettings={gameSettings}
+          onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
+          gamepadConnected={gamepadConnected} controllerType={controllerType}
+          scoreAttackMode={scoreAttackMode}
+          onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          dailyChallengeMode={dailyChallengeMode}
+          onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          cursedRunMode={cursedRunMode}
+          onSetCursedRunMode={v => { setCursedRunMode(v); cursedRunRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          bossRushMode={bossRushMode}
+          onSetBossRushMode={v => { setBossRushMode(v); bossRushRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; } }}
+          speedrunMode={speedrunMode}
+          onSetSpeedrunMode={v => { setSpeedrunMode(v); speedrunRef.current = v; if (v) { setGauntletMode(false); gauntletRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          gauntletMode={gauntletMode}
+          onSetGauntletMode={v => { setGauntletMode(v); gauntletRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          assistAvailable={assistAvailable}
+          onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
+        />
+      </Suspense>
     );
   }
 

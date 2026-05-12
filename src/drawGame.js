@@ -1092,6 +1092,23 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
     ctx.fillRect(0, 0, W, H);
   }
+  // Heat Meter visual integration: a restrained palette lift at high tempo,
+  // then a tiny hit-reactive edge split in overdrive.
+  if (!_rm && (gs.heat || 0) >= 40) {
+    const heat = Math.min(100, gs.heat || 0);
+    const warmAlpha = heat >= 70 ? 0.08 : 0.045;
+    ctx.fillStyle = `rgba(255,120,20,${warmAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+    if (heat >= 70 && (gs.killFlash > 0 || gs.damageFlash > 0)) {
+      const split = 2 + Math.sin(Date.now() / 45) * 1.5;
+      ctx.globalCompositeOperation = "screen";
+      ctx.fillStyle = "rgba(0,229,255,0.035)";
+      ctx.fillRect(split, 0, W, H);
+      ctx.fillStyle = "rgba(255,40,90,0.035)";
+      ctx.fillRect(-split, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
+    }
+  }
   // Damage / kill flash
   if (!_rm && gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
   if (!_rm && gs.killFlash > 0) { ctx.fillStyle = "rgba(255,215,0," + (gs.killFlash * 0.015) + ")"; ctx.fillRect(0, 0, W, H); }

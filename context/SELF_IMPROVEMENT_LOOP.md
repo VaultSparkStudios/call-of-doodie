@@ -4,14 +4,31 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇▇▇██
-Avgs — 3: 974.0 | 5: 967.6 | 10: — | 25: — | all: 961.1 [N=8, SIL history in private ops repo]
-  └ 3-session: Dev 99.3 | Align 98.3 | Momentum 97.7 | Engage 97.7 | Process 98.3 [N=3]
+Sparkline (last 5 totals): ▇▇███
+Avgs — 3: 979.7 | 5: 975.4 | 10: — | 25: — | all: 964.0 [N=9, SIL history in private ops repo]
+  └ 3-session: Dev 99.3 | Align 99.0 | Momentum 98.0 | Engage 98.7 | Process 98.7 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~12.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-09 | Session 57 | Total: 982/1000 | Velocity: 3 | protocolVelocity: 1
+Last session: 2026-05-11 | Session 58 | Total: 987/1000 | Velocity: 4 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-11 — Session 58 | Total: 987/1000 | Velocity: 4 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Founder-requested all-items refinement pass. The session turned the prior objective/heat/replay foundations into a deeper player loop: pure combat helpers now support deterministic trust work, objectives now have mastery streaks and achievements, DeathScreen has local Run Brain guidance without LLM spend, Run History has fixed-seed bounty targets, HomeV2 gets a first-three-run onboarding arc, and build pressure fell by lazy-splitting legacy MenuScreen. Validation: 315/315 tests, `npm run lint` clean, `npm run build` clean.
+
+| Category | Score | vs S57 | Notes |
+|---|---|---|---|
+| Dev Health | 100 | → | New pure modules and tests expanded suite to 315/315; lint/build clean; App.jsx shed another deterministic branch without behavior drift |
+| Creative Alignment | 100 | ↑1 | Objective mastery, bounty targets, heat visuals, and Run Brain all deepen the existing comedy-combat identity instead of adding generic surface area |
+| Momentum | 99 | → | Multiple dependent features shipped after the prior 12-item sweep; next trust slice is now concrete instead of blocked on extraction |
+| Engagement | 100 | ↑1 | Post-run guidance, claimable bounties, onboarding arc, and objective-chain achievements close several repeat-session feedback loops |
+| Process Quality | 99 | → | Work stayed staged: pure helpers first, then dependent achievements/trust/UI; no broad rewrites or new dependencies |
+| Cross-Repo Coherence | 93 | ↑1 | Replay-contract hardening better aligns client and Edge Function trust semantics; domain migration still awaits founder-side gates |
+| Security Posture | 99 | ↑1 | `validate-replay` now distinguishes heuristic vs replay-contract confidence and warns on seeded competitive submissions missing `inputHash` |
+| Ecosystem Integration | 97 | → | All intelligence remains local-first and browser-safe; no new backend, paid API, or storage contract required |
+| Capital Efficiency | 100 | → | Zero-token Run Brain gives AI-like value without API spend; bundle split lowers default payload without reducing feature depth |
+| Automation Coverage | 100 | ↑1 | New regression tests cover combat math, objective chains, bounty generation, and Run Brain outputs |
 
 ## 2026-05-09 — Session 57 | Total: 982/1000 | Velocity: 3 | Debt: ↓
 

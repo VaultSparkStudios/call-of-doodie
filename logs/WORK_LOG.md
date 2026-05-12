@@ -196,3 +196,10 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - TASK_BOARD: meta clarity, pickup extraction, Roast Director, economy clarity slice 2 all marked DONE S51
 - Validation: `npm test` 248/248 · `npm run lint` clean · `npm run build` clean
 - All commits pushed to main (8 commits, 0bf4f20 latest)
+# 2026-05-11 (Session 58)
+
+- Implemented the founder-requested all-items refinement pass: deterministic combat-resolution helpers, objective-chain stats, four objective mastery achievements, Heat visual overlay, local Run Brain, Run History Bounty Board, first-three-run HomeV2 onboarding, replay-contract confidence in `validate-replay`, SettingsPanel hook cleanup, and legacy MenuScreen lazy loading.
+- Added focused coverage for `combatResolution`, `runBrain`, objective-chain behavior, bounty-board generation, Run Coach integration, and the updated achievement count.
+- Reduced initial bundle pressure by splitting legacy `MenuScreen` out of the default HomeV2 path. Final build main chunk: 730.41 kB raw / 222.57 kB gzip; `MenuScreen` chunk: 69.40 kB raw / 17.07 kB gzip.
+- Validation: `npm run lint` clean; `npx vitest run --pool=threads --fileParallelism=false --reporter=dot` 315/315 across 41 files; `npm run build` clean.
+- Captured S59 follow-ups: actual deterministic replay resimulation from `seed + inputHash`, next App.jsx extraction slice for enemy bullet/player hit and grenade explosion damage, and HomeV2 legacy-retirement gate after Lighthouse/funnel data.

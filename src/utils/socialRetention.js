@@ -125,3 +125,47 @@ export function buildGhostBoard(runHistory = [], rivalryHistory = []) {
     accent: rivalrySeeds.has(run.runSeed) ? "#FF8888" : "#8BD3FF",
   }));
 }
+
+export function buildBountyBoard(runHistory = [], rivalryHistory = [], dailyChampion = null) {
+  const bounties = [];
+  const unresolved = rivalryHistory.find((entry) => entry?.won === false && entry.seed);
+  if (unresolved) {
+    bounties.push({
+      id: `revenge-${unresolved.seed}`,
+      label: "Revenge Bounty",
+      seed: unresolved.seed,
+      targetScore: safeNumber(unresolved.vsScore, safeNumber(unresolved.score, 0)),
+      detail: unresolved.vsName ? `Take the seed back from @${unresolved.vsName}.` : "Erase a known loss on a fixed seed.",
+      accent: "#FFB36B",
+      challenge: { vs: unresolved.vsScore, vsName: unresolved.vsName },
+    });
+  }
+
+  if (dailyChampion?.score && dailyChampion?.seed) {
+    bounties.push({
+      id: `daily-crown-${dailyChampion.seed}`,
+      label: "Daily Crown",
+      seed: dailyChampion.seed,
+      targetScore: safeNumber(dailyChampion.score),
+      detail: `${dailyChampion.name || "Today's leader"} owns the crown. Make the board update.`,
+      accent: "#FFD700",
+      challenge: { vs: dailyChampion.score, vsName: dailyChampion.name || "Daily Champion" },
+    });
+  }
+
+  const seeded = runHistory.filter((run) => Number(run?.runSeed) > 0);
+  const best = seeded.slice().sort((a, b) => safeNumber(b.score) - safeNumber(a.score))[0];
+  if (best && !bounties.find((bounty) => bounty.seed === best.runSeed)) {
+    bounties.push({
+      id: `personal-best-${best.runSeed}`,
+      label: "Personal Ghost",
+      seed: best.runSeed,
+      targetScore: Math.ceil(safeNumber(best.score) * 1.1),
+      detail: "Beat your own proven route by 10% instead of rerolling noise.",
+      accent: "#7FE6FF",
+      challenge: { vs: Math.ceil(safeNumber(best.score) * 1.1), vsName: "Your Ghost" },
+    });
+  }
+
+  return bounties.slice(0, 3);
+}

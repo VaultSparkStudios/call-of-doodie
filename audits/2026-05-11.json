@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "session": 58,
+  "date": "2026-05-11",
+  "status": "green",
+  "sil": {
+    "rubricVersion": "3.0",
+    "score": 987,
+    "max": 1000,
+    "velocity": 4,
+    "debt": "improving",
+    "categories": {
+      "devHealth": 100,
+      "creativeAlignment": 100,
+      "momentum": 99,
+      "engagement": 100,
+      "processQuality": 99,
+      "crossRepoCoherence": 93,
+      "securityPosture": 99,
+      "ecosystemIntegration": 97,
+      "capitalEfficiency": 100,
+      "automationCoverage": 100
+    }
+  },
+  "summary": [
+    "Deterministic combat-resolution foundation extracted into pure helpers and wired into App.jsx bullet/enemy and obstacle-bounce paths.",
+    "Objective mastery chains and four new achievements shipped.",
+    "Local zero-token Run Brain, Run History Bounty Board, and first-three-run onboarding added.",
+    "Heat Meter visual overlay and replay-contract confidence hardening shipped.",
+    "Legacy MenuScreen lazy-loaded to reduce default bundle pressure."
+  ],
+  "validation": {
+    "lint": "npm run lint: clean",
+    "tests": "npx vitest run --pool=threads --fileParallelism=false --reporter=dot: 315/315 passing across 41 files",
+    "build": "npm run build: clean; main chunk 730.41 kB raw / 222.57 kB gzip; MenuScreen chunk 69.40 kB raw / 17.07 kB gzip",
+    "notes": "Vitest emitted expected jsdom canvas getContext warnings from DemoCanvas tests only."
+  },
+  "next": [
+    "validate-replay Phase 2B: actual headless deterministic resim from seed + inputHash using pure combat helpers; quarantine >2% drift.",
+    "App.jsx extraction slice 11: enemy bullet/player hit resolution and grenade explosion damage.",
+    "HomeV2/MenuScreen retirement gate after Lighthouse and funnel data confirm HomeV2 wins."
+  ],
+  "blockers": [
+    "Cloudflare API tokens lack account zone-create scope; founder must add zones or provide broader token.",
+    "Namecheap API remains blocked until current public IP is added to the allowlist.",
+    "Real-device PWA/gamepad QA and analytics key setup remain human-gated."
+  ]
+}

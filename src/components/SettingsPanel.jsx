@@ -53,7 +53,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     setPresets(updated); savePresets(updated); setShowSave(false); setNameInput("");
   };
 
-  const _filterTab = (entries) => entries.filter(([, m]) => tab === "Quick" ? m.quick : !m.quick);
+  const _filterTab = useCallback((entries) => entries.filter(([, m]) => tab === "Quick" ? m.quick : !m.quick), [tab]);
   const tabEntries = _filterTab(Object.entries(META));
 
   // ── Gamepad navigation ──────────────────────────────────────────────────
@@ -172,7 +172,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
     }, 50);
 
     return () => { clearInterval(id); clearTimeout(repeatTimeout); };
-  }, [apply, tab]); // re-run when tab changes so doMoveUD has correct itemCount
+  }, [_filterTab, apply, tab]); // re-run when tab changes so doMoveUD has correct itemCount
 
   const base = { fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6, fontWeight: 700 };
 

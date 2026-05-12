@@ -7,6 +7,7 @@ import {
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { copyChallengeUrl } from "../utils/challengeLinks.js";
 import {
+  buildBountyBoard,
   buildFeaturedSeeds,
   buildGhostBoard,
   buildWeeklyContract,
@@ -169,6 +170,7 @@ export function RunHistoryPanel({
   studioEvents = null,
   username = "",
   onLaunchSeed = null,
+  dailyChampion = null,
 }) {
   const history = Array.isArray(runHistory) ? runHistory : loadRunHistory();
   const rivalry = Array.isArray(rivalryHistory) ? rivalryHistory : loadRivalryHistory();
@@ -180,6 +182,7 @@ export function RunHistoryPanel({
   const weeklyContract = buildWeeklyContract(history, rivalry, events);
   const featuredSeeds = buildFeaturedSeeds(history, rivalry);
   const ghostBoard = buildGhostBoard(history, rivalry);
+  const bountyBoard = buildBountyBoard(history, rivalry, dailyChampion);
   const trustRecommendations = buildTrustRecommendations(trustSummary);
   const launchSeed = (seed, challenge = null) => {
     if (!seed || typeof onLaunchSeed !== "function") return;
@@ -219,6 +222,19 @@ export function RunHistoryPanel({
         </div>
         <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(0,229,255,0.04)", border: "1px solid rgba(0,229,255,0.18)" }}>
           <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>⚔️ RIVALRY NETWORK</div>
+          {bountyBoard.length > 0 && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 8, marginBottom: 10 }}>
+              {bountyBoard.map((bounty) => (
+                <div key={bounty.id} style={{ padding: "9px 10px", borderRadius: 8, background: "rgba(0,0,0,0.22)", border: `1px solid ${bounty.accent}44` }}>
+                  <div style={{ color: bounty.accent, fontSize: 10, fontWeight: 900, letterSpacing: 1 }}>{bounty.label}</div>
+                  <div style={{ color: "#FFF", fontSize: 12, marginTop: 4 }}>Seed #{bounty.seed}</div>
+                  <div style={{ color: "#BBB", fontSize: 10, marginTop: 4, lineHeight: 1.4 }}>{bounty.detail}</div>
+                  <div style={{ color: "#DDD", fontSize: 10, marginTop: 5 }}>Beat {bounty.targetScore.toLocaleString()}</div>
+                  <button onClick={() => launchSeed(bounty.seed, bounty.challenge)} style={{ ...MINI_BTN, marginTop: 7 }}>▶ CLAIM</button>
+                </div>
+              ))}
+            </div>
+          )}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#00FF88", border: "1px solid rgba(0,255,136,0.2)" }}>Wins {rivalrySummary.wins}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FF8888", border: "1px solid rgba(255,120,120,0.2)" }}>Losses {rivalrySummary.losses}</span>

@@ -25,4 +25,9 @@ describe("runCoach", () => {
     const r = buildRunCoach({ runSummary });
     expect(r.working).toMatch(/Pistol/);
   });
+  it("includes a persistent zero-cost run brain summary", () => {
+    const r = buildRunCoach({ runHistory: [{ wave: 4, score: 3000 }, { wave: 5, score: 6000 }] });
+    expect(r.brain.archetype).toBe("survival_gap");
+    expect(r.brain.nextExperiment.length).toBeGreaterThan(0);
+  });
 });

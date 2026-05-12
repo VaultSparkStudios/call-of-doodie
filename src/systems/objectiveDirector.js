@@ -208,3 +208,30 @@ export function tickObjective(gs) {
   }
   return { completed: false, expired: false };
 }
+
+export function createObjectiveChainStats(prev = {}) {
+  return {
+    hotZoneStreak: prev.hotZoneStreak || 0,
+    bountyKills: prev.bountyKills || 0,
+    perfectEscorts: prev.perfectEscorts || 0,
+    clutchLockdowns: prev.clutchLockdowns || 0,
+    completedTotal: prev.completedTotal || 0,
+  };
+}
+
+export function recordObjectiveResult(stats = {}, objective = null, result = {}) {
+  const next = createObjectiveChainStats(stats);
+  if (!objective || !result.completed) {
+    if (objective?.type === "hot_zone") next.hotZoneStreak = 0;
+    return next;
+  }
+
+  next.completedTotal++;
+  if (objective.type === "hot_zone") next.hotZoneStreak++;
+  else next.hotZoneStreak = 0;
+
+  if (objective.type === "bounty") next.bountyKills++;
+  if (objective.type === "escort" && (objective.cart?.hp || 0) >= 100) next.perfectEscorts++;
+  if (objective.type === "lockdown" && (objective.timeLeft || 0) <= 30 * 60) next.clutchLockdowns++;
+  return next;
+}

@@ -1,17 +1,9 @@
-// combatResolution.js — pure helpers for bullet/enemy collision math.
+// combatResolution.js — pure combat math for player projectile resolution.
 //
-// SCAFFOLD as of Session 57: only the helpers actually needed by Hot Zones (#1)
-// and replay validation (#5) live here. The full bullet-vs-enemy resolution
-// path remains in App.jsx; extracting it safely is a multi-session refactor
-// because it's tangled with React refs, addParticles, and analytics events.
-//
-// Future sessions should migrate:
-//   - bullet-vs-enemy hit detection
-//   - lightning chain target selection
-//   - pierce / bounce decrement
-//   - crit roll
-// Each migration must keep deterministic seed behavior intact (replay validation
-// resimulates from the seed and expects byte-identical scores).
+// This module deliberately avoids React refs, particles, sounds, analytics, and
+// state setters. App.jsx still owns side effects, but the rules that determine
+// hit geometry, crits, shield multipliers, lightning targets, and projectile
+// consumption now live here so replay validation can converge on the same core.
 
 /**
  * Returns true if the point (px, py) is inside the axis-aligned circle
@@ -29,4 +21,103 @@ export function pointInCircle(px, py, cx, cy, r) {
 export function dist2(ax, ay, bx, by) {
   const dx = ax - bx, dy = ay - by;
   return dx * dx + dy * dy;
+}
+
+export function bulletEnemyCollision(bullet, enemy) {
+  if (!bullet || !enemy) return { hit: false, radius: 0, distanceSq: Infinity };
+  const radius = (enemy.size || 0) / 2 + (bullet.size || 0);
+  const dx = (bullet.x || 0) - (enemy.x || 0);
+  const dy = (bullet.y || 0) - (enemy.y || 0);
+  if (Math.abs(dx) > radius || Math.abs(dy) > radius) {
+    return { hit: false, radius, distanceSq: dx * dx + dy * dy };
+  }
+  const distanceSq = dx * dx + dy * dy;
+  return { hit: distanceSq < radius * radius, radius, distanceSq };
+}
+
+export function rollCrit({ baseCrit = 0, perkCrit = 0, runCrit = 0, rng = Math.random } = {}) {
+  const chance = Math.max(0, Math.min(1, baseCrit + perkCrit + runCrit));
+  return { isCrit: rng() < chance, chance };
+}
+
+export function getShieldFacingMultiplier({ enemy, bullet, player }) {
+  if (!enemy || enemy.typeIndex !== 11) return 1;
+  const moveAngle = Math.atan2((player?.y || 0) - enemy.y, (player?.x || 0) - enemy.x);
+  const bulletAngle = Math.atan2(bullet?.vy || 0, bullet?.vx || 0);
+  const angleDiff = Math.abs(Math.atan2(Math.sin(bulletAngle - moveAngle), Math.cos(bulletAngle - moveAngle)));
+  return angleDiff < Math.PI / 2 ? 0.20 : 1.60;
+}
+
+export function computeBulletDamage({
+  bullet,
+  enemy,
+  player,
+  comboCount = 0,
+  critMult = 2,
+  critMultBonus = 0,
+  isCrit = false,
+  lastResort = false,
+  rageActive = false,
+} = {}) {
+  const comboMult = 1 + Math.max(0, comboCount) * 0.1;
+  const lastResortMult = lastResort && player?.health < (player?.maxHealth || 0) * 0.25 ? 3.0 : 1.0;
+  const shieldMult = getShieldFacingMultiplier({ enemy, bullet, player });
+  const rageMult = rageActive ? 1.75 : 1.0;
+  const jugShieldMult = enemy?.typeIndex === 17 && (enemy.jugShield || 0) > 0 ? 0.15 : 1.0;
+  const damage = (bullet?.damage || 0)
+    * comboMult
+    * (isCrit ? critMult + critMultBonus : 1)
+    * lastResortMult
+    * shieldMult
+    * (enemy?.dmgMult || 1)
+    * rageMult
+    * jugShieldMult;
+  return { damage, comboMult, shieldMult, lastResortMult, rageMult, jugShieldMult };
+}
+
+export function computeJuggernautShieldDamage({ bulletDamage = 0, comboCount = 0, isCrit = false, critMult = 2 } = {}) {
+  return bulletDamage * (1 + Math.max(0, comboCount) * 0.1) * (isCrit ? critMult : 1);
+}
+
+export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 200 } = {}) {
+  if (!sourceEnemy) return null;
+  const rangeSq = range * range;
+  let best = null;
+  let bestSq = rangeSq;
+  for (const enemy of enemies) {
+    if (!enemy || enemy === sourceEnemy || enemy.health <= 0) continue;
+    const d = dist2(enemy.x, enemy.y, sourceEnemy.x, sourceEnemy.y);
+    if (d < bestSq) {
+      bestSq = d;
+      best = enemy;
+    }
+  }
+  return best;
+}
+
+export function resolvePierce({ pierceLeft = 0 } = {}) {
+  const nextPierceLeft = Math.max(0, pierceLeft - 1);
+  return { nextPierceLeft, consumeBullet: pierceLeft <= 0 };
+}
+
+export function resolveObstacleBounce(bullet, obstacle) {
+  if (!bullet || !obstacle) return { bounced: false, consumed: false };
+  const inside = bullet.x >= obstacle.x && bullet.x <= obstacle.x + obstacle.w
+    && bullet.y >= obstacle.y && bullet.y <= obstacle.y + obstacle.h;
+  if (!inside) return { bounced: false, consumed: false };
+  if ((bullet.bouncesLeft || 0) <= 0) return { bounced: false, consumed: true };
+
+  const prevX = bullet.x - bullet.vx;
+  const prevY = bullet.y - bullet.vy;
+  const hitVerticalFace = prevX < obstacle.x || prevX > obstacle.x + obstacle.w;
+  return {
+    bounced: true,
+    consumed: false,
+    x: prevX + (hitVerticalFace ? -bullet.vx : bullet.vx),
+    y: prevY + (hitVerticalFace ? bullet.vy : -bullet.vy),
+    vx: hitVerticalFace ? -bullet.vx : bullet.vx,
+    vy: hitVerticalFace ? bullet.vy : -bullet.vy,
+    bouncesLeft: bullet.bouncesLeft - 1,
+    life: Math.max(bullet.life || 0, 35),
+  };
 }

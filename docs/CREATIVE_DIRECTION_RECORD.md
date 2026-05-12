@@ -5,6 +5,15 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-11 (Session 58)
+
+- **Founder direction:** continue the audit/refinement mandate and implement all recommended items in the optimal order at highest quality, then closeout, commit, and push.
+- **Creative read:** the highest leverage was not raw feature count; it was making the prior dynamic-objective foundation feel like an authored player journey. The pass therefore turned objectives into mastery chains, added claimable rivalry bounties, added local next-run intelligence, and made heat visible without drowning the screen.
+- **Locked-in invariants this session reinforced:**
+  1. **AI can be local intelligence** — Run Brain adds adaptive coaching without LLM calls, preserving token/API budget while still making the app feel smarter.
+  2. **Replay/rivalry targets need fixed seeds** — bounties are engaging because the target is reproducible and claimable, not just decorative leaderboard copy.
+  3. **Legacy UI stays fallback until data retires it** — MenuScreen is now lazy-loaded; removal waits for Lighthouse/funnel evidence that HomeV2 wins.
+
 ## 2026-05-09 (Session 57)
 
 - **Founder direction:** Two-part request — fix the broken Best-Moment GIF after death, *and* signal that "I really like the circle concept added that increases points/score" with a request to brainstorm additional strategic objectives. Then immediately followed with: "Audit project … recommend the top items in one combined list … be as creative and innovative as possible" → "Implement all items at the highest/optimal quality in one pass."

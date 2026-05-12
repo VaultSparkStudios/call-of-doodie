@@ -7,7 +7,7 @@ import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
-import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress } from "../storage.js";
+import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadStudioGameEvents } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -317,6 +317,8 @@ export default function DeathScreen({
     career: loadCareerStats(),
     meta: loadMetaProgress(),
     runSummary: { wave, bestStreak, crits, topWeapon: _topWpn },
+    runHistory: loadRunHistory(),
+    studioEvents: loadStudioGameEvents(),
   });
   const postRunIntel = buildPostRunIntelligence({
     score,
@@ -508,6 +510,10 @@ export default function DeathScreen({
           </div>
           <div style={{ fontSize: 11, color: "#B3FFB3", lineHeight: 1.45 }}>
             <span style={{ color: "#00FF88", fontWeight: 700 }}>Working:</span> {runCoach.working}
+          </div>
+          <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
+            <span style={{ color: "#9CB8FF", fontWeight: 700 }}>Run Brain:</span> {runCoach.brain.nextExperiment}
+            <div style={{ color: "#88A", marginTop: 2 }}>Follow-through: {runCoach.brain.followThrough}</div>
           </div>
         </div>
 

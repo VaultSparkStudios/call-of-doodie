@@ -13,6 +13,7 @@
 
 import { getRecommendedMetaUpgrade } from "./metaClarity.js";
 import { ENEMY_TYPES } from "../constants.js";
+import { buildRunBrain } from "./runBrain.js";
 
 function topRecentKiller(career, lookback = 5) {
   const arr = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy.slice(0, lookback) : [];
@@ -68,10 +69,17 @@ function buildWorking(runSummary) {
  * @param {{ career: object, meta: object, runSummary: object }} ctx
  * @returns {{ killedBy: string, tryNext: string, working: string }}
  */
-export function buildRunCoach({ career = {}, meta = {}, runSummary = {} } = {}) {
+export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [] } = {}) {
+  const brain = buildRunBrain({
+    career,
+    runHistory,
+    studioEvents,
+    latestAdvice: runSummary?.drill || null,
+  });
   return {
     killedBy: buildKilledBy(career, runSummary),
     tryNext:  buildTryNext(meta, career),
     working:  buildWorking(runSummary),
+    brain,
   };
 }

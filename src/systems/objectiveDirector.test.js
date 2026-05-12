@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { pickObjective, tickObjective, getObjectiveWeights } from "./objectiveDirector.js";
+import { pickObjective, tickObjective, getObjectiveWeights, recordObjectiveResult } from "./objectiveDirector.js";
 
 describe("objectiveDirector", () => {
   it("never spawns on boss waves", () => {
@@ -56,6 +56,18 @@ describe("objectiveDirector", () => {
     };
     const r = tickObjective(gs);
     expect(r.expired).toBe(true);
+  });
+  it("tracks objective achievement chains", () => {
+    let stats = recordObjectiveResult({}, { type: "hot_zone" }, { completed: true });
+    stats = recordObjectiveResult(stats, { type: "hot_zone" }, { completed: true });
+    stats = recordObjectiveResult(stats, { type: "bounty" }, { completed: true });
+    stats = recordObjectiveResult(stats, { type: "escort", cart: { hp: 100 } }, { completed: true });
+    stats = recordObjectiveResult(stats, { type: "lockdown", timeLeft: 200 }, { completed: true });
+    expect(stats.hotZoneStreak).toBe(0);
+    expect(stats.bountyKills).toBe(1);
+    expect(stats.perfectEscorts).toBe(1);
+    expect(stats.clutchLockdowns).toBe(1);
+    expect(stats.completedTotal).toBe(5);
   });
 });
 

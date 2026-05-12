@@ -169,6 +169,16 @@ export default function HomeV2(props) {
   const recommendedAction = actionStack[0];
   const analyticsStatus = getAnalyticsStatus();
   const telemetrySummary = useMemo(() => summarizeStudioEvents(studioEvents), [studioEvents]);
+  const onboarding = useMemo(() => {
+    const runs = career?.totalRuns || 0;
+    if (runs >= 3) return null;
+    const steps = [
+      { label: "RUN 1", text: "Deploy a clean baseline. Learn spacing before opening every system." },
+      { label: "RUN 2", text: "Play the Daily seed. Fixed conditions make improvement obvious." },
+      { label: "RUN 3", text: "Spend upgrades, then replay a seed to prove the build changed." },
+    ];
+    return { current: runs + 1, steps };
+  }, [career?.totalRuns]);
 
   const recordFrontDoorAction = useCallback((actionId, extra = {}) => {
     const studioEvent = buildStudioGameEvent("front_door_action", {
@@ -370,6 +380,21 @@ export default function HomeV2(props) {
             </div>
           )}
         </div>
+
+        {onboarding && (
+          <div style={{ margin: "0 auto 10px", maxWidth: 680, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 6 }}>
+            {onboarding.steps.map((step, index) => {
+              const active = index + 1 === onboarding.current;
+              const done = index + 1 < onboarding.current;
+              return (
+                <div key={step.label} style={{ minHeight: 62, padding: "8px 9px", borderRadius: 8, background: active ? "rgba(255,107,53,0.12)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.35)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
+                  <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
+                  <div style={{ color: "#DDD", fontSize: 10, lineHeight: 1.35, marginTop: 4 }}>{step.text}</div>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* DEPLOY split-button */}
         <div style={deployRow}>
@@ -711,6 +736,7 @@ export default function HomeV2(props) {
             runHistory={runHistory}
             rivalryHistory={rivalryHistory}
             studioEvents={studioEvents}
+            dailyChampion={dailyChampion}
             username={username}
             onLaunchSeed={launchHistorySeed}
             onClose={() => setShowRunHistory(false)}

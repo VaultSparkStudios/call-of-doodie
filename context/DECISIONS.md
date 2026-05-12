@@ -162,3 +162,18 @@ The two "Absolute path leak" warnings (`.push-final.tmp`, `.test-out.txt`) were 
 **Rationale:** The game needs post-run analysis and cross-surface telemetry without turning the player experience into a network-dependent live service. Local-first keeps UX resilient; opportunistic sync preserves downstream balancing and trust-review value.
 
 ---
+## 2026-05-11 — Run Brain remains zero-token/local-first
+
+Decision: post-run "AI" intelligence for Call of Doodie should default to deterministic local models over LLM/API calls.
+
+Rationale: the game benefits from adaptive coaching and experiment suggestions, but the needed signal already exists in run history, Studio events, and recent-death pressure. `src/utils/runBrain.js` gives a smarter-feeling loop with no token spend, no network dependency, and no privacy surface expansion.
+
+---
+
+## 2026-05-11 — Legacy MenuScreen remains lazy fallback until data gate
+
+Decision: split `MenuScreen` out of the default bundle now, but do not delete the `?home=v1` fallback until HomeV2 has real Lighthouse and funnel evidence.
+
+Rationale: lazy loading recovers default payload immediately while preserving a rollback/QA path. Full removal should be data-gated because the legacy surface still covers long-tail behaviors and human-device checks.
+
+---

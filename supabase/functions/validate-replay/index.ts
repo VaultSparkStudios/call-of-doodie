@@ -1,15 +1,9 @@
 // validate-replay — plausibility check for submitted runs.
 //
-// Phase 1 (this commit): heuristic validator. Computes expected score/kill
-// bounds from {wave, mode, difficulty, time} and quarantines submissions
-// outside the band. Returns { ok, drift, reasons } so the client can show
-// a transparent rejection message.
-//
-// Phase 2 (planned): deterministic re-simulation from {seed, input_hash}.
-// The game engine ships a pure-fn core that the worker can run headlessly;
-// we add a sim runner here, compare the byte-identical score, and reject on
-// >2% drift. That requires extracting the combat resolver — see App.jsx
-// scaffolding in src/systems/combatResolution.js.
+// Phase 1.5: heuristic validator plus replay-contract hardening. The full
+// headless resim path still needs the complete combat step in the browser and
+// edge runtime, but this endpoint now validates the shape of competitive replay
+// contracts and returns machine-readable confidence for quarantine decisions.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -38,6 +32,7 @@ interface ValidateResult {
   ok: boolean;
   drift: number;            // 0..1, how far outside expected band
   reasons: string[];
+  confidence: "heuristic" | "replay_contract" | "quarantine";
 }
 
 function difficultyMult(d: string | undefined): number {
@@ -112,7 +107,24 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
     drift = Math.max(drift, 0.4);
   }
 
-  return { ok: drift < 0.5 && reasons.length === 0, drift, reasons };
+  const inputHash = String(req.inputHash || "");
+  if (inputHash && !/^[a-f0-9]{16,128}$/i.test(inputHash)) {
+    reasons.push("inputHash malformed");
+    drift = Math.max(drift, 0.6);
+  }
+  const competitiveMode = mode === "daily_challenge" || mode === "gauntlet" || mode === "score_attack";
+  if (competitiveMode && req.seed != null && !inputHash) {
+    reasons.push("competitive seeded replay missing inputHash");
+    drift = Math.max(drift, 0.35);
+  }
+
+  const ok = drift < 0.5 && reasons.length === 0;
+  return {
+    ok,
+    drift,
+    reasons,
+    confidence: ok && inputHash ? "replay_contract" : ok ? "heuristic" : "quarantine",
+  };
 }
 
 Deno.serve(async (req) => {
