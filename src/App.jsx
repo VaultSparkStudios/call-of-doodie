@@ -5,9 +5,9 @@ import {
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
-  WAVE_CHALLENGE_MUTATIONS,
+  WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -23,6 +23,7 @@ import {
   resolveObstacleBounce,
   resolvePierce,
   rollCrit,
+  isPrecisionHit,
 } from "./systems/combatResolution.js";
 import { identifyWeakness as _identifyWeakness } from "./utils/metaClarity.js";
 import {
@@ -34,6 +35,7 @@ import {
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
+  getMusicBeat, getMusicBPM,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
@@ -549,6 +551,7 @@ export default function CallOfDoodie() {
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
       waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null,
+      precisionStreak: 0,
     };
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -1553,9 +1556,19 @@ export default function CallOfDoodie() {
     }
     // Reset draft gate for next run
     draftShownRef.current = false;
-    // Store challenge vs data for HUD + DeathScreen
-    setChallengeVsScore(challengeOpts.vs ?? null);
-    setChallengeVsName(challengeOpts.vsName ?? null);
+    // Store challenge vs data for HUD + DeathScreen.
+    // If no explicit challenge, auto-load the most recent unbeaten rivalry as a pressure target.
+    let vsScore = challengeOpts.vs ?? null;
+    let vsName = challengeOpts.vsName ?? null;
+    if (vsScore == null) {
+      try {
+        const rivalry = loadRivalryHistory();
+        const unbeaten = rivalry.find(r => r.vsScore != null && r.won === false);
+        if (unbeaten) { vsScore = unbeaten.vsScore; vsName = unbeaten.vsName || null; }
+      } catch {}
+    }
+    setChallengeVsScore(vsScore);
+    setChallengeVsName(vsName);
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
     const seed = initGame(forceSeed);
@@ -1635,6 +1648,14 @@ export default function CallOfDoodie() {
     });
     track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[0]?.name, starterLoadout });
     if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
+    // Weapon unlock snapshot — PostHog can derive unlock-rate funnels by account level
+    try {
+      const _acctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
+      const _unlockedCount = WEAPON_UNLOCK_LEVELS.filter((_, i) => isWeaponUnlocked(i, _acctLevel)).length;
+      if (_unlockedCount < WEAPONS.length) {
+        track("weapon_unlock_snapshot", { accountLevel: _acctLevel, unlockedCount: _unlockedCount, totalWeapons: WEAPONS.length });
+      }
+    } catch {}
   }, [applyPerk, dailyChallengeMode, difficulty, initGame, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
@@ -2009,6 +2030,15 @@ export default function CallOfDoodie() {
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         if (directorEliteType) applyEliteType(ne, directorEliteType);
         if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
+        // Beat-sync pulse: ring of particles when spawn lands on a downbeat
+        try {
+          const _bpm = getMusicBPM();
+          const _framesPerBeat = Math.round(60 / _bpm * 60);
+          const _beatPhase = frameCountRef.current % _framesPerBeat;
+          if (ne && (_beatPhase < 4 || _beatPhase > _framesPerBeat - 4)) {
+            addParticles(gs, ne.x, ne.y, ne.color || "#FF4400", 6);
+          }
+        } catch {}
       }
     }
     // Wave cleared
@@ -2595,6 +2625,22 @@ export default function CallOfDoodie() {
           addText(gs, e.x + (Math.random() - 0.5) * 20, e.y - e.size / 2 - Math.random() * 10,
             isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random() * HITMARKERS.length)],
             isCrit ? "#FFD700" : "#FFF");
+          // Precision hit bonus: bullet near enemy core → 1 💩 coin + streak multiplier
+          if (!e.isBossEnemy && isPrecisionHit(b, e)) {
+            gs.precisionStreak = (gs.precisionStreak || 0) + 1;
+            gs.coins = (gs.coins || 0) + 1;
+            if (gs.precisionStreak === 3) {
+              gs.coins += 2;
+              addText(gs, e.x, e.y - e.size - 10, "🎯 PRECISION BURST! +3💩", "#FF88FF", true);
+              addParticles(gs, e.x, e.y, "#FF88FF", 8);
+            } else if (gs.precisionStreak > 3) {
+              addText(gs, e.x, e.y - e.size - 10, `🎯 ×${gs.precisionStreak} +1💩`, "#CC88FF");
+            } else {
+              addText(gs, e.x, e.y - e.size - 10, "🎯 +1💩", "#FFAAFF");
+            }
+          } else if (!e.isBossEnemy) {
+            gs.precisionStreak = 0;
+          }
           // Pierce logic
           const pierce = resolvePierce({ pierceLeft: b.pierceLeft || 0 });
           b.pierceLeft = pierce.nextPierceLeft;

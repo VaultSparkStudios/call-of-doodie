@@ -6,6 +6,7 @@ import {
   computeJuggernautShieldDamage,
   enemyProjectilePlayerCollision,
   findLightningChainTarget,
+  isPrecisionHit,
   resolveEnemyContactPlayerHit,
   resolveEnemyProjectilePlayerHit,
   resolveGrenadeEnemyDamage,
@@ -103,5 +104,28 @@ describe("combatResolution", () => {
     expect(result.bouncesLeft).toBe(1);
     expect(result.life).toBe(35);
     expect(bullet.vx).toBe(3);
+  });
+
+  describe("isPrecisionHit", () => {
+    const enemy = { x: 100, y: 100, size: 40 }; // core radius threshold = 20 * 0.35 = 7
+
+    it("returns true when bullet is within 35% of enemy core radius", () => {
+      expect(isPrecisionHit({ x: 103, y: 102 }, enemy)).toBe(true);  // dist ~3.6 < 7
+    });
+
+    it("returns false when bullet is outside core but still hitting the enemy", () => {
+      expect(isPrecisionHit({ x: 115, y: 100 }, enemy)).toBe(false); // dist 15 > 7
+    });
+
+    it("returns false for boss enemies guard (handled at call site)", () => {
+      // isPrecisionHit itself is agnostic to boss flag — caller skips bosses
+      expect(isPrecisionHit({ x: 103, y: 102 }, { ...enemy, isBossEnemy: true })).toBe(true);
+    });
+
+    it("returns false for missing inputs", () => {
+      expect(isPrecisionHit(null, enemy)).toBe(false);
+      expect(isPrecisionHit({ x: 100, y: 100 }, null)).toBe(false);
+      expect(isPrecisionHit({ x: 100, y: 100 }, { x: 100, y: 100, size: 0 })).toBe(false);
+    });
   });
 });

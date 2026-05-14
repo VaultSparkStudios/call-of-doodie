@@ -542,6 +542,11 @@ function _beatBoss(ctx, beat, bar) {
 
 export function getMusicVibe() { return _musicVibe; }
 export function setMusicVibe(vibe) { _musicVibe = vibe; }
+export function getMusicBeat() { return _musicBeat; }
+export function getMusicBPM() {
+  const vibe = _musicBoss ? "boss" : (_musicVibe || "action");
+  return _BPM[vibe] || 108;
+}
 
 export function startMusic(isBossWave = false) {
   if (_musicActive) return;

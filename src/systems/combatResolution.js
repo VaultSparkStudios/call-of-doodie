@@ -35,6 +35,19 @@ export function bulletEnemyCollision(bullet, enemy) {
   return { hit: distanceSq < radius * radius, radius, distanceSq };
 }
 
+/**
+ * Returns true when the bullet landed near the enemy's core — within 35% of
+ * the enemy radius (ignoring the bullet size component). Used for precision /
+ * skill-shot bonus 💩 coin rewards.
+ */
+export function isPrecisionHit(bullet, enemy) {
+  if (!bullet || !enemy || !enemy.size) return false;
+  const coreRadius = (enemy.size / 2) * 0.35;
+  const dx = (bullet.x || 0) - (enemy.x || 0);
+  const dy = (bullet.y || 0) - (enemy.y || 0);
+  return (dx * dx + dy * dy) < coreRadius * coreRadius;
+}
+
 export function rollCrit({ baseCrit = 0, perkCrit = 0, runCrit = 0, rng = Math.random } = {}) {
   const chance = Math.max(0, Math.min(1, baseCrit + perkCrit + runCrit));
   return { isCrit: rng() < chance, chance };

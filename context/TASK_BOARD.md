@@ -14,6 +14,12 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:3] **DONE S62** Replay share links — `HomeV2.jsx` now parses `?replay=` URL params on mount (auto-fills seed/difficulty/mode, opens deploy dropdown); SHARE button copies full `?replay=<code>` URL to clipboard; `DeathScreen.jsx` gains "🔗 SHARE RUN" button that encodes current run as a share link + fires `debrief_share_replay_link` telemetry
+- [x] [SIL:2] **DONE S62** Run Coach weapon tips + enemy evasion tips — `runCoach.js` fully rewritten: `buildWeaponTip()` detects waste/dominated/spread-build patterns from `weaponKills` array; `buildKilledBy()` appends enemy-specific evasion tip for boss-type repeat killers (types 4/9/17/3/6/10/19/20); `DeathScreen.jsx` renders the `weaponTip` line in the AI RUN COACH card; 8/8 runCoach tests pass
+- [x] [SIL:2] **DONE S62** Precision hit system — `combatResolution.js` exports `isPrecisionHit(bullet, enemy)` (hit within 35% of enemy core radius); App.jsx bullet-enemy collision tracks `gs.precisionStreak`, awards +1💩 per hit with "PRECISION BURST! +3💩" milestone at streak 3+; 15/15 combatResolution tests pass
+- [x] [SIL:1] **DONE S62** Rivalry auto-load — `startGame()` in App.jsx auto-loads the first unbeaten rivalry entry from `loadRivalryHistory()` when no explicit `challengeOpts.vs` is passed; existing manual challenge flow unaffected
+- [x] [SIL:1] **DONE S62** Beat-sync spawn particles — `sounds.js` exports `getMusicBPM()` and `getMusicBeat()`; beat-aligned spawns (±4 frames) trigger a 6-particle burst, adding perceptual music sync with zero balance impact
+- [ ] [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to include `https://callofdoodie.wtf/` and backup-origin expectations — Supabase Edge Functions currently use `Access-Control-Allow-Origin: *`, so no repo-side CORS allowlist change is needed; remaining PostHog/Sentry/Ko-fi project URL updates require analytics/dashboard credentials (`node scripts/check-secrets.mjs --for analytics` is MISSING).
 - [x] [SIL:2] **DONE S61** [S60 follow-up] Finish post-cutover routing — verified `www.callofdoodie.wtf` SSL/domain readiness, added Cloudflare Pages middleware redirects, deployed to Pages, and confirmed `www.callofdoodie.wtf`, `playcallofdoodie.com`, and `www.playcallofdoodie.com` now return 301 to `https://callofdoodie.wtf/`.
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to include `https://callofdoodie.wtf/` and backup-origin expectations — Supabase Edge Functions currently use `Access-Control-Allow-Origin: *`, so no repo-side CORS allowlist change is needed; remaining PostHog/Sentry/Ko-fi project URL updates require analytics/dashboard credentials (`node scripts/check-secrets.mjs --for analytics` is MISSING).
 - [x] [SIL:1] **DONE S61** [S60 follow-up] Add old-path redirect in `VaultSparkStudios.github.io` from `/call-of-doodie/*` to `https://callofdoodie.wtf/*` — committed and pushed sibling repo commit `a6515ae` with `call-of-doodie/index.html` canonical/meta redirect plus `404.html` `/call-of-doodie/*` guard, leaving unrelated sibling repo worktree changes untouched.
@@ -129,6 +135,12 @@ Public-safe launch roadmap summary.
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready
+- [ ] [SIL:3] [S62 deferred] App.jsx extraction slice 1 — game loop `step()` modules; deeply coupled to React refs (setHealth, perkModsRef, dashRef) and globals (W, H); needs a dedicated architectural session with full regression test coverage before extraction is safe
+- [ ] [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor with no user-facing impact; HomeV2 is the default (v1 opt-in only), so deferral has minimal player impact
+- [ ] [SIL:2] [S62 deferred] Coordinated enemy formations — wave 20+ group-spawn patterns (flanks, pincer, escort); game design work (~4h) beyond current scope
+- [ ] [SIL:1] [S62 deferred] Mid-run challenge contracts — optional per-wave objectives for bonus coins beyond Dynamic Objective System; needs design pass to avoid overlap
+- [ ] [SIL:1] [S62 deferred] Input-timeline digest for validate-replay Phase 2B — compact signed command trace; prerequisite for deterministic resim; blocked on server contract v2
+- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
 
 ## Deferred to Project Agents
 

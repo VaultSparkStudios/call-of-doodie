@@ -7,6 +7,7 @@ import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
+import { encodeReplayCode } from "../utils/replayCode.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadStudioGameEvents } from "../storage.js";
 
@@ -317,7 +318,7 @@ export default function DeathScreen({
   const runCoach = buildRunCoach({
     career: loadCareerStats(),
     meta: loadMetaProgress(),
-    runSummary: { wave, bestStreak, crits, topWeapon: _topWpn },
+    runSummary: { wave, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [] },
     runHistory: loadRunHistory(),
     studioEvents: loadStudioGameEvents(),
   });
@@ -509,9 +510,14 @@ export default function DeathScreen({
           <div style={{ fontSize: 11, color: "#FFE5B3", lineHeight: 1.45, marginBottom: 4 }}>
             <span style={{ color: "#FFC800", fontWeight: 700 }}>Try next:</span> {runCoach.tryNext}
           </div>
-          <div style={{ fontSize: 11, color: "#B3FFB3", lineHeight: 1.45 }}>
+          <div style={{ fontSize: 11, color: "#B3FFB3", lineHeight: 1.45, marginBottom: runCoach.weaponTip ? 4 : 0 }}>
             <span style={{ color: "#00FF88", fontWeight: 700 }}>Working:</span> {runCoach.working}
           </div>
+          {runCoach.weaponTip && (
+            <div style={{ fontSize: 11, color: "#E0D0FF", lineHeight: 1.45 }}>
+              <span style={{ color: "#CC88FF", fontWeight: 700 }}>Weapon:</span> {runCoach.weaponTip}
+            </div>
+          )}
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
             <span style={{ color: "#9CB8FF", fontWeight: 700 }}>Run Brain:</span> {runCoach.brain.nextExperiment}
             <div style={{ color: "#88A", marginTop: 2 }}>Follow-through: {runCoach.brain.followThrough}</div>
@@ -885,6 +891,18 @@ export default function DeathScreen({
           <button aria-label="Play again — start a new run" onClick={() => { track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
           {runSeed > 0 && (
             <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
+          )}
+          {runSeed > 0 && (
+            <button
+              aria-label="Copy shareable link for this run"
+              onClick={() => {
+                const code = encodeReplayCode({ seed: runSeed, mode, difficulty, weaponIdx: 0, starterLoadout: "standard" });
+                const url = `${location.origin}${location.pathname}?replay=${code}`;
+                navigator.clipboard?.writeText?.(url);
+                track("debrief_share_replay_link", { seed: runSeed, score, wave, mode });
+              }}
+              style={{ ...btnS, minWidth: 130, fontSize: 13 }}
+            >🔗 SHARE RUN</button>
           )}
           <button aria-label="View leaderboard" onClick={() => { track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
           <button aria-label="Return to main menu" onClick={() => { track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause }); onMenu(); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>

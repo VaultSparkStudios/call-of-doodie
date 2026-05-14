@@ -117,16 +117,27 @@ export default function HomeV2(props) {
     if ((loaded?.totalRuns || 0) > 0) setCmdCenterExpanded(true);
     track("home_v2_view");
     const params = new URLSearchParams(window.location.search);
-    const urlSeed = params.get("seed");
-    if (urlSeed && !isNaN(parseInt(urlSeed))) {
-      setCustomSeed(urlSeed);
-      const urlDiff = params.get("diff");
-      if (urlDiff && Object.keys(DIFFICULTIES).includes(urlDiff)) setDifficulty(urlDiff);
-      setChallengeMode({
-        seed: urlSeed, diff: urlDiff || null,
-        vs: params.get("vs") ? parseInt(params.get("vs")) : null,
-        vsName: params.get("vsName") || null,
-      });
+    const urlReplay = params.get("replay");
+    if (urlReplay && isValidReplayCode(urlReplay)) {
+      const r = decodeReplayCode(urlReplay);
+      if (r) {
+        setCustomSeed(String(r.seed));
+        setDifficulty(r.difficulty);
+        selectMode(r.mode);
+        setDeployOpen(true);
+      }
+    } else {
+      const urlSeed = params.get("seed");
+      if (urlSeed && !isNaN(parseInt(urlSeed))) {
+        setCustomSeed(urlSeed);
+        const urlDiff = params.get("diff");
+        if (urlDiff && Object.keys(DIFFICULTIES).includes(urlDiff)) setDifficulty(urlDiff);
+        setChallengeMode({
+          seed: urlSeed, diff: urlDiff || null,
+          vs: params.get("vs") ? parseInt(params.get("vs")) : null,
+          vsName: params.get("vsName") || null,
+        });
+      }
     }
     requestStudioEventSync({ limit: 25 }).catch(() => {});
     getDailyChampion().then(c => { if (c) setDailyChampion(c); }).catch(() => {});
@@ -480,14 +491,15 @@ export default function HomeV2(props) {
                     seed: parseInt(customSeed || todaySeedStr, 10) || 0,
                     mode: modeId, difficulty, weaponIdx: 0, starterLoadout: selectedLoadout.id,
                   });
-                  navigator.clipboard?.writeText?.(code);
+                  const url = `${location.origin}${location.pathname}?replay=${code}`;
+                  navigator.clipboard?.writeText?.(url);
                   setReplayCopied(true);
                   setTimeout(() => setReplayCopied(false), 1500);
                   track("front_door_action", { actionId: "replay_code_share", surface: "home_v2", code });
                 }}
-                title="Copy a 12-char replay code for the currently configured run"
+                title="Copy a shareable link that auto-loads this run configuration"
                 style={{ marginLeft: "auto", padding: "5px 10px", fontSize: 10, fontWeight: 800, letterSpacing: 1, color: replayCopied ? "#00FF88" : "#FFD700", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, cursor: "pointer" }}
-              >{replayCopied ? "✓ COPIED" : "📋 SHARE CODE"}</button>
+              >{replayCopied ? "✓ LINK COPIED" : "🔗 SHARE LINK"}</button>
             </div>
           </div>
         )}
