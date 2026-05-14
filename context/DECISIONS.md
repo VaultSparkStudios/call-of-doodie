@@ -2,6 +2,30 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-05-13 — Session 59 — Cloudflare Pages is canonical host; GitHub Pages is fallback only
+
+**Decision:** Cloudflare Pages is now the canonical deployment target for Call of Doodie. The previous GitHub Pages deployment remains as a manual fallback during the domain migration window and builds with `VITE_BASE_PATH=/call-of-doodie/`.
+
+**Rationale:** The standalone domain requires root-scoped PWA behavior, custom-domain redirects, and future edge/CDN control that GitHub Pages does not provide cleanly. Keeping the old workflow as a manual fallback avoids cutting off the existing `vaultsparkstudios.com/call-of-doodie/` path before Cloudflare DNS and custom-domain verification are complete.
+
+**Trade-off accepted:** Two deployment modes exist temporarily. This is intentional during DNS propagation and rollback planning. Once `callofdoodie.wtf` and redirects are verified, the old GitHub Pages fallback can be retired.
+
+## 2026-05-13 — Session 59 — Platform migration needs account-level zone-create token
+
+**Decision:** Future domain migrations should use a separate broader Cloudflare token stored privately as `CLOUDFLARE_ZONE_CREATE_TOKEN`, rather than expanding the existing zone-scoped token in place.
+
+**Rationale:** The stored Cloudflare token can create/deploy the Pages project but cannot create new zones (`com.cloudflare.api.account.zone.create` missing). Domain migration is a distinct operational capability from routine DNS edits; keeping it in a separately named token makes capability boundaries explicit while letting automation create zones, attach Pages domains, and install redirects for future projects.
+
+**Trade-off accepted:** Until that token exists, custom apex migrations still have one manual Cloudflare dashboard step. The repo now has automation ready to consume the token as soon as it is available.
+
+## 2026-05-13 — Session 59 — Callsign/supporter/Studio membership remain separate identities
+
+**Decision:** The game should not imply that callsign entry or supporter badge claim is account creation. Public UI remains callsign-based until a real Supabase Auth sign-in flow ships; Studio membership integration is treated as backend-ready but not player-facing.
+
+**Rationale:** `submit-score` can recognize `vault_members` when an authenticated Supabase `uid` exists, but the current app does not expose create-account, sign-in, magic link, or OAuth. Mixing callsign/localStorage identity with Studio membership language would create false expectations about cross-device recovery and paid/member persistence.
+
+**Trade-off accepted:** Account UX remains deferred and explicit. If membership matters for launch/monetization, the next implementation should follow `docs/AUTH_INTEGRATION_PLAN.md` instead of extending the current local-only identity model.
+
 ## 2026-05-09 — Session 57 — Pushed with `--no-verify` (logged per CLAUDE.md)
 
 **Decision:** The S57 closeout push used `git push --no-verify` after the pre-push hook flagged 5 "Router adherence violations" in pre-existing infrastructure scripts (`scripts/context-meter.mjs:50-53`, `scripts/probe-capability.mjs:59`).

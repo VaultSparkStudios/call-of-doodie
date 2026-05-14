@@ -33,7 +33,7 @@ function assert(condition, message) {
 async function main() {
   loadDotEnv(path.join(process.cwd(), ".env.local"));
 
-  const siteUrl = process.env.COD_LIVE_URL || "https://vaultsparkstudios.com/call-of-doodie/";
+  const siteUrl = process.env.COD_LIVE_URL || "https://callofdoodie.wtf/";
   const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl : `${siteUrl}/`;
 
   console.log(`Live site target: ${normalizedSiteUrl}`);
@@ -41,7 +41,7 @@ async function main() {
   const html = await fetchText(normalizedSiteUrl);
   assert(html.status === 200, `Live page expected 200, got ${html.status}`);
   assert(html.text.includes("<title>Call of Doodie"), "Live page title missing");
-  assert(html.text.includes('rel="canonical" href="https://vaultsparkstudios.com/call-of-doodie/"'), "Canonical URL missing");
+  assert(html.text.includes('rel="canonical" href="https://callofdoodie.wtf/"'), "Canonical URL missing");
   assert(html.text.includes("manifest.json"), "Manifest link missing from live HTML");
   assert(html.text.includes("favicon.svg"), "Favicon reference missing from live HTML");
   assert(html.text.includes("og-image.svg"), "OG image reference missing from live HTML");
@@ -51,7 +51,8 @@ async function main() {
   const manifest = await fetchText(`${normalizedSiteUrl}manifest.json`);
   assert(manifest.status === 200, `Manifest expected 200, got ${manifest.status}`);
   const manifestJson = JSON.parse(manifest.text);
-  assert(manifestJson.start_url === "/call-of-doodie/", `Manifest start_url mismatch: ${manifestJson.start_url}`);
+  assert(manifestJson.start_url === "/", `Manifest start_url mismatch: ${manifestJson.start_url}`);
+  assert(manifestJson.scope === "/", `Manifest scope mismatch: ${manifestJson.scope}`);
   assert(manifestJson.display === "standalone", `Manifest display mismatch: ${manifestJson.display}`);
   assert(Array.isArray(manifestJson.icons) && manifestJson.icons.some((icon) => icon.sizes === "192x192"), "Manifest missing 192x192 icon");
   assert(Array.isArray(manifestJson.icons) && manifestJson.icons.some((icon) => icon.sizes === "512x512"), "Manifest missing 512x512 icon");
@@ -60,7 +61,8 @@ async function main() {
   const registerSw = await fetchText(`${normalizedSiteUrl}register-sw.js`);
   assert(registerSw.status === 200, `register-sw.js expected 200, got ${registerSw.status}`);
   assert(registerSw.text.includes("serviceWorker.register"), "Service worker registration call missing");
-  assert(registerSw.text.includes("/call-of-doodie/sw.js"), "Service worker path missing");
+  assert(registerSw.text.includes("new URL(\".\", import.meta.url).pathname"), "Service worker base derivation missing");
+  assert(registerSw.text.includes("serviceWorker.register(`${base}sw.js`)"), "Service worker path missing");
   console.log("PASS service worker registration checks");
 
   const sw = await fetchText(`${normalizedSiteUrl}sw.js`);

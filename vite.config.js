@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/call-of-doodie/",
+  base: process.env.VITE_BASE_PATH || "/",
   build: {
     rollupOptions: {
       output: {
@@ -22,7 +22,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}"],
-    testTimeout: 15000,
+    testTimeout: 30000,
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],

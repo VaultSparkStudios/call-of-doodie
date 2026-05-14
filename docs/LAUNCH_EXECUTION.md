@@ -46,7 +46,7 @@ Short description:
 
 Primary call-to-action:
 
-`Play instantly in your browser: https://vaultsparkstudios.com/call-of-doodie/`
+`Play instantly in your browser: https://callofdoodie.wtf/`
 
 Suggested body copy:
 
@@ -64,7 +64,7 @@ Suggested body copy:
 > - installable PWA
 > 
 > Play free:
-> https://vaultsparkstudios.com/call-of-doodie/
+> https://callofdoodie.wtf/
 
 ## Launch media pack
 

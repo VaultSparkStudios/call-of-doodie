@@ -1,4 +1,4 @@
-const base = import.meta.env?.BASE_URL || "/";
+const base = new URL(".", import.meta.url).pathname;
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

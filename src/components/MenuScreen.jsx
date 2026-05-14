@@ -8,6 +8,7 @@ import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelli
 import { track } from "../utils/analytics.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { isSupporter } from "../utils/supporter.js";
+import { CANONICAL_SITE_URL } from "../config/site.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
@@ -482,7 +483,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       const { blob } = await generateFeatureCard();
       const file = new File([blob], "call-of-doodie-whats-new.png", { type: "image/png" });
       const shareText = "Call of Doodie is live: a free browser roguelite shooter with doctrine builds, daily challenges, boss telegraphs, tactical debriefs, and leaderboard rivalry. Play free:";
-      const shareUrl = "https://vaultsparkstudios.com/call-of-doodie";
+      const shareUrl = CANONICAL_SITE_URL;
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: "Call of Doodie — What's New", text: shareText, url: shareUrl });
       } else {

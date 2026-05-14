@@ -13,6 +13,32 @@ Last session: 2026-05-11 | Session 58 | Total: 987/1000 | Velocity: 4 | protocol
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
+## 2026-05-13 — Session 59 | Total: 985/1000 | Velocity: 4 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Standalone-domain migration implementation session. Repo-side work is complete: root-scoped Cloudflare Pages build, canonical `.wtf` metadata/share/PWA surfaces, runtime-scoped service worker, Pages workflow, Pages security headers, reusable Cloudflare/Namecheap cutover automation, and successful Pages deployment. Custom apex remains blocked by platform permissions rather than code: stored Cloudflare token lacks `com.cloudflare.api.account.zone.create`, and Namecheap NS switching still requires Cloudflare zones + API allowlist.
+
+| Category | Score | vs S58 | Notes |
+|---|---|---|---|
+| Dev Health | 99 | ↓1 | Root/fallback builds pass; lint clean; targeted challenge-link test passes; full Vitest runner remains sensitive to Windows/process variance but launch smoke was observed passing under forked runner |
+| Creative Alignment | 100 | → | `.wtf` canonical + `.com` redirect preserves the comedy-first brand and parody posture without splitting identity |
+| Momentum | 98 | ↓1 | Large migration slice shipped and deployed to Pages; final apex cutover is blocked by credential scope outside repo control |
+| Engagement | 99 | ↓1 | Dedicated domain/PWA scope improves install/share posture; no new gameplay loop shipped this session |
+| Process Quality | 100 | ↑1 | Cutover ordering, fallback behavior, docs, and automation scripts are explicit and reusable; no irreversible DNS step was faked |
+| Cross-Repo Coherence | 96 | ↑3 | Private ops credentials are consumed by script; future projects now have a repeatable migration pattern; apex repo redirect remains a separate follow-up |
+| Security Posture | 99 | → | Secrets stay in private ops/env; scripts do not print token values; CSP moved into Pages `_headers` while legacy worker remains documented |
+| Ecosystem Integration | 99 | ↑2 | Cloudflare Pages project deployed; GitHub Actions workflow added; platform helper bridges Cloudflare + Namecheap + repo builds |
+| Capital Efficiency | 100 | → | Uses Cloudflare Pages free tier and existing domains; no new paid service introduced |
+| Automation Coverage | 95 | ↓5 | Automation advanced materially, but complete DNS automation requires a broader Cloudflare token and Namecheap allowlist update |
+
+**Top win:** The migration is now real, not just a plan: the root build is live on Cloudflare Pages and the repo can produce both canonical root and fallback subpath builds without manual edits.
+**Top gap:** Platform permissions remain the constraint. Without `CLOUDFLARE_ZONE_CREATE_TOKEN` or manual zone creation, `callofdoodie.wtf` will keep resolving to Namecheap parking DNS.
+**Intent outcome:** Partially achieved — all repo/deploy work shipped, Cloudflare Pages deploy succeeded, but apex custom-domain cutover remains blocked by external credential scope.
+
+**Brainstorm**
+1. Promote `scripts/platform-domain-cutover.mjs` into a shared Studio OS domain-migration utility once the broader token exists. High probability.
+2. Add a post-cutover browser smoke script that asserts `callofdoodie.wtf`, `www.callofdoodie.wtf`, `playcallofdoodie.com`, and the old VaultSpark path all return expected 200/301 behavior. High probability.
+3. If Studio membership becomes a launch goal, ship Supabase Auth as a visible "Save progress / Studio sign-in" benefit rather than burying it behind callsign entry. Medium-high probability.
+
 ## 2026-05-11 — Session 58 | Total: 987/1000 | Velocity: 4 | Debt: ↓
 
 SIL rubric v3.0 (10 categories × 100). Founder-requested all-items refinement pass. The session turned the prior objective/heat/replay foundations into a deeper player loop: pure combat helpers now support deterministic trust work, objectives now have mastery streaks and achievements, DeathScreen has local Run Brain guidance without LLM spend, Run History has fixed-seed bounty targets, HomeV2 gets a first-three-run onboarding arc, and build pressure fell by lazy-splitting legacy MenuScreen. Validation: 315/315 tests, `npm run lint` clean, `npm run build` clean.

@@ -2,6 +2,33 @@
 
 # Latest Handoff
 
+Session Intent: Founder asked to start/plan the standalone-domain migration, implement all migration items, troubleshoot the unreachable custom domain, clarify auth/Studio membership status, and close out with commit + push.
+
+## Where We Left Off (Session 59 — standalone-domain implementation + Cloudflare Pages deploy)
+
+**Intent outcome:** Partially achieved. Repo-side migration is implemented and deployed to Cloudflare Pages, but `callofdoodie.wtf` and `playcallofdoodie.com` still cannot resolve through Cloudflare because the stored Cloudflare token lacks account-level zone-create permission and the domains remain on Namecheap parking DNS.
+
+### What shipped
+- Root-domain build support: `VITE_BASE_PATH=/` for Cloudflare Pages, `VITE_BASE_PATH=/call-of-doodie/` for manual GitHub Pages fallback.
+- Canonical metadata/share/PWA assets updated to `https://callofdoodie.wtf/`.
+- Runtime-scoped service worker + registrar so root and fallback paths both cache correctly; cache bumped to `cod-v5`.
+- Cloudflare Pages workflow, Pages `_headers`, cutover runbook, Cloudflare domain helper, and platform helper that loads private ops secrets.
+- Root build deployed to Cloudflare Pages: `https://a660c406.call-of-doodie.pages.dev/`; live-site check passed 5/5.
+- Auth reality check completed: no public sign-in/create-account UI; callsign + local anon UUID today; Studio membership only server-side when an authenticated Supabase `uid` exists.
+
+### Validation
+- `npm run lint` clean.
+- `npm run build` clean.
+- `VITE_BASE_PATH=/call-of-doodie/ npm run build` clean.
+- `src/utils/challengeLinks.test.js` 2/2 passing under forked Vitest.
+- `npm run live:site-check` passed against the Pages URL.
+
+### Remaining work
+- [ ] Create broader Cloudflare zone-create token or manually add zones for both domains.
+- [ ] Switch Namecheap nameservers to the Cloudflare-assigned NS pair.
+- [ ] Update Namecheap API allowlist.
+- [ ] Run platform/domain cutover scripts, verify canonical URL + redirects, update Supabase/PostHog/Sentry/Ko-fi URLs, and add old-path 301 in the apex repo.
+
 Session Intent: Founder asked to continue the audit/refinement mandate, implement all recommended items in optimal order at highest quality, then closeout, commit, and push with all memory/context/CDR/task-board files updated.
 
 ## Where We Left Off (Session 58 — deterministic combat + run-intelligence depth pass)

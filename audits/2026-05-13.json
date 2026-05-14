@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "session": 59,
+  "date": "2026-05-13",
+  "status": "green",
+  "sil": {
+    "rubricVersion": "3.0",
+    "score": 985,
+    "max": 1000,
+    "velocity": 4,
+    "debt": "improving",
+    "categories": {
+      "devHealth": 99,
+      "creativeAlignment": 100,
+      "momentum": 98,
+      "engagement": 99,
+      "processQuality": 100,
+      "crossRepoCoherence": 96,
+      "securityPosture": 99,
+      "ecosystemIntegration": 99,
+      "capitalEfficiency": 100,
+      "automationCoverage": 95
+    }
+  },
+  "summary": [
+    "Standalone-domain migration implemented repo-side for callofdoodie.wtf canonical and playcallofdoodie.com redirect hedge.",
+    "Cloudflare Pages root build support, Pages workflow, Pages security headers, and runtime-scoped service worker shipped.",
+    "Canonical metadata, manifest, OG image, launch copy, score-card share URL, menu share URL, and challenge-link URLs updated to callofdoodie.wtf.",
+    "Reusable Cloudflare/Namecheap cutover scripts added for this and future project domain migrations.",
+    "Root build deployed successfully to Cloudflare Pages at https://a660c406.call-of-doodie.pages.dev/."
+  ],
+  "validation": {
+    "lint": "npm run lint: clean",
+    "tests": "src/utils/challengeLinks.test.js: 2/2 passing under forked Vitest; App.launch.test.jsx observed passing in full forked run after timeout increase",
+    "build": "npm run build: clean; VITE_BASE_PATH=/call-of-doodie/ npm run build: clean",
+    "live": "COD_LIVE_URL=https://a660c406.call-of-doodie.pages.dev/ npm run live:site-check: 5/5 passing",
+    "notes": "Default/threaded Vitest invocations showed Windows runner timeout variance; forked targeted coverage passed."
+  },
+  "next": [
+    "Create/store CLOUDFLARE_ZONE_CREATE_TOKEN or manually add Cloudflare zones for callofdoodie.wtf and playcallofdoodie.com.",
+    "Switch Namecheap nameservers to the Cloudflare-assigned NS pair and update Namecheap API IP allowlist.",
+    "Run domain cutover scripts, attach custom domains, configure redirects, and verify canonical + backup domains.",
+    "If membership matters for launch, implement Supabase Auth per docs/AUTH_INTEGRATION_PLAN.md."
+  ],
+  "blockers": [
+    "Stored Cloudflare token lacks com.cloudflare.api.account.zone.create permission.",
+    "Custom apex domains still resolve through Namecheap parking DNS until zones exist and nameservers are switched.",
+    "Namecheap API automation requires current public IP in allowlist."
+  ]
+}

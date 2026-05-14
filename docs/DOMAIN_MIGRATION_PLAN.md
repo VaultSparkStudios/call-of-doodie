@@ -4,7 +4,7 @@
 **Canonical:** `callofdoodie.wtf` (purchased at Namecheap)
 **Hedge / 301 target:** `playcallofdoodie.com` (purchased at Namecheap)
 **Target host:** Cloudflare Pages (free tier)
-**Status:** Paused at "founder must add zones to Cloudflare dashboard + swap nameservers in Namecheap"
+**Status:** Repo implementation in progress on `feat-standalone-domain`; DNS remains paused at "founder must add zones to Cloudflare dashboard + swap nameservers in Namecheap"
 
 ---
 
@@ -59,7 +59,7 @@ Domain comparison:
 
 ### Phase B — Code changes (on `feat/standalone-domain` branch, NOT `main`)
 
-5. **`vite.config.js`** — change `base: "/call-of-doodie/"` to `base: "/"`
+5. **`vite.config.js`** — use environment-driven base paths: Cloudflare Pages builds with `VITE_BASE_PATH=/`, GitHub Pages fallback builds with `VITE_BASE_PATH=/call-of-doodie/`
 
 6. **`public/sw.js`** — bump cache name `cod-v4` → `cod-v5`; rewrite precache list paths (`/call-of-doodie/` → `/`) and `BASE` constant
 
@@ -80,11 +80,15 @@ Domain comparison:
 
 12. **Add GitHub Actions secrets** for `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (founder UI action; values are in `vaultspark-studio-ops/secrets/cloudflare.env`)
 
+12a. **Run the cutover helper** once zones and secrets exist:
+   - Dry run: `npm run domain:cloudflare:plan`
+   - Apply: `npm run domain:cloudflare:apply`
+
 ### Phase D — Custom domain attachment
 
 13. **Attach domains to CF Pages project** via API: `POST /accounts/:account_id/pages/projects/:project/domains` for each of `callofdoodie.wtf`, `www.callofdoodie.wtf`, `playcallofdoodie.com`, `www.playcallofdoodie.com`
 
-14. **Set up CF Bulk Redirect** on `playcallofdoodie.com` zone — redirect every path to `https://callofdoodie.wtf$path` (301)
+14. **Set up Cloudflare Single Redirect rules** on `playcallofdoodie.com` and `callofdoodie.wtf` — redirect backup/www hosts to `https://callofdoodie.wtf$path` (301)
 
 ### Phase E — Backend allowlists
 
@@ -100,7 +104,7 @@ Domain comparison:
 
 19. **Add 301 redirect** in `VaultSparkStudios.github.io` repo: when path matches `/call-of-doodie/...`, serve a meta-refresh + canonical link to `https://callofdoodie.wtf$path`
 
-20. **Disable GH Pages** in this repo (Settings → Pages → "Source: None") OR keep `deploy.yml` running for 7d as a fallback before disabling
+20. **Disable GH Pages** in this repo (Settings → Pages → "Source: None") OR keep `deploy.yml` as a manual fallback for 7d before disabling
 
 21. **Update README, in-game footer (`vaultsparkstudios.com` → `callofdoodie.wtf`), Ko-fi page link, social posts**
 

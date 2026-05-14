@@ -5,6 +5,18 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-13 (Session 59)
+
+- **Founder direction:** complete the standalone-domain migration from `vaultsparkstudios.com/call-of-doodie/` to `callofdoodie.wtf`, keep `playcallofdoodie.com` as a backup/redirect, and make future project migrations easier through reusable platform automation. Founder also asked whether account creation/sign-in exists today and whether it is integrated with Studio membership.
+- **Public-safe implementation summary:**
+  - Repo-side migration is implemented: root-scoped Cloudflare Pages build, canonical metadata/share/PWA surfaces, Pages deploy workflow, Pages security headers, and reusable Cloudflare/Namecheap cutover scripts.
+  - Cloudflare Pages project is live at a temporary Pages URL and smoke-checks pass. Custom domain activation remains blocked by Cloudflare zone-create permission, not by app code.
+  - Current identity posture was confirmed: no public create-account/sign-in UI; callsign + local anon UUID remains the active player identity; Studio membership is a backend-aware path only when an authenticated Supabase user exists.
+- **Locked-in invariants this session reinforced:**
+  1. **`.wtf` remains canonical** — `playcallofdoodie.com` is a hedge/redirect, not a second brand surface.
+  2. **Fallback must stay operational during DNS cutover** — GitHub Pages stays as a manual `/call-of-doodie/` fallback until the apex domain and redirects verify.
+  3. **Auth should be explicit, not implied** — supporter badges, callsigns, and Studio membership are distinct concepts until a real sign-in UI ships.
+
 ## 2026-05-11 (Session 58)
 
 - **Founder direction:** continue the audit/refinement mandate and implement all recommended items in the optimal order at highest quality, then closeout, commit, and push.

@@ -2,8 +2,20 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-05-11
+Last reviewed: 2026-05-13
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-13 — Session 59 changes
+
+- `vite.config.js` — deployment base path is now controlled by `VITE_BASE_PATH`. Cloudflare Pages uses `/`; the manual GitHub Pages fallback uses `/call-of-doodie/`.
+- `.github/workflows/deploy-cloudflare.yml` — new canonical deployment workflow for Cloudflare Pages. `.github/workflows/deploy.yml` is no longer automatic on push and remains a manual fallback.
+- `index.html`, `public/manifest.json`, `public/og-image.svg`, `public/launch-assets/launch-combat.svg`, `docs/LAUNCH_EXECUTION.md`, `src/components/DeathScreen.jsx`, and `src/components/MenuScreen.jsx` — canonical public URL now points at `https://callofdoodie.wtf/`.
+- `src/config/site.js` and `src/utils/challengeLinks.js` — canonical share URL is centralized. `challengeLinks` still accepts explicit `baseUrl` for tests or future overrides.
+- `public/register-sw.js` and `public/sw.js` — service worker registration/cache scope is derived at runtime; this prevents root-domain and fallback-subpath builds from diverging. Cache version is `cod-v5`.
+- `public/_headers` — Cloudflare Pages security headers/CSP now live with the static bundle. Legacy `cloudflare/vaultspark-security-headers.js` remains only for the old `vaultsparkstudios.com` route.
+- `scripts/cloudflare-domain-cutover.mjs` and `scripts/platform-domain-cutover.mjs` — new deployment automation. They are operational helpers, not secret stores; they read credentials from environment/private ops files and do not print secrets.
+- `docs/DOMAIN_MIGRATION_PLAN.md` and `docs/DOMAIN_CUTOVER_RUNBOOK.md` — source-of-truth migration procedure updated. Custom domain activation remains blocked until Cloudflare zones exist.
+- `supabase/functions/submit-score/index.ts`, `src/supabase.js`, `src/utils/supporter.js`, and `docs/AUTH_INTEGRATION_PLAN.md` — auth audit confirmed no contradiction: Studio membership hooks exist server-side, but no public sign-in UI is implemented.
 
 ## 2026-05-11 — Session 58 changes
 

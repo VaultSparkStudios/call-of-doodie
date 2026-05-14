@@ -5,17 +5,17 @@
 //  • Supabase / external API calls → network-only (never cache)
 //  • Navigation → network-first with offline fallback to index.html
 
-const CACHE_NAME = "cod-v4";
+const CACHE_NAME = "cod-v5";
+const BASE = new URL(self.registration.scope).pathname;
 const SHELL_ASSETS = [
-  "/call-of-doodie/",
-  "/call-of-doodie/index.html",
-  "/call-of-doodie/manifest.json",
-  "/call-of-doodie/icon.svg",
-  "/call-of-doodie/icon-192.png",
-  "/call-of-doodie/icon-512.png",
-  "/call-of-doodie/og-image.svg",
+  BASE,
+  `${BASE}index.html`,
+  `${BASE}manifest.json`,
+  `${BASE}icon.svg`,
+  `${BASE}icon-192.png`,
+  `${BASE}icon-512.png`,
+  `${BASE}og-image.svg`,
 ];
-const BASE = "/call-of-doodie/";
 
 // ── Install: pre-cache shell ──────────────────────────────────────────────────
 self.addEventListener("install", e => {
@@ -61,7 +61,7 @@ self.addEventListener("fetch", e => {
   }
 
   // Hashed /assets/ files → cache-first (immutable)
-  if (url.pathname.startsWith(BASE + "assets/")) {
+  if (url.pathname.startsWith(`${BASE}assets/`)) {
     e.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;

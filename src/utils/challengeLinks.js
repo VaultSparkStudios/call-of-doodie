@@ -1,3 +1,5 @@
+import { CANONICAL_SITE_URL } from "../config/site.js";
+
 function cleanSeed(seed) {
   const num = Number(seed);
   return Number.isFinite(num) && num > 0 ? Math.floor(num) : null;
@@ -36,6 +38,7 @@ export function buildChallengeUrl({
   if (safeVsName) params.set("vsName", safeVsName);
 
   const resolvedBase = baseUrl
+    || CANONICAL_SITE_URL
     || (typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : "");
   if (!resolvedBase) return `?${params.toString()}`;
   return `${resolvedBase}?${params.toString()}`;

@@ -4,6 +4,20 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 ## 2026-04-22 (Session 53)
 
+## 2026-05-13 (Session 59 — standalone-domain migration implementation)
+
+- Founder request: start the session, provide the full plan to migrate from `vaultsparkstudios.com/call-of-doodie` to `callofdoodie.wtf`, use `playcallofdoodie.com` as backup/redirect, then implement all items at highest quality in optimal order and closeout/push.
+- Implemented root-domain app support: `vite.config.js` now reads `VITE_BASE_PATH`; Cloudflare Pages builds at `/`, while `.github/workflows/deploy.yml` remains a manual GitHub Pages fallback with `/call-of-doodie/`.
+- Updated canonical URL surfaces to `https://callofdoodie.wtf/`: `index.html`, `public/manifest.json`, `public/og-image.svg`, `public/launch-assets/launch-combat.svg`, `docs/LAUNCH_EXECUTION.md`, DeathScreen score card/share URL, MenuScreen share URL, and challenge-link generation.
+- Added `src/config/site.js` for canonical site URL/host and made `src/utils/challengeLinks.js` use it by default. Updated challenge-link tests.
+- Made PWA cache/registration path-safe across both root and fallback deployments: `public/register-sw.js` derives `base` from `import.meta.url`; `public/sw.js` derives `BASE` from `self.registration.scope`; cache bumped to `cod-v5`.
+- Added Cloudflare Pages deployment path: `.github/workflows/deploy-cloudflare.yml`, `public/_headers`, `docs/DOMAIN_CUTOVER_RUNBOOK.md`, `scripts/cloudflare-domain-cutover.mjs`, `scripts/platform-domain-cutover.mjs`, and npm scripts `domain:cloudflare:*` + `domain:platform:*`.
+- Created/deployed the Cloudflare Pages project with stored credentials; root build uploaded successfully to `https://a660c406.call-of-doodie.pages.dev/`; `COD_LIVE_URL=https://a660c406.call-of-doodie.pages.dev/ npm run live:site-check` passed 5/5.
+- Diagnosed `callofdoodie.wtf` browser timeout: both domains still use Namecheap parking nameservers and resolve to Namecheap parking IPs. Custom apex cannot work until zones exist in Cloudflare and Namecheap NS is switched.
+- Attempted API-driven zone creation via private ops Cloudflare credentials; blocked by token scope: `Requires permission "com.cloudflare.api.account.zone.create"`. Pages project creation/deploy works, but custom-domain attachment is blocked until zones exist.
+- Answered account/membership audit: no public sign-in/create-account UI today; callsign + local anon UUID is current identity. Studio membership is only recognized server-side when an authenticated Supabase `uid` already exists.
+- Validation: `npm run lint` clean; `npm run build` clean; `VITE_BASE_PATH=/call-of-doodie/ npm run build` clean; `src/utils/challengeLinks.test.js` 2/2 passing under forked Vitest; Cloudflare Pages live-site check passed.
+
 ## 2026-05-09 (Session 57 — 12-item depth + retention sweep)
 
 - Founder request: investigate broken Best-Moment GIF, brainstorm strategic objectives building on the existing "circle that increases score" concept (which on inspection didn't yet exist — confirmed with founder), produce a top-12 audit ranked list, then implement all items at quality in one pass.

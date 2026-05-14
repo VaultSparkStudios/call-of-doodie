@@ -7,6 +7,7 @@ import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
+import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadStudioGameEvents } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -160,7 +161,7 @@ export default function DeathScreen({
     const _viewers = ((score / 100 + kills * 3 + wave * 50) | 0).toLocaleString();
     c.textAlign = "right"; c.font = "14px 'Courier New', monospace"; c.fillStyle = "#CCC";
     c.fillText("👥 " + _viewers + " watching", W - 18, 20);
-    c.fillStyle = "#888"; c.fillText("vaultsparkstudios.com/call-of-doodie", W - 18, 38);
+    c.fillStyle = "#888"; c.fillText(CANONICAL_SITE_HOST, W - 18, 38);
 
     // ── KILLCAM banner ────────────────────────────────────────────────────────
     c.textAlign = "center";
@@ -243,7 +244,7 @@ export default function DeathScreen({
     ctaGrad.addColorStop(0, "#FF6B35"); ctaGrad.addColorStop(0.5, "#FFD700"); ctaGrad.addColorStop(1, "#FF6B35");
     c.fillStyle = ctaGrad; c.fillRect(0, H - 72, W, 4);
     c.font = "bold 24px 'Courier New', monospace"; c.fillStyle = "#FFF";
-    c.fillText("💀  CAN YOU BEAT " + username.toUpperCase() + "?  ·  vaultsparkstudios.com/call-of-doodie  💀", W / 2, H - 32);
+    c.fillText("💀  CAN YOU BEAT " + username.toUpperCase() + "?  ·  " + CANONICAL_SITE_HOST + "  💀", W / 2, H - 32);
     c.font = "13px 'Courier New', monospace"; c.fillStyle = "#888";
     c.fillText("FREE TO PLAY IN YOUR BROWSER  ·  SHARE YOUR SCORE  ·  #CallOfDoodie", W / 2, H - 12);
 
@@ -257,7 +258,7 @@ export default function DeathScreen({
       const file = new File([blob], "call-of-doodie-score.png", { type: "image/png" });
       const _modeTag = bossRushMode ? " [BOSS RUSH]" : cursedRunMode ? " [CURSED]" : scoreAttackMode ? " [SCORE ATTACK]" : dailyChallengeMode ? " [DAILY]" : "";
       const shareText = `I scored ${score.toLocaleString()} pts and reached Wave ${wave}${_modeTag} in Call of Doodie! 💀 Can you beat me?`;
-      const shareUrl = "https://vaultsparkstudios.com/call-of-doodie";
+      const shareUrl = CANONICAL_SITE_URL;
       if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({ files: [file], title: "Call of Doodie Score", text: shareText, url: shareUrl });
       } else {

@@ -29,7 +29,7 @@ async function main() {
   loadDotEnv(path.join(process.cwd(), ".env.local"));
 
   const siteRoot = process.env.COD_SITE_ROOT || "https://vaultsparkstudios.com/";
-  const gameUrl = process.env.COD_LIVE_URL || "https://vaultsparkstudios.com/call-of-doodie/";
+  const gameUrl = process.env.COD_LIVE_URL || "https://callofdoodie.wtf/";
   const homepageUrl = siteRoot.endsWith("/") ? siteRoot : `${siteRoot}/`;
   const sitemapUrl = `${homepageUrl}sitemap.xml`;
   const optionalGamesHubUrl = `${homepageUrl}games/`;

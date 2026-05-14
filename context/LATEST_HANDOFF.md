@@ -1,5 +1,40 @@
 # Latest Handoff
 
+Session Intent: Founder asked to start/plan the standalone-domain migration, then implement all migration items at highest quality, troubleshoot the unreachable `callofdoodie.wtf`, clarify auth/Studio membership status, and closeout with commit + push.
+
+## Where We Left Off (Session 59 — standalone-domain implementation + Cloudflare Pages deploy)
+
+**Intent outcome:** Partially achieved. Repo-side migration work is implemented and the root-scoped build is deployed to Cloudflare Pages, but the custom domains cannot resolve until Cloudflare zones are created and Namecheap nameservers are switched. The current Cloudflare token can create/deploy the Pages project but cannot create zones (`com.cloudflare.api.account.zone.create` missing).
+
+### What shipped
+- **Root-domain build support** — `vite.config.js` now uses `VITE_BASE_PATH` so Cloudflare Pages builds at `/`, while the manual GitHub Pages fallback still builds at `/call-of-doodie/`.
+- **Canonical domain metadata** — `index.html`, `public/manifest.json`, `public/og-image.svg`, launch copy, and share cards now point at `https://callofdoodie.wtf/`.
+- **Runtime-safe PWA scope** — `public/register-sw.js` and `public/sw.js` derive their scope at runtime, so both the new root deployment and the old subpath fallback can register/cache correctly. Cache bumped to `cod-v5`.
+- **Canonical sharing config** — `src/config/site.js` centralizes the canonical site URL/host; `challengeLinks`, DeathScreen, and MenuScreen share surfaces use it.
+- **Cloudflare Pages pipeline** — `.github/workflows/deploy-cloudflare.yml` deploys `dist` to Pages; old `.github/workflows/deploy.yml` is now a manual GitHub Pages fallback.
+- **Cloudflare headers + cutover tooling** — `public/_headers` carries Pages CSP/security headers; `scripts/cloudflare-domain-cutover.mjs` handles Pages custom-domain/redirect setup after zones exist; `scripts/platform-domain-cutover.mjs` loads private ops secrets and attempts Cloudflare zone + Namecheap NS + Pages setup end-to-end.
+- **Deployment completed** — root build deployed to Cloudflare Pages at `https://a660c406.call-of-doodie.pages.dev/`; `npm run live:site-check` passed against that URL.
+- **Auth reality check** — confirmed there is no public create-account/sign-in UI yet. Identity is callsign + local anon UUID; Studio membership is only recognized server-side if an authenticated Supabase `uid` already exists.
+
+### Validation
+- `npm run lint` -> clean.
+- `npm run build` -> clean for Cloudflare root build.
+- `VITE_BASE_PATH=/call-of-doodie/ npm run build` -> clean for fallback build.
+- `npx vitest run src/utils/challengeLinks.test.js --reporter=dot --pool=forks --no-file-parallelism` -> 2/2 passing.
+- Full Vitest forked run observed `App.launch.test.jsx` passing after timeout increase; earlier default/threaded Vitest invocations timed out on Windows runner variance.
+- `node --check scripts/cloudflare-domain-cutover.mjs` and `node --check scripts/platform-domain-cutover.mjs` -> clean.
+- `npm run live:site-check` with `COD_LIVE_URL=https://a660c406.call-of-doodie.pages.dev/` -> 5/5 passing.
+
+### Remaining work
+- [ ] [Human/Credential] Create a broader Cloudflare token with account-level zone creation (or manually add both zones in Cloudflare): `callofdoodie.wtf` and `playcallofdoodie.com`.
+- [ ] [Human] Switch Namecheap nameservers for both domains to the exact Cloudflare nameservers assigned to those zones.
+- [ ] [Human/Credential] Update Namecheap API IP allowlist to this machine's current public IP before API-driven NS updates can work reliably.
+- [ ] After zones exist: run `npm run domain:platform:apply`, then `npm run domain:cloudflare:apply`, then verify `https://callofdoodie.wtf/` and redirects.
+- [ ] Update Supabase/PostHog/Sentry/Ko-fi allowed URLs and add old-path 301 in the `VaultSparkStudios.github.io` repo.
+
+## Next Recommended Slice (Session 60)
+- [ ] First unblock the platform access gap: add `CLOUDFLARE_ZONE_CREATE_TOKEN` with `Account:Cloudflare Pages Edit`, `Zone:Zone Edit`, `Zone:DNS Edit`, and `Zone:Rulesets Edit` across all zones in the VaultSpark account; update Namecheap API allowlist. Then run the platform cutover scripts and smoke-check the canonical domain.
+
 Session Intent: Founder asked to continue the audit/refinement mandate, implement all recommended items in optimal order at highest quality, then closeout, commit, and push with all memory/context/CDR/task-board files updated.
 
 ## Where We Left Off (Session 58 — deterministic combat + run-intelligence depth pass)
