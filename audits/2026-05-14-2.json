@@ -5,12 +5,13 @@
   "date": "2026-05-14",
   "agent": "codex",
   "intent": "Fix the protocol mismatch that caused Claude-only plan-mode checks to fail in Codex sessions, continue /go cleanup, then closeout, commit, and push with memory/context/CDR/task board files updated.",
-  "intentOutcome": "Achieved for current repo; sibling website redirect patch remains cross-repo pending.",
+  "intentOutcome": "Achieved; current repo closeout was pushed and the sibling website old-path redirect patch was also committed and pushed.",
   "shipped": [
     "Codex plan-mode mismatch fixed in scripts/verify-plan-mode.mjs; Codex sessions now stamp planModeDetected=not_required instead of failing.",
     "Cloudflare Pages middleware redirects deployed and verified for www.callofdoodie.wtf, playcallofdoodie.com, and www.playcallofdoodie.com to canonical https://callofdoodie.wtf/.",
     "App.jsx combat extraction slice 11 shipped for incoming damage, enemy projectile hits, contact-hit helper coverage, and grenade explosion damage.",
-    "Domain migration/runbook context updated to document the Pages middleware fallback when Rulesets API access is unavailable."
+    "Domain migration/runbook context updated to document the Pages middleware fallback when Rulesets API access is unavailable.",
+    "Sibling VaultSparkStudios.github.io old-path redirect patch committed and pushed as a6515ae."
   ],
   "deferred": [
     {
@@ -20,10 +21,6 @@
     {
       "item": "validate-replay Phase 2B deterministic resim",
       "reason": "inputHash is not reversible into replay inputs; the server contract must first include a compact input timeline, command trace, or signed event digest."
-    },
-    {
-      "item": "Old GitHub Pages /call-of-doodie/* redirect",
-      "reason": "patch is prepared in the sibling VaultSparkStudios.github.io repo, but cross-repo commit/push/deploy is tracked separately."
     }
   ],
   "validation": [

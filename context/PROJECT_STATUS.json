@@ -5,7 +5,7 @@
   "status": "active",
   "health": "green",
   "currentFocus": "Session 61 closed the Codex plan-mode protocol mismatch, deployed Pages middleware canonical redirects to https://callofdoodie.wtf/, and extracted another App.jsx combat-resolution slice.",
-  "nextMilestone": "S62 follow-through: publish the prepared old-path redirect in VaultSparkStudios.github.io or design replay-contract v2 with a real input timeline/signed digest before deterministic resim.",
+  "nextMilestone": "S62 follow-through: design replay-contract v2 with a real input timeline/signed digest before deterministic resim, verify sibling website old-path redirect deployment, and rotate/narrow broad Cloudflare migration credentials.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -31,7 +31,6 @@
   "blockers": [
     "PostHog/Sentry/Ko-fi URL allowlists require analytics/dashboard credentials.",
     "validate-replay Phase 2B requires replay input timeline, command trace, or signed event digest; inputHash alone is not reversible.",
-    "Old-path /call-of-doodie/* redirect patch is prepared in sibling VaultSparkStudios.github.io repo but not yet committed/pushed/deployed there.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
   "lastUpdated": "2026-05-14",

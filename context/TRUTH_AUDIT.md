@@ -14,7 +14,7 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - Live domain state — apex `https://callofdoodie.wtf/` serves 200 and the three alternate hosts return 301 to the apex after the Pages middleware deployment.
 - `src/systems/combatResolution.js` and `src/App.jsx` — enemy projectile/player damage and grenade explosion damage now delegate through pure combat helpers. Contact-hit helper logic exists and is covered by tests, but not every contact path is wired out of `App.jsx` yet.
 - `validate-replay` truth — deterministic resim remains blocked by the contract shape. `inputHash` is not reversible into replay inputs; a compact timeline/command trace or signed event digest is needed before server resimulation can be real.
-- Cross-repo truth — old-path redirect changes are prepared in local sibling repo `VaultSparkStudios.github.io`, but this repo's committed state should not claim that old-path production redirect is live until that sibling repo is committed, pushed, and deployed.
+- Cross-repo truth — old-path redirect changes were committed and pushed to sibling repo `VaultSparkStudios.github.io` as `a6515ae`. This repo can claim the sibling patch is published to GitHub; production availability should still be verified after the website deployment completes.
 
 ## 2026-05-14 — Session 60 changes
 

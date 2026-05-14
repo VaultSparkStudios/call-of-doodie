@@ -57,7 +57,7 @@
 ║  ⚠  Tests         ?/? passing                                    ║
 ║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~12.0 sessions                                 ║
-║  ✓  Headroom      94% remaining · ~9 large item(s) fit           ║
+║  ✓  Headroom      70% remaining · ~1 large item(s) fit           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         46693 FORGE  ·  0d old                         ║
 ║  ✓  Truth         green  ·  Genome: ?                            ║

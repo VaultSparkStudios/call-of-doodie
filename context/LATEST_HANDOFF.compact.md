@@ -6,14 +6,15 @@ Session Intent: Founder asked whether plan mode applies to Codex, then directed 
 
 ## Where We Left Off (Session 61 — Codex protocol fix + redirect cleanup + combat extraction)
 
-**Intent outcome:** Achieved for this repo. The Codex plan-mode mismatch is fixed, canonical redirect routing is live and verified, App.jsx extraction slice 11 is implemented, and closeout write-back is complete. Remaining work is either dashboard/credential-gated, product-decision-gated, or cross-repo deploy follow-through.
+**Intent outcome:** Achieved. The Codex plan-mode mismatch is fixed, canonical redirect routing is live and verified, App.jsx extraction slice 11 is implemented, the sibling old-path redirect patch was committed/pushed, and closeout write-back is complete. Remaining work is dashboard/credential-gated, product-decision-gated, or replay-contract-gated.
 
 ### What shipped
 - **Codex protocol mismatch fixed** — `scripts/verify-plan-mode.mjs` now reads `agent:` from `context/.session-lock`; when `agent` is not `claude-code`, Claude-only plan mode is stamped as `not_required` instead of failing Codex sessions.
 - **Redirect routing deployed** — `functions/_middleware.js` redirects `www.callofdoodie.wtf`, `playcallofdoodie.com`, and `www.playcallofdoodie.com` to canonical `https://callofdoodie.wtf/` with HTTP 301 through Cloudflare Pages middleware.
 - **Cloudflare cutover helper hardened** — `scripts/cloudflare-domain-cutover.mjs` now loads the private Studio Ops Cloudflare token paths used by platform helpers; Rulesets API access still lacked authorization, so Pages middleware is the repo-owned fallback.
 - **Combat extraction slice 11** — `src/systems/combatResolution.js` now owns pure helpers for incoming damage, enemy projectile/player hits, contact-hit resolution, and grenade explosion damage. `src/App.jsx` delegates enemy projectile hits and grenade blast damage through those helpers.
-- **Blockers clarified** — analytics/dashboard allowlists are credential-gated; `validate-replay` Phase 2B is contract-gated because `inputHash` alone is not reversible into replay inputs; old-path GitHub Pages redirect patch is prepared in the sibling repo but still needs cross-repo commit/push/deploy.
+- **Blockers clarified** — analytics/dashboard allowlists are credential-gated; `validate-replay` Phase 2B is contract-gated because `inputHash` alone is not reversible into replay inputs; broad Cloudflare migration credentials still need rotation/narrowing after stabilization.
+- **Old-path redirect published** — sibling repo `VaultSparkStudios.github.io` commit `a6515ae` updates `call-of-doodie/index.html` and `404.html` so legacy `/call-of-doodie/*` traffic moves toward `https://callofdoodie.wtf/*`.
 
 ### Validation
 - `node --check scripts\verify-plan-mode.mjs` -> passed.
@@ -29,11 +30,10 @@ Session Intent: Founder asked whether plan mode applies to Codex, then directed 
 - [ ] Update PostHog/Sentry/Ko-fi project URL allowlists once analytics/dashboard credentials are available. Supabase Edge Functions currently use wildcard CORS, so no repo-side Supabase allowlist edit is needed.
 - [ ] Decide whether to implement Supabase Auth / Studio membership UI from `docs/AUTH_INTEGRATION_PLAN.md`; current identity remains callsign + local anonymous UUID.
 - [ ] Redesign `validate-replay` Phase 2B around a replay input timeline, command trace, or signed event digest before attempting deterministic resim.
-- [ ] Commit/push/deploy the prepared sibling-repo old-path redirect patch in `VaultSparkStudios.github.io` if cross-repo publication is approved.
 - [ ] Rotate/narrow the broad Cloudflare studio-access token after the domain migration stabilizes.
 
 ## Next Recommended Slice (Session 62)
-- [ ] Start with the old-path redirect publication or replay-contract design, depending on whether the next session is ops cleanup or trust-system work. For in-repo coding, the replay contract is the highest-leverage unblocker; for launch cleanup, the sibling website redirect is the cleanest finish.
+- [ ] Start with replay-contract design if the next session is in-repo trust work; otherwise verify the sibling website deployment finished serving the old-path redirect and rotate/narrow the broad Cloudflare migration credential.
 
 Session Intent: Founder asked to start the session because `callofdoodie.wtf` was still not working, continue through Cloudflare/Namecheap cutover with updated credentials, ensure the studio website agent can discover the new live URL, then closeout, commit, and push with all context/memory files updated.
 
