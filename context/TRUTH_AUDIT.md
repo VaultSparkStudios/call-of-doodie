@@ -2,8 +2,19 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-05-13
+Last reviewed: 2026-05-14
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-14 — Session 60 changes
+
+- `scripts/platform-domain-cutover.mjs` — promoted from partial platform helper to full custom-domain repair helper: loads private studio-access token, uses separate zone-create/DNS tokens, creates/verifies zones, updates Namecheap nameservers, attaches Pages domains, creates/updates Cloudflare DNS CNAMEs, and removes conflicting A/AAAA records for web hosts.
+- Cloudflare/Namecheap live state — `callofdoodie.wtf` and `playcallofdoodie.com` are delegated to Cloudflare nameservers; apex `callofdoodie.wtf` serves the Cloudflare Pages app and passed live-site verification.
+- `context/PROJECT_STATUS.json` — current focus, next milestone, blockers, and `testingSurfaces` now reflect the completed apex cutover and remaining post-cutover tasks.
+- `context/STUDIO_MANIFEST.json` and `context/runtime-pack/RUNTIME_PACK.json` — production `liveUrl` now points at `https://callofdoodie.wtf/`; backup and Pages preview surfaces are listed for downstream website/portfolio agents.
+- `docs/STARTUP_BRIEF.md` — WHERE TO TEST now surfaces the canonical domain, backup `.com`, Pages preview, and live-site check command.
+- `docs/DOMAIN_MIGRATION_PLAN.md` — status updated from blocked/in-progress to apex-live with redirects/allowlists remaining.
+- Security truth — broad Cloudflare studio-access token was used to complete the cutover; least-privilege rotation is now an explicit follow-up.
+- No gameplay source-of-truth changed this session. Remaining contradiction risk is operational only: `www.callofdoodie.wtf` was still pending/522 while apex passed.
 
 ## 2026-05-13 — Session 59 changes
 

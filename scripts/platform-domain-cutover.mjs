@@ -29,12 +29,26 @@ function loadDotEnv(filePath) {
   }
 }
 
+function loadCloudflareStudioAccess(filePath) {
+  if (!fs.existsSync(filePath) || process.env.CLOUDFLARE_ZONE_CREATE_TOKEN) return;
+  const token = fs
+    .readFileSync(filePath, "utf8")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .find((line) => /^[A-Za-z0-9_-]{40,}$/.test(line));
+  if (token) process.env.CLOUDFLARE_ZONE_CREATE_TOKEN = token;
+}
+
 loadDotEnv(path.join(ROOT, ".env.local"));
 loadDotEnv(path.join(OPS_SECRETS, "cloudflare.env"));
 loadDotEnv(path.join(OPS_SECRETS, "namecheap.env"));
+loadCloudflareStudioAccess(path.join(OPS_SECRETS, "cloudflare-studio-access.txt"));
 
 const cloudflareToken = process.env.CLOUDFLARE_API_TOKEN || process.env.CLOUDFLARE_DNS_TOKEN;
+const cloudflareZoneCreateToken = process.env.CLOUDFLARE_ZONE_CREATE_TOKEN || cloudflareToken;
+const cloudflareDnsToken = process.env.CLOUDFLARE_DNS_EDIT_TOKEN || cloudflareZoneCreateToken || cloudflareToken || process.env.CLOUDFLARE_DNS_TOKEN;
 const cloudflareAccountId = process.env.CLOUDFLARE_ACCOUNT_ID || ACCOUNT_ID_FALLBACK;
+const PAGES_TARGET = `${PROJECT_NAME}.pages.dev`;
 
 function requireSecret(name) {
   const value = process.env[name];
@@ -42,11 +56,16 @@ function requireSecret(name) {
   return value;
 }
 
-async function cf(pathname, { method = "GET", body, ok = [200] } = {}) {
+function isNotFoundError(error) {
+  const message = String(error.message);
+  return message.includes("not found") || message.includes("8000007") || message.includes("8000021");
+}
+
+async function cf(pathname, { method = "GET", body, ok = [200], token = cloudflareToken } = {}) {
   const response = await fetch(`${CF_API}${pathname}`, {
     method,
     headers: {
-      Authorization: `Bearer ${cloudflareToken}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -107,6 +126,7 @@ async function ensureZone(domain) {
   if (!apply) return { name: domain, name_servers: [] };
   const zone = await cf("/zones", {
     method: "POST",
+    token: cloudflareZoneCreateToken,
     ok: [200, 201],
     body: {
       name: domain,
@@ -140,7 +160,7 @@ async function ensurePagesProject() {
     console.log(`OK Pages project exists: ${PROJECT_NAME}`);
     return;
   } catch (error) {
-    if (!String(error.message).includes("not found") && !String(error.message).includes("8000007")) throw error;
+    if (!isNotFoundError(error)) throw error;
   }
 
   console.log(`${apply ? "CREATE" : "WOULD CREATE"} Pages project: ${PROJECT_NAME}`);
@@ -165,7 +185,7 @@ async function ensurePagesDomain(domain) {
     console.log(`OK Pages domain exists: ${domain}`);
     return;
   } catch (error) {
-    if (!String(error.message).includes("not found") && !String(error.message).includes("8000007")) throw error;
+    if (!isNotFoundError(error)) throw error;
   }
 
   console.log(`${apply ? "ATTACH" : "WOULD ATTACH"} Pages domain: ${domain}`);
@@ -175,6 +195,63 @@ async function ensurePagesDomain(domain) {
     ok: [200, 201],
     body: { name: domain },
   });
+}
+
+async function ensureDnsCname(zone, name) {
+  if (!zone?.id) return;
+  try {
+    const existing = await cf(
+      `/zones/${zone.id}/dns_records?name=${encodeURIComponent(name)}`,
+      { token: cloudflareDnsToken },
+    );
+    const webRecords = existing.filter((record) => ["A", "AAAA", "CNAME"].includes(record.type));
+    const matching = webRecords.find((record) => record.type === "CNAME" && record.content === PAGES_TARGET);
+    if (matching) {
+      console.log(`OK DNS CNAME exists: ${name} -> ${PAGES_TARGET}`);
+      return;
+    }
+
+    const cname = webRecords.find((record) => record.type === "CNAME");
+    const action = cname ? "UPDATE" : "CREATE";
+    console.log(`${apply ? action : `WOULD ${action}`} DNS CNAME: ${name} -> ${PAGES_TARGET}`);
+    if (!apply) return;
+
+    for (const record of webRecords.filter((candidate) => candidate.type !== "CNAME")) {
+      console.log(`DELETE conflicting ${record.type} record: ${name} -> ${record.content}`);
+      await cf(`/zones/${zone.id}/dns_records/${record.id}`, {
+        method: "DELETE",
+        token: cloudflareDnsToken,
+      });
+    }
+
+    if (cname?.id) {
+      await cf(`/zones/${zone.id}/dns_records/${cname.id}`, {
+        method: "PUT",
+        token: cloudflareDnsToken,
+        body: {
+          type: "CNAME",
+          name,
+          content: PAGES_TARGET,
+          proxied: true,
+        },
+      });
+      return;
+    }
+
+    await cf(`/zones/${zone.id}/dns_records`, {
+      method: "POST",
+      token: cloudflareDnsToken,
+      ok: [200, 201],
+      body: {
+        type: "CNAME",
+        name,
+        content: PAGES_TARGET,
+        proxied: true,
+      },
+    });
+  } catch (error) {
+    console.log(`BLOCKED DNS CNAME ${name}: ${error.message}`);
+  }
 }
 
 async function main() {
@@ -193,13 +270,25 @@ async function main() {
   }
 
   await ensurePagesProject();
-  for (const domain of [
+  const pagesDomains = [
     CANONICAL_DOMAIN,
     `www.${CANONICAL_DOMAIN}`,
     BACKUP_DOMAIN,
     `www.${BACKUP_DOMAIN}`,
-  ]) {
+  ];
+  for (const domain of pagesDomains) {
+    const zoneDomain = DOMAINS.find((candidate) => domain === candidate || domain.endsWith(`.${candidate}`));
+    if (apply && zoneDomain && !zones.get(zoneDomain)?.id) {
+      console.log(`SKIP Pages domain ${domain}: Cloudflare zone ${zoneDomain} is not ready`);
+      continue;
+    }
     await ensurePagesDomain(domain);
+  }
+
+  for (const domain of DOMAINS) {
+    const zone = zones.get(domain);
+    await ensureDnsCname(zone, domain);
+    await ensureDnsCname(zone, `www.${domain}`);
   }
 
   console.log("Next: deploy with `npx wrangler pages deploy dist --project-name=call-of-doodie --branch=main` once the Pages project exists.");

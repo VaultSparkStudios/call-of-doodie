@@ -3,10 +3,7 @@
 Public-safe launch roadmap summary.
 
 ## Human Action Required
-- [ ] [S59] Generate and store a broader Cloudflare token as `CLOUDFLARE_ZONE_CREATE_TOKEN` in `vaultspark-studio-ops/secrets/cloudflare.env` — needs account-level zone creation plus Pages/DNS/Rulesets edit so future project domain migrations can be automated
-- [ ] [S56/S59] Add zones to Cloudflare dashboard if the broader token is not provided — `callofdoodie.wtf` + `playcallofdoodie.com` at https://dash.cloudflare.com/2d737158a4dde61a7a476a9fda51af2f/add-site (Free plan, both)
-- [ ] [S56/S59] Swap Namecheap nameservers for both domains to the Cloudflare-assigned NS pair (likely `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`) — Namecheap dashboard → each domain → Nameservers → Custom DNS
-- [ ] [S56/S59] Update Namecheap API IP allowlist to current public IP at https://ap.www.namecheap.com/Profile/Tools/ApiAccess; then update `NAMECHEAP_WHITELIST_IP` in `vaultspark-studio-ops/secrets/namecheap.env`
+- [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
 - [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination
 - [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
@@ -17,7 +14,9 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
-- [ ] [SIL:3] [S60] Complete standalone-domain cutover after Cloudflare zone-create access or manual zone creation: run `npm run domain:platform:apply`, run `npm run domain:cloudflare:apply`, verify `https://callofdoodie.wtf/`, verify `playcallofdoodie.com` 301, update Supabase/PostHog/Sentry/Ko-fi URL allowlists, and add old-path 301 in `VaultSparkStudios.github.io`
+- [ ] [SIL:2] [S60 follow-up] Finish post-cutover routing: verify `www.callofdoodie.wtf` after Cloudflare Pages pending SSL/domain verification clears, then configure `www` + `playcallofdoodie.com` 301 redirects to `https://callofdoodie.wtf/`
+- [ ] [SIL:2] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to include `https://callofdoodie.wtf/` and backup-origin expectations
+- [ ] [SIL:1] [S60 follow-up] Add old-path 301 in `VaultSparkStudios.github.io` from `/call-of-doodie/*` to `https://callofdoodie.wtf/*`
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
 - [ ] [SIL:2] [S59 carryover] validate-replay Phase 2B — build the actual headless deterministic resim runner from `seed + inputHash`, using pure combat helpers; quarantine >2% drift; keep heuristic as the fast pre-filter
 - [ ] [SIL:1] [S59 carryover] App.jsx extraction slice 11 — extract enemy bullet/player hit resolution and grenade explosion damage into pure modules with regression tests
@@ -57,6 +56,8 @@ Public-safe launch roadmap summary.
 - [x] Roast Director — **DONE S51**: `src/utils/roastDirector.js` with 10 event pools, per-event wave-cooldown rate limiting; wired in game loop at kill_streak (every 5 kills) and boss_kill; 12 tests
 - [x] Studio Hub/Social Dashboard event contract — **DONE S52**: `buildStudioGameEvent()` now emits contract v2 payloads across front-door, trust, telemetry, debrief, rivalry, and weekly-contract surfaces for downstream Studio OS consumers
 ## Done
+- [x] [SIL:4] **DONE S60** Standalone-domain custom cutover — Cloudflare zones created for `callofdoodie.wtf` + `playcallofdoodie.com`; Namecheap nameservers set to `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`; Pages custom domains attached; Namecheap parking A record removed; apex + backup DNS CNAMEs point at `call-of-doodie.pages.dev`; `https://callofdoodie.wtf/` live-site check passed 5/5.
+- [x] [SIL:1] **DONE S60** Studio URL source-of-truth repair — `context/PROJECT_STATUS.json`, `context/STUDIO_MANIFEST.json`, `context/runtime-pack/RUNTIME_PACK.json`, and `docs/STARTUP_BRIEF.md` now advertise `https://callofdoodie.wtf/` so website/portfolio agents can discover the live URL.
 - [x] [SIL:4] **DONE S59** Standalone-domain migration implementation — root-scoped Cloudflare Pages build support, canonical `callofdoodie.wtf` metadata/share/PWA updates, runtime-scoped service worker, Cloudflare Pages workflow, Pages security headers, cutover runbook, Cloudflare/Namecheap platform automation scripts, and live deployment to `https://a660c406.call-of-doodie.pages.dev/`. Custom apex remains blocked by Cloudflare zone-create permission + Namecheap NS gates, not by repo code.
 - [x] [SIL:1] **DONE S59** Auth/Studio membership audit — confirmed no public create-account/sign-in UI exists today; callsign + local anon UUID remains active identity; Studio membership recognition exists only server-side when an authenticated Supabase `uid` is present.
 - [x] [SIL:5] **DONE S58** Founder-requested all-items refinement pass — deterministic combat-resolution foundation (`src/systems/combatResolution.js` now owns bullet/enemy overlap, crit, shield-facing multiplier, lightning target selection, pierce, and obstacle bounce helpers); objective mastery chains + four new achievements; Heat Meter visual overlay; zero-token Run Brain; Run History Bounty Board; first-three-run HomeV2 onboarding; replay-contract confidence in `validate-replay`; SettingsPanel hook cleanup; legacy MenuScreen lazy loading. Validation: 315/315 tests, lint clean, build passing. Bundle: main chunk trimmed to 730.41 kB raw / 222.57 kB gzip after splitting MenuScreen.

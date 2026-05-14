@@ -2,6 +2,22 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-05-14 — Session 60 — `callofdoodie.wtf` is the live canonical production URL
+
+**Decision:** `https://callofdoodie.wtf/` is now the canonical production URL for Call of Doodie. `playcallofdoodie.com`, `www.callofdoodie.wtf`, and the old `vaultsparkstudios.com/call-of-doodie/` path should resolve or redirect to the apex rather than acting as parallel brand surfaces.
+
+**Rationale:** The apex domain now serves the Cloudflare Pages app and passes live-site verification. A single canonical URL prevents SEO/share fragmentation and keeps the `.wtf` comedy/parody positioning that motivated the domain decision.
+
+**Trade-off accepted:** During DNS/SSL propagation, backup hosts may temporarily serve 200 or pending states. The durable target is one apex canonical plus redirects.
+
+## 2026-05-14 — Session 60 — Broad Cloudflare studio-access token is temporary
+
+**Decision:** The expanded `cloudflare-studio-access.txt` token can be used to unblock this cutover, but it should be rotated or replaced with narrower named tokens after stabilization.
+
+**Rationale:** The token currently has broad account/user/zone permissions far beyond this project's needs. It solved the immediate Cloudflare zone/DNS/Page binding blocker, but future automation should use least-privilege capabilities such as zone create, DNS edit, Pages edit, and redirects edit.
+
+**Trade-off accepted:** Completing the public-domain cutover had higher immediate value than waiting for ideal token scoping. The follow-up task is now explicit so the temporary broad credential does not become the default operating model.
+
 ## 2026-05-13 — Session 59 — Cloudflare Pages is canonical host; GitHub Pages is fallback only
 
 **Decision:** Cloudflare Pages is now the canonical deployment target for Call of Doodie. The previous GitHub Pages deployment remains as a manual fallback during the domain migration window and builds with `VITE_BASE_PATH=/call-of-doodie/`.

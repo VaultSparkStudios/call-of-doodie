@@ -47,10 +47,19 @@
     "production": [
       {
         "label": "live",
-        "url": "https://vaultsparkstudios.com/call-of-doodie/"
+        "url": "https://callofdoodie.wtf/"
+      },
+      {
+        "label": "backup",
+        "url": "https://playcallofdoodie.com/"
       }
     ],
-    "preview": [],
+    "preview": [
+      {
+        "label": "cloudflare-pages",
+        "url": "https://call-of-doodie.pages.dev/"
+      }
+    ],
     "admin": [],
     "api": [],
     "docs": [],
@@ -101,21 +110,23 @@
   },
   "secretsCapabilities": [],
   "hosting": {
-    "hostingProvider": "github-pages",
-    "liveUrl": "https://vaultsparkstudios.com/call-of-doodie/",
+    "hostingProvider": "cloudflare-pages",
+    "liveUrl": "https://callofdoodie.wtf/",
     "stagingUrl": null,
-    "privatePreviewUrl": null,
+    "privatePreviewUrl": "https://call-of-doodie.pages.dev/",
     "localDevUrl": null,
     "deployStatus": "deployed-unannounced",
-    "testInstructions": []
+    "testInstructions": [
+      "COD_LIVE_URL=https://callofdoodie.wtf/ npm run live:site-check"
+    ]
   },
   "capacity": {
     "currentPlanTier": "unknown",
     "freePlanCeilings": [],
     "fitsCurrentCapacity": true,
-    "preferredRuntime": "github-pages",
-    "fallbackRuntime": "hetzner",
-    "notes": ""
+    "preferredRuntime": "cloudflare-pages",
+    "fallbackRuntime": "github-pages",
+    "notes": "GitHub Pages legacy path remains fallback during post-cutover observation."
   },
   "publicMetadata": {
     "privateByDefault": true,

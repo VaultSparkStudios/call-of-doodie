@@ -1,5 +1,37 @@
 # Latest Handoff
 
+Session Intent: Founder asked to start the session because `callofdoodie.wtf` was still not working, continue through Cloudflare/Namecheap cutover with updated credentials, ensure the studio website agent can discover the new live URL, then closeout, commit, and push with all context/memory files updated.
+
+## Where We Left Off (Session 60 — standalone-domain cutover completed)
+
+**Intent outcome:** Mostly achieved. Canonical production is now live at `https://callofdoodie.wtf/` and the formal live-site check passes 5/5. Backup `.com` and stable Pages preview also serve the game. The remaining work is post-cutover routing/allowlist cleanup, not primary domain activation.
+
+### What shipped
+- **Cloudflare zones + registrar delegation** — created/verified `callofdoodie.wtf` and `playcallofdoodie.com` Cloudflare zones; set Namecheap nameservers for both to `journey.ns.cloudflare.com` and `piers.ns.cloudflare.com`.
+- **Pages custom domains** — attached `callofdoodie.wtf`, `www.callofdoodie.wtf`, `playcallofdoodie.com`, and `www.playcallofdoodie.com` to the Cloudflare Pages project.
+- **DNS repaired** — replaced the imported Namecheap parking A record (`162.255.119.44`) with proxied Cloudflare CNAMEs to `call-of-doodie.pages.dev`; preserved non-web MX/TXT records.
+- **Cutover automation hardened** — `scripts/platform-domain-cutover.mjs` now loads the private studio-access token, separates zone-create/DNS tokens, tolerates pending Pages domains, manages CNAME records, and removes conflicting A/AAAA records for web hosts.
+- **Studio URL source of truth repaired** — `context/PROJECT_STATUS.json`, `context/STUDIO_MANIFEST.json`, `context/runtime-pack/RUNTIME_PACK.json`, and `docs/STARTUP_BRIEF.md` now advertise `https://callofdoodie.wtf/` so website/portfolio agents can find the live URL without chat history.
+- **Security caveat logged** — the broad studio-access Cloudflare token unblocked the cutover but should be rotated/narrowed after stabilization.
+
+### Validation
+- `COD_LIVE_URL=https://callofdoodie.wtf/ npm run live:site-check` -> 5/5 passing.
+- `https://callofdoodie.wtf/` returned HTTP 200 with the correct title.
+- `https://playcallofdoodie.com/` and `https://www.playcallofdoodie.com/` returned HTTP 200 during verification.
+- `https://call-of-doodie.pages.dev/` and the fresh deployment URL passed live-site checks.
+- `npm run build` passed during the session.
+- Full `npm test` was attempted but timed out after 120s on this Windows runner; no failing assertion was captured.
+
+### Remaining work
+- [ ] Recheck `www.callofdoodie.wtf` after Cloudflare Pages finishes pending SSL/domain verification; it was still returning 522 while apex was healthy.
+- [ ] Configure `www` and backup `.com` redirects to the canonical `https://callofdoodie.wtf/`.
+- [ ] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to the canonical domain.
+- [ ] Add old-path 301 from `VaultSparkStudios.github.io` `/call-of-doodie/*` to `https://callofdoodie.wtf/*`.
+- [ ] Rotate or replace the broad studio-access Cloudflare token with narrower domain-migration tokens.
+
+## Next Recommended Slice (Session 61)
+- [ ] Finish redirect/allowlist cleanup first, then run a four-surface post-cutover smoke (`apex`, `www`, `.com`, old VaultSpark path) before retiring the GitHub Pages fallback.
+
 Session Intent: Founder asked to start/plan the standalone-domain migration, then implement all migration items at highest quality, troubleshoot the unreachable `callofdoodie.wtf`, clarify auth/Studio membership status, and closeout with commit + push.
 
 ## Where We Left Off (Session 59 — standalone-domain implementation + Cloudflare Pages deploy)

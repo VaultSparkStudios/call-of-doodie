@@ -5,6 +5,18 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-14 (Session 60)
+
+- **Founder direction:** finish making `callofdoodie.wtf` work, use the expanded Cloudflare studio-access token to complete the cutover, ensure the studio website agent knows where to find the live URL, then closeout and push all context updates.
+- **Public-safe implementation summary:**
+  - `https://callofdoodie.wtf/` is now the canonical production surface and passed the live-site check.
+  - Machine-readable Studio surfaces now advertise the canonical URL, backup `.com`, and stable Cloudflare Pages preview.
+  - The broad Cloudflare token unblocked the migration but is intentionally recorded as something to rotate/narrow after stabilization.
+- **Locked-in invariants this session reinforced:**
+  1. **Agents read context, not chat memory** — the live URL must live in `PROJECT_STATUS`, `STUDIO_MANIFEST`, runtime pack, and startup brief.
+  2. **Apex `.wtf` is canonical** — backup and `www` hosts should redirect to `https://callofdoodie.wtf/`, not become parallel brands.
+  3. **Broad ops tokens are temporary tools** — use them to unblock, then replace with narrow domain-migration credentials.
+
 ## 2026-05-13 (Session 59)
 
 - **Founder direction:** complete the standalone-domain migration from `vaultsparkstudios.com/call-of-doodie/` to `callofdoodie.wtf`, keep `playcallofdoodie.com` as a backup/redirect, and make future project migrations easier through reusable platform automation. Founder also asked whether account creation/sign-in exists today and whether it is integrated with Studio membership.

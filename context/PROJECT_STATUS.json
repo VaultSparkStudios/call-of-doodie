@@ -4,28 +4,48 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 59 implemented the standalone-domain migration repo-side: root Cloudflare Pages build, canonical callofdoodie.wtf metadata/share/PWA surfaces, runtime-scoped service worker, Cloudflare Pages workflow, Pages security headers, reusable Cloudflare/Namecheap cutover automation, and live Pages deploy at https://a660c406.call-of-doodie.pages.dev/. Custom apex remains blocked by Cloudflare zone-create permission and Namecheap NS/allowlist gates.",
-  "nextMilestone": "S60: obtain broader Cloudflare zone-create token or manually add zones for callofdoodie.wtf + playcallofdoodie.com, switch Namecheap nameservers to the assigned Cloudflare NS pair, run platform/domain cutover scripts, verify canonical + backup redirects, then update Supabase/PostHog/Sentry/Ko-fi URL allowlists and old-path 301.",
+  "currentFocus": "Session 60 completed the standalone-domain cutover: canonical production is https://callofdoodie.wtf/ on Cloudflare Pages, backup is https://playcallofdoodie.com/, and the stable Pages preview is https://call-of-doodie.pages.dev/.",
+  "nextMilestone": "S60 follow-through: verify www.callofdoodie.wtf after Cloudflare Pages finishes pending SSL/domain verification, configure backup/www 301 redirects to https://callofdoodie.wtf/, then update Supabase/PostHog/Sentry/Ko-fi URL allowlists and add old-path 301 in VaultSparkStudios.github.io.",
+  "testingSurfaces": [
+    {
+      "type": "production",
+      "url": "https://callofdoodie.wtf/",
+      "status": "green"
+    },
+    {
+      "type": "production",
+      "url": "https://playcallofdoodie.com/",
+      "status": "green"
+    },
+    {
+      "type": "cloudflare",
+      "url": "https://call-of-doodie.pages.dev/",
+      "status": "green"
+    },
+    {
+      "type": "tests",
+      "command": "COD_LIVE_URL=https://callofdoodie.wtf/ npm run live:site-check",
+      "status": "green"
+    }
+  ],
   "blockers": [
-    "Cloudflare API tokens lack `com.cloudflare.api.account.zone.create` — founder must add both zones via dashboard or generate/store `CLOUDFLARE_ZONE_CREATE_TOKEN`",
-    "Namecheap API nameserver automation requires current public IP in the Namecheap API allowlist before next migration session",
-    "Custom apex domains still use Namecheap parking DNS until Cloudflare zones exist and nameservers are switched"
+    "www.callofdoodie.wtf was still returning 522 while Cloudflare Pages showed .wtf custom domains pending; apex canonical is serving 200 and live:site-check passes."
   ],
   "lastUpdated": "2026-05-14",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-05-13",
-  "ignisScore": 48422,
+  "ignisScore": 46693,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-04-25",
-  "silSession": 59,
-  "silScore": 985,
-  "silAvg3": 984.7,
+  "ignisLastComputed": "2026-05-14",
+  "silSession": 60,
+  "silScore": 987,
+  "silAvg3": 986.3,
   "silVelocity": 4,
   "silDebt": "improving",
-  "silLastSession": "2026-05-13",
-  "currentSession": 59,
+  "silLastSession": "2026-05-14",
+  "currentSession": 60,
   "sessionMode": "founder",
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-04-14",

@@ -15,19 +15,7 @@
     "firstSeen": "2026-04-22",
     "session": null
   },
-  "[S59] Generate and store a broader Cloudflare token as `CLOUDFLARE_ZONE_CREATE_TOKEN` in `vaultspark-studio-ops/secrets/cloudflare.env`": {
-    "firstSeen": "2026-05-14",
-    "session": null
-  },
-  "[S56/S59] Add zones to Cloudflare dashboard if the broader token is not provided": {
-    "firstSeen": "2026-05-14",
-    "session": null
-  },
-  "[S56/S59] Swap Namecheap nameservers for both domains to the Cloudflare-assigned NS pair (likely `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`)": {
-    "firstSeen": "2026-05-14",
-    "session": null
-  },
-  "[S56/S59] Update Namecheap API IP allowlist to current public IP at https://ap.www.namecheap.com/Profile/Tools/ApiAccess; then update `NAMECHEAP_WHITELIST_IP` in `vaultspark-studio-ops/secrets/namecheap.env`": {
+  "[S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization": {
     "firstSeen": "2026-05-14",
     "session": null
   }

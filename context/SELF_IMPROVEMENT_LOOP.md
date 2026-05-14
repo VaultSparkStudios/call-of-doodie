@@ -13,6 +13,32 @@ Last session: 2026-05-11 | Session 58 | Total: 987/1000 | Velocity: 4 | protocol
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
+## 2026-05-14 — Session 60 | Total: 987/1000 | Velocity: 4 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Standalone-domain cutover session. The primary production URL is now live at `https://callofdoodie.wtf/`, the backup `.com` and stable Cloudflare Pages preview serve the app, and machine-readable Studio surfaces now point future website/portfolio agents at the correct live URL. Remaining work is post-cutover polish: `www` pending verification/522, redirects, URL allowlists, old-path 301, and narrowing the broad Cloudflare token used to unblock the migration.
+
+| Category | Score | vs S59 | Notes |
+|---|---|---|---|
+| Dev Health | 99 | → | Build and live-site checks pass; full Vitest still timed out on this Windows runner without a captured failing assertion |
+| Creative Alignment | 100 | → | `.wtf` is now the actual canonical public surface, preserving the parody-first domain strategy |
+| Momentum | 99 | ↑1 | The long-running domain blocker is cleared; only follow-through tasks remain |
+| Engagement | 99 | → | Share/install URLs now land on a dedicated memorable domain; no new gameplay loop shipped |
+| Process Quality | 100 | → | Cutover was verified stepwise across DNS, Pages, Namecheap, and live HTTP; stale source-of-truth files were corrected |
+| Cross-Repo Coherence | 98 | ↑2 | Studio manifest/runtime pack/startup brief now expose the live URL for website and portfolio agents |
+| Security Posture | 97 | ↓2 | Broad Cloudflare token was used successfully but now needs rotation/narrowing to restore least privilege |
+| Ecosystem Integration | 100 | ↑1 | Cloudflare Pages, Namecheap, repo manifests, and Studio OS surfaces now agree on the canonical URL |
+| Capital Efficiency | 100 | → | Stayed on Cloudflare Pages free tier and existing domains |
+| Automation Coverage | 95 | → | Platform cutover helper now handles zones, domains, DNS repair, and conflict removal; redirect automation remains follow-up |
+
+**Top win:** The game finally has its intended public home: `https://callofdoodie.wtf/` passes the live shell/PWA check.
+**Top gap:** Post-cutover routing is not finished until `www`, `.com`, and the old VaultSpark path redirect cleanly to the apex.
+**Intent outcome:** Achieved for the canonical domain and source-of-truth repair; follow-up remains for redirects/allowlists and token hardening.
+
+**Brainstorm**
+1. Add a `post-cutover:smoke` script that asserts apex 200, `www` 301, `.com` 301, old path 301, canonical tags, and PWA manifest reachability. High probability.
+2. Promote the domain helper into a shared Studio OS command after replacing the broad token with named least-privilege tokens. High probability.
+3. Use the new `.wtf` URL in a streamer-friendly QR/share overlay once redirects are stable. Medium-high probability.
+
 ## 2026-05-13 — Session 59 | Total: 985/1000 | Velocity: 4 | Debt: ↓
 
 SIL rubric v3.0 (10 categories × 100). Standalone-domain migration implementation session. Repo-side work is complete: root-scoped Cloudflare Pages build, canonical `.wtf` metadata/share/PWA surfaces, runtime-scoped service worker, Pages workflow, Pages security headers, reusable Cloudflare/Namecheap cutover automation, and successful Pages deployment. Custom apex remains blocked by platform permissions rather than code: stored Cloudflare token lacks `com.cloudflare.api.account.zone.create`, and Namecheap NS switching still requires Cloudflare zones + API allowlist.

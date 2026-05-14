@@ -2,6 +2,18 @@
 
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
+## 2026-05-14 (Session 60 — domain cutover + Studio surface repair)
+
+- Founder request: start because `callofdoodie.wtf` was still not working; use the `cloudflare-studio-access.txt` token after permissions were expanded; then make sure website agents can find the live URL and closeout/push all context.
+- Diagnosed live failure: app deployment was healthy on Cloudflare Pages, but apex/`www` still resolved through Namecheap parking DNS before cutover.
+- Verified the studio-access Cloudflare token without printing it; used it to create/verify Cloudflare zones for `callofdoodie.wtf` and `playcallofdoodie.com`.
+- Ran `npm run domain:platform:apply` to set Namecheap nameservers to `journey.ns.cloudflare.com` + `piers.ns.cloudflare.com`, attach all four Pages custom domains, and later repair DNS records.
+- Updated `scripts/platform-domain-cutover.mjs` so future runs can load studio-access, separate zone-create/DNS tokens, tolerate pending Pages domains, manage Cloudflare CNAMEs, and remove conflicting Namecheap parking A/AAAA records for web hosts while preserving MX/TXT records.
+- Removed the imported Namecheap parking A record for `callofdoodie.wtf` (`162.255.119.44`) and created proxied CNAMEs to `call-of-doodie.pages.dev`.
+- Redeployed current `dist` to Cloudflare Pages; canonical `https://callofdoodie.wtf/` returned 200 and `COD_LIVE_URL=https://callofdoodie.wtf/ npm run live:site-check` passed 5/5.
+- Updated Studio machine-readable surfaces (`PROJECT_STATUS`, `STUDIO_MANIFEST`, runtime pack, startup brief) so website/portfolio agents discover `https://callofdoodie.wtf/`.
+- Remaining follow-up: recheck `www.callofdoodie.wtf` after pending SSL/domain verification, configure `.com`/`www` redirects to apex, update Supabase/PostHog/Sentry/Ko-fi allowlists, add old-path 301, and rotate/narrow the broad Cloudflare token.
+
 ## 2026-04-22 (Session 53)
 
 ## 2026-05-13 (Session 59 — standalone-domain migration implementation)
