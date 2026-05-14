@@ -5,6 +5,18 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-14 (Session 63)
+
+- **Founder direction:** Run `/start`, then `/audit`, then `/implement`, then `/closeout`; use genius-level, sophisticated, creative/innovative judgment to make Call of Doodie as strong as possible.
+- **Public-safe implementation summary:**
+  - Replay sharing now protects trust: a shared replay URL preserves the actual starter loadout used in the run instead of silently flattening every shared run to Standard.
+  - Precision hits now become a player identity signal: the best precision streak survives into Run Coach/Run Brain and produces specific mastery or gap coaching.
+  - Public deployment copy now matches the actual product home: `callofdoodie.wtf` + Cloudflare Pages, with a one-command post-cutover smoke for routing drift.
+- **Locked-in invariants this session reinforced:**
+  1. **Shared runs must be faithful** — viral loops lose value when the encoded challenge differs from the run being bragged about.
+  2. **Skill expression should teach itself** — if precision earns rewards in-run, the debrief should remember it and coach the next attempt.
+  3. **Canonical `.wtf` is operational, not just branding** — docs, smoke checks, and public links should all defend the single public home.
+
 ## 2026-05-14 (Session 62)
 
 - **Founder direction:** Audit the project, generate a genius-level ranked list of improvements across features/UX/AI/security/performance, then implement all unblocked items in one pass at highest quality. Close session with full memory/context/CDR/task-board updates and push to GitHub. Keep `callofdoodie.wtf` as the live canonical URL in all copy and links.

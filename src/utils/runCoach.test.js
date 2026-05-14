@@ -55,4 +55,13 @@ describe("runCoach", () => {
     expect("working" in r).toBe(true);
     expect("weaponTip" in r).toBe(true);
   });
+  it("coaches precision mastery when the run had a high precision chain", () => {
+    const r = buildRunCoach({ runSummary: { bestPrecisionStreak: 6, kills: 30, crits: 8 } });
+    expect(r.precisionTip).toContain("Best precision chain: 6");
+    expect(r.brain.nextExperiment).toContain("precision route");
+  });
+  it("coaches a precision gap for high-kill low-precision runs", () => {
+    const r = buildRunCoach({ runSummary: { bestPrecisionStreak: 1, kills: 30, crits: 1 } });
+    expect(r.precisionTip).toContain("Precision gap");
+  });
 });

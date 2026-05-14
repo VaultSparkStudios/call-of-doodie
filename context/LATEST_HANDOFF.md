@@ -1,5 +1,35 @@
 # Latest Handoff
 
+Session Intent: Founder invoked `/start then /audit then /implement then /closeout`, asking for genius-level, sophisticated, creative/innovative execution to make the project as strong as possible.
+
+## Where We Left Off (Session 63 — audit implement sprint: replay fidelity, precision memory, canonical smoke)
+
+**Intent outcome:** Achieved for `/start`, `/audit`, and `/implement`. All 4 audited items shipped and validated. `/closeout` write-back/autopilot is now in progress.
+
+### What shipped
+- **Replay link fidelity** — DeathScreen SHARE RUN now encodes the actual starter loadout passed from App.jsx instead of hardcoding `standard`; replay-code tests cover non-standard starter payload fidelity.
+- **Precision skill memory** — best precision streak is tracked for each run, passed into DeathScreen, and surfaced through Run Coach/Run Brain as mastery or precision-gap guidance.
+- **Canonical public docs** — README now points at `https://callofdoodie.wtf/`, names Cloudflare Pages as canonical hosting, uses the root local dev URL, and documents the new post-cutover smoke command.
+- **Post-cutover smoke automation** — `scripts/post-cutover-smoke.mjs` + `npm run post-cutover:smoke` validate apex, Pages preview, `www`, backup apex, and backup `www` surfaces.
+- **Audit artifacts** — `docs/AUDIT_2026-05-14.md` and `docs/IMPLEMENT_PLAN.md` capture the ranked plan and execution order/outcomes.
+
+### Validation
+- `npm test` → **331/331** passing across 41 files.
+- `npm run lint` → clean.
+- `npm run build` → passing.
+- `node scripts\post-cutover-smoke.mjs` → **5/5** live surfaces passed after network permission.
+- Focused tests: replayCode 5/5; runCoach/runBrain 13/13; HomeV2/App launch focused set 21/21.
+
+### Remaining work
+- [ ] Deterministic replay validation still needs a real input timeline/command trace before Phase 2B can honestly ship.
+- [ ] Rotate/narrow the broad Cloudflare studio-access token after domain stabilization.
+- [ ] Continue App.jsx extraction slice 1 or a content-depth sprint (formations/contracts) depending on next founder priority.
+
+## Next Recommended Slice (Session 64)
+- [ ] Implement replay contract v3: compact command trace bound to the issued run token, then validate only v3 payloads through deterministic resim.
+- [ ] Add a precision-reticle feedback overlay so the new precision skill memory has an in-run teaching affordance.
+- [ ] Promote `post-cutover:smoke` into CI/nightly monitoring if public launch distribution ramps.
+
 Session Intent: Founder invoked `/start` (audit + genius list), then `/go` to ship all unblocked items, then `/closeout` with full memory/context/CDR/task-board updates and GitHub push.
 
 ## Where We Left Off (Session 62 — depth sprint: precision hits, share links, run coach, rivalry, beat-sync)

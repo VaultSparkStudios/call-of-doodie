@@ -8,7 +8,7 @@ function average(values) {
   return nums.length ? nums.reduce((sum, v) => sum + v, 0) / nums.length : 0;
 }
 
-export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [], latestAdvice = null } = {}) {
+export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [], latestAdvice = null, latestRun = {} } = {}) {
   const recentRuns = Array.isArray(runHistory) ? runHistory.slice(0, 8) : [];
   const recentEvents = Array.isArray(studioEvents) ? studioEvents.slice(0, 80) : [];
   const avgWave = average(recentRuns.map(run => run.wave));
@@ -20,6 +20,7 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
   const adviceViews = recentEvents.filter(event => event?.type === "debrief_intelligence");
   const abandons = recentEvents.filter(event => event?.type === "mode_abandon");
   const deaths = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy.slice(0, 8) : [];
+  const precisionStreak = n(latestRun?.bestPrecisionStreak);
 
   let archetype = "balanced";
   if (avgWave > 0 && avgWave < 8) archetype = "survival_gap";
@@ -41,6 +42,8 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
 
   const nextExperiment = latestAdvice
     ? `Run the next seed as a test of: ${latestAdvice}`
+    : precisionStreak >= 5
+      ? "Run one precision route: keep the same aim discipline, then buy damage multipliers before spray weapons."
     : archetype === "survival_gap"
       ? "Run one safe opener: stabilizer perk first, greed second."
       : archetype === "seed_grinder"
@@ -57,5 +60,6 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
     followThrough,
     pressure,
     nextExperiment,
+    precisionStreak,
   };
 }

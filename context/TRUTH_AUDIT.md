@@ -5,6 +5,17 @@ Overall status: green
 Last reviewed: 2026-05-14
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-14 — Session 63 changes
+
+- `src/App.jsx` — `statsRef.current.bestPrecisionStreak` is initialized and reset per run, then updated when a non-boss precision hit increments `gs.precisionStreak`. This is telemetry/coaching state only; precision coin rewards remain the Session 62 behavior.
+- `src/components/DeathScreen.jsx` — receives `starterLoadout` and `bestPrecisionStreak` from App.jsx. SHARE RUN now encodes the actual starter loadout in the replay code. AI RUN COACH can render a precision coaching line when applicable.
+- `src/utils/runCoach.js` — now returns a `precisionTip` field. It emits mastery guidance for `bestPrecisionStreak >= 5`, a gap hint for high-kill/low-precision runs, and `null` when no precision advice applies.
+- `src/utils/runBrain.js` — accepts `latestRun` and records `precisionStreak`; strong precision chains can drive the next-experiment recommendation. This remains zero-token/local-first.
+- `src/utils/replayCode.test.js`, `src/utils/runCoach.test.js`, and `src/utils/runBrain.test.js` — regression coverage now includes non-standard starter replay fidelity and precision coaching paths.
+- `README.md` — public live/deploy documentation now matches the canonical `.wtf` + Cloudflare Pages hosting state.
+- `scripts/post-cutover-smoke.mjs` / `package.json` — new smoke command validates apex and Pages shell/manifest plus redirects from `www` and backup domains to `https://callofdoodie.wtf/`.
+- Validation truth — full test suite passed 331/331, lint clean, build passing, and live post-cutover smoke passed 5/5 after network permission.
+
 ## 2026-05-14 — Session 62 changes
 
 - `src/systems/combatResolution.js` — now exports `isPrecisionHit(bullet, enemy)`. Hit detection checks squared distance against `(size/2 * 0.35)²`. Returns false for null inputs and zero-size enemies.

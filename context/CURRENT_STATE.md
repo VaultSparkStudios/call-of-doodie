@@ -1,6 +1,7 @@
 # Current State
 
 Public-safe summary:
+- Session 63 (2026-05-14) ran `/start` → `/audit` → `/implement` and shipped all four audited items: replay share links now preserve the actual starter loadout instead of hardcoding `standard`; precision hits now persist best precision streak into post-run Run Coach/Run Brain guidance; `README.md` now reflects the canonical `https://callofdoodie.wtf/` Cloudflare Pages deployment; and `npm run post-cutover:smoke` verifies apex, Pages preview, `www`, backup apex, and backup `www` routing. Validation: 331/331 tests passing, lint clean, build passing, live post-cutover smoke 5/5.
 - Session 62 (2026-05-14) shipped a 5-item depth sprint: precision hit streak system, replay share links, enhanced Run Coach with weapon tips + enemy evasion advice, rivalry auto-load, and beat-sync spawn particles. Tests: 327/327 (was 315, +12 new across runCoach and combatResolution). Build and lint clean.
 - `src/systems/combatResolution.js` now exports `isPrecisionHit(bullet, enemy)`: hit within 35% of enemy core radius returns true. `src/App.jsx` tracks `gs.precisionStreak`, awards +1💩 per precision hit with a "PRECISION BURST! +3💩" milestone at streak 3+, and resets on any non-precision hit.
 - `src/utils/runCoach.js` now has `buildWeaponTip()` (detects waste/dominated/spread-build patterns from `weaponKills` array) and appends enemy-specific evasion tips in `buildKilledBy()` for boss-type repeat killers (types 4/9/17/3/6/10/19/20). `DeathScreen.jsx` renders the `weaponTip` line in the AI RUN COACH card.

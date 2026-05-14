@@ -1,10 +1,10 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-05-14 (Session 61 closeout) -->
+<!-- generated-at: 2026-05-14 (Session 63 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 61 closeout · 2026-05-14.
+> **Fast-boot brief** — generated at Session 63 closeout · 2026-05-14.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -13,7 +13,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 62 · 2026-05-14 · FOUNDER MODE                          ║
+║  Session 64 · 2026-05-14 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -28,36 +28,36 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    983/1000   ███████████████████████░   98%                     ║
-║    SIL v3.0  ·  Avg3: 985  ·  Velocity 3↑                        ║
+║    989/1000   ███████████████████████░   99%                     ║
+║    SIL v3.0  ·  Avg3: 986.3  ·  Velocity 5↑                      ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
 ║    Trend  ▄▄▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health        98    ██████████  ▇▇▇██▇▇▇ →                ║
-║    Alignment        100    ██████████  ▇▇▇▇████ →                ║
-║    Momentum          95    ██████████  ▇▇▇▇▇▇▇▇ ↓                ║
-║    Engagement        99    ██████████  ▇▇▇▇█▇▇▇ →                ║
-║    Process Qual     100    ██████████  ▇▇▇▇▇███ →                ║
-║    Coherence         96    ██████████  ········ →                ║
-║    Security          98    ██████████  ········ →                ║
+║    Dev Health       100    ██████████  ▇██▇▇▇▇█ →                ║
+║    Alignment        100    ██████████  ▇▇██████ →                ║
+║    Momentum          98    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Engagement       100    ██████████  ▇▇█▇▇▇██ →                ║
+║    Process Qual     100    ██████████  ▇▇▇█████ →                ║
+║    Coherence         98    ██████████  ········ →                ║
+║    Security          99    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
 ║    Capital          100    ██████████  ········ →                ║
-║    Automation        98    ██████████  ········ →                ║
+║    Automation       100    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 61 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 63 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    ? passing  ·  Deploy: N/A                             ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ⚠  Tests         ?/? passing                                    ║
-║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
-║  ✓  Runway        ~12.0 sessions                                 ║
-║  ✓  Headroom      94% remaining · ~9 large item(s) fit           ║
+║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
+║  ✓  Runway        ~13.0 sessions                                 ║
+║  ✓  Headroom      93% remaining · ~9 large item(s) fit           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         46693 FORGE  ·  0d old                         ║
 ║  ✓  Truth         green  ·  Genome: ?                            ║
@@ -89,9 +89,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▄▄▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▄▄▄  5↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 3 consecutive achieved-intent sessions            ║
+║  Streak:     ✓ 5 consecutive achieved-intent sessions            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -102,5 +102,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 61 closeout · 2026-05-14*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 63 closeout · 2026-05-14*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

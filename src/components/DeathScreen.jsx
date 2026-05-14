@@ -24,7 +24,7 @@ export default function DeathScreen({
   highlightGifUrl, gifEncoding,
   fmtTime,
   gamepadConnected, onInstallApp,
-  weaponKills, scoreAttackMode, playerSkin,
+  weaponKills, bestPrecisionStreak = 0, starterLoadout = "standard", scoreAttackMode, playerSkin,
   dailyChallengeMode, bossRushMode, cursedRunMode, vsScore, vsName,
   ghostKey,
 }) {
@@ -318,7 +318,7 @@ export default function DeathScreen({
   const runCoach = buildRunCoach({
     career: loadCareerStats(),
     meta: loadMetaProgress(),
-    runSummary: { wave, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [] },
+    runSummary: { wave, kills, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [], bestPrecisionStreak },
     runHistory: loadRunHistory(),
     studioEvents: loadStudioGameEvents(),
   });
@@ -516,6 +516,11 @@ export default function DeathScreen({
           {runCoach.weaponTip && (
             <div style={{ fontSize: 11, color: "#E0D0FF", lineHeight: 1.45 }}>
               <span style={{ color: "#CC88FF", fontWeight: 700 }}>Weapon:</span> {runCoach.weaponTip}
+            </div>
+          )}
+          {runCoach.precisionTip && (
+            <div style={{ fontSize: 11, color: "#FFD8FF", lineHeight: 1.45, marginTop: runCoach.weaponTip ? 4 : 0 }}>
+              <span style={{ color: "#FF88FF", fontWeight: 700 }}>Precision:</span> {runCoach.precisionTip}
             </div>
           )}
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
@@ -896,7 +901,7 @@ export default function DeathScreen({
             <button
               aria-label="Copy shareable link for this run"
               onClick={() => {
-                const code = encodeReplayCode({ seed: runSeed, mode, difficulty, weaponIdx: 0, starterLoadout: "standard" });
+                const code = encodeReplayCode({ seed: runSeed, mode, difficulty, weaponIdx: 0, starterLoadout });
                 const url = `${location.origin}${location.pathname}?replay=${code}`;
                 navigator.clipboard?.writeText?.(url);
                 track("debrief_share_replay_link", { seed: runSeed, score, wave, mode });

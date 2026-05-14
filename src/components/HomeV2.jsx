@@ -141,6 +141,8 @@ export default function HomeV2(props) {
     }
     requestStudioEventSync({ limit: 25 }).catch(() => {});
     getDailyChampion().then(c => { if (c) setDailyChampion(c); }).catch(() => {});
+    // Replay/challenge URL bootstrap is intentionally one-shot on first menu mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setDifficulty]);
 
   const accountLevel = career ? getAccountLevel(career.totalKills) : 1;

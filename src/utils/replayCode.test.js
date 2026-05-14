@@ -10,6 +10,15 @@ describe("replayCode", () => {
     const back = decodeReplayCode(code);
     expect(back).toEqual(orig);
   });
+  it("preserves non-standard starter loadouts for shared replay links", () => {
+    const code = encodeReplayCode({ seed: 90210, mode: "boss_rush", difficulty: "nightmare", weaponIdx: 0, starterLoadout: "tank" });
+    expect(decodeReplayCode(code)).toMatchObject({
+      seed: 90210,
+      mode: "boss_rush",
+      difficulty: "nightmare",
+      starterLoadout: "tank",
+    });
+  });
   it("invalidates corrupt checksum", () => {
     const code = encodeReplayCode({ seed: 1, mode: "standard", difficulty: "normal" });
     const broken = code.slice(0, 11) + "0";

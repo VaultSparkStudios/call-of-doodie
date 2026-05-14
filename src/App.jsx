@@ -35,7 +35,7 @@ import {
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
   setMusicVibe, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
-  getMusicBeat, getMusicBPM,
+  getMusicBPM,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
@@ -182,7 +182,7 @@ export default function CallOfDoodie() {
   const xpRef            = useRef({ xp: 0, level: 1 });
   const grenadeRef       = useRef({ ready: true, lastUse: 0 });
   const dashRef          = useRef({ ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 });
-  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {} });
+  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0 });
   const achievedRef      = useRef(new Set());
   const startTimeRef     = useRef(0);
   const timerRef         = useRef(null);
@@ -571,7 +571,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {} };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0 };
     roastCooldowns.current = {};
     achievedRef.current = new Set();
     perkModsRef.current = {};
@@ -2628,6 +2628,7 @@ export default function CallOfDoodie() {
           // Precision hit bonus: bullet near enemy core → 1 💩 coin + streak multiplier
           if (!e.isBossEnemy && isPrecisionHit(b, e)) {
             gs.precisionStreak = (gs.precisionStreak || 0) + 1;
+            statsRef.current.bestPrecisionStreak = Math.max(statsRef.current.bestPrecisionStreak || 0, gs.precisionStreak);
             gs.coins = (gs.coins || 0) + 1;
             if (gs.precisionStreak === 3) {
               gs.coins += 2;
@@ -3747,7 +3748,8 @@ export default function CallOfDoodie() {
           highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
           fmtTime={fmtTime}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
-          weaponKills={weaponKillsSnapshot} scoreAttackMode={scoreAttackMode}
+          weaponKills={weaponKillsSnapshot} bestPrecisionStreak={statsRef.current.bestPrecisionStreak || 0} starterLoadout={starterLoadout}
+          scoreAttackMode={scoreAttackMode}
           dailyChallengeMode={dailyChallengeMode}
           bossRushMode={bossRushMode} cursedRunMode={cursedRunMode} speedrunMode={speedrunMode} gauntletMode={gauntletMode}
           playerSkin={gsRef.current?.playerSkin || ""}

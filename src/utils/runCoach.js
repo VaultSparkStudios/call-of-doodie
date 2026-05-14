@@ -124,9 +124,22 @@ function buildWeaponTip(runSummary) {
   return null;
 }
 
+function buildPrecisionTip(runSummary) {
+  const streak = Number(runSummary?.bestPrecisionStreak) || 0;
+  const kills = Number(runSummary?.kills) || 0;
+  const crits = Number(runSummary?.crits) || 0;
+  if (streak >= 5) {
+    return `Best precision chain: ${streak}. Keep the aim discipline and route toward crit/damage multipliers before adding spread weapons.`;
+  }
+  if (kills >= 20 && streak < 3 && crits < Math.max(3, kills * 0.08)) {
+    return "Precision gap detected: slow one weapon down next run and aim through enemy centers before chasing fire rate.";
+  }
+  return null;
+}
+
 /**
  * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[] }} ctx
- * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, brain: object }}
+ * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, brain: object }}
  */
 export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [] } = {}) {
   const brain = buildRunBrain({
@@ -134,12 +147,14 @@ export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHist
     runHistory,
     studioEvents,
     latestAdvice: runSummary?.drill || null,
+    latestRun: runSummary,
   });
   return {
     killedBy:  buildKilledBy(career, runSummary),
     tryNext:   buildTryNext(meta, career),
     working:   buildWorking(runSummary),
     weaponTip: buildWeaponTip(runSummary),
+    precisionTip: buildPrecisionTip(runSummary),
     brain,
   };
 }

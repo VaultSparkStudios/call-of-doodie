@@ -17,4 +17,10 @@ describe("runBrain", () => {
     });
     expect(brain.followThrough).toContain("converting into rematches");
   });
+
+  it("turns precision streaks into the next experiment", () => {
+    const brain = buildRunBrain({ latestRun: { bestPrecisionStreak: 6 } });
+    expect(brain.precisionStreak).toBe(6);
+    expect(brain.nextExperiment).toContain("precision route");
+  });
 });

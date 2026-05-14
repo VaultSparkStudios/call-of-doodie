@@ -2,7 +2,7 @@
 
 A comedy-first top-down roguelite shooter. Play free in your browser.
 
-**Live:** https://vaultsparkstudios.com/call-of-doodie/
+**Live:** https://callofdoodie.wtf/
 
 ---
 
@@ -28,7 +28,7 @@ Survive endless waves of absurd enemies using increasingly ridiculous weapons. E
 | Framework | React 19                          |
 | Bundler  | Vite 6                             |
 | Language | JavaScript (JSX)                   |
-| Hosting  | GitHub Pages (auto-deploy on push) |
+| Hosting  | Cloudflare Pages (canonical) + GitHub Pages fallback |
 | Backend  | Supabase (leaderboard + anon auth) |
 | Audio    | Web Audio API (zero audio files)   |
 
@@ -38,10 +38,11 @@ Survive endless waves of absurd enemies using increasingly ridiculous weapons. E
 
 ```bash
 npm install
-npm run dev      # local dev server at http://localhost:5173/call-of-doodie/
+npm run dev      # local dev server at http://localhost:5173/
 npm run build    # production build — must pass before any push
 npm run preview  # preview production build
 npm run launch:verify  # launch smoke + live function check + live site check
+npm run post-cutover:smoke  # canonical domain + redirect smoke checks
 ```
 
 Env vars for local dev (create `.env.local`, gitignored):
@@ -59,7 +60,8 @@ npm run audit:env:site
 
 ## Deploy
 
-Push to `main` — GitHub Actions builds and deploys to GitHub Pages automatically.
+Push to `main` — GitHub Actions builds and deploys the canonical Cloudflare Pages app.
+The old GitHub Pages path is fallback-only during the post-cutover window.
 
 Client build secrets required in GitHub Actions:
 ```text
