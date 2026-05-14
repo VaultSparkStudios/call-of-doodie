@@ -217,3 +217,33 @@ Decision: split `MenuScreen` out of the default bundle now, but do not delete th
 Rationale: lazy loading recovers default payload immediately while preserving a rollback/QA path. Full removal should be data-gated because the legacy surface still covers long-tail behaviors and human-device checks.
 
 ---
+
+## 2026-05-14 — Codex sessions do not require Claude Code plan mode
+
+Decision: `scripts/verify-plan-mode.mjs` must branch on `context/.session-lock -> agent`. When `agent` is `codex` or any non-`claude-code` agent, the model-tier `modelPlanMode` requirement is stamped as `planModeDetected: not_required` rather than failing the session.
+
+Rationale: plan mode is a Claude Code runtime slash-command behavior. Treating it as mandatory for Codex created a false protocol failure even when the session was correctly locked and operating under Codex's own execution model.
+
+Trade-off accepted: `PROJECT_STATUS.json` can still advertise `modelPlanMode: true` as the desired T2 Claude posture while Codex records the runtime check as not applicable. This preserves one shared protocol file without forcing a Claude-only UI concept into Codex sessions.
+
+---
+
+## 2026-05-14 — Pages middleware is the repo-owned redirect fallback
+
+Decision: Domain canonical redirects may live in Cloudflare Pages `functions/_middleware.js` when the Cloudflare Rulesets API path is unavailable.
+
+Rationale: the Rulesets API returned authorization failures despite using the available Cloudflare secret paths. Pages middleware keeps redirect behavior source-controlled, deployable with the app, and verifiable through ordinary live-site checks.
+
+Trade-off accepted: middleware redirects run at the Pages layer instead of the zone edge Rulesets layer. That is acceptable for this launch stage because it produces correct 301 canonicalization for all attached Pages hostnames and avoids dashboard-only drift.
+
+---
+
+## 2026-05-14 — Replay resimulation needs replay inputs, not only an input hash
+
+Decision: `validate-replay` Phase 2B should not pretend to resimulate from `seed + inputHash`. The next trust contract must include a compact input timeline, command trace, or signed event digest that the server can actually replay or verify.
+
+Rationale: `inputHash` is intentionally one-way; it can prove that the client committed to some input payload, but it cannot reconstruct that payload. Building deterministic resim on that contract would create false confidence.
+
+Trade-off accepted: replay validation remains heuristic/replay-contract based until the client/server payload changes. This keeps the trust surface honest instead of shipping a named resim path that cannot work.
+
+---

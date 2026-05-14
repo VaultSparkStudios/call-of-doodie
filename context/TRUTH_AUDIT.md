@@ -5,6 +5,17 @@ Overall status: green
 Last reviewed: 2026-05-14
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-14 — Session 61 changes
+
+- `scripts/verify-plan-mode.mjs` — now reads the session lock `agent:` value and treats non-`claude-code` sessions as `planModeDetected: not_required`, preventing Codex sessions from failing on a Claude-only runtime slash-command requirement.
+- `context/PROJECT_STATUS.json` — `planModeDetected` and current session metadata now reflect the Codex-specific not-required status and Session 61 closeout state.
+- `functions/_middleware.js` — new Cloudflare Pages middleware source-of-truth for canonical redirects from `www.callofdoodie.wtf`, `playcallofdoodie.com`, and `www.playcallofdoodie.com` to `https://callofdoodie.wtf/`.
+- `scripts/cloudflare-domain-cutover.mjs` — now loads the same private Studio Ops Cloudflare secret paths as the platform cutover helper. Rulesets API access was still unauthorized; middleware is therefore the active redirect mechanism.
+- Live domain state — apex `https://callofdoodie.wtf/` serves 200 and the three alternate hosts return 301 to the apex after the Pages middleware deployment.
+- `src/systems/combatResolution.js` and `src/App.jsx` — enemy projectile/player damage and grenade explosion damage now delegate through pure combat helpers. Contact-hit helper logic exists and is covered by tests, but not every contact path is wired out of `App.jsx` yet.
+- `validate-replay` truth — deterministic resim remains blocked by the contract shape. `inputHash` is not reversible into replay inputs; a compact timeline/command trace or signed event digest is needed before server resimulation can be real.
+- Cross-repo truth — old-path redirect changes are prepared in local sibling repo `VaultSparkStudios.github.io`, but this repo's committed state should not claim that old-path production redirect is live until that sibling repo is committed, pushed, and deployed.
+
 ## 2026-05-14 — Session 60 changes
 
 - `scripts/platform-domain-cutover.mjs` — promoted from partial platform helper to full custom-domain repair helper: loads private studio-access token, uses separate zone-create/DNS tokens, creates/verifies zones, updates Namecheap nameservers, attaches Pages domains, creates/updates Cloudflare DNS CNAMEs, and removes conflicting A/AAAA records for web hosts.

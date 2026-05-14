@@ -47,11 +47,21 @@ let sessionStart = Date.now() - 3600_000;
 const m = lockText.match(/session_start:\s*(\S+)/);
 if (m) sessionStart = new Date(m[1]).getTime();
 
+const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || 'claude-code').toLowerCase();
 const planModeRequired = !!status.modelPlanMode;
 const tier = status.modelTier || null;
 
 if (!planModeRequired) {
-  emit({ status: 'not_required', tier, reason: 'tier does not require plan-mode' });
+  const result = { status: 'not_required', tier, agent, reason: 'tier does not require plan-mode' };
+  stamp(result);
+  emit(result);
+  process.exit(0);
+}
+
+if (agent !== 'claude-code') {
+  const result = { status: 'not_required', tier, agent, reason: 'plan-mode is a Claude Code runtime slash-command' };
+  stamp(result);
+  emit(result);
   process.exit(0);
 }
 
@@ -114,21 +124,7 @@ const result = {
   reminder: active ? null : `Run /model opusplan to activate Opus-plans-Sonnet-executes. Then: node scripts/mark-plan-mode.mjs`,
 };
 
-// Stamp status + lock
-try {
-  status.planModeDetected = result.status;
-  status.planModeCheckedAt = new Date().toISOString();
-  if (active) status.planModeLastActivatedAt = status.planModeLastActivatedAt || new Date().toISOString();
-  fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
-} catch { /* non-fatal */ }
-try {
-  if (fs.existsSync(lockPath)) {
-    const updated = lockText.includes('plan_mode_detected:')
-      ? lockText.replace(/plan_mode_detected:\s*\S+/, `plan_mode_detected: ${result.status}`)
-      : lockText.trimEnd() + `\nplan_mode_detected: ${result.status}\n`;
-    fs.writeFileSync(lockPath, updated);
-  }
-} catch { /* non-fatal */ }
+stamp(result);
 
 function emit(r) {
   if (JSON_MODE) { console.log(JSON.stringify(r, null, 2)); return; }
@@ -140,5 +136,23 @@ function emit(r) {
     console.log(`  signals: ${sigs.join(', ') || '(none)'}`);
   }
   if (r.reminder) console.log(`  → ${r.reminder}`);
+}
+
+function stamp(r) {
+  try {
+    status.planModeDetected = r.status;
+    status.planModeCheckedAt = new Date().toISOString();
+    if (r.status === 'active') status.planModeLastActivatedAt = status.planModeLastActivatedAt || new Date().toISOString();
+    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+  } catch { /* non-fatal */ }
+  try {
+    if (fs.existsSync(lockPath)) {
+      const currentLockText = readText(lockPath);
+      const updated = currentLockText.includes('plan_mode_detected:')
+        ? currentLockText.replace(/plan_mode_detected:\s*\S+/, `plan_mode_detected: ${r.status}`)
+        : currentLockText.trimEnd() + `\nplan_mode_detected: ${r.status}\n`;
+      fs.writeFileSync(lockPath, updated);
+    }
+  } catch { /* non-fatal */ }
 }
 emit(result);

@@ -35,6 +35,11 @@ The helper verifies or creates:
 - 301 redirect from `www.callofdoodie.wtf/*` to `callofdoodie.wtf/*`
 - 301 redirect from both `playcallofdoodie.com/*` hosts to `callofdoodie.wtf/*`
 
+If the Cloudflare Rulesets API is unavailable to the current token, the
+repo-owned fallback is `functions/_middleware.js`. It performs the same
+host-level 301 redirects inside Cloudflare Pages and deploys with the static
+build.
+
 ## Verification
 
 ```sh

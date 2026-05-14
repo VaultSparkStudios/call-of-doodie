@@ -4,7 +4,7 @@
 **Canonical:** `callofdoodie.wtf` (purchased at Namecheap)
 **Hedge / 301 target:** `playcallofdoodie.com` (purchased at Namecheap)
 **Target host:** Cloudflare Pages (free tier)
-**Status:** Apex cutover complete as of 2026-05-14 (Session 60). `https://callofdoodie.wtf/` serves the Cloudflare Pages app and passes live-site verification. Remaining post-cutover work: verify `www.callofdoodie.wtf` after Cloudflare Pages pending SSL/domain verification clears, configure backup/`www` 301 redirects to the apex, update external URL allowlists, and add the old-path 301 in the apex studio website repo.
+**Status:** Apex cutover complete as of 2026-05-14 (Session 60). `https://callofdoodie.wtf/` serves the Cloudflare Pages app and passes live-site verification. Session 61 verified `www.callofdoodie.wtf` and deployed Pages middleware so `www.callofdoodie.wtf`, `playcallofdoodie.com`, and `www.playcallofdoodie.com` 301 to the apex. Remaining post-cutover work: update external analytics/Ko-fi URL settings and add the old-path 301 in the apex studio website repo.
 
 ---
 

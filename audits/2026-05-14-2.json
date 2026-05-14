@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "session": 61,
+  "date": "2026-05-14",
+  "agent": "codex",
+  "intent": "Fix the protocol mismatch that caused Claude-only plan-mode checks to fail in Codex sessions, continue /go cleanup, then closeout, commit, and push with memory/context/CDR/task board files updated.",
+  "intentOutcome": "Achieved for current repo; sibling website redirect patch remains cross-repo pending.",
+  "shipped": [
+    "Codex plan-mode mismatch fixed in scripts/verify-plan-mode.mjs; Codex sessions now stamp planModeDetected=not_required instead of failing.",
+    "Cloudflare Pages middleware redirects deployed and verified for www.callofdoodie.wtf, playcallofdoodie.com, and www.playcallofdoodie.com to canonical https://callofdoodie.wtf/.",
+    "App.jsx combat extraction slice 11 shipped for incoming damage, enemy projectile hits, contact-hit helper coverage, and grenade explosion damage.",
+    "Domain migration/runbook context updated to document the Pages middleware fallback when Rulesets API access is unavailable."
+  ],
+  "deferred": [
+    {
+      "item": "PostHog/Sentry/Ko-fi dashboard URL allowlists",
+      "reason": "analytics capability is missing; Supabase Edge Functions already use wildcard CORS so no repo-side Supabase allowlist change is required."
+    },
+    {
+      "item": "validate-replay Phase 2B deterministic resim",
+      "reason": "inputHash is not reversible into replay inputs; the server contract must first include a compact input timeline, command trace, or signed event digest."
+    },
+    {
+      "item": "Old GitHub Pages /call-of-doodie/* redirect",
+      "reason": "patch is prepared in the sibling VaultSparkStudios.github.io repo, but cross-repo commit/push/deploy is tracked separately."
+    }
+  ],
+  "validation": [
+    "node --check scripts\\verify-plan-mode.mjs",
+    "node scripts\\verify-plan-mode.mjs --json",
+    "COD_LIVE_URL=https://callofdoodie.wtf/ npm run live:site-check",
+    "npx vitest run src/systems/combatResolution.test.js",
+    "npx vitest run src/systems/combatResolution.test.js src/App.launch.test.jsx",
+    "npm run lint",
+    "npm run build"
+  ],
+  "validationCaveat": "Full npm test timed out after 6 minutes after the combat extraction; no failing assertion was captured.",
+  "sil": {
+    "score": 983,
+    "max": 1000,
+    "velocity": 3,
+    "debt": "improving",
+    "categories": {
+      "devHealth": 98,
+      "creativeAlignment": 100,
+      "momentum": 95,
+      "engagement": 99,
+      "processQuality": 100,
+      "crossRepoCoherence": 96,
+      "securityPosture": 98,
+      "ecosystemIntegration": 99,
+      "capitalEfficiency": 100,
+      "automationCoverage": 98
+    }
+  },
+  "memoryTouched": [
+    "C:/Users/p4cka/.codex/memories/call-of-doodie/session-61-closeout.md"
+  ]
+}

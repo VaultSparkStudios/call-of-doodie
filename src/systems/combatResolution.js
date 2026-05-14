@@ -79,6 +79,95 @@ export function computeJuggernautShieldDamage({ bulletDamage = 0, comboCount = 0
   return bulletDamage * (1 + Math.max(0, comboCount) * 0.1) * (isCrit ? critMult : 1);
 }
 
+export function computeIncomingDamage({ baseDamage = 0, glassjaw = false, glassjawMult = 2, armorMult = 1 } = {}) {
+  const glassMult = glassjaw ? glassjawMult || 2 : 1;
+  return Math.max(0, baseDamage * glassMult * (armorMult || 1));
+}
+
+export function enemyProjectilePlayerCollision(projectile, player, { radius = 18 } = {}) {
+  if (!projectile || !player) return { hit: false, radius, distanceSq: Infinity };
+  const distanceSq = dist2(projectile.x || 0, projectile.y || 0, player.x || 0, player.y || 0);
+  return { hit: distanceSq < radius * radius, radius, distanceSq };
+}
+
+export function resolvePlayerDamage({
+  player,
+  baseDamage = 0,
+  invincibleFrames = 20,
+  screenShake = 0,
+  damageFlash = 0,
+  glassjaw = false,
+  glassjawMult = 2,
+  armorMult = 1,
+} = {}) {
+  const damage = computeIncomingDamage({ baseDamage, glassjaw, glassjawMult, armorMult });
+  const health = Math.max(0, (player?.health || 0) - damage);
+  return {
+    damage,
+    health,
+    dead: health <= 0,
+    invincibleFrames,
+    screenShake,
+    damageFlash,
+  };
+}
+
+export function resolveEnemyProjectilePlayerHit({ projectile, player, dashActive = false, ...damageArgs } = {}) {
+  if (dashActive || (player?.invincible || 0) > 0) return { hit: false };
+  const collision = enemyProjectilePlayerCollision(projectile, player);
+  if (!collision.hit) return { hit: false, collision };
+  return {
+    hit: true,
+    collision,
+    projectileLife: 0,
+    ...resolvePlayerDamage({
+      player,
+      baseDamage: projectile?.damage || 8,
+      invincibleFrames: 20,
+      screenShake: 5,
+      damageFlash: 8,
+      ...damageArgs,
+    }),
+  };
+}
+
+export function resolveEnemyContactPlayerHit({ enemy, player, dashActive = false, ...damageArgs } = {}) {
+  if (dashActive || !enemy || !player || (player.invincible || 0) > 0) return { hit: false };
+  const radius = (enemy.size || 0) / 2 + 15;
+  const distanceSq = dist2(enemy.x || 0, enemy.y || 0, player.x || 0, player.y || 0);
+  if (distanceSq >= radius * radius) return { hit: false, collision: { radius, distanceSq } };
+  return {
+    hit: true,
+    collision: { radius, distanceSq },
+    ...resolvePlayerDamage({
+      player,
+      baseDamage: 10 + (enemy.typeIndex || 0) * 5,
+      invincibleFrames: 30,
+      screenShake: 8,
+      damageFlash: 10,
+      ...damageArgs,
+    }),
+  };
+}
+
+export function resolveGrenadeEnemyDamage({
+  grenade,
+  enemy,
+  radius = 130,
+  baseDamage = 70,
+  damageMult = 1,
+} = {}) {
+  if (!grenade || !enemy) return { hit: false, distance: Infinity, damage: 0, radius };
+  const distance = Math.hypot((enemy.x || 0) - (grenade.x || 0), (enemy.y || 0) - (grenade.y || 0));
+  if (distance >= radius) return { hit: false, distance, damage: 0, radius };
+  return {
+    hit: true,
+    distance,
+    radius,
+    damage: baseDamage * (1 - distance / radius) * (damageMult || 1),
+  };
+}
+
 export function findLightningChainTarget(enemies = [], sourceEnemy, { range = 200 } = {}) {
   if (!sourceEnemy) return null;
   const rangeSq = range * range;

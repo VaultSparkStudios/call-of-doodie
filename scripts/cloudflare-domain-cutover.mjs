@@ -2,8 +2,11 @@
 import fs from "node:fs";
 import path from "node:path";
 
+const ROOT = process.cwd();
+const OPS_SECRETS = path.resolve(ROOT, "..", "vaultspark-studio-ops", "secrets");
 const API = "https://api.cloudflare.com/client/v4";
 const PROJECT_NAME = "call-of-doodie";
+const ACCOUNT_ID_FALLBACK = "2d737158a4dde61a7a476a9fda51af2f";
 const CANONICAL_DOMAIN = "callofdoodie.wtf";
 const BACKUP_DOMAIN = "playcallofdoodie.com";
 const CUSTOM_DOMAINS = [
@@ -29,10 +32,26 @@ function loadDotEnv(filePath) {
   }
 }
 
-loadDotEnv(path.join(process.cwd(), ".env.local"));
+function loadCloudflareStudioAccess(filePath) {
+  if (!fs.existsSync(filePath) || process.env.CLOUDFLARE_RULESETS_TOKEN) return;
+  const token = fs
+    .readFileSync(filePath, "utf8")
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .find((line) => /^[A-Za-z0-9_-]{40,}$/.test(line));
+  if (token) process.env.CLOUDFLARE_RULESETS_TOKEN = token;
+}
 
-const token = process.env.CLOUDFLARE_API_TOKEN;
-const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+loadDotEnv(path.join(ROOT, ".env.local"));
+loadDotEnv(path.join(OPS_SECRETS, "cloudflare.env"));
+loadCloudflareStudioAccess(path.join(OPS_SECRETS, "cloudflare-studio-access.txt"));
+
+const token = process.env.CLOUDFLARE_RULESETS_TOKEN
+  || process.env.CLOUDFLARE_ZONE_CREATE_TOKEN
+  || process.env.CLOUDFLARE_DNS_EDIT_TOKEN
+  || process.env.CLOUDFLARE_API_TOKEN
+  || process.env.CLOUDFLARE_DNS_TOKEN;
+const accountId = process.env.CLOUDFLARE_ACCOUNT_ID || ACCOUNT_ID_FALLBACK;
 
 function requireConfig() {
   const missing = [];

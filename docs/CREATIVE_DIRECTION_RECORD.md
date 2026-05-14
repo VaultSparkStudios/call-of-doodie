@@ -5,6 +5,18 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-14 (Session 61)
+
+- **Founder direction:** Codex should not fail Studio OS sessions because of a Claude Code plan-mode requirement; fix the protocol mismatch so it does not happen in Codex sessions, then closeout, commit, push, and update memory/context/task-board files.
+- **Public-safe implementation summary:**
+  - Codex sessions now record plan mode as `not_required` when the session lock identifies the agent as Codex.
+  - Canonical domain redirects now keep all public web traffic pointed at `https://callofdoodie.wtf/`.
+  - Replay trust follow-up is explicitly blocked on needing real replay inputs, not just an input hash.
+- **Locked-in invariants this session reinforced:**
+  1. **Agent parity means correct branching, not forced sameness** — Claude-only runtime concepts must not be imposed on Codex.
+  2. **Canonical `.wtf` remains the only public brand home** — `www` and backup `.com` are routing surfaces, not separate destinations.
+  3. **Trust labels must be honest** — deterministic replay validation cannot be claimed until the server receives data it can replay or verify.
+
 ## 2026-05-14 (Session 60)
 
 - **Founder direction:** finish making `callofdoodie.wtf` work, use the expanded Cloudflare studio-access token to complete the cutover, ensure the studio website agent knows where to find the live URL, then closeout and push all context updates.

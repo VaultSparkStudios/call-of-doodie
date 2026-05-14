@@ -5,13 +5,39 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): ▇▇███
-Avgs — 3: 979.7 | 5: 975.4 | 10: — | 25: — | all: 964.0 [N=9, SIL history in private ops repo]
-  └ 3-session: Dev 99.3 | Align 99.0 | Momentum 98.0 | Engage 98.7 | Process 98.7 [N=3]
+Avgs — 3: 985.0 | 5: 977.0 | 10: — | 25: — | all: 965.9 [N=10, SIL history in private ops repo]
+  └ 3-session: Dev 98.7 | Align 100.0 | Momentum 97.3 | Engage 99.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~12.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-11 | Session 58 | Total: 987/1000 | Velocity: 4 | protocolVelocity: 1
+Last session: 2026-05-14 | Session 61 | Total: 983/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-14 — Session 61 | Total: 983/1000 | Velocity: 3 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Codex protocol mismatch and post-cutover cleanup session. The false plan-mode failure is removed for Codex sessions, canonical redirects are now live through Cloudflare Pages middleware, and the App.jsx combat extraction ladder advanced again. Remaining drag is cleanly classified: dashboard allowlists need credentials, deterministic replay resim needs a richer input contract, and old-path redirect publication is cross-repo.
+
+| Category | Score | vs S60 | Notes |
+|---|---|---|---|
+| Dev Health | 98 | ↓1 | Targeted combat/launch tests, lint, build, and live-site checks pass; full `npm test` timed out after 6 minutes without a captured failure |
+| Creative Alignment | 100 | → | Redirects reinforce `.wtf` as the single canonical parody surface instead of splitting attention across backup hosts |
+| Momentum | 95 | ↓4 | Three useful items shipped, but several visible follow-ups remain blocked on credentials, contract design, or cross-repo publication |
+| Engagement | 99 | → | Player/share traffic now canonicalizes to the memorable apex; combat extraction is internal but supports future trust and feel work |
+| Process Quality | 100 | → | Protocol bug was fixed at the agent-branch level, blockers were classified with evidence, and false replay-resim confidence was avoided |
+| Cross-Repo Coherence | 96 | ↓2 | Website redirect patch is prepared but not yet committed/deployed in the sibling repo; current repo surfaces are coherent |
+| Security Posture | 98 | ↑1 | No secrets printed or committed; broad Cloudflare token remains a rotation follow-up; staged secret scan is required before push |
+| Ecosystem Integration | 99 | ↓1 | Cloudflare Pages middleware, live domain verification, and project docs now align; dashboard allowlists still need external access |
+| Capital Efficiency | 100 | → | Zero new spend; middleware solved redirects without paid infrastructure or dashboard-only state |
+| Automation Coverage | 98 | ↑3 | Codex plan-mode verification and Pages middleware redirects are automated/source-controlled; next gap is post-cutover smoke aggregation |
+
+**Top win:** The protocol now understands Codex as Codex: no more false plan-mode failure from a Claude-only runtime concept.
+**Top gap:** `validate-replay` deterministic resim is blocked by contract shape, not implementation effort; `inputHash` cannot be reversed into inputs.
+**Intent outcome:** Achieved for current repo closeout and push readiness; sibling website redirect publication remains a separate cross-repo action.
+
+**Brainstorm**
+1. Add a replay-input contract v2: compact input timeline + signed event digest, then make `validate-replay` resim only when the v2 payload is present. High probability.
+2. Add `npm run post-cutover:smoke` that checks apex 200, `www` 301, `.com` 301, Pages preview 200, old-path redirect, canonical tag, and manifest reachability. High probability.
+3. Move Codex/Claude agent-branch checks into a shared protocol utility so every Studio repo avoids runtime-specific false negatives. Medium-high probability.
 
 ## 2026-05-14 — Session 60 | Total: 987/1000 | Velocity: 4 | Debt: ↓
 

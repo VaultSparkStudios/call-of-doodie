@@ -18,6 +18,8 @@ import {
   computeBulletDamage,
   computeJuggernautShieldDamage,
   findLightningChainTarget,
+  resolveEnemyProjectilePlayerHit,
+  resolveGrenadeEnemyDamage,
   resolveObstacleBounce,
   resolvePierce,
   rollCrit,
@@ -2323,17 +2325,22 @@ export default function CallOfDoodie() {
     // ── Enemy bullet hits player ──
     if (dashRef.current.active <= 0) {
       gs.enemyBullets.forEach(eb => {
-        if (Math.hypot(eb.x - p.x, eb.y - p.y) < 18 && p.invincible <= 0) {
-          eb.life = 0;
-          let dmg = eb.damage || 8;
-          if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
-          dmg *= (gs._treeArmorMult || 1);
-          p.health -= dmg; p.invincible = 20; gs.screenShake = 5; gs.damageFlash = 8;
+        const hit = resolveEnemyProjectilePlayerHit({
+          projectile: eb,
+          player: p,
+          dashActive: dashRef.current.active > 0,
+          glassjaw: !!gs.glassjaw,
+          glassjawMult: gs.glassjawMult || 2,
+          armorMult: gs._treeArmorMult || 1,
+        });
+        if (hit.hit) {
+          eb.life = hit.projectileLife;
+          p.health = hit.health; p.invincible = hit.invincibleFrames; gs.screenShake = hit.screenShake; gs.damageFlash = hit.damageFlash;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
-          addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg), "#FF4444");
+          addText(gs, p.x, p.y - 30, "-" + Math.floor(hit.damage), "#FF4444");
           rumbleGamepad(0.3, 0.45, 100);
-          if (p.health <= 0) handlePlayerDeath(gs);
+          if (hit.dead) handlePlayerDeath(gs);
         }
       });
     }
@@ -2347,11 +2354,15 @@ export default function CallOfDoodie() {
         addText(gs, g.x, g.y, "BOOM!", "#FF4500", true);
         gs.screenShake = 15;
         gs.enemies.forEach(e => {
-          const d = Math.hypot(e.x - g.x, e.y - g.y);
           const _gradius = 130 * (gs.settGrenadeRadMult || 1);
-          if (d < _gradius) {
-            const dmg = 70 * (1 - d / _gradius) * (perkModsRef.current.grenadeDamageMult || 1);
-            e.health -= dmg; e.hitFlash = 10; gs.totalDamage += dmg;
+          const blast = resolveGrenadeEnemyDamage({
+            grenade: g,
+            enemy: e,
+            radius: _gradius,
+            damageMult: perkModsRef.current.grenadeDamageMult || 1,
+          });
+          if (blast.hit) {
+            e.health -= blast.damage; e.hitFlash = 10; gs.totalDamage += blast.damage;
             e.lastDmgSource = "grenade";
           }
         });

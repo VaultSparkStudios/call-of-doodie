@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-05-14 (Session 61)
+
+- Fixed the Codex plan-mode protocol mismatch in `scripts/verify-plan-mode.mjs`: Codex sessions now read `context/.session-lock`, stamp `planModeDetected: not_required`, and exit cleanly because plan mode is a Claude Code runtime-only slash command.
+- Added Cloudflare Pages middleware at `functions/_middleware.js` to canonicalize `www.callofdoodie.wtf`, `playcallofdoodie.com`, and `www.playcallofdoodie.com` to `https://callofdoodie.wtf/` with 301 redirects.
+- Hardened `scripts/cloudflare-domain-cutover.mjs` so it can load Studio Ops Cloudflare secret files like the platform cutover helper; Rulesets API access still returned unauthorized, so middleware became the repo-owned redirect path.
+- Deployed the middleware build to Cloudflare Pages and verified the apex plus `www`/backup redirect surfaces; live site check passed 5/5 against `https://callofdoodie.wtf/`.
+- Audited allowlist follow-through: Supabase Edge Functions currently use `Access-Control-Allow-Origin: *`, so no repo-side Supabase allowlist change was needed; remaining PostHog/Sentry/Ko-fi URL changes are dashboard/credential-gated.
+- Prepared old-path redirect changes in the sibling `VaultSparkStudios.github.io` repo (`call-of-doodie/index.html` + `404.html`), but left cross-repo commit/push/deploy pending explicit publication handling.
+- Audited `validate-replay` Phase 2B and deferred deterministic resim because the server currently receives only `inputHash`; a hash cannot reconstruct the replay input timeline.
+- Implemented App.jsx extraction slice 11: incoming damage, enemy projectile/player hit resolution, contact-hit helpers, and grenade explosion damage now live as pure helpers in `src/systems/combatResolution.js`; enemy projectile hits and grenade blast damage are wired through helpers in `src/App.jsx`.
+- Added focused combat-resolution regression tests and re-ran targeted launch/combat coverage, lint, and build. Full `npm test` timed out after 6 minutes post-extraction without a captured failing assertion.
+
 This public repo no longer carries the detailed internal work log. Internal session-by-session execution detail is maintained privately.
 
 ## 2026-05-14 (Session 60 — domain cutover + Studio surface repair)

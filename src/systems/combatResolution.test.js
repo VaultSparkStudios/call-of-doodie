@@ -2,10 +2,16 @@ import { describe, expect, it } from "vitest";
 import {
   bulletEnemyCollision,
   computeBulletDamage,
+  computeIncomingDamage,
   computeJuggernautShieldDamage,
+  enemyProjectilePlayerCollision,
   findLightningChainTarget,
+  resolveEnemyContactPlayerHit,
+  resolveEnemyProjectilePlayerHit,
+  resolveGrenadeEnemyDamage,
   resolveObstacleBounce,
   resolvePierce,
+  resolvePlayerDamage,
   rollCrit,
 } from "./combatResolution.js";
 
@@ -37,6 +43,43 @@ describe("combatResolution", () => {
 
   it("keeps juggernaut shield drain separate from post-mitigation damage", () => {
     expect(computeJuggernautShieldDamage({ bulletDamage: 10, comboCount: 3, isCrit: true, critMult: 2 })).toBe(26);
+  });
+
+  it("computes incoming player damage with glassjaw and armor modifiers", () => {
+    expect(computeIncomingDamage({ baseDamage: 10, glassjaw: true, glassjawMult: 1.5, armorMult: 0.8 })).toBe(12);
+    expect(resolvePlayerDamage({ player: { health: 20 }, baseDamage: 25 })).toMatchObject({ health: 0, dead: true });
+  });
+
+  it("resolves enemy projectile hits without mutating player state", () => {
+    const player = { x: 10, y: 10, health: 30, invincible: 0 };
+    const projectile = { x: 20, y: 10, damage: 8 };
+    expect(enemyProjectilePlayerCollision(projectile, player).hit).toBe(true);
+    const result = resolveEnemyProjectilePlayerHit({ projectile, player, armorMult: 0.5 });
+    expect(result).toMatchObject({ hit: true, projectileLife: 0, damage: 4, health: 26, invincibleFrames: 20 });
+    expect(player.health).toBe(30);
+  });
+
+  it("skips projectile and contact hits during dash or invincibility", () => {
+    expect(resolveEnemyProjectilePlayerHit({ projectile: { x: 0, y: 0 }, player: { x: 0, y: 0, invincible: 3 } }).hit).toBe(false);
+    expect(resolveEnemyContactPlayerHit({ enemy: { x: 0, y: 0, size: 30, typeIndex: 2 }, player: { x: 0, y: 0, invincible: 0 }, dashActive: true }).hit).toBe(false);
+  });
+
+  it("resolves enemy contact and grenade blast damage from geometry", () => {
+    const contact = resolveEnemyContactPlayerHit({
+      enemy: { x: 0, y: 0, size: 20, typeIndex: 3 },
+      player: { x: 5, y: 0, health: 100, invincible: 0 },
+    });
+    expect(contact).toMatchObject({ hit: true, damage: 25, health: 75, invincibleFrames: 30 });
+
+    const blast = resolveGrenadeEnemyDamage({
+      grenade: { x: 0, y: 0 },
+      enemy: { x: 65, y: 0 },
+      radius: 130,
+      baseDamage: 70,
+      damageMult: 2,
+    });
+    expect(blast.hit).toBe(true);
+    expect(blast.damage).toBeCloseTo(70, 4);
   });
 
   it("selects the nearest valid lightning chain target", () => {
