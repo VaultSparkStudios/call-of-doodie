@@ -5,6 +5,17 @@ Overall status: green
 Last reviewed: 2026-05-14
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-14 — Session 62 changes
+
+- `src/systems/combatResolution.js` — now exports `isPrecisionHit(bullet, enemy)`. Hit detection checks squared distance against `(size/2 * 0.35)²`. Returns false for null inputs and zero-size enemies.
+- `src/App.jsx` — `gs.precisionStreak` is new gs state initialized to 0 in `initGame()`. Precision streak logic is wired into the bullet-enemy collision block. `getMusicBPM` and `getMusicBeat` are now imported from `sounds.js`; beat-sync spawn particle burst is additive-only (no spawn rate changes).
+- `src/utils/runCoach.js` — `buildWeaponTip()` now exists as a named export-adjacent helper. The module returns a 5-field object (`killedBy`, `tryNext`, `working`, `weaponTip`, `brain`). `weaponTip` is `null` when no actionable advice applies (zero kills, single weapon, no pattern detected).
+- `src/components/DeathScreen.jsx` — SHARE RUN button only renders when `runSeed > 0`. Uses `encodeReplayCode` from `replayCode.js` (pre-existing import). `weaponTip` is rendered conditionally in AI RUN COACH section.
+- `src/components/HomeV2.jsx` — `?replay=` URL param is handled in the same `useEffect` as the existing `?seed=` handler. Mutually exclusive: if `?replay=` is present and valid, the `?seed=` branch is skipped.
+- `src/sounds.js` — `getMusicBPM()` reads `_BPM[vibe]` where `vibe` is `"boss"` when `_musicBoss` is set, otherwise falls back to `_musicVibe || "action"`. `getMusicBeat()` returns the `_musicBeat` counter. Both are safe to call before audio is initialized (return 108 and 0 respectively).
+- Test truth — `runCoach.test.js` line 21 was changed from "killed you" to "ended" (matching the actual string the function now emits). Line 41-44 was changed to test only zero-kills cases for null `weaponTip` (a single-weapon dominant run correctly returns a non-null tip).
+- Combat truth — `isPrecisionHit` is caller-aware: the call site in App.jsx guards `!e.isBossEnemy` so boss enemies never contribute to precision streak. The function itself is agnostic to boss status.
+
 ## 2026-05-14 — Session 61 changes
 
 - `scripts/verify-plan-mode.mjs` — now reads the session lock `agent:` value and treats non-`claude-code` sessions as `planModeDetected: not_required`, preventing Codex sessions from failing on a Claude-only runtime slash-command requirement.

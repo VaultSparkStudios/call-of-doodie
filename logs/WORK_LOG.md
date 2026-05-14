@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-05-14 (Session 62 — depth sprint)
+
+- Founder invoked `/start` for audit/genius list, then `/go` to ship all unblocked items.
+- Synthesized 12-item genius list from TASK_BOARD and founder goals; shipped 5 unblocked items, deferred 6 that were blocked by architectural coupling or design gaps, deferred 1 pending measurement data.
+- `combatResolution.js`: added `isPrecisionHit(bullet, enemy)` — returns true when hit is within 35% of enemy core radius. Added 4 tests (near-center, outside-core, null inputs, zero-size guard). 15/15 total combatResolution tests.
+- `App.jsx`: added `gs.precisionStreak` tracking in bullet-enemy collision block; +1💩 per precision hit with "PRECISION BURST! +3💩" at streak 3+; streak resets on non-precision hits to non-boss enemies. Added `isPrecisionHit` import and `getMusicBPM`/`getMusicBeat` imports. Beat-aligned spawns (±4 frames of BPM cycle) fire 6-particle burst. Auto-load unbeaten rivalry entry in `startGame()`. Weapon unlock snapshot telemetry on game start.
+- `sounds.js`: added `getMusicBPM()` and `getMusicBeat()` exports.
+- `runCoach.js`: full rewrite. `buildWeaponTip()` detects waste (share <8%), dominated (share ≥65%), and spread-build (≥4 weapons, top <40%) patterns. `buildKilledBy()` appends enemy-specific evasion tips (ENEMY_EVASION_TIPS map for types 4/9/17/3/6/10/19/20). Returns 5-field object `{killedBy, tryNext, working, weaponTip, brain}`. Added 5 new tests + fixed 2 existing tests. 8/8 runCoach tests.
+- `HomeV2.jsx`: `?replay=` URL param parsing on mount (auto-fills seed/difficulty/mode, opens deploy dropdown). SHARE button now copies full `?replay=<code>` URL; button label changed to "🔗 SHARE LINK".
+- `DeathScreen.jsx`: added "🔗 SHARE RUN" button (when `runSeed > 0`) that encodes a replay share link and fires `debrief_share_replay_link` analytics event. Passes `weaponKills` to `buildRunCoach`. Renders `runCoach.weaponTip` in AI RUN COACH card.
+- Test fixes: changed "killed you" → "ended" in repeating-killer test; changed single-weapon null test to zero-kills-only case (dominant single weapon correctly returns a tip, not null).
+- Full suite: 327/327. Commit `d804bcb`. Pushed to `feat-standalone-domain`.
+
 ## 2026-05-14 (Session 61)
 
 - Fixed the Codex plan-mode protocol mismatch in `scripts/verify-plan-mode.mjs`: Codex sessions now read `context/.session-lock`, stamp `planModeDetected: not_required`, and exit cleanly because plan mode is a Claude Code runtime-only slash command.

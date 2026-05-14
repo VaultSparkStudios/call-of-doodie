@@ -2,6 +2,22 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-05-14 — Session 62 — Beat-sync is visual-only; spawn rate is not music-gated
+
+**Decision:** Beat-aligned enemy spawns trigger a 6-particle burst visual effect, but the spawn rate, spawn count, and enemy types are unchanged. Music beat phase does not gate whether a spawn occurs.
+
+**Rationale:** Gating spawns on beat would materially alter wave balance (a fast-BPM boss vibe would produce fewer enemies per second than intended). The visual-only approach gives perceptual music integration at zero balance risk.
+
+**Trade-off accepted:** The sync feel is suggestive rather than strict. A player who notices will feel the rhythm; a player who doesn't will see occasional particle bursts that read as ambient atmosphere. Both outcomes are acceptable.
+
+## 2026-05-14 — Session 62 — Weapon tip null for single-weapon runs with kills
+
+**Decision:** `buildWeaponTip()` returns a non-null "dominated" tip when a single weapon accounts for ≥65% of kills, even if only one weapon was used. It returns null only when there are zero total kills.
+
+**Rationale:** A player who used one weapon for 30 kills in a 12-weapon loadout is demonstrating a dominant-weapon pattern that deserves a specific actionable note ("check synergies"), not silence.
+
+**Trade-off accepted:** Players who intentionally mono-weapon will receive a tip they may consider unnecessary. The tip is low-friction (a single line in the debrief) so the cost is low.
+
 ## 2026-05-14 — Session 60 — `callofdoodie.wtf` is the live canonical production URL
 
 **Decision:** `https://callofdoodie.wtf/` is now the canonical production URL for Call of Doodie. `playcallofdoodie.com`, `www.callofdoodie.wtf`, and the old `vaultsparkstudios.com/call-of-doodie/` path should resolve or redirect to the apex rather than acting as parallel brand surfaces.
