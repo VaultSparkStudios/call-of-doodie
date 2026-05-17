@@ -36,6 +36,7 @@ Public-safe launch roadmap summary.
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
+- [ ] [SIL:1] Closeout autopilot noninteractive help hardening — `scripts/closeout-autopilot.mjs --help` currently starts the autopilot instead of printing usage; add a real help path and document the Codex-safe `--yes --message` flow.
 - [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
 - [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
 - [ ] [SIL:1] App.jsx extraction roadmap per `docs/APP_EXTRACTION_ROADMAP.md` — slice 1 is the game loop (player/bullet/enemy update); pure `step(gs, frame)` modules with their own tests

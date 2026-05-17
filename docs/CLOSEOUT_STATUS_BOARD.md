@@ -1,29 +1,31 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-17 (Session 64 closeout) -->
+<!-- generated-at: 2026-05-17 (Session 65 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S64 ═════════════════════╗
-║  Date: 2026-05-17  ·  SIL: 992/1000  ·  Velocity: 1 improving    ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S65 ═════════════════════╗
+║  Date: 2026-05-17  ·  SIL: 993/1000  ·  Velocity: 0 improving    ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **Replay bootstrap starter hydration** — HomeV2 now applies  ║
-║  ✓ **Replay regression coverage** — HomeV2 test covers seed, mo  ║
-║  ✓ **Audit artifacts** — `docs/AUDIT_2026-05-17.md` and `docs/I  ║
+║  ✓ **/start** — session lock written for Codex; session mode de  ║
+║  ✓ **/audit** — `docs/AUDIT_2026-05-17.md` exists and contains   ║
+║  ✓ **/implement** — `src/components/HomeV2.jsx` applies decoded  ║
+║  ✓ **/closeout** — context write-back updated with this verific  ║
+║  ✓ `npm test -- --run src/components/HomeV2.test.jsx` -> **3/3*  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 992/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 993/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           99   ██████████                            ║
+║    Momentum           98   ██████████                            ║
 ║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          98   ██████████                            ║
 ║    Security           99   ██████████                            ║
 ║    Ecosystem          99   ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -32,20 +34,20 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: closeout pending commit                                ║
-║  Ahead: ?  ·  Behind: ?                                          ║
+║  Changes: 12 files  ·  M:11 A:0 D:0 ?:1                          ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: feat-standalone-domain                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         332/332                                          ║
-║  IGNIS:         1d ago                                           ║
+║  Tests:         —                                                ║
+║  IGNIS:         3d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

@@ -2,41 +2,41 @@
 
 # Latest Handoff
 
-Session Intent: Founder invoked `/start` (audit + genius list), then `/go` to ship all unblocked items, then `/closeout` with full memory/context/CDR/task-board updates and GitHub push.
+Session Intent: Continue the active `/start then /audit then /implement then /closeout` goal and verify the project is actually complete before marking it achieved.
 
-## Where We Left Off (Session 62 — depth sprint: precision hits, share links, run coach, rivalry, beat-sync)
+## Where We Left Off (Session 65 — verification closeout for replay bootstrap audit)
 
-**Intent outcome:** Achieved. All 5 unblocked genius list items shipped in one pass. 327/327 tests. Lint clean. Build clean. Committed and pushed to `feat-standalone-domain`.
+**Intent outcome:** Achieved. The current audit/implement slice was already present, so this session verified it against real source and command evidence, then completed closeout write-back.
 
-### What shipped
-- **Precision hit system** — `isPrecisionHit(bullet, enemy)` in `combatResolution.js`; `gs.precisionStreak` tracked in App.jsx; +1💩 per center hit; +3💩 burst milestone at streak 3; streak resets on non-precision hit
-- **Replay share links** — HomeV2 parses `?replay=` on mount (auto-fills seed/diff/mode, opens deploy); DeathScreen "🔗 SHARE RUN" button encodes current run + fires telemetry; SHARE button copies full URL
-- **Run Coach weapon tips + enemy evasion** — `buildWeaponTip()` detects waste/dominated/spread-build patterns; `buildKilledBy()` appends boss-enemy-specific evasion tips; DeathScreen renders the tip line
-- **Rivalry auto-load** — `startGame()` auto-promotes first unbeaten rivalry entry into HUD VS chip; manual challenge flow unaffected
-- **Beat-sync spawn particles** — `getMusicBPM()` + `getMusicBeat()` exported from sounds.js; beat-aligned spawns trigger 6-particle burst for perceptual music sync
+### What was verified
+- **/start** — session lock written for Codex; session mode detected as execution; context-meter returned `CONTINUE`.
+- **/audit** — `docs/AUDIT_2026-05-17.md` exists and contains the ranked replay bootstrap plan plus execution log.
+- **/implement** — `src/components/HomeV2.jsx` applies decoded `starterLoadout` from both `?replay=` URL bootstrap and pasted replay-code load paths; `src/components/HomeV2.test.jsx` covers difficulty, daily mode, starter loadout, and seed hydration.
+- **/closeout** — context write-back updated with this verification layer; remaining work is unchanged and correctly gated on replay contract design, analytics/dashboard credentials, or human launch QA.
 
 ### Validation
-- `npx vitest run src/utils/runCoach.test.js src/systems/combatResolution.test.js` → 23/23
-- Full suite background run → **327/327** (was 315; +12)
-- `npm run lint` → clean (0 errors)
-- `npm run build` → passing (732.93 kB raw / 223.53 kB gzip)
-- `git push` → pushed to `origin/feat-standalone-domain`
+- `npm test -- --run src/components/HomeV2.test.jsx` -> **3/3** passing.
+- `npm run lint` -> clean.
+- `npm run launch:smoke` -> **1/1** passing outside the sandbox.
+- `npm test` -> **332/332** passing across 41 files outside the sandbox.
+- `npm run build` -> passing.
 
-### Deferred (TASK_BOARD Next/Later)
-- App.jsx extraction slice 1 — game loop step() modules (deeply coupled to React refs, needs dedicated architectural session)
-- MenuScreen → MenuPanels.jsx unification (~900 lines, pure refactor, low urgency with HomeV2 as default)
-- Coordinated enemy formations (wave 20+, ~4h game design work)
-- Mid-run challenge contracts (design pass needed to avoid overlap with Dynamic Objective System)
-- Input-timeline digest for validate-replay Phase 2B (blocked on server contract v2)
-- HomeV2 v1 fallback retirement (gate on Lighthouse LCP data)
+### Remaining work
+- [ ] Replay contract v3: add a compact command trace or signed replay-input digest before deterministic `validate-replay` Phase 2B.
+- [ ] Rotate/narrow the broad Cloudflare studio-access token after domain stabilization.
+- [ ] HomeV2 retirement gate: capture production Lighthouse/funnel evidence before removing the legacy `?home=v1` fallback.
 
-## Next Recommended Slice (Session 63)
-- [ ] Merge `feat-standalone-domain` → `main` and confirm Cloudflare Pages deploys cleanly on the merged build
-- [ ] Start App.jsx extraction slice 1 if architectural refactor is the priority, or focus on a content/engagement sprint (formations, contracts) if depth is the priority
-- [ ] Rotate/narrow broad Cloudflare studio-access token after domain stabilization
+## Next Recommended Slice (Session 66)
+- [ ] Implement replay contract v3 if trust/replay fidelity remains the top priority.
+- [ ] Continue App.jsx extraction slice 1 if architectural debt is the top priority.
+- [ ] Capture HomeV2 production LCP/funnel evidence if launch measurement is the top priority.
 
-Session Intent: Founder asked whether plan mode applies to Codex, then directed Codex to fix the protocol mismatch so it does not happen in Codex sessions; after /go continuation, founder asked for closeout, commit, push, and all memory/context/CDR/task-board updates.
+Session Intent: Founder invoked `/start then /audit then /implement then /closeout`, asking for genius-level execution.
 
-## Where We Left Off (Session 61 — Codex protocol fix + redirect cleanup + combat extraction)
+## Where We Left Off (Session 64 — focused audit implement sprint: replay bootstrap starter fidelity)
 
-**Intent outcome:** Achieved. The Codex plan-mode mismatch is fixed, canonical redirect routing is live and verified, App.jsx extraction slice 11 is implemented, the sibling old-path redirect patch was committed/pushed, and closeout write-back is complete. Remaining work is dashboard/credential-gated, product-decision-gated, or replay-contract-gated.
+**Intent outcome:** Achieved. `/start` completed with context-meter `CONTINUE`; `/audit` produced `docs/AUDIT_2026-05-17.md`; `/implement` shipped all three audit items; `/closeout` write-back is complete.
+
+### What shipped
+- **Replay bootstrap starter hydration** — HomeV2 now applies decoded `starterLoadout` when opening `?replay=` URLs and when loading a pasted replay code, closing the gap between replay-code payload fidelity and actual launcher state.
+- **Regression coverage** — HomeV2 now has a focused replay URL hydration test covering seed input state, daily mode setter, difficulty setter, and starter loadout setter.

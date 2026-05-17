@@ -221,3 +221,11 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `src/gameHelpers.test.js` added: 26 new tests, all passing
 - All context files (CURRENT_STATE, TASK_BOARD, LATEST_HANDOFF, WORK_LOG, SIL) updated to reflect session 40 state
 - No contradictions introduced. Source-of-truth hierarchy unchanged.
+
+## 2026-05-17 — Session 65 verification closeout
+
+- `docs/AUDIT_2026-05-17.md` and `docs/IMPLEMENT_PLAN.md` were checked against source evidence instead of accepted as proxy completion signals.
+- `src/components/HomeV2.jsx` contains both replay starter hydration paths: `?replay=` URL bootstrap and pasted replay-code load.
+- `src/components/HomeV2.test.jsx` contains the component regression for replay URL hydration, including seed input, daily mode, difficulty, and starter loadout setter coverage.
+- Verification evidence is current: focused HomeV2 test passed, `npm run lint` clean, `npm run launch:smoke` passed, full `npm test` passed 332/332, and `npm run build` passed.
+- No source-of-truth contradictions introduced. Remaining replay-validation work is still correctly blocked on a command trace / replay input contract rather than `inputHash` alone.

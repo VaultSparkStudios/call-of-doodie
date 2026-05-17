@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 64 shipped replay bootstrap starter hydration from audit/implement: HomeV2 now applies decoded starterLoadout from replay URLs and pasted codes. Tests 332/332.",
-  "nextMilestone": "S65: choose between replay contract v3 with command trace, App.jsx extraction slice 1, HomeV2 retirement evidence, or content depth (formations/contracts).",
+  "currentFocus": "Session 65 verified the replay bootstrap audit/implement slice end-to-end: HomeV2 starterLoadout hydration evidence matches source and tests; full suite 332/332, lint clean, build passing.",
+  "nextMilestone": "S66: choose between replay contract v3 with command trace, App.jsx extraction slice 1, HomeV2 retirement evidence, or content depth (formations/contracts).",
   "testingSurfaces": [
     {
       "type": "production",
@@ -41,14 +41,15 @@
   "ignisScore": 46693,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-14",
-  "silSession": 64,
-  "silScore": 992,
-  "silAvg3": 990.7,
-  "silVelocity": 1,
+  "silSession": 65,
+  "silScore": 993,
+  "silAvg3": 991.3,
+  "silVelocity": 0,
   "silDebt": "improving",
   "silLastSession": "2026-05-17",
-  "currentSession": 64,
+  "currentSession": 65,
   "sessionMode": "founder",
+  "lastAgent": "codex",
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-04-14",
   "silRubricVersion": "3.0",
@@ -57,14 +58,14 @@
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 99,
+    "momentum": 98,
     "engagement": 100,
     "processQuality": 100,
     "crossRepoCoherence": 98,
     "securityPosture": 99,
     "ecosystemIntegration": 99,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -72,7 +73,7 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-05-14T20:17:58.487Z",
+  "planModeDetected": "not_required",
+  "planModeCheckedAt": "2026-05-17T05:53:12.857Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
 }

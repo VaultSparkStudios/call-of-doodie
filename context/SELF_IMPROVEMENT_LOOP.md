@@ -571,3 +571,27 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 3. Threat forecast HUD — show the next pacing phase and elite cadence during non-boss waves so players can reposition proactively. Implementation: expose `waveDirector` state through HUD with a subtle progress band and climax marker. Medium probability.
 
 **Committed to TASK_BOARD:** [SIL] Boss-wave anticipation pass · [SIL] Director telemetry hooks
+
+## 2026-05-17 — Session 65 | Total: 993/1000 | Velocity: 0 | Debt: →
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite passed 332/332 outside sandbox; lint and build passed; launch smoke passed separately |
+| Creative Alignment | 100 | → | Replay fidelity supports the seed-rematch promise without adding off-theme surface area |
+| Momentum | 98 | ↓ | Verification/closeout completed; no new product-code slice was needed because audit items were already shipped |
+| Engagement | 100 | → | Replay starter fidelity preserves player trust in shared run links |
+| Process Quality | 100 | → | Completion audit checked docs against code/tests instead of relying on execution-log claims |
+| Cross-Repo Coherence | 98 | → | Studio protocol followed; remaining dashboard/credential blockers stayed correctly classified |
+| Security Posture | 99 | → | No new secrets introduced; broad Cloudflare token rotation remains a human/ops follow-up |
+| Ecosystem Integration | 99 | → | Canonical domains and launch surfaces unchanged; sandbox limitation documented for smoke/full test runs |
+| Capital Efficiency | 100 | → | Zero-token local verification; no external AI/API cost added |
+| Automation Coverage | 99 | → | Regression and launch smoke cover the replay bootstrap path; deterministic replay still awaits v3 input contract |
+
+**Top win:** Converted the resumed goal into a proof-backed closeout: the audit artifacts, HomeV2 implementation, regression test, full suite, launch smoke, lint, and build all line up.
+**Top gap:** `closeout-autopilot.mjs --help` is not a help path; it starts the autopilot and blocks at the interactive commit prompt in this shell.
+**Intent outcome:** Achieved — `/start`, `/audit`, `/implement`, and `/closeout` requirements are now mapped to concrete evidence.
+
+**Brainstorm**
+1. Replay contract v3 — bind compact command traces to issued run tokens so deterministic replay validation has actual inputs; High probability.
+2. Noninteractive closeout autopilot hardening — make `--help` print usage and add an explicit `--yes --message` documented path for Codex closeouts; High probability.
+3. HomeV2 measurement gate — add a production LCP/funnel capture script before removing the legacy fallback; Medium probability.

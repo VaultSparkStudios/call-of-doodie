@@ -54,6 +54,12 @@ Boundary:
   2. **Apex `.wtf` is canonical** — backup and `www` hosts should redirect to `https://callofdoodie.wtf/`, not become parallel brands.
   3. **Broad ops tokens are temporary tools** — use them to unblock, then replace with narrow domain-migration credentials.
 
+## 2026-05-17 (Session 65)
+
+- **Founder direction:** continue the active `/start then /audit then /implement then /closeout` mandate and verify completion rigorously before marking the goal achieved.
+- **Public-safe implementation summary:** no new game-surface direction was introduced; this session confirmed the replay bootstrap fidelity slice is real in source and tests, then refreshed closeout context. The project posture remains: shared run links must reproduce the actual opener, not just the seed.
+- **Locked-in invariant reinforced:** replay/trust work must be evidence-backed. Audit logs and passing proxy checks are useful only when mapped back to concrete source behavior and targeted regression coverage.
+
 ## 2026-05-13 (Session 59)
 
 - **Founder direction:** complete the standalone-domain migration from `vaultsparkstudios.com/call-of-doodie/` to `callofdoodie.wtf`, keep `playcallofdoodie.com` as a backup/redirect, and make future project migrations easier through reusable platform automation. Founder also asked whether account creation/sign-in exists today and whether it is integrated with Studio membership.
