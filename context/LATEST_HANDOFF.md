@@ -1,5 +1,32 @@
 # Latest Handoff
 
+Session Intent: Founder invoked `/start then /audit then /implement then /closeout`, asking for genius-level execution.
+
+## Where We Left Off (Session 64 — focused audit implement sprint: replay bootstrap starter fidelity)
+
+**Intent outcome:** Achieved. `/start` completed with context-meter `CONTINUE`; `/audit` produced `docs/AUDIT_2026-05-17.md`; `/implement` shipped all three audit items; `/closeout` write-back is complete.
+
+### What shipped
+- **Replay bootstrap starter hydration** — HomeV2 now applies decoded `starterLoadout` when opening `?replay=` URLs and when loading a pasted replay code, closing the gap between replay-code payload fidelity and actual launcher state.
+- **Regression coverage** — HomeV2 now has a focused replay URL hydration test covering seed input state, daily mode setter, difficulty setter, and starter loadout setter.
+- **Audit/implement artifacts** — `docs/AUDIT_2026-05-17.md` and `docs/IMPLEMENT_PLAN.md` record the compact execution plan and per-item outcomes.
+
+### Validation
+- `npx vitest run src/components/HomeV2.test.jsx src/utils/replayCode.test.js` → **8/8** passing.
+- `npm run lint` → clean.
+- `npm test` → **332/332** passing across 41 files.
+- `npm run build` → passing.
+
+### Remaining work
+- [ ] Deterministic replay validation still needs a real input timeline/command trace before Phase 2B can honestly ship.
+- [ ] Rotate/narrow the broad Cloudflare studio-access token after domain stabilization.
+- [ ] Decide whether to retire legacy HomeV2 v1 fallback after Lighthouse/funnel data confirms production wins.
+
+## Next Recommended Slice (Session 65)
+- [ ] Implement replay contract v3: compact command trace bound to issued run token, then validate deterministic replay inputs instead of only `inputHash`.
+- [ ] Continue App.jsx extraction slice 1 if architectural debt is the priority.
+- [ ] Add production HomeV2 LCP/funnel capture if launch measurement is the priority.
+
 Session Intent: Founder invoked `/start then /audit then /implement then /closeout`, asking for genius-level, sophisticated, creative/innovative execution to make the project as strong as possible.
 
 ## Where We Left Off (Session 63 — audit implement sprint: replay fidelity, precision memory, canonical smoke)

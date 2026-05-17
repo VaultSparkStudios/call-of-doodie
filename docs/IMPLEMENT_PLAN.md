@@ -1,14 +1,17 @@
+# Implement Plan — 2026-05-17 Audit
+
 <!-- generated-by: /implement skill v1.0 -->
-<!-- generated-at: 2026-05-14 -->
-<!-- audit: docs/AUDIT_2026-05-14.md -->
+<!-- source: docs/AUDIT_2026-05-17.md -->
 
-# Implement Plan
+## Sequence
 
-Optimal-efficiency order:
+1. **replay-loadout-hydration** — Update HomeV2 replay URL and replay-code load paths to apply decoded `starterLoadout`.
+2. **replay-bootstrap-regression** — Add focused HomeV2 regression coverage for replay URL hydration.
+3. **audit-handoff-tightening** — Append execution results to the audit and context logs so the pass is idempotent.
 
-1. **replay-link-fidelity** — same App/DeathScreen/replay-code surface as recent Session 62 work; smallest high-impact bug fix.
-2. **precision-skill-memory** — same DeathScreen/Run Coach surface while context is hot; turns the new precision mechanic into durable coaching.
-3. **canonical-public-surface** — docs-only source-of-truth repair after code surfaces settle.
-4. **post-cutover-smoke-command** — script/package addition last so validation can include the final public-surface assumptions.
+## Success Criteria
 
-Token/API-cost note: all four items are zero-token and local-first. Measurement is via tests, lint/build, and the new post-cutover smoke script.
+- Replay links generated from a non-standard starter hydrate that starter when opened.
+- Pasted replay codes hydrate the same starter before deployment.
+- Focused HomeV2/replay tests pass.
+- Audit execution log records shipped outcomes.

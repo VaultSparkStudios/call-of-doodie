@@ -14,6 +14,7 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:1] **DONE S64** Replay bootstrap starter hydration — HomeV2 now applies decoded `starterLoadout` from both `?replay=` URLs and pasted replay codes; focused HomeV2 regression covers seed, daily mode, difficulty, and starter hydration.
 - [x] [SIL:3] **DONE S63** Replay link fidelity — `DeathScreen.jsx` now receives the actual `starterLoadout` from `App.jsx` and encodes it into shareable replay URLs; `replayCode.test.js` covers non-standard starter loadout round-trip fidelity.
 - [x] [SIL:3] **DONE S63** Precision skill memory — best precision streak is tracked for each run, passed into Run Coach/Run Brain, and rendered as precision mastery or precision-gap guidance on the death screen; focused runCoach/runBrain tests added.
 - [x] [SIL:1] **DONE S63** Canonical public surface repair — `README.md` now points to `https://callofdoodie.wtf/`, names Cloudflare Pages as canonical hosting, and documents the root dev URL plus post-cutover smoke command.

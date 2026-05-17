@@ -2,8 +2,16 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-05-14
+Last reviewed: 2026-05-17
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-17 — Session 64 changes
+
+- `src/components/HomeV2.jsx` — now accepts `setStarterLoadout` and applies decoded replay starter loadouts in both `?replay=` URL bootstrap and pasted replay-code load paths.
+- Replay truth — `src/utils/replayCode.js` already encoded `starterLoadout`; this session closes the launcher hydration gap so starter loadout is no longer inert payload data on HomeV2.
+- `src/components/HomeV2.test.jsx` — adds component-level replay URL hydration coverage for difficulty, daily mode, starter loadout, and seed input state. DemoCanvas is mocked in this test file to avoid jsdom canvas noise.
+- `docs/AUDIT_2026-05-17.md` / `docs/IMPLEMENT_PLAN.md` — current audit and execution artifacts for the focused replay fidelity sprint.
+- Validation truth — focused HomeV2/replayCode tests passed 8/8, full `npm test` passed 332/332, lint clean, and build passing.
 
 ## 2026-05-14 — Session 63 changes
 

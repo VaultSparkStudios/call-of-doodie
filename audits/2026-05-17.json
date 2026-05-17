@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-05-17",
+  "session": 64,
+  "sessionType": "audit-implement-closeout",
+  "label": "replay-bootstrap-starter-fidelity",
+  "calibration": false,
+  "scores": {
+    "devHealth": 100,
+    "creativeAlignment": 100,
+    "momentum": 99,
+    "engagement": 100,
+    "processQuality": 100,
+    "crossRepoCoherence": 98,
+    "securityPosture": 99,
+    "ecosystemIntegration": 99,
+    "capitalEfficiency": 100,
+    "automationCoverage": 100
+  },
+  "total": 992,
+  "maxScore": 1000,
+  "velocity": 1,
+  "protocolVelocity": 1,
+  "durationMinutes": null,
+  "debt": "↓",
+  "rollingAvgTotals": {
+    "3": 990.7,
+    "5": 986.6,
+    "10": null,
+    "25": null,
+    "all": 969.4
+  },
+  "topWin": "Replay links and pasted replay codes now hydrate the encoded starter loadout in HomeV2 instead of preserving only seed/mode/difficulty.",
+  "topGap": "Deterministic replay validation still needs a compact input timeline or command trace before Phase 2B can honestly ship.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 1,
+  "improvementGroups": {
+    "replay_fidelity": 1,
+    "regression_coverage": 1,
+    "audit_handoff": 1
+  },
+  "testsTotal": 332,
+  "testsByType": {
+    "client": 332,
+    "server": null,
+    "core": null
+  },
+  "testsDelta": 1,
+  "deployStatus": "not-deployed",
+  "ignisFlags": [
+    "intent-achieved",
+    "replay-starter-hydration",
+    "validation-green"
+  ],
+  "ignisNote": "Compact audit/implement sprint closed a replay trust bug and added component-level coverage. No new secrets, services, or dependencies."
+}

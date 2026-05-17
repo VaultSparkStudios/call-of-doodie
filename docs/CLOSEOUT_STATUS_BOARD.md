@@ -1,53 +1,51 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-14 (Session 59 closeout) -->
+<!-- generated-at: 2026-05-17 (Session 64 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S59 ═════════════════════╗
-║  Date: 2026-05-14  ·  SIL: 985/1000  ·  Velocity: 4 improving    ║
-║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S64 ═════════════════════╗
+║  Date: 2026-05-17  ·  SIL: 992/1000  ·  Velocity: 1 improving    ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **Root-domain build support** — `vite.config.js` now uses `V  ║
-║  ✓ **Canonical domain metadata** — `index.html`, `public/manife  ║
-║  ✓ **Runtime-safe PWA scope** — `public/register-sw.js` and `pu  ║
-║  ✓ **Canonical sharing config** — `src/config/site.js` centrali  ║
-║  ✓ **Cloudflare Pages pipeline** — `.github/workflows/deploy-cl  ║
+║  ✓ **Replay bootstrap starter hydration** — HomeV2 now applies  ║
+║  ✓ **Replay regression coverage** — HomeV2 test covers seed, mo  ║
+║  ✓ **Audit artifacts** — `docs/AUDIT_2026-05-17.md` and `docs/I  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 985/1000 ═══════════════════════════════════════╗
-║    Dev Health         99   ██████████                            ║
+╔══ SCORES · SIL 992/1000 ═══════════════════════════════════════╗
+║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           98   ██████████                            ║
-║    Engagement         99   ██████████                            ║
+║    Momentum           99   ██████████                            ║
+║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
-║    Coherence          96   ██████████                            ║
+║    Coherence          98   ██████████                            ║
 ║    Security           99   ██████████                            ║
 ║    Ecosystem          99   ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         95   ██████████                            ║
+║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
 ║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
+║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 37 files  ·  M:30 A:7 D:0 ?:0                          ║
+║  Changes: closeout pending commit                                ║
 ║  Ahead: ?  ·  Behind: ?                                          ║
 ║  Branch: feat-standalone-domain                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         —                                                ║
-║  IGNIS:         19d ago                                          ║
+║  Tests:         332/332                                          ║
+║  IGNIS:         1d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

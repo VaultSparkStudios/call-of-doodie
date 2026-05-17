@@ -14,8 +14,14 @@ vi.mock("../utils/analytics.js", () => ({
   resolveMode: () => "standard",
   getAnalyticsStatus: () => ({ enabled: false, provider: "none" }),
 }));
+vi.mock("./DemoCanvas.jsx", () => ({
+  default: function DemoCanvasMock() {
+    return <div data-testid="demo-canvas" />;
+  },
+}));
 
 import HomeV2 from "./HomeV2.jsx";
+import { encodeReplayCode } from "../utils/replayCode.js";
 
 const noop = () => {};
 const baseProps = {
@@ -47,7 +53,11 @@ const baseProps = {
 
 describe("HomeV2", () => {
   let container, root;
-  afterEach(() => { act(() => root?.unmount()); container?.remove(); });
+  afterEach(() => {
+    act(() => root?.unmount());
+    container?.remove();
+    window.history.pushState({}, "", "/");
+  });
 
   it("renders hero title + DEPLOY button and calls onStart on click", async () => {
     container = document.createElement("div");
@@ -79,5 +89,40 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/CODEX/);
     expect(txt).toMatch(/SETTINGS/);
     expect(txt).toMatch(/SUPPORT/);
+  });
+
+  it("hydrates replay links including starter loadout", async () => {
+    const code = encodeReplayCode({
+      seed: 424242,
+      mode: "daily_challenge",
+      difficulty: "hard",
+      starterLoadout: "tank",
+      weaponIdx: 0,
+    });
+    window.history.pushState({}, "", `/?replay=${code}`);
+
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const setDifficulty = vi.fn();
+    const setStarterLoadout = vi.fn();
+    const onSetDailyChallengeMode = vi.fn();
+
+    await act(async () => {
+      root = createRoot(container);
+      root.render(
+        <HomeV2
+          {...baseProps}
+          setDifficulty={setDifficulty}
+          setStarterLoadout={setStarterLoadout}
+          onSetDailyChallengeMode={onSetDailyChallengeMode}
+        />,
+      );
+    });
+
+    expect(setDifficulty).toHaveBeenCalledWith("hard");
+    expect(setStarterLoadout).toHaveBeenCalledWith("tank");
+    expect(onSetDailyChallengeMode).toHaveBeenCalledWith(true);
+    const seedInput = [...container.querySelectorAll("input")].find(input => input.value === "424242");
+    expect(seedInput).toBeTruthy();
   });
 });

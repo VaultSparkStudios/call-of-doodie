@@ -55,7 +55,7 @@ export default function HomeV2(props) {
   const {
     username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore,
     onStart, onRefreshLeaderboard, onChangeUsername,
-    starterLoadout,
+    starterLoadout, setStarterLoadout,
     gameSettings, onSaveSettings,
     gamepadConnected, controllerType,
     scoreAttackMode, onSetScoreAttackMode,
@@ -123,6 +123,7 @@ export default function HomeV2(props) {
       if (r) {
         setCustomSeed(String(r.seed));
         setDifficulty(r.difficulty);
+        setStarterLoadout?.(r.starterLoadout);
         selectMode(r.mode);
         setDeployOpen(true);
       }
@@ -482,6 +483,7 @@ export default function HomeV2(props) {
                   if (!r) return;
                   selectMode(r.mode);
                   setDifficulty(r.difficulty);
+                  setStarterLoadout?.(r.starterLoadout);
                   setCustomSeed(String(r.seed));
                   track("front_door_action", { actionId: "replay_code_apply", surface: "home_v2" });
                 }}

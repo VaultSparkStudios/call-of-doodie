@@ -4,14 +4,40 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇▇███▇
-Avgs — 3: 986.3 | 5: 979.4 | 10: — | 25: — | all: 967.3 [N=11, SIL history in private ops repo]
-  └ 3-session: Dev 98.7 | Align 100.0 | Momentum 97.0 | Engage 99.7 | Process 100.0 [N=3]
+Sparkline (last 5 totals): ▇███▇
+Avgs — 3: 990.7 | 5: 986.6 | 10: — | 25: — | all: 969.4 [N=12, SIL history in private ops repo]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 98.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~13.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-14 | Session 62 | Total: 989/1000 | Velocity: 5 | protocolVelocity: 1
+Last session: 2026-05-17 | Session 64 | Total: 992/1000 | Velocity: 1 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-17 — Session 64 | Total: 992/1000 | Velocity: 1 | Debt: ↓
+
+SIL rubric v3.0 (10 categories × 100). Focused audit→implement sprint. Shipped replay bootstrap starter hydration so replay URLs and pasted replay codes now apply the encoded starter loadout, not only seed/mode/difficulty. Tests increased to 332/332; lint/build clean.
+
+| Category | Score | vs S63 | Notes |
+|---|---|---|---|
+| Dev Health | 100 | → | 332/332 tests, lint clean, build passing; focused replay regression added |
+| Creative Alignment | 100 | → | Replay links now better honor the player's actual run setup, preserving the game's rematch promise |
+| Momentum | 99 | ↑1 | Compact audit found and closed one real trust bug without opening new scope |
+| Engagement | 100 | → | Shared replay links are more faithful and less likely to disappoint a player following a friend's run |
+| Process Quality | 100 | → | Audit file, implement plan, execution log, handoff, task board, and work log updated |
+| Cross-Repo Coherence | 98 | → | Change is repo-local and keeps public replay behavior aligned with docs/current state |
+| Security Posture | 99 | → | No secrets touched; no new network or auth surface introduced |
+| Ecosystem Integration | 99 | → | Replay-code contract now matches HomeV2 launcher state more closely |
+| Capital Efficiency | 100 | → | No new dependencies, services, or paid API usage |
+| Automation Coverage | 100 | → | HomeV2 regression exercises URL hydration at the component boundary |
+
+**Top win:** Closed the remaining half of replay-loadout fidelity: encoded starter loadouts now hydrate into the launcher instead of staying as inert payload data.
+**Top gap:** Replay Phase 2B still needs a compact input timeline/command trace before deterministic validation is honest.
+**Intent outcome:** Achieved — `/start`, `/audit`, `/implement`, and `/closeout` completed with validation green.
+
+**Brainstorm**
+1. Replay contract v3 — compact command trace bound to issued run token, validated by the Edge Function before deterministic resim. High probability.
+2. HomeV2 retirement evidence pack — collect production LCP and `home_v2_deploy` funnel deltas so the v1 fallback can be removed confidently. Medium probability.
+3. App.jsx extraction slice 1 — isolate game-loop step modules to unblock replay simulation and reduce regression risk. High probability.
 
 ## 2026-05-14 — Session 63 | Total: 991/1000 | Velocity: 4 | Debt: ↓
 

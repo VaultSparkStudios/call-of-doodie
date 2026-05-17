@@ -258,6 +258,15 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - TASK_BOARD: meta clarity, pickup extraction, Roast Director, economy clarity slice 2 all marked DONE S51
 - Validation: `npm test` 248/248 · `npm run lint` clean · `npm run build` clean
 - All commits pushed to main (8 commits, 0bf4f20 latest)
+# 2026-05-17 (Session 64)
+
+- Ran `/start` protocol with session lock written for Codex and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-05-17.md` and `docs/IMPLEMENT_PLAN.md` for a compact replay-fidelity implementation slice.
+- Fixed HomeV2 replay bootstrap so decoded `starterLoadout` is applied from both `?replay=` URLs and pasted replay codes.
+- Added HomeV2 regression coverage for replay URL hydration: difficulty setter, daily mode setter, starter loadout setter, and seed input state.
+- Mocked DemoCanvas in the HomeV2 component test to keep jsdom canvas limitations out of test output.
+- Validation: focused HomeV2/replayCode tests 8/8; `npm run lint` clean; `npm test` 332/332; `npm run build` passing.
+
 # 2026-05-11 (Session 58)
 
 - Implemented the founder-requested all-items refinement pass: deterministic combat-resolution helpers, objective-chain stats, four objective mastery achievements, Heat visual overlay, local Run Brain, Run History Bounty Board, first-three-run HomeV2 onboarding, replay-contract confidence in `validate-replay`, SettingsPanel hook cleanup, and legacy MenuScreen lazy loading.
