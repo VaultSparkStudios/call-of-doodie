@@ -14,6 +14,9 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:2] **DONE S66** Replay command trace v1 — `src/utils/replayCommandTrace.js` now creates bounded replay-input evidence with deterministic normalization, compact encode/decode, digest validation, and summary output; 4 focused tests cover ordering, round-trip, tamper detection, and caps.
+- [x] [SIL:1] **DONE S66** Launch readiness JSON — `scripts/launch-readiness.mjs --json` now returns machine-readable checks, owner-only gates, and readiness summary while preserving the existing text report.
+- [x] [SIL:1] **DONE S66** Closeout autopilot help hardening — `scripts/closeout-autopilot.mjs --help` / `-h` now prints usage for dry-run/skip-push/yes/message and exits before doctor/git/prompt work.
 - [x] [SIL:1] **DONE S64** Replay bootstrap starter hydration — HomeV2 now applies decoded `starterLoadout` from both `?replay=` URLs and pasted replay codes; focused HomeV2 regression covers seed, daily mode, difficulty, and starter hydration.
 - [x] [SIL:3] **DONE S63** Replay link fidelity — `DeathScreen.jsx` now receives the actual `starterLoadout` from `App.jsx` and encodes it into shareable replay URLs; `replayCode.test.js` covers non-standard starter loadout round-trip fidelity.
 - [x] [SIL:3] **DONE S63** Precision skill memory — best precision streak is tracked for each run, passed into Run Coach/Run Brain, and rendered as precision mastery or precision-gap guidance on the death screen; focused runCoach/runBrain tests added.
@@ -36,7 +39,7 @@ Public-safe launch roadmap summary.
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
-- [ ] [SIL:1] Closeout autopilot noninteractive help hardening — `scripts/closeout-autopilot.mjs --help` currently starts the autopilot instead of printing usage; add a real help path and document the Codex-safe `--yes --message` flow.
+- [ ] [SIL:2] Replay command trace integration — bind `replayCommandTrace` to the issued run token / leaderboard submission path, then update `validate-replay` to accept trace-backed replay contracts instead of only `inputHash`.
 - [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
 - [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
 - [ ] [SIL:1] App.jsx extraction roadmap per `docs/APP_EXTRACTION_ROADMAP.md` — slice 1 is the game loop (player/bullet/enemy update); pure `step(gs, frame)` modules with their own tests

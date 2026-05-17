@@ -3,6 +3,7 @@ import path from "node:path";
 
 const ROOT = process.cwd();
 const assetsDir = path.join(ROOT, "public", "launch-assets");
+const JSON_MODE = process.argv.includes("--json");
 
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -40,15 +41,41 @@ const checks = [
   },
 ];
 
-console.log("Launch Readiness");
-console.log("===============");
-for (const check of checks) {
-  console.log(`- ${check.ok ? "✓" : "⚠"} ${check.label} — ${check.detail}`);
-}
+const ownerOnlyGates = [
+  "Run one real mobile/browser PWA install pass",
+  "Run one real gamepad/browser pass",
+  "Publish the Itch.io listing",
+  "Observe 48h of HomeV2 funnel data once analytics is configured",
+];
 
-console.log("");
-console.log("Owner-only finish line:");
-console.log("- Run one real mobile/browser PWA install pass");
-console.log("- Run one real gamepad/browser pass");
-console.log("- Publish the Itch.io listing");
-console.log("- Observe 48h of HomeV2 funnel data once analytics is configured");
+const requiredReady = checks.filter((check) => check.label === "Launch PNG assets").every((check) => check.ok);
+const optionalReady = checks.filter((check) => check.label !== "Launch PNG assets").every((check) => check.ok);
+const status = requiredReady
+  ? optionalReady
+    ? "ready_with_owner_gates"
+    : "ready_missing_optional_analytics"
+  : "blocked_missing_assets";
+
+if (JSON_MODE) {
+  console.log(JSON.stringify({
+    status,
+    checks,
+    ownerOnlyGates,
+    summary: {
+      readyChecks: checks.filter((check) => check.ok).length,
+      totalChecks: checks.length,
+      requiredReady,
+      optionalReady,
+    },
+  }, null, 2));
+} else {
+  console.log("Launch Readiness");
+  console.log("===============");
+  for (const check of checks) {
+    console.log(`- ${check.ok ? "✓" : "⚠"} ${check.label} — ${check.detail}`);
+  }
+
+  console.log("");
+  console.log("Owner-only finish line:");
+  for (const gate of ownerOnlyGates) console.log(`- ${gate}`);
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-05-17",
+  "session": 66,
+  "sessionType": "audit-implement-closeout",
+  "label": "replay-command-trace-and-ops-hardening",
+  "calibration": false,
+  "scores": {
+    "devHealth": 100,
+    "creativeAlignment": 100,
+    "momentum": 99,
+    "engagement": 100,
+    "processQuality": 100,
+    "crossRepoCoherence": 98,
+    "securityPosture": 100,
+    "ecosystemIntegration": 99,
+    "capitalEfficiency": 100,
+    "automationCoverage": 100
+  },
+  "total": 995,
+  "maxScore": 1000,
+  "velocity": 3,
+  "protocolVelocity": 1,
+  "durationMinutes": null,
+  "debt": "↓",
+  "rollingAvgTotals": {
+    "3": 993.3,
+    "5": 989.8,
+    "10": null,
+    "25": null,
+    "all": 971.8
+  },
+  "topWin": "Created the missing replay-input evidence layer with a bounded command trace utility, then made launch readiness machine-readable and fixed closeout autopilot help behavior.",
+  "topGap": "The replay command trace is not yet bound into issued run tokens or validate-replay server validation.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 3,
+  "improvementGroups": {
+    "replay_trust": 1,
+    "launch_ops": 1,
+    "process_hardening": 1
+  },
+  "testsTotal": 336,
+  "testsByType": {
+    "client": 336,
+    "server": null,
+    "core": null
+  },
+  "testsDelta": 4,
+  "deployStatus": "not-deployed",
+  "ignisFlags": [
+    "intent-achieved",
+    "replay-command-trace",
+    "launch-readiness-json",
+    "closeout-help-fixed",
+    "validation-green"
+  ],
+  "ignisNote": "Audit/implement sprint shipped a pure replay trust artifact plus two Studio OS operational hardening fixes. No new dependencies, secrets, network calls, or external AI/API cost."
+}

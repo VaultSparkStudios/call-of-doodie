@@ -5,6 +5,12 @@ This public repo now keeps only public-safe creative-direction summaries.
 Boundary:
 - detailed private creative direction and internal rationale live in the private Studio OS / ops repository
 
+## 2026-05-17 (Session 66)
+
+- **Founder direction:** Continue the full `/start` → `/audit` → `/implement` → `/closeout` chain with genius-level, sophisticated, creative/innovative judgment to make Call of Doodie as strong as possible.
+- **Public-safe implementation summary:** the right current move was not more surface-area content; it was strengthening the trust and operations layer that lets the game scale honestly. This session created the first compact replay-command trace artifact for future deterministic replay validation, made launch readiness machine-readable, and fixed the closeout help path that was wasting noninteractive Codex context.
+- **Locked-in invariant reinforced:** replay/trust work must never imply stronger validation than the artifact actually supports. `inputHash` alone is not replayable; command traces create the missing evidence, but server binding/resimulation remains a separate future slice.
+
 ## 2026-05-14 (Session 63)
 
 - **Founder direction:** Run `/start`, then `/audit`, then `/implement`, then `/closeout`; use genius-level, sophisticated, creative/innovative judgment to make Call of Doodie as strong as possible.

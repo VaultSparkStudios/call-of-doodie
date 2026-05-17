@@ -1,17 +1,20 @@
-# Implement Plan — 2026-05-17 Audit
+# Implement Plan — 2026-05-17 Audit Slice
 
-<!-- generated-by: /implement skill v1.0 -->
-<!-- source: docs/AUDIT_2026-05-17.md -->
+Source: `docs/AUDIT_2026-05-17.md`
 
-## Sequence
+## Sequenced Order
 
-1. **replay-loadout-hydration** — Update HomeV2 replay URL and replay-code load paths to apply decoded `starterLoadout`.
-2. **replay-bootstrap-regression** — Add focused HomeV2 regression coverage for replay URL hydration.
-3. **audit-handoff-tightening** — Append execution results to the audit and context logs so the pass is idempotent.
+| Order | Audit item | Reason |
+|---:|---|---|
+| 1 | replay-command-trace-v1 | Highest innovation and the only product/trust prerequisite; pure utility can be tested without touching runtime flow. |
+| 2 | launch-readiness-json | Small operational bridge from human-readable launch status to machine-readable Studio OS signals. |
+| 3 | closeout-autopilot-help | Process hardening with no dependency on product code; completes the Session 65 gap. |
 
-## Success Criteria
+## Verification Plan
 
-- Replay links generated from a non-standard starter hydrate that starter when opened.
-- Pasted replay codes hydrate the same starter before deployment.
-- Focused HomeV2/replay tests pass.
-- Audit execution log records shipped outcomes.
+- `npx vitest run src/utils/replayCommandTrace.test.js`
+- `node scripts/launch-readiness.mjs --json`
+- `node scripts/closeout-autopilot.mjs --help`
+- `npm run lint`
+- `npm test`
+- `npm run build`

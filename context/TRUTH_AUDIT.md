@@ -5,6 +5,15 @@ Overall status: green
 Last reviewed: 2026-05-17
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-17 — Session 66 changes
+
+- `src/utils/replayCommandTrace.js` — new pure utility for compact replay-input evidence. It normalizes command events into 6-frame buckets, caps traces at 240 events by default, serializes to a compact body, validates an FNV-style digest, decodes trace bodies, and summarizes action counts/frame span.
+- Replay trust truth — this does not complete deterministic server resimulation by itself. It creates the missing client-side artifact that can be bound into a later run-token / `validate-replay` contract.
+- `src/utils/replayCommandTrace.test.js` — 4 tests cover deterministic ordering/bucketing, encode/decode round-trip, tamper detection, and event cap behavior.
+- `scripts/launch-readiness.mjs` — `--json` now emits structured `status`, `checks`, `ownerOnlyGates`, and `summary`; default text output remains unchanged. Current JSON status is `ready_missing_optional_analytics` because launch PNG assets are present but PostHog/Sentry keys are still missing.
+- `scripts/closeout-autopilot.mjs` — `--help` / `-h` now prints usage and exits before any doctor, status, git, lock, or prompt work.
+- Validation truth — targeted trace tests passed 4/4; full `npm test` passed 336/336; lint clean; build passing.
+
 ## 2026-05-17 — Session 64 changes
 
 - `src/components/HomeV2.jsx` — now accepts `setStarterLoadout` and applies decoded replay starter loadouts in both `?replay=` URL bootstrap and pasted replay-code load paths.

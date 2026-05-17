@@ -276,6 +276,16 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Validation: `npm test -- --run src/components/HomeV2.test.jsx` 3/3; `npm run lint` clean; `npm run launch:smoke` 1/1 outside sandbox; full `npm test` 332/332 outside sandbox; `npm run build` passing.
 - Closeout note: `scripts/closeout-autopilot.mjs --help` currently runs the autopilot instead of printing help; it reached the commit prompt and exited on noninteractive top-level await. Manual write-back completed instead.
 
+# 2026-05-17 (Session 66)
+
+- Ran `/start` protocol with Codex session lock, mode/secrets/blocker preflight, and context-meter verdict `CONTINUE`.
+- Replaced the already-executed same-day audit with a fresh three-item audit slice: replay command trace v1, launch readiness JSON, and closeout help hardening.
+- Added `src/utils/replayCommandTrace.js` plus `src/utils/replayCommandTrace.test.js`: bounded normalization, frame buckets, compact encoding/decoding, digest validation, summaries, ordering tests, tamper detection, and event cap coverage.
+- Extended `scripts/launch-readiness.mjs` with `--json` output for structured Studio OS consumption while preserving the existing human-readable report.
+- Fixed `scripts/closeout-autopilot.mjs --help` / `-h` so it prints usage and exits before doctor/git/prompt work.
+- Updated `docs/AUDIT_2026-05-17.md` and `docs/IMPLEMENT_PLAN.md` with the current execution order and shipped evidence.
+- Validation: `npx vitest run src/utils/replayCommandTrace.test.js` 4/4; `node scripts/launch-readiness.mjs --json` emitted `ready_missing_optional_analytics`; `node scripts/closeout-autopilot.mjs --help` exited cleanly; `npm run lint` clean; `npm test` 336/336; `npm run build` passing.
+
 # 2026-05-11 (Session 58)
 
 - Implemented the founder-requested all-items refinement pass: deterministic combat-resolution helpers, objective-chain stats, four objective mastery achievements, Heat visual overlay, local Run Brain, Run History Bounty Board, first-three-run HomeV2 onboarding, replay-contract confidence in `validate-replay`, SettingsPanel hook cleanup, and legacy MenuScreen lazy loading.

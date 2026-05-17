@@ -4,14 +4,38 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ▇███▇
-Avgs — 3: 990.7 | 5: 986.6 | 10: — | 25: — | all: 969.4 [N=12, SIL history in private ops repo]
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 98.0 | Engage 100.0 | Process 100.0 [N=3]
+Sparkline (last 5 totals): ███▇█
+Avgs — 3: 993.3 | 5: 989.8 | 10: — | 25: — | all: 971.8 [N=13, SIL history in private ops repo]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 98.7 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~13.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-17 | Session 64 | Total: 992/1000 | Velocity: 1 | protocolVelocity: 1
+Last session: 2026-05-17 | Session 66 | Total: 995/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-17 — Session 66 | Total: 995/1000 | Velocity: 3 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | Added focused replay command trace coverage; full suite now 336/336, lint clean, build passing |
+| Creative Alignment | 100 | → | Trust work supports the seed/rematch fantasy without adding generic live-service sprawl |
+| Momentum | 99 | ↑ | Replaced already-executed audit with a fresh current slice and shipped all three bounded items |
+| Engagement | 100 | → | Command traces are the prerequisite for replayable mastery loops and fairer shared-run trust |
+| Process Quality | 100 | → | Audit, implement plan, execution log, truth audit, handoff, task board, and work log updated |
+| Cross-Repo Coherence | 98 | → | Launch readiness JSON gives Studio OS a structured signal without moving private ops into the public repo |
+| Security Posture | 100 | ↑ | Replay validation posture is more honest: artifact first, no false resim claim from one-way hashes |
+| Ecosystem Integration | 99 | → | Existing launch and closeout scripts improved without new dependencies or service coupling |
+| Capital Efficiency | 100 | → | Zero LLM/API/runtime cost; all intelligence remains local and deterministic |
+| Automation Coverage | 100 | ↑ | Added 4 focused tests and verified CLI behaviors plus full lint/test/build |
+
+**Top win:** Created the missing replay-input evidence layer (`replayCommandTrace`) while also making launch readiness machine-readable and closing the noninteractive closeout help gap from Session 65.
+**Top gap:** The command trace is not yet bound into run tokens or server validation; Phase 2B still needs that integration before deterministic replay trust can honestly ship.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement`, and closeout write-back executed with evidence-backed verification.
+
+**Brainstorm**
+1. Trace-backed run token — include command-trace digest in issued run claims and reject leaderboard submissions whose trace summary diverges; High probability.
+2. HomeV2 measurement JSON — emit production Lighthouse/funnel readiness as a structured status beside launch readiness; Medium probability.
+3. Trace-aware replay trainer — use trace summaries locally to teach over-dashing, reload panic, and grenade hoarding in Run Brain without sending raw input streams; High probability.
 
 ## 2026-05-17 — Session 64 | Total: 992/1000 | Velocity: 1 | Debt: ↓
 

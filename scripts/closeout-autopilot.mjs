@@ -18,8 +18,34 @@ const args = process.argv.slice(2);
 const DRY = args.includes("--dry-run");
 const SKIP_PUSH = args.includes("--skip-push");
 const YES = args.includes("--yes");
+const HELP = args.includes("--help") || args.includes("-h");
 const msgIdx = args.indexOf("--message");
 const CUSTOM_MESSAGE = msgIdx >= 0 ? args[msgIdx + 1] : null;
+
+function printHelp() {
+  console.log(`closeout-autopilot
+
+Usage:
+  node scripts/closeout-autopilot.mjs [options]
+
+Options:
+  --dry-run            Preview doctor, status, git, and cleanup steps without writing.
+  --skip-push          Commit locally but do not push.
+  --yes                Skip the interactive commit/push prompt.
+  --message <text>     Use a custom commit message.
+  --help, -h           Print this help and exit.
+
+Codex-safe examples:
+  node scripts/closeout-autopilot.mjs --dry-run
+  node scripts/closeout-autopilot.mjs --yes --message "chore: closeout session"
+  node scripts/closeout-autopilot.mjs --yes --skip-push --message "chore: closeout session"
+`);
+}
+
+if (HELP) {
+  printHelp();
+  process.exit(0);
+}
 
 function header(title) {
   const bar = "═".repeat(64);
