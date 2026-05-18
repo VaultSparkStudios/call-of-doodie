@@ -2,41 +2,41 @@
 
 # Latest Handoff
 
-Session Intent: Continue the active `/start then /audit then /implement then /closeout` goal and verify the project is actually complete before marking it achieved.
+Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible`.
 
-## Where We Left Off (Session 66 — command-trace trust + ops hardening)
+## Where We Left Off (Session 68 — replay-trust contract slice, all shipped)
 
-**Intent outcome:** Achieved for `/start`, fresh `/audit`, `/implement`, and closeout write-back in progress. The prior same-day audit had already been shipped, so this session replaced it with a current three-item audit slice and implemented all items.
+**Intent outcome:** Achieved end-to-end for `/start`, fresh `/audit`, `/implement`, and closeout write-back. The session avoided repeating the S67 product-depth sprint and instead closed the next real trust handoff: edge validators now understand replay command trace metadata.
 
 ### What shipped
-- **Replay command trace v1** — `src/utils/replayCommandTrace.js` adds bounded command-trace normalization, frame bucketing, compact encode/decode, digest validation, and summary output. This is the first honest artifact needed before deterministic `validate-replay` Phase 2B can move beyond `inputHash`.
-- **Launch readiness JSON** — `scripts/launch-readiness.mjs --json` now emits structured status, checks, owner-only gates, and summary counts while preserving the existing text report.
-- **Closeout help path** — `scripts/closeout-autopilot.mjs --help` / `-h` now prints usage and exits before doctor, git, or prompt work.
-- **Audit artifacts** — `docs/AUDIT_2026-05-17.md` now reflects this current slice; `docs/IMPLEMENT_PLAN.md` records the execution order and verification commands.
+- **replay-trace-contract-v2** — `validate-replay` accepts `traceDigest` + `traceLength`, validates shape/range, lets competitive seeded runs satisfy replay-contract presence with valid trace metadata, and returns `trace_contract` confidence when heuristics are clean.
+- **submit-score-trace-firewall** — `submit-score` rejects malformed trace metadata with `replay_trace_malformed` anomaly logging before leaderboard insert.
+- **member-session trace summary** — valid trace summaries flow into `game_sessions.metadata` for member sessions without changing the leaderboard table schema.
+- **trace regression coverage** — `runSubmission.test.js` now proves trace fields are included only when non-empty command trace summaries exist.
+- **truth repair** — task board, project status, and truth audit now distinguish shipped client trace binding from the remaining deterministic replay-runner/storage milestone.
 
 ### Validation
-- `npx vitest run src/utils/replayCommandTrace.test.js` -> **4/4** passing.
-- `node scripts/launch-readiness.mjs --json` -> structured status `ready_missing_optional_analytics`; launch PNG assets ready 5/5; PostHog/Sentry still missing.
-- `node scripts/closeout-autopilot.mjs --help` -> usage printed and exited cleanly.
-- `npm run lint` -> clean.
-- `npm test` -> **336/336** passing across 42 files.
-- `npm run build` -> passing.
+- `npx vitest run src/utils/runSubmission.test.js` -> **5/5** passing
+- `npm run lint` -> clean
+- `npm run build` -> passing
+- `npm run launch:smoke` -> passing
+- `npm test` -> **349/349** passing after rerun
 
-### Remaining work
-- [ ] Bind `replayCommandTrace` into run submission / issued run token flow, then teach `validate-replay` to accept trace-backed replay contracts.
-- [ ] Rotate/narrow the broad Cloudflare studio-access token after domain stabilization.
-- [ ] Add PostHog/Sentry GitHub Action secrets and capture HomeV2 funnel/Lighthouse evidence before legacy fallback retirement.
+### Next Recommended Slice
+- [ ] Deploy edge-function changes and confirm production replay-contract behavior.
+- [ ] Design/store the full trace payload contract needed for actual deterministic replay resim.
+- [ ] Build the deterministic replay runner only after the payload contract is observable.
 
-## Next Recommended Slice (Session 67)
-- [ ] Replay contract v3 integration: include command trace digest in the leaderboard/replay validation path.
-- [ ] HomeV2 measurement gate if analytics credentials become available.
-- [ ] App.jsx extraction slice 1 if architecture debt is the priority.
+---
 
-## Where We Left Off (Session 65 — verification closeout for replay bootstrap audit)
+Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible`.
 
-**Intent outcome:** Achieved. The current audit/implement slice was already present, so this session verified it against real source and command evidence, then completed closeout write-back.
+## Where We Left Off (Session 67 — 10-item depth sprint, all shipped)
 
-### What was verified
-- **/start** — session lock written for Codex; session mode detected as execution; context-meter returned `CONTINUE`.
-- **/audit** — `docs/AUDIT_2026-05-17.md` exists and contains the ranked replay bootstrap plan plus execution log.
-- **/implement** — `src/components/HomeV2.jsx` applies decoded `starterLoadout` from both `?replay=` URL bootstrap and pasted replay-code load paths; `src/components/HomeV2.test.jsx` covers difficulty, daily mode, starter loadout, and seed hydration.
+**Intent outcome:** Achieved end-to-end. All 10 S67 audit items implemented in one pass. 347/347 tests. Lint clean. Build passing. Committed to `feat-standalone-domain`.
+
+### What shipped
+- **rhythm-kill-bonus** — Beat-aligned kills (+1💩 + "🎵 BEAT KILL!" floating text + 4 magenta particles on frame ±4 of beat) turns the audio engine into an active skill layer
+- **doodie-pass-play-widget** — `cosmeticTrack.reconcileOwnership()` called on death; gold-bordered unlock card on DeathScreen when tier changes
+- **persistent-ghost-leaderboard** — `loadTopGhosts(mode, diff)` in storage.js fetches top-3 from Supabase at run start; seeded into `gs.topGhosts`
+- **daily-mission-streak** — `getMissionStreak`/`advanceMissionStreak`/`resetMissionStreak` in storage.js; 🔥 streak chip in HomeV2 Command Center header (streak ≥ 2)

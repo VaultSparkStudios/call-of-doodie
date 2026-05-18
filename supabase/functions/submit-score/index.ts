@@ -159,6 +159,21 @@ function collectDigestFailures(entry: ReturnType<typeof normalizeEntry>, digest:
   return reasons;
 }
 
+function collectTraceFailures(traceDigest: string, traceLength: number) {
+  const reasons: string[] = [];
+  const hasDigest = traceDigest.length > 0;
+  const hasLength = traceLength > 0;
+
+  if (!hasDigest && !hasLength) return reasons;
+  if (hasDigest !== hasLength) reasons.push("trace contract incomplete");
+  if (hasDigest && !/^[a-f0-9]{8,128}$/i.test(traceDigest)) reasons.push("traceDigest malformed");
+  if (hasLength && (!Number.isInteger(traceLength) || traceLength < 1 || traceLength > 240)) {
+    reasons.push("traceLength outside [1..240]");
+  }
+
+  return reasons;
+}
+
 function normalizeEntry(entry: Record<string, unknown>) {
   const mode = VALID_MODES.has(String(entry.mode ?? "")) ? String(entry.mode) : null;
   return {
@@ -232,6 +247,8 @@ Deno.serve(async (req) => {
     const eventDigest = rawBody.eventDigest && typeof rawBody.eventDigest === "object"
       ? rawBody.eventDigest as Record<string, unknown>
       : null;
+    const traceDigest = typeof rawBody.traceDigest === "string" ? rawBody.traceDigest.trim() : "";
+    const traceLength = clampInt(rawBody.traceLength, 0, 240, 0);
 
     const { data: tokenRow, error: tokenError } = await serviceClient
       .from("run_tokens")
@@ -365,6 +382,29 @@ Deno.serve(async (req) => {
       });
     }
 
+    const traceFailures = collectTraceFailures(traceDigest, traceLength);
+    if (traceFailures.length > 0) {
+      await logRunAnomaly(serviceClient, {
+        token: runToken,
+        uid,
+        reason: "replay_trace_malformed",
+        metadata: {
+          mode: payload.mode,
+          difficulty: payload.difficulty,
+          wave: payload.wave,
+          score: payload.score,
+          reasons: traceFailures.slice(0, 5),
+        },
+      });
+      return new Response(JSON.stringify({
+        error: "Run rejected by replay trace validation.",
+        reasons: traceFailures.slice(0, 3),
+      }), {
+        status: 422,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { data: claim } = await serviceClient
       .from("callsign_claims")
       .select("uid,supporter")
@@ -424,6 +464,8 @@ Deno.serve(async (req) => {
           mode: row.mode || "standard",
           bestStreak: row.bestStreak,
           achievements: row.achievements,
+          traceDigest: traceDigest || null,
+          traceLength,
         },
       }]);
 

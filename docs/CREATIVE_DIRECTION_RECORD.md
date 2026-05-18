@@ -143,3 +143,9 @@ Boundary:
 ## 2026-04-22 (Session 52 review)
 
 - CDR reviewed — no new creative-direction entries this session
+
+## 2026-05-18 (Session 68)
+
+- Founder direction: continue the full `/start → /audit → /implement → /closeout` loop with genius-level, creative, innovative thinking.
+- Public-safe implementation summary: replay trust advanced from client-only command trace evidence to edge-level trace contract validation. The wording and implementation are intentionally honest: `trace_contract` means validated replay-proof metadata, not full deterministic resimulation.
+- Locked-in invariant reinforced: trust features must not overclaim. If the server cannot replay the run yet, the product and docs must say "trace-backed contract" rather than implying deterministic replay validation.

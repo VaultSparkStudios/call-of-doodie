@@ -1,31 +1,31 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-17 (Session 65 closeout) -->
+<!-- generated-at: 2026-05-18 (Session 68 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S65 ═════════════════════╗
-║  Date: 2026-05-17  ·  SIL: 993/1000  ·  Velocity: 0 improving    ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S68 ═════════════════════╗
+║  Date: 2026-05-18  ·  SIL: 995/1000  ·  Velocity: 3 improving    ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **/start** — session lock written for Codex; session mode de  ║
-║  ✓ **/audit** — `docs/AUDIT_2026-05-17.md` exists and contains   ║
-║  ✓ **/implement** — `src/components/HomeV2.jsx` applies decoded  ║
-║  ✓ **/closeout** — context write-back updated with this verific  ║
-║  ✓ `npm test -- --run src/components/HomeV2.test.jsx` -> **3/3*  ║
+║  ✓ **replay-trace-contract-v2** — `validate-replay` accepts `tr  ║
+║  ✓ **submit-score-trace-firewall** — `submit-score` rejects mal  ║
+║  ✓ **member-session trace summary** — valid trace summaries flo  ║
+║  ✓ **trace regression coverage** — `runSubmission.test.js` now   ║
+║  ✓ **truth repair** — task board, project status, and truth aud  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 993/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 995/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           98   ██████████                            ║
+║    Momentum           99   ██████████                            ║
 ║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          98   ██████████                            ║
-║    Security           99   ██████████                            ║
+║    Security           100  ██████████                            ║
 ║    Ecosystem          99   ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         99   ██████████                            ║
+║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -39,15 +39,15 @@
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 12 files  ·  M:11 A:0 D:0 ?:1                          ║
+║  Changes: 17 files  ·  M:15 A:0 D:0 ?:2                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
-║  Branch: feat-standalone-domain                                  ║
+║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
 ║  Tests:         —                                                ║
-║  IGNIS:         3d ago                                           ║
+║  IGNIS:         4d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

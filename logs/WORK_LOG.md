@@ -313,3 +313,13 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Reduced initial bundle pressure by splitting legacy `MenuScreen` out of the default HomeV2 path. Final build main chunk: 730.41 kB raw / 222.57 kB gzip; `MenuScreen` chunk: 69.40 kB raw / 17.07 kB gzip.
 - Validation: `npm run lint` clean; `npx vitest run --pool=threads --fileParallelism=false --reporter=dot` 315/315 across 41 files; `npm run build` clean.
 - Captured S59 follow-ups: actual deterministic replay resimulation from `seed + inputHash`, next App.jsx extraction slice for enemy bullet/player hit and grenade explosion damage, and HomeV2 legacy-retirement gate after Lighthouse/funnel data.
+
+# 2026-05-18 (Session 68)
+
+- Ran `/start` protocol with Codex session lock, execution-mode detection, secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-05-18.md` and `docs/IMPLEMENT_PLAN.md` for a bounded replay-trust contract slice.
+- Updated `supabase/functions/validate-replay/index.ts` so trace-backed replay contracts (`traceDigest` + `traceLength`) are validated and can produce `trace_contract` confidence without claiming full deterministic resim.
+- Updated `supabase/functions/submit-score/index.ts` to reject malformed trace metadata with `replay_trace_malformed` anomaly logging before leaderboard insert and to include valid trace summaries in member session metadata.
+- Added `runSubmission` regression coverage for trace metadata inclusion and empty-trace omission; removed a stale unused App import surfaced by lint.
+- Repaired public truth surfaces: `context/TASK_BOARD.md`, `context/PROJECT_STATUS.json`, and `context/TRUTH_AUDIT.md` now split completed client trace binding from the remaining deterministic replay-runner milestone.
+- Validation: focused `runSubmission` tests 5/5; `npm run lint` clean; `npm run build` passing; `npm run launch:smoke` passing; full `npm test` 349/349 after rerun.

@@ -2,8 +2,15 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-05-17
+Last reviewed: 2026-05-18
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-18 — Session 68 changes
+
+- `supabase/functions/validate-replay/index.ts` — accepts trace-backed replay contracts via `traceDigest` + `traceLength`; malformed trace metadata quarantines the replay check; competitive seeded runs can now satisfy replay-contract presence with either `inputHash` or valid trace metadata. Confidence can now be `trace_contract` without claiming full deterministic resimulation.
+- `supabase/functions/submit-score/index.ts` — validates trace metadata before leaderboard insert, logs malformed trace claims as `replay_trace_malformed`, and carries valid trace summary into member `game_sessions.metadata` without requiring a leaderboard schema change.
+- `src/utils/runSubmission.test.js` — adds regression coverage for trace metadata being included only when a non-empty command trace summary exists.
+- Replay trust truth — client trace binding is no longer the open gap. The remaining Phase 2B work is the actual deterministic replay runner plus any storage contract needed for full trace payload replay.
 
 ## 2026-05-17 — Session 67 changes
 

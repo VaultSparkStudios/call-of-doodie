@@ -54,4 +54,36 @@ describe("runSubmission", () => {
     expect(entry.mode).toBeUndefined();
     expect(entry.eventDigest.v).toBe(2);
   });
+
+  test("adds replay command trace metadata when a trace summary is present", () => {
+    const entry = buildSessionSubmission({
+      username: "TraceDood",
+      score: 30000,
+      kills: 120,
+      wave: 16,
+      commandTrace: {
+        digest: "ABCDEF12",
+        count: 42,
+      },
+    });
+
+    expect(entry.traceDigest).toBe("ABCDEF12");
+    expect(entry.traceLength).toBe(42);
+  });
+
+  test("does not add replay trace fields for an empty trace", () => {
+    const entry = buildSessionSubmission({
+      username: "QuietDood",
+      score: 10,
+      kills: 1,
+      wave: 1,
+      commandTrace: {
+        digest: "",
+        count: 0,
+      },
+    });
+
+    expect(entry.traceDigest).toBeUndefined();
+    expect(entry.traceLength).toBeUndefined();
+  });
 });

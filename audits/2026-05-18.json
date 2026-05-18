@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-05-18",
+  "session": 68,
+  "sessionType": "audit-implement-closeout",
+  "label": "replay-trace-contract-validation",
+  "calibration": false,
+  "scores": {
+    "devHealth": 100,
+    "creativeAlignment": 100,
+    "momentum": 100,
+    "engagement": 100,
+    "processQuality": 100,
+    "crossRepoCoherence": 99,
+    "securityPosture": 100,
+    "ecosystemIntegration": 100,
+    "capitalEfficiency": 100,
+    "automationCoverage": 99
+  },
+  "total": 998,
+  "maxScore": 1000,
+  "velocity": 5,
+  "protocolVelocity": 1,
+  "durationMinutes": null,
+  "debt": "↓",
+  "rollingAvgTotals": {
+    "3": 996.7,
+    "5": 994.4,
+    "10": null,
+    "25": null,
+    "all": null
+  },
+  "topWin": "Closed the honest replay-contract gap by making edge validators accept and classify trace-backed replay metadata without overclaiming deterministic resimulation.",
+  "topGap": "Full deterministic replay resim still needs a stored trace payload contract and replay runner.",
+  "intentOutcome": "Achieved",
+  "improvementsShipped": 5,
+  "improvementGroups": {
+    "replay_trust": 2,
+    "automation": 1,
+    "truth_repair": 1,
+    "process_language": 1
+  },
+  "testsTotal": 349,
+  "testsByType": {
+    "client": 349,
+    "server": null,
+    "core": null
+  },
+  "testsDelta": 2,
+  "deployStatus": "not-deployed",
+  "ignisFlags": [
+    "intent-achieved",
+    "trace-contract-validation",
+    "submit-score-trace-firewall",
+    "validation-green",
+    "truth-repaired"
+  ],
+  "ignisNote": "Audit/implement sprint advanced replay trust from browser-side evidence to edge-level trace contract validation. No new secrets, dependencies, external APIs, or LLM/token spend."
+}

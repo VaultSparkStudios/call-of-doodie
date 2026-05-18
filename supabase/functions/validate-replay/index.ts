@@ -26,13 +26,15 @@ interface ValidateRequest {
   bestStreak?: number;
   totalDamage?: number;
   inputHash?: string;      // reserved for Phase 2
+  traceDigest?: string;    // compact replay command-trace checksum
+  traceLength?: number;    // normalized command count in the trace
 }
 
 interface ValidateResult {
   ok: boolean;
   drift: number;            // 0..1, how far outside expected band
   reasons: string[];
-  confidence: "heuristic" | "replay_contract" | "quarantine";
+  confidence: "heuristic" | "replay_contract" | "trace_contract" | "quarantine";
 }
 
 function difficultyMult(d: string | undefined): number {
@@ -112,18 +114,44 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
     reasons.push("inputHash malformed");
     drift = Math.max(drift, 0.6);
   }
+  const traceDigest = String(req.traceDigest || "");
+  const traceLengthRaw = Number(req.traceLength || 0);
+  const hasTraceDigest = traceDigest.length > 0;
+  const hasTraceLength = traceLengthRaw > 0;
+  const traceDigestValid = /^[a-f0-9]{8,128}$/i.test(traceDigest);
+  const traceLengthValid = Number.isInteger(traceLengthRaw) && traceLengthRaw >= 1 && traceLengthRaw <= 240;
+  const hasValidTraceContract = hasTraceDigest && hasTraceLength && traceDigestValid && traceLengthValid;
+  if (hasTraceDigest !== hasTraceLength) {
+    reasons.push("trace contract incomplete");
+    drift = Math.max(drift, 0.6);
+  }
+  if (hasTraceDigest && !traceDigestValid) {
+    reasons.push("traceDigest malformed");
+    drift = Math.max(drift, 0.6);
+  }
+  if (hasTraceLength && !traceLengthValid) {
+    reasons.push("traceLength outside [1..240]");
+    drift = Math.max(drift, 0.6);
+  }
   const competitiveMode = mode === "daily_challenge" || mode === "gauntlet" || mode === "score_attack";
-  if (competitiveMode && req.seed != null && !inputHash) {
-    reasons.push("competitive seeded replay missing inputHash");
+  if (competitiveMode && req.seed != null && !inputHash && !hasValidTraceContract) {
+    reasons.push("competitive seeded replay missing replay contract");
     drift = Math.max(drift, 0.35);
   }
 
   const ok = drift < 0.5 && reasons.length === 0;
+  const confidence = ok && hasValidTraceContract
+    ? "trace_contract"
+    : ok && inputHash
+      ? "replay_contract"
+      : ok
+        ? "heuristic"
+        : "quarantine";
   return {
     ok,
     drift,
     reasons,
-    confidence: ok && inputHash ? "replay_contract" : ok ? "heuristic" : "quarantine",
+    confidence,
   };
 }
 

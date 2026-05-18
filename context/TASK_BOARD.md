@@ -33,18 +33,18 @@ Public-safe launch roadmap summary.
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to include `https://callofdoodie.wtf/` and backup-origin expectations — Supabase Edge Functions currently use `Access-Control-Allow-Origin: *`, so no repo-side CORS allowlist change is needed; remaining PostHog/Sentry/Ko-fi project URL updates require analytics/dashboard credentials (`node scripts/check-secrets.mjs --for analytics` is MISSING).
 - [x] [SIL:1] **DONE S61** [S60 follow-up] Add old-path redirect in `VaultSparkStudios.github.io` from `/call-of-doodie/*` to `https://callofdoodie.wtf/*` — committed and pushed sibling repo commit `a6515ae` with `call-of-doodie/index.html` canonical/meta redirect plus `404.html` `/call-of-doodie/*` guard, leaving unrelated sibling repo worktree changes untouched.
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
-- [ ] [SIL:2] [BLOCKER S61] [S59 carryover] validate-replay Phase 2B — build the actual headless deterministic resim runner from `seed + inputHash`, using pure combat helpers; quarantine >2% drift; keep heuristic as the fast pre-filter — blocked because the current server contract receives only `inputHash`, which is not reversible into replay inputs. Next implementation must first add a compact input timeline/command trace or signed v2 event digest for deterministic resim.
+- [ ] [SIL:2] [BLOCKER S61] [S59 carryover] validate-replay Phase 2B — build the actual headless deterministic resim runner from seed + trace-backed replay inputs, using pure combat helpers; quarantine >2% drift; keep heuristic as the fast pre-filter. Session 68 closes the trace metadata contract, but full resim still needs a replay runner and stored trace payload contract.
 - [x] [SIL:1] **DONE S61** [S59 carryover] App.jsx extraction slice 11 — extracted enemy projectile/player hit resolution, incoming damage math, contact-hit helpers, and grenade explosion damage into `src/systems/combatResolution.js`; wired enemy bullet hits and grenade blast damage through pure helpers in `src/App.jsx`; added regression tests.
 - [ ] [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
 - [ ] [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
-- [ ] [SIL:2] Replay command trace integration — bind `replayCommandTrace` to the issued run token / leaderboard submission path, then update `validate-replay` to accept trace-backed replay contracts instead of only `inputHash`.
+- [x] [SIL:2] **DONE S68** Replay command trace contract — client trace binding already shipped in S67; S68 updates `validate-replay` to accept `traceDigest`/`traceLength` as a trace-backed replay contract and updates `submit-score` to reject malformed trace metadata before leaderboard insert.
 - [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
 - [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
 - [ ] [SIL:1] App.jsx extraction roadmap per `docs/APP_EXTRACTION_ROADMAP.md` — slice 1 is the game loop (player/bullet/enemy update); pure `step(gs, frame)` modules with their own tests
-- [ ] [SIL:1] Weapon unlock telemetry — track which level players hit each unlock and whether grandfathered legacy loadouts get reused vs reset; informs whether the curve still needs tuning
+- [x] [SIL:1] **DONE S67** Weapon unlock telemetry — `handlePlayerDeath` detects newly unlocked weapons after account-level changes and emits `track("weapon_unlock", {...})`; future balance work needs real traffic, not more local wiring.
 - [x] [SIL:2] **DONE S55** GIF highlight encoder — non-blocking palette reuse + 36-frame cap + 6-frame yields + skip on mobile/PERF mode
 - [x] [SIL:2] **DONE S55** First-card readability — PerkModal tier pill black-on-solid + DraftScreen 6-char hex + dark card body
 - [x] [SIL:2] **DONE S55** Frame-budget adaptive quality — `window.__codReducedEffects` flips on sustained drops; particle render halved; HUD `⚡ PERF MODE` chip surfaces it; GIF capture skipped while active
@@ -149,7 +149,7 @@ Public-safe launch roadmap summary.
 - [ ] [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor with no user-facing impact; HomeV2 is the default (v1 opt-in only), so deferral has minimal player impact
 - [ ] [SIL:2] [S62 deferred] Coordinated enemy formations — wave 20+ group-spawn patterns (flanks, pincer, escort); game design work (~4h) beyond current scope
 - [ ] [SIL:1] [S62 deferred] Mid-run challenge contracts — optional per-wave objectives for bonus coins beyond Dynamic Objective System; needs design pass to avoid overlap
-- [ ] [SIL:1] [S62 deferred] Input-timeline digest for validate-replay Phase 2B — compact signed command trace; prerequisite for deterministic resim; blocked on server contract v2
+- [x] [SIL:1] **DONE S68** [S62 deferred] Input-timeline digest contract — compact command trace metadata now reaches the edge contract (`traceDigest` + `traceLength`); deterministic resim remains a separate runner/storage milestone.
 - [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
 
 ## Deferred to Project Agents

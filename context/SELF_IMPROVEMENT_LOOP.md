@@ -643,3 +643,27 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 1. Replay contract v3 — bind compact command traces to issued run tokens so deterministic replay validation has actual inputs; High probability.
 2. Noninteractive closeout autopilot hardening — make `--help` print usage and add an explicit `--yes --message` documented path for Codex closeouts; High probability.
 3. HomeV2 measurement gate — add a production LCP/funnel capture script before removing the legacy fallback; Medium probability.
+
+## 2026-05-18 — Session 68 | Total: 998/1000 | Velocity: 5 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 349/349 tests passing after rerun, lint clean, build passing; targeted trace submission tests added |
+| Creative Alignment | 100 | → | Replay trust improves the fair-challenge promise without adding off-theme UI or live-service noise |
+| Momentum | 100 | ↑ | Fresh audit, full implementation, and truth repair completed in one bounded pass |
+| Engagement | 100 | → | Trust work protects score/rivalry credibility; player-facing surfaces intentionally unchanged until edge deploy is observed |
+| Process Quality | 100 | → | Prompt-to-artifact path recorded across audit, implement plan, task board, truth audit, work log, and handoff |
+| Cross-Repo Coherence | 99 | ↑ | Edge validation language now matches the Studio-wide truth rule: trace contract is real, deterministic resim is still future work |
+| Security Posture | 100 | → | Malformed trace metadata is rejected before leaderboard insert and anomaly-classified |
+| Ecosystem Integration | 100 | ↑ | Valid trace summaries are preserved in member session metadata without schema churn on the leaderboard table |
+| Capital Efficiency | 100 | → | Zero external API/LLM spend; replay trust gained through local metadata and edge checks |
+| Automation Coverage | 99 | → | Browser-side trace submission coverage added; edge helpers still need deployment-level smoke after function publish |
+
+**Top win:** Closed the honest replay-contract gap: command traces are no longer just browser-side evidence, and edge validators now classify trace-backed runs without pretending full resimulation exists.
+**Top gap:** Deterministic replay resim still needs a real runner plus a stored trace payload contract; digest metadata alone is proof-of-contract, not replay input.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement`, validation, and closeout write-back completed with concrete evidence.
+
+**Brainstorm**
+1. Trace payload storage contract — store the compact trace body outside leaderboard rows, keyed by run token, so deterministic resim has actual replay inputs. High probability.
+2. Edge-function trace smoke — add a local fixture script that posts valid/malformed trace metadata to deployed `validate-replay` and `submit-score` after publish. High probability.
+3. Ghost visualization follow-through — render `gs.topGhosts` in-run now that persistent ghost loading exists. Medium probability.

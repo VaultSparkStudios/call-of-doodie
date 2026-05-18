@@ -28,18 +28,18 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    995/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 993.3  ·  Velocity 3↑                      ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
-║    Trend  ▄▄▄▂▄  ↑  (last 5 sessions)                            ║
+║    997/1000   ███████████████████████░   100%                    ║
+║    SIL v3.0  ·  Avg3: 994.7  ·  Velocity 10↑                     ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Trend  ▄▄▂▄▇  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  █▇▇▇▇███ →                ║
+║    Dev Health       100    ██████████  ▇▇▇▇████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum          99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
-║    Engagement       100    ██████████  █▇▇▇████ →                ║
-║    Process Qual     100    ██████████  ▇███████ →                ║
+║    Momentum         100    ██████████  ▇▇▇▇▇▇▇█ →                ║
+║    Engagement       100    ██████████  ▇▇▇█████ →                ║
+║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence         98    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
@@ -55,8 +55,8 @@
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ⚠  Tests         ?/? passing                                    ║
-║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
-║  ✓  Runway        ~13.0 sessions                                 ║
+║  ✓  Velocity      10 ↑  ·  Debt: ↓                               ║
+║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ✓  Headroom      93% remaining · ~9 large item(s) fit           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         46693 FORGE  ·  4d old                         ║
@@ -89,9 +89,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▄▂▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▂▄▇  10↑  (last 5 sessions)                       ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 7 consecutive achieved-intent sessions            ║
+║  Streak:     ✓ 8 consecutive achieved-intent sessions            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
