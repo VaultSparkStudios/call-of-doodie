@@ -33,7 +33,7 @@
     "validate-replay Phase 2B now has a browser-side command trace helper, but still needs run-token/submission binding before server replay validation can honestly ship.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
-  "lastUpdated": "2026-05-17",
+  "lastUpdated": "2026-05-18",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
@@ -73,7 +73,7 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-05-17T05:53:12.857Z",
+  "planModeDetected": "missing",
+  "planModeCheckedAt": "2026-05-18T01:12:39.060Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
 }
