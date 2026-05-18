@@ -215,6 +215,28 @@ export async function loadTopGhosts(mode = "standard", difficulty = "normal") {
   } catch { return []; }
 }
 
+export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {
+  const payload = {
+    ...safeEntry,
+    runToken: typeof rawEntry?.runToken === "string" ? rawEntry.runToken.trim() : "",
+    clientUid: getOrCreateClientUid(),
+    summarySig: typeof rawEntry?.summarySig === "string" ? rawEntry.summarySig.trim() : "",
+    eventDigest: rawEntry?.eventDigest && typeof rawEntry.eventDigest === "object" ? rawEntry.eventDigest : null,
+  };
+
+  const traceDigest = typeof rawEntry?.traceDigest === "string" ? rawEntry.traceDigest.trim() : "";
+  const traceLength = _clampInt(rawEntry?.traceLength, 0, 240, 0);
+  const traceBody = typeof rawEntry?.traceBody === "string"
+    ? rawEntry.traceBody.trim().replace(/[^a-z0-9._:~-]/gi, "").slice(0, 8192)
+    : "";
+
+  if (traceDigest) payload.traceDigest = traceDigest;
+  if (traceLength > 0) payload.traceLength = traceLength;
+  if (traceBody) payload.traceBody = traceBody;
+
+  return payload;
+}
+
 // Note: requires Supabase migration: ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;
 // Online submit path expects the Supabase Edge Function `submit-score` to be deployed.
 export async function saveToLeaderboard(entry) {
@@ -223,13 +245,10 @@ export async function saveToLeaderboard(entry) {
 
   if (supabase && supabaseUrl && supabaseAnonKey) {
     try {
-      const response = await invokeEdgeFunction("submit-score", {
-        ...safeEntry,
-        runToken: rawRunToken,
-        clientUid: getOrCreateClientUid(),
-        summarySig: typeof entry?.summarySig === "string" ? entry.summarySig.trim() : "",
-        eventDigest: entry?.eventDigest && typeof entry.eventDigest === "object" ? entry.eventDigest : null,
-      });
+      const response = await invokeEdgeFunction("submit-score", buildSubmitScorePayload(
+        safeEntry,
+        { ...entry, runToken: rawRunToken },
+      ));
       if (!response.ok) {
         const failure = {
           board: await loadLeaderboard(),

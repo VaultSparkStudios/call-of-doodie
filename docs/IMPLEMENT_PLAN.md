@@ -1,19 +1,17 @@
-# Implement Plan — 2026-05-18 Audit
+# Implement Plan — 2026-05-18 Audit Iteration 2
 
-Source: `docs/AUDIT_2026-05-18.md`
+Source: `docs/AUDIT_2026-05-18_2.md`
 
 | Order | Item | Tier | Effort | Priority | Work surface |
 |---:|---|:-:|---|---:|---|
-| 1 | replay-trace-contract-v2 | 🔥 | 2h | 54.0 | `supabase/functions/validate-replay/index.ts` |
-| 2 | submit-score-trace-firewall | 🔥 | 1h | 51.7 | `supabase/functions/submit-score/index.ts` |
-| 3 | trace-submission-test-backfill | ⚡ | 30m | 49.0 | `src/utils/runSubmission.test.js` |
-| 4 | trace-truth-repair | ⚡ | 30m | 42.0 | `context/*` truth surfaces |
-| 5 | run-proof-language | 💡 | 1h | 6.7 | public-safe closeout/truth language only |
+| 1 | trace-edge-forwarding-firewall | 🔥 | 1h | 58.2 | `src/storage.js`, `src/storage.test.js` |
+| 2 | trace-payload-storage-contract | 🔥 | 2h | 54.0 | `src/utils/runSubmission.js`, `supabase/functions/submit-score/index.ts` |
+| 3 | replay-trust-smoke-script | ⚡ | 1h | 44.3 | `scripts/replay-trust-smoke.mjs`, `package.json` |
+| 4 | ghost-pack-hud-surface | ⚡ | 1h | 32.1 | `src/App.jsx`, `src/components/HUD.jsx` |
 
 ## Success Checks
 
-- `validate-replay` accepts trace-backed replay contracts without claiming full deterministic resim.
-- `submit-score` rejects malformed trace metadata before insertion.
-- Valid trace metadata is kept in member session metadata, avoiding leaderboard schema drift.
-- Unit coverage proves trace fields in session submissions.
-- Public context surfaces distinguish shipped client trace binding from remaining edge/server trust work.
+- Online score submission forwards trace metadata after leaderboard normalization.
+- Trace body, digest, and length agree before Edge Function acceptance; invalid body/digest pairs reject as replay trace failures.
+- Deployed `validate-replay` can be smoke-tested for valid trace confidence and malformed trace quarantine.
+- Loaded leaderboard ghosts are visible as an in-run HUD target without blocking play.

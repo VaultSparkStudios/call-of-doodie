@@ -29,7 +29,7 @@ export default function HUD({
   cursedHideScore,
   speedrunMode, startTime,
   missions, missionDoneSet,
-  hud, heat,
+  hud, heat, topGhosts,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
   const HUD_FLAGS = hud || {
@@ -107,6 +107,23 @@ export default function HUD({
             ? `🏆 BEATING ${vsName ? "@" + vsName : "THEM"} +${(score - vsScore).toLocaleString()}`
             : `⚔️ BEHIND ${vsName ? "@" + vsName : "THEM"} -${(vsScore - score).toLocaleString()}`
           }
+        </div>
+      )}
+
+      {Array.isArray(topGhosts) && topGhosts.length > 0 && (
+        <div style={{
+          position: "absolute", top: vsScore != null ? 74 : 46, left: "50%", transform: "translateX(-50%)",
+          maxWidth: "min(92vw, 520px)", display: "flex", gap: 5, alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.52)", border: "1px solid rgba(0,229,255,0.22)", borderRadius: 8,
+          padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", color: "#BEEFFF",
+          whiteSpace: "nowrap", overflow: "hidden",
+        }} title="Top leaderboard ghosts loaded for this mode and difficulty">
+          <span style={{ color: "#00E5FF", fontWeight: 900 }}>GHOST PACK</span>
+          {topGhosts.slice(0, 3).map((ghost, index) => (
+            <span key={`${ghost.name || "ghost"}-${index}`} style={{ color: index === 0 ? "#FFD700" : "#D8F6FF", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 138 }}>
+              {index + 1}. {(ghost.name || "Ghost").slice(0, 12)} {Math.max(0, Number(ghost.score || 0)).toLocaleString()}
+            </span>
+          ))}
         </div>
       )}
 
@@ -401,4 +418,3 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, gren
     </div>
   );
 }
-

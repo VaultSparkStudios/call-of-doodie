@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 68 is closing the replay-trust handoff: browser command traces are already bound into score submissions, and edge validators now need to classify trace-backed contracts honestly without claiming full deterministic resim.",
-  "nextMilestone": "Deploy and observe trace-backed replay contract validation, then use accumulated trace metadata as the prerequisite for deterministic validate-replay Phase 2B.",
+  "currentFocus": "Session 69 is closing the trace-payload follow-through: online score submissions now preserve compact trace evidence through normalization, submit-score validates optional trace bodies, and loaded leaderboard ghosts are visible as in-run HUD targets.",
+  "nextMilestone": "Run the deployed replay trust smoke with network permission after edge deploy, then build the deterministic validate-replay runner against the stored trace payload contract.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -30,7 +30,7 @@
   ],
   "blockers": [
     "PostHog/Sentry/Ko-fi URL allowlists require analytics/dashboard credentials.",
-    "validate-replay Phase 2B has browser-side command trace metadata and edge contract validation, but full deterministic resimulation still needs a replay runner and stored trace payload contract.",
+    "validate-replay Phase 2B has browser-side command trace metadata, edge contract validation, and member-session trace body storage, but full deterministic resimulation still needs a replay runner.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
   "lastUpdated": "2026-05-18",
@@ -41,13 +41,13 @@
   "ignisScore": 46693,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-14",
-  "silSession": 68,
-  "silScore": 998,
-  "silAvg3": 996.7,
-  "silVelocity": 5,
+  "silSession": 69,
+  "silScore": 999,
+  "silAvg3": 998,
+  "silVelocity": 4,
   "silDebt": "improving",
   "silLastSession": "2026-05-18",
-  "currentSession": 68,
+  "currentSession": 69,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "entropyScore": 0.178,
@@ -74,6 +74,6 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-05-18T04:52:25.358Z",
+  "planModeCheckedAt": "2026-05-18T06:24:37.769Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
 }

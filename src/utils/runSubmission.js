@@ -89,6 +89,7 @@ export function buildSessionSubmission({
 } = {}) {
   const traceDigest = commandTrace?.digest || null;
   const traceLength = commandTrace?.count ?? 0;
+  const traceBody = typeof commandTrace?.body === "string" ? commandTrace.body : "";
   const entry = buildLeaderboardEntry({
     username,
     score,
@@ -115,5 +116,6 @@ export function buildSessionSubmission({
   });
   if (traceDigest) entry.traceDigest = traceDigest;
   if (traceLength > 0) entry.traceLength = traceLength;
+  if (traceBody) entry.traceBody = traceBody;
   return entry;
 }

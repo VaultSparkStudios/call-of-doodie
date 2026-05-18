@@ -11,6 +11,15 @@ const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
 const encoder = new TextEncoder();
 
+function checksum(serialized: string) {
+  let hash = 2166136261;
+  for (let i = 0; i < serialized.length; i++) {
+    hash ^= serialized.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).toUpperCase().padStart(8, "0");
+}
+
 function clampInt(value: unknown, min: number, max: number, fallback = min) {
   const num = Number.parseInt(String(value ?? ""), 10);
   if (!Number.isFinite(num)) return fallback;
@@ -159,16 +168,25 @@ function collectDigestFailures(entry: ReturnType<typeof normalizeEntry>, digest:
   return reasons;
 }
 
-function collectTraceFailures(traceDigest: string, traceLength: number) {
+function collectTraceFailures(traceDigest: string, traceLength: number, traceBody: string) {
   const reasons: string[] = [];
   const hasDigest = traceDigest.length > 0;
   const hasLength = traceLength > 0;
+  const hasBody = traceBody.length > 0;
 
-  if (!hasDigest && !hasLength) return reasons;
+  if (!hasDigest && !hasLength && !hasBody) return reasons;
   if (hasDigest !== hasLength) reasons.push("trace contract incomplete");
   if (hasDigest && !/^[a-f0-9]{8,128}$/i.test(traceDigest)) reasons.push("traceDigest malformed");
   if (hasLength && (!Number.isInteger(traceLength) || traceLength < 1 || traceLength > 240)) {
     reasons.push("traceLength outside [1..240]");
+  }
+  if (hasBody) {
+    if (!/^[a-z0-9._:~-]+$/i.test(traceBody)) reasons.push("traceBody malformed");
+    const bodyCount = traceBody.split("~").filter(Boolean).length;
+    if (bodyCount !== traceLength) reasons.push("traceBody count mismatch");
+    if (hasDigest && checksum(traceBody).toUpperCase() !== traceDigest.toUpperCase()) {
+      reasons.push("traceBody digest mismatch");
+    }
   }
 
   return reasons;
@@ -249,6 +267,7 @@ Deno.serve(async (req) => {
       : null;
     const traceDigest = typeof rawBody.traceDigest === "string" ? rawBody.traceDigest.trim() : "";
     const traceLength = clampInt(rawBody.traceLength, 0, 240, 0);
+    const traceBody = typeof rawBody.traceBody === "string" ? rawBody.traceBody.trim() : "";
 
     const { data: tokenRow, error: tokenError } = await serviceClient
       .from("run_tokens")
@@ -382,7 +401,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const traceFailures = collectTraceFailures(traceDigest, traceLength);
+    const traceFailures = collectTraceFailures(traceDigest, traceLength, traceBody);
     if (traceFailures.length > 0) {
       await logRunAnomaly(serviceClient, {
         token: runToken,
@@ -466,6 +485,7 @@ Deno.serve(async (req) => {
           achievements: row.achievements,
           traceDigest: traceDigest || null,
           traceLength,
+          traceBody: traceBody || null,
         },
       }]);
 

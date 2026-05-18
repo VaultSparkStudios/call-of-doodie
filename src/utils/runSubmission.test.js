@@ -64,11 +64,13 @@ describe("runSubmission", () => {
       commandTrace: {
         digest: "ABCDEF12",
         count: 42,
+        body: "a.move.left~g.shoot.primary",
       },
     });
 
     expect(entry.traceDigest).toBe("ABCDEF12");
     expect(entry.traceLength).toBe(42);
+    expect(entry.traceBody).toBe("a.move.left~g.shoot.primary");
   });
 
   test("does not add replay trace fields for an empty trace", () => {

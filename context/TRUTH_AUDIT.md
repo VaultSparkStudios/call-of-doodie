@@ -5,6 +5,15 @@ Overall status: green
 Last reviewed: 2026-05-18
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-18 — Session 69 changes
+
+- `src/storage.js` — `saveToLeaderboard()` now uses `buildSubmitScorePayload()` so trace evidence survives `normalizeLeaderboardEntry()` and reaches `submit-score`; trace fields remain outside leaderboard row normalization.
+- `src/utils/runSubmission.js` — `buildSessionSubmission()` now forwards `traceBody` alongside `traceDigest` and `traceLength` when a non-empty command trace exists.
+- `supabase/functions/submit-score/index.ts` — validates optional trace bodies against digest and count before leaderboard insert; malformed bodies are rejected through the replay-trace validation path; valid trace bodies are stored only in member `game_sessions.metadata`.
+- `scripts/replay-trust-smoke.mjs` / `package.json` — adds `npm run replay:trust-smoke` for deployed `validate-replay` checks covering valid trace-contract confidence and malformed trace quarantine. Live execution still requires network permission.
+- `src/App.jsx` / `src/components/HUD.jsx` — loaded `gs.topGhosts` now appears in-game as a compact Ghost Pack target strip. This closes the visible-surface half of the persistent ghost leaderboard; it does not yet draw full path ghosts from leaderboard rows.
+- Validation truth — targeted runSubmission/storage tests passed 24/24; full `npm test` passed 350/350; lint clean; build passing; live replay trust smoke attempted but blocked by sandbox network and unapproved escalation.
+
 ## 2026-05-18 — Session 68 changes
 
 - `supabase/functions/validate-replay/index.ts` — accepts trace-backed replay contracts via `traceDigest` + `traceLength`; malformed trace metadata quarantines the replay check; competitive seeded runs can now satisfy replay-contract presence with either `inputHash` or valid trace metadata. Confidence can now be `trace_contract` without claiming full deterministic resimulation.

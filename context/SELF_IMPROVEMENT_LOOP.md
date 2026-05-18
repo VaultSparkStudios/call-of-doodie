@@ -667,3 +667,27 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 1. Trace payload storage contract — store the compact trace body outside leaderboard rows, keyed by run token, so deterministic resim has actual replay inputs. High probability.
 2. Edge-function trace smoke — add a local fixture script that posts valid/malformed trace metadata to deployed `validate-replay` and `submit-score` after publish. High probability.
 3. Ghost visualization follow-through — render `gs.topGhosts` in-run now that persistent ghost loading exists. Medium probability.
+
+## 2026-05-18 — Session 69 | Total: 999/1000 | Velocity: 4 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 350/350 tests passing, lint clean, build passing; targeted trace/storage regressions added |
+| Creative Alignment | 100 | → | Ghost Pack adds leaderboard pressure without changing the parody combat loop or adding live-service friction |
+| Momentum | 100 | → | Fresh audit iteration shipped all four bounded items and closed the newly found trace-forwarding gap |
+| Engagement | 100 | → | Persistent ghosts are now visible in-run as score targets instead of hidden state |
+| Process Quality | 100 | → | Same-day prior audit was checked before creating a new iteration; execution log maps every item to evidence |
+| Cross-Repo Coherence | 100 | ↑ | Replay truth now distinguishes metadata, stored trace payload, and still-future deterministic runner |
+| Security Posture | 100 | → | `submit-score` validates trace body digest/count before accept and keeps body storage off leaderboard rows |
+| Ecosystem Integration | 100 | → | New live smoke command uses existing Supabase function/env contract with no new provider or schema dependency |
+| Capital Efficiency | 100 | → | Zero external AI/API spend; no dependency additions |
+| Automation Coverage | 99 | → | Local coverage is green; live replay smoke still needs network-approved execution after deploy |
+
+**Top win:** Found and fixed the actual online-path hole: trace metadata was being produced by gameplay code but stripped before the Edge Function call.
+**Top gap:** The new replay trust smoke could not be run live in this sandbox because network escalation was not approved.
+**Intent outcome:** Achieved — `/start`, fresh `/audit` iteration, `/implement`, validation, and closeout write-back completed with concrete evidence.
+
+**Brainstorm**
+1. Deterministic replay runner — consume the stored trace payload contract in `validate-replay` Phase 2B and quarantine drift above a tight threshold. High probability.
+2. Network-approved replay trust smoke — run `npm run replay:trust-smoke` after Edge deploy and add it to launch verification if stable. High probability.
+3. Ghost path contract — if leaderboard rows ever store safe path samples, upgrade Ghost Pack targets into actual replay path ghosts. Medium probability.

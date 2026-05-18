@@ -3,6 +3,7 @@
 
 import { describe, it, expect } from "vitest";
 import {
+  buildSubmitScorePayload,
   compareLeaderboardEntries,
   getAccountLevel,
   loadRivalryHistory,
@@ -115,6 +116,35 @@ describe("normalizeLeaderboardEntry", () => {
     expect(entry.wave).toBe(1);
     expect(entry.inputDevice).toBe("mouse");
     expect(entry.mode).toBeNull();
+  });
+});
+
+describe("buildSubmitScorePayload", () => {
+  it("preserves replay trace fields stripped from leaderboard normalization", () => {
+    const safeEntry = normalizeLeaderboardEntry({
+      name: "TraceDood",
+      score: 12345,
+      kills: 50,
+      wave: 9,
+      traceDigest: "ignored-by-normalizer",
+      traceLength: 99,
+    });
+
+    const payload = buildSubmitScorePayload(safeEntry, {
+      runToken: " token-123 ",
+      summarySig: " sig-abc ",
+      eventDigest: { v: 2, timeline: "m:standard" },
+      traceDigest: "ABCDEF12",
+      traceLength: 42,
+      traceBody: "a.move.left~g.shoot.primary",
+    });
+
+    expect(payload.runToken).toBe("token-123");
+    expect(payload.summarySig).toBe("sig-abc");
+    expect(payload.eventDigest.v).toBe(2);
+    expect(payload.traceDigest).toBe("ABCDEF12");
+    expect(payload.traceLength).toBe(42);
+    expect(payload.traceBody).toBe("a.move.left~g.shoot.primary");
   });
 });
 

@@ -323,3 +323,13 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Added `runSubmission` regression coverage for trace metadata inclusion and empty-trace omission; removed a stale unused App import surfaced by lint.
 - Repaired public truth surfaces: `context/TASK_BOARD.md`, `context/PROJECT_STATUS.json`, and `context/TRUTH_AUDIT.md` now split completed client trace binding from the remaining deterministic replay-runner milestone.
 - Validation: focused `runSubmission` tests 5/5; `npm run lint` clean; `npm run build` passing; `npm run launch:smoke` passing; full `npm test` 349/349 after rerun.
+
+# 2026-05-18 (Session 69)
+
+- Ran `/start` protocol with Codex session lock, execution-mode detection, secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-05-18_2.md` for a fresh same-day audit iteration after confirming the earlier S68 audit was already fully executed.
+- Fixed the online trace submit path: `buildSubmitScorePayload()` preserves trace fields after leaderboard normalization and `saveToLeaderboard()` uses it before calling `submit-score`.
+- Extended the trace payload contract: `buildSessionSubmission()` forwards compact `traceBody`; `submit-score` validates body count/digest and stores valid bodies only in member session metadata.
+- Added `scripts/replay-trust-smoke.mjs` plus `npm run replay:trust-smoke` for deployed `validate-replay` trace confidence/quarantine smoke checks.
+- Surfaced loaded leaderboard ghosts in-run: `App.jsx` passes `gs.topGhosts` to `HUD`, and HUD renders a compact Ghost Pack target strip.
+- Validation: targeted runSubmission/storage tests 24/24; `node --check scripts/replay-trust-smoke.mjs` passing; `npm run lint` clean; `npm run build` passing; full `npm test` 350/350. Live replay trust smoke was attempted but sandbox fetch failed and network escalation was not approved.

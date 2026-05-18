@@ -4153,6 +4153,7 @@ export default function CallOfDoodie() {
         missionDoneSet={missionDoneRef.current}
         hud={hudFlagsMemo}
         heat={gsRef.current?.heat || 0}
+        topGhosts={gsRef.current?.topGhosts || []}
       />
 
       {/* Mobile action bar */}
