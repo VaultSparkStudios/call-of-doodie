@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, getMissionStreak, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -41,6 +41,7 @@ import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/an
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
+import { encodeReplayCommandTrace } from "./utils/replayCommandTrace.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -83,6 +84,7 @@ import {
   createScoreSubmitStudioEvents,
   resolveRunModeFromFlags,
 } from "./systems/runSession.js";
+import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -206,6 +208,7 @@ export default function CallOfDoodie() {
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
   const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
+  const commandTraceRef  = useRef([]);    // replay command trace events for trust submission
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
@@ -298,6 +301,8 @@ export default function CallOfDoodie() {
   const [weaponKillsSnapshot, setWeaponKillsSnapshot] = useState([]);
   const [metaToast, setMetaToast]         = useState(null);
   const [missionsSummary, setMissionsSummary] = useState([]); // captured at death
+  const [cosmeticUnlocks, setCosmeticUnlocks] = useState([]); // newly unlocked Doodie Pass items at death
+  const [objectivesSummary, setObjectivesSummary] = useState(null); // captured at death: {completed, failed}
   const [shopPending, setShopPending]         = useState(false);
   const [shopOptions, setShopOptions]         = useState([]);
   const [coinShopOptions, setCoinShopOptions] = useState([]);
@@ -560,12 +565,18 @@ export default function CallOfDoodie() {
     bestMomentRef.current = { ts: 0, score: 0 };
     // Ghost race: load previous run's ghost for same mode, reset recorder
     ghostRecordRef.current = [];
+    commandTraceRef.current = []; // reset command trace for this run
     try {
       const _gKey = "cod-ghost-" + (bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
       gsRef.current._ghostKey = _gKey;
       const _raw = sessionStorage.getItem(_gKey);
       gsRef.current.ghost = _raw ? JSON.parse(_raw) : null;
     } catch { gsRef.current.ghost = null; }
+    // Persistent ghost leaderboard: load top-3 scores for this mode/difficulty as score targets
+    loadTopGhosts(
+      bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
+      difficultyRef.current || "normal"
+    ).then(ghosts => { if (gsRef.current) gsRef.current.topGhosts = ghosts; }).catch(() => {});
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -1454,6 +1465,8 @@ export default function CallOfDoodie() {
     setBestStreak(statsRef.current.bestStreak);
     setTimeSurvived(Math.floor((Date.now() - startTimeRef.current) / 1000));
     // Save career stats + mission progress
+    const _prevCareerKills = loadCareerStats().totalKills || 0;
+    const _prevAcctLevel = getAccountLevel(_prevCareerKills);
     updateCareerStats({
       kills: gs.kills, deaths: 1, score: gs.score, wave: gs.currentWave,
       streak: statsRef.current.bestStreak, damage: gs.totalDamage,
@@ -1466,9 +1479,33 @@ export default function CallOfDoodie() {
       combo: comboRef.current.max,
       bossKills: statsRef.current.bossKills,
     });
+    // Weapon unlock telemetry: emit per-weapon event when account level gates a new weapon
+    try {
+      const _newAcctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
+      if (_newAcctLevel > _prevAcctLevel) {
+        for (let _wi = 0; _wi < WEAPON_UNLOCK_LEVELS.length; _wi++) {
+          const _req = WEAPON_UNLOCK_LEVELS[_wi];
+          if (_req > _prevAcctLevel && _req <= _newAcctLevel) {
+            track("weapon_unlock", { weaponIdx: _wi, accountLevel: _newAcctLevel, prevLevel: _prevAcctLevel, wave: gs?.currentWave || 0 });
+          }
+        }
+      }
+    } catch {}
     const mProgress = {};
     missionDoneRef.current.forEach(i => { mProgress[i] = true; });
     saveMissionProgress(mProgress);
+    // Advance daily mission streak if any mission was completed today
+    if (missionDoneRef.current.size > 0) advanceMissionStreak();
+    // Capture objective summary for death screen
+    setObjectivesSummary({
+      completed: gs?.objectivesCompleted || [],
+      failed: gs?.objectivesFailed || [],
+    });
+    // Check Doodie Pass cosmetic unlocks against updated career stats
+    try {
+      const { newlyUnlocked } = reconcileOwnership(loadCareerStats());
+      setCosmeticUnlocks(newlyUnlocked);
+    } catch { setCosmeticUnlocks([]); }
     // Capture missions summary for death screen (refs become stale after screen change)
     const _missions = dailyMissionsRef.current || [];
     const _done = missionDoneRef.current || new Set();
@@ -1515,6 +1552,8 @@ export default function CallOfDoodie() {
       speedrun: speedrunRef.current,
       gauntlet: gauntletRef.current,
     };
+    const _killerType = gs?._lastDamageBy ?? null;
+    const _killerEnemy = _killerType != null ? (gs.enemies || []).find(e => e.type === _killerType) : null;
     saveRunToHistory(createRunHistoryEntry({
       score: gs.score,
       kills: gs.kills,
@@ -1524,6 +1563,8 @@ export default function CallOfDoodie() {
       flags: runFlags,
       runSeed,
       modifier: gs.runModifier || null,
+      killedByType: _killerType,
+      killedByName: _killerEnemy?.name || null,
     }));
     createDeathStudioEvents({
       score: gs.score,
@@ -1712,6 +1753,7 @@ export default function CallOfDoodie() {
       speedrun: speedrunRef.current,
       gauntlet: gauntletRef.current,
     });
+    const commandTrace = encodeReplayCommandTrace(commandTraceRef.current || []);
     const entry = buildSessionSubmission({
       username,
       score,
@@ -1735,6 +1777,7 @@ export default function CallOfDoodie() {
       runToken: runTokenRef.current,
       summarySig: runSummarySigRef.current,
       eventDigest,
+      commandTrace,
     });
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const result = await saveToLeaderboard(entry);
@@ -1892,10 +1935,12 @@ export default function CallOfDoodie() {
           addText(gs, GW() / 2, GH() / 2, `🎁 ${obj.label} CLEARED · +1 PERK CHOICE`, obj.color, true);
         }
         gs.screenShake = Math.max(gs.screenShake || 0, 8);
+        gs.objectivesCompleted = [...(gs.objectivesCompleted || []), { type: obj.type, label: obj.label }];
         gs.activeObjective = null;
         achCheckRef.current = true;
       } else if (r.expired) {
         statsRef.current.objectiveChains = recordObjectiveResult(statsRef.current.objectiveChains, gs.activeObjective, r);
+        gs.objectivesFailed = [...(gs.objectivesFailed || []), { type: gs.activeObjective.type, label: gs.activeObjective.label }];
         addText(gs, GW() / 2, GH() / 2, `${gs.activeObjective.label} FAILED`, "#FF3333");
         gs.activeObjective = null;
       }
@@ -2662,6 +2707,17 @@ export default function CallOfDoodie() {
             });
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
+            // Beat-kill bonus: kills aligned to the music beat earn +1💩
+            try {
+              const _bpm = getMusicBPM();
+              const _fpb = Math.round(60 / _bpm * 60);
+              const _beatPhase = frameCountRef.current % _fpb;
+              if (_beatPhase < 4 || _beatPhase > _fpb - 4) {
+                gs.coins = (gs.coins || 0) + 1;
+                addText(gs, e.x, e.y - e.size - 20, "🎵 BEAT KILL! +1💩", "#FF44FF");
+                addParticles(gs, e.x, e.y, "#FF44FF", 4);
+              }
+            } catch {}
             gs.coinStreakKills++;
             gs.coinStreakTimer = 180; // reset 3s window
             if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
@@ -3749,6 +3805,8 @@ export default function CallOfDoodie() {
           fmtTime={fmtTime}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           weaponKills={weaponKillsSnapshot} bestPrecisionStreak={statsRef.current.bestPrecisionStreak || 0} starterLoadout={starterLoadout}
+          cosmeticUnlocks={cosmeticUnlocks}
+          objectivesSummary={objectivesSummary}
           scoreAttackMode={scoreAttackMode}
           dailyChallengeMode={dailyChallengeMode}
           bossRushMode={bossRushMode} cursedRunMode={cursedRunMode} speedrunMode={speedrunMode} gauntletMode={gauntletMode}

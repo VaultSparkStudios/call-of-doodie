@@ -45,6 +45,8 @@ export function createRunHistoryEntry({
   flags = {},
   runSeed = null,
   modifier = null,
+  killedByType = null,
+  killedByName = null,
 } = {}) {
   return {
     score,
@@ -55,6 +57,8 @@ export function createRunHistoryEntry({
     mode: resolveRunModeFromFlags(flags),
     runSeed,
     modifier,
+    killedByType,
+    killedByName,
     ts: Date.now(),
   };
 }

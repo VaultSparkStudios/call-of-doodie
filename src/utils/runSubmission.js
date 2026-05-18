@@ -85,8 +85,11 @@ export function buildSessionSubmission({
   runToken,
   summarySig,
   eventDigest,
+  commandTrace = null,
 } = {}) {
-  return buildLeaderboardEntry({
+  const traceDigest = commandTrace?.digest || null;
+  const traceLength = commandTrace?.count ?? 0;
+  const entry = buildLeaderboardEntry({
     username,
     score,
     kills,
@@ -110,4 +113,7 @@ export function buildSessionSubmission({
     summarySig,
     eventDigest,
   });
+  if (traceDigest) entry.traceDigest = traceDigest;
+  if (traceLength > 0) entry.traceLength = traceLength;
+  return entry;
 }

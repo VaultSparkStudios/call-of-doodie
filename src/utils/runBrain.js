@@ -63,3 +63,37 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
     precisionStreak,
   };
 }
+
+/**
+ * Returns a one-line difficulty briefing based on run history at that difficulty.
+ * Example: "Avg wave 14 · 42% reach wave 20 (12 runs)"
+ */
+export function getDifficultyBriefing(difficulty, runHistory = []) {
+  const filtered = runHistory.filter(r => r.difficulty === difficulty);
+  if (filtered.length < 2) return null;
+  const avgWave = Math.round(average(filtered.map(r => r.wave)) * 10) / 10;
+  const highWaveCount = filtered.filter(r => (r.wave || 0) >= 20).length;
+  const survivalPct = Math.round((highWaveCount / filtered.length) * 100);
+  return `Avg wave ${avgWave} · ${survivalPct}% reach wave 20 (${filtered.length} runs)`;
+}
+
+/**
+ * Aggregates killedByType across recent runs and returns the most frequent killer
+ * if it appears 3+ times, else null.
+ */
+export function mostFrequentKiller(runHistory = []) {
+  const counts = {};
+  const names = {};
+  for (const run of runHistory.slice(0, 10)) {
+    if (!run.killedByType) continue;
+    const t = String(run.killedByType);
+    counts[t] = (counts[t] || 0) + 1;
+    if (!names[t] && run.killedByName) names[t] = run.killedByName;
+  }
+  let best = null, bestCount = 0;
+  for (const [type, count] of Object.entries(counts)) {
+    if (count > bestCount) { best = type; bestCount = count; }
+  }
+  if (!best || bestCount < 3) return null;
+  return { typeIndex: Number(best), name: names[best] || `Enemy #${best}`, count: bestCount };
+}

@@ -4,7 +4,7 @@ import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, get
 import {
   loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress,
   getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, requestStudioEventSync, saveStudioGameEvent,
-  loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion,
+  loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion, getMissionStreak,
 } from "../storage.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
@@ -12,6 +12,7 @@ import { getAnalyticsStatus, track } from "../utils/analytics.js";
 import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
+import { getDifficultyBriefing } from "../utils/runBrain.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -101,6 +102,7 @@ export default function HomeV2(props) {
   const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [cmdCenterExpanded, setCmdCenterExpanded] = useState(false);
   const [dailyChampion, setDailyChampion] = useState(null);
+  const [missionStreak, setMissionStreak] = useState(0);
   const [replayInput, setReplayInput] = useState("");
   const [replayCopied, setReplayCopied] = useState(false);
 
@@ -115,6 +117,7 @@ export default function HomeV2(props) {
     setStudioEvents(loadStudioGameEvents());
     // Auto-expand Command Center for returning players; first-timers see DEPLOY only
     if ((loaded?.totalRuns || 0) > 0) setCmdCenterExpanded(true);
+    setMissionStreak(getMissionStreak().streak || 0);
     track("home_v2_view");
     const params = new URLSearchParams(window.location.search);
     const urlReplay = params.get("replay");
@@ -455,6 +458,7 @@ export default function HomeV2(props) {
                 </button>
               ))}
             </div>
+            {(() => { const brief = getDifficultyBriefing(difficulty, runHistory); return brief ? <div style={{ fontSize: 10, color: "#999", marginTop: 5, textAlign: "center", letterSpacing: 0.5 }}>{brief}</div> : null; })()}
             <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>SEED</label>
               <input
@@ -550,13 +554,20 @@ export default function HomeV2(props) {
 
         {/* Command Center — full panel access */}
         <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <button
-            onClick={() => setCmdCenterExpanded(v => !v)}
-            style={{ width: "100%", background: "none", border: "none", cursor: "pointer", fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, textAlign: "center", marginBottom: cmdCenterExpanded ? 8 : 0, fontFamily: "inherit", padding: 0 }}
-            aria-expanded={cmdCenterExpanded}
-          >
-            ⚙ COMMAND CENTER {cmdCenterExpanded ? "▴" : "▾"}
-          </button>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: cmdCenterExpanded ? 8 : 0 }}>
+            <button
+              onClick={() => setCmdCenterExpanded(v => !v)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, fontFamily: "inherit", padding: 0 }}
+              aria-expanded={cmdCenterExpanded}
+            >
+              ⚙ COMMAND CENTER {cmdCenterExpanded ? "▴" : "▾"}
+            </button>
+            {missionStreak >= 2 && (
+              <span style={{ fontSize: 10, color: "#FF8C00", fontWeight: 900, letterSpacing: 1 }}>
+                🔥 {missionStreak}-DAY STREAK
+              </span>
+            )}
+          </div>
           {cmdCenterExpanded && <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
             {[
               ["📊 STATS",       CMD_ACTIONS[0]],

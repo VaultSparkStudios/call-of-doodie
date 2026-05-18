@@ -26,7 +26,7 @@ export default function DeathScreen({
   gamepadConnected, onInstallApp,
   weaponKills, bestPrecisionStreak = 0, starterLoadout = "standard", scoreAttackMode, playerSkin,
   dailyChallengeMode, bossRushMode, cursedRunMode, vsScore, vsName,
-  ghostKey,
+  ghostKey, cosmeticUnlocks = [], objectivesSummary = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -523,6 +523,11 @@ export default function DeathScreen({
               <span style={{ color: "#FF88FF", fontWeight: 700 }}>Precision:</span> {runCoach.precisionTip}
             </div>
           )}
+          {runCoach.crossRunTip && (
+            <div style={{ fontSize: 11, color: "#FFE0A0", lineHeight: 1.45, marginTop: 4 }}>
+              <span style={{ color: "#FF9900", fontWeight: 700 }}>Pattern:</span> {runCoach.crossRunTip}
+            </div>
+          )}
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
             <span style={{ color: "#9CB8FF", fontWeight: 700 }}>Run Brain:</span> {runCoach.brain.nextExperiment}
             <div style={{ color: "#88A", marginTop: 2 }}>Follow-through: {runCoach.brain.followThrough}</div>
@@ -634,6 +639,19 @@ export default function DeathScreen({
           );
         })()}
 
+        {/* Objective summary */}
+        {objectivesSummary && (objectivesSummary.completed.length > 0 || objectivesSummary.failed.length > 0) && (
+          <div style={{ ...card, marginBottom: 10, padding: "10px 12px" }}>
+            <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 2, fontWeight: 900, marginBottom: 5 }}>OBJECTIVES</div>
+            {objectivesSummary.completed.map((o, i) => (
+              <div key={`oc-${i}`} style={{ fontSize: 11, color: "#00FF88", marginBottom: 2 }}>✓ {o.label}</div>
+            ))}
+            {objectivesSummary.failed.map((o, i) => (
+              <div key={`of-${i}`} style={{ fontSize: 11, color: "#FF6666", marginBottom: 2 }}>✗ {o.label} — not completed</div>
+            ))}
+          </div>
+        )}
+
         {/* Run summary: perks taken + daily missions */}
         {((activePerks && activePerks.length > 0) || (missionsSummary && missionsSummary.length > 0)) && (
           <div style={{ ...card, marginBottom: 10, padding: "10px 12px" }}>
@@ -666,6 +684,18 @@ export default function DeathScreen({
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Doodie Pass cosmetic unlocks */}
+        {cosmeticUnlocks && cosmeticUnlocks.length > 0 && (
+          <div style={{ ...card, marginBottom: 10, padding: "10px 12px", border: "1px solid rgba(255,180,0,0.35)", background: "rgba(255,180,0,0.07)" }}>
+            <div style={{ fontSize: 10, color: "#FFD700", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>🎖 DOODIE PASS UNLOCKED</div>
+            {cosmeticUnlocks.map((c) => (
+              <div key={c.id} style={{ fontSize: 12, color: "#FFE082", marginBottom: 3 }}>
+                {c.emoji} <strong>{c.name}</strong> — {c.desc}
+              </div>
+            ))}
           </div>
         )}
 

@@ -14,6 +14,7 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:9] **DONE S67** 10-item depth sprint — rhythm-kill-bonus (beat-sync 💩 skill layer), doodie-pass-play-widget (cosmeticTrack reconcile on death → DeathScreen gold card), persistent-ghost-leaderboard (`loadTopGhosts` + `gs.topGhosts`), daily-mission-streak (streak counter + 🔥 chip HomeV2), objective-mastery-deathscreen (completed/failed arrays → DeathScreen OBJECTIVES card), predictive-difficulty-briefing (`getDifficultyBriefing` below difficulty picker), cross-run-coaching-memory (`mostFrequentKiller` + `crossRunTip` in RUN COACH), replay-trace-submission-integration (`commandTraceRef` + `encodeReplayCommandTrace` in submitScore), weapon-unlock-telemetry (unlock detection loop + `track("weapon_unlock")`), app-extraction-slice-1 (`gameStep.js` with `computeMovementVector` + `applyPlayerMovement` + 11 tests). Tests: 347/347. Lint: 0 errors.
 - [x] [SIL:2] **DONE S66** Replay command trace v1 — `src/utils/replayCommandTrace.js` now creates bounded replay-input evidence with deterministic normalization, compact encode/decode, digest validation, and summary output; 4 focused tests cover ordering, round-trip, tamper detection, and caps.
 - [x] [SIL:1] **DONE S66** Launch readiness JSON — `scripts/launch-readiness.mjs --json` now returns machine-readable checks, owner-only gates, and readiness summary while preserving the existing text report.
 - [x] [SIL:1] **DONE S66** Closeout autopilot help hardening — `scripts/closeout-autopilot.mjs --help` / `-h` now prints usage for dry-run/skip-push/yes/message and exits before doctor/git/prompt work.
@@ -144,7 +145,7 @@ Public-safe launch roadmap summary.
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready
-- [ ] [SIL:3] [S62 deferred] App.jsx extraction slice 1 — game loop `step()` modules; deeply coupled to React refs (setHealth, perkModsRef, dashRef) and globals (W, H); needs a dedicated architectural session with full regression test coverage before extraction is safe
+- [x] [SIL:3] **DONE S67** App.jsx extraction slice 1 — `gameStep.js` exports `computeMovementVector` + `applyPlayerMovement`; 11 tests; 347/347 passing.
 - [ ] [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor with no user-facing impact; HomeV2 is the default (v1 opt-in only), so deferral has minimal player impact
 - [ ] [SIL:2] [S62 deferred] Coordinated enemy formations — wave 20+ group-spawn patterns (flanks, pincer, escort); game design work (~4h) beyond current scope
 - [ ] [SIL:1] [S62 deferred] Mid-run challenge contracts — optional per-wave objectives for bonus coins beyond Dynamic Objective System; needs design pass to avoid overlap

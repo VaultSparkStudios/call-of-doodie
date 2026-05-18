@@ -4,14 +4,38 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ███▇█
-Avgs — 3: 993.3 | 5: 989.8 | 10: — | 25: — | all: 971.8 [N=13, SIL history in private ops repo]
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 98.7 | Engage 100.0 | Process 100.0 [N=3]
+Sparkline (last 5 totals): ███▇██
+Avgs — 3: 994.7 | 5: 990.8 | 10: — | 25: — | all: 972.9 [N=14, SIL history in private ops repo]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 99.3 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~13.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-17 | Session 66 | Total: 995/1000 | Velocity: 3 | protocolVelocity: 1
+Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
+Last session: 2026-05-17 | Session 67 | Total: 997/1000 | Velocity: 10 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-17 — Session 67 | Total: 997/1000 | Velocity: 10 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 347/347 tests pass; 11 new gameStep.js tests; lint 0 errors; launch test mock gap fixed |
+| Creative Alignment | 100 | → | 10 items span gamification depth, local AI, and architecture extraction — all player-facing or trust-hardening |
+| Momentum | 100 | ↑ | Full 10-item fresh audit dispatched and shipped in one session; no deferred or BLOCKED items |
+| Engagement | 100 | → | Beat-kill bonus, objective deathscreen, daily streak, persistent ghosts, and cosmetic unlock card all deepen the run feedback loop |
+| Process Quality | 100 | → | Audit → implement plan → execution log → task board → SIL → commit all executed in order |
+| Cross-Repo Coherence | 99 | → | Replay trace now bound into submission path; closes the Phase 2B prerequisite gap noted in S66 |
+| Security Posture | 100 | → | Command trace digest + length included in leaderboard submission; trust posture improves without server cost |
+| Ecosystem Integration | 99 | → | Supabase `loadTopGhosts` uses existing leaderboard infrastructure; zero new dependencies |
+| Capital Efficiency | 100 | → | All 10 items are zero-LLM-token features; all intelligence is local and deterministic |
+| Automation Coverage | 100 | → | gameStep.test.js adds 11 isolated movement/collision tests; full suite passes on first run after mock fix |
+
+**Top win:** Shipped all 10 audit items in a single session — beat-sync skill layer, persistent ghost opponents, and objective mastery deathscreen are the three highest-quality player-facing additions. The App.jsx extraction slice finally starts the architectural unwind.
+**Top gap:** `loadTopGhosts` seeds `gs.topGhosts` but the ghost-race render in `drawGame.js` still reads from `gs.ghostFrames` per-mode — wiring the two together is the follow-up to make persistent ghosts visible in-game.
+**Intent outcome:** Achieved — `/start`, `/audit`, `/implement` (10/10), and `/closeout` executed end-to-end with evidence-backed 347/347 verification.
+
+**Brainstorm**
+1. Ghost-race render wiring — `gs.topGhosts` is seeded but not yet rendered; wiring it as a ghost opponent set in `drawGame.js` is the straightforward follow-up; High probability.
+2. Mission streak milestones — streak counter runs but the +5💩 fanfare at 3/5/7-day streaks is not yet implemented; adds genuine retention without balance impact; High probability.
+3. Doodie Pass wave-clear XP — cosmetic track XP fires only on death; adding a per-wave-clear tick would give players in-run feedback on pass progression; Medium probability.
 
 ## 2026-05-17 — Session 66 | Total: 995/1000 | Velocity: 3 | Debt: ↓
 

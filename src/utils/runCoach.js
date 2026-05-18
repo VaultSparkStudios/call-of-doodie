@@ -14,7 +14,7 @@
 
 import { getRecommendedMetaUpgrade } from "./metaClarity.js";
 import { WEAPONS, ENEMY_TYPES } from "../constants.js";
-import { buildRunBrain } from "./runBrain.js";
+import { buildRunBrain, mostFrequentKiller } from "./runBrain.js";
 
 // Enemy-specific evasion tips keyed by ENEMY_TYPES index
 const ENEMY_EVASION_TIPS = {
@@ -139,7 +139,7 @@ function buildPrecisionTip(runSummary) {
 
 /**
  * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[] }} ctx
- * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, brain: object }}
+ * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, brain: object }}
  */
 export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [] } = {}) {
   const brain = buildRunBrain({
@@ -149,12 +149,30 @@ export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHist
     latestAdvice: runSummary?.drill || null,
     latestRun: runSummary,
   });
+  const frequent = mostFrequentKiller(runHistory);
+  let crossRunTip = null;
+  if (frequent) {
+    const enemy = ENEMY_TYPES.find(e => e.typeIndex === frequent.typeIndex);
+    const enemyName = enemy?.name || frequent.name;
+    const evasionHints = {
+      17: "dash through their charge pattern",
+      9: "keep moving — they mirror your position",
+      4: "stay at mid-range to avoid melee",
+      6: "watch the projectile arc and strafe",
+      10: "prioritize from cover",
+      16: "destroy summoned minions first",
+      20: "disable the algorithm surge first",
+    };
+    const hint = evasionHints[frequent.typeIndex] || "adjust your positioning";
+    crossRunTip = `⚠ ${enemyName} has killed you ${frequent.count}× this week — ${hint}.`;
+  }
   return {
     killedBy:  buildKilledBy(career, runSummary),
     tryNext:   buildTryNext(meta, career),
     working:   buildWorking(runSummary),
     weaponTip: buildWeaponTip(runSummary),
     precisionTip: buildPrecisionTip(runSummary),
+    crossRunTip,
     brain,
   };
 }

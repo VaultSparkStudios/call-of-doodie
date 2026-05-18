@@ -88,6 +88,12 @@ vi.mock("./storage.js", () => ({
   saveRunToHistory: vi.fn(),
   loadMetaTree: vi.fn(() => new Set()),
   issueRunToken: issueRunTokenMock,
+  getMissionStreak: vi.fn(() => ({ streak: 0, lastCompleted: null })),
+  advanceMissionStreak: vi.fn(),
+  loadTopGhosts: vi.fn(() => Promise.resolve([])),
+  saveStudioGameEvent: vi.fn(),
+  recordDeathByEnemy: vi.fn(),
+  loadRivalryHistory: vi.fn(() => []),
 }));
 
 vi.mock("./components/UsernameScreen.jsx", () => {

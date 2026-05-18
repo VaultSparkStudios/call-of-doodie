@@ -181,6 +181,40 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
   } catch { return []; }
 }
 
+const TOP_GHOSTS_KEY = "cod-top-ghosts-v1";
+
+/**
+ * Loads top-3 leaderboard entries for a given mode/difficulty as persistent ghost opponents.
+ * Fetches from Supabase if available, caches to localStorage, falls back to cache on error.
+ * Returns [{name, score, wave, mode, difficulty}].
+ */
+export async function loadTopGhosts(mode = "standard", difficulty = "normal") {
+  const cacheKey = `${TOP_GHOSTS_KEY}-${mode}-${difficulty}`;
+  if (supabase) {
+    try {
+      const modeFilter = mode === "standard" ? null : mode;
+      let q = supabase
+        .from("leaderboard")
+        .select("name,score,wave,mode,difficulty,ts")
+        .eq("difficulty", difficulty)
+        .order("score", { ascending: false })
+        .limit(3);
+      if (modeFilter) q = q.eq("mode", modeFilter);
+      else q = q.or("mode.is.null,mode.eq.standard");
+      const { data, error } = await q;
+      if (error) throw error;
+      const ghosts = (data || []).map(r => ({ name: r.name || "Ghost", score: r.score || 0, wave: r.wave || 0, mode: r.mode || "standard", difficulty: r.difficulty || "normal" }));
+      try { localStorage.setItem(cacheKey, JSON.stringify(ghosts)); } catch {}
+      return ghosts;
+    } catch {}
+  }
+  // Fallback to cache
+  try {
+    const raw = localStorage.getItem(cacheKey);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
 // Note: requires Supabase migration: ALTER TABLE leaderboard ADD COLUMN IF NOT EXISTS prestige integer DEFAULT 0;
 // Online submit path expects the Supabase Edge Function `submit-score` to be deployed.
 export async function saveToLeaderboard(entry) {
@@ -460,6 +494,33 @@ export function loadMissionProgress() {
 }
 export function saveMissionProgress(completed) {
   try { localStorage.setItem("cod-missions-" + getTodayKey(), JSON.stringify(completed)); } catch {}
+}
+
+// ===== DAILY MISSION STREAK =====
+const MISSION_STREAK_KEY = "cod-mission-streak-v1";
+
+export function getMissionStreak() {
+  try {
+    const raw = localStorage.getItem(MISSION_STREAK_KEY);
+    return raw ? JSON.parse(raw) : { streak: 0, lastCompleted: null };
+  } catch { return { streak: 0, lastCompleted: null }; }
+}
+
+export function advanceMissionStreak() {
+  try {
+    const today = getTodayKey();
+    const state = getMissionStreak();
+    if (state.lastCompleted === today) return state; // already advanced today
+    const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10).replace(/-/g, "");
+    const newStreak = state.lastCompleted === yesterday ? (state.streak || 0) + 1 : 1;
+    const next = { streak: newStreak, lastCompleted: today };
+    localStorage.setItem(MISSION_STREAK_KEY, JSON.stringify(next));
+    return next;
+  } catch { return { streak: 0, lastCompleted: null }; }
+}
+
+export function resetMissionStreak() {
+  try { localStorage.setItem(MISSION_STREAK_KEY, JSON.stringify({ streak: 0, lastCompleted: null })); } catch {}
 }
 
 // ===== META PROGRESSION =====
