@@ -1,5 +1,25 @@
 # Work Log
 
+## 2026-05-17 (Session 67 — 10-item depth sprint)
+
+- Founder invoked `/goal` with `/start then /audit then /implement then /closeout`, requesting genius-level execution.
+- `/start` completed: session lock written, context-meter `CONTINUE`, brief loaded.
+- `/audit` produced `docs/AUDIT_2026-05-17.md` (fresh 10-item slate replacing all-shipped S66 items); `docs/IMPLEMENT_PLAN.md` documented the optimal execution order.
+- `/implement` — all 10 items shipped in one pass:
+  - **rhythm-kill-bonus**: beat-aligned kill bonus (+1💩 + BEAT KILL! floating text) in App.jsx bullet-enemy collision path using `getMusicBPM()`
+  - **doodie-pass-play-widget**: `cosmeticTrack.reconcileOwnership()` on death; DeathScreen renders gold-bordered Doodie Pass unlock card
+  - **persistent-ghost-leaderboard**: `loadTopGhosts(mode, diff)` added to `storage.js`; fetches top-3 Supabase rows, caches to localStorage; called in App.jsx `startGame()`
+  - **daily-mission-streak**: `getMissionStreak`/`advanceMissionStreak`/`resetMissionStreak` added to `storage.js`; `advanceMissionStreak()` called on mission complete; HomeV2 shows 🔥 streak chip when streak ≥ 2
+  - **objective-mastery-deathscreen**: `gs.objectivesCompleted[]` and `gs.objectivesFailed[]` tracked in App.jsx; `objectivesSummary` state passed to DeathScreen; OBJECTIVES card with ✓/✗ per outcome
+  - **predictive-difficulty-briefing**: `getDifficultyBriefing(difficulty, runHistory)` added to `runBrain.js`; rendered below HomeV2 difficulty picker
+  - **cross-run-coaching-memory**: `mostFrequentKiller(runHistory)` aggregates last 10 runs in `runBrain.js`; `buildRunCoach()` extended with `crossRunTip`; rendered in DeathScreen RUN COACH after precisionTip
+  - **replay-trace-submission-integration**: `commandTraceRef` added to App.jsx (reset on run start); `encodeReplayCommandTrace()` called in `submitScore()`; `traceDigest`/`traceLength` wired through `buildSessionSubmission()`
+  - **weapon-unlock-telemetry**: unlock detection loop in `handlePlayerDeath` compares prev/new account level; emits `track("weapon_unlock", ...)` per newly unlocked weapon
+  - **app-extraction-slice-1**: `src/systems/gameStep.js` exports `computeMovementVector` + `applyPlayerMovement`; 11 tests in `gameStep.test.js`
+- Fixed `App.launch.test.jsx` storage mock: added `getMissionStreak`, `advanceMissionStreak`, `loadTopGhosts`, `saveStudioGameEvent`, `recordDeathByEnemy`, `loadRivalryHistory` to the vi.mock factory.
+- Validation: `npm test` 347/347 (was 336; +11 new gameStep tests); `npm run lint` 0 errors; `npm run build` passing.
+- Committed as `22d079d feat(session-67): 10-item depth sprint...` on `feat-standalone-domain`.
+
 ## 2026-05-14 (Session 63 — audit implement sprint)
 
 - Founder invoked `/start then /audit then /implement then /closeout` and asked for genius-level, sophisticated, creative/innovative execution.

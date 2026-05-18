@@ -1,5 +1,45 @@
 # Latest Handoff
 
+Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible`.
+
+## Where We Left Off (Session 67 — 10-item depth sprint, all shipped)
+
+**Intent outcome:** Achieved end-to-end. All 10 S67 audit items implemented in one pass. 347/347 tests. Lint clean. Build passing. Committed to `feat-standalone-domain`.
+
+### What shipped
+- **rhythm-kill-bonus** — Beat-aligned kills (+1💩 + "🎵 BEAT KILL!" floating text + 4 magenta particles on frame ±4 of beat) turns the audio engine into an active skill layer
+- **doodie-pass-play-widget** — `cosmeticTrack.reconcileOwnership()` called on death; gold-bordered unlock card on DeathScreen when tier changes
+- **persistent-ghost-leaderboard** — `loadTopGhosts(mode, diff)` in storage.js fetches top-3 from Supabase at run start; seeded into `gs.topGhosts`
+- **daily-mission-streak** — `getMissionStreak`/`advanceMissionStreak`/`resetMissionStreak` in storage.js; 🔥 streak chip in HomeV2 Command Center header (streak ≥ 2)
+- **objective-mastery-deathscreen** — `gs.objectivesCompleted[]`/`gs.objectivesFailed[]` tracked; OBJECTIVES card on DeathScreen with ✓/✗ per outcome
+- **predictive-difficulty-briefing** — `getDifficultyBriefing(difficulty, runHistory)` in runBrain.js; subtitle below HomeV2 difficulty picker
+- **cross-run-coaching-memory** — `mostFrequentKiller(runHistory)` aggregates last 10 runs; `crossRunTip` in RUN COACH card on DeathScreen
+- **replay-trace-submission-integration** — `commandTraceRef` in App.jsx; `encodeReplayCommandTrace()` in `submitScore()`; `traceDigest`/`traceLength` in `buildSessionSubmission()`
+- **weapon-unlock-telemetry** — unlock detection loop on death emits `track("weapon_unlock", {weaponIdx, prevLevel, newLevel, wave})` per newly unlocked weapon
+- **app-extraction-slice-1** — `src/systems/gameStep.js` with `computeMovementVector` + `applyPlayerMovement`; 11 tests
+
+### Validation
+- `npm test` → **347/347** passing across 43 test files (was 336 before S67)
+- `npm run lint` → clean (0 errors)
+- `npm run build` → passing
+
+### Known follow-up gaps (not blocking)
+- `gs.topGhosts` is seeded in App.jsx but not yet rendered as ghost opponents in `drawGame.js` — wiring them to the ghost-race draw path is the natural follow-up
+- Mission streak milestone rewards (+5💩 fanfare at 3/5/7-day streaks) are tracked but the reward trigger is not yet implemented
+- Doodie Pass wave-clear XP fires only on death; adding a per-wave-clear tick would give in-run pass-progression feedback
+
+### Remaining work
+- [ ] Merge `feat-standalone-domain` → `main` and confirm Cloudflare Pages deploys cleanly
+- [ ] Rotate/narrow the broad Cloudflare studio-access token
+- [ ] Add PostHog/Sentry GitHub Action secrets + capture HomeV2 funnel/Lighthouse evidence before legacy fallback retirement
+
+## Next Recommended Slice (Session 68)
+- [ ] Ghost-race render wiring — `gs.topGhosts` → `drawGame.js` so persistent ghosts are visible in-run
+- [ ] Mission streak milestone rewards (+5💩 burst at 3/5/7-day)
+- [ ] Merge to `main` if CI is green
+
+---
+
 Session Intent: Continue the active `/start then /audit then /implement then /closeout` goal and verify the project is actually complete before marking it achieved.
 
 ## Where We Left Off (Session 66 — command-trace trust + ops hardening)

@@ -5,6 +5,21 @@ Overall status: green
 Last reviewed: 2026-05-17
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-17 — Session 67 changes
+
+- `src/App.jsx` — beat-kill bonus in bullet-enemy collision path; `commandTraceRef` for replay trace binding; `getMissionStreak`/`advanceMissionStreak` called on death; `reconcileOwnership` from cosmeticTrack; `loadTopGhosts()` called in `startGame()`; weapon unlock detection loop in `handlePlayerDeath`; `objectivesCompleted`/`objectivesFailed` arrays tracked on objective tick; `cosmeticUnlocks` + `objectivesSummary` states passed to DeathScreen.
+- `src/components/DeathScreen.jsx` — OBJECTIVES card (✓/✗ per outcome before perks card); `crossRunTip` line in RUN COACH; Doodie Pass gold unlock card before ghost visualization; `cosmeticUnlocks`/`objectivesSummary` props accepted.
+- `src/components/HomeV2.jsx` — `getMissionStreak` called in useEffect; 🔥 streak chip in Command Center header; `getDifficultyBriefing()` subtitle below difficulty picker.
+- `src/storage.js` — `getMissionStreak`/`advanceMissionStreak`/`resetMissionStreak` (key `cod-mission-streak-v1`); `loadTopGhosts(mode, difficulty)` (key `cod-top-ghosts-v1`, async with Supabase + localStorage cache).
+- `src/utils/runBrain.js` — `getDifficultyBriefing(difficulty, runHistory)` + `mostFrequentKiller(runHistory)`.
+- `src/utils/runCoach.js` — `buildRunCoach()` now computes `crossRunTip` from `mostFrequentKiller()`; return value includes `crossRunTip`.
+- `src/systems/runSession.js` — `createRunHistoryEntry` now accepts `killedByType`/`killedByName` params.
+- `src/utils/runSubmission.js` — `buildSessionSubmission()` accepts `commandTrace`, extracts `traceDigest`/`traceLength`.
+- `src/systems/gameStep.js` — NEW: `computeMovementVector` + `applyPlayerMovement`; pure functions extracted from App.jsx movement logic.
+- `src/systems/gameStep.test.js` — NEW: 11 tests covering zero input, diagonal normalization, cardinal movement, joystick, boundary clamping, speed multipliers, and obstacle push-out.
+- `src/App.launch.test.jsx` — storage mock extended with `getMissionStreak`, `advanceMissionStreak`, `loadTopGhosts`, `saveStudioGameEvent`, `recordDeathByEnemy`, `loadRivalryHistory`.
+- Validation truth — `npm test` 347/347; lint clean; build passing. Commit `22d079d` on `feat-standalone-domain`.
+
 ## 2026-05-17 — Session 66 changes
 
 - `src/utils/replayCommandTrace.js` — new pure utility for compact replay-input evidence. It normalizes command events into 6-frame buckets, caps traces at 240 events by default, serializes to a compact body, validates an FNV-style digest, decodes trace bodies, and summarizes action counts/frame span.
