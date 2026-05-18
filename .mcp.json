@@ -1,0 +1,14 @@
+{
+  "_comment": "IGNIS MCP server template. Drop this into your project as .mcp.json. Replace C:/Users/p4cka/documents/development/vaultspark-ignis with the absolute path to your vaultspark-ignis checkout, or use the bundled `npx ignis-mcp` after `npm i -g @vaultspark/ignis-core`.",
+  "mcpServers": {
+    "ignis": {
+      "command": "node",
+      "args": [
+        "C:/Users/p4cka/documents/development/vaultspark-ignis/dist/mcp-entrypoint.js"
+      ],
+      "env": {
+        "IGNIS_PROJECT_ROOT": "."
+      }
+    }
+  }
+}
