@@ -90,6 +90,37 @@ Project must score ≥8/10 before flipping to SPARKED. `app-release-gate` enforc
 
 ---
 
+## CANON-019 — Founder-Action Discipline (CDR-S126.1, MANDATORY)
+
+**Problem this canon fixes:** agents repeatedly label tasks as "Founder Action Required" or "Human Blocker" when the work is actually agent-attemptable. Pattern observed across multiple repos and sessions. **Default behavior MUST flip: try first, label blocked only after evidence of attempt.**
+
+**Hard gate — before any task is labeled `Human Action Required`, `[BLOCKER]`, `FOUNDER ACTION`, or `human-blocked`, you MUST have run AND logged:**
+
+```bash
+# 1. Secrets discovery (always)
+node ../vaultspark-studio-ops/scripts/check-secrets.mjs --for <capability>
+
+# 2. Elevated/admin probe (always)
+node ../vaultspark-studio-ops/scripts/ops.mjs blocker-preflight
+
+# 3. If credential is READY → execute the action yourself using the secrets gateway
+# 4. If admin probe reveals agent-attemptable path → execute it
+```
+
+**Reserve `Human Action Required` ONLY for:** hardware key enrollment · provider dashboard signup · billing/payment confirmation · destructive ops explicitly gated by CANON (force-push to main, npm publish, prod DB drop).
+
+**Everything else is agent work.** This includes: applying migrations · running deploys (`wrangler deploy`, `vercel deploy`, `gcloud run deploy`) · setting secrets in providers (`wrangler secret put`, `gh secret set`, `gcloud secrets versions add`) · creating workflows · scaffolding files · running `--apply` flags on scripted migrations · enrolling in API allowlists via API calls.
+
+**Closeout enforcement (CANON-019):** every `/closeout` runs:
+```bash
+node ../vaultspark-studio-ops/scripts/enforce-blocker-discipline.mjs
+```
+Verdict `discipline-gap` → warns founder + lists violating items. With `--strict` flag → blocks closeout. Log persisted to `portfolio/BLOCKER_DISCIPLINE_LOG.ndjson`.
+
+**The phantom-blocker pattern is forbidden.** If you find yourself typing `FOUNDER ACTION` or `human-blocked` without two commits showing `check-secrets` + `blocker-preflight` evidence in the last hour, **STOP and try the action yourself.**
+
+---
+
 ## Elevated-access protocol (S113 — apply migrations yourself)
 
 When a sprint deliverable lists "Founder action needed" steps that are **scripted** (`wrangler deploy`, `wrangler secret put`, `gh workflow run`, `node scripts/migrate-*.mjs --apply`, `hcloud …`, `gcloud …`, etc.), the agent **must execute them itself** using the relevant gateway capability — not leave them for the founder.
@@ -145,6 +176,55 @@ Before scaffolding any public-facing website page (home, auth, dashboard, market
 **Enforcements (non-negotiable for public projects):** branding line per type (CANON-006), footer copyright `© 2026 VaultSpark Studios LLC. All rights reserved.`, required legal pages `/privacy` + `/terms`, Vault SSO call on signup-success when `vault.sso` capability is provisioned.
 
 Refresh manually: `node vaultspark-studio-ops/scripts/scrape-studio-websites.mjs`.
+
+---
+
+## Max Plan First (CANON-015 · CDR-S120.1)
+
+Default to **Claude Max Plan** for every new Claude-using feature. Direct Anthropic **API** calls require:
+1. **Feasibility check** — confirm Max Plan can't deliver this (e.g. true rate-limit, automation-only context).
+2. **Cost estimate** — projected monthly $ with usage assumptions.
+3. **Founder approval** logged in `context/DECISIONS.md` with `[API]` tag.
+
+**Enforcement.** Every script making direct Anthropic HTTP calls (`api.anthropic.com`, `@anthropic-ai/sdk`, or model-router bypass) must appear in `portfolio/APPROVED_API_SCRIPTS.json`. Doctor probe `api-allowlist` greps `scripts/` for direct usage and fails on unregistered callers.
+
+**Existing API code is grandfathered** — only new adoption requires approval.
+
+---
+
+## Free-Build Bias (CANON-017 · CDR-S120.1)
+
+Default integration choices live in `docs/INTEGRATION_PREFERENCES.md`. Before adopting any **new** SaaS that isn't the canonical free choice, fill `docs/templates/BUILD_VS_BUY.md` and get founder sign-off. Lock-in score ≥6 requires explicit founder override.
+
+**Doctor probe `build-vs-buy-discipline`** fails when a `[INTEGRATION]` decision in `DECISIONS.md` doesn't link a `BUILD_VS_BUY` record.
+
+---
+
+## Studio Ark — Cross-Repo Transport (CANON-018)
+
+Every Studio repo's `/start` automatically drains the Studio Ark inbox (step 1.8). Cargo addressed to this repo's `slug` (or `*` broadcast) appears in `.cache/ark-inbox.json`; the `╔══ ARK STATUS ══╗` tile in the startup brief surfaces depth + sig health.
+
+**Sending cargo:**
+
+```bash
+# Share a learned pattern with the fleet
+node scripts/ark.mjs ship --type pattern-share --to '*' \
+  --payload '{"pattern":"win-spawn-quirk","context":"node child_process on Windows","solution":"use absolute paths","tags":["windows","node"]}'
+
+# Ask another repo a question
+node scripts/ark.mjs ship --type repo-question --to mindframe \
+  --payload '{"question":"how do you handle X","context":"working on similar feature","replyTo":"my-slug"}'
+
+# Hand off intent + context to another repo's agent
+node scripts/ark.mjs ship --type agent-handoff --to vorn \
+  --payload '{"intent":"finish auth refactor","openFiles":["src/auth.ts"],"recentDecisions":["use vault-sso"]}'
+```
+
+**Rules:**
+- Never write directly to another repo's files. Ship cargo instead (CANON-018).
+- Receipts are auto-emitted on drain — don't ship them manually.
+- Producer allowlist enforced in `portfolio/ark/MANIFEST.json`. Most types are open; `canon-update` + `phantom-blocker-fix` are studio-ops only.
+- Full design: `vaultspark-studio-ops/docs/STUDIO_ARK.md`.
 
 ---
 
