@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-05-21",
+  "project": "call-of-doodie",
+  "projectType": "game",
+  "source": "docs/AUDIT_2026-05-21.md",
+  "topLine": {
+    "totalItems": 4,
+    "combinedPriority": 168.9,
+    "top3": [
+      "flow-field-extraction-contract",
+      "formation-spawn-identity",
+      "deathscreen-contract-closure"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": "Strong: moment-to-moment movement, shooting, dashing, perks, shops, and escalating waves are already reinforced by deterministic flow-field navigation.",
+    "progressionCurve": "Strong with one remaining leap: formation identity deepens late-wave pressure, while the deterministic replay runner remains the next mastery/trust milestone.",
+    "sessionEngagement": "Strong: DeathScreen now closes the weekly-contract loop immediately after a run, when replay motivation is highest.",
+    "retentionHooks": "Strong: rivalry, ghost, contract, daily seed, and leaderboard loops are present; the next lift is proving them through analytics credentials and real traffic.",
+    "soulFidelity": "Good: readable chaos, parody-first identity, and fast retry loops remain intact while the systems become more deterministic."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "flow-field-extraction-contract",
+      "tier": "fire",
+      "axis": "speed / organization / replay foundation",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 49.2,
+      "item": "Enemy navigation is still a large inline App.jsx island even though replay Phase 2B needs deterministic movement primitives.",
+      "recipe": "Move FF_CELL, buildFlowField(), and flow-field sampling into src/systems/flowField.js, wire App.jsx through the helpers, and add tests for obstacle blocking plus fallback steering.",
+      "status": "shipped",
+      "evidence": "src/systems/flowField.js owns buildFlowField() and sampleFlowField(); src/App.jsx imports the helpers; src/systems/flowField.test.js covers path steering, obstacle routing, and fallback-null behavior."
+    },
+    {
+      "rank": 2,
+      "slug": "formation-spawn-identity",
+      "tier": "fire",
+      "axis": "gamification / immersion / feature depth",
+      "effort": "2h",
+      "impact": 8,
+      "innovation": 8,
+      "priority": 48,
+      "item": "The wave director names pressure stages, but individual spawns still arrive as unrelated edge enemies.",
+      "recipe": "Add a deterministic formation planner to waveDirector, tag scouting/pressure/climax spawns as flank/pincer/surge patterns, apply small post-spawn offsets in App.jsx, and cover the planner with unit tests.",
+      "status": "shipped",
+      "evidence": "src/systems/waveDirector.js exports deterministic formation plans plus bounded post-spawn offsets; src/App.jsx applies them to director spawns; src/systems/waveDirector.test.js covers pincer identity and bounds clamping."
+    },
+    {
+      "rank": 3,
+      "slug": "deathscreen-contract-closure",
+      "tier": "high",
+      "axis": "feedback loop / UX / engagement",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 43.1,
+      "item": "Weekly contracts and bounty loops live in Run History, but the post-run screen is where motivation is highest.",
+      "recipe": "Reuse buildWeeklyContract() on DeathScreen, render one compact Next Contract panel under Run Brain, and add a social-retention regression for contract progress copy.",
+      "status": "shipped",
+      "evidence": "src/components/DeathScreen.jsx builds the active weekly contract from run history/rivalries/studio events and renders its progress under Run Brain; src/utils/socialRetention.test.js covers latest progress labels."
+    },
+    {
+      "rank": 4,
+      "slug": "trace-contract-byte-budget",
+      "tier": "high",
+      "axis": "security / automation / token-cost discipline",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 5,
+      "priority": 28.6,
+      "item": "Trace bodies now reach submit-score, but the edge contract caps event count rather than encoded byte size.",
+      "recipe": "Add a trace body byte cap and reason to collectTraceFailures(), mirror the cap in client trace constants if needed, and document the measurement target in the validation log.",
+      "status": "shipped",
+      "evidence": "src/utils/replayCommandTrace.js exports a 10,000-byte trace body budget and rejects oversized traces; supabase/functions/submit-score/index.ts rejects trace bodies over the same encoded budget before storage."
+    }
+  ],
+  "validation": {
+    "targeted": "22/22 focused audit tests passed before closeout.",
+    "lint": "npm run lint passed.",
+    "build": "npm run build passed.",
+    "fullTests": "npm test passed: 357/357 tests across 44 files."
+  }
+}

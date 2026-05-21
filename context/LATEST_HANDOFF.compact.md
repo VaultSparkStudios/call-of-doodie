@@ -18,7 +18,7 @@ Session Intent: Founder invoked `/goal` with `/start then /audit then /implement
 - `npm run lint` -> clean
 - `npm run build` -> passing
 - `npm test` -> **357/357** passing across 44 files
-- S70 audit evidence lives in `docs/AUDIT_2026-05-21.md`, `audits/2026-05-21.json`, and `docs/IMPLEMENT_PLAN.md`
+- S70 audit evidence lives in `docs/AUDIT_2026-05-21.md`, `docs/AUDIT_2026-05-21.json`, `audits/2026-05-21.json`, and `docs/IMPLEMENT_PLAN.md`
 
 ### Next Recommended Slice
 - [ ] Deterministic replay runner — consume stored trace bodies plus extracted movement primitives to produce a first headless drift detector.

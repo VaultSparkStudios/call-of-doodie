@@ -4,7 +4,7 @@
 
 - Founder goal continued: `/start` -> `/audit` -> `/implement` -> `/closeout`, with a short readable impact summary requested after closeout.
 - `/start` evidence: Codex session lock written, mode/secrets/blocker preflight ran, context-meter returned `CONTINUE`, and the startup brief was checked.
-- `/audit` produced `docs/AUDIT_2026-05-21.md` plus `audits/2026-05-21.json`, ranking four bounded items: flow-field extraction, formation spawn identity, DeathScreen contract closure, and trace body byte budgeting.
+- `/audit` produced `docs/AUDIT_2026-05-21.md`, `docs/AUDIT_2026-05-21.json`, and `audits/2026-05-21.json`, ranking four bounded items: flow-field extraction, formation spawn identity, DeathScreen contract closure, and trace body byte budgeting.
 - `/implement` shipped all four items:
   - `src/systems/flowField.js` extracts deterministic flow-field building/sampling from `App.jsx` and adds focused pathing coverage.
   - `src/systems/waveDirector.js` adds deterministic formation planning and bounded spawn offsets, with tests for pincer identity and bounds clamping.
