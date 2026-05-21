@@ -1,5 +1,30 @@
 # Latest Handoff
 
+Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible; provide short readable impact changes summary post-closeout`.
+
+## Where We Left Off (Session 70 — navigation/formation/feedback/trust audit sprint, all shipped)
+
+**Intent outcome:** Achieved. `/start` ran with Codex session lock, context-meter returned `CONTINUE`, `/audit` produced the 2026-05-21 ranked plan, `/implement` shipped all four items, and closeout write-back now reflects the S70 state.
+
+### What shipped
+- **flow-field-extraction-contract** — `src/systems/flowField.js` now owns deterministic flow-field building/sampling, `App.jsx` imports the helpers, and focused tests cover path steering, obstacle routing, and fallback-null behavior.
+- **formation-spawn-identity** — `waveDirector` now assigns deterministic formation identity (`flank`, `pincer`, `surge`) and bounded post-spawn offsets, making late-wave pressure read as tactical shapes instead of unrelated edge arrivals.
+- **deathscreen-contract-closure** — `DeathScreen` renders active weekly-contract progress under Run Brain, closing the post-run motivation loop where the player is most likely to queue another run.
+- **trace-contract-byte-budget** — replay trace bodies now enforce a shared 10,000-byte budget in client validation and `submit-score`, limiting request/log budget exposure before edge storage.
+
+### Validation
+- `npm run lint` -> clean
+- `npm run build` -> passing
+- `npm test` -> **357/357** passing across 44 files
+- S70 audit evidence lives in `docs/AUDIT_2026-05-21.md`, `audits/2026-05-21.json`, and `docs/IMPLEMENT_PLAN.md`
+
+### Next Recommended Slice
+- [ ] Deterministic replay runner — consume stored trace bodies plus extracted movement primitives to produce a first headless drift detector.
+- [ ] Formation telemetry tuning — compare stage/formation pressure bands against deaths and abandonments before adding more formation types.
+- [ ] Contract completion event — emit a direct `weekly_contract_progress` event from post-run outcomes instead of only surfacing existing progress.
+
+---
+
 Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible`.
 
 ## Where We Left Off (Session 69 — trace-payload + ghost-pack follow-through, all shipped)

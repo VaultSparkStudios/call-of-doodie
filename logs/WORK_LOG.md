@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-05-21 (Session 70 — navigation/formation/feedback/trust audit sprint)
+
+- Founder goal continued: `/start` -> `/audit` -> `/implement` -> `/closeout`, with a short readable impact summary requested after closeout.
+- `/start` evidence: Codex session lock written, mode/secrets/blocker preflight ran, context-meter returned `CONTINUE`, and the startup brief was checked.
+- `/audit` produced `docs/AUDIT_2026-05-21.md` plus `audits/2026-05-21.json`, ranking four bounded items: flow-field extraction, formation spawn identity, DeathScreen contract closure, and trace body byte budgeting.
+- `/implement` shipped all four items:
+  - `src/systems/flowField.js` extracts deterministic flow-field building/sampling from `App.jsx` and adds focused pathing coverage.
+  - `src/systems/waveDirector.js` adds deterministic formation planning and bounded spawn offsets, with tests for pincer identity and bounds clamping.
+  - `src/components/DeathScreen.jsx` reuses weekly-contract state to show post-run contract progress under Run Brain; social-retention tests cover the copy.
+  - `src/utils/replayCommandTrace.js` and `supabase/functions/submit-score/index.ts` enforce a 10,000-byte trace body budget before client accept or edge storage.
+- Validation re-run during closeout verification: `npm run lint` clean; `npm run build` passing; `npm test` 357/357 across 44 files.
+- Closeout repair: stale S69/S68 write-back surfaces were updated so `PROJECT_STATUS`, `LATEST_HANDOFF`, `TRUTH_AUDIT`, `WORK_LOG`, `SELF_IMPROVEMENT_LOOP`, and the closeout board all point at S70.
+
 ## 2026-05-17 (Session 67 — 10-item depth sprint)
 
 - Founder invoked `/goal` with `/start then /audit then /implement then /closeout`, requesting genius-level execution.

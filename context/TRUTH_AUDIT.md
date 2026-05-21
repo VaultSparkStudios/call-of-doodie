@@ -2,8 +2,17 @@
 # Truth Audit
 
 Overall status: green
-Last reviewed: 2026-05-18
+Last reviewed: 2026-05-21
 Public-safe summary only. Sensitive verification notes are maintained privately.
+
+## 2026-05-21 — Session 70 changes
+
+- `src/systems/flowField.js` — now owns deterministic flow-field construction and sampling that were previously embedded in `App.jsx`; tests prove obstacle routing, steering, and fallback behavior.
+- `src/App.jsx` — imports the flow-field helpers and applies wave-director formation offsets after spawn creation without changing enemy taxonomy or balance intent.
+- `src/systems/waveDirector.js` — exports deterministic formation planning and bounded post-spawn offsets so scouting/pressure/climax stages can read as flank, pincer, or surge patterns.
+- `src/components/DeathScreen.jsx` — renders active weekly-contract progress under Run Brain, turning the debrief into a contract feedback surface instead of leaving that loop only in Run History.
+- `src/utils/replayCommandTrace.js` and `supabase/functions/submit-score/index.ts` — enforce a shared 10,000-byte replay trace body budget before client accept or edge storage/logging work.
+- Validation truth — `npm run lint` passed, `npm run build` passed, and `npm test` passed 357/357 across 44 files during closeout verification.
 
 ## 2026-05-18 — Session 69 changes
 

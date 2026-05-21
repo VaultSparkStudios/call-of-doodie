@@ -1,21 +1,21 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-18 (Session 68 closeout) -->
+<!-- generated-at: 2026-05-21 (Session 70 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S68 ═════════════════════╗
-║  Date: 2026-05-18  ·  SIL: 998/1000  ·  Velocity: 5 improving    ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S70 ═════════════════════╗
+║  Date: 2026-05-21  ·  SIL: 999/1000  ·  Velocity: 4 improving    ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **replay-trace-contract-v2** — `validate-replay` accepts `tr  ║
-║  ✓ **submit-score-trace-firewall** — `submit-score` rejects mal  ║
-║  ✓ **member-session trace summary** — valid trace summaries flo  ║
-║  ✓ **trace regression coverage** — `runSubmission.test.js` now   ║
-║  ✓ **truth repair** — task board, project status, and truth aud  ║
+║  ✓ **flow-field-extraction-contract** — `src/systems/flowField.  ║
+║  ✓ **formation-spawn-identity** — `waveDirector` now assigns de  ║
+║  ✓ **deathscreen-contract-closure** — `DeathScreen` renders act  ║
+║  ✓ **trace-contract-byte-budget** — replay trace bodies now enf  ║
+║  ✓ `npm run lint` -> clean                                       ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -30,24 +30,24 @@
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  · context/CURRENT_STATE.md                                      ║
 ║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 1 files  ·  M:1 A:0 D:0 ?:0                            ║
+║  Changes: 5 files  ·  M:5 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         —                                                ║
-║  IGNIS:         4d ago                                           ║
+║  Tests:         357/357                                          ║
+║  IGNIS:         0d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
