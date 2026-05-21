@@ -5,6 +5,15 @@ Overall status: green
 Last reviewed: 2026-05-21
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-21 — Session 73 changes
+
+- `src/utils/runSubmission.js` — `buildSessionSubmission()` now attaches compact `traceEvidence` from the replay command trace analyzer when a valid trace is present.
+- `src/storage.js` — leaderboard submit results preserve `traceEvidence` across online, rejected, local, and local-fallback paths.
+- `supabase/functions/submit-score/index.ts` — mirrors trace-evidence analysis, stores `traceEvidence` in member `game_sessions.metadata`, and returns it in success responses.
+- `src/systems/runSession.js`, `src/App.jsx`, and `src/components/DeathScreen.jsx` — score-submit analytics and local Studio events now receive trace evidence.
+- `src/utils/studioEventOps.js` and `src/components/MenuPanels.jsx` — Run History trust ops now summarizes rich/weak trace evidence counts and shows per-event evidence gaps.
+- Validation truth — focused trace/submission/session/event tests passed 22/22, `npm run lint` passed, `npm run build` passed, and `npm test` passed 363/363 across 44 files.
+
 ## 2026-05-21 — Session 72 changes
 
 - `src/App.jsx` — command traces now include throttled movement and aim octant samples in addition to discrete run actions. Sampling happens on bucket changes or interval expiry and still flows through the existing bounded recorder.

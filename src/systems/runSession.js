@@ -104,6 +104,7 @@ export function createScoreSubmitStudioEvents({
   globalRank = null,
   result = {},
   eventDigest = null,
+  traceEvidence = null,
 } = {}) {
   const mode = resolveRunModeFromFlags(flags);
   const events = [
@@ -116,6 +117,7 @@ export function createScoreSubmitStudioEvents({
       seed: runSeed,
       submission: result.submission,
       globalRank,
+      traceEvidence: traceEvidence || result.traceEvidence || null,
     }),
   ];
 
@@ -131,6 +133,7 @@ export function createScoreSubmitStudioEvents({
         digestVersion: eventDigest?.v || null,
         reason: result.rejectionReason || "Score submission rejected.",
         reasons: result.rejectionReasons || [],
+        traceEvidence: traceEvidence || result.traceEvidence || null,
       }),
     );
   }

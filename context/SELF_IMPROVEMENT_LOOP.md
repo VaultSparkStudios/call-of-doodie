@@ -763,3 +763,27 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 1. Deterministic replay runner — use the stored trace body plus extracted movement primitives to build a first headless drift detector. High probability.
 2. Formation telemetry tuning — compare stage/formation pressure bands against deaths and abandonments before adding more formation types. Medium probability.
 3. Contract completion event — emit a `weekly_contract_progress` event directly from post-run outcomes instead of only surfacing existing progress. High probability.
+
+## 2026-05-21 — Session 73 | Total: 999/1000 | Velocity: 4 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 363/363 tests passing, lint clean, build passing; focused trace/submission/session/event coverage 22/22 |
+| Creative Alignment | 100 | → | Trust feedback stays inside the Run History ops surface and preserves the game-first parody loop |
+| Momentum | 100 | → | Fresh same-day audit iteration shipped all three bounded trace-evidence items in one pass |
+| Engagement | 100 | → | Run History now gives replay-grade trust evidence a visible payoff instead of hiding it in payloads |
+| Process Quality | 100 | → | Audit sidecar, implement plan, execution log, task board, current state, and tests all map to shipped evidence |
+| Cross-Repo Coherence | 100 | → | Public-safe docs distinguish trace evidence receipts from the still-future deterministic resim runner |
+| Security Posture | 100 | → | `submit-score` now emits/stores traceEvidence receipts so accepted runs are easier to audit later |
+| Ecosystem Integration | 100 | → | Uses existing Studio event, leaderboard, and member-session contracts with no new provider or schema dependency |
+| Capital Efficiency | 100 | → | Zero new dependencies and no external AI/API spend |
+| Automation Coverage | 99 | → | Local gates are green; deployed Edge receipt behavior still needs post-deploy smoke |
+
+**Top win:** Closed the trace-evidence feedback loop: rich/basic/weak replay evidence now survives submission and appears in trust ops.
+**Top gap:** Deterministic replay resim remains future work; this sprint made its evidence receipts visible and durable.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement`, and validation completed with concrete evidence.
+
+**Brainstorm**
+1. Deterministic replay runner — consume stored rich trace bodies to calculate first-pass movement/action drift. High probability.
+2. Edge receipt smoke — deploy `submit-score`, submit rich/weak trace fixtures, and verify returned/stored `traceEvidence`. High probability.
+3. Trust badge experiment — show a small post-submit "rich replay evidence" receipt on DeathScreen only after player testing confirms it reads as confidence, not surveillance. Medium probability.

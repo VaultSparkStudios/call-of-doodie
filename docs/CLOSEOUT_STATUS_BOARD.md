@@ -1,21 +1,21 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-21 (Session 72 closeout) -->
+<!-- generated-at: 2026-05-21 (Session 73 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S72 ═════════════════════╗
-║  Date: 2026-05-21  ·  SIL: 1000/1000  ·  Velocity: 3 improving   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S73 ═════════════════════╗
+║  Date: 2026-05-21  ·  SIL: 999/1000  ·  Velocity: 4 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **replay-trace-evidence-summary** — `analyzeReplayCommandTra  ║
-║  ✓ **replay-input-signal-coverage** — gameplay traces now inclu  ║
-║  ✓ **validate-replay-trace-quality-gate** — the Edge validator   ║
-║  ✓ **smoke fixture upgrade** — `npm run replay:trust-smoke` now  ║
-║  ✓ `npx vitest run src/utils/replayCommandTrace.test.js src/uti  ║
+║  ✓ **trace-evidence-submission-loop** — `buildSessionSubmission  ║
+║  ✓ **edge-trace-quality-receipts** — `submit-score` mirrors tra  ║
+║  ✓ **trust-ops-trace-surface** — Run History trust ops now show  ║
+║  ✓ `npx vitest run src/utils/runSubmission.test.js src/utils/st  ║
+║  ✓ `npm run lint` -> clean                                       ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
+╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -25,28 +25,28 @@
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 24 files  ·  M:21 A:0 D:0 ?:3                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         362/362                                          ║
+║  Tests:         363/363                                          ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

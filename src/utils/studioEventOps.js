@@ -16,6 +16,13 @@ export function summarizeStudioEvents(studioEvents = []) {
   const failedSync = recent.filter((event) => event?.syncStatus === "failed");
   const latestRejection = trust.find((event) => event?.type === "submission_rejected") || null;
   const latestSubmission = trust.find((event) => event?.type === "score_submit_result") || null;
+  const traceEvidenceEvents = trust.filter((event) => event?.payload?.traceEvidence?.level);
+  const traceEvidenceCounts = traceEvidenceEvents.reduce((counts, event) => {
+    const level = event.payload.traceEvidence.level || "none";
+    counts[level] = (counts[level] || 0) + 1;
+    return counts;
+  }, { none: 0, weak: 0, basic: 0, rich: 0 });
+  const latestTraceEvidence = traceEvidenceEvents[0]?.payload?.traceEvidence || null;
   const latestSyncedEvent = synced.find((event) => event?.syncedAt) || null;
   return {
     trust,
@@ -32,6 +39,8 @@ export function summarizeStudioEvents(studioEvents = []) {
     rejectionCount: trust.filter((event) => event?.type === "submission_rejected").length,
     latestRejection,
     latestSubmission,
+    traceEvidenceCounts,
+    latestTraceEvidence,
   };
 }
 
@@ -42,6 +51,12 @@ export function buildTrustRecommendations(summary) {
   }
   if (summary.latestRejection?.payload?.reasons?.[0]) {
     lines.push(`Top flag: ${summary.latestRejection.payload.reasons[0]}`);
+  }
+  if (summary.latestTraceEvidence?.level) {
+    lines.push(`Replay evidence: ${summary.latestTraceEvidence.level}${summary.latestTraceEvidence.count ? ` · ${summary.latestTraceEvidence.count} trace events` : ""}.`);
+  }
+  if (summary.latestTraceEvidence?.level === "weak" && summary.latestTraceEvidence.weaknessReasons?.[0]) {
+    lines.push(`Trace gap: ${summary.latestTraceEvidence.weaknessReasons[0]}`);
   }
   if (summary.rejectionCount === 0) {
     lines.push("No local rejection history recorded yet.");

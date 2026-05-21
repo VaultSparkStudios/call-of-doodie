@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-21",
+  "session": 73,
+  "project": "call-of-doodie",
+  "status": "completed",
+  "source": "docs/AUDIT_2026-05-21_4.md",
+  "shipped": [
+    "trace-evidence-submission-loop",
+    "trust-ops-trace-surface",
+    "edge-trace-quality-receipts"
+  ],
+  "validation": {
+    "targeted": "npx vitest run src/utils/runSubmission.test.js src/utils/studioEventOps.test.js src/systems/runSession.test.js src/utils/replayCommandTrace.test.js -> 22/22 passing",
+    "lint": "npm run lint -> passing",
+    "build": "npm run build -> passing",
+    "fullTests": "npm test -> 363/363 passing across 44 files"
+  },
+  "summary": "Session 73 closed the replay trace evidence feedback loop: submissions now carry compact traceEvidence, submit-score returns and stores trace-quality receipts, and Run History trust ops surfaces rich/weak evidence counts plus weakness reasons."
+}

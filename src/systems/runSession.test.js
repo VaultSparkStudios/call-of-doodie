@@ -75,4 +75,26 @@ describe("runSession", () => {
     expect(result.events).toHaveLength(2);
     expect(result.events[1].payload.reason).toBe("Digest mismatch");
   });
+
+  it("carries replay trace evidence into score submission events", () => {
+    const result = createScoreSubmitStudioEvents({
+      difficulty: "normal",
+      score: 50000,
+      wave: 18,
+      runSeed: 99,
+      result: { submission: "online" },
+      traceEvidence: {
+        level: "basic",
+        count: 5,
+        durationFrames: 84,
+        weaknessReasons: ["low-movement-evidence"],
+      },
+    });
+
+    expect(result.events[0].payload.traceEvidence).toMatchObject({
+      level: "basic",
+      count: 5,
+      weaknessReasons: ["low-movement-evidence"],
+    });
+  });
 });

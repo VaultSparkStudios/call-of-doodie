@@ -18,6 +18,20 @@ function compactObject(obj) {
   );
 }
 
+function compactTraceEvidence(traceEvidence) {
+  if (!traceEvidence || typeof traceEvidence !== "object") return null;
+  const level = String(traceEvidence.level || traceEvidence.evidenceLevel || "none");
+  if (!["none", "weak", "basic", "rich"].includes(level)) return null;
+  return compactObject({
+    level,
+    count: safeNullableNumber(traceEvidence.count),
+    durationFrames: safeNullableNumber(traceEvidence.durationFrames),
+    weaknessReasons: Array.isArray(traceEvidence.weaknessReasons)
+      ? traceEvidence.weaknessReasons.filter(Boolean).map(String).slice(0, 6)
+      : [],
+  });
+}
+
 function completedMissionCount(missions = [], missionProgress = {}) {
   return missions.filter(mission => missionProgress?.[mission.id]).length;
 }
@@ -309,6 +323,7 @@ export function buildStudioGameEvent(type, payload = {}) {
               digestVersion: safeNullableNumber(payload.digestVersion),
               reason: payload.reason || null,
               reasons: Array.isArray(payload.reasons) ? payload.reasons.filter(Boolean).slice(0, 6) : [],
+              traceEvidence: compactTraceEvidence(payload.traceEvidence),
             })
           : type === "score_submit_result"
             ? compactObject({
@@ -319,6 +334,7 @@ export function buildStudioGameEvent(type, payload = {}) {
                 seed: safeNullableNumber(payload.seed),
                 submission: payload.submission || null,
                 globalRank: safeNullableNumber(payload.globalRank),
+                traceEvidence: compactTraceEvidence(payload.traceEvidence),
               })
             : type === "perk_choice"
               ? compactObject({

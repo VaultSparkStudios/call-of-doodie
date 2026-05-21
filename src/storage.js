@@ -233,6 +233,16 @@ export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {
   if (traceDigest) payload.traceDigest = traceDigest;
   if (traceLength > 0) payload.traceLength = traceLength;
   if (traceBody) payload.traceBody = traceBody;
+  if (rawEntry?.traceEvidence && typeof rawEntry.traceEvidence === "object") {
+    payload.traceEvidence = {
+      level: typeof rawEntry.traceEvidence.level === "string" ? rawEntry.traceEvidence.level : "none",
+      count: _clampInt(rawEntry.traceEvidence.count, 0, 240, 0),
+      durationFrames: _clampInt(rawEntry.traceEvidence.durationFrames, 0, 999999, 0),
+      weaknessReasons: Array.isArray(rawEntry.traceEvidence.weaknessReasons)
+        ? rawEntry.traceEvidence.weaknessReasons.filter(Boolean).map(String).slice(0, 6)
+        : [],
+    };
+  }
 
   return payload;
 }
@@ -256,6 +266,7 @@ export async function saveToLeaderboard(entry) {
           submission: "rejected",
           rejectionReason: response.data?.error || "Score submission rejected.",
           rejectionReasons: Array.isArray(response.data?.reasons) ? response.data.reasons : [],
+          traceEvidence: response.data?.traceEvidence || entry?.traceEvidence || null,
         };
         if (response.status >= 400 && response.status < 500) {
           return failure;
@@ -263,7 +274,14 @@ export async function saveToLeaderboard(entry) {
         throw new Error(failure.rejectionReason);
       }
       const board = await loadLeaderboard();
-      return { board, online: true, submission: "online", rejectionReason: null, rejectionReasons: [] };
+      return {
+        board,
+        online: true,
+        submission: "online",
+        rejectionReason: null,
+        rejectionReasons: [],
+        traceEvidence: response.data?.traceEvidence || entry?.traceEvidence || null,
+      };
     } catch (err) {
       console.warn("[leaderboard] Edge submit failed, saving locally:", err?.message ?? String(err));
     }
@@ -277,8 +295,8 @@ export async function saveToLeaderboard(entry) {
       .sort((a, b) => compareLeaderboardEntries(a, b, null))
       .slice(0, 100);
     localStorage.setItem(LB_KEY, JSON.stringify(top));
-    return { board: top, online: false, submission: "local", rejectionReason: null, rejectionReasons: [] };
-  } catch { return { board: [], online: false, submission: "local", rejectionReason: null, rejectionReasons: [] }; }
+    return { board: top, online: false, submission: "local", rejectionReason: null, rejectionReasons: [], traceEvidence: entry?.traceEvidence || null };
+  } catch { return { board: [], online: false, submission: "local", rejectionReason: null, rejectionReasons: [], traceEvidence: entry?.traceEvidence || null }; }
 }
 
 export async function issueRunToken({ mode = null, difficulty = "normal", seed = null, starterLoadout = "standard" } = {}) {

@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 72 closed the replay evidence-quality substrate: command traces now sample movement and aim octants, local trace analysis classifies weak/basic/rich evidence, and validate-replay reserves trace_contract confidence for rich body-backed traces.",
-  "nextMilestone": "Deploy validate-replay, run the 3-case replay trust smoke against production, then build the first deterministic drift detector from rich trace bodies plus extracted movement/combat primitives.",
+  "currentFocus": "Session 73 closed the trace-evidence feedback loop: session submissions now carry compact traceEvidence, submit-score returns/stores trace-quality receipts, and Run History trust ops surfaces rich/weak evidence counts plus weakness reasons.",
+  "nextMilestone": "Deploy submit-score, smoke rich/weak trace fixtures against production, then build the first deterministic drift detector from rich trace bodies plus extracted movement/action primitives.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -30,7 +30,7 @@
   ],
   "blockers": [
     "PostHog/Sentry/Ko-fi URL allowlists require analytics/dashboard credentials.",
-    "validate-replay Phase 2B has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, and trace byte-budgeting, but full deterministic resimulation still needs a replay runner.",
+    "validate-replay Phase 2B has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, trace byte-budgeting, and visible traceEvidence receipts, but full deterministic resimulation still needs a replay runner.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
   "lastUpdated": "2026-05-21",
@@ -41,17 +41,17 @@
   "ignisScore": 47704,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-21",
-  "silSession": 72,
-  "silScore": 1000,
+  "silSession": 73,
+  "silScore": 999,
   "silAvg3": 1000,
-  "silVelocity": 3,
-  "silDebt": "improving",
+  "silVelocity": 4,
+  "silDebt": "decreasing",
   "silLastSession": "2026-05-21",
-  "currentSession": 72,
+  "currentSession": 73,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 362,
-  "testsTotal": 362,
+  "testsPassing": 363,
+  "testsTotal": 363,
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-04-14",
   "silRubricVersion": "3.0",
@@ -67,7 +67,7 @@
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -76,6 +76,6 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-05-21T19:10:35.464Z",
+  "planModeCheckedAt": "2026-05-21T20:36:12.506Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
 }

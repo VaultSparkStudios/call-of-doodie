@@ -194,6 +194,55 @@ function collectTraceFailures(traceDigest: string, traceLength: number, traceBod
   return reasons;
 }
 
+function analyzeTraceEvidence(traceBody: string) {
+  const parts = traceBody ? traceBody.split("~").filter(Boolean) : [];
+  const actions: Record<string, number> = {};
+  let firstFrame: number | null = null;
+  let lastFrame: number | null = null;
+
+  for (const part of parts) {
+    const [frame, action] = part.split(".");
+    const parsedFrame = Number.parseInt(frame || "", 36);
+    if (!Number.isFinite(parsedFrame)) continue;
+    if (firstFrame == null) firstFrame = parsedFrame;
+    lastFrame = parsedFrame;
+    actions[action || ""] = (actions[action || ""] || 0) + 1;
+  }
+
+  const durationFrames = firstFrame != null && lastFrame != null ? Math.max(0, lastFrame - firstFrame) : 0;
+  const movementCount = actions.move || 0;
+  const aimCount = actions.aim || 0;
+  const shootCount = actions.shoot || 0;
+  const interactionCount = ["shoot", "reload", "dash", "grenade", "perk", "route", "shop", "swap", "pause"]
+    .reduce((total, action) => total + (actions[action] || 0), 0);
+  const weaknessReasons: string[] = [];
+
+  if (parts.length === 0) weaknessReasons.push("no-events");
+  if (parts.length > 0 && parts.length < 3) weaknessReasons.push("too-few-events");
+  if (durationFrames > 0 && durationFrames < 60) weaknessReasons.push("short-duration");
+  if (movementCount < 2) weaknessReasons.push("low-movement-evidence");
+  if (aimCount < 1 && shootCount > 0) weaknessReasons.push("missing-aim-evidence");
+  if (interactionCount < 2) weaknessReasons.push("low-interaction-evidence");
+
+  let level: "none" | "weak" | "basic" | "rich" = "none";
+  if (parts.length > 0) level = "weak";
+  if (parts.length >= 3 && interactionCount >= 1 && durationFrames >= 24) level = "basic";
+  if (parts.length >= 6 && durationFrames >= 60 && movementCount >= 2 && aimCount >= 1 && interactionCount >= 2) {
+    level = "rich";
+  }
+
+  return {
+    level,
+    count: parts.length,
+    durationFrames,
+    movementCount,
+    aimCount,
+    shootCount,
+    interactionCount,
+    weaknessReasons,
+  };
+}
+
 function normalizeEntry(entry: Record<string, unknown>) {
   const mode = VALID_MODES.has(String(entry.mode ?? "")) ? String(entry.mode) : null;
   return {
@@ -270,6 +319,7 @@ Deno.serve(async (req) => {
     const traceDigest = typeof rawBody.traceDigest === "string" ? rawBody.traceDigest.trim() : "";
     const traceLength = clampInt(rawBody.traceLength, 0, 240, 0);
     const traceBody = typeof rawBody.traceBody === "string" ? rawBody.traceBody.trim() : "";
+    let traceEvidence: ReturnType<typeof analyzeTraceEvidence> | null = null;
 
     const { data: tokenRow, error: tokenError } = await serviceClient
       .from("run_tokens")
@@ -425,6 +475,9 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    if (traceBody) {
+      traceEvidence = analyzeTraceEvidence(traceBody);
+    }
 
     const { data: claim } = await serviceClient
       .from("callsign_claims")
@@ -488,6 +541,7 @@ Deno.serve(async (req) => {
           traceDigest: traceDigest || null,
           traceLength,
           traceBody: traceBody || null,
+          traceEvidence,
         },
       }]);
 
@@ -499,7 +553,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    return new Response(JSON.stringify({ ok: true, entry: row }), {
+    return new Response(JSON.stringify({ ok: true, entry: row, traceEvidence }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

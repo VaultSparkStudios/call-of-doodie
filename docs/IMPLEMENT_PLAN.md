@@ -1,21 +1,14 @@
-# Implement Plan — 2026-05-21 Session 72
+# Implement Plan — 2026-05-21 Session 73
 
-Source audit: `docs/AUDIT_2026-05-21_3.md`
+Source: `docs/AUDIT_2026-05-21_4.md`
 
 ## Sequenced Order
 
-1. `replay-trace-evidence-summary`
-   - Build the pure trace-analysis vocabulary first so later work can depend on one local definition of weak/rich evidence.
+1. `trace-evidence-submission-loop` — foundation. Attach compact replay trace evidence to session submissions and preserve it in leaderboard submit results.
+2. `edge-trace-quality-receipts` — backend receipt. Mirror trace-quality analysis in `submit-score`, store it in member metadata, and return it in the success response.
+3. `trust-ops-trace-surface` — player/operator surface. Summarize trace evidence in local Studio trust events and Run History trust ops.
 
-2. `replay-input-signal-coverage`
-   - Wire low-rate movement and aim samples into the existing command-trace recorder without expanding the trace cap.
+## Verification Target
 
-3. `validate-replay-trace-quality-gate`
-   - Mirror the evidence-quality threshold at the edge so `trace_contract` confidence means the trace is useful, not merely well-formed.
-
-## Validation Plan
-
-- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js`
-- `npm run lint`
-- `npm run build`
-- `npm test`
+- Focused utility tests for run submission and Studio event summaries.
+- Lint/build/full test if the focused pass is clean.

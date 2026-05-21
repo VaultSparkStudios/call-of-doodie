@@ -406,6 +406,7 @@ export default function DeathScreen({
         digestVersion: eventDigest?.v || null,
         reason: result?.rejectionReason || null,
         reasons: result?.rejectionReasons || [],
+        traceEvidence: result?.traceEvidence || null,
       }));
       requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
     } catch {

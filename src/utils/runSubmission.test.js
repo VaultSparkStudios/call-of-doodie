@@ -59,7 +59,11 @@ describe("runSubmission", () => {
   test("adds replay command trace metadata when a trace summary is present", () => {
     const commandTrace = encodeReplayCommandTrace([
       { frame: 60, action: "move", value: "n" },
+      { frame: 72, action: "aim", value: "ne" },
       { frame: 66, action: "shoot", value: "w2" },
+      { frame: 126, action: "move", value: "e" },
+      { frame: 132, action: "dash", value: "e" },
+      { frame: 150, action: "shoot", value: "w2" },
     ]);
     const entry = buildSessionSubmission({
       username: "TraceDood",
@@ -70,8 +74,14 @@ describe("runSubmission", () => {
     });
 
     expect(entry.traceDigest).toBe(commandTrace.digest);
-    expect(entry.traceLength).toBe(2);
+    expect(entry.traceLength).toBe(6);
     expect(entry.traceBody).toBe(commandTrace.body);
+    expect(entry.traceEvidence).toMatchObject({
+      level: "rich",
+      count: 6,
+      movementCount: 2,
+      shootCount: 2,
+    });
   });
 
   test("does not add replay trace fields for an empty trace", () => {

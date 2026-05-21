@@ -368,3 +368,13 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Hardened `buildSessionSubmission()` so malformed trace objects are omitted before network submission.
 - Extended `validate-replay` to validate optional trace bodies for byte budget, count, digest, frame, and action-shape parity; updated `scripts/replay-trust-smoke.mjs` to send body-backed valid/malformed cases.
 - Validation: focused trace tests 13/13; `npm run lint` clean; `npm run build` passing; full `npm test` 360/360.
+
+# 2026-05-21 (Session 73)
+
+- Ran `/start` protocol with Codex session lock, session-mode/secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-05-21_4.md` / `.json` for a fresh same-day trace-evidence feedback-loop audit after confirming S72 was already fully shipped.
+- Updated `src/utils/runSubmission.js` so valid replay command traces attach compact `traceEvidence` with level, counts, duration, and weakness reasons.
+- Updated `src/storage.js`, `src/App.jsx`, `src/components/DeathScreen.jsx`, and `src/systems/runSession.js` so trace evidence survives leaderboard submit results and local Studio score-submit events.
+- Updated `supabase/functions/submit-score/index.ts` so the Edge path mirrors trace-evidence analysis, stores it in member session metadata, and returns it as a submit receipt.
+- Updated `src/utils/studioEventOps.js` and `src/components/MenuPanels.jsx` so Run History trust ops shows rich/weak trace evidence counts and per-event trace gaps.
+- Validation: focused trace/submission/session/event tests 22/22; `npm run lint` clean; `npm test` 363/363; `npm run build` passing.

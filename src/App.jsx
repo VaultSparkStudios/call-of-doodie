@@ -1782,6 +1782,7 @@ export default function CallOfDoodie() {
       rejected: result.submission === "rejected",
       reason: result.rejectionReason || null,
       eventDigestVersion: eventDigest?.v || null,
+      traceEvidenceLevel: result.traceEvidence?.level || entry.traceEvidence?.level || null,
     });
     createScoreSubmitStudioEvents({
       difficulty,
@@ -1799,6 +1800,7 @@ export default function CallOfDoodie() {
       globalRank,
       result,
       eventDigest,
+      traceEvidence: result.traceEvidence || entry.traceEvidence || null,
     }).events.forEach(saveStudioGameEvent);
     return { ...result, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);

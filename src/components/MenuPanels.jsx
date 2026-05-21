@@ -311,6 +311,8 @@ export function RunHistoryPanel({
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#9BE7FF", border: "1px solid rgba(0,229,255,0.18)" }}>Synced {trustSummary.syncedCount}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFD79C", border: "1px solid rgba(255,215,156,0.18)" }}>Queued {trustSummary.pendingSyncCount}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFB5B5", border: "1px solid rgba(255,120,120,0.2)" }}>Retry {trustSummary.failedSyncCount}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#B8FFB8", border: "1px solid rgba(120,255,120,0.2)" }}>Trace rich {trustSummary.traceEvidenceCounts.rich}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFE0A3", border: "1px solid rgba(255,224,163,0.2)" }}>Trace weak {trustSummary.traceEvidenceCounts.weak}</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
             {trustRecommendations.map((line, index) => (
@@ -326,6 +328,15 @@ export function RunHistoryPanel({
                   <div style={{ color: "#FF8888", fontWeight: 700 }}>{event.summary || event.type}</div>
                   {event.payload?.reason && <div>{event.payload.reason}</div>}
                   {Array.isArray(event.payload?.reasons) && event.payload.reasons[0] && <div style={{ color: "#FFC7C7" }}>Top flag: {event.payload.reasons[0]}</div>}
+                  {event.payload?.traceEvidence?.level && (
+                    <div style={{ color: event.payload.traceEvidence.level === "rich" ? "#B8FFB8" : "#FFD79C" }}>
+                      Trace evidence: {event.payload.traceEvidence.level}
+                      {event.payload.traceEvidence.count ? ` · ${event.payload.traceEvidence.count} events` : ""}
+                    </div>
+                  )}
+                  {event.payload?.traceEvidence?.weaknessReasons?.[0] && (
+                    <div style={{ color: "#FFC7C7" }}>Trace gap: {event.payload.traceEvidence.weaknessReasons[0]}</div>
+                  )}
                 </div>
               ))}
             </div>
