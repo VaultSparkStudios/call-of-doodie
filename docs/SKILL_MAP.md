@@ -13,7 +13,7 @@ Muscle memory: **`/start` → `/go` → `/closeout`**. Everything else routes it
 |---|---|
 | **`/start`** | Begin every session. Detects mode (BUILDER vs FOUNDER), loads context, renders the startup brief with SIGNALS + GENIUS HIT LIST + HUMAN PRESSURE. |
 | **`/go`** | Right after `/start`. Refreshes the Unified Genius List (IGNIS-fueled, 12 items), syncs items into TASK_BOARD, captures memory patterns, executes unblocked items at quality bar with risk gating. Proactively suggests a specialty skill if the project type warrants one. |
-| **`/closeout`** | End every session. Write-back in canonical order → score 5 categories → commit + push via autopilot with confirmation. |
+| **`/closeout`** / **`/c`** | End every session. Write-back in canonical order → score 5 categories → commit + push via autopilot with confirmation. |
 
 ## When you don't know the right command
 

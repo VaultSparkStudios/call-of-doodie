@@ -25,7 +25,7 @@ function printHelp() {
 Commands:
   action-queue     Print the current Now queue from context/TASK_BOARD.md
   blocker-preflight  Check human-blocked items against local secret readiness
-  closeout         Project-local closeout autopilot
+  closeout, c      Project-local closeout autopilot
   feedback-score   Proxy to Studio Ops feedback-score
   onboard          Verify local startup tooling exists; use --repair --write to report repair state
   help             Show this help`);
@@ -101,6 +101,7 @@ switch (command) {
   case "blocker-preflight":
     blockerPreflight();
     break;
+  case "c":
   case "closeout":
     runNode(path.join(__dirname, "closeout-autopilot.mjs"), args);
     break;

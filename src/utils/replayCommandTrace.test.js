@@ -3,6 +3,7 @@ import {
   decodeReplayCommandTrace,
   encodeReplayCommandTrace,
   isValidReplayCommandTrace,
+  MAX_TRACE_BODY_BYTES,
   normalizeReplayCommandTrace,
   summarizeReplayCommandTrace,
 } from "./replayCommandTrace.js";
@@ -57,5 +58,10 @@ describe("replayCommandTrace", () => {
 
     expect(trace.count).toBe(5);
     expect(decodeReplayCommandTrace(trace)).toHaveLength(5);
+  });
+
+  it("rejects oversized trace bodies before decode work", () => {
+    const body = "a".repeat(MAX_TRACE_BODY_BYTES + 1);
+    expect(isValidReplayCommandTrace({ v: 1, bucket: 6, count: 1, body, digest: "00000000" })).toBe(false);
   });
 });

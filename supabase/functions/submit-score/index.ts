@@ -9,6 +9,7 @@ const corsHeaders = {
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
+const MAX_TRACE_BODY_BYTES = 10000;
 const encoder = new TextEncoder();
 
 function checksum(serialized: string) {
@@ -182,6 +183,7 @@ function collectTraceFailures(traceDigest: string, traceLength: number, traceBod
   }
   if (hasBody) {
     if (!/^[a-z0-9._:~-]+$/i.test(traceBody)) reasons.push("traceBody malformed");
+    if (encoder.encode(traceBody).length > MAX_TRACE_BODY_BYTES) reasons.push("traceBody exceeds byte budget");
     const bodyCount = traceBody.split("~").filter(Boolean).length;
     if (bodyCount !== traceLength) reasons.push("traceBody count mismatch");
     if (hasDigest && checksum(traceBody).toUpperCase() !== traceDigest.toUpperCase()) {

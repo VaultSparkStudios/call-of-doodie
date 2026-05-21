@@ -37,7 +37,7 @@ Everything else routes itself. Memorize these three:
 |---|---|---|
 | `/start` or `start` | §1 | Begin every session — lock + load context + render brief |
 | `/go` or `go` | §2 | Autonomous sprint through the Unified Genius List at quality bar |
-| `/closeout` or `closeout` | §3 | Write-back + score + commit + push |
+| `/closeout`, `closeout`, `/c`, or `c` | §3 | Write-back + score + commit + push |
 
 Natural-language invocation works too. Typing "start" without the slash, or saying "begin session" / "let's start", routes the same. For Codex specifically, there is no native slash-command subsystem, so slash-prefixed commands must be matched as plain user text with the leading `/` treated as optional.
 
@@ -307,7 +307,7 @@ Agents and skills MUST NOT suggest `/closeout` after each small item. `/closeout
 2. The current genius-list item is cleanly completed (no partial state), **and**
 3. The founder has not explicitly told the agent to keep going.
 
-Explicit founder invocation (`closeout` / `/closeout`) always executes immediately regardless of meter state.
+Explicit founder invocation (`closeout` / `/closeout` / `c` / `/c`) always executes immediately regardless of meter state.
 
 ### 3.0.1 Intent check
 

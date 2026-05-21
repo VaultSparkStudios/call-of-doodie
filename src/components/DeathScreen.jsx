@@ -8,8 +8,9 @@ import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } f
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
+import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
-import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadStudioGameEvents } from "../storage.js";
+import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -315,12 +316,16 @@ export default function DeathScreen({
     for (let i = 1; i < wk.length; i++) if ((wk[i] || 0) > (wk[bi] || 0)) bi = i;
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
+  const runHistory = loadRunHistory();
+  const rivalryHistory = loadRivalryHistory();
+  const studioEvents = loadStudioGameEvents();
+  const nextContract = buildWeeklyContract(runHistory, rivalryHistory, studioEvents);
   const runCoach = buildRunCoach({
     career: loadCareerStats(),
     meta: loadMetaProgress(),
     runSummary: { wave, kills, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [], bestPrecisionStreak },
-    runHistory: loadRunHistory(),
-    studioEvents: loadStudioGameEvents(),
+    runHistory,
+    studioEvents,
   });
   const postRunIntel = buildPostRunIntelligence({
     score,
@@ -531,6 +536,10 @@ export default function DeathScreen({
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
             <span style={{ color: "#9CB8FF", fontWeight: 700 }}>Run Brain:</span> {runCoach.brain.nextExperiment}
             <div style={{ color: "#88A", marginTop: 2 }}>Follow-through: {runCoach.brain.followThrough}</div>
+          </div>
+          <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#FFE4B8", lineHeight: 1.45 }}>
+            <span style={{ color: "#FFB36B", fontWeight: 800 }}>Next Contract:</span> {nextContract.title}
+            <div style={{ color: "#C9A26F", marginTop: 2 }}>{nextContract.progress}</div>
           </div>
         </div>
 

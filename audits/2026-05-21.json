@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "date": "2026-05-21",
+  "sessionType": "audit-implement",
+  "label": "navigation-formation-feedback-trust",
+  "calibration": false,
+  "source": "docs/AUDIT_2026-05-21.md",
+  "items": [
+    {
+      "slug": "flow-field-extraction-contract",
+      "tier": "fire",
+      "axis": "speed / organization / replay foundation",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 49.2,
+      "recipe": "Move FF_CELL, buildFlowField(), and flow-field sampling into src/systems/flowField.js, wire App.jsx through the helpers, and add tests for obstacle blocking plus fallback steering.",
+      "status": "shipped",
+      "evidence": "src/systems/flowField.js owns buildFlowField/sampleFlowField; App.jsx imports them; src/systems/flowField.test.js covers steering, obstacle routing, and fallback-null behavior."
+    },
+    {
+      "slug": "formation-spawn-identity",
+      "tier": "fire",
+      "axis": "gamification / immersion / feature depth",
+      "effort": "2h",
+      "impact": 8,
+      "innovation": 8,
+      "priority": 48.0,
+      "recipe": "Add a deterministic formation planner to waveDirector, tag scouting/pressure/climax spawns as flank/pincer/surge patterns, apply small post-spawn offsets in App.jsx, and cover the planner with unit tests.",
+      "status": "shipped",
+      "evidence": "waveDirector exports formation planning and bounded spawn offsets; App.jsx applies formation offsets after director spawns; waveDirector tests cover pincer identity and bounds clamping."
+    },
+    {
+      "slug": "deathscreen-contract-closure",
+      "tier": "high",
+      "axis": "feedback loop / UX / engagement",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 43.1,
+      "recipe": "Reuse buildWeeklyContract() on DeathScreen, render one compact Next Contract panel under Run Brain, and add a social-retention regression for contract progress copy.",
+      "status": "shipped",
+      "evidence": "DeathScreen renders active contract progress from buildWeeklyContract; socialRetention.test.js covers latest progress labels."
+    },
+    {
+      "slug": "trace-contract-byte-budget",
+      "tier": "high",
+      "axis": "security / automation / token-cost discipline",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 5,
+      "priority": 28.6,
+      "recipe": "Add a trace body byte cap and reason to collectTraceFailures(), mirror the cap in client trace constants if needed, and document the measurement target in the validation log.",
+      "status": "shipped",
+      "evidence": "Client replay trace validation and submit-score edge validation both enforce a 10,000-byte trace body budget."
+    }
+  ],
+  "validation": {
+    "targeted": "flowField 3/3, waveDirector 9/9, socialRetention+replayCommandTrace 10/10",
+    "lint": "npm run lint passed",
+    "build": "npm run build passed",
+    "fullTests": "npm test passed 357/357 across 44 files"
+  }
+}

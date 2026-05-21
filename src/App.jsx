@@ -68,11 +68,14 @@ import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
+import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import {
   buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
+  applySpawnFormation,
   getBossWaveGuidance,
   getGuaranteedEliteType,
+  getSpawnFormationPlan,
   getWaveDirectorState,
   getWaveSpawnRate,
 } from "./systems/waveDirector.js";
@@ -115,48 +118,6 @@ function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
       });
     }
   } catch (_) { /* not supported */ }
-}
-
-// ── Flow field pathfinding ────────────────────────────────────────────────────
-// BFS from player position, producing direction vectors for each grid cell.
-// Enemies sample their cell and move toward the player while navigating around walls.
-const FF_CELL = 24; // grid cell size in px
-function buildFlowField(W, H, px, py, obstacles) {
-  const cols = Math.ceil(W / FF_CELL);
-  const rows = Math.ceil(H / FF_CELL);
-  const blocked = new Uint8Array(cols * rows);
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const cx = (c + 0.5) * FF_CELL, cy = (r + 0.5) * FF_CELL;
-      for (const ob of obstacles) {
-        if (cx > ob.x - 10 && cx < ob.x + ob.w + 10 && cy > ob.y - 10 && cy < ob.y + ob.h + 10) {
-          blocked[r * cols + c] = 1; break;
-        }
-      }
-    }
-  }
-  const fdx = new Float32Array(cols * rows);
-  const fdy = new Float32Array(cols * rows);
-  const visited = new Uint8Array(cols * rows);
-  const pc = Math.min(cols - 1, Math.max(0, Math.floor(px / FF_CELL)));
-  const pr = Math.min(rows - 1, Math.max(0, Math.floor(py / FF_CELL)));
-  visited[pr * cols + pc] = 1;
-  const queue = [[pc, pr]]; let qi = 0;
-  const DIRS = [[0,-1],[0,1],[-1,0],[1,0],[-1,-1],[-1,1],[1,-1],[1,1]];
-  while (qi < queue.length) {
-    const [cc, cr] = queue[qi++];
-    for (const [dc, dr] of DIRS) {
-      const nc = cc + dc, nr = cr + dr;
-      if (nc < 0 || nc >= cols || nr < 0 || nr >= rows) continue;
-      if (visited[nr * cols + nc] || blocked[nr * cols + nc]) continue;
-      visited[nr * cols + nc] = 1;
-      const ddx = cc - nc, ddy = cr - nr, dl = Math.hypot(ddx, ddy);
-      fdx[nr * cols + nc] = ddx / dl;
-      fdy[nr * cols + nc] = ddy / dl;
-      queue.push([nc, nr]);
-    }
-  }
-  return { fdx, fdy, cols, rows };
 }
 
 // ── Performance caps ─────────────────────────────────────────────────────────
@@ -2072,6 +2033,8 @@ export default function CallOfDoodie() {
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         const ne = gs.enemies[gs.enemies.length - 1];
+        const formation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
+        if (formation) applySpawnFormation(ne, formation, W, H);
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         if (directorEliteType) applyEliteType(ne, directorEliteType);
         if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
@@ -2894,11 +2857,9 @@ export default function CallOfDoodie() {
       const ff = gs.flowField;
       let sx, sy;
       if (ff && !e.chargeActive) {
-        const fc = Math.min(ff.cols - 1, Math.max(0, Math.floor(e.x / FF_CELL)));
-        const fr = Math.min(ff.rows - 1, Math.max(0, Math.floor(e.y / FF_CELL)));
-        const idx = fr * ff.cols + fc;
-        if (ff.fdx[idx] !== 0 || ff.fdy[idx] !== 0) {
-          sx = ff.fdx[idx]; sy = ff.fdy[idx];
+        const sampled = sampleFlowField(ff, e.x, e.y);
+        if (sampled) {
+          sx = sampled.sx; sy = sampled.sy;
         } else {
           const a = Math.atan2(p.y - e.y, p.x - e.x);
           sx = Math.cos(a); sy = Math.sin(a);

@@ -21,6 +21,16 @@ describe("socialRetention", () => {
     expect(contract.detail).toContain("seed #88");
   });
 
+  test("surfaces latest contract progress from studio events", () => {
+    const contract = buildWeeklyContract(
+      [{ runSeed: 44, score: 14000, wave: 8 }],
+      [],
+      [{ type: "weekly_contract_progress", payload: { progressLabel: "2 seeded runs banked this week" } }],
+    );
+    expect(contract.id).toBe("studio_seed_contract");
+    expect(contract.progress).toBe("2 seeded runs banked this week");
+  });
+
   test("creates featured seeds and ghost boards from seeded run history", () => {
     const runHistory = [
       { runSeed: 44, score: 14000, wave: 8 },

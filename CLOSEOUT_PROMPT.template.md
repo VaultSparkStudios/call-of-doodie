@@ -3,7 +3,7 @@
 <!-- v3.1 changes: closeout autopilot at step 11 — `node scripts/ops.mjs closeout` bundles doctor + write-back verification + git diff preview + CONFIRMATION + commit + push + beacon/lock clear -->
 # CLOSEOUT
 
-Executed when the user says only `closeout`.
+Executed when the user says only `closeout`, `/closeout`, `c`, or `/c`.
 
 ---
 

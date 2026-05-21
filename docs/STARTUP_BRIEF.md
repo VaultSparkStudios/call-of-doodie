@@ -1,106 +1,46 @@
-<!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-05-18 (Session 68 closeout) -->
-<!-- fast-boot-valid-until: next session if within 24h -->
+> **Density: FULL** — Low session energy (velocity:1 gap:0d trend:stable) — expand output with full context rebuild.
 
-# Startup Brief — Call-Of-Doodie
+<!-- generated-by: ignis/startup-brief -->
+<!-- generated: 2026-05-21T04:21:56.149Z -->
 
-> **Fast-boot brief** — generated at Session 68 closeout · 2026-05-18.
-> Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
-
----
-
-```
 ╔════════════════════════════════════════════════════════════════╗
-║  🚀 CALL-OF-DOODIE                                               ║
-║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 69 · 2026-05-18 · FOUNDER MODE                          ║
-║  Owner: VaultSpark Studios                                       ║
+║  IGNIS — call-of-doodie  ·  FORGE  ·  2026-05-21               ║
+║  Internal intelligence infrastructure · v5.3 · Session 69      ║
 ╚════════════════════════════════════════════════════════════════╝
 
-
-
-╔══ WHERE TO TEST · Call-Of-Doodie ══════════════════════════════╗
-║  Production    → https://callofdoodie.wtf/ ✓                     ║
-║  Production    → https://playcallofdoodie.com/ ✓                 ║
-║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
-║  Unit tests    → COD_LIVE_URL=https://callofdoodie.wtf/ npm  ✓   ║
+╔══ WHERE WE LEFT OFF ═══════════════════════════════════════════╗
+║  Top action: Feed founder feedback directly into ranking and…  ║
+║  Arc: Confidence budget rising over last 4 sessions (74%); m…  ║
+║  Regime: Post-Launch (72%) — call-of-doodie is showing live/…  ║
+║  Queue: 0 approved, 8 pending  ·  Trust: 53%                   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
-║                                                                  ║
-║    997/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 994.7  ·  Velocity 10↑                     ║
-║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
-║    Trend  ▄▄▂▄▇  ↑  (last 5 sessions)                            ║
-║                                                                  ║
-║    Category         Score  Bar        Spark   Δ                  ║
-║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ▇▇▇▇████ →                ║
-║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  ▇▇▇▇▇▇▇█ →                ║
-║    Engagement       100    ██████████  ▇▇▇█████ →                ║
-║    Process Qual     100    ██████████  ████████ →                ║
-║    Coherence         99    ██████████  ········ →                ║
-║    Security         100    ██████████  ········ →                ║
-║    Ecosystem        100    ██████████  ········ →                ║
-║    Capital          100    ██████████  ········ →                ║
-║    Automation        99    ██████████  ········ →                ║
-║                                                                  ║
-╚════════════════════════════════════════════════════════════════╝
-
-╔══ WHERE WE LEFT OFF  ·  Session 68 ════════════════════════════╗
-║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    ? passing  ·  Deploy: N/A                             ║
+║  Score: 545,320 / 1,000,000  [INFERNO]  54.5%                  ║
+║  Delta: +15,905 pts (+1.6%)  █▄▁▄ · Rank #1/1                  ║
+║  → SUPERNOVA (65%) — growth stalled                            ║
+║  Eval: 65/100  ·  Signal coverage: 65% weighted trust          ║
+║  Strategy: conservative leads, but authority is still govern…  ║
+║  Posture: balanced / exploratory / commander                   ║
+║  Acceptance: 50%  ·  Receipts/outcomes: 0/18                   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ⚠  Tests         ?/? passing                                    ║
-║  ✓  Velocity      10 ↑  ·  Debt: ↓                               ║
-║  ✓  Runway        ~14.0 sessions                                 ║
-║  ✓  Headroom      92% remaining · ~9 large item(s) fit           ║
-║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         46693 FORGE  ·  4d old                         ║
-║  ✓  Truth         green  ·  Genome: ?                            ║
-║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
-║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.178  (healthy)                               ║
-║  ✓  CDR           no gap detected                                ║
-║  ✓  Patterns      no recurring pressure detected                 ║
-║  ✓  Templates     v3.3 aligned                                   ║
-║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
-║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⚠  Doctor        not yet tracked — run: node scripts/ops.mjs d  ║
+║  🟡 Contradiction: weakest pillar: CREATIVITY (0.20)           ║
+║     Resolution: Raise CREATIVITY without weakening VITALITY.   ║
+║  🟡 Top signal gaps: proposals, sil                            ║
+║  📊 Trust shift: sessions flat (-0.013) — Freshness degraded…  ║
+║  ⚡ Portfolio contagion: low                                    ║
+║  🔥 This fire transforms everything it touches.                ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
-║  Single founder actions that reopen sprint surface:              ║
-║                                                                  ║
-║     4d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    26d · Physical launch QA                                      ║
-║    26d · Physical launch QA                                      ║
-║    26d · Create Itch.io listing and publish the prepared la      ║
-║    26d · Add `VITE_POSTHOG_KEY` to GitHub repo Settings → S      ║
-║    26d · Add `VITE_SENTRY_DSN` to GitHub repo Settings → Se      ║
-╚════════════════════════════════════════════════════════════════╝
-
-╔══ SESSION VOICE ═══════════════════════════════════════════════╗
-║  "Public-facing creative summary only. Detailed creative s"      ║
-║    — from SOUL.md                                                ║
-╚════════════════════════════════════════════════════════════════╝
-
-╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▂▄▇  10↑  (last 5 sessions)                       ║
-║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 8 consecutive achieved-intent sessions            ║
+╔══ HUMAN PRESSURE ══════════════════════════════════════════════╗
+║  Shadow adapters: deploys, pr-reviews, social-dashboard, stu…  ║
+║  [ ] Physical launch QA — verify PWA install prompt/accept o…  ║
+║  [ ] Physical launch QA — verify one real gamepad/browser co…  ║
+║  [ ] Create Itch.io listing — use copy from docs/LAUNCH_EXEC…  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
-║  Run `node scripts/ops.mjs genius-list` to generate fresh recom  ║
+║    1. [IGNIS] Feed founder feedback directly into ranking an…  ║
 ╚════════════════════════════════════════════════════════════════╝
-
-```
-
----
-
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 68 closeout · 2026-05-18*
-*Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

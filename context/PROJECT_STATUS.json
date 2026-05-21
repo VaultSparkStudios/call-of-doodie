@@ -33,14 +33,14 @@
     "validate-replay Phase 2B has browser-side command trace metadata, edge contract validation, and member-session trace body storage, but full deterministic resimulation still needs a replay runner.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
-  "lastUpdated": "2026-05-18",
+  "lastUpdated": "2026-05-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
   "truthAuditLastRun": "2026-05-18",
-  "ignisScore": 46693,
+  "ignisScore": 47704,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-05-14",
+  "ignisLastComputed": "2026-05-21",
   "silSession": 69,
   "silScore": 999,
   "silAvg3": 998,
@@ -74,6 +74,6 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-05-18T06:24:37.769Z",
+  "planModeCheckedAt": "2026-05-21T05:15:24.930Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
 }

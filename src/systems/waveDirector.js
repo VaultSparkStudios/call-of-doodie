@@ -172,6 +172,38 @@ export function getGuaranteedEliteType(plan, state, enemiesSpawned) {
   return plan.eliteType;
 }
 
+export function getSpawnFormationPlan(plan, state, enemiesSpawned) {
+  if (!plan || !state) return null;
+  const spawnNumber = enemiesSpawned + 1;
+  const sign = spawnNumber % 2 === 0 ? 1 : -1;
+  if (state.stageId === "scouting" && spawnNumber % 3 === 0) {
+    return { id: "flank", label: "FLANK", offset: sign * 64 };
+  }
+  if (state.stageId === "pressure") {
+    return { id: "pincer", label: "PINCER", offset: sign * 78 };
+  }
+  if (state.stageId === "climax") {
+    return { id: "surge", label: "SURGE", offset: sign * 42 };
+  }
+  return null;
+}
+
+export function applySpawnFormation(enemy, formation, W, H, margin = 24) {
+  if (!enemy || !formation) return enemy;
+  const x = Number(enemy.x) || 0;
+  const y = Number(enemy.y) || 0;
+  const amount = formation.offset || 0;
+  const nearVerticalEdge = x < W * 0.2 || x > W * 0.8;
+  const nearHorizontalEdge = y < H * 0.2 || y > H * 0.8;
+  if (nearVerticalEdge && !nearHorizontalEdge) {
+    enemy.y = clamp(y + amount, margin, H - margin);
+  } else {
+    enemy.x = clamp(x + amount, margin, W - margin);
+  }
+  enemy.formation = formation.id;
+  return enemy;
+}
+
 export function getPressureBand(state) {
   if (!state) return "stable";
   if (state.pressureRatio >= 1.15) return "overrun";

@@ -1,4 +1,5 @@
 const MAX_EVENTS = 240;
+export const MAX_TRACE_BODY_BYTES = 10000;
 const FRAME_BUCKET = 6;
 const VALID_ACTIONS = new Set([
   "move",
@@ -86,6 +87,7 @@ export function encodeReplayCommandTrace(events = [], options = {}) {
 export function isValidReplayCommandTrace(trace) {
   if (!trace || trace.v !== 1 || trace.bucket !== FRAME_BUCKET) return false;
   if (typeof trace.body !== "string" || !/^[a-z0-9._:~-]*$/.test(trace.body)) return false;
+  if (trace.body.length > MAX_TRACE_BODY_BYTES) return false;
   const events = decodeReplayCommandTrace(trace);
   return events != null && trace.digest === checksum(trace.body) && events.length === trace.count;
 }

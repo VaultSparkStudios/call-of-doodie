@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   buildWaveTelemetrySnapshot,
   createWaveDirectorPlan,
+  applySpawnFormation,
   getGuaranteedEliteType,
   getBossWaveGuidance,
   getPressureBand,
+  getSpawnFormationPlan,
   getWaveDirectorState,
   getWaveSpawnRate,
 } from "./waveDirector.js";
@@ -55,6 +57,21 @@ describe("waveDirector", () => {
 
     expect(snapshot.stageId).toBe("climax");
     expect(snapshot.pressureBand).toBe(getPressureBand(state));
+  });
+
+  it("adds deterministic formation identity to pressure-stage spawns", () => {
+    const plan = createWaveDirectorPlan({ wave: 14, maxEnemies: 30, nonBossWaveCount: 3, random: () => 0 });
+    const state = getWaveDirectorState(plan, 10, 30, 6);
+    const formation = getSpawnFormationPlan(plan, state, 10);
+    expect(formation.id).toBe("pincer");
+    expect(formation.offset).toBeLessThan(0);
+  });
+
+  it("applies formation offsets without moving enemies out of bounds", () => {
+    const enemy = { x: 8, y: 100 };
+    applySpawnFormation(enemy, { id: "flank", offset: -200 }, 320, 240);
+    expect(enemy.formation).toBe("flank");
+    expect(enemy.y).toBe(24);
   });
 
   it("returns concrete boss guidance for paired boss waves", () => {

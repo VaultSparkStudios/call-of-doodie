@@ -691,3 +691,27 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 1. Deterministic replay runner — consume the stored trace payload contract in `validate-replay` Phase 2B and quarantine drift above a tight threshold. High probability.
 2. Network-approved replay trust smoke — run `npm run replay:trust-smoke` after Edge deploy and add it to launch verification if stable. High probability.
 3. Ghost path contract — if leaderboard rows ever store safe path samples, upgrade Ghost Pack targets into actual replay path ghosts. Medium probability.
+
+## 2026-05-21 — Session 70 | Total: 999/1000 | Velocity: 4 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 357/357 tests passing, lint clean, build passing; new flow-field, formation, contract, and trace-budget regressions added |
+| Creative Alignment | 100 | → | Formation identity adds battlefield readability without changing the parody shooter core or inflating enemy taxonomy |
+| Momentum | 100 | → | Fresh audit shipped all four bounded items in one pass after validated `/start` |
+| Engagement | 100 | → | DeathScreen now closes the active weekly-contract loop when motivation is highest |
+| Process Quality | 100 | → | Audit, sidecar, implement plan, execution log, task board, current state, and SIL all map shipped work to evidence |
+| Cross-Repo Coherence | 100 | → | Public repo remains deployable and public-safe; internal-only blockers stay in private ops surfaces |
+| Security Posture | 100 | → | Replay trace contracts now enforce a byte budget before edge storage/logging work |
+| Ecosystem Integration | 100 | → | Changes reuse existing Supabase/game contracts and Studio event retention utilities with no new providers |
+| Capital Efficiency | 100 | → | Zero new dependencies and no external AI/API spend |
+| Automation Coverage | 99 | → | Full local suite is green; live replay smoke remains a deployment/network follow-up |
+
+**Top win:** Turned three previously inline or hidden systems into tested player-visible loops: flow navigation, formation identity, and post-run contract closure.
+**Top gap:** Deterministic replay resim Phase 2B is still not the runner itself; this sprint prepared movement primitives and tightened trace budget boundaries.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement`, and validation completed with concrete evidence.
+
+**Brainstorm**
+1. Deterministic replay runner — use the stored trace body plus extracted movement primitives to build a first headless drift detector. High probability.
+2. Formation telemetry tuning — compare stage/formation pressure bands against deaths and abandonments before adding more formation types. Medium probability.
+3. Contract completion event — emit a `weekly_contract_progress` event directly from post-run outcomes instead of only surfacing existing progress. High probability.

@@ -3,7 +3,7 @@
 <!-- v3.3 changes: closeout autopilot now auto-trims LATEST_HANDOFF to last 2 sessions (compact-handoff --trim); NEXT SESSION loads STARTUP_BRIEF.md only -->
 # CLOSEOUT
 
-Executed when the user says only `closeout`.
+Executed when the user says only `closeout`, `/closeout`, `c`, or `/c`.
 
 ---
 
