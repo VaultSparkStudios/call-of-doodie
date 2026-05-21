@@ -5,6 +5,15 @@ Overall status: green
 Last reviewed: 2026-05-21
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-21 — Session 71 changes
+
+- `src/utils/replayCommandTrace.js` — adds `recordReplayCommandEvent()` and `directionBucket()` so command traces can be populated incrementally during actual gameplay, not only encoded at death.
+- `src/App.jsx` — records replay trace events for shoot, dash, grenade, perk, route, shop, reload, and weapon swap actions before `buildSessionSubmission()` sends the encoded trace contract.
+- `src/utils/runSubmission.js` — now forwards trace fields only when `isValidReplayCommandTrace()` passes, stripping malformed trace objects before network submission.
+- `supabase/functions/validate-replay/index.ts` — accepts optional `traceBody` and verifies byte budget, count, digest, frame parsing, and action shape; it still does not claim deterministic resimulation.
+- `scripts/replay-trust-smoke.mjs` — live trust smoke now posts body-backed trace contracts and malformed body cases.
+- Validation truth — focused trace tests passed 13/13, `npm run lint` passed, `npm run build` passed, and `npm test` passed 360/360 across 44 files.
+
 ## 2026-05-21 — Session 70 changes
 
 - `src/systems/flowField.js` — now owns deterministic flow-field construction and sampling that were previously embedded in `App.jsx`; tests prove obstacle routing, steering, and fallback behavior.

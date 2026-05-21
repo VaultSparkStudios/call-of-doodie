@@ -14,6 +14,9 @@ const corsHeaders = {
 };
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal", "standard"]);
+const VALID_TRACE_ACTIONS = new Set(["move", "aim", "shoot", "reload", "dash", "grenade", "perk", "route", "shop", "swap", "pause"]);
+const MAX_TRACE_BODY_BYTES = 10000;
+const encoder = new TextEncoder();
 
 interface ValidateRequest {
   seed?: number;
@@ -28,6 +31,7 @@ interface ValidateRequest {
   inputHash?: string;      // reserved for Phase 2
   traceDigest?: string;    // compact replay command-trace checksum
   traceLength?: number;    // normalized command count in the trace
+  traceBody?: string;      // optional compact body for body-backed contract checks
 }
 
 interface ValidateResult {
@@ -47,6 +51,40 @@ function difficultyMult(d: string | undefined): number {
     case "normal":
     default: return 1.0;
   }
+}
+
+function checksum(serialized: string) {
+  let hash = 2166136261;
+  for (let i = 0; i < serialized.length; i++) {
+    hash ^= serialized.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).toUpperCase().padStart(8, "0");
+}
+
+function collectTraceBodyFailures(traceDigest: string, traceLength: number, traceBody: string) {
+  const reasons: string[] = [];
+  if (!traceBody) return reasons;
+  if (!/^[a-z0-9._:~-]+$/i.test(traceBody)) reasons.push("traceBody malformed");
+  if (encoder.encode(traceBody).length > MAX_TRACE_BODY_BYTES) reasons.push("traceBody exceeds byte budget");
+  const parts = traceBody.split("~").filter(Boolean);
+  if (parts.length !== traceLength) reasons.push("traceBody count mismatch");
+  if (traceDigest && checksum(traceBody).toUpperCase() !== traceDigest.toUpperCase()) {
+    reasons.push("traceBody digest mismatch");
+  }
+  for (const part of parts) {
+    const [frame, action] = part.split(".");
+    const parsedFrame = Number.parseInt(frame || "", 36);
+    if (!Number.isFinite(parsedFrame) || parsedFrame < 0) {
+      reasons.push("traceBody frame malformed");
+      break;
+    }
+    if (!VALID_TRACE_ACTIONS.has(action || "")) {
+      reasons.push("traceBody action malformed");
+      break;
+    }
+  }
+  return reasons;
 }
 
 /**
@@ -116,11 +154,17 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
   }
   const traceDigest = String(req.traceDigest || "");
   const traceLengthRaw = Number(req.traceLength || 0);
+  const traceBody = String(req.traceBody || "");
   const hasTraceDigest = traceDigest.length > 0;
   const hasTraceLength = traceLengthRaw > 0;
+  const hasTraceBody = traceBody.length > 0;
   const traceDigestValid = /^[a-f0-9]{8,128}$/i.test(traceDigest);
   const traceLengthValid = Number.isInteger(traceLengthRaw) && traceLengthRaw >= 1 && traceLengthRaw <= 240;
   const hasValidTraceContract = hasTraceDigest && hasTraceLength && traceDigestValid && traceLengthValid;
+  if (hasTraceBody && (!hasTraceDigest || !hasTraceLength)) {
+    reasons.push("trace body missing digest or length");
+    drift = Math.max(drift, 0.6);
+  }
   if (hasTraceDigest !== hasTraceLength) {
     reasons.push("trace contract incomplete");
     drift = Math.max(drift, 0.6);
@@ -132,6 +176,13 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
   if (hasTraceLength && !traceLengthValid) {
     reasons.push("traceLength outside [1..240]");
     drift = Math.max(drift, 0.6);
+  }
+  if (hasTraceBody && traceDigestValid && traceLengthValid) {
+    const bodyFailures = collectTraceBodyFailures(traceDigest, traceLengthRaw, traceBody);
+    if (bodyFailures.length > 0) {
+      reasons.push(...bodyFailures);
+      drift = Math.max(drift, 0.7);
+    }
   }
   const competitiveMode = mode === "daily_challenge" || mode === "gauntlet" || mode === "score_attack";
   if (competitiveMode && req.seed != null && !inputHash && !hasValidTraceContract) {

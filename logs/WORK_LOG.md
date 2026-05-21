@@ -346,3 +346,13 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Added `scripts/replay-trust-smoke.mjs` plus `npm run replay:trust-smoke` for deployed `validate-replay` trace confidence/quarantine smoke checks.
 - Surfaced loaded leaderboard ghosts in-run: `App.jsx` passes `gs.topGhosts` to `HUD`, and HUD renders a compact Ghost Pack target strip.
 - Validation: targeted runSubmission/storage tests 24/24; `node --check scripts/replay-trust-smoke.mjs` passing; `npm run lint` clean; `npm run build` passing; full `npm test` 350/350. Live replay trust smoke was attempted but sandbox fetch failed and network escalation was not approved.
+
+# 2026-05-21 (Session 71)
+
+- Ran `/start` protocol with Codex session lock, mode/secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-05-21_2.md` / `.json` for a fresh same-day replay trace-trust follow-up after confirming the earlier S70 audit was already fully shipped.
+- Added a bounded replay command recorder in `src/utils/replayCommandTrace.js` plus direction bucketing and regression coverage.
+- Wired `src/App.jsx` to record actual player commands into `commandTraceRef` for shoot, dash, grenade, perk, route, shop, reload, and weapon swap actions.
+- Hardened `buildSessionSubmission()` so malformed trace objects are omitted before network submission.
+- Extended `validate-replay` to validate optional trace bodies for byte budget, count, digest, frame, and action-shape parity; updated `scripts/replay-trust-smoke.mjs` to send body-backed valid/malformed cases.
+- Validation: focused trace tests 13/13; `npm run lint` clean; `npm run build` passing; full `npm test` 360/360.

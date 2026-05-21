@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-21",
+  "session": 71,
+  "project": "call-of-doodie",
+  "status": "completed",
+  "source": "docs/AUDIT_2026-05-21_2.md",
+  "shipped": [
+    "replay-command-trace-capture",
+    "trace-submission-validity-gate",
+    "validate-replay-trace-body-parity"
+  ],
+  "validation": {
+    "targeted": "npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js -> 13/13 passing",
+    "lint": "npm run lint -> passing",
+    "build": "npm run build -> passing",
+    "fullTests": "npm test -> 360/360 passing across 44 files"
+  },
+  "summary": "Session 71 closed the trace-trust gap left after the previous replay-contract sprint: gameplay actions now populate command traces, malformed traces are stripped before submission, and validate-replay can verify optional trace bodies."
+}

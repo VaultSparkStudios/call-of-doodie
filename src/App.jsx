@@ -41,7 +41,7 @@ import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/an
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
-import { encodeReplayCommandTrace } from "./utils/replayCommandTrace.js";
+import { directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -891,6 +891,13 @@ export default function CallOfDoodie() {
     killFeedRef.current = [entry, ...killFeedRef.current].slice(0, 5);
     setKillFeed([...killFeedRef.current]);
   };
+  const recordCommandTrace = useCallback((action, value = "") => {
+    recordReplayCommandEvent(commandTraceRef.current, {
+      frame: frameCountRef.current,
+      action,
+      value,
+    });
+  }, []);
   const openQueuedPerkSelection = useCallback(() => {
     const perkSelection = consumeBankedPerkChoice({
       bankedPerkChoices: bankedPerkChoicesRef.current,
@@ -965,6 +972,7 @@ export default function CallOfDoodie() {
   // ── Perk application ─────────────────────────────────────────────────────
   const applyPerk = useCallback((perk) => {
     perk.apply(perkModsRef.current, gsRef.current);
+    recordCommandTrace("perk", perk.id);
     // Calibrate Glass Jaw incoming-damage multiplier by difficulty (less brutal at Hard/Insane)
     if (gsRef.current?.glassjaw && !gsRef.current.glassjawMult) {
       const d = difficultyRef.current;
@@ -1030,7 +1038,7 @@ export default function CallOfDoodie() {
     }
     resolveDeferredPerkFlow();
     checkAchievements(gsRef.current || {});
-  }, [activePerks, checkAchievements, resolveDeferredPerkFlow]);
+  }, [activePerks, checkAchievements, recordCommandTrace, resolveDeferredPerkFlow]);
 
   // ── Synergy charge burst ──────────────────────────────────────────────────
   const fireSynergyCharge = useCallback(() => {
@@ -1083,8 +1091,9 @@ export default function CallOfDoodie() {
     if (resolution.shopHistoryEntry) {
       setShopHistory(h => [...h, resolution.shopHistoryEntry]);
     }
+    recordCommandTrace("shop", optionId);
     track("shop_buy", { itemId: optionId, wave: gs.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current });
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Coin shop apply ───────────────────────────────────────────────────────
   const applyCoinShopItem = useCallback((optionId, cost) => {
@@ -1116,8 +1125,9 @@ export default function CallOfDoodie() {
       setExtraLives(extraLivesRef.current);
     }
     soundPerkSelect();
+    recordCommandTrace("shop", `coin-${optionId}`);
     track("coin_shop_buy", { itemId: optionId, cost, wave: gs.currentWave, coinsAfter: resolution.coins, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current });
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Wave mutation challenge: accept or skip ──────────────────────────────
   const _triggerShopIfNeeded = useCallback(() => {
@@ -1140,12 +1150,13 @@ export default function CallOfDoodie() {
     if (!delta) return;
     gs.coins = delta.coins;
     setCoins(delta.coins);
+    recordCommandTrace("route", `mutation-${mutation?.id || "accepted"}`);
     addText(gs, GW() / 2, GH() / 2 - 80, delta.floatingText.text, delta.floatingText.color, true);
     mutationPendingRef.current = false;
     setMutationPending(false);
     setMutationOptions([]);
     _triggerShopIfNeeded();
-  }, [_triggerShopIfNeeded]);
+  }, [_triggerShopIfNeeded, recordCommandTrace]);
 
   const skipMutation = useCallback(() => {
     mutationPendingRef.current = false;
@@ -1159,6 +1170,7 @@ export default function CallOfDoodie() {
     const gs = gsRef.current;
     if (!gs) return;
     route.apply(gs, perkModsRef.current);
+    recordCommandTrace("route", route.id);
     const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
     track("route_chosen", {
       routeId: route.id,
@@ -1180,7 +1192,7 @@ export default function CallOfDoodie() {
     routePendingRef.current = false;
     setRoutePending(false);
     setRouteOptions([]);
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Boss / enemy spawning (logic lives in gameHelpers.js) ────────────────
   const spawnBoss  = useCallback((gs, typeIndex) => _spawnBoss(gs, GW(), GH(), difficultyRef.current, typeIndex), []);
@@ -1195,6 +1207,7 @@ export default function CallOfDoodie() {
   const doReload = useCallback((wpnIdx) => {
     if (isReloadingRef.current || pausedRef.current) return;
     setIsReloading(true); isReloadingRef.current = true;
+    recordCommandTrace("reload", `w${wpnIdx}`);
     const gs = gsRef.current;
     if (gs?.player) {
       const nearbyEnemies = (gs.enemies || []).filter((enemy) => Math.hypot(enemy.x - gs.player.x, enemy.y - gs.player.y) < 220).length;
@@ -1215,7 +1228,7 @@ export default function CallOfDoodie() {
       setIsReloading(false); isReloadingRef.current = false;
       if (gsRef.current?.overclocked) { gsRef.current.overclockedShots = 0; setOverclockedShots(0); }
     }, WEAPONS[wpnIdx].reloadTime);
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Shoot ─────────────────────────────────────────────────────────────────
   const shoot = useCallback((gs, weaponIdx, angle) => {
@@ -1227,6 +1240,7 @@ export default function CallOfDoodie() {
     const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1) * (gs.synergyFireRateMult || 1) * (_wpnMod.fireRateMult || 1);
     if (now - lastShotRef.current < weapon.fireRate * fireRateMult || gs.ammoCount <= 0 || isReloadingRef.current) return;
     lastShotRef.current = now; gs.ammoCount--; gs.weaponAmmos[weaponIdx] = gs.ammoCount; setAmmo(gs.ammoCount);
+    recordCommandTrace("shoot", `w${weaponIdx}`);
     // Overclocked perk: track shots, force reload every 20
     if (gs.overclocked) {
       gs.overclockedShots = (gs.overclockedShots || 0) + 1;
@@ -1312,7 +1326,7 @@ export default function CallOfDoodie() {
     gs.muzzleFlash = 4;
     gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : weaponIdx === 4 ? 18 : 3);
     if (gs.ammoCount <= 0) doReload(weaponIdx);
-  }, [doReload]);
+  }, [doReload, recordCommandTrace]);
 
   // ── Grenade ───────────────────────────────────────────────────────────────
   const throwGrenade = useCallback(() => {
@@ -1323,9 +1337,10 @@ export default function CallOfDoodie() {
     soundGrenadeAt(p.x, GW());
     gs.grenades.push({ x: p.x, y: p.y, vx: Math.cos(p.angle) * 8, vy: Math.sin(p.angle) * 8, life: 45, size: 8 });
     statsRef.current.grenades++;
+    recordCommandTrace("grenade", directionBucket(Math.cos(p.angle), Math.sin(p.angle)));
     const cd = GRENADE_COOLDOWN * (perkModsRef.current.grenadeCDMult || 1);
     setTimeout(() => { grenadeRef.current.ready = true; setGrenadeReady(true); }, cd);
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Dash ──────────────────────────────────────────────────────────────────
   const doDash = useCallback(() => {
@@ -1342,13 +1357,14 @@ export default function CallOfDoodie() {
     if (js.active) { const dist = Math.hypot(js.dx, js.dy); if (dist > 5) { ddx += js.dx / dist; ddy += js.dy / dist; } }
     const dlen = Math.hypot(ddx, ddy);
     if (dlen > 0) { ddx /= dlen; ddy /= dlen; } else { ddx = Math.cos(gs.player.angle); ddy = Math.sin(gs.player.angle); }
+    recordCommandTrace("dash", directionBucket(ddx, ddy));
     dashRef.current.active = DASH_DURATION; dashRef.current.dx = ddx; dashRef.current.dy = ddy;
     gs.player.invincible = Math.max(gs.player.invincible, DASH_DURATION + 5);
     statsRef.current.dashes++;
     addParticles(gs, gs.player.x, gs.player.y, "#00FFFF", 12);
     const cd = DASH_COOLDOWN * (perkModsRef.current.dashCDMult || 1);
     setTimeout(() => { dashRef.current.ready = true; setDashReady(true); }, cd);
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Player death ──────────────────────────────────────────────────────────
   const handlePlayerDeath = useCallback((gs) => {
@@ -1693,13 +1709,14 @@ export default function CallOfDoodie() {
     const prevIdx = currentWeaponRef.current;
     setCurrentWeapon(idx); currentWeaponRef.current = idx;
     setIsReloading(false); isReloadingRef.current = false;
+    recordCommandTrace("swap", `w${idx}`);
     // ── Analytics: weapon switch (throttled to once per 2s) ──
     const _now = Date.now();
     if (_now - weaponSwitchTrackRef.current > 2000) {
       weaponSwitchTrackRef.current = _now;
       track("weapon_switch", { from: WEAPONS[prevIdx]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current) });
     }
-  }, []);
+  }, [recordCommandTrace]);
 
   // ── Score submit ──────────────────────────────────────────────────────────
   const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {

@@ -1,3 +1,5 @@
+import { isValidReplayCommandTrace } from "./replayCommandTrace.js";
+
 function cleanMode(mode) {
   return mode || "standard";
 }
@@ -87,9 +89,10 @@ export function buildSessionSubmission({
   eventDigest,
   commandTrace = null,
 } = {}) {
-  const traceDigest = commandTrace?.digest || null;
-  const traceLength = commandTrace?.count ?? 0;
-  const traceBody = typeof commandTrace?.body === "string" ? commandTrace.body : "";
+  const validTrace = isValidReplayCommandTrace(commandTrace) ? commandTrace : null;
+  const traceDigest = validTrace?.digest || null;
+  const traceLength = validTrace?.count ?? 0;
+  const traceBody = typeof validTrace?.body === "string" ? validTrace.body : "";
   const entry = buildLeaderboardEntry({
     username,
     score,

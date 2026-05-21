@@ -1,17 +1,16 @@
-# Implement Plan — 2026-05-21 Audit
+# Implement Plan — 2026-05-21 Audit 2
 
-Source: `docs/AUDIT_2026-05-21.md`
+Source: `docs/AUDIT_2026-05-21_2.md`
 
 | Order | Item | Tier | Effort | Priority | Work surface |
 |---:|---|:-:|---|---:|---|
-| 1 | flow-field-extraction-contract | 🔥 | 1h | 49.2 | `src/systems/flowField.js`, `src/App.jsx`, `src/systems/flowField.test.js` |
-| 2 | formation-spawn-identity | 🔥 | 2h | 48.0 | `src/systems/waveDirector.js`, `src/App.jsx`, `src/systems/waveDirector.test.js` |
-| 3 | deathscreen-contract-closure | ⚡ | 1h | 43.1 | `src/components/DeathScreen.jsx`, `src/utils/socialRetention.test.js` |
-| 4 | trace-contract-byte-budget | ⚡ | 1h | 28.6 | `src/utils/replayCommandTrace.js`, `src/utils/replayCommandTrace.test.js`, `supabase/functions/submit-score/index.ts` |
+| 1 | replay-command-trace-capture | 🔥 | 1h | 49.2 | `src/utils/replayCommandTrace.js`, `src/App.jsx`, `src/utils/replayCommandTrace.test.js` |
+| 2 | trace-submission-validity-gate | ⚡ | 30m | 44.7 | `src/utils/runSubmission.js`, `src/utils/runSubmission.test.js` |
+| 3 | validate-replay-trace-body-parity | ⚡ | 1h | 33.5 | `supabase/functions/validate-replay/index.ts`, `scripts/replay-trust-smoke.mjs` |
 
 ## Success Checks
 
-- Enemy navigation primitives are pure, imported by `App.jsx`, and covered by obstacle/fallback tests.
-- Wave director stages can assign deterministic formation identity and keep adjusted spawn positions bounded.
-- Death debriefs show the active contract progress immediately after a run.
-- Replay trace bodies are capped by encoded byte size on client validation and edge rejection.
+- Gameplay command traces are non-empty for real player actions and stay bounded before encoding.
+- Invalid trace objects are stripped before network submission.
+- `validate-replay` can verify trace body byte/count/digest/action-shape parity when a body is supplied.
+- Focused trace tests, lint, build, and full suite pass.

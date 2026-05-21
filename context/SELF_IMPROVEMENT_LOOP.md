@@ -13,6 +13,30 @@ Last session: 2026-05-17 | Session 67 | Total: 997/1000 | Velocity: 10 | protoco
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
+## 2026-05-21 — Session 71 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 360/360 tests pass, lint clean, build clean; focused replay trace tests now cover recorder and submission validity gates |
+| Creative Alignment | 100 | → | Improves the proof layer behind rivalry/replay loops without adding UI noise or token/API dependency |
+| Momentum | 100 | → | Fresh same-day audit replaced already-shipped S70 work and all 3 new items shipped in one pass |
+| Engagement | 100 | → | Replay links, ghost targets, and leaderboards now have real command evidence to build on |
+| Process Quality | 100 | → | Start → audit → implement → validation → closeout write-back executed with current artifacts |
+| Cross-Repo Coherence | 100 | ↑ | Keeps replay trust labels aligned with the Studio rule that validation must match the artifact actually received |
+| Security Posture | 100 | → | Malformed traces are stripped client-side and body-validated edge-side before trust confidence is granted |
+| Ecosystem Integration | 100 | → | Supabase Edge trust contract improved without new services or schema dependency |
+| Capital Efficiency | 100 | → | Zero-token, zero-SaaS trust improvement; no new dependency spend |
+| Automation Coverage | 100 | ↑ | Full suite grew to 360 tests, with body-backed smoke script ready for network-enabled production proof |
+
+**Top win:** Closed the practical gap between "trace-backed" and actual trace evidence: commands now populate, invalid traces stop before submit, and validate-replay can verify body-backed contracts.
+**Top gap:** Production `validate-replay` still needs deployment plus `npm run replay:trust-smoke` with network permission before the live endpoint proves the new body parity path.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement` (3/3), validation, and `/closeout` write-back completed with evidence.
+
+**Brainstorm**
+1. Deterministic replay drift detector — consume stored trace bodies plus extracted movement/combat primitives to produce first drift score; High probability.
+2. Trace summary debrief chip — show "trace captured: N commands" only after production smoke is green; Medium probability.
+3. Formation pressure tuning from trace density — correlate dash/grenade/reload traces with wave formation deaths to tune late-wave pressure; Medium probability.
+
 ## 2026-05-17 — Session 67 | Total: 997/1000 | Velocity: 10 | Debt: ↓
 
 | Category | Score | vs Last | Notes |

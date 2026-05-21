@@ -11,6 +11,7 @@ const VALID_ACTIONS = new Set([
   "perk",
   "route",
   "shop",
+  "swap",
   "pause",
 ]);
 
@@ -35,6 +36,16 @@ function cleanValue(value) {
     .toLowerCase()
     .replace(/[^a-z0-9_.:-]/g, "")
     .slice(0, 24);
+}
+
+export function directionBucket(dx = 0, dy = 0) {
+  const x = Number(dx) || 0;
+  const y = Number(dy) || 0;
+  if (Math.hypot(x, y) < 0.01) return "neutral";
+  const angle = Math.atan2(y, x);
+  const octants = ["e", "se", "s", "sw", "w", "nw", "n", "ne"];
+  const idx = Math.round(angle / (Math.PI / 4));
+  return octants[(idx + 8) % 8];
 }
 
 function checksum(serialized) {
@@ -65,6 +76,20 @@ export function normalizeReplayCommandTrace(events = [], { maxEvents = MAX_EVENT
     lastKey = key;
     return true;
   });
+}
+
+export function recordReplayCommandEvent(events = [], event = {}, options = {}) {
+  const maxEvents = clamp(safeInt(options.maxEvents, MAX_EVENTS), 1, MAX_EVENTS);
+  const target = Array.isArray(events) ? events : [];
+  target.push({
+    frame: safeInt(event.frame ?? event.f, 0),
+    action: cleanAction(event.action ?? event.a),
+    value: cleanValue(event.value ?? event.v),
+  });
+  if (target.length > maxEvents) {
+    target.splice(0, target.length - maxEvents);
+  }
+  return target;
 }
 
 export function serializeReplayCommandTrace(events = [], options = {}) {

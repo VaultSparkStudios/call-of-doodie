@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   decodeReplayCommandTrace,
+  directionBucket,
   encodeReplayCommandTrace,
   isValidReplayCommandTrace,
   MAX_TRACE_BODY_BYTES,
   normalizeReplayCommandTrace,
+  recordReplayCommandEvent,
   summarizeReplayCommandTrace,
 } from "./replayCommandTrace.js";
 
@@ -58,6 +60,26 @@ describe("replayCommandTrace", () => {
 
     expect(trace.count).toBe(5);
     expect(decodeReplayCommandTrace(trace)).toHaveLength(5);
+  });
+
+  it("records bounded gameplay events for later normalization", () => {
+    const events = [];
+    recordReplayCommandEvent(events, { frame: 11, action: "DASH", value: "North West!" }, { maxEvents: 2 });
+    recordReplayCommandEvent(events, { frame: 17, action: "shoot", value: "weapon-3" }, { maxEvents: 2 });
+    recordReplayCommandEvent(events, { frame: 23, action: "grenade", value: "boss" }, { maxEvents: 2 });
+
+    const trace = encodeReplayCommandTrace(events);
+    expect(trace.count).toBe(2);
+    expect(decodeReplayCommandTrace(trace)).toEqual([
+      { f: 12, a: "shoot", v: "weapon-3" },
+      { f: 18, a: "grenade", v: "boss" },
+    ]);
+  });
+
+  it("buckets analog directions into stable octants", () => {
+    expect(directionBucket(1, 0)).toBe("e");
+    expect(directionBucket(-1, -1)).toBe("nw");
+    expect(directionBucket(0, 0)).toBe("neutral");
   });
 
   it("rejects oversized trace bodies before decode work", () => {

@@ -1,53 +1,53 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-21 (Session 70 closeout) -->
+<!-- generated-at: 2026-05-21 (Session 71 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S70 ═════════════════════╗
-║  Date: 2026-05-21  ·  SIL: 999/1000  ·  Velocity: 4 improving    ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S71 ═════════════════════╗
+║  Date: 2026-05-21  ·  SIL: 1000/1000  ·  Velocity: 3 improving   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **flow-field-extraction-contract** — `src/systems/flowField.  ║
-║  ✓ **formation-spawn-identity** — `waveDirector` now assigns de  ║
-║  ✓ **deathscreen-contract-closure** — `DeathScreen` renders act  ║
-║  ✓ **trace-contract-byte-budget** — replay trace bodies now enf  ║
+║  ✓ **replay-command-trace-capture** — command traces are no lon  ║
+║  ✓ **trace-submission-validity-gate** — `buildSessionSubmission  ║
+║  ✓ **validate-replay-trace-body-parity** — `validate-replay` no  ║
+║  ✓ `npx vitest run src/utils/replayCommandTrace.test.js src/uti  ║
 ║  ✓ `npm run lint` -> clean                                       ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
 ║    Engagement         100  ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
-║    Coherence          99   ██████████                            ║
+║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         99   ██████████                            ║
+║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
+║  Changes: 18 files  ·  M:15 A:0 D:0 ?:3                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         357/357                                          ║
-║  IGNIS:         0d ago                                           ║
+║  Tests:         360/360                                          ║
+║  IGNIS:         1d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

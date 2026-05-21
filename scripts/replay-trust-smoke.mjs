@@ -76,6 +76,7 @@ async function main() {
     ...baseRun,
     traceDigest: checksum(traceBody),
     traceLength: traceBody.split("~").length,
+    traceBody,
   });
   assert(valid.status === 200, `valid trace expected HTTP 200, got ${valid.status}`);
   assert(valid.data?.ok === true, `valid trace expected ok=true, got ${JSON.stringify(valid.data)}`);
@@ -84,14 +85,15 @@ async function main() {
 
   const malformed = await postReplay(config, {
     ...baseRun,
-    traceDigest: "not-a-digest",
+    traceDigest: checksum(traceBody),
     traceLength: 3,
+    traceBody: traceBody.replace("shoot", "hack"),
   });
   assert(malformed.status === 200, `malformed trace expected HTTP 200, got ${malformed.status}`);
   assert(malformed.data?.ok === false, `malformed trace expected ok=false, got ${JSON.stringify(malformed.data)}`);
   assert(malformed.data?.confidence === "quarantine", `malformed trace expected quarantine, got ${malformed.data?.confidence}`);
-  assert((malformed.data?.reasons || []).some((reason) => String(reason).includes("traceDigest")), "malformed trace did not report traceDigest reason");
-  console.log("PASS validate-replay quarantines malformed trace contract");
+  assert((malformed.data?.reasons || []).some((reason) => String(reason).includes("traceBody")), "malformed trace did not report traceBody reason");
+  console.log("PASS validate-replay quarantines malformed trace body");
 
   console.log("Replay trust smoke complete: 2/2 assertions passed.");
 }

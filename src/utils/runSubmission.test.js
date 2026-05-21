@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { encodeReplayCommandTrace } from "./replayCommandTrace.js";
 import { buildLeaderboardEntry, buildRunClaim, buildSessionSubmission } from "./runSubmission.js";
 
 describe("runSubmission", () => {
@@ -56,21 +57,21 @@ describe("runSubmission", () => {
   });
 
   test("adds replay command trace metadata when a trace summary is present", () => {
+    const commandTrace = encodeReplayCommandTrace([
+      { frame: 60, action: "move", value: "n" },
+      { frame: 66, action: "shoot", value: "w2" },
+    ]);
     const entry = buildSessionSubmission({
       username: "TraceDood",
       score: 30000,
       kills: 120,
       wave: 16,
-      commandTrace: {
-        digest: "ABCDEF12",
-        count: 42,
-        body: "a.move.left~g.shoot.primary",
-      },
+      commandTrace,
     });
 
-    expect(entry.traceDigest).toBe("ABCDEF12");
-    expect(entry.traceLength).toBe(42);
-    expect(entry.traceBody).toBe("a.move.left~g.shoot.primary");
+    expect(entry.traceDigest).toBe(commandTrace.digest);
+    expect(entry.traceLength).toBe(2);
+    expect(entry.traceBody).toBe(commandTrace.body);
   });
 
   test("does not add replay trace fields for an empty trace", () => {
@@ -87,5 +88,25 @@ describe("runSubmission", () => {
 
     expect(entry.traceDigest).toBeUndefined();
     expect(entry.traceLength).toBeUndefined();
+  });
+
+  test("omits malformed replay trace fields before submission", () => {
+    const entry = buildSessionSubmission({
+      username: "TamperDood",
+      score: 10,
+      kills: 1,
+      wave: 1,
+      commandTrace: {
+        v: 1,
+        bucket: 6,
+        digest: "ABCDEF12",
+        count: 2,
+        body: "a.move.n",
+      },
+    });
+
+    expect(entry.traceDigest).toBeUndefined();
+    expect(entry.traceLength).toBeUndefined();
+    expect(entry.traceBody).toBeUndefined();
   });
 });

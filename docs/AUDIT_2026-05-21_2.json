@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-05-21",
+  "project": "call-of-doodie",
+  "projectType": "game",
+  "source": "docs/AUDIT_2026-05-21_2.md",
+  "session": 71,
+  "topLine": {
+    "totalItems": 3,
+    "combinedPriority": 127.4,
+    "top3": [
+      "replay-command-trace-capture",
+      "trace-submission-validity-gate",
+      "validate-replay-trace-body-parity"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": "Strong. The moment-to-moment loop already supports readable movement, weapons, perks, objectives, shops, formations, and replay hooks.",
+    "progressionCurve": "Strong, with the next leverage point being trust-backed mastery: replays must carry enough player-input evidence to become more than a confidence label.",
+    "sessionEngagement": "Strong. DeathScreen, weekly contracts, ghost targets, and replay links all reinforce retry intent, but empty traces weaken the long-term rivalry/replay promise.",
+    "retentionHooks": "Strong. Daily seeds, ghosts, rivalry links, contract progress, and local-first run history exist; the next lift is proving submitted runs through actual command evidence.",
+    "soulFidelity": "Good. This audit preserves the fast parody arcade feel while making the trust layer more honest and deterministic."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "replay-command-trace-capture",
+      "tier": "fire",
+      "axis": "security / replay trust / gamification",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 49.2,
+      "item": "Replay command traces are encoded at submission time but never populated during a run, so trace-backed competitive submissions can still be empty.",
+      "recipe": "Add a tiny bounded command-trace recorder to src/utils/replayCommandTrace.js, wire App.jsx to record shoot, dash, grenade, perk, route, shop, reload, and weapon-switch events at frame buckets, and cover the recorder with unit tests.",
+      "status": "shipped",
+      "evidence": "src/utils/replayCommandTrace.js exports recordReplayCommandEvent() and directionBucket(); src/App.jsx records shoot, dash, grenade, perk, route, shop, reload, and weapon-swap events into commandTraceRef before encodeReplayCommandTrace(); replayCommandTrace tests cover bounded recording and direction bucketing."
+    },
+    {
+      "rank": 2,
+      "slug": "trace-submission-validity-gate",
+      "tier": "high",
+      "axis": "security / token-cost discipline",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 6,
+      "priority": 44.7,
+      "item": "buildSessionSubmission forwards whatever commandTrace object it receives, even if the digest/count/body relationship is malformed.",
+      "recipe": "Route trace forwarding through isValidReplayCommandTrace(), omit invalid trace payloads before network submission, and add runSubmission regressions for both valid and invalid traces.",
+      "status": "shipped",
+      "evidence": "src/utils/runSubmission.js forwards trace fields only when isValidReplayCommandTrace() passes; runSubmission tests cover valid trace inclusion, empty trace omission, and malformed trace stripping."
+    },
+    {
+      "rank": 3,
+      "slug": "validate-replay-trace-body-parity",
+      "tier": "high",
+      "axis": "security / automation / replay foundation",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 6,
+      "priority": 33.5,
+      "item": "validate-replay accepts traceDigest and traceLength but cannot verify an optional trace body when a caller supplies one, leaving the smoke path weaker than submit-score.",
+      "recipe": "Teach supabase/functions/validate-replay/index.ts to accept traceBody, enforce body byte/count/digest/action-shape parity with submit-score, and update scripts/replay-trust-smoke.mjs so live validation proves body-backed contracts.",
+      "status": "shipped",
+      "evidence": "supabase/functions/validate-replay/index.ts accepts optional traceBody and checks byte budget, count, digest, frame, and action shape; scripts/replay-trust-smoke.mjs now sends body-backed valid and malformed trace cases."
+    }
+  ],
+  "validation": {
+    "targeted": "13/13 focused replayCommandTrace + runSubmission tests passed.",
+    "lint": "npm run lint passed.",
+    "build": "npm run build passed.",
+    "fullTests": "npm test passed: 360/360 tests across 44 files."
+  }
+}
