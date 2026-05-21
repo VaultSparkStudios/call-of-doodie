@@ -5,6 +5,15 @@ Overall status: green
 Last reviewed: 2026-05-21
 Public-safe summary only. Sensitive verification notes are maintained privately.
 
+## 2026-05-21 — Session 72 changes
+
+- `src/App.jsx` — command traces now include throttled movement and aim octant samples in addition to discrete run actions. Sampling happens on bucket changes or interval expiry and still flows through the existing bounded recorder.
+- `src/utils/replayCommandTrace.js` — adds `analyzeReplayCommandTrace()` with duration, action mix, movement/aim/shoot counts, interaction count, evidence level, and weakness reasons.
+- `src/utils/replayCommandTrace.test.js` — adds rich-evidence and weak-trace coverage; focused trace/submission tests now pass 15/15.
+- `supabase/functions/validate-replay/index.ts` — returns optional `traceEvidence` and reserves `trace_contract` confidence for rich body-backed traces. Low-evidence valid traces remain accepted as heuristic rather than being over-claimed.
+- `scripts/replay-trust-smoke.mjs` — live trust smoke now covers rich trace contract, weak trace heuristic labeling, and malformed trace quarantine.
+- Validation truth — focused trace tests passed 15/15, `npm run lint` passed, `npm run build` passed, and `npm test` passed 362/362 across 44 files.
+
 ## 2026-05-21 — Session 71 changes
 
 - `src/utils/replayCommandTrace.js` — adds `recordReplayCommandEvent()` and `directionBucket()` so command traces can be populated incrementally during actual gameplay, not only encoded at death.

@@ -8,6 +8,7 @@ import {
   normalizeReplayCommandTrace,
   recordReplayCommandEvent,
   summarizeReplayCommandTrace,
+  analyzeReplayCommandTrace,
 } from "./replayCommandTrace.js";
 
 describe("replayCommandTrace", () => {
@@ -85,5 +86,39 @@ describe("replayCommandTrace", () => {
   it("rejects oversized trace bodies before decode work", () => {
     const body = "a".repeat(MAX_TRACE_BODY_BYTES + 1);
     expect(isValidReplayCommandTrace({ v: 1, bucket: 6, count: 1, body, digest: "00000000" })).toBe(false);
+  });
+
+  it("classifies rich replay evidence when movement, aim, and interactions span time", () => {
+    const trace = encodeReplayCommandTrace([
+      { frame: 0, action: "move", value: "n" },
+      { frame: 18, action: "aim", value: "ne" },
+      { frame: 24, action: "shoot", value: "w0" },
+      { frame: 54, action: "move", value: "e" },
+      { frame: 72, action: "dash", value: "e" },
+      { frame: 90, action: "aim", value: "se" },
+      { frame: 96, action: "shoot", value: "w0" },
+    ]);
+
+    expect(analyzeReplayCommandTrace(trace)).toMatchObject({
+      valid: true,
+      evidenceLevel: "rich",
+      movementCount: 2,
+      aimCount: 2,
+      shootCount: 2,
+      interactionCount: 3,
+    });
+  });
+
+  it("keeps syntactically valid but low-signal traces below rich evidence", () => {
+    const trace = encodeReplayCommandTrace([{ frame: 12, action: "shoot", value: "w0" }]);
+    const analysis = analyzeReplayCommandTrace(trace);
+
+    expect(analysis.valid).toBe(true);
+    expect(analysis.evidenceLevel).toBe("weak");
+    expect(analysis.weaknessReasons).toEqual(expect.arrayContaining([
+      "too-few-events",
+      "low-movement-evidence",
+      "missing-aim-evidence",
+    ]));
   });
 });

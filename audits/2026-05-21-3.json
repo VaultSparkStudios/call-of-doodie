@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-21",
+  "session": 72,
+  "project": "call-of-doodie",
+  "status": "completed",
+  "source": "docs/AUDIT_2026-05-21_3.md",
+  "shipped": [
+    "replay-trace-evidence-summary",
+    "replay-input-signal-coverage",
+    "validate-replay-trace-quality-gate"
+  ],
+  "validation": {
+    "targeted": "npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js -> 15/15 passing",
+    "lint": "npm run lint -> passing",
+    "build": "npm run build -> passing",
+    "fullTests": "npm test -> 362/362 passing across 44 files"
+  },
+  "summary": "Session 72 upgraded replay trust from valid trace bodies to evidence-quality-aware traces: movement and aim are sampled, local analysis classifies weak/basic/rich evidence, and validate-replay only grants trace_contract confidence for rich body-backed traces."
+}

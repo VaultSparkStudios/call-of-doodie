@@ -57,7 +57,8 @@ function assert(condition, message) {
 
 async function main() {
   const config = getConfig();
-  const traceBody = "0.move.left~6.shoot.primary~c.dash.forward";
+  const traceBody = "0.move.n~i.aim.ne~o.shoot.w0~1i.move.e~20.dash.e~2i.aim.se~2o.shoot.w0";
+  const weakTraceBody = "0.shoot.w0";
   const baseRun = {
     seed: 424242,
     mode: "score_attack",
@@ -83,6 +84,18 @@ async function main() {
   assert(valid.data?.confidence === "trace_contract", `valid trace expected trace_contract, got ${valid.data?.confidence}`);
   console.log("PASS validate-replay accepts valid trace-backed contract");
 
+  const weak = await postReplay(config, {
+    ...baseRun,
+    traceDigest: checksum(weakTraceBody),
+    traceLength: weakTraceBody.split("~").length,
+    traceBody: weakTraceBody,
+  });
+  assert(weak.status === 200, `weak trace expected HTTP 200, got ${weak.status}`);
+  assert(weak.data?.ok === true, `weak trace expected ok=true, got ${JSON.stringify(weak.data)}`);
+  assert(weak.data?.confidence === "heuristic", `weak trace expected heuristic confidence, got ${weak.data?.confidence}`);
+  assert(weak.data?.traceEvidence?.level === "weak", `weak trace expected weak evidence, got ${JSON.stringify(weak.data?.traceEvidence)}`);
+  console.log("PASS validate-replay accepts weak trace without over-labeling trace_contract");
+
   const malformed = await postReplay(config, {
     ...baseRun,
     traceDigest: checksum(traceBody),
@@ -95,7 +108,7 @@ async function main() {
   assert((malformed.data?.reasons || []).some((reason) => String(reason).includes("traceBody")), "malformed trace did not report traceBody reason");
   console.log("PASS validate-replay quarantines malformed trace body");
 
-  console.log("Replay trust smoke complete: 2/2 assertions passed.");
+  console.log("Replay trust smoke complete: 3/3 assertions passed.");
 }
 
 main().catch((error) => {

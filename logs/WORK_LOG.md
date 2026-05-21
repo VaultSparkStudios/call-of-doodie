@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-05-21 (Session 72 — replay evidence-quality substrate)
+
+- Founder goal continued: `/start` -> fresh `/audit` -> `/implement` -> `/closeout`, with genius-level/creative/innovative judgment and a short readable impact summary requested after closeout.
+- `/start` evidence: Codex session lock written, mode/secrets/blocker preflight ran, context-meter returned `CONTINUE`, and the startup brief validated with required canonical blocks.
+- `/audit` produced `docs/AUDIT_2026-05-21_3.md` and `docs/AUDIT_2026-05-21_3.json`, ranking three bounded items: replay input signal coverage, replay trace evidence summary, and validate-replay trace quality gating.
+- `/implement` shipped all three items:
+  - `src/App.jsx` now samples movement and aim octants into replay command traces at bounded intervals or bucket changes, preserving the existing 240-event cap.
+  - `src/utils/replayCommandTrace.js` adds `analyzeReplayCommandTrace()` so the app can distinguish weak/basic/rich replay evidence and report weakness reasons.
+  - `supabase/functions/validate-replay/index.ts` now exposes `traceEvidence` and only returns `trace_contract` confidence for rich trace bodies; weak valid traces remain accepted but are labeled `heuristic`.
+  - `scripts/replay-trust-smoke.mjs` now proves rich, weak, and malformed trace cases when run against the deployed function.
+- Validation: focused trace/submission tests 15/15, `npm run lint` clean, `npm run build` passing, and `npm test` 362/362 across 44 files.
+
 ## 2026-05-21 (Session 70 — navigation/formation/feedback/trust audit sprint)
 
 - Founder goal continued: `/start` -> `/audit` -> `/implement` -> `/closeout`, with a short readable impact summary requested after closeout.

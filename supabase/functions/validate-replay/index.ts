@@ -39,6 +39,10 @@ interface ValidateResult {
   drift: number;            // 0..1, how far outside expected band
   reasons: string[];
   confidence: "heuristic" | "replay_contract" | "trace_contract" | "quarantine";
+  traceEvidence?: {
+    level: "none" | "weak" | "basic" | "rich";
+    weaknessReasons: string[];
+  };
 }
 
 function difficultyMult(d: string | undefined): number {
@@ -85,6 +89,46 @@ function collectTraceBodyFailures(traceDigest: string, traceLength: number, trac
     }
   }
   return reasons;
+}
+
+function analyzeTraceEvidence(traceBody: string) {
+  const weaknessReasons: string[] = [];
+  const parts = traceBody ? traceBody.split("~").filter(Boolean) : [];
+  const actions: Record<string, number> = {};
+  let firstFrame: number | null = null;
+  let lastFrame: number | null = null;
+
+  for (const part of parts) {
+    const [frame, action] = part.split(".");
+    const parsedFrame = Number.parseInt(frame || "", 36);
+    if (!Number.isFinite(parsedFrame)) continue;
+    if (firstFrame == null) firstFrame = parsedFrame;
+    lastFrame = parsedFrame;
+    actions[action || ""] = (actions[action || ""] || 0) + 1;
+  }
+
+  const durationFrames = firstFrame != null && lastFrame != null ? Math.max(0, lastFrame - firstFrame) : 0;
+  const movementCount = actions.move || 0;
+  const aimCount = actions.aim || 0;
+  const shootCount = actions.shoot || 0;
+  const interactionCount = ["shoot", "reload", "dash", "grenade", "perk", "route", "shop", "swap", "pause"]
+    .reduce((total, action) => total + (actions[action] || 0), 0);
+
+  if (parts.length === 0) weaknessReasons.push("no-events");
+  if (parts.length > 0 && parts.length < 3) weaknessReasons.push("too-few-events");
+  if (durationFrames > 0 && durationFrames < 60) weaknessReasons.push("short-duration");
+  if (movementCount < 2) weaknessReasons.push("low-movement-evidence");
+  if (aimCount < 1 && shootCount > 0) weaknessReasons.push("missing-aim-evidence");
+  if (interactionCount < 2) weaknessReasons.push("low-interaction-evidence");
+
+  let level: "none" | "weak" | "basic" | "rich" = "none";
+  if (parts.length > 0) level = "weak";
+  if (parts.length >= 3 && interactionCount >= 1 && durationFrames >= 24) level = "basic";
+  if (parts.length >= 6 && durationFrames >= 60 && movementCount >= 2 && aimCount >= 1 && interactionCount >= 2) {
+    level = "rich";
+  }
+
+  return { level, weaknessReasons };
 }
 
 /**
@@ -161,6 +205,7 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
   const traceDigestValid = /^[a-f0-9]{8,128}$/i.test(traceDigest);
   const traceLengthValid = Number.isInteger(traceLengthRaw) && traceLengthRaw >= 1 && traceLengthRaw <= 240;
   const hasValidTraceContract = hasTraceDigest && hasTraceLength && traceDigestValid && traceLengthValid;
+  let traceEvidence: ValidateResult["traceEvidence"] | undefined;
   if (hasTraceBody && (!hasTraceDigest || !hasTraceLength)) {
     reasons.push("trace body missing digest or length");
     drift = Math.max(drift, 0.6);
@@ -182,6 +227,8 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
     if (bodyFailures.length > 0) {
       reasons.push(...bodyFailures);
       drift = Math.max(drift, 0.7);
+    } else {
+      traceEvidence = analyzeTraceEvidence(traceBody);
     }
   }
   const competitiveMode = mode === "daily_challenge" || mode === "gauntlet" || mode === "score_attack";
@@ -191,7 +238,8 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
   }
 
   const ok = drift < 0.5 && reasons.length === 0;
-  const confidence = ok && hasValidTraceContract
+  const hasRichTraceEvidence = traceEvidence?.level === "rich";
+  const confidence = ok && hasValidTraceContract && hasRichTraceEvidence
     ? "trace_contract"
     : ok && inputHash
       ? "replay_contract"
@@ -203,6 +251,7 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
     drift,
     reasons,
     confidence,
+    ...(traceEvidence ? { traceEvidence } : {}),
   };
 }
 

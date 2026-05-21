@@ -145,3 +145,47 @@ export function summarizeReplayCommandTrace(trace) {
     digest: trace?.digest ?? checksum(""),
   };
 }
+
+export function analyzeReplayCommandTrace(trace) {
+  const valid = isValidReplayCommandTrace(trace);
+  const events = valid ? decodeReplayCommandTrace(trace) || [] : [];
+  const summary = summarizeReplayCommandTrace(valid ? trace : null);
+  const durationFrames = events.length > 1 ? Math.max(0, events.at(-1).f - events[0].f) : 0;
+  const movementCount = summary.actions.move || 0;
+  const aimCount = summary.actions.aim || 0;
+  const shootCount = summary.actions.shoot || 0;
+  const interactionCount = ["shoot", "reload", "dash", "grenade", "perk", "route", "shop", "swap", "pause"]
+    .reduce((total, action) => total + (summary.actions[action] || 0), 0);
+  const weaknessReasons = [];
+
+  if (!valid) weaknessReasons.push("invalid-trace");
+  if (events.length === 0) weaknessReasons.push("no-events");
+  if (events.length > 0 && events.length < 3) weaknessReasons.push("too-few-events");
+  if (durationFrames > 0 && durationFrames < 60) weaknessReasons.push("short-duration");
+  if (movementCount < 2) weaknessReasons.push("low-movement-evidence");
+  if (aimCount < 1 && shootCount > 0) weaknessReasons.push("missing-aim-evidence");
+  if (interactionCount < 2) weaknessReasons.push("low-interaction-evidence");
+
+  let evidenceLevel = "none";
+  if (valid && events.length > 0) evidenceLevel = "weak";
+  if (valid && events.length >= 3 && interactionCount >= 1 && durationFrames >= 24) evidenceLevel = "basic";
+  if (valid && events.length >= 6 && durationFrames >= 60 && movementCount >= 2 && aimCount >= 1 && interactionCount >= 2) {
+    evidenceLevel = "rich";
+  }
+
+  return {
+    valid,
+    evidenceLevel,
+    count: events.length,
+    durationFrames,
+    firstFrame: summary.firstFrame,
+    lastFrame: summary.lastFrame,
+    actions: summary.actions,
+    movementCount,
+    aimCount,
+    shootCount,
+    interactionCount,
+    digest: summary.digest,
+    weaknessReasons,
+  };
+}

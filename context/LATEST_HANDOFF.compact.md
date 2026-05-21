@@ -4,39 +4,39 @@
 
 Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible; provide short readable impact changes summary post-closeout`.
 
-## Where We Left Off (Session 70 — navigation/formation/feedback/trust audit sprint, all shipped)
+## Where We Left Off (Session 72 — replay evidence-quality substrate, all shipped)
 
-**Intent outcome:** Achieved. `/start` ran with Codex session lock, context-meter returned `CONTINUE`, `/audit` produced the 2026-05-21 ranked plan, `/implement` shipped all four items, and closeout write-back now reflects the S70 state.
+**Intent outcome:** Achieved. `/start` ran with Codex session lock, context-meter returned `CONTINUE`, a fresh same-day audit was written to `docs/AUDIT_2026-05-21_3.md`, all three implementation items shipped, validation is green, and closeout write-back now reflects the S72 state.
 
 ### What shipped
-- **flow-field-extraction-contract** — `src/systems/flowField.js` now owns deterministic flow-field building/sampling, `App.jsx` imports the helpers, and focused tests cover path steering, obstacle routing, and fallback-null behavior.
-- **formation-spawn-identity** — `waveDirector` now assigns deterministic formation identity (`flank`, `pincer`, `surge`) and bounded post-spawn offsets, making late-wave pressure read as tactical shapes instead of unrelated edge arrivals.
-- **deathscreen-contract-closure** — `DeathScreen` renders active weekly-contract progress under Run Brain, closing the post-run motivation loop where the player is most likely to queue another run.
-- **trace-contract-byte-budget** — replay trace bodies now enforce a shared 10,000-byte budget in client validation and `submit-score`, limiting request/log budget exposure before edge storage.
+- **replay-trace-evidence-summary** — `analyzeReplayCommandTrace()` now classifies valid traces as weak/basic/rich using duration, action mix, movement/aim/shoot counts, interaction count, and explicit weakness reasons.
+- **replay-input-signal-coverage** — gameplay traces now include bounded movement and aim octant samples in addition to shoot/dash/grenade/perk/route/shop/reload/swap actions.
+- **validate-replay-trace-quality-gate** — the Edge validator returns `traceEvidence` and only grants `trace_contract` confidence to rich body-backed traces; weak valid traces remain accepted but labeled `heuristic`.
+- **smoke fixture upgrade** — `npm run replay:trust-smoke` now covers rich trace acceptance, weak trace heuristic labeling, and malformed trace quarantine.
 
 ### Validation
+- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js` -> **15/15** passing
 - `npm run lint` -> clean
 - `npm run build` -> passing
-- `npm test` -> **357/357** passing across 44 files
-- S70 audit evidence lives in `docs/AUDIT_2026-05-21.md`, `docs/AUDIT_2026-05-21.json`, `audits/2026-05-21.json`, and `docs/IMPLEMENT_PLAN.md`
+- `npm test` -> **362/362** passing across 44 files
 
 ### Next Recommended Slice
-- [ ] Deterministic replay runner — consume stored trace bodies plus extracted movement primitives to produce a first headless drift detector.
-- [ ] Formation telemetry tuning — compare stage/formation pressure bands against deaths and abandonments before adding more formation types.
-- [ ] Contract completion event — emit a direct `weekly_contract_progress` event from post-run outcomes instead of only surfacing existing progress.
+- [ ] Deploy `validate-replay` and run `npm run replay:trust-smoke` with network permission against production.
+- [ ] Build the first deterministic replay drift detector from rich trace bodies plus extracted movement/combat primitives.
+- [ ] Add replay evidence visibility to debrief/trust ops only after production smoke is green.
 
 ---
 
-Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible`.
+## Where We Left Off (Session 71 — replay trace-trust follow-up, all shipped)
 
-## Where We Left Off (Session 69 — trace-payload + ghost-pack follow-through, all shipped)
-
-**Intent outcome:** Achieved for `/start`, fresh same-day `/audit` iteration, `/implement`, validation, and closeout write-back. The session did not repeat the already-executed S68 audit; it found and fixed the next real replay-trust gap in the online submit path.
+**Intent outcome:** Achieved. `/start` ran with Codex session lock, context-meter returned `CONTINUE`, a fresh same-day audit was written to `docs/AUDIT_2026-05-21_2.md`, all three implementation items shipped, and validation is green.
 
 ### What shipped
-- **trace-edge-forwarding-firewall** — `saveToLeaderboard()` now preserves trace fields after leaderboard normalization via `buildSubmitScorePayload()`, so the real Edge submit path receives the evidence S68 created.
-- **trace-payload-storage-contract** — `buildSessionSubmission()` forwards compact `traceBody`; `submit-score` validates body count + digest and stores valid bodies only in member `game_sessions.metadata`.
-- **replay-trust-smoke-script** — `npm run replay:trust-smoke` now checks deployed `validate-replay` for valid trace-contract confidence and malformed trace quarantine.
-- **ghost-pack-hud-surface** — the HUD now renders loaded `gs.topGhosts` as a compact Ghost Pack score target strip.
+- **replay-command-trace-capture** — command traces are no longer empty shells. App actions now record bounded trace events for shoot, dash, grenade, perk, route, shop, reload, and weapon swap before death/submit encoding.
+- **trace-submission-validity-gate** — `buildSessionSubmission()` now forwards trace metadata only when `isValidReplayCommandTrace()` proves digest/count/body consistency, keeping malformed traces out of the network path.
+- **validate-replay-trace-body-parity** — `validate-replay` now validates optional trace bodies with byte, count, digest, frame, and action-shape checks; the live smoke script sends both body-backed valid and malformed cases.
 
 ### Validation
+- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js` -> **13/13** passing
+- `npm run lint` -> clean
+- `npm run build` -> passing

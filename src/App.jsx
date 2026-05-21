@@ -170,6 +170,8 @@ export default function CallOfDoodie() {
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
   const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
   const commandTraceRef  = useRef([]);    // replay command trace events for trust submission
+  const lastTraceMoveRef = useRef({ bucket: "neutral", frame: -999 });
+  const lastTraceAimRef  = useRef({ bucket: "neutral", frame: -999 });
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
@@ -898,6 +900,15 @@ export default function CallOfDoodie() {
       value,
     });
   }, []);
+  const sampleCommandTrace = useCallback((action, bucket, interval = 30) => {
+    const state = action === "aim" ? lastTraceAimRef.current : lastTraceMoveRef.current;
+    const frame = frameCountRef.current;
+    if (bucket !== state.bucket || frame - state.frame >= interval) {
+      state.bucket = bucket;
+      state.frame = frame;
+      recordCommandTrace(action, bucket);
+    }
+  }, [recordCommandTrace]);
   const openQueuedPerkSelection = useCallback(() => {
     const perkSelection = consumeBankedPerkChoice({
       bankedPerkChoices: bankedPerkChoicesRef.current,
@@ -1828,6 +1839,7 @@ export default function CallOfDoodie() {
     const _rushMult = (gs.adrenalineRushTimer || 0) > 0 ? 2.0 : 1.0;
     const _rubbleMult = gs._rubbleSlowed ? 0.6 : 1;
     if (dashRef.current.active <= 0) { p.x += dx * p.speed * _rushMult * _rubbleMult; p.y += dy * p.speed * _rushMult * _rubbleMult; }
+    sampleCommandTrace("move", Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 ? directionBucket(dx, dy) : "neutral");
     p.x = Math.max(20, Math.min(W - 20, p.x));
     p.y = Math.max(20, Math.min(H - 20, p.y));
     (gs.obstacles || []).forEach(ob => {
@@ -1874,6 +1886,7 @@ export default function CallOfDoodie() {
       gs.enemies.forEach(e => { const d = Math.hypot(e.x - p.x, e.y - p.y); if (d < nd) { nd = d; nearest = e; } });
       if (nearest) p.angle = Math.atan2(nearest.y - p.y, nearest.x - p.x);
     }
+    sampleCommandTrace("aim", directionBucket(Math.cos(p.angle), Math.sin(p.angle)));
     const shouldShoot = mouse.down || ss.shooting || gamepadShootRef.current || (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0);
     if (shouldShoot && !isReloadingRef.current && gs.ammoCount > 0) shoot(gs, wpnIdx, p.angle);
     if (p.invincible > 0) p.invincible--;
@@ -3500,7 +3513,7 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection, sampleCommandTrace]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef);

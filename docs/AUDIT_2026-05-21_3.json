@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-05-21",
+  "project": "call-of-doodie",
+  "projectType": "game",
+  "source": "docs/AUDIT_2026-05-21_3.md",
+  "session": 72,
+  "topLine": {
+    "totalItems": 3,
+    "combinedPriority": 135.2,
+    "top3": [
+      "replay-input-signal-coverage",
+      "replay-trace-evidence-summary",
+      "validate-replay-trace-quality-gate"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "replay-input-signal-coverage",
+      "tier": "fire",
+      "axis": "security / replay trust / gamification",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 8,
+      "priority": 55.4,
+      "item": "Command traces capture discrete buttons, but movement and aim are still mostly absent even though those are the inputs a future replay runner needs most.",
+      "recipe": "Add a tiny throttled trace sampler in App.jsx that records movement octants and aim octants only when buckets change or every bounded interval, keeping the 240-event cap intact.",
+      "status": "shipped",
+      "evidence": "src/App.jsx records throttled movement and aim octants through the existing command trace recorder, sampling bucket changes or interval expiry while preserving the recorder's 240-event cap."
+    },
+    {
+      "rank": 2,
+      "slug": "replay-trace-evidence-summary",
+      "tier": "fire",
+      "axis": "AI/intelligence / feedback loop / trust",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 8,
+      "priority": 49.2,
+      "item": "The game can validate a trace body, but it cannot yet describe whether that body is useful evidence.",
+      "recipe": "Extend src/utils/replayCommandTrace.js with analyzeReplayCommandTrace() returning duration, action mix, movement/aim/shoot counts, evidence level, and weakness reasons; cover rich and weak traces in unit tests.",
+      "status": "shipped",
+      "evidence": "src/utils/replayCommandTrace.js exports analyzeReplayCommandTrace(); replayCommandTrace tests cover rich evidence and weak low-signal traces."
+    },
+    {
+      "rank": 3,
+      "slug": "validate-replay-trace-quality-gate",
+      "tier": "high",
+      "axis": "security / automation / token-cost discipline",
+      "effort": "45m",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 30.6,
+      "item": "validate-replay currently grants trace_contract confidence when digest/count/body shape matches, even if the body is a one-action trace that cannot support drift review.",
+      "recipe": "Mirror the lightweight trace evidence checks in supabase/functions/validate-replay/index.ts, return heuristic rather than trace_contract for low-evidence traces, and add local tests or smoke fixture coverage for rich vs weak trace bodies.",
+      "status": "shipped",
+      "evidence": "supabase/functions/validate-replay/index.ts returns traceEvidence and only grants trace_contract for rich trace bodies; scripts/replay-trust-smoke.mjs now includes rich, weak, and malformed trace fixtures."
+    }
+  ],
+  "validation": {
+    "targeted": "15/15 focused replayCommandTrace + runSubmission tests passed.",
+    "lint": "npm run lint passed.",
+    "build": "npm run build passed.",
+    "fullTests": "npm test passed: 362/362 tests across 44 files."
+  }
+}

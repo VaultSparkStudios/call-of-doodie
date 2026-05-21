@@ -1,16 +1,21 @@
-# Implement Plan — 2026-05-21 Audit 2
+# Implement Plan — 2026-05-21 Session 72
 
-Source: `docs/AUDIT_2026-05-21_2.md`
+Source audit: `docs/AUDIT_2026-05-21_3.md`
 
-| Order | Item | Tier | Effort | Priority | Work surface |
-|---:|---|:-:|---|---:|---|
-| 1 | replay-command-trace-capture | 🔥 | 1h | 49.2 | `src/utils/replayCommandTrace.js`, `src/App.jsx`, `src/utils/replayCommandTrace.test.js` |
-| 2 | trace-submission-validity-gate | ⚡ | 30m | 44.7 | `src/utils/runSubmission.js`, `src/utils/runSubmission.test.js` |
-| 3 | validate-replay-trace-body-parity | ⚡ | 1h | 33.5 | `supabase/functions/validate-replay/index.ts`, `scripts/replay-trust-smoke.mjs` |
+## Sequenced Order
 
-## Success Checks
+1. `replay-trace-evidence-summary`
+   - Build the pure trace-analysis vocabulary first so later work can depend on one local definition of weak/rich evidence.
 
-- Gameplay command traces are non-empty for real player actions and stay bounded before encoding.
-- Invalid trace objects are stripped before network submission.
-- `validate-replay` can verify trace body byte/count/digest/action-shape parity when a body is supplied.
-- Focused trace tests, lint, build, and full suite pass.
+2. `replay-input-signal-coverage`
+   - Wire low-rate movement and aim samples into the existing command-trace recorder without expanding the trace cap.
+
+3. `validate-replay-trace-quality-gate`
+   - Mirror the evidence-quality threshold at the edge so `trace_contract` confidence means the trace is useful, not merely well-formed.
+
+## Validation Plan
+
+- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js`
+- `npm run lint`
+- `npm run build`
+- `npm test`

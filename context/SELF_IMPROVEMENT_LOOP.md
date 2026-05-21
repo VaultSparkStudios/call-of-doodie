@@ -5,13 +5,37 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): ███▇██
-Avgs — 3: 994.7 | 5: 990.8 | 10: — | 25: — | all: 972.9 [N=14, SIL history in private ops repo]
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 99.3 | Engage 100.0 | Process 100.0 [N=3]
+Avgs — 3: 1000.0 | 5: 996.8 | 10: — | 25: — | all: 974.7 [N=15, SIL history in private ops repo]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-05-17 | Session 67 | Total: 997/1000 | Velocity: 10 | protocolVelocity: 1
+Last session: 2026-05-21 | Session 72 | Total: 1000/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-05-21 — Session 72 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 362/362 tests pass, lint clean, build clean; focused trace/submission coverage now proves rich vs weak trace classification |
+| Creative Alignment | 100 | → | Strengthens the invisible proof layer behind replay/rivalry loops without adding UI clutter or generic live-service mechanics |
+| Momentum | 100 | → | Fresh same-day audit replaced the already-shipped S71 plan and all 3 new items shipped in one pass |
+| Engagement | 100 | → | Replay traces now capture movement and aim intent, making future ghost/drift loops feel fairer and more explainable |
+| Process Quality | 100 | → | Start → audit → implement → validation → closeout write-back executed with current artifacts and evidence |
+| Cross-Repo Coherence | 100 | → | Keeps the Studio-wide trust language honest: `trace_contract` now means rich evidence, not just parser success |
+| Security Posture | 100 | ↑ | Weak valid traces are accepted but no longer over-labeled; malformed traces still quarantine |
+| Ecosystem Integration | 100 | → | Edge validator and live smoke script advanced without new dependencies, services, or schema churn |
+| Capital Efficiency | 100 | → | Zero-token, zero-SaaS trust work; replay evidence quality is deterministic local logic |
+| Automation Coverage | 100 | ↑ | Full suite grew to 362 tests, and replay trust smoke now covers rich, weak, and malformed trace cases |
+
+**Top win:** Replay trust now has a quality ladder: movement/aim samples, local evidence analysis, and edge confidence labels agree on weak/basic/rich evidence.
+**Top gap:** Production `validate-replay` still needs deployment plus `npm run replay:trust-smoke` with network permission before the live endpoint proves the 3-case trust contract.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement` (3/3), validation, and `/closeout` write-back completed with evidence.
+
+**Brainstorm**
+1. Deterministic replay drift detector — consume only rich trace bodies plus extracted movement/combat primitives to produce the first drift score; High probability.
+2. Trust Ops debrief chip — show evidence level only after production smoke is green, e.g. "Replay evidence: rich"; Medium probability.
+3. Trace-informed coaching — use weak-trace reasons locally to detect panic shooting, missing aim movement, or no-movement camping without any LLM calls; Medium probability.
 
 ## 2026-05-21 — Session 71 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
 

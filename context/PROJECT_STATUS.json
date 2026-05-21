@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 71 closed the replay trace-trust follow-up: gameplay commands now populate bounded replay traces, malformed trace objects are stripped before network submission, and validate-replay can verify optional trace bodies against byte/count/digest/frame/action-shape rules.",
-  "nextMilestone": "Deploy validate-replay, run the body-backed replay trust smoke against production, then build the first deterministic drift detector from stored trace bodies plus extracted movement/combat primitives.",
+  "currentFocus": "Session 72 closed the replay evidence-quality substrate: command traces now sample movement and aim octants, local trace analysis classifies weak/basic/rich evidence, and validate-replay reserves trace_contract confidence for rich body-backed traces.",
+  "nextMilestone": "Deploy validate-replay, run the 3-case replay trust smoke against production, then build the first deterministic drift detector from rich trace bodies plus extracted movement/combat primitives.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -30,7 +30,7 @@
   ],
   "blockers": [
     "PostHog/Sentry/Ko-fi URL allowlists require analytics/dashboard credentials.",
-    "validate-replay Phase 2B has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement extraction, and trace byte-budgeting, but full deterministic resimulation still needs a replay runner.",
+    "validate-replay Phase 2B has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, and trace byte-budgeting, but full deterministic resimulation still needs a replay runner.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
   "lastUpdated": "2026-05-21",
@@ -41,17 +41,17 @@
   "ignisScore": 47704,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-21",
-  "silSession": 71,
+  "silSession": 72,
   "silScore": 1000,
-  "silAvg3": 999,
+  "silAvg3": 1000,
   "silVelocity": 3,
   "silDebt": "improving",
   "silLastSession": "2026-05-21",
-  "currentSession": 71,
+  "currentSession": 72,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 360,
-  "testsTotal": 360,
+  "testsPassing": 362,
+  "testsTotal": 362,
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-04-14",
   "silRubricVersion": "3.0",
@@ -76,6 +76,6 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-05-21T16:16:00.567Z",
+  "planModeCheckedAt": "2026-05-21T19:10:35.464Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
 }
