@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-05-21",
+  "project": "call-of-doodie",
+  "projectType": "game",
+  "source": "docs/AUDIT_2026-05-21_5.md",
+  "session": 74,
+  "topLine": {
+    "totalItems": 3,
+    "combinedPriority": 139.4,
+    "top3": [
+      "trace-contract-coach",
+      "resim-readiness-meter",
+      "run-brain-trust-drill"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "trace-contract-coach",
+      "tier": "fire",
+      "axis": "feedback loop / gamification / replay trust",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 8,
+      "priority": 55.4,
+      "item": "Replay trace evidence is now visible, but weak traces still read like diagnostics instead of a playable improvement contract.",
+      "recipe": "Add a deterministic trace-evidence contract builder that translates weakness reasons into a next-run drill, then surface it in Run History trust recommendations.",
+      "status": "shipped",
+      "evidence": "src/utils/studioEventOps.js adds buildTraceEvidenceContract(); Run History trust recommendations surface the resulting proof drill."
+    },
+    {
+      "rank": 2,
+      "slug": "resim-readiness-meter",
+      "tier": "fire",
+      "axis": "security / automation / UX",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 8,
+      "priority": 49.2,
+      "item": "The deterministic replay-resim milestone still has no local readiness meter; the game cannot tell whether recent evidence is strong enough to justify the next trust tier.",
+      "recipe": "Extend Studio event trust summaries with a resim readiness status derived from rich/basic/weak trace counts and sync health; surface the status as a trust chip and recommendation line.",
+      "status": "shipped",
+      "evidence": "src/utils/studioEventOps.js adds buildReplayResimReadiness(); src/components/MenuPanels.jsx renders Trace basic and resim readiness trust chips."
+    },
+    {
+      "rank": 3,
+      "slug": "run-brain-trust-drill",
+      "tier": "high",
+      "axis": "AI / intelligence integration / token-cost reduction",
+      "effort": "45m",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 34.8,
+      "item": "Run Brain remains zero-token and useful, but it ignores the trust evidence loop that now exists in local Studio events.",
+      "recipe": "Teach buildRunBrain() to prefer a trace-proof drill when the latest submitted run has weak evidence, keeping the advice local and zero-LLM.",
+      "status": "shipped",
+      "evidence": "src/utils/runBrain.js consumes latest trust trace evidence and prioritizes a replay-proof drill when the latest submitted run is weak."
+    }
+  ],
+  "validation": {
+    "targeted": "12/12 focused studioEventOps + runBrain tests passed.",
+    "lint": "npm run lint passed.",
+    "build": "npm run build passed.",
+    "fullTests": "npm test passed: 370/370 tests across 44 files."
+  }
+}

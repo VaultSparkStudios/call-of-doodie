@@ -1,14 +1,14 @@
-# Implement Plan — 2026-05-21 Session 73
+# Implement Plan — 2026-05-21 Session 74
 
-Source: `docs/AUDIT_2026-05-21_4.md`
+Source: `docs/AUDIT_2026-05-21_5.md`
 
 ## Sequenced Order
 
-1. `trace-evidence-submission-loop` — foundation. Attach compact replay trace evidence to session submissions and preserve it in leaderboard submit results.
-2. `edge-trace-quality-receipts` — backend receipt. Mirror trace-quality analysis in `submit-score`, store it in member metadata, and return it in the success response.
-3. `trust-ops-trace-surface` — player/operator surface. Summarize trace evidence in local Studio trust events and Run History trust ops.
+1. `trace-contract-coach` — add trace evidence contract builder and trust recommendation copy.
+2. `resim-readiness-meter` — add resim readiness scoring to Studio event summaries and Run History trust chips.
+3. `run-brain-trust-drill` — route weak trace evidence into Run Brain's next experiment.
 
-## Verification Target
+## Validation Plan
 
-- Focused utility tests for run submission and Studio event summaries.
-- Lint/build/full test if the focused pass is clean.
+- Focused unit tests: `src/utils/studioEventOps.test.js`, `src/utils/runBrain.test.js`
+- Broader quality gates: `npm run lint`, `npm run build`, `npm test`

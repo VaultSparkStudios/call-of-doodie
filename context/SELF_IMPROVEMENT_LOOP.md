@@ -787,3 +787,7 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 1. Deterministic replay runner — consume stored rich trace bodies to calculate first-pass movement/action drift. High probability.
 2. Edge receipt smoke — deploy `submit-score`, submit rich/weak trace fixtures, and verify returned/stored `traceEvidence`. High probability.
 3. Trust badge experiment — show a small post-submit "rich replay evidence" receipt on DeathScreen only after player testing confirms it reads as confidence, not surveillance. Medium probability.
+
+## 2026-05-21 — Session 74 — Trace-proof coaching readiness
+
+SIL +3: Converted replay trace trust from passive diagnostics into actionable player drills and resim readiness telemetry while preserving the zero-token/local-first Run Brain decision. Validation: 370/370 tests, lint clean, build passing.

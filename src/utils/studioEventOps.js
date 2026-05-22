@@ -24,6 +24,13 @@ export function summarizeStudioEvents(studioEvents = []) {
   }, { none: 0, weak: 0, basic: 0, rich: 0 });
   const latestTraceEvidence = traceEvidenceEvents[0]?.payload?.traceEvidence || null;
   const latestSyncedEvent = synced.find((event) => event?.syncedAt) || null;
+  const traceContract = buildTraceEvidenceContract(latestTraceEvidence);
+  const resimReadiness = buildReplayResimReadiness({
+    traceEvidenceCounts,
+    syncedCount: synced.length,
+    failedSyncCount: failedSync.length,
+    latestTraceEvidence,
+  });
   return {
     trust,
     frontDoorCount: frontDoor.length,
@@ -41,6 +48,92 @@ export function summarizeStudioEvents(studioEvents = []) {
     latestSubmission,
     traceEvidenceCounts,
     latestTraceEvidence,
+    traceContract,
+    resimReadiness,
+  };
+}
+
+export function buildTraceEvidenceContract(traceEvidence = null) {
+  const level = traceEvidence?.level || "none";
+  const reasons = Array.isArray(traceEvidence?.weaknessReasons) ? traceEvidence.weaknessReasons : [];
+  if (level === "rich") {
+    return {
+      status: "complete",
+      title: "Replay Proof Ready",
+      target: "Keep trace capture active and bank another rich seeded run.",
+      detail: "Movement, aim, and interaction evidence are strong enough for replay-trust work.",
+    };
+  }
+  if (level === "basic") {
+    return {
+      status: "almost",
+      title: "Upgrade Replay Proof",
+      target: "Add two movement samples, one aim sample, and two interactions across a 60+ frame run.",
+      detail: "The trace is valid, but it needs richer player intent before it can carry high-trust replay claims.",
+    };
+  }
+
+  const targetParts = [];
+  if (reasons.includes("too-few-events") || reasons.includes("no-events")) targetParts.push("record at least 6 trace events");
+  if (reasons.includes("short-duration")) targetParts.push("span at least 60 frames");
+  if (reasons.includes("low-movement-evidence")) targetParts.push("move in two distinct windows");
+  if (reasons.includes("missing-aim-evidence")) targetParts.push("aim before firing");
+  if (reasons.includes("low-interaction-evidence")) targetParts.push("fire, reload, dash, or choose a route twice");
+  if (reasons.includes("invalid-trace")) targetParts.push("submit a valid trace body");
+
+  return {
+    status: level === "weak" ? "needs-drill" : "no-sample",
+    title: level === "weak" ? "Trace Proof Drill" : "Trace Proof Baseline",
+    target: targetParts.length ? targetParts.join("; ") + "." : "Bank one seeded run with movement, aim, and interaction evidence.",
+    detail: level === "weak"
+      ? "This accepted run needs a clearer input trail before replay trust can advance."
+      : "No usable trace evidence has been recorded yet.",
+  };
+}
+
+export function buildReplayResimReadiness({
+  traceEvidenceCounts = {},
+  syncedCount = 0,
+  failedSyncCount = 0,
+  latestTraceEvidence = null,
+} = {}) {
+  const rich = traceEvidenceCounts.rich || 0;
+  const basic = traceEvidenceCounts.basic || 0;
+  const weak = traceEvidenceCounts.weak || 0;
+  const latestLevel = latestTraceEvidence?.level || "none";
+  let status = "no-samples";
+  let score = 10;
+  let detail = "No trace evidence samples are available for replay-resim work.";
+
+  if (rich >= 2 && failedSyncCount === 0) {
+    status = "ready";
+    score = 95;
+    detail = "Multiple rich traces and clean sync health make the next resim pilot credible.";
+  } else if (rich >= 1) {
+    status = "pilot-ready";
+    score = failedSyncCount > 0 ? 68 : 78;
+    detail = "At least one rich trace exists; bank another rich sample before widening the gate.";
+  } else if (rich + basic >= 2) {
+    status = "evidence-building";
+    score = 58;
+    detail = "Trace samples are valid, but need richer movement and aim evidence.";
+  } else if (weak > 0 || latestLevel === "weak") {
+    status = "needs-drill";
+    score = 35;
+    detail = "Accepted runs exist, but replay evidence is still too weak for resim confidence.";
+  }
+
+  if (failedSyncCount > 0) {
+    score = Math.max(0, score - 10);
+    detail += " Sync retries should be cleared before treating this as production-ready.";
+  }
+
+  return {
+    status,
+    score,
+    label: `Resim ${status.replace(/-/g, " ")}`,
+    detail,
+    samples: { rich, basic, weak, synced: syncedCount, retry: failedSyncCount },
   };
 }
 
@@ -58,6 +151,12 @@ export function buildTrustRecommendations(summary) {
   if (summary.latestTraceEvidence?.level === "weak" && summary.latestTraceEvidence.weaknessReasons?.[0]) {
     lines.push(`Trace gap: ${summary.latestTraceEvidence.weaknessReasons[0]}`);
   }
+  if (summary.traceContract?.target) {
+    lines.push(`${summary.traceContract.title}: ${summary.traceContract.target}`);
+  }
+  if (summary.resimReadiness?.label) {
+    lines.push(`${summary.resimReadiness.label}: ${summary.resimReadiness.detail}`);
+  }
   if (summary.rejectionCount === 0) {
     lines.push("No local rejection history recorded yet.");
   }
@@ -74,5 +173,5 @@ export function buildTrustRecommendations(summary) {
   if (summary.perkChoiceCount > 0 || summary.routeChoiceCount > 0) {
     lines.push(`Decision telemetry: ${summary.perkChoiceCount} perk picks · ${summary.routeChoiceCount} route picks`);
   }
-  return lines.slice(0, 4);
+  return lines.slice(0, 5);
 }

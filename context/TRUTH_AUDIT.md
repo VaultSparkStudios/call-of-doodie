@@ -1,6 +1,13 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-05-21 - Session 74
+
+- `src/utils/studioEventOps.js` now owns trace-evidence contracts and replay-resim readiness summaries derived from local Studio trust events.
+- `src/components/MenuPanels.jsx` Run History trust ops now displays Trace basic and resim readiness chips alongside existing trace rich/weak chips.
+- `src/utils/runBrain.js` zero-token Run Brain now prioritizes replay-proof drills when the latest trust event has weak trace evidence.
+- Validation truth: focused tests passed 12/12, `npm run lint` passed, `npm run build` passed, and `npm test` passed 370/370 across 44 files.
+
 Overall status: green
 Last reviewed: 2026-05-21
 Public-safe summary only. Sensitive verification notes are maintained privately.

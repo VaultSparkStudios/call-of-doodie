@@ -378,3 +378,7 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Updated `supabase/functions/submit-score/index.ts` so the Edge path mirrors trace-evidence analysis, stores it in member session metadata, and returns it as a submit receipt.
 - Updated `src/utils/studioEventOps.js` and `src/components/MenuPanels.jsx` so Run History trust ops shows rich/weak trace evidence counts and per-event trace gaps.
 - Validation: focused trace/submission/session/event tests 22/22; `npm run lint` clean; `npm test` 363/363; `npm run build` passing.
+
+## 2026-05-21 — Session 74 — trace-proof coaching readiness
+
+Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audit items, added additional focused tests on request, and validated with lint/build/full test suite. Full tests now pass 370/370.

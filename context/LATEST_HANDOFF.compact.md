@@ -4,6 +4,30 @@
 
 Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible; provide short readable impact changes summary post-closeout`.
 
+## Where We Left Off (Session 73 — trace-evidence feedback loop, all shipped)
+
+**Intent outcome:** Achieved for `/start`, fresh same-day `/audit`, `/implement`, and validation. Closeout write-back is in progress for this Session 73 state.
+
+### What shipped
+- **trace-evidence-submission-loop** — `buildSessionSubmission()` now attaches compact `traceEvidence` from the replay trace analyzer, and leaderboard submit results preserve that evidence across online/rejected/local outcomes.
+- **edge-trace-quality-receipts** — `submit-score` mirrors trace-evidence analysis, stores `traceEvidence` in member `game_sessions.metadata`, and returns it in success responses.
+- **trust-ops-trace-surface** — Run History trust ops now shows rich/weak trace evidence counts and per-event weakness reasons.
+
+### Validation
+- `npx vitest run src/utils/runSubmission.test.js src/utils/studioEventOps.test.js src/systems/runSession.test.js src/utils/replayCommandTrace.test.js` -> **22/22** passing
+- `npm run lint` -> clean
+- `npm test` -> **363/363** passing across 44 files
+- `npm run build` -> passing
+
+### Next Recommended Slice
+- [ ] Deploy `submit-score` and smoke a rich/weak trace fixture against production to verify returned/stored `traceEvidence`.
+- [ ] Build the first deterministic replay drift detector using rich trace bodies plus extracted movement/action primitives.
+- [ ] Consider a post-submit replay-evidence receipt only after player testing confirms it feels like confidence, not surveillance.
+
+---
+
+Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible; provide short readable impact changes summary post-closeout`.
+
 ## Where We Left Off (Session 72 — replay evidence-quality substrate, all shipped)
 
 **Intent outcome:** Achieved. `/start` ran with Codex session lock, context-meter returned `CONTINUE`, a fresh same-day audit was written to `docs/AUDIT_2026-05-21_3.md`, all three implementation items shipped, validation is green, and closeout write-back now reflects the S72 state.
@@ -16,27 +40,3 @@ Session Intent: Founder invoked `/goal` with `/start then /audit then /implement
 
 ### Validation
 - `npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js` -> **15/15** passing
-- `npm run lint` -> clean
-- `npm run build` -> passing
-- `npm test` -> **362/362** passing across 44 files
-
-### Next Recommended Slice
-- [ ] Deploy `validate-replay` and run `npm run replay:trust-smoke` with network permission against production.
-- [ ] Build the first deterministic replay drift detector from rich trace bodies plus extracted movement/combat primitives.
-- [ ] Add replay evidence visibility to debrief/trust ops only after production smoke is green.
-
----
-
-## Where We Left Off (Session 71 — replay trace-trust follow-up, all shipped)
-
-**Intent outcome:** Achieved. `/start` ran with Codex session lock, context-meter returned `CONTINUE`, a fresh same-day audit was written to `docs/AUDIT_2026-05-21_2.md`, all three implementation items shipped, and validation is green.
-
-### What shipped
-- **replay-command-trace-capture** — command traces are no longer empty shells. App actions now record bounded trace events for shoot, dash, grenade, perk, route, shop, reload, and weapon swap before death/submit encoding.
-- **trace-submission-validity-gate** — `buildSessionSubmission()` now forwards trace metadata only when `isValidReplayCommandTrace()` proves digest/count/body consistency, keeping malformed traces out of the network path.
-- **validate-replay-trace-body-parity** — `validate-replay` now validates optional trace bodies with byte, count, digest, frame, and action-shape checks; the live smoke script sends both body-backed valid and malformed cases.
-
-### Validation
-- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js` -> **13/13** passing
-- `npm run lint` -> clean
-- `npm run build` -> passing

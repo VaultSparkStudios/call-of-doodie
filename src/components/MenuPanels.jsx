@@ -312,7 +312,9 @@ export function RunHistoryPanel({
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFD79C", border: "1px solid rgba(255,215,156,0.18)" }}>Queued {trustSummary.pendingSyncCount}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFB5B5", border: "1px solid rgba(255,120,120,0.2)" }}>Retry {trustSummary.failedSyncCount}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#B8FFB8", border: "1px solid rgba(120,255,120,0.2)" }}>Trace rich {trustSummary.traceEvidenceCounts.rich}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#D6D6FF", border: "1px solid rgba(180,180,255,0.2)" }}>Trace basic {trustSummary.traceEvidenceCounts.basic}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFE0A3", border: "1px solid rgba(255,224,163,0.2)" }}>Trace weak {trustSummary.traceEvidenceCounts.weak}</span>
+            <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: trustSummary.resimReadiness.score >= 75 ? "#B8FFB8" : "#FFD79C", border: "1px solid rgba(255,215,156,0.2)" }}>{trustSummary.resimReadiness.label} {trustSummary.resimReadiness.score}</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
             {trustRecommendations.map((line, index) => (

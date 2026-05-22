@@ -1,5 +1,21 @@
 # Latest Handoff
 
+## Where We Left Off - Session 74 (2026-05-21)
+
+Shipped trace-proof coaching + resim readiness from docs/AUDIT_2026-05-21_5.md. The trust loop now turns trace evidence into player-actionable drills, shows resim readiness in Run History, and lets Run Brain recommend a replay-proof drill when the latest accepted run has weak evidence.
+
+Validation:
+- focused studioEventOps/runBrain tests: 12/12
+- npm run lint: passed
+- npm run build: passed
+- npm test: 370/370 across 44 files
+
+Next:
+- Continue toward the larger deterministic replay resimulation runner when a broader trust sprint is desired.
+- Human/data gates remain: physical QA, Itch.io publication, analytics dashboard secrets, HomeV2 Lighthouse/funnel gate.
+
+---
+
 Session Intent: Founder invoked `/goal` with `/start then /audit then /implement then /closeout - Use genius-level, sophisticated thinking; be as creative and innovative as possible; provide short readable impact changes summary post-closeout`.
 
 ## Where We Left Off (Session 73 — trace-evidence feedback loop, all shipped)

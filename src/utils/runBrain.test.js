@@ -23,4 +23,50 @@ describe("runBrain", () => {
     expect(brain.precisionStreak).toBe(6);
     expect(brain.nextExperiment).toContain("precision route");
   });
+
+  it("prioritizes trace proof drills when the latest trust event is weak", () => {
+    const brain = buildRunBrain({
+      latestRun: { bestPrecisionStreak: 6 },
+      studioEvents: [
+        {
+          type: "score_submit_result",
+          category: "trust",
+          payload: {
+            traceEvidence: {
+              level: "weak",
+              count: 1,
+              weaknessReasons: ["too-few-events", "missing-aim-evidence"],
+            },
+          },
+        },
+      ],
+    });
+
+    expect(brain.traceContract.status).toBe("needs-drill");
+    expect(brain.nextExperiment).toContain("replay-proof drill");
+    expect(brain.nextExperiment).toContain("aim before firing");
+  });
+
+  it("does not let rich trace evidence override stronger gameplay coaching", () => {
+    const brain = buildRunBrain({
+      latestRun: { bestPrecisionStreak: 7 },
+      studioEvents: [
+        {
+          type: "score_submit_result",
+          category: "trust",
+          payload: {
+            traceEvidence: {
+              level: "rich",
+              count: 9,
+              weaknessReasons: [],
+            },
+          },
+        },
+      ],
+    });
+
+    expect(brain.traceContract.status).toBe("complete");
+    expect(brain.nextExperiment).toContain("precision route");
+  });
+
 });

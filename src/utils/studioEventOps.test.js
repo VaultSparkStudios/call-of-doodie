@@ -1,5 +1,10 @@
 import { describe, expect, test } from "vitest";
-import { buildTrustRecommendations, summarizeStudioEvents } from "./studioEventOps.js";
+import {
+  buildReplayResimReadiness,
+  buildTraceEvidenceContract,
+  buildTrustRecommendations,
+  summarizeStudioEvents,
+} from "./studioEventOps.js";
 
 describe("studioEventOps", () => {
   const events = [
@@ -25,6 +30,8 @@ describe("studioEventOps", () => {
     expect(summary.traceEvidenceCounts.rich).toBe(1);
     expect(summary.traceEvidenceCounts.weak).toBe(1);
     expect(summary.latestTraceEvidence.level).toBe("rich");
+    expect(summary.traceContract.status).toBe("complete");
+    expect(summary.resimReadiness.status).toBe("pilot-ready");
   });
 
   test("builds operator-facing recommendation lines", () => {
@@ -32,5 +39,63 @@ describe("studioEventOps", () => {
     const lines = buildTrustRecommendations(summary);
     expect(lines[0]).toContain("Last rejection");
     expect(lines.some((line) => line.includes("Replay evidence: rich"))).toBe(true);
+    expect(lines.some((line) => line.includes("Replay Proof Ready"))).toBe(true);
+    expect(lines.some((line) => line.includes("Resim pilot ready"))).toBe(true);
   });
+
+  test("turns weak trace evidence into a concrete proof drill", () => {
+    const contract = buildTraceEvidenceContract({
+      level: "weak",
+      count: 1,
+      weaknessReasons: ["too-few-events", "missing-aim-evidence", "low-interaction-evidence"],
+    });
+
+    expect(contract.status).toBe("needs-drill");
+    expect(contract.target).toContain("record at least 6 trace events");
+    expect(contract.target).toContain("aim before firing");
+  });
+
+  test("marks resim readiness when multiple rich traces have clean sync health", () => {
+    const readiness = buildReplayResimReadiness({
+      traceEvidenceCounts: { rich: 2, basic: 1, weak: 0 },
+      syncedCount: 4,
+      failedSyncCount: 0,
+    });
+
+    expect(readiness.status).toBe("ready");
+    expect(readiness.score).toBeGreaterThan(90);
+  });
+
+  test("gives basic trace evidence an upgrade contract", () => {
+    const contract = buildTraceEvidenceContract({
+      level: "basic",
+      count: 4,
+      weaknessReasons: [],
+    });
+
+    expect(contract.status).toBe("almost");
+    expect(contract.title).toBe("Upgrade Replay Proof");
+    expect(contract.target).toContain("60+ frame run");
+  });
+
+  test("penalizes resim readiness when sync retries are present", () => {
+    const readiness = buildReplayResimReadiness({
+      traceEvidenceCounts: { rich: 1, basic: 1, weak: 0 },
+      syncedCount: 2,
+      failedSyncCount: 2,
+    });
+
+    expect(readiness.status).toBe("pilot-ready");
+    expect(readiness.score).toBeLessThan(70);
+    expect(readiness.detail).toContain("Sync retries");
+    expect(readiness.samples.retry).toBe(2);
+  });
+
+  test("keeps empty trust history in a no-sample state", () => {
+    const summary = summarizeStudioEvents([]);
+    expect(summary.traceContract.status).toBe("no-sample");
+    expect(summary.resimReadiness.status).toBe("no-samples");
+    expect(buildTrustRecommendations(summary).some((line) => line.includes("Trace Proof Baseline"))).toBe(true);
+  });
+
 });

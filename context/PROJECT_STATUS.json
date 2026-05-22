@@ -33,7 +33,7 @@
     "validate-replay Phase 2B has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, trace byte-budgeting, and visible traceEvidence receipts, but full deterministic resimulation still needs a replay runner.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
-  "lastUpdated": "2026-05-21",
+  "lastUpdated": "2026-05-22",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",

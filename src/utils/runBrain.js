@@ -1,3 +1,5 @@
+import { buildTraceEvidenceContract } from "./studioEventOps.js";
+
 function n(value, fallback = 0) {
   const num = Number(value);
   return Number.isFinite(num) ? num : fallback;
@@ -18,6 +20,8 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
     return /replay|rematch|history_replay/i.test(haystack);
   });
   const adviceViews = recentEvents.filter(event => event?.type === "debrief_intelligence");
+  const latestTraceEvidence = recentEvents.find(event => event?.category === "trust" && event?.payload?.traceEvidence?.level)?.payload?.traceEvidence || null;
+  const traceContract = buildTraceEvidenceContract(latestTraceEvidence);
   const abandons = recentEvents.filter(event => event?.type === "mode_abandon");
   const deaths = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy.slice(0, 8) : [];
   const precisionStreak = n(latestRun?.bestPrecisionStreak);
@@ -42,6 +46,8 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
 
   const nextExperiment = latestAdvice
     ? `Run the next seed as a test of: ${latestAdvice}`
+    : latestTraceEvidence?.level === "weak"
+      ? `Run one replay-proof drill: ${traceContract.target}`
     : precisionStreak >= 5
       ? "Run one precision route: keep the same aim discipline, then buy damage multipliers before spray weapons."
     : archetype === "survival_gap"
@@ -61,6 +67,7 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
     pressure,
     nextExperiment,
     precisionStreak,
+    traceContract,
   };
 }
 
