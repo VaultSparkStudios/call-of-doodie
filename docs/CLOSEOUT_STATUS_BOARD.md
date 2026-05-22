@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-21 (Session 73 closeout) -->
+<!-- generated-at: 2026-05-22 (Session 74 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S73 ═════════════════════╗
-║  Date: 2026-05-21  ·  SIL: 999/1000  ·  Velocity: 4 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S74 ═════════════════════╗
+║  Date: 2026-05-22  ·  SIL: 999/1000  ·  Velocity: 4 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ **trace-evidence-submission-loop** — `buildSessionSubmission  ║
-║  ✓ **edge-trace-quality-receipts** — `submit-score` mirrors tra  ║
-║  ✓ **trust-ops-trace-surface** — Run History trust ops now show  ║
-║  ✓ `npx vitest run src/utils/runSubmission.test.js src/utils/st  ║
-║  ✓ `npm run lint` -> clean                                       ║
+║  ✓ focused studioEventOps/runBrain tests: 12/12                  ║
+║  ✓ npm run lint: passed                                          ║
+║  ✓ npm run build: passed                                         ║
+║  ✓ npm test: 370/370 across 44 files                             ║
+║  ✓ Continue toward the larger deterministic replay resimulation  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,25 +28,25 @@
 ║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  · context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 24 files  ·  M:21 A:0 D:0 ?:3                          ║
+║  Changes: 2 files  ·  M:2 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         363/363                                          ║
+║  Tests:         370/370                                          ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

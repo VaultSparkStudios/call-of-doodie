@@ -35,7 +35,7 @@ Full decision: `vaultspark-studio-ops/docs/STUDIO_CANON.md` → CANON-008
 
 <!-- studio-os:universal-sections-start -->
 <!-- Source: vaultspark-studio-ops/docs/templates/project-system/AGENTS_universal_sections.md -->
-<!-- DO NOT EDIT — re-run `node scripts/propagate-agents-sections.mjs --apply` from studio-ops to refresh -->
+<!-- DO NOT EDIT — re-run via /start deferred-propagation hook or scripts/propagate-agents-sections.mjs -->
 
 <!-- Universal AGENTS.md sections — propagate to every Studio repo via scripts/run-template-propagation.mjs -->
 <!-- Owner: Studio Ops · Source: docs/templates/project-system/AGENTS_universal_sections.md -->
@@ -338,6 +338,35 @@ When two or more agents work on a shared concern (canon, protocol, schema, ecosy
 - Cargo manifest: `vaultspark-studio-ops/portfolio/ark/MANIFEST.json`
 - Doctor probe: `cross-repo-sync-health` (in `scripts/run-doctor.mjs`)
 - Registry watcher: `node scripts/watch-registry-changes.mjs`
+
+---
+
+## Free-Tier Cost Discipline (CANON-029 · CDR-S138.3, MANDATORY pre-revenue)
+
+Every Studio project's free tier MUST be **per-user cost-neutral to the studio at 1000+ users**. Features that consume per-user variable studio cost (LLM API calls without BYOK, image/audio/video gen, transcription, transactional email beyond hard ceiling, vector DB writes, per-user paid compute, per-user paid monitoring, metered third-party APIs) MUST be gated to paid tiers OR served via no-cost-to-studio patterns.
+
+**Approved free-tier patterns:**
+- **BYOK (Bring Your Own Key)** — user supplies provider API key; we orchestrate. Default for LLM features on free plans. Reference: Velaxis.
+- **Local-only compute** — browser-side, localStorage / IndexedDB.
+- **Cached / static** — pre-computed at build, served from CDN / edge KV.
+- **Trial-ceiling** — N free uses lifetime, hard 429 with upgrade prompt (NOT degraded experience).
+- **Stay-in-free-band** — Cloudflare Workers free 100K/day, Supabase free 500MB, Hetzner CX22 $5/mo flat.
+
+**Forbidden on free tier (always paid):** studio-paid LLM API · image/audio/video gen · transcription · transactional email beyond hard ceiling · vector DB writes beyond free band · per-user paid compute · per-user paid monitoring · per-call metered third-party APIs.
+
+**Implementation gate (MANDATORY every project):**
+- `context/PROJECT_STATUS.json` declares `freeTierCostStatus`: `cost-neutral | BYOK | trial-ceiling | paid-only | exempt-internal | AUDIT-PENDING` (default).
+- `app-release-gate` blocks SPARKED flip if `AUDIT-PENDING`.
+- Free-tier feature flags enforce gate **server-side** (never trust client).
+- Audit doc: `docs/FREE_TIER_AUDIT_<date>.md` (template: `vaultspark-studio-ops/docs/FREE_TIER_AUDIT_2026-05-22_PORTFOLIO.md`).
+
+**Approved exceptions (narrow, log in DECISIONS.md):** time-boxed acquisition burn with named $-cap + kill date · `audience: internal` projects · copyleft fork obligations.
+
+**Reference good patterns:** Seamline `lib/tiers.ts` (per-feature cost comments + server-side enforcement) · Velaxis (BYOK + no backend) · Vorn `llm-gateway.ts` (sophisticated embedding/semantic/prompt caching for paid tier).
+
+**Rationale.** Zero revenue + only costs. 1000 free users × $0.05/user/day LLM × 5 SPARKED projects = $7.5K/mo burn before $1 of revenue. Pre-revenue, no general override.
+
+Full canon: `vaultspark-studio-ops/docs/STUDIO_CANON.md` → CANON-029.
 
 ---
 

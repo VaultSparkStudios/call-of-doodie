@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 73 closed the trace-evidence feedback loop: session submissions now carry compact traceEvidence, submit-score returns/stores trace-quality receipts, and Run History trust ops surfaces rich/weak evidence counts plus weakness reasons.",
-  "nextMilestone": "Deploy submit-score, smoke rich/weak trace fixtures against production, then build the first deterministic drift detector from rich trace bodies plus extracted movement/action primitives.",
+  "currentFocus": "Session 74 closed the trace-proof coaching readiness loop: replay trace evidence now becomes actionable proof drills, Run History shows resim readiness, and Run Brain can recommend weak-trace replay-proof drills without LLM/API calls.",
+  "nextMilestone": "Use the new resim readiness signal to pick the next deterministic replay resimulation slice when a broader trust sprint is desired.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -41,17 +41,17 @@
   "ignisScore": 47704,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-05-21",
-  "silSession": 73,
+  "silSession": 74,
   "silScore": 999,
   "silAvg3": 1000,
   "silVelocity": 4,
   "silDebt": "decreasing",
   "silLastSession": "2026-05-21",
-  "currentSession": 73,
+  "currentSession": 74,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 363,
-  "testsTotal": 363,
+  "testsPassing": 370,
+  "testsTotal": 370,
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-04-14",
   "silRubricVersion": "3.0",
@@ -77,5 +77,6 @@
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
   "planModeCheckedAt": "2026-05-21T20:36:12.506Z",
-  "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z"
+  "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
+  "freeTierCostStatus": "cost-neutral"
 }
