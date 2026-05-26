@@ -263,3 +263,13 @@ Rationale: `inputHash` is intentionally one-way; it can prove that the client co
 Trade-off accepted: replay validation remains heuristic/replay-contract based until the client/server payload changes. This keeps the trust surface honest instead of shipping a named resim path that cannot work.
 
 ---
+
+## 2026-05-26 — Accounts use Supabase Auth first, Obelisk as trust wrapper
+
+Decision: the account bridge should implement Supabase Auth for player sign-in and persistence, while Obelisk wraps the sensitive transitions with signed intent receipts and future passkey-first posture.
+
+Rationale: custom auth would create unnecessary risk and cost. Supabase already fits the current backend shape; Obelisk adds the Studio-wide trust layer where it matters most: guest-to-account migration, callsign claims, capability-scoped server mutations, and future cross-Studio identity.
+
+Trade-off accepted: passkeys are not the first implementation step for this game. The first useful account version is magic-link/Google sign-in plus durable progress, leaderboard ownership, and supporter recovery.
+
+---

@@ -5,6 +5,22 @@ let muted = false;
 export function setMuted(val) { muted = val; }
 export function getMuted() { return muted; }
 
+function _rand(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function _pick(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function _maybe(chance) {
+  return Math.random() < chance;
+}
+
+function _detune(freq, cents) {
+  return freq * Math.pow(2, cents / 1200);
+}
+
 // iOS / Safari require AudioContext to be created & resumed inside a user gesture.
 // This one-shot listener fires on first pointer interaction and unlocks audio globally.
 function _unlockAudio() {
@@ -65,9 +81,12 @@ function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, start
     gain.connect(dest || ctx.destination);
     osc.type = type;
     const t = ctx.currentTime + startDelay;
-    osc.frequency.setValueAtTime(freq, t);
-    if (freqEnd !== null) osc.frequency.linearRampToValueAtTime(freqEnd, t + duration);
-    gain.gain.setValueAtTime(vol, t);
+    const cents = duration <= 0.45 ? _rand(-9, 9) : _rand(-3, 3);
+    const startFreq = _detune(freq, cents);
+    const endFreq = freqEnd !== null ? _detune(freqEnd, cents * 0.6) : null;
+    osc.frequency.setValueAtTime(startFreq, t);
+    if (endFreq !== null) osc.frequency.linearRampToValueAtTime(endFreq, t + duration);
+    gain.gain.setValueAtTime(vol * _rand(0.92, 1.08), t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
     osc.start(t);
     osc.stop(t + duration);
@@ -82,8 +101,10 @@ function noise(duration, vol = 0.15, startDelay = 0, dest = null) {
     const samples = Math.floor(sampleRate * duration);
     const buf = ctx.createBuffer(1, samples, sampleRate);
     const data = buf.getChannelData(0);
+    const color = _rand(0.4, 1.3);
     for (let i = 0; i < samples; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.max(0, 1 - (i / samples) * 2.5);
+      const fade = Math.max(0, 1 - (i / samples) * (2.0 + color));
+      data[i] = (Math.random() * 2 - 1) * fade;
     }
     const src = ctx.createBufferSource();
     const gain = ctx.createGain();
@@ -97,32 +118,59 @@ function noise(duration, vol = 0.15, startDelay = 0, dest = null) {
   } catch {}
 }
 
+function chirp(freqs, duration = 0.06, type = "triangle", vol = 0.05, gap = 0.04, dest = null) {
+  freqs.forEach((f, i) => tone(f, duration * _rand(0.85, 1.15), type, vol, null, i * gap, dest));
+}
+
+function impact(root, dest = null, strength = 1) {
+  noise(0.08 * strength, 0.045 * strength, 0, dest);
+  tone(root, 0.09 * strength, "sawtooth", 0.055 * strength, root * 0.45, 0, dest);
+}
+
 // ===== EXPORTED SOUND FUNCTIONS =====
 
 export function soundShoot(weaponIdx) {
+  const micro = _rand(-18, 18);
   switch (weaponIdx) {
-    case 0: tone(700, 0.05, "square", 0.06, 500); break;          // Banana Blaster: quick pew
-    case 1: tone(120, 0.35, "sawtooth", 0.13, 60); noise(0.2, 0.1); break; // RPG: low thud
-    case 2: tone(1400, 0.018, "square", 0.04, 1000); break;       // Minigun: high tick
-    case 3: tone(280, 0.12, "square", 0.08, 180); break;           // Plunger: thwonk
-    case 4: noise(0.03, 0.16); tone(2600, 0.05, "sawtooth", 0.09, 400); break; // Sniper-ator: sharp crack
-    case 5: tone(600, 0.018, "square", 0.05, 1800); break; // Squirt Gun: high squirt tick
-    case 6: noise(0.09, 0.14); tone(300, 0.05, "square", 0.05, 180); break; // Confetti Cannon: pop blast
-    case 7: tone(1200, 0.04, "square", 0.06, 900); tone(1000, 0.04, "triangle", 0.04, 800, 0.04); tone(900, 0.04, "square", 0.05, 700, 0.08); break; // Shock Zapper: triple zap
-    case 8: tone(600, 0.28, "sawtooth", 0.09, 180); noise(0.18, 0.04, 0.04); break; // Boomerang: WHOOSH sweep
-    case 9: tone(55, 0.18, "sawtooth", 0.16, 180); tone(4200, 0.10, "square", 0.07, 200, 0.02); noise(0.06, 0.14, 0.01); break; // Railgun: deep electric rail discharge
-    case 10: tone(2200, 0.04, "triangle", 0.08, 3200); tone(1800, 0.06, "triangle", 0.04, 800, 0.04); break; // Ricochet Pistol: metallic high ping
-    case 11: tone(180, 0.12, "sawtooth", 0.10, 120); tone(220, 0.08, "square", 0.06, 160, 0.06); break; // Nuclear Kazoo: low nasal honk
+    case 0:
+      tone(_detune(_pick([660, 700, 740]), micro), 0.045, "square", 0.055, 500);
+      if (_maybe(0.35)) tone(1040, 0.025, "triangle", 0.018, 760, 0.018);
+      break;          // Banana Blaster: quick pew
+    case 1:
+      impact(120, null, 1.35); tone(95, 0.32, "sawtooth", 0.12, 48); noise(0.18, 0.11, 0.03); break; // RPG: low thud
+    case 2:
+      tone(_pick([1280, 1400, 1520]), 0.016, "square", 0.038, 900);
+      if (_maybe(0.3)) tone(2800, 0.012, "triangle", 0.014, 1800, 0.006);
+      break;       // Minigun: high tick
+    case 3:
+      tone(_pick([230, 260, 290]), 0.11, "square", 0.075, 170); noise(0.035, 0.025, 0.02); break;           // Plunger: thwonk
+    case 4:
+      noise(0.025, 0.17); tone(_pick([2400, 2600, 2900]), 0.045, "sawtooth", 0.088, 360); tone(120, 0.06, "sine", 0.025, 70, 0.015); break; // Sniper-ator: sharp crack
+    case 5:
+      tone(_pick([540, 600, 680]), 0.016, "square", 0.044, 1800); noise(0.018, 0.018, 0.004); break; // Squirt Gun: high squirt tick
+    case 6:
+      noise(0.085, 0.145); chirp([900, 1250, 1600].sort(() => Math.random() - 0.5), 0.025, "square", 0.024, 0.018); tone(300, 0.05, "square", 0.045, 180); break; // Confetti Cannon: pop blast
+    case 7:
+      chirp(_pick([[1200, 1000, 900], [1320, 990, 760], [1100, 1450, 880]]), 0.04, "square", 0.052, 0.038); break; // Shock Zapper: triple zap
+    case 8:
+      tone(_pick([520, 600, 680]), 0.26, "sawtooth", 0.085, 160); noise(0.16, 0.045, 0.04); if (_maybe(0.4)) tone(980, 0.08, "triangle", 0.02, 520, 0.11); break; // Boomerang: whoosh sweep
+    case 9:
+      tone(55, 0.18, "sawtooth", 0.15, 180); chirp([4200, 2500, 1200], 0.045, "square", 0.055, 0.025); noise(0.06, 0.14, 0.01); break; // Railgun: deep electric rail discharge
+    case 10:
+      chirp(_pick([[2200, 3300], [2400, 1900, 3100], [1800, 2600]]), 0.035, "triangle", 0.058, 0.035); break; // Ricochet Pistol: metallic high ping
+    case 11:
+      tone(_pick([160, 180, 205]), 0.12, "sawtooth", 0.095, 120); tone(_pick([220, 260, 310]), 0.08, "square", 0.055, 150, 0.055); break; // Nuclear Kazoo: low nasal honk
     default: tone(600, 0.05, "square", 0.06);
   }
 }
 
 export function soundHit(isCrit) {
   if (isCrit) {
-    tone(440, 0.04, "square", 0.07);
-    tone(880, 0.08, "triangle", 0.06, 660, 0.02);
+    tone(_pick([392, 440, 494]), 0.04, "square", 0.07);
+    tone(_pick([784, 880, 988]), 0.08, "triangle", 0.06, 660, 0.02);
+    if (_maybe(0.45)) tone(1320, 0.035, "sine", 0.028, 990, 0.06);
   } else {
-    tone(180, 0.03, "sawtooth", 0.05, 100);
+    tone(_pick([150, 180, 210]), 0.03, "sawtooth", 0.047, 90);
   }
 }
 
@@ -130,10 +178,11 @@ export function soundHit(isCrit) {
 export function soundHitAt(isCrit, x, W) {
   const d = _destAt(_pan(x, W));
   if (isCrit) {
-    tone(440, 0.04, "square", 0.07, null, 0, d);
-    tone(880, 0.08, "triangle", 0.06, 660, 0.02, d);
+    tone(_pick([392, 440, 494]), 0.04, "square", 0.07, null, 0, d);
+    tone(_pick([784, 880, 988]), 0.08, "triangle", 0.06, 660, 0.02, d);
+    if (_maybe(0.45)) tone(1320, 0.035, "sine", 0.028, 990, 0.06, d);
   } else {
-    tone(180, 0.03, "sawtooth", 0.05, 100, 0, d);
+    tone(_pick([150, 180, 210]), 0.03, "sawtooth", 0.047, 90, 0, d);
   }
 }
 
@@ -175,10 +224,10 @@ export function soundEnemyDeathAt(typeIndex, x, W) {
 export function soundPickupAt(type, x, W) {
   const d = _destAt(_pan(x, W));
   switch (type) {
-    case "health":        tone(523, 0.15, "triangle", 0.08, 659, 0, d); break;
-    case "ammo":          tone(660, 0.12, "square",   0.07, 880, 0, d); break;
-    case "speed":         tone(880, 0.08, "triangle", 0.07, 1100, 0, d); break;
-    case "nuke":          tone(80, 0.9, "sawtooth",   0.18, 40, 0, d); noise(0.5, 0.15, 0, d); break;
+    case "health":        tone(_pick([494, 523, 587]), 0.15, "triangle", 0.08, 659, 0, d); break;
+    case "ammo":          chirp(_pick([[660, 880], [590, 740], [700, 990]]), 0.09, "square", 0.055, 0.055, d); break;
+    case "speed":         chirp(_pick([[880, 1100], [988, 1320], [784, 1175]]), 0.07, "triangle", 0.06, 0.045, d); break;
+    case "nuke":          tone(_pick([64, 72, 80]), 0.9, "sawtooth",   0.18, 36, 0, d); noise(0.5, 0.15, 0, d); break;
     case "guardian_angel":
       [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.18, "sine", 0.09, null, i * 0.09, d)); break;
     case "upgrade":
@@ -194,24 +243,27 @@ export function soundPickupAt(type, x, W) {
 export function soundGrenadeAt(x, W) {
   const d = _destAt(_pan(x, W));
   noise(0.45, 0.22, 0, d);
-  tone(80, 0.4, "sawtooth", 0.10, 40, 0, d);
+  tone(_pick([64, 72, 80, 92]), 0.42, "sawtooth", 0.10, 36, 0, d);
+  tone(180, 0.08, "square", 0.035, 60, 0.035, d);
 }
 
 export function soundDeath() {
-  tone(280, 0.6, "sawtooth", 0.12, 50);
-  tone(150, 0.8, "square",   0.06, 40, 0.1);
+  tone(_pick([240, 280, 320]), 0.6, "sawtooth", 0.12, 50);
+  tone(_pick([120, 150, 180]), 0.8, "square",   0.06, 40, 0.1);
+  noise(0.28, 0.045, 0.12);
 }
 
 export function soundLevelUp() {
-  [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.14, "triangle", 0.09, null, i * 0.08));
+  chirp(_pick([[523, 659, 784, 1047], [587, 740, 880, 1175], [494, 622, 740, 988]]), 0.14, "triangle", 0.085, 0.08);
+  if (_maybe(0.35)) tone(1568, 0.16, "sine", 0.025, null, 0.32);
 }
 
 export function soundPickup(type) {
   switch (type) {
-    case "health":        tone(523, 0.15, "triangle", 0.08, 659); break;
-    case "ammo":          tone(660, 0.12, "square",   0.07, 880); break;
-    case "speed":         tone(880, 0.08, "triangle", 0.07, 1100); break;
-    case "nuke":          tone(80, 0.9, "sawtooth",   0.18, 40); noise(0.5, 0.15); break;
+    case "health":        tone(_pick([494, 523, 587]), 0.15, "triangle", 0.08, 659); break;
+    case "ammo":          chirp(_pick([[660, 880], [590, 740], [700, 990]]), 0.09, "square", 0.055, 0.055); break;
+    case "speed":         chirp(_pick([[880, 1100], [988, 1320], [784, 1175]]), 0.07, "triangle", 0.06, 0.045); break;
+    case "nuke":          tone(_pick([64, 72, 80]), 0.9, "sawtooth",   0.18, 36); noise(0.5, 0.15); break;
     case "guardian_angel":
       [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.18, "sine", 0.09, null, i * 0.09));
       break;
@@ -228,50 +280,56 @@ export function soundPickup(type) {
 
 export function soundGrenade() {
   noise(0.45, 0.22);
-  tone(80, 0.4, "sawtooth", 0.10, 40);
+  tone(_pick([64, 72, 80, 92]), 0.42, "sawtooth", 0.10, 36);
+  tone(180, 0.08, "square", 0.035, 60, 0.035);
 }
 
 export function soundBossWave() {
-  tone(80,  1.4, "sawtooth", 0.14, 55);
+  tone(_pick([62, 70, 80]),  1.4, "sawtooth", 0.14, 48);
   tone(120, 0.6, "square",   0.08, 90, 0.35);
-  tone(200, 0.4, "triangle", 0.06, 150, 0.7);
+  tone(_pick([180, 200, 240]), 0.4, "triangle", 0.06, 140, 0.7);
+  noise(0.22, 0.055, 0.18);
 }
 
 export function soundAchievement() {
-  [660, 830, 1000, 1320].forEach((f, i) => tone(f, 0.13, "sine", 0.08, null, i * 0.07));
+  chirp(_pick([[660, 830, 1000, 1320], [784, 988, 1175, 1568], [587, 740, 988, 1480]]), 0.13, "sine", 0.075, 0.07);
 }
 
 export function soundReload() {
-  tone(350, 0.08, "square", 0.05, 550);
-  tone(650, 0.06, "square", 0.04, null, 0.14);
+  tone(_pick([300, 350, 410]), 0.075, "square", 0.048, 550);
+  noise(0.025, 0.025, 0.07);
+  tone(_pick([590, 650, 720]), 0.055, "square", 0.038, null, 0.14);
 }
 
 export function soundDash() {
-  tone(2200, 0.14, "sine", 0.07, 400);
+  tone(_pick([1800, 2200, 2600]), 0.13, "sine", 0.068, 380);
+  noise(0.055, 0.025, 0.01);
 }
 
 export function soundBossKill() {
-  noise(0.3, 0.12);
-  [300, 400, 500, 700, 1000].forEach((f, i) => tone(f, 0.18, "triangle", 0.08, null, i * 0.06));
+  noise(0.34, 0.13);
+  chirp(_pick([[300, 400, 500, 700, 1000], [247, 330, 494, 740, 988], [392, 523, 659, 880, 1175]]), 0.18, "triangle", 0.078, 0.06);
 }
 
 export function soundWaveClear() {
-  [440, 550, 660].forEach((f, i) => tone(f, 0.15, "triangle", 0.07, null, i * 0.1));
+  chirp(_pick([[440, 550, 660], [494, 622, 740], [392, 523, 784]]), 0.15, "triangle", 0.068, 0.1);
 }
 
 export function soundPerkSelect() {
-  tone(440, 0.1, "sine", 0.08);
-  tone(660, 0.15, "triangle", 0.07, null, 0.08);
-  tone(880, 0.2, "sine", 0.06, null, 0.18);
+  const root = _pick([392, 440, 494]);
+  tone(root, 0.1, "sine", 0.075);
+  tone(root * 1.5, 0.15, "triangle", 0.066, null, 0.08);
+  tone(root * 2, 0.2, "sine", 0.055, null, 0.18);
 }
 
 export function soundUIOpen() {
-  tone(800, 0.06, "square", 0.04, 1000);
-  tone(1200, 0.05, "triangle", 0.03, null, 0.05);
+  tone(_pick([760, 800, 880]), 0.055, "square", 0.036, 1000);
+  tone(_pick([1120, 1200, 1320]), 0.045, "triangle", 0.028, null, 0.048);
 }
 
 export function soundUIClose() {
-  tone(1000, 0.05, "square", 0.04, 700);
+  tone(_pick([940, 1000, 1080]), 0.05, "square", 0.036, 680);
+  if (_maybe(0.3)) tone(520, 0.035, "triangle", 0.018, 380, 0.045);
 }
 
 // Per-enemy-type death synths — 8 distinct sound groups
@@ -313,21 +371,17 @@ export function soundEnemyDeath(typeIndex) {
 
 // Distinct sound when a Summoner's summoned minion is destroyed
 export function soundSummonDismissed() {
-  tone(800, 0.14, "sine", 0.07, 200);
-  tone(1200, 0.09, "triangle", 0.05, 350, 0.06);
+  tone(_pick([720, 800, 880]), 0.14, "sine", 0.07, 200);
+  tone(_pick([1100, 1200, 1320]), 0.09, "triangle", 0.05, 350, 0.06);
   noise(0.07, 0.035, 0.03);
 }
 
 export function soundGamepadConnect() {
-  tone(440, 0.07, "triangle", 0.05, 660);
-  tone(660, 0.10, "sine", 0.06, 880, 0.07);
-  tone(880, 0.12, "triangle", 0.05, 1100, 0.16);
+  chirp(_pick([[440, 660, 880], [494, 740, 988], [392, 587, 784]]), 0.08, "triangle", 0.05, 0.075);
 }
 
 export function soundGamepadDisconnect() {
-  tone(880, 0.07, "triangle", 0.05, 600);
-  tone(600, 0.09, "sine", 0.05, 360, 0.07);
-  tone(360, 0.12, "triangle", 0.04, 220, 0.14);
+  chirp(_pick([[880, 600, 360], [740, 494, 294], [988, 660, 392]]), 0.08, "triangle", 0.045, 0.075);
 }
 
 // ===== AMBIENT ROOM TONE =====

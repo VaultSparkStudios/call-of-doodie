@@ -30,7 +30,7 @@ const MP_Missions       = lazy(() => import("./MenuPanels.jsx").then(m => ({ def
 const MP_Upgrades       = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.UpgradesPanel })));
 const MP_NewFeatures    = lazy(() => import("./MenuPanels.jsx").then(m => ({ default: m.NewFeaturesPanel })));
 
-const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" };
+const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 
 const MODE_DEFS = [
   { id: "standard",        label: "NORMAL",        emoji: "🎯", color: "#FFD700", blurb: "Survive as long as you can" },
@@ -190,9 +190,9 @@ export default function HomeV2(props) {
     const runs = career?.totalRuns || 0;
     if (runs >= 3) return null;
     const steps = [
-      { label: "RUN 1", text: "Deploy a clean baseline. Learn spacing before opening every system." },
-      { label: "RUN 2", text: "Play the Daily seed. Fixed conditions make improvement obvious." },
-      { label: "RUN 3", text: "Spend upgrades, then replay a seed to prove the build changed." },
+      { label: "RUN 1", title: "Survive", text: "Use WASD or left stick to keep space. Aim in a full circle and fire only when lanes open." },
+      { label: "RUN 2", title: "Prove It", text: "Try the Daily seed. Fixed conditions make every dodge, perk, and mistake easier to read." },
+      { label: "RUN 3", title: "Build", text: "Spend upgrades, replay a seed, then compare whether your build actually changed the run." },
     ];
     return { current: runs + 1, steps };
   }, [career?.totalRuns]);
@@ -283,13 +283,13 @@ export default function HomeV2(props) {
 
   // ── Styles ────────────────────────────────────────────────────────────────
   const page = {
-    width: "100%", height: "100dvh", margin: 0, overflow: "auto",
+    width: "100%", minHeight: "100dvh", height: "100dvh", margin: 0, overflowY: "auto", overflowX: "hidden",
     background: "radial-gradient(ellipse at top, #1a0a05 0%, #0a0a0a 55%, #050505 100%)",
     fontFamily: "'Courier New', monospace", color: "#EEE", position: "relative",
-    WebkitUserSelect: "none", userSelect: "none",
+    WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px)", pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "14px 16px 28px" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: "#888", fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#CCC", cursor: "pointer", fontFamily: "inherit" };
@@ -399,17 +399,26 @@ export default function HomeV2(props) {
         </div>
 
         {onboarding && (
-          <div style={{ margin: "0 auto 10px", maxWidth: 680, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 6 }}>
+          <div style={{ margin: "0 auto 12px", maxWidth: 720, border: "1px solid rgba(255,107,53,0.18)", borderRadius: 10, background: "rgba(0,0,0,0.22)", padding: 8 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginBottom: 7, flexWrap: "wrap" }}>
+              <div style={{ color: "#FFB36B", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIRST 3 RUNS</div>
+              <div style={{ color: "#AAA", fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 6 }}>
             {onboarding.steps.map((step, index) => {
               const active = index + 1 === onboarding.current;
               const done = index + 1 < onboarding.current;
               return (
-                <div key={step.label} style={{ minHeight: 62, padding: "8px 9px", borderRadius: 8, background: active ? "rgba(255,107,53,0.12)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.35)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
-                  <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
-                  <div style={{ color: "#DDD", fontSize: 10, lineHeight: 1.35, marginTop: 4 }}>{step.text}</div>
+                <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>
+                    <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
+                    <div style={{ color: active ? "#FFF" : "#AAA", fontSize: 10, fontWeight: 900 }}>{step.title}</div>
+                  </div>
+                  <div style={{ color: "#DDD", fontSize: 10, lineHeight: 1.35, marginTop: 5 }}>{step.text}</div>
                 </div>
               );
             })}
+            </div>
           </div>
         )}
 

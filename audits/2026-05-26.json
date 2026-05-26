@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-26",
+  "session": 75,
+  "project": "call-of-doodie",
+  "agent": "codex",
+  "intent": "Repair controller, mouse/touchpad aim, scrollability, onboarding, sound variety, and account/Obelisk planning.",
+  "outcome": "achieved-first-pass",
+  "writeback": {
+    "currentState": true,
+    "taskBoard": true,
+    "latestHandoff": true,
+    "workLog": true,
+    "decisions": true,
+    "selfImprovementLoop": true,
+    "creativeDirectionRecord": true,
+    "truthAudit": true,
+    "repoSpecific": true,
+    "agentMemory": true
+  },
+  "shipped": [
+    "Active gamepad selection and restored Xbox mapping",
+    "Keyboard/touch movement separated from controller movement",
+    "Mouse/touchpad click-to-aim update for full-circle aiming",
+    "Scrollable safe-area overlays across major website/menu surfaces",
+    "Clearer first-run onboarding guidance",
+    "Procedural sound variety pass for existing synthesized sounds",
+    "Obelisk phase-0 adoption posture and account bridge audit"
+  ],
+  "validation": [
+    "npm test -- --run src/utils/gamepad.test.js src/systems/gameStep.test.js",
+    "npm test",
+    "npm run lint",
+    "npm run build",
+    "Get-Content docs/AUDIT_2026-05-26.json | ConvertFrom-Json"
+  ],
+  "deferred": [
+    "Real-device Xbox/browser QA",
+    "Playwright pointer 360-degree aim regression",
+    "Input diagnostics HUD",
+    "Supabase Auth plus Obelisk receipt implementation",
+    "Optional first-session control calibration"
+  ],
+  "humanActionPreflight": {
+    "blockerPreflight": "ran",
+    "analyticsSecrets": "missing",
+    "hardwareQa": "requires physical device/browser",
+    "publication": "requires provider/dashboard action"
+  },
+  "sil": {
+    "score": 999,
+    "max": 1000,
+    "velocity": 4,
+    "debt": "decreasing"
+  }
+}

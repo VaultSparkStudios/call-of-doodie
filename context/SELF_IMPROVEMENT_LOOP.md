@@ -791,3 +791,27 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 ## 2026-05-21 — Session 74 — Trace-proof coaching readiness
 
 SIL +3: Converted replay trace trust from passive diagnostics into actionable player drills and resim readiness telemetry while preserving the zero-token/local-first Run Brain decision. Validation: 370/370 tests, lint clean, build passing.
+
+## 2026-05-26 — Session 75 | Total: 999/1000 | Velocity: 4 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | Focused gamepad/gameStep tests 14/14, full suite 373/373, lint clean, build passing, audit JSON parse clean |
+| Creative Alignment | 100 | → | Control repair, richer arcade sounds, and clearer first-run guidance support the fast parody shooter loop |
+| Momentum | 100 | → | Founder-reported regressions were repaired in one bounded pass with audit follow-ups recorded |
+| Engagement | 100 | → | Full-circle aim, active-controller pairing, scrollable overlays, and sound variety remove first-session friction |
+| Process Quality | 100 | → | Audit, Obelisk posture, handoff, task board, and validation evidence now line up |
+| Cross-Repo Coherence | 100 | → | Obelisk posture follows Studio canon without inventing a custom auth provider |
+| Security Posture | 100 | → | Account path uses Supabase Auth and signed receipts instead of custom credentials or raw secret handling |
+| Ecosystem Integration | 100 | → | Account plan fits existing leaderboard/supporter/session contracts |
+| Capital Efficiency | 100 | → | Sound pass adds variety procedurally with no paid generation, assets, or dependencies |
+| Automation Coverage | 99 | → | Gamepad normalization has focused tests; browser 360-degree pointer regression and real-device controller lab remain next |
+
+**Top win:** Restored trust in the control surface: controller, keyboard, mouse, and touch can coexist without one input path corrupting another.
+**Top gap:** Full real-device confidence still needs a diagnostics HUD plus Playwright pointer sweep and physical Xbox/browser QA.
+**Intent outcome:** Achieved for the repair/audit pass; account implementation remains the next deliberate feature slice.
+
+**Brainstorm**
+1. Input diagnostics HUD — make `?debug=input` a launch QA tool that shows exact controller slot, mapping, axes, source, and aim angle. High probability.
+2. Control calibration ring — first-session optional target sweep that detects controller drift and pointer full-circle failures before a run. High probability.
+3. Signed account migration receipt — let guest progress become portable without weakening callsign/supporter trust. High probability.

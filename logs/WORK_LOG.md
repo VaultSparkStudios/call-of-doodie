@@ -382,3 +382,15 @@ This public repo no longer carries the detailed internal work log. Internal sess
 ## 2026-05-21 — Session 74 — trace-proof coaching readiness
 
 Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audit items, added additional focused tests on request, and validated with lint/build/full test suite. Full tests now pass 370/370.
+
+# 2026-05-26 (Session 75)
+
+- Ran start/audit/implementation closeout for founder-reported controller, mouse/touchpad, scrollability, onboarding, sound, and account-path issues.
+- Added `src/utils/gamepad.js` and `src/utils/gamepad.test.js` so controller selection/mapping is normalized and regression-tested.
+- Updated `src/App.jsx` and `src/hooks/useGamepadNav.js` so Xbox/gamepad movement does not overwrite keyboard/touch state and active non-slot-0 controllers work.
+- Updated controller copy in menu/pause/tutorial surfaces to match the restored layout.
+- Updated modal/menu overlay styles across HomeV2, MenuPanels, PauseMenu, settings, achievements, leaderboard, supporter, shop, and route selection so short/mobile viewports can scroll instead of clipping top/bottom content.
+- Improved first-run HomeV2 onboarding copy and added a visible full-circle aim check prompt.
+- Improved current synthesized sounds in `src/sounds.js` with richer layering, detune, impact noise, and small randomized variations while avoiding new dependencies or paid audio generation.
+- Added `context/OBELISK_ADOPTION.md`, `docs/AUDIT_2026-05-26.md`, and `docs/AUDIT_2026-05-26.json` to record the ranked follow-up plan and account/Obelisk posture.
+- Validation: focused gamepad/gameStep tests 14/14; full `npm test` 373/373 across 45 files; `npm run lint` clean; `npm run build` passing; audit JSON parse clean.

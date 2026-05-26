@@ -181,9 +181,9 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
   return (
     <div
       onClick={e => { if (e.target === e.currentTarget) apply(); }}
-      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 120, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}
+      style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 120, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" }}
     >
-      <div style={{ maxWidth: 480, width: "100%", background: "rgba(12,12,18,0.98)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 12, color: "#fff", display: "flex", flexDirection: "column", maxHeight: "92dvh", overflow: "hidden" }}>
+      <div style={{ maxWidth: 480, width: "100%", background: "rgba(12,12,18,0.98)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 12, color: "#fff", display: "flex", flexDirection: "column", maxHeight: "none", overflow: "visible", margin: "auto 0" }}>
 
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px 10px", borderBottom: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
@@ -204,7 +204,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
         </div>
 
         {/* Settings list */}
-        <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "14px 16px" }}>
+        <div style={{ flex: 1, minHeight: 0, overflowY: "visible", padding: "14px 16px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {tabEntries.map(([key, meta], i) => {
               const isFocused = focusIdx === i;

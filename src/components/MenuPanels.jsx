@@ -18,8 +18,8 @@ import {
   summarizeStudioEvents,
 } from "../utils/studioEventOps.js";
 
-const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" };
-const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto", width: "100%", position: "relative" };
+const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
+const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
 const BTN_P = { padding: "12px 24px", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "linear-gradient(180deg,#FF6B35,#CC4400)", color: "#FFF", border: "none", borderRadius: 6, cursor: "pointer", letterSpacing: 2 };
 const BTN_S = { ...BTN_P, background: "rgba(255,255,255,0.08)", color: "#CCC", border: "1px solid #444" };
 const CLOSE_X = { position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" };
@@ -113,7 +113,7 @@ export function ControlsPanel({ onClose, isMobile, controllerType }) {
             <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Stick</span> — Move</div>
             <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
             <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3 (click stick)</span> — Dash</div>
+            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>A / Cross</span> — Dash</div>
             <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
             <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / Square</span> — Reload</div>
             <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>

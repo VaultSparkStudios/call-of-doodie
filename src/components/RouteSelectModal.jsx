@@ -18,10 +18,12 @@ export default function RouteSelectModal({ options, wave, onSelect, buildArchety
       position: "fixed", inset: 0,
       background: "rgba(0,0,0,0.85)",
       zIndex: 200,
-      display: "flex", alignItems: "center", justifyContent: "center",
+      display: "flex", alignItems: "flex-start", justifyContent: "center",
+      padding: "max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom))",
+      overflowY: "auto", WebkitOverflowScrolling: "touch",
       backdropFilter: "blur(6px)",
     }}>
-      <div style={{ maxWidth: 680, width: "92%", color: "#fff", textAlign: "center" }}>
+      <div style={{ maxWidth: 680, width: "92%", color: "#fff", textAlign: "center", margin: "auto 0" }}>
 
         {/* Header */}
         <div style={{ marginBottom: 24 }}>

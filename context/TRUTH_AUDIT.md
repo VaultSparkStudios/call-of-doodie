@@ -313,3 +313,12 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `src/components/HomeV2.test.jsx` contains the component regression for replay URL hydration, including seed input, daily mode, difficulty, and starter loadout setter coverage.
 - Verification evidence is current: focused HomeV2 test passed, `npm run lint` clean, `npm run launch:smoke` passed, full `npm test` passed 332/332, and `npm run build` passed.
 - No source-of-truth contradictions introduced. Remaining replay-validation work is still correctly blocked on a command trace / replay input contract rather than `inputHash` alone.
+
+## 2026-05-26 — Session 75 control/account repair
+
+- `src/utils/gamepad.js` is now the source of truth for controller detection, active-pad selection, stick/button normalization, and Xbox/PlayStation copy mapping.
+- `src/App.jsx` now treats keyboard/touch movement and controller movement as separate inputs before merging them in the frame loop.
+- `src/sounds.js` remains procedural WebAudio; no external sound files, paid generation, or dependency changes were introduced.
+- `context/OBELISK_ADOPTION.md` declares this repo's Obelisk posture as phase-0-declared and narrows Obelisk's role to signed trust receipts/future passkeys around Supabase Auth.
+- `docs/AUDIT_2026-05-26.md` and `.json` are the current ranked audit for control repair, scrollability, sound variety, onboarding, account bridge, and remaining QA automation.
+- No source-of-truth contradictions introduced. Real-device controller QA and account implementation remain future work, not shipped claims.

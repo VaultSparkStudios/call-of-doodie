@@ -33,8 +33,9 @@ export default function SupporterModal({ onClose }) {
     position: "fixed", inset: 0,
     background: "rgba(0,0,0,0.88)",
     zIndex: 200, display: "flex",
-    alignItems: "center", justifyContent: "center",
-    padding: 16, backdropFilter: "blur(8px)",
+    alignItems: "flex-start", justifyContent: "center",
+    padding: "max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom))",
+    overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(8px)",
   };
   const panel = {
     background: "rgba(20,15,30,0.97)",
@@ -42,7 +43,7 @@ export default function SupporterModal({ onClose }) {
     borderRadius: 14, padding: "28px 24px",
     maxWidth: 420, width: "100%",
     color: "#fff", fontFamily: "'Courier New',monospace",
-    position: "relative",
+    position: "relative", margin: "auto 0",
   };
   const btnBase = {
     width: "100%", padding: "12px 0", borderRadius: 8,

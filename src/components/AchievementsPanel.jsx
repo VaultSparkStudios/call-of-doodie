@@ -14,8 +14,8 @@ export default function AchievementsPanel({ achievementsUnlocked, onClose, runSt
   const stats = runStats || { kills: career.totalKills, bestStreak: career.bestStreak, totalDamage: career.totalDamage };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 110, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-      <div style={{ ...card, maxWidth: 520, width: "100%", maxHeight: "88vh", overflow: "auto", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "18px 14px", color: "#fff" }}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 110, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" }}>
+      <div style={{ ...card, maxWidth: 520, width: "100%", overflow: "visible", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "18px 14px", color: "#fff", margin: "auto 0" }}>
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>🏅 CAREER ACHIEVEMENTS</h3>
         <div style={{ marginBottom: 14 }}>

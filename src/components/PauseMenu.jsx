@@ -49,8 +49,8 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   const pBtn = { padding: "12px 24px", fontSize: 15, fontWeight: 900, fontFamily: "'Courier New',monospace", background: "rgba(255,255,255,0.08)", color: "#FFF", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, cursor: "pointer", width: "100%", maxWidth: 300 };
   const backBtn = { ...pBtn, marginTop: 16, background: "linear-gradient(180deg,#FF6B35,#CC4400)", border: "none" };
 
-  const overlay = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, backdropFilter: "blur(6px)" };
-  const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "#fff", border: "1px solid rgba(255,215,0,0.25)", maxHeight: "90vh", overflowY: "auto" };
+  const overlay = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(6px)" };
+  const panel = { ...card, maxWidth: 460, width: "100%", padding: "24px 20px", color: "#fff", border: "1px solid rgba(255,215,0,0.25)", overflowY: "visible", margin: "auto 0" };
 
   // ── Mini-map ref + effect — MUST be before any early returns (Rules of Hooks) ──
   const mapRef = useRef(null);
@@ -152,11 +152,10 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
             <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
             <div>🔭 <span style={{ color: "#00E5FF", fontWeight: 800 }}>LT / L2</span> — ADS Zoom</div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3</span> — Dash</div>
-            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>LB / L1</span> — Grenade</div>
+            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>A / Cross</span> — Dash</div>
+            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
             <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / ☐</span> — Reload</div>
-            <div>💣 <span style={{ color: "#888", fontWeight: 800 }}>B / ○</span> — Grenade (alt)</div>
-            <div>◀▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>D-pad L/R</span> — Prev/Next weapon</div>
+            <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>
             <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>RB / R1</span> — Next weapon</div>
             <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Start / Options</span> — Pause</div>
             <div>⬆⬇ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad U/D</span> — Navigate menus</div>
@@ -214,8 +213,8 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     if (pm.bounces > 0)                   stats.push({ label: "Bounces",     val: `+${pm.bounces} extra`,              color: "#7FFF00" });
     if (pm.extraPellets > 0)              stats.push({ label: "Pellets",     val: `+${pm.extraPellets} per shot`,      color: "#FF69B4" });
     return (
-      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 90, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, backdropFilter: "blur(6px)" }}>
-        <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,215,0,0.25)", padding: "24px 20px", maxWidth: 480, width: "100%", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
+      <div style={overlay}>
+        <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,215,0,0.25)", padding: "24px 20px", maxWidth: 480, width: "100%", color: "#fff", overflowY: "visible", margin: "auto 0" }}>
           <h3 style={{ color: "#FF88FF", margin: "0 0 4px", fontSize: 18, fontFamily: "'Courier New',monospace", letterSpacing: 2 }}>🔧 YOUR BUILD</h3>
           <p style={{ fontSize: 10, color: "#888", margin: "0 0 16px", letterSpacing: 1 }}>Active perks, synergies & stat bonuses this run</p>
 

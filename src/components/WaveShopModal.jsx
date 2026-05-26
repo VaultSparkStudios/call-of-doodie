@@ -58,12 +58,12 @@ export default function WaveShopModal({ options, wave, onSelect, boughtHistory =
     <div style={{
       position: "fixed", inset: 0, zIndex: 200,
       background: "rgba(0,0,0,0.88)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: 16, backdropFilter: "blur(8px)",
+      display: "flex", alignItems: "flex-start", justifyContent: "center",
+      padding: "max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom))", backdropFilter: "blur(8px)",
       fontFamily: "'Courier New',monospace", color: "#fff",
-      overflowY: "auto",
+      overflowY: "auto", WebkitOverflowScrolling: "touch",
     }}>
-      <div style={{ maxWidth: 480, width: "100%", textAlign: "center" }}>
+      <div style={{ maxWidth: 480, width: "100%", textAlign: "center", margin: "auto 0" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>📦</div>
         <h2 style={{ fontSize: "clamp(16px,4vw,24px)", fontWeight: 900, margin: "0 0 4px", color: "#FFD700", letterSpacing: 2 }}>
           WAVE {wave - 1} CLEAR!

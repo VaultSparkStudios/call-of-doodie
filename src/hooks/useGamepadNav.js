@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getPrimaryGamepad, readGamepadControls } from "../utils/gamepad.js";
 
 /**
  * Gamepad D-pad / left-stick menu navigation.
@@ -77,20 +78,14 @@ export function useGamepadNav({
     const stopDir = () => { clearTimeout(repeatTimeout); activeDir = null; };
 
     const id = setInterval(() => {
-      const gp = navigator.getGamepads?.()[0];
+      const gp = getPrimaryGamepad();
       if (!gp) return;
 
-      const dUp    = gp.buttons[12]?.pressed;
-      const dDown  = gp.buttons[13]?.pressed;
-      const dLeft  = gp.buttons[14]?.pressed;
-      const dRight = gp.buttons[15]?.pressed;
-      const lx = gp.axes[0] ?? 0;
-      const ly = gp.axes[1] ?? 0;
-
-      const up    = dUp    || ly < -DEAD;
-      const down  = dDown  || ly >  DEAD;
-      const left  = !disableLR && (dLeft  || lx < -DEAD);
-      const right = !disableLR && (dRight || lx >  DEAD);
+      const controls = readGamepadControls(gp, DEAD);
+      const up    = controls.menuUp;
+      const down  = controls.menuDown;
+      const left  = !disableLR && controls.menuLeft;
+      const right = !disableLR && controls.menuRight;
 
       if      (up)    startDir("up");
       else if (down)  startDir("down");
@@ -98,8 +93,8 @@ export function useGamepadNav({
       else if (right) startDir("right");
       else            stopDir();
 
-      const aNow = gp.buttons[0]?.pressed;
-      const bNow = gp.buttons[1]?.pressed;
+      const aNow = controls.confirm;
+      const bNow = controls.back;
       if (aNow && !lastA) r.current.onConfirm?.(r.current.focusIdx);
       if (bNow && !lastB) r.current.onBack?.();
       lastA = !!aNow;

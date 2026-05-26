@@ -42,6 +42,7 @@ import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildA
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
 import { directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
+import { detectControllerType, getPrimaryGamepad, readGamepadControls } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -95,20 +96,12 @@ const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
 // ── Controller helpers ────────────────────────────────────────────────────────
 let _rumbleEnabled = true; // gated by settings.rumble
 
-function detectControllerType(gp) {
-  if (!gp) return "controller";
-  const id = (gp.id || "").toLowerCase();
-  if (id.includes("045e") || id.includes("xinput") || id.includes("xbox")) return "xbox";
-  if (id.includes("054c") || id.includes("dualshock") || id.includes("dualsense") || id.includes("playstation")) return "ps";
-  return "controller";
-}
-
 // Fires haptic feedback on the first connected gamepad if the Vibration Actuator
 // API is available (Chrome 68+). Silently no-ops on unsupported browsers/devices.
 function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
   if (!_rumbleEnabled) return;
   try {
-    const gp = navigator.getGamepads?.()[0];
+    const gp = getPrimaryGamepad();
     if (gp?.vibrationActuator) {
       gp.vibrationActuator.playEffect("dual-rumble", {
         startDelay: 0,
@@ -174,6 +167,7 @@ export default function CallOfDoodie() {
   const lastTraceAimRef  = useRef({ bucket: "neutral", frame: -999 });
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
+  const gamepadMoveRef   = useRef({ x: 0, y: 0, active: false }); // left-stick movement, kept separate from keyboard state
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
   const dailyChallengeRef     = useRef(false); // synced with dailyChallengeMode
   const cursedRunRef          = useRef(false); // synced with cursedRunMode
@@ -1366,6 +1360,8 @@ export default function CallOfDoodie() {
     if (keys["a"] || keys["arrowleft"]) ddx -= 1;
     if (keys["d"] || keys["arrowright"]) ddx += 1;
     if (js.active) { const dist = Math.hypot(js.dx, js.dy); if (dist > 5) { ddx += js.dx / dist; ddy += js.dy / dist; } }
+    const gpMove = gamepadMoveRef.current;
+    if (gpMove.active) { ddx += gpMove.x; ddy += gpMove.y; }
     const dlen = Math.hypot(ddx, ddy);
     if (dlen > 0) { ddx /= dlen; ddy /= dlen; } else { ddx = Math.cos(gs.player.angle); ddy = Math.sin(gs.player.angle); }
     recordCommandTrace("dash", directionBucket(ddx, ddy));
@@ -1836,6 +1832,8 @@ export default function CallOfDoodie() {
     if (keys["d"] || keys["arrowright"]) dx += 1;
     const js = joystickRef.current;
     if (js.active) { const dist = Math.hypot(js.dx, js.dy); if (dist > 5) { dx += js.dx / Math.max(dist, 50); dy += js.dy / Math.max(dist, 50); } }
+    const gpMove = gamepadMoveRef.current;
+    if (gpMove.active) { dx += gpMove.x; dy += gpMove.y; }
     const len = Math.hypot(dx, dy);
     if (len > 0) { dx /= len; dy /= len; }
     const _rushMult = (gs.adrenalineRushTimer || 0) > 0 ? 2.0 : 1.0;
@@ -3543,8 +3541,16 @@ export default function CallOfDoodie() {
       if (["w","a","s","d","r","q","g","e","1","2","3","4","5","6","7","8","9","0","-","="," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
     };
     const ku = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
-    const mm = (e) => { mouseRef.current.x = e.clientX; mouseRef.current.y = e.clientY; mouseRef.current.moved = true; };
-    const md = (e) => { if (e.button === 0 && !pausedRef.current && !perkPendingRef.current) mouseRef.current.down = true; };
+    const updateMouseAim = (e) => {
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
+      mouseRef.current.moved = true;
+    };
+    const mm = updateMouseAim;
+    const md = (e) => {
+      updateMouseAim(e);
+      if (e.button === 0 && !pausedRef.current && !perkPendingRef.current) mouseRef.current.down = true;
+    };
     const mu = (e) => { if (e.button === 0) mouseRef.current.down = false; };
     window.addEventListener("keydown", kd); window.addEventListener("keyup", ku);
     window.addEventListener("mousemove", mm); window.addEventListener("mousedown", md); window.addEventListener("mouseup", mu);
@@ -3596,13 +3602,12 @@ export default function CallOfDoodie() {
 
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {
-    let lastLB = false, lastRB = false, lastStart = false;
-    let lastBtnB = false, lastR3 = false, lastBtnX = false;
-    let lastDLeft = false, lastDRight = false;
+    let lastPrevWeapon = false, lastNextWeapon = false, lastStart = false;
+    let lastDash = false, lastGrenade = false, lastReload = false;
     let lastGpConnected = false;
 
     const poll = () => {
-      const gp = navigator.getGamepads ? navigator.getGamepads()[0] : null;
+      const gp = getPrimaryGamepad();
       const connected = !!gp;
       if (connected !== lastGpConnected) {
         lastGpConnected = connected;
@@ -3621,75 +3626,56 @@ export default function CallOfDoodie() {
         const start = gp.buttons[9]?.pressed;
         if (start && !lastStart) setPaused(p => !p);
         lastStart = !!start;
-        // Clear movement so player doesn't keep moving when unpaused
-        keysRef.current["w"] = false;
-        keysRef.current["a"] = false;
-        keysRef.current["s"] = false;
-        keysRef.current["d"] = false;
+        // Clear controller movement so player doesn't keep moving when unpaused.
+        // Keyboard state is owned by keyboard events and must not be overwritten here.
+        gamepadMoveRef.current = { x: 0, y: 0, active: false };
         gamepadShootRef.current = false;
         gamepadAngleRef.current = null;
         return;
       }
 
       const deadZone = settingsRef.current.controllerDeadZone ?? 0.2;
+      const controls = readGamepadControls(gp, deadZone);
 
-      // Left stick → movement (synthesise WASD)
-      const lx = gp.axes[0] ?? 0;
-      const ly = gp.axes[1] ?? 0;
-      keysRef.current["w"] = ly < -deadZone;
-      keysRef.current["s"] = ly >  deadZone;
-      keysRef.current["a"] = lx < -deadZone;
-      keysRef.current["d"] = lx >  deadZone;
+      // Left stick → movement. Keep this isolated from keyboard state so an
+      // idle/paired controller cannot erase WASD input every poll.
+      gamepadMoveRef.current = controls.left.active
+        ? { x: controls.left.x, y: controls.left.y, active: true }
+        : { x: 0, y: 0, active: false };
 
       // Right stick → aim ONLY (no shooting from stick)
-      const rx = gp.axes[2] ?? 0;
-      const ry = gp.axes[3] ?? 0;
-      const rMag = Math.hypot(rx, ry);
-      if (rMag > deadZone) {
-        gamepadAngleRef.current = Math.atan2(ry, rx);
+      if (controls.right.active) {
+        gamepadAngleRef.current = Math.atan2(controls.right.y, controls.right.x);
       } else {
         gamepadAngleRef.current = null;
       }
 
       // RT (button 7) → shoot (analog-aware)
-      const rtValue = gp.buttons[7]?.value ?? (gp.buttons[7]?.pressed ? 1 : 0);
-      gamepadShootRef.current = rtValue > 0.3;
+      gamepadShootRef.current = controls.shoot;
 
-      // R3 (button 11, right stick click) → dash (edge-triggered)
-      const r3 = gp.buttons[11]?.pressed;
-      if (r3 && !lastR3) doDash();
-      lastR3 = !!r3;
+      // A/Cross → dash (edge-triggered)
+      if (controls.dash && !lastDash) doDash();
+      lastDash = !!controls.dash;
 
-      // Button 1 (B/Circle) → grenade (kept as secondary; LB is primary)
-      const btnB = gp.buttons[1]?.pressed;
-      if (btnB && !lastBtnB) throwGrenade();
-      lastBtnB = !!btnB;
+      // B/Circle → grenade (edge-triggered)
+      if (controls.grenade && !lastGrenade) throwGrenade();
+      lastGrenade = !!controls.grenade;
 
       // Button 2 (X/Square / ☐) → reload (edge-triggered)
-      const btnX = gp.buttons[2]?.pressed;
-      if (btnX && !lastBtnX) doReload(currentWeaponRef.current);
-      lastBtnX = !!btnX;
+      if (controls.reload && !lastReload) doReload(currentWeaponRef.current);
+      lastReload = !!controls.reload;
 
       // LT (button 6) → ADS / zoom (analog-aware)
       const ltValue = gp.buttons[6]?.value ?? (gp.buttons[6]?.pressed ? 1 : 0);
       if (gsRef.current) gsRef.current.adsZoom = ltValue > 0.3;
 
-      // LB (button 4) → grenade (primary), RB (button 5) → next weapon
-      const lb = gp.buttons[4]?.pressed;
-      const rb = gp.buttons[5]?.pressed;
-      if (lb && !lastLB) throwGrenade();
-      if (rb && !lastRB) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
-      lastLB = !!lb; lastRB = !!rb;
-
-      // D-pad left/right → prev/next weapon (edge-triggered)
-      const dLeft  = gp.buttons[14]?.pressed;
-      const dRight = gp.buttons[15]?.pressed;
-      if (dLeft  && !lastDLeft)  switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
-      if (dRight && !lastDRight) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
-      lastDLeft = !!dLeft; lastDRight = !!dRight;
+      if (controls.previousWeapon && !lastPrevWeapon) switchWeapon(((currentWeaponRef.current - 1) + WEAPONS.length) % WEAPONS.length);
+      if (controls.nextWeapon && !lastNextWeapon) switchWeapon((currentWeaponRef.current + 1) % WEAPONS.length);
+      lastPrevWeapon = !!controls.previousWeapon;
+      lastNextWeapon = !!controls.nextWeapon;
 
       // Button 9 (Start/Options) → toggle pause (edge-triggered)
-      const start = gp.buttons[9]?.pressed;
+      const start = controls.pause;
       if (start && !lastStart) setPaused(p => !p);
       lastStart = !!start;
     };
@@ -3703,6 +3689,7 @@ export default function CallOfDoodie() {
       keys["a"] = false;
       keys["s"] = false;
       keys["d"] = false;
+      gamepadMoveRef.current = { x: 0, y: 0, active: false };
       gamepadShootRef.current = false;
       gamepadAngleRef.current = null;
     };

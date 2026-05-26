@@ -1,0 +1,164 @@
+{
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-05-26",
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 13,
+    "combinedPriority": 530.9,
+    "top3": [
+      "input-stack-trust-repair",
+      "pointer-aim-regression-qa",
+      "viewport-scrollability-pass"
+    ]
+  },
+  "items": [
+    {
+      "slug": "input-stack-trust-repair",
+      "tier": "fire",
+      "axis": "UX / speed / controller support",
+      "effort": "1h",
+      "impact": 10,
+      "innovation": 6,
+      "priority": 60,
+      "item": "Controller polling was able to overwrite keyboard movement and only read gamepad slot 0. Centralize gamepad normalization, prefer the active pad, keep controller movement separate from keyboard state, and lock the intended Xbox layout with regression tests.",
+      "status": "shipped",
+      "evidence": "src/utils/gamepad.js, src/App.jsx, src/hooks/useGamepadNav.js, src/utils/gamepad.test.js"
+    },
+    {
+      "slug": "pointer-aim-regression-qa",
+      "tier": "fire",
+      "axis": "UX / controls / accessibility",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 5,
+      "priority": 45,
+      "item": "Mouse and touchpad aim need a real browser regression harness that sweeps 360 degrees around the player and asserts bullet vectors cover every quadrant. The immediate click-to-aim update shipped, but a Playwright-backed synthetic pointer test should become the permanent gate.",
+      "recipe": "Start the Vite dev server, launch Playwright, enter a run, move the pointer around a circle around canvas center, and assert `gs.player.angle` or emitted bullet vectors traverse all quadrants."
+    },
+    {
+      "slug": "obelisk-account-bridge",
+      "tier": "fire",
+      "axis": "security / identity / progression",
+      "effort": "1d",
+      "impact": 9,
+      "innovation": 8,
+      "priority": 36,
+      "item": "Create accounts by implementing the existing Supabase Auth plan, then wrap migration and callsign-claim actions in Obelisk-style signed intent receipts. This preserves low-friction guest play while giving serious players cross-device progress, supporter recovery, and a future Studio-wide trust path.",
+      "recipe": "Add `profiles`, nullable `leaderboard.user_id`, AuthModal magic-link/Google UI, profile upsert on sign-in, and a signed migration receipt for local UUID to auth user ownership."
+    },
+    {
+      "slug": "viewport-scrollability-pass",
+      "tier": "fire",
+      "axis": "UX / accessibility / website",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 4,
+      "priority": 36,
+      "item": "Top-level overlays were centered and height-clamped, so short/mobile viewports could cut off controls near the top and bottom. Menu, pause, settings, achievements, leaderboard, supporter, route, and shop overlays now scroll at the viewport with safe-area padding.",
+      "status": "shipped",
+      "evidence": "src/components/MenuPanels.jsx, src/components/HomeV2.jsx, src/components/LeaderboardPanel.jsx, src/components/AchievementsPanel.jsx, src/components/SettingsPanel.jsx, src/components/SupporterModal.jsx, src/components/PauseMenu.jsx, src/components/WaveShopModal.jsx, src/components/RouteSelectModal.jsx"
+    },
+    {
+      "slug": "procedural-sound-variety-pass",
+      "tier": "high",
+      "axis": "audio / immersion / speed",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 4,
+      "priority": 32,
+      "item": "The existing synth sounds were deterministic and thin, so repeated firing, pickups, hits, UI, and combat cues became fatiguing. Current sounds now use layered chirps, impact noise, detune, and small random variations without adding assets or dependencies.",
+      "status": "shipped",
+      "evidence": "src/sounds.js"
+    },
+    {
+      "slug": "first-run-onboarding-clarity",
+      "tier": "high",
+      "axis": "UX / onboarding / accessibility",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 4,
+      "priority": 30,
+      "item": "The menu now needs to make the first three runs feel intentional instead of decorative. The onboarding cards now teach survival, aiming, upgrades, and the full-circle aim check before the first wave.",
+      "status": "shipped",
+      "evidence": "src/components/HomeV2.jsx"
+    },
+    {
+      "slug": "app-loop-extraction-next-slice",
+      "tier": "high",
+      "axis": "speed / organization / testability",
+      "effort": "4h",
+      "impact": 8,
+      "innovation": 5,
+      "priority": 26.7,
+      "item": "`App.jsx` still owns too much per-frame behavior, which makes input regressions hard to isolate. Extract an `inputState` and `aimState` module next so mouse, touch, and gamepad controls are testable without rendering the whole app.",
+      "recipe": "Move aim-source resolution and movement-vector merge into a pure `src/systems/inputState.js` with tests for keyboard+gamepad coexistence, touch aim, and mouse fallback."
+    },
+    {
+      "slug": "real-device-control-lab",
+      "tier": "high",
+      "axis": "feedback loop / launch QA",
+      "effort": "2h",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 32,
+      "item": "Physical controller QA is still listed as a human launch gate, but the repo can lower the burden with an in-game diagnostics overlay. Show active gamepad id, slot, mapping, button states, axes, selected input source, and current aim angle.",
+      "recipe": "Add a dev-only `?debug=input` HUD panel that reads the normalized gamepad helper and current refs; use it during Xbox, mouse, and touch verification."
+    },
+    {
+      "slug": "homev2-retirement-performance-gate",
+      "tier": "high",
+      "axis": "speed / UX",
+      "effort": "2h",
+      "impact": 7,
+      "innovation": 4,
+      "priority": 23.3,
+      "item": "The legacy MenuScreen fallback still ships a large chunk. Once production Lighthouse confirms HomeV2 wins, retire `?home=v1` and remove the duplicate menu surface.",
+      "recipe": "Capture LCP/CLS on production for HomeV2 and legacy, log the result, then delete the fallback path and duplicated MenuScreen control copy."
+    },
+    {
+      "slug": "deterministic-replay-runner",
+      "tier": "fire",
+      "axis": "security / replay trust / gamification",
+      "effort": "1w",
+      "impact": 9,
+      "innovation": 8,
+      "priority": 24,
+      "item": "Replay trace evidence is rich enough to become a competitive trust feature, but the final deterministic resim runner is still missing. This turns replay proof from metadata into an actual leaderboard anti-cheat layer.",
+      "recipe": "Implement a headless seed+trace runner over extracted combat helpers and quarantine competitive submissions whose simulated score/kills drift beyond 2%."
+    },
+    {
+      "slug": "first-session-control-calibration",
+      "tier": "high",
+      "axis": "UX / onboarding / accessibility",
+      "effort": "2h",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 28,
+      "item": "Add a 15-second optional control calibration before first deploy. It can detect controller drift, let mouse/touch players verify full-circle aim, and recommend dead-zone settings without burying the fix in Settings.",
+      "recipe": "Show a tiny target ring before first run; ask the player to rotate aim once, sample quadrants, and offer dead-zone/aim-assist adjustments only when the signal is bad."
+    },
+    {
+      "slug": "account-value-loop",
+      "tier": "high",
+      "axis": "gamification / accounts / retention",
+      "effort": "4h",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 37.3,
+      "item": "Accounts should earn their place by protecting visible progress, not by gating play. Tie sign-in prompts to weapon unlocks, prestige, supporter recovery, and replay-proof competitive history.",
+      "recipe": "After a new unlock or daily crown, show a compact save-progress prompt that explains exactly what sign-in preserves."
+    },
+    {
+      "slug": "free-tier-auth-discipline",
+      "tier": "high",
+      "axis": "security / cost / operations",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 5,
+      "priority": 35,
+      "item": "The account plan is cost-neutral if it stays on Supabase Auth plus existing Edge Functions, but future AI coaching or email-heavy loops must stay paid, BYOK, or hard-capped. Lock that into the account launch checklist.",
+      "recipe": "Add server-side feature flags before any account-only AI, email, or storage-heavy feature ships; keep guest and free authenticated play no-cost-to-studio."
+    }
+  ]
+}
