@@ -1,21 +1,21 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-05-22 (Session 74 closeout) -->
+<!-- generated-at: 2026-05-27 (Session 76 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S74 ═════════════════════╗
-║  Date: 2026-05-22  ·  SIL: 999/1000  ·  Velocity: 4 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S76 ═════════════════════╗
+║  Date: 2026-05-27  ·  SIL: 1000/1000  ·  Velocity: 4 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ focused studioEventOps/runBrain tests: 12/12                  ║
-║  ✓ npm run lint: passed                                          ║
-║  ✓ npm run build: passed                                         ║
-║  ✓ npm test: 370/370 across 44 files                             ║
-║  ✓ Continue toward the larger deterministic replay resimulation  ║
+║  ✓ `docs/AUDIT_2026-05-27.md` / `.json` rank and execute a thre  ║
+║  ✓ `src/systems/gameStep.js` now exports tested pointer-to-canv  ║
+║  ✓ `?debug=input` or `localStorage.cod-debug-input=1` now enabl  ║
+║  ✓ HomeV2 first-run onboarding now includes a calibration step;  ║
+║  ✓ `npx vitest run src/systems/gameStep.test.js src/components/  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -36,18 +36,18 @@
 ║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  · context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 2 files  ·  M:2 A:0 D:0 ?:0                            ║
+║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         370/370                                          ║
-║  IGNIS:         1d ago                                           ║
+║  Tests:         378/378                                          ║
+║  IGNIS:         6d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
