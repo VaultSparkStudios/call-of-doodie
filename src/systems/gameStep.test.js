@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeMovementVector, applyPlayerMovement } from "./gameStep.js";
+import { computeMovementVector, applyPlayerMovement, computePointerAimAngle, angleToUnitVector } from "./gameStep.js";
 
 describe("computeMovementVector", () => {
   it("returns zero vector when no input", () => {
@@ -73,5 +73,43 @@ describe("applyPlayerMovement", () => {
     // Player should be pushed away from obstacle center (50, 50)
     const dist = Math.hypot(player.x - 50, player.y - 50);
     expect(dist).toBeGreaterThanOrEqual(16); // pushed to at least 17px from nearest obstacle edge
+  });
+});
+
+describe("computePointerAimAngle", () => {
+  const rect = { left: 10, top: 20, width: 400, height: 300 };
+  const canvasSize = { w: 800, h: 600 };
+  const player = { x: 400, y: 300 };
+
+  it("projects pointer aim east on the canvas", () => {
+    const angle = computePointerAimAngle({ x: 410, y: 170 }, rect, canvasSize, player);
+    const v = angleToUnitVector(angle);
+    expect(v.x).toBeCloseTo(1, 5);
+    expect(v.y).toBeCloseTo(0, 5);
+  });
+
+  it("projects pointer aim west on the canvas", () => {
+    const angle = computePointerAimAngle({ x: 10, y: 170 }, rect, canvasSize, player);
+    const v = angleToUnitVector(angle);
+    expect(v.x).toBeCloseTo(-1, 5);
+    expect(v.y).toBeCloseTo(0, 5);
+  });
+
+  it("projects pointer aim north and south on the canvas", () => {
+    const north = angleToUnitVector(computePointerAimAngle({ x: 210, y: 20 }, rect, canvasSize, player));
+    const south = angleToUnitVector(computePointerAimAngle({ x: 210, y: 320 }, rect, canvasSize, player));
+    expect(north.x).toBeCloseTo(0, 5);
+    expect(north.y).toBeCloseTo(-1, 5);
+    expect(south.x).toBeCloseTo(0, 5);
+    expect(south.y).toBeCloseTo(1, 5);
+  });
+
+  it("projects diagonal quadrant vectors", () => {
+    const ne = angleToUnitVector(computePointerAimAngle({ x: 360, y: 20 }, rect, canvasSize, player));
+    const sw = angleToUnitVector(computePointerAimAngle({ x: 60, y: 320 }, rect, canvasSize, player));
+    expect(ne.x).toBeGreaterThan(0.7);
+    expect(ne.y).toBeLessThan(-0.7);
+    expect(sw.x).toBeLessThan(-0.7);
+    expect(sw.y).toBeGreaterThan(0.7);
   });
 });

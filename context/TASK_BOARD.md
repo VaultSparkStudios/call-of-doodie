@@ -14,6 +14,7 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:3] **DONE S76** Input diagnostics + pointer aim contract — `?debug=input` / `cod-debug-input=1` now exposes a hidden in-run QA HUD with controller slot/type/id, stick state, aim angles, action readiness, pointer coordinates, and trace counts; runtime pointer aim now uses tested pure projection helpers. Validation: focused tests 22/22, full `npm test` 378/378, lint clean, build passing.
 - [x] [SIL:3] **DONE S75** Controller/input trust repair — normalized gamepad input now selects the active controller, restores Xbox mapping (left stick move, right stick aim, RT shoot, A dash, B grenade, X reload, LB/RB weapon cycle), separates controller movement from keyboard/touch state, and adds focused gamepad regression coverage. Validation: gamepad/gameStep tests 14/14, lint clean, build passing.
 - [x] [SIL:2] **DONE S75** Website scrollability + onboarding repair — HomeV2 and modal overlays now scroll at the viewport with safe-area padding instead of clipping top/bottom content; first-run cards now teach survival, aiming, upgrades, and the full-circle aim check.
 - [x] [SIL:2] **DONE S75** Current sound variety pass — existing synthesized shoot, hit, pickup, grenade, UI, movement, achievement, and boss cues now use layered chirps/noise, detune, and small variations without new assets or dependencies.
@@ -50,8 +51,8 @@ Public-safe launch roadmap summary.
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
-- [ ] [SIL:2] Real device input lab — add `?debug=input` to show gamepad id, slot, mapping, axes, current input source, and aim angle for Xbox/mouse/touch QA.
-- [ ] [SIL:2] Pointer 360 regression — add a Playwright browser test that enters a run, sweeps pointer aim around the player, and asserts weapon/bullet vectors cover all quadrants.
+- [x] [SIL:2] **DONE S76** Real device input lab — `?debug=input` now shows gamepad identity, slot, source, stick axes, aim angle, pointer position, action state, and trace counts for Xbox/mouse/touch QA.
+- [ ] [SIL:2] Pointer 360 browser regression — pure pointer projection now has unit coverage for all directions; add a Playwright browser test that enters a run, sweeps pointer aim around the player, and asserts weapon/bullet vectors cover all quadrants.
 - [ ] [SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Auth, profiles, nullable leaderboard `user_id`, guest-to-account migration, and signed migration/callsign claim receipts.
 - [ ] [SIL:1] First-session control calibration — add an optional short target-ring calibration to detect drift and verify full-circle aim before the first serious run.
 - [x] [SIL:2] **DONE S68** Replay command trace contract — client trace binding already shipped in S67; S68 updates `validate-replay` to accept `traceDigest`/`traceLength` as a trace-backed replay contract and updates `submit-score` to reject malformed trace metadata before leaderboard insert.

@@ -105,6 +105,11 @@ export default function HomeV2(props) {
   const [missionStreak, setMissionStreak] = useState(0);
   const [replayInput, setReplayInput] = useState("");
   const [replayCopied, setReplayCopied] = useState(false);
+  const [inputDebugEnabled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).get("debug") === "input"
+      || localStorage.getItem("cod-debug-input") === "1";
+  });
 
   useEffect(() => {
     const loaded = loadCareerStats();
@@ -191,6 +196,7 @@ export default function HomeV2(props) {
     if (runs >= 3) return null;
     const steps = [
       { label: "RUN 1", title: "Survive", text: "Use WASD or left stick to keep space. Aim in a full circle and fire only when lanes open." },
+      { label: "CHECK", title: "Calibrate", text: "Sweep aim around the player once. If any direction feels dead, open diagnostics before a serious run." },
       { label: "RUN 2", title: "Prove It", text: "Try the Daily seed. Fixed conditions make every dodge, perk, and mistake easier to read." },
       { label: "RUN 3", title: "Build", text: "Spend upgrades, replay a seed, then compare whether your build actually changed the run." },
     ];
@@ -557,6 +563,18 @@ export default function HomeV2(props) {
           {assistAvailable && (
             <button style={{ ...quickBtn, borderColor: "rgba(68,255,136,0.5)", color: "#44FF88" }} onClick={onApplyAssist}>
               🛡️ ASSIST +50HP
+            </button>
+          )}
+          {inputDebugEnabled && (
+            <button
+              style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
+              onClick={() => {
+                localStorage.setItem("cod-debug-input", "1");
+                recordFrontDoorAction("open_input_diagnostics", { source: "quick_chip" });
+                setDeployOpen(true);
+              }}
+            >
+              DEBUG INPUT
             </button>
           )}
         </div>

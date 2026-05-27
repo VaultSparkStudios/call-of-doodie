@@ -30,6 +30,24 @@ export function computeMovementVector(keys = {}, joystick = { active: false, dx:
   return { dx, dy };
 }
 
+export function computePointerAimAngle(pointer, rect, canvasSize, player) {
+  const safeRect = rect || { left: 0, top: 0, width: canvasSize?.w || 1, height: canvasSize?.h || 1 };
+  const canvasW = canvasSize?.w || safeRect.width || 1;
+  const canvasH = canvasSize?.h || safeRect.height || 1;
+  const rectW = safeRect.width || 1;
+  const rectH = safeRect.height || 1;
+  const x = ((pointer?.x || 0) - (safeRect.left || 0)) * (canvasW / rectW);
+  const y = ((pointer?.y || 0) - (safeRect.top || 0)) * (canvasH / rectH);
+  return Math.atan2(y - (player?.y || 0), x - (player?.x || 0));
+}
+
+export function angleToUnitVector(angle) {
+  return {
+    x: Math.cos(angle),
+    y: Math.sin(angle),
+  };
+}
+
 /**
  * Apply player movement for one frame. Mutates player.x / player.y in place.
  * Returns the (possibly mutated) player object for chaining.

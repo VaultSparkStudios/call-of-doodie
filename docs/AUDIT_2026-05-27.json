@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-05-27",
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 3,
+    "combinedPriority": 30.88,
+    "top3": [
+      "input-diagnostics-hud",
+      "pointer-aim-projection-contract",
+      "first-run-control-calibration"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "input-diagnostics-hud",
+      "tier": "fire",
+      "axis": "UX / user-experience",
+      "effort": "2h",
+      "impact": 9,
+      "innovation": 7,
+      "priority": 18.93,
+      "title": "Input diagnostics HUD",
+      "summary": "Add a `?debug=input` in-run overlay showing source, controller slot/type, axes, aim angle, shoot/dash/reload/grenade state, pointer coordinates, and trace evidence counts. This turns physical controller QA from a subjective 'feels wrong' loop into visible evidence while keeping the feature hidden from normal players.",
+      "recipe": "Wire a debug flag in `App.jsx`, snapshot gamepad/mouse/trace state during polling/render, render a compact fixed overlay only when `?debug=input` or `localStorage.cod-debug-input=1` is active, and add focused launch coverage that the debug path does not break run start."
+    },
+    {
+      "rank": 2,
+      "slug": "pointer-aim-projection-contract",
+      "tier": "high",
+      "axis": "Speed / organization / efficiency",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 15.14,
+      "title": "Pointer aim projection contract",
+      "summary": "Extract browser pointer-to-canvas aim math into a pure helper and test every quadrant. This is the smallest reliable foundation for the requested browser pointer 360 regression without depending on a fragile full Playwright combat run.",
+      "recipe": "Add `computePointerAimAngle()` and `angleToUnitVector()` to `src/systems/gameStep.js`, use it in `App.jsx`, and add unit tests proving north/east/south/west/quadrant vectors."
+    },
+    {
+      "rank": 3,
+      "slug": "first-run-control-calibration",
+      "tier": "high",
+      "axis": "Gamification / engagement / immersion",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 15.45,
+      "title": "First-run control calibration card",
+      "summary": "Teach players to verify full-circle aim before the first serious run, with a hidden diagnostic shortcut for QA. The game already has deep systems; the launch risk is players bouncing before they trust movement and aim.",
+      "recipe": "Extend HomeV2's first-run onboarding copy with a calibration step and add a `DEBUG INPUT` control shortcut when diagnostics are enabled."
+    }
+  ]
+  ,
+  "executionLog": [
+    {
+      "slug": "pointer-aim-projection-contract",
+      "status": "shipped",
+      "evidence": [
+        "src/systems/gameStep.js",
+        "src/systems/gameStep.test.js",
+        "src/App.jsx",
+        "npx vitest run src/systems/gameStep.test.js src/components/HomeV2.test.jsx src/utils/gamepad.test.js -> 22/22"
+      ]
+    },
+    {
+      "slug": "input-diagnostics-hud",
+      "status": "shipped",
+      "evidence": [
+        "src/App.jsx",
+        "npm test -> 378/378",
+        "npm run build -> passing"
+      ]
+    },
+    {
+      "slug": "first-run-control-calibration",
+      "status": "shipped",
+      "evidence": [
+        "src/components/HomeV2.jsx",
+        "src/components/HomeV2.test.jsx",
+        "npm run lint -> clean"
+      ]
+    }
+  ],
+  "validation": {
+    "focused": "22/22 passing",
+    "lint": "clean",
+    "test": "378/378 passing across 45 files",
+    "build": "passing"
+  }
+}

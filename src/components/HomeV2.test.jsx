@@ -57,6 +57,7 @@ describe("HomeV2", () => {
     act(() => root?.unmount());
     container?.remove();
     window.history.pushState({}, "", "/");
+    localStorage.removeItem("cod-debug-input");
   });
 
   it("renders hero title + DEPLOY button and calls onStart on click", async () => {
@@ -124,5 +125,18 @@ describe("HomeV2", () => {
     expect(onSetDailyChallengeMode).toHaveBeenCalledWith(true);
     const seedInput = [...container.querySelectorAll("input")].find(input => input.value === "424242");
     expect(seedInput).toBeTruthy();
+  });
+
+  it("surfaces first-run calibration guidance and hidden input diagnostics shortcut", async () => {
+    localStorage.setItem("cod-debug-input", "1");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("Calibrate");
+    expect(container.textContent).toContain("DEBUG INPUT");
   });
 });

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-05-27",
+  "session": 76,
+  "project": "call-of-doodie",
+  "agent": "codex",
+  "intent": "/start -> /audit -> /implement -> /closeout",
+  "shipped": [
+    "Hidden input diagnostics HUD behind ?debug=input / cod-debug-input=1",
+    "Pure tested pointer-to-canvas aim projection contract",
+    "HomeV2 first-run control calibration guidance and diagnostics shortcut"
+  ],
+  "validation": {
+    "focused": "22/22 passing",
+    "test": "378/378 passing across 45 files",
+    "lint": "clean",
+    "build": "passing",
+    "contextMeter": "CONTINUE"
+  },
+  "sil": {
+    "score": 1000,
+    "velocity": 4,
+    "debt": "decreasing"
+  },
+  "deferred": [
+    "Browser-level Playwright pointer sweep over the real canvas",
+    "Optional target-ring calibration flow",
+    "Supabase Auth plus Obelisk receipt account bridge"
+  ],
+  "blocked": []
+}

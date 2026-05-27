@@ -67,6 +67,7 @@ import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolu
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
+import { computePointerAimAngle } from "./systems/gameStep.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
@@ -176,6 +177,7 @@ export default function CallOfDoodie() {
   const runSummarySigRef      = useRef("");
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
+  const gamepadMetaRef   = useRef({ connected: false, index: null, id: "", type: "controller" });
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
   const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
@@ -275,6 +277,12 @@ export default function CallOfDoodie() {
   const [_showSettings, _setShowSettings]       = useState(false);
   const [gamepadConnected, setGamepadConnected] = useState(false);
   const [controllerType, setControllerType] = useState("controller");
+  const [inputDebugEnabled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).get("debug") === "input"
+      || localStorage.getItem("cod-debug-input") === "1";
+  });
+  const [inputDebug, setInputDebug] = useState(null);
   const [overclockedShots, setOverclockedShots] = useState(0);
   const [waveStreak, setWaveStreak]             = useState(0);
   const [berserkersKilled, setBerserkersKilled] = useState(0);
@@ -1878,7 +1886,7 @@ export default function CallOfDoodie() {
     const mouse = mouseRef.current;
     if (!js.active && !ss.active && gamepadAngleRef.current === null && (mouse.down || mouse.moved)) {
       const rect = canvas.getBoundingClientRect();
-      p.angle = Math.atan2((mouse.y - rect.top) * (H / rect.height) - p.y, (mouse.x - rect.left) * (W / rect.width) - p.x);
+      p.angle = computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
       inputDeviceRef.current = "mouse";
     }
     if (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0) {
@@ -1887,6 +1895,32 @@ export default function CallOfDoodie() {
       if (nearest) p.angle = Math.atan2(nearest.y - p.y, nearest.x - p.x);
     }
     sampleCommandTrace("aim", directionBucket(Math.cos(p.angle), Math.sin(p.angle)));
+    if (inputDebugEnabled && frameCountRef.current % 15 === 0) {
+      const gpMove = gamepadMoveRef.current;
+      const mouse = mouseRef.current;
+      const trace = commandTraceRef.current || [];
+      setInputDebug({
+        source: inputDeviceRef.current,
+        connected: gamepadMetaRef.current.connected,
+        controllerType: gamepadMetaRef.current.type,
+        controllerIndex: gamepadMetaRef.current.index,
+        controllerId: gamepadMetaRef.current.id,
+        leftX: gpMove.x || 0,
+        leftY: gpMove.y || 0,
+        leftActive: !!gpMove.active,
+        aimAngle: p.angle,
+        gamepadAimAngle: gamepadAngleRef.current,
+        shoot: !!gamepadShootRef.current || !!mouse.down || !!ss.shooting,
+        dashReady: !!dashReady,
+        grenadeReady: !!grenadeReady,
+        reloading: !!isReloadingRef.current,
+        pointerX: Math.round(mouse.x || 0),
+        pointerY: Math.round(mouse.y || 0),
+        traceEvents: trace.length,
+        traceAim: trace.filter(e => e.action === "aim").length,
+        traceMove: trace.filter(e => e.action === "move").length,
+      });
+    }
     const shouldShoot = mouse.down || ss.shooting || gamepadShootRef.current || (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0);
     if (shouldShoot && !isReloadingRef.current && gs.ammoCount > 0) shoot(gs, wpnIdx, p.angle);
     if (p.invincible > 0) p.invincible--;
@@ -3513,7 +3547,7 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection, sampleCommandTrace]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef);
@@ -3612,13 +3646,23 @@ export default function CallOfDoodie() {
       if (connected !== lastGpConnected) {
         lastGpConnected = connected;
         setGamepadConnected(connected);
-        if (!connected) { controllerTypeRef.current = "controller"; setControllerType("controller"); }
+        if (!connected) {
+          controllerTypeRef.current = "controller";
+          gamepadMetaRef.current = { connected: false, index: null, id: "", type: "controller" };
+          setControllerType("controller");
+        }
       }
       if (!gp) return;
 
       // Detect controller type
       const cType = detectControllerType(gp);
       if (cType !== controllerTypeRef.current) { controllerTypeRef.current = cType; setControllerType(cType); }
+      gamepadMetaRef.current = {
+        connected: true,
+        index: gp.index ?? null,
+        id: gp.id || "",
+        type: cType,
+      };
       inputDeviceRef.current = cType;
 
       if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current) {
@@ -4073,6 +4117,9 @@ export default function CallOfDoodie() {
           🎮
         </div>
       )}
+      {inputDebugEnabled && (
+        <InputDebugOverlay data={inputDebug} />
+      )}
 
       {/* Tutorial overlay — first-run hints */}
       {!paused && !perkPending && !shopPending && !routePending && (
@@ -4201,6 +4248,57 @@ export default function CallOfDoodie() {
         .skip-link { position:absolute; top:-9999px; left:0; z-index:9999; padding:8px 16px; background:#FFD700; color:#000; font-weight:900; text-decoration:none; border-radius:0 0 6px 0; font-family:'Courier New',monospace; }
         .skip-link:focus { top:0; }
       `}</style>
+    </div>
+  );
+}
+
+function fmtDebugNumber(value, digits = 2) {
+  return Number.isFinite(value) ? value.toFixed(digits) : "--";
+}
+
+function InputDebugOverlay({ data }) {
+  const d = data || {};
+  const rows = [
+    ["SRC", d.source || "--"],
+    ["PAD", d.connected ? `${d.controllerType || "controller"} #${d.controllerIndex ?? "?"}` : "none"],
+    ["ID", d.controllerId ? String(d.controllerId).slice(0, 34) : "--"],
+    ["LSTICK", `${fmtDebugNumber(d.leftX)} ${fmtDebugNumber(d.leftY)} ${d.leftActive ? "ACTIVE" : "idle"}`],
+    ["AIM", `${fmtDebugNumber(d.aimAngle)} rad`],
+    ["PAD AIM", d.gamepadAimAngle == null ? "--" : `${fmtDebugNumber(d.gamepadAimAngle)} rad`],
+    ["PTR", `${d.pointerX ?? "--"},${d.pointerY ?? "--"}`],
+    ["ACTIONS", `shoot:${d.shoot ? "1" : "0"} dash:${d.dashReady ? "ready" : "cool"} grenade:${d.grenadeReady ? "ready" : "cool"} reload:${d.reloading ? "1" : "0"}`],
+    ["TRACE", `${d.traceEvents || 0} events · aim ${d.traceAim || 0} · move ${d.traceMove || 0}`],
+  ];
+
+  return (
+    <div
+      data-testid="input-debug-hud"
+      style={{
+        position: "absolute",
+        top: 42,
+        right: 8,
+        width: 260,
+        maxWidth: "calc(100vw - 16px)",
+        zIndex: 80,
+        pointerEvents: "none",
+        background: "rgba(0,0,0,0.78)",
+        border: "1px solid rgba(0,229,255,0.45)",
+        borderRadius: 8,
+        padding: "8px 10px",
+        color: "#DDFBFF",
+        fontFamily: "'Courier New',monospace",
+        fontSize: 10,
+        lineHeight: 1.45,
+        boxShadow: "0 0 18px rgba(0,229,255,0.16)",
+      }}
+    >
+      <div style={{ color: "#00E5FF", fontWeight: 900, letterSpacing: 1, marginBottom: 4 }}>INPUT DIAGNOSTICS</div>
+      {rows.map(([label, value]) => (
+        <div key={label} style={{ display: "grid", gridTemplateColumns: "62px 1fr", gap: 6 }}>
+          <span style={{ color: "#7FE6FF", fontWeight: 900 }}>{label}</span>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</span>
+        </div>
+      ))}
     </div>
   );
 }

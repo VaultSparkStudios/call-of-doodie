@@ -242,6 +242,14 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - No contradictions introduced. Source-of-truth hierarchy unchanged — MenuPanels.jsx is purely additive and matches MenuScreen's existing storage helpers exactly (`loadCustomLoadouts`, `saveCustomLoadout`, `purchaseMetaUpgrade`, `prestigeAccount`, `saveMetaProgress`).
 - `context/PROJECT_STATUS.json` updated: `silSession` 48 → 49, `silScore` 936 → 942, `silVelocity` 5 → 2, `currentSession` 48 → 49, `truthAuditLastRun` 2026-04-17 → 2026-04-21, new per-category scores reflect refined rubric values, `currentFocus` + `nextMilestone` rewritten for session 49.
 
+## 2026-05-27 — Session 76 control diagnostics
+
+- `docs/AUDIT_2026-05-27.md` / `.json` are the current ranked audit and execution record for the input diagnostics slice.
+- `src/systems/gameStep.js` owns the pure pointer-to-canvas aim projection helper now used by `src/App.jsx`; `src/systems/gameStep.test.js` covers cardinal and diagonal aim vectors.
+- `src/App.jsx` exposes `?debug=input` / `cod-debug-input=1` diagnostics only as a hidden QA surface and does not change normal-player UI.
+- `src/components/HomeV2.jsx` includes first-run calibration guidance and shows the diagnostics shortcut only when debug input mode is enabled.
+- No source-of-truth contradictions introduced. The remaining pointer follow-up is specifically a browser-level Playwright sweep, not the underlying aim math contract.
+
 ## 2026-04-17 — Session 47 changes
 
 - `src/utils/runIntelligence.js` + tests added: shared run-intelligence utility now owns menu focus selection, post-run diagnosis, rivalry prompts, compact event digests, Studio event shape, and rule-based callouts.

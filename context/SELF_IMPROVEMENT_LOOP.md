@@ -735,6 +735,19 @@ Avgs — 3: 436.0 | 5: — | 10: — | 25: — | all: 432.8 [N=4]
 **Top gap:** The new replay trust smoke could not be run live in this sandbox because network escalation was not approved.
 **Intent outcome:** Achieved — `/start`, fresh `/audit` iteration, `/implement`, validation, and closeout write-back completed with concrete evidence.
 
+## 2026-05-27 — Session 76 | Total: 1000/1000 | Velocity: 4 | Debt: ↓
+
+SIL +3: Converted input QA from subjective physical-device notes into a hidden observable runtime surface while extracting pointer aim projection into tested pure code. Validation: focused control/UI tests 22/22, full suite 378/378, lint clean, build passing.
+
+**Top win:** `?debug=input` gives controller and pointer QA real evidence without exposing debug clutter to normal players.
+**Top gap:** The full Playwright pointer sweep remains a browser-level follow-up; the math contract underneath it is now tested.
+**Intent outcome:** Achieved for `/start`, fresh `/audit`, `/implement`, and validation; `/closeout` write-back is in progress.
+
+**Brainstorm**
+1. Browser pointer sweep — drive the real canvas with Playwright and compare debug HUD aim buckets across all quadrants. High probability.
+2. Calibration ring — turn the first-run copy into a one-tap optional target sweep that unlocks a "controls verified" local marker. High probability.
+3. Controller profile memory — remember stable controller id/type/dead-zone hints locally so repeat device QA starts from known-good settings. Medium probability.
+
 **Brainstorm**
 1. Deterministic replay runner — consume the stored trace payload contract in `validate-replay` Phase 2B and quarantine drift above a tight threshold. High probability.
 2. Network-approved replay trust smoke — run `npm run replay:trust-smoke` after Edge deploy and add it to launch verification if stable. High probability.

@@ -1,5 +1,30 @@
 # Latest Handoff
 
+## Where We Left Off - Session 76 (2026-05-27)
+
+Founder asked to continue the durable `/start -> /audit -> /implement -> /closeout` workflow with high creative/technical ambition and a short impact summary after closeout.
+
+Intent outcome: Achieved for start, fresh audit, implementation, and validation. The session focused on the highest-return launch gap left by Session 75: input confidence under real controller/mouse/touch QA.
+
+What shipped:
+- `docs/AUDIT_2026-05-27.md` / `.json` rank and execute a three-item control-confidence plan.
+- `src/systems/gameStep.js` now exports tested pointer-to-canvas aim projection helpers, and `App.jsx` uses the shared helper for runtime mouse/touchpad aim.
+- `?debug=input` or `localStorage.cod-debug-input=1` now enables a hidden in-run diagnostics HUD showing source, controller type/slot/id, stick values, aim angles, action state, pointer coordinates, and trace counts.
+- HomeV2 first-run onboarding now includes a calibration step; the `DEBUG INPUT` shortcut appears only when diagnostics are enabled.
+
+Validation:
+- `npx vitest run src/systems/gameStep.test.js src/components/HomeV2.test.jsx src/utils/gamepad.test.js` -> 22/22 passing
+- `npm run lint` -> clean
+- `npm test` -> 378/378 passing across 45 files
+- `npm run build` -> passing
+
+Next:
+- Add the browser-level Playwright pointer sweep on top of the tested aim math.
+- Consider turning calibration copy into an optional target-ring flow that records a local "controls verified" marker.
+- Keep Supabase Auth + Obelisk account bridge as a deliberate separate feature slice.
+
+---
+
 ## Where We Left Off - Session 75 (2026-05-26)
 
 Founder reported that Xbox controller pairing/mapping, mouse/touchpad aiming, sound feel, website scrollability, and onboarding had regressed, and asked for an account/Obelisk path.

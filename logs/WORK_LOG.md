@@ -314,6 +314,16 @@ This public repo no longer carries the detailed internal work log. Internal sess
 
 # 2026-05-17 (Session 65)
 
+# 2026-05-27 (Session 76)
+
+- Ran `/start` protocol with Codex session lock, mode/secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-05-27.md` / `.json` for a bounded control-confidence audit after confirming Session 75 left input diagnostics and pointer 360 confidence as the next launch-risk slice.
+- Added `computePointerAimAngle()` and `angleToUnitVector()` to `src/systems/gameStep.js`; routed runtime mouse/touchpad aim in `src/App.jsx` through the pure helper.
+- Added `?debug=input` / `cod-debug-input=1` hidden diagnostics in `src/App.jsx` with controller identity, stick axes, source, aim angles, action states, pointer coordinates, and replay trace counts.
+- Updated HomeV2 first-run onboarding with calibration guidance and a hidden `DEBUG INPUT` shortcut when diagnostics mode is enabled.
+- Updated audit execution logs, task board, current state, truth audit, and SIL entry.
+- Validation: focused control/UI tests 22/22; `npm run lint` clean; `npm test` 378/378 across 45 files; `npm run build` passing.
+
 - Continued the active `/start then /audit then /implement then /closeout` goal from the current repo state rather than repeating shipped code work.
 - Ran `/start` protocol: wrote `context/.session-lock` for Codex, detected execution session, ran secrets/blocker preflight, and got context-meter `CONTINUE`.
 - Verified `docs/AUDIT_2026-05-17.md` and `docs/IMPLEMENT_PLAN.md` against actual implementation evidence in `src/components/HomeV2.jsx` and `src/components/HomeV2.test.jsx`.
