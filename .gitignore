@@ -15,3 +15,6 @@ docs/RIGHTS_PROVENANCE.md
 *.tmp
 .test-out.txt
 .cache/
+
+# Private surfaces — never commit (sanitization 2026-06-03)
+ignis/output/
