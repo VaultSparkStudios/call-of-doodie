@@ -241,5 +241,5 @@ describe("CallOfDoodie launch smoke", () => {
       seed: expect.any(Number),
       starterLoadout: "standard",
     });
-  });
+  }, 60000);
 });

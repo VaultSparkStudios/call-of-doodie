@@ -35,7 +35,7 @@ Full decision: `vaultspark-studio-ops/docs/STUDIO_CANON.md` → CANON-008
 
 <!-- studio-os:universal-sections-start -->
 <!-- Source: vaultspark-studio-ops/docs/templates/project-system/AGENTS_universal_sections.md -->
-<!-- DO NOT EDIT — re-run via /start deferred-propagation hook or scripts/propagate-agents-sections.mjs -->
+<!-- DO NOT EDIT — re-run `node scripts/propagate-agents-sections.mjs --apply` from studio-ops to refresh -->
 
 <!-- Universal AGENTS.md sections — propagate to every Studio repo via scripts/run-template-propagation.mjs -->
 <!-- Owner: Studio Ops · Source: docs/templates/project-system/AGENTS_universal_sections.md -->
@@ -367,6 +367,61 @@ Every Studio project's free tier MUST be **per-user cost-neutral to the studio a
 **Rationale.** Zero revenue + only costs. 1000 free users × $0.05/user/day LLM × 5 SPARKED projects = $7.5K/mo burn before $1 of revenue. Pre-revenue, no general override.
 
 Full canon: `vaultspark-studio-ops/docs/STUDIO_CANON.md` → CANON-029.
+
+---
+
+## Unified Skill Brief (CANON-031 candidate · S141)
+
+Every founder-facing skill — `/start`, `/audit`, `/implement`, `/closeout`, `/go` — produces its output through ONE shared library. Same 95-col frame, same voice rules, same schema. Different `kind` flips score labels; nothing else moves.
+
+**Library:** `vaultspark-studio-ops/scripts/lib/skill-brief.mjs`
+**Spec:** `vaultspark-studio-ops/docs/SKILL_BRIEF_SPEC.md`
+**Closeout-specific:** `vaultspark-studio-ops/docs/CLOSEOUT_BRIEF_SPEC.md`
+**Visual mock:** `vaultspark-studio-ops/docs/CLOSEOUT_BRIEF_MOCK.md`
+
+**Five canonical brief kinds:**
+
+| Kind | Skill | Left score | Right score |
+|---|---|---|---|
+| `orientation` | /start | Context Readiness | Cross-Repo Urgency |
+| `audit` | /audit | Combined Priority | Innovation Density |
+| `plan` | /implement | Effort Shippability | Execution Confidence |
+| `closeout` | /closeout | Project Impact | Ecosystem Impact |
+| `sprint` | /go | Round Velocity | Round Quality |
+
+**Per-item required fields:** `id`, `slug`, `title`, `axis`, `leftScore` (1–10), `rightScore` (1–10), `insight` (2–3 sentences, voice-driven, no buzzwords), `evidence`.
+
+**Voice rules for `insight`** (apply universally):
+- 2–3 sentences max
+- Lead with what changed in plain English; optional second/third = why it matters or what compounds
+- Warm-confident voice, slight wit OK when honest
+- Forbidden words: leveraged · best-in-class · stakeholder · synergies · robust · seamless
+- Forbidden openers: "This implementation/feature/change..."
+- No process narration · no emoji inside `insight`
+
+**Cross-agent invocation:**
+- Claude Code: skill bodies import `scripts/lib/skill-brief.mjs` directly
+- Codex: `node -e "import('./scripts/lib/skill-brief.mjs').then(m => console.log(m.render(JSON.parse(process.argv[1]))))" '<json>'`
+- ChatGPT custom GPTs: studio-ops MCP tool `skill_brief_render({ brief })`
+- Managed agents: outcome rubric requires brief JSON; harness invokes renderer
+
+If your project doesn't yet produce briefs at session boundaries, the next `/closeout` will queue propagation. No agent invents its own format.
+
+---
+
+## SIL v5.0 (CANON-030 candidate · S141)
+
+Studio Improvement Loop scoring expands from 1000 max (v3) → **2000 max + ×1.15 halo = 2300** (v5). Three tiers:
+
+- **Base** (10 categories × 100 = 1000, always-on) — functional/aligned/healthy
+- **Depth** (5 categories × 100 = 500, unlock at base ≥ 700) — good citizen of the studio
+- **Mastery** (5 categories × 100 = 500, unlock at base+depth ≥ 1200) — doing things only this studio can
+
+Mastery categories: Studio Tooling Adoption · Proprietary Surface + IP Posture · Operational Excellence · Stakeholder Value Loop · Anti-Fragility.
+
+Decay: −2%/week per stale category. Halo: +0.5%/gene · +1%/sidecar · +0.3%/importer · +2%/canon (max ×1.15).
+
+Full proposal: `vaultspark-studio-ops/docs/SIL_V5_PROPOSAL.md`. Dual-render v3+v5 begins after canon approval. Library to build: `scripts/lib/sil-v5.mjs`.
 
 ---
 

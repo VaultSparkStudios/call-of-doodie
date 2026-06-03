@@ -1,5 +1,5 @@
 {
-  "_comment": "IGNIS MCP server template. Drop this into your project as .mcp.json. Prefer the bundled `npx ignis-mcp` after `npm i -g @vaultspark/ignis-core`, or replace the placeholder with the absolute path to your vaultspark-ignis checkout.",
+  "_comment": "IGNIS MCP server. Uses the global `ignis-mcp` bin from @vaultspark/ignis-core (install once per machine: `npm i -g <path-to-vaultspark-ignis-checkout>`). Portable — no absolute local paths (public-repo sanitization).",
   "mcpServers": {
     "ignis": {
       "command": "npx",
