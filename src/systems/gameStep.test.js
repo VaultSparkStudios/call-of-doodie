@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { computeMovementVector, applyPlayerMovement, computePointerAimAngle, angleToUnitVector } from "./gameStep.js";
+import {
+  computeMovementVector,
+  applyPlayerMovement,
+  computePointerAimAngle,
+  angleToUnitVector,
+  buildPointerAimSweepReport,
+} from "./gameStep.js";
 
 describe("computeMovementVector", () => {
   it("returns zero vector when no input", () => {
@@ -111,5 +117,13 @@ describe("computePointerAimAngle", () => {
     expect(ne.y).toBeLessThan(-0.7);
     expect(sw.x).toBeLessThan(-0.7);
     expect(sw.y).toBeGreaterThan(0.7);
+  });
+
+  it("builds a complete four-direction browser pointer sweep report", () => {
+    const report = buildPointerAimSweepReport(rect, canvasSize, player);
+
+    expect(report.complete).toBe(true);
+    expect(report.buckets).toEqual(["east", "north", "south", "west"]);
+    expect(report.probes.map(probe => probe.id)).toEqual(["east", "south", "west", "north"]);
   });
 });

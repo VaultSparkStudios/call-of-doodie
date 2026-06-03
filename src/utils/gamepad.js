@@ -1,4 +1,5 @@
 const DEFAULT_DEAD_ZONE = 0.2;
+const PROFILE_KEY = "cod-controller-profile";
 
 let activeGamepadIndex = null;
 
@@ -40,6 +41,40 @@ export function getPrimaryGamepad(nav = globalThis.navigator) {
   const chosen = xbox || pads[0];
   activeGamepadIndex = chosen.index;
   return chosen;
+}
+
+export function buildControllerProfile(gp) {
+  if (!gp) return null;
+  return {
+    version: 1,
+    index: gp.index,
+    id: gp.id || "",
+    type: detectControllerType(gp),
+    axes: gp.axes?.length || 0,
+    buttons: gp.buttons?.length || 0,
+    lastSeen: Date.now(),
+  };
+}
+
+export function rememberControllerProfile(gp, storage = globalThis.localStorage) {
+  const profile = buildControllerProfile(gp);
+  if (!profile || !storage?.setItem) return profile;
+  try {
+    storage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  } catch (_) {
+    // Storage can be unavailable in privacy-restricted browsers.
+  }
+  return profile;
+}
+
+export function loadControllerProfile(storage = globalThis.localStorage) {
+  if (!storage?.getItem) return null;
+  try {
+    const parsed = JSON.parse(storage.getItem(PROFILE_KEY) || "null");
+    return parsed?.version === 1 ? parsed : null;
+  } catch (_) {
+    return null;
+  }
 }
 
 export function buttonPressed(gp, idx) {

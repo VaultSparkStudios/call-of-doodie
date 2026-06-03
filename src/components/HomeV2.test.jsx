@@ -22,6 +22,7 @@ vi.mock("./DemoCanvas.jsx", () => ({
 
 import HomeV2 from "./HomeV2.jsx";
 import { encodeReplayCode } from "../utils/replayCode.js";
+import { buildInputCalibrationRecord, saveInputCalibration } from "../utils/inputCalibration.js";
 
 const noop = () => {};
 const baseProps = {
@@ -58,6 +59,8 @@ describe("HomeV2", () => {
     container?.remove();
     window.history.pushState({}, "", "/");
     localStorage.removeItem("cod-debug-input");
+    localStorage.removeItem("cod-input-calibration");
+    localStorage.removeItem("cod-controller-profile");
   });
 
   it("renders hero title + DEPLOY button and calls onStart on click", async () => {
@@ -138,5 +141,31 @@ describe("HomeV2", () => {
 
     expect(container.textContent).toContain("Calibrate");
     expect(container.textContent).toContain("DEBUG INPUT");
+  });
+
+  it("surfaces remembered input calibration and controller profile status", async () => {
+    saveInputCalibration(buildInputCalibrationRecord({
+      source: "mouse",
+      buckets: ["east", "west", "north", "south"],
+      timestamp: 123,
+    }));
+    localStorage.setItem("cod-controller-profile", JSON.stringify({
+      version: 1,
+      type: "xbox",
+      index: 1,
+      id: "Xbox Wireless Controller",
+      axes: 4,
+      buttons: 16,
+      lastSeen: 123,
+    }));
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("INPUT MOUSE VERIFIED");
+    expect(container.textContent).toContain("XBOX #1");
   });
 });

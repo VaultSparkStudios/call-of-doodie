@@ -828,3 +828,16 @@ SIL +3: Converted replay trace trust from passive diagnostics into actionable pl
 1. Input diagnostics HUD — make `?debug=input` a launch QA tool that shows exact controller slot, mapping, axes, source, and aim angle. High probability.
 2. Control calibration ring — first-session optional target sweep that detects controller drift and pointer full-circle failures before a run. High probability.
 3. Signed account migration receipt — let guest progress become portable without weakening callsign/supporter trust. High probability.
+
+## 2026-06-03 — Session 77 | Total: 1000/1000 | Velocity: 4 | Debt: ↓
+
+SIL +3: Converted input diagnostics from one-session observation into durable local QA evidence: pointer sweep reports prove four-direction aim coverage, calibration status persists locally, and controller profile memory gives repeat device checks a known baseline. Validation: focused input/control tests 27/27, full suite 383/383, lint clean, build passing.
+
+**Top win:** The game can now remember that a browser/device has proven full-circle input coverage without adding accounts, telemetry cost, or a visible setup chore.
+**Top gap:** The actual Playwright pointer 360 harness still needs to drive the real canvas and assert the debug HUD after viewport changes.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement`, validation, and closeout write-back completed with concrete evidence.
+
+**Brainstorm**
+1. Playwright pointer harness — drive canvas pointer positions around the player and assert debug HUD buckets across desktop/mobile viewports. High probability.
+2. Target-ring calibration mode — turn the current automatic debug calibration into a short optional first-run target sweep with a visible local "controls verified" reward. High probability.
+3. Device-specific control hints — use remembered controller profile ids to suggest Xbox/PS button labels and dead-zone notes on the debug HUD. Medium probability.

@@ -48,6 +48,35 @@ export function angleToUnitVector(angle) {
   };
 }
 
+export function pointerAimBucket(angle) {
+  const { x, y } = angleToUnitVector(angle);
+  if (Math.abs(x) >= Math.abs(y)) return x >= 0 ? "east" : "west";
+  return y >= 0 ? "south" : "north";
+}
+
+export function buildPointerAimSweepReport(rect, canvasSize, player) {
+  const safeRect = rect || { left: 0, top: 0, width: canvasSize?.w || 1, height: canvasSize?.h || 1 };
+  const midX = (safeRect.left || 0) + (safeRect.width || 1) / 2;
+  const midY = (safeRect.top || 0) + (safeRect.height || 1) / 2;
+  const edgeX = (safeRect.width || 1) * 0.35;
+  const edgeY = (safeRect.height || 1) * 0.35;
+  const probes = [
+    { id: "east", pointer: { x: midX + edgeX, y: midY } },
+    { id: "south", pointer: { x: midX, y: midY + edgeY } },
+    { id: "west", pointer: { x: midX - edgeX, y: midY } },
+    { id: "north", pointer: { x: midX, y: midY - edgeY } },
+  ].map((probe) => {
+    const angle = computePointerAimAngle(probe.pointer, safeRect, canvasSize, player);
+    return { ...probe, angle, bucket: pointerAimBucket(angle) };
+  });
+  const buckets = new Set(probes.map((probe) => probe.bucket));
+  return {
+    probes,
+    buckets: Array.from(buckets).sort(),
+    complete: ["east", "north", "south", "west"].every((bucket) => buckets.has(bucket)),
+  };
+}
+
 /**
  * Apply player movement for one frame. Mutates player.x / player.y in place.
  * Returns the (possibly mutated) player object for chaining.

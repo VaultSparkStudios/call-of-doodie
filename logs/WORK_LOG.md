@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-06-03 (Session 77)
+
+- Ran `/start` with Codex session lock, session-mode check, secrets audit, blocker preflight, and context-meter verdict `CONTINUE`.
+- Created `docs/AUDIT_2026-06-03.md` / `.json` for a three-item input-evidence memory sprint, then implemented all items.
+- Added `pointerAimBucket()` and `buildPointerAimSweepReport()` in `src/systems/gameStep.js` with regression coverage for complete four-direction pointer evidence.
+- Added `src/utils/inputCalibration.js` with local-only calibration record build/load/save/summary helpers, wired completed debug sweeps into `App.jsx`, and surfaced calibration status in the hidden input HUD.
+- Added controller profile build/load/save helpers in `src/utils/gamepad.js`, persisted profiles during gamepad polling, and surfaced remembered controller status on HomeV2.
+- Updated HomeV2 tests for calibration/profile status and added focused utility coverage.
+- Validation: focused input/control tests 27/27; `npm run lint` clean; full `npm test` 383/383 across 46 files; `npm run build` passing.
+- Dependency note: `node_modules` was absent, so `npm install` restored existing lockfile dependencies; npm reported 10 existing audit findings (6 moderate, 2 high, 2 critical), with no package changes staged.
+
 ## 2026-05-21 (Session 72 — replay evidence-quality substrate)
 
 - Founder goal continued: `/start` -> fresh `/audit` -> `/implement` -> `/closeout`, with genius-level/creative/innovative judgment and a short readable impact summary requested after closeout.

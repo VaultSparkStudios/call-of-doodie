@@ -42,7 +42,7 @@ import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildA
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
 import { directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
-import { detectControllerType, getPrimaryGamepad, readGamepadControls } from "./utils/gamepad.js";
+import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberControllerProfile } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -67,7 +67,8 @@ import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolu
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
-import { computePointerAimAngle } from "./systems/gameStep.js";
+import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
+import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
@@ -178,6 +179,7 @@ export default function CallOfDoodie() {
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const gamepadMetaRef   = useRef({ connected: false, index: null, id: "", type: "controller" });
+  const inputCalibrationRef = useRef(typeof window === "undefined" ? null : loadInputCalibration());
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
   const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
@@ -1899,6 +1901,19 @@ export default function CallOfDoodie() {
       const gpMove = gamepadMoveRef.current;
       const mouse = mouseRef.current;
       const trace = commandTraceRef.current || [];
+      let calibration = inputCalibrationRef.current;
+      const rect = canvasRef.current?.getBoundingClientRect?.();
+      if (rect && gs?.player) {
+        const sweep = buildPointerAimSweepReport(rect, { w: W, h: H }, gs.player);
+        if (sweep.complete) {
+          calibration = saveInputCalibration(buildInputCalibrationRecord({
+            source: inputDeviceRef.current,
+            controllerType: gamepadMetaRef.current.type || "none",
+            buckets: sweep.buckets,
+          }));
+          inputCalibrationRef.current = calibration;
+        }
+      }
       setInputDebug({
         source: inputDeviceRef.current,
         connected: gamepadMetaRef.current.connected,
@@ -1919,6 +1934,7 @@ export default function CallOfDoodie() {
         traceEvents: trace.length,
         traceAim: trace.filter(e => e.action === "aim").length,
         traceMove: trace.filter(e => e.action === "move").length,
+        calibration: summarizeInputCalibration(calibration),
       });
     }
     const shouldShoot = mouse.down || ss.shooting || gamepadShootRef.current || (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0);
@@ -3656,6 +3672,7 @@ export default function CallOfDoodie() {
 
       // Detect controller type
       const cType = detectControllerType(gp);
+      rememberControllerProfile(gp);
       if (cType !== controllerTypeRef.current) { controllerTypeRef.current = cType; setControllerType(cType); }
       gamepadMetaRef.current = {
         connected: true,
@@ -4266,6 +4283,7 @@ function InputDebugOverlay({ data }) {
     ["AIM", `${fmtDebugNumber(d.aimAngle)} rad`],
     ["PAD AIM", d.gamepadAimAngle == null ? "--" : `${fmtDebugNumber(d.gamepadAimAngle)} rad`],
     ["PTR", `${d.pointerX ?? "--"},${d.pointerY ?? "--"}`],
+    ["CAL", d.calibration || "unverified"],
     ["ACTIONS", `shoot:${d.shoot ? "1" : "0"} dash:${d.dashReady ? "ready" : "cool"} grenade:${d.grenadeReady ? "ready" : "cool"} reload:${d.reloading ? "1" : "0"}`],
     ["TRACE", `${d.traceEvents || 0} events · aim ${d.traceAim || 0} · move ${d.traceMove || 0}`],
   ];

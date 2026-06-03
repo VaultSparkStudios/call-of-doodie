@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-03",
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 3,
+    "combinedPriority": 38.55,
+    "top3": [
+      "pointer-sweep-evidence-report",
+      "durable-input-calibration-memory",
+      "controller-profile-memory"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "pointer-sweep-evidence-report",
+      "tier": "fire",
+      "axis": "UX / user-experience",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 7,
+      "priority": 18.93,
+      "title": "Pointer sweep evidence report",
+      "summary": "Turn the tested pointer projection contract into a four-direction sweep report that browser QA can assert without reading combat side effects. The next real launch risk is not another aim formula; it is proving the live canvas can cover every direction after resizing and viewport scaling.",
+      "recipe": "Add `buildPointerAimSweepReport()` and `pointerAimBucket()` to `src/systems/gameStep.js`, test all four buckets, and feed the result into debug/calibration state."
+    },
+    {
+      "rank": 2,
+      "slug": "durable-input-calibration-memory",
+      "tier": "high",
+      "axis": "Gamification / engagement / immersion",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 17.66,
+      "title": "Durable input calibration memory",
+      "summary": "Persist a local-only record when a debug run proves north/east/south/west aim coverage, then surface that status on the front door and debug HUD. This makes first-session control confidence visible without adding accounts, telemetry spend, or player-facing setup friction.",
+      "recipe": "Add a small `inputCalibration` utility, save a completed sweep during `?debug=input`, render calibration summary in HomeV2/debug HUD, and cover the storage/status path with tests."
+    },
+    {
+      "rank": 3,
+      "slug": "controller-profile-memory",
+      "tier": "high",
+      "axis": "User feedback loop",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 6,
+      "priority": 16.17,
+      "title": "Controller profile memory",
+      "summary": "Remember the last real controller profile locally so repeat QA starts from a known browser-reported type, slot, axes, and button count. The game already detects active controllers; this turns that signal into a durable feedback loop for device-specific launch checks.",
+      "recipe": "Extend `src/utils/gamepad.js` with profile build/load/save helpers, persist the profile when polling a connected pad, and show the remembered controller profile on HomeV2."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "pointer-sweep-evidence-report",
+      "status": "shipped",
+      "evidence": [
+        "src/systems/gameStep.js",
+        "src/systems/gameStep.test.js",
+        "npx vitest run src/systems/gameStep.test.js src/utils/inputCalibration.test.js src/utils/gamepad.test.js src/components/HomeV2.test.jsx -> 27/27"
+      ]
+    },
+    {
+      "slug": "durable-input-calibration-memory",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/inputCalibration.js",
+        "src/utils/inputCalibration.test.js",
+        "src/App.jsx",
+        "src/components/HomeV2.jsx",
+        "src/components/HomeV2.test.jsx"
+      ]
+    },
+    {
+      "slug": "controller-profile-memory",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/gamepad.js",
+        "src/utils/gamepad.test.js",
+        "src/App.jsx",
+        "src/components/HomeV2.jsx"
+      ]
+    }
+  ],
+  "validation": {
+    "focused": "27/27 passing",
+    "lint": "clean",
+    "test": "383/383 passing across 46 files",
+    "build": "passing"
+  }
+}

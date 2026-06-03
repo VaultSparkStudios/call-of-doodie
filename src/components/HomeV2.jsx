@@ -13,6 +13,8 @@ import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing } from "../utils/runBrain.js";
+import { loadControllerProfile } from "../utils/gamepad.js";
+import { loadInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -110,6 +112,8 @@ export default function HomeV2(props) {
     return new URLSearchParams(window.location.search).get("debug") === "input"
       || localStorage.getItem("cod-debug-input") === "1";
   });
+  const [inputCalibration] = useState(() => loadInputCalibration());
+  const [controllerProfile] = useState(() => loadControllerProfile());
 
   useEffect(() => {
     const loaded = loadCareerStats();
@@ -576,6 +580,21 @@ export default function HomeV2(props) {
             >
               DEBUG INPUT
             </button>
+          )}
+          {(inputCalibration || controllerProfile) && (
+            <span
+              style={{
+                ...quickBtn,
+                display: "inline-flex",
+                alignItems: "center",
+                borderColor: "rgba(127,230,255,0.3)",
+                color: "#B9F3FF",
+                cursor: "default",
+              }}
+            >
+              INPUT {summarizeInputCalibration(inputCalibration).toUpperCase()}
+              {controllerProfile ? ` · ${controllerProfile.type.toUpperCase()} #${controllerProfile.index ?? "?"}` : ""}
+            </span>
           )}
         </div>
 

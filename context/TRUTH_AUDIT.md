@@ -1,6 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-03 - Session 77
+
+- `src/systems/gameStep.js` now owns both pointer projection and a four-direction pointer sweep evidence report.
+- `src/utils/inputCalibration.js` persists local-only verified input calibration records; no account, API, analytics, or network dependency was added.
+- `src/utils/gamepad.js` persists last-seen controller profile metadata locally for repeat QA.
+- `src/App.jsx` writes completed pointer sweep calibration into local storage only while input debugging is enabled and shows calibration status in the hidden diagnostics HUD.
+- `src/components/HomeV2.jsx` surfaces remembered calibration/controller status for repeat QA without changing normal deploy flow.
+- Validation truth — focused input/control tests passed 27/27, `npm run lint` passed, `npm test` passed 383/383 across 46 files, and `npm run build` passed.
+
+Overall status: green
+Last reviewed: 2026-06-03
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-05-21 - Session 74
 
 - `src/utils/studioEventOps.js` now owns trace-evidence contracts and replay-resim readiness summaries derived from local Studio trust events.

@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { detectControllerType, getPrimaryGamepad, readGamepadControls } from "./gamepad.js";
+import {
+  buildControllerProfile,
+  detectControllerType,
+  getPrimaryGamepad,
+  loadControllerProfile,
+  readGamepadControls,
+  rememberControllerProfile,
+} from "./gamepad.js";
 
 function pad({ index = 0, id = "Generic", buttons = [], axes = [] } = {}) {
   return {
@@ -48,5 +55,25 @@ describe("gamepad helpers", () => {
     expect(controls.pause).toBe(true);
     expect(controls.left).toMatchObject({ x: 0.8, y: -0.9, active: true });
     expect(controls.right).toMatchObject({ x: 0.5, y: 0.1, active: true });
+  });
+
+  it("remembers a local controller profile for repeat QA", () => {
+    const stored = new Map();
+    const storage = {
+      getItem: (key) => stored.get(key) || null,
+      setItem: (key, value) => stored.set(key, value),
+    };
+    const gp = pad({
+      index: 2,
+      id: "Xbox Wireless Controller",
+      buttons: Array.from({ length: 16 }),
+      axes: Array.from({ length: 4 }),
+    });
+
+    const profile = rememberControllerProfile(gp, storage);
+
+    expect(profile).toMatchObject({ index: 2, type: "xbox", buttons: 16, axes: 4 });
+    expect(loadControllerProfile(storage)).toMatchObject({ index: 2, type: "xbox", buttons: 16, axes: 4 });
+    expect(buildControllerProfile(null)).toBeNull();
   });
 });
