@@ -2114,7 +2114,7 @@ export default function CallOfDoodie() {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         const ne = gs.enemies[gs.enemies.length - 1];
         const formation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
-        if (formation) applySpawnFormation(ne, formation, W, H);
+        if (formation) { applySpawnFormation(ne, formation, W, H); gs._lastFormationLabel = formation.label; }
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         if (directorEliteType) applyEliteType(ne, directorEliteType);
         if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
@@ -2343,6 +2343,7 @@ export default function CallOfDoodie() {
         // ── Wave incoming preview card (always shown) then chain mutation/shop ──
         const _evtMap = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
         waveAnnouncePendingRef.current = true;
+        const _fmtDescriptors = { FLANK: "pressure from the sides", PINCER: "split attack", SURGE: "overwhelming force" };
         setWaveAnnounce({
           waveNum: gs.currentWave,
           isBoss: nextIsBoss,
@@ -2351,6 +2352,7 @@ export default function CallOfDoodie() {
           tempoLabel: !nextIsBoss ? gs.waveDirector?.label : null,
           threatHint: !nextIsBoss ? gs.waveDirector?.hint : null,
           telemetryBand: !nextIsBoss ? gs.waveTelemetryBand : null,
+          formationHint: !nextIsBoss && gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
         });
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
         const _showMutation = !nextIsBoss && !gs.gauntletMode && !gs.bossRushMode
@@ -4039,6 +4041,11 @@ export default function CallOfDoodie() {
             {wa.threatHint && (
               <div style={{ fontSize: 11, color: "#c6c6c6", maxWidth: 320, margin: "8px auto 0", lineHeight: 1.45 }}>
                 {wa.threatHint}
+              </div>
+            )}
+            {wa.formationHint && (
+              <div style={{ fontSize: 10, color: "#9de8b4", fontStyle: "italic", fontFamily: "'Courier New',monospace", marginTop: 5, letterSpacing: 1 }}>
+                {wa.formationHint}
               </div>
             )}
             {wa.telemetryBand && (
