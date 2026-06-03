@@ -15,6 +15,9 @@ import {
   saveExperimentIntent,
   loadExperimentIntent,
   clearExperimentIntent,
+  getBossKillRecord,
+  saveBossKillRecord,
+  isNemesis,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -197,5 +200,49 @@ describe("experiment intent persistence", () => {
     localStorage.clear();
     saveExperimentIntent(null);
     expect(loadExperimentIntent()).toBeNull();
+  });
+});
+
+describe("boss kill record + nemesis detection", () => {
+  it("returns zero kills/deaths for unseen boss", () => {
+    localStorage.clear();
+    const rec = getBossKillRecord(4);
+    expect(rec.kills).toBe(0);
+    expect(rec.deaths).toBe(0);
+  });
+
+  it("saves and loads boss kill counts", () => {
+    localStorage.clear();
+    saveBossKillRecord(9, { kills: 3, deaths: 1 });
+    const rec = getBossKillRecord(9);
+    expect(rec.kills).toBe(3);
+    expect(rec.deaths).toBe(1);
+  });
+
+  it("keeps separate records for different boss types", () => {
+    localStorage.clear();
+    saveBossKillRecord(4, { kills: 2, deaths: 0 });
+    saveBossKillRecord(17, { kills: 0, deaths: 3 });
+    expect(getBossKillRecord(4).kills).toBe(2);
+    expect(getBossKillRecord(17).deaths).toBe(3);
+    expect(getBossKillRecord(4).deaths).toBe(0);
+  });
+
+  it("isNemesis returns false when under threshold", () => {
+    localStorage.clear();
+    saveBossKillRecord(16, { kills: 0, deaths: 2 });
+    expect(isNemesis(16)).toBe(false);
+  });
+
+  it("isNemesis returns true at threshold deaths with 0 kills", () => {
+    localStorage.clear();
+    saveBossKillRecord(16, { kills: 0, deaths: 3 });
+    expect(isNemesis(16)).toBe(true);
+  });
+
+  it("isNemesis returns false once boss is killed even with many deaths", () => {
+    localStorage.clear();
+    saveBossKillRecord(17, { kills: 1, deaths: 5 });
+    expect(isNemesis(17)).toBe(false);
   });
 });

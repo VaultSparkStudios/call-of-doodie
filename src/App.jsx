@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadExperimentIntent } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -551,7 +551,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0 };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0, nemesisSlain: 0 };
     roastCooldowns.current = {};
     achievedRef.current = new Set();
     perkModsRef.current = {};
@@ -1442,7 +1442,16 @@ export default function CallOfDoodie() {
           }
           if (best) killerType = best.type;
         }
-        if (killerType != null) recordDeathByEnemy(killerType);
+        if (killerType != null) {
+          recordDeathByEnemy(killerType);
+          // Track boss deaths for nemesis detection
+          if (best?.isBossEnemy) {
+            try {
+              const _prevRec = getBossKillRecord(best.typeIndex);
+              saveBossKillRecord(best.typeIndex, { kills: _prevRec.kills, deaths: _prevRec.deaths + 1 });
+            } catch {}
+          }
+        }
       } catch { /* non-fatal */ }
     }
     // Ghost race: persist this run's positions under mode-specific key
@@ -2286,8 +2295,19 @@ export default function CallOfDoodie() {
         });
         if (bossPlan.markDeveloperBossSpawned) gs.developerBossSpawned = true;
         const _bossGuidance = getBossWaveGuidance(bossPlan.primaryBoss, bossPlan.secondaryBoss);
-        bossCutsceneRef.current = true;
-        setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
+        // Nemesis + boss kill count for cutscene card
+        const _primaryType = bossPlan.primaryBoss;
+        try {
+          const _bossRec = getBossKillRecord(_primaryType);
+          gs.nemesisBossType = isNemesis(_primaryType) ? _primaryType : (gs.nemesisBossType === _primaryType ? null : gs.nemesisBossType);
+          const _killLabel = _bossRec.kills === 0 ? "FIRST ENCOUNTER" : _bossRec.kills >= 10 ? `EXECUTIONER (${_bossRec.kills}× killed)` : _bossRec.kills >= 5 ? `VETERAN (${_bossRec.kills}× killed)` : `${_bossRec.kills}× killed`;
+          const _nemesisFlag = isNemesis(_primaryType);
+          bossCutsceneRef.current = true;
+          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag });
+        } catch {
+          bossCutsceneRef.current = true;
+          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
+        }
         if (bossPlan.setLiveAnnounce) {
           setLiveAnnounce("Boss wave! " + (bossPlan.previewCard.name || "Boss") + " incoming on wave " + gs.currentWave);
         }
@@ -2571,6 +2591,19 @@ export default function CallOfDoodie() {
               if (e.typeIndex === 20) gs.algorithmSurge = false;
               const _bossRoast = getRoastCallout("boss_kill", roastCooldowns.current, gs.currentWave, 3);
               if (_bossRoast) addText(gs, W / 2, H / 3 + 36, _bossRoast, "#FFD700");
+              // Nemesis kill: update record, award 3× extra coins, trigger NEMESIS_SLAIN achievement
+              try {
+                const _wasNemesis = isNemesis(e.typeIndex);
+                const _prev = getBossKillRecord(e.typeIndex);
+                saveBossKillRecord(e.typeIndex, { kills: _prev.kills + 1, deaths: _prev.deaths });
+                if (_wasNemesis) {
+                  gs.nemesisBossType = null;
+                  statsRef.current.nemesisSlain = (statsRef.current.nemesisSlain || 0) + 1;
+                  addText(gs, W / 2, H / 3 + 56, "🎯 NEMESIS SLAIN! +30💩", "#FF4400", true);
+                  gs.coins = (gs.coins || 0) + 30;
+                  setCoins(gs.coins);
+                }
+              } catch {}
             }
             // 💩 Doodie Coin drop
             const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
@@ -4105,9 +4138,15 @@ export default function CallOfDoodie() {
               {bossCutscene.name}
             </div>
             {/* Subtitle */}
-            <div style={{ fontSize:"clamp(11px,2.5vw,14px)", color:"#999", letterSpacing:3, fontFamily:"'Courier New',monospace", marginBottom:20, fontWeight:700 }}>
+            <div style={{ fontSize:"clamp(11px,2.5vw,14px)", color:"#999", letterSpacing:3, fontFamily:"'Courier New',monospace", marginBottom:bossCutscene.bossKillLabel ? 8 : 20, fontWeight:700 }}>
               {bossCutscene.title}
             </div>
+            {/* Kill count + nemesis badge */}
+            {bossCutscene.bossKillLabel && (
+              <div style={{ fontSize:10, color: bossCutscene.isNemesis ? "#FF4400" : "#888", letterSpacing:2, fontFamily:"'Courier New',monospace", marginBottom:20, fontWeight: bossCutscene.isNemesis ? 900 : 400 }}>
+                {bossCutscene.isNemesis ? "🎯 NEMESIS — " : ""}{bossCutscene.bossKillLabel}
+              </div>
+            )}
             {/* Divider */}
             <div style={{ width:"60%", height:1, background:`linear-gradient(90deg,transparent,${bossCutscene.color}66,transparent)`, margin:"0 auto 16px" }} />
             {/* Quote */}

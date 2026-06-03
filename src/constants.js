@@ -785,6 +785,7 @@ export const ACHIEVEMENTS = [
   { id: "bounty_5", name: "Contractor Problems", desc: "Clear 5 bounty objectives in one run", emoji: "🎯", check: (s) => s.bountyKills >= 5, tier: "gold" },
   { id: "perfect_escort", name: "Special Delivery", desc: "Clear an escort with the cart untouched", emoji: "🚚", check: (s) => s.perfectEscorts >= 1, tier: "silver" },
   { id: "clutch_lockdown", name: "Panic Room", desc: "Survive a lockdown objective to the final 30 seconds", emoji: "🛡️", check: (s) => s.clutchLockdowns >= 1, tier: "silver" },
+  { id: "nemesis_slain", name: "Nemesis Defeated", desc: "Kill a boss that had been your Nemesis", emoji: "🎯", check: (s) => s.nemesisSlain >= 1, tier: "gold" },
 ];
 
 // ===== ACHIEVEMENT PROGRESS TRACKING =====

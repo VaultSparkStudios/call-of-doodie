@@ -957,6 +957,32 @@ function _saveMetaTree(unlocked) {
  * Unlock a META_TREE node, deducting its cost from career points.
  * Returns { success, reason } — caller should re-load meta progress after success.
  */
+const BOSS_KILLS_KEY = "cod-boss-kills-v1";
+const NEMESIS_THRESHOLD_DEATHS = 3;
+
+export function getBossKillRecord(bossType) {
+  try {
+    const all = JSON.parse(localStorage.getItem(BOSS_KILLS_KEY) || "{}");
+    const t = String(bossType);
+    return { kills: Number(all[t]?.kills || 0), deaths: Number(all[t]?.deaths || 0) };
+  } catch { return { kills: 0, deaths: 0 }; }
+}
+
+export function saveBossKillRecord(bossType, { kills = 0, deaths = 0 } = {}) {
+  try {
+    const all = JSON.parse(localStorage.getItem(BOSS_KILLS_KEY) || "{}");
+    const t = String(bossType);
+    all[t] = { kills, deaths };
+    localStorage.setItem(BOSS_KILLS_KEY, JSON.stringify(all));
+    return all[t];
+  } catch { return null; }
+}
+
+export function isNemesis(bossType) {
+  const rec = getBossKillRecord(bossType);
+  return rec.deaths >= NEMESIS_THRESHOLD_DEATHS && rec.kills === 0;
+}
+
 const EXPERIMENT_INTENT_KEY = "cod-last-experiment-v1";
 
 export function saveExperimentIntent(suggestion) {

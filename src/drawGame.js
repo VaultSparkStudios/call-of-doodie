@@ -813,11 +813,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         ctx.fillStyle = bar.color; ctx.fillRect(-bw / 2, by, bw * ratio, 3);
       }
     }
-    // Name label
-    ctx.fillStyle = e.isBossEnemy ? "#FF5555" : "rgba(255,255,255,0.85)";
+    // Name label (+ nemesis 🎯 indicator)
+    const _isNemBoss = e.isBossEnemy && gs.nemesisBossType === e.typeIndex;
+    ctx.fillStyle = _isNemBoss ? "#FF4400" : (e.isBossEnemy ? "#FF5555" : "rgba(255,255,255,0.85)");
     ctx.font = "bold " + (e.isBossEnemy ? 11 : 9) + "px monospace"; ctx.textAlign = "center";
     ctx.strokeStyle = "rgba(0,0,0,0.7)"; ctx.lineWidth = 2.5;
-    ctx.strokeText(e.name, 0, r + 14); ctx.fillText(e.name, 0, r + 14);
+    const _nameStr = _isNemBoss ? `🎯 ${e.name}` : e.name;
+    ctx.strokeText(_nameStr, 0, r + 14); ctx.fillText(_nameStr, 0, r + 14);
     ctx.restore();
   });
 
