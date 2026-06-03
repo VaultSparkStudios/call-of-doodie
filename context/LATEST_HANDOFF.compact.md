@@ -2,41 +2,40 @@
 
 # Latest Handoff
 
-## Where We Left Off - Session 75 (2026-05-26)
+## Where We Left Off - Session 77 (2026-06-03)
 
-Founder reported that Xbox controller pairing/mapping, mouse/touchpad aiming, sound feel, website scrollability, and onboarding had regressed, and asked for an account/Obelisk path.
+Founder asked to continue the durable `/start -> /audit -> /implement -> /closeout` workflow with genius-level, creative, innovative thinking and a short post-closeout impact summary.
 
-Intent outcome: Achieved for the first repair/audit pass. Controller input now uses a shared normalizer, selects the active gamepad instead of slot 0, restores the intended Xbox layout, and no longer overwrites keyboard/touch movement. Mouse/touchpad click aim updates immediately. The major menus and modal overlays now scroll with safe-area padding, HomeV2 first-run onboarding is clearer, and existing synthesized sounds have richer procedural variation.
+Intent outcome: Achieved. The session advanced Call of Doodie's launch input-confidence lane from hidden diagnostics into durable local QA evidence without adding dependencies, accounts, network calls, or paid API spend.
+
+What shipped:
+- `docs/AUDIT_2026-06-03.md` / `.json` rank and execute a three-item input-evidence memory sprint.
+- `src/systems/gameStep.js` now exports `pointerAimBucket()` and `buildPointerAimSweepReport()` so browser QA can prove north/east/south/west pointer coverage from the real canvas projection contract.
+- `src/utils/inputCalibration.js` persists local-only calibration records once a debug run proves all four aim buckets; the hidden `?debug=input` HUD now reports calibration status.
+- `src/utils/gamepad.js` persists the last controller profile locally: type, slot, button count, axis count, and id metadata for repeat device QA.
+- HomeV2 surfaces remembered input calibration and controller profile state as a compact QA status chip.
 
 Validation:
-- `npm test -- --run src/utils/gamepad.test.js src/systems/gameStep.test.js` -> 14/14 passing
-- `npm test` -> 373/373 passing across 45 files
+- `npx vitest run src/systems/gameStep.test.js src/utils/inputCalibration.test.js src/utils/gamepad.test.js src/components/HomeV2.test.jsx` -> 27/27 passing
 - `npm run lint` -> clean
+- `npm test` -> 383/383 passing across 46 files
 - `npm run build` -> passing
-- `docs/AUDIT_2026-05-26.json` -> parsed successfully
-
-Account path:
-- Implement Supabase Auth first: magic link plus optional Google OAuth, `profiles`, nullable `leaderboard.user_id`, guest preservation, and local UUID migration.
-- Use Obelisk as the trust layer: signed guest-to-account migration receipts, signed callsign-claim receipts, capability-scoped server actions, and future passkey-first identity posture.
 
 Next:
-- Add `?debug=input` for real Xbox/mouse/touch QA.
-- Add a Playwright pointer-aim 360-degree regression test.
-- Implement the Supabase Auth + Obelisk receipt bridge when account work is greenlit.
-- Add optional first-session control calibration.
+- Add the Playwright pointer 360 harness using `buildPointerAimSweepReport()` and the debug HUD after viewport resizing.
+- Keep physical PWA/gamepad QA and Itch.io publication as founder/device/publication gates.
+- Keep Supabase Auth + Obelisk account bridge as the next deliberate feature slice when account work is greenlit.
 
 ---
 
-## Where We Left Off - Session 74 (2026-05-21)
+## Where We Left Off - Session 76 (2026-05-27)
 
-Shipped trace-proof coaching + resim readiness from docs/AUDIT_2026-05-21_5.md. The trust loop now turns trace evidence into player-actionable drills, shows resim readiness in Run History, and lets Run Brain recommend a replay-proof drill when the latest accepted run has weak evidence.
+Founder asked to continue the durable `/start -> /audit -> /implement -> /closeout` workflow with high creative/technical ambition and a short impact summary after closeout.
 
-Validation:
-- focused studioEventOps/runBrain tests: 12/12
-- npm run lint: passed
-- npm run build: passed
-- npm test: 370/370 across 44 files
+Intent outcome: Achieved for start, fresh audit, implementation, and validation. The session focused on the highest-return launch gap left by Session 75: input confidence under real controller/mouse/touch QA.
 
-Next:
-- Continue toward the larger deterministic replay resimulation runner when a broader trust sprint is desired.
-- Human/data gates remain: physical QA, Itch.io publication, analytics dashboard secrets, HomeV2 Lighthouse/funnel gate.
+What shipped:
+- `docs/AUDIT_2026-05-27.md` / `.json` rank and execute a three-item control-confidence plan.
+- `src/systems/gameStep.js` now exports tested pointer-to-canvas aim projection helpers, and `App.jsx` uses the shared helper for runtime mouse/touchpad aim.
+- `?debug=input` or `localStorage.cod-debug-input=1` now enables a hidden in-run diagnostics HUD showing source, controller type/slot/id, stick values, aim angles, action state, pointer coordinates, and trace counts.
+- HomeV2 first-run onboarding now includes a calibration step; the `DEBUG INPUT` shortcut appears only when diagnostics are enabled.
