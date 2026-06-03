@@ -12,7 +12,7 @@ import { getAnalyticsStatus, track } from "../utils/analytics.js";
 import { summarizeStudioEvents } from "../utils/studioEventOps.js";
 import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
-import { getDifficultyBriefing } from "../utils/runBrain.js";
+import { getDifficultyBriefing, getMutationDifficultyBrief } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { loadInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
 
@@ -478,6 +478,7 @@ export default function HomeV2(props) {
               ))}
             </div>
             {(() => { const brief = getDifficultyBriefing(difficulty, runHistory); return brief ? <div style={{ fontSize: 10, color: "#999", marginTop: 5, textAlign: "center", letterSpacing: 0.5 }}>{brief}</div> : null; })()}
+            {(() => { const mb = getMutationDifficultyBrief(weeklyMutation, difficulty, runHistory); return mb ? <div style={{ fontSize: 10, color: "#FFBB44", marginTop: 3, textAlign: "center", fontStyle: "italic", letterSpacing: 0.3 }}>⚠ {mb}</div> : null; })()}
             <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
               <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>SEED</label>
               <input

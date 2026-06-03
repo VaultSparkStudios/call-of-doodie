@@ -1,4 +1,5 @@
 import { buildTraceEvidenceContract } from "./studioEventOps.js";
+import { WEEKLY_MUTATIONS } from "../constants.js";
 
 function n(value, fallback = 0) {
   const num = Number(value);
@@ -88,6 +89,42 @@ export function getDifficultyBriefing(difficulty, runHistory = []) {
  * Aggregates killedByType across recent runs and returns the most frequent killer
  * if it appears 3+ times, else null.
  */
+/**
+ * Returns a compound one-liner comparing avg wave for a difficulty when the
+ * given mutation was active vs. all other weeks. Returns null when there are
+ * fewer than 2 matching runs.
+ *
+ * Example: "NIGHTMARE × Acid Rain — avg wave drops 38% vs non-mutation runs (3 runs)"
+ */
+export function getMutationDifficultyBrief(mutation, difficulty, runHistory = []) {
+  if (!mutation || !difficulty) return null;
+  const WEEK_MS = 7 * 24 * 3600 * 1000;
+  const mutIdx = WEEKLY_MUTATIONS.findIndex(m => m.id === mutation.id);
+  if (mutIdx === -1) return null;
+
+  const diffRuns = runHistory.filter(r => r.difficulty === difficulty && r.ts);
+  if (diffRuns.length < 2) return null;
+
+  const withMut = diffRuns.filter(r => Math.floor(r.ts / WEEK_MS) % WEEKLY_MUTATIONS.length === mutIdx);
+  const withoutMut = diffRuns.filter(r => Math.floor(r.ts / WEEK_MS) % WEEKLY_MUTATIONS.length !== mutIdx);
+
+  if (withMut.length < 2) return null;
+
+  const avgWith = average(withMut.map(r => r.wave));
+  const avgWithout = withoutMut.length >= 1 ? average(withoutMut.map(r => r.wave)) : null;
+
+  const diffLabel = difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase();
+  const mutName = mutation.name || mutation.id;
+
+  if (avgWithout !== null && avgWithout > 0) {
+    const deltaPct = Math.round(((avgWith - avgWithout) / avgWithout) * 100);
+    const dir = deltaPct >= 0 ? `improves ${deltaPct}%` : `drops ${Math.abs(deltaPct)}%`;
+    return `${diffLabel} × ${mutName} — avg wave ${dir} vs non-mutation runs (${withMut.length} runs)`;
+  }
+
+  return `${diffLabel} × ${mutName} — avg wave ${Math.round(avgWith * 10) / 10} at this combo (${withMut.length} runs)`;
+}
+
 export function mostFrequentKiller(runHistory = []) {
   const counts = {};
   const names = {};

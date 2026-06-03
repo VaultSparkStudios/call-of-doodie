@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildRunBrain } from "./runBrain.js";
+import { buildRunBrain, getMutationDifficultyBrief } from "./runBrain.js";
+import { WEEKLY_MUTATIONS } from "../constants.js";
 
 describe("runBrain", () => {
   it("detects early survival pressure from recent history", () => {
@@ -69,4 +70,58 @@ describe("runBrain", () => {
     expect(brain.nextExperiment).toContain("precision route");
   });
 
+});
+
+describe("getMutationDifficultyBrief", () => {
+  const WEEK_MS = 7 * 24 * 3600 * 1000;
+  const mutation = WEEKLY_MUTATIONS[0];
+  const weekWith = 0;
+  const weekWithout = 1;
+
+  it("returns null when not enough matching runs", () => {
+    const result = getMutationDifficultyBrief(mutation, "normal", [
+      { difficulty: "normal", wave: 10, ts: weekWith * WEEK_MS + 1000 },
+    ]);
+    expect(result).toBeNull();
+  });
+
+  it("returns null for unknown mutation", () => {
+    const result = getMutationDifficultyBrief({ id: "nonexistent_mut" }, "normal", [
+      { difficulty: "normal", wave: 10, ts: weekWith * WEEK_MS + 1000 },
+      { difficulty: "normal", wave: 12, ts: weekWith * WEEK_MS + 2000 },
+    ]);
+    expect(result).toBeNull();
+  });
+
+  it("returns a compound brief showing delta when comparison data exists", () => {
+    const runHistory = [
+      { difficulty: "normal", wave: 8, ts: weekWith * WEEK_MS + 1000 },
+      { difficulty: "normal", wave: 10, ts: weekWith * WEEK_MS + 2000 },
+      { difficulty: "normal", wave: 18, ts: weekWithout * WEEK_MS + 1000 },
+      { difficulty: "normal", wave: 20, ts: weekWithout * WEEK_MS + 2000 },
+    ];
+    const result = getMutationDifficultyBrief(mutation, "normal", runHistory);
+    expect(result).toBeTruthy();
+    expect(result).toContain(mutation.name);
+    expect(result).toContain("2 runs");
+  });
+
+  it("returns a simple avg brief when no non-mutation comparison exists", () => {
+    const runHistory = [
+      { difficulty: "hard", wave: 12, ts: weekWith * WEEK_MS + 1000 },
+      { difficulty: "hard", wave: 14, ts: weekWith * WEEK_MS + 2000 },
+    ];
+    const result = getMutationDifficultyBrief(mutation, "hard", runHistory);
+    expect(result).toBeTruthy();
+    expect(result).toContain("13");
+    expect(result).toContain("2 runs");
+  });
+
+  it("ignores runs from different difficulty", () => {
+    const runHistory = [
+      { difficulty: "insane", wave: 5, ts: weekWith * WEEK_MS + 1000 },
+      { difficulty: "insane", wave: 7, ts: weekWith * WEEK_MS + 2000 },
+    ];
+    expect(getMutationDifficultyBrief(mutation, "normal", runHistory)).toBeNull();
+  });
 });
