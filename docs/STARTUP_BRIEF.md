@@ -1,10 +1,10 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-05-22 (Session 74 closeout) -->
+<!-- generated-at: 2026-06-03 (Session 77 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 74 closeout · 2026-05-22.
+> **Fast-boot brief** — generated at Session 77 closeout · 2026-06-03.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -13,7 +13,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 75 · 2026-05-22 · FOUNDER MODE                          ║
+║  Session 78 · 2026-06-03 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -30,15 +30,15 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 3↑                       ║
-║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
-║    Trend  ▂▄▇▄▄  ↑  (last 5 sessions)                            ║
+║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
+║    Trend  ▇▄▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ▇▇██████ →                ║
+║    Dev Health       100    ██████████  ▇███████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  ▇▇▇▇▇███ →                ║
-║    Engagement       100    ██████████  ▇███████ →                ║
+║    Momentum         100    ██████████  ▇▇▇▇████ →                ║
+║    Engagement       100    ██████████  ████████ →                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -48,18 +48,18 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 74 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 77 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    370 passing  ·  Deploy: N/A                           ║
+║  Tests:    383 passing  ·  Deploy: N/A                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         370/370 passing                                ║
+║  ✓  Tests         383/383 passing                                ║
 ║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
-║  ✓  Headroom      56% remaining · ~1 large item(s) fit           ║
+║  ✓  Headroom      90% remaining · ~9 large item(s) fit           ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         47704 FORGE  ·  1d old                         ║
+║  ✓  IGNIS         46881 FORGE  ·  0d old                         ║
 ║  ✓  Truth         green  ·  Genome: ?                            ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
@@ -75,12 +75,12 @@
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
 ║                                                                  ║
-║     8d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    30d · Physical launch QA                                      ║
-║    30d · Physical launch QA                                      ║
-║    30d · Create Itch.io listing and publish the prepared la      ║
-║    30d · Add `VITE_POSTHOG_KEY` to GitHub repo Settings → S      ║
-║    30d · Add `VITE_SENTRY_DSN` to GitHub repo Settings → Se      ║
+║    20d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    42d · Physical launch QA                                      ║
+║    42d · Physical launch QA                                      ║
+║    42d · Create Itch.io listing and publish the prepared la      ║
+║    42d · Add `VITE_POSTHOG_KEY` to GitHub repo Settings → S      ║
+║    42d · Add `VITE_SENTRY_DSN` to GitHub repo Settings → Se      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SESSION VOICE ═══════════════════════════════════════════════╗
@@ -89,7 +89,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▄▇▄▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▇▄▄▄▄  3↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -102,5 +102,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 74 closeout · 2026-05-22*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 77 closeout · 2026-06-03*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

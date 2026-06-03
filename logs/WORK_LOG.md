@@ -415,3 +415,14 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Improved current synthesized sounds in `src/sounds.js` with richer layering, detune, impact noise, and small randomized variations while avoiding new dependencies or paid audio generation.
 - Added `context/OBELISK_ADOPTION.md`, `docs/AUDIT_2026-05-26.md`, and `docs/AUDIT_2026-05-26.json` to record the ranked follow-up plan and account/Obelisk posture.
 - Validation: focused gamepad/gameStep tests 14/14; full `npm test` 373/373 across 45 files; `npm run lint` clean; `npm run build` passing; audit JSON parse clean.
+
+## Session 78 — 2026-06-03
+
+**Shipped 5 items from fresh `/audit` in one `/implement` pass.**
+
+- Added nemesis boss mechanic: `getBossKillRecord`/`saveBossKillRecord`/`isNemesis` in `storage.js`; boss cutscene cards show kill count tier (FIRST ENCOUNTER / VETERAN 5× / EXECUTIONER 10×) and orange 🎯 NEMESIS badge when threshold (3 deaths, 0 kills) is met; boss health bar name prefixed with 🎯 in drawGame; nemesis kill awards +30💩 + `nemesis_slain` achievement; achievement count 65→66.
+- Added experiment follow-through loop: `saveExperimentIntent`/`loadExperimentIntent`/`clearExperimentIntent` in `storage.js`; `matchesExperiment(config, intent)` in `runBrain.js` detects run alignment via keyword + entity matching; DeathScreen auto-saves `nextExperiment` on render; `startGame()` checks intent against starterLoadout/mode/difficulty; 🧪 EXPERIMENT HUD chip when matched; DeathScreen RunBrain section shows experiment result line.
+- Added aim flow state ring: `drawGame.js` draws animated glow ring at precision streak ≥5 (cyan→violet color lerp, alpha scales 0.22→0.77 with streak depth); adds faint center-hit window highlights on nearby non-boss enemies at streak ≥10, matching `isPrecisionHit`'s 35% radius threshold.
+- Added mutation × difficulty compound brief: `getMutationDifficultyBrief(mutation, difficulty, runHistory)` in `runBrain.js` derives avg-wave delta for the active mutation+difficulty combo from localStorage run timestamps; rendered as amber italic sub-line in HomeV2 difficulty picker.
+- Added formation flavor wave preview: `gs._lastFormationLabel` written on spawn; `waveAnnounce.formationHint` field added to setWaveAnnounce; formation descriptor map (FLANK/PINCER/SURGE) renders as green italic subtitle in wave incoming card JSX.
+- Validation: focused tests 22/22, full `npm test` 405/405 across 46 files (+22 new), `npm run lint` 0 errors, `npm run build` passing (767.54 kB / 235.90 kB gzip).

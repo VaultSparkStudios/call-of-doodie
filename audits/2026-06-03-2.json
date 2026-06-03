@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-06-03",
+  "session": 78,
+  "project": "call-of-doodie",
+  "type": "game",
+  "silScore": 1000,
+  "silMax": 1000,
+  "silRubricVersion": "3.0",
+  "velocity": 4,
+  "testsPassing": 405,
+  "testsAdded": 22,
+  "topItems": [
+    "nemesis-boss-mechanic",
+    "experiment-followthrough-loop",
+    "aim-flow-state-ring",
+    "mutation-difficulty-compound-brief",
+    "formation-flavor-wave-preview"
+  ],
+  "shippedCount": 5,
+  "deferredCount": 0,
+  "blockedCount": 0,
+  "combinedPriority": 170.5,
+  "buildStatus": "passing",
+  "lintErrors": 0,
+  "auditSource": "docs/AUDIT_2026-06-03_2.json"
+}

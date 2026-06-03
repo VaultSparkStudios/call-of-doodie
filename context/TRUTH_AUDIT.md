@@ -1,6 +1,15 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-03 - Session 78
+
+- `src/storage.js` now owns `getBossKillRecord`/`saveBossKillRecord`/`isNemesis` (key `cod-boss-kills-v1`) and `saveExperimentIntent`/`loadExperimentIntent`/`clearExperimentIntent` (key `cod-last-experiment-v1`). Neither reads or writes any account/network surface.
+- `src/App.jsx` tracks nemesis state in `gs.nemesisBossType`, boss kill/death records in storage on boss-wave events and player deaths, and experiment intent in `experimentMatchedRef` at run start.
+- `src/drawGame.js` reads `gs.precisionStreak` and `gs.nemesisBossType` for purely visual rendering (aim flow ring, enemy center highlights, boss name prefix). No game-state mutation in drawGame.
+- `src/utils/runBrain.js` adds `getMutationDifficultyBrief` (reads run history + WEEKLY_MUTATIONS, zero network) and `matchesExperiment` (keyword/entity matching, zero network).
+- `src/constants.js` achievement count is now 66 (was 65); `constants.test.js` count assertion updated to match.
+- Formation flavor descriptors live in App.jsx (inline map) and are not persisted — they derive from `gs._lastFormationLabel` which is wave-ephemeral.
+
 ## 2026-06-03 - Session 77
 
 - `src/systems/gameStep.js` now owns both pointer projection and a four-direction pointer sweep evidence report.

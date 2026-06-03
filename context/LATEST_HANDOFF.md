@@ -1,5 +1,11 @@
 # Latest Handoff
 
+## Where We Left Off - Session 78 (2026-06-03)
+
+Shipped 5 innovations in one `/start → /audit → /implement → /closeout` pass: (1) **Nemesis boss mechanic** — per-boss kill/death history in `cod-boss-kills-v1`; bosses with 3+ player deaths and 0 kills become Nemesis (🎯 badge on cutscene + health bar, +30💩 kill reward, `nemesis_slain` gold achievement); cutscene cards show FIRST ENCOUNTER / VETERAN / EXECUTIONER tier labels. (2) **Experiment follow-through loop** — RunBrain `nextExperiment` suggestion auto-saved to localStorage on death; `matchesExperiment()` checks run config on start; 🧪 HUD chip + DeathScreen "followed/diverged" result line — zero tokens, pure local. (3) **Aim flow state ring** — `gs.precisionStreak ≥ 5` draws an animated cyan→violet glow ring around the player (alpha/radius scales to streak depth); streak ≥ 10 adds faint center-hit window highlights on nearby non-boss enemies. (4) **Mutation × difficulty compound brief** — `getMutationDifficultyBrief()` cross-refs active mutation + selected difficulty against run history timestamps, surfaces "NIGHTMARE × Corrosive Rounds — avg wave drops 40% (3 runs)" as amber italic in HomeV2 difficulty picker. (5) **Formation flavor wave preview** — wave incoming card now shows formation descriptor (FLANK — pressure from the sides / PINCER — split attack / SURGE — overwhelming force) as a green italic subtitle. Validation: 405/405 tests (+22 new), lint 0 errors, build passing.
+
+Next priorities: Playwright pointer 360 harness (needs `@playwright/test` devDep), adaptive enemy difficulty curve (per-enemy spawn weight reduction after repeated deaths), device-specific control hint labels (Xbox/PS labels from remembered gamepad profile), and enemy-annotated death heatmap.
+
 ## Where We Left Off - Session 77 (2026-06-03)
 
 Founder asked to continue the durable `/start -> /audit -> /implement -> /closeout` workflow with genius-level, creative, innovative thinking and a short post-closeout impact summary.
