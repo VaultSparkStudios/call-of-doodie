@@ -786,6 +786,14 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.fillRect(-bw / 2, -r - 14, bw * Math.max(0, e.health / e.maxHealth), 6);
       ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 1; ctx.strokeRect(-bw / 2, -r - 14, bw, 6);
     }
+    // Aim flow precision window highlight (streak >= 10, non-boss, within 200px)
+    if (!e.isBossEnemy && (gs.precisionStreak || 0) >= 10 && Math.hypot(e.x - p.x, e.y - p.y) < 200) {
+      const _pr = r * 0.35;
+      ctx.globalAlpha = 0.22 + Math.sin(dn / 22) * 0.08;
+      ctx.strokeStyle = "#FFFFFF"; ctx.lineWidth = 1; ctx.shadowColor = "#FFFFFF"; ctx.shadowBlur = 4;
+      ctx.beginPath(); ctx.arc(0, 0, _pr, 0, Math.PI * 2); ctx.stroke();
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    }
     // Boss ability telegraph bars (show next-ability cooldown as thin bar under HP bar)
     if (e.isBossEnemy) {
       const bw = e.size + 4;
@@ -965,6 +973,19 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const _tdA = 0.55 + Math.sin(dn / 25) * 0.30;
     ctx.globalAlpha = _tdA; ctx.strokeStyle = "#CC88FF"; ctx.shadowColor = "#CC88FF"; ctx.shadowBlur = 20; ctx.lineWidth = 2.5;
     ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI * 2); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
+  }
+  // Aim flow state ring — precision streak visual (streak >= 5)
+  const _ps = gs.precisionStreak || 0;
+  if (_ps >= 5) {
+    const _psNorm = Math.min(1, (_ps - 5) / 10);
+    const _psAlpha = (0.22 + _psNorm * 0.55) * (0.7 + Math.sin(dn / 18) * 0.3);
+    const _r = Math.round(0x88 + _psNorm * (0xFF - 0x88));
+    const _g = Math.round(0xFF - _psNorm * (0xFF - 0x88));
+    const _b = Math.round(0xFF - _psNorm * (0xFF - 0xFF));
+    const _psColor = `rgb(${_r},${_g},${_b})`;
+    ctx.globalAlpha = _psAlpha; ctx.strokeStyle = _psColor; ctx.shadowColor = _psColor; ctx.shadowBlur = 12 + _psNorm * 10; ctx.lineWidth = 1.5 + _psNorm;
+    ctx.beginPath(); ctx.arc(0, 0, 27 + _psNorm * 4, 0, Math.PI * 2); ctx.stroke();
     ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
   }
   // Legs (unrotated — bob south)
