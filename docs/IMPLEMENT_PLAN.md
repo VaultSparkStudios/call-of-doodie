@@ -1,4 +1,20 @@
-# Implement Plan — 2026-06-03
+# Implement Plan — Session 78 (2026-06-03)
+
+Source audit: `docs/AUDIT_2026-06-03_2.md` · 5 items · Combined Priority 170.5
+
+## Optimal Execution Order (Wave Plan)
+
+| Wave | Slug | Effort | Priority | Axis | Key files |
+|---|---|---|---|---|---|
+| 1 | formation-flavor-wave-preview | 30m | 27.3 | gamification | waveDirector.js, drawGame.js |
+| 2 | aim-flow-state-ring | 2h | 32.0 | gamification | drawGame.js |
+| 3 | mutation-difficulty-compound-brief | 1h | 31.0 | AI | runBrain.js, HomeV2.jsx |
+| 4 | experiment-followthrough-loop | 2h | 39.8 | AI | storage.js, runBrain.js, App.jsx, HUD.jsx, DeathScreen.jsx |
+| 5 | nemesis-boss-mechanic | 2h | 40.5 | gamification | storage.js, App.jsx, drawGame.js, constants.js |
+
+---
+
+# Previous plan (S77 — 2026-06-03)
 
 Source audit: `docs/AUDIT_2026-06-03.md`
 

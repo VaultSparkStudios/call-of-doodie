@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-03",
+  "session": 78,
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 5,
+    "combinedPriority": 170.5,
+    "top3": [
+      "nemesis-boss-mechanic",
+      "experiment-followthrough-loop",
+      "aim-flow-state-ring"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "nemesis-boss-mechanic",
+      "tier": "fire",
+      "axis": "gamification",
+      "effort": "2h",
+      "impact": 9,
+      "innovation": 9,
+      "priority": 40.5,
+      "title": "Nemesis Boss Mechanic — persistent antagonist identity across runs",
+      "summary": "Track per-boss kill counts locally; if a player dies to the same boss 3+ times without killing it, that boss becomes their \"Nemesis\" — flagged on the 3s cutscene card, with a 🎯 icon beside the boss health bar in-run. Killing your Nemesis awards 3× boss-kill coins and unlocks a new NEMESIS SLAIN achievement. Boss cutscene cards also gain a personal kill-count line: FIRST ENCOUNTER / VETERAN (5×) / EXECUTIONER (10×). This transforms bosses from repeating wave events into recurring antagonists the player has a personal relationship with, which is the deepest narrative memory layer available without a live-service backend.",
+      "recipe": "Add `getBossKillRecord()` / `saveBossKillRecord()` to `src/storage.js` (localStorage `cod-boss-kills-v1`), define nemesis threshold (3 deaths, 0 kills) as a pure check, update `src/App.jsx` boss-wave start to read/write record + set `gs.nemesisBossType`, update boss cutscene card in `src/App.jsx` to show kill count line + NEMESIS badge, update `src/drawGame.js` boss health bar rendering to add 🎯 prefix when `gs.nemesisBossType === boss.type`, add NEMESIS_SLAIN achievement in `src/constants.js`, and award 3× coins on nemesis kill in the boss-kill block of the game loop."
+    },
+    {
+      "rank": 2,
+      "slug": "experiment-followthrough-loop",
+      "tier": "fire",
+      "axis": "AI / intelligence integration",
+      "effort": "2h",
+      "impact": 8,
+      "innovation": 9,
+      "priority": 39.8,
+      "title": "Run Brain Experiment Follow-Through Loop — close the advice → action → result loop",
+      "summary": "RunBrain currently produces a `nextExperiment` suggestion on every death screen but has no mechanism to check whether the player acted on it. On run start, save the last `nextExperiment` to localStorage (`cod-last-experiment-v1`). During the run, compare the player's actual config (starter weapon, first perk chosen, mode) against the suggestion. If it matches, add a \"🧪 EXPERIMENT\" chip to the HUD. At death, show \"Experiment followed / diverged / matched\" in RunCoach alongside the follow-through stat. This is the missing feedback arc that makes the AI feel like it learns rather than just talks — and it's entirely local, zero tokens, zero new backend.",
+      "recipe": "Add `saveExperimentIntent(suggestion)` / `loadExperimentIntent()` to `src/storage.js` (key `cod-last-experiment-v1`), call save in DeathScreen on render, add `matchesExperiment(config, intent)` pure fn in `src/utils/runBrain.js`, call it in App.jsx on first perk chosen / first shop to set `gs._experimentMatched`, pass `experimentMatched` into `buildRunCoach()`, render 🧪 chip in `src/components/HUD.jsx` when `gs._experimentMatched !== undefined`, and surface result line on DeathScreen RunCoach card."
+    },
+    {
+      "rank": 3,
+      "slug": "aim-flow-state-ring",
+      "tier": "fire",
+      "axis": "gamification",
+      "effort": "2h",
+      "impact": 8,
+      "innovation": 8,
+      "priority": 32.0,
+      "title": "Aim Flow State Ring — visible precision mastery expression on the player character",
+      "summary": "`gs.precisionStreak` exists and already awards coins, but the only feedback is a floating text message. A precision streak ≥ 5 deserves a visible ambient indicator: a subtle crosshair glow ring around the player sprite that intensifies with streak depth (streak 5 = faint, streak 10 = full glow, streak 15+ = pulsing). At streak 10+, enemies within aim range get a subtle highlight on their center hit zone showing the player where the precision window is. This is the most player-skill-affirming addition possible — it makes mastery visible without changing balance, and creates a distinct visual moment when flow state breaks.",
+      "recipe": "In `src/drawGame.js`, after the player sprite is drawn, check `gs.precisionStreak >= 5` — if so, draw a `ctx.arc` stroke ring at player position with alpha proportional to `Math.min(1, streak/15)` and a color lerp from `#88FFFF` to `#FF88FF`. At streak >= 10, for each visible enemy within 200px, draw a small 6px ring at `(enemy.x, enemy.y - enemy.h/2 * 0.35)` with low alpha (0.25) using `#FFFFFF`. No game-state changes needed — reads existing `gs.precisionStreak`."
+    },
+    {
+      "rank": 4,
+      "slug": "mutation-difficulty-compound-brief",
+      "tier": "high",
+      "axis": "AI / intelligence integration",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 31.0,
+      "title": "Mutation × Difficulty Compound Brief — contextual pre-run intelligence",
+      "summary": "`getDifficultyBriefing()` in runBrain already produces per-difficulty run stats from history. The missing synthesis: cross-reference the current weekly mutation with difficulty history to produce a compound one-liner like \"NIGHTMARE × Corrosive Rounds — your avg wave drops 40% at this combo (3 prior runs).\" Players with no history get a generic mutation warning. This elevates the pre-run intel from raw stats to personalized risk assessment, directly answering \"should I play on NIGHTMARE this week?\" without any LLM spend.",
+      "recipe": "Add `getMutationDifficultyBrief(mutation, difficulty, runHistory)` to `src/utils/runBrain.js`: filter runHistory for runs at that difficulty + mutation active week, compute avgWave delta vs non-mutation runs, return a one-sentence compound brief. Expose `getActiveMutation()` from `src/constants.js` (or use the existing `getWeeklyGauntlet()` mutation field). Render in HomeV2 difficulty picker below `getDifficultyBriefing()` as a small italic line when mutation is active."
+    },
+    {
+      "rank": 5,
+      "slug": "formation-flavor-wave-preview",
+      "tier": "high",
+      "axis": "gamification",
+      "effort": "30m",
+      "impact": 6,
+      "innovation": 6,
+      "priority": 27.3,
+      "title": "Formation Flavor Text in Wave Preview Card — narrative wave identity",
+      "summary": "Wave director spawns already get formation identity (flank/pincer/surge — S70), but the wave incoming preview card shows only count/event/boss hints. Mapping formation type → flavor descriptor makes each wave feel narratively distinct: \"SURGE — overwhelming force,\" \"PINCER — split attack,\" \"FLANK — pressure from the sides.\" This is 8 lines of code for a meaningfully richer wave announcement that teaches players what to expect from each formation while they're already reading the card.",
+      "recipe": "In `src/App.jsx`, when setting `gs._wavePreviewCard`, read `gs._lastFormationLabel` (add a 1-line ref update in `waveDirector.js`'s `resolveFormation` call), map it to a short descriptor object `{flank: 'pressure from the sides', pincer: 'split attack', surge: 'overwhelming force'}`, and append the descriptor as a new `formationHint` field on the preview card. Render it in `src/drawGame.js` wave preview card block as a small italic subtitle line."
+    }
+  ],
+  "innovationReserve": [
+    "nemesis-boss-mechanic",
+    "experiment-followthrough-loop",
+    "aim-flow-state-ring",
+    "enemy-annotated-deathmap"
+  ],
+  "skipped": [
+    { "slug": "adaptive-enemy-difficulty-curve", "reason": "High innovation (8) but requires per-enemy spawn weight tuning with balance risk — Next bucket" },
+    { "slug": "playwright-pointer-360", "reason": "High dev-health value but blocked on Playwright not being in devDeps — prerequisite install needed" },
+    { "slug": "enemy-annotated-deathmap", "reason": "Innovative but requires enemy-sprite-at-position rendering in DeathScreen canvas — 2h+ scope" },
+    { "slug": "beat-synced-health-bars", "reason": "Fun but lower ROI than nemesis/experiment items — Next bucket" },
+    { "slug": "runbrain-archetype-expansion", "reason": "Good incremental value — fold into next run intelligence pass" },
+    { "slug": "runhistory-sparkline", "reason": "Nice polish but lower priority than narrative/intelligence items this session" },
+    { "slug": "device-control-labels", "reason": "S77 brainstorm item — keep for next pass once nemesis/experiment are shipped" },
+    { "slug": "hud-priority-collapse", "reason": "Low innovation score, below threshold" },
+    { "slug": "sig-hmac-trace", "reason": "Security check — verify in a separate ops pass" },
+    { "slug": "app-extraction-slice", "reason": "Below priority threshold — structural debt, not user-facing" }
+  ],
+  "executionLog": [
+    {
+      "slug": "formation-flavor-wave-preview",
+      "status": "shipped",
+      "evidence": [
+        "src/App.jsx — gs._lastFormationLabel tracking + waveAnnounce.formationHint field",
+        "src/App.jsx — formationHint JSX render in wave preview card",
+        "waveDirector.test.js 9/9 passing"
+      ]
+    },
+    {
+      "slug": "aim-flow-state-ring",
+      "status": "shipped",
+      "evidence": [
+        "src/drawGame.js — precision glow ring at streak >= 5 (alpha/color scale)",
+        "src/drawGame.js — enemy center-hit highlights at streak >= 10 (nearby non-boss)",
+        "npm run build passing"
+      ]
+    },
+    {
+      "slug": "mutation-difficulty-compound-brief",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/runBrain.js — getMutationDifficultyBrief() exported",
+        "src/utils/runBrain.test.js — 5 new tests (10/10 passing)",
+        "src/components/HomeV2.jsx — amber italic mutation brief below difficulty picker"
+      ]
+    },
+    {
+      "slug": "experiment-followthrough-loop",
+      "status": "shipped",
+      "evidence": [
+        "src/storage.js — saveExperimentIntent/loadExperimentIntent/clearExperimentIntent",
+        "src/storage.test.js — 4 new tests",
+        "src/utils/runBrain.js — matchesExperiment(config, intent)",
+        "src/utils/runBrain.test.js — 7 new tests (17/17 passing)",
+        "src/App.jsx — experimentMatchedRef, startGame check, DeathScreen/HUD props",
+        "src/components/HUD.jsx — 🧪 EXPERIMENT chip",
+        "src/components/DeathScreen.jsx — experiment result line + auto-save intent"
+      ]
+    },
+    {
+      "slug": "nemesis-boss-mechanic",
+      "status": "shipped",
+      "evidence": [
+        "src/storage.js — getBossKillRecord/saveBossKillRecord/isNemesis",
+        "src/storage.test.js — 6 new tests",
+        "src/constants.js — nemesis_slain achievement (count 65→66)",
+        "src/constants.test.js — updated count assertion",
+        "src/App.jsx — boss cutscene card with kill label + nemesis badge + kill/death tracking",
+        "src/drawGame.js — 🎯 nemesis name prefix on boss health bar"
+      ]
+    }
+  ],
+  "validation": {
+    "focused": "405/405 passing across 46 files",
+    "lint": "0 errors",
+    "build": "passing (767.54 kB / 235.90 kB gzip)"
+  }
+}
