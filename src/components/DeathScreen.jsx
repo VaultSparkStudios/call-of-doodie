@@ -10,7 +10,7 @@ import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js"
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
-import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents } from "../storage.js";
+import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -28,6 +28,7 @@ export default function DeathScreen({
   weaponKills, bestPrecisionStreak = 0, starterLoadout = "standard", scoreAttackMode, playerSkin,
   dailyChallengeMode, bossRushMode, cursedRunMode, vsScore, vsName,
   ghostKey, cosmeticUnlocks = [], objectivesSummary = null,
+  experimentMatched = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -327,6 +328,8 @@ export default function DeathScreen({
     runHistory,
     studioEvents,
   });
+  // Persist the next experiment so the followthrough loop can check it on the next run start
+  if (runCoach?.brain?.nextExperiment) saveExperimentIntent(runCoach.brain.nextExperiment);
   const postRunIntel = buildPostRunIntelligence({
     score,
     kills,
@@ -536,6 +539,11 @@ export default function DeathScreen({
           )}
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
             <span style={{ color: "#9CB8FF", fontWeight: 700 }}>Run Brain:</span> {runCoach.brain.nextExperiment}
+            {experimentMatched && (
+              <div style={{ color: experimentMatched === "matched" ? "#88FF99" : "#FF9966", marginTop: 2 }}>
+                🧪 Experiment {experimentMatched === "matched" ? "followed ✓" : "diverged — try it next run"}
+              </div>
+            )}
             <div style={{ color: "#88A", marginTop: 2 }}>Follow-through: {runCoach.brain.followThrough}</div>
           </div>
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#FFE4B8", lineHeight: 1.45 }}>

@@ -125,6 +125,35 @@ export function getMutationDifficultyBrief(mutation, difficulty, runHistory = []
   return `${diffLabel} × ${mutName} — avg wave ${Math.round(avgWith * 10) / 10} at this combo (${withMut.length} runs)`;
 }
 
+/**
+ * Checks whether the player's current run config plausibly follows the saved
+ * experiment suggestion. Lightweight keyword matching — no token spend.
+ *
+ * @param {object} config - { starterLoadout, firstPerkName, mode, difficulty }
+ * @param {object|null} intent - { suggestion: string, ts: number } from loadExperimentIntent()
+ * @returns {"matched"|"diverged"|null} — null when intent is absent or too old (>7d)
+ */
+export function matchesExperiment(config = {}, intent = null) {
+  if (!intent?.suggestion) return null;
+  const MAX_AGE_MS = 7 * 24 * 3600 * 1000;
+  if (intent.ts && Date.now() - intent.ts > MAX_AGE_MS) return null;
+  const s = intent.suggestion.toLowerCase();
+  const { starterLoadout = "", firstPerkName = "", mode = "", difficulty = "" } = config;
+  // Look for named entities in the suggestion that match the current run config
+  const hasEntity = (keyword) => keyword.length > 2 && s.includes(keyword.toLowerCase());
+  if (hasEntity(starterLoadout) || hasEntity(firstPerkName) || hasEntity(mode) || hasEntity(difficulty)) {
+    return "matched";
+  }
+  // Pattern-based matches: "safe opener" → stabilizer/defense perk; "precision route" → any run
+  if (s.includes("safe opener") && (hay.includes("stabilizer") || hay.includes("defense") || hay.includes("armor"))) return "matched";
+  if (s.includes("precision route")) return "matched"; // any run qualifies
+  if (s.includes("same seed") && mode.includes("seed")) return "matched";
+  if (s.includes("normal difficulty") && difficulty === "normal") return "matched";
+  if (s.includes("familiar loadout") && starterLoadout) return "matched";
+  if (s.includes("commit to one build")) return "matched";
+  return "diverged";
+}
+
 export function mostFrequentKiller(runHistory = []) {
   const counts = {};
   const names = {};

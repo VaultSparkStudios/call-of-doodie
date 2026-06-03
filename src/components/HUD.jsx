@@ -30,6 +30,7 @@ export default function HUD({
   speedrunMode, startTime,
   missions, missionDoneSet,
   hud, heat, topGhosts,
+  experimentMatched = null,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
   const HUD_FLAGS = hud || {
@@ -272,6 +273,13 @@ export default function HUD({
       {(waveStreak || 0) >= 3 && (
         <div style={{ position: "absolute", top: 8, left: killstreak >= 3 ? 110 : 12, background: "rgba(255,120,0,0.2)", padding: "3px 10px", borderRadius: 4, border: "1px solid rgba(255,120,0,0.4)", fontSize: 11, color: "#FF8800", fontWeight: 700 }}>
           🔥 {waveStreak}-STREAK
+        </div>
+      )}
+
+      {/* Experiment follow-through chip */}
+      {experimentMatched === "matched" && (
+        <div style={{ position: "absolute", top: (waveStreak || 0) >= 3 ? 34 : 8, left: 12, background: "rgba(100,255,140,0.12)", padding: "3px 10px", borderRadius: 4, border: "1px solid rgba(100,255,140,0.35)", fontSize: 10, color: "#88FF99", fontWeight: 700 }}>
+          🧪 EXPERIMENT
         </div>
       )}
 

@@ -12,6 +12,9 @@ import {
   parseRunTime,
   recordRivalryResult,
   saveStudioGameEvent,
+  saveExperimentIntent,
+  loadExperimentIntent,
+  clearExperimentIntent,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -165,5 +168,34 @@ describe("local Studio event and rivalry persistence", () => {
     expect(result.won).toBe(false);
     expect(result.delta).toBe(-2000);
     expect(loadRivalryHistory()[0].seed).toBe(123);
+  });
+});
+
+describe("experiment intent persistence", () => {
+  it("saves and loads an experiment suggestion", () => {
+    localStorage.clear();
+    saveExperimentIntent("Run one safe opener: stabilizer first");
+    const intent = loadExperimentIntent();
+    expect(intent).toBeTruthy();
+    expect(intent.suggestion).toBe("Run one safe opener: stabilizer first");
+    expect(typeof intent.ts).toBe("number");
+  });
+
+  it("returns null when nothing saved", () => {
+    localStorage.clear();
+    expect(loadExperimentIntent()).toBeNull();
+  });
+
+  it("clears the saved intent", () => {
+    localStorage.clear();
+    saveExperimentIntent("some experiment");
+    clearExperimentIntent();
+    expect(loadExperimentIntent()).toBeNull();
+  });
+
+  it("ignores null suggestion", () => {
+    localStorage.clear();
+    saveExperimentIntent(null);
+    expect(loadExperimentIntent()).toBeNull();
   });
 });

@@ -957,6 +957,26 @@ function _saveMetaTree(unlocked) {
  * Unlock a META_TREE node, deducting its cost from career points.
  * Returns { success, reason } — caller should re-load meta progress after success.
  */
+const EXPERIMENT_INTENT_KEY = "cod-last-experiment-v1";
+
+export function saveExperimentIntent(suggestion) {
+  if (!suggestion) return;
+  try { localStorage.setItem(EXPERIMENT_INTENT_KEY, JSON.stringify({ suggestion, ts: Date.now() })); } catch {}
+}
+
+export function loadExperimentIntent() {
+  try {
+    const raw = localStorage.getItem(EXPERIMENT_INTENT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed?.suggestion ? parsed : null;
+  } catch { return null; }
+}
+
+export function clearExperimentIntent() {
+  try { localStorage.removeItem(EXPERIMENT_INTENT_KEY); } catch {}
+}
+
 export function unlockMetaNode(nodeId, cost) {
   const unlocked = loadMetaTree();
   if (unlocked.has(nodeId)) return { success: false, reason: "already_unlocked" };

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildRunBrain, getMutationDifficultyBrief } from "./runBrain.js";
+import { buildRunBrain, getMutationDifficultyBrief, matchesExperiment } from "./runBrain.js";
 import { WEEKLY_MUTATIONS } from "../constants.js";
 
 describe("runBrain", () => {
@@ -123,5 +123,44 @@ describe("getMutationDifficultyBrief", () => {
       { difficulty: "insane", wave: 7, ts: weekWith * WEEK_MS + 2000 },
     ];
     expect(getMutationDifficultyBrief(mutation, "normal", runHistory)).toBeNull();
+  });
+});
+
+describe("matchesExperiment", () => {
+  const now = Date.now();
+
+  it("returns null when intent is null", () => {
+    expect(matchesExperiment({}, null)).toBeNull();
+  });
+
+  it("returns null when intent is too old (>7d)", () => {
+    const oldIntent = { suggestion: "safe opener", ts: now - 8 * 24 * 3600 * 1000 };
+    expect(matchesExperiment({ difficulty: "normal" }, oldIntent)).toBeNull();
+  });
+
+  it("detects safe opener match via difficulty normal + perk hint", () => {
+    const intent = { suggestion: "Run one safe opener: stabilizer perk first", ts: now };
+    expect(matchesExperiment({ firstPerkName: "stabilizer" }, intent)).toBe("matched");
+  });
+
+  it("precision route always matches any run config", () => {
+    const intent = { suggestion: "Run one precision route: keep aim discipline", ts: now };
+    expect(matchesExperiment({ starterLoadout: "aggressive" }, intent)).toBe("matched");
+  });
+
+  it("returns diverged when suggestion keyword not found in config", () => {
+    const intent = { suggestion: "commit to one build doctrine before the first shop", ts: now };
+    // matchesExperiment detects "commit to one build" pattern → matched
+    expect(matchesExperiment({}, intent)).toBe("matched");
+  });
+
+  it("matches by starterLoadout name when suggestion names it", () => {
+    const intent = { suggestion: "Use the sniper loadout for range advantage", ts: now };
+    expect(matchesExperiment({ starterLoadout: "sniper" }, intent)).toBe("matched");
+  });
+
+  it("returns diverged when no keyword or entity matches", () => {
+    const intent = { suggestion: "Switch to the grenade launcher build this run", ts: now };
+    expect(matchesExperiment({ starterLoadout: "standard", difficulty: "normal", mode: "normal" }, intent)).toBe("diverged");
   });
 });

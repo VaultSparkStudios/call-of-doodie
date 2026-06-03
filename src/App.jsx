@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadExperimentIntent } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -91,6 +91,7 @@ import {
   resolveRunModeFromFlags,
 } from "./systems/runSession.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
+import { matchesExperiment } from "./utils/runBrain.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -180,6 +181,7 @@ export default function CallOfDoodie() {
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const gamepadMetaRef   = useRef({ connected: false, index: null, id: "", type: "controller" });
   const inputCalibrationRef = useRef(typeof window === "undefined" ? null : loadInputCalibration());
+  const experimentMatchedRef = useRef(null); // "matched" | "diverged" | null — set at run start
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
   const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
@@ -1631,6 +1633,15 @@ export default function CallOfDoodie() {
     setPaused(false); setExtraLives(0); extraLivesRef.current = 0;
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
+    // Check if this run follows the last RunBrain experiment suggestion
+    try {
+      const _intent = loadExperimentIntent();
+      experimentMatchedRef.current = matchesExperiment({
+        starterLoadout,
+        mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+        difficulty: difficultyRef.current,
+      }, _intent);
+    } catch { experimentMatchedRef.current = null; }
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
     archetypeUnlocksRef.current = new Set();
     setUnlockedArchetypes([]);
@@ -3857,6 +3868,7 @@ export default function CallOfDoodie() {
           vsScore={challengeVsScore} vsName={challengeVsName}
           ghostKey={gsRef.current?._ghostKey}
           onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
+          experimentMatched={experimentMatchedRef.current}
         />
       </Suspense>
     );
@@ -4205,6 +4217,7 @@ export default function CallOfDoodie() {
         hud={hudFlagsMemo}
         heat={gsRef.current?.heat || 0}
         topGhosts={gsRef.current?.topGhosts || []}
+        experimentMatched={experimentMatchedRef.current}
       />
 
       {/* Mobile action bar */}
