@@ -4,14 +4,40 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ███▇██
-Avgs — 3: 1000.0 | 5: 996.8 | 10: — | 25: — | all: 974.7 [N=15, SIL history in private ops repo]
+Sparkline (last 5 totals): ████▇█
+Avgs — 3: 1000.0 | 5: 997.4 | 10: — | 25: — | all: 976.3 [N=16, SIL history in private ops repo]
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-06-05 | Session 79 | Total: 1000/1000 | Velocity: 3 | protocolVelocity: 1
+Last session: 2026-06-05 | Session 80 | Total: 1000/1000 | Velocity: 2 | protocolVelocity: 2
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-06-05 — Session 80 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 408/408 tests pass across 46 files, lint clean, build passing; protocol helper modules are syntax-clean and runtime-smoked |
+| Creative Alignment | 100 | → | No game-soul change; this protects the launch/refinement loop that lets the product keep improving safely |
+| Momentum | 100 | → | Detected and repaired four protocol-integrity items in the same continuation rather than deferring automation drift |
+| Engagement | 100 | → | Player-facing work remains intact; next product sprint can return to pointer QA/death feedback without session-tool fragility |
+| Process Quality | 100 | → | `/start`, focused `/audit`, `/implement`, protocol smokes, validation, and closeout write-back completed with evidence |
+| Cross-Repo Coherence | 100 | → | Added repo-local compatibility shims instead of importing private Studio Ops internals into the public game repo |
+| Security Posture | 100 | → | No new dependencies, secrets, providers, network surfaces, or public runtime code paths |
+| Ecosystem Integration | 100 | → | Preserves Studio OS protocol upgrades while keeping this repo self-executable |
+| Capital Efficiency | 100 | → | Zero new SaaS/API/per-user cost; helper repair prevents future token waste from failed starts |
+| Automation Coverage | 100 | ↑ | `compact-handoff`, startup renderer, brief validator, blocker preflight, context meter, lint, tests, and build all pass |
+
+SIL +2: Repaired protocol drift that blocked or warned during `/start` and closeout: missing helper imports, Codex plan-mode false blocker, SIL score/category mismatch, missing local secret scan gate, and unignored cache artifacts. Validation: protocol smokes green, `npm run lint` clean, `npm test` 408/408, `npm run build` passing.
+
+**Top win:** The public game repo can now execute the upgraded Studio OS startup path without private-helper missing-module failures.
+**Top gap:** The next high-value product item is still the Playwright pointer 360 harness.
+**Intent outcome:** Achieved pending closeout autopilot — `/start`, focused `/audit`, `/implement`, validation, and write-back completed with concrete evidence.
+
+**Brainstorm**
+1. Playwright pointer harness — drive canvas pointer positions around the player and assert debug HUD buckets across desktop/mobile viewports. High probability.
+2. Enemy-annotated death feedback — cluster recent death positions by enemy type and render causal icons on DeathScreen. High probability.
+3. Protocol dependency scanner — static check for imported `scripts/lib/*.mjs` files missing locally before `/start` renders. Medium probability.
 
 ## 2026-06-05 — Session 79 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
 

@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-06-05 (Session 80)
+
+- Continued the durable founder goal after Session 79 and ran `/start`; runtime evidence exposed protocol drift in the current worktree.
+- Created `docs/AUDIT_2026-06-05_2.md` and `.json` for a focused protocol-integrity sprint.
+- `/implement` shipped all four items:
+  - Added local compatibility helpers: `turn-classifier`, `visual-blocks`, `sil-forecaster`, `blocker-rules`, `skill-cost-ledger`, and the missing closeout `scan-secrets` gate.
+  - Restored Codex/non-Claude plan-mode exemption in `scripts/verify-plan-mode.mjs`.
+  - Used `scripts/lib/write-project-status.mjs --fix` and `--check` to enforce `silScore := sum(silCategoriesV3)`.
+  - Proved runtime smokes: `compact-handoff`, `render-startup-brief`, `validate-brief-format`, `blocker-preflight`, and `context-meter`.
+- Validation: `npm run lint` clean; `npm test` 408/408 across 46 files; `npm run build` passing.
+
 ## 2026-06-05 (Session 79)
 
 - Continued the durable founder goal: `/start` -> fresh `/audit` -> `/implement` -> `/closeout`, with game-specific creative/technical personalization.

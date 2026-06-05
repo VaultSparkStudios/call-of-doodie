@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-05",
+  "session": 80,
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 4,
+    "combinedPriority": 124.6,
+    "top3": [
+      "startup-helper-compatibility",
+      "codex-plan-mode-exemption",
+      "sil-invariant-repair"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "startup-helper-compatibility",
+      "tier": "fire",
+      "axis": "speed / organization / efficiency",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 6,
+      "priority": 26.8,
+      "title": "Startup Helper Compatibility — make the upgraded protocol executable in this public repo",
+      "summary": "The current worktree imported Studio OS helper modules that do not exist locally, which breaks `compact-handoff`, `render-startup-brief`, and direct blocker preflight execution. A public game repo can consume richer Studio protocol features only if missing helper paths degrade locally instead of aborting session start.",
+      "recipe": "Add repo-local compatibility modules for `turn-classifier`, `visual-blocks`, `sil-forecaster`, and `blocker-rules`; keep the helpers deterministic, dependency-free, and safe for public-repo execution."
+    },
+    {
+      "rank": 2,
+      "slug": "codex-plan-mode-exemption",
+      "tier": "high",
+      "axis": "speed / organization / efficiency",
+      "effort": "30m",
+      "impact": 8,
+      "innovation": 5,
+      "priority": 26.7,
+      "title": "Codex Plan-Mode Exemption — stop asking Codex to run Claude Code slash commands",
+      "summary": "`verify-plan-mode` regressed the prior Codex exemption and now reports `MISSING` for a Claude-only `/model opusplan` runtime feature. That creates a false protocol blocker in Codex sessions and contradicts the existing project decision from Session 61.",
+      "recipe": "Restore session-lock agent detection, stamp Codex/non-Claude sessions as `not_required`, and validate the JSON output from a Codex session lock."
+    },
+    {
+      "rank": 3,
+      "slug": "sil-invariant-repair",
+      "tier": "high",
+      "axis": "observability / honesty",
+      "effort": "15m",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 30.9,
+      "title": "SIL Invariant Repair — make the status score equal the category truth",
+      "summary": "The new write helper correctly caught `silScore=1000` while the ten SIL categories sum to `999` because Automation Coverage is `99`. Leaving the mismatch would make the startup score box a plausible-looking lie, exactly what CANON-031 forbids.",
+      "recipe": "Run `scripts/lib/write-project-status.mjs --fix`, keep the category values unchanged, and validate `--check` after the write."
+    },
+    {
+      "rank": 4,
+      "slug": "protocol-script-smoke",
+      "tier": "high",
+      "axis": "security / process quality",
+      "effort": "45m",
+      "impact": 8,
+      "innovation": 5,
+      "priority": 22.2,
+      "title": "Protocol Script Smoke — prove the repaired start/closeout path runs",
+      "summary": "This repo is deployed and public-unlaunched; session automation failures now cost more than another feature polish slice because they erode launch confidence and closeout reliability. The correct bar is not syntax validity, but actual runtime proof for the scripts `/start` and `/closeout` depend on.",
+      "recipe": "Run `compact-handoff`, `render-startup-brief`, `validate-brief-format`, `blocker-preflight`, `context-meter`, and targeted test/lint checks after the helper repair."
+    }
+  ],
+  "innovationReserve": [],
+  "skipped": [
+    {
+      "slug": "playwright-pointer-360",
+      "reason": "Still the highest product QA gap, but this continuation found protocol breakage that must be fixed before a package/install pass."
+    },
+    {
+      "slug": "deterministic-resim-runner",
+      "reason": "High-value trust milestone, but larger than a closeout-safe protocol repair sprint."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "startup-helper-compatibility",
+      "status": "shipped",
+      "evidence": [
+        "scripts/lib/turn-classifier.mjs supplies the router classifier import used by compact-handoff/model-router",
+        "scripts/lib/visual-blocks.mjs and scripts/lib/sil-forecaster.mjs supply startup brief helpers",
+        "scripts/lib/blocker-rules.mjs supplies direct blocker-preflight classification",
+        "scripts/lib/skill-cost-ledger.mjs supplies append-only local telemetry for renderers",
+        "scripts/scan-secrets.mjs supplies the missing closeout secret-scan gate"
+      ]
+    },
+    {
+      "slug": "codex-plan-mode-exemption",
+      "status": "shipped",
+      "evidence": [
+        "scripts/verify-plan-mode.mjs reads context/.session-lock agent and stamps non-claude-code sessions as not_required",
+        "Runtime JSON check returned status=not_required, agent=codex"
+      ]
+    },
+    {
+      "slug": "sil-invariant-repair",
+      "status": "shipped",
+      "evidence": [
+        "node scripts/lib/write-project-status.mjs --fix corrected silScore to the category sum",
+        "node scripts/lib/write-project-status.mjs --check now reports the SIL invariant clean"
+      ]
+    },
+    {
+      "slug": "protocol-script-smoke",
+      "status": "shipped",
+      "evidence": [
+        "node scripts/compact-handoff.mjs writes cached compact handoff without missing-import failure",
+        "node scripts/render-startup-brief.mjs completes without missing helper warnings",
+        "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md passes required-block validation",
+        "node scripts/blocker-preflight.mjs --json runs and returns an empty current human-action item list",
+        "node scripts/context-meter.mjs --json returns CONTINUE",
+        "node scripts/scan-secrets.mjs --staged is available for the staged closeout diff",
+        "npm run lint, npm test, and npm run build pass"
+      ]
+    }
+  ],
+  "validation": {
+    "protocol": "compact-handoff, render-startup-brief, validate-brief-format, blocker-preflight, context-meter, verify-plan-mode, write-project-status all pass",
+    "full": "408/408 tests across 46 files",
+    "lint": "0 errors",
+    "build": "passing (main chunk 769.27 kB / 236.52 kB gzip)"
+  }
+}

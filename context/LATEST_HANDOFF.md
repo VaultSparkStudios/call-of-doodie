@@ -1,5 +1,13 @@
 # Latest Handoff
 
+## Where We Left Off - Session 80 (2026-06-05)
+
+Continued the durable founder goal after the Session 79 product audit/implement pass and found protocol drift during `/start`. Wrote and executed `docs/AUDIT_2026-06-05_2.md` / `.json` for a four-item protocol-integrity sprint: (1) **Startup helper compatibility** — added repo-local deterministic helpers for `turn-classifier`, `visual-blocks`, `sil-forecaster`, `blocker-rules`, `skill-cost-ledger`, and the missing closeout `scan-secrets` gate so upgraded Studio OS scripts run in this public game repo without private helper dependencies. (2) **Codex plan-mode exemption** — restored `verify-plan-mode` agent detection so Codex sessions stamp `not_required` instead of asking for Claude Code's `/model opusplan`. (3) **SIL invariant repair** — `write-project-status --fix` / `--check` now proves `silScore` equals the ten-category sum. (4) **Protocol script smoke** — `compact-handoff`, `render-startup-brief`, `validate-brief-format`, `blocker-preflight`, `context-meter`, lint, tests, and build all pass.
+
+Validation: `npm run lint` clean; `npm test` 408/408 across 46 files; `npm run build` passing; protocol smokes green with context-meter `CONTINUE`.
+
+Next priorities remain product-facing: Playwright pointer 360 harness, enemy-annotated death feedback, deterministic replay resim runner, and the remaining manual launch gates (physical PWA/gamepad QA and Itch.io publication).
+
 ## Where We Left Off - Session 79 (2026-06-05)
 
 Shipped a fresh three-item `/start -> /audit -> /implement` pass and prepared closeout. `docs/AUDIT_2026-06-05.md` / `.json` rank and execute: (1) **RunBrain experiment guardrail** — `matchesExperiment()` now builds a normalized config haystack before safe-opener pattern checks, preventing an undefined variable crash path while keeping the coach zero-token/local-first. (2) **Recent-killer Revenge Drill** — `buildFrontDoorActionStack()` now detects 3+ recent deaths to one enemy and emits a `revenge_drill` action with Most Wanted study CTA. (3) **Remembered controller glyphs** — `getControllerLabels()` centralizes Xbox/PlayStation/generic labels; TutorialOverlay, ControlsPanel, PauseMenu, and HomeV2 remembered-profile fallback now render device-specific help.

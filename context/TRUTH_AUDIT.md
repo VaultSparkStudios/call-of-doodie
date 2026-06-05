@@ -1,6 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-05 - Session 80
+
+- Protocol compatibility truth — this session did not add game runtime features; it repaired repo-local Studio OS execution paths introduced by prior protocol upgrades.
+- `scripts/lib/turn-classifier.mjs` is deterministic and dependency-free; it exists so `model-router.mjs` imports safely and can down-route simple Anthropic calls without breaking callers.
+- `scripts/lib/visual-blocks.mjs`, `scripts/lib/sil-forecaster.mjs`, `scripts/lib/blocker-rules.mjs`, `scripts/lib/skill-cost-ledger.mjs`, and `scripts/scan-secrets.mjs` are local compatibility helpers, not private Studio Ops replacements.
+- `scripts/verify-plan-mode.mjs` again treats Codex plan mode as `not_required`, matching the Session 61 decision that `/model opusplan` is a Claude Code runtime-only command.
+- `context/PROJECT_STATUS.json` now passes the write-time SIL invariant helper; `silScore` equals the sum of `silCategoriesV3`.
+- Validation truth — `compact-handoff`, `render-startup-brief`, `validate-brief-format`, `blocker-preflight`, `context-meter`, `npm run lint`, `npm test` 408/408, and `npm run build` passed.
+
+Overall status: green
+Last reviewed: 2026-06-05
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-06-05 - Session 79
 
 - `src/utils/runBrain.js` `matchesExperiment()` remains local-only/zero-token and now normalizes run config into a `hay` string before safe-opener pattern checks.

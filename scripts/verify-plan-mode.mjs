@@ -47,9 +47,9 @@ let sessionStart = Date.now() - 3600_000;
 const m = lockText.match(/session_start:\s*(\S+)/);
 if (m) sessionStart = new Date(m[1]).getTime();
 
-const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || 'claude-code').toLowerCase();
 const planModeRequired = !!status.modelPlanMode;
 const tier = status.modelTier || null;
+const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || 'claude-code').toLowerCase();
 
 if (!planModeRequired) {
   const result = { status: 'not_required', tier, agent, reason: 'tier does not require plan-mode' };
@@ -137,6 +137,7 @@ function emit(r) {
   }
   if (r.reminder) console.log(`  → ${r.reminder}`);
 }
+emit(result);
 
 function stamp(r) {
   try {
@@ -155,4 +156,3 @@ function stamp(r) {
     }
   } catch { /* non-fatal */ }
 }
-emit(result);

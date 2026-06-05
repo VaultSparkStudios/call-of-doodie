@@ -1,4 +1,26 @@
-# Implement Plan — Session 79 (2026-06-05)
+# Implement Plan — Session 80 (2026-06-05)
+
+Source audit: `docs/AUDIT_2026-06-05_2.md` · 4 items · Combined Priority 124.6
+
+## Optimal Execution Order (Wave Plan)
+
+| Wave | Slug | Effort | Priority | Axis | Key files |
+|---|---|---|---|---|---|
+| 1 | startup-helper-compatibility | 1h | 26.8 | speed / organization / efficiency | scripts/lib/*.mjs |
+| 2 | codex-plan-mode-exemption | 30m | 26.7 | speed / organization / efficiency | scripts/verify-plan-mode.mjs |
+| 3 | sil-invariant-repair | 15m | 30.9 | observability / honesty | context/PROJECT_STATUS.json, scripts/lib/write-project-status.mjs |
+| 4 | protocol-script-smoke | 45m | 22.2 | security / process quality | scripts/*.mjs, docs/STARTUP_BRIEF.md |
+
+## Execution Result
+
+- Shipped: 4
+- Deferred: 0
+- Blocked: 0
+- Validation: protocol smokes pass, `npm run lint` clean, `npm test` 408/408 across 46 files, `npm run build` passing.
+
+---
+
+# Previous plan (S79 — 2026-06-05)
 
 Source audit: `docs/AUDIT_2026-06-05.md` · 3 items · Combined Priority 89.7
 
