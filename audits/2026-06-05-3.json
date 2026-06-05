@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-06-05",
+  "session": 81,
+  "project": "call-of-doodie",
+  "kind": "audit-implement-closeout",
+  "summary": "Focused continuation shipped the missing Studio OS skill-profile entry shims so /start, /audit, /implement, and /closeout resolve Call-Of-Doodie's game overlay locally.",
+  "validation": {
+    "protocol": "skill-profile, active-skill, startup render/validate, plan-mode, context-meter, and SIL invariant all passing",
+    "full": "408/408",
+    "lint": "clean",
+    "build": "passing"
+  },
+  "shipped": [
+    "skill-profile-personalization-shim"
+  ],
+  "blocked": [],
+  "deferred": [
+    "playwright-pointer-360",
+    "enemy-annotated-deathmap",
+    "deterministic-resim-runner"
+  ]
+}

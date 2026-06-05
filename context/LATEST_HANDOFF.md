@@ -1,5 +1,13 @@
 # Latest Handoff
 
+## Where We Left Off - Session 81 (2026-06-05)
+
+Continued the durable `/start -> /audit -> /implement -> /closeout` goal after verifying the Session 80 protocol repair. `/start` exposed one remaining command-entry gap: all four invoked skills call `scripts/lib/skill-profile.mjs`, but the public repo did not have that resolver. Wrote and executed `docs/AUDIT_2026-06-05_3.md` / `.json` for **Skill Profile Personalization Shim** and shipped deterministic local shims: `scripts/lib/skill-profile.mjs` returns a Call-Of-Doodie `game` overlay for `/start`, `/audit`, `/implement`, and `/closeout`; `scripts/set-active-skill.mjs` writes `.cache/active-skill.json`; `scripts/lib/medium-quality-gates.mjs` and `scripts/lib/sil-rubrics.mjs` keep implement/closeout helper imports available without private Studio Ops dependencies.
+
+Validation: `node scripts/lib/skill-profile.mjs start|audit|closeout` returns `medium=game`; `node scripts/set-active-skill.mjs implement` passes; `compact-handoff`, `render-startup-brief`, `validate-brief-format`, `verify-plan-mode --json`, `context-meter --json`, and `write-project-status --check` pass; `npm run lint` clean; `npm test` 408/408 across 46 files; `npm run build` passing.
+
+Next priorities remain product-facing: Playwright pointer 360 harness, enemy-annotated death feedback, deterministic replay resim runner, and the remaining manual launch gates (physical PWA/gamepad QA and Itch.io publication).
+
 ## Where We Left Off - Session 80 (2026-06-05)
 
 Continued the durable founder goal after the Session 79 product audit/implement pass and found protocol drift during `/start`. Wrote and executed `docs/AUDIT_2026-06-05_2.md` / `.json` for a four-item protocol-integrity sprint: (1) **Startup helper compatibility** — added repo-local deterministic helpers for `turn-classifier`, `visual-blocks`, `sil-forecaster`, `blocker-rules`, `skill-cost-ledger`, and the missing closeout `scan-secrets` gate so upgraded Studio OS scripts run in this public game repo without private helper dependencies. (2) **Codex plan-mode exemption** — restored `verify-plan-mode` agent detection so Codex sessions stamp `not_required` instead of asking for Claude Code's `/model opusplan`. (3) **SIL invariant repair** — `write-project-status --fix` / `--check` now proves `silScore` equals the ten-category sum. (4) **Protocol script smoke** — `compact-handoff`, `render-startup-brief`, `validate-brief-format`, `blocker-preflight`, `context-meter`, lint, tests, and build all pass.

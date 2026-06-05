@@ -4,14 +4,40 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ████▇█
-Avgs — 3: 1000.0 | 5: 997.4 | 10: — | 25: — | all: 976.3 [N=16, SIL history in private ops repo]
+Sparkline (last 5 totals): ███▇██
+Avgs — 3: 1000.0 | 5: 1000.0 | 10: — | 25: — | all: 977.7 [N=17, SIL history in private ops repo]
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-06-05 | Session 80 | Total: 1000/1000 | Velocity: 2 | protocolVelocity: 2
+Last session: 2026-06-05 | Session 81 | Total: 1000/1000 | Velocity: 1 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-06-05 — Session 81 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 408/408 tests pass across 46 files, lint clean, build passing; new protocol shims are syntax-clean and runtime-smoked |
+| Creative Alignment | 100 | → | No runtime game behavior changed; the work protects the launch/refinement cadence for the game |
+| Momentum | 100 | → | Closed the remaining command-entry gap found during verification instead of leaving `/audit`/`/closeout` personalization brittle |
+| Engagement | 100 | → | Player-facing loop stays intact; next work can return to pointer QA, death feedback, or replay trust |
+| Process Quality | 100 | → | `/start`, focused `/audit`, `/implement`, validation, and closeout write-back all have concrete evidence |
+| Cross-Repo Coherence | 100 | → | Public repo uses deterministic local shims rather than importing private Studio Ops runtime files |
+| Security Posture | 100 | → | No new dependencies, network calls, credentials, providers, or player data surfaces |
+| Ecosystem Integration | 100 | → | The repo now resolves skill overlays, active-skill telemetry, medium gates, and SIL rubric helpers locally |
+| Capital Efficiency | 100 | → | Zero SaaS/API/per-user cost; fewer failed protocol starts saves operator time and token spend |
+| Automation Coverage | 100 | → | Startup preflight, brief validation, plan-mode check, context meter, SIL invariant, lint, tests, and build all pass |
+
+SIL +1: Added the missing skill-profile/personalization shims that all four requested Studio OS skills invoke first. Validation: protocol smokes green, `npm run lint` clean, `npm test` 408/408, `npm run build` passing.
+
+**Top win:** `/start`, `/audit`, `/implement`, and `/closeout` can now resolve Call-Of-Doodie's game overlay from this public repo.
+**Top gap:** The next high-value product item is still the Playwright pointer 360 harness.
+**Intent outcome:** Achieved pending closeout autopilot — the full requested command sequence has current audit, implementation, validation, and write-back evidence.
+
+**Brainstorm**
+1. Protocol dependency scanner — static-check all `scripts/lib/*.mjs` imports used by skill entry points before startup renders. High probability.
+2. Playwright pointer harness — drive canvas pointer positions around the player and assert debug HUD buckets across desktop/mobile viewports. High probability.
+3. Enemy-annotated death feedback — cluster recent death positions by enemy type and render causal icons on DeathScreen. High probability.
 
 ## 2026-06-05 — Session 80 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
 

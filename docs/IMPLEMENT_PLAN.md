@@ -1,4 +1,23 @@
-# Implement Plan — Session 80 (2026-06-05)
+# Implement Plan — Session 81 (2026-06-05)
+
+Source audit: `docs/AUDIT_2026-06-05_3.md` · 1 item · Combined Priority 28.4
+
+## Optimal Execution Order (Wave Plan)
+
+| Wave | Slug | Effort | Priority | Axis | Key files |
+|---|---|---|---|---|---|
+| 1 | skill-profile-personalization-shim | 30m | 28.4 | speed / organization / efficiency | scripts/lib/skill-profile.mjs, scripts/set-active-skill.mjs, scripts/lib/medium-quality-gates.mjs, scripts/lib/sil-rubrics.mjs |
+
+## Execution Result
+
+- Shipped: 1
+- Deferred: 0
+- Blocked: 0
+- Validation: skill-profile and active-skill entry points pass, Session 81 startup preflight renders and validates, Codex plan mode is `not_required`, SIL invariant is clean.
+
+---
+
+# Previous plan (S80 — 2026-06-05)
 
 Source audit: `docs/AUDIT_2026-06-05_2.md` · 4 items · Combined Priority 124.6
 

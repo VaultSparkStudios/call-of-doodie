@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-05",
+  "session": 81,
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 1,
+    "combinedPriority": 28.4,
+    "top3": [
+      "skill-profile-personalization-shim"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "skill-profile-personalization-shim",
+      "tier": "high",
+      "axis": "speed / organization / efficiency",
+      "effort": "30m",
+      "impact": 9,
+      "innovation": 5,
+      "priority": 28.4,
+      "title": "Skill Profile Personalization Shim — make every requested Studio OS skill executable",
+      "summary": "The previous protocol-integrity pass repaired several missing helper imports, but all four requested skills still start by invoking `scripts/lib/skill-profile.mjs`, which did not exist locally. That gap means `/start`, `/audit`, `/implement`, and `/closeout` cannot reliably personalize to Call-Of-Doodie's game surface before doing work.",
+      "recipe": "Add a deterministic repo-local `skill-profile` resolver, an active-skill marker, and minimal medium gate/rubric shims so the game overlay, success bars, and telemetry paths resolve without private Studio Ops imports."
+    }
+  ],
+  "innovationReserve": [],
+  "skipped": [
+    {
+      "slug": "playwright-pointer-360",
+      "reason": "Still the next best product-quality sprint, but this continuation must first close the command-entry execution gap discovered during verification."
+    },
+    {
+      "slug": "deterministic-resim-runner",
+      "reason": "High-value leaderboard trust milestone, deferred because the active goal is the Studio OS command sequence and closeout."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "skill-profile-personalization-shim",
+      "status": "shipped",
+      "evidence": [
+        "scripts/lib/skill-profile.mjs returns a Call-Of-Doodie game overlay for start/audit/implement/closeout",
+        "scripts/set-active-skill.mjs writes .cache/active-skill.json for local telemetry consumers",
+        "scripts/lib/medium-quality-gates.mjs and scripts/lib/sil-rubrics.mjs keep implement/closeout helper imports available",
+        "node scripts/lib/skill-profile.mjs start and audit both return medium=game",
+        "node scripts/set-active-skill.mjs studio-start writes the active skill marker",
+        "node --check passes for the new protocol shim scripts"
+      ]
+    }
+  ],
+  "validation": {
+    "protocol": "skill-profile, set-active-skill, compact-handoff, render-startup-brief, validate-brief-format, verify-plan-mode, context-meter, and write-project-status all pass",
+    "start": "Session 81 startup preflight rendered docs/STARTUP_BRIEF.md v3.2 and validator reported all required canonical blocks present",
+    "statusInvariant": "SIL invariant clean at 1000/1000"
+  }
+}

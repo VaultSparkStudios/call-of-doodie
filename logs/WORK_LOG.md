@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-06-05 (Session 81)
+
+- Continued the durable founder goal through `/start -> /audit -> /implement -> /closeout` after verifying the Session 80 protocol repair.
+- `/start` evidence found one remaining command-entry gap: `scripts/lib/skill-profile.mjs` was missing even though all four invoked skills call it first.
+- Created `docs/AUDIT_2026-06-05_3.md` and `.json` for a focused skill-entry integrity sprint.
+- `/implement` shipped the single audit item:
+  - Added `scripts/lib/skill-profile.mjs` with a deterministic Call-Of-Doodie `game` overlay for `/start`, `/audit`, `/implement`, and `/closeout`.
+  - Added `scripts/set-active-skill.mjs` so active skill telemetry writes `.cache/active-skill.json`.
+  - Added `scripts/lib/medium-quality-gates.mjs` and `scripts/lib/sil-rubrics.mjs` as minimal local compatibility shims for implement/closeout imports.
+- Validation: skill-profile start/audit/closeout checks pass; active-skill marker pass; startup brief renders and validates; Codex plan mode is `not_required`; SIL invariant is clean; `npm run lint` clean; `npm test` 408/408 across 46 files; `npm run build` passing.
+
 ## 2026-06-05 (Session 80)
 
 - Continued the durable founder goal after Session 79 and ran `/start`; runtime evidence exposed protocol drift in the current worktree.

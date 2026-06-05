@@ -1,6 +1,17 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-05 - Session 81
+
+- Skill-entry truth — the public repo now has `scripts/lib/skill-profile.mjs`, so `/start`, `/audit`, `/implement`, and `/closeout` can resolve the Call-Of-Doodie game overlay before doing work.
+- `scripts/set-active-skill.mjs` writes only `.cache/active-skill.json`; it does not touch game runtime, secrets, or provider state.
+- `scripts/lib/medium-quality-gates.mjs` and `scripts/lib/sil-rubrics.mjs` are minimal compatibility shims for local imports, not private Studio Ops replacements.
+- Validation truth — skill-profile start/audit/closeout checks, active-skill marker, startup brief render/validate, Codex plan-mode check, context meter, SIL invariant check, `npm run lint`, `npm test` 408/408, and `npm run build` passed.
+
+Overall status: green
+Last reviewed: 2026-06-05
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-06-05 - Session 80
 
 - Protocol compatibility truth — this session did not add game runtime features; it repaired repo-local Studio OS execution paths introduced by prior protocol upgrades.

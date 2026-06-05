@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 80 completed a focused protocol-integrity audit/implement/closeout pass after /start exposed executable drift: missing Studio OS helper imports are now supplied locally, Codex plan-mode checks are correctly not_required, and the SIL status invariant is enforced.",
+  "currentFocus": "Session 81 completed the command-entry continuation for the durable /start -> /audit -> /implement -> /closeout goal: the repo now has a local skill-profile game overlay, active-skill marker, medium gate shim, and SIL rubric shim so all four Studio OS skills execute without private helper imports.",
   "nextMilestone": "Add the Playwright pointer 360 harness on top of the sweep/calibration substrate, then tackle enemy-annotated death feedback or deterministic replay resim as a dedicated trust sprint.",
   "testingSurfaces": [
     {
@@ -41,13 +41,13 @@
   "ignisScore": 46881,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-03",
-  "silSession": 80,
+  "silSession": 81,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 2,
+  "silVelocity": 1,
   "silDebt": "decreasing",
   "silLastSession": "2026-06-05",
-  "currentSession": 80,
+  "currentSession": 81,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 408,
@@ -76,7 +76,7 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-06-05T19:14:40.096Z",
+  "planModeCheckedAt": "2026-06-05T21:37:05.710Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral"
 }
