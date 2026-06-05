@@ -9,9 +9,35 @@ Avgs — 3: 1000.0 | 5: 996.8 | 10: — | 25: — | all: 974.7 [N=15, SIL histor
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-06-03 | Session 77 | Total: 1000/1000 | Velocity: 3 | protocolVelocity: 1
+Last session: 2026-06-05 | Session 79 | Total: 1000/1000 | Velocity: 3 | protocolVelocity: 1
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
+
+## 2026-06-05 — Session 79 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+| Category | Score | vs Last | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | 408/408 tests pass across 46 files, lint clean, build passing; 3 new focused tests cover the helper changes |
+| Creative Alignment | 100 | → | The work tightens the launch learning loop: local coach advice cannot crash, repeated deaths become explicit mastery targets, and controller help respects the player's device |
+| Momentum | 100 | → | Fresh audit produced 3 bounded items and all 3 shipped in one pass with execution evidence |
+| Engagement | 100 | → | Revenge Drill turns a failure pattern into an immediate next-run reason; controller labels reduce first-run friction for device QA |
+| Process Quality | 100 | → | `/start`, fresh `/audit`, `/implement`, validation, audit sidecar, implement plan, task board, handoff, work log, and truth audit all updated |
+| Cross-Repo Coherence | 100 | → | All improvements are repo-local and public-safe; no sibling repo writes or cross-repo protocol changes |
+| Security Posture | 100 | → | No new dependencies, secrets, providers, network calls, or account surfaces; all data reads remain local browser state |
+| Ecosystem Integration | 100 | → | Reuses existing RunBrain, menu guidance, gamepad profile, tutorial, controls, and pause surfaces |
+| Capital Efficiency | 100 | → | Zero-token/zero-SaaS polish; no per-user studio cost added |
+| Automation Coverage | 100 | ↑ | Focused helper tests plus full suite validate the changed behavior; remaining browser/device proof stays in the Playwright/manual QA lane |
+
+SIL +3: Shipped RunBrain experiment guardrail, recent-killer Revenge Drill, and remembered controller glyphs. Validation: focused helper tests 29/29, full `npm test` 408/408, lint 0 errors, build passing.
+
+**Top win:** The front door now translates repeated deaths into a specific Most Wanted study target instead of making the player infer the lesson from history.
+**Top gap:** Browser-level Playwright pointer 360 harness is still the highest-value automated launch QA gap.
+**Intent outcome:** Achieved pending closeout autopilot — `/start`, fresh `/audit`, `/implement`, validation, and write-back completed with concrete evidence.
+
+**Brainstorm**
+1. Enemy-annotated death heatmap — cluster recent death positions and render enemy-type icons on the DeathScreen map. High probability.
+2. Replay resim runner slice — pure deterministic replay of a short trace window first, not the full run. High probability.
+3. Controller QA export card — package remembered controller profile + calibration result into a one-click owner QA receipt. Medium probability.
 
 ## 2026-06-03 — Session 78 | Total: 1000/1000 | Velocity: 4 | Debt: ↓
 

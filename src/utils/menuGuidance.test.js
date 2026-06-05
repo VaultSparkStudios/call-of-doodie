@@ -62,6 +62,28 @@ describe("menuGuidance", () => {
     expect(upgradeAction.metaRec.node).toBeDefined();
   });
 
+  test("adds a revenge drill when recent deaths cluster around one enemy", () => {
+    const stack = buildFrontDoorActionStack({
+      dailyAlreadyPlayed: true,
+      totalRuns: 8,
+      career: {
+        recentDeathsByEnemy: [
+          { t: "12" },
+          { t: "12" },
+          { t: "4" },
+          { t: "12" },
+        ],
+      },
+      selectedLoadout: { name: "Standard Issue" },
+      currentModeLabel: "Standard",
+    });
+
+    const drill = stack.find(action => action.id === "revenge_drill");
+    expect(drill).toBeDefined();
+    expect(drill.detail).toContain("Enemy #12");
+    expect(drill.killerType).toBe("12");
+  });
+
   test("builds a command brief that reflects the selected mode and loadout", () => {
     const brief = buildCommandBrief({
       mode: "boss_rush",

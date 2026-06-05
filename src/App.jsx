@@ -4199,7 +4199,7 @@ export default function CallOfDoodie() {
       {/* Tutorial overlay — first-run hints */}
       {!paused && !perkPending && !shopPending && !routePending && (
         <Suspense fallback={null}>
-          <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} wave={wave} />
+          <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} controllerType={controllerType} wave={wave} />
         </Suspense>
       )}
 

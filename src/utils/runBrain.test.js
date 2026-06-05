@@ -143,6 +143,11 @@ describe("matchesExperiment", () => {
     expect(matchesExperiment({ firstPerkName: "stabilizer" }, intent)).toBe("matched");
   });
 
+  it("does not throw when a safe-opener intent has no direct entity match", () => {
+    const intent = { suggestion: "Run one safe opener: stabilizer perk first", ts: now };
+    expect(matchesExperiment({ starterLoadout: "standard", difficulty: "hard" }, intent)).toBe("diverged");
+  });
+
   it("precision route always matches any run config", () => {
     const intent = { suggestion: "Run one precision route: keep aim discipline", ts: now };
     expect(matchesExperiment({ starterLoadout: "aggressive" }, intent)).toBe("matched");

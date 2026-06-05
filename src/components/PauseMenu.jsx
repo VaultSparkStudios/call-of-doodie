@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
+import { getControllerLabels } from "../utils/gamepad.js";
 import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
 
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
@@ -8,6 +9,7 @@ const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
 export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot, activePerks, perkMods, activeSynergiesData }) {
+  const labels = getControllerLabels(controllerType);
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -148,16 +150,16 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
             {controllerType === "ps" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900 }}>PS</span>}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", fontSize: 12, color: "#EEE", lineHeight: 2 }}>
-            <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Stick</span> — Move</div>
-            <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
-            <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
-            <div>🔭 <span style={{ color: "#00E5FF", fontWeight: 800 }}>LT / L2</span> — ADS Zoom</div>
-            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>A / Cross</span> — Dash</div>
-            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
-            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / ☐</span> — Reload</div>
-            <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>
-            <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>RB / R1</span> — Next weapon</div>
-            <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Start / Options</span> — Pause</div>
+            <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>{labels.move}</span> — Move</div>
+            <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>{labels.aim}</span> — Aim</div>
+            <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>{labels.shoot}</span> — Shoot</div>
+            <div>🔭 <span style={{ color: "#00E5FF", fontWeight: 800 }}>{labels.ads}</span> — ADS Zoom</div>
+            <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>{labels.dash}</span> — Dash</div>
+            <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>{labels.grenade}</span> — Grenade</div>
+            <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.reload}</span> — Reload</div>
+            <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.previousWeapon}</span> — Prev weapon</div>
+            <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.nextWeapon}</span> — Next weapon</div>
+            <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>{labels.pause}</span> — Pause</div>
             <div>⬆⬇ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad U/D</span> — Navigate menus</div>
           </div>
         </div>

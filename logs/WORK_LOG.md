@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-06-05 (Session 79)
+
+- Continued the durable founder goal: `/start` -> fresh `/audit` -> `/implement` -> `/closeout`, with game-specific creative/technical personalization.
+- `/start` evidence: Codex session lock written, mode/secrets/blocker preflight ran, context-meter returned `CONTINUE`, startup brief rendered and validated with one recommended-block warning.
+- Created `docs/AUDIT_2026-06-05.md`, `docs/AUDIT_2026-06-05.json`, and `audits/2026-06-05.json` for a three-item launch-polish sprint.
+- `/implement` shipped all three items:
+  - `src/utils/runBrain.js` now defines a normalized config haystack before safe-opener pattern checks; regression coverage proves no throw when advice lacks a direct entity match.
+  - `src/utils/menuGuidance.js` now promotes 3+ recent deaths to one enemy into a front-door `revenge_drill` action with Most Wanted study CTA.
+  - `src/utils/gamepad.js` now exports shared Xbox/PlayStation/generic controller labels; TutorialOverlay, ControlsPanel, PauseMenu, and HomeV2 remembered-profile fallback use them.
+- Validation: focused helper tests 29/29; `npm run lint` clean; `npm test` 408/408 across 46 files; `npm run build` passing.
+
 ## 2026-06-03 (Session 77)
 
 - Ran `/start` with Codex session lock, session-mode check, secrets audit, blocker preflight, and context-meter verdict `CONTINUE`.

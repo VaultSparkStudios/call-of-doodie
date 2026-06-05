@@ -1,5 +1,26 @@
 import { getRecommendedMetaUpgrade, getMetaRecommendationLabel } from "./metaClarity.js";
 
+function getRecentKillerPressure(career = {}) {
+  const deaths = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy.slice(0, 8) : [];
+  if (deaths.length < 3) return null;
+  const counts = new Map();
+  for (const death of deaths) {
+    const key = String(death?.t ?? "");
+    if (!key) continue;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  let type = null;
+  let count = 0;
+  for (const [key, value] of counts.entries()) {
+    if (value > count) {
+      type = key;
+      count = value;
+    }
+  }
+  if (!type || count < 3) return null;
+  return { type, count };
+}
+
 export function buildCommandBrief({
   mode = "standard",
   selectedLoadout = { id: "standard", name: "Standard Issue" },
@@ -107,6 +128,20 @@ export function buildFrontDoorActionStack({
       urgency: "Worth prioritizing when your next clean run is uncertain.",
       accent: "#7CFF8A",
       cta: "📋 REVIEW MISSIONS",
+    }, actions.length));
+  }
+
+  const killerPressure = getRecentKillerPressure(career);
+  if (killerPressure) {
+    actions.push(normalizeAction({
+      id: "revenge_drill",
+      title: "Revenge Drill",
+      detail: `Enemy #${killerPressure.type} ended ${killerPressure.count} of your last ${Math.min(8, career.recentDeathsByEnemy?.length || 8)} deaths. Open Most Wanted before deploying and rehearse its tell.`,
+      whyNow: "The game already widened that threat's warning window; pairing that assist with an explicit drill turns repeated deaths into a readable mastery target.",
+      urgency: "Highest value before the next run repeats the same mistake.",
+      accent: "#FF8888",
+      cta: "👾 STUDY TARGET",
+      killerType: killerPressure.type,
     }, actions.length));
   }
 

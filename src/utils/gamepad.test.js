@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildControllerProfile,
   detectControllerType,
+  getControllerLabels,
   getPrimaryGamepad,
   loadControllerProfile,
   readGamepadControls,
@@ -55,6 +56,12 @@ describe("gamepad helpers", () => {
     expect(controls.pause).toBe(true);
     expect(controls.left).toMatchObject({ x: 0.8, y: -0.9, active: true });
     expect(controls.right).toMatchObject({ x: 0.5, y: 0.1, active: true });
+  });
+
+  it("returns device-specific controller labels with a generic fallback", () => {
+    expect(getControllerLabels("xbox")).toMatchObject({ shoot: "RT", dash: "A", grenade: "B" });
+    expect(getControllerLabels("ps")).toMatchObject({ shoot: "R2", dash: "Cross", grenade: "Circle" });
+    expect(getControllerLabels("unknown")).toMatchObject({ shoot: "RT / R2", dash: "A / Cross" });
   });
 
   it("remembers a local controller profile for repeat QA", () => {

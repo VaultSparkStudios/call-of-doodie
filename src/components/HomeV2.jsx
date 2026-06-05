@@ -114,6 +114,7 @@ export default function HomeV2(props) {
   });
   const [inputCalibration] = useState(() => loadInputCalibration());
   const [controllerProfile] = useState(() => loadControllerProfile());
+  const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
 
   useEffect(() => {
     const loaded = loadCareerStats();
@@ -786,7 +787,7 @@ export default function HomeV2(props) {
       )}
       {showControls && (
         <Suspense fallback={null}>
-          <MP_Controls isMobile={isMobile} controllerType={controllerType} onClose={() => setShowControls(false)} />
+          <MP_Controls isMobile={isMobile} controllerType={effectiveControllerType} onClose={() => setShowControls(false)} />
         </Suspense>
       )}
       {showMostWanted && (

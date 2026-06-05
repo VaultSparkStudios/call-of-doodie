@@ -1,19 +1,15 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-03 (Session 77 closeout) -->
+<!-- generated-at: 2026-06-05 (Session 79 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S77 ═════════════════════╗
-║  Date: 2026-06-03  ·  SIL: 1000/1000  ·  Velocity: 4 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S79 ═════════════════════╗
+║  Date: 2026-06-05  ·  SIL: 1000/1000  ·  Velocity: 3 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ `docs/AUDIT_2026-06-03.md` / `.json` rank and execute a thre  ║
-║  ✓ `src/systems/gameStep.js` now exports `pointerAimBucket()` a  ║
-║  ✓ `src/utils/inputCalibration.js` persists local-only calibrat  ║
-║  ✓ `src/utils/gamepad.js` persists the last controller profile   ║
-║  ✓ HomeV2 surfaces remembered input calibration and controller   ║
+║  (no shipped bullets parsed from LATEST_HANDOFF — see git log)   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -39,15 +35,15 @@
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 20 files  ·  M:15 A:5 D:0 ?:0                          ║
+║  Changes: 24 files  ·  M:21 A:0 D:0 ?:3                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         383/383                                          ║
-║  IGNIS:         1d ago                                           ║
+║  Tests:         408/408                                          ║
+║  IGNIS:         2d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

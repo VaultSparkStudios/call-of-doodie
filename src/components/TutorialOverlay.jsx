@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { getControllerLabels } from "../utils/gamepad.js";
 
 const TUTORIAL_KEY = "cod-tutorial-v1";
 
@@ -61,7 +62,7 @@ const STEPS = [
   },
 ];
 
-export default function TutorialOverlay({ isMobile, controllerConnected, wave, onDismiss }) {
+export default function TutorialOverlay({ isMobile, controllerConnected, controllerType = "controller", wave, onDismiss }) {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [step, setStep] = useState(0);
@@ -69,6 +70,7 @@ export default function TutorialOverlay({ isMobile, controllerConnected, wave, o
   const autoTimerRef = useRef(null);
 
   const inputMode = controllerConnected ? "controller" : isMobile ? "mobile" : "pc";
+  const controllerLabels = getControllerLabels(controllerType);
   const current = STEPS[step];
   const isLast = step === STEPS.length - 1;
 
@@ -110,7 +112,14 @@ export default function TutorialOverlay({ isMobile, controllerConnected, wave, o
 
   if (!visible || dismissed) return null;
 
-  const controlText = current[inputMode];
+  const controlText = inputMode === "controller"
+    ? ({
+        MOVE: controllerLabels.move,
+        SHOOT: controllerLabels.shoot,
+        DASH: controllerLabels.dash,
+        GRENADE: controllerLabels.grenade,
+      }[current.title] || current[inputMode])
+    : current[inputMode];
 
   return (
     <div style={{

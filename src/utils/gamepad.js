@@ -11,6 +11,58 @@ export function detectControllerType(gp) {
   return "controller";
 }
 
+const CONTROLLER_LABELS = {
+  xbox: {
+    brand: "Xbox",
+    move: "Left Stick",
+    aim: "Right Stick",
+    shoot: "RT",
+    ads: "LT",
+    dash: "A",
+    grenade: "B",
+    reload: "X",
+    previousWeapon: "LB",
+    nextWeapon: "RB",
+    pause: "Menu",
+    confirm: "A",
+    back: "B",
+  },
+  ps: {
+    brand: "PlayStation",
+    move: "Left Stick",
+    aim: "Right Stick",
+    shoot: "R2",
+    ads: "L2",
+    dash: "Cross",
+    grenade: "Circle",
+    reload: "Square",
+    previousWeapon: "L1",
+    nextWeapon: "R1",
+    pause: "Options",
+    confirm: "Cross",
+    back: "Circle",
+  },
+  controller: {
+    brand: "Controller",
+    move: "Left Stick",
+    aim: "Right Stick",
+    shoot: "RT / R2",
+    ads: "LT / L2",
+    dash: "A / Cross",
+    grenade: "B / Circle",
+    reload: "X / Square",
+    previousWeapon: "LB / L1",
+    nextWeapon: "RB / R1",
+    pause: "Start / Options",
+    confirm: "A / Cross",
+    back: "B / Circle",
+  },
+};
+
+export function getControllerLabels(type = "controller") {
+  return CONTROLLER_LABELS[type] || CONTROLLER_LABELS.controller;
+}
+
 function connectedGamepads(nav = globalThis.navigator) {
   const pads = nav?.getGamepads?.();
   return Array.from(pads || []).filter(Boolean);

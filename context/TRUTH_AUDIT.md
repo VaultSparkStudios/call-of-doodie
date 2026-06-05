@@ -1,6 +1,18 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-05 - Session 79
+
+- `src/utils/runBrain.js` `matchesExperiment()` remains local-only/zero-token and now normalizes run config into a `hay` string before safe-opener pattern checks.
+- `src/utils/menuGuidance.js` reads only local career `recentDeathsByEnemy` state to emit `revenge_drill`; it does not alter enemy spawn rates, balancing, storage schema, or network behavior.
+- `src/utils/gamepad.js` owns shared controller label metadata for Xbox, PlayStation, and generic controllers; UI surfaces consume labels but do not change input mapping.
+- `src/components/HomeV2.jsx` uses remembered controller profile only as a controls-help fallback when a controller is not currently connected.
+- Validation truth — focused helper tests passed 29/29, `npm run lint` passed, `npm test` passed 408/408 across 46 files, and `npm run build` passed.
+
+Overall status: green
+Last reviewed: 2026-06-05
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-06-03 - Session 78
 
 - `src/storage.js` now owns `getBossKillRecord`/`saveBossKillRecord`/`isNemesis` (key `cod-boss-kills-v1`) and `saveExperimentIntent`/`loadExperimentIntent`/`clearExperimentIntent` (key `cod-last-experiment-v1`). Neither reads or writes any account/network surface.

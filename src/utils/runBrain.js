@@ -139,6 +139,7 @@ export function matchesExperiment(config = {}, intent = null) {
   if (intent.ts && Date.now() - intent.ts > MAX_AGE_MS) return null;
   const s = intent.suggestion.toLowerCase();
   const { starterLoadout = "", firstPerkName = "", mode = "", difficulty = "" } = config;
+  const hay = [starterLoadout, firstPerkName, mode, difficulty].filter(Boolean).join(" ").toLowerCase();
   // Look for named entities in the suggestion that match the current run config
   const hasEntity = (keyword) => keyword.length > 2 && s.includes(keyword.toLowerCase());
   if (hasEntity(starterLoadout) || hasEntity(firstPerkName) || hasEntity(mode) || hasEntity(difficulty)) {

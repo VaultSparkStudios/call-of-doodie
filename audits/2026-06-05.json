@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-06-05",
+  "session": 79,
+  "project": "call-of-doodie",
+  "kind": "audit-implement",
+  "summary": "Fresh /audit -> /implement pass shipped RunBrain experiment guardrail, recent-killer Revenge Drill, and remembered controller glyph labels.",
+  "validation": {
+    "focused": "29/29",
+    "full": "408/408",
+    "lint": "clean",
+    "build": "passing"
+  },
+  "shipped": [
+    "runbrain-experiment-guardrail",
+    "recent-killer-revenge-drill",
+    "remembered-controller-glyphs"
+  ],
+  "blocked": [],
+  "deferred": [
+    "playwright-pointer-360",
+    "enemy-annotated-deathmap",
+    "deterministic-resim-runner"
+  ]
+}

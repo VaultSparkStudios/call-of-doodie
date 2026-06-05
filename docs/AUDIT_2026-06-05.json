@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-05",
+  "session": 79,
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 3,
+    "combinedPriority": 89.7,
+    "top3": [
+      "runbrain-experiment-guardrail",
+      "recent-killer-revenge-drill",
+      "remembered-controller-glyphs"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "runbrain-experiment-guardrail",
+      "tier": "high",
+      "axis": "AI / intelligence integration",
+      "effort": "30m",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 32.0,
+      "title": "RunBrain Experiment Guardrail — make the advice loop impossible to crash",
+      "summary": "The current RunBrain experiment matcher can reference an undefined `hay` value when a saved safe-opener experiment does not directly name the current loadout, perk, mode, or difficulty. That is exactly the kind of quiet local-first intelligence bug that makes a zero-token coach feel flaky right after it earns the player's trust.",
+      "recipe": "Define a normalized config haystack inside `matchesExperiment()`, add a regression where safe-opener intent has no direct entity match, and keep the matcher zero-network/zero-token."
+    },
+    {
+      "rank": 2,
+      "slug": "recent-killer-revenge-drill",
+      "tier": "fire",
+      "axis": "gamification",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 8,
+      "priority": 31.7,
+      "title": "Recent-Killer Revenge Drill — turn repeated deaths into a front-door mastery target",
+      "summary": "The game already records recent enemy deaths and widens telegraphs for repeated killers, but the home action stack does not explicitly tell players what to study next. Promoting a clustered killer into a Revenge Drill closes the loop from death memory to menu intent without adding backend cost or balance risk.",
+      "recipe": "Add recent-killer clustering to `buildFrontDoorActionStack()`, insert a `revenge_drill` action when one enemy owns 3+ recent deaths, and test that the drill carries the killer type and Most Wanted study CTA."
+    },
+    {
+      "rank": 3,
+      "slug": "remembered-controller-glyphs",
+      "tier": "high",
+      "axis": "UI / UX / user-experience",
+      "effort": "1h",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 26.0,
+      "title": "Remembered Controller Glyphs — make device trust visible in onboarding and controls",
+      "summary": "Session 77 taught the game to remember controller profile metadata, but the help surfaces still mostly speak in generic Xbox/PlayStation pairs. A shared label map lets first-run tutorial, Command Center controls, and pause controls show Xbox or PlayStation-specific bindings, including remembered profile fallback before reconnection.",
+      "recipe": "Add `getControllerLabels()` to `src/utils/gamepad.js`, use it in `TutorialOverlay`, `MenuPanels.ControlsPanel`, and `PauseMenu`, pass controller type through `App.jsx`, and use HomeV2's stored controller profile as a controls-panel fallback."
+    }
+  ],
+  "innovationReserve": [
+    "recent-killer-revenge-drill"
+  ],
+  "skipped": [
+    {
+      "slug": "playwright-pointer-360",
+      "reason": "Still requires adding Playwright test dependency or using an already-approved browser harness; keep for a separate package-trust/install pass."
+    },
+    {
+      "slug": "enemy-annotated-deathmap",
+      "reason": "Worth doing, but it touches death-screen rendering and enemy icon composition; larger than this closeout-safe sprint."
+    },
+    {
+      "slug": "deterministic-resim-runner",
+      "reason": "High-value trust milestone, but it needs a dedicated replay runner design pass and server contract review."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "runbrain-experiment-guardrail",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/runBrain.js — `matchesExperiment()` now builds a normalized config haystack before pattern checks",
+        "src/utils/runBrain.test.js — regression covers safe-opener intent with no direct entity match"
+      ]
+    },
+    {
+      "slug": "recent-killer-revenge-drill",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/menuGuidance.js — front-door action stack detects 3+ recent deaths to one enemy and emits `revenge_drill`",
+        "src/utils/menuGuidance.test.js — verifies killer type, detail copy, and CTA metadata"
+      ]
+    },
+    {
+      "slug": "remembered-controller-glyphs",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/gamepad.js — shared `getControllerLabels()` map for Xbox, PlayStation, and generic controllers",
+        "src/components/TutorialOverlay.jsx — first-run controller hints use the detected controller labels",
+        "src/components/MenuPanels.jsx and src/components/PauseMenu.jsx — controls help renders device-specific labels",
+        "src/components/HomeV2.jsx — remembered controller profile supplies controls-panel fallback when disconnected",
+        "src/App.jsx — passes controller type into tutorial overlay"
+      ]
+    }
+  ],
+  "validation": {
+    "focused": "29/29 passing across gamepad, runBrain, menuGuidance",
+    "full": "408/408 passing across 46 files",
+    "lint": "0 errors",
+    "build": "passing (main chunk 769.27 kB / 236.52 kB gzip)"
+  }
+}
