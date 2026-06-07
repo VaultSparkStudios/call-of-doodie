@@ -31,6 +31,12 @@ export function summarizeStudioEvents(studioEvents = []) {
     failedSyncCount: failedSync.length,
     latestTraceEvidence,
   });
+  const nextBenchmark = buildTraceProofNextBenchmark({
+    traceContract,
+    resimReadiness,
+    traceEvidenceCounts,
+    failedSyncCount: failedSync.length,
+  });
   return {
     trust,
     frontDoorCount: frontDoor.length,
@@ -50,6 +56,7 @@ export function summarizeStudioEvents(studioEvents = []) {
     latestTraceEvidence,
     traceContract,
     resimReadiness,
+    nextBenchmark,
   };
 }
 
@@ -137,6 +144,61 @@ export function buildReplayResimReadiness({
   };
 }
 
+export function buildTraceProofNextBenchmark({
+  traceContract = null,
+  resimReadiness = null,
+  traceEvidenceCounts = {},
+  failedSyncCount = 0,
+} = {}) {
+  const rich = traceEvidenceCounts.rich || 0;
+  const basic = traceEvidenceCounts.basic || 0;
+  const weak = traceEvidenceCounts.weak || 0;
+  const readinessStatus = resimReadiness?.status || "no-samples";
+
+  if (readinessStatus === "ready") {
+    return {
+      status: "ready",
+      title: "Replay Trust Pilot",
+      target: "Start the deterministic replay-resimulation design pass with the rich-trace fixture set.",
+      measure: `${rich} rich trace samples · ${failedSyncCount} sync retries`,
+    };
+  }
+
+  if (readinessStatus === "pilot-ready") {
+    return {
+      status: "bank-one-more",
+      title: "Bank One More Rich Trace",
+      target: "Capture one more accepted seeded run with rich movement, aim, and interaction evidence before widening replay gates.",
+      measure: `${rich} rich · ${basic} basic · ${weak} weak`,
+    };
+  }
+
+  if (traceContract?.status === "almost" || readinessStatus === "evidence-building") {
+    return {
+      status: "upgrade-basic",
+      title: "Upgrade Basic Trace",
+      target: traceContract?.target || "Turn the next basic trace into a rich trace with movement, aim, and interaction coverage.",
+      measure: `${basic} basic trace sample${basic === 1 ? "" : "s"} available`,
+    };
+  }
+
+  if (traceContract?.status === "needs-drill" || readinessStatus === "needs-drill") {
+    return {
+      status: "proof-drill",
+      title: "Run Trace Proof Drill",
+      target: traceContract?.target || "Bank one seeded run with movement, aim, and interaction evidence.",
+      measure: `${weak} weak trace sample${weak === 1 ? "" : "s"} found`,
+    };
+  }
+
+  return {
+    status: "baseline",
+    title: "Create Trace Baseline",
+    target: "Submit one seeded run with trace capture active so replay trust has a first sample.",
+    measure: "0 usable trace samples",
+  };
+}
+
 export function buildTrustRecommendations(summary) {
   const lines = [];
   if (summary.latestRejection?.payload?.reason) {
@@ -157,6 +219,9 @@ export function buildTrustRecommendations(summary) {
   if (summary.resimReadiness?.label) {
     lines.push(`${summary.resimReadiness.label}: ${summary.resimReadiness.detail}`);
   }
+  if (summary.nextBenchmark?.title) {
+    lines.push(`${summary.nextBenchmark.title}: ${summary.nextBenchmark.target}`);
+  }
   if (summary.rejectionCount === 0) {
     lines.push("No local rejection history recorded yet.");
   }
@@ -173,5 +238,5 @@ export function buildTrustRecommendations(summary) {
   if (summary.perkChoiceCount > 0 || summary.routeChoiceCount > 0) {
     lines.push(`Decision telemetry: ${summary.perkChoiceCount} perk picks · ${summary.routeChoiceCount} route picks`);
   }
-  return lines.slice(0, 5);
+  return lines.slice(0, 6);
 }

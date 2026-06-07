@@ -702,7 +702,7 @@ function persistStudioGameEvents(events) {
 
 function getPendingStudioGameEvents(limit = 25) {
   return loadStudioGameEvents()
-    .filter((event) => event.syncStatus !== "synced")
+    .filter((event) => event.syncStatus === "pending")
     .slice()
     .reverse()
     .slice(0, limit);

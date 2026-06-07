@@ -28,6 +28,17 @@ const ENEMY_EVASION_TIPS = {
   20: "Berserker elites move 3× fast — prioritize them before clearing the wave.",
 };
 
+const ENEMY_COUNTER_VERBS = {
+  3: "Flank",
+  4: "Sidestep",
+  6: "Strafe",
+  9: "Clear summons",
+  10: "Burst fire",
+  17: "Bait the charge",
+  19: "Punish freezes",
+  20: "Focus first",
+};
+
 function topRecentKiller(career, lookback = 5) {
   const arr = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy.slice(0, lookback) : [];
   if (!arr.length) return null;
@@ -56,6 +67,31 @@ function buildKilledBy(career, runSummary) {
   if (runSummary?.wave <= 6) return "Mid-early deaths often come from underusing grenades and dashes as tempo tools — they're on cooldown, not one-time use.";
   if (runSummary?.bossKilled === false && (runSummary?.wave || 0) >= 5) return "Boss waves end most runs at this stage — keep one weapon at full ammo specifically for the fight.";
   return "No repeating death source detected. You're progressing through varied threats — keep varying your counters.";
+}
+
+function buildEnemyLab(career, runSummary) {
+  const top = topRecentKiller(career);
+  if (!top) return null;
+
+  const tip = ENEMY_EVASION_TIPS[top.idx] || "Watch the telegraph, then change lanes before committing to a reload.";
+  const counterVerb = ENEMY_COUNTER_VERBS[top.idx] || "Study";
+  const pressure = top.count >= 4 ? "high" : top.count >= 3 ? "rising" : "watch";
+  const firstSentence = tip.split(/[.!?]/).map(part => part.trim()).find(Boolean) || tip;
+  const runContext = runSummary?.wave
+    ? `Wave ${runSummary.wave} is late enough to practice the counter before the next boss spike.`
+    : "Use the next run's first sighting as a counter-drill, not a panic check.";
+
+  return {
+    enemyType: top.idx,
+    name: top.name,
+    emoji: top.emoji,
+    deaths: top.count,
+    lookback: top.lookback,
+    pressure,
+    counterVerb,
+    drill: `${counterVerb}: ${firstSentence}.`,
+    nextRunCue: runContext,
+  };
 }
 
 function buildTryNext(meta, career) {
@@ -139,7 +175,7 @@ function buildPrecisionTip(runSummary) {
 
 /**
  * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[] }} ctx
- * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, brain: object }}
+ * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, enemyLab: object|null, brain: object }}
  */
 export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [] } = {}) {
   const brain = buildRunBrain({
@@ -173,6 +209,7 @@ export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHist
     weaponTip: buildWeaponTip(runSummary),
     precisionTip: buildPrecisionTip(runSummary),
     crossRunTip,
+    enemyLab: buildEnemyLab(career, runSummary),
     brain,
   };
 }

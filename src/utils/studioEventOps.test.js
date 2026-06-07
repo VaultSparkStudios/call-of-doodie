@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   buildReplayResimReadiness,
   buildTraceEvidenceContract,
+  buildTraceProofNextBenchmark,
   buildTrustRecommendations,
   summarizeStudioEvents,
 } from "./studioEventOps.js";
@@ -32,6 +33,7 @@ describe("studioEventOps", () => {
     expect(summary.latestTraceEvidence.level).toBe("rich");
     expect(summary.traceContract.status).toBe("complete");
     expect(summary.resimReadiness.status).toBe("pilot-ready");
+    expect(summary.nextBenchmark.status).toBe("bank-one-more");
   });
 
   test("builds operator-facing recommendation lines", () => {
@@ -41,6 +43,7 @@ describe("studioEventOps", () => {
     expect(lines.some((line) => line.includes("Replay evidence: rich"))).toBe(true);
     expect(lines.some((line) => line.includes("Replay Proof Ready"))).toBe(true);
     expect(lines.some((line) => line.includes("Resim pilot ready"))).toBe(true);
+    expect(lines.some((line) => line.includes("Bank One More Rich Trace"))).toBe(true);
   });
 
   test("turns weak trace evidence into a concrete proof drill", () => {
@@ -95,7 +98,27 @@ describe("studioEventOps", () => {
     const summary = summarizeStudioEvents([]);
     expect(summary.traceContract.status).toBe("no-sample");
     expect(summary.resimReadiness.status).toBe("no-samples");
+    expect(summary.nextBenchmark.status).toBe("baseline");
     expect(buildTrustRecommendations(summary).some((line) => line.includes("Trace Proof Baseline"))).toBe(true);
+  });
+
+  test("builds trace proof benchmark states from readiness", () => {
+    expect(buildTraceProofNextBenchmark({
+      traceContract: { status: "needs-drill", target: "record at least 6 trace events." },
+      resimReadiness: { status: "needs-drill" },
+      traceEvidenceCounts: { weak: 1 },
+    })).toMatchObject({ status: "proof-drill", title: "Run Trace Proof Drill" });
+
+    expect(buildTraceProofNextBenchmark({
+      traceContract: { status: "almost", target: "Add two movement samples." },
+      resimReadiness: { status: "evidence-building" },
+      traceEvidenceCounts: { basic: 2 },
+    })).toMatchObject({ status: "upgrade-basic", title: "Upgrade Basic Trace" });
+
+    expect(buildTraceProofNextBenchmark({
+      resimReadiness: { status: "ready" },
+      traceEvidenceCounts: { rich: 2 },
+    })).toMatchObject({ status: "ready", title: "Replay Trust Pilot" });
   });
 
 });

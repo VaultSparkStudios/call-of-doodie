@@ -16,6 +16,10 @@ function cleanUuid(value: unknown) {
   return /^[0-9a-f-]{36}$/i.test(text) ? text : null;
 }
 
+function cleanClientIdentity(value: unknown) {
+  return cleanText(value, 80);
+}
+
 function cleanIsoDate(value: unknown, fallback = new Date().toISOString()) {
   const text = typeof value === "string" ? value.trim() : "";
   if (!text) return fallback;
@@ -28,6 +32,11 @@ function cleanPayload(value: unknown) {
 }
 
 function normalizeEvent(raw: Record<string, unknown>, uid: string | null, clientUid: string | null) {
+  const rawClientUid = cleanClientIdentity(raw.clientUid);
+  const payload = cleanPayload(raw.payload);
+  const payloadWithIdentity = rawClientUid && !clientUid
+    ? { ...payload, clientUid: rawClientUid }
+    : payload;
   return {
     client_event_id: cleanText(raw.clientEventId, 80),
     uid,
@@ -39,7 +48,7 @@ function normalizeEvent(raw: Record<string, unknown>, uid: string | null, client
     category: cleanText(raw.category, 24, "system"),
     surface: cleanText(raw.surface, 40, "gameplay"),
     summary: cleanText(raw.summary, 140, ""),
-    payload: cleanPayload(raw.payload),
+    payload: payloadWithIdentity,
     event_created_at: cleanIsoDate(raw.createdAt),
   };
 }
@@ -68,7 +77,8 @@ Deno.serve(async (req) => {
     const { data: { user } } = await userClient.auth.getUser().catch(() => ({ data: { user: null } }));
 
     const body = await req.json();
-    const clientUid = cleanUuid(body?.clientUid);
+    const rawClientUid = cleanClientIdentity(body?.clientUid);
+    const clientUid = cleanUuid(rawClientUid);
     const uid = cleanUuid(user?.id);
     if (!uid && !clientUid) {
       return new Response(JSON.stringify({ error: "Missing caller identity." }), {
@@ -93,7 +103,7 @@ Deno.serve(async (req) => {
 
     const normalized = rawEvents
       .filter((event): event is Record<string, unknown> => !!event && typeof event === "object" && !Array.isArray(event))
-      .map((event) => normalizeEvent(event, uid, clientUid))
+      .map((event) => normalizeEvent({ ...event, clientUid: rawClientUid }, uid, clientUid))
       .filter((event) => event.client_event_id);
 
     if (normalized.length === 0) {

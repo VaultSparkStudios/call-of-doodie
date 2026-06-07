@@ -68,6 +68,7 @@ export default function HomeV2(props) {
     speedrunMode, onSetSpeedrunMode,
     gauntletMode, onSetGauntletMode,
     assistAvailable, onApplyAssist,
+    onInstallApp,
   } = props;
 
   const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode });
@@ -569,6 +570,17 @@ export default function HomeV2(props) {
           {assistAvailable && (
             <button style={{ ...quickBtn, borderColor: "rgba(68,255,136,0.5)", color: "#44FF88" }} onClick={onApplyAssist}>
               🛡️ ASSIST +50HP
+            </button>
+          )}
+          {onInstallApp && (
+            <button
+              style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
+              onClick={() => {
+                track("front_door_action", { actionId: "install_app", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id });
+                onInstallApp();
+              }}
+            >
+              📲 INSTALL APP
             </button>
           )}
           {inputDebugEnabled && (

@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-07",
+  "session": 82,
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 4,
+    "combinedPriority": 132.8,
+    "top3": [
+      "enemy-lab-run-coach",
+      "launch-readiness-evidence-receipts",
+      "protocol-drift-sentinel"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "enemy-lab-run-coach",
+      "tier": "transformative",
+      "axis": "gamification / engagement / immersion",
+      "effort": "1h",
+      "impact": 9,
+      "innovation": 8,
+      "priority": 41.6,
+      "title": "Enemy Lab Run Coach — turn repeated deaths into a named counter-drill",
+      "summary": "Call-Of-Doodie already tracks recent killer patterns and renders Run Coach advice, but the enemy lesson is still embedded as prose. A compact Enemy Lab profile converts frustration into mastery: killer identity, threat level, counter verb, and one next-run drill.",
+      "recipe": "Extend `buildRunCoach()` with an `enemyLab` object for repeated killers, render it as a compact DeathScreen coaching card, and add regression coverage for repeat-killer and no-pattern states."
+    },
+    {
+      "rank": 2,
+      "slug": "launch-readiness-evidence-receipts",
+      "tier": "high",
+      "axis": "user feedback loop",
+      "effort": "45m",
+      "impact": 8,
+      "innovation": 7,
+      "priority": 32.4,
+      "title": "Launch Readiness Evidence Receipts — make the human finish line auditable",
+      "summary": "The launch script correctly separates optional analytics from true owner gates, but it prints the remaining gates as plain text. The founder needs each gate to carry the exact evidence command or artifact that closes it, so manual QA stops becoming vague memory.",
+      "recipe": "Upgrade `scripts/launch-readiness.mjs --json` and text output with structured owner gates, evidence fields, and next commands while keeping analytics explicitly post-launch optional."
+    },
+    {
+      "rank": 3,
+      "slug": "protocol-drift-sentinel",
+      "tier": "high",
+      "axis": "speed / organization / efficiency",
+      "effort": "45m",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 27.7,
+      "title": "Protocol Drift Sentinel — report missing Studio OS helpers without breaking startup",
+      "summary": "`/start` found several protocol helpers missing locally (`credential-watch`, `ark`, `check-brief-staleness`, `build-skill-manifest`, `skill-trace-emit`). That is not player-facing, but it erodes the repeatable command loop this repo now relies on for launch hygiene.",
+      "recipe": "Add a repo-local `scripts/protocol-drift-check.mjs` that checks required/optional Studio OS helpers, emits stable JSON/text, and documents the missing helpers as warning-level drift rather than blockers."
+    },
+    {
+      "rank": 4,
+      "slug": "trace-proof-next-benchmark",
+      "tier": "high",
+      "axis": "security",
+      "effort": "30m",
+      "impact": 7,
+      "innovation": 7,
+      "priority": 31.1,
+      "title": "Trace Proof Next Benchmark — turn replay trust status into the next measurable target",
+      "summary": "The trust panel already classifies weak/basic/rich trace evidence and resim readiness, but the next benchmark is implicit. A named benchmark makes leaderboard trust feel like a visible ladder without falsely claiming deterministic resimulation is done.",
+      "recipe": "Extend Studio event trust summaries with a `nextBenchmark` object and include it in trust recommendations, with tests for no-sample, weak, basic, pilot-ready, and ready states."
+    }
+  ],
+  "innovationReserve": [
+    "enemy-lab-run-coach"
+  ],
+  "skipped": [
+    {
+      "slug": "deterministic-resim-runner",
+      "reason": "Still the major trust milestone, but a real runner is a multi-surface design pass. This audit ships the benchmark and coaching layer that makes the later runner measurable."
+    },
+    {
+      "slug": "playwright-pointer-360",
+      "reason": "Still valuable, but adding Playwright requires a package-trust/install pass and should not be mixed into this launch-readiness sprint."
+    },
+    {
+      "slug": "supabase-auth-obelisk-bridge",
+      "reason": "High monetization/account value, but current launch posture is free, local-first, and cost-neutral. Account work should trigger when paid tier or traffic justifies it."
+    }
+  ],
+  "executionLog": []
+}

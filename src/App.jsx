@@ -237,6 +237,7 @@ export default function CallOfDoodie() {
   const [perkPending, setPerkPending] = useState(false);
   const [perkOptions, setPerkOptions] = useState([]);
   const [bossWaveActive, setBossWaveActive] = useState(false);
+  const [bossWaveBanner, setBossWaveBanner] = useState(false);
   const [bossCutscene, setBossCutscene]     = useState(null); // { emoji, name, title, quote, wave }
   const [coins, setCoins]                   = useState(0);   // 💩 Doodie Coins per run
   const [autoAim, setAutoAim]             = useState(false);
@@ -328,6 +329,17 @@ export default function CallOfDoodie() {
     const handler = (e) => { e.preventDefault(); pwaPromptRef.current = e; setPwaPromptReady(true); };
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const promptInstallApp = useCallback(async () => {
+    if (!pwaPromptRef.current) return;
+    const promptEvent = pwaPromptRef.current;
+    promptEvent.prompt();
+    const result = await promptEvent.userChoice.catch(() => null);
+    if (!result || result.outcome === "accepted" || result.outcome === "dismissed") {
+      pwaPromptRef.current = null;
+      setPwaPromptReady(false);
+    }
   }, []);
 
   // ── Warn before accidental tab close / refresh during a run ───────────────
@@ -1651,7 +1663,7 @@ export default function CallOfDoodie() {
         difficulty: difficultyRef.current,
       }, _intent);
     } catch { experimentMatchedRef.current = null; }
-    setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false);
+    setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false); setBossWaveBanner(false);
     archetypeUnlocksRef.current = new Set();
     setUnlockedArchetypes([]);
     // Apply draft perk if one was chosen — defer so applyPerk runs after state resets
@@ -1839,6 +1851,12 @@ export default function CallOfDoodie() {
     if (!canvas) return;
     if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
     const ctx = ctxRef.current;
+    if (!gs.player) return;
+    gs.enemies = (gs.enemies || []).filter(Boolean);
+    gs.enemyBullets = (gs.enemyBullets || []).filter(Boolean);
+    gs.bullets = (gs.bullets || []).filter(Boolean);
+    gs.grenades = (gs.grenades || []).filter(Boolean);
+    gs.pickups = (gs.pickups || []).filter(Boolean);
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
     if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current || mutationPendingRef.current) {
@@ -2212,6 +2230,7 @@ export default function CallOfDoodie() {
       }
       gs.bossWave = false;
       setBossWaveActive(false);
+      setBossWaveBanner(false);
       gs.currentWave++; gs.enemiesThisWave = 0;
       setLiveAnnounce("Wave " + gs.currentWave + " started");
       // Dynamic Objective: at most one per non-boss wave, weighted by player weakness
@@ -2282,6 +2301,7 @@ export default function CallOfDoodie() {
       if (nextIsBoss) {
         gs.bossWave = true;
         setBossWaveActive(true);
+        setBossWaveBanner(true);
         soundBossWave();
         setMusicIntensity(true);
         gs.screenShake = 20;
@@ -2317,6 +2337,7 @@ export default function CallOfDoodie() {
           verb: _bossGuidance.verb,
         });
         setTimeout(() => { bossCutsceneRef.current = false; setBossCutscene(null); }, 3000);
+        setTimeout(() => { setBossWaveBanner(false); }, 4800);
         bossPlan.announceLines.forEach((line, index) => {
           addText(gs, W / 2, H / 2 - 70 + (index * 20), line.text, line.color, line.emphasize);
         });
@@ -2371,26 +2392,29 @@ export default function CallOfDoodie() {
         if (gs.waveStreak >= 3) addText(gs, W / 2, H / 2 + 55, "🔥 " + gs.waveStreak + "-WAVE STREAK!", "#FF8800", true);
         soundWaveClear();
 
-        // ── Wave incoming preview card (always shown) then chain mutation/shop ──
+        // ── Wave incoming preview card then chain mutation/shop. Boss waves use
+        // their dedicated cutscene; stacking this card can visually trap play.
         const _evtMap = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
-        waveAnnouncePendingRef.current = true;
-        const _fmtDescriptors = { FLANK: "pressure from the sides", PINCER: "split attack", SURGE: "overwhelming force" };
-        setWaveAnnounce({
-          waveNum: gs.currentWave,
-          isBoss: nextIsBoss,
-          eventLabel: gs.waveEvent ? (_evtMap[gs.waveEvent] || gs.waveEvent) : null,
-          estimatedCount: nextIsBoss ? (gs.currentWave >= 15 ? 2 : 1) : gs.maxEnemiesThisWave,
-          tempoLabel: !nextIsBoss ? gs.waveDirector?.label : null,
-          threatHint: !nextIsBoss ? gs.waveDirector?.hint : null,
-          telemetryBand: !nextIsBoss ? gs.waveTelemetryBand : null,
-          formationHint: !nextIsBoss && gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
-        });
+        if (!nextIsBoss) {
+          waveAnnouncePendingRef.current = true;
+          const _fmtDescriptors = { FLANK: "pressure from the sides", PINCER: "split attack", SURGE: "overwhelming force" };
+          setWaveAnnounce({
+            waveNum: gs.currentWave,
+            isBoss: false,
+            eventLabel: gs.waveEvent ? (_evtMap[gs.waveEvent] || gs.waveEvent) : null,
+            estimatedCount: gs.maxEnemiesThisWave,
+            tempoLabel: gs.waveDirector?.label,
+            threatHint: gs.waveDirector?.hint,
+            telemetryBand: gs.waveTelemetryBand,
+            formationHint: gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
+          });
+        }
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
         const _showMutation = !nextIsBoss && !gs.gauntletMode && !gs.bossRushMode
           && !gs.scoreAttackMode && !gs.dailyChallengeMode && gs.currentWave % 5 === 0;
         const _showShop = !gs.gauntletMode && (gs.currentWave < 5 || gs.currentWave % 2 === 0);
-        postMutationShopRef.current = _showShop;
-        setTimeout(() => {
+        postMutationShopRef.current = !nextIsBoss && _showShop;
+        if (!nextIsBoss) setTimeout(() => {
           waveAnnouncePendingRef.current = false;
           setWaveAnnounce(null);
           const _pool = _showMutation
@@ -3868,6 +3892,7 @@ export default function CallOfDoodie() {
           onSetGauntletMode={v => { setGauntletMode(v); gauntletRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
           assistAvailable={assistAvailable}
           onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
+          onInstallApp={pwaPromptReady ? promptInstallApp : null}
         />
       </Suspense>
     );
@@ -3900,7 +3925,7 @@ export default function CallOfDoodie() {
           playerSkin={gsRef.current?.playerSkin || ""}
           vsScore={challengeVsScore} vsName={challengeVsName}
           ghostKey={gsRef.current?._ghostKey}
-          onInstallApp={pwaPromptReady ? async () => { if (!pwaPromptRef.current) return; pwaPromptRef.current.prompt(); const r = await pwaPromptRef.current.userChoice; if (r.outcome === "accepted") { pwaPromptRef.current = null; setPwaPromptReady(false); } } : null}
+          onInstallApp={pwaPromptReady ? promptInstallApp : null}
           experimentMatched={experimentMatchedRef.current}
         />
       </Suspense>
@@ -4178,7 +4203,7 @@ export default function CallOfDoodie() {
       )}
 
       {/* Boss wave banner — shown during the fight (after cutscene) */}
-      {bossWaveActive && !bossCutscene && !paused && !perkPending && (
+      {bossWaveActive && bossWaveBanner && !bossCutscene && !paused && !perkPending && (
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none", textAlign: "center", animation: "bossIn 0.5s ease-out forwards" }}>
           <div style={{ fontSize: "clamp(28px,6vw,48px)", fontWeight: 900, color: "#FF0000", textShadow: "0 0 20px #FF0000,0 0 40px #FF000088", letterSpacing: 4, fontFamily: "'Courier New',monospace" }}>
             ⚠ BOSS WAVE ⚠

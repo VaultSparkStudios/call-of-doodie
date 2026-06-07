@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-05 (Session 81 closeout) -->
+<!-- generated-at: 2026-06-07 (Session 82 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S81 ═════════════════════╗
-║  Date: 2026-06-05  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S82 ═════════════════════╗
+║  Date: 2026-06-07  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
+║  ✓ chore(protocol): closeout skill profile shims                 ║
 ║  ✓ chore(session-80): repair protocol closeout path              ║
 ║  ✓ closeout-board-session-79                                     ║
 ║  ✓ session-79-closeout-writeback                                 ║
 ║  ✓ feat session 79 revenge drill and controller labels           ║
-║  ✓ closeout(session-78): five-innovation depth sprint write-bac  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -34,21 +34,21 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
+║  ✓ agent memory (~/.codex|.claude)                               ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 18 files  ·  M:11 A:7 D:0 ?:0                          ║
+║  Changes: 28 files  ·  M:25 A:0 D:0 ?:3                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         408/408                                          ║
-║  IGNIS:         3d ago                                           ║
+║  Tests:         412/412                                          ║
+║  IGNIS:         5d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

@@ -1,94 +1,10 @@
-# Implement Plan — Session 81 (2026-06-05)
+# Implement Plan — 2026-06-07 Audit
 
-Source audit: `docs/AUDIT_2026-06-05_3.md` · 1 item · Combined Priority 28.4
+| Order | Slug | Effort | Priority | Surface |
+|---:|---|---:|---:|---|
+| 1 | enemy-lab-run-coach | 1h | 41.6 | `runCoach.js`, `DeathScreen.jsx`, focused tests |
+| 2 | trace-proof-next-benchmark | 30m | 31.1 | `studioEventOps.js`, focused tests |
+| 3 | launch-readiness-evidence-receipts | 45m | 32.4 | `launch-readiness.mjs` |
+| 4 | protocol-drift-sentinel | 45m | 27.7 | new `protocol-drift-check.mjs`, `package.json` script |
 
-## Optimal Execution Order (Wave Plan)
-
-| Wave | Slug | Effort | Priority | Axis | Key files |
-|---|---|---|---|---|---|
-| 1 | skill-profile-personalization-shim | 30m | 28.4 | speed / organization / efficiency | scripts/lib/skill-profile.mjs, scripts/set-active-skill.mjs, scripts/lib/medium-quality-gates.mjs, scripts/lib/sil-rubrics.mjs |
-
-## Execution Result
-
-- Shipped: 1
-- Deferred: 0
-- Blocked: 0
-- Validation: skill-profile and active-skill entry points pass, Session 81 startup preflight renders and validates, Codex plan mode is `not_required`, SIL invariant is clean.
-
----
-
-# Previous plan (S80 — 2026-06-05)
-
-Source audit: `docs/AUDIT_2026-06-05_2.md` · 4 items · Combined Priority 124.6
-
-## Optimal Execution Order (Wave Plan)
-
-| Wave | Slug | Effort | Priority | Axis | Key files |
-|---|---|---|---|---|---|
-| 1 | startup-helper-compatibility | 1h | 26.8 | speed / organization / efficiency | scripts/lib/*.mjs |
-| 2 | codex-plan-mode-exemption | 30m | 26.7 | speed / organization / efficiency | scripts/verify-plan-mode.mjs |
-| 3 | sil-invariant-repair | 15m | 30.9 | observability / honesty | context/PROJECT_STATUS.json, scripts/lib/write-project-status.mjs |
-| 4 | protocol-script-smoke | 45m | 22.2 | security / process quality | scripts/*.mjs, docs/STARTUP_BRIEF.md |
-
-## Execution Result
-
-- Shipped: 4
-- Deferred: 0
-- Blocked: 0
-- Validation: protocol smokes pass, `npm run lint` clean, `npm test` 408/408 across 46 files, `npm run build` passing.
-
----
-
-# Previous plan (S79 — 2026-06-05)
-
-Source audit: `docs/AUDIT_2026-06-05.md` · 3 items · Combined Priority 89.7
-
-## Optimal Execution Order (Wave Plan)
-
-| Wave | Slug | Effort | Priority | Axis | Key files |
-|---|---|---|---|---|---|
-| 1 | runbrain-experiment-guardrail | 30m | 32.0 | AI | runBrain.js, runBrain.test.js |
-| 2 | remembered-controller-glyphs | 1h | 26.0 | UX | gamepad.js, TutorialOverlay.jsx, MenuPanels.jsx, PauseMenu.jsx, HomeV2.jsx |
-| 3 | recent-killer-revenge-drill | 1h | 31.7 | gamification | menuGuidance.js, menuGuidance.test.js |
-
-## Execution Result
-
-- Shipped: 3
-- Deferred: 0
-- Blocked: 0
-- Validation: focused helper tests 29/29, full `npm test` 408/408 across 46 files, `npm run lint` clean, `npm run build` passing.
-
----
-
-# Previous plan (S78 — 2026-06-03)
-
-Source audit: `docs/AUDIT_2026-06-03_2.md` · 5 items · Combined Priority 170.5
-
-## Optimal Execution Order (Wave Plan)
-
-| Wave | Slug | Effort | Priority | Axis | Key files |
-|---|---|---|---|---|---|
-| 1 | formation-flavor-wave-preview | 30m | 27.3 | gamification | waveDirector.js, drawGame.js |
-| 2 | aim-flow-state-ring | 2h | 32.0 | gamification | drawGame.js |
-| 3 | mutation-difficulty-compound-brief | 1h | 31.0 | AI | runBrain.js, HomeV2.jsx |
-| 4 | experiment-followthrough-loop | 2h | 39.8 | AI | storage.js, runBrain.js, App.jsx, HUD.jsx, DeathScreen.jsx |
-| 5 | nemesis-boss-mechanic | 2h | 40.5 | gamification | storage.js, App.jsx, drawGame.js, constants.js |
-
----
-
-# Previous plan (S77 — 2026-06-03)
-
-Source audit: `docs/AUDIT_2026-06-03.md`
-
-## Sequenced Order
-
-1. `pointer-sweep-evidence-report` — foundational pure aim evidence before UI status.
-2. `durable-input-calibration-memory` — uses the sweep result to save and surface local calibration.
-3. `controller-profile-memory` — adjacent input QA work using the same HomeV2/debug surfaces.
-
-## Execution Result
-
-- Shipped: 3
-- Deferred: 0
-- Blocked: 0
-- Validation: focused input/control tests 27/27, `npm run lint` clean, `npm test` 383/383 across 46 files, `npm run build` passing.
+Sequencing note: player-facing coaching ships first because it compounds the game loop directly. Trust benchmark and launch/protocol scripts follow because they share validation surfaces and can be verified without touching the live backend.

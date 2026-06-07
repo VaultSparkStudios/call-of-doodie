@@ -10,19 +10,21 @@ function shuffle(list) {
 }
 
 export function getShopOptions(gs, wpnIdx) {
-  const p = gs.player;
+  const safeGs = gs || {};
+  const p = safeGs.player || { health: 100, maxHealth: 100 };
+  const safeWeaponIdx = WEAPONS[wpnIdx] ? wpnIdx : 0;
   const unblessedIdx = WEAPONS
     .map((_, i) => i)
-    .filter(i => i !== wpnIdx && !(gs.weaponMods?.[i]?.blessed) && !(gs.weaponMods?.[i]?.cursed));
+    .filter(i => i !== safeWeaponIdx && !(safeGs.weaponMods?.[i]?.blessed) && !(safeGs.weaponMods?.[i]?.cursed));
   const blessTarget = unblessedIdx.length > 0
     ? unblessedIdx[Math.floor(Math.random() * unblessedIdx.length)]
-    : wpnIdx;
-  const alreadyCursed = !!(gs.weaponMods?.[wpnIdx]?.cursed);
+    : safeWeaponIdx;
+  const alreadyCursed = !!(safeGs.weaponMods?.[safeWeaponIdx]?.cursed);
 
   return shuffle([
     { id: "health", emoji: "💊", name: "Field Medkit", desc: "Restore 50 HP", available: p.health < p.maxHealth },
     { id: "ammo", emoji: "📦", name: "Resupply Crate", desc: "Fully refill all weapons", available: true },
-    { id: "upgrade", emoji: "🔧", name: "Field Upgrade", desc: `Upgrade ${WEAPONS[wpnIdx].emoji} (+1 ⭐)`, available: (gs.weaponUpgrades?.[wpnIdx] || 0) < 3 },
+    { id: "upgrade", emoji: "🔧", name: "Field Upgrade", desc: `Upgrade ${WEAPONS[safeWeaponIdx].emoji} (+1 ⭐)`, available: (safeGs.weaponUpgrades?.[safeWeaponIdx] || 0) < 3 },
     { id: "speed", emoji: "👟", name: "Combat Stim", desc: "+10% move speed (permanent)", available: true },
     { id: "maxhp", emoji: "❤️", name: "HP Canister", desc: "+25 max HP (permanent)", available: true },
     { id: "damage", emoji: "🔥", name: "Damage Boost", desc: "+15% bullet damage", available: true },
@@ -31,20 +33,20 @@ export function getShopOptions(gs, wpnIdx) {
       emoji: "✨",
       name: `Bless ${WEAPONS[blessTarget].emoji}`,
       desc: `${WEAPONS[blessTarget].name}: +30% dmg, 20% faster fire (permanent)`,
-      available: gs.currentWave >= 3 && !(gs.weaponMods?.[blessTarget]?.blessed),
+      available: safeGs.currentWave >= 3 && !(safeGs.weaponMods?.[blessTarget]?.blessed),
     },
     {
-      id: `curse_${wpnIdx}`,
+      id: `curse_${safeWeaponIdx}`,
       emoji: "☠️",
       name: "Devil's Pact",
-      desc: `Curse ${WEAPONS[wpnIdx].emoji} (−30% dmg) → gain +50 max HP`,
-      available: gs.currentWave >= 4 && !alreadyCursed,
+      desc: `Curse ${WEAPONS[safeWeaponIdx].emoji} (-30% damage) -> gain +50 max health`,
+      available: safeGs.currentWave >= 4 && !alreadyCursed,
     },
   ].filter(option => option.available)).slice(0, 3);
 }
 
 export function getCoinShopOptions(gs) {
-  const p = gs.player;
+  const p = gs?.player || { health: 100, maxHealth: 100 };
   return shuffle([
     { id: "cs_fullhp", emoji: "💖", name: "Full Restore", desc: "Restore to full HP", cost: 20, available: p.health < p.maxHealth },
     { id: "cs_nuke", emoji: "💣", name: "Pocket Nuke", desc: "Nuke all enemies on screen", cost: 28, available: true },

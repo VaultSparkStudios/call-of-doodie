@@ -48,12 +48,30 @@ describe("runCoach", () => {
     // Type 4 is Karen — should include the word "charge" from the tip
     expect(r.killedBy.toLowerCase()).toContain("charge");
   });
+  it("builds an enemy lab counter-drill for repeated killers", () => {
+    const career = { recentDeathsByEnemy: [{ t: "4", ts: 1 }, { t: "4", ts: 2 }, { t: "4", ts: 3 }, { t: "4", ts: 4 }] };
+    const r = buildRunCoach({ career, runSummary: { wave: 12 } });
+    expect(r.enemyLab).toMatchObject({
+      deaths: 4,
+      lookback: 4,
+      pressure: "high",
+      counterVerb: "Sidestep",
+    });
+    expect(r.enemyLab.drill).toContain("Sidestep");
+    expect(r.enemyLab.nextRunCue).toContain("Wave 12");
+  });
+  it("keeps enemy lab empty when no repeated killer exists", () => {
+    const career = { recentDeathsByEnemy: [{ t: "4", ts: 1 }, { t: "5", ts: 2 }] };
+    const r = buildRunCoach({ career });
+    expect(r.enemyLab).toBeNull();
+  });
   it("returns four fields including weaponTip on every call", () => {
     const r = buildRunCoach({});
     expect("killedBy" in r).toBe(true);
     expect("tryNext" in r).toBe(true);
     expect("working" in r).toBe(true);
     expect("weaponTip" in r).toBe(true);
+    expect("enemyLab" in r).toBe(true);
   });
   it("coaches precision mastery when the run had a high precision chain", () => {
     const r = buildRunCoach({ runSummary: { bestPrecisionStreak: 6, kills: 30, crits: 8 } });

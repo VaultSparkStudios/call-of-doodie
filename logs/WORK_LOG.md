@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-06-07 (Session 82)
+
+- Ran `/start`, created fresh `docs/AUDIT_2026-06-07.md` and `.json`, and began the `/implement` pass.
+- Pivoted to founder-reported runtime defects from real play:
+  - Hardened `public/sw.js` so service-worker cache writes no longer clone already-used responses and failed fetches return controlled offline fallbacks.
+  - Added explicit Install App actions wired to the deferred `beforeinstallprompt` event.
+  - Fixed the forced next-round boss-wave flow so the boss title is transient and does not trap the game before combat.
+  - Guarded shop option builders, draw loops, and game-loop transient arrays against missing/null state that caused `reading 'health'` and null enemy failures.
+  - Repaired local Studio event retry behavior and normalized `sync-studio-events` non-UUID client identity handling.
+- Live deploy note: `supabase functions deploy sync-studio-events --project-ref fjnpzjjyhnpmunfoycrp` was attempted but failed without `SUPABASE_ACCESS_TOKEN`; `node scripts/check-secrets.mjs --for supabase` reports `supabase MISSING`.
+- Validation: focused tests 32/32; full `npm test` 412/412 across 46 files; `npm run lint` clean; `npm run build` passing.
+
 ## 2026-06-05 (Session 81)
 
 - Continued the durable founder goal through `/start -> /audit -> /implement -> /closeout` after verifying the Session 80 protocol repair.

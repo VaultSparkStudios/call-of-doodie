@@ -34,6 +34,13 @@ describe("shopOptions", () => {
     expect(options.some(o => o.id === "health")).toBe(false);
   });
 
+  test("shop options tolerate missing transient player state", () => {
+    expect(() => getShopOptions({}, 999)).not.toThrow();
+    expect(() => getCoinShopOptions({})).not.toThrow();
+    expect(getShopOptions({}, 999).length).toBeGreaterThan(0);
+    expect(getCoinShopOptions({}).length).toBeGreaterThan(0);
+  });
+
   test("field upgrade not offered when weapon is already at max level (3)", () => {
     const gs = makeGs({ weaponUpgrades: [3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] });
     const options = getShopOptions(gs, 0);

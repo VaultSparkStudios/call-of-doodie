@@ -1,6 +1,20 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-07 - Session 82
+
+- Service worker truth — `public/sw.js` now caches only safe cloned responses, handles failed network fetches explicitly, and avoids turning missing assets into the app shell.
+- Boss-wave truth — forced next-round boss cards no longer set the generic wave announcement/shop delay path; the boss-wave title is a timed banner and clears independently from the fight state.
+- Runtime-state truth — shop option helpers, draw loops, and game-loop transient arrays tolerate missing/null state instead of assuming every enemy/player object is present.
+- Studio event truth — local storage retries only pending events, and the Supabase edge function keeps non-UUID browser client ids in payload rather than writing invalid UUIDs to `client_uid`.
+- Deployment truth — the Supabase edge-function code is fixed locally but not live; deploy failed without `SUPABASE_ACCESS_TOKEN`, and `node scripts/check-secrets.mjs --for supabase` reports `supabase MISSING`.
+- Cloudflare beacon truth — no repo-owned beacon script was found; the Subresource Integrity error is consistent with Cloudflare-injected Web Analytics configuration outside this repo.
+- Validation truth — focused tests passed 32/32, full `npm test` passed 412/412 across 46 files, `npm run lint` passed, and `npm run build` passed.
+
+Overall status: green locally; live Supabase deploy pending credential
+Last reviewed: 2026-06-07
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-06-05 - Session 81
 
 - Skill-entry truth — the public repo now has `scripts/lib/skill-profile.mjs`, so `/start`, `/audit`, `/implement`, and `/closeout` can resolve the Call-Of-Doodie game overlay before doing work.

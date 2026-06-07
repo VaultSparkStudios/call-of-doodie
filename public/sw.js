@@ -17,6 +17,19 @@ const SHELL_ASSETS = [
   `${BASE}og-image.svg`,
 ];
 
+function cacheResponse(cache, request, response) {
+  if (!response || !response.ok || response.type === "opaque" || response.bodyUsed) return Promise.resolve();
+  try {
+    return cache.put(request, response.clone()).catch(() => {});
+  } catch (_) {
+    return Promise.resolve();
+  }
+}
+
+function safeFetch(request) {
+  return fetch(request).catch(() => null);
+}
+
 // ── Install: pre-cache shell ──────────────────────────────────────────────────
 self.addEventListener("install", e => {
   e.waitUntil(
@@ -50,9 +63,10 @@ self.addEventListener("fetch", e => {
   // Navigation → network-first, offline fallback
   if (request.mode === "navigate") {
     e.respondWith(
-      fetch(request)
+      safeFetch(request)
         .then(res => {
-          if (res.ok) caches.open(CACHE_NAME).then(c => c.put(request, res.clone()));
+          if (!res) return caches.match(BASE + "index.html");
+          caches.open(CACHE_NAME).then(c => cacheResponse(c, request, res));
           return res;
         })
         .catch(() => caches.match(BASE + "index.html"))
@@ -65,8 +79,9 @@ self.addEventListener("fetch", e => {
     e.respondWith(
       caches.match(request).then(cached => {
         if (cached) return cached;
-        return fetch(request).then(res => {
-          if (res.ok) { const clone = res.clone(); caches.open(CACHE_NAME).then(c => c.put(request, clone)); }
+        return safeFetch(request).then(res => {
+          if (!res) return new Response("", { status: 503, statusText: "Offline" });
+          caches.open(CACHE_NAME).then(c => cacheResponse(c, request, res));
           return res;
         });
       })
@@ -79,8 +94,9 @@ self.addEventListener("fetch", e => {
     e.respondWith(
       caches.open(CACHE_NAME).then(cache =>
         cache.match(request).then(cached => {
-          const networkFetch = fetch(request).then(res => {
-            if (res.ok) cache.put(request, res.clone());
+          const networkFetch = safeFetch(request).then(res => {
+            if (!res) return cached || caches.match(BASE + "index.html");
+            cacheResponse(cache, request, res);
             return res;
           });
           return cached || networkFetch;

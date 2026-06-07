@@ -443,7 +443,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   // Enemies
-  gs.enemies.forEach(e => {
+  (gs.enemies || []).filter(Boolean).forEach(e => {
     // Fog of War: skip rendering enemies beyond 195px (they become visible at ~160px)
     if (gs.fogOfWar && !e.isBossEnemy && Math.hypot(e.x - p.x, e.y - p.y) > 195) return;
     ctx.save(); ctx.translate(e.x, e.y);
@@ -1073,7 +1073,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.strokeStyle = gs.bossWave ? "#F00" : "#0F0"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.stroke();
   ctx.globalAlpha = 0.7;
   ctx.fillStyle = "#0F0"; ctx.beginPath(); ctx.arc(rx, ry, 2, 0, Math.PI * 2); ctx.fill();
-  gs.enemies.forEach(e => {
+  (gs.enemies || []).filter(Boolean).forEach(e => {
     const edx = (e.x - p.x) / (W * 0.6) * rs, edy = (e.y - p.y) / (H * 0.6) * rs;
     if (Math.hypot(edx, edy) < rs - 2) {
       ctx.fillStyle = e.isBossEnemy ? "#FF00FF" : e.typeIndex >= 4 ? "#F00" : e.ranged ? "#F80" : "#FF0";

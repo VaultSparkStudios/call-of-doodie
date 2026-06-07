@@ -537,6 +537,22 @@ export default function DeathScreen({
               <span style={{ color: "#FF9900", fontWeight: 700 }}>Pattern:</span> {runCoach.crossRunTip}
             </div>
           )}
+          {runCoach.enemyLab && (
+            <div style={{ marginTop: 7, padding: "8px 9px", borderRadius: 6, border: "1px solid rgba(255,107,53,0.28)", background: "rgba(255,107,53,0.07)" }}>
+              <div style={{ fontSize: 9, color: "#FFB38A", letterSpacing: 2, fontWeight: 900, marginBottom: 4 }}>
+                ENEMY LAB · {runCoach.enemyLab.pressure.toUpperCase()}
+              </div>
+              <div style={{ fontSize: 11, color: "#FFE1D5", lineHeight: 1.45 }}>
+                <strong>{runCoach.enemyLab.emoji} {runCoach.enemyLab.name}</strong> ended {runCoach.enemyLab.deaths} of your last {runCoach.enemyLab.lookback} runs.
+              </div>
+              <div style={{ fontSize: 10, color: "#FFD0A6", lineHeight: 1.45, marginTop: 3 }}>
+                {runCoach.enemyLab.drill}
+              </div>
+              <div style={{ fontSize: 10, color: "#BCA08E", lineHeight: 1.45, marginTop: 3 }}>
+                {runCoach.enemyLab.nextRunCue}
+              </div>
+            </div>
+          )}
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>
             <span style={{ color: "#9CB8FF", fontWeight: 700 }}>Run Brain:</span> {runCoach.brain.nextExperiment}
             {experimentMatched && (
