@@ -7,9 +7,12 @@
 - Boss-wave truth — forced next-round boss cards no longer set the generic wave announcement/shop delay path; the boss-wave title is a timed banner and clears independently from the fight state.
 - Runtime-state truth — shop option helpers, draw loops, and game-loop transient arrays tolerate missing/null state instead of assuming every enemy/player object is present.
 - Studio event truth — local storage retries only pending events, and the Supabase edge function keeps non-UUID browser client ids in payload rather than writing invalid UUIDs to `client_uid`.
+- Audit execution truth — `docs/AUDIT_2026-06-07.md` / `.json` now mark all four items shipped; Enemy Lab and trace-proof benchmark were verified in existing player/trust code, while launch-readiness receipts and protocol drift sentinel were implemented this pass.
+- Launch readiness truth — `scripts/launch-readiness.mjs --json` exposes structured owner-gate evidence receipts and reports `requiredReady=true`; missing PostHog/Sentry keys remain optional post-launch analytics, not a launch asset blocker.
+- Protocol drift truth — `npm run protocol:drift -- --json` reports `warning` with `missingRequired=0`; missing `credential-watch`, `ark`, `check-brief-staleness`, `build-skill-manifest`, and `skill-trace-emit` are warning-level optional helper drift in this public repo.
 - Deployment truth — the Supabase edge-function code is fixed locally but not live; deploy failed without `SUPABASE_ACCESS_TOKEN`, and `node scripts/check-secrets.mjs --for supabase` reports `supabase MISSING`.
 - Cloudflare beacon truth — no repo-owned beacon script was found; the Subresource Integrity error is consistent with Cloudflare-injected Web Analytics configuration outside this repo.
-- Validation truth — focused tests passed 32/32, full `npm test` passed 412/412 across 46 files, `npm run lint` passed, and `npm run build` passed.
+- Validation truth — focused Run Coach/trust tests passed 20/20, full `npm test` passed 412/412 across 46 files, `npm run lint` passed, and `npm run build` passed.
 
 Overall status: green locally; live Supabase deploy pending credential
 Last reviewed: 2026-06-07

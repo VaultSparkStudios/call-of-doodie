@@ -85,5 +85,46 @@
       "reason": "High monetization/account value, but current launch posture is free, local-first, and cost-neutral. Account work should trigger when paid tier or traffic justifies it."
     }
   ],
-  "executionLog": []
+  "executionLog": [
+    {
+      "slug": "enemy-lab-run-coach",
+      "status": "SHIPPED",
+      "date": "2026-06-07",
+      "evidence": [
+        "src/utils/runCoach.js returns an enemyLab profile for repeated killers with pressure, counter verb, drill, and next-run cue",
+        "src/components/DeathScreen.jsx renders the Enemy Lab card inside the AI Run Coach panel",
+        "src/utils/runCoach.test.js covers repeat-killer and no-pattern states"
+      ]
+    },
+    {
+      "slug": "trace-proof-next-benchmark",
+      "status": "SHIPPED",
+      "date": "2026-06-07",
+      "evidence": [
+        "src/utils/studioEventOps.js builds nextBenchmark from trace contract, resim readiness, and trace evidence counts",
+        "buildTrustRecommendations() includes the named next benchmark target",
+        "src/utils/studioEventOps.test.js covers baseline, proof-drill, upgrade-basic, bank-one-more, and ready states"
+      ]
+    },
+    {
+      "slug": "launch-readiness-evidence-receipts",
+      "status": "SHIPPED",
+      "date": "2026-06-07",
+      "evidence": [
+        "scripts/launch-readiness.mjs --json emits structured ownerOnlyGates and evidenceReceipts with evidence, nextCommand, closesWhen, and optional flags",
+        "text output prints each owner gate with evidence and next command while preserving analytics as post-launch optional",
+        "node scripts/launch-readiness.mjs --json returned ready_missing_optional_analytics with requiredReady=true"
+      ]
+    },
+    {
+      "slug": "protocol-drift-sentinel",
+      "status": "SHIPPED",
+      "date": "2026-06-07",
+      "evidence": [
+        "scripts/protocol-drift-check.mjs checks required and optional Studio OS helpers with stable JSON/text output",
+        "package.json exposes npm run protocol:drift",
+        "node scripts/protocol-drift-check.mjs --json returned warning with missingRequired=0 and missingOptional=5"
+      ]
+    }
+  ]
 }

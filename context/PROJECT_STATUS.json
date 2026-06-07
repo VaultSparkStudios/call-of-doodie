@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 82 completed a fresh /start -> /audit -> /implement pass, then closed founder-reported runtime defects: service worker clone/fetch failures, install prompt dead-end, boss-wave title soft-lock, undefined health crash guards, and local sync-studio-events UUID handling.",
-  "nextMilestone": "Deploy the sync-studio-events edge-function repair once Supabase credentials are available, then return to launch-readiness evidence receipts, protocol drift sentinel, and trace-proof benchmark follow-through.",
+  "currentFocus": "Session 82 completed the requested /start -> /audit -> /implement loop, closed founder-reported runtime defects, and finished every docs/AUDIT_2026-06-07 item: Enemy Lab Run Coach, trace-proof benchmark, launch-readiness evidence receipts, and protocol drift sentinel.",
+  "nextMilestone": "Deploy the sync-studio-events edge-function repair once Supabase credentials are available, then continue launch/backlog work with Cloudflare Web Analytics config, Playwright pointer 360, enemy-annotated death feedback, or deterministic replay resim.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -45,7 +45,7 @@
   "silSession": 82,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 1,
+  "silVelocity": 10,
   "silDebt": "decreasing",
   "silLastSession": "2026-06-07",
   "currentSession": 82,

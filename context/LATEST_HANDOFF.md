@@ -2,13 +2,15 @@
 
 ## Where We Left Off - Session 82 (2026-06-07)
 
-Ran `/start`, created fresh `docs/AUDIT_2026-06-07.md` / `.json`, began `/implement`, then pivoted to founder-reported console and gameplay bugs from a live play attempt. The urgent repair closed the service worker consumed-response/offline fetch failures, added an explicit Install App action for the deferred browser install prompt, hardened shop/draw/game-loop paths against missing transient state, and fixed the forced next-round boss-wave card path so the boss title is a timed banner instead of a sticky blocker.
+Ran `/start`, created fresh `docs/AUDIT_2026-06-07.md` / `.json`, began `/implement`, pivoted to founder-reported console and gameplay bugs from a live play attempt, then returned to finish the full audit queue. The urgent repair closed the service worker consumed-response/offline fetch failures, added an explicit Install App action for the deferred browser install prompt, hardened shop/draw/game-loop paths against missing transient state, and fixed the forced next-round boss-wave card path so the boss title is a timed banner instead of a sticky blocker.
 
 The Studio event mirror is locally repaired too: failed events no longer retry forever, and `sync-studio-events` keeps non-UUID client ids in payload instead of writing them into the UUID `client_uid` column. Live deploy was attempted with `supabase functions deploy sync-studio-events --project-ref fjnpzjjyhnpmunfoycrp`; it failed because no access token was available, and `node scripts/check-secrets.mjs --for supabase` reports `supabase MISSING`.
 
-Validation: focused runtime/audit tests 32/32, full `npm test` 412/412 across 46 files, `npm run lint` clean, and `npm run build` passing. Remaining live-only issue: the Cloudflare beacon Subresource Integrity failure appears to be Cloudflare-injected Web Analytics with a stale/wrong integrity hash; no matching beacon script exists in repo source.
+Audit lane finished: Enemy Lab Run Coach renders a repeat-killer counter-drill on DeathScreen; trace-proof next benchmark appears in trust recommendations; launch readiness emits owner-gate evidence receipts; and `npm run protocol:drift` reports optional Studio OS helper drift while required helpers are present. `docs/AUDIT_2026-06-07.md` / `.json` now record all four items as shipped.
 
-Next priorities: deploy the Supabase edge-function fix once the Supabase token is available; fix Cloudflare Web Analytics injection/config in Cloudflare if the beacon error persists; then return to the product audit lane, especially launch-readiness evidence receipts, protocol drift sentinel, and trace-proof benchmark follow-through.
+Validation: focused Run Coach/trust tests 20/20, full `npm test` 412/412 across 46 files, `npm run lint` clean, `npm run build` passing, launch readiness JSON verified with `requiredReady=true`, and protocol drift JSON verified with `missingRequired=0`. Remaining live-only issue: the Cloudflare beacon Subresource Integrity failure appears to be Cloudflare-injected Web Analytics with a stale/wrong integrity hash; no matching beacon script exists in repo source.
+
+Next priorities: deploy the Supabase edge-function fix once the Supabase token is available; fix Cloudflare Web Analytics injection/config in Cloudflare if the beacon error persists; then continue the product backlog with Playwright pointer 360, enemy-annotated death feedback, or the deterministic replay resim runner.
 
 ## Where We Left Off - Session 81 (2026-06-05)
 

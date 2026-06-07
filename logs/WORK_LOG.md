@@ -11,6 +11,12 @@
   - Repaired local Studio event retry behavior and normalized `sync-studio-events` non-UUID client identity handling.
 - Live deploy note: `supabase functions deploy sync-studio-events --project-ref fjnpzjjyhnpmunfoycrp` was attempted but failed without `SUPABASE_ACCESS_TOKEN`; `node scripts/check-secrets.mjs --for supabase` reports `supabase MISSING`.
 - Validation: focused tests 32/32; full `npm test` 412/412 across 46 files; `npm run lint` clean; `npm run build` passing.
+- Returned to the `/implement` audit queue and closed all four `docs/AUDIT_2026-06-07.md` items:
+  - Verified the already-landed Enemy Lab Run Coach path: `buildRunCoach()` returns `enemyLab`, DeathScreen renders it, and runCoach tests cover repeat-killer/no-pattern states.
+  - Verified the already-landed trace-proof benchmark path: `summarizeStudioEvents()` returns `nextBenchmark`, trust recommendations include it, and studioEventOps tests cover every benchmark state.
+  - Upgraded `scripts/launch-readiness.mjs` so JSON/text output includes owner gate evidence receipts, next commands, close conditions, and optional flags while keeping analytics post-launch optional.
+  - Added `scripts/protocol-drift-check.mjs` and `npm run protocol:drift` so missing upgraded Studio OS helpers surface as warning-level drift instead of startup blockers.
+- Validation follow-up: focused Run Coach/trust tests 20/20; `node --check` passed for edited scripts; `node scripts/launch-readiness.mjs --json` returned `requiredReady=true`; `npm run protocol:drift -- --json` returned `missingRequired=0`; full tests/lint/build remained green.
 
 ## 2026-06-05 (Session 81)
 
