@@ -1,6 +1,17 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-07 - Session 83
+
+- Startup helper truth - repo-local compatibility scripts now exist for `credential-watch`, `ark`, `router`, `check-brief-staleness`, `build-skill-manifest`, and `skill-trace-emit`.
+- Scope truth - these helpers are local compatibility surfaces, not private Studio Ops replacements. They snapshot or read local repo files and report no-op state honestly.
+- Protocol drift truth - `npm run protocol:drift -- --json` reports `status=ok`, `missingRequired=0`, and `missingOptional=0`.
+- Validation truth - helper probes pass, `npm run lint` passed, `npm test` passed 412/412 across 46 files, and `npm run build` passed.
+
+Overall status: green locally; live Supabase deploy still pending credential
+Last reviewed: 2026-06-07
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-06-07 - Session 82
 
 - Service worker truth — `public/sw.js` now caches only safe cloned responses, handles failed network fetches explicitly, and avoids turning missing assets into the app shell.

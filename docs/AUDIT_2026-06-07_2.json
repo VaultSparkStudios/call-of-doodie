@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v1.0",
+  "generatedAt": "2026-06-07",
+  "session": 83,
+  "project": "call-of-doodie",
+  "type": "game",
+  "topLine": {
+    "totalItems": 1,
+    "combinedPriority": 34.6,
+    "top3": [
+      "startup-helper-parity-pack"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "startup-helper-parity-pack",
+      "tier": "high",
+      "axis": "speed / organization / efficiency",
+      "effort": "1h",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 34.6,
+      "title": "Startup Helper Parity Pack - make the local /start chain fully executable",
+      "summary": "Session startup still trips over absent optional Studio OS helpers even after the protocol drift sentinel. For a public-unlaunched browser game, this is a launch-confidence problem: every failed helper adds noise before the agent gets to real playability, QA, and founder-blocker evidence.",
+      "recipe": "Add repo-local compatibility helpers for credential-watch, ark drain/ship, router suggest, brief staleness, skill manifest checks, and skill trace emission; keep them honest no-op or local-file implementations, then verify /start helper probes and npm run protocol:drift."
+    }
+  ],
+  "innovationReserve": [],
+  "skipped": [
+    {
+      "slug": "physical-qa-automation",
+      "reason": "Still launch-critical, but true PWA install acceptance and real controller feel require owner-device evidence. This audit removes automation noise before that manual gate."
+    },
+    {
+      "slug": "deterministic-resim-runner",
+      "reason": "Still the largest replay-trust milestone, but it is larger than a startup repair pass and needs a broader design slice."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "startup-helper-parity-pack",
+      "status": "SHIPPED",
+      "date": "2026-06-07",
+      "evidence": [
+        "Added repo-local compatibility helpers for credential-watch, Ark drain/ship, router suggestions, brief staleness, skill manifest checks, and skill trace emission",
+        "npm run protocol:drift -- --json reports status ok with missingRequired=0 and missingOptional=0",
+        "npm run lint clean, npm test 412/412, and npm run build passing"
+      ]
+    }
+  ]
+}

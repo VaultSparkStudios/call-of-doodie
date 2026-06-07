@@ -1,5 +1,17 @@
 # Work Log
 
+## 2026-06-07 (Session 83)
+
+- Continued the durable `/start -> /audit -> /implement -> /closeout` goal from fresh repo evidence.
+- `/start` wrote a Codex session lock, resolved the game overlay, confirmed context-meter `CONTINUE`, and surfaced remaining launch gates. Startup also exposed missing optional helper scripts in the canonical command path: `credential-watch`, `ark`, `router`, `check-brief-staleness`, `build-skill-manifest`, and `skill-trace-emit`.
+- Created `docs/AUDIT_2026-06-07_2.md` and `.json` for a focused startup-helper parity pass.
+- `/implement` shipped the single audit item:
+  - Added `scripts/credential-watch.mjs` to snapshot local secrets-audit output without printing raw secrets.
+  - Added `scripts/ark.mjs` with local drain/ship behavior backed by `.cache` files.
+  - Added `scripts/router.mjs` so startup can emit deduped task-board suggestions.
+  - Added `scripts/check-brief-staleness.mjs`, `scripts/build-skill-manifest.mjs`, and `scripts/skill-trace-emit.mjs` as honest local compatibility helpers.
+- Validation: helper probes pass; `npm run protocol:drift -- --json` reports `status=ok`, `missingRequired=0`, `missingOptional=0`; `npm run lint` clean; `npm test` 412/412 across 46 files; `npm run build` passing.
+
 ## 2026-06-07 (Session 82)
 
 - Ran `/start`, created fresh `docs/AUDIT_2026-06-07.md` and `.json`, and began the `/implement` pass.

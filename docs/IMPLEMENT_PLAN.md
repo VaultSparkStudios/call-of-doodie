@@ -1,10 +1,7 @@
-# Implement Plan — 2026-06-07 Audit
+# Implement Plan - 2026-06-07 Audit
 
 | Order | Slug | Effort | Priority | Surface |
 |---:|---|---:|---:|---|
-| 1 | enemy-lab-run-coach | 1h | 41.6 | `runCoach.js`, `DeathScreen.jsx`, focused tests |
-| 2 | trace-proof-next-benchmark | 30m | 31.1 | `studioEventOps.js`, focused tests |
-| 3 | launch-readiness-evidence-receipts | 45m | 32.4 | `launch-readiness.mjs` |
-| 4 | protocol-drift-sentinel | 45m | 27.7 | new `protocol-drift-check.mjs`, `package.json` script |
+| 1 | startup-helper-parity-pack | 1h | 34.6 | `scripts/credential-watch.mjs`, `scripts/ark.mjs`, `scripts/router.mjs`, `scripts/check-brief-staleness.mjs`, `scripts/build-skill-manifest.mjs`, `scripts/skill-trace-emit.mjs` |
 
-Sequencing note: player-facing coaching ships first because it compounds the game loop directly. Trust benchmark and launch/protocol scripts follow because they share validation surfaces and can be verified without touching the live backend.
+Sequencing note: this follow-up pass intentionally shipped the protocol helper parity item first because `/start` showed executable helper gaps before any new product work. The prior same-day player-facing audit queue remains recorded in `docs/AUDIT_2026-06-07.md`.
