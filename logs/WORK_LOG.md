@@ -11,6 +11,7 @@
   - Added `scripts/router.mjs` so startup can emit deduped task-board suggestions.
   - Added `scripts/check-brief-staleness.mjs`, `scripts/build-skill-manifest.mjs`, and `scripts/skill-trace-emit.mjs` as honest local compatibility helpers.
 - Validation: helper probes pass; `npm run protocol:drift -- --json` reports `status=ok`, `missingRequired=0`, `missingOptional=0`; `npm run lint` clean; `npm test` 412/412 across 46 files; `npm run build` passing.
+- Continuation closeout verification re-ran the gates from current state: `npm run protocol:drift -- --json` still reports `status=ok`, `missingRequired=0`, `missingOptional=0`; `npm run lint` is clean; `npm test` passes 412/412 across 46 files; `npm run build` passes. The closeout cost marker was attempted, then rerun escalated after a Windows sandbox `CryptUnprotectData` failure, and is truthfully recorded as unavailable because `scripts/record-skill-cost.mjs` is absent in this repo.
 
 ## 2026-06-07 (Session 82)
 

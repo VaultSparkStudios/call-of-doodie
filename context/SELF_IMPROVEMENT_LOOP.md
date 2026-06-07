@@ -17,11 +17,11 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 | Capital Efficiency | 100 | → | Zero paid SaaS/API/per-user cost; future starts avoid wasted failure loops |
 | Automation Coverage | 100 | → | `npm run protocol:drift` now reports all 12 startup helpers present, with helper probes green |
 
-SIL +1: Closed the optional helper drift exposed during `/start` by adding honest local compatibility scripts. Validation: helper probes pass, `npm run protocol:drift -- --json` reports `status=ok`, `npm run lint` clean, `npm test` 412/412, and `npm run build` passing.
+SIL +1: Closed the optional helper drift exposed during `/start` by adding honest local compatibility scripts. Continuation closeout re-verified the evidence from current command output: `npm run protocol:drift -- --json` reports `status=ok`, `npm run lint` is clean, `npm test` passes 412/412, and `npm run build` passes.
 
 **Top win:** The canonical startup path no longer trips over missing optional helper files in this public repo.
 **Top gap:** The Supabase edge-function repair still cannot deploy until `SUPABASE_ACCESS_TOKEN` is available.
-**Intent outcome:** Fresh `/start`, `/audit`, and `/implement` completed; closeout write-back is in progress.
+**Intent outcome:** Achieved — fresh `/start`, focused `/audit`, `/implement`, verification, and closeout write-back completed with concrete evidence. The closeout cost marker could not run because `scripts/record-skill-cost.mjs` is not present in this public repo.
 
 **Brainstorm**
 1. Startup helper smoke test — a single script that runs every `/start` helper in sequence and fails on module-not-found regressions. High probability.

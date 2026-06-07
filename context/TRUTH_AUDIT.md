@@ -6,7 +6,9 @@
 - Startup helper truth - repo-local compatibility scripts now exist for `credential-watch`, `ark`, `router`, `check-brief-staleness`, `build-skill-manifest`, and `skill-trace-emit`.
 - Scope truth - these helpers are local compatibility surfaces, not private Studio Ops replacements. They snapshot or read local repo files and report no-op state honestly.
 - Protocol drift truth - `npm run protocol:drift -- --json` reports `status=ok`, `missingRequired=0`, and `missingOptional=0`.
-- Validation truth - helper probes pass, `npm run lint` passed, `npm test` passed 412/412 across 46 files, and `npm run build` passed.
+- Validation truth - helper probes pass, and continuation closeout re-ran the current gates: `npm run lint` passed, `npm test` passed 412/412 across 46 files, and `npm run build` passed.
+- Closeout protocol truth - `scripts/record-skill-cost.mjs` is absent in this public repo. The cost marker did not run; the rest of closeout evidence is recorded from available local commands.
+- Founder-Twin truth - repo-local `scripts/twin-ask.mjs` is absent, so the closeout git gate used the narrow public-repo mutation path instead of claiming a Twin verdict.
 
 Overall status: green locally; live Supabase deploy still pending credential
 Last reviewed: 2026-06-07

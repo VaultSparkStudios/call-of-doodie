@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 83 continued the requested /start -> /audit -> /implement loop with a focused startup-helper parity pass. Local compatibility helpers now cover credential-watch, Ark drain/ship, router suggestions, brief staleness, skill manifest checks, and skill trace emission; protocol drift reports all startup helpers present.",
+  "currentFocus": "Session 83 continued the requested /start -> /audit -> /implement -> /closeout loop with a focused startup-helper parity pass. Local compatibility helpers now cover credential-watch, Ark drain/ship, router suggestions, brief staleness, skill manifest checks, and skill trace emission; continuation closeout re-verified protocol drift clean, lint clean, tests 412/412, and build passing.",
   "nextMilestone": "Deploy the sync-studio-events edge-function repair once Supabase credentials are available, then continue launch/backlog work with Cloudflare Web Analytics config, Playwright pointer 360, enemy-annotated death feedback, or deterministic replay resim.",
   "testingSurfaces": [
     {

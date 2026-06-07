@@ -8,6 +8,8 @@ Created and executed `docs/AUDIT_2026-06-07_2.md` / `.json` for a one-item start
 
 Validation: `npm run protocol:drift -- --json` now reports `status=ok`, `missingRequired=0`, and `missingOptional=0`; helper probes pass; `npm run lint` is clean; `npm test` passes 412/412 across 46 files; `npm run build` passes.
 
+Continuation closeout verification re-ran the core gates from current state with the same result: protocol drift clean, lint clean, tests 412/412, and production build passing. The only closeout protocol gap observed is that `scripts/record-skill-cost.mjs` is not present locally; the cost-marker command was attempted and then retried with escalation after the Windows sandbox failed.
+
 Next priorities remain unchanged: deploy the Supabase edge-function repair when `SUPABASE_ACCESS_TOKEN` is available, resolve Cloudflare Web Analytics config if the beacon integrity error persists, then return to product-facing launch work such as Playwright pointer 360, enemy-annotated death feedback, or deterministic replay resimulation.
 
 ## Where We Left Off - Session 82 (2026-06-07)
