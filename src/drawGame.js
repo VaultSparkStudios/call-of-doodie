@@ -1135,6 +1135,21 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // Damage / kill flash
   if (!_rm && gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
   if (!_rm && gs.killFlash > 0) { ctx.fillStyle = "rgba(255,215,0," + (gs.killFlash * 0.015) + ")"; ctx.fillRect(0, 0, W, H); }
+  // Mutation accept flash banner
+  if (!_rm && (gs._mutationAcceptFlash?.framesLeft || 0) > 0) {
+    const _maf = gs._mutationAcceptFlash;
+    const _ft = Math.min(1, _maf.framesLeft / 18);
+    ctx.fillStyle = `rgba(160,0,50,${_ft * 0.55})`; ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = _ft;
+    ctx.textAlign = "center";
+    ctx.font = "bold 19px monospace"; ctx.fillStyle = "#FFF";
+    ctx.shadowColor = "#FF2255"; ctx.shadowBlur = 18;
+    ctx.fillText("☠ DIRTY DEAL SIGNED ☠", W / 2, H / 2 - 14);
+    ctx.font = "bold 14px monospace"; ctx.fillStyle = "#FF88AA";
+    ctx.shadowBlur = 0;
+    ctx.fillText(_maf.label, W / 2, H / 2 + 12);
+    ctx.globalAlpha = 1;
+  }
   // Boss wave red pulse
   if (!_rm && gs.bossWave) {
     ctx.fillStyle = "rgba(255,0,0," + (0.03 + Math.sin(Date.now() / 300) * 0.02) + ")";
@@ -1156,6 +1171,21 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
   };
   drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+
+  // Wave kill attribution card (shows top-3 killed types after each wave)
+  if (!_rm && (gs._waveKillFeed?.framesLeft || 0) > 0) {
+    const _wkf = gs._waveKillFeed;
+    const _ft = Math.min(1, _wkf.framesLeft / 18);
+    const _bw = Math.min(W - 40, 380), _bh = 46, _bx = (W - _bw) / 2, _by = H / 2 + 20;
+    ctx.globalAlpha = _ft * 0.88;
+    ctx.fillStyle = "rgba(0,8,0,0.78)"; ctx.fillRect(_bx, _by, _bw, _bh);
+    ctx.strokeStyle = "#2A6"; ctx.lineWidth = 1.5; ctx.strokeRect(_bx, _by, _bw, _bh);
+    ctx.fillStyle = "#9BE7FF"; ctx.font = "bold 9px monospace"; ctx.textAlign = "center";
+    ctx.fillText("WAVE " + _wkf.wave + " — NEUTRALIZED", W / 2, _by + 14);
+    ctx.fillStyle = "#DDD"; ctx.font = "bold 11px monospace";
+    ctx.fillText(_wkf.text, W / 2, _by + 33);
+    ctx.globalAlpha = 1;
+  }
 
   // Boss Rush mode badge
   if (gs.bossRushMode) {

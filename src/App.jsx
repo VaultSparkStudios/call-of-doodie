@@ -528,6 +528,7 @@ export default function CallOfDoodie() {
       spawnTimer: 0, enemiesThisWave: 0, maxEnemiesThisWave: 5,
       currentWave: 1, score: 0, kills: 0, killstreakCount: 0, damageThisWave: 0,
       floatingTexts: [], screenShake: 0, muzzleFlash: 0, ammoCount: WEAPONS[0].ammo,
+      _waveKillsByType: {},
       weaponAmmos: WEAPONS.map(w => w.ammo), // per-weapon ammo state
       weaponMods: {},  // per-weapon curse/bless modifiers: { [idx]: { damageMult, fireRateMult, blessed, cursed } }
       damageFlash: 0, killFlash: 0, totalDamage: 0, trail: [],
@@ -1181,6 +1182,7 @@ export default function CallOfDoodie() {
     setCoins(delta.coins);
     recordCommandTrace("route", `mutation-${mutation?.id || "accepted"}`);
     addText(gs, GW() / 2, GH() / 2 - 80, delta.floatingText.text, delta.floatingText.color, true);
+    gs._mutationAcceptFlash = { label: (mutation?.emoji ? mutation.emoji + " " : "") + (mutation?.name || "MUTATION").toUpperCase(), framesLeft: 90 };
     mutationPendingRef.current = false;
     setMutationPending(false);
     setMutationOptions([]);
@@ -2209,6 +2211,15 @@ export default function CallOfDoodie() {
       const waveClearRoast = getRoastCallout("wave_clear", roastCooldowns.current, gs.currentWave, 1);
       if (waveClearRoast) addText(gs, GW() / 2, GH() / 2 - 126, waveClearRoast, "#9BE7FF", true);
 
+      // Wave kill feed: build top-3 type attribution card
+      const _wkt = gs._waveKillsByType || {};
+      const _wktEntries = Object.values(_wkt).sort((a, b) => b.count - a.count).slice(0, 3);
+      if (_wktEntries.length > 0) {
+        const _feedText = _wktEntries.map(e => `${e.count}× ${e.name.toUpperCase().slice(0, 10)}`).join(" · ");
+        gs._waveKillFeed = { text: _feedText, wave: gs.currentWave, framesLeft: 120 };
+      }
+      gs._waveKillsByType = {};
+
       if (gs.bossWave) {
         statsRef.current.bossWavesCleared++;
         soundWaveClear();
@@ -2592,6 +2603,7 @@ export default function CallOfDoodie() {
             });
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
+            if (e.typeIndex != null) { const _wkt = gs._waveKillsByType || (gs._waveKillsByType = {}); _wkt[e.typeIndex] = { count: ((_wkt[e.typeIndex]?.count) || 0) + 1, name: e.name || ("TYPE" + e.typeIndex) }; }
             gs.coinStreakKills++;
             gs.coinStreakTimer = 180; // reset 3s window
             if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
@@ -2637,6 +2649,13 @@ export default function CallOfDoodie() {
               gs.coins = (gs.coins || 0) + _coinDrop;
               setCoins(gs.coins);
               addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000");
+              if (gs.coinMultActive && gs.floatingTexts.length < 28) {
+                const _streak = Math.min(gs.coinStreakKills || 0, 15);
+                const _n = 2 + Math.floor(_streak / 5);
+                for (let _ci = 0; _ci < _n; _ci++) {
+                  gs.floatingTexts.push({ text: "💩", x: e.x + (Math.random() - 0.5) * 60, y: e.y - 20 - Math.random() * 40, vy: -1.2 - Math.random() * 0.8, life: 35 + Math.floor(Math.random() * 20), color: "#C8A000" });
+                }
+              }
               if ((Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
                 gs.lastCoinRoastMilestone = gs.coins;
                 const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
@@ -3619,6 +3638,8 @@ export default function CallOfDoodie() {
     if (gs.damageFlash > 0) gs.damageFlash--;
     if (gs.killFlash > 0) gs.killFlash--;
     if ((gs.bossKillFlash || 0) > 0) gs.bossKillFlash--;
+    if (gs._mutationAcceptFlash?.framesLeft > 0) gs._mutationAcceptFlash.framesLeft--;
+    if (gs._waveKillFeed?.framesLeft > 0) gs._waveKillFeed.framesLeft--;
     if ((gs.adrenalineRushTimer || 0) > 0) gs.adrenalineRushTimer--;
     if ((gs.rageTimer || 0) > 0) gs.rageTimer--;
     if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
