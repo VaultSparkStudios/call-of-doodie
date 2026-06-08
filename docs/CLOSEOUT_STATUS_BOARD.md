@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-07 (Session 82 closeout) -->
+<!-- generated-at: 2026-06-08 (Session 84 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S82 ═════════════════════╗
-║  Date: 2026-06-07  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S84 ═════════════════════╗
+║  Date: 2026-06-08  ·  SIL: 1000/1000  ·  Velocity: 9 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ chore(protocol): closeout skill profile shims                 ║
-║  ✓ chore(session-80): repair protocol closeout path              ║
-║  ✓ closeout-board-session-79                                     ║
-║  ✓ session-79-closeout-writeback                                 ║
-║  ✓ feat session 79 revenge drill and controller labels           ║
+║  ✓ feat(gamification): adaptive spawn weight damping for top pr  ║
+║  ✓ feat(gamification): wave kill feed + mutation flash + coin s  ║
+║  ✓ closeout(session-83): verify startup helper parity            ║
+║  ✓ chore(protocol): add startup helper parity                    ║
+║  ✓ chore: closeout session 82 audit follow-through               ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -34,20 +34,20 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (~/.codex|.claude)                               ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 28 files  ·  M:25 A:0 D:0 ?:3                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 32 files  ·  M:26 A:0 D:0 ?:6                          ║
+║  Ahead: 2  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         412/412                                          ║
+║  Tests:         423/423                                          ║
 ║  IGNIS:         5d ago                                           ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

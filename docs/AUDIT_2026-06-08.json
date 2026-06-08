@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-08",
+    "session": 84,
+    "project": "call-of-doodie",
+    "type": "game",
+    "silScore": 1000,
+    "tests": "412/412",
+    "axisWeights": {
+      "gamification": 6,
+      "ux": 4,
+      "ai": 3,
+      "featureDepth": 3,
+      "userFeedback": 1,
+      "security": 1,
+      "speed": 1,
+      "token": 1
+    },
+    "totalItems": 8,
+    "combinedPriority": 251.0,
+    "top3": ["localized-kill-feed", "wave-mutation-accept-callout", "ai-difficulty-suggestion"],
+    "executionSummary": {
+      "status": "implemented",
+      "implementedAt": "2026-06-08",
+      "tests": "423/423",
+      "build": "pass",
+      "e2e": "1/1",
+      "residualRisk": "none; npm audit reports 0 vulnerabilities after dev-toolchain remediation"
+    }
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "slug": "localized-kill-feed",
+      "title": "Post-Wave Kill Attribution Card",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 9,
+      "innovation": 8,
+      "effort": "1h",
+      "effortHours": 1,
+      "priority": 45.4,
+      "why": "A 1.5-second post-wave card reading '9× TOXIC · 3× ARMORED · 1 ELITE ROGUE — NEUTRALIZED' teaches enemy composition mid-run without UI clutter, and deepens the military parody voice players associate with the brand. The wave-kill-by-type data is already computed inside the game loop; this purely surfaces it as a brief overlay in drawGame.js. No battle-tested shooter does this with comedic framing — it's a distinct novelty that rewards enemy-type literacy and turns every wave into a mini-debrief.",
+      "recipe": "Add gs._waveKillsByType = {} reset at wave start; increment on each enemy kill keyed by enemy.type; in drawGame.js on wave-clear frame, render a centered overlay card for 60 frames using existing floating-text infrastructure. Cap display to top 3 types to avoid clutter.",
+      "status": "shipped",
+      "executionLog": [
+        "Wave kill attribution tracking and post-wave enemy-type card are present in the current worktree."
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "wave-mutation-accept-callout",
+      "title": "Mutation Accept Screen Flash",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 7,
+      "innovation": 7,
+      "effort": "30m",
+      "effortHours": 0.5,
+      "priority": 37.1,
+      "why": "Accepting a wave mutation challenge is the highest-stakes decision moment in any given run, but the current UI gives it no ceremony — the player clicks accept and the mutation silently activates. A full-width 1.5-second red banner ('☠️ DIRTY DEAL SIGNED — CORROSIVE ROUNDS') rewards the bold choice, amplifies the comedic military-contract theme, and makes the activated mutation memorable rather than invisible. Thirty minutes in drawGame.js with zero state changes required.",
+      "recipe": "On mutation accept in App.jsx, set gs._mutationAcceptFlash = { label: mutationName, framesLeft: 90 }. In drawGame.js, when framesLeft > 0, render a full-width red banner with white bold text + camera shake (reuse existing screenshake ref); decrement framesLeft each frame.",
+      "status": "shipped",
+      "executionLog": [
+        "Mutation accept flash state and dirty-deal banner rendering are present in the current worktree."
+      ]
+    },
+    {
+      "rank": 3,
+      "slug": "ai-difficulty-suggestion",
+      "title": "RunBrain Difficulty Coach in HomeV2",
+      "axis": "ai / intelligence integration + ui / ux",
+      "tier": "🔥",
+      "impact": 8,
+      "innovation": 8,
+      "effort": "2h",
+      "effortHours": 2,
+      "priority": 32.0,
+      "why": "Difficulty pickers are universally static — they never tell you if you're over- or under-matched based on your own play history. RunBrain already computes run history analytics including avg wave, boss kills, and frequent killers; extending it to produce a difficulty suggestion ('You're clearing wave 14 avg on RECRUIT — VETERAN awaits') closes the skill-progression loop and feels like the game is paying attention. Zero tokens, purely local, and it directly addresses the carry-over 'adaptive difficulty' task-board item from a fresh angle.",
+      "recipe": "Add suggestDifficulty(runHistory, currentDiff) in runBrain.js: compute avgWave from last 5 runs, emit 'upgrade' if avgWave > 12 and currentDiff is RECRUIT, 'downgrade' if avgWave < 5 and currentDiff is NIGHTMARE. Wire into HomeV2 difficulty picker as a 1-line italic hint below the current tier label.",
+      "status": "shipped",
+      "executionLog": [
+        "Added suggestDifficulty(runHistory, currentDiff) and HomeV2 difficulty picker hint, with focused tests."
+      ]
+    },
+    {
+      "rank": 4,
+      "slug": "coin-streak-visual-escalation",
+      "title": "Coin Multiplier Particle Escalation",
+      "axis": "gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 7,
+      "innovation": 6,
+      "effort": "30m",
+      "effortHours": 0.5,
+      "priority": 31.8,
+      "why": "gs.coinMultActive already triggers a multiplier but the visual signal is a small HUD label — nearly invisible during high-action combat. Escalating poop-particle rain (3 → 5 → 8 💩 per kill, driven by gs.coinStreakKills) makes the multiplier viscerally legible and rewards sustained aggression with comedic payoff that reinforces the game's brand voice. Pure drawGame.js addition, no state changes, no new API surface.",
+      "recipe": "In drawGame.js kill-flash path, when gs.coinMultActive && gs.coinStreakKills > 0, spawn Math.min(3 + Math.floor(gs.coinStreakKills / 3), 8) extra 💩 emoji particles at kill position with random velocity fans. Reuse existing floating-emoji infrastructure.",
+      "status": "shipped",
+      "executionLog": [
+        "Coin multiplier streak particle escalation is present in the current worktree."
+      ]
+    },
+    {
+      "rank": 5,
+      "slug": "adaptive-spawn-damping",
+      "title": "Per-Enemy Adaptive Spawn Weight Damping",
+      "axis": "gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 8,
+      "innovation": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "priority": 28.0,
+      "why": "recordDeathByEnemy() already logs killer type per run in cod-boss-kills-v1 adjacent storage. Reading that into spawn-weight damping (top-2 killer types receive −10% spawn probability after 3+ consecutive deaths) auto-balances frustration spikes without touching global difficulty constants or punishing skilled play. The 'Adapted for you' chip at run start closes the feedback loop — players feel seen rather than stuck. This is a direct task-board Next item with a cleaner implementation path than previously scoped.",
+      "recipe": "Add getAdaptiveSpawnMods(career) in storage.js returning { type: dampFactor } map. In spawnEnemy() in gameHelpers.js, multiply the base enemy-type probability by (1 - dampFactor) before the weighted random draw. Show 'Adapted for you' chip in HUD on wave 1 if any damping is active.",
+      "status": "shipped",
+      "executionLog": [
+        "Adaptive spawn dampening helpers and run-start feedback are present in the current worktree."
+      ]
+    },
+    {
+      "rank": 6,
+      "slug": "enemy-death-heatmap-types",
+      "title": "Enemy-Type Annotation on Death Heatmap",
+      "axis": "ui / ux / user-experience + gamification",
+      "tier": "⚡",
+      "impact": 8,
+      "innovation": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "priority": 28.0,
+      "why": "The existing death heatmap shows WHERE you died with color-coded time bands, but not WHY — if deaths cluster at the south edge, players have no way to know it's the Acid Spitter territory without manual reasoning. Adding enemy-type icons at death cluster centroids (derived from gs._lastDamageBy already tracked at each death) turns the spatial retrospective into a genuine tactical debrief. This is a direct task-board Next item and the natural completion of the heatmap feature.",
+      "recipe": "Extend gs._deathPositions entries to store { x, y, frame, type: gs._lastDamageBy }. In DeathScreen heatmap canvas render, after drawing the path, draw a small enemy emoji or type-initial at each death position's x/y scaled to canvas bounds. Group by type when ≥3 nearby deaths share the same type.",
+      "status": "shipped-bounded",
+      "executionLog": [
+        "Annotated the final ghost-path death marker with the killer enemy type and rendered the enemy indicator on DeathScreen. Multi-death cluster centroid grouping remains follow-up polish."
+      ]
+    },
+    {
+      "rank": 7,
+      "slug": "run-end-build-report-card",
+      "title": "Run-End Build Report Card (A/B/C Grade)",
+      "axis": "gamification / engagement / immersion + ui / ux",
+      "tier": "🔥",
+      "impact": 9,
+      "innovation": 8,
+      "effort": "4h",
+      "effortHours": 4,
+      "priority": 27.8,
+      "why": "Every run ends with a death screen that tells players WHAT happened but not HOW WELL they built. A BUILD GRADE card — grading perk synergy efficiency (activeSynergies / max possible), ammo discipline (weaponKills / shots), and survivability (wave / level) — teaches loadout literacy without LLM spend, using data already in statsRef and gs. Comedy-framed tier labels ('BORN SOLDIER / TRIGGER HAPPY / GLASS CANNON') fit the parody military voice and create a shareable social hook that no comparable mobile-web shooter has shipped.",
+      "recipe": "Create src/utils/buildReport.js with computeBuildGrade({ activeSynergies, weaponKills, weaponAmmos, totalShots, wave, level }) returning { grade: 'A'|'B'|'C', label, breakdown }. Add 11 focused tests. Render BUILD GRADE card in DeathScreen.jsx above the SCORE section with letter grade + label + 3 sub-bars.",
+      "status": "shipped",
+      "executionLog": [
+        "Added computeBuildGrade() plus tests and rendered the DeathScreen BUILD GRADE card with synergy, ammo discipline, and survival bars."
+      ]
+    },
+    {
+      "rank": 8,
+      "slug": "playwright-pointer-360",
+      "title": "Playwright Pointer 360 Harness",
+      "axis": "feature depth & refinement",
+      "tier": "⚡",
+      "impact": 9,
+      "innovation": 6,
+      "effort": "4h",
+      "effortHours": 4,
+      "priority": 20.9,
+      "why": "buildPointerAimSweepReport() already exists in gameStep.js and the debug HUD already tracks quadrant coverage — the missing piece is a Playwright test that drives the real canvas and asserts all four aim buckets fill after a pointer sweep. This harness has been deferred 7 consecutive sessions and remains the last automated gate before the 'input fairness' pillar of the launch confidence claim can be declared proven. Without it, pointer-aim correctness is only a manual check that has already regressed once (S75).",
+      "recipe": "Install @playwright/test as devDep (npm i -D @playwright/test). Create tests/pointer-360.spec.ts: load localhost:5173?debug=input, enter a run, page.mouse.move() in N/E/S/W arcs around canvas center, assert debug HUD text shows all 4 quadrant counters ≥ 1. Add 'test:e2e' script to package.json.",
+      "status": "shipped",
+      "executionLog": [
+        "Installed @playwright/test@1.60.0 after package-trust approval, added Playwright config and pointer-360 spec, and fixed the pointer sweep helper to evaluate around the projected player position."
+      ]
+    }
+  ],
+  "innovationReserve": [
+    "localized-kill-feed",
+    "ai-difficulty-suggestion",
+    "run-end-build-report-card"
+  ],
+  "skipped": [
+    { "slug": "homeV2-retirement-gate", "reason": "Priority 9.5 — data gate (Lighthouse + funnel) is a human action; not implementable this session" },
+    { "slug": "validate-replay-phase2b", "reason": "Blocked on compact input timeline contract per DECISIONS.md; not implementable until Phase 2A lands" },
+    { "slug": "first-session-calibration-ring", "reason": "Priority 24.5 — good but out-ranked; defer to next session after heatmap ships" },
+    { "slug": "anti-idle-enemy-taunt", "reason": "Priority 24.0 — fun but animation budget concern; needs design pass" },
+    { "slug": "precision-streak-leaderboard", "reason": "Priority 22.8 — requires leaderboard schema change; requires Supabase token (blocked)" }
+  ]
+}

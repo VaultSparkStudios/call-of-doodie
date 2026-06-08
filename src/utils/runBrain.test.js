@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildRunBrain, getMutationDifficultyBrief, matchesExperiment } from "./runBrain.js";
+import { buildRunBrain, getMutationDifficultyBrief, matchesExperiment, suggestDifficulty } from "./runBrain.js";
 import { WEEKLY_MUTATIONS } from "../constants.js";
 
 describe("runBrain", () => {
@@ -123,6 +123,27 @@ describe("getMutationDifficultyBrief", () => {
       { difficulty: "insane", wave: 7, ts: weekWith * WEEK_MS + 2000 },
     ];
     expect(getMutationDifficultyBrief(mutation, "normal", runHistory)).toBeNull();
+  });
+});
+
+describe("suggestDifficulty", () => {
+  it("suggests an upgrade after strong recent runs", () => {
+    const result = suggestDifficulty([
+      { wave: 15 }, { wave: 16 }, { wave: 14 }, { wave: 13 }, { wave: 17 },
+    ], "normal");
+    expect(result).toMatchObject({ direction: "up", label: "VETERAN" });
+    expect(result.reason).toContain("VETERAN");
+  });
+
+  it("suggests a downgrade after repeated early deaths", () => {
+    const result = suggestDifficulty([
+      { wave: 2 }, { wave: 4 }, { wave: 3 },
+    ], "nightmare");
+    expect(result).toMatchObject({ direction: "down", label: "VETERAN" });
+  });
+
+  it("stays quiet until enough history exists", () => {
+    expect(suggestDifficulty([{ wave: 20 }, { wave: 18 }], "recruit")).toBeNull();
   });
 });
 

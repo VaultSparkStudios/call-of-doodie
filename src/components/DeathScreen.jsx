@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, lazy, Suspense } from "react";
-import { ACHIEVEMENTS, RANK_NAMES, WEAPONS } from "../constants.js";
+import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
@@ -9,6 +9,7 @@ import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
+import { computeBuildGrade } from "../utils/buildReport.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -29,6 +30,7 @@ export default function DeathScreen({
   dailyChallengeMode, bossRushMode, cursedRunMode, vsScore, vsName,
   ghostKey, cosmeticUnlocks = [], objectivesSummary = null,
   experimentMatched = null,
+  gsSnapshot = null, activeSynergiesData = [],
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -93,6 +95,17 @@ export default function DeathScreen({
     ctx.fillStyle = "#FF2222"; ctx.beginPath(); ctx.arc(ex, ey, 5, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = "#fff"; ctx.font = "bold 7px monospace"; ctx.textAlign = "center";
     ctx.fillText("☠", ex, ey + 3);
+    const finalType = ghostData[ghostData.length - 1]?.killedByType;
+    if (finalType != null) {
+      const enemy = ENEMY_TYPES[Number(finalType)] || {};
+      ctx.font = "bold 13px monospace";
+      ctx.textAlign = "center";
+      ctx.shadowColor = "#000";
+      ctx.shadowBlur = 4;
+      ctx.fillStyle = "#FFF";
+      ctx.fillText(enemy.emoji || "!", Math.min(W - 12, ex + 12), Math.max(14, ey - 8));
+      ctx.shadowBlur = 0;
+    }
     // Legend
     ctx.globalAlpha = 0.65; ctx.font = "7px monospace"; ctx.textAlign = "left";
     const legend = [["#00B450","EARLY"],["#FFB000","MID"],["#FF2222","FINAL"]];
@@ -358,6 +371,14 @@ export default function DeathScreen({
     cause: postRunIntel.cause,
     actionCount: debrief.actions.length,
   });
+  const buildGrade = computeBuildGrade({
+    activeSynergies: activeSynergiesData,
+    weaponKills: weaponKills || [],
+    weaponAmmos: gsSnapshot?.weaponAmmos || [],
+    wave,
+    level,
+    kills,
+  });
 
   useEffect(() => {
     const studioEvent = buildStudioGameEvent("debrief_intelligence", postRunIntel.telemetry);
@@ -490,6 +511,29 @@ export default function DeathScreen({
             <span style={{ color: "#bbb", fontSize: 10, marginLeft: 8 }}>{runModifier.desc}</span>
           </div>
         )}
+
+        <div style={{ ...card, marginBottom: 12, padding: "10px 12px", border: "1px solid rgba(255,215,0,0.24)", background: "linear-gradient(180deg,rgba(255,215,0,0.09),rgba(255,255,255,0.035))" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, marginBottom: 8 }}>
+            <div style={{ textAlign: "left" }}>
+              <div style={{ fontSize: 9, color: "#777", letterSpacing: 3 }}>BUILD GRADE</div>
+              <div style={{ fontSize: 13, color: "#EEE", fontWeight: 900 }}>{buildGrade.label}</div>
+            </div>
+            <div style={{ width: 52, height: 52, borderRadius: 6, display: "grid", placeItems: "center", color: "#111", background: buildGrade.grade === "A" ? "#FFD700" : buildGrade.grade === "B" ? "#00E5FF" : "#FF6B35", fontSize: 32, fontWeight: 900, boxShadow: "0 0 18px rgba(255,215,0,0.22)" }}>
+              {buildGrade.grade}
+            </div>
+          </div>
+          <div style={{ display: "grid", gap: 6 }}>
+            {buildGrade.breakdown.map(row => (
+              <div key={row.id} style={{ display: "grid", gridTemplateColumns: "88px 1fr 28px", alignItems: "center", gap: 6 }}>
+                <div style={{ fontSize: 8, color: "#999", textAlign: "left", letterSpacing: 1 }}>{row.label}</div>
+                <div style={{ height: 7, borderRadius: 4, background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
+                  <div style={{ width: `${Math.max(6, Math.min(100, row.value))}%`, height: "100%", background: row.value >= 75 ? "#00FF88" : row.value >= 45 ? "#FFD700" : "#FF4444" }} />
+                </div>
+                <div style={{ fontSize: 9, color: "#CCC", textAlign: "right" }}>{row.value}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 12 }}>
           {[

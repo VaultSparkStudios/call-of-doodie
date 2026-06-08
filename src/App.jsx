@@ -1466,6 +1466,7 @@ export default function CallOfDoodie() {
           if (best) killerType = best.type;
         }
         if (killerType != null) {
+          gs._deathKillerType = killerType;
           recordDeathByEnemy(killerType);
           // Track boss deaths for nemesis detection
           if (best?.isBossEnemy) {
@@ -1480,8 +1481,13 @@ export default function CallOfDoodie() {
     // Ghost race: persist this run's positions under mode-specific key
     try {
       const _gKey = gsRef.current?._ghostKey || "cod-ghost-normal-v1";
-      if (ghostRecordRef.current.length > 10)
+      if (ghostRecordRef.current.length > 10) {
+        ghostRecordRef.current[ghostRecordRef.current.length - 1] = {
+          ...ghostRecordRef.current[ghostRecordRef.current.length - 1],
+          killedByType: gs?._deathKillerType ?? gs?._lastDamageBy ?? null,
+        };
         sessionStorage.setItem(_gKey, JSON.stringify(ghostRecordRef.current));
+      }
     } catch { /* storage full — silent fail */ }
     stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0);
     soundDeath();
@@ -1580,7 +1586,7 @@ export default function CallOfDoodie() {
       speedrun: speedrunRef.current,
       gauntlet: gauntletRef.current,
     };
-    const _killerType = gs?._lastDamageBy ?? null;
+    const _killerType = gs?._deathKillerType ?? gs?._lastDamageBy ?? null;
     const _killerEnemy = _killerType != null ? (gs.enemies || []).find(e => e.type === _killerType) : null;
     saveRunToHistory(createRunHistoryEntry({
       score: gs.score,
@@ -1951,9 +1957,11 @@ export default function CallOfDoodie() {
       const mouse = mouseRef.current;
       const trace = commandTraceRef.current || [];
       let calibration = inputCalibrationRef.current;
+      let pointerSweep = null;
       const rect = canvasRef.current?.getBoundingClientRect?.();
       if (rect && gs?.player) {
         const sweep = buildPointerAimSweepReport(rect, { w: W, h: H }, gs.player);
+        pointerSweep = `${sweep.buckets.length}/4`;
         if (sweep.complete) {
           calibration = saveInputCalibration(buildInputCalibrationRecord({
             source: inputDeviceRef.current,
@@ -1980,6 +1988,7 @@ export default function CallOfDoodie() {
         reloading: !!isReloadingRef.current,
         pointerX: Math.round(mouse.x || 0),
         pointerY: Math.round(mouse.y || 0),
+        pointerSweep,
         traceEvents: trace.length,
         traceAim: trace.filter(e => e.action === "aim").length,
         traceMove: trace.filter(e => e.action === "move").length,
@@ -4397,6 +4406,7 @@ function InputDebugOverlay({ data }) {
     ["AIM", `${fmtDebugNumber(d.aimAngle)} rad`],
     ["PAD AIM", d.gamepadAimAngle == null ? "--" : `${fmtDebugNumber(d.gamepadAimAngle)} rad`],
     ["PTR", `${d.pointerX ?? "--"},${d.pointerY ?? "--"}`],
+    ["SWEEP", d.pointerSweep ? `pointer:${d.pointerSweep}` : "--"],
     ["CAL", d.calibration || "unverified"],
     ["ACTIONS", `shoot:${d.shoot ? "1" : "0"} dash:${d.dashReady ? "ready" : "cool"} grenade:${d.grenadeReady ? "ready" : "cool"} reload:${d.reloading ? "1" : "0"}`],
     ["TRACE", `${d.traceEvents || 0} events · aim ${d.traceAim || 0} · move ${d.traceMove || 0}`],

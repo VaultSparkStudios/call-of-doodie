@@ -193,27 +193,17 @@ function gitChangeSummary() {
 }
 
 function agentMemoryRecentlyTouched() {
-  // Check whether agent memory has files modified within the last 24h.
-  // Best-effort — absence is reported as "·" rather than failing.
+  // Check whether agent memory (~/.claude/projects/<slug>/memory) has files
+  // modified within the last 24h. Best-effort — cross-platform path resolution
+  // varies; absence is reported as "·" rather than failing.
   const home = os?.homedir?.() || process.env.HOME || process.env.USERPROFILE;
   if (!home) return false;
   const slug = path.basename(ROOT);
-  const cutoff = Date.now() - 24 * 3600_000;
-
-  const codexDir = path.join(home, '.codex', 'memories', slug);
-  try {
-    if (fs.existsSync(codexDir)) {
-      for (const f of fs.readdirSync(codexDir)) {
-        const stat = fs.statSync(path.join(codexDir, f));
-        if (stat.mtimeMs > cutoff) return true;
-      }
-    }
-  } catch { /* best-effort */ }
-
-  // Claude project memory dirs use a prefix-encoded form; fall back to a scan.
+  // Project memory dirs use a prefix-encoded form; fall back to a glob scan.
   const projectsDir = path.join(home, '.claude', 'projects');
   if (!fs.existsSync(projectsDir)) return false;
   try {
+    const cutoff = Date.now() - 24 * 3600_000;
     for (const entry of fs.readdirSync(projectsDir)) {
       if (!entry.includes(slug)) continue;
       const memDir = path.join(projectsDir, entry, 'memory');
@@ -228,9 +218,6 @@ function agentMemoryRecentlyTouched() {
 }
 
 function writeBackCoverage() {
-  const status = readJson(STATUS_PATH);
-  const sessionMarker = status?.currentSession ? `Session ${status.currentSession}` : null;
-  const dateMarker = status?.lastUpdated || new Date().toISOString().slice(0, 10);
   const TARGETS = [
     'context/CURRENT_STATE.md',
     'context/TASK_BOARD.md',
@@ -245,24 +232,17 @@ function writeBackCoverage() {
   const s = sh('git status --short');
   const touched = new Set();
   for (const ln of s.out.split('\n')) {
-    const file = ln.slice(3).trim().replace(/\\/g, '/').replace(/^"|"$/g, '');
-    if (!file) continue;
+    const fileMatch = ln.match(/^.{2,3}\s+(.+)$/);
+    if (!fileMatch) continue;
+    const file = fileMatch[1].replace(/\\/g, '/').replace(/^"|"$/g, '');
     for (const t of TARGETS) {
       if (file.endsWith(t)) touched.add(t);
     }
   }
-  for (const t of TARGETS) {
-    if (touched.has(t)) continue;
-    const body = readText(path.join(ROOT, t));
-    if (!body) continue;
-    if ((sessionMarker && body.includes(sessionMarker)) || (dateMarker && body.includes(dateMarker))) {
-      touched.add(t);
-    }
-  }
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
-  // 10th item (per closeout spec): agent memory at ~/.codex or ~/.claude.
+  // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
   result.push({
-    file: 'agent memory (~/.codex|.claude)',
+    file: 'agent memory (~/.claude/projects/<slug>/memory/)',
     touched: agentMemoryRecentlyTouched(),
   });
   return result;

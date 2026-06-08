@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 84 (2026-06-08)
+
+Continued the durable `/start -> /audit -> /implement -> /closeout` loop from current repo evidence. Created and executed `docs/AUDIT_2026-06-08.md` / `.json` for an eight-item product-intelligence and input-confidence sprint.
+
+Shipped this pass: `suggestDifficulty(runHistory, currentDiff)` in RunBrain with HomeV2 difficulty coaching; `computeBuildGrade()` plus DeathScreen BUILD GRADE card; final ghost-path death markers annotated/rendered with killer enemy type; Playwright pointer 360 harness with `@playwright/test@1.60.0`; and a pointer sweep projection fix so the debug report measures around the projected player position rather than the canvas center. Current worktree evidence also verifies wave kill attribution, mutation accept flash, coin-streak particle escalation, and adaptive spawn damping from the recovered interrupted slice.
+
+Validation: focused utility tests passed, full `npm test` passed 423/423 across 47 files, `npm run build` passed, and `npm run test:e2e` passed 1/1 Chromium test. Follow-up dependency remediation upgraded the Vitest/Vite toolchain and pinned patched transitive packages; `npm audit --json` now reports 0 vulnerabilities.
+
+Next priorities: optionally deepen enemy death feedback from final-marker annotation into multi-death cluster centroid grouping; keep live Supabase deploy and manual launch QA as credential/human-gated work.
+
 ## Where We Left Off - Session 83 (2026-06-07)
 
 Continued the durable `/start -> /audit -> /implement -> /closeout` loop after Session 82. `/start` succeeded far enough to read the canonical startup context and confirmed context-meter `CONTINUE`, but the local command path still had optional helper gaps: `credential-watch`, `ark`, `router`, `check-brief-staleness`, `build-skill-manifest`, and `skill-trace-emit`.

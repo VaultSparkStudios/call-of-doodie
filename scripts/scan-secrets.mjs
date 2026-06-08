@@ -33,6 +33,13 @@ const ALLOW = [
   /VITE_SENTRY_DSN/,
   /ANTHROPIC_API_KEY/,
   /KOFI_VERIFICATION_TOKEN/,
+  /"integrity"\s*:\s*"sha512-/,
+  /sha512-/,
+  /vaultspark-studio-ops\/docs\//,
+  /vaultspark-studio-ops\/secrets\/CAPABILITY_MAP\.json/,
+  /AGENT_CAPABILITIES\.md/,
+  /PROJECT_SITEMAP_STANDARD\.md/,
+  /PROPOSAL_2026-05-21_HIVEMIND\.md/,
 ];
 
 function shannon(value) {
