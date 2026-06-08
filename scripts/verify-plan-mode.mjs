@@ -151,9 +151,12 @@ emit(result);
 function stampNotRequired(reason) {
   const result = { status: 'not_required', tier, agent: sessionAgent, reason };
   try {
-    status.planModeDetected = result.status;
-    status.planModeCheckedAt = new Date().toISOString();
-    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+    const shouldStampStatus = !!lockText || status.planModeDetected !== result.status;
+    if (shouldStampStatus) {
+      status.planModeDetected = result.status;
+      status.planModeCheckedAt = new Date().toISOString();
+      fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+    }
   } catch { /* non-fatal */ }
   try {
     if (fs.existsSync(lockPath)) {
