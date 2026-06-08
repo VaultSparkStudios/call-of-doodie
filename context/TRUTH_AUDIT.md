@@ -1,6 +1,20 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-08 - Session 84
+
+- Audit execution truth - `docs/AUDIT_2026-06-08.md` / `.json` now record all eight ranked items as shipped or bounded-shipped with execution notes.
+- RunBrain truth - difficulty suggestion remains local-only and zero-token; it reads recent run history and renders only a HomeV2 hint.
+- Build report truth - `computeBuildGrade()` grades local run/build data and DeathScreen renders the result; it does not submit or expose additional player data.
+- Death marker truth - the shipped heatmap pass annotates the final ghost-path death marker with killer type; multi-run cluster centroid grouping is not yet implemented.
+- Pointer harness truth - `@playwright/test@1.60.0` was installed after exact-version package-trust approval, and the e2e test proves the debug HUD reaches `pointer:4/4`.
+- Validation truth - `npm test` passed 423/423 across 47 files, `npm run build` passed, and `npm run test:e2e` passed 1/1 Chromium test.
+- Dependency truth - the dev-toolchain remediation is complete: package-trust approved the exact upgrade set after fixing a false-positive `vitest` typosquat rule in Studio Ops, and `npm audit --json` now reports 0 vulnerabilities.
+
+Overall status: green locally with zero npm audit vulnerabilities
+Last reviewed: 2026-06-08
+Public-safe summary only. Sensitive verification notes are maintained privately.
+
 ## 2026-06-07 - Session 83
 
 - Startup helper truth - repo-local compatibility scripts now exist for `credential-watch`, `ark`, `router`, `check-brief-staleness`, `build-skill-manifest`, and `skill-trace-emit`.

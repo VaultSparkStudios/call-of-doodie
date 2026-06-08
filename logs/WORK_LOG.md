@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-06-08 (Session 84)
+
+- Continued the durable `/start -> /audit -> /implement -> /closeout` goal from current repo evidence.
+- Created `docs/AUDIT_2026-06-08.md` and `.json` for an eight-item game improvement sprint.
+- `/implement` shipped or verified the audit queue:
+  - Added local RunBrain difficulty suggestion logic and rendered the one-line HomeV2 difficulty nudge.
+  - Added `src/utils/buildReport.js` with build grade scoring and rendered the DeathScreen BUILD GRADE card.
+  - Annotated final ghost-path death markers with the killer enemy type and rendered the enemy indicator in the death replay canvas.
+  - Installed trusted exact `@playwright/test@1.60.0`, added `playwright.config.ts`, and added `tests/pointer-360.spec.ts`.
+  - Fixed `buildPointerAimSweepReport()` to evaluate around the projected player position, allowing the browser harness to prove `pointer:4/4`.
+  - Verified current-worktree wave kill attribution, mutation accept flash, coin-streak particle escalation, and adaptive spawn damping.
+- Validation: focused utility tests pass; `npm test` passes 423/423 across 47 files; `npm run build` passes; `npm run test:e2e` passes 1/1 Chromium test.
+- Follow-up dependency remediation: fixed the Studio Ops package-trust false positive for exact `vitest`, upgraded the Vitest/Vite toolchain, pinned patched transitive packages with npm overrides, and verified `npm audit --json` reports 0 vulnerabilities.
+
 ## 2026-06-07 (Session 83)
 
 - Continued the durable `/start -> /audit -> /implement -> /closeout` goal from fresh repo evidence.

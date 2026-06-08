@@ -25,6 +25,7 @@ import { loadIgnisInsight } from './lib/ignis-insight.mjs';
 import { contextWindowForAgent } from './lib/model-router.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
+import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -431,7 +432,7 @@ const unifiedItems   = parseUnifiedItems(taskBoard);
 const openNow        = unifiedItems.filter((item) => item.status === 'unblocked');
 const openNext       = openNow.slice(3);
 const openBlocked    = unifiedItems.filter((item) =>
-  ['human-blocked', 'cross-repo-locked', 'externally-blocked', 'blocked-on-hub'].includes(item.status)
+  BLOCKED_STATUSES_CORE.includes(item.status)
 );
 
 function taskLabel(item, maxLen = 54) {
@@ -1168,7 +1169,16 @@ const lines = [
   `*Run \`node scripts/ops.mjs doctor\` for live health check · \`node scripts/ops.mjs genius-list\` to refresh hit list*`,
 ];
 
-fs.writeFileSync(outputPath, lines.join('\n'), 'utf8');
+// S154 audit #4 — enforce per-tile byte budgets at the source. Overflowing
+// tiles are trimmed with an explicit marker (never silently — CANON-031).
+let briefBody = lines.join('\n');
+try {
+  const { enforceTileBudgets } = await import('./validate-brief-format.mjs');
+  const r = enforceTileBudgets(briefBody);
+  briefBody = r.body;
+  for (const t of r.trimmed) console.log(`  ✂ tile trimmed to budget: ${t.title} (−${t.dropped} lines, cap ${(t.budget / 1024).toFixed(1)}KB)`);
+} catch { /* budget enforcement is advisory at render time */ }
+fs.writeFileSync(outputPath, briefBody, 'utf8');
 console.log(`✓ Startup brief → docs/STARTUP_BRIEF.md  (v3.2)`);
 console.log(`  Session ${currentSession} · SIL ${silTotal}/${silMax} · ${pct} · Unblocked ${openNow.length} / Blocked ${openBlocked.length}`);
 console.log(`  Signals: tests ${sigTests}  velocity ${sigVel}  runway ${sigRun}  genome ${sigGenome}  entropy ${sigEntropy}  cdr ${sigCdr}  patterns ${sigPatterns}  templates ${sigVer}  revenue ${sigRev}`);

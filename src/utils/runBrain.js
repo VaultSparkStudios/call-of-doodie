@@ -155,6 +155,29 @@ export function matchesExperiment(config = {}, intent = null) {
   return "diverged";
 }
 
+/**
+ * Suggests a difficulty upgrade or downgrade based on recent run history.
+ * Returns { direction: 'up'|'down', label, reason } or null if no suggestion.
+ * Requires at least 3 recent runs with wave data.
+ */
+export function suggestDifficulty(runHistory = [], currentDiff = "normal") {
+  const recent = Array.isArray(runHistory) ? runHistory.slice(0, 5).filter(r => r && n(r.wave) > 0) : [];
+  if (recent.length < 3) return null;
+  const avgWave = average(recent.map(r => r.wave));
+  const UPGRADE_MAP = { recruit: "normal", normal: "veteran", veteran: "nightmare" };
+  const DOWNGRADE_MAP = { nightmare: "veteran", veteran: "normal", normal: "recruit" };
+  const DIFF_LABELS = { recruit: "RECRUIT", normal: "NORMAL", veteran: "VETERAN", nightmare: "NIGHTMARE" };
+  if (avgWave >= 14 && UPGRADE_MAP[currentDiff]) {
+    const next = UPGRADE_MAP[currentDiff];
+    return { direction: "up", label: DIFF_LABELS[next] || next.toUpperCase(), reason: `Clearing wave ${avgWave.toFixed(0)} avg — ${DIFF_LABELS[next] || next} awaits.` };
+  }
+  if (avgWave <= 4 && DOWNGRADE_MAP[currentDiff]) {
+    const prev = DOWNGRADE_MAP[currentDiff];
+    return { direction: "down", label: DIFF_LABELS[prev] || prev.toUpperCase(), reason: `Avg wave ${avgWave.toFixed(0)} on ${DIFF_LABELS[currentDiff]} — try ${DIFF_LABELS[prev] || prev}.` };
+  }
+  return null;
+}
+
 export function mostFrequentKiller(runHistory = []) {
   const counts = {};
   const names = {};

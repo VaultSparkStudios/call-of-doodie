@@ -56,8 +56,10 @@ export function pointerAimBucket(angle) {
 
 export function buildPointerAimSweepReport(rect, canvasSize, player) {
   const safeRect = rect || { left: 0, top: 0, width: canvasSize?.w || 1, height: canvasSize?.h || 1 };
-  const midX = (safeRect.left || 0) + (safeRect.width || 1) / 2;
-  const midY = (safeRect.top || 0) + (safeRect.height || 1) / 2;
+  const canvasW = canvasSize?.w || safeRect.width || 1;
+  const canvasH = canvasSize?.h || safeRect.height || 1;
+  const midX = (safeRect.left || 0) + ((player?.x ?? canvasW / 2) / canvasW) * (safeRect.width || 1);
+  const midY = (safeRect.top || 0) + ((player?.y ?? canvasH / 2) / canvasH) * (safeRect.height || 1);
   const edgeX = (safeRect.width || 1) * 0.35;
   const edgeY = (safeRect.height || 1) * 0.35;
   const probes = [
