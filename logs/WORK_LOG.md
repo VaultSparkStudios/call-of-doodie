@@ -13,6 +13,7 @@
   - Verified current-worktree wave kill attribution, mutation accept flash, coin-streak particle escalation, and adaptive spawn damping.
 - Validation: focused utility tests pass; `npm test` passes 423/423 across 47 files; `npm run build` passes; `npm run test:e2e` passes 1/1 Chromium test.
 - Follow-up dependency remediation: fixed the Studio Ops package-trust false positive for exact `vitest`, upgraded the Vitest/Vite toolchain, pinned patched transitive packages with npm overrides, and verified `npm audit --json` reports 0 vulnerabilities.
+- Closeout continuation repaired local protocol evidence gates: `scripts/verify-plan-mode.mjs` now stamps Codex/non-Claude sessions as `not_required`, and `scripts/lib/sil-categories.mjs` restores the local PROJECT_STATUS SIL invariant check. Validation: `npm run lint` clean, `npm run protocol:drift -- --json` status ok, `node scripts/lib/write-project-status.mjs --check` clean, and edited helper syntax checks pass.
 
 ## 2026-06-07 (Session 83)
 

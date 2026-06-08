@@ -8,6 +8,8 @@ Shipped this pass: `suggestDifficulty(runHistory, currentDiff)` in RunBrain with
 
 Validation: focused utility tests passed, full `npm test` passed 423/423 across 47 files, `npm run build` passed, and `npm run test:e2e` passed 1/1 Chromium test. Follow-up dependency remediation upgraded the Vitest/Vite toolchain and pinned patched transitive packages; `npm audit --json` now reports 0 vulnerabilities.
 
+Closeout continuation repaired two repo-local protocol gaps found by verification: `scripts/verify-plan-mode.mjs` now stamps Codex/non-Claude sessions as `not_required` instead of false `missing`, and `scripts/lib/sil-categories.mjs` now exists so `node scripts/lib/write-project-status.mjs --check` can prove the SIL invariant locally. Fresh gates: `npm run lint` clean, `npm run protocol:drift -- --json` status ok, `node scripts/lib/write-project-status.mjs --check` clean, and `node --check` passes for the edited helpers.
+
 Next priorities: optionally deepen enemy death feedback from final-marker annotation into multi-death cluster centroid grouping; keep live Supabase deploy and manual launch QA as credential/human-gated work.
 
 ## Where We Left Off - Session 83 (2026-06-07)

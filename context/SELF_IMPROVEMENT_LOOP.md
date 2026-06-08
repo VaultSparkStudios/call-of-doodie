@@ -10,7 +10,7 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 | Creative Alignment | 98 | ↓ | Build grading, enemy death cause, wave debriefs, mutation ceremony, and difficulty coaching all reinforce the tactical parody loop |
 | Momentum | 100 | → | Converted the full fresh audit into shipped code and verified current recovered worktree features instead of leaving ambiguous drift |
 | Engagement | 97 | ↓ | Post-run and pre-run feedback now teach players what to change without adding friction or paid AI calls |
-| Process Quality | 100 | → | `/start`, `/audit`, `/implement`, package trust, dependency remediation, unit/build/e2e verification, and write-back completed |
+| Process Quality | 100 | → | `/start`, `/audit`, `/implement`, package trust, dependency remediation, unit/build/e2e verification, protocol-gate repair, and write-back completed |
 | Cross-Repo Coherence | 100 | → | Work stayed repo-local and public-safe; no sibling repo writes or private ops imports |
 | Security Posture | 100 | → | Dev-toolchain audit is clean after reviewed upgrades and npm overrides; no secrets or runtime network surfaces added |
 | Ecosystem Integration | 97 | ↓ | Playwright harness closes the input-confidence automation gap and audit sidecars now reflect execution state |
@@ -18,6 +18,8 @@ Detailed internal scoring, audit trends, and brainstorming are maintained privat
 | Automation Coverage | 100 | → | Full unit suite, production build, and real-browser pointer regression are green |
 
 SIL +9: Shipped the fresh Session 84 audit queue across player intelligence, post-run debriefing, and pointer-confidence automation, then completed the dev-toolchain vulnerability remediation. Validation: `npm test` 423/423, `npm run build` passing, `npm run test:e2e` passing 1/1, and `npm audit --json` reporting 0 vulnerabilities.
+
+Closeout continuation: repaired Codex plan-mode truth stamping and the missing SIL category helper so local protocol gates now pass (`verify-plan-mode --json`, `protocol:drift -- --json`, and `write-project-status --check`).
 
 **Top win:** The pointer 360 browser regression is no longer a deferred launch-confidence gap.
 **Top gap:** Enemy death feedback still has a richer follow-up available: multi-death cluster centroid grouping.

@@ -49,9 +49,14 @@ if (m) sessionStart = new Date(m[1]).getTime();
 
 const planModeRequired = !!status.modelPlanMode;
 const tier = status.modelTier || null;
+const agentMatch = lockText.match(/^agent:\s*(\S+)/m);
+const sessionAgent = agentMatch ? agentMatch[1] : null;
 
-if (!planModeRequired) {
-  emit({ status: 'not_required', tier, reason: 'tier does not require plan-mode' });
+if (!planModeRequired || (sessionAgent && sessionAgent !== 'claude-code')) {
+  const reason = !planModeRequired
+    ? 'tier does not require plan-mode'
+    : `agent ${sessionAgent} does not support Claude Code plan-mode`;
+  stampNotRequired(reason);
   process.exit(0);
 }
 
@@ -142,3 +147,21 @@ function emit(r) {
   if (r.reminder) console.log(`  → ${r.reminder}`);
 }
 emit(result);
+
+function stampNotRequired(reason) {
+  const result = { status: 'not_required', tier, agent: sessionAgent, reason };
+  try {
+    status.planModeDetected = result.status;
+    status.planModeCheckedAt = new Date().toISOString();
+    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+  } catch { /* non-fatal */ }
+  try {
+    if (fs.existsSync(lockPath)) {
+      const updated = lockText.includes('plan_mode_detected:')
+        ? lockText.replace(/plan_mode_detected:\s*\S+/, `plan_mode_detected: ${result.status}`)
+        : lockText.trimEnd() + `\nplan_mode_detected: ${result.status}\n`;
+      fs.writeFileSync(lockPath, updated);
+    }
+  } catch { /* non-fatal */ }
+  emit(result);
+}

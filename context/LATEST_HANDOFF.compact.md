@@ -38,10 +38,11 @@ Human-blocked (with age)
 - Itch.io publication — open since S74 (~10 sessions)
 - PostHog/Sentry GitHub Action secrets + HomeV2 Lighthouse/funnel capture before legacy v1 retirement — open since S67 (~17 sessions)
 - Rotate/narrow broad Cloudflare studio-access token — open since S65 (~19 sessions)
+- Merge feat-standalone-domain -> main, confirm Cloudflare Pages deploy — open since S67 (~17 sessions)
 - Supabase Auth + Obelisk account bridge (greenlight needed) — open since S75 (~9 sessions)
 
 Repo State
-- Branch: main
+- Branch: feat-standalone-domain
 - Protocol drift: clean (missingRequired=0, missingOptional=0)
 - Local helpers present: skill-profile, set-active-skill, medium-quality-gates, sil-rubrics, credential-watch, ark, router, check-brief-staleness, build-skill-manifest, skill-trace-emit
 - Gap: scripts/record-skill-cost.mjs not present locally

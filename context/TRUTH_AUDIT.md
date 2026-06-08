@@ -10,6 +10,7 @@
 - Pointer harness truth - `@playwright/test@1.60.0` was installed after exact-version package-trust approval, and the e2e test proves the debug HUD reaches `pointer:4/4`.
 - Validation truth - `npm test` passed 423/423 across 47 files, `npm run build` passed, and `npm run test:e2e` passed 1/1 Chromium test.
 - Dependency truth - the dev-toolchain remediation is complete: package-trust approved the exact upgrade set after fixing a false-positive `vitest` typosquat rule in Studio Ops, and `npm audit --json` now reports 0 vulnerabilities.
+- Protocol truth - Codex sessions now truthfully stamp plan mode as `not_required` in `verify-plan-mode.mjs`, and the local SIL category list exists so `node scripts/lib/write-project-status.mjs --check` can run instead of failing on a missing import.
 
 Overall status: green locally with zero npm audit vulnerabilities
 Last reviewed: 2026-06-08

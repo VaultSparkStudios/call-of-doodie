@@ -76,8 +76,8 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-06-08T04:45:25.747Z",
+  "planModeDetected": "not_required",
+  "planModeCheckedAt": "2026-06-08T17:58:30.335Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral"
 }
