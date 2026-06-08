@@ -2,6 +2,14 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-08 — Session 85 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Converted Session 84's desktop-only input proof into desktop+mobile browser coverage, made first-run aim calibration visible as a tested pre-run chip, and upgraded the death heatmap from an unlabeled final emoji to a readable killer label. Validation: focused tests 11/11, full `npm test` 427/427, lint clean, build passing, Playwright 2/2 across Chromium + Mobile Chrome.
+
+**Top win:** Launch input confidence now has automated mobile viewport evidence, not just desktop proof.
+**Top gap:** Physical device PWA/gamepad QA and deterministic replay resimulation remain the meaningful unclosed trust edges.
+**Intent outcome:** Achieved — `/start`, `/audit`, `/implement`, and closeout write-back completed with concrete validation evidence.
+
 ## 2026-06-08 — Session 84 | Total: 1000/1000 | Velocity: 9 | Debt: ↓
 
 | Category | Score | vs Last | Notes |

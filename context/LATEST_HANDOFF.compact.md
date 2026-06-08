@@ -1,50 +1,54 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 50077c802f25 -->
-<!-- generated-at: 2026-06-08T17:14:47.933Z -->
+<!-- source-hash: 79ca4a1b1404 -->
+<!-- generated-at: 2026-06-08T18:10:07.101Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 84 (2026-06-08)
+Session 84 (2026-06-08) | Codex
 
 Shipped
-- suggestDifficulty in RunBrain with HomeV2 coaching
-- computeBuildGrade and DeathScreen BUILD GRADE card
+- RunBrain suggestDifficulty + HomeV2 coaching
+- computeBuildGrade + DeathScreen BUILD GRADE card
 - Final ghost-path death markers annotated with killer enemy type
 - Playwright pointer 360 harness (@playwright/test@1.60.0)
-- Pointer sweep projection fix (measures around projected player pos)
-- Verified: wave kill attribution, mutation accept flash, coin-streak particle escalation, adaptive spawn damping
+- Pointer sweep projection fix (measures around projected player)
 - Vitest/Vite toolchain upgrade; npm audit 0 vulns
+- verify-plan-mode stamps non-Claude as not_required
+- scripts/lib/sil-categories.mjs added for SIL invariant check
 
 Validation
-- npm test 423/423 across 47 files
-- npm run build pass
-- npm run test:e2e 1/1 Chromium
+- npm test: 423/423 across 47 files
+- npm run build: pass
+- npm run test:e2e: 1/1 Chromium
+- npm run lint: clean
+- protocol:drift --json: ok
+- write-project-status --check: clean
 
-Intent
-- Durable /start -> /audit -> /implement -> /closeout loop; product-intelligence and input-confidence sprint complete
+Current intent
+- Continue durable /start -> /audit -> /implement -> /closeout loop
+- Product-intelligence + input-confidence lane
 
-Now (top 3)
-- Deepen enemy death feedback: multi-death cluster centroid grouping from final-marker annotation
-- Deterministic replay resim runner using stored rich trace bodies + movement/action primitives
-- Formation telemetry tuning before adding more formation types
+Now bucket
+1. Deepen enemy death feedback: multi-death cluster centroid grouping (extends final-marker annotation)
+2. Playwright pointer 360 expansion beyond single Chromium smoke
+3. Adaptive enemy difficulty curve (per-enemy spawn weight reduction after repeated deaths)
 
 Blockers (top 3)
-- Supabase edge-function deploy (sync-studio-events) gated on SUPABASE_ACCESS_TOKEN; check-secrets reports supabase MISSING
-- Cloudflare Web Analytics beacon SRI failure (Cloudflare-injected, no in-repo source) — needs Cloudflare console fix
-- npm run replay:trust-smoke requires network permission against deployed validate-replay
+1. Supabase edge-function deploy of sync-studio-events — needs SUPABASE_ACCESS_TOKEN (check-secrets reports MISSING)
+2. Cloudflare Web Analytics beacon SRI failure — Cloudflare-injected, no repo source; needs Cloudflare dashboard fix
+3. Physical PWA/gamepad QA + Itch.io publication — human/device gated
 
-Human-blocked (with age)
-- Physical PWA/gamepad QA on device — open since S74 (~10 sessions)
-- Itch.io publication — open since S74 (~10 sessions)
-- PostHog/Sentry GitHub Action secrets + HomeV2 Lighthouse/funnel capture before legacy v1 retirement — open since S67 (~17 sessions)
-- Rotate/narrow broad Cloudflare studio-access token — open since S65 (~19 sessions)
-- Merge feat-standalone-domain -> main, confirm Cloudflare Pages deploy — open since S67 (~17 sessions)
-- Supabase Auth + Obelisk account bridge (greenlight needed) — open since S75 (~9 sessions)
+Human-blocked (age)
+- Supabase token for edge deploy: 2 sessions (S82-S84)
+- Cloudflare Web Analytics SRI: 2 sessions (S82-S84)
+- Physical PWA/gamepad QA: 7+ sessions (since S77)
+- Itch.io publication: 7+ sessions (since S77)
+- PostHog/Sentry GitHub Action secrets + HomeV2 Lighthouse/funnel: 17+ sessions (since S67)
+- Cloudflare studio-access token rotation/narrowing: 19+ sessions (since S65)
 
-Repo State
-- Branch: feat-standalone-domain
-- Protocol drift: clean (missingRequired=0, missingOptional=0)
-- Local helpers present: skill-profile, set-active-skill, medium-quality-gates, sil-rubrics, credential-watch, ark, router, check-brief-staleness, build-skill-manifest, skill-trace-emit
-- Gap: scripts/record-skill-cost.mjs not present locally
+Repo state
+- Branch: feat-standalone-domain (per S67)
+- Canonical: https://callofdoodie.wtf/ (Cloudflare Pages)
+- Skill profile: game overlay via scripts/lib/skill-profile.mjs
 
-Next session: run /start; if context-meter CONTINUE, pick multi-death cluster centroid grouping as next /audit -> /implement slice.
+Next session: run /start; if context CONTINUE, pursue multi-death cluster centroid grouping as next product slice.

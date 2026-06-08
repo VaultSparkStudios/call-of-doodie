@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildInputCalibrationRecord,
+  buildInputCalibrationNudge,
   loadInputCalibration,
   saveInputCalibration,
   summarizeInputCalibration,
@@ -31,5 +32,37 @@ describe("input calibration", () => {
     saveInputCalibration(record, storage);
     expect(loadInputCalibration(storage)).toEqual(record);
     expect(summarizeInputCalibration(record)).toBe("mouse verified");
+  });
+
+  it("builds first-run aim check nudges for unverified and partial calibration", () => {
+    expect(buildInputCalibrationNudge(null)).toEqual({
+      status: "unverified",
+      label: "AIM CHECK 0/4",
+      detail: "4 directions left",
+      action: "VERIFY",
+    });
+
+    expect(buildInputCalibrationNudge(buildInputCalibrationRecord({ buckets: ["east", "north"] }))).toEqual({
+      status: "partial",
+      label: "AIM CHECK 2/4",
+      detail: "2 directions left",
+      action: "VERIFY",
+    });
+  });
+
+  it("builds verified and diagnostics-aware aim check nudges", () => {
+    const record = buildInputCalibrationRecord({
+      source: "mouse",
+      buckets: ["east", "west", "north", "south"],
+      timestamp: 123,
+    });
+
+    expect(buildInputCalibrationNudge(record)).toEqual({
+      status: "verified",
+      label: "AIM CHECK VERIFIED",
+      detail: "mouse verified",
+      action: "READY",
+    });
+    expect(buildInputCalibrationNudge(record, { debugEnabled: true }).action).toBe("OPEN DIAGNOSTICS");
   });
 });

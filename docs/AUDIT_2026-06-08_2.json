@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-08",
+    "session": 85,
+    "project": "call-of-doodie",
+    "type": "game",
+    "axisWeights": {
+      "gamification": 6,
+      "ux": 4,
+      "ai": 3,
+      "featureDepth": 3,
+      "security": 1,
+      "speed": 1,
+      "token": 1
+    },
+    "totalItems": 3,
+    "combinedPriority": 103.9,
+    "top3": [
+      "mobile-pointer-360-proof",
+      "first-run-aim-check-chip",
+      "killer-heatmap-label"
+    ],
+    "executionSummary": {
+      "status": "implemented",
+      "implementedAt": "2026-06-08",
+      "tests": "427/427",
+      "build": "pass",
+      "e2e": "2/2 desktop+mobile",
+      "lint": "pass"
+    }
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "slug": "mobile-pointer-360-proof",
+      "title": "Mobile Pointer 360 Browser Proof",
+      "axis": "feature depth & refinement + ui / ux",
+      "tier": "🔥",
+      "impact": 9,
+      "innovation": 6,
+      "effort": "1h",
+      "effortHours": 1,
+      "priority": 34.1,
+      "why": "Session 84 proved desktop pointer coverage, but the public launch promise is mobile and desktop. Running the same real-browser pointer sweep under a mobile viewport closes the biggest remaining automation gap before physical-device QA, and it catches canvas scaling regressions that unit tests cannot see.",
+      "recipe": "Add a Mobile Chrome project to Playwright and make the pointer 360 spec assert viewport-specific coverage without changing the game loop. Keep the test path identical so desktop/mobile parity stays visible in one command.",
+      "status": "shipped",
+      "executionLog": [
+        "Playwright now runs the pointer 360 spec in Chromium and Mobile Chrome; npm run test:e2e passes 2/2."
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "first-run-aim-check-chip",
+      "title": "First-Run Aim Check Chip",
+      "axis": "ui / ux + gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 8,
+      "innovation": 7,
+      "effort": "1h",
+      "effortHours": 1,
+      "priority": 35.3,
+      "why": "The game already remembers four-direction aim calibration, but first-run players only get prose guidance. A compact AIM CHECK chip turns that invisible trust state into a visible pre-run ritual, nudging players to prove full-circle aim before a serious run without adding a modal or account dependency.",
+      "recipe": "Add buildInputCalibrationNudge(record, { debugEnabled }) in inputCalibration.js and render a quick chip on HomeV2 when totalRuns < 3 or debug input is enabled. Include focused tests for unverified, partial, complete, and debug states.",
+      "status": "shipped",
+      "executionLog": [
+        "HomeV2 renders an AIM CHECK chip for first-run/debug sessions, backed by tested calibration nudge states."
+      ]
+    },
+    {
+      "rank": 3,
+      "slug": "killer-heatmap-label",
+      "title": "Death Heatmap Killer Label",
+      "axis": "ui / ux + gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 8,
+      "innovation": 6,
+      "effort": "1h",
+      "effortHours": 1,
+      "priority": 34.5,
+      "why": "The death heatmap now marks the final killer emoji, but the player still has to infer what it means. Rendering a small killer label and danger halo on the final marker makes the debrief instantly readable and completes the bounded first step before any heavier multi-death clustering work.",
+      "recipe": "Extract buildGhostKillerMarker(ghostData, enemies, canvasSize) into a small utility, test its bounds and labels, and use it in DeathScreen to render emoji, name, and a final danger halo.",
+      "status": "shipped",
+      "executionLog": [
+        "DeathScreen now uses a tested ghost marker helper to draw final-killer emoji, name label, and danger halo on the ghost path."
+      ]
+    }
+  ],
+  "innovationReserve": [
+    "first-run-aim-check-chip"
+  ],
+  "skipped": [
+    {
+      "slug": "deterministic-resim-runner",
+      "reason": "Still high value, but it is larger than this continuation and remains constrained by replay-runner design."
+    },
+    {
+      "slug": "home-v1-retirement",
+      "reason": "Requires Lighthouse and funnel evidence before removing the fallback."
+    }
+  ]
+}

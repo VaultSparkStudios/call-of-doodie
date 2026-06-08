@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-06-08 (Session 85)
+
+- Ran `/start`, wrote continuation audit artifacts `docs/AUDIT_2026-06-08_2.md` / `.json`, implemented all three ranked items, and updated `docs/IMPLEMENT_PLAN.md`.
+- Expanded Playwright pointer coverage from single desktop Chromium proof to desktop Chromium plus Mobile Chrome.
+- Added `buildInputCalibrationNudge()` and HomeV2 AIM CHECK quick chip so first-run/debug sessions expose local four-direction calibration state before deployment.
+- Added `src/utils/ghostPath.js` plus tests and used it in DeathScreen to draw a bounded final-killer halo, emoji, and enemy-name label on the ghost path.
+- Validation: focused tests 11/11; `npm test` 427/427 across 48 files; `npm run lint` clean; `npm run build` passing; `npm run test:e2e` 2/2 across Chromium + Mobile Chrome.
+
 ## 2026-06-08 (Session 84)
 
 - Continued the durable `/start -> /audit -> /implement -> /closeout` goal from current repo evidence.

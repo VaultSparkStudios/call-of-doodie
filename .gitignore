@@ -17,6 +17,7 @@ docs/RIGHTS_PROVENANCE.md
 .cache/
 .ops-cache/
 docs/cache-ledger.ndjson
+test-results/
 
 # Private surfaces — never commit (sanitization 2026-06-03)
 ignis/output/

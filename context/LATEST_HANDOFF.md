@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 85 (2026-06-08)
+
+Continued the durable `/start -> /audit -> /implement -> /closeout` loop from fresh Session 84 evidence. Created and executed `docs/AUDIT_2026-06-08_2.md` / `.json` for a bounded three-item launch-confidence continuation.
+
+Shipped this pass: Playwright pointer 360 now runs under both desktop Chromium and Mobile Chrome; HomeV2 renders a tested AIM CHECK chip for first-run/debug sessions using local calibration state; and DeathScreen ghost paths now show a final-killer halo, emoji, and readable enemy-name label through `src/utils/ghostPath.js`.
+
+Validation: focused tests passed 11/11, full `npm test` passed 427/427 across 48 files, `npm run lint` passed, `npm run build` passed, and `npm run test:e2e` passed 2/2 across Chromium + Mobile Chrome.
+
+Next priorities: deterministic replay resimulation remains the largest trust milestone; HomeV2 v1 retirement still needs Lighthouse/funnel evidence; physical PWA/gamepad QA and Itch.io publication remain human/device gated.
+
 ## Where We Left Off - Session 84 (2026-06-08)
 
 Continued the durable `/start -> /audit -> /implement -> /closeout` loop from current repo evidence. Created and executed `docs/AUDIT_2026-06-08.md` / `.json` for an eight-item product-intelligence and input-confidence sprint.

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("pointer aim sweep reaches all four calibration buckets", async ({ page }) => {
+test("pointer aim sweep reaches all four calibration buckets", async ({ page }, testInfo) => {
   await page.goto("/?debug=input");
 
   const callsign = page.getByRole("textbox").first();
@@ -33,4 +33,5 @@ test("pointer aim sweep reaches all four calibration buckets", async ({ page }) 
   }
 
   await expect(page.getByTestId("input-debug-hud")).toContainText(/pointer:4\/4/i);
+  expect(["chromium", "mobile-chrome"]).toContain(testInfo.project.name);
 });

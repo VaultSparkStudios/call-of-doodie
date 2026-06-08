@@ -14,7 +14,7 @@ import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
-import { loadInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
+import { buildInputCalibrationNudge, loadInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -197,6 +197,10 @@ export default function HomeV2(props) {
   const recommendedAction = actionStack[0];
   const analyticsStatus = getAnalyticsStatus();
   const telemetrySummary = useMemo(() => summarizeStudioEvents(studioEvents), [studioEvents]);
+  const aimCheck = useMemo(
+    () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
+    [inputCalibration, inputDebugEnabled],
+  );
   const onboarding = useMemo(() => {
     const runs = career?.totalRuns || 0;
     if (runs >= 3) return null;
@@ -594,6 +598,22 @@ export default function HomeV2(props) {
               }}
             >
               DEBUG INPUT
+            </button>
+          )}
+          {(inputDebugEnabled || onboarding || aimCheck.status !== "verified") && (
+            <button
+              style={{
+                ...quickBtn,
+                borderColor: aimCheck.status === "verified" ? "rgba(0,255,136,0.4)" : "rgba(255,211,77,0.48)",
+                color: aimCheck.status === "verified" ? "#00FF88" : "#FFD34D",
+              }}
+              onClick={() => {
+                localStorage.setItem("cod-debug-input", "1");
+                recordFrontDoorAction("aim_check_chip", { source: "quick_chip", status: aimCheck.status });
+                setDeployOpen(true);
+              }}
+            >
+              {aimCheck.label} · {aimCheck.detail.toUpperCase()}
             </button>
           )}
           {(inputCalibration || controllerProfile) && (

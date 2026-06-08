@@ -10,6 +10,7 @@ import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js"
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
+import { buildGhostKillerMarker } from "../utils/ghostPath.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -95,15 +96,28 @@ export default function DeathScreen({
     ctx.fillStyle = "#FF2222"; ctx.beginPath(); ctx.arc(ex, ey, 5, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = "#fff"; ctx.font = "bold 7px monospace"; ctx.textAlign = "center";
     ctx.fillText("☠", ex, ey + 3);
-    const finalType = ghostData[ghostData.length - 1]?.killedByType;
-    if (finalType != null) {
-      const enemy = ENEMY_TYPES[Number(finalType)] || {};
+    const killerMarker = buildGhostKillerMarker(ghostData, ENEMY_TYPES, { width: W, height: H });
+    if (killerMarker) {
+      const labelX = Math.max(66, Math.min(W - 66, killerMarker.x));
+      const labelY = killerMarker.y < 28 ? killerMarker.y + 22 : killerMarker.y - 16;
+      ctx.strokeStyle = killerMarker.color + "AA";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(killerMarker.x, killerMarker.y, 12, 0, Math.PI * 2);
+      ctx.stroke();
       ctx.font = "bold 13px monospace";
       ctx.textAlign = "center";
       ctx.shadowColor = "#000";
       ctx.shadowBlur = 4;
       ctx.fillStyle = "#FFF";
-      ctx.fillText(enemy.emoji || "!", Math.min(W - 12, ex + 12), Math.max(14, ey - 8));
+      ctx.fillText(killerMarker.emoji, Math.min(W - 12, killerMarker.x + 12), Math.max(14, killerMarker.y - 8));
+      ctx.fillStyle = "rgba(0,0,0,0.72)";
+      ctx.fillRect(labelX - 58, labelY - 9, 116, 16);
+      ctx.strokeStyle = killerMarker.color + "88";
+      ctx.strokeRect(labelX - 58, labelY - 9, 116, 16);
+      ctx.fillStyle = killerMarker.color;
+      ctx.font = "bold 8px monospace";
+      ctx.fillText(killerMarker.label.toUpperCase().slice(0, 18), labelX, labelY + 3);
       ctx.shadowBlur = 0;
     }
     // Legend
