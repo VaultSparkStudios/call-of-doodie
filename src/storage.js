@@ -875,6 +875,28 @@ export function recordDeathByEnemy(typeId) {
 }
 
 /**
+ * Returns spawn-weight damp factors for the top-2 killer enemy types when
+ * the player has died to them 3+ times in the last 20 deaths. Each entry is
+ * { [typeId]: dampFactor } where dampFactor 0.15 means a 15% chance to
+ * substitute that type with a basic enemy on spawn. Cap: top-2 types only.
+ */
+export function getAdaptiveSpawnMods(career) {
+  try {
+    const arr = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy : [];
+    if (arr.length < 3) return {};
+    const counts = {};
+    arr.forEach(d => { counts[d.t] = (counts[d.t] || 0) + 1; });
+    const eligible = Object.entries(counts)
+      .filter(([, n]) => n >= 3)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2);
+    const mods = {};
+    eligible.forEach(([typeId]) => { mods[typeId] = 0.15; });
+    return mods;
+  } catch { return {}; }
+}
+
+/**
  * Returns a multiplier (1.0 → 2.0) applied to enemy ability warning windows.
  * 1.0 = no help (player is fine vs this enemy); 2.0 = double the warning
  * window because the player has died to this type 3+ times in last 5 runs.

@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -539,6 +539,7 @@ export default function CallOfDoodie() {
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
       waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null,
       precisionStreak: 0,
+      _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -880,6 +881,14 @@ export default function CallOfDoodie() {
       setTimeout(() => setMetaToast(null), 4000);
     }
     setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
+    // Adaptive spawn: notify player if pressure types are being damped this run
+    const _asmKeys = Object.keys(gsRef.current._adaptiveSpawnMods || {});
+    if (_asmKeys.length > 0) {
+      setTimeout(() => {
+        const gs = gsRef.current;
+        if (gs) addText(gs, sizeRef.current.w / 2, sizeRef.current.h / 2 - 40, "⚙ Adapted for you", "#88FF88", true);
+      }, 800);
+    }
     return seed;
   }, []);
 

@@ -94,6 +94,7 @@ vi.mock("./storage.js", () => ({
   saveStudioGameEvent: vi.fn(),
   recordDeathByEnemy: vi.fn(),
   loadRivalryHistory: vi.fn(() => []),
+  getAdaptiveSpawnMods: vi.fn(() => ({})),
 }));
 
 vi.mock("./components/UsernameScreen.jsx", () => {

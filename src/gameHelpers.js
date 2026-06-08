@@ -47,6 +47,10 @@ export function spawnEnemy(gs, W, H, difficultyId) {
   else if (wv >= 3  && r < 0.73) ti = 5;
   else if (wv >= 2  && r < 0.80) ti = 1;
 
+  // Adaptive spawn damping: substitute a pressure type with type 0 at 15% rate
+  const _asm = gs._adaptiveSpawnMods;
+  if (_asm && _asm[String(ti)] && Math.random() < _asm[String(ti)]) ti = 0;
+
   const side = Math.floor(Math.random() * 4);
   let x, y;
   if (side === 0) { x = Math.random() * W; y = -30; }

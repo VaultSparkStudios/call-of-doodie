@@ -18,6 +18,7 @@ import {
   getBossKillRecord,
   saveBossKillRecord,
   isNemesis,
+  getAdaptiveSpawnMods,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -244,5 +245,39 @@ describe("boss kill record + nemesis detection", () => {
     localStorage.clear();
     saveBossKillRecord(17, { kills: 1, deaths: 5 });
     expect(isNemesis(17)).toBe(false);
+  });
+});
+
+describe("getAdaptiveSpawnMods", () => {
+  it("returns empty object when career has no recent deaths", () => {
+    expect(getAdaptiveSpawnMods({})).toEqual({});
+  });
+
+  it("returns empty object when fewer than 3 deaths to any type", () => {
+    const career = { recentDeathsByEnemy: [{ t: "3", ts: 1 }, { t: "3", ts: 2 }] };
+    expect(getAdaptiveSpawnMods(career)).toEqual({});
+  });
+
+  it("returns 0.15 damp factor for type with 3+ deaths", () => {
+    const career = { recentDeathsByEnemy: [
+      { t: "3", ts: 1 }, { t: "3", ts: 2 }, { t: "3", ts: 3 },
+    ]};
+    expect(getAdaptiveSpawnMods(career)).toEqual({ "3": 0.15 });
+  });
+
+  it("caps to top-2 types even when 3+ types qualify", () => {
+    const career = { recentDeathsByEnemy: [
+      { t: "1", ts: 1 }, { t: "1", ts: 2 }, { t: "1", ts: 3 },
+      { t: "2", ts: 4 }, { t: "2", ts: 5 }, { t: "2", ts: 6 },
+      { t: "7", ts: 7 }, { t: "7", ts: 8 }, { t: "7", ts: 9 },
+    ]};
+    const mods = getAdaptiveSpawnMods(career);
+    expect(Object.keys(mods).length).toBe(2);
+  });
+
+  it("handles missing or malformed career gracefully", () => {
+    expect(getAdaptiveSpawnMods(null)).toEqual({});
+    expect(getAdaptiveSpawnMods(undefined)).toEqual({});
+    expect(getAdaptiveSpawnMods({ recentDeathsByEnemy: "bad" })).toEqual({});
   });
 });
