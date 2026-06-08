@@ -50,7 +50,7 @@ if (m) sessionStart = new Date(m[1]).getTime();
 const planModeRequired = !!status.modelPlanMode;
 const tier = status.modelTier || null;
 const agentMatch = lockText.match(/^agent:\s*(\S+)/m);
-const sessionAgent = agentMatch ? agentMatch[1] : null;
+const sessionAgent = agentMatch ? agentMatch[1] : (status.lastAgent || null);
 
 if (!planModeRequired || (sessionAgent && sessionAgent !== 'claude-code')) {
   const reason = !planModeRequired
