@@ -1,0 +1,97 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-12",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 86,
+    "axisWeights": {
+      "gamification": 6,
+      "ui_ux": 4,
+      "feature_depth": 3,
+      "ai_intelligence": 3,
+      "feedback_loop": 2,
+      "security": 1.5,
+      "speed_efficiency": 1,
+      "token_cost": 1
+    },
+    "candidateCount": 3,
+    "combinedPriority": 83.8,
+    "top3": [
+      "replay-resim-honesty-receipt",
+      "ghost-death-readout",
+      "trust-copy-honesty-pass"
+    ],
+    "shippedCount": 3,
+    "lastImplementedAt": "2026-06-12"
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "slug": "replay-resim-honesty-receipt",
+      "title": "Replay Resim Honesty Receipt",
+      "axis": "security",
+      "tier": "🔥",
+      "impact": 9,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 45.4,
+      "why": "The current replay resim runner is useful, but it is a pressure-model estimate rather than a true deterministic frame simulation. The product should keep the trust value while exposing the method plainly so future leaderboard gates never overclaim certainty. Add a machine-readable receipt that names the method, gate mode, and confidence class.",
+      "recipe": "In src/utils/replayResim.js, add method/confidence/gate fields to runResim() output and rename invalid-trace reason to make the failure source explicit. Mirror those fields in supabase/functions/validate-replay/index.ts resim output and rejection text. Add focused tests proving valid traces return heuristic_pressure_estimate/advisory and invalid traces return invalid-trace.",
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped method/confidence/gate receipts for local replay resim and validate-replay pressure-estimate output. Verified focused tests 15/15, full npm test 432/432, lint, and build."
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "ghost-death-readout",
+      "title": "Ghost Death Readout",
+      "axis": "ui_ux",
+      "tier": "⚡",
+      "impact": 8,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 35.3,
+      "why": "The death recap canvas is cinematic, but players still have to infer what happened from a path smear. A tiny readout that says whether the final seconds were pinned, sprinting, drifting, or trapped turns the replay into coaching without adding AI or network cost. It also makes the killer marker more actionable.",
+      "recipe": "In src/utils/ghostPath.js, add buildGhostDeathReadout(ghostData, enemies) that analyzes the last 90 samples for movement distance, bounding box, and killer label. Render the resulting headline/detail under the DeathScreen ghost canvas. Add tests for pinned vs sprinting final paths.",
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped DeathScreen ghost final-path readout with pinned/sprinting/trapped/drifting classifications and tests. Verified focused tests 15/15, full npm test 432/432, lint, and build."
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "slug": "trust-copy-honesty-pass",
+      "title": "Replay Trust Copy Honesty Pass",
+      "axis": "feedback_loop",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "30m",
+      "effortHours": 0.5,
+      "innovation": 6,
+      "priority": 24.4,
+      "why": "Run History currently uses deterministic-resimulation phrasing in readiness copy even though the shipped gate is still an estimate. Tightening that language prevents a future operator or player-facing surface from treating a pilot signal as proof. This is small, but it protects the trust loop from semantic drift.",
+      "recipe": "Update src/utils/studioEventOps.js readiness and benchmark copy from deterministic replay-resimulation to replay-resim pilot / pressure-estimate language. Add or update focused expectations so future copy changes cannot silently reintroduce deterministic claims.",
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped trust copy honesty pass and regression guard preventing deterministic/resimulation claims in live trust copy. Verified focused tests 15/15, full npm test 432/432, lint, and build."
+        }
+      ]
+    }
+  ],
+  "innovationReserve": [
+    "replay-resim-honesty-receipt"
+  ],
+  "skipped": []
+}

@@ -537,3 +537,12 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Implemented phantom elite variant: wave≥25 12% spawn chance, 90-frame opacity toggle (15%↔95%), purple dashed ring, speed×1.1, HP×0.85; `drawGame.js` globalAlpha handling.
 - Validation: 427/427 tests, 0 new lint errors, build 768.41 kB / 237.42 kB gzip.
 - Commits: `e371983` (implement pass), `bfe2e76` (closeout write-back). Pushed to origin main.
+
+## 2026-06-12 — Session 86 follow-on
+
+- Ran `/start` continuation with Codex session lock, context-meter `CONTINUE`, startup brief fresh, no Ark backlog, and blocker preflight showing only known manual/credential launch gates.
+- Created `docs/AUDIT_2026-06-12_2.md` / `.json` after confirming `docs/AUDIT_2026-06-12.json` was already fully shipped.
+- Implemented replay resim honesty receipts: `src/utils/replayResim.js` returns `method: heuristic_pressure_estimate`, `confidence: advisory`, and `gate: pressure-estimate-v1`; `validate-replay` mirrors those fields and changes drift wording to pressure-estimate.
+- Implemented DeathScreen ghost death readouts: `buildGhostDeathReadout()` classifies final paths as pinned, sprinting, trapped, or drifting and renders a coaching line under the ghost replay canvas.
+- Implemented trust-copy guardrails: `studioEventOps` now uses pressure-estimate / pilot copy and tests prevent deterministic/resimulation claims from returning to live trust copy.
+- Validation: focused tests 15/15; full `npm test` 432/432 across 49 files; `npm run lint` clean; `npm run build` passing.

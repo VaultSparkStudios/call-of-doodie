@@ -1073,3 +1073,16 @@ SIL +3: Converted input diagnostics from one-session observation into durable lo
 1. Playwright pointer harness — drive canvas pointer positions around the player and assert debug HUD buckets across desktop/mobile viewports. High probability.
 2. Target-ring calibration mode — turn the current automatic debug calibration into a short optional first-run target sweep with a visible local "controls verified" reward. High probability.
 3. Device-specific control hints — use remembered controller profile ids to suggest Xbox/PS button labels and dead-zone notes on the debug HUD. Medium probability.
+
+## 2026-06-12 — Session 86 follow-on | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +2: Converted replay-resim trust from an overconfident label into an honest pressure-estimate receipt, added a DeathScreen final-path coaching readout, and guarded live trust copy against deterministic/resimulation overclaims. Validation: focused tests 15/15, full `npm test` 432/432, lint clean, build passing.
+
+**Top win:** The replay trust layer now says exactly what it is: advisory pressure-estimate evidence, not a full deterministic frame simulation.
+**Top gap:** True physics-parity replay resimulation remains a larger Phase 2C design slice.
+**Intent outcome:** Achieved for `/start`, fresh follow-on `/audit`, `/implement`, validation, and write-back; closeout autopilot remains pending.
+
+**Brainstorm**
+1. Physics-parity replay resim design — replace the pressure estimate with a true seeded frame runner once the combat/pathing surface is narrow enough. High probability.
+2. Death-readout drill bridge — turn pinned/sprinting/trapped classifications into one-tap Most Wanted or route drills. High probability.
+3. Edge receipt smoke — deploy `validate-replay` and verify the new pressure-estimate receipt shape against live rich/weak trace fixtures. Medium probability.

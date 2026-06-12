@@ -67,6 +67,7 @@ describe("studioEventOps", () => {
 
     expect(readiness.status).toBe("ready");
     expect(readiness.score).toBeGreaterThan(90);
+    expect(readiness.detail).toContain("pressure-estimate");
   });
 
   test("gives basic trace evidence an upgrade contract", () => {
@@ -118,7 +119,26 @@ describe("studioEventOps", () => {
     expect(buildTraceProofNextBenchmark({
       resimReadiness: { status: "ready" },
       traceEvidenceCounts: { rich: 2 },
-    })).toMatchObject({ status: "ready", title: "Replay Trust Pilot" });
+    })).toMatchObject({
+      status: "ready",
+      title: "Replay Trust Pilot",
+      target: expect.stringContaining("pressure-estimate"),
+    });
+  });
+
+  test("does not reintroduce deterministic resim claims in live trust copy", () => {
+    const ready = buildReplayResimReadiness({
+      traceEvidenceCounts: { rich: 2 },
+      failedSyncCount: 0,
+    });
+    const benchmark = buildTraceProofNextBenchmark({
+      resimReadiness: { status: "ready" },
+      traceEvidenceCounts: { rich: 2 },
+    });
+    const copy = `${ready.detail} ${benchmark.target}`;
+
+    expect(copy).not.toMatch(/deterministic|resimulation/i);
+    expect(copy).toMatch(/pressure-estimate|pilot/i);
   });
 
 });

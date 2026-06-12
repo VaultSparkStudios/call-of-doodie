@@ -445,3 +445,11 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - Death recap mini-replay uses the existing `ghostData` path samples only; `DeathScreen.jsx` owns the requestAnimationFrame replay loop and restart button, with no new storage format.
 - `src/utils/replayResim.js` is the browser-side replay resim utility for trace-body summaries; `supabase/functions/validate-replay/index.ts` owns the matching Phase 2B Edge Function drift check and rejects rich traces above 2% drift.
 - No source-of-truth contradictions introduced. Validation: 429/429 tests, 0 lint errors, build clean.
+
+## 2026-06-12 - Session 86 follow-on
+
+- `docs/AUDIT_2026-06-12_2.md` / `.json` are the source of truth for the follow-on replay-trust honesty sprint; all three items are marked shipped with execution logs.
+- `src/utils/replayResim.js` and `supabase/functions/validate-replay/index.ts` now explicitly identify the shipped gate as `heuristic_pressure_estimate` with advisory confidence, not a full deterministic frame simulation.
+- `src/utils/ghostPath.js` owns final-path death readout classification; `DeathScreen.jsx` only renders the returned headline/detail under the existing ghost replay canvas.
+- `src/utils/studioEventOps.js` owns live trust/readiness copy. Tests now guard against deterministic/resimulation wording returning to the pressure-estimate trust surface.
+- No source-of-truth contradictions introduced. Validation: focused tests 15/15, `npm test` 432/432, lint clean, build clean.

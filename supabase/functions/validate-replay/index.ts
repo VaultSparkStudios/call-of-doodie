@@ -44,6 +44,9 @@ interface ValidateResult {
     weaknessReasons: string[];
   };
   resim?: {
+    method: "heuristic_pressure_estimate";
+    confidence: "advisory";
+    gate: "pressure-estimate-v1";
     finalWave: number;
     finalScore: number;
     driftPct: number;
@@ -163,6 +166,9 @@ function runTraceResim(req: ValidateRequest, traceBody: string, traceLength: num
   const waveDrift = Math.abs(submittedWave - finalWave) / Math.max(4, submittedWave);
   const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - finalScore) / Math.max(2500, submittedScore) : 0;
   return {
+    method: "heuristic_pressure_estimate" as const,
+    confidence: "advisory" as const,
+    gate: "pressure-estimate-v1" as const,
     finalWave,
     finalScore,
     driftPct: Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100,
@@ -271,7 +277,7 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
       traceEvidence = analyzeTraceEvidence(traceBody);
       resim = runTraceResim(req, traceBody, traceLengthRaw);
       if (traceEvidence.level === "rich" && resim.driftPct > 2) {
-        reasons.push(`replay resim drift ${resim.driftPct.toFixed(2)}% above 2% threshold`);
+        reasons.push(`replay pressure-estimate drift ${resim.driftPct.toFixed(2)}% above 2% advisory threshold`);
         drift = Math.max(drift, Math.min(1, resim.driftPct / 100));
       }
     }

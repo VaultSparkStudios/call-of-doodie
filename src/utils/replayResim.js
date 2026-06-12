@@ -48,6 +48,9 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
 
   return {
     ok: valid,
+    method: "heuristic_pressure_estimate",
+    confidence: valid ? "advisory" : "invalid",
+    gate: "pressure-estimate-v1",
     seed: clampInt(seed, 0, 999999999, 0),
     finalWave,
     finalScore,

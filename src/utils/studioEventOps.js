@@ -115,7 +115,7 @@ export function buildReplayResimReadiness({
   if (rich >= 2 && failedSyncCount === 0) {
     status = "ready";
     score = 95;
-    detail = "Multiple rich traces and clean sync health make the next resim pilot credible.";
+    detail = "Multiple rich traces and clean sync health make the pressure-estimate resim pilot credible.";
   } else if (rich >= 1) {
     status = "pilot-ready";
     score = failedSyncCount > 0 ? 68 : 78;
@@ -159,7 +159,7 @@ export function buildTraceProofNextBenchmark({
     return {
       status: "ready",
       title: "Replay Trust Pilot",
-      target: "Start the deterministic replay-resimulation design pass with the rich-trace fixture set.",
+      target: "Start the replay-resim pressure-estimate review with the rich-trace fixture set.",
       measure: `${rich} rich trace samples · ${failedSyncCount} sync retries`,
     };
   }

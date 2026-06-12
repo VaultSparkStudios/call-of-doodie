@@ -2,6 +2,12 @@
 
 ## Where We Left Off - Session 86 (2026-06-12)
 
+Follow-on continuation executed a fresh same-day audit after the prior `docs/AUDIT_2026-06-12.md` / `.json` was verified fully shipped. New audit `docs/AUDIT_2026-06-12_2.md` / `.json` shipped all three items: replay resim honesty receipts, ghost death readouts, and trust-copy guardrails.
+
+Shipped in the follow-on: `src/utils/replayResim.js` now returns `method: heuristic_pressure_estimate`, `confidence: advisory`, and `gate: pressure-estimate-v1`; `supabase/functions/validate-replay/index.ts` mirrors those receipt fields and names drift as a pressure-estimate advisory threshold; `src/utils/ghostPath.js` adds `buildGhostDeathReadout()` for pinned/sprinting/trapped/drifting final path coaching; `src/components/DeathScreen.jsx` renders that readout below the ghost replay canvas; `src/utils/studioEventOps.js` now uses pressure-estimate/pilot copy, with tests guarding against deterministic/resimulation overclaims.
+
+Validation for the follow-on: focused replay/ghost/trust tests 15/15; full `npm test` 432/432 across 49 files; `npm run lint` clean; `npm run build` passing. Commit/push for this follow-on is pending closeout autopilot.
+
 Executed the full `/start -> /audit -> /implement -> /closeout` pipeline, then continued the same audit to completion. Audit `docs/AUDIT_2026-06-12.md` / `.json` identified 8 items; all 8 are now shipped and logged.
 
 Shipped: last-stand clutch state (HP<15% red vignette + `setDangerIntensity(1.0)` + "LAST STAND!!" text, `gs.lastStandActive` flag, `soundLastStand()` entry sound + `soundHeartbeatPulse()` every 55 frames); kill-chain audio escalation (combo-graded pitch in `soundEnemyDeathAt`, RAMPAGE/GODLIKE/UNSTOPPABLE floating text milestones at combo 5/10/15); adaptive soundtrack layers (`soundBossFinale()` triggering at boss HP<10%); live PACE coaching chip in HUD (ahead/behind vs `gs.careerBest.wave`, hidden until wave≥3); phantom elite variant (wave≥25+, 12% spawn chance, 90-frame opacity pulse 15%↔95%, purple dashed ring, speed×1.1, HP×0.85, `drawGame.js` globalAlpha handling); weekly rival ghost (`loadWeeklyTopGhost()` 7-day leaderboard query, 1h `sessionStorage` cache, HUD WEEKLY RIVAL chip); death recap mini-replay (DeathScreen animates the final ghost-path segment over the existing canvas with a REPLAY restart button); replay resim runner (`src/utils/replayResim.js`, focused tests, and `validate-replay` Phase 2B resim drift reporting/rejection for rich trace bodies above 2%).

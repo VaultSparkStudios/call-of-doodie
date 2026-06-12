@@ -10,7 +10,7 @@ import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js"
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
-import { buildGhostKillerMarker } from "../utils/ghostPath.js";
+import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -340,6 +340,7 @@ export default function DeathScreen({
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
+  const ghostDeathReadout = buildGhostDeathReadout(ghostData, ENEMY_TYPES);
   const rankIndex = Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1);
   const mode = bossRushMode ? "boss_rush"
     : cursedRunMode ? "cursed"
@@ -833,6 +834,12 @@ export default function DeathScreen({
                 style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", borderRadius: 4, color: "#8DEBFF", cursor: "pointer", letterSpacing: 1 }}
               >REPLAY</button>
             </div>
+            {ghostDeathReadout && (
+              <div style={{ margin: "8px auto 0", maxWidth: 260, padding: "7px 9px", borderRadius: 6, background: "rgba(0,229,255,0.06)", border: "1px solid rgba(0,229,255,0.18)", textAlign: "left" }}>
+                <div style={{ fontSize: 10, color: "#8DEBFF", fontWeight: 900, letterSpacing: 1 }}>{ghostDeathReadout.headline.toUpperCase()}</div>
+                <div style={{ fontSize: 10, color: "#BFD8DD", marginTop: 3, lineHeight: 1.35 }}>{ghostDeathReadout.detail}</div>
+              </div>
+            )}
           </div>
         )}
 
