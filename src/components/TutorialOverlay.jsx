@@ -75,7 +75,7 @@ export default function TutorialOverlay({ isMobile, controllerConnected, control
   const isLast = step === STEPS.length - 1;
 
   useEffect(() => {
-    if (localStorage.getItem(TUTORIAL_KEY)) return;
+    if (localStorage.getItem(TUTORIAL_KEY) || sessionStorage.getItem(TUTORIAL_KEY)) return;
     setVisible(true);
   }, []);
 
@@ -84,6 +84,7 @@ export default function TutorialOverlay({ isMobile, controllerConnected, control
     setVisible(false);
     setDismissed(true);
     localStorage.setItem(TUTORIAL_KEY, "1");
+    sessionStorage.setItem(TUTORIAL_KEY, "1");
     onDismiss?.();
   }, [onDismiss]);
 
@@ -102,7 +103,7 @@ export default function TutorialOverlay({ isMobile, controllerConnected, control
     autoTimerRef.current = setTimeout(() => {
       if (isLast) handleDismiss();
       else goNext();
-    }, 6000);
+    }, 3000);
     return () => clearTimeout(autoTimerRef.current);
   }, [dismissed, goNext, handleDismiss, isLast, visible]);
 

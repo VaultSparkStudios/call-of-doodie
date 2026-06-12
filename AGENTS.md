@@ -35,7 +35,7 @@ Full decision: `vaultspark-studio-ops/docs/STUDIO_CANON.md` → CANON-008
 
 <!-- studio-os:universal-sections-start -->
 <!-- Source: vaultspark-studio-ops/docs/templates/project-system/AGENTS_universal_sections.md -->
-<!-- DO NOT EDIT — re-run via /start deferred-propagation hook or scripts/propagate-agents-sections.mjs -->
+<!-- DO NOT EDIT — re-run `node scripts/propagate-agents-sections.mjs --apply` from studio-ops to refresh -->
 
 <!-- Universal AGENTS.md sections — propagated to every Studio repo via scripts/propagate-agents-sections.mjs -->
 <!-- Owner: Studio Ops · Source: docs/templates/project-system/AGENTS_universal_sections.md -->
@@ -146,6 +146,8 @@ For `audience: public-*` projects:
 - **CANON-032** · Build-Optimal for Flagships — no premature constraint
 - **CANON-033** · Launch Announcement Discipline — no silent launches
 - **CANON-034** · Browser Experience Excellence — browser is never second-class
+- **CANON-035** · Project Brand Identity — every project designs its own professional logo, favicon, and brand kit
+- **CANON-036** · Deploy Currency Discipline — production must not silently lag main
 
 <!-- canon-index:end -->
 

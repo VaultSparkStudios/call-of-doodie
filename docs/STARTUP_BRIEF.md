@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-06-07 (Session 81 closeout) -->
+<!-- generated-at: 2026-06-12 (Session 85 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 81 closeout · 2026-06-07.
+> **Fast-boot brief** — generated at Session 85 closeout · 2026-06-12.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 82 · 2026-06-07 · FOUNDER MODE                          ║
+║  Session 86 · 2026-06-12 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -32,16 +32,16 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 1↑                       ║
-║    Last active: 2d  ·  Last closeout: 2d  ·  (active = newest o  ║
-║    Trend  ▄▄▄▂▂  ↑  (last 5 sessions)                            ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 3↑                       ║
+║    Last active: 0d  ·  Last closeout: 7d  ·  (active = newest o  ║
+║    Trend  ▂▇▂▇▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
-║    Alignment        100    ██████████  ████████ →                ║
+║    Alignment         98    ██████████  ████████ ↓                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ████████ →                ║
+║    Engagement        97    ██████████  ████████ ↓                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -51,25 +51,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 81 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 85 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    408 passing  ·  Deploy: N/A                           ║
+║  Tests:    423 passing  ·  Deploy: N/A                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  ██████████░░░░░░░░░░░░░░   40% used                          ║
-║     4,443 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
-║     ~2,222 tok/turn  ·  cache 50%  ·  412 turns to compact       ║
+║     4,259 / 1,000,000 tok  ·  claude-code/opus-4-7-1m  ·  measu  ║
+║     ~2,130 tok/turn  ·  cache 50%  ·  429 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         408/408 passing                                ║
-║  ⚠  Velocity      1 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         423/423 passing                                ║
+║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         46881 FORGE  ·  4d old                         ║
-║  ✓  Truth         green  ·  Genome: ?                            ║
+║  ⚠  IGNIS         46881 FORGE  ·  9d old                         ║
+║  ⛔  Truth         green locally with zero npm audit vulnerabili  ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.178  (healthy)                               ║
@@ -83,8 +83,8 @@
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    24d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    46d · Physical launch QA                                      ║
+║    29d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    51d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -96,7 +96,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▄▂▂  1↑  (last 5 sessions)                        ║
+║  Velocity:   ▂▇▂▇▄  3↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -114,5 +114,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 81 closeout · 2026-06-07*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 85 closeout · 2026-06-12*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

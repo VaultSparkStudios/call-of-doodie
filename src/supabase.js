@@ -12,6 +12,9 @@ export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabase
 // Returns a stable client-side UUID that persists across sessions.
 // Used as the "user identity" when Supabase anonymous auth is unavailable
 // (e.g. CAPTCHA protection enabled on the project).
+// Module-level cache ensures consistency when localStorage is unavailable
+// (Safari private browsing, strict storage blocking) — prevents issue/submit UID mismatch.
+let _fallbackUid = null;
 export function getOrCreateClientUid() {
   try {
     const stored = localStorage.getItem("cod-client-uid-v1");
@@ -20,7 +23,8 @@ export function getOrCreateClientUid() {
     localStorage.setItem("cod-client-uid-v1", uid);
     return uid;
   } catch {
-    return crypto.randomUUID();
+    if (!_fallbackUid) _fallbackUid = crypto.randomUUID();
+    return _fallbackUid;
   }
 }
 

@@ -38,7 +38,7 @@ export function getShopOptions(gs, wpnIdx) {
     {
       id: `curse_${safeWeaponIdx}`,
       emoji: "☠️",
-      name: "Devil's Pact",
+      name: "Blood Pact",
       desc: `Curse ${WEAPONS[safeWeaponIdx].emoji} (-30% damage) -> gain +50 max health`,
       available: safeGs.currentWave >= 4 && !alreadyCursed,
     },

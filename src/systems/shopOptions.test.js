@@ -47,7 +47,7 @@ describe("shopOptions", () => {
     expect(options.some(o => o.id === "upgrade")).toBe(false);
   });
 
-  test("devil's pact not offered on wave 1–3", () => {
+  test("blood pact not offered on wave 1–3", () => {
     const gs = makeGs({ currentWave: 2 });
     const options = getShopOptions(gs, 0);
     expect(options.some(o => o.id.startsWith("curse_"))).toBe(false);

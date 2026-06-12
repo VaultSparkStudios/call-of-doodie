@@ -101,7 +101,7 @@ export function applyShopOptionEffect({
         text: "☠️ PACT SEALED! +50 MAX HP",
         color: "#CC00FF",
       };
-      result.shopHistoryEntry = { emoji: "☠️", name: "Devil's Pact" };
+      result.shopHistoryEntry = { emoji: "☠️", name: "Blood Pact" };
     }
     return result;
   }

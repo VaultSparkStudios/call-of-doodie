@@ -191,6 +191,7 @@ export default function CallOfDoodie() {
   const mutationPendingRef      = useRef(false); // blocks game loop during mutation offer
   const postMutationShopRef     = useRef(false); // whether to show shop after mutation resolves
   const bankedPerkChoicesRef    = useRef(0);
+  const perksThisWaveRef        = useRef(0); // cap perk screens per wave
   const deferredMutationOptionsRef = useRef([]);
   const deferredMutationPendingRef = useRef(false);
   const deferredShopPendingRef     = useRef(false);
@@ -996,8 +997,9 @@ export default function CallOfDoodie() {
         addText(gsRef.current, GW() / 2, GH() / 2 - 60, "⬆ LEVEL " + ref.level + "!", "#00FF88", true);
         gsRef.current.player.speed += 0.12;
       }
-      if (shouldAwardPerkChoice(ref.level)) {
+      if (shouldAwardPerkChoice(ref.level) && perksThisWaveRef.current < 1) {
         bankedPerkChoicesRef.current += 1;
+        perksThisWaveRef.current += 1;
         setBankedPerkChoices(bankedPerkChoicesRef.current);
         if (gsRef.current) {
           addText(gsRef.current, GW() / 2, GH() / 2 - 92, "✨ DOCTRINE READY", "#FFD700", true);
@@ -1693,6 +1695,7 @@ export default function CallOfDoodie() {
     setRoutePending(false); setRouteOptions([]); routePendingRef.current = false;
     bankedPerkChoicesRef.current = 0;
     setBankedPerkChoices(0);
+    perksThisWaveRef.current = 0;
     deferredMutationOptionsRef.current = [];
     deferredMutationPendingRef.current = false;
     deferredShopPendingRef.current = false;
@@ -2209,6 +2212,7 @@ export default function CallOfDoodie() {
         if (gs.currentWave >= 3) addText(gs, GW() / 2, GH() / 2 - 100, `+${bonus} XP FLAWLESS WAVE!`, "#44FF88", true);
       }
       gs._waveDeaths = 0;          // reset per-wave death counter for adaptive assist
+      perksThisWaveRef.current = 0; // allow 1 perk screen again next wave
       setAssistAvailable(false);
       setAssistUsed(false);
 
@@ -2639,7 +2643,9 @@ export default function CallOfDoodie() {
             if (e.isBossEnemy) {
               soundBossKill(); rumbleGamepad(0.5, 1.0, 500);
               gs.bossKillFlash = 22; gs.screenShake = Math.max(gs.screenShake, 30);
-              addParticles(gs, e.x, e.y, e.color, 50); addParticles(gs, e.x, e.y, "#FFD700", 30); addParticles(gs, e.x, e.y, "#FFFFFF", 20);
+              addParticles(gs, e.x, e.y, e.color, 25); addParticles(gs, e.x, e.y, "#FFD700", 15); addParticles(gs, e.x, e.y, "#FFFFFF", 10);
+              // Clear small damage texts so the boss kill banner reads clean
+              gs.floatingTexts = gs.floatingTexts.filter(ft => ft.big).slice(-4);
               addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
               if (e.typeIndex === 20) gs.algorithmSurge = false;
@@ -2667,14 +2673,14 @@ export default function CallOfDoodie() {
               gs.coins = (gs.coins || 0) + _coinDrop;
               setCoins(gs.coins);
               addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000");
-              if (gs.coinMultActive && gs.floatingTexts.length < 28) {
+              if (!e.isBossEnemy && gs.coinMultActive && gs.floatingTexts.length < 28) {
                 const _streak = Math.min(gs.coinStreakKills || 0, 15);
                 const _n = 2 + Math.floor(_streak / 5);
                 for (let _ci = 0; _ci < _n; _ci++) {
                   gs.floatingTexts.push({ text: "💩", x: e.x + (Math.random() - 0.5) * 60, y: e.y - 20 - Math.random() * 40, vy: -1.2 - Math.random() * 0.8, life: 35 + Math.floor(Math.random() * 20), color: "#C8A000" });
                 }
               }
-              if ((Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
+              if (!e.isBossEnemy && (Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
                 gs.lastCoinRoastMilestone = gs.coins;
                 const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
                 if (coinRoast) addText(gs, e.x, e.y - 74, coinRoast, "#FFE082");
@@ -2692,8 +2698,10 @@ export default function CallOfDoodie() {
             }
             addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
-            const _rbDq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : "...";
-            addText(gs, e.x, e.y - 54, `"${_rbDq}"`, "#FF88CC", "quote");
+            if (!e.isBossEnemy) {
+              const _rbDq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : "...";
+              addText(gs, e.x, e.y - 54, `"${_rbDq}"`, "#FF88CC", "quote");
+            }
             addKillFeed(e.name, pbWeapon.name);
             if (!e.isBossEnemy) {
               if (e.summonedBy) { soundSummonDismissed(); addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF"); }
@@ -2718,7 +2726,7 @@ export default function CallOfDoodie() {
               if (e.isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) { gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 }); }
               else if ((e.isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) { spawnPickup(gs, e.x, e.y, e.isBossEnemy); }
             }
-            if (KILL_MILESTONES[gs.kills]) {
+            if (!e.isBossEnemy && KILL_MILESTONES[gs.kills]) {
               addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
               addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
               gs.screenShake = 10;
@@ -2727,7 +2735,7 @@ export default function CallOfDoodie() {
               const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
               if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
             }
-            if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
+            if (!e.isBossEnemy && gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
               const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
               addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
               const _streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
