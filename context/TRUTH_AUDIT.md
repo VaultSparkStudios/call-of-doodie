@@ -433,3 +433,12 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `context/OBELISK_ADOPTION.md` declares this repo's Obelisk posture as phase-0-declared and narrows Obelisk's role to signed trust receipts/future passkeys around Supabase Auth.
 - `docs/AUDIT_2026-05-26.md` and `.json` are the current ranked audit for control repair, scrollability, sound variety, onboarding, account bridge, and remaining QA automation.
 - No source-of-truth contradictions introduced. Real-device controller QA and account implementation remain future work, not shipped claims.
+
+## 2026-06-12 - Session 86
+
+- `src/sounds.js` is the sole source of truth for all procedural audio; three new exports added: `soundLastStand()`, `soundHeartbeatPulse()`, `soundBossFinale()` — all pure WebAudio synthesis, no external assets.
+- `gs.lastStandActive` is the canonical flag for last-stand state; `drawGame.js` reads it for the red vignette; `setDangerIntensity()` in `App.jsx` reads `_isLastStand` directly from the same HP check.
+- `gs.careerBest.wave` is set at `startGame()` from `loadCareerStats()` (line 538 in App.jsx); the HUD PACE chip reads it as a prop — no new storage reads at render time.
+- Phantom elite type (`e.eliteType === "phantom"`) is the fifth elite variant; `drawGame.js` is the sole renderer for globalAlpha toggling and purple ring; App.jsx is the sole spawner and timer ticker.
+- `comboRef.current.count` at both kill sites (boss + regular) now passes combo to `soundEnemyDeathAt` and milestone text — both sites were confirmed unique and separately edited.
+- No source-of-truth contradictions introduced. Validation: 427/427 tests, 0 new lint errors, build clean.

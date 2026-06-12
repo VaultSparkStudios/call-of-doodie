@@ -513,3 +513,16 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Added mutation × difficulty compound brief: `getMutationDifficultyBrief(mutation, difficulty, runHistory)` in `runBrain.js` derives avg-wave delta for the active mutation+difficulty combo from localStorage run timestamps; rendered as amber italic sub-line in HomeV2 difficulty picker.
 - Added formation flavor wave preview: `gs._lastFormationLabel` written on spawn; `waveAnnounce.formationHint` field added to setWaveAnnounce; formation descriptor map (FLANK/PINCER/SURGE) renders as green italic subtitle in wave incoming card JSX.
 - Validation: focused tests 22/22, full `npm test` 405/405 across 46 files (+22 new), `npm run lint` 0 errors, `npm run build` passing (767.54 kB / 235.90 kB gzip).
+
+## 2026-06-12 (Session 86)
+
+- Ran `/start -> /audit -> /implement -> /closeout` pipeline end-to-end.
+- Created `docs/AUDIT_2026-06-12.md` and `.json` (8 items ranked; top 5 shipped this session).
+- Committed session-85 uncommitted files first (perk cap, boss cleanup, shop rename, UID stability, tutorial session gate, shared-policies shim).
+- Implemented last-stand clutch: `gs.lastStandActive` flag, red vignette in `drawGame.js`, setDangerIntensity(1.0), "LAST STAND!!" floating text, `soundLastStand()` + `soundHeartbeatPulse()` every 55 frames.
+- Implemented kill-chain audio escalation: `soundEnemyDeathAt(typeIndex, x, W, combo)` now pitch-escalates +80¢ per tier-of-5; RAMPAGE/GODLIKE/UNSTOPPABLE milestone floating text at combo 5/10/15 at both kill sites.
+- Implemented adaptive soundtrack layers: `soundBossFinale()` at boss HP<10% (one-shot per boss wave via `bossFinalePlayedRef`).
+- Implemented live pace coaching chip: HUD compares current wave to `gs.careerBest.wave`; green=ahead/orange=behind; hidden until wave≥3 and bestWave>0.
+- Implemented phantom elite variant: wave≥25 12% spawn chance, 90-frame opacity toggle (15%↔95%), purple dashed ring, speed×1.1, HP×0.85; `drawGame.js` globalAlpha handling.
+- Validation: 427/427 tests, 0 new lint errors, build 768.41 kB / 237.42 kB gzip.
+- Commits: `e371983` (implement pass), `bfe2e76` (closeout write-back). Pushed to origin main.

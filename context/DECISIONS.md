@@ -273,3 +273,19 @@ Rationale: custom auth would create unnecessary risk and cost. Supabase already 
 Trade-off accepted: passkeys are not the first implementation step for this game. The first useful account version is magic-link/Google sign-in plus durable progress, leaderboard ownership, and supporter recovery.
 
 ---
+
+## 2026-06-12 — Session 86 — Last-stand gated to non-boss waves
+
+**Decision:** `gs.lastStandActive` only fires when `!gs.bossWave`, even if HP<15% during a boss fight.
+
+**Rationale:** Boss fights already have dedicated sound design (`soundBossWave`, boss music tier, `soundBossFinale` at 10% HP). Layering last-stand vignette + heartbeat on top would create competing audio/visual signals that reduce clarity rather than increasing tension.
+
+**Trade-off accepted:** Players who reach HP<15% during a boss fight do not see the red vignette or hear the heartbeat. The boss finale layer (rising sawtooth chord at boss HP<10%) fills the cinematic role instead.
+
+## 2026-06-12 — Session 86 — Phantom elite spawns only when no other elite type is assigned
+
+**Decision:** Phantom spawn check is `!ne.eliteType && !ne.isBossEnemy && gs.currentWave >= 25` — it cannot override an already-assigned armored/fast/berserker/explosive type.
+
+**Rationale:** Stacking two elite types on one enemy produces unpredictable compound effects (e.g., phantom+armored = slow-fire invisible tank that is nearly untrackable). Keeping phantom mutually exclusive with other elites bounds the difficulty ceiling.
+
+**Trade-off accepted:** The 12% phantom probability is measured against the pool of enemies that received no other elite type, not the entire spawn pool; effective spawn rate is lower than 12% in waves where armored/fast/berserker/explosive all fire.

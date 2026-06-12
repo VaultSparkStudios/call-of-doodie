@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 86 (2026-06-12)
+
+Executed the full `/start -> /audit -> /implement -> /closeout` pipeline. Audit `docs/AUDIT_2026-06-12.md` / `.json` identified 8 items; 5 were shipped in this session.
+
+Shipped: last-stand clutch state (HP<15% red vignette + `setDangerIntensity(1.0)` + "LAST STAND!!" text, `gs.lastStandActive` flag, `soundLastStand()` entry sound + `soundHeartbeatPulse()` every 55 frames); kill-chain audio escalation (combo-graded pitch in `soundEnemyDeathAt`, RAMPAGE/GODLIKE/UNSTOPPABLE floating text milestones at combo 5/10/15); adaptive soundtrack layers (`soundBossFinale()` triggering at boss HP<10%); live PACE coaching chip in HUD (ahead/behind vs `gs.careerBest.wave`, hidden until wave≥3); phantom elite variant (wave≥25+, 12% spawn chance, 90-frame opacity pulse 15%↔95%, purple dashed ring, speed×1.1, HP×0.85, `drawGame.js` globalAlpha handling).
+
+Deferred from audit: weekly-rival-ghost (item 6), death-recap-mini-replay (item 7), replay-resim-runner (item 8) — all high-innovation candidates for next session.
+
+Validation: 427/427 tests, lint 0 new errors, build passing. Commits: `e371983` (implement), `bfe2e76` (closeout write-back). Both pushed to origin main.
+
 ## Where We Left Off - Session 85 (2026-06-08)
 
 Continued the durable `/start -> /audit -> /implement -> /closeout` loop from fresh Session 84 evidence. Created and executed `docs/AUDIT_2026-06-08_2.md` / `.json` for a bounded three-item launch-confidence continuation.
