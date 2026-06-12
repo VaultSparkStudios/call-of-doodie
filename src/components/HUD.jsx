@@ -31,6 +31,7 @@ export default function HUD({
   missions, missionDoneSet,
   hud, heat, topGhosts,
   experimentMatched = null,
+  careerBestWave = 0,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
   const HUD_FLAGS = hud || {
@@ -282,6 +283,17 @@ export default function HUD({
           🧪 EXPERIMENT
         </div>
       )}
+
+      {/* Live pace chip vs personal best */}
+      {careerBestWave > 0 && wave >= 3 && !speedrunMode && (() => {
+        const ahead = wave >= careerBestWave;
+        const paceTop = ((waveStreak || 0) >= 3 ? 34 : 8) + (experimentMatched === "matched" ? 24 : 0);
+        return (
+          <div style={{ position: "absolute", top: paceTop + 24, left: 12, background: ahead ? "rgba(0,200,80,0.12)" : "rgba(255,100,0,0.10)", padding: "2px 8px", borderRadius: 4, border: `1px solid ${ahead ? "rgba(0,200,80,0.4)" : "rgba(255,100,0,0.35)"}`, fontSize: 10, color: ahead ? "#44FF88" : "#FF8844", fontWeight: 700 }}>
+            {ahead ? `📈 PB PACE W${careerBestWave}` : `📉 PACE -${careerBestWave - wave}W`}
+          </div>
+        );
+      })()}
 
       {/* Ammo / weapon */}
       <div style={{ position: "absolute", bottom: 8, right: isMobile ? 8 : 56, textAlign: "right" }}>

@@ -28,6 +28,7 @@ import {
 import { identifyWeakness as _identifyWeakness } from "./utils/metaClarity.js";
 import {
   soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
+  soundLastStand, soundHeartbeatPulse, soundBossFinale,
   soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
   soundSummonDismissed,
@@ -192,6 +193,9 @@ export default function CallOfDoodie() {
   const postMutationShopRef     = useRef(false); // whether to show shop after mutation resolves
   const bankedPerkChoicesRef    = useRef(0);
   const perksThisWaveRef        = useRef(0); // cap perk screens per wave
+  const lastStandActiveRef      = useRef(false);
+  const bossFinalePlayedRef     = useRef(false);
+  const heartbeatCounterRef     = useRef(0);
   const deferredMutationOptionsRef = useRef([]);
   const deferredMutationPendingRef = useRef(false);
   const deferredShopPendingRef     = useRef(false);
@@ -1615,6 +1619,7 @@ export default function CallOfDoodie() {
     // ── Analytics: death ──
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
+    lastStandActiveRef.current = false; if (gs) gs.lastStandActive = false;
     return true;
   }, [difficulty, runSeed]);
 
@@ -1696,6 +1701,9 @@ export default function CallOfDoodie() {
     bankedPerkChoicesRef.current = 0;
     setBankedPerkChoices(0);
     perksThisWaveRef.current = 0;
+    lastStandActiveRef.current = false;
+    bossFinalePlayedRef.current = false;
+    heartbeatCounterRef.current = 0;
     deferredMutationOptionsRef.current = [];
     deferredMutationPendingRef.current = false;
     deferredShopPendingRef.current = false;
@@ -2116,7 +2124,20 @@ export default function CallOfDoodie() {
       gs.synergyExtraBounces = active.reduce((acc, s) => acc + (s.extraBounces || 0), 0);
       gs.synergyExtraPellets = active.reduce((acc, s) => acc + (s.extraPellets || 0), 0);
       const _dangerLevel = Math.min(1, (gs.enemies?.length || 0) / 25);
-      setDangerIntensity(_dangerLevel);
+      const _hp = gs.player?.health || 0;
+      const _maxHp = gs.player?.maxHealth || 100;
+      const _isLastStand = _hp > 0 && _hp < _maxHp * 0.15 && !gs.bossWave;
+      if (_isLastStand && !lastStandActiveRef.current) {
+        lastStandActiveRef.current = true;
+        gs.lastStandActive = true;
+        soundLastStand();
+        addText(gs, GW() / 2, GH() / 2 - 80, "LAST STAND!!", "#FF2222", true);
+        heartbeatCounterRef.current = 30;
+      } else if (!_isLastStand && lastStandActiveRef.current) {
+        lastStandActiveRef.current = false;
+        gs.lastStandActive = false;
+      }
+      setDangerIntensity(_isLastStand ? 1.0 : _dangerLevel);
       // Synergy charge: ready when active synergies exist AND both weapons above 50% ammo
       if (synergyChargeCooldownRef.current > 0) synergyChargeCooldownRef.current -= 30; // decrement by 30 (once per 30-frame block)
       if (synergyChargeCooldownRef.current < 0) synergyChargeCooldownRef.current = 0;
@@ -2129,6 +2150,24 @@ export default function CallOfDoodie() {
       })();
       gs.synergyChargeReady = _chargeReady;
       setSynergyChargeReady(_chargeReady);
+
+      // ── Boss Finale: sound when boss HP crosses 10% ──
+      if (gs.bossWave && !bossFinalePlayedRef.current) {
+        const _bossEn = gs.enemies?.find(e => e.isBossEnemy);
+        if (_bossEn && _bossEn.health < _bossEn.maxHealth * 0.10) {
+          bossFinalePlayedRef.current = true;
+          soundBossFinale();
+        }
+      }
+    }
+
+    // ── Per-frame heartbeat while in last stand ──
+    if (gs.lastStandActive && (gs.player?.health || 0) > 0) {
+      heartbeatCounterRef.current--;
+      if (heartbeatCounterRef.current <= 0) {
+        soundHeartbeatPulse();
+        heartbeatCounterRef.current = 55;
+      }
     }
 
     // ── Wave / boss wave logic ──
@@ -2179,6 +2218,11 @@ export default function CallOfDoodie() {
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         if (directorEliteType) applyEliteType(ne, directorEliteType);
         if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
+        // Phantom elite: 12% of elite-eligible spawns at wave 25+, non-boss only
+        if (ne && !ne.eliteType && !ne.isBossEnemy && gs.currentWave >= 25 && Math.random() < 0.12) {
+          ne.eliteType = "phantom"; ne.phantomTimer = 0; ne.phantomVisible = true;
+          ne.speed *= 1.1; ne.health *= 0.85; ne.maxHealth = ne.health;
+        }
         // Beat-sync pulse: ring of particles when spawn lands on a downbeat
         try {
           const _bpm = getMusicBPM();
@@ -2336,6 +2380,7 @@ export default function CallOfDoodie() {
         setBossWaveActive(true);
         setBossWaveBanner(true);
         soundBossWave();
+        bossFinalePlayedRef.current = false;
         setMusicIntensity(true);
         gs.screenShake = 20;
         // ── Boss rotation: Karen→Splitter→Juggernaut→Summoner→Landlord, cycling ──
@@ -2615,6 +2660,9 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
+            if (comboRef.current.count === 5) addText(gs, GW() / 2, GH() / 2 - 88, "RAMPAGE!!", "#FF6400", true);
+            else if (comboRef.current.count === 10) addText(gs, GW() / 2, GH() / 2 - 88, "GODLIKE!!", "#FF0088", true);
+            else if (comboRef.current.count === 15) addText(gs, GW() / 2, GH() / 2 - 88, "UNSTOPPABLE!!", "#FFD700", true);
             const pts = computeKillPoints({
               basePoints: e.points,
               comboMult: pbComboMult,
@@ -2705,7 +2753,7 @@ export default function CallOfDoodie() {
             addKillFeed(e.name, pbWeapon.name);
             if (!e.isBossEnemy) {
               if (e.summonedBy) { soundSummonDismissed(); addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF"); }
-              else if ((gs._deathSoundsThisFrame || 0) < 1) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeathAt(e.typeIndex, e.x, W); }
+              else if ((gs._deathSoundsThisFrame || 0) < 1) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count); }
             }
             if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
             if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
@@ -2855,6 +2903,9 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
+            if (comboRef.current.count === 5) addText(gs, GW() / 2, GH() / 2 - 88, "RAMPAGE!!", "#FF6400", true);
+            else if (comboRef.current.count === 10) addText(gs, GW() / 2, GH() / 2 - 88, "GODLIKE!!", "#FF0088", true);
+            else if (comboRef.current.count === 15) addText(gs, GW() / 2, GH() / 2 - 88, "UNSTOPPABLE!!", "#FFD700", true);
             const pts = computeKillPoints({
               basePoints: e.points,
               comboMult,
@@ -2985,7 +3036,7 @@ export default function CallOfDoodie() {
                 addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
               } else if ((gs._deathSoundsThisFrame || 0) < 2) {
                 gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
-                soundEnemyDeathAt(e.typeIndex, e.x, W);
+                soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count);
               }
             }
             // Splitter: split into 3 mini-copies on death
@@ -3043,6 +3094,11 @@ export default function CallOfDoodie() {
 
     // ── Enemy movement & melee ──
     gs.enemies.forEach(e => {
+      // Phantom elite: toggle visibility every 90 frames
+      if (e.eliteType === "phantom") {
+        e.phantomTimer = (e.phantomTimer || 0) + 1;
+        if (e.phantomTimer >= 90) { e.phantomTimer = 0; e.phantomVisible = !e.phantomVisible; }
+      }
       e.wobble += 0.1;
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
       const freezeMult = (gs.freezeTimer || 0) > 0 ? 0.35 : 1;
@@ -4329,6 +4385,7 @@ export default function CallOfDoodie() {
         heat={gsRef.current?.heat || 0}
         topGhosts={gsRef.current?.topGhosts || []}
         experimentMatched={experimentMatchedRef.current}
+        careerBestWave={gsRef.current?.careerBest?.wave || 0}
       />
 
       {/* Mobile action bar */}

@@ -16,6 +16,7 @@ function getEnemyReadabilityStyle(enemy, timeNow) {
       fast:      { ringColor: "#00E5FF", marker: "fast" },
       berserker: { ringColor: "#FF00C8", marker: "rage" },
       explosive: { ringColor: "#FF6400", marker: "blast" },
+      phantom:   { ringColor: "#B450FF", marker: "stealth" },
     };
     const elite = eliteMap[enemy.eliteType] || eliteMap.explosive;
     return {
@@ -450,6 +451,10 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const r = e.size / 2;
     const faceA = Math.atan2(p.y - e.y, p.x - e.x);
     const readability = getEnemyReadabilityStyle(e, dn);
+    // Phantom elite: pulse between 15% and 100% opacity
+    if (e.eliteType === "phantom") {
+      ctx.globalAlpha = e.phantomVisible ? 0.95 : (0.15 + Math.sin(timeNow / 200) * 0.05);
+    }
     // Drop shadow
     ctx.fillStyle = "rgba(0,0,0,0.3)";
     ctx.beginPath(); ctx.ellipse(0, r + 3, r * 0.7, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
@@ -752,15 +757,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     }
     // Elite variant ring — color + dash pattern for colorblind accessibility
     if (e.eliteType) {
-      const eliteRgb = e.eliteType === "armored" ? "255,215,0" : e.eliteType === "fast" ? "0,229,255" : e.eliteType === "berserker" ? "255,0,200" : "255,100,0";
+      const eliteRgb = e.eliteType === "armored" ? "255,215,0" : e.eliteType === "fast" ? "0,229,255" : e.eliteType === "berserker" ? "255,0,200" : e.eliteType === "phantom" ? "180,80,255" : "255,100,0";
       const alpha = 0.72 + Math.sin(dn / 140) * 0.22;
       ctx.strokeStyle = `rgba(${eliteRgb},${alpha})`;
       ctx.lineWidth = 2.5;
       // Distinct dash pattern per type (colorblind-friendly)
-      if (e.eliteType === "armored")       ctx.setLineDash([6, 4]);
-      else if (e.eliteType === "fast")     ctx.setLineDash([2, 3]);
+      if (e.eliteType === "armored")        ctx.setLineDash([6, 4]);
+      else if (e.eliteType === "fast")      ctx.setLineDash([2, 3]);
       else if (e.eliteType === "berserker") { ctx.setLineDash([]); ctx.lineWidth = 2; }
-      else                                 ctx.setLineDash([]); // explosive = solid
+      else if (e.eliteType === "phantom")   ctx.setLineDash([4, 6]); // long gap = eerie
+      else                                  ctx.setLineDash([]); // explosive = solid
       ctx.beginPath(); ctx.arc(0, 0, r + 11, 0, Math.PI * 2); ctx.stroke();
       // Berserker: second ring to distinguish
       if (e.eliteType === "berserker") {
@@ -1114,6 +1120,18 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   if (!_rm && (gs.bossKillFlash || 0) > 0) {
     ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
     ctx.fillRect(0, 0, W, H);
+  }
+  // Last Stand: pulsing deep-red vignette when HP < 15%
+  if (!_rm && gs.lastStandActive) {
+    const _lsPulse = 0.20 + Math.sin(timeNow / 110) * 0.08;
+    const _lsGrad = ctx.createRadialGradient(W / 2, H / 2, H * 0.18, W / 2, H / 2, H * 0.68);
+    _lsGrad.addColorStop(0, "rgba(0,0,0,0)");
+    _lsGrad.addColorStop(1, `rgba(200,0,0,${_lsPulse})`);
+    ctx.fillStyle = _lsGrad; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.globalAlpha = _lsPulse * 0.55;
+    ctx.strokeStyle = "#CC0000"; ctx.lineWidth = 5;
+    ctx.strokeRect(3, 3, W - 6, H - 6);
+    ctx.restore();
   }
   // Heat Meter visual integration: a restrained palette lift at high tempo,
   // then a tiny hit-reactive edge split in overdrive.

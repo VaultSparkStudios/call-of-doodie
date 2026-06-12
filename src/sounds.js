@@ -186,7 +186,7 @@ export function soundHitAt(isCrit, x, W) {
   }
 }
 
-export function soundEnemyDeathAt(typeIndex, x, W) {
+export function soundEnemyDeathAt(typeIndex, x, W, combo = 0) {
   const d = _destAt(_pan(x, W));
   switch (typeIndex) {
     case 0: case 13: case 14:
@@ -218,6 +218,14 @@ export function soundEnemyDeathAt(typeIndex, x, W) {
       noise(0.14, 0.08, 0.10, d); break;
     default:
       tone(300, 0.08, "triangle", 0.05, 120, 0, d); break;
+  }
+  // Kill-chain escalation: additive pitch marker that rises with combo tier
+  if (combo >= 5) {
+    const tier = Math.min(3, Math.floor(combo / 5));
+    const pitchHz = _detune(880, tier * 80); // +80 cents per 5-combo tier
+    tone(pitchHz, 0.06, "triangle", 0.03 + tier * 0.01, null, 0, d);
+    if (combo >= 10) tone(pitchHz * 2, 0.05, "sine", 0.018, null, 0.02, d);
+    if (combo >= 15) tone(52, 0.18, "sawtooth", 0.07, 35, 0, d);
   }
 }
 
@@ -378,6 +386,27 @@ export function soundSummonDismissed() {
 
 export function soundGamepadConnect() {
   chirp(_pick([[440, 660, 880], [494, 740, 988], [392, 587, 784]]), 0.08, "triangle", 0.05, 0.075);
+}
+
+// ── Last Stand + Adaptive Soundtrack ──
+
+export function soundLastStand() {
+  // Dramatic descending crash: announces critical HP threshold
+  tone(_pick([660, 700, 740]), 0.45, "sawtooth", 0.11, 110);
+  tone(_pick([330, 370, 400]), 0.32, "square", 0.07, 55, 0.05);
+  noise(0.30, 0.13, 0.08);
+}
+
+export function soundHeartbeatPulse() {
+  // Single low double-thump; called periodically while in last-stand mode
+  tone(78, 0.10, "sine", 0.13, 52);
+  tone(68, 0.09, "sine", 0.08, 42, 0.11);
+}
+
+export function soundBossFinale() {
+  // Rising tension chord when boss HP crosses 10%
+  [220, 277, 330, 440].forEach((f, i) => tone(f, 0.55, "sawtooth", 0.04, f * 1.5, i * 0.10));
+  noise(0.18, 0.055, 0.14);
 }
 
 export function soundGamepadDisconnect() {
