@@ -441,4 +441,7 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `gs.careerBest.wave` is set at `startGame()` from `loadCareerStats()` (line 538 in App.jsx); the HUD PACE chip reads it as a prop — no new storage reads at render time.
 - Phantom elite type (`e.eliteType === "phantom"`) is the fifth elite variant; `drawGame.js` is the sole renderer for globalAlpha toggling and purple ring; App.jsx is the sole spawner and timer ticker.
 - `comboRef.current.count` at both kill sites (boss + regular) now passes combo to `soundEnemyDeathAt` and milestone text — both sites were confirmed unique and separately edited.
-- No source-of-truth contradictions introduced. Validation: 427/427 tests, 0 new lint errors, build clean.
+- `loadWeeklyTopGhost()` in `src/storage.js` is the source of truth for the 7-day leaderboard rival and its 1h `sessionStorage` cache; `App.jsx` loads it at run start and `HUD.jsx` renders the WEEKLY RIVAL chip.
+- Death recap mini-replay uses the existing `ghostData` path samples only; `DeathScreen.jsx` owns the requestAnimationFrame replay loop and restart button, with no new storage format.
+- `src/utils/replayResim.js` is the browser-side replay resim utility for trace-body summaries; `supabase/functions/validate-replay/index.ts` owns the matching Phase 2B Edge Function drift check and rejects rich traces above 2% drift.
+- No source-of-truth contradictions introduced. Validation: 429/429 tests, 0 lint errors, build clean.

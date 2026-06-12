@@ -182,6 +182,7 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
 }
 
 const TOP_GHOSTS_KEY = "cod-top-ghosts-v1";
+const WEEKLY_TOP_GHOST_KEY = "cod-weekly-top-ghost-v1";
 
 /**
  * Loads top-3 leaderboard entries for a given mode/difficulty as persistent ghost opponents.
@@ -213,6 +214,58 @@ export async function loadTopGhosts(mode = "standard", difficulty = "normal") {
     const raw = localStorage.getItem(cacheKey);
     return raw ? JSON.parse(raw) : [];
   } catch { return []; }
+}
+
+function normalizeGhostEntry(row, fallbackMode = "standard", fallbackDifficulty = "normal") {
+  const normalized = normalizeLeaderboardEntry({
+    ...row,
+    mode: row?.mode ?? fallbackMode,
+    difficulty: row?.difficulty ?? fallbackDifficulty,
+  });
+  return {
+    name: normalized.name || "Weekly Ghost",
+    score: normalized.score || 0,
+    wave: normalized.wave || 0,
+    mode: normalized.mode || fallbackMode,
+    difficulty: normalized.difficulty || fallbackDifficulty,
+    ts: normalized.ts || normalized.created_at || null,
+  };
+}
+
+export async function loadWeeklyTopGhost(mode = "standard", difficulty = "normal", { now = Date.now(), ttlMs = 3600000 } = {}) {
+  const cacheKey = `${WEEKLY_TOP_GHOST_KEY}-${mode}-${difficulty}`;
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(cacheKey) || "null");
+    if (cached?.cachedAt && now - cached.cachedAt < ttlMs && cached.ghost) return cached.ghost;
+  } catch {}
+
+  if (supabase) {
+    try {
+      const modeFilter = mode === "standard" ? null : mode;
+      const sinceIso = new Date(now - 7 * 86400000).toISOString();
+      let q = supabase
+        .from("leaderboard")
+        .select("name,score,wave,mode,difficulty,ts,created_at")
+        .eq("difficulty", difficulty)
+        .gte("created_at", sinceIso)
+        .order("score", { ascending: false })
+        .limit(1);
+      if (modeFilter) q = q.eq("mode", modeFilter);
+      else q = q.or("mode.is.null,mode.eq.standard");
+      const { data, error } = await q;
+      if (error) throw error;
+      const ghost = data?.[0] ? normalizeGhostEntry(data[0], mode, difficulty) : null;
+      try { sessionStorage.setItem(cacheKey, JSON.stringify({ cachedAt: now, ghost })); } catch {}
+      return ghost;
+    } catch (err) {
+      console.warn("[leaderboard] Weekly rival lookup failed, using cache:", err?.message ?? String(err));
+    }
+  }
+
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(cacheKey) || "null");
+    return cached?.ghost || null;
+  } catch { return null; }
 }
 
 export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {

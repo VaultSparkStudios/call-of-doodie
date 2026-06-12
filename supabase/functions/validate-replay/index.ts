@@ -43,6 +43,12 @@ interface ValidateResult {
     level: "none" | "weak" | "basic" | "rich";
     weaknessReasons: string[];
   };
+  resim?: {
+    finalWave: number;
+    finalScore: number;
+    driftPct: number;
+    commandCount: number;
+  };
 }
 
 function difficultyMult(d: string | undefined): number {
@@ -131,6 +137,39 @@ function analyzeTraceEvidence(traceBody: string) {
   return { level, weaknessReasons };
 }
 
+function runTraceResim(req: ValidateRequest, traceBody: string, traceLength: number) {
+  const parts = traceBody ? traceBody.split("~").filter(Boolean) : [];
+  const actions: Record<string, number> = {};
+  let lastFrame = 0;
+  for (const part of parts) {
+    const [frame, action] = part.split(".");
+    const parsedFrame = Number.parseInt(frame || "", 36);
+    if (Number.isFinite(parsedFrame)) lastFrame = Math.max(lastFrame, parsedFrame);
+    actions[action || ""] = (actions[action || ""] || 0) + 1;
+  }
+  const durationSec = Math.max(1, lastFrame / 60);
+  const actionPressure = (actions.shoot || 0)
+    + (actions.grenade || 0) * 2
+    + (actions.dash || 0)
+    + (actions.perk || 0) * 3
+    + (actions.shop || 0) * 2
+    + (actions.route || 0) * 2;
+  const movementPressure = (actions.move || 0) + (actions.aim || 0);
+  const seedBias = Math.abs(Math.floor(Number(req.seed || 0)) % 17) / 100;
+  const finalWave = Math.max(1, Math.floor(durationSec / 35 + actionPressure / 18 + movementPressure / 35 + 1 + seedBias));
+  const finalScore = Math.max(0, Math.floor(actionPressure * 95 + movementPressure * 22 + finalWave * 420));
+  const submittedWave = Math.max(1, Math.floor(Number(req.wave || finalWave)));
+  const submittedScore = Math.max(0, Math.floor(Number(req.score || finalScore)));
+  const waveDrift = Math.abs(submittedWave - finalWave) / Math.max(4, submittedWave);
+  const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - finalScore) / Math.max(2500, submittedScore) : 0;
+  return {
+    finalWave,
+    finalScore,
+    driftPct: Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100,
+    commandCount: traceLength || parts.length,
+  };
+}
+
 /**
  * Heuristic plausibility — derives min/max expected values from observed
  * wave + time + difficulty. Uses generous bands to avoid false positives.
@@ -206,6 +245,7 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
   const traceLengthValid = Number.isInteger(traceLengthRaw) && traceLengthRaw >= 1 && traceLengthRaw <= 240;
   const hasValidTraceContract = hasTraceDigest && hasTraceLength && traceDigestValid && traceLengthValid;
   let traceEvidence: ValidateResult["traceEvidence"] | undefined;
+  let resim: ValidateResult["resim"] | undefined;
   if (hasTraceBody && (!hasTraceDigest || !hasTraceLength)) {
     reasons.push("trace body missing digest or length");
     drift = Math.max(drift, 0.6);
@@ -229,6 +269,11 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
       drift = Math.max(drift, 0.7);
     } else {
       traceEvidence = analyzeTraceEvidence(traceBody);
+      resim = runTraceResim(req, traceBody, traceLengthRaw);
+      if (traceEvidence.level === "rich" && resim.driftPct > 2) {
+        reasons.push(`replay resim drift ${resim.driftPct.toFixed(2)}% above 2% threshold`);
+        drift = Math.max(drift, Math.min(1, resim.driftPct / 100));
+      }
     }
   }
   const competitiveMode = mode === "daily_challenge" || mode === "gauntlet" || mode === "score_attack";
@@ -252,6 +297,7 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
     reasons,
     confidence,
     ...(traceEvidence ? { traceEvidence } : {}),
+    ...(resim ? { resim } : {}),
   };
 }
 

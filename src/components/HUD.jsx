@@ -29,7 +29,7 @@ export default function HUD({
   cursedHideScore,
   speedrunMode, startTime,
   missions, missionDoneSet,
-  hud, heat, topGhosts,
+  hud, heat, topGhosts, weeklyRival,
   experimentMatched = null,
   careerBestWave = 0,
 }) {
@@ -126,6 +126,23 @@ export default function HUD({
               {index + 1}. {(ghost.name || "Ghost").slice(0, 12)} {Math.max(0, Number(ghost.score || 0)).toLocaleString()}
             </span>
           ))}
+        </div>
+      )}
+
+      {weeklyRival && (
+        <div style={{
+          position: "absolute", top: vsScore != null ? 102 : Array.isArray(topGhosts) && topGhosts.length > 0 ? 74 : 46, left: "50%", transform: "translateX(-50%)",
+          maxWidth: "min(92vw, 460px)",
+          background: "rgba(18,0,28,0.66)", border: `1px solid ${score >= (weeklyRival.score || 0) ? "rgba(0,255,136,0.45)" : "rgba(204,68,255,0.4)"}`, borderRadius: 8,
+          padding: "3px 9px", fontSize: 9, fontFamily: "'Courier New',monospace",
+          color: score >= (weeklyRival.score || 0) ? "#00FF88" : "#E0B5FF",
+          whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+        }} title="Best leaderboard run from the last 7 days">
+          <strong>WEEKLY RIVAL</strong>{" "}
+          {(weeklyRival.name || "Ghost").slice(0, 14)} W{Math.max(1, Number(weeklyRival.wave || 1))}{" "}
+          {score >= (weeklyRival.score || 0)
+            ? `BEATING +${(score - (weeklyRival.score || 0)).toLocaleString()}`
+            : `BEHIND -${((weeklyRival.score || 0) - score).toLocaleString()}`}
         </div>
       )}
 

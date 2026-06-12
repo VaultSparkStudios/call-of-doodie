@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 86 executed the /start -> /audit -> /implement -> /closeout loop shipping five combat-feel and audio-immersion items: last-stand clutch (HP<15% red vignette + danger spike + LAST STAND!! text), kill-chain audio escalation (pitch tiers + RAMPAGE/GODLIKE/UNSTOPPABLE milestones), adaptive soundtrack layers (soundHeartbeatPulse + soundBossFinale), live PACE coaching chip vs careerBest.wave, and phantom elite variant (wave 25+, opacity pulse, purple ring). Validation: 427/427 tests, 0 new lint errors, build 768.41 kB gzip.",
-  "nextMilestone": "Audit items 6-8 (weekly rival ghost, death recap mini-replay, replay resim runner) are the highest-priority follow-ups. Continue with Supabase Auth or live deploy work.",
+  "currentFocus": "Session 86 continuation completed all 8 docs/AUDIT_2026-06-12 items: five combat-feel/audio items plus weekly rival ghost, death recap mini-replay, and replay resim Phase 2B drift reporting/rejection. Validation: focused replay tests 11/11, npm test 429/429, lint clean, build 770.54 kB raw / 237.91 kB gzip main chunk.",
+  "nextMilestone": "Next highest-value trust work is deeper physics-parity deterministic replay resim, plus the remaining manual launch gates: physical PWA/gamepad QA and Itch.io publication.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -31,7 +31,7 @@
   "blockers": [
     "sync-studio-events edge-function repair is fixed locally but not deployed because SUPABASE_ACCESS_TOKEN is unavailable; node scripts/check-secrets.mjs --for supabase reports supabase MISSING.",
     "PostHog/Sentry/Ko-fi URL allowlists require analytics/dashboard credentials.",
-    "validate-replay Phase 2B has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, trace byte-budgeting, and visible traceEvidence receipts, but full deterministic resimulation still needs a replay runner.",
+    "validate-replay Phase 2B now has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, trace byte-budgeting, visible traceEvidence receipts, and trace-driven resim drift reporting/rejection; full physics-parity deterministic resimulation remains future work.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
   "lastUpdated": "2026-06-12",
@@ -45,14 +45,14 @@
   "silSession": 86,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 5,
+  "silVelocity": 8,
   "silDebt": "decreasing",
   "silLastSession": "2026-06-12",
   "currentSession": 86,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 427,
-  "testsTotal": 427,
+  "testsPassing": 429,
+  "testsTotal": 429,
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-04-14",
   "silRubricVersion": "3.0",
@@ -76,8 +76,8 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "planModeDetected": "missing",
-  "planModeCheckedAt": "2026-06-12T12:46:32.635Z",
+  "planModeDetected": "not_required",
+  "planModeCheckedAt": "2026-06-12T19:33:17.420Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral"
 }

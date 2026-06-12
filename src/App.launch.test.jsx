@@ -91,6 +91,7 @@ vi.mock("./storage.js", () => ({
   getMissionStreak: vi.fn(() => ({ streak: 0, lastCompleted: null })),
   advanceMissionStreak: vi.fn(),
   loadTopGhosts: vi.fn(() => Promise.resolve([])),
+  loadWeeklyTopGhost: vi.fn(() => Promise.resolve(null)),
   saveStudioGameEvent: vi.fn(),
   recordDeathByEnemy: vi.fn(),
   loadRivalryHistory: vi.fn(() => []),

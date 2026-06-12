@@ -2,13 +2,11 @@
 
 ## Where We Left Off - Session 86 (2026-06-12)
 
-Executed the full `/start -> /audit -> /implement -> /closeout` pipeline. Audit `docs/AUDIT_2026-06-12.md` / `.json` identified 8 items; 5 were shipped in this session.
+Executed the full `/start -> /audit -> /implement -> /closeout` pipeline, then continued the same audit to completion. Audit `docs/AUDIT_2026-06-12.md` / `.json` identified 8 items; all 8 are now shipped and logged.
 
-Shipped: last-stand clutch state (HP<15% red vignette + `setDangerIntensity(1.0)` + "LAST STAND!!" text, `gs.lastStandActive` flag, `soundLastStand()` entry sound + `soundHeartbeatPulse()` every 55 frames); kill-chain audio escalation (combo-graded pitch in `soundEnemyDeathAt`, RAMPAGE/GODLIKE/UNSTOPPABLE floating text milestones at combo 5/10/15); adaptive soundtrack layers (`soundBossFinale()` triggering at boss HP<10%); live PACE coaching chip in HUD (ahead/behind vs `gs.careerBest.wave`, hidden until wave≥3); phantom elite variant (wave≥25+, 12% spawn chance, 90-frame opacity pulse 15%↔95%, purple dashed ring, speed×1.1, HP×0.85, `drawGame.js` globalAlpha handling).
+Shipped: last-stand clutch state (HP<15% red vignette + `setDangerIntensity(1.0)` + "LAST STAND!!" text, `gs.lastStandActive` flag, `soundLastStand()` entry sound + `soundHeartbeatPulse()` every 55 frames); kill-chain audio escalation (combo-graded pitch in `soundEnemyDeathAt`, RAMPAGE/GODLIKE/UNSTOPPABLE floating text milestones at combo 5/10/15); adaptive soundtrack layers (`soundBossFinale()` triggering at boss HP<10%); live PACE coaching chip in HUD (ahead/behind vs `gs.careerBest.wave`, hidden until wave≥3); phantom elite variant (wave≥25+, 12% spawn chance, 90-frame opacity pulse 15%↔95%, purple dashed ring, speed×1.1, HP×0.85, `drawGame.js` globalAlpha handling); weekly rival ghost (`loadWeeklyTopGhost()` 7-day leaderboard query, 1h `sessionStorage` cache, HUD WEEKLY RIVAL chip); death recap mini-replay (DeathScreen animates the final ghost-path segment over the existing canvas with a REPLAY restart button); replay resim runner (`src/utils/replayResim.js`, focused tests, and `validate-replay` Phase 2B resim drift reporting/rejection for rich trace bodies above 2%).
 
-Deferred from audit: weekly-rival-ghost (item 6), death-recap-mini-replay (item 7), replay-resim-runner (item 8) — all high-innovation candidates for next session.
-
-Validation: 427/427 tests, lint 0 new errors, build passing. Commits: `e371983` (implement), `bfe2e76` (closeout write-back). Both pushed to origin main.
+Validation: focused replay tests 11/11; full `npm test` 429/429 across 49 files; `npm run lint` clean; `npm run build` passing at main chunk 770.54 kB raw / 237.91 kB gzip. Earlier commits `e371983` (implement) and `bfe2e76` (closeout write-back) predate this continuation; commit/push for the continuation is still pending closeout autopilot.
 
 ## Where We Left Off - Session 85 (2026-06-08)
 

@@ -1,46 +1,53 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 8f7631db2eee -->
-<!-- generated-at: 2026-06-12T13:24:38.878Z -->
+<!-- source-hash: dc5af931eec1 -->
+<!-- generated-at: 2026-06-12T19:33:36.750Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 85 (2026-06-08). Status: durable /start->/audit->/implement->/closeout loop continuing cleanly.
+Session 86 continuation (2026-06-12)
 
-Last shipped
-- Playwright pointer 360 runs on desktop Chromium + Mobile Chrome
-- HomeV2 AIM CHECK chip for first-run/debug via local calibration state
-- DeathScreen ghost paths: final-killer halo + emoji + enemy-name label (src/utils/ghostPath.js)
+Shipped this session
+- Last-stand clutch: HP<15% red vignette, danger intensity 1.0, "LAST STAND!!" text, gs.lastStandActive, entry sound + heartbeat pulse @55f
+- Kill-chain audio: combo-graded death pitch; RAMPAGE/GODLIKE/UNSTOPPABLE text at combo 5/10/15
+- Adaptive soundtrack: soundBossFinale() at boss HP<10%
+- PACE coaching chip in HUD (ahead/behind vs careerBest.wave, wave≥3)
+- Phantom elite: wave≥25, 12% chance, pulsing opacity, purple dashed ring, 1.1x speed, 0.85x HP
+- Weekly rival ghost: 7-day leaderboard query, 1h session cache, HUD WEEKLY RIVAL chip
+- Death recap mini-replay: final ghost-path canvas animation with REPLAY restart button
+- Replay resim runner: src/utils/replayResim.js + validate-replay Phase 2B rich-trace drift reporting/rejection above 2%
+- Earlier commits e371983, bfe2e76 pushed to main; continuation commit pending closeout autopilot
 
 Validation
-- Focused tests 11/11; full npm test 427/427 across 48 files
-- npm run lint clean; npm run build green
-- npm run test:e2e 2/2 (Chromium + Mobile Chrome)
+- Focused replay tests 11/11; 429/429 tests, lint clean, build passing
 
 Current intent
-- Continue product-facing trust/launch-confidence increments via small audit slices
-- Preserve zero-dependency, local-first, honest-evidence posture
+- Durable /start → /audit → /implement → /closeout loop; founder wants genius-level, innovative slices with short impact summaries
 
-Now (top 3)
-1. Deterministic replay resimulation runner — consume stored rich trace bodies + movement primitives to detect drift; largest remaining trust milestone
-2. HomeV2 v1 fallback retirement — gated on production Lighthouse/funnel evidence
-3. Multi-death cluster centroid grouping — deepen enemy death feedback beyond single final-marker annotation
+Now bucket (top 3)
+- Deeper physics-parity replay resim Phase 2C
+- Physical PWA/gamepad launch QA when device access is available
+- Itch.io publication using docs/LAUNCH_EXECUTION.md
 
-Blockers (top 3)
-1. Supabase edge-function deploy of sync-studio-events repair — SUPABASE_ACCESS_TOKEN missing; check-secrets reports supabase MISSING
-2. Cloudflare Web Analytics beacon SRI failure — live-only, requires Cloudflare dashboard access to fix/remove stale integrity hash
-3. PostHog/Sentry GitHub Action secrets absent — blocks HomeV2 funnel/Lighthouse measurement gate
+Top blockers (top 3)
+- Deterministic replay resimulation: Phase 2B trace-driven drift is shipped; full physics parity remains future work
+- HomeV2 v1 retirement: needs production Lighthouse/funnel evidence
+- Cloudflare Web Analytics beacon SRI error: injected externally, not in repo source
 
-Human/device-gated (age)
-- Physical PWA + Xbox/PS gamepad QA — open since S74 (~14 sessions)
-- Itch.io publication — open since S74 (~14 sessions)
-- Cloudflare studio-access token rotation/narrowing — open since S65 (~20 sessions)
-- Merge feat-standalone-domain -> main + verify Pages deploy — open since S67 (~18 sessions)
+Human/credential gated (with age)
+- Physical PWA/gamepad QA — pending since S74 (~12 sessions)
+- Itch.io publication — pending since S74 (~12 sessions)
+- PostHog/Sentry GH Action secrets + HomeV2 funnel/Lighthouse evidence — pending since S66 (~20 sessions)
+- Supabase functions deploy (sync-studio-events, submit-score, validate-replay) — pending since S82 (~4 sessions), needs SUPABASE_ACCESS_TOKEN
+- Cloudflare studio-access token rotation/narrowing — pending since S65 (~21 sessions)
+- npm run replay:trust-smoke against production — pending since S69 (~17 sessions)
 
 Repo protocol state
 - protocol:drift status=ok, missingRequired=0
-- write-project-status --check clean; SIL invariant proven via scripts/lib/sil-categories.mjs
+- Local shims present: skill-profile, sil-categories, medium-quality-gates, sil-rubrics, turn-classifier, visual-blocks, sil-forecaster, blocker-rules, skill-cost-ledger, scan-secrets, credential-watch, ark, router, brief-staleness, skill-manifest, skill-trace-emit
 - verify-plan-mode stamps Codex as not_required
-- Local helpers present: skill-profile, set-active-skill, medium-quality-gates, sil-rubrics, turn-classifier, visual-blocks, sil-forecaster, blocker-rules, skill-cost-ledger, scan-secrets, credential-watch, ark, router, check-brief-staleness, build-skill-manifest, skill-trace-emit
-- scripts/record-skill-cost.mjs still absent (cost-marker noop locally)
+- scripts/record-skill-cost.mjs still absent locally (noted S83)
 
-Next session: run /start; if context CONTINUE, open a fresh same-day audit targeting deterministic replay resim runner scaffold against existing rich trace bodies.
+Architecture debt
+- App.jsx extraction: slice 1 shipped S67 (gameStep.js); further slices available if prioritized
+
+Next-session pointer: pick deeper physics-parity replay resim, launch QA/publication, or HomeV2 measurement evidence; run /start → /audit → /implement → /closeout.

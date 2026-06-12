@@ -2,12 +2,20 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-12 — Session 86 continuation | Total: 1000/1000 | Velocity: 8 | Debt: ↓
+
+SIL +3: Completed the remaining three `docs/AUDIT_2026-06-12.md` items: weekly rival ghost (7-day leaderboard rival + HUD chip), death recap mini-replay (final ghost-path animation + replay restart), and replay resim runner (client utility + Edge Function Phase 2B drift block for rich traces above 2%). Validation: focused replay tests 11/11, full `npm test` 429/429, lint clean, build passing at 770.54 kB raw / 237.91 kB gzip.
+
+**Top win:** The audit is now actually exhausted instead of leaving the highest-innovation replay/rivalry items deferred.
+**Top gap:** The resim runner is intentionally conservative and trace-driven; full physics parity remains a deeper future trust milestone.
+**Intent outcome:** Achieved for `/audit -> /implement` continuation; closeout write-back is in progress.
+
 ## 2026-06-12 — Session 86 | Total: 1000/1000 | Velocity: 5 | Debt: ↓
 
 SIL +5: Shipped five combat-feel and audio-immersion items in one pass — last-stand clutch state with red vignette and audio spike, kill-chain audio escalation with milestone floating text, situational soundtrack layers (heartbeat + boss finale), live PACE coaching chip vs career best wave, and a new phantom elite variant with opacity pulsing. Validation: focused tests 427/427 (no regressions), lint 0 new errors, build passing at 768.41 kB.
 
 **Top win:** Last-stand clutch + heartbeat pulse transforms every near-death moment from anxiety into a shareable cinematic — zero new assets, pure Web Audio synthesis.
-**Top gap:** Items 6-8 from the audit (weekly rival ghost, death recap mini-replay, replay resim runner) remain as follow-up targets for the next session.
+**Top gap:** Superseded by the Session 86 continuation above: items 6-8 are now shipped.
 **Intent outcome:** Achieved — `/start`, `/audit`, `/implement` (5/8 items, context gate deferred 3), and closeout write-back completed with validation evidence.
 
 ## 2026-06-08 — Session 85 | Total: 1000/1000 | Velocity: 3 | Debt: ↓

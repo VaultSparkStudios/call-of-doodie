@@ -17,7 +17,9 @@
     },
     "candidateCount": 8,
     "combinedPriority": 210.9,
-    "top3": ["last-stand-clutch", "kill-chain-audio-escalation", "adaptive-soundtrack-layers"]
+    "top3": ["last-stand-clutch", "kill-chain-audio-escalation", "adaptive-soundtrack-layers"],
+    "shippedCount": 8,
+    "lastImplementedAt": "2026-06-12"
   },
   "candidates": [
     {
@@ -33,8 +35,13 @@
       "priority": 31.5,
       "why": "HP below 15% currently reads the same as HP at 50% — the danger drone gets louder but nothing visceral happens. Adding a 90-frame automatic Last Stand state (deep red vignette, setDangerIntensity(1.0), 'LAST STAND!' floating text) transforms near-death from anxiety into a legendary clutch window. Every close-call run becomes shareable.",
       "recipe": "In App.jsx game loop, track gs.lastStandActive: set true when gs.player.health < gs.player.maxHealth * 0.15 and reset when health recovers or player dies. In drawGame.js add a full-screen deep red radial gradient at alpha 0.28 when gs.lastStandActive. Emit setDangerIntensity(1.0) and addText 'LAST STAND!' on state entry.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped HP<15% last-stand state, red vignette, danger spike, floating text, and heartbeat/entry sound integration. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 2,
@@ -49,8 +56,13 @@
       "priority": 27.0,
       "why": "The combo counter climbs to 20+ but soundEnemyDeathAt plays the same flat tone at combo 1 vs combo 15. Pitching each kill sound up by +80 cents per 5-combo tier and adding a bass impact thud at chain 10+ makes combos feel physically real. The existing kill sound uses Web Audio API oscillators — this is a one-parameter pass-through change.",
       "recipe": "Pass comboRef.current.count to soundEnemyDeathAt (or create soundEnemyDeathAtCombo). In sounds.js: at combo ≥5 add +80 cents detune; at combo ≥10 add second oscillator +1 octave; at combo ≥15 add short sub-bass thump. Add RAMPAGE/GODLIKE/UNSTOPPABLE floating text milestones at 5/10/15 with escalating colors (#FF6400, #FF0088, #FFD700).",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped combo-aware enemy death audio and RAMPAGE/GODLIKE/UNSTOPPABLE text milestones. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 3,
@@ -65,8 +77,13 @@
       "priority": 31.0,
       "why": "The heat-meter drives the base music tier but there are no situational audio overlays — the same tier-2 track plays whether the player is at full health cruising or at 5HP fighting a Phase 2 boss. A synthesized heartbeat bass pulse at HP<15% and a rising string swell when a boss hits <10% HP would make these moments feel cinematic and zero-cost (pure Web Audio synthesis).",
       "recipe": "In sounds.js add soundLastStandHeartbeat() — low 60bpm sine pulse with a slight reverb tail, volume scales inversely with health fraction. Add soundBossFinaleLayer() — a brief rising sawtooth chord (220→440Hz over 1.5s). In App.jsx: on health entering <15% call soundLastStandHeartbeat(); on boss health crossing 10% call soundBossFinaleLayer(). Store refs so they can be stopped on health recovery or boss death.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped last-stand heartbeat pulse and boss-finale synthesized chord trigger. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 4,
@@ -81,8 +98,13 @@
       "priority": 32.0,
       "why": "The HUD shows current wave but has no personal context — a player at wave 15 doesn't know if they're ahead or behind their best run. A small 'PACE: W18 PB' chip that turns green/yellow/red creates a live personal challenge without any server calls. RunBrain already loads career stats locally; this is a pure display layer over existing data.",
       "recipe": "In HomeV2/App.jsx load career bestWave from loadCareerStats() before game start and pass as bestWave prop to HUD. In HUD.jsx render a PACE chip: compute projectedFinalWave from (currentWave/timeSurvived * estimatedRunTime); show AHEAD/ON PACE/BEHIND vs bestWave with green/yellow/red border. Only shown wave ≥3, only if bestWave > 0.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped HUD PACE chip against career best wave with no server calls. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 5,
@@ -97,8 +119,13 @@
       "priority": 31.0,
       "why": "The four existing elite variants (armored/fast/berserker/explosive) all modify stats but none change visual tracking difficulty. A phantom variant that pulses between 20% and 100% opacity every 1.5s creates a genuine skill-based tracking challenge — players must predict its location during cloaked frames. The drawGame elite rendering already handles special ring styles, and applyEliteType covers the spawn path.",
       "recipe": "Add 'phantom' to the eliteType options in gameHelpers.js getRandomEliteType (wave ≥25 only). In applyEliteType: set e.phantomTimer = 0, e.phantomVisible = true, e.speed *= 1.1, e.health *= 0.85. In drawGame.js enemy render: if e.eliteType === 'phantom', compute opacity = e.phantomVisible ? 1 : 0.15 + Math.sin(timeNow/200)*0.05, apply ctx.globalAlpha. In game loop: every frame tick e.phantomTimer++; every 90 frames toggle e.phantomVisible.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped mutually exclusive wave 25+ phantom elite variant with opacity pulse and purple ring. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 6,
@@ -113,8 +140,13 @@
       "priority": 24.8,
       "why": "topGhosts loads from the leaderboard and appears on HUD but there's no WEEKLY champion ghost that creates persistent rivalry pressure. Querying the leaderboard for ts > 7 days ago and loading the top result as a weekly rival would mean every session players see 'BEHIND THE_DESTROYER +3 WAVES' in the HUD — social pressure without authentication or friends lists.",
       "recipe": "In storage.js add loadWeeklyTopGhost() — queries Supabase leaderboard filtered by ts > Date.now()-7d, selects top score, caches in sessionStorage for 1h. In HomeV2/App.jsx call it at game start and store as weeklyRivalRef. Pass weeklyRival to HUD alongside topGhosts. In HUD render: 'WEEKLY RIVAL: [name]' chip with BEATING/BEHIND delta vs current wave/score.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped loadWeeklyTopGhost() with 1h session cache, App.jsx run-start loading, and HUD WEEKLY RIVAL chip. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 7,
@@ -129,8 +161,13 @@
       "priority": 31.4,
       "why": "Ghost data is already stored in sessionStorage as {x,y,f} frames — the death screen only uses it as a static path drawing. Animating the final 8 seconds of ghost movement as a short auto-playing replay on the death screen canvas (at 2x speed, 4-second playback) would transform the death screen from a static summary into a dramatic cinematic recap. This is a pure canvas animation layer over already-stored data.",
       "recipe": "In DeathScreen.jsx, after ghost canvas renders the static path, start a requestAnimationFrame loop that replays the last N ghost frames (8s × 60fps = ~480 frames) at 2x speed. Draw player dot + trail, fade-in the final kill marker at end. Add a 'REPLAY' button to restart the animation. No new data required — existing ghostData.frames slice is enough.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped DeathScreen final-path replay animation over existing ghost samples plus a REPLAY restart button. Verified in 429/429 tests, lint, and build."
+        }
+      ]
     },
     {
       "rank": 8,
@@ -145,8 +182,13 @@
       "priority": 16.9,
       "why": "Deterministic replay resim is the highest-trust feature in the backlog — it would let submit-score prove a submitted run is reachable from stored trace inputs. All the primitives are in place: gameStep.js for movement, combatResolution.js for hit math, flowField.js for pathing, and replayCommandTrace.js for input encoding. The only missing piece is a headless runner that seeds the RNG from runSeed and applies stored commands frame by frame.",
       "recipe": "Create src/utils/replayResim.js: export runResim(seed, traceBody, maxFrames) that initializes gs from seed, decodes the command trace, applies each frame via gameStep/combatResolution, and returns {finalWave, finalScore, driftPct}. Wire into validate-replay Edge Function as Phase 2B: if traceBody present, run resim and reject if driftPct > 2%.",
-      "status": "pending",
-      "executionLog": []
+      "status": "shipped",
+      "executionLog": [
+        {
+          "date": "2026-06-12",
+          "result": "Shipped src/utils/replayResim.js, focused tests, and validate-replay Phase 2B resim drift reporting/rejection for rich trace bodies above 2%. Verified in 429/429 tests, focused replay tests, lint, and build."
+        }
+      ]
     }
   ],
   "innovationReserve": ["phantom-elite-variant", "death-recap-mini-replay", "adaptive-soundtrack-layers"],

@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-06-12 (Session 86 continuation)
+
+- Continued the active `/start -> /audit -> /implement -> /closeout` goal from current evidence.
+- Verified the first five `docs/AUDIT_2026-06-12.md` items already existed in source, then shipped the remaining three audit items:
+  - `weekly-rival-ghost`: added `loadWeeklyTopGhost()` with 7-day leaderboard filtering, 1h `sessionStorage` cache, run-start loading in `App.jsx`, and HUD WEEKLY RIVAL chip.
+  - `death-recap-mini-replay`: upgraded the DeathScreen ghost-path canvas with final-segment requestAnimationFrame playback and a REPLAY restart button.
+  - `replay-resim-runner`: added `src/utils/replayResim.js` + tests and wired `validate-replay` Phase 2B resim drift reporting/rejection for rich trace bodies above 2%.
+- Repaired `docs/AUDIT_2026-06-12.json` / `.md` execution status so `/implement` is idempotent and all eight items are logged as shipped.
+- Validation: focused replay tests 11/11; full `npm test` 429/429 across 49 files; `npm run lint` clean; `npm run build` passing at 770.54 kB raw / 237.91 kB gzip main chunk.
+- Closeout note: `scripts/record-skill-cost.mjs` remains absent in this public repo, so the cost marker could not run; context-meter was used instead and reported `CONTINUE`.
+
 ## 2026-06-08 (Session 85)
 
 - Ran `/start`, wrote continuation audit artifacts `docs/AUDIT_2026-06-08_2.md` / `.json`, implemented all three ranked items, and updated `docs/IMPLEMENT_PLAN.md`.

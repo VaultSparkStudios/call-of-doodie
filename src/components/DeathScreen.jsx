@@ -45,6 +45,7 @@ export default function DeathScreen({
   const [showQR, setShowQR] = useState(false);
   const [qrError, setQrError] = useState(false);
   const [showAllWeapons, setShowAllWeapons] = useState(false);
+  const [replayNonce, setReplayNonce] = useState(0);
   const qrCanvasRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
@@ -66,6 +67,7 @@ export default function DeathScreen({
     const W = canvas.width, H = canvas.height;
     ctx.fillStyle = "#050505"; ctx.fillRect(0, 0, W, H);
     if (ghostData.length < 2) return;
+    let rafId = 0;
     let minX = Infinity, minY = Infinity, maxX = 0, maxY = 0;
     ghostData.forEach(pt => { minX = Math.min(minX, pt.x); minY = Math.min(minY, pt.y); maxX = Math.max(maxX, pt.x); maxY = Math.max(maxY, pt.y); });
     const rangeX = Math.max(maxX - minX, 100), rangeY = Math.max(maxY - minY, 100);
@@ -128,7 +130,35 @@ export default function DeathScreen({
       ctx.fillStyle = "#CCC"; ctx.fillText(label, 17, H - 17 + i * 8);
     });
     ctx.globalAlpha = 1;
-  }, [ghostData]);
+    const replayFrames = ghostData.slice(-Math.min(480, ghostData.length));
+    if (replayFrames.length >= 2) {
+      const replayStart = performance.now();
+      const drawReplay = (now) => {
+        const progress = Math.min(1, (now - replayStart) / 4000);
+        const frameIndex = Math.min(replayFrames.length - 1, Math.floor(progress * (replayFrames.length - 1)));
+        const startIndex = Math.max(0, frameIndex - 45);
+        for (let i = startIndex + 1; i <= frameIndex; i++) {
+          const t = (i - startIndex) / Math.max(1, frameIndex - startIndex);
+          const [x1, y1] = toC(replayFrames[i - 1].x, replayFrames[i - 1].y);
+          const [x2, y2] = toC(replayFrames[i].x, replayFrames[i].y);
+          ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+          ctx.strokeStyle = `rgba(0,229,255,${(0.08 + t * 0.45).toFixed(2)})`;
+          ctx.lineWidth = 1 + t * 2.5;
+          ctx.stroke();
+        }
+        const pt = replayFrames[frameIndex];
+        const [px, py] = toC(pt.x, pt.y);
+        ctx.fillStyle = progress >= 0.98 ? "#FF2222" : "#00E5FF";
+        ctx.shadowColor = ctx.fillStyle;
+        ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.arc(px, py, progress >= 0.98 ? 6 : 4, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+        if (progress < 1) rafId = requestAnimationFrame(drawReplay);
+      };
+      rafId = requestAnimationFrame(drawReplay);
+    }
+    return () => { if (rafId) cancelAnimationFrame(rafId); };
+  }, [ghostData, replayNonce]);
 
   // ── QR code rendering ─────────────────────────────────────────────────────
   const challengeUrl = buildChallengeUrl({
@@ -796,8 +826,12 @@ export default function DeathScreen({
           <div style={{ ...card, marginBottom: 12 }}>
             <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 10, fontFamily: "'Courier New',monospace" }}>── GHOST RACE — YOUR PATH ──</div>
             <canvas ref={ghostCanvasRef} width={280} height={140} style={{ borderRadius: 6, border: "1px solid #1A1A1A", display: "block", margin: "0 auto" }} />
-            <div style={{ fontSize: 9, color: "#444", marginTop: 6, textAlign: "center" }}>
-              🟢 START  🔴 DEATH  — {ghostData.length} position samples
+            <div style={{ fontSize: 9, color: "#444", marginTop: 6, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
+              <span>🟢 START  🔴 DEATH  — {ghostData.length} position samples</span>
+              <button
+                onClick={() => setReplayNonce(n => n + 1)}
+                style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", borderRadius: 4, color: "#8DEBFF", cursor: "pointer", letterSpacing: 1 }}
+              >REPLAY</button>
             </div>
           </div>
         )}
