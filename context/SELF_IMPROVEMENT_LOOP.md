@@ -2,6 +2,14 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-13 — Session 87 | Total: 1000/1000 | Velocity: 8 | Debt: ↓
+
+SIL +8: Shipped all 8 items in one pass — formation system is now heat-reactive (pincer encirclements at overdrive), enemies escalate speed/fire rate when player is on a kill chain, wave preview cards show 1–5 skull threat ratings, formation lore toasts explain tactics passively, DeathScreen gains a ⭐ VERIFIED badge, 🎯 BEST SHOT ghost path scrub, and a RIVALRY LADDER card (3 rivals within ±10% personal best). Validation: 440/440 tests (+8 new), lint 0 errors, build passing.
+
+**Top win:** Kill-chain-ai-escalation inverts the power fantasy — a GODLIKE streak is also the moment enemies become most dangerous, which creates genuine skill tension instead of safe grinding.
+**Top gap:** Proximity rivals require a loaded leaderboard to populate; in sessions with no LB data the card silently hides — this is correct behavior but degrades on first runs.
+**Intent outcome:** Achieved — full `/start → /audit → /implement → /closeout` loop completed; all 8 audit items shipped and committed.
+
 ## 2026-06-12 — Session 86 continuation | Total: 1000/1000 | Velocity: 8 | Debt: ↓
 
 SIL +3: Completed the remaining three `docs/AUDIT_2026-06-12.md` items: weekly rival ghost (7-day leaderboard rival + HUD chip), death recap mini-replay (final ghost-path animation + replay restart), and replay resim runner (client utility + Edge Function Phase 2B drift block for rich traces above 2%). Validation: focused replay tests 11/11, full `npm test` 429/429, lint clean, build passing at 770.54 kB raw / 237.91 kB gzip.
