@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildWaveTelemetrySnapshot,
+  computeWaveThreatRating,
   createWaveDirectorPlan,
   applySpawnFormation,
   getGuaranteedEliteType,
@@ -9,6 +10,7 @@ import {
   getSpawnFormationPlan,
   getWaveDirectorState,
   getWaveSpawnRate,
+  heatBiasedFormation,
 } from "./waveDirector.js";
 
 describe("waveDirector", () => {
@@ -78,5 +80,50 @@ describe("waveDirector", () => {
     const guidance = getBossWaveGuidance(17, 18);
     expect(guidance.headline).toContain("Juggernaut");
     expect(guidance.pressure).toContain("Summoner");
+  });
+
+  it("computeWaveThreatRating clamps at 1 for a small quiet wave", () => {
+    expect(computeWaveThreatRating({ maxEnemies: 5, eliteType: null, event: null })).toBe(1);
+  });
+
+  it("computeWaveThreatRating raises to 5 for elite_only siege", () => {
+    const rating = computeWaveThreatRating({ maxEnemies: 40, eliteType: "berserker", event: "elite_only" });
+    expect(rating).toBe(5);
+  });
+
+  it("computeWaveThreatRating adds 1 for siege event", () => {
+    const base = computeWaveThreatRating({ maxEnemies: 10, event: null });
+    const withSiege = computeWaveThreatRating({ maxEnemies: 10, event: "siege" });
+    expect(withSiege).toBe(base + 1);
+  });
+
+  it("heatBiasedFormation promotes flank to pincer at heat tier 1", () => {
+    const base = { id: "flank", label: "FLANK", offset: 60 };
+    const result = heatBiasedFormation(1, base, 0);
+    expect(result.id).toBe("pincer");
+  });
+
+  it("heatBiasedFormation forces pincer at heat tier 2 regardless of base", () => {
+    const base = { id: "surge", label: "SURGE", offset: 0 };
+    const result = heatBiasedFormation(2, base, 1);
+    expect(result.id).toBe("pincer");
+  });
+
+  it("heatBiasedFormation preserves surge at heat tier 0", () => {
+    const base = { id: "surge", label: "SURGE", offset: 0 };
+    const result = heatBiasedFormation(0, base, 0);
+    expect(result.id).toBe("surge");
+  });
+
+  it("heatBiasedFormation returns null for null base", () => {
+    expect(heatBiasedFormation(2, null, 0)).toBeNull();
+  });
+
+  it("heatBiasedFormation alternates pincer sign by spawn number", () => {
+    const base = { id: "flank", label: "FLANK", offset: 60 };
+    const even = heatBiasedFormation(2, base, 0);
+    const odd  = heatBiasedFormation(2, base, 1);
+    expect(even.offset).toBeGreaterThan(0);
+    expect(odd.offset).toBeLessThan(0);
   });
 });

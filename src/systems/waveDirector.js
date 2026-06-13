@@ -245,3 +245,28 @@ export function getBossWaveGuidance(primaryBossType, secondaryBossType = null) {
       : primary.pressure,
   };
 }
+
+// Returns a 1–5 danger rating for a non-boss wave.
+export function computeWaveThreatRating({ maxEnemies = 10, eliteType = null, event = null } = {}) {
+  let score = 1;
+  score += Math.min(2, Math.floor(maxEnemies / 10));
+  if (event === "elite_only") score += 2;
+  else if (event === "siege" || event === "fast_round") score += 1;
+  if (eliteType) score += 1;
+  return Math.max(1, Math.min(5, score));
+}
+
+// Upgrades the base formation based on how hot the current heat tier is.
+// At heat 2 (overdrive) all spawns become pincer encirclements.
+// At heat 1 (warm), loose flanks are promoted to pincer.
+export function heatBiasedFormation(heatTierValue, baseFormation, spawnNumber) {
+  if (!baseFormation) return null;
+  const sign = spawnNumber % 2 === 0 ? 1 : -1;
+  if (heatTierValue >= 2) {
+    return { id: "pincer", label: "PINCER", offset: sign * 78 };
+  }
+  if (heatTierValue === 1 && baseFormation.id === "flank") {
+    return { id: "pincer", label: "PINCER", offset: sign * 78 };
+  }
+  return baseFormation;
+}
