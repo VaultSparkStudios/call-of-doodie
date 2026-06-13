@@ -268,6 +268,17 @@ export async function loadWeeklyTopGhost(mode = "standard", difficulty = "normal
   } catch { return null; }
 }
 
+// Returns up to `count` leaderboard entries whose score is within ±bandPct of myBestScore.
+// Prioritises entries just above the player (the "next rung" to beat).
+export function getProximityRivals(myBestScore, leaderboard = [], count = 3, bandPct = 0.10) {
+  if (!myBestScore || myBestScore <= 0 || !leaderboard.length) return [];
+  const lo = myBestScore * (1 - bandPct);
+  const hi = myBestScore * (1 + bandPct);
+  const above = leaderboard.filter(e => e.score > myBestScore && e.score <= hi).sort((a, b) => a.score - b.score);
+  const below = leaderboard.filter(e => e.score >= lo && e.score <= myBestScore).sort((a, b) => b.score - a.score);
+  return [...above, ...below].slice(0, count).map(e => ({ name: e.name, score: e.score, diff: e.score - myBestScore }));
+}
+
 export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {
   const payload = {
     ...safeEntry,
