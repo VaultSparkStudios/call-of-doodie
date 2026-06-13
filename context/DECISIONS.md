@@ -289,3 +289,13 @@ Trade-off accepted: passkeys are not the first implementation step for this game
 **Rationale:** Stacking two elite types on one enemy produces unpredictable compound effects (e.g., phantom+armored = slow-fire invisible tank that is nearly untrackable). Keeping phantom mutually exclusive with other elites bounds the difficulty ceiling.
 
 **Trade-off accepted:** The 12% phantom probability is measured against the pool of enemies that received no other elite type, not the entire spawn pool; effective spawn rate is lower than 12% in waves where armored/fast/berserker/explosive all fire.
+
+---
+
+## 2026-06-13 — Public repo keeps local Studio OS compatibility helpers
+
+**Decision:** When canonical Studio OS skills reference helper scripts that are absent from this public game repo, add small repo-local compatibility helpers instead of importing private Studio Ops internals.
+
+**Rationale:** This repository must keep `/start`, `/audit`, `/implement`, and `/closeout` executable from public-safe code. Local helpers preserve repeatability and observability without exposing private planning, secrets workflows, or Studio Ops implementation details.
+
+**Trade-off accepted:** These helpers are intentionally lightweight and task-board/codebase based. They are compatibility surfaces, not feature-equivalent replacements for private Studio Ops intelligence.

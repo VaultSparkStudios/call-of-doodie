@@ -19,6 +19,13 @@ const helpers = [
   { rel: "scripts/check-brief-staleness.mjs", level: "optional", purpose: "chooses full brief versus delta brief" },
   { rel: "scripts/build-skill-manifest.mjs", level: "optional", purpose: "warns on skill registry drift" },
   { rel: "scripts/skill-trace-emit.mjs", level: "optional", purpose: "emits skill telemetry breadcrumbs" },
+  { rel: "scripts/cache-genius-list.mjs", level: "optional", purpose: "keeps startup genius-list command executable" },
+  { rel: "scripts/generate-genius-list.mjs", level: "optional", purpose: "renders brief startup recommendations" },
+  { rel: "scripts/sample-codebase.mjs", level: "optional", purpose: "supports bounded audit code sampling" },
+  { rel: "scripts/render-audit-md.mjs", level: "optional", purpose: "renders audit markdown from JSON sidecar" },
+  { rel: "scripts/lib/audit-sidecar.mjs", level: "optional", purpose: "finds and updates audit JSON sidecars" },
+  { rel: "scripts/session-floor.mjs", level: "optional", purpose: "gates implement/closeout saturation honestly" },
+  { rel: "scripts/record-skill-cost.mjs", level: "optional", purpose: "records closeout skill-cost snapshots" },
 ];
 
 function exists(rel) {

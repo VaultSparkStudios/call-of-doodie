@@ -27,6 +27,7 @@ Commands:
   blocker-preflight  Check human-blocked items against local secret readiness
   closeout, c      Project-local closeout autopilot
   feedback-score   Proxy to Studio Ops feedback-score
+  genius-list      Generate or print the cached local genius list
   onboard          Verify local startup tooling exists; use --repair --write to report repair state
   help             Show this help`);
 }
@@ -107,6 +108,9 @@ switch (command) {
     break;
   case "feedback-score":
     runNode(STUDIO_OPS, ["feedback-score", ...args]);
+    break;
+  case "genius-list":
+    runNode(path.join(__dirname, "cache-genius-list.mjs"), ["--write", ...args]);
     break;
   case "onboard":
     onboard();

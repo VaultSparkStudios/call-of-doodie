@@ -67,6 +67,16 @@ const BOSS_GUIDANCE = {
   },
 };
 
+const NEMESIS_WEAPON_RECOMMENDATIONS = {
+  4: "Shotgun",
+  9: "Crossbow",
+  16: "Laser",
+  17: "Minigun",
+  18: "Rocket Launcher",
+  20: "Sniper",
+  21: "Flamethrower",
+};
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -244,6 +254,14 @@ export function getBossWaveGuidance(primaryBossType, secondaryBossType = null) {
       ? `${primary.pressure} ${secondary.pressure}`
       : primary.pressure,
   };
+}
+
+export function getNemesisWeaponRecommendation(bossType) {
+  return NEMESIS_WEAPON_RECOMMENDATIONS[bossType] || "your best weapon";
+}
+
+export function getKnownBossGuidanceTypes() {
+  return Object.keys(BOSS_GUIDANCE).map(Number).sort((a, b) => a - b);
 }
 
 // Returns a 1–5 danger rating for a non-boss wave.

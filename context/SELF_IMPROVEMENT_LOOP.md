@@ -2,6 +2,14 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-13 — Session 87 continuation | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Converted a same-day continuation into a verified protocol-truth and coaching-truth repair. The local Studio OS loop now has executable helpers for sampling, audit sidecars, Markdown rendering, session-floor gating, genius-list caching, and cost snapshots; protocol drift now covers 19 helpers; and nemesis dossiers no longer fall back to vague counter-weapon advice for guided boss types. Validation: script smokes, focused waveDirector 19/19, full `npm test` 442/442, lint 0 errors / 1 pre-existing warning, build passing.
+
+**Top win:** The next `/start → /audit → /implement → /closeout` loop is less dependent on agent memory because the command paths now exist locally.
+**Top gap:** The helper shims are compatibility-grade, not full private Studio Ops replacements; they keep the public repo executable and honest.
+**Intent outcome:** Achieved for the continuation — fresh audit, implementation, verification, and closeout write-back completed with evidence.
+
 ## 2026-06-13 — Session 87 | Total: 1000/1000 | Velocity: 8 | Debt: ↓
 
 SIL +8: Shipped all 8 items in one pass — formation system is now heat-reactive (pincer encirclements at overdrive), enemies escalate speed/fire rate when player is on a kill chain, wave preview cards show 1–5 skull threat ratings, formation lore toasts explain tactics passively, DeathScreen gains a ⭐ VERIFIED badge, 🎯 BEST SHOT ghost path scrub, and a RIVALRY LADDER card (3 rivals within ±10% personal best). Validation: 440/440 tests (+8 new), lint 0 errors, build passing.

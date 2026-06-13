@@ -2,6 +2,12 @@
 
 ## 2026-06-13 (Session 87)
 
+- Continuation: verified `docs/AUDIT_2026-06-13.md` / `.json` was already fully shipped, then created `docs/AUDIT_2026-06-13_2.md` / `.json` for a three-item follow-on.
+- Shipped `studio-loop-executable-parity`: added local compatibility helpers for `sample-codebase`, `audit-sidecar`, `render-audit-md`, `session-floor`, `cache-genius-list`, `generate-genius-list`, and `record-skill-cost`; wired `node scripts/ops.mjs genius-list`.
+- Shipped `protocol-drift-next-command-coverage`: `scripts/protocol-drift-check.mjs` now checks 19 helpers, including next-command audit/implement/closeout surfaces.
+- Shipped `nemesis-counter-map-completeness`: moved nemesis weapon recommendations into `src/systems/waveDirector.js`, covered every guided boss type, and replaced the partial inline `App.jsx` map.
+- Validation: script smokes passed; focused `waveDirector.test.js` 19/19; full `npm test` 442/442; `npm run lint` 0 errors / 1 pre-existing warning; `npm run build` passing.
+
 - Ran the full `/start → /audit → /implement → /closeout` loop from context-compacted continuation state.
 - Created `docs/AUDIT_2026-06-13.md` / `.json` (8 items, combined priority 276.2, theme: Combat Depth × Social Rivalry).
 - Implemented all 8 items in efficiency order (waveDirector cluster → App.jsx game loop → App.jsx death flow → App.jsx boss → storage → DeathScreen):

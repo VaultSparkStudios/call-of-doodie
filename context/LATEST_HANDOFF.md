@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 87 continuation (2026-06-13)
+
+Continued the active `/start → /audit → /implement → /closeout` goal after verifying the earlier same-day audit was already fully shipped. Created and executed `docs/AUDIT_2026-06-13_2.md` / `.json` for three verified continuation gaps.
+
+**Shipped:** repo-local Studio OS helper parity for `sample-codebase`, `audit-sidecar`, `render-audit-md`, `session-floor`, `cache-genius-list`, `generate-genius-list`, and `record-skill-cost`; `node scripts/ops.mjs genius-list` now executes instead of failing from the startup brief; `npm run protocol:drift -- --json` now covers 19 helpers; nemesis counter-weapon recommendations moved into `src/systems/waveDirector.js` with coverage for every concrete boss guidance type, and `App.jsx` now consumes that helper instead of a partial inline map.
+
+**Validation:** script smokes passed; `npx vitest run src/systems/waveDirector.test.js` 19/19; `npm test` 442/442 across 49 files; `npm run lint` 0 errors / 1 pre-existing `leaderboard` hook dependency warning; `npm run build` passing.
+
+**Next session:** Product-facing work can resume from a cleaner loop. Strong candidates: score-milestone share hook, rivalry ladder “rival beaten” animation, Supabase edge-function deploy when `SUPABASE_ACCESS_TOKEN` exists, or Lighthouse-gated HomeV2 v1 retirement.
+
 ## Where We Left Off - Session 87 (2026-06-13)
 
 Full `/start → /audit → /implement → /closeout` loop completed. Audit `docs/AUDIT_2026-06-13.md` / `.json` identified 8 items across the Combat Depth × Social Rivalry theme; all 8 shipped in one pass.

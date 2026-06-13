@@ -80,6 +80,7 @@ import {
   applySpawnFormation,
   getBossWaveGuidance,
   getGuaranteedEliteType,
+  getNemesisWeaponRecommendation,
   getSpawnFormationPlan,
   getWaveDirectorState,
   getWaveSpawnRate,
@@ -2441,8 +2442,7 @@ export default function CallOfDoodie() {
           gs.nemesisBossType = isNemesis(_primaryType) ? _primaryType : (gs.nemesisBossType === _primaryType ? null : gs.nemesisBossType);
           const _killLabel = _bossRec.kills === 0 ? "FIRST ENCOUNTER" : _bossRec.kills >= 10 ? `EXECUTIONER (${_bossRec.kills}× killed)` : _bossRec.kills >= 5 ? `VETERAN (${_bossRec.kills}× killed)` : `${_bossRec.kills}× killed`;
           const _nemesisFlag = isNemesis(_primaryType);
-          const _NEMESIS_WEAPON = { 5: "Shotgun", 6: "Flamethrower", 7: "Sniper", 17: "Minigun", 18: "Rocket Launcher", 14: "Laser", 19: "Crossbow", 11: "Grenade Launcher" };
-          const _nemesisBrief = _nemesisFlag ? { weapon: _NEMESIS_WEAPON[_primaryType] || "your best weapon", tip: _bossGuidance.verb } : null;
+          const _nemesisBrief = _nemesisFlag ? { weapon: getNemesisWeaponRecommendation(_primaryType), tip: _bossGuidance.verb } : null;
           bossCutsceneRef.current = true;
           setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief });
         } catch {

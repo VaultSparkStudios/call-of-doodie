@@ -1,6 +1,17 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-13 - Session 87 continuation
+
+- Protocol helper truth — `sample-codebase`, `audit-sidecar`, `render-audit-md`, `session-floor`, `cache-genius-list`, `generate-genius-list`, and `record-skill-cost` are repo-local compatibility helpers. They keep the public repo's Studio OS loop executable; they do not claim to replace private Studio Ops intelligence.
+- Genius-list truth — `node scripts/ops.mjs genius-list` now returns task-board-derived local recommendations. When there are no open repo-executable Now items, it truthfully emits a launch-confidence maintenance item rather than inventing product work.
+- Protocol drift truth — `npm run protocol:drift -- --json` now reports `status=ok` across 19 helper files, including the newer audit/implement/closeout helper set.
+- Nemesis dossier truth — `getNemesisWeaponRecommendation()` covers every boss type that has concrete `BOSS_GUIDANCE`. Unknown boss types still fall back to "your best weapon", and the fallback is tested.
+- Validation truth — script smokes passed; focused waveDirector tests passed 19/19; full `npm test` passed 442/442; `npm run lint` reported 0 errors and 1 pre-existing warning; `npm run build` passed.
+
+Overall status: green locally
+Last reviewed: 2026-06-13
+
 ## 2026-06-13 - Session 87
 
 - Formation system truth — `heatBiasedFormation` upgrades the director's output but never moves an enemy off-screen; `applySpawnFormation` clamps positions to the canvas margin. No balance invariants broken.
@@ -8,7 +19,7 @@
 - Trace evidence truth — `deathTraceEvidenceRef` is populated by `analyzeReplayCommandTrace(encodeReplayCommandTrace(...))` at the moment of death. The ⭐ VERIFIED badge requires `evidenceLevel: rich` (≥6 events, 60+ frames, 2+ movement, 1+ aim, 2+ interactions). Players who die very quickly will legitimately show no badge.
 - Proximity rivals truth — `getProximityRivals` returns [] when `myBestScore ≤ 0` or leaderboard is empty. The DeathScreen RIVALRY LADDER silently hides — this is correct behavior.
 - Precision peak truth — `_precisionPeakFrame` is only set when a new streak peak is reached. If a player never builds a precision streak, the BEST SHOT button does not render (guarded by `precisionPeakStreak >= 3`).
-- Nemesis weapon truth — `_NEMESIS_WEAPON` lookup uses boss typeIndex integers. Types not in the map fallback to "your best weapon" — honest default, not a false claim.
+- Nemesis weapon truth — superseded by the Session 87 continuation helper: guided boss types now use tested `getNemesisWeaponRecommendation()` coverage; unknown types still fall back to "your best weapon" honestly.
 - Test truth — 440/440 passing; +8 from new `computeWaveThreatRating` and `heatBiasedFormation` tests in `waveDirector.test.js`.
 
 Overall status: green locally

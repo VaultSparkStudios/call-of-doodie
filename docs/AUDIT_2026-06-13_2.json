@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-13",
+    "session": 87,
+    "project": "call-of-doodie",
+    "type": "game",
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "ai": 1.5,
+      "feature-depth": 1.5,
+      "security": 1,
+      "speed": 1,
+      "feedback": 1,
+      "token-cost": 1,
+      "new-feature": 1
+    },
+    "totalItems": 3,
+    "combinedPriority": 83.6,
+    "top3": [
+      "studio-loop-executable-parity",
+      "nemesis-counter-map-completeness",
+      "protocol-drift-next-command-coverage"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "slug": "studio-loop-executable-parity",
+      "title": "Studio Loop Executable Parity Pack",
+      "axis": "speed",
+      "tier": "🔥",
+      "impact": 9,
+      "effortHours": 2,
+      "innovation": 7,
+      "priority": 31.5,
+      "status": "shipped",
+      "why": "The current repo can start and play, but the newer `/audit` and `/implement` skill contracts point at helpers that are absent locally: `sample-codebase`, `audit-sidecar`, `render-audit-md`, `session-floor`, `cache-genius-list`, and `record-skill-cost`. That makes every future unattended Studio OS loop depend on agent memory instead of executable project truth.",
+      "recipe": "Add lightweight repo-local compatibility helpers for the missing scripts, route `node scripts/ops.mjs genius-list` through the cache, and keep the outputs public-safe: source sampling only reports paths/line counts/previews, audit rendering consumes the existing `candidates` shape, session-floor returns a deterministic CONTINUE/STOP code, and cost records store context-meter snapshots without secrets.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Add `ops.mjs genius-list` plus `cache-genius-list.mjs` so the startup brief command stops failing."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Add all missing helper shims: `sample-codebase.mjs`, `scripts/lib/audit-sidecar.mjs`, `render-audit-md.mjs`, `session-floor.mjs`, `cache-genius-list.mjs`, and `record-skill-cost.mjs`; wire `ops.mjs genius-list` to the cache helper."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Also add smoke coverage for each helper and have closeout consume the generated cost ledger in its status board."
+        }
+      }
+    },
+    {
+      "id": "2",
+      "slug": "nemesis-counter-map-completeness",
+      "title": "Complete Nemesis Counter Map",
+      "axis": "ai",
+      "tier": "⚡",
+      "impact": 7,
+      "effortHours": 1,
+      "innovation": 6,
+      "priority": 26.5,
+      "status": "shipped",
+      "why": "Session 87 shipped a nemesis dossier, but live code verifies the counter-weapon map is inline and misses several actual boss guidance types: Karen, Landlord, Splitter, Algorithm, and Developer all fall back to generic advice. The coaching loop should never become vague exactly when the player has a personal nemesis.",
+      "recipe": "Move nemesis weapon recommendations into `waveDirector.js` beside `BOSS_GUIDANCE`, export `getNemesisWeaponRecommendation()`, cover every concrete boss guidance key, wire `App.jsx` to use it, and add focused tests for completeness plus unknown fallback.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Patch the inline map in `App.jsx` to include all currently known boss types."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Export a tested helper from `waveDirector.js` and replace the inline `App.jsx` map."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Use the helper to also render a pre-run boss dossier preview when a rivalry seed includes a boss-wave death."
+        }
+      }
+    },
+    {
+      "id": "3",
+      "slug": "protocol-drift-next-command-coverage",
+      "title": "Protocol Drift Checks Cover Next-Command Helpers",
+      "axis": "security",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 0.75,
+      "innovation": 5,
+      "priority": 25.6,
+      "status": "shipped",
+      "why": "`npm run protocol:drift` can report clean while the next command in the official loop still fails. That is an observability-honesty issue: green protocol status must cover the scripts the current `/start → /audit → /implement → /closeout` path advertises.",
+      "recipe": "Extend `scripts/protocol-drift-check.mjs` required/optional helper coverage to include the newly executable audit/implement/closeout helpers and the genius-list cache path; verify JSON mode reports `status=ok` after the parity pack lands.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Add only `scripts/cache-genius-list.mjs` and `scripts/record-skill-cost.mjs` to optional drift checks."
+        },
+        "L2": {
+          "effortHours": 0.75,
+          "recipe": "Add the full next-command helper set to protocol drift coverage with clear purposes."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Have drift check run each helper in dry-run mode and report contract failures, not just file presence."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "new-gameplay-content-wave",
+      "reason": "Skipped for this continuation because current verified risk is executable Studio OS drift and a partially true coaching feature from the just-shipped wave."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "studio-loop-executable-parity",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": null,
+      "notes": "Added repo-local helper shims for code sampling, audit sidecars, audit Markdown rendering, session-floor gating, genius-list caching, and skill-cost recording; wired ops.mjs genius-list."
+    },
+    {
+      "slug": "protocol-drift-next-command-coverage",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": null,
+      "notes": "protocol-drift-check now covers 19 helpers including next-command audit/implement/closeout shims; npm run protocol:drift -- --json reports status ok."
+    },
+    {
+      "slug": "nemesis-counter-map-completeness",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": null,
+      "notes": "Nemesis weapon recommendations now live in waveDirector.js, App.jsx consumes the helper, and waveDirector tests cover all guided bosses plus unknown fallback."
+    }
+  ]
+}

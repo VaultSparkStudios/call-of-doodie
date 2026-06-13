@@ -6,6 +6,8 @@ import {
   applySpawnFormation,
   getGuaranteedEliteType,
   getBossWaveGuidance,
+  getKnownBossGuidanceTypes,
+  getNemesisWeaponRecommendation,
   getPressureBand,
   getSpawnFormationPlan,
   getWaveDirectorState,
@@ -80,6 +82,16 @@ describe("waveDirector", () => {
     const guidance = getBossWaveGuidance(17, 18);
     expect(guidance.headline).toContain("Juggernaut");
     expect(guidance.pressure).toContain("Summoner");
+  });
+
+  it("has nemesis counter-weapon recommendations for every guided boss", () => {
+    for (const bossType of getKnownBossGuidanceTypes()) {
+      expect(getNemesisWeaponRecommendation(bossType)).not.toBe("your best weapon");
+    }
+  });
+
+  it("falls back safely for unknown nemesis boss types", () => {
+    expect(getNemesisWeaponRecommendation(999)).toBe("your best weapon");
   });
 
   it("computeWaveThreatRating clamps at 1 for a small quiet wave", () => {
