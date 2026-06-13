@@ -32,7 +32,7 @@
       "innovation": 8,
       "priority": 40.5,
       "priorityWeighted": 121.5,
-      "status": "pending",
+      "status": "shipped",
       "why": "The heatMeter and waveDirector are two live systems that don't talk to each other. Heat tier drives music, but formation shape is currently deterministic from wave type alone. Wiring heatTier(gs.heat) into the formation seed means the player's own momentum reshapes the battlefield — high heat yields pincer (encircling) formations, low heat yields flank/surge (loose). This is emergent difficulty that responds to the player's performance without ever feeling arbitrary.",
       "recipe": "In App.jsx, pass heatTier(gs.heat) as a `heatBias` param to the waveDirector's `applySpawnFormation` call; in waveDirector.js, bias the formation choice array so 'pincer' probability rises with heatBias (0→uniform, 1→50% pincer, 2→80% pincer). Single-file change.",
       "ladder": {
@@ -61,7 +61,7 @@
       "innovation": 9,
       "priority": 40.5,
       "priorityWeighted": 121.5,
-      "status": "pending",
+      "status": "shipped",
       "why": "The kill chain currently rewards the player with milestone text and audio (RAMPAGE/GODLIKE/UNSTOPPABLE). It doesn't punish the chain. The genius flip: at UNSTOPPABLE (combo ≥ 15), enemies enter a reactive state — +10% speed, +15% fire rate for the chain's duration. Your power high is also your greatest danger. This turns every UNSTOPPABLE into a genuine high-stakes moment instead of a victory lap, without adding any new assets or systems.",
       "recipe": "In the game loop frame update, compute `const _chainMod = comboRef.current.count >= 15 ? { speed: 1.10, fireRate: 0.85 } : { speed: 1.0, fireRate: 1.0 }`. Apply _chainMod.speed to each enemy's effective speed in the move step, and _chainMod.fireRate to their fire cooldown. Add a red-tinted HUD text 'ENEMIES ENRAGED' at combo 15 milestone. Reset when combo breaks.",
       "ladder": {
@@ -90,7 +90,7 @@
       "innovation": 9,
       "priority": 40.5,
       "priorityWeighted": 121.5,
-      "status": "pending",
+      "status": "shipped",
       "why": "The mini-replay in DeathScreen plays the full final-path animation. The precision streak system tracks bestPrecisionStreak but not WHICH frame the peak occurred at. Recording `gs.precisionPeakFrame` when a new streak peak is set enables the DeathScreen to offer a 'BEST SHOT' button that scrubs the path replay to that frame. This is the shareable highlight-reel hook — players share their best shot, not their final wave number.",
       "recipe": "In App.jsx near the precisionStreak++ block, add: `if (gs.precisionStreak > (gs.precisionPeakStreak || 0)) { gs.precisionPeakStreak = gs.precisionStreak; gs.precisionPeakFrame = frameCountRef.current; }`. In DeathScreen.jsx, if precisionPeakFrame is set, show a 'BEST SHOT ×N' chip that, when clicked, sets the replay canvas startFrame to precisionPeakFrame - 90 (3 seconds of lead-up).",
       "ladder": {
@@ -119,7 +119,7 @@
       "innovation": 7,
       "priority": 35.4,
       "priorityWeighted": 106.3,
-      "status": "pending",
+      "status": "shipped",
       "why": "The replay evidence pipeline (S67-S86) classifies trace quality as rich/basic/weak using analyzeReplayCommandTrace. There is no visual payoff for a rich-evidence run — the player submits and sees nothing about the trust quality of their run. A 'VERIFIED RUN' chip on DeathScreen (when evidence = 'rich') is the payoff that makes the leaderboard's trust infrastructure visible. This is a ~30-minute client-only change that closes an 8-session trust investment.",
       "recipe": "In App.jsx, compute evidence level from commandTraceRef when the run ends (analyzeReplayCommandTrace(commandTraceRef.current)). Pass `traceEvidence: {level: 'rich'|'basic'|'weak'}` into the death data. In DeathScreen.jsx, render a '⭐ VERIFIED RUN' chip (blue border, white text) when traceEvidence.level === 'rich', and a muted '✓ LOGGED' chip for basic. Add 1 focused test.",
       "ladder": {
@@ -148,7 +148,7 @@
       "innovation": 8,
       "priority": 32.0,
       "priorityWeighted": 96.0,
-      "status": "pending",
+      "status": "shipped",
       "why": "loadWeeklyTopGhost returns a single fixed rival (the top 7-day scorer). This creates a permanent ceiling, not a ladder. A proximity graph auto-selects the 3 leaderboard players within ±10% of your personal best score — players you can realistically beat. When you beat one, the next auto-promotes. This creates a continuous rivalry loop without any new UI surface beyond the existing DeathScreen 'RIVAL BEATEN' hook.",
       "recipe": "Add `getProximityRivals(myBestScore, leaderboard, n=3)` to storage.js: filter leaderboard entries where |entry.score - myBestScore| / myBestScore <= 0.10, sort by score ascending, return top n. Call in startGame() after loading leaderboard. Store as gs.proximityRivals[]. On kill of a wave that beats the top rival score, fire a 'RIVAL BEATEN — NEXT: [name]' addText at screen center.",
       "ladder": {
@@ -177,7 +177,7 @@
       "innovation": 7,
       "priority": 31.0,
       "priorityWeighted": 62.0,
-      "status": "pending",
+      "status": "shipped",
       "why": "Enemy formations (flank/pincer/surge) are assigned by waveDirector and stored on each enemy entity, but players see no indication of which formation just spawned. The tactics are invisible. A 0.8s banner toast when a new formation type is detected in the current wave ('⚠ FLANKING MANEUVER — enemies splitting to catch you in crossfire') makes tactical depth visible without requiring a tutorial. Invisible mechanics that teach the player passively are the highest ROI UX pattern.",
       "recipe": "In App.jsx wave-start block, after the spawn loop, check if any spawned enemy has a new formation type (not seen this wave). If so, call addText(gs, GW()/2, GH()/2 - 60, formationLore[formation.id], '#FFF8DC') with a 60-frame display timer. formationLore map: { flank: '⚠ FLANKING — enemies splitting', pincer: '⚠ PINCER — encirclement inbound', surge: '⚠ SURGE — direct assault wave' }. Track shown formations per wave in a Set to avoid repeat announcements.",
       "ladder": {
@@ -206,7 +206,7 @@
       "innovation": 7,
       "priority": 24.5,
       "priorityWeighted": 73.5,
-      "status": "pending",
+      "status": "shipped",
       "why": "When a nemesis boss type is set (3 deaths against it, 0 kills), the boss cutscene card shows the 🎯 NEMESIS badge but gives no tactical guidance specific to the nemesis pattern. BOSS_GUIDANCE already contains verb and pressure strings for every boss type, plus WAVE_ROUTES has tactical pairings. Surfacing 'NEMESIS DOSSIER: use [weapon], run [route]' as a 3-second pre-boss intel card turns the nemesis mechanic from a badge into an actual coaching loop.",
       "recipe": "In App.jsx nemesis boss detection, after `isNemesis(_primaryType)` is true, build a nemesis briefing object: { name: BOSS_GUIDANCE[type].title, verb: BOSS_GUIDANCE[type].verb, pressure: BOSS_GUIDANCE[type].pressure, recommendedWeapon: getNemesisWeapon(type) }. getNemesisWeapon() returns a WEAPONS[idx].name suggestion per boss type from a small lookup table. Pass into setBossCutscene as an additional `nemesisBrief` field. BossCutscene card renders it in a red-bordered callout block.",
       "ladder": {
@@ -235,7 +235,7 @@
       "innovation": 6,
       "priority": 31.8,
       "priorityWeighted": 63.6,
-      "status": "pending",
+      "status": "shipped",
       "why": "The wave incoming preview card shows wave number, event type, boss/mutation hints, but gives no at-a-glance danger estimate. A threat rating (1-5 skulls, computed from enemy type composition × wave multipliers) gives players 2 seconds to mentally prepare — whether to save a grenade, shift to a defensive weapon, or commit to an aggressive route. This is pure information design with near-zero implementation cost.",
       "recipe": "Add computeWaveThreatRating(wavePlan, gs) in a utility or inline in waveDirector: score = baseEnemyCount × typeWeights (tank/boss-escort = 2.0, ranged = 1.5, standard = 1.0) + event bonus (siege/fast = +1, elite_only = +2) + bossWave bonus (+3). Clamp to 1-5. Render as skull icons ('💀'.repeat(rating)) in the wave preview card label row. Zero test coverage needed for this tier of complexity.",
       "ladder": {
@@ -262,5 +262,62 @@
     { "slug": "revenue-signal-meter", "reason": "Credential-gated (SUPABASE_ACCESS_TOKEN missing). Can't query kofi_events without Supabase access." },
     { "slug": "death-readout-drill-bridge", "reason": "Superseded by nemesis-intelligence-brief which covers the same coaching gap more powerfully." }
   ],
-  "executionLog": []
+  "executionLog": [
+    {
+      "slug": "wave-threat-rating",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "e5f467f",
+      "notes": "computeWaveThreatRating in waveDirector.js; 1-5 skull threat display in wave preview card"
+    },
+    {
+      "slug": "heat-formation-seeding",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "5dc62ef",
+      "notes": "heatBiasedFormation wired in spawn block; heat tier 2 forces pincer"
+    },
+    {
+      "slug": "formation-lore-card",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "5dc62ef",
+      "notes": "Per-formation toast with per-wave _formationToastedThisWave Set"
+    },
+    {
+      "slug": "kill-chain-ai-escalation",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "5dc62ef",
+      "notes": "_chainEnrageLevel at combo thresholds; speed and fire-rate pressure applied"
+    },
+    {
+      "slug": "certified-run-badge",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "5dc62ef",
+      "notes": "Trace evidence is captured on death and rendered as a VERIFIED RUN chip"
+    },
+    {
+      "slug": "precision-best-shot-replay",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "be754ec",
+      "notes": "Precision peak frame tracked; BEST SHOT button scrubs ghost replay"
+    },
+    {
+      "slug": "nemesis-intelligence-brief",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "5dc62ef",
+      "notes": "_NEMESIS_WEAPON lookup and NEMESIS DOSSIER boss cutscene block"
+    },
+    {
+      "slug": "ghost-rivalry-proximity-graph",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": "529ed1a",
+      "notes": "getProximityRivals in storage.js and RIVALRY LADDER card in DeathScreen"
+    }
+  ]
 }

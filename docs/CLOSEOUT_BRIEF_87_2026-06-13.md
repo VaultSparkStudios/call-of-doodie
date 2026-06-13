@@ -17,7 +17,9 @@ Headline: Eight combat-depth and social-rivalry items shipped in one pass: enemi
 
 ## Validation
 
-- No validation recorded.
+- npm test: 49 files, 440 tests passing
+- npm run lint: 0 errors, 1 React hook dependency warning in src/App.jsx
+- npm run build: passing production build
 
 ## Remaining
 
