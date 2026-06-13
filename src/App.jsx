@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -42,7 +42,7 @@ import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/an
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
-import { directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
+import { analyzeReplayCommandTrace, directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
 import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberControllerProfile } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
@@ -75,6 +75,7 @@ import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import {
   buildWaveTelemetrySnapshot,
+  computeWaveThreatRating,
   createWaveDirectorPlan,
   applySpawnFormation,
   getBossWaveGuidance,
@@ -82,6 +83,7 @@ import {
   getSpawnFormationPlan,
   getWaveDirectorState,
   getWaveSpawnRate,
+  heatBiasedFormation,
 } from "./systems/waveDirector.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 import {
@@ -167,6 +169,7 @@ export default function CallOfDoodie() {
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
   const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
   const commandTraceRef  = useRef([]);    // replay command trace events for trust submission
+  const deathTraceEvidenceRef = useRef(null); // analyzeReplayCommandTrace result at moment of death
   const lastTraceMoveRef = useRef({ bucket: "neutral", frame: -999 });
   const lastTraceAimRef  = useRef({ bucket: "neutral", frame: -999 });
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
@@ -569,6 +572,13 @@ export default function CallOfDoodie() {
       bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
       difficultyRef.current || "normal"
     ).then(ghost => { if (gsRef.current) gsRef.current.weeklyRival = ghost; }).catch(() => {});
+    // Proximity rivals: 3 leaderboard players within ±10% of personal best — continuous rivalry ladder
+    try {
+      const _careerForRivals = loadCareerStats();
+      if (_careerForRivals.bestScore > 0 && leaderboard.length > 0) {
+        gsRef.current.proximityRivals = getProximityRivals(_careerForRivals.bestScore, leaderboard, 3);
+      }
+    } catch { gsRef.current.proximityRivals = []; }
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -1622,6 +1632,8 @@ export default function CallOfDoodie() {
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
+    // Certified-run badge: capture replay trust evidence snapshot at moment of death
+    try { deathTraceEvidenceRef.current = analyzeReplayCommandTrace(encodeReplayCommandTrace(commandTraceRef.current || [])); } catch { deathTraceEvidenceRef.current = null; }
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     lastStandActiveRef.current = false; if (gs) gs.lastStandActive = false;
     return true;
@@ -2023,6 +2035,19 @@ export default function CallOfDoodie() {
 
     // Reactive soundtrack tier handled below by Heat Meter (#8); combo no longer drives music directly.
 
+    // Kill-chain AI escalation: at UNSTOPPABLE (combo ≥15) enemies get faster + more aggressive
+    {
+      const _newEnrage = comboRef.current.count >= 35 ? 2 : comboRef.current.count >= 15 ? 1 : 0;
+      if (_newEnrage !== (gs._chainEnrageLevel || 0)) {
+        const _prev = gs._chainEnrageLevel || 0;
+        gs._chainEnrageLevel = _newEnrage;
+        if (_newEnrage > _prev) {
+          if (_newEnrage === 1) addText(gs, W / 2, H / 2 - 110, "🔴 ENEMIES ENRAGED", "#FF6644", true);
+          else if (_newEnrage === 2) addText(gs, W / 2, H / 2 - 110, "🔥 ENEMIES FURIOUS", "#FF2200", true);
+        }
+      }
+    }
+
     // ── Kill Frenzy (META_TREE off4): +20% speed for 60f after kill ──
     if ((gs._killFrenzyTimer || 0) > 0) { gs._killFrenzyTimer--; gs.player.speed = gs._killFrenzyBaseSpeed * 1.20; }
     else if (gs._killFrenzyUnlocked && gs.player.speed === (gs._killFrenzyBaseSpeed || 0) * 1.20) {
@@ -2217,8 +2242,19 @@ export default function CallOfDoodie() {
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         const ne = gs.enemies[gs.enemies.length - 1];
-        const formation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
-        if (formation) { applySpawnFormation(ne, formation, W, H); gs._lastFormationLabel = formation.label; }
+        const _baseFormation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
+        const formation = heatBiasedFormation(heatTier(gs.heat || 0), _baseFormation, gs.enemiesThisWave - 1);
+        if (formation) {
+          applySpawnFormation(ne, formation, W, H);
+          gs._lastFormationLabel = formation.label;
+          // Formation lore toast: show once per formation type per wave
+          if (!gs._formationToastedThisWave) gs._formationToastedThisWave = new Set();
+          if (!gs._formationToastedThisWave.has(formation.id)) {
+            gs._formationToastedThisWave.add(formation.id);
+            const _lore = { FLANK: "⚠ FLANKING — enemies splitting to cut off escape", PINCER: "⚠ PINCER — encirclement inbound", SURGE: "⚠ SURGE — overwhelming assault" };
+            if (_lore[formation.label]) addText(gs, W / 2, H / 2 - 60, _lore[formation.label], "#FFF8DC");
+          }
+        }
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         if (directorEliteType) applyEliteType(ne, directorEliteType);
         if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
@@ -2361,6 +2397,7 @@ export default function CallOfDoodie() {
           dailyChallengeMode: gs.dailyChallengeMode,
         });
         gs.waveDirectorStage = -1;
+        gs._formationToastedThisWave = new Set();
       }
       setWave(gs.currentWave);
       setMapTheme(gs.mapTheme ?? 0);
@@ -2404,8 +2441,10 @@ export default function CallOfDoodie() {
           gs.nemesisBossType = isNemesis(_primaryType) ? _primaryType : (gs.nemesisBossType === _primaryType ? null : gs.nemesisBossType);
           const _killLabel = _bossRec.kills === 0 ? "FIRST ENCOUNTER" : _bossRec.kills >= 10 ? `EXECUTIONER (${_bossRec.kills}× killed)` : _bossRec.kills >= 5 ? `VETERAN (${_bossRec.kills}× killed)` : `${_bossRec.kills}× killed`;
           const _nemesisFlag = isNemesis(_primaryType);
+          const _NEMESIS_WEAPON = { 5: "Shotgun", 6: "Flamethrower", 7: "Sniper", 17: "Minigun", 18: "Rocket Launcher", 14: "Laser", 19: "Crossbow", 11: "Grenade Launcher" };
+          const _nemesisBrief = _nemesisFlag ? { weapon: _NEMESIS_WEAPON[_primaryType] || "your best weapon", tip: _bossGuidance.verb } : null;
           bossCutsceneRef.current = true;
-          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag });
+          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief });
         } catch {
           bossCutsceneRef.current = true;
           setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
@@ -2489,6 +2528,7 @@ export default function CallOfDoodie() {
             threatHint: gs.waveDirector?.hint,
             telemetryBand: gs.waveTelemetryBand,
             formationHint: gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
+            threatRating: computeWaveThreatRating({ maxEnemies: gs.maxEnemiesThisWave, eliteType: gs.waveDirector?.eliteType, event: gs.waveEvent }),
           });
         }
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
@@ -2884,6 +2924,10 @@ export default function CallOfDoodie() {
           if (!e.isBossEnemy && isPrecisionHit(b, e)) {
             gs.precisionStreak = (gs.precisionStreak || 0) + 1;
             statsRef.current.bestPrecisionStreak = Math.max(statsRef.current.bestPrecisionStreak || 0, gs.precisionStreak);
+            if (gs.precisionStreak > (gs._precisionPeakStreak || 0)) {
+              gs._precisionPeakStreak = gs.precisionStreak;
+              gs._precisionPeakFrame = frameCountRef.current;
+            }
             gs.coins = (gs.coins || 0) + 1;
             if (gs.precisionStreak === 3) {
               gs.coins += 2;
@@ -3107,7 +3151,8 @@ export default function CallOfDoodie() {
       const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
       const freezeMult = (gs.freezeTimer || 0) > 0 ? 0.35 : 1;
       const timeDilMult = (gs.timeDilationTimer || 0) > 0 ? 0.18 : 1;
-      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult * timeDilMult;
+      const _enrageMult = gs._chainEnrageLevel === 2 ? 1.20 : gs._chainEnrageLevel === 1 ? 1.10 : 1.0;
+      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult * timeDilMult * _enrageMult;
       // Flow field steering: sample flow field, fall back to direct angle if no cell data
       const ff = gs.flowField;
       let sx, sy;
@@ -3161,7 +3206,8 @@ export default function CallOfDoodie() {
       if (e.hitFlash > 0) e.hitFlash--;
       if (e.ranged) {
         e.shootTimer++;
-        if (e.shootTimer >= e.projRate) {
+        const _enrageFireThresh = gs._chainEnrageLevel === 2 ? e.projRate * 0.80 : gs._chainEnrageLevel === 1 ? e.projRate * 0.85 : e.projRate;
+        if (e.shootTimer >= _enrageFireThresh) {
           e.shootTimer = 0;
           const pa = Math.atan2(p.y - e.y, p.x - e.x);
           // Mega Karen phase 2: 5-bullet spread
@@ -4024,6 +4070,10 @@ export default function CallOfDoodie() {
           fmtTime={fmtTime}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           weaponKills={weaponKillsSnapshot} bestPrecisionStreak={statsRef.current.bestPrecisionStreak || 0} starterLoadout={starterLoadout}
+          traceEvidence={deathTraceEvidenceRef.current}
+          precisionPeakFrame={gsRef.current?._precisionPeakFrame || 0}
+          precisionPeakStreak={gsRef.current?._precisionPeakStreak || 0}
+          proximityRivals={gsRef.current?.proximityRivals || []}
           cosmeticUnlocks={cosmeticUnlocks}
           objectivesSummary={objectivesSummary}
           scoreAttackMode={scoreAttackMode}
@@ -4234,6 +4284,12 @@ export default function CallOfDoodie() {
               <span>{isBoss ? "⚠️ Boss" : `👾 ~${wa.estimatedCount} enemies`}</span>
               {!isBoss && wa.waveNum % 5 === 0 && <span style={{ color: "#CC44FF" }}>🧬 Mutation offer</span>}
             </div>
+            {!isBoss && wa.threatRating && (
+              <div style={{ fontSize: 11, marginTop: 7, letterSpacing: 2, fontFamily: "'Courier New',monospace",
+                color: wa.threatRating >= 4 ? "#FF5533" : wa.threatRating >= 3 ? "#FFD700" : "#88FF99" }}>
+                {"💀".repeat(wa.threatRating)}{" "}THREAT {wa.threatRating}/5
+              </div>
+            )}
           </div>
         );
       })()}
@@ -4275,8 +4331,18 @@ export default function CallOfDoodie() {
             </div>
             {/* Kill count + nemesis badge */}
             {bossCutscene.bossKillLabel && (
-              <div style={{ fontSize:10, color: bossCutscene.isNemesis ? "#FF4400" : "#888", letterSpacing:2, fontFamily:"'Courier New',monospace", marginBottom:20, fontWeight: bossCutscene.isNemesis ? 900 : 400 }}>
+              <div style={{ fontSize:10, color: bossCutscene.isNemesis ? "#FF4400" : "#888", letterSpacing:2, fontFamily:"'Courier New',monospace", marginBottom: bossCutscene.nemesisBrief ? 10 : 20, fontWeight: bossCutscene.isNemesis ? 900 : 400 }}>
                 {bossCutscene.isNemesis ? "🎯 NEMESIS — " : ""}{bossCutscene.bossKillLabel}
+              </div>
+            )}
+            {/* Nemesis dossier: weapon recommendation + evasion tip */}
+            {bossCutscene.nemesisBrief && (
+              <div style={{ maxWidth:380, margin:"0 auto 18px", padding:"8px 14px", borderRadius:8, border:"1px solid #FF440066", background:"rgba(255,68,0,0.10)", textAlign:"left" }}>
+                <div style={{ fontSize:9, color:"#FF6644", letterSpacing:3, fontFamily:"'Courier New',monospace", fontWeight:900, marginBottom:5 }}>── NEMESIS DOSSIER ──</div>
+                <div style={{ fontSize:11, color:"#FFD7B8", lineHeight:1.5 }}>
+                  <span style={{ color:"#FF8866", fontWeight:700 }}>COUNTER: </span>{bossCutscene.nemesisBrief.weapon}
+                </div>
+                <div style={{ fontSize:10, color:"#CC9988", marginTop:4, lineHeight:1.4 }}>{bossCutscene.nemesisBrief.tip}</div>
               </div>
             )}
             {/* Divider */}
