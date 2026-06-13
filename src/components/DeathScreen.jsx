@@ -32,6 +32,8 @@ export default function DeathScreen({
   ghostKey, cosmeticUnlocks = [], objectivesSummary = null,
   experimentMatched = null,
   gsSnapshot = null, activeSynergiesData = [],
+  traceEvidence = null, precisionPeakFrame = 0, precisionPeakStreak = 0,
+  proximityRivals = [],
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -46,6 +48,7 @@ export default function DeathScreen({
   const [qrError, setQrError] = useState(false);
   const [showAllWeapons, setShowAllWeapons] = useState(false);
   const [replayNonce, setReplayNonce] = useState(0);
+  const [replayMode, setReplayMode] = useState("full"); // "full" | "best_shot"
   const qrCanvasRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
@@ -130,7 +133,17 @@ export default function DeathScreen({
       ctx.fillStyle = "#CCC"; ctx.fillText(label, 17, H - 17 + i * 8);
     });
     ctx.globalAlpha = 1;
-    const replayFrames = ghostData.slice(-Math.min(480, ghostData.length));
+    let replayFrames;
+    if (replayMode === "best_shot" && precisionPeakFrame > 0) {
+      const targetFrame = Math.max(0, precisionPeakFrame - 90);
+      let startIdx = 0;
+      for (let i = 0; i < ghostData.length; i++) {
+        if ((ghostData[i].f || 0) >= targetFrame) { startIdx = i; break; }
+      }
+      replayFrames = ghostData.slice(startIdx, startIdx + 300);
+    } else {
+      replayFrames = ghostData.slice(-Math.min(480, ghostData.length));
+    }
     if (replayFrames.length >= 2) {
       const replayStart = performance.now();
       const drawReplay = (now) => {
@@ -158,7 +171,7 @@ export default function DeathScreen({
       rafId = requestAnimationFrame(drawReplay);
     }
     return () => { if (rafId) cancelAnimationFrame(rafId); };
-  }, [ghostData, replayNonce]);
+  }, [ghostData, replayNonce, replayMode, precisionPeakFrame]);
 
   // ── QR code rendering ─────────────────────────────────────────────────────
   const challengeUrl = buildChallengeUrl({
@@ -825,14 +838,25 @@ export default function DeathScreen({
         {/* Ghost path visualization */}
         {ghostData && ghostData.length > 10 && (
           <div style={{ ...card, marginBottom: 12 }}>
-            <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 10, fontFamily: "'Courier New',monospace" }}>── GHOST RACE — YOUR PATH ──</div>
+            <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 10, fontFamily: "'Courier New',monospace", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span>── GHOST RACE — YOUR PATH ──</span>
+              {traceEvidence?.evidenceLevel === "rich" && (
+                <span style={{ fontSize: 8, color: "#FFD700", background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.35)", borderRadius: 4, padding: "1px 6px", letterSpacing: 1.5, fontWeight: 700 }}>⭐ VERIFIED RUN</span>
+              )}
+            </div>
             <canvas ref={ghostCanvasRef} width={280} height={140} style={{ borderRadius: 6, border: "1px solid #1A1A1A", display: "block", margin: "0 auto" }} />
             <div style={{ fontSize: 9, color: "#444", marginTop: 6, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
               <span>🟢 START  🔴 DEATH  — {ghostData.length} position samples</span>
               <button
-                onClick={() => setReplayNonce(n => n + 1)}
-                style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", borderRadius: 4, color: "#8DEBFF", cursor: "pointer", letterSpacing: 1 }}
+                onClick={() => { setReplayMode("full"); setReplayNonce(n => n + 1); }}
+                style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: replayMode === "full" ? "rgba(0,229,255,0.15)" : "rgba(0,229,255,0.08)", border: "1px solid rgba(0,229,255,0.35)", borderRadius: 4, color: "#8DEBFF", cursor: "pointer", letterSpacing: 1 }}
               >REPLAY</button>
+              {precisionPeakStreak >= 3 && (
+                <button
+                  onClick={() => { setReplayMode("best_shot"); setReplayNonce(n => n + 1); }}
+                  style={{ padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", background: replayMode === "best_shot" ? "rgba(255,136,255,0.18)" : "rgba(255,136,255,0.06)", border: "1px solid rgba(255,136,255,0.4)", borderRadius: 4, color: "#FF88FF", cursor: "pointer", letterSpacing: 1 }}
+                >🎯 BEST SHOT ×{precisionPeakStreak}</button>
+              )}
             </div>
             {ghostDeathReadout && (
               <div style={{ margin: "8px auto 0", maxWidth: 260, padding: "7px 9px", borderRadius: 6, background: "rgba(0,229,255,0.06)", border: "1px solid rgba(0,229,255,0.18)", textAlign: "left" }}>
@@ -840,6 +864,19 @@ export default function DeathScreen({
                 <div style={{ fontSize: 10, color: "#BFD8DD", marginTop: 3, lineHeight: 1.35 }}>{ghostDeathReadout.detail}</div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Proximity rivals: up to 3 nearby leaderboard players to beat */}
+        {proximityRivals.length > 0 && (
+          <div style={{ ...card, marginBottom: 12 }}>
+            <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── RIVALRY LADDER ──</div>
+            {proximityRivals.map((r, i) => (
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0", borderBottom: i < proximityRivals.length - 1 ? "1px solid #1A1A1A" : "none" }}>
+                <span style={{ fontSize: 11, color: r.diff > 0 ? "#FF8866" : "#66FFAA", fontFamily: "'Courier New',monospace", letterSpacing: 1 }}>{r.diff > 0 ? "▲" : "▼"} {r.name}</span>
+                <span style={{ fontSize: 10, color: "#777", fontFamily: "'Courier New',monospace" }}>{r.diff > 0 ? "+" : ""}{r.diff.toLocaleString()} pts</span>
+              </div>
+            ))}
           </div>
         )}
 
