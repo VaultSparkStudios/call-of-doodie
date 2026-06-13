@@ -1,6 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-13 - Session 87
+
+- Formation system truth — `heatBiasedFormation` upgrades the director's output but never moves an enemy off-screen; `applySpawnFormation` clamps positions to the canvas margin. No balance invariants broken.
+- Enrage truth — `_chainEnrageLevel` applies to ALL non-boss ranged enemies simultaneously. At overdrive (combo≥35) this compounds with `mutAlwaysEnraged` in cursed runs — same behavior as documented in MEMORY.md known-issues.
+- Trace evidence truth — `deathTraceEvidenceRef` is populated by `analyzeReplayCommandTrace(encodeReplayCommandTrace(...))` at the moment of death. The ⭐ VERIFIED badge requires `evidenceLevel: rich` (≥6 events, 60+ frames, 2+ movement, 1+ aim, 2+ interactions). Players who die very quickly will legitimately show no badge.
+- Proximity rivals truth — `getProximityRivals` returns [] when `myBestScore ≤ 0` or leaderboard is empty. The DeathScreen RIVALRY LADDER silently hides — this is correct behavior.
+- Precision peak truth — `_precisionPeakFrame` is only set when a new streak peak is reached. If a player never builds a precision streak, the BEST SHOT button does not render (guarded by `precisionPeakStreak >= 3`).
+- Nemesis weapon truth — `_NEMESIS_WEAPON` lookup uses boss typeIndex integers. Types not in the map fallback to "your best weapon" — honest default, not a false claim.
+- Test truth — 440/440 passing; +8 from new `computeWaveThreatRating` and `heatBiasedFormation` tests in `waveDirector.test.js`.
+
+Overall status: green locally
+Last reviewed: 2026-06-13
+
 ## 2026-06-08 - Session 84
 
 - Audit execution truth - `docs/AUDIT_2026-06-08.md` / `.json` now record all eight ranked items as shipped or bounded-shipped with execution notes.

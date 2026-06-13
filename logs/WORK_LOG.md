@@ -1,5 +1,21 @@
 # Work Log
 
+## 2026-06-13 (Session 87)
+
+- Ran the full `/start → /audit → /implement → /closeout` loop from context-compacted continuation state.
+- Created `docs/AUDIT_2026-06-13.md` / `.json` (8 items, combined priority 276.2, theme: Combat Depth × Social Rivalry).
+- Implemented all 8 items in efficiency order (waveDirector cluster → App.jsx game loop → App.jsx death flow → App.jsx boss → storage → DeathScreen):
+  - `wave-threat-rating`: `computeWaveThreatRating` + skull row in wave preview card.
+  - `heat-formation-seeding`: `heatBiasedFormation` promotes flanks to pincer at heat≥1, forces pincer at heat≥2.
+  - `formation-lore-card`: per-wave formation toast (FLANKING / PINCER / SURGE), Set-backed dedup.
+  - `kill-chain-ai-escalation`: `gs._chainEnrageLevel` 1/2 at combo 15/35; +10/20% speed, −15/20% fire threshold.
+  - `certified-run-badge`: `deathTraceEvidenceRef` snapshot at death; ⭐ VERIFIED RUN chip in DeathScreen.
+  - `precision-best-shot-replay`: `_precisionPeakFrame` on new streak peak; 🎯 BEST SHOT button scrubs ghost replay.
+  - `nemesis-intelligence-brief`: `_NEMESIS_WEAPON` lookup + red-bordered NEMESIS DOSSIER on boss cutscene card.
+  - `ghost-rivalry-proximity-graph`: `getProximityRivals` in storage.js; loaded at game start; RIVALRY LADDER in DeathScreen.
+- Commits: `e5f467f` (waveDirector), `5dc62ef` (App.jsx), `be754ec` (DeathScreen), `529ed1a` (storage), `f63d5b5` (closeout write-backs).
+- Validation: `npm test` 440/440 (+8 new), `npm run lint` clean, `npm run build` passing.
+
 ## 2026-06-12 (Session 86 continuation)
 
 - Continued the active `/start -> /audit -> /implement -> /closeout` goal from current evidence.

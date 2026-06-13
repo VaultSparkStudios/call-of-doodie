@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 87 (2026-06-13)
+
+Full `/start → /audit → /implement → /closeout` loop completed. Audit `docs/AUDIT_2026-06-13.md` / `.json` identified 8 items across the Combat Depth × Social Rivalry theme; all 8 shipped in one pass.
+
+**Shipped:** `computeWaveThreatRating` + skull display in wave preview card; `heatBiasedFormation` wired in spawn block (heat 2 forces pincer); formation lore toasts per-wave (`_formationToastedThisWave` Set); `gs._chainEnrageLevel` at combo≥15/35 (enemy speed + fire rate escalation); trace evidence snapshot at death + ⭐ VERIFIED RUN chip in ghost header; `_precisionPeakFrame` tracking + 🎯 BEST SHOT scrub button in DeathScreen ghost replay; NEMESIS DOSSIER callout block in boss cutscene card (`_NEMESIS_WEAPON` lookup + evasion tip); `getProximityRivals` in storage.js + RIVALRY LADDER card in DeathScreen.
+
+**Validation:** 440/440 tests (+8 new, all in `waveDirector.test.js`), lint 0 errors, build passing.
+
+**Next session:** No audit items deferred. Natural next themes: (1) Score-milestone social share hook — tweet/share on personal best broken; (2) Ranked ladder entry animation on DeathScreen when RIVALRY LADDER shows a rival beaten; (3) Supabase edge-function deploy once `SUPABASE_ACCESS_TOKEN` is available (credential-gated); (4) HomeV2 Lighthouse gate (LCP ≥200ms win needed before v1 removal).
+
 ## Where We Left Off - Session 86 (2026-06-12)
 
 Follow-on continuation executed a fresh same-day audit after the prior `docs/AUDIT_2026-06-12.md` / `.json` was verified fully shipped. New audit `docs/AUDIT_2026-06-12_2.md` / `.json` shipped all three items: replay resim honesty receipts, ghost death readouts, and trust-copy guardrails.
