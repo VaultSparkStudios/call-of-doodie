@@ -21,3 +21,14 @@ Audit: docs/AUDIT_2026-06-13_2.md | Items: 3 | Combined Priority: 83.6
 - Protocol: `npm run protocol:drift -- --json`
 - Focused gameplay: `npx vitest run src/systems/waveDirector.test.js`
 - Full gates: `npm test`, `npm run lint`, `npm run build`
+# Implement Plan — 2026-06-13 continuation 3
+
+Source: `docs/AUDIT_2026-06-13_3.json`
+
+## Wave Plan
+
+1. `boss-phase-two-readable-counterplay` — L2 — add tested per-boss phase-two warnings and wire them into the transition.
+
+## Verification
+
+- `npx vitest run src/systems/bossPhases.test.js` — passed 4/4.

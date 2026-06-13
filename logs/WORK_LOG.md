@@ -568,3 +568,10 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Implemented DeathScreen ghost death readouts: `buildGhostDeathReadout()` classifies final paths as pinned, sprinting, trapped, or drifting and renders a coaching line under the ghost replay canvas.
 - Implemented trust-copy guardrails: `studioEventOps` now uses pressure-estimate / pilot copy and tests prevent deterministic/resimulation claims from returning to live trust copy.
 - Validation: focused tests 15/15; full `npm test` 432/432 across 49 files; `npm run lint` clean; `npm run build` passing.
+
+## 2026-06-13 — Session 87 continuation 3
+
+- Ran `/start` continuation with Codex session lock, context-meter `CONTINUE`, fresh startup brief, credential/blocker preflight, and game medium overlay.
+- Verified `docs/AUDIT_2026-06-13_2.json` was already fully shipped, then created `docs/AUDIT_2026-06-13_3.md` / `.json` for a new current-state gap.
+- Implemented boss phase-two readable counterplay: `getBossPhaseTwoWarning()` covers every guided boss plus fallback, and `triggerBossPhaseTwoTransition()` now emits the warning under the PHASE 2 banner.
+- Validation: focused bossPhases 4/4; full `npm test` 444/444; `npm run lint` 0 errors / 1 pre-existing warning; audit JSON parse clean; `npm run build` passing.

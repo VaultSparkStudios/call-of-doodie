@@ -1102,3 +1102,10 @@ SIL +2: Converted replay-resim trust from an overconfident label into an honest 
 1. Physics-parity replay resim design — replace the pressure estimate with a true seeded frame runner once the combat/pathing surface is narrow enough. High probability.
 2. Death-readout drill bridge — turn pinned/sprinting/trapped classifications into one-tap Most Wanted or route drills. High probability.
 3. Edge receipt smoke — deploy `validate-replay` and verify the new pressure-estimate receipt shape against live rich/weak trace fixtures. Medium probability.
+## 2026-06-13 — Session 87 continuation 3 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
+
+SIL +1: Converted boss phase-two escalation from a spectacle-only banner into actionable counterplay at the exact difficulty spike while preserving the existing pure boss phase module pattern. Validation: focused bossPhases 4/4, full suite 444/444, lint 0 errors / 1 pre-existing warning, audit JSON parse clean, build passing.
+
+**Top win:** The player now gets a boss-specific survival instruction when speed/projectile pressure secretly increases.
+**Top gap:** The broader boss update loop remains embedded in `App.jsx`; extracting it should be a dedicated, higher-risk refactor rather than a continuation patch.
+**Intent outcome:** Achieved for `/start`, refreshed `/audit`, `/implement`, validation, and closeout write-back.

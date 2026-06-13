@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-13",
+    "session": 87,
+    "project": "call-of-doodie",
+    "type": "game",
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "ai": 1.5,
+      "feature-depth": 1.5,
+      "security": 1,
+      "speed": 1,
+      "feedback": 1,
+      "token-cost": 1,
+      "new-feature": 1
+    },
+    "totalItems": 1,
+    "combinedPriority": 28.4,
+    "top3": [
+      "boss-phase-two-readable-counterplay"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "slug": "boss-phase-two-readable-counterplay",
+      "title": "Boss Phase-Two Readable Counterplay",
+      "axis": "ui / ux / user-experience",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 0.75,
+      "innovation": 6,
+      "priority": 28.4,
+      "status": "shipped",
+      "why": "Live code already has strong boss preview guidance and a universal 50% health phase-two transition, but the transition only said PHASE 2 while secretly increasing speed and projectile pressure. The highest-pressure boss moment should give the player one concrete counter, not just a spectacle cue.",
+      "recipe": "Add a pure boss phase-two warning helper in `src/systems/bossPhases.js`, cover every guided boss type plus unknown fallback, and have `triggerBossPhaseTwoTransition()` emit the warning directly under the phase banner.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Add a generic phase-two warning line to the existing transition."
+        },
+        "L2": {
+          "effortHours": 0.75,
+          "recipe": "Add tested per-boss phase-two warnings and wire them into the transition."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Also feed the warning into aria-live and post-run boss coaching when phase two caused the death."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "physics-parity-replay-resim",
+      "reason": "Deferred because current replay resim is intentionally labeled heuristic/advisory; replacing it with a true runner is larger than a safe continuation slice and needs a dedicated design pass."
+    },
+    {
+      "slug": "appjsx-boss-logic-extraction",
+      "reason": "Deferred because extracting the full boss update loop from App.jsx has higher regression risk than this audited readability patch."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "boss-phase-two-readable-counterplay",
+      "status": "shipped",
+      "depth": "L2",
+      "commit": null,
+      "notes": "Added getBossPhaseTwoWarning(), wired it into triggerBossPhaseTwoTransition(), and covered known-boss plus fallback warning behavior. Focused verification: npx vitest run src/systems/bossPhases.test.js -> 4/4 passing."
+    }
+  ]
+}

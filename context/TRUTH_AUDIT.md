@@ -477,3 +477,10 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `src/utils/ghostPath.js` owns final-path death readout classification; `DeathScreen.jsx` only renders the returned headline/detail under the existing ghost replay canvas.
 - `src/utils/studioEventOps.js` owns live trust/readiness copy. Tests now guard against deterministic/resimulation wording returning to the pressure-estimate trust surface.
 - No source-of-truth contradictions introduced. Validation: focused tests 15/15, `npm test` 432/432, lint clean, build clean.
+## 2026-06-13 - Session 87 continuation 3
+
+- `docs/AUDIT_2026-06-13_3.md` / `.json` are the source of truth for the follow-on boss phase-two readability slice; the single item is marked shipped with execution evidence.
+- `src/systems/bossPhases.js` owns phase-two mechanics and now also owns the phase-two warning copy through `getBossPhaseTwoWarning()`.
+- `triggerBossPhaseTwoTransition()` remains the only runtime phase-two transition path; it now emits both the PHASE 2 banner and the concrete counterplay warning.
+- `src/systems/bossPhases.test.js` covers the known-boss warning map, unknown fallback, and the transition text emission.
+- No source-of-truth contradictions introduced. Validation: focused bossPhases 4/4, full suite 444/444, lint 0 errors / 1 pre-existing warning, audit JSON parse clean, build clean.
