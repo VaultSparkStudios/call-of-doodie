@@ -3,6 +3,7 @@ import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js"
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
 import { buildRunDebrief } from "../utils/runDebrief.js";
+import { buildRunNarrative } from "../utils/runNarrative.js";
 import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
@@ -34,6 +35,9 @@ export default function DeathScreen({
   gsSnapshot = null, activeSynergiesData = [],
   traceEvidence = null, precisionPeakFrame = 0, precisionPeakStreak = 0,
   proximityRivals = [],
+  nearDeathEvents = [], flowStateFired = 0, bossKillCount = 0,
+  speedrunMode = false, gauntletMode = false,
+  controllerType = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -380,6 +384,7 @@ export default function DeathScreen({
     vsScore,
     runSeed,
   });
+  const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived });
   const _topWpn = (() => {
     const wk = weaponKills || [];
     const total = wk.reduce((s, v) => s + (v || 0), 0);
@@ -866,6 +871,19 @@ export default function DeathScreen({
             )}
           </div>
         )}
+
+        {/* Run narrative arc card */}
+        <div style={{ ...card, marginBottom: 12 }}>
+          <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── RUN ARC ──</div>
+          <div style={{ fontSize: 14, fontWeight: 900, color: "#EEE", letterSpacing: 2, marginBottom: 4 }}>{runNarrative.act}</div>
+          <div style={{ fontSize: 11, color: "#888", lineHeight: 1.5, marginBottom: runNarrative.moments.length > 0 ? 10 : 0 }}>{runNarrative.actDesc}</div>
+          {runNarrative.moments.map((m, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "4px 0", borderTop: "1px solid #1A1A1A" }}>
+              <div style={{ fontSize: 8, color: "#FFD700", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap", marginTop: 2 }}>{m.label}</div>
+              <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.5 }}>{m.desc}</div>
+            </div>
+          ))}
+        </div>
 
         {/* Proximity rivals: up to 3 nearby leaderboard players to beat */}
         {proximityRivals.length > 0 && (

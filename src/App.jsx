@@ -2972,6 +2972,7 @@ export default function CallOfDoodie() {
             if (gs.precisionStreak >= 10 && !(gs._flowStateCooldown > 0)) {
               gs.timeDilationTimer = Math.max(gs.timeDilationTimer || 0, 90);
               gs._flowStateCooldown = 300;
+              gs._flowStateFiredCount = (gs._flowStateFiredCount || 0) + 1;
               addText(gs, e.x, e.y - e.size - 30, "⚡ FLOW STATE", "#00FFEE", true);
               addParticles(gs, e.x, e.y, "#00FFEE", 12);
             }
@@ -3825,6 +3826,14 @@ export default function CallOfDoodie() {
     if ((gs.timeDilationTimer || 0) > 0) gs.timeDilationTimer--;
     if ((gs._flowStateCooldown || 0) > 0) gs._flowStateCooldown--;
     if ((gs._globalTauntCooldown || 0) > 0) gs._globalTauntCooldown--;
+    // Near-death event tracking for run narrative arc (below 20% max HP)
+    const _ndMax = gs.player.maxHealth || 100;
+    if (gs.player.health > 0 && gs.player.health < _ndMax * 0.20) {
+      if (!gs._nearDeathActive) {
+        gs._nearDeathActive = true;
+        (gs._nearDeathEvents = gs._nearDeathEvents || []).push({ wave: gs.currentWave, hpLeft: Math.round(gs.player.health) });
+      }
+    } else { gs._nearDeathActive = false; }
     if (gs.coinMultTimer > 0) { gs.coinMultTimer--; if (gs.coinMultTimer === 0) { gs.coinMultActive = false; } }
     if (gs.coinStreakTimer > 0) { gs.coinStreakTimer--; if (gs.coinStreakTimer === 0) { gs.coinStreakKills = 0; } }
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
@@ -4123,6 +4132,9 @@ export default function CallOfDoodie() {
           precisionPeakFrame={gsRef.current?._precisionPeakFrame || 0}
           precisionPeakStreak={gsRef.current?._precisionPeakStreak || 0}
           proximityRivals={gsRef.current?.proximityRivals || []}
+          nearDeathEvents={gsRef.current?._nearDeathEvents || []}
+          flowStateFired={gsRef.current?._flowStateFiredCount || 0}
+          bossKillCount={statsRef.current.bossKills || 0}
           cosmeticUnlocks={cosmeticUnlocks}
           objectivesSummary={objectivesSummary}
           scoreAttackMode={scoreAttackMode}
