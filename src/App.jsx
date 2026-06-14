@@ -30,7 +30,7 @@ import {
   soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
   soundLastStand, soundHeartbeatPulse, soundBossFinale,
   soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
-  soundDash, soundBossKill, soundWaveClear, soundPerkSelect,
+  soundDash, soundBossKill, soundWaveClear, soundPerkSelect, soundPrecisionClick, soundPrecisionLock,
   soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
@@ -2975,6 +2975,8 @@ export default function CallOfDoodie() {
               gs._precisionPeakStreak = gs.precisionStreak;
               gs._precisionPeakFrame = frameCountRef.current;
             }
+            soundPrecisionClick(gs.precisionStreak);
+            if (gs.precisionStreak === 5) soundPrecisionLock();
             gs.coins = (gs.coins || 0) + 1;
             if (gs.precisionStreak === 3) {
               gs.coins += 2;

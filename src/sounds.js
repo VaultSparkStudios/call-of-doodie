@@ -323,6 +323,18 @@ export function soundWaveClear() {
   chirp(_pick([[440, 550, 660], [494, 622, 740], [392, 523, 784]]), 0.15, "triangle", 0.068, 0.1);
 }
 
+// Rising pitch click for each precision streak hit. streakLevel 1–N raises pitch.
+export function soundPrecisionClick(streakLevel = 1) {
+  const freq = 440 + Math.min(streakLevel, 20) * 40;
+  tone(freq, 0.04, "sine", 0.045);
+}
+
+// Bright lock sound at streak=5 (glow ring activation threshold).
+export function soundPrecisionLock() {
+  tone(880, 0.06, "sine", 0.065);
+  tone(1320, 0.08, "triangle", 0.04, null, 0.04);
+}
+
 export function soundPerkSelect() {
   const root = _pick([392, 440, 494]);
   tone(root, 0.1, "sine", 0.075);
