@@ -1,5 +1,26 @@
 # Latest Handoff
 
+## Where We Left Off - Session 91 (2026-06-14)
+
+Completed the requested `/start → /audit → /implement → /closeout` pass. Created and executed `docs/AUDIT_2026-06-14_3.md` / `.json` covering a genius-level creative depth sprint, then climbed to L3 on the three highest-value shipped items and added two innovation-pack micro-features after `session-floor` reported budget remaining.
+
+**Shipped (10 audit items + 7 ladder climbs / innovation):**
+- `adaptive-boss-dialogue-templates`: `interpolateBossQuote()` + context-aware templates in BOSS_GRUDGE_QUOTES; L3 adds session-escalation logic (≥2 same-session boss deaths forces grudge/nemesis), `{sessionDeaths}` `{bossKills}` `{tone}` tokens, and `getBossTone(difficulty)` difficulty-flavored descriptor.
+- `precision-streak-audio-ladder`: `soundPrecisionClick(streak)` rising-pitch series + `soundPrecisionLock()` at streak 5.
+- `social-proof-wave-death-aggregator`: leaderboard death-count per wave rendered as "💀 N players died here" on wave preview card; L3 adds `getCommunityChokePoints()` (≥3× median → ⚠ COMMUNITY CHOKE POINT chip) + `communityChokePointsRef`.
+- `multi-kill-combo-fullscreen-card`: cinematic RAMPAGE/GODLIKE/UNSTOPPABLE fullscreen overlay at combo 5/10/15 (`gs._comboCardTimer` + `gs._comboCardTier`).
+- `beat-precision-vulnerability-window`: cyan vulnerability ring on enemy during BPM beat window + +2💩 on on-beat precision hit; L3 widens window by `min(4, floor(streak/5))` frames, ring scales thicker at mastery, `trackRhythmMasteryHit()` / `getRhythmMastery()` career stat, milestone floats at 100/500/1000/2500/5000.
+- `run-arc-gameplay-amplification`: `gs._runAct` set per-wave (THE OPENER/GRIND/PUSH/LEGEND) + spawn rate modifier ×1.12/1/1/0.88; L3 adds act-keyed radial edge vignette in drawGame.js (blue 4% → amber 5.5% → red 8% → crimson 12%).
+- `enemy-proximity-cluster-spawning`: same-type enemies spawned in the same frame get a ±40–80px proximity offset for natural cluster formations (wave 15+).
+- `weapon-evolution-on-legend`: `WEAPON_EVOLVED_NAMES` (12 entries) + `getWeaponEvolutionState()` at 1000 career kills → HUD shows evolved name chip + ×1.05 dmg; DeathScreen `weaponEvolutions` prop wired.
+- `deathscreen-run-dna-share-card`: OffscreenCanvas web worker `shareCard.worker.js` generates 480×160 PNG with DNA bar, stats, optional proof tier, and community wave percentile (L3: "You outlasted X% of the community" on the card).
+- `weekly-world-theme-event`: `WEEKLY_THEMES` ×5 (CORPORATE UPRISING/CHAOS CARNIVAL/OUTBREAK PROTOCOL/RUSH HOUR/RETRO WAVE) with `statOverrides`; `getWeeklyGauntlet()` picks theme via 6th PRNG call; label stored as `gs._weeklyThemeLabel`.
+- Innovation pack: `soundChainEscalate(1|2)` — ascending sawtooth stab at ENRAGED (combo 15), dual-pulse alarm at FURIOUS (combo 35), both wired at `_chainEnrageLevel` crossings.
+
+**Validation:** 478/478 tests (+17 new vs S90 baseline of 461), lint 0 errors / 7 warnings (−1 vs S90), build passing.
+
+**Next session candidates:** deeper App.jsx extraction (death/shoot/spawn slices); CareerStats panel rhythm mastery display; L3 on weekly theme (enemy weight bias in spawn loop); Itch.io / PWA device QA remain human-gated.
+
 ## Where We Left Off - Session 90 (2026-06-14)
 
 Completed the requested `/start -> /audit -> /implement -> /closeout` continuation from current repo evidence. Created and executed `docs/AUDIT_2026-06-14_2.md` / `.json` after confirming the earlier same-day replay trust audit was already shipped.

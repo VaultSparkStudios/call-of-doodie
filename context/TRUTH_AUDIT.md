@@ -1,6 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-14 - Session 91
+
+- storage.js surface truth — 3 new exported functions: `getCommunityChokePoints(counts)` (returns `Set<Number>` of waves with ≥3× median death count; null input falls back to `getWaveDeathCounts()`), `trackRhythmMasteryHit()` (increments career.rhythmMasteryHits, returns new total), `getRhythmMastery()` (returns career.rhythmMasteryHits or 0).
+- bossDialogue.js surface truth — `interpolateBossQuote()` now handles 7 tokens: `{wave}`, `{weapon}`, `{deaths}`, `{streak}`, `{act}`, `{sessionDeaths}`, `{bossKills}`, `{tone}`. New export `getBossTone(difficultyId)` returns one of 4 adverbs; unknown IDs return 'adequately'. 17 tests cover all token substitutions and all difficulty branches.
+- drawGame.js truth — vignette now reads `gs._runAct` (set by `getRunAct()` in runNarrative.js each wave) to select act color; beat vulnerability ring width reads `gs.precisionStreak` via the same `8+min(4,floor(streak/5))` formula used in App.jsx. Both are live-computed per frame (no cached value).
+- sounds.js truth — `soundChainEscalate(level)` exported; level 1 = ascending sawtooth stab (3 tones), level 2 = dual-pulse alarm (4 tones). No existing sound function was modified.
+- App.jsx refs truth — `bossSessionDeathsRef = useRef({})` resets at `startGame()`; keyed by enemy typeIndex; incremented in the player-death handler when `best.isBossEnemy`. `communityChokePointsRef = useRef(new Set())` populated once at game start from `getCommunityChokePoints(waveDeathCountsRef.current)`.
+- shareCard worker truth — `wavePercentile` (null or 0–100 integer) passes from DeathScreen to worker via postMessage; computed only when leaderboard has ≥5 entries. Worker renders the line only when non-null.
+- Validation truth — `npm test` passed 478/478 (+17 new tests vs S90 baseline 461); `npm run lint` passed with 0 errors / 7 warnings (−1 vs S90 8); `npm run build` passed.
+
+Overall status: green locally
+Last reviewed: 2026-06-14
+
 ## 2026-06-14 - Session 90
 
 - Replay proof presenter truth — `src/utils/replayProofPresenter.js` composes existing replay proof receipts and trends; it does not create stronger trust claims than `buildReplayProofReceipt()` and `buildReplayProofTrend()` already support.

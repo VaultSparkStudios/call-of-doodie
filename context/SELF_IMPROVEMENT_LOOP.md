@@ -2,6 +2,14 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-14 — Session 91 | Total: 925/1000 | Velocity: 7 | Debt: ↓
+
+SIL +7: Boss dialogue now escalates mid-session (per-boss session death ref, grudge/nemesis tier at 2/3 deaths, `{sessionDeaths}`, `{bossKills}`, `{tone}` tokens across all 6 boss types). Beat-precision mastery grows — ring widens and thickens at streak 5/10/15/20/25+ via `8+min(4,streak/5)` window matching App.jsx and drawGame.js. Community choke points auto-detect via 3× median death threshold. Atmospheric run-arc vignette colors the canvas edges per act (blue→amber→red→crimson). soundChainEscalate synth fires on kill-chain level crossings. shareCard worker now stamps wave percentile from leaderboard sample. rhythmMasteryHit career stat tracks on-beat precision hits with milestone floats at 100/500/1000/2500/5000. Validation: 478/478 tests (+17 vs S90 461), lint 0 errors / 7 warnings (−1 vs S90), build passing.
+
+**Top win:** Boss session-death escalation is the most human-feeling AI the game has shipped — Karen responding to your third death this session differently than your first transforms the boss from obstacle into nemesis without any stat change.
+**Top gap:** Atmospheric vignette runs every frame via radial gradient — on low-end devices this is measurable GPU cost. A `gs._runActPrev` dirty-check + cached offscreen layer would amortize it; deferred to next session.
+**Intent outcome:** Achieved — full `/start → /audit → /implement → /closeout` loop completed with all systems tested, committed, and write-backs completed.
+
 ## 2026-06-14 — Session 90 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
 
 SIL +2: Converted replay proof presentation from DeathScreen-owned glue into a tested pure presenter and repaired the missing local `ops.mjs innovation-pack` command that `/implement` saturation expects. Validation: focused proof/replay/session 27/27, full suite 453/453, fixture validator 4/4, protocol drift 20/20, lint 0 errors / 8 existing warnings, build passing.

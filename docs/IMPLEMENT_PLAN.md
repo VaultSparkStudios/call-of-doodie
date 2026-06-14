@@ -1,4 +1,25 @@
-# Implement Plan — Session 87 Continuation (2026-06-13)
+# Implement Plan — Session 91 (2026-06-14)
+
+Source: docs/AUDIT_2026-06-14_3.json · 10 items · Combined Priority: 914.5
+
+## Wave Plan — Optimal Efficiency Order
+
+| Order | Slug | Effort | P/h | Surface |
+|---|---|---|---|---|
+| 1 | adaptive-boss-dialogue-templates | 1h | 121.5 | constants.js → bossDialogue.js (new) |
+| 2 | precision-streak-audio-ladder | 1h | 93.0 | sounds.js |
+| 3 | social-proof-wave-death-aggregator | 1h | 121.5 | storage.js + App.jsx |
+| 4 | multi-kill-combo-fullscreen-card | 1h | 79.7 | App.jsx + drawGame.js |
+| 5 | beat-precision-vulnerability-window | 2h | 60.75 | drawGame.js + App.jsx |
+| 6 | run-arc-gameplay-amplification | 2h | 39.4 | App.jsx |
+| 7 | enemy-proximity-cluster-spawning | 2h | 36.75 | gameHelpers.js |
+| 8 | weapon-evolution-on-legend | 3h | 27.6 | storage.js + constants.js |
+| 9 | deathscreen-run-dna-share-card | 3h | 22.6 | DeathScreen.jsx + shareCard.worker.js |
+| 10 | weekly-world-theme-event | 4h | 18.6 | constants.js + App.jsx |
+
+---
+
+# Previous Plan — Session 87 Continuation (2026-06-13)
 
 Audit: docs/AUDIT_2026-06-13_2.md | Items: 3 | Combined Priority: 83.6
 

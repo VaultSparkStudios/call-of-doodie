@@ -2,6 +2,38 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-06-14 — Session 91 — Beat-precision vulnerability window is streak-adaptive, not fixed
+
+**Decision:** The beat-precision vulnerability ring uses `8 + Math.min(4, Math.floor(streak/5))` frames wide (max 12), not a fixed 8-frame window. The same formula is used identically in App.jsx (bonus coins) and drawGame.js (ring visual).
+
+**Rationale:** A fixed window gives new players no incentive to maintain the streak. A scaling window rewards mastery — at streak 25+ you have 4 extra frames to land the beat hit, which reads as "rhythm skill unlocking latency forgiveness." The ring also renders thicker and brighter at mastery, making the state legible without a separate tutorial.
+
+**Trade-off accepted:** Formula duplication between App.jsx and drawGame.js — considered acceptable because both are single-use callsites and the formula is simple enough that drift is immediately visible in playtesting.
+
+## 2026-06-14 — Session 91 — Boss session escalation via per-session ref, not career data
+
+**Decision:** `bossSessionDeathsRef = useRef({})` tracks deaths-per-boss within a single play session. It resets on `startGame()` and is never persisted to localStorage or Supabase. Session tier (grudge/nemesis) triggers at ≥2/3 within-session deaths respectively, overriding the career-history tier.
+
+**Rationale:** Session context is more emotionally resonant than career context — a player who dies to Karen twice in one session should get the "SECOND TIME THIS SESSION" grudge quote, not a career-average tone. Career history is still factored in for the initial taunt/intro choice on first encounter.
+
+**Trade-off accepted:** Quitting and restarting resets the escalation counter. Players who rage-quit to soften the boss dialogue can technically exploit this, but that's an acceptable UX-reset case.
+
+## 2026-06-14 — Session 91 — Community choke-point threshold is ≥3× median, not hardcoded
+
+**Decision:** `getCommunityChokePoints(counts)` flags a wave as a community choke point when its death count is ≥3× the median across all waves, not a fixed count threshold.
+
+**Rationale:** A hardcoded threshold (e.g. "≥50 deaths") would require recalibration as the leaderboard grows. A 3× median is self-normalizing — it scales with the community and will correctly identify relative outliers whether the board has 10 or 10 000 rows.
+
+**Trade-off accepted:** Single-wave boards return an empty Set (correctly handled). Extremely uniform boards where even the deadliest wave is only 2.9× median will show no choke points — acceptable because no choke point is more honest than a false positive.
+
+## 2026-06-14 — Session 91 — `getBossTone` maps difficulty ID to adverb, not difficulty label
+
+**Decision:** `getBossTone(difficultyId)` returns an adverb ('embarrassingly'/'impressively'/'terrifyingly'/'adequately') keyed on the difficulty ID string. Unknown IDs return 'adequately'.
+
+**Rationale:** Adverbs slot cleanly into boss taunt templates at any position without rewording. A null/undefined fallback would leave ugly empty strings; 'adequately' reads as muted contempt on normal difficulty, which matches the tone intent.
+
+**Trade-off accepted:** If a new difficulty ID is added without updating `getBossTone`, it silently uses 'adequately'. Tests will catch missing branches if they enumerate all expected IDs.
+
 ## 2026-05-14 — Session 62 — Beat-sync is visual-only; spawn rate is not music-gated
 
 **Decision:** Beat-aligned enemy spawns trigger a 6-particle burst visual effect, but the spawn rate, spawn count, and enemy types are unchanged. Music beat phase does not gate whether a spawn occurs.

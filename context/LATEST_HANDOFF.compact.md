@@ -1,46 +1,48 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 87a2d4c0b0da -->
-<!-- generated-at: 2026-06-14T03:02:39.856Z -->
+<!-- source-hash: 5768d882b68c -->
+<!-- generated-at: 2026-06-14T05:35:01.139Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 89 (2026-06-14) handoff summary.
+Session 90 (2026-06-14)
 
 Shipped
-- buildReplayProofReceipt + buildReplayProofTrend in src/utils/replayCommandTrace.js
-- runSubmission.js attaches traceReceipt to valid trace submissions
-- runSession.js stores compact proof receipts in last-10 history
-- DeathScreen renders REPLAY PROOF card; share-card images stamped with trend context
-- buildReplayPressureProfile + runResim profile receipt in replayResim.js
-- replayTraceFixtures.js (rich/basic/weak/malformed) + scripts/validate-replay-trace-fixtures.mjs
+- replayProofPresenter.js extracted from DeathScreen (pure, tested): returns receipt/trend/shareStamp
+- DeathScreen.jsx consumes presenter for REPLAY PROOF card, score-card stamp, online/rejected/local feedback
+- scripts/ops.mjs innovation-pack command added; writes docs/INNOVATION_PACK.md from task-board + genius-list
+- npm run protocol:drift now tracks innovation-pack artifact (20/20 helpers present)
 
 Validation
-- Focused vitest 28/28; npm test 450/450; lint 0 errors / 8 pre-existing warnings; build passes
-- node scripts/validate-replay-trace-fixtures.mjs: 4 fixtures pass (after sandbox retry)
+- focused vitest 27/27 (replayProofPresenter, replayCommandTrace, runSubmission, runSession)
+- validate-replay-trace-fixtures 4/4
+- npm test 453/453; lint 0 errors / 8 warnings; build pass
+- protocol:drift status=ok
 
-Current Intent
-- Durable /start -> /audit -> /implement -> /closeout loop, genius-level creative output, short impact summary post-closeout
+Intent
+- Continue durable /start -> /audit -> /implement -> /closeout loop
+- Use docs/INNOVATION_PACK.md when session-floor reports remaining budget post-audit
 
 Now (top 3)
-1. Wire fixture validator into edge-function parity checks (validate-replay)
-2. Continue App.jsx extraction around replay/death submission paths
-3. True physics-parity replay resim runner (largest trust milestone; current receipt still labeled heuristic_pressure_estimate / advisory)
+1. Warning-baseline cleanup (8 pre-existing lint warnings, including leaderboard hook dep)
+2. Deeper App.jsx extraction around death/submission glue
+3. Physics-parity replay resim design slice (replace heuristic_pressure_estimate / advisory receipt)
 
 Blockers (top 3)
-1. Deterministic replay resim not yet physics-parity; receipts honestly advisory
-2. Supabase edge-function deploy gated on SUPABASE_ACCESS_TOKEN (functions: validate-replay, sync-studio-events, submit-score)
-3. 8 pre-existing lint warnings (incl. leaderboard hook dep) — clean baseline not yet established
+1. Manual PWA/gamepad QA — human/device gate
+2. Itch.io publication — human/publication gate
+3. Supabase edge-function deploy (sync-studio-events, validate-replay) — requires SUPABASE_ACCESS_TOKEN
 
 Human-Blocked (age)
-- Supabase edge-function deploys awaiting SUPABASE_ACCESS_TOKEN — open since S82 (2026-06-07), ~7 sessions
-- Physical PWA / Xbox-gamepad QA — open since S75 (2026-05-26)
-- Itch.io publication — open since S74 (2026-05-21)
-- HomeV2 v1 retirement awaiting Lighthouse/funnel evidence (LCP ≥200ms win) — open since S85 (2026-06-08)
-- Cloudflare Web Analytics beacon SRI mismatch — config-side, open since S82
+- Physical PWA/gamepad QA: open since S77 (~13 sessions)
+- Itch.io publication: open since S77 (~13 sessions)
+- SUPABASE_ACCESS_TOKEN for edge deploys: open since S82 (~8 sessions)
+- Cloudflare Web Analytics beacon SRI fix: open since S82 (~8 sessions)
+- HomeV2 v1 retirement awaiting Lighthouse/funnel evidence: open since S85 (~5 sessions)
 
-Repo State
-- Branch: feat-standalone-domain
-- Tests: 450/450 across 49 files; build green; protocol drift ok; SIL invariant clean
-- Local Studio OS shims present (skill-profile, sample-codebase, audit-sidecar, render-audit-md, session-floor, genius-list, record-skill-cost)
+Context
+- Replay trust trajectory: S70 trace contract → S71 capture → S72 evidence classification → S73 submission loop → S74 coaching → S89 player-facing proof receipt + trend + share stamp + fixture validator → S90 presenter extraction
+- Current proof labeled heuristic_pressure_estimate / advisory; true deterministic resim is the next trust milestone
+- Repo has local Studio OS helper parity (S83, S87); skill-profile shims return game overlay
+- Innovation pack now generated locally instead of failing
 
-Next-session pointer: run /start -> /audit; if queue empty, pick fixture-validator-into-validate-replay-parity slice next.
+Next-session pointer: run /start; if session-floor reports budget after audit, pull from docs/INNOVATION_PACK.md (warning baseline, App.jsx death/submission extraction, or physics-parity resim).

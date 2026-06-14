@@ -1,0 +1,334 @@
+{
+  "generated": "2026-06-14",
+  "session": 91,
+  "project": "call-of-doodie",
+  "type": "game",
+  "axisWeights": {
+    "gamification": 3,
+    "ux": 2,
+    "ai": 1.5,
+    "feature-depth": 1.5,
+    "security": 1,
+    "speed": 1,
+    "token": 1,
+    "feedback": 1,
+    "new-features": 1
+  },
+  "totalItems": 10,
+  "combinedPriority": 915.2,
+  "top3": ["beat-precision-vulnerability-window", "social-proof-wave-death-aggregator", "adaptive-boss-dialogue-templates"],
+  "innovationReserve": [
+    "beat-precision-vulnerability-window",
+    "social-proof-wave-death-aggregator",
+    "adaptive-boss-dialogue-templates",
+    "weapon-evolution-on-legend",
+    "weekly-world-theme-event"
+  ],
+  "items": [
+    {
+      "rank": 1,
+      "id": "beat-precision-vulnerability-window",
+      "slug": "beat-precision-vulnerability-window",
+      "tier": "🔥",
+      "axis": "gamification",
+      "effort": "2h",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 121.5,
+      "why": "The game already has getMusicBeat() triggering spawn particles AND a precision streak glow ring at streak≥5. These two systems have never intersected: nobody in the browser-game category has implemented beat-synced precision vulnerability windows. Every fourth beat (configurable), a 30-frame flicker ring appears at each living enemy's center — landing a precision hit during that window deals 2× damage and awards +5💩 instead of +1. This converts beat-sync from a visual garnish into a skill layer that rewards attention to rhythm, creating a second mastery axis alongside the existing flow-state time dilation. The dual-axis skill ceiling (precision timing × beat timing) is unique in the genre.",
+      "recipe": "In drawGame.js, compute beatPhase = frame % framesPerBeat (already computed at line 2279). When beatPhase < 8, draw a thin cyan pulse-ring on each non-boss enemy at radius = enemy.radius * 0.5. In App.jsx bullet-enemy hit handler, check if beatPhase < 8 when isPrecisionHit() is true: double the coin award and apply 2× damageMult. Add a 'RHYTHM HIT! +5💩' floating text variant. Zero balance risk on miss (same damage as before).",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add beatPhase < 8 check in drawGame.js to draw a thin cyan ring at enemy center. No damage change — visual only."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full implementation: visual ring in drawGame.js + 2× coin bonus + 'RHYTHM HIT!' floating text when isPrecisionHit() is true during window. Add a subtle chime using existing sound synthesis."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Per-boss-type window shape (Karen has a 'flustered' ring that spins, Juggernaut's is a back-hit arc only). Beat window width scales with player precision streak: streak≥10 widens window to 12 frames. Persistent 'rhythm mastery' career stat tracked in storage.js."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 2,
+      "id": "social-proof-wave-death-aggregator",
+      "slug": "social-proof-wave-death-aggregator",
+      "tier": "🔥",
+      "axis": "gamification",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 121.5,
+      "why": "The local leaderboard cache (cod-lb-v5) already stores `wave` for every entry. Nobody in the browser-game genre computes and surfaces 'how many other players died on the same wave you're about to face'. A single aggregation pass over the cached rows produces a wave→deathCount map. During the 2.2s wave-incoming preview card, a subtle ghost-count line under the threat rating reads '74 players fell on this wave'. This converts solo play into passive social presence at zero API cost — the feeling of shared struggle without any server call.",
+      "recipe": "In storage.js, add getWaveDeathCounts() that reduces cod-lb-v5 entries into a {wave: count} map (one pass, O(n)). In App.jsx WavePreviewCard render (lines ~2300 area), pull deathCounts[nextWave] and append a subtle '💀 N fell here' line in gray italic. Cap display at 99+ to avoid clutter. Update on leaderboard refresh only (cached between refreshes).",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add getWaveDeathCounts() to storage.js; display death count in wave preview card only."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 + DeathScreen 'X other players died here' context line if player died on a top-5 death wave. Also show the player's wave percentile ('better than 43% of players') using stored wave data."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Historical week-over-week trend: 'more players dying here this week ↑' computed by comparing timestamps. Mini bar chart in LeaderboardPanel showing wave-death distribution. 'Community choke point' warning chip for waves with 3× above average deaths."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 3,
+      "id": "adaptive-boss-dialogue-templates",
+      "slug": "adaptive-boss-dialogue-templates",
+      "tier": "🔥",
+      "axis": "gamification",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 121.5,
+      "why": "BOSS_GRUDGE_QUOTES has beautifully written static arrays, but Karen saying 'I have a Yelp account' hits differently when it becomes 'I have a Yelp account and your wave-{wave} performance? One star.' A lightweight `interpolateBossQuote(template, ctx)` helper turns `{wave}`, `{weapon}`, `{deaths}`, `{act}` tokens into runtime data, converting the existing dialogue system from clever-but-static to genuinely personalized. No LLM calls, no API cost — pure string interpolation. The perceived intelligence of each boss increases dramatically for zero infrastructure cost.",
+      "recipe": "Add interpolateBossQuote(template, ctx) to a new src/utils/bossDialogue.js: replaces {wave}, {weapon}, {deaths}, {streak}, {act} with gs values. Add 2 context-aware grudge/nemesis templates per boss in BOSS_GRUDGE_QUOTES using these tokens. Call in App.jsx where dynamicQuote is selected (the boss cutscene card display path). Tests: interpolation + fallback on missing ctx keys.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add interpolateBossQuote() helper in constants.js or bossDialogue.js. Add one {wave} + {weapon} template per boss in grudge/nemesis arrays. Wire in existing boss quote selection."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "2 context-aware templates per boss × 6 bosses. Tokens: {wave}, {weapon}, {deaths}, {act} (from runNarrative.js act classification). Full tests."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Session-level escalation: if player died to same boss twice this session, escalate to nemesis tier even below the kill/death threshold. Add {sessionDeaths}, {bossKills}, {timeSurvived} tokens. Per-difficulty tone variants (easy boss is condescending, hard boss is respectful)."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 4,
+      "id": "precision-streak-audio-ladder",
+      "slug": "precision-streak-audio-ladder",
+      "tier": "⚡",
+      "axis": "gamification",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 93.0,
+      "why": "The precision streak already has two visual milestones (glow ring at ≥5, center-hit window highlight at ≥10) and a time dilation trigger at ≥10. But the only audio feedback is the standard kill sound. Adding a rising pitch 'click-lock' blip at each streak step (using the existing Web Audio synthesis pattern in sounds.js) makes streak building feel tangible and teaches new players the mechanic exists through sound before they notice the visual. The sound escalation mirrors the visual escalation: the streak becomes multi-sensory without any new assets.",
+      "recipe": "In sounds.js, add soundPrecisionClick(streakLevel) that plays a 40ms sine oscillator at 440 + (streakLevel * 40) Hz (rising pitch ladder). Add a soundPrecisionLock() played at streak=5 (the ring activation threshold) with a slightly longer 80ms tone. Call from App.jsx isPrecisionHit handler after incrementing precisionStreak. Tests: that functions exist and return AudioNode without error.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add soundPrecisionClick(n) in sounds.js (brief pitched sine). Call at each precision hit. No lock sound."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 + soundPrecisionLock() at streak=5 (ring activation) and soundFlowStatePing() at streak=10 (center-window activation). Distinct timbres for each milestone."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Generative precision melody: each hit at streak≥3 plays a pentatonic scale note (C4, D4, E4, G4, A4, C5...) in sequence, building a brief melody that resets on break. Feels like the game is 'playing along' with your precision. Same synthesis chain as background music for tonal cohesion."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 5,
+      "id": "weapon-evolution-on-legend",
+      "slug": "weapon-evolution-on-legend",
+      "tier": "⚡",
+      "axis": "gamification",
+      "effort": "3h",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 82.8,
+      "why": "weaponLegendKills[] in storage.js already tracks career kills per weapon and LEGEND_THRESHOLDS at 1000 kills. Currently the only reward for Legend tier is a chip on DeathScreen at threshold crossing. The weapon that carried you to 1000 kills deserves to FEEL different. An evolved name suffix ('Pistol: EXECUTIONER'), a +5% damage bonus, and a gold toolbar border convert a tracking stat into a meaningful long-term progression reward. The evolved form has zero P2W implications (it's career-earned, purely cosmetic+marginal stat) and directly reinforces the weapon-mastery loop.",
+      "recipe": "In storage.js, add getWeaponEvolutionState(idx) that returns {evolved: bool, name: string, damageMult: float} based on weaponLegendKills[idx]. Add WEAPON_EVOLVED_NAMES constant (12 entries) in constants.js. In App.jsx, apply evolution damageMult to weaponMods[idx].damageMult on game start. In HUD, show gold border on evolved weapon slot. In DeathScreen weapon chip, show evolved name. Tests in constants.test.js.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add WEAPON_EVOLVED_NAMES to constants.js. Show evolved name in DeathScreen weapon chip when weaponLegendKills[idx] >= 1000. No stat change."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "L1 + getWeaponEvolutionState() in storage.js. Apply +5% damageMult to weaponMods on game start. Gold HUD toolbar border for evolved weapons. Evolved name in toolbar tooltip."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "3 tiers: 1000/2500/5000 kills → VETERAN/ELITE/LEGEND each with different bonus (+firerate/+reload/+damage). LEGEND-tier bullets have a colored tracer in drawGame.js (matching weapon's theme color). Sound chime plays on first evolution crossing in-run (not just at debrief)."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 6,
+      "id": "multi-kill-combo-fullscreen-card",
+      "slug": "multi-kill-combo-fullscreen-card",
+      "tier": "⚡",
+      "axis": "gamification",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 79.7,
+      "why": "RAMPAGE/GODLIKE/UNSTOPPABLE at combo 5/10/15 are currently just addText() floating lines in the center of the screen — the same presentation as any coin pickup. These are milestone moments that deserve cinematic weight. The LAST STAND card showed this design already: a 60-frame header overlay with color pulse communicates that something exceptional just happened. A RAMPAGE card uses the same pattern but adds a streak count ('5 KILLS — RAMPAGE!!') and color-codes by tier (orange/pink/gold). It also teaches new players that the combo system exists, since many never notice the floating text.",
+      "recipe": "In App.jsx, at combo 5/10/15 set gs._comboCardTimer = 60 and gs._comboCardTier = 'rampage'|'godlike'|'unstoppable'. In drawGame.js, when _comboCardTimer > 0, draw a full-width centered card (700×80px) with tier name, color bg, kill count, and 4-frame alpha-in transition. Reuse the existing LAST STAND card drawing pattern. Tests: that card timer is set at correct combo thresholds.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Set gs._comboCardTimer + tier in App.jsx. Draw a simple full-width text card in drawGame.js at tier colors. 60-frame display."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "L1 + combo HUD chip (shows current streak count at the top of the canvas, turns orange/red/gold as you approach 5/10/15). Card includes streak count and 'enemies are getting nervous' line."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Full killstreak system: best streak tracked in career (bestStreak already exists in leaderboard schema). DeathScreen shows 'NEW PERSONAL BEST STREAK!' chip when beaten. Leaderboard 'STREAK' sort tab. Optional: submit streak to leaderboard as a secondaryScore."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 7,
+      "id": "run-arc-gameplay-amplification",
+      "slug": "run-arc-gameplay-amplification",
+      "tier": "⚡",
+      "axis": "gamification",
+      "effort": "2h",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 78.75,
+      "why": "buildRunNarrative() in runNarrative.js classifies every run into Prologue/Rising/Climax/Epilogue act based on wave, score, kills, and near-death events. But this classification ONLY affects the post-run DeathScreen display — it never changes what actually happens in the run. Making the act classification live-reactive creates genuine narrative arc in gameplay: Prologue waves slightly easier (new players breathe), Climax waves slightly harder (the moment feels earned). Same design principle as film structure, applied to a wave-shooter. Zero new systems required — just reading the existing act classification into spawn/speed parameters.",
+      "recipe": "Import buildRunNarrative (or extract a lightweight getRunAct(wave, score, kills)) into App.jsx as a pure function called once per wave-clear. Store result in gs._runAct. In enemy spawn, apply: gs._runAct === 'prologue' ? spawnCount * 0.9 : gs._runAct === 'climax' ? enemySpeed * 1.05 : 1.0. Show a 1-frame act-transition toast ('RISING ACTION' at act change) in drawGame.js using addText. Tests: getRunAct boundaries.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add getRunAct(wave, kills) pure function. Apply -10% spawn count in prologue (waves 1-3). No climax change yet."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "L1 + +5% enemy speed in climax. Act transition toast shown in HUD on act change. Store gs._runAct. Tests for boundaries."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Full narrative director: each act has a distinct color temperature shift in drawGame.js (Prologue=cool/blue ambient, Rising=neutral, Climax=warm/orange edge light, Epilogue=desaturated). Music tier follows act classification instead of heat during act transitions (6-wave ramp)."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 8,
+      "id": "weekly-world-theme-event",
+      "slug": "weekly-world-theme-event",
+      "tier": "⚡",
+      "axis": "gamification",
+      "effort": "4h",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 74.4,
+      "why": "getWeeklyGauntlet() has a deterministic PRNG seeded by weekNum — but only uses it for weapon/difficulty/perk selection. The same PRNG can deterministically select one of 5 rotating world themes each week: CORPORATE UPRISING (Karen/Landlord spawn weight ×1.5), GYM WARS (Gym Bro speed +15%, protein-shake pickups), DIGITAL CRISIS (Algorithm spawns from wave 3), RETAIL WARS (Shopper density ×2), OFFICE REVOLT (Secretary ammo-drain buff). A theme chip on the Gauntlet mode launch card and a themed intro line convert the weekly gauntlet from 'same game, different seed' into 'this week the world is different'. Players talk about it.",
+      "recipe": "Add WEEKLY_THEMES array (5 entries: id, label, spawnWeightOverrides, statOverrides, themeDesc) in constants.js. Extend getWeeklyGauntlet() to pick theme via existing PRNG (6th rand() call). In App.jsx, apply theme.spawnWeightOverrides to ENEMY_TYPES spawn weights before gauntlet wave planning. Add themeDesc to the gauntlet launch card. Show theme chip in HomeV2 GAUNTLET quick chip. Tests: theme selection is deterministic per weekNum.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Add WEEKLY_THEMES and extend getWeeklyGauntlet() with theme field. Show theme name on launch card only. No spawn changes."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "L1 + spawn weight overrides applied in gauntlet mode. Theme-colored wave preview card header. Themed intro line via Roast Director at game start."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Theme-specific unique mechanic: CORPORATE UPRISING spawns a 'District Manager' (Karen ultra-boss) on wave 12. DIGITAL CRISIS: Algorithm enemies leave lingering 'data stream' hazards. OFFICE REVOLT: secretary enemies can heal other enemies. Limited cosmetic unlock for completing a theme week (stored in cod-career-v1)."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 9,
+      "id": "enemy-proximity-cluster-spawning",
+      "slug": "enemy-proximity-cluster-spawning",
+      "tier": "⚡",
+      "axis": "gamification",
+      "effort": "2h",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 73.5,
+      "why": "The existing formation system (flank/pincer/surge from waveDirector.js + heatBiasedFormation) operates at the wave-plan level. At wave 15+, same-type enemies that appear in the same spawn batch still arrive at random canvas positions, making formations feel accidental rather than coordinated. Type-homogeneous cluster spawning — placing same-type enemies within 80px of each other — creates the visual impression of natural squad behavior without any behavior change. A wave of 3 Karen units arriving together reads as 'complaint delegation'. 4 Gym Bros arriving together reads as 'group workout'. The game's comedy benefits directly from visible coordination.",
+      "recipe": "In spawnEnemy() in gameHelpers.js, track lastSpawnByType[typeIndex] = {x, y, frame}. If the incoming enemy matches the last typeIndex and the same frame batch (<3 frames), offset spawn position by ±60px from lastSpawn.x/y with a random direction. Only active wave≥15. Tests: cluster offset applied to same-type batch, not cross-type.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Track lastSpawnByType in gameHelpers.js. Apply ±60px cluster offset when typeIndex matches recent spawn within 3 frames. Wave≥15 only."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "L1 + waveDirector.js 'CLUSTERED' formation variant that intentionally spawns same-type batches as a named formation. Formation lore toast: 'DELEGATION INCOMING!' for Karen clusters, 'GYM SQUAD!' for Gym Bro clusters."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Enemy hive formation: a special 'hive marker' ring spawns as a hazard; same-type enemies spawn around it for 3 waves; destroying the ring ends the cluster. Hive marker is a new gs.hazards[] entry with its own draw pass."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    },
+    {
+      "rank": 10,
+      "id": "deathscreen-run-dna-share-card",
+      "slug": "deathscreen-run-dna-share-card",
+      "tier": "⚡",
+      "axis": "ux",
+      "effort": "3h",
+      "effortHours": 3,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 67.9,
+      "why": "The run DNA fingerprint bar (proportional weapon kill distribution, shipped S88) lives only inside the DeathScreen component. It's the most shareable visual in the game — a personal run signature — but copying the replay URL shares text, not the visual. An off-thread canvas renderer (pattern already established by gifEncode.worker.js) composites the DNA bar + BUILD GRADE letter + wave/score/kills + weapon breakdown + branded footer into a 600×315 PNG blob. 'Copy as Image' via Clipboard API gives players a Discord-optimized card that organically spreads the game identity. The share card IS the marketing asset.",
+      "recipe": "Create src/workers/shareCard.worker.js using OffscreenCanvas. Receives run state: {weaponKills, buildGrade, wave, score, kills, replayProofTier, runArc, seed}. Draws DNA bar (same proportions as DeathScreen), grade letter, stats grid, replay proof stamp, and 'callofdoodie.wtf' footer. Posts back as Blob. In DeathScreen.jsx, add 'Copy Card' button next to 'SHARE RUN'. Uses Clipboard.write(ClipboardItem). Tests: worker renders without crashing; props produce blob.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Main-thread canvas render in DeathScreen (not a worker). Download as PNG via anchor link. Basic layout: grade letter + stats + URL."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "OffscreenCanvas worker. Full layout: DNA bar + grade + weapon breakdown + proof stamp + footer. Clipboard.write() copy + fallback to download link."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Three card sizes: 600×315 (Discord), 1200×630 (Twitter/OG), 1080×1080 (Instagram). User picks size. Card includes week theme badge if gauntlet run. Animated GIF variant using existing gifEncode.worker.js for the DNA bar filling in."
+        }
+      },
+      "status": "pending",
+      "executionLog": []
+    }
+  ],
+  "skipped": [
+    { "slug": "app-bullet-step-extraction", "reason": "Speed axis only, priority 7.0 — below threshold. Extraction roadmap already in TASK_BOARD; defer to dedicated refactor session." },
+    { "slug": "flow-field-partial-recompute", "reason": "Speed axis, priority 8.3 — marginal; BFS runs acceptably on 24px grid. Low innovation (5). Defer." },
+    { "slug": "leaderboard-wave-histogram", "reason": "UX, priority 42 — valid but subordinate to social-proof-wave-death-aggregator which covers the same data at higher impact. Demoted to L3 of that item." }
+  ]
+}
