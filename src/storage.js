@@ -978,7 +978,18 @@ export function getTelegraphMultiplier(typeId) {
   } catch { return 1; }
 }
 
-export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills }) {
+const LEGEND_THRESHOLDS = [
+  { min: 1000, label: "LEGEND", color: "#FF6B35" },
+  { min: 500,  label: "ELITE",  color: "#FFD700" },
+  { min: 200,  label: "VETERAN", color: "#C0C0C0" },
+  { min: 50,   label: "RECRUIT", color: "#CD7F32" },
+];
+export function getWeaponLegendRank(kills) {
+  for (const t of LEGEND_THRESHOLDS) { if ((kills || 0) >= t.min) return t; }
+  return null;
+}
+
+export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills, weaponKills }) {
   const career = loadCareerStats();
   career.totalRuns += 1;
   career.totalKills += (kills || 0);
@@ -1000,10 +1011,25 @@ export function updateCareerStats({ kills, deaths, score, wave, streak, damage, 
     const all = new Set([...career.achievementsEver, ...achievementIds]);
     career.achievementsEver = [...all];
   }
+  // Per-weapon legend kill tracking — detect threshold crossings this run
+  const weaponMilestones = [];
+  if (Array.isArray(weaponKills) && weaponKills.length > 0) {
+    if (!Array.isArray(career.weaponLegendKills)) career.weaponLegendKills = [];
+    while (career.weaponLegendKills.length < weaponKills.length) career.weaponLegendKills.push(0);
+    weaponKills.forEach((k, i) => {
+      const prev = career.weaponLegendKills[i] || 0;
+      const next = prev + (k || 0);
+      career.weaponLegendKills[i] = next;
+      // Did this run push through a threshold?
+      for (const t of LEGEND_THRESHOLDS) {
+        if (prev < t.min && next >= t.min) { weaponMilestones.push({ weaponIdx: i, ...t }); break; }
+      }
+    });
+  }
   saveCareerStats(career);
   // Credit career points (1 per kill)
   if (kills > 0) addCareerPoints(kills);
-  return career;
+  return { career, weaponMilestones };
 }
 
 // ===== CUSTOM LOADOUTS =====

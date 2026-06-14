@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -171,6 +171,7 @@ export default function CallOfDoodie() {
   const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
   const commandTraceRef  = useRef([]);    // replay command trace events for trust submission
   const deathTraceEvidenceRef = useRef(null); // analyzeReplayCommandTrace result at moment of death
+  const weaponMilestonesRef  = useRef([]);    // weapon legend milestones crossed this run
   const lastTraceMoveRef = useRef({ bucket: "neutral", frame: -999 });
   const lastTraceAimRef  = useRef({ bucket: "neutral", frame: -999 });
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
@@ -1522,7 +1523,7 @@ export default function CallOfDoodie() {
     // Save career stats + mission progress
     const _prevCareerKills = loadCareerStats().totalKills || 0;
     const _prevAcctLevel = getAccountLevel(_prevCareerKills);
-    updateCareerStats({
+    const _careerResult = updateCareerStats({
       kills: gs.kills, deaths: 1, score: gs.score, wave: gs.currentWave,
       streak: statsRef.current.bestStreak, damage: gs.totalDamage,
       playTime: (Date.now() - startTimeRef.current) / 1000,
@@ -1533,7 +1534,9 @@ export default function CallOfDoodie() {
       level: xpRef.current.level,
       combo: comboRef.current.max,
       bossKills: statsRef.current.bossKills,
+      weaponKills: statsRef.current.weaponKills,
     });
+    weaponMilestonesRef.current = _careerResult?.weaponMilestones || [];
     // Weapon unlock telemetry: emit per-weapon event when account level gates a new weapon
     try {
       const _newAcctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
@@ -4135,6 +4138,7 @@ export default function CallOfDoodie() {
           nearDeathEvents={gsRef.current?._nearDeathEvents || []}
           flowStateFired={gsRef.current?._flowStateFiredCount || 0}
           bossKillCount={statsRef.current.bossKills || 0}
+          weaponMilestones={weaponMilestonesRef.current}
           cosmeticUnlocks={cosmeticUnlocks}
           objectivesSummary={objectivesSummary}
           scoreAttackMode={scoreAttackMode}

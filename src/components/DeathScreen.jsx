@@ -35,7 +35,7 @@ export default function DeathScreen({
   gsSnapshot = null, activeSynergiesData = [],
   traceEvidence = null, precisionPeakFrame = 0, precisionPeakStreak = 0,
   proximityRivals = [],
-  nearDeathEvents = [], flowStateFired = 0, bossKillCount = 0,
+  nearDeathEvents = [], flowStateFired = 0, bossKillCount = 0, weaponMilestones = [],
   speedrunMode = false, gauntletMode = false,
   controllerType = null,
 }) {
@@ -884,6 +884,22 @@ export default function DeathScreen({
             </div>
           ))}
         </div>
+
+        {/* Weapon legend milestones crossed this run */}
+        {weaponMilestones.length > 0 && (
+          <div style={{ ...card, marginBottom: 12 }}>
+            <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── WEAPON MILESTONES ──</div>
+            {weaponMilestones.map((m, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 0", borderTop: i > 0 ? "1px solid #1A1A1A" : "none" }}>
+                <span style={{ fontSize: 16 }}>{WEAPONS[m.weaponIdx]?.emoji || "🔫"}</span>
+                <div style={{ flex: 1, textAlign: "left" }}>
+                  <div style={{ fontSize: 11, color: "#EEE", fontWeight: 700 }}>{WEAPONS[m.weaponIdx]?.name || "Weapon"}</div>
+                  <div style={{ fontSize: 9, letterSpacing: 2, color: m.color, fontFamily: "'Courier New',monospace" }}>{m.label} REACHED</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Proximity rivals: up to 3 nearby leaderboard players to beat */}
         {proximityRivals.length > 0 && (
