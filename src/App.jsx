@@ -2964,6 +2964,13 @@ export default function CallOfDoodie() {
             } else {
               addText(gs, e.x, e.y - e.size - 10, "🎯 +1💩", "#FFAAFF");
             }
+            // Flow state: streak ≥10 → 1.5s bullet-time (genre-first mechanical reward)
+            if (gs.precisionStreak >= 10 && !(gs._flowStateCooldown > 0)) {
+              gs.timeDilationTimer = Math.max(gs.timeDilationTimer || 0, 90);
+              gs._flowStateCooldown = 300;
+              addText(gs, e.x, e.y - e.size - 30, "⚡ FLOW STATE", "#00FFEE", true);
+              addParticles(gs, e.x, e.y, "#00FFEE", 12);
+            }
           } else if (!e.isBossEnemy) {
             gs.precisionStreak = 0;
           }
@@ -3802,6 +3809,7 @@ export default function CallOfDoodie() {
     if ((gs.rageTimer || 0) > 0) gs.rageTimer--;
     if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
     if ((gs.timeDilationTimer || 0) > 0) gs.timeDilationTimer--;
+    if ((gs._flowStateCooldown || 0) > 0) gs._flowStateCooldown--;
     if (gs.coinMultTimer > 0) { gs.coinMultTimer--; if (gs.coinMultTimer === 0) { gs.coinMultActive = false; } }
     if (gs.coinStreakTimer > 0) { gs.coinStreakTimer--; if (gs.coinStreakTimer === 0) { gs.coinStreakKills = 0; } }
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
