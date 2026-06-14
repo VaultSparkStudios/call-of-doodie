@@ -2240,7 +2240,7 @@ export default function CallOfDoodie() {
       }
       const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1)));
       const spawnRate = getWaveSpawnRate(baseSpawnRate, directorState);
-      if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave) {
+      if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave && !gs._respiteLock) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         const ne = gs.enemies[gs.enemies.length - 1];
         const _baseFormation = getSpawnFormationPlan(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
@@ -2277,6 +2277,14 @@ export default function CallOfDoodie() {
     }
     // Wave cleared
     if (gs.enemies.length === 0 && gs.enemiesThisWave >= gs.maxEnemiesThisWave) {
+      // Respite gate: count down after high-threat wave before advancing
+      if (gs._respiteLock) {
+        gs._respiteTimer = (gs._respiteTimer || 1) - 1;
+        if (gs._respiteTimer <= 0) gs._respiteLock = false;
+        if (gs._respiteLock) return;
+        gs._waveTransitDone = true; // respite over — skip re-firing effects
+      }
+      if (!gs._waveTransitDone) {
       // Show route select on non-boss waves (wave 2+, not special competitive modes)
       const _showRoute = !gs.bossWave && gs.currentWave >= 2
         && !gs.bossRushMode && !gs.scoreAttackMode && !gs.dailyChallengeMode
@@ -2290,6 +2298,7 @@ export default function CallOfDoodie() {
         return; // game loop will pause; resumes after player picks a route
       }
       gs._routeSelectDone = false; // reset for next wave
+      gs._waveTransitDone = true; // mark effects as firing; blocks re-entry this wave
       // Survival bonus XP: awarded before resetting _waveDeaths
       if ((gs._waveDeaths || 0) === 0 && !gs.bossWave) {
         const bonus = getWaveSurvivalBonus(gs.currentWave, xpRef.current.level);
@@ -2338,6 +2347,7 @@ export default function CallOfDoodie() {
       gs.routeKillScoreMult = 1; // reset per-wave score bonus
       // Non-blitz routes reset the blitz streak
       const _wasBlitz = gs.routeBlitz;
+      gs._wasBlitzCache = _wasBlitz; // cache for post-respite wave transition
       if (!_wasBlitz) gs.blitzCount = 0;
       gs.routeArmoryRun = false; gs.routeBlitz = false; gs.blitzSpawnMult = 1;
       // 2× Blitz in a row → Hyperspeed mode (persistent for the run)
@@ -2346,6 +2356,22 @@ export default function CallOfDoodie() {
         addText(gsRef.current, GW() / 2, GH() / 2 - 40, "⚡⚡ HYPERSPEED UNLOCKED!", "#00E5FF", true);
         addText(gsRef.current, GW() / 2, GH() / 2, "Enemies are now faster all run", "#88CCFF");
       }
+      // Post-threat-4 respite: spawn loot burst and pause before next wave
+      if (!gs.bossWave && !gs.bossRushMode) {
+        const _rThreat = computeWaveThreatRating({ maxEnemies: gs.maxEnemiesThisWave, eliteType: gs.waveDirector?.eliteType, event: gs.waveEvent });
+        if (_rThreat >= 4) {
+          gs._respiteLock = true;
+          gs._respiteTimer = 120;
+          const _mx = GW() / 2, _my = GH() / 2;
+          gs.pickups.push({ x: _mx - 60 + Math.random() * 120, y: _my - 80 + Math.random() * 120, type: "health", life: 450 });
+          gs.pickups.push({ x: _mx - 60 + Math.random() * 120, y: _my - 80 + Math.random() * 120, type: "health", life: 450 });
+          gs.pickups.push({ x: _mx - 60 + Math.random() * 120, y: _my - 80 + Math.random() * 120, type: "ammo", life: 450 });
+          addText(gs, _mx, _my - 60, "💨 BREATH TAKEN", "#88FFCC", true);
+          return;
+        }
+      }
+      } // end wave-clear effects (only fires once per wave via _waveTransitDone)
+      gs._waveTransitDone = false;
       gs.bossWave = false;
       setBossWaveActive(false);
       setBossWaveBanner(false);
@@ -2387,7 +2413,7 @@ export default function CallOfDoodie() {
         // Apply route modifiers to the upcoming wave
         if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
         if (gs.routeEliteWave)    { gs.waveEliteOnly = true; gs.routeEliteWave = false; }
-        if (_wasBlitz)            { gs.blitzSpawnMult = 3; }
+        if (gs._wasBlitzCache)    { gs.blitzSpawnMult = 3; }
         gs._nonBossWaveCount = (gs._nonBossWaveCount || 0) + 1;
         gs.waveDirector = createWaveDirectorPlan({
           wave: gs.currentWave,
