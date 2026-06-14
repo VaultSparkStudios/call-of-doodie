@@ -19,6 +19,7 @@ import {
   saveBossKillRecord,
   isNemesis,
   getAdaptiveSpawnMods,
+  getCommunityChokePoints,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -279,5 +280,46 @@ describe("getAdaptiveSpawnMods", () => {
     expect(getAdaptiveSpawnMods(null)).toEqual({});
     expect(getAdaptiveSpawnMods(undefined)).toEqual({});
     expect(getAdaptiveSpawnMods({ recentDeathsByEnemy: "bad" })).toEqual({});
+  });
+});
+
+describe("getCommunityChokePoints", () => {
+  it("returns empty Set for empty counts", () => {
+    const result = getCommunityChokePoints({});
+    expect(result instanceof Set).toBe(true);
+    expect(result.size).toBe(0);
+  });
+
+  it("flags waves at ≥3× the median death count", () => {
+    // median of [1,1,1,10] = 1 → threshold = 3 → wave 5 qualifies (10 >= 3)
+    const counts = { 1: 1, 2: 1, 3: 1, 5: 10 };
+    const result = getCommunityChokePoints(counts);
+    expect(result.has(5)).toBe(true);
+    expect(result.has(1)).toBe(false);
+  });
+
+  it("does not flag waves below 3× threshold", () => {
+    // median of [2,3,4] = 3 → threshold = 9 → none qualify
+    const counts = { 1: 2, 2: 3, 3: 4 };
+    expect(getCommunityChokePoints(counts).size).toBe(0);
+  });
+
+  it("handles a single-wave counts object", () => {
+    // single entry: median = itself → threshold = 3× itself → nothing qualifies
+    const result = getCommunityChokePoints({ 7: 5 });
+    expect(result.has(7)).toBe(false);
+  });
+
+  it("returns wave numbers as Numbers, not strings", () => {
+    const counts = { 3: 1, 4: 1, 5: 20 };
+    const result = getCommunityChokePoints(counts);
+    expect(result.has(5)).toBe(true);
+    expect(result.has("5")).toBe(false);
+  });
+
+  it("falls back gracefully when counts argument is null (calls getWaveDeathCounts internally)", () => {
+    // no localStorage in test env → getWaveDeathCounts returns {} → empty set
+    const result = getCommunityChokePoints(null);
+    expect(result instanceof Set).toBe(true);
   });
 });

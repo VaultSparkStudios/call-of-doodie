@@ -1143,6 +1143,25 @@ export function getWaveDeathCounts() {
   } catch { return {}; }
 }
 
+// Returns a Set of wave numbers that are community choke points (≥3× the median death count).
+// Uses the same leaderboard snapshot as getWaveDeathCounts(); both read the same key so callers
+// should batch them or reuse results to avoid double parsing.
+export function getCommunityChokePoints(counts) {
+  try {
+    const src = counts || getWaveDeathCounts();
+    const vals = Object.values(src);
+    if (!vals.length) return new Set();
+    const sorted = [...vals].sort((a, b) => a - b);
+    const median = sorted[Math.floor(sorted.length / 2)];
+    const threshold = median * 3;
+    const chokes = new Set();
+    for (const [w, c] of Object.entries(src)) {
+      if (c >= threshold && threshold > 0) chokes.add(Number(w));
+    }
+    return chokes;
+  } catch { return new Set(); }
+}
+
 export function unlockMetaNode(nodeId, cost) {
   const unlocked = loadMetaTree();
   if (unlocked.has(nodeId)) return { success: false, reason: "already_unlocked" };

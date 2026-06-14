@@ -99,6 +99,7 @@ vi.mock("./storage.js", () => ({
   getProximityRivals: vi.fn(() => []),
   getWeaponLegendRank: vi.fn(() => null),
   getWaveDeathCounts: vi.fn(() => ({})),
+  getCommunityChokePoints: vi.fn(() => new Set()),
   getWeaponEvolutionState: vi.fn(() => ({ evolved: false, kills: 0, name: null, damageMult: 1 })),
   getBossKillRecord: vi.fn(() => ({ kills: 0, deaths: 0 })),
   saveBossKillRecord: vi.fn(),
