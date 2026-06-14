@@ -71,6 +71,7 @@ import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./system
 import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
+import { interpolateBossQuote } from "./utils/bossDialogue.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import {
@@ -2484,7 +2485,11 @@ export default function CallOfDoodie() {
           // History-aware grudge quote: pick variant based on kill/death record
           const _grudgeVariant = _bossRec.kills === 0 ? 'intro' : _bossRec.deaths > _bossRec.kills ? 'nemesis' : _bossRec.deaths > 0 ? 'grudge' : 'taunt';
           const _grudgePool = BOSS_GRUDGE_QUOTES[_primaryType]?.[_grudgeVariant];
-          const _dynamicQuote = _grudgePool ? _grudgePool[Math.floor(Math.random() * _grudgePool.length)] : null;
+          const _rawQuote = _grudgePool ? _grudgePool[Math.floor(Math.random() * _grudgePool.length)] : null;
+          const _bossWave = gs.currentWave;
+          const _bossWeapon = WEAPONS[currentWeaponRef.current]?.name || 'that';
+          const _bossAct = _bossWave < 10 ? 'prologue' : _bossWave < 25 ? 'rising' : _bossWave < 40 ? 'climax' : 'epilogue';
+          const _dynamicQuote = _rawQuote ? interpolateBossQuote(_rawQuote, { wave: _bossWave, weapon: _bossWeapon, deaths: _bossRec.deaths, streak: gs.precisionStreak || 0, act: _bossAct }) : null;
           bossCutsceneRef.current = true;
           setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief, dynamicQuote: _dynamicQuote });
         } catch {
