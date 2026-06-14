@@ -7,6 +7,10 @@ function classifyAct(wave) {
   return { act: "THE OPENER", desc: "The run ended before the build found its identity." };
 }
 
+export function getRunAct(wave) {
+  return classifyAct(wave).act;
+}
+
 export function buildRunNarrative({
   wave = 1,
   score = 0,

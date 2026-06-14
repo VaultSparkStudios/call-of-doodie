@@ -72,6 +72,7 @@ import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/ga
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { interpolateBossQuote } from "./utils/bossDialogue.js";
+import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import {
@@ -2248,7 +2249,8 @@ export default function CallOfDoodie() {
           ...telemetrySnapshot,
         });
       }
-      const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1)));
+      const _arcMult = gs._runAct === 'THE LEGEND' ? 0.88 : gs._runAct === 'THE OPENER' ? 1.12 : 1;
+      const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1) * _arcMult));
       const spawnRate = getWaveSpawnRate(baseSpawnRate, directorState);
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave && !gs._respiteLock) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
@@ -2320,6 +2322,7 @@ export default function CallOfDoodie() {
         addXp(bonus);
         if (gs.currentWave >= 3) addText(gs, GW() / 2, GH() / 2 - 100, `+${bonus} XP FLAWLESS WAVE!`, "#44FF88", true);
       }
+      gs._runAct = getRunAct(gs.currentWave);
       gs._waveDeaths = 0;          // reset per-wave death counter for adaptive assist
       perksThisWaveRef.current = 0; // allow 1 perk screen again next wave
       setAssistAvailable(false);
