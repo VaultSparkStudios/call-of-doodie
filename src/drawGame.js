@@ -1185,6 +1185,30 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillText(_maf.label, W / 2, H / 2 + 12);
     ctx.globalAlpha = 1;
   }
+  // Combo milestone fullscreen card — RAMPAGE/GODLIKE/UNSTOPPABLE
+  if (!_rm && (gs._comboCardTimer || 0) > 0) {
+    const _cct = gs._comboCardTimer;
+    const _tier = gs._comboCardTier || 'rampage';
+    const _color = _tier === 'unstoppable' ? '#FFD700' : _tier === 'godlike' ? '#FF0088' : '#FF6400';
+    const _alpha = Math.min(1, _cct / 15) * (_cct < 20 ? _cct / 20 : 1);
+    const _label = _tier === 'unstoppable' ? 'UNSTOPPABLE!!' : _tier === 'godlike' ? 'GODLIKE!!' : 'RAMPAGE!!';
+    ctx.save();
+    ctx.globalAlpha = _alpha * 0.85;
+    ctx.fillStyle = `rgba(0,0,0,0.72)`;
+    ctx.fillRect(0, H / 2 - 52, W, 104);
+    ctx.strokeStyle = _color + '88';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, H / 2 - 52, W, 104);
+    ctx.textAlign = 'center';
+    ctx.shadowColor = _color;
+    ctx.shadowBlur = 32;
+    ctx.fillStyle = _color;
+    ctx.font = `bold clamp(28px,6vw,48px) 'Courier New',monospace`;
+    ctx.font = `bold ${Math.round(Math.min(W * 0.07, 48))}px 'Courier New',monospace`;
+    ctx.fillText(_label, W / 2, H / 2 + 16);
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  }
   // Boss wave red pulse
   if (!_rm && gs.bossWave) {
     ctx.fillStyle = "rgba(255,0,0," + (0.03 + Math.sin(Date.now() / 300) * 0.02) + ")";

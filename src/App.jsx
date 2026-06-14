@@ -2754,9 +2754,9 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            if (comboRef.current.count === 5) addText(gs, GW() / 2, GH() / 2 - 88, "RAMPAGE!!", "#FF6400", true);
-            else if (comboRef.current.count === 10) addText(gs, GW() / 2, GH() / 2 - 88, "GODLIKE!!", "#FF0088", true);
-            else if (comboRef.current.count === 15) addText(gs, GW() / 2, GH() / 2 - 88, "UNSTOPPABLE!!", "#FFD700", true);
+            if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
+            else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
+            else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = 'unstoppable'; }
             const pts = computeKillPoints({
               basePoints: e.points,
               comboMult: pbComboMult,
@@ -3011,9 +3011,9 @@ export default function CallOfDoodie() {
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
             if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
             setCombo(comboRef.current.count);
-            if (comboRef.current.count === 5) addText(gs, GW() / 2, GH() / 2 - 88, "RAMPAGE!!", "#FF6400", true);
-            else if (comboRef.current.count === 10) addText(gs, GW() / 2, GH() / 2 - 88, "GODLIKE!!", "#FF0088", true);
-            else if (comboRef.current.count === 15) addText(gs, GW() / 2, GH() / 2 - 88, "UNSTOPPABLE!!", "#FFD700", true);
+            if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
+            else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
+            else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = 'unstoppable'; }
             const pts = computeKillPoints({
               basePoints: e.points,
               comboMult,
@@ -3849,6 +3849,7 @@ export default function CallOfDoodie() {
     if ((gs.timeDilationTimer || 0) > 0) gs.timeDilationTimer--;
     if ((gs._flowStateCooldown || 0) > 0) gs._flowStateCooldown--;
     if ((gs._globalTauntCooldown || 0) > 0) gs._globalTauntCooldown--;
+    if ((gs._comboCardTimer || 0) > 0) gs._comboCardTimer--;
     // Near-death event tracking for run narrative arc (below 20% max HP)
     const _ndMax = gs.player.maxHealth || 100;
     if (gs.player.health > 0 && gs.player.health < _ndMax * 0.20) {
