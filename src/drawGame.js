@@ -1191,6 +1191,30 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.globalCompositeOperation = "source-over";
     }
   }
+  // Run-arc atmospheric vignette: edge color shifts by act, deepens toward LEGEND
+  if (!_rm && gs._runAct) {
+    const _actColors = {
+      'THE OPENER': [0, 68, 255],
+      'THE GRIND':  [200, 100, 0],
+      'THE PUSH':   [220, 40, 0],
+      'THE LEGEND': [140, 0, 0],
+    };
+    const _actAlpha = {
+      'THE OPENER': 0.04,
+      'THE GRIND':  0.055,
+      'THE PUSH':   0.08,
+      'THE LEGEND': 0.12,
+    };
+    const _ac = _actColors[gs._runAct];
+    const _aa = _actAlpha[gs._runAct] || 0;
+    if (_ac && _aa > 0) {
+      const _vgr = ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.78);
+      _vgr.addColorStop(0, `rgba(${_ac[0]},${_ac[1]},${_ac[2]},0)`);
+      _vgr.addColorStop(1, `rgba(${_ac[0]},${_ac[1]},${_ac[2]},${_aa})`);
+      ctx.fillStyle = _vgr;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
   // Damage / kill flash
   if (!_rm && gs.damageFlash > 0) { ctx.fillStyle = "rgba(255,0,0," + (gs.damageFlash * 0.03) + ")"; ctx.fillRect(0, 0, W, H); }
   if (!_rm && gs.killFlash > 0) { ctx.fillStyle = "rgba(255,215,0," + (gs.killFlash * 0.015) + ")"; ctx.fillRect(0, 0, W, H); }
