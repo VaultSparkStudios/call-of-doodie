@@ -1262,7 +1262,23 @@ export default function CallOfDoodie() {
 
   // ── Boss / enemy spawning (logic lives in gameHelpers.js) ────────────────
   const spawnBoss  = useCallback((gs, typeIndex) => _spawnBoss(gs, GW(), GH(), difficultyRef.current, typeIndex), []);
-  const spawnEnemy = useCallback((gs)            => _spawnEnemy(gs, GW(), GH(), difficultyRef.current), []);
+  const spawnEnemy = useCallback((gs) => {
+    _spawnEnemy(gs, GW(), GH(), difficultyRef.current);
+    // Proximity cluster: same-type enemies spawned within 3 frames get ±60px offset to form visible clusters
+    if (gs.currentWave >= 15) {
+      const ne = gs.enemies[gs.enemies.length - 1];
+      if (ne) {
+        const _frame = frameCountRef.current;
+        const _last = gs._lastSpawnByType?.[ne.typeIndex];
+        if (_last && (_frame - _last.frame) < 3) {
+          ne.x = Math.max(20, Math.min(GW() - 20, _last.x + (Math.random() < 0.5 ? 1 : -1) * (40 + Math.random() * 40)));
+          ne.y = Math.max(20, Math.min(GH() - 20, _last.y + (Math.random() < 0.5 ? 1 : -1) * (40 + Math.random() * 40)));
+        }
+        gs._lastSpawnByType = gs._lastSpawnByType || {};
+        gs._lastSpawnByType[ne.typeIndex] = { x: ne.x, y: ne.y, frame: _frame };
+      }
+    }
+  }, []);
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = useCallback((gs, ex, ey, isBoss) => {
