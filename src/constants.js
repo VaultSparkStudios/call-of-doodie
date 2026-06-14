@@ -560,6 +560,48 @@ export const BOSS_ABILITY_POOL = [
   },
 ];
 
+// ===== BOSS GRUDGE QUOTES =====
+// History-aware quote variants per boss typeIndex. Variant chosen by kill/death record.
+// intro: first encounter | taunt: player has kills, 0 deaths | grudge: mutual history | nemesis: deaths > kills
+export const BOSS_GRUDGE_QUOTES = {
+  4: { // Karen
+    intro: ["I heard about this game. I have CONCERNS.", "Sir, I will need to see your gaming license immediately.", "I have a Yelp account and I'm not afraid to use it."],
+    taunt: ["You killed me once. I've already filed a formal complaint.", "One kill doesn't make you special. I left a one-star review.", "Enjoy your little victory. My lawyer has been notified."],
+    grudge: ["Oh. YOU. Again.", "I remember what you did to me. My memory is EXCELLENT.", "Back for more? Good. I brought documentation."],
+    nemesis: ["I've sent you back more times than you've beaten me. Do the math.", "You keep losing to ME. Me. A woman with a bob haircut.", "I want to speak to whoever designed your strategy. Immediately."],
+  },
+  16: { // Splitter
+    intro: ["You cannot defeat what cannot stay whole.", "Every wound makes us more.", "We are curious about you."],
+    taunt: ["You shattered us before. We learned. We adapted.", "Killing one means killing none when we multiply.", "You thought killing us would help. Sweet."],
+    grudge: ["We remember what you did. All of us do.", "Each fragment carries the memory of your last assault.", "We've counted your bullets. We know your patterns."],
+    nemesis: ["You've died to us more than we've died to you. The numbers are ours.", "Every version of you falls to us eventually.", "We own the count. You know this."],
+  },
+  17: { // Juggernaut
+    intro: ["CHARRRGE.", "Nothing stops the Juggernaut.", "You're in the way. Move or be moved."],
+    taunt: ["Lucky shot last time. Won't happen again.", "You found my weakness once. It's been reinforced.", "I adapted. You haven't."],
+    grudge: ["We've danced this before.", "You know what I am. I know what you are. Let's finish it.", "The wall holds this time."],
+    nemesis: ["The math is simple: I've crushed you more than you've stopped me.", "You keep charging into me. I appreciate the commitment.", "My wall. Your face. Repeatedly."],
+  },
+  18: { // Summoner
+    intro: ["The circle is unbroken. You are the offering.", "You approach... interesting.", "The portal awaits your soul."],
+    taunt: ["My minions remember you. They've been training.", "You disrupted my circle once. The void does not forget.", "You broke the summoning. The summoning remembers."],
+    grudge: ["We meet again within the spiral.", "The pattern repeats. You are part of it now.", "You cannot escape a circle. We've proven this."],
+    nemesis: ["You've fallen to my minions more than you've closed my portal. Statistically fascinating.", "The count favors me and my children.", "Every soul lost to my circle strengthens it."],
+  },
+  9: { // Landlord
+    intro: ["Your health? Due on the first.", "I don't accept excuses. Or cheques.", "Welcome. Your security deposit is non-refundable."],
+    taunt: ["You beat me once. The rent still went up.", "One kill won't cover what you owe.", "I raised the difficulty after your last visit."],
+    grudge: ["Back again? I'm adding a late fee.", "I remember the damage you did. I've itemized it.", "You're on my problem-tenant list. Top three."],
+    nemesis: ["I've evicted you more times than you've evicted me. Keep up.", "You're behind on the kill count AND the rent.", "Some landlords get beaten. I'm not one of them. Historically."],
+  },
+  20: { // The Algorithm
+    intro: ["New user detected. Your data has been collected.", "Engagement metrics: optimal. You won't leave.", "Your attention is the product. Welcome."],
+    taunt: ["You disrupted my reach once. My numbers recovered.", "One defeat is a data point. I've A/B tested your weakness.", "You killed me once. I shadow-banned you. We're even."],
+    grudge: ["You again. Your behavior profile is... interesting.", "Repeat engagement. Exactly as the model predicted.", "We've been here before. My algorithm anticipated this."],
+    nemesis: ["My kill-to-death ratio is favorable. The data is clear.", "You return, and I delete you. This is your content loop.", "Your defeat is the most engaged content you create."],
+  },
+};
+
 // ===== WAVE ROUTES =====
 // Shown after each non-boss wave clear (wave 2+, not in Score Attack / Daily Challenge).
 // Player picks from 3 options (Standard always included). apply(gs, perkMods) is called immediately.

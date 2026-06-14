@@ -5,7 +5,7 @@ import {
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
-  WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked,
+  WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
@@ -2469,8 +2469,12 @@ export default function CallOfDoodie() {
           const _killLabel = _bossRec.kills === 0 ? "FIRST ENCOUNTER" : _bossRec.kills >= 10 ? `EXECUTIONER (${_bossRec.kills}× killed)` : _bossRec.kills >= 5 ? `VETERAN (${_bossRec.kills}× killed)` : `${_bossRec.kills}× killed`;
           const _nemesisFlag = isNemesis(_primaryType);
           const _nemesisBrief = _nemesisFlag ? { weapon: getNemesisWeaponRecommendation(_primaryType), tip: _bossGuidance.verb } : null;
+          // History-aware grudge quote: pick variant based on kill/death record
+          const _grudgeVariant = _bossRec.kills === 0 ? 'intro' : _bossRec.deaths > _bossRec.kills ? 'nemesis' : _bossRec.deaths > 0 ? 'grudge' : 'taunt';
+          const _grudgePool = BOSS_GRUDGE_QUOTES[_primaryType]?.[_grudgeVariant];
+          const _dynamicQuote = _grudgePool ? _grudgePool[Math.floor(Math.random() * _grudgePool.length)] : null;
           bossCutsceneRef.current = true;
-          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief });
+          setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief, dynamicQuote: _dynamicQuote });
         } catch {
           bossCutsceneRef.current = true;
           setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance });
@@ -4381,9 +4385,9 @@ export default function CallOfDoodie() {
             )}
             {/* Divider */}
             <div style={{ width:"60%", height:1, background:`linear-gradient(90deg,transparent,${bossCutscene.color}66,transparent)`, margin:"0 auto 16px" }} />
-            {/* Quote */}
+            {/* Quote — dynamic (history-aware) falls back to static */}
             <div style={{ fontSize:"clamp(12px,2.8vw,15px)", color:"#CCC", fontStyle:"italic", lineHeight:1.6, marginBottom:20, maxWidth:380, margin:"0 auto 20px" }}>
-              "{bossCutscene.quote}"
+              "{bossCutscene.dynamicQuote || bossCutscene.quote}"
             </div>
             {bossCutscene.guidance && (
               <div style={{ maxWidth: 420, margin: "0 auto 18px", display: "flex", flexDirection: "column", gap: 8 }}>
