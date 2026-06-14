@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-06-13 (Session 86 closeout) -->
+<!-- generated-at: 2026-06-14 (Session 88 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 86 closeout · 2026-06-13.
+> **Fast-boot brief** — generated at Session 88 closeout · 2026-06-14.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 87 · 2026-06-13 · FOUNDER MODE                          ║
+║  Session 89 · 2026-06-14 · FOUNDER MODE                          ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -33,8 +33,8 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 8↑                       ║
-║    Last active: 1d  ·  Last closeout: 8d  ·  (active = newest o  ║
-║    Trend  ▂▇▄▄▆  ↑  (last 5 sessions)                            ║
+║    Last active: 1d  ·  Last closeout: 9d  ·  (active = newest o  ║
+║    Trend  ▄▆▆▄▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
@@ -51,15 +51,15 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 86 ════════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 88 ════════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    429 passing  ·  Deploy: N/A                           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
-║     2,457 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
-║     ~1,229 tok/turn  ·  cache 50%  ·  147 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░    2% used                          ║
+║     17,094 / 1,000,000 tok  ·  claude-code/opus-4-7-1m  ·  meas  ║
+║     ~8,547 tok/turn  ·  cache 50%  ·  105 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -68,8 +68,8 @@
 ║  ✓  Velocity      8 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⚠  IGNIS         46881 FORGE  ·  10d old                        ║
-║  ⛔  Truth         green locally with zero npm audit vulnerabili  ║
+║  ⚠  IGNIS         46881 FORGE  ·  11d old                        ║
+║  ⛔  Truth         green locally  ·  Genome: ?                    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.178  (healthy)                               ║
@@ -83,8 +83,8 @@
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    30d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    52d · Physical launch QA                                      ║
+║    31d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    53d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -96,7 +96,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▇▄▄▆  8↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▆▆▄▆  8↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -106,13 +106,18 @@
 ║  All categories forecast stable or rising.                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
-║  Run `node scripts/ops.mjs genius-list` to generate fresh recom  ║
-╚════════════════════════════════════════════════════════════════╝
+1. [SIL:1] [Credential-gated S82] Deploy `sync-studio-events` edge-function repair — local code is fixed, but `supabase functions deploy sync-studio-events --project-ref fjnpzjjyhnpmunfoycrp` failed because no `SUPABASE_ACCESS_TOKEN` is available; `node scripts/check-secrets.mjs --for supabase` reports `supabase MISSING`.
+2. [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to include `https://callofdoodie.wtf/` and backup-origin expectations — Supabase Edge Functions currently use `Access-Control-Allow-Origin: *`, so no repo-side CORS allowlist change is needed; remaining PostHog/Sentry/Ko-fi project URL updates require analytics/dashboard credentials (`node scripts/check-secrets.mjs --for analytics` is MISSING).
+3. [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL allowlists to include `https://callofdoodie.wtf/` and backup-origin expectations — Supabase Edge Functions currently use `Access-Control-Allow-Origin: *`, so no repo-side CORS allowlist change is needed; remaining PostHog/Sentry/Ko-fi project URL updates require analytics/dashboard credentials (`node scripts/check-secrets.mjs --for analytics` is MISSING).
+4. [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
+5. [SIL:2] [BLOCKER S61] [S59 carryover] validate-replay Phase 2B — build the actual headless deterministic resim runner from seed + trace-backed replay inputs, using pure combat helpers; quarantine >2% drift; keep heuristic as the fast pre-filter. Session 68 closes the trace metadata contract, but full resim still needs a replay runner and stored trace payload contract.
+6. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
+7. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
+8. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ```
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 86 closeout · 2026-06-13*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 88 closeout · 2026-06-14*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

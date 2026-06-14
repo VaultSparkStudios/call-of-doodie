@@ -1,0 +1,273 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-13",
+    "session": 88,
+    "project": "call-of-doodie",
+    "type": "game",
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "ai": 1.5,
+      "feature-depth": 1.5,
+      "security": 1,
+      "speed": 1,
+      "feedback": 1,
+      "token-cost": 1,
+      "new-feature": 1
+    },
+    "totalItems": 8,
+    "combinedPriority": 319.4,
+    "top3": [
+      "flow-state-time-dilation",
+      "boss-grudge-dialogue",
+      "enemy-combat-taunts"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "slug": "flow-state-time-dilation",
+      "title": "Flow-State Time Dilation on Precision Streak",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 9,
+      "effortHours": 1,
+      "innovation": 10,
+      "priority": 56.8,
+      "status": "pending",
+      "why": "The precision streak system already tracks the player reaching 10+ consecutive center hits, and the `timeDilationTimer` mechanic already slows the world to 0.18× for other triggers — but these two systems have never been wired together. Hitting streak ≥10 and landing the next precision shot is a measurable flow state: the game should reward it with a 0.5s bullet-time window that says 'you are beyond human at this moment.' No browser shooter in this category gives the player a mechanical sense of transcendent aim; this is a genuine genre-first.",
+      "recipe": "In `src/App.jsx` bullet-enemy hit handler where `isPrecisionHit()` returns true and `gs.precisionStreak >= 10`: set `gs.timeDilationTimer = 30` (0.5s at 60fps) and emit a `'⚡ FLOW STATE'` floating text in cyan. Guard with a `_flowStateCooldown` counter (reset to 300 on trigger) so it can only fire once per 5s.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Wire precisionStreak >= 10 next-hit to set timeDilationTimer = 18 (0.3s) — minimal time-dilation, no cooldown, no text."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Full flow-state: timeDilationTimer = 30 on streak ≥10 next precision hit, FLOW STATE floating text, 300-frame cooldown guard, unit test in combatResolution."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "L2 + visual: during flow-state window draw a brief cyan vignette ring expanding from the player + track `gs._flowStateCount` per run and surface it in DeathScreen as a 'Flow State' bonus stat."
+        }
+      }
+    },
+    {
+      "id": "2",
+      "slug": "boss-grudge-dialogue",
+      "title": "Boss Grudge Dialogue — History-Aware Cutscene Quotes",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 9,
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 45.4,
+      "status": "pending",
+      "why": "The boss cutscene already reads from `getBossKillRecord()` to compute the kill-count label, but the `quote` field remains static per-boss regardless of history. A player who has died to Mega Karen four times and killed her zero times should see a different line than a first-timer — the data is already in `cod-boss-kills-v1`, and the cutscene renders it for 3 seconds with the player's full attention. This is the highest-attention narrative moment in the game, and it's currently generic.",
+      "recipe": "Add `BOSS_GRUDGE_QUOTES` in `src/constants.js` per boss type: `{ intro, grudge, taunt, nemesis }` lines. In `src/App.jsx` where `setBossCutscene` is called, pick the quote variant based on `_bossRec.kills` and `_bossRec.deaths`: intro (first encounter), taunt (player has killed before), grudge (boss has killed player before), nemesis (both ≥3). Pass as `dynamicQuote` field and render it instead of the static `previewCard.quote`.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add 2 quote variants per boss (intro vs 'not again') and pick based on kills>0 flag."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Full 4-variant system: intro/taunt/grudge/nemesis per boss + dynamicQuote rendering in App.jsx + 6 unit tests covering each variant and edge cases."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "L2 + per-boss unique quote pool (3 grudge lines each) with random selection per encounter, so repeat fights don't repeat the exact same line."
+        }
+      }
+    },
+    {
+      "id": "3",
+      "slug": "enemy-combat-taunts",
+      "title": "Enemy Mid-Run Contextual Taunts",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 10,
+      "effortHours": 2,
+      "innovation": 9,
+      "priority": 45.0,
+      "status": "pending",
+      "why": "Enemy death quotes already fire as floating text when enemies are killed, and the roast director fires callouts between waves — but no enemy yells anything at the player DURING combat. Karen has never screamed 'I WANT THE MANAGER!' while chasing you alive. Contextual mid-combat taunts from enemies the player is currently fighting would be the single most comedic, most personality-rich upgrade possible: it turns every enemy into an active antagonist rather than a target. The system already has `addText()` floating text and a per-event cooldown model — this extends both patterns.",
+      "recipe": "Add `combatTaunts: [...]` arrays to key enemy types in `ENEMY_TYPES` (Karen, Mega Karen, HOA President, Landlord, Gym Bro, Life Coach). In `src/App.jsx` enemy update loop, at low probability (0.4%/frame when enemy is alive and on-screen), pick a random taunt and call `addText(gs, e.x, e.y - e.size - 10, taunt, e.color, false)`. Throttle via per-enemy `_tauntCooldown` counter (180 frames between taunts per enemy).",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add 2 taunts to Karen and HOA President only; fire at 0.2%/frame with a 300-frame per-enemy cooldown. No per-context logic."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full system: combatTaunts on 8 enemy types, context-sensitive firing (more likely when player streak is high or HP is low), per-enemy 180-frame cooldown, and a global 60-frame any-taunt cooldown so screen doesn't fill with text."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 + enemy taunts react to the player's weapon (Karen: 'A BANANA?!', Gym Bro on Nerf Minigun: 'That's not even a real gun, bro') using the player's active weapon index — creates weapon-personality combos."
+        }
+      }
+    },
+    {
+      "id": "4",
+      "slug": "wave-respite-breath",
+      "title": "Post-Threat Wave Respite Moment",
+      "axis": "gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 0.5,
+      "innovation": 7,
+      "priority": 42.4,
+      "status": "pending",
+      "why": "After a threat-4 or threat-5 wave the player is typically depleted, low ammo, and hit — but the next wave launches immediately on the same cadence. Great action movies and games breathe: a two-second pickup lull after an intense wave signals 'you survived that, claim your reward' before the next assault. The wave threat rating already classifies high-threat waves; this just adds the pacing beat that makes those ratings feel meaningful. It costs zero balance: pickups already exist, the wave timer already pauses for boss cutscenes and shop — a 120-frame loot-drop window is structurally identical.",
+      "recipe": "In `src/App.jsx` wave-clear handler, after `computeWaveThreatRating()` returns ≥4: set `gs.respiteTimer = 120`, spawn 2 health packs + 1 ammo crate at randomized canvas positions, and skip starting the next wave spawn loop until `gs.respiteTimer` reaches 0. Decrement `gs.respiteTimer` each frame in the game loop. Show a brief '💨 BREATH TAKEN' floating text at player position.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "60-frame pause after threat≥4 wave clear, no pickups, just a gap before next wave."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "120-frame respite + 2 HP packs + 1 ammo crate + BREATH TAKEN text. Unit test for timer and pickup counts."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "L2 + respite scales with threat: threat 4 → 90 frames, threat 5 → 150 frames; pickups scale too (threat 5 → adds a perk token); respite indicator HUD chip."
+        }
+      }
+    },
+    {
+      "id": "5",
+      "slug": "run-narrative-arc",
+      "title": "Run Narrative Arc — Dramatic Act Detection on DeathScreen",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 9,
+      "effortHours": 3,
+      "innovation": 9,
+      "priority": 34.9,
+      "status": "pending",
+      "why": "Every run already contains a natural dramatic arc — an explosive opening, a grinding middle where skill is tested, and a climactic final moment — but the death screen only reports flat stats. By classifying the run into act phases (THE OPENER: waves 1-5, THE GRIND: 6-12, THE PUSH: 13-20, THE LEGEND: 21+) and identifying 1-3 'turning point' moments (first near-death, first precision streak peak, boss phase-two activation), the death screen becomes a story recap rather than a scoreboard. This makes every run feel authored, shareable, and emotionally resonant in a way no other browser shooter achieves.",
+      "recipe": "Create `src/utils/runNarrative.js` exporting `buildRunNarrative({wave, kills, nearDeathEvents, firstBossWave, precisionPeak, chainEnragePeak})` → `{act, actLabel, turningPoints[], arcSummary}`. Wire `nearDeathEvents` tracking in App.jsx (increment `gs._nearDeathEvents` whenever HP drops below 15 and recovers). Render a 'RUN ARC' card in DeathScreen below the existing BUILD GRADE card.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Pure act classification only: compute which act the player died in and show a one-line label on DeathScreen."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Full narrative: act label + 1-3 turning points + arc summary sentence + near-death event tracking in App.jsx. Unit tests for act transitions and turning point detection."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "L2 + every turning point becomes a 'scene': labelled moment ('Wave 7 — You entered the killing zone: 18 kills in 90s') with emoji marker, forming a mini timeline strip on DeathScreen."
+        }
+      }
+    },
+    {
+      "id": "6",
+      "slug": "weapon-legend-milestones",
+      "title": "Weapon Legend — Per-Weapon Career Kill Milestones",
+      "axis": "gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 2,
+      "innovation": 8,
+      "priority": 32.0,
+      "status": "pending",
+      "why": "Career stats track `totalKills` globally but have no per-weapon kill memory — the game doesn't know you've killed 847 enemies with the Banana Blaster across 60 runs. Per-weapon kill totals unlock weapon legends: Recruit (50 kills), Veteran (200), Elite (500), Legend (1000). This creates a completely separate axis of mastery progression that doesn't compete with Meta Tree nodes, drives weapon specialization, and surfaces on DeathScreen as 'You reached VETERAN with the Banana Blaster this run' when crossing a threshold. It's the simplest version of a weapon mastery system, and it costs zero gameplay balance.",
+      "recipe": "Add `weaponLegendKills: new Array(12).fill(0)` to career stats in `src/storage.js` `updateCareerStats()` — accumulate from run's `weaponKills[]`. Add `getWeaponLegendRank(kills)` returning Recruit/Veteran/Elite/Legend. On DeathScreen, detect threshold crossings during the run and show a compact 'WEAPON LEGEND' milestone chip if any weapon crossed a boundary.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Persist weaponLegendKills[] to career storage only — no display yet."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Persist + rank function + DeathScreen threshold-crossed milestone chip. Unit tests for rank thresholds and career accumulation."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "L2 + HUD tooltip on weapon toolbar shows current weapon's legend rank + kills to next rank; META_TREE node 'Weapon Affinity' gives +5% damage to your top-3 legend-rank weapons."
+        }
+      }
+    },
+    {
+      "id": "7",
+      "slug": "run-dna-fingerprint",
+      "title": "Run DNA Fingerprint — Visual Kill Distribution on DeathScreen",
+      "axis": "ui / ux / user-experience",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 2,
+      "innovation": 8,
+      "priority": 32.0,
+      "status": "pending",
+      "why": "The death screen has BUILD GRADE, RUN COACH, weapon kills collapsible, and heatmap — but no single visual that captures the whole run at a glance. A horizontal kill-distribution bar (each weapon segment proportionally colored) plus a tiny wave-survival sparkline (kills-per-wave as dots) gives the run a visual fingerprint that's unique, screenshot-worthy, and immediately readable in 2 seconds. Players share screenshots; this makes every screenshot carry the run's identity without requiring any new network or API calls.",
+      "recipe": "In `src/components/DeathScreen.jsx`, below the BUILD GRADE row, add a 'RUN DNA' strip: a 200px wide horizontal bar divided into colored segments proportional to each weapon's kill share (using WEAPONS[i].color), followed by a 200×30px mini sparkline SVG showing kills per wave (use `weaponKills` and `wave` already passed as props). Pure client-side rendering, no deps.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Weapon kill share bar only — a flex div with colored segments proportional to weaponKills[i]/total."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full DNA strip: colored weapon share bar + wave-kill sparkline SVG. Render only when totalKills > 0. Unit test for segment width math."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "L2 + encode the DNA strip as a compact URL-safe string appended to the existing SHARE RUN link, so recipients see your run DNA when they load the replay URL."
+        }
+      }
+    },
+    {
+      "id": "8",
+      "slug": "enemy-chain-fear-enrage-spawn",
+      "title": "Enemy Chain-State Spawn Visuals — Fear vs Enrage Indicator",
+      "axis": "gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 7,
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 30.9,
+      "status": "pending",
+      "why": "The `_chainEnrageLevel` system already secretly makes enemies 10-20% faster and tightens fire rate at combo 15/35 — but there's no on-spawn signal that communicates this pressure to the player. A brief flash tint on newly-spawned enemies (yellow exclamation if enrage=0, orange charging-arrow if enrage=1, red with particle burst if enrage=2) makes the kill-chain escalation READABLE: players can see the game reacting to them. Currently, increasing the chain has invisible mechanical effects, which wastes the dramatic potential of the system already in place.",
+      "recipe": "In `src/App.jsx` enemy spawn handler (where `spawnEnemy()` is called), after pushing to `gs.enemies`, set `e._spawnFlashTimer = 20` and `e._spawnEnrageLevel = gs._chainEnrageLevel || 0`. In `src/drawGame.js` enemy render loop, when `_spawnFlashTimer > 0`: tint the enemy fill with the enrage indicator color (yellow/orange/red at levels 0/1/2) fading over the 20 frames, and at levels 1-2 also draw a brief '⚡' text above the enemy.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Simple: at enrage level ≥1 add a short hitFlash-style tint on spawn (reuse existing hitFlash mechanism with a different color)."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Full: 3-level tint + ⚡ text above enemy at levels 1-2 + _spawnFlashTimer fade. Unit test for spawn-state assignment."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "L2 + at enrage level 2 ALL currently alive enemies simultaneously flash red for 8 frames when new ones spawn — communicating 'everything just got harder together.'"
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "ghost-pack-canvas-render",
+      "reason": "High visual complexity with canvas state coupling risk; deferred until App.jsx drawGame decoupling is further advanced. Priority 24.4 — valid but lower than ranked items."
+    },
+    {
+      "slug": "precision-streak-achievement-push",
+      "reason": "Already 66 achievements; adding more without a new category system adds noise. Deferred."
+    }
+  ],
+  "executionLog": [
+    { "slug": "wave-respite-breath",        "status": "shipped", "session": 88, "commit": "f93aca5", "notes": "120-frame respite after threat≥4 waves; 2 HP + 1 ammo pickup burst; _waveTransitDone/_respiteLock two-flag arch; route-select fires before flag set; spawn gate guarded." },
+    { "slug": "flow-state-time-dilation",   "status": "shipped", "session": 88, "commit": "911a2e2", "notes": "precisionStreak≥10 triggers 90-frame (1.5s) timeDilation + ⚡ FLOW STATE toast; 300-frame cooldown; _flowStateFiredCount tracked for narrative arc." },
+    { "slug": "boss-grudge-dialogue",       "status": "shipped", "session": 88, "commit": "8a0277b", "notes": "BOSS_GRUDGE_QUOTES: 4-variant (intro/taunt/grudge/nemesis) × 6 boss types; dynamicQuote picked by _bossRec.kills/deaths; renders in place of static quote." },
+    { "slug": "enemy-combat-taunts",        "status": "shipped", "session": 88, "commit": "b927494", "notes": "combatTaunts on 8 enemy types; 0.4%/frame; per-enemy 180f cooldown + global 60f cooldown; ENEMY_TYPES[typeIndex] lookup at runtime." },
+    { "slug": "run-narrative-arc",          "status": "shipped", "session": 88, "commit": "eb0756b", "notes": "runNarrative.js: act classification (OPENER/GRIND/PUSH/LEGEND); up to 3 turning points; nearDeathEvents tracked per-frame; RUN ARC card above RIVALRY LADDER." },
+    { "slug": "weapon-legend-milestones",   "status": "shipped", "session": 88, "commit": "4489b5c", "notes": "weaponLegendKills[] in updateCareerStats; getWeaponLegendRank (Recruit/Veteran/Elite/Legend); milestone chips on DeathScreen when threshold crossed." },
+    { "slug": "run-dna-fingerprint",        "status": "shipped", "session": 88, "commit": "ff3ac97", "notes": "Proportional weapon kill-distribution bar below BUILD GRADE; top-4 weapon legend with emoji+%; IIFE render pattern." },
+    { "slug": "enemy-chain-fear-enrage-spawn","status": "shipped","session": 88, "commit": "018f7a6", "notes": "_spawnFlashTimer=20 + _spawnEnrageLevel on enrage≥1 spawns; drawGame: 20-frame fade tint (yellow L1/orange L2) + ⚡ ENRAGED text above." }
+  ]
+}
