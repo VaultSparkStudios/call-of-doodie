@@ -8,7 +8,7 @@ import {
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -3037,14 +3037,18 @@ export default function CallOfDoodie() {
               addText(gs, e.x, e.y - e.size - 10, "🎯 +1💩", "#FFAAFF");
             }
             // Beat-precision bonus: precision hit during beat vulnerability window → +2💩
+            // Window widens with streak: base 8 frames + 1 extra per 5 streak (max +4 at streak≥20)
             try {
               const _bpBpm = getMusicBPM();
               const _bpFpb = Math.round(60 / _bpBpm * 60);
               const _bpPhase = frameCountRef.current % _bpFpb;
-              if (_bpPhase < 8) {
+              const _bpStreak = gs.precisionStreak || 0;
+              const _bpWindow = 8 + Math.min(4, Math.floor(_bpStreak / 5));
+              if (_bpPhase < _bpWindow) {
                 gs.coins = (gs.coins || 0) + 2;
                 addText(gs, e.x, e.y - e.size - 22, "🎵🎯 BEAT PRECISION! +2💩", "#00FFEE");
                 addParticles(gs, e.x, e.y, "#00FFEE", 5);
+                try { trackRhythmMasteryHit(); } catch {}
               }
             } catch {}
             // Flow state: streak ≥10 → 1.5s bullet-time (genre-first mechanical reward)

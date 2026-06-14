@@ -445,12 +445,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   // Beat-precision vulnerability: compute once per frame for the enemy loop
+  // Window widens with precision streak: base 8 frames + 1 per 5 streak (max +4 at ≥20)
   let _beatVulnActive = false;
+  let _beatVulnWindow = 8;
   try {
     const _bvBpm = getMusicBPM();
     const _bvFpb = Math.round(60 / _bvBpm * 60);
     const _bvPhase = (refs.frameCountRef?.current || 0) % _bvFpb;
-    _beatVulnActive = _bvPhase < 8;
+    _beatVulnWindow = 8 + Math.min(4, Math.floor((gs.precisionStreak || 0) / 5));
+    _beatVulnActive = _bvPhase < _beatVulnWindow;
   } catch {}
 
   // Enemies
@@ -827,13 +830,14 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(0, 0, _pr, 0, Math.PI * 2); ctx.stroke();
       ctx.shadowBlur = 0; ctx.globalAlpha = 1;
     }
-    // Beat-precision vulnerability ring: thin cyan pulse on beat window
+    // Beat-precision vulnerability ring: cyan pulse, thicker when streak widens the window
     if (!e.isBossEnemy && _beatVulnActive) {
-      ctx.globalAlpha = 0.55;
-      ctx.strokeStyle = "#00FFEE";
-      ctx.lineWidth = 1.5;
+      const _bvMastered = _beatVulnWindow > 8;
+      ctx.globalAlpha = _bvMastered ? 0.75 : 0.55;
+      ctx.strokeStyle = _bvMastered ? "#00FFDD" : "#00FFEE";
+      ctx.lineWidth = _bvMastered ? 2.5 : 1.5;
       ctx.shadowColor = "#00FFEE";
-      ctx.shadowBlur = 8;
+      ctx.shadowBlur = _bvMastered ? 14 : 8;
       ctx.beginPath(); ctx.arc(0, 0, r * 0.5, 0, Math.PI * 2); ctx.stroke();
       ctx.shadowBlur = 0; ctx.globalAlpha = 1;
     }

@@ -1033,6 +1033,26 @@ export function updateCareerStats({ kills, deaths, score, wave, streak, damage, 
   return { career, weaponMilestones };
 }
 
+// ===== RHYTHM MASTERY =====
+// Persistent career stat: total beat-precision hits (on-beat precision shots).
+// Stored inside career stats under `rhythmMasteryHits`.
+
+export function trackRhythmMasteryHit() {
+  try {
+    const career = loadCareerStats();
+    career.rhythmMasteryHits = (career.rhythmMasteryHits || 0) + 1;
+    saveCareerStats(career);
+    return career.rhythmMasteryHits;
+  } catch { return 0; }
+}
+
+export function getRhythmMastery() {
+  try {
+    const career = loadCareerStats();
+    return career.rhythmMasteryHits || 0;
+  } catch { return 0; }
+}
+
 // ===== CUSTOM LOADOUTS =====
 const CUSTOM_LOADOUTS_KEY = "cod-custom-loadouts-v1";
 

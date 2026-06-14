@@ -20,6 +20,8 @@ import {
   isNemesis,
   getAdaptiveSpawnMods,
   getCommunityChokePoints,
+  trackRhythmMasteryHit,
+  getRhythmMastery,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -321,5 +323,24 @@ describe("getCommunityChokePoints", () => {
     // no localStorage in test env → getWaveDeathCounts returns {} → empty set
     const result = getCommunityChokePoints(null);
     expect(result instanceof Set).toBe(true);
+  });
+});
+
+describe("rhythm mastery tracking", () => {
+  it("getRhythmMastery returns 0 when no hits recorded", () => {
+    expect(getRhythmMastery()).toBe(0);
+  });
+
+  it("trackRhythmMasteryHit increments on each call", () => {
+    const first = trackRhythmMasteryHit();
+    expect(first).toBeGreaterThan(0);
+    const second = trackRhythmMasteryHit();
+    expect(second).toBeGreaterThan(first);
+  });
+
+  it("getRhythmMastery reflects accumulated hits", () => {
+    const before = getRhythmMastery();
+    trackRhythmMasteryHit();
+    expect(getRhythmMastery()).toBe(before + 1);
   });
 });
