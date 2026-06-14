@@ -59,6 +59,8 @@ export default function DeathScreen({
   // ── Ghost path visualization ───────────────────────────────────────────────
   const [ghostData, setGhostData] = useState(null);
   const ghostCanvasRef = useRef(null);
+  const [shareCardUrl, setShareCardUrl] = useState(null);
+  const [shareCardBusy, setShareCardBusy] = useState(false);
 
   useEffect(() => {
     if (!ghostKey) return;
@@ -620,9 +622,41 @@ export default function DeathScreen({
         {weaponKills && weaponKills.some(k => k > 0) && (() => {
           const _total = weaponKills.reduce((s, k) => s + (k || 0), 0);
           const _used = weaponKills.map((k, i) => ({ k: k || 0, i })).filter(w => w.k > 0).sort((a, b) => b.k - a.k);
+          const _doShareCard = () => {
+            if (shareCardBusy) return;
+            setShareCardBusy(true);
+            try {
+              const worker = new Worker(new URL("../workers/shareCard.worker.js", import.meta.url), { type: "module" });
+              worker.onmessage = (ev) => {
+                worker.terminate();
+                setShareCardBusy(false);
+                if (ev.data?.blob) {
+                  const url = URL.createObjectURL(ev.data.blob);
+                  setShareCardUrl(url);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = "run-dna.png"; a.click();
+                }
+              };
+              worker.onerror = () => { worker.terminate(); setShareCardBusy(false); };
+              worker.postMessage({
+                weaponKills: weaponKills || [],
+                weaponColors: WEAPONS.map(w => w.color),
+                weaponEmojis: WEAPONS.map(w => w.emoji),
+                wave, score, kills,
+                runArc: runNarrative?.act || '',
+                buildGrade: buildGrade?.grade || '?',
+                replayProofTier: null,
+              });
+            } catch { setShareCardBusy(false); }
+          };
           return (
             <div style={{ ...card, marginBottom: 12, padding: "10px 12px" }}>
-              <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── RUN DNA ──</div>
+              <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span>── RUN DNA ──</span>
+                <button onClick={_doShareCard} disabled={shareCardBusy} style={{ fontSize: 8, background: "none", border: "1px solid #333", borderRadius: 4, color: shareCardBusy ? "#555" : "#AAA", padding: "2px 6px", cursor: "pointer" }}>
+                  {shareCardBusy ? "…" : "📸 SAVE CARD"}
+                </button>
+              </div>
               <div style={{ height: 14, borderRadius: 7, overflow: "hidden", display: "flex", marginBottom: 8 }} title="Weapon kill distribution">
                 {_used.map(({ k, i }) => (
                   <div key={i} style={{ width: `${(k / _total) * 100}%`, height: "100%", background: WEAPONS[i]?.color || "#888", opacity: 0.9 }} />
