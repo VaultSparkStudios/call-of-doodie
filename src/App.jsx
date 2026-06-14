@@ -72,7 +72,7 @@ import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./system
 import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
-import { interpolateBossQuote } from "./utils/bossDialogue.js";
+import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
@@ -180,6 +180,7 @@ export default function CallOfDoodie() {
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
   const waveDeathCountsRef = useRef({});  // {wave: N} — how many LB players died on each wave
   const weaponEvolutionsRef = useRef([]); // per-weapon evolution state loaded at game start
+  const bossSessionDeathsRef = useRef({}); // {bossTypeIdx: N} — deaths to each boss this session
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const gamepadMoveRef   = useRef({ x: 0, y: 0, active: false }); // left-stick movement, kept separate from keyboard state
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
@@ -588,6 +589,7 @@ export default function CallOfDoodie() {
     } catch { gsRef.current.proximityRivals = []; }
     waveDeathCountsRef.current = getWaveDeathCounts();
     weaponEvolutionsRef.current = WEAPONS.map((_, i) => getWeaponEvolutionState(i));
+    bossSessionDeathsRef.current = {};
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -1523,12 +1525,14 @@ export default function CallOfDoodie() {
         if (killerType != null) {
           gs._deathKillerType = killerType;
           recordDeathByEnemy(killerType);
-          // Track boss deaths for nemesis detection
+          // Track boss deaths for nemesis detection and session escalation
           if (best?.isBossEnemy) {
             try {
               const _prevRec = getBossKillRecord(best.typeIndex);
               saveBossKillRecord(best.typeIndex, { kills: _prevRec.kills, deaths: _prevRec.deaths + 1 });
             } catch {}
+            const _bsti = best.typeIndex ?? killerType;
+            if (_bsti != null) bossSessionDeathsRef.current[_bsti] = (bossSessionDeathsRef.current[_bsti] || 0) + 1;
           }
         }
       } catch { /* non-fatal */ }
@@ -2517,13 +2521,20 @@ export default function CallOfDoodie() {
           const _nemesisFlag = isNemesis(_primaryType);
           const _nemesisBrief = _nemesisFlag ? { weapon: getNemesisWeaponRecommendation(_primaryType), tip: _bossGuidance.verb } : null;
           // History-aware grudge quote: pick variant based on kill/death record
-          const _grudgeVariant = _bossRec.kills === 0 ? 'intro' : _bossRec.deaths > _bossRec.kills ? 'nemesis' : _bossRec.deaths > 0 ? 'grudge' : 'taunt';
+          // Session escalation: ≥2 deaths to this boss THIS session forces grudge/nemesis tier
+          const _sessionBossDeaths = bossSessionDeathsRef.current[_primaryType] || 0;
+          const _sessionEscalate = _sessionBossDeaths >= 2;
+          const _grudgeVariant = _bossRec.kills === 0 && !_sessionEscalate ? 'intro'
+            : _bossRec.deaths > _bossRec.kills || _sessionBossDeaths >= 3 ? 'nemesis'
+            : _bossRec.deaths > 0 || _sessionEscalate ? 'grudge'
+            : 'taunt';
           const _grudgePool = BOSS_GRUDGE_QUOTES[_primaryType]?.[_grudgeVariant];
           const _rawQuote = _grudgePool ? _grudgePool[Math.floor(Math.random() * _grudgePool.length)] : null;
           const _bossWave = gs.currentWave;
           const _bossWeapon = WEAPONS[currentWeaponRef.current]?.name || 'that';
           const _bossAct = _bossWave < 10 ? 'prologue' : _bossWave < 25 ? 'rising' : _bossWave < 40 ? 'climax' : 'epilogue';
-          const _dynamicQuote = _rawQuote ? interpolateBossQuote(_rawQuote, { wave: _bossWave, weapon: _bossWeapon, deaths: _bossRec.deaths, streak: gs.precisionStreak || 0, act: _bossAct }) : null;
+          const _bossTone = getBossTone(difficultyRef.current);
+          const _dynamicQuote = _rawQuote ? interpolateBossQuote(_rawQuote, { wave: _bossWave, weapon: _bossWeapon, deaths: _bossRec.deaths, streak: gs.precisionStreak || 0, act: _bossAct, sessionDeaths: _sessionBossDeaths, bossKills: _bossRec.kills, tone: _bossTone }) : null;
           bossCutsceneRef.current = true;
           setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief, dynamicQuote: _dynamicQuote });
         } catch {
