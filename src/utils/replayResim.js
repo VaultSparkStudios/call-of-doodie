@@ -22,7 +22,7 @@ function parseTrace(traceBodyOrTrace, traceLength = null, traceDigest = "") {
   };
 }
 
-export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = {}) {
+export function buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames = 36000, submitted = {}) {
   const trace = parseTrace(traceBodyOrTrace, submitted.traceLength, submitted.traceDigest);
   const valid = isValidReplayCommandTrace(trace);
   const events = valid ? decodeReplayCommandTrace(trace) || [] : [];
@@ -40,24 +40,45 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
   const seedBias = Math.abs(clampInt(seed, 0, 999999999, 0) % 17) / 100;
   const finalWave = Math.max(1, Math.floor(durationSec / 35 + actionPressure / 18 + movementPressure / 35 + 1 + seedBias));
   const finalScore = Math.max(0, Math.floor(actionPressure * 95 + movementPressure * 22 + finalWave * 420));
-  const submittedWave = clampInt(submitted.wave, 1, 10000, finalWave);
-  const submittedScore = clampInt(submitted.score, 0, 10000000, finalScore);
-  const waveDrift = Math.abs(submittedWave - finalWave) / Math.max(4, submittedWave);
-  const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - finalScore) / Math.max(2500, submittedScore) : 0;
-  const driftPct = valid ? Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100 : 100;
-
+  const pressureScore = actionPressure * 2 + movementPressure;
+  const pressureClass = pressureScore >= 22 ? "high" : pressureScore >= 10 ? "medium" : pressureScore > 0 ? "low" : "none";
   return {
-    ok: valid,
-    method: "heuristic_pressure_estimate",
-    confidence: valid ? "advisory" : "invalid",
-    gate: "pressure-estimate-v1",
+    valid,
     seed: clampInt(seed, 0, 999999999, 0),
+    durationSec: Math.round(durationSec * 10) / 10,
+    actionPressure,
+    movementPressure,
+    pressureScore,
+    pressureClass,
     finalWave,
     finalScore,
-    driftPct,
     framesSimulated: lastFrame,
     commandCount: events.length,
     actions: summary.actions,
-    reason: valid ? null : "invalid-trace",
+  };
+}
+
+export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = {}) {
+  const pressureProfile = buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames, submitted);
+  const submittedWave = clampInt(submitted.wave, 1, 10000, pressureProfile.finalWave);
+  const submittedScore = clampInt(submitted.score, 0, 10000000, pressureProfile.finalScore);
+  const waveDrift = Math.abs(submittedWave - pressureProfile.finalWave) / Math.max(4, submittedWave);
+  const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - pressureProfile.finalScore) / Math.max(2500, submittedScore) : 0;
+  const driftPct = pressureProfile.valid ? Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100 : 100;
+
+  return {
+    ok: pressureProfile.valid,
+    method: "heuristic_pressure_estimate",
+    confidence: pressureProfile.valid ? "advisory" : "invalid",
+    gate: "pressure-estimate-v1",
+    seed: pressureProfile.seed,
+    finalWave: pressureProfile.finalWave,
+    finalScore: pressureProfile.finalScore,
+    driftPct,
+    framesSimulated: pressureProfile.framesSimulated,
+    commandCount: pressureProfile.commandCount,
+    actions: pressureProfile.actions,
+    pressureProfile,
+    reason: pressureProfile.valid ? null : "invalid-trace",
   };
 }

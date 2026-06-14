@@ -500,6 +500,15 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Surfaced loaded leaderboard ghosts in-run: `App.jsx` passes `gs.topGhosts` to `HUD`, and HUD renders a compact Ghost Pack target strip.
 - Validation: targeted runSubmission/storage tests 24/24; `node --check scripts/replay-trust-smoke.mjs` passing; `npm run lint` clean; `npm run build` passing; full `npm test` 350/350. Live replay trust smoke was attempted but sandbox fetch failed and network escalation was not approved.
 
+## 2026-06-14 (Session 89)
+
+- Ran `/start` with Codex session lock, game profile overlay, context-meter `CONTINUE`, fresh startup brief, credential/blocker preflight, and skill trace markers.
+- Created `docs/AUDIT_2026-06-14.md` / `.json` after verifying that Run DNA and rich-trace badge surfaces already existed and should not be duplicated.
+- Implemented replay proof receipt: `buildReplayProofReceipt()` scores trace evidence, `buildSessionSubmission()` emits `traceReceipt`, and DeathScreen renders a REPLAY PROOF card for all trace evidence levels.
+- Implemented replay pressure profile parity: `buildReplayPressureProfile()` extracts advisory pressure math and `runResim()` includes `pressureProfile` without overclaiming deterministic resimulation.
+- Implemented trace fixture harness: `replayTraceFixtures.js` exposes rich/basic/weak/malformed fixture traces and focused tests now consume them.
+- Validation: focused replay/submission tests 21/21; full `npm test` 448/448; `npm run lint` 0 errors / 8 existing warnings; `npm run build` passing.
+
 # 2026-05-21 (Session 71)
 
 - Ran `/start` protocol with Codex session lock, mode/secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.

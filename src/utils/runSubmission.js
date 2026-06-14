@@ -1,4 +1,4 @@
-import { analyzeReplayCommandTrace, isValidReplayCommandTrace } from "./replayCommandTrace.js";
+import { analyzeReplayCommandTrace, buildReplayProofReceipt, isValidReplayCommandTrace } from "./replayCommandTrace.js";
 
 function cleanMode(mode) {
   return mode || "standard";
@@ -132,6 +132,7 @@ export function buildSessionSubmission({
       interactionCount: traceAnalysis.interactionCount,
       weaknessReasons: traceAnalysis.weaknessReasons.slice(0, 6),
     };
+    entry.traceReceipt = buildReplayProofReceipt(entry.traceEvidence);
   }
   return entry;
 }

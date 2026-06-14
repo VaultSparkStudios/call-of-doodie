@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 89 (2026-06-14)
+
+Completed the requested `/start -> /audit -> /implement -> /closeout` loop from current repo evidence. Created and executed `docs/AUDIT_2026-06-14.md` / `.json` for a three-item replay-trust sprint after rejecting already-shipped duplicate ideas (Run DNA v2 and rich-trace badge) during premise verification.
+
+**Shipped:** replay proof is now player-facing and structured. `src/utils/replayCommandTrace.js` exports `buildReplayProofReceipt()` with score/status/color/proof lines/nextAction; `src/utils/runSubmission.js` attaches `traceReceipt` to valid trace-backed submissions; `src/components/DeathScreen.jsx` renders a standalone REPLAY PROOF card for all trace evidence levels; `src/utils/replayResim.js` exports `buildReplayPressureProfile()` and `runResim()` includes the profile receipt; `src/utils/replayTraceFixtures.js` provides rich/basic/weak/malformed fixtures.
+
+**Validation:** focused `npx vitest run src/utils/replayCommandTrace.test.js src/utils/replayResim.test.js src/utils/runSubmission.test.js` passed 21/21; full `npm test` passed 448/448; `npm run lint` reported 0 errors / 8 existing warnings; `npm run build` passed. Direct medium-gate import was attempted twice and failed with the local Windows sandbox decrypt error, not a gate failure.
+
+**Next session:** True physics-parity replay resim remains the larger trust milestone. The next best in-repo slices are edge parity fixtures for `validate-replay`, a Run History trend for proof receipt quality, or continued App.jsx extraction around the replay/death submission path.
+
 ## Where We Left Off - Session 87 continuation 3 (2026-06-13)
 
 Continued the active `/start -> /audit -> /implement -> /closeout` goal after verifying the latest same-day audit queue was already fully shipped. Created and executed `docs/AUDIT_2026-06-13_3.md` / `.json` for one verified player-facing readability gap.

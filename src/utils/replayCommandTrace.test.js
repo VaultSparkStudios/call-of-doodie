@@ -9,7 +9,9 @@ import {
   recordReplayCommandEvent,
   summarizeReplayCommandTrace,
   analyzeReplayCommandTrace,
+  buildReplayProofReceipt,
 } from "./replayCommandTrace.js";
+import { makeRichTrace, makeWeakTrace, richTraceEvents } from "./replayTraceFixtures.js";
 
 describe("replayCommandTrace", () => {
   it("normalizes commands into ordered bounded frame buckets", () => {
@@ -89,15 +91,7 @@ describe("replayCommandTrace", () => {
   });
 
   it("classifies rich replay evidence when movement, aim, and interactions span time", () => {
-    const trace = encodeReplayCommandTrace([
-      { frame: 0, action: "move", value: "n" },
-      { frame: 18, action: "aim", value: "ne" },
-      { frame: 24, action: "shoot", value: "w0" },
-      { frame: 54, action: "move", value: "e" },
-      { frame: 72, action: "dash", value: "e" },
-      { frame: 90, action: "aim", value: "se" },
-      { frame: 96, action: "shoot", value: "w0" },
-    ]);
+    const trace = makeRichTrace();
 
     expect(analyzeReplayCommandTrace(trace)).toMatchObject({
       valid: true,
@@ -110,7 +104,7 @@ describe("replayCommandTrace", () => {
   });
 
   it("keeps syntactically valid but low-signal traces below rich evidence", () => {
-    const trace = encodeReplayCommandTrace([{ frame: 12, action: "shoot", value: "w0" }]);
+    const trace = makeWeakTrace();
     const analysis = analyzeReplayCommandTrace(trace);
 
     expect(analysis.valid).toBe(true);
@@ -120,5 +114,28 @@ describe("replayCommandTrace", () => {
       "low-movement-evidence",
       "missing-aim-evidence",
     ]));
+  });
+
+  it("builds a player-facing proof receipt from rich trace evidence", () => {
+    const receipt = buildReplayProofReceipt(analyzeReplayCommandTrace(makeRichTrace()));
+
+    expect(receipt).toMatchObject({
+      status: "verified",
+      label: "Replay Proof Ready",
+      level: "rich",
+    });
+    expect(receipt.score).toBeGreaterThanOrEqual(88);
+    expect(receipt.proofLines[0]).toContain("trace events");
+  });
+
+  it("points weak proof receipts at the missing trace signal", () => {
+    const receipt = buildReplayProofReceipt(analyzeReplayCommandTrace(makeWeakTrace()));
+
+    expect(receipt.status).toBe("needs-proof");
+    expect(receipt.nextAction).toMatch(/6 trace events|Move|Aim|Fire/i);
+  });
+
+  it("exposes reusable rich trace fixture events", () => {
+    expect(richTraceEvents()).toHaveLength(7);
   });
 });

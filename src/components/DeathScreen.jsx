@@ -9,6 +9,7 @@ import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } f
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
+import { buildReplayProofReceipt } from "../utils/replayCommandTrace.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
@@ -385,6 +386,7 @@ export default function DeathScreen({
     runSeed,
   });
   const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived });
+  const replayProofReceipt = traceEvidence ? buildReplayProofReceipt(traceEvidence) : null;
   const _topWpn = (() => {
     const wk = weaponKills || [];
     const total = wk.reduce((s, v) => s + (v || 0), 0);
@@ -861,6 +863,22 @@ export default function DeathScreen({
                 {c.emoji} <strong>{c.name}</strong> — {c.desc}
               </div>
             ))}
+          </div>
+        )}
+
+        {replayProofReceipt && (
+          <div style={{ ...card, marginBottom: 12, border: `1px solid ${replayProofReceipt.color}44`, background: `${replayProofReceipt.color}0D` }}>
+            <div style={{ fontSize: 9, color: replayProofReceipt.color, letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── REPLAY PROOF ──</div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 6 }}>
+              <div style={{ fontSize: 13, color: "#EEE", fontWeight: 900, letterSpacing: 1.5 }}>{replayProofReceipt.label}</div>
+              <div style={{ fontSize: 16, color: replayProofReceipt.color, fontWeight: 900, fontFamily: "'Courier New',monospace" }}>{replayProofReceipt.score}%</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3, textAlign: "left" }}>
+              {replayProofReceipt.proofLines.map((line, i) => (
+                <div key={i} style={{ fontSize: 10, color: "#AAA", lineHeight: 1.35 }}>{line}</div>
+              ))}
+              <div style={{ fontSize: 10, color: "#DDD", lineHeight: 1.35, marginTop: 3 }}>{replayProofReceipt.nextAction}</div>
+            </div>
           </div>
         )}
 

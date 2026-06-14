@@ -189,3 +189,72 @@ export function analyzeReplayCommandTrace(trace) {
     weaknessReasons,
   };
 }
+
+function safeNum(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+}
+
+function normalizeEvidence(traceEvidence = null) {
+  const level = String(traceEvidence?.level || traceEvidence?.evidenceLevel || "none");
+  return {
+    level,
+    count: safeNum(traceEvidence?.count),
+    durationFrames: safeNum(traceEvidence?.durationFrames),
+    movementCount: safeNum(traceEvidence?.movementCount),
+    aimCount: safeNum(traceEvidence?.aimCount),
+    shootCount: safeNum(traceEvidence?.shootCount),
+    interactionCount: safeNum(traceEvidence?.interactionCount),
+    weaknessReasons: Array.isArray(traceEvidence?.weaknessReasons) ? traceEvidence.weaknessReasons.map(String) : [],
+  };
+}
+
+export function buildReplayProofReceipt(traceEvidence = null) {
+  const evidence = normalizeEvidence(traceEvidence);
+  let score = 0;
+  score += Math.min(25, evidence.count * 4);
+  score += Math.min(20, Math.floor(evidence.durationFrames / 3));
+  score += Math.min(20, evidence.movementCount * 8);
+  score += Math.min(15, evidence.aimCount * 8);
+  score += Math.min(20, evidence.interactionCount * 8);
+  score -= evidence.weaknessReasons.length * 8;
+  if (evidence.level === "rich") score = Math.max(score, 88);
+  else if (evidence.level === "basic") score = Math.max(score, 58);
+  else if (evidence.level === "weak") score = Math.max(score, 24);
+  score = clamp(score, 0, 100);
+
+  const status = score >= 85 ? "verified" : score >= 55 ? "building" : score > 0 ? "needs-proof" : "missing";
+  const label = status === "verified"
+    ? "Replay Proof Ready"
+    : status === "building"
+      ? "Replay Proof Building"
+      : status === "needs-proof"
+        ? "Replay Proof Needs Signal"
+        : "Replay Proof Missing";
+  const color = status === "verified" ? "#00FF88" : status === "building" ? "#FFD700" : status === "needs-proof" ? "#FF9A3D" : "#888";
+  const proofLines = [
+    `${evidence.count} trace events across ${evidence.durationFrames} frames`,
+    `${evidence.movementCount} movement · ${evidence.aimCount} aim · ${evidence.interactionCount} interaction`,
+  ];
+  const nextAction = (() => {
+    if (status === "verified") return "Keep trace capture active; this run carries strong movement, aim, and action evidence.";
+    if (evidence.weaknessReasons.includes("too-few-events") || evidence.weaknessReasons.includes("no-events")) return "Bank at least 6 trace events before score submission.";
+    if (evidence.weaknessReasons.includes("short-duration")) return "Keep the run active for at least 60 traced frames.";
+    if (evidence.weaknessReasons.includes("low-movement-evidence")) return "Move in two distinct windows so the proof shows path intent.";
+    if (evidence.weaknessReasons.includes("missing-aim-evidence")) return "Aim before firing so the proof shows target intent.";
+    if (evidence.weaknessReasons.includes("low-interaction-evidence")) return "Fire, dash, reload, route, shop, or use a grenade at least twice.";
+    if (evidence.weaknessReasons.includes("invalid-trace")) return "Submit a valid trace body before replay trust can advance.";
+    return "Add movement, aim, and interaction variety to upgrade the proof receipt.";
+  })();
+
+  return {
+    status,
+    label,
+    score,
+    color,
+    level: evidence.level,
+    proofLines,
+    nextAction,
+    weaknessReasons: evidence.weaknessReasons.slice(0, 6),
+  };
+}

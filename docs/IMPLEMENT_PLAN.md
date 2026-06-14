@@ -32,3 +32,32 @@ Source: `docs/AUDIT_2026-06-13_3.json`
 ## Verification
 
 - `npx vitest run src/systems/bossPhases.test.js` — passed 4/4.
+
+---
+
+# Implement Plan — AUDIT_2026-06-13_4 (Session 88)
+
+Source: `docs/AUDIT_2026-06-13_4.json` · Items: 8 · Combined Priority: 319.4
+
+Wave 1: wave-respite-breath [0.5h] → flow-state-time-dilation [1h] → boss-grudge-dialogue [1h]
+Wave 2: enemy-combat-taunts [2h] → enemy-chain-fear-enrage-spawn [1h]
+Wave 3: weapon-legend-milestones [2h] → run-dna-fingerprint [2h] → run-narrative-arc [3h]
+
+---
+
+# Implement Plan — AUDIT_2026-06-14 (Session 89)
+
+Source: `docs/AUDIT_2026-06-14.json` · Items: 3 · Combined Priority: 97.8
+
+## Wave Plan
+
+1. `trace-fixture-harness` — L2 — add reusable rich/basic/weak/malformed replay trace fixtures and update focused trace tests.
+2. `pressure-profile-parity` — L2 — extract advisory replay pressure math into `buildReplayPressureProfile()` and include its receipt in `runResim()`.
+3. `replay-proof-receipt` — L2 — convert trace evidence into a player-facing proof receipt, attach it to submissions, and render it on DeathScreen.
+
+## Verification
+
+- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/replayResim.test.js src/utils/runSubmission.test.js` — passed 21/21.
+- `npm test` — passed 448/448.
+- `npm run lint` — 0 errors; 8 existing warnings remain.
+- `npm run build` — passed.

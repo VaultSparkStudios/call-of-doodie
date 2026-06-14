@@ -82,6 +82,11 @@ describe("runSubmission", () => {
       movementCount: 2,
       shootCount: 2,
     });
+    expect(entry.traceReceipt).toMatchObject({
+      status: "verified",
+      label: "Replay Proof Ready",
+      level: "rich",
+    });
   });
 
   test("does not add replay trace fields for an empty trace", () => {

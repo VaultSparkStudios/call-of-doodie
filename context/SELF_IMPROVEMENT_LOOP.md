@@ -1117,3 +1117,16 @@ SIL +1: Converted boss phase-two escalation from a spectacle-only banner into ac
 **Top win:** The player now gets a boss-specific survival instruction when speed/projectile pressure secretly increases.
 **Top gap:** The broader boss update loop remains embedded in `App.jsx`; extracting it should be a dedicated, higher-risk refactor rather than a continuation patch.
 **Intent outcome:** Achieved for `/start`, refreshed `/audit`, `/implement`, validation, and closeout write-back.
+
+## 2026-06-14 — Session 89 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Turned replay trace evidence into a visible, structured trust receipt and extracted the advisory pressure profile into a pure tested primitive. Validation: focused replay/submission tests 21/21, full suite 448/448, lint 0 errors / 8 existing warnings, build passing.
+
+**Top win:** Players now see why a run is replay-proof or what signal is missing, instead of only seeing a rich-run badge when ghost replay conditions happen to render.
+**Top gap:** The Edge `validate-replay` pressure math still has a parallel TypeScript implementation; parity fixtures are the next honest step before any deterministic-resim claim.
+**Intent outcome:** Achieved for `/start`, `/audit`, `/implement`, validation, and closeout write-back.
+
+**Brainstorm**
+1. Edge parity fixture pack — export browser-side pressure fixtures and verify the Deno edge function returns matching advisory fields. High probability.
+2. Run History proof trend — show last-10 proof receipt quality so players can improve trust posture across sessions. High probability.
+3. Replay/death submission extraction — move the remaining DeathScreen submit/trust composition into a pure helper to keep UI thinner. Medium probability.

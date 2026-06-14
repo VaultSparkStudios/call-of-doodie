@@ -34,7 +34,7 @@
     "validate-replay Phase 2B now has browser-side command trace capture, edge contract/body validation, member-session trace body storage, movement/aim evidence quality, movement extraction, trace byte-budgeting, visible traceEvidence receipts, and trace-driven resim drift reporting/rejection; full physics-parity deterministic resimulation remains future work.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization."
   ],
-  "lastUpdated": "2026-06-13",
+  "lastUpdated": "2026-06-14",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
@@ -48,7 +48,7 @@
   "silVelocity": 8,
   "silDebt": "decreasing",
   "silLastSession": "2026-06-12",
-  "currentSession": 86,
+  "currentSession": 88,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 429,
@@ -77,7 +77,7 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-06-13T23:23:08.583Z",
+  "planModeCheckedAt": "2026-06-14T01:52:00.635Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral"
 }

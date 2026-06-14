@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-14",
+    "session": 89,
+    "project": "call-of-doodie",
+    "type": "game",
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "ai": 1.5,
+      "feature-depth": 1.5,
+      "security": 1,
+      "speed": 1,
+      "feedback": 1,
+      "token-cost": 1,
+      "new-feature": 1
+    },
+    "totalItems": 3,
+    "combinedPriority": 97.8,
+    "top3": [
+      "replay-proof-receipt",
+      "pressure-profile-parity",
+      "trace-fixture-harness"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "slug": "replay-proof-receipt",
+      "title": "Replay Proof Receipt on Post-Run Trust Surface",
+      "axis": "security / user feedback loop / ui / ux / user-experience",
+      "tier": "🔥",
+      "impact": 9,
+      "effortHours": 2,
+      "innovation": 9,
+      "priority": 40.5,
+      "status": "shipped",
+      "why": "The game already captures replay trace evidence and stores level/count/weakness reasons, but the DeathScreen only shows a rich-run badge instead of a compact receipt that tells the player what made the run trustworthy or what to improve next. A proof receipt turns anti-cheat plumbing into visible player trust: movement, aim, interaction, duration, and event-count coverage become a readable score instead of hidden metadata. This directly improves leaderboard credibility without network cost or deterministic-resim overclaims.",
+      "recipe": "Add `buildReplayProofReceipt(traceEvidence)` in `src/utils/replayCommandTrace.js`, returning label, score, status, color, proofLines, and nextAction. Wire `buildSessionSubmission()` to include `traceReceipt` in submitted entries, then render a REPLAY PROOF card in `DeathScreen.jsx` for any trace evidence level, not only rich traces.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Return a label and nextAction from traceEvidence level only; render a one-line card on DeathScreen."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full receipt: score derived from count, duration, movement, aim, interaction, and weakness reasons; traceReceipt included in session submission; DeathScreen shows proof lines and nextAction; unit tests for rich/basic/weak cases."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "L2 + share-card proof stamp and Run History aggregation so players can see proof-quality trend across the last 10 runs."
+        }
+      }
+    },
+    {
+      "id": "2",
+      "slug": "pressure-profile-parity",
+      "title": "Replay Pressure Profile as a Pure Shared Trust Primitive",
+      "axis": "speed / organization / efficiency / security",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 1.5,
+      "innovation": 7,
+      "priority": 31.4,
+      "status": "shipped",
+      "why": "`runResim()` already computes action pressure, movement pressure, duration, finalWave, and finalScore internally, while the edge function has a parallel TypeScript version. Before real deterministic resim can exist, the browser side needs a named pure pressure-profile primitive with a stable receipt shape and tests. This reduces drift and creates a concrete contract for the future edge parity port without pretending the current method is deterministic.",
+      "recipe": "Extract the pressure math in `src/utils/replayResim.js` into exported `buildReplayPressureProfile(seed, trace, submitted)` with `durationSec`, `actionPressure`, `movementPressure`, `pressureClass`, `finalWave`, and `finalScore`. Make `runResim()` consume it and include `pressureProfile` in its advisory result.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Extract the existing action/movement pressure math into a local helper without exporting it."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Export `buildReplayPressureProfile()`, include pressureClass bands, consume it from `runResim()`, and test the stable receipt shape."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "L2 + add a parity fixture JSON consumed by both browser tests and a Deno-compatible validation fixture script."
+        }
+      }
+    },
+    {
+      "id": "3",
+      "slug": "trace-fixture-harness",
+      "title": "Replay Trace Fixture Harness for Trust Regression Coverage",
+      "axis": "feature depth & refinement / token / api consumption reduction",
+      "tier": "⚡",
+      "impact": 7,
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 25.9,
+      "status": "shipped",
+      "why": "The repo has many trace tests, but each test hand-builds traces inline, making future trust changes easy to update inconsistently. A small fixture harness gives audit/implement sessions a shared vocabulary for rich, basic, weak, and malformed traces, which reduces test churn and keeps trust claims precise. It also cuts future agent token usage because new trust tests can reference named fixtures instead of restating event arrays.",
+      "recipe": "Create `src/utils/replayTraceFixtures.js` with `makeRichTrace()`, `makeBasicTrace()`, `makeWeakTrace()`, and `makeMalformedTrace()`. Update replay trace/resim tests to use the fixtures where they currently inline the same shape.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add the fixture module only and use it in one new proof-receipt test."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Fixture module + update replayCommandTrace and replayResim tests to consume named fixtures for rich/weak/malformed cases."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "L2 + export a machine-readable fixture table for future edge validation parity tests."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "run-dna-fingerprint-v2",
+      "reason": "Rejected on verification: DeathScreen already renders a RUN DNA weapon distribution bar from Session 88."
+    },
+    {
+      "slug": "rich-trace-badge",
+      "reason": "Rejected on verification: DeathScreen already renders a VERIFIED RUN chip for rich trace evidence; the new receipt must cover all evidence levels instead."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "trace-fixture-harness",
+      "status": "shipped",
+      "session": 89,
+      "notes": "Added reusable replay trace fixtures for rich/basic/weak/malformed cases and updated focused trust tests to consume the fixtures."
+    },
+    {
+      "slug": "pressure-profile-parity",
+      "status": "shipped",
+      "session": 89,
+      "notes": "Extracted `buildReplayPressureProfile()` from advisory resim math, added pressureClass/pressureScore receipt fields, and included `pressureProfile` in `runResim()` results."
+    },
+    {
+      "slug": "replay-proof-receipt",
+      "status": "shipped",
+      "session": 89,
+      "notes": "Added `buildReplayProofReceipt()`, attached `traceReceipt` to session submissions, and rendered a standalone DeathScreen REPLAY PROOF card for all trace evidence levels."
+    }
+  ]
+}

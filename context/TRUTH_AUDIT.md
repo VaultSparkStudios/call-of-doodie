@@ -484,3 +484,12 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `triggerBossPhaseTwoTransition()` remains the only runtime phase-two transition path; it now emits both the PHASE 2 banner and the concrete counterplay warning.
 - `src/systems/bossPhases.test.js` covers the known-boss warning map, unknown fallback, and the transition text emission.
 - No source-of-truth contradictions introduced. Validation: focused bossPhases 4/4, full suite 444/444, lint 0 errors / 1 pre-existing warning, audit JSON parse clean, build clean.
+
+## 2026-06-14 - Session 89
+
+- `docs/AUDIT_2026-06-14.md` / `.json` are the source of truth for the replay proof receipt and pressure-profile trust sprint; all three items are marked shipped with execution evidence.
+- `src/utils/replayCommandTrace.js` owns replay trace normalization, analysis, and the new player-facing `buildReplayProofReceipt()` conversion.
+- `src/utils/runSubmission.js` is the source of truth for attaching trace metadata to leaderboard submissions; valid trace-backed submissions now include `traceReceipt`.
+- `src/components/DeathScreen.jsx` owns the player-facing REPLAY PROOF card, while the receipt copy/scoring remains in the utility layer.
+- `src/utils/replayResim.js` remains an advisory pressure-estimate utility, not deterministic resimulation; `buildReplayPressureProfile()` is the extracted pure profile primitive.
+- No source-of-truth contradictions introduced. Validation: focused replay/submission 21/21, full suite 448/448, lint 0 errors / 8 existing warnings, build clean.
