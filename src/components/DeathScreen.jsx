@@ -9,7 +9,7 @@ import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } f
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
-import { buildReplayProofReceipt } from "../utils/replayCommandTrace.js";
+import { buildReplayProofReceipt, buildReplayProofTrend } from "../utils/replayCommandTrace.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
@@ -316,6 +316,17 @@ export default function DeathScreen({
     c.font = "italic 17px 'Courier New', monospace";
     c.fillStyle = "#FF8888"; c.fillText('"' + deathMessage + '"', W / 2, 462);
 
+    if (replayProofReceipt) {
+      c.fillStyle = "rgba(0,0,0,0.72)";
+      c.beginPath(); c.roundRect(314, 478, 572, 38, 6); c.fill();
+      c.strokeStyle = replayProofReceipt.color + "AA"; c.lineWidth = 1.5;
+      c.beginPath(); c.roundRect(314, 478, 572, 38, 6); c.stroke();
+      c.textAlign = "center";
+      c.font = "bold 13px 'Courier New', monospace";
+      c.fillStyle = replayProofReceipt.color;
+      c.fillText(`REPLAY PROOF ${replayProofReceipt.score}% · ${proofTrend.detail.toUpperCase()}`, W / 2, 502);
+    }
+
     // ── Bottom bar: CTA ───────────────────────────────────────────────────────
     c.fillStyle = "rgba(0,0,0,0.8)"; c.fillRect(0, H - 72, W, 72);
     const ctaGrad = c.createLinearGradient(0, 0, W, 0);
@@ -396,6 +407,10 @@ export default function DeathScreen({
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
   const runHistory = loadRunHistory();
+  const proofTrend = buildReplayProofTrend([
+    ...(replayProofReceipt ? [{ traceReceipt: replayProofReceipt }] : []),
+    ...runHistory,
+  ]);
   const rivalryHistory = loadRivalryHistory();
   const studioEvents = loadStudioGameEvents();
   const nextContract = buildWeeklyContract(runHistory, rivalryHistory, studioEvents);
@@ -878,6 +893,11 @@ export default function DeathScreen({
                 <div key={i} style={{ fontSize: 10, color: "#AAA", lineHeight: 1.35 }}>{line}</div>
               ))}
               <div style={{ fontSize: 10, color: "#DDD", lineHeight: 1.35, marginTop: 3 }}>{replayProofReceipt.nextAction}</div>
+              {proofTrend.sampleSize > 1 && (
+                <div style={{ fontSize: 9, color: proofTrend.color, lineHeight: 1.35, marginTop: 5, letterSpacing: 1 }}>
+                  {proofTrend.label.toUpperCase()} · {proofTrend.detail}
+                </div>
+              )}
             </div>
           </div>
         )}

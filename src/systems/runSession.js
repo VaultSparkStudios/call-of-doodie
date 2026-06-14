@@ -47,8 +47,10 @@ export function createRunHistoryEntry({
   modifier = null,
   killedByType = null,
   killedByName = null,
+  traceEvidence = null,
+  traceReceipt = null,
 } = {}) {
-  return {
+  const entry = {
     score,
     kills,
     wave,
@@ -61,6 +63,23 @@ export function createRunHistoryEntry({
     killedByName,
     ts: Date.now(),
   };
+  if (traceEvidence) {
+    entry.traceEvidence = {
+      level: traceEvidence.level || traceEvidence.evidenceLevel || "none",
+      count: Number(traceEvidence.count) || 0,
+      durationFrames: Number(traceEvidence.durationFrames) || 0,
+      weaknessReasons: Array.isArray(traceEvidence.weaknessReasons) ? traceEvidence.weaknessReasons.slice(0, 6) : [],
+    };
+  }
+  if (traceReceipt) {
+    entry.traceReceipt = {
+      status: traceReceipt.status,
+      label: traceReceipt.label,
+      score: Number(traceReceipt.score) || 0,
+      level: traceReceipt.level || traceEvidence?.level || traceEvidence?.evidenceLevel || "none",
+    };
+  }
+  return entry;
 }
 
 export function createDeathStudioEvents({

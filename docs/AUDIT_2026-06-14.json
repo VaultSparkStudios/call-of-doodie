@@ -138,6 +138,24 @@
       "status": "shipped",
       "session": 89,
       "notes": "Added `buildReplayProofReceipt()`, attached `traceReceipt` to session submissions, and rendered a standalone DeathScreen REPLAY PROOF card for all trace evidence levels."
+    },
+    {
+      "slug": "trace-fixture-harness",
+      "status": "shipped-l3",
+      "session": 89,
+      "notes": "Climbed L3 by exporting a machine-readable replay trace fixture table and adding a Deno-compatible fixture validation script for future browser/edge parity checks."
+    },
+    {
+      "slug": "pressure-profile-parity",
+      "status": "shipped-l3",
+      "session": 89,
+      "notes": "Climbed L3 by validating the shared replay fixture table against both trace evidence classification and the pressure-profile receipt shape."
+    },
+    {
+      "slug": "replay-proof-receipt",
+      "status": "shipped-l3",
+      "session": 89,
+      "notes": "Climbed L3 by storing compact proof receipts in local run history, aggregating the last 10 proof scores, and stamping the share card plus DeathScreen receipt with the trend."
     }
   ]
 }

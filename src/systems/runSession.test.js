@@ -35,12 +35,16 @@ describe("runSession", () => {
       flags: { cursed: true },
       runSeed: 2468,
       modifier: "chaos",
+      traceEvidence: { level: "rich", count: 7, durationFrames: 96, weaknessReasons: [] },
+      traceReceipt: { status: "verified", label: "Replay Proof Ready", score: 92, level: "rich" },
     });
     expect(historyEntry).toMatchObject({
       mode: "cursed",
       runSeed: 2468,
       modifier: "chaos",
       time: 301,
+      traceReceipt: { status: "verified", score: 92 },
+      traceEvidence: { level: "rich", count: 7 },
     });
 
     const events = createDeathStudioEvents({

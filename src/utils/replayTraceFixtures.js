@@ -42,3 +42,12 @@ export function makeMalformedTrace() {
   const trace = makeWeakTrace();
   return { ...trace, body: "0.fly.nope", digest: "BAD" };
 }
+
+export function replayTraceFixtureTable() {
+  return [
+    { id: "rich", trace: makeRichTrace(), expectedEvidenceLevel: "rich", expectedValid: true },
+    { id: "basic", trace: makeBasicTrace(), expectedEvidenceLevel: "basic", expectedValid: true },
+    { id: "weak", trace: makeWeakTrace(), expectedEvidenceLevel: "weak", expectedValid: true },
+    { id: "malformed", trace: makeMalformedTrace(), expectedEvidenceLevel: "none", expectedValid: false },
+  ];
+}

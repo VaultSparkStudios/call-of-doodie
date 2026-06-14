@@ -10,6 +10,7 @@ import {
   summarizeReplayCommandTrace,
   analyzeReplayCommandTrace,
   buildReplayProofReceipt,
+  buildReplayProofTrend,
 } from "./replayCommandTrace.js";
 import { makeRichTrace, makeWeakTrace, richTraceEvents } from "./replayTraceFixtures.js";
 
@@ -137,5 +138,20 @@ describe("replayCommandTrace", () => {
 
   it("exposes reusable rich trace fixture events", () => {
     expect(richTraceEvents()).toHaveLength(7);
+  });
+
+  it("summarizes proof-quality trend across recent runs", () => {
+    const richReceipt = buildReplayProofReceipt(analyzeReplayCommandTrace(makeRichTrace()));
+    const weakReceipt = buildReplayProofReceipt(analyzeReplayCommandTrace(makeWeakTrace()));
+
+    const trend = buildReplayProofTrend([
+      { traceReceipt: richReceipt },
+      { traceReceipt: weakReceipt },
+    ]);
+
+    expect(trend.sampleSize).toBe(2);
+    expect(trend.verifiedCount).toBe(1);
+    expect(trend.averageScore).toBeGreaterThan(40);
+    expect(trend.detail).toContain("recent runs");
   });
 });

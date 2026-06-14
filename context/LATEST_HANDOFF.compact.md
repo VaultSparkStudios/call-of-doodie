@@ -1,39 +1,62 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: a98171de767f -->
-<!-- generated-at: 2026-06-14T01:52:30.069Z -->
+<!-- source-hash: 1a495a68b30a -->
+<!-- generated-at: 2026-06-14T02:28:40.568Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 87c3 (2026-06-13)
+Session: 89 (2026-06-14)
 
-Shipped
-- bossPhases.js: getBossPhaseTwoWarning() with per-boss copy (Karen, Landlord, Splitter, Juggernaut, Summoner, Algorithm, Developer + fallback)
-- triggerBossPhaseTwoTransition() renders warning under PHASE 2 banner
-- Session 87c2: repo-local Studio OS helper parity (sample-codebase, audit-sidecar, render-audit-md, session-floor, cache-genius-list, generate-genius-list, record-skill-cost); nemesis counter-weapon recs moved to waveDirector.js
-- Session 87: 8-item Combat Depth x Social Rivalry audit (threat rating, heat formations, chain enrage, trace evidence VERIFIED chip, BEST SHOT scrub, NEMESIS DOSSIER, RIVALRY LADDER)
+Shipped (S89):
+- replayCommandTrace.js: buildReplayProofReceipt() (score/status/color/proof lines/nextAction)
+- runSubmission.js: traceReceipt attached to valid trace-backed submissions
+- DeathScreen.jsx: standalone REPLAY PROOF card for all trace evidence levels
+- replayResim.js: buildReplayPressureProfile() + runResim() returns profile receipt
+- replayTraceFixtures.js: rich/basic/weak/malformed fixtures
 
-Validation
-- vitest bossPhases 4/4; npm test 444/444 across 49 files
-- lint: 0 errors, 1 pre-existing leaderboard hook-dep warning
-- build passing; protocol:drift status ok (19 helpers)
+Validation:
+- Focused vitest: 21/21
+- npm test: 448/448 across 49 files
+- npm run lint: 0 errors / 8 pre-existing warnings
+- npm run build: passing
+- Medium-gate import: failed twice on Windows sandbox decrypt (not gate failure)
 
-Now bucket
-1. Score-milestone social share hook (tweet on PB broken)
-2. Rivalry ladder "rival beaten" entry animation on DeathScreen
-3. HomeV2 v1 retirement after Lighthouse/funnel evidence (LCP >=200ms win)
+Current Intent:
+- Continue durable /start → /audit → /implement → /closeout loop
+- Replay trust + product depth on Call of Doodie
 
-Blockers / human-gated
-- Supabase edge-function deploy (sync-studio-events, submit-score, validate-replay): needs SUPABASE_ACCESS_TOKEN; outstanding since S82 (~5 sessions)
-- Cloudflare Web Analytics beacon SRI failure: needs Cloudflare dashboard fix; since S82
-- Physical PWA/gamepad QA + Itch.io publication: human/device gated; since S75+
-- HomeV2 Lighthouse/funnel evidence: needs PostHog/Sentry GH Action secrets; since S67
+Now (top 3):
+1. True physics-parity replay resim runner (next big trust milestone; current receipt honestly labeled heuristic_pressure_estimate/advisory)
+2. Edge parity fixtures for validate-replay (rich/basic/weak/malformed)
+3. Run History trend card for proof receipt quality over time
 
-Deliberately deferred
-- Deterministic replay resim runner: current receipts honestly labeled heuristic_pressure_estimate / advisory; defer until trust sprint
+Alt Now slices:
+- Continued App.jsx extraction around replay/death submission path
+- Score-milestone share hook on personal best
+- Rivalry ladder "rival beaten" animation on DeathScreen
+- HomeV2 v1 retirement (needs Lighthouse/funnel evidence)
 
-Repo state
-- Branch: feat-standalone-domain (per S67); merge-to-main pending CI confirmation
-- Context-meter: CONTINUE
-- Codex session; plan-mode not_required
+Blockers (top 3):
+1. Windows sandbox medium-gate import decrypt error (local-only; recurring across sessions; does not block ship)
+2. SUPABASE_ACCESS_TOKEN missing → cannot deploy submit-score / validate-replay / sync-studio-events edge functions (human-blocked since S82, ~7 sessions)
+3. Cloudflare Web Analytics beacon SRI mismatch in production (Cloudflare-injected, not in repo source; human-blocked since S82)
 
-Next: open /audit for product-facing slice; pick share-hook or rivalry animation as highest-leverage launch lift.
+Human-blocked (age):
+- Supabase edge-function deploys: ~7 sessions (since S82, 2026-06-07)
+- Cloudflare Web Analytics config fix: ~7 sessions (since S82)
+- Physical PWA/gamepad QA: ~13 sessions (since S76, 2026-05-27)
+- Itch.io publication: ~13 sessions (since S76)
+- HomeV2 Lighthouse/funnel evidence gate for v1 retirement: ongoing since S76
+
+Repo State:
+- Branch: feat-standalone-domain
+- Tests: 448/448 across 49 files
+- Lint: 0 errors / 8 warnings
+- Build: passing
+- Protocol drift: ok (19 helpers covered)
+
+Trust Receipts (honest labels preserved):
+- replayResim: method=heuristic_pressure_estimate, confidence=advisory, gate=pressure-estimate-v1
+- validate-replay: mirrors pressure-estimate advisory
+- trace evidence tiers: rich/basic/weak/malformed with explicit reasons
+
+Next-session pointer: Run /start → /audit; if no fresh product gap, ship edge parity fixtures for validate-replay or begin physics-parity resim scaffolding.

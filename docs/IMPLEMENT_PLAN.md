@@ -61,3 +61,17 @@ Source: `docs/AUDIT_2026-06-14.json` · Items: 3 · Combined Priority: 97.8
 - `npm test` — passed 448/448.
 - `npm run lint` — 0 errors; 8 existing warnings remain.
 - `npm run build` — passed.
+
+## L3 Ladder Climb
+
+- `trace-fixture-harness` — L3 — exported `replayTraceFixtureTable()` for future browser/edge parity validation.
+- `pressure-profile-parity` — L3 — added `scripts/validate-replay-trace-fixtures.mjs` to validate the fixture table against trace evidence classification and pressure profile parity.
+- `replay-proof-receipt` — L3 — stores compact proof receipts in local run history, aggregates last-10 proof quality, and stamps the score share card plus DeathScreen proof receipt with the trend.
+
+## L3 Verification
+
+- `npx vitest run src/utils/replayCommandTrace.test.js src/utils/replayResim.test.js src/utils/runSubmission.test.js src/systems/runSession.test.js` — passed 28/28.
+- `node scripts/validate-replay-trace-fixtures.mjs` — passed 4 fixtures.
+- `npm test` — passed 450/450.
+- `npm run lint` — 0 errors; 8 existing warnings remain.
+- `npm run build` — passed.

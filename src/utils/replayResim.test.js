@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildReplayPressureProfile, runResim } from "./replayResim.js";
-import { makeMalformedTrace, makeRichTrace } from "./replayTraceFixtures.js";
+import { replayTraceFixtureTable, makeMalformedTrace, makeRichTrace } from "./replayTraceFixtures.js";
 
 describe("runResim", () => {
   it("summarizes a valid trace into an advisory pressure-estimate receipt", () => {
@@ -45,5 +45,15 @@ describe("runResim", () => {
     expect(profile.durationSec).toBeGreaterThan(1);
     expect(profile.actionPressure).toBeGreaterThan(0);
     expect(profile.movementPressure).toBeGreaterThan(0);
+  });
+
+  it("exports a shared replay fixture table for future edge parity", () => {
+    const fixtures = replayTraceFixtureTable();
+
+    expect(fixtures.map((fixture) => fixture.id)).toEqual(["rich", "basic", "weak", "malformed"]);
+    expect(fixtures.find((fixture) => fixture.id === "malformed")).toMatchObject({
+      expectedValid: false,
+      expectedEvidenceLevel: "none",
+    });
   });
 });

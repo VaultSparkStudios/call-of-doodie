@@ -258,3 +258,42 @@ export function buildReplayProofReceipt(traceEvidence = null) {
     weaknessReasons: evidence.weaknessReasons.slice(0, 6),
   };
 }
+
+export function buildReplayProofTrend(runs = []) {
+  const receipts = (Array.isArray(runs) ? runs : [])
+    .map((run) => run?.traceReceipt || run?.replayProofReceipt || null)
+    .filter((receipt) => receipt && Number.isFinite(Number(receipt.score)))
+    .slice(0, 10);
+  if (receipts.length === 0) {
+    return {
+      sampleSize: 0,
+      averageScore: 0,
+      verifiedCount: 0,
+      label: "No proof trend yet",
+      detail: "Submit traced runs to build a local proof-quality trend.",
+      status: "empty",
+      color: "#888",
+    };
+  }
+
+  const total = receipts.reduce((sum, receipt) => sum + Number(receipt.score), 0);
+  const averageScore = Math.round(total / receipts.length);
+  const verifiedCount = receipts.filter((receipt) => receipt.status === "verified" || Number(receipt.score) >= 85).length;
+  const status = averageScore >= 85 ? "verified-trend" : averageScore >= 55 ? "building-trend" : "thin-trend";
+  const color = status === "verified-trend" ? "#00FF88" : status === "building-trend" ? "#FFD700" : "#FF9A3D";
+  const label = status === "verified-trend"
+    ? "Proof trend strong"
+    : status === "building-trend"
+      ? "Proof trend building"
+      : "Proof trend thin";
+
+  return {
+    sampleSize: receipts.length,
+    averageScore,
+    verifiedCount,
+    label,
+    detail: `${verifiedCount}/${receipts.length} recent runs verified · ${averageScore}% average proof`,
+    status,
+    color,
+  };
+}

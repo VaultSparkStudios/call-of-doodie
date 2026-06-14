@@ -42,7 +42,7 @@ import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/an
 import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
-import { analyzeReplayCommandTrace, directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
+import { analyzeReplayCommandTrace, buildReplayProofReceipt, directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
 import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberControllerProfile } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
@@ -1610,6 +1610,10 @@ export default function CallOfDoodie() {
       speedrun: speedrunRef.current,
       gauntlet: gauntletRef.current,
     };
+    let deathTraceEvidence = null;
+    try { deathTraceEvidence = analyzeReplayCommandTrace(encodeReplayCommandTrace(commandTraceRef.current || [])); } catch { deathTraceEvidence = null; }
+    deathTraceEvidenceRef.current = deathTraceEvidence;
+    const deathTraceReceipt = deathTraceEvidence ? buildReplayProofReceipt(deathTraceEvidence) : null;
     const _killerType = gs?._deathKillerType ?? gs?._lastDamageBy ?? null;
     const _killerEnemy = _killerType != null ? (gs.enemies || []).find(e => e.type === _killerType) : null;
     saveRunToHistory(createRunHistoryEntry({
@@ -1623,6 +1627,8 @@ export default function CallOfDoodie() {
       modifier: gs.runModifier || null,
       killedByType: _killerType,
       killedByName: _killerEnemy?.name || null,
+      traceEvidence: deathTraceEvidence,
+      traceReceipt: deathTraceReceipt,
     }));
     createDeathStudioEvents({
       score: gs.score,
@@ -1636,8 +1642,6 @@ export default function CallOfDoodie() {
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
-    // Certified-run badge: capture replay trust evidence snapshot at moment of death
-    try { deathTraceEvidenceRef.current = analyzeReplayCommandTrace(encodeReplayCommandTrace(commandTraceRef.current || [])); } catch { deathTraceEvidenceRef.current = null; }
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     lastStandActiveRef.current = false; if (gs) gs.lastStandActive = false;
     return true;

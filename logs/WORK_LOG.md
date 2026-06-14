@@ -509,6 +509,15 @@ This public repo no longer carries the detailed internal work log. Internal sess
 - Implemented trace fixture harness: `replayTraceFixtures.js` exposes rich/basic/weak/malformed fixture traces and focused tests now consume them.
 - Validation: focused replay/submission tests 21/21; full `npm test` 448/448; `npm run lint` 0 errors / 8 existing warnings; `npm run build` passing.
 
+## 2026-06-14 — Session 89 L3 continuation
+
+- Continued after `session-floor` returned `CONTINUE` with the three L2 audit items already shipped.
+- Added `buildReplayProofTrend()` and wired DeathScreen to aggregate last-10 local proof receipts.
+- Moved death trace evidence capture before run-history save and stored compact proof receipts through `createRunHistoryEntry()`.
+- Stamped generated score share cards with replay proof score plus recent proof trend.
+- Exported `replayTraceFixtureTable()` and added `scripts/validate-replay-trace-fixtures.mjs` for fixture evidence / pressure-profile parity validation.
+- Validation: focused replay/session tests 28/28; fixture validator 4/4; full `npm test` 450/450; `npm run lint` 0 errors / 8 existing warnings; `npm run build` passing.
+
 # 2026-05-21 (Session 71)
 
 - Ran `/start` protocol with Codex session lock, mode/secrets/blocker preflight, startup brief validation, and context-meter verdict `CONTINUE`.
