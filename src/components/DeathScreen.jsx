@@ -598,6 +598,30 @@ export default function DeathScreen({
           </div>
         </div>
 
+        {/* RUN DNA — weapon kill-distribution fingerprint */}
+        {weaponKills && weaponKills.some(k => k > 0) && (() => {
+          const _total = weaponKills.reduce((s, k) => s + (k || 0), 0);
+          const _used = weaponKills.map((k, i) => ({ k: k || 0, i })).filter(w => w.k > 0).sort((a, b) => b.k - a.k);
+          return (
+            <div style={{ ...card, marginBottom: 12, padding: "10px 12px" }}>
+              <div style={{ fontSize: 9, color: "#555", letterSpacing: 3, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── RUN DNA ──</div>
+              <div style={{ height: 14, borderRadius: 7, overflow: "hidden", display: "flex", marginBottom: 8 }} title="Weapon kill distribution">
+                {_used.map(({ k, i }) => (
+                  <div key={i} style={{ width: `${(k / _total) * 100}%`, height: "100%", background: WEAPONS[i]?.color || "#888", opacity: 0.9 }} />
+                ))}
+              </div>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                {_used.slice(0, 4).map(({ k, i }) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: 2, background: WEAPONS[i]?.color || "#888", flexShrink: 0 }} />
+                    <span style={{ fontSize: 9, color: "#AAA" }}>{WEAPONS[i]?.emoji} {Math.round((k / _total) * 100)}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 12 }}>
           {[
             [score.toLocaleString(), "SCORE", "#FFD700"],
