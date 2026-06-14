@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank, getWaveDeathCounts } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -176,6 +176,7 @@ export default function CallOfDoodie() {
   const lastTraceMoveRef = useRef({ bucket: "neutral", frame: -999 });
   const lastTraceAimRef  = useRef({ bucket: "neutral", frame: -999 });
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
+  const waveDeathCountsRef = useRef({});  // {wave: N} — how many LB players died on each wave
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const gamepadMoveRef   = useRef({ x: 0, y: 0, active: false }); // left-stick movement, kept separate from keyboard state
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
@@ -582,6 +583,7 @@ export default function CallOfDoodie() {
         gsRef.current.proximityRivals = getProximityRivals(_careerForRivals.bestScore, leaderboard, 3);
       }
     } catch { gsRef.current.proximityRivals = []; }
+    waveDeathCountsRef.current = getWaveDeathCounts();
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -2576,6 +2578,7 @@ export default function CallOfDoodie() {
             telemetryBand: gs.waveTelemetryBand,
             formationHint: gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
             threatRating: computeWaveThreatRating({ maxEnemies: gs.maxEnemiesThisWave, eliteType: gs.waveDirector?.eliteType, event: gs.waveEvent }),
+            deathCount: waveDeathCountsRef.current[gs.currentWave] || 0,
           });
         }
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
@@ -4370,6 +4373,11 @@ export default function CallOfDoodie() {
               <div style={{ fontSize: 11, marginTop: 7, letterSpacing: 2, fontFamily: "'Courier New',monospace",
                 color: wa.threatRating >= 4 ? "#FF5533" : wa.threatRating >= 3 ? "#FFD700" : "#88FF99" }}>
                 {"💀".repeat(wa.threatRating)}{" "}THREAT {wa.threatRating}/5
+              </div>
+            )}
+            {!isBoss && wa.deathCount > 0 && (
+              <div style={{ fontSize: 10, color: "#FF7777", marginTop: 6, letterSpacing: 1, fontFamily: "'Courier New',monospace", opacity: 0.8 }}>
+                💀 {wa.deathCount} player{wa.deathCount !== 1 ? "s" : ""} died here
               </div>
             )}
           </div>

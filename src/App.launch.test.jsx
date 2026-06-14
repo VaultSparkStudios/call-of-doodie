@@ -96,6 +96,17 @@ vi.mock("./storage.js", () => ({
   recordDeathByEnemy: vi.fn(),
   loadRivalryHistory: vi.fn(() => []),
   getAdaptiveSpawnMods: vi.fn(() => ({})),
+  getProximityRivals: vi.fn(() => []),
+  getWeaponLegendRank: vi.fn(() => null),
+  getWaveDeathCounts: vi.fn(() => ({})),
+  getBossKillRecord: vi.fn(() => ({ kills: 0, deaths: 0 })),
+  saveBossKillRecord: vi.fn(),
+  isNemesis: vi.fn(() => false),
+  loadExperimentIntent: vi.fn(() => null),
+  saveExperimentIntent: vi.fn(),
+  clearExperimentIntent: vi.fn(),
+  saveRunHistory: vi.fn(),
+  loadRunHistory: vi.fn(() => []),
 }));
 
 vi.mock("./components/UsernameScreen.jsx", () => {

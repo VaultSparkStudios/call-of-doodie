@@ -1115,6 +1115,19 @@ export function clearExperimentIntent() {
   try { localStorage.removeItem(EXPERIMENT_INTENT_KEY); } catch {}
 }
 
+export function getWaveDeathCounts() {
+  try {
+    const raw = localStorage.getItem(LB_KEY);
+    const all = raw ? JSON.parse(raw) : [];
+    const counts = {};
+    for (const entry of all) {
+      const w = entry?.wave;
+      if (w != null && w > 0) counts[w] = (counts[w] || 0) + 1;
+    }
+    return counts;
+  } catch { return {}; }
+}
+
 export function unlockMetaNode(nodeId, cost) {
   const unlocked = loadMetaTree();
   if (unlocked.has(nodeId)) return { success: false, reason: "already_unlocked" };
