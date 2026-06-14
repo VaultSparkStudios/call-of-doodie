@@ -10,9 +10,10 @@ import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
-import { buildWeeklyContract } from "../utils/socialRetention.js";
+import { buildWeeklyContract, buildWeeklyContractProgressPayload } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
+import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -55,6 +56,7 @@ export default function DeathScreen({
   const [replayNonce, setReplayNonce] = useState(0);
   const [replayMode, setReplayMode] = useState("full"); // "full" | "best_shot"
   const qrCanvasRef = useRef(null);
+  const weeklyContractEventKeyRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
   const [ghostData, setGhostData] = useState(null);
@@ -416,6 +418,8 @@ export default function DeathScreen({
   const rivalryHistory = loadRivalryHistory();
   const studioEvents = loadStudioGameEvents();
   const nextContract = buildWeeklyContract(runHistory, rivalryHistory, studioEvents);
+  const nextContractId = nextContract.id;
+  const nextContractProgress = nextContract.progress;
   const runCoach = buildRunCoach({
     career: loadCareerStats(),
     meta: loadMetaProgress(),
@@ -465,6 +469,25 @@ export default function DeathScreen({
   useEffect(() => {
     const studioEvent = buildStudioGameEvent("debrief_intelligence", postRunIntel.telemetry);
     saveStudioGameEvent(studioEvent);
+    const contractProgress = buildWeeklyContractProgressPayload({
+      id: nextContractId,
+      progress: nextContractProgress,
+    }, {
+      runSeed,
+      mode,
+      score,
+      wave,
+    });
+    if (contractProgress) {
+      const progressKey = `${contractProgress.contractId}:${contractProgress.seed ?? "none"}:${contractProgress.score}:${contractProgress.wave}`;
+      if (weeklyContractEventKeyRef.current !== progressKey) {
+        weeklyContractEventKeyRef.current = progressKey;
+        saveStudioGameEvent(buildStudioGameEvent("weekly_contract_progress", {
+          surface: "death_screen",
+          ...contractProgress,
+        }));
+      }
+    }
     if (runSeed > 0) {
       const rivalryResult = recordRivalryResult({
         seed: runSeed,
@@ -488,7 +511,7 @@ export default function DeathScreen({
       studioEvent,
     });
     requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
-  }, [difficulty, eventDigest.v, mode, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
+  }, [difficulty, eventDigest.v, mode, nextContractId, nextContractProgress, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
 
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
@@ -637,25 +660,15 @@ export default function DeathScreen({
                 }
               };
               worker.onerror = () => { worker.terminate(); setShareCardBusy(false); };
-              // Compute community percentile: % of leaderboard entries with wave < player's wave
-              let _wavePercentile = null;
-              try {
-                const _lb = Array.isArray(leaderboard) ? leaderboard : [];
-                if (_lb.length >= 5) {
-                  const _below = _lb.filter(e => (e.wave || 0) < (wave || 0)).length;
-                  _wavePercentile = Math.round((_below / _lb.length) * 100);
-                }
-              } catch {}
-              worker.postMessage({
+              worker.postMessage(buildRunDnaSharePayload({
                 weaponKills: weaponKills || [],
-                weaponColors: WEAPONS.map(w => w.color),
-                weaponEmojis: WEAPONS.map(w => w.emoji),
+                weapons: WEAPONS,
+                leaderboard,
                 wave, score, kills,
-                runArc: runNarrative?.act || '',
-                buildGrade: buildGrade?.grade || '?',
-                replayProofTier: null,
-                wavePercentile: _wavePercentile,
-              });
+                runNarrative,
+                buildGrade,
+                replayProofPresenter,
+              }));
             } catch { setShareCardBusy(false); }
           };
           return (

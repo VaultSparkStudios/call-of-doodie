@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { buildBountyBoard, buildFeaturedSeeds, buildGhostBoard, buildWeeklyContract, summarizeRivalryHistory } from "./socialRetention.js";
+import { buildStudioGameEvent } from "./runIntelligence.js";
+import { buildBountyBoard, buildFeaturedSeeds, buildGhostBoard, buildWeeklyContract, buildWeeklyContractProgressPayload, summarizeRivalryHistory } from "./socialRetention.js";
 
 describe("socialRetention", () => {
   test("summarizes rivalry wins, losses, and unresolved entries", () => {
@@ -29,6 +30,32 @@ describe("socialRetention", () => {
     );
     expect(contract.id).toBe("studio_seed_contract");
     expect(contract.progress).toBe("2 seeded runs banked this week");
+  });
+
+  test("builds a weekly contract progress payload for local feedback loops", () => {
+    const contract = buildWeeklyContract(
+      [{ runSeed: 44, score: 14000, wave: 8 }],
+      [],
+      [],
+    );
+    const payload = buildWeeklyContractProgressPayload(contract, {
+      runSeed: 44,
+      mode: "gauntlet",
+      score: 18000,
+      wave: 9,
+    });
+    const event = buildStudioGameEvent("weekly_contract_progress", payload);
+
+    expect(payload).toMatchObject({
+      contractId: "studio_seed_contract",
+      progressLabel: "1 seeded run banked this week",
+      seed: 44,
+      mode: "gauntlet",
+      score: 18000,
+      wave: 9,
+    });
+    expect(event.category).toBe("social");
+    expect(event.payload).toMatchObject(payload);
   });
 
   test("creates featured seeds and ghost boards from seeded run history", () => {

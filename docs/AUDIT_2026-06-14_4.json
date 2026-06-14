@@ -1,0 +1,161 @@
+{
+  "generated": "2026-06-14",
+  "session": 92,
+  "project": "call-of-doodie",
+  "type": "game",
+  "axisWeights": {
+    "gamification": 3,
+    "ux": 2,
+    "ai": 1.5,
+    "feature-depth": 1.5,
+    "security": 1,
+    "speed": 1,
+    "token": 1,
+    "feedback": 1,
+    "new-features": 1
+  },
+  "totalItems": 3,
+  "combinedPriority": 201.2,
+  "top3": [
+    "run-dna-share-payload-truth",
+    "weekly-contract-progress-event",
+    "replay-pressure-fixture-contract"
+  ],
+  "innovationReserve": [
+    "run-dna-share-payload-truth"
+  ],
+  "items": [
+    {
+      "rank": 1,
+      "id": "run-dna-share-payload-truth",
+      "slug": "run-dna-share-payload-truth",
+      "tier": "🔥",
+      "axis": "ux",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 76.8,
+      "why": "Session 91 shipped the Run DNA share-card worker, but DeathScreen still assembles the worker payload inline and hard-codes replayProofTier to null. That makes the share card less trustworthy than the on-screen proof receipt and keeps a fragile payload contract buried in a 70k component. Extracting the payload builder gives the worker a tested contract, carries proof status into the downloadable card, and reduces DeathScreen's responsibility without changing the visible game loop.",
+      "recipe": "Create a pure src/utils/runDnaShareCard.js helper that builds the share-card payload from weaponKills, weapons, leaderboard, run narrative, build grade, and replay proof presenter data. Replace the inline DeathScreen worker.postMessage object with that helper and pass replayProofTier from the actual receipt/status instead of null. Add tests for top weapons, community wave percentile, and proof tier propagation.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Extract only computeWavePercentile() and use it in DeathScreen before posting to shareCard.worker.js."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Full helper extraction: buildRunDnaSharePayload() returns worker-safe data with weapon colors/emojis, wave percentile, run arc, build grade, and replay proof tier. Wire DeathScreen to it and add focused tests."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Add a second tested helper for score-card share text/image metadata so both score cards and Run DNA cards share one proof-aware copy contract."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Added src/utils/runDnaShareCard.js + tests, wired DeathScreen shareCard.worker payload through buildRunDnaSharePayload(), and propagated replay proof status into replayProofTier. Verified by focused utility tests, full npm test, lint, build, and game medium gate."
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "weekly-contract-progress-event",
+      "slug": "weekly-contract-progress-event",
+      "tier": "⚡",
+      "axis": "user feedback loop",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 58.8,
+      "why": "The weekly contract surface already reads prior weekly_contract_progress events, and buildStudioGameEvent already normalizes that type, but no current gameplay/debrief path writes it. The result is a feedback loop that can remember progress only if something external injects events. Emitting a compact progress event from the DeathScreen contract view closes the loop locally with zero API cost and gives Run History/ops surfaces real social-retention evidence.",
+      "recipe": "Add buildWeeklyContractProgressPayload() to socialRetention.js so a contract can produce a normalized progress payload from the current run. In DeathScreen's debrief effect, save a weekly_contract_progress event after nextContract is computed. Add focused tests for revenge/studio-seed contract payloads and event category normalization.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Write a weekly_contract_progress event with contractId and progressLabel from nextContract on DeathScreen render."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add a tested payload helper that includes contractId, progressLabel, seed, mode, score, and wave; wire DeathScreen to persist the event once per debrief effect."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Deduplicate progress events by contract/run seed and expose the latest contract streak on HomeV2's social retention card."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Added buildWeeklyContractProgressPayload(), persisted weekly_contract_progress events from DeathScreen with a per-run de-dupe key, and covered payload/category normalization in socialRetention tests. Verified by focused utility tests, full npm test, lint, build, and game medium gate."
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "replay-pressure-fixture-contract",
+      "slug": "replay-pressure-fixture-contract",
+      "tier": "⚡",
+      "axis": "security",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 5,
+      "priority": 65.6,
+      "why": "The replay fixture harness validates evidence level and pressure-profile validity, but it does not pin the pressure estimate's class, command count, final wave, or final score. That leaves browser/edge pressure math free to drift while the parity script stays green. Adding expected pressure values turns replay trust into a stricter regression surface before the project makes any stronger resimulation claim.",
+      "recipe": "Extend replayTraceFixtureTable() with expectedPressure fields for the stable rich/basic/weak/malformed traces. Update scripts/validate-replay-trace-fixtures.mjs and replayResim tests to assert pressureClass, commandCount, finalWave, and finalScore where applicable. Keep malformed fixture expectations explicit and advisory-only.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add expectedPressureClass and expectedCommandCount to fixture expectations and validate them in the script."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add full expectedPressure object with pressureClass, commandCount, finalWave, and finalScore; update script and unit tests."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Generate a JSON fixture artifact consumed by both browser tests and a Deno edge smoke so validate-replay cannot drift from src/utils/replayResim.js."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Pinned expected pressure profile class/count/finalWave/finalScore in replayTraceFixtureTable(), enforced them in scripts/validate-replay-trace-fixtures.mjs, and updated replayResim tests. Validator passes across all 4 fixtures."
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-resim-runner",
+      "reason": "Valid long-term trust item, but current code still has the honest pressure-estimate contract. A full physics-parity runner is larger than this closeable audit pass and should not be half-shipped."
+    },
+    {
+      "slug": "delete-legacy-menu-v1",
+      "reason": "DECISIONS.md says the v1 Home/Menu fallback is data-gated by Lighthouse and funnel evidence, so removing it now would reverse a recent decision without the required human measurements."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "run-dna-share-payload-truth",
+      "status": "shipped",
+      "notes": "Share-card payload extracted and replay proof tier propagated. Evidence: focused tests 13/13, replay fixture validator 4/4, full npm test 482/482, lint 0 errors / 7 existing warnings, build passing."
+    },
+    {
+      "slug": "weekly-contract-progress-event",
+      "status": "shipped",
+      "notes": "Weekly contract progress events now persist from DeathScreen with de-dupe. Evidence: focused tests 13/13, full npm test 482/482, lint 0 errors / 7 existing warnings, build passing."
+    },
+    {
+      "slug": "replay-pressure-fixture-contract",
+      "status": "shipped",
+      "notes": "Replay fixture expectations now pin pressure profile values. Evidence: node scripts/validate-replay-trace-fixtures.mjs passed and full npm test 482/482."
+    }
+  ]
+}

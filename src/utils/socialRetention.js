@@ -64,6 +64,23 @@ export function buildWeeklyContract(runHistory = [], rivalryHistory = [], studio
   };
 }
 
+export function buildWeeklyContractProgressPayload(contract = null, {
+  runSeed = null,
+  mode = "standard",
+  score = 0,
+  wave = 1,
+} = {}) {
+  if (!contract?.id) return null;
+  return {
+    contractId: contract.id,
+    progressLabel: contract.progress || contract.title || "contract progress",
+    seed: runSeed,
+    mode,
+    score: safeNumber(score, 0),
+    wave: safeNumber(wave, 1),
+  };
+}
+
 export function buildFeaturedSeeds(runHistory = [], rivalryHistory = []) {
   const cards = [];
   const unresolved = rivalryHistory.find((entry) => entry?.won === false && entry.seed);

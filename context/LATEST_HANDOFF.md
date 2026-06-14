@@ -1,5 +1,18 @@
 # Latest Handoff
 
+## Where We Left Off - Session 92 (2026-06-14)
+
+Completed the requested `/start → /audit → /implement → /closeout` pass from current repo evidence. Created and executed `docs/AUDIT_2026-06-14_4.md` / `.json` for three verified gaps left after the larger Session 91 depth sprint.
+
+**Shipped:**
+- `run-dna-share-payload-truth`: added `src/utils/runDnaShareCard.js` with `buildRunDnaSharePayload()` and `computeWavePercentile()`. `DeathScreen.jsx` now posts a tested worker payload to `shareCard.worker.js` and propagates actual replay proof status into `replayProofTier` instead of hard-coding `null`.
+- `weekly-contract-progress-event`: added `buildWeeklyContractProgressPayload()` in `src/utils/socialRetention.js` and wired DeathScreen to save a de-duplicated `weekly_contract_progress` Studio event from the visible contract loop.
+- `replay-pressure-fixture-contract`: extended `replayTraceFixtureTable()` with expected pressure class/count/finalWave/finalScore and updated `scripts/validate-replay-trace-fixtures.mjs` plus `replayResim.test.js` to enforce the contract.
+
+**Validation:** focused `npx vitest run src/utils/runDnaShareCard.test.js src/utils/socialRetention.test.js src/utils/replayResim.test.js` passed 13/13; `node scripts/validate-replay-trace-fixtures.mjs` passed 4 fixtures; full `npm test` passed 482/482; `npm run lint` reported 0 errors / 7 existing warnings; `npm run build` passed.
+
+**Next session candidates:** edge validate-replay fixture parity against the same pressure expectations; deeper DeathScreen/App.jsx submission extraction; existing lint-warning baseline cleanup if launch hygiene wants zero warnings.
+
 ## Where We Left Off - Session 91 (2026-06-14)
 
 Completed the requested `/start → /audit → /implement → /closeout` pass. Created and executed `docs/AUDIT_2026-06-14_3.md` / `.json` covering a genius-level creative depth sprint, then climbed to L3 on the three highest-value shipped items and added two innovation-pack micro-features after `session-floor` reported budget remaining.

@@ -17,6 +17,13 @@ for (const fixture of replayTraceFixtureTable()) {
   if (profile.valid !== fixture.expectedValid) {
     failures.push(`${fixture.id}: pressure profile valid=${profile.valid}, expected ${fixture.expectedValid}`);
   }
+  if (fixture.expectedPressure) {
+    for (const key of ["pressureClass", "commandCount", "finalWave", "finalScore"]) {
+      if (profile[key] !== fixture.expectedPressure[key]) {
+        failures.push(`${fixture.id}: expected pressure ${key}=${fixture.expectedPressure[key]}, got ${profile[key]}`);
+      }
+    }
+  }
 }
 
 if (failures.length > 0) {

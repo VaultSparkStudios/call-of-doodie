@@ -51,9 +51,21 @@ describe("runResim", () => {
     const fixtures = replayTraceFixtureTable();
 
     expect(fixtures.map((fixture) => fixture.id)).toEqual(["rich", "basic", "weak", "malformed"]);
+    expect(fixtures.find((fixture) => fixture.id === "rich").expectedPressure).toMatchObject({
+      pressureClass: "medium",
+      commandCount: 7,
+      finalWave: 1,
+      finalScore: 793,
+    });
     expect(fixtures.find((fixture) => fixture.id === "malformed")).toMatchObject({
       expectedValid: false,
       expectedEvidenceLevel: "none",
+      expectedPressure: {
+        pressureClass: "none",
+        commandCount: 0,
+        finalWave: 1,
+        finalScore: 420,
+      },
     });
   });
 });

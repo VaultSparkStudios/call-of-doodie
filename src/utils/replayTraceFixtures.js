@@ -45,9 +45,33 @@ export function makeMalformedTrace() {
 
 export function replayTraceFixtureTable() {
   return [
-    { id: "rich", trace: makeRichTrace(), expectedEvidenceLevel: "rich", expectedValid: true },
-    { id: "basic", trace: makeBasicTrace(), expectedEvidenceLevel: "basic", expectedValid: true },
-    { id: "weak", trace: makeWeakTrace(), expectedEvidenceLevel: "weak", expectedValid: true },
-    { id: "malformed", trace: makeMalformedTrace(), expectedEvidenceLevel: "none", expectedValid: false },
+    {
+      id: "rich",
+      trace: makeRichTrace(),
+      expectedEvidenceLevel: "rich",
+      expectedValid: true,
+      expectedPressure: { pressureClass: "medium", commandCount: 7, finalWave: 1, finalScore: 793 },
+    },
+    {
+      id: "basic",
+      trace: makeBasicTrace(),
+      expectedEvidenceLevel: "basic",
+      expectedValid: true,
+      expectedPressure: { pressureClass: "low", commandCount: 3, finalWave: 1, finalScore: 632 },
+    },
+    {
+      id: "weak",
+      trace: makeWeakTrace(),
+      expectedEvidenceLevel: "weak",
+      expectedValid: true,
+      expectedPressure: { pressureClass: "low", commandCount: 1, finalWave: 1, finalScore: 515 },
+    },
+    {
+      id: "malformed",
+      trace: makeMalformedTrace(),
+      expectedEvidenceLevel: "none",
+      expectedValid: false,
+      expectedPressure: { pressureClass: "none", commandCount: 0, finalWave: 1, finalScore: 420 },
+    },
   ];
 }

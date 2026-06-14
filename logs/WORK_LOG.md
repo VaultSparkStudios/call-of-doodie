@@ -610,3 +610,12 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Verified `docs/AUDIT_2026-06-13_2.json` was already fully shipped, then created `docs/AUDIT_2026-06-13_3.md` / `.json` for a new current-state gap.
 - Implemented boss phase-two readable counterplay: `getBossPhaseTwoWarning()` covers every guided boss plus fallback, and `triggerBossPhaseTwoTransition()` now emits the warning under the PHASE 2 banner.
 - Validation: focused bossPhases 4/4; full `npm test` 444/444; `npm run lint` 0 errors / 1 pre-existing warning; audit JSON parse clean; `npm run build` passing.
+
+## 2026-06-14 — Session 92
+
+- Ran `/start` with Codex session lock, game skill profile, context-meter `CONTINUE`, fresh startup brief, credential/blocker preflight, and skill trace completion.
+- Created `docs/AUDIT_2026-06-14_4.md` / `.json` from current-state evidence after rejecting duplicate Session 91 depth ideas.
+- Implemented Run DNA share-card payload truth: `src/utils/runDnaShareCard.js` now owns worker-safe payload construction and community wave percentile calculation; `DeathScreen.jsx` uses it and sends replay proof status into `replayProofTier`.
+- Implemented weekly contract progress persistence: `buildWeeklyContractProgressPayload()` turns the visible weekly contract into a normalized local Studio event, and DeathScreen writes de-duplicated `weekly_contract_progress` events.
+- Implemented replay pressure fixture hardening: shared replay fixtures now pin pressure-profile class/count/finalWave/finalScore; `scripts/validate-replay-trace-fixtures.mjs` enforces those values.
+- Validation: focused utility tests 13/13; replay fixture validator 4/4; full `npm test` 482/482; `npm run lint` 0 errors / 7 existing warnings; `npm run build` passing.

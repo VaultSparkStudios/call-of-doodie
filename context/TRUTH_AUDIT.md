@@ -517,3 +517,11 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `src/components/DeathScreen.jsx` owns the player-facing REPLAY PROOF card, while the receipt copy/scoring remains in the utility layer.
 - `src/utils/replayResim.js` remains an advisory pressure-estimate utility, not deterministic resimulation; `buildReplayPressureProfile()` is the extracted pure profile primitive.
 - No source-of-truth contradictions introduced. Validation: focused replay/submission 21/21, full suite 448/448, lint 0 errors / 8 existing warnings, build clean.
+
+## 2026-06-14 - Session 92
+
+- `docs/AUDIT_2026-06-14_4.md` / `.json` are the source of truth for the Run DNA payload, weekly contract progress, and replay pressure fixture sprint; all three items are marked shipped with execution evidence.
+- `src/utils/runDnaShareCard.js` owns Run DNA share-card worker payload construction and community wave percentile calculation; `DeathScreen.jsx` coordinates the worker call only.
+- `src/utils/socialRetention.js` owns weekly contract progress payload shaping; `DeathScreen.jsx` persists the resulting `weekly_contract_progress` event with a per-run de-dupe key.
+- `src/utils/replayTraceFixtures.js` now owns both replay evidence and pressure-profile fixture expectations; `scripts/validate-replay-trace-fixtures.mjs` enforces those expectations.
+- No source-of-truth contradictions introduced. Validation: focused utility tests 13/13, replay fixture validator 4/4, full suite 482/482, lint 0 errors / 7 existing warnings, build clean.

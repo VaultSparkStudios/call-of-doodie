@@ -1147,6 +1147,19 @@ SIL +3: Turned replay trace evidence into a visible, structured trust receipt an
 2. Run History proof trend — show last-10 proof receipt quality so players can improve trust posture across sessions. High probability.
 3. Replay/death submission extraction — move the remaining DeathScreen submit/trust composition into a pure helper to keep UI thinner. Medium probability.
 
+## 2026-06-14 — Session 92 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Closed three launch-confidence truth gaps after the Session 91 depth sprint: Run DNA share cards now use a tested payload contract and carry replay proof tier, weekly contracts persist their own local progress events, and replay pressure fixtures now pin the advisory math instead of only checking validity. Validation: focused utility tests 13/13, replay fixture validator 4/4, full suite 482/482, lint 0 errors / 7 existing warnings, build passing.
+
+**Top win:** Turned three quiet trust surfaces into explicit contracts: share-card payloads, contract-progress events, and pressure-profile fixture expectations.
+**Top gap:** The live Edge `validate-replay` TypeScript path still mirrors pressure math manually; the next honest trust step is a Deno/edge parity smoke against these same fixture expectations.
+**Intent outcome:** Achieved — `/start`, fresh `/audit`, `/implement`, validation, and closeout write-back completed from current evidence.
+
+**Brainstorm**
+1. Edge validate-replay fixture parity — run the same rich/basic/weak/malformed pressure expectations against the Supabase Edge source or local Deno harness. High probability.
+2. DeathScreen submit/share extraction — move score-card metadata and submit feedback payloads into pure helpers, continuing the Run DNA extraction pattern. High probability.
+3. Warning baseline cleanup — clear the remaining 7 lint warnings before launch if zero-warning hygiene becomes a public release gate. Medium probability.
+
 ## 2026-06-14 — Session 89 L3 continuation | Total: 1000/1000 | Velocity: 3 | Debt: ↓
 
 SIL +3: Climbed the replay-trust audit ladders from receipt visibility into durable proof trend and parity-fixture infrastructure. Validation: focused replay/session tests 28/28, fixture validator 4/4, full suite 450/450, lint 0 errors / 8 existing warnings, build passing.
