@@ -2276,6 +2276,11 @@ export default function CallOfDoodie() {
             addParticles(gs, ne.x, ne.y, ne.color || "#FF4400", 6);
           }
         } catch {}
+        // Chain enrage spawn: tag enemy with flash timer so drawGame can tint + label it
+        if (ne && (gs._chainEnrageLevel || 0) >= 1) {
+          ne._spawnFlashTimer = 20;
+          ne._spawnEnrageLevel = gs._chainEnrageLevel;
+        }
       }
     }
     // Wave cleared
@@ -3245,6 +3250,7 @@ export default function CallOfDoodie() {
         }
       }
       if (e.hitFlash > 0) e.hitFlash--;
+      if ((e._spawnFlashTimer || 0) > 0) e._spawnFlashTimer--;
       if ((e._tauntCooldown || 0) > 0) e._tauntCooldown--;
       // Combat taunt: alive enemy quips at player (0.4%/frame, per-enemy 180f + global 60f cooldown)
       if (!e.isBossEnemy && !(gs._globalTauntCooldown > 0) && !(e._tauntCooldown > 0) && Math.random() < 0.004) {

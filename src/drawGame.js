@@ -501,6 +501,14 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
     }
+    // Chain enrage spawn: fade-in yellow/orange tint for 20 frames to signal kill-chain pressure
+    if ((e._spawnFlashTimer || 0) > 0) {
+      const _ef = e._spawnFlashTimer / 20;
+      ctx.globalAlpha = _ef * 0.55;
+      ctx.fillStyle = (e._spawnEnrageLevel || 0) >= 2 ? "#FF4400" : "#FFD700";
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
     // Inner depth ring (darker ring for body volume)
     ctx.globalAlpha = 0.32;
     ctx.strokeStyle = "rgba(0,0,0,0.7)"; ctx.lineWidth = r * 0.28;
@@ -783,6 +791,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = e.hitFlash > 6 ? 0.15 : 0.88;
     ctx.fillText(e.emoji, 0, 1);
     ctx.globalAlpha = 1;
+    // Chain enrage spawn label: ⚡ above enemy during first 20 frames
+    if ((e._spawnFlashTimer || 0) > 0) {
+      const _ef = e._spawnFlashTimer / 20;
+      ctx.globalAlpha = _ef;
+      ctx.font = "bold 10px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+      ctx.fillStyle = (e._spawnEnrageLevel || 0) >= 2 ? "#FF6622" : "#FFD700";
+      ctx.fillText("⚡ ENRAGED", 0, -r - 4);
+      ctx.globalAlpha = 1;
+    }
 
     // HP bar
     if (gs.settShowEnemyHealthBars || e.health < e.maxHealth) {
