@@ -14,6 +14,23 @@ export const WEAPONS = [
   { name: "Nuclear Kazoo", upgradedName: "DOOMSDAY KAZOO", emoji: "🎵", damage: 22, fireRate: 260, ammo: 24, maxAmmo: 24, reloadTime: 2000, color: "#FF00FF", sound: "HONK!", spread: 0.20, bulletLife: 48, bulletSize: 5, bulletSpeed: 10, pellets: 3, desc: "3-wide shots per fire. Annoyingly effective in crowds." },
 ];
 
+// ===== WEAPON EVOLUTION (career legend milestone: 1000 kills) =====
+// Each entry is the lore name displayed when that weapon reaches LEGEND status.
+export const WEAPON_EVOLVED_NAMES = [
+  "VOID BANANA",        // 0 Banana Blaster
+  "PRIMAL BAWK",        // 1 Rubber Chicken RPG
+  "HYPERGUN OMEGA",     // 2 Nerf Minigun
+  "SEWAGE TITAN",       // 3 Plunger Launcher
+  "VOID PIERCER",       // 4 Sniper-ator 3000
+  "HELLFIRE SQUIRTER",  // 5 Spicy Squirt Gun
+  "TOTAL CHAOS CANNON", // 6 Confetti Cannon
+  "STORM SOVEREIGN",    // 7 Shock Zapper
+  "ORBITAL DOOMSDAY",   // 8 Boomerang Blaster
+  "ANNIHILATOR RAIL",   // 9 Railgun
+  "INFINITE BOUNCER",   // 10 Ricochet Pistol
+  "DOOMSDAY RECKONING", // 11 Nuclear Kazoo
+];
+
 // ===== WEAPON UNLOCK PROGRESSION =====
 // Account-level gates per weapon index. Levels 1-3 are starter; later weapons
 // unlock as the player accumulates kills (account level = sqrt(totalKills/20)+1).

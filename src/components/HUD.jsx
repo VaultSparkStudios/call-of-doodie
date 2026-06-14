@@ -19,7 +19,7 @@ export default function HUD({
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
   bankedPerkChoices, nextPerkLevel,
-  difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponAmmos, weaponMods,
+  difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponAmmos, weaponMods, weaponEvolutions,
   buildArchetype, unlockedArchetypes,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
@@ -315,9 +315,11 @@ export default function HUD({
       {/* Ammo / weapon */}
       <div style={{ position: "absolute", bottom: 8, right: isMobile ? 8 : 56, textAlign: "right" }}>
         <div style={{ fontSize: 11, color: weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName ? "#FFD700" : weapon.color, marginBottom: 1, fontWeight: 600 }}>
-          {weapon.emoji} {weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName
-            ? <span style={{ color: "#FFD700", textShadow: "0 0 8px rgba(255,215,0,0.6)" }}>⭐⭐⭐ {weapon.upgradedName}</span>
-            : <>{weapon.name}{weaponUpgrades?.[currentWeapon] > 0 && <span style={{ color: "#AA44FF", marginLeft: 4, fontSize: 10 }}>{upgStars(currentWeapon)}</span>}</>
+          {weapon.emoji} {weaponEvolutions?.[currentWeapon]?.evolved
+            ? <span style={{ color: "#FF6B35", textShadow: "0 0 8px rgba(255,107,53,0.7)" }}>🔥 {weaponEvolutions[currentWeapon].name}</span>
+            : weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName
+              ? <span style={{ color: "#FFD700", textShadow: "0 0 8px rgba(255,215,0,0.6)" }}>⭐⭐⭐ {weapon.upgradedName}</span>
+              : <>{weapon.name}{weaponUpgrades?.[currentWeapon] > 0 && <span style={{ color: "#AA44FF", marginLeft: 4, fontSize: 10 }}>{upgStars(currentWeapon)}</span>}</>
           }
         </div>
         <div style={{ fontSize: 20, fontWeight: 900 }}>

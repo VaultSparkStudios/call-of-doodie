@@ -7,7 +7,7 @@ import {
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank, getWaveDeathCounts } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank, getWaveDeathCounts, getWeaponEvolutionState } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -178,6 +178,7 @@ export default function CallOfDoodie() {
   const lastTraceAimRef  = useRef({ bucket: "neutral", frame: -999 });
   const roastCooldowns   = useRef({});    // per-event wave cooldown state for roastDirector
   const waveDeathCountsRef = useRef({});  // {wave: N} — how many LB players died on each wave
+  const weaponEvolutionsRef = useRef([]); // per-weapon evolution state loaded at game start
   const gamepadShootRef  = useRef(false); // gamepad RT fire signal
   const gamepadMoveRef   = useRef({ x: 0, y: 0, active: false }); // left-stick movement, kept separate from keyboard state
   const scoreAttackRef        = useRef(false); // synced with scoreAttackMode state for game loop
@@ -585,6 +586,7 @@ export default function CallOfDoodie() {
       }
     } catch { gsRef.current.proximityRivals = []; }
     waveDeathCountsRef.current = getWaveDeathCounts();
+    weaponEvolutionsRef.current = WEAPONS.map((_, i) => getWeaponEvolutionState(i));
     if (highlightUrlRef.current) { URL.revokeObjectURL(highlightUrlRef.current); highlightUrlRef.current = null; }
     setHighlightGifUrl(null);
     xpRef.current = { xp: 0, level: 1 };
@@ -1355,7 +1357,8 @@ export default function CallOfDoodie() {
     }
     const spread = (Math.random() - 0.5) * weapon.spread;
     const a = angle + spread;
-    const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1) * (_wpnMod.damageMult || 1);
+    const _evoMult = weaponEvolutionsRef.current[weaponIdx]?.damageMult || 1;
+    const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1) * (_wpnMod.damageMult || 1) * _evoMult;
     const pierce = perkModsRef.current.pierce || 0;
     const bSize = weapon.bulletSize || (weaponIdx === 1 ? 8 : weaponIdx === 2 ? 2 : 4);
     const bLife = weapon.bulletLife || 60;
@@ -4536,6 +4539,7 @@ export default function CallOfDoodie() {
         unlockedArchetypes={unlockedArchetypes}
         weaponAmmos={gsRef.current?.weaponAmmos || []}
         weaponMods={gsRef.current?.weaponMods || {}}
+        weaponEvolutions={weaponEvolutionsRef.current}
         runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
         onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)}
         onDash={doDash} onGrenade={throwGrenade} onPause={() => setPaused(true)}

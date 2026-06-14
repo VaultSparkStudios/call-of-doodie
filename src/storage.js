@@ -1,6 +1,7 @@
 // ===== LEADERBOARD =====
 import { supabase, supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUid } from "./supabase.js";
 import { isSupporter } from "./utils/supporter.js";
+import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
 // Run these in the Supabase SQL console (one time, in order):
@@ -1113,6 +1114,20 @@ export function loadExperimentIntent() {
 
 export function clearExperimentIntent() {
   try { localStorage.removeItem(EXPERIMENT_INTENT_KEY); } catch {}
+}
+
+export function getWeaponEvolutionState(idx) {
+  try {
+    const career = loadCareerStats();
+    const kills = career.weaponLegendKills?.[idx] || 0;
+    const evolved = kills >= 1000;
+    return {
+      evolved,
+      kills,
+      name: evolved ? (WEAPON_EVOLVED_NAMES[idx] || null) : null,
+      damageMult: evolved ? 1.05 : 1,
+    };
+  } catch { return { evolved: false, kills: 0, name: null, damageMult: 1 }; }
 }
 
 export function getWaveDeathCounts() {
