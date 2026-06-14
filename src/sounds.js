@@ -335,6 +335,20 @@ export function soundPrecisionLock() {
   tone(1320, 0.08, "triangle", 0.04, null, 0.04);
 }
 
+// Kill-chain escalation audio: level 1 (ENRAGED) = ascending tritone stab; level 2 (FURIOUS) = two-pulse alarm.
+export function soundChainEscalate(level) {
+  if (level === 1) {
+    tone(220, 0.05, "sawtooth", 0.06);
+    tone(311, 0.09, "sawtooth", 0.05, null, 0.05);
+    tone(440, 0.13, "square",   0.04, null, 0.09);
+  } else if (level === 2) {
+    tone(146, 0.06, "sawtooth", 0.09);
+    tone(195, 0.07, "sawtooth", 0.07, null, 0.04);
+    tone(146, 0.06, "sawtooth", 0.08, null, 0.14);
+    tone(195, 0.07, "sawtooth", 0.07, null, 0.18);
+  }
+}
+
 export function soundPerkSelect() {
   const root = _pick([392, 440, 494]);
   tone(root, 0.1, "sine", 0.075);

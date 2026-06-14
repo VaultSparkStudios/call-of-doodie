@@ -31,7 +31,7 @@ import {
   soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
   soundLastStand, soundHeartbeatPulse, soundBossFinale,
   soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
-  soundDash, soundBossKill, soundWaveClear, soundPerkSelect, soundPrecisionClick, soundPrecisionLock,
+  soundDash, soundBossKill, soundWaveClear, soundPerkSelect, soundPrecisionClick, soundPrecisionLock, soundChainEscalate,
   soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
@@ -2089,8 +2089,13 @@ export default function CallOfDoodie() {
         const _prev = gs._chainEnrageLevel || 0;
         gs._chainEnrageLevel = _newEnrage;
         if (_newEnrage > _prev) {
-          if (_newEnrage === 1) addText(gs, W / 2, H / 2 - 110, "🔴 ENEMIES ENRAGED", "#FF6644", true);
-          else if (_newEnrage === 2) addText(gs, W / 2, H / 2 - 110, "🔥 ENEMIES FURIOUS", "#FF2200", true);
+          if (_newEnrage === 1) {
+            addText(gs, W / 2, H / 2 - 110, "🔴 ENEMIES ENRAGED", "#FF6644", true);
+            try { soundChainEscalate(1); } catch {}
+          } else if (_newEnrage === 2) {
+            addText(gs, W / 2, H / 2 - 110, "🔥 ENEMIES FURIOUS", "#FF2200", true);
+            try { soundChainEscalate(2); } catch {}
+          }
         }
       }
     }
@@ -3048,7 +3053,12 @@ export default function CallOfDoodie() {
                 gs.coins = (gs.coins || 0) + 2;
                 addText(gs, e.x, e.y - e.size - 22, "🎵🎯 BEAT PRECISION! +2💩", "#00FFEE");
                 addParticles(gs, e.x, e.y, "#00FFEE", 5);
-                try { trackRhythmMasteryHit(); } catch {}
+                try {
+                  const _rmTotal = trackRhythmMasteryHit();
+                  if ([100, 500, 1000, 2500, 5000].includes(_rmTotal)) {
+                    addText(gs, e.x, e.y - e.size - 40, `🎵 RHYTHM MASTER ×${_rmTotal}!`, "#FFD700", true);
+                  }
+                } catch {}
               }
             } catch {}
             // Flow state: streak ≥10 → 1.5s bullet-time (genre-first mechanical reward)
