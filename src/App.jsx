@@ -6,6 +6,7 @@ import {
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
+  getWeeklyGauntlet,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWeaponLegendRank, getWaveDeathCounts, getWeaponEvolutionState } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
@@ -709,6 +710,15 @@ export default function CallOfDoodie() {
     // ── Gauntlet mode init ─────────────────────────────────────────────────
     gsRef.current.gauntletMode = gauntletRef.current;
     gsRef.current.speedrunMode = speedrunRef.current;
+    if (gauntletRef.current) {
+      try {
+        const _gt = getWeeklyGauntlet();
+        if (_gt.theme?.statOverrides) {
+          Object.assign(gsRef.current, _gt.theme.statOverrides);
+          gsRef.current._weeklyThemeLabel = _gt.theme.label;
+        }
+      } catch {}
+    }
     gsRef.current._waveDeaths = 0;   // per-wave death counter for adaptive assist
 
     // Load daily missions

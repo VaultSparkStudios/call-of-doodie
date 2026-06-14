@@ -59,7 +59,6 @@ export default function DeathScreen({
   // ── Ghost path visualization ───────────────────────────────────────────────
   const [ghostData, setGhostData] = useState(null);
   const ghostCanvasRef = useRef(null);
-  const [shareCardUrl, setShareCardUrl] = useState(null);
   const [shareCardBusy, setShareCardBusy] = useState(false);
 
   useEffect(() => {
@@ -632,9 +631,9 @@ export default function DeathScreen({
                 setShareCardBusy(false);
                 if (ev.data?.blob) {
                   const url = URL.createObjectURL(ev.data.blob);
-                  setShareCardUrl(url);
                   const a = document.createElement("a");
                   a.href = url; a.download = "run-dna.png"; a.click();
+                  setTimeout(() => URL.revokeObjectURL(url), 5000);
                 }
               };
               worker.onerror = () => { worker.terminate(); setShareCardBusy(false); };

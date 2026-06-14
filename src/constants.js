@@ -990,6 +990,42 @@ export const META_TREE = {
 // All META_TREE node IDs flat — used for storage validation
 export const META_TREE_NODE_IDS = Object.values(META_TREE).flatMap(b => b.nodes.map(n => n.id));
 
+// ===== WEEKLY THEMES =====
+// 5 rotating world themes, one per slot. getWeeklyGauntlet() picks deterministically.
+// statOverrides keys map directly to gs fields applied at gauntlet-run start.
+export const WEEKLY_THEMES = [
+  {
+    id: 'corporate_uprising',
+    label: '🏢 CORPORATE UPRISING',
+    themeDesc: 'Management has taken over. Karens spawn twice as often and shout twice as loud.',
+    statOverrides: { mutEnemySpeedExtra: 1.1, mutEnemyProjSpeed: 1.3 },
+  },
+  {
+    id: 'chaos_carnival',
+    label: '🎪 CHAOS CARNIVAL',
+    themeDesc: 'Nothing makes sense. Every enemy is explosive. Coins rain from the ceiling.',
+    statOverrides: { mutAllExplosive: true, coinMultActive: true, coinMultTimer: 9999 },
+  },
+  {
+    id: 'outbreak_protocol',
+    label: '☣️ OUTBREAK PROTOCOL',
+    themeDesc: 'Ranged enemies have received military upgrades. Projectiles hit harder and faster.',
+    statOverrides: { mutEnemyProjSpeed: 1.5, mutEnemyHPMult: 1.2 },
+  },
+  {
+    id: 'rush_hour',
+    label: '🚗 RUSH HOUR',
+    themeDesc: 'Everybody is in a hurry. Spawn rate doubles; enemies move 30% faster.',
+    statOverrides: { mutEnemySpeedExtra: 1.3, blitzSpawnMult: 1.5, blitzCount: 9999 },
+  },
+  {
+    id: 'retro_wave',
+    label: '👾 RETRO WAVE',
+    themeDesc: 'Old-school arcade rules. Enemies are pixel-tiny but wave counts are doubled.',
+    statOverrides: { mutEnemySizeMult: 0.65, waveEnemyMult: 1.8 },
+  },
+];
+
 // ===== WEEKLY GAUNTLET =====
 // Fixed-loadout weekly challenge: one weapon, one forced perk, no free perk-ups mid-run.
 // Seeded deterministically by week number so every player sees the same config.
@@ -1008,6 +1044,9 @@ export function getWeeklyGauntlet() {
   // Pick a non-cursed starting perk by index (resolved in App.jsx against PERKS array)
   const startPerkRoll = rand();
 
+  const themeIdx = Math.floor(rand() * WEEKLY_THEMES.length);  // 6th rand() call
+  const theme = WEEKLY_THEMES[themeIdx];
+
   return {
     weekNum,
     seed: weekNum * 13 + 7,   // deterministic run seed
@@ -1017,5 +1056,6 @@ export function getWeeklyGauntlet() {
     noShop: true,              // no wave shop
     noPerkChoice: true,        // level-up grants stat boosts only, no perk pick
     label: `WEEK ${weekNum} GAUNTLET`,
+    theme,
   };
 }
