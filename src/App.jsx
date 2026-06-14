@@ -3241,6 +3241,16 @@ export default function CallOfDoodie() {
         }
       }
       if (e.hitFlash > 0) e.hitFlash--;
+      if ((e._tauntCooldown || 0) > 0) e._tauntCooldown--;
+      // Combat taunt: alive enemy quips at player (0.4%/frame, per-enemy 180f + global 60f cooldown)
+      if (!e.isBossEnemy && !(gs._globalTauntCooldown > 0) && !(e._tauntCooldown > 0) && Math.random() < 0.004) {
+        const _taunts = ENEMY_TYPES[e.typeIndex]?.combatTaunts;
+        if (_taunts) {
+          addText(gs, e.x, e.y - e.size - 10, _taunts[Math.floor(Math.random() * _taunts.length)], e.color);
+          e._tauntCooldown = 180;
+          gs._globalTauntCooldown = 60;
+        }
+      }
       if (e.ranged) {
         e.shootTimer++;
         const _enrageFireThresh = gs._chainEnrageLevel === 2 ? e.projRate * 0.80 : gs._chainEnrageLevel === 1 ? e.projRate * 0.85 : e.projRate;
@@ -3814,6 +3824,7 @@ export default function CallOfDoodie() {
     if ((gs.freezeTimer || 0) > 0) gs.freezeTimer--;
     if ((gs.timeDilationTimer || 0) > 0) gs.timeDilationTimer--;
     if ((gs._flowStateCooldown || 0) > 0) gs._flowStateCooldown--;
+    if ((gs._globalTauntCooldown || 0) > 0) gs._globalTauntCooldown--;
     if (gs.coinMultTimer > 0) { gs.coinMultTimer--; if (gs.coinMultTimer === 0) { gs.coinMultActive = false; } }
     if (gs.coinStreakTimer > 0) { gs.coinStreakTimer--; if (gs.coinStreakTimer === 0) { gs.coinStreakKills = 0; } }
     if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
