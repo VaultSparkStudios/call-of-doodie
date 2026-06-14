@@ -3,7 +3,7 @@
 // Posts back: { blob } — PNG blob of the card
 
 self.onmessage = function(e) {
-  const { weaponKills = [], weaponColors = [], weaponEmojis = [], wave = 0, score = 0, kills = 0, runArc = '', buildGrade = 'F', replayProofTier = null } = e.data || {};
+  const { weaponKills = [], weaponColors = [], weaponEmojis = [], wave = 0, score = 0, kills = 0, runArc = '', buildGrade = 'F', replayProofTier = null, wavePercentile = null } = e.data || {};
 
   const W = 480, H = 160;
   let canvas;
@@ -93,6 +93,14 @@ self.onmessage = function(e) {
     ctx.font = 'bold 13px monospace';
     ctx.fillText(val, sx, 106);
   });
+
+  // Community percentile
+  if (wavePercentile !== null) {
+    ctx.textAlign = 'center';
+    ctx.font = '8px monospace';
+    ctx.fillStyle = wavePercentile >= 75 ? '#FFD700' : wavePercentile >= 50 ? '#88FF99' : '#888';
+    ctx.fillText(`You outlasted ${wavePercentile}% of the community`, W / 2, 120);
+  }
 
   // Footer
   ctx.fillStyle = '#444';

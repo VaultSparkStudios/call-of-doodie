@@ -637,6 +637,15 @@ export default function DeathScreen({
                 }
               };
               worker.onerror = () => { worker.terminate(); setShareCardBusy(false); };
+              // Compute community percentile: % of leaderboard entries with wave < player's wave
+              let _wavePercentile = null;
+              try {
+                const _lb = Array.isArray(leaderboard) ? leaderboard : [];
+                if (_lb.length >= 5) {
+                  const _below = _lb.filter(e => (e.wave || 0) < (wave || 0)).length;
+                  _wavePercentile = Math.round((_below / _lb.length) * 100);
+                }
+              } catch {}
               worker.postMessage({
                 weaponKills: weaponKills || [],
                 weaponColors: WEAPONS.map(w => w.color),
@@ -645,6 +654,7 @@ export default function DeathScreen({
                 runArc: runNarrative?.act || '',
                 buildGrade: buildGrade?.grade || '?',
                 replayProofTier: null,
+                wavePercentile: _wavePercentile,
               });
             } catch { setShareCardBusy(false); }
           };
