@@ -28,6 +28,7 @@ Commands:
   closeout, c      Project-local closeout autopilot
   feedback-score   Proxy to Studio Ops feedback-score
   genius-list      Generate or print the cached local genius list
+  innovation-pack  Write docs/INNOVATION_PACK.md from repo-local open work and genius signals
   onboard          Verify local startup tooling exists; use --repair --write to report repair state
   help             Show this help`);
 }
@@ -72,6 +73,97 @@ function blockerPreflight() {
   }
 }
 
+function cleanTask(line) {
+  return line.replace(/^- \[ \]\s*/, "").trim();
+}
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[`*_#[\]]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 72) || "innovation-item";
+}
+
+function collectOpenTasks() {
+  const board = readText("context/TASK_BOARD.md");
+  const sections = ["Now", "Deferred"];
+  const tasks = [];
+  for (const section of sections) {
+    const body = board.match(new RegExp(`## ${section}\\s+([\\s\\S]*?)(?:\\n## |\\n$)`))?.[1] || "";
+    for (const line of body.split(/\r?\n/).filter((entry) => entry.trim().startsWith("- [ ]"))) {
+      const title = cleanTask(line);
+      tasks.push({
+        slug: slugify(title),
+        title,
+        source: `context/TASK_BOARD.md#${section.toLowerCase()}`,
+        axis: /protocol|script|startup|closeout|audit|implement/i.test(title) ? "protocol"
+          : /qa|input|gamepad|pwa|screenshot/i.test(title) ? "launch-confidence"
+            : /replay|leaderboard|trust|score/i.test(title) ? "trust"
+              : "product",
+      });
+    }
+  }
+  return tasks;
+}
+
+function innovationPack() {
+  const cacheScript = path.join(__dirname, "cache-genius-list.mjs");
+  spawnSync(process.execPath, [cacheScript, "--write"], { cwd: ROOT, stdio: "ignore" });
+  const cachePath = path.join(ROOT, ".cache", "genius-list.json");
+  const genius = fs.existsSync(cachePath) ? JSON.parse(fs.readFileSync(cachePath, "utf8")) : { items: [] };
+  const taskItems = collectOpenTasks();
+  const geniusItems = (genius.items || []).map((item) => ({
+    slug: item.slug || slugify(item.title || item.insight || "genius-item"),
+    title: item.title || item.insight || "Maintain launch confidence.",
+    source: item.evidence || ".cache/genius-list.json",
+    axis: item.axis || "protocol",
+  }));
+  const seen = new Set();
+  const items = [...taskItems, ...geniusItems]
+    .filter((item) => {
+      if (seen.has(item.slug)) return false;
+      seen.add(item.slug);
+      return true;
+    })
+    .slice(0, 8);
+
+  const generatedAt = new Date().toISOString();
+  const lines = [
+    "<!-- generated-by: node scripts/ops.mjs innovation-pack -->",
+    `<!-- generated-at: ${generatedAt} -->`,
+    "",
+    "# Innovation Pack — Call-Of-Doodie",
+    "",
+    "> Repo-local second-order candidate list for `/implement` saturation loops.",
+    "",
+    "## Ranked Candidates",
+    "",
+  ];
+  if (items.length === 0) {
+    lines.push("- No repo-local candidates found. Maintain launch confidence with tests, build, and protocol checks.");
+  } else {
+    items.forEach((item, index) => {
+      lines.push(`${index + 1}. **${item.slug}** — ${item.title}`);
+      lines.push(`   - Axis: ${item.axis}`);
+      lines.push(`   - Evidence: ${item.source}`);
+      lines.push(`   - First step: verify the premise in source, then write a fresh \`docs/AUDIT_<date>.json\` item before implementation.`);
+    });
+  }
+  lines.push("");
+  lines.push("## Guardrails");
+  lines.push("");
+  lines.push("- Treat human/device/dashboard items as launch gates, not repo-code blockers.");
+  lines.push("- Keep replay, leaderboard, and submission trust language evidence-backed.");
+  lines.push("- Prefer local deterministic helpers over paid API or per-user variable cost.");
+  lines.push("");
+
+  const outPath = path.join(ROOT, "docs", "INNOVATION_PACK.md");
+  fs.writeFileSync(outPath, `${lines.join("\n")}`);
+  console.log(`Innovation pack written: ${path.relative(ROOT, outPath).replace(/\\/g, "/")}`);
+}
+
 function onboard() {
   const repair = args.includes("--repair") && args.includes("--write");
   const required = [
@@ -111,6 +203,9 @@ switch (command) {
     break;
   case "genius-list":
     runNode(path.join(__dirname, "cache-genius-list.mjs"), ["--write", ...args]);
+    break;
+  case "innovation-pack":
+    innovationPack();
     break;
   case "onboard":
     onboard();

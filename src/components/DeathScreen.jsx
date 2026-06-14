@@ -9,7 +9,7 @@ import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } f
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
-import { buildReplayProofReceipt, buildReplayProofTrend } from "../utils/replayCommandTrace.js";
+import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
 import { buildWeeklyContract } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
@@ -324,7 +324,7 @@ export default function DeathScreen({
       c.textAlign = "center";
       c.font = "bold 13px 'Courier New', monospace";
       c.fillStyle = replayProofReceipt.color;
-      c.fillText(`REPLAY PROOF ${replayProofReceipt.score}% · ${proofTrend.detail.toUpperCase()}`, W / 2, 502);
+      c.fillText(replayProofPresenter.shareStamp, W / 2, 502);
     }
 
     // ── Bottom bar: CTA ───────────────────────────────────────────────────────
@@ -397,7 +397,6 @@ export default function DeathScreen({
     runSeed,
   });
   const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived });
-  const replayProofReceipt = traceEvidence ? buildReplayProofReceipt(traceEvidence) : null;
   const _topWpn = (() => {
     const wk = weaponKills || [];
     const total = wk.reduce((s, v) => s + (v || 0), 0);
@@ -407,10 +406,12 @@ export default function DeathScreen({
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
   const runHistory = loadRunHistory();
-  const proofTrend = buildReplayProofTrend([
-    ...(replayProofReceipt ? [{ traceReceipt: replayProofReceipt }] : []),
-    ...runHistory,
-  ]);
+  const replayProofPresenter = buildReplayProofPresenter({ traceEvidence, runHistory });
+  const replayProofReceipt = replayProofPresenter.receipt;
+  const proofTrend = replayProofPresenter.trend;
+  const submitProofPresenter = submitFeedback
+    ? buildReplayProofPresenter({ traceEvidence: submitFeedback.traceEvidence || traceEvidence, runHistory })
+    : null;
   const rivalryHistory = loadRivalryHistory();
   const studioEvents = loadStudioGameEvents();
   const nextContract = buildWeeklyContract(runHistory, rivalryHistory, studioEvents);
@@ -1078,6 +1079,11 @@ export default function DeathScreen({
               </div>
             )}
             <div style={{ color: "#CCC", fontSize: 11, marginTop: 4 }}>Your shame is now public knowledge.</div>
+            {submitProofPresenter?.receipt && (
+              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 6, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+                {submitProofPresenter.shareStamp}
+              </div>
+            )}
           </div>
         ) : submitStatus === "rejected" ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,90,90,0.35)", background: "rgba(255,70,70,0.05)" }}>
@@ -1097,6 +1103,11 @@ export default function DeathScreen({
             <div style={{ color: "#999", fontSize: 10, marginTop: 8, lineHeight: 1.5 }}>
               Local fallback skipped — this was a server-side validity check, not a network outage. Common causes: impossibly high kill/damage ratio for the reported wave, or a corrupted run token. Your career stats are still updated locally.
             </div>
+            {submitProofPresenter?.receipt && (
+              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, lineHeight: 1.4, fontFamily: "'Courier New',monospace" }}>
+                {submitProofPresenter.receipt.label.toUpperCase()} · {submitProofPresenter.receipt.nextAction}
+              </div>
+            )}
           </div>
         ) : (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,180,0,0.3)", background: "rgba(255,140,0,0.05)" }}>
@@ -1105,6 +1116,11 @@ export default function DeathScreen({
             <div style={{ color: "#999", fontSize: 10, marginTop: 6, lineHeight: 1.5 }}>
               This usually means a network blip. Your score will <em>not</em> appear on the global leaderboard, but it counts toward your local career stats. Try submitting again next session — the game keeps your run data.
             </div>
+            {submitProofPresenter?.receipt && (
+              <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, letterSpacing: 1, fontFamily: "'Courier New',monospace" }}>
+                {submitProofPresenter.shareStamp}
+              </div>
+            )}
           </div>
         )}
 

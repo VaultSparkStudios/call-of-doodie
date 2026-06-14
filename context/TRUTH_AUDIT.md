@@ -1,6 +1,17 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-14 - Session 90
+
+- Replay proof presenter truth — `src/utils/replayProofPresenter.js` composes existing replay proof receipts and trends; it does not create stronger trust claims than `buildReplayProofReceipt()` and `buildReplayProofTrend()` already support.
+- Submission feedback truth — online/rejected/local DeathScreen states now reuse the same presenter language when trace evidence exists. Rejected runs still say local fallback is skipped when the server rejected validity; the proof readout is informational, not an override.
+- Innovation-pack truth — `node scripts/ops.mjs innovation-pack` is a repo-local candidate generator based on `context/TASK_BOARD.md` and `.cache/genius-list.json`; it is not private Studio Ops intelligence and every candidate still requires premise verification before implementation.
+- Protocol drift truth — `npm run protocol:drift -- --json` now reports `status=ok`, `missingRequired=0`, `missingOptional=0`, and 20/20 present including `docs/INNOVATION_PACK.md`.
+- Validation truth — focused proof/replay/session tests passed 27/27; full `npm test` passed 453/453; fixture validator passed 4/4; lint reported 0 errors / 8 existing warnings; build passed.
+
+Overall status: green locally
+Last reviewed: 2026-06-14
+
 ## 2026-06-13 - Session 87 continuation
 
 - Protocol helper truth — `sample-codebase`, `audit-sidecar`, `render-audit-md`, `session-floor`, `cache-genius-list`, `generate-genius-list`, and `record-skill-cost` are repo-local compatibility helpers. They keep the public repo's Studio OS loop executable; they do not claim to replace private Studio Ops intelligence.

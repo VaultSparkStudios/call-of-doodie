@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-06-14 (Session 90)
+
+- Ran the requested `/start -> /audit -> /implement -> /closeout` continuation from current repo evidence.
+- Created `docs/AUDIT_2026-06-14_2.md` / `.json` after verifying the prior same-day replay trust audit was already shipped.
+- Shipped `deathscreen-replay-proof-presenter`: added `src/utils/replayProofPresenter.js` and `src/utils/replayProofPresenter.test.js`; DeathScreen now consumes one presenter for the proof card, score-card share stamp, and online/rejected/local submission feedback proof readouts.
+- Shipped `ops-innovation-pack-command`: added `node scripts/ops.mjs innovation-pack`, generated `docs/INNOVATION_PACK.md`, and added the artifact to protocol drift visibility.
+- Validation: focused replay/presenter/session tests 27/27; replay fixture validator 4/4; full `npm test` 453/453; `npm run protocol:drift -- --json` status ok with 20/20 checks present; `npm run lint` 0 errors / 8 existing warnings; `npm run build` passing.
+
 ## 2026-06-13 (Session 87)
 
 - Continuation: verified `docs/AUDIT_2026-06-13.md` / `.json` was already fully shipped, then created `docs/AUDIT_2026-06-13_2.md` / `.json` for a three-item follow-on.

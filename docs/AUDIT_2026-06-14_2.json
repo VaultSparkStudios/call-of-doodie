@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-14",
+    "session": 90,
+    "project": "call-of-doodie",
+    "type": "game",
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "ai": 1.5,
+      "feature-depth": 1.5,
+      "security": 1,
+      "speed": 1,
+      "feedback": 1,
+      "token-cost": 1,
+      "new-feature": 1
+    },
+    "totalItems": 2,
+    "combinedPriority": 52.5,
+    "top3": [
+      "deathscreen-replay-proof-presenter",
+      "ops-innovation-pack-command"
+    ]
+  },
+  "candidates": [
+    {
+      "id": "1",
+      "slug": "deathscreen-replay-proof-presenter",
+      "title": "DeathScreen Replay Proof Presenter Extraction",
+      "axis": "speed / organization / efficiency / ui / ux / user-experience / security",
+      "tier": "⚡",
+      "impact": 8,
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 32.5,
+      "status": "shipped-l3",
+      "why": "Current code correctly turns replay trace evidence into receipts and a last-10 trend, but `DeathScreen.jsx` still owns the composition of the current receipt, history trend, and share-card stamp. That makes a trust contract depend on a large React component and raises the chance that future UI edits silently desync the proof card from the generated share image. A pure presenter helper keeps replay trust copy, trend math, and share-card text in one tested place while preserving the player-facing DeathScreen behavior.",
+      "recipe": "Create `src/utils/replayProofPresenter.js` with `buildReplayProofPresenter({ traceEvidence, runHistory })`, returning `receipt`, `trend`, and `shareStamp`. Replace inline DeathScreen receipt/trend composition with the helper and add focused tests covering no evidence, rich evidence, and mixed recent proof history.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Extract only DeathScreen receipt/trend creation into a pure helper and cover rich/no-evidence cases."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add receipt, trend, and shareStamp output; wire DeathScreen card and score-card canvas to use it; test rich evidence plus mixed history."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Also normalize submit feedback proof receipts through the presenter so online/local/rejected states can surface the same trust language."
+        }
+      }
+    }
+    ,
+    {
+      "id": "2",
+      "slug": "ops-innovation-pack-command",
+      "title": "Repo-Local Ops Innovation Pack Command",
+      "axis": "speed / organization / efficiency / token / api consumption reduction",
+      "tier": "⚡",
+      "impact": 6,
+      "effortHours": 0.5,
+      "innovation": 5,
+      "priority": 20,
+      "status": "shipped",
+      "why": "The local session protocol tells `/implement` to expand into an innovation pack when the audit list is exhausted, but `node scripts/ops.mjs innovation-pack` currently exits as an unknown command. That makes low-context continuation loops depend on agent improvisation instead of a repo-local executable surface. A small command that writes `docs/INNOVATION_PACK.md` restores the protocol contract and reduces future token waste from rediscovering the same missing helper.",
+      "recipe": "Add an `innovation-pack` command to `scripts/ops.mjs` that gathers open Now/Deferred task-board items plus cached genius-list signals, writes `docs/INNOVATION_PACK.md`, and documents guardrails for repo-local implementation candidates.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Add a help entry and command stub that prints the cached genius-list output."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "Generate `docs/INNOVATION_PACK.md` from task-board and genius-list signals, then smoke-test the command."
+        },
+        "L3": {
+          "effortHours": 1,
+          "recipe": "Also wire protocol drift coverage so the generated innovation-pack artifact remains visible in future checks."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "replay-proof-receipt",
+      "reason": "Rejected on verification: `buildReplayProofReceipt()`, DeathScreen proof card, and share-card proof stamp already shipped in `docs/AUDIT_2026-06-14.json`."
+    },
+    {
+      "slug": "trace-fixture-harness",
+      "reason": "Rejected on verification: `src/utils/replayTraceFixtures.js` and `scripts/validate-replay-trace-fixtures.mjs` already exist and pass the current fixture parity contract."
+    },
+    {
+      "slug": "physics-parity-replay-resim",
+      "reason": "Deferred: the current code intentionally labels replay validation as an advisory pressure estimate; replacing it with true frame simulation is larger than a safe continuation slice."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "deathscreen-replay-proof-presenter",
+      "status": "shipped-l3",
+      "depth": "L3",
+      "commit": null,
+      "notes": "Added `src/utils/replayProofPresenter.js` to compose DeathScreen replay proof receipts, proof trends, and share-card stamps through one pure tested helper; DeathScreen now consumes that presenter instead of owning trust composition inline. Climbed L3 by routing online/rejected/local submission feedback proof readouts through the same presenter. Verification: focused proof/replay/session tests 27/27, full `npm test` 453/453, replay fixture validator 4/4, `npm run lint` 0 errors / 8 existing warnings, and `npm run build` passing."
+    },
+    {
+      "slug": "ops-innovation-pack-command",
+      "status": "shipped",
+      "depth": "L3",
+      "commit": null,
+      "notes": "Added `node scripts/ops.mjs innovation-pack`, generated `docs/INNOVATION_PACK.md`, and added the artifact to protocol drift visibility. Verification: command smoke passed and `npm run protocol:drift -- --json` reports required helpers present."
+    }
+  ]
+}

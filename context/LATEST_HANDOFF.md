@@ -1,5 +1,15 @@
 # Latest Handoff
 
+## Where We Left Off - Session 90 (2026-06-14)
+
+Completed the requested `/start -> /audit -> /implement -> /closeout` continuation from current repo evidence. Created and executed `docs/AUDIT_2026-06-14_2.md` / `.json` after confirming the earlier same-day replay trust audit was already shipped.
+
+**Shipped:** replay proof composition is now a pure tested presenter instead of DeathScreen-owned glue. `src/utils/replayProofPresenter.js` returns `receipt`, `trend`, and `shareStamp`; `src/components/DeathScreen.jsx` uses it for the REPLAY PROOF card, generated score-card stamp, and online/rejected/local submission feedback proof readouts. The saturation loop also exposed a real protocol gap: `node scripts/ops.mjs innovation-pack` was missing. That command now writes `docs/INNOVATION_PACK.md` from task-board and genius-list signals, and `npm run protocol:drift -- --json` tracks the artifact.
+
+**Validation:** focused `npx vitest run src/utils/replayProofPresenter.test.js src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js src/systems/runSession.test.js` passed 27/27; `node scripts/validate-replay-trace-fixtures.mjs` passed 4 fixtures; full `npm test` passed 453/453; `npm run protocol:drift -- --json` reported `status=ok` with 20/20 checks present; `npm run lint` reported 0 errors / 8 existing warnings; `npm run build` passed.
+
+**Next session:** use `docs/INNOVATION_PACK.md` if `session-floor` asks for more work after an audit is exhausted. Strong next repo-local candidates are warning-baseline cleanup, a deeper App.jsx death/submission extraction, or a dedicated physics-parity replay resim design slice; manual PWA/gamepad QA and Itch.io publication remain human/device gates.
+
 ## Where We Left Off - Session 89 (2026-06-14)
 
 Completed the requested `/start -> /audit -> /implement -> /closeout` loop from current repo evidence. Created and executed `docs/AUDIT_2026-06-14.md` / `.json` for a three-item replay-trust sprint after rejecting already-shipped duplicate ideas (Run DNA v2 and rich-trace badge) during premise verification, then climbed the remaining L3 ladder rungs after `session-floor` correctly reported that the session still had implementation budget.

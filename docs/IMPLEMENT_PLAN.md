@@ -75,3 +75,25 @@ Source: `docs/AUDIT_2026-06-14.json` · Items: 3 · Combined Priority: 97.8
 - `npm test` — passed 450/450.
 - `npm run lint` — 0 errors; 8 existing warnings remain.
 - `npm run build` — passed.
+## 2026-06-14 Session 90 — Replay Proof Presenter Extraction
+
+Source audit: `docs/AUDIT_2026-06-14_2.json`
+
+### Sequenced Order
+
+1. `deathscreen-replay-proof-presenter` — L2 — add `buildReplayProofPresenter({ traceEvidence, runHistory })`, wire DeathScreen receipt/trend/share-card stamp to the pure helper, and cover no-evidence/rich/mixed-history cases.
+2. `ops-innovation-pack-command` — L3 — repair the missing local `node scripts/ops.mjs innovation-pack` path exposed by session-floor saturation, generate `docs/INNOVATION_PACK.md`, and add drift visibility.
+
+### Execution Log
+
+- `deathscreen-replay-proof-presenter` — shipped L3. Added `src/utils/replayProofPresenter.js`, added `src/utils/replayProofPresenter.test.js`, replaced DeathScreen's inline proof trend/share-stamp composition with the helper, and routed online/rejected/local submission feedback proof readouts through the same presenter.
+- `ops-innovation-pack-command` — shipped L3. Added a repo-local innovation-pack command to `scripts/ops.mjs`, generated `docs/INNOVATION_PACK.md`, and surfaced the artifact in protocol drift checks.
+
+### Verification
+
+- `npx vitest run src/utils/replayProofPresenter.test.js src/utils/replayCommandTrace.test.js src/utils/runSubmission.test.js src/systems/runSession.test.js` — passed 27/27.
+- `npm test` — passed 453/453 across 50 files.
+- `node scripts/validate-replay-trace-fixtures.mjs` — passed 4 fixtures.
+- `npm run lint` — 0 errors; 8 existing warnings remain.
+- `npm run build` — passed.
+- Medium gate direct CLI attempt hit the local Windows sandbox decrypt error; the game/replay quality bar is covered by the focused replay/session tests and will be covered again by full gates before closeout.

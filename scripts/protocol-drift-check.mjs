@@ -26,6 +26,7 @@ const helpers = [
   { rel: "scripts/lib/audit-sidecar.mjs", level: "optional", purpose: "finds and updates audit JSON sidecars" },
   { rel: "scripts/session-floor.mjs", level: "optional", purpose: "gates implement/closeout saturation honestly" },
   { rel: "scripts/record-skill-cost.mjs", level: "optional", purpose: "records closeout skill-cost snapshots" },
+  { rel: "docs/INNOVATION_PACK.md", level: "optional", purpose: "records second-order saturation candidates from ops innovation-pack" },
 ];
 
 function exists(rel) {
