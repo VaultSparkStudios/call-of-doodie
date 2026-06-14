@@ -2990,6 +2990,17 @@ export default function CallOfDoodie() {
             } else {
               addText(gs, e.x, e.y - e.size - 10, "🎯 +1💩", "#FFAAFF");
             }
+            // Beat-precision bonus: precision hit during beat vulnerability window → +2💩
+            try {
+              const _bpBpm = getMusicBPM();
+              const _bpFpb = Math.round(60 / _bpBpm * 60);
+              const _bpPhase = frameCountRef.current % _bpFpb;
+              if (_bpPhase < 8) {
+                gs.coins = (gs.coins || 0) + 2;
+                addText(gs, e.x, e.y - e.size - 22, "🎵🎯 BEAT PRECISION! +2💩", "#00FFEE");
+                addParticles(gs, e.x, e.y, "#00FFEE", 5);
+              }
+            } catch {}
             // Flow state: streak ≥10 → 1.5s bullet-time (genre-first mechanical reward)
             if (gs.precisionStreak >= 10 && !(gs._flowStateCooldown > 0)) {
               gs.timeDilationTimer = Math.max(gs.timeDilationTimer || 0, 90);

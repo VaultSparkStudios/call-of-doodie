@@ -1,4 +1,5 @@
 import { WEAPONS } from "./constants.js";
+import { getMusicBPM } from "./sounds.js";
 
 function getEnemyReadabilityStyle(enemy, timeNow) {
   if (enemy.isBossEnemy) {
@@ -443,6 +444,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillStyle = _fog; ctx.fillRect(0, 0, W, H);
   }
 
+  // Beat-precision vulnerability: compute once per frame for the enemy loop
+  let _beatVulnActive = false;
+  try {
+    const _bvBpm = getMusicBPM();
+    const _bvFpb = Math.round(60 / _bvBpm * 60);
+    const _bvPhase = (refs.frameCountRef?.current || 0) % _bvFpb;
+    _beatVulnActive = _bvPhase < 8;
+  } catch {}
+
   // Enemies
   (gs.enemies || []).filter(Boolean).forEach(e => {
     // Fog of War: skip rendering enemies beyond 195px (they become visible at ~160px)
@@ -815,6 +825,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.globalAlpha = 0.22 + Math.sin(dn / 22) * 0.08;
       ctx.strokeStyle = "#FFFFFF"; ctx.lineWidth = 1; ctx.shadowColor = "#FFFFFF"; ctx.shadowBlur = 4;
       ctx.beginPath(); ctx.arc(0, 0, _pr, 0, Math.PI * 2); ctx.stroke();
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+    }
+    // Beat-precision vulnerability ring: thin cyan pulse on beat window
+    if (!e.isBossEnemy && _beatVulnActive) {
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = "#00FFEE";
+      ctx.lineWidth = 1.5;
+      ctx.shadowColor = "#00FFEE";
+      ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.5, 0, Math.PI * 2); ctx.stroke();
       ctx.shadowBlur = 0; ctx.globalAlpha = 1;
     }
     // Boss ability telegraph bars (show next-ability cooldown as thin bar under HP bar)
