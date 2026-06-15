@@ -1,5 +1,27 @@
 # Latest Handoff
 
+## Where We Left Off (Session 93 — mission progress truth + telemetry single-writer closeout)
+
+**Intent outcome:** Achieved for `/start → /audit → /implement`; `/closeout` is executing with validation complete and write-backs in place.
+
+**Shipped**
+- `src/storage.js` — added `isMissionCompleted()` and `countIncompleteMissions()` so mission completion reads true for both legacy index-keyed progress and mission-id progress.
+- `src/components/HomeV2.jsx`, `src/components/MenuScreen.jsx`, `src/components/MenuPanels.jsx` — front-door and mission row surfaces now use the shared mission completion contract.
+- `src/systems/runSession.js` — `createDeathStudioEvents()` now emits only `first_death_wave`; weekly contract progress is owned by DeathScreen's contract-specific de-duped writer.
+- `src/components/DeathScreen.jsx` — removed duplicate successful score-submit Studio event writes; App.submitScore remains the canonical successful submit writer, while DeathScreen keeps the local failure fallback event.
+
+**Validation**
+- `npx vitest run src/storage.test.js` — 45/45
+- `npx vitest run src/systems/runSession.test.js` — 5/5
+- `npm test` — 484/484
+- `npm run lint` — 0 errors / 7 existing warnings
+- `npm run build` — passing
+
+**Next recommended slice**
+- [ ] Edge validate-replay pressure parity — extend Supabase function fixture checks to consume the same pressure expectations as local fixtures.
+- [ ] App.jsx death-slice extraction — move more death/submit orchestration into pure helpers now event ownership is cleaner.
+- [ ] Warning baseline cleanup — clear the 7 existing lint warnings if zero-warning launch hygiene becomes a release gate.
+
 ## Where We Left Off - Session 92 (2026-06-14)
 
 Completed the requested `/start → /audit → /implement → /closeout` pass from current repo evidence. Created and executed `docs/AUDIT_2026-06-14_4.md` / `.json` for three verified gaps left after the larger Session 91 depth sprint.

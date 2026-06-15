@@ -619,3 +619,9 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Implemented weekly contract progress persistence: `buildWeeklyContractProgressPayload()` turns the visible weekly contract into a normalized local Studio event, and DeathScreen writes de-duplicated `weekly_contract_progress` events.
 - Implemented replay pressure fixture hardening: shared replay fixtures now pin pressure-profile class/count/finalWave/finalScore; `scripts/validate-replay-trace-fixtures.mjs` enforces those values.
 - Validation: focused utility tests 13/13; replay fixture validator 4/4; full `npm test` 482/482; `npm run lint` 0 errors / 7 existing warnings; `npm run build` passing.
+## 2026-06-14 — Session 93 — Mission Progress Truth + Telemetry Single Writer
+
+- Ran `/start` preflight, generated fresh `docs/AUDIT_2026-06-14_5.json` / `.md`, and implemented both audit items.
+- Added mission progress helpers so saved mission completion by index or id produces the same UI truth across HomeV2, MenuScreen, and MissionsPanel.
+- Removed duplicate Studio event writes: `createDeathStudioEvents()` now emits `first_death_wave` only, DeathScreen owns contract-specific weekly progress, and App.submitScore owns successful submit telemetry.
+- Validation: focused storage 45/45, focused runSession 5/5, full `npm test` 484/484, `npm run lint` 0 errors / 7 existing warnings, `npm run build` passing.

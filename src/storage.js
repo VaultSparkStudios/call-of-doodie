@@ -597,6 +597,15 @@ export function loadMissionProgress() {
 export function saveMissionProgress(completed) {
   try { localStorage.setItem("cod-missions-" + getTodayKey(), JSON.stringify(completed)); } catch {}
 }
+export function isMissionCompleted(missionProgress = {}, mission = null, index = null) {
+  if (!missionProgress || typeof missionProgress !== "object") return false;
+  const byIndex = index != null && !!missionProgress[index];
+  const byId = mission?.id != null && !!missionProgress[mission.id];
+  return byIndex || byId;
+}
+export function countIncompleteMissions(missions = [], missionProgress = {}) {
+  return (missions || []).filter((mission, index) => !isMissionCompleted(missionProgress, mission, index)).length;
+}
 
 // ===== DAILY MISSION STREAK =====
 const MISSION_STREAK_KEY = "cod-mission-streak-v1";

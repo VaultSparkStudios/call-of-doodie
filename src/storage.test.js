@@ -19,7 +19,9 @@ import {
   saveBossKillRecord,
   isNemesis,
   getAdaptiveSpawnMods,
+  countIncompleteMissions,
   getCommunityChokePoints,
+  isMissionCompleted,
   trackRhythmMasteryHit,
   getRhythmMastery,
 } from "./storage.js";
@@ -175,6 +177,30 @@ describe("local Studio event and rivalry persistence", () => {
     expect(result.won).toBe(false);
     expect(result.delta).toBe(-2000);
     expect(loadRivalryHistory()[0].seed).toBe(123);
+  });
+});
+
+describe("mission progress lookup", () => {
+  const missions = [
+    { id: "kills", text: "Kill 50 enemies" },
+    { id: "waves", text: "Reach wave 5" },
+    { id: "coins", text: "Collect 20 coins" },
+  ];
+
+  it("recognizes legacy index-keyed mission progress", () => {
+    const progress = { 0: true, 2: true };
+
+    expect(isMissionCompleted(progress, missions[0], 0)).toBe(true);
+    expect(isMissionCompleted(progress, missions[1], 1)).toBe(false);
+    expect(countIncompleteMissions(missions, progress)).toBe(1);
+  });
+
+  it("recognizes mission-id progress for canonical callers", () => {
+    const progress = { kills: true, waves: true };
+
+    expect(isMissionCompleted(progress, missions[0], 0)).toBe(true);
+    expect(isMissionCompleted(progress, missions[1], 1)).toBe(true);
+    expect(countIncompleteMissions(missions, progress)).toBe(1);
   });
 });
 

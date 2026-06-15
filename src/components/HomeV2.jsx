@@ -5,6 +5,7 @@ import {
   loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress,
   getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, requestStudioEventSync, saveStudioGameEvent,
   loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion, getMissionStreak,
+  countIncompleteMissions,
 } from "../storage.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
@@ -183,7 +184,7 @@ export default function HomeV2(props) {
       challenge: challengeMode?.vs ? { seed: challengeMode.seed, vsScore: challengeMode.vs, vsName: challengeMode.vsName } : null,
       dailyAlreadyPlayed,
       canSpendMeta: (meta?.careerPoints || 0) >= 10,
-      incompleteMissionCount: missions.filter(m => !missionProgress[m.id]).length,
+      incompleteMissionCount: countIncompleteMissions(missions, missionProgress),
       selectedLoadout,
       currentModeLabel: selectedMode.label,
       todaySeed: todaySeedStr,
@@ -867,7 +868,7 @@ export default function HomeV2(props) {
 
 function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree }) {
   if (!career) return <div style={{ color: "#888", textAlign: "center" }}>Loading…</div>;
-  const incomplete = (missions || []).filter(m => !missionProgress[m.id]).length;
+  const incomplete = countIncompleteMissions(missions, missionProgress);
   return (
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 10 }}>

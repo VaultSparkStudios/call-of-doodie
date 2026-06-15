@@ -88,21 +88,9 @@ export function createDeathStudioEvents({
   wave = 1,
   difficulty = "normal",
   flags = {},
-  runSeed = null,
 } = {}) {
   const mode = resolveRunModeFromFlags(flags);
   return [
-    buildStudioGameEvent("weekly_contract_progress", {
-      surface: "death_screen",
-      contractId: runSeed ? "seeded_progress" : "baseline_progress",
-      progressLabel: runSeed
-        ? `Seed #${runSeed} banked at wave ${wave}`
-        : `Wave ${wave} baseline recorded`,
-      seed: runSeed || null,
-      mode,
-      score,
-      wave,
-    }),
     buildStudioGameEvent("first_death_wave", {
       surface: "death_screen",
       mode,

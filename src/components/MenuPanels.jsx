@@ -2,7 +2,7 @@ import { useState } from "react";
 import { WEAPONS, ENEMY_TYPES, STARTER_LOADOUTS, ACHIEVEMENTS, META_UPGRADES, NEW_FEATURES, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked } from "../constants.js";
 import {
   loadCustomLoadouts, saveCustomLoadout, loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
-  saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, loadCareerStats, getAccountLevel,
+  saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, loadCareerStats, getAccountLevel, isMissionCompleted,
 } from "../storage.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { copyChallengeUrl } from "../utils/challengeLinks.js";
@@ -635,7 +635,7 @@ export function MissionsPanel({ missions, missionProgress, onClose }) {
         <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Resets in {h}h {m}m · Complete for career point bonuses</p>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {(missions || []).map((mi, i) => {
-            const done = !!missionProgress[i];
+            const done = isMissionCompleted(missionProgress, mi, i);
             return (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 8, background: done ? "rgba(0,255,136,0.07)" : "rgba(255,255,255,0.04)", border: `1px solid ${done ? "rgba(0,255,136,0.35)" : "rgba(255,255,255,0.1)"}` }}>
                 <span style={{ fontSize: 26, flexShrink: 0 }}>{mi.icon}</span>

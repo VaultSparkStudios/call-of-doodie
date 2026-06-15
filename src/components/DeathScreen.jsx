@@ -523,20 +523,6 @@ export default function DeathScreen({
       setSubmitStatus(result?.submission || (result?.online ? "online" : "local"));
       setSubmitFeedback(result || null);
       if (result?.globalRank) setGlobalRank(result.globalRank);
-      saveStudioGameEvent(buildStudioGameEvent(result?.submission === "rejected" ? "submission_rejected" : "score_submit_result", {
-        surface: "death_screen",
-        mode,
-        difficulty,
-        score,
-        wave,
-        seed: runSeed,
-        submission: result?.submission || null,
-        globalRank: result?.globalRank || null,
-        digestVersion: eventDigest?.v || null,
-        reason: result?.rejectionReason || null,
-        reasons: result?.rejectionReasons || [],
-        traceEvidence: result?.traceEvidence || null,
-      }));
       requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
     } catch {
       setSubmitStatus('local');

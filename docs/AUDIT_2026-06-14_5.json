@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "generatedAt": "2026-06-14",
+    "project": "call-of-doodie",
+    "type": "game",
+    "combinedPriority": 132.8,
+    "top3": [
+      "mission-progress-key-truth",
+      "death-telemetry-single-writer"
+    ]
+  },
+  "generated": "2026-06-14",
+  "session": "codex-2026-06-14",
+  "project": "call-of-doodie",
+  "type": "game",
+  "axisWeights": {
+    "gamification": 3,
+    "ux": 2,
+    "ai": 1.5,
+    "feature-depth": 1.5,
+    "security": 1,
+    "speed": 1,
+    "token": 1,
+    "feedback": 1,
+    "new-features": 1
+  },
+  "totalItems": 2,
+  "combinedPriority": 132.8,
+  "top3": [
+    "mission-progress-key-truth",
+    "death-telemetry-single-writer"
+  ],
+  "innovationReserve": [
+    "death-telemetry-single-writer"
+  ],
+  "items": [
+    {
+      "rank": 1,
+      "id": "mission-progress-key-truth",
+      "slug": "mission-progress-key-truth",
+      "tier": "⚡",
+      "axis": "user feedback loop",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 57.6,
+      "why": "Gameplay persists daily mission completion by mission index, and the Missions panels also read by index, but HomeV2 and the legacy front-door incomplete counters read by mission id. That means a completed mission can still look incomplete in the recommended action stack and career tab, causing the game to nag the player toward already-finished progression. Normalizing mission completion lookup protects the front-door feedback loop without changing mission rules.",
+      "recipe": "Add a small mission progress lookup helper that treats index keys and mission id keys as compatible. Use it anywhere incomplete mission counts or mission rows are derived, then add focused tests proving index-keyed saved progress no longer generates a false Mission Cleanup action.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Replace HomeV2 and MenuScreen incomplete counters with index-aware checks."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Create a pure mission progress helper, wire HomeV2/MenuScreen/MenuPanels to it, and add tests for index-keyed and id-keyed saved progress."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Migrate saved mission progress to canonical mission ids while preserving old index keys for the current day."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Added isMissionCompleted() and countIncompleteMissions(), wired HomeV2/MenuScreen/MenuPanels through the shared helper, and covered index-keyed plus id-keyed mission progress in storage tests. Evidence: focused storage tests 45/45, full npm test 484/484, lint 0 errors / 7 existing warnings, build passing, game medium gate ok."
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "death-telemetry-single-writer",
+      "slug": "death-telemetry-single-writer",
+      "tier": "🔥",
+      "axis": "speed / organization / efficiency",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 75.2,
+      "why": "Death and submit telemetry currently has multiple writers for the same semantic events. App's createDeathStudioEvents still writes a generic weekly_contract_progress event even though DeathScreen now writes the contract-specific progress event with de-dupe, and score submission events are written by submitScore plus DeathScreen after the callback resolves. Collapsing to one writer per event type makes Studio event history more trustworthy and reduces local sync noise without adding any network or token cost.",
+      "recipe": "Make createDeathStudioEvents emit only the first_death_wave death fact, leaving contract progress to DeathScreen's contract-specific writer. Remove DeathScreen's duplicate score_submit_result/submission_rejected writes on successful callback because App.submitScore already records those through createScoreSubmitStudioEvents; keep a catch-path local failure event if onSubmitScore throws before App can record anything. Update runSession and DeathScreen-focused tests around the single-writer contract.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Stop createDeathStudioEvents from emitting generic weekly_contract_progress and update its tests."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Apply the full single-writer contract for weekly progress and score-submit events, preserving only the DeathScreen catch-path local event."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Add a shared event-writer registry helper that documents canonical owners for death, debrief, rivalry, weekly contract, and score submission events."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "createDeathStudioEvents() now emits only first_death_wave, leaving weekly contract progress to DeathScreen's contract-specific de-duped writer; DeathScreen no longer duplicates score-submit events after successful App.submitScore(), while retaining the local catch-path fallback event. Evidence: focused runSession tests 5/5, full npm test 484/484, lint 0 errors / 7 existing warnings, build passing, game medium gate ok."
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-resim-runner",
+      "reason": "Still a valid long-term trust target, but today's verified gaps are smaller single-session correctness issues. A full runner should not be partially shipped."
+    },
+    {
+      "slug": "delete-legacy-menu-v1",
+      "reason": "DECISIONS.md keeps the legacy menu fallback data-gated by Lighthouse and funnel evidence, so removal would reverse a current decision."
+    },
+    {
+      "slug": "new-content-pack",
+      "reason": "The game already has substantial content breadth. Current evidence says trust and feedback-loop correctness outrank adding more modes or enemies."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "mission-progress-key-truth",
+      "status": "shipped",
+      "notes": "Mission progress lookup now treats legacy index keys and mission id keys as compatible across HomeV2, MenuScreen, and MissionsPanel. Evidence: npx vitest run src/storage.test.js passed 45/45; npm test passed 484/484; npm run lint 0 errors / 7 existing warnings; npm run build passed."
+    },
+    {
+      "slug": "death-telemetry-single-writer",
+      "status": "shipped",
+      "notes": "Death and submit telemetry now have single owners for weekly progress and successful score submissions, with DeathScreen retaining only its catch-path local submit event. Evidence: npx vitest run src/systems/runSession.test.js passed 5/5; npm test passed 484/484; npm run lint 0 errors / 7 existing warnings; npm run build passed."
+    }
+  ]
+}

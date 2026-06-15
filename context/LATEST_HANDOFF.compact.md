@@ -1,54 +1,58 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
 <!-- source-hash: ac5e4e70023f -->
-<!-- generated-at: 2026-06-14T17:13:51.960Z -->
+<!-- generated-at: 2026-06-14T23:09:50.266Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session: 93 (continuation from S92, 2026-06-14)
+Session 92 (2026-06-14)
 
-Shipped recent (S92):
-- src/utils/runDnaShareCard.js: buildRunDnaSharePayload(), computeWavePercentile(); DeathScreen posts payload to shareCard.worker.js with real replayProofTier
-- buildWeeklyContractProgressPayload() in socialRetention.js; weekly_contract_progress Studio event de-duped
-- replayTraceFixtureTable() extended with pressure class/count/finalWave/finalScore; validate-replay-trace-fixtures.mjs + replayResim.test.js enforce contract
+Shipped
+- runDnaShareCard.js: buildRunDnaSharePayload + computeWavePercentile; DeathScreen posts to shareCard.worker.js, propagates replayProofTier from real proof
+- socialRetention.js: buildWeeklyContractProgressPayload; DeathScreen saves de-duplicated weekly_contract_progress Studio event
+- replayTraceFixtures: extended fixture table with pressure class/count/finalWave/finalScore; validator + replayResim.test.js enforce contract
 
-Validation last green:
-- npm test 482/482; lint 0 errors / 7 warnings; build pass
+Validation
+- Focused vitest: 13/13
 - validate-replay-trace-fixtures.mjs: 4 fixtures pass
+- npm test: 482/482
+- Lint: 0 errors / 7 warnings (baseline)
+- Build: pass
 
-Current intent:
-- Continue /start → /audit → /implement → /closeout loop with creative/innovative depth and short impact summary
+Current Intent
+- Continue durable /start → /audit → /implement → /closeout loop with creative depth
+- Maintain replay trust honesty (heuristic_pressure_estimate / advisory)
+- No new dependencies, accounts, or paid spend
 
-Now bucket (top 3):
-1. Edge validate-replay fixture parity vs new pressure expectations
-2. Deeper App.jsx extraction (death/shoot/spawn/submission slices)
-3. Lint-warning baseline cleanup (7 warnings) for clean launch hygiene
+Now Bucket (top 3)
+1. Edge validate-replay fixture parity vs same pressure expectations (extend Supabase function to match local contract)
+2. Deeper App.jsx extraction: death/shoot/spawn slices
+3. Lint warning baseline cleanup (7 existing) if zero-warning launch hygiene needed
 
-Secondary candidates:
-- CareerStats panel rhythm mastery display
-- L3 weekly theme enemy weight bias in spawn loop
-- Deterministic physics-parity replay resim (larger trust milestone; currently labeled heuristic_pressure_estimate/advisory)
-- Wire fixture validator into edge-function parity checks
+Adjacent candidates
+- CareerStats panel: rhythm mastery display
+- L3 weekly theme: enemy weight bias in spawn loop
+- HomeV2 v1 retirement pending Lighthouse/funnel evidence
+- Score-milestone share hook; rivalry ladder "rival beaten" animation
 
-Blockers (top 3, all human/device/credential gated):
-- Supabase edge-function deploy: needs SUPABASE_ACCESS_TOKEN
-- Physical PWA/gamepad QA: device-gated
-- Itch.io publication: human-gated
-- HomeV2 v1 retirement: needs Lighthouse/funnel evidence
+Blockers (top 3)
+1. Supabase edge-function deploy — needs SUPABASE_ACCESS_TOKEN (credential-gated)
+2. Cloudflare Web Analytics beacon SRI error — Cloudflare-injected, config-side fix
+3. Deterministic physics-parity replay resim — large design slice, deliberately deferred; current receipt honestly labeled advisory
 
-Human-blocked age:
-- Supabase token: pending since S82 (2026-06-07, ~7 days)
-- Cloudflare Web Analytics SRI beacon error: pending since S82
-- Itch.io publication: pending multi-session (≥S74, ~24 days)
-- PWA/gamepad device QA: pending multi-session (≥S74)
-- HomeV2 Lighthouse gate: pending since S87 (~1 day)
+Human/Device Gated (age)
+- Physical PWA + gamepad QA — open since S75 (~17 sessions)
+- Itch.io publication — open since S74 (~18 sessions)
+- HomeV2 v1 retirement (Lighthouse LCP ≥200ms win) — open since S87 (~5 sessions)
+- Analytics dashboard secrets — open since S74
 
-Protocol state:
-- Studio OS helpers locally shimmed (S80/S81/S83); protocol:drift status=ok
-- Codex plan-mode: not_required stamp working
-- SIL invariant check: clean via write-project-status
+Protocol State
+- protocol:drift status=ok, 20/20 helpers
+- Local Studio OS helpers (skill-profile, sil-categories, plan-mode, etc.) shimmed in S80–S83
+- innovation-pack helper available (S90) for post-audit budget
 
-Repo health:
-- Tests 482, +21 net vs S91 (461→482); coverage growing on share/payload/fixture utils
-- innovation-pack.mjs available for post-audit saturation work
+Repo Facts
+- Tests: 482 across 49+ files
+- Build passing, lint 0 errors / 7 warnings
+- Replay trust honestly labeled pressure-estimate-v1 / advisory
 
-Next-session pointer: run /start; if audit exhausted, consume docs/INNOVATION_PACK.md or pursue edge fixture parity + App.jsx extraction.
+Next session: run /start → /audit; if exhausted, consult docs/INNOVATION_PACK.md, then target edge validate-replay pressure parity or App.jsx death-slice extraction.

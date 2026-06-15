@@ -1,6 +1,15 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-14 - Session 93
+
+- Mission progress truth — `isMissionCompleted(progress, mission, index)` returns true for either a legacy numeric/index key or a mission `id` key. `countIncompleteMissions()` is now the shared front-door counter used by HomeV2/MenuScreen surfaces.
+- Studio event ownership truth — `createDeathStudioEvents()` emits only `first_death_wave`. DeathScreen remains the owner of contract-specific `weekly_contract_progress`, and App.submitScore remains the owner of successful `score_submit_result` / `submission_rejected` events via `createScoreSubmitStudioEvents()`.
+- DeathScreen fallback truth — DeathScreen still writes a local `score_submit_result` only in the catch path where the submit callback throws before App can write the canonical result event.
+- Validation truth — focused storage tests passed 45/45, focused runSession tests passed 5/5, full `npm test` passed 484/484, `npm run lint` passed with 0 errors / 7 existing warnings, and `npm run build` passed.
+
+Last reviewed: 2026-06-14
+
 ## 2026-06-14 - Session 91
 
 - storage.js surface truth — 3 new exported functions: `getCommunityChokePoints(counts)` (returns `Set<Number>` of waves with ≥3× median death count; null input falls back to `getWaveDeathCounts()`), `trackRhythmMasteryHit()` (increments career.rhythmMasteryHits, returns new total), `getRhythmMastery()` (returns career.rhythmMasteryHits or 0).

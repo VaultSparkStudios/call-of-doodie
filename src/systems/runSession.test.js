@@ -55,9 +55,15 @@ describe("runSession", () => {
       flags: { cursed: true },
       runSeed: 2468,
     });
-    expect(events).toHaveLength(2);
-    expect(events[0].type).toBe("weekly_contract_progress");
-    expect(events[1].type).toBe("first_death_wave");
+    expect(events).toHaveLength(1);
+    expect(events[0].type).toBe("first_death_wave");
+    expect(events[0].payload).toMatchObject({
+      mode: "cursed",
+      difficulty: "normal",
+      wave: 12,
+      score: 9999,
+      kills: 55,
+    });
   });
 
   it("includes rejection metadata when score submission is rejected", () => {

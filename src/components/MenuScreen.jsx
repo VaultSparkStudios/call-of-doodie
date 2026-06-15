@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent } from "../storage.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent, countIncompleteMissions, isMissionCompleted } from "../storage.js";
 import { supabase } from "../supabase.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
@@ -283,7 +283,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
     selectedLoadout,
     weeklyMutation,
   });
-  const incompleteMissionCount = missions.filter(m => !missionProgress[m.id]).length;
+  const incompleteMissionCount = countIncompleteMissions(missions, missionProgress);
   const canSpendMeta = (meta?.careerPoints || 0) >= 10;
   const actionStack = buildFrontDoorActionStack({
     challenge: challengeMode?.vs ? { seed: challengeMode.seed, vsScore: challengeMode.vs, vsName: challengeMode.vsName } : null,
@@ -908,7 +908,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {missions.map((m, i) => {
-                const done = !!missionProgress[i];
+                const done = isMissionCompleted(missionProgress, m, i);
                 return (
                   <div key={i} style={{
                     display: "flex", alignItems: "center", gap: 12, padding: "12px 14px",
