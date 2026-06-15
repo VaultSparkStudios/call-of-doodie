@@ -42,9 +42,41 @@ describe("runDnaShareCard", () => {
       score: 12345,
       kills: 15,
       runArc: "THE PUSH",
+      moments: [],
       buildGrade: "A",
       replayProofTier: "verified",
       wavePercentile: 80,
     });
+  });
+
+  test("includes up to 2 turning-point moments from runNarrative", () => {
+    const payload = buildRunDnaSharePayload({
+      weaponKills: [5],
+      weapons: [{ color: "#f00", emoji: "X" }],
+      leaderboard: [],
+      wave: 15,
+      score: 9000,
+      kills: 40,
+      runNarrative: {
+        act: "THE GRIND",
+        moments: [
+          { label: "LAST STAND", desc: "Dropped to 5 HP on wave 8." },
+          { label: "AIM LOCKED", desc: "Peak 7× precision streak." },
+          { label: "CHAIN REACTION", desc: "22-kill streak at peak momentum." },
+        ],
+      },
+    });
+
+    expect(payload.moments).toHaveLength(2);
+    expect(payload.moments[0].label).toBe("LAST STAND");
+    expect(payload.moments[1].label).toBe("AIM LOCKED");
+  });
+
+  test("returns empty moments array when runNarrative has none", () => {
+    const payload = buildRunDnaSharePayload({
+      weapons: [],
+      runNarrative: { act: "THE OPENER", moments: [] },
+    });
+    expect(payload.moments).toEqual([]);
   });
 });

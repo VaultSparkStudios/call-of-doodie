@@ -31,6 +31,7 @@ export function buildRunDnaSharePayload({
     score: safeNumber(score, 0),
     kills: safeNumber(kills, 0),
     runArc: runNarrative?.act || "",
+    moments: Array.isArray(runNarrative?.moments) ? runNarrative.moments.slice(0, 2) : [],
     buildGrade: buildGrade?.grade || "?",
     replayProofTier: receipt?.status || receipt?.level || null,
     wavePercentile: computeWavePercentile(leaderboard, wave),

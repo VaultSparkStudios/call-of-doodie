@@ -1,11 +1,11 @@
 // Generates a shareable run DNA card image using OffscreenCanvas.
-// Receives: { weaponKills, weaponColors, weaponEmojis, wave, score, kills, runArc, buildGrade, replayProofTier }
+// Receives: { weaponKills, weaponColors, weaponEmojis, wave, score, kills, runArc, moments, buildGrade, replayProofTier }
 // Posts back: { blob } — PNG blob of the card
 
 self.onmessage = function(e) {
-  const { weaponKills = [], weaponColors = [], weaponEmojis = [], wave = 0, score = 0, kills = 0, runArc = '', buildGrade = 'F', replayProofTier = null, wavePercentile = null } = e.data || {};
+  const { weaponKills = [], weaponColors = [], weaponEmojis = [], wave = 0, score = 0, kills = 0, runArc = '', moments = [], buildGrade = 'F', replayProofTier = null, wavePercentile = null } = e.data || {};
 
-  const W = 480, H = 160;
+  const W = 480, H = 160 + Math.min(moments.length, 2) * 18;
   let canvas;
   try {
     canvas = new OffscreenCanvas(W, H);
@@ -94,12 +94,24 @@ self.onmessage = function(e) {
     ctx.fillText(val, sx, 106);
   });
 
+  // Turning-point moments (up to 2): shown below stats row
+  const _momentIcons = { 'LAST STAND': '♥', 'AIM LOCKED': '◎', 'BOSS SLAYER': '☠', 'BOSS HUNTER': '☠', 'CHAIN REACTION': '⚡' };
+  moments.slice(0, 2).forEach((m, idx) => {
+    const my = 118 + idx * 18;
+    ctx.fillStyle = '#556';
+    ctx.font = 'italic 8px monospace';
+    ctx.textAlign = 'left';
+    const icon = _momentIcons[m.label] || '●';
+    const line = `${icon} ${m.label}: ${m.desc}`;
+    ctx.fillText(line.length > 68 ? line.slice(0, 65) + '…' : line, 12, my);
+  });
+
   // Community percentile
   if (wavePercentile !== null) {
     ctx.textAlign = 'center';
     ctx.font = '8px monospace';
     ctx.fillStyle = wavePercentile >= 75 ? '#FFD700' : wavePercentile >= 50 ? '#88FF99' : '#888';
-    ctx.fillText(`You outlasted ${wavePercentile}% of the community`, W / 2, 120);
+    ctx.fillText(`You outlasted ${wavePercentile}% of the community`, W / 2, H - 40);
   }
 
   // Footer
