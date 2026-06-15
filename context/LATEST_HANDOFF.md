@@ -18,7 +18,7 @@
 - `npm run lint` — 0 errors / 7 existing warnings
 - `npm run build` — passing
 
-**Note:** `deno` is not installed locally, so Supabase Edge type-checking could not be run on this machine.
+**Deno check:** Deno 2.8.2 is installed at `C:\tmp\deno-2.8.2\deno.exe`; `deno check supabase\functions\validate-replay\index.ts` passes.
 
 ## Where We Left Off (Session 95 — closeout verification pass)
 

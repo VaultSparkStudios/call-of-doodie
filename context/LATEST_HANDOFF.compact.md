@@ -29,9 +29,9 @@ NOW BUCKET (top 3)
 3. Deterministic physics-parity replay resim runner — larger trust milestone beyond current heuristic_pressure_estimate
 
 BLOCKERS (top 3)
-1. Deno not installed locally — Supabase Edge type-check could not run this machine; parity proven via Node fixture harness only
-2. Physics-parity replay resim deferred — current receipt honestly labeled heuristic/advisory
-3. HomeV2 v1 retirement needs Lighthouse + funnel evidence
+1. Physics-parity replay resim deferred — current receipt honestly labeled heuristic/advisory
+2. HomeV2 v1 retirement needs Lighthouse + funnel evidence
+3. Supabase edge-function live deploy remains credential-gated
 
 HUMAN-BLOCKED (with age)
 - Physical PWA / gamepad QA — open since S74 (~22 sessions)

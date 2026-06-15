@@ -166,11 +166,13 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
       reasons.push(...bodyFailures);
       drift = Math.max(drift, 0.7);
     } else {
-      traceEvidence = analyzeTraceEvidence(traceBody);
-      resim = buildTracePressureReceipt(req, traceBody, traceLengthRaw) as ValidateResult["resim"];
-      if (traceEvidence.level === "rich" && resim.driftPct > 2) {
-        reasons.push(`replay pressure-estimate drift ${resim.driftPct.toFixed(2)}% above 2% advisory threshold`);
-        drift = Math.max(drift, Math.min(1, resim.driftPct / 100));
+      const nextTraceEvidence = analyzeTraceEvidence(traceBody) as NonNullable<ValidateResult["traceEvidence"]>;
+      const nextResim = buildTracePressureReceipt(req, traceBody, traceLengthRaw) as NonNullable<ValidateResult["resim"]>;
+      traceEvidence = nextTraceEvidence;
+      resim = nextResim;
+      if (nextTraceEvidence.level === "rich" && nextResim.driftPct > 2) {
+        reasons.push(`replay pressure-estimate drift ${nextResim.driftPct.toFixed(2)}% above 2% advisory threshold`);
+        drift = Math.max(drift, Math.min(1, nextResim.driftPct / 100));
       }
     }
   }

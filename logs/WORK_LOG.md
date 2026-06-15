@@ -6,7 +6,7 @@
 - Added `supabase/functions/validate-replay/pressure.js` and wired `supabase/functions/validate-replay/index.ts` through it so Edge pressure/evidence helpers are importable by Node fixture checks.
 - Added `scripts/validate-edge-replay-pressure-fixtures.mjs` plus `npm run replay:edge-fixtures`, comparing Edge pressure receipt fields against shared browser replay fixtures and `buildReplayPressureProfile()`.
 - Created `docs/AUDIT_2026-06-15_2.md` / `.json` and marked the item shipped with evidence.
-- Validation: Edge parity 4/4, browser replay fixtures 4/4, focused replay tests 17/17, full `npm test` 489/489, `npm run lint` 0 errors / 7 existing warnings, `npm run build` passing. `deno` is not installed locally, so Edge type-checking was unavailable.
+- Validation: Edge parity 4/4, browser replay fixtures 4/4, focused replay tests 17/17, full `npm test` 489/489, `npm run lint` 0 errors / 7 existing warnings, `npm run build` passing, and Deno Edge type-check passing via `C:\tmp\deno-2.8.2\deno.exe`.
 
 ## 2026-06-15 (Session 95)
 

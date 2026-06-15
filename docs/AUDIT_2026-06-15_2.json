@@ -50,7 +50,7 @@
       "executionLog": [
         {
           "status": "shipped",
-          "notes": "Extracted Edge replay pressure/evidence helpers into `supabase/functions/validate-replay/pressure.js`, wired `validate-replay/index.ts` through the shared module, added `scripts/validate-edge-replay-pressure-fixtures.mjs`, and exposed `npm run replay:edge-fixtures`. Evidence: Edge parity gate passed 4 fixtures; existing browser replay fixture validator passed 4 fixtures; focused replay tests passed 17/17."
+          "notes": "Extracted Edge replay pressure/evidence helpers into `supabase/functions/validate-replay/pressure.js`, wired `validate-replay/index.ts` through the shared module, added `scripts/validate-edge-replay-pressure-fixtures.mjs`, and exposed `npm run replay:edge-fixtures`. Evidence: Edge parity gate passed 4 fixtures; existing browser replay fixture validator passed 4 fixtures; focused replay tests passed 17/17; Deno Edge type-check passed."
         }
       ]
     }
@@ -65,7 +65,7 @@
     {
       "slug": "edge-validate-replay-pressure-parity",
       "status": "shipped",
-      "notes": "Edge validate-replay now consumes an importable pressure receipt module and the new parity script compares Edge pressureClass, commandCount, finalWave, and finalScore against the shared browser replay fixtures and `buildReplayPressureProfile()`."
+      "notes": "Edge validate-replay now consumes an importable pressure receipt module and the new parity script compares Edge pressureClass, commandCount, finalWave, and finalScore against the shared browser replay fixtures and `buildReplayPressureProfile()`. Deno Edge type-check now passes with `C:\\tmp\\deno-2.8.2\\deno.exe`."
     }
   ]
 }

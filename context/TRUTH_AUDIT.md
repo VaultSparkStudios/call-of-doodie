@@ -6,7 +6,7 @@
 - Edge pressure truth — `supabase/functions/validate-replay/pressure.js` now owns the Edge replay pressure/evidence helper logic, and `validate-replay/index.ts` imports it instead of duplicating the pressure math inline.
 - Fixture parity truth — `npm run replay:edge-fixtures` compares Edge `pressureClass`, `commandCount`, `finalWave`, and `finalScore` against the shared browser `replayTraceFixtureTable()` and `buildReplayPressureProfile()`.
 - Validation truth — Edge parity passed 4 fixtures, browser replay fixture validator passed 4 fixtures, focused replay tests passed 17/17, full `npm test` passed 489/489, lint reported 0 errors / 7 existing warnings, and build passed.
-- Tooling truth — local `deno` is unavailable on this machine, so Supabase Edge type-checking was not run.
+- Tooling truth — Deno 2.8.2 is available at `C:\tmp\deno-2.8.2\deno.exe`; `deno check supabase\functions\validate-replay\index.ts` passes after narrowing the shared JS helper return types at the TypeScript call site.
 
 Overall status: green locally
 Last reviewed: 2026-06-15
