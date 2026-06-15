@@ -1,6 +1,6 @@
-# Implement Plan — 2026-06-15
+# Implement Plan — 2026-06-15 (Session 96 — AUDIT_2026-06-15_3)
 
-Source: `docs/AUDIT_2026-06-15.json`
+Source: `docs/AUDIT_2026-06-15_3.json`
 
 ## Wave Plan
 

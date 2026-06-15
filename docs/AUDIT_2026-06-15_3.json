@@ -1,0 +1,463 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-15",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 96,
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "feature-depth": 1.5,
+      "ai": 1.5,
+      "new-features": 1,
+      "feedback-loop": 1,
+      "security": 1,
+      "speed": 1,
+      "token-cost": 1
+    }
+  },
+  "summary": {
+    "totalItems": 14,
+    "combinedPriority": 714.2,
+    "top3": ["boss-grudge-escalation-sound", "combo-decay-urgency-audio", "run-narrative-share-card"]
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "slug": "boss-grudge-escalation-sound",
+      "title": "Boss Grudge Escalation Audio Sting",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 8,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 121.5,
+      "status": "pending",
+      "why": "Session escalation (grudge/nemesis tiers at ≥2/3 boss deaths) is text-only — the dialogue changes but no audio cue signals the shift. A 2-note descending 'nemesis recognition' sting wired at the `bossSessionDeathsRef` crossing point makes the personality shift felt rather than merely read. This is a zero-asset change: pure Web Audio API synthesis matching the existing soundChainEscalate pattern. Bosses become acoustically alive — Karen recognizing you is now an auditory punch in the gut, not a text swap.",
+      "recipe": "Add `soundBossGrudge(tier)` to sounds.js — tier 1 = descending minor 3rd (440→330Hz, 0.35s), tier 2 = descending tritone sting (440→311→220Hz). Wire in App.jsx at the bossSessionDeathsRef crossing gate (same location where grudge/nemesis dialogue tier is selected).",
+      "evidence": "bossDialogue.js confirmed: no audio in interpolateBossQuote or getBossTone. App.jsx confirmed: bossSessionDeathsRef crossing is text-tier-only. soundChainEscalate is the exact synthesis pattern to clone.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add `soundBossGrudge(1)` single descending 2-note sting (440→330Hz sawtooth 0.35s). Fire in App.jsx when bossSessionDeaths for current boss crosses ≥2."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Dual-tier sound: grudge sting (minor 3rd descent) at ≥2 deaths + nemesis sting (tritone + bass pulse) at ≥3 deaths. Both synthesized via tone() helpers. Wire at the grudge tier gate in App.jsx."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Boss-type-specific nemesis audio: each of 6 boss types gets a distinct 2-note nemesis cue (Karen = descending bell+noise; Gym Bro = dropping thud; Office Karen = digital blip; etc.). Keyed on boss typeIndex, generated via existing tone() pattern. Adds personality without assets."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "combo-decay-urgency-audio",
+      "title": "Combo Decay Urgency Audio",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 7,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 106.3,
+      "status": "pending",
+      "why": "Combo chains are a core tension mechanic but their decay is completely silent. When a 15× GODLIKE streak slips away, only the HUD counter updates — no audio confirms the loss. A ticking urgency sound in the final 30 frames before reset, followed by a 'chain-drop' descending sting, creates acoustic tension around streak maintenance. This pattern is already established for escalation (soundChainEscalate) — the decay direction is the natural counterpart, completing the audio arc.",
+      "recipe": "Add `soundComboTick(framesLeft)` for ticking audio (pitch rises from 220→880Hz as framesLeft drops 30→0, played every 4 frames for combos ≥10). Add `soundComboBreak(count)` descending glide sting fired on reset when count ≥5. Wire both in the combo decay block at App.jsx:2077-2081.",
+      "evidence": "App.jsx:2077-2081 confirmed combo decay block. comboRef.current.timer decrements to 0, then count resets. No audio. soundChainEscalate at sounds.js:339 is the exact pattern to extend.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add `soundComboBreak(count)` — single descending note sting (440→220Hz 0.4s) fires on combo reset when count ≥5. Wire in App.jsx:2079."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add tick + break: `soundComboTick(framesLeft)` plays rising-pitch blip every 4 frames during last 30f for combos ≥10. `soundComboBreak(count)` scales intensity with count (5-14 = soft drop, 15+ = dramatic glide). Wire both in decay block."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Full acoustic tension arc: tick (as L2) + break intensity scales with count tier (GODLIKE loss at ≥15 gets a 3-note dramatic descending chord vs soft pop at ≤5). Add 'CLOSE CALL' decay rescue: if player gets a kill within 5 frames of chain reset, fire a 'saved!' rising sting and reset the decay timer."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "run-narrative-share-card",
+      "title": "Run Narrative Turning Points on Share Card",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 8,
+      "priority": 84.0,
+      "status": "pending",
+      "why": "buildRunNarrative() tracks up to 3 turning points per run (LAST STAND, AIM LOCKED, BOSS SLAYER, CHAIN REACTION) but only the act string flows into the share card. The moments array is computed and immediately abandoned. Adding these narrative beats to the OffscreenCanvas share card transforms a stat dump into a 'story card' — each share becomes a unique run narrative, not a score screenshot. This is the only browser game I'm aware of that would put personalized run narratives on shareable cards.",
+      "recipe": "1. Update `runDnaShareCard.js` payload to include `moments` array from buildRunNarrative. 2. In the worker canvas render, add a 3rd section below DNA bar: italicized turning points (icon + label + desc, up to 2 per card). 3. Update `buildRunNarrativePayload` in DeathScreen to pass moments through. Add 3 tests for moments rendering path.",
+      "evidence": "runDnaShareCard.js:21 confirmed: `runNarrative?.act` is used but `moments` is not destructured. runNarrative.js:58 confirmed: moments array returned with up to 3 items. Share card worker uses OffscreenCanvas — text rendering is already implemented.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Pass moments text into share card payload. Render as 1-line italic string below act: '🎯 AIM LOCKED · ❤️ LAST STAND'. No canvas changes, just text string assembly."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full canvas rendering: moments render as distinct rows with icon + bold label + truncated desc in the share card OffscreenCanvas worker. Up to 2 moments shown. Include test coverage for moments path."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Cinematic share card: act name rendered as a large badge at top. Moments rendered as timeline entries with connecting line. Wave percentile line from community data (already computed in shareCard.worker.js). Color-coded by run arc (blue OPENER → crimson LEGEND)."
+        }
+      }
+    },
+    {
+      "id": 4,
+      "slug": "enemy-personal-record-tracker",
+      "title": "Enemy Personal Record Tracker (MOST WANTED Depth)",
+      "axis": "gamification / engagement / immersion",
+      "tier": "🔥",
+      "impact": 8,
+      "effort": "3h",
+      "effortHours": 3,
+      "innovation": 7,
+      "priority": 72.4,
+      "status": "pending",
+      "why": "The MOST WANTED panel shows enemy names and types but no player-specific stats. Career tracks total kills but not per-enemy personal bests. Adding 'most killed in one wave', 'career kills', and 'times killed by this enemy' per enemy type creates micro-goals that make the bestiary a living achievement board rather than a static reference. Players will actively compete to set 'enemy PR' records, driving replays to specific enemies — a behavioral loop no similar game has.",
+      "recipe": "1. Add `enemyKillBests: {}` to DEFAULT_CAREER (maps typeIndex → {waveMax, careerKills, killedByCount}). 2. Add `updateEnemyCareerStats(typeIndex, waveKills)` to storage.js. 3. Call from App.jsx on wave clear + on player death. 4. Surface in MostWantedPanel as 'PB: N/wave · ⚔️ N career · ☠ N deaths'. Add 5 storage tests.",
+      "evidence": "DEFAULT_CAREER (storage.js:489) confirmed: no per-enemy stats. MOST WANTED panel in MenuPanels.jsx is static. recentDeathsByEnemy exists as an array (not per-type best). updateCareerStats exists as extension model.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Add `enemyKillBests` to career. Track `careerKills` per typeIndex. Render as 'Career kills: N' in MOST WANTED panel."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Full triple-stat per enemy: careerKills, waveMax (most in one wave), killedByCount. Update in storage, surface in MostWanted. Add 5 tests for update path and defaults."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "Full dossier with unlock depth: enemy intel cards unlock progressively (10 kills = counter drill tip, 25 kills = weakness revealed, 50 kills = 'NEMESIS' designation if also killed by this enemy 3+ times). Add first-encounter date and render unlock state in MOST WANTED hover card."
+        }
+      }
+    },
+    {
+      "id": 5,
+      "slug": "wave-respite-visual-cue",
+      "title": "Wave Respite Visual Signal",
+      "axis": "gamification / engagement / immersion",
+      "tier": "⚡",
+      "impact": 6,
+      "effort": "30m",
+      "effortHours": 0.5,
+      "innovation": 5,
+      "priority": 68.2,
+      "status": "pending",
+      "why": "The 120-frame loot lull after high-threat waves exists architecturally (_waveTransitDone/_respiteLock from S88) but has zero visual signaling. Players don't know they're in a breather window, so they keep sprinting and don't collect pickups. A brief 'RESPITE' floating text + subtle pickup pulse communicates the intentional breathing room, making the wave-pacing design legible without tutorial copy. This closes the design–perception gap in under 30 minutes.",
+      "recipe": "In App.jsx, when _waveTransitDone fires and gs.threat >= 4, add `addText(gs, W/2, H/2, '✦ RESPITE ✦', '#88FFCC', 90)`. In drawGame.js, during respite window, add a soft 0.15-alpha pulse ring around pickups (sin(frame/8) modulation of ring radius). No new state needed.",
+      "evidence": "_waveTransitDone and _respiteLock are gs fields from S88. addText() is the existing floating text helper. drawGame.js already renders pickup halos — pulse modulation is a 2-line change.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Add addText('✦ RESPITE ✦') floating text in center of screen when threat≥4 wave clears. 1 line in App.jsx."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "Floating text + pickup pulse ring: sin-modulated radius on pickup halos during respite window. Communicates 'collect now' without words."
+        },
+        "L3": {
+          "effortHours": 1.5,
+          "recipe": "Threat-scaled respite signal: threat 4 = subtle text + soft rings, threat 5 = full 'WAVE CLEARED' overlay + pickup magnet radius bonus for 60 frames. Scales reward feeling with danger difficulty."
+        }
+      }
+    },
+    {
+      "id": 6,
+      "slug": "runbrain-choke-point-coach",
+      "title": "RunBrain × Community Choke Point Coach",
+      "axis": "ai / intelligence integration",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 8,
+      "priority": 42.0,
+      "status": "pending",
+      "why": "getCommunityChokePoints() identifies waves where ≥3× median players die, and buildRunBrain() generates coaching, but they've never been connected. Wiring them creates the first data-driven pre-wave coaching signal in the game: 'Community choke at wave 12 — 41% of players die here. Take defensive route + Shield perk.' This is genuinely AI-adjacent: pattern-mined community data surfaces as personalized coaching at exactly the moment the player needs it.",
+      "recipe": "In buildRunBrain(), add `chokeWaves: communityChokePoints` param (optional). Detect if the player's worst wave matches a choke point. Add `chokeWarning` field to the output: { wave, tip }. Surface in DeathScreen Run Coach if player died on a choke wave. Wire communityChokePointsRef into App.jsx's deathScreen props.",
+      "evidence": "getCommunityChokePoints() confirmed in storage.js. communityChokePointsRef exists in App.jsx (S91). buildRunBrain() in runBrain.js has no choke point awareness. DeathScreen RunCoach already renders runBrain output.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add chokeWaves param to buildRunBrain. If player's death wave is a choke point, add 'You hit community choke point (wave N)' to nextExperiment text."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full coaching: choke wave detected → specific tip (defensive route recommended, shield perk suggested, 'X% of players die here'). Surface as a distinct 'COMMUNITY INTEL' line in DeathScreen RunCoach. Wire communityChokePointsRef → deathScreen → buildRunBrain."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Pre-wave choke warning on wave preview card: if next wave is a community choke point, wave preview card shows ⚠ CHOKE ZONE with community death rate + recommended counter. Fires as a 2s interstitial before the wave starts."
+        }
+      }
+    },
+    {
+      "id": 7,
+      "slug": "run-arc-vignette-gpu-dirty-check",
+      "title": "Run Arc Vignette GPU Dirty-Check (Performance)",
+      "axis": "speed / organization / efficiency",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 4,
+      "priority": 35.4,
+      "status": "pending",
+      "why": "drawGame.js:1211 calls ctx.createRadialGradient() every frame for the atmospheric run-arc vignette. Acts change at most a handful of times per run (wave ~10, ~25, ~35), yet a new gradient object is allocated at 60fps. S91 explicitly flagged this as the top technical gap. A gs._runActPrev dirty-check eliminates ~99% of gradient allocations — the canvas fillStyle can be cached as a reference and reused until the act changes.",
+      "recipe": "Add `gs._runActPrev = null` to game state init. In drawGame.js:1210, check `if (!_ac || _aa === 0 || gs._runAct === gs._runActPrev) { /* reuse cached */ }`. Cache the gradient as `gs._runActVignetteStyle`. Recreate only when `gs._runAct !== gs._runActPrev`, then update `gs._runActPrev`. Add unit test for dirty-check guard.",
+      "evidence": "drawGame.js:1211 confirmed: `ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.78)` called unconditionally every frame. S91 SIL top gap note confirms this is a known issue. gs._runActPrev field does not exist in App.jsx startGame state.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add `gs._runActPrev` to startGame init. In drawGame.js, skip radialGradient creation when `gs._runAct === gs._runActPrev`. Cache fillStyle as `gs._runActVignetteStyle`. Update prev on act change."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Full dirty-check + cache: gradient object cached per act key on first creation, reused on subsequent frames. Null-guard on canvas resize (W/H change invalidates cache). Add 1 test asserting no repeated gradient alloc across frames with same act."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Extend dirty-check pattern to all three per-frame gradient allocations in drawGame.js: run-arc vignette + last-stand radial gradient + time-dilation vignette. Estimated frame savings: ~0.3ms/frame on mid-range mobile."
+        }
+      }
+    },
+    {
+      "id": 8,
+      "slug": "ammo-depletion-urgency-pulse",
+      "title": "Ammo Depletion Urgency Pulse Animation",
+      "axis": "ui / ux / user-experience",
+      "tier": "⚡",
+      "impact": 5,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 5,
+      "priority": 31.6,
+      "status": "pending",
+      "why": "Per-weapon ammo bars use green/yellow/red color coding but are static — there's no motion signal that you're about to run out. Under combat pressure, players miss the color shift. A subtle pulse animation on the red-zone bar (<10% ammo) creates peripheral awareness without screen clutter. This follows established game industry urgency signaling (HP bars pulse in Halo, Zelda, etc.) and costs nothing but a sin() call per frame.",
+      "recipe": "In HUD.jsx, for ammo bars in red zone (<10%), add a CSS animation class or inline `opacity: 0.7 + 0.3 * Math.sin(Date.now()/200)` on the bar fill. Yellow zone (<30%): slow pulse (400ms period). Red zone (<10%): fast pulse (200ms period) + glow shadow. React `useSyncExternalStore` already polls ammo state.",
+      "evidence": "Per-weapon ammo bars exist on desktop toolbar per MEMORY. HUD.jsx renders ammo state. Color coding green/yellow/red exists. No animation/pulse exists.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Red zone (<10%): add CSS `@keyframes ammo-pulse` with opacity 0.6→1.0 at 200ms period. Apply class when fill% < 0.1."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Dual-zone pulse: yellow (<30%) = slow glow (400ms, mild box-shadow), red (<10%) = fast pulse (200ms) + red glow shadow. Both via CSS keyframes on the fill element."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Adaptive urgency: pulse rate scales linearly with depletion (30%→10% = 400ms→100ms). Add a soft audio tick at <5% ammo (once per reload cycle). Integrate with PERF MODE flag to disable animation when __codReducedEffects is true."
+        }
+      }
+    },
+    {
+      "id": 9,
+      "slug": "enemy-behavior-prediction-layer",
+      "title": "Enemy Behavior Prediction Layer (Wave Preview)",
+      "axis": "ai / intelligence integration",
+      "tier": "⚡",
+      "impact": 6,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 7,
+      "priority": 31.5,
+      "status": "pending",
+      "why": "recentDeathsByEnemy and getTelegraphMultiplier exist — the game knows which enemies kill the player most. Wave preview cards show incoming count and event type but not enemy-specific coaching. Adding 'Recent killer on this wave: Karen (dodge slam left)' pulls two existing systems together into the first enemy-specific predictive coaching that fires before the player dies, not after.",
+      "recipe": "In App.jsx wave preview card assembly, check recentDeathsByEnemy for the top recent killer. If that enemy type spawns in the current wave plan, add a 'WATCH FOR: [EnemyName] — [specific tip]' line to the preview card data. Define short tips in a ENEMY_WAVE_TIPS map in constants or waveDirector.js (one line per enemy type).",
+      "evidence": "recentDeathsByEnemy confirmed in storage.js. Wave preview card rendering exists in App.jsx / drawGame.js. getNemesisWeaponRecommendation in waveDirector.js covers boss types — same pattern for elite/standard enemies.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "For the top recent-death enemy type, append 'Watch: [EnemyName]' to the wave preview card label. No tips yet — just name awareness."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "WATCH FOR line with specific tip: define ENEMY_BEHAVIOR_TIPS[typeIndex] (one-liner per enemy). Show only when this enemy is in the current wave and matches a recent death. Add 3 tests for tip lookup."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Full prediction panel: shows top 2 predicted threats with counter weapon + dodge tip. Source: telegraphMultiplier + waveDirector plan + career death pressure. Rendered as a distinct 'THREAT INTEL' section on wave preview cards."
+        }
+      }
+    },
+    {
+      "id": 10,
+      "slug": "run-momentum-sparkline",
+      "title": "Per-Wave Score Momentum Sparkline (DeathScreen)",
+      "axis": "new innovative features",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 8,
+      "priority": 28.0,
+      "status": "pending",
+      "why": "DeathScreen shows final stats but nothing about the shape of the run. A 20-pixel-tall sparkline of score-per-wave reveals dramatic swings: a LEGEND run that peaked at wave 12 then collapsed looks totally different from a slow-burn climber. This is a common data visualization used in sports replay but never in a browser wave shooter. Players will share these runs specifically because the sparkline is a visual fingerprint of their story.",
+      "recipe": "Track `gs._waveScoreLog = []` in App.jsx — push current score at each wave clear. On death, pass to DeathScreen. Render a 120×20px inline SVG sparkline using the score array. Normalize to max score. Color: green until peak wave, orange→red after. Add to existing stat cluster above BUILD GRADE.",
+      "evidence": "DeathScreen receives gs props. No wave-by-wave score tracking exists in gs. SVG rendering in React is zero-dependency. Wave-clear hook in App.jsx already fires analytics events — score snapshot there is trivial.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Track waveScoreLog in gs. Render as a simple single-color CSS bar chart (each wave = a div width-scaled to max score) in DeathScreen."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Inline SVG polyline sparkline, 120×20px. Color splits at peak wave (green before, orange after). Tooltip on hover shows wave N → score. Add 1 test for waveScoreLog accumulation."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Full momentum card: sparkline + peak wave marker + 'peak WAVE N' label + comparison line against personal best run shape. Exportable as part of the share card. Animate in on DeathScreen mount."
+        }
+      }
+    },
+    {
+      "id": 11,
+      "slug": "peak-moment-capture",
+      "title": "Peak Moment Capture ('GODLIKE MOMENT' on DeathScreen)",
+      "axis": "new innovative features",
+      "tier": "⚡",
+      "impact": 6,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 26.6,
+      "status": "pending",
+      "why": "The game tracks combo maximums but never captures the specific context of a peak moment. Storing a lightweight snapshot at the frame where comboRef.current.count hits its new all-time-this-run maximum (wave, timestamp, enemies on screen) enables a 'TOP MOMENT: GODLIKE ×17 on Wave 11, 9 enemies' callout on the DeathScreen. The achievement context transforms a number into a memory. Zero extra storage — a single ref object.",
+      "recipe": "Add `peakMomentRef = useRef(null)` in App.jsx. When comboRef.current.count exceeds the session best, store { wave: gs.currentWave, count, enemiesAlive: gs.enemies.length, label }. Pass to DeathScreen as peakMoment. Render as '🏆 PEAK MOMENT: [LABEL] ×N · Wave W · N enemies' in the BUILD GRADE section.",
+      "evidence": "comboRef.current.max exists. No contextual peak moment capture exists. DeathScreen BUILD GRADE card is the natural home. bestMomentRef.current exists for GIF capture but doesn't track combo context.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Add peakMomentRef. Capture { wave, count, label } at new combo max. Display 1 line: '🏆 PEAK: [LABEL] ×N · Wave W' in DeathScreen stat area."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Full peak moment: capture wave, count, enemiesAlive, timestamp relative to run start. Display with enemies context. Include in share card payload as peak moment line."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Peak moment + ghost replay scrub: scrub ghost path to the peak moment frame (align with precision best-shot scrub pattern from S87 certified-run-badge). Show ghost at peak context. Trigger 'REPLAY PEAK' button on DeathScreen alongside BEST SHOT."
+        }
+      }
+    },
+    {
+      "id": 12,
+      "slug": "cross-weapon-death-coach",
+      "title": "Cross-Referenced Weapon×Death Coach",
+      "axis": "user feedback loop",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 7,
+      "priority": 24.5,
+      "status": "pending",
+      "why": "buildWeaponTip() detects weapon usage patterns. buildKilledBy() detects repeat killers. These run independently — there's no cross-reference between 'you mainly used a shotgun' and 'you died to ranged enemies 4× this week'. That correlation is precisely what a great coach would surface: 'Your shotgun dominance leaves you exposed to ranged threats — consider pairing with a sniper for zones 2–3.' This is contextual coaching that no existing game AI provides in this format.",
+      "recipe": "Create a `buildWeaponDeathCoach(weaponKills, recentDeathsByEnemy)` function in runCoach.js. Map enemy type to its primary threat category (melee/ranged/aoe/chase). Map weapons to their range coverage (shotgun = close, sniper = long, etc.). When the player's dominant weapon has low range coverage but their top killers are ranged, emit a targeted swap suggestion. Add 4 tests.",
+      "evidence": "buildWeaponTip() and buildKilledBy() confirmed in runCoach.js. They're called separately. ENEMY_TYPES in constants.js has ranged property. Weapon range is inferable from WEAPONS array.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Check if top killer is ranged and dominant weapon is shotgun/melee. Emit 'You died to ranged enemies — try pairing a longer-range weapon'. Simple heuristic, 2 enemy type checks."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Full weapon×death matrix: classify 22 enemy types into threat categories, classify 12 weapons into range tiers. Find coverage gaps and emit specific weapon suggestion. Add 4 tests for major gap patterns."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Adaptive coach with memory: if the player already owns the suggested weapon but doesn't use it, suggest 'You have [Weapon] unlocked — your data says it counters your top killer.' Uses weaponKills to detect under-utilization. Stores last coach suggestion in career to track follow-through."
+        }
+      }
+    },
+    {
+      "id": 13,
+      "slug": "enemy-intel-cards-most-wanted",
+      "title": "Enemy Intel Cards (MOST WANTED Depth Layer)",
+      "axis": "new innovative features",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "4h",
+      "effortHours": 4,
+      "innovation": 8,
+      "priority": 21.7,
+      "status": "pending",
+      "why": "MOST WANTED panel shows static enemy names. Career stats don't track per-enemy intel depth. Adding progressively unlocked enemy intel — quick bio + attack pattern + counter weapon — earned through kill milestones (10/25/50 kills), makes the bestiary a living achievement board. Players will farm specific enemy types to unlock their full intel file. This is the 'Pokédex loop' for a comedy wave shooter, and it's a perfect fit for the game's comedic character roster.",
+      "recipe": "Define ENEMY_INTEL[typeIndex] = { bio, pattern, counter, unlockAt } in constants.js for all 22 types. Add `enemyKillCounts: {}` to career storage. In updateCareerStats, increment per enemy type from weaponKills. In MostWantedPanel, render unlock state based on kill count vs unlockAt thresholds.",
+      "evidence": "MOST WANTED panel exists in MenuPanels.jsx. 22 enemy types defined in constants.js. Career stats extensible (DEFAULT_CAREER is object spread). No ENEMY_INTEL or per-enemy kill tracking exists.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Add counter weapon per enemy in constants. Show '⚔ Counter: [Weapon]' in MOST WANTED on unlock at 10 kills. Track kills via career."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Full 3-tier unlock: 10 kills = counter weapon, 25 kills = attack pattern, 50 kills = full comedic bio. All 22 enemies defined. Career tracks counts. Visual lock/unlock state in MOST WANTED panel."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Full dossier cards: hover reveals comic-style enemy file card with portrait placeholder, kill stats, PRs, 'NEMESIS' flag, first-encounter date. Unlock animations on milestone crossing mid-run."
+        }
+      }
+    },
+    {
+      "id": 14,
+      "slug": "weapon-evolution-branching",
+      "title": "Weapon Evolution Branching Paths",
+      "axis": "new innovative features",
+      "tier": "⚡",
+      "impact": 8,
+      "effort": "8h",
+      "effortHours": 8,
+      "innovation": 9,
+      "priority": 21.7,
+      "status": "pending",
+      "why": "WEAPON_EVOLVED_NAMES gives a linear passive bonus (×1.05 damage) at 1000 career kills. Branching evolution — offering 2 choices at the threshold — transforms weapon mastery from a passive buff into an active identity decision. Shotgun → Scatter Cannon [more pellets] vs Thunder Drum [knockback every shot]. This is the genre's standout endgame weapon system and nobody in browser wave shooters has it. Extremely high innovation, high effort — a ladder-climb target once lower-effort items are shipped.",
+      "recipe": "Define WEAPON_EVOLUTION_BRANCHES[weaponIdx] = [{ name, stat, bonus }, { name, stat, bonus }] in constants.js. At 1000-kill threshold, show a 2-option choice modal (PerkModal pattern). Persist choice to career. Apply in game loop. Track in weaponMods[] as a new branch field.",
+      "evidence": "WEAPON_EVOLVED_NAMES confirmed in constants.js and storage.js import. weaponMods[] in gs tracks blessed/cursed. The PerkModal selection flow is the exact UX pattern to reuse. No branching exists.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Define 2 branches for 1 weapon (Shotgun). Show prompt at 1000 kills. Apply stat to weaponMods. Test the branch selection and persistence."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "All 12 weapons with 2 branches each. Branch modal reuses PerkModal UI. Branches persist in career. Applied at game start when career kills threshold met."
+        },
+        "L3": {
+          "effortHours": 8,
+          "recipe": "Full evolution system: branching + tier 2 evolution at 5000 kills (3 branches). Career weapon evolution tree visible in LoadoutBuilder. Synergy bonuses when evolved weapon pairs with matching perk. Visual: weapon icon gets an evolution badge in HUD."
+        }
+      }
+    }
+  ],
+  "innovationReserve": [
+    "run-narrative-share-card",
+    "enemy-personal-record-tracker",
+    "combo-decay-urgency-audio",
+    "boss-grudge-escalation-sound",
+    "run-momentum-sparkline",
+    "enemy-intel-cards-most-wanted",
+    "weapon-evolution-branching"
+  ],
+  "skipped": [
+    { "slug": "lint-warning-cleanup", "reason": "Priority 4.5 — too low; warnings are intentional patterns (game loop ref stability, stale closure, fast-refresh). Prefix _var fix is trivial but offers no player value." },
+    { "slug": "menuscreen-menuPanels-unification", "reason": "Pure refactor, Priority <10, deferred in S62 TASK_BOARD — no player-facing value per session." },
+    { "slug": "supabase-auth-integration", "reason": "Requires credentials + human decision (auth plan decision). Explicitly blocked." },
+    { "slug": "validate-replay-phase2b", "reason": "Credential-gated (SUPABASE_ACCESS_TOKEN missing). Explicitly blocked." }
+  ],
+  "executionLog": []
+}
