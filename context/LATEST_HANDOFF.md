@@ -1,5 +1,26 @@
 # Latest Handoff
 
+## Where We Left Off (Session 95 — closeout verification pass)
+
+**Intent outcome:** Achieved for the durable `/start → /audit → /implement → /closeout` goal. The latest audit implementation was already shipped in Session 94, so this pass verified the current worktree evidence and completed closeout state.
+
+**Verified**
+- `docs/AUDIT_2026-06-15.md` / `.json` still mark both audit items shipped: `startup-brief-canonical-boxes` and `startup-brief-regression-harness`.
+- `scripts/lib/startup-brief-boxes.mjs`, `scripts/render-startup-brief.mjs`, and `tests/startup-brief-boxes.test.js` remain present and wired.
+- `docs/STARTUP_BRIEF.md` validates with canonical `HUMAN PRESSURE` and `GENIUS HIT LIST` boxes.
+
+**Validation**
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` — conformant
+- `npx vitest run tests/startup-brief-boxes.test.js` — 5/5
+- `npm test` — 489/489
+- `npm run lint` — 0 errors / 7 existing warnings
+- `npm run build` — passing
+
+**Next recommended slice**
+- [ ] Edge validate-replay pressure parity — extend Supabase function fixture checks to consume the same pressure expectations as local fixtures.
+- [ ] App.jsx death-slice extraction — move more death/submit orchestration into pure helpers now event ownership is cleaner.
+- [ ] Warning baseline cleanup — clear the 7 existing lint warnings if zero-warning launch hygiene becomes a release gate.
+
 ## Where We Left Off (Session 94 — startup brief canonical box repair)
 
 **Intent outcome:** Achieved for `/start → /audit → /implement → /closeout`.

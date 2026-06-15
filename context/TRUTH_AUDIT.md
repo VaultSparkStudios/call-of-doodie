@@ -1,6 +1,15 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-15 - Session 95
+
+- Closeout verification truth — this session did not add new product code; it verified the existing Session 94 audit implementation from the current worktree.
+- Audit execution truth — `docs/AUDIT_2026-06-15.md` / `.json` still mark `startup-brief-canonical-boxes` and `startup-brief-regression-harness` shipped with execution evidence.
+- Validation truth — `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passed, `npx vitest run tests/startup-brief-boxes.test.js` passed 5/5, full `npm test` passed 489/489, `npm run lint` reported 0 errors / 7 existing warnings, and `npm run build` passed.
+
+Overall status: green locally
+Last reviewed: 2026-06-15
+
 ## 2026-06-15 - Session 94
 
 - Startup brief format truth — `scripts/render-startup-brief.mjs` no longer writes raw numbered genius-list stdout into `docs/STARTUP_BRIEF.md`; unboxed output is normalized through `normalizeGeniusBlock()` into a canonical `GENIUS HIT LIST` tile.

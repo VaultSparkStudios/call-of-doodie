@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 94 shipped docs/AUDIT_2026-06-15: startup brief canonical box repair. render-startup-brief now normalizes raw genius-list stdout into a canonical GENIUS HIT LIST tile and always renders HUMAN PRESSURE with an honest empty state; tests cover plain/boxed/empty genius output and pressure paths. Validation: focused 5/5, startup brief render and validator green, npm test 489/489, lint 0 errors / 7 existing warnings, build passing.",
+  "currentFocus": "Session 95 verified the already-shipped docs/AUDIT_2026-06-15 implementation and completed closeout. Startup brief format remains conformant; focused startup-brief box tests pass 5/5; npm test passes 489/489; lint reports 0 errors / 7 existing warnings; build passes.",
   "nextMilestone": "Continue launch-confidence polish from verified gaps: edge validate-replay fixture parity, deeper App.jsx death/submission extraction, or warning-baseline cleanup; remaining manual launch gates are physical PWA/gamepad QA and Itch.io publication.",
   "testingSurfaces": [
     {
@@ -45,10 +45,10 @@
   "silSession": 94,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 2,
+  "silVelocity": 0,
   "silDebt": "decreasing",
   "silLastSession": "2026-06-15",
-  "currentSession": 94,
+  "currentSession": 95,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 489,
@@ -77,7 +77,7 @@
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
   "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-06-15T01:51:54.412Z",
+  "planModeCheckedAt": "2026-06-15T03:17:05.914Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral"
 }
