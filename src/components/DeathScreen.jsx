@@ -42,6 +42,7 @@ export default function DeathScreen({
   controllerType = null,
   peakMoment = null,
   waveScoreLog = [],
+  communityChokeWaves = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -428,6 +429,7 @@ export default function DeathScreen({
     runSummary: { wave, kills, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [], bestPrecisionStreak },
     runHistory,
     studioEvents,
+    chokeWaves: communityChokeWaves,
   });
   // Persist the next experiment so the followthrough loop can check it on the next run start
   if (runCoach?.brain?.nextExperiment) saveExperimentIntent(runCoach.brain.nextExperiment);
@@ -744,6 +746,11 @@ export default function DeathScreen({
               <div style={{ fontSize: 10, color: "#BCA08E", lineHeight: 1.45, marginTop: 3 }}>
                 {runCoach.enemyLab.nextRunCue}
               </div>
+            </div>
+          )}
+          {runCoach.brain.chokeWarning && (
+            <div style={{ marginTop: 7, padding: "6px 9px", borderRadius: 5, border: "1px solid rgba(255,140,0,0.35)", background: "rgba(255,140,0,0.08)", fontSize: 10, color: "#FFD080", lineHeight: 1.45 }}>
+              <span style={{ color: "#FF9900", fontWeight: 700 }}>⚠ CHOKE POINT:</span> {runCoach.brain.chokeWarning.tip}
             </div>
           )}
           <div style={{ marginTop: 7, paddingTop: 7, borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 10, color: "#C8D7FF", lineHeight: 1.45 }}>

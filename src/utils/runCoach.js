@@ -177,13 +177,14 @@ function buildPrecisionTip(runSummary) {
  * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[] }} ctx
  * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, enemyLab: object|null, brain: object }}
  */
-export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [] } = {}) {
+export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [], chokeWaves = null } = {}) {
   const brain = buildRunBrain({
     career,
     runHistory,
     studioEvents,
     latestAdvice: runSummary?.drill || null,
     latestRun: runSummary,
+    chokeWaves,
   });
   const frequent = mostFrequentKiller(runHistory);
   let crossRunTip = null;

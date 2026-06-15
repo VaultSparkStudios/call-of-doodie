@@ -11,7 +11,7 @@ function average(values) {
   return nums.length ? nums.reduce((sum, v) => sum + v, 0) / nums.length : 0;
 }
 
-export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [], latestAdvice = null, latestRun = {} } = {}) {
+export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [], latestAdvice = null, latestRun = {}, chokeWaves = null } = {}) {
   const recentRuns = Array.isArray(runHistory) ? runHistory.slice(0, 8) : [];
   const recentEvents = Array.isArray(studioEvents) ? studioEvents.slice(0, 80) : [];
   const avgWave = average(recentRuns.map(run => run.wave));
@@ -59,6 +59,14 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
           ? "Use Normal difficulty and a familiar loadout before chasing variants."
           : "Commit to one build doctrine before the first shop.";
 
+  let chokeWarning = null;
+  if (chokeWaves && n(latestRun?.wave) > 0) {
+    const chokeSet = chokeWaves instanceof Set ? chokeWaves : new Set(chokeWaves);
+    if (chokeSet.has(n(latestRun.wave))) {
+      chokeWarning = { wave: n(latestRun.wave), tip: `Wave ${n(latestRun.wave)} is a community choke point — most players struggle here too. Save an HP perk for this wave.` };
+    }
+  }
+
   return {
     archetype,
     confidence: Math.min(1, (recentRuns.length + adviceViews.length + replayEvents.length) / 10),
@@ -69,6 +77,7 @@ export function buildRunBrain({ career = {}, runHistory = [], studioEvents = [],
     nextExperiment,
     precisionStreak,
     traceContract,
+    chokeWarning,
   };
 }
 

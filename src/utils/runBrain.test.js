@@ -70,6 +70,23 @@ describe("runBrain", () => {
     expect(brain.nextExperiment).toContain("precision route");
   });
 
+  it("emits chokeWarning when the death wave is a community choke point", () => {
+    const brain = buildRunBrain({ latestRun: { wave: 12 }, chokeWaves: new Set([8, 12, 20]) });
+    expect(brain.chokeWarning).not.toBeNull();
+    expect(brain.chokeWarning.wave).toBe(12);
+    expect(brain.chokeWarning.tip).toContain("choke point");
+  });
+
+  it("returns null chokeWarning when the death wave is not a choke point", () => {
+    const brain = buildRunBrain({ latestRun: { wave: 10 }, chokeWaves: new Set([8, 12, 20]) });
+    expect(brain.chokeWarning).toBeNull();
+  });
+
+  it("returns null chokeWarning when chokeWaves is not provided", () => {
+    const brain = buildRunBrain({ latestRun: { wave: 12 } });
+    expect(brain.chokeWarning).toBeNull();
+  });
+
 });
 
 describe("getMutationDifficultyBrief", () => {

@@ -4272,6 +4272,7 @@ export default function CallOfDoodie() {
           experimentMatched={experimentMatchedRef.current}
           peakMoment={peakMomentRef.current}
           waveScoreLog={gsRef.current?._waveScoreLog || []}
+          communityChokeWaves={communityChokePointsRef.current}
         />
       </Suspense>
     );
