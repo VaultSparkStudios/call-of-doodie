@@ -1,5 +1,25 @@
 # Latest Handoff
 
+## Where We Left Off (Continuation — edge replay pressure parity)
+
+**Intent outcome:** Continued forward after Session 95 by shipping the top repo-local next slice: Edge validate-replay pressure parity.
+
+**Shipped**
+- `supabase/functions/validate-replay/pressure.js` — shared Edge pressure/evidence helper module importable by both Supabase Deno and Node.
+- `supabase/functions/validate-replay/index.ts` — now consumes the shared pressure module instead of carrying duplicate inline pressure math.
+- `scripts/validate-edge-replay-pressure-fixtures.mjs` and `npm run replay:edge-fixtures` — compare Edge `pressureClass`, `commandCount`, `finalWave`, and `finalScore` against `replayTraceFixtureTable()` and browser `buildReplayPressureProfile()`.
+- `docs/AUDIT_2026-06-15_2.md` / `.json` — focused audit artifact with execution evidence.
+
+**Validation**
+- `npm run replay:edge-fixtures` — 4/4 fixtures
+- `node scripts/validate-replay-trace-fixtures.mjs` — 4/4 fixtures
+- `npx vitest run src/utils/replayResim.test.js src/utils/replayCommandTrace.test.js` — 17/17
+- `npm test` — 489/489
+- `npm run lint` — 0 errors / 7 existing warnings
+- `npm run build` — passing
+
+**Note:** `deno` is not installed locally, so Supabase Edge type-checking could not be run on this machine.
+
 ## Where We Left Off (Session 95 — closeout verification pass)
 
 **Intent outcome:** Achieved for the durable `/start → /audit → /implement → /closeout` goal. The latest audit implementation was already shipped in Session 94, so this pass verified the current worktree evidence and completed closeout state.

@@ -1,6 +1,16 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-15 - Edge replay pressure parity continuation
+
+- Edge pressure truth — `supabase/functions/validate-replay/pressure.js` now owns the Edge replay pressure/evidence helper logic, and `validate-replay/index.ts` imports it instead of duplicating the pressure math inline.
+- Fixture parity truth — `npm run replay:edge-fixtures` compares Edge `pressureClass`, `commandCount`, `finalWave`, and `finalScore` against the shared browser `replayTraceFixtureTable()` and `buildReplayPressureProfile()`.
+- Validation truth — Edge parity passed 4 fixtures, browser replay fixture validator passed 4 fixtures, focused replay tests passed 17/17, full `npm test` passed 489/489, lint reported 0 errors / 7 existing warnings, and build passed.
+- Tooling truth — local `deno` is unavailable on this machine, so Supabase Edge type-checking was not run.
+
+Overall status: green locally
+Last reviewed: 2026-06-15
+
 ## 2026-06-15 - Session 95
 
 - Closeout verification truth — this session did not add new product code; it verified the existing Session 94 audit implementation from the current worktree.

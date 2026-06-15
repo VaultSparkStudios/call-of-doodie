@@ -6,6 +6,11 @@
 // contracts and returns machine-readable confidence for quarantine decisions.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import {
+  analyzeTraceEvidence,
+  buildTracePressureReceipt,
+  collectTraceBodyFailures,
+} from "./pressure.js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,10 +19,6 @@ const corsHeaders = {
 };
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal", "standard"]);
-const VALID_TRACE_ACTIONS = new Set(["move", "aim", "shoot", "reload", "dash", "grenade", "perk", "route", "shop", "swap", "pause"]);
-const MAX_TRACE_BODY_BYTES = 10000;
-const encoder = new TextEncoder();
-
 interface ValidateRequest {
   seed?: number;
   mode?: string;
@@ -51,6 +52,7 @@ interface ValidateResult {
     finalScore: number;
     driftPct: number;
     commandCount: number;
+    pressureClass: "none" | "low" | "medium" | "high";
   };
 }
 
@@ -64,116 +66,6 @@ function difficultyMult(d: string | undefined): number {
     case "normal":
     default: return 1.0;
   }
-}
-
-function checksum(serialized: string) {
-  let hash = 2166136261;
-  for (let i = 0; i < serialized.length; i++) {
-    hash ^= serialized.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-  return (hash >>> 0).toString(16).toUpperCase().padStart(8, "0");
-}
-
-function collectTraceBodyFailures(traceDigest: string, traceLength: number, traceBody: string) {
-  const reasons: string[] = [];
-  if (!traceBody) return reasons;
-  if (!/^[a-z0-9._:~-]+$/i.test(traceBody)) reasons.push("traceBody malformed");
-  if (encoder.encode(traceBody).length > MAX_TRACE_BODY_BYTES) reasons.push("traceBody exceeds byte budget");
-  const parts = traceBody.split("~").filter(Boolean);
-  if (parts.length !== traceLength) reasons.push("traceBody count mismatch");
-  if (traceDigest && checksum(traceBody).toUpperCase() !== traceDigest.toUpperCase()) {
-    reasons.push("traceBody digest mismatch");
-  }
-  for (const part of parts) {
-    const [frame, action] = part.split(".");
-    const parsedFrame = Number.parseInt(frame || "", 36);
-    if (!Number.isFinite(parsedFrame) || parsedFrame < 0) {
-      reasons.push("traceBody frame malformed");
-      break;
-    }
-    if (!VALID_TRACE_ACTIONS.has(action || "")) {
-      reasons.push("traceBody action malformed");
-      break;
-    }
-  }
-  return reasons;
-}
-
-function analyzeTraceEvidence(traceBody: string) {
-  const weaknessReasons: string[] = [];
-  const parts = traceBody ? traceBody.split("~").filter(Boolean) : [];
-  const actions: Record<string, number> = {};
-  let firstFrame: number | null = null;
-  let lastFrame: number | null = null;
-
-  for (const part of parts) {
-    const [frame, action] = part.split(".");
-    const parsedFrame = Number.parseInt(frame || "", 36);
-    if (!Number.isFinite(parsedFrame)) continue;
-    if (firstFrame == null) firstFrame = parsedFrame;
-    lastFrame = parsedFrame;
-    actions[action || ""] = (actions[action || ""] || 0) + 1;
-  }
-
-  const durationFrames = firstFrame != null && lastFrame != null ? Math.max(0, lastFrame - firstFrame) : 0;
-  const movementCount = actions.move || 0;
-  const aimCount = actions.aim || 0;
-  const shootCount = actions.shoot || 0;
-  const interactionCount = ["shoot", "reload", "dash", "grenade", "perk", "route", "shop", "swap", "pause"]
-    .reduce((total, action) => total + (actions[action] || 0), 0);
-
-  if (parts.length === 0) weaknessReasons.push("no-events");
-  if (parts.length > 0 && parts.length < 3) weaknessReasons.push("too-few-events");
-  if (durationFrames > 0 && durationFrames < 60) weaknessReasons.push("short-duration");
-  if (movementCount < 2) weaknessReasons.push("low-movement-evidence");
-  if (aimCount < 1 && shootCount > 0) weaknessReasons.push("missing-aim-evidence");
-  if (interactionCount < 2) weaknessReasons.push("low-interaction-evidence");
-
-  let level: "none" | "weak" | "basic" | "rich" = "none";
-  if (parts.length > 0) level = "weak";
-  if (parts.length >= 3 && interactionCount >= 1 && durationFrames >= 24) level = "basic";
-  if (parts.length >= 6 && durationFrames >= 60 && movementCount >= 2 && aimCount >= 1 && interactionCount >= 2) {
-    level = "rich";
-  }
-
-  return { level, weaknessReasons };
-}
-
-function runTraceResim(req: ValidateRequest, traceBody: string, traceLength: number) {
-  const parts = traceBody ? traceBody.split("~").filter(Boolean) : [];
-  const actions: Record<string, number> = {};
-  let lastFrame = 0;
-  for (const part of parts) {
-    const [frame, action] = part.split(".");
-    const parsedFrame = Number.parseInt(frame || "", 36);
-    if (Number.isFinite(parsedFrame)) lastFrame = Math.max(lastFrame, parsedFrame);
-    actions[action || ""] = (actions[action || ""] || 0) + 1;
-  }
-  const durationSec = Math.max(1, lastFrame / 60);
-  const actionPressure = (actions.shoot || 0)
-    + (actions.grenade || 0) * 2
-    + (actions.dash || 0)
-    + (actions.perk || 0) * 3
-    + (actions.shop || 0) * 2
-    + (actions.route || 0) * 2;
-  const movementPressure = (actions.move || 0) + (actions.aim || 0);
-  const seedBias = Math.abs(Math.floor(Number(req.seed || 0)) % 17) / 100;
-  const finalWave = Math.max(1, Math.floor(durationSec / 35 + actionPressure / 18 + movementPressure / 35 + 1 + seedBias));
-  const finalScore = Math.max(0, Math.floor(actionPressure * 95 + movementPressure * 22 + finalWave * 420));
-  const submittedWave = Math.max(1, Math.floor(Number(req.wave || finalWave)));
-  const submittedScore = Math.max(0, Math.floor(Number(req.score || finalScore)));
-  const waveDrift = Math.abs(submittedWave - finalWave) / Math.max(4, submittedWave);
-  const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - finalScore) / Math.max(2500, submittedScore) : 0;
-  return {
-    method: "heuristic_pressure_estimate" as const,
-    confidence: "advisory" as const,
-    gate: "pressure-estimate-v1" as const,
-    finalWave,
-    finalScore,
-    driftPct: Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100,
-    commandCount: traceLength || parts.length,
-  };
 }
 
 /**
@@ -275,7 +167,7 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
       drift = Math.max(drift, 0.7);
     } else {
       traceEvidence = analyzeTraceEvidence(traceBody);
-      resim = runTraceResim(req, traceBody, traceLengthRaw);
+      resim = buildTracePressureReceipt(req, traceBody, traceLengthRaw) as ValidateResult["resim"];
       if (traceEvidence.level === "rich" && resim.driftPct > 2) {
         reasons.push(`replay pressure-estimate drift ${resim.driftPct.toFixed(2)}% above 2% advisory threshold`);
         drift = Math.max(drift, Math.min(1, resim.driftPct / 100));

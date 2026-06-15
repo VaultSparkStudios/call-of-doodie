@@ -1,5 +1,13 @@
 # Work Log
 
+## 2026-06-15 (Continuation — edge replay pressure parity)
+
+- Continued forward from the clean Session 95 closeout and selected the top repo-local next slice: Edge validate-replay pressure parity.
+- Added `supabase/functions/validate-replay/pressure.js` and wired `supabase/functions/validate-replay/index.ts` through it so Edge pressure/evidence helpers are importable by Node fixture checks.
+- Added `scripts/validate-edge-replay-pressure-fixtures.mjs` plus `npm run replay:edge-fixtures`, comparing Edge pressure receipt fields against shared browser replay fixtures and `buildReplayPressureProfile()`.
+- Created `docs/AUDIT_2026-06-15_2.md` / `.json` and marked the item shipped with evidence.
+- Validation: Edge parity 4/4, browser replay fixtures 4/4, focused replay tests 17/17, full `npm test` 489/489, `npm run lint` 0 errors / 7 existing warnings, `npm run build` passing. `deno` is not installed locally, so Edge type-checking was unavailable.
+
 ## 2026-06-15 (Session 95)
 
 - Continued the active durable goal from current repo evidence and ran the `/start` preflight path with Codex session lock, game skill profile, secrets audit, blocker preflight, and context-meter verdict `CONTINUE`.

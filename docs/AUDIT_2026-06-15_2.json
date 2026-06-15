@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "generatedAt": "2026-06-15",
+    "project": "call-of-doodie",
+    "type": "game",
+    "combinedPriority": 68.4,
+    "top3": [
+      "edge-validate-replay-pressure-parity"
+    ]
+  },
+  "generated": "2026-06-15",
+  "session": "codex-2026-06-15-continuation",
+  "project": "call-of-doodie",
+  "type": "game",
+  "totalItems": 1,
+  "combinedPriority": 68.4,
+  "top3": [
+    "edge-validate-replay-pressure-parity"
+  ],
+  "innovationReserve": [],
+  "items": [
+    {
+      "rank": 1,
+      "id": "edge-validate-replay-pressure-parity",
+      "slug": "edge-validate-replay-pressure-parity",
+      "tier": "⚡",
+      "axis": "security / speed / organization / efficiency",
+      "effort": "1.5h",
+      "effortHours": 1.5,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 68.4,
+      "why": "Browser replay fixtures already pin advisory pressure expectations, but the Supabase Edge validate-replay path still carried parallel pressure math with no fixture parity gate. That lets trust copy and rejection thresholds drift between local tests and the deployed validator. Extracting the Edge pressure receipt into an importable module and checking it against the same fixtures closes the highest-leverage launch-confidence gap without claiming deterministic resimulation.",
+      "recipe": "Extract Edge pressure/evidence helpers from `supabase/functions/validate-replay/index.ts` into a JS module importable by both Deno and Node. Add `scripts/validate-edge-replay-pressure-fixtures.mjs` and `npm run replay:edge-fixtures` to compare Edge pressureClass, commandCount, finalWave, and finalScore against `replayTraceFixtureTable()` and browser `buildReplayPressureProfile()`.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add a Node parity script that replays the existing fixtures against Edge-equivalent pressure math."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Extract the Edge helper module and run the same fixture table through browser and Edge receipt calculations."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Add a generated JSON fixture artifact consumed by both browser unit tests and deployed Edge smoke tests."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Extracted Edge replay pressure/evidence helpers into `supabase/functions/validate-replay/pressure.js`, wired `validate-replay/index.ts` through the shared module, added `scripts/validate-edge-replay-pressure-fixtures.mjs`, and exposed `npm run replay:edge-fixtures`. Evidence: Edge parity gate passed 4 fixtures; existing browser replay fixture validator passed 4 fixtures; focused replay tests passed 17/17."
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-resim-runner",
+      "reason": "Still a larger future trust milestone; this slice is the prerequisite that prevents browser/edge pressure-estimate drift."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "edge-validate-replay-pressure-parity",
+      "status": "shipped",
+      "notes": "Edge validate-replay now consumes an importable pressure receipt module and the new parity script compares Edge pressureClass, commandCount, finalWave, and finalScore against the shared browser replay fixtures and `buildReplayPressureProfile()`."
+    }
+  ]
+}

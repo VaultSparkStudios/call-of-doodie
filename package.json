@@ -23,6 +23,7 @@
     "launch:surfaces": "node scripts/launch-surface-check.mjs",
     "leaderboard:shared-check": "node scripts/shared-leaderboard-check.mjs",
     "replay:trust-smoke": "node scripts/replay-trust-smoke.mjs",
+    "replay:edge-fixtures": "node scripts/validate-edge-replay-pressure-fixtures.mjs",
     "post-cutover:smoke": "node scripts/post-cutover-smoke.mjs",
     "launch:qa": "node scripts/health-check.mjs && node scripts/live-site-check.mjs && node scripts/launch-surface-check.mjs",
     "launch:verify": "vitest run src/App.launch.test.jsx && node scripts/health-check.mjs && node scripts/live-site-check.mjs && node scripts/launch-surface-check.mjs && node scripts/shared-leaderboard-check.mjs",
