@@ -40,6 +40,7 @@ export default function DeathScreen({
   nearDeathEvents = [], flowStateFired = 0, bossKillCount = 0, weaponMilestones = [],
   speedrunMode = false, gauntletMode = false,
   controllerType = null,
+  peakMoment = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -988,6 +989,12 @@ export default function DeathScreen({
               <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.5 }}>{m.desc}</div>
             </div>
           ))}
+          {peakMoment && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", borderTop: "1px solid #1A1A1A" }}>
+              <div style={{ fontSize: 8, color: "#FF8800", letterSpacing: 2, fontFamily: "'Courier New',monospace", whiteSpace: "nowrap" }}>PEAK MOMENT</div>
+              <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.5 }}>{peakMoment.label} ×{peakMoment.count} on wave {peakMoment.wave}{peakMoment.enemiesAlive > 0 ? ` (${peakMoment.enemiesAlive} left standing)` : ""}.</div>
+            </div>
+          )}
         </div>
 
         {/* Weapon legend milestones crossed this run */}

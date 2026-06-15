@@ -145,6 +145,7 @@ export default function CallOfDoodie() {
   const currentWeaponRef = useRef(0);
   const isReloadingRef   = useRef(false);
   const comboRef         = useRef({ count: 0, timer: 0, max: 0 });
+  const peakMomentRef    = useRef(null); // { wave, count, enemiesAlive, label } at run-best combo
   const killFeedRef      = useRef([]);
   const xpRef            = useRef({ xp: 0, level: 1 });
   const grenadeRef       = useRef({ ready: true, lastUse: 0 });
@@ -561,6 +562,7 @@ export default function CallOfDoodie() {
     };
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
+    peakMomentRef.current = null;
     killFeedRef.current = [];
     frameBufferRef.current = [];
     bestMomentRef.current = { ts: 0, score: 0 };
@@ -2815,7 +2817,11 @@ export default function CallOfDoodie() {
           if (e.health <= 0) {
             const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
-            if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
+            if (comboRef.current.count > comboRef.current.max) {
+              comboRef.current.max = comboRef.current.count;
+              const _pmLabel = comboRef.current.count >= 15 ? 'UNSTOPPABLE' : comboRef.current.count >= 10 ? 'GODLIKE' : comboRef.current.count >= 5 ? 'RAMPAGE' : null;
+              if (_pmLabel) peakMomentRef.current = { wave: gs.currentWave, count: comboRef.current.count, enemiesAlive: gs.enemies.length, label: _pmLabel };
+            }
             setCombo(comboRef.current.count);
             if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
             else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
@@ -3092,7 +3098,11 @@ export default function CallOfDoodie() {
           if (e.health <= 0) {
             const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
             comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
-            if (comboRef.current.count > comboRef.current.max) comboRef.current.max = comboRef.current.count;
+            if (comboRef.current.count > comboRef.current.max) {
+              comboRef.current.max = comboRef.current.count;
+              const _pmLabel = comboRef.current.count >= 15 ? 'UNSTOPPABLE' : comboRef.current.count >= 10 ? 'GODLIKE' : comboRef.current.count >= 5 ? 'RAMPAGE' : null;
+              if (_pmLabel) peakMomentRef.current = { wave: gs.currentWave, count: comboRef.current.count, enemiesAlive: gs.enemies.length, label: _pmLabel };
+            }
             setCombo(comboRef.current.count);
             if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
             else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
@@ -4253,6 +4263,7 @@ export default function CallOfDoodie() {
           ghostKey={gsRef.current?._ghostKey}
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
           experimentMatched={experimentMatchedRef.current}
+          peakMoment={peakMomentRef.current}
         />
       </Suspense>
     );
