@@ -335,6 +335,40 @@ export function soundPrecisionLock() {
   tone(1320, 0.08, "triangle", 0.04, null, 0.04);
 }
 
+// Boss grudge recognition sting: tier 1 (grudge, ≥2 session deaths) = descending minor 3rd;
+// tier 2 (nemesis, ≥3 session deaths) = descending tritone + bass pulse.
+export function soundBossGrudge(tier = 1) {
+  if (tier >= 2) {
+    tone(440, 0.10, "sawtooth", 0.08);
+    tone(311, 0.12, "sawtooth", 0.07, null, 0.08);
+    tone(185, 0.18, "square",   0.10, null, 0.18);
+    tone(92,  0.30, "sawtooth", 0.06, null, 0.25);
+  } else {
+    tone(440, 0.10, "sine", 0.07);
+    tone(330, 0.22, "sawtooth", 0.08, null, 0.08);
+  }
+}
+
+// Combo decay tension: ticking blip that pitches up as timer expires (for combos ≥10).
+// framesLeft: remaining frames on the combo timer.
+export function soundComboTick(framesLeft = 15) {
+  const pitch = 220 + Math.max(0, 30 - framesLeft) * 22;
+  tone(pitch, 0.03, "square", 0.045);
+}
+
+// Combo break sting: descending glide on chain reset. count = the lost streak.
+export function soundComboBreak(count = 5) {
+  const vol = Math.min(0.10, 0.04 + count * 0.003);
+  if (count >= 15) {
+    tone(440, 0.06, "sawtooth", vol);
+    tone(311, 0.10, "sawtooth", vol * 0.85, null, 0.05);
+    tone(220, 0.20, "square",   vol * 0.70, null, 0.12);
+  } else {
+    tone(330, 0.08, "sine", vol);
+    tone(220, 0.16, "sawtooth", vol * 0.8, null, 0.06);
+  }
+}
+
 // Kill-chain escalation audio: level 1 (ENRAGED) = ascending tritone stab; level 2 (FURIOUS) = two-pulse alarm.
 export function soundChainEscalate(level) {
   if (level === 1) {

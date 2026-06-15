@@ -32,6 +32,7 @@ import {
   soundLastStand, soundHeartbeatPulse, soundBossFinale,
   soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
   soundDash, soundBossKill, soundWaveClear, soundPerkSelect, soundPrecisionClick, soundPrecisionLock, soundChainEscalate,
+  soundBossGrudge, soundComboTick, soundComboBreak,
   soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
   startMusic, stopMusic, setMusicIntensity, getMuted, setMuted,
@@ -2076,8 +2077,16 @@ export default function CallOfDoodie() {
     // ── Combo decay ──
     if (comboRef.current.timer > 0) {
       comboRef.current.timer--;
-      if (comboRef.current.timer <= 0) { comboRef.current.count = 0; setCombo(0); setComboTimer(0); }
-      else if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
+      if (comboRef.current.timer <= 0) {
+        const _breakCount = comboRef.current.count;
+        comboRef.current.count = 0; setCombo(0); setComboTimer(0);
+        if (_breakCount >= 5) try { soundComboBreak(_breakCount); } catch {}
+      } else {
+        if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
+        if (comboRef.current.timer <= 30 && comboRef.current.count >= 10 && frameCountRef.current % 4 === 0) {
+          try { soundComboTick(comboRef.current.timer); } catch {}
+        }
+      }
     }
 
     // Reactive soundtrack tier handled below by Heat Meter (#8); combo no longer drives music directly.
@@ -2542,6 +2551,9 @@ export default function CallOfDoodie() {
           const _bossAct = _bossWave < 10 ? 'prologue' : _bossWave < 25 ? 'rising' : _bossWave < 40 ? 'climax' : 'epilogue';
           const _bossTone = getBossTone(difficultyRef.current);
           const _dynamicQuote = _rawQuote ? interpolateBossQuote(_rawQuote, { wave: _bossWave, weapon: _bossWeapon, deaths: _bossRec.deaths, streak: gs.precisionStreak || 0, act: _bossAct, sessionDeaths: _sessionBossDeaths, bossKills: _bossRec.kills, tone: _bossTone }) : null;
+          if (_grudgeVariant === 'grudge' || _grudgeVariant === 'nemesis') {
+            try { soundBossGrudge(_grudgeVariant === 'nemesis' ? 2 : 1); } catch {}
+          }
           bossCutsceneRef.current = true;
           setBossCutscene({ ...bossPlan.previewCard, guidance: _bossGuidance, bossKillLabel: _killLabel, isNemesis: _nemesisFlag, nemesisBrief: _nemesisBrief, dynamicQuote: _dynamicQuote });
         } catch {
