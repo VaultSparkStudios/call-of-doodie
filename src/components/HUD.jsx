@@ -423,7 +423,7 @@ function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, gren
               {/* Ammo bar */}
               {showAmmoBars && (
                 <div style={{ position: "absolute", bottom: 2, left: 3, right: 3, height: 3, background: "rgba(0,0,0,0.5)", borderRadius: 2, overflow: "hidden" }}>
-                  <div style={{ width: ammoPct * 100 + "%", height: "100%", background: ammoColor, borderRadius: 2, transition: i === currentWeapon ? "width 0.08s" : "none" }} />
+                  <div style={{ width: ammoPct * 100 + "%", height: "100%", background: ammoColor, borderRadius: 2, transition: i === currentWeapon ? "width 0.08s" : "none", animation: ammoPct < 0.1 ? "ammoPulseRed 0.15s ease-in-out infinite" : ammoPct < 0.3 ? "ammoPulseYellow 0.4s ease-in-out infinite" : "none" }} />
                 </div>
               )}
             </div>
