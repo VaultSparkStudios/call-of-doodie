@@ -504,6 +504,7 @@ const DEFAULT_CAREER = {
   totalBossKills: 0,
   totalPlayTime: 0,
   achievementsEver: [],
+  enemyKillBests: {}, // typeIndex → { waveMax, careerKills, killedByCount }
 };
 
 export function loadCareerStats() {
@@ -945,7 +946,24 @@ export function recordDeathByEnemy(typeId) {
   const arr = Array.isArray(career.recentDeathsByEnemy) ? career.recentDeathsByEnemy : [];
   arr.unshift({ t: String(typeId), ts: Date.now() });
   career.recentDeathsByEnemy = arr.slice(0, 20);
+  if (!career.enemyKillBests) career.enemyKillBests = {};
+  const kbRec = career.enemyKillBests[typeId] || { waveMax: 0, careerKills: 0, killedByCount: 0 };
+  kbRec.killedByCount = (kbRec.killedByCount || 0) + 1;
+  career.enemyKillBests[typeId] = kbRec;
   try { localStorage.setItem(CAREER_KEY, JSON.stringify(career)); } catch {}
+}
+
+export function updateEnemyCareerStatsBatch(killsByType) {
+  if (!killsByType || !Object.keys(killsByType).length) return;
+  const career = loadCareerStats();
+  if (!career.enemyKillBests) career.enemyKillBests = {};
+  for (const [typeIdx, waveKills] of Object.entries(killsByType)) {
+    const rec = career.enemyKillBests[typeIdx] || { waveMax: 0, careerKills: 0, killedByCount: 0 };
+    rec.careerKills = (rec.careerKills || 0) + waveKills;
+    rec.waveMax = Math.max(rec.waveMax || 0, waveKills);
+    career.enemyKillBests[typeIdx] = rec;
+  }
+  saveCareerStats(career);
 }
 
 /**

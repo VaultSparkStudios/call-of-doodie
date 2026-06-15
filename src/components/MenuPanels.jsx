@@ -144,20 +144,32 @@ export function ControlsPanel({ onClose, isMobile, controllerType }) {
 
 // ── MOST WANTED (was BESTIARY) ───────────────────────────────────────────────
 export function MostWantedPanel({ onClose }) {
+  const [enemyBests] = useState(() => {
+    try { return loadCareerStats().enemyKillBests || {}; } catch { return {}; }
+  });
   return (
     <div style={OVERLAY}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,215,0,0.25)" }}>
         <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
-        {ENEMY_TYPES.map((e, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-            <span style={{ fontSize: 24 }}>{e.emoji}</span>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
-              <div style={{ fontSize: 10, color: "#CCC" }}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED ⚡" : ""}</div>
-              <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : (e.deathQuote || "...")}"</div>
+        {ENEMY_TYPES.map((e, i) => {
+          const rec = enemyBests[i] || null;
+          return (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+              <span style={{ fontSize: 24 }}>{e.emoji}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
+                <div style={{ fontSize: 10, color: "#CCC" }}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED ⚡" : ""}</div>
+                {rec ? (
+                  <div style={{ fontSize: 9, color: "#666", marginTop: 2, fontFamily: "'Courier New',monospace" }}>
+                    {rec.careerKills > 0 ? `☠ ${rec.careerKills} career kills` : "☠ 0 career kills"}
+                    {rec.waveMax > 0 ? ` · wave best: ${rec.waveMax}` : ""}
+                    {rec.killedByCount > 0 ? ` · killed you ${rec.killedByCount}×` : ""}
+                  </div>
+                ) : null}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         <button onClick={onClose} style={{ ...BTN_P, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
       </div>
     </div>
