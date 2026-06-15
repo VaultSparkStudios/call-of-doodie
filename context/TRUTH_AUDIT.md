@@ -1,6 +1,21 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-15 — Session 96 — Combat audio × career depth × coaching sprint
+
+- Audio truth — `soundBossGrudge(tier)`, `soundComboTick(framesLeft)`, `soundComboBreak(count)` added to `src/sounds.js`; all three are named exports wired in `src/App.jsx`.
+- Career stats truth — `src/storage.js` `DEFAULT_CAREER` now includes `enemyKillBests: {}` and exports `updateEnemyCareerStatsBatch(killsByType)`. `recordDeathByEnemy()` also upserts `killedByCount`. Batch write is the single write path at wave-clear.
+- Coach truth — `src/utils/runCoach.js` exports `buildWeaponDeathCoach(weaponKills, recentDeathsByEnemy)` with module-level `WEAPON_RANGE_MAP`, `ENEMY_THREAT_MAP`, `THREAT_COUNTER`. `buildRunCoach()` returns `weaponDeathTip` field.
+- RunBrain truth — `src/utils/runBrain.js` `buildRunBrain()` accepts `chokeWaves = null` and returns `chokeWarning: {wave, tip}|null`.
+- Share card truth — `src/utils/runDnaShareCard.js` payload includes `moments: []`; `src/workers/shareCard.worker.js` renders up to 2 moments with dynamic H.
+- DeathScreen truth — `peakMoment`, `waveScoreLog`, `communityChokeWaves` props added; SVG sparkline and PEAK MOMENT row rendered; Run Coach card shows chokeWarning pill and weaponDeathTip "Mismatch:" line.
+- App truth — `peakMomentRef = useRef(null)` added at ref declarations; `gs._waveScoreLog` and `gs._wkbt` accumulate in game loop; both flushed at wave-clear; `peakMoment`/`waveScoreLog`/`communityChokeWaves` passed to DeathScreen JSX.
+- HUD truth — ammo bar fill div in `src/components/HUD.jsx` applies `ammoPulseRed`/`ammoPulseYellow` animations keyed by `ammoPct` threshold.
+- Validation truth — 499/499 tests (+10 new: runBrain ×3, runCoach ×5, runDnaShareCard ×2), lint 0 errors / 7 existing warnings, build passing.
+
+Overall status: green locally
+Last reviewed: 2026-06-15
+
 ## 2026-06-15 - Edge replay pressure parity continuation
 
 - Edge pressure truth — `supabase/functions/validate-replay/pressure.js` now owns the Edge replay pressure/evidence helper logic, and `validate-replay/index.ts` imports it instead of duplicating the pressure math inline.

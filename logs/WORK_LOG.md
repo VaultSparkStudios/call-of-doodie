@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-06-15 (Session 96 — combat audio × career depth × coaching sprint)
+
+- Ran full `/start → /audit → /implement → /closeout` loop against `docs/AUDIT_2026-06-15_3.json` (14 items, 10 shipped this session).
+- Wave 1: added `soundBossGrudge(tier)` and combo decay urgency sounds (`soundComboTick`, `soundComboBreak`) to `src/sounds.js`; wired both in App.jsx at boss cutscene grudge gate and combo decay block.
+- Wave 2+3: added respite pickup beacon ring in drawGame.js + radial gradient cache keyed by `act:W:H` string to skip redundant CanvasGradient rebuilds.
+- Wave 4: added `moments[]` to `runDnaShareCard.js` payload and shareCard.worker.js dynamic-height card rendering with turning-point lines.
+- Wave 5: `peakMomentRef` captures best combo context (wave/count/enemies/label) in App.jsx; PEAK MOMENT row renders on DeathScreen RUN ARC card.
+- Wave 6: `gs._waveScoreLog[]` accumulates per-wave score in App.jsx; rendered as SVG sparkline with gold peak-wave marker on DeathScreen.
+- Wave 7: `career.enemyKillBests{}` added to storage.js with new `updateEnemyCareerStatsBatch()` single-pass write; MostWantedPanel shows career per-enemy stats row.
+- Wave 8: `buildRunBrain()` accepts `chokeWaves` Set → `chokeWarning`; propagated App → DeathScreen props → buildRunCoach; orange ⚠ pill on Run Coach card.
+- Wave 9: `buildWeaponDeathCoach()` added to runCoach.js with WEAPON_RANGE_MAP + ENEMY_THREAT_MAP + THREAT_COUNTER; "Mismatch:" line on Run Coach card.
+- Wave 10: `ammoPulseYellow`/`ammoPulseRed` keyframes in App.jsx global style; HUD ammo bars apply urgency animation below 30%/10% fill.
+- Validation: `npm test` 499/499 (+10 new), `npm run lint` 0 errors / 7 existing warnings, `npm run build` clean.
+
 ## 2026-06-15 (Continuation — edge replay pressure parity)
 
 - Continued forward from the clean Session 95 closeout and selected the top repo-local next slice: Edge validate-replay pressure parity.

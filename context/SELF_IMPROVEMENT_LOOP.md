@@ -2,6 +2,14 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-15 — Session 96 | Total: 985/1000 | Velocity: +10 | Debt: ↓
+
+SIL +10 (estimated 985/1000): Shipped 10 player-facing gameplay features in one sprint — grudge audio sting, combo urgency sounds, respite visual, vignette cache, share-card moments, peak moment capture, sparkline, enemy career records, choke coach, weapon death coach, and ammo urgency pulse. Tests: 499/499 (+10). Lint: 0 errors. Build: clean. All 10 committed individually to main.
+
+**Top win:** The wave-level coaching layer is now fully instrumented — players see peak moment, momentum sparkline, choke-point warning, and weapon mismatch all in one DeathScreen pass without leaving the game client.
+**Top gap:** Cross-repo coherence (no Supabase/ops sync) and ecosystem integration (no analytics events for new coaching surfaces) account for the 15-point deduction. Next session should wire at least one PostHog event for `weaponDeathTip_shown` and `chokeWarning_shown`.
+**Intent outcome:** Achieved — all 10 audit waves shipped, validated, and committed.
+
 ## 2026-06-15 — Session 95 | Total: 1000/1000 | Velocity: 0 | Debt: →
 
 SIL +0: Completed a verification-only closeout pass for the already-shipped Session 94 audit. Current evidence remains green: startup brief validator conformant, focused startup-brief box tests 5/5, full suite 489/489, lint 0 errors / 7 existing warnings, build passing.

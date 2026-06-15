@@ -2,6 +2,30 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-06-15 — Session 96 — Peak combo moment tier labels at 5/10/15
+
+**Decision:** `peakMomentRef` captures three named tiers: `_pmLabel = combo ≥ 15 ? "UNSTOPPABLE" : combo ≥ 10 ? "GODLIKE" : "RAMPAGE"` (triggered at 5+). Labels match the existing fullscreen combo card (S91), so both surfaces agree on tier identity.
+
+**Rationale:** Reusing the existing tier names from the fullscreen overlay creates one vocabulary for combo mastery across all post-death surfaces (share card, deathscreen, peak moment label). Players who see RAMPAGE on the overlay recognize it immediately in the career coaching context.
+
+**Trade-off accepted:** The peak-moment row is only shown once (the session-best, not the per-wave best), so a player who hit GODLIKE early but RAMPAGE later will see GODLIKE — correctly representing their ceiling rather than their typical.
+
+## 2026-06-15 — Session 96 — Radial vignette gradient cached by act:W:H composite key
+
+**Decision:** `gs._runActVignetteKey = \`${gs._runAct}:${W}:${H}\`` is the cache-busting key for the run-arc radial gradient in drawGame.js. The gradient object is stored in `gs._runActVignetteStyle` and only rebuilt when the key changes.
+
+**Rationale:** Canvas resize and act transitions are the only two cases where the gradient needs to change. Using only `_runAct` as the key would produce a stale gradient with wrong dimensions after a resize. The composite key handles both axes without extra logic.
+
+**Trade-off accepted:** The key is a string concatenation on every frame (cheap), but the gradient rebuild is only O(1) on act/resize transitions. The `gs` object carries two extra fields (`_runActVignetteStyle`, `_runActVignetteKey`) for the lifetime of the run.
+
+## 2026-06-15 — Session 96 — Enemy career stats use batch write, not per-type writes
+
+**Decision:** `updateEnemyCareerStatsBatch(killsByType)` in storage.js performs a single `loadCareerStats()` + multiple mutations + `saveCareerStats()` for all enemy types at once. This is called at wave-clear when `gs._wkbt` is flushed, not at each enemy death.
+
+**Rationale:** Writing career stats per enemy death in a busy wave would cause N localStorage read+write cycles in a tight frame. Batching to wave-clear bounds the write cost to one cycle per wave regardless of enemy count. The `gs._wkbt` accumulator (typeIndex → count) is cheap to maintain per-death and free to reset on wave-clear.
+
+**Trade-off accepted:** If the player quits mid-wave (hard exit), that wave's kills are lost from `enemyKillBests`. The career data is eventually consistent across wave boundaries, not per-kill. Accepted because career stat precision matters less than frame-budget safety.
+
 ## 2026-06-14 — Session 91 — Beat-precision vulnerability window is streak-adaptive, not fixed
 
 **Decision:** The beat-precision vulnerability ring uses `8 + Math.min(4, Math.floor(streak/5))` frames wide (max 12), not a fixed 8-frame window. The same formula is used identically in App.jsx (bonus coins) and drawGame.js (ring visual).

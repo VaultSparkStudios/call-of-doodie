@@ -1,5 +1,29 @@
 # Latest Handoff
 
+## Where We Left Off (Session 96 — combat audio × career depth × coaching sprint)
+
+**Intent outcome:** Achieved. Ran the full `/start → /audit → /implement → /closeout` loop against `docs/AUDIT_2026-06-15_3.json`. Shipped all 10 waves in one pass.
+
+**Shipped (10 waves, 10 commits)**
+- `soundBossGrudge(tier)` + combo decay urgency sounds (`soundComboTick`/`soundComboBreak`) — wired in App.jsx at grudge/nemesis boss cutscene gate and combo decay block
+- Respite pickup beacon ring in drawGame.js (teal ring during `gs._respiteLock`) + radial vignette gradient cache (`_runActVignetteKey = "${act}:${W}:${H}"`)
+- `moments[]` in runDnaShareCard.js payload + shareCard.worker.js dynamic-height moment lines
+- `peakMomentRef` in App.jsx → PEAK MOMENT row on DeathScreen (RAMPAGE≥5/GODLIKE≥10/UNSTOPPABLE≥15)
+- `gs._waveScoreLog[]` → SVG sparkline on DeathScreen RUN ARC card with gold peak marker
+- `career.enemyKillBests{}` in storage.js + `updateEnemyCareerStatsBatch()` + MostWantedPanel career per-enemy stats row
+- `buildRunBrain()` `chokeWaves` → `chokeWarning` → Run Coach ⚠ pill (App → DeathScreen props)
+- `buildWeaponDeathCoach()` in runCoach.js with WEAPON_RANGE_MAP/ENEMY_THREAT_MAP → "Mismatch:" coaching line
+- `ammoPulseYellow`/`ammoPulseRed` keyframes in App.jsx → HUD ammo bars animate urgency
+
+**Validation**
+- `npm test` — 499/499 (+10 new vs 489 at session start)
+- `npm run lint` — 0 errors / 7 existing warnings
+- `npm run build` — passing (800kB main chunk is pre-existing warning)
+- 10 commits: `036a897`–`cb90a0f` on main
+
+**Next session start point**
+Remaining 4 items from `docs/AUDIT_2026-06-15_3.json` were deferred (session floor returned CONTINUE but list was exhausted). Recommend fresh `/audit` against current state to regenerate next wave, or climb the L3 ladder on shipped items (peakMomentRef → career integration, sparkline → historical comparison, choke coach → multi-wave lookahead).
+
 ## Where We Left Off (Continuation — edge replay pressure parity)
 
 **Intent outcome:** Continued forward after Session 95 by shipping the top repo-local next slice: Edge validate-replay pressure parity.
