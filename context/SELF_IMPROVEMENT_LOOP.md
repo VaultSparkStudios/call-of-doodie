@@ -2,6 +2,14 @@
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-06-15 — Session 94 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
+
+SIL +2: Repaired a real `/start` protocol regression before adding larger game scope. Startup brief generation now boxes raw genius-list output and always renders HUMAN PRESSURE, restoring the validator contract that Claude/Codex handoffs depend on. Validation: focused startup brief box tests 5/5, brief render and validator green, full suite 489/489, lint 0 errors / 7 existing warnings, build passing.
+
+**Top win:** The session loop is honest again: a future agent can trust `docs/STARTUP_BRIEF.md` as the sole startup context source instead of burning time diagnosing malformed recommendation output.
+**Top gap:** This was protocol hygiene rather than player-facing depth; the best next gameplay-adjacent slice remains edge validate-replay pressure parity or App.jsx death-slice extraction.
+**Intent outcome:** Achieved — `/start`, `/audit`, `/implement`, and closeout write-back completed with verification evidence.
+
 ## 2026-06-14 — Session 93 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
 
 SIL +2: Closed two launch-trust feedback-loop gaps from `docs/AUDIT_2026-06-14_5`: daily mission completion now reads truthfully whether saved by legacy index or mission id, and Studio event history no longer double-writes weekly contract or successful score-submit events. Validation: focused storage 45/45, focused runSession 5/5, full suite 484/484, lint 0 errors / 7 existing warnings, build passing.

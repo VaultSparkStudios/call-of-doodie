@@ -1,5 +1,14 @@
 # Work Log
 
+## 2026-06-15 (Session 94)
+
+- Ran the requested `/start → /audit → /implement → /closeout` loop from current evidence.
+- `/start` exposed a protocol-format regression: `docs/STARTUP_BRIEF.md` contained a raw numbered genius list, so `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` failed on the required `GENIUS HIT LIST` box after the official repair path.
+- Created `docs/AUDIT_2026-06-15.md` / `.json` for two verified items: `startup-brief-canonical-boxes` and `startup-brief-regression-harness`.
+- Shipped `scripts/lib/startup-brief-boxes.mjs` and wired `scripts/render-startup-brief.mjs` to normalize plain generator output into a canonical box and always render the `HUMAN PRESSURE` tile.
+- Added `tests/startup-brief-boxes.test.js` covering plain/boxed/empty genius-list output plus pressure item and no-pressure rendering.
+- Validation: focused 5/5, startup brief render passed, validator passed, full `npm test` 489/489, `npm run lint` 0 errors / 7 existing warnings, `npm run build` passing.
+
 ## 2026-06-14 (Session 91)
 
 - Ran the requested `/start → /audit → /implement → /closeout` depth sprint. Audited fresh with `docs/AUDIT_2026-06-14_3.md` / `.json`, implemented all 10 items at L2, then climbed ladders and ran innovation pack after `session-floor --shipped 10` returned CONTINUE.

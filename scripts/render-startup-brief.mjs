@@ -26,6 +26,7 @@ import { contextWindowForAgent } from './lib/model-router.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
+import { normalizeGeniusBlock, renderHumanPressureBlock } from './lib/startup-brief-boxes.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -911,14 +912,12 @@ try {
     encoding: 'utf8',
     timeout: 15000,
   });
-  geniusBlock = (res.stdout ?? '').trim();
+  geniusBlock = normalizeGeniusBlock((res.stdout ?? '').trim(), { width: W, maxLines: 8 });
 } catch { /* fallback below */ }
 if (!geniusBlock) {
   geniusBlock = buildGeniusBoxFromMarkdown(readText(path.join(root, 'docs', 'GENIUS_LIST.md')));
 }
-if (!geniusBlock) {
-  geniusBlock = [top('GENIUS HIT LIST'), row('Run `node scripts/ops.mjs genius-list` to generate fresh recommendations.'), bot()].join('\n');
-}
+if (!geniusBlock) geniusBlock = normalizeGeniusBlock('', { width: W, maxLines: 8 });
 
 // ── Brief integrity self-assertion (S142 audit item 2) ──────────────────────
 // The brief is the SOLE context source for every session. A three-way coherence
@@ -1101,14 +1100,8 @@ const lines = [
   ] : []),
   // Now/Next/Blocked buckets removed — Unified Genius List is the single
   // recommendation surface. Blocked count surfaces in SIGNALS + GENIUS LIST.
-  ...(topPressure ? [
-    top('HUMAN PRESSURE'),
-    row(`Top item:      ${topPressure.title.slice(0, W - 15)}`),
-    row(`Pressure:      ${topPressure.pressureScore} · ${topPressure.pressureBand}`),
-    row(`Next action:   ${topPressure.nextAgentAction.slice(0, W - 15)}`),
-    bot(),
-    ``,
-  ] : []),
+  renderHumanPressureBlock(topPressure, { width: W }),
+  ``,
   // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
   // Suppressed S116 #623 — low-signal flavor block was pushing brief over the
   // 15KB brief-golden cap. v4.1 spec already drops this. Re-enable behind a

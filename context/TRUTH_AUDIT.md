@@ -1,6 +1,16 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-06-15 - Session 94
+
+- Startup brief format truth — `scripts/render-startup-brief.mjs` no longer writes raw numbered genius-list stdout into `docs/STARTUP_BRIEF.md`; unboxed output is normalized through `normalizeGeniusBlock()` into a canonical `GENIUS HIT LIST` tile.
+- Human pressure truth — the renderer always emits `HUMAN PRESSURE`. When no compiled pressure queue exists, the tile explicitly says no founder-action pressure is queued instead of silently omitting the surface.
+- Regression truth — `tests/startup-brief-boxes.test.js` covers plain, boxed, and empty genius-list output plus human-pressure item and empty-state rendering.
+- Validation truth — focused startup-brief box tests passed 5/5, `node scripts/render-startup-brief.mjs` passed, `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passed, full `npm test` passed 489/489, `npm run lint` passed with 0 errors / 7 existing warnings, and `npm run build` passed.
+
+Overall status: green locally
+Last reviewed: 2026-06-15
+
 ## 2026-06-14 - Session 93
 
 - Mission progress truth — `isMissionCompleted(progress, mission, index)` returns true for either a legacy numeric/index key or a mission `id` key. `countIncompleteMissions()` is now the shared front-door counter used by HomeV2/MenuScreen surfaces.

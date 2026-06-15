@@ -1,23 +1,17 @@
-# Implement Plan — 2026-06-14_5
+# Implement Plan — 2026-06-15
 
-Source audit: `docs/AUDIT_2026-06-14_5.json`
+Source: `docs/AUDIT_2026-06-15.json`
 
-## Wave 1
+## Wave Plan
 
-1. `mission-progress-key-truth` — L2
-   - Add a pure mission progress helper that accepts either legacy index keys or mission id keys.
-   - Wire HomeV2, MenuScreen, and shared MissionsPanel reads through the helper.
-   - Add regression tests for index-keyed and id-keyed mission progress.
-
-2. `death-telemetry-single-writer` — L2
-   - Make `createDeathStudioEvents()` own only first-death facts.
-   - Leave weekly contract progress to DeathScreen's contract-specific writer.
-   - Remove DeathScreen's duplicate score-submit event writes on successful submit callback; keep the catch-path local event.
-   - Update focused run session tests.
+1. `startup-brief-canonical-boxes` — fix `scripts/render-startup-brief.mjs` so `/start` always emits canonical `GENIUS HIT LIST` and `HUMAN PRESSURE` boxes.
+2. `startup-brief-regression-harness` — add focused regression coverage for plain genius-list output and the no-pressure empty state.
 
 ## Verification
 
-- Focused unit tests for changed helpers/components.
-- Full `npm test`.
-- `npm run lint`.
-- `npm run build`.
+- `npx vitest run tests/startup-brief-boxes.test.js`
+- `node scripts/render-startup-brief.mjs`
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`
+- `npm test`
+- `npm run lint`
+- `npm run build`

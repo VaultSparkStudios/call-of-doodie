@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "generatedAt": "2026-06-15",
+    "project": "call-of-doodie",
+    "type": "game",
+    "combinedPriority": 116.8,
+    "top3": [
+      "startup-brief-canonical-boxes",
+      "startup-brief-regression-harness"
+    ]
+  },
+  "generated": "2026-06-15",
+  "session": "codex-2026-06-15",
+  "project": "call-of-doodie",
+  "type": "game",
+  "axisWeights": {
+    "gamification": 3,
+    "ux": 2,
+    "ai": 1.5,
+    "feature-depth": 1.5,
+    "security": 1,
+    "speed": 1,
+    "token": 1,
+    "feedback": 1,
+    "new-features": 1
+  },
+  "totalItems": 2,
+  "combinedPriority": 116.8,
+  "top3": [
+    "startup-brief-canonical-boxes",
+    "startup-brief-regression-harness"
+  ],
+  "innovationReserve": [
+    "startup-brief-canonical-boxes"
+  ],
+  "items": [
+    {
+      "rank": 1,
+      "id": "startup-brief-canonical-boxes",
+      "slug": "startup-brief-canonical-boxes",
+      "tier": "🔥",
+      "axis": "speed / organization / efficiency",
+      "effort": "1h",
+      "effortHours": 1,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 86.4,
+      "why": "The current /start renderer emits the generated genius list as a raw numbered list when `generate-genius-list.mjs --brief` does not return a box, so `validate-brief-format` fails after the official repair path. That makes every future Codex or Claude handoff pay protocol-debug tax before game work starts, and it hides the top sprint action from the canonical surface. The fix is a renderer-level normalization: accept either boxed or plain generator output, but always write a canonical `GENIUS HIT LIST` tile and a `HUMAN PRESSURE` tile.",
+      "recipe": "Add a normalization wrapper in `scripts/render-startup-brief.mjs` that detects unboxed genius stdout and wraps its first lines inside `top('GENIUS HIT LIST')` / `row()` / `bot()`. Render a HUMAN PRESSURE tile even when no compiled pressure file exists, using an explicit no-pressure row instead of omitting the canonical block.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Wrap unboxed genius stdout before writing `docs/STARTUP_BRIEF.md`."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Normalize genius output and always render HUMAN PRESSURE with an honest empty-state row."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Extract shared brief tile helpers so generator, renderer, and validator use one canonical block contract."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Added `scripts/lib/startup-brief-boxes.mjs` and wired `scripts/render-startup-brief.mjs` through `normalizeGeniusBlock()` plus an always-rendered `renderHumanPressureBlock()`. Evidence: generated `docs/STARTUP_BRIEF.md` now validates with canonical HUMAN PRESSURE and GENIUS HIT LIST boxes; full npm test passed 489/489; lint 0 errors / 7 existing warnings; build passed."
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "startup-brief-regression-harness",
+      "slug": "startup-brief-regression-harness",
+      "tier": "⚡",
+      "axis": "security",
+      "effort": "45m",
+      "effortHours": 0.75,
+      "impact": 8,
+      "innovation": 4,
+      "priority": 30.4,
+      "why": "Session 80 previously proved `validate-brief-format` passed, but today's renderer drift reappeared because the generator stdout shape was not covered. This is not a player-facing feature, but it protects the public game by keeping launch hygiene repeatable and honest. A small focused test or script check should prove that plain numbered recommendations are boxed and validate successfully.",
+      "recipe": "Add a lightweight regression check for the normalization helper or rendered output, then verify with `node scripts/render-startup-brief.mjs`, `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`, `npm test`, lint, and build.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add a direct exported-helper test for wrapping plain genius-list text."
+        },
+        "L2": {
+          "effortHours": 0.75,
+          "recipe": "Add a test or script smoke that covers plain genius output and canonical validation together."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Add a broader startup-render fixture harness covering missing pressure data, boxed generator output, and plain generator output."
+        }
+      },
+      "status": "shipped",
+      "executionLog": [
+        {
+          "status": "shipped",
+          "notes": "Added `tests/startup-brief-boxes.test.js` covering plain genius output wrapping, already boxed output preservation, empty fallback rendering, no-pressure empty state, and pressure-item rendering. Evidence: focused test passed 5/5; full npm test passed 489/489; validator passed against the real startup brief."
+        }
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-resim-runner",
+      "reason": "Still important for replay trust, but current /start protocol failure must be repaired first because it blocks reliable unattended sessions."
+    },
+    {
+      "slug": "new-gameplay-content-pack",
+      "reason": "The game already has strong content depth; session evidence points to launch-hygiene automation as the highest leverage current gap."
+    },
+    {
+      "slug": "home-v2-v1-retirement",
+      "reason": "Still gated by real Lighthouse and funnel evidence per existing decisions, so code removal would be premature."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "startup-brief-canonical-boxes",
+      "status": "shipped",
+      "notes": "Renderer now normalizes raw genius-list stdout into the canonical `GENIUS HIT LIST` box and always emits `HUMAN PRESSURE` with an honest empty state when no compiled pressure queue exists. Evidence: `node scripts/render-startup-brief.mjs` passed; `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passed."
+    },
+    {
+      "slug": "startup-brief-regression-harness",
+      "status": "shipped",
+      "notes": "Focused regression coverage now protects plain, boxed, and empty genius-list output plus both human-pressure paths. Evidence: `npx vitest run tests/startup-brief-boxes.test.js` passed 5/5; `npm test` passed 489/489; `npm run lint` completed with 0 errors / 7 baseline warnings; `npm run build` passed."
+    }
+  ]
+}

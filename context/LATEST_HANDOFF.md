@@ -1,5 +1,28 @@
 # Latest Handoff
 
+## Where We Left Off (Session 94 — startup brief canonical box repair)
+
+**Intent outcome:** Achieved for `/start → /audit → /implement → /closeout`.
+
+**Shipped**
+- `scripts/lib/startup-brief-boxes.mjs` — added reusable helpers for canonical startup brief `GENIUS HIT LIST` normalization and `HUMAN PRESSURE` rendering.
+- `scripts/render-startup-brief.mjs` — now wraps plain numbered genius-list stdout in a box instead of writing raw list text, preserves already-boxed output, and always emits the human-pressure tile with an honest empty state.
+- `tests/startup-brief-boxes.test.js` — covers plain, boxed, and empty genius-list output plus pressure item and no-pressure paths.
+- `docs/AUDIT_2026-06-15.md` / `.json` and `docs/IMPLEMENT_PLAN.md` — record the focused audit and execution order.
+
+**Validation**
+- `npx vitest run tests/startup-brief-boxes.test.js` — 5/5
+- `node scripts/render-startup-brief.mjs` — passing
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` — conformant
+- `npm test` — 489/489
+- `npm run lint` — 0 errors / 7 existing warnings
+- `npm run build` — passing
+
+**Next recommended slice**
+- [ ] Edge validate-replay pressure parity — extend Supabase function fixture checks to consume the same pressure expectations as local fixtures.
+- [ ] App.jsx death-slice extraction — move more death/submit orchestration into pure helpers now event ownership is cleaner.
+- [ ] Warning baseline cleanup — clear the 7 existing lint warnings if zero-warning launch hygiene becomes a release gate.
+
 ## Where We Left Off (Session 93 — mission progress truth + telemetry single-writer closeout)
 
 **Intent outcome:** Achieved for `/start → /audit → /implement`; `/closeout` is executing with validation complete and write-backs in place.
