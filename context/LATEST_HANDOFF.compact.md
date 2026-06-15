@@ -1,46 +1,49 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 815d8b7026ea -->
-<!-- generated-at: 2026-06-15T00:39:33.274Z -->
+<!-- source-hash: 8ef374287898 -->
+<!-- generated-at: 2026-06-15T01:20:15.438Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 93 — mission progress truth + telemetry single-writer closeout
+Session 94 — startup brief canonical box repair
 
 Shipped
-- src/storage.js: isMissionCompleted(), countIncompleteMissions() — unified legacy index + mission-id progress reads
-- HomeV2.jsx, MenuScreen.jsx, MenuPanels.jsx: use shared mission completion contract
-- runSession.js: createDeathStudioEvents() emits only first_death_wave; weekly contract progress owned by DeathScreen
-- DeathScreen.jsx: removed duplicate successful score-submit Studio events; App.submitScore is canonical writer, DeathScreen keeps local failure fallback
+- scripts/lib/startup-brief-boxes.mjs: helpers for GENIUS HIT LIST normalization and HUMAN PRESSURE rendering
+- scripts/render-startup-brief.mjs: wraps plain numbered lists in boxes, preserves boxed output, always emits human-pressure tile with empty state
+- tests/startup-brief-boxes.test.js: 5 cases (plain/boxed/empty list, pressure item, no-pressure)
+- docs/AUDIT_2026-06-15.md/.json, docs/IMPLEMENT_PLAN.md
 
 Validation
-- vitest storage 45/45, runSession 5/5
-- npm test 484/484
-- lint 0 errors / 7 existing warnings
-- build passing
+- vitest startup-brief-boxes: 5/5
+- render-startup-brief, validate-brief-format: pass
+- npm test: 489/489
+- lint: 0 errors / 7 warnings (baseline)
+- build: pass
 
 Current intent
-- Continue durable /start → /audit → /implement → /closeout loop with creative/genius framing; short impact summaries post-closeout
+- Durable /start → /audit → /implement → /closeout loop, genius-level creative depth, short impact summaries
 
-Now (top 3)
-1. Edge validate-replay pressure parity — extend Supabase fixture checks to consume same pressure expectations as local fixtures
+Now bucket (top 3)
+1. Edge validate-replay pressure parity — extend Supabase function fixture checks to consume same pressure expectations as local fixtures
 2. App.jsx death-slice extraction — move more death/submit orchestration into pure helpers now event ownership is clean
-3. Warning baseline cleanup — clear 7 existing lint warnings if zero-warning launch hygiene becomes a release gate
+3. Warning baseline cleanup — clear 7 existing lint warnings if zero-warning launch hygiene becomes release gate
 
 Blockers (top 3)
-1. Supabase edge deploys gated on SUPABASE_ACCESS_TOKEN availability
-2. Cloudflare Web Analytics beacon SRI mismatch (Cloudflare-injected, no repo source) — config-side fix
-3. Deterministic physics-parity replay resim remains design-scale work; current receipt honestly labeled heuristic_pressure_estimate/advisory
+- None active in repo. All audit items shipped.
+- Larger physics-parity replay resim deferred (current receipt honestly labeled heuristic_pressure_estimate / advisory)
+- Lint warnings (7) tolerated as baseline until launch gate decision
 
-Human-blocked (with age)
-- Physical PWA + gamepad QA — open since S74 (~19 sessions)
-- Itch.io publication — open since S74 (~19 sessions)
-- HomeV2 v1 retirement pending Lighthouse/funnel evidence — open since S82 (~11 sessions)
-- Analytics dashboard secrets — open since S74 (~19 sessions)
-- Supabase Auth + Obelisk account bridge — greenlight pending since S75 (~18 sessions)
+Human-blocked / gated (with age)
+- Supabase edge-function deploy: needs SUPABASE_ACCESS_TOKEN (since S82, ~12 sessions)
+- Itch.io publication: human/publication gate (since S76+, ~18 sessions)
+- Physical PWA/gamepad QA: device gate (since S75+, ~19 sessions)
+- HomeV2 v1 retirement: needs Lighthouse/funnel evidence (since S87, ~7 sessions)
+- Cloudflare Web Analytics beacon SRI error: needs Cloudflare-side config fix (since S82, ~12 sessions)
 
-Repo state
-- Tests 484/484, lint clean (7 warns), build green
-- Protocol drift: status ok, helpers present
-- Innovation pack generator available via scripts/ops.mjs innovation-pack if audit exhausted
+State
+- Tests: 489/489 across 49+ files
+- Lint: 0 errors / 7 warnings (stable baseline)
+- Build: passing
+- Protocol drift: status=ok, all required helpers present
+- Innovation pack artifact: docs/INNOVATION_PACK.md available via `node scripts/ops.mjs innovation-pack` if audit exhausted
 
-Next session pointer: run /start → fresh /audit; if budget remains after audit, pull from Now list 1–3 or consult docs/INNOVATION_PACK.md.
+Pointer: Next session start with /start; if audit exhausted, consult docs/INNOVATION_PACK.md or pick from Now bucket above.
