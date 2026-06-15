@@ -382,6 +382,12 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.strokeStyle = _pkColors[pk.type]; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI * 2); ctx.stroke();
     }
+    // Respite window: soft teal beacon ring signals the breather
+    if (gs._respiteLock) {
+      ctx.globalAlpha = 0.08 + Math.sin(Date.now() / 250) * 0.07;
+      ctx.strokeStyle = "#88FFCC"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI * 2); ctx.stroke();
+    }
     ctx.globalAlpha = 1; ctx.restore();
   });
 
@@ -1208,10 +1214,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const _ac = _actColors[gs._runAct];
     const _aa = _actAlpha[gs._runAct] || 0;
     if (_ac && _aa > 0) {
-      const _vgr = ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.78);
-      _vgr.addColorStop(0, `rgba(${_ac[0]},${_ac[1]},${_ac[2]},0)`);
-      _vgr.addColorStop(1, `rgba(${_ac[0]},${_ac[1]},${_ac[2]},${_aa})`);
-      ctx.fillStyle = _vgr;
+      const _vKey = `${gs._runAct}:${W}:${H}`;
+      if (!gs._runActVignetteStyle || gs._runActVignetteKey !== _vKey) {
+        const _vgr = ctx.createRadialGradient(W / 2, H / 2, H * 0.28, W / 2, H / 2, H * 0.78);
+        _vgr.addColorStop(0, `rgba(${_ac[0]},${_ac[1]},${_ac[2]},0)`);
+        _vgr.addColorStop(1, `rgba(${_ac[0]},${_ac[1]},${_ac[2]},${_aa})`);
+        gs._runActVignetteStyle = _vgr;
+        gs._runActVignetteKey = _vKey;
+      }
+      ctx.fillStyle = gs._runActVignetteStyle;
       ctx.fillRect(0, 0, W, H);
     }
   }
