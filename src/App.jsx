@@ -2367,6 +2367,8 @@ export default function CallOfDoodie() {
       }
       gs._routeSelectDone = false; // reset for next wave
       gs._waveTransitDone = true; // mark effects as firing; blocks re-entry this wave
+      // Score snapshot for momentum sparkline
+      (gs._waveScoreLog = gs._waveScoreLog || []).push(gs.score);
       // Survival bonus XP: awarded before resetting _waveDeaths
       if ((gs._waveDeaths || 0) === 0 && !gs.bossWave) {
         const bonus = getWaveSurvivalBonus(gs.currentWave, xpRef.current.level);
@@ -4264,6 +4266,7 @@ export default function CallOfDoodie() {
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
           experimentMatched={experimentMatchedRef.current}
           peakMoment={peakMomentRef.current}
+          waveScoreLog={gsRef.current?._waveScoreLog || []}
         />
       </Suspense>
     );
