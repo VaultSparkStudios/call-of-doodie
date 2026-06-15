@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildRunCoach } from "./runCoach.js";
+import { buildRunCoach, buildWeaponDeathCoach } from "./runCoach.js";
 
 describe("runCoach", () => {
   it("returns three non-empty lines for a default run", () => {
@@ -81,5 +81,43 @@ describe("runCoach", () => {
   it("coaches a precision gap for high-kill low-precision runs", () => {
     const r = buildRunCoach({ runSummary: { bestPrecisionStreak: 1, kills: 30, crits: 1 } });
     expect(r.precisionTip).toContain("Precision gap");
+  });
+});
+
+describe("buildWeaponDeathCoach", () => {
+  it("flags close-range weapon vs ranged killer mismatch", () => {
+    // weapon 1 = shotgun (close), enemy 2 = Sniper (ranged)
+    const wk = new Array(12).fill(0); wk[1] = 30;
+    const deaths = [{ t: "2", ts: 1 }, { t: "2", ts: 2 }, { t: "2", ts: 3 }];
+    const tip = buildWeaponDeathCoach(wk, deaths);
+    expect(tip).toBeTruthy();
+    expect(tip.toLowerCase()).toContain("close");
+  });
+
+  it("flags long-range weapon vs chase killer mismatch", () => {
+    // weapon 4 = sniper (long), enemy 7 = Speedster (chase)
+    const wk = new Array(12).fill(0); wk[4] = 25;
+    const deaths = [{ t: "7", ts: 1 }, { t: "7", ts: 2 }, { t: "7", ts: 3 }];
+    const tip = buildWeaponDeathCoach(wk, deaths);
+    expect(tip).toBeTruthy();
+    expect(tip.toLowerCase()).toContain("long");
+  });
+
+  it("returns null when weapon and threat are compatible", () => {
+    // weapon 1 = shotgun (close), enemy 1 = Rioter (melee) — compatible
+    const wk = new Array(12).fill(0); wk[1] = 20;
+    const deaths = [{ t: "1", ts: 1 }, { t: "1", ts: 2 }, { t: "1", ts: 3 }];
+    expect(buildWeaponDeathCoach(wk, deaths)).toBeNull();
+  });
+
+  it("returns null when only 1 death by top killer", () => {
+    const wk = new Array(12).fill(0); wk[1] = 20;
+    const deaths = [{ t: "2", ts: 1 }];
+    expect(buildWeaponDeathCoach(wk, deaths)).toBeNull();
+  });
+
+  it("returns null on empty inputs", () => {
+    expect(buildWeaponDeathCoach([], [])).toBeNull();
+    expect(buildWeaponDeathCoach(null, null)).toBeNull();
   });
 });

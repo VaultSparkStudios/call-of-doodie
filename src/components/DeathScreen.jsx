@@ -722,6 +722,11 @@ export default function DeathScreen({
               <span style={{ color: "#CC88FF", fontWeight: 700 }}>Weapon:</span> {runCoach.weaponTip}
             </div>
           )}
+          {runCoach.weaponDeathTip && (
+            <div style={{ fontSize: 11, color: "#FFD8B0", lineHeight: 1.45, marginTop: runCoach.weaponTip ? 4 : 0 }}>
+              <span style={{ color: "#FF8844", fontWeight: 700 }}>Mismatch:</span> {runCoach.weaponDeathTip}
+            </div>
+          )}
           {runCoach.precisionTip && (
             <div style={{ fontSize: 11, color: "#FFD8FF", lineHeight: 1.45, marginTop: runCoach.weaponTip ? 4 : 0 }}>
               <span style={{ color: "#FF88FF", fontWeight: 700 }}>Precision:</span> {runCoach.precisionTip}

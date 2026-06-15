@@ -173,6 +173,49 @@ function buildPrecisionTip(runSummary) {
   return null;
 }
 
+// Range coverage per weapon index
+const WEAPON_RANGE_MAP = { 0:'medium', 1:'close', 2:'close', 3:'medium', 4:'long', 5:'aoe', 6:'close', 7:'close', 8:'aoe', 9:'medium', 10:'long', 11:'aoe' };
+// Primary threat category per enemy typeIndex
+const ENEMY_THREAT_MAP = { 0:'melee', 1:'melee', 2:'ranged', 3:'tanky', 4:'chase', 5:'aoe', 6:'ranged', 7:'chase', 8:'chase', 9:'melee', 10:'ranged', 11:'melee', 12:'melee', 13:'ranged', 14:'melee', 15:'chase', 16:'ranged', 17:'melee', 18:'ranged', 19:'ranged', 20:'chase', 21:'boss' };
+// Best counter weapon per threat category [weaponIdx, reason]
+const THREAT_COUNTER = { ranged:[4,'punish ranged threats before they commit'], chase:[1,'delete chasers at close range'], melee:[1,'max damage per reload when they close in'], aoe:[5,'blast packs before they converge'], tanky:[10,'railgun pierces armor'] };
+
+export function buildWeaponDeathCoach(weaponKills, recentDeathsByEnemy) {
+  const wk = Array.isArray(weaponKills) ? weaponKills : [];
+  const deaths = Array.isArray(recentDeathsByEnemy) ? recentDeathsByEnemy : [];
+  if (!wk.length || !deaths.length) return null;
+  let topWpnIdx = -1, topWpnKills = 0;
+  for (let i = 0; i < wk.length; i++) {
+    if ((wk[i] || 0) > topWpnKills) { topWpnKills = wk[i]; topWpnIdx = i; }
+  }
+  if (topWpnIdx < 0 || !topWpnKills) return null;
+  const killCounts = {};
+  for (const d of deaths) killCounts[d.t] = (killCounts[d.t] || 0) + 1;
+  let topKillerType = null, topKillerCount = 0;
+  for (const [t, c] of Object.entries(killCounts)) {
+    if (c > topKillerCount) { topKillerCount = c; topKillerType = t; }
+  }
+  if (!topKillerType || topKillerCount < 2) return null;
+  const killerThreat = ENEMY_THREAT_MAP[Number(topKillerType)];
+  const weaponRange = WEAPON_RANGE_MAP[topWpnIdx];
+  if (!killerThreat || !weaponRange) return null;
+  const mismatch =
+    (killerThreat === 'ranged' && weaponRange === 'close') ||
+    (killerThreat === 'chase' && weaponRange === 'long') ||
+    (killerThreat === 'melee' && weaponRange === 'long');
+  if (!mismatch) return null;
+  const topWpn = WEAPONS[topWpnIdx];
+  const enemy = ENEMY_TYPES[Number(topKillerType)];
+  const counter = THREAT_COUNTER[killerThreat];
+  const counterWpn = counter ? WEAPONS[counter[0]] : null;
+  const wpnName = topWpn ? `${topWpn.emoji || '🔫'} ${topWpn.name}` : `Weapon ${topWpnIdx}`;
+  const enemyName = enemy ? `${enemy.emoji || '👾'} ${enemy.name}` : `enemy #${topKillerType}`;
+  if (counterWpn && counter) {
+    return `${wpnName} is ${weaponRange}-range but ${enemyName} is a ${killerThreat} threat — ${counterWpn.emoji || '🔫'} ${counterWpn.name} would ${counter[1]}.`;
+  }
+  return `${wpnName} is underperforming vs ${enemyName}'s ${killerThreat} style — adapt your loadout at the next shop.`;
+}
+
 /**
  * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[] }} ctx
  * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, enemyLab: object|null, brain: object }}
@@ -210,6 +253,7 @@ export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHist
     weaponTip: buildWeaponTip(runSummary),
     precisionTip: buildPrecisionTip(runSummary),
     crossRunTip,
+    weaponDeathTip: buildWeaponDeathCoach(runSummary?.weaponKills, career?.recentDeathsByEnemy),
     enemyLab: buildEnemyLab(career, runSummary),
     brain,
   };
