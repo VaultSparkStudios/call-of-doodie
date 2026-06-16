@@ -934,7 +934,7 @@ export default function CallOfDoodie() {
       }, 800);
     }
     return seed;
-  }, []);
+  }, [leaderboard]);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   const addParticles = (gs, x, y, color, count = 8) => {
