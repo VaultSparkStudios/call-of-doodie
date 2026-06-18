@@ -376,3 +376,8 @@ Decision: Keep the Vite chunk-size warning meaningful and split `@sentry/react` 
 Rationale: The main app chunk was only slightly above the 800 kB threshold, but those vendor clients are stable dependencies and do not need to live inside the gameplay bundle. Manual chunks reduced the main chunk to ~620 kB while preserving synchronous behavior.
 
 Trade-off accepted: Initial page load now has two additional module chunks for observability/data clients. This is acceptable because they are cacheable, behavior-preserving, and keep future build warnings useful.
+## 2026-06-18 — Obelisk surfaces are explicit routes, not a gameplay gate
+
+Decision: Call of Doodie's generated Obelisk Passport UI is reachable at `/login`, and callback handling is reachable at `/auth/callback`, but the default game path remains guest-play-first. Unknown routes and ordinary game URLs must continue rendering gameplay unless a deliberate future account feature gates a specific paid or account-only capability.
+
+Rationale: The earlier auto-wiring briefly introduced an accidental blanket auth gate, which conflicts with the current launch posture and the standing account plan. The account bridge should add trust and recovery without blocking free browser play; server verification and guest-to-account migration receipts remain separate follow-up work.

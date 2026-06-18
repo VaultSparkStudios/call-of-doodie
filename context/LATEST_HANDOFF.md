@@ -1,5 +1,32 @@
 # Latest Handoff
 
+## Where We Left Off (Session 100 — compact-handoff smoke + explicit Obelisk routes)
+
+**Intent outcome:** Achieved. Continued after Session 99, shipped the next protocol regression guard, made the generated Obelisk login surface reachable by explicit routes only, then ran closeout write-back per founder direction.
+
+**Shipped**
+- Added `node scripts/compact-handoff.mjs --smoke-unicode`, a no-network CLI smoke that exercises compact-handoff through `callClaude()` with malformed handoff text and fails if unsafe surrogate escapes reach the model-router payload.
+- Added `tests/compact-handoff-unicode-smoke.test.js`, raising the full suite to 509 tests for that slice.
+- Added explicit Obelisk route classification in `src/obeliskRoutes.js`: `/login` routes to the generated login component, `/auth/callback` routes to callback handling, and every other path remains the game.
+- Added `src/ObeliskCallback.jsx` so the callback path has a visible verification state and no client-side secret handling.
+- Updated `src/main.jsx` to render `ObeliskLogin`, `ObeliskCallback`, or `CallOfDoodie` based on the explicit route classifier.
+- Added `src/obeliskRoutes.test.js`, proving `/`, `/daily`, and unknown paths still render gameplay rather than a blanket auth gate.
+
+**Validation**
+- `node scripts/compact-handoff.mjs --smoke-unicode` — passed
+- `npx vitest run tests/compact-handoff-unicode-smoke.test.js tests/model-router-unicode.test.js` — 3/3
+- `npx vitest run src/obeliskRoutes.test.js` — 1/1
+- `npm run lint` — clean
+- `npm test` — 510/510
+- `npm run build` — passing
+- Staged secret scans — clean
+- Commits pushed: `a1d12f0` and `520a4d8`
+
+**Next recommended slice**
+- [ ] Add backend `/api/obelisk-verify` or equivalent worker before treating Obelisk login as a complete account system.
+- [ ] Keep guest play as the default path until Supabase Auth + Obelisk migration receipts are fully implemented.
+- [ ] Continue visual credibility work: real gameplay screenshots and first Blender-authored source asset.
+
 ## Where We Left Off (Session 99 — protocol transport + Codex plan-mode truth)
 
 **Intent outcome:** Achieved for the continuation slice. Ran `/start`, created a fresh continuation audit from current evidence, implemented both protocol-reliability items, verified the original startup failure path, and completed closeout write-back.

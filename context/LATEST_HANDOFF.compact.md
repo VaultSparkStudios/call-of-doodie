@@ -1,39 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: af69011781b4 -->
-<!-- generated-at: 2026-06-18T20:16:42.425Z -->
+<!-- source-hash: 8e6fe1ee8021 -->
+<!-- generated-at: 2026-06-18T21:02:51.631Z -->
 
 # LATEST_HANDOFF (compact)
 
-## Handoff Summary (Session 98)
+SESSION 100 HANDOFF SUMMARY
 
-### Session
-- Session 98: asset pack follow-on, security cleanup, lint/build hygiene. Intent achieved.
+Status
+- Intent achieved. Shipped protocol regression guard + explicit Obelisk route classification, then closeout.
 
-### Shipped
-- Generated proprietary signature visual pack: source SVGs, runtime PNGs, generator script, `npm run assets:generate`, `visualAssetLibrary.js` + tests.
-- Wired signature assets into HomeV2 (front-door strip + Codex ASSETS tab); manifest expanded 6 to 10 assets.
-- Patched all 5 npm audit findings via overrides (`@babel/core`, `esbuild`, `form-data`, `js-yaml`, `ws`); Dependabot alerts cleared.
-- Cleared remaining lint warnings (initGame leaderboard dep; underscore convention for unused inputs).
-- Split @sentry/react and @supabase/supabase-js into Vite vendor chunks; main chunk 804kB to 620kB, build warning gone.
+Shipped
+- compact-handoff unicode smoke CLI (scripts/compact-handoff.mjs --smoke-unicode) + test; suite at ~509-510 tests.
+- Explicit Obelisk route classifier (src/obeliskRoutes.js): /login -> ObeliskLogin, /auth/callback -> ObeliskCallback, all else -> game.
+- src/ObeliskCallback.jsx (visible verify state, no client-side secrets).
+- src/main.jsx routes via classifier; src/obeliskRoutes.test.js proves /, /daily, unknown still render gameplay.
 
-### Validation (all green)
-- assets:generate 4/4; assets:check 10/10; launch:media-check 5/5; asset tests 6/6.
-- npm audit 0 vulns; lint clean; test 505/505; build clean; e2e 2/2 (Chromium + Mobile Chrome).
+Validation
+- compact-handoff smoke pass; vitest unicode 3/3; obeliskRoutes 1/1; lint clean; npm test 510/510; build passing; secret scans clean.
+- Commits a1d12f0, 520a4d8 pushed.
 
-### Now Bucket (top 3)
-1. Replace launch placeholder SVG/PNG media with real gameplay screenshots; update manifest statuses.
-2. Add first true Blender-authored source asset under `assets/source/`; export through manifest/generator path.
-3. Decide whether to keep @sentry/react sync-loaded or lazy-load telemetry post-first-paint if LCP needs reduction.
+Current Intent
+- Continue durable /start -> /audit -> /implement -> /closeout loop. Harden Obelisk login toward a real account system; protect protocol startup reliability; advance launch visual credibility.
 
-### Blockers (top 3)
-1. Real gameplay screenshots require browser/device capture pass (not yet available).
-2. Itch.io publication and physical PWA/gamepad QA remain human/device-gated.
-3. Supabase edge-function deploy (sync-studio-events, validate-replay) gated on missing SUPABASE_ACCESS_TOKEN.
+Now (top 3)
+- Add backend /api/obelisk-verify (or worker) before treating Obelisk login as complete account system.
+- Keep guest play as default path until Supabase Auth + Obelisk migration receipts implemented.
+- Visual credibility: real gameplay screenshots + first Blender-authored source asset through manifest/generator path.
 
-### Human-Blocked (with age)
-- Supabase edge deploy / SUPABASE_ACCESS_TOKEN missing: since Session 82 (~16 sessions).
-- Physical PWA/gamepad QA + Itch.io publish: since Session 84+ (~14 sessions).
-- Cloudflare Web Analytics beacon SRI error (Cloudflare-injected, not in repo source): since Session 82.
+Blockers (top 3)
+- No backend verify endpoint exists; Obelisk login not yet a full account system.
+- Launch media still placeholder SVG/PNG; needs real gameplay capture pass.
+- Pre-existing Studio OS helper worktree changes (blocker-rules, visual-blocks, skill-cost-ledger) need split/land for clean baseline.
 
-### Next Session
-Run fresh /audit from current state, or capture real gameplay screenshots to retire launch placeholders.
+Human-Blocked (with age)
+- Supabase edge-function deploy: needs SUPABASE_ACCESS_TOKEN (recurring since ~Session 82).
+- Cloudflare Web Analytics beacon SRI failure: fix in Cloudflare config (since ~Session 82).
+- Itch.io publication + physical PWA/gamepad device QA: human/device gated (since ~Session 85).
+- Browser/device gameplay screenshot capture pass: human-gated (since ~Session 97).
+
+Next Session Pointer
+- Run fresh /audit; prioritize backend obelisk-verify endpoint, else advance real gameplay screenshots / first Blender source asset.

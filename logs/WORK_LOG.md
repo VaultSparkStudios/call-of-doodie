@@ -689,3 +689,11 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Added Unicode scalar sanitization at the `scripts/lib/model-router.mjs` API chokepoint so lone surrogate code units are replaced before model-router JSON payloads leave the process while valid emoji/surrogate pairs remain intact.
 - Restored Codex-aware `not_required` stamping in `scripts/verify-plan-mode.mjs`, including `PROJECT_STATUS.json` and `context/.session-lock` updates, so Codex sessions no longer get a false Claude-only plan-mode warning.
 - Validation: focused protocol tests 3/3, live `node scripts/verify-plan-mode.mjs --json` returns `not_required`, live `node scripts/compact-handoff.mjs --force` succeeds, medium game gate passes both items, `npm run protocol:drift -- --json` 20/20, `npm run lint` clean, `npm test` 508/508, and `npm run build` passing.
+
+## 2026-06-18 — Session 100 — Compact-Handoff Smoke + Obelisk Route Wiring
+
+- Continued from Session 99 recommendations and added a real compact-handoff CLI regression smoke: `node scripts/compact-handoff.mjs --smoke-unicode` runs through the same model-router payload path with malformed handoff text and fails if unsafe surrogate escapes survive.
+- Added `tests/compact-handoff-unicode-smoke.test.js`; focused smoke coverage and the full suite passed.
+- Wired the generated Obelisk Passport login surface into the app without blanket-gating gameplay: `/login` renders `ObeliskLogin`, `/auth/callback` renders `ObeliskCallback`, and all other paths render `CallOfDoodie`.
+- Added `src/obeliskRoutes.js` and `src/obeliskRoutes.test.js` so the explicit-route invariant is covered by tests.
+- Validation: compact-handoff smoke, focused route test, `npm run lint`, `npm test` 510/510, `npm run build`, and staged secret scans all passed. Commits pushed: `a1d12f0`, `520a4d8`.

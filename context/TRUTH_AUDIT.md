@@ -594,3 +594,8 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - Dependency vulnerability truth now comes from the committed `package-lock.json` plus exact overrides in `package.json`; local `npm audit --json` reports 0 vulnerabilities and GitHub Dependabot marks all five previous alerts fixed.
 - Build-size truth changed: Sentry and Supabase are now explicit Vite vendor chunks; the main application chunk is ~620 kB raw instead of ~804 kB raw.
 - No contradictions introduced. Remaining visual truth gap: launch screenshots are still placeholder exports until a real capture pass replaces them.
+## 2026-06-18 — Session 100 Truth Updates
+
+- `scripts/compact-handoff.mjs` now has a direct `--smoke-unicode` path that exercises malformed handoff text through `callClaude()` without network. This supports the Session 99 claim that the startup Unicode failure is regression-covered, not merely fixed at the shared router layer.
+- `src/obeliskRoutes.js`, `src/main.jsx`, and `src/obeliskRoutes.test.js` make the Obelisk route truth explicit: only `/login` and `/auth/callback` route away from gameplay. The repo still should not claim a complete account system because `/api/obelisk-verify` is not implemented here.
+- `src/ObeliskCallback.jsx` stores a verified result only after the configured backend endpoint returns `ok`; it does not verify Obelisk tokens in the browser and does not embed secrets.

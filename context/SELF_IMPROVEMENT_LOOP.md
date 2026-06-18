@@ -1241,3 +1241,16 @@ SIL +2: Repaired two Studio OS protocol truth gaps found by the live `/start` pa
 1. Protocol helper diff review — inspect and land or split the existing broader Studio OS helper changes so the repo returns to a clean, attributable baseline. High probability.
 2. Compact-handoff fixture — add a script-level fixture that injects malformed handoff text and proves fallback/sanitized API paths in one command. Medium probability.
 3. Gameplay screenshot capture pass — replace launch placeholder exports with real desktop/mobile gameplay PNGs once the visual QA surface is available. High probability.
+
+## 2026-06-18 — Session 100 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
+
+SIL +2: Converted the Session 99 compact-handoff transport fix into a direct CLI smoke and made Obelisk Passport reachable only through explicit auth routes. Validation: direct compact-handoff smoke passes, focused route and Unicode tests pass, lint clean, full suite 510/510, build passing, staged secret scans clean, and both commits pushed.
+
+**Top win:** The prior startup failure mode now has a direct regression check, and the login surface is reachable without reviving the accidental all-player auth gate.
+**Top gap:** `/auth/callback` still needs a real `/api/obelisk-verify` backend or Worker proxy before this becomes a complete account flow.
+**Intent outcome:** Achieved for continuation implementation, validation, commit/push, and closeout write-back.
+
+**Brainstorm**
+1. Obelisk verify Worker — add the backend verification endpoint and tests so callback identity is server-verified without exposing secrets. High probability.
+2. Guest-to-account migration receipts — connect the explicit login path to the existing Supabase Auth + Obelisk receipt plan without gating free play. High probability.
+3. Gameplay screenshot capture pass — replace launch placeholder media with real desktop/mobile screenshots. High probability.
