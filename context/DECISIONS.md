@@ -355,3 +355,16 @@ Trade-off accepted: passkeys are not the first implementation step for this game
 **Rationale:** This repository must keep `/start`, `/audit`, `/implement`, and `/closeout` executable from public-safe code. Local helpers preserve repeatability and observability without exposing private planning, secrets workflows, or Studio Ops implementation details.
 
 **Trade-off accepted:** These helpers are intentionally lightweight and task-board/codebase based. They are compatibility surfaces, not feature-equivalent replacements for private Studio Ops intelligence.
+# 2026-06-18 — Per-game visual asset libraries are local/proprietary first
+
+Decision: Call of Doodie now treats visual assets as a game-local proprietary asset library, not a shared loose folder or external-tool dump. Source art, generated files, runtime exports, license/provenance, and status live in this repo under `assets/source/` and `assets/visual-assets.json`.
+
+Rationale: Visual assets are game identity and VaultSpark IP. Keeping source/provenance local preserves ownership clarity while still allowing reusable validation/templates to be propagated through Studio OS.
+
+Follow-up: Ark `canon-update` cargo was queued to `vaultspark-studio-ops` requesting official canon and propagation to all game repos.
+
+# 2026-06-18 — Playwright e2e must not reuse generic dev ports
+
+Decision: Call of Doodie Playwright e2e uses strict port `53173` and only runs `*.spec.*` browser specs.
+
+Rationale: The previous harness could reuse an unrelated app already running on 5173 and could attempt to execute Vitest files under `tests/`. Browser validation must prove this game, not whatever local server happens to occupy a common Vite port.

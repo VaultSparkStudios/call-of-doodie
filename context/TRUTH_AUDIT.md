@@ -578,3 +578,10 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `src/utils/socialRetention.js` owns weekly contract progress payload shaping; `DeathScreen.jsx` persists the resulting `weekly_contract_progress` event with a per-run de-dupe key.
 - `src/utils/replayTraceFixtures.js` now owns both replay evidence and pressure-profile fixture expectations; `scripts/validate-replay-trace-fixtures.mjs` enforces those expectations.
 - No source-of-truth contradictions introduced. Validation: focused utility tests 13/13, replay fixture validator 4/4, full suite 482/482, lint 0 errors / 7 existing warnings, build clean.
+# 2026-06-18 — Visual Asset Pipeline Truth
+
+- Source of truth for Call of Doodie visual asset provenance is now `assets/visual-assets.json`.
+- Source-art and generation rules live in `assets/source/README.md`.
+- Runtime pseudo-3D material primitives live in `src/utils/visualPrimitives.js`; `src/drawGame.js` consumes them.
+- Launch media placeholder status is explicit: current SVG/PNG launch assets are tracked as `placeholder-export` until real gameplay screenshots replace them.
+- Studio-wide propagation was not written directly to a sibling repo; it was queued as Ark `canon-update` cargo for `vaultspark-studio-ops`.

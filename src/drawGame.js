@@ -1,5 +1,6 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
+import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
 
 function getEnemyReadabilityStyle(enemy, timeNow) {
   if (enemy.isBossEnemy) {
@@ -511,8 +512,12 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(0, 0, r + 6, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
     }
-    ctx.fillStyle = e.color;
-    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    drawShadedOrb(ctx, {
+      radius: r,
+      material: e.isBossEnemy ? "porcelain" : "enemyFlesh",
+      baseColor: e.color,
+      rimWidth: 2,
+    });
     // Hit-flash white overlay
     if (e.hitFlash > 0) {
       ctx.globalAlpha = Math.min(0.9, e.hitFlash / 12);
@@ -528,17 +533,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
     }
-    // Inner depth ring (darker ring for body volume)
-    ctx.globalAlpha = 0.32;
-    ctx.strokeStyle = "rgba(0,0,0,0.7)"; ctx.lineWidth = r * 0.28;
-    ctx.beginPath(); ctx.arc(0, 0, r * 0.6, 0, Math.PI * 2); ctx.stroke();
-    ctx.globalAlpha = 1;
-    // Top-left highlight
-    ctx.fillStyle = "rgba(255,255,255,0.13)";
-    ctx.beginPath(); ctx.arc(-r * 0.28, -r * 0.28, r * 0.38, 0, Math.PI * 2); ctx.fill();
-    // Outer border
-    ctx.strokeStyle = e.hitFlash > 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.55)";
-    ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+    // Outer flash border preserves hit readability over the material pass.
+    if (e.hitFlash > 0) {
+      ctx.strokeStyle = "rgba(255,255,255,0.6)";
+      ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.stroke();
+    }
     if (readability) {
       ctx.strokeStyle = readability.contrastColor;
       ctx.lineWidth = e.isBossEnemy ? 2.8 : 1.8;
@@ -1051,15 +1050,12 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // === Rotate to aim angle ===
   ctx.rotate(p.angle);
   const curWpn = WEAPONS[wpnIdx];
+  const weaponAccent = buildWeaponAccent(curWpn);
   // Gun grip + barrel
   ctx.fillStyle = "#444"; ctx.fillRect(8, -3, 6, 6);         // grip
-  ctx.fillStyle = "#505050"; ctx.fillRect(13, -2.5, 16, 5);  // barrel body
-  ctx.fillStyle = "#3A3A3A"; ctx.fillRect(24, -3.5, 6, 7);   // suppressor base
-  ctx.fillStyle = curWpn.color; ctx.fillRect(28, -2.5, 6, 5); // muzzle color
+  drawWeaponBarrel(ctx, weaponAccent);
   // Tactical vest body
-  ctx.fillStyle = "#3A6A3A";
-  ctx.beginPath(); ctx.ellipse(0, 0, 13, 11, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = "#244E24"; ctx.lineWidth = 2; ctx.stroke();
+  drawShadedOrb(ctx, { radius: 13, material: "combatGreen", squash: 0.85, rimWidth: 2 });
   // Vest strap lines
   ctx.strokeStyle = "rgba(18,45,18,0.7)"; ctx.lineWidth = 1.2;
   ctx.beginPath(); ctx.moveTo(-4, -8); ctx.lineTo(-4, 8); ctx.stroke();
@@ -1072,9 +1068,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.fillStyle = "rgba(255,255,255,0.07)";
   ctx.beginPath(); ctx.ellipse(-1, -3, 6, 4, 0, 0, Math.PI * 2); ctx.fill();
   // Helmet
-  ctx.fillStyle = "#2A5A2A";
-  ctx.beginPath(); ctx.arc(0, 0, 10, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = "#183C18"; ctx.lineWidth = 1.5; ctx.stroke();
+  drawShadedOrb(ctx, { radius: 10, material: "combatGreen", rimWidth: 1.5 });
   // Helmet brim detail
   ctx.strokeStyle = "rgba(45,90,45,0.55)"; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.arc(0, 0, 10, Math.PI * 0.6, Math.PI * 1.4); ctx.stroke();

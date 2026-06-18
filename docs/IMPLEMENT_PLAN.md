@@ -1,17 +1,30 @@
-# Implement Plan — 2026-06-15 (Session 96 — AUDIT_2026-06-15_3)
+# Implement Plan — 2026-06-18 Visual Asset Pipeline
 
-Source: `docs/AUDIT_2026-06-15_3.json`
+Source audit: `docs/AUDIT_2026-06-18.json`
 
-## Wave Plan
+## Sequence
 
-1. `startup-brief-canonical-boxes` — fix `scripts/render-startup-brief.mjs` so `/start` always emits canonical `GENIUS HIT LIST` and `HUMAN PRESSURE` boxes.
-2. `startup-brief-regression-harness` — add focused regression coverage for plain genius-list output and the no-pressure empty state.
+1. `visual-asset-provenance-pipeline`
+   - Add proprietary per-game visual asset library contract.
+   - Add manifest and validator.
+   - Verify with `npm run assets:check`.
+
+2. `pseudo-3d-runtime-asset-primitives`
+   - Extract reusable pseudo-3D canvas primitives.
+   - Wire player/enemy material rendering through the helper.
+   - Verify with focused tests, full tests, build, and e2e canvas smoke.
+
+3. `launch-media-asset-gate`
+   - Add manifest/launch screenshot parity gate.
+   - Verify with `npm run launch:media-check`.
 
 ## Verification
 
-- `npx vitest run tests/startup-brief-boxes.test.js`
-- `node scripts/render-startup-brief.mjs`
-- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`
-- `npm test`
+- `npm run assets:check`
+- `npm run launch:media-check`
+- `npx vitest run src/utils/visualPrimitives.test.js`
 - `npm run lint`
+- `npm test`
 - `npm run build`
+- `npm run protocol:drift -- --json`
+- `npm run test:e2e`

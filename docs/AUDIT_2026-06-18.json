@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-18",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 97,
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "feature-depth": 1.5,
+      "ai": 1.5,
+      "new-features": 1,
+      "feedback-loop": 1,
+      "security": 1,
+      "speed": 1,
+      "token-cost": 1
+    },
+    "combinedPriority": 228.7,
+    "top3": [
+      "visual-asset-provenance-pipeline",
+      "pseudo-3d-runtime-asset-primitives",
+      "launch-media-asset-gate"
+    ]
+  },
+  "summary": {
+    "totalItems": 3,
+    "combinedPriority": 228.7,
+    "top3": [
+      "visual-asset-provenance-pipeline",
+      "pseudo-3d-runtime-asset-primitives",
+      "launch-media-asset-gate"
+    ]
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "slug": "visual-asset-provenance-pipeline",
+      "title": "Visual Asset Provenance Pipeline",
+      "axis": "security / speed / organization / efficiency",
+      "tier": "🔥",
+      "impact": 9,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 85.1,
+      "status": "shipped",
+      "why": "The game has strong procedural canvas rendering, but no source-of-truth ledger for future Blender, generated, or downloaded visual assets. That makes a 3D art upgrade risky: assets can enter the repo without source files, export settings, license status, or runtime constraints. A small manifest plus source-folder contract turns every future visual improvement into an auditable pipeline instead of mystery media.",
+      "recipe": "Create `assets/source/README.md` and `assets/visual-assets.json` documenting the 3D-authored sprite pipeline, allowed free/open sources, source/export paths, licensing, and optimization rules. Add `scripts/validate-visual-assets.mjs` plus an npm script so every manifest entry must include id, kind, sourceType, license, sourcePath, runtimePath, dimensions, and status.",
+      "evidence": "`public/launch-assets/` contains exported launch SVG/PNG media and `scripts/generate-launch-assets.mjs`, but there is no `assets/source` folder, no visual asset manifest, and no validator. `docs/INTERNAL_TOOLS.md` is absent locally, so the internal-first choice is to build a repo-local manifest without adding dependencies.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add a markdown source-art contract and one JSON manifest entry for the current launch asset pack."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add manifest, source README, validator script, npm script, and entries for launch media plus runtime procedural sprites."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Extend the validator to check image dimensions and warn when runtime assets exceed mobile texture budget."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "pseudo-3d-runtime-asset-primitives",
+      "title": "Pseudo-3D Runtime Asset Primitives",
+      "axis": "ui / ux / user-experience",
+      "tier": "🔥",
+      "impact": 8,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 8,
+      "priority": 76.8,
+      "status": "shipped",
+      "why": "Call of Doodie already renders enemies as shaded canvas forms, but the 3D-ish look is implicit inside one large renderer and the player still has hard-coded body/gun drawing. Extracting reusable porcelain/plastic/metal primitives lets the game look more authored today while leaving a clean swap point for Blender-rendered sprite sheets tomorrow. This improves readability and style coherence without making the whole game a fragile 3D migration.",
+      "recipe": "Add `src/utils/visualPrimitives.js` with tested helpers for pseudo-3D tokens: material palette lookup, shaded orb/specular pass, and weapon barrel accent descriptors. Wire the player body and enemy body base in `drawGame.js` through those helpers while preserving existing telegraphs, hit flashes, labels, and emoji overlays.",
+      "evidence": "`src/drawGame.js` already draws enemy body volume inline with inner depth ring/top-left highlight and hard-coded player helmet/vest/gun shapes. There is no reusable primitive module, so future sprite/3D swaps would require editing the monolithic renderer.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Extract only shaded enemy body drawing into a pure helper and test material fallback."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Extract enemy orb, player body, and weapon accent helpers; wire `drawGame.js`; add unit tests for palette/material contracts."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Add an offscreen sprite-atlas cache keyed by enemy/player material so static shading is reused instead of repainted every frame."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "launch-media-asset-gate",
+      "title": "Launch Media Asset Gate",
+      "axis": "feedback-loop / security",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 6,
+      "priority": 66.8,
+      "status": "shipped",
+      "why": "The public manifest still points screenshot entries at SVG launch placeholders even though PNG generation exists. That is workable for browsers, but weak for store/listing workflows and gives no automated proof that launch media is present, sized, and tracked. A media gate makes the asset pipeline visible before every launch/closeout and creates the place to later require real gameplay screenshots.",
+      "recipe": "Add `scripts/validate-launch-media.mjs` to verify every manifest screenshot has a generated PNG sibling and every launch PNG is represented in `assets/visual-assets.json`. Add `npm run launch:media-check` and update launch readiness documentation to treat real screenshot capture as the remaining human step.",
+      "evidence": "`public/manifest.json` references five SVG screenshots; `scripts/generate-launch-assets.mjs` exports PNG siblings, but no script checks manifest-to-PNG parity or provenance coverage.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Check that each manifest screenshot path has a PNG sibling in `public/launch-assets`."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Also require each generated PNG to be tracked in the visual asset manifest and documented as placeholder or real screenshot."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Use `sharp` metadata to verify exact screenshot dimensions and fail if wide/narrow form factors drift."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-3d-gameplay-migration",
+      "reason": "Rejected on verification: current game is a tuned 2D canvas shooter with extensive input/replay tests. Full 3D migration would risk launch confidence; 3D-authored sprites are the safer first rung."
+    },
+    {
+      "slug": "kilnstudio-direct-adoption",
+      "reason": "Deferred: live lookup did not verify the site, export terms, or license posture. Any use must pass package/source trust and rights provenance first."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "visual-asset-provenance-pipeline",
+      "status": "shipped",
+      "notes": "Added `assets/source/README.md`, `assets/visual-assets.json`, `scripts/validate-visual-assets.mjs`, and `npm run assets:check`. Ark canon-update cargo queued to `vaultspark-studio-ops` for studio-wide per-game proprietary asset-library propagation. Verified with `npm run assets:check`."
+    },
+    {
+      "slug": "pseudo-3d-runtime-asset-primitives",
+      "status": "shipped",
+      "notes": "Added `src/utils/visualPrimitives.js` and focused tests, then routed enemy body material shading plus player weapon/body/helmet drawing through reusable pseudo-3D primitives while preserving existing hit flashes, telegraphs, labels, and emoji overlays. Verified with focused tests, full `npm test` 503/503, build, and Playwright desktop/mobile canvas smoke."
+    },
+    {
+      "slug": "launch-media-asset-gate",
+      "status": "shipped",
+      "notes": "Added `scripts/validate-launch-media.mjs` and `npm run launch:media-check` to require manifest screenshot PNG siblings and visual-asset provenance coverage. Also fixed Playwright e2e harness isolation by scoping testMatch and moving the dev server to strict port 53173. Verified with `npm run launch:media-check` and `npm run test:e2e` 2/2."
+    }
+  ]
+}

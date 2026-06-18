@@ -1,5 +1,34 @@
 # Latest Handoff
 
+## Where We Left Off (Session 97 — proprietary visual asset library + pseudo-3D pipeline)
+
+**Intent outcome:** Achieved for the Call of Doodie slice. Ran `/start → /audit → /implement` on a fresh visual-asset audit, answered the founder’s tooling question, shipped the per-game proprietary asset-library pattern via Studio Ark cargo to `vaultspark-studio-ops`, and kept implementation local to Call of Doodie.
+
+**Shipped**
+- `assets/source/README.md` and `assets/visual-assets.json` establish the game-local proprietary visual asset library, source-art rules, runtime export policy, and provenance manifest.
+- `scripts/validate-visual-assets.mjs`, `scripts/validate-launch-media.mjs`, `npm run assets:check`, and `npm run launch:media-check` add repeatable gates for source/runtime provenance and manifest screenshot PNG parity.
+- `src/utils/visualPrimitives.js` adds reusable pseudo-3D canvas material primitives for shaded orbs and weapon barrels; `src/drawGame.js` now uses them for enemy body material shading plus player weapon/body/helmet rendering while preserving telegraphs, hit flashes, labels, and emoji overlays.
+- `playwright.config.ts` now scopes Playwright to `*.spec.*` files and runs this repo on strict port `53173`, preventing e2e from attaching to unrelated local apps.
+- `docs/AUDIT_2026-06-18.json` / `.md` and `docs/IMPLEMENT_PLAN.md` record the three shipped audit items and verification evidence.
+
+**Ark cargo**
+- Queued local Ark `canon-update` cargo to `vaultspark-studio-ops`: every game should maintain its own internal proprietary visual asset library with source art, provenance manifest, license/status fields, runtime exports, and validation before propagation to all game repos.
+
+**Validation**
+- `npm run assets:check` — 6/6 asset manifest entries valid
+- `npm run launch:media-check` — 5/5 manifest screenshots have PNG provenance
+- `npx vitest run src/utils/visualPrimitives.test.js` — 4/4
+- `npm test` — 503/503
+- `npm run lint` — 0 errors / 7 existing warnings
+- `npm run build` — passing; existing large main chunk warning remains
+- `npm run protocol:drift -- --json` — 20/20 present
+- `npm run test:e2e` — 2/2 desktop Chromium + mobile Chrome pointer sweep
+
+**Next recommended slice**
+- [ ] Capture real gameplay screenshots to replace launch SVG placeholders once a browser/device capture pass is available.
+- [ ] Add first Blender-authored source asset under `assets/source/` and export it through the manifest to prove the source-to-runtime path.
+- [ ] Consider a tiny in-menu rotating trophy/collectible preview as the first safe true-3D experiment, leaving gameplay 2D.
+
 ## Where We Left Off (Session 96 — combat audio × career depth × coaching sprint)
 
 **Intent outcome:** Achieved. Ran the full `/start → /audit → /implement → /closeout` loop against `docs/AUDIT_2026-06-15_3.json`. Shipped all 10 waves in one pass.

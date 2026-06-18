@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0",
+  "project": "call-of-doodie",
+  "ownership": "Proprietary - All Rights Reserved, VaultSpark Studios LLC",
+  "policy": {
+    "defaultLicense": "Proprietary",
+    "sourceLibrary": "assets/source",
+    "runtimeAssetRoots": ["public", "src"],
+    "externalAssetRule": "Record per-asset license and provenance before runtime use."
+  },
+  "assets": [
+    {
+      "id": "launch-combat",
+      "kind": "launch-media",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "public/launch-assets/launch-combat.svg",
+      "runtimePath": "public/launch-assets/launch-combat.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "placeholder-export",
+      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+    },
+    {
+      "id": "launch-boss",
+      "kind": "launch-media",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "public/launch-assets/launch-boss.svg",
+      "runtimePath": "public/launch-assets/launch-boss.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "placeholder-export",
+      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+    },
+    {
+      "id": "launch-builds",
+      "kind": "launch-media",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "public/launch-assets/launch-builds.svg",
+      "runtimePath": "public/launch-assets/launch-builds.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "placeholder-export",
+      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+    },
+    {
+      "id": "launch-leaderboard",
+      "kind": "launch-media",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "public/launch-assets/launch-leaderboard.svg",
+      "runtimePath": "public/launch-assets/launch-leaderboard.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "placeholder-export",
+      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+    },
+    {
+      "id": "launch-devices",
+      "kind": "launch-media",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "public/launch-assets/launch-devices.svg",
+      "runtimePath": "public/launch-assets/launch-devices.png",
+      "dimensions": { "width": 390, "height": 844 },
+      "status": "placeholder-export",
+      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+    },
+    {
+      "id": "runtime-procedural-combat-sprites",
+      "kind": "runtime-procedural",
+      "sourceType": "procedural-canvas",
+      "license": "Proprietary",
+      "sourcePath": "src/utils/visualPrimitives.js",
+      "runtimePath": "src/drawGame.js",
+      "dimensions": { "width": 0, "height": 0 },
+      "status": "runtime-generated",
+      "notes": "Pseudo-3D primitives render player, enemy, and weapon material cues directly in canvas."
+    }
+  ]
+}

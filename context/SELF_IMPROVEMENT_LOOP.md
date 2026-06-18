@@ -1202,3 +1202,16 @@ SIL +3: Climbed the replay-trust audit ladders from receipt visibility into dura
 **Top win:** Replay proof now has memory: the player can see whether trust quality is improving across recent runs, and shared score cards carry the same proof context.
 **Top gap:** The validator proves browser fixture parity only; the live Edge `validate-replay` TypeScript path still needs to consume the same fixture expectations before any stronger resim claim.
 **Intent outcome:** Achieved — `/start`, verified `/audit`, `/implement`, L3 ladder climb, validation, and closeout write-back completed from current evidence.
+
+## 2026-06-18 — Session 97 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Turned visual asset improvement from an external-tool question into a durable proprietary game-local asset pipeline: source library, provenance manifest, launch-media gate, pseudo-3D runtime primitives, and desktop/mobile browser proof. Validation: asset gates pass, focused visual primitive tests 4/4, full suite 503/503, lint 0 errors / 7 existing warnings, build passing, protocol drift 20/20, Playwright e2e 2/2.
+
+**Top win:** Call of Doodie now has a real place for Blender/generated/source visual assets to land without weakening ownership, licensing, or launch hygiene.
+**Top gap:** The library is structurally ready, but the first real Blender-authored asset and real gameplay screenshot replacement still need a capture/art pass.
+**Intent outcome:** Achieved for `/start`, `/audit`, `/implement`, founder-directed Ark canon cargo, validation, and closeout write-back.
+
+**Brainstorm**
+1. Blender-authored hero prop — create the first porcelain/toilet/trophy source asset under `assets/source/` and export a runtime sprite sheet through the manifest. High probability.
+2. Real screenshot replacement — replace launch SVG placeholders with captured gameplay PNGs and update manifest statuses from placeholder-export to production-ready. High probability.
+3. Safe true-3D preview — add a non-gameplay rotating trophy/collectible preview in menu or victory screen before considering any 3D gameplay migration. Medium probability.

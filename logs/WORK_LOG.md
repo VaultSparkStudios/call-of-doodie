@@ -663,3 +663,12 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Added mission progress helpers so saved mission completion by index or id produces the same UI truth across HomeV2, MenuScreen, and MissionsPanel.
 - Removed duplicate Studio event writes: `createDeathStudioEvents()` now emits `first_death_wave` only, DeathScreen owns contract-specific weekly progress, and App.submitScore owns successful submit telemetry.
 - Validation: focused storage 45/45, focused runSession 5/5, full `npm test` 484/484, `npm run lint` 0 errors / 7 existing warnings, `npm run build` passing.
+
+## 2026-06-18 — Session 97 — Visual Asset Library + Pseudo-3D Pipeline
+
+- Ran `/start` preflight, answered the founder’s visual-asset/tooling question with current-source research, and created `docs/AUDIT_2026-06-18.json` / `.md`.
+- Queued Ark `canon-update` cargo to `vaultspark-studio-ops` proposing studio-wide canon: every game maintains its own internal proprietary visual asset library and provenance/export gates.
+- Added Call of Doodie's local asset library: `assets/source/README.md`, `assets/visual-assets.json`, `scripts/validate-visual-assets.mjs`, `scripts/validate-launch-media.mjs`, `npm run assets:check`, and `npm run launch:media-check`.
+- Added `src/utils/visualPrimitives.js` and tests, then wired `drawGame.js` enemy/player/weapon material rendering through reusable pseudo-3D helpers.
+- Repaired Playwright e2e harness drift: browser specs only, strict project port `53173`, no accidental reuse of unrelated local apps.
+- Validation: `npm run assets:check`, `npm run launch:media-check`, focused visual primitive tests 4/4, full `npm test` 503/503, lint 0 errors / 7 existing warnings, build passing, protocol drift 20/20, e2e 2/2.
