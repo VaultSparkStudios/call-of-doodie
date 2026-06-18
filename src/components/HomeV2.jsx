@@ -18,6 +18,7 @@ import { loadControllerProfile } from "../utils/gamepad.js";
 import { buildInputCalibrationNudge, buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
+import { buildLocalBalanceLab } from "../utils/balanceLab.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -206,6 +207,10 @@ export default function HomeV2(props) {
   const recommendedAction = actionStack[0];
   const analyticsStatus = getAnalyticsStatus();
   const telemetrySummary = useMemo(() => summarizeStudioEvents(studioEvents), [studioEvents]);
+  const balanceLab = useMemo(
+    () => buildLocalBalanceLab({ runHistory, studioEvents, career: career || {} }),
+    [runHistory, studioEvents, career],
+  );
   const aimCheck = useMemo(
     () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
     [inputCalibration, inputDebugEnabled],
@@ -820,6 +825,16 @@ export default function HomeV2(props) {
                   : telemetrySummary.syncedCount > 0
                     ? `${telemetrySummary.syncedCount} recent event${telemetrySummary.syncedCount === 1 ? "" : "s"} mirrored`
                     : "local Studio events ready but no recent mirror confirmations yet"}
+            </span>
+          </div>
+        )}
+        {opsDebugEnabled && (
+          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(255,215,0,0.05)", borderColor: "rgba(255,215,0,0.22)", color: "#FFF2C2" }}>
+            <span style={{ fontSize: 14 }}>LAB</span>
+            <span style={{ flex: 1 }}>
+              <strong style={{ color: "#FFD700" }}>BALANCE LAB:</strong>{" "}
+              {balanceLab.topInsight.title} — <span style={{ color: "#CCC" }}>{balanceLab.topInsight.detail}</span>
+              <span style={{ color: "#888" }}> · {balanceLab.inspected.runs} runs / {balanceLab.inspected.events} events inspected</span>
             </span>
           </div>
         )}
