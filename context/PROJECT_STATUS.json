@@ -48,7 +48,7 @@
   "silVelocity": 12,
   "silDebt": "decreasing",
   "silLastSession": "2026-06-18",
-  "currentSession": 101,
+  "currentSession": 102,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 540,
@@ -76,8 +76,8 @@
   "modelTierCtxLimit": 200000,
   "modelPlanMode": true,
   "modelPlanModeSlash": "/model opusplan",
-  "planModeDetected": "not_required",
-  "planModeCheckedAt": "2026-06-18T20:16:30.666Z",
+  "planModeDetected": "missing",
+  "planModeCheckedAt": "2026-06-18T22:38:35.183Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral"
 }
