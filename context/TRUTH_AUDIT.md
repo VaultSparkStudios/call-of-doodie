@@ -599,3 +599,13 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `scripts/compact-handoff.mjs` now has a direct `--smoke-unicode` path that exercises malformed handoff text through `callClaude()` without network. This supports the Session 99 claim that the startup Unicode failure is regression-covered, not merely fixed at the shared router layer.
 - `src/obeliskRoutes.js`, `src/main.jsx`, and `src/obeliskRoutes.test.js` make the Obelisk route truth explicit: only `/login` and `/auth/callback` route away from gameplay. The repo still should not claim a complete account system because `/api/obelisk-verify` is not implemented here.
 - `src/ObeliskCallback.jsx` stores a verified result only after the configured backend endpoint returns `ok`; it does not verify Obelisk tokens in the browser and does not embed secrets.
+
+## 2026-06-18 — Session 101 Truth Updates
+
+- `docs/AUDIT_2026-06-18_3.json` / `.md` are the source of truth for the Session 101 audit implementation sweep; all 12 candidates are marked `shipped` with execution evidence.
+- `/api/obelisk-verify` is implemented as `functions/api/obelisk-verify.js`. It is server-side verification plumbing, not a gameplay gate, and it returns redacted receipts only.
+- HomeV2 visitor-facing truth changed: measurement/analytics status is an ops-debug surface, not default public copy.
+- Launch media truth changed: `public/launch-captures/real-combat.png` and `real-mobile-controls.png` are verified browser gameplay captures; `public/launch-assets/*` remains authored promotional fallback media.
+- Local intelligence truth changed: Balance Lab and next-run drill are deterministic zero-token analyzers. They do not call paid model APIs or send player data externally.
+- Architecture truth changed: `src/systems/deathFlow.js` owns DeathScreen prop composition. App still owns refs, state setters, and side-effect handlers.
+- No contradictions introduced. Validation: full suite 540/540, build passing, release security gate with npm audit 0 vulnerabilities, launch media gate passing.

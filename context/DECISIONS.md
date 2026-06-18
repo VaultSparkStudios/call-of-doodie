@@ -381,3 +381,23 @@ Trade-off accepted: Initial page load now has two additional module chunks for o
 Decision: Call of Doodie's generated Obelisk Passport UI is reachable at `/login`, and callback handling is reachable at `/auth/callback`, but the default game path remains guest-play-first. Unknown routes and ordinary game URLs must continue rendering gameplay unless a deliberate future account feature gates a specific paid or account-only capability.
 
 Rationale: The earlier auto-wiring briefly introduced an accidental blanket auth gate, which conflicts with the current launch posture and the standing account plan. The account bridge should add trust and recovery without blocking free browser play; server verification and guest-to-account migration receipts remain separate follow-up work.
+
+---
+
+## 2026-06-18 — Verified screenshots are distinct from promotional stills
+
+Decision: Literal gameplay screenshot claims must use browser-captured PNGs from `public/launch-captures/`, while `public/launch-assets/*.svg` remains proprietary promotional/key-art fallback media.
+
+Rationale: Store visitors and browser install surfaces trust real gameplay screenshots differently from composed launch art. Keeping both classes explicit prevents accidental overclaiming and gives the repo a repeatable capture path through `npm run launch:screenshots`.
+
+Trade-off accepted: The manifest still uses the SVG fallback entries until the full five-scene capture set exists. The truth pack documents the partial L1 state rather than pretending the entire store image set has been replaced.
+
+---
+
+## 2026-06-18 — Obelisk token verification is server-owned
+
+Decision: Obelisk callback handling may store account identity only after a server endpoint verifies the returned token and returns a redacted receipt. The browser must not embed verification secrets or claim verified recovery from a client-only token parse.
+
+Rationale: The account bridge is a trust boundary. Keeping token verification inside `/api/obelisk-verify` preserves secret hygiene, lets staging/prod configure verification independently, and keeps not-configured states honest for users.
+
+Trade-off accepted: When `OBELISK_VERIFY_URL` is absent, the callback reports `verify-not-configured` instead of treating login as complete. Guest play remains unaffected.

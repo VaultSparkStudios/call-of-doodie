@@ -1254,3 +1254,16 @@ SIL +2: Converted the Session 99 compact-handoff transport fix into a direct CLI
 1. Obelisk verify Worker — add the backend verification endpoint and tests so callback identity is server-verified without exposing secrets. High probability.
 2. Guest-to-account migration receipts — connect the explicit login path to the existing Supabase Auth + Obelisk receipt plan without gating free play. High probability.
 3. Gameplay screenshot capture pass — replace launch placeholder media with real desktop/mobile screenshots. High probability.
+
+## 2026-06-18 — Session 101 | Total: 1000/1000 | Velocity: 12 | Debt: ↓
+
+SIL +12: Completed the full `docs/AUDIT_2026-06-18_3.md` implementation sweep across UX, first-run control confidence, zero-token intelligence, security, screenshot truth, HUD layout safety, rivalry feedback, and App extraction. Validation: focused gates per item, full suite 540/540, production build passing, release security gate with `npm audit` 0 vulnerabilities, and launch media gate passing with two verified Chromium gameplay captures.
+
+**Top win:** The project now has a cleaner public front door, explicit account verification boundary, real screenshot provenance, and tighter post-run/in-run feedback loops without adding token-consuming AI.
+**Top gap:** The screenshot truth pack is L1: two verified captures exist, but the manifest still uses SVG fallback entries until the full five-scene capture set is produced.
+**Intent outcome:** Achieved — `/audit` plan generated, `/implement` executed all 12 ranked items, validation completed, and handoff surfaces updated.
+
+**Brainstorm**
+1. Five-scene screenshot replacement — capture verified combat, boss, build/debrief, leaderboard, and mobile PNGs, then move manifest screenshots from SVG fallback to production capture paths. High probability.
+2. Death-submit extraction slice 2 — move score-submit event planning, replay-proof receipt packaging, and debrief outcome summaries into `src/systems/deathFlow.js` or adjacent pure helpers. High probability.
+3. Journey visual QA matrix — add Playwright screenshots for first-run, returning, ops-debug, and mobile HomeV2 states so future front-door changes cannot regress hierarchy. Medium probability.

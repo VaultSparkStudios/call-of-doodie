@@ -10,6 +10,8 @@ function useReducedEffects() {
   );
 }
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
+import { getHudDebugSlots, isHudDebugEnabled } from "../utils/hudLayout.js";
+import { buildRivalPace } from "../utils/rivalPace.js";
 
 const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
 const THEME_EMOJIS = ["🏢","🪖","🏭","🏚️","🌵","🌲","🚀","🧊"];
@@ -53,6 +55,12 @@ export default function HUD({
   }, [speedrunMode]);
 
   const reducedEffects = useReducedEffects();
+  const hudDebugEnabled = isHudDebugEnabled();
+  const rivalPace = buildRivalPace({ score, wave, topGhosts, weeklyRival });
+  const centerStackTop = 46
+    + (vsScore != null ? 28 : 0)
+    + (Array.isArray(topGhosts) && topGhosts.length > 0 ? 28 : 0)
+    + (weeklyRival ? 28 : 0);
 
   const Tooltip = ({ text, visible }) => {
     if (!visible) return null;
@@ -143,6 +151,27 @@ export default function HUD({
           {score >= (weeklyRival.score || 0)
             ? `BEATING +${(score - (weeklyRival.score || 0)).toLocaleString()}`
             : `BEHIND -${((weeklyRival.score || 0) - score).toLocaleString()}`}
+        </div>
+      )}
+
+      {rivalPace && (
+        <div style={{
+          position: "absolute", top: centerStackTop, left: "50%", transform: "translateX(-50%)",
+          maxWidth: "min(92vw, 430px)",
+          background: rivalPace.ahead ? "rgba(0,38,25,0.68)" : "rgba(31,16,0,0.68)",
+          border: `1px solid ${rivalPace.ahead ? "rgba(0,255,136,0.42)" : "rgba(255,160,64,0.42)"}`,
+          borderRadius: 8,
+          padding: "3px 9px",
+          fontSize: 9,
+          fontFamily: "'Courier New',monospace",
+          color: rivalPace.ahead ? "#85FFC0" : "#FFC078",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          letterSpacing: 0.5,
+        }} title={`Nearest live rival: ${rivalPace.name}, ${rivalPace.targetScore.toLocaleString()} points`}>
+          <strong>{rivalPace.label}</strong>{" "}
+          <span style={{ color: "rgba(255,255,255,0.72)" }}>{rivalPace.detail}</span>
         </div>
       )}
 
@@ -378,6 +407,31 @@ export default function HUD({
       {HUD_FLAGS.showHeatMeter && typeof heat === "number" && heat > 5 && (
         <div title={`Heat ${Math.round(heat)} — kills + multikills increase, decays over time`} style={{ position: "absolute", top: 8, right: 8, padding: "3px 9px", background: "rgba(0,0,0,0.55)", border: `1px solid rgba(255,${Math.max(40, 200 - heat * 1.6)},0,0.6)`, borderRadius: 999, fontSize: 10, color: heat >= 70 ? "#FF3300" : heat >= 40 ? "#FF8800" : "#FFC800", fontWeight: 900, letterSpacing: 1.5 }}>
           🔥 HEAT {Math.round(heat)}{heat >= 70 ? " · OVERDRIVE" : ""}
+        </div>
+      )}
+
+      {hudDebugEnabled && (
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 999 }}>
+          {getHudDebugSlots({ isMobile }).map((slot) => (
+            <div
+              key={slot.id}
+              style={{
+                position: "absolute",
+                ...slot.style,
+                maxWidth: "calc(100vw - 16px)",
+                border: "1px dashed rgba(0,229,255,0.55)",
+                background: "rgba(0,229,255,0.045)",
+                color: "#7FE6FF",
+                fontSize: 9,
+                fontWeight: 900,
+                letterSpacing: 1,
+                padding: 4,
+                boxSizing: "border-box",
+              }}
+            >
+              {slot.label}
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -1,5 +1,35 @@
 # Latest Handoff
 
+## Where We Left Off (Session 101 — full audit implementation sweep)
+
+**Intent outcome:** Achieved. Audited the full public website/game surface from HomeV2 through HUD, DeathScreen, launch media, account routes, and project gates; implemented all 12 ranked items; validated broadly; then prepared closeout write-back per founder direction.
+
+**Shipped**
+- HomeV2 now keeps operational measurement copy out of the public default surface and exposes it only through `?debug=ops` / `cod-debug-ops=1`.
+- Added `scripts/security-release-gate.mjs`, `npm run security:release`, and `security:release:audit`; `launch:verify` now includes the audit-backed release gate.
+- Added `functions/api/obelisk-verify.js`, a server-side Obelisk verification proxy that returns redacted identity receipts and honest not-configured errors while preserving guest play.
+- Added `docs/LEGACY_HOME_RETIREMENT.md` and `scripts/legacy-home-retirement-gate.mjs` so legacy `?home=v1` has an explicit retirement decision gate.
+- Added `src/utils/playerJourney.js` and a HomeV2 Journey card that keeps DEPLOY primary while surfacing one next-best action.
+- Promoted Aim Check into a first-run control rite with a saved local calibration receipt and visible verified state.
+- Added `src/utils/drillDirector.js`; DeathScreen now synthesizes one next-run drill and CTA from existing coach/debrief signals.
+- Added local zero-token `src/utils/balanceLab.js` and an ops-debug Balance Lab finding.
+- Added `src/utils/hudLayout.js`, debug HUD slot overlay, and `src/utils/rivalPace.js` live Rival Pace chip.
+- Added `scripts/capture-launch-screenshots.mjs`, `docs/LAUNCH_SCREENSHOT_TRUTH_PACK.md`, and verified Chromium captures in `public/launch-captures/`.
+- Added `src/systems/deathFlow.js` so DeathScreen prop mapping is isolated from the App render branch.
+
+**Validation**
+- `npm test` — 540/540
+- `npm run build` — passing
+- `npm run lint` — clean during item gates
+- `node scripts/security-release-gate.mjs --npm-audit` — passing, 0 vulnerabilities
+- `npm run launch:media-check` — passing with 2 verified gameplay captures
+- All 12 audit items marked shipped in `docs/AUDIT_2026-06-18_3.json`
+
+**Next recommended slice**
+- [ ] Complete the full five-scene screenshot replacement and switch manifest screenshots from SVG fallback entries to verified gameplay PNGs.
+- [ ] Extract DeathScreen score-submit/debrief event planning as the next `deathFlow` slice.
+- [ ] Add Playwright visual checks for HomeV2 first-run, returning, ops-debug, and mobile states.
+
 ## Where We Left Off (Session 100 — compact-handoff smoke + explicit Obelisk routes)
 
 **Intent outcome:** Achieved. Continued after Session 99, shipped the next protocol regression guard, made the generated Obelisk login surface reachable by explicit routes only, then ran closeout write-back per founder direction.

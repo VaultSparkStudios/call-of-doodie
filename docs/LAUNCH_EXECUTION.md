@@ -22,6 +22,7 @@ The remaining launch blockers are now execution-only:
 Helpful commands:
 
 - `npm run launch:assets` exports PNG versions of the prepared launch stills
+- `npm run launch:screenshots` captures verified desktop/mobile gameplay screenshots
 - `npm run launch:readiness` prints the current telemetry/assets/human-gate status
 
 ## Launch decision
@@ -68,7 +69,7 @@ Suggested body copy:
 
 ## Launch media pack
 
-Ready-to-upload launch stills are prepared in `public/launch-assets/`:
+Ready-to-upload authored launch stills are prepared in `public/launch-assets/`:
 
 1. `launch-combat.svg`
 2. `launch-boss.svg`
@@ -77,7 +78,14 @@ Ready-to-upload launch stills are prepared in `public/launch-assets/`:
 5. `launch-devices.svg`
 6. `npm run launch:assets` generates matching `.png` exports for store uploads that prefer raster files
 
-These remove the "need screenshots before listing" blocker for store/distribution surfaces. Real gameplay captures are still a nice follow-up, but not required to publish the listing package now.
+These remain proprietary promotional fallback media. Verified browser gameplay captures live in `public/launch-captures/` and are tracked in `docs/LAUNCH_SCREENSHOT_TRUTH_PACK.md`.
+
+Current verified captures:
+
+1. `real-combat.png`
+2. `real-mobile-controls.png`
+
+Use the verified captures anywhere the surface asks for literal gameplay screenshots. Use the authored stills only when the surface accepts promotional/key-art style images.
 
 ## Launch channel sequence
 
@@ -85,7 +93,7 @@ Recommended order:
 
 1. confirm site visibility and game hub placement
 2. publish the Itch.io page using the copy above
-3. upload the prepared launch stills from `public/launch-assets/`
+3. upload verified screenshots from `public/launch-captures/` where literal gameplay screenshots are requested; otherwise use the prepared launch stills from `public/launch-assets/`
 4. run `npm run launch:verify` once more before announcement
 5. post the launch link to studio-owned channels
 

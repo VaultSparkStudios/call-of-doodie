@@ -41,6 +41,16 @@ const ALLOW = [
   /AGENT_CAPABILITIES\.md/,
   /PROJECT_SITEMAP_STANDARD\.md/,
   /PROPOSAL_2026-05-21_HIVEMIND\.md/,
+  /obelisk-verify/,
+  /cod-obelisk-receipt-v1/,
+  /OBELISK_VERIFY_SECRET/,
+  /session-token/,
+  /secret-value/,
+  /no-token/,
+  /token-too-large/,
+  /tokenHash/,
+  /token-cost/,
+  /zero-token/,
 ];
 
 function shannon(value) {

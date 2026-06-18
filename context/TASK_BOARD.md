@@ -196,16 +196,19 @@ Public-safe launch roadmap summary.
 - [x] [SIL:1] Combat readability pass, slice 1 — dangerous enemies now get stronger contrast rings, threat brackets, and ranged prefire telegraphs in `src/drawGame.js`
 - [x] [SIL:1] Level-flow cadence pass, slice 1 — perk rewards are now banked during combat, opened at the next wave-clear safe point, exposed in the HUD, and shifted onto a softer perk-breakpoint curve via `src/utils/levelFlow.js`
 - [x] Protocol sync — start/closeout prompts, prompt templates, mode/secrets helpers, and local closeout wrapper now align with the latest Studio OS/ops workflow without pointing at missing repo-local commands
+- [x] [SIL] **DONE S101** Full `/audit` implementation sweep — shipped all 12 items from `docs/AUDIT_2026-06-18_3.md`: visitor-safe ops copy, release security header gate, Obelisk verify endpoint, legacy home retirement gate, Journey card/front-door clarity, Aim Check control rite, DeathScreen next-run drill bridge, local Balance Lab, HUD debug collision overlay, Rival Pace ghost chip, screenshot truth pack with verified captures, and DeathScreen prop extraction. Validation: full suite 540/540, build passing, release security gate with npm audit 0 vulnerabilities, launch media gate passing.
 
 ## Deferred
 - [ ] Discord invite/community link when the community entry point is ready
-- [ ] [SIL:2] Obelisk verify backend — implement `/api/obelisk-verify` or a Cloudflare Worker proxy before login can become a complete account path; the current `/login` and `/auth/callback` routes are explicit surfaces only and do not gate guest play.
+- [x] [SIL:2] Obelisk verify backend — `/api/obelisk-verify` now exists as a Cloudflare Pages Function proxy with redacted receipts and honest not-configured behavior; guest play remains default.
 - [x] [SIL:3] **DONE S67** App.jsx extraction slice 1 — `gameStep.js` exports `computeMovementVector` + `applyPlayerMovement`; 11 tests; 347/347 passing.
 - [ ] [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor with no user-facing impact; HomeV2 is the default (v1 opt-in only), so deferral has minimal player impact
 - [ ] [SIL:2] [S62 deferred] Coordinated enemy formations — wave 20+ group-spawn patterns (flanks, pincer, escort); game design work (~4h) beyond current scope
 - [ ] [SIL:1] [S62 deferred] Mid-run challenge contracts — optional per-wave objectives for bonus coins beyond Dynamic Objective System; needs design pass to avoid overlap
 - [x] [SIL:1] **DONE S68** [S62 deferred] Input-timeline digest contract — compact command trace metadata now reaches the edge contract (`traceDigest` + `traceLength`); deterministic resim remains a separate runner/storage milestone.
 - [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
+- [ ] [SIL:1] [S101 follow-up] Full five-scene screenshot replacement — two verified browser captures now exist; replace all five manifest screenshots with verified PNG captures after combat, boss, build/debrief, leaderboard, and mobile scenes are captured.
+- [ ] [SIL:1] [S101 follow-up] Death-submit extraction slice 2 — `deathFlow.js` now owns DeathScreen props; next slice should extract score-submit/debrief event planning from App into tested pure builders.
 
 ## Deferred to Project Agents
 

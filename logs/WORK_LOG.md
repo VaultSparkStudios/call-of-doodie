@@ -697,3 +697,10 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Wired the generated Obelisk Passport login surface into the app without blanket-gating gameplay: `/login` renders `ObeliskLogin`, `/auth/callback` renders `ObeliskCallback`, and all other paths render `CallOfDoodie`.
 - Added `src/obeliskRoutes.js` and `src/obeliskRoutes.test.js` so the explicit-route invariant is covered by tests.
 - Validation: compact-handoff smoke, focused route test, `npm run lint`, `npm test` 510/510, `npm run build`, and staged secret scans all passed. Commits pushed: `a1d12f0`, `520a4d8`.
+## 2026-06-18 — Session 101 — Full Audit Implementation Sweep
+
+- Ran current-state audit and generated `docs/AUDIT_2026-06-18_3.json` / `.md` plus `docs/IMPLEMENT_PLAN.md`.
+- Implemented all 12 ranked audit items: front-door clarity, Obelisk verify, screenshot truth pack, Aim Check, next-run drill, visitor-safe ops copy, death-flow extraction, HUD collision budget, Rival Pace, local Balance Lab, release security gate, and legacy home retirement gate.
+- Added verified browser screenshot capture command and two real launch captures under `public/launch-captures/`.
+- Updated memory/handoff/task/self-improvement surfaces with Session 101 status and follow-ups.
+- Validation: focused gates per item, `npm test` 540/540, `npm run build` passing, `node scripts/security-release-gate.mjs --npm-audit` passing with 0 vulnerabilities, and `npm run launch:media-check` passing.

@@ -65,6 +65,28 @@
       "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
     },
     {
+      "id": "real-combat-capture",
+      "kind": "launch-screenshot",
+      "sourceType": "browser-capture",
+      "license": "Proprietary",
+      "sourcePath": "scripts/capture-launch-screenshots.mjs",
+      "runtimePath": "public/launch-captures/real-combat.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "production-ready",
+      "notes": "Verified gameplay capture from Chromium against the local Vite app."
+    },
+    {
+      "id": "real-mobile-controls-capture",
+      "kind": "launch-screenshot",
+      "sourceType": "browser-capture",
+      "license": "Proprietary",
+      "sourcePath": "scripts/capture-launch-screenshots.mjs",
+      "runtimePath": "public/launch-captures/real-mobile-controls.png",
+      "dimensions": { "width": 390, "height": 844 },
+      "status": "production-ready",
+      "notes": "Verified mobile gameplay/control capture from Chromium against the local Vite app."
+    },
+    {
       "id": "runtime-procedural-combat-sprites",
       "kind": "runtime-procedural",
       "sourceType": "procedural-canvas",

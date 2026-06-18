@@ -98,6 +98,7 @@ import {
   createScoreSubmitStudioEvents,
   resolveRunModeFromFlags,
 } from "./systems/runSession.js";
+import { buildDeathScreenProps } from "./systems/deathFlow.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 
@@ -4234,46 +4235,63 @@ export default function CallOfDoodie() {
   }
 
   if (screen === "death") {
+    const deathScreenProps = buildDeathScreenProps({
+      score,
+      kills,
+      deaths,
+      wave,
+      level,
+      bestStreak,
+      timeSurvived,
+      totalDamage,
+      stats: statsRef.current,
+      deathMessage,
+      difficulty,
+      runSeed,
+      runModifier,
+      runModifiers: RUN_MODIFIERS,
+      achievementsUnlocked,
+      activePerks,
+      missionsSummary,
+      leaderboard,
+      lbLoading,
+      lbHasMore,
+      onLoadMore: loadMoreLeaderboard,
+      username,
+      DIFFICULTIES,
+      onStartGame: startGame,
+      onMenu: () => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); },
+      onRefreshLeaderboard: refreshLeaderboard,
+      onSubmitScore: submitScore,
+      highlightGifUrl,
+      gifEncoding,
+      fmtTime,
+      gamepadConnected,
+      controllerType,
+      weaponKills: weaponKillsSnapshot,
+      starterLoadout,
+      traceEvidence: deathTraceEvidenceRef.current,
+      gs: gsRef.current,
+      bossKillCount: statsRef.current.bossKills || 0,
+      weaponMilestones: weaponMilestonesRef.current,
+      cosmeticUnlocks,
+      objectivesSummary,
+      scoreAttackMode,
+      dailyChallengeMode,
+      bossRushMode,
+      cursedRunMode,
+      speedrunMode,
+      gauntletMode,
+      challengeVsScore,
+      challengeVsName,
+      onInstallApp: pwaPromptReady ? promptInstallApp : null,
+      experimentMatched: experimentMatchedRef.current,
+      peakMoment: peakMomentRef.current,
+      communityChokeWaves: communityChokePointsRef.current,
+    });
     return (
       <Suspense fallback={null}>
-        <DeathScreen
-          score={score} kills={kills} deaths={deaths} wave={wave} level={level}
-          bestStreak={bestStreak} timeSurvived={timeSurvived} totalDamage={totalDamage}
-          crits={statsRef.current.crits} grenades={statsRef.current.grenades}
-          deathMessage={deathMessage} difficulty={difficulty} runSeed={runSeed}
-          runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
-          achievementsUnlocked={achievementsUnlocked}
-          activePerks={activePerks} missionsSummary={missionsSummary}
-          leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard} username={username}
-          DIFFICULTIES={DIFFICULTIES}
-          onStartGame={startGame} onMenu={() => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); }}
-          onRefreshLeaderboard={refreshLeaderboard} onSubmitScore={submitScore}
-          highlightGifUrl={highlightGifUrl} gifEncoding={gifEncoding}
-          fmtTime={fmtTime}
-          gamepadConnected={gamepadConnected} controllerType={controllerType}
-          weaponKills={weaponKillsSnapshot} bestPrecisionStreak={statsRef.current.bestPrecisionStreak || 0} starterLoadout={starterLoadout}
-          traceEvidence={deathTraceEvidenceRef.current}
-          precisionPeakFrame={gsRef.current?._precisionPeakFrame || 0}
-          precisionPeakStreak={gsRef.current?._precisionPeakStreak || 0}
-          proximityRivals={gsRef.current?.proximityRivals || []}
-          nearDeathEvents={gsRef.current?._nearDeathEvents || []}
-          flowStateFired={gsRef.current?._flowStateFiredCount || 0}
-          bossKillCount={statsRef.current.bossKills || 0}
-          weaponMilestones={weaponMilestonesRef.current}
-          cosmeticUnlocks={cosmeticUnlocks}
-          objectivesSummary={objectivesSummary}
-          scoreAttackMode={scoreAttackMode}
-          dailyChallengeMode={dailyChallengeMode}
-          bossRushMode={bossRushMode} cursedRunMode={cursedRunMode} speedrunMode={speedrunMode} gauntletMode={gauntletMode}
-          playerSkin={gsRef.current?.playerSkin || ""}
-          vsScore={challengeVsScore} vsName={challengeVsName}
-          ghostKey={gsRef.current?._ghostKey}
-          onInstallApp={pwaPromptReady ? promptInstallApp : null}
-          experimentMatched={experimentMatchedRef.current}
-          peakMoment={peakMomentRef.current}
-          waveScoreLog={gsRef.current?._waveScoreLog || []}
-          communityChokeWaves={communityChokePointsRef.current}
-        />
+        <DeathScreen {...deathScreenProps} />
       </Suspense>
     );
   }

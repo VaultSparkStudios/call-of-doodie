@@ -231,5 +231,6 @@ describe("HomeV2", () => {
 
     expect(container.textContent).toContain("MEASUREMENT STATUS");
     expect(container.textContent).toContain("PostHog key missing");
+    expect(container.textContent).toContain("BALANCE LAB");
   });
 });

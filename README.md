@@ -75,6 +75,12 @@ VITE_POSTHOG_KEY
 VITE_SENTRY_DSN
 ```
 
+Optional account verification secrets for the Cloudflare Pages `/api/obelisk-verify` endpoint:
+```text
+OBELISK_VERIFY_URL      # server-side Obelisk verification URL
+OBELISK_VERIFY_SECRET   # optional bearer secret for the verification URL
+```
+
 The hardened leaderboard path also requires Supabase-side setup:
 
 1. Run the DB migration:

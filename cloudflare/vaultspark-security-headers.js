@@ -14,7 +14,7 @@ const BASE_CSP = {
   "frame-ancestors": ["'none'"],
   "form-action": ["'self'"],
   "manifest-src": ["'self'"],
-  "script-src": ["'self'", "https://static.cloudflareinsights.com"],
+  "script-src": ["'self'", "https://static.cloudflareinsights.com", "https://obeliskgate.com"],
   "style-src": ["'self'", "'unsafe-inline'"],
   "img-src": ["'self'", "data:", "https:"],
   "font-src": ["'self'", "data:", "https:"],
@@ -32,6 +32,7 @@ const CALL_OF_DOODIE_CSP = {
     "https://*.supabase.co",
     "wss://fjnpzjjyhnpmunfoycrp.supabase.co",
     "https://static.cloudflareinsights.com",
+    "https://obeliskgate.com",
   ],
 };
 
