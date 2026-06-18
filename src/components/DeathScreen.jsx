@@ -14,6 +14,7 @@ import { buildWeeklyContract, buildWeeklyContractProgressPayload } from "../util
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
 import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
+import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -445,6 +446,14 @@ export default function DeathScreen({
     runSeed,
     mode,
   });
+  const nextRunDrill = buildNextRunDrill({
+    runSeed,
+    runCoach,
+    ghostDeathReadout,
+    postRunIntel,
+    debrief,
+    mode,
+  });
   const eventDigest = buildRunEventDigest({
     mode,
     difficulty,
@@ -473,6 +482,15 @@ export default function DeathScreen({
   useEffect(() => {
     const studioEvent = buildStudioGameEvent("debrief_intelligence", postRunIntel.telemetry);
     saveStudioGameEvent(studioEvent);
+    saveStudioGameEvent(buildStudioGameEvent("next_run_drill_shown", {
+      surface: "death_screen",
+      drillId: nextRunDrill.id,
+      action: nextRunDrill.action,
+      seed: nextRunDrill.seed || null,
+      mode,
+      score,
+      wave,
+    }));
     const contractProgress = buildWeeklyContractProgressPayload({
       id: nextContractId,
       progress: nextContractProgress,
@@ -515,7 +533,7 @@ export default function DeathScreen({
       studioEvent,
     });
     requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
-  }, [difficulty, eventDigest.v, mode, nextContractId, nextContractProgress, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
+  }, [difficulty, eventDigest.v, mode, nextContractId, nextContractProgress, nextRunDrill.action, nextRunDrill.id, nextRunDrill.seed, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
 
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
@@ -848,6 +866,30 @@ export default function DeathScreen({
               {postRunIntel.rivalry.prompt}
             </div>
           )}
+          <div style={{ marginTop: 10, padding: "9px 10px", borderRadius: 8, background: "rgba(255,107,53,0.08)", border: "1px solid rgba(255,107,53,0.28)" }}>
+            <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 1.5, fontWeight: 900 }}>NEXT DRILL</div>
+            <div style={{ fontSize: 12, color: "#FFF", fontWeight: 900, marginTop: 3 }}>{nextRunDrill.title}</div>
+            <div style={{ fontSize: 10, color: "#DDD", lineHeight: 1.45, marginTop: 3 }}>{nextRunDrill.detail}</div>
+            <button
+              onClick={() => {
+                track("next_run_drill_accept", { drillId: nextRunDrill.id, action: nextRunDrill.action, seed: nextRunDrill.seed || null, score, wave, mode });
+                saveStudioGameEvent(buildStudioGameEvent("next_run_drill_accept", {
+                  surface: "death_screen",
+                  drillId: nextRunDrill.id,
+                  action: nextRunDrill.action,
+                  seed: nextRunDrill.seed || null,
+                  mode,
+                  score,
+                  wave,
+                }));
+                if (nextRunDrill.action === "replay_seed" && nextRunDrill.seed > 0) onStartGame(nextRunDrill.seed);
+                else onStartGame();
+              }}
+              style={{ marginTop: 8, width: "100%", padding: "8px 10px", borderRadius: 7, border: "none", background: "linear-gradient(180deg,#FF8A3D,#CC4400)", color: "#FFF", fontSize: 12, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer", fontFamily: "'Courier New',monospace" }}
+            >
+              {nextRunDrill.cta}
+            </button>
+          </div>
         </div>
 
         {/* Weapon kill breakdown */}
