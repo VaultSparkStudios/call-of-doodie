@@ -56,8 +56,7 @@ if (!ALL && !FILTER) {
 const PROBES = {
   'claude.api': async () => {
     const key = getSecret('ANTHROPIC_API_KEY', 'claude.api');
-    const url = `https://${['api', 'anthropic', 'com'].join('.')}/v1/models`;
-    const r = await httpFetch(url, { headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' } });
+    const r = await httpFetch('https://api.anthropic.com/v1/models', { headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' } });
     return interpret(r);
   },
   'stripe.checkout': async () => {

@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-18",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 99,
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "feature-depth": 1.5,
+      "ai": 1.5,
+      "new-features": 1,
+      "feedback-loop": 1,
+      "security": 1,
+      "speed": 1,
+      "token-cost": 1
+    },
+    "combinedPriority": 147.7,
+    "top3": [
+      "unicode-safe-model-router-transport",
+      "codex-plan-mode-truth"
+    ]
+  },
+  "summary": {
+    "totalItems": 2,
+    "combinedPriority": 147.7,
+    "top3": [
+      "unicode-safe-model-router-transport",
+      "codex-plan-mode-truth"
+    ]
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "slug": "unicode-safe-model-router-transport",
+      "title": "Unicode-Safe Model Router Transport",
+      "axis": "speed / organization / efficiency",
+      "tier": "🔥",
+      "impact": 9,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 79.5,
+      "status": "shipped",
+      "why": "The live `/start` run proved `compact-handoff` can fail before startup finishes when `LATEST_HANDOFF.md` contains malformed UTF-16. JSON escaping alone is not enough because the upstream API rejects lone surrogate code units as invalid Unicode. The model-router chokepoint should clean transport payloads once, so every Studio OS script inherits the fix without papering over individual callers.",
+      "recipe": "Add a recursive Unicode scalar sanitizer in `scripts/lib/model-router.mjs`, use it for Anthropic JSON payload serialization, and cover both lone high/low surrogates and valid emoji preservation with focused tests.",
+      "evidence": "`node scripts/compact-handoff.mjs` failed during `/start` with `API error: The request body is not valid JSON: no low surrogate in string`. `scripts/lib/model-router.mjs` currently passes raw `JSON.stringify(body)` to the API, so any caller can reproduce the failure with malformed local text.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Sanitize `messages[].content` in `compact-handoff.mjs` only."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Sanitize all model-router JSON payloads at the API chokepoint and add focused transport tests."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Extend the sanitizer into semantic-cache keys and raw/batch API helpers, then add a startup smoke proving compact handoff survives malformed handoff text."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "codex-plan-mode-truth",
+      "title": "Codex Plan-Mode Truth",
+      "axis": "feedback-loop / token-cost",
+      "tier": "⚡",
+      "impact": 8,
+      "effort": "30m",
+      "effortHours": 0.5,
+      "innovation": 6,
+      "priority": 68.2,
+      "status": "shipped",
+      "why": "The startup verifier currently tells a Codex session to run `/model opusplan`, which Codex cannot execute. That is a lying operational surface: it burns attention, leaves the session lock marked missing, and makes future startup briefs look worse than reality. Restoring agent-aware `not_required` stamping keeps the protocol strict for Claude Code while keeping Codex sessions honest.",
+      "recipe": "Restore `verify-plan-mode.mjs` session-agent detection and `not_required` lock/status stamping for non-Claude Code agents. Add a regression test that runs the script in a temp Codex project and verifies JSON output, `PROJECT_STATUS.json`, and `.session-lock` all agree.",
+      "evidence": "`node scripts/write-session-lock.mjs --agent codex` followed by `node scripts/verify-plan-mode.mjs --quiet` emitted `⚠ MISSING` and asked for `/model opusplan`. The current diff in `scripts/verify-plan-mode.mjs` removed the non-Claude agent exception and stamping helper.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Restore the non-Claude agent early return."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "Restore the early return plus status/lock stamping and focused regression coverage."
+        },
+        "L3": {
+          "effortHours": 1,
+          "recipe": "Also add a protocol-drift check that fails if Codex sessions report Claude-only plan-mode missing."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "disable-compact-handoff-api-call",
+      "reason": "Rejected on verification: the compactor has a valid API-key path and real token-saving purpose. Disabling it would hide the malformed-Unicode transport bug instead of fixing the shared chokepoint."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "unicode-safe-model-router-transport",
+      "status": "shipped",
+      "notes": "Added recursive Unicode scalar sanitization at the model-router API chokepoint, reused it for messages/raw/batch payloads and semantic cache keys, and covered malformed high/low surrogates plus valid emoji preservation. Verified with focused Vitest coverage and `node scripts/compact-handoff.mjs --force`, which now succeeds after the original startup failure."
+    },
+    {
+      "slug": "codex-plan-mode-truth",
+      "status": "shipped",
+      "notes": "Restored session-agent detection in `scripts/verify-plan-mode.mjs` so Codex sessions stamp `not_required` instead of prompting for Claude Code `/model opusplan`. Verified with focused temp-project regression coverage and live `node scripts/verify-plan-mode.mjs --json` returning `not_required` for the current Codex lock."
+    }
+  ]
+}

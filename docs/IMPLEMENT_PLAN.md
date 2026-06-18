@@ -1,30 +1,13 @@
-# Implement Plan — 2026-06-18 Visual Asset Pipeline
+# Implement Plan — 2026-06-18 continuation
 
-Source audit: `docs/AUDIT_2026-06-18.json`
+Source audit: `docs/AUDIT_2026-06-18_2.json`
 
-## Sequence
+## Wave Plan
 
-1. `visual-asset-provenance-pipeline`
-   - Add proprietary per-game visual asset library contract.
-   - Add manifest and validator.
-   - Verify with `npm run assets:check`.
+1. `codex-plan-mode-truth` — foundational startup honesty fix. Restore non-Claude agent handling before rerunning startup probes so the lock/status surfaces stop reporting a false missing state.
+2. `unicode-safe-model-router-transport` — shared API transport fix. Patch the model-router chokepoint after the verifier fix so every Claude API caller inherits safe JSON payload serialization.
 
-2. `pseudo-3d-runtime-asset-primitives`
-   - Extract reusable pseudo-3D canvas primitives.
-   - Wire player/enemy material rendering through the helper.
-   - Verify with focused tests, full tests, build, and e2e canvas smoke.
+## Results
 
-3. `launch-media-asset-gate`
-   - Add manifest/launch screenshot parity gate.
-   - Verify with `npm run launch:media-check`.
-
-## Verification
-
-- `npm run assets:check`
-- `npm run launch:media-check`
-- `npx vitest run src/utils/visualPrimitives.test.js`
-- `npm run lint`
-- `npm test`
-- `npm run build`
-- `npm run protocol:drift -- --json`
-- `npm run test:e2e`
+- `codex-plan-mode-truth`: shipped and verified with focused Vitest temp-project coverage plus live `node scripts/verify-plan-mode.mjs --json`.
+- `unicode-safe-model-router-transport`: shipped and verified with focused Vitest API-payload coverage plus live `node scripts/compact-handoff.mjs --force`.

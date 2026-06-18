@@ -15,7 +15,7 @@ function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return
 
 function extractSection(content, heading) {
   const parts = content.split(/^## /m);
-  const match = parts.find((p) => p.startsWith(heading));
+  const match = parts.find(p => p.startsWith(heading));
   if (!match) return '';
   const nl = match.indexOf('\n');
   return nl === -1 ? '' : match.slice(nl + 1);
@@ -47,6 +47,7 @@ export function loadIgnisInsight(options = {}) {
   const truthMix = statusBlock.match(/Truth status mix:\s*([^\n]+)/)?.[1]?.trim() ?? null;
   const coverage = statusBlock.match(/Tracked IGNIS coverage:\s*([^\n]+)/)?.[1]?.trim() ?? null;
 
+  // Top recommendation: first numbered line in Recommended Actions.
   const firstAction = actionsBlock.match(/^\s*1\.\s+(.+)$/m)?.[1]?.trim() ?? null;
   const summaryLead = firstSentence(summaryBlock);
 
@@ -73,6 +74,7 @@ export function loadIgnisInsight(options = {}) {
   };
 }
 
+// CLI
 if (process.argv[1]?.endsWith('ignis-insight.mjs')) {
   const out = loadIgnisInsight();
   if (process.argv.includes('--json')) {

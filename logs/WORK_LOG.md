@@ -681,3 +681,11 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Cleared the remaining lint warnings and verified `npm run lint` now exits with no warnings.
 - Split telemetry and data clients into cacheable Vite chunks; main app chunk dropped from ~804 kB to ~620 kB and the build warning disappeared.
 - Validation: `npm run assets:generate`, `npm run assets:check`, `npm run launch:media-check`, focused asset tests 6/6, `npm audit --json` 0 vulnerabilities, `npm test` 505/505, `npm run build` clean, `npm run test:e2e` 2/2.
+
+## 2026-06-18 — Session 99 — Protocol Transport + Codex Plan-Mode Truth
+
+- Ran `/start`; startup completed except for a real `compact-handoff` failure from malformed UTF-16 reaching the Anthropic API request body, and `verify-plan-mode` falsely reported Codex as missing Claude Code `/model opusplan`.
+- Created `docs/AUDIT_2026-06-18_2.json` / `.md` with two verified protocol-reliability items, then shipped both in one `/implement` pass.
+- Added Unicode scalar sanitization at the `scripts/lib/model-router.mjs` API chokepoint so lone surrogate code units are replaced before model-router JSON payloads leave the process while valid emoji/surrogate pairs remain intact.
+- Restored Codex-aware `not_required` stamping in `scripts/verify-plan-mode.mjs`, including `PROJECT_STATUS.json` and `context/.session-lock` updates, so Codex sessions no longer get a false Claude-only plan-mode warning.
+- Validation: focused protocol tests 3/3, live `node scripts/verify-plan-mode.mjs --json` returns `not_required`, live `node scripts/compact-handoff.mjs --force` succeeds, medium game gate passes both items, `npm run protocol:drift -- --json` 20/20, `npm run lint` clean, `npm test` 508/508, and `npm run build` passing.

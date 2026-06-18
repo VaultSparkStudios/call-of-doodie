@@ -1228,3 +1228,16 @@ SIL +6: Followed the asset-library foundation with the first proprietary signatu
 1. Gameplay screenshot capture pass — replace launch placeholder exports with real desktop/mobile gameplay PNGs and update statuses to production-ready. High probability.
 2. Blender source proof — add one authored `.blend`/exported source package for a signature prop and regenerate runtime sprites from it. High probability.
 3. Telemetry lazy-load — move optional Sentry initialization behind first paint if launch LCP needs further improvement. Medium probability.
+
+## 2026-06-18 — Session 99 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
+
+SIL +2: Repaired two Studio OS protocol truth gaps found by the live `/start` path: model-router now sanitizes malformed Unicode before API transport, and Codex sessions stamp plan-mode as `not_required` instead of falsely prompting for Claude Code `/model opusplan`. Validation: focused protocol tests 3/3, compact-handoff live force run succeeds, plan-mode live JSON reports not_required, protocol drift 20/20, lint clean, full suite 508/508, build passing.
+
+**Top win:** `/start` no longer fails on bad handoff text or reports a false Codex plan-mode blocker.
+**Top gap:** The broader pre-existing protocol-helper worktree remains dirty and should be reviewed as its own closeout/commit scope before being treated as a clean release package.
+**Intent outcome:** Achieved for `/start`, continuation `/audit`, `/implement`, validation, and closeout write-back.
+
+**Brainstorm**
+1. Protocol helper diff review — inspect and land or split the existing broader Studio OS helper changes so the repo returns to a clean, attributable baseline. High probability.
+2. Compact-handoff fixture — add a script-level fixture that injects malformed handoff text and proves fallback/sanitized API paths in one command. Medium probability.
+3. Gameplay screenshot capture pass — replace launch placeholder exports with real desktop/mobile gameplay PNGs once the visual QA surface is available. High probability.

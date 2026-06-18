@@ -56,6 +56,7 @@ export function ensureAges(taskBoardText, opts = {}) {
   const session = opts.currentSession || null;
   let dirty = false;
 
+  // Add any new items with today's date.
   for (const item of items) {
     if (!ledger[item.title]) {
       ledger[item.title] = { firstSeen: today, session };
@@ -63,6 +64,7 @@ export function ensureAges(taskBoardText, opts = {}) {
     }
   }
 
+  // Prune titles that no longer appear (they got resolved).
   const activeTitles = new Set(items.map((i) => i.title));
   for (const title of Object.keys(ledger)) {
     if (!activeTitles.has(title)) {

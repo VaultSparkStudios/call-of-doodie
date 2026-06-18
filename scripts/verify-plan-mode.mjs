@@ -52,11 +52,13 @@ const tier = status.modelTier || null;
 const agentMatch = lockText.match(/^agent:\s*(\S+)/m);
 const sessionAgent = agentMatch ? agentMatch[1] : (status.lastAgent || null);
 
-if (!planModeRequired || (sessionAgent && sessionAgent !== 'claude-code')) {
-  const reason = !planModeRequired
-    ? 'tier does not require plan-mode'
-    : `agent ${sessionAgent} does not support Claude Code plan-mode`;
-  stampNotRequired(reason);
+if (!planModeRequired) {
+  stampNotRequired('tier does not require plan-mode');
+  process.exit(0);
+}
+
+if (sessionAgent && sessionAgent !== 'claude-code') {
+  stampNotRequired(`agent ${sessionAgent} does not support Claude Code plan-mode`);
   process.exit(0);
 }
 
@@ -151,12 +153,9 @@ emit(result);
 function stampNotRequired(reason) {
   const result = { status: 'not_required', tier, agent: sessionAgent, reason };
   try {
-    const shouldStampStatus = !!lockText || status.planModeDetected !== result.status;
-    if (shouldStampStatus) {
-      status.planModeDetected = result.status;
-      status.planModeCheckedAt = new Date().toISOString();
-      fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
-    }
+    status.planModeDetected = result.status;
+    status.planModeCheckedAt = new Date().toISOString();
+    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
   } catch { /* non-fatal */ }
   try {
     if (fs.existsSync(lockPath)) {

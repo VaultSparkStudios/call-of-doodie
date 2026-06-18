@@ -1,5 +1,30 @@
 # Latest Handoff
 
+## Where We Left Off (Session 99 — protocol transport + Codex plan-mode truth)
+
+**Intent outcome:** Achieved for the continuation slice. Ran `/start`, created a fresh continuation audit from current evidence, implemented both protocol-reliability items, verified the original startup failure path, and completed closeout write-back.
+
+**Shipped**
+- `scripts/lib/model-router.mjs` now sanitizes invalid Unicode scalar fragments before Anthropic JSON payloads are sent. Lone high/low surrogate code units become replacement characters; valid emoji/surrogate pairs are preserved.
+- `scripts/verify-plan-mode.mjs` again detects the session agent and stamps Codex sessions as `not_required` instead of asking for the Claude Code-only `/model opusplan` runtime mode.
+- Added focused regression coverage in `tests/model-router-unicode.test.js` and `tests/verify-plan-mode.test.js`.
+- Recorded the continuation plan in `docs/AUDIT_2026-06-18_2.json`, `docs/AUDIT_2026-06-18_2.md`, and `docs/IMPLEMENT_PLAN.md`.
+
+**Validation**
+- `npx vitest run tests/model-router-unicode.test.js tests/verify-plan-mode.test.js` — 3/3
+- `node scripts/verify-plan-mode.mjs --json` — `not_required` for Codex
+- `node scripts/compact-handoff.mjs --force` — succeeds after the original malformed-Unicode failure
+- Game medium gate — passes both shipped items
+- `npm run protocol:drift -- --json` — 20/20 present
+- `npm run lint` — clean
+- `npm test` — 508/508
+- `npm run build` — passing
+
+**Next recommended slice**
+- [ ] Review and split/land the broader pre-existing Studio OS helper worktree changes (`blocker-rules`, `visual-blocks`, `skill-cost-ledger`, etc.) so the repo returns to a clean attributable baseline.
+- [ ] Add a compact-handoff fixture/smoke that proves malformed handoff text cannot break startup again.
+- [ ] Continue the launch visual credibility path: real gameplay screenshots and first Blender-authored source asset.
+
 ## Where We Left Off (Session 98 — asset pack follow-on, security cleanup, lint/build hygiene)
 
 **Intent outcome:** Achieved. Continued beyond the initial visual-asset pipeline pass, fixed the pushed Dependabot vulnerabilities, cleared the remaining lint warnings, removed the Vite main-chunk warning with vendor splitting, and then prepared closeout write-backs per founder direction.

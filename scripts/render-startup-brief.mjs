@@ -23,10 +23,11 @@ import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
 import { contextWindowForAgent } from './lib/model-router.mjs';
+import { loadProvenanceMap } from './classify-warning-provenance.mjs';
+import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
-import { normalizeGeniusBlock, renderHumanPressureBlock } from './lib/startup-brief-boxes.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -46,10 +47,18 @@ if (process.argv.includes('--v5') || process.env.BRIEF_V5 === '1') {
 const W  = 62; // inner box width (content between ║  and  ║)
 const BW = W + 4; // total line width including ║  prefix/suffix
 
-// ── Preflight: doctor --fix (S120 audit #2 — clear stable warns before render) ─
+// ── Preflight: doctor --fix --update-json (S120 audit #2 — clear stable warns) ─
+// S173 [audit #1 · CANON-031 observability honesty]: the preflight already runs
+// a full doctor pass, but historically WITHOUT --update-json, so the brief read
+// `status.doctorScore` as last written at the PRIOR session's closeout. When a
+// probe self-healed between sessions (e.g. propagation-adoption fail→warn) the
+// brief kept surfacing a PHANTOM ⛔ "N failing" the live doctor no longer agreed
+// with. Adding --update-json persists the freshly-computed score (spawnSync is
+// synchronous and completes before loadAllFiles reads PROJECT_STATUS.json), so
+// the SIGNALS box always reflects the doctor run the brief itself just triggered.
 if (!process.env.STUDIO_BRIEF_NO_DOCTOR_FIX) {
   try {
-    spawnSync(process.execPath, [path.join(__dirname, 'ops.mjs'), 'doctor', '--fix', '--quiet'], {
+    spawnSync(process.execPath, [path.join(__dirname, 'ops.mjs'), 'doctor', '--fix', '--update-json', '--quiet'], {
       stdio: 'ignore', timeout: 30000,
     });
   } catch { /* non-fatal */ }
@@ -620,12 +629,67 @@ try {
   }
 } catch { /* keep defaults */ }
 
+// ── Cost anomaly signal — SHARED evaluator (S181 [audit #1]) ─────────────────
+// Previously an inline rolling-window check on NOTIONAL list-price (entryCost),
+// which double-counted flat-rate Max-Plan interactive tokens as metered API spend
+// → a phantom ⛔ "$916 4.4× spike". It also diverged from check-cost-anomaly.mjs
+// (the S153 two-implementations class). Now both surfaces call ONE evaluator that
+// runs the alarm on REAL metered cost and reports notional separately.
+let sigCost = '✓', costDetail = 'no ledger data';
+try {
+  const { readEntries, evaluateCostAnomaly } = await import('./cache-ledger-rollup.mjs');
+  const ledgerPath = path.join(root, 'docs', 'cache-ledger.ndjson');
+  const ledEntries = readEntries(ledgerPath);
+  if (ledEntries.length > 0) {
+    const v = evaluateCostAnomaly(ledEntries);
+    sigCost = v.sig;
+    const realPart = `real $${v.realMetered7d.toFixed(2)}/7d`;
+    costDetail = v.notionalNote
+      ? `${realPart} · ${v.notionalNote}`
+      : `${realPart} · ${v.reasons[0] || 'normal'}`;
+  }
+} catch { /* best-effort */ }
+
 // ── Doctor score ─────────────────────────────────────────────────────────────
 const doctorScore  = status.doctorScore ?? null;
 const sigDoctor    = !doctorScore ? '⚠' : doctorScore.failing === 0 ? (doctorScore.warning > 0 ? '⚠' : '✓') : '⛔';
-const doctorDetail = doctorScore
-  ? `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.date}${doctorScore.failing > 0 ? `  ·  ${doctorScore.failing} failing` : doctorScore.warning > 0 ? `  ·  ${doctorScore.warning} warning` : '  ✓'}`
-  : 'not yet tracked — run: node scripts/ops.mjs doctor --update-json';
+// S171 [audit #4] — aggregate-honesty: a bare "9 warning" reads as 9 studio-ops
+// problems. Append the ownership split (self vs sibling-rollout) so the founder
+// sees that ~all of them are portfolio-rollout trackers studio-ops surfaces but
+// does not own. Reuses the warning-provenance classifier (no recompute) and
+// degrades gracefully to the bare count if checks/map are unavailable.
+// Compact ownership split (box inner width is 62; date is dropped when warnings
+// exist so the split fits — ownership is the load-bearing signal, not the date).
+let ownershipSplit = '';
+try {
+  if (doctorScore?.checks && doctorScore.warning > 0) {
+    // Classify exactly the set the doctor TALLIES as warnings (the canonical
+    // isWarning predicate — shared with run-doctor.mjs via doctor-predicates.mjs,
+    // S172 [audit #4]) so the split always sums to the displayed count. (The
+    // provenance classifier walks the BROADER isNonGreen set on purpose — naming
+    // both predicates is what kills the silent divergence the old inline copies
+    // carried.)
+    const map = loadProvenanceMap();
+    const byOwner = { self: 0, sibling: 0, chronic: 0 };
+    for (const c of doctorScore.checks) {
+      if (!isWarning(c)) continue;
+      const o = map[c.id]?.owner || 'self';
+      byOwner[o] = (byOwner[o] || 0) + 1;
+    }
+    const parts = [];
+    if (byOwner.self) parts.push(`${byOwner.self} self`);
+    if (byOwner.sibling) parts.push(`${byOwner.sibling} sib`);
+    if (byOwner.chronic) parts.push(`${byOwner.chronic} chronic`);
+    if (parts.length) ownershipSplit = `: ${parts.join('·')}`;
+  }
+} catch { /* split is advisory */ }
+const doctorDetail = !doctorScore
+  ? 'not yet tracked — run: node scripts/ops.mjs doctor --update-json'
+  : doctorScore.failing > 0
+    ? `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.failing} failing`
+    : doctorScore.warning > 0
+      ? `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.warning} warn${ownershipSplit}`
+      : `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.date}  ✓`;
 
 // ── Entropy ───────────────────────────────────────────────────────────────────
 const entropy      = status.entropyScore ?? null;
@@ -661,6 +725,11 @@ const runwayNum = runwayNumMatch ? parseFloat(runwayNumMatch[1])
                 : runwayWeak ? 1
                 : 5;
 // G1 S121 — prefer fresh .cache/test-count.json (from refresh-test-count.mjs) over PROJECT_STATUS values.
+// S181 [audit #2] — freshness guard: the cache silently went stale (179 files cached
+// while the live suite had 225), so the brief reported a confident-but-wrong count.
+// Flag the count stale when the cache is >24h old OR predates the newest test file
+// — a stale count is surfaced as such, never as fresh truth (CANON-031).
+let testsStale = false;
 try {
   const tcPath = path.join(root, '.cache', 'test-count.json');
   if (fs.existsSync(tcPath)) {
@@ -669,6 +738,18 @@ try {
       status.testsTotal = tc.total;
       status.testsPassing = tc.passed;
       if (tc.generatedAt) status.testsLastRun = tc.generatedAt.slice(0, 10);
+      const cacheMs = fs.statSync(tcPath).mtimeMs;
+      const ageH = (Date.now() - cacheMs) / 3.6e6;
+      let newestTestMs = 0;
+      try {
+        const td = path.join(root, 'scripts', 'test');
+        for (const f of fs.readdirSync(td)) {
+          if (!/\.(mjs|ts)$/.test(f)) continue;
+          const m = fs.statSync(path.join(td, f)).mtimeMs;
+          if (m > newestTestMs) newestTestMs = m;
+        }
+      } catch { /* no test dir */ }
+      testsStale = ageH > 24 || (newestTestMs > 0 && newestTestMs > cacheMs);
     }
   }
 } catch { /* non-fatal — fall through to PROJECT_STATUS values */ }
@@ -678,8 +759,8 @@ let sigTests, testsLabel;
 if (typeof status.testsPassing === 'number' && typeof status.testsTotal === 'number' && status.testsTotal > 0) {
   const allPass = status.testsPassing === status.testsTotal;
   const mostlyPass = status.testsPassing / status.testsTotal >= 0.9;
-  sigTests = allPass ? '✓' : mostlyPass ? '⚠' : '⛔';
-  testsLabel = `${status.testsPassing}/${status.testsTotal} passing` + (status.testsLastRun ? ` (${status.testsLastRun})` : '');
+  sigTests = testsStale ? '⚠' : allPass ? '✓' : mostlyPass ? '⚠' : '⛔';
+  testsLabel = `${status.testsPassing}/${status.testsTotal} passing` + (status.testsLastRun ? ` (${status.testsLastRun})` : '') + (testsStale ? ' · STALE — run node scripts/run-tests.mjs' : '');
 } else if (testsExempt) {
   sigTests = '✓';
   testsLabel = 'N/A (protocol repo)';
@@ -912,12 +993,14 @@ try {
     encoding: 'utf8',
     timeout: 15000,
   });
-  geniusBlock = normalizeGeniusBlock((res.stdout ?? '').trim(), { width: W, maxLines: 8 });
+  geniusBlock = (res.stdout ?? '').trim();
 } catch { /* fallback below */ }
 if (!geniusBlock) {
   geniusBlock = buildGeniusBoxFromMarkdown(readText(path.join(root, 'docs', 'GENIUS_LIST.md')));
 }
-if (!geniusBlock) geniusBlock = normalizeGeniusBlock('', { width: W, maxLines: 8 });
+if (!geniusBlock) {
+  geniusBlock = [top('GENIUS HIT LIST'), row('Run `node scripts/ops.mjs genius-list` to generate fresh recommendations.'), bot()].join('\n');
+}
 
 // ── Brief integrity self-assertion (S142 audit item 2) ──────────────────────
 // The brief is the SOLE context source for every session. A three-way coherence
@@ -1022,7 +1105,10 @@ const lines = [
   // ── WHERE WE LEFT OFF ──────────────────────────────────────────────────────
   top(`WHERE WE LEFT OFF  ·  Session ${currentSession - 1}`),
   row(`Shipped:  ${shippedLine.slice(0, W - 10)}`),
-  row(`Tests:    ${status.testsTotal ?? '?'} passing  ·  Deploy: ${status.lastDeployStatus || 'N/A'}`),
+  // S181 [audit #2] — was `${testsTotal} passing`, which labelled the TOTAL as
+  // PASSING (179 "passing" while 10 failed) — a CANON-031 lying surface that
+  // contradicted the SIGNALS block. Show passing/total, matching testsLabel.
+  row(`Tests:    ${typeof status.testsPassing === 'number' ? `${status.testsPassing}/${status.testsTotal ?? '?'}` : (status.testsTotal ?? '?')} passing  ·  Deploy: ${status.lastDeployStatus || 'N/A'}`),
   bot(),
   ``,
   // ── CONTEXT METER (S119 founder directive — was buried, now first-class) ──
@@ -1069,6 +1155,7 @@ const lines = [
   row(`${sigRev}  Revenue sig.  ${revGenDate ? `${revAge}d old (${revGenDate})` : 'not found'}${revAge > 7 ? '  ⚠ stale' : ''}`),
   row(`${sigDeploy}  Deploy gaps   ${deployLabel}`),
   row(`${sigDoctor}  Doctor        ${doctorDetail}`),
+  row(`${sigCost}  Cost          ${costDetail}`),
   bot(),
   ``,
   // ── IGNIS INSIGHT ──────────────────────────────────────────────────────────
@@ -1100,8 +1187,14 @@ const lines = [
   ] : []),
   // Now/Next/Blocked buckets removed — Unified Genius List is the single
   // recommendation surface. Blocked count surfaces in SIGNALS + GENIUS LIST.
-  renderHumanPressureBlock(topPressure, { width: W }),
-  ``,
+  ...(topPressure ? [
+    top('HUMAN PRESSURE'),
+    row(`Top item:      ${topPressure.title.slice(0, W - 15)}`),
+    row(`Pressure:      ${topPressure.pressureScore} · ${topPressure.pressureBand}`),
+    row(`Next action:   ${topPressure.nextAgentAction.slice(0, W - 15)}`),
+    bot(),
+    ``,
+  ] : []),
   // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
   // Suppressed S116 #623 — low-signal flavor block was pushing brief over the
   // 15KB brief-golden cap. v4.1 spec already drops this. Re-enable behind a

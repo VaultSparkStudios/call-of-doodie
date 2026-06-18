@@ -32,6 +32,7 @@ const ALLOW = [
   /VITE_POSTHOG_KEY/,
   /VITE_SENTRY_DSN/,
   /ANTHROPIC_API_KEY/,
+  /\bapiKey:\s*this\.apiKey\b/,
   /KOFI_VERIFICATION_TOKEN/,
   /"integrity"\s*:\s*"sha512-/,
   /sha512-/,

@@ -1,39 +1,39 @@
-<!-- generated-by: codex closeout write-back -->
-<!-- generated-at: 2026-06-18T18:00:00Z -->
+<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
+<!-- source-hash: af69011781b4 -->
+<!-- generated-at: 2026-06-18T20:16:42.425Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary
+## Handoff Summary (Session 98)
 
-## Session
-- Session 98 (asset pack follow-on, security cleanup, lint/build hygiene)
+### Session
+- Session 98: asset pack follow-on, security cleanup, lint/build hygiene. Intent achieved.
 
-## What Shipped
-- Generated proprietary signature asset pack: source SVGs in `assets/source/signature-pack/`, runtime PNGs in `public/visual-assets/`, generator script, manifest entries, and runtime registry.
-- HomeV2 now shows a signature asset strip; Codex opens to an `ASSETS` tab with the pack.
-- `assets/visual-assets.json` now tracks 10 proprietary assets.
-- Fixed all five npm/GitHub Dependabot alerts via exact overrides and lockfile refresh.
-- Cleared all lint warnings.
-- Split Sentry and Supabase into cacheable Vite vendor chunks; main app chunk dropped from ~804 kB to ~620 kB and the build warning is gone.
+### Shipped
+- Generated proprietary signature visual pack: source SVGs, runtime PNGs, generator script, `npm run assets:generate`, `visualAssetLibrary.js` + tests.
+- Wired signature assets into HomeV2 (front-door strip + Codex ASSETS tab); manifest expanded 6 to 10 assets.
+- Patched all 5 npm audit findings via overrides (`@babel/core`, `esbuild`, `form-data`, `js-yaml`, `ws`); Dependabot alerts cleared.
+- Cleared remaining lint warnings (initGame leaderboard dep; underscore convention for unused inputs).
+- Split @sentry/react and @supabase/supabase-js into Vite vendor chunks; main chunk 804kB to 620kB, build warning gone.
 
-## Validation
-- `npm run assets:generate`, `npm run assets:check`, `npm run launch:media-check`
-- Focused asset tests 6/6
-- `npm audit --json` 0 vulnerabilities; GitHub Dependabot alerts fixed
-- `npm run lint` clean/no warnings
-- `npm test` 505/505
-- `npm run build` passing/no chunk-size warning
-- `npm run test:e2e` 2/2
+### Validation (all green)
+- assets:generate 4/4; assets:check 10/10; launch:media-check 5/5; asset tests 6/6.
+- npm audit 0 vulns; lint clean; test 505/505; build clean; e2e 2/2 (Chromium + Mobile Chrome).
 
-## Current Intent
-- Closeout completed for the founder-directed visual asset/security/build hygiene arc. Next useful work is visual credibility: real gameplay screenshots and first Blender-authored source asset.
+### Now Bucket (top 3)
+1. Replace launch placeholder SVG/PNG media with real gameplay screenshots; update manifest statuses.
+2. Add first true Blender-authored source asset under `assets/source/`; export through manifest/generator path.
+3. Decide whether to keep @sentry/react sync-loaded or lazy-load telemetry post-first-paint if LCP needs reduction.
 
-## Now Bucket
-- Replace launch placeholder media with real gameplay screenshots and update manifest statuses.
-- Add the first Blender-authored source asset under `assets/source/` and export it through the existing manifest/generator path.
-- Consider lazy-loading optional telemetry initialization if launch LCP needs another reduction.
+### Blockers (top 3)
+1. Real gameplay screenshots require browser/device capture pass (not yet available).
+2. Itch.io publication and physical PWA/gamepad QA remain human/device-gated.
+3. Supabase edge-function deploy (sync-studio-events, validate-replay) gated on missing SUPABASE_ACCESS_TOKEN.
 
-## Blockers / Human Gates
-- Physical PWA install QA and real gamepad/browser QA remain human/device-gated.
-- Itch.io publication remains human publication-gated.
-- Supabase deploys requiring missing credentials remain gated by `SUPABASE_ACCESS_TOKEN`.
+### Human-Blocked (with age)
+- Supabase edge deploy / SUPABASE_ACCESS_TOKEN missing: since Session 82 (~16 sessions).
+- Physical PWA/gamepad QA + Itch.io publish: since Session 84+ (~14 sessions).
+- Cloudflare Web Analytics beacon SRI error (Cloudflare-injected, not in repo source): since Session 82.
+
+### Next Session
+Run fresh /audit from current state, or capture real gameplay screenshots to retire launch placeholders.

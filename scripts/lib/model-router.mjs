@@ -6,7 +6,7 @@
  * studio-wide model upgrades in one place.
  *
  * Rules:
- *   COMPLEX  → claude-opus-4-7    (strategy, deep analysis, extended thinking)
+ *   COMPLEX  → claude-opus-4-8    (strategy, deep analysis, extended thinking)
  *   MODERATE → claude-sonnet-4-6  (implementation, code, Q&A, most work)
  *   SIMPLE   → claude-haiku-4-5-20251001  (validations, lookups, quick checks)
  *
@@ -41,7 +41,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LEDGER_DEFAULT = path.resolve(__dirname, '..', '..', 'docs', 'cache-ledger.ndjson');
 
 export const MODELS = {
-  opus:   'claude-opus-4-7',
+  opus:   'claude-opus-4-8',
   sonnet: 'claude-sonnet-4-6',
   haiku:  'claude-haiku-4-5-20251001',
 };
@@ -64,7 +64,7 @@ export const CONTEXT_WINDOWS = {
 export function contextWindowForAgent(agent) {
   // Env override: CLAUDE_CONTEXT_LIMIT=1000000 for Max/extended-context plans
   if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
-  // Studio Ops founder runs Opus 4.7 (1M context) exclusively across Claude Code sessions.
+  // Studio Ops founder runs Opus 4.8 (1M context) exclusively across Claude Code sessions.
   // Set CLAUDE_CONTEXT_LIMIT=200000 to pin to the legacy 200K window.
   if (agent === 'claude-code') return CONTEXT_WINDOWS['opus-1m'];
   if (agent === 'codex') return CONTEXT_WINDOWS['codex-1m'];
@@ -161,6 +161,46 @@ export function withCache(block, opts = {}) {
  * Shorthand for 1-hour cached blocks (stable context that rarely changes).
  */
 export function withLongCache(block) { return withCache(block, { ttl: '1h' }); }
+
+/**
+ * Replace lone UTF-16 surrogate code units before JSON leaves this process.
+ * JSON.stringify can emit "\ud800"-style escapes for malformed local strings,
+ * but the Anthropic API rejects those because they are not valid Unicode scalar
+ * values. Valid surrogate pairs, including emoji, are preserved.
+ */
+export function sanitizeUnicodeScalars(value) {
+  if (typeof value === 'string') {
+    let out = '';
+    for (let i = 0; i < value.length; i++) {
+      const code = value.charCodeAt(i);
+      if (code >= 0xD800 && code <= 0xDBFF) {
+        const next = value.charCodeAt(i + 1);
+        if (next >= 0xDC00 && next <= 0xDFFF) {
+          out += value[i] + value[i + 1];
+          i++;
+        } else {
+          out += '\uFFFD';
+        }
+      } else if (code >= 0xDC00 && code <= 0xDFFF) {
+        out += '\uFFFD';
+      } else {
+        out += value[i];
+      }
+    }
+    return out;
+  }
+  if (Array.isArray(value)) return value.map(sanitizeUnicodeScalars);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, sanitizeUnicodeScalars(entry)])
+    );
+  }
+  return value;
+}
+
+export function safeJsonStringify(value) {
+  return JSON.stringify(sanitizeUnicodeScalars(value));
+}
 
 /**
  * Build standard API request headers (no SDK required).
@@ -428,9 +468,18 @@ export function buildMcpServers(servers) {
  * @param {boolean|object} [opts.compaction]   - true → defaults, or buildCompactionConfig() result (G5)
  * @param {boolean|object} [opts.contextEditing] - true → defaults, or buildContextEditingConfig() result (G9)
  * @param {Array} [opts.mcpServers] - array of {name,url,vaultId|authToken,toolAllowlist} (G2)
+ * @param {string} [opts.cachePrefix] - S178: stable canon/system prefix to prompt-cache.
+ *   When set, it is prepended to `system` as a cache_control'd text block (the stable
+ *   prefix is cached; any string `system` becomes a non-cached per-call tail). Use for
+ *   the byte-identical canon/rubric preamble shared across many calls (~90% input savings
+ *   on repeat). `cachePrefixTtl` ('5m'|'1h', default '1h') picks the cache window.
+ * @param {'5m'|'1h'} [opts.cachePrefixTtl='1h']
+ * @param {boolean|object} [opts.memory=false] - S178: enable the native memory tool
+ *   (memory_20250818, ships under context-management beta). true → default tool def;
+ *   object → reserved for future per-tool config. No-op for callers that don't set it.
  * @returns {Promise<object>} parsed API response
  */
-export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null, compaction = false, contextEditing = false, mcpServers = null, tools = null, memory = false, citations = false, webSearch = false, codeExecution = false, files = false, turnClassify = true }, httpsModule) {
+export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null, compaction = false, contextEditing = false, mcpServers = null, tools = null, memory = false, citations = false, webSearch = false, codeExecution = false, files = false, turnClassify = true, cachePrefix = null, cachePrefixTtl = '1h' }, httpsModule) {
   // S120 #3 — turn-classifier wire (SIL #612). Auto-route haiku-able turns
   // to haiku when classifier confidently identifies pure transform/short
   // transactional work. Caller can disable with turnClassify:false.
@@ -445,13 +494,26 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
         routedModel = 'claude-haiku-4-5-20251001';
         classifyTag = `routing:turn-classifier-v1:${verdict.reason}`;
       } else if (verdict.model === 'opus' && /haiku|sonnet/i.test(model)) {
-        routedModel = 'claude-opus-4-7';
+        routedModel = MODELS.opus;
         classifyTag = `routing:turn-classifier-v1:${verdict.reason}`;
       }
     } catch { /* classifier optional — never break callers */ }
   }
   const body = { model: routedModel, max_tokens: maxTokens, messages };
-  if (system) body.system = system;
+  // S178 — prompt-caching on a stable canon/system prefix. The prefix is emitted
+  // as a cache_control'd block (cached across calls); a string `system` is kept as
+  // a non-cached per-call tail. An array `system` is preserved as-is after the prefix.
+  if (cachePrefix) {
+    const prefixBlock = cachePrefixTtl === '1h'
+      ? withCache({ type: 'text', text: cachePrefix }, { ttl: '1h' })
+      : withCache({ type: 'text', text: cachePrefix }, { ttl: cachePrefixTtl || '5m' });
+    const tail = system
+      ? (typeof system === 'string' ? [{ type: 'text', text: system }] : (Array.isArray(system) ? system : [system]))
+      : [];
+    body.system = [prefixBlock, ...tail];
+  } else if (system) {
+    body.system = system;
+  }
   if (thinking) body.thinking = thinking;
 
   // G5/G9 — merge context_management edits (compaction + clear_tool_uses + clear_thinking)
@@ -480,7 +542,11 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
 
   // Auto-detect 1h cache usage in system/messages to flip the beta header on
   const detectLong = (blocks) => Array.isArray(blocks) && blocks.some(b => b?.cache_control?.ttl === '1h');
-  const autoLong = longCache || detectLong(system) || detectLong(messages?.flatMap?.(m => m?.content || []) || []);
+  const autoLong = longCache
+    || (!!cachePrefix && cachePrefixTtl === '1h')
+    || detectLong(body.system)
+    || detectLong(system)
+    || detectLong(messages?.flatMap?.(m => m?.content || []) || []);
 
   const useThinking = !!thinking;
   const headers = buildHeaders(apiKey, {
@@ -495,7 +561,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
     webSearch:      !!webSearch,
     codeExecution:  !!codeExecution,
   });
-  const payload = JSON.stringify(body);
+  const payload = safeJsonStringify(body);
 
   return new Promise((resolve, reject) => {
     const https = httpsModule;
@@ -573,7 +639,7 @@ export async function callWithEscalation(opts, httpsModule) {
  * Returns cached response if hash matches and is under `ttlSec` old.
  */
 export function semanticCacheKey(system, messages, model) {
-  const normalized = JSON.stringify({ m: model, s: typeof system === 'string' ? system : JSON.stringify(system), u: messages });
+  const normalized = safeJsonStringify({ m: model, s: typeof system === 'string' ? system : safeJsonStringify(system), u: messages });
   return crypto.createHash('sha256').update(normalized).digest('hex');
 }
 
@@ -716,7 +782,7 @@ export function logMetrics({ script, model, usage, mode = null, logPath = null }
 export function callAnthropicRaw({ apiKey, method, path, body = null, betaHeader = null }, httpsModule) {
   const headers = buildHeaders(apiKey);
   if (betaHeader) headers['anthropic-beta'] = betaHeader;
-  const payload = body ? JSON.stringify(body) : null;
+  const payload = body ? safeJsonStringify(body) : null;
   if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
 
   return new Promise((resolve, reject) => {
@@ -742,7 +808,7 @@ export function callAnthropicRaw({ apiKey, method, path, body = null, betaHeader
  * Returns batch object with id for polling.
  */
 export function submitBatch(apiKey, requests, httpsModule) {
-  const payload = JSON.stringify({ requests });
+  const payload = safeJsonStringify({ requests });
   const headers = buildHeaders(apiKey);
 
   return new Promise((resolve, reject) => {
