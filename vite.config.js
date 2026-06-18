@@ -10,6 +10,9 @@ export default defineConfig({
         manualChunks: {
           // React runtime in its own chunk — cached across deploys
           "vendor-react": ["react", "react-dom"],
+          // Optional telemetry and data clients stay cacheable outside the gameplay bundle.
+          "vendor-observability": ["@sentry/react"],
+          "vendor-data": ["@supabase/supabase-js"],
           // gifenc only loaded when GIF encoding triggers (dynamic import in App.jsx)
           // already split automatically; this keeps it explicit
         },
