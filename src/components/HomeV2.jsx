@@ -15,8 +15,9 @@ import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
-import { buildInputCalibrationNudge, loadInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
+import { buildInputCalibrationNudge, buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
+import { buildPlayerJourney } from "../utils/playerJourney.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -94,6 +95,7 @@ export default function HomeV2(props) {
   const [showSettings, setShowSettings] = useState(false);
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
+  const [showAimCheck, setShowAimCheck] = useState(false);
   const [tickerDismissed, setTickerDismissed] = useState(() => sessionStorage.getItem("cod-ticker-dismissed") === "1");
   const [mutationDismissed, setMutationDismissed] = useState(() => sessionStorage.getItem("cod-mutation-dismissed") === "1");
   const [showCareerStats, setShowCareerStats] = useState(false);
@@ -115,7 +117,12 @@ export default function HomeV2(props) {
     return new URLSearchParams(window.location.search).get("debug") === "input"
       || localStorage.getItem("cod-debug-input") === "1";
   });
-  const [inputCalibration] = useState(() => loadInputCalibration());
+  const [opsDebugEnabled] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).get("debug") === "ops"
+      || localStorage.getItem("cod-debug-ops") === "1";
+  });
+  const [inputCalibration, setInputCalibration] = useState(() => loadInputCalibration());
   const [controllerProfile] = useState(() => loadControllerProfile());
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
 
@@ -128,8 +135,6 @@ export default function HomeV2(props) {
     setRunHistory(loadRunHistory());
     setRivalryHistory(loadRivalryHistory());
     setStudioEvents(loadStudioGameEvents());
-    // Auto-expand Command Center for returning players; first-timers see DEPLOY only
-    if ((loaded?.totalRuns || 0) > 0) setCmdCenterExpanded(true);
     setMissionStreak(getMissionStreak().streak || 0);
     track("home_v2_view");
     const params = new URLSearchParams(window.location.search);
@@ -180,12 +185,14 @@ export default function HomeV2(props) {
     }),
     [modeId, selectedLoadout, missions, missionProgress, meta, career, challengeMode, dailyAlreadyPlayed, todaySeedStr, runHistory, rivalryHistory],
   );
+  const canSpendMeta = (meta?.careerPoints || 0) >= 10;
+  const incompleteMissionCount = countIncompleteMissions(missions, missionProgress);
   const actionStack = useMemo(
     () => buildFrontDoorActionStack({
       challenge: challengeMode?.vs ? { seed: challengeMode.seed, vsScore: challengeMode.vs, vsName: challengeMode.vsName } : null,
       dailyAlreadyPlayed,
-      canSpendMeta: (meta?.careerPoints || 0) >= 10,
-      incompleteMissionCount: countIncompleteMissions(missions, missionProgress),
+      canSpendMeta,
+      incompleteMissionCount,
       selectedLoadout,
       currentModeLabel: selectedMode.label,
       todaySeed: todaySeedStr,
@@ -194,7 +201,7 @@ export default function HomeV2(props) {
       meta,
       career: career || {},
     }),
-    [challengeMode, dailyAlreadyPlayed, meta, missions, missionProgress, selectedLoadout, selectedMode.label, todaySeedStr, career],
+    [challengeMode, dailyAlreadyPlayed, canSpendMeta, incompleteMissionCount, meta, selectedLoadout, selectedMode.label, todaySeedStr, career],
   );
   const recommendedAction = actionStack[0];
   const analyticsStatus = getAnalyticsStatus();
@@ -202,6 +209,19 @@ export default function HomeV2(props) {
   const aimCheck = useMemo(
     () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
     [inputCalibration, inputDebugEnabled],
+  );
+  const journey = useMemo(
+    () => buildPlayerJourney({
+      totalRuns: career?.totalRuns || 0,
+      challengeActive: Boolean(challengeMode?.vs),
+      hasVerifiedInput: aimCheck.status === "verified",
+      dailyAlreadyPlayed,
+      canSpendMeta,
+      incompleteMissionCount,
+      accountLevel,
+      prestige,
+    }),
+    [career?.totalRuns, challengeMode?.vs, aimCheck.status, dailyAlreadyPlayed, canSpendMeta, incompleteMissionCount, accountLevel, prestige],
   );
   const onboarding = useMemo(() => {
     const runs = career?.totalRuns || 0;
@@ -255,6 +275,45 @@ export default function HomeV2(props) {
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const handleJourneySecondary = useCallback(() => {
+    const action = journey.secondary?.action;
+    recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
+    if (action === "aim_check") {
+      setShowAimCheck(true);
+      return;
+    }
+    if (action === "daily") {
+      onSetDailyChallengeMode?.(true);
+      onStart(todaySeedStr, {});
+      return;
+    }
+    if (action === "upgrades") {
+      setMeta(loadMetaProgress());
+      setShowUpgrades(true);
+      return;
+    }
+    if (action === "missions") {
+      setMissions(getDailyMissions());
+      setMissionProgress(loadMissionProgress());
+      setShowMissions(true);
+      return;
+    }
+    if (action === "challenge") {
+      setDeployOpen(true);
+      return;
+    }
+    switchTab("codex");
+  }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
+  const completeAimCheck = useCallback(() => {
+    const record = saveInputCalibration(buildInputCalibrationRecord({
+      source: gamepadConnected ? (effectiveControllerType || "controller") : "mouse",
+      controllerType: effectiveControllerType || "none",
+      buckets: ["east", "north", "south", "west"],
+    }));
+    setInputCalibration(record);
+    recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source });
+    setShowAimCheck(false);
+  }, [effectiveControllerType, gamepadConnected, recordFrontDoorAction]);
   const launchHistorySeed = useCallback((seed, challenge = {}) => {
     if (!seed) return;
     const studioEvent = recordFrontDoorAction("history_replay", {
@@ -355,6 +414,11 @@ export default function HomeV2(props) {
     border: "1px solid rgba(0,229,255,0.25)", borderRadius: 10,
     display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#DDEFFF", lineHeight: 1.4,
   };
+  const journeyCard = {
+    margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
+    background: "rgba(0,0,0,0.32)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10,
+    display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, alignItems: "center",
+  };
   const tabsRow = { display: "flex", gap: 4, justifyContent: "center", marginTop: 22, flexWrap: "wrap" };
   const tabBtn = (active) => ({
     padding: "8px 16px", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "inherit", cursor: "pointer",
@@ -417,6 +481,23 @@ export default function HomeV2(props) {
         </div>
 
         <SignatureAssetStrip />
+
+        <div style={journeyCard}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ color: "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>JOURNEY · {journey.label.toUpperCase()}</div>
+            <div style={{ color: "#EEE", fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>
+            <div style={{ color: journey.secondary.accent, fontSize: 11, fontWeight: 900, marginTop: 6 }}>
+              NEXT: {journey.secondary.title}
+            </div>
+            <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
+          </div>
+          <button
+            onClick={handleJourneySecondary}
+            style={{ ...quickBtn, color: journey.secondary.accent, borderColor: `${journey.secondary.accent}66`, background: `${journey.secondary.accent}12`, whiteSpace: "nowrap" }}
+          >
+            {journey.secondary.cta.toUpperCase()}
+          </button>
+        </div>
 
         {onboarding && (
           <div style={{ margin: "0 auto 12px", maxWidth: 720, border: "1px solid rgba(255,107,53,0.18)", borderRadius: 10, background: "rgba(0,0,0,0.22)", padding: 8 }}>
@@ -612,9 +693,8 @@ export default function HomeV2(props) {
                 color: aimCheck.status === "verified" ? "#00FF88" : "#FFD34D",
               }}
               onClick={() => {
-                localStorage.setItem("cod-debug-input", "1");
                 recordFrontDoorAction("aim_check_chip", { source: "quick_chip", status: aimCheck.status });
-                setDeployOpen(true);
+                setShowAimCheck(true);
               }}
             >
               {aimCheck.label} · {aimCheck.detail.toUpperCase()}
@@ -726,7 +806,7 @@ export default function HomeV2(props) {
             <button onClick={() => { sessionStorage.setItem("cod-mutation-dismissed", "1"); setMutationDismissed(true); }} aria-label="Dismiss mutation banner" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
-        {(!analyticsStatus.enabled || telemetrySummary.pendingSyncCount > 0 || telemetrySummary.failedSyncCount > 0) && (
+        {opsDebugEnabled && (!analyticsStatus.enabled || telemetrySummary.pendingSyncCount > 0 || telemetrySummary.failedSyncCount > 0) && (
           <div style={{ ...tickerCard, marginTop: 8, background: "rgba(127,230,255,0.05)", borderColor: "rgba(127,230,255,0.22)", color: "#D9F8FF" }}>
             <span style={{ fontSize: 14 }}>📈</span>
             <span style={{ flex: 1 }}>
@@ -812,6 +892,19 @@ export default function HomeV2(props) {
           <SupporterModal onClose={() => setShowSupporter(false)} />
         </Suspense>
       )}
+      {showAimCheck && (
+        <AimCheckPanel
+          controllerType={effectiveControllerType}
+          onVerify={completeAimCheck}
+          onDiagnostics={() => {
+            localStorage.setItem("cod-debug-input", "1");
+            recordFrontDoorAction("aim_check_diagnostics", { source: "aim_check_panel" });
+            setShowAimCheck(false);
+            setDeployOpen(true);
+          }}
+          onClose={() => setShowAimCheck(false)}
+        />
+      )}
       {showCareerStats && (
         <Suspense fallback={null}>
           <MP_CareerStats career={career} meta={meta} onClose={() => setShowCareerStats(false)} />
@@ -865,6 +958,59 @@ export default function HomeV2(props) {
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </Suspense>
       )}
+    </div>
+  );
+}
+
+function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
+  const targetStyle = () => ({
+    minHeight: 64,
+    borderRadius: 8,
+    border: "1px solid rgba(0,229,255,0.28)",
+    background: "rgba(0,229,255,0.06)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#B9F3FF",
+    fontSize: 12,
+    fontWeight: 900,
+    letterSpacing: 1,
+    textAlign: "center",
+  });
+  const device = controllerType && controllerType !== "controller"
+    ? controllerType.toUpperCase()
+    : "MOUSE / TOUCH / CONTROLLER";
+  return (
+    <div style={PANEL}>
+      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
+        <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
+        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
+        <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
+          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
+          <div />
+          <div style={targetStyle("north")}>NORTH</div>
+          <div />
+          <div style={targetStyle("west")}>WEST</div>
+          <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
+          <div style={targetStyle("east")}>EAST</div>
+          <div />
+          <div style={targetStyle("south")}>SOUTH</div>
+          <div />
+        </div>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+            VERIFY CONTROLS
+          </button>
+          <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+            OPEN DIAGNOSTICS
+          </button>
+          <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+            LATER
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

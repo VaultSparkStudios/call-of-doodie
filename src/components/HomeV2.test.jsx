@@ -22,7 +22,7 @@ vi.mock("./DemoCanvas.jsx", () => ({
 
 import HomeV2 from "./HomeV2.jsx";
 import { encodeReplayCode } from "../utils/replayCode.js";
-import { buildInputCalibrationRecord, saveInputCalibration } from "../utils/inputCalibration.js";
+import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration } from "../utils/inputCalibration.js";
 
 const noop = () => {};
 const baseProps = {
@@ -59,6 +59,7 @@ describe("HomeV2", () => {
     container?.remove();
     window.history.pushState({}, "", "/");
     localStorage.removeItem("cod-debug-input");
+    localStorage.removeItem("cod-debug-ops");
     localStorage.removeItem("cod-input-calibration");
     localStorage.removeItem("cod-controller-profile");
   });
@@ -93,6 +94,21 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/CODEX/);
     expect(txt).toMatch(/SETTINGS/);
     expect(txt).toMatch(/SUPPORT/);
+  });
+
+  it("shows a journey card and keeps Command Center collapsed by default", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("JOURNEY");
+    expect(container.textContent).toContain("NEXT:");
+    expect(container.textContent).toContain("COMMAND CENTER");
+    const commandToggle = [...container.querySelectorAll("button")].find(b => /COMMAND CENTER/.test(b.textContent));
+    expect(commandToggle?.getAttribute("aria-expanded")).toBe("false");
   });
 
   it("hydrates replay links including starter loadout", async () => {
@@ -143,6 +159,29 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("DEBUG INPUT");
   });
 
+  it("turns Aim Check into a local controls-verified receipt", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    expect(aimButton).toBeTruthy();
+    await act(async () => { aimButton.click(); });
+    expect(container.textContent).toContain("Verify Full-Circle Control");
+
+    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
+    expect(verifyButton).toBeTruthy();
+    await act(async () => { verifyButton.click(); });
+
+    const saved = loadInputCalibration();
+    expect(saved?.complete).toBe(true);
+    expect(saved?.buckets).toEqual(["east", "north", "south", "west"]);
+    expect(container.textContent).toContain("AIM CHECK VERIFIED");
+  });
+
   it("surfaces remembered input calibration and controller profile status", async () => {
     saveInputCalibration(buildInputCalibrationRecord({
       source: "mouse",
@@ -167,5 +206,30 @@ describe("HomeV2", () => {
 
     expect(container.textContent).toContain("INPUT MOUSE VERIFIED");
     expect(container.textContent).toContain("XBOX #1");
+  });
+
+  it("hides operational measurement status from the default visitor surface", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).not.toContain("MEASUREMENT STATUS");
+    expect(container.textContent).not.toContain("PostHog key missing");
+  });
+
+  it("shows measurement status only through the ops debug surface", async () => {
+    window.history.pushState({}, "", "/?debug=ops");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("MEASUREMENT STATUS");
+    expect(container.textContent).toContain("PostHog key missing");
   });
 });

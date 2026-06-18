@@ -17,7 +17,7 @@ export function ObeliskCallback() {
           setTimeout(() => { location.href = "/"; }, 900);
           return;
         }
-        setState({ status: "error", detail: result?.reason || "verify-failed" });
+        setState({ status: "error", detail: result?.detail || result?.reason || "verify-failed" });
       })
       .catch(() => {
         if (!cancelled) setState({ status: "error", detail: "verify-failed" });
