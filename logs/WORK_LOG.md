@@ -704,3 +704,9 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Added verified browser screenshot capture command and two real launch captures under `public/launch-captures/`.
 - Updated memory/handoff/task/self-improvement surfaces with Session 101 status and follow-ups.
 - Validation: focused gates per item, `npm test` 540/540, `npm run build` passing, `node scripts/security-release-gate.mjs --npm-audit` passing with 0 vulnerabilities, and `npm run launch:media-check` passing.
+## 2026-06-18 — Session 102 — Leaderboard Submission Repair + Protocol Tooling Sync
+
+- Diagnosed 403 "Run summary signature mismatch" on leaderboard submit: `issue-run-token` signs with `expiresAt.toISOString()` (Z suffix), but PostgREST returns `expires_at` as `+00:00` format — identical timestamp, different string, different HMAC. Fixed in `submit-score/index.ts` by normalizing `tokenRow.expires_at` via `new Date(tokenRow.expires_at).toISOString()` before calling `signSummary`.
+- Fixed `sw.js` navigation-handler race: `cacheResponse(c, request, res)` ran in a detached `caches.open().then()` while the browser had already started reading `res.body`, causing `Failed to execute 'clone' on 'Response': Response body is already used`. Fix: clone synchronously (`const clone = res.clone()`) before the detached promise, pass clone to `cache.put()`. Bumped CACHE_NAME from `cod-v5` to `cod-v6`.
+- Synced 3 missing scripts from vaultspark-studio-ops: `scripts/lib/insight-voice-linter.mjs`, `scripts/lib/skill-brief.mjs` (orientation brief renderer used by `/start` v1.4), `scripts/render-brief-delta.mjs` (warm-start delta path for `/start` exit-code 2). All verified to load.
+- Validation: `npm test` 540/540, `npm run build` still passing (no source changes to build-affecting files).

@@ -401,3 +401,23 @@ Decision: Obelisk callback handling may store account identity only after a serv
 Rationale: The account bridge is a trust boundary. Keeping token verification inside `/api/obelisk-verify` preserves secret hygiene, lets staging/prod configure verification independently, and keeps not-configured states honest for users.
 
 Trade-off accepted: When `OBELISK_VERIFY_URL` is absent, the callback reports `verify-not-configured` instead of treating login as complete. Guest play remains unaffected.
+
+---
+
+## 2026-06-18 — Normalize DB timestamps to ISO Z-format before HMAC signing
+
+Decision: In `submit-score`, convert `tokenRow.expires_at` via `new Date(tokenRow.expires_at).toISOString()` before using it in `signSummary`, rather than using the raw Postgres/PostgREST string.
+
+Rationale: `issue-run-token` signs with `expiresAt.toISOString()` which always produces the `Z`-suffix format (e.g., `2026-06-18T20:24:05.123Z`). PostgREST returns TIMESTAMPTZ columns as `+00:00` offset format (e.g., `2026-06-18T20:24:05.123+00:00`). These are the same moment but different strings, causing every HMAC verification to fail with a 403. The fix normalizes on read so both sides of the verify use the same canonical string.
+
+Trade-off accepted: Microsecond precision is truncated to milliseconds during normalization — acceptable since JS Date always stores milliseconds and the token TTL is 6 hours.
+
+---
+
+## 2026-06-18 — Clone SW navigation response synchronously before detached cache-put
+
+Decision: In the service worker navigation handler, `res.clone()` must be called synchronously in the same `.then()` tick as `return res`, not inside a subsequent `caches.open().then()` callback.
+
+Rationale: Once `respondWith(res)` delivers the response to the browser, the browser starts streaming `res.body`. Any subsequent `.clone()` call finds `bodyUsed === true` and throws. Cloning before the detached async gap ensures the clone is made before the body is consumed.
+
+Trade-off accepted: None — this is a correctness fix with no behavioral change for the end user.

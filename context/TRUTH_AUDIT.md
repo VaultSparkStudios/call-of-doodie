@@ -609,3 +609,10 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - Local intelligence truth changed: Balance Lab and next-run drill are deterministic zero-token analyzers. They do not call paid model APIs or send player data externally.
 - Architecture truth changed: `src/systems/deathFlow.js` owns DeathScreen prop composition. App still owns refs, state setters, and side-effect handlers.
 - No contradictions introduced. Validation: full suite 540/540, build passing, release security gate with npm audit 0 vulnerabilities, launch media gate passing.
+
+## 2026-06-18 — Session 102 Truth Updates
+
+- `supabase/functions/submit-score/index.ts` truth changed: HMAC verification now uses `new Date(tokenRow.expires_at).toISOString()` — the raw DB column was a different string format from what `issue-run-token` signed, so all previous verification was silently failing.
+- `public/sw.js` truth changed: navigation handler clone pattern is corrected. `cod-v5` cache was affected by the race; clients running the old SW may have had stale navigation responses. `cod-v6` clears the old cache on activate.
+- No gameplay, storage schema, or analytics surfaces changed. No contradictions introduced.
+- Validation: `npm test` 540/540, build passing.

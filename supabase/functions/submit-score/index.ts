@@ -369,6 +369,8 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    // Normalize expires_at to the same JS ISO format used when signing in issue-run-token.
+    // PostgREST returns TIMESTAMPTZ as "+00:00" not "Z", which would cause an HMAC mismatch.
     const expectedSummarySig = await signSummary(
       Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? serviceRoleKey,
       {
@@ -378,7 +380,7 @@ Deno.serve(async (req) => {
         difficulty: tokenRow.difficulty,
         seed: tokenRow.seed ?? null,
         starterLoadout: payload.starterLoadout,
-        expiresAt: tokenRow.expires_at,
+        expiresAt: new Date(tokenRow.expires_at).toISOString(),
       },
     );
     if (!summarySig || summarySig !== expectedSummarySig) {

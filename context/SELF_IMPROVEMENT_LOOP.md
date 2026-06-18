@@ -1267,3 +1267,16 @@ SIL +12: Completed the full `docs/AUDIT_2026-06-18_3.md` implementation sweep ac
 1. Five-scene screenshot replacement — capture verified combat, boss, build/debrief, leaderboard, and mobile PNGs, then move manifest screenshots from SVG fallback to production capture paths. High probability.
 2. Death-submit extraction slice 2 — move score-submit event planning, replay-proof receipt packaging, and debrief outcome summaries into `src/systems/deathFlow.js` or adjacent pure helpers. High probability.
 3. Journey visual QA matrix — add Playwright screenshots for first-run, returning, ops-debug, and mobile HomeV2 states so future front-door changes cannot regress hierarchy. Medium probability.
+
+## 2026-06-18 — Session 102 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Repaired leaderboard submission HMAC mismatch (every score save was silently rejected server-side due to PostgREST timestamp format differing from JS ISO format), fixed service worker clone race that produced `Failed to execute 'clone' on 'Response': Response body is already used` errors on navigation fetches, and synced 3 missing Studio OS protocol scripts from studio-ops. Validation: `npm test` 540/540, build passing.
+
+**Top win:** Leaderboard submissions now reach Supabase and pass HMAC verification — players can save scores again.
+**Top gap:** `sync-studio-events` edge function still returns 500 (credential-gated deploy — needs `SUPABASE_ACCESS_TOKEN`).
+**Intent outcome:** Achieved — diagnosed two reported player-facing bugs, fixed both, synced missing protocol tooling, committed and pushed.
+
+**Brainstorm**
+1. End-to-end leaderboard smoke — add a Vitest test that mocks `invokeEdgeFunction` and asserts `summarySig` roundtrips correctly through `issue-run-token`→`submit-score` canonical signature path. High probability.
+2. Five-scene screenshot replacement — capture verified combat, boss, build/debrief, leaderboard, and mobile PNGs, then update manifest from SVG fallback to production captures. High probability.
+3. DeathScreen score-submit extraction slice 2 — move replay-proof receipt packaging and debrief outcome summaries into `src/systems/deathFlow.js`. Medium probability.

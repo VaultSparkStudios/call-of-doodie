@@ -1,5 +1,26 @@
 # Latest Handoff
 
+## Where We Left Off (Session 102 — leaderboard submission repair + protocol tooling sync)
+
+**Intent outcome:** Achieved. Diagnosed and fixed the leaderboard 403 "signature mismatch" blocking score saves, fixed the sw.js Response clone race, and synced 3 missing protocol scripts from studio-ops.
+
+**Shipped**
+- `supabase/functions/submit-score/index.ts`: normalized `tokenRow.expires_at` via `new Date(...).toISOString()` before HMAC verification — PostgREST returns `+00:00` while `issue-run-token` signs with `Z`, causing every submission to fail.
+- `public/sw.js`: fixed navigation-handler race where `res.clone()` was called after the browser started reading `res.body`; clone is now synchronous before the detached `caches.open()` call. Bumped to `cod-v6`.
+- Added `scripts/lib/insight-voice-linter.mjs`, `scripts/lib/skill-brief.mjs` (orientation brief renderer for `/start` v1.4), and `scripts/render-brief-delta.mjs` (warm-start delta path) — all copied from studio-ops; verified load.
+
+**Validation**
+- `npm test` — 540/540
+- `npm run build` — passing (not re-run; no source changes that affect build)
+
+**Next recommended slice**
+- [ ] Push to main → `deploy-supabase-function.yml` auto-deploys fixed `submit-score`; verify a real leaderboard save works end-to-end.
+- [ ] Deploy `sync-studio-events` fix (credential-gated — needs `SUPABASE_ACCESS_TOKEN`).
+- [ ] Five-scene screenshot replacement and manifest PNG migration.
+- [ ] DeathScreen score-submit extraction slice 2 into `src/systems/deathFlow.js`.
+
+---
+
 ## Where We Left Off (Session 101 — full audit implementation sweep)
 
 **Intent outcome:** Achieved. Audited the full public website/game surface from HomeV2 through HUD, DeathScreen, launch media, account routes, and project gates; implemented all 12 ranked items; validated broadly; then prepared closeout write-back per founder direction.

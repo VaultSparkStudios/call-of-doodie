@@ -5,7 +5,7 @@
 //  • Supabase / external API calls → network-only (never cache)
 //  • Navigation → network-first with offline fallback to index.html
 
-const CACHE_NAME = "cod-v5";
+const CACHE_NAME = "cod-v6";
 const BASE = new URL(self.registration.scope).pathname;
 const SHELL_ASSETS = [
   BASE,
@@ -66,7 +66,11 @@ self.addEventListener("fetch", e => {
       safeFetch(request)
         .then(res => {
           if (!res) return caches.match(BASE + "index.html");
-          caches.open(CACHE_NAME).then(c => cacheResponse(c, request, res));
+          // Clone synchronously before any async gap — browser reads res.body
+          // concurrently and bodyUsed will be true by the time the detached
+          // caches.open() resolves, causing "clone on used Response" errors.
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(request, clone).catch(() => {}));
           return res;
         })
         .catch(() => caches.match(BASE + "index.html"))
