@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="NEMESIS">
+  <defs>
+    <radialGradient id="cod-karen-nemesis-bg" cx="38%" cy="25%" r="76%">
+      <stop offset="0%" stop-color="#682642"/>
+      <stop offset="100%" stop-color="#12040B"/>
+    </radialGradient>
+    <linearGradient id="cod-karen-nemesis-shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <filter id="cod-karen-nemesis-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="56" fill="url(#cod-karen-nemesis-bg)"/>
+  <path d="M42 404 C128 364 210 396 286 358 C356 322 418 332 472 298 L472 512 L42 512 Z" fill="#000000" opacity="0.2"/>
+  
+  <g filter="url(#cod-karen-nemesis-shadow)">
+    <ellipse cx="258" cy="354" rx="110" ry="32" fill="#000" opacity="0.28"/>
+    <circle cx="256" cy="220" r="98" fill="#FF69B4"/>
+    <path d="M166 196 C192 116 290 86 350 158 C326 142 300 150 274 174 C236 132 188 146 166 196 Z" fill="#FFD740"/>
+    <path d="M160 202 C178 128 226 91 288 100 C250 132 232 176 228 224 Z" fill="#FFE36B"/>
+    <path d="M206 238 C236 262 284 262 314 238" fill="none" stroke="#781B4C" stroke-width="12" stroke-linecap="round"/>
+    <ellipse cx="220" cy="200" rx="28" ry="18" fill="#FFFFFF" opacity="0.9"/>
+    <ellipse cx="292" cy="200" rx="28" ry="18" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="232" cy="201" r="8" fill="#111"/>
+    <circle cx="304" cy="201" r="8" fill="#111"/>
+    <path d="M176 172 L224 184 M336 172 L292 184" stroke="#2A0818" stroke-width="10" stroke-linecap="round"/>
+    <path d="M176 318 C214 360 304 360 340 318 L354 392 L158 392 Z" fill="#C41467"/>
+    <path d="M196 332 C236 352 282 352 322 332" stroke="#FFB0D4" stroke-width="7" stroke-linecap="round" opacity="0.72"/>
+    <text x="256" y="386" text-anchor="middle" fill="#fff" font-family="Courier New, monospace" font-size="28" font-weight="900">1★</text>
+  </g>
+  <rect x="26" y="26" width="460" height="460" rx="44" fill="none" stroke="#FF69B4" stroke-opacity="0.62" stroke-width="4"/>
+  <text x="38" y="434" fill="#FFE0EF" font-family="Courier New, monospace" font-size="28" font-weight="900" letter-spacing="2">NEMESIS</text>
+  <text x="40" y="464" fill="#FFE0EF" opacity="0.72" font-family="Courier New, monospace" font-size="16" font-weight="700" letter-spacing="1.4">MANAGER DEMANDER</text>
+</svg>

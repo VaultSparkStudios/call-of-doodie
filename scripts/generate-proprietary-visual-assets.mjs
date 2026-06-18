@@ -1,0 +1,139 @@
+#!/usr/bin/env node
+
+import fs from "node:fs";
+import path from "node:path";
+import sharp from "sharp";
+
+const ROOT = process.cwd();
+const sourceDir = path.join(ROOT, "assets", "source", "signature-pack");
+const runtimeDir = path.join(ROOT, "public", "visual-assets");
+
+fs.mkdirSync(sourceDir, { recursive: true });
+fs.mkdirSync(runtimeDir, { recursive: true });
+
+function svgFrame({ id, title, subtitle, bg0, bg1, fg, accent, body }) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="${title}">
+  <defs>
+    <radialGradient id="${id}-bg" cx="38%" cy="25%" r="76%">
+      <stop offset="0%" stop-color="${bg0}"/>
+      <stop offset="100%" stop-color="${bg1}"/>
+    </radialGradient>
+    <linearGradient id="${id}-shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <filter id="${id}-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="56" fill="url(#${id}-bg)"/>
+  <path d="M42 404 C128 364 210 396 286 358 C356 322 418 332 472 298 L472 512 L42 512 Z" fill="#000000" opacity="0.2"/>
+  ${body}
+  <rect x="26" y="26" width="460" height="460" rx="44" fill="none" stroke="${accent}" stroke-opacity="0.62" stroke-width="4"/>
+  <text x="38" y="434" fill="${fg}" font-family="Courier New, monospace" font-size="28" font-weight="900" letter-spacing="2">${title}</text>
+  <text x="40" y="464" fill="${fg}" opacity="0.72" font-family="Courier New, monospace" font-size="16" font-weight="700" letter-spacing="1.4">${subtitle}</text>
+</svg>`;
+}
+
+const assets = [
+  {
+    id: "cod-porcelain-throne",
+    title: "PORCELAIN",
+    subtitle: "CORE OBJECTIVE PROP",
+    bg0: "#344659",
+    bg1: "#090A0D",
+    fg: "#F7FAFF",
+    accent: "#BFE7FF",
+    body: `
+  <g filter="url(#cod-porcelain-throne-shadow)" transform="translate(0 2)">
+    <ellipse cx="256" cy="322" rx="116" ry="42" fill="#93AFCB" opacity="0.32"/>
+    <path d="M166 190 C166 142 201 116 258 116 C315 116 350 142 350 190 L334 326 C328 370 300 390 258 390 C216 390 188 370 182 326 Z" fill="#EAF6FF"/>
+    <path d="M188 186 C188 158 212 143 258 143 C304 143 328 158 328 186 C328 215 304 230 258 230 C212 230 188 215 188 186 Z" fill="#BFD8F5"/>
+    <ellipse cx="258" cy="182" rx="49" ry="24" fill="#102535"/>
+    <path d="M208 115 L212 78 C215 50 236 38 262 42 L337 54 C358 58 373 75 372 96 L368 142 C333 124 294 115 258 115 Z" fill="#F7FAFF"/>
+    <path d="M224 74 C248 60 295 67 340 78" fill="none" stroke="#BFD8F5" stroke-width="12" stroke-linecap="round"/>
+    <ellipse cx="224" cy="132" rx="26" ry="15" fill="url(#cod-porcelain-throne-shine)" opacity="0.8"/>
+    <path d="M186 290 C220 315 296 315 330 290" fill="none" stroke="#7EA7CC" stroke-width="8" stroke-linecap="round" opacity="0.55"/>
+  </g>`
+  },
+  {
+    id: "cod-plunger-rocket",
+    title: "PLUNGER",
+    subtitle: "MID-RANGE JUSTICE",
+    bg0: "#4B2416",
+    bg1: "#080403",
+    fg: "#FFD8B5",
+    accent: "#FF7A30",
+    body: `
+  <g filter="url(#cod-plunger-rocket-shadow)" transform="rotate(-18 256 246)">
+    <rect x="222" y="110" width="58" height="240" rx="24" fill="#7A421E"/>
+    <rect x="238" y="126" width="18" height="206" rx="9" fill="#C47A36" opacity="0.78"/>
+    <path d="M156 312 C164 258 200 230 254 230 C308 230 344 258 352 312 C318 344 190 344 156 312 Z" fill="#9B1D1D"/>
+    <path d="M178 298 C216 318 292 318 330 298" fill="none" stroke="#F05A37" stroke-width="14" stroke-linecap="round" opacity="0.72"/>
+    <ellipse cx="256" cy="232" rx="56" ry="18" fill="#5E0E0E"/>
+    <path d="M284 120 C334 132 376 166 396 212" stroke="#FFD740" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <path d="M302 105 C363 118 414 160 438 220" stroke="#FF7A30" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+  </g>`
+  },
+  {
+    id: "cod-doodie-operative",
+    title: "OPERATIVE",
+    subtitle: "PLAYER SILHOUETTE",
+    bg0: "#24472A",
+    bg1: "#060B07",
+    fg: "#D8FFE4",
+    accent: "#5EE68A",
+    body: `
+  <g filter="url(#cod-doodie-operative-shadow)">
+    <ellipse cx="254" cy="350" rx="106" ry="30" fill="#000" opacity="0.28"/>
+    <path d="M216 206 C216 156 244 128 280 128 C318 128 344 158 338 206 L332 276 C328 330 294 358 250 350 C212 342 194 312 200 272 Z" fill="#3A6A3A"/>
+    <path d="M218 223 C246 240 292 238 328 218" stroke="#1A351D" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <circle cx="278" cy="136" r="54" fill="#2A5A2A"/>
+    <path d="M236 130 C252 94 306 84 334 122" fill="none" stroke="#75A875" stroke-width="14" stroke-linecap="round" opacity="0.5"/>
+    <ellipse cx="312" cy="140" rx="32" ry="13" fill="#46F06E" opacity="0.62"/>
+    <rect x="304" y="200" width="112" height="34" rx="11" fill="#343A3F"/>
+    <rect x="392" y="192" width="40" height="50" rx="8" fill="#202429"/>
+    <rect x="425" y="203" width="40" height="29" rx="8" fill="#FFD740"/>
+    <path d="M212 342 L174 390 M292 346 L332 392" stroke="#274C2A" stroke-width="24" stroke-linecap="round"/>
+    <path d="M205 336 L169 382 M286 342 L326 386" stroke="#5B8A5E" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+  </g>`
+  },
+  {
+    id: "cod-karen-nemesis",
+    title: "NEMESIS",
+    subtitle: "MANAGER DEMANDER",
+    bg0: "#682642",
+    bg1: "#12040B",
+    fg: "#FFE0EF",
+    accent: "#FF69B4",
+    body: `
+  <g filter="url(#cod-karen-nemesis-shadow)">
+    <ellipse cx="258" cy="354" rx="110" ry="32" fill="#000" opacity="0.28"/>
+    <circle cx="256" cy="220" r="98" fill="#FF69B4"/>
+    <path d="M166 196 C192 116 290 86 350 158 C326 142 300 150 274 174 C236 132 188 146 166 196 Z" fill="#FFD740"/>
+    <path d="M160 202 C178 128 226 91 288 100 C250 132 232 176 228 224 Z" fill="#FFE36B"/>
+    <path d="M206 238 C236 262 284 262 314 238" fill="none" stroke="#781B4C" stroke-width="12" stroke-linecap="round"/>
+    <ellipse cx="220" cy="200" rx="28" ry="18" fill="#FFFFFF" opacity="0.9"/>
+    <ellipse cx="292" cy="200" rx="28" ry="18" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="232" cy="201" r="8" fill="#111"/>
+    <circle cx="304" cy="201" r="8" fill="#111"/>
+    <path d="M176 172 L224 184 M336 172 L292 184" stroke="#2A0818" stroke-width="10" stroke-linecap="round"/>
+    <path d="M176 318 C214 360 304 360 340 318 L354 392 L158 392 Z" fill="#C41467"/>
+    <path d="M196 332 C236 352 282 352 322 332" stroke="#FFB0D4" stroke-width="7" stroke-linecap="round" opacity="0.72"/>
+    <text x="256" y="386" text-anchor="middle" fill="#fff" font-family="Courier New, monospace" font-size="28" font-weight="900">1★</text>
+  </g>`
+  },
+];
+
+for (const asset of assets) {
+  const svg = svgFrame(asset);
+  const svgPath = path.join(sourceDir, `${asset.id}.svg`);
+  const pngPath = path.join(runtimeDir, `${asset.id}.png`);
+  fs.writeFileSync(svgPath, svg, "utf8");
+  await sharp(Buffer.from(svg)).png({ compressionLevel: 9, quality: 100 }).toFile(pngPath);
+  console.log(`Generated ${path.relative(ROOT, svgPath)} -> ${path.relative(ROOT, pngPath)}`);
+}
+
+console.log(`Generated ${assets.length} proprietary visual asset(s).`);

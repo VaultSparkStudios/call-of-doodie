@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="PORCELAIN">
+  <defs>
+    <radialGradient id="cod-porcelain-throne-bg" cx="38%" cy="25%" r="76%">
+      <stop offset="0%" stop-color="#344659"/>
+      <stop offset="100%" stop-color="#090A0D"/>
+    </radialGradient>
+    <linearGradient id="cod-porcelain-throne-shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <filter id="cod-porcelain-throne-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="56" fill="url(#cod-porcelain-throne-bg)"/>
+  <path d="M42 404 C128 364 210 396 286 358 C356 322 418 332 472 298 L472 512 L42 512 Z" fill="#000000" opacity="0.2"/>
+  
+  <g filter="url(#cod-porcelain-throne-shadow)" transform="translate(0 2)">
+    <ellipse cx="256" cy="322" rx="116" ry="42" fill="#93AFCB" opacity="0.32"/>
+    <path d="M166 190 C166 142 201 116 258 116 C315 116 350 142 350 190 L334 326 C328 370 300 390 258 390 C216 390 188 370 182 326 Z" fill="#EAF6FF"/>
+    <path d="M188 186 C188 158 212 143 258 143 C304 143 328 158 328 186 C328 215 304 230 258 230 C212 230 188 215 188 186 Z" fill="#BFD8F5"/>
+    <ellipse cx="258" cy="182" rx="49" ry="24" fill="#102535"/>
+    <path d="M208 115 L212 78 C215 50 236 38 262 42 L337 54 C358 58 373 75 372 96 L368 142 C333 124 294 115 258 115 Z" fill="#F7FAFF"/>
+    <path d="M224 74 C248 60 295 67 340 78" fill="none" stroke="#BFD8F5" stroke-width="12" stroke-linecap="round"/>
+    <ellipse cx="224" cy="132" rx="26" ry="15" fill="url(#cod-porcelain-throne-shine)" opacity="0.8"/>
+    <path d="M186 290 C220 315 296 315 330 290" fill="none" stroke="#7EA7CC" stroke-width="8" stroke-linecap="round" opacity="0.55"/>
+  </g>
+  <rect x="26" y="26" width="460" height="460" rx="44" fill="none" stroke="#BFE7FF" stroke-opacity="0.62" stroke-width="4"/>
+  <text x="38" y="434" fill="#F7FAFF" font-family="Courier New, monospace" font-size="28" font-weight="900" letter-spacing="2">PORCELAIN</text>
+  <text x="40" y="464" fill="#F7FAFF" opacity="0.72" font-family="Courier New, monospace" font-size="16" font-weight="700" letter-spacing="1.4">CORE OBJECTIVE PROP</text>
+</svg>

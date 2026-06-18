@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="PLUNGER">
+  <defs>
+    <radialGradient id="cod-plunger-rocket-bg" cx="38%" cy="25%" r="76%">
+      <stop offset="0%" stop-color="#4B2416"/>
+      <stop offset="100%" stop-color="#080403"/>
+    </radialGradient>
+    <linearGradient id="cod-plunger-rocket-shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <filter id="cod-plunger-rocket-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="56" fill="url(#cod-plunger-rocket-bg)"/>
+  <path d="M42 404 C128 364 210 396 286 358 C356 322 418 332 472 298 L472 512 L42 512 Z" fill="#000000" opacity="0.2"/>
+  
+  <g filter="url(#cod-plunger-rocket-shadow)" transform="rotate(-18 256 246)">
+    <rect x="222" y="110" width="58" height="240" rx="24" fill="#7A421E"/>
+    <rect x="238" y="126" width="18" height="206" rx="9" fill="#C47A36" opacity="0.78"/>
+    <path d="M156 312 C164 258 200 230 254 230 C308 230 344 258 352 312 C318 344 190 344 156 312 Z" fill="#9B1D1D"/>
+    <path d="M178 298 C216 318 292 318 330 298" fill="none" stroke="#F05A37" stroke-width="14" stroke-linecap="round" opacity="0.72"/>
+    <ellipse cx="256" cy="232" rx="56" ry="18" fill="#5E0E0E"/>
+    <path d="M284 120 C334 132 376 166 396 212" stroke="#FFD740" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <path d="M302 105 C363 118 414 160 438 220" stroke="#FF7A30" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+  </g>
+  <rect x="26" y="26" width="460" height="460" rx="44" fill="none" stroke="#FF7A30" stroke-opacity="0.62" stroke-width="4"/>
+  <text x="38" y="434" fill="#FFD8B5" font-family="Courier New, monospace" font-size="28" font-weight="900" letter-spacing="2">PLUNGER</text>
+  <text x="40" y="464" fill="#FFD8B5" opacity="0.72" font-family="Courier New, monospace" font-size="16" font-weight="700" letter-spacing="1.4">MID-RANGE JUSTICE</text>
+</svg>

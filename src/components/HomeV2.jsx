@@ -16,6 +16,7 @@ import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { buildInputCalibrationNudge, loadInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
+import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -414,6 +415,8 @@ export default function HomeV2(props) {
             </div>
           )}
         </div>
+
+        <SignatureAssetStrip />
 
         {onboarding && (
           <div style={{ margin: "0 auto 12px", maxWidth: 720, border: "1px solid rgba(255,107,53,0.18)", borderRadius: 10, background: "rgba(0,0,0,0.22)", padding: 8 }}>
@@ -899,16 +902,18 @@ function StatChip({ label, value }) {
 }
 
 function CodexTab() {
-  const [section, setSection] = useState("arsenal");
+  const [section, setSection] = useState("assets");
   const btn = (active) => ({ padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: active ? "rgba(255,107,53,0.14)" : "transparent", border: "1px solid " + (active ? "rgba(255,107,53,0.5)" : "rgba(255,255,255,0.12)"), color: active ? "#FF9960" : "#AAA", borderRadius: 6 });
   return (
     <div>
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button style={btn(section === "assets")}  onClick={() => setSection("assets")}>🖼 ASSETS</button>
         <button style={btn(section === "arsenal")}  onClick={() => setSection("arsenal")}>🔫 ARSENAL</button>
         <button style={btn(section === "mostwanted")} onClick={() => setSection("mostwanted")}>👾 MOST WANTED</button>
         <button style={btn(section === "rules")}    onClick={() => setSection("rules")}>📜 RULES</button>
         <button style={btn(section === "news")}     onClick={() => setSection("news")}>✦ WHAT'S NEW</button>
       </div>
+      {section === "assets" && <SignatureAssetGrid />}
       {section === "arsenal" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 6 }}>
           {WEAPONS.map((w, i) => (
@@ -956,6 +961,33 @@ function CodexTab() {
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+function SignatureAssetStrip() {
+  return (
+    <div style={{ margin: "10px auto 0", maxWidth: 650, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: 8 }}>
+      {SIGNATURE_VISUAL_ASSETS.map((asset) => (
+        <div key={asset.id} style={{ minWidth: 0, border: `1px solid ${asset.accent}55`, background: "rgba(0,0,0,0.34)", borderRadius: 8, padding: 7, boxShadow: `0 0 18px ${asset.accent}18` }}>
+          <img src={asset.src} alt={asset.label} loading="eager" width="96" height="96" style={{ width: "100%", maxWidth: 92, aspectRatio: "1 / 1", objectFit: "contain", display: "block", margin: "0 auto" }} />
+          <div style={{ marginTop: 4, color: asset.accent, fontSize: 9, fontWeight: 900, letterSpacing: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{asset.label.toUpperCase()}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SignatureAssetGrid() {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 8 }}>
+      {SIGNATURE_VISUAL_ASSETS.map((asset) => (
+        <div key={asset.id} style={{ padding: 10, borderRadius: 8, border: `1px solid ${asset.accent}55`, background: "rgba(255,255,255,0.035)", textAlign: "center" }}>
+          <img src={asset.src} alt={asset.label} loading="lazy" width="128" height="128" style={{ width: 108, maxWidth: "100%", aspectRatio: "1 / 1", objectFit: "contain", filter: `drop-shadow(0 0 14px ${asset.accent}44)` }} />
+          <div style={{ color: asset.accent, fontSize: 12, fontWeight: 900, marginTop: 6 }}>{asset.label}</div>
+          <div style={{ color: "#999", fontSize: 10, letterSpacing: 1.2, textTransform: "uppercase", marginTop: 3 }}>{asset.role}</div>
+        </div>
+      ))}
     </div>
   );
 }

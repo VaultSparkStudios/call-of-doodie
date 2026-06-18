@@ -27,6 +27,7 @@
     "post-cutover:smoke": "node scripts/post-cutover-smoke.mjs",
     "launch:qa": "node scripts/health-check.mjs && node scripts/live-site-check.mjs && node scripts/launch-surface-check.mjs",
     "launch:verify": "vitest run src/App.launch.test.jsx && node scripts/health-check.mjs && node scripts/live-site-check.mjs && node scripts/launch-surface-check.mjs && node scripts/shared-leaderboard-check.mjs",
+    "assets:generate": "node scripts/generate-proprietary-visual-assets.mjs",
     "assets:check": "node scripts/validate-visual-assets.mjs",
     "launch:media-check": "node scripts/validate-launch-media.mjs",
     "audit:env": "node scripts/audit-env.mjs",

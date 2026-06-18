@@ -74,6 +74,50 @@
       "dimensions": { "width": 0, "height": 0 },
       "status": "runtime-generated",
       "notes": "Pseudo-3D primitives render player, enemy, and weapon material cues directly in canvas."
+    },
+    {
+      "id": "cod-porcelain-throne",
+      "kind": "signature-runtime",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/signature-pack/cod-porcelain-throne.svg",
+      "runtimePath": "public/visual-assets/cod-porcelain-throne.png",
+      "dimensions": { "width": 512, "height": 512 },
+      "status": "production-ready",
+      "notes": "Signature 3D-styled hero prop exported from the proprietary internal asset pack."
+    },
+    {
+      "id": "cod-plunger-rocket",
+      "kind": "signature-runtime",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/signature-pack/cod-plunger-rocket.svg",
+      "runtimePath": "public/visual-assets/cod-plunger-rocket.png",
+      "dimensions": { "width": 512, "height": 512 },
+      "status": "production-ready",
+      "notes": "Signature 3D-styled weapon prop exported from the proprietary internal asset pack."
+    },
+    {
+      "id": "cod-doodie-operative",
+      "kind": "signature-runtime",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/signature-pack/cod-doodie-operative.svg",
+      "runtimePath": "public/visual-assets/cod-doodie-operative.png",
+      "dimensions": { "width": 512, "height": 512 },
+      "status": "production-ready",
+      "notes": "Signature 3D-styled protagonist sprite exported from the proprietary internal asset pack."
+    },
+    {
+      "id": "cod-karen-nemesis",
+      "kind": "signature-runtime",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/signature-pack/cod-karen-nemesis.svg",
+      "runtimePath": "public/visual-assets/cod-karen-nemesis.png",
+      "dimensions": { "width": 512, "height": 512 },
+      "status": "production-ready",
+      "notes": "Signature 3D-styled boss sprite exported from the proprietary internal asset pack."
     }
   ]
 }
