@@ -24,6 +24,7 @@ import fs from 'fs';
 import https from 'https';
 import path from 'path';
 import crypto from 'crypto';
+import { EventEmitter } from 'events';
 import { fileURLToPath } from 'url';
 import { MODELS, callClaude, withLongCache, logMetrics } from './lib/model-router.mjs';
 import { getSecret } from './lib/secrets.mjs';
@@ -37,8 +38,41 @@ const OUT     = path.join(ROOT, 'context', 'LATEST_HANDOFF.compact.md');
 const force   = process.argv.includes('--force');
 const trim    = process.argv.includes('--trim');
 const dryRun  = process.argv.includes('--dry-run');
+const smokeUnicode = process.argv.includes('--smoke-unicode');
 
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
+
+if (smokeUnicode) {
+  const capture = {};
+  const fakeHttps = {
+    request(_options, callback) {
+      const req = new EventEmitter();
+      req.write = (chunk) => { capture.payload = chunk; };
+      req.end = () => {
+        const res = new EventEmitter();
+        callback(res);
+        res.emit('data', JSON.stringify({ content: [{ type: 'text', text: 'ok' }], usage: {} }));
+        res.emit('end');
+      };
+      return req;
+    },
+  };
+  await callClaude({
+    apiKey: 'test-key',
+    model: MODELS.haiku,
+    maxTokens: 8,
+    turnClassify: false,
+    system: [withLongCache({ type: 'text', text: 'unicode smoke' })],
+    messages: [{ role: 'user', content: 'malformed handoff \uD800 text \uDC00' }],
+  }, fakeHttps);
+
+  if (capture.payload?.includes('\\ud800') || capture.payload?.includes('\\udc00')) {
+    console.error('compact-handoff unicode smoke failed: unsafe surrogate escape reached payload');
+    process.exit(1);
+  }
+  console.log('compact-handoff unicode smoke passed');
+  process.exit(0);
+}
 
 // ── TRIM MODE ────────────────────────────────────────────────────────────────
 if (trim) {
