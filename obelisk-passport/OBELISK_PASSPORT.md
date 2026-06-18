@@ -15,10 +15,22 @@ Obelisk identity service. All accounts, passkeys, and sessions live at the IdP
 2. Add a route /auth/callback that calls handleObeliskCallback() and stores the returned identity.
 3. Expose POST /api/obelisk-verify on your backend that calls verifyObeliskSession (verify.server.js) — keeps the verify server-side.
 
+## The three flows (all seamless, all at the IdP)
+
+The login surface ships **three** entry points — no passwords anywhere:
+
+| Flow | Entry | What the user does |
+|---|---|---|
+| **Sign in** | `data-obelisk-signin` (web) / `signInWithObelisk()` (expo) | One passkey tap (conditional-UI autofill prompts returning users automatically). |
+| **Create account** | `data-obelisk-signup` / `createAccountWithObelisk()` | Pick a handle → enrol a passkey → backup codes shown once. |
+| **Can't sign in? (forgot)** | `data-obelisk-recover` / `recoverObeliskAccess()` | Lost device → enter a backup recovery code → re-enrol a passkey. This is the passwordless equivalent of "forgot password". |
+
+All three open `https://obeliskgate.com/auth?screen=<signin|signup|recovery>` — one consistent, themed surface.
+
 ## How it works
 
-1. User clicks **Play — Sign in** → redirected to https://obeliskgate.com/auth.
-2. They authenticate (passkey-first, no password) at the IdP.
+1. User clicks **Play — Sign in** (or **Create account** / **Recover access**) → redirected to https://obeliskgate.com/auth.
+2. They authenticate (passkey-first, no password) at the IdP — or recover via a backup code.
 3. IdP redirects back to /auth/callback?obelisk_session=<token>.
 4. This project verifies the token **server-to-server** at https://obeliskgate.com/auth/verify-session
    and receives only `{ ok, identityId }`. No secret ever touches this repo.

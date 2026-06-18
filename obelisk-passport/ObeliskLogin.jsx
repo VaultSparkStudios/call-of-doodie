@@ -21,7 +21,8 @@ export function ObeliskLogin({ project = "Call of Doodie", tier = "T4", returnUr
       <p style={{ opacity: .7, fontSize: 14, margin: "0 0 22px" }}>One account. Every VaultSpark game. Your progress, carried.</p>
       <button data-obelisk-signin style={{ width: "100%", padding: 13, border: 0, borderRadius: 10, background: "#f5c542", color: "#001018", fontWeight: 600, fontSize: 15, cursor: "pointer" }}>Play — Sign in</button>
       <button data-obelisk-signup style={{ width: "100%", padding: 12, marginTop: 10, border: "1px solid #ff5d8f", borderRadius: 10, background: "transparent", color: "inherit", fontSize: 14, cursor: "pointer" }}>Create your player account</button>
-      <div style={{ marginTop: 18, fontSize: 11, opacity: .45 }}>Secured by Obelisk · passwordless</div>
+      <button data-obelisk-recover style={{ marginTop: 14, border: 0, background: "none", color: "inherit", opacity: .6, fontSize: 13, textDecoration: "underline", cursor: "pointer" }}>Can't sign in? Recover access</button>
+      <div style={{ marginTop: 14, fontSize: 11, opacity: .45 }}>Secured by Obelisk · passwordless · lost your device? recover with a backup code</div>
     </div>
   );
 }
