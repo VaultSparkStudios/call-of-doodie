@@ -13,14 +13,14 @@ export function getRunAct(wave) {
 
 export function buildRunNarrative({
   wave = 1,
-  score = 0,
-  kills = 0,
+  score: _score = 0,
+  kills: _kills = 0,
   bestStreak = 0,
   nearDeathEvents = [],
   precisionPeakStreak = 0,
   bossKillCount = 0,
   flowStateFired = 0,
-  timeSurvived = 0,
+  timeSurvived: _timeSurvived = 0,
 }) {
   const { act, desc: actDesc } = classifyAct(wave);
   const moments = [];
