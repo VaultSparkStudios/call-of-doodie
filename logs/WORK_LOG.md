@@ -672,3 +672,12 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Added `src/utils/visualPrimitives.js` and tests, then wired `drawGame.js` enemy/player/weapon material rendering through reusable pseudo-3D helpers.
 - Repaired Playwright e2e harness drift: browser specs only, strict project port `53173`, no accidental reuse of unrelated local apps.
 - Validation: `npm run assets:check`, `npm run launch:media-check`, focused visual primitive tests 4/4, full `npm test` 503/503, lint 0 errors / 7 existing warnings, build passing, protocol drift 20/20, e2e 2/2.
+
+## 2026-06-18 — Session 98 — Asset Pack, Security, Lint, Build Hygiene
+
+- Continued the visual asset work with a generated proprietary signature pack: source SVGs in `assets/source/signature-pack/`, runtime PNGs in `public/visual-assets/`, generator script `scripts/generate-proprietary-visual-assets.mjs`, and `src/utils/visualAssetLibrary.js` tests.
+- Wired the signature pack into the HomeV2 front door and Codex assets tab; visual asset manifest now tracks 10 assets.
+- Fixed all five npm/GitHub audit alerts with exact overrides and lockfile refresh: `@babel/core@7.29.7`, `esbuild@0.28.1`, `form-data@4.0.6`, `js-yaml@4.2.0`, `ws@8.21.0`. GitHub Dependabot reports all five alerts `fixed`.
+- Cleared the remaining lint warnings and verified `npm run lint` now exits with no warnings.
+- Split telemetry and data clients into cacheable Vite chunks; main app chunk dropped from ~804 kB to ~620 kB and the build warning disappeared.
+- Validation: `npm run assets:generate`, `npm run assets:check`, `npm run launch:media-check`, focused asset tests 6/6, `npm audit --json` 0 vulnerabilities, `npm test` 505/505, `npm run build` clean, `npm run test:e2e` 2/2.

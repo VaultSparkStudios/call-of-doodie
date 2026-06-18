@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.3",
+  "project": "call-of-doodie",
+  "session": 98,
+  "date": "2026-06-18",
+  "agent": "codex",
+  "status": "closed",
+  "sil": {
+    "score": 1000,
+    "max": 1000,
+    "velocity": 6,
+    "debt": "decreasing",
+    "categories": {
+      "devHealth": 100,
+      "creativeAlignment": 100,
+      "momentum": 100,
+      "engagement": 100,
+      "processQuality": 100,
+      "crossRepoCoherence": 100,
+      "securityPosture": 100,
+      "ecosystemIntegration": 100,
+      "capitalEfficiency": 100,
+      "automationCoverage": 100
+    }
+  },
+  "shipped": [
+    "Generated proprietary signature visual asset pack and surfaced it in HomeV2/Codex.",
+    "Expanded visual asset manifest to 10 tracked proprietary assets.",
+    "Fixed five npm/GitHub Dependabot vulnerabilities through exact overrides and lockfile refresh.",
+    "Cleared all ESLint warnings.",
+    "Split Sentry and Supabase into cacheable Vite vendor chunks, removing the chunk-size warning."
+  ],
+  "validation": [
+    "npm run assets:generate",
+    "npm run assets:check",
+    "npm run launch:media-check",
+    "npx vitest run src/utils/visualAssetLibrary.test.js src/utils/visualPrimitives.test.js",
+    "npm audit --json",
+    "npm run lint",
+    "npm test",
+    "npm run build",
+    "npm run test:e2e",
+    "npm run protocol:drift -- --json"
+  ],
+  "followUps": [
+    "Replace launch placeholder media with real gameplay screenshots.",
+    "Add first Blender-authored source asset under assets/source.",
+    "Evaluate lazy telemetry initialization if launch LCP needs another reduction."
+  ],
+  "blockers": [
+    "Physical PWA install QA and real gamepad/browser QA remain human/device-gated.",
+    "Itch.io publication remains human publication-gated.",
+    "Supabase deploy tasks requiring SUPABASE_ACCESS_TOKEN remain credential-gated."
+  ]
+}

@@ -26,6 +26,7 @@
 
 ## Notes for new agents
 
+- Session 98 current truth: visual asset provenance lives in `assets/visual-assets.json`, generated signature pack source/runtime lives in `assets/source/signature-pack/` and `public/visual-assets/`, and security/build hygiene is recorded in `context/TRUTH_AUDIT.md` plus `package.json` overrides and `vite.config.js` vendor chunks.
 - Treat `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, and dated handoffs as history only
 - Use the docs in `plans/` for ongoing constraints and experiments
 - Preserve comedy-first tone while respecting the live deployed build

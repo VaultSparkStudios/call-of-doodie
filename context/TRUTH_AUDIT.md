@@ -585,3 +585,12 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - Runtime pseudo-3D material primitives live in `src/utils/visualPrimitives.js`; `src/drawGame.js` consumes them.
 - Launch media placeholder status is explicit: current SVG/PNG launch assets are tracked as `placeholder-export` until real gameplay screenshots replace them.
 - Studio-wide propagation was not written directly to a sibling repo; it was queued as Ark `canon-update` cargo for `vaultspark-studio-ops`.
+
+# 2026-06-18 — Session 98 Asset/Security/Build Truth
+
+- `assets/source/signature-pack/` is the source package for the first Call of Doodie proprietary signature pack; runtime exports live in `public/visual-assets/`.
+- `scripts/generate-proprietary-visual-assets.mjs` is the repeatable generator for the current signature pack; `npm run assets:generate` regenerates source SVGs and PNG exports.
+- `src/utils/visualAssetLibrary.js` is the runtime registry for HomeV2/Codex signature asset cards; `assets/visual-assets.json` remains the provenance manifest source of truth.
+- Dependency vulnerability truth now comes from the committed `package-lock.json` plus exact overrides in `package.json`; local `npm audit --json` reports 0 vulnerabilities and GitHub Dependabot marks all five previous alerts fixed.
+- Build-size truth changed: Sentry and Supabase are now explicit Vite vendor chunks; the main application chunk is ~620 kB raw instead of ~804 kB raw.
+- No contradictions introduced. Remaining visual truth gap: launch screenshots are still placeholder exports until a real capture pass replaces them.

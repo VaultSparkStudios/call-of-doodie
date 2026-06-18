@@ -1,44 +1,39 @@
-<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 0aa23b4d3146 -->
-<!-- generated-at: 2026-06-15T04:35:33.832Z -->
+<!-- generated-by: codex closeout write-back -->
+<!-- generated-at: 2026-06-18T18:00:00Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session: 96 (continuation post-95)
+# Handoff Summary
 
-Shipped:
-- supabase/functions/validate-replay/pressure.js shared Edge pressure/evidence module
-- validate-replay/index.ts refactored to consume shared module
-- scripts/validate-edge-replay-pressure-fixtures.mjs + npm run replay:edge-fixtures
-- docs/AUDIT_2026-06-15_2.md/.json
+## Session
+- Session 98 (asset pack follow-on, security cleanup, lint/build hygiene)
 
-Validation:
-- replay:edge-fixtures 4/4; validate-replay-trace-fixtures 4/4
-- vitest replayResim+replayCommandTrace 17/17
-- npm test 489/489; lint 0 err / 7 warn; build OK
-- deno check validate-replay/index.ts passes (Deno 2.8.2 at C:\tmp\deno-2.8.2\deno.exe)
+## What Shipped
+- Generated proprietary signature asset pack: source SVGs in `assets/source/signature-pack/`, runtime PNGs in `public/visual-assets/`, generator script, manifest entries, and runtime registry.
+- HomeV2 now shows a signature asset strip; Codex opens to an `ASSETS` tab with the pack.
+- `assets/visual-assets.json` now tracks 10 proprietary assets.
+- Fixed all five npm/GitHub Dependabot alerts via exact overrides and lockfile refresh.
+- Cleared all lint warnings.
+- Split Sentry and Supabase into cacheable Vite vendor chunks; main app chunk dropped from ~804 kB to ~620 kB and the build warning is gone.
 
-Current intent: Continue durable /start → /audit → /implement → /closeout loop. Edge pressure parity now closed.
+## Validation
+- `npm run assets:generate`, `npm run assets:check`, `npm run launch:media-check`
+- Focused asset tests 6/6
+- `npm audit --json` 0 vulnerabilities; GitHub Dependabot alerts fixed
+- `npm run lint` clean/no warnings
+- `npm test` 505/505
+- `npm run build` passing/no chunk-size warning
+- `npm run test:e2e` 2/2
 
-Now bucket (top 3):
-1. App.jsx death-slice extraction — pure helpers for death/submit orchestration now event ownership cleaner
-2. Warning baseline cleanup — eliminate 7 existing lint warnings for zero-warning launch hygiene
-3. Deeper physics-parity replay resim runner (larger trust milestone; current receipt honestly labeled heuristic_pressure_estimate/advisory)
+## Current Intent
+- Closeout completed for the founder-directed visual asset/security/build hygiene arc. Next useful work is visual credibility: real gameplay screenshots and first Blender-authored source asset.
 
-Blockers (top 3):
-1. Supabase edge-function live deploy — needs SUPABASE_ACCESS_TOKEN (last attempted S82, still missing)
-2. Cloudflare Web Analytics beacon SRI failure — fix in Cloudflare dashboard, not repo
-3. HomeV2 v1 retirement — needs Lighthouse LCP ≥200ms win + funnel evidence
+## Now Bucket
+- Replace launch placeholder media with real gameplay screenshots and update manifest statuses.
+- Add the first Blender-authored source asset under `assets/source/` and export it through the existing manifest/generator path.
+- Consider lazy-loading optional telemetry initialization if launch LCP needs another reduction.
 
-Human/device-gated (age):
-- Physical PWA/gamepad QA — open since S75 (~21 sessions)
-- Itch.io publication — open since S74 (~22 sessions)
-- Analytics dashboard secrets — open since S74 (~22 sessions)
-- SUPABASE_ACCESS_TOKEN provisioning — open since S82 (~14 sessions)
-
-Protocol notes:
-- Local Studio OS shims present (skill-profile, sil-categories, plan-mode codex exemption, scan-secrets, helper parity through S87c)
-- protocol:drift status=ok across required helpers; INNOVATION_PACK.md available if session-floor reports budget remaining
-- npm run replay:edge-fixtures is the new parity gate for Edge changes
-
-Next session pointer: Run /start; if budget remains after audit, pick App.jsx death-slice extraction or warning baseline cleanup.
+## Blockers / Human Gates
+- Physical PWA install QA and real gamepad/browser QA remain human/device-gated.
+- Itch.io publication remains human publication-gated.
+- Supabase deploys requiring missing credentials remain gated by `SUPABASE_ACCESS_TOKEN`.

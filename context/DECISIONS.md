@@ -368,3 +368,11 @@ Follow-up: Ark `canon-update` cargo was queued to `vaultspark-studio-ops` reques
 Decision: Call of Doodie Playwright e2e uses strict port `53173` and only runs `*.spec.*` browser specs.
 
 Rationale: The previous harness could reuse an unrelated app already running on 5173 and could attempt to execute Vitest files under `tests/`. Browser validation must prove this game, not whatever local server happens to occupy a common Vite port.
+
+# 2026-06-18 — Split telemetry/data vendors before raising build warning limits
+
+Decision: Keep the Vite chunk-size warning meaningful and split `@sentry/react` plus `@supabase/supabase-js` into explicit cacheable vendor chunks instead of simply raising `chunkSizeWarningLimit`.
+
+Rationale: The main app chunk was only slightly above the 800 kB threshold, but those vendor clients are stable dependencies and do not need to live inside the gameplay bundle. Manual chunks reduced the main chunk to ~620 kB while preserving synchronous behavior.
+
+Trade-off accepted: Initial page load now has two additional module chunks for observability/data clients. This is acceptable because they are cacheable, behavior-preserving, and keep future build warnings useful.

@@ -1,5 +1,34 @@
 # Latest Handoff
 
+## Where We Left Off (Session 98 — asset pack follow-on, security cleanup, lint/build hygiene)
+
+**Intent outcome:** Achieved. Continued beyond the initial visual-asset pipeline pass, fixed the pushed Dependabot vulnerabilities, cleared the remaining lint warnings, removed the Vite main-chunk warning with vendor splitting, and then prepared closeout write-backs per founder direction.
+
+**Shipped**
+- Added a generated proprietary signature visual pack: source SVGs in `assets/source/signature-pack/`, runtime PNGs in `public/visual-assets/`, `scripts/generate-proprietary-visual-assets.mjs`, `npm run assets:generate`, and `src/utils/visualAssetLibrary.js` with tests.
+- Wired the signature assets into `HomeV2`: visible front-door asset strip plus a Codex `ASSETS` tab.
+- Expanded `assets/visual-assets.json` from 6 to 10 registered proprietary assets.
+- Patched all five npm audit findings through exact overrides and lockfile refresh: `@babel/core@7.29.7`, `esbuild@0.28.1`, `form-data@4.0.6`, `js-yaml@4.2.0`, and `ws@8.21.0`. GitHub Dependabot now marks the five alerts fixed.
+- Cleared the remaining lint warnings: `initGame` now declares its `leaderboard` dependency, and intentionally-unused death/narrative inputs use the repo underscore convention.
+- Split `@sentry/react` and `@supabase/supabase-js` into cacheable Vite vendor chunks. Main app chunk dropped from ~804 kB to ~620 kB and the build warning is gone.
+
+**Validation**
+- `npm run assets:generate` — 4/4 generated proprietary signature assets
+- `npm run assets:check` — 10/10 manifest entries valid
+- `npm run launch:media-check` — 5/5 manifest screenshots have PNG provenance
+- Focused asset tests — 6/6
+- `npm audit --json` — 0 vulnerabilities
+- `npm run lint` — clean, no warnings
+- `npm test` — 505/505
+- `npm run build` — passing, no chunk-size warning after vendor split
+- `npm run test:e2e` — 2/2 desktop Chromium + mobile Chrome pointer sweep
+- Studio npm supply-chain scan — no tracked compromise incidents affecting this repo
+
+**Next recommended slice**
+- [ ] Replace launch placeholder SVG/PNG media with real gameplay screenshots and update manifest statuses.
+- [ ] Add the first true Blender-authored source asset under `assets/source/` and export it through the same manifest/generator path.
+- [ ] Decide whether to keep `@sentry/react` synchronously loaded or lazy-load telemetry initialization after first paint if launch LCP needs another reduction.
+
 ## Where We Left Off (Session 97 — proprietary visual asset library + pseudo-3D pipeline)
 
 **Intent outcome:** Achieved for the Call of Doodie slice. Ran `/start → /audit → /implement` on a fresh visual-asset audit, answered the founder’s tooling question, shipped the per-game proprietary asset-library pattern via Studio Ark cargo to `vaultspark-studio-ops`, and kept implementation local to Call of Doodie.
