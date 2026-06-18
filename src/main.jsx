@@ -3,6 +3,9 @@ import { createRoot } from "react-dom/client";
 import * as Sentry from "@sentry/react";
 import CallOfDoodie from "./App.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import { ObeliskCallback } from "./ObeliskCallback.jsx";
+import { ObeliskLogin } from "./ObeliskLogin.jsx";
+import { getObeliskRoute } from "./obeliskRoutes.js";
 
 // Sentry error tracking — set VITE_SENTRY_DSN in .env.local to enable.
 // Get your DSN at https://sentry.io → Project → Settings → SDK Setup
@@ -18,10 +21,17 @@ if (SENTRY_DSN) {
   });
 }
 
+const route = getObeliskRoute(window.location.pathname);
+const surface = route === "login"
+  ? <ObeliskLogin />
+  : route === "callback"
+    ? <ObeliskCallback />
+    : <CallOfDoodie />;
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
-      <CallOfDoodie />
+      {surface}
     </ErrorBoundary>
   </StrictMode>
 );
