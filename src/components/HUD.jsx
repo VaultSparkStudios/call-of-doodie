@@ -403,6 +403,16 @@ export default function HUD({
         />
       )}
 
+      {/* Mobile action toolbar — dash / grenade / reload for touch players */}
+      {isMobile && (
+        <MobileToolbar
+          dashReady={dashReady} grenadeReady={grenadeReady} isReloading={isReloading}
+          onDash={onDash} onGrenade={onGrenade} onReload={onReload}
+          weapon={weapon} ammo={ammo} currentWeapon={currentWeapon}
+          weaponAmmos={weaponAmmos} onSwitchWeapon={onSwitchWeapon}
+        />
+      )}
+
       {/* Heat meter (top-right) */}
       {HUD_FLAGS.showHeatMeter && typeof heat === "number" && heat > 5 && (
         <div title={`Heat ${Math.round(heat)} — kills + multikills increase, decays over time`} style={{ position: "absolute", top: 8, right: 8, padding: "3px 9px", background: "rgba(0,0,0,0.55)", border: `1px solid rgba(255,${Math.max(40, 200 - heat * 1.6)},0,0.6)`, borderRadius: 999, fontSize: 10, color: heat >= 70 ? "#FF3300" : heat >= 40 ? "#FF8800" : "#FFC800", fontWeight: 900, letterSpacing: 1.5 }}>
@@ -439,6 +449,94 @@ export default function HUD({
 }
 
 const WEAPON_HOTKEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
+
+function MobileToolbar({ dashReady, grenadeReady, isReloading, onDash, onGrenade, onReload, weapon, ammo, currentWeapon, weaponAmmos, onSwitchWeapon }) {
+  // Cycle to the next unlocked weapon (wraps around)
+  const handleWeaponSwitch = () => {
+    const next = (currentWeapon + 1) % WEAPONS.length;
+    onSwitchWeapon?.(next);
+  };
+
+  const btnBase = {
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    gap: 1, height: 44, borderRadius: 10, cursor: "pointer", border: "none",
+    fontFamily: "'Courier New',monospace", fontWeight: 900, touchAction: "none",
+  };
+
+  return (
+    <div style={{
+      position: "fixed", bottom: 0, left: 0, right: 0, height: 56,
+      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+      background: "rgba(0,0,0,0.45)", backdropFilter: "blur(6px)",
+      borderTop: "1px solid rgba(255,255,255,0.08)",
+      pointerEvents: "all", zIndex: 20,
+      paddingBottom: "env(safe-area-inset-bottom)",
+    }}>
+      {/* Current weapon + tap-to-cycle */}
+      <button
+        onPointerDown={(e) => { e.preventDefault(); handleWeaponSwitch(); }}
+        style={{
+          ...btnBase, width: 54, fontSize: 11, color: weapon?.color || "#FFF",
+          background: "rgba(255,255,255,0.07)",
+          border: "1px solid rgba(255,255,255,0.22)",
+        }}
+        aria-label="Cycle weapon"
+      >
+        <span style={{ fontSize: 18 }}>{weapon?.emoji || "🔫"}</span>
+        <span style={{ fontSize: 8, color: ammo > 0 ? "#CCC" : "#F44" }}>{ammo}</span>
+      </button>
+
+      <div style={{ width: 1, height: 30, background: "rgba(255,255,255,0.12)" }} />
+
+      {/* Dash */}
+      <button
+        onPointerDown={(e) => { e.preventDefault(); onDash?.(); }}
+        style={{
+          ...btnBase, width: 60, fontSize: 11,
+          background: dashReady ? "rgba(0,229,255,0.18)" : "rgba(255,255,255,0.05)",
+          color: dashReady ? "#0EF" : "#445",
+          border: dashReady ? "1px solid rgba(0,229,255,0.45)" : "1px solid rgba(255,255,255,0.09)",
+          boxShadow: dashReady ? "0 0 14px rgba(0,229,255,0.25), inset 0 1px 0 rgba(255,255,255,0.12)" : "none",
+        }}
+        aria-label="Dash"
+      >
+        <span style={{ fontSize: 20 }}>💨</span>
+        <span style={{ fontSize: 8, letterSpacing: 0.5 }}>DASH</span>
+      </button>
+
+      {/* Grenade */}
+      <button
+        onPointerDown={(e) => { e.preventDefault(); onGrenade?.(); }}
+        style={{
+          ...btnBase, width: 60, fontSize: 11,
+          background: grenadeReady ? "rgba(255,69,0,0.18)" : "rgba(255,255,255,0.05)",
+          color: grenadeReady ? "#FF6B35" : "#543",
+          border: grenadeReady ? "1px solid rgba(255,69,0,0.45)" : "1px solid rgba(255,255,255,0.09)",
+          boxShadow: grenadeReady ? "0 0 14px rgba(255,69,0,0.25), inset 0 1px 0 rgba(255,255,255,0.12)" : "none",
+        }}
+        aria-label="Grenade"
+      >
+        <span style={{ fontSize: 20 }}>💣</span>
+        <span style={{ fontSize: 8, letterSpacing: 0.5 }}>NADE</span>
+      </button>
+
+      {/* Reload */}
+      <button
+        onPointerDown={(e) => { e.preventDefault(); onReload?.(); }}
+        style={{
+          ...btnBase, width: 54, fontSize: 11,
+          background: isReloading ? "rgba(255,215,0,0.15)" : "rgba(255,255,255,0.05)",
+          color: isReloading ? "#FFD700" : "#887",
+          border: isReloading ? "1px solid rgba(255,215,0,0.35)" : "1px solid rgba(255,255,255,0.09)",
+        }}
+        aria-label="Reload"
+      >
+        <span style={{ fontSize: 16, display: "inline-block", animation: isReloading ? "spin 0.7s linear infinite" : "none" }}>🔄</span>
+        <span style={{ fontSize: 8, letterSpacing: 0.5 }}>{isReloading ? "..." : "RELOAD"}</span>
+      </button>
+    </div>
+  );
+}
 
 function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, grenadeReady, dashReady, isReloading, weaponMods, showAmmoBars = true, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
   const [hoveredTool, setHoveredTool] = useState(null);

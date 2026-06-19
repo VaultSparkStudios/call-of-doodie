@@ -4734,6 +4734,7 @@ export default function CallOfDoodie() {
         @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }
         @keyframes ammoPulseYellow { 0%,100% { opacity:1 } 50% { opacity:.55 } }
         @keyframes ammoPulseRed { 0%,100% { opacity:1 } 50% { opacity:.35 } }
+        @keyframes spin { from { transform:rotate(0deg) } to { transform:rotate(360deg) } }
         @keyframes slideDown { from { opacity:0; transform:translateX(-50%) translateY(-20px) } to { opacity:1; transform:translateX(-50%) translateY(0) } }
         @keyframes bossIn { from { opacity:0; transform:translate(-50%,-50%) scale(0.5) } to { opacity:1; transform:translate(-50%,-50%) scale(1) } }
         * { box-sizing:border-box; margin:0 }
