@@ -1,13 +1,38 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildRunFlags,
   createDeathStudioEvents,
   createRunHistoryEntry,
   createRunStartArtifacts,
   createScoreSubmitStudioEvents,
+  GAMEPLAY_SETTINGS_KEYS,
+  resolveCustomSettings,
   resolveRunModeFromFlags,
 } from "./runSession.js";
 
 describe("runSession", () => {
+  it("buildRunFlags normalises booleans and defaults all to false", () => {
+    expect(buildRunFlags({ bossRush: true })).toEqual({
+      scoreAttack: false, dailyChallenge: false, cursed: false,
+      bossRush: true, speedrun: false, gauntlet: false,
+    });
+    expect(buildRunFlags()).toEqual({
+      scoreAttack: false, dailyChallenge: false, cursed: false,
+      bossRush: false, speedrun: false, gauntlet: false,
+    });
+    // Truthy non-boolean values are coerced
+    expect(buildRunFlags({ speedrun: 1 }).speedrun).toBe(true);
+  });
+
+  it("resolveCustomSettings detects any changed gameplay key", () => {
+    const defaults = Object.fromEntries(GAMEPLAY_SETTINGS_KEYS.map(k => [k, 1.0]));
+    expect(resolveCustomSettings(defaults, defaults)).toBe(false);
+    expect(resolveCustomSettings({ ...defaults, enemySpawnMult: 1.5 }, defaults)).toBe(true);
+    expect(resolveCustomSettings({ ...defaults, pickupMagnet: 0.5 }, defaults)).toBe(true);
+    // Non-gameplay keys are ignored
+    expect(resolveCustomSettings({ ...defaults, volume: 0.8 }, defaults)).toBe(false);
+  });
+
   it("resolves the active run mode from flags", () => {
     expect(resolveRunModeFromFlags({ bossRush: true })).toBe("boss_rush");
     expect(resolveRunModeFromFlags({ dailyChallenge: true })).toBe("daily_challenge");

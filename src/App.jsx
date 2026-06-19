@@ -94,11 +94,13 @@ import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 import {
   createDeathStudioEvents,
   createRunHistoryEntry,
+  buildRunFlags,
   createRunStartArtifacts,
   createScoreSubmitStudioEvents,
+  resolveCustomSettings,
   resolveRunModeFromFlags,
 } from "./systems/runSession.js";
-import { buildDeathScreenProps } from "./systems/deathFlow.js";
+import { buildDeathKillerInfo, buildDeathScreenProps } from "./systems/deathFlow.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 
@@ -1645,20 +1647,19 @@ export default function CallOfDoodie() {
       } catch (err) { console.warn("[GIF] encode failed:", err); }
       setGifEncoding(false);
     })();
-    const runFlags = {
+    const runFlags = buildRunFlags({
       scoreAttack: scoreAttackRef.current,
       dailyChallenge: dailyChallengeRef.current,
       cursed: cursedRunRef.current,
       bossRush: bossRushRef.current,
       speedrun: speedrunRef.current,
       gauntlet: gauntletRef.current,
-    };
+    });
     let deathTraceEvidence = null;
     try { deathTraceEvidence = analyzeReplayCommandTrace(encodeReplayCommandTrace(commandTraceRef.current || [])); } catch { deathTraceEvidence = null; }
     deathTraceEvidenceRef.current = deathTraceEvidence;
     const deathTraceReceipt = deathTraceEvidence ? buildReplayProofReceipt(deathTraceEvidence) : null;
-    const _killerType = gs?._deathKillerType ?? gs?._lastDamageBy ?? null;
-    const _killerEnemy = _killerType != null ? (gs.enemies || []).find(e => e.type === _killerType) : null;
+    const { killerType: _killerType, killerEnemy: _killerEnemy } = buildDeathKillerInfo(gs);
     saveRunToHistory(createRunHistoryEntry({
       score: gs.score,
       kills: gs.kills,
@@ -1864,10 +1865,8 @@ export default function CallOfDoodie() {
 
   // ── Score submit ──────────────────────────────────────────────────────────
   const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {
-    const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
-    const sett = settingsRef.current;
-    const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
-    const mode = resolveRunModeFromFlags({
+    const customSettings = resolveCustomSettings(settingsRef.current, SETTINGS_DEFAULTS);
+    const submitFlags = buildRunFlags({
       scoreAttack: scoreAttackRef.current,
       dailyChallenge: dailyChallengeRef.current,
       cursed: cursedRunRef.current,
@@ -1875,6 +1874,7 @@ export default function CallOfDoodie() {
       speedrun: speedrunRef.current,
       gauntlet: gauntletRef.current,
     });
+    const mode = resolveRunModeFromFlags(submitFlags);
     const commandTrace = encodeReplayCommandTrace(commandTraceRef.current || []);
     const entry = buildSessionSubmission({
       username,
@@ -1922,14 +1922,7 @@ export default function CallOfDoodie() {
       score,
       wave,
       runSeed,
-      flags: {
-        scoreAttack: scoreAttackRef.current,
-        dailyChallenge: dailyChallengeRef.current,
-        cursed: cursedRunRef.current,
-        bossRush: bossRushRef.current,
-        speedrun: speedrunRef.current,
-        gauntlet: gauntletRef.current,
-      },
+      flags: submitFlags,
       globalRank,
       result,
       eventDigest,

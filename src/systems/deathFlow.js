@@ -1,3 +1,10 @@
+export function buildDeathKillerInfo(gs) {
+  const killerType = gs?._deathKillerType ?? gs?._lastDamageBy ?? null;
+  const killerEnemy =
+    killerType != null ? (gs?.enemies || []).find(e => e.type === killerType) ?? null : null;
+  return { killerType, killerEnemy };
+}
+
 export function buildDeathScreenProps({
   score,
   kills,

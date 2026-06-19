@@ -1,5 +1,47 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildDeathScreenProps } from "./deathFlow.js";
+import { buildDeathKillerInfo, buildDeathScreenProps } from "./deathFlow.js";
+
+describe("buildDeathKillerInfo", () => {
+  it("resolves killer from _deathKillerType first", () => {
+    const gs = {
+      _deathKillerType: 5,
+      _lastDamageBy: 9,
+      enemies: [{ type: 5, name: "Splitter" }, { type: 9, name: "Tank" }],
+    };
+    const { killerType, killerEnemy } = buildDeathKillerInfo(gs);
+    expect(killerType).toBe(5);
+    expect(killerEnemy.name).toBe("Splitter");
+  });
+
+  it("falls back to _lastDamageBy when _deathKillerType is absent", () => {
+    const gs = {
+      _lastDamageBy: 3,
+      enemies: [{ type: 3, name: "Boss" }],
+    };
+    const { killerType, killerEnemy } = buildDeathKillerInfo(gs);
+    expect(killerType).toBe(3);
+    expect(killerEnemy.name).toBe("Boss");
+  });
+
+  it("returns null killerEnemy when no matching enemy exists", () => {
+    const gs = { _deathKillerType: 7, enemies: [{ type: 2 }] };
+    const { killerType, killerEnemy } = buildDeathKillerInfo(gs);
+    expect(killerType).toBe(7);
+    expect(killerEnemy).toBeNull();
+  });
+
+  it("returns nulls when gs has no damage attribution", () => {
+    const { killerType, killerEnemy } = buildDeathKillerInfo({});
+    expect(killerType).toBeNull();
+    expect(killerEnemy).toBeNull();
+  });
+
+  it("handles null gs gracefully", () => {
+    const { killerType, killerEnemy } = buildDeathKillerInfo(null);
+    expect(killerType).toBeNull();
+    expect(killerEnemy).toBeNull();
+  });
+});
 
 describe("buildDeathScreenProps", () => {
   it("maps death screen state without reaching into React", () => {
