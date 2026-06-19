@@ -1,6 +1,12 @@
 import { buildRunClaim } from "../utils/runSubmission.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
 
+// Gameplay settings keys that disqualify a run from standard leaderboard competition.
+export const GAMEPLAY_SETTINGS_KEYS = [
+  "enemySpawnMult", "enemyHealthMult", "enemySpeedMult",
+  "playerSpeedMult", "xpGainMult", "pickupMagnet", "grenadeRadiusMult",
+];
+
 export function resolveRunModeFromFlags({
   scoreAttack = false,
   dailyChallenge = false,
@@ -16,6 +22,28 @@ export function resolveRunModeFromFlags({
   if (speedrun) return "speedrun";
   if (gauntlet) return "gauntlet";
   return "standard";
+}
+
+export function buildRunFlags({
+  scoreAttack = false,
+  dailyChallenge = false,
+  cursed = false,
+  bossRush = false,
+  speedrun = false,
+  gauntlet = false,
+} = {}) {
+  return {
+    scoreAttack: !!scoreAttack,
+    dailyChallenge: !!dailyChallenge,
+    cursed: !!cursed,
+    bossRush: !!bossRush,
+    speedrun: !!speedrun,
+    gauntlet: !!gauntlet,
+  };
+}
+
+export function resolveCustomSettings(settings = {}, defaults = {}) {
+  return GAMEPLAY_SETTINGS_KEYS.some(k => k in defaults && settings[k] !== defaults[k]);
 }
 
 export function createRunStartArtifacts({
