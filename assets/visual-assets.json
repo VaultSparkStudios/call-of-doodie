@@ -18,7 +18,7 @@
       "runtimePath": "public/launch-assets/launch-combat.png",
       "dimensions": { "width": 1280, "height": 720 },
       "status": "placeholder-export",
-      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+      "notes": "SVG-exported placeholder. Manifest now uses real-combat-capture (public/launch-captures/real-combat.png) for the combat screenshot slot."
     },
     {
       "id": "launch-boss",
@@ -62,7 +62,7 @@
       "runtimePath": "public/launch-assets/launch-devices.png",
       "dimensions": { "width": 390, "height": 844 },
       "status": "placeholder-export",
-      "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
+      "notes": "SVG-exported placeholder. Manifest now uses real-mobile-controls-capture (public/launch-captures/real-mobile-controls.png) for the narrow/mobile screenshot slot."
     },
     {
       "id": "real-combat-capture",
