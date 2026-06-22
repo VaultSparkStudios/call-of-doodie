@@ -38,6 +38,8 @@ const MP_NewFeatures    = lazy(() => import("./MenuPanels.jsx").then(m => ({ def
 
 const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 
+const ALL_DIRECTIONS = ["east", "north", "south", "west"];
+
 const MODE_DEFS = [
   { id: "standard",        label: "NORMAL",        emoji: "🎯", color: "#FFD700", blurb: "Survive as long as you can" },
   { id: "score_attack",    label: "SCORE ATTACK",  emoji: "⏱",  color: "#FF6600", blurb: "5 min · faster spawns · max score" },
@@ -309,11 +311,11 @@ export default function HomeV2(props) {
     }
     switchTab("codex");
   }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
-  const completeAimCheck = useCallback(() => {
+  const completeAimCheck = useCallback((buckets = ALL_DIRECTIONS) => {
     const record = saveInputCalibration(buildInputCalibrationRecord({
       source: gamepadConnected ? (effectiveControllerType || "controller") : "mouse",
       controllerType: effectiveControllerType || "none",
-      buckets: ["east", "north", "south", "west"],
+      buckets,
     }));
     setInputCalibration(record);
     recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source });
@@ -910,6 +912,7 @@ export default function HomeV2(props) {
       {showAimCheck && (
         <AimCheckPanel
           controllerType={effectiveControllerType}
+          gamepadConnected={gamepadConnected}
           onVerify={completeAimCheck}
           onDiagnostics={() => {
             localStorage.setItem("cod-debug-input", "1");
@@ -977,45 +980,95 @@ export default function HomeV2(props) {
   );
 }
 
-function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
-  const targetStyle = () => ({
-    minHeight: 64,
-    borderRadius: 8,
-    border: "1px solid rgba(0,229,255,0.28)",
-    background: "rgba(0,229,255,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#B9F3FF",
-    fontSize: 12,
-    fontWeight: 900,
-    letterSpacing: 1,
-    textAlign: "center",
-  });
+function AimCheckPanel({ controllerType, gamepadConnected, onVerify, onDiagnostics, onClose }) {
+  const [covered, setCovered] = useState(new Set());
+  const allCovered = covered.size >= 4;
+  const canVerify = gamepadConnected || allCovered;
+
+  const markZone = useCallback((dir) => {
+    setCovered(prev => {
+      if (prev.has(dir)) return prev;
+      const next = new Set(prev);
+      next.add(dir);
+      return next;
+    });
+  }, []);
+
+  const zoneStyle = (dir) => {
+    const hit = covered.has(dir);
+    return {
+      minHeight: 64, borderRadius: 8,
+      border: `1px solid ${hit ? "rgba(0,255,136,0.65)" : "rgba(0,229,255,0.28)"}`,
+      background: hit ? "rgba(0,255,136,0.11)" : "rgba(0,229,255,0.06)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      color: hit ? "#00FF88" : "#B9F3FF",
+      fontSize: 12, fontWeight: 900, letterSpacing: 1, textAlign: "center",
+      cursor: "crosshair", transition: "background 0.12s, border-color 0.12s, color 0.12s",
+      userSelect: "none",
+    };
+  };
+
   const device = controllerType && controllerType !== "controller"
     ? controllerType.toUpperCase()
     : "MOUSE / TOUCH / CONTROLLER";
+  const instruction = gamepadConnected
+    ? `Press any direction on your controller to confirm. — ${device}`
+    : allCovered
+    ? `All clear — click VERIFY CONTROLS. — ${device}`
+    : `Sweep aim through each zone. (${covered.size}/4) — ${device}`;
+
+  const handleVerify = () => {
+    onVerify(gamepadConnected ? ALL_DIRECTIONS : Array.from(covered).sort());
+  };
+
   return (
     <div style={PANEL}>
       <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
         <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
         <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
         <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
-          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+          {instruction}
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
           <div />
-          <div style={targetStyle("north")}>NORTH</div>
+          <div
+            data-direction="north"
+            style={zoneStyle("north")}
+            onPointerOver={() => markZone("north")}
+          >
+            {covered.has("north") ? "✓ N" : "NORTH"}
+          </div>
           <div />
-          <div style={targetStyle("west")}>WEST</div>
-          <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
-          <div style={targetStyle("east")}>EAST</div>
+          <div
+            data-direction="west"
+            style={zoneStyle("west")}
+            onPointerOver={() => markZone("west")}
+          >
+            {covered.has("west") ? "✓ W" : "WEST"}
+          </div>
+          <div style={{ minHeight: 76, borderRadius: 8, border: "1px solid rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFB36B", fontSize: 12, fontWeight: 900, letterSpacing: 1, textAlign: "center" }}>PLAYER</div>
+          <div
+            data-direction="east"
+            style={zoneStyle("east")}
+            onPointerOver={() => markZone("east")}
+          >
+            {covered.has("east") ? "✓ E" : "EAST"}
+          </div>
           <div />
-          <div style={targetStyle("south")}>SOUTH</div>
+          <div
+            data-direction="south"
+            style={zoneStyle("south")}
+            onPointerOver={() => markZone("south")}
+          >
+            {covered.has("south") ? "✓ S" : "SOUTH"}
+          </div>
           <div />
         </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+          <button
+            onClick={handleVerify}
+            disabled={!canVerify}
+            style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: canVerify ? "linear-gradient(180deg,#00E5FF,#007A99)" : "rgba(0,229,255,0.08)", color: canVerify ? "#001018" : "#3A7A88", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: canVerify ? "pointer" : "not-allowed", fontFamily: "inherit", transition: "background 0.18s, color 0.18s" }}>
             VERIFY CONTROLS
           </button>
           <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>

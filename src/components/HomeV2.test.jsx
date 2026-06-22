@@ -2,6 +2,16 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+// jsdom does not include PointerEvent; polyfill so pointer event dispatch works in tests
+if (typeof PointerEvent === "undefined") {
+  globalThis.PointerEvent = class PointerEvent extends MouseEvent {
+    constructor(type, params = {}) {
+      super(type, params);
+      this.pointerId = params.pointerId ?? 1;
+    }
+  };
+}
+
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock("../supabase.js", () => ({ supabase: null, getOrCreateClientUid: () => "test-uid", getAuthUid: () => null }));
@@ -159,27 +169,86 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("DEBUG INPUT");
   });
 
-  it("turns Aim Check into a local controls-verified receipt", async () => {
+  it("requires zone sweep before VERIFY CONTROLS is enabled (mouse)", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
       root = createRoot(container);
-      root.render(<HomeV2 {...baseProps} />);
+      root.render(<HomeV2 {...baseProps} gamepadConnected={false} />);
     });
 
     const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
-    expect(aimButton).toBeTruthy();
     await act(async () => { aimButton.click(); });
     expect(container.textContent).toContain("Verify Full-Circle Control");
 
-    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
-    expect(verifyButton).toBeTruthy();
-    await act(async () => { verifyButton.click(); });
+    const verifyBtn = () => [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
+    expect(verifyBtn()?.disabled).toBe(true);
+    expect(container.textContent).toContain("(0/4)");
+
+    // Sweep aim through all 4 directional zones
+    for (const dir of ["north", "east", "west", "south"]) {
+      const zone = container.querySelector(`[data-direction="${dir}"]`);
+      expect(zone).toBeTruthy();
+      await act(async () => {
+        zone.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
+      });
+    }
+
+    expect(verifyBtn()?.disabled).toBe(false);
+    expect(container.textContent).toContain("All clear");
+
+    await act(async () => { verifyBtn().click(); });
 
     const saved = loadInputCalibration();
     expect(saved?.complete).toBe(true);
     expect(saved?.buckets).toEqual(["east", "north", "south", "west"]);
     expect(container.textContent).toContain("AIM CHECK VERIFIED");
+  });
+
+  it("allows immediate VERIFY CONTROLS when gamepad is connected", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} gamepadConnected={true} controllerType="xbox" />);
+    });
+
+    const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    await act(async () => { aimButton.click(); });
+
+    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
+    expect(verifyButton?.disabled).toBe(false);
+
+    await act(async () => { verifyButton.click(); });
+
+    const saved = loadInputCalibration();
+    expect(saved?.complete).toBe(true);
+    expect(saved?.source).toBe("xbox");
+  });
+
+  it("shows incremental zone progress in AimCheck panel instructions", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} gamepadConnected={false} />);
+    });
+
+    const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    await act(async () => { aimButton.click(); });
+    expect(container.textContent).toContain("(0/4)");
+
+    const northZone = container.querySelector('[data-direction="north"]');
+    await act(async () => {
+      northZone.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
+    });
+    expect(container.textContent).toContain("(1/4)");
+
+    const eastZone = container.querySelector('[data-direction="east"]');
+    await act(async () => {
+      eastZone.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
+    });
+    expect(container.textContent).toContain("(2/4)");
   });
 
   it("surfaces remembered input calibration and controller profile status", async () => {
