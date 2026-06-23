@@ -159,7 +159,7 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("DEBUG INPUT");
   });
 
-  it("turns Aim Check into a local controls-verified receipt", async () => {
+  it("turns Aim Check into a local controls-verified receipt via interactive targets", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -170,16 +170,26 @@ describe("HomeV2", () => {
     const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
     expect(aimButton).toBeTruthy();
     await act(async () => { aimButton.click(); });
-    expect(container.textContent).toContain("Verify Full-Circle Control");
+    expect(container.textContent).toContain("Tap Each Direction");
 
-    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
-    expect(verifyButton).toBeTruthy();
-    await act(async () => { verifyButton.click(); });
+    // tap all four directional targets
+    for (const dir of ["NORTH", "EAST", "SOUTH", "WEST"]) {
+      const target = [...container.querySelectorAll("button")].find(b => b.textContent.trim() === dir || b.textContent.includes(dir));
+      expect(target).toBeTruthy();
+      await act(async () => { target.click(); });
+    }
+
+    // all four hit → panel now shows "SAVE VERIFIED"
+    expect(container.textContent).toContain("SAVE VERIFIED");
+    expect(container.textContent).toContain("AIM CHECK VERIFIED");
+
+    const saveBtn = [...container.querySelectorAll("button")].find(b => /SAVE VERIFIED/.test(b.textContent));
+    expect(saveBtn).toBeTruthy();
+    await act(async () => { saveBtn.click(); });
 
     const saved = loadInputCalibration();
     expect(saved?.complete).toBe(true);
-    expect(saved?.buckets).toEqual(["east", "north", "south", "west"]);
-    expect(container.textContent).toContain("AIM CHECK VERIFIED");
+    expect(new Set(saved?.buckets)).toEqual(new Set(["east", "north", "south", "west"]));
   });
 
   it("surfaces remembered input calibration and controller profile status", async () => {

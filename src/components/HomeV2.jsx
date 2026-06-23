@@ -15,7 +15,8 @@ import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
-import { buildInputCalibrationNudge, buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
+import { buildInputCalibrationNudge, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
+import { buildCalibrationRingState, buildCalibrationRingRecord, isCalibrationRingComplete, registerCalibrationHit } from "../utils/calibrationRing.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
@@ -309,14 +310,14 @@ export default function HomeV2(props) {
     }
     switchTab("codex");
   }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
-  const completeAimCheck = useCallback(() => {
-    const record = saveInputCalibration(buildInputCalibrationRecord({
-      source: gamepadConnected ? (effectiveControllerType || "controller") : "mouse",
-      controllerType: effectiveControllerType || "none",
-      buckets: ["east", "north", "south", "west"],
-    }));
+  const completeAimCheck = useCallback((ringState) => {
+    const source = gamepadConnected ? (effectiveControllerType || "controller") : "mouse";
+    const record = saveInputCalibration(buildCalibrationRingRecord(
+      ringState || buildCalibrationRingState(),
+      { source, controllerType: effectiveControllerType || "none" },
+    ));
     setInputCalibration(record);
-    recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source });
+    recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source, complete: record.complete });
     setShowAimCheck(false);
   }, [effectiveControllerType, gamepadConnected, recordFrontDoorAction]);
   const launchHistorySeed = useCallback((seed, challenge = {}) => {
@@ -978,51 +979,93 @@ export default function HomeV2(props) {
 }
 
 function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
-  const targetStyle = () => ({
-    minHeight: 64,
-    borderRadius: 8,
-    border: "1px solid rgba(0,229,255,0.28)",
-    background: "rgba(0,229,255,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#B9F3FF",
-    fontSize: 12,
-    fontWeight: 900,
-    letterSpacing: 1,
-    textAlign: "center",
-  });
+  const [ring, setRing] = useState(buildCalibrationRingState);
+  const complete = isCalibrationRingComplete(ring);
+  const coveredCount = ring.covered.size;
+
+  const hitTarget = useCallback((bucket) => {
+    setRing((prev) => registerCalibrationHit(prev, bucket));
+  }, []);
+
   const device = controllerType && controllerType !== "controller"
     ? controllerType.toUpperCase()
     : "MOUSE / TOUCH / CONTROLLER";
+
+  const targetCell = (bucket, label) => {
+    const hit = ring.covered.has(bucket);
+    return (
+      <button
+        key={bucket}
+        onClick={() => hitTarget(bucket)}
+        style={{
+          minHeight: 64,
+          borderRadius: 8,
+          border: `2px solid ${hit ? "rgba(0,255,136,0.7)" : "rgba(0,229,255,0.35)"}`,
+          background: hit ? "rgba(0,255,136,0.12)" : "rgba(0,229,255,0.05)",
+          color: hit ? "#00FF88" : "#B9F3FF",
+          fontSize: 11,
+          fontWeight: 900,
+          letterSpacing: 1,
+          cursor: hit ? "default" : "pointer",
+          fontFamily: "inherit",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 4,
+          transition: "border-color 0.18s, background 0.18s, color 0.18s",
+        }}
+        aria-pressed={hit}
+        aria-label={`${label} aim target${hit ? " — verified" : ""}`}
+      >
+        <span style={{ fontSize: 16 }}>{hit ? "✓" : "○"}</span>
+        {label}
+      </button>
+    );
+  };
+
   return (
     <div style={PANEL}>
-      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
-        <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
-        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
+      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: `1px solid ${complete ? "rgba(0,255,136,0.45)" : "rgba(0,229,255,0.32)"}`, color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)", transition: "border-color 0.25s" }}>
+        <div style={{ color: complete ? "#00FF88" : "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>
+          {complete ? "AIM CHECK VERIFIED" : `AIM CHECK ${coveredCount}/4`}
+        </div>
+        <h2 style={{ margin: "8px 0 6px", fontSize: 20, color: "#FFF", letterSpacing: 1 }}>
+          {complete ? "Full-Circle Aim Confirmed" : "Tap Each Direction"}
+        </h2>
         <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
-          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+          {complete
+            ? `Controls verified for ${device}. Your calibration receipt has been saved.`
+            : `Click or tap each target to confirm your aim reaches all four directions. Device: ${device}.`}
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
           <div />
-          <div style={targetStyle("north")}>NORTH</div>
+          {targetCell("north", "NORTH")}
           <div />
-          <div style={targetStyle("west")}>WEST</div>
-          <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
-          <div style={targetStyle("east")}>EAST</div>
+          {targetCell("west", "WEST")}
+          <div style={{ minHeight: 76, borderRadius: 8, border: "2px solid rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>
+            PLAYER
+          </div>
+          {targetCell("east", "EAST")}
           <div />
-          <div style={targetStyle("south")}>SOUTH</div>
+          {targetCell("south", "SOUTH")}
           <div />
         </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            VERIFY CONTROLS
-          </button>
+          {complete ? (
+            <button onClick={() => onVerify(ring)} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00FF88,#007A55)", color: "#001810", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+              SAVE VERIFIED
+            </button>
+          ) : (
+            <button onClick={() => onVerify(ring)} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+              SAVE {coveredCount > 0 ? `(${coveredCount}/4)` : "PARTIAL"}
+            </button>
+          )}
           <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            OPEN DIAGNOSTICS
+            DIAGNOSTICS
           </button>
           <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            LATER
+            {complete ? "DONE" : "LATER"}
           </button>
         </div>
       </div>
