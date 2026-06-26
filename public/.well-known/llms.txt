@@ -1,0 +1,51 @@
+# Call of Doodie — LLM Summary
+
+## What is this?
+
+Call of Doodie (https://callofdoodie.wtf/) is a free browser-based top-down roguelite wave shooter
+developed by VaultSpark Studios LLC. It is a comedy parody game and is not affiliated with
+Activision Publishing, Inc. or the Call of Duty® franchise.
+
+## Game Summary
+
+- **Genre:** Top-down roguelite wave shooter
+- **Platform:** Browser (desktop and mobile) — no install required
+- **Price:** Free to play
+- **Developer:** VaultSpark Studios LLC (https://vaultsparkstudios.com/)
+
+## Core Loop
+
+1. Choose a callsign (pseudonym) and a starter loadout
+2. Survive escalating waves of absurd enemies: Karen, Gym Bro, Mall Cop, Influencer, etc.
+3. Earn perk points at wave-clear to build one of four archetypes: Vanguard, Gunslinger, Demolitionist, Tempo
+4. Spend 💩 coins at the wave shop on weapons, upgrades, and power-ups
+5. Die. Review your run coach debrief. Retry.
+
+## Features
+
+- **Daily Challenge:** Same seed for all players each day with global leaderboard ranking
+- **Boss Rush:** Every wave is a boss encounter
+- **Gauntlet:** Weekly fixed-challenge mode with stat mutations
+- **Speedrun:** Race the clock with a live timer
+- **Replay Codes:** 12-character codes to share or replay exact runs
+- **Ghost Rivalry:** Challenge friends or leaderboard rivals on identical seeds
+- **Replay Trust:** Cryptographic replay command traces for leaderboard integrity
+- **Run Coach:** Zero-token AI coaching based on your run history
+- **Doodie Pass:** Cosmetic-only seasonal track (never gameplay-gating)
+
+## Technical
+
+- Built with React + Vite, deployed on Cloudflare Pages
+- Service worker for offline/PWA support
+- Supabase backend for leaderboard and score submission
+- PostHog analytics, Sentry error monitoring
+
+## Legal
+
+- Privacy Policy: https://callofdoodie.wtf/privacy
+- Terms of Service: https://callofdoodie.wtf/terms
+- © 2026 VaultSpark Studios LLC. All rights reserved.
+
+## Contact
+
+VaultSpark Studios LLC — https://vaultsparkstudios.com/

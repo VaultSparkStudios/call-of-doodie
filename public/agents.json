@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Call of Doodie",
+  "name_for_model": "call_of_doodie",
+  "description_for_human": "Free browser roguelite shooter with absurd enemies, archetype perk builds, daily challenges, and global leaderboard rivalry.",
+  "description_for_model": "Call of Doodie is a free browser-based top-down roguelite wave shooter made by VaultSpark Studios. Players choose a callsign, pick a starter loadout, and survive escalating waves of absurd enemies (Karen, Gym Bro, Mall Cop, etc.). The game features perk-driven archetype builds, daily challenge seeds with global leaderboards, boss rushes, weekly mutations, a replay/challenge system, and in-depth run coaching. It runs entirely in the browser with no install required. Play at https://callofdoodie.wtf/.",
+  "contact_email": "studio@vaultsparkstudios.com",
+  "legal_info_url": "https://callofdoodie.wtf/terms",
+  "logo_url": "https://callofdoodie.wtf/icon-512.png",
+  "api": {
+    "type": "none"
+  },
+  "auth": {
+    "type": "none"
+  }
+}
