@@ -37,37 +37,37 @@
   ],
   "screenshots": [
     {
-      "src": "/launch-assets/launch-combat.svg",
+      "src": "/launch-captures/real-combat.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Combat — Survive waves of absurd enemies"
     },
     {
-      "src": "/launch-assets/launch-boss.svg",
+      "src": "/launch-assets/launch-boss.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Boss fight — Phase 2 boss encounters"
     },
     {
-      "src": "/launch-assets/launch-builds.svg",
+      "src": "/launch-assets/launch-builds.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Perk builds — Stack run-defining combos"
     },
     {
-      "src": "/launch-assets/launch-leaderboard.svg",
+      "src": "/launch-assets/launch-leaderboard.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Leaderboard — Compete globally"
     },
     {
-      "src": "/launch-assets/launch-devices.svg",
+      "src": "/launch-captures/real-mobile-controls.png",
       "sizes": "390x844",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "narrow",
       "label": "Mobile — Play on any device"
     }
