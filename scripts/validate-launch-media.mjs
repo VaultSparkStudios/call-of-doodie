@@ -9,14 +9,11 @@ const visual = JSON.parse(fs.readFileSync(path.join(ROOT, "assets", "visual-asse
 const visualRuntime = new Set((visual.assets || []).map((asset) => asset.runtimePath));
 const truthPackDoc = path.join(ROOT, "docs", "LAUNCH_SCREENSHOT_TRUTH_PACK.md");
 const verifiedCaptures = [
-  {
-    path: "public/launch-captures/real-combat.png",
-    label: "desktop combat",
-  },
-  {
-    path: "public/launch-captures/real-mobile-controls.png",
-    label: "mobile controls",
-  },
+  { path: "public/launch-captures/real-combat.png", label: "desktop combat" },
+  { path: "public/launch-captures/real-draft.png", label: "perk draft" },
+  { path: "public/launch-captures/real-deploy.png", label: "deploy dropdown" },
+  { path: "public/launch-captures/real-achievements.png", label: "achievements panel" },
+  { path: "public/launch-captures/real-mobile.png", label: "mobile gameplay" },
 ];
 
 let failures = 0;
