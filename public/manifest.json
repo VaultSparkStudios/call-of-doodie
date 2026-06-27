@@ -37,37 +37,37 @@
   ],
   "screenshots": [
     {
-      "src": "/launch-assets/launch-combat.svg",
+      "src": "/launch-captures/real-combat.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "Combat — Survive waves of absurd enemies"
     },
     {
-      "src": "/launch-assets/launch-boss.svg",
+      "src": "/launch-captures/real-draft.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "Boss fight — Phase 2 boss encounters"
+      "label": "Perk draft — Choose your edge before deployment"
     },
     {
-      "src": "/launch-assets/launch-builds.svg",
+      "src": "/launch-captures/real-deploy.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "Perk builds — Stack run-defining combos"
+      "label": "Deploy — 7 modes and 4 difficulty tiers"
     },
     {
-      "src": "/launch-assets/launch-leaderboard.svg",
+      "src": "/launch-captures/real-achievements.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "Leaderboard — Compete globally"
+      "label": "Achievements — Career progression and milestones"
     },
     {
-      "src": "/launch-assets/launch-devices.svg",
+      "src": "/launch-captures/real-mobile.png",
       "sizes": "390x844",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "narrow",
       "label": "Mobile — Play on any device"
     }
