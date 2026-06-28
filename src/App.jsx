@@ -96,9 +96,8 @@ import {
   createRunHistoryEntry,
   createRunStartArtifacts,
   createScoreSubmitStudioEvents,
-  resolveRunModeFromFlags,
 } from "./systems/runSession.js";
-import { buildDeathScreenProps } from "./systems/deathFlow.js";
+import { buildDeathScreenProps, buildScoreSubmitPlan } from "./systems/deathFlow.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 
@@ -1864,16 +1863,17 @@ export default function CallOfDoodie() {
 
   // ── Score submit ──────────────────────────────────────────────────────────
   const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {
-    const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
-    const sett = settingsRef.current;
-    const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
-    const mode = resolveRunModeFromFlags({
-      scoreAttack: scoreAttackRef.current,
-      dailyChallenge: dailyChallengeRef.current,
-      cursed: cursedRunRef.current,
-      bossRush: bossRushRef.current,
-      speedrun: speedrunRef.current,
-      gauntlet: gauntletRef.current,
+    const { mode, customSettings } = buildScoreSubmitPlan({
+      flags: {
+        scoreAttack: scoreAttackRef.current,
+        dailyChallenge: dailyChallengeRef.current,
+        cursed: cursedRunRef.current,
+        bossRush: bossRushRef.current,
+        speedrun: speedrunRef.current,
+        gauntlet: gauntletRef.current,
+      },
+      settings: settingsRef.current,
+      settingsDefaults: SETTINGS_DEFAULTS,
     });
     const commandTrace = encodeReplayCommandTrace(commandTraceRef.current || []);
     const entry = buildSessionSubmission({

@@ -15,6 +15,7 @@ import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
 import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
+import { buildSubmitFallbackPayload } from "../systems/deathFlow.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -549,15 +550,8 @@ export default function DeathScreen({
     } catch {
       setSubmitStatus('local');
       setSubmitFeedback(null);
-      saveStudioGameEvent(buildStudioGameEvent("score_submit_result", {
-        surface: "death_screen",
-        mode,
-        difficulty,
-        score,
-        wave,
-        seed: runSeed,
-        submission: "local",
-      }));
+      saveStudioGameEvent(buildStudioGameEvent("score_submit_result",
+        buildSubmitFallbackPayload({ mode, difficulty, score, wave, runSeed })));
       requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
     }
   };
