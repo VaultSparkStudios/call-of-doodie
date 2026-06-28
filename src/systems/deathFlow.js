@@ -1,3 +1,28 @@
+import { resolveRunModeFromFlags } from "./runSession.js";
+
+const SUBMIT_GAMEPLAY_KEYS = [
+  "enemySpawnMult", "enemyHealthMult", "enemySpeedMult",
+  "playerSpeedMult", "xpGainMult", "pickupMagnet", "grenadeRadiusMult",
+];
+
+export function buildScoreSubmitPlan({ flags = {}, settings = {}, settingsDefaults = {} } = {}) {
+  const mode = resolveRunModeFromFlags(flags);
+  const customSettings = SUBMIT_GAMEPLAY_KEYS.some(k => settings[k] !== settingsDefaults[k]);
+  return { mode, customSettings };
+}
+
+export function buildSubmitFallbackPayload({ mode = "standard", difficulty = "normal", score = 0, wave = 1, runSeed = null } = {}) {
+  return {
+    surface: "death_screen",
+    mode,
+    difficulty,
+    score,
+    wave,
+    seed: runSeed,
+    submission: "local",
+  };
+}
+
 export function buildDeathScreenProps({
   score,
   kills,

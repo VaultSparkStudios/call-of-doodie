@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildDeathScreenProps } from "./deathFlow.js";
+import { buildDeathScreenProps, buildScoreSubmitPlan, buildSubmitFallbackPayload } from "./deathFlow.js";
 
 describe("buildDeathScreenProps", () => {
   it("maps death screen state without reaching into React", () => {
@@ -57,5 +57,69 @@ describe("buildDeathScreenProps", () => {
     expect(props.proximityRivals).toEqual([]);
     expect(props.nearDeathEvents).toEqual([]);
     expect(props.waveScoreLog).toEqual([]);
+  });
+});
+
+describe("buildScoreSubmitPlan", () => {
+  it("resolves standard mode when no flags are set", () => {
+    const { mode } = buildScoreSubmitPlan({});
+    expect(mode).toBe("standard");
+  });
+
+  it("resolves daily_challenge when dailyChallenge flag is true", () => {
+    const { mode } = buildScoreSubmitPlan({ flags: { dailyChallenge: true } });
+    expect(mode).toBe("daily_challenge");
+  });
+
+  it("resolves score_attack over other modes by flag priority", () => {
+    const { mode } = buildScoreSubmitPlan({ flags: { scoreAttack: true, dailyChallenge: true } });
+    expect(mode).toBe("score_attack");
+  });
+
+  it("returns customSettings false when settings match defaults", () => {
+    const defaults = { enemySpawnMult: 1, enemyHealthMult: 1, playerSpeedMult: 1 };
+    const { customSettings } = buildScoreSubmitPlan({ settings: defaults, settingsDefaults: defaults });
+    expect(customSettings).toBe(false);
+  });
+
+  it("returns customSettings true when a gameplay key differs from defaults", () => {
+    const defaults = { enemySpawnMult: 1 };
+    const { customSettings } = buildScoreSubmitPlan({
+      settings: { enemySpawnMult: 2 },
+      settingsDefaults: defaults,
+    });
+    expect(customSettings).toBe(true);
+  });
+
+  it("returns customSettings false when only non-gameplay keys differ", () => {
+    const defaults = { volume: 0.8, enemySpawnMult: 1 };
+    const { customSettings } = buildScoreSubmitPlan({
+      settings: { volume: 0.5, enemySpawnMult: 1 },
+      settingsDefaults: defaults,
+    });
+    expect(customSettings).toBe(false);
+  });
+});
+
+describe("buildSubmitFallbackPayload", () => {
+  it("returns a local submission payload with the correct surface", () => {
+    const payload = buildSubmitFallbackPayload({ mode: "daily_challenge", difficulty: "hard", score: 5000, wave: 10, runSeed: 42 });
+    expect(payload).toEqual({
+      surface: "death_screen",
+      mode: "daily_challenge",
+      difficulty: "hard",
+      score: 5000,
+      wave: 10,
+      seed: 42,
+      submission: "local",
+    });
+  });
+
+  it("uses safe defaults when called with no arguments", () => {
+    const payload = buildSubmitFallbackPayload();
+    expect(payload.submission).toBe("local");
+    expect(payload.surface).toBe("death_screen");
+    expect(payload.mode).toBe("standard");
+    expect(payload.seed).toBeNull();
   });
 });
