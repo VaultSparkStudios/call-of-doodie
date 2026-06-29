@@ -1,19 +1,19 @@
-<!-- generated-by: codex studio-closeout -->
-<!-- generated-at: 2026-06-18 (Session 98 closeout) -->
+<!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
+<!-- generated-at: 2026-06-29 (Session 103 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S98 ═════════════════════╗
-║  Date: 2026-06-18  ·  SIL: 1000/1000  ·  Velocity: 6 decreasing ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S103 ════════════════════╗
+║  Date: 2026-06-29  ·  SIL: 1000/1000  ·  Velocity: 5 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED · last 5 commits ═══════════════════════════════╗
-║  ✓ perf(build): split telemetry and data vendor chunks           ║
-║  ✓ chore(lint): clear remaining warnings                         ║
-║  ✓ fix(deps): patch npm audit vulnerabilities                    ║
-║  ✓ feat(assets): add signature visual pack                       ║
-║  ✓ feat(assets): add proprietary visual pipeline                 ║
+╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
+║  ✓ `scripts/render-startup-brief.mjs`: restored canonical start  ║
+║  ✓ `scripts/lib/model-router.mjs` + `scripts/compact-handoff.mj  ║
+║  ✓ `scripts/verify-plan-mode.mjs`: restored Codex-aware `not_re  ║
+║  ✓ `scripts/closeout-autopilot.mjs`: made shell spawn hiding ex  ║
+║  ✓ `scripts/protocol-drift-check.mjs`: expanded protocol parity  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -28,32 +28,37 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md + compact handoff                   ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
-║  · context/MEMORY_INDEX.md                                       ║
-║  · agent memory (~/.claude/projects/call-of-doodie/memory/)      ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ VALIDATION ══════════════════════════════════════════════════╗
-║  Assets:        generate/check/media-check pass                  ║
-║  Audit:         npm audit 0 vulnerabilities                       ║
-║  Lint:          clean, no warnings                                ║
-║  Tests:         505/505                                           ║
-║  Browser e2e:   2/2 desktop + mobile Chromium                     ║
-║  Build:         clean, main chunk ~620 kB, no size warning         ║
-║  Protocol:      drift ok, 20/20 present                           ║
+╔══ GIT STATUS ══════════════════════════════════════════════════╗
+║  Changes: 45 files  ·  M:32 A:0 D:0 ?:13                         ║
+║  Ahead: 0  ·  Behind: 0                                          ║
+║  Branch: main                                                    ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
+║  Staging:  not configured  ·  type: —                            ║
+║  Live:     N/A — pre-deploy (FORGE)                              ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
+║  Doctor:        —                                                ║
+║  Compliance:    —                                                ║
+║  Tests:         540/540                                          ║
+║  IGNIS:         10d ago                                          ║
+║  Truth:         green                                            ║
+║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  1. Replace launch placeholder media with real screenshots.       ║
-║  2. Add first Blender-authored source asset under assets/source.  ║
-║  3. Consider telemetry lazy-load if launch LCP needs another cut. ║
+║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
-*Generated during Session 98 closeout.*
+*Generated by `scripts/render-closeout-board.mjs v1.0`*

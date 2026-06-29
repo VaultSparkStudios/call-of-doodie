@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import readline from "readline";
-import { spawnSync } from "child_process";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 import { fileURLToPath } from "url";
 import { redact } from "./lib/secrets.mjs";
 
@@ -65,6 +65,7 @@ function run(command, args = [], cwd = ROOT) {
 function sh(command, cwd = ROOT) {
   return spawnSync(command, {
     shell: true,
+    windowsHide: true,
     cwd,
     encoding: "utf8",
     stdio: "pipe",

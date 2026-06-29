@@ -1,50 +1,36 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: d122a44b85d9 -->
-<!-- generated-at: 2026-06-18T22:38:34.023Z -->
+<!-- source-hash: 281747df1aa9 -->
+<!-- generated-at: 2026-06-29T06:35:01.625Z -->
 
 # LATEST_HANDOFF (compact)
 
-## Handoff Summary — Session 101
+## Handoff Summary (compressed)
 
-Session: 101 (full audit implementation sweep)
-Intent outcome: Achieved. Audited public website/game surface; implemented all 12 ranked items; validated; closeout write-back prepared.
+Session: 102
 
-What Shipped
-- HomeV2 ops measurement copy moved behind debug flags (?debug=ops / cod-debug-ops=1).
-- Security release gate: scripts/security-release-gate.mjs, npm run security:release(:audit); launch:verify now gated.
-- functions/api/obelisk-verify.js server-side proxy with redacted receipts and honest not-configured errors; guest play preserved.
-- Legacy home retirement gate (docs + scripts/legacy-home-retirement-gate.mjs) for ?home=v1.
-- playerJourney.js + HomeV2 Journey card (DEPLOY stays primary).
-- Aim Check first-run rite with saved calibration receipt.
-- drillDirector.js; DeathScreen synthesizes next-run drill + CTA.
-- balanceLab.js (zero-token) ops-debug finding.
-- hudLayout.js debug overlay; rivalPace.js live chip.
-- Launch screenshot capture script + truth pack; verified Chromium PNGs.
-- deathFlow.js isolates DeathScreen prop mapping.
+Shipped (S102)
+- submit-score/index.ts: normalize tokenRow.expires_at via toISOString() before HMAC verify (PostgREST +00:00 vs signed Z mismatch caused all 403s)
+- public/sw.js: fixed navigation res.clone() race (clone synchronously before detached caches.open); bumped to cod-v6
+- Added 3 protocol scripts from studio-ops: insight-voice-linter.mjs, skill-brief.mjs, render-brief-delta.mjs; verified load
 
-Current Intent
-Continue audit-driven /start to /closeout loop; advance launch visual credibility and DeathScreen extraction.
+Validation
+- npm test 540/540; build passing (not re-run, no build-affecting source changes)
 
-Now Bucket (top 3)
-- Complete five-scene screenshot replacement; switch manifest from SVG fallback to verified gameplay PNGs.
-- Extract DeathScreen score-submit/debrief event planning as next deathFlow slice.
-- Add Playwright visual checks for HomeV2 first-run, returning, ops-debug, mobile states.
+Current intent
+- Verify the leaderboard score-save fix end-to-end after auto-deploy via deploy-supabase-function.yml
+
+Now bucket (top 3)
+- Push to main; confirm fixed submit-score auto-deploys and a real leaderboard save works end-to-end
+- Five-scene screenshot replacement + migrate manifest screenshots from SVG fallback to verified gameplay PNGs
+- DeathScreen score-submit extraction slice 2 into src/systems/deathFlow.js
 
 Blockers (top 3)
-- Obelisk login not a complete account system until backend verify/worker is fully wired; keep guest play default.
-- Supabase Auth + Obelisk migration receipts not yet implemented.
-- Manifest screenshots still SVG fallback pending verified gameplay captures.
+- Leaderboard fix unverified in production until push + auto-deploy completes
+- Build not re-run this session (low risk; no source changes affecting build)
+- Real gameplay PNG captures still pending to replace SVG placeholders
 
-Human-Blocked Items
-- Supabase edge-function deploy — needs SUPABASE_ACCESS_TOKEN (recurring since ~S83).
-- Itch.io publication / device PWA + gamepad QA — human/device gated (since ~S84).
-- HomeV2 v1 retirement — needs Lighthouse/funnel evidence (since ~S83).
-- Cloudflare Web Analytics beacon integrity — verify if error persists (since ~S82).
+Human-blocked
+- sync-studio-events deploy: needs SUPABASE_ACCESS_TOKEN (credential-gated; recurring across sessions)
+- PWA/gamepad device QA and Itch.io publication: human/device-gated (recurring)
 
-Validation (S101)
-- npm test 540/540; build passing; lint clean.
-- security-release-gate --npm-audit passing, 0 vulnerabilities.
-- launch:media-check passing, 2 verified gameplay captures.
-- All 12 audit items shipped in docs/AUDIT_2026-06-18_3.json.
-
-Next session: Finish five-scene gameplay screenshot replacement and flip manifest off SVG fallbacks.
+Next session: Push to main and verify a real end-to-end leaderboard save with the fixed submit-score function.

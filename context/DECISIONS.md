@@ -421,3 +421,19 @@ Decision: In the service worker navigation handler, `res.clone()` must be called
 Rationale: Once `respondWith(res)` delivers the response to the browser, the browser starts streaming `res.body`. Any subsequent `.clone()` call finds `bodyUsed === true` and throws. Cloning before the detached async gap ensures the clone is made before the body is consumed.
 
 Trade-off accepted: None — this is a correctness fix with no behavioral change for the end user.
+
+---
+
+## 2026-06-29 — Protocol truth beats force-green product scope
+
+Decision: Session 103 prioritized live `/start` and protocol-regression repairs over larger product/game items once the startup brief, Unicode transport, Codex plan-mode, and Windows-hide gates proved red or regressed in the working tree.
+
+Rationale: A durable `/arc` depends on executable `/start -> /audit -> /implement -> /closeout` surfaces. Shipping gameplay depth while the session protocol lies or fails would compound future handoff/debug costs.
+
+Trade-off accepted: The generated innovation-pack product items were not force-shipped. Supabase/analytics items remain credential-missing after explicit checks; auth waits for the existing product trigger; deterministic replay resim remains a larger runner/storage milestone; manual/device/data items require real evidence.
+
+## 2026-06-29 — Rejected timer candidate on verification
+
+Decision: Do not refactor the two `App.jsx` survival timer setup sites in Session 103.
+
+Rationale: The premise looked suspicious from grep, but both sites clear `timerRef.current` before setting a new interval and the later site appears to be a restart/reset path. Changing run timing without browser evidence would be riskier than recording the candidate as rejected-on-verification.

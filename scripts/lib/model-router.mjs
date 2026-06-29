@@ -165,8 +165,8 @@ export function withLongCache(block) { return withCache(block, { ttl: '1h' }); }
 /**
  * Replace lone UTF-16 surrogate code units before JSON leaves this process.
  * JSON.stringify can emit "\ud800"-style escapes for malformed local strings,
- * but the Anthropic API rejects those because they are not valid Unicode scalar
- * values. Valid surrogate pairs, including emoji, are preserved.
+ * but provider APIs reject those because they are not valid Unicode scalar values.
+ * Valid surrogate pairs, including emoji, are preserved.
  */
 export function sanitizeUnicodeScalars(value) {
   if (typeof value === 'string') {

@@ -1,5 +1,31 @@
 # Latest Handoff
 
+## Where We Left Off (Session 103 — arc protocol reliability + second-order hardening)
+
+**Intent outcome:** Achieved for the executable arc surface in this turn. The session started with a blocked pull because the worktree was already dirty, classified it as live repo state, repaired startup/protocol regressions found by live checks, generated a fresh audit, implemented every verified item, generated the innovation pack, and recorded honest deferrals for credential/device/product-decision gates.
+
+**Shipped**
+- `scripts/render-startup-brief.mjs`: restored canonical startup brief output by normalizing raw genius-list stdout through `normalizeGeniusBlock()` and always rendering `HUMAN PRESSURE` via `renderHumanPressureBlock()`.
+- `scripts/lib/model-router.mjs` + `scripts/compact-handoff.mjs`: restored Unicode scalar sanitization and the `--smoke-unicode` no-network regression check so malformed handoff text cannot reach provider payloads as unsafe surrogate escapes.
+- `scripts/verify-plan-mode.mjs`: restored Codex-aware `not_required` stamping for non-Claude agents and writes status to PROJECT_STATUS/session lock.
+- `scripts/closeout-autopilot.mjs`: made shell spawn hiding explicit for the Windows-hide guard.
+- `scripts/protocol-drift-check.mjs`: expanded protocol parity from 20 to 24 helpers, including `check-windows-hide`, `safe-spawn`, the runtime shim, and the codemod.
+- `docs/AUDIT_2026-06-29.json` / `.md`, `docs/IMPLEMENT_PLAN.md`, and `docs/INNOVATION_PACK.md`: recorded shipped items, the rejected timer candidate, and innovation-pack deferrals.
+
+**Validation**
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` — passing
+- `npx vitest run tests/startup-brief-boxes.test.js tests/compact-handoff-unicode-smoke.test.js` — 6/6
+- `node scripts/compact-handoff.mjs --smoke-unicode` — passing
+- `node scripts/verify-plan-mode.mjs --json` — `not_required` for Codex
+- `node scripts/check-windows-hide.mjs --json` — `ok: true`, count 0
+- `npm run protocol:drift -- --json` — 24/24 present
+
+**Next recommended slice**
+- [ ] Complete full closeout validation (`npm test`, build, doctor, secret scan) and push Session 103.
+- [ ] If Supabase/analytics credentials become ready, deploy `sync-studio-events` and update dashboard URL allowlists.
+- [ ] Keep five-scene screenshot replacement and DeathScreen score-submit extraction as the next product/game slices.
+
+---
 ## Where We Left Off (Session 102 — leaderboard submission repair + protocol tooling sync)
 
 **Intent outcome:** Achieved. Diagnosed and fixed the leaderboard 403 "signature mismatch" blocking score saves, fixed the sw.js Response clone race, and synced 3 missing protocol scripts from studio-ops.

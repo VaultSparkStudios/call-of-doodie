@@ -1,5 +1,5 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-06-14T04:10:04.679Z -->
+<!-- generated-at: 2026-06-29T06:42:46.268Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
@@ -45,3 +45,11 @@
 - Treat human/device/dashboard items as launch gates, not repo-code blockers.
 - Keep replay, leaderboard, and submission trust language evidence-backed.
 - Prefer local deterministic helpers over paid API or per-user variable cost.
+
+## Session 103 implementation ledger
+
+- Implemented second-order candidate: **protocol-drift-windows-hide-coverage** — protocol drift now tracks `scripts/check-windows-hide.mjs`, `scripts/lib/safe-spawn.mjs`, `scripts/lib/windows-hide-shim.cjs`, and `scripts/codemod-safe-spawn.mjs`; verified with `npm run protocol:drift -- --json` reporting 24/24 and `node scripts/check-windows-hide.mjs --json` reporting `ok: true`.
+- Deferred credential candidates: Supabase deploy and analytics URL allowlists remain credential-missing after `node scripts/check-secrets.mjs --for supabase` and `node scripts/check-secrets.mjs --for analytics` both returned MISSING.
+- Deferred product decision: Supabase Auth / Studio membership remains gated by the existing `docs/AUTH_INTEGRATION_PLAN.md` trigger (>500 lifetime players or paid tier decision), not by missing repo code.
+- Deferred large replay milestone: validate-replay Phase 2B still needs a full deterministic runner/storage contract. Current code honestly labels the shipped path as `heuristic_pressure_estimate` / `pressure-estimate-v1`; no deterministic-resim claim was fabricated.
+- Deferred human/device/data gates: manual QA, Lighthouse delta capture, analytics funnel comparison, and Discord/community link need real device, production traffic, dashboard, or community readiness evidence.

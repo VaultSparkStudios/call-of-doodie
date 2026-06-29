@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-29",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 103,
+    "axisWeights": {
+      "gamification": 3,
+      "ux": 2,
+      "feature-depth": 1.5,
+      "ai": 1.5,
+      "security": 1,
+      "speed": 1,
+      "token-cost": 1
+    },
+    "combinedPriority": 267.8,
+    "top3": [
+      "startup-brief-canonical-surface-regression",
+      "model-router-unicode-transport-regression",
+      "codex-plan-mode-truth-regression"
+    ]
+  },
+  "summary": {
+    "totalItems": 5,
+    "combinedPriority": 267.8,
+    "top3": [
+      "startup-brief-canonical-surface-regression",
+      "model-router-unicode-transport-regression",
+      "codex-plan-mode-truth-regression"
+    ],
+    "gameLoopReview": "No context/GAME_LOOP.md exists, so the game-loop lens used live code and task-board evidence. The highest-confidence work this pass is protocol reliability that protects future game sessions; product/game deferred items remain real but larger than the verified protocol defects discovered during /start.",
+    "premiseVerification": "Every shipped item was reproduced against the live worktree: startup brief validation failed before repair; check-windows-hide failed before repair; verify-plan-mode falsely warned for Codex before repair; compact-handoff unicode smoke and model-router sanitization were missing in the dirty diff before restoration. The duplicate timer candidate was rejected-on-verification rather than shipped because the second setup appears to be a restart path that clears the first timer."
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "slug": "startup-brief-canonical-surface-regression",
+      "title": "Startup brief canonical surface regression",
+      "axis": "speed / organization / efficiency",
+      "tier": "🔥",
+      "impact": 10,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 70.0,
+      "status": "shipped",
+      "why": "The official /start path rendered a brief that failed its own canonical validator because raw genius-list output was written as plain numbered rows and HUMAN PRESSURE vanished when no pressure item existed. That breaks multi-agent continuity before any gameplay work starts.",
+      "recipe": "Import the existing startup-brief box helpers in scripts/render-startup-brief.mjs, normalize generated genius-list output with normalizeGeniusBlock(), and always render renderHumanPressureBlock() with an honest empty state.",
+      "evidence": "Before repair, node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md failed missing GENIUS HIT LIST and HUMAN PRESSURE. After repair, brief validation passes and tests/startup-brief-boxes.test.js passes 5/5.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Wrap raw genius output in a box." },
+        "L2": { "effortHours": 1, "recipe": "Normalize genius output and render the human-pressure empty state through reusable helpers." },
+        "L3": { "effortHours": 2, "recipe": "Add full render + validator regression coverage for the complete startup brief." }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "model-router-unicode-transport-regression",
+      "title": "Model-router Unicode transport regression",
+      "axis": "security",
+      "tier": "🔥",
+      "impact": 9,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 7,
+      "priority": 63.0,
+      "status": "shipped",
+      "why": "The dirty worktree removed sanitizeUnicodeScalars(), safeJsonStringify(), and the compact-handoff --smoke-unicode path. That reopens the exact malformed UTF-16 failure class that previously broke handoff compression.",
+      "recipe": "Restore recursive Unicode scalar sanitization at the model-router serialization chokepoints and restore the compact-handoff Unicode smoke that proves lone surrogates cannot reach provider payloads.",
+      "evidence": "node scripts/compact-handoff.mjs --smoke-unicode passes, and focused compact-handoff/startup brief tests pass 6/6.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Restore sanitizeUnicodeScalars() for callClaude payloads." },
+        "L2": { "effortHours": 1, "recipe": "Restore all model-router JSON chokepoints plus the compact-handoff smoke." },
+        "L3": { "effortHours": 3, "recipe": "Add shared malformed-Unicode tests for raw Anthropic calls, batch calls, and cache-key generation." }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "codex-plan-mode-truth-regression",
+      "title": "Codex plan-mode truth regression",
+      "axis": "speed / organization / efficiency",
+      "tier": "⚡",
+      "impact": 8,
+      "effort": "0.5h",
+      "effortHours": 0.5,
+      "innovation": 6,
+      "priority": 48.0,
+      "status": "shipped",
+      "why": "Codex sessions were again warned to run Claude Code /model opusplan despite the session lock identifying agent: codex. That is an observability-honesty issue and wastes every Codex /start.",
+      "recipe": "Restore session-agent detection in scripts/verify-plan-mode.mjs and stamp not_required for non-Claude agents into PROJECT_STATUS and context/.session-lock.",
+      "evidence": "node scripts/verify-plan-mode.mjs --json returns status not_required, agent codex, and reason 'agent codex does not support Claude Code plan-mode'.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Restore non-Claude not_required branch." },
+        "L2": { "effortHours": 1, "recipe": "Add focused regression coverage around Codex lock parsing and status stamping." },
+        "L3": { "effortHours": 2, "recipe": "Move plan-mode applicability into a shared agent-capability helper used by start and closeout." }
+      }
+    },
+    {
+      "id": 4,
+      "slug": "windows-hide-closeout-parity",
+      "title": "Windows-hide closeout parity",
+      "axis": "security",
+      "tier": "⚡",
+      "impact": 8,
+      "effort": "0.5h",
+      "effortHours": 0.5,
+      "innovation": 5,
+      "priority": 40.0,
+      "status": "shipped",
+      "why": "The new Windows-hide guard correctly found a shell spawn in closeout-autopilot that was not explicitly hidden. Closeout is a hot path; it must not pop OS console windows during unattended sessions.",
+      "recipe": "Route closeout-autopilot through lib/safe-spawn.mjs and add windowsHide:true to the shell:true options object so the guard can verify it locally.",
+      "evidence": "node scripts/check-windows-hide.mjs --json now reports ok true, count 0.",
+      "ladder": {
+        "L1": { "effortHours": 0.25, "recipe": "Add windowsHide:true to the flagged closeout spawn." },
+        "L2": { "effortHours": 0.5, "recipe": "Verify no direct child_process imports and no shell:true missing hide remain." },
+        "L3": { "effortHours": 2, "recipe": "Wire the guard into all local protocol validation surfaces." }
+      }
+    },
+    {
+      "id": 5,
+      "slug": "protocol-drift-windows-hide-coverage",
+      "title": "Protocol drift covers Windows-hide enforcement",
+      "axis": "speed / organization / efficiency",
+      "tier": "⚡",
+      "impact": 7,
+      "effort": "0.5h",
+      "effortHours": 0.5,
+      "innovation": 5,
+      "priority": 46.8,
+      "status": "shipped",
+      "why": "A repo could previously claim protocol drift 20/20 while missing the new window-storm guard or safe-spawn wrapper. That would make the protocol surface green while the founder-flagged Windows failure mode was unprotected.",
+      "recipe": "Add check-windows-hide.mjs and lib/safe-spawn.mjs as required protocol-drift helpers, with the runtime shim and codemod as optional but tracked helpers.",
+      "evidence": "npm run protocol:drift -- --json now reports 24/24 present, missingRequired 0, missingOptional 0.",
+      "ladder": {
+        "L1": { "effortHours": 0.25, "recipe": "Add the guard to protocol drift." },
+        "L2": { "effortHours": 0.5, "recipe": "Track the guard, wrapper, shim, and codemod in protocol drift." },
+        "L3": { "effortHours": 2, "recipe": "Add a protocol drift test that fails if future Studio OS mandatory helpers are not represented." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "app-survival-timer-duplication",
+      "reason": "Rejected-on-verification: App.jsx has two timer setup sites, but each clears timerRef.current first and the latter appears to support a restart/reset path. Shipping a timer refactor without deeper browser evidence would risk changing run timing semantics."
+    }
+  ],
+  "executionLog": [
+    { "slug": "startup-brief-canonical-surface-regression", "status": "shipped", "notes": "Renderer normalizes genius output and always renders HUMAN PRESSURE; startup brief validates." },
+    { "slug": "model-router-unicode-transport-regression", "status": "shipped", "notes": "safeJsonStringify and compact-handoff unicode smoke restored; smoke passes." },
+    { "slug": "codex-plan-mode-truth-regression", "status": "shipped", "notes": "Codex sessions stamp not_required with correct agent reason." },
+    { "slug": "windows-hide-closeout-parity", "status": "shipped", "notes": "closeout-autopilot shell spawn is hidden; guard passes." },
+    { "slug": "protocol-drift-windows-hide-coverage", "status": "shipped", "notes": "protocol drift now tracks 24 helpers including Windows-hide enforcement." }
+  ]
+}

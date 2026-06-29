@@ -710,3 +710,11 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Fixed `sw.js` navigation-handler race: `cacheResponse(c, request, res)` ran in a detached `caches.open().then()` while the browser had already started reading `res.body`, causing `Failed to execute 'clone' on 'Response': Response body is already used`. Fix: clone synchronously (`const clone = res.clone()`) before the detached promise, pass clone to `cache.put()`. Bumped CACHE_NAME from `cod-v5` to `cod-v6`.
 - Synced 3 missing scripts from vaultspark-studio-ops: `scripts/lib/insight-voice-linter.mjs`, `scripts/lib/skill-brief.mjs` (orientation brief renderer used by `/start` v1.4), `scripts/render-brief-delta.mjs` (warm-start delta path for `/start` exit-code 2). All verified to load.
 - Validation: `npm test` 540/540, `npm run build` still passing (no source changes to build-affecting files).
+
+## 2026-06-29 — Session 103 — Arc protocol reliability + second-order hardening
+
+- Ran `/goal` `/arc` continuation. Required `git pull --rebase origin main` was attempted first and failed because the worktree already had unstaged changes; fetched origin and verified `origin/main...HEAD` was 0/0, then preserved the dirty live repo state.
+- Repaired startup brief canonical validation: restored GENIUS HIT LIST normalization and HUMAN PRESSURE empty-state rendering in `scripts/render-startup-brief.mjs`; regenerated `docs/STARTUP_BRIEF.md` and validated it.
+- Restored protocol truth regressions in the dirty worktree: Unicode-safe model-router JSON transport, compact-handoff Unicode smoke, Codex plan-mode `not_required` stamping, and closeout shell spawn hiding.
+- Generated `docs/AUDIT_2026-06-29.json` / `.md`, `docs/IMPLEMENT_PLAN.md`, and refreshed `docs/INNOVATION_PACK.md`; implemented all verified audit items and recorded honest deferrals for credential/human/product-decision candidates.
+- Validation during implementation: startup brief validator passing, focused protocol tests 6/6, compact-handoff Unicode smoke passing, Codex plan-mode JSON `not_required`, Windows-hide guard clean, protocol drift 24/24, context meter CONTINUE.

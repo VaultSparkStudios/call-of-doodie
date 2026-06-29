@@ -26,6 +26,10 @@ const helpers = [
   { rel: "scripts/lib/audit-sidecar.mjs", level: "optional", purpose: "finds and updates audit JSON sidecars" },
   { rel: "scripts/session-floor.mjs", level: "optional", purpose: "gates implement/closeout saturation honestly" },
   { rel: "scripts/record-skill-cost.mjs", level: "optional", purpose: "records closeout skill-cost snapshots" },
+  { rel: "scripts/check-windows-hide.mjs", level: "required", purpose: "prevents visible Windows child-process storms" },
+  { rel: "scripts/lib/safe-spawn.mjs", level: "required", purpose: "forces windowsHide:true on child-process calls" },
+  { rel: "scripts/lib/windows-hide-shim.cjs", level: "optional", purpose: "runtime safety shim for child-process hiding" },
+  { rel: "scripts/codemod-safe-spawn.mjs", level: "optional", purpose: "rewires direct child_process imports to safe-spawn" },
   { rel: "docs/INNOVATION_PACK.md", level: "optional", purpose: "records second-order saturation candidates from ops innovation-pack" },
 ];
 

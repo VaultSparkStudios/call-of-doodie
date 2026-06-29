@@ -1280,3 +1280,16 @@ SIL +3: Repaired leaderboard submission HMAC mismatch (every score save was sile
 1. End-to-end leaderboard smoke — add a Vitest test that mocks `invokeEdgeFunction` and asserts `summarySig` roundtrips correctly through `issue-run-token`→`submit-score` canonical signature path. High probability.
 2. Five-scene screenshot replacement — capture verified combat, boss, build/debrief, leaderboard, and mobile PNGs, then update manifest from SVG fallback to production captures. High probability.
 3. DeathScreen score-submit extraction slice 2 — move replay-proof receipt packaging and debrief outcome summaries into `src/systems/deathFlow.js`. Medium probability.
+
+## 2026-06-29 — Session 103 | Total: 1000/1000 | Velocity: 5 | Debt: ↓
+
+SIL +5: Restored the reliability spine for the public game repo's Studio OS loop: startup brief canonical boxes validate again, model-router/compact-handoff are Unicode-safe again, Codex plan-mode no longer false-warns, closeout shell spawns are hidden, and protocol drift now covers Windows-hide enforcement. Generated a fresh audit plus innovation pack and recorded honest deferrals instead of force-shipping credential/device/product-decision work.
+
+**Top win:** `/start` now produces a conformant brief and the protocol gates that protect future sessions are executable from this repo.
+**Top gap:** The five-scene screenshot replacement and DeathScreen score-submit extraction remain the next product/game slices once protocol closeout is clean.
+**Intent outcome:** Achieved for `/start`, `/audit`, `/implement`, innovation expansion, validation-in-progress, and closeout write-back.
+
+**Brainstorm**
+1. Five-scene screenshot replacement — finish verified combat, boss, build/debrief, leaderboard, and mobile captures and switch manifest screenshots to gameplay PNGs. High probability.
+2. DeathScreen score-submit extraction slice 2 — move replay-proof receipt packaging and debrief outcome summaries into pure builders near `deathFlow.js`. High probability.
+3. Protocol drift execution gates — make protocol drift optionally execute critical smoke commands like Windows-hide and startup brief validation, not only check helper presence. Medium probability.

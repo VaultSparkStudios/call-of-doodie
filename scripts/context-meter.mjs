@@ -25,7 +25,8 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync } from './lib/safe-spawn.mjs';
+import { VERDICT_EXITS } from './lib/context-verdicts.mjs';
 // Inline context window sizes — keeps this script self-contained for propagation to all project repos.
 // Update here if new models are added to the studio fleet.
 function contextWindowForAgent(agent) {
@@ -485,6 +486,10 @@ if (asJson) {
   }
 }
 
-// Exit 0 on CONTINUE, 2 on CONSIDER_CLOSEOUT, 3 on CLOSEOUT — lets hooks/skills route.
-const exits = { CONTINUE: 0, CONSIDER_CLOSEOUT: 2, CLOSEOUT: 3 };
-process.exit(exits[recommendation] ?? 0);
+// Exit 0 on CONTINUE / WARN_COMPACT_SOON, 2 on CONSIDER_CLOSEOUT, 3 on CLOSEOUT —
+// lets hooks/skills route on the verdict. Exit map is the single source of truth in
+// lib/context-verdicts.mjs (shared with the tier1-context-meter-gate contract test so
+// the vocabulary + exit codes can never drift — S198). A NON-ZERO exit is a routing
+// signal, NOT a failure: callers wanting only the JSON must read stdout regardless of
+// exit status (spawnSync, not execSync).
+process.exit(VERDICT_EXITS[recommendation] ?? 0);

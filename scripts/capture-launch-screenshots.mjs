@@ -2,8 +2,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { spawn } from "node:child_process";
-import { execFileSync } from "node:child_process";
+import { spawn } from "./lib/safe-spawn.mjs";
+import { execFileSync } from "./lib/safe-spawn.mjs";
 import { chromium } from "@playwright/test";
 
 const ROOT = process.cwd();

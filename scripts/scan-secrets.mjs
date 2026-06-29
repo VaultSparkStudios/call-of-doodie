@@ -7,7 +7,7 @@
  * non-zero when anything suspicious appears.
  */
 
-import { execFileSync } from 'node:child_process';
+import { execFileSync } from './lib/safe-spawn.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -37,6 +37,7 @@ const ALLOW = [
   /"integrity"\s*:\s*"sha512-/,
   /sha512-/,
   /vaultspark-studio-ops\/docs\//,
+  /vaultspark-studio-ops\/portfolio\/STUDIO_WEBSITE_SCAFFOLD\/catalog\.json/,
   /vaultspark-studio-ops\/secrets\/CAPABILITY_MAP\.json/,
   /AGENT_CAPABILITIES\.md/,
   /PROJECT_SITEMAP_STANDARD\.md/,

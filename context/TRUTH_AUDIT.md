@@ -616,3 +616,15 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 - `public/sw.js` truth changed: navigation handler clone pattern is corrected. `cod-v5` cache was affected by the race; clients running the old SW may have had stale navigation responses. `cod-v6` clears the old cache on activate.
 - No gameplay, storage schema, or analytics surfaces changed. No contradictions introduced.
 - Validation: `npm test` 540/540, build passing.
+
+## 2026-06-29 - Session 103
+
+- Startup brief truth — `scripts/render-startup-brief.mjs` now normalizes raw genius-list output through `normalizeGeniusBlock()` and always renders HUMAN PRESSURE through `renderHumanPressureBlock()`. `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` passes.
+- Unicode transport truth — `scripts/lib/model-router.mjs` serializes model payloads through Unicode scalar sanitization, and `node scripts/compact-handoff.mjs --smoke-unicode` proves lone surrogate escapes do not reach payloads.
+- Plan-mode truth — `scripts/verify-plan-mode.mjs --json` returns `not_required` for `agent: codex`; Codex sessions should not be told to run Claude Code `/model opusplan`.
+- Windows-hide truth — `node scripts/check-windows-hide.mjs --json` reports `ok: true`, `count: 0`; `closeout-autopilot` no longer has a flagged shell spawn.
+- Protocol drift truth — `npm run protocol:drift -- --json` reports 24/24 helpers present, including Windows-hide enforcement files.
+- Innovation-pack truth — Supabase and analytics candidates remain credential-missing after explicit `check-secrets` probes; deterministic replay resim remains a future runner/storage milestone and current code honestly labels the shipped path as `heuristic_pressure_estimate` / `pressure-estimate-v1`.
+
+Overall status: green locally for focused protocol gates; full suite/build pending closeout validation.
+Last reviewed: 2026-06-29

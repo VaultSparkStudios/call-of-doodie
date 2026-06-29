@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { spawnSync } from "node:child_process";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 
 const JSON_MODE = process.argv.includes("--json");
 const closeoutGate = process.argv.includes("--closeout-gate");
