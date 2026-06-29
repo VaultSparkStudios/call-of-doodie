@@ -6,7 +6,9 @@ import path from "node:path";
 const ROOT = process.cwd();
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "public", "manifest.json"), "utf8"));
 const visual = JSON.parse(fs.readFileSync(path.join(ROOT, "assets", "visual-assets.json"), "utf8"));
-const visualRuntime = new Set((visual.assets || []).map((asset) => asset.runtimePath));
+const visualAssets = Array.isArray(visual.assets) ? visual.assets : [];
+const visualRuntime = new Set(visualAssets.map((asset) => asset.runtimePath));
+const visualByRuntime = new Map(visualAssets.map((asset) => [asset.runtimePath, asset]));
 const truthPackDoc = path.join(ROOT, "docs", "LAUNCH_SCREENSHOT_TRUTH_PACK.md");
 const verifiedCaptures = [
   {
@@ -35,8 +37,12 @@ for (const shot of screenshots) {
     continue;
   }
   if (src.endsWith(".png")) {
-    const pngRepoPath = path.join("public", src.replace(/^\//, ""));
+    const pngRepoPath = path.join("public", src.replace(/^\//, "")).replace(/\\/g, "/");
     if (!fs.existsSync(path.join(ROOT, pngRepoPath))) fail(`${src} missing manifest PNG file.`);
+    const asset = visualByRuntime.get(pngRepoPath);
+    if (!asset) fail(`${pngRepoPath} missing from assets/visual-assets.json.`);
+    if (asset && asset.sourceType !== "browser-capture") fail(`${pngRepoPath} must be a browser-capture asset, got ${asset.sourceType}.`);
+    if (asset && asset.status !== "production-ready") fail(`${pngRepoPath} must be production-ready, got ${asset.status}.`);
     continue;
   }
   const pngPublic = src.replace(/\.svg$/i, ".png");

@@ -22,6 +22,53 @@ function parseTrace(traceBodyOrTrace, traceLength = null, traceDigest = "") {
   };
 }
 
+const STEP_FRAME_BUCKET = 6;
+const DIRECTION_VECTORS = {
+  e: { dx: 1, dy: 0 },
+  se: { dx: Math.SQRT1_2, dy: Math.SQRT1_2 },
+  s: { dx: 0, dy: 1 },
+  sw: { dx: -Math.SQRT1_2, dy: Math.SQRT1_2 },
+  w: { dx: -1, dy: 0 },
+  nw: { dx: -Math.SQRT1_2, dy: -Math.SQRT1_2 },
+  n: { dx: 0, dy: -1 },
+  ne: { dx: Math.SQRT1_2, dy: -Math.SQRT1_2 },
+  neutral: { dx: 0, dy: 0 },
+};
+
+function round3(value) {
+  return Math.round((Number(value) || 0) * 1000) / 1000;
+}
+
+function directionToVector(bucket = "neutral") {
+  return DIRECTION_VECTORS[String(bucket || "neutral").toLowerCase()] || DIRECTION_VECTORS.neutral;
+}
+
+function clampPlayerState(player, canvasSize) {
+  const w = Number(canvasSize?.w) || 800;
+  const h = Number(canvasSize?.h) || 600;
+  player.x = Math.max(20, Math.min(w - 20, player.x));
+  player.y = Math.max(20, Math.min(h - 20, player.y));
+  return player;
+}
+
+function advanceState(player, movement, frames, canvasSize) {
+  const frameCount = clampInt(frames, 0, 36000, 0);
+  if (frameCount <= 0) return player;
+  player.x += movement.dx * player.speed * frameCount;
+  player.y += movement.dy * player.speed * frameCount;
+  return clampPlayerState(player, canvasSize);
+}
+
+function snapshot(frame, player, aimBucket, actionCounts, reason) {
+  return {
+    frame,
+    x: round3(player.x),
+    y: round3(player.y),
+    aimBucket,
+    actionCounts: { ...actionCounts },
+    reason,
+  };
+}
 export function buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames = 36000, submitted = {}) {
   const trace = parseTrace(traceBodyOrTrace, submitted.traceLength, submitted.traceDigest);
   const valid = isValidReplayCommandTrace(trace);
@@ -59,6 +106,64 @@ export function buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames = 3
 }
 
 
+export function runDeterministicReplayStateStepper(seed, traceBodyOrTrace, {
+  maxFrames = 36000,
+  submitted = {},
+  initialPlayer = {},
+  canvasSize = {},
+} = {}) {
+  const trace = parseTrace(traceBodyOrTrace, submitted.traceLength, submitted.traceDigest);
+  if (!isValidReplayCommandTrace(trace)) {
+    return {
+      ok: false,
+      method: "deterministic_replay_state_stepper_v1",
+      coverage: "movement_aim_only",
+      reason: "invalid-trace",
+      checkpoints: [],
+      finalState: null,
+    };
+  }
+
+  const events = decodeReplayCommandTrace(trace) || [];
+  const frameCap = clampInt(maxFrames, STEP_FRAME_BUCKET, 36000, 36000);
+  const lastEventFrame = events.at(-1)?.f ?? 0;
+  const finalFrame = Math.min(frameCap, lastEventFrame + STEP_FRAME_BUCKET);
+  const player = clampPlayerState({
+    x: Number(initialPlayer.x) || 400,
+    y: Number(initialPlayer.y) || 300,
+    speed: Number(initialPlayer.speed) || 4,
+  }, canvasSize);
+  const actionCounts = {};
+  const checkpoints = [snapshot(0, player, "neutral", actionCounts, "start")];
+  let movement = DIRECTION_VECTORS.neutral;
+  let aimBucket = "neutral";
+  let currentFrame = 0;
+
+  for (const event of events) {
+    const eventFrame = Math.min(frameCap, Math.max(0, event.f));
+    advanceState(player, movement, eventFrame - currentFrame, canvasSize);
+    currentFrame = eventFrame;
+    actionCounts[event.a] = (actionCounts[event.a] || 0) + 1;
+    if (event.a === "move") movement = directionToVector(event.v);
+    if (event.a === "aim") aimBucket = event.v || "neutral";
+    checkpoints.push(snapshot(currentFrame, player, aimBucket, actionCounts, `${event.a}:${event.v || "none"}`));
+  }
+
+  advanceState(player, movement, finalFrame - currentFrame, canvasSize);
+  currentFrame = finalFrame;
+  const finalState = snapshot(currentFrame, player, aimBucket, actionCounts, "final");
+
+  return {
+    ok: true,
+    method: "deterministic_replay_state_stepper_v1",
+    coverage: "movement_aim_only",
+    seed: clampInt(seed, 0, 999999999, 0),
+    framesSimulated: currentFrame,
+    commandCount: events.length,
+    checkpoints,
+    finalState,
+  };
+}
 export function buildDeterministicResimInputContract({
   seed = null,
   trace = null,
@@ -95,6 +200,9 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
     trace: traceBodyOrTrace,
     submitted,
   });
+  const deterministicStepper = deterministicContract.ready
+    ? runDeterministicReplayStateStepper(seed, traceBodyOrTrace, { maxFrames, submitted })
+    : null;
   const waveDrift = Math.abs(submittedWave - pressureProfile.finalWave) / Math.max(4, submittedWave);
   const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - pressureProfile.finalScore) / Math.max(2500, submittedScore) : 0;
   const driftPct = pressureProfile.valid ? Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100 : 100;
@@ -113,6 +221,7 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
     actions: pressureProfile.actions,
     pressureProfile,
     deterministicContract,
+    deterministicStepper,
     reason: pressureProfile.valid ? null : "invalid-trace",
   };
 }

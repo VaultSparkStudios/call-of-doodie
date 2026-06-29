@@ -638,3 +638,10 @@ Last reviewed: 2026-06-29
 - Deferred truth — Supabase deploy remains blocked by missing `supabase` capability; analytics production wiring remains blocked by missing `analytics` capability; launch screenshots still require verified browser capture. No fabricated data or report-only refresh was used to close those items.
 
 Overall status: green locally; live Supabase/analytics/dashboard actions remain credential/provider gated.
+
+## 2026-06-29 — Session 105 truth audit
+
+- Replay trust language remains honest. `runResim()` still reports `method: "heuristic_pressure_estimate"` and `confidence: "advisory"`; the new `deterministicStepper` is explicitly `coverage: "movement_aim_only"` and is exposed only when the deterministic input contract is ready.
+- Launch media truth improved without fabricating scenes. The manifest now uses verified browser-capture PNGs only for combat and mobile, because those files already exist with production-ready browser-capture provenance. Boss, build/debrief, and leaderboard entries remain SVG fallback art until verified captures exist.
+- Game-loop review source truth repaired. `context/GAME_LOOP.md` now exists for the canonical protocol path and points to live runtime/post-run/trust code evidence.
+- Doctor truth note: local `node scripts/ops.mjs doctor --update-json` is absent in this public repo router; closeout autopilot invokes the Studio Ops doctor path and protocol drift validates local helper parity at 24/24.

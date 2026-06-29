@@ -1,43 +1,43 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 0a2e7a000577 -->
-<!-- generated-at: 2026-06-29T07:44:39.202Z -->
+<!-- source-hash: 96ddcb769409 -->
+<!-- generated-at: 2026-06-29T19:53:41.400Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary (Session 103)
+# Handoff Summary — Session 104 (2026-06-29)
 
-## Session 103 Outcome
-- Repaired startup/protocol regressions found by live checks; implemented all verified audit items; recorded deferrals for credential/device/product gates.
+## Session State
+- Latest: Session 104. Ran continuous arc loop after syncing origin/main; prior same-day audit already shipped.
+- Generated/implemented docs/AUDIT_2026-06-29_2.json/.md plus innovation-pack pass.
 
 ## Shipped This Session
-- render-startup-brief.mjs: canonical startup brief restored via normalizeGeniusBlock + renderHumanPressureBlock.
-- model-router.mjs + compact-handoff.mjs: Unicode scalar sanitization + --smoke-unicode no-network regression check.
-- verify-plan-mode.mjs: Codex not_required stamping for non-Claude agents.
-- closeout-autopilot.mjs: explicit shell spawn hiding for Windows-hide guard.
-- protocol-drift-check.mjs: parity expanded 20 to 24 helpers.
-- Audit/plan/innovation docs updated (AUDIT_2026-06-29, IMPLEMENT_PLAN, INNOVATION_PACK).
+- buildDeathCoachTelemetry() maps weapon mismatch, precision, enemy lab, cross-run pattern, choke-point coaching into tested event contract.
+- buildScoreSubmitAnalyticsPayload() owns rejection/digest/trace-evidence analytics outside React/Supabase side effects.
+- buildDeterministicResimInputContract() reports resim readiness; runResim() still honestly labeled heuristic_pressure_estimate.
+- buildStudioGameEvent("debrief_intelligence") preserves coaching flags, weapon mismatch copy, choke-warning evidence.
+- Audit/implement artifacts updated.
 
-## Validation (passing)
-- validate-brief-format, startup-brief + unicode-smoke tests (6/6), --smoke-unicode, verify-plan-mode (not_required Codex), check-windows-hide (ok), protocol:drift 24/24.
+## Validation
+- lint, build pass. npm test 545/545 across 67 files. replay:edge-fixtures 4/4. launch:media-check pass (5 manifest screenshots, 2 verified captures).
 
 ## Current Intent
-- Durable /start to /closeout loop with arc protocol reliability; complete Session 103 closeout and push.
+- Continue durable /start -> /audit -> /implement -> /closeout loop with innovation-pack continuation.
 
 ## Now Bucket (Top 3)
-- Run full closeout validation (npm test, build, doctor, secret scan) and push Session 103.
-- Five-scene screenshot replacement; switch manifest screenshots from SVG fallback to verified gameplay PNGs.
-- DeathScreen score-submit extraction slice 2 into src/systems/deathFlow.js.
+1. Replay path: build first deterministic state-stepper behind new input contract.
+2. Verified browser scene capture for all five manifest screenshots, then launch:media-check.
+3. Replace manifest SVG fallbacks with verified gameplay PNGs.
 
 ## Blockers (Top 3)
-- Supabase/analytics credentials needed to deploy sync-studio-events and update dashboard URL allowlists.
-- Real leaderboard end-to-end save verification pending push of submit-score fix.
-- Playwright visual checks (HomeV2 first-run/returning/ops-debug/mobile) not yet added.
+1. Supabase secrets MISSING — sync-studio-events live deploy credential-gated.
+2. Analytics secrets MISSING — PostHog/Sentry production gated on dashboard/GitHub secrets.
+3. Deterministic replay resim still heuristic-only; true physics-parity remains larger trust milestone.
 
-## Human-Blocked Items (with age)
-- Supabase/analytics credentials (SUPABASE_ACCESS_TOKEN) for sync-studio-events deploy — open since Session 102 (~1 session).
-- Itch.io publication — human/device gated, open since ~Session 84 (~19 sessions).
-- Physical PWA/gamepad device QA — human/device gated, open since ~Session 84 (~19 sessions).
-- HomeV2 v1 retirement — needs Lighthouse/funnel evidence (product decision), open since ~Session 85 (~18 sessions).
+## Human-Blocked Items (age from Session 104)
+- Physical PWA install QA — manual/device, open since S104 (recurring since ~S85).
+- One real gamepad/browser combo QA — manual, open since S104 (recurring since ~S85).
+- Itch.io publication — human, open since S104 (recurring since ~S87).
+- Five-scene screenshot replacement — browser-capture, open since S104 (recurring since S97).
 
-## Next Session Pointer
-Run full closeout validation and push Session 103, then start fresh /audit against current state for the next slice.
+## Next-Session Pointer
+Build the first deterministic replay state-stepper behind buildDeterministicResimInputContract(), or run verified five-scene browser capture if doing launch polish.

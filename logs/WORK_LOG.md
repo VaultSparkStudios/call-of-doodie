@@ -726,3 +726,11 @@ Ran the requested continuous `/arc` continuation through sync, startup, live aud
 Shipped: `buildDeathCoachTelemetry()` for visible DeathScreen coaching flags; `buildScoreSubmitAnalyticsPayload()` for score-submit analytics truth; `buildDeterministicResimInputContract()` for honest replay deterministic-readiness; `runResim()` now exposes `deterministicContract` while preserving `heuristic_pressure_estimate`; `buildStudioGameEvent("debrief_intelligence")` now keeps coaching/choke-warning evidence in local Studio events.
 
 Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm run build`; `npm run replay:edge-fixtures`; `npm run launch:media-check`. Secrets probes confirm `supabase` and `analytics` remain MISSING, so live Supabase deploy and production analytics credentials stay honest deferrals.
+
+## 2026-06-29 — Session 105 Codex `/goal` arc
+
+- Ran `/start` with `git pull --rebase origin main` first; wrote Codex session lock; validated startup brief; ran blocker preflight, secrets audit, canon conformance/adoption checks, and protocol drift. Wrote missing `context/CANON_ADOPTION.md` using the official canon adoption writer.
+- Ran `/audit` with live-code verification and generated `docs/AUDIT_2026-06-29_3.json` / `.md`.
+- Implemented all three verified audit items: `context/GAME_LOOP.md`, deterministic movement/aim replay state-stepper, and verified launch-media manifest/provenance enforcement.
+- Ran innovation-pack saturation and shipped the bounded validate-replay Phase 2B follow-through: `scripts/validate-replay-state-stepper-fixtures.mjs` plus `npm run replay:state-stepper`.
+- Validation: lint clean; full tests 547/547; build passing; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check passing; protocol drift 24/24. Local `ops doctor` alias is absent; closeout autopilot uses Studio Ops doctor.

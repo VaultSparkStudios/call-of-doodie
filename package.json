@@ -44,7 +44,8 @@
     "domain:platform:plan": "node scripts/platform-domain-cutover.mjs",
     "domain:platform:apply": "node scripts/platform-domain-cutover.mjs --apply",
     "schema:lint": "node scripts/schema-lint.mjs",
-    "leaderboard:audit": "node scripts/leaderboard-audit.mjs"
+    "leaderboard:audit": "node scripts/leaderboard-audit.mjs",
+    "replay:state-stepper": "node scripts/validate-replay-state-stepper-fixtures.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",

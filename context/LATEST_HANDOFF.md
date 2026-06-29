@@ -1,3 +1,28 @@
+# Where We Left Off (Session 105)
+
+Session 105 completed the requested Codex `/goal` arc through `/start -> /audit -> /implement` and is closing out direct-to-main. The session created `docs/AUDIT_2026-06-29_3.json` / `.md`, updated `docs/IMPLEMENT_PLAN.md`, regenerated and executed the relevant part of `docs/INNOVATION_PACK.md`, and wrote missing `context/CANON_ADOPTION.md` through the official canon adoption checker.
+
+Shipped behavior and evidence:
+- Added `context/GAME_LOOP.md` so canonical `/game-loop-review` reads the expected context source instead of failing while the public game-loop doc exists.
+- Added movement/aim-only deterministic replay stepping in `src/utils/replayResim.js`; `runResim()` now exposes `deterministicStepper` only when the deterministic input contract is ready, and still labels the replay gate as `heuristic_pressure_estimate` / advisory.
+- Added `scripts/validate-replay-state-stepper-fixtures.mjs` and `npm run replay:state-stepper` as second-order innovation-pack follow-through for validate-replay Phase 2B.
+- Updated `public/manifest.json` to use verified browser-capture PNGs for combat and mobile screenshots; strengthened `scripts/validate-launch-media.mjs` so manifest PNG screenshots require production-ready browser-capture asset records.
+
+Validation:
+- `npm run lint` clean.
+- `npm test` 547/547 across 67 files.
+- `npm run build` passing.
+- `npm run replay:state-stepper` 4 fixtures passing.
+- `npm run replay:edge-fixtures` 4 fixtures passing.
+- `npm run launch:media-check` passing with 5 manifest screenshots / 2 verified captures.
+- `npm run protocol:drift -- --json` green at 24/24.
+
+Open next:
+- Build the next deterministic replay slice only after preserving the honesty boundary: current state-stepper covers movement/aim, not combat/physics parity.
+- Capture verified boss, build/debrief, and leaderboard browser screenshots before replacing the remaining SVG fallback manifest entries.
+- Supabase deploy, PostHog/Sentry production analytics, PWA install QA, and real gamepad QA remain credential/dashboard/manual-device gated.
+
+---
 # Latest Handoff
 
 ## Where We Left Off — Session 104 (2026-06-29)
@@ -1407,4 +1432,3 @@ Public-safe handoff summary:
 - [ ] Set `KOFI_VERIFICATION_TOKEN` Supabase function secret, then paste `https://<project-ref>.supabase.co/functions/v1/kofi-webhook` into Ko-fi → More → Settings → API & Webhooks
 
 - detailed handoff history remains in the private Studio OS / ops repository
-

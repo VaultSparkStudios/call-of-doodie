@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildDeterministicResimInputContract, buildReplayPressureProfile, runResim } from "./replayResim.js";
+import { encodeReplayCommandTrace } from "./replayCommandTrace.js";
+import { buildDeterministicResimInputContract, buildReplayPressureProfile, runDeterministicReplayStateStepper, runResim } from "./replayResim.js";
 import { replayTraceFixtureTable, makeMalformedTrace, makeRichTrace } from "./replayTraceFixtures.js";
 
 describe("runResim", () => {
@@ -88,6 +89,11 @@ describe("runResim", () => {
     });
     expect(result.method).toBe("heuristic_pressure_estimate");
     expect(result.deterministicContract).toMatchObject({ ready: true, method: "deterministic_resim_contract_v0" });
+    expect(result.deterministicStepper).toMatchObject({
+      ok: true,
+      method: "deterministic_replay_state_stepper_v1",
+      coverage: "movement_aim_only",
+    });
   });
 
   it("reports missing deterministic resim inputs explicitly", () => {
@@ -103,6 +109,52 @@ describe("runResim", () => {
       "submitted.wave",
       "submitted.score",
     ]));
+  });
+  it("steps valid trace movement and aim into a deterministic player state", () => {
+    const trace = encodeReplayCommandTrace([
+      { frame: 0, action: "move", value: "e" },
+      { frame: 60, action: "move", value: "s" },
+      { frame: 120, action: "aim", value: "n" },
+      { frame: 126, action: "shoot", value: "primary" },
+    ]);
+
+    const result = runDeterministicReplayStateStepper(777, trace, {
+      maxFrames: 132,
+      initialPlayer: { x: 100, y: 100, speed: 2 },
+      canvasSize: { w: 800, h: 600 },
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      method: "deterministic_replay_state_stepper_v1",
+      coverage: "movement_aim_only",
+      seed: 777,
+      commandCount: 4,
+    });
+    expect(result.finalState).toMatchObject({
+      frame: 132,
+      x: 220,
+      y: 244,
+      aimBucket: "n",
+      actionCounts: { move: 2, aim: 1, shoot: 1 },
+    });
+    expect(result.checkpoints.map((point) => point.reason)).toEqual([
+      "start",
+      "move:e",
+      "move:s",
+      "aim:n",
+      "shoot:primary",
+    ]);
+  });
+
+  it("does not step malformed traces", () => {
+    const result = runDeterministicReplayStateStepper(1, makeMalformedTrace());
+
+    expect(result).toMatchObject({
+      ok: false,
+      reason: "invalid-trace",
+      finalState: null,
+    });
   });
 });
 

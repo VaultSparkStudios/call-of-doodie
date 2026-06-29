@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-29",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 105,
+    "combinedPriority": 197.8,
+    "top3": [
+      "deterministic-replay-state-stepper",
+      "game-loop-protocol-source-bridge",
+      "launch-media-verified-capture-contract"
+    ]
+  },
+  "summary": {
+    "totalItems": 3,
+    "combinedPriority": 197.8,
+    "gameLoopReview": "The playable loop is already deep: wave pressure, boss phases, debrief coaching, replay proof, rivalry, and meta progression are all live in code. The weakest verified game-loop surface is not missing content; it is evidence continuity around replay determinism and protocol-visible design sources.",
+    "premiseVerification": "Premises were verified against live files before scoring. `docs/GAME_LOOP.md` exists while `context/GAME_LOOP.md` is absent even though the canonical game-loop-review protocol reads the context path. `src/utils/replayResim.js` exposes deterministic input-contract readiness but no state-stepper, matching PROJECT_STATUS' future-work note. `public/manifest.json` still advertises five SVG launch placeholders while `assets/visual-assets.json` and `scripts/validate-launch-media.mjs` know about two verified browser captures."
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "slug": "deterministic-replay-state-stepper",
+      "title": "First deterministic replay state-stepper",
+      "axis": "launch-confidence",
+      "tier": "fire",
+      "impact": 9,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 9,
+      "priority": 72.0,
+      "status": "shipped",
+      "why": "Replay trust is the game's most differentiated confidence loop, and current code now honestly reports readiness without claiming physics parity. The next non-fake step is a narrow deterministic movement/aim state-stepper that proves trace events can drive reproducible player state before combat resimulation is attempted.",
+      "recipe": "Add a pure movement/aim-only deterministic replay state-stepper to `src/utils/replayResim.js`, expose it from `runResim()` when the contract is ready, and test valid, invalid, and diagonal movement cases without changing the existing advisory pressure gate.",
+      "evidence": "`src/utils/replayResim.js` has `buildDeterministicResimInputContract()` and `runResim()` but no state-stepper; `context/PROJECT_STATUS.json` says full deterministic resimulation remains future work.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Decode valid traces into deterministic movement/aim checkpoints and a final player state."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Wire the stepper into `runResim()` behind the readiness contract with focused tests."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "Move projectile/enemy collision slices into the same deterministic replay stepping contract."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "game-loop-protocol-source-bridge",
+      "title": "Game-loop protocol source bridge",
+      "axis": "process quality",
+      "tier": "high",
+      "impact": 8,
+      "effort": "0.5h",
+      "effortHours": 0.5,
+      "innovation": 5,
+      "priority": 53.3,
+      "status": "shipped",
+      "why": "The game-loop-review protocol reads `context/GAME_LOOP.md`, but this repo's actual game-loop source lives at `docs/GAME_LOOP.md`. That mismatch makes future design audits look under-documented even though the source exists, and it already surfaced during this audit.",
+      "recipe": "Add `context/GAME_LOOP.md` as the protocol-readable game-loop summary, preserving the existing public `docs/GAME_LOOP.md` language and adding a short evidence note that points audits to live code and launch checks.",
+      "evidence": "`Get-Content context/GAME_LOOP.md` failed while `docs/GAME_LOOP.md` and `context/TRUTH_MAP.md` both reference game-loop truth.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Add a context copy or pointer for the game-loop source."
+        },
+        "L2": {
+          "effortHours": 0.5,
+          "recipe": "Add the context source with loop health, evidence pointers, and current open risks."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Add playtest ledger scaffolding and a validator that warns when game-loop evidence is stale."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "launch-media-verified-capture-contract",
+      "title": "Launch media verified-capture contract",
+      "axis": "ui / ux / user-experience",
+      "tier": "high",
+      "impact": 8,
+      "effort": "1.5h",
+      "effortHours": 1.5,
+      "innovation": 7,
+      "priority": 72.5,
+      "status": "shipped",
+      "why": "The manifest still points every screenshot entry at SVG placeholders even though the repo has two verified Chromium captures. The honest upgrade is to let the manifest and media gate prefer verified captures where they exist while leaving uncaptured scenes explicitly marked as fallback art.",
+      "recipe": "Update `public/manifest.json` to use verified capture PNGs for combat and mobile, keep uncaptured scenes as SVG fallbacks, and extend `scripts/validate-launch-media.mjs` so manifest PNG entries must be listed as production-ready browser captures in `assets/visual-assets.json`.",
+      "evidence": "`public/manifest.json` has five `/launch-assets/*.svg` screenshot entries; `assets/visual-assets.json` already has `real-combat-capture` and `real-mobile-controls-capture` marked production-ready.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Point manifest combat/mobile entries at existing verified captures."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Also make the media validator require production-ready visual-asset records for any manifest PNG screenshot."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Expand capture automation to boss, build/debrief, and leaderboard scenes with pixel checks."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "sync-studio-events-live-deploy",
+      "reason": "Credential-gated: `check-secrets --audit` reported no ready capabilities and PROJECT_STATUS records SUPABASE_ACCESS_TOKEN unavailable."
+    },
+    {
+      "slug": "posthog-sentry-production-analytics",
+      "reason": "Provider/dashboard-gated: blocker-preflight lists PostHog and Sentry GitHub Actions secrets as missing; no fabricated analytics data should be introduced."
+    },
+    {
+      "slug": "physical-pwa-gamepad-qa",
+      "reason": "Manual device QA: blocker-preflight correctly classifies real PWA install acceptance and real gamepad/browser combo verification as manual/device steps."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "deterministic-replay-state-stepper",
+      "status": "shipped",
+      "notes": "Added movement/aim-only deterministic replay state stepping behind the readiness contract while preserving the existing advisory pressure gate. Verified with replayResim focused tests 8/8."
+    },
+    {
+      "slug": "game-loop-protocol-source-bridge",
+      "status": "shipped",
+      "notes": "Added context/GAME_LOOP.md so the canonical game-loop-review protocol has the expected context source with live evidence pointers and open risk boundaries."
+    },
+    {
+      "slug": "launch-media-verified-capture-contract",
+      "status": "shipped",
+      "notes": "Manifest now uses verified browser-capture PNGs for combat and mobile scenes; launch media validation requires production-ready browser-capture asset records for manifest PNG screenshots."
+    }
+  ]
+}

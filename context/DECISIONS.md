@@ -437,3 +437,9 @@ Trade-off accepted: The generated innovation-pack product items were not force-s
 Decision: Do not refactor the two `App.jsx` survival timer setup sites in Session 103.
 
 Rationale: The premise looked suspicious from grep, but both sites clear `timerRef.current` before setting a new interval and the later site appears to be a restart/reset path. Changing run timing without browser evidence would be riskier than recording the candidate as rejected-on-verification.
+
+## 2026-06-29 — Session 105 replay/media honesty boundary
+
+Decision: advance deterministic replay in bounded, labeled slices. The new state-stepper is movement/aim-only and must not be described as full deterministic physics or combat resimulation. `runResim()` keeps `heuristic_pressure_estimate` / advisory labeling until combat/physics parity exists.
+
+Decision: manifest screenshot entries may point to verified browser-capture PNGs only when the capture file exists and `assets/visual-assets.json` records it as `sourceType: browser-capture` and `status: production-ready`. Uncaptured launch scenes stay as SVG fallback art instead of being relabeled as gameplay screenshots.
