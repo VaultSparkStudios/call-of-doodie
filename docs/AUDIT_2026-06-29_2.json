@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "generatedBy": "/audit skill v1.0",
+    "generatedAt": "2026-06-29",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 104,
+    "combinedPriority": 255.7,
+    "top3": [
+      "death-coach-telemetry-truth",
+      "deterministic-resim-contract-readiness",
+      "score-submit-analytics-extraction"
+    ]
+  },
+  "summary": {
+    "totalItems": 5,
+    "combinedPriority": 255.7,
+    "gameLoopReview": "Live code shows the core loop already has deep combat/debrief systems. The highest verified non-credential improvement this pass was making visible post-run coaching and score-submit outcomes measurable through tested system builders, without changing combat balance or adding paid cost.",
+    "premiseVerification": "DeathScreen rendered weapon mismatch and choke-point coaching while telemetry was assembled inline. App.submitScore also assembled analytics inline next to storage and leaderboard side effects. Both premises were verified in src/components/DeathScreen.jsx and src/App.jsx before implementation. Screenshot replacement remains real but requires browser scene capture beyond this code slice; Supabase/analytics deploy work remains credential-gated after check-secrets output reported missing capabilities. The innovation-pack replay candidate was narrowed to a truthful L1: explicit deterministic input-contract readiness, not a fake full resimulator."
+  },
+  "candidates": [
+    {
+      "id": 1,
+      "slug": "death-coach-telemetry-truth",
+      "title": "Death coach telemetry truth",
+      "axis": "user feedback loop",
+      "tier": "high",
+      "impact": 9,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 72.0,
+      "status": "shipped",
+      "why": "The DeathScreen already shows weapon mismatch, precision, enemy lab, cross-run pattern, and community choke-point coaching, but the debrief_intelligence event did not expose those visible surfaces as a stable tested contract. That makes feedback-loop analysis weaker exactly where the game is most differentiated: tactical post-run coaching.",
+      "recipe": "Extract buildDeathCoachTelemetry() into src/systems/deathFlow.js, include visible coaching flags and compact choke-warning evidence, wire DeathScreen storage and track() calls through it, and prove the event shape in deathFlow tests.",
+      "evidence": "src/systems/deathFlow.js exports buildDeathCoachTelemetry(); src/components/DeathScreen.jsx uses it for debrief_intelligence storage and PostHog track payloads; src/systems/deathFlow.test.js covers the visible coach surfaces. Focused tests pass 9/9 across deathFlow and runSession.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add boolean coaching flags to the existing debrief event."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Extract and test the event builder in the death-flow system."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Add a downstream dashboard panel for coach-surface conversion once analytics credentials are READY."
+        }
+      }
+    },
+    {
+      "id": 2,
+      "slug": "score-submit-analytics-extraction",
+      "title": "Score-submit analytics extraction",
+      "axis": "speed / organization / efficiency",
+      "tier": "high",
+      "impact": 8,
+      "effort": "0.75h",
+      "effortHours": 0.75,
+      "innovation": 6,
+      "priority": 47.7,
+      "status": "shipped",
+      "why": "App.submitScore still owned analytics payload assembly inline beside leaderboard persistence, trace evidence, global-rank lookup, and Studio event writes. Extracting the analytics shape makes the score-submit outcome contract testable without pulling React or Supabase into the assertion path.",
+      "recipe": "Add buildScoreSubmitAnalyticsPayload() to src/systems/runSession.js, use it at the track('score_submit_result') call site, and cover rejected/trace-evidence payloads in runSession tests.",
+      "evidence": "src/systems/runSession.js exports buildScoreSubmitAnalyticsPayload(); App.submitScore calls it; src/systems/runSession.test.js proves rejected submissions, digest version, and trace evidence level. Focused tests and lint pass.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Move the payload object into a helper."
+        },
+        "L2": {
+          "effortHours": 0.75,
+          "recipe": "Test the helper against rejection and trace-evidence cases."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Extract the remaining score-submit side-effect plan into one pure builder for storage events, analytics, and UI feedback."
+        }
+      }
+    },
+    {
+      "id": 3,
+      "slug": "manual-launch-screenshot-replacement",
+      "title": "Manual launch screenshot replacement",
+      "axis": "ui / ux / user-experience",
+      "tier": "high",
+      "impact": 7,
+      "effort": "2h",
+      "effortHours": 2,
+      "innovation": 5,
+      "priority": 30.0,
+      "status": "deferred",
+      "why": "The launch manifest still has a known follow-up to replace all five scenes with verified browser captures. The premise is true in TASK_BOARD and TRUTH_AUDIT, but doing it honestly requires scene capture verification rather than editing metadata by hand.",
+      "recipe": "Run the browser screenshot capture path for combat, boss, build/debrief, leaderboard, and mobile scenes, then replace manifest screenshot PNG siblings only when validate-launch-media passes.",
+      "evidence": "Deferred honestly: this session shipped code-backed telemetry/extraction items first; screenshot replacement remains queued as a browser-capture item rather than a report refresh.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Capture and verify one missing scene."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Capture all five launch scenes and run launch media validation."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Add deterministic scene fixtures so screenshots are reproducible in CI."
+        }
+      }
+    },
+    {
+      "id": 4,
+      "slug": "deterministic-resim-contract-readiness",
+      "title": "Deterministic resim contract readiness",
+      "axis": "launch-confidence",
+      "tier": "high",
+      "impact": 8,
+      "effort": "1h",
+      "effortHours": 1,
+      "innovation": 8,
+      "priority": 64,
+      "status": "shipped",
+      "why": "The innovation pack correctly keeps full deterministic replay resimulation as future work, but current code had no explicit readiness contract separating available seed/trace/submitted-score evidence from the existing heuristic pressure estimate. Without that contract, future work can overclaim deterministic parity or fail late on missing inputs.",
+      "recipe": "Add buildDeterministicResimInputContract() to replayResim, expose it from runResim alongside the existing advisory result, and test both contract-ready and missing-input cases without changing the pressure-estimate gate.",
+      "evidence": "src/utils/replayResim.js exports buildDeterministicResimInputContract(); runResim returns deterministicContract while method remains heuristic_pressure_estimate; src/utils/replayResim.test.js passes 6/6.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Report whether deterministic resim inputs are present."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Expose a tested input contract from runResim without changing advisory scoring."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Build the first deterministic replay state-stepper using pure combat helpers."
+        }
+      }
+    },
+    {
+      "id": 5,
+      "slug": "studio-event-coaching-normalizer",
+      "title": "Studio event coaching normalizer",
+      "axis": "user feedback loop",
+      "tier": "high",
+      "impact": 7,
+      "effort": "0.5h",
+      "effortHours": 0.5,
+      "innovation": 6,
+      "priority": 42,
+      "status": "shipped",
+      "why": "After extracting debrief coaching telemetry, the local Studio event normalizer still discarded coaching flags and choke-warning evidence for debrief_intelligence events. That would make local event history less truthful than PostHog analytics.",
+      "recipe": "Extend buildStudioGameEvent(\"debrief_intelligence\") normalization to preserve coaching flags, weapon mismatch copy, and compact choke-warning evidence; add a focused runIntelligence test.",
+      "evidence": "src/utils/runIntelligence.js preserves coaching, weaponDeathTip, chokeWarningWave, and chokeWarningTip; src/utils/runIntelligence.test.js covers the normalized payload.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Preserve the new coaching flags in local Studio events."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add a debrief coaching event summary tile in Run History."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Build a local coaching effectiveness dashboard once enough events exist."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "sync-studio-events-live-deploy",
+      "reason": "Credential-gated: startup check-secrets output still reports 0/0 local capabilities and PROJECT_STATUS records missing SUPABASE_ACCESS_TOKEN for the Supabase deploy path."
+    },
+    {
+      "slug": "posthog-sentry-production-analytics",
+      "reason": "Credential-gated/provider settings: blocker-preflight lists VITE_POSTHOG_KEY and VITE_SENTRY_DSN as GitHub Actions secret additions. No raw secret or fabricated analytics data was introduced."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "death-coach-telemetry-truth",
+      "status": "shipped",
+      "notes": "Visible DeathScreen coaching flags now flow through a tested deathFlow telemetry builder."
+    },
+    {
+      "slug": "score-submit-analytics-extraction",
+      "status": "shipped",
+      "notes": "Score-submit analytics payload now comes from tested runSession system helper."
+    },
+    {
+      "slug": "manual-launch-screenshot-replacement",
+      "status": "deferred",
+      "notes": "Needs honest browser scene capture and launch-media validation; not report-refreshed."
+    },
+    {
+      "slug": "deterministic-resim-contract-readiness",
+      "status": "shipped",
+      "notes": "Innovation-pack L1 shipped: deterministic replay readiness is explicit without overclaiming full resim."
+    },
+    {
+      "slug": "studio-event-coaching-normalizer",
+      "status": "shipped",
+      "notes": "Compound refinement shipped: local Studio events now retain debrief coaching truth."
+    }
+  ]
+}

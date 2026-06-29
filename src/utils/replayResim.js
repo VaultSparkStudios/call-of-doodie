@@ -58,10 +58,43 @@ export function buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames = 3
   };
 }
 
+
+export function buildDeterministicResimInputContract({
+  seed = null,
+  trace = null,
+  submitted = {},
+} = {}) {
+  const parsedTrace = parseTrace(trace, submitted.traceLength, submitted.traceDigest);
+  const validTrace = isValidReplayCommandTrace(parsedTrace);
+  const missing = [];
+  if (seed == null || seed === "" || !Number.isFinite(Number(seed))) missing.push("seed");
+  if (!parsedTrace.body) missing.push("trace.body");
+  if (!parsedTrace.digest) missing.push("trace.digest");
+  if (!validTrace) missing.push("validTrace");
+  if (!Number.isFinite(Number(submitted.wave))) missing.push("submitted.wave");
+  if (!Number.isFinite(Number(submitted.score))) missing.push("submitted.score");
+
+  return {
+    method: "deterministic_resim_contract_v0",
+    ready: missing.length === 0,
+    confidence: missing.length === 0 ? "contract-ready" : "missing-inputs",
+    seed: seed == null || seed === "" || !Number.isFinite(Number(seed)) ? null : clampInt(seed, 0, 999999999, 0),
+    traceDigest: parsedTrace.digest || "",
+    commandCount: validTrace ? decodeReplayCommandTrace(parsedTrace).length : 0,
+    submittedWave: Number.isFinite(Number(submitted.wave)) ? clampInt(submitted.wave, 1, 10000, 1) : null,
+    submittedScore: Number.isFinite(Number(submitted.score)) ? clampInt(submitted.score, 0, 10000000, 0) : null,
+    missing,
+  };
+}
 export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = {}) {
   const pressureProfile = buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames, submitted);
   const submittedWave = clampInt(submitted.wave, 1, 10000, pressureProfile.finalWave);
   const submittedScore = clampInt(submitted.score, 0, 10000000, pressureProfile.finalScore);
+  const deterministicContract = buildDeterministicResimInputContract({
+    seed,
+    trace: traceBodyOrTrace,
+    submitted,
+  });
   const waveDrift = Math.abs(submittedWave - pressureProfile.finalWave) / Math.max(4, submittedWave);
   const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - pressureProfile.finalScore) / Math.max(2500, submittedScore) : 0;
   const driftPct = pressureProfile.valid ? Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100 : 100;
@@ -79,6 +112,10 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
     commandCount: pressureProfile.commandCount,
     actions: pressureProfile.actions,
     pressureProfile,
+    deterministicContract,
     reason: pressureProfile.valid ? null : "invalid-trace",
   };
 }
+
+
+

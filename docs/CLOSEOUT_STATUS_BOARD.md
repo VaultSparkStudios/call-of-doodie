@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-06-29 (Session 103 closeout) -->
+<!-- generated-at: 2026-06-29 (Session 104 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S103 ════════════════════╗
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S104 ════════════════════╗
 ║  Date: 2026-06-29  ·  SIL: 1000/1000  ·  Velocity: 5 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ `scripts/render-startup-brief.mjs`: restored canonical start  ║
-║  ✓ `scripts/lib/model-router.mjs` + `scripts/compact-handoff.mj  ║
-║  ✓ `scripts/verify-plan-mode.mjs`: restored Codex-aware `not_re  ║
-║  ✓ `scripts/closeout-autopilot.mjs`: made shell spawn hiding ex  ║
-║  ✓ `scripts/protocol-drift-check.mjs`: expanded protocol parity  ║
+║  ✓ DeathScreen coaching telemetry truth: `buildDeathCoachTeleme  ║
+║  ✓ Score-submit analytics extraction: `buildScoreSubmitAnalytic  ║
+║  ✓ Replay trust innovation: `buildDeterministicResimInputContra  ║
+║  ✓ Studio event truth: `buildStudioGameEvent("debrief_intellige  ║
+║  ✓ Audit/implement artifacts: `docs/AUDIT_2026-06-29_2.*`, `doc  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -32,7 +32,7 @@
 ║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
+║  · context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
@@ -40,7 +40,7 @@
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 25 files  ·  M:21 A:0 D:0 ?:4                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         540/540                                          ║
+║  Tests:         545/545                                          ║
 ║  IGNIS:         10d ago                                          ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

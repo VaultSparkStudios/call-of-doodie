@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildReplayPressureProfile, runResim } from "./replayResim.js";
+import { buildDeterministicResimInputContract, buildReplayPressureProfile, runResim } from "./replayResim.js";
 import { replayTraceFixtureTable, makeMalformedTrace, makeRichTrace } from "./replayTraceFixtures.js";
 
 describe("runResim", () => {
@@ -68,4 +68,41 @@ describe("runResim", () => {
       },
     });
   });
+  it("exposes deterministic resim input-contract readiness without changing the advisory gate", () => {
+    const trace = makeRichTrace();
+    const contract = buildDeterministicResimInputContract({
+      seed: 12345,
+      trace,
+      submitted: { wave: 3, score: 1200 },
+    });
+    const result = runResim(12345, trace, 1000, { wave: 3, score: 1200 });
+
+    expect(contract).toMatchObject({
+      method: "deterministic_resim_contract_v0",
+      ready: true,
+      confidence: "contract-ready",
+      commandCount: 7,
+      submittedWave: 3,
+      submittedScore: 1200,
+      missing: [],
+    });
+    expect(result.method).toBe("heuristic_pressure_estimate");
+    expect(result.deterministicContract).toMatchObject({ ready: true, method: "deterministic_resim_contract_v0" });
+  });
+
+  it("reports missing deterministic resim inputs explicitly", () => {
+    const contract = buildDeterministicResimInputContract({ submitted: {} });
+
+    expect(contract.ready).toBe(false);
+    expect(contract.confidence).toBe("missing-inputs");
+    expect(contract.missing).toEqual(expect.arrayContaining([
+      "seed",
+      "trace.body",
+      "trace.digest",
+      "validTrace",
+      "submitted.wave",
+      "submitted.score",
+    ]));
+  });
 });
+

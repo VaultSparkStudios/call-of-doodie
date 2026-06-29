@@ -301,6 +301,10 @@ export function buildStudioGameEvent(type, payload = {}) {
           scorePerMinute: safeNullableNumber(payload.scorePerMinute),
           killsPerMinute: safeNullableNumber(payload.killsPerMinute),
           targetDelta: safeNullableNumber(payload.targetDelta),
+          coaching: payload.coaching || null,
+          weaponDeathTip: payload.weaponDeathTip || null,
+          chokeWarningWave: safeNullableNumber(payload.chokeWarning?.wave),
+          chokeWarningTip: payload.chokeWarning?.tip || null,
         })
       : type === "rivalry_result"
         ? compactObject({
@@ -413,3 +417,4 @@ export function buildStudioGameEvent(type, payload = {}) {
     payload: normalizedPayload,
   };
 }
+

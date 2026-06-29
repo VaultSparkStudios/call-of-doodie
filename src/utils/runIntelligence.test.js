@@ -97,4 +97,33 @@ describe("runIntelligence", () => {
     expect(event.payload.mode).toBe("daily_challenge");
     expect(event.payload.reasons[0]).toContain("kills exceed");
   });
+  test("preserves visible debrief coaching flags in Studio events", () => {
+    const event = buildStudioGameEvent("debrief_intelligence", {
+      mode: "standard",
+      cause: "chain_control",
+      score: 42000,
+      wave: 14,
+      coaching: {
+        weaponMismatchShown: true,
+        chokeWarningShown: true,
+      },
+      weaponDeathTip: "Mismatch: ranged threat beat a short-range build.",
+      chokeWarning: { wave: 14, tip: "Community deaths spike here." },
+    });
+
+    expect(event.payload).toMatchObject({
+      mode: "standard",
+      cause: "chain_control",
+      score: 42000,
+      wave: 14,
+      coaching: {
+        weaponMismatchShown: true,
+        chokeWarningShown: true,
+      },
+      weaponDeathTip: "Mismatch: ranged threat beat a short-range build.",
+      chokeWarningWave: 14,
+      chokeWarningTip: "Community deaths spike here.",
+    });
+  });
 });
+

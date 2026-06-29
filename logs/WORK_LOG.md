@@ -718,3 +718,11 @@ Ran /start, produced docs/AUDIT_2026-05-21_5.md/json, implemented all three audi
 - Restored protocol truth regressions in the dirty worktree: Unicode-safe model-router JSON transport, compact-handoff Unicode smoke, Codex plan-mode `not_required` stamping, and closeout shell spawn hiding.
 - Generated `docs/AUDIT_2026-06-29.json` / `.md`, `docs/IMPLEMENT_PLAN.md`, and refreshed `docs/INNOVATION_PACK.md`; implemented all verified audit items and recorded honest deferrals for credential/human/product-decision candidates.
 - Validation during implementation: startup brief validator passing, focused protocol tests 6/6, compact-handoff Unicode smoke passing, Codex plan-mode JSON `not_required`, Windows-hide guard clean, protocol drift 24/24, context meter CONTINUE.
+
+## 2026-06-29 — Session 104 — Death/debrief telemetry truth + replay contract readiness
+
+Ran the requested continuous `/arc` continuation through sync, startup, live audit, implementation, innovation-pack expansion, and closeout. The existing `docs/AUDIT_2026-06-29.*` was already fully shipped, so this session created `docs/AUDIT_2026-06-29_2.*` and implemented all repo-code-backed candidates.
+
+Shipped: `buildDeathCoachTelemetry()` for visible DeathScreen coaching flags; `buildScoreSubmitAnalyticsPayload()` for score-submit analytics truth; `buildDeterministicResimInputContract()` for honest replay deterministic-readiness; `runResim()` now exposes `deterministicContract` while preserving `heuristic_pressure_estimate`; `buildStudioGameEvent("debrief_intelligence")` now keeps coaching/choke-warning evidence in local Studio events.
+
+Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm run build`; `npm run replay:edge-fixtures`; `npm run launch:media-check`. Secrets probes confirm `supabase` and `analytics` remain MISSING, so live Supabase deploy and production analytics credentials stay honest deferrals.

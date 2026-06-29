@@ -1,36 +1,43 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 281747df1aa9 -->
-<!-- generated-at: 2026-06-29T06:35:01.625Z -->
+<!-- source-hash: 0a2e7a000577 -->
+<!-- generated-at: 2026-06-29T07:44:39.202Z -->
 
 # LATEST_HANDOFF (compact)
 
-## Handoff Summary (compressed)
+# Handoff Summary (Session 103)
 
-Session: 102
+## Session 103 Outcome
+- Repaired startup/protocol regressions found by live checks; implemented all verified audit items; recorded deferrals for credential/device/product gates.
 
-Shipped (S102)
-- submit-score/index.ts: normalize tokenRow.expires_at via toISOString() before HMAC verify (PostgREST +00:00 vs signed Z mismatch caused all 403s)
-- public/sw.js: fixed navigation res.clone() race (clone synchronously before detached caches.open); bumped to cod-v6
-- Added 3 protocol scripts from studio-ops: insight-voice-linter.mjs, skill-brief.mjs, render-brief-delta.mjs; verified load
+## Shipped This Session
+- render-startup-brief.mjs: canonical startup brief restored via normalizeGeniusBlock + renderHumanPressureBlock.
+- model-router.mjs + compact-handoff.mjs: Unicode scalar sanitization + --smoke-unicode no-network regression check.
+- verify-plan-mode.mjs: Codex not_required stamping for non-Claude agents.
+- closeout-autopilot.mjs: explicit shell spawn hiding for Windows-hide guard.
+- protocol-drift-check.mjs: parity expanded 20 to 24 helpers.
+- Audit/plan/innovation docs updated (AUDIT_2026-06-29, IMPLEMENT_PLAN, INNOVATION_PACK).
 
-Validation
-- npm test 540/540; build passing (not re-run, no build-affecting source changes)
+## Validation (passing)
+- validate-brief-format, startup-brief + unicode-smoke tests (6/6), --smoke-unicode, verify-plan-mode (not_required Codex), check-windows-hide (ok), protocol:drift 24/24.
 
-Current intent
-- Verify the leaderboard score-save fix end-to-end after auto-deploy via deploy-supabase-function.yml
+## Current Intent
+- Durable /start to /closeout loop with arc protocol reliability; complete Session 103 closeout and push.
 
-Now bucket (top 3)
-- Push to main; confirm fixed submit-score auto-deploys and a real leaderboard save works end-to-end
-- Five-scene screenshot replacement + migrate manifest screenshots from SVG fallback to verified gameplay PNGs
-- DeathScreen score-submit extraction slice 2 into src/systems/deathFlow.js
+## Now Bucket (Top 3)
+- Run full closeout validation (npm test, build, doctor, secret scan) and push Session 103.
+- Five-scene screenshot replacement; switch manifest screenshots from SVG fallback to verified gameplay PNGs.
+- DeathScreen score-submit extraction slice 2 into src/systems/deathFlow.js.
 
-Blockers (top 3)
-- Leaderboard fix unverified in production until push + auto-deploy completes
-- Build not re-run this session (low risk; no source changes affecting build)
-- Real gameplay PNG captures still pending to replace SVG placeholders
+## Blockers (Top 3)
+- Supabase/analytics credentials needed to deploy sync-studio-events and update dashboard URL allowlists.
+- Real leaderboard end-to-end save verification pending push of submit-score fix.
+- Playwright visual checks (HomeV2 first-run/returning/ops-debug/mobile) not yet added.
 
-Human-blocked
-- sync-studio-events deploy: needs SUPABASE_ACCESS_TOKEN (credential-gated; recurring across sessions)
-- PWA/gamepad device QA and Itch.io publication: human/device-gated (recurring)
+## Human-Blocked Items (with age)
+- Supabase/analytics credentials (SUPABASE_ACCESS_TOKEN) for sync-studio-events deploy — open since Session 102 (~1 session).
+- Itch.io publication — human/device gated, open since ~Session 84 (~19 sessions).
+- Physical PWA/gamepad device QA — human/device gated, open since ~Session 84 (~19 sessions).
+- HomeV2 v1 retirement — needs Lighthouse/funnel evidence (product decision), open since ~Session 85 (~18 sessions).
 
-Next session: Push to main and verify a real end-to-end leaderboard save with the fixed submit-score function.
+## Next Session Pointer
+Run full closeout validation and push Session 103, then start fresh /audit against current state for the next slice.

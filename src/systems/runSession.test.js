@@ -4,6 +4,7 @@ import {
   createRunHistoryEntry,
   createRunStartArtifacts,
   createScoreSubmitStudioEvents,
+  buildScoreSubmitAnalyticsPayload,
   resolveRunModeFromFlags,
 } from "./runSession.js";
 
@@ -107,4 +108,31 @@ describe("runSession", () => {
       weaknessReasons: ["low-movement-evidence"],
     });
   });
+  it("builds score-submit analytics payloads from submission truth", () => {
+    const payload = buildScoreSubmitAnalyticsPayload({
+      difficulty: "hard",
+      mode: "boss_rush",
+      wave: 22,
+      score: 123456,
+      result: {
+        submission: "rejected",
+        rejectionReason: "Digest mismatch",
+      },
+      eventDigest: { v: 2 },
+      traceEvidence: { evidenceLevel: "rich" },
+    });
+
+    expect(payload).toMatchObject({
+      difficulty: "hard",
+      mode: "boss_rush",
+      wave: 22,
+      score: 123456,
+      submission: "rejected",
+      rejected: true,
+      reason: "Digest mismatch",
+      eventDigestVersion: 2,
+      traceEvidenceLevel: "rich",
+    });
+  });
 });
+

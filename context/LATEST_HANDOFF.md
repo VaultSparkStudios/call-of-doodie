@@ -1,29 +1,31 @@
 # Latest Handoff
 
-## Where We Left Off (Session 103 — arc protocol reliability + second-order hardening)
+## Where We Left Off — Session 104 (2026-06-29)
 
-**Intent outcome:** Achieved for the executable arc surface in this turn. The session started with a blocked pull because the worktree was already dirty, classified it as live repo state, repaired startup/protocol regressions found by live checks, generated a fresh audit, implemented every verified item, generated the innovation pack, and recorded honest deferrals for credential/device/product-decision gates.
+Session 104 completed the requested continuous arc loop after syncing `origin/main` first. The prior same-day audit was already fully shipped, so this session generated and implemented `docs/AUDIT_2026-06-29_2.json` / `.md`, then ran an innovation-pack pass instead of stopping after one item.
 
-**Shipped**
-- `scripts/render-startup-brief.mjs`: restored canonical startup brief output by normalizing raw genius-list stdout through `normalizeGeniusBlock()` and always rendering `HUMAN PRESSURE` via `renderHumanPressureBlock()`.
-- `scripts/lib/model-router.mjs` + `scripts/compact-handoff.mjs`: restored Unicode scalar sanitization and the `--smoke-unicode` no-network regression check so malformed handoff text cannot reach provider payloads as unsafe surrogate escapes.
-- `scripts/verify-plan-mode.mjs`: restored Codex-aware `not_required` stamping for non-Claude agents and writes status to PROJECT_STATUS/session lock.
-- `scripts/closeout-autopilot.mjs`: made shell spawn hiding explicit for the Windows-hide guard.
-- `scripts/protocol-drift-check.mjs`: expanded protocol parity from 20 to 24 helpers, including `check-windows-hide`, `safe-spawn`, the runtime shim, and the codemod.
-- `docs/AUDIT_2026-06-29.json` / `.md`, `docs/IMPLEMENT_PLAN.md`, and `docs/INNOVATION_PACK.md`: recorded shipped items, the rejected timer candidate, and innovation-pack deferrals.
+Shipped:
+- DeathScreen coaching telemetry truth: `buildDeathCoachTelemetry()` now maps visible weapon mismatch, precision, enemy lab, cross-run pattern, and choke-point coaching into a tested event contract.
+- Score-submit analytics extraction: `buildScoreSubmitAnalyticsPayload()` now owns rejection/digest/trace-evidence analytics shape outside React/Supabase side effects.
+- Replay trust innovation: `buildDeterministicResimInputContract()` reports deterministic-resim readiness and missing evidence while `runResim()` remains honestly labeled `heuristic_pressure_estimate`.
+- Studio event truth: `buildStudioGameEvent("debrief_intelligence")` now preserves coaching flags, weapon mismatch copy, and choke-warning evidence instead of compacting them away.
+- Audit/implement artifacts: `docs/AUDIT_2026-06-29_2.*`, `docs/IMPLEMENT_PLAN.md`, and `docs/INNOVATION_PACK.md` reflect shipped/deferred status.
 
-**Validation**
-- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` — passing
-- `npx vitest run tests/startup-brief-boxes.test.js tests/compact-handoff-unicode-smoke.test.js` — 6/6
-- `node scripts/compact-handoff.mjs --smoke-unicode` — passing
-- `node scripts/verify-plan-mode.mjs --json` — `not_required` for Codex
-- `node scripts/check-windows-hide.mjs --json` — `ok: true`, count 0
-- `npm run protocol:drift -- --json` — 24/24 present
+Validation:
+- `npm run lint` passed.
+- `npm test` passed: 545/545 across 67 files.
+- `npm run build` passed.
+- `npm run replay:edge-fixtures` passed: 4 fixtures.
+- `npm run launch:media-check` passed: 5 manifest screenshots, 2 verified captures.
 
-**Next recommended slice**
-- [ ] Complete full closeout validation (`npm test`, build, doctor, secret scan) and push Session 103.
-- [ ] If Supabase/analytics credentials become ready, deploy `sync-studio-events` and update dashboard URL allowlists.
-- [ ] Keep five-scene screenshot replacement and DeathScreen score-submit extraction as the next product/game slices.
+Remaining honest gates:
+- `node scripts/check-secrets.mjs --for supabase` reports MISSING, so `sync-studio-events` live deploy remains credential-gated.
+- `node scripts/check-secrets.mjs --for analytics` reports MISSING, so PostHog/Sentry production analytics remain dashboard/GitHub-secret gated.
+- Physical PWA install QA, one real gamepad/browser combo, Itch.io publication, and five-scene screenshot replacement remain manual/browser-capture work.
+
+Next best repo-local move:
+- If staying code-only, continue the replay path by building the first deterministic state-stepper behind the new input contract.
+- If doing launch polish, run verified browser scene capture for all five manifest screenshots, then `npm run launch:media-check`.
 
 ---
 ## Where We Left Off (Session 102 — leaderboard submission repair + protocol tooling sync)
@@ -1405,3 +1407,4 @@ Public-safe handoff summary:
 - [ ] Set `KOFI_VERIFICATION_TOKEN` Supabase function secret, then paste `https://<project-ref>.supabase.co/functions/v1/kofi-webhook` into Ko-fi → More → Settings → API & Webhooks
 
 - detailed handoff history remains in the private Studio OS / ops repository
+

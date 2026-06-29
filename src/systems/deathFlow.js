@@ -116,3 +116,30 @@ export function buildDeathScreenProps({
     communityChokeWaves,
   };
 }
+
+export function buildDeathCoachTelemetry({
+  postRunTelemetry = {},
+  eventDigest = null,
+  runCoach = {},
+} = {}) {
+  const chokeWarning = runCoach?.brain?.chokeWarning || null;
+  return {
+    ...postRunTelemetry,
+    digestVersion: eventDigest?.v ?? null,
+    coaching: {
+      weaponTipShown: Boolean(runCoach.weaponTip),
+      weaponMismatchShown: Boolean(runCoach.weaponDeathTip),
+      precisionTipShown: Boolean(runCoach.precisionTip),
+      crossRunPatternShown: Boolean(runCoach.crossRunTip),
+      enemyLabShown: Boolean(runCoach.enemyLab),
+      chokeWarningShown: Boolean(chokeWarning),
+    },
+    weaponDeathTip: runCoach.weaponDeathTip || null,
+    chokeWarning: chokeWarning
+      ? {
+          wave: chokeWarning.wave ?? null,
+          tip: chokeWarning.tip || "",
+        }
+      : null,
+  };
+}

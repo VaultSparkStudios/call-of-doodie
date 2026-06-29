@@ -628,3 +628,13 @@ Public-safe summary only. Sensitive verification notes are maintained privately.
 
 Overall status: green locally for focused protocol gates; full suite/build pending closeout validation.
 Last reviewed: 2026-06-29
+
+## 2026-06-29 — Session 104 truth update
+
+- DeathScreen coaching telemetry truth — `src/systems/deathFlow.js` now owns `buildDeathCoachTelemetry()`, and `src/components/DeathScreen.jsx` uses it for both `debrief_intelligence` local Studio events and PostHog `debrief_intelligence_view` payloads. Visible coaching surfaces now map to explicit flags: weapon tip, weapon mismatch, precision, cross-run pattern, enemy lab, and choke warning.
+- Score-submit analytics truth — `src/systems/runSession.js` now owns `buildScoreSubmitAnalyticsPayload()`, and `App.submitScore` uses it for rejection, digest version, and trace-evidence level. Score-submit analytics no longer require reading the React side-effect block to verify payload semantics.
+- Replay resim truth — `src/utils/replayResim.js` now exposes `buildDeterministicResimInputContract()` and `runResim().deterministicContract`. The existing replay gate remains honestly labeled `heuristic_pressure_estimate` / `pressure-estimate-v1`; no deterministic parity claim was introduced.
+- Studio event truth — `buildStudioGameEvent("debrief_intelligence")` now preserves coaching flags, weapon mismatch copy, and choke-warning evidence instead of compacting those fields away.
+- Deferred truth — Supabase deploy remains blocked by missing `supabase` capability; analytics production wiring remains blocked by missing `analytics` capability; launch screenshots still require verified browser capture. No fabricated data or report-only refresh was used to close those items.
+
+Overall status: green locally; live Supabase/analytics/dashboard actions remain credential/provider gated.

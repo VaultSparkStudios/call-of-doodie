@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildDeathScreenProps } from "./deathFlow.js";
+import { buildDeathCoachTelemetry, buildDeathScreenProps } from "./deathFlow.js";
 
 describe("buildDeathScreenProps", () => {
   it("maps death screen state without reaching into React", () => {
@@ -58,4 +58,35 @@ describe("buildDeathScreenProps", () => {
     expect(props.nearDeathEvents).toEqual([]);
     expect(props.waveScoreLog).toEqual([]);
   });
+  it("builds debrief coaching telemetry from visible coach surfaces", () => {
+    const telemetry = buildDeathCoachTelemetry({
+      postRunTelemetry: { surface: "death_screen", cause: "cornered" },
+      eventDigest: { v: 2 },
+      runCoach: {
+        weaponTip: "Keep the shotgun for close mobs.",
+        weaponDeathTip: "You died to ranged threats with a short-range build.",
+        precisionTip: "Hold aim through the beat window.",
+        crossRunTip: "Gym Bro keeps ending runs.",
+        enemyLab: { pressure: "high" },
+        brain: { chokeWarning: { wave: 12, tip: "Wave 12 deletes most runs." } },
+      },
+    });
+
+    expect(telemetry).toMatchObject({
+      surface: "death_screen",
+      cause: "cornered",
+      digestVersion: 2,
+      weaponDeathTip: "You died to ranged threats with a short-range build.",
+      chokeWarning: { wave: 12, tip: "Wave 12 deletes most runs." },
+      coaching: {
+        weaponTipShown: true,
+        weaponMismatchShown: true,
+        precisionTipShown: true,
+        crossRunPatternShown: true,
+        enemyLabShown: true,
+        chokeWarningShown: true,
+      },
+    });
+  });
 });
+

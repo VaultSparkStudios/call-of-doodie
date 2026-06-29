@@ -96,6 +96,7 @@ import {
   createRunHistoryEntry,
   createRunStartArtifacts,
   createScoreSubmitStudioEvents,
+  buildScoreSubmitAnalyticsPayload,
   resolveRunModeFromFlags,
 } from "./systems/runSession.js";
 import { buildDeathScreenProps } from "./systems/deathFlow.js";
@@ -1909,14 +1910,15 @@ export default function CallOfDoodie() {
     const globalRank = result.submission === "online"
       ? await getPlayerGlobalRank(score, entry.mode || null, entry.time)
       : null;
-    track("score_submit_result", {
-      ...gameCtx({ difficulty, mode, wave, score }),
-      submission: result.submission,
-      rejected: result.submission === "rejected",
-      reason: result.rejectionReason || null,
-      eventDigestVersion: eventDigest?.v || null,
-      traceEvidenceLevel: result.traceEvidence?.level || entry.traceEvidence?.level || null,
-    });
+    track("score_submit_result", buildScoreSubmitAnalyticsPayload({
+      difficulty,
+      mode,
+      wave,
+      score,
+      result,
+      eventDigest,
+      traceEvidence: entry.traceEvidence,
+    }));
     createScoreSubmitStudioEvents({
       difficulty,
       score,
@@ -4800,3 +4802,5 @@ function InputDebugOverlay({ data }) {
     </div>
   );
 }
+
+

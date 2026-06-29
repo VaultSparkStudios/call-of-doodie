@@ -16,6 +16,7 @@ import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPa
 import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
+import { buildDeathCoachTelemetry } from "../systems/deathFlow.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -478,9 +479,14 @@ export default function DeathScreen({
     level,
     kills,
   });
+  const debriefTelemetry = buildDeathCoachTelemetry({
+    postRunTelemetry: postRunIntel.telemetry,
+    eventDigest,
+    runCoach,
+  });
 
   useEffect(() => {
-    const studioEvent = buildStudioGameEvent("debrief_intelligence", postRunIntel.telemetry);
+    const studioEvent = buildStudioGameEvent("debrief_intelligence", debriefTelemetry);
     saveStudioGameEvent(studioEvent);
     saveStudioGameEvent(buildStudioGameEvent("next_run_drill_shown", {
       surface: "death_screen",
@@ -528,12 +534,11 @@ export default function DeathScreen({
       }
     }
     track("debrief_intelligence_view", {
-      ...postRunIntel.telemetry,
-      digestVersion: eventDigest.v,
+      ...debriefTelemetry,
       studioEvent,
     });
     requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
-  }, [difficulty, eventDigest.v, mode, nextContractId, nextContractProgress, nextRunDrill.action, nextRunDrill.id, nextRunDrill.seed, postRunIntel.telemetry, runSeed, score, vsName, vsScore, wave]);
+  }, [debriefTelemetry, difficulty, mode, nextContractId, nextContractProgress, nextRunDrill.action, nextRunDrill.id, nextRunDrill.seed, runSeed, score, vsName, vsScore, wave]);
 
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
@@ -1372,3 +1377,6 @@ export default function DeathScreen({
     </div>
   );
 }
+
+
+

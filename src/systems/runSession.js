@@ -147,3 +147,25 @@ export function createScoreSubmitStudioEvents({
 
   return { mode, events };
 }
+
+export function buildScoreSubmitAnalyticsPayload({
+  difficulty = "normal",
+  mode = "standard",
+  wave = 1,
+  score = 0,
+  result = {},
+  eventDigest = null,
+  traceEvidence = null,
+} = {}) {
+  return {
+    difficulty,
+    mode,
+    wave,
+    score,
+    submission: result.submission,
+    rejected: result.submission === "rejected",
+    reason: result.rejectionReason || null,
+    eventDigestVersion: eventDigest?.v ?? null,
+    traceEvidenceLevel: result.traceEvidence?.level || traceEvidence?.level || traceEvidence?.evidenceLevel || null,
+  };
+}
