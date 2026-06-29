@@ -47,10 +47,10 @@
     "leaderboard:audit": "node scripts/leaderboard-audit.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.99.1",
+    "@supabase/supabase-js": "^2.108.2",
     "gifenc": "^1.0.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "overrides": {
     "@babel/core": "7.29.7",
