@@ -1268,21 +1268,71 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillRect(0, 0, W, H);
   }
 
-  // Touch joysticks
-  const drawStick = (ref, baseColor) => {
+  // Touch joysticks — CANON-041 elite immersive visuals
+  const drawStick = (ref, knobColor, ringColor) => {
     if (!ref.current.active) return;
     const j = ref.current, rect = canvas.getBoundingClientRect();
     const sx = W / rect.width, sy = H / rect.height;
     const cx = (j.startX - rect.left) * sx, cy = (j.startY - rect.top) * sy;
-    ctx.globalAlpha = 0.15; ctx.fillStyle = baseColor;
-    ctx.beginPath(); ctx.arc(cx, cy, 60, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 0.45;
-    const clampD = Math.min(Math.hypot(j.dx, j.dy), 50);
+    const maxR = 52;
+    const clampD = Math.min(Math.hypot(j.dx, j.dy), maxR);
     const ang = Math.atan2(j.dy, j.dx);
-    ctx.beginPath(); ctx.arc(cx + Math.cos(ang) * clampD * sx, cy + Math.sin(ang) * clampD * sy, 22, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 1;
+    const kx = cx + Math.cos(ang) * clampD * sx;
+    const ky = cy + Math.sin(ang) * clampD * sy;
+
+    // Outer boundary ring
+    ctx.globalAlpha = 0.22; ctx.strokeStyle = ringColor; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(cx, cy, 58, 0, Math.PI * 2); ctx.stroke();
+    // Inner area fill
+    ctx.globalAlpha = 0.06; ctx.fillStyle = ringColor;
+    ctx.beginPath(); ctx.arc(cx, cy, 58, 0, Math.PI * 2); ctx.fill();
+
+    // Direction line from center to knob
+    if (clampD > 10) {
+      ctx.globalAlpha = 0.35; ctx.strokeStyle = knobColor; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(kx, ky); ctx.stroke();
+    }
+
+    // Center dot
+    ctx.globalAlpha = 0.4; ctx.fillStyle = knobColor;
+    ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI * 2); ctx.fill();
+
+    // Knob body
+    ctx.globalAlpha = 0.72; ctx.fillStyle = knobColor;
+    ctx.beginPath(); ctx.arc(kx, ky, 22, 0, Math.PI * 2); ctx.fill();
+    // Knob highlight
+    const hl = ctx.createRadialGradient(kx - 5, ky - 5, 2, kx, ky, 22);
+    hl.addColorStop(0, "rgba(255,255,255,0.38)"); hl.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.globalAlpha = 0.6; ctx.fillStyle = hl;
+    ctx.beginPath(); ctx.arc(kx, ky, 22, 0, Math.PI * 2); ctx.fill();
+
+    ctx.globalAlpha = 1; ctx.lineWidth = 1;
   };
-  drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+  drawStick(joystickRef, "#AAC8FF", "#88AAFF");   // blue — MOVE
+  drawStick(shootStickRef, "#FF8855", "#FF5533"); // orange — AIM+SHOOT
+
+  // Mobile zone hints (first 2.5 s, fade when sticks activate)
+  if (isMobile) {
+    const frame = frameCountRef.current;
+    const HINT_FRAMES = 150;
+    if (frame < HINT_FRAMES && !joystickRef.current.active && !shootStickRef.current.active) {
+      const alpha = frame < 90 ? 0.55 : 0.55 * (1 - (frame - 90) / 60);
+      const yHint = H - 36;
+      ctx.font = "bold 10px monospace"; ctx.textAlign = "center";
+
+      ctx.globalAlpha = alpha * 0.7; ctx.fillStyle = "#AAC8FF";
+      ctx.beginPath(); ctx.arc(W * 0.25, yHint - 6, 20, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = alpha; ctx.fillStyle = "#C8DFFF";
+      ctx.fillText("MOVE", W * 0.25, yHint + 18);
+
+      ctx.globalAlpha = alpha * 0.7; ctx.fillStyle = "#FF7744";
+      ctx.beginPath(); ctx.arc(W * 0.75, yHint - 6, 20, 0, Math.PI * 2); ctx.fill();
+      ctx.globalAlpha = alpha; ctx.fillStyle = "#FFAA88";
+      ctx.fillText("AIM · SHOOT", W * 0.75, yHint + 18);
+
+      ctx.globalAlpha = 1;
+    }
+  }
 
   // Wave kill attribution card (shows top-3 killed types after each wave)
   if (!_rm && (gs._waveKillFeed?.framesLeft || 0) > 0) {
