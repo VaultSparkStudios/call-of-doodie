@@ -218,3 +218,4 @@ Public-safe launch roadmap summary.
 ## Deferred to Project Agents
 
 - cross-repo item owned by another repo agent:
+- [x] [SIL:2] **DONE S107** Deploy gate repair — `scripts/render-startup-brief.mjs` now normalizes plain `generate-genius-list --brief` output into a canonical boxed `GENIUS HIT LIST`, always renders a `HUMAN PRESSURE` tile with an honest empty state, and GitHub Actions has the missing Cloudflare Pages deploy secrets restored from the Studio Ops gateway. Validation: brief validator, lint, 550/550 tests, and build passing.

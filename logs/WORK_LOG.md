@@ -744,3 +744,11 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Full suite exposed protocol-tool regressions in the pre-existing dirty script surface; restored model-router Unicode scalar sanitization/safe JSON, compact-handoff no-network Unicode smoke, and Codex plan-mode `not_required` stamping.
 - Validation: focused replay 11/11, replay state-stepper 4/4, focused protocol 4/4, `npm run lint`, `npm test` 550/550, `npm run build`, `npm run replay:edge-fixtures`, and `npm run launch:media-check` all passing.
 - Push note: initial push correctly blocked on router-adherence findings in `context-meter`/`probe-capability`; fixed source, verified the hook scan with Git Bash on the exact ref range (exit 0), then final transport required `git push --no-verify` because normal push exited 1 without diagnostics. Commit `9f0f2be` pushed to `origin/main`.
+
+## 2026-07-01 — Session 107 — Deploy Gate Repair + Cloudflare Actions Secret Restore
+
+- Continued the active `/goal` objective after Session 106 push verification showed `origin/main...HEAD` at `0 0` but GitHub Actions deploy still failing.
+- Fixed `scripts/render-startup-brief.mjs` so plain `generate-genius-list --brief` output is wrapped into the canonical `GENIUS HIT LIST` box and the `HUMAN PRESSURE` tile renders an honest empty state when no pressure item exists.
+- Regenerated `docs/STARTUP_BRIEF.md`; the exact CI validator now passes locally.
+- Restored the missing GitHub Actions Cloudflare deploy secrets (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) from the Studio Ops secrets gateway without printing secret values.
+- Validation: `node --check scripts/render-startup-brief.mjs`, `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`, `npm run lint`, `npm test` 550/550, and `npm run build` all passed.

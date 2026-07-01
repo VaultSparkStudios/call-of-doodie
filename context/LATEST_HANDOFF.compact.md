@@ -1,43 +1,46 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 55e7f05b7e11 -->
-<!-- generated-at: 2026-07-01T05:54:57.252Z -->
+<!-- source-hash: 7511328bba3c -->
+<!-- generated-at: 2026-07-01T06:46:20.909Z -->
 
 # LATEST_HANDOFF (compact)
 
-Where We Left Off — Handoff Summary
+# Handoff Summary (Session 107)
 
-Session
-- Latest: 105 (2026-06-29), closing direct-to-main.
+## Session
+Session 107. Continuing Codex /goal objective (replay-combat arc from S106).
 
-Shipped (Session 105)
-- Added context/GAME_LOOP.md so canonical /game-loop-review reads expected source.
-- Added movement/aim-only deterministic replay stepping in src/utils/replayResim.js; runResim() exposes deterministicStepper only when input contract ready; gate still labeled heuristic_pressure_estimate/advisory.
-- Added scripts/validate-replay-state-stepper-fixtures.mjs + npm run replay:state-stepper (validate-replay Phase 2B follow-through).
-- Updated public/manifest.json to verified browser-capture PNGs for combat/mobile; strengthened scripts/validate-launch-media.mjs to require production-ready browser-capture records.
-- Wrote missing context/CANON_ADOPTION.md; audit/implement artifacts updated (AUDIT_2026-06-29_3, IMPLEMENT_PLAN.md, INNOVATION_PACK.md).
+## Shipped
+- Fixed scripts/render-startup-brief.mjs: normalizes plain generate-genius-list --brief output into canonical boxed GENIUS HIT LIST tile.
+- Added honest empty-state HUMAN PRESSURE tile so brief surface always present.
+- Regenerated docs/STARTUP_BRIEF.md; validate-brief-format now passes.
+- Set GitHub Actions secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID via Studio Ops gateway (no values printed).
 
-Current Intent
-- Continue durable /goal arc: /start -> /audit -> /implement, preserving replay honesty boundary and launch-media truth gates.
+## Validation
+- node --check scripts/render-startup-brief.mjs: pass
+- node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md: pass
+- npm run lint: clean
+- npm test: 550/550 across 67 files
+- npm run build: passing
 
-Validation Status
-- lint clean; test 547/547 (67 files); build passing.
-- replay:state-stepper 4/4; replay:edge-fixtures 4/4; launch:media-check passing (5 screenshots/2 verified); protocol:drift 24/24 green.
+## Current Intent
+Complete Codex /goal requirement: verify GitHub Actions deploy succeeds after brief-format-check fix and Cloudflare secret provisioning; continue deterministic replay parity design while preserving advisory replay-gate honesty boundary.
 
-Now Bucket (top 3)
-- Build next deterministic replay slice only after preserving honesty boundary (state-stepper covers movement/aim, not combat/physics parity).
-- Capture verified boss, build/debrief, and leaderboard browser screenshots, then replace remaining SVG fallback manifest entries.
-- Extend deterministic input contract toward combat/physics before claiming full replay parity.
+## Now (Top 3)
+- Verify rerun Cloudflare Pages workflow + production smoke checks after push.
+- Continue deterministic replay enemy/physics parity design (bounded; must preserve advisory/heuristic_pressure_estimate labeling).
+- Design stored trace payload for full deterministic replay.
 
-Blockers (top 3)
-- Deterministic replay parity blocked on combat/physics contract not yet defined; current receipt stays advisory.
-- Remaining manifest screenshots still SVG fallback pending verified scene captures.
-- Replay trust milestone (true physics-parity resim) remains a larger deferred design slice.
+## Blockers (Top 3)
+- Cloudflare Pages deploy previously failed: no CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID (now set; needs verification rerun).
+- brief-format-check rejected STARTUP_BRIEF.md for missing boxed GENIUS HIT LIST (fixed; needs deploy confirmation).
+- Full deterministic replay lacks enemy/physics parity; current combat slice is bounded and truth-labeled.
 
-Human-Blocked / Credential-Gated
-- Supabase live deploy (sync-studio-events / submit-score): check-secrets reports MISSING SUPABASE_ACCESS_TOKEN. Open since ~S92/S104.
-- PostHog/Sentry production analytics: dashboard/GitHub-secret gated. Open since ~S98/S104.
-- PWA install QA + real gamepad/browser QA: manual device work. Long-standing (S90+).
-- Itch.io publication: manual. Long-standing.
+## Human-Blocked (with age)
+- Supabase live deploy (sync-studio-events): credential-gated, MISSING since S104 (~3 sessions).
+- PostHog/Sentry production analytics: dashboard/secret-gated since S104 (~3 sessions).
+- PWA install QA + real gamepad/browser QA: manual/device-gated since S104 (~3 sessions).
+- Five-scene screenshot replacement / Itch.io publication: browser-capture/publication-gated, ongoing since S101 (~6 sessions).
+- Lighthouse deltas / funnel analysis: browser/data-gated since S106 (~1 session).
 
-Next Session Pointer
-- Run fresh /audit against current state; pick next repo-local slice (replay contract extension or verified scene captures) since prior audit queue is exhausted.
+## Next Session Pointer
+Push changes, confirm Cloudflare Pages workflow rerun + prod smoke pass, then resume bounded deterministic replay enemy/physics parity design.

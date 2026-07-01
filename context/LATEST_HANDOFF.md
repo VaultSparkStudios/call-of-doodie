@@ -1,3 +1,25 @@
+# Where We Left Off (Session 107)
+
+Session 107 continued the active Codex `/goal` objective after Session 106 had already pushed the replay-combat arc. The current requirement was not complete because GitHub Actions deploy failed: `brief-format-check` rejected `docs/STARTUP_BRIEF.md` for a missing boxed GENIUS HIT LIST, and Cloudflare Pages deploy had no `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` secrets configured.
+
+Shipped behavior and evidence:
+- Fixed `scripts/render-startup-brief.mjs` so plain `generate-genius-list --brief` output is normalized into the canonical boxed `GENIUS HIT LIST` tile.
+- Added an honest empty-state `HUMAN PRESSURE` tile so the recommended brief surface is always present instead of disappearing when no pressure item is detected.
+- Regenerated `docs/STARTUP_BRIEF.md`; `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` now passes.
+- Set the missing GitHub Actions `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets from the Studio Ops secrets gateway, without printing secret values.
+
+Validation:
+- `node --check scripts/render-startup-brief.mjs` — passed.
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` — passed.
+- `npm run lint` — clean.
+- `npm test` — 550/550 across 67 files.
+- `npm run build` — passing.
+
+Open next:
+- Verify the rerun Cloudflare Pages workflow and production smoke checks after push.
+- Continue deterministic replay enemy/physics parity design only after preserving the advisory replay-gate honesty boundary.
+
+---
 # Where We Left Off (Session 106)
 
 Session 106 completed the requested Codex `/goal` arc continuation through `/start -> /audit -> /implement -> /closeout`. Required `git pull --rebase origin main` was attempted first and blocked by pre-existing unstaged script changes, so the session preserved the dirty worktree, classified no stale lock/cut-off closeout artifacts, and proceeded with live-code verification.

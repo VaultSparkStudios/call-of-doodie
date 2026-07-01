@@ -853,6 +853,33 @@ function buildGeniusBoxFromMarkdown(markdown) {
   return out.join('\n');
 }
 
+function buildGeniusBoxFromBrief(briefText) {
+  const text = String(briefText ?? '').trim();
+  if (!text) return '';
+  if (/╔[^\n]*GENIUS HIT LIST|║\s*GENIUS HIT LIST/.test(text)) return text;
+
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (lines.length === 0) return '';
+
+  const out = [top('GENIUS HIT LIST')];
+  for (const line of lines.slice(0, 8)) {
+    const chunks = [];
+    let rest = line.replace(/\s+/g, ' ');
+    while (rest.length > 0) {
+      chunks.push(rest.slice(0, W));
+      rest = rest.slice(W).trimStart();
+    }
+    for (const chunk of chunks.slice(0, 3)) out.push(row(chunk));
+    if (chunks.length > 3) out.push(row('...'));
+    out.push(blank());
+  }
+  out.push(bot());
+  return out.join('\n');
+}
+
 // ── Cross-repo TASK_BOARD aggregation ─────────────────────────────────────────
 let portfolioTasks = null;
 try { portfolioTasks = loadPortfolioTaskBoards({ studioRoot: root, currentRepoPath: root }); } catch { /* best-effort */ }
@@ -1026,7 +1053,7 @@ try {
     encoding: 'utf8',
     timeout: 15000,
   });
-  geniusBlock = (res.stdout ?? '').trim();
+  geniusBlock = buildGeniusBoxFromBrief(res.stdout);
 } catch { /* fallback below */ }
 if (!geniusBlock) {
   geniusBlock = buildGeniusBoxFromMarkdown(readText(path.join(root, 'docs', 'GENIUS_LIST.md')));
@@ -1223,14 +1250,17 @@ const lines = [
   ] : []),
   // Now/Next/Blocked buckets removed — Unified Genius List is the single
   // recommendation surface. Blocked count surfaces in SIGNALS + GENIUS LIST.
+  top('HUMAN PRESSURE'),
   ...(topPressure ? [
-    top('HUMAN PRESSURE'),
     row(`Top item:      ${topPressure.title.slice(0, W - 15)}`),
     row(`Pressure:      ${topPressure.pressureScore} · ${topPressure.pressureBand}`),
     row(`Next action:   ${topPressure.nextAgentAction.slice(0, W - 15)}`),
-    bot(),
-    ``,
-  ] : []),
+  ] : [
+    row('No current human-pressure item detected.'),
+    row('Agent-owned queue continues from GENIUS HIT LIST.'),
+  ]),
+  bot(),
+  ``,
   // ── v4.0: SESSION VOICE (personable cue) ────────────────────────────────────
   // Suppressed S116 #623 — low-signal flavor block was pushing brief over the
   // 15KB brief-golden cap. v4.1 spec already drops this. Re-enable behind a

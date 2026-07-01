@@ -1349,3 +1349,16 @@ Velocity: 5 shipped items. Debt delta: decreasing. Tests: `npm test` 545/545, `n
 Top win: visible post-run coaching and replay-trust readiness now have tested source-of-truth contracts instead of inline or aspirational payloads.
 Top gap: full deterministic replay resimulation remains future work; current code now exposes readiness honestly but does not claim deterministic parity.
 Next SIL candidates: build the first deterministic replay state-stepper behind `buildDeterministicResimInputContract()`; run verified five-scene launch screenshot capture.
+
+## 2026-07-01 — Session 107 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
+
+SIL +2: Closed the deploy gate left open after the Session 106 arc by repairing canonical startup-brief rendering and restoring Cloudflare Pages deploy credentials in GitHub Actions. Validation: brief validator passes, lint clean, full suite 550/550, build passing.
+
+**Top win:** Main now has a conformant startup brief and the Cloudflare workflow has the missing deploy secrets it needs.
+**Top gap:** Production deploy still must be observed after this commit lands; Supabase/analytics/manual QA gates remain separate from the Cloudflare Pages frontend deploy.
+**Intent outcome:** Partial until push and deploy verification complete; local closeout write-back and gates are complete.
+
+**Brainstorm**
+1. Workflow secret drift probe — add a read-only GitHub Actions secret presence check to pre-closeout deploy readiness so missing deploy secrets are caught before push. High probability.
+2. Brief renderer contract test — add a direct unit/smoke test proving plain `generate-genius-list --brief` output renders as a boxed `GENIUS HIT LIST`. High probability.
+3. Cloudflare deploy postcheck — wire `gh run watch` plus `npm run live:site-check` into closeout deploy verification for this repo. Medium probability.
