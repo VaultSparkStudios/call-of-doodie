@@ -1,44 +1,43 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 37322394e679 -->
-<!-- generated-at: 2026-07-01T06:50:59.309Z -->
+<!-- source-hash: 98867733a354 -->
+<!-- generated-at: 2026-07-01T16:32:25.180Z -->
 
 # LATEST_HANDOFF (compact)
 
-Where We Left Off (Session 107)
+Handoff Summary — Call of Doodie
 
-SHIPPED (S107)
-- Fixed scripts/render-startup-brief.mjs to normalize plain genius-list output into canonical boxed GENIUS HIT LIST tile.
-- Added honest empty-state HUMAN PRESSURE tile so brief surface always renders.
-- Regenerated docs/STARTUP_BRIEF.md; validate-brief-format now passes.
-- Set GitHub Actions CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets from Studio Ops gateway (values not printed).
+Session
+- Session 108 (latest). Continued Codex /goal arc: verify, document, push, deploy. No cosmetic code change invented; stayed honest.
 
-VALIDATION (S107)
-- node --check render-startup-brief.mjs: passed
-- validate-brief-format docs/STARTUP_BRIEF.md: passed
-- npm run lint: clean
-- npm test: 550/550 across 67 files
-- npm run build: passing
+Shipped This Session
+- Generated audit artifacts: docs/AUDIT_2026-07-01_2.json/.md, audits/2026-07-01-session108.json.
+- Confirmed clean main sync (git status empty, origin even).
+- Passed canon/startup gates; verified Cloudflare auth (wrangler whoami, Pages write).
 
-CURRENT INTENT
-- Continue active Codex /goal objective (deploy pipeline recovery + deterministic replay arc). Requirement not fully closed until Cloudflare Pages rerun and prod smoke checks verify.
+Validation (all green)
+- lint clean; test 550/550 across 67 files; build passing.
+- replay:state-stepper 4 fixtures; replay:edge-fixtures 4 fixtures; launch:media-check passing.
+- live:site-check 5/5 (callofdoodie.wtf); post-cutover:smoke 5/5 (apex, Pages, www, backup, backup www).
 
-NOW (top 3)
-1. Verify reran Cloudflare Pages workflow + production smoke checks after push.
-2. Continue deterministic replay enemy/physics parity design while preserving advisory replay-gate honesty boundary.
-3. Design stored trace payload for full replay parity (current combat slice is bounded/truth-labeled).
+Current Intent
+- Post-launch confidence maintenance. Observe Cloudflare Pages deploy, re-run live smoke after deploy.
 
-BLOCKERS (top 3)
-1. Cloudflare Pages deploy previously failed for missing secrets; now set but rerun not yet confirmed green.
-2. Full deterministic replay parity blocked on enemy/physics parity + stored trace payload design.
-3. Advisory replay gate remains heuristic_pressure_estimate, not full parity.
+Now Bucket (top 3)
+- Observe post-push Cloudflare Pages deploy; re-run live smoke post-deploy.
+- Design deterministic replay enemy/physics parity (current combat slice is bounded/advisory only).
+- Complete five-scene screenshot replacement once verified browser captures exist (boss, build/debrief, leaderboard still SVG fallback).
 
-HUMAN-BLOCKED (with age)
+Blockers (top 3)
+- Deterministic replay lacks enemy/physics parity + stored trace payload design; combat slice truth-labeled heuristic_pressure_estimate/advisory.
+- Manifest screenshots partially SVG fallback pending verified browser captures.
+- No unblocked product-code item beyond launch confidence at session start.
+
+Human-Blocked Items (with age)
 - Supabase deploy / sync-studio-events: credential-gated (SUPABASE_ACCESS_TOKEN), since ~S104.
-- PostHog/Sentry production analytics: dashboard/secret gated, since ~S104.
-- PWA install QA + real gamepad/browser QA: manual device work, since ~S104-105.
-- Five-scene screenshot replacement: needs browser-capture evidence, since ~S101-105.
+- PostHog/Sentry production analytics: dashboard/GitHub-secret gated, since ~S104.
+- PWA install QA + real gamepad/browser QA: manual/device gated, since ~S104.
 - Itch.io publication: manual, since ~S104.
-- Lighthouse deltas / funnel analysis: browser/data gated, since ~S104.
+- Lighthouse deltas / funnel analysis: browser/data gated, since ~S108.
 
-NEXT SESSION
-Confirm Cloudflare Pages rerun is green and run prod smoke checks; then resume deterministic replay enemy/physics parity design.
+Next Session Pointer
+- Confirm Cloudflare Pages deploy landed and re-run live:site-check + post-cutover:smoke; then advance deterministic replay parity design or verified screenshot capture.

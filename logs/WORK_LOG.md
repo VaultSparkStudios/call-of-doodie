@@ -760,3 +760,12 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Generated `docs/AUDIT_2026-07-01_2.json` / `.md` and `audits/2026-07-01-session108.json` after live-code audit found no unblocked product-code item beyond maintaining launch confidence.
 - Preserved honest deferrals: Supabase/analytics remain credential/dashboard gated; physical PWA/gamepad QA, Itch.io publication, Lighthouse/funnel evidence, and screenshot replacement still require real manual/browser/data evidence.
 - Validation: `npm run lint` clean; `npm test` 550/550; `npm run build` passing; `npm run replay:state-stepper` 4 fixtures; `npm run replay:edge-fixtures` 4 fixtures; `npm run launch:media-check` passing; `npm run live:site-check` 5/5; `npm run post-cutover:smoke` 5/5; `npx wrangler whoami` authenticated with Pages write permission.
+## 2026-07-01 — Session 109 — Input QA Receipt Surface + Saturation Arc
+
+- Ran the requested continuous `/goal` `/arc` with `git pull --rebase origin main` first, Codex session lock, context-meter, secrets audit, blocker preflight, skill overlays, and live-code audit verification.
+- Primary genius cache contained only launch-confidence maintenance, so the session expanded into verified second-order work from SIL/deferred history instead of inventing a phantom item.
+- Generated `docs/AUDIT_2026-07-01_3.json` / `.md` and refreshed `docs/IMPLEMENT_PLAN.md`.
+- Shipped `input-qa-receipt-surface`: `buildInputQaReceipt()` derives a local input QA receipt from calibration + controller profile state; HomeV2 renders the receipt in the front-door input status chip.
+- Preserved honest deferrals for replay enemy/physics parity, five-scene screenshot replacement, physical PWA/gamepad QA, and analytics/dashboard credentials.
+- Validation: focused input/HomeV2 tests 15/15; `npm run lint`; `npm test` 552/552; `npm run build`; `npm run replay:state-stepper`; `npm run replay:edge-fixtures`; `npm run launch:media-check` all passed.
+

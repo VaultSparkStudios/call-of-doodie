@@ -1,3 +1,20 @@
+## Where We Left Off (Session 109)
+- Shipped: input QA receipt surface for launch/device confidence. `buildInputQaReceipt()` now turns local calibration + remembered controller profile data into a tested receipt, and HomeV2 renders that receipt instead of a loose input text chip.
+- Tests: focused 15/15; full `npm test` 552/552; lint/build/replay/media gates green.
+- Deploy: pending direct-to-main closeout commit/push.
+
+Public-safe handoff summary:
+- session intent: run the requested continuous `/goal` `/arc` through start, audit, implement, and closeout, exhausting the primary genius list and second-order innovation surface.
+- intent outcome: Achieved for repo-executable work. The primary genius cache only contained launch-confidence preservation; the second-order innovation shipped from live SIL/deferred evidence was the input QA receipt surface.
+- completed this session: `docs/AUDIT_2026-07-01_3.json` / `.md` and `docs/IMPLEMENT_PLAN.md` now record the ranked plan, shipped outcome, and honest deferrals.
+- completed this session: `src/utils/inputCalibration.js` adds `buildInputQaReceipt()` with direct tests for ready/partial/missing states.
+- completed this session: `src/components/HomeV2.jsx` renders `INPUT QA READY` / `INPUT QA RECHECK` from the tested receipt helper, preserving the player front door while giving physical gamepad QA a repeatable local evidence artifact.
+- validation baseline: focused input/HomeV2 15/15, `npm run lint` clean, `npm test` 552/552, `npm run build` passing, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check passing.
+
+## Next Recommended Slice
+- [ ] Full deterministic replay enemy/physics parity design — start with one enemy archetype and stored trace payload shape; do not change advisory replay labels until the slice verifies.
+- [ ] Verified screenshot capture completion — capture boss, build/debrief, and leaderboard browser PNGs before manifest replacement.
+- [ ] Physical QA pass — use the new local input QA receipt during one real gamepad/browser pass and one real mobile PWA install pass.
 ## Where We Left Off (Session 108)
 
 Session 108 ran the requested Codex `/goal arc`, then prepared `/closeout`, direct commit/push to `main`, and full Cloudflare deploy. The current genius list had no unblocked product-code item beyond maintaining launch confidence, so the session stayed honest: verify, document, push, and deploy rather than inventing a cosmetic code change.

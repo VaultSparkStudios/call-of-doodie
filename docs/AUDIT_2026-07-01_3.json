@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "generatedAt": "2026-07-01",
+    "session": 109,
+    "project": "call-of-doodie",
+    "type": "game",
+    "rubric": "product/game",
+    "combinedPriority": "37.4",
+    "top3": [
+      "input-qa-receipt-surface",
+      "launch-confidence-verification",
+      "honest-replay-and-media-deferrals"
+    ]
+  },
+  "summary": "Live-code audit verified the primary genius list was effectively exhausted except launch-confidence preservation, then expanded into a second-order innovation candidate from the SIL history: make controller/input QA evidence a deterministic local receipt visible on the front door.",
+  "items": [
+    {
+      "slug": "input-qa-receipt-surface",
+      "title": "Turn remembered controller and aim calibration data into a visible input QA receipt",
+      "tier": "🔥",
+      "axis": "ui / ux / user-experience",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 25.6,
+      "status": "shipped",
+      "why": "Physical gamepad QA remains manual, but the repo already captures controller profile and four-direction calibration evidence locally. A single receipt helper makes that evidence testable and gives the front door a truthful status artifact for repeat QA without pretending CLI can certify hardware.",
+      "recipe": "Add a pure buildInputQaReceipt helper in inputCalibration.js, render it in HomeV2's input chip, and cover ready/partial/missing states with focused tests.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Unit-test a helper that summarizes calibration + controller profile state." },
+        "L2": { "effortHours": 1, "recipe": "Wire the helper into HomeV2 and update component assertions." },
+        "L3": { "effortHours": 3, "recipe": "Add an export/share path for founder physical QA after real-device browser capture exists." }
+      },
+      "evidence": [
+        "src/utils/inputCalibration.js",
+        "src/components/HomeV2.jsx",
+        "npx vitest run src/utils/inputCalibration.test.js src/components/HomeV2.test.jsx"
+      ]
+    },
+    {
+      "slug": "launch-confidence-verification",
+      "title": "Maintain launch confidence while avoiding phantom product work",
+      "tier": "⚡",
+      "axis": "speed / organization / efficiency",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 4,
+      "priority": 11.2,
+      "status": "shipped",
+      "why": "The live genius cache currently contains only launch-confidence maintenance. The correct implementation posture is to preserve the green baseline, verify the tree against live code, and only add code where second-order evidence is real.",
+      "recipe": "Run start preflight, blocker preflight, cache-genius-list, and focused validation for any code shipped this session.",
+      "evidence": [
+        "git pull --rebase origin main",
+        "node scripts/context-meter.mjs --json",
+        "node scripts/ops.mjs blocker-preflight",
+        ".cache/genius-list.json"
+      ]
+    },
+    {
+      "slug": "honest-replay-and-media-deferrals",
+      "title": "Keep replay parity and screenshot replacement deferred until their evidence exists",
+      "tier": "⚡",
+      "axis": "security",
+      "effortHours": 0.5,
+      "impact": 8,
+      "innovation": 2,
+      "priority": 0.6,
+      "status": "honest-deferral",
+      "why": "Replay enemy/physics parity and full five-scene screenshot replacement are real roadmap items, but live evidence still says they need stored trace payload design or verified browser captures. Deferring them explicitly is better than changing labels or media metadata to force a green gate.",
+      "recipe": "Record the deferral in closeout and do not alter advisory replay labels or manifest screenshots without new verified inputs.",
+      "evidence": [
+        "context/GAME_LOOP.md",
+        "docs/LAUNCH_SCREENSHOT_TRUTH_PACK.md",
+        "src/utils/replayResim.js"
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-enemy-physics-resim",
+      "reason": "Verified as real but too broad for honest implementation without stored trace payload design and enemy/physics parity scope. Current code correctly labels replay as advisory."
+    },
+    {
+      "slug": "five-scene-screenshot-replacement",
+      "reason": "Verified as real but blocked on browser-captured boss, build/debrief, and leaderboard screenshots. Metadata-only replacement would fabricate evidence."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "input-qa-receipt-surface",
+      "status": "shipped",
+      "notes": "Added buildInputQaReceipt(), wired HomeV2 input chip to the receipt, and verified focused tests 15/15."
+    },
+    {
+      "slug": "launch-confidence-verification",
+      "status": "shipped",
+      "notes": "Start sync/preflight completed; primary genius list had only maintain-launch-confidence."
+    },
+    {
+      "slug": "honest-replay-and-media-deferrals",
+      "status": "honest-deferral",
+      "notes": "No advisory replay labels or launch media provenance were changed without evidence."
+    }
+  ]
+}

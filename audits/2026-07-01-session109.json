@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-01",
+  "session": 109,
+  "project": "call-of-doodie",
+  "agent": "codex",
+  "intent": "Run continuous /goal /arc through start, audit, implement, and closeout; exhaust primary genius list and second-order innovation candidates.",
+  "outcome": "achieved",
+  "shipped": [
+    "input-qa-receipt-surface",
+    "launch-confidence-verification",
+    "honest-replay-and-media-deferrals"
+  ],
+  "validation": {
+    "focused": "npx vitest run src/utils/inputCalibration.test.js src/components/HomeV2.test.jsx: 15/15",
+    "lint": "npm run lint: pass",
+    "tests": "npm test: 552/552 across 67 files",
+    "build": "npm run build: pass",
+    "replayStateStepper": "npm run replay:state-stepper: 4 fixtures",
+    "edgeReplayFixtures": "npm run replay:edge-fixtures: 4 fixtures",
+    "launchMedia": "npm run launch:media-check: pass"
+  },
+  "honestyLedger": [
+    "Primary genius cache only contained launch-confidence maintenance; second-order item was selected from verified SIL/deferred evidence.",
+    "Replay enemy/physics parity remains advisory/evidence-gated; no trust labels changed.",
+    "Five-scene screenshot replacement remains browser-capture gated; no manifest provenance was fabricated."
+  ],
+  "sil": {
+    "score": 1000,
+    "max": 1000,
+    "velocity": 2,
+    "debt": "decreasing"
+  }
+}

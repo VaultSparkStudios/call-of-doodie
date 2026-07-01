@@ -39,6 +39,44 @@ export function summarizeInputCalibration(record) {
   return record.complete ? `${record.source} verified` : `${record.buckets.length}/4 directions`;
 }
 
+export function buildInputQaReceipt({
+  calibration = null,
+  controllerProfile = null,
+  gamepadConnected = false,
+  controllerType = null,
+  timestamp = Date.now(),
+} = {}) {
+  const hasCalibration = Boolean(calibration);
+  const calibrationComplete = Boolean(calibration?.complete);
+  const connectedType = gamepadConnected ? (controllerType || "controller") : null;
+  const rememberedType = controllerProfile?.type || null;
+  const deviceType = connectedType || rememberedType || calibration?.controllerType || calibration?.source || "unknown";
+  const coverage = calibrationComplete
+    ? "four-direction"
+    : hasCalibration
+      ? `${new Set(calibration.buckets || []).size}/4-direction`
+      : "none";
+  const status = calibrationComplete && (gamepadConnected || controllerProfile || calibration?.source)
+    ? "ready"
+    : hasCalibration || controllerProfile || gamepadConnected
+      ? "needs-repeat"
+      : "missing";
+
+  return {
+    version: 1,
+    status,
+    deviceType,
+    deviceIndex: controllerProfile?.index ?? null,
+    connected: Boolean(gamepadConnected),
+    remembered: Boolean(controllerProfile),
+    calibrationComplete,
+    coverage,
+    label: status === "ready" ? "INPUT QA READY" : status === "needs-repeat" ? "INPUT QA RECHECK" : "INPUT QA MISSING",
+    summary: `${String(deviceType).toUpperCase()} · ${coverage}`,
+    timestamp,
+  };
+}
+
 export function buildInputCalibrationNudge(record, { debugEnabled = false } = {}) {
   const buckets = Array.isArray(record?.buckets) ? record.buckets : [];
   const complete = Boolean(record?.complete);

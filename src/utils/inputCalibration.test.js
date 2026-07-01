@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildInputCalibrationRecord,
   buildInputCalibrationNudge,
+  buildInputQaReceipt,
   loadInputCalibration,
   saveInputCalibration,
   summarizeInputCalibration,
@@ -64,5 +65,51 @@ describe("input calibration", () => {
       action: "READY",
     });
     expect(buildInputCalibrationNudge(record, { debugEnabled: true }).action).toBe("OPEN DIAGNOSTICS");
+  });
+  it("builds a local input QA receipt from calibration and controller profile", () => {
+    const calibration = buildInputCalibrationRecord({
+      source: "xbox",
+      controllerType: "xbox",
+      buckets: ["east", "west", "north", "south"],
+      timestamp: 123,
+    });
+    const receipt = buildInputQaReceipt({
+      calibration,
+      controllerProfile: { type: "xbox", index: 1 },
+      gamepadConnected: true,
+      controllerType: "xbox",
+      timestamp: 456,
+    });
+
+    expect(receipt).toEqual({
+      version: 1,
+      status: "ready",
+      deviceType: "xbox",
+      deviceIndex: 1,
+      connected: true,
+      remembered: true,
+      calibrationComplete: true,
+      coverage: "four-direction",
+      label: "INPUT QA READY",
+      summary: "XBOX · four-direction",
+      timestamp: 456,
+    });
+  });
+
+  it("marks partial or missing input QA receipts honestly", () => {
+    expect(buildInputQaReceipt()).toMatchObject({
+      status: "missing",
+      label: "INPUT QA MISSING",
+      coverage: "none",
+    });
+    expect(buildInputQaReceipt({
+      calibration: buildInputCalibrationRecord({ buckets: ["east", "north"] }),
+      controllerProfile: { type: "ps", index: 0 },
+    })).toMatchObject({
+      status: "needs-repeat",
+      label: "INPUT QA RECHECK",
+      deviceType: "ps",
+      coverage: "2/4-direction",
+    });
   });
 });

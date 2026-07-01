@@ -204,8 +204,9 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
 
-    expect(container.textContent).toContain("INPUT MOUSE VERIFIED");
-    expect(container.textContent).toContain("XBOX #1");
+    expect(container.textContent).toContain("INPUT QA READY");
+    expect(container.textContent).toContain("XBOX · FOUR-DIRECTION");
+    expect(container.textContent).toContain("#1");
   });
 
   it("hides operational measurement status from the default visitor surface", async () => {

@@ -1,29 +1,19 @@
-# Implement Plan - Session 105
+# Implementation Plan — Session 109
 
-Source audit: `docs/AUDIT_2026-06-29_3.json`
+Source audit: `docs/AUDIT_2026-07-01_3.json` / `.md`
 
-## Wave Plan
+## Sequenced Order
 
-1. `deterministic-replay-state-stepper` - shipped. Added `runDeterministicReplayStateStepper()` in `src/utils/replayResim.js`, movement/aim-only by design, exposed as `deterministicStepper` only when the deterministic input contract is ready. The existing replay gate remains `heuristic_pressure_estimate` / advisory.
-2. `game-loop-protocol-source-bridge` - shipped. Added `context/GAME_LOOP.md` so `/game-loop-review` reads a real context source instead of failing while the public `docs/GAME_LOOP.md` exists.
-3. `launch-media-verified-capture-contract` - shipped. Updated `public/manifest.json` to use verified browser-capture PNGs for combat and mobile screenshots, while keeping uncaptured boss/build/leaderboard scenes as explicit SVG fallbacks. Strengthened `scripts/validate-launch-media.mjs` so any manifest PNG screenshot must have a production-ready browser-capture asset record.
+1. `input-qa-receipt-surface` — shipped. Added `buildInputQaReceipt()` in `src/utils/inputCalibration.js`, wired HomeV2's visible input chip to the deterministic receipt, and covered ready/partial/missing states plus component rendering.
+2. `launch-confidence-verification` — shipped. Synced `main`, wrote session lock, ran context-meter, secrets audit, blocker preflight, genius-list cache check, and verified the primary list only contained launch-confidence preservation.
+3. `honest-replay-and-media-deferrals` — recorded as honest deferral. Replay enemy/physics parity and full five-scene screenshot replacement remain real but evidence-gated; no replay trust labels or launch media provenance were changed without the required inputs.
 
-## Verification
+## Validation
 
-- `npx vitest run src/utils/replayResim.test.js` - 8/8 passing.
-- `npm run launch:media-check` - passing; 5 manifest screenshots checked, 2 verified captures.
+- `npx vitest run src/utils/inputCalibration.test.js src/components/HomeV2.test.jsx` — 15/15 passing.
 
-## Honest Deferrals
+## Remaining Evidence-Gated Items
 
-- Supabase `sync-studio-events` live deploy remains credential-gated.
-- PostHog/Sentry production analytics remain provider/GitHub-secret gated.
-- Real-device PWA install and gamepad QA remain manual/device checks.
-- Three launch scenes still need verified browser captures before they can replace fallback art: boss, build/debrief, and leaderboard.
-
-## Innovation Pack Follow-through
-
-- `validate-replay Phase 2B` - shipped a bounded second-order slice. Added `scripts/validate-replay-state-stepper-fixtures.mjs` plus `npm run replay:state-stepper` so the new deterministic movement/aim state-stepper is validated against the shared replay fixture table. This does not claim full physics parity; it establishes a reusable gate for the next combat-resimulation slice.
-
-## Innovation Verification
-
-- `npm run replay:state-stepper` - passing; 4 replay fixtures validated against deterministic movement/aim stepping.
+- Full deterministic enemy/physics resimulation requires stored trace payload design and narrowed enemy archetype parity before any product or Edge gate claims it.
+- Full five-scene screenshot replacement requires verified browser captures for boss, build/debrief, and leaderboard scenes.
+- Physical PWA install and real gamepad/browser QA remain manual/device checks, now aided by the local input QA receipt.

@@ -15,7 +15,7 @@ import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
-import { buildInputCalibrationNudge, buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "../utils/inputCalibration.js";
+import { buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, saveInputCalibration } from "../utils/inputCalibration.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
@@ -214,6 +214,15 @@ export default function HomeV2(props) {
   const aimCheck = useMemo(
     () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
     [inputCalibration, inputDebugEnabled],
+  );
+  const inputQaReceipt = useMemo(
+    () => buildInputQaReceipt({
+      calibration: inputCalibration,
+      controllerProfile,
+      gamepadConnected,
+      controllerType: effectiveControllerType,
+    }),
+    [controllerProfile, effectiveControllerType, gamepadConnected, inputCalibration],
   );
   const journey = useMemo(
     () => buildPlayerJourney({
@@ -716,8 +725,8 @@ export default function HomeV2(props) {
                 cursor: "default",
               }}
             >
-              INPUT {summarizeInputCalibration(inputCalibration).toUpperCase()}
-              {controllerProfile ? ` · ${controllerProfile.type.toUpperCase()} #${controllerProfile.index ?? "?"}` : ""}
+              {inputQaReceipt.label} · {inputQaReceipt.summary.toUpperCase()}
+              {inputQaReceipt.deviceIndex != null ? ` · #${inputQaReceipt.deviceIndex}` : ""}
             </span>
           )}
         </div>

@@ -1390,3 +1390,29 @@ SIL +1: Converted a thin genius-list state into a useful launch-confidence arc i
 1. Cloudflare deploy postcheck command — add a repo-local script that watches the latest Pages workflow/deploy and reruns live smoke automatically. High probability.
 2. Secret presence drift probe — add a read-only GitHub Actions secret presence check for deploy-critical secrets before push. Medium probability.
 3. Screenshot capture completion — finish verified browser captures for boss, build/debrief, and leaderboard scenes before manifest replacement. High probability.
+## 2026-07-01 — Session 109 | Total: 1000/1000 | Velocity: 2 | Debt: ↓
+
+SIL +2: Exhausted the thin primary genius-list state without fabricating work, then shipped a real second-order launch-confidence improvement: local input calibration + remembered controller profile now produce one tested input QA receipt on the HomeV2 front door. Validation: focused input/HomeV2 15/15, lint clean, full suite 552/552, build passing, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check passing.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite increased to 552/552 with focused helper/component coverage and clean lint/build. |
+| Creative Alignment | 100 | → | The player-facing change supports launch trust without changing the comedy combat identity. |
+| Momentum | 100 | ↑ | Thin primary list still yielded shipped second-order product work instead of a verification-only stop. |
+| Engagement | 100 | ↑ | Controller/input confidence is more visible before a run, reducing avoidable first-session friction. |
+| Process Quality | 100 | ↑ | Audit/implement artifacts distinguish shipped evidence from honest replay/media/device deferrals. |
+| Cross-Repo Coherence | 100 | → | No sibling repo tree edits; all work stayed in the public game repo. |
+| Security Posture | 100 | → | No dependencies, secrets, auth, or network behavior added. |
+| Ecosystem Integration | 100 | → | Device QA evidence remains local and public-safe while supporting Studio launch gates. |
+| Capital Efficiency | 100 | → | Zero paid services or per-user variable cost introduced. |
+| Automation Coverage | 100 | ↑ | New helper tests cover ready, missing, and partial input QA receipt states. |
+
+**Top win:** Physical gamepad QA now has a tested local receipt surface to lean on instead of a one-off observation.
+**Top gap:** Full replay enemy/physics parity and full screenshot replacement remain evidence-gated, and staying honest about that preserved trust.
+**Intent outcome:** Achieved for `/start`, `/audit`, `/implement`, second-order innovation, and validation; final closeout commit/push follows.
+
+**Brainstorm**
+1. Input QA export card — after one real device pass, add a copyable receipt payload for founder QA notes. High probability.
+2. Replay enemy archetype parity slice — simulate one basic contact enemy against stored trace movement before touching trust labels. High probability.
+3. Screenshot capture completion — finish verified browser captures for boss, build/debrief, and leaderboard scenes. High probability.
+
