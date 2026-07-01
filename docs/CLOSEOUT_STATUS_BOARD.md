@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-01 (Session 108 closeout) -->
+<!-- generated-at: 2026-07-01 (Session 110 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S108 ════════════════════╗
-║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S110 ════════════════════╗
+║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 2 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Generated `docs/AUDIT_2026-07-01_2.json` / `.md` and `audits  ║
-║  ✓ Confirmed clean `main` sync before write-back: `git status -  ║
-║  ✓ Ran canon/startup gates: context meter `CONTINUE`, canon ado  ║
-║  ✓ Verified Cloudflare readiness: `npx wrangler whoami` authent  ║
-║  ✓ `npm run lint` - clean.                                       ║
+║  ✓ Shipped: PWA install readiness and prompt-outcome receipt su  ║
+║  ✓ Tests: focused PWA/HomeV2 16/16; full `npm test` 559/559; li  ║
+║  ✓ Deploy: pending direct-to-main closeout commit/push.          ║
+║  ✓ session intent: run the requested continuous `/goal` `/arc`   ║
+║  ✓ intent outcome: Achieved for repo-executable work. The prima  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -41,7 +41,7 @@
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 13 files  ·  M:9 A:0 D:0 ?:4                           ║
+║  Changes: 22 files  ·  M:16 A:0 D:0 ?:6                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -52,8 +52,8 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         550/550                                          ║
-║  IGNIS:         12d ago                                          ║
+║  Tests:         559/559                                          ║
+║  IGNIS:         13d ago                                          ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

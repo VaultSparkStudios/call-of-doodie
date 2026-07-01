@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "generatedAt": "2026-07-01",
+    "session": 110,
+    "project": "call-of-doodie",
+    "type": "game",
+    "rubric": "product/game",
+    "combinedPriority": "44.0",
+    "top3": [
+      "pwa-install-readiness-receipt",
+      "pwa-install-outcome-receipt",
+      "honest-innovation-pack-deferrals"
+    ]
+  },
+  "summary": "Live-code audit found the primary genius cache exhausted except launch-confidence maintenance and the innovation pack blocked on credentials, dashboards, physical QA, human data, or a too-broad replay runner. The shippable second-order lane was the PWA install QA path: runtime prompt state existed, but no tested local receipt surfaced prompt readiness or persisted real browser outcomes.",
+  "items": [
+    {
+      "slug": "pwa-install-readiness-receipt",
+      "title": "Expose a truthful PWA install readiness receipt on HomeV2",
+      "tier": "🔥",
+      "axis": "ui / ux / user-experience",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 22.4,
+      "status": "shipped",
+      "why": "Physical PWA install QA remains manual, but App already detects the browser beforeinstallprompt event. A pure receipt helper and HomeV2 chip make prompt readiness, standalone mode, service-worker support, and manifest presence visible without claiming device acceptance.",
+      "recipe": "Add buildPwaInstallReceipt(), wire pwaPromptReady into HomeV2, render a PWA status chip, and cover prompt-ready/browser-ready/standalone states with tests.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Unit-test a pure helper for PWA install readiness state." },
+        "L2": { "effortHours": 1, "recipe": "Render the receipt on HomeV2 and pass the App prompt state through props." },
+        "L3": { "effortHours": 2, "recipe": "Persist browser prompt outcomes as local QA evidence for later physical-device review." }
+      },
+      "evidence": [
+        "src/utils/pwaInstallReadiness.js",
+        "src/components/HomeV2.jsx",
+        "src/App.jsx",
+        "npx vitest run src/utils/pwaInstallReadiness.test.js src/components/HomeV2.test.jsx"
+      ]
+    },
+    {
+      "slug": "pwa-install-outcome-receipt",
+      "title": "Persist accepted/dismissed browser install prompt outcomes locally",
+      "tier": "⚡",
+      "axis": "user feedback loop",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 16.8,
+      "status": "shipped",
+      "why": "The browser userChoice result is real QA evidence, but it was previously discarded after clearing the deferred prompt. Persisting accepted/dismissed outcomes gives later manual QA a receipt while still requiring standalone relaunch before saying the PWA is fully installed.",
+      "recipe": "Add build/load/save PWA install attempt helpers, write them from promptInstallApp(), and render stored accepted/dismissed outcomes in HomeV2.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Persist the prompt outcome in localStorage." },
+        "L2": { "effortHours": 1, "recipe": "Fold the stored outcome into the HomeV2 receipt and focused tests." },
+        "L3": { "effortHours": 3, "recipe": "After real device QA, add a manual export receipt tied to docs/QA_CHECKLIST.md." }
+      },
+      "evidence": [
+        "src/utils/pwaInstallReadiness.test.js",
+        "src/components/HomeV2.test.jsx",
+        "npm run lint"
+      ]
+    },
+    {
+      "slug": "honest-innovation-pack-deferrals",
+      "title": "Regenerate the innovation pack and keep blocked items honestly deferred",
+      "tier": "⚡",
+      "axis": "process quality",
+      "effortHours": 0.5,
+      "impact": 6,
+      "innovation": 2,
+      "priority": 4.8,
+      "status": "honest-deferral",
+      "why": "The regenerated innovation pack contains Supabase/analytics credential gates, dashboard allowlists, manual physical/browser QA, human Lighthouse/funnel data, a product membership decision, and a full replay runner that still needs stored trace payload design. Treating those as blocked is more valuable than forcing code that would lie about trust or evidence.",
+      "recipe": "Record the deferrals and avoid changing replay labels, screenshot provenance, or analytics/account promises without the missing evidence.",
+      "evidence": [
+        "docs/INNOVATION_PACK.md",
+        "node scripts/ops.mjs blocker-preflight",
+        "node scripts/check-secrets.mjs --audit"
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-enemy-physics-resim",
+      "reason": "Verified as real but too broad for an honest same-session change without stored trace payload design and narrowed enemy/physics parity slices. Advisory replay language remains correct."
+    },
+    {
+      "slug": "five-scene-screenshot-replacement",
+      "reason": "Verified as real but blocked on browser-captured boss, build/debrief, and leaderboard screenshots. Metadata-only changes would fabricate provenance."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "Credential/dashboard gated; check-secrets and blocker preflight still classify analytics as missing or owner-dashboard work."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "pwa-install-readiness-receipt",
+      "status": "shipped",
+      "notes": "Added pure PWA readiness receipt helper, HomeV2 chip, App prompt-ready prop, and focused tests."
+    },
+    {
+      "slug": "pwa-install-outcome-receipt",
+      "status": "shipped",
+      "notes": "Persisted browser prompt accepted/dismissed outcomes and rendered stored acceptance without claiming standalone install completion."
+    },
+    {
+      "slug": "honest-innovation-pack-deferrals",
+      "status": "honest-deferral",
+      "notes": "Regenerated docs/INNOVATION_PACK.md; remaining candidates are credential, dashboard, manual, data, product-decision, or broad replay-design gates."
+    }
+  ]
+}

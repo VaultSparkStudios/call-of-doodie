@@ -16,6 +16,7 @@ import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, saveInputCalibration } from "../utils/inputCalibration.js";
+import { buildPwaInstallReceipt, detectServiceWorkerReady, detectStandaloneDisplay, loadPwaInstallAttempt } from "../utils/pwaInstallReadiness.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
@@ -73,6 +74,7 @@ export default function HomeV2(props) {
     gauntletMode, onSetGauntletMode,
     assistAvailable, onApplyAssist,
     onInstallApp,
+    pwaInstallPromptReady = false,
   } = props;
 
   const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode });
@@ -125,6 +127,7 @@ export default function HomeV2(props) {
   });
   const [inputCalibration, setInputCalibration] = useState(() => loadInputCalibration());
   const [controllerProfile] = useState(() => loadControllerProfile());
+  const [pwaInstallAttempt] = useState(() => loadPwaInstallAttempt());
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
 
   useEffect(() => {
@@ -223,6 +226,17 @@ export default function HomeV2(props) {
       controllerType: effectiveControllerType,
     }),
     [controllerProfile, effectiveControllerType, gamepadConnected, inputCalibration],
+  );
+  const pwaInstallReceipt = useMemo(
+    () => buildPwaInstallReceipt({
+      promptReady: pwaInstallPromptReady || Boolean(onInstallApp),
+      standalone: detectStandaloneDisplay(),
+      serviceWorkerReady: detectServiceWorkerReady(),
+      manifestLinked: true,
+      lastAttempt: pwaInstallAttempt,
+      mobile: isMobile,
+    }),
+    [isMobile, onInstallApp, pwaInstallAttempt, pwaInstallPromptReady],
   );
   const journey = useMemo(
     () => buildPlayerJourney({
@@ -687,6 +701,19 @@ export default function HomeV2(props) {
               📲 INSTALL APP
             </button>
           )}
+          <span
+            title={pwaInstallReceipt.summary}
+            style={{
+              ...quickBtn,
+              display: "inline-flex",
+              alignItems: "center",
+              borderColor: pwaInstallReceipt.status === "needs-browser" ? "rgba(255,215,0,0.28)" : "rgba(0,229,255,0.3)",
+              color: pwaInstallReceipt.status === "needs-browser" ? "#FFE29A" : "#B9F3FF",
+              cursor: "default",
+            }}
+          >
+            {pwaInstallReceipt.label} · {pwaInstallReceipt.readySignals}/4
+          </span>
           {inputDebugEnabled && (
             <button
               style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}

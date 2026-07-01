@@ -1,19 +1,20 @@
-# Implementation Plan — Session 109
+# Implement Plan — 2026-07-01 Session 110
 
-Source audit: `docs/AUDIT_2026-07-01_3.json` / `.md`
+Source: `docs/AUDIT_2026-07-01_4.json`
 
 ## Sequenced Order
 
-1. `input-qa-receipt-surface` — shipped. Added `buildInputQaReceipt()` in `src/utils/inputCalibration.js`, wired HomeV2's visible input chip to the deterministic receipt, and covered ready/partial/missing states plus component rendering.
-2. `launch-confidence-verification` — shipped. Synced `main`, wrote session lock, ran context-meter, secrets audit, blocker preflight, genius-list cache check, and verified the primary list only contained launch-confidence preservation.
-3. `honest-replay-and-media-deferrals` — recorded as honest deferral. Replay enemy/physics parity and full five-scene screenshot replacement remain real but evidence-gated; no replay trust labels or launch media provenance were changed without the required inputs.
+1. `pwa-install-readiness-receipt` — shipped. Added a pure PWA install readiness receipt and rendered it on HomeV2 from real prompt/standalone/service-worker/manifest signals.
+2. `pwa-install-outcome-receipt` — shipped. Persisted browser `userChoice.outcome` as local QA evidence and rendered accepted/dismissed outcomes without claiming physical install completion.
+3. `honest-innovation-pack-deferrals` — recorded as honest deferral. Regenerated `docs/INNOVATION_PACK.md`; remaining items are credential/dashboard/manual/data/product-decision or broad replay-design gates.
 
 ## Validation
 
-- `npx vitest run src/utils/inputCalibration.test.js src/components/HomeV2.test.jsx` — 15/15 passing.
+- `npx vitest run src/utils/pwaInstallReadiness.test.js src/components/HomeV2.test.jsx` — 16/16 passing.
+- `npm run lint` — clean.
 
-## Remaining Evidence-Gated Items
+## Honest Deferrals
 
-- Full deterministic enemy/physics resimulation requires stored trace payload design and narrowed enemy archetype parity before any product or Edge gate claims it.
-- Full five-scene screenshot replacement requires verified browser captures for boss, build/debrief, and leaderboard scenes.
-- Physical PWA install and real gamepad/browser QA remain manual/device checks, now aided by the local input QA receipt.
+- Full deterministic enemy/physics resimulation still requires stored trace payload design and narrowed parity slices.
+- Full five-scene screenshot replacement still requires verified browser captures for boss, build/debrief, and leaderboard scenes.
+- Supabase, analytics/dashboard, physical PWA/gamepad QA, Lighthouse/funnel evidence, and membership decisions remain gated by credentials, real devices, data, or founder product direction.

@@ -1,43 +1,47 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 98867733a354 -->
-<!-- generated-at: 2026-07-01T16:32:25.180Z -->
+<!-- source-hash: 599a112b916e -->
+<!-- generated-at: 2026-07-01T16:56:36.210Z -->
 
 # LATEST_HANDOFF (compact)
 
-Handoff Summary — Call of Doodie
+## Handoff Summary (Session 109)
 
-Session
-- Session 108 (latest). Continued Codex /goal arc: verify, document, push, deploy. No cosmetic code change invented; stayed honest.
+## Session
+- Number: 109
+- Repo: Call of Doodie
 
-Shipped This Session
-- Generated audit artifacts: docs/AUDIT_2026-07-01_2.json/.md, audits/2026-07-01-session108.json.
-- Confirmed clean main sync (git status empty, origin even).
-- Passed canon/startup gates; verified Cloudflare auth (wrangler whoami, Pages write).
+## Shipped This Session
+- buildInputQaReceipt() in src/utils/inputCalibration.js; turns local calibration + remembered controller profile into a tested receipt (ready/partial/missing states).
+- HomeV2 renders INPUT QA READY / INPUT QA RECHECK from the tested receipt helper instead of a loose input text chip.
+- Audit/plan artifacts: docs/AUDIT_2026-07-01_3.json/.md, docs/IMPLEMENT_PLAN.md updated with ranked plan + honest deferrals.
 
-Validation (all green)
-- lint clean; test 550/550 across 67 files; build passing.
-- replay:state-stepper 4 fixtures; replay:edge-fixtures 4 fixtures; launch:media-check passing.
-- live:site-check 5/5 (callofdoodie.wtf); post-cutover:smoke 5/5 (apex, Pages, www, backup, backup www).
+## Validation
+- Focused input/HomeV2 15/15; npm test 552/552; lint clean; build passing.
+- replay:state-stepper 4/4; replay:edge-fixtures 4/4; launch:media-check passing.
 
-Current Intent
-- Post-launch confidence maintenance. Observe Cloudflare Pages deploy, re-run live smoke after deploy.
+## Current Intent
+- Run continuous /goal /arc through start, audit, implement, closeout; exhaust primary genius list and second-order surface. Achieved for repo-executable work.
 
-Now Bucket (top 3)
-- Observe post-push Cloudflare Pages deploy; re-run live smoke post-deploy.
-- Design deterministic replay enemy/physics parity (current combat slice is bounded/advisory only).
-- Complete five-scene screenshot replacement once verified browser captures exist (boss, build/debrief, leaderboard still SVG fallback).
+## Deploy State
+- Direct-to-main closeout commit/push pending.
 
-Blockers (top 3)
-- Deterministic replay lacks enemy/physics parity + stored trace payload design; combat slice truth-labeled heuristic_pressure_estimate/advisory.
-- Manifest screenshots partially SVG fallback pending verified browser captures.
-- No unblocked product-code item beyond launch confidence at session start.
+## Now Bucket (Top 3)
+- Deterministic replay enemy/physics parity design: start with one enemy archetype + stored trace payload shape; do not change advisory replay labels until slice verifies.
+- Verified screenshot capture: capture boss, build/debrief, leaderboard browser PNGs before manifest replacement.
+- Physical QA pass: use new input QA receipt during one real gamepad/browser pass and one mobile PWA install pass.
 
-Human-Blocked Items (with age)
-- Supabase deploy / sync-studio-events: credential-gated (SUPABASE_ACCESS_TOKEN), since ~S104.
-- PostHog/Sentry production analytics: dashboard/GitHub-secret gated, since ~S104.
-- PWA install QA + real gamepad/browser QA: manual/device gated, since ~S104.
-- Itch.io publication: manual, since ~S104.
-- Lighthouse deltas / funnel analysis: browser/data gated, since ~S108.
+## Blockers (Top 3)
+- Replay parity remains bounded; current slice is honestly labeled heuristic_pressure_estimate / advisory, not full parity.
+- Manifest still uses SVG fallback entries pending verified browser captures.
+- Post-push Cloudflare Pages deploy needs observation + live smoke rerun after closeout push.
 
-Next Session Pointer
-- Confirm Cloudflare Pages deploy landed and re-run live:site-check + post-cutover:smoke; then advance deterministic replay parity design or verified screenshot capture.
+## Human-Blocked Items (with age)
+- Supabase live deploy (sync-studio-events): credential-gated, SUPABASE_ACCESS_TOKEN missing (since ~S102, ~7 sessions).
+- PostHog/Sentry production analytics: dashboard/GitHub-secret gated (since ~S104, ~5 sessions).
+- Physical PWA install QA + one real gamepad/browser combo: device-gated (recurring since ~S104, ~5 sessions).
+- Itch.io publication: manual (recurring, ~5+ sessions).
+
+## Deferred/Honest Gates
+- Verified five-scene screenshot replacement pending real browser capture evidence.
+
+Next session: push closeout commit, confirm Cloudflare deploy + live smoke, then begin deterministic replay parity design for one enemy archetype.

@@ -654,3 +654,13 @@ Overall status: green locally; live Supabase/analytics/dashboard actions remain 
 - Deferred truth unchanged: Supabase/analytics/dashboard work requires credentials or provider surfaces; physical install/gamepad QA, Lighthouse/funnel analysis, and remaining screenshot replacement require real external evidence.
 
 Overall status: green locally and green on current live surfaces; deploy observation pending final push/deploy.
+
+## 2026-07-01 — Session 110 — PWA install QA receipt truth
+
+- PWA readiness truth — `src/utils/pwaInstallReadiness.js` derives receipt states from explicit inputs: prompt-ready, standalone display, service-worker support, manifest presence, and optional stored browser prompt attempt.
+- Prompt outcome truth — `src/App.jsx` persists only the real browser `beforeinstallprompt.userChoice.outcome`; unknown outcomes are normalized to `unknown`, accepted/dismissed are stored locally.
+- Front-door truth — `src/components/HomeV2.jsx` renders `PWA PROMPT READY`, `PWA ACCEPTED`, `PWA DISMISSED`, `PWA READY`, or `PWA CHECK NEEDED` from the helper. It does not show `PWA INSTALLED` unless standalone display is detected.
+- Validation truth — focused PWA/HomeV2 tests passed 16/16, full `npm test` passed 559/559, lint/build/replay/media gates passed.
+
+Overall status: green locally
+Last reviewed: 2026-07-01

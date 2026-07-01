@@ -1,3 +1,20 @@
+## Where We Left Off (Session 110)
+- Shipped: PWA install readiness and prompt-outcome receipt surface for launch/device confidence. `buildPwaInstallReceipt()` turns prompt-ready, browser-ready, standalone, accepted, and dismissed evidence into a tested local receipt; App persists the browser `userChoice.outcome`; HomeV2 renders the receipt without claiming physical install completion.
+- Tests: focused PWA/HomeV2 16/16; full `npm test` 559/559; lint/build/replay/media gates green.
+- Deploy: pending direct-to-main closeout commit/push.
+
+Public-safe handoff summary:
+- session intent: run the requested continuous `/goal` `/arc` through start, audit, implement, innovation-pack saturation, and closeout.
+- intent outcome: Achieved for repo-executable work. The primary genius cache remained thin/exhausted, and the regenerated innovation pack proved credential/dashboard/manual/data/product-decision or broad replay-design gated.
+- completed this session: `docs/AUDIT_2026-07-01_4.json` / `.md` and `docs/IMPLEMENT_PLAN.md` record the ranked plan, shipped outcomes, and honest deferrals.
+- completed this session: `src/utils/pwaInstallReadiness.js` adds pure PWA receipt + local prompt-attempt helpers with tests.
+- completed this session: `src/App.jsx` persists accepted/dismissed prompt outcomes; `src/components/HomeV2.jsx` renders PWA install readiness/acceptance evidence on the front door.
+- validation baseline: focused PWA/HomeV2 16/16, `npm run lint` clean, `npm test` 559/559, `npm run build` passing, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check passing.
+
+## Next Recommended Slice
+- [ ] Physical QA pass — use the input QA and PWA install receipts during one real gamepad/browser pass and one real mobile PWA install/standalone relaunch pass.
+- [ ] Replay enemy archetype parity slice — simulate one basic contact enemy against stored trace movement before touching advisory trust labels.
+- [ ] Verified screenshot capture completion — capture boss, build/debrief, and leaderboard browser PNGs before manifest replacement.
 ## Where We Left Off (Session 109)
 - Shipped: input QA receipt surface for launch/device confidence. `buildInputQaReceipt()` now turns local calibration + remembered controller profile data into a tested receipt, and HomeV2 renders that receipt instead of a loose input text chip.
 - Tests: focused 15/15; full `npm test` 552/552; lint/build/replay/media gates green.

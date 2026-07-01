@@ -72,6 +72,7 @@ import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
 import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
+import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
@@ -357,6 +358,9 @@ export default function CallOfDoodie() {
     const promptEvent = pwaPromptRef.current;
     promptEvent.prompt();
     const result = await promptEvent.userChoice.catch(() => null);
+    if (result?.outcome) {
+      savePwaInstallAttempt(buildPwaInstallAttempt({ outcome: result.outcome }));
+    }
     if (!result || result.outcome === "accepted" || result.outcome === "dismissed") {
       pwaPromptRef.current = null;
       setPwaPromptReady(false);
@@ -4231,6 +4235,7 @@ export default function CallOfDoodie() {
           assistAvailable={assistAvailable}
           onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
+          pwaInstallPromptReady={pwaPromptReady}
         />
       </Suspense>
     );

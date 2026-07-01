@@ -62,6 +62,7 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-debug-ops");
     localStorage.removeItem("cod-input-calibration");
     localStorage.removeItem("cod-controller-profile");
+    localStorage.removeItem("cod-pwa-install-attempt");
   });
 
   it("renders hero title + DEPLOY button and calls onStart on click", async () => {
@@ -207,6 +208,32 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("INPUT QA READY");
     expect(container.textContent).toContain("XBOX · FOUR-DIRECTION");
     expect(container.textContent).toContain("#1");
+  });
+
+  it("surfaces PWA install readiness without claiming physical acceptance", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} pwaInstallPromptReady onInstallApp={vi.fn()} />);
+    });
+
+    expect(container.textContent).toContain("PWA PROMPT READY");
+    expect(container.textContent).toContain("INSTALL APP");
+    expect(container.textContent).not.toContain("PWA INSTALLED");
+  });
+
+  it("renders stored PWA prompt acceptance as install QA evidence", async () => {
+    localStorage.setItem("cod-pwa-install-attempt", JSON.stringify({ version: 1, outcome: "accepted", timestamp: 123 }));
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("PWA ACCEPTED");
+    expect(container.textContent).not.toContain("PWA INSTALLED");
   });
 
   it("hides operational measurement status from the default visitor surface", async () => {

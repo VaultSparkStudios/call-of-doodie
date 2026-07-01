@@ -473,3 +473,11 @@ Decision: Treat the Session 108 `/goal arc` as a launch-confidence verification 
 Rationale: The live genius list had one agent-owned item: maintain launch confidence. Remaining high-value product items still require credentials, dashboard access, physical device QA, production data, or verified browser captures. Changing gameplay or UI without a real prompt from the audit would create churn without improving the launch state.
 
 Trade-off accepted: The commit is mostly evidence and closeout state. That is acceptable because the founder explicitly asked for arc, closeout, direct main push, and deploy.
+
+## 2026-07-01 — Session 110 — PWA install receipts must separate prompt evidence from physical install completion
+
+Decision: PWA install readiness may be surfaced from runtime browser evidence (`beforeinstallprompt`, service-worker support, manifest presence, standalone display mode, and browser `userChoice.outcome`), but the product must not claim physical PWA install QA is complete until a real device accepts the prompt and relaunches in standalone mode.
+
+Rationale: The browser prompt result is useful local QA evidence and should not be discarded, but accepted/dismissed prompt outcomes are not the same as a completed physical install and standalone relaunch pass.
+
+Trade-off accepted: HomeV2 now shows a PWA receipt chip for launch confidence; physical QA remains a real manual/device gate.

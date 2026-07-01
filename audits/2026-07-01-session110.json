@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-01",
+  "session": 110,
+  "project": "call-of-doodie",
+  "status": "green",
+  "silScore": 1000,
+  "silCategories": {
+    "devHealth": 100,
+    "creativeAlignment": 100,
+    "momentum": 100,
+    "engagement": 100,
+    "processQuality": 100,
+    "crossRepoCoherence": 100,
+    "securityPosture": 100,
+    "ecosystemIntegration": 100,
+    "capitalEfficiency": 100,
+    "automationCoverage": 100
+  },
+  "shipped": [
+    "pwa-install-readiness-receipt",
+    "pwa-install-outcome-receipt"
+  ],
+  "honestDeferrals": [
+    "supabase/analytics/dashboard/manual/data gates",
+    "full deterministic replay enemy/physics parity",
+    "full five-scene screenshot replacement"
+  ],
+  "validation": {
+    "tests": "npm test — 559/559",
+    "replayStateStepper": "npm run replay:state-stepper — 4 fixtures",
+    "lint": "npm run lint — clean",
+    "replayEdgeFixtures": "npm run replay:edge-fixtures — 4 fixtures",
+    "build": "npm run build — passing",
+    "launchMedia": "npm run launch:media-check — passing",
+    "focused": "npx vitest run src/utils/pwaInstallReadiness.test.js src/components/HomeV2.test.jsx — 16/16"
+  }
+}
