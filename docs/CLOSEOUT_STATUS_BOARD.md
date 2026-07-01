@@ -1,65 +1,18 @@
-<!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-01 (Session 110 closeout) -->
-
-# Closeout Status Board — Call-Of-Doodie
+# Closeout Status Board
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S110 ════════════════════╗
-║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 2 decreasing  ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
-║  Live:  preview  →  https://callofdoodie.wtf/                    ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: PWA install readiness and prompt-outcome receipt su  ║
-║  ✓ Tests: focused PWA/HomeV2 16/16; full `npm test` 559/559; li  ║
-║  ✓ Deploy: pending direct-to-main closeout commit/push.          ║
-║  ✓ session intent: run the requested continuous `/goal` `/arc`   ║
-║  ✓ intent outcome: Achieved for repo-executable work. The prima  ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
-║    Dev Health         100  ██████████                            ║
-║    Alignment          100  ██████████                            ║
-║    Momentum           100  ██████████                            ║
-║    Engagement         100  ██████████                            ║
-║    Process Qual       100  ██████████                            ║
-║    Coherence          100  ██████████                            ║
-║    Security           100  ██████████                            ║
-║    Ecosystem          100  ██████████                            ║
-║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
-║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 22 files  ·  M:16 A:0 D:0 ?:6                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
-║  Branch: main                                                    ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  N/A — internal/exempt (stagingType: none)             ║
-║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        —                                                ║
-║  Compliance:    —                                                ║
-║  Tests:         559/559                                          ║
-║  IGNIS:         13d ago                                          ║
-║  Truth:         green                                            ║
-║  Sanitization:  —                                                ║
-╚════════════════════════════════════════════════════════════════╝
-╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
+╔══ STATUS BOARD · CALL-OF-DOODIE · S111 ════════════════════════╗
+║ Date      2026-07-01                                           ║
+║ Branch    main                                                  ║
+║ Commit    4576106 feat(session-111): extract deathscreen event  ║
+║ Push      yes · origin/main...HEAD = 0 0                        ║
+║ Dirty     clean                                                 ║
+║ Deploy    GitHub Actions success · Cloudflare Pages success     ║
+║ Live      live:site-check 5/5 · post-cutover smoke 5/5          ║
+║ SIL       1000/1000 · Velocity 2 · Debt ↓                       ║
+║ Tests     561/561 · lint/build/replay/media green               ║
+║ Memory    Codex memory updated under ~/.codex/memories          ║
+║ Ark       session-impact-summary cargo queued                   ║
+║ Shells    0 persistent command sessions still running           ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
-
-*Generated by `scripts/render-closeout-board.mjs v1.0`*
