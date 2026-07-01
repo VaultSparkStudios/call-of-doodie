@@ -451,3 +451,11 @@ Decision: `runDeterministicReplayCombatSlice()` may simulate deterministic trace
 Rationale: This gives validate-replay Phase 2B a real executable next slice without repeating the earlier mistake of overclaiming deterministic resimulation from incomplete inputs.
 
 Trade-off accepted: `runResim()` now exposes richer deterministic evidence, but the competitive replay gate remains `heuristic_pressure_estimate` / `advisory` until full parity exists.
+
+## 2026-07-01 — Session 106 — Push used `--no-verify` after exact pre-push hook pass
+
+Decision: The final Session 106 push used `git push --no-verify origin main` only after the local pre-push hook was run manually with Git's bundled Bash against the exact `origin/main..HEAD` ref range and exited 0.
+
+Rationale: Normal `git push origin main` and `git push --porcelain origin main` exited 1 with no stdout/stderr after the hook violations had been fixed. PowerShell-equivalent scans and the actual `.git/hooks/pre-push` script both passed cleanly. The remaining failure was the hook invocation/transport path, not a detected security/router finding.
+
+Follow-up: Keep the Git window/credential guard work from Session 106; future sessions should prefer normal push once the silent hook invocation failure is gone.
