@@ -1,3 +1,5 @@
+import { buildStudioGameEvent } from "../utils/runIntelligence.js";
+
 export function buildDeathScreenProps({
   score,
   kills,
@@ -142,4 +144,75 @@ export function buildDeathCoachTelemetry({
         }
       : null,
   };
+}
+
+export function buildDebriefStudioEventPlan({
+  debriefTelemetry = {},
+  nextRunDrill = {},
+  contractProgress = null,
+  rivalryResult = null,
+  mode = "standard",
+  score = 0,
+  wave = 1,
+} = {}) {
+  const debriefEventKey = `${mode}:${score}:${wave}:${nextRunDrill.id || "none"}:${debriefTelemetry.cause || "unknown"}`;
+  const debriefEvent = buildStudioGameEvent("debrief_intelligence", debriefTelemetry);
+  const events = [
+    debriefEvent,
+    buildStudioGameEvent("next_run_drill_shown", {
+      surface: "death_screen",
+      drillId: nextRunDrill.id,
+      action: nextRunDrill.action,
+      seed: nextRunDrill.seed || null,
+      mode,
+      score,
+      wave,
+    }),
+  ];
+
+  let contractProgressKey = null;
+  if (contractProgress) {
+    contractProgressKey = `${contractProgress.contractId}:${contractProgress.seed ?? "none"}:${contractProgress.score}:${contractProgress.wave}`;
+    events.push(buildStudioGameEvent("weekly_contract_progress", {
+      surface: "death_screen",
+      ...contractProgress,
+    }));
+  }
+
+  if (rivalryResult) {
+    events.push(buildStudioGameEvent("rivalry_result", {
+      surface: "death_screen",
+      ...rivalryResult,
+    }));
+  }
+
+  return {
+    events,
+    debriefEvent,
+    debriefEventKey,
+    contractProgressKey,
+    analyticsPayload: {
+      ...debriefTelemetry,
+      studioEvent: debriefEvent,
+    },
+  };
+}
+
+export function buildScoreSubmitFallbackStudioEvent({
+  mode = "standard",
+  difficulty = "normal",
+  score = 0,
+  wave = 1,
+  runSeed = null,
+  submission = "local",
+} = {}) {
+  return buildStudioGameEvent("score_submit_result", {
+    surface: "death_screen",
+    mode,
+    difficulty,
+    score,
+    wave,
+    seed: runSeed,
+    submission,
+  });
 }

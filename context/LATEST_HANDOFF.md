@@ -1,3 +1,19 @@
+## Where We Left Off (Session 111)
+- Shipped: DeathScreen event-source extraction and debrief receipt dedupe. `buildDebriefStudioEventPlan()` and `buildScoreSubmitFallbackStudioEvent()` now own tested Studio event payload construction; DeathScreen persists through those builders instead of inline event payload blocks.
+- Tests: focused death-flow/HomeV2 16/16; full `npm test` 561/561; lint/build/replay/media/live gates green.
+- Deploy: pending direct-to-main closeout commit/push.
+
+Public-safe handoff summary:
+- session intent: run the requested continuous `/goal` `/arc` through start, audit, implement, innovation-pack saturation, closeout, direct main push, and status reporting.
+- intent outcome: Achieved for repo-executable work. Supabase/analytics/dashboard/device/data/publication items remain honestly gated after preflight.
+- completed this session: `docs/AUDIT_2026-07-01_5.json` / `.md`, `docs/IMPLEMENT_PLAN.md`, and regenerated `docs/INNOVATION_PACK.md` record the ranked plan, shipped outcome, and honest deferrals.
+- completed this session: `src/systems/deathFlow.js` adds pure debrief event plan and score-submit fallback builders; `src/components/DeathScreen.jsx` now dedupes debrief/drill receipts with a stable event key.
+- validation baseline: focused death-flow/HomeV2 16/16, `npm run lint` clean, `npm test` 561/561, `npm run build` passing, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, live site, and post-cutover smoke all passing.
+
+## Next Recommended Slice
+- [ ] Replay enemy archetype parity slice — simulate one basic contact enemy against stored trace movement before touching advisory trust labels.
+- [ ] Physical QA pass — use the input QA and PWA install receipts during one real gamepad/browser pass and one real mobile PWA install/standalone relaunch pass.
+- [ ] Verified screenshot capture completion — capture boss, build/debrief, and leaderboard browser PNGs before manifest replacement.
 ## Where We Left Off (Session 110)
 - Shipped: PWA install readiness and prompt-outcome receipt surface for launch/device confidence. `buildPwaInstallReceipt()` turns prompt-ready, browser-ready, standalone, accepted, and dismissed evidence into a tested local receipt; App persists the browser `userChoice.outcome`; HomeV2 renders the receipt without claiming physical install completion.
 - Tests: focused PWA/HomeV2 16/16; full `npm test` 559/559; lint/build/replay/media gates green.
@@ -1546,6 +1562,3 @@ Deployment verification completed after push:
 - `Deploy to Cloudflare Pages` run `28499115278` passed for commit `0c76bcd`.
 - `npm run live:site-check` passed 5/5 against `https://callofdoodie.wtf/`.
 - `npm run post-cutover:smoke` passed 5/5 across apex, Pages, `www`, backup, and backup `www` surfaces.
-
-
-

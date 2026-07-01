@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "generatedAt": "2026-07-01",
+    "session": 111,
+    "project": "call-of-doodie",
+    "type": "game",
+    "rubric": "product/game",
+    "combinedPriority": "45.6",
+    "top3": [
+      "death-submit-event-plan-extraction",
+      "debrief-event-dedupe-key",
+      "honest-gated-deferrals"
+    ]
+  },
+  "summary": "Live-code audit verified the primary genius list is still credential/dashboard/device/data gated. The shippable second-order lane was DeathScreen trust telemetry: event payloads were partly inline and rerenders could duplicate debrief/drill local Studio events. This session extracted those plans into pure builders and added a stable debrief receipt key.",
+  "items": [
+    {
+      "slug": "death-submit-event-plan-extraction",
+      "title": "Extract death-screen event planning into pure tested builders",
+      "tier": "FIRE",
+      "axis": "observability / trust",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 19.2,
+      "status": "shipped",
+      "why": "DeathScreen was still a mixed source of truth for debrief, next-run drill, weekly contract, rivalry, and score-submit fallback events. Extracting event construction makes local Studio telemetry inspectable and regression-testable.",
+      "recipe": "Add event plan builders to src/systems/deathFlow.js, keep DeathScreen orchestration-only, and assert event types/payloads in src/systems/deathFlow.test.js.",
+      "evidence": [
+        "src/systems/deathFlow.js",
+        "src/components/DeathScreen.jsx",
+        "src/systems/deathFlow.test.js",
+        "npx vitest run src/systems/deathFlow.test.js src/components/HomeV2.test.jsx"
+      ]
+    },
+    {
+      "slug": "debrief-event-dedupe-key",
+      "title": "Prevent duplicate debrief/drill receipts on rerender",
+      "tier": "FIRE",
+      "axis": "feedback loop / data truth",
+      "effortHours": 0.75,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 19.2,
+      "status": "shipped",
+      "why": "The effect depends on derived telemetry, so rerenders could re-save debrief_intelligence and next_run_drill_shown. A stable event key keeps the local event ledger honest while preserving contract-progress dedupe.",
+      "recipe": "Return debriefEventKey from buildDebriefStudioEventPlan(), keep a DeathScreen ref, skip duplicate debrief/drill events, and only track debrief_intelligence_view once per receipt.",
+      "evidence": [
+        "src/components/DeathScreen.jsx",
+        "src/systems/deathFlow.test.js",
+        "npm run lint",
+        "npm test"
+      ]
+    },
+    {
+      "slug": "honest-gated-deferrals",
+      "title": "Regenerate innovation pack and preserve gated work honestly",
+      "tier": "SPARK",
+      "axis": "process quality",
+      "effortHours": 0.5,
+      "impact": 6,
+      "innovation": 3,
+      "priority": 7.2,
+      "status": "honest-deferral",
+      "why": "Supabase and analytics capabilities are still missing, and physical/data/publication items require real external evidence. Deferral is the truthful implementation outcome for those rows.",
+      "recipe": "Run secrets/blocker preflight, regenerate docs/INNOVATION_PACK.md, and record the deferrals in audit/closeout instead of changing claims.",
+      "evidence": [
+        "docs/INNOVATION_PACK.md",
+        "node scripts/check-secrets.mjs --for supabase",
+        "node scripts/check-secrets.mjs --for analytics",
+        "node scripts/ops.mjs blocker-preflight"
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "sync-studio-events-deploy",
+      "reason": "SUPABASE_ACCESS_TOKEN unavailable; supabase capability remains MISSING."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "analytics capability remains MISSING and the remaining edits are dashboard-owned."
+    },
+    {
+      "slug": "full-deterministic-enemy-physics-resim",
+      "reason": "Real but too broad without stored trace payload design and narrowed parity slices. Advisory replay language remains correct."
+    },
+    {
+      "slug": "physical-and-human-data-qa",
+      "reason": "PWA/gamepad QA, Lighthouse/funnel evidence, Itch.io publication, and screenshot replacement require external device/data/UI evidence."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "death-submit-event-plan-extraction",
+      "status": "shipped",
+      "notes": "Added pure DeathScreen Studio event builders and wired component orchestration to them."
+    },
+    {
+      "slug": "debrief-event-dedupe-key",
+      "status": "shipped",
+      "notes": "Added stable debrief event key and component-level dedupe for debrief/drill receipts."
+    },
+    {
+      "slug": "honest-gated-deferrals",
+      "status": "honest-deferral",
+      "notes": "Regenerated innovation pack and verified Supabase/analytics missing capabilities."
+    }
+  ]
+}

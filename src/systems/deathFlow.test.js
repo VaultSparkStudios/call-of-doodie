@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildDeathCoachTelemetry, buildDeathScreenProps } from "./deathFlow.js";
+import { buildDeathCoachTelemetry, buildDeathScreenProps, buildDebriefStudioEventPlan, buildScoreSubmitFallbackStudioEvent } from "./deathFlow.js";
 
 describe("buildDeathScreenProps", () => {
   it("maps death screen state without reaching into React", () => {
@@ -88,5 +88,47 @@ describe("buildDeathScreenProps", () => {
       },
     });
   });
-});
+  it("builds debrief Studio event plans from visible death-screen truth", () => {
+    const plan = buildDebriefStudioEventPlan({
+      debriefTelemetry: { surface: "death_screen", cause: "cornered" },
+      nextRunDrill: { id: "drill-1", action: "Replay the seed", seed: 77 },
+      contractProgress: { contractId: "seed-week", seed: 77, score: 1200, wave: 8, progressLabel: "1 seeded run" },
+      rivalryResult: { seed: 77, result: "won", delta: 200 },
+      mode: "daily_challenge",
+      score: 1200,
+      wave: 8,
+    });
 
+    expect(plan.events.map((event) => event.type)).toEqual([
+      "debrief_intelligence",
+      "next_run_drill_shown",
+      "weekly_contract_progress",
+      "rivalry_result",
+    ]);
+    expect(plan.contractProgressKey).toBe("seed-week:77:1200:8");
+    expect(plan.debriefEventKey).toBe("daily_challenge:1200:8:drill-1:cornered");
+    expect(plan.analyticsPayload.studioEvent.type).toBe("debrief_intelligence");
+    expect(plan.events[1].payload).toMatchObject({ drillId: "drill-1", mode: "daily_challenge", score: 1200 });
+  });
+
+  it("builds local score-submit fallback events without inline component payloads", () => {
+    const event = buildScoreSubmitFallbackStudioEvent({
+      mode: "boss_rush",
+      difficulty: "hard",
+      score: 2200,
+      wave: 11,
+      runSeed: 99,
+    });
+
+    expect(event.type).toBe("score_submit_result");
+    expect(event.surface).toBe("death_screen");
+    expect(event.payload).toMatchObject({
+      mode: "boss_rush",
+      difficulty: "hard",
+      score: 2200,
+      wave: 11,
+      seed: 99,
+      submission: "local",
+    });
+  });
+});

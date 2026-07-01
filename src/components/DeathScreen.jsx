@@ -16,7 +16,7 @@ import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPa
 import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
-import { buildDeathCoachTelemetry } from "../systems/deathFlow.js";
+import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -62,6 +62,7 @@ export default function DeathScreen({
   const [replayMode, setReplayMode] = useState("full"); // "full" | "best_shot"
   const qrCanvasRef = useRef(null);
   const weeklyContractEventKeyRef = useRef(null);
+  const debriefEventKeyRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
   const [ghostData, setGhostData] = useState(null);
@@ -486,17 +487,6 @@ export default function DeathScreen({
   });
 
   useEffect(() => {
-    const studioEvent = buildStudioGameEvent("debrief_intelligence", debriefTelemetry);
-    saveStudioGameEvent(studioEvent);
-    saveStudioGameEvent(buildStudioGameEvent("next_run_drill_shown", {
-      surface: "death_screen",
-      drillId: nextRunDrill.id,
-      action: nextRunDrill.action,
-      seed: nextRunDrill.seed || null,
-      mode,
-      score,
-      wave,
-    }));
     const contractProgress = buildWeeklyContractProgressPayload({
       id: nextContractId,
       progress: nextContractProgress,
@@ -506,37 +496,37 @@ export default function DeathScreen({
       score,
       wave,
     });
-    if (contractProgress) {
-      const progressKey = `${contractProgress.contractId}:${contractProgress.seed ?? "none"}:${contractProgress.score}:${contractProgress.wave}`;
-      if (weeklyContractEventKeyRef.current !== progressKey) {
-        weeklyContractEventKeyRef.current = progressKey;
-        saveStudioGameEvent(buildStudioGameEvent("weekly_contract_progress", {
-          surface: "death_screen",
-          ...contractProgress,
-        }));
-      }
-    }
-    if (runSeed > 0) {
-      const rivalryResult = recordRivalryResult({
-        seed: runSeed,
-        vsScore,
-        vsName,
-        score,
-        wave,
-        mode,
-        difficulty,
-      });
-      if (rivalryResult) {
-        saveStudioGameEvent(buildStudioGameEvent("rivalry_result", {
-          surface: "death_screen",
-          ...rivalryResult,
-        }));
-      }
-    }
-    track("debrief_intelligence_view", {
-      ...debriefTelemetry,
-      studioEvent,
+    const rivalryResult = runSeed > 0 ? recordRivalryResult({
+      seed: runSeed,
+      vsScore,
+      vsName,
+      score,
+      wave,
+      mode,
+      difficulty,
+    }) : null;
+    const eventPlan = buildDebriefStudioEventPlan({
+      debriefTelemetry,
+      nextRunDrill: { id: nextRunDrill.id, action: nextRunDrill.action, seed: nextRunDrill.seed },
+      contractProgress,
+      rivalryResult,
+      mode,
+      score,
+      wave,
     });
+    const debriefAlreadyRecorded = debriefEventKeyRef.current === eventPlan.debriefEventKey;
+    eventPlan.events.forEach((event) => {
+      if ((event.type === "debrief_intelligence" || event.type === "next_run_drill_shown") && debriefAlreadyRecorded) return;
+      if (event.type === "weekly_contract_progress") {
+        if (weeklyContractEventKeyRef.current === eventPlan.contractProgressKey) return;
+        weeklyContractEventKeyRef.current = eventPlan.contractProgressKey;
+      }
+      saveStudioGameEvent(event);
+    });
+    if (!debriefAlreadyRecorded) {
+      debriefEventKeyRef.current = eventPlan.debriefEventKey;
+      track("debrief_intelligence_view", eventPlan.analyticsPayload);
+    }
     requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
   }, [debriefTelemetry, difficulty, mode, nextContractId, nextContractProgress, nextRunDrill.action, nextRunDrill.id, nextRunDrill.seed, runSeed, score, vsName, vsScore, wave]);
 
@@ -554,14 +544,12 @@ export default function DeathScreen({
     } catch {
       setSubmitStatus('local');
       setSubmitFeedback(null);
-      saveStudioGameEvent(buildStudioGameEvent("score_submit_result", {
-        surface: "death_screen",
+      saveStudioGameEvent(buildScoreSubmitFallbackStudioEvent({
         mode,
         difficulty,
         score,
         wave,
-        seed: runSeed,
-        submission: "local",
+        runSeed,
       }));
       requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
     }
@@ -1377,6 +1365,3 @@ export default function DeathScreen({
     </div>
   );
 }
-
-
-

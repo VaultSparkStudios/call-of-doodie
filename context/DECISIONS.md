@@ -481,3 +481,10 @@ Decision: PWA install readiness may be surfaced from runtime browser evidence (`
 Rationale: The browser prompt result is useful local QA evidence and should not be discarded, but accepted/dismissed prompt outcomes are not the same as a completed physical install and standalone relaunch pass.
 
 Trade-off accepted: HomeV2 now shows a PWA receipt chip for launch confidence; physical QA remains a real manual/device gate.
+## 2026-07-01 — Session 111 — DeathScreen event receipts are source-of-truth, not render noise
+
+Decision: DeathScreen debrief, next-run drill, weekly contract, rivalry, and score-submit fallback event payload construction should live in pure tested builders in `src/systems/deathFlow.js`; the React component should coordinate persistence only.
+
+Rationale: The local Studio event ledger feeds downstream trust, coaching, and analytics surfaces. Inline payload construction and rerender-driven duplicate events make observability harder to audit and can make local player behavior look noisier than it is.
+
+Trade-off accepted: This does not change gameplay or external analytics semantics. It narrows event construction and dedupes debrief/drill receipts while preserving weekly contract progress as a separate dedupe stream.

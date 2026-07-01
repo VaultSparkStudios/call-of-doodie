@@ -778,3 +778,11 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Shipped PWA install QA receipts: `src/utils/pwaInstallReadiness.js` derives prompt-ready/browser-ready/standalone/accepted/dismissed receipts; `src/App.jsx` stores real browser prompt outcomes; HomeV2 renders the PWA receipt without claiming physical install completion.
 - Preserved honest deferrals for Supabase/analytics/dashboard items, physical QA, Lighthouse/funnel evidence, full replay enemy/physics parity, and full screenshot replacement.
 - Validation: focused PWA/HomeV2 16/16, `npm run lint`, `npm test` 559/559, `npm run build`, `npm run replay:state-stepper`, `npm run replay:edge-fixtures`, and `npm run launch:media-check` all passed.
+## 2026-07-01 — Session 111 — DeathScreen Event Truth + Saturation Arc
+
+- Ran the requested continuous `/goal` `/arc` with `git pull --rebase origin main` first, Codex session lock, context-meter, secrets audit, blocker preflight, project/game profile, specialty review, and live-code audit verification.
+- Primary genius and innovation-pack candidates remained credential/dashboard/manual/data/product-decision or broad replay-design gated after `check-secrets` and blocker preflight, so the session shipped a verified second-order trust/observability slice instead of fabricating external evidence.
+- Generated `docs/AUDIT_2026-07-01_5.json` / `.md`, refreshed `docs/IMPLEMENT_PLAN.md`, and regenerated `docs/INNOVATION_PACK.md`.
+- Shipped DeathScreen event-source extraction: `buildDebriefStudioEventPlan()` and `buildScoreSubmitFallbackStudioEvent()` now own tested local Studio event payloads; DeathScreen orchestration uses them.
+- Shipped debrief receipt dedupe: a stable debrief event key prevents rerender-driven duplicate `debrief_intelligence` / `next_run_drill_shown` events while preserving weekly contract progress dedupe.
+- Validation: focused death-flow/HomeV2 16/16, `npm run lint`, `npm test` 561/561, `npm run build`, `npm run replay:state-stepper`, `npm run replay:edge-fixtures`, `npm run launch:media-check`, `npm run live:site-check`, and `npm run post-cutover:smoke` all passed.

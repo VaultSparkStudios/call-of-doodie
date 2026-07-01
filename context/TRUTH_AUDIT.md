@@ -664,3 +664,14 @@ Overall status: green locally and green on current live surfaces; deploy observa
 
 Overall status: green locally
 Last reviewed: 2026-07-01
+## 2026-07-01 — Session 111 — DeathScreen event-source truth
+
+- `docs/AUDIT_2026-07-01_5.json` / `.md` are the source of truth for the Session 111 audit implementation; both shipped items are marked with execution evidence.
+- DeathScreen event planning truth — `src/systems/deathFlow.js` owns `buildDebriefStudioEventPlan()` for debrief, next-run drill, weekly contract progress, and rivalry result local Studio events. `src/components/DeathScreen.jsx` persists the returned events.
+- Score-submit fallback truth — App remains the owner of canonical successful/rejected score-submit events through `createScoreSubmitStudioEvents()`. DeathScreen only writes a local `score_submit_result` fallback if `onSubmitScore` throws before App can write the canonical result.
+- Duplicate-receipt truth — `buildDebriefStudioEventPlan()` returns a stable `debriefEventKey`; DeathScreen uses it to avoid duplicate `debrief_intelligence` / `next_run_drill_shown` receipts on rerender while preserving weekly contract progress dedupe.
+- Deferred truth — Supabase and analytics capabilities remain missing after explicit checks; physical PWA/gamepad QA, Lighthouse/funnel evidence, Itch.io publication, screenshots, and full enemy/physics replay parity still require external evidence or a separate design slice.
+- Validation truth — focused death-flow/HomeV2 tests passed 16/16, full `npm test` passed 561/561, lint/build/replay/media/live gates passed.
+
+Overall status: green locally and green on current live surfaces
+Last reviewed: 2026-07-01
