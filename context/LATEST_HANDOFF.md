@@ -1481,3 +1481,9 @@ Public-safe handoff summary:
 - [ ] Set `KOFI_VERIFICATION_TOKEN` Supabase function secret, then paste `https://<project-ref>.supabase.co/functions/v1/kofi-webhook` into Ko-fi → More → Settings → API & Webhooks
 
 - detailed handoff history remains in the private Studio OS / ops repository
+
+Deployment verification completed after push:
+- `brief-format-check` run `28499115277` passed for commit `0c76bcd`.
+- `Deploy to Cloudflare Pages` run `28499115278` passed for commit `0c76bcd`.
+- `npm run live:site-check` passed 5/5 against `https://callofdoodie.wtf/`.
+- `npm run post-cutover:smoke` passed 5/5 across apex, Pages, `www`, backup, and backup `www` surfaces.

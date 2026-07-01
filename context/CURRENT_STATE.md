@@ -215,3 +215,4 @@
 - last updated: 2026-06-18 (Session 97 — visual asset library + pseudo-3D pipeline)
 
 - Session 107 (2026-07-01) repaired the remaining deploy gate after the Session 106 arc: `scripts/render-startup-brief.mjs` now wraps plain genius-list output in the canonical boxed `GENIUS HIT LIST`, always renders `HUMAN PRESSURE` with an honest empty state, and `docs/STARTUP_BRIEF.md` passes `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`. GitHub Actions now has `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` set from the Studio Ops secrets gateway for Cloudflare Pages deploy.
+- Session 107 deploy verification completed: GitHub Actions `brief-format-check` and `Deploy to Cloudflare Pages` passed on main, `npm run live:site-check` passed 5/5 on `https://callofdoodie.wtf/`, and `npm run post-cutover:smoke` passed 5/5 across apex/Pages/redirect surfaces.

@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 107 (2026-07-01) repaired the remaining deploy gates after the Session 106 arc: startup brief canonical GENIUS/HUMAN PRESSURE tiles now validate, and Cloudflare Pages GitHub Actions secrets are restored.",
-  "nextMilestone": "Push Session 107 deploy-gate repair, verify Cloudflare Pages workflow succeeds, run production live-site smoke checks, then continue replay enemy/physics parity design without changing advisory labels.",
+  "currentFocus": "Session 107 (2026-07-01) repaired and verified the deploy gates: startup brief validation passes, Cloudflare Pages GitHub Actions secrets are restored, Cloudflare deploy passed, and production live-site/post-cutover smoke checks are green.",
+  "nextMilestone": "Continue launch-confidence work: replay enemy/physics parity design without changing advisory labels, and verified five-scene screenshot replacement when browser capture evidence exists.",
   "testingSurfaces": [
     {
       "type": "production",

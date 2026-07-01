@@ -1362,3 +1362,5 @@ SIL +2: Closed the deploy gate left open after the Session 106 arc by repairing 
 1. Workflow secret drift probe — add a read-only GitHub Actions secret presence check to pre-closeout deploy readiness so missing deploy secrets are caught before push. High probability.
 2. Brief renderer contract test — add a direct unit/smoke test proving plain `generate-genius-list --brief` output renders as a boxed `GENIUS HIT LIST`. High probability.
 3. Cloudflare deploy postcheck — wire `gh run watch` plus `npm run live:site-check` into closeout deploy verification for this repo. Medium probability.
+
+Session 107 deploy verification addendum: `brief-format-check` and `Deploy to Cloudflare Pages` both passed on main after the repair commit, and production smoke checks passed (`live:site-check` 5/5, `post-cutover:smoke` 5/5). Intent outcome: Achieved.

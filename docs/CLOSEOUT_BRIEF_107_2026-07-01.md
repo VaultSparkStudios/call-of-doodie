@@ -26,3 +26,10 @@ Headline: Deploy gate repaired: startup brief validates and Cloudflare Pages has
 ## Blockers
 
 - Supabase/analytics/manual QA gates remain separate from Cloudflare Pages frontend deploy.
+
+## Deploy Verification
+
+- GitHub Actions `brief-format-check` run `28499115277` passed.
+- GitHub Actions `Deploy to Cloudflare Pages` run `28499115278` passed.
+- `npm run live:site-check` passed 5/5 against `https://callofdoodie.wtf/`.
+- `npm run post-cutover:smoke` passed 5/5 across apex, Pages, and redirect surfaces.

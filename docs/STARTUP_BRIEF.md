@@ -58,8 +58,8 @@
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    3% used                          ║
-║     32,769 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~16,385 tok/turn  ·  cache 50%  ·  54 turns to compact       ║
+║     29,459 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~14,730 tok/turn  ·  cache 50%  ·  60 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 

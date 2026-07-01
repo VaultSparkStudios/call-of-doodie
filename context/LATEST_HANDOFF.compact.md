@@ -1,46 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 7511328bba3c -->
-<!-- generated-at: 2026-07-01T06:46:20.909Z -->
+<!-- source-hash: 37322394e679 -->
+<!-- generated-at: 2026-07-01T06:50:59.309Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary (Session 107)
+Where We Left Off (Session 107)
 
-## Session
-Session 107. Continuing Codex /goal objective (replay-combat arc from S106).
-
-## Shipped
-- Fixed scripts/render-startup-brief.mjs: normalizes plain generate-genius-list --brief output into canonical boxed GENIUS HIT LIST tile.
-- Added honest empty-state HUMAN PRESSURE tile so brief surface always present.
+SHIPPED (S107)
+- Fixed scripts/render-startup-brief.mjs to normalize plain genius-list output into canonical boxed GENIUS HIT LIST tile.
+- Added honest empty-state HUMAN PRESSURE tile so brief surface always renders.
 - Regenerated docs/STARTUP_BRIEF.md; validate-brief-format now passes.
-- Set GitHub Actions secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID via Studio Ops gateway (no values printed).
+- Set GitHub Actions CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets from Studio Ops gateway (values not printed).
 
-## Validation
-- node --check scripts/render-startup-brief.mjs: pass
-- node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md: pass
+VALIDATION (S107)
+- node --check render-startup-brief.mjs: passed
+- validate-brief-format docs/STARTUP_BRIEF.md: passed
 - npm run lint: clean
 - npm test: 550/550 across 67 files
 - npm run build: passing
 
-## Current Intent
-Complete Codex /goal requirement: verify GitHub Actions deploy succeeds after brief-format-check fix and Cloudflare secret provisioning; continue deterministic replay parity design while preserving advisory replay-gate honesty boundary.
+CURRENT INTENT
+- Continue active Codex /goal objective (deploy pipeline recovery + deterministic replay arc). Requirement not fully closed until Cloudflare Pages rerun and prod smoke checks verify.
 
-## Now (Top 3)
-- Verify rerun Cloudflare Pages workflow + production smoke checks after push.
-- Continue deterministic replay enemy/physics parity design (bounded; must preserve advisory/heuristic_pressure_estimate labeling).
-- Design stored trace payload for full deterministic replay.
+NOW (top 3)
+1. Verify reran Cloudflare Pages workflow + production smoke checks after push.
+2. Continue deterministic replay enemy/physics parity design while preserving advisory replay-gate honesty boundary.
+3. Design stored trace payload for full replay parity (current combat slice is bounded/truth-labeled).
 
-## Blockers (Top 3)
-- Cloudflare Pages deploy previously failed: no CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID (now set; needs verification rerun).
-- brief-format-check rejected STARTUP_BRIEF.md for missing boxed GENIUS HIT LIST (fixed; needs deploy confirmation).
-- Full deterministic replay lacks enemy/physics parity; current combat slice is bounded and truth-labeled.
+BLOCKERS (top 3)
+1. Cloudflare Pages deploy previously failed for missing secrets; now set but rerun not yet confirmed green.
+2. Full deterministic replay parity blocked on enemy/physics parity + stored trace payload design.
+3. Advisory replay gate remains heuristic_pressure_estimate, not full parity.
 
-## Human-Blocked (with age)
-- Supabase live deploy (sync-studio-events): credential-gated, MISSING since S104 (~3 sessions).
-- PostHog/Sentry production analytics: dashboard/secret-gated since S104 (~3 sessions).
-- PWA install QA + real gamepad/browser QA: manual/device-gated since S104 (~3 sessions).
-- Five-scene screenshot replacement / Itch.io publication: browser-capture/publication-gated, ongoing since S101 (~6 sessions).
-- Lighthouse deltas / funnel analysis: browser/data-gated since S106 (~1 session).
+HUMAN-BLOCKED (with age)
+- Supabase deploy / sync-studio-events: credential-gated (SUPABASE_ACCESS_TOKEN), since ~S104.
+- PostHog/Sentry production analytics: dashboard/secret gated, since ~S104.
+- PWA install QA + real gamepad/browser QA: manual device work, since ~S104-105.
+- Five-scene screenshot replacement: needs browser-capture evidence, since ~S101-105.
+- Itch.io publication: manual, since ~S104.
+- Lighthouse deltas / funnel analysis: browser/data gated, since ~S104.
 
-## Next Session Pointer
-Push changes, confirm Cloudflare Pages workflow rerun + prod smoke pass, then resume bounded deterministic replay enemy/physics parity design.
+NEXT SESSION
+Confirm Cloudflare Pages rerun is green and run prod smoke checks; then resume deterministic replay enemy/physics parity design.
