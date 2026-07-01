@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { encodeReplayCommandTrace } from "./replayCommandTrace.js";
-import { buildDeterministicResimInputContract, buildReplayPressureProfile, runDeterministicReplayStateStepper, runResim } from "./replayResim.js";
+import { buildDeterministicResimInputContract, buildReplayPressureProfile, runDeterministicReplayCombatSlice, runDeterministicReplayStateStepper, runResim } from "./replayResim.js";
 import { replayTraceFixtureTable, makeMalformedTrace, makeRichTrace } from "./replayTraceFixtures.js";
 
 describe("runResim", () => {
@@ -154,6 +154,77 @@ describe("runResim", () => {
       ok: false,
       reason: "invalid-trace",
       finalState: null,
+    });
+  });
+  it("runs a bounded deterministic combat slice from trace actions", () => {
+    const trace = encodeReplayCommandTrace([
+      { frame: 0, action: "move", value: "e" },
+      { frame: 12, action: "shoot", value: "w0" },
+      { frame: 18, action: "shoot", value: "w0" },
+      { frame: 30, action: "shoot", value: "w0" },
+      { frame: 42, action: "dash", value: "n" },
+      { frame: 60, action: "grenade", value: "arc" },
+      { frame: 72, action: "reload", value: "manual" },
+      { frame: 168, action: "shoot", value: "w0" },
+    ]);
+
+    const result = runDeterministicReplayCombatSlice(777, trace, {
+      maxFrames: 180,
+      initialPlayer: { x: 100, y: 100, speed: 2 },
+      initialCombat: { ammo: 3, maxAmmo: 6, reserveAmmo: 9, grenades: 1 },
+      canvasSize: { w: 800, h: 600 },
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      method: "deterministic_replay_combat_slice_v1",
+      coverage: "trace_movement_actions_no_enemies",
+      seed: 777,
+      commandCount: 8,
+    });
+    expect(result.finalState).toMatchObject({
+      frame: 174,
+      x: 448,
+      y: 76,
+      ammo: 5,
+      reserveAmmo: 4,
+      grenades: 0,
+      shotsFired: 3,
+      reloadsCompleted: 1,
+      dashes: 1,
+      grenadesThrown: 1,
+      reason: "final",
+    });
+  });
+
+  it("records blocked combat actions without pretending full physics parity", () => {
+    const trace = encodeReplayCommandTrace([
+      { frame: 0, action: "shoot", value: "w0" },
+      { frame: 6, action: "shoot", value: "w0" },
+      { frame: 12, action: "grenade", value: "arc" },
+      { frame: 18, action: "grenade", value: "arc" },
+    ]);
+
+    const result = runDeterministicReplayCombatSlice(1, trace, {
+      initialCombat: { ammo: 1, maxAmmo: 1, reserveAmmo: 0, grenades: 1 },
+    });
+
+    expect(result.coverage).toBe("trace_movement_actions_no_enemies");
+    expect(result.finalState.blockedActions).toEqual([
+      { frame: 6, action: "shoot", reason: "cooldown" },
+      { frame: 18, action: "grenade", reason: "cooldown" },
+    ]);
+  });
+
+  it("exposes the combat slice through runResim while preserving advisory confidence", () => {
+    const result = runResim(12345, makeRichTrace(), 1000, { wave: 3, score: 1200 });
+
+    expect(result.method).toBe("heuristic_pressure_estimate");
+    expect(result.confidence).toBe("advisory");
+    expect(result.deterministicCombatSlice).toMatchObject({
+      ok: true,
+      method: "deterministic_replay_combat_slice_v1",
+      coverage: "trace_movement_actions_no_enemies",
     });
   });
 });

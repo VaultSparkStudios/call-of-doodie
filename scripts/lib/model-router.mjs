@@ -163,46 +163,6 @@ export function withCache(block, opts = {}) {
 export function withLongCache(block) { return withCache(block, { ttl: '1h' }); }
 
 /**
- * Replace lone UTF-16 surrogate code units before JSON leaves this process.
- * JSON.stringify can emit "\ud800"-style escapes for malformed local strings,
- * but provider APIs reject those because they are not valid Unicode scalar values.
- * Valid surrogate pairs, including emoji, are preserved.
- */
-export function sanitizeUnicodeScalars(value) {
-  if (typeof value === 'string') {
-    let out = '';
-    for (let i = 0; i < value.length; i++) {
-      const code = value.charCodeAt(i);
-      if (code >= 0xD800 && code <= 0xDBFF) {
-        const next = value.charCodeAt(i + 1);
-        if (next >= 0xDC00 && next <= 0xDFFF) {
-          out += value[i] + value[i + 1];
-          i++;
-        } else {
-          out += '\uFFFD';
-        }
-      } else if (code >= 0xDC00 && code <= 0xDFFF) {
-        out += '\uFFFD';
-      } else {
-        out += value[i];
-      }
-    }
-    return out;
-  }
-  if (Array.isArray(value)) return value.map(sanitizeUnicodeScalars);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, entry]) => [key, sanitizeUnicodeScalars(entry)])
-    );
-  }
-  return value;
-}
-
-export function safeJsonStringify(value) {
-  return JSON.stringify(sanitizeUnicodeScalars(value));
-}
-
-/**
  * Build standard API request headers (no SDK required).
  * @param {string} apiKey
  * @param {object} [opts]
@@ -454,6 +414,40 @@ export function buildMcpServers(servers) {
   };
 }
 
+function sanitizeUnicodeString(value) {
+  let out = '';
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    if (code >= 0xD800 && code <= 0xDBFF) {
+      const next = value.charCodeAt(i + 1);
+      if (next >= 0xDC00 && next <= 0xDFFF) {
+        out += value[i] + value[i + 1];
+        i++;
+      } else {
+        out += '\uFFFD';
+      }
+    } else if (code >= 0xDC00 && code <= 0xDFFF) {
+      out += '\uFFFD';
+    } else {
+      out += value[i];
+    }
+  }
+  return out;
+}
+
+export function sanitizeUnicodeScalars(value) {
+  if (typeof value === 'string') return sanitizeUnicodeString(value);
+  if (Array.isArray(value)) return value.map((item) => sanitizeUnicodeScalars(item));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, sanitizeUnicodeScalars(entry)]));
+  }
+  return value;
+}
+
+export function safeJsonStringify(value) {
+  return JSON.stringify(sanitizeUnicodeScalars(value));
+}
+
 /**
  * Make a Claude API messages call via raw https (no SDK dependency).
  * Returns the parsed response or throws on error.
@@ -639,7 +633,7 @@ export async function callWithEscalation(opts, httpsModule) {
  * Returns cached response if hash matches and is under `ttlSec` old.
  */
 export function semanticCacheKey(system, messages, model) {
-  const normalized = safeJsonStringify({ m: model, s: typeof system === 'string' ? system : safeJsonStringify(system), u: messages });
+  const normalized = JSON.stringify({ m: model, s: typeof system === 'string' ? system : JSON.stringify(system), u: messages });
   return crypto.createHash('sha256').update(normalized).digest('hex');
 }
 
@@ -782,7 +776,7 @@ export function logMetrics({ script, model, usage, mode = null, logPath = null }
 export function callAnthropicRaw({ apiKey, method, path, body = null, betaHeader = null }, httpsModule) {
   const headers = buildHeaders(apiKey);
   if (betaHeader) headers['anthropic-beta'] = betaHeader;
-  const payload = body ? safeJsonStringify(body) : null;
+  const payload = body ? JSON.stringify(body) : null;
   if (payload) headers['Content-Length'] = Buffer.byteLength(payload);
 
   return new Promise((resolve, reject) => {
@@ -808,7 +802,7 @@ export function callAnthropicRaw({ apiKey, method, path, body = null, betaHeader
  * Returns batch object with id for polling.
  */
 export function submitBatch(apiKey, requests, httpsModule) {
-  const payload = safeJsonStringify({ requests });
+  const payload = JSON.stringify({ requests });
   const headers = buildHeaders(apiKey);
 
   return new Promise((resolve, reject) => {

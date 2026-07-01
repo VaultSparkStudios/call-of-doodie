@@ -1,5 +1,5 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-06-29T20:04:20.747Z -->
+<!-- generated-at: 2026-07-01T05:59:41.198Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
@@ -45,7 +45,3 @@
 - Treat human/device/dashboard items as launch gates, not repo-code blockers.
 - Keep replay, leaderboard, and submission trust language evidence-backed.
 - Prefer local deterministic helpers over paid API or per-user variable cost.
-
-## Session 105 Execution
-
-- `sil-2-blocker-s61-s59-carryover-validate-replay-phase-2b-build-the-actua` - bounded repo-owned slice shipped. Added deterministic movement/aim state stepping plus `npm run replay:state-stepper` fixture validation. Full combat/physics resimulation remains future work and is not claimed.

@@ -69,6 +69,69 @@ function snapshot(frame, player, aimBucket, actionCounts, reason) {
     reason,
   };
 }
+
+function makeCombatState(initialCombat = {}) {
+  return {
+    ammo: clampInt(initialCombat.ammo, 0, 999, 12),
+    maxAmmo: clampInt(initialCombat.maxAmmo, 1, 999, 12),
+    reserveAmmo: clampInt(initialCombat.reserveAmmo, 0, 9999, 36),
+    reloadFrames: 0,
+    fireCooldown: 0,
+    dashCooldown: 0,
+    grenadeCooldown: 0,
+    grenades: clampInt(initialCombat.grenades, 0, 99, 2),
+    shotsFired: 0,
+    reloadsStarted: 0,
+    reloadsCompleted: 0,
+    dashes: 0,
+    grenadesThrown: 0,
+    blockedActions: [],
+  };
+}
+
+function advanceCombat(combat, frames) {
+  const frameCount = clampInt(frames, 0, 36000, 0);
+  if (frameCount <= 0) return combat;
+  const reloadBefore = combat.reloadFrames;
+  combat.reloadFrames = Math.max(0, combat.reloadFrames - frameCount);
+  combat.fireCooldown = Math.max(0, combat.fireCooldown - frameCount);
+  combat.dashCooldown = Math.max(0, combat.dashCooldown - frameCount);
+  combat.grenadeCooldown = Math.max(0, combat.grenadeCooldown - frameCount);
+  if (reloadBefore > 0 && combat.reloadFrames === 0) {
+    const needed = Math.max(0, combat.maxAmmo - combat.ammo);
+    const loaded = Math.min(needed, combat.reserveAmmo);
+    combat.ammo += loaded;
+    combat.reserveAmmo -= loaded;
+    combat.reloadsCompleted += 1;
+  }
+  return combat;
+}
+
+function combatSnapshot(frame, player, aimBucket, combat, reason) {
+  return {
+    frame,
+    x: round3(player.x),
+    y: round3(player.y),
+    aimBucket,
+    ammo: combat.ammo,
+    reserveAmmo: combat.reserveAmmo,
+    grenades: combat.grenades,
+    shotsFired: combat.shotsFired,
+    reloadsCompleted: combat.reloadsCompleted,
+    dashes: combat.dashes,
+    grenadesThrown: combat.grenadesThrown,
+    fireCooldown: combat.fireCooldown,
+    dashCooldown: combat.dashCooldown,
+    grenadeCooldown: combat.grenadeCooldown,
+    reloadFrames: combat.reloadFrames,
+    blockedActions: combat.blockedActions.slice(-6),
+    reason,
+  };
+}
+
+function blockCombatAction(combat, frame, action, reason) {
+  combat.blockedActions.push({ frame, action, reason });
+}
 export function buildReplayPressureProfile(seed, traceBodyOrTrace, maxFrames = 36000, submitted = {}) {
   const trace = parseTrace(traceBodyOrTrace, submitted.traceLength, submitted.traceDigest);
   const valid = isValidReplayCommandTrace(trace);
@@ -164,6 +227,108 @@ export function runDeterministicReplayStateStepper(seed, traceBodyOrTrace, {
     finalState,
   };
 }
+export function runDeterministicReplayCombatSlice(seed, traceBodyOrTrace, {
+  maxFrames = 36000,
+  submitted = {},
+  initialPlayer = {},
+  initialCombat = {},
+  canvasSize = {},
+} = {}) {
+  const trace = parseTrace(traceBodyOrTrace, submitted.traceLength, submitted.traceDigest);
+  if (!isValidReplayCommandTrace(trace)) {
+    return {
+      ok: false,
+      method: "deterministic_replay_combat_slice_v1",
+      coverage: "trace_movement_actions_no_enemies",
+      reason: "invalid-trace",
+      checkpoints: [],
+      finalState: null,
+    };
+  }
+
+  const events = decodeReplayCommandTrace(trace) || [];
+  const frameCap = clampInt(maxFrames, STEP_FRAME_BUCKET, 36000, 36000);
+  const lastEventFrame = events.at(-1)?.f ?? 0;
+  const finalFrame = Math.min(frameCap, lastEventFrame + STEP_FRAME_BUCKET);
+  const player = clampPlayerState({
+    x: Number(initialPlayer.x) || 400,
+    y: Number(initialPlayer.y) || 300,
+    speed: Number(initialPlayer.speed) || 4,
+  }, canvasSize);
+  const combat = makeCombatState(initialCombat);
+  const checkpoints = [combatSnapshot(0, player, "neutral", combat, "start")];
+  let movement = DIRECTION_VECTORS.neutral;
+  let aimBucket = "neutral";
+  let currentFrame = 0;
+
+  for (const event of events) {
+    const eventFrame = Math.min(frameCap, Math.max(0, event.f));
+    const elapsed = eventFrame - currentFrame;
+    advanceState(player, movement, elapsed, canvasSize);
+    advanceCombat(combat, elapsed);
+    currentFrame = eventFrame;
+
+    if (event.a === "move") movement = directionToVector(event.v);
+    if (event.a === "aim") aimBucket = event.v || "neutral";
+    if (event.a === "dash") {
+      if (combat.dashCooldown > 0) {
+        blockCombatAction(combat, currentFrame, "dash", "cooldown");
+      } else {
+        advanceState(player, directionToVector(event.v || aimBucket), STEP_FRAME_BUCKET * 2, canvasSize);
+        combat.dashes += 1;
+        combat.dashCooldown = 90;
+      }
+    }
+    if (event.a === "shoot") {
+      if (combat.reloadFrames > 0) blockCombatAction(combat, currentFrame, "shoot", "reloading");
+      else if (combat.fireCooldown > 0) blockCombatAction(combat, currentFrame, "shoot", "cooldown");
+      else if (combat.ammo <= 0) blockCombatAction(combat, currentFrame, "shoot", "empty");
+      else {
+        combat.ammo -= 1;
+        combat.shotsFired += 1;
+        combat.fireCooldown = 12;
+      }
+    }
+    if (event.a === "reload") {
+      if (combat.reloadFrames > 0) blockCombatAction(combat, currentFrame, "reload", "already-reloading");
+      else if (combat.ammo >= combat.maxAmmo) blockCombatAction(combat, currentFrame, "reload", "full");
+      else if (combat.reserveAmmo <= 0) blockCombatAction(combat, currentFrame, "reload", "no-reserve");
+      else {
+        combat.reloadFrames = 90;
+        combat.reloadsStarted += 1;
+      }
+    }
+    if (event.a === "grenade") {
+      if (combat.grenadeCooldown > 0) blockCombatAction(combat, currentFrame, "grenade", "cooldown");
+      else if (combat.grenades <= 0) blockCombatAction(combat, currentFrame, "grenade", "empty");
+      else {
+        combat.grenades -= 1;
+        combat.grenadesThrown += 1;
+        combat.grenadeCooldown = 180;
+      }
+    }
+
+    checkpoints.push(combatSnapshot(currentFrame, player, aimBucket, combat, `${event.a}:${event.v || "none"}`));
+  }
+
+  const tailFrames = finalFrame - currentFrame;
+  advanceState(player, movement, tailFrames, canvasSize);
+  advanceCombat(combat, tailFrames);
+  currentFrame = finalFrame;
+  const finalState = combatSnapshot(currentFrame, player, aimBucket, combat, "final");
+
+  return {
+    ok: true,
+    method: "deterministic_replay_combat_slice_v1",
+    coverage: "trace_movement_actions_no_enemies",
+    seed: clampInt(seed, 0, 999999999, 0),
+    framesSimulated: currentFrame,
+    commandCount: events.length,
+    checkpoints,
+    finalState,
+  };
+}
+
 export function buildDeterministicResimInputContract({
   seed = null,
   trace = null,
@@ -203,6 +368,9 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
   const deterministicStepper = deterministicContract.ready
     ? runDeterministicReplayStateStepper(seed, traceBodyOrTrace, { maxFrames, submitted })
     : null;
+  const deterministicCombatSlice = deterministicContract.ready
+    ? runDeterministicReplayCombatSlice(seed, traceBodyOrTrace, { maxFrames, submitted })
+    : null;
   const waveDrift = Math.abs(submittedWave - pressureProfile.finalWave) / Math.max(4, submittedWave);
   const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - pressureProfile.finalScore) / Math.max(2500, submittedScore) : 0;
   const driftPct = pressureProfile.valid ? Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100 : 100;
@@ -222,6 +390,7 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
     pressureProfile,
     deterministicContract,
     deterministicStepper,
+    deterministicCombatSlice,
     reason: pressureProfile.valid ? null : "invalid-trace",
   };
 }

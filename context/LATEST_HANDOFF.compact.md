@@ -1,43 +1,43 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 96ddcb769409 -->
-<!-- generated-at: 2026-06-29T19:53:41.400Z -->
+<!-- source-hash: 55e7f05b7e11 -->
+<!-- generated-at: 2026-07-01T05:54:57.252Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 104 (2026-06-29)
+Where We Left Off — Handoff Summary
 
-## Session State
-- Latest: Session 104. Ran continuous arc loop after syncing origin/main; prior same-day audit already shipped.
-- Generated/implemented docs/AUDIT_2026-06-29_2.json/.md plus innovation-pack pass.
+Session
+- Latest: 105 (2026-06-29), closing direct-to-main.
 
-## Shipped This Session
-- buildDeathCoachTelemetry() maps weapon mismatch, precision, enemy lab, cross-run pattern, choke-point coaching into tested event contract.
-- buildScoreSubmitAnalyticsPayload() owns rejection/digest/trace-evidence analytics outside React/Supabase side effects.
-- buildDeterministicResimInputContract() reports resim readiness; runResim() still honestly labeled heuristic_pressure_estimate.
-- buildStudioGameEvent("debrief_intelligence") preserves coaching flags, weapon mismatch copy, choke-warning evidence.
-- Audit/implement artifacts updated.
+Shipped (Session 105)
+- Added context/GAME_LOOP.md so canonical /game-loop-review reads expected source.
+- Added movement/aim-only deterministic replay stepping in src/utils/replayResim.js; runResim() exposes deterministicStepper only when input contract ready; gate still labeled heuristic_pressure_estimate/advisory.
+- Added scripts/validate-replay-state-stepper-fixtures.mjs + npm run replay:state-stepper (validate-replay Phase 2B follow-through).
+- Updated public/manifest.json to verified browser-capture PNGs for combat/mobile; strengthened scripts/validate-launch-media.mjs to require production-ready browser-capture records.
+- Wrote missing context/CANON_ADOPTION.md; audit/implement artifacts updated (AUDIT_2026-06-29_3, IMPLEMENT_PLAN.md, INNOVATION_PACK.md).
 
-## Validation
-- lint, build pass. npm test 545/545 across 67 files. replay:edge-fixtures 4/4. launch:media-check pass (5 manifest screenshots, 2 verified captures).
+Current Intent
+- Continue durable /goal arc: /start -> /audit -> /implement, preserving replay honesty boundary and launch-media truth gates.
 
-## Current Intent
-- Continue durable /start -> /audit -> /implement -> /closeout loop with innovation-pack continuation.
+Validation Status
+- lint clean; test 547/547 (67 files); build passing.
+- replay:state-stepper 4/4; replay:edge-fixtures 4/4; launch:media-check passing (5 screenshots/2 verified); protocol:drift 24/24 green.
 
-## Now Bucket (Top 3)
-1. Replay path: build first deterministic state-stepper behind new input contract.
-2. Verified browser scene capture for all five manifest screenshots, then launch:media-check.
-3. Replace manifest SVG fallbacks with verified gameplay PNGs.
+Now Bucket (top 3)
+- Build next deterministic replay slice only after preserving honesty boundary (state-stepper covers movement/aim, not combat/physics parity).
+- Capture verified boss, build/debrief, and leaderboard browser screenshots, then replace remaining SVG fallback manifest entries.
+- Extend deterministic input contract toward combat/physics before claiming full replay parity.
 
-## Blockers (Top 3)
-1. Supabase secrets MISSING — sync-studio-events live deploy credential-gated.
-2. Analytics secrets MISSING — PostHog/Sentry production gated on dashboard/GitHub secrets.
-3. Deterministic replay resim still heuristic-only; true physics-parity remains larger trust milestone.
+Blockers (top 3)
+- Deterministic replay parity blocked on combat/physics contract not yet defined; current receipt stays advisory.
+- Remaining manifest screenshots still SVG fallback pending verified scene captures.
+- Replay trust milestone (true physics-parity resim) remains a larger deferred design slice.
 
-## Human-Blocked Items (age from Session 104)
-- Physical PWA install QA — manual/device, open since S104 (recurring since ~S85).
-- One real gamepad/browser combo QA — manual, open since S104 (recurring since ~S85).
-- Itch.io publication — human, open since S104 (recurring since ~S87).
-- Five-scene screenshot replacement — browser-capture, open since S104 (recurring since S97).
+Human-Blocked / Credential-Gated
+- Supabase live deploy (sync-studio-events / submit-score): check-secrets reports MISSING SUPABASE_ACCESS_TOKEN. Open since ~S92/S104.
+- PostHog/Sentry production analytics: dashboard/GitHub-secret gated. Open since ~S98/S104.
+- PWA install QA + real gamepad/browser QA: manual device work. Long-standing (S90+).
+- Itch.io publication: manual. Long-standing.
 
-## Next-Session Pointer
-Build the first deterministic replay state-stepper behind buildDeterministicResimInputContract(), or run verified five-scene browser capture if doing launch polish.
+Next Session Pointer
+- Run fresh /audit against current state; pick next repo-local slice (replay contract extension or verified scene captures) since prior audit queue is exhausted.

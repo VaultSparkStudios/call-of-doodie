@@ -443,3 +443,11 @@ Rationale: The premise looked suspicious from grep, but both sites clear `timerR
 Decision: advance deterministic replay in bounded, labeled slices. The new state-stepper is movement/aim-only and must not be described as full deterministic physics or combat resimulation. `runResim()` keeps `heuristic_pressure_estimate` / advisory labeling until combat/physics parity exists.
 
 Decision: manifest screenshot entries may point to verified browser-capture PNGs only when the capture file exists and `assets/visual-assets.json` records it as `sourceType: browser-capture` and `status: production-ready`. Uncaptured launch scenes stay as SVG fallback art instead of being relabeled as gameplay screenshots.
+
+## 2026-07-01 — Session 106 — Deterministic replay combat slice remains bounded
+
+Decision: `runDeterministicReplayCombatSlice()` may simulate deterministic trace-action state for movement, dash impulse, weapon fire cooldown, ammo, reload completion, grenade cooldown, and blocked-action receipts, but it must be labeled `trace_movement_actions_no_enemies` until enemy movement, collision, damage, pickups, wave state, and full physics parity are represented.
+
+Rationale: This gives validate-replay Phase 2B a real executable next slice without repeating the earlier mistake of overclaiming deterministic resimulation from incomplete inputs.
+
+Trade-off accepted: `runResim()` now exposes richer deterministic evidence, but the competitive replay gate remains `heuristic_pressure_estimate` / `advisory` until full parity exists.

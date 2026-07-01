@@ -1,3 +1,30 @@
+# Where We Left Off (Session 106)
+
+Session 106 completed the requested Codex `/goal` arc continuation through `/start -> /audit -> /implement -> /closeout`. Required `git pull --rebase origin main` was attempted first and blocked by pre-existing unstaged script changes, so the session preserved the dirty worktree, classified no stale lock/cut-off closeout artifacts, and proceeded with live-code verification.
+
+Shipped behavior and evidence:
+- Generated `docs/AUDIT_2026-07-01.json` / `.md` after verifying the Unified Genius List against source. Credential, dashboard, physical QA, data, and product-decision items were honestly deferred after preflight instead of force-greened.
+- Added `runDeterministicReplayCombatSlice()` in `src/utils/replayResim.js`: a deterministic trace-action slice covering movement, dash impulse, fire cooldown, ammo, reload completion, grenade cooldown, and blocked-action receipts.
+- `runResim()` now exposes `deterministicCombatSlice` when `buildDeterministicResimInputContract()` is ready, while preserving the honest `heuristic_pressure_estimate` / `advisory` replay gate. This is not full enemy/physics parity.
+- Expanded `scripts/validate-replay-state-stepper-fixtures.mjs` / `npm run replay:state-stepper` so the fixture gate validates both movement/aim stepping and the new combat-slice contract.
+- Full-suite verification exposed pre-existing dirty protocol regressions; fixed them at source: recursive Unicode scalar sanitization and `safeJsonStringify()` in `scripts/lib/model-router.mjs`, no-network `compact-handoff --smoke-unicode`, and Codex `verify-plan-mode` `not_required` stamping.
+
+Validation:
+- `npx vitest run src\utils\replayResim.test.js` — 11/11
+- `npm run replay:state-stepper` — 4 fixtures
+- `npx vitest run tests\model-router-unicode.test.js tests\compact-handoff-unicode-smoke.test.js tests\verify-plan-mode.test.js` — 4/4
+- `npm run lint` — clean
+- `npm test` — 550/550 across 67 files
+- `npm run build` — passing
+- `npm run replay:edge-fixtures` — 4 fixtures
+- `npm run launch:media-check` — passing
+
+Open next:
+- Full deterministic replay still needs enemy/physics parity and stored trace payload design; current combat slice is bounded and truth-labeled.
+- Supabase deploy and analytics/dashboard work remain credential-gated; PWA install/gamepad QA, Lighthouse deltas, and funnel analysis remain physical/browser/data gates.
+- Next best repo-local product slice: continue the replay path into enemy/physics parity design, or complete verified five-scene screenshot replacement once capture evidence exists.
+
+---
 # Where We Left Off (Session 105)
 
 Session 105 completed the requested Codex `/goal` arc through `/start -> /audit -> /implement` and is closing out direct-to-main. The session created `docs/AUDIT_2026-06-29_3.json` / `.md`, updated `docs/IMPLEMENT_PLAN.md`, regenerated and executed the relevant part of `docs/INNOVATION_PACK.md`, and wrote missing `context/CANON_ADOPTION.md` through the official canon adoption checker.

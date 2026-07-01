@@ -49,16 +49,32 @@ if (m) sessionStart = new Date(m[1]).getTime();
 
 const planModeRequired = !!status.modelPlanMode;
 const tier = status.modelTier || null;
-const agentMatch = lockText.match(/^agent:\s*(\S+)/m);
-const sessionAgent = agentMatch ? agentMatch[1] : (status.lastAgent || null);
+const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || status.lastAgent || '').toLowerCase();
 
-if (!planModeRequired) {
-  stampNotRequired('tier does not require plan-mode');
+function stampPlanModeDetected(value) {
+  try {
+    status.planModeDetected = value;
+    status.planModeCheckedAt = new Date().toISOString();
+    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+  } catch { /* non-fatal */ }
+  try {
+    if (fs.existsSync(lockPath)) {
+      const updated = lockText.includes('plan_mode_detected:')
+        ? lockText.replace(/plan_mode_detected:\s*\S+/, `plan_mode_detected: ${value}`)
+        : lockText.trimEnd() + `\nplan_mode_detected: ${value}\n`;
+      fs.writeFileSync(lockPath, updated);
+    }
+  } catch { /* non-fatal */ }
+}
+
+if (agent === 'codex') {
+  stampPlanModeDetected('not_required');
+  emit({ status: 'not_required', agent, tier, reason: 'Codex does not support Claude Code plan-mode; slash-mode activation is not required.' });
   process.exit(0);
 }
 
-if (sessionAgent && sessionAgent !== 'claude-code') {
-  stampNotRequired(`agent ${sessionAgent} does not support Claude Code plan-mode`);
+if (!planModeRequired) {
+  emit({ status: 'not_required', tier, reason: 'tier does not require plan-mode' });
   process.exit(0);
 }
 
@@ -149,21 +165,3 @@ function emit(r) {
   if (r.reminder) console.log(`  → ${r.reminder}`);
 }
 emit(result);
-
-function stampNotRequired(reason) {
-  const result = { status: 'not_required', tier, agent: sessionAgent, reason };
-  try {
-    status.planModeDetected = result.status;
-    status.planModeCheckedAt = new Date().toISOString();
-    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
-  } catch { /* non-fatal */ }
-  try {
-    if (fs.existsSync(lockPath)) {
-      const updated = lockText.includes('plan_mode_detected:')
-        ? lockText.replace(/plan_mode_detected:\s*\S+/, `plan_mode_detected: ${result.status}`)
-        : lockText.trimEnd() + `\nplan_mode_detected: ${result.status}\n`;
-      fs.writeFileSync(lockPath, updated);
-    }
-  } catch { /* non-fatal */ }
-  emit(result);
-}

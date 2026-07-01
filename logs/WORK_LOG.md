@@ -734,3 +734,12 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Implemented all three verified audit items: `context/GAME_LOOP.md`, deterministic movement/aim replay state-stepper, and verified launch-media manifest/provenance enforcement.
 - Ran innovation-pack saturation and shipped the bounded validate-replay Phase 2B follow-through: `scripts/validate-replay-state-stepper-fixtures.mjs` plus `npm run replay:state-stepper`.
 - Validation: lint clean; full tests 547/547; build passing; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check passing; protocol drift 24/24. Local `ops doctor` alias is absent; closeout autopilot uses Studio Ops doctor.
+
+## 2026-07-01 — Session 106 Codex `/goal` arc
+
+- Ran the requested continuous `/goal` `/arc` continuation. `git pull --rebase origin main` was attempted first and failed because the repo already had unstaged script changes; no stale lock or cut-off closeout artifacts were present, so the session preserved the dirty worktree and proceeded.
+- Generated `docs/AUDIT_2026-07-01.json` / `.md` from live-code verification. Credential/dashboard/manual/data/product-decision items were honestly deferred after secrets audit and blocker preflight.
+- Shipped validate-replay Phase 2B follow-through: `runDeterministicReplayCombatSlice()` adds deterministic trace-action stepping for movement, dash, fire cooldown, ammo, reload, grenade cooldown, and blocked-action receipts; `runResim()` exposes `deterministicCombatSlice` without changing the advisory pressure-estimate gate.
+- Expanded `npm run replay:state-stepper` so fixture validation covers both movement/aim stepping and the combat-slice contract.
+- Full suite exposed protocol-tool regressions in the pre-existing dirty script surface; restored model-router Unicode scalar sanitization/safe JSON, compact-handoff no-network Unicode smoke, and Codex plan-mode `not_required` stamping.
+- Validation: focused replay 11/11, replay state-stepper 4/4, focused protocol 4/4, `npm run lint`, `npm test` 550/550, `npm run build`, `npm run replay:edge-fixtures`, and `npm run launch:media-check` all passing.

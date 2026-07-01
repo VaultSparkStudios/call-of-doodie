@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-07-01T06:05:00.000Z",
+  "session": 106,
+  "project": "Call-Of-Doodie",
+  "rubric": "product/game",
+  "summary": "Live-code audit found most genius-list items credential, dashboard, physical-device, data, or product-decision gated. The repo-executable replay Phase 2B slice was implemented, and full-suite verification exposed protocol-tool regressions in the pre-existing dirty worktree that were root-fixed before closeout.",
+  "items": [
+    {
+      "rank": 1,
+      "id": "deterministic-replay-combat-slice",
+      "title": "Advance validate-replay Phase 2B with a bounded deterministic combat action slice",
+      "status": "shipped",
+      "evidence": [
+        "src/utils/replayResim.js",
+        "src/utils/replayResim.test.js",
+        "scripts/validate-replay-state-stepper-fixtures.mjs"
+      ],
+      "result": "Added runDeterministicReplayCombatSlice() with trace-driven movement, dash impulse, fire cooldown, ammo, reload, grenade cooldown, blocked-action receipts, fixture validation, and runResim exposure while keeping heuristic_pressure_estimate/advisory labeling."
+    },
+    {
+      "rank": 2,
+      "id": "protocol-tool-green-gate-repair",
+      "title": "Root-fix protocol-tool regressions surfaced by full-suite gate",
+      "status": "shipped",
+      "evidence": [
+        "scripts/lib/model-router.mjs",
+        "scripts/compact-handoff.mjs",
+        "scripts/verify-plan-mode.mjs",
+        "tests/model-router-unicode.test.js",
+        "tests/compact-handoff-unicode-smoke.test.js",
+        "tests/verify-plan-mode.test.js"
+      ],
+      "result": "Restored Unicode scalar sanitization and safe JSON at the Anthropic chokepoint, no-network compact-handoff Unicode smoke mode, and Codex plan-mode not_required stamping."
+    },
+    {
+      "rank": 3,
+      "id": "credential-dashboard-manual-deferrals",
+      "title": "Verify remaining genius-list items and defer only with evidence",
+      "status": "honest-deferral",
+      "evidence": [
+        "node scripts/check-secrets.mjs --audit",
+        "node scripts/ops.mjs blocker-preflight",
+        "docs/INNOVATION_PACK.md"
+      ],
+      "result": "Supabase and analytics/dashboard work remain missing-credential or dashboard-gated; PWA/gamepad QA and Lighthouse/funnel evidence remain physical/browser/data gates; Supabase Auth membership remains a product decision."
+    }
+  ],
+  "validation": {
+    "focusedReplay": "npx vitest run src/utils/replayResim.test.js: 11/11",
+    "stateStepper": "npm run replay:state-stepper: 4 fixtures",
+    "protocolFocused": "npx vitest run tests/model-router-unicode.test.js tests/compact-handoff-unicode-smoke.test.js tests/verify-plan-mode.test.js: 4/4",
+    "lint": "npm run lint: pass",
+    "tests": "npm test: 550/550 across 67 files",
+    "build": "npm run build: pass",
+    "edgeFixtures": "npm run replay:edge-fixtures: 4 fixtures",
+    "launchMedia": "npm run launch:media-check: pass"
+  }
+}
