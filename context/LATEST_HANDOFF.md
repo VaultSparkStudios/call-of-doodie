@@ -1,3 +1,28 @@
+## Where We Left Off (Session 108)
+
+Session 108 ran the requested Codex `/goal arc`, then prepared `/closeout`, direct commit/push to `main`, and full Cloudflare deploy. The current genius list had no unblocked product-code item beyond maintaining launch confidence, so the session stayed honest: verify, document, push, and deploy rather than inventing a cosmetic code change.
+
+Shipped behavior and evidence:
+- Generated `docs/AUDIT_2026-07-01_2.json` / `.md` and `audits/2026-07-01-session108.json` for the launch-confidence verification/deploy arc.
+- Confirmed clean `main` sync before write-back: `git status --short` empty and `origin/main...HEAD` at `0 0`.
+- Ran canon/startup gates: context meter `CONTINUE`, canon adoption checked, canon conformance had no absolute gaps, blocker preflight preserved manual/credential/data gates.
+- Verified Cloudflare readiness: `npx wrangler whoami` authenticated to the VaultSpark Cloudflare account with Pages write permission.
+
+Validation:
+- `npm run lint` - clean.
+- `npm test` - 550/550 across 67 files.
+- `npm run build` - passing.
+- `npm run replay:state-stepper` - 4 fixtures.
+- `npm run replay:edge-fixtures` - 4 fixtures.
+- `npm run launch:media-check` - passing.
+- `npm run live:site-check` - 5/5 against `https://callofdoodie.wtf/`.
+- `npm run post-cutover:smoke` - 5/5 across apex, Pages, `www`, backup, and backup `www`.
+
+Open next:
+- Observe the post-push Cloudflare Pages deploy and re-run live smoke after deploy.
+- Product-code next remains unchanged: deterministic replay enemy/physics parity design, or full five-scene screenshot replacement once verified browser captures exist.
+
+---
 # Where We Left Off (Session 107)
 
 Session 107 continued the active Codex `/goal` objective after Session 106 had already pushed the replay-combat arc. The current requirement was not complete because GitHub Actions deploy failed: `brief-format-check` rejected `docs/STARTUP_BRIEF.md` for a missing boxed GENIUS HIT LIST, and Cloudflare Pages deploy had no `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` secrets configured.
@@ -1487,3 +1512,6 @@ Deployment verification completed after push:
 - `Deploy to Cloudflare Pages` run `28499115278` passed for commit `0c76bcd`.
 - `npm run live:site-check` passed 5/5 against `https://callofdoodie.wtf/`.
 - `npm run post-cutover:smoke` passed 5/5 across apex, Pages, `www`, backup, and backup `www` surfaces.
+
+
+

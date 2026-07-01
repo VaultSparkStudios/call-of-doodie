@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 107 (2026-07-01) repaired and verified the deploy gates: startup brief validation passes, Cloudflare Pages GitHub Actions secrets are restored, Cloudflare deploy passed, and production live-site/post-cutover smoke checks are green.",
-  "nextMilestone": "Continue launch-confidence work: replay enemy/physics parity design without changing advisory labels, and verified five-scene screenshot replacement when browser capture evidence exists.",
+  "currentFocus": "Session 108 (2026-07-01) ran the requested goal arc through launch-confidence verification, closeout preparation, direct-to-main commit/push preparation, and Cloudflare deploy readiness. Local release gates are green, live production smoke is green, and Wrangler is authenticated for Pages deploy.",
+  "nextMilestone": "After final deploy observation, continue product work only where evidence exists: replay enemy/physics parity design without changing advisory labels, or verified five-scene screenshot replacement after browser captures exist.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -44,13 +44,13 @@
   "ignisScore": 46424,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-19",
-  "silSession": 107,
+  "silSession": 108,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 2,
+  "silVelocity": 1,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-01",
-  "currentSession": 107,
+  "currentSession": 108,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 550,
@@ -81,5 +81,7 @@
   "planModeDetected": "not_required",
   "planModeCheckedAt": "2026-07-01T06:45:47.2252591Z",
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
-  "freeTierCostStatus": "cost-neutral"
+  "freeTierCostStatus": "cost-neutral",
+  "runtimeUrl": "https://callofdoodie.wtf/",
+  "stagingType": "none"
 }

@@ -1,19 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-01 (Session 107 closeout) -->
+<!-- generated-at: 2026-07-01 (Session 108 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S107 ════════════════════╗
-║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 2 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S108 ════════════════════╗
+║  Date: 2026-07-01  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
+║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ DeathScreen coaching telemetry truth: `buildDeathCoachTeleme  ║
-║  ✓ Score-submit analytics extraction: `buildScoreSubmitAnalytic  ║
-║  ✓ Replay trust innovation: `buildDeterministicResimInputContra  ║
-║  ✓ Studio event truth: `buildStudioGameEvent("debrief_intellige  ║
-║  ✓ Audit/implement artifacts: `docs/AUDIT_2026-06-29_2.*`, `doc  ║
+║  ✓ Generated `docs/AUDIT_2026-07-01_2.json` / `.md` and `audits  ║
+║  ✓ Confirmed clean `main` sync before write-back: `git status -  ║
+║  ✓ Ran canon/startup gates: context meter `CONTINUE`, canon ado  ║
+║  ✓ Verified Cloudflare readiness: `npx wrangler whoami` authent  ║
+║  ✓ `npm run lint` - clean.                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,24 +30,24 @@
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
+║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
+║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 8 files  ·  M:8 A:0 D:0 ?:0                            ║
+║  Changes: 13 files  ·  M:9 A:0 D:0 ?:4                           ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  not configured  ·  type: —                            ║
-║  Live:     N/A — pre-deploy (FORGE)                              ║
+║  Staging:  N/A — internal/exempt (stagingType: none)             ║
+║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║

@@ -465,3 +465,11 @@ Follow-up: Keep the Git window/credential guard work from Session 106; future se
 Decision: Set this repo's missing `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` GitHub Actions secrets from the Studio Ops `cloudflare.deploy` secrets gateway so the canonical Cloudflare Pages deploy workflow can run from `main`.
 
 Rationale: The `Deploy to Cloudflare Pages` workflow failed after Session 106 because the repo had no Cloudflare deploy secrets configured. The gateway reported `cloudflare.deploy` READY in Studio Ops, so this was agent-actionable rather than a founder blocker. Secret values were passed directly to `gh secret set` and were not printed.
+
+## 2026-07-01 — Session 108 — Verification-only arc when no product-code item is unblocked
+
+Decision: Treat the Session 108 `/goal arc` as a launch-confidence verification and deploy arc instead of inventing a product-code change.
+
+Rationale: The live genius list had one agent-owned item: maintain launch confidence. Remaining high-value product items still require credentials, dashboard access, physical device QA, production data, or verified browser captures. Changing gameplay or UI without a real prompt from the audit would create churn without improving the launch state.
+
+Trade-off accepted: The commit is mostly evidence and closeout state. That is acceptable because the founder explicitly asked for arc, closeout, direct main push, and deploy.

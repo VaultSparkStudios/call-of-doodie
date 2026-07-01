@@ -645,3 +645,12 @@ Overall status: green locally; live Supabase/analytics/dashboard actions remain 
 - Launch media truth improved without fabricating scenes. The manifest now uses verified browser-capture PNGs only for combat and mobile, because those files already exist with production-ready browser-capture provenance. Boss, build/debrief, and leaderboard entries remain SVG fallback art until verified captures exist.
 - Game-loop review source truth repaired. `context/GAME_LOOP.md` now exists for the canonical protocol path and points to live runtime/post-run/trust code evidence.
 - Doctor truth note: local `node scripts/ops.mjs doctor --update-json` is absent in this public repo router; closeout autopilot invokes the Studio Ops doctor path and protocol drift validates local helper parity at 24/24.
+
+## 2026-07-01 — Session 108 truth audit
+
+- `docs/AUDIT_2026-07-01_2.json` / `.md` are the source of truth for this verification/deploy arc. They intentionally record no product-code change because the current genius list had no unblocked repo-executable product item beyond maintaining launch confidence.
+- Release readiness truth: local gates passed (`npm run lint`, `npm test` 550/550, `npm run build`, replay state-stepper, edge replay fixtures, launch media), and live smoke passed (`live:site-check` 5/5, `post-cutover:smoke` 5/5).
+- Cloudflare deploy truth: Wrangler is authenticated with Pages write permission. Final production deploy is the direct Cloudflare Pages deploy after the closeout commit lands on `main`.
+- Deferred truth unchanged: Supabase/analytics/dashboard work requires credentials or provider surfaces; physical install/gamepad QA, Lighthouse/funnel analysis, and remaining screenshot replacement require real external evidence.
+
+Overall status: green locally and green on current live surfaces; deploy observation pending final push/deploy.
