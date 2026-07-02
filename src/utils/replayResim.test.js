@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { encodeReplayCommandTrace } from "./replayCommandTrace.js";
-import { buildDeterministicResimInputContract, buildReplayPressureProfile, runDeterministicReplayCombatSlice, runDeterministicReplayStateStepper, runResim } from "./replayResim.js";
+import { buildDeterministicResimInputContract, buildReplayPressureProfile, runDeterministicContactEnemySlice, runDeterministicReplayCombatSlice, runDeterministicReplayStateStepper, runResim } from "./replayResim.js";
 import { replayTraceFixtureTable, makeMalformedTrace, makeRichTrace } from "./replayTraceFixtures.js";
 
 describe("runResim", () => {
@@ -225,6 +225,103 @@ describe("runResim", () => {
       ok: true,
       method: "deterministic_replay_combat_slice_v1",
       coverage: "trace_movement_actions_no_enemies",
+    });
+  });
+
+  describe("runDeterministicContactEnemySlice", () => {
+    const trace = encodeReplayCommandTrace([
+      { frame: 0, action: "move", value: "e" },
+      { frame: 60, action: "move", value: "s" },
+      { frame: 120, action: "aim", value: "n" },
+      { frame: 126, action: "dash", value: "n" },
+    ]);
+
+    it("derives one contact enemy from the seed and steps it deterministically", () => {
+      const a = runDeterministicContactEnemySlice(777, trace, {
+        maxFrames: 132,
+        initialPlayer: { x: 100, y: 100, speed: 2 },
+        canvasSize: { w: 800, h: 600 },
+      });
+      const b = runDeterministicContactEnemySlice(777, trace, {
+        maxFrames: 132,
+        initialPlayer: { x: 100, y: 100, speed: 2 },
+        canvasSize: { w: 800, h: 600 },
+      });
+
+      expect(a).toMatchObject({
+        ok: true,
+        method: "deterministic_contact_enemy_slice_v1",
+        coverage: "trace_movement_one_contact_enemy_derived",
+        seed: 777,
+        commandCount: 4,
+      });
+      expect(a.derivedSpawn).toEqual(b.derivedSpawn);
+      expect(a.finalState).toEqual(b.finalState);
+      expect(a.contactCount).toBe(b.contactCount);
+      expect(a.damageTaken).toBe(b.damageTaken);
+    });
+
+    it("diverges for a different seed", () => {
+      const a = runDeterministicContactEnemySlice(1, trace, { maxFrames: 132 });
+      const b = runDeterministicContactEnemySlice(2, trace, { maxFrames: 132 });
+
+      expect(a.derivedSpawn).not.toEqual(b.derivedSpawn);
+    });
+
+    it("spawns the derived enemy off-canvas on one edge", () => {
+      const result = runDeterministicContactEnemySlice(42, trace, {
+        maxFrames: 60,
+        canvasSize: { w: 800, h: 600 },
+      });
+
+      const { x, y } = result.derivedSpawn;
+      const onVerticalEdge = x === -30 || x === 830;
+      const onHorizontalEdge = y === -30 || y === 630;
+      expect(onVerticalEdge || onHorizontalEdge).toBe(true);
+    });
+
+    it("records deterministic contact events with 30-frame invincibility spacing", () => {
+      // Player stays put (aim-only pings, no move) so the chasing enemy
+      // eventually reaches contact range; pings extend the simulated tail
+      // out to the last event + STEP_FRAME_BUCKET, mirroring how a real
+      // trace keeps recording aim throughout a run.
+      const pings = Array.from({ length: 20 }, (_, i) => ({ frame: i * 60, action: "aim", value: "n" }));
+      const stillTrace = encodeReplayCommandTrace(pings);
+      const result = runDeterministicContactEnemySlice(9001, stillTrace, {
+        maxFrames: 2000,
+        initialPlayer: { x: 400, y: 300, speed: 4 },
+        canvasSize: { w: 800, h: 600 },
+      });
+
+      expect(result.contactCount).toBeGreaterThan(0);
+      expect(result.damageTaken).toBe(result.contactCount * 10);
+      const frames = result.contactEvents.map((e) => e.frame);
+      for (let i = 1; i < frames.length; i++) {
+        expect(frames[i] - frames[i - 1]).toBeGreaterThanOrEqual(30);
+      }
+    });
+
+    it("does not step malformed traces", () => {
+      const result = runDeterministicContactEnemySlice(1, makeMalformedTrace());
+
+      expect(result).toMatchObject({
+        ok: false,
+        coverage: "trace_movement_one_contact_enemy_derived",
+        reason: "invalid-trace",
+        finalState: null,
+      });
+    });
+
+    it("exposes the contact-enemy slice through runResim while preserving the advisory gate", () => {
+      const result = runResim(12345, makeRichTrace(), 1000, { wave: 3, score: 1200 });
+
+      expect(result.method).toBe("heuristic_pressure_estimate");
+      expect(result.confidence).toBe("advisory");
+      expect(result.deterministicContactEnemySlice).toMatchObject({
+        ok: true,
+        method: "deterministic_contact_enemy_slice_v1",
+        coverage: "trace_movement_one_contact_enemy_derived",
+      });
     });
   });
 });

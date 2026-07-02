@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { runDeterministicReplayCombatSlice, runDeterministicReplayStateStepper } from "../src/utils/replayResim.js";
+import { runDeterministicContactEnemySlice, runDeterministicReplayCombatSlice, runDeterministicReplayStateStepper } from "../src/utils/replayResim.js";
 import { replayTraceFixtureTable } from "../src/utils/replayTraceFixtures.js";
 
 let failures = 0;
@@ -43,10 +43,34 @@ for (const fixture of replayTraceFixtureTable()) {
     fail(`${fixture.id}: combat commandCount ${combat.commandCount} !== ${fixture.expectedPressure.commandCount}`);
   }
   if (!combat.finalState || combat.finalState.frame <= 0) fail(`${fixture.id}: missing combat final state`);
+
+  const contact = runDeterministicContactEnemySlice(12345, fixture.trace, {
+    maxFrames: 1000,
+    submitted: {
+      wave: fixture.expectedPressure?.finalWave || 1,
+      score: fixture.expectedPressure?.finalScore || 0,
+    },
+  });
+  const contactRepeat = runDeterministicContactEnemySlice(12345, fixture.trace, {
+    maxFrames: 1000,
+    submitted: {
+      wave: fixture.expectedPressure?.finalWave || 1,
+      score: fixture.expectedPressure?.finalScore || 0,
+    },
+  });
+  if (!contact.ok) fail(`${fixture.id}: valid fixture did not run contact-enemy slice (${contact.reason || "unknown"})`);
+  if (contact.coverage !== "trace_movement_one_contact_enemy_derived") fail(`${fixture.id}: unexpected contact coverage ${contact.coverage}`);
+  if (contact.commandCount !== fixture.expectedPressure.commandCount) {
+    fail(`${fixture.id}: contact commandCount ${contact.commandCount} !== ${fixture.expectedPressure.commandCount}`);
+  }
+  if (!contact.finalState || contact.finalState.frame <= 0) fail(`${fixture.id}: missing contact final state`);
+  if (JSON.stringify(contact.finalState) !== JSON.stringify(contactRepeat.finalState)) {
+    fail(`${fixture.id}: contact-enemy slice is not deterministic across repeat runs`);
+  }
 }
 
 if (failures) {
   process.exitCode = 1;
 } else {
-  console.log(`[replay-stepper-fixtures] ${replayTraceFixtureTable().length} fixtures validated against deterministic movement/aim stepping and combat-slice replay actions.`);
+  console.log(`[replay-stepper-fixtures] ${replayTraceFixtureTable().length} fixtures validated against deterministic movement/aim stepping, combat-slice replay actions, and the derived contact-enemy slice.`);
 }

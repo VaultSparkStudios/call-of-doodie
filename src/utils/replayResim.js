@@ -3,6 +3,7 @@ import {
   isValidReplayCommandTrace,
   summarizeReplayCommandTrace,
 } from "./replayCommandTrace.js";
+import { createWaveRng } from "../gameHelpers.js";
 
 function clampInt(value, min, max, fallback = min) {
   const num = Number.parseInt(value, 10);
@@ -329,6 +330,135 @@ export function runDeterministicReplayCombatSlice(seed, traceBodyOrTrace, {
   };
 }
 
+// ── Derived single-contact-enemy slice (S112) ────────────────────────────────
+// Stored traces carry player commands only, so the REAL enemies of a run are
+// not replayable. This slice derives ONE basic contact enemy from the seed
+// (same createWaveRng stream family the live game uses) and steps it with the
+// game's direct-vector chase math against the reconstructed player path.
+// It is deterministic evidence, not a replay of the actual fight — hence the
+// "derived" coverage label. Advisory gate labeling is unchanged (DECISIONS
+// 2026-07-01).
+
+// Mirrors ENEMY_TYPES[0] "Mall Cop" at wave 1: speed 1.2 × (1 + wave*0.05),
+// size 40, contact damage 10 + typeIndex*5, 30-frame player invincibility.
+const CONTACT_ENEMY_SPEED = 1.2 * 1.05;
+const CONTACT_ENEMY_SIZE = 40;
+const CONTACT_DAMAGE = 10;
+const CONTACT_INVINCIBILITY_FRAMES = 30;
+const CONTACT_RADIUS_PAD = 15;
+
+function deriveContactEnemy(seed, canvasSize) {
+  const w = Number(canvasSize?.w) || 800;
+  const h = Number(canvasSize?.h) || 600;
+  const rng = createWaveRng(clampInt(seed, 0, 999999999, 0), 1);
+  const side = Math.floor(rng() * 4);
+  let x, y;
+  if (side === 0) { x = rng() * w; y = -30; }
+  else if (side === 1) { x = w + 30; y = rng() * h; }
+  else if (side === 2) { x = rng() * w; y = h + 30; }
+  else { x = -30; y = rng() * h; }
+  return { x, y, side, wobble: rng() * Math.PI * 2, speed: CONTACT_ENEMY_SPEED, size: CONTACT_ENEMY_SIZE };
+}
+
+function stepContactEnemy(enemy, player) {
+  const angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+  enemy.x += Math.cos(angle) * enemy.speed + Math.sin(enemy.wobble) * 0.5;
+  enemy.y += Math.sin(angle) * enemy.speed + Math.cos(enemy.wobble) * 0.5;
+  enemy.wobble += 0.1;
+}
+
+function contactEnemySnapshot(frame, player, enemy, contactState, reason) {
+  return {
+    frame,
+    x: round3(player.x),
+    y: round3(player.y),
+    ex: round3(enemy.x),
+    ey: round3(enemy.y),
+    enemyDistance: round3(Math.hypot(player.x - enemy.x, player.y - enemy.y)),
+    contacts: contactState.events.length,
+    damageTaken: contactState.damageTaken,
+    reason,
+  };
+}
+
+export function runDeterministicContactEnemySlice(seed, traceBodyOrTrace, {
+  maxFrames = 36000,
+  submitted = {},
+  initialPlayer = {},
+  canvasSize = {},
+} = {}) {
+  const trace = parseTrace(traceBodyOrTrace, submitted.traceLength, submitted.traceDigest);
+  if (!isValidReplayCommandTrace(trace)) {
+    return {
+      ok: false,
+      method: "deterministic_contact_enemy_slice_v1",
+      coverage: "trace_movement_one_contact_enemy_derived",
+      reason: "invalid-trace",
+      checkpoints: [],
+      finalState: null,
+    };
+  }
+
+  const events = decodeReplayCommandTrace(trace) || [];
+  const frameCap = clampInt(maxFrames, STEP_FRAME_BUCKET, 36000, 36000);
+  const lastEventFrame = events.at(-1)?.f ?? 0;
+  const finalFrame = Math.min(frameCap, lastEventFrame + STEP_FRAME_BUCKET);
+  const player = clampPlayerState({
+    x: Number(initialPlayer.x) || 400,
+    y: Number(initialPlayer.y) || 300,
+    speed: Number(initialPlayer.speed) || 4,
+  }, canvasSize);
+  const enemy = deriveContactEnemy(seed, canvasSize);
+  const derivedSpawn = { side: enemy.side, x: round3(enemy.x), y: round3(enemy.y) };
+  const contactState = { events: [], damageTaken: 0, invincibleFor: 0 };
+  const checkpoints = [contactEnemySnapshot(0, player, enemy, contactState, "start")];
+  let movement = DIRECTION_VECTORS.neutral;
+  let aimBucket = "neutral";
+  let dashCooldown = 0;
+  let eventIdx = 0;
+
+  for (let frame = 1; frame <= finalFrame; frame++) {
+    // Apply this frame's trace events before integrating the frame.
+    while (eventIdx < events.length && Math.min(frameCap, Math.max(0, events[eventIdx].f)) <= frame) {
+      const event = events[eventIdx];
+      eventIdx += 1;
+      if (event.a === "move") movement = directionToVector(event.v);
+      if (event.a === "aim") aimBucket = event.v || "neutral";
+      if (event.a === "dash" && dashCooldown <= 0) {
+        advanceState(player, directionToVector(event.v || aimBucket), STEP_FRAME_BUCKET * 2, canvasSize);
+        dashCooldown = 90;
+      }
+      checkpoints.push(contactEnemySnapshot(frame, player, enemy, contactState, `${event.a}:${event.v || "none"}`));
+    }
+    if (dashCooldown > 0) dashCooldown -= 1;
+    advanceState(player, movement, 1, canvasSize);
+    stepContactEnemy(enemy, player);
+    if (contactState.invincibleFor > 0) {
+      contactState.invincibleFor -= 1;
+    } else if (Math.hypot(player.x - enemy.x, player.y - enemy.y) < enemy.size / 2 + CONTACT_RADIUS_PAD) {
+      contactState.events.push({ frame, x: round3(player.x), y: round3(player.y) });
+      contactState.damageTaken += CONTACT_DAMAGE;
+      contactState.invincibleFor = CONTACT_INVINCIBILITY_FRAMES;
+    }
+  }
+
+  const finalState = contactEnemySnapshot(finalFrame, player, enemy, contactState, "final");
+  return {
+    ok: true,
+    method: "deterministic_contact_enemy_slice_v1",
+    coverage: "trace_movement_one_contact_enemy_derived",
+    seed: clampInt(seed, 0, 999999999, 0),
+    framesSimulated: finalFrame,
+    commandCount: events.length,
+    derivedSpawn,
+    contactCount: contactState.events.length,
+    contactEvents: contactState.events.slice(0, 24),
+    damageTaken: contactState.damageTaken,
+    checkpoints: checkpoints.slice(0, 240),
+    finalState,
+  };
+}
+
 export function buildDeterministicResimInputContract({
   seed = null,
   trace = null,
@@ -371,6 +501,9 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
   const deterministicCombatSlice = deterministicContract.ready
     ? runDeterministicReplayCombatSlice(seed, traceBodyOrTrace, { maxFrames, submitted })
     : null;
+  const deterministicContactEnemySlice = deterministicContract.ready
+    ? runDeterministicContactEnemySlice(seed, traceBodyOrTrace, { maxFrames, submitted })
+    : null;
   const waveDrift = Math.abs(submittedWave - pressureProfile.finalWave) / Math.max(4, submittedWave);
   const scoreDrift = submittedScore > 0 ? Math.abs(submittedScore - pressureProfile.finalScore) / Math.max(2500, submittedScore) : 0;
   const driftPct = pressureProfile.valid ? Math.round(Math.max(waveDrift, scoreDrift) * 10000) / 100 : 100;
@@ -391,6 +524,7 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
     deterministicContract,
     deterministicStepper,
     deterministicCombatSlice,
+    deterministicContactEnemySlice,
     reason: pressureProfile.valid ? null : "invalid-trace",
   };
 }
