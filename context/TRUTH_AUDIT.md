@@ -697,3 +697,8 @@ Last reviewed: 2026-07-01
 
 Overall status: green locally
 Last reviewed: 2026-07-02
+
+## 2026-07-02 — Session 113 live replay smoke follow-up
+
+- Advisory drift truth — `validate-replay` no longer quarantines an otherwise valid trace-backed contract solely because `resim.driftPct` is high. The pressure estimate remains visible in the response as advisory evidence, matching the trust-label decision.
+- Deployment truth — this fix was required by live `npm run replay:trust-smoke` after the first Session 113 deploy.

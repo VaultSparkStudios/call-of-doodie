@@ -806,3 +806,5 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Extended `scripts/validate-edge-replay-pressure-fixtures.mjs` so edge pressure + deterministic receipts are compared against browser `runResim()` on the shared replay fixtures.
 - Preserved the honesty boundary: the score validation method remains `heuristic_pressure_estimate` / advisory; the new receipts are evidence slices, not full physics parity.
 - Validation: `node scripts/validate-edge-replay-pressure-fixtures.mjs` 4/4, focused replayResim 17/17, `npm run replay:edge-fixtures` 4/4, `npm run replay:state-stepper` 4/4, `npm run lint`, `npm test` 595/595, `npm run build`, and Deno check all passed.
+
+Session 113 deploy follow-up: live `npm run replay:trust-smoke` exposed that the edge function still used advisory pressure-estimate drift as a hard quarantine reason for an otherwise valid rich trace. Fixed `validateRunHeuristic()` so pressure drift remains in `resim.driftPct` but no longer rejects valid trace contracts; replay trust smoke is the deployment gate for the fix.

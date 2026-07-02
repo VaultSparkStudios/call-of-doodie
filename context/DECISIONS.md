@@ -504,3 +504,9 @@ Decision: `validate-replay` may emit deterministic movement/combat/contact-enemy
 Rationale: The edge now consumes the same bounded evidence classes as browser `runResim()`, closing the edge-invisibility gap from Session 112, but stored traces still carry player commands only. Derived contact-enemy receipts are useful anti-cheat evidence; they are not a reconstruction of the real fight.
 
 Trade-off accepted: The edge helper carries Deno-compatible mirrored slice logic and a parity script to catch drift instead of importing browser runtime code directly.
+
+## 2026-07-02 — Session 113 — Pressure drift is review evidence, not a validity verdict
+
+Decision: high `pressure-estimate` drift must remain advisory metadata in `validate-replay`; it must not quarantine an otherwise valid trace-backed contract by itself.
+
+Rationale: The pressure model is intentionally coarse and can diverge from real submitted score/wave values. Treating it as a hard gate contradicted the product's replay-trust honesty boundary and broke the live trace-contract smoke test.
