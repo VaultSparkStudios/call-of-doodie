@@ -42,3 +42,48 @@ export function buildRematchKit(startWave) {
     coins: Math.min(400, wave * 15),
   };
 }
+
+function normalizeText(value, fallback) {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  return text || fallback;
+}
+
+export function buildRematchDrillBrief({
+  drill = null,
+  deathWave = 1,
+  startWave = null,
+} = {}) {
+  const wave = Math.max(1, Math.floor(Number(deathWave) || 1));
+  const drillWave = Math.max(1, Math.floor(Number(startWave) || wave));
+  const title = normalizeText(drill?.title, `Wave ${wave} correction`);
+  const detail = normalizeText(
+    drill?.detail,
+    "Practice the exact failure point before going back to the leaderboard.",
+  );
+  return {
+    id: normalizeText(drill?.id, "corrective_rematch"),
+    title,
+    detail,
+    deathWave: wave,
+    startWave: drillWave,
+    label: `REMATCH W${drillWave}`,
+  };
+}
+
+export function buildRematchMasteryReceipt({
+  attempts = 0,
+  wins = 0,
+  targetWins = 2,
+} = {}) {
+  const played = Math.max(0, Math.floor(Number(attempts) || 0));
+  const needed = Math.max(1, Math.floor(Number(targetWins) || 2));
+  const cleared = Math.max(0, Math.min(needed, Math.floor(Number(wins) || 0)));
+  const complete = cleared >= needed;
+  return {
+    attempts: played,
+    wins: cleared,
+    targetWins: needed,
+    complete,
+    label: complete ? "BEST-OF-3 MASTERED" : `BEST-OF-3 ${cleared}/${needed}`,
+  };
+}

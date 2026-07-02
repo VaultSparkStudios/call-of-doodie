@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/arc Codex session 115",
+  "generatedAt": "2026-07-02",
+  "project": "call-of-doodie",
+  "type": "game",
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "game loop / retention",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 5,
+      "priority": 18.9,
+      "slug": "rematch-drill-l3-coach-receipts",
+      "title": "Carry the death-screen coaching reason into REMATCH practice runs and show best-of-3 mastery receipts",
+      "status": "shipped",
+      "evidence": [
+        "src/systems/rematchDrill.js builds practice drill briefs and best-of-3 mastery receipt labels",
+        "src/components/DeathScreen.jsx passes nextRunDrill context into REMATCH starts",
+        "src/App.jsx stores practiceDrill/practiceMastery on the practice run game state",
+        "src/components/HUD.jsx renders the live REMATCH drill chip during practice runs"
+      ]
+    }
+  ],
+  "validation": [
+    "npx vitest run src/systems/rematchDrill.test.js — 12/12",
+    "npx eslint touched runtime files --max-warnings 0 — clean",
+    "npx vitest run src/systems/rematchDrill.test.js src/App.launch.test.jsx — 13/13",
+    "git diff --check — clean"
+  ],
+  "deferrals": [
+    "Analytics/dashboard allowlists remain provider-credential gated",
+    "Physical PWA install and real gamepad QA remain device-evidence gated",
+    "HomeV2 Lighthouse/funnel analysis remains production-data gated",
+    "MenuScreen/MenuPanels full unification remains a larger coverage-first refactor"
+  ]
+}

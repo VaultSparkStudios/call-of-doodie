@@ -1,3 +1,12 @@
+## Where We Left Off (Session 115 — REMATCH drill L3 coach receipts)
+- Shipped: REMATCH drill L3 coach receipts. Death-screen REMATCH starts now carry the selected next-run drill into the practice run; the live heads-up display shows the REMATCH reason and best-of-3 mastery receipt state.
+- Trust posture: unchanged. REMATCH remains a leaderboard-excluded practice run and does not claim physical device/gamepad QA or full replay parity.
+- Validation: focused REMATCH tests 12/12; touched-runtime ESLint clean; App launch + REMATCH focused tests 13/13; full `npm test` 599/599; `npm run lint`; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check; `npm run build`.
+
+## Next Best Actions
+- [ ] MenuScreen → MenuPanels.jsx coverage-first unification — add dedicated component coverage before replacing the legacy modal stack.
+- [ ] Full five-scene screenshot replacement — requires verified browser captures for boss, build/debrief, and leaderboard scenes before manifest/media updates.
+- [ ] Physical launch QA — real PWA install standalone relaunch and one real gamepad/browser combo remain device-evidence gated.
 ## Where We Left Off (Session 114)
 - Shipped: coordinated late-wave enemy formations. Wave-20+ non-boss pressure/climax spawns now use deterministic PINCER / ESCORT / FLANK archetypes with lane and role metadata instead of only loose offsets.
 - Tests: focused waveDirector 20/20, lint clean, full `npm test` 596/596, replay state-stepper 4/4, edge fixtures 4/4, launch media check passing, build passing.

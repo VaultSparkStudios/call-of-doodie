@@ -34,6 +34,8 @@ export default function HUD({
   hud, heat, topGhosts, weeklyRival,
   experimentMatched = null,
   careerBestWave = 0,
+  practiceDrill = null,
+  practiceMastery = null,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
   const HUD_FLAGS = hud || {
@@ -102,6 +104,29 @@ export default function HUD({
         )}
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
+
+      {practiceDrill && (
+        <div style={{
+          position: "absolute", top: 30, left: "50%", transform: "translateX(-50%)",
+          maxWidth: "min(92vw, 520px)",
+          background: "rgba(0,229,255,0.12)",
+          border: "1px solid rgba(0,229,255,0.45)",
+          borderRadius: 8,
+          padding: "4px 10px",
+          fontSize: 9,
+          fontFamily: "'Courier New',monospace",
+          color: "#BFF7FF",
+          textAlign: "center",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          letterSpacing: 0.5,
+        }} title={practiceDrill.detail}>
+          <strong>{practiceDrill.label}</strong>{" "}
+          <span style={{ color: "#FFF" }}>{practiceDrill.title}</span>
+          {practiceMastery?.label && <span style={{ color: practiceMastery.complete ? "#00FF88" : "#FFD166" }}> · {practiceMastery.label}</span>}
+        </div>
+      )}
 
       {/* Challenge score tracker */}
       {vsScore != null && (

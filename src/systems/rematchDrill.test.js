@@ -6,6 +6,8 @@ import {
   getMaxEnemiesForWave,
   estimateNonBossWaveCount,
   buildRematchKit,
+  buildRematchDrillBrief,
+  buildRematchMasteryReceipt,
 } from "./rematchDrill.js";
 
 describe("resolveRematchStartWave", () => {
@@ -75,5 +77,52 @@ describe("buildRematchKit", () => {
       expect(kit.coins).toBeGreaterThanOrEqual(prev.coins);
       prev = kit;
     }
+  });
+});
+
+describe("buildRematchDrillBrief", () => {
+  it("carries the death-screen coaching reason into a practice run brief", () => {
+    const brief = buildRematchDrillBrief({
+      deathWave: 12,
+      startWave: 12,
+      drill: {
+        id: "enemy_lab_rematch",
+        title: "Sidestep Karen",
+        detail: "Move perpendicular before the ranged burst lands.",
+      },
+    });
+
+    expect(brief).toEqual({
+      id: "enemy_lab_rematch",
+      title: "Sidestep Karen",
+      detail: "Move perpendicular before the ranged burst lands.",
+      deathWave: 12,
+      startWave: 12,
+      label: "REMATCH W12",
+    });
+  });
+
+  it("falls back to honest generic practice copy", () => {
+    const brief = buildRematchDrillBrief({ deathWave: 5, startWave: 4 });
+
+    expect(brief.title).toBe("Wave 5 correction");
+    expect(brief.label).toBe("REMATCH W4");
+    expect(brief.detail).toContain("Practice the exact failure point");
+  });
+});
+
+describe("buildRematchMasteryReceipt", () => {
+  it("summarizes best-of-3 mastery progress", () => {
+    expect(buildRematchMasteryReceipt({ attempts: 1, wins: 1 })).toMatchObject({
+      attempts: 1,
+      wins: 1,
+      targetWins: 2,
+      complete: false,
+      label: "BEST-OF-3 1/2",
+    });
+    expect(buildRematchMasteryReceipt({ attempts: 3, wins: 2 })).toMatchObject({
+      complete: true,
+      label: "BEST-OF-3 MASTERED",
+    });
   });
 });

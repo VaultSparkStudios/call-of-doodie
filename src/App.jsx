@@ -92,7 +92,7 @@ import {
   heatBiasedFormation,
 } from "./systems/waveDirector.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
-import { buildRematchKit, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
+import { buildRematchKit, buildRematchDrillBrief, buildRematchMasteryReceipt, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
 import {
   createDeathStudioEvents,
   createRunHistoryEntry,
@@ -544,7 +544,7 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Init game ─────────────────────────────────────────────────────────────
-  const initGame = useCallback((forceSeed, startWave) => {
+  const initGame = useCallback((forceSeed, startWave, practiceDrill = null) => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     const seed = (forceSeed && !isNaN(parseInt(forceSeed))) ? Math.abs(parseInt(forceSeed)) % 999999 : Math.floor(Math.random() * 999999);
@@ -574,6 +574,8 @@ export default function CallOfDoodie() {
     if (_rematchKit) {
       const gs0 = gsRef.current;
       gs0.practiceRun = true;
+      gs0.practiceDrill = buildRematchDrillBrief({ drill: practiceDrill, deathWave: practiceDrill?.deathWave || _rematchKit.startWave, startWave: _rematchKit.startWave });
+      gs0.practiceMastery = buildRematchMasteryReceipt({ attempts: 1, wins: 0 });
       gs0.currentWave = _rematchKit.startWave;
       gs0.maxEnemiesThisWave = getMaxEnemiesForWave(_rematchKit.startWave);
       gs0._nonBossWaveCount = estimateNonBossWaveCount(_rematchKit.startWave);
@@ -1752,7 +1754,7 @@ export default function CallOfDoodie() {
     setChallengeVsName(vsName);
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
-    const seed = initGame(forceSeed, challengeOpts.startWave);
+    const seed = initGame(forceSeed, challengeOpts.startWave, challengeOpts.drill || null);
     // Adaptive telegraph: precompute per-enemy-type warning multiplier from
     // recent deaths. Read once per run; written by handlePlayerDeath.
     try {
@@ -4712,6 +4714,8 @@ export default function CallOfDoodie() {
         weeklyRival={gsRef.current?.weeklyRival || null}
         experimentMatched={experimentMatchedRef.current}
         careerBestWave={gsRef.current?.careerBest?.wave || 0}
+        practiceDrill={gsRef.current?.practiceDrill || null}
+        practiceMastery={gsRef.current?.practiceMastery || null}
       />
 
       {/* Mobile action bar */}

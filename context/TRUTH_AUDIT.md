@@ -722,3 +722,8 @@ Last reviewed: 2026-07-02
 
 Overall status: green live
 Last reviewed: 2026-07-02
+
+## 2026-07-02 — Session 115 — REMATCH drill L3 truth
+- REMATCH practice truth — src/components/DeathScreen.jsx now passes the selected nextRunDrill into the REMATCH start path, and src/App.jsx stores an explicit practiceDrill object on the leaderboard-excluded practice game state.
+- HUD truth — src/components/HUD.jsx renders the REMATCH drill reason and best-of-3 receipt only when practiceDrill exists; normal competitive runs do not show the practice receipt.
+- Trust unchanged — practice runs still skip leaderboard submission and career-record farming; this session did not claim physical PWA/gamepad QA, production Lighthouse data, or full deterministic replay parity.

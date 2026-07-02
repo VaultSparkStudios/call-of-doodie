@@ -818,3 +818,8 @@ Session 113 deploy follow-up: live `npm run replay:trust-smoke` exposed that the
 - Validation: focused waveDirector 20/20, `npm run lint`, full `npm test` 596/596, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, and `npm run build` all passed.
 
 Session 114 deploy verification: pushed `4c34f07` to `origin/main`; GitHub Actions `brief-format-check` run `28616256915` and `Deploy to Cloudflare Pages` run `28616256955` succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.
+
+## 2026-07-02 — Session 115 — REMATCH drill L3 coach receipts
+- Ran /arc from clean main, wrote the Codex session lock, rendered/validated the startup brief, and generated docs/AUDIT_2026-07-02_3.* for the next repo-local product slice.
+- Shipped REMATCH drill L3 coach receipts: rematchDrill.js now builds practice drill briefs and best-of-3 receipt labels; DeathScreen passes the selected next-run drill into REMATCH starts; App.jsx stores practice drill/mastery state; HUD.jsx renders the live REMATCH reason during practice.
+- Validation: focused REMATCH 12/12, touched-runtime ESLint clean, App launch + REMATCH focused tests 13/13, full `npm test` 599/599, `npm run lint`, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, and `npm run build` all passed.

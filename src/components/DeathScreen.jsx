@@ -1345,8 +1345,8 @@ export default function DeathScreen({
             <button
               aria-label={`Rematch wave ${rematchWave} — practice the wave that killed you on the same seed`}
               onClick={() => {
-                track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause });
-                onStartGame(runSeed, { startWave: rematchWave });
+                track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause, drillId: nextRunDrill.id });
+                onStartGame(runSeed, { startWave: rematchWave, drill: { ...nextRunDrill, deathWave: wave } });
               }}
               style={{ ...btnS, minWidth: 130, fontSize: 13, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF" }}
             >🔁 REMATCH W{rematchWave}</button>

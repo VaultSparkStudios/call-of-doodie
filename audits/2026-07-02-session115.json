@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.3",
+  "session": 115,
+  "date": "2026-07-02",
+  "project": "call-of-doodie",
+  "intentOutcome": "achieved",
+  "shipped": ["rematch-drill-l3-coach-receipts"],
+  "validation": {
+    "lint": "passed",
+    "tests": "599/599",
+    "build": "passed",
+    "replayStateStepper": "4/4",
+    "replayEdgeFixtures": "4/4",
+    "launchMedia": "passed"
+  },
+  "sil": {
+    "score": 1000,
+    "max": 1000,
+    "velocity": 1,
+    "debt": "decreasing"
+  },
+  "honestyLedger": [
+    "Practice REMATCH remains leaderboard-excluded and does not alter trust labels.",
+    "Physical PWA/gamepad QA remains device-evidence gated.",
+    "Analytics/dashboard and Lighthouse/funnel work remains credential/data gated."
+  ]
+}
