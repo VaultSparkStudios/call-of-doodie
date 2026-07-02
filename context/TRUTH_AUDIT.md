@@ -675,3 +675,15 @@ Last reviewed: 2026-07-01
 
 Overall status: green locally and green on current live surfaces
 Last reviewed: 2026-07-01
+## 2026-07-01 — Session 112 — Determinism, REMATCH, and replay-parity truth
+
+- `docs/AUDIT_2026-07-01_6.json` / `.md` are the source of truth for the Session 112 audit implementation; all 7 items are marked shipped with execution evidence.
+- Board-truth correction — the TASK_BOARD S82 (`sync-studio-events` deploy) and S61 (Supabase-half of the URL-allowlist) items were stale: CI evidence (`gh run list`, fresh `workflow_dispatch` run 28555855725) and a live 200 OPTIONS probe from `https://callofdoodie.wtf` show both were already resolved. Closed with evidence rather than re-carried; the analytics-credential half of S61 remains genuinely gated.
+- Enemy-spawn determinism truth — `createWaveRng(seed, wave)` now drives enemy type, spawn side/position, elite/berserker rolls, wobble, shootTimer, cluster jitter, and the wave-director event roll. This is a real behavior change: prior to this session, `gs.runSeed` only drove arena layout, so "seeded" modes (REPLAY #seed, Daily Challenge, Gauntlet) never reproduced the actual fight. `src/gameHelpers.seededSpawn.test.js` proves byte-identical spawn timelines for the same seed across a full 10-wave run.
+- REMATCH drill truth — practice runs (`gs.practiceRun`) are explicitly excluded from leaderboard submission (UI gate + `submitScore` backstop returning `submission: "skipped_practice"`), cannot trigger achievement or daily-mission checks, and cannot set career bests (score/wave/streak/level/combo zeroed in the `updateCareerStats` call) or overwrite the ghost recording.
+- Replay contact-enemy slice truth — `runDeterministicContactEnemySlice()` is explicitly labeled `trace_movement_one_contact_enemy_derived`: it simulates a seed-derived synthetic enemy, not the actual enemy the player fought (stored traces carry only player commands). The advisory `heuristic_pressure_estimate` gate in `runResim()` is unchanged. Not yet consumed by the `validate-replay` edge function, which runs its own separate, smaller heuristic-only implementation — noted as an honest gap, not claimed as wired.
+- Balance-lab surface truth — the player-facing "PATTERN SPOTTED" card only renders when `balanceLab.status === "signals-found"`; the "quiet"/no-signal placeholder state stays debug-gated so players never see a manufactured insight.
+- Validation truth — 61 new/updated focused tests passed, full `npm test` passed 595/595, lint/build/replay-state-stepper/replay-edge-fixtures gates all passed.
+
+Overall status: green locally
+Last reviewed: 2026-07-01

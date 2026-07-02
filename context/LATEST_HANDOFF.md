@@ -1,3 +1,19 @@
+## Where We Left Off (Session 112)
+- Shipped: full determinism arc — seeded per-wave enemy RNG (`createWaveRng`/`getWaveSpawnRng`), REMATCH death-wave practice drill, deterministic replay contact-enemy parity slice — plus a player-facing balance-lab insight surface, a drawGame hot-loop perf pass, dead sound export cleanup, and closure of two stale credential-gated board blockers with live evidence.
+- Tests: 61 new/updated focused tests; full `npm test` 595/595 (up from 561); lint/build/replay-state-stepper/replay-edge-fixtures all green.
+- Deploy: pending direct-to-main closeout commit/push.
+
+Public-safe handoff summary:
+- session intent: run the requested continuous `/goal` `/arc` through start, audit, implement, innovation-pack saturation, and closeout.
+- intent outcome: Achieved. All 7 audit items shipped at quality bar; one genuine second-order item (Daily Challenge/Gauntlet spawn-fairness regression test) shipped from the session's own compounding work; remaining innovation-pack candidates are honestly credential/human/data/large-scope gated (recorded with a specific finding on the Sentry DSN capability-scope ambiguity).
+- completed this session: `docs/AUDIT_2026-07-01_6.json` / `.md`, `docs/IMPLEMENT_PLAN.md`, regenerated `docs/INNOVATION_PACK.md`.
+- completed this session: `src/gameHelpers.js` seeded spawn RNG; `src/systems/rematchDrill.js` + DeathScreen REMATCH button; `src/utils/replayResim.js` `runDeterministicContactEnemySlice()`; `src/components/HomeV2.jsx` PATTERN SPOTTED card; `src/drawGame.js` hot-loop perf pass; `src/sounds.js` dead-export cleanup.
+- validation baseline: full `npm test` 595/595, `npm run lint` clean, `npm run build` passing, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4.
+
+## Next Recommended Slice
+- [ ] validate-replay Phase 2B edge-function wiring — the deterministic replay slices in `src/utils/replayResim.js` (including this session's contact-enemy slice) are not yet consumed anywhere; `supabase/functions/validate-replay/pressure.js` has its own smaller, Deno-runtime-compatible heuristic-only implementation. Porting the deterministic slices into the edge function is real, tracked, larger-scope work (own SIL:2 BLOCKER item) — deliberately not force-shipped this session given it touches live score/anti-cheat validation.
+- [ ] MenuScreen → MenuPanels.jsx unification (~900 duplicated lines) — pure refactor, still deferred per S62 rationale (HomeV2/v2 is default, v1 is opt-in only, so player impact of the duplication is minimal).
+- [ ] Physical QA pass — use the input QA and PWA install receipts during one real gamepad/browser pass and one real mobile PWA install/standalone relaunch pass.
 ## Where We Left Off (Session 111)
 - Shipped: DeathScreen event-source extraction and debrief receipt dedupe. `buildDebriefStudioEventPlan()` and `buildScoreSubmitFallbackStudioEvent()` now own tested Studio event payload construction; DeathScreen persists through those builders instead of inline event payload blocks.
 - Tests: focused death-flow/HomeV2 16/16; full `npm test` 561/561; lint/build/replay/media/live gates green.

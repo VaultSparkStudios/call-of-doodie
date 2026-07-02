@@ -1467,3 +1467,28 @@ SIL +2: Exhausted the thin/gated primary and innovation-pack surface without fab
 1. Replay enemy archetype parity slice — simulate one basic contact enemy against stored trace movement before touching trust labels. High probability.
 2. PWA + input QA export card — after one real device pass, add a copyable receipt payload for founder QA notes. High probability.
 3. Screenshot capture completion — finish verified browser captures for boss, build/debrief, and leaderboard scenes. High probability.
+## 2026-07-01 — Session 112 | Total: 1000/1000 | Velocity: 3 | Debt: ↓
+
+SIL +3: Shipped the S111 brainstorm's #1 item (replay contact-enemy parity slice) plus a full determinism arc it unlocked — seeded per-wave enemy RNG closing a real, previously-silent Daily Challenge/Gauntlet fairness gap, and a REMATCH death-wave practice drill built on that determinism. Also closed two stale credential-gated board blockers with live CI/OPTIONS evidence, surfaced the balance-lab insight to players for the first time, removed hot-loop allocations in drawGame, and deleted dead sound exports. One genuine second-order item (fairness regression test + DECISIONS entry) shipped from the session's own compounding work rather than a fresh audit pass. Validation: 61 new/updated tests, lint clean, full suite 595/595 (+34 vs S111), build passing, replay gates green.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite grew to 595/595 with clean lint/build; every shipped item carried its own focused test surface. |
+| Creative Alignment | 100 | ↑ | REMATCH drill deepens the existing debrief/coaching loop into deliberate practice without inventing an unrelated feature. |
+| Momentum | 100 | ↑ | Shipped a 7-item audit plus a genuine second-order fairness test in one continuous pass, no partial handback. |
+| Engagement | 100 | ↑ | REMATCH drill and the newly-visible balance-lab insight give players two new concrete post-death actions. |
+| Process Quality | 100 | ↑ | Stale board blockers were verified and closed with live evidence rather than silently re-carried; a capability-scope ambiguity (Sentry DSN) was recorded honestly instead of force-wired. |
+| Cross-Repo Coherence | 100 | → | No sibling repo tree edits; all work stayed in the public game repo. |
+| Security Posture | 100 | → | No dependencies, secrets, auth, or network behavior added. |
+| Ecosystem Integration | 100 | ↑ | Enemy-spawn determinism now genuinely backs the Daily Challenge/Gauntlet/leaderboard fairness claim the product markets. |
+| Capital Efficiency | 100 | → | Zero paid services or per-user variable cost introduced. |
+| Automation Coverage | 100 | ↑ | New determinism/fairness/rematch/replay/HomeV2 tests cover every shipped surface plus one dedicated end-to-end regression test. |
+
+**Top win:** Enemy spawning is finally seeded — Daily Challenge and Gauntlet now mean what they've always claimed to mean.
+**Top gap:** The deterministic replay slices (including this session's contact-enemy slice) still aren't consumed by the `validate-replay` edge function, which runs its own smaller heuristic-only implementation; porting them is real, tracked, larger-scope work deliberately not force-shipped given it touches live anti-cheat validation.
+**Intent outcome:** Achieved for `/start`, `/audit`, `/implement`, innovation-pack saturation, second-order shipping, and closeout write-back.
+
+**Brainstorm**
+1. validate-replay edge-function wiring — port the deterministic combat/contact-enemy slices into `supabase/functions/validate-replay/pressure.js` so replay trust evidence actually feeds score validation. Medium probability (real scope, needs its own audit cycle).
+2. MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor, low urgency since HomeV2/v2 is default. Medium probability.
+3. REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts. High probability.

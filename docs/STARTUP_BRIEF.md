@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-01 (Session 110 closeout) -->
+<!-- generated-at: 2026-07-02 (Session 112 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 110 closeout · 2026-07-01.
+> **Fast-boot brief** — generated at Session 112 closeout · 2026-07-02.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 111 · 2026-07-01 · FOUNDER MODE                         ║
+║  Session 113 · 2026-07-02 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -32,16 +32,16 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 2↑                       ║
-║    Last active: 0d  ·  Last closeout: 26d  ·  (active = newest   ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 3↑                       ║
+║    Last active: 0d  ·  Last closeout: 27d  ·  (active = newest   ║
 ║    Trend  ▂▂▁▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
-║    Alignment        100    ██████████  ██▇█████ →                ║
+║    Alignment        100    ██████████  ▇███████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ██▇█████ →                ║
+║    Engagement       100    ██████████  ▇███████ →                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -51,24 +51,24 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 110 ═══════════════════════════╗
-║  Shipped:  PWA install readiness and prompt-outcome receipt sur  ║
-║  Tests:    559/559 passing  ·  Deploy: N/A                       ║
+╔══ WHERE WE LEFT OFF  ·  Session 112 ═══════════════════════════╗
+║  Shipped:  full determinism arc — seeded per-wave enemy RNG (`c  ║
+║  Tests:    595/595 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░    4% used                          ║
-║     37,903 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~18,952 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
+║     36,607 / 1,000,000 tok  ·  claude-code/opus-4-8-1m  ·  meas  ║
+║     ~18,304 tok/turn  ·  cache 50%  ·  48 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         559/559 passing                                ║
-║  ✓  Velocity      2 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         595/595 passing                                ║
+║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⚠  IGNIS         46424 FORGE  ·  12d old                        ║
+║  ⚠  IGNIS         46424 FORGE  ·  13d old                        ║
 ║  ⛔  Truth         green locally  ·  Genome: ?                    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
@@ -79,13 +79,13 @@
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
 ║  ⚠  Doctor        not yet tracked — run: node scripts/ops.mjs d  ║
-║  ✓  Cost          real $0.06/7d · 7d notional $1.00 (flat-rate   ║
+║  ⚠  Cost          real $0.23/7d · 7d notional $3.73 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    48d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    70d · Physical launch QA                                      ║
+║    49d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    71d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -102,7 +102,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▁▄▄  2↑  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▁▄▄  3↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -113,42 +113,40 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
-║  1. [SIL:1] [Credential-gated S82] Deploy `sync-studio-events`   ║
-║  edge-function repair — local code is fixed, but `supabase func  ║
-║  tions deploy sync-studio-events --project-ref fjnpzjjyhnpmunfo  ║
+║  1. [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Updat  ║
+║  e PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://c  ║
+║  allofdoodie.wtf/` — the Supabase half is CLOSED with evidence   ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  2. [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostH  ║
-║  og/Sentry/Ko-fi URL allowlists to include `https://callofdoodi  ║
-║  e.wtf/` and backup-origin expectations — Supabase Edge Functio  ║
-║  ...                                                             ║
-║                                                                  ║
-║  3. [SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostH  ║
-║  og/Sentry/Ko-fi URL allowlists to include `https://callofdoodi  ║
-║  e.wtf/` and backup-origin expectations — Supabase Edge Functio  ║
-║  ...                                                             ║
-║                                                                  ║
-║  4. [SIL:2] [S60] Supabase Auth / Studio membership implementat  ║
+║  2. [SIL:2] [S60] Supabase Auth / Studio membership implementat  ║
 ║  ion decision — if paid tier or membership integration is now d  ║
 ║  esired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of l  ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  5. [SIL:2] [BLOCKER S61] [S59 carryover] validate-replay Phase  ║
+║  3. [SIL:2] [BLOCKER S61] [S59 carryover] validate-replay Phase  ║
 ║  2B — build the actual headless deterministic resim runner from  ║
 ║  seed + trace-backed replay inputs, using pure combat helpers;   ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  6. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
+║  4. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
 ║  CKLIST.md` to confirm S55 GIF + white-card + lag fixes hold un  ║
 ║  der real clicks (CLI cannot drive the browser)                  ║
 ║                                                                  ║
-║  7. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
+║  5. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
 ║  re real LCP/CLS deltas vs legacy MenuScreen on production, con  ║
 ║  firm ≥200ms LCP improvement before removing v1 fallback         ║
 ║                                                                  ║
-║  8. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
+║  6. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
 ║  e_v2_deploy` vs legacy `front_door_action` completion rates af  ║
 ║  ter 48h of traffic                                              ║
+║                                                                  ║
+║  7. Discord invite/community link when the community entry poin  ║
+║  t is ready                                                      ║
+║                                                                  ║
+║  8. [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unificat  ║
+║  ion — ~900 duplicated lines; pure refactor with no user-facing  ║
+║  impact; HomeV2 is the default (v1 opt-in only), so deferral ha  ║
+║  ...                                                             ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -156,5 +154,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 110 closeout · 2026-07-01*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 112 closeout · 2026-07-02*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*
