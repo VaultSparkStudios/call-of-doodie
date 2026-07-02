@@ -808,3 +808,11 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Validation: `node scripts/validate-edge-replay-pressure-fixtures.mjs` 4/4, focused replayResim 17/17, `npm run replay:edge-fixtures` 4/4, `npm run replay:state-stepper` 4/4, `npm run lint`, `npm test` 595/595, `npm run build`, and Deno check all passed.
 
 Session 113 deploy follow-up: live `npm run replay:trust-smoke` exposed that the edge function still used advisory pressure-estimate drift as a hard quarantine reason for an otherwise valid rich trace. Fixed `validateRunHeuristic()` so pressure drift remains in `resim.driftPct` but no longer rejects valid trace contracts; replay trust smoke is the deployment gate for the fix.
+
+## 2026-07-02 — Session 114 — Coordinated Late-Wave Formations
+
+- Continued the active `/goal` objective with a fresh `/arc`: clean main triage, session lock, context-meter, secrets audit, blocker preflight, startup brief validation, game-loop lens, live-code audit, and implementation.
+- Verified the Session 113 replay-trust item was already shipped; remaining primary genius items were credential/dashboard/device/data gated, so this session shipped the repo-local deferred game-loop item instead of fabricating external evidence.
+- Generated `docs/AUDIT_2026-07-02_2.json` / `.md` for the Session 114 ranked plan and execution evidence.
+- Shipped coordinated late-wave formations: wave director plans retain `wave`, wave-20+ pressure/climax spawns now produce deterministic PINCER / ESCORT / FLANK archetypes with lane/role metadata, spawned enemies carry formation metadata, and telemetry snapshots declare `formationSet`.
+- Validation: focused waveDirector 20/20, `npm run lint`, full `npm test` 596/596, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, and `npm run build` all passed.

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/arc Codex session 114",
+  "generatedAt": "2026-07-02",
+  "project": "call-of-doodie",
+  "type": "game",
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "game loop / encounter readability",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 25.6,
+      "slug": "wave-20-coordinated-formation-archetypes",
+      "title": "Promote late-wave spawn formations into deterministic coordinated archetypes",
+      "status": "shipped",
+      "evidence": [
+        "src/systems/waveDirector.js retains plan.wave and assigns wave-20+ pincer/escort/flank archetypes with lane/role metadata",
+        "src/systems/waveDirector.test.js covers late-wave formation cadence and bounds-safe metadata application"
+      ]
+    }
+  ],
+  "validation": [
+    "npx vitest run src/systems/waveDirector.test.js — 20/20",
+    "npm run lint — clean",
+    "npm test — 596/596",
+    "npm run replay:state-stepper — 4 fixtures",
+    "npm run replay:edge-fixtures — 4 fixtures",
+    "npm run launch:media-check — passed",
+    "npm run build — passed"
+  ],
+  "deferrals": [
+    "Analytics/dashboard allowlists remain provider-credential gated",
+    "Physical PWA install and real gamepad QA remain device-evidence gated",
+    "Lighthouse/funnel analysis remains production-data gated",
+    "MenuScreen/MenuPanels full unification remains a larger refactor requiring dedicated component coverage"
+  ]
+}

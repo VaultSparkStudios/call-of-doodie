@@ -214,7 +214,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] Obelisk verify backend — `/api/obelisk-verify` now exists as a Cloudflare Pages Function proxy with redacted receipts and honest not-configured behavior; guest play remains default.
 - [x] [SIL:3] **DONE S67** App.jsx extraction slice 1 — `gameStep.js` exports `computeMovementVector` + `applyPlayerMovement`; 11 tests; 347/347 passing.
 - [ ] [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor with no user-facing impact; HomeV2 is the default (v1 opt-in only), so deferral has minimal player impact
-- [ ] [SIL:2] [S62 deferred] Coordinated enemy formations — wave 20+ group-spawn patterns (flanks, pincer, escort); game design work (~4h) beyond current scope
+- [x] [SIL:2] **DONE S114** [S62 deferred] Coordinated enemy formations — wave-20+ spawn planning now promotes pressure/climax spawns into deterministic PINCER / ESCORT / FLANK archetypes with lane/role metadata and telemetry (`formationSet`); focused waveDirector tests cover cadence and bounds. Validation: focused 20/20, lint, full 596/596, build, replay gates, launch media check.
 - [ ] [SIL:1] [S62 deferred] Mid-run challenge contracts — optional per-wave objectives for bonus coins beyond Dynamic Objective System; needs design pass to avoid overlap
 - [x] [SIL:1] **DONE S68** [S62 deferred] Input-timeline digest contract — compact command trace metadata now reaches the edge contract (`traceDigest` + `traceLength`); deterministic resim remains a separate runner/storage milestone.
 - [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)

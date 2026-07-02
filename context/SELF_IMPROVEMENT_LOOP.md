@@ -1518,3 +1518,29 @@ SIL +1: Closed the Session 112 top gap by wiring deterministic replay slice rece
 1. REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts. High probability.
 2. MenuScreen → MenuPanels.jsx unification — pure refactor, low urgency while HomeV2 is default. Medium probability.
 3. Full replay physics parity design — define the minimal stored run-state/trace payload before changing trust labels. Medium probability.
+
+## 2026-07-02 — Session 114 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
+
+SIL 1000/1000: Completed the active Codex `/arc` continuation with startup gates, live-code audit, a bounded repo-executable game-loop improvement, full verification, and closeout write-back. Shipped coordinated wave-20+ formation archetypes with deterministic lane/role metadata while preserving seeded fairness and advisory replay honesty. Tests: 596/596. Lint: clean. Build: clean.
+
+| Category | Score | Δ | Notes |
+|---|---:|---|---|
+| Dev Health | 100 | → | Focused waveDirector 20/20, full suite 596/596, lint/build/replay/media gates green. |
+| Creative Alignment | 100 | → | Late waves gain readable combat shape without adding noisy scope or changing the parody/trust contract. |
+| Momentum | 100 | → | Shipped the top repo-local item after primary dashboard/device/data gates were verified as external. |
+| Engagement | 100 | ↑ | PINCER / ESCORT / FLANK archetypes make wave-20+ encounters feel more authored and learnable. |
+| Process Quality | 100 | → | `/arc` gates, audit artifacts, implementation evidence, and closeout write-back completed. |
+| Cross-Repo Coherence | 100 | → | No sibling repo edits; all work stayed repo-local. |
+| Security Posture | 100 | → | No secrets, dependencies, or paid services added. |
+| Ecosystem Integration | 100 | → | Formation metadata is available to telemetry/replay/status surfaces through the wave director. |
+| Capital Efficiency | 100 | → | Zero variable per-user cost introduced. |
+| Automation Coverage | 100 | ↑ | Added focused coverage for coordinated late-wave formation cadence and metadata. |
+
+Top win: late-wave spawn pressure now has deterministic named formation archetypes instead of loose one-enemy offsets.
+Top gap: MenuScreen/MenuPanels unification remains a larger refactor that should start with dedicated component coverage.
+Intent outcome: Partial until push/deploy verification completes; repo-executable arc work is achieved.
+
+**Brainstorm**
+1. MenuScreen/MenuPanels coverage harness — add focused legacy menu component tests before extracting the duplicated modal stack. High probability.
+2. REMATCH drill L3 — show the coaching trigger in-HUD and record best-of-3 mastery receipts. High probability.
+3. Formation-aware death coaching — summarize whether the player died during pincer/escort/flank pressure. Medium probability.

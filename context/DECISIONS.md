@@ -510,3 +510,11 @@ Trade-off accepted: The edge helper carries Deno-compatible mirrored slice logic
 Decision: high `pressure-estimate` drift must remain advisory metadata in `validate-replay`; it must not quarantine an otherwise valid trace-backed contract by itself.
 
 Rationale: The pressure model is intentionally coarse and can diverge from real submitted score/wave values. Treating it as a hard gate contradicted the product's replay-trust honesty boundary and broke the live trace-contract smoke test.
+
+## 2026-07-02 — Session 114 — Late-wave formation metadata is gameplay truth, not cosmetic-only copy
+
+Decision: Wave-20+ non-boss encounters should expose deterministic formation archetypes (PINCER, ESCORT, FLANK) with lane and role metadata from `waveDirector`, while early waves keep the lighter loose-formation behavior.
+
+Rationale: Late-wave combat readability improves when spawn pressure has named, testable patterns instead of invisible random offsets. Keeping the logic in `src/systems/waveDirector.js` preserves deterministic seeded-run fairness and gives telemetry/replay surfaces a concrete source of truth.
+
+Trade-off accepted: This does not add new enemy types or a broad App.jsx refactor. The formation layer changes encounter shape/readability while leaving damage, health, and leaderboard trust labels untouched.

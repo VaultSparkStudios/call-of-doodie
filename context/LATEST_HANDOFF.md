@@ -1,4 +1,19 @@
-## Where We Left Off (Session 113)
+## Where We Left Off (Session 114)
+- Shipped: coordinated late-wave enemy formations. Wave-20+ non-boss pressure/climax spawns now use deterministic PINCER / ESCORT / FLANK archetypes with lane and role metadata instead of only loose offsets.
+- Tests: focused waveDirector 20/20, lint clean, full `npm test` 596/596, replay state-stepper 4/4, edge fixtures 4/4, launch media check passing, build passing.
+- Deploy: closeout commit/push and Cloudflare deploy verification are the remaining steps in this active objective.
+
+Public-safe handoff summary:
+- session intent: continue active objective: /arc, then /closeout, direct commit/push to main, and deploy.
+- intent outcome: repo-executable arc work achieved; closeout/push/deploy verification continues from this handoff.
+- completed this session: `docs/AUDIT_2026-07-02_2.json` / `.md`, `src/systems/waveDirector.js`, and `src/systems/waveDirector.test.js`.
+
+## Next Recommended Slice
+- [ ] Observe post-push Cloudflare Pages deploy and rerun live smoke.
+- [ ] REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts.
+- [ ] MenuScreen → MenuPanels.jsx unification — pure refactor, but add dedicated component coverage before replacing the legacy modal stack.
+
+---## Where We Left Off (Session 113)
 - Shipped: validate-replay edge deterministic slice receipts. The edge pressure helper now returns deterministic contract, movement/aim stepper, combat-action, and derived contact-enemy receipts under the existing advisory `heuristic_pressure_estimate` result. The trust gate label did not change.
 - Tests: edge replay fixtures 4/4, focused replayResim 17/17, replay state-stepper 4/4, lint clean, full `npm test` 595/595, build passing, Deno check passing.
 - Deploy: ready for direct-to-main closeout commit/push and Cloudflare deploy verification.

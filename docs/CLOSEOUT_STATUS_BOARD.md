@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-02 (Session 112 closeout) -->
+<!-- generated-at: 2026-07-02 (Session 114 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S112 ════════════════════╗
-║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 2 decreasing  ║
-║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S114 ════════════════════╗
+║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
+║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: full determinism arc — seeded per-wave enemy RNG (`  ║
-║  ✓ Tests: 61 new/updated focused tests; full `npm test` 595/595  ║
-║  ✓ Deploy: pending direct-to-main closeout commit/push.          ║
-║  ✓ session intent: run the requested continuous `/goal` `/arc`   ║
-║  ✓ intent outcome: Achieved. All 7 audit items shipped at quali  ║
+║  ✓ Shipped: coordinated late-wave enemy formations. Wave-20+ no  ║
+║  ✓ Tests: focused waveDirector 20/20, lint clean, full `npm tes  ║
+║  ✓ Deploy: closeout commit/push and Cloudflare deploy verificat  ║
+║  ✓ session intent: continue active objective: /arc, then /close  ║
+║  ✓ intent outcome: repo-executable arc work achieved; closeout/  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,19 +29,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (~/.claude/projects/<slug>/memory/)              ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 17 files  ·  M:13 A:0 D:0 ?:4                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -52,8 +52,8 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         595/595                                          ║
-║  IGNIS:         13d ago                                          ║
+║  Tests:         596/596                                          ║
+║  IGNIS:         14d ago                                          ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

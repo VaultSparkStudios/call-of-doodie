@@ -98,6 +98,7 @@ export function createWaveDirectorPlan({
   const event = eventEligible ? theme.eventPool[Math.floor(random() * theme.eventPool.length)] : null;
 
   return {
+    wave,
     themeId: theme.id,
     label: theme.label,
     hint: theme.hint,
@@ -186,14 +187,25 @@ export function getSpawnFormationPlan(plan, state, enemiesSpawned) {
   if (!plan || !state) return null;
   const spawnNumber = enemiesSpawned + 1;
   const sign = spawnNumber % 2 === 0 ? 1 : -1;
+  const lateWave = plan.wave >= 20;
+  if (lateWave && state.stageId === "pressure") {
+    if (spawnNumber % 5 === 0) {
+      return { id: "escort", label: "ESCORT", offset: sign * 36, lane: "center", role: "guard" };
+    }
+    return { id: "pincer", label: "PINCER", offset: sign * 104, lane: sign > 0 ? "right" : "left", role: "encircle" };
+  }
+  if (lateWave && state.stageId === "climax") {
+    const lane = spawnNumber % 3 === 0 ? "center" : sign > 0 ? "right" : "left";
+    return { id: "flank", label: "FLANK", offset: sign * 118, lane, role: "collapse" };
+  }
   if (state.stageId === "scouting" && spawnNumber % 3 === 0) {
-    return { id: "flank", label: "FLANK", offset: sign * 64 };
+    return { id: "flank", label: "FLANK", offset: sign * 64, lane: sign > 0 ? "right" : "left", role: "probe" };
   }
   if (state.stageId === "pressure") {
-    return { id: "pincer", label: "PINCER", offset: sign * 78 };
+    return { id: "pincer", label: "PINCER", offset: sign * 78, lane: sign > 0 ? "right" : "left", role: "encircle" };
   }
   if (state.stageId === "climax") {
-    return { id: "surge", label: "SURGE", offset: sign * 42 };
+    return { id: "surge", label: "SURGE", offset: sign * 42, lane: "center", role: "rush" };
   }
   return null;
 }
@@ -211,6 +223,8 @@ export function applySpawnFormation(enemy, formation, W, H, margin = 24) {
     enemy.x = clamp(x + amount, margin, W - margin);
   }
   enemy.formation = formation.id;
+  enemy.formationLane = formation.lane || null;
+  enemy.formationRole = formation.role || null;
   return enemy;
 }
 
@@ -232,6 +246,7 @@ export function buildWaveTelemetrySnapshot(plan, state, wave) {
     aliveBudget: state?.aliveBudget ?? null,
     eliteEvery: state?.eliteEvery ?? 0,
     event: plan?.event ?? null,
+    formationSet: plan?.wave >= 20 ? "coordinated" : "loose",
   };
 }
 
@@ -281,10 +296,10 @@ export function heatBiasedFormation(heatTierValue, baseFormation, spawnNumber) {
   if (!baseFormation) return null;
   const sign = spawnNumber % 2 === 0 ? 1 : -1;
   if (heatTierValue >= 2) {
-    return { id: "pincer", label: "PINCER", offset: sign * 78 };
+    return { id: "pincer", label: "PINCER", offset: sign * 78, lane: sign > 0 ? "right" : "left", role: "encircle" };
   }
   if (heatTierValue === 1 && baseFormation.id === "flank") {
-    return { id: "pincer", label: "PINCER", offset: sign * 78 };
+    return { id: "pincer", label: "PINCER", offset: sign * 78, lane: sign > 0 ? "right" : "left", role: "encircle" };
   }
   return baseFormation;
 }

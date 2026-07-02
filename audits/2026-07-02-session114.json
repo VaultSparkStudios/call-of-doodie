@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-02",
+  "session": 114,
+  "project": "call-of-doodie",
+  "agent": "codex",
+  "intent": "arc then closeout, direct push to main, deploy",
+  "intentOutcome": "repo-executable arc work achieved; push/deploy verification pending at audit creation",
+  "sil": {
+    "total": 1000,
+    "max": 1000,
+    "velocity": 1,
+    "debt": "decreasing",
+    "categories": {
+      "devHealth": 100,
+      "creativeAlignment": 100,
+      "momentum": 100,
+      "engagement": 100,
+      "processQuality": 100,
+      "crossRepoCoherence": 100,
+      "securityPosture": 100,
+      "ecosystemIntegration": 100,
+      "capitalEfficiency": 100,
+      "automationCoverage": 100
+    }
+  },
+  "shipped": [
+    "Coordinated late-wave enemy formation archetypes in src/systems/waveDirector.js",
+    "Focused waveDirector coverage for wave-20+ pincer/escort/flank cadence and formation metadata",
+    "Session 114 audit artifacts docs/AUDIT_2026-07-02_2.md and docs/AUDIT_2026-07-02_2.json"
+  ],
+  "validation": [
+    "npx vitest run src/systems/waveDirector.test.js — 20/20",
+    "npm run lint — clean",
+    "npm test — 596/596",
+    "npm run replay:state-stepper — 4 fixtures",
+    "npm run replay:edge-fixtures — 4 fixtures",
+    "npm run launch:media-check — passed",
+    "npm run build — passed"
+  ],
+  "deferred": [
+    "Analytics/dashboard allowlists remain provider-credential gated",
+    "Physical PWA install and real gamepad QA remain device-evidence gated",
+    "Lighthouse/funnel analysis remains production-data gated",
+    "MenuScreen/MenuPanels unification remains larger refactor requiring dedicated component coverage"
+  ]
+}

@@ -69,12 +69,30 @@ describe("waveDirector", () => {
     const formation = getSpawnFormationPlan(plan, state, 10);
     expect(formation.id).toBe("pincer");
     expect(formation.offset).toBeLessThan(0);
+    expect(formation.role).toBe("encircle");
+  });
+
+  it("uses coordinated late-wave formation archetypes after wave 20", () => {
+    const plan = createWaveDirectorPlan({ wave: 22, maxEnemies: 50, nonBossWaveCount: 8, random: () => 0 });
+    const pressure = getWaveDirectorState(plan, 15, 50, 7);
+    const pincer = getSpawnFormationPlan(plan, pressure, 15);
+    const escort = getSpawnFormationPlan(plan, pressure, 19);
+    const climax = getWaveDirectorState(plan, 32, 50, 8);
+    const flank = getSpawnFormationPlan(plan, climax, 32);
+
+    expect(plan.wave).toBe(22);
+    expect(pincer).toMatchObject({ id: "pincer", lane: "right", role: "encircle" });
+    expect(pincer.offset).toBeGreaterThan(78);
+    expect(escort).toMatchObject({ id: "escort", lane: "center", role: "guard" });
+    expect(flank).toMatchObject({ id: "flank", role: "collapse" });
   });
 
   it("applies formation offsets without moving enemies out of bounds", () => {
     const enemy = { x: 8, y: 100 };
     applySpawnFormation(enemy, { id: "flank", offset: -200 }, 320, 240);
     expect(enemy.formation).toBe("flank");
+    expect(enemy.formationLane).toBeNull();
+    expect(enemy.formationRole).toBeNull();
     expect(enemy.y).toBe(24);
   });
 

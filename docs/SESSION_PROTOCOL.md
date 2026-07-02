@@ -284,6 +284,10 @@ Use the returned task-board and memory counts in the sprint summary instead of e
 
 **Never auto-invoke `/closeout`.** Always a separate, confirmed action.
 
+### CANON-044 Wave List Mandate
+
+For any multi-step work (3 or more steps) or any multi-phase effort, every agent MUST keep a visible in-session Wave task list (Wave 1, Wave 2, and so on), update it as work progresses, and reconcile it at closeout. This task scaffold is required for Claude Code, Codex, and any other CLI agent so `/start`, `/audit`, `/implement`, and `/closeout` stay inspectable across handoffs.
+
 ### `/go` rules
 
 - Never skip `/start`. Abort if no session lock.

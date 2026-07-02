@@ -702,3 +702,14 @@ Last reviewed: 2026-07-02
 
 - Advisory drift truth — `validate-replay` no longer quarantines an otherwise valid trace-backed contract solely because `resim.driftPct` is high. The pressure estimate remains visible in the response as advisory evidence, matching the trust-label decision.
 - Deployment truth — this fix was required by live `npm run replay:trust-smoke` after the first Session 113 deploy.
+
+## 2026-07-02 — Session 114 — Coordinated formation truth
+
+- `docs/AUDIT_2026-07-02_2.json` / `.md` are the source of truth for the Session 114 audit implementation.
+- Wave-director truth — `createWaveDirectorPlan()` now retains `wave`, and `getSpawnFormationPlan()` uses that source to switch wave-20+ pressure/climax spawns from loose offsets to coordinated PINCER / ESCORT / FLANK archetypes.
+- Enemy metadata truth — `applySpawnFormation()` stamps `formation`, `formationLane`, and `formationRole` onto the spawned enemy after applying bounds-safe offsets.
+- Telemetry truth — `buildWaveTelemetrySnapshot()` now reports `formationSet: "coordinated"` for wave-20+ plans and `"loose"` for earlier waves.
+- Validation truth — focused waveDirector tests passed 20/20, full `npm test` passed 596/596, lint/build/replay-state-stepper/replay-edge-fixtures/launch-media gates passed.
+
+Overall status: green locally
+Last reviewed: 2026-07-02
