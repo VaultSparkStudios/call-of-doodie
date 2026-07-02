@@ -24,7 +24,7 @@
       "impact": 9,
       "innovation": 7,
       "priority": 31.5,
-      "status": "planned",
+      "status": "shipped",
       "why": "Death is the game's most motivated moment and the debrief already coaches the player, but the only action is a full restart from wave 1. A REMATCH button that relaunches at the death wave with the same seed converts coaching into immediate deliberate practice. Depends on seeded-enemy-rng per-wave streams for honest 'same wave, same enemies' fidelity.",
       "recipe": "Add optional startWave to initGame(forceSeed, startWave) (App.jsx:544, currentWave hardcoded 1 at :554); scale starting loadout/level context sanely; add REMATCH AT WAVE N button to DeathScreen next-run drill block (DeathScreen.jsx:864-883) calling onStartGame(runSeed, deathWave); track rematch_started local Studio event; exclude rematch runs from leaderboard submission to protect score trust.",
       "evidence": [
@@ -48,7 +48,7 @@
       "impact": 9,
       "innovation": 7,
       "priority": 24.4,
-      "status": "planned",
+      "status": "shipped",
       "why": "The run seed only drives arena layout (App.jsx:811-920); enemy type, spawn side, position, elite rolls and timing all use global Math.random (gameHelpers.js:34,54-59,83-101; App.jsx:1299-1300,2314). So REPLAY #seed and Daily Challenge reproduce the map but not the fight - a quiet fairness gap for a game whose leaderboard sells seeded competition. Deriving an independent LCG stream per wave as hash(seed,wave) makes any wave reproducible without simulating prior waves.",
       "recipe": "Add createWaveRng(seed, wave) (mulberry32/LCG over a mixed hash) in src/gameHelpers.js; thread an rng param through spawnEnemy() and the App.jsx spawn call sites for type roll, side/position, elite/berserker rolls, shootTimer, wobble and spawn jitter; keep all other combat randomness on Math.random; cover determinism with unit tests (same seed+wave = identical spawn sequence; different wave = different).",
       "evidence": [
@@ -72,7 +72,7 @@
       "impact": 7,
       "innovation": 8,
       "priority": 24.1,
-      "status": "planned",
+      "status": "shipped",
       "why": "Phase 2B's honest next slice per S106 canon: stored traces carry player commands only, so a true enemy replay is impossible today - but a seed-derived single contact enemy stepped with the real chase math (direct-vector fallback + wobble, App.jsx:3331-3365) against the reconstructed player path is fully deterministic with current trace data. It extends replay evidence without touching the advisory gate label.",
       "recipe": "Add runDeterministicContactEnemySlice() to src/utils/replayResim.js with coverage label trace_movement_one_contact_enemy_derived: derive spawn side/position/frame from seed via local LCG, step the enemy with atan2 chase + wobble jitter and speed from ENEMY_TYPES[0] wave-1 scaling, detect contact at size/2+15 with 30-frame invincibility receipts; expose via runResim() alongside deterministicCombatSlice; add fixtures to replayTraceFixtures.js and extend validate-replay-state-stepper-fixtures.mjs; keep runResim gate heuristic_pressure_estimate/advisory per DECISIONS 2026-07-01.",
       "evidence": [
@@ -97,7 +97,7 @@
       "impact": 6,
       "innovation": 5,
       "priority": 18.9,
-      "status": "planned",
+      "status": "shipped",
       "why": "HomeV2 computes a balance-lab insight from local telemetry (HomeV2.jsx:213) but renders it only behind the ?debug=ops gate (:123-127, :850-873), so a real intelligence surface is invisible to every player. Promoting the single topInsight line into the visible intel area closes the loop between local telemetry and player-facing coaching.",
       "recipe": "Render balanceLab.topInsight as one compact chip/line in the visible HomeV2 intel area when present, keep the full lab table debug-gated, cover with a HomeV2 test asserting the insight renders without the debug flag.",
       "evidence": [
@@ -120,7 +120,7 @@
       "impact": 6,
       "innovation": 2,
       "priority": 9.1,
-      "status": "planned",
+      "status": "shipped",
       "why": "The top two genius-list blockers are stale: deploy-supabase-function.yml has SUPABASE_ACCESS_TOKEN + SUPABASE_PROJECT_REF as Actions secrets and has deployed sync-studio-events successfully five times since 2026-06-12 (last 2026-06-18, run 27794392576); and every edge function ships Access-Control-Allow-Origin:* with a live 200 OPTIONS from https://callofdoodie.wtf, so no Supabase-side allowlist blocks the new domain. Observability must not lie - the board should say so.",
       "recipe": "Mark the S82 sync-studio-events TASK_BOARD item done with the CI-run evidence; narrow the S61 allowlist items to the genuinely-gated PostHog/Sentry/Ko-fi dashboard halves (analytics capability still MISSING); trigger one fresh workflow_dispatch of deploy-supabase-function.yml to confirm current-tree deployability; regenerate the innovation pack.",
       "evidence": [
@@ -144,7 +144,7 @@
       "impact": 6,
       "innovation": 3,
       "priority": 9.0,
-      "status": "planned",
+      "status": "shipped",
       "why": "drawGame allocates a filtered copy of the enemies array twice every frame (drawGame.js:467,1123), rebuilds full-screen gradients every frame (:150,351,1148,1168,1397), and allocates per-enemy body-shape array literals per frame (:576-651). At 60fps with dozens of enemies this is steady GC pressure on the game's hottest path; the vignette cache pattern from S96 (_runActVignetteStyle) already proves the fix shape.",
       "recipe": "Replace the two filter(Boolean).forEach passes with plain for-loops that skip falsy entries; add a size-keyed gradient cache (key W:H) for the static full-screen gradients following the S96 vignette-cache pattern; hoist the body-shape coordinate tables to module-level constants; verify no visual change via existing tests + build.",
       "evidence": [
@@ -168,7 +168,7 @@
       "impact": 3,
       "innovation": 1,
       "priority": 2.3,
-      "status": "planned",
+      "status": "shipped",
       "why": "soundHit, soundPickup, soundGrenade and soundEnemyDeath were superseded by spatial ...At variants and have zero non-test callers (~55 dead lines). Dead exports mislead future sessions into wiring the wrong variant.",
       "recipe": "Delete the four exports from src/sounds.js after re-verifying zero callers; run lint + full suite.",
       "evidence": [
@@ -192,5 +192,13 @@
     { "slug": "homev2-lighthouse-funnel", "reason": "Requires production browser/data evidence a CLI cannot fabricate." },
     { "slug": "itchio-listing-and-screenshots", "reason": "Publication UI + verified browser captures required; SVG fallbacks stay per S105 decision." }
   ],
-  "executionLog": []
+  "executionLog": [
+    { "slug": "board-truth-stale-blockers", "status": "shipped", "notes": "TASK_BOARD S82 + S61 items closed with CI-run and live-OPTIONS evidence; fresh workflow_dispatch run 28555855725 confirmed green." },
+    { "slug": "seeded-enemy-rng", "status": "shipped", "notes": "createWaveRng()/getWaveSpawnRng() in gameHelpers.js; spawnEnemy/spawnBoss + App.jsx spawn call sites threaded; 15 new determinism tests, all legacy spawn tests still pass." },
+    { "slug": "rematch-death-wave-drill", "status": "shipped", "notes": "resolveRematchStartWave/buildRematchKit in src/systems/rematchDrill.js; REMATCH button in DeathScreen; leaderboard/achievement/career-record exclusion for practice runs." },
+    { "slug": "replay-contact-enemy-parity-slice", "status": "shipped", "notes": "runDeterministicContactEnemySlice() in replayResim.js, coverage trace_movement_one_contact_enemy_derived; fixture gate extended with determinism assertion." },
+    { "slug": "balance-lab-player-surface", "status": "shipped", "notes": "PATTERN SPOTTED session-dismissible card in HomeV2 renders balanceLab.topInsight when status=signals-found, outside the ops debug gate." },
+    { "slug": "drawgame-hot-loop-perf", "status": "shipped", "notes": "Two filter(Boolean).forEach passes over gs.enemies replaced with for-loops; bg + theme-vignette gradients cached on gs; per-enemy body-shape literals hoisted to module constants." },
+    { "slug": "dead-sound-exports", "status": "shipped", "notes": "soundHit/soundPickup/soundGrenade/soundEnemyDeath deleted after re-verifying zero non-test callers; spatial ...At variants are exact supersets." }
+  ]
 }
