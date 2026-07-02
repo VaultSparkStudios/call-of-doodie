@@ -2,6 +2,15 @@ import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
 
+// Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
+// these were re-allocated as fresh array literals for every enemy, every
+// frame; the values never change, only where they're multiplied by `r`).
+const SIGN_PAIR = [-1, 1];
+const CROC_SCALE_DOTS = [[-0.38, 0], [0, -0.38], [0.38, 0], [0, 0.38], [0, 0]];
+const CLIPBOARD_ROW_OFFSETS = [-0.18, 0.03, 0.24];
+const CRYPTO_ZIGZAG_POINTS = [[-0.44, -0.08], [-0.22, 0.22], [0, -0.24], [0.22, 0.08], [0.44, -0.28]];
+const KAREN_CHEVRON_ROWS = [0.36, 0.1];
+
 function getEnemyReadabilityStyle(enemy, timeNow) {
   if (enemy.isBossEnemy) {
     return {
@@ -147,10 +156,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ["#0a1220","#050a14"], // arctic: cold midnight blue
   ];
   const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : (THEME_BG[gs.mapTheme] || THEME_BG[0]);
-  const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
-  bgGrad.addColorStop(0, bgC0);
-  bgGrad.addColorStop(1, bgC1);
-  ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H);
+  const _bgKey = `${bgC0}:${bgC1}:${W}:${H}`;
+  if (!gs._bgGradStyle || gs._bgGradKey !== _bgKey) {
+    const _bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
+    _bg.addColorStop(0, bgC0);
+    _bg.addColorStop(1, bgC1);
+    gs._bgGradStyle = _bg;
+    gs._bgGradKey = _bgKey;
+  }
+  ctx.fillStyle = gs._bgGradStyle; ctx.fillRect(0, 0, W, H);
 
   // ── Floor zone panels (room sections with tile grid, themed per run) ──
   const FZ_FILL = ["rgba(62,55,92,","rgba(35,62,35,","rgba(60,54,36,","rgba(72,46,22,","rgba(90,68,30,","rgba(28,62,28,","rgba(25,12,55,","rgba(40,60,90,"];
@@ -348,10 +362,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       "5,30,70",     // arctic: cold blue
     ];
     const vc = VIGNETTE_CLR[gs.mapTheme] || VIGNETTE_CLR[0];
-    const vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.28, W / 2, H / 2, W * 0.72);
-    vig.addColorStop(0, `rgba(${vc},0)`);
-    vig.addColorStop(1, `rgba(${vc},0.22)`);
-    ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
+    const _vigKey = `${vc}:${W}:${H}`;
+    if (!gs._themeVignetteStyle || gs._themeVignetteKey !== _vigKey) {
+      const _vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.28, W / 2, H / 2, W * 0.72);
+      _vig.addColorStop(0, `rgba(${vc},0)`);
+      _vig.addColorStop(1, `rgba(${vc},0.22)`);
+      gs._themeVignetteStyle = _vig;
+      gs._themeVignetteKey = _vigKey;
+    }
+    ctx.fillStyle = gs._themeVignetteStyle; ctx.fillRect(0, 0, W, H);
   }
 
   // Trail
@@ -464,9 +483,12 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   } catch {}
 
   // Enemies
-  (gs.enemies || []).filter(Boolean).forEach(e => {
+  const _enemiesDraw = gs.enemies || [];
+  for (let _ei = 0; _ei < _enemiesDraw.length; _ei++) {
+    const e = _enemiesDraw[_ei];
+    if (!e) continue;
     // Fog of War: skip rendering enemies beyond 195px (they become visible at ~160px)
-    if (gs.fogOfWar && !e.isBossEnemy && Math.hypot(e.x - p.x, e.y - p.y) > 195) return;
+    if (gs.fogOfWar && !e.isBossEnemy && Math.hypot(e.x - p.x, e.y - p.y) > 195) continue;
     ctx.save(); ctx.translate(e.x, e.y);
     const r = e.size / 2;
     const faceA = Math.atan2(p.y - e.y, p.x - e.x);
@@ -573,7 +595,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         }
         case 2: { // Florida Man — croc scale dots
           ctx.fillStyle = "rgba(0,0,0,0.22)";
-          [[-0.38, 0], [0, -0.38], [0.38, 0], [0, 0.38], [0, 0]].forEach(([dx, dy]) => {
+          CROC_SCALE_DOTS.forEach(([dx, dy]) => {
             ctx.beginPath(); ctx.arc(dx * r, dy * r, r * 0.13, 0, Math.PI * 2); ctx.fill();
           }); break;
         }
@@ -581,11 +603,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
           ctx.fillStyle = "rgba(255,255,255,0.22)"; ctx.strokeStyle = "rgba(255,255,255,0.18)"; ctx.lineWidth = 1;
           ctx.fillRect(-r * 0.36, -r * 0.36, r * 0.72, r * 0.62); ctx.strokeRect(-r * 0.36, -r * 0.36, r * 0.72, r * 0.62);
           ctx.fillStyle = "rgba(40,40,40,0.55)";
-          [-0.18, 0.03, 0.24].forEach(dy => ctx.fillRect(-r * 0.28, dy * r, r * 0.56, r * 0.11)); break;
+          CLIPBOARD_ROW_OFFSETS.forEach(dy => ctx.fillRect(-r * 0.28, dy * r, r * 0.56, r * 0.11)); break;
         }
         case 5: { // IT Guy — thick glasses
           ctx.strokeStyle = "#2a2a2a"; ctx.lineWidth = Math.max(1.5, r * 0.09); ctx.fillStyle = "rgba(160,230,255,0.28)";
-          [-1, 1].forEach(s => {
+          SIGN_PAIR.forEach(s => {
             ctx.beginPath(); ctx.arc(s * r * 0.34, -r * 0.12, r * 0.24, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
           });
           ctx.beginPath(); ctx.moveTo(-r * 0.1, -r * 0.12); ctx.lineTo(r * 0.1, -r * 0.12); ctx.stroke();
@@ -594,7 +616,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         }
         case 6: { // Gym Bro — bulging arms either side
           ctx.fillStyle = e.color; ctx.strokeStyle = "rgba(0,0,0,0.3)"; ctx.lineWidth = 1.5;
-          [-1, 1].forEach(s => {
+          SIGN_PAIR.forEach(s => {
             ctx.beginPath(); ctx.ellipse(s * r * 0.92, r * 0.06, r * 0.32, r * 0.44, s * 0.22, 0, Math.PI * 2);
             ctx.fill(); ctx.stroke();
           }); break;
@@ -621,8 +643,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         case 10: { // Crypto Bro — zigzag chart line
           ctx.strokeStyle = "#00FFD0"; ctx.lineWidth = 2; ctx.globalAlpha = 0.78; ctx.lineCap = "round";
           ctx.beginPath();
-          [[-r*.44,-r*.08],[-r*.22,r*.22],[0,-r*.24],[r*.22,r*.08],[r*.44,-r*.28]].forEach(([x, y], i) =>
-            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y));
+          CRYPTO_ZIGZAG_POINTS.forEach(([fx, fy], i) =>
+            i === 0 ? ctx.moveTo(fx * r, fy * r) : ctx.lineTo(fx * r, fy * r));
           ctx.stroke(); ctx.globalAlpha = 1; ctx.lineCap = "butt"; break;
         }
         case 12: { // YOLO Bomber — hazard stripes clipped to circle
@@ -636,7 +658,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         }
         case 13: { // Sergeant Karen — rank chevrons
           ctx.strokeStyle = "rgba(255,255,255,0.78)"; ctx.lineWidth = 2; ctx.lineCap = "round";
-          [r * 0.36, r * 0.1].forEach(cy => {
+          KAREN_CHEVRON_ROWS.forEach(f => {
+            const cy = f * r;
             ctx.beginPath(); ctx.moveTo(-r * 0.32, cy); ctx.lineTo(0, cy - r * 0.23); ctx.lineTo(r * 0.32, cy); ctx.stroke();
           }); ctx.lineCap = "butt"; break;
         }
@@ -648,7 +671,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     if (e.hitFlash <= 4) {
       ctx.save(); ctx.rotate(faceA);
       const er = Math.max(1.8, r * 0.18);
-      [-1, 1].forEach(side => {
+      SIGN_PAIR.forEach(side => {
         ctx.fillStyle = "rgba(255,255,255,0.92)";
         ctx.beginPath(); ctx.ellipse(r * 0.42, side * r * 0.3, er * 1.4, er, 0, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = e.isBossEnemy ? "#FF0000" : "#111";
@@ -873,7 +896,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const _nameStr = _isNemBoss ? `🎯 ${e.name}` : e.name;
     ctx.strokeText(_nameStr, 0, r + 14); ctx.fillText(_nameStr, 0, r + 14);
     ctx.restore();
-  });
+  }
 
   // Railgun beams
   if (gs.beams && gs.beams.length > 0) {
@@ -1120,13 +1143,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.strokeStyle = gs.bossWave ? "#F00" : "#0F0"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(rx, ry, rs, 0, Math.PI * 2); ctx.stroke();
   ctx.globalAlpha = 0.7;
   ctx.fillStyle = "#0F0"; ctx.beginPath(); ctx.arc(rx, ry, 2, 0, Math.PI * 2); ctx.fill();
-  (gs.enemies || []).filter(Boolean).forEach(e => {
+  for (let _ri = 0; _ri < (gs.enemies || []).length; _ri++) {
+    const e = gs.enemies[_ri];
+    if (!e) continue;
     const edx = (e.x - p.x) / (W * 0.6) * rs, edy = (e.y - p.y) / (H * 0.6) * rs;
     if (Math.hypot(edx, edy) < rs - 2) {
       ctx.fillStyle = e.isBossEnemy ? "#FF00FF" : e.typeIndex >= 4 ? "#F00" : e.ranged ? "#F80" : "#FF0";
       ctx.beginPath(); ctx.arc(rx + edx, ry + edy, e.isBossEnemy ? 4 : 2, 0, Math.PI * 2); ctx.fill();
     }
-  });
+  }
   ctx.globalAlpha = 1;
 
   // Rage active: red pulse overlay
