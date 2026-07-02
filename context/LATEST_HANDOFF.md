@@ -1,3 +1,19 @@
+## Where We Left Off (Session 113)
+- Shipped: validate-replay edge deterministic slice receipts. The edge pressure helper now returns deterministic contract, movement/aim stepper, combat-action, and derived contact-enemy receipts under the existing advisory `heuristic_pressure_estimate` result. The trust gate label did not change.
+- Tests: edge replay fixtures 4/4, focused replayResim 17/17, replay state-stepper 4/4, lint clean, full `npm test` 595/595, build passing, Deno check passing.
+- Deploy: ready for direct-to-main closeout commit/push and Cloudflare deploy verification.
+
+Public-safe handoff summary:
+- session intent: continue active objective: /arc, then /closeout, direct commit/push to main, and deploy.
+- intent outcome: repo-executable arc work achieved; closeout/push/deploy verification continues from this handoff.
+- completed this session: `docs/AUDIT_2026-07-02.json` / `.md`, `audits/2026-07-02-session113.json`, `supabase/functions/validate-replay/pressure.js`, `supabase/functions/validate-replay/index.ts`, and `scripts/validate-edge-replay-pressure-fixtures.mjs`.
+
+## Next Recommended Slice
+- [ ] Observe post-push Cloudflare Pages deploy and rerun live smoke.
+- [ ] REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts.
+- [ ] MenuScreen → MenuPanels.jsx unification — pure refactor, still lower urgency while HomeV2 is default.
+
+---
 ## Where We Left Off (Session 112)
 - Shipped: full determinism arc — seeded per-wave enemy RNG (`createWaveRng`/`getWaveSpawnRng`), REMATCH death-wave practice drill, deterministic replay contact-enemy parity slice — plus a player-facing balance-lab insight surface, a drawGame hot-loop perf pass, dead sound export cleanup, and closure of two stale credential-gated board blockers with live evidence.
 - Tests: 61 new/updated focused tests; full `npm test` 595/595 (up from 561); lint/build/replay-state-stepper/replay-edge-fixtures all green.

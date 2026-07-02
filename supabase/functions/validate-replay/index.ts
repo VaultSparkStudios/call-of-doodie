@@ -53,6 +53,12 @@ interface ValidateResult {
     driftPct: number;
     commandCount: number;
     pressureClass: "none" | "low" | "medium" | "high";
+    deterministicSlices?: {
+      contract: Record<string, unknown>;
+      stepper: Record<string, unknown>;
+      combatSlice: Record<string, unknown>;
+      contactEnemySlice: Record<string, unknown>;
+    };
   };
 }
 

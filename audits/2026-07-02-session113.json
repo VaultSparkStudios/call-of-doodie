@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-02",
+  "session": 113,
+  "status": "green-local",
+  "shipped": [
+    "validate-replay-edge-deterministic-slice-receipts"
+  ],
+  "tests": {
+    "passing": 595,
+    "total": 595
+  },
+  "validation": [
+    "node scripts/validate-edge-replay-pressure-fixtures.mjs - 4 fixtures",
+    "npx vitest run src/utils/replayResim.test.js - 17/17",
+    "npm run replay:edge-fixtures - 4 fixtures",
+    "npm run replay:state-stepper - 4 fixtures",
+    "npm run lint - clean",
+    "npm test - 595/595",
+    "npm run build - passed",
+    "deno check supabase/functions/validate-replay/index.ts - passed"
+  ]
+}

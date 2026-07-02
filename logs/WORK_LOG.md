@@ -798,3 +798,11 @@ Validation: affected tests 22/22; full `npm test` 545/545; `npm run lint`; `npm 
 - Shipped a player-facing balance-lab insight card in HomeV2 (was debug-only), a drawGame hot-loop perf pass (killed two full-array `filter(Boolean)` allocations, cached background/vignette gradients, hoisted per-enemy shape literals), and deletion of 4 dead non-spatial sound exports.
 - Second-order follow-up: added an end-to-end regression test proving Daily Challenge/Gauntlet spawn-fairness across a full multi-wave run, and recorded the fairness fix formally in `context/DECISIONS.md`.
 - Validation: 61 new/updated focused tests, `npm run lint` clean, full `npm test` 595/595 (up from 561), `npm run build` passing, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4.
+
+## 2026-07-02 — Session 113 — validate-replay edge deterministic slice receipts
+
+- Ran the requested continuous arc continuation from a clean main worktree: session lock, context-meter, secrets audit, blocker preflight, startup brief validation, and live-code replay-trust audit.
+- Shipped the Session 112 next slice: `supabase/functions/validate-replay/pressure.js` now emits deterministic slice receipts under the existing advisory pressure result, and `validate-replay/index.ts` types that richer receipt.
+- Extended `scripts/validate-edge-replay-pressure-fixtures.mjs` so edge pressure + deterministic receipts are compared against browser `runResim()` on the shared replay fixtures.
+- Preserved the honesty boundary: the score validation method remains `heuristic_pressure_estimate` / advisory; the new receipts are evidence slices, not full physics parity.
+- Validation: `node scripts/validate-edge-replay-pressure-fixtures.mjs` 4/4, focused replayResim 17/17, `npm run replay:edge-fixtures` 4/4, `npm run replay:state-stepper` 4/4, `npm run lint`, `npm test` 595/595, `npm run build`, and Deno check all passed.

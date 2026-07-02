@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-07-02T09:00:00.000Z",
+  "project": "call-of-doodie",
+  "type": "game",
+  "summary": "Live-code arc targeted the highest-leverage unblocked replay-trust follow-up from Session 112: edge-function wiring for deterministic replay slices. Credential/dashboard/manual/data items remain honest deferrals.",
+  "items": [
+    {
+      "slug": "validate-replay-edge-deterministic-slice-receipts",
+      "tier": "FIRE",
+      "axis": "security / replay trust",
+      "effort": "1.5h",
+      "impact": 8,
+      "innovation": 6,
+      "priority": 26.8,
+      "result": "Shipped deterministic movement/combat/contact-enemy slice receipts from supabase/functions/validate-replay/pressure.js under the existing advisory pressure-estimate result; extended the edge fixture validator to compare method, coverage, derived spawn, contact count, and damage against browser runResim().",
+      "files": [
+        "supabase/functions/validate-replay/pressure.js",
+        "supabase/functions/validate-replay/index.ts",
+        "scripts/validate-edge-replay-pressure-fixtures.mjs"
+      ],
+      "validation": [
+        "node scripts/validate-edge-replay-pressure-fixtures.mjs - 4 fixtures",
+        "npx vitest run src/utils/replayResim.test.js - 17/17",
+        "npm run replay:edge-fixtures - 4 fixtures",
+        "npm run replay:state-stepper - 4 fixtures",
+        "npm run lint - clean",
+        "npm test - 595/595",
+        "npm run build - passed",
+        "deno check supabase/functions/validate-replay/index.ts - passed"
+      ]
+    }
+  ],
+  "deferred": [
+    "PostHog/Sentry/Ko-fi dashboard allowlists remain credential/provider gated.",
+    "Physical PWA install and real gamepad QA still require device evidence.",
+    "HomeV2 Lighthouse/funnel analysis still requires production measurement data.",
+    "Full launch screenshot replacement still requires verified browser captures."
+  ]
+}

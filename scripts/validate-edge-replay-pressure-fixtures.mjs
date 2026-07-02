@@ -1,4 +1,4 @@
-import { buildReplayPressureProfile } from "../src/utils/replayResim.js";
+import { buildReplayPressureProfile, runResim } from "../src/utils/replayResim.js";
 import { replayTraceFixtureTable } from "../src/utils/replayTraceFixtures.js";
 import {
   analyzeTraceEvidence,
@@ -47,6 +47,29 @@ for (const fixture of replayTraceFixtureTable()) {
     }
     if (receipt[key] !== browserProfile[key]) {
       failures.push(`${fixture.id}: Edge ${key}=${receipt[key]} drifted from browser ${browserProfile[key]}`);
+    }
+  }
+
+  const browserResim = runResim(seed, trace, 1000, {
+    wave: fixture.expectedPressure.finalWave,
+    score: fixture.expectedPressure.finalScore,
+  });
+  const edgeSlices = receipt.deterministicSlices;
+  const comparisons = [
+    ["contract.ready", edgeSlices?.contract?.ready, browserResim.deterministicContract?.ready],
+    ["stepper.method", edgeSlices?.stepper?.method, browserResim.deterministicStepper?.method],
+    ["stepper.coverage", edgeSlices?.stepper?.coverage, browserResim.deterministicStepper?.coverage],
+    ["combat.method", edgeSlices?.combatSlice?.method, browserResim.deterministicCombatSlice?.method],
+    ["combat.coverage", edgeSlices?.combatSlice?.coverage, browserResim.deterministicCombatSlice?.coverage],
+    ["contact.method", edgeSlices?.contactEnemySlice?.method, browserResim.deterministicContactEnemySlice?.method],
+    ["contact.coverage", edgeSlices?.contactEnemySlice?.coverage, browserResim.deterministicContactEnemySlice?.coverage],
+    ["contact.derivedSpawn", JSON.stringify(edgeSlices?.contactEnemySlice?.derivedSpawn), JSON.stringify(browserResim.deterministicContactEnemySlice?.derivedSpawn)],
+    ["contact.contactCount", edgeSlices?.contactEnemySlice?.contactCount, browserResim.deterministicContactEnemySlice?.contactCount],
+    ["contact.damageTaken", edgeSlices?.contactEnemySlice?.damageTaken, browserResim.deterministicContactEnemySlice?.damageTaken],
+  ];
+  for (const [label, edgeValue, browserValue] of comparisons) {
+    if (edgeValue !== browserValue) {
+      failures.push(`${fixture.id}: Edge ${label}=${edgeValue} drifted from browser ${browserValue}`);
     }
   }
 }

@@ -1,40 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 90e5ce3aa991 -->
-<!-- generated-at: 2026-07-01T23:46:35.125Z -->
+<!-- source-hash: b735467902e8 -->
+<!-- generated-at: 2026-07-02T08:39:35.631Z -->
 
 # LATEST_HANDOFF (compact)
 
-Handoff Summary (compressed)
+SESSION 112 HANDOFF SUMMARY
 
-Session: 111
+Session
+- Current: 112 (latest of continuous /goal /arc runs)
 
-Shipped this session
-- DeathScreen event-source extraction: buildDebriefStudioEventPlan() and buildScoreSubmitFallbackStudioEvent() own tested Studio event payload construction.
-- Debrief/drill receipt dedupe in DeathScreen via stable event key.
+Shipped This Session
+- Seeded per-wave enemy RNG (createWaveRng/getWaveSpawnRng) in src/gameHelpers.js
+- REMATCH death-wave practice drill (src/systems/rematchDrill.js + DeathScreen button)
+- Deterministic replay contact-enemy parity slice (runDeterministicContactEnemySlice in src/utils/replayResim.js)
+- Balance-lab PATTERN SPOTTED insight card (HomeV2.jsx), drawGame hot-loop perf pass, dead sound export cleanup
+- Daily Challenge/Gauntlet spawn-fairness regression test; closed two stale credential-gated board blockers
+- Audit artifacts: AUDIT_2026-07-01_6.json/.md, IMPLEMENT_PLAN.md, INNOVATION_PACK.md
 
-Validation baseline
-- Focused death-flow/HomeV2 16/16; npm test 561/561; lint clean; build passing.
-- replay state-stepper 4/4; edge replay fixtures 4/4; launch media check, live site, post-cutover smoke all passing.
+Current Intent
+- Run continuous /goal /arc: start, audit, implement, innovation-pack saturation, closeout. Achieved this session; deploy commit/push still pending.
 
-Current intent
-- Run continuous /goal /arc: start, audit, implement, innovation-pack saturation, closeout, direct main push, status reporting. Achieved for repo-executable work; external items honestly gated.
+Validation Baseline
+- npm test 595/595 (up from 561); lint clean; build passing
+- replay:state-stepper 4/4; replay:edge-fixtures 4/4
 
-Now bucket (top 3)
-1. Replay enemy archetype parity slice — simulate one basic contact enemy against stored trace movement before touching advisory trust labels.
-2. Physical QA pass — real gamepad/browser run plus real mobile PWA install/standalone relaunch using existing input QA + PWA install receipts.
-3. Verified screenshot capture — capture boss, build/debrief, leaderboard browser PNGs before manifest replacement.
+Now Bucket (Top 3)
+- validate-replay Phase 2B: port deterministic slices from replayResim.js into supabase/functions/validate-replay (currently heuristic-only, Deno runtime); touches live score/anti-cheat validation (SIL:2 BLOCKER)
+- Deploy closeout: direct-to-main commit/push pending
+- Physical QA pass: real gamepad/browser run + mobile PWA install/standalone relaunch using input QA and PWA install receipts
 
-Blockers (top 3)
-1. Deploy pending: direct-to-main closeout commit/push not yet executed.
-2. Deterministic replay still lacks enemy/physics parity and stored trace payload design; current combat slice bounded/truth-labeled.
-3. Full manifest screenshot replacement blocked on missing verified browser captures.
+Blockers (Top 3)
+- validate-replay Phase 2B is larger-scope, deliberately not force-shipped; deterministic slices currently consumed nowhere
+- Sentry DSN capability-scope ambiguity flagged; analytics/dashboard items credential-gated
+- Innovation-pack candidates remaining are credential/human/data/large-scope gated
 
-Human-blocked items (age)
-- Supabase live deploy for sync-studio-events — credential-gated (since ~S104, ~7 sessions).
-- PostHog/Sentry production analytics — dashboard/GitHub-secret gated (since ~S104, ~7 sessions).
-- Itch.io publication — manual (since ~S104, ~7 sessions).
-- Physical PWA install + real gamepad/browser QA — device-gated (since ~S104, ~7 sessions).
-- Lighthouse deltas / funnel analysis — data-gated (since ~S104, ~7 sessions).
+Human-Blocked Items (with age)
+- Physical QA pass (gamepad + mobile PWA install): open since S109-S110, ~3 sessions
+- Verified screenshot capture (boss, build/debrief, leaderboard PNGs) before manifest replacement: open since S105, ~7 sessions
+- Supabase/analytics live deploy (PostHog/Sentry, sync-studio-events): credential-gated, recurring since S104+
+- MenuScreen to MenuPanels.jsx unification (~900 dup lines): deferred per S62 rationale, low player impact
 
-Next session pointer
-- Execute the pending direct-to-main closeout push, verify Cloudflare deploy + live smoke, then begin the replay enemy archetype parity slice.
+Next Session Pointer
+- Push pending closeout to main, verify deploy/live smoke, then scope validate-replay Phase 2B edge-function port.

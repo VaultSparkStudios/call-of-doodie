@@ -1492,3 +1492,29 @@ SIL +3: Shipped the S111 brainstorm's #1 item (replay contact-enemy parity slice
 1. validate-replay edge-function wiring — port the deterministic combat/contact-enemy slices into `supabase/functions/validate-replay/pressure.js` so replay trust evidence actually feeds score validation. Medium probability (real scope, needs its own audit cycle).
 2. MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor, low urgency since HomeV2/v2 is default. Medium probability.
 3. REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts. High probability.
+
+## 2026-07-02 — Session 113 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
+
+SIL +1: Closed the Session 112 top gap by wiring deterministic replay slice receipts into the edge validate-replay pressure surface while preserving the advisory honesty boundary. Validation stayed green across focused replay, edge parity, state-stepper, lint, full suite, build, and Deno check.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite remains 595/595 with clean lint/build and Deno type-check. |
+| Creative Alignment | 100 | → | Replay trust deepens the existing competitive-fairness promise without changing player-facing tone. |
+| Momentum | 100 | ↑ | Shipped the prior closeout's top follow-up instead of re-carrying it as a vague blocker. |
+| Engagement | 100 | → | No direct UI change; replay trust supports leaderboard confidence. |
+| Process Quality | 100 | ↑ | Edge/browser parity is now executable evidence rather than a prose claim. |
+| Cross-Repo Coherence | 100 | → | No sibling repo tree edits. |
+| Security Posture | 100 | ↑ | validate-replay now has richer deterministic evidence while keeping quarantine labels honest. |
+| Ecosystem Integration | 100 | → | Supabase edge receipt stays compatible with existing replay trust surfaces. |
+| Capital Efficiency | 100 | → | Zero dependencies, paid services, or variable cost added. |
+| Automation Coverage | 100 | ↑ | Edge fixture gate now compares deterministic receipt fields against browser runResim. |
+
+**Top win:** Edge validate-replay no longer lags behind browser replay evidence slices.
+**Top gap:** Full physics parity still requires a richer stored trace/run-state contract.
+**Intent outcome:** Achieved for arc implementation and verification; closeout push/deploy continues.
+
+**Brainstorm**
+1. REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts. High probability.
+2. MenuScreen → MenuPanels.jsx unification — pure refactor, low urgency while HomeV2 is default. Medium probability.
+3. Full replay physics parity design — define the minimal stored run-state/trace payload before changing trust labels. Medium probability.

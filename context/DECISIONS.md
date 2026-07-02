@@ -496,3 +496,11 @@ Decision: Enemy type, spawn side/position, elite/berserker rolls, spawn timing (
 Rationale: `gs.runSeed` previously drove only arena layout (obstacles/terrain/props/theme via a local LCG in `initGame`). Enemy spawning used raw `Math.random()`, so "REPLAY #seed", Daily Challenge, and Gauntlet — all of which force every player onto the same seed — reproduced the map but never the actual fight. This was a silent competitive-fairness gap for a game that markets seeded competition and a shared leaderboard. `src/gameHelpers.seededSpawn.test.js` now includes an end-to-end regression test simulating two independent 10-wave runs on the same seed and asserting a byte-identical spawn timeline, matching what two real Daily Challenge players see.
 
 Trade-off accepted: This changes RNG consumption order for any code relying on `Math.random()` call-count parity with prior sessions (none exists). It does not change enemy difficulty scaling, only which enemies spawn when. The REMATCH drill (same session) depends on this fix for honest "same wave, same enemies" practice fidelity.
+
+## 2026-07-02 — Session 113 — Edge replay slices remain advisory evidence
+
+Decision: `validate-replay` may emit deterministic movement/combat/contact-enemy slice receipts from the edge runtime, but the validator still reports `method: "heuristic_pressure_estimate"` and `confidence: "advisory"` until full enemy/wave/physics parity exists.
+
+Rationale: The edge now consumes the same bounded evidence classes as browser `runResim()`, closing the edge-invisibility gap from Session 112, but stored traces still carry player commands only. Derived contact-enemy receipts are useful anti-cheat evidence; they are not a reconstruction of the real fight.
+
+Trade-off accepted: The edge helper carries Deno-compatible mirrored slice logic and a parity script to catch drift instead of importing browser runtime code directly.

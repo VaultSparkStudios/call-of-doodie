@@ -687,3 +687,13 @@ Last reviewed: 2026-07-01
 
 Overall status: green locally
 Last reviewed: 2026-07-01
+
+## 2026-07-02 — Session 113 — Edge replay deterministic receipt truth
+
+- Edge replay truth — `supabase/functions/validate-replay/pressure.js` now emits `deterministicSlices` under the existing advisory pressure receipt: deterministic input contract, movement/aim stepper, combat action slice, and derived contact-enemy slice.
+- Trust-label truth — `validate-replay` still reports `heuristic_pressure_estimate` / advisory. The new receipts are bounded evidence slices, not a full reconstruction of the actual enemy/wave/physics state.
+- Parity truth — `scripts/validate-edge-replay-pressure-fixtures.mjs` compares edge deterministic receipt method/coverage/spawn/contact fields against browser `runResim()` on the shared fixtures.
+- Validation truth — edge fixtures 4/4, focused replayResim 17/17, replay state-stepper 4/4, lint/build/full suite/Deno check green.
+
+Overall status: green locally
+Last reviewed: 2026-07-02
