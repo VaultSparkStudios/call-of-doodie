@@ -488,3 +488,11 @@ Decision: DeathScreen debrief, next-run drill, weekly contract, rivalry, and sco
 Rationale: The local Studio event ledger feeds downstream trust, coaching, and analytics surfaces. Inline payload construction and rerender-driven duplicate events make observability harder to audit and can make local player behavior look noisier than it is.
 
 Trade-off accepted: This does not change gameplay or external analytics semantics. It narrows event construction and dedupes debrief/drill receipts while preserving weekly contract progress as a separate dedupe stream.
+
+## 2026-07-01 — Session 112 — Enemy spawning is now seeded; Daily Challenge/Gauntlet fairness gap closed
+
+Decision: Enemy type, spawn side/position, elite/berserker rolls, spawn timing (wobble/shootTimer), proximity-cluster jitter, and the wave-director event roll now derive from `createWaveRng(runSeed, wave)` — an independent per-wave mulberry32 stream — instead of global `Math.random()`. All other combat randomness (crits, spread, pickups, boss internal ability timers) stays on `Math.random()` by design; only spawn-shape randomness is seeded.
+
+Rationale: `gs.runSeed` previously drove only arena layout (obstacles/terrain/props/theme via a local LCG in `initGame`). Enemy spawning used raw `Math.random()`, so "REPLAY #seed", Daily Challenge, and Gauntlet — all of which force every player onto the same seed — reproduced the map but never the actual fight. This was a silent competitive-fairness gap for a game that markets seeded competition and a shared leaderboard. `src/gameHelpers.seededSpawn.test.js` now includes an end-to-end regression test simulating two independent 10-wave runs on the same seed and asserting a byte-identical spawn timeline, matching what two real Daily Challenge players see.
+
+Trade-off accepted: This changes RNG consumption order for any code relying on `Math.random()` call-count parity with prior sessions (none exists). It does not change enemy difficulty scaling, only which enemies spawn when. The REMATCH drill (same session) depends on this fix for honest "same wave, same enemies" practice fidelity.

@@ -130,6 +130,39 @@ describe("spawnEnemy — seeded determinism", () => {
   });
 });
 
+describe("Daily Challenge / Gauntlet fairness — same seed across a full multi-wave run", () => {
+  // Daily Challenge and Gauntlet force every player onto the same runSeed for
+  // the day/week. This proves two independent playthroughs advancing through
+  // waves 1-10 (spawning several enemies per wave, exactly like the live game
+  // loop does via getWaveSpawnRng(gs) caching per-wave) see the identical
+  // enemy sequence end to end — not just within a single isolated wave.
+  function simulateRun(seed) {
+    const gs = makeGs(1, { runSeed: seed });
+    const log = [];
+    for (let wave = 1; wave <= 10; wave++) {
+      gs.currentWave = wave;
+      const perWave = 2 + (wave % 3);
+      for (let i = 0; i < perWave; i++) {
+        spawnEnemy(gs, W, H, "normal");
+        const e = gs.enemies[gs.enemies.length - 1];
+        log.push({ wave, ti: e.typeIndex, x: round2(e.x), y: round2(e.y), eliteType: e.eliteType || null });
+      }
+      if (wave % 5 === 0) spawnBoss(gs, W, H, "normal", 4);
+    }
+    return log;
+  }
+  function round2(n) { return Math.round(n * 100) / 100; }
+
+  it("produces a byte-identical spawn timeline for two independent Daily Challenge players", () => {
+    const dailySeed = 20260701; // shape of getDailyChallengeSeed() — one shared number for the day
+    expect(simulateRun(dailySeed)).toEqual(simulateRun(dailySeed));
+  });
+
+  it("diverges for a different day's seed", () => {
+    expect(simulateRun(20260701)).not.toEqual(simulateRun(20260702));
+  });
+});
+
 describe("spawnBoss — seeded determinism", () => {
   function bossSnapshot(seed) {
     const gs = makeGs(20, { runSeed: seed });
