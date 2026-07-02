@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-02 (Session 112 closeout) -->
+<!-- generated-at: 2026-07-02 (Session 113 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 112 closeout · 2026-07-02.
+> **Fast-boot brief** — generated at Session 113 closeout · 2026-07-02.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 113 · 2026-07-02 · FOUNDER MODE                         ║
+║  Session 114 · 2026-07-02 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -32,16 +32,16 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 3↑                       ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 1↑                       ║
 ║    Last active: 0d  ·  Last closeout: 27d  ·  (active = newest   ║
 ║    Trend  ▂▂▁▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
-║    Alignment        100    ██████████  ▇███████ →                ║
+║    Alignment        100    ██████████  ████████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ▇███████ →                ║
+║    Engagement       100    ██████████  ████████ →                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -51,21 +51,21 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 112 ═══════════════════════════╗
-║  Shipped:  full determinism arc — seeded per-wave enemy RNG (`c  ║
+╔══ WHERE WE LEFT OFF  ·  Session 113 ═══════════════════════════╗
+║  Shipped:  validate-replay edge deterministic slice receipts. T  ║
 ║  Tests:    595/595 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ███████░░░░░░░░░░░░░░░░░   30% used                          ║
-║     3,238 / 1,000,000 tok  ·  codex/codex-1m  ·  heuristic       ║
-║     ~1,619 tok/turn  ·  cache 50%  ·  566 turns to compact       ║
+║  ✓  ████████████░░░░░░░░░░░░   50% used                          ║
+║     5,309 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
+║     ~2,655 tok/turn  ·  cache 50%  ·  344 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         595/595 passing                                ║
-║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
+║  ⚠  Velocity      1 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ⚠  IGNIS         46424 FORGE  ·  13d old                        ║
@@ -102,7 +102,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▂▁▄▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▂▂▁▄▄  1↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -123,30 +123,29 @@
 ║  esired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of l  ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  3. [SIL:2] [BLOCKER S61] [S59 carryover] validate-replay Phase  ║
-║  2B — build the actual headless deterministic resim runner from  ║
-║  seed + trace-backed replay inputs, using pure combat helpers;   ║
-║  ...                                                             ║
-║                                                                  ║
-║  4. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
+║  3. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
 ║  CKLIST.md` to confirm S55 GIF + white-card + lag fixes hold un  ║
 ║  der real clicks (CLI cannot drive the browser)                  ║
 ║                                                                  ║
-║  5. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
+║  4. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
 ║  re real LCP/CLS deltas vs legacy MenuScreen on production, con  ║
 ║  firm ≥200ms LCP improvement before removing v1 fallback         ║
 ║                                                                  ║
-║  6. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
+║  5. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
 ║  e_v2_deploy` vs legacy `front_door_action` completion rates af  ║
 ║  ter 48h of traffic                                              ║
 ║                                                                  ║
-║  7. Discord invite/community link when the community entry poin  ║
+║  6. Discord invite/community link when the community entry poin  ║
 ║  t is ready                                                      ║
 ║                                                                  ║
-║  8. [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unificat  ║
+║  7. [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unificat  ║
 ║  ion — ~900 duplicated lines; pure refactor with no user-facing  ║
 ║  impact; HomeV2 is the default (v1 opt-in only), so deferral ha  ║
 ║  ...                                                             ║
+║                                                                  ║
+║  8. [SIL:2] [S62 deferred] Coordinated enemy formations — wave   ║
+║  20+ group-spawn patterns (flanks, pincer, escort); game design  ║
+║  work (~4h) beyond current scope                                 ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -154,5 +153,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 112 closeout · 2026-07-02*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 113 closeout · 2026-07-02*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*
