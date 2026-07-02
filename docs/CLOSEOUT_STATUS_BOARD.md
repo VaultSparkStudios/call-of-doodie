@@ -1,18 +1,65 @@
-# Closeout Status Board
+<!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
+<!-- generated-at: 2026-07-02 (Session 112 closeout) -->
+
+# Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ STATUS BOARD · CALL-OF-DOODIE · S111 ════════════════════════╗
-║ Date      2026-07-01                                           ║
-║ Branch    main                                                  ║
-║ Commit    4576106 feat(session-111): extract deathscreen event  ║
-║ Push      yes · origin/main...HEAD = 0 0                        ║
-║ Dirty     clean                                                 ║
-║ Deploy    GitHub Actions success · Cloudflare Pages success     ║
-║ Live      live:site-check 5/5 · post-cutover smoke 5/5          ║
-║ SIL       1000/1000 · Velocity 2 · Debt ↓                       ║
-║ Tests     561/561 · lint/build/replay/media green               ║
-║ Memory    Codex memory updated under ~/.codex/memories          ║
-║ Ark       session-impact-summary cargo queued                   ║
-║ Shells    0 persistent command sessions still running           ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S112 ════════════════════╗
+║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 2 decreasing  ║
+║  Mode: FOUNDER  ·  Agent: claude-code                            ║
+║  Live:  preview  →  https://callofdoodie.wtf/                    ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
+║  ✓ Shipped: full determinism arc — seeded per-wave enemy RNG (`  ║
+║  ✓ Tests: 61 new/updated focused tests; full `npm test` 595/595  ║
+║  ✓ Deploy: pending direct-to-main closeout commit/push.          ║
+║  ✓ session intent: run the requested continuous `/goal` `/arc`   ║
+║  ✓ intent outcome: Achieved. All 7 audit items shipped at quali  ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
+║    Dev Health         100  ██████████                            ║
+║    Alignment          100  ██████████                            ║
+║    Momentum           100  ██████████                            ║
+║    Engagement         100  ██████████                            ║
+║    Process Qual       100  ██████████                            ║
+║    Coherence          100  ██████████                            ║
+║    Security           100  ██████████                            ║
+║    Ecosystem          100  ██████████                            ║
+║    Capital            100  ██████████                            ║
+║    Automation         100  ██████████                            ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
+║  · context/DECISIONS.md                                          ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · context/TRUTH_AUDIT.md                                        ║
+║  · context/PROJECT_STATUS.json                                   ║
+║  ✓ agent memory (~/.claude/projects/<slug>/memory/)              ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ GIT STATUS ══════════════════════════════════════════════════╗
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Ahead: 0  ·  Behind: 0                                          ║
+║  Branch: main                                                    ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
+║  Staging:  N/A — internal/exempt (stagingType: none)             ║
+║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
+║  Doctor:        —                                                ║
+║  Compliance:    —                                                ║
+║  Tests:         595/595                                          ║
+║  IGNIS:         13d ago                                          ║
+║  Truth:         green                                            ║
+║  Sanitization:  —                                                ║
+╚════════════════════════════════════════════════════════════════╝
+╔══ NEXT SESSION ════════════════════════════════════════════════╗
+║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
+
+*Generated by `scripts/render-closeout-board.mjs v1.0`*
