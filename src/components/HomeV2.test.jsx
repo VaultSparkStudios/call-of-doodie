@@ -63,6 +63,8 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-input-calibration");
     localStorage.removeItem("cod-controller-profile");
     localStorage.removeItem("cod-pwa-install-attempt");
+    localStorage.removeItem("cod-run-history-v1");
+    sessionStorage.removeItem("cod-insight-dismissed");
   });
 
   it("renders hero title + DEPLOY button and calls onStart on click", async () => {
@@ -260,5 +262,53 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("MEASUREMENT STATUS");
     expect(container.textContent).toContain("PostHog key missing");
     expect(container.textContent).toContain("BALANCE LAB");
+  });
+
+  it("surfaces a player-facing balance insight without the ops debug flag", async () => {
+    localStorage.setItem("cod-run-history-v1", JSON.stringify([
+      { wave: 7, score: 1000, ts: 1 },
+      { wave: 7, score: 900, ts: 2 },
+      { wave: 3, score: 400, ts: 3 },
+    ]));
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("PATTERN SPOTTED");
+    expect(container.textContent).toContain("Wave 7 is repeating");
+    expect(container.textContent).not.toContain("BALANCE LAB");
+  });
+
+  it("does not surface a balance insight when local history is quiet", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).not.toContain("PATTERN SPOTTED");
+  });
+
+  it("hides the balance insight after dismissal for the session", async () => {
+    localStorage.setItem("cod-run-history-v1", JSON.stringify([
+      { wave: 7, score: 1000, ts: 1 },
+      { wave: 7, score: 900, ts: 2 },
+    ]));
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    const dismissBtn = [...container.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "Dismiss pattern insight");
+    expect(dismissBtn).toBeTruthy();
+    await act(async () => { dismissBtn.click(); });
+    expect(container.textContent).not.toContain("PATTERN SPOTTED");
+    expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
 });

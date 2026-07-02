@@ -101,6 +101,7 @@ export default function HomeV2(props) {
   const [showAimCheck, setShowAimCheck] = useState(false);
   const [tickerDismissed, setTickerDismissed] = useState(() => sessionStorage.getItem("cod-ticker-dismissed") === "1");
   const [mutationDismissed, setMutationDismissed] = useState(() => sessionStorage.getItem("cod-mutation-dismissed") === "1");
+  const [insightDismissed, setInsightDismissed] = useState(() => sessionStorage.getItem("cod-insight-dismissed") === "1");
   const [showCareerStats, setShowCareerStats] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -845,6 +846,16 @@ export default function HomeV2(props) {
               <strong style={{ color: "#FFB300" }}>THIS WEEK'S MUTATION:</strong> {weeklyMutation.emoji} {weeklyMutation.name} — <span style={{ color: "#CCC" }}>{weeklyMutation.desc}</span>
             </span>
             <button onClick={() => { sessionStorage.setItem("cod-mutation-dismissed", "1"); setMutationDismissed(true); }} aria-label="Dismiss mutation banner" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
+          </div>
+        )}
+        {/* Local balance insight — player-facing single-line surface (S112). Full lab table stays debug-gated below. */}
+        {!insightDismissed && balanceLab.status === "signals-found" && (
+          <div style={{ ...tickerCard, marginTop: 8, background: "rgba(180,140,255,0.06)", borderColor: "rgba(180,140,255,0.3)", color: "#E8DFFF" }}>
+            <span style={{ fontSize: 14 }}>🧠</span>
+            <span style={{ flex: 1 }}>
+              <strong style={{ color: "#B48CFF" }}>PATTERN SPOTTED:</strong> {balanceLab.topInsight.title} — <span style={{ color: "#CCC" }}>{balanceLab.topInsight.detail}</span>
+            </span>
+            <button onClick={() => { sessionStorage.setItem("cod-insight-dismissed", "1"); setInsightDismissed(true); }} aria-label="Dismiss pattern insight" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
         {opsDebugEnabled && (!analyticsStatus.enabled || telemetrySummary.pendingSyncCount > 0 || telemetrySummary.failedSyncCount > 0) && (
