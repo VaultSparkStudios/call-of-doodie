@@ -92,6 +92,7 @@ import {
   heatBiasedFormation,
 } from "./systems/waveDirector.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
+import { buildRematchKit, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
 import {
   createDeathStudioEvents,
   createRunHistoryEntry,
@@ -463,6 +464,7 @@ export default function CallOfDoodie() {
 
   // ── Achievements ──────────────────────────────────────────────────────────
   const checkAchievements = useCallback((gs) => {
+    if (gs.practiceRun) return; // REMATCH drills can't farm achievements
     const s = {
       kills: gs.kills, wave: gs.currentWave, maxCombo: comboRef.current.max,
       bestStreak: statsRef.current.bestStreak, nukes: statsRef.current.nukes,
@@ -503,6 +505,7 @@ export default function CallOfDoodie() {
 
   // ── Daily mission checking ─────────────────────────────────────────────────
   const checkDailyMissions = useCallback((gs) => {
+    if (gs.practiceRun) return; // REMATCH drills can't farm daily missions
     const missions = dailyMissionsRef.current;
     if (!missions?.length) return;
     const s = {
@@ -541,7 +544,7 @@ export default function CallOfDoodie() {
   }, []);
 
   // ── Init game ─────────────────────────────────────────────────────────────
-  const initGame = useCallback((forceSeed) => {
+  const initGame = useCallback((forceSeed, startWave) => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
     const seed = (forceSeed && !isNaN(parseInt(forceSeed))) ? Math.abs(parseInt(forceSeed)) % 999999 : Math.floor(Math.random() * 999999);
@@ -566,6 +569,27 @@ export default function CallOfDoodie() {
       precisionStreak: 0,
       _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
+    // ── REMATCH drill: start at the death wave on the same seed (S112) ──────
+    const _rematchKit = buildRematchKit(startWave);
+    if (_rematchKit) {
+      const gs0 = gsRef.current;
+      gs0.practiceRun = true;
+      gs0.currentWave = _rematchKit.startWave;
+      gs0.maxEnemiesThisWave = getMaxEnemiesForWave(_rematchKit.startWave);
+      gs0._nonBossWaveCount = estimateNonBossWaveCount(_rematchKit.startWave);
+      gs0.coins = (gs0.coins || 0) + _rematchKit.coins;
+      gs0.player.maxHealth += _rematchKit.maxHealthBonus;
+      gs0.player.health = gs0.player.maxHealth;
+      gs0.waveDirector = createWaveDirectorPlan({
+        wave: _rematchKit.startWave,
+        maxEnemies: gs0.maxEnemiesThisWave,
+        nonBossWaveCount: gs0._nonBossWaveCount,
+        scoreAttackMode: false,
+        gauntletMode: false,
+        dailyChallengeMode: false,
+        random: getWaveSpawnRng(gs0),
+      });
+    }
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
     peakMomentRef.current = null;
@@ -1552,7 +1576,7 @@ export default function CallOfDoodie() {
     // Ghost race: persist this run's positions under mode-specific key
     try {
       const _gKey = gsRef.current?._ghostKey || "cod-ghost-normal-v1";
-      if (ghostRecordRef.current.length > 10) {
+      if (ghostRecordRef.current.length > 10 && !gs?.practiceRun) {
         ghostRecordRef.current[ghostRecordRef.current.length - 1] = {
           ...ghostRecordRef.current[ghostRecordRef.current.length - 1],
           killedByType: gs?._deathKillerType ?? gs?._lastDamageBy ?? null,
@@ -1572,16 +1596,18 @@ export default function CallOfDoodie() {
     // Save career stats + mission progress
     const _prevCareerKills = loadCareerStats().totalKills || 0;
     const _prevAcctLevel = getAccountLevel(_prevCareerKills);
+    // Practice (REMATCH) runs keep grind stats but can't set records from a mid-run start
+    const _isPracticeRun = !!gs?.practiceRun;
     const _careerResult = updateCareerStats({
-      kills: gs.kills, deaths: 1, score: gs.score, wave: gs.currentWave,
-      streak: statsRef.current.bestStreak, damage: gs.totalDamage,
+      kills: gs.kills, deaths: 1, score: _isPracticeRun ? 0 : gs.score, wave: _isPracticeRun ? 0 : gs.currentWave,
+      streak: _isPracticeRun ? 0 : statsRef.current.bestStreak, damage: gs.totalDamage,
       playTime: (Date.now() - startTimeRef.current) / 1000,
       achievementIds: [...achievedRef.current],
       crits: statsRef.current.crits,
       grenades: statsRef.current.grenades,
       dashes: statsRef.current.dashes,
-      level: xpRef.current.level,
-      combo: comboRef.current.max,
+      level: _isPracticeRun ? 0 : xpRef.current.level,
+      combo: _isPracticeRun ? 0 : comboRef.current.max,
       bossKills: statsRef.current.bossKills,
       weaponKills: statsRef.current.weaponKills,
     });
@@ -1726,7 +1752,7 @@ export default function CallOfDoodie() {
     setChallengeVsName(vsName);
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
-    const seed = initGame(forceSeed);
+    const seed = initGame(forceSeed, challengeOpts.startWave);
     // Adaptive telegraph: precompute per-enemy-type warning multiplier from
     // recent deaths. Read once per run; written by handlePlayerDeath.
     try {
@@ -1742,7 +1768,7 @@ export default function CallOfDoodie() {
     } catch { gsRef.current._telegraphMult = {}; }
     resetHeat(gsRef.current);
     gsRef.current._lastHeatTier = 0;
-    setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(1);
+    setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(gsRef.current.currentWave || 1);
     setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
@@ -1781,7 +1807,7 @@ export default function CallOfDoodie() {
     deferredMutationPendingRef.current = false;
     deferredShopPendingRef.current = false;
     setBossCutscene(null); bossCutsceneRef.current = false;
-    setCoins(0);
+    setCoins(gsRef.current?.coins || 0);
     runTokenRef.current = null;
     runSummarySigRef.current = "";
     currentWeaponRef.current = 0; isReloadingRef.current = false;
@@ -1870,6 +1896,8 @@ export default function CallOfDoodie() {
 
   // ── Score submit ──────────────────────────────────────────────────────────
   const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {
+    // Practice runs never touch the leaderboard (UI hides the form; this is the backstop)
+    if (gsRef.current?.practiceRun) return { submission: "skipped_practice", board: [] };
     const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
     const sett = settingsRef.current;
     const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);

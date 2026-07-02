@@ -10,6 +10,7 @@ import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
+import { resolveRematchStartWave } from "../systems/rematchDrill.js";
 import { buildWeeklyContract, buildWeeklyContractProgressPayload } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
@@ -530,6 +531,11 @@ export default function DeathScreen({
     requestStudioEventSync({ limit: 30, force: true }).catch(() => {});
   }, [debriefTelemetry, difficulty, mode, nextContractId, nextContractProgress, nextRunDrill.action, nextRunDrill.id, nextRunDrill.seed, runSeed, score, vsName, vsScore, wave]);
 
+  // REMATCH drill: practice runs skip the leaderboard; the rematch wave is
+  // derived from the death wave (boss waves start one wave early).
+  const practiceRun = !!gsSnapshot?.practiceRun;
+  const rematchWave = resolveRematchStartWave(wave);
+
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
     if (words.length > 5) { setLastWords(words.slice(0, 5).join(" ")); return; }
@@ -567,6 +573,9 @@ export default function DeathScreen({
         <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>💀</div>
         <h2 style={{ fontSize: "clamp(24px,7vw,38px)", color: "#FF2222", margin: "4px 0", letterSpacing: 3 }}>YOU DIED</h2>
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
+        {practiceRun && (
+          <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 6, borderRadius: 10, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>🔁 DRILL RUN</div>
+        )}
         <div style={{ fontSize: 11, color: diff.color, marginBottom: 6, fontWeight: 700 }}>
           {diff.emoji} {diff.label.toUpperCase()} MODE
           {scoreAttackMode  && <span style={{ marginLeft: 8, color: "#FF6600" }}>⏱ SCORE ATTACK</span>}
@@ -1163,7 +1172,12 @@ export default function DeathScreen({
           />
         )}
 
-        {!submitStatus || submitStatus === 'pending' ? (
+        {practiceRun ? (
+          <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
+            <div style={{ fontSize: 12, color: "#00E5FF", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
+            <div style={{ fontSize: 11, color: "#AAD", marginTop: 4 }}>Practice rematches don't submit to the leaderboard or set career records.</div>
+          </div>
+        ) : !submitStatus || submitStatus === 'pending' ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>
             <div style={{ fontSize: 12, color: "#FFD700", marginBottom: 8, letterSpacing: 1, fontWeight: 700 }}>SUBMIT TO HALL OF SHAME</div>
             <input
@@ -1326,6 +1340,16 @@ export default function DeathScreen({
           <button aria-label="Play again — start a new run" onClick={() => { track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
           {runSeed > 0 && (
             <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
+          )}
+          {runSeed > 0 && rematchWave != null && (
+            <button
+              aria-label={`Rematch wave ${rematchWave} — practice the wave that killed you on the same seed`}
+              onClick={() => {
+                track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause });
+                onStartGame(runSeed, { startWave: rematchWave });
+              }}
+              style={{ ...btnS, minWidth: 130, fontSize: 13, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF" }}
+            >🔁 REMATCH W{rematchWave}</button>
           )}
           {runSeed > 0 && (
             <button
