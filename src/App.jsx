@@ -9,7 +9,7 @@ import {
   getWeeklyGauntlet,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
-import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType } from "./gameHelpers.js";
+import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { computeKillPoints } from "./systems/scoreLedger.js";
@@ -1296,8 +1296,9 @@ export default function CallOfDoodie() {
         const _frame = frameCountRef.current;
         const _last = gs._lastSpawnByType?.[ne.typeIndex];
         if (_last && (_frame - _last.frame) < 3) {
-          ne.x = Math.max(20, Math.min(GW() - 20, _last.x + (Math.random() < 0.5 ? 1 : -1) * (40 + Math.random() * 40)));
-          ne.y = Math.max(20, Math.min(GH() - 20, _last.y + (Math.random() < 0.5 ? 1 : -1) * (40 + Math.random() * 40)));
+          const _crng = getWaveSpawnRng(gs);
+          ne.x = Math.max(20, Math.min(GW() - 20, _last.x + (_crng() < 0.5 ? 1 : -1) * (40 + _crng() * 40)));
+          ne.y = Math.max(20, Math.min(GH() - 20, _last.y + (_crng() < 0.5 ? 1 : -1) * (40 + _crng() * 40)));
         }
         gs._lastSpawnByType = gs._lastSpawnByType || {};
         gs._lastSpawnByType[ne.typeIndex] = { x: ne.x, y: ne.y, frame: _frame };
@@ -2328,7 +2329,7 @@ export default function CallOfDoodie() {
         }
         const directorEliteType = getGuaranteedEliteType(gs.waveDirector, directorState, gs.enemiesThisWave - 1);
         if (directorEliteType) applyEliteType(ne, directorEliteType);
-        if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType());
+        if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType(getWaveSpawnRng(gs)));
         // Phantom elite: 12% of elite-eligible spawns at wave 25+, non-boss only
         if (ne && !ne.eliteType && !ne.isBossEnemy && gs.currentWave >= 25 && Math.random() < 0.12) {
           ne.eliteType = "phantom"; ne.phantomTimer = 0; ne.phantomVisible = true;
@@ -2503,6 +2504,7 @@ export default function CallOfDoodie() {
           scoreAttackMode: gs.scoreAttackMode,
           gauntletMode: gs.gauntletMode,
           dailyChallengeMode: gs.dailyChallengeMode,
+          random: getWaveSpawnRng(gs),
         });
         gs.waveDirectorStage = -1;
         gs._formationToastedThisWave = new Set();

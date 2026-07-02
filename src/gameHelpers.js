@@ -13,6 +13,35 @@ export function getRandomEliteType(random = Math.random) {
   return ELITE_TYPES[Math.floor(random() * ELITE_TYPES.length)];
 }
 
+// ── Seeded per-wave RNG streams ───────────────────────────────────────────────
+// Each wave gets an independent deterministic stream derived from
+// (runSeed, wave), so any wave's spawn sequence is reproducible without
+// simulating the waves before it (REMATCH drills, REPLAY #seed, Daily fairness).
+export function createWaveRng(seed, wave) {
+  let h = (Math.imul(((seed >>> 0) || 1) ^ 0x9e3779b9, 0x85ebca6b) ^
+           Math.imul(((wave >>> 0) + 0x6d2b79f5) | 0, 0xc2b2ae35)) >>> 0;
+  // mulberry32
+  return function waveRng() {
+    h = (h + 0x6d2b79f5) >>> 0;
+    let t = h;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Lazily (re)derives the current wave's spawn stream on gs. Falls back to
+// Math.random when the run carries no numeric seed so tests/tools that build
+// partial gs objects keep working.
+export function getWaveSpawnRng(gs) {
+  if (!gs || typeof gs.runSeed !== "number" || !isFinite(gs.runSeed)) return Math.random;
+  if (gs._waveRngWave !== gs.currentWave || typeof gs._waveRng !== "function") {
+    gs._waveRng = createWaveRng(gs.runSeed, gs.currentWave || 1);
+    gs._waveRngWave = gs.currentWave;
+  }
+  return gs._waveRng;
+}
+
 export function applyEliteType(enemy, eliteType) {
   if (!enemy || enemy.isBossEnemy || enemy.eliteType) return enemy;
   enemy.eliteType = eliteType;
@@ -30,8 +59,9 @@ export function applyEliteType(enemy, eliteType) {
 // ── spawnEnemy ────────────────────────────────────────────────────────────────
 export function spawnEnemy(gs, W, H, difficultyId) {
   const wv = gs.currentWave;
+  const rng = getWaveSpawnRng(gs);
   let ti = 0;
-  const r = Math.random();
+  const r = rng();
   if      (wv >= 15 && r < 0.05) ti = 13;
   else if (wv >= 13 && r < 0.10) ti = 12;
   else if (wv >= 10 && r < 0.15) ti = 11;
@@ -49,14 +79,14 @@ export function spawnEnemy(gs, W, H, difficultyId) {
 
   // Adaptive spawn damping: substitute a pressure type with type 0 at 15% rate
   const _asm = gs._adaptiveSpawnMods;
-  if (_asm && _asm[String(ti)] && Math.random() < _asm[String(ti)]) ti = 0;
+  if (_asm && _asm[String(ti)] && rng() < _asm[String(ti)]) ti = 0;
 
-  const side = Math.floor(Math.random() * 4);
+  const side = Math.floor(rng() * 4);
   let x, y;
-  if (side === 0) { x = Math.random() * W; y = -30; }
-  else if (side === 1) { x = W + 30; y = Math.random() * H; }
-  else if (side === 2) { x = Math.random() * W; y = H + 30; }
-  else { x = -30; y = Math.random() * H; }
+  if (side === 0) { x = rng() * W; y = -30; }
+  else if (side === 1) { x = W + 30; y = rng() * H; }
+  else if (side === 2) { x = rng() * W; y = H + 30; }
+  else { x = -30; y = rng() * H; }
 
   const type = ENEMY_TYPES[ti];
   const diff = DIFFICULTIES[difficultyId] || DIFFICULTIES.normal;
@@ -70,17 +100,17 @@ export function spawnEnemy(gs, W, H, difficultyId) {
     speed: type.speed * (1 + wv * 0.05) * diff.speedMult * pm * (gs.settEnemySpeedMult || 1) * (gs.waveEventSpeedMult || 1) * (gs.mutEnemySpeedExtra || 1) * (gs.hyperspeedActive ? 1.4 : 1),
     size: type.size * sizeMut, color: type.color, name: type.name, points: type.points,
     deathQuotes: type.deathQuotes, emoji: type.emoji, typeIndex: ti,
-    wobble: Math.random() * Math.PI * 2, hitFlash: 0,
+    wobble: rng() * Math.PI * 2, hitFlash: 0,
     ranged: type.ranged || false, projSpeed: (type.projSpeed || 0) * (gs.mutEnemyProjSpeed || 1),
     projRate: type.projRate ? Math.floor(type.projRate * projRateMut) : 999,
-    shootTimer: Math.floor(Math.random() * 60), isBossEnemy: false,
+    shootTimer: Math.floor(rng() * 60), isBossEnemy: false,
     // Weekly mutation: spawn frozen
     freezeTimer: gs.mutSpawnFrozen || 0,
   });
   // Elite variants (wave 10+, regular enemies only)
   if (wv >= 10) {
     const elite = gs.enemies[gs.enemies.length - 1];
-    const er = Math.random();
+    const er = rng();
     // Weekly mutation overrides
     if (gs.mutAlwaysEnraged)  { elite.enrageTriggered = true; elite.speed *= 1.8; }
     if (gs.mutAllExplosive)   { applyEliteType(elite, "explosive"); }
@@ -108,8 +138,9 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
   const diff = DIFFICULTIES[difficultyId] || DIFFICULTIES.normal;
   const pm = gs.prestigeMult || 1;
   const wv = gs.currentWave;
+  const rng = getWaveSpawnRng(gs);
   const bossHealth = type.health * (1 + wv * 0.12) * diff.healthMult * pm * 2.5;
-  const side = Math.floor(Math.random() * 4);
+  const side = Math.floor(rng() * 4);
   let x, y;
   if (side === 0) { x = W / 2; y = -50; }
   else if (side === 1) { x = W + 50; y = H / 2; }
@@ -137,7 +168,7 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     hasRentNuke: typeIndex === 9 && wv >= 40 - (gs.mutBossEarly || 0), rentNukeTimer: 0,
     hasBulletRing: wv >= 10 - (gs.mutBossEarly || 0), bulletRingTimer: 0,
     hasGroundSlam: wv >= 15 - (gs.mutBossEarly || 0),
-    groundSlamTimer: Math.floor(Math.random() * 180),
+    groundSlamTimer: Math.floor(rng() * 180),
     groundSlamActive: false, groundSlamRadius: 0,
     sharedAbilityCooldown: 0,
     bulletRingWarning: false, groundSlamWarning: false,
@@ -196,7 +227,7 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     let _attempts = 0;
     while ((!boss._bonusAbilities || boss._bonusAbilities.length < 2) && _attempts < 20) {
       _attempts++;
-      const _idx = Math.floor(Math.random() * BOSS_ABILITY_POOL.length);
+      const _idx = Math.floor(rng() * BOSS_ABILITY_POOL.length);
       const _ab = BOSS_ABILITY_POOL[_idx];
       if (!_usedIds.has(_ab.id)) {
         _usedIds.add(_ab.id);
