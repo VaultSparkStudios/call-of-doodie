@@ -816,3 +816,5 @@ Session 113 deploy follow-up: live `npm run replay:trust-smoke` exposed that the
 - Generated `docs/AUDIT_2026-07-02_2.json` / `.md` for the Session 114 ranked plan and execution evidence.
 - Shipped coordinated late-wave formations: wave director plans retain `wave`, wave-20+ pressure/climax spawns now produce deterministic PINCER / ESCORT / FLANK archetypes with lane/role metadata, spawned enemies carry formation metadata, and telemetry snapshots declare `formationSet`.
 - Validation: focused waveDirector 20/20, `npm run lint`, full `npm test` 596/596, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, and `npm run build` all passed.
+
+Session 114 deploy verification: pushed `4c34f07` to `origin/main`; GitHub Actions `brief-format-check` run `28616256915` and `Deploy to Cloudflare Pages` run `28616256955` succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.

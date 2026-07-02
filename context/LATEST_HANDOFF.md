@@ -1,15 +1,15 @@
 ## Where We Left Off (Session 114)
 - Shipped: coordinated late-wave enemy formations. Wave-20+ non-boss pressure/climax spawns now use deterministic PINCER / ESCORT / FLANK archetypes with lane and role metadata instead of only loose offsets.
 - Tests: focused waveDirector 20/20, lint clean, full `npm test` 596/596, replay state-stepper 4/4, edge fixtures 4/4, launch media check passing, build passing.
-- Deploy: closeout commit/push and Cloudflare deploy verification are the remaining steps in this active objective.
+- Deploy: pushed to `origin/main` at `4c34f07`; Cloudflare Pages deploy run `28616256955` succeeded; live site smoke 5/5, post-cutover smoke 5/5, replay trust smoke 3/3.
 
 Public-safe handoff summary:
 - session intent: continue active objective: /arc, then /closeout, direct commit/push to main, and deploy.
-- intent outcome: repo-executable arc work achieved; closeout/push/deploy verification continues from this handoff.
+- intent outcome: achieved — arc work shipped, closeout completed, direct main push landed, and production deploy/live smoke verified.
 - completed this session: `docs/AUDIT_2026-07-02_2.json` / `.md`, `src/systems/waveDirector.js`, and `src/systems/waveDirector.test.js`.
 
 ## Next Recommended Slice
-- [ ] Observe post-push Cloudflare Pages deploy and rerun live smoke.
+- [x] Observe post-push Cloudflare Pages deploy and rerun live smoke — DONE S114: Cloudflare Pages deploy succeeded and live smoke passed.
 - [ ] REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts.
 - [ ] MenuScreen → MenuPanels.jsx unification — pure refactor, but add dedicated component coverage before replacing the legacy modal stack.
 
@@ -20,11 +20,11 @@ Public-safe handoff summary:
 
 Public-safe handoff summary:
 - session intent: continue active objective: /arc, then /closeout, direct commit/push to main, and deploy.
-- intent outcome: repo-executable arc work achieved; closeout/push/deploy verification continues from this handoff.
+- intent outcome: achieved — arc work shipped, closeout completed, direct main push landed, and production deploy/live smoke verified.
 - completed this session: `docs/AUDIT_2026-07-02.json` / `.md`, `audits/2026-07-02-session113.json`, `supabase/functions/validate-replay/pressure.js`, `supabase/functions/validate-replay/index.ts`, and `scripts/validate-edge-replay-pressure-fixtures.mjs`.
 
 ## Next Recommended Slice
-- [ ] Observe post-push Cloudflare Pages deploy and rerun live smoke.
+- [x] Observe post-push Cloudflare Pages deploy and rerun live smoke — DONE S114: Cloudflare Pages deploy succeeded and live smoke passed.
 - [ ] REMATCH drill L3 — show the coach tip that triggered the rematch in-HUD and chain best-of-3 mastery receipts.
 - [ ] MenuScreen → MenuPanels.jsx unification — pure refactor, still lower urgency while HomeV2 is default.
 

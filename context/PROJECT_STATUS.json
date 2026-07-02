@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 114 (2026-07-02) shipped coordinated late-wave enemy formations: wave-20+ pressure/climax spawns now use deterministic PINCER / ESCORT / FLANK archetypes with lane/role metadata from the wave director.",
-  "nextMilestone": "Observe post-push Cloudflare Pages deploy and rerun live smoke; next repo-local product slice is REMATCH drill L3 or MenuScreen/MenuPanels coverage-first unification.",
+  "currentFocus": "Session 114 (2026-07-02) shipped coordinated late-wave enemy formations, completed closeout, pushed main at 4c34f07, and verified Cloudflare Pages production deploy plus live smoke.",
+  "nextMilestone": "Next repo-local product slice is REMATCH drill L3 or MenuScreen/MenuPanels coverage-first unification; external gates remain physical PWA/gamepad QA and analytics/dashboard credentials.",
   "testingSurfaces": [
     {
       "type": "production",

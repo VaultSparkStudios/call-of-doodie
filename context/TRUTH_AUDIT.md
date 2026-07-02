@@ -713,3 +713,12 @@ Last reviewed: 2026-07-02
 
 Overall status: green locally
 Last reviewed: 2026-07-02
+
+## 2026-07-02 — Session 114 deployment truth
+
+- Git truth — `origin/main` points at `4c34f07 feat: add coordinated late-wave formations`; local `main` and `origin/main` are even (`0 0`).
+- Deploy truth — GitHub Actions `Deploy to Cloudflare Pages` run `28616256955` completed successfully for commit `4c34f07`; `brief-format-check` run `28616256915` also succeeded.
+- Live truth — `npm run live:site-check` passed 5/5 on `https://callofdoodie.wtf/`; `npm run post-cutover:smoke` passed 5/5; `npm run replay:trust-smoke` passed 3/3.
+
+Overall status: green live
+Last reviewed: 2026-07-02
