@@ -4,28 +4,48 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 119 (2026-07-03) shipped post-run next-run contracts, repaired stale screenshot truth surfaces, and verified lint/tests/replay/media/build green.",
+  "currentFocus": "Session 119 (2026-07-03) shipped post-run next-run contracts, repaired stale screenshot truth surfaces, pushed commit bb2e19e to main, and verified Cloudflare Pages deploy plus live smokes green.",
   "nextMilestone": "Next repo-local slice: physical launch QA evidence pack if hardware is available, otherwise continue contract-aware debrief coaching or HomeV2 retirement evidence preparation. External gates remain analytics/dashboard credentials, physical PWA/gamepad QA, HomeV2 production evidence, and founder approval.",
   "testingSurfaces": [
     {
-      "type": "production",
+      "status": "green",
       "url": "https://callofdoodie.wtf/",
-      "status": "green"
+      "type": "production"
     },
     {
-      "type": "production",
+      "status": "green",
       "url": "https://playcallofdoodie.com/",
-      "status": "green"
+      "type": "production"
     },
     {
-      "type": "cloudflare",
+      "status": "green",
       "url": "https://call-of-doodie.pages.dev/",
-      "status": "green"
+      "type": "cloudflare"
     },
     {
+      "status": "green",
       "type": "tests",
-      "command": "COD_LIVE_URL=https://callofdoodie.wtf/ npm run live:site-check",
-      "status": "green"
+      "command": "npm test"
+    },
+    {
+      "status": "green",
+      "type": "deploy",
+      "command": "GitHub Actions Deploy to Cloudflare Pages 28685361987"
+    },
+    {
+      "status": "green",
+      "type": "production-smoke",
+      "command": "npm run live:site-check"
+    },
+    {
+      "status": "green",
+      "type": "production-smoke",
+      "command": "npm run post-cutover:smoke"
+    },
+    {
+      "status": "green",
+      "type": "production-smoke",
+      "command": "npm run replay:trust-smoke"
     }
   ],
   "blockers": [
