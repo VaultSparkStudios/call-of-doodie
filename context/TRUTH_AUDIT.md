@@ -738,3 +738,12 @@ Last reviewed: 2026-07-02
 
 Overall status: green locally
 Last reviewed: 2026-07-03
+
+## 2026-07-03 — Session 116 deployment truth
+
+- Git truth — `origin/main` points at `0e18930 feat: route legacy menu panels through shared components`; local `main` and `origin/main` are even (`0 0`).
+- Deploy truth — GitHub Actions `Deploy to Cloudflare Pages` run `28632606103` completed successfully for commit `0e18930`; `brief-format-check` run `28632606098` also succeeded.
+- Live truth — `npm run live:site-check` passed 5/5 on `https://callofdoodie.wtf/`; `npm run post-cutover:smoke` passed 5/5; `npm run replay:trust-smoke` passed 3/3.
+
+Overall status: green live
+Last reviewed: 2026-07-03

@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 116 (2026-07-03) shipped bounded legacy MenuScreen shared-panel routing through MenuPanels.jsx, with focused legacy Command Center coverage and full local validation green.",
+  "currentFocus": "Session 116 (2026-07-03) shipped bounded legacy MenuScreen shared-panel routing through MenuPanels.jsx, pushed commit 0e18930 to main, and verified Cloudflare Pages deploy plus live smoke green.",
   "nextMilestone": "Observe Session 116 Cloudflare Pages deploy and rerun live smoke; next repo-local slices are verified remaining launch screenshots or HomeV2 retirement evidence pack. External gates remain physical PWA/gamepad QA and analytics/dashboard credentials.",
   "testingSurfaces": [
     {

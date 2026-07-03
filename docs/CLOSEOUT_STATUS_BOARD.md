@@ -45,7 +45,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
 ║  Staging:  N/A — internal/exempt (stagingType: none)             ║
-║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
+║  Live:     https://callofdoodie.wtf/  ·  deployed + smoke green  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
@@ -53,7 +53,7 @@
 ║  Tests:         600/600                                          ║
 ║  IGNIS:         14d ago                                          ║
 ║  Truth:         green                                            ║
-║  Sanitization:  —                                                ║
+║  Sanitization:  staged scan clean                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

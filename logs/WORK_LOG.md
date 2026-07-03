@@ -832,3 +832,5 @@ Session 114 deploy verification: pushed `4c34f07` to `origin/main`; GitHub Actio
 - Shipped bounded shared-panel routing: `src/components/MenuScreen.jsx` now renders Rules, Controls, Most Wanted, Run History, Loadout Builder, Missions, Upgrades, and What's New through `src/components/MenuPanels.jsx` exports while preserving HomeV2 as the default launch surface.
 - Added `src/components/MenuScreen.test.jsx` covering the legacy Command Center Rules/Controls path through shared panel content.
 - Validation: focused MenuScreen test 1/1, touched-file ESLint clean, `npm run lint`, full `npm test` 600/600, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, `npm run build`, and `git diff --check` all passed.
+
+Session 116 deploy verification: pushed `0e18930` to `origin/main`; GitHub Actions `brief-format-check` run `28632606098` and `Deploy to Cloudflare Pages` run `28632606103` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.

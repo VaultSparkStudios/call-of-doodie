@@ -1628,3 +1628,7 @@ Deployment verification completed after push:
 - `Deploy to Cloudflare Pages` run `28499115278` passed for commit `0c76bcd`.
 - `npm run live:site-check` passed 5/5 against `https://callofdoodie.wtf/`.
 - `npm run post-cutover:smoke` passed 5/5 across apex, Pages, `www`, backup, and backup `www` surfaces.
+
+## Deploy Follow-up (Session 116)
+- GitHub Actions: `brief-format-check` run `28632606098` succeeded; `Deploy to Cloudflare Pages` run `28632606103` succeeded for commit `0e18930`.
+- Live verification: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, `npm run replay:trust-smoke` 3/3.
