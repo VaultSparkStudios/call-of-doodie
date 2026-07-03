@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-03",
+  "session": 117,
+  "project": "Call-Of-Doodie",
+  "intent": "/arc",
+  "outcome": "achieved-repo-executable",
+  "shipped": [
+    "Mid-run wave challenge contracts: non-overlapping optional per-wave bonus-coin objectives with HUD chip and objective-summary receipts"
+  ],
+  "validation": [
+    "focused objectiveDirector 12/12",
+    "touched-file ESLint clean",
+    "npm run lint clean",
+    "npm test 603/603",
+    "replay state-stepper 4/4",
+    "edge replay fixtures 4/4",
+    "launch media check passed",
+    "npm run build passed",
+    "git diff --check passed"
+  ],
+  "deferred": [
+    "analytics/dashboard credentials",
+    "physical PWA and gamepad QA",
+    "HomeV2 production Lighthouse/funnel evidence",
+    "remaining verified launch screenshot captures"
+  ],
+  "sil": {
+    "score": 1000,
+    "velocity": 1,
+    "debt": "decreasing"
+  },
+  "headline": "Mid-run wave challenge contracts shipped without overlapping Dynamic Objectives",
+  "items": [
+    {
+      "evidence": "objectiveDirector/App/HUD + 603/603 tests",
+      "projectImpact": "8",
+      "ecosystemImpact": "5",
+      "title": "Mid-run wave challenge contracts"
+    }
+  ],
+  "followUps": [
+    "Observe Cloudflare Pages deploy and rerun live smoke after push",
+    "Contract-aware debrief coaching",
+    "Verified boss/build-debrief/leaderboard screenshot captures",
+    "HomeV2 Lighthouse/funnel evidence before v1 retirement"
+  ],
+  "blockers": [
+    "Physical PWA/gamepad QA requires real devices",
+    "Analytics/dashboard credentials remain external",
+    "Sentry DSN project scope still needs founder confirmation"
+  ]
+}

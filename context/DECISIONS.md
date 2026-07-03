@@ -526,3 +526,10 @@ Decision: Route the legacy MenuScreen modal states through shared `MenuPanels.js
 Rationale: HomeV2 is the default launch surface, but `?home=v1` remains reachable. A bounded shared-panel routing slice reduces duplicated runtime behavior and adds regression coverage without making the larger production-data-gated decision to remove the legacy fallback.
 
 Trade-off accepted: The old inline branches are gated off during this migration slice rather than fully deleted in the same pass. Full deletion should follow only after production Lighthouse/funnel evidence supports HomeV2 fallback retirement.
+## 2026-07-03 — Session 117 — Wave contracts cannot overlap Dynamic Objectives
+
+Decision: Optional wave challenge contracts spawn only when `gs.activeObjective` is absent and only on eligible non-boss waves. They resolve at wave-clear with bounded Doodie Coin rewards and write into the existing objective completion/failure summary instead of creating a separate progression channel.
+
+Rationale: The S62 deferred item explicitly needed a design pass to avoid overlap with the Dynamic Objective System. Reusing the wave-clear boundary keeps the mechanic legible, avoids simultaneous competing objective prompts, and preserves existing leaderboard/replay trust behavior.
+
+Trade-off accepted: Contracts are intentionally small and occasional. They add mid-run motivation without guaranteeing every wave has a contract or adding new economy spend sinks.

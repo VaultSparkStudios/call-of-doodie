@@ -235,3 +235,100 @@ export function recordObjectiveResult(stats = {}, objective = null, result = {})
   if (objective.type === "lockdown" && (objective.timeLeft || 0) <= 30 * 60) next.clutchLockdowns++;
   return next;
 }
+const WAVE_CONTRACT_DEFS = {
+  flawless_wave: {
+    label: "📜 CLEAN CONTRACT",
+    color: "#44FF88",
+    description: "Clear this wave without taking damage",
+    minWave: 4,
+    weight: 4,
+  },
+  kill_quota: {
+    label: "📜 PILE-ON CONTRACT",
+    color: "#FFD166",
+    description: "Bank the target kill count before the wave ends",
+    minWave: 5,
+    weight: 3,
+  },
+  streak_keeper: {
+    label: "📜 STREAK CONTRACT",
+    color: "#FF8800",
+    description: "Keep the clear streak alive for bonus coins",
+    minWave: 6,
+    weight: 2,
+  },
+};
+
+export function pickWaveChallengeContract({
+  wave,
+  bossWave = false,
+  activeObjective = null,
+  rng,
+} = {}) {
+  if (bossWave || activeObjective || wave < 4) return null;
+  if (rand(rng) > 0.28) return null;
+
+  const eligible = {};
+  for (const [id, def] of Object.entries(WAVE_CONTRACT_DEFS)) {
+    if ((def.minWave || 0) <= wave) eligible[id] = def.weight || 1;
+  }
+  if (Object.keys(eligible).length === 0) return null;
+
+  const id = weightedPick(eligible, rng);
+  const def = WAVE_CONTRACT_DEFS[id];
+  const targetKills = id === "kill_quota" ? Math.max(8, Math.min(24, 6 + Math.floor(wave * 0.75))) : null;
+  const rewardCoins = 4 + Math.floor(wave / 4) + (id === "kill_quota" ? 2 : 0);
+  return {
+    id,
+    label: def.label,
+    color: def.color,
+    description: targetKills ? `${def.description} · ${targetKills} kills` : def.description,
+    wave,
+    targetKills,
+    rewardCoins,
+  };
+}
+
+export function startWaveChallengeContract(contract = null, gs = {}) {
+  if (!contract) return null;
+  return {
+    ...contract,
+    startKills: gs.kills || 0,
+    startWaveStreak: gs.waveStreak || 0,
+    completed: false,
+    failed: false,
+  };
+}
+
+export function resolveWaveChallengeContract(gs = {}) {
+  const contract = gs.activeWaveContract;
+  if (!contract || contract.completed || contract.failed) return null;
+
+  const killsDelta = Math.max(0, (gs.kills || 0) - (contract.startKills || 0));
+  const damageTaken = Boolean(gs.damageThisWave);
+  let completed = false;
+  let reason = "";
+
+  if (contract.id === "flawless_wave") {
+    completed = !damageTaken;
+    reason = completed ? "no damage taken" : "damage taken";
+  } else if (contract.id === "kill_quota") {
+    completed = killsDelta >= (contract.targetKills || 0);
+    reason = `${killsDelta}/${contract.targetKills || 0} kills`;
+  } else if (contract.id === "streak_keeper") {
+    completed = (gs.waveStreak || 0) > (contract.startWaveStreak || 0) && !damageTaken;
+    reason = completed ? "streak held" : "streak broken";
+  }
+
+  const result = {
+    id: contract.id,
+    label: contract.label,
+    color: contract.color,
+    rewardCoins: completed ? contract.rewardCoins || 0 : 0,
+    completed,
+    failed: !completed,
+    reason,
+  };
+  gs.activeWaveContract = null;
+  return result;
+}

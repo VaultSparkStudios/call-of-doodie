@@ -834,3 +834,9 @@ Session 114 deploy verification: pushed `4c34f07` to `origin/main`; GitHub Actio
 - Validation: focused MenuScreen test 1/1, touched-file ESLint clean, `npm run lint`, full `npm test` 600/600, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, `npm run build`, and `git diff --check` all passed.
 
 Session 116 deploy verification: pushed `0e18930` to `origin/main`; GitHub Actions `brief-format-check` run `28632606098` and `Deploy to Cloudflare Pages` run `28632606103` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.
+## 2026-07-03 — Session 117 — Mid-run wave challenge contracts
+
+- Ran `/arc` from clean synced `main`: no stale lock, no cut-off artifacts, session lock written, context-meter CONTINUE, secrets audit and blocker preflight preserved known dashboard/device/data gates.
+- Generated `docs/AUDIT_2026-07-03_2.json` / `.md` and refreshed `docs/IMPLEMENT_PLAN.md` for the highest repo-local item.
+- Shipped mid-run wave challenge contracts: `objectiveDirector` now selects bounded optional contracts only when no Dynamic Objective is active; `App.jsx` starts/resolves contracts on wave transitions, awards bonus coins, clears HUD state, and records objective receipts; `HUD.jsx` renders the active contract chip.
+- Validation: focused objectiveDirector 12/12, touched-file ESLint clean, `npm run lint`, full `npm test` 603/603, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, `npm run build`, and `git diff --check` all passed.

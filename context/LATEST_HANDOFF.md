@@ -1,4 +1,15 @@
-## Where We Left Off (Session 116 — legacy MenuScreen shared-panel routing)
+## Where We Left Off (Session 117 — mid-run wave challenge contracts)
+- Shipped: optional wave challenge contracts. Non-boss waves can now offer a bounded bonus-coin contract only when the Dynamic Objective slot is empty, avoiding overlap with hot-zone/bounty/sniper/lockdown/escort objectives.
+- Player-facing loop: the heads-up display renders the active contract chip, wave-clear resolution awards bounded coins on success, and completion/failure receipts feed the existing death-screen objective summary arrays.
+- Trust posture: unchanged. No leaderboard, replay, credential, analytics, account, or paid-service behavior changed.
+- Validation: focused objectiveDirector 12/12; touched-file ESLint clean; `npm run lint`; full `npm test` 603/603; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check; `npm run build`; `git diff --check`.
+
+## Next Best Actions
+- [ ] Observe GitHub Actions Cloudflare Pages deploy for the Session 117 commit, then rerun live smoke and post-cutover smoke.
+- [ ] Full five-scene screenshot replacement — requires verified browser captures for boss, build/debrief, and leaderboard scenes before manifest/media updates.
+- [ ] HomeV2 v1 fallback retirement evidence — requires production Lighthouse LCP/CLS and funnel data.
+
+---## Where We Left Off (Session 116 — legacy MenuScreen shared-panel routing)
 - Shipped: coverage-backed legacy MenuScreen -> MenuPanels routing. The legacy Command Center now opens shared Rules, Controls, Most Wanted, Run History, Loadout Builder, Missions, Upgrades, and What's New panels from `MenuPanels.jsx` instead of using the old inline runtime branches.
 - Trust posture: unchanged. HomeV2 remains the default launch surface; full legacy v1 deletion still waits for production Lighthouse/funnel evidence.
 - Validation: focused MenuScreen test 1/1; touched-file ESLint clean; `npm run lint`; full `npm test` 600/600; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check; `npm run build`; `git diff --check`.

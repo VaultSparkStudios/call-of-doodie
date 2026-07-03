@@ -13,7 +13,7 @@ import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, appl
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { computeKillPoints } from "./systems/scoreLedger.js";
-import { pickObjective, recordObjectiveResult, tickObjective } from "./systems/objectiveDirector.js";
+import { pickObjective, pickWaveChallengeContract, recordObjectiveResult, resolveWaveChallengeContract, startWaveChallengeContract, tickObjective } from "./systems/objectiveDirector.js";
 import {
   bulletEnemyCollision,
   computeBulletDamage,
@@ -321,6 +321,7 @@ export default function CallOfDoodie() {
   const [bankedPerkChoices, setBankedPerkChoices] = useState(0);
   const [missionToast, setMissionToast]         = useState(null);
   const [waveAnnounce, setWaveAnnounce]         = useState(null);
+  const [activeWaveContract, setActiveWaveContract] = useState(null);
   const [mutationPending, setMutationPending]   = useState(false);
   const [mutationOptions, setMutationOptions]   = useState([]);
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
@@ -1810,6 +1811,7 @@ export default function CallOfDoodie() {
     deferredShopPendingRef.current = false;
     setBossCutscene(null); bossCutsceneRef.current = false;
     setCoins(gsRef.current?.coins || 0);
+    setActiveWaveContract(null);
     runTokenRef.current = null;
     runSummarySigRef.current = "";
     currentWeaponRef.current = 0; isReloadingRef.current = false;
@@ -2168,6 +2170,7 @@ export default function CallOfDoodie() {
         } else if (obj.reward === "coins") {
           const coinBonus = 5 + Math.floor(gs.currentWave / 3);
           gs.coins = (gs.coins || 0) + coinBonus;
+          setCoins(gs.coins);
           addText(gs, GW() / 2, GH() / 2, `+${coinBonus}💩 ${obj.label} CLEARED!`, obj.color, true);
         } else if (obj.reward === "perk_reroll") {
           bankedPerkChoicesRef.current++;
@@ -2405,6 +2408,19 @@ export default function CallOfDoodie() {
       }
       gs._routeSelectDone = false; // reset for next wave
       gs._waveTransitDone = true; // mark effects as firing; blocks re-entry this wave
+      const contractResult = resolveWaveChallengeContract(gs);
+      if (contractResult) {
+        if (contractResult.completed) {
+          gs.coins = (gs.coins || 0) + contractResult.rewardCoins;
+          setCoins(gs.coins);
+          addText(gs, GW() / 2, GH() / 2 - 108, `+${contractResult.rewardCoins}💩 ${contractResult.label}`, contractResult.color, true);
+          gs.objectivesCompleted = [...(gs.objectivesCompleted || []), { type: "wave_contract", label: contractResult.label }];
+        } else {
+          addText(gs, GW() / 2, GH() / 2 - 108, `${contractResult.label} MISSED · ${contractResult.reason}`, "#FF8866");
+          gs.objectivesFailed = [...(gs.objectivesFailed || []), { type: "wave_contract", label: contractResult.label }];
+        }
+        setActiveWaveContract(null);
+      }
       // Score snapshot for momentum sparkline
       (gs._waveScoreLog = gs._waveScoreLog || []).push(gs.score);
       // Persist per-enemy wave kill bests to career
@@ -2491,6 +2507,8 @@ export default function CallOfDoodie() {
       setLiveAnnounce("Wave " + gs.currentWave + " started");
       // Dynamic Objective: at most one per non-boss wave, weighted by player weakness
       gs.activeObjective = null;
+      gs.activeWaveContract = null;
+      setActiveWaveContract(null);
       try {
         const _bossNext = gs.routeForceBoss || (gs.bossRushMode ? gs.currentWave >= 4 : gs.currentWave % 5 === 0);
         if (!_bossNext) {
@@ -2506,6 +2524,17 @@ export default function CallOfDoodie() {
             gs.activeObjective = obj;
             addText(gs, GW() / 2, GH() / 2 - 90, obj.label + " ACTIVE", obj.color, true);
             addText(gs, GW() / 2, GH() / 2 - 70, obj.description, "#DDDDDD");
+          } else {
+            const contract = pickWaveChallengeContract({
+              wave: gs.currentWave,
+              bossWave: false,
+            });
+            if (contract) {
+              gs.activeWaveContract = startWaveChallengeContract(contract, gs);
+              setActiveWaveContract(gs.activeWaveContract);
+              addText(gs, GW() / 2, GH() / 2 - 90, contract.label + " ACTIVE", contract.color, true);
+              addText(gs, GW() / 2, GH() / 2 - 70, contract.description, "#DDDDDD");
+            }
           }
         }
       } catch { /* objective failure must never crash the game loop */ }
@@ -4679,6 +4708,7 @@ export default function CallOfDoodie() {
         overclockedActive={activePerks.some(p => p.id === "overclocked")}
         overclockedShots={overclockedShots}
         waveStreak={waveStreak}
+        activeWaveContract={activeWaveContract}
         mapTheme={mapTheme}
         vsScore={challengeVsScore} vsName={challengeVsName}
         synergyChargeReady={synergyChargeReady}
@@ -4841,5 +4871,3 @@ function InputDebugOverlay({ data }) {
     </div>
   );
 }
-
-

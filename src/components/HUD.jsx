@@ -25,7 +25,7 @@ export default function HUD({
   buildArchetype, unlockedArchetypes,
   onSwitchWeapon, onReload, onDash, onGrenade, onPause,
   fmtTime,
-  overclockedActive, overclockedShots, waveStreak, mapTheme,
+  overclockedActive, overclockedShots, waveStreak, activeWaveContract = null, mapTheme,
   vsScore, vsName,
   synergyChargeReady, onSynergyCharge,
   cursedHideScore,
@@ -345,6 +345,12 @@ export default function HUD({
       {(waveStreak || 0) >= 3 && (
         <div style={{ position: "absolute", top: 8, left: killstreak >= 3 ? 110 : 12, background: "rgba(255,120,0,0.2)", padding: "3px 10px", borderRadius: 4, border: "1px solid rgba(255,120,0,0.4)", fontSize: 11, color: "#FF8800", fontWeight: 700 }}>
           🔥 {waveStreak}-STREAK
+        </div>
+      )}
+
+      {activeWaveContract && (
+        <div style={{ position: "absolute", top: ((waveStreak || 0) >= 3 ? 34 : 8), left: killstreak >= 3 ? 110 : 12, maxWidth: 210, background: "rgba(255,209,102,0.14)", padding: "3px 10px", borderRadius: 4, border: "1px solid rgba(255,209,102,0.42)", fontSize: 10, color: activeWaveContract.color || "#FFD166", fontWeight: 800, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={activeWaveContract.description}>
+          {activeWaveContract.label} · +{activeWaveContract.rewardCoins}💩
         </div>
       )}
 

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { pickObjective, tickObjective, getObjectiveWeights, recordObjectiveResult } from "./objectiveDirector.js";
+import { pickObjective, tickObjective, getObjectiveWeights, recordObjectiveResult, pickWaveChallengeContract, startWaveChallengeContract, resolveWaveChallengeContract } from "./objectiveDirector.js";
 
 describe("objectiveDirector", () => {
   it("never spawns on boss waves", () => {
@@ -69,6 +69,34 @@ describe("objectiveDirector", () => {
     expect(stats.clutchLockdowns).toBe(1);
     expect(stats.completedTotal).toBe(5);
   });
+  it("creates wave challenge contracts only when they do not overlap dynamic objectives", () => {
+    const spawnRng = scriptedRng([0.01, 0.1]);
+    expect(pickWaveChallengeContract({ wave: 6, activeObjective: { type: "bounty" }, rng: spawnRng })).toBeNull();
+    expect(pickWaveChallengeContract({ wave: 3, rng: spawnRng })).toBeNull();
+    const contract = pickWaveChallengeContract({ wave: 6, rng: scriptedRng([0.01, 0.1]) });
+    expect(contract).toMatchObject({ id: "flawless_wave", wave: 6 });
+    expect(contract.rewardCoins).toBeGreaterThan(0);
+  });
+
+  it("resolves clean wave contracts into coin rewards and clears active state", () => {
+    const contract = startWaveChallengeContract(
+      { id: "flawless_wave", label: "CLEAN", color: "#fff", rewardCoins: 6, wave: 6 },
+      { kills: 10, waveStreak: 1 },
+    );
+    const gs = { activeWaveContract: contract, kills: 18, waveStreak: 2, damageThisWave: 0 };
+    const result = resolveWaveChallengeContract(gs);
+    expect(result).toMatchObject({ completed: true, rewardCoins: 6, reason: "no damage taken" });
+    expect(gs.activeWaveContract).toBeNull();
+  });
+
+  it("fails kill quota contracts with an honest progress reason", () => {
+    const contract = startWaveChallengeContract(
+      { id: "kill_quota", label: "PILE", color: "#fff", rewardCoins: 8, targetKills: 12, wave: 7 },
+      { kills: 4, waveStreak: 0 },
+    );
+    const result = resolveWaveChallengeContract({ activeWaveContract: contract, kills: 10, damageThisWave: 0 });
+    expect(result).toMatchObject({ completed: false, failed: true, rewardCoins: 0, reason: "6/12 kills" });
+  });
 });
 
 // tiny seedable RNG (mulberry32) for deterministic test runs
@@ -81,4 +109,9 @@ function mulberry(seed) {
     t ^= t + Math.imul(t ^ t >>> 7, t | 61);
     return ((t ^ t >>> 14) >>> 0) / 4294967296;
   };
+}
+
+function scriptedRng(values) {
+  let index = 0;
+  return () => values[Math.min(index++, values.length - 1)];
 }

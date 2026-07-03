@@ -1576,3 +1576,28 @@ SIL +1: Shipped the first coverage-backed MenuScreen -> MenuPanels unification s
 1. HomeV2 retirement evidence pack — capture Lighthouse LCP/CLS and funnel data before deleting v1. Medium probability.
 2. Verified screenshot completion — capture boss, build/debrief, and leaderboard PNGs before manifest replacement. High probability once browser capture is available.
 3. Formation-aware death coaching — summarize PINCER / ESCORT / FLANK deaths in the debrief. Medium probability.
+## 2026-07-03 — Session 117 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
+
+SIL +1: Shipped the S62 deferred mid-run challenge contracts slice. Optional per-wave contracts now add bounded bonus-coin micro-goals only when the Dynamic Objective system is inactive, avoiding objective overlap while giving clean waves, kill quotas, and streak holds more visible payoff. Validation increased to 603/603 tests with full lint/build/replay/media gates green.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite 603/603, lint/build/replay/media gates green, focused objectiveDirector coverage added. |
+| Creative Alignment | 100 | → | Adds low-noise arcade motivation without changing the parody/trust contract or overcomplicating wave rules. |
+| Momentum | 100 | ↑ | Closed the highest repo-executable deferred item after dashboard/device/data gates were verified as external. |
+| Engagement | 100 | ↑ | Wave clears now occasionally carry a visible optional wager-like target and bounded coin payoff. |
+| Process Quality | 100 | → | Fresh audit sidecar, implementation plan, game-loop review evidence, and closeout write-back completed. |
+| Cross-Repo Coherence | 100 | → | No sibling repo edits. |
+| Security Posture | 100 | → | No secrets, dependencies, auth, network, or paid-service behavior added. |
+| Ecosystem Integration | 100 | → | Contract receipts reuse the existing objective summary surface instead of inventing a new reporting channel. |
+| Capital Efficiency | 100 | → | Zero variable per-user cost introduced. |
+| Automation Coverage | 100 | ↑ | Added focused contract selection/resolution tests and kept launch gates green. |
+
+Top win: mid-run bonus objectives now bridge ambient Dynamic Objectives and external weekly contracts without overlap.
+Top gap: external launch gates remain unchanged: physical PWA/gamepad QA, analytics/dashboard credentials, HomeV2 production data, and verified screenshot captures.
+Intent outcome: Achieved for repo-executable `/arc` work; push/deploy verification follows.
+
+**Brainstorm**
+1. Contract-aware debrief coaching — summarize missed/completed wave contracts in post-run advice. High probability.
+2. Verified screenshot completion — capture boss, build/debrief, and leaderboard PNGs before manifest replacement. High probability once browser capture is available.
+3. HomeV2 retirement evidence pack — capture Lighthouse LCP/CLS and funnel data before deleting v1. Medium probability.

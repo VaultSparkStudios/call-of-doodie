@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "session": 117,
+  "date": "2026-07-03",
+  "project": "Call-Of-Doodie",
+  "source": "arc / audit / game-loop-review",
+  "items": [
+    {
+      "slug": "mid-run-wave-challenge-contracts",
+      "rank": 1,
+      "tier": "SIL:1",
+      "category": "gamification / engagement / immersion",
+      "effortHours": 1.5,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 35.3,
+      "status": "shipped",
+      "rung": "L2",
+      "evidence": [
+        "src/systems/objectiveDirector.js",
+        "src/App.jsx",
+        "src/components/HUD.jsx",
+        "src/systems/objectiveDirector.test.js"
+      ],
+      "recipe": "Add optional per-wave challenge contracts that only spawn when dynamic objectives do not, resolve on wave clear, award bounded bonus coins, and surface HUD/death-summary receipts."
+    },
+    {
+      "slug": "homev2-v1-fallback-retirement-evidence",
+      "rank": 2,
+      "tier": "SIL:1",
+      "category": "ui / ux / user-experience",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 4,
+      "priority": 17.7,
+      "status": "deferred-human-data",
+      "blocker": "Requires production Lighthouse LCP/CLS measurement versus legacy MenuScreen."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "rank": 3,
+      "tier": "SIL:2",
+      "category": "launch / analytics",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 2,
+      "priority": 10.1,
+      "status": "deferred-credential",
+      "blocker": "check-secrets analytics remains missing; Sentry DSN scope needs founder confirmation."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "mid-run-wave-challenge-contracts",
+      "outcome": "shipped",
+      "verification": [
+        "npx vitest run src\\systems\\objectiveDirector.test.js: 12/12",
+        "npx eslint src\\systems\\objectiveDirector.js src\\systems\\objectiveDirector.test.js src\\App.jsx src\\components\\HUD.jsx: clean"
+      ]
+    }
+  ]
+}
