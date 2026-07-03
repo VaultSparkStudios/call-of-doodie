@@ -46,7 +46,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
 ║  Staging:  N/A — internal/exempt (stagingType: none)             ║
-║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
+║  Live:     https://callofdoodie.wtf/  ·  deploy verified green       ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
@@ -57,7 +57,7 @@
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  Observe deploy, then run live smoke; next: debrief contracts  ║
+║  Deploy verified; next: contract-aware debrief coaching         ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 

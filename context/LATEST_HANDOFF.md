@@ -1643,3 +1643,6 @@ Deployment verification completed after push:
 ## Deploy Follow-up (Session 116)
 - GitHub Actions: `brief-format-check` run `28632606098` succeeded; `Deploy to Cloudflare Pages` run `28632606103` succeeded for commit `0e18930`.
 - Live verification: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, `npm run replay:trust-smoke` 3/3.
+## Deploy Follow-up (Session 117)
+- GitHub Actions: `brief-format-check` run `28635261186` succeeded; `Deploy to Cloudflare Pages` run `28635261198` succeeded for commit `dd3caca`.
+- Live verification: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, `npm run replay:trust-smoke` 3/3.

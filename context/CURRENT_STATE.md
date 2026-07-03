@@ -247,3 +247,4 @@
 
 - Session 114 shipped coordinated late-wave enemy formation archetypes: `src/systems/waveDirector.js` now retains the wave number on director plans, promotes wave-20+ pressure/climax spawns into deterministic PINCER / ESCORT / FLANK formations with lane and role metadata, stamps spawned enemies with formation metadata, and includes `formationSet` in telemetry snapshots.
 - Validation baseline after Session 114: focused waveDirector tests 20/20, `npm run lint` clean, full `npm test` 596/596, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check` passing, and `npm run build` passing.
+Session 117 deploy verification: pushed `dd3caca` to `origin/main`; GitHub Actions `brief-format-check` run `28635261186` and `Deploy to Cloudflare Pages` run `28635261198` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.

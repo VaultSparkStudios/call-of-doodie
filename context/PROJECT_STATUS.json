@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 117 (2026-07-03) shipped mid-run wave challenge contracts: optional per-wave bonus-coin objectives that avoid Dynamic Objective overlap, render in HUD, and write completion/failure receipts through existing objective summaries.",
-  "nextMilestone": "Observe Session 117 Cloudflare Pages deploy and rerun live smoke; next repo-local slices are contract-aware debrief coaching, verified remaining launch screenshots, or HomeV2 retirement evidence pack. External gates remain physical PWA/gamepad QA and analytics/dashboard credentials.",
+  "currentFocus": "Session 117 (2026-07-03) shipped mid-run wave challenge contracts, pushed commit dd3caca to main, and verified Cloudflare Pages deploy plus live smoke green.",
+  "nextMilestone": "Next repo-local slice: contract-aware debrief coaching or verified remaining launch screenshots. External gates remain physical PWA/gamepad QA, analytics/dashboard credentials, and HomeV2 production evidence.",
   "testingSurfaces": [
     {
       "type": "production",
