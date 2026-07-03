@@ -1,37 +1,17 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 9d52b48d3ade -->
-<!-- generated-at: 2026-07-03T09:19:34.309Z -->
+<!-- source-hash: a0819974facd -->
+<!-- generated-at: 2026-07-03T09:26:43.656Z -->
 
 # LATEST_HANDOFF (compact)
 
-HANDOFF SUMMARY — Session 118+
+SESSION 118 - LAUNCH SCREENSHOT REPLACEMENT
 
-CURRENT STATUS
-Session: 118 (five-scene launch screenshot replacement)
-Latest intent: Ship verified browser capture manifest screenshots; observe Cloudflare deploy; run live + post-cutover smoke.
-Last shipped: Full manifest screenshot replacement; install-card uses verified PNG captures for combat, Boss Rush, Loadout Builder, leaderboard, mobile controls; replaced SVG fallbacks.
-Session 117 shipped: Optional wave challenge contracts (non-boss waves, Dynamic Objective slot empty only).
-Session 116 shipped: MenuScreen → MenuPanels routing, legacy Command Center now uses shared panels.
+Shipped: Full manifest screenshot replacement. Install-card manifests now use verified browser captures for combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls (5/5 scenes) instead of authored SVG fallbacks. `assets/visual-assets.json` records every manifest PNG as proprietary `browser-capture`; `npm run launch:media-check` enforces capture listing, production-ready status, readable PNG headers, and exact dimensions.
 
-NOW-BUCKET (top 3)
-[ ] Observe GitHub Actions Cloudflare Pages deploy for Session 118 commit; rerun live smoke and post-cutover smoke.
-[ ] Physical launch QA: real PWA install standalone relaunch + one real gamepad/browser combo (device-evidence gated).
-[ ] HomeV2 v1 fallback retirement evidence: requires production Lighthouse LCP/CLS and funnel data.
+Trust posture: Improved launch media honesty only. No gameplay balance, leaderboard, replay trust label, analytics, auth, or paid-service behavior changed.
 
-VERIFICATION GATES (all passing Session 118)
-npm run launch:screenshots 5/5; npm run assets:check; npm run launch:media-check; npm run lint; npm test 603/603; npm run build; git diff --check.
+Validation: `npm run launch:screenshots` 5/5; `npm run assets:check`; `npm run launch:media-check`; `npm run lint`; `npm test` 603/603; `npm run build`; `git diff --check`. Deploy run 28651302691 live 5/5; post-cutover 5/5; replay trust 3/3.
 
-TRUST POSTURE
-No gameplay balance, leaderboard, replay trust label, analytics, auth, or paid-service behavior changed. Launch media honesty only.
+Now: Physical launch QA (real PWA install standalone relaunch + one real gamepad/browser combo) and HomeV2 v1 fallback retirement evidence (production Lighthouse LCP/CLS + funnel data) remain device/data-gated.
 
-BLOCKERS (top 3)
-1. Physical device QA (PWA install, gamepad/browser real combo) — evidence-gated, documented as deferred.
-2. Lighthouse production metrics (LCP/CLS) + funnel data for v1 fallback retirement — data-gated.
-3. Supabase Auth + Obelisk full migration — credential-gated (noted as pre-existing).
-
-HUMAN-BLOCKED ITEMS (age, status)
-- Post-cutover Cloudflare deploy verification — awaiting GitHub Actions completion (in-flight).
-- Physical QA pass (gamepad/browser, PWA install) — manual/browser work, no code blocker.
-- Five-scene screenshot capture (boss, build/debrief, leaderboard replace SVG) — manual capture work, no code blocker.
-
-Next session: Observe deploy, rerun smoke checks; if passing, escalate physical QA and capture work or focus on Lighthouse/funnel metrics for v1 retirement decision.
+Next session: Run physical launch QA or continue with HomeV2 retirement evidence collection.
