@@ -872,3 +872,5 @@ Session 119 deploy verification: pushed `bb2e19e` to `origin/main`; GitHub Actio
 - Shipped the second-order innovation guard: `scripts/protocol-drift-check.mjs` now requires `prompts/initiate.md`, preventing silent regression of the CANON-003 split.
 - Regenerated `docs/INNOVATION_PACK.md`; all other surfaced candidates remained dashboard/credential, physical-device, production-data, publication/community, or founder-approval gated and were deferred honestly.
 - Validation: protocol drift 25/25 ok, canon conformance 0 GAP / CANON-003 conformed, analytics capability MISSING by secrets check, `npm run lint`, `npm test` 605/605, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, `npm run build`, windows-hide check, and `git diff --check` all passed.
+
+Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions brief-format-check run 28686453624 and Deploy to Cloudflare Pages run 28686453628 both succeeded. Post-deploy verification passed: npm run live:site-check 5/5, npm run post-cutover:smoke 5/5, and npm run replay:trust-smoke 3/3.
