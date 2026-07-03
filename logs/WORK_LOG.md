@@ -862,3 +862,13 @@ Session 118 deploy verification: pushed `cf3283f` to `origin/main`; GitHub Actio
 - Validation: focused runDebrief 4/4, `npm run lint`, full `npm test` 605/605, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, `npm run build`, and `git diff --check` all passed.
 
 Session 119 deploy verification: pushed `bb2e19e` to `origin/main`; GitHub Actions `brief-format-check` run `28685362017` and `Deploy to Cloudflare Pages` run `28685361987` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.
+
+## 2026-07-03 — Session 120 — Initiation prompt surface and protocol drift guard
+
+- Ran the active Codex `/goal` `/arc` from `main`: attempted `git pull --rebase origin main` first as requested; pull was blocked by pre-existing unstaged `AGENTS.md` propagation changes, then `git fetch` + `git rev-list --left-right --count origin/main...HEAD` verified local and origin were even (`0 0`).
+- Wrote the Codex session lock, installed/verified the Windows Git storm guard, ran startup preflights, context meter, secrets audit, blocker preflight, canon adoption/conformance checks, and loaded the canonical startup brief.
+- Verified the repo is a public-unlaunched browser game despite stale profiler fallback, applied the game-loop lens, and generated `docs/AUDIT_2026-07-03_5.json` / `.md` plus `docs/IMPLEMENT_PLAN.md`.
+- Shipped the top verified repo-local gap: `prompts/initiate.md` now exists as the initiation wrapper that `prompts/start.md` routes to for Type A/B projects and returning-session redirects.
+- Shipped the second-order innovation guard: `scripts/protocol-drift-check.mjs` now requires `prompts/initiate.md`, preventing silent regression of the CANON-003 split.
+- Regenerated `docs/INNOVATION_PACK.md`; all other surfaced candidates remained dashboard/credential, physical-device, production-data, publication/community, or founder-approval gated and were deferred honestly.
+- Validation: protocol drift 25/25 ok, canon conformance 0 GAP / CANON-003 conformed, analytics capability MISSING by secrets check, `npm run lint`, `npm test` 605/605, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, `npm run build`, windows-hide check, and `git diff --check` all passed.

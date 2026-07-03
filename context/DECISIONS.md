@@ -547,3 +547,11 @@ Trade-off accepted: Capture automation seeds local browser state for stable Load
 **Decision:** Do not treat dashboard credentials, physical PWA/gamepad QA, HomeV2 production evidence, or founder publication approval as repo-code work. When the primary genius list is gated, ship verified repo-local second-order improvements and record the gated items honestly.
 
 **Rationale:** This preserves CANON-031 observability honesty and keeps the product improving without fabricating external evidence.
+
+## 2026-07-03 — Session 120 — Protocol route targets must be local and self-checked
+
+Decision: If a local Studio OS prompt routes to another local prompt, that target is an executable protocol surface and must be present in-repo. The local protocol drift check should include required prompt surfaces, not only scripts.
+
+Rationale: `prompts/start.md` already routed Type A/B projects to `prompts/initiate.md`, but the file was absent until this session. Canon conformance caught the gap; adding the file alone would not prevent recurrence.
+
+Trade-off accepted: `prompts/initiate.md` is a slim wrapper pointing to `docs/SESSION_PROTOCOL.md` section 4 instead of duplicating every private Studio OS implementation detail in this public repo.

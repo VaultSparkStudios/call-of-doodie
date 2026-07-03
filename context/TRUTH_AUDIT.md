@@ -762,3 +762,13 @@ Last reviewed: 2026-07-03
 
 - Source-of-truth correction: `public/manifest.json`, `assets/visual-assets.json`, and `scripts/validate-launch-media.mjs` already prove five verified browser-capture manifest screenshots from Session 118. `context/GAME_LOOP.md` and `context/TASK_BOARD.md` were reconciled so they no longer carry the stale partial-screenshot premise.
 - Current truth posture: green locally. Replay trust remains advisory until full deterministic physics/enemy resimulation exists. Physical PWA install/gamepad QA remains real-device gated.
+
+## 2026-07-03 — Session 120 — Initiation route truth
+
+- Protocol truth — `prompts/start.md` routes uninitialized Type A/B projects to `prompts/initiate.md`; that file now exists locally and redirects mature returning sessions back to start.
+- Drift truth — `scripts/protocol-drift-check.mjs --json` now includes the initiation prompt as required and reports `status=ok`, 25/25 present, `missingRequired=0`.
+- Canon truth — tier-aware conformance reports 0 GAP and CANON-003 conformed after the fix.
+- Launch-gate truth — analytics capability remains MISSING; physical PWA/gamepad QA, HomeV2 production evidence, and publication/community links remain external gates, not shipped code claims.
+
+Overall status: green locally
+Last reviewed: 2026-07-03

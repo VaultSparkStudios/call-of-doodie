@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "generatedAt": "2026-07-03",
+    "project": "call-of-doodie",
+    "type": "game",
+    "session": 120,
+    "combinedPriority": "26.0",
+    "top3": [
+      "restore-initiation-prompt-surface",
+      "protocol-drift-initiation-guard",
+      "external-launch-gates-honest-deferral"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 9,
+    "progressionCurve": 9,
+    "sessionEngagement": 10,
+    "retentionHooks": 10,
+    "soulFidelity": 10,
+    "note": "Primary gameplay loop remains high-confidence; the unblocked repo-local work this pass is protocol launch-confidence rather than new combat scope."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "P0",
+      "axis": "protocol / automation coverage",
+      "slug": "restore-initiation-prompt-surface",
+      "status": "shipped",
+      "effortHours": 0.5,
+      "impact": 9,
+      "innovation": 4,
+      "priority": 18,
+      "why": "Live canon conformance reported a real STRONG CANON-003 gap: prompts/start.md routes Type A/B startup to prompts/initiate.md, but the target file was missing locally.",
+      "recipe": "Add a slim local prompts/initiate.md wrapper that routes returning sessions back to start and points bootstrap/foundation flows at docs/SESSION_PROTOCOL.md section 4."
+    },
+    {
+      "rank": 2,
+      "tier": "P1",
+      "axis": "second-order innovation / protocol guard",
+      "slug": "protocol-drift-initiation-guard",
+      "status": "shipped",
+      "effortHours": 0.25,
+      "impact": 8,
+      "innovation": 5,
+      "priority": 8,
+      "why": "A one-time file restore would regress silently unless the local drift check treats the initiation prompt as a required executable surface.",
+      "recipe": "Add prompts/initiate.md to scripts/protocol-drift-check.mjs as a required helper and verify protocol drift returns ok with missingRequired=0."
+    },
+    {
+      "rank": 3,
+      "tier": "P1",
+      "axis": "launch confidence",
+      "slug": "external-launch-gates-honest-deferral",
+      "status": "deferred",
+      "effortHours": 0,
+      "impact": 9,
+      "innovation": 3,
+      "priority": 0,
+      "why": "Innovation pack and startup brief still surface analytics/dashboard, physical PWA/gamepad QA, HomeV2 production data, community/publication, and founder approval gates. These are not repo-local code tasks.",
+      "recipe": "Keep them deferred with evidence from check-secrets --for analytics and blocker-preflight; do not fabricate data or edit sibling repos."
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "node scripts/check-secrets.mjs --for analytics reports analytics MISSING; dashboard secrets are not available repo-locally."
+    },
+    {
+      "slug": "physical-device-launch-qa",
+      "reason": "Requires real mobile PWA install/relaunch and real gamepad/browser evidence."
+    },
+    {
+      "slug": "home-v2-retirement-evidence",
+      "reason": "Requires production Lighthouse and funnel data before deleting the legacy path."
+    },
+    {
+      "slug": "community-publication-links",
+      "reason": "Requires founder/publication decision and real community destination."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "restore-initiation-prompt-surface",
+      "status": "shipped",
+      "notes": "Added prompts/initiate.md returning-session wrapper."
+    },
+    {
+      "slug": "protocol-drift-initiation-guard",
+      "status": "shipped",
+      "notes": "protocol-drift-check now requires prompts/initiate.md; protocol drift reports ok with 25/25 present."
+    },
+    {
+      "slug": "external-launch-gates-honest-deferral",
+      "status": "deferred",
+      "notes": "Deferred with secrets/blocker evidence instead of claiming external progress."
+    }
+  ],
+  "validation": {
+    "protocolDrift": "ok; 25/25 present, missingRequired=0",
+    "canonConformance": "0 GAP; CANON-003 conformed",
+    "analyticsSecrets": "MISSING; external gate retained"
+  }
+}

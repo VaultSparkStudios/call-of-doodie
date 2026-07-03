@@ -14,6 +14,7 @@ const helpers = [
   { rel: "scripts/validate-brief-format.mjs", level: "required", purpose: "checks startup brief shape" },
   { rel: "scripts/check-secrets.mjs", level: "required", purpose: "checks capability readiness without raw secrets" },
   { rel: "scripts/ops.mjs", level: "required", purpose: "local command router and blocker preflight" },
+  { rel: "prompts/initiate.md", level: "required", purpose: "keeps start.md Type A/B initiation routing executable" },
   { rel: "scripts/credential-watch.mjs", level: "optional", purpose: "auto-detects credential transitions" },
   { rel: "scripts/ark.mjs", level: "optional", purpose: "drains and ships Studio Ark cargo" },
   { rel: "scripts/check-brief-staleness.mjs", level: "optional", purpose: "chooses full brief versus delta brief" },

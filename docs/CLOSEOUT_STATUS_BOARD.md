@@ -1,17 +1,18 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-03 (Session 119 closeout) -->
+<!-- generated-at: 2026-07-03 (Session 120 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S119 ════════════════════╗
-║  Date: 2026-07-03  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S120 ════════════════════╗
+║  Date: 2026-07-03  ·  SIL: 1000/1000  ·  Velocity: 2 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped post-run next-run contracts: debriefs now generate a  ║
-║  ✓ Reconciled stale screenshot truth surfaces: GAME_LOOP no lon  ║
+║  ✓ Shipped the missing initiation prompt surface: `prompts/init  ║
+║  ✓ Added the second-order guard: `scripts/protocol-drift-check.  ║
+║  ✓ Generated `docs/AUDIT_2026-07-03_5.json` / `.md`, refreshed   ║
 ║  ✓ External gates remain honest: analytics/dashboard credential  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
@@ -28,7 +29,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
+║  · context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
@@ -39,7 +40,7 @@
 ║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 20 files  ·  M:16 A:0 D:0 ?:4                          ║
+║  Changes: 18 files  ·  M:15 A:0 D:0 ?:3                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
