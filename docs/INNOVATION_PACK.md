@@ -1,5 +1,5 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-07-02T18:53:47.847Z -->
+<!-- generated-at: 2026-07-03T21:53:37.068Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
@@ -31,13 +31,13 @@
    - Axis: product
    - Evidence: context/TASK_BOARD.md#deferred
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-7. **sil-2-s62-deferred-menuscreen-menupanels-jsx-unification-900-duplicated-** — [SIL:2] [S62 deferred] MenuScreen → MenuPanels.jsx unification — ~900 duplicated lines; pure refactor with no user-facing impact; HomeV2 is the default (v1 opt-in only), so deferral has minimal player impact
+7. **sil-1-s62-deferred-homev2-v1-fallback-retirement-gate-on-200ms-lighthous** — [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
    - Axis: product
    - Evidence: context/TASK_BOARD.md#deferred
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-8. **sil-2-s62-deferred-coordinated-enemy-formations-wave-20-group-spawn-patt** — [SIL:2] [S62 deferred] Coordinated enemy formations — wave 20+ group-spawn patterns (flanks, pincer, escort); game design work (~4h) beyond current scope
-   - Axis: product
-   - Evidence: context/TASK_BOARD.md#deferred
+8. **maintain-launch-confidence** — Maintain launch confidence with protocol, test, and build verification.
+   - Axis: protocol
+   - Evidence: context/TASK_BOARD.md
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
 
 ## Guardrails

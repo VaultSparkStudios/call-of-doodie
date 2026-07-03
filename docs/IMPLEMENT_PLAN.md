@@ -1,13 +1,14 @@
-# Implement Plan - 2026-07-03 Session 118
+# Implement Plan - 2026-07-03 Session 119
 
-Source: `docs/AUDIT_2026-07-03_3.json`
+Source: `docs/AUDIT_2026-07-03_4.json`
 
 ## Sequenced Order
 
 | Seq | Slug | Rung | Effort | Why this position |
 |---|---|---|---|---|
-| 1 | five-scene-launch-screenshot-capture-contract | L1 | 1h | Highest repo-executable public-launch truth gap; removes authored manifest fallbacks without touching external analytics, device, or production-data gates. |
+| 1 | post-run-next-contracts | L2 | 45m | Highest repo-local retention improvement after external gates; turns existing debrief evidence into a measurable next-run proof condition. |
+| 2 | screenshot-truth-surface-reconciliation | L1 | 15m | Removes stale Studio OS context after Session 118 already shipped the source media contract. |
 
 ## Validation Plan
 
-Regenerate all screenshots with `npm run launch:screenshots`, then prove manifest/media provenance with `npm run assets:check` and `npm run launch:media-check`. Before closeout: `npm run lint`, `npm test`, `npm run build`, and `git diff --check`.
+Focused debrief tests first, then lint, full unit suite, launch media gate, replay gates, build, and `git diff --check` before closeout.

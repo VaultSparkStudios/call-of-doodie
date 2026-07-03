@@ -75,6 +75,55 @@ function rematchPlan({ runSeed, vsScore, top, bestStreak, grenades, completedMis
   return actions.slice(0, 3);
 }
 
+function nextRunContract({ runSeed, wave, kills, bestStreak, grenades, completedMissions, missionsSummary, top, vsScore, score }) {
+  const baseAction = runSeed > 0 ? `Replay seed #${runSeed}` : "Start a clean run";
+  if (vsScore != null && score < vsScore) {
+    return {
+      id: "rival_score_contract",
+      focus: "Beat the rival ghost",
+      target: `${baseAction} and close the ${(vsScore - score).toLocaleString()} point gap.`,
+      proof: "Win condition: pass the rival score before changing seeds.",
+    };
+  }
+  if (grenades === 0 && wave >= 6) {
+    return {
+      id: "tempo_tool_contract",
+      focus: "Spend cooldowns on purpose",
+      target: `${baseAction}; throw at least one grenade before the first crowded spike ends.`,
+      proof: "Win condition: no unused-grenade death on the next debrief.",
+    };
+  }
+  if (bestStreak < 20 && kills >= 40) {
+    return {
+      id: "chain_control_contract",
+      focus: "Protect the kill chain",
+      target: `${baseAction}; hit a 20-streak before chasing side objectives.`,
+      proof: "Win condition: best streak reaches 20+ or the run survives three more waves.",
+    };
+  }
+  if (missionsSummary.length > 0 && completedMissions === 0) {
+    return {
+      id: "mission_value_contract",
+      focus: "Convert a failed run into account progress",
+      target: `${baseAction}; route the first shop or perk choice toward one unfinished daily mission.`,
+      proof: "Win condition: complete one daily mission even if the score run collapses.",
+    };
+  }
+  if (top?.share >= 0.58 && top.weapon?.name) {
+    return {
+      id: "specialist_scaling_contract",
+      focus: `Scale ${top.weapon.name}`,
+      target: `${baseAction}; buy the first ${top.weapon.name} upgrade before spreading coins.`,
+      proof: "Win condition: top weapon stays above 50% kill share with one support weapon online.",
+    };
+  }
+  return {
+    id: "build_identity_contract",
+    focus: "Forge a sharper build",
+    target: `${baseAction}; commit to two weapons by the first safe shop.`,
+    proof: "Win condition: next debrief names a specialist identity instead of a flat generalist.",
+  };
+}
 export function buildRunDebrief(input) {
   const {
     score = 0,
@@ -128,5 +177,6 @@ export function buildRunDebrief(input) {
     collapseReason: collapseReason(input),
     missedValue: missedValue.slice(0, 3),
     rematchPlan: rematchPlan({ runSeed, vsScore, top, bestStreak, grenades, completedMissions, missionsSummary }),
+    nextRunContract: nextRunContract({ runSeed, wave, kills, bestStreak, grenades, completedMissions, missionsSummary, top, vsScore, score }),
   };
 }

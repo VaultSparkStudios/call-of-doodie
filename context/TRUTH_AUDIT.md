@@ -757,3 +757,8 @@ Last reviewed: 2026-07-03
 
 Overall status: green live
 Last reviewed: 2026-07-03
+
+## 2026-07-03 — Session 119
+
+- Source-of-truth correction: `public/manifest.json`, `assets/visual-assets.json`, and `scripts/validate-launch-media.mjs` already prove five verified browser-capture manifest screenshots from Session 118. `context/GAME_LOOP.md` and `context/TASK_BOARD.md` were reconciled so they no longer carry the stale partial-screenshot premise.
+- Current truth posture: green locally. Replay trust remains advisory until full deterministic physics/enemy resimulation exists. Physical PWA install/gamepad QA remains real-device gated.

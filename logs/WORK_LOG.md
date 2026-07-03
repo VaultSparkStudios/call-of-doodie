@@ -852,3 +852,11 @@ Session 117 deploy verification: pushed `dd3caca` to `origin/main`; GitHub Actio
 - Validation: `npm run launch:screenshots` 5/5, `npm run assets:check`, `npm run launch:media-check`, `npm run lint`, full `npm test` 603/603, `npm run build`, and `git diff --check` all passed.
 
 Session 118 deploy verification: pushed `cf3283f` to `origin/main`; GitHub Actions `brief-format-check` run `28651302722` and `Deploy to Cloudflare Pages` run `28651302691` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.
+
+## 2026-07-03 — Session 119 — Post-run next-run contracts
+
+- Ran continuous Codex `/goal` `/arc` from synced `main`: pulled `origin/main`, wrote session lock, ran context meter, secrets audit, blocker preflight, startup brief render/validation, live genius-list audit, and game-loop review.
+- Verified primary genius-list items remain external-gated by analytics/dashboard credentials, physical PWA/gamepad QA, HomeV2 production evidence, or founder publication approval; closed the stale screenshot premise against Session 118 source evidence instead of carrying it.
+- Generated `docs/AUDIT_2026-07-03_4.json` / `.md` and refreshed `docs/IMPLEMENT_PLAN.md` / `docs/INNOVATION_PACK.md`.
+- Shipped post-run next-run contracts: `buildRunDebrief()` now emits a measured focus/target/proof contract from rival-score, cooldown, streak, mission, and build-identity evidence; DeathScreen renders it in the existing Run Intelligence next-drill card.
+- Validation: focused runDebrief 4/4, `npm run lint`, full `npm test` 605/605, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, `npm run build`, and `git diff --check` all passed.

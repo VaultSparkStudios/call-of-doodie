@@ -1,19 +1,18 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-03 (Session 117 closeout) -->
+<!-- generated-at: 2026-07-03 (Session 119 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S117 ════════════════════╗
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S119 ════════════════════╗
 ║  Date: 2026-07-03  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: optional wave challenge contracts. Non-boss waves c  ║
-║  ✓ Player-facing loop: the heads-up display renders the active   ║
-║  ✓ Trust posture: unchanged. No leaderboard, replay, credential  ║
-║  ✓ Validation: focused objectiveDirector 12/12; touched-file ES  ║
+║  ✓ Shipped post-run next-run contracts: debriefs now generate a  ║
+║  ✓ Reconciled stale screenshot truth surfaces: GAME_LOOP no lon  ║
+║  ✓ External gates remain honest: analytics/dashboard credential  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -35,29 +34,29 @@
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (~/.codex/memories/call-of-doodie/)              ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: pending commit; see git status/diff                         ║
+║  Changes: 20 files  ·  M:16 A:0 D:0 ?:4                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
 ║  Staging:  N/A — internal/exempt (stagingType: none)             ║
-║  Live:     https://callofdoodie.wtf/  ·  deploy verified green       ║
+║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         603/603                                          ║
-║  IGNIS:         14d ago                                          ║
+║  Tests:         605/605                                          ║
+║  IGNIS:         15d ago                                          ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  Deploy verified; next: contract-aware debrief coaching         ║
+║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 

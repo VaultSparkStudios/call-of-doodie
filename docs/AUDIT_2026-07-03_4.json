@@ -1,0 +1,65 @@
+{
+  "date": "2026-07-03",
+  "session": 119,
+  "project": "call-of-doodie",
+  "status": "shipped",
+  "releaseGate": "no-go-sparked",
+  "gameLoopReview": {
+    "loopTightness": 9,
+    "progressionCurve": 9,
+    "sessionEngagement": 10,
+    "retentionHooks": 10,
+    "soulFidelity": 10
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "post-run-next-contracts",
+      "status": "shipped",
+      "rung": "L2",
+      "evidence": [
+        "src/utils/runDebrief.js now emits a nextRunContract with focus, target, and proof fields from rival-score, cooldown, streak, mission, and build-identity evidence",
+        "src/components/DeathScreen.jsx renders the contract inside the existing Run Intelligence next-drill card",
+        "src/utils/runDebrief.test.js covers tempo-tool and rival-score contract priority"
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "screenshot-truth-surface-reconciliation",
+      "status": "shipped",
+      "rung": "L1",
+      "evidence": [
+        "context/GAME_LOOP.md no longer carries the stale authored-fallback screenshot risk",
+        "context/TASK_BOARD.md marks the S101 five-scene screenshot follow-up done with Session 118 evidence"
+      ]
+    },
+    {
+      "rank": 3,
+      "slug": "physical-device-launch-qa",
+      "status": "gated",
+      "reason": "Requires real mobile PWA install/relaunch and real gamepad/browser evidence"
+    },
+    {
+      "rank": 4,
+      "slug": "analytics-dashboard-allowlists",
+      "status": "gated",
+      "reason": "analytics capability remains missing and dashboard secrets are not repo-local"
+    },
+    {
+      "rank": 5,
+      "slug": "home-v2-retirement-evidence",
+      "status": "gated",
+      "reason": "Requires production Lighthouse and funnel data before removing legacy v1 fallback"
+    }
+  ],
+  "validation": {
+    "focusedRunDebrief": "4/4 passed",
+    "lint": "passed",
+    "tests": "605/605",
+    "replayStateStepper": "4/4 passed",
+    "replayEdgeFixtures": "4/4 passed",
+    "launchMediaCheck": "passed",
+    "build": "passed",
+    "diffCheck": "passed"
+  }
+}

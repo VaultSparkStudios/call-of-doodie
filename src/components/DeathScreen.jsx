@@ -872,6 +872,11 @@ export default function DeathScreen({
             <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 1.5, fontWeight: 900 }}>NEXT DRILL</div>
             <div style={{ fontSize: 12, color: "#FFF", fontWeight: 900, marginTop: 3 }}>{nextRunDrill.title}</div>
             <div style={{ fontSize: 10, color: "#DDD", lineHeight: 1.45, marginTop: 3 }}>{nextRunDrill.detail}</div>
+            <div style={{ marginTop: 8, padding: "7px 8px", borderRadius: 6, background: "rgba(0,0,0,0.24)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <div style={{ fontSize: 9, color: "#FFD7B8", letterSpacing: 1.5, fontWeight: 900 }}>CONTRACT: {debrief.nextRunContract.focus}</div>
+              <div style={{ fontSize: 10, color: "#EEE", lineHeight: 1.4, marginTop: 3 }}>{debrief.nextRunContract.target}</div>
+              <div style={{ fontSize: 9, color: "#8FEFFF", lineHeight: 1.4, marginTop: 3 }}>{debrief.nextRunContract.proof}</div>
+            </div>
             <button
               onClick={() => {
                 track("next_run_drill_accept", { drillId: nextRunDrill.id, action: nextRunDrill.action, seed: nextRunDrill.seed || null, score, wave, mode });

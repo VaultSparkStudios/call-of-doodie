@@ -28,7 +28,7 @@ Protocol-readable game-loop source for `/game-loop-review`. The public-facing su
 ## Current Evidence
 
 - Runtime loop: `src/App.jsx`, `src/systems/waveDirector.js`, `src/systems/progressionFlow.js`, `src/systems/combatResolution.js`.
-- Post-run loop: `src/components/DeathScreen.jsx`, `src/systems/deathFlow.js`, `src/utils/runBrain.js`.
+- Post-run loop: `src/components/DeathScreen.jsx`, `src/systems/deathFlow.js`, `src/utils/runBrain.js`, `src/utils/runDebrief.js`.
 - Trust loop: `src/utils/replayCommandTrace.js`, `src/utils/replayResim.js`, `src/utils/studioEventOps.js`.
 - Launch checks: `npm test`, `npm run launch:media-check`, `npm run replay:edge-fixtures`, `npm run live:site-check`.
 
@@ -36,4 +36,4 @@ Protocol-readable game-loop source for `/game-loop-review`. The public-facing su
 
 - Full deterministic replay resimulation is still future work; current code must keep labeling the replay gate as advisory until physics parity exists.
 - Real-device PWA install and controller QA remain manual/device checks.
-- Three launch-scene screenshots still use authored fallback art until verified browser captures exist for boss, build/debrief, and leaderboard scenes.
+- Launch screenshot truth is covered by five verified browser captures and `npm run launch:media-check`; keep physical-device QA separate from media provenance.

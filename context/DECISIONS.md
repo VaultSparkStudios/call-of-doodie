@@ -541,3 +541,9 @@ Decision: All five web-app manifest screenshots now use real Chromium captures f
 Rationale: Install cards, store surfaces, and launch docs should show actual gameplay/UI evidence when capture automation can produce it. Authored SVG fallbacks remain useful promotional media, but they should not be the manifest screenshots once verified captures exist.
 
 Trade-off accepted: Capture automation seeds local browser state for stable Loadout Builder and leaderboard scenes. That state is fixture evidence for the screenshot, not a claim about production traffic or physical-device QA.
+
+## 2026-07-03 — Session 119 — Keep external launch gates separate from repo-local retention work
+
+**Decision:** Do not treat dashboard credentials, physical PWA/gamepad QA, HomeV2 production evidence, or founder publication approval as repo-code work. When the primary genius list is gated, ship verified repo-local second-order improvements and record the gated items honestly.
+
+**Rationale:** This preserves CANON-031 observability honesty and keeps the product improving without fabricating external evidence.
