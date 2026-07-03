@@ -850,3 +850,5 @@ Session 117 deploy verification: pushed `dd3caca` to `origin/main`; GitHub Actio
 - Updated `public/manifest.json` so all five screenshot entries point at verified browser PNG captures; registered new Boss Rush, Loadout Builder, and leaderboard capture assets.
 - Hardened `scripts/validate-launch-media.mjs` so manifest PNG screenshots must be production-ready browser captures, listed in the verified capture set, readable as PNGs, and dimension-correct.
 - Validation: `npm run launch:screenshots` 5/5, `npm run assets:check`, `npm run launch:media-check`, `npm run lint`, full `npm test` 603/603, `npm run build`, and `git diff --check` all passed.
+
+Session 118 deploy verification: pushed `cf3283f` to `origin/main`; GitHub Actions `brief-format-check` run `28651302722` and `Deploy to Cloudflare Pages` run `28651302691` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.

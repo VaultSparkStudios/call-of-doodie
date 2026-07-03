@@ -5,7 +5,7 @@
 - Validation: `npm run launch:screenshots` 5/5; `npm run assets:check`; `npm run launch:media-check`; `npm run lint`; full `npm test` 603/603; `npm run build`; `git diff --check`.
 
 ## Next Best Actions
-- [ ] Observe GitHub Actions Cloudflare Pages deploy for the Session 118 commit, then rerun live smoke and post-cutover smoke.
+- [x] Observe GitHub Actions Cloudflare Pages deploy for the Session 118 commit, then rerun live smoke and post-cutover smoke - DONE: deploy run 28651302691, live 5/5, post-cutover 5/5, replay trust 3/3.
 - [ ] Physical launch QA - real PWA install standalone relaunch and one real gamepad/browser combo remain device-evidence gated.
 - [ ] HomeV2 v1 fallback retirement evidence - requires production Lighthouse LCP/CLS and funnel data.
 

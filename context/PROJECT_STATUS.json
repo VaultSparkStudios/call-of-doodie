@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 118 (2026-07-03) shipped full five-scene launch screenshot replacement: manifest screenshots now use verified browser captures for combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls.",
+  "currentFocus": "Session 118 (2026-07-03) shipped full five-scene launch screenshot replacement, pushed commit cf3283f to main, and verified Cloudflare Pages deploy plus live smoke green.",
   "nextMilestone": "Next repo-local slice: physical launch QA evidence pack if hardware is available, otherwise contract-aware debrief coaching or HomeV2 retirement evidence preparation. External gates remain analytics/dashboard credentials, physical PWA/gamepad QA, HomeV2 production evidence, and founder approval.",
   "testingSurfaces": [
     {
