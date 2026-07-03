@@ -727,3 +727,14 @@ Last reviewed: 2026-07-02
 - REMATCH practice truth — src/components/DeathScreen.jsx now passes the selected nextRunDrill into the REMATCH start path, and src/App.jsx stores an explicit practiceDrill object on the leaderboard-excluded practice game state.
 - HUD truth — src/components/HUD.jsx renders the REMATCH drill reason and best-of-3 receipt only when practiceDrill exists; normal competitive runs do not show the practice receipt.
 - Trust unchanged — practice runs still skip leaderboard submission and career-record farming; this session did not claim physical PWA/gamepad QA, production Lighthouse data, or full deterministic replay parity.
+
+## 2026-07-03 — Session 116 — Legacy shared-panel routing truth
+
+- `docs/AUDIT_2026-07-03.json` / `.md` are the source of truth for the Session 116 audit implementation.
+- MenuScreen truth — legacy modal state now renders shared `MenuPanels.jsx` components for Rules, Controls, Most Wanted, Run History, Loadout Builder, Missions, Upgrades, and What's New.
+- Coverage truth — `src/components/MenuScreen.test.jsx` proves the legacy Command Center opens shared Rules and Controls content; the default HomeV2 path remains unchanged.
+- Retirement truth — this session does not claim full legacy v1 deletion. The old fallback remains production-reachable until HomeV2 Lighthouse/funnel evidence clears the retirement gate.
+- Validation truth — focused MenuScreen test 1/1, full `npm test` 600/600, lint/build/replay/media gates passed.
+
+Overall status: green locally
+Last reviewed: 2026-07-03

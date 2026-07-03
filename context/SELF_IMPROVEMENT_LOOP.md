@@ -1550,3 +1550,29 @@ Intent outcome: Partial until push/deploy verification completes; repo-executabl
 - Shipped [SIL:1] REMATCH drill L3: the corrective practice loop now preserves the death-screen coaching reason in-run and shows a best-of-3 mastery receipt without changing leaderboard trust.
 - Validation: full test suite 599/599, lint/build/replay/media gates green.
 - Next [SIL] candidates: MenuScreen/MenuPanels coverage-first unification; verified remaining launch screenshots; physical PWA/gamepad QA once device evidence is available.
+
+## 2026-07-03 — Session 116 | Total: 1000/1000 | Velocity: 1 | Debt: ↓
+
+SIL +1: Shipped the first coverage-backed MenuScreen -> MenuPanels unification slice. Legacy MenuScreen modal state now routes through shared MenuPanels exports for the Command Center panel stack, with focused regression coverage and full launch validation green.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite increased to 600/600 with clean lint/build and focused legacy MenuScreen coverage. |
+| Creative Alignment | 100 | → | No new player-facing promise; the slice protects existing front-door behavior while reducing duplicated legacy paths. |
+| Momentum | 100 | ↑ | Closed the highest repo-executable deferred item after external blockers were verified. |
+| Engagement | 100 | → | Shared panels preserve existing Command Center player affordances across HomeV2 and legacy v1. |
+| Process Quality | 100 | ↑ | Fresh audit artifacts, implementation plan, and validation evidence tie the bounded refactor to the live task board. |
+| Cross-Repo Coherence | 100 | → | No sibling repo edits. |
+| Security Posture | 100 | → | No secrets, dependencies, auth, or network behavior added. |
+| Ecosystem Integration | 100 | → | Legacy/front-door surfaces now reuse the same panel source-of-truth already used by HomeV2. |
+| Capital Efficiency | 100 | → | Zero paid services or per-user variable cost introduced. |
+| Automation Coverage | 100 | ↑ | Added dedicated component coverage for the legacy shared-panel path. |
+
+**Top win:** The legacy Command Center now shares panel behavior with HomeV2 instead of carrying separate runtime modal implementations.
+**Top gap:** Full legacy MenuScreen deletion remains gated on production LCP/funnel evidence.
+**Intent outcome:** Achieved for repo-executable arc work; push/deploy verification follows.
+
+**Brainstorm**
+1. HomeV2 retirement evidence pack — capture Lighthouse LCP/CLS and funnel data before deleting v1. Medium probability.
+2. Verified screenshot completion — capture boss, build/debrief, and leaderboard PNGs before manifest replacement. High probability once browser capture is available.
+3. Formation-aware death coaching — summarize PINCER / ESCORT / FLANK deaths in the debrief. Medium probability.

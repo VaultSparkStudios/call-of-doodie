@@ -9,6 +9,16 @@ import { track } from "../utils/analytics.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { isSupporter } from "../utils/supporter.js";
 import { CANONICAL_SITE_URL } from "../config/site.js";
+import {
+  ControlsPanel,
+  LoadoutBuilderPanel,
+  MissionsPanel,
+  MostWantedPanel,
+  NewFeaturesPanel,
+  RulesPanel,
+  RunHistoryPanel,
+  UpgradesPanel,
+} from "./MenuPanels.jsx";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
@@ -518,9 +528,55 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />
         </LazyPanel>
       )}
+      {showRules && (
+        <LazyPanel>
+          <RulesPanel onClose={() => setShowRules(false)} />
+        </LazyPanel>
+      )}
+      {showControls && (
+        <LazyPanel>
+          <ControlsPanel onClose={() => setShowControls(false)} isMobile={isMobile} controllerType={controllerType} />
+        </LazyPanel>
+      )}
+      {showBestiary && (
+        <LazyPanel>
+          <MostWantedPanel onClose={() => setShowBestiary(false)} />
+        </LazyPanel>
+      )}
+      {showRunHistory && (
+        <LazyPanel>
+          <RunHistoryPanel
+            onClose={() => setShowRunHistory(false)}
+            runHistory={runHistory}
+            rivalryHistory={rivalryHistory}
+            username={username}
+            onLaunchSeed={(seed, challenge = {}) => onStart(seed, challenge)}
+          />
+        </LazyPanel>
+      )}
+      {showLoadoutBuilder && (
+        <LazyPanel>
+          <LoadoutBuilderPanel onClose={() => setShowLoadoutBuilder(false)} />
+        </LazyPanel>
+      )}
+      {showMissions && (
+        <LazyPanel>
+          <MissionsPanel missions={missions} missionProgress={missionProgress} onClose={() => setShowMissions(false)} />
+        </LazyPanel>
+      )}
+      {showUpgrades && meta && (
+        <LazyPanel>
+          <UpgradesPanel meta={meta} accountLevel={accountLevel} onClose={() => setShowUpgrades(false)} />
+        </LazyPanel>
+      )}
+      {showNewFeatures && (
+        <LazyPanel>
+          <NewFeaturesPanel onClose={() => setShowNewFeatures(false)} />
+        </LazyPanel>
+      )}
 
       {/* Rules Modal */}
-      {showRules && (
+      {false && showRules && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
@@ -548,7 +604,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Controls Modal */}
-      {showControls && (
+      {false && showControls && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
@@ -613,7 +669,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Most Wanted List Modal */}
-      {showBestiary && (
+      {false && showBestiary && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
@@ -633,7 +689,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Run History Modal */}
-      {showRunHistory && (
+      {false && showRunHistory && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 480, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <button onClick={() => setShowRunHistory(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
@@ -685,7 +741,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Custom Loadout Builder Modal */}
-      {showLoadoutBuilder && (
+      {false && showLoadoutBuilder && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 500, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.35)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <button onClick={() => { setShowLoadoutBuilder(false); setEditingSlot(null); }} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
@@ -892,7 +948,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Daily Missions Modal */}
-      {showMissions && (
+      {false && showMissions && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
@@ -961,7 +1017,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Meta Upgrades Modal */}
-      {showUpgrades && meta && (
+      {false && showUpgrades && meta && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
           <div data-gamepad-scroll="" style={{ ...card, maxWidth: 520, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
@@ -1113,7 +1169,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* New Features Modal */}
-      {showNewFeatures && (
+      {false && showNewFeatures && (
         <>
           <style>{`.wnscroll::-webkit-scrollbar{width:5px}.wnscroll::-webkit-scrollbar-track{background:rgba(255,255,255,0.04);border-radius:3px}.wnscroll::-webkit-scrollbar-thumb{background:rgba(255,107,53,0.55);border-radius:3px}.wnscroll{scrollbar-width:thin;scrollbar-color:rgba(255,107,53,0.55) rgba(255,255,255,0.04)}`}</style>
           <div

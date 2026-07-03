@@ -823,3 +823,12 @@ Session 114 deploy verification: pushed `4c34f07` to `origin/main`; GitHub Actio
 - Ran /arc from clean main, wrote the Codex session lock, rendered/validated the startup brief, and generated docs/AUDIT_2026-07-02_3.* for the next repo-local product slice.
 - Shipped REMATCH drill L3 coach receipts: rematchDrill.js now builds practice drill briefs and best-of-3 receipt labels; DeathScreen passes the selected next-run drill into REMATCH starts; App.jsx stores practice drill/mastery state; HUD.jsx renders the live REMATCH reason during practice.
 - Validation: focused REMATCH 12/12, touched-runtime ESLint clean, App launch + REMATCH focused tests 13/13, full `npm test` 599/599, `npm run lint`, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, and `npm run build` all passed.
+
+## 2026-07-03 — Session 116 — Legacy MenuScreen shared-panel routing
+
+- Ran the active `/goal` `/arc` continuation from clean `main`: pulled `origin/main`, wrote the Codex session lock, ran context-meter, secrets audit, blocker preflight, startup brief render/validation, and game-loop/code audit.
+- Verified the top startup items remain dashboard/device/community/data gated; shipped the highest repo-local slice from the S62 deferred MenuScreen/MenuPanels unification item.
+- Generated `docs/AUDIT_2026-07-03.json` / `.md` and refreshed `docs/IMPLEMENT_PLAN.md`.
+- Shipped bounded shared-panel routing: `src/components/MenuScreen.jsx` now renders Rules, Controls, Most Wanted, Run History, Loadout Builder, Missions, Upgrades, and What's New through `src/components/MenuPanels.jsx` exports while preserving HomeV2 as the default launch surface.
+- Added `src/components/MenuScreen.test.jsx` covering the legacy Command Center Rules/Controls path through shared panel content.
+- Validation: focused MenuScreen test 1/1, touched-file ESLint clean, `npm run lint`, full `npm test` 600/600, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, `npm run build`, and `git diff --check` all passed.

@@ -1,0 +1,32 @@
+{
+  "date": "2026-07-03",
+  "session": 116,
+  "headline": "Legacy MenuScreen now routes Command Center panels through the shared MenuPanels source-of-truth, with launch validation green.",
+  "items": [
+    {
+      "title": "legacy-menu-shared-panel-routing",
+      "projectImpact": "High",
+      "ecosystemImpact": "Medium",
+      "evidence": "MenuScreen.jsx shared-panel routing + MenuScreen.test.jsx; full validation 600/600"
+    }
+  ],
+  "validation": [
+    "npx vitest run src/components/MenuScreen.test.jsx — 1/1",
+    "npm run lint — clean",
+    "npm test — 600/600",
+    "npm run replay:state-stepper — 4/4",
+    "npm run replay:edge-fixtures — 4/4",
+    "npm run launch:media-check — pass",
+    "npm run build — pass",
+    "Studio Ops doctor — completed with warnings, no hard-stop output"
+  ],
+  "followUps": [
+    "Observe Cloudflare Pages deploy for the Session 116 commit, then rerun live smoke",
+    "HomeV2 retirement evidence pack before deleting the legacy v1 fallback",
+    "Verified screenshot completion for boss, build/debrief, and leaderboard scenes"
+  ],
+  "blockers": [
+    "Analytics/dashboard allowlists remain credential/provider gated",
+    "Physical PWA install and gamepad QA remain device-evidence gated"
+  ]
+}

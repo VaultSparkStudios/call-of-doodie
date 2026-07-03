@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/arc Codex session 116",
+  "generatedAt": "2026-07-03",
+  "project": "call-of-doodie",
+  "type": "game",
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "architecture / front-door resilience",
+      "effortHours": 1,
+      "impact": 6,
+      "innovation": 3,
+      "priority": 16.2,
+      "slug": "legacy-menu-shared-panel-routing",
+      "title": "Route legacy MenuScreen modals through shared MenuPanels exports before full v1 retirement",
+      "status": "shipped",
+      "evidence": [
+        "src/components/MenuScreen.jsx imports shared Rules, Controls, MostWanted, RunHistory, LoadoutBuilder, Missions, Upgrades, and NewFeatures panels",
+        "legacy modal state now renders the shared MenuPanels components instead of the old inline runtime branches",
+        "src/components/MenuScreen.test.jsx covers the legacy Command Center rules and controls paths through shared panel content"
+      ]
+    }
+  ],
+  "validation": [
+    "npx vitest run src/components/MenuScreen.test.jsx — 1/1",
+    "npx eslint src/components/MenuScreen.jsx src/components/MenuScreen.test.jsx --max-warnings 0 — clean",
+    "npm run lint — clean",
+    "npm test — 600/600 across 71 files",
+    "npm run replay:state-stepper — 4/4",
+    "npm run replay:edge-fixtures — 4/4",
+    "npm run launch:media-check — pass",
+    "npm run build — pass",
+    "git diff --check — clean"
+  ],
+  "deferrals": [
+    "Analytics/dashboard allowlists remain provider-credential gated",
+    "Physical PWA install and real gamepad QA remain device-evidence gated",
+    "HomeV2 Lighthouse/funnel analysis remains production-data gated",
+    "Full legacy MenuScreen deletion remains gated on HomeV2 production LCP/funnel evidence"
+  ]
+}

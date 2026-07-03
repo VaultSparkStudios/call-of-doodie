@@ -1,18 +1,18 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-02 (Session 115 closeout) -->
+<!-- generated-at: 2026-07-03 (Session 116 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S115 ════════════════════╗
-║  Date: 2026-07-02  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S116 ════════════════════╗
+║  Date: 2026-07-03  ·  SIL: 1000/1000  ·  Velocity: 1 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: REMATCH drill L3 coach receipts. Death-screen REMAT  ║
-║  ✓ Trust posture: unchanged. REMATCH remains a leaderboard-excl  ║
-║  ✓ Validation: focused REMATCH tests 12/12; touched-runtime ESL  ║
+║  ✓ Shipped: coverage-backed legacy MenuScreen -> MenuPanels rou  ║
+║  ✓ Trust posture: unchanged. HomeV2 remains the default launch   ║
+║  ✓ Validation: focused MenuScreen test 1/1; touched-file ESLint  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -31,15 +31,15 @@
 ║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  ✓ logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
+║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
+║  ✓ agent memory (~/.codex/memories/call-of-doodie/)             ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 19 files  ·  M:14 A:0 D:0 ?:5                          ║
+║  Changes: 16 files  ·  M:12 A:0 D:0 ?:4                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -50,7 +50,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        —                                                ║
 ║  Compliance:    —                                                ║
-║  Tests:         599/599                                          ║
+║  Tests:         600/600                                          ║
 ║  IGNIS:         14d ago                                          ║
 ║  Truth:         green                                            ║
 ║  Sanitization:  —                                                ║

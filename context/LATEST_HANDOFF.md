@@ -1,4 +1,14 @@
-## Where We Left Off (Session 115 — REMATCH drill L3 coach receipts)
+## Where We Left Off (Session 116 — legacy MenuScreen shared-panel routing)
+- Shipped: coverage-backed legacy MenuScreen -> MenuPanels routing. The legacy Command Center now opens shared Rules, Controls, Most Wanted, Run History, Loadout Builder, Missions, Upgrades, and What's New panels from `MenuPanels.jsx` instead of using the old inline runtime branches.
+- Trust posture: unchanged. HomeV2 remains the default launch surface; full legacy v1 deletion still waits for production Lighthouse/funnel evidence.
+- Validation: focused MenuScreen test 1/1; touched-file ESLint clean; `npm run lint`; full `npm test` 600/600; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check; `npm run build`; `git diff --check`.
+
+## Next Best Actions
+- [ ] Observe GitHub Actions Cloudflare Pages deploy for the Session 116 commit, then rerun live smoke and post-cutover smoke.
+- [ ] Full five-scene screenshot replacement — requires verified browser captures for boss, build/debrief, and leaderboard scenes before manifest/media updates.
+- [ ] Physical launch QA — real PWA install standalone relaunch and one real gamepad/browser combo remain device-evidence gated.
+
+---## Where We Left Off (Session 115 — REMATCH drill L3 coach receipts)
 - Shipped: REMATCH drill L3 coach receipts. Death-screen REMATCH starts now carry the selected next-run drill into the practice run; the live heads-up display shows the REMATCH reason and best-of-3 mastery receipt state.
 - Trust posture: unchanged. REMATCH remains a leaderboard-excluded practice run and does not claim physical device/gamepad QA or full replay parity.
 - Validation: focused REMATCH tests 12/12; touched-runtime ESLint clean; App launch + REMATCH focused tests 13/13; full `npm test` 599/599; `npm run lint`; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check; `npm run build`.

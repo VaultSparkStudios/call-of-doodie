@@ -518,3 +518,11 @@ Decision: Wave-20+ non-boss encounters should expose deterministic formation arc
 Rationale: Late-wave combat readability improves when spawn pressure has named, testable patterns instead of invisible random offsets. Keeping the logic in `src/systems/waveDirector.js` preserves deterministic seeded-run fairness and gives telemetry/replay surfaces a concrete source of truth.
 
 Trade-off accepted: This does not add new enemy types or a broad App.jsx refactor. The formation layer changes encounter shape/readability while leaving damage, health, and leaderboard trust labels untouched.
+
+## 2026-07-03 — Session 116 — Legacy MenuScreen unification stays coverage-first
+
+Decision: Route the legacy MenuScreen modal states through shared `MenuPanels.jsx` exports before deleting the inline legacy modal stack or retiring the v1 fallback.
+
+Rationale: HomeV2 is the default launch surface, but `?home=v1` remains reachable. A bounded shared-panel routing slice reduces duplicated runtime behavior and adds regression coverage without making the larger production-data-gated decision to remove the legacy fallback.
+
+Trade-off accepted: The old inline branches are gated off during this migration slice rather than fully deleted in the same pass. Full deletion should follow only after production Lighthouse/funnel evidence supports HomeV2 fallback retirement.
