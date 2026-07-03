@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 117 (2026-07-03) shipped mid-run wave challenge contracts, pushed commit dd3caca to main, and verified Cloudflare Pages deploy plus live smoke green.",
-  "nextMilestone": "Next repo-local slice: contract-aware debrief coaching or verified remaining launch screenshots. External gates remain physical PWA/gamepad QA, analytics/dashboard credentials, and HomeV2 production evidence.",
+  "currentFocus": "Session 118 (2026-07-03) shipped full five-scene launch screenshot replacement: manifest screenshots now use verified browser captures for combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls.",
+  "nextMilestone": "Next repo-local slice: physical launch QA evidence pack if hardware is available, otherwise contract-aware debrief coaching or HomeV2 retirement evidence preparation. External gates remain analytics/dashboard credentials, physical PWA/gamepad QA, HomeV2 production evidence, and founder approval.",
   "testingSurfaces": [
     {
       "type": "production",
@@ -31,9 +31,9 @@
   "blockers": [
     "PostHog/Sentry/Ko-fi dashboard URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING. Supabase half already satisfied (Access-Control-Allow-Origin: * verified S112).",
     "Physical launch QA still requires a real PWA install standalone relaunch and one real gamepad/browser combo; the local input QA and PWA install receipts can support that pass but do not replace it.",
-    "Full five-scene screenshot replacement requires verified browser captures before manifest/media updates.",
+    "HomeV2 v1 fallback retirement requires production Lighthouse LCP/CLS and funnel data before deleting the legacy path.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
-    "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie — founder confirmation needed before wiring."
+    "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
   "lastUpdated": "2026-07-03",
   "lifecycle": "deployed",
@@ -43,13 +43,13 @@
   "ignisScore": 46424,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-19",
-  "silSession": 117,
+  "silSession": 118,
   "silScore": 1000,
   "silAvg3": 1000,
   "silVelocity": 1,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-03",
-  "currentSession": 117,
+  "currentSession": 118,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 603,

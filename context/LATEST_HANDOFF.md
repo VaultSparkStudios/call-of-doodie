@@ -1,4 +1,15 @@
-## Where We Left Off (Session 117 — mid-run wave challenge contracts)
+## Where We Left Off (Session 118 - five-scene launch screenshot replacement)
+- Shipped: full manifest screenshot replacement. The install-card manifest now uses verified browser captures for combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls instead of authored SVG fallbacks.
+- Provenance: `assets/visual-assets.json` records every manifest PNG as a proprietary `browser-capture`; `npm run launch:media-check` now enforces capture listing, production-ready status, readable PNG headers, and exact dimensions.
+- Trust posture: improved launch media honesty only. No gameplay balance, leaderboard, replay trust label, analytics, auth, or paid-service behavior changed.
+- Validation: `npm run launch:screenshots` 5/5; `npm run assets:check`; `npm run launch:media-check`; `npm run lint`; full `npm test` 603/603; `npm run build`; `git diff --check`.
+
+## Next Best Actions
+- [ ] Observe GitHub Actions Cloudflare Pages deploy for the Session 118 commit, then rerun live smoke and post-cutover smoke.
+- [ ] Physical launch QA - real PWA install standalone relaunch and one real gamepad/browser combo remain device-evidence gated.
+- [ ] HomeV2 v1 fallback retirement evidence - requires production Lighthouse LCP/CLS and funnel data.
+
+---## Where We Left Off (Session 117 — mid-run wave challenge contracts)
 - Shipped: optional wave challenge contracts. Non-boss waves can now offer a bounded bonus-coin contract only when the Dynamic Objective slot is empty, avoiding overlap with hot-zone/bounty/sniper/lockdown/escort objectives.
 - Player-facing loop: the heads-up display renders the active contract chip, wave-clear resolution awards bounded coins on success, and completion/failure receipts feed the existing death-screen objective summary arrays.
 - Trust posture: unchanged. No leaderboard, replay, credential, analytics, account, or paid-service behavior changed.

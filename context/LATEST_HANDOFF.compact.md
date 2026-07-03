@@ -1,37 +1,37 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 713380e44c41 -->
-<!-- generated-at: 2026-07-03T02:38:04.705Z -->
+<!-- source-hash: 9d52b48d3ade -->
+<!-- generated-at: 2026-07-03T09:19:34.309Z -->
 
 # LATEST_HANDOFF (compact)
 
-Where We Left Off — Session 116
+HANDOFF SUMMARY — Session 118+
 
-Session
-- Current: 116. Direct-to-main workflow, HomeV2 default.
+CURRENT STATUS
+Session: 118 (five-scene launch screenshot replacement)
+Latest intent: Ship verified browser capture manifest screenshots; observe Cloudflare deploy; run live + post-cutover smoke.
+Last shipped: Full manifest screenshot replacement; install-card uses verified PNG captures for combat, Boss Rush, Loadout Builder, leaderboard, mobile controls; replaced SVG fallbacks.
+Session 117 shipped: Optional wave challenge contracts (non-boss waves, Dynamic Objective slot empty only).
+Session 116 shipped: MenuScreen → MenuPanels routing, legacy Command Center now uses shared panels.
 
-Shipped (S116)
-- Legacy MenuScreen now routes to shared MenuPanels.jsx (Rules, Controls, Most Wanted, Run History, Loadout Builder, Missions, Upgrades, What's New) instead of inline runtime branches. Coverage-backed.
+NOW-BUCKET (top 3)
+[ ] Observe GitHub Actions Cloudflare Pages deploy for Session 118 commit; rerun live smoke and post-cutover smoke.
+[ ] Physical launch QA: real PWA install standalone relaunch + one real gamepad/browser combo (device-evidence gated).
+[ ] HomeV2 v1 fallback retirement evidence: requires production Lighthouse LCP/CLS and funnel data.
 
-Trust Posture
-- Unchanged. HomeV2 is default launch surface; full legacy v1 deletion still gated on production Lighthouse/funnel evidence. Replay gate remains advisory/heuristic_pressure_estimate (no full enemy/physics parity).
+VERIFICATION GATES (all passing Session 118)
+npm run launch:screenshots 5/5; npm run assets:check; npm run launch:media-check; npm run lint; npm test 603/603; npm run build; git diff --check.
 
-Validation Baseline
-- Full npm test 600/600; lint clean; build passing; replay state-stepper 4/4; edge replay fixtures 4/4; launch media check passing; git diff --check clean.
+TRUST POSTURE
+No gameplay balance, leaderboard, replay trust label, analytics, auth, or paid-service behavior changed. Launch media honesty only.
 
-Now (top 3)
-- Observe GitHub Actions Cloudflare Pages deploy for S116 commit, then rerun live smoke + post-cutover smoke.
-- Full five-scene screenshot replacement (needs verified browser captures for boss, build/debrief, leaderboard before manifest/media update).
-- validate-replay Phase 2B: port deterministic replay slices (movement/aim + combat + contact-enemy) from src/utils/replayResim.js into edge function; currently unconsumed.
+BLOCKERS (top 3)
+1. Physical device QA (PWA install, gamepad/browser real combo) — evidence-gated, documented as deferred.
+2. Lighthouse production metrics (LCP/CLS) + funnel data for v1 fallback retirement — data-gated.
+3. Supabase Auth + Obelisk full migration — credential-gated (noted as pre-existing).
 
-Blockers (top 3)
-- Deterministic replay enemy/physics parity: larger-scope, touches live score/anti-cheat validation. Not force-shipped.
-- Five-scene screenshots: require real browser captures not yet taken.
-- Full legacy v1 deletion: waits on production evidence.
+HUMAN-BLOCKED ITEMS (age, status)
+- Post-cutover Cloudflare deploy verification — awaiting GitHub Actions completion (in-flight).
+- Physical QA pass (gamepad/browser, PWA install) — manual/browser work, no code blocker.
+- Five-scene screenshot capture (boss, build/debrief, leaderboard replace SVG) — manual capture work, no code blocker.
 
-Human-Blocked (device/credential/data-gated)
-- Physical launch QA: real PWA install standalone relaunch + one real gamepad/browser combo. Open since ~S109-110.
-- Supabase sync-studio-events live deploy: credential-gated (SUPABASE_ACCESS_TOKEN). Since ~S102.
-- PostHog/Sentry production analytics: dashboard/GitHub-secret gated. Since ~S104.
-- Itch.io publication: manual. Since ~S104.
-
-Next session: Confirm S116 Cloudflare deploy succeeded and rerun live + post-cutover smoke, then start validate-replay Phase 2B edge-function port.
+Next session: Observe deploy, rerun smoke checks; if passing, escalate physical QA and capture work or focus on Lighthouse/funnel metrics for v1 retirement decision.

@@ -841,3 +841,12 @@ Session 116 deploy verification: pushed `0e18930` to `origin/main`; GitHub Actio
 - Shipped mid-run wave challenge contracts: `objectiveDirector` now selects bounded optional contracts only when no Dynamic Objective is active; `App.jsx` starts/resolves contracts on wave transitions, awards bonus coins, clears HUD state, and records objective receipts; `HUD.jsx` renders the active contract chip.
 - Validation: focused objectiveDirector 12/12, touched-file ESLint clean, `npm run lint`, full `npm test` 603/603, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check`, `npm run build`, and `git diff --check` all passed.
 Session 117 deploy verification: pushed `dd3caca` to `origin/main`; GitHub Actions `brief-format-check` run `28635261186` and `Deploy to Cloudflare Pages` run `28635261198` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.
+
+## 2026-07-03 - Session 118 - Five-scene launch screenshot replacement
+
+- Ran `/arc` from clean synced `main`: no stale lock, no cut-off artifacts, session lock written, context-meter CONTINUE, secrets audit and blocker preflight preserved known dashboard/device/data gates.
+- Generated `docs/AUDIT_2026-07-03_3.json` / `.md` and refreshed `docs/IMPLEMENT_PLAN.md` for the highest repo-local launch-media item.
+- Shipped five-scene browser capture automation: combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls are all captured through Chromium against the local Vite app.
+- Updated `public/manifest.json` so all five screenshot entries point at verified browser PNG captures; registered new Boss Rush, Loadout Builder, and leaderboard capture assets.
+- Hardened `scripts/validate-launch-media.mjs` so manifest PNG screenshots must be production-ready browser captures, listed in the verified capture set, readable as PNGs, and dimension-correct.
+- Validation: `npm run launch:screenshots` 5/5, `npm run assets:check`, `npm run launch:media-check`, `npm run lint`, full `npm test` 603/603, `npm run build`, and `git diff --check` all passed.

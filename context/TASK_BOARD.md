@@ -126,7 +126,7 @@ Public-safe launch roadmap summary.
 - [x] Social retention layer — **DONE S52**: `socialRetention.js` now drives weekly contracts, featured seeds, revenge links, fresh ghost cards, and async competition prompts in `RunHistoryPanel`
 - [x] Social rivalry loop — **DONE S52**: rivalry streaks, featured seed cards, revenge links, and ghost-board summaries now surface stored rivalry data as a visible player-facing loop
 - [x] Telemetry/balance loop — **DONE S52**: normalized local Studio events now capture perk picks, route picks, first-death wave, abandonments, score-submit results/rejections, and weekly contract progress
-- [ ] [SIL:1] Replace launch-asset SVG placeholders with real PNG gameplay screenshots — improves Itch.io listing fidelity and Chrome install-card presentation (human action: screenshot capture)
+- [x] [SIL:1] **DONE S118** Replace launch-asset SVG placeholders with real PNG gameplay screenshots - manifest now uses five verified browser-capture PNGs, including Boss Rush, Loadout Builder, leaderboard, combat, and mobile controls.
 - [x] Meta clarity pass — **DONE S51**: `metaClarity.js` + wired into `menuGuidance.js`, HomeV2, MenuScreen; career-weakness-targeted upgrade recommendations in front-door action stack
 - [x] Security/trust v2 ops surface — **DONE S52**: `RunHistoryPanel` now exposes trust-op counts, rejection summaries, anomaly guidance, and score-submit outcome telemetry backed by normalized local Studio events
 - [x] App-runtime architecture pass, slice 8 — **DONE S51**: pickup spawning extracted to `src/systems/pickupSpawning.js` (pure fn + `getPickupWeights`); App.jsx wrapper collapses to 2 lines; 11 tests

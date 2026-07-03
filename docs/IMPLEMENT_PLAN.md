@@ -1,13 +1,13 @@
-# Implement Plan — 2026-07-03 Session 117
+# Implement Plan - 2026-07-03 Session 118
 
-Source: `docs/AUDIT_2026-07-03_2.json`
+Source: `docs/AUDIT_2026-07-03_3.json`
 
 ## Sequenced Order
 
 | Seq | Slug | Rung | Effort | Why this position |
 |---|---|---|---|---|
-| 1 | mid-run-wave-challenge-contracts | L2 | 1.5h | Highest repo-executable item from the current genius list; adds replay-safe engagement without touching credential, dashboard, device, or production-data gates. |
+| 1 | five-scene-launch-screenshot-capture-contract | L1 | 1h | Highest repo-executable public-launch truth gap; removes authored manifest fallbacks without touching external analytics, device, or production-data gates. |
 
 ## Validation Plan
 
-Focused first: `npx vitest run src\systems\objectiveDirector.test.js` and touched-file ESLint. Before closeout: full `npm run lint`, `npm test`, `npm run replay:state-stepper`, `npm run replay:edge-fixtures`, `npm run launch:media-check`, `npm run build`, and `git diff --check`.
+Regenerate all screenshots with `npm run launch:screenshots`, then prove manifest/media provenance with `npm run assets:check` and `npm run launch:media-check`. Before closeout: `npm run lint`, `npm test`, `npm run build`, and `git diff --check`.

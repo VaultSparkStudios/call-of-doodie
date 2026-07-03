@@ -1,3 +1,13 @@
+## 2026-07-03 - Session 118 - Five-scene launch screenshot replacement
+
+- Screenshot truth - `scripts/capture-launch-screenshots.mjs` captures five real Chromium scenes from the local Vite app: combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls.
+- Manifest truth - `public/manifest.json` now points every screenshot entry at a verified PNG in `public/launch-captures/`; the previous SVG launch assets remain proprietary promotional fallbacks only.
+- Provenance truth - `assets/visual-assets.json` records all five manifest screenshots as `sourceType: browser-capture`, `license: Proprietary`, and `status: production-ready`.
+- Gate truth - `scripts/validate-launch-media.mjs` verifies manifest PNG files exist, are listed in the asset registry, are production-ready browser captures, are included in `verifiedCaptures`, and match expected PNG dimensions.
+- Validation truth - screenshot capture 5/5, asset registry check passed, launch media check passed, lint/build passed, full `npm test` passed 603/603, and `git diff --check` passed.
+
+Overall status: green locally
+Last reviewed: 2026-07-03
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 

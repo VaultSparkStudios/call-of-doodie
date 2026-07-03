@@ -1,0 +1,54 @@
+{
+  "date": "2026-07-03",
+  "session": 118,
+  "project": "call-of-doodie",
+  "status": "shipped",
+  "releaseGate": "no-go-sparked",
+  "gameLoopReview": {
+    "loopTightness": 9,
+    "progressionCurve": 9,
+    "sessionEngagement": 9,
+    "retentionHooks": 9,
+    "soulFidelity": 10
+  },
+  "items": [
+    {
+      "rank": 1,
+      "slug": "five-scene-launch-screenshot-capture-contract",
+      "status": "shipped",
+      "rung": "L1",
+      "evidence": [
+        "scripts/capture-launch-screenshots.mjs captures combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls",
+        "public/manifest.json points all five screenshot entries at verified browser PNG captures",
+        "scripts/validate-launch-media.mjs enforces asset provenance, production-ready status, and PNG dimensions"
+      ]
+    },
+    {
+      "rank": 2,
+      "slug": "physical-device-launch-qa",
+      "status": "gated",
+      "reason": "Requires real mobile PWA install/relaunch and real gamepad/browser evidence"
+    },
+    {
+      "rank": 3,
+      "slug": "analytics-dashboard-allowlists",
+      "status": "gated",
+      "reason": "analytics capability remains missing and dashboard secrets are not repo-local"
+    },
+    {
+      "rank": 4,
+      "slug": "home-v2-retirement-evidence",
+      "status": "gated",
+      "reason": "Requires production Lighthouse and funnel data before removing legacy v1 fallback"
+    }
+  ],
+  "validation": {
+    "launchScreenshots": "5/5 captured",
+    "assetsCheck": "passed",
+    "launchMediaCheck": "passed",
+    "lint": "passed",
+    "tests": "603/603",
+    "build": "passed",
+    "diffCheck": "passed"
+  }
+}

@@ -533,3 +533,11 @@ Decision: Optional wave challenge contracts spawn only when `gs.activeObjective`
 Rationale: The S62 deferred item explicitly needed a design pass to avoid overlap with the Dynamic Objective System. Reusing the wave-clear boundary keeps the mechanic legible, avoids simultaneous competing objective prompts, and preserves existing leaderboard/replay trust behavior.
 
 Trade-off accepted: Contracts are intentionally small and occasional. They add mid-run motivation without guaranteeing every wave has a contract or adding new economy spend sinks.
+
+## 2026-07-03 - Session 118 - Manifest screenshots must use verified browser captures
+
+Decision: All five web-app manifest screenshots now use real Chromium captures from `public/launch-captures/` instead of authored SVG promotional fallbacks.
+
+Rationale: Install cards, store surfaces, and launch docs should show actual gameplay/UI evidence when capture automation can produce it. Authored SVG fallbacks remain useful promotional media, but they should not be the manifest screenshots once verified captures exist.
+
+Trade-off accepted: Capture automation seeds local browser state for stable Loadout Builder and leaderboard scenes. That state is fixture evidence for the screenshot, not a claim about production traffic or physical-device QA.

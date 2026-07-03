@@ -140,6 +140,39 @@
       "dimensions": { "width": 512, "height": 512 },
       "status": "production-ready",
       "notes": "Signature 3D-styled boss sprite exported from the proprietary internal asset pack."
+    },
+    {
+      "id": "real-boss-rush-capture",
+      "kind": "launch-screenshot",
+      "sourceType": "browser-capture",
+      "license": "Proprietary",
+      "sourcePath": "scripts/capture-launch-screenshots.mjs",
+      "runtimePath": "public/launch-captures/real-boss-rush.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "production-ready",
+      "notes": "Verified Boss Rush gameplay capture from Chromium against the local Vite app."
+    },
+    {
+      "id": "real-loadout-builder-capture",
+      "kind": "launch-screenshot",
+      "sourceType": "browser-capture",
+      "license": "Proprietary",
+      "sourcePath": "scripts/capture-launch-screenshots.mjs",
+      "runtimePath": "public/launch-captures/real-loadout-builder.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "production-ready",
+      "notes": "Verified loadout-builder capture from Chromium against the local Vite app."
+    },
+    {
+      "id": "real-leaderboard-capture",
+      "kind": "launch-screenshot",
+      "sourceType": "browser-capture",
+      "license": "Proprietary",
+      "sourcePath": "scripts/capture-launch-screenshots.mjs",
+      "runtimePath": "public/launch-captures/real-leaderboard.png",
+      "dimensions": { "width": 1280, "height": 720 },
+      "status": "production-ready",
+      "notes": "Verified leaderboard capture from Chromium against the local Vite app."
     }
   ]
 }

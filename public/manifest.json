@@ -41,38 +41,41 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Combat — Verified gameplay capture"
+      "label": "Combat - Verified gameplay capture"
     },
     {
-      "src": "/launch-assets/launch-boss.svg",
+      "src": "/launch-captures/real-boss-rush.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "Boss fight — Phase 2 boss encounters"
+      "label": "Boss Rush - Verified gameplay capture"
     },
     {
-      "src": "/launch-assets/launch-builds.svg",
+      "src": "/launch-captures/real-loadout-builder.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "Perk builds — Stack run-defining combos"
+      "label": "Loadout Builder - Verified gameplay capture"
     },
     {
-      "src": "/launch-assets/launch-leaderboard.svg",
+      "src": "/launch-captures/real-leaderboard.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "Leaderboard — Compete globally"
+      "label": "Leaderboard - Verified gameplay capture"
     },
     {
       "src": "/launch-captures/real-mobile-controls.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Mobile — Verified touch controls capture"
+      "label": "Mobile - Verified touch controls capture"
     }
   ],
   "prefer_related_applications": false,
-  "categories": ["games", "entertainment"],
+  "categories": [
+    "games",
+    "entertainment"
+  ],
   "lang": "en-US"
 }
