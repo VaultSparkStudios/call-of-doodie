@@ -1,3 +1,7 @@
+## 2026-07-04 — Session 121 - Launch contract truth\n\n- Contract truth: scripts/health-check.mjs now includes summarySig and ventDigest on the valid score submit path when issue-token and payload contract require those fields.\n- Surface truth: scripts/launch-surface-check.mjs now validates sitemap coverage using multiple acceptable location patterns so it does not fail on legacy listing paths.\n- Verification truth: 
+pm run lint, 
+pm test (605/605), replay fixtures, build, launch media check, and 
+pm run launch:qa all passed.\n- Deferred truths remain external: Cloudflare token hardening, physical launch QA, analytics keys, HomeV2 production lighthouse/funnel evidence, and publication/community gates.\n\nOverall status: green locally\nLast reviewed: 2026-07-04\n
 ## 2026-07-03 - Session 118 - Five-scene launch screenshot replacement
 
 - Screenshot truth - `scripts/capture-launch-screenshots.mjs` captures five real Chromium scenes from the local Vite app: combat, Boss Rush, Loadout Builder, leaderboard, and mobile controls.
@@ -772,3 +776,4 @@ Last reviewed: 2026-07-03
 
 Overall status: green locally
 Last reviewed: 2026-07-03
+

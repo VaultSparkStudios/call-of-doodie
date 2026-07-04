@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit Codex session",
+  "generatedAt": "2026-07-04",
+  "project": "call-of-doodie",
+  "type": "game",
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "protocol / launch confidence",
+      "effortHours": 1,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 17.4,
+      "slug": "maintain-launch-confidence",
+      "title": "Maintain launch confidence with protocol, test, and build verification.",
+      "status": "pending",
+      "why": "No open repo-editable items are visible in `context/TASK_BOARD.md`; remaining open work is human/device or external-keyed. The highest-value remaining work is to validate the launch-confidence contract end-to-end on current HEAD.",
+      "recipe": "Run blocker preflight, context-meter, task-board sanity checks, and the canonical verification set (lint, full test, replay/edge suites, launch media, live smoke, and build). Record outcomes in audit execution log and closeout write-back."
+    }
+  ],
+  "validation": [
+    "node scripts/write-session-lock.mjs --agent codex",
+    "node scripts/context-meter.mjs --json",
+    "node scripts/compact-handoff.mjs",
+    "node scripts/check-secrets.mjs --audit",
+    "node scripts/ops.mjs blocker-preflight",
+    "npm run lint",
+    "npm test",
+    "npm run replay:state-stepper",
+    "npm run replay:edge-fixtures",
+    "npm run launch:media-check",
+    "npm run launch:qa",
+    "npm run build"
+  ],
+  "skipped": [
+    {
+      "slug": "s60-cloudflare-token-rotation",
+      "reason": "Blocked by owner-side secret scoping and deployment-operations scope outside repo; requires founder approval and process execution."
+    },
+    {
+      "slug": "s60-physical-qa-pwa-gamepad",
+      "reason": "Manual physical verification on real mobile/gamepad combinations is outside repo-editable scope."
+    },
+    {
+      "slug": "analytics-key-provision",
+      "reason": "PostHog and Sentry dashboard keys are project/organization secrets not present in local repo and require provider-side setup."
+    },
+    {
+      "slug": "homev2-lcp-funnel-gate",
+      "reason": "Production Lighthouse/funnel evidence gate remains external and requires live measurement + founder sign-off."
+    }
+  ],
+  "deferrals": [
+    "External Cloudflare token narrow/rotation remains a founder execution step.",
+    "Physical PWA install + gamepad smoke remains manual device evidence.",
+    "PostHog and Sentry DSN/action keys remain external secret provisioning.",
+    "Itch publication and community entry points remain founder-owned assets.",
+    "HomeV2 v1 fallback retirement gate remains measurement-gated by live telemetry."
+  ]
+}

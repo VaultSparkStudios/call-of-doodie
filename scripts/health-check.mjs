@@ -83,7 +83,7 @@ async function main() {
       level: 2,
       difficulty: "normal",
       mode: "normal",
-      time: "0:00",
+      time: "0:02",
     },
   });
   assertStatus(missingToken, 400, "submit-score without token");
@@ -125,7 +125,7 @@ async function main() {
       mode: "normal",
       starterLoadout: "standard",
       inputDevice: "mouse",
-      time: "0:00",
+      time: "0:02",
       seed,
     },
   });
@@ -165,7 +165,7 @@ async function main() {
     inputDevice: "mouse",
     lastWords: "health-check clear",
     rank: "Noob Potato",
-    time: "0:00",
+    time: "0:02",
     seed,
   };
 
@@ -173,7 +173,22 @@ async function main() {
     baseUrl: functionsBaseUrl,
     anonKey,
     fn: "submit-score",
-    body: validSubmitBody,
+    body: {
+      ...validSubmitBody,
+      summarySig: validToken.data.summarySig,
+      eventDigest: {
+        v: 1,
+        seed,
+        mode: "normal",
+        difficulty: "normal",
+        scoreBand: Math.floor(validSubmitBody.score / 5000),
+        killBand: Math.floor(validSubmitBody.kills / 10),
+        damageBand: Math.floor(validSubmitBody.totalDamage / 25000),
+        streakBand: Math.floor(validSubmitBody.bestStreak / 10),
+        perkCount: 0,
+        achievementCount: validSubmitBody.achievements || 0,
+      },
+    },
   });
   assertStatus(validSubmit, 200, "submit-score valid payload");
   console.log("PASS submit-score accepts valid payload");
@@ -194,3 +209,6 @@ main().catch((error) => {
   console.error(`Health check failed: ${error.message}`);
   process.exitCode = 1;
 });
+
+
+

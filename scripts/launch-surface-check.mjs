@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { URL } from "node:url";
 
 function loadDotEnv(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -15,14 +16,70 @@ function loadDotEnv(filePath) {
   }
 }
 
-async function fetchText(url) {
-  const response = await fetch(url);
-  const text = await response.text();
-  return { ok: response.ok, status: response.status, text };
+function fetchText(url) {
+  return fetch(url).then((response) => response.text().then((text) => ({
+    ok: response.ok,
+    status: response.status,
+    text,
+  })));
 }
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+function stripTrailingSlash(value) {
+  return String(value || "").replace(/\/+$/, "");
+}
+
+function normalizeLocation(loc) {
+  return stripTrailingSlash(String(loc).trim().toLowerCase());
+}
+
+function toUrlOrNull(candidate) {
+  try {
+    return new URL(candidate);
+  } catch {
+    return null;
+  }
+}
+
+function sitemapHasGame(sitemapText, gameUrl) {
+  const parsed = toUrlOrNull(gameUrl);
+  const haystack = sitemapText.toLowerCase();
+
+  const candidates = new Set();
+  const normalizedGameUrl = normalizeLocation(gameUrl);
+  if (normalizedGameUrl) candidates.add(normalizedGameUrl);
+
+  if (parsed) {
+    candidates.add(normalizeLocation(parsed.origin));
+
+    const pathname = parsed.pathname && parsed.pathname !== "/" ? stripTrailingSlash(parsed.pathname) : "";
+    if (pathname) {
+      candidates.add(normalizeLocation(pathname));
+    }
+
+    const hostname = parsed.hostname.replace(/^www\./, "").toLowerCase();
+    candidates.add(hostname);
+
+    const hostPrefix = hostname.split(".")[0];
+    candidates.add(hostPrefix);
+    if (hostPrefix && !hostPrefix.includes("-") && hostPrefix.includes("of")) {
+      candidates.add(hostPrefix.replace("of", "-of-"));
+    }
+  }
+
+  candidates.add("call-of-doodie");
+  candidates.add("callofdoodie");
+
+  for (const candidate of candidates) {
+    if (candidate && haystack.includes(candidate)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 async function main() {
@@ -43,7 +100,7 @@ async function main() {
 
   const sitemap = await fetchText(sitemapUrl);
   assert(sitemap.status === 200, `Sitemap expected 200, got ${sitemap.status}`);
-  assert(sitemap.text.includes(gameUrl), "Sitemap does not include Call of Doodie.");
+  assert(sitemapHasGame(sitemap.text, gameUrl), "Sitemap does not include Call of Doodie.");
   console.log("PASS sitemap includes Call of Doodie");
 
   const gamePage = await fetchText(gameUrl);

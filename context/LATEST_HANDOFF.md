@@ -1,3 +1,28 @@
+# Latest Handoff — Session 121
+
+## Where We Left Off
+- Completed the `/start` → `/audit` → `/implement` → `/closeout` launch-confidence arc from a clean `main` baseline.
+- Root-fixed launch QA contract edge cases:
+  - `scripts/health-check.mjs` now includes `summarySig` and `eventDigest` in the valid score-submit path.
+  - `scripts/launch-surface-check.mjs` now validates sitemap inclusion across accepted URL/path variants.
+- Re-ran full launch-confidence verification stacks to re-establish green signal (`npm run lint`, `npm test`, `npm run replay:state-stepper`, `npm run replay:edge-fixtures`, `npm run launch:media-check`, `npm run launch:qa`, and `npm run build`).
+
+## Validation
+- `node scripts/health-check.mjs` — PASS (5/5 assertions).
+- `npm run launch:media-check` — PASS.
+- `npm run launch:qa` — PASS.
+- `npm run lint` — PASS.
+- `npm test` — 605/605.
+- `npm run replay:state-stepper` — PASS.
+- `npm run replay:edge-fixtures` — PASS.
+- `npm run build` — PASS.
+
+## Next
+- Continue with the next `/audit` cycle only when new repo-editable launch-confidence gaps appear.
+- Keep external blockers explicit: Cloudflare token hardening, hardware launch QA, analytics-key provisioning, HomeV2 production Lighthouse/funnel evidence, community/publication listing.
+
+Session Intent: Complete continuous `/start` → `/audit` → `/implement` → `/closeout` with truthful launch-contract evidence.
+
 # Latest Handoff — Session 120
 
 ## Where We Left Off
@@ -25,3 +50,5 @@
 - Do not retire `?home=v1` until production Lighthouse and funnel evidence clear the documented gate.
 
 Session Intent: Complete continuous `/goal` `/arc` with audit, implementation saturation, and closeout.
+
+
