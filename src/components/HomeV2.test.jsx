@@ -99,6 +99,29 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/SUPPORT/);
   });
 
+  it("renders a fixed bottom nav on mobile instead of inline tabs", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+    // Fixed bottom nav (role=navigation) should be present with all 4 labels
+    const nav = container.querySelector("nav[aria-label='Sections']");
+    expect(nav).toBeTruthy();
+    const navText = nav.textContent;
+    expect(navText).toMatch(/CAREER/);
+    expect(navText).toMatch(/CODEX/);
+    expect(navText).toMatch(/SETTINGS/);
+    expect(navText).toMatch(/SUPPORT/);
+    // Inline tab row should not be rendered on mobile
+    const allButtons = [...container.querySelectorAll("button")];
+    const inlineTabButtons = allButtons.filter(b =>
+      b.textContent.includes("📊 CAREER") || b.textContent.includes("📖 CODEX")
+    );
+    expect(inlineTabButtons).toHaveLength(0);
+  });
+
   it("shows a journey card and keeps Command Center collapsed by default", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
