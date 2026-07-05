@@ -16,6 +16,7 @@ import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, saveInputCalibration } from "../utils/inputCalibration.js";
+import { pointerAimBucket } from "../systems/gameStep.js";
 import { buildPwaInstallReceipt, detectServiceWorkerReady, detectStandaloneDisplay, loadPwaInstallAttempt } from "../utils/pwaInstallReadiness.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
@@ -1025,50 +1026,149 @@ export default function HomeV2(props) {
 }
 
 function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
-  const targetStyle = () => ({
-    minHeight: 64,
-    borderRadius: 8,
-    border: "1px solid rgba(0,229,255,0.28)",
-    background: "rgba(0,229,255,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#B9F3FF",
-    fontSize: 12,
-    fontWeight: 900,
-    letterSpacing: 1,
-    textAlign: "center",
-  });
-  const device = controllerType && controllerType !== "controller"
-    ? controllerType.toUpperCase()
-    : "MOUSE / TOUCH / CONTROLLER";
+  const [covered, setCovered] = useState(new Set());
+  const [autoComplete, setAutoComplete] = useState(false);
+  const zoneRef = useRef(null);
+  const rafRef = useRef(null);
+  const coveredRef = useRef(new Set());
+
+  const isGamepad = Boolean(controllerType && !["none", "mouse"].includes(String(controllerType || "").toLowerCase()));
+
+  const addBucket = useCallback((bucket) => {
+    if (coveredRef.current.has(bucket)) return;
+    const next = new Set(coveredRef.current);
+    next.add(bucket);
+    coveredRef.current = next;
+    setCovered(new Set(next));
+  }, []);
+
+  const trackPointer = useCallback((clientX, clientY) => {
+    const el = zoneRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const dx = clientX - (r.left + r.width / 2);
+    const dy = clientY - (r.top + r.height / 2);
+    if (Math.hypot(dx, dy) < Math.min(r.width, r.height) * 0.15) return;
+    addBucket(pointerAimBucket(Math.atan2(dy, dx)));
+  }, [addBucket]);
+
+  // Poll the gamepad right stick for controller users
+  useEffect(() => {
+    if (!isGamepad) return;
+    const poll = () => {
+      if (coveredRef.current.size >= 4) return;
+      const pads = typeof navigator !== "undefined" ? (navigator.getGamepads?.() || []) : [];
+      for (const gp of pads) {
+        if (!gp) continue;
+        const ax = gp.axes.length > 2 ? gp.axes[2] : gp.axes[0];
+        const ay = gp.axes.length > 3 ? gp.axes[3] : gp.axes[1];
+        if (Math.hypot(ax || 0, ay || 0) > 0.55) {
+          addBucket(pointerAimBucket(Math.atan2(ay || 0, ax || 0)));
+        }
+      }
+      rafRef.current = requestAnimationFrame(poll);
+    };
+    rafRef.current = requestAnimationFrame(poll);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [isGamepad, addBucket]);
+
+  // Auto-complete when all 4 directions covered
+  useEffect(() => {
+    if (covered.size >= 4 && !autoComplete) {
+      setAutoComplete(true);
+      const t = setTimeout(onVerify, 750);
+      return () => clearTimeout(t);
+    }
+  }, [covered.size, autoComplete, onVerify]);
+
+  const deviceLabel = isGamepad ? "RIGHT STICK" : "MOUSE / TOUCH";
+  const instruction = isGamepad
+    ? "Push the right stick in each direction"
+    : "Move the cursor through each direction zone";
+
+  const zoneBox = (key, label) => {
+    const ok = covered.has(key);
+    return (
+      <div style={{
+        minHeight: 60, borderRadius: 8,
+        border: `1px solid ${ok ? "rgba(0,255,136,0.55)" : "rgba(0,229,255,0.28)"}`,
+        background: ok ? "rgba(0,255,136,0.1)" : "rgba(0,229,255,0.06)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        color: ok ? "#00FF88" : "#B9F3FF",
+        fontSize: 11, fontWeight: 900, letterSpacing: 1,
+        textAlign: "center", transition: "all 0.18s ease",
+        userSelect: "none",
+      }}>
+        {ok ? `✓ ${label}` : label}
+      </div>
+    );
+  };
+
   return (
     <div style={PANEL}>
-      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
+      <div style={{
+        width: "min(460px, 100%)", margin: "auto 0", padding: 18,
+        borderRadius: 10, background: "rgba(8,12,18,0.98)",
+        border: `1px solid ${autoComplete ? "rgba(0,255,136,0.45)" : "rgba(0,229,255,0.32)"}`,
+        color: "#EEE", textAlign: "center",
+        boxShadow: "0 14px 40px rgba(0,0,0,0.65)",
+        transition: "border-color 0.3s",
+      }}>
         <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
-        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
-        <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
-          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+        <h2 style={{ margin: "8px 0 4px", fontSize: 20, color: autoComplete ? "#00FF88" : "#FFF", letterSpacing: 1, transition: "color 0.3s" }}>
+          {autoComplete ? "ALL CLEAR — Saving…" : "Aim Through Each Direction"}
+        </h2>
+        <p style={{ margin: "0 auto 10px", maxWidth: 340, color: "#888", fontSize: 11, lineHeight: 1.5, letterSpacing: 0.5 }}>
+          {covered.size > 0 ? `${covered.size}/4 directions · ` : ""}{deviceLabel} · {instruction}
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
+        {/* Interactive zone grid — mousemove / touchmove track direction coverage */}
+        <div
+          ref={zoneRef}
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 10px", maxWidth: 290, touchAction: "none" }}
+          onMouseMove={e => trackPointer(e.clientX, e.clientY)}
+          onTouchMove={e => { e.preventDefault(); if (e.touches[0]) trackPointer(e.touches[0].clientX, e.touches[0].clientY); }}
+        >
           <div />
-          <div style={targetStyle("north")}>NORTH</div>
+          {zoneBox("north", "NORTH")}
           <div />
-          <div style={targetStyle("west")}>WEST</div>
-          <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
-          <div style={targetStyle("east")}>EAST</div>
+          {zoneBox("west", "WEST")}
+          <div style={{
+            minHeight: 72, borderRadius: 8,
+            border: `1px solid ${autoComplete ? "rgba(0,255,136,0.4)" : "rgba(255,107,53,0.4)"}`,
+            background: autoComplete ? "rgba(0,255,136,0.08)" : "rgba(255,107,53,0.08)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: autoComplete ? "#00FF88" : "#FFB36B",
+            fontSize: autoComplete ? 18 : 11, fontWeight: 900,
+            transition: "all 0.3s",
+          }}>
+            {autoComplete ? "✓" : "PLAYER"}
+          </div>
+          {zoneBox("east", "EAST")}
           <div />
-          <div style={targetStyle("south")}>SOUTH</div>
+          {zoneBox("south", "SOUTH")}
           <div />
         </div>
+        {/* Progress bar */}
+        <div style={{ height: 3, background: "rgba(255,255,255,0.07)", borderRadius: 4, margin: "0 auto 14px", maxWidth: 290 }}>
+          <div style={{ height: "100%", background: autoComplete ? "#00FF88" : "#00E5FF", borderRadius: 4, width: `${(covered.size / 4) * 100}%`, transition: "width 0.15s ease" }} />
+        </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            VERIFY CONTROLS
+          <button
+            onClick={onVerify}
+            style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}
+          >
+            {covered.size >= 4 ? "VERIFIED ✓" : covered.size > 0 ? `CONFIRM (${covered.size}/4)` : "SKIP / CONFIRM"}
           </button>
-          <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            OPEN DIAGNOSTICS
+          <button
+            onClick={onDiagnostics}
+            style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}
+          >
+            DIAGNOSTICS
           </button>
-          <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+          <button
+            onClick={onClose}
+            style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}
+          >
             LATER
           </button>
         </div>

@@ -4,6 +4,7 @@ import {
   applyPlayerMovement,
   computePointerAimAngle,
   angleToUnitVector,
+  pointerAimBucket,
   buildPointerAimSweepReport,
 } from "./gameStep.js";
 
@@ -79,6 +80,30 @@ describe("applyPlayerMovement", () => {
     // Player should be pushed away from obstacle center (50, 50)
     const dist = Math.hypot(player.x - 50, player.y - 50);
     expect(dist).toBeGreaterThanOrEqual(16); // pushed to at least 17px from nearest obstacle edge
+  });
+});
+
+describe("pointerAimBucket — used by interactive aim calibration", () => {
+  it("classifies cardinal angles as the correct direction", () => {
+    expect(pointerAimBucket(0)).toBe("east");
+    expect(pointerAimBucket(Math.PI)).toBe("west");
+    expect(pointerAimBucket(-Math.PI / 2)).toBe("north");
+    expect(pointerAimBucket(Math.PI / 2)).toBe("south");
+  });
+
+  it("classifies near-cardinal angles to the dominant axis", () => {
+    expect(pointerAimBucket(Math.PI / 6)).toBe("east");    // 30° — x dominant
+    expect(pointerAimBucket(-Math.PI / 6)).toBe("east");   // -30° — x dominant
+    expect(pointerAimBucket(Math.PI / 3)).toBe("south");   // 60° — y dominant
+    expect(pointerAimBucket(-Math.PI / 3)).toBe("north");  // -60° — y dominant
+  });
+
+  it("covers all 4 buckets sweeping a full circle in 30° steps", () => {
+    const buckets = new Set();
+    for (let deg = 0; deg < 360; deg += 30) {
+      buckets.add(pointerAimBucket((deg * Math.PI) / 180));
+    }
+    expect(buckets).toEqual(new Set(["east", "west", "north", "south"]));
   });
 });
 
