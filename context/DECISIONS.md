@@ -555,3 +555,11 @@ Decision: If a local Studio OS prompt routes to another local prompt, that targe
 Rationale: `prompts/start.md` already routed Type A/B projects to `prompts/initiate.md`, but the file was absent until this session. Canon conformance caught the gap; adding the file alone would not prevent recurrence.
 
 Trade-off accepted: `prompts/initiate.md` is a slim wrapper pointing to `docs/SESSION_PROTOCOL.md` section 4 instead of duplicating every private Studio OS implementation detail in this public repo.
+
+## 2026-07-06 — Session 121 continuation — Verification-only arcs must still root-fix protocol lies
+
+Decision: When product work is externally gated, a repo-local `/arc` should ship the highest verified launch-confidence/protocol fix rather than invent gameplay or analytics work. This session's real fix was restoring `node scripts/ops.mjs doctor` because startup/closeout surfaces already required it.
+
+Rationale: Observability honesty is a product quality bar for this repo. A health command named in canonical startup/closeout instructions but missing from the local router makes future green signals weaker and can turn a real doctor result into a phantom blocker or stale brief.
+
+Trade-off accepted: No new player-facing feature shipped. The arc improved the launch process by making the health path executable and re-verifying the playable build, replay gates, live site, and launch surfaces.

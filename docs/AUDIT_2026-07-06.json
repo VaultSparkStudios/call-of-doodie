@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit Codex session",
+  "generatedAt": "2026-07-06",
+  "project": "call-of-doodie",
+  "type": "game",
+  "meta": {
+    "generatedAt": "2026-07-06",
+    "project": "call-of-doodie",
+    "type": "game",
+    "combinedPriority": 32.0,
+    "top3": [
+      "repo-local-doctor-route"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "infrastructure / protocol / launch confidence",
+      "effortHours": 0.5,
+      "impact": 8,
+      "innovation": 4,
+      "priority": 32.0,
+      "slug": "repo-local-doctor-route",
+      "title": "Restore `node scripts/ops.mjs doctor` as an executable local health command.",
+      "status": "shipped",
+      "why": "Live `/start` evidence showed `docs/STARTUP_BRIEF.md` tells agents to run `node scripts/ops.mjs doctor`, and `docs/SESSION_PROTOCOL.md` requires it at closeout, but `scripts/ops.mjs` returned `Unknown command: doctor`. That makes the launch-confidence health path non-executable and can mask doctor state during future arcs.",
+      "recipe": "Add a `doctor` subcommand to `scripts/ops.mjs` that proxies to the existing Studio Ops doctor path with the current repo as cwd, document it in help output, then verify help, JSON/update execution, startup brief render, and protocol drift gates."
+    }
+  ],
+  "validation": [
+    "node scripts/ops.mjs help",
+    "node scripts/ops.mjs doctor --update-json --quiet",
+    "node scripts/render-startup-brief.mjs",
+    "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md",
+    "npm run protocol:drift -- --json",
+    "npm run lint",
+    "npm test",
+    "npm run replay:state-stepper",
+    "npm run replay:edge-fixtures",
+    "npm run launch:media-check",
+    "npm run build"
+  ],
+  "skipped": [
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "Still requires PostHog/Sentry dashboard credentials or project-scoped DSN confirmation; `node scripts/check-secrets.mjs --audit` reports no ready project capabilities. Do not fabricate analytics evidence."
+    },
+    {
+      "slug": "physical-pwa-gamepad-qa",
+      "reason": "Still requires real mobile/browser install flow and one real controller/browser combination. Existing PWA/input receipts are local evidence only, not physical QA completion."
+    },
+    {
+      "slug": "homev2-retirement",
+      "reason": "Still gated by production Lighthouse and funnel evidence; no live metric was available in repo state."
+    },
+    {
+      "slug": "itch-community-publication",
+      "reason": "Founder publication/community entry point remains outside repo-local automation."
+    }
+  ],
+  "deferrals": [
+    "Cloudflare token narrowing remains an owner/operations security action after domain stabilization.",
+    "PostHog/Sentry setup remains secrets/dashboard gated.",
+    "HomeV2 v1 fallback retirement remains data gated.",
+    "Itch.io and community publication remain founder-owned launch actions."
+  ],
+  "executionLog": [
+    {
+      "notes": "Added the doctor subcommand to scripts/ops.mjs, verified help output, doctor --update-json, doctor --json blockingFailing=0, startup brief render/validation, protocol drift 25/25, lint, full 605/605 tests, replay gates, launch media, launch:qa, build, and diff check.",
+      "status": "shipped",
+      "slug": "repo-local-doctor-route"
+    },
+    {
+      "notes": "Regenerated docs/INNOVATION_PACK.md; all high-rank candidates remain analytics/dashboard, physical-device, HomeV2 production-data, publication/community, or founder-decision gated. No fabricated data or repo churn.",
+      "status": "deferred",
+      "slug": "innovation-pack-external-gates"
+    }
+  ]
+}

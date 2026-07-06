@@ -26,6 +26,7 @@ Commands:
   action-queue     Print the current Now queue from context/TASK_BOARD.md
   blocker-preflight  Check human-blocked items against local secret readiness
   closeout, c      Project-local closeout autopilot
+  doctor           Proxy to Studio Ops doctor for project health checks
   feedback-score   Proxy to Studio Ops feedback-score
   genius-list      Generate or print the cached local genius list
   innovation-pack  Write docs/INNOVATION_PACK.md from repo-local open work and genius signals
@@ -197,6 +198,9 @@ switch (command) {
   case "c":
   case "closeout":
     runNode(path.join(__dirname, "closeout-autopilot.mjs"), args);
+    break;
+  case "doctor":
+    runNode(STUDIO_OPS, ["doctor", ...args]);
     break;
   case "feedback-score":
     runNode(STUDIO_OPS, ["feedback-score", ...args]);

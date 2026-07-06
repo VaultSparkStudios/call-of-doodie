@@ -230,23 +230,29 @@ function gitChangeSummary() {
 }
 
 function agentMemoryRecentlyTouched() {
-  // Check whether agent memory (~/.claude/projects/<slug>/memory) has files
-  // modified within the last 24h. Best-effort — cross-platform path resolution
-  // varies; absence is reported as "·" rather than failing.
+  // Check whether Claude or Codex agent memory has files modified within the
+  // last 24h. Best-effort — absence is reported as "·" rather than failing.
   const home = os?.homedir?.() || process.env.HOME || process.env.USERPROFILE;
   if (!home) return false;
   const slug = path.basename(ROOT);
-  // Project memory dirs use a prefix-encoded form; fall back to a glob scan.
-  const projectsDir = path.join(home, '.claude', 'projects');
-  if (!fs.existsSync(projectsDir)) return false;
+  const cutoff = Date.now() - 24 * 3600_000;
+
+  const candidates = [
+    path.join(home, '.codex', 'memories', slug.toLowerCase()),
+    path.join(home, '.codex', 'memories', slug),
+  ];
+
   try {
-    const cutoff = Date.now() - 24 * 3600_000;
-    for (const entry of fs.readdirSync(projectsDir)) {
-      if (!entry.includes(slug)) continue;
-      const memDir = path.join(projectsDir, entry, 'memory');
-      if (!fs.existsSync(memDir)) continue;
-      for (const f of fs.readdirSync(memDir)) {
-        const stat = fs.statSync(path.join(memDir, f));
+    const projectsDir = path.join(home, '.claude', 'projects');
+    if (fs.existsSync(projectsDir)) {
+      for (const entry of fs.readdirSync(projectsDir)) {
+        if (entry.includes(slug)) candidates.push(path.join(projectsDir, entry, 'memory'));
+      }
+    }
+    for (const dir of candidates) {
+      if (!fs.existsSync(dir)) continue;
+      for (const f of fs.readdirSync(dir)) {
+        const stat = fs.statSync(path.join(dir, f));
         if (stat.mtimeMs > cutoff) return true;
       }
     }
@@ -279,7 +285,7 @@ function writeBackCoverage() {
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
   // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
   result.push({
-    file: 'agent memory (~/.claude/projects/<slug>/memory/)',
+    file: 'agent memory (~/.codex or ~/.claude project memory)' ,
     touched: agentMemoryRecentlyTouched(),
   });
   return result;
@@ -294,7 +300,7 @@ function daysSinceISO(iso) {
 
 function postSessionSignals(status) {
   const doctor = status?.doctorScore && typeof status.doctorScore === 'object'
-    ? `${status.doctorScore.passing ?? '?'}/${status.doctorScore.total ?? '?'}`
+    ? `${status.doctorScore.passing ?? status.doctorScore.ran ?? '?'}/${status.doctorScore.total ?? '?'}`
     : (typeof status?.doctorScore === 'number' ? String(status.doctorScore) : '—');
   const tests = status?.testsPassing != null && status?.testsTotal != null
     ? `${status.testsPassing}/${status.testsTotal}`

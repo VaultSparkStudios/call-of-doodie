@@ -1,28 +1,33 @@
-# Latest Handoff — Session 121
+# Latest Handoff — Session 121 continuation
 
 ## Where We Left Off
-- Completed the `/start` → `/audit` → `/implement` → `/closeout` launch-confidence arc from a clean `main` baseline.
-- Root-fixed launch QA contract edge cases:
-  - `scripts/health-check.mjs` now includes `summarySig` and `eventDigest` in the valid score-submit path.
-  - `scripts/launch-surface-check.mjs` now validates sitemap inclusion across accepted URL/path variants.
-- Re-ran full launch-confidence verification stacks to re-establish green signal (`npm run lint`, `npm test`, `npm run replay:state-stepper`, `npm run replay:edge-fixtures`, `npm run launch:media-check`, `npm run launch:qa`, and `npm run build`).
+- Completed the requested continuous Codex `/arc` from clean synced `main`: `/start` → `/audit` → `/implement` saturation → `/closeout` verification.
+- Shipped the repo-local doctor route root fix: `scripts/ops.mjs` now exposes `doctor` and proxies to the existing Studio Ops doctor path, making the startup/closeout health command executable from this repo.
+- Generated `docs/AUDIT_2026-07-06.json` / `.md`, refreshed `docs/IMPLEMENT_PLAN.md`, regenerated `docs/INNOVATION_PACK.md`, refreshed `docs/STARTUP_BRIEF.md`, and updated stale doctor truth notes.
+- Innovation-pack review found no additional agent-owned product item: remaining candidates are analytics/dashboard, physical-device, HomeV2 production-data, publication/community, or founder-decision gated.
 
 ## Validation
-- `node scripts/health-check.mjs` — PASS (5/5 assertions).
-- `npm run launch:media-check` — PASS.
-- `npm run launch:qa` — PASS.
+- `node scripts/ops.mjs help` — PASS; doctor listed.
+- `node scripts/ops.mjs doctor --update-json --quiet` — PASS; doctorScore written.
+- `node scripts/ops.mjs doctor --json --quiet` — PASS; `blockingFailing: 0`, `failing: 0`.
+- `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md` — PASS.
+- `npm run protocol:drift -- --json` — PASS, 25/25 present.
 - `npm run lint` — PASS.
-- `npm test` — 605/605.
-- `npm run replay:state-stepper` — PASS.
-- `npm run replay:edge-fixtures` — PASS.
+- `npm test` — 605/605 passing across 71 files.
+- `npm run replay:state-stepper` — PASS, 4 fixtures.
+- `npm run replay:edge-fixtures` — PASS, 4 fixtures.
+- `npm run launch:media-check` — PASS.
+- `npm run launch:qa` — PASS: health 5/5, live site 5/5, launch surface checks passed.
 - `npm run build` — PASS.
+- `git diff --check` — PASS.
 
 ## Next
-- Continue with the next `/audit` cycle only when new repo-editable launch-confidence gaps appear.
-- Keep external blockers explicit: Cloudflare token hardening, hardware launch QA, analytics-key provisioning, HomeV2 production Lighthouse/funnel evidence, community/publication listing.
+- Hardware available: complete physical launch QA for one real PWA install/relaunch and one real gamepad/browser combo.
+- Credentials available: set project-scoped PostHog/Sentry secrets and dashboard allowlists through the secrets gateway; do not wire the unconfirmed Sentry DSN blindly.
+- Data available: capture production Lighthouse/funnel evidence before retiring `?home=v1`.
+- Otherwise continue repo-local launch-confidence work without fabricating external evidence.
 
-Session Intent: Complete continuous `/start` → `/audit` → `/implement` → `/closeout` with truthful launch-contract evidence.
-
+Session Intent: Complete continuous `/arc` with truthful audit, implementation saturation, closeout, direct-to-main push, and no fabricated gates.
 # Latest Handoff — Session 120
 
 ## Where We Left Off

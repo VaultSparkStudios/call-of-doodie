@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 121 completed launch-contract closure and green `launch:qa` verification (`health-check`, `launch-surface-check`, lint, tests, build, replay fixtures).",
-  "nextMilestone": "If hardware is available: complete the real PWA install/relaunch and one physical gamepad/browser QA pass; otherwise continue repo-local launch-confidence work without fabricating external analytics or production evidence.",
+  "currentFocus": "Session 121 continuation restored the repo-local doctor route and reverified launch confidence (doctor blockingFailing 0, protocol drift 25/25, lint, 605/605 tests, replay gates, launch media, launch:qa, build).",
+  "nextMilestone": "If hardware is available: complete real PWA install/relaunch and one physical gamepad/browser QA pass; otherwise continue repo-local launch-confidence work without fabricating analytics, dashboard, or production data evidence.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -55,20 +55,20 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-04",
+  "lastUpdated": "2026-07-06",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green",
-  "truthAuditLastRun": "2026-07-03",
+  "truthAuditLastRun": "2026-07-06",
   "ignisScore": 46424,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-06-19",
   "silSession": 121,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 2,
+  "silVelocity": 1,
   "silDebt": "decreasing",
-  "silLastSession": "2026-07-03",
+  "silLastSession": "2026-07-06",
   "currentSession": 121,
   "sessionMode": "founder",
   "lastAgent": "codex",
@@ -102,5 +102,17 @@
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
-  "stagingType": "none"
+  "stagingType": "github-pages",
+  "doctorScore": {
+    "date": "2026-07-06",
+    "overallPass": true,
+    "passing": 107,
+    "warning": 21,
+    "failing": 0,
+    "blockingFailing": 0,
+    "skipped": 2,
+    "ran": 128,
+    "total": 130,
+    "score": 84
+  }
 }

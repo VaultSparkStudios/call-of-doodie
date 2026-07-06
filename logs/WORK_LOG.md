@@ -874,3 +874,11 @@ Session 119 deploy verification: pushed `bb2e19e` to `origin/main`; GitHub Actio
 - Validation: protocol drift 25/25 ok, canon conformance 0 GAP / CANON-003 conformed, analytics capability MISSING by secrets check, `npm run lint`, `npm test` 605/605, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, `npm run build`, windows-hide check, and `git diff --check` all passed.
 
 Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions brief-format-check run 28686453624 and Deploy to Cloudflare Pages run 28686453628 both succeeded. Post-deploy verification passed: npm run live:site-check 5/5, npm run post-cutover:smoke 5/5, and npm run replay:trust-smoke 3/3.
+
+## 2026-07-06 — Session 121 continuation — Repo-local doctor route and launch-confidence arc
+
+- Ran continuous Codex `/arc` from clean synced `main`: `git pull --rebase origin main`, session lock, Windows Git guard, context meter, secrets audit, blocker preflight, canon adoption/conformance checks, startup brief render/validation, and live genius-list review.
+- Generated `docs/AUDIT_2026-07-06.json` / `.md` and refreshed `docs/IMPLEMENT_PLAN.md` for the verified repo-local gap: `node scripts/ops.mjs doctor` was referenced by startup/closeout protocols but rejected by the local router.
+- Shipped `scripts/ops.mjs doctor` as a local proxy to the Studio Ops doctor path and reconciled stale doctor truth notes in `context/CURRENT_STATE.md` and `context/TRUTH_AUDIT.md`.
+- Regenerated `docs/INNOVATION_PACK.md`; all high-rank second-order candidates remain analytics/dashboard, physical-device, HomeV2 production-data, publication/community, or founder-decision gated, so they were deferred with evidence rather than fabricated.
+- Validation: `node scripts/ops.mjs help`, `node scripts/ops.mjs doctor --update-json --quiet`, `node scripts/ops.mjs doctor --json --quiet` (`blockingFailing: 0`), startup brief render/validation, protocol drift 25/25, `npm run lint`, full `npm test` 605/605, replay state-stepper 4/4, edge replay fixtures 4/4, launch media check, `npm run launch:qa`, `npm run build`, and `git diff --check` all passed.

@@ -1,0 +1,47 @@
+{
+  "session": "121_2026-07-06",
+  "date": "2026-07-06",
+  "headline": "Restored the repo-local doctor command and reverified launch confidence without fabricating external gates.",
+  "items": [
+    {
+      "title": "Repo-local doctor route",
+      "projectImpact": 8,
+      "ecosystemImpact": 7,
+      "evidence": "scripts/ops.mjs now routes doctor to Studio Ops; doctor JSON reports blockingFailing 0."
+    },
+    {
+      "title": "Truth surface reconciliation",
+      "projectImpact": 6,
+      "ecosystemImpact": 5,
+      "evidence": "CURRENT_STATE, TRUTH_AUDIT, STARTUP_BRIEF, IMPLEMENT_PLAN, and audit artifacts now describe the executable health path."
+    },
+    {
+      "title": "Launch-confidence verification",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "evidence": "lint, 605/605 tests, replay fixtures, launch media, launch:qa, build, and diff check passed."
+    }
+  ],
+  "validation": [
+    "node scripts/ops.mjs doctor --json --quiet -> blockingFailing 0, failing 0",
+    "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md -> pass",
+    "npm run protocol:drift -- --json -> 25/25 present",
+    "npm run lint -> pass",
+    "npm test -> 605/605",
+    "npm run replay:state-stepper -> 4 fixtures",
+    "npm run replay:edge-fixtures -> 4 fixtures",
+    "npm run launch:media-check -> pass",
+    "npm run launch:qa -> health 5/5, live site 5/5, launch surface pass",
+    "npm run build -> pass",
+    "git diff --check -> pass"
+  ],
+  "followUps": [
+    "Complete physical PWA install/relaunch QA and one real gamepad/browser pass when hardware is available.",
+    "Confirm project-scoped PostHog/Sentry credentials before setting GitHub Actions secrets.",
+    "Capture production Lighthouse/funnel evidence before retiring HomeV2 legacy fallback."
+  ],
+  "blockers": [
+    "Analytics/dashboard allowlists and Sentry DSN scope remain credential/founder-confirmation gated.",
+    "Physical QA, publication/community setup, and Cloudflare token narrowing remain external owner/device/ops actions."
+  ]
+}

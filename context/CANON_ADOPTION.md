@@ -5,13 +5,13 @@
 > Suggest: `node ../vaultspark-studio-ops/scripts/check-canon-adoption.mjs --project . --suggest` uses conformance evidence to pre-fill safe suggestions.
 > Mark each: **adopted** · **pending** · **review** · **exempt (reason)**. This file is maintained, not auto-trusted.
 
-Audience: public-unlaunched · Live ACTIVE canons: 50 · Pending review: 44
+Audience: public-unlaunched · Live ACTIVE canons: 50 · Pending review: 43
 
 | Canon | Title | Status | Evidence / note |
 |---|---|---|---|
 | CANON-001 | Rolling Status headers use HTML comment markers for programm | adopted (suggested) | Conformance checker passed: rolling-status start+end markers present with content |
 | CANON-002 | Sessions 1–3 are a Calibration Window, excluded from studio- | review |  |
-| CANON-003 | prompts/initiate.md is separate from prompts/start.md for to | review |  |
+| CANON-003 | prompts/initiate.md is separate from prompts/start.md for to | adopted (suggested) | Conformance checker passed: start.md + initiate.md both present and distinct |
 | CANON-004 | studioOsApplied: true requires Layer 1 SIL format, not just  | adopted (suggested) | Conformance checker passed: rolling-status start+end markers present with content |
 | CANON-005 | CDR gap recovery check is mandatory at startup and closeout  | adopted (suggested) | Conformance checker passed: CDR gap-recovery instruction present in prompts/start.md, prompts/closeout.md, docs/SESSION_PROTOCOL.md |
 | CANON-006 | Every public-facing product must display VaultSpark Studios  | review |  |

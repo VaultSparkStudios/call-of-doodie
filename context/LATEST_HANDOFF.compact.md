@@ -1,39 +1,38 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: a5d6fb5504e5 -->
-<!-- generated-at: 2026-07-04T06:18:27.063Z -->
+<!-- source-hash: 50671cc0c1d2 -->
+<!-- generated-at: 2026-07-06T21:14:49.151Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session: 121
+SESSION: 121 (continuation)
 
-Shipped
-- Fixed launch QA contract edge cases in scripts/health-check.mjs (added summarySig, eventDigest to valid score-submit path).
-- scripts/launch-surface-check.mjs now validates sitemap inclusion across accepted URL/path variants.
-- Re-established green launch-confidence signal across full verification stack.
+SHIPPED
+- Repo-local doctor route root fix: scripts/ops.mjs now exposes doctor and proxies to Studio Ops doctor path.
+- Regenerated audit (docs/AUDIT_2026-07-06.json/.md), IMPLEMENT_PLAN, INNOVATION_PACK, STARTUP_BRIEF; updated stale doctor truth notes.
+- Completed continuous /arc from clean main: start → audit → implement saturation → closeout, direct-to-main.
 
-Current Intent
-- Complete continuous /start → /audit → /implement → /closeout with truthful launch-contract evidence.
+CURRENT INTENT
+- Complete continuous /arc with truthful audit, implementation saturation, closeout, no fabricated gates.
 
-Validation (all PASS)
-- health-check 5/5, launch:media-check, launch:qa, lint, build.
-- npm test 605/605.
-- replay:state-stepper, replay:edge-fixtures.
+VALIDATION STATUS
+- All PASS: doctor (blockingFailing 0, failing 0), protocol drift 25/25, lint, npm test 605/605, replays, launch:qa (health 5/5, site 5/5), build, git diff --check.
 
-Now Bucket (top 3)
-- Continue next /audit cycle only when new repo-editable launch-confidence gaps appear.
-- Physical launch QA evidence pack for PWA install/relaunch and one real gamepad/browser combo (if hardware available).
-- Otherwise continue repo-local launch-confidence work without fabricating dashboard/production evidence.
+NOW BUCKET
+- Physical launch QA: one real PWA install/relaunch and one real gamepad/browser combo (hardware available).
+- Set project-scoped PostHog/Sentry secrets and dashboard allowlists via secrets gateway (do not blindly wire unconfirmed Sentry DSN).
+- Capture production Lighthouse/funnel evidence before retiring ?home=v1.
 
-Blockers (top 3)
-- Do not retire ?home=v1 until production Lighthouse and funnel evidence clear documented gate.
-- Analytics-key/dashboard credential provisioning (check-secrets: MISSING).
-- Cloudflare token hardening.
+BLOCKERS
+- Analytics/dashboard work gated on credentials.
+- Physical PWA/gamepad QA gated on hardware.
+- HomeV2 ?home=v1 retirement gated on production LCP/funnel evidence.
 
-Human-Blocked (external gates)
-- HomeV2 production Lighthouse/funnel evidence — pending since S120.
-- Hardware launch QA (PWA install, gamepad/browser) — pending since S120.
-- Analytics-key provisioning — pending since S120.
-- Community/publication listing — pending since S120.
-- Founder approval — pending since S120.
+HUMAN-BLOCKED (age)
+- Founder approval / decision-gated innovation items: pending since Session 120.
+- Analytics credentials (PostHog/Sentry secrets): pending since Session 120.
+- Production data evidence (Lighthouse/funnel): pending since Session 120.
 
-Next session: Run /audit; only implement if new repo-editable launch-confidence gaps surface.
+NOTES
+- Innovation-pack review found no additional agent-owned product item; remaining candidates all external/founder-gated.
+
+NEXT SESSION: If hardware/credentials/data available, execute the three Now-bucket items; otherwise continue repo-local launch-confidence work without fabricating external evidence.

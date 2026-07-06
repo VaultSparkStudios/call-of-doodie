@@ -1,3 +1,13 @@
+## 2026-07-06 — Session 121 continuation — Doctor route truth
+
+- Protocol truth — `scripts/ops.mjs` now lists and routes `doctor`, proxying to the Studio Ops doctor path from the current repo.
+- Health truth — `node scripts/ops.mjs doctor --update-json --quiet` exits 0 and writes `doctorScore`; `node scripts/ops.mjs doctor --json --quiet` reports `blockingFailing: 0`, `failing: 0`, `passing: 107`, `warning: 21`, and `skipped: 2`.
+- Brief truth — `docs/STARTUP_BRIEF.md` was regenerated after the doctor route existed and still validates with the canonical brief validator.
+- Deferral truth — innovation-pack candidates remain external where they require analytics/dashboard access, physical device evidence, HomeV2 production metrics, community/publication setup, or founder confirmation.
+- Verification truth — protocol drift 25/25, lint, 605/605 tests, replay state-stepper, edge fixtures, launch media, launch QA, build, and diff check passed.
+
+Overall status: green locally; portfolio doctor warnings are advisory and non-blocking for this repo closeout.
+Last reviewed: 2026-07-06
 ## 2026-07-04 — Session 121 - Launch contract truth\n\n- Contract truth: scripts/health-check.mjs now includes summarySig and ventDigest on the valid score submit path when issue-token and payload contract require those fields.\n- Surface truth: scripts/launch-surface-check.mjs now validates sitemap coverage using multiple acceptable location patterns so it does not fail on legacy listing paths.\n- Verification truth: 
 pm run lint, 
 pm test (605/605), replay fixtures, build, launch media check, and 
@@ -658,7 +668,7 @@ Overall status: green locally; live Supabase/analytics/dashboard actions remain 
 - Replay trust language remains honest. `runResim()` still reports `method: "heuristic_pressure_estimate"` and `confidence: "advisory"`; the new `deterministicStepper` is explicitly `coverage: "movement_aim_only"` and is exposed only when the deterministic input contract is ready.
 - Launch media truth improved without fabricating scenes. The manifest now uses verified browser-capture PNGs only for combat and mobile, because those files already exist with production-ready browser-capture provenance. Boss, build/debrief, and leaderboard entries remain SVG fallback art until verified captures exist.
 - Game-loop review source truth repaired. `context/GAME_LOOP.md` now exists for the canonical protocol path and points to live runtime/post-run/trust code evidence.
-- Doctor truth note: local `node scripts/ops.mjs doctor --update-json` is absent in this public repo router; closeout autopilot invokes the Studio Ops doctor path and protocol drift validates local helper parity at 24/24.
+- Doctor truth note: local `node scripts/ops.mjs doctor --update-json` is now present in the public repo router and proxies the Studio Ops doctor path; protocol drift validates local helper parity at 25/25.
 
 ## 2026-07-01 — Session 108 truth audit
 
