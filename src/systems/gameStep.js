@@ -1,15 +1,17 @@
 /**
- * gameStep.js — pure per-frame game logic extractions (App.jsx slice 1).
+ * gameStep.js — pure per-frame game logic extractions (App.jsx slice 1+2).
  *
  * Each function here is a pure transformation: takes explicit state/inputs,
- * returns updated values. No React refs, no side effects.
+ * returns updated values. No React refs, no state setters, no sounds.
  *
  * Extraction roadmap:
  *   slice 1 (this file) — player movement, obstacle push-out
- *   slice 2 — bullet movement + lifetime
+ *   slice 2 (this file) — bullet movement + lifetime (stepBullets, stepEnemyBullets)
  *   slice 3 — enemy movement (flow field lookup)
  *   slice N — full step(gs, frame, inputs) → {nextGs, events}
  */
+
+import { resolveObstacleBounce } from "./combatResolution.js";
 
 /**
  * Compute normalized movement direction from keyboard + joystick input.
@@ -122,4 +124,74 @@ export function applyPlayerMovement(player, dir, {
     }
   }
   return player;
+}
+
+/**
+ * Advance all player bullets one frame. Mutates each bullet object in-place
+ * (matching the existing pattern in App.jsx) then returns the filtered live
+ * list plus the side-effects App.jsx needs to dispatch.
+ *
+ * @param {{ bullets, obstacles, player, W, H, frameCount }} opts
+ * @returns {{ bullets: object[], particleSpawns: {x,y,color,count}[], screenShakeBump: number }}
+ */
+export function stepBullets({ bullets, obstacles, player, W, H, frameCount }) {
+  const particleSpawns = [];
+  let screenShakeBump = 0;
+  const kept = bullets.filter(b => {
+    // Boomerang: curve outbound, then steer back to player
+    if (b.boomerang) {
+      if (!b.returning) {
+        const rot = 0.055;
+        const nvx = b.vx * Math.cos(rot) - b.vy * Math.sin(rot);
+        const nvy = b.vx * Math.sin(rot) + b.vy * Math.cos(rot);
+        b.vx = nvx; b.vy = nvy;
+        if (b.life <= b.outboundLife) b.returning = true;
+      } else {
+        const bdx = player.x - b.x, bdy = player.y - b.y;
+        const bdist = Math.hypot(bdx, bdy);
+        if (bdist < 24) return false; // caught
+        const spd = Math.hypot(b.vx, b.vy);
+        b.vx = (bdx / bdist) * spd;
+        b.vy = (bdy / bdist) * spd;
+      }
+    }
+    b.x += b.vx; b.y += b.vy; b.life--;
+    if (b.trail && frameCount % 2 === 0) {
+      particleSpawns.push({ x: b.x, y: b.y, color: b.color, count: 1 });
+    }
+    for (const ob of (obstacles || [])) {
+      const bounce = resolveObstacleBounce(b, ob);
+      if (bounce.bounced) {
+        Object.assign(b, { x: bounce.x, y: bounce.y, vx: bounce.vx, vy: bounce.vy, bouncesLeft: bounce.bouncesLeft, life: bounce.life });
+        particleSpawns.push({ x: b.x, y: b.y, color: "#FFFFFF", count: 4 });
+        screenShakeBump = Math.max(screenShakeBump, 1);
+        break;
+      }
+      if (bounce.consumed) {
+        particleSpawns.push({ x: b.x, y: b.y, color: b.color, count: 3 });
+        return false;
+      }
+    }
+    return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
+  });
+  return { bullets: kept, particleSpawns, screenShakeBump };
+}
+
+/**
+ * Advance all enemy bullets one frame. Mutates each bullet in-place.
+ * During time dilation the speed is reduced to 0.2×.
+ *
+ * @param {{ enemyBullets, obstacles, timeDilationTimer, W, H }} opts
+ * @returns {{ enemyBullets: object[] }}
+ */
+export function stepEnemyBullets({ enemyBullets, obstacles, timeDilationTimer, W, H }) {
+  const tdm = (timeDilationTimer || 0) > 0 ? 0.2 : 1;
+  return {
+    enemyBullets: enemyBullets.filter(eb => {
+      eb.x += eb.vx * tdm; eb.y += eb.vy * tdm; eb.life--;
+      const hitWall = (obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
+      if (hitWall) return false;
+      return eb.life > 0 && eb.x > -10 && eb.x < W + 10 && eb.y > -10 && eb.y < H + 10;
+    }),
+  };
 }
