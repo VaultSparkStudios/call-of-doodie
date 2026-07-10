@@ -395,7 +395,9 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px)", pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const scanlineOverlay = { position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.10) 3px,rgba(0,0,0,0.10) 4px)", pointerEvents: "none", zIndex: 0 };
+  const mobileNavH = "calc(56px + env(safe-area-inset-bottom))";
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px ${isMobile ? `max(80px, ${mobileNavH})` : "max(32px, env(safe-area-inset-bottom))"}` };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: "#888", fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#CCC", cursor: "pointer", fontFamily: "inherit" };
@@ -464,8 +466,9 @@ export default function HomeV2(props) {
   return (
     <div style={page}>
       <div style={gridBg} />
+      <div style={scanlineOverlay} aria-hidden="true" />
       <Suspense fallback={null}>
-        <DemoCanvas opacity={0.28} />
+        <DemoCanvas opacity={0.33} />
       </Suspense>
       <div style={wrap}>
 
@@ -886,17 +889,19 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
+        {/* Tabbed nav — desktop inline; mobile uses fixed bottom bar below */}
+        {!isMobile && (
+          <div style={tabsRow}>
+            {["career", "codex", "settings", "support"].map(t => (
+              <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
+                {t === "career" && "📊 CAREER"}
+                {t === "codex" && "📖 CODEX"}
+                {t === "settings" && "⚙ SETTINGS"}
+                {t === "support" && "❤️ SUPPORT"}
+              </button>
+            ))}
+          </div>
+        )}
         <div style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
@@ -921,6 +926,47 @@ export default function HomeV2(props) {
           Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
         </div>
       </div>
+
+      {/* Mobile bottom nav bar (CANON-041: scrollable 100dvh mobile nav) */}
+      {isMobile && (
+        <nav
+          aria-label="Sections"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
+            display: "flex",
+            background: "rgba(8,4,2,0.97)",
+            borderTop: "1px solid rgba(255,107,53,0.35)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+            paddingBottom: "env(safe-area-inset-bottom)",
+          }}
+        >
+          {[
+            { id: "career",   emoji: "📊", label: "CAREER"   },
+            { id: "codex",    emoji: "📖", label: "CODEX"    },
+            { id: "settings", emoji: "⚙",  label: "SETTINGS" },
+            { id: "support",  emoji: "❤️", label: "SUPPORT"  },
+          ].map(t => (
+            <button
+              key={t.id}
+              onClick={() => switchTab(t.id)}
+              aria-label={t.label}
+              aria-selected={tab === t.id}
+              style={{
+                flex: 1, height: 56, display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center", gap: 2,
+                background: "none", border: "none", cursor: "pointer",
+                fontFamily: "inherit",
+                color: tab === t.id ? "#FF9960" : "#555",
+                borderTop: `2px solid ${tab === t.id ? "#FF9960" : "transparent"}`,
+              }}
+            >
+              <span style={{ fontSize: 18, lineHeight: 1 }}>{t.emoji}</span>
+              <span style={{ fontSize: 8, letterSpacing: 1, fontWeight: 700 }}>{t.label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
 
       {/* Modals (lazy) */}
       {showLeaderboard && (
