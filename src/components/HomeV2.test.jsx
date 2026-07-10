@@ -282,6 +282,58 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("BALANCE LAB");
   });
 
+  it("renders a fixed bottom nav bar on mobile with all 4 tabs", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("nav[aria-label='Main navigation']");
+    expect(nav).toBeTruthy();
+    const navBtns = [...nav.querySelectorAll("button")];
+    expect(navBtns).toHaveLength(4);
+    expect(navBtns.some(b => /CAREER/.test(b.textContent))).toBe(true);
+    expect(navBtns.some(b => /CODEX/.test(b.textContent))).toBe(true);
+    expect(navBtns.some(b => /SETTINGS/.test(b.textContent))).toBe(true);
+    expect(navBtns.some(b => /SUPPORT/.test(b.textContent))).toBe(true);
+
+    const careerBtn = navBtns.find(b => /CAREER/.test(b.textContent));
+    expect(careerBtn?.getAttribute("aria-current")).toBe("page");
+    const codexBtn = navBtns.find(b => /CODEX/.test(b.textContent));
+    expect(codexBtn?.getAttribute("aria-current")).toBeNull();
+  });
+
+  it("does not render the fixed bottom nav on desktop", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={false} />);
+    });
+
+    const nav = container.querySelector("nav[aria-label='Main navigation']");
+    expect(nav).toBeNull();
+  });
+
+  it("mobile nav tab switch updates active state", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("nav[aria-label='Main navigation']");
+    const codexBtn = [...nav.querySelectorAll("button")].find(b => /CODEX/.test(b.textContent));
+    await act(async () => { codexBtn.click(); });
+
+    expect(codexBtn.getAttribute("aria-current")).toBe("page");
+    const careerBtn = [...nav.querySelectorAll("button")].find(b => /CAREER/.test(b.textContent));
+    expect(careerBtn.getAttribute("aria-current")).toBeNull();
+  });
+
   it("does not surface a balance insight when local history is quiet", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);

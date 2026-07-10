@@ -395,7 +395,11 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px)", pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const MOBILE_NAV_H = 56;
+  const wrap = {
+    position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto",
+    padding: `max(14px, env(safe-area-inset-top)) 16px ${isMobile ? `calc(${MOBILE_NAV_H}px + max(18px, env(safe-area-inset-bottom)))` : "max(32px, env(safe-area-inset-bottom))"}`,
+  };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: "#888", fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#CCC", cursor: "pointer", fontFamily: "inherit" };
@@ -457,6 +461,22 @@ export default function HomeV2(props) {
   });
   const tabBody = { marginTop: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: 14 };
   const footer = { marginTop: 22, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: "#777", letterSpacing: 1, flexWrap: "wrap" };
+  const mobileNav = {
+    position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 200,
+    display: "flex", flexDirection: "row",
+    background: "rgba(10,6,3,0.97)",
+    borderTop: "1px solid rgba(255,107,53,0.22)",
+    backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+    paddingBottom: "env(safe-area-inset-bottom)",
+    boxShadow: "0 -4px 24px rgba(0,0,0,0.55)",
+  };
+  const mobileNavItem = (active) => ({
+    flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    padding: "10px 4px 8px", background: "none", border: "none", cursor: "pointer",
+    fontFamily: "'Courier New', monospace",
+    color: active ? "#FF9960" : "#777", fontSize: 9, fontWeight: 900, letterSpacing: 1, gap: 3,
+    WebkitTapHighlightColor: "transparent",
+  });
   const linkBtn = { background: "none", border: "none", color: isSupporter() ? "#FFD700" : "#888", fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
 
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
@@ -886,8 +906,8 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
+        {/* Tabbed nav — hidden on mobile; replaced by fixed bottom bar */}
+        <div style={{ ...tabsRow, display: isMobile ? "none" : undefined }}>
           {["career", "codex", "settings", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
               {t === "career" && "📊 CAREER"}
@@ -921,6 +941,28 @@ export default function HomeV2(props) {
           Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
         </div>
       </div>
+
+      {/* Mobile sticky bottom tab nav — CANON-041 mobile parity */}
+      {isMobile && (
+        <nav style={mobileNav} aria-label="Main navigation">
+          {[
+            { id: "career",   icon: "📊", label: "CAREER" },
+            { id: "codex",    icon: "📖", label: "CODEX" },
+            { id: "settings", icon: "⚙",  label: "SETTINGS" },
+            { id: "support",  icon: "❤️",  label: "SUPPORT" },
+          ].map(({ id, icon, label }) => (
+            <button
+              key={id}
+              style={mobileNavItem(tab === id)}
+              onClick={() => switchTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+            >
+              <span style={{ fontSize: 18, lineHeight: 1 }}>{icon}</span>
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
 
       {/* Modals (lazy) */}
       {showLeaderboard && (
