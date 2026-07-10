@@ -328,6 +328,7 @@ export default function CallOfDoodie() {
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const synergyChargeCooldownRef = useRef(0);
   const archetypeUnlocksRef = useRef(new Set());
+  const leaderboardRef = useRef([]);
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -335,6 +336,7 @@ export default function CallOfDoodie() {
   useEffect(() => { pausedRef.current = paused; }, [paused]);
   useEffect(() => { extraLivesRef.current = extraLives; }, [extraLives]);
   useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+  useEffect(() => { leaderboardRef.current = leaderboard; }, [leaderboard]);
   useEffect(() => {
     const gs = gsRef.current;
     if (screen !== "game" || !gs?.player || health <= 0) return;
@@ -620,8 +622,8 @@ export default function CallOfDoodie() {
     // Proximity rivals: 3 leaderboard players within ±10% of personal best — continuous rivalry ladder
     try {
       const _careerForRivals = loadCareerStats();
-      if (_careerForRivals.bestScore > 0 && leaderboard.length > 0) {
-        gsRef.current.proximityRivals = getProximityRivals(_careerForRivals.bestScore, leaderboard, 3);
+      if (_careerForRivals.bestScore > 0 && leaderboardRef.current.length > 0) {
+        gsRef.current.proximityRivals = getProximityRivals(_careerForRivals.bestScore, leaderboardRef.current, 3);
       }
     } catch { gsRef.current.proximityRivals = []; }
     waveDeathCountsRef.current = getWaveDeathCounts();
