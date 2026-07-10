@@ -21,7 +21,6 @@ import {
   findLightningChainTarget,
   resolveEnemyProjectilePlayerHit,
   resolveGrenadeEnemyDamage,
-  resolveObstacleBounce,
   resolvePierce,
   rollCrit,
   isPrecisionHit,
@@ -70,7 +69,7 @@ import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolu
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
-import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
+import { buildPointerAimSweepReport, computePointerAimAngle, stepBullets, stepEnemyBullets } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
@@ -2758,54 +2757,13 @@ export default function CallOfDoodie() {
     }
 
     // ── Bullet movement ──
-    gs.bullets = gs.bullets.filter(b => {
-      // Boomerang: curve outbound, then steer back to player
-      if (b.boomerang) {
-        if (!b.returning) {
-          const rot = 0.055; // curve angle per frame
-          const nvx = b.vx * Math.cos(rot) - b.vy * Math.sin(rot);
-          const nvy = b.vx * Math.sin(rot) + b.vy * Math.cos(rot);
-          b.vx = nvx; b.vy = nvy;
-          if (b.life <= b.outboundLife) b.returning = true;
-        } else {
-          const bdx = p.x - b.x, bdy = p.y - b.y, bdist = Math.hypot(bdx, bdy);
-          if (bdist < 24) return false; // caught by player
-          const spd = Math.hypot(b.vx, b.vy);
-          b.vx = (bdx / bdist) * spd; b.vy = (bdy / bdist) * spd;
-        }
-      }
-      b.x += b.vx; b.y += b.vy; b.life--;
-      if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
-      for (const ob of (gs.obstacles || [])) {
-        const bounce = resolveObstacleBounce(b, ob);
-        if (bounce.bounced) {
-          Object.assign(b, {
-            x: bounce.x, y: bounce.y, vx: bounce.vx, vy: bounce.vy,
-            bouncesLeft: bounce.bouncesLeft, life: bounce.life,
-          });
-          addParticles(gs, b.x, b.y, "#FFFFFF", 4);
-          gs.screenShake = Math.max(gs.screenShake, 1);
-          break;
-        }
-        if (bounce.consumed) {
-          addParticles(gs, b.x, b.y, b.color, 3);
-          return false;
-        }
-        if (bounce.bounced || bounce.consumed) {
-          break;
-        }
-      }
-      return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
-    });
+    const _bStep = stepBullets({ bullets: gs.bullets, obstacles: gs.obstacles, player: p, W, H, frameCount: frameCountRef.current });
+    gs.bullets = _bStep.bullets;
+    if (_bStep.screenShakeBump) gs.screenShake = Math.max(gs.screenShake, _bStep.screenShakeBump);
+    _bStep.particleSpawns.forEach(ps => addParticles(gs, ps.x, ps.y, ps.color, ps.count));
 
     // ── Enemy bullet movement ──
-    gs.enemyBullets = gs.enemyBullets.filter(eb => {
-      const _tdm = (gs.timeDilationTimer || 0) > 0 ? 0.2 : 1;
-      eb.x += eb.vx * _tdm; eb.y += eb.vy * _tdm; eb.life--;
-      const hitWall = (gs.obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
-      if (hitWall) return false;
-      return eb.life > 0 && eb.x > -10 && eb.x < W + 10 && eb.y > -10 && eb.y < H + 10;
-    });
+    ({ enemyBullets: gs.enemyBullets } = stepEnemyBullets({ enemyBullets: gs.enemyBullets, obstacles: gs.obstacles, timeDilationTimer: gs.timeDilationTimer, W, H }));
 
     // ── Enemy bullet hits player ──
     if (dashRef.current.active <= 0) {
