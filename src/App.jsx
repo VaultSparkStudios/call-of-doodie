@@ -77,7 +77,7 @@ import { getRoastCallout } from "./utils/roastDirector.js";
 import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
-import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
+import { buildFlowField } from "./systems/flowField.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -102,6 +102,7 @@ import {
   resolveRunModeFromFlags,
 } from "./systems/runSession.js";
 import { buildDeathScreenProps } from "./systems/deathFlow.js";
+import { computeEnemySteeringVector } from "./systems/enemyUpdate.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 
@@ -3376,49 +3377,18 @@ export default function CallOfDoodie() {
         if (e.phantomTimer >= 90) { e.phantomTimer = 0; e.phantomVisible = !e.phantomVisible; }
       }
       e.wobble += 0.1;
-      const zigzag = e.typeIndex === 10 ? Math.sin(e.wobble * 3) * 3 : 0;
-      const freezeMult = (gs.freezeTimer || 0) > 0 ? 0.35 : 1;
-      const timeDilMult = (gs.timeDilationTimer || 0) > 0 ? 0.18 : 1;
-      const _enrageMult = gs._chainEnrageLevel === 2 ? 1.20 : gs._chainEnrageLevel === 1 ? 1.10 : 1.0;
-      const buffedSpeed = e.speed * (e.buffed ? 1.35 : 1) * (gs.enemySpeedMult || 1) * freezeMult * timeDilMult * _enrageMult;
-      // Flow field steering: sample flow field, fall back to direct angle if no cell data
-      const ff = gs.flowField;
-      let sx, sy;
-      if (ff && !e.chargeActive) {
-        const sampled = sampleFlowField(ff, e.x, e.y);
-        if (sampled) {
-          sx = sampled.sx; sy = sampled.sy;
-        } else {
-          const a = Math.atan2(p.y - e.y, p.x - e.x);
-          sx = Math.cos(a); sy = Math.sin(a);
-        }
-      } else {
-        const a = Math.atan2(p.y - e.y, p.x - e.x);
-        sx = Math.cos(a); sy = Math.sin(a);
-      }
-      // Wall-avoidance steering: repulse from close walls (keeps enemies from clipping)
-      if (!e.chargeActive) {
-        (gs.obstacles || []).forEach(ob => {
-          const nx = Math.max(ob.x, Math.min(e.x, ob.x + ob.w));
-          const ny = Math.max(ob.y, Math.min(e.y, ob.y + ob.h));
-          const rdx = e.x - nx, rdy = e.y - ny;
-          const rdist = Math.hypot(rdx, rdy);
-          const AVOID_R = e.size / 2 + 32;
-          if (rdist < AVOID_R && rdist > 0) {
-            const str = (AVOID_R - rdist) / AVOID_R;
-            sx += (rdx / rdist) * str * 3.5;
-            sy += (rdy / rdist) * str * 3.5;
-          }
-        });
-        const slen = Math.hypot(sx, sy);
-        if (slen > 0) { sx /= slen; sy /= slen; }
-      }
       // Doomscroller: periodically freezes while doomscrolling (every 280 frames, stops for 70)
       if (e.typeIndex === 19 && !e.isBossEnemy) {
         e.doomscrollTimer = (e.doomscrollTimer || 0) + 1;
         e.doomscrolling = (e.doomscrollTimer % 280) < 70;
         if ((e.doomscrollTimer % 280) === 0) addParticles(gs, e.x, e.y - 20, "#7B68EE", 3);
       }
+      const { sx, sy, buffedSpeed, zigzag } = computeEnemySteeringVector(e, p, gs.flowField, gs.obstacles || [], {
+        freezeTimer: gs.freezeTimer || 0,
+        timeDilationTimer: gs.timeDilationTimer || 0,
+        chainEnrageLevel: gs._chainEnrageLevel || 0,
+        enemySpeedMult: gs.enemySpeedMult || 1,
+      });
       // Skip regular movement for Juggernaut during charge/stun, or Doomscroller while frozen
       const _skipMove = (e.typeIndex === 17 && (e.jugCharging || (e.jugStunned || 0) > 0)) || (e.typeIndex === 19 && e.doomscrolling);
       if (!_skipMove) {
