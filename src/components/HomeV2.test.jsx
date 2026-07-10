@@ -173,9 +173,9 @@ describe("HomeV2", () => {
     const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
     expect(aimButton).toBeTruthy();
     await act(async () => { aimButton.click(); });
-    expect(container.textContent).toContain("Verify Full-Circle Control");
+    expect(container.textContent).toContain("Aim Through Each Direction");
 
-    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
+    const verifyButton = [...container.querySelectorAll("button")].find(b => /SKIP \/ CONFIRM|CONFIRM|VERIFIED/.test(b.textContent));
     expect(verifyButton).toBeTruthy();
     await act(async () => { verifyButton.click(); });
 
