@@ -282,6 +282,27 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("BALANCE LAB");
   });
 
+  it("renders a fixed bottom nav bar on mobile with all 4 tab labels", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("nav[aria-label='Main navigation']");
+    expect(nav).toBeTruthy();
+    const navText = nav.textContent;
+    expect(navText).toContain("CAREER");
+    expect(navText).toContain("CODEX");
+    expect(navText).toContain("SETTINGS");
+    expect(navText).toContain("SUPPORT");
+
+    // Active tab button should carry aria-current="page"
+    const activeBtn = nav.querySelector("[aria-current='page']");
+    expect(activeBtn).toBeTruthy();
+  });
+
   it("does not surface a balance insight when local history is quiet", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
