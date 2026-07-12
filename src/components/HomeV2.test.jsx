@@ -175,7 +175,7 @@ describe("HomeV2", () => {
     await act(async () => { aimButton.click(); });
     expect(container.textContent).toContain("Verify Full-Circle Control");
 
-    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
+    const verifyButton = [...container.querySelectorAll("button")].find(b => /SKIP/.test(b.textContent));
     expect(verifyButton).toBeTruthy();
     await act(async () => { verifyButton.click(); });
 

@@ -5,6 +5,7 @@ import {
   computePointerAimAngle,
   angleToUnitVector,
   buildPointerAimSweepReport,
+  pointerAimBucket,
 } from "./gameStep.js";
 
 describe("computeMovementVector", () => {
@@ -125,5 +126,28 @@ describe("computePointerAimAngle", () => {
     expect(report.complete).toBe(true);
     expect(report.buckets).toEqual(["east", "north", "south", "west"]);
     expect(report.probes.map(probe => probe.id)).toEqual(["east", "south", "west", "north"]);
+  });
+});
+
+describe("pointerAimBucket", () => {
+  it("maps cardinal angles to correct aim buckets", () => {
+    expect(pointerAimBucket(0)).toBe("east");
+    expect(pointerAimBucket(Math.PI / 2)).toBe("south");
+    expect(pointerAimBucket(Math.PI)).toBe("west");
+    expect(pointerAimBucket(-Math.PI / 2)).toBe("north");
+  });
+
+  it("maps angles clearly in the east/west half-planes to east or west", () => {
+    expect(pointerAimBucket(Math.PI / 6)).toBe("east");
+    expect(pointerAimBucket(-Math.PI / 6)).toBe("east");
+    expect(pointerAimBucket(5 * Math.PI / 6)).toBe("west");
+    expect(pointerAimBucket(-5 * Math.PI / 6)).toBe("west");
+  });
+
+  it("maps angles clearly in the north/south half-planes to north or south", () => {
+    expect(pointerAimBucket(Math.PI / 3)).toBe("south");
+    expect(pointerAimBucket(2 * Math.PI / 3)).toBe("south");
+    expect(pointerAimBucket(-Math.PI / 3)).toBe("north");
+    expect(pointerAimBucket(-2 * Math.PI / 3)).toBe("north");
   });
 });

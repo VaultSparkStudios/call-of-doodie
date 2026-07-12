@@ -16,6 +16,7 @@ import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, saveInputCalibration } from "../utils/inputCalibration.js";
+import { pointerAimBucket } from "../systems/gameStep.js";
 import { buildPwaInstallReceipt, detectServiceWorkerReady, detectStandaloneDisplay, loadPwaInstallAttempt } from "../utils/pwaInstallReadiness.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
@@ -333,14 +334,14 @@ export default function HomeV2(props) {
     }
     switchTab("codex");
   }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
-  const completeAimCheck = useCallback(() => {
+  const completeAimCheck = useCallback((buckets = ["east", "north", "south", "west"]) => {
     const record = saveInputCalibration(buildInputCalibrationRecord({
       source: gamepadConnected ? (effectiveControllerType || "controller") : "mouse",
       controllerType: effectiveControllerType || "none",
-      buckets: ["east", "north", "south", "west"],
+      buckets,
     }));
     setInputCalibration(record);
-    recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source });
+    recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source, complete: record.complete });
     setShowAimCheck(false);
   }, [effectiveControllerType, gamepadConnected, recordFrontDoorAction]);
   const launchHistorySeed = useCallback((seed, challenge = {}) => {
@@ -1024,53 +1025,152 @@ export default function HomeV2(props) {
   );
 }
 
+const AIM_DIRS = ["north", "east", "south", "west"];
+const AIM_TARGET_POS = { north: [0, -90], east: [90, 0], south: [0, 90], west: [-90, 0] };
+
 function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
-  const targetStyle = () => ({
-    minHeight: 64,
-    borderRadius: 8,
-    border: "1px solid rgba(0,229,255,0.28)",
-    background: "rgba(0,229,255,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#B9F3FF",
-    fontSize: 12,
-    fontWeight: 900,
-    letterSpacing: 1,
-    textAlign: "center",
-  });
+  const [hit, setHit] = useState(new Set());
+  const [done, setDone] = useState(false);
+  const zoneRef = useRef(null);
+  const doneRef = useRef(false);
+
+  const markBucket = useCallback((bucket) => {
+    if (doneRef.current) return;
+    setHit(prev => {
+      if (prev.has(bucket)) return prev;
+      const next = new Set(prev);
+      next.add(bucket);
+      if (next.size === 4) {
+        doneRef.current = true;
+        setDone(true);
+        const verified = Array.from(next);
+        setTimeout(() => onVerify(verified), 500);
+      }
+      return next;
+    });
+  }, [onVerify]);
+
+  const trackPointer = useCallback((clientX, clientY) => {
+    const zone = zoneRef.current;
+    if (!zone || doneRef.current) return;
+    const rect = zone.getBoundingClientRect();
+    const dx = clientX - (rect.left + rect.width / 2);
+    const dy = clientY - (rect.top + rect.height / 2);
+    if (Math.hypot(dx, dy) < rect.width * 0.14) return;
+    markBucket(pointerAimBucket(Math.atan2(dy, dx)));
+  }, [markBucket]);
+
+  const onPointerMove = useCallback((e) => trackPointer(e.clientX, e.clientY), [trackPointer]);
+  const onTouchMove = useCallback((e) => {
+    const t = e.touches[0];
+    if (t) trackPointer(t.clientX, t.clientY);
+  }, [trackPointer]);
+
+  useEffect(() => {
+    if (!navigator.getGamepads) return;
+    const id = setInterval(() => {
+      const gp = Array.from(navigator.getGamepads() || []).find(g => g?.connected);
+      if (!gp) return;
+      const rx = gp.axes[2] ?? 0;
+      const ry = gp.axes[3] ?? 0;
+      if (Math.hypot(rx, ry) < 0.5) return;
+      markBucket(pointerAimBucket(Math.atan2(ry, rx)));
+    }, 80);
+    return () => clearInterval(id);
+  }, [markBucket]);
+
   const device = controllerType && controllerType !== "controller"
     ? controllerType.toUpperCase()
-    : "MOUSE / TOUCH / CONTROLLER";
+    : "MOUSE / TOUCH / STICK";
+
   return (
     <div style={PANEL}>
-      <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
+      <div style={{ width: "min(420px,100%)", margin: "auto 0", padding: 20, borderRadius: 12, background: "rgba(8,12,18,0.98)", border: `1px solid ${done ? "rgba(0,255,136,0.45)" : "rgba(0,229,255,0.32)"}`, color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)", transition: "border-color 0.4s" }}>
         <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
-        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
-        <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
-          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+        <h2 style={{ margin: "8px 0 6px", fontSize: 20, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
+        <p style={{ margin: "0 auto 16px", maxWidth: 340, color: "#BFC9D8", fontSize: 12, lineHeight: 1.5 }}>
+          {done
+            ? <strong style={{ color: "#00FF88" }}>✓ All four directions verified!</strong>
+            : <>Move {controllerType === "gamepad" ? "the right stick" : "your cursor or finger"} to each target for <strong style={{ color: "#7FE6FF" }}>{device}</strong>.</>}
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
-          <div />
-          <div style={targetStyle("north")}>NORTH</div>
-          <div />
-          <div style={targetStyle("west")}>WEST</div>
-          <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
-          <div style={targetStyle("east")}>EAST</div>
-          <div />
-          <div style={targetStyle("south")}>SOUTH</div>
-          <div />
+
+        {/* Interactive aim zone */}
+        <div
+          ref={zoneRef}
+          onPointerMove={onPointerMove}
+          onTouchMove={onTouchMove}
+          style={{
+            position: "relative", margin: "0 auto 16px",
+            width: 220, height: 220, borderRadius: "50%",
+            background: done ? "rgba(0,255,136,0.05)" : "rgba(0,12,24,0.55)",
+            border: `2px solid ${done ? "rgba(0,255,136,0.4)" : "rgba(0,229,255,0.18)"}`,
+            cursor: done ? "default" : "crosshair",
+            touchAction: "none",
+            transition: "background 0.35s, border-color 0.35s",
+            userSelect: "none",
+          }}
+        >
+          {/* Center player dot */}
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: 34, height: 34, borderRadius: "50%",
+            background: "rgba(255,107,53,0.22)", border: "2px solid #FF6B35",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 7, fontWeight: 900, color: "#FFB36B", letterSpacing: 1,
+            pointerEvents: "none",
+          }}>YOU</div>
+
+          {/* Directional targets */}
+          {AIM_DIRS.map(dir => {
+            const [tx, ty] = AIM_TARGET_POS[dir];
+            const isHit = hit.has(dir);
+            return (
+              <div key={dir} style={{
+                position: "absolute",
+                top: `calc(50% + ${ty}px)`, left: `calc(50% + ${tx}px)`,
+                transform: "translate(-50%,-50%)",
+                width: 44, height: 44, borderRadius: "50%",
+                background: isHit ? "rgba(0,255,136,0.2)" : "rgba(0,229,255,0.07)",
+                border: `2px solid ${isHit ? "#00FF88" : "rgba(0,229,255,0.45)"}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: isHit ? 18 : 9, fontWeight: 900,
+                color: isHit ? "#00FF88" : "#7FE6FF",
+                letterSpacing: isHit ? 0 : 0.5,
+                transition: "all 0.15s",
+                pointerEvents: "none",
+                boxShadow: isHit ? "0 0 14px rgba(0,255,136,0.45)" : "none",
+              }}>
+                {isHit ? "✓" : dir[0].toUpperCase()}
+              </div>
+            );
+          })}
         </div>
+
+        {/* Direction progress dots */}
+        <div style={{ marginBottom: 16, fontSize: 11, display: "flex", justifyContent: "center", gap: 14 }}>
+          {AIM_DIRS.map(dir => (
+            <span key={dir} style={{ color: hit.has(dir) ? "#00FF88" : "#444", transition: "color 0.15s" }}>
+              {hit.has(dir) ? "●" : "○"} {dir[0].toUpperCase()}
+            </span>
+          ))}
+        </div>
+
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            VERIFY CONTROLS
-          </button>
-          <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            OPEN DIAGNOSTICS
-          </button>
-          <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            LATER
-          </button>
+          {!done && (
+            <button
+              onClick={() => onVerify(["east", "north", "south", "west"])}
+              style={{ padding: "10px 16px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.05)", color: "#999", fontSize: 11, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}
+            >SKIP</button>
+          )}
+          <button
+            onClick={onDiagnostics}
+            style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(0,229,255,0.3)", background: "rgba(0,229,255,0.06)", color: "#7FE6FF", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}
+          >INPUT LAB</button>
+          <button
+            onClick={onClose}
+            style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}
+          >{done ? "CLOSE" : "LATER"}</button>
         </div>
       </div>
     </div>
