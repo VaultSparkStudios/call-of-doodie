@@ -69,7 +69,8 @@ import { applyArchetypeCapstone, applyPerkSynergies } from "./systems/perkResolu
 import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolution.js";
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
-import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
+import { triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
+import { getWaveAbilityScale, stepEnemyRangedFire, stepBossShieldPulse, stepBossEnrage, stepBossTeleport, stepBossBulletRing, stepBossGroundSlamTimer, stepBossShieldRegen, stepBossSpeedSurge, stepBossBulletSpray, stepBossEnrageThreshold, stepBossGroundMines, stepBossMagnetPull, stepDeveloperMergeConflict } from "./systems/enemyUpdate.js";
 import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
@@ -3443,19 +3444,9 @@ export default function CallOfDoodie() {
           gs._globalTauntCooldown = 60;
         }
       }
-      if (e.ranged) {
-        e.shootTimer++;
-        const _enrageFireThresh = gs._chainEnrageLevel === 2 ? e.projRate * 0.80 : gs._chainEnrageLevel === 1 ? e.projRate * 0.85 : e.projRate;
-        if (e.shootTimer >= _enrageFireThresh) {
-          e.shootTimer = 0;
-          const pa = Math.atan2(p.y - e.y, p.x - e.x);
-          // Mega Karen phase 2: 5-bullet spread
-          const bCount = getBossRangedBurstCount(e);
-          for (let bi = 0; bi < bCount; bi++) {
-            const angle = pa + (bi - Math.floor(bCount / 2)) * 0.28;
-            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
-          }
-        }
+      {
+        const _rfBullets = stepEnemyRangedFire(e, p, { chainEnrageLevel: gs._chainEnrageLevel || 0 });
+        if (_rfBullets.length) gs.enemyBullets.push(..._rfBullets);
       }
       // ── Boss special mechanics ──────────────────────────────────────────────
       if (e.isBossEnemy) {
@@ -3508,86 +3499,28 @@ export default function CallOfDoodie() {
         if ((e.sharedAbilityCooldown || 0) > 0) e.sharedAbilityCooldown--;
         const _abilityReady = (e.sharedAbilityCooldown || 0) <= 0;
         // At high waves (40+) scale ability timers up so they're less frequent
-        const _waveScale = gs.currentWave >= 40 ? 1.4 : gs.currentWave >= 30 ? 1.2 : 1.0;
+        const _waveScale = getWaveAbilityScale(gs.currentWave);
+        const _cb = {
+          addText:           (x, y, t, c, b) => addText(gs, x, y, t, c, b),
+          addParticles:      (x, y, c, n)    => addParticles(gs, x, y, c, n),
+          addScreenShake:    (v)              => { gs.screenShake = Math.max(gs.screenShake, v); },
+          setSharedCooldown: (v)              => { e.sharedAbilityCooldown = v; },
+        };
         // ── Shared boss abilities (scale per wave) ──────────────────────────
-        if (e.hasShieldPulse) {
-          if (!e.shieldPulseActive) {
-            e.shieldPulseCooldown--;
-            if (e.shieldPulseCooldown <= 0) {
-              e.shieldPulseActive = true;
-              e.shieldPulseTimer  = 180; // active 3 seconds
-              e.shieldPulseCooldown = 480; // recharge 8 seconds
-              addText(gs, e.x, e.y - 80, "🛡 SHIELD PULSE!", "#00BFFF", true);
-              addParticles(gs, e.x, e.y, "#00BFFF", 12);
-              gs.screenShake = 5;
-            }
-          } else {
-            if (--e.shieldPulseTimer <= 0) e.shieldPulseActive = false;
-          }
-        }
-        if (e.hasEnrage && !e.enrageTriggered && e.health < e.maxHealth * 0.33) {
-          e.enrageTriggered = true;
-          e.speed    *= 1.8;
-          e.projRate  = Math.max(30, Math.floor(e.projRate * 0.5));
-          addText(gs, e.x, e.y - 80, "⚡ ENRAGED!!", "#FF0000", true);
-          addParticles(gs, e.x, e.y, "#FF4400", 25);
-          gs.screenShake = 12;
-        }
-        if (e.hasTeleport) {
-          e.teleportTimer++;
-          if (_abilityReady && e.teleportTimer >= Math.floor(480 * _waveScale)) {
-            e.teleportTimer = 0;
-            e.sharedAbilityCooldown = 90;
-            const tAngle = Math.random() * Math.PI * 2;
-            const tDist  = 110 + Math.random() * 70;
-            e.x = Math.max(e.size, Math.min(W - e.size, p.x + Math.cos(tAngle) * tDist));
-            e.y = Math.max(e.size, Math.min(H - e.size, p.y + Math.sin(tAngle) * tDist));
-            addText(gs, e.x, e.y - 65, "🌀 BLINKED!", "#FF1493", true);
-            addParticles(gs, e.x, e.y, "#FF1493", 15);
-            gs.screenShake = 8;
-          }
-        }
+        stepBossShieldPulse(e, _cb);
+        stepBossEnrage(e, _cb);
+        stepBossTeleport(e, p, { W, H, abilityReady: _abilityReady, waveScale: _waveScale, ..._cb });
         // ── Bullet Ring (wave 10+): fires 8 bullets in 360° pattern ──────────
-        if (e.hasBulletRing) {
-          e.bulletRingTimer++;
-          const _brCap = Math.floor(360 * _waveScale);
-          // Warning flash: 1 second (60 frames) before the ring fires
-          // Adaptive widen if player has been dying to this enemy type recently
-          const _brWarn = Math.floor(60 * (gs._telegraphMult?.[e.type] || 1));
-          e.bulletRingWarning = _abilityReady && e.bulletRingTimer >= _brCap - _brWarn && e.bulletRingTimer < _brCap;
-          if (_abilityReady && e.bulletRingTimer >= _brCap) {
-            e.bulletRingTimer = 0;
-            e.bulletRingWarning = false;
-            e.sharedAbilityCooldown = 120;
-            const _brCount = gs.currentWave >= 40 ? 12 : 8;
-            for (let _ri = 0; _ri < _brCount; _ri++) {
-              const ba = (_ri / _brCount) * Math.PI * 2;
-              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12 });
-            }
-            addText(gs, e.x, e.y - 80, "🔥 BULLET RING!", "#FF6600", true);
-            addParticles(gs, e.x, e.y, "#FF6600", 14);
-            gs.screenShake = 6;
-          }
+        {
+          const _brBullets = stepBossBulletRing(e, { wave: gs.currentWave, telegraphMult: gs._telegraphMult || {}, abilityReady: _abilityReady, waveScale: _waveScale, ..._cb });
+          if (_brBullets.length) gs.enemyBullets.push(..._brBullets);
         }
         // ── Ground Slam (wave 15+): expanding shockwave ring ─────────────────
         if (e.hasGroundSlam) {
-          if (!e.groundSlamActive) {
-            e.groundSlamTimer++;
-            const _gsCap = Math.floor(420 * _waveScale);
-            // Warning flash: 1.5 seconds (90 frames) before the slam triggers
-            const _gsWarn = Math.floor(90 * (gs._telegraphMult?.[e.type] || 1));
-            e.groundSlamWarning = _abilityReady && e.groundSlamTimer >= _gsCap - _gsWarn && e.groundSlamTimer < _gsCap;
-            if (_abilityReady && e.groundSlamTimer >= _gsCap) {
-              e.groundSlamTimer = 0; e.groundSlamWarning = false; e.groundSlamActive = true; e.groundSlamRadius = 0;
-              e.sharedAbilityCooldown = 120;
-              addText(gs, e.x, e.y - 80, "💥 GROUND SLAM!", "#FF4400", true);
-              addParticles(gs, e.x, e.y, "#FF4400", 20);
-              gs.screenShake = 14;
-            }
-          } else {
-            e.groundSlamRadius += 6;
+          stepBossGroundSlamTimer(e, { abilityReady: _abilityReady, waveScale: _waveScale, telegraphMult: gs._telegraphMult || {}, ..._cb });
+          if (e.groundSlamActive && e.groundSlamRadius > 40) {
             const slamDist = Math.hypot(p.x - e.x, p.y - e.y);
-            if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
+            if (slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
               const _slamBase = (gs.currentWave >= 40 ? 25 : 18) * (gs._treeArmorMult || 1);
               const _slamDmg = gs.glassjaw ? Math.round(_slamBase * (gs.glassjawMult || 2)) : _slamBase;
               p.health -= _slamDmg; p.invincible = 25; gs.damageFlash = 10;
@@ -3597,70 +3530,20 @@ export default function CallOfDoodie() {
               rumbleGamepad(0.4, 0.65, 150);
               if (p.health <= 0) handlePlayerDeath(gs);
             }
-            if (e.groundSlamRadius >= 230) e.groundSlamActive = false;
           }
         }
       }
       // ── Procedural boss abilities (bonus abilities assigned on spawn) ──────
       if (e.isBossEnemy) {
-        // Shield regen: restore HP while not recently hit (reset timer on any hit)
-        if (e.hasShieldRegen && e.maxHealth !== undefined) {
-          if (e.hitFlash > 0) { e.shieldRegenTimer = 0; }
-          else { e.shieldRegenTimer = (e.shieldRegenTimer || 0) + 1; }
-          if (e.shieldRegenTimer > 120) {
-            e.health = Math.min(e.maxHealth, (e.health || 0) + (e.shieldRegenRate || 0.5));
-          }
+        stepBossShieldRegen(e);
+        stepBossSpeedSurge(e, { addText: (x, y, t, c) => addText(gs, x, y, t, c) });
+        {
+          const _sprayBullets = stepBossBulletSpray(e, { mutEnemyProjSpeed: gs.mutEnemyProjSpeed || 1 });
+          if (_sprayBullets.length) gs.enemyBullets.push(..._sprayBullets);
         }
-        // Speed surge: brief double-speed burst
-        if (e.hasSpeedSurge) {
-          e.speedSurgeTimer = (e.speedSurgeTimer || 0) + 1;
-          if (e.speedSurgeTimer >= e.speedSurgeCooldown) {
-            e.speedSurgeTimer = 0;
-            e.speedSurgeActive = true;
-            setTimeout(() => { if (e) e.speedSurgeActive = false; }, 2000);
-            addText(gs, e.x, e.y - 50, "⚡ SPEED SURGE!", "#FF8800");
-          }
-        }
-        if (e.speedSurgeActive) { e.speed = (e._baseSpeed || e.speed) * 2; }
-        else if (e._baseSpeed) { e.speed = e._baseSpeed; }
-        else { e._baseSpeed = e.speed; }
-        // Bullet spray: ring of 8 bullets
-        if (e.hasBulletSpray) {
-          e.bulletSprayTimer = (e.bulletSprayTimer || 0) + 1;
-          if (e.bulletSprayTimer >= e.bulletSprayCooldown) {
-            e.bulletSprayTimer = 0;
-            for (let _ang = 0; _ang < Math.PI * 2; _ang += Math.PI / 4) {
-              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, vy: Math.sin(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, damage: 8, life: 60, size: 5, color: "#FF4400" });
-            }
-          }
-        }
-        // Enrage threshold: permanent enrage below 40% HP
-        if (e.hasEnrageThreshold && !e.enrageThresholdFired && e.health < e.maxHealth * 0.4) {
-          e.enrageThresholdFired = true;
-          e.enraged = true;
-          e.speed *= 1.4;
-          addText(gs, e.x, e.y - 60, "🔥 ENRAGED!", "#FF0000", true);
-          gs.screenShake = 10;
-        }
-        // Ground mines: drop proximity mines below 60% HP
-        if (e.hasGroundMines && e.health < e.maxHealth * 0.6) {
-          e.mineDropTimer = (e.mineDropTimer || 0) + 1;
-          if (e.mineDropTimer >= e.mineDropCooldown) {
-            e.mineDropTimer = 0;
-            gs.pickups.push({ x: e.x + (Math.random() - 0.5) * 100, y: e.y + (Math.random() - 0.5) * 100, type: "mine", life: 600 });
-          }
-        }
-        // Magnet pull: deflect nearby player bullets
-        if (e.hasMagnetPull && e.magnetRadius) {
-          gs.bullets.forEach(b => {
-            const _md = Math.hypot(b.x - e.x, b.y - e.y);
-            if (_md < e.magnetRadius) {
-              const _ma = Math.atan2(b.y - e.y, b.x - e.x);
-              b.vx += Math.cos(_ma + Math.PI / 2) * 0.8;
-              b.vy += Math.sin(_ma + Math.PI / 2) * 0.8;
-            }
-          });
-        }
+        stepBossEnrageThreshold(e, { addText: (x, y, t, c, b) => addText(gs, x, y, t, c, b), addScreenShake: (v) => { gs.screenShake = Math.max(gs.screenShake, v); } });
+        stepBossGroundMines(e, gs);
+        stepBossMagnetPull(e, gs);
       }
       // ── Juggernaut (17): shield regen + charge ──
       if (e.typeIndex === 17 && e.isBossEnemy) {
@@ -3795,20 +3678,9 @@ export default function CallOfDoodie() {
           addText(gs, e.x, e.y - 70, "🩹 HOTFIX DEPLOYED!", "#00FF88", true);
           addParticles(gs, e.x, e.y, "#00FF88", 20);
         }
-        // Merge Conflict: fires 6 bullets in 3 directions simultaneously
-        if (e.hasMergeConflict) {
-          e.mergeConflictTimer = (e.mergeConflictTimer || 0) + 1;
-          if (e.mergeConflictTimer >= e.mergeConflictCooldown) {
-            e.mergeConflictTimer = 0;
-            addText(gs, e.x, e.y - 55, "⚠️ MERGE CONFLICT!", "#FF8800");
-            for (let _set = 0; _set < 3; _set++) {
-              const _baseAng = (_set / 3) * Math.PI * 2;
-              for (let _spread = -1; _spread <= 1; _spread++) {
-                const _ang = _baseAng + _spread * 0.3;
-                gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * 5, vy: Math.sin(_ang) * 5, damage: 12, life: 80, size: 5, color: "#FF8800" });
-              }
-            }
-          }
+        {
+          const _mcBullets = stepDeveloperMergeConflict(e, { addText: (x, y, t, c) => addText(gs, x, y, t, c) });
+          if (_mcBullets.length) gs.enemyBullets.push(..._mcBullets);
         }
       }
       // ── Universal boss phase 2 at 50% HP ─────────────────────────────────
