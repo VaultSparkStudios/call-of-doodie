@@ -293,6 +293,27 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
   });
 
+  it("renders sticky bottom nav on mobile with all 4 tab labels", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile />);
+    });
+    const nav = container.querySelector("nav[aria-label='Main navigation']");
+    expect(nav).toBeTruthy();
+    const txt = nav.textContent;
+    expect(txt).toMatch(/CAREER/);
+    expect(txt).toMatch(/CODEX/);
+    expect(txt).toMatch(/SETTINGS/);
+    expect(txt).toMatch(/SUPPORT/);
+    // inline tab row must be absent on mobile
+    const inlineTabRow = [...container.querySelectorAll("button")].filter(b =>
+      b.textContent.trim() === "📊 CAREER" || b.textContent.trim() === "📖 CODEX",
+    );
+    expect(inlineTabRow).toHaveLength(0);
+  });
+
   it("hides the balance insight after dismissal for the session", async () => {
     localStorage.setItem("cod-run-history-v1", JSON.stringify([
       { wave: 7, score: 1000, ts: 1 },

@@ -395,7 +395,7 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px)", pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: isMobile ? "max(14px, env(safe-area-inset-top)) 16px calc(74px + env(safe-area-inset-bottom))" : "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: "#888", fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#CCC", cursor: "pointer", fontFamily: "inherit" };
@@ -886,17 +886,19 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
+        {/* Tabbed nav — desktop inline; mobile uses fixed bottom bar */}
+        {!isMobile && (
+          <div style={tabsRow}>
+            {["career", "codex", "settings", "support"].map(t => (
+              <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
+                {t === "career" && "📊 CAREER"}
+                {t === "codex" && "📖 CODEX"}
+                {t === "settings" && "⚙ SETTINGS"}
+                {t === "support" && "❤️ SUPPORT"}
+              </button>
+            ))}
+          </div>
+        )}
         <div style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
@@ -1019,6 +1021,51 @@ export default function HomeV2(props) {
         <Suspense fallback={null}>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </Suspense>
+      )}
+
+      {/* Mobile sticky bottom navigation */}
+      {isMobile && (
+        <nav
+          aria-label="Main navigation"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0,
+            display: "flex", alignItems: "stretch",
+            background: "rgba(8,4,2,0.97)",
+            borderTop: "1px solid rgba(255,107,53,0.25)",
+            zIndex: 200,
+            paddingBottom: "env(safe-area-inset-bottom)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+          }}
+        >
+          {[
+            { id: "career",   emoji: "📊", label: "CAREER" },
+            { id: "codex",    emoji: "📖", label: "CODEX" },
+            { id: "settings", emoji: "⚙",  label: "SETTINGS" },
+            { id: "support",  emoji: "❤️", label: "SUPPORT" },
+          ].map(({ id, emoji, label }) => (
+            <button
+              key={id}
+              onClick={() => switchTab(id)}
+              aria-label={label}
+              aria-current={tab === id ? "page" : undefined}
+              style={{
+                flex: 1,
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                gap: 3, padding: "10px 4px",
+                background: "none", border: "none",
+                borderTop: tab === id ? "2px solid #FF6B35" : "2px solid transparent",
+                cursor: "pointer",
+                fontFamily: "'Courier New', monospace",
+                color: tab === id ? "#FF9960" : "#666",
+                fontSize: 9, fontWeight: 900, letterSpacing: 1.5,
+              }}
+            >
+              <span style={{ fontSize: 20, lineHeight: 1 }}>{emoji}</span>
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
       )}
     </div>
   );
