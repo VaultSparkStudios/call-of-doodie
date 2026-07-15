@@ -169,7 +169,7 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("DEBUG INPUT");
   });
 
-  it("requires zone sweep before VERIFY CONTROLS is enabled (mouse)", async () => {
+  it("turns Aim Check into a verified receipt via interactive 4-tap targets", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -179,25 +179,14 @@ describe("HomeV2", () => {
 
     const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
     await act(async () => { aimButton.click(); });
-    expect(container.textContent).toContain("Verify Full-Circle Control");
-
-    const verifyBtn = () => [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
-    expect(verifyBtn()?.disabled).toBe(true);
+    expect(container.textContent).toContain("Tap All Four Directions");
     expect(container.textContent).toContain("(0/4)");
 
-    // Sweep aim through all 4 directional zones
     for (const dir of ["north", "east", "west", "south"]) {
-      const zone = container.querySelector(`[data-direction="${dir}"]`);
-      expect(zone).toBeTruthy();
-      await act(async () => {
-        zone.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
-      });
+      const btn = container.querySelector(`[data-direction="${dir}"]`);
+      expect(btn).toBeTruthy();
+      await act(async () => { btn.click(); });
     }
-
-    expect(verifyBtn()?.disabled).toBe(false);
-    expect(container.textContent).toContain("All clear");
-
-    await act(async () => { verifyBtn().click(); });
 
     const saved = loadInputCalibration();
     expect(saved?.complete).toBe(true);
@@ -205,7 +194,7 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("AIM CHECK VERIFIED");
   });
 
-  it("allows immediate VERIFY CONTROLS when gamepad is connected", async () => {
+  it("shows controller device label in AimCheck instructions when gamepad is connected", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -215,18 +204,19 @@ describe("HomeV2", () => {
 
     const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
     await act(async () => { aimButton.click(); });
+    expect(container.textContent).toContain("XBOX");
 
-    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
-    expect(verifyButton?.disabled).toBe(false);
-
-    await act(async () => { verifyButton.click(); });
+    for (const dir of ["north", "east", "west", "south"]) {
+      const btn = container.querySelector(`[data-direction="${dir}"]`);
+      await act(async () => { btn.click(); });
+    }
 
     const saved = loadInputCalibration();
     expect(saved?.complete).toBe(true);
     expect(saved?.source).toBe("xbox");
   });
 
-  it("shows incremental zone progress in AimCheck panel instructions", async () => {
+  it("shows incremental tap progress in AimCheck panel instructions", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -238,16 +228,10 @@ describe("HomeV2", () => {
     await act(async () => { aimButton.click(); });
     expect(container.textContent).toContain("(0/4)");
 
-    const northZone = container.querySelector('[data-direction="north"]');
-    await act(async () => {
-      northZone.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
-    });
+    await act(async () => { container.querySelector('[data-direction="north"]').click(); });
     expect(container.textContent).toContain("(1/4)");
 
-    const eastZone = container.querySelector('[data-direction="east"]');
-    await act(async () => {
-      eastZone.dispatchEvent(new PointerEvent("pointerover", { bubbles: true }));
-    });
+    await act(async () => { container.querySelector('[data-direction="east"]').click(); });
     expect(container.textContent).toContain("(2/4)");
   });
 
