@@ -39,6 +39,8 @@ const MP_NewFeatures    = lazy(() => import("./MenuPanels.jsx").then(m => ({ def
 
 const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 
+const ALL_DIRECTIONS = ["east", "north", "south", "west"];
+
 const MODE_DEFS = [
   { id: "standard",        label: "NORMAL",        emoji: "🎯", color: "#FFD700", blurb: "Survive as long as you can" },
   { id: "score_attack",    label: "SCORE ATTACK",  emoji: "⏱",  color: "#FF6600", blurb: "5 min · faster spawns · max score" },
@@ -333,11 +335,11 @@ export default function HomeV2(props) {
     }
     switchTab("codex");
   }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
-  const completeAimCheck = useCallback(() => {
+  const completeAimCheck = useCallback((buckets = ALL_DIRECTIONS) => {
     const record = saveInputCalibration(buildInputCalibrationRecord({
       source: gamepadConnected ? (effectiveControllerType || "controller") : "mouse",
       controllerType: effectiveControllerType || "none",
-      buckets: ["east", "north", "south", "west"],
+      buckets,
     }));
     setInputCalibration(record);
     recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source });
@@ -1024,52 +1026,84 @@ export default function HomeV2(props) {
   );
 }
 
+const AIM_TARGETS = [
+  { id: "north", label: "NORTH", arrow: "⬆" },
+  { id: "west",  label: "WEST",  arrow: "⬅" },
+  { id: "east",  label: "EAST",  arrow: "➡" },
+  { id: "south", label: "SOUTH", arrow: "⬇" },
+];
+
+function AimTargetButton({ id, label, arrow, confirmed, onConfirm }) {
+  return (
+    <button
+      data-direction={id}
+      onClick={() => onConfirm(id)}
+      aria-label={confirmed ? `${label} confirmed` : `Confirm ${label} direction`}
+      disabled={confirmed}
+      style={{
+        minHeight: 64, borderRadius: 8,
+        border: `1px solid ${confirmed ? "rgba(0,255,136,0.65)" : "rgba(0,229,255,0.28)"}`,
+        background: confirmed ? "rgba(0,255,136,0.11)" : "rgba(0,229,255,0.06)",
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        color: confirmed ? "#00FF88" : "#B9F3FF",
+        fontSize: 12, fontWeight: 900, letterSpacing: 1, textAlign: "center",
+        cursor: confirmed ? "default" : "pointer",
+        transition: "background 0.12s, border-color 0.12s, color 0.12s",
+        fontFamily: "inherit", gap: 3,
+      }}
+    >
+      <span style={{ fontSize: 18 }}>{confirmed ? "✓" : arrow}</span>
+      <span>{label}</span>
+    </button>
+  );
+}
+
 function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
-  const targetStyle = () => ({
-    minHeight: 64,
-    borderRadius: 8,
-    border: "1px solid rgba(0,229,255,0.28)",
-    background: "rgba(0,229,255,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#B9F3FF",
-    fontSize: 12,
-    fontWeight: 900,
-    letterSpacing: 1,
-    textAlign: "center",
-  });
+  const [confirmed, setConfirmed] = useState(new Set());
+
+  const confirmTarget = (id) => {
+    if (confirmed.has(id)) return;
+    const next = new Set(confirmed);
+    next.add(id);
+    setConfirmed(next);
+    if (next.size === AIM_TARGETS.length) {
+      onVerify(Array.from(next).sort());
+    }
+  };
+
+  const count = confirmed.size;
   const device = controllerType && controllerType !== "controller"
     ? controllerType.toUpperCase()
     : "MOUSE / TOUCH / CONTROLLER";
+  const instruction = count === AIM_TARGETS.length
+    ? `All clear — ${device}`
+    : `Tap all four directions. (${count}/4) — ${device}`;
+
   return (
     <div style={PANEL}>
       <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
         <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
-        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
+        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Tap All Four Directions</h2>
         <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
-          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+          {instruction}
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
           <div />
-          <div style={targetStyle("north")}>NORTH</div>
+          <AimTargetButton id="north" label="NORTH" arrow="⬆" confirmed={confirmed.has("north")} onConfirm={confirmTarget} />
           <div />
-          <div style={targetStyle("west")}>WEST</div>
-          <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
-          <div style={targetStyle("east")}>EAST</div>
+          <AimTargetButton id="west"  label="WEST"  arrow="⬅" confirmed={confirmed.has("west")}  onConfirm={confirmTarget} />
+          <div style={{ minHeight: 76, borderRadius: 8, border: "1px solid rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFB36B", fontSize: 12, fontWeight: 900, letterSpacing: 1, textAlign: "center" }}>PLAYER</div>
+          <AimTargetButton id="east"  label="EAST"  arrow="➡" confirmed={confirmed.has("east")}  onConfirm={confirmTarget} />
           <div />
-          <div style={targetStyle("south")}>SOUTH</div>
+          <AimTargetButton id="south" label="SOUTH" arrow="⬇" confirmed={confirmed.has("south")} onConfirm={confirmTarget} />
           <div />
         </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            VERIFY CONTROLS
-          </button>
           <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
             OPEN DIAGNOSTICS
           </button>
           <button onClick={onClose} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", background: "transparent", color: "#888", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
-            LATER
+            SKIP
           </button>
         </div>
       </div>

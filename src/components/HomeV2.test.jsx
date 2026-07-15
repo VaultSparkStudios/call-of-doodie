@@ -2,6 +2,16 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+// jsdom does not include PointerEvent; polyfill so pointer event dispatch works in tests
+if (typeof PointerEvent === "undefined") {
+  globalThis.PointerEvent = class PointerEvent extends MouseEvent {
+    constructor(type, params = {}) {
+      super(type, params);
+      this.pointerId = params.pointerId ?? 1;
+    }
+  };
+}
+
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock("../supabase.js", () => ({ supabase: null, getOrCreateClientUid: () => "test-uid", getAuthUid: () => null }));
@@ -162,27 +172,70 @@ describe("HomeV2", () => {
     expect(container.textContent).toContain("DEBUG INPUT");
   });
 
-  it("turns Aim Check into a local controls-verified receipt", async () => {
+  it("turns Aim Check into a verified receipt via interactive 4-tap targets", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
       root = createRoot(container);
-      root.render(<HomeV2 {...baseProps} />);
+      root.render(<HomeV2 {...baseProps} gamepadConnected={false} />);
     });
 
     const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
-    expect(aimButton).toBeTruthy();
     await act(async () => { aimButton.click(); });
-    expect(container.textContent).toContain("Verify Full-Circle Control");
+    expect(container.textContent).toContain("Tap All Four Directions");
+    expect(container.textContent).toContain("(0/4)");
 
-    const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
-    expect(verifyButton).toBeTruthy();
-    await act(async () => { verifyButton.click(); });
+    for (const dir of ["north", "east", "west", "south"]) {
+      const btn = container.querySelector(`[data-direction="${dir}"]`);
+      expect(btn).toBeTruthy();
+      await act(async () => { btn.click(); });
+    }
 
     const saved = loadInputCalibration();
     expect(saved?.complete).toBe(true);
     expect(saved?.buckets).toEqual(["east", "north", "south", "west"]);
     expect(container.textContent).toContain("AIM CHECK VERIFIED");
+  });
+
+  it("shows controller device label in AimCheck instructions when gamepad is connected", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} gamepadConnected={true} controllerType="xbox" />);
+    });
+
+    const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    await act(async () => { aimButton.click(); });
+    expect(container.textContent).toContain("XBOX");
+
+    for (const dir of ["north", "east", "west", "south"]) {
+      const btn = container.querySelector(`[data-direction="${dir}"]`);
+      await act(async () => { btn.click(); });
+    }
+
+    const saved = loadInputCalibration();
+    expect(saved?.complete).toBe(true);
+    expect(saved?.source).toBe("xbox");
+  });
+
+  it("shows incremental tap progress in AimCheck panel instructions", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} gamepadConnected={false} />);
+    });
+
+    const aimButton = [...container.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    await act(async () => { aimButton.click(); });
+    expect(container.textContent).toContain("(0/4)");
+
+    await act(async () => { container.querySelector('[data-direction="north"]').click(); });
+    expect(container.textContent).toContain("(1/4)");
+
+    await act(async () => { container.querySelector('[data-direction="east"]').click(); });
+    expect(container.textContent).toContain("(2/4)");
   });
 
   it("surfaces remembered input calibration and controller profile status", async () => {
