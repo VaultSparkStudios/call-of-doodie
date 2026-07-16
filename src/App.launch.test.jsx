@@ -198,6 +198,13 @@ vi.mock("./components/TutorialOverlay.jsx", () => ({
   },
 }));
 
+vi.mock("./components/CalibrationScreen.jsx", () => ({
+  default: function CalibrationScreenMock({ onComplete }) {
+    React.useEffect(() => { onComplete(); }, [onComplete]);
+    return <div>calibration-screen</div>;
+  },
+}));
+
 let container;
 let root;
 
