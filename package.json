@@ -48,7 +48,7 @@
     "replay:state-stepper": "node scripts/validate-replay-state-stepper-fixtures.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.1",
+    "@supabase/supabase-js": "^2.110.6",
     "gifenc": "^1.0.3",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
