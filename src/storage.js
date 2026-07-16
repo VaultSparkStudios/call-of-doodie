@@ -573,7 +573,12 @@ export function markDailyChallengeSubmitted() {
 }
 
 export function getTodayKey() {
-  const d = new Date();
+  return getMissionDayKey(new Date());
+}
+
+export function getMissionDayKey(value = new Date()) {
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return null;
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
 export function getDailyMissions() {
@@ -618,14 +623,32 @@ export function getMissionStreak() {
   } catch { return { streak: 0, lastCompleted: null }; }
 }
 
-export function advanceMissionStreak() {
+export function buildMissionStreakState(state, now = new Date()) {
+  const today = getMissionDayKey(now);
+  if (!today) return { streak: 0, lastCompleted: null };
+
+  const previous = state && typeof state === "object" ? state : {};
+  const previousStreak = Number.isFinite(Number(previous.streak))
+    ? Math.max(0, Math.floor(Number(previous.streak)))
+    : 0;
+  if (previous.lastCompleted === today) {
+    return { streak: previousStreak, lastCompleted: today };
+  }
+
+  const yesterdayDate = new Date(now);
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterday = getMissionDayKey(yesterdayDate);
+  return {
+    streak: previous.lastCompleted === yesterday ? previousStreak + 1 : 1,
+    lastCompleted: today,
+  };
+}
+
+export function advanceMissionStreak(now = new Date()) {
   try {
-    const today = getTodayKey();
     const state = getMissionStreak();
-    if (state.lastCompleted === today) return state; // already advanced today
-    const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10).replace(/-/g, "");
-    const newStreak = state.lastCompleted === yesterday ? (state.streak || 0) + 1 : 1;
-    const next = { streak: newStreak, lastCompleted: today };
+    const next = buildMissionStreakState(state, now);
+    if (state.lastCompleted === next.lastCompleted && Number(state.streak) === next.streak) return next;
     localStorage.setItem(MISSION_STREAK_KEY, JSON.stringify(next));
     return next;
   } catch { return { streak: 0, lastCompleted: null }; }
@@ -1017,9 +1040,18 @@ export function getWeaponLegendRank(kills) {
   return null;
 }
 
-export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills, weaponKills }) {
+export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills, weaponKills, practiceRun = false }) {
   const career = loadCareerStats();
   career.totalRuns += 1;
+  if (practiceRun) {
+    // REMATCH is a correction drill, not a second progression economy. Keep
+    // only honest session bookkeeping; every unlock/record/mastery input is
+    // deliberately ignored so a high-wave restart cannot farm the career.
+    career.totalDeaths += (deaths || 0);
+    career.totalPlayTime += Math.floor(playTime || 0);
+    saveCareerStats(career);
+    return { career, weaponMilestones: [], practiceExcluded: true };
+  }
   career.totalKills += (kills || 0);
   career.totalDeaths += (deaths || 0);
   career.totalScore = (career.totalScore || 0) + (score || 0);

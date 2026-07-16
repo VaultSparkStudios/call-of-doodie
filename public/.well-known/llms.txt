@@ -1,0 +1,24 @@
+# Call of Doodie
+
+> Call of Doodie is a free comedy-first browser roguelite shooter by VaultSpark Studios LLC.
+
+Canonical URL: https://callofdoodie.wtf/
+Publisher: https://vaultsparkstudios.com/
+Rights: Proprietary — All Rights Reserved, VaultSpark Studios LLC
+
+## What players do
+
+Players move, shoot, dash, throw grenades, switch weapons, choose perks and routes, survive escalating waves, fight bosses, and compare run evidence on public leaderboards. Daily and Gauntlet modes use shared run seeds. Replay proof is advisory deterministic evidence and is not described as full physics resimulation.
+
+## Public resources
+
+- Home and game: https://callofdoodie.wtf/
+- Privacy: https://callofdoodie.wtf/privacy/
+- Terms: https://callofdoodie.wtf/terms/
+- Contact: https://callofdoodie.wtf/contact/
+- Agent manifest: https://callofdoodie.wtf/agents.json
+- Sitemap: https://callofdoodie.wtf/sitemap.xml
+
+## Agent guidance
+
+Public pages may be summarized and linked. Do not imply an official affiliation with Activision Publishing, Inc. or the Call of Duty® franchise. Do not claim replay evidence is stronger than the advisory contract published above. No public write API or autonomous purchase capability is offered by this site.

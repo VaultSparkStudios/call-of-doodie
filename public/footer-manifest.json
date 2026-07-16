@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "headerLinks": [
+    { "href": "/", "label": "Play" }
+  ],
+  "footerLinks": [
+    { "href": "/", "label": "Play" },
+    { "href": "/privacy/", "label": "Privacy" },
+    { "href": "/terms/", "label": "Terms" },
+    { "href": "/contact/", "label": "Contact" },
+    { "href": "/agents.json", "label": "Agents" },
+    { "href": "/.well-known/llms.txt", "label": "LLMs" }
+  ],
+  "footerOnly": [
+    "/privacy/",
+    "/terms/",
+    "/contact/",
+    "/agents.json",
+    "/.well-known/llms.txt"
+  ],
+  "legalPages": ["/privacy/", "/terms/", "/contact/"]
+}

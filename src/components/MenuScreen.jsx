@@ -1654,7 +1654,12 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           >
             {isSupporter() ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
           </button>
-          <span style={{ fontSize: 10, color: "#555" }}>© 2026 VaultSpark Studios</span>
+          <a href="privacy/" style={{ fontSize: 10, color: "#999" }}>PRIVACY</a>
+          <a href="terms/" style={{ fontSize: 10, color: "#999" }}>TERMS</a>
+          <a href="contact/" style={{ fontSize: 10, color: "#999" }}>CONTACT</a>
+          <a href="agents.json" style={{ fontSize: 10, color: "#999" }}>AGENTS</a>
+          <a href=".well-known/llms.txt" style={{ fontSize: 10, color: "#999" }}>LLMS</a>
+          <span style={{ fontSize: 10, color: "#777" }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>
         </div>
         <div style={{ marginTop: 6, padding: "0 8px", fontSize: 9, lineHeight: 1.5, color: "#666", textAlign: "center", maxWidth: 720, marginLeft: "auto", marginRight: "auto", fontFamily: "'Courier New',monospace" }}>
           Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.

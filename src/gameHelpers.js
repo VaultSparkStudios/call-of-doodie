@@ -4,6 +4,7 @@
 // to test in isolation.
 
 import { ENEMY_TYPES, DIFFICULTIES, BOSS_ABILITY_POOL } from "./constants.js";
+import { createNamedRunRng, getRunRng } from "./systems/runRng.js";
 
 // Boss type rotation: wave 5→Karen, 10→Splitter, 15→Juggernaut, 20→Summoner, 25→Landlord, 30→Algorithm, repeats
 export const BOSS_ROTATION = [4, 16, 17, 18, 9, 20];
@@ -18,28 +19,14 @@ export function getRandomEliteType(random = Math.random) {
 // (runSeed, wave), so any wave's spawn sequence is reproducible without
 // simulating the waves before it (REMATCH drills, REPLAY #seed, Daily fairness).
 export function createWaveRng(seed, wave) {
-  let h = (Math.imul(((seed >>> 0) || 1) ^ 0x9e3779b9, 0x85ebca6b) ^
-           Math.imul(((wave >>> 0) + 0x6d2b79f5) | 0, 0xc2b2ae35)) >>> 0;
-  // mulberry32
-  return function waveRng() {
-    h = (h + 0x6d2b79f5) >>> 0;
-    let t = h;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+  return createNamedRunRng({ seed, wave, name: "spawn" });
 }
 
 // Lazily (re)derives the current wave's spawn stream on gs. Falls back to
 // Math.random when the run carries no numeric seed so tests/tools that build
 // partial gs objects keep working.
 export function getWaveSpawnRng(gs) {
-  if (!gs || typeof gs.runSeed !== "number" || !isFinite(gs.runSeed)) return Math.random;
-  if (gs._waveRngWave !== gs.currentWave || typeof gs._waveRng !== "function") {
-    gs._waveRng = createWaveRng(gs.runSeed, gs.currentWave || 1);
-    gs._waveRngWave = gs.currentWave;
-  }
-  return gs._waveRng;
+  return getRunRng(gs, "spawn");
 }
 
 export function applyEliteType(enemy, eliteType) {
@@ -198,7 +185,7 @@ export function spawnBoss(gs, W, H, difficultyId, typeIndex) {
     boss.summonerCount = 0;           // currently alive summons
     boss.summonerMaxCount = 3;
     boss.summonerVulnTimer = 0;       // frames of vulnerability remaining
-    boss.summonerId = Date.now() + Math.random(); // unique ID
+    boss.summonerId = `${gs.runSeed || "run"}:${wv}:${Math.floor(rng() * 0xFFFFFFFF)}`;
     boss.summonerInvuln = false;      // true while summons alive
     boss.summonerFirstSummon = true;  // portal VFX shown before first summon
   }

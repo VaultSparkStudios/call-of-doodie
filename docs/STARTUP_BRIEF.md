@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-06 (Session 120 closeout) -->
+<!-- generated-at: 2026-07-16 (Session 122 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 120 closeout · 2026-07-06.
+> **Fast-boot brief** — generated at Session 122 closeout · 2026-07-16.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 121 · 2026-07-06 · FOUNDER MODE                         ║
+║  Session 123 · 2026-07-16 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -24,11 +24,11 @@
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
+║  staging-preview → https://recovery-s122.call-of-doodie.page ·   ║
 ║  Unit tests    → npm test ✓                                      ║
 ║  deploy       → GitHub Actions Deploy to Cloudflare Pages 28 ✓   ║
 ║  production-smoke → npm run live:site-check ✓                    ║
 ║  production-smoke → npm run post-cutover:smoke ✓                 ║
-║  production-smoke → npm run replay:trust-smoke ✓                 ║
 ╚════════════════════════════════════════════════════════════════╝
 
 
@@ -36,9 +36,9 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 2↑                       ║
-║    Last active: 2d  ·  Last closeout: 31d  ·  (active = newest   ║
-║    Trend  ▂▁▄▄▂  ↑  (last 5 sessions)                            ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 6↑                       ║
+║    Last active: 0d  ·  Last closeout: 41d  ·  (active = newest   ║
+║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
@@ -55,41 +55,41 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 120 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 122 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    605/605 passing  ·  Deploy: N/A                       ║
+║  Tests:    631/631 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████████████████░░░░░░░   70% used                          ║
-║     7,232 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
-║     ~3,616 tok/turn  ·  cache 50%  ·  252 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  5.5% used                          ║
+║     54,603 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~27,302 tok/turn  ·  cache 50%  ·  31 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         605/605 passing                                ║
-║  ✓  Velocity      2 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         631/631 passing                                ║
+║  ✓  Velocity      6 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⛔  IGNIS         46424 FORGE  ·  17d old                        ║
-║  ⛔  Truth         green locally  ·  Genome: ?                    ║
+║  ✓  IGNIS         43856 FORGE  ·  0d old                         ║
+║  ⛔  Truth         green locally; portfolio doctor warnings are   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.178  (healthy)                               ║
+║  ✓  Entropy       0.240  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⚠  Doctor        not yet tracked — run: node scripts/ops.mjs d  ║
-║  ✓  Cost          real $0.41/7d · 7d notional $5.72 (flat-rate   ║
+║  ⚠  Doctor        114/143 (81%)  ·  27 warn                      ║
+║  ✓  Cost          real $0.00/7d · real metered total $1.2032 ac  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    53d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    75d · Physical launch QA                                      ║
+║    63d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    85d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -106,7 +106,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▁▄▄▂  2↑  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  6↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -117,32 +117,37 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
-║  1. [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Updat  ║
+║  1. [SIL] **Repo-local staged visual/theme evidence harness** —  ║
+║  reuse the pinned `@playwright/test` dependency to audit dark/l  ║
+║  ight themes at 390/768/1440 against an arbitrary preview URL,   ║
+║  ...                                                             ║
+║                                                                  ║
+║  2. [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Updat  ║
 ║  e PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://c  ║
 ║  allofdoodie.wtf/` — the Supabase half is CLOSED with evidence   ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  2. [SIL:2] [S60] Supabase Auth / Studio membership implementat  ║
+║  3. [SIL:2] [S60] Supabase Auth / Studio membership implementat  ║
 ║  ion decision — if paid tier or membership integration is now d  ║
 ║  esired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of l  ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  3. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
+║  4. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
 ║  CKLIST.md` to confirm S55 GIF + white-card + lag fixes hold un  ║
 ║  der real clicks (CLI cannot drive the browser)                  ║
 ║                                                                  ║
-║  4. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
+║  5. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
 ║  re real LCP/CLS deltas vs legacy MenuScreen on production, con  ║
 ║  firm ≥200ms LCP improvement before removing v1 fallback         ║
 ║                                                                  ║
-║  5. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
+║  6. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
 ║  e_v2_deploy` vs legacy `front_door_action` completion rates af  ║
 ║  ter 48h of traffic                                              ║
 ║                                                                  ║
-║  6. Discord invite/community link when the community entry poin  ║
+║  7. Discord invite/community link when the community entry poin  ║
 ║  t is ready                                                      ║
 ║                                                                  ║
-║  7. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
+║  8. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
 ║  on ≥200ms Lighthouse LCP improvement confirmed on production (  ║
 ║  human measurement required)                                     ║
 ║                                                                  ║
@@ -152,5 +157,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 120 closeout · 2026-07-06*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 122 closeout · 2026-07-16*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

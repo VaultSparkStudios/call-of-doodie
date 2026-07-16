@@ -1,3 +1,26 @@
+# Latest Handoff — Session 122 recovery
+
+## Where We Left Off
+- Recovered the cut-off Session 122 from its stale lock and full dirty worktree. The prior run finished `/start` and `/audit` but died mid-`/implement`; no Session 122 changes had been committed.
+- Finished every item in `docs/AUDIT_2026-07-16.json` / `.md`: startup context-meter/fallback, public human/agent/legal contract, stratified sampler, mission/practice integrity, named competitive RNG streams, and a one-action `RUN THE FIX` death flow.
+- Preserved replay compatibility by keeping the original spawn-stream derivation byte-identical while splitting all other score-affecting randomness into serializable named streams.
+- Deployed the recovered build to isolated Cloudflare preview `https://recovery-s122.call-of-doodie.pages.dev`; all nine required public routes and key security headers passed direct HTTP verification.
+- App-release verdict is honestly NO-GO for SPARKED: a fresh staged visual/theme sweep was not evidenced, and physical QA, analytics/Sentry scope, HomeV2 production data, and founder approval remain open.
+
+## Validation
+- Integrity: all changed/untracked JSON parsed; no changed NDJSON; Claude guard config valid; no debris.
+- `npm run lint` — PASS.
+- `npm test` — 631/631 across 76 files.
+- `npm run replay:state-stepper` / `npm run replay:edge-fixtures` — 4/4 each.
+- `npm run launch:media-check`, `npm run launch:qa`, `npm run build`, `git diff --check` — PASS.
+- Isolated preview route contract — 9/9 HTTP 200 with expected content types and security headers.
+
+## Next
+- Begin a fresh `/start` from the clean recovery checkpoint, then audit and implement the repo-local staged visual/theme evidence harness before regenerating the innovation pack.
+- Preserve the app-release NO-GO until browser visual evidence plus physical/device/credential/data/founder gates are genuinely satisfied.
+
+Session Intent: Recover the cut-off prior session completely, checkpoint it as `recover S122 closeout`, then continue automatically through a fresh saturated `/start -> /audit -> /implement -> /closeout` arc.
+
 # Latest Handoff — Session 121 continuation
 
 ## Where We Left Off

@@ -1,38 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 50671cc0c1d2 -->
-<!-- generated-at: 2026-07-06T21:14:49.151Z -->
+<!-- source-hash: 042cd29d0080 -->
+<!-- generated-at: 2026-07-16T18:53:31.721Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION: 121 (continuation)
+SESSION 122 HANDOFF SUMMARY
 
-SHIPPED
-- Repo-local doctor route root fix: scripts/ops.mjs now exposes doctor and proxies to Studio Ops doctor path.
-- Regenerated audit (docs/AUDIT_2026-07-06.json/.md), IMPLEMENT_PLAN, INNOVATION_PACK, STARTUP_BRIEF; updated stale doctor truth notes.
-- Completed continuous /arc from clean main: start → audit → implement saturation → closeout, direct-to-main.
+Session
+- Session 122 (recovery of cut-off prior run).
 
-CURRENT INTENT
-- Complete continuous /arc with truthful audit, implementation saturation, closeout, no fabricated gates.
+Shipped
+- Recovered stale-locked Session 122 from dirty worktree; prior run died mid-/implement with nothing committed.
+- Completed all items in AUDIT_2026-07-16: startup context-meter/fallback, public human/agent/legal contract, stratified sampler, mission/practice integrity, named competitive RNG streams, one-action RUN THE FIX death flow.
+- Preserved replay compatibility: original spawn-stream derivation byte-identical; other score-affecting randomness split into serializable named streams.
+- Deployed recovered build to isolated preview recovery-s122.call-of-doodie.pages.dev; 9/9 public routes and security headers passed HTTP verification.
 
-VALIDATION STATUS
-- All PASS: doctor (blockingFailing 0, failing 0), protocol drift 25/25, lint, npm test 605/605, replays, launch:qa (health 5/5, site 5/5), build, git diff --check.
+Current Intent
+- Start fresh /start from clean recovery checkpoint, then audit and implement repo-local staged visual/theme evidence harness before regenerating innovation pack.
+- Continue automatic /start -> /audit -> /implement -> /closeout arc.
 
-NOW BUCKET
-- Physical launch QA: one real PWA install/relaunch and one real gamepad/browser combo (hardware available).
-- Set project-scoped PostHog/Sentry secrets and dashboard allowlists via secrets gateway (do not blindly wire unconfirmed Sentry DSN).
-- Capture production Lighthouse/funnel evidence before retiring ?home=v1.
+Now (Top 3)
+- Fresh /start from clean recovery checkpoint.
+- Build repo-local staged visual/theme evidence harness.
+- Regenerate innovation pack after harness lands.
 
-BLOCKERS
-- Analytics/dashboard work gated on credentials.
-- Physical PWA/gamepad QA gated on hardware.
-- HomeV2 ?home=v1 retirement gated on production LCP/funnel evidence.
+Blockers (Top 3)
+- App-release verdict is NO-GO: no fresh staged visual/theme sweep evidenced.
+- Physical/device QA not done.
+- Analytics/Sentry scope, HomeV2 production data unresolved.
 
-HUMAN-BLOCKED (age)
-- Founder approval / decision-gated innovation items: pending since Session 120.
-- Analytics credentials (PostHog/Sentry secrets): pending since Session 120.
-- Production data evidence (Lighthouse/funnel): pending since Session 120.
+Human-Blocked (with age)
+- Founder approval — open since S120 (3 sessions).
+- Physical PWA install/relaunch + gamepad/browser QA — open since S120 (3 sessions).
+- Analytics/PostHog/Sentry credentials + dashboard allowlists — open since S120 (3 sessions).
+- HomeV2 production Lighthouse/funnel evidence to retire ?home=v1 — open since S120 (3 sessions).
 
-NOTES
-- Innovation-pack review found no additional agent-owned product item; remaining candidates all external/founder-gated.
+Validation Status
+- lint PASS; test 631/631 across 76 files; replay state-stepper 4/4; replay edge-fixtures 4/4; launch:media-check, launch:qa, build, git diff --check all PASS; preview 9/9 HTTP 200.
 
-NEXT SESSION: If hardware/credentials/data available, execute the three Now-bucket items; otherwise continue repo-local launch-confidence work without fabricating external evidence.
+Next Session Pointer
+- Run fresh /start from clean recovery checkpoint and build the staged visual/theme evidence harness; keep app-release NO-GO until browser visual plus human gates clear.

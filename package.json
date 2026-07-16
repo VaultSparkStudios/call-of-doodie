@@ -18,6 +18,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "launch:smoke": "vitest run src/App.launch.test.jsx",
+    "public:contract": "node scripts/validate-public-contract.mjs",
     "health:check": "node scripts/health-check.mjs",
     "live:site-check": "node scripts/live-site-check.mjs",
     "launch:surfaces": "node scripts/launch-surface-check.mjs",

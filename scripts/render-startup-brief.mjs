@@ -18,6 +18,7 @@ import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from './lib/safe-spawn.mjs';
+import { normalizeContextMeterView } from './lib/context-meter-view.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
@@ -38,9 +39,14 @@ const node = process.execPath;
 // to render-startup-brief-v5.mjs (71% token reduction, validated S117). Default
 // remains v3.1 until 3-session hash-stability monitoring completes.
 if (process.argv.includes('--v5') || process.env.BRIEF_V5 === '1') {
-  const { spawnSync } = await import('node:child_process');
-  const r = spawnSync(node, [path.join(__dirname, 'render-startup-brief-v5.mjs'), ...process.argv.slice(2).filter(a => a !== '--v5')], { stdio: 'inherit', cwd: root });
-  process.exit(r.status ?? 0);
+  const v5Path = path.join(__dirname, 'render-startup-brief-v5.mjs');
+  if (fs.existsSync(v5Path)) {
+    const r = spawnSync(node, [v5Path, ...process.argv.slice(2).filter(a => a !== '--v5')], {
+      stdio: 'inherit', cwd: root,
+    });
+    process.exit(r.status ?? 1);
+  }
+  console.warn('⚠ brief-v5 unavailable; rendering canonical v3.1 instead.');
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -238,14 +244,15 @@ function loadLiveContextMeter() {
 }
 
 const meter = loadLiveContextMeter();
-const meterUsed = meter.usedTokens;
-const meterRemaining = Math.max(0, meter.limit - meterUsed);
+const meterView = normalizeContextMeterView(meter, { fallbackLimit: meterLimit });
+const meterUsed = meterView.usedTokens;
+const meterRemaining = meterView.remainingTokens;
 const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);
-// context-meter returns pctUsed in percentage form (0-100), not 0-1. Normalize.
-const meterUsedPctRaw = meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100;
-const meterUsedPct = Math.max(0, Math.min(100, Math.round(meterUsedPctRaw)));
-// pctUsedFraction is 0-1 for bar rendering math
-const meterUsedFrac = meterUsedPctRaw / 100;
+// Percent derives from the token ratio, so a live 0.6% value can never be
+// mistaken for a 0.6 fraction (60%). The declared pct remains a diagnostic.
+const meterUsedPctRaw = meterView.pctUsed;
+const meterUsedPct = meterView.displayPercent;
+const meterUsedFrac = meterView.fraction;
 const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
 
 // ── Parse Rolling Status ──────────────────────────────────────────────────────

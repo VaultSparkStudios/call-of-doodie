@@ -1,5 +1,48 @@
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
 
+export function buildRunTheFixContract({
+  debrief = {},
+  postRunIntel = {},
+  nextRunDrill = {},
+  runSeed = 0,
+  wave = 1,
+  rematchWave = null,
+} = {}) {
+  const nextContract = debrief?.nextRunContract || {};
+  const diagnosis = debrief?.collapseReason
+    || String(postRunIntel?.cause || "pressure breakdown").replace(/_/g, " ");
+  const target = nextContract.target || nextRunDrill.detail || "Survive one more wave with one deliberate adjustment.";
+  const proof = nextContract.proof || "Win condition: finish the target and bank the result.";
+  const seeded = Number(runSeed) > 0;
+  const canRematch = seeded && Number(rematchWave) > 0 && Number(wave) > 1;
+
+  let action = { type: "new_run", label: nextRunDrill.cta || "RUN THE FIX" };
+  if (canRematch) {
+    action = {
+      type: "rematch",
+      label: `RUN THE FIX · REMATCH W${rematchWave}`,
+      seed: Number(runSeed),
+      startWave: Number(rematchWave),
+    };
+  } else if (seeded && nextRunDrill.action === "replay_seed") {
+    action = {
+      type: "replay_seed",
+      label: nextRunDrill.cta || `REPLAY #${runSeed}`,
+      seed: Number(runSeed),
+    };
+  }
+
+  return {
+    diagnosis,
+    focus: nextContract.focus || nextRunDrill.title || "Stabilize the opener",
+    target,
+    proof,
+    action,
+    secondaryDisclosureLabel: "OPEN RUN ANALYSIS",
+    focusOrder: ["run_the_fix", "secondary_analysis", "more_run_actions"],
+  };
+}
+
 export function buildDeathScreenProps({
   score,
   kills,

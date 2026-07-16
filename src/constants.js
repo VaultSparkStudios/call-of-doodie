@@ -653,7 +653,7 @@ export const WAVE_ROUTES = [
     name: "Mutation Wave",
     desc: "A random mutation hits this wave. +50% XP.",
     color: "#CC44FF",
-    apply: (gs, perkMods) => {
+    apply: (gs, perkMods, rng = Math.random) => {
       const ROUTE_MUTS = [
         g => { g.mutEnemySizeMult = (g.mutEnemySizeMult || 1) * 0.65; },
         g => { g.mutEnemySizeMult = (g.mutEnemySizeMult || 1) * 1.5; },
@@ -663,7 +663,7 @@ export const WAVE_ROUTES = [
         g => { g.mutSpawnFrozen = 120; },
         g => { g.waveEnemyMult = (g.waveEnemyMult || 1) * 1.5; g.mutEnemyHPMult = (g.mutEnemyHPMult || 1) * 0.6; },
       ];
-      ROUTE_MUTS[Math.floor(Math.random() * ROUTE_MUTS.length)](gs);
+      ROUTE_MUTS[Math.floor(rng() * ROUTE_MUTS.length)](gs);
       perkMods.xpMult = (perkMods.xpMult || 1) * 1.5;
     },
   },

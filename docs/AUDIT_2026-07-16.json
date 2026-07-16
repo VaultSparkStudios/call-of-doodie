@@ -1,0 +1,247 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit Codex continuous arc",
+  "generatedAt": "2026-07-16",
+  "project": "call-of-doodie",
+  "type": "app",
+  "rubric": "product",
+  "meta": {
+    "generatedAt": "2026-07-16",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "combinedPriority": 181.1,
+    "top3": [
+      "startup-brief-truth-and-resilience",
+      "return-loop-integrity",
+      "competitive-rng-stream-contract"
+    ],
+    "livePremiseVerification": true,
+    "specialtyLenses": [
+      "game-loop review",
+      "app release gate"
+    ]
+  },
+  "recoveryCorrection": {
+    "correctedAt": "2026-07-16",
+    "reason": "arc-profile identifies this public game as type app with the product rubric; the interrupted audit mislabeled its rubric as infrastructure even though its live findings spanned product and release surfaces.",
+    "preservedFindings": true,
+    "gameLoopScores": {
+      "loopTightness": 84,
+      "progression": 88,
+      "sessionEngagement": 86,
+      "retention": 91,
+      "soulFidelity": 90
+    }
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "infrastructure / observability honesty",
+      "effortHours": 1,
+      "impact": 10,
+      "innovation": 6,
+      "priority": 37.9,
+      "slug": "startup-brief-truth-and-resilience",
+      "title": "Make the startup context meter unit-safe and the experimental renderer fallback non-fatal.",
+      "status": "unblocked",
+      "why": "Live evidence disagrees: `context-meter.mjs --json` reports `pctUsed: 0.6` (5,973/1,000,000), while the freshly rendered brief says `60% used`. `render-startup-brief.mjs` ambiguously treats values <=1 as fractions even though the live meter already returns percent units. The same renderer advertises `--v5` but crashes because `render-startup-brief-v5.mjs` is absent. Both are executable protocol defects, and the percentage error violates CANON-031.",
+      "recipe": "Extract a pure context-meter view normalizer with an explicit live-percent versus fallback-fraction contract, clamp and self-validate derived values, cover 0.6%, 60%, fraction fallback, and invalid input with focused tests, then make a missing v5 delegate fall back to the canonical renderer with an honest warning instead of crashing. Re-render and assert the displayed percent matches the measured token ratio.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Correct the live/fallback branch and guard the missing v5 file." },
+        "L2": { "effortHours": 1, "recipe": "Add a pure unit-normalization helper, regression tests, and live render verification." },
+        "L3": { "effortHours": 1.5, "recipe": "Add invariant checks for percent, fraction, token ratio, clamping, and graceful v5 fallback; prove the generated brief is coherent." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "gamification / retention / progression integrity",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 31.5,
+      "slug": "return-loop-integrity",
+      "title": "Repair mission streak continuity and remove REMATCH permanent-progression farming.",
+      "status": "unblocked",
+      "why": "`advanceMissionStreak()` stores `lastCompleted` as `YYYY-MM-DD` but removes dashes from the computed yesterday key, so natural multi-day streaks reset to one. Separately, REMATCH practice skips records but still passes kills, boss kills, damage, and weapon kills into `updateCareerStats()` and writes per-enemy career bests at wave clear, allowing a high-wave practice restart to accelerate account and weapon unlocks.",
+      "recipe": "Centralize the mission day-key contract and test same-day, consecutive-day, missed-day, and malformed storage behavior. Build a pure run-to-career update contract that preserves only non-progression session bookkeeping for practice runs, gate wave-clear career writes, and add tests proving REMATCH cannot change kills, weapon mastery, boss kills, achievements, missions, records, or account level while normal runs remain unchanged.",
+      "ladder": {
+        "L1": { "effortHours": 0.75, "recipe": "Fix the dashed date comparison and zero practice kills." },
+        "L2": { "effortHours": 2, "recipe": "Add pure contracts and focused regression tests for streak and practice progression." },
+        "L3": { "effortHours": 3, "recipe": "Separate REMATCH mastery receipts from career state and verify every permanent progression write path." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "game trust / replay integrity / security",
+      "effortHours": 6,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 30,
+      "slug": "competitive-rng-stream-contract",
+      "title": "Turn Daily and Gauntlet 'same seed' into an end-to-end gameplay contract.",
+      "status": "unblocked",
+      "why": "Spawn geometry is seeded, but live score-affecting branches still use `Math.random()`: objective and wave-contract selection, phantom elites, weapon spread, crits, coin and pickup drops, chain lightning, mutation options, mines, boss add placement, teleports, and obstacle choices. The existing fairness test covers spawn timelines, so player copy promising the same battlefield is stronger than the implementation.",
+      "recipe": "Create named deterministic run streams derived from the run seed (combat, loot, choices, hazards) with serializable state. Route every gameplay-affecting random branch through the correct stream while leaving cosmetic-only randomness explicitly separate. Pass seeded RNG into objective, perk, route, shop, and pickup helpers. Add a ten-wave competitive receipt harness that proves identical seed plus command schedule yields identical score-affecting decisions and a different seed diverges; keep replay labels advisory until full physics resimulation exists.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Seed objective, contract, elite, crit, and drop rolls." },
+        "L2": { "effortHours": 6, "recipe": "Introduce named streams and route all competitive score-affecting randomness with deterministic receipt tests." },
+        "L3": { "effortHours": 8, "recipe": "Make stream state serializable, classify cosmetic exclusions, add divergence/property coverage, and emit an audit receipt without overstating full replay parity." }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "HOT",
+      "axis": "UI / UX / engagement feedback loop",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 28,
+      "slug": "deathscreen-run-the-fix-hierarchy",
+      "title": "Collapse the post-run advice maze into one measurable corrective action.",
+      "status": "unblocked",
+      "why": "The live DeathScreen renders NEXT BEST MOVES, CORRECTIVE REMATCH, RUN INTELLIGENCE, NEXT DRILL, a second CONTRACT, then six peer-level action buttons. The diagnosis quality is strong, but the duplicated hierarchy buries the intended immediate correction loop.",
+      "recipe": "Compose one primary 'RUN THE FIX' contract card from the existing debrief/rematch evidence: one diagnosis, one target, one proof condition, one action. Move secondary analysis and share/leaderboard controls behind a clearly labeled disclosure without deleting information. Add component tests for a rematch-capable run, a wave-one run, keyboard focus order, and honest fallback copy when evidence is sparse.",
+      "ladder": {
+        "L1": { "effortHours": 0.75, "recipe": "Promote one primary CTA and demote duplicate buttons visually." },
+        "L2": { "effortHours": 2, "recipe": "Build a single evidence-derived contract card with accessible secondary disclosure and tests." },
+        "L3": { "effortHours": 3, "recipe": "Unify the contract presenter, telemetry event, focus behavior, and reduced-motion/mobile layout." }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "FIRE",
+      "axis": "release infrastructure / dual-audience web contract",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 7,
+      "priority": 27.1,
+      "slug": "public-launch-contract-surface",
+      "title": "Ship the missing human, agent, legal, discovery, and rollback surfaces.",
+      "status": "unblocked",
+      "why": "The read-only release gate found that `/privacy`, `/terms`, `/contact`, `/agents.json`, `/.well-known/llms.txt`, `/sitemap.xml`, and `/robots.txt` all resolve to the game SPA fallback because no source files/routes exist. Both footers omit `LLC. All rights reserved.` and legal destinations. No footer manifest, release parity note, or executable rollback plan exists. Production smoke is green, but that cannot substitute for these public contracts.",
+      "recipe": "Add branded, responsive, CSP-compatible static Privacy, Terms, and Contact pages; machine-readable agents.json, llms.txt, sitemap.xml, and robots.txt; JSON-LD discovery in the game shell; a footer manifest plus complete footer links on both home surfaces; and an explicit deploy rollback runbook with triggers, commands, and verification. Add a local contract validator and tests/build assertions. State the on-domain email forwarding as unverified until Brevo capability is available—never claim delivery without evidence.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Add missing files, exact proprietary footer, and legal links." },
+        "L2": { "effortHours": 4, "recipe": "Add polished human/agent surfaces, footer manifest, JSON-LD, rollback plan, and automated contract checks." },
+        "L3": { "effortHours": 6, "recipe": "Verify responsive accessibility, content parity, sitemap/agent schemas, CSP compatibility, build output, and live-like staging routes without fabricating email or launch approval." }
+      }
+    },
+    {
+      "rank": 6,
+      "tier": "HOT",
+      "axis": "audit infrastructure / speed / token efficiency",
+      "effortHours": 1.5,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 26.6,
+      "slug": "audit-sampler-diversity",
+      "title": "Prevent one god-object from consuming the entire live-code audit sample.",
+      "status": "unblocked",
+      "why": "The mandated `sample-codebase.mjs --max-tokens 30000 --json` sampled only package.json, vite.config.js, and the first portion of the 4,700+ line App.jsx. It consumed the full 120,000-character budget before reaching wave systems, DeathScreen, storage, protocol tooling, or tests, undermining premise verification and wasting tokens on a single head-only excerpt.",
+      "recipe": "Implement deterministic stratified sampling with a per-file cap and head/middle/tail excerpts, reserve budget across runtime, systems, UI, tooling, context, and tests, expose truncation/coverage metadata, and add fixture-backed tests proving a large priority file cannot starve the rest of the sample. Measure sampled-file count and category coverage before/after at the same token budget.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Add a per-file character cap." },
+        "L2": { "effortHours": 1.5, "recipe": "Add stratified excerpts, category reserves, metadata, and tests." },
+        "L3": { "effortHours": 2.5, "recipe": "Make selection deterministic and diversity-aware, with explicit omission receipts and before/after token-efficiency evidence." }
+      }
+    }
+  ],
+  "infrastructureRubric": {
+    "staleScripts": "No premise strong enough for an item: recent protocol and deploy scripts are actively referenced; age alone was not treated as deadness.",
+    "orphanedWorkflows": "No safe deletion item: Cloudflare production and manually dispatched GitHub Pages fallback workflows are both intentional, though staging isolation remains a release-gate deferral.",
+    "divergentRenderers": "Verified renderer defect is scoped into startup-brief-truth-and-resilience; no broad renderer consolidation without behavior evidence.",
+    "parserDrift": "No new verified parser contradiction found in the sampled task/status surfaces.",
+    "godObjects": "App.jsx (~4.7k lines), MenuScreen.jsx (~1.6k), drawGame.js (~1.4k), DeathScreen.jsx (~1.3k), render-startup-brief.mjs (~1.3k), HomeV2.jsx (~1.2k), storage.js (~1.1k), and constants.js (~1.0k) are large. Broad extraction was rejected as churn; targeted seam extractions are included only where they close live defects.",
+    "missingTests": "Verified missing regression surfaces for context-meter units, sampler diversity, mission streak continuity, practice progression exclusion, public route contracts, and end-to-end competitive RNG.",
+    "deadCode": "The v5 opt-in points at a missing module; repair is included. Obelisk risk scaffolding is unreferenced but retained because ownership is protocol/canon-sensitive.",
+    "dependencies": "Main was freshly fast-forwarded through three Dependabot commits; no install or speculative version churn is proposed."
+  },
+  "skipped": [
+    {
+      "slug": "wave-interstitial-pacing",
+      "reason": "Code suggests stacked interruptions, but no `docs/PLAYTESTS` evidence exists. A pacing rewrite without dwell/abandon evidence would be speculative; record instrumentation as a future candidate rather than fabricating a fun result."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "`node scripts/check-secrets.mjs --for analytics` is MISSING. Supabase CORS is already closed; PostHog/Sentry/Ko-fi dashboard work remains credential/admin gated."
+    },
+    {
+      "slug": "contact-email-forwarding",
+      "reason": "`node scripts/check-secrets.mjs --for brevo` is MISSING. The static contact surface can ship, but forwarding/delivery must remain explicitly unverified until the Brevo route and SPF/DKIM can be tested."
+    },
+    {
+      "slug": "physical-pwa-gamepad-qa",
+      "reason": "Requires a real PWA install/relaunch and physical controller/browser evidence. Local automation cannot truthfully substitute."
+    },
+    {
+      "slug": "homev2-retirement",
+      "reason": "Requires real production Lighthouse and funnel deltas; no fabricated metrics and no fallback deletion."
+    },
+    {
+      "slug": "staging-and-launch-approval",
+      "reason": "Current GitHub Pages fallback is not an isolated current staging environment, and no founder launch approval exists. This arc may verify a local/staged build but must not flip SPARKED or claim launch readiness."
+    }
+  ],
+  "validation": [
+    "npx vitest run tests/startup-brief-context-meter.test.js tests/sample-codebase.test.js src/storage.test.js src/systems/rematchDrill.test.js src/utils/runRng.test.js src/components/DeathScreen.test.jsx tests/public-contract.test.js",
+    "node scripts/render-startup-brief.mjs",
+    "node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md",
+    "node scripts/sample-codebase.mjs --max-tokens 30000 --json",
+    "node scripts/validate-public-contract.mjs",
+    "npm run lint",
+    "npm test",
+    "npm run replay:state-stepper",
+    "npm run replay:edge-fixtures",
+    "npm run launch:media-check",
+    "npm run launch:qa",
+    "npm run build",
+    "git diff --check"
+  ],
+  "executionLog": [
+    {
+      "slug": "startup-brief-truth-and-resilience",
+      "rung": "L3",
+      "shipped": true,
+      "outcome": "Added a token-ratio-first context-meter view contract, unit/coherence regression tests, graceful missing-v5 fallback, and a coherent regenerated brief.",
+      "verification": "tests/startup-brief-context-meter.test.js; startup render + format validator"
+    },
+    {
+      "slug": "return-loop-integrity",
+      "rung": "L2",
+      "shipped": true,
+      "outcome": "Unified mission streak keys on the local YYYY-MM-DD contract and made REMATCH career isolation explicit, preserving only run/death/play-time bookkeeping while gating enemy-career writes.",
+      "verification": "src/storage.test.js + src/systems/rematchDrill.test.js"
+    },
+    {
+      "slug": "competitive-rng-stream-contract",
+      "rung": "L3",
+      "shipped": true,
+      "outcome": "Introduced serializable named per-wave spawn/combat/loot/choices/hazards streams, wired every App score-affecting roll, retained explicit cosmetic randomness, and added a deterministic ten-wave receipt plus direct-randomness guard.",
+      "verification": "src/systems/runRng.test.js and injected helper suites"
+    },
+    {
+      "slug": "deathscreen-run-the-fix-hierarchy",
+      "rung": "L3",
+      "shipped": true,
+      "outcome": "Promoted one evidence-derived RUN THE FIX contract/CTA and moved tactical intelligence plus share/leaderboard/menu actions behind accessible disclosures.",
+      "verification": "src/systems/deathFlow.test.js + focused DeathScreen lint"
+    },
+    {
+      "slug": "public-launch-contract-surface",
+      "rung": "L3",
+      "shipped": true,
+      "outcome": "Added proprietary legal/contact pages, dual-audience standard files, JSON-LD/CSP binding, complete footers, release parity and rollback docs, and an executable contract validator without fabricating email delivery.",
+      "verification": "tests/public-contract.test.js + node scripts/validate-public-contract.mjs"
+    },
+    {
+      "slug": "audit-sampler-diversity",
+      "rung": "L3",
+      "shipped": true,
+      "outcome": "Replaced head-only sampling with deterministic stratified head/middle/tail excerpts, per-file caps, coverage/omission receipts, and regression tests.",
+      "verification": "tests/sample-codebase.test.js; live 30k-token sample covers 9 categories / 21 files"
+    }
+  ]
+}

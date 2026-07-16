@@ -17,7 +17,7 @@ import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPa
 import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
-import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
+import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -535,6 +535,45 @@ export default function DeathScreen({
   // derived from the death wave (boss waves start one wave early).
   const practiceRun = !!gsSnapshot?.practiceRun;
   const rematchWave = resolveRematchStartWave(wave);
+  const runTheFix = buildRunTheFixContract({
+    debrief,
+    postRunIntel,
+    nextRunDrill,
+    runSeed,
+    wave,
+    rematchWave,
+  });
+  const executeRunTheFix = () => {
+    track("run_the_fix_accept", {
+      action: runTheFix.action.type,
+      seed: runTheFix.action.seed || null,
+      startWave: runTheFix.action.startWave || null,
+      drillId: nextRunDrill.id,
+      score,
+      wave,
+      mode,
+    });
+    saveStudioGameEvent(buildStudioGameEvent("run_the_fix_accept", {
+      surface: "death_screen",
+      action: runTheFix.action.type,
+      drillId: nextRunDrill.id,
+      seed: runTheFix.action.seed || null,
+      startWave: runTheFix.action.startWave || null,
+      score,
+      wave,
+      mode,
+    }));
+    if (runTheFix.action.type === "rematch") {
+      onStartGame(runTheFix.action.seed, {
+        startWave: runTheFix.action.startWave,
+        drill: { ...nextRunDrill, deathWave: wave },
+      });
+    } else if (runTheFix.action.type === "replay_seed") {
+      onStartGame(runTheFix.action.seed);
+    } else {
+      onStartGame();
+    }
+  };
 
   const handleSubmit = async () => {
     const words = lastWords.trim().split(/\s+/).filter(Boolean);
@@ -793,7 +832,32 @@ export default function DeathScreen({
           </div>
         </div>
 
-        <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
+        <div data-focus-order="run_the_fix" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
+          <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>RUN THE FIX</div>
+          <div style={{ marginTop: 7, fontSize: 16, color: "#FFF", fontWeight: 900, textTransform: "uppercase" }}>{runTheFix.focus}</div>
+          <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
+            <strong style={{ color: "#FF9A67" }}>Diagnosis:</strong> {runTheFix.diagnosis}
+          </div>
+          <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
+            <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
+            <div style={{ marginTop: 4, fontSize: 10, color: "#8FEFFF", lineHeight: 1.45 }}>{runTheFix.proof}</div>
+          </div>
+          <button
+            data-testid="run-the-fix"
+            aria-label={`${runTheFix.action.label}: ${runTheFix.target}`}
+            onClick={executeRunTheFix}
+            style={{ marginTop: 10, width: "100%", padding: "11px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 13, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}
+          >
+            {runTheFix.action.label}
+          </button>
+        </div>
+
+        <details data-focus-order="secondary_analysis" style={{ width: "100%", marginBottom: 12 }}>
+          <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.045)", color: "#B8C0D0", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
+            {runTheFix.secondaryDisclosureLabel}
+          </summary>
+
+        <div style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
           <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>TACTICAL DEBRIEF</div>
           <div style={{ fontSize: 18, color: "#FFF", fontWeight: 900, textTransform: "uppercase", letterSpacing: 1 }}>
             {debrief.verdict}
@@ -898,6 +962,7 @@ export default function DeathScreen({
             </button>
           </div>
         </div>
+        </details>
 
         {/* Weapon kill breakdown */}
         {weaponKills && weaponKills.some(k => k > 0) && (() => {
@@ -1302,6 +1367,11 @@ export default function DeathScreen({
           </div>
         )}
 
+        <details data-focus-order="more_run_actions" style={{ width: "100%", marginTop: 4 }}>
+          <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.035)", color: "#9299A8", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
+            MORE RUN ACTIONS
+          </summary>
+
         {runSeed > 0 && (
           <div style={{ marginBottom: 10, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, flexWrap: "wrap" }}>
             <span style={{ fontSize: 10, color: "#aaa", letterSpacing: 1 }}>SEED #{runSeed}</span>
@@ -1371,6 +1441,7 @@ export default function DeathScreen({
           <button aria-label="View leaderboard" onClick={() => { track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
           <button aria-label="Return to main menu" onClick={() => { track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause }); onMenu(); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
+        </details>
       </div>
       </div>
 

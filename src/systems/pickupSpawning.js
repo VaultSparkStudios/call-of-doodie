@@ -15,7 +15,7 @@ const PICKUP_TYPES = ["health", "ammo", "speed", "nuke", "upgrade", "rage", "mag
  * @param {object} opts
  * @param {number} [opts.ammoDropMult=1] - Scavenger perk ammo-drop multiplier
  */
-export function spawnPickup(gs, ex, ey, isBoss, { ammoDropMult = 1 } = {}) {
+export function spawnPickup(gs, ex, ey, isBoss, { ammoDropMult = 1, rng = Math.random } = {}) {
   const vampireMode = gs.vampireMode;
   const armoryRun = gs.routeArmoryRun;
 
@@ -30,7 +30,7 @@ export function spawnPickup(gs, ex, ey, isBoss, { ammoDropMult = 1 } = {}) {
     ? [vampireMode ? 0 : 0.19, ammoW, 0.07, 0.07, 0.34, 0.09, 0.06, 0.06, 0.05]
     : [vampireMode ? 0 : 0.38, ammoW, 0.17, 0.04, upgradeW, 0.09, 0.07, 0.07, 0.03];
 
-  let roll = Math.random();
+  let roll = rng();
   let cumul = 0;
   let pType = "health";
   for (let i = 0; i < PICKUP_TYPES.length; i++) {

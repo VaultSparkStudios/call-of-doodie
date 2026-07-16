@@ -24,6 +24,12 @@ import {
   isMissionCompleted,
   trackRhythmMasteryHit,
   getRhythmMastery,
+  advanceMissionStreak,
+  buildMissionStreakState,
+  getMissionStreak,
+  loadCareerStats,
+  saveCareerStats,
+  updateCareerStats,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -201,6 +207,128 @@ describe("mission progress lookup", () => {
     expect(isMissionCompleted(progress, missions[0], 0)).toBe(true);
     expect(isMissionCompleted(progress, missions[1], 1)).toBe(true);
     expect(countIncompleteMissions(missions, progress)).toBe(1);
+  });
+});
+
+describe("mission streak continuity", () => {
+  it("advances across consecutive local calendar days", () => {
+    expect(buildMissionStreakState(
+      { streak: 4, lastCompleted: "2026-07-15" },
+      new Date(2026, 6, 16, 8, 30),
+    )).toEqual({ streak: 5, lastCompleted: "2026-07-16" });
+  });
+
+  it("is idempotent on the same day and resets after a missed day", () => {
+    expect(buildMissionStreakState(
+      { streak: 4, lastCompleted: "2026-07-16" },
+      new Date(2026, 6, 16, 23, 59),
+    )).toEqual({ streak: 4, lastCompleted: "2026-07-16" });
+    expect(buildMissionStreakState(
+      { streak: 9, lastCompleted: "2026-07-14" },
+      new Date(2026, 6, 16, 8, 30),
+    )).toEqual({ streak: 1, lastCompleted: "2026-07-16" });
+  });
+
+  it("recovers safely from malformed persisted values", () => {
+    expect(buildMissionStreakState(
+      { streak: "not-a-number", lastCompleted: "yesterday-ish" },
+      new Date(2026, 6, 16, 8, 30),
+    )).toEqual({ streak: 1, lastCompleted: "2026-07-16" });
+  });
+
+  it("persists the dashed key contract used by daily missions", () => {
+    localStorage.clear();
+    const now = new Date(2026, 6, 16, 8, 30);
+    expect(advanceMissionStreak(now)).toEqual({ streak: 1, lastCompleted: "2026-07-16" });
+    expect(getMissionStreak()).toEqual({ streak: 1, lastCompleted: "2026-07-16" });
+  });
+});
+
+describe("REMATCH career isolation", () => {
+  it("keeps session bookkeeping without changing permanent progression", () => {
+    localStorage.clear();
+    saveCareerStats({
+      ...loadCareerStats(),
+      totalKills: 79,
+      totalRuns: 3,
+      totalDeaths: 2,
+      totalPlayTime: 100,
+      bestScore: 5000,
+      bestWave: 8,
+      bestStreak: 12,
+      bestKills: 30,
+      bestCombo: 7,
+      bestLevel: 4,
+      totalDamage: 9000,
+      totalCrits: 20,
+      totalGrenades: 4,
+      totalDashes: 10,
+      totalBossKills: 2,
+      achievementsEver: ["baseline"],
+      weaponLegendKills: [49, 0],
+      enemyKillBests: { 2: { waveMax: 3, careerKills: 8, killedByCount: 0 } },
+    });
+
+    const before = loadCareerStats();
+    const result = updateCareerStats({
+      kills: 500,
+      deaths: 1,
+      score: 999999,
+      wave: 50,
+      streak: 100,
+      damage: 50000,
+      playTime: 61.9,
+      achievementIds: ["practice-farm"],
+      crits: 100,
+      grenades: 50,
+      dashes: 80,
+      level: 25,
+      combo: 99,
+      bossKills: 12,
+      weaponKills: [1000, 1000],
+      practiceRun: true,
+    });
+    const after = loadCareerStats();
+
+    expect(result).toMatchObject({ weaponMilestones: [], practiceExcluded: true });
+    expect(after).toEqual({
+      ...before,
+      totalRuns: before.totalRuns + 1,
+      totalDeaths: before.totalDeaths + 1,
+      totalPlayTime: before.totalPlayTime + 61,
+    });
+    expect(getAccountLevel(after.totalKills)).toBe(getAccountLevel(before.totalKills));
+  });
+
+  it("keeps the normal-run progression contract unchanged", () => {
+    localStorage.clear();
+    const result = updateCareerStats({
+      kills: 20,
+      deaths: 1,
+      score: 4000,
+      wave: 6,
+      streak: 8,
+      damage: 1500,
+      playTime: 90,
+      achievementIds: ["normal-run"],
+      crits: 5,
+      grenades: 2,
+      dashes: 4,
+      level: 3,
+      combo: 6,
+      bossKills: 1,
+      weaponKills: [20],
+    });
+
+    expect(result.practiceExcluded).toBeUndefined();
+    expect(result.career).toMatchObject({
+      totalKills: 20,
+      bestScore: 4000,
+      bestWave: 6,
+      totalBossKills: 1,
+      achievementsEver: ["normal-run"],
+      weaponLegendKills: [20],
+    });
   });
 });
 

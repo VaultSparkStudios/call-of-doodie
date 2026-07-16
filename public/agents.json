@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "name": "Call of Doodie",
+  "canonicalUrl": "https://callofdoodie.wtf/",
+  "publisher": {
+    "name": "VaultSpark Studios LLC",
+    "url": "https://vaultsparkstudios.com/"
+  },
+  "description": "A free comedy-first browser roguelite shooter with daily seeds, boss rushes, buildcraft, replay-proof receipts, and public leaderboards.",
+  "audience": ["humans", "ai-agents"],
+  "access": {
+    "play": "public",
+    "readDocumentation": "public",
+    "writeActions": "not-offered",
+    "authentication": "none-required-for-public-read"
+  },
+  "resources": [
+    { "rel": "home", "href": "https://callofdoodie.wtf/" },
+    { "rel": "privacy", "href": "https://callofdoodie.wtf/privacy/" },
+    { "rel": "terms", "href": "https://callofdoodie.wtf/terms/" },
+    { "rel": "contact", "href": "https://callofdoodie.wtf/contact/" },
+    { "rel": "llms", "href": "https://callofdoodie.wtf/.well-known/llms.txt" },
+    { "rel": "sitemap", "href": "https://callofdoodie.wtf/sitemap.xml" }
+  ],
+  "capabilities": [
+    {
+      "id": "game.describe",
+      "mode": "read",
+      "description": "Describe the public game loop, modes, accessibility, and competitive-trust posture from published pages."
+    }
+  ],
+  "trust": {
+    "competitiveReplayClaim": "advisory deterministic evidence; not full physics resimulation",
+    "freeTierCostStatus": "cost-neutral",
+    "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC"
+  }
+}

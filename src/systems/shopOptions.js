@@ -1,15 +1,15 @@
 import { WEAPONS } from "../constants.js";
 
-function shuffle(list) {
+function shuffle(list, rng = Math.random) {
   const copy = [...list];
   for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
 }
 
-export function getShopOptions(gs, wpnIdx) {
+export function getShopOptions(gs, wpnIdx, rng = Math.random) {
   const safeGs = gs || {};
   const p = safeGs.player || { health: 100, maxHealth: 100 };
   const safeWeaponIdx = WEAPONS[wpnIdx] ? wpnIdx : 0;
@@ -17,7 +17,7 @@ export function getShopOptions(gs, wpnIdx) {
     .map((_, i) => i)
     .filter(i => i !== safeWeaponIdx && !(safeGs.weaponMods?.[i]?.blessed) && !(safeGs.weaponMods?.[i]?.cursed));
   const blessTarget = unblessedIdx.length > 0
-    ? unblessedIdx[Math.floor(Math.random() * unblessedIdx.length)]
+    ? unblessedIdx[Math.floor(rng() * unblessedIdx.length)]
     : safeWeaponIdx;
   const alreadyCursed = !!(safeGs.weaponMods?.[safeWeaponIdx]?.cursed);
 
@@ -42,10 +42,10 @@ export function getShopOptions(gs, wpnIdx) {
       desc: `Curse ${WEAPONS[safeWeaponIdx].emoji} (-30% damage) -> gain +50 max health`,
       available: safeGs.currentWave >= 4 && !alreadyCursed,
     },
-  ].filter(option => option.available)).slice(0, 3);
+  ].filter(option => option.available), rng).slice(0, 3);
 }
 
-export function getCoinShopOptions(gs) {
+export function getCoinShopOptions(gs, rng = Math.random) {
   const p = gs?.player || { health: 100, maxHealth: 100 };
   return shuffle([
     { id: "cs_fullhp", emoji: "💖", name: "Full Restore", desc: "Restore to full HP", cost: 20, available: p.health < p.maxHealth },
@@ -55,5 +55,5 @@ export function getCoinShopOptions(gs) {
     { id: "cs_extralife", emoji: "👼", name: "Guardian Angel", desc: "+1 extra life", cost: 45, available: true },
     { id: "cs_maxhp", emoji: "❤️‍🔥", name: "HP Augment", desc: "+30 permanent max HP", cost: 22, available: true },
     { id: "cs_ammo", emoji: "🔋", name: "Full Battery", desc: "Refill all weapons", cost: 10, available: true },
-  ].filter(option => option.available)).slice(0, 3);
+  ].filter(option => option.available), rng).slice(0, 3);
 }

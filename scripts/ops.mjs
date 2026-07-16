@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "./lib/safe-spawn.mjs";
+import { syncDoctorScore } from "./lib/doctor-score-sync.mjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -16,6 +17,25 @@ function runNode(script, extraArgs = []) {
     cwd: ROOT,
     stdio: "inherit",
   });
+  process.exit(result.status ?? 1);
+}
+
+function runDoctor(extraArgs = []) {
+  const result = spawnSync(process.execPath, [STUDIO_OPS, "doctor", ...extraArgs], {
+    cwd: ROOT,
+    stdio: "inherit",
+  });
+  if ((result.status ?? 1) === 0 && extraArgs.includes("--update-json")) {
+    const sourceStatusPath = path.resolve(ROOT, "..", "vaultspark-studio-ops", "context", "PROJECT_STATUS.json");
+    const targetStatusPath = path.join(ROOT, "context", "PROJECT_STATUS.json");
+    try {
+      syncDoctorScore({ sourceStatusPath, targetStatusPath });
+      process.stderr.write("✓ synced doctorScore to this project''s context/PROJECT_STATUS.json\n");
+    } catch (error) {
+      process.stderr.write(`⛔ doctor passed but local doctorScore sync failed: ${error.message}\n`);
+      process.exit(1);
+    }
+  }
   process.exit(result.status ?? 1);
 }
 
@@ -200,7 +220,7 @@ switch (command) {
     runNode(path.join(__dirname, "closeout-autopilot.mjs"), args);
     break;
   case "doctor":
-    runNode(STUDIO_OPS, ["doctor", ...args]);
+    runDoctor(args);
     break;
   case "feedback-score":
     runNode(STUDIO_OPS, ["feedback-score", ...args]);

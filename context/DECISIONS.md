@@ -563,3 +563,29 @@ Decision: When product work is externally gated, a repo-local `/arc` should ship
 Rationale: Observability honesty is a product quality bar for this repo. A health command named in canonical startup/closeout instructions but missing from the local router makes future green signals weaker and can turn a real doctor result into a phantom blocker or stale brief.
 
 Trade-off accepted: No new player-facing feature shipped. The arc improved the launch process by making the health path executable and re-verifying the playable build, replay gates, live site, and launch surfaces.
+
+## 2026-07-16 — Session 122 recovery — Competitive randomness is partitioned, serializable, and backward-compatible
+
+Decision: Every score-affecting random domain uses a named per-wave stream (`spawn`, `combat`, `loot`, `choices`, `hazards`) with serializable snapshot/restore state. The `spawn` stream preserves Session 112''s original `createWaveRng(seed, wave)` derivation byte-for-byte; cosmetic variation uses an explicitly non-competitive source.
+
+Rationale: A single shared RNG stream makes unrelated code changes alter competitive outcomes through call-order coupling. Named streams make Daily Challenge, Gauntlet, replay receipts, and REMATCH drills reproducible by domain while preserving the fixtures and player contracts already shipped under Session 112.
+
+Trade-off accepted: Snapshot receipts carry more RNG state, and every new score-affecting random call must choose a declared domain. This is preferable to invisible cross-system coupling.
+
+## 2026-07-16 — Session 122 recovery — Practice runs may record participation, never progression advantage
+
+Decision: REMATCH practice runs may increment participation-only totals (runs, deaths, play time), but they cannot advance scores, kills, records, achievements, missions, mastery, enemy career records, or mission streaks.
+
+Rationale: Practice needs an honest local receipt without becoming a progression farm. Centralizing the rule in storage and gating enemy-career updates prevents future call sites from bypassing the trust boundary.
+
+## 2026-07-16 — Session 122 recovery — Recovery code may checkpoint; release status remains NO-GO
+
+Decision: The recovered implementation can be committed and pushed after isolated HTTP staging verification, but the product cannot be labeled SPARKED or launch-ready until staged visual/theme evidence and the existing physical/device/credential/data/founder gates pass.
+
+Rationale: Code recovery and production release are separate truth claims. The preview proves deployability and route/header contracts; it does not prove every theme and viewport is visually flawless.
+
+## 2026-07-16 — Session 122 recovery — Local proxy write claims require local receipts
+
+Decision: `node scripts/ops.mjs doctor --update-json` must copy the authoritative Studio doctor receipt into Call of Doodie''s own `context/PROJECT_STATUS.json`; a successful Studio-wide update alone is not sufficient.
+
+Rationale: Session 121 correctly restored the executable doctor route, but its local write-back claim was phantom because the upstream command is rooted to Studio Ops. A project-local proxy must make project-local side effects explicit and tested.

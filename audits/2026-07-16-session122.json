@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-16",
+  "session": 122,
+  "project": "Call-Of-Doodie",
+  "intent": "recover cut-off session, finish audit implementation, close out, and checkpoint",
+  "outcome": "achieved-recovery-boundary",
+  "shipped": [
+    "Startup context-meter resilience and honest fallback",
+    "Public human/agent/legal route contract",
+    "Stratified implementation sampler diversity",
+    "Local-calendar mission streak integrity and practice-run progression isolation",
+    "Serializable named competitive RNG streams with legacy spawn compatibility",
+    "One-primary-action RUN THE FIX DeathScreen hierarchy"
+  ],
+  "validation": [
+    "changed/untracked JSON parse clean; no changed NDJSON; Claude guard valid",
+    "npm run lint passed",
+    "npm test 631/631 across 76 files",
+    "focused audit tests 86/86",
+    "replay state-stepper 4/4",
+    "replay edge fixtures 4/4",
+    "launch media and launch QA passed",
+    "npm run build passed",
+    "isolated Cloudflare preview required-route contract 9/9",
+    "git diff --check passed"
+  ],
+  "deferred": [
+    "fresh staged visual/theme/viewport evidence",
+    "physical PWA and gamepad QA",
+    "analytics and Sentry project-scope confirmation",
+    "HomeV2 production Lighthouse/funnel evidence",
+    "founder launch approval"
+  ],
+  "sil": {
+    "score": 1000,
+    "velocity": 6,
+    "debt": "decreasing"
+  },
+  "headline": "Recovered the cut-off six-item audit with compatibility-preserving competitive RNG and honest staging evidence",
+  "items": [
+    {
+      "title": "Recovery integrity and implementation completion",
+      "projectImpact": 10,
+      "ecosystemImpact": 7,
+      "evidence": "Six audit items shipped; 631/631 tests; no phantom-green claims"
+    },
+    {
+      "title": "Competitive determinism partition",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "Named serializable streams with byte-compatible spawn derivation and browser/edge parity fixtures"
+    },
+    {
+      "title": "Isolated recovery staging",
+      "projectImpact": 8,
+      "ecosystemImpact": 6,
+      "evidence": "Cloudflare preview with 9/9 public route/header contract; visual evidence honestly deferred"
+    }
+  ],
+  "followUps": [
+    "Build the repo-local arbitrary-preview visual/theme evidence harness from the pinned Playwright dependency",
+    "Run the fresh saturated arc and innovation pack after the recovery checkpoint",
+    "Keep SPARKED/public launch at NO-GO until every real gate passes"
+  ],
+  "blockers": [
+    "Physical PWA/gamepad QA requires real hardware",
+    "Analytics/Sentry scope and production HomeV2 evidence remain external",
+    "Public launch requires founder approval"
+  ]
+}

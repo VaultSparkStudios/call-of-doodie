@@ -1,7 +1,72 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildDeathCoachTelemetry, buildDeathScreenProps, buildDebriefStudioEventPlan, buildScoreSubmitFallbackStudioEvent } from "./deathFlow.js";
+import fs from "node:fs";
+import path from "node:path";
+import { buildDeathCoachTelemetry, buildDeathScreenProps, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "./deathFlow.js";
 
 describe("buildDeathScreenProps", () => {
+  it("promotes a seeded corrective REMATCH into the single primary action", () => {
+    const contract = buildRunTheFixContract({
+      debrief: {
+        collapseReason: "You got pinned between a ranged lane and the wall.",
+        nextRunContract: {
+          focus: "SPACE FIRST",
+          target: "Clear the death wave without touching the outer wall.",
+          proof: "Win condition: clear wave 8 with one dash still ready.",
+        },
+      },
+      nextRunDrill: { id: "spacing", title: "Spacing drill", cta: "TRY AGAIN" },
+      runSeed: 77,
+      wave: 8,
+      rematchWave: 8,
+    });
+
+    expect(contract.action).toEqual({
+      type: "rematch",
+      label: "RUN THE FIX · REMATCH W8",
+      seed: 77,
+      startWave: 8,
+    });
+    expect(contract.focusOrder).toEqual(["run_the_fix", "secondary_analysis", "more_run_actions"]);
+  });
+
+  it("uses a clean new-run action for a wave-one collapse", () => {
+    const contract = buildRunTheFixContract({
+      debrief: { nextRunContract: { focus: "SAFE OPENER" } },
+      nextRunDrill: { title: "Reset the opener", cta: "DEPLOY AGAIN" },
+      runSeed: 44,
+      wave: 1,
+      rematchWave: null,
+    });
+
+    expect(contract.action).toEqual({ type: "new_run", label: "DEPLOY AGAIN" });
+    expect(contract.focus).toBe("SAFE OPENER");
+  });
+
+  it("falls back honestly when run evidence is sparse", () => {
+    const contract = buildRunTheFixContract({});
+
+    expect(contract).toMatchObject({
+      diagnosis: "pressure breakdown",
+      focus: "Stabilize the opener",
+      target: "Survive one more wave with one deliberate adjustment.",
+      proof: "Win condition: finish the target and bank the result.",
+      secondaryDisclosureLabel: "OPEN RUN ANALYSIS",
+    });
+  });
+
+  it("keeps keyboard focus order primary-first with disclosures after it", () => {
+    const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreen.jsx"), "utf8");
+    const primary = source.indexOf('data-focus-order="run_the_fix"');
+    const analysis = source.indexOf('data-focus-order="secondary_analysis"');
+    const moreActions = source.indexOf('data-focus-order="more_run_actions"');
+
+    expect(primary).toBeGreaterThan(-1);
+    expect(analysis).toBeGreaterThan(primary);
+    expect(moreActions).toBeGreaterThan(analysis);
+    expect(source).toContain('data-testid="run-the-fix"');
+    expect(source).toContain("<summary");
+  });
+
   it("maps death screen state without reaching into React", () => {
     const onStartGame = vi.fn();
     const props = buildDeathScreenProps({

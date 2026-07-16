@@ -22,6 +22,21 @@ pm run launch:qa all passed.\n- Deferred truths remain external: Cloudflare toke
 
 Overall status: green locally
 Last reviewed: 2026-07-03
+
+## 2026-07-16 — Session 122 recovery — Interrupted-work and release-gate truth
+
+- Recovery boundary truth — Session 122 was not complete when recovered. The stale lock and dirty tree showed `/start` + `/audit` completed, three audit items partially implemented, and three without implementation footprints. All Session 122 product changes were uncommitted.
+- Integrity truth — every changed/untracked JSON parsed, there was no changed NDJSON, the Claude guard configuration was valid with no recent corruptions, and no confirmed debris was deleted.
+- Implementation truth — all six items in `docs/AUDIT_2026-07-16.json` / `.md` now carry execution evidence. The audit profile is corrected to public app/product; the game-loop lens remains additional product evidence, not a replacement rubric.
+- Competitive RNG truth — named streams cover spawn/combat/loot/choices/hazards and are serializable. The spawn stream deliberately preserves the original Session 112 hash; replay browser/edge fixtures remain 4/4. Cosmetic randomness is outside competitive receipts.
+- Practice truth — practice runs record participation-only totals and cannot advance scores, kills, records, achievements, missions, mastery, enemy career records, or mission streaks.
+- Validation truth — lint passed; full tests passed 631/631 across 76 files; replay state/edge fixtures passed 4/4; launch media, launch QA, public contract, build, and diff checks passed.
+- Doctor write-back truth — Session 121''s executable proxy was real, but its `--update-json` project-write claim was not: the upstream doctor wrote Studio Ops only. Session 122 adds a tested fail-closed receipt sync so this repo''s doctorScore now updates from the authoritative result.
+- Staging truth — isolated preview `https://recovery-s122.call-of-doodie.pages.dev` served nine required routes with HTTP 200, expected content types, CSP, nosniff, and referrer policy. A fresh visual/theme/viewport pass is not claimed: browser runtime initialization failed and Obelisk blocked downloading an unpinned CLI.
+- Release truth — app-release verdict remains NO-GO for SPARKED/public launch. Recovery checkpoint authorization does not satisfy physical PWA/gamepad QA, analytics/Sentry scope, HomeV2 production evidence, staged visual/theme proof, or founder launch approval.
+
+Overall status: green recovered code; NO-GO public launch
+Last reviewed: 2026-07-16
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 

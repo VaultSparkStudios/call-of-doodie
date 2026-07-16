@@ -10,6 +10,7 @@ import {
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
+import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { computeKillPoints } from "./systems/scoreLedger.js";
@@ -548,6 +549,8 @@ export default function CallOfDoodie() {
   const initGame = useCallback((forceSeed, startWave, practiceDrill = null) => {
     const w = sizeRef.current.w, h = sizeRef.current.h;
     const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
+    // Seed creation is intentionally nondeterministic; once chosen, every
+    // score-affecting branch uses a named stream derived from this value.
     const seed = (forceSeed && !isNaN(parseInt(forceSeed))) ? Math.abs(parseInt(forceSeed)) % 999999 : Math.floor(Math.random() * 999999);
     const career = loadCareerStats();
     gsRef.current = {
@@ -957,7 +960,7 @@ export default function CallOfDoodie() {
       setMetaToast(toastParts.join("  ·  "));
       setTimeout(() => setMetaToast(null), 4000);
     }
-    setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
+    setTip(TIPS[Math.floor(cosmeticRandom() * TIPS.length)]);
     // Adaptive spawn: notify player if pressure types are being damped this run
     const _asmKeys = Object.keys(gsRef.current._adaptiveSpawnMods || {});
     if (_asmKeys.length > 0) {
@@ -976,8 +979,8 @@ export default function CallOfDoodie() {
     count = Math.max(1, Math.floor(count * (gs.settParticlesMult || 1)));
     const n = Math.min(count, space);
     for (let i = 0; i < n; i++) {
-      const a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 4;
-      gs.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 30 + Math.random() * 20, maxLife: 50, color, size: 2 + Math.random() * 4 });
+      const a = cosmeticRandom() * Math.PI * 2, sp = 1 + cosmeticRandom() * 4;
+      gs.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 30 + cosmeticRandom() * 20, maxLife: 50, color, size: 2 + cosmeticRandom() * 4 });
     }
   };
   const addText = (gs, x, y, text, color = "#FFF", big = false) => {
@@ -994,7 +997,7 @@ export default function CallOfDoodie() {
     });
   };
   const addKillFeed = (enemyName, weaponName) => {
-    const entry = { enemy: enemyName, weapon: weaponName, id: Date.now() + Math.random() };
+    const entry = { enemy: enemyName, weapon: weaponName, id: Date.now() + cosmeticRandom() };
     killFeedRef.current = [entry, ...killFeedRef.current].slice(0, 5);
     setKillFeed([...killFeedRef.current]);
   };
@@ -1015,11 +1018,12 @@ export default function CallOfDoodie() {
     }
   }, [recordCommandTrace]);
   const openQueuedPerkSelection = useCallback(() => {
+    const choiceRng = getRunRng(gsRef.current, "choices");
     const perkSelection = consumeBankedPerkChoice({
       bankedPerkChoices: bankedPerkChoicesRef.current,
       isCursedRun: cursedRunRef.current,
-      getRandomPerks,
-      getFullyCursedPerks,
+      getRandomPerks: (count) => getRandomPerks(count, choiceRng),
+      getFullyCursedPerks: (count) => getFullyCursedPerks(count, choiceRng),
     });
     if (!perkSelection) return false;
     bankedPerkChoicesRef.current = perkSelection.bankedPerkChoices;
@@ -1053,9 +1057,10 @@ export default function CallOfDoodie() {
       deferredShopPendingRef.current = false;
       const gs = gsRef.current;
       if (!gs) return;
-      const opts = getShopOptions(gs, currentWeaponRef.current);
+      const choiceRng = getRunRng(gs, "choices");
+      const opts = getShopOptions(gs, currentWeaponRef.current, choiceRng);
       setShopOptions(opts);
-      setCoinShopOptions(getCoinShopOptions(gs));
+      setCoinShopOptions(getCoinShopOptions(gs, choiceRng));
       setShopPending(true);
       shopPendingRef.current = true;
     }
@@ -1252,9 +1257,10 @@ export default function CallOfDoodie() {
       postMutationShopRef.current = false;
       const gs = gsRef.current;
       if (!gs) return;
-      const opts = getShopOptions(gs, currentWeaponRef.current);
+      const choiceRng = getRunRng(gs, "choices");
+      const opts = getShopOptions(gs, currentWeaponRef.current, choiceRng);
       setShopOptions(opts);
-      setCoinShopOptions(getCoinShopOptions(gs));
+      setCoinShopOptions(getCoinShopOptions(gs, choiceRng));
       setShopPending(true);
       shopPendingRef.current = true;
     }
@@ -1287,7 +1293,7 @@ export default function CallOfDoodie() {
   const applyRoute = useCallback((route) => {
     const gs = gsRef.current;
     if (!gs) return;
-    route.apply(gs, perkModsRef.current);
+    route.apply(gs, perkModsRef.current, getRunRng(gs, "choices"));
     recordCommandTrace("route", route.id);
     const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
     track("route_chosen", {
@@ -1335,7 +1341,10 @@ export default function CallOfDoodie() {
 
   // ── Pickup spawning helper ────────────────────────────────────────────────
   const spawnPickup = useCallback((gs, ex, ey, isBoss) => {
-    _spawnPickup(gs, ex, ey, isBoss, { ammoDropMult: perkModsRef.current.ammoDropMult || 1 });
+    _spawnPickup(gs, ex, ey, isBoss, {
+      ammoDropMult: perkModsRef.current.ammoDropMult || 1,
+      rng: getRunRng(gs, "loot"),
+    });
   }, []);
 
   // ── Reload ────────────────────────────────────────────────────────────────
@@ -1369,6 +1378,8 @@ export default function CallOfDoodie() {
   const shoot = useCallback((gs, weaponIdx, angle) => {
     if (pausedRef.current || perkPendingRef.current) return;
     const weapon = WEAPONS[weaponIdx];
+    const combatRng = getRunRng(gs, "combat");
+    const lootRng = getRunRng(gs, "loot");
     const now = Date.now();
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
     const _wpnMod = gs.weaponMods?.[weaponIdx] || {};
@@ -1387,7 +1398,7 @@ export default function CallOfDoodie() {
         doReload(weaponIdx);
         // Synergy: Overclocked + Scavenger → drop ammo crate on forced reload
         if (perkModsRef.current.reloadDropsAmmo) {
-          gs.pickups.push({ x: gs.player.x + (Math.random()-0.5)*60, y: gs.player.y + (Math.random()-0.5)*60, type: "ammo", life: 300 });
+          gs.pickups.push({ x: gs.player.x + (lootRng()-0.5)*60, y: gs.player.y + (lootRng()-0.5)*60, type: "ammo", life: 300 });
           addText(gs, gs.player.x, gs.player.y - 70, "🎒 AMMO DROP!", "#00BFFF");
         }
         // Synergy: Grenade Chain + Overclocked → forced reload readies grenade
@@ -1406,7 +1417,7 @@ export default function CallOfDoodie() {
       const lowAmmoRoast = getRoastCallout("low_ammo", roastCooldowns.current, gs.currentWave, 1);
       if (lowAmmoRoast) addText(gs, p.x, p.y - 68, lowAmmoRoast, "#FFE082", true);
     }
-    const spread = (Math.random() - 0.5) * weapon.spread;
+    const spread = (combatRng() - 0.5) * weapon.spread;
     const a = angle + spread;
     const _evoMult = weaponEvolutionsRef.current[weaponIdx]?.damageMult || 1;
     const damageMult = (perkModsRef.current.damageMult || 1) * (1 + upgLevel * 0.25) * (gs.synergyDamageMult || 1) * (_wpnMod.damageMult || 1) * _evoMult;
@@ -1428,7 +1439,7 @@ export default function CallOfDoodie() {
       // Shotgun — fire N pellets with independent spread (+ synergy extra)
       const totalPellets = weapon.pellets + (gs.synergyExtraPellets || 0);
       for (let pi = 0; pi < totalPellets; pi++) {
-        const pa = angle + (Math.random() - 0.5) * weapon.spread;
+        const pa = angle + (combatRng() - 0.5) * weapon.spread;
         gs.bullets.push(makeBullet(pa));
       }
     } else if (weapon.burst) {
@@ -1437,7 +1448,7 @@ export default function CallOfDoodie() {
       for (let bi = 1; bi < weapon.burst; bi++) {
         setTimeout(() => {
           if (!gsRef.current || pausedRef.current) return;
-          const ba = angle + (Math.random() - 0.5) * weapon.spread;
+          const ba = angle + (combatRng() - 0.5) * weapon.spread;
           gsRef.current.bullets.push(makeBullet(ba));
         }, bi * (weapon.burstDelay || 90));
       }
@@ -1591,7 +1602,7 @@ export default function CallOfDoodie() {
     soundDeath();
     rumbleGamepad(0.7, 1.0, 600);
     setDeaths(dd => dd + 1);
-    setDeathMessage(gs?.scoreAttackDone ? "⏱ TIME's UP! Your final score stands." : DEATH_MESSAGES[Math.floor(Math.random() * DEATH_MESSAGES.length)]);
+    setDeathMessage(gs?.scoreAttackDone ? "⏱ TIME's UP! Your final score stands." : DEATH_MESSAGES[Math.floor(cosmeticRandom() * DEATH_MESSAGES.length)]);
     setTotalDamage(Math.floor(gs.totalDamage));
     setWeaponKillsSnapshot([...(statsRef.current.weaponKills || [])]);
     setBestStreak(statsRef.current.bestStreak);
@@ -1599,7 +1610,7 @@ export default function CallOfDoodie() {
     // Save career stats + mission progress
     const _prevCareerKills = loadCareerStats().totalKills || 0;
     const _prevAcctLevel = getAccountLevel(_prevCareerKills);
-    // Practice (REMATCH) runs keep grind stats but can't set records from a mid-run start
+    // Practice (REMATCH) runs keep only non-progression session bookkeeping.
     const _isPracticeRun = !!gs?.practiceRun;
     const _careerResult = updateCareerStats({
       kills: gs.kills, deaths: 1, score: _isPracticeRun ? 0 : gs.score, wave: _isPracticeRun ? 0 : gs.currentWave,
@@ -1613,6 +1624,7 @@ export default function CallOfDoodie() {
       combo: _isPracticeRun ? 0 : comboRef.current.max,
       bossKills: statsRef.current.bossKills,
       weaponKills: statsRef.current.weaponKills,
+      practiceRun: _isPracticeRun,
     });
     weaponMilestonesRef.current = _careerResult?.weaponMilestones || [];
     // Weapon unlock telemetry: emit per-weapon event when account level gates a new weapon
@@ -1729,7 +1741,11 @@ export default function CallOfDoodie() {
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     // Show pre-deployment perk draft (skip in Daily Challenge to preserve seed fairness)
     if (!draftShownRef.current && !dailyChallengeMode) {
-      const opts = getRandomPerks(3, [], false);
+      const draftSeed = Number(forceSeed);
+      const draftRng = Number.isFinite(draftSeed) && draftSeed > 0
+        ? createNamedRunRng({ seed: draftSeed, wave: 1, name: "choices" })
+        : Math.random;
+      const opts = getRandomPerks(3, draftRng);
       setDraftOptions(opts);
       setDraftPending(true);
       draftShownRef.current = true;
@@ -2030,7 +2046,7 @@ export default function CallOfDoodie() {
       const dist = Math.hypot(p.x - cx, p.y - cy);
       if (dist < 16) { const ang = Math.atan2(p.y - cy, p.x - cx); p.x = cx + Math.cos(ang) * 17; p.y = cy + Math.sin(ang) * 17; }
     });
-    if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (Math.random() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
+    if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (cosmeticRandom() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
     gs.trail = gs.trail.filter(t => { t.life--; return t.life > 0; });
 
     // ── Aim ──
@@ -2364,7 +2380,7 @@ export default function CallOfDoodie() {
         if (directorEliteType) applyEliteType(ne, directorEliteType);
         if (gs.waveEliteOnly) applyEliteType(ne, directorEliteType || getRandomEliteType(getWaveSpawnRng(gs)));
         // Phantom elite: 12% of elite-eligible spawns at wave 25+, non-boss only
-        if (ne && !ne.eliteType && !ne.isBossEnemy && gs.currentWave >= 25 && Math.random() < 0.12) {
+        if (ne && !ne.eliteType && !ne.isBossEnemy && gs.currentWave >= 25 && getRunRng(gs, "spawn")() < 0.12) {
           ne.eliteType = "phantom"; ne.phantomTimer = 0; ne.phantomVisible = true;
           ne.speed *= 1.1; ne.health *= 0.85; ne.maxHealth = ne.health;
         }
@@ -2400,7 +2416,7 @@ export default function CallOfDoodie() {
         && !gs._routeSelectDone;
       if (_showRoute) {
         gs._routeSelectDone = true; // prevent re-entry next frame
-        const rOpts = getRouteOptions(gs);
+        const rOpts = getRouteOptions(gs, getRunRng(gs, "choices"));
         setRouteOptions(rOpts);
         setRoutePending(true);
         routePendingRef.current = true;
@@ -2423,8 +2439,8 @@ export default function CallOfDoodie() {
       }
       // Score snapshot for momentum sparkline
       (gs._waveScoreLog = gs._waveScoreLog || []).push(gs.score);
-      // Persist per-enemy wave kill bests to career
-      try { updateEnemyCareerStatsBatch(gs._wkbt || {}); } catch {}
+      // Persist per-enemy wave kill bests only for progression-eligible runs.
+      try { if (!gs.practiceRun) updateEnemyCareerStatsBatch(gs._wkbt || {}); } catch {}
       gs._wkbt = {};
       // Survival bonus XP: awarded before resetting _waveDeaths
       if ((gs._waveDeaths || 0) === 0 && !gs.bossWave) {
@@ -2491,9 +2507,10 @@ export default function CallOfDoodie() {
           gs._respiteLock = true;
           gs._respiteTimer = 120;
           const _mx = GW() / 2, _my = GH() / 2;
-          gs.pickups.push({ x: _mx - 60 + Math.random() * 120, y: _my - 80 + Math.random() * 120, type: "health", life: 450 });
-          gs.pickups.push({ x: _mx - 60 + Math.random() * 120, y: _my - 80 + Math.random() * 120, type: "health", life: 450 });
-          gs.pickups.push({ x: _mx - 60 + Math.random() * 120, y: _my - 80 + Math.random() * 120, type: "ammo", life: 450 });
+          const respiteRng = getRunRng(gs, "loot");
+          gs.pickups.push({ x: _mx - 60 + respiteRng() * 120, y: _my - 80 + respiteRng() * 120, type: "health", life: 450 });
+          gs.pickups.push({ x: _mx - 60 + respiteRng() * 120, y: _my - 80 + respiteRng() * 120, type: "health", life: 450 });
+          gs.pickups.push({ x: _mx - 60 + respiteRng() * 120, y: _my - 80 + respiteRng() * 120, type: "ammo", life: 450 });
           addText(gs, _mx, _my - 60, "💨 BREATH TAKEN", "#88FFCC", true);
           return;
         }
@@ -2519,6 +2536,7 @@ export default function CallOfDoodie() {
             weakness,
             bossWave: false,
             world: { W: GW(), H: GH() },
+            rng: getRunRng(gs, "choices"),
           });
           if (obj) {
             gs.activeObjective = obj;
@@ -2528,6 +2546,7 @@ export default function CallOfDoodie() {
             const contract = pickWaveChallengeContract({
               wave: gs.currentWave,
               bossWave: false,
+              rng: getRunRng(gs, "choices"),
             });
             if (contract) {
               gs.activeWaveContract = startWaveChallengeContract(contract, gs);
@@ -2583,7 +2602,7 @@ export default function CallOfDoodie() {
       const streakBonus = gs.waveStreak >= 3 ? (gs.waveStreak - 2) * 200 : 0;
       const waveBonus = gs.currentWave * 100 + streakBonus;
       gs.score += waveBonus; setScore(gs.score);
-      setTip(TIPS[Math.floor(Math.random() * TIPS.length)]);
+      setTip(TIPS[Math.floor(cosmeticRandom() * TIPS.length)]);
 
       if (nextIsBoss) {
         gs.bossWave = true;
@@ -2620,7 +2639,7 @@ export default function CallOfDoodie() {
             : _bossRec.deaths > 0 || _sessionEscalate ? 'grudge'
             : 'taunt';
           const _grudgePool = BOSS_GRUDGE_QUOTES[_primaryType]?.[_grudgeVariant];
-          const _rawQuote = _grudgePool ? _grudgePool[Math.floor(Math.random() * _grudgePool.length)] : null;
+          const _rawQuote = _grudgePool ? _grudgePool[Math.floor(cosmeticRandom() * _grudgePool.length)] : null;
           const _bossWave = gs.currentWave;
           const _bossWeapon = WEAPONS[currentWeaponRef.current]?.name || 'that';
           const _bossAct = _bossWave < 10 ? 'prologue' : _bossWave < 25 ? 'rising' : _bossWave < 40 ? 'climax' : 'epilogue';
@@ -2728,7 +2747,7 @@ export default function CallOfDoodie() {
           waveAnnouncePendingRef.current = false;
           setWaveAnnounce(null);
           const _pool = _showMutation
-            ? [...WAVE_CHALLENGE_MUTATIONS].sort(() => Math.random() - 0.5).slice(0, 2)
+            ? shuffleWithRng(WAVE_CHALLENGE_MUTATIONS, getRunRng(gs, "choices")).slice(0, 2)
             : [];
           const rewardPlan = createWaveRewardPlan({
             hasBankedPerkChoices: bankedPerkChoicesRef.current > 0,
@@ -2747,9 +2766,10 @@ export default function CallOfDoodie() {
             mutationPendingRef.current = true;
             // Shop (if applicable) triggers from applyMutation / skipMutation callbacks
           } else if (rewardPlan.action === "shop") {
-            const opts = getShopOptions(gsRef.current, currentWeaponRef.current);
+            const choiceRng = getRunRng(gsRef.current, "choices");
+            const opts = getShopOptions(gsRef.current, currentWeaponRef.current, choiceRng);
             setShopOptions(opts);
-            setCoinShopOptions(getCoinShopOptions(gsRef.current));
+            setCoinShopOptions(getCoinShopOptions(gsRef.current, choiceRng));
             setShopPending(true);
             shopPendingRef.current = true;
           }
@@ -2871,7 +2891,7 @@ export default function CallOfDoodie() {
         if (proj > 0 && proj < maxT && perp < e.size / 2 + 7) {
           if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, e.x, e.y, "#8844FF", 3); return; }
           const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0) + (gs.critBonus || 0);
-          const isCrit = Math.random() < effectiveCrit;
+          const isCrit = getRunRng(gs, "combat")() < effectiveCrit;
           const _pbRageMult = (gs.rageTimer || 0) > 0 ? 1.75 : 1.0;
           const _pbJugMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
           const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1) * _pbRageMult * _pbJugMult;
@@ -2886,7 +2906,7 @@ export default function CallOfDoodie() {
             if (perkModsRef.current.critGrantsXp) addXp(10);
           }
           addParticles(gs, e.x, e.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
-          addText(gs, e.x, e.y - e.size / 2 - 8, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random() * HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
+          addText(gs, e.x, e.y - e.size / 2 - 8, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(cosmeticRandom() * HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
           if (e.health <= 0) {
             (gs._wkbt = gs._wkbt || {})[e.typeIndex] = ((gs._wkbt)[e.typeIndex] || 0) + 1;
             const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
@@ -2951,7 +2971,8 @@ export default function CallOfDoodie() {
               } catch {}
             }
             // 💩 Doodie Coin drop
-            const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            const _railLootRng = getRunRng(gs, "loot");
+            const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(_railLootRng() * 16)) : (e.elite ? (2 + Math.floor(_railLootRng() * 3)) : (_railLootRng() < 0.40 ? (1 + (_railLootRng() < 0.25 ? 1 : 0)) : 0));
             const _coinTreeMult = gs._treeCoinBonus || 1;
             const _coinDrop = Math.floor(_coinDropBase * (gs.coinMultActive ? 2 : 1) * _coinTreeMult);
             if (_coinDrop > 0) {
@@ -2962,7 +2983,7 @@ export default function CallOfDoodie() {
                 const _streak = Math.min(gs.coinStreakKills || 0, 15);
                 const _n = 2 + Math.floor(_streak / 5);
                 for (let _ci = 0; _ci < _n; _ci++) {
-                  gs.floatingTexts.push({ text: "💩", x: e.x + (Math.random() - 0.5) * 60, y: e.y - 20 - Math.random() * 40, vy: -1.2 - Math.random() * 0.8, life: 35 + Math.floor(Math.random() * 20), color: "#C8A000" });
+                  gs.floatingTexts.push({ text: "💩", x: e.x + (cosmeticRandom() - 0.5) * 60, y: e.y - 20 - cosmeticRandom() * 40, vy: -1.2 - cosmeticRandom() * 0.8, life: 35 + Math.floor(cosmeticRandom() * 20), color: "#C8A000" });
                 }
               }
               if (!e.isBossEnemy && (Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
@@ -2984,7 +3005,7 @@ export default function CallOfDoodie() {
             addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
             if (!e.isBossEnemy) {
-              const _rbDq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : "...";
+              const _rbDq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(cosmeticRandom() * e.deathQuotes.length)] : "...";
               addText(gs, e.x, e.y - 54, `"${_rbDq}"`, "#FF88CC", "quote");
             }
             addKillFeed(e.name, pbWeapon.name);
@@ -3002,14 +3023,14 @@ export default function CallOfDoodie() {
               e.splitDone = true; addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
               for (let _si = 0; _si < 3; _si++) {
                 const _sa = (_si / 3) * Math.PI * 2 + 0.5;
-                gs.enemies.push({ x: e.x + Math.cos(_sa) * 55, y: e.y + Math.sin(_sa) * 55, health: e.maxHealth * 0.35, maxHealth: e.maxHealth * 0.35, speed: e.speed * 1.4, size: e.size * 0.58, color: "#FF8899", name: "Splitter Shard", points: Math.floor(e.points * 0.25), deathQuotes: ["..."], emoji: "💔", typeIndex: 16, wobble: Math.random() * Math.PI * 2, hitFlash: 0, ranged: false, projSpeed: 0, projRate: 999, shootTimer: 60, isBossEnemy: false, splitOnDeath: false });
+                gs.enemies.push({ x: e.x + Math.cos(_sa) * 55, y: e.y + Math.sin(_sa) * 55, health: e.maxHealth * 0.35, maxHealth: e.maxHealth * 0.35, speed: e.speed * 1.4, size: e.size * 0.58, color: "#FF8899", name: "Splitter Shard", points: Math.floor(e.points * 0.25), deathQuotes: ["..."], emoji: "💔", typeIndex: 16, wobble: getRunRng(gs, "hazards")() * Math.PI * 2, hitFlash: 0, ranged: false, projSpeed: 0, projRate: 999, shootTimer: 60, isBossEnemy: false, splitOnDeath: false });
               }
               addParticles(gs, e.x, e.y, "#FF6688", 30);
             }
             const _rIsShd = e.typeIndex === 16 && !e.isBossEnemy;
             if (!_rIsShd) {
-              if (e.isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) { gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 }); }
-              else if ((e.isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) { spawnPickup(gs, e.x, e.y, e.isBossEnemy); }
+              if (e.isBossEnemy && extraLivesRef.current === 0 && _railLootRng() < 0.18) { gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 }); }
+              else if ((e.isBossEnemy || _railLootRng() < 0.25) && !gs.siegeMode) { spawnPickup(gs, e.x, e.y, e.isBossEnemy); }
             }
             if (!e.isBossEnemy && KILL_MILESTONES[gs.kills]) {
               addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
@@ -3054,6 +3075,7 @@ export default function CallOfDoodie() {
             baseCrit: CRIT_CHANCE,
             perkCrit: perkModsRef.current.critBonus || 0,
             runCrit: gs.critBonus || 0,
+            rng: getRunRng(gs, "combat"),
           });
           // Summoner invulnerability while summons alive
           if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, b.x, b.y, "#8844FF", 3); b.life = 0; return; }
@@ -3082,7 +3104,7 @@ export default function CallOfDoodie() {
           }
           e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
           // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
-          if (gs.chainLightning && Math.random() < 0.20) {
+          if (gs.chainLightning && getRunRng(gs, "combat")() < 0.20) {
             const arcTarget = findLightningChainTarget(gs.enemies, e, { range: 200 });
             if (arcTarget) {
               const arcDmg = dmg * 0.5;
@@ -3110,8 +3132,8 @@ export default function CallOfDoodie() {
           if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); }
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
-          addText(gs, e.x + (Math.random() - 0.5) * 20, e.y - e.size / 2 - Math.random() * 10,
-            isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(Math.random() * HITMARKERS.length)],
+          addText(gs, e.x + (cosmeticRandom() - 0.5) * 20, e.y - e.size / 2 - cosmeticRandom() * 10,
+            isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(cosmeticRandom() * HITMARKERS.length)],
             isCrit ? "#FFD700" : "#FFF");
           // Precision hit bonus: bullet near enemy core → 1 💩 coin + streak multiplier
           if (!e.isBossEnemy && isPrecisionHit(b, e)) {
@@ -3230,7 +3252,8 @@ export default function CallOfDoodie() {
               if (e.typeIndex === 20) gs.algorithmSurge = false;
             }
             // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
-            const _cd2Base = e.isBossEnemy ? (10 + Math.floor(Math.random() * 16)) : (e.elite ? (2 + Math.floor(Math.random() * 3)) : (Math.random() < 0.40 ? (1 + (Math.random() < 0.25 ? 1 : 0)) : 0));
+            const _bulletLootRng = getRunRng(gs, "loot");
+            const _cd2Base = e.isBossEnemy ? (10 + Math.floor(_bulletLootRng() * 16)) : (e.elite ? (2 + Math.floor(_bulletLootRng() * 3)) : (_bulletLootRng() < 0.40 ? (1 + (_bulletLootRng() < 0.25 ? 1 : 0)) : 0));
             const _cd2 = Math.floor(_cd2Base * (gs.coinMultActive ? 2 : 1) * (gs._treeCoinBonus || 1));
             if (_cd2 > 0) {
               gs.coins = (gs.coins || 0) + _cd2;
@@ -3254,7 +3277,7 @@ export default function CallOfDoodie() {
             }
             addParticles(gs, e.x, e.y, e.color, 20);
             addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
-            const dq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : (e.deathQuote || "...");
+            const dq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(cosmeticRandom() * e.deathQuotes.length)] : (e.deathQuote || "...");
             addText(gs, e.x, e.y - 54, `"${dq}"`, "#FF88CC", "quote");
             addKillFeed(e.name, WEAPONS[wpnIdx].name);
             if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
@@ -3330,7 +3353,7 @@ export default function CallOfDoodie() {
                   size: e.size * 0.58, color: "#FF8899",
                   name: "Splitter Shard", points: Math.floor(e.points * 0.25),
                   deathQuotes: ["..."], emoji: "💔", typeIndex: 16,
-                  wobble: Math.random() * Math.PI * 2, hitFlash: 0,
+                  wobble: getRunRng(gs, "hazards")() * Math.PI * 2, hitFlash: 0,
                   ranged: false, projSpeed: 0, projRate: 999,
                   shootTimer: 60, isBossEnemy: false,
                   splitOnDeath: false,
@@ -3342,9 +3365,9 @@ export default function CallOfDoodie() {
             const isBossEnemy = e.isBossEnemy;
             const isShard = e.typeIndex === 16 && !isBossEnemy;
             if (!isShard) {
-              if (isBossEnemy && extraLivesRef.current === 0 && Math.random() < 0.18) {
+              if (isBossEnemy && extraLivesRef.current === 0 && _bulletLootRng() < 0.18) {
                 gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
-              } else if ((isBossEnemy || Math.random() < 0.25) && !gs.siegeMode) {
+              } else if ((isBossEnemy || _bulletLootRng() < 0.25) && !gs.siegeMode) {
                 spawnPickup(gs, e.x, e.y, isBossEnemy);
               }
             }
@@ -3425,9 +3448,9 @@ export default function CallOfDoodie() {
         e.x += sx * buffedSpeed + Math.sin(e.wobble) * 0.5 + (-sy) * zigzag;
         e.y += sy * buffedSpeed + Math.cos(e.wobble) * 0.5 + sx * zigzag;
         // Cursed Run: acid trail particles
-        if (gs.cursedAcidTrails && !e.isBossEnemy && Math.random() < 0.15) {
+        if (gs.cursedAcidTrails && !e.isBossEnemy && cosmeticRandom() < 0.15) {
           if ((gs.particles?.length || 0) < MAX_PARTICLES) {
-            gs.particles.push({ x: e.x, y: e.y, vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5, life: 50, color: "#44FF44", size: 3 });
+            gs.particles.push({ x: e.x, y: e.y, vx: (cosmeticRandom() - 0.5) * 0.5, vy: (cosmeticRandom() - 0.5) * 0.5, life: 50, color: "#44FF44", size: 3 });
           }
         }
       }
@@ -3435,10 +3458,10 @@ export default function CallOfDoodie() {
       if ((e._spawnFlashTimer || 0) > 0) e._spawnFlashTimer--;
       if ((e._tauntCooldown || 0) > 0) e._tauntCooldown--;
       // Combat taunt: alive enemy quips at player (0.4%/frame, per-enemy 180f + global 60f cooldown)
-      if (!e.isBossEnemy && !(gs._globalTauntCooldown > 0) && !(e._tauntCooldown > 0) && Math.random() < 0.004) {
+      if (!e.isBossEnemy && !(gs._globalTauntCooldown > 0) && !(e._tauntCooldown > 0) && cosmeticRandom() < 0.004) {
         const _taunts = ENEMY_TYPES[e.typeIndex]?.combatTaunts;
         if (_taunts) {
-          addText(gs, e.x, e.y - e.size - 10, _taunts[Math.floor(Math.random() * _taunts.length)], e.color);
+          addText(gs, e.x, e.y - e.size - 10, _taunts[Math.floor(cosmeticRandom() * _taunts.length)], e.color);
           e._tauntCooldown = 180;
           gs._globalTauntCooldown = 60;
         }
@@ -3538,8 +3561,9 @@ export default function CallOfDoodie() {
           if (_abilityReady && e.teleportTimer >= Math.floor(480 * _waveScale)) {
             e.teleportTimer = 0;
             e.sharedAbilityCooldown = 90;
-            const tAngle = Math.random() * Math.PI * 2;
-            const tDist  = 110 + Math.random() * 70;
+            const teleportRng = getRunRng(gs, "hazards");
+            const tAngle = teleportRng() * Math.PI * 2;
+            const tDist  = 110 + teleportRng() * 70;
             e.x = Math.max(e.size, Math.min(W - e.size, p.x + Math.cos(tAngle) * tDist));
             e.y = Math.max(e.size, Math.min(H - e.size, p.y + Math.sin(tAngle) * tDist));
             addText(gs, e.x, e.y - 65, "🌀 BLINKED!", "#FF1493", true);
@@ -3647,7 +3671,8 @@ export default function CallOfDoodie() {
           e.mineDropTimer = (e.mineDropTimer || 0) + 1;
           if (e.mineDropTimer >= e.mineDropCooldown) {
             e.mineDropTimer = 0;
-            gs.pickups.push({ x: e.x + (Math.random() - 0.5) * 100, y: e.y + (Math.random() - 0.5) * 100, type: "mine", life: 600 });
+            const mineRng = getRunRng(gs, "hazards");
+            gs.pickups.push({ x: e.x + (mineRng() - 0.5) * 100, y: e.y + (mineRng() - 0.5) * 100, type: "mine", life: 600 });
           }
         }
         // Magnet pull: deflect nearby player bullets
@@ -3717,7 +3742,7 @@ export default function CallOfDoodie() {
           if (e.summonerFirstSummon && (e.summonerTimer || 0) > 0) {
             if (frameCountRef.current % 25 === 0) {
               addParticles(gs, e.x, e.y, "#CC88FF", 6);
-              const _pa = Math.random() * Math.PI * 2, _pr = 60 + Math.random() * 40;
+              const _pa = cosmeticRandom() * Math.PI * 2, _pr = 60 + cosmeticRandom() * 40;
               addParticles(gs, e.x + Math.cos(_pa) * _pr, e.y + Math.sin(_pa) * _pr, "#8844FF", 4);
             }
           }
@@ -3727,13 +3752,14 @@ export default function CallOfDoodie() {
             e.summonerTimer = 280;
             e.summonerFirstSummon = false;
             const _sCount = Math.min(3, e.summonerMaxCount - _aliveCount);
+            const summonRng = getRunRng(gs, "hazards");
             for (let _si = 0; _si < _sCount; _si++) {
-              const _sa = Math.random() * Math.PI * 2, _sd = 80 + Math.random() * 60;
+              const _sa = summonRng() * Math.PI * 2, _sd = 80 + summonRng() * 60;
               spawnEnemy(gs);
               const _ne = gs.enemies[gs.enemies.length - 1];
               _ne.x = e.x + Math.cos(_sa) * _sd; _ne.y = e.y + Math.sin(_sa) * _sd;
               _ne.summonedBy = e.summonerId;
-              _ne.eliteType = ["armored","fast","explosive"][Math.floor(Math.random()*3)];
+              _ne.eliteType = ["armored","fast","explosive"][Math.floor(summonRng()*3)];
               if (_ne.eliteType === "fast") { _ne.speed *= 2; _ne.size *= 0.75; }
               else if (_ne.eliteType === "armored") { _ne.dmgMult = 0.45; _ne.health *= 1.5; _ne.maxHealth = _ne.health; }
             }
@@ -3778,7 +3804,7 @@ export default function CallOfDoodie() {
           e.debugModeTimer = (e.debugModeTimer || 0) + 1;
           if (e.debugModeTimer >= e.debugModeCooldown && gs.obstacles && gs.obstacles.length > 0) {
             e.debugModeTimer = 0;
-            const _ob = gs.obstacles[Math.floor(Math.random() * gs.obstacles.length)];
+            const _ob = gs.obstacles[Math.floor(getRunRng(gs, "hazards")() * gs.obstacles.length)];
             if (_ob && (_ob._devSaved === undefined)) {
               const _savedW = _ob.w; const _savedH = _ob.h;
               _ob._devSaved = true;
@@ -3841,7 +3867,7 @@ export default function CallOfDoodie() {
         const er = e.size / 2 + 2;
         if (ed < er) {
           // When ed===0 the enemy is dead-center in a wall; use a random ejection angle to avoid oscillation
-          const ea = ed > 0 ? Math.atan2(e.y - ecy, e.x - ecx) : Math.random() * Math.PI * 2;
+          const ea = ed > 0 ? Math.atan2(e.y - ecy, e.x - ecx) : getRunRng(gs, "hazards")() * Math.PI * 2;
           e.x = ecx + Math.cos(ea) * (er + 1);
           e.y = ecy + Math.sin(ea) * (er + 1);
           e.x = Math.max(e.size / 2, Math.min(W - e.size / 2, e.x));

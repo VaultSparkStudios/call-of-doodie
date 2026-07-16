@@ -1,22 +1,22 @@
 {
   "vectorVersion": "1.0",
-  "generatedAt": "2026-07-01",
-  "generatedAtMs": 1782926704376,
-  "session": 110,
-  "vectorHash": "27deb156541d2a35",
+  "generatedAt": "2026-07-16",
+  "generatedAtMs": 1784227999140,
+  "session": 122,
+  "vectorHash": "4fcf6782fbc92327",
   "silTotal": 1000,
   "silAvg3": 1000,
   "velocity": 1,
   "debt": "decreasing",
   "runway": "~14.0 sessions",
   "intentRate": "100% (last 5 tracked)",
-  "openNow": 8,
-  "openNext": 7,
+  "openNow": 6,
+  "openNext": 6,
   "openBlocked": 0,
   "topNow": [
-    "[SIL:1] [Credential-gated S82] Deploy `sync-studio-events` edge-function repair ",
-    "[SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL a",
-    "[SIL:2] [BLOCKER S61] [S60 follow-up] Update Supabase/PostHog/Sentry/Ko-fi URL a"
+    "[SIL] **Repo-local staged visual/theme evidence harness** — reuse the pinned `@p",
+    "[SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-f",
+    "[SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if pai"
   ],
   "topNext": [
     "[SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Aut",
@@ -24,21 +24,21 @@
     "[SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confir"
   ],
   "health": "green",
-  "truthStatus": "green locally",
+  "truthStatus": "green locally; portfolio doctor warnings are advisory and non-blocking for this repo closeout.",
   "genome": null,
-  "ignisScore": 46424,
+  "ignisScore": 43856,
   "ignisGrade": "FORGE",
-  "ignisAgeDays": 12,
+  "ignisAgeDays": 0,
   "name": "Call-Of-Doodie",
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Use the input QA and PWA install receipts during real physical gamepad/PWA QA, or continue only evidence-backed work: one-enemy replay parity design without changing advisory labels, or verified browser screenshot capture completion.",
-  "currentFocus": "Session 110 (2026-07-01) completed the requested continuous goal arc with a shipped PWA install QA receipt surface. HomeV2 now renders tested PWA readiness/outcome receipts from runtime prompt, standalone, service-worker, manifest, and stored browser userChoice evidence; audit/implement artifacts record shipped items and honest deferrals.",
-  "lastShipped": "PWA install readiness and prompt-outcome receipt surface for launch/device confidence. `buildPwaInstallReceipt()` turns prompt-ready, browser-ready, standalone, accepted, and dismissed evidence into a tested local receipt; App persists the browser `userChoice.outcome`; HomeV2 renders the receipt without claiming physical install completion.",
+  "nextMilestone": "Run a fresh saturated arc beginning with a repo-local arbitrary-preview visual/theme evidence harness; preserve NO-GO until physical QA, credential/data gates, and founder launch approval pass.",
+  "currentFocus": "Session 122 recovered and completed the cut-off six-item audit: startup resilience, public contract, sampler diversity, mission/practice integrity, named competitive RNG, and DeathScreen RUN THE FIX hierarchy; 631/631 tests and isolated HTTP staging green.",
+  "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "sync-studio-events edge-function repair is fixed locally but not deployed because SUPABASE_ACCESS_TOKEN is unavailable; node scripts/check-secrets.mjs --for supabase reports supabase MISSING.",
-    "PostHog/Sentry/Ko-fi URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING.",
-    "Full replay enemy/physics deterministic resimulation remains future work behind stored trace payload design and narrowed parity slices; current replay trust labels must stay advisory."
+    "PostHog/Sentry/Ko-fi dashboard URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING. Supabase half already satisfied (Access-Control-Allow-Origin: * verified S112).",
+    "Physical launch QA still requires a real PWA install standalone relaunch and one real gamepad/browser combo; the local input QA and PWA install receipts can support that pass but do not replace it.",
+    "HomeV2 v1 fallback retirement requires production Lighthouse LCP/CLS and funnel data before deleting the legacy path."
   ]
 }

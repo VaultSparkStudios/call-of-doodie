@@ -1,28 +1,27 @@
-# Implement Plan - 2026-07-06 Session 121
+# Implement Plan — 2026-07-16 Session 122 Recovery
 
-Source: `docs/AUDIT_2026-07-06.json`
+Source: docs/AUDIT_2026-07-16.json
 
 ## Sequenced Order
 
 | Seq | Slug | Rung | Effort | Why this position | Outcome |
 |---|---|---|---|---|---|
-| 1 | repo-local-doctor-route | L2 | 30m | Highest verified repo-local protocol gap: startup and closeout surfaces require `node scripts/ops.mjs doctor`, but the local router rejected the command. | Shipped |
-| 2 | stale-doctor-truth-notes | L1 | 10m | Source-of-truth records still said the local doctor route was absent; leaving that contradiction would violate observability honesty. | Shipped |
-| 3 | innovation-pack-external-gates | L1 | 0m | Regenerated candidates are analytics/dashboard, physical-device QA, HomeV2 production data, community/publication, or founder-decision gated; no fabricated repo work. | Deferred with evidence |
-| 4 | maintain-launch-confidence | L2 | 60m | Verify the repaired protocol path and current launch baseline instead of inventing product churn. | Shipped |
+| 1 | startup-brief-truth-and-resilience | L3 | 1.5h | Restore observability truth before trusting any later protocol output. | Shipped + verified |
+| 2 | audit-sampler-diversity | L3 | 2.5h | Improve live-code premise coverage before completing the remaining audit. | Shipped + verified |
+| 3 | return-loop-integrity | L2 | 2h | Close permanent-progression exploits before expanding deterministic competition. | Shipped + verified |
+| 4 | competitive-rng-stream-contract | L3 | 8h | Make shared seeds an end-to-end gameplay contract with serializable evidence. | Shipped + verified |
+| 5 | deathscreen-run-the-fix-hierarchy | L3 | 3h | Convert rich post-run evidence into one measurable immediate correction loop. | Shipped + verified |
+| 6 | public-launch-contract-surface | L3 | 6h | Complete human/agent/legal/discovery/rollback surfaces and executable checks. | Shipped + verified |
 
 ## Validation Plan
 
-1. `node scripts/ops.mjs help`
-2. `node scripts/ops.mjs doctor --update-json --quiet`
-3. `node scripts/ops.mjs doctor --json --quiet`
-4. `node scripts/render-startup-brief.mjs`
-5. `node scripts/validate-brief-format.mjs docs/STARTUP_BRIEF.md`
-6. `npm run protocol:drift -- --json`
-7. `npm run lint`
-8. `npm test`
-9. `npm run replay:state-stepper`
-10. `npm run replay:edge-fixtures`
-11. `npm run launch:media-check`
-12. `npm run build`
-13. `git diff --check`
+1. Focused audit-item suites and source validators.
+2. npm run lint
+3. npm test
+4. npm run replay:state-stepper
+5. npm run replay:edge-fixtures
+6. npm run launch:media-check
+7. npm run launch:qa
+8. npm run build
+9. node scripts/ops.mjs doctor --json --quiet
+10. git diff --check
