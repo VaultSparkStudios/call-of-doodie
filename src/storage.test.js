@@ -26,6 +26,7 @@ import {
   getRhythmMastery,
   advanceMissionStreak,
   buildMissionStreakState,
+  getMissionDayKey,
   getMissionStreak,
   loadCareerStats,
   saveCareerStats,
@@ -241,6 +242,23 @@ describe("mission streak continuity", () => {
     const now = new Date(2026, 6, 16, 8, 30);
     expect(advanceMissionStreak(now)).toEqual({ streak: 1, lastCompleted: "2026-07-16" });
     expect(getMissionStreak()).toEqual({ streak: 1, lastCompleted: "2026-07-16" });
+  });
+
+  it("preserves continuity across every local calendar boundary in a twelve-year window", () => {
+    const cursor = new Date(2020, 0, 1, 12, 0);
+    const end = new Date(2032, 0, 1, 12, 0);
+    let streak = 1;
+    while (cursor < end) {
+      const previousKey = getMissionDayKey(cursor);
+      const next = new Date(cursor);
+      next.setDate(next.getDate() + 1);
+      const nextKey = getMissionDayKey(next);
+      const result = buildMissionStreakState({ streak, lastCompleted: previousKey }, next);
+      streak += 1;
+      expect(result).toEqual({ streak, lastCompleted: nextKey });
+      expect(nextKey).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      cursor.setDate(cursor.getDate() + 1);
+    }
   });
 });
 

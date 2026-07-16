@@ -33,6 +33,7 @@
     "assets:generate": "node scripts/generate-proprietary-visual-assets.mjs",
     "assets:check": "node scripts/validate-visual-assets.mjs",
     "launch:screenshots": "node scripts/capture-launch-screenshots.mjs",
+    "visual:audit": "node scripts/audit-staging-visuals.mjs",
     "launch:media-check": "node scripts/validate-launch-media.mjs",
     "home:retirement-gate": "node scripts/legacy-home-retirement-gate.mjs",
     "audit:env": "node scripts/audit-env.mjs",

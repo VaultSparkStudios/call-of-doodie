@@ -64,6 +64,8 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-controller-profile");
     localStorage.removeItem("cod-pwa-install-attempt");
     localStorage.removeItem("cod-run-history-v1");
+    localStorage.removeItem("cod-theme");
+    document.documentElement.removeAttribute("data-cod-theme");
     sessionStorage.removeItem("cod-insight-dismissed");
   });
 
@@ -83,6 +85,24 @@ describe("HomeV2", () => {
     expect(deployBtn).toBeTruthy();
     await act(async () => { deployBtn.click(); });
     expect(onStart).toHaveBeenCalledTimes(1);
+  });
+
+  it("persists an accessible project-specific theme toggle", async () => {
+    window.history.replaceState({}, "", "/?theme=porcelain-day");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    const shell = container.querySelector("[data-testid='home-v2-shell']");
+    const toggle = container.querySelector("[data-theme-toggle]");
+    expect(shell?.getAttribute("data-theme")).toBe("porcelain-day");
+    expect(toggle?.getAttribute("aria-pressed")).toBe("true");
+    await act(async () => { toggle.click(); });
+    expect(shell?.getAttribute("data-theme")).toBe("sewer-night");
+    expect(localStorage.getItem("cod-theme")).toBe("sewer-night");
   });
 
   it("exposes all 4 tab labels (Career / Codex / Settings / Support)", async () => {

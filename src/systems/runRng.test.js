@@ -7,6 +7,7 @@ import { getRandomPerks } from "../utils/perkOptions.js";
 import { getRouteOptions } from "../utils/routeOptions.js";
 import {
   buildCompetitiveRngReceipt,
+  buildRunRngFairnessReceipt,
   createNamedRunRng,
   getRunRng,
   restoreRunRng,
@@ -52,6 +53,18 @@ describe("named competitive run RNG", () => {
     expect(repeat).toEqual(first);
     expect(different.decisions).not.toEqual(first.decisions);
     expect(first.contract).toContain("not-full-physics-resimulation");
+  });
+
+  it("builds a stable, compact, honestly scoped live fairness fingerprint", () => {
+    const run = { runSeed: 8080, currentWave: 2 };
+    getRunRng(run, "combat")();
+    getRunRng(run, "combat")();
+    getRunRng(run, "loot")();
+    const receipt = buildRunRngFairnessReceipt(run);
+    expect(buildRunRngFairnessReceipt(run)).toEqual(receipt);
+    expect(receipt).toMatchObject({ seed: 8080, totalCalls: 3, streamCount: 2 });
+    expect(receipt.fingerprint).toMatch(/^[0-9A-F]{8}$/);
+    expect(receipt.contract).toContain("not-full-physics-replay");
   });
 
   it("threads the choices and loot streams through live helper contracts", () => {

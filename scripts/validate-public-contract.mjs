@@ -47,6 +47,8 @@ const requiredFiles = [
   relative("public", "sitemap.xml"),
   relative("public", "robots.txt"),
   relative("public", "footer-manifest.json"),
+  relative("public", "legal.css"),
+  relative("public", "theme.js"),
   relative("docs", "DEPLOY_ROLLBACK.md"),
   relative("docs", "RELEASE_PARITY.md"),
 ];
@@ -107,8 +109,23 @@ for (const page of ["privacy", "terms", "contact"]) {
     "../privacy/",
     "../terms/",
     "../contact/",
+    "../theme.js",
+    "data-theme-toggle",
   ]);
 }
+
+requireIncludes("legal.css", contentByFile[relative("public", "legal.css")], [
+  "sewer-night",
+  "porcelain-day",
+  "--button-ink",
+  ".theme-toggle",
+]);
+requireIncludes("theme.js", contentByFile[relative("public", "theme.js")], [
+  "cod-theme",
+  "porcelain-day",
+  "sewer-night",
+  "prefers-color-scheme: light",
+]);
 
 requireIncludes("contact", contentByFile[relative("public", "contact", "index.html")], [
   "hello@callofdoodie.wtf",

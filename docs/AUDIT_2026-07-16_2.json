@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit Codex Session 123 continuous arc",
+  "generatedAt": "2026-07-16",
+  "project": "call-of-doodie",
+  "type": "app",
+  "rubric": "product",
+  "meta": {
+    "generatedAt": "2026-07-16",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "combinedPriority": 164.0,
+    "top3": [
+      "project-theme-contract",
+      "staged-visual-evidence-harness",
+      "local-closeout-command-parity"
+    ],
+    "livePremiseVerification": true,
+    "specialtyLenses": ["game-loop review", "app release gate"]
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 89,
+    "sessionEngagement": 88,
+    "retention": 92,
+    "soulFidelity": 91,
+    "topDesignMove": "Expose the existing deterministic competitive receipt to players as an honest fairness fingerprint without claiming full physics replay parity."
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED; implementation may continue on staging",
+    "green": ["recovery CI", "isolated preview contract", "rollback documentation", "zero-cost core play", "proprietary public surfaces"],
+    "red": ["no AI-verified light/dark theme evidence", "analytics capability missing", "on-domain inbound delivery not verified", "no founder launch approval"]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "UI / UX / accessibility / brand identity",
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 36.4,
+      "slug": "project-theme-contract",
+      "title": "Give the public front door and legal shell a real Sewer Night / Porcelain Day theme system.",
+      "status": "unblocked",
+      "why": "Live source inspection found no theme state, toggle, token layer, or query/storage contract. HomeV2 is hard-coded to a dark radial surface and public/legal.css declares dark-only color-scheme, so CANON-047 is unmet and a screenshot harness alone would only automate the gap.",
+      "recipe": "Create a pure shared theme contract with two project-specific palettes, URL override, durable preference, system fallback, DOM application, and accessible toggle. Tokenize the primary HomeV2 shell/cards/actions plus all legal pages, preserve the dark combat canvas for readability, and test resolution/persistence semantics and public-page parity.",
+      "ladder": {
+        "L1": {"effortHours": 1, "recipe": "Add a toggle and swap the page background."},
+        "L2": {"effortHours": 2, "recipe": "Add durable theme tokens across HomeV2 and legal pages with focused tests."},
+        "L3": {"effortHours": 3, "recipe": "Ship two branded palettes, URL/storage/system resolution, accessible semantics, cross-surface parity, reduced-motion handling, and visual verification hooks."}
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "release quality / accessibility / observability honesty",
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 34.2,
+      "slug": "staged-visual-evidence-harness",
+      "title": "Make theme and mobile-parity claims reproducible against an isolated staging URL.",
+      "status": "unblocked",
+      "why": "The app has a pinned and installed @playwright/test dependency plus a one-off launch screenshot script, but no release receipt covering both themes, 390/768/1440 widths, legal surfaces, overflow, console failures, action visibility, or contrast. The app-release gate therefore has no durable CANON-041/047 evidence.",
+      "recipe": "Build a repo-local Playwright audit command that targets an explicit URL, captures the front door and legal pages across three widths and both themes, checks horizontal overflow, visible primary action/theme control, page/console errors, and computed foreground/background contrast, then writes screenshots and a machine-readable JSON receipt under output/playwright. Add pure evaluator tests and execute it against the Session 123 preview.",
+      "ladder": {
+        "L1": {"effortHours": 1, "recipe": "Capture six front-door screenshots."},
+        "L2": {"effortHours": 2, "recipe": "Add route, overflow, action, and console assertions with a JSON receipt."},
+        "L3": {"effortHours": 3, "recipe": "Cover both themes, three widths, public/legal pages, contrast evaluation, deterministic artifact naming, and strict staged-release exit status."}
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "protocol infrastructure / speed / reliability",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 30.6,
+      "slug": "local-closeout-command-parity",
+      "title": "Make every closeout command named by the local protocol executable inside this repo.",
+      "status": "unblocked",
+      "why": "The recovered closeout had to bypass the repo because render-state-vector.mjs, compute-entropy.mjs, append-genome-snapshot.mjs, sanitize-claude-settings.mjs, and ops.mjs rescore are absent. protocol-drift-check does not probe them, so its green result is a false-negative against the actual closeout contract.",
+      "recipe": "Add thin project-local proxies that locate the authoritative Studio Ops scripts and bind --project/--path to this repo without copying private policy. Add ops rescore routing, strengthen protocol-drift-check to require the closeout surface, test command construction and missing-control-plane failures, and correct the existing router typo.",
+      "ladder": {
+        "L1": {"effortHours": 0.75, "recipe": "Add missing file shims."},
+        "L2": {"effortHours": 1.25, "recipe": "Centralize safe proxy resolution and route ops rescore."},
+        "L3": {"effortHours": 2, "recipe": "Add source/behavior tests, protocol drift enforcement, Windows-hidden execution, argument binding, and actionable failure messages."}
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "HOT",
+      "axis": "game trust / retention / explainability",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 25.6,
+      "slug": "player-visible-fairness-receipt",
+      "title": "Turn named competitive RNG streams into an inspectable post-run fairness fingerprint.",
+      "status": "unblocked",
+      "why": "runRng.js can snapshot every named stream and build deterministic receipts, but App and DeathScreen never consume those exports. Players see same-seed competitive copy without a way to inspect which seed/streams were actually used, leaving the strongest trust mechanism stranded in tests.",
+      "recipe": "Build a compact receipt from the live run snapshot at death, pass it through deathFlow, and show seed, stream draw counts, and a stable fingerprint inside the existing secondary analysis disclosure. Label it as deterministic decision-stream evidence—not full physics replay proof. Add pure snapshot/prop/presenter tests and preserve RUN THE FIX as the first action.",
+      "ladder": {
+        "L1": {"effortHours": 0.5, "recipe": "Show the run seed and total RNG draws."},
+        "L2": {"effortHours": 1.25, "recipe": "Add named-stream counts and a stable compact fingerprint."},
+        "L3": {"effortHours": 2, "recipe": "Wire the live snapshot end to end, add honest proof-language boundaries, accessible details, telemetry-ready shape, and regression tests."}
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "WARM",
+      "axis": "second-order retention integrity",
+      "effortHours": 0.5,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 16.4,
+      "slug": "mission-calendar-boundary-invariants",
+      "title": "Prove mission streak continuity across leap years, month/year rolls, and local daylight-saving boundaries.",
+      "status": "unblocked",
+      "why": "The recovered dashed-key defect showed that four example dates were not enough to protect a calendar-based retention loop. The pure local-date contract can be saturated cheaply across thousands of consecutive dates without adding runtime cost.",
+      "recipe": "Add a twelve-year consecutive-local-day invariant test that crosses leap days, month/year boundaries, and daylight-saving transitions at local noon while preserving the YYYY-MM-DD key shape and monotonically advancing the streak.",
+      "ladder": {
+        "L1": {"effortHours": 0.25, "recipe": "Add explicit leap-day and New Year examples."},
+        "L2": {"effortHours": 0.5, "recipe": "Sweep a twelve-year local calendar window with a pure invariant."},
+        "L3": {"effortHours": 0.75, "recipe": "Run the same sweep under multiple process time zones in CI."}
+      }
+    },
+    {
+      "rank": 6,
+      "tier": "HOT",
+      "axis": "release infrastructure / staging isolation",
+      "effortHours": 0.75,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 20.8,
+      "slug": "ci-isolated-staging-path",
+      "title": "Make isolated session previews a first-class GitHub Actions path instead of depending on a developer's global Wrangler token.",
+      "status": "unblocked",
+      "why": "Both locally available Cloudflare tokens failed the Pages API despite one being valid for DNS, while the production workflow already owns a correctly scoped Pages secret. The workflow only listens to main and hard-codes --branch=main, forcing production-before-staging or dashboard credential drift.",
+      "recipe": "Allow bounded session-* pushes, derive the Pages branch and environment URL from github.ref_name, keep main behavior unchanged, and add a source-contract test. Use a temporary session branch for evidence, then push the same verified commit directly to main.",
+      "ladder": {
+        "L1": {"effortHours": 0.25, "recipe": "Manually dispatch an existing workflow."},
+        "L2": {"effortHours": 0.5, "recipe": "Parameterize the Pages branch for session previews."},
+        "L3": {"effortHours": 0.75, "recipe": "Add bounded trigger patterns, dynamic environment evidence, regression tests, and preserve production semantics."}
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "contact-email-forwarding",
+      "reason": "Brevo is now credential-ready, but official Brevo documentation requires a distinct inbound subdomain, MX delegation, and a webhook receiver; it does not provide a direct forwarding toggle. No safe receiver exists in this repo today. Keep the public fallback honest and promote this to a cross-infrastructure launch task rather than improvising a production mail relay inside a theme/release-evidence arc."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "analytics capability remains MISSING; do not invent production metrics or dashboard evidence."
+    },
+    {
+      "slug": "physical-pwa-gamepad-qa",
+      "reason": "Requires physical install/relaunch and controller evidence; automated browser evidence cannot substitute."
+    },
+    {
+      "slug": "legacy-home-retirement",
+      "reason": "Requires real production Lighthouse and funnel deltas; the fallback stays until evidence exists."
+    }
+  ],
+  "validation": [
+    "npm run visual:audit -- --url <isolated-preview>",
+    "npm run protocol:drift",
+    "npm run public:contract",
+    "npm run lint",
+    "npm test",
+    "npm run build",
+    "npm run launch:qa",
+    "npm run replay:state-stepper",
+    "npm run replay:edge-fixtures",
+    "git diff --check"
+  ],
+  "executionLog": []
+}

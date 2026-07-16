@@ -20,6 +20,7 @@ import { buildPwaInstallReceipt, detectServiceWorkerReady, detectStandaloneDispl
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
+import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -111,6 +112,7 @@ export default function HomeV2(props) {
   const [showRunHistory, setShowRunHistory] = useState(false);
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showNewFeatures, setShowNewFeatures] = useState(false);
+  const [theme, setTheme] = useState(() => readTheme());
   const [cmdCenterExpanded, setCmdCenterExpanded] = useState(false);
   const [dailyChampion, setDailyChampion] = useState(null);
   const [missionStreak, setMissionStreak] = useState(0);
@@ -130,6 +132,11 @@ export default function HomeV2(props) {
   const [controllerProfile] = useState(() => loadControllerProfile());
   const [pwaInstallAttempt] = useState(() => loadPwaInstallAttempt());
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
+  const themePalette = THEMES[theme];
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   useEffect(() => {
     const loaded = loadCareerStats();
@@ -390,15 +397,15 @@ export default function HomeV2(props) {
   // ── Styles ────────────────────────────────────────────────────────────────
   const page = {
     width: "100%", minHeight: "100dvh", height: "100dvh", margin: 0, overflowY: "auto", overflowX: "hidden",
-    background: "radial-gradient(ellipse at top, #1a0a05 0%, #0a0a0a 55%, #050505 100%)",
-    fontFamily: "'Courier New', monospace", color: "#EEE", position: "relative",
+    background: themePalette.page,
+    fontFamily: "'Courier New', monospace", color: themePalette.ink, position: "relative",
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
-  const gridBg = { position: "fixed", inset: 0, backgroundImage: "repeating-linear-gradient(0deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,rgba(255,255,255,0.025) 49px,rgba(255,255,255,0.025) 50px)", pointerEvents: "none" };
+  const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
   const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
-  const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: "#888", fontWeight: 700 };
-  const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: "#CCC", cursor: "pointer", fontFamily: "inherit" };
+  const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
+  const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
   const iconBtn = { ...chip, padding: "4px 8px", fontSize: 14 };
   const hero = { textAlign: "center", marginBottom: 14 };
   const title = { fontSize: "clamp(40px,10vw,72px)", fontWeight: 900, margin: 0, lineHeight: 1, letterSpacing: -2, background: "linear-gradient(180deg,#FFD700,#FF6B00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 24px rgba(255,107,0,0.45))" };
@@ -412,31 +419,31 @@ export default function HomeV2(props) {
   };
   const deployDropdownBtn = {
     padding: "18px 18px", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace",
-    background: "linear-gradient(180deg,#3a2012,#1a0f08)", color: selectedMode.color,
-    border: "none", borderLeft: "1px solid rgba(255,255,255,0.14)", borderRadius: "0 10px 10px 0",
+    background: theme === "porcelain-day" ? "linear-gradient(180deg,#fff6e8,#ead8c5)" : "linear-gradient(180deg,#3a2012,#1a0f08)", color: selectedMode.color,
+    border: "none", borderLeft: `1px solid ${themePalette.line}`, borderRadius: "0 10px 10px 0",
     cursor: "pointer", letterSpacing: 1, minWidth: 150, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3,
   };
   const dropdownPanel = {
     position: "relative", margin: "6px auto 0", maxWidth: 540,
-    background: "rgba(15,10,5,0.98)", border: "1px solid rgba(255,107,53,0.35)",
-    borderRadius: 10, padding: 12, boxShadow: "0 12px 36px rgba(0,0,0,0.6)",
+    background: themePalette.panelStrong, border: "1px solid rgba(255,107,53,0.42)",
+    borderRadius: 10, padding: 12, boxShadow: `0 12px 36px ${themePalette.shadow}`,
   };
   const modeGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 6 };
   const modeCell = (active, color) => ({
     padding: "8px 8px", borderRadius: 8, cursor: "pointer", textAlign: "left", fontFamily: "inherit",
-    background: active ? `${color}22` : "rgba(255,255,255,0.03)",
-    border: active ? `2px solid ${color}` : "1px solid rgba(255,255,255,0.1)",
-    color: "#FFF",
+    background: active ? `${color}22` : themePalette.panel,
+    border: active ? `2px solid ${color}` : `1px solid ${themePalette.line}`,
+    color: themePalette.ink,
   });
   const diffGrid = { display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 6, marginTop: 10 };
   const diffCell = (active, color) => ({
     padding: "8px 6px", borderRadius: 8, cursor: "pointer", textAlign: "center", fontFamily: "inherit",
-    background: active ? `${color}22` : "rgba(255,255,255,0.03)",
-    border: active ? `2px solid ${color}` : "1px solid rgba(255,255,255,0.1)",
-    color: "#FFF", fontWeight: 900, fontSize: 12,
+    background: active ? `${color}22` : themePalette.panel,
+    border: active ? `2px solid ${color}` : `1px solid ${themePalette.line}`,
+    color: themePalette.ink, fontWeight: 900, fontSize: 12,
   });
   const quickRow = { display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 10 };
-  const quickBtn = { ...chip, padding: "8px 14px", fontSize: 12, fontWeight: 900, letterSpacing: 1, color: "#EEE" };
+  const quickBtn = { ...chip, padding: "8px 14px", fontSize: 12, fontWeight: 900, letterSpacing: 1, color: themePalette.ink };
   const tickerCard = {
     margin: "14px auto 0", maxWidth: 640, padding: "10px 14px",
     background: "linear-gradient(180deg,rgba(0,229,255,0.08),rgba(255,255,255,0.03))",
@@ -445,24 +452,24 @@ export default function HomeV2(props) {
   };
   const journeyCard = {
     margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
-    background: "rgba(0,0,0,0.32)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10,
+    background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
     display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, alignItems: "center",
   };
   const tabsRow = { display: "flex", gap: 4, justifyContent: "center", marginTop: 22, flexWrap: "wrap" };
   const tabBtn = (active) => ({
     padding: "8px 16px", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "inherit", cursor: "pointer",
     background: active ? "rgba(255,107,53,0.12)" : "transparent",
-    border: active ? "1px solid rgba(255,107,53,0.5)" : "1px solid rgba(255,255,255,0.1)",
-    color: active ? "#FF9960" : "#AAA", borderRadius: 8,
+    border: active ? "1px solid rgba(255,107,53,0.58)" : `1px solid ${themePalette.line}`,
+    color: active ? themePalette.accent : themePalette.muted, borderRadius: 8,
   });
-  const tabBody = { marginTop: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: 14 };
-  const footer = { marginTop: 22, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: "#777", letterSpacing: 1, flexWrap: "wrap" };
-  const linkBtn = { background: "none", border: "none", color: isSupporter() ? "#FFD700" : "#888", fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
+  const tabBody = { marginTop: 12, background: themePalette.panel, border: `1px solid ${themePalette.line}`, borderRadius: 10, padding: 14 };
+  const footer = { marginTop: 22, paddingTop: 12, borderTop: `1px solid ${themePalette.line}`, display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: themePalette.quiet, letterSpacing: 1, flexWrap: "wrap" };
+  const linkBtn = { background: "none", border: "none", color: isSupporter() ? "#9a6500" : themePalette.quiet, fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
 
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
-    <div style={page}>
+    <div style={page} data-theme={theme} data-testid="home-v2-shell">
       <div style={gridBg} />
       <Suspense fallback={null}>
         <DemoCanvas opacity={0.28} />
@@ -485,6 +492,14 @@ export default function HomeV2(props) {
             {gamepadConnected && (
               <span style={{ ...chip, color: controllerType === "xbox" ? "#4DBD61" : controllerType === "ps" ? "#6699FF" : "#CCC" }} title="Controller connected">🎮</span>
             )}
+            <button
+              style={iconBtn}
+              onClick={() => setTheme(current => nextTheme(current))}
+              aria-label={`Switch to ${THEMES[nextTheme(theme)].label} theme`}
+              aria-pressed={theme === "porcelain-day"}
+              title={`Theme: ${themePalette.label}`}
+              data-theme-toggle
+            >{themePalette.icon}</button>
             <button style={iconBtn} onClick={() => setShowSettings(true)} aria-label="Settings">⚙</button>
             <button style={iconBtn} onClick={() => switchTab("codex")} aria-label="Help / Codex">❓</button>
           </div>

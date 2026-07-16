@@ -1,4 +1,5 @@
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
+import { buildRunRngFairnessReceipt } from "./runRng.js";
 
 export function buildRunTheFixContract({
   debrief = {},
@@ -159,6 +160,7 @@ export function buildDeathScreenProps({
     peakMoment,
     waveScoreLog: gs?._waveScoreLog || [],
     communityChokeWaves,
+    fairnessReceipt: buildRunRngFairnessReceipt(gs),
   };
 }
 

@@ -4,6 +4,16 @@ import path from "node:path";
 import { buildDeathCoachTelemetry, buildDeathScreenProps, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "./deathFlow.js";
 
 describe("buildDeathScreenProps", () => {
+  it("carries an inspectable live fairness receipt without claiming full replay proof", () => {
+    const gs = { runSeed: 404, currentWave: 3 };
+    const props = buildDeathScreenProps({ runSeed: 404, gs });
+    expect(props.fairnessReceipt).toMatchObject({
+      seed: 404,
+      contract: "deterministic-decision-stream-evidence-not-full-physics-replay",
+    });
+    expect(props.fairnessReceipt.fingerprint).toMatch(/^[0-9A-F]{8}$/);
+  });
+
   it("promotes a seeded corrective REMATCH into the single primary action", () => {
     const contract = buildRunTheFixContract({
       debrief: {

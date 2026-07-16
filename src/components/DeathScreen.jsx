@@ -46,6 +46,7 @@ export default function DeathScreen({
   peakMoment = null,
   waveScoreLog = [],
   communityChokeWaves = null,
+  fairnessReceipt = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -856,6 +857,27 @@ export default function DeathScreen({
           <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.045)", color: "#B8C0D0", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
             {runTheFix.secondaryDisclosureLabel}
           </summary>
+
+        {fairnessReceipt?.seed > 0 && (
+          <div data-testid="fairness-receipt" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(143,239,255,0.28)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
+            <div style={{ fontSize: 10, color: "#8FEFFF", letterSpacing: 2, fontWeight: 900 }}>FAIRNESS RECEIPT · {fairnessReceipt.fingerprint}</div>
+            <div style={{ marginTop: 7, display: "flex", gap: 12, flexWrap: "wrap", color: "#E8F7FF", fontSize: 10 }}>
+              <span>SEED #{fairnessReceipt.seed}</span>
+              <span>{fairnessReceipt.streamCount} STREAMS</span>
+              <span>{fairnessReceipt.totalCalls} DRAWS</span>
+            </div>
+            <div style={{ marginTop: 7, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(118px,1fr))", gap: 5 }}>
+              {fairnessReceipt.streams.map((stream) => (
+                <div key={stream.key} style={{ padding: "5px 7px", borderRadius: 5, background: "rgba(0,0,0,0.24)", color: "#BFD3DE", fontSize: 9 }}>
+                  W{stream.wave} {stream.name.toUpperCase()} · {stream.calls}
+                </div>
+              ))}
+            </div>
+            <p style={{ margin: "8px 0 0", color: "#91A4AE", fontSize: 9, lineHeight: 1.45 }}>
+              This fingerprint proves the seeded decision streams used by this run. It is not a claim of full physics replay equivalence.
+            </p>
+          </div>
+        )}
 
         <div style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,107,53,0.18)", background: "linear-gradient(180deg,rgba(255,107,53,0.08),rgba(255,255,255,0.04))" }}>
           <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>TACTICAL DEBRIEF</div>

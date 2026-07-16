@@ -1,5 +1,7 @@
 # Latest Handoff — Session 122 recovery
 
+Session 123 Intent: Execute the fresh continuous `/start -> /audit -> /implement -> /closeout` arc after the recovery checkpoint, exhaust the Unified Genius List and second-order innovation pack, implement every agent-owned item at the highest quality, retain honest external deferrals, and push direct-to-main after staging verification.
+
 ## Where We Left Off
 - Recovered the cut-off Session 122 from its stale lock and full dirty worktree. The prior run finished `/start` and `/audit` but died mid-`/implement`; no Session 122 changes had been committed.
 - Finished every item in `docs/AUDIT_2026-07-16.json` / `.md`: startup context-meter/fallback, public human/agent/legal contract, stratified sampler, mission/practice integrity, named competitive RNG streams, and a one-action `RUN THE FIX` death flow.

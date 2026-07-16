@@ -103,6 +103,42 @@ export function snapshotRunRng(gs) {
   };
 }
 
+function fingerprintText(value) {
+  let hash = 2166136261;
+  for (const char of String(value)) {
+    hash ^= char.codePointAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0").toUpperCase();
+}
+
+export function buildRunRngFairnessReceipt(gs) {
+  const snapshot = snapshotRunRng(gs);
+  const streams = Object.entries(snapshot.streams || {})
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, stream]) => ({
+      key,
+      name: String(stream?.name || key.split(":").at(-1) || "unknown"),
+      wave: Math.max(1, Math.floor(Number(stream?.wave) || Number(key.split(":")[0]) || 1)),
+      calls: Math.max(0, Math.floor(Number(stream?.calls) || 0)),
+      state: Number(stream?.state) >>> 0,
+    }));
+  const totalCalls = streams.reduce((sum, stream) => sum + stream.calls, 0);
+  const fingerprint = fingerprintText([
+    snapshot.seed,
+    ...streams.map((stream) => `${stream.key}:${stream.calls}:${stream.state}`),
+  ].join("|"));
+  return {
+    schemaVersion: "1.0",
+    contract: "deterministic-decision-stream-evidence-not-full-physics-replay",
+    seed: snapshot.seed,
+    totalCalls,
+    streamCount: streams.length,
+    streams,
+    fingerprint,
+  };
+}
+
 export function restoreRunRng(gs, snapshot) {
   if (!gs || !snapshot || Number(snapshot.seed) !== Number(gs.runSeed)) return false;
   gs.runRngState = {

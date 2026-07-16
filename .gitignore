@@ -18,6 +18,7 @@ docs/RIGHTS_PROVENANCE.md
 .ops-cache/
 docs/cache-ledger.ndjson
 test-results/
+output/playwright/
 
 # Private surfaces — never commit (sanitization 2026-06-03)
 ignis/output/

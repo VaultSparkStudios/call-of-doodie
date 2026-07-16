@@ -2,7 +2,7 @@ name: Deploy to Cloudflare Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "session-*"]
   workflow_dispatch:
 
 permissions:
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: cloudflare-pages
-      url: https://callofdoodie.wtf/
+      url: ${{ github.ref_name == 'main' && 'https://callofdoodie.wtf/' || format('https://{0}.call-of-doodie.pages.dev/', github.ref_name) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,4 +68,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=call-of-doodie --branch=main
+          command: pages deploy dist --project-name=call-of-doodie --branch=${{ github.ref_name }}

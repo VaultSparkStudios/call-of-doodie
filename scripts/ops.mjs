@@ -30,7 +30,7 @@ function runDoctor(extraArgs = []) {
     const targetStatusPath = path.join(ROOT, "context", "PROJECT_STATUS.json");
     try {
       syncDoctorScore({ sourceStatusPath, targetStatusPath });
-      process.stderr.write("✓ synced doctorScore to this project''s context/PROJECT_STATUS.json\n");
+      process.stderr.write("✓ synced doctorScore to this project's context/PROJECT_STATUS.json\n");
     } catch (error) {
       process.stderr.write(`⛔ doctor passed but local doctorScore sync failed: ${error.message}\n`);
       process.exit(1);
@@ -51,6 +51,7 @@ Commands:
   genius-list      Generate or print the cached local genius list
   innovation-pack  Write docs/INNOVATION_PACK.md from repo-local open work and genius signals
   onboard          Verify local startup tooling exists; use --repair --write to report repair state
+  rescore          Proxy the authoritative IGNIS rescore command
   help             Show this help`);
 }
 
@@ -233,6 +234,9 @@ switch (command) {
     break;
   case "onboard":
     onboard();
+    break;
+  case "rescore":
+    runNode(path.join(ROOT, "..", "vaultspark-studio-ops", "scripts", "rescore-ignis.mjs"), args);
     break;
   case "help":
   case undefined:

@@ -1,5 +1,5 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-07-06T21:08:36.596Z -->
+<!-- generated-at: 2026-07-16T22:37:37.041Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
@@ -7,37 +7,37 @@
 
 ## Ranked Candidates
 
-1. **sil-2-blocker-s61-s60-follow-up-narrowed-s112-update-posthog-sentry-ko-f** — [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
+1. **sil-repo-local-staged-visual-theme-evidence-harness-reuse-the-pinned-pla** — [SIL] **Repo-local staged visual/theme evidence harness** — reuse the pinned `@playwright/test` dependency to audit dark/light themes at 390/768/1440 against an arbitrary preview URL, with screenshots under `output/playwright/`, contrast/overflow assertions, and a machine-readable receipt. Do not download the unpinned transient `@playwright/cli`; Obelisk blocked it in S122.
    - Axis: protocol
    - Evidence: context/TASK_BOARD.md#now
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-2. **sil-2-s60-supabase-auth-studio-membership-implementation-decision-if-pai** — [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
+2. **sil-2-blocker-s61-s60-follow-up-narrowed-s112-update-posthog-sentry-ko-f** — [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
    - Axis: protocol
    - Evidence: context/TASK_BOARD.md#now
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-3. **human-sil-2-manual-browser-qa-pass-against-docs-qachecklist-md-to-confir** — [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
+3. **sil-2-s60-supabase-auth-studio-membership-implementation-decision-if-pai** — [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
+   - Axis: protocol
+   - Evidence: context/TASK_BOARD.md#now
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+4. **human-sil-2-manual-browser-qa-pass-against-docs-qachecklist-md-to-confir** — [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
    - Axis: launch-confidence
    - Evidence: context/TASK_BOARD.md#now
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-4. **human-data-sil-2-homev2-lighthouse-measurement-capture-real-lcp-cls-delt** — [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
+5. **human-data-sil-2-homev2-lighthouse-measurement-capture-real-lcp-cls-delt** — [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
    - Axis: product
    - Evidence: context/TASK_BOARD.md#now
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-5. **human-data-sil-1-homev2-analytics-funnel-compare-homev2deploy-vs-legacy-** — [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
+6. **human-data-sil-1-homev2-analytics-funnel-compare-homev2deploy-vs-legacy-** — [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
    - Axis: product
    - Evidence: context/TASK_BOARD.md#now
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-6. **discord-invite-community-link-when-the-community-entry-point-is-ready** — Discord invite/community link when the community entry point is ready
+7. **discord-invite-community-link-when-the-community-entry-point-is-ready** — Discord invite/community link when the community entry point is ready
    - Axis: product
    - Evidence: context/TASK_BOARD.md#deferred
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-7. **sil-1-s62-deferred-homev2-v1-fallback-retirement-gate-on-200ms-lighthous** — [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
+8. **sil-1-s62-deferred-homev2-v1-fallback-retirement-gate-on-200ms-lighthous** — [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
    - Axis: product
    - Evidence: context/TASK_BOARD.md#deferred
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-8. **maintain-launch-confidence** — Maintain launch confidence with protocol, test, and build verification.
-   - Axis: protocol
-   - Evidence: context/TASK_BOARD.md
    - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
 
 ## Guardrails
