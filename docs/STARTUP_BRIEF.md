@@ -24,7 +24,7 @@
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
-║  staging-preview → https://session-123-staging.call-of-doodi ✓   ║
+║  staging-preview → https://session-124-staging.call-of-doodi ✓   ║
 ║  Unit tests    → npm test ✓                                      ║
 ║  deploy       → GitHub Actions staging Deploy to Cloudflare  ✓   ║
 ║  production-smoke → npm run live:site-check ✓                    ║
@@ -63,9 +63,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  5.2% used                          ║
-║     52,381 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~26,191 tok/turn  ·  cache 50%  ·  33 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.5% used                          ║
+║     35,111 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~17,556 tok/turn  ·  cache 50%  ·  50 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -84,7 +84,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⚠  Doctor        122/148 (84%)  ·  24 warn                      ║
+║  ⚠  Doctor        123/148 (84%)  ·  23 warn                      ║
 ║  ✓  Cost          real $0.01/7d · 7d notional $0.21 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 

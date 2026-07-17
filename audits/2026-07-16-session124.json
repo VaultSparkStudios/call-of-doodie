@@ -20,8 +20,9 @@
     "security release audit and npm audit 0 passed",
     "replay state and edge fixtures 4/4 each",
     "medium game gate and diff checks passed",
+    "isolated staging deploy run 29549796742 passed; live shell 5/5, route/header 8/8, hosted visual matrix 192/192",
     "doctor overallPass true with failing 0 and blockingFailing 0",
-    "settings sanitizer passed with zero findings; staged secret scan runs immediately before commit"
+    "settings sanitizer passed with zero findings and the staged secret scan was clean"
   ],
   "deferred": [
     "direct AI pixel review after host CryptUnprotectData failures",

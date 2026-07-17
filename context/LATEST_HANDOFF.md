@@ -11,7 +11,8 @@
 - `npm run lint`, `npm run build`, `npm run public:contract` (12/12), `npm run security:release:audit` (npm audit 0) — PASS.
 - Replay state-stepper and edge fixtures — 4/4 each.
 - Focused evidence gates: Aim/input/Home 24/24; supporter/cosmetic/storage 61/61; drill/death/rematch 26/26; frame/combat 18/18.
-- Hosted staging and final production evidence are recorded below after closeout deployment verification.
+- Isolated staging deploy run `29549796742` passed for commit `b616e3f`; live shell checks passed 5/5 and the required route/header contract passed 8/8.
+- Hosted visual matrix passed 192/192 machine checks across 24 captures at `https://session-124-staging.call-of-doodie.pages.dev`; direct AI pixel inspection remains explicitly unclaimed.
 
 ## Next
 - With physical hardware: perform one real Progressive Web App install/relaunch and one real controller/browser pass.

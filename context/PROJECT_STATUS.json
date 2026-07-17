@@ -24,7 +24,7 @@
     },
     {
       "status": "green",
-      "url": "https://session-123-staging.call-of-doodie.pages.dev/",
+      "url": "https://session-124-staging.call-of-doodie.pages.dev/",
       "type": "staging-preview",
       "command": "8/8 routes and security headers pass; hosted theme/viewport matrix 192/192"
     },
@@ -36,7 +36,7 @@
     {
       "status": "green",
       "type": "deploy",
-      "command": "GitHub Actions staging Deploy to Cloudflare Pages 29540809234"
+      "command": "GitHub Actions staging Deploy to Cloudflare Pages 29549796742"
     },
     {
       "status": "green",
@@ -112,8 +112,8 @@
   "doctorScore": {
     "date": "2026-07-17",
     "overallPass": true,
-    "passing": 122,
-    "warning": 24,
+    "passing": 123,
+    "warning": 23,
     "failing": 0,
     "blockingFailing": 0,
     "skipped": 2,

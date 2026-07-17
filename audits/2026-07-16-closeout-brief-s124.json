@@ -40,6 +40,7 @@
     "Full suite: 662/662 tests across 84 files; lint, build, public contract, replay fixtures, medium game gate, and diff checks passed.",
     "Security release audit and npm audit passed with 0 vulnerabilities; settings sanitizer reported zero findings.",
     "Studio doctor reports overallPass=true, failing=0, and blockingFailing=0; entropy is healthy.",
+    "Isolated staging run 29549796742 passed; live shell 5/5, route/header 8/8, and hosted visual matrix 192/192.",
     "Direct AI pixel inspection remains explicitly unclaimed after host CryptUnprotectData failures."
   ],
   "followUps": [

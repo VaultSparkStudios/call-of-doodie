@@ -1,40 +1,45 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 070ba43482d9 -->
-<!-- generated-at: 2026-07-17T02:19:59.078Z -->
+<!-- source-hash: 82ed7ae36b44 -->
+<!-- generated-at: 2026-07-17T02:27:16.541Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 124
+SESSION 124 HANDOFF SUMMARY
 
-## Session
-- Session 124; continuous /goal arc from synced main (start -> audit -> implement -> saturation -> closeout), no phase handback.
+Session
+- Number: 124
 
-## Shipped
-- All eight live-premise items from docs/AUDIT_2026-07-16_3.json: canonical SIL history truth, observed-input Aim Check, reusable frame index, backend supporter verification, next-run drill continuity, supporter cache expiry, repeatable drill evidence, calibration expiry.
-- Unified Genius List exhausted for repo-executable work; only generated item (maintain-launch-confidence) satisfied by validation matrix.
+Shipped
+- All 8 live-premise items from AUDIT_2026-07-16_3.json: canonical SIL history truth, observed-input Aim Check, reusable frame index, backend supporter verification, next-run drill continuity, supporter cache expiry, repeatable drill evidence, calibration expiry.
+- Unified Genius List exhausted for repo-executable work (only generated item maintain-launch-confidence, satisfied).
 
-## Current Intent
-- Preserve app-release NO-GO honesty until external/hardware/founder gates are genuinely met.
+Intent
+- Continuous /goal mission from synced main: /start -> /audit -> /implement -> saturation -> /closeout, no handback. Push direct-to-main after staging verification, no fabricated gates.
 
-## Validation
-- npm test 662/662 across 84 files; lint, build, public:contract (12/12), security:release:audit (npm audit 0) PASS.
+Validation (all PASS)
+- npm test 662/662 across 84 files; lint, build, public:contract 12/12, security:release:audit (npm audit 0).
 - Replay state-stepper and edge fixtures 4/4 each.
 - Evidence gates: Aim/input/Home 24/24; supporter/cosmetic/storage 61/61; drill/death/rematch 26/26; frame/combat 18/18.
+- Staging deploy 29549796742 for commit b616e3f; live shell 5/5, route/header contract 8/8.
+- Hosted visual matrix 192/192 across 24 captures at session-124-staging.call-of-doodie.pages.dev.
 
-## Now (top 3)
+Now (top 3)
 - Physical hardware: one real PWA install/relaunch and one real controller/browser pass.
 - Production traffic + scoped analytics: collect HomeV2 Lighthouse/funnel evidence before retiring ?home=v1.
 - Verify on-domain inbound mail route before SPARKED.
 
-## Blockers (top 3)
-- No physical hardware for PWA/gamepad QA.
-- No production traffic or project-scoped analytics (PostHog/Sentry) for LCP/funnel evidence.
-- Inbound email route, Itch listing, and direct AI theme review unverified.
+Blockers (top 3)
+- No physical PWA/gamepad QA (no hardware).
+- No production Lighthouse/funnel evidence (no production traffic/scoped analytics).
+- No verified inbound email route.
 
-## Human-Blocked (age)
-- Founder approval for SPARKED GO — open since Session 120+.
-- Project-scoped analytics/Sentry credentials via secrets gateway — open since Session 121.
-- Physical device QA — open since Session 120.
+Human-blocked (age)
+- Founder approval for SPARKED — open since Session 120+ (4+ sessions).
+- Itch publication/listing — open since Session 120+ (4+ sessions).
+- Project-scoped analytics/Sentry credentials — open since Session 121 (3+ sessions).
+- Direct AI pixel/theme review — open since Session 122 (2+ sessions).
 
-## Next Session Pointer
-- Fresh /start from clean main; pursue any remaining repo-local launch-confidence work, hold SPARKED NO-GO until external/hardware/founder gates clear.
+Status
+- SPARKED verdict: NO-GO.
+
+Next: Resume at physical hardware QA (PWA install/relaunch + controller pass) or advance human-blocked SPARKED gates if credentials/hardware become available.
