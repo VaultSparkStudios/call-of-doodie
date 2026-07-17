@@ -9,7 +9,7 @@ import { redact } from "./lib/secrets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const STUDIO_OPS = path.resolve(ROOT, "..", "vaultspark-studio-ops", "scripts", "ops.mjs");
+const LOCAL_OPS = path.join(ROOT, "scripts", "ops.mjs");
 const STATUS_PATH = path.join(ROOT, "context", "PROJECT_STATUS.json");
 const LOCK_PATH = path.join(ROOT, "context", ".session-lock");
 const BEACON_PATH = path.join(ROOT, ".claude", "beacon.env");
@@ -90,7 +90,7 @@ function bestEffortDoctor() {
   header("Step 1 · Studio Ops doctor sync");
   const result = DRY
     ? { status: 0, stdout: "(dry-run) would run Studio Ops doctor\n", stderr: "" }
-    : sh(`${JSON.stringify(process.execPath)} ${JSON.stringify(STUDIO_OPS)} doctor --update-json`);
+    : sh(`${JSON.stringify(process.execPath)} ${JSON.stringify(LOCAL_OPS)} doctor --json --quiet`);
   process.stdout.write(redact(result.stdout || ""));
   process.stderr.write(redact(result.stderr || ""));
   if ((result.status ?? 1) !== 0) {

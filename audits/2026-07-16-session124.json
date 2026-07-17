@@ -11,16 +11,18 @@
     "Reusable single-scan enemy frame index and in-place hot-array compaction",
     "Exact-callsign backend supporter verification with seven-day cache freshness",
     "Live/replay/REMATCH coaching continuity and observed outcome receipts",
-    "Deduplicated two-of-three drill repeatability evidence without causal claims"
+    "Deduplicated two-of-three drill repeatability evidence without causal claims",
+    "Read-only closeout doctor verification with cross-repo boundary regression coverage"
   ],
   "validation": [
-    "npm test 662/662 across 84 files",
+    "npm test 663/663 across 84 files",
     "lint and production build passed",
     "public contract 12/12 passed",
     "security release audit and npm audit 0 passed",
     "replay state and edge fixtures 4/4 each",
     "medium game gate and diff checks passed",
     "isolated staging deploy run 29549796742 passed; live shell 5/5, route/header 8/8, hosted visual matrix 192/192",
+    "production deploy run 29550017949 passed; live shell 5/5, post-cutover 5/5, replay trust 3/3, and launch QA green",
     "doctor overallPass true with failing 0 and blockingFailing 0",
     "settings sanitizer passed with zero findings and the staged secret scan was clean"
   ],
@@ -32,7 +34,7 @@
     "project-scoped analytics configuration",
     "Itch publication and founder launch approval"
   ],
-  "sil": {"score": 1000, "velocity": 8, "debt": "decreasing"},
+  "sil": {"score": 1000, "velocity": 9, "debt": "decreasing"},
   "headline": "Made player, supporter, coaching, runtime, and startup claims evidence-backed across minting, freshness, repeatability, and authority",
   "items": [
     {"title":"Evidence-backed player input and supporter trust","projectImpact":10,"ecosystemImpact":8,"evidence":"False-mint tests, exact backend claims, and bounded proof freshness"},

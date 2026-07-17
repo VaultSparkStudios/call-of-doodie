@@ -623,3 +623,8 @@ Rationale: A single better run is useful feedback, not proof that coaching cause
 Decision: `callsign_claims.supporter` is the supporter source of truth. Local storage is only a callsign-bound, expiring display cache; score submission independently overwrites any client supporter field from the backend claim.
 
 Rationale: Cosmetic status should feel responsive offline, but a public browser must never be able to award itself a paid badge or author competitive trust metadata.
+## 2026-07-16 — Session 124 — Closeout doctor verification is read-only across repo boundaries
+
+Decision: Canonical project closeout may read the sibling Studio Ops doctor verdict, but must not invoke `--update-json` against the sibling tree. The project autopilot routes through `scripts/ops.mjs doctor --json --quiet` and only stamps project-local state.
+
+Rationale: Health evidence does not require a cross-repo mutation. Keeping verification read-only preserves CANON-018 ownership boundaries and prevents a project closeout from changing the control plane merely to become green.

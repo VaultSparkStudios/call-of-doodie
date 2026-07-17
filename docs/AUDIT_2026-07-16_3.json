@@ -9,7 +9,7 @@
     "generatedAt": "2026-07-16",
     "project": "call-of-doodie",
     "type": "game-app",
-    "combinedPriority": 201.1,
+    "combinedPriority": 218.1,
     "top3": [
       "evidence-backed-aim-calibration",
       "canonical-sil-history-truth",
@@ -24,7 +24,8 @@
     "secondOrderImplemented": [
       "supporter-verification-cache-freshness",
       "repeatable-drill-evidence-ledger",
-      "input-calibration-evidence-freshness"
+      "input-calibration-evidence-freshness",
+      "read-only-closeout-doctor-boundary"
     ]
   },
   "gameLoopReview": {
@@ -248,6 +249,21 @@
       "why": "Evidence-backed capture fixed minting, but saved proof remained ready indefinitely after devices, mappings, or browser input paths could change.",
       "recipe": "Add a 30-day freshness boundary, distinguish completeness from freshness, show AIM CHECK EXPIRED / INPUT QA RECHECK, and test the boundary.",
       "source": "second-order innovation pack"
+    },
+    {
+      "rank": 9,
+      "tier": "BOLT",
+      "axis": "infrastructure / cross-repo coherence / closeout safety",
+      "effortHours": 1.0,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 17.0,
+      "slug": "read-only-closeout-doctor-boundary",
+      "title": "Keep canonical closeout health verification read-only across repository boundaries.",
+      "status": "shipped",
+      "why": "Final closeout inspection found the autopilot directly invoked the sibling Studio Ops doctor with --update-json, violating the mission boundary even though a read-only health verdict is sufficient.",
+      "recipe": "Route the autopilot through the project-local doctor command with --json --quiet, remove the cross-repo write flag, and add a source-level regression assertion.",
+      "source": "second-order closeout audit"
     }
   ],
   "skipped": [
@@ -380,6 +396,17 @@
         "30-day TTL",
         "freshness fields",
         "24 focused tests"
+      ]
+    },
+    {
+      "slug": "read-only-closeout-doctor-boundary",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "autopilot doctor is --json --quiet",
+        "no --update-json call",
+        "focused proxy regression 3/3"
       ]
     }
   ]

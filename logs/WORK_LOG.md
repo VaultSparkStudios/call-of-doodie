@@ -917,6 +917,7 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - Replaced supporter self-attestation with exact-callsign backend verification; cached proof expires after seven days and online scores remain server-authoritative.
 - Carried accepted coaching into live, replay, and REMATCH runs; added observed-only outcome receipts plus a deduplicated 2-of-3 repeatability ledger.
 - Added 30-day Aim Check evidence freshness so complete but old proof becomes `INPUT QA RECHECK`.
-- Generated `docs/AUDIT_2026-07-16_3.*`, `docs/IMPLEMENT_PLAN.md`, and `docs/INNOVATION_PACK.md`; all eight items are marked shipped with execution evidence.
-- Validation: 662/662 tests across 84 files, lint, build, public contract 12/12, security release gate and npm audit 0, replay state/edge fixtures 4/4 each, medium game gate, and diff checks passed.
+- Generated `docs/AUDIT_2026-07-16_3.*`, `docs/IMPLEMENT_PLAN.md`, and `docs/INNOVATION_PACK.md`; all nine items are marked shipped with execution evidence.
+- Validation: 663/663 tests across 84 files, lint, build, public contract 12/12, security release gate and npm audit 0, replay state/edge fixtures 4/4 each, medium game gate, and diff checks passed.
 - App-release verdict remains NO-GO for SPARKED because physical devices, inbound mail, production data, scoped analytics, publication, direct AI pixel review, and founder approval remain real external gates.
+- S124 closeout root-fix: changed closeout-autopilot doctor verification from sibling `--update-json` mutation to read-only local-router `--json --quiet` and added regression coverage.

@@ -38,7 +38,7 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 8↑                       ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 9↑                       ║
 ║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -59,19 +59,19 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 124 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    662/662 passing  ·  Deploy: N/A                       ║
+║  Tests:    663/663 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.5% used                          ║
-║     35,111 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~17,556 tok/turn  ·  cache 50%  ·  50 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.8% used                          ║
+║     38,214 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~19,107 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         662/662 passing                                ║
-║  ✓  Velocity      8 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         663/663 passing                                ║
+║  ✓  Velocity      9 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44175 FORGE  ·  1d old                         ║
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  8↑  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  9↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
