@@ -40,7 +40,7 @@
 ║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -49,7 +49,7 @@
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        123/148                                          ║
+║  Doctor:        122/148                                          ║
 ║  Compliance:    —                                                ║
 ║  Tests:         664/664                                          ║
 ║  IGNIS:         1d ago                                           ║
