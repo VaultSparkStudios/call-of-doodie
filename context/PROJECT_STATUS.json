@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 122 recovered and completed the cut-off six-item audit: startup resilience, public contract, sampler diversity, mission/practice integrity, named competitive RNG, and DeathScreen RUN THE FIX hierarchy; 631/631 tests and isolated HTTP staging green.",
-  "nextMilestone": "Run a fresh saturated arc beginning with a repo-local arbitrary-preview visual/theme evidence harness; preserve NO-GO until physical QA, credential/data gates, and founder launch approval pass.",
+  "currentFocus": "Session 123 shipped verifiable Sewer Night/Porcelain Day themes, a hosted 192-check visual matrix, local closeout-command parity, player-visible RNG fairness fingerprints, calendar invariants, and CI-native isolated staging; 642/642 tests green.",
+  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad QA, production Lighthouse/funnel evidence, project-scoped analytics, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -23,10 +23,10 @@
       "type": "cloudflare"
     },
     {
-      "status": "warning",
-      "url": "https://recovery-s122.call-of-doodie.pages.dev/",
+      "status": "green",
+      "url": "https://session-123-staging.call-of-doodie.pages.dev/",
       "type": "staging-preview",
-      "command": "9/9 routes and security headers pass; fresh visual/theme evidence not yet captured"
+      "command": "8/8 routes and security headers pass; hosted theme/viewport matrix 192/192"
     },
     {
       "status": "green",
@@ -36,7 +36,7 @@
     {
       "status": "green",
       "type": "deploy",
-      "command": "GitHub Actions Deploy to Cloudflare Pages 28686453628"
+      "command": "GitHub Actions staging Deploy to Cloudflare Pages 29540809234"
     },
     {
       "status": "green",
@@ -61,26 +61,26 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-16",
+  "lastUpdated": "2026-07-17",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
   "truthAuditLastRun": "2026-07-16",
-  "ignisScore": 43856,
+  "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 122,
+  "silSession": 123,
   "silScore": 1000,
   "silAvg3": 1000,
   "silVelocity": 6,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-16",
-  "currentSession": 122,
+  "currentSession": 123,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 631,
-  "testsTotal": 631,
-  "entropyScore": 0.24,
+  "testsPassing": 642,
+  "testsTotal": 642,
+  "entropyScore": 0.181,
   "entropyLastComputed": "2026-07-16",
   "silRubricVersion": "3.0",
   "silMax": 1000,
@@ -110,15 +110,15 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "github-pages",
   "doctorScore": {
-    "date": "2026-07-16",
+    "date": "2026-07-17",
     "overallPass": true,
-    "passing": 114,
-    "warning": 27,
+    "passing": 116,
+    "warning": 29,
     "failing": 0,
     "blockingFailing": 0,
     "skipped": 2,
-    "ran": 141,
-    "total": 143,
-    "score": 81
+    "ran": 145,
+    "total": 147,
+    "score": 80
   }
 }

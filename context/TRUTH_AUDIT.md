@@ -40,6 +40,21 @@ Last reviewed: 2026-07-16
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-07-16 — Session 123 — Theme, staging, and run-trust truth
+
+- Theme truth — src/utils/theme.js owns two real player-selectable themes with URL/storage/system resolution; HomeV2 and all three legal pages expose accessible toggles. Combat remains dark-first intentionally.
+- Visual evidence truth — scripts/audit-staging-visuals.mjs uses the installed pinned Playwright dependency and writes screenshots plus a JSON receipt. The isolated hosted preview passed 192/192 checks across four routes, two themes, and three widths.
+- Pixel-review truth — direct AI inspection of the generated PNGs is not claimed: both the local image viewer and image-emitting Node kernel failed Windows CryptUnprotectData. This remains a release-gate input even though the machine matrix is green.
+- Staging truth — GitHub Actions run 29540809234 deployed commit f33c1b5 to session-123-staging.call-of-doodie.pages.dev; eight required routes returned 200 with CSP and nosniff.
+- RNG truth — the DeathScreen receipt reflects the live named-stream snapshot's seed, draw counts, states, and stable fingerprint. Its copy explicitly rejects a full physics replay claim.
+- Protocol truth — local closeout proxy files bind project/path arguments to authoritative sibling scripts, use the safe hidden spawn path, and are required by protocol drift.
+- Calendar truth — the streak invariant covers every consecutive local calendar day from 2020 through 2031 at local noon, including leap, month/year, and daylight-saving transitions.
+- Validation truth — 642/642 tests, lint, public contract, protocol drift, build, replay fixtures, launch gates, npm audit 0, secret scans, and hosted visual/route checks passed.
+- Release truth — SPARKED remains NO-GO; physical hardware, inbound delivery, production data/analytics scope, publication, and founder approval are not replaced by engineering evidence.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-16
+
 ## 2026-06-15 — Session 96 — Combat audio × career depth × coaching sprint
 
 - Audio truth — `soundBossGrudge(tier)`, `soundComboTick(framesLeft)`, `soundComboBreak(count)` added to `src/sounds.js`; all three are named exports wired in `src/App.jsx`.

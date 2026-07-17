@@ -893,3 +893,17 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - Validation: lint PASS; full tests 631/631 across 76 files; focused audit tests 86/86; replay state and edge fixtures 4/4; launch media PASS; launch QA PASS; build PASS; public contract PASS; diff check PASS.
 - Release verdict: NO-GO for SPARKED/public launch. Recovery code is checkpoint-ready; staged theme/viewport screenshots, physical PWA/gamepad QA, analytics/Sentry scope, HomeV2 production evidence, and founder approval remain real gates.
 - Final claim verification found Session 121''s `doctor --update-json` proxy updated the sibling Studio Ops status rather than this repo. Added `doctor-score-sync.mjs`, wired it into the local proxy, and added fail-closed regression tests so the recovery checkpoint contains the real project-local receipt.
+
+## 2026-07-16 — Session 123 — Fresh saturated arc, verifiable themes, and run-trust receipt
+
+- Ran a fresh continuous /start -> /audit -> /implement -> /closeout after the Session 122 recovery checkpoint, with the game-loop and app-release lenses.
+- Generated docs/AUDIT_2026-07-16_2.json / .md and shipped all six ranked items, including two second-order additions discovered during implementation.
+- Added Sewer Night / Porcelain Day theme resolution, persistence, accessible toggles, and public/legal parity.
+- Added a pinned-Playwright arbitrary-preview visual audit covering four routes, two themes, and three widths; local and hosted receipts passed 192/192 checks.
+- Added thin tested proxies for state vector, entropy, genome, settings sanitization, and IGNIS rescore; protocol drift now enforces closeout parity.
+- Exposed a live named-RNG fairness fingerprint in secondary post-run analysis with explicit non-physics-proof language.
+- Added a twelve-year mission calendar invariant and bounded session-* GitHub Actions staging deployments.
+- Validation: full tests 642/642 across 80 files, lint, public contract, protocol drift, replay fixtures, launch media/QA, build, security release audit, npm audit 0, staged secret scan, and diff check all passed.
+- Isolated staging: https://session-123-staging.call-of-doodie.pages.dev; GitHub deploy run 29540809234 and brief-format run 29540809248 succeeded; eight public/agent routes and headers passed; hosted visual receipt 192/192.
+- App-release verdict remains NO-GO for SPARKED due external/manual/data/founder gates; engineering closeout is green.
+- Visual-review boundary: the machine receipt is real, but direct AI image inspection is unclaimed because view_image and the image-emitting Node kernel both failed Windows CryptUnprotectData. Session hygiene closed the one leaked Vite process; 6 servers started, 6 closed, 0 running.

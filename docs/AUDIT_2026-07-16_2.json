@@ -29,7 +29,7 @@
   "releaseGate": {
     "decision": "NO-GO for SPARKED; implementation may continue on staging",
     "green": ["recovery CI", "isolated preview contract", "rollback documentation", "zero-cost core play", "proprietary public surfaces"],
-    "red": ["no AI-verified light/dark theme evidence", "analytics capability missing", "on-domain inbound delivery not verified", "no founder launch approval"]
+    "red": ["direct AI pixel review host-blocked by Windows CryptUnprotectData", "analytics capability missing", "on-domain inbound delivery not verified", "no founder launch approval"]
   },
   "items": [
     {
@@ -177,5 +177,12 @@
     "npm run replay:edge-fixtures",
     "git diff --check"
   ],
-  "executionLog": []
+  "executionLog": [
+    {"slug":"project-theme-contract","rung":"L3","shipped":true,"outcome":"Shipped Sewer Night / Porcelain Day URL, storage, system, DOM, accessible-toggle, HomeV2, and legal-shell parity.","verification":"theme unit/HomeV2/public-contract tests plus hosted visual matrix"},
+    {"slug":"staged-visual-evidence-harness","rung":"L3","shipped":true,"outcome":"Added arbitrary-preview Playwright capture/receipt automation for four routes, two themes, and three widths.","verification":"isolated preview receipt PASS 192/192"},
+    {"slug":"local-closeout-command-parity","rung":"L3","shipped":true,"outcome":"Added safe authoritative proxies and protocol-drift enforcement for state vector, entropy, genome, settings sanitize, and rescore.","verification":"proxy tests plus protocol drift status ok"},
+    {"slug":"player-visible-fairness-receipt","rung":"L3","shipped":true,"outcome":"Exposed live seeded stream counts and stable fingerprint inside secondary analysis with honest proof boundaries.","verification":"runRng and deathFlow tests"},
+    {"slug":"mission-calendar-boundary-invariants","rung":"L2","shipped":true,"outcome":"Added a twelve-year consecutive-local-day invariant spanning leap and daylight-saving boundaries.","verification":"storage suite 52/52"},
+    {"slug":"ci-isolated-staging-path","rung":"L3","shipped":true,"outcome":"Added bounded session preview deployments through GitHub Actions while preserving direct-main production behavior.","verification":"workflow test and successful staging run 29540809234"}
+  ]
 }

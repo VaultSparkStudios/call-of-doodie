@@ -1,0 +1,55 @@
+{
+  "session": "S123",
+  "date": "2026-07-16",
+  "agent": "codex",
+  "repo": "call-of-doodie",
+  "headline": "Made themes, staging, and deterministic run trust reproducible without overstating launch readiness.",
+  "items": [
+    {
+      "id": "#1",
+      "slug": "verifiable-theme-contract",
+      "title": "Two real themes with hosted visual evidence",
+      "axis": "ux",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "insight": "Sewer Night and Porcelain Day are durable player preferences across HomeV2 and legal pages. The isolated preview passed 192 of 192 browser checks across 24 captures.",
+      "evidence": "src/utils/theme.js; scripts/audit-staging-visuals.mjs; staging run 29540809234"
+    },
+    {
+      "id": "#2",
+      "slug": "fairness-fingerprint",
+      "title": "Inspectable deterministic run receipt",
+      "axis": "feature-depth",
+      "projectImpact": 9,
+      "ecosystemImpact": 7,
+      "insight": "The post-run analysis now shows the seed, named-stream draw counts, and a stable fingerprint from the live run. Copy explicitly distinguishes decision-stream evidence from full physics replay.",
+      "evidence": "src/systems/runRng.js; src/components/DeathScreen.jsx"
+    },
+    {
+      "id": "#3",
+      "slug": "closeout-staging-parity",
+      "title": "Executable closeout and isolated staging",
+      "axis": "organization",
+      "projectImpact": 9,
+      "ecosystemImpact": 9,
+      "insight": "The repo now executes every named closeout helper through authoritative proxies. Bounded session branches deploy through the existing scoped CI secret, eliminating production-before-staging pressure.",
+      "evidence": "scripts/lib/studio-ops-proxy.mjs; .github/workflows/deploy-cloudflare.yml"
+    }
+  ],
+  "validation": [
+    "Full suite: 642/642 tests across 80 files; lint, build, public contract, protocol drift, replay fixtures, launch media, and launch QA passed.",
+    "Security release audit and npm audit passed with 0 vulnerabilities; working-tree and staged secret scans were clean.",
+    "Isolated staging deploy and brief-format workflows passed; 8/8 required routes returned 200 with CSP/nosniff.",
+    "Hosted visual matrix passed 192/192 machine checks across 24 captures; direct AI image inspection remains explicitly unclaimed after host CryptUnprotectData failures.",
+    "Studio doctor reports overallPass=true, failing=0, and blockingFailing=0."
+  ],
+  "followUps": [
+    "Run physical PWA and controller QA.",
+    "Verify inbound email before changing contact delivery status.",
+    "Collect production Lighthouse and funnel evidence before HomeV1 retirement."
+  ],
+  "blockers": [
+    "SPARKED remains NO-GO pending AI pixel review, physical, inbound-mail, production-data, publication, and founder evidence."
+  ],
+  "silDelta": {"previous": 1000, "current": 1000}
+}

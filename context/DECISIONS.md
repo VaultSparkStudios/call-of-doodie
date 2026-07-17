@@ -589,3 +589,19 @@ Rationale: Code recovery and production release are separate truth claims. The p
 Decision: `node scripts/ops.mjs doctor --update-json` must copy the authoritative Studio doctor receipt into Call of Doodie''s own `context/PROJECT_STATUS.json`; a successful Studio-wide update alone is not sufficient.
 
 Rationale: Session 121 correctly restored the executable doctor route, but its local write-back claim was phantom because the upstream command is rooted to Studio Ops. A project-local proxy must make project-local side effects explicit and tested.
+
+## 2026-07-16 — Session 123 — Themes are a cross-surface product contract, not a screenshot mode
+
+Decision: The public front door and static legal shell share the named sewer-night / porcelain-day contract with URL, storage, system-preference, DOM, and accessible-toggle semantics. Combat remains dark-first because target readability outranks aesthetic parity inside a live run.
+
+Rationale: CANON-047 requires human-best themes with verified readability. A screenshot-only query switch would automate a false claim; a shared player preference makes the visual evidence correspond to a real product behavior.
+
+Trade-off accepted: HomeV2 still contains older hard-coded accent colors inside specialized content cards. The primary shell, controls, cards, tabs, footer, and all legal surfaces are tokenized now; future extraction should follow evidence rather than churn the entire component at once.
+
+## 2026-07-16 — Session 123 — Isolated previews use bounded CI branches
+
+Decision: Cloudflare Pages staging deploys accept only session-* push branches in addition to main, and the deployed Pages branch derives from github.ref_name. Production remains direct-to-main.
+
+Rationale: Local global/DNS Cloudflare tokens did not have Pages permissions, while GitHub Actions already owns a correctly scoped deployment secret. A first-class bounded staging path avoids production-before-staging and credential drift without widening local secret access.
+
+Trade-off accepted: Preview branches are ephemeral remote refs that must be deleted after final production verification.
