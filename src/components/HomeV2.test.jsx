@@ -197,11 +197,22 @@ describe("HomeV2", () => {
 
     const verifyButton = [...container.querySelectorAll("button")].find(b => /VERIFY CONTROLS/.test(b.textContent));
     expect(verifyButton).toBeTruthy();
+    expect(verifyButton.disabled).toBe(true);
+    await act(async () => { verifyButton.click(); });
+    expect(loadInputCalibration()).toBeNull();
+
+    await act(async () => {
+      for (const key of ["w", "d", "s", "a"]) {
+        window.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+      }
+    });
+    expect(verifyButton.disabled).toBe(false);
     await act(async () => { verifyButton.click(); });
 
     const saved = loadInputCalibration();
     expect(saved?.complete).toBe(true);
     expect(saved?.buckets).toEqual(["east", "north", "south", "west"]);
+    expect(saved?.source).toBe("keyboard");
     expect(container.textContent).toContain("AIM CHECK VERIFIED");
   });
 
@@ -209,7 +220,7 @@ describe("HomeV2", () => {
     saveInputCalibration(buildInputCalibrationRecord({
       source: "mouse",
       buckets: ["east", "west", "north", "south"],
-      timestamp: 123,
+      timestamp: Date.now(),
     }));
     localStorage.setItem("cod-controller-profile", JSON.stringify({
       version: 1,

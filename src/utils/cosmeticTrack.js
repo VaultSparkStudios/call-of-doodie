@@ -7,8 +7,8 @@
 // IMPORTANT (locked-in by founder feedback):
 //   - No gameplay impact. Only skins, taunts, kill-text fonts, badge tints.
 //   - No paywall on any in-game advantage.
-//   - The supporter unlock continues to use the existing isSupporter() flag
-//     (which is set by the Ko-fi webhook).
+//   - Supporter unlocks require a callsign-matched backend verification cache.
+//     The Ko-fi webhook remains authoritative; local storage is display cache only.
 //
 // Anchor (week 0) = Mon 2026-05-04. Each "week" advances on Mondays.
 
@@ -37,9 +37,9 @@ export function currentTrackWeek(now = Date.now()) {
 }
 
 /** Returns array of cosmetic IDs available this week (not necessarily owned). */
-export function availableThisWeek(now = Date.now()) {
+export function availableThisWeek(now = Date.now(), callsign = null) {
   const w = currentTrackWeek(now);
-  const supporter = isSupporter();
+  const supporter = isSupporter(callsign);
   // Supporters get full week-of-release access; free users get last week's drops too.
   const cap = supporter ? w : Math.max(0, w - 1);
   return COSMETICS.filter(c => c.week <= cap).map(c => c.id);
@@ -60,11 +60,11 @@ function saveOwned(state) {
  * Reconcile ownership against milestones + supporter status.
  * Caller passes career stats; this returns { owned, newlyUnlocked }.
  */
-export function reconcileOwnership(career = {}) {
+export function reconcileOwnership(career = {}, callsign = null) {
   const state = loadOwned();
   const ownedSet = new Set(state.owned || []);
-  const supporter = isSupporter();
-  const eligible = new Set(availableThisWeek());
+  const supporter = isSupporter(callsign);
+  const eligible = new Set(availableThisWeek(Date.now(), callsign));
   const newlyUnlocked = [];
   for (const c of COSMETICS) {
     if (ownedSet.has(c.id)) continue;

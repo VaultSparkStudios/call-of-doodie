@@ -1,25 +1,22 @@
-# Latest Handoff — Session 123
+# Latest Handoff — Session 124
 
 ## Where We Left Off
-- Completed the fresh post-recovery continuous arc and shipped all six items in docs/AUDIT_2026-07-16_2.json / .md: project theme contract, staged visual evidence harness, local closeout-command parity, player-visible fairness receipt, twelve-year mission-calendar invariant, and CI-native isolated staging.
-- The Unified Genius List has no remaining repo-executable product item; it now resolves to maintain launch confidence. External/manual/data/product-decision items remain explicit instead of being forced into code.
-- Isolated staging is green at https://session-123-staging.call-of-doodie.pages.dev: GitHub quality/build/deploy succeeded, eight required routes returned 200 with CSP/nosniff, and the hosted visual matrix passed 192/192 checks.
-- App-release posture remains NO-GO for SPARKED. The automated hosted matrix is green, but direct AI screenshot inspection failed because both local image viewers hit Windows CryptUnprotectData; this session also did not claim physical device QA, production funnel/Lighthouse data, verified on-domain inbound email, analytics project scope, Itch publication, or founder launch approval.
+- Completed the requested continuous `/goal` mission from synced `main`: `/start -> /audit -> /implement -> innovation saturation -> /closeout` with no phase handback.
+- Shipped all eight live-premise items in `docs/AUDIT_2026-07-16_3.json`: canonical SIL history truth, observed-input Aim Check, reusable frame index, backend supporter verification, next-run drill continuity, supporter cache expiry, repeatable drill evidence, and calibration expiry.
+- The Unified Genius List is exhausted for repo-executable work. Its only generated item is maintain-launch-confidence, satisfied by the full validation matrix; external/dashboard/device/data/product-decision entries remain explicit.
+- SPARKED remains NO-GO. This session does not claim physical PWA/gamepad QA, verified inbound email, production Lighthouse/funnel evidence, project-scoped analytics, Itch publication, direct AI pixel review, or founder approval.
 
 ## Validation
-- npm test — 642/642 across 80 files.
-- npm run lint, npm run public:contract (12 files), npm run protocol:drift, npm run build — PASS.
-- Replay state/edge fixtures — 4/4 each; launch media and launch QA — PASS.
-- npm run security:release:audit and npm audit --json — PASS, 0 vulnerabilities.
-- Staged secret scan and diff check — clean.
-- Staging GitHub Actions: Deploy to Cloudflare Pages run 29540809234 — success; brief-format-check run 29540809248 — success.
-- Session hygiene: 6 local browser servers started · 6 closed · 0 running.
+- `npm test` — 662/662 across 84 files.
+- `npm run lint`, `npm run build`, `npm run public:contract` (12/12), `npm run security:release:audit` (npm audit 0) — PASS.
+- Replay state-stepper and edge fixtures — 4/4 each.
+- Focused evidence gates: Aim/input/Home 24/24; supporter/cosmetic/storage 61/61; drill/death/rematch 26/26; frame/combat 18/18.
+- Hosted staging and final production evidence are recorded below after closeout deployment verification.
 
 ## Next
 - With physical hardware: perform one real Progressive Web App install/relaunch and one real controller/browser pass.
-- With production traffic/analytics: capture HomeV2 Lighthouse/funnel evidence before retiring ?home=v1.
-- Before SPARKED: finish the on-domain inbound mail route, project-scoped analytics configuration, Itch listing, and explicit founder approval.
-
+- With production traffic and scoped analytics: collect HomeV2 Lighthouse/funnel evidence before retiring `?home=v1`.
+- Before SPARKED: verify the on-domain inbound mail route, project-scoped analytics, Itch listing, direct AI theme review, and explicit founder approval.
 # Previous Handoff — Session 122 recovery
 
 Session 123 Intent: Execute the fresh continuous `/start -> /audit -> /implement -> /closeout` arc after the recovery checkpoint, exhaust the Unified Genius List and second-order innovation pack, implement every agent-owned item at the highest quality, retain honest external deferrals, and push direct-to-main after staging verification.

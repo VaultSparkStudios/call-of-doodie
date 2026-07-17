@@ -1,0 +1,54 @@
+{
+  "session": "S124",
+  "date": "2026-07-16",
+  "agent": "codex",
+  "repo": "call-of-doodie",
+  "headline": "Made player, supporter, coaching, runtime, and startup claims evidence-backed across authority, freshness, and repeatability.",
+  "items": [
+    {
+      "id": "#1",
+      "slug": "evidence-lifecycle",
+      "title": "Evidence-backed player input and supporter trust",
+      "axis": "security",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "insight": "Aim calibration now requires observed keyboard, pointer, touch, and gamepad input and expires after 30 days. Supporter status requires an exact backend callsign claim and its local verified cache expires after seven days.",
+      "evidence": "src/utils/inputCalibration.js; src/utils/supporter.js; false-mint and expiry tests"
+    },
+    {
+      "id": "#2",
+      "slug": "closed-loop-coaching",
+      "title": "Closed-loop coaching evidence",
+      "axis": "engagement",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "insight": "Accepted drills now persist into live, replay, and rematch play. The game records observed outcomes and only surfaces repeatability after two improvements in the latest three deduplicated attempts, without claiming causality.",
+      "evidence": "src/systems/runDrill.js; src/components/HUD.jsx; src/components/DeathScreen.jsx"
+    },
+    {
+      "id": "#3",
+      "slug": "canonical-runtime-truth",
+      "title": "Truthful protocol and frame-loop sources",
+      "axis": "organization",
+      "projectImpact": 9,
+      "ecosystemImpact": 8,
+      "insight": "Startup SIL history now has one multi-format parser, while the frame loop builds one reusable enemy index and compacts hot arrays in place. Both remove divergent or repeated sources of truth.",
+      "evidence": "scripts/lib/sil-history.mjs; src/systems/frameIndex.js; 662/662 tests"
+    }
+  ],
+  "validation": [
+    "Full suite: 662/662 tests across 84 files; lint, build, public contract, replay fixtures, medium game gate, and diff checks passed.",
+    "Security release audit and npm audit passed with 0 vulnerabilities; settings sanitizer reported zero findings.",
+    "Studio doctor reports overallPass=true, failing=0, and blockingFailing=0; entropy is healthy.",
+    "Direct AI pixel inspection remains explicitly unclaimed after host CryptUnprotectData failures."
+  ],
+  "followUps": [
+    "Run physical PWA and controller QA.",
+    "Verify inbound email and project-scoped analytics before launch.",
+    "Collect production Lighthouse and funnel evidence before HomeV1 retirement."
+  ],
+  "blockers": [
+    "SPARKED remains NO-GO pending direct visual, physical, inbound-mail, production-data, publication, and founder evidence."
+  ],
+  "silDelta": {"previous": 1000, "current": 1000}
+}

@@ -1,17 +1,17 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-07-17",
-  "generatedAtMs": 1784246860588,
-  "session": 123,
-  "vectorHash": "718e8b5fcde9e36a",
+  "generatedAtMs": 1784254756834,
+  "session": 124,
+  "vectorHash": "b879bc5891dfd4f7",
   "silTotal": 1000,
   "silAvg3": 1000,
-  "velocity": 1,
+  "velocity": 8,
   "debt": "decreasing",
   "runway": "~14.0 sessions",
   "intentRate": "100% (last 5 tracked)",
   "openNow": 5,
-  "openNext": 6,
+  "openNext": 5,
   "openBlocked": 0,
   "topNow": [
     "[SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-f",
@@ -20,8 +20,8 @@
   ],
   "topNext": [
     "[SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Aut",
-    "[SIL:1] First-session control calibration — add an optional short target-ring ca",
-    "[SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confir"
+    "[SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confir",
+    "[SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-li"
   ],
   "health": "green",
   "truthStatus": "green locally; portfolio doctor warnings are advisory and non-blocking for this repo closeout.",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad QA, production Lighthouse/funnel evidence, project-scoped analytics, publication, and explicit founder launch approval pass.",
-  "currentFocus": "Session 123 shipped verifiable Sewer Night/Porcelain Day themes, a hosted 192-check visual matrix, local closeout-command parity, player-visible RNG fairness fingerprints, calendar invariants, and CI-native isolated staging; 642/642 tests green.",
+  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
+  "currentFocus": "Session 124 shipped eight evidence-truth improvements: canonical SIL parsing, observed-input calibration, reusable enemy frame index, backend supporter verification, next-run drill continuity, supporter/input proof expiry, and repeatable drill evidence; 662/662 tests green.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog/Sentry/Ko-fi dashboard URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING. Supabase half already satisfied (Access-Control-Allow-Origin: * verified S112).",

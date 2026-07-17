@@ -12,6 +12,7 @@ describe("buildDeathScreenProps", () => {
       contract: "deterministic-decision-stream-evidence-not-full-physics-replay",
     });
     expect(props.fairnessReceipt.fingerprint).toMatch(/^[0-9A-F]{8}$/);
+    expect(props.gsSnapshot).toBe(gs);
   });
 
   it("promotes a seeded corrective REMATCH into the single primary action", () => {

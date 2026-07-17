@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, lazy, Suspense } from "react";
+import { useState, useRef, useEffect, useMemo, lazy, Suspense } from "react";
 import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
@@ -11,6 +11,7 @@ import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js"
 import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
 import { resolveRematchStartWave } from "../systems/rematchDrill.js";
+import { buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillOutcomeReceipt } from "../systems/runDrill.js";
 import { buildWeeklyContract, buildWeeklyContractProgressPayload } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
@@ -65,6 +66,7 @@ export default function DeathScreen({
   const qrCanvasRef = useRef(null);
   const weeklyContractEventKeyRef = useRef(null);
   const debriefEventKeyRef = useRef(null);
+  const drillOutcomeEventKeyRef = useRef(null);
 
   // ── Ghost path visualization ───────────────────────────────────────────────
   const [ghostData, setGhostData] = useState(null);
@@ -535,6 +537,15 @@ export default function DeathScreen({
   // REMATCH drill: practice runs skip the leaderboard; the rematch wave is
   // derived from the death wave (boss waves start one wave early).
   const practiceRun = !!gsSnapshot?.practiceRun;
+  const activeRunDrill = gsSnapshot?.activeRunDrill || null;
+  const drillOutcome = useMemo(() => buildRunDrillOutcomeReceipt(activeRunDrill, { wave, score }), [activeRunDrill, score, wave]);
+  const drillEvidence = useMemo(() => {
+    if (!drillOutcome) return null;
+    const prior = loadStudioGameEvents()
+      .filter((event) => event.type === "run_drill_outcome")
+      .map((event) => event.payload);
+    return buildDrillEvidenceLedger([...prior, drillOutcome], { drillId: drillOutcome.drillId });
+  }, [drillOutcome]);
   const rematchWave = resolveRematchStartWave(wave);
   const runTheFix = buildRunTheFixContract({
     debrief,
@@ -544,6 +555,38 @@ export default function DeathScreen({
     wave,
     rematchWave,
   });
+  useEffect(() => {
+    if (!drillOutcome || drillOutcomeEventKeyRef.current === drillOutcome.receiptId) return;
+    const alreadyRecorded = loadStudioGameEvents().some((event) => (
+      event.type === "run_drill_outcome" && event.payload?.receiptId === drillOutcome.receiptId
+    ));
+    if (!alreadyRecorded) {
+      saveStudioGameEvent(buildStudioGameEvent("run_drill_outcome", {
+        surface: "death_screen",
+        ...drillOutcome,
+        evidence: drillEvidence,
+      }));
+      track("run_drill_outcome", {
+        drillId: drillOutcome.drillId,
+        launchKind: drillOutcome.launchKind,
+        status: drillOutcome.status,
+        waveDelta: drillOutcome.waveDelta,
+        scoreDelta: drillOutcome.scoreDelta,
+        masteryClaim: drillOutcome.masteryClaim,
+        repeatable: drillEvidence?.repeatable || false,
+        evidenceImprovements: drillEvidence?.improvements || 0,
+      });
+      requestStudioEventSync({ limit: 30 }).catch(() => {});
+    }
+    drillOutcomeEventKeyRef.current = drillOutcome.receiptId;
+  }, [drillEvidence, drillOutcome]);
+
+  const makeDrillLaunch = (launchKind) => buildDrillLaunchPayload(nextRunDrill, debrief.nextRunContract, {
+    baselineWave: wave,
+    baselineScore: score,
+    launchKind,
+  });
+
   const executeRunTheFix = () => {
     track("run_the_fix_accept", {
       action: runTheFix.action.type,
@@ -564,15 +607,17 @@ export default function DeathScreen({
       wave,
       mode,
     }));
+    const launchKind = runTheFix.action.type === "rematch" ? "rematch" : runTheFix.action.type === "replay_seed" ? "replay_seed" : "new_run";
+    const drill = makeDrillLaunch(launchKind);
     if (runTheFix.action.type === "rematch") {
       onStartGame(runTheFix.action.seed, {
         startWave: runTheFix.action.startWave,
-        drill: { ...nextRunDrill, deathWave: wave },
+        drill: { ...drill, deathWave: wave },
       });
     } else if (runTheFix.action.type === "replay_seed") {
-      onStartGame(runTheFix.action.seed);
+      onStartGame(runTheFix.action.seed, { drill });
     } else {
-      onStartGame();
+      onStartGame(undefined, { drill });
     }
   };
 
@@ -833,6 +878,15 @@ export default function DeathScreen({
           </div>
         </div>
 
+        {drillOutcome && (
+          <div data-testid="run-drill-outcome" style={{ ...card, marginBottom: 12, textAlign: "left", border: `1px solid ${drillOutcome.status === "improved" ? "rgba(0,255,136,0.58)" : "rgba(255,209,102,0.42)"}`, background: "rgba(0,0,0,0.28)" }}>
+            <div style={{ fontSize: 10, color: drillOutcome.status === "improved" ? "#7CFFBE" : "#FFD166", letterSpacing: 2, fontWeight: 900 }}>DRILL OUTCOME · {drillOutcome.label}</div>
+            <div style={{ marginTop: 6, color: "#FFF", fontSize: 13, fontWeight: 900 }}>{drillOutcome.title}</div>
+            <div style={{ marginTop: 5, color: "#D4D8E0", fontSize: 10, lineHeight: 1.45 }}>{drillOutcome.summary}</div>
+            {drillEvidence && <div style={{ marginTop: 6, color: drillEvidence.repeatable ? "#7CFFBE" : "#FFD166", fontSize: 10, fontWeight: 900 }}>{drillEvidence.label} · LAST {drillEvidence.attempts}/{drillEvidence.windowSize} ATTEMPTS</div>}
+            <div style={{ marginTop: 5, color: "#8FA0AF", fontSize: 9, lineHeight: 1.4 }}>Observed result only—this receipt does not claim the drill caused the outcome.</div>
+          </div>
+        )}
         <div data-focus-order="run_the_fix" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
           <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>RUN THE FIX</div>
           <div style={{ marginTop: 7, fontSize: 16, color: "#FFF", fontWeight: 900, textTransform: "uppercase" }}>{runTheFix.focus}</div>
@@ -975,8 +1029,10 @@ export default function DeathScreen({
                   score,
                   wave,
                 }));
-                if (nextRunDrill.action === "replay_seed" && nextRunDrill.seed > 0) onStartGame(nextRunDrill.seed);
-                else onStartGame();
+                const launchKind = nextRunDrill.action === "replay_seed" ? "replay_seed" : "new_run";
+                const drill = makeDrillLaunch(launchKind);
+                if (launchKind === "replay_seed" && nextRunDrill.seed > 0) onStartGame(nextRunDrill.seed, { drill });
+                else onStartGame(undefined, { drill });
               }}
               style={{ marginTop: 8, width: "100%", padding: "8px 10px", borderRadius: 7, border: "none", background: "linear-gradient(180deg,#FF8A3D,#CC4400)", color: "#FFF", fontSize: 12, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer", fontFamily: "'Courier New',monospace" }}
             >
@@ -1443,7 +1499,7 @@ export default function DeathScreen({
               aria-label={`Rematch wave ${rematchWave} — practice the wave that killed you on the same seed`}
               onClick={() => {
                 track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause, drillId: nextRunDrill.id });
-                onStartGame(runSeed, { startWave: rematchWave, drill: { ...nextRunDrill, deathWave: wave } });
+                onStartGame(runSeed, { startWave: rematchWave, drill: { ...makeDrillLaunch("rematch"), deathWave: wave } });
               }}
               style={{ ...btnS, minWidth: 130, fontSize: 13, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF" }}
             >🔁 REMATCH W{rematchWave}</button>

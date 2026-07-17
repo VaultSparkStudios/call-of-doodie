@@ -160,6 +160,7 @@ export function buildDeathScreenProps({
     peakMoment,
     waveScoreLog: gs?._waveScoreLog || [],
     communityChokeWaves,
+    gsSnapshot: gs,
     fairnessReceipt: buildRunRngFairnessReceipt(gs),
   };
 }

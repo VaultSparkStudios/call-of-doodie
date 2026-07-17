@@ -316,7 +316,7 @@ export function buildSubmitScorePayload(safeEntry, rawEntry = {}) {
 // Online submit path expects the Supabase Edge Function `submit-score` to be deployed.
 export async function saveToLeaderboard(entry) {
   const rawRunToken = typeof entry?.runToken === "string" ? entry.runToken.trim() : "";
-  const safeEntry = normalizeLeaderboardEntry({ ...entry, supporter: isSupporter() });
+  const safeEntry = normalizeLeaderboardEntry({ ...entry, supporter: isSupporter(entry?.name) });
 
   if (supabase && supabaseUrl && supabaseAnonKey) {
     try {

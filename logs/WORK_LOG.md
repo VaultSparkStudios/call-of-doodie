@@ -907,3 +907,16 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - Isolated staging: https://session-123-staging.call-of-doodie.pages.dev; GitHub deploy run 29540809234 and brief-format run 29540809248 succeeded; eight public/agent routes and headers passed; hosted visual receipt 192/192.
 - App-release verdict remains NO-GO for SPARKED due external/manual/data/founder gates; engineering closeout is green.
 - Visual-review boundary: the machine receipt is real, but direct AI image inspection is unclaimed because view_image and the image-emitting Node kernel both failed Windows CryptUnprotectData. Session hygiene closed the one leaked Vite process; 6 servers started, 6 closed, 0 running.
+
+## 2026-07-16 — Session 124 — Evidence-truth saturation arc
+
+- Ran the complete continuous `/goal` arc from synced `main`, including live audit, all-item implementation, Unified Genius List exhaustion, three implemented second-order candidates, and canonical closeout.
+- Replaced divergent SIL parsing with one tested history source for startup age and forecasting; repaired the false 42-day / 0-point brief outputs.
+- Made Aim Check evidence-backed across keyboard, pointer/touch, and gamepad; button-only verification cannot mint a receipt.
+- Added a reusable enemy frame index and in-place hot-array compaction, removing five array replacements, Sergeant position allocations, and per-Summoner full rescans.
+- Replaced supporter self-attestation with exact-callsign backend verification; cached proof expires after seven days and online scores remain server-authoritative.
+- Carried accepted coaching into live, replay, and REMATCH runs; added observed-only outcome receipts plus a deduplicated 2-of-3 repeatability ledger.
+- Added 30-day Aim Check evidence freshness so complete but old proof becomes `INPUT QA RECHECK`.
+- Generated `docs/AUDIT_2026-07-16_3.*`, `docs/IMPLEMENT_PLAN.md`, and `docs/INNOVATION_PACK.md`; all eight items are marked shipped with execution evidence.
+- Validation: 662/662 tests across 84 files, lint, build, public contract 12/12, security release gate and npm audit 0, replay state/edge fixtures 4/4 each, medium game gate, and diff checks passed.
+- App-release verdict remains NO-GO for SPARKED because physical devices, inbound mail, production data, scoped analytics, publication, direct AI pixel review, and founder approval remain real external gates.

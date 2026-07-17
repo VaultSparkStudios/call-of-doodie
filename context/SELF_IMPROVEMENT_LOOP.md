@@ -271,12 +271,12 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
-Sparkline (last 5 totals): ███▇██
-Avgs — 3: 1000.0 | 5: 1000.0 | 10: — | 25: — | all: 977.7 [N=17, SIL history in private ops repo]
+Sparkline (last 5 totals): █████
+Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=5 canonical parsed sessions]
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-06-05 | Session 81 | Total: 1000/1000 | Velocity: 1 | protocolVelocity: 1
+Last session: 2026-07-16 | Session 124 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1741,3 +1741,29 @@ Brainstorm:
 1. Physical QA evidence capture — use the existing PWA/input receipts during one mobile install and one gamepad pass. High probability with hardware.
 2. Inbound mail relay architecture — design a spam-bounded Brevo inbound subdomain/webhook path before DNS mutation. Medium probability.
 3. Production evidence window — collect Lighthouse and funnel samples before legacy HomeV1 retirement. Medium probability after analytics scope is confirmed.
+
+## 2026-07-16 — Session 124 | Total: 1000/1000 | Velocity: 8 | Debt: ↓
+
+SIL +8: Shipped all five verified audit items plus three second-order innovations, exhausted repo-executable work, and made every new proof fail closed across minting, freshness, repeatability, and backend authority.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Full 662/662 suite, lint, build, public contract, security, replay, and diff gates are green. |
+| Creative Alignment | 100 | same | Coaching, input ritual, and supporter UX deepen the irreverent game without diluting its fast guest-first combat identity. |
+| Momentum | 100 | up | Five primary items and three second-order refinements shipped in one uninterrupted mission. |
+| Engagement | 100 | up | Accepted drills persist into play and build honest cross-run repeatability evidence instead of disappearing at launch. |
+| Process Quality | 100 | up | Every premise was checked live; false brief/input/supporter claims were root-fixed; external gates stayed honest. |
+| Cross-Repo Coherence | 100 | same | Authoritative Studio Ops scripts were consumed read-only; no sibling tree was edited. |
+| Security Posture | 100 | up | Supporter self-attestation was removed, backend authority preserved, caches bounded, release audit and npm audit 0 passed. |
+| Ecosystem Integration | 100 | up | Studio events now carry deduplicated drill outcome evidence suitable for downstream agent/human surfaces. |
+| Capital Efficiency | 100 | same | All intelligence remains deterministic and local; no paid inference, new dependency, or variable per-user cost was added. |
+| Automation Coverage | 100 | up | Added SIL-format, false-mint, cache-expiry, frame-reuse, drill-continuity, repeatability, and death-prop regression coverage. |
+
+Top win: proof is now lifecycle-aware from first observation through expiry, repeatability, backend validation, and public copy.
+Top gap: SPARKED still depends on physical devices, verified inbound delivery, production evidence, project-scoped analytics, publication, direct AI pixel review, and founder approval.
+Intent outcome: Achieved for every agent-owned item; external gates were verified and preserved rather than fabricated.
+
+Brainstorm:
+1. Physical evidence bundle — serialize one real PWA install/relaunch and one controller pass into the existing input/PWA receipts. High probability with hardware.
+2. Drill-specific mechanics telemetry — compare target-specific events (dash retained, reload timing, wall contact) when those events become reliably captured, without causal overclaiming. Medium probability.
+3. Backend verification receipt endpoint — return a minimal signed supporter-status receipt through Obelisk when the unified identity plane is active. Medium probability after auth trigger.

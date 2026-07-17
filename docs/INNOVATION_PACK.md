@@ -1,5 +1,5 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-07-17T00:02:45.869Z -->
+<!-- generated-at: 2026-07-17T01:58:16.227Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
@@ -45,3 +45,20 @@
 - Treat human/device/dashboard items as launch gates, not repo-code blockers.
 - Keep replay, leaderboard, and submission trust language evidence-backed.
 - Prefer local deterministic helpers over paid API or per-user variable cost.
+
+## Session 124 Live Triage
+
+The generated portfolio candidates were checked against live source and capability state:
+
+- Analytics allowlists: deferred with fresh `analytics` capability MISSING evidence; Supabase CORS is already green.
+- Auth/membership: deferred because the recorded paid-tier/material-traffic trigger is not present; guest-first remains the accepted decision.
+- Physical browser/PWA/gamepad, production Lighthouse/funnel, Discord, and HomeV2 retirement: preserved as manual/data/external gates, not recast as repo work.
+- Maintain launch confidence: exhausted through focused tests, lint, production build, security/public-contract gates, and the pending full-suite closeout gate.
+
+## Implemented Second-Order Candidates
+
+1. **supporter-verification-cache-freshness** — Backend-verified supporter cache now expires after seven days; stale proof fails closed and the UI asks for a source-of-truth refresh.
+2. **repeatable-drill-evidence-ledger** — Same-drill outcome receipts are deduplicated over a three-attempt window; only two observed improvements earn `REPEATABLE IMPROVEMENT`, explicitly not a causality claim.
+3. **input-calibration-evidence-freshness** — Complete Aim Check evidence expires after 30 days and becomes `AIM CHECK EXPIRED` / `INPUT QA RECHECK` instead of remaining green indefinitely.
+
+All three premises were verified in the post-primary implementation tree and recorded as shipped items in `docs/AUDIT_2026-07-16_3.json`.

@@ -28,6 +28,7 @@ import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
+import { validateSilSession } from './lib/sil-history.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -294,9 +295,7 @@ if (cat3Match) {
 // most-recent, so it locked onto a stale block (brief rendered S135/928 while
 // real state was S141/996). We now scan EVERY `## …Session N…` header in either
 // format, capture each body, and select the latest by session NUMBER.
-const allSilEntries = [...sil.matchAll(/##[^\n]*?\bSession\s+(\d+)\b[^\n]*\n([\s\S]*?)(?=\n##\s|$)/g)]
-  .map(m => ({ session: parseInt(m[1], 10), header: m[0].split('\n')[0], body: m[2] ?? '' }))
-  .sort((a, b) => b.session - a.session);
+const allSilEntries = parseSilHistory(sil, Number.POSITIVE_INFINITY);
 
 // Highest session number present in the SIL log (source of truth for "what session are we on").
 const silMaxSession = allSilEntries.length ? allSilEntries[0].session : null;
@@ -307,14 +306,10 @@ const lastEntry = (allSilEntries.find(e => /\|\s*Dev Health\s*\|/i.test(e.body))
 
 // Latest entry that carries a Total — header-inline (format A) OR a **Total: X/Y** body line (format B).
 function entryTotal(e) {
-  const inline = e.header.match(/Total:\s*(\d+)\/(\d+)/);
-  const body   = e.body.match(/Total:\s*(\d+)\/(\d+)/);
-  const mt = inline ?? body;
-  return mt ? { total: parseInt(mt[1], 10), max: parseInt(mt[2], 10) } : null;
+  return e?.total != null ? { total: e.total, max: e.max || 1000 } : null;
 }
 function entryVelocity(e) {
-  const m = (e.header + '\n' + e.body).match(/Velocity:\s*(\d+)/);
-  return m ? parseInt(m[1], 10) : null;
+  return e?.velocity ?? null;
 }
 const latestScored = allSilEntries.find(e => entryTotal(e) !== null) ?? null;
 
@@ -474,7 +469,7 @@ const scopeCap       = velocity > 0 ? Math.floor(velocity * 1.5) : null;
 // "Days since last" was previously SIL-only, which lied when sessions shipped without
 // running /closeout. Now takes the newest signal across all three sources.
 const lastSilDateMatch = lastSessionStr.match(/(\d{4}-\d{2}-\d{2})/);
-const lastSilDate = lastSilDateMatch?.[1] || null;
+const lastSilDate = latestScored?.date || lastSilDateMatch?.[1] || null;
 const candidateDates = [
   lastSilDate,
   status.lastUpdated,
@@ -1288,6 +1283,7 @@ const lines = [
       const silTxt = fs.readFileSync(path.join(root, 'context', 'SELF_IMPROVEMENT_LOOP.md'), 'utf8');
       const sessions = parseSilHistory(silTxt);
       if (!sessions.length) return [];
+      if (!validateSilSession(sessions[0]).ok) return [];
       const f = forecastNext(sessions, { velocity, blockerPressure: 87, contextAge: 0 });
       if (!f) return [];
       const diff = f.totalPredicted - sessions[0].total;

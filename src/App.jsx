@@ -79,6 +79,7 @@ import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
+import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSummonsFor, createEnemyFrameIndex } from "./systems/frameIndex.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -94,6 +95,7 @@ import {
 } from "./systems/waveDirector.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 import { buildRematchKit, buildRematchDrillBrief, buildRematchMasteryReceipt, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
+import { buildActiveRunDrill } from "./systems/runDrill.js";
 import {
   createDeathStudioEvents,
   createRunHistoryEntry,
@@ -573,6 +575,18 @@ export default function CallOfDoodie() {
       precisionStreak: 0,
       _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
+    const gs0 = gsRef.current;
+    if (practiceDrill) {
+      gs0.activeRunDrill = buildActiveRunDrill({
+        drill: practiceDrill,
+        contract: practiceDrill.contract,
+        baselineWave: practiceDrill.baselineWave,
+        baselineScore: practiceDrill.baselineScore,
+        seed,
+        launchKind: practiceDrill.launchKind,
+        acceptedAt: practiceDrill.acceptedAt,
+      });
+    }
     // ── REMATCH drill: start at the death wave on the same seed (S112) ──────
     const _rematchKit = buildRematchKit(startWave);
     if (_rematchKit) {
@@ -1651,7 +1665,7 @@ export default function CallOfDoodie() {
     });
     // Check Doodie Pass cosmetic unlocks against updated career stats
     try {
-      const { newlyUnlocked } = reconcileOwnership(loadCareerStats());
+      const { newlyUnlocked } = reconcileOwnership(loadCareerStats(), username);
       setCosmeticUnlocks(newlyUnlocked);
     } catch { setCosmeticUnlocks([]); }
     // Capture missions summary for death screen (refs become stale after screen change)
@@ -1735,7 +1749,7 @@ export default function CallOfDoodie() {
     setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
     lastStandActiveRef.current = false; if (gs) gs.lastStandActive = false;
     return true;
-  }, [difficulty, runSeed]);
+  }, [difficulty, runSeed, username]);
 
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
@@ -2002,11 +2016,11 @@ export default function CallOfDoodie() {
     if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
     const ctx = ctxRef.current;
     if (!gs.player) return;
-    gs.enemies = (gs.enemies || []).filter(Boolean);
-    gs.enemyBullets = (gs.enemyBullets || []).filter(Boolean);
-    gs.bullets = (gs.bullets || []).filter(Boolean);
-    gs.grenades = (gs.grenades || []).filter(Boolean);
-    gs.pickups = (gs.pickups || []).filter(Boolean);
+    gs.enemies = compactTruthyInPlace(gs.enemies);
+    gs.enemyBullets = compactTruthyInPlace(gs.enemyBullets);
+    gs.bullets = compactTruthyInPlace(gs.bullets);
+    gs.grenades = compactTruthyInPlace(gs.grenades);
+    gs.pickups = compactTruthyInPlace(gs.pickups);
     const W = GW(), H = GH(), p = gs.player, wpnIdx = currentWeaponRef.current;
 
     if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current || waveAnnouncePendingRef.current || mutationPendingRef.current) {
@@ -3388,8 +3402,8 @@ export default function CallOfDoodie() {
     }
 
     // ── Sergeant Karen aura ──
-    const sergeantPositions = gs.enemies.filter(e => e.typeIndex === 13).map(e => ({ x: e.x, y: e.y }));
-    gs.enemies.forEach(e => { e.buffed = sergeantPositions.length > 0 && sergeantPositions.some(s => Math.hypot(e.x - s.x, e.y - s.y) < 150) && e.typeIndex !== 13; });
+    gs._enemyFrameIndex = buildEnemyFrameIndex(gs.enemies, gs._enemyFrameIndex || createEnemyFrameIndex());
+    applySergeantAura(gs.enemies, gs._enemyFrameIndex);
 
     // ── Enemy movement & melee ──
     gs.enemies.forEach(e => {
@@ -3733,7 +3747,7 @@ export default function CallOfDoodie() {
       // ── Summoner (18): summon elites + invulnerability ──
       if (e.typeIndex === 18 && e.isBossEnemy) {
         // Count alive summons
-        const _aliveCount = gs.enemies.filter(ne => ne !== e && ne.summonedBy === e.summonerId).length;
+        const _aliveCount = countSummonsFor(gs._enemyFrameIndex, e.summonerId);
         e.summonerCount = _aliveCount;
         e.summonerInvuln = _aliveCount > 0;
         if (_aliveCount === 0 && (e.summonerVulnTimer || 0) > 0) e.summonerVulnTimer--;
@@ -4771,6 +4785,7 @@ export default function CallOfDoodie() {
         experimentMatched={experimentMatchedRef.current}
         careerBestWave={gsRef.current?.careerBest?.wave || 0}
         practiceDrill={gsRef.current?.practiceDrill || null}
+        runDrill={gsRef.current?.activeRunDrill || null}
         practiceMastery={gsRef.current?.practiceMastery || null}
       />
 

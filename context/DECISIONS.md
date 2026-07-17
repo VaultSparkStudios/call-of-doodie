@@ -605,3 +605,21 @@ Decision: Cloudflare Pages staging deploys accept only session-* push branches i
 Rationale: Local global/DNS Cloudflare tokens did not have Pages permissions, while GitHub Actions already owns a correctly scoped deployment secret. A first-class bounded staging path avoids production-before-staging and credential drift without widening local secret access.
 
 Trade-off accepted: Preview branches are ephemeral remote refs that must be deleted after final production verification.
+
+## 2026-07-16 — Session 124 — Evidence has a lifecycle
+
+Decision: Browser-local proof for source-of-truth claims must expire. Supporter verification is valid for seven days; input calibration is valid for 30 days. Expired evidence fails closed and asks for refresh/recheck.
+
+Rationale: Removing false minting is insufficient if a once-valid cache can outlive a revoked grant, changed controller, remapped browser, or altered input path forever.
+
+## 2026-07-16 — Session 124 — Coaching receipts describe observation, never causality
+
+Decision: A next-run drill outcome may report improved, held, or regressed observed performance. `REPEATABLE IMPROVEMENT` requires two improvements in the latest three deduplicated same-drill attempts and still carries `repeatability-evidence-not-causality`.
+
+Rationale: A single better run is useful feedback, not proof that coaching caused mastery. The ledger strengthens the loop without turning correlation into a product claim.
+
+## 2026-07-16 — Session 124 — Supporter authority stays server-owned
+
+Decision: `callsign_claims.supporter` is the supporter source of truth. Local storage is only a callsign-bound, expiring display cache; score submission independently overwrites any client supporter field from the backend claim.
+
+Rationale: Cosmetic status should feel responsive offline, but a public browser must never be able to award itself a paid badge or author competitive trust metadata.

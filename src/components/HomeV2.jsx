@@ -15,7 +15,7 @@ import { isSupporter } from "../utils/supporter.js";
 import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/replayCode.js";
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
-import { buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, saveInputCalibration } from "../utils/inputCalibration.js";
+import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
 import { buildPwaInstallReceipt, detectServiceWorkerReady, detectStandaloneDisplay, loadPwaInstallAttempt } from "../utils/pwaInstallReadiness.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
@@ -340,16 +340,23 @@ export default function HomeV2(props) {
     }
     switchTab("codex");
   }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
-  const completeAimCheck = useCallback(() => {
-    const record = saveInputCalibration(buildInputCalibrationRecord({
-      source: gamepadConnected ? (effectiveControllerType || "controller") : "mouse",
+  const completeAimCheck = useCallback((evidence = {}) => {
+    const record = buildInputCalibrationRecord({
+      source: resolveAimCalibrationSource(evidence.sources),
       controllerType: effectiveControllerType || "none",
-      buckets: ["east", "north", "south", "west"],
-    }));
+      buckets: evidence.buckets,
+    });
+    if (!record.complete) return false;
+    saveInputCalibration(record);
     setInputCalibration(record);
-    recordFrontDoorAction("aim_check_verified", { source: "aim_check_panel", inputSource: record.source });
+    recordFrontDoorAction("aim_check_verified", {
+      source: "aim_check_panel",
+      inputSource: record.source,
+      observedBuckets: record.buckets,
+    });
     setShowAimCheck(false);
-  }, [effectiveControllerType, gamepadConnected, recordFrontDoorAction]);
+    return true;
+  }, [effectiveControllerType, recordFrontDoorAction]);
   const launchHistorySeed = useCallback((seed, challenge = {}) => {
     if (!seed) return;
     const studioEvent = recordFrontDoorAction("history_replay", {
@@ -464,7 +471,7 @@ export default function HomeV2(props) {
   });
   const tabBody = { marginTop: 12, background: themePalette.panel, border: `1px solid ${themePalette.line}`, borderRadius: 10, padding: 14 };
   const footer = { marginTop: 22, paddingTop: 12, borderTop: `1px solid ${themePalette.line}`, display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: themePalette.quiet, letterSpacing: 1, flexWrap: "wrap" };
-  const linkBtn = { background: "none", border: "none", color: isSupporter() ? "#9a6500" : themePalette.quiet, fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
+  const linkBtn = { background: "none", border: "none", color: isSupporter(username) ? "#9a6500" : themePalette.quiet, fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
 
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
@@ -929,7 +936,7 @@ export default function HomeV2(props) {
         {/* Footer */}
         <div style={footer}>
           <span>A <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ color: "#999", textDecoration: "none" }}>VaultSpark Studios</a> Game</span>
-          <button style={linkBtn} onClick={() => setShowSupporter(true)}>{isSupporter() ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}</button>
+          <button style={linkBtn} onClick={() => setShowSupporter(true)}>{isSupporter(username) ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}</button>
           <a href="privacy/" style={linkBtn}>PRIVACY</a>
           <a href="terms/" style={linkBtn}>TERMS</a>
           <a href="contact/" style={linkBtn}>CONTACT</a>
@@ -971,7 +978,7 @@ export default function HomeV2(props) {
       )}
       {showSupporter && (
         <Suspense fallback={null}>
-          <SupporterModal onClose={() => setShowSupporter(false)} />
+          <SupporterModal callsign={username} onClose={() => setShowSupporter(false)} />
         </Suspense>
       )}
       {showAimCheck && (
@@ -1045,44 +1052,105 @@ export default function HomeV2(props) {
 }
 
 function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
-  const targetStyle = () => ({
-    minHeight: 64,
-    borderRadius: 8,
-    border: "1px solid rgba(0,229,255,0.28)",
-    background: "rgba(0,229,255,0.06)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#B9F3FF",
-    fontSize: 12,
-    fontWeight: 900,
-    letterSpacing: 1,
-    textAlign: "center",
-  });
+  const [evidence, setEvidence] = useState(() => ({ buckets: [], sources: [], complete: false }));
+  const arenaRef = useRef(null);
+  const capture = useCallback((bucket, source) => {
+    if (!bucket) return;
+    setEvidence((current) => mergeAimCalibrationEvidence(current, bucket, source));
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      const bucket = aimBucketFromKey(event.key);
+      if (!bucket) return;
+      event.preventDefault();
+      capture(bucket, "keyboard");
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    let frame = null;
+    const pollGamepad = () => {
+      const pads = navigator.getGamepads?.() || [];
+      const pad = [...pads].find(Boolean);
+      if (pad) {
+        const aimX = pad.axes?.length >= 4 ? pad.axes[2] : pad.axes?.[0];
+        const aimY = pad.axes?.length >= 4 ? pad.axes[3] : pad.axes?.[1];
+        capture(aimBucketFromVector(aimX, aimY, 0.55), "gamepad");
+      }
+      frame = requestAnimationFrame(pollGamepad);
+    };
+    if (typeof navigator.getGamepads === "function" && typeof requestAnimationFrame === "function") {
+      frame = requestAnimationFrame(pollGamepad);
+    }
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      if (frame != null && typeof cancelAnimationFrame === "function") cancelAnimationFrame(frame);
+    };
+  }, [capture]);
+
+  const capturePointer = (event) => {
+    const rect = arenaRef.current?.getBoundingClientRect?.();
+    if (!rect?.width || !rect?.height) return;
+    const x = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+    const y = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+    capture(aimBucketFromVector(x, y, 0.35), event.pointerType || "mouse");
+  };
+
+  const targetStyle = (bucket) => {
+    const observed = evidence.buckets.includes(bucket);
+    return {
+      minHeight: 64,
+      borderRadius: 8,
+      border: observed ? "1px solid rgba(0,255,136,0.78)" : "1px solid rgba(0,229,255,0.28)",
+      background: observed ? "rgba(0,255,136,0.14)" : "rgba(0,229,255,0.06)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: observed ? "#7CFFBE" : "#B9F3FF",
+      fontSize: 12,
+      fontWeight: 900,
+      letterSpacing: 1,
+      textAlign: "center",
+    };
+  };
   const device = controllerType && controllerType !== "controller"
     ? controllerType.toUpperCase()
-    : "MOUSE / TOUCH / CONTROLLER";
+    : "MOUSE / TOUCH / KEYBOARD / CONTROLLER";
+  const remaining = AIM_CALIBRATION_BUCKETS.length - evidence.buckets.length;
   return (
-    <div style={PANEL}>
+    <div style={PANEL} role="dialog" aria-modal="true" aria-labelledby="aim-check-title">
       <div style={{ width: "min(460px, 100%)", margin: "auto 0", padding: 18, borderRadius: 10, background: "rgba(8,12,18,0.98)", border: "1px solid rgba(0,229,255,0.32)", color: "#EEE", textAlign: "center", boxShadow: "0 14px 40px rgba(0,0,0,0.65)" }}>
-        <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>AIM CHECK</div>
-        <h2 style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
-        <p style={{ margin: "0 auto 14px", maxWidth: 360, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
-          Sweep aim through all four directions once. This saves a local controls-verified receipt for {device}.
+        <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>EVIDENCE-BACKED AIM CHECK</div>
+        <h2 id="aim-check-title" style={{ margin: "8px 0 6px", fontSize: 22, color: "#FFF", letterSpacing: 1 }}>Verify Full-Circle Control</h2>
+        <p style={{ margin: "0 auto 14px", maxWidth: 380, color: "#BFC9D8", fontSize: 12, lineHeight: 1.55 }}>
+          Aim through all four directions inside the target, press W/A/S/D or arrow keys, or sweep a controller stick. A receipt is saved only from observed input for {device}.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 14px", maxWidth: 300 }}>
+        <div
+          ref={arenaRef}
+          data-testid="aim-check-arena"
+          onPointerDown={capturePointer}
+          onPointerMove={capturePointer}
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, alignItems: "center", margin: "0 auto 12px", maxWidth: 300, touchAction: "none" }}
+        >
           <div />
-          <div style={targetStyle("north")}>NORTH</div>
+          <div style={targetStyle("north")}>NORTH {evidence.buckets.includes("north") ? "✓" : ""}</div>
           <div />
-          <div style={targetStyle("west")}>WEST</div>
+          <div style={targetStyle("west")}>WEST {evidence.buckets.includes("west") ? "✓" : ""}</div>
           <div style={{ ...targetStyle("center"), minHeight: 76, borderColor: "rgba(255,107,53,0.4)", background: "rgba(255,107,53,0.08)", color: "#FFB36B" }}>PLAYER</div>
-          <div style={targetStyle("east")}>EAST</div>
+          <div style={targetStyle("east")}>EAST {evidence.buckets.includes("east") ? "✓" : ""}</div>
           <div />
-          <div style={targetStyle("south")}>SOUTH</div>
+          <div style={targetStyle("south")}>SOUTH {evidence.buckets.includes("south") ? "✓" : ""}</div>
           <div />
         </div>
+        <div aria-live="polite" style={{ color: evidence.complete ? "#7CFFBE" : "#FFD34D", fontSize: 11, fontWeight: 900, marginBottom: 10 }}>
+          {evidence.complete ? `4/4 observed · ${resolveAimCalibrationSource(evidence.sources).toUpperCase()}` : `${evidence.buckets.length}/4 observed · ${remaining} direction${remaining === 1 ? "" : "s"} left`}
+        </div>
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onVerify} style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#00E5FF,#007A99)", color: "#001018", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
+          <button
+            disabled={!evidence.complete}
+            onClick={() => onVerify(evidence)}
+            style={{ padding: "10px 18px", borderRadius: 8, border: "none", background: evidence.complete ? "linear-gradient(180deg,#00E5FF,#007A99)" : "#27313A", color: evidence.complete ? "#001018" : "#7B8792", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: evidence.complete ? "pointer" : "not-allowed", fontFamily: "inherit" }}
+          >
             VERIFY CONTROLS
           </button>
           <button onClick={onDiagnostics} style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#DDD", fontSize: 12, fontWeight: 900, letterSpacing: 1, cursor: "pointer", fontFamily: "inherit" }}>
@@ -1096,7 +1164,6 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
     </div>
   );
 }
-
 function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree }) {
   if (!career) return <div style={{ color: "#888", textAlign: "center" }}>Loading…</div>;
   const incomplete = countIncompleteMissions(missions, missionProgress);

@@ -817,3 +817,18 @@ Last reviewed: 2026-07-03
 Overall status: green locally
 Last reviewed: 2026-07-03
 
+
+## 2026-07-16 — Session 124 — Evidence lifecycle and coaching truth
+
+- Audit truth — `docs/AUDIT_2026-07-16_3.json` / `.md` contain five live-verified primary items and three implemented second-order candidates; every item is marked shipped with execution evidence.
+- Startup truth — `scripts/lib/sil-history.mjs` is the shared parser for supported SIL formats. Latest scored session/date and forecasts no longer come from divergent regular expressions.
+- Input truth — Aim Check completion requires observed four-direction evidence. A button click alone cannot save a complete record. Complete evidence older than 30 days becomes stale and cannot produce `INPUT QA READY`.
+- Supporter truth — the removed legacy flag is never proof. The browser queries `callsign_claims` for an exact callsign, caches only a verified record, expires it after seven days, and the submit Edge Function remains independently authoritative.
+- Coaching truth — accepted drill/contract/baseline data reaches live, replay, and REMATCH runs. Outcome receipts report observations only; repeatability is a deduplicated 2-of-3 pattern and explicitly not causality or mastery proof.
+- Runtime truth — the frame index scans the compacted enemy list once per frame, reuses scratch identity, clears stale summon keys, and supplies Sergeant/summon lookups without the removed allocation/rescan paths.
+- Validation truth — 662/662 tests across 84 files, lint, production build, public contract 12/12, security release gate, npm audit 0, replay fixtures, medium game gate, and diff checks passed directly.
+- Visual truth — the existing hosted 192/192 machine matrix remains valid for the prior staging baseline; direct AI pixel review is still unclaimed because the Windows image/browser tools failed CryptUnprotectData.
+- Release truth — engineering closeout is green; SPARKED remains NO-GO pending the external/manual/data/founder gates recorded in PROJECT_STATUS.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-16

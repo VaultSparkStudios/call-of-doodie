@@ -1,0 +1,386 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v2",
+  "generatedAt": "2026-07-16",
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "product + infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-16",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "combinedPriority": 201.1,
+    "top3": [
+      "evidence-backed-aim-calibration",
+      "canonical-sil-history-truth",
+      "next-run-drill-mastery-loop"
+    ],
+    "livePremiseVerification": true,
+    "specialtyLenses": [
+      "game-loop review",
+      "app release gate",
+      "infrastructure rubric"
+    ],
+    "secondOrderImplemented": [
+      "supporter-verification-cache-freshness",
+      "repeatable-drill-evidence-ledger",
+      "input-calibration-evidence-freshness"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 91,
+    "progression": 90,
+    "sessionEngagement": 89,
+    "retention": 93,
+    "soulFidelity": 92,
+    "topDesignMove": "Carry an accepted post-run coaching drill into the next live run and issue an honest mastery receipt from observed performance."
+  },
+  "infrastructureReview": {
+    "observabilityHonesty": 72,
+    "runtimeOrganization": 70,
+    "automationCoverage": 92,
+    "securityPosture": 100,
+    "costDiscipline": 100,
+    "topRisk": "Two startup-brief metrics and the Aim Check receipt derive claims from stale or unobserved data."
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED; repo-local implementation may continue against isolated staging",
+    "green": [
+      "latest eight GitHub Actions runs succeeded",
+      "hosted staging visual matrix 192/192",
+      "public contract 12/12",
+      "security release audit and npm audit green",
+      "footer completeness green",
+      "cost-neutral release and cost-bleeder gates green",
+      "rollback and legacy-home retention gates green"
+    ],
+    "red": [
+      "direct AI pixel review host-blocked by Windows CryptUnprotectData",
+      "analytics capability missing",
+      "on-domain inbound delivery not verified",
+      "physical PWA/gamepad evidence absent",
+      "production Lighthouse/funnel evidence absent",
+      "no founder launch approval"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "UI / UX / input trust / accessibility",
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 34.5,
+      "slug": "evidence-backed-aim-calibration",
+      "title": "Make the first-session Aim Check observe four real directions before it can mint a controls-verified receipt.",
+      "status": "shipped",
+      "why": "Live inspection found `completeAimCheck()` writes east/north/south/west unconditionally when the player clicks VERIFY CONTROLS. The panel claims a sweep occurred but captures no pointer, keyboard, touch, or gamepad evidence, so the resulting INPUT QA READY receipt is fabricated despite the debug path having real bucket evidence.",
+      "recipe": "Extract pure calibration-capture helpers; make the panel collect pointer/touch vector, WASD/arrow-key, and right-stick direction buckets; highlight observed targets; disable verification until all four are observed; persist the observed source/buckets only; add keyboard/pointer/gamepad and no-false-green tests; preserve a diagnostics escape hatch.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Disable verification until four UI target interactions are recorded."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Collect pointer and keyboard vectors with progress highlighting and persist only captured buckets."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship multi-input pointer/touch/keyboard/gamepad capture, source evidence, accessible live progress, fail-closed completion, and regression coverage proving a click alone cannot verify controls."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "infrastructure / observability honesty / token efficiency",
+      "effortHours": 2.5,
+      "impact": 10,
+      "innovation": 7,
+      "priority": 32.3,
+      "slug": "canonical-sil-history-truth",
+      "title": "Replace duplicated brittle SIL parsing with one mixed-format source for session, closeout-age, score, and forecast truth.",
+      "status": "shipped",
+      "why": "The canonical startup brief rendered `Last closeout: 42d` and `Projected: 0/1000` while Session 123 closed today at 1000/1000. `render-startup-brief.mjs` robustly discovers the latest session for some fields but still sources closeout age from a stale rolling header, while `sil-forecaster.mjs` only recognizes one legacy inline-header format.",
+      "recipe": "Create a shared pure SIL history parser that handles both supported header/body formats, out-of-order append history, category aliases, dates, totals, and velocity. Reuse it in the startup renderer and forecaster; source last-closeout age and current total from the latest scored entry; fail closed when categories are absent; add mixed-format/out-of-order tests and assert a fresh brief renders 0d and a non-zero forecast.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Patch closeout age to use the latest parsed SIL entry date."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Teach the forecaster both SIL formats and add regression tests for the two visible lies."
+        },
+        "L3": {
+          "effortHours": 2.5,
+          "recipe": "Consolidate all session/date/score/category parsing behind one reusable parser, migrate both consumers, and self-validate the rendered brief against canonical status."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "feedback loop / AI intelligence / retention",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 31.3,
+      "slug": "next-run-drill-mastery-loop",
+      "title": "Carry accepted Run Intelligence drills into live play and close the loop with an observed mastery receipt.",
+      "status": "shipped",
+      "why": "DeathScreen generates specific next-run drills and measurable contracts, but the standard and replay-seed accept paths call `onStartGame()` without passing the drill. Only REMATCH practice carries `challengeOpts.drill`, so the most common acceptance path discards the intelligence at the transition boundary and the HUD cannot reinforce or evaluate it.",
+      "recipe": "Normalize an active run-drill contract with baseline wave/score and target/proof copy; pass it through every acceptance path; keep ordinary runs leaderboard-eligible; render a compact LIVE DRILL HUD contract; derive an attempted/improved/held/regressed receipt from observed wave/score evidence on death without claiming causal mastery; render the receipt and emit one deduplicated Studio event; test normal, replay, and REMATCH semantics.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1.5,
+          "recipe": "Pass the accepted drill into standard/replay runs and show it in the HUD."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Add normalized baselines and a post-run outcome receipt with focused tests."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Ship end-to-end accept-to-HUD-to-outcome continuity, honest multi-signal receipts, deduplicated telemetry, and strict separation between ordinary competitive runs and REMATCH practice."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "FIRE",
+      "axis": "security / identity trust / supporter UX",
+      "effortHours": 2.5,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 25.8,
+      "slug": "supporter-proof-not-self-attestation",
+      "title": "Stop presenting a local self-claim as a verified leaderboard supporter badge.",
+      "status": "shipped",
+      "why": "SupporterModal lets any browser click `I already supported`, stores `cod-supporter-v1=1`, and promises the star will appear on leaderboard entries. The submit-score Edge Function correctly overwrites the client flag from `callsign_claims.supporter`, so the modal promise and local cosmetic state can disagree with server truth.",
+      "recipe": "Replace the self-attestation action with a callsign-scoped Supabase verification refresh; cache only verified status plus verification timestamp/callsign; distinguish verified, pending, unavailable, and local-preview states; explain that Ko-fi messages must contain the exact callsign; keep failure graceful and cosmetic-only; add pure status normalization/cache tests and modal copy coverage.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Remove the false leaderboard promise and relabel the local flag as preview-only."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Add server verification refresh and honest pending/unavailable states."
+        },
+        "L3": {
+          "effortHours": 2.5,
+          "recipe": "Ship callsign-bound verified caching, resilient Supabase lookup, exact Ko-fi instructions, accessible status UI, and tests proving local mutation cannot manufacture verified status."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "BOLT",
+      "axis": "speed / runtime organization / efficiency",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 20.7,
+      "slug": "zero-garbage-frame-index",
+      "title": "Remove avoidable per-frame array churn and repeated enemy rescans from the 60 FPS simulation path.",
+      "status": "shipped",
+      "why": "The live game loop allocates five new arrays every frame through `.filter(Boolean)`, allocates sergeant position objects every frame, and rescans every enemy for each Summoner. This sits inside a 4,900-line App callback and compounds precisely when enemy pressure is highest.",
+      "recipe": "Add tested in-place compaction and a reusable enemy-frame index scratch structure; compact nullable runtime arrays without reallocating; build sergeant references and summon counts in one pass; use the index for aura and Summoner logic; add identity/count/buff behavior tests plus a deterministic micro-benchmark receipt comparing allocations/scans before and after.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Replace the five filter(Boolean) calls with a tested in-place compactor."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Also pre-index sergeants and summon counts once per frame."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship reusable zero-garbage scratch indexing, wire all hot call sites, prove behavioral parity, and record deterministic allocation/scan deltas."
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "tier": "BOLT",
+      "axis": "identity trust / cache coherence",
+      "effortHours": 1.0,
+      "impact": 7,
+      "innovation": 7,
+      "priority": 18.9,
+      "slug": "supporter-verification-cache-freshness",
+      "title": "Expire backend supporter proof from the browser cache and require periodic re-verification.",
+      "status": "shipped",
+      "why": "The primary fix removed self-attestation, but its verified cache had no expiry, so a revoked supporter grant could remain cosmetically active forever in one browser.",
+      "recipe": "Add a seven-day verification time-to-live, surface stale status honestly, fail closed for cosmetics, and test the exact boundary.",
+      "source": "second-order innovation pack"
+    },
+    {
+      "rank": 7,
+      "tier": "FIRE",
+      "axis": "feedback loop / retention / observability honesty",
+      "effortHours": 1.5,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 20.2,
+      "slug": "repeatable-drill-evidence-ledger",
+      "title": "Require repeated observed improvement before reporting a coaching pattern as repeatable.",
+      "status": "shipped",
+      "why": "A single improved run is useful evidence but cannot establish repeatability or causality. The new drill receipt needed a cross-run evidence window.",
+      "recipe": "Deduplicate the last three same-drill receipts, require two observed improvements, render EVIDENCE progress, and retain an explicit non-causality claim.",
+      "source": "second-order innovation pack"
+    },
+    {
+      "rank": 8,
+      "tier": "BOLT",
+      "axis": "input trust / lifecycle coherence",
+      "effortHours": 1.0,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 17.4,
+      "slug": "input-calibration-evidence-freshness",
+      "title": "Expire old device calibration proof instead of presenting INPUT QA READY forever.",
+      "status": "shipped",
+      "why": "Evidence-backed capture fixed minting, but saved proof remained ready indefinitely after devices, mappings, or browser input paths could change.",
+      "recipe": "Add a 30-day freshness boundary, distinguish completeness from freshness, show AIM CHECK EXPIRED / INPUT QA RECHECK, and test the boundary.",
+      "source": "second-order innovation pack"
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "`node scripts/check-secrets.mjs --for analytics` is MISSING; PostHog and project-scoped Sentry configuration remain external dashboard work. Supabase CORS is already green."
+    },
+    {
+      "slug": "homev2-retirement",
+      "reason": "The live retirement gate passes only by retaining `?home=v1`; production Lighthouse and funnel evidence do not exist, so deletion would violate the recorded decision."
+    },
+    {
+      "slug": "supabase-auth-obelisk-bridge",
+      "reason": "The recorded trigger is paid tier or material traffic; neither premise is evidenced. Implementing auth now would silently reverse the accepted guest-first decision."
+    },
+    {
+      "slug": "contact-email-forwarding",
+      "reason": "Inbound delivery requires cross-infrastructure DNS/webhook work and remains explicitly unverified on the public page. No repo-local code change can honestly make delivery pass."
+    },
+    {
+      "slug": "new-security-framework-or-runtime-ai-service",
+      "reason": "Security release, headers, Content Security Policy, npm audit, cost-neutrality, and replay trust gates are green. The runtime uses zero paid inference, so a new dependency or API would add cost and attack surface without a verified gap."
+    },
+    {
+      "slug": "ai-theme-pixel-verdict",
+      "reason": "The hosted 24-capture matrix passed 192/192, but direct AI image inspection remains unclaimed because both filesystem image loading and in-app browser bootstrap failed at Windows CryptUnprotectData."
+    }
+  ],
+  "validation": [
+    "focused tests for every item",
+    "npm run lint",
+    "npm test",
+    "npm run public:contract",
+    "npm run protocol:drift",
+    "npm run security:release:audit",
+    "npm run visual:audit -- --url <isolated-preview>",
+    "npm run replay:state-stepper",
+    "npm run replay:edge-fixtures",
+    "npm run launch:qa",
+    "npm run build",
+    "git diff --check"
+  ],
+  "executionLog": [
+    {
+      "slug": "canonical-sil-history-truth",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Shared mixed-format SIL parser now drives startup session/date/score and forecast truth; fresh brief renders last closeout 1d instead of 42d and forecast 999/1000 instead of 0/1000.",
+      "verification": "13 focused parser/startup tests; startup brief render + canonical validator"
+    },
+    {
+      "slug": "evidence-backed-aim-calibration",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "23 focused tests passed",
+        "lint passed",
+        "game medium gate passed",
+        "button-only receipt test fails closed"
+      ]
+    },
+    {
+      "slug": "zero-garbage-frame-index",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "18 focused tests passed",
+        "reused identity and stale-key regression covered",
+        "lint passed",
+        "game medium gate passed"
+      ]
+    },
+    {
+      "slug": "supporter-proof-not-self-attestation",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "75 focused tests passed",
+        "legacy self-attestation regression fails closed",
+        "callsign-matched backend verification tested",
+        "server submit remains authoritative",
+        "lint and game medium gate passed"
+      ]
+    },
+    {
+      "slug": "next-run-drill-mastery-loop",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "78 focused tests passed",
+        "production build passed",
+        "live/replay/rematch continuity covered",
+        "outcome receipt explicitly observed-only",
+        "lint and game medium gate passed"
+      ]
+    },
+    {
+      "slug": "supporter-verification-cache-freshness",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "7-day TTL",
+        "stale UI",
+        "61 related tests"
+      ]
+    },
+    {
+      "slug": "repeatable-drill-evidence-ledger",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "2-of-3 observed evidence window",
+        "deduped receipts",
+        "non-causality label"
+      ]
+    },
+    {
+      "slug": "input-calibration-evidence-freshness",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "evidence": [
+        "30-day TTL",
+        "freshness fields",
+        "24 focused tests"
+      ]
+    }
+  ]
+}

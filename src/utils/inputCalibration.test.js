@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
+  aimBucketFromKey,
+  aimBucketFromVector,
   buildInputCalibrationRecord,
+  INPUT_CALIBRATION_TTL_MS,
   buildInputCalibrationNudge,
   buildInputQaReceipt,
   loadInputCalibration,
+  mergeAimCalibrationEvidence,
+  resolveAimCalibrationSource,
   saveInputCalibration,
   summarizeInputCalibration,
 } from "./inputCalibration.js";
@@ -17,6 +22,31 @@ function memoryStorage() {
 }
 
 describe("input calibration", () => {
+  it("maps observed keyboard and vector input into aim buckets", () => {
+    expect(["w", "ArrowUp", "d", "ArrowRight", "s", "ArrowDown", "a", "ArrowLeft"].map(aimBucketFromKey)).toEqual([
+      "north", "north", "east", "east", "south", "south", "west", "west",
+    ]);
+    expect(aimBucketFromKey("Enter")).toBeNull();
+    expect(aimBucketFromVector(0.2, 0.1)).toBeNull();
+    expect(aimBucketFromVector(0.9, 0.2)).toBe("east");
+    expect(aimBucketFromVector(-0.9, 0.2)).toBe("west");
+    expect(aimBucketFromVector(0.2, -0.9)).toBe("north");
+    expect(aimBucketFromVector(0.2, 0.9)).toBe("south");
+  });
+
+  it("deduplicates observed evidence and fails closed until all buckets exist", () => {
+    let evidence = mergeAimCalibrationEvidence({}, "north", "keyboard");
+    evidence = mergeAimCalibrationEvidence(evidence, "north", "keyboard");
+    evidence = mergeAimCalibrationEvidence(evidence, "east", "mouse");
+    expect(evidence).toEqual({ buckets: ["north", "east"], sources: ["keyboard", "mouse"], complete: false });
+    evidence = mergeAimCalibrationEvidence(evidence, "south", "mouse");
+    evidence = mergeAimCalibrationEvidence(evidence, "west", "mouse");
+    expect(evidence.complete).toBe(true);
+    expect(resolveAimCalibrationSource(evidence.sources)).toBe("mixed");
+    expect(resolveAimCalibrationSource(["gamepad", "gamepad"])).toBe("gamepad");
+    expect(resolveAimCalibrationSource([])).toBe("unknown");
+  });
+
   it("marks calibration complete only after all four aim buckets are present", () => {
     expect(buildInputCalibrationRecord({ buckets: ["east", "west", "north"] }).complete).toBe(false);
     expect(buildInputCalibrationRecord({ buckets: ["east", "west", "north", "south"] }).complete).toBe(true);
@@ -58,13 +88,13 @@ describe("input calibration", () => {
       timestamp: 123,
     });
 
-    expect(buildInputCalibrationNudge(record)).toEqual({
+    expect(buildInputCalibrationNudge(record, { now: 124 })).toEqual({
       status: "verified",
       label: "AIM CHECK VERIFIED",
       detail: "mouse verified",
       action: "READY",
     });
-    expect(buildInputCalibrationNudge(record, { debugEnabled: true }).action).toBe("OPEN DIAGNOSTICS");
+    expect(buildInputCalibrationNudge(record, { debugEnabled: true, now: 124 }).action).toBe("OPEN DIAGNOSTICS");
   });
   it("builds a local input QA receipt from calibration and controller profile", () => {
     const calibration = buildInputCalibrationRecord({
@@ -79,6 +109,7 @@ describe("input calibration", () => {
       gamepadConnected: true,
       controllerType: "xbox",
       timestamp: 456,
+      now: 124,
     });
 
     expect(receipt).toEqual({
@@ -89,6 +120,8 @@ describe("input calibration", () => {
       connected: true,
       remembered: true,
       calibrationComplete: true,
+      calibrationFresh: true,
+      calibrationAgeDays: 0,
       coverage: "four-direction",
       label: "INPUT QA READY",
       summary: "XBOX · four-direction",
@@ -96,6 +129,26 @@ describe("input calibration", () => {
     });
   });
 
+  it("expires old calibration evidence instead of showing INPUT QA READY forever", () => {
+    const calibration = buildInputCalibrationRecord({
+      source: "keyboard",
+      buckets: ["east", "west", "north", "south"],
+      timestamp: 1000,
+    });
+    const now = 1001 + INPUT_CALIBRATION_TTL_MS;
+    expect(buildInputCalibrationNudge(calibration, { now })).toEqual({
+      status: "stale",
+      label: "AIM CHECK EXPIRED",
+      detail: "reverify after 30 days",
+      action: "VERIFY",
+    });
+    expect(buildInputQaReceipt({ calibration, now })).toMatchObject({
+      status: "needs-repeat",
+      calibrationComplete: true,
+      calibrationFresh: false,
+      label: "INPUT QA RECHECK",
+    });
+  });
   it("marks partial or missing input QA receipts honestly", () => {
     expect(buildInputQaReceipt()).toMatchObject({
       status: "missing",

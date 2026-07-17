@@ -1650,9 +1650,9 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           <button
             onClick={() => setShowSupporter(true)}
             aria-label="Support the developer"
-            style={{ background: "none", border: "none", color: isSupporter() ? "#FFD700" : "#888", fontSize: 10, cursor: "pointer", padding: "2px 6px", letterSpacing: 1, fontFamily: "'Courier New',monospace", textDecoration: "underline dotted" }}
+            style={{ background: "none", border: "none", color: isSupporter(username) ? "#FFD700" : "#888", fontSize: 10, cursor: "pointer", padding: "2px 6px", letterSpacing: 1, fontFamily: "'Courier New',monospace", textDecoration: "underline dotted" }}
           >
-            {isSupporter() ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
+            {isSupporter(username) ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
           </button>
           <a href="privacy/" style={{ fontSize: 10, color: "#999" }}>PRIVACY</a>
           <a href="terms/" style={{ fontSize: 10, color: "#999" }}>TERMS</a>
@@ -1668,7 +1668,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       </div>
       {showSupporter && (
         <LazyPanel>
-          <SupporterModal onClose={() => setShowSupporter(false)} />
+          <SupporterModal callsign={username} onClose={() => setShowSupporter(false)} />
         </LazyPanel>
       )}
     </div>

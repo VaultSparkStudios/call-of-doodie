@@ -8,52 +8,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const CATEGORIES = [
-  'Dev Health', 'Creative Alignment', 'Momentum',
-  'Engagement', 'Process Quality', 'Cross-Repo Coher',
-  'Security Posture', 'Ecosystem Integ', 'Capital Efficiency',
-  'Automation Cover'
-];
+import { parseSilHistory, SIL_CATEGORIES } from './sil-history.mjs';
 
-const CATEGORY_ALIASES = {
-  'Cross-Repo Coherence': 'Cross-Repo Coher',
-  'Ecosystem Integration': 'Ecosystem Integ',
-  'Automation Coverage': 'Automation Cover',
-  'Engagement (infra)': 'Engagement'
-};
-
-export function parseSilHistory(silText, maxSessions = 5) {
-  const sessionRe = /^## (\d{4}-\d{2}-\d{2}) — Session (\d+)[^\n]*Total: (\d+)\/1000/gm;
-  const sessions = [];
-  let m;
-  while ((m = sessionRe.exec(silText)) !== null) {
-    sessions.push({ date: m[1], session: Number(m[2]), total: Number(m[3]), idx: m.index });
-    if (sessions.length >= maxSessions) break;
-  }
-  // Extract category scores from each session block
-  for (let i = 0; i < sessions.length; i++) {
-    const start = sessions[i].idx;
-    const end = i + 1 < sessions.length ? sessions[i + 1].idx : silText.length;
-    const block = silText.slice(start, end);
-    const cats = {};
-    // table rows: | N | Category Name | score | Δ | notes |
-    const rowRe = /^\|\s*\d+\s*\|\s*([A-Za-z][^|]+?)\s*\|\s*(\d+)\s*\|/gm;
-    let rm;
-    while ((rm = rowRe.exec(block)) !== null) {
-      const raw = rm[1].trim();
-      const canonical = CATEGORY_ALIASES[raw] || raw;
-      cats[canonical] = Number(rm[2]);
-    }
-    sessions[i].categories = cats;
-  }
-  return sessions;
-}
+export { parseSilHistory };
 
 export function forecastNext(sessions, signals = {}) {
   // signals: { velocity, blockerPressure, contextAge, unblocked }
   if (!sessions.length) return null;
   const forecast = {};
-  for (const cat of CATEGORIES) {
+  for (const cat of SIL_CATEGORIES) {
     const series = sessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
     if (!series.length) { forecast[cat] = { predicted: null, confidence: 'none' }; continue; }
     // Simple AR(1): predict = last + alpha * (last - last-1), clamped 0..100
@@ -81,6 +44,7 @@ export function forecastNext(sessions, signals = {}) {
   const totalPred = Object.values(forecast)
     .filter(f => f.predicted != null)
     .reduce((sum, f) => sum + f.predicted, 0);
+  if (totalPred === 0) return null;
   return { categories: forecast, totalPredicted: totalPred, basis: sessions.length };
 }
 

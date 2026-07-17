@@ -1,11 +1,11 @@
 // ===== SUPPORTER MODAL =====
 // Cosmetic-only supporter pack. Links to Ko-fi. No gameplay impact.
-// Badge is stored in localStorage (Option A) — no backend required.
-// Future Option B: sync to Supabase callsign_claims.supporter column.
+// Supabase callsign_claims is authoritative; local storage only caches verified status.
+
 
 import { useState, useRef, useEffect } from "react";
 import { useFocusTrap } from "../hooks/useFocusTrap.js";
-import { isSupporter, setSupporter } from "../utils/supporter.js";
+import { isSupporter, supporterVerificationStatus, verifySupporterCallsign } from "../utils/supporter.js";
 import { COSMETICS, currentTrackWeek, reconcileOwnership } from "../utils/cosmeticTrack.js";
 import { loadCareerStats } from "../storage.js";
 
@@ -17,10 +17,24 @@ const PERKS = [
   { icon: "💛", label: "Genuine appreciation from the dev" },
 ];
 
-export default function SupporterModal({ onClose }) {
-  const [claimed, setClaimed] = useState(() => isSupporter());
+export default function SupporterModal({ callsign, onClose }) {
+  const [verification, setVerification] = useState(() => supporterVerificationStatus(callsign));
+  const [checking, setChecking] = useState(false);
+  const claimed = verification.verified;
   const panelRef = useRef(null);
   useFocusTrap(panelRef, true);
+
+  useEffect(() => {
+    setVerification(supporterVerificationStatus(callsign));
+  }, [callsign]);
+
+  async function refreshVerification() {
+    if (!callsign || checking) return;
+    setChecking(true);
+    const result = await verifySupporterCallsign(callsign);
+    setVerification(result);
+    setChecking(false);
+  }
 
   // Close on Escape
   useEffect(() => {
@@ -86,14 +100,17 @@ export default function SupporterModal({ onClose }) {
           <div style={{ textAlign: "center", padding: "14px 0" }}>
             <div style={{ fontSize: 36, marginBottom: 8 }}>⭐</div>
             <p style={{ color: "#FFD700", fontWeight: 900, fontSize: 16, margin: "0 0 6px" }}>
-              You&apos;re a Supporter!
+              Supporter verified for {verification.callsign}
             </p>
             <p style={{ color: "#aaa", fontSize: 12, margin: 0 }}>
-              Thank you — the ⭐ badge will appear on your leaderboard entries.
+              This browser cached the backend-verified status. Online leaderboard entries independently re-check it.
             </p>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <div style={{ padding: 10, borderRadius: 8, background: "rgba(255,215,0,0.06)", border: "1px solid rgba(255,215,0,0.18)", color: "#D8C98A", fontSize: 11, lineHeight: 1.5 }}>
+              Put the exact callsign <strong style={{ color: "#FFF" }}>{callsign || "you play under"}</strong> in your Ko-fi message. The webhook—not this browser—grants the badge.
+            </div>
             <a
               href={KOFI_URL}
               target="_blank"
@@ -104,31 +121,35 @@ export default function SupporterModal({ onClose }) {
               ☕ Support on Ko-fi
             </a>
             <button
-              onClick={() => { setSupporter(); setClaimed(true); }}
-              style={{ ...btnBase, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", color: "#aaa", fontSize: 13 }}
+              onClick={refreshVerification}
+              disabled={!callsign || checking}
+              style={{ ...btnBase, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", color: callsign ? "#DDD" : "#777", fontSize: 13, cursor: callsign && !checking ? "pointer" : "not-allowed" }}
             >
-              I already supported — claim my badge
+              {checking ? "CHECKING BACKEND…" : "REFRESH VERIFIED STATUS"}
             </button>
+            {verification.status === "stale" && <p role="status" style={{ color: "#FFCC66", fontSize: 11, margin: 0 }}>Cached proof is over seven days old. Refresh it before the badge is shown again.</p>}
+            {verification.status === "pending" && <p role="status" style={{ color: "#FFCC66", fontSize: 11, margin: 0 }}>Not verified yet. Confirm the Ko-fi message uses this exact callsign, then retry.</p>}
+            {verification.status === "offline" && <p role="status" style={{ color: "#AAA", fontSize: 11, margin: 0 }}>Verification needs the online service. Your status was not changed.</p>}
+            {verification.status === "unavailable" && <p role="status" style={{ color: "#FF9B80", fontSize: 11, margin: 0 }}>Verification is temporarily unavailable. No badge was granted.</p>}
           </div>
         )}
-
         <p style={{ color: "#555", fontSize: 10, margin: "16px 0 0", textAlign: "center" }}>
-          Badge is stored locally. Cloud sync coming soon.
+          Verification source: callsign_claims · local storage is cache only.
         </p>
 
         {/* Doodie Pass Lite — cosmetic track */}
-        <CosmeticTrackBlock />
+        <CosmeticTrackBlock callsign={callsign} />
       </div>
     </div>
   );
 }
 
-function CosmeticTrackBlock() {
+function CosmeticTrackBlock({ callsign }) {
   const [career] = useState(() => loadCareerStats());
-  const [reco]   = useState(() => reconcileOwnership(career));
+  const [reco]   = useState(() => reconcileOwnership(career, callsign));
   const week     = currentTrackWeek();
   const owned    = new Set(reco.owned);
-  const supporter = isSupporter();
+  const supporter = isSupporter(callsign);
   return (
     <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px solid rgba(255,215,0,0.18)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>

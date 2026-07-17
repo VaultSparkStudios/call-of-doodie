@@ -35,6 +35,7 @@ export default function HUD({
   experimentMatched = null,
   careerBestWave = 0,
   practiceDrill = null,
+  runDrill = null,
   practiceMastery = null,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
@@ -43,6 +44,7 @@ export default function HUD({
     showAmmoBars: true, showSynergyChips: true, showBuildSummary: false,
     showMutationBanner: true, showCoinStreak: true,
   };
+  const activeDrill = runDrill || practiceDrill;
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
@@ -105,7 +107,7 @@ export default function HUD({
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
 
-      {practiceDrill && (
+      {activeDrill && (
         <div style={{
           position: "absolute", top: 30, left: "50%", transform: "translateX(-50%)",
           maxWidth: "min(92vw, 520px)",
@@ -121,9 +123,9 @@ export default function HUD({
           overflow: "hidden",
           textOverflow: "ellipsis",
           letterSpacing: 0.5,
-        }} title={practiceDrill.detail}>
-          <strong>{practiceDrill.label}</strong>{" "}
-          <span style={{ color: "#FFF" }}>{practiceDrill.title}</span>
+        }} title={activeDrill.detail}>
+          <strong>{activeDrill.label}</strong>{" "}
+          <span style={{ color: "#FFF" }}>{activeDrill.title}</span>
           {practiceMastery?.label && <span style={{ color: practiceMastery.complete ? "#00FF88" : "#FFD166" }}> · {practiceMastery.label}</span>}
         </div>
       )}
