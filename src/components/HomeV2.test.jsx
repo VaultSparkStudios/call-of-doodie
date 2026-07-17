@@ -342,4 +342,59 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  describe("mobile bottom nav — CANON-041", () => {
+    it("renders sticky bottom nav with DEPLOY + 4 tab buttons on mobile", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+
+      const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+      expect(nav).toBeTruthy();
+
+      const deployBtn = container.querySelector("[data-testid='mobile-nav-deploy']");
+      expect(deployBtn).toBeTruthy();
+      expect(deployBtn.textContent).toMatch(/DEPLOY/);
+
+      for (const id of ["career", "codex", "settings", "support"]) {
+        const tabBtn = container.querySelector(`[data-testid='mobile-nav-tab-${id}']`);
+        expect(tabBtn).toBeTruthy();
+      }
+    });
+
+    it("highlights the active tab and switches content on tap", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+
+      const careerTab = container.querySelector("[data-testid='mobile-nav-tab-career']");
+      expect(careerTab?.getAttribute("aria-current")).toBe("page");
+
+      const codexTab = container.querySelector("[data-testid='mobile-nav-tab-codex']");
+      expect(codexTab?.getAttribute("aria-current")).toBeFalsy();
+
+      await act(async () => { codexTab.click(); });
+
+      expect(container.querySelector("[data-testid='mobile-nav-tab-codex']")?.getAttribute("aria-current")).toBe("page");
+      expect(container.querySelector("[data-testid='mobile-nav-tab-career']")?.getAttribute("aria-current")).toBeFalsy();
+    });
+
+    it("does NOT render mobile sticky nav on desktop", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={false} />);
+      });
+
+      const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+      expect(nav).toBeNull();
+    });
+  });
 });

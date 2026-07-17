@@ -310,7 +310,13 @@ export default function HomeV2(props) {
     onStart(seed, challenge);
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
-  const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const switchTab = useCallback((t) => {
+    setTab(t);
+    track("home_v2_tab", { tab: t });
+    if (isMobile && tabBodyRef.current) {
+      setTimeout(() => tabBodyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 40);
+    }
+  }, [isMobile]);
   const handleJourneySecondary = useCallback(() => {
     const action = journey.secondary?.action;
     recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
@@ -390,6 +396,7 @@ export default function HomeV2(props) {
   ], [recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
+  const tabBodyRef = useRef(null);
   const cmdFocusIdx = useGamepadNav({
     count: CMD_ACTIONS.length,
     cols: 5,
@@ -409,7 +416,13 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: isMobile ? "max(14px, env(safe-area-inset-top)) 16px calc(56px + max(20px, env(safe-area-inset-bottom)))" : "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const MOBILE_NAV_TABS = [
+    { id: "career",   emoji: "📊", label: "CAREER" },
+    { id: "codex",    emoji: "📖", label: "CODEX" },
+    { id: "settings", emoji: "⚙",  label: "CONFIG" },
+    { id: "support",  emoji: "❤",  label: "SUPPORT" },
+  ];
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -908,18 +921,20 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
-        <div style={tabBody}>
+        {/* Tabbed nav — desktop only; mobile uses sticky bottom bar */}
+        {!isMobile && (
+          <div style={tabsRow}>
+            {["career", "codex", "settings", "support"].map(t => (
+              <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
+                {t === "career" && "📊 CAREER"}
+                {t === "codex" && "📖 CODEX"}
+                {t === "settings" && "⚙ SETTINGS"}
+                {t === "support" && "❤️ SUPPORT"}
+              </button>
+            ))}
+          </div>
+        )}
+        <div ref={tabBodyRef} style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
           {tab === "settings" && (
@@ -948,6 +963,59 @@ export default function HomeV2(props) {
           Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
         </div>
       </div>
+
+      {/* Mobile sticky bottom nav — CANON-041 scrollable 100dvh mobile nav */}
+      {isMobile && (
+        <nav
+          aria-label="Main navigation"
+          data-testid="mobile-bottom-nav"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 90,
+            height: "calc(52px + env(safe-area-inset-bottom))",
+            paddingBottom: "env(safe-area-inset-bottom)",
+            display: "flex", alignItems: "stretch",
+            background: "rgba(5,5,10,0.96)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            borderTop: "1px solid rgba(255,107,53,0.35)",
+            boxShadow: "0 -6px 28px rgba(255,107,53,0.12)",
+          }}
+        >
+          <button
+            onClick={deploy}
+            aria-label={`Deploy — ${selectedMode.label}, ${selectedDiff.label}`}
+            data-testid="mobile-nav-deploy"
+            style={{
+              flex: 1.6, border: "none", borderRight: "1px solid rgba(255,255,255,0.08)",
+              background: "linear-gradient(180deg,#FF8A3D,#CC4400)",
+              color: "#FFF", fontSize: 15, fontWeight: 900,
+              fontFamily: "'Courier New',monospace", letterSpacing: 2,
+              cursor: "pointer",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.22)",
+            }}
+          >▶ DEPLOY</button>
+          {MOBILE_NAV_TABS.map(({ id, emoji, label }) => (
+            <button
+              key={id}
+              onClick={() => switchTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+              data-testid={`mobile-nav-tab-${id}`}
+              style={{
+                flex: 1, border: "none", borderLeft: "1px solid rgba(255,255,255,0.05)",
+                background: tab === id ? "rgba(255,107,53,0.18)" : "transparent",
+                color: tab === id ? "#FF8A3D" : "#666",
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center", gap: 2,
+                cursor: "pointer", transition: "color 0.12s, background 0.12s",
+                fontFamily: "'Courier New',monospace",
+              }}
+            >
+              <span style={{ fontSize: 16, lineHeight: 1 }}>{emoji}</span>
+              <span style={{ fontSize: 7, fontWeight: 900, letterSpacing: 0.8, lineHeight: 1 }}>{label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
 
       {/* Modals (lazy) */}
       {showLeaderboard && (
