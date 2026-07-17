@@ -259,10 +259,10 @@
       "innovation": 7,
       "priority": 17.0,
       "slug": "read-only-closeout-doctor-boundary",
-      "title": "Keep canonical closeout health verification read-only across repository boundaries.",
+      "title": "Keep canonical closeout health and status derivation truthful across repository and commit boundaries.",
       "status": "shipped",
-      "why": "Final closeout inspection found the autopilot directly invoked the sibling Studio Ops doctor with --update-json, violating the mission boundary even though a read-only health verdict is sufficient.",
-      "recipe": "Route the autopilot through the project-local doctor command with --json --quiet, remove the cross-repo write flag, and add a source-level regression assertion.",
+      "why": "Final closeout inspection found two authority errors: the autopilot invoked sibling Studio Ops with --update-json, while the board inferred committed write-backs from only the clean working tree and ignored the verified staging testing surface.",
+      "recipe": "Route doctor verification through read-only local JSON mode; derive write-back coverage from the prior-to-current closeout commit range with bounded ignored-file evidence; source staging from PROJECT_STATUS.testingSurfaces; regression-test the invariants.",
       "source": "second-order closeout audit"
     }
   ],
@@ -406,7 +406,9 @@
       "evidence": [
         "autopilot doctor is --json --quiet",
         "no --update-json call",
-        "focused proxy regression 3/3"
+        "committed closeout range drives write-back receipts",
+        "testingSurfaces drives staging receipt",
+        "focused proxy regression 4/4"
       ]
     }
   ]

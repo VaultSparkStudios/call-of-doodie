@@ -60,6 +60,6 @@ The generated portfolio candidates were checked against live source and capabili
 1. **supporter-verification-cache-freshness** — Backend-verified supporter cache now expires after seven days; stale proof fails closed and the UI asks for a source-of-truth refresh.
 2. **repeatable-drill-evidence-ledger** — Same-drill outcome receipts are deduplicated over a three-attempt window; only two observed improvements earn `REPEATABLE IMPROVEMENT`, explicitly not a causality claim.
 3. **input-calibration-evidence-freshness** — Complete Aim Check evidence expires after 30 days and becomes `AIM CHECK EXPIRED` / `INPUT QA RECHECK` instead of remaining green indefinitely.
-4. **read-only-closeout-doctor-boundary** — Canonical autopilot health verification now routes through the local doctor in read-only JSON mode, so closeout cannot mutate a sibling repo to obtain green evidence.
+4. **read-only-closeout-doctor-boundary** — Canonical autopilot health verification is read-only, while the board derives committed write-backs and verified staging from authoritative sources instead of a clean working tree or absent legacy field.
 
 All four premises were verified in the post-primary implementation tree and recorded as shipped items in `docs/AUDIT_2026-07-16_3.json`.

@@ -12,10 +12,10 @@
     "Exact-callsign backend supporter verification with seven-day cache freshness",
     "Live/replay/REMATCH coaching continuity and observed outcome receipts",
     "Deduplicated two-of-three drill repeatability evidence without causal claims",
-    "Read-only closeout doctor verification with cross-repo boundary regression coverage"
+    "Truthful closeout health and board derivation with cross-repo and committed-state regression coverage"
   ],
   "validation": [
-    "npm test 663/663 across 84 files",
+    "npm test 664/664 across 84 files",
     "lint and production build passed",
     "public contract 12/12 passed",
     "security release audit and npm audit 0 passed",
@@ -34,12 +34,31 @@
     "project-scoped analytics configuration",
     "Itch publication and founder launch approval"
   ],
-  "sil": {"score": 1000, "velocity": 9, "debt": "decreasing"},
+  "sil": {
+    "score": 1000,
+    "velocity": 9,
+    "debt": "decreasing"
+  },
   "headline": "Made player, supporter, coaching, runtime, and startup claims evidence-backed across minting, freshness, repeatability, and authority",
   "items": [
-    {"title":"Evidence-backed player input and supporter trust","projectImpact":10,"ecosystemImpact":8,"evidence":"False-mint tests, exact backend claims, and bounded proof freshness"},
-    {"title":"Closed-loop coaching evidence","projectImpact":10,"ecosystemImpact":8,"evidence":"Accepted drill continuity plus observed-only 2-of-3 repeatability receipts"},
-    {"title":"Truthful protocol and frame-loop sources","projectImpact":9,"ecosystemImpact":8,"evidence":"Shared SIL parser and reusable single-scan frame index"}
+    {
+      "title": "Evidence-backed player input and supporter trust",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "False-mint tests, exact backend claims, and bounded proof freshness"
+    },
+    {
+      "title": "Closed-loop coaching evidence",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "Accepted drill continuity plus observed-only 2-of-3 repeatability receipts"
+    },
+    {
+      "title": "Truthful protocol and frame-loop sources",
+      "projectImpact": 9,
+      "ecosystemImpact": 8,
+      "evidence": "Shared SIL parser and reusable single-scan frame index"
+    }
   ],
   "followUps": [
     "Complete physical PWA and controller evidence when hardware is available",

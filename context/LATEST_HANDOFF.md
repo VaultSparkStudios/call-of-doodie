@@ -2,12 +2,12 @@
 
 ## Where We Left Off
 - Completed the requested continuous `/goal` mission from synced `main`: `/start -> /audit -> /implement -> innovation saturation -> /closeout` with no phase handback.
-- Shipped all nine live-premise items in `docs/AUDIT_2026-07-16_3.json`: canonical SIL history truth, observed-input Aim Check, reusable frame index, backend supporter verification, next-run drill continuity, supporter cache expiry, repeatable drill evidence, calibration expiry, and a read-only closeout doctor boundary.
+- Shipped all nine live-premise items in `docs/AUDIT_2026-07-16_3.json`: canonical SIL history truth, observed-input Aim Check, reusable frame index, backend supporter verification, next-run drill continuity, supporter cache expiry, repeatable drill evidence, calibration expiry, and truthful closeout derivation for the read-only doctor, committed write-backs, and verified staging.
 - The Unified Genius List is exhausted for repo-executable work. Its only generated item is maintain-launch-confidence, satisfied by the full validation matrix; external/dashboard/device/data/product-decision entries remain explicit.
 - SPARKED remains NO-GO. This session does not claim physical PWA/gamepad QA, verified inbound email, production Lighthouse/funnel evidence, project-scoped analytics, Itch publication, direct AI pixel review, or founder approval.
 
 ## Validation
-- `npm test` — 663/663 across 84 files.
+- `npm test` — 664/664 across 84 files.
 - `npm run lint`, `npm run build`, `npm run public:contract` (12/12), `npm run security:release:audit` (npm audit 0) — PASS.
 - Replay state-stepper and edge fixtures — 4/4 each.
 - Focused evidence gates: Aim/input/Home 24/24; supporter/cosmetic/storage 61/61; drill/death/rematch 26/26; frame/combat 18/18.

@@ -39,7 +39,7 @@
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
 ║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 9↑                       ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -59,18 +59,18 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 124 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    663/663 passing  ·  Deploy: N/A                       ║
+║  Tests:    664/664 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.8% used                          ║
-║     38,214 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~19,107 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.7% used                          ║
+║     3,308 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,654 tok/turn  ·  cache 50%  ·  109 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         663/663 passing                                ║
+║  ✓  Tests         664/664 passing                                ║
 ║  ✓  Velocity      9 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
@@ -84,7 +84,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⚠  Doctor        123/148 (84%)  ·  23 warn                      ║
+║  ⚠  Doctor        122/148 (84%)  ·  24 warn                      ║
 ║  ✓  Cost          real $0.01/7d · 7d notional $0.21 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 

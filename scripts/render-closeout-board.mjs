@@ -129,8 +129,9 @@ function deploymentRows() {
     || p.localPath?.toLowerCase()?.endsWith(slug)
     || p.folderName?.toLowerCase() === slug
   ) || {};
-  const stagingType = status?.stagingType ?? entry?.stagingType;
-  const stagingUrl = status?.stagingUrl ?? entry?.stagingUrl;
+  const stagingSurface = status?.testingSurfaces?.find((surface) => surface?.type === 'staging-preview');
+  const stagingType = stagingSurface?.type ?? status?.stagingType ?? entry?.stagingType;
+  const stagingUrl = status?.stagingUrl ?? stagingSurface?.url ?? entry?.stagingUrl;
   const liveUrl = status?.runtimeUrl || entry?.runtimeUrl || entry?.liveUrl || entry?.deployedUrl;
   const vs = (entry?.vaultStatus || '').toUpperCase();
 
@@ -260,7 +261,7 @@ function agentMemoryRecentlyTouched() {
   return false;
 }
 
-function writeBackCoverage() {
+function writeBackCoverage(session) {
   const TARGETS = [
     'context/CURRENT_STATE.md',
     'context/TASK_BOARD.md',
@@ -281,6 +282,26 @@ function writeBackCoverage() {
     for (const t of TARGETS) {
       if (file.endsWith(t)) touched.add(t);
     }
+  }
+  if (session != null) {
+    const closeoutSha = sh(`git log -n 1 --format=%H --grep="closeout session ${session}"`).out.trim();
+    if (closeoutSha) {
+      const previousCloseoutSha = sh(`git log -n 1 --format=%H ${closeoutSha}~1 --grep="closeout session"`).out.trim();
+      const committed = previousCloseoutSha
+        ? sh(`git diff --name-only ${previousCloseoutSha}..${closeoutSha}`).out
+        : sh(`git show --pretty=format: --name-only ${closeoutSha}`).out;
+      for (const file of committed.split('\n').map((value) => value.trim().replace(/\\/g, '/'))) {
+        for (const target of TARGETS) {
+          if (file.endsWith(target)) touched.add(target);
+        }
+      }
+    }
+  }
+  const recentCutoff = Date.now() - 24 * 3600_000;
+  for (const target of TARGETS) {
+    const targetPath = path.join(ROOT, target);
+    const ignored = sh(`git check-ignore --quiet -- "${target}"`).code === 0;
+    if (ignored && fs.existsSync(targetPath) && fs.statSync(targetPath).mtimeMs > recentCutoff) touched.add(target);
   }
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
   // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
@@ -348,7 +369,7 @@ function render() {
     shippedSource = 'git-log';
   }
   const silRows = silCategoryRows(status);
-  const wb = writeBackCoverage();
+  const wb = writeBackCoverage(status.currentSession ?? status.silSession);
   const git = gitChangeSummary();
   const sig = postSessionSignals(status);
   const next = nextSessionHint();

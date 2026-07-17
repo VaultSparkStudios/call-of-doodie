@@ -33,21 +33,21 @@
       "projectImpact": 9,
       "ecosystemImpact": 8,
       "insight": "Startup SIL history now has one multi-format parser, while the frame loop builds one reusable enemy index and compacts hot arrays in place. Both remove divergent or repeated sources of truth.",
-      "evidence": "scripts/lib/sil-history.mjs; src/systems/frameIndex.js; 663/663 tests"
+      "evidence": "scripts/lib/sil-history.mjs; src/systems/frameIndex.js; 664/664 tests"
     },
     {
       "id": "#4",
       "slug": "read-only-closeout-doctor-boundary",
-      "title": "Read-only canonical closeout",
+      "title": "Truthful canonical closeout",
       "axis": "organization",
       "projectImpact": 8,
       "ecosystemImpact": 9,
-      "insight": "The autopilot now verifies doctor health through the project-local router in read-only JSON mode, preventing a closeout from mutating the sibling control-plane tree.",
-      "evidence": "scripts/closeout-autopilot.mjs; tests/studio-ops-proxy.test.js"
+      "insight": "The autopilot verifies doctor health read-only, while its board derives write-backs from committed session history and staging from project testing surfaces instead of the clean working tree or absent legacy fields.",
+      "evidence": "scripts/closeout-autopilot.mjs; scripts/render-closeout-board.mjs; tests/studio-ops-proxy.test.js"
     }
   ],
   "validation": [
-    "Full suite: 663/663 tests across 84 files; lint, build, public contract, replay fixtures, medium game gate, and diff checks passed.",
+    "Full suite: 664/664 tests across 84 files; lint, build, public contract, replay fixtures, medium game gate, and diff checks passed.",
     "Security release audit and npm audit passed with 0 vulnerabilities; settings sanitizer reported zero findings.",
     "Studio doctor reports overallPass=true, failing=0, and blockingFailing=0; entropy is healthy.",
     "Isolated staging run 29549796742 passed; live shell 5/5, route/header 8/8, and hosted visual matrix 192/192.",

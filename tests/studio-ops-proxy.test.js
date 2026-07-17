@@ -35,4 +35,11 @@ describe("project-local Studio Ops proxies", () => {
     expect(source).toContain("doctor --json --quiet");
     expect(source).not.toContain("doctor --update-json");
   });
+  it("derives closeout write-backs and staging from committed source-of-truth state", () => {
+    const source = fs.readFileSync(path.resolve("scripts/render-closeout-board.mjs"), "utf8");
+    expect(source).toContain("closeout session ${session}");
+    expect(source).toContain("testingSurfaces?.find");
+    expect(source).toContain("git check-ignore --quiet" );
+    expect(source).toContain("writeBackCoverage(status.currentSession ?? status.silSession)");
+  });
 });

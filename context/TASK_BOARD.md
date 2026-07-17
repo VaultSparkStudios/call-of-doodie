@@ -14,7 +14,7 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
-- [x] [SIL:1] **DONE S124** Read-only closeout doctor boundary — autopilot verifies health through the local router without `--update-json` against a sibling repo; a regression test enforces it.
+- [x] [SIL:1] **DONE S124** Truthful closeout derivation — autopilot verifies health read-only, and the board derives committed write-backs plus verified staging from authoritative sources; regression coverage enforces the boundary.
 - [x] [SIL:1] **DONE S124** Canonical SIL history truth — one parser now drives startup closeout age and forecast inputs across both supported formats.
 - [x] [SIL:1] **DONE S124** Evidence-backed Aim Check — keyboard, pointer/touch, and gamepad observations must reach 4/4 before a receipt can be saved.
 - [x] [SIL:1] **DONE S124** Reusable enemy frame index — hot arrays compact in place and one scan supplies Sergeant/summon lookups.

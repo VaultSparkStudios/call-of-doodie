@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 124 shipped nine evidence-truth improvements: canonical SIL parsing, observed-input calibration, reusable enemy frame index, backend supporter verification, next-run drill continuity, supporter/input proof expiry, repeatable drill evidence, and read-only closeout health verification; 663/663 tests green.",
+  "currentFocus": "Session 124 shipped nine evidence-truth improvements: canonical SIL parsing, observed-input calibration, reusable enemy frame index, backend supporter verification, next-run drill continuity, supporter/input proof expiry, repeatable drill evidence, and truthful closeout health and status derivation; 664/664 tests green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -78,8 +78,8 @@
   "currentSession": 124,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 663,
-  "testsTotal": 663,
+  "testsPassing": 664,
+  "testsTotal": 664,
   "entropyScore": 0.181,
   "entropyLastComputed": "2026-07-16",
   "silRubricVersion": "3.0",
@@ -112,8 +112,8 @@
   "doctorScore": {
     "date": "2026-07-17",
     "overallPass": true,
-    "passing": 123,
-    "warning": 23,
+    "passing": 122,
+    "warning": 24,
     "failing": 0,
     "blockingFailing": 0,
     "skipped": 2,

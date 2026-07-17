@@ -14,7 +14,7 @@ Source: `docs/AUDIT_2026-07-16_3.json`
 | 6 | supporter-verification-cache-freshness | L3 | 1h | Bound locally cached identity evidence after backend authority is established. | Shipped |
 | 7 | repeatable-drill-evidence-ledger | L3 | 1.5h | Require repeated observations before presenting a pattern. | Shipped |
 | 8 | input-calibration-evidence-freshness | L3 | 1h | Expire device evidence after capture truth is established. | Shipped |
-| 9 | read-only-closeout-doctor-boundary | L3 | 1h | Preserve the no-sibling-write mission boundary in canonical closeout. | Shipped |
+| 9 | read-only-closeout-doctor-boundary | L3 | 1h | Preserve read-only cross-repo health checks and derive the closeout board from committed/staging sources. | Shipped |
 
 ## Per-item Gate
 

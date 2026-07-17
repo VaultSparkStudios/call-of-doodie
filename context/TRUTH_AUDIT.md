@@ -826,7 +826,7 @@ Last reviewed: 2026-07-03
 - Supporter truth — the removed legacy flag is never proof. The browser queries `callsign_claims` for an exact callsign, caches only a verified record, expires it after seven days, and the submit Edge Function remains independently authoritative.
 - Coaching truth — accepted drill/contract/baseline data reaches live, replay, and REMATCH runs. Outcome receipts report observations only; repeatability is a deduplicated 2-of-3 pattern and explicitly not causality or mastery proof.
 - Runtime truth — the frame index scans the compacted enemy list once per frame, reuses scratch identity, clears stale summon keys, and supplies Sergeant/summon lookups without the removed allocation/rescan paths.
-- Validation truth — 663/663 tests across 84 files, lint, production build, public contract 12/12, security release gate, npm audit 0, replay fixtures, medium game gate, and diff checks passed directly.
+- Validation truth — 664/664 tests across 84 files, lint, production build, public contract 12/12, security release gate, npm audit 0, replay fixtures, medium game gate, and diff checks passed directly.
 - Visual truth — the existing hosted 192/192 machine matrix remains valid for the prior staging baseline; direct AI pixel review is still unclaimed because the Windows image/browser tools failed CryptUnprotectData.
 - Release truth — engineering closeout is green; SPARKED remains NO-GO pending the external/manual/data/founder gates recorded in PROJECT_STATUS.
 
@@ -836,4 +836,6 @@ Last reviewed: 2026-07-16
 
 - The final autopilot path was inspected before lock clearance; its sibling `doctor --update-json` mutation was replaced with read-only project-router `doctor --json --quiet` verification.
 - `tests/studio-ops-proxy.test.js` asserts the read-only command and rejects reintroduction of `doctor --update-json` in the autopilot.
-- Full suite after the root-fix: 663/663 tests; protocol drift 30/30; Windows hidden-spawn guard green.
+- Full suite after the root-fix: 664/664 tests; protocol drift 30/30; Windows hidden-spawn guard green.
+
+- Closeout board truth: committed write-backs are derived from the prior-to-current closeout commit range; ignored local creative-direction evidence uses a bounded recent-mtime fallback; staging uses the verified `testingSurfaces` entry. The regenerated board marks all ten write-backs and the Session 124 preview truthfully.
