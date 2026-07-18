@@ -93,6 +93,7 @@ export default function HomeV2(props) {
   const [customSeed, setCustomSeed] = useState("");
   const [challengeMode, setChallengeMode] = useState(null);
   const [tab, setTab] = useState("career");
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(null);
   const [deployOpen, setDeployOpen] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
@@ -409,7 +410,7 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: isMobile ? "max(14px, env(safe-area-inset-top)) 16px calc(80px + env(safe-area-inset-bottom))" : "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -472,6 +473,12 @@ export default function HomeV2(props) {
   const tabBody = { marginTop: 12, background: themePalette.panel, border: `1px solid ${themePalette.line}`, borderRadius: 10, padding: 14 };
   const footer = { marginTop: 22, paddingTop: 12, borderTop: `1px solid ${themePalette.line}`, display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: themePalette.quiet, letterSpacing: 1, flexWrap: "wrap" };
   const linkBtn = { background: "none", border: "none", color: isSupporter(username) ? "#9a6500" : themePalette.quiet, fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
+  const mobileNavTab = (active) => ({
+    background: "none", border: "none", cursor: "pointer", fontFamily: "inherit",
+    display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+    gap: 2, padding: "6px 4px", flex: 1,
+    color: active ? "#FF6B35" : themePalette.muted,
+  });
 
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
@@ -908,30 +915,34 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
-        <div style={tabBody}>
-          {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
-          {tab === "codex" && <CodexTab />}
-          {tab === "settings" && (
-            <div style={{ textAlign: "center" }}>
-              <button style={{ ...quickBtn, padding: "10px 20px" }} onClick={() => setShowSettings(true)}>⚙ OPEN SETTINGS PANEL</button>
-              <div style={{ fontSize: 10, color: "#888", marginTop: 10 }}>Audio, visuals, accessibility, controls, colorblind + reduced-motion modes</div>
+        {/* Tabbed nav — desktop only; mobile uses sticky bottom nav */}
+        {!isMobile && (
+          <>
+            <div style={tabsRow}>
+              {["career", "codex", "settings", "support"].map(t => (
+                <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
+                  {t === "career" && "📊 CAREER"}
+                  {t === "codex" && "📖 CODEX"}
+                  {t === "settings" && "⚙ SETTINGS"}
+                  {t === "support" && "❤️ SUPPORT"}
+                </button>
+              ))}
             </div>
-          )}
-          {tab === "support" && (
-            <SupportTab onOpen={() => setShowSupporter(true)} />
-          )}
-        </div>
+            <div style={tabBody}>
+              {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
+              {tab === "codex" && <CodexTab />}
+              {tab === "settings" && (
+                <div style={{ textAlign: "center" }}>
+                  <button style={{ ...quickBtn, padding: "10px 20px" }} onClick={() => setShowSettings(true)}>⚙ OPEN SETTINGS PANEL</button>
+                  <div style={{ fontSize: 10, color: "#888", marginTop: 10 }}>Audio, visuals, accessibility, controls, colorblind + reduced-motion modes</div>
+                </div>
+              )}
+              {tab === "support" && (
+                <SupportTab onOpen={() => setShowSupporter(true)} />
+              )}
+            </div>
+          </>
+        )}
 
         {/* Footer */}
         <div style={footer}>
@@ -948,6 +959,126 @@ export default function HomeV2(props) {
           Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
         </div>
       </div>
+
+      {/* Mobile bottom-sheet panel for career / codex (CANON-041) */}
+      {isMobile && mobilePanelOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          data-testid="mobile-panel-overlay"
+          onClick={e => { if (e.target === e.currentTarget) setMobilePanelOpen(null); }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 98,
+            background: "rgba(0,0,0,0.72)",
+            backdropFilter: "blur(4px)",
+            display: "flex", alignItems: "flex-end",
+          }}
+        >
+          <div style={{
+            width: "100%",
+            background: theme === "porcelain-day" ? "#f0e6da" : "#121418",
+            borderRadius: "14px 14px 0 0",
+            padding: `16px 16px calc(80px + env(safe-area-inset-bottom))`,
+            maxHeight: "82dvh",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+            borderTop: `1px solid ${themePalette.line}`,
+            boxShadow: "0 -8px 40px rgba(0,0,0,0.5)",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+              <div style={{ fontWeight: 900, letterSpacing: 2, fontSize: 10, color: themePalette.quiet }}>
+                {mobilePanelOpen === "career" ? "📊 CAREER" : "📖 CODEX"}
+              </div>
+              <button
+                onClick={() => setMobilePanelOpen(null)}
+                style={{ background: "none", border: "none", color: themePalette.muted, cursor: "pointer", fontSize: 22, padding: "0 4px", lineHeight: 1, fontFamily: "inherit" }}
+                aria-label="Close panel"
+              >×</button>
+            </div>
+            {mobilePanelOpen === "career" && (
+              <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => { setMobilePanelOpen(null); setShowMetaTree(true); }} />
+            )}
+            {mobilePanelOpen === "codex" && <CodexTab />}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile sticky bottom nav (CANON-041 — scrollable 100dvh nav, mobile parity) */}
+      {isMobile && (
+        <nav
+          data-testid="mobile-bottom-nav"
+          aria-label="Main navigation"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0,
+            height: "56px",
+            paddingBottom: "env(safe-area-inset-bottom)",
+            background: theme === "porcelain-day" ? "rgba(240,230,218,0.96)" : "rgba(10,10,10,0.94)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderTop: `1px solid ${themePalette.line}`,
+            display: "flex", alignItems: "stretch",
+            zIndex: 49,
+            boxShadow: "0 -2px 20px rgba(0,0,0,0.5)",
+          }}
+        >
+          <button
+            style={mobileNavTab(mobilePanelOpen === "career")}
+            onClick={() => setMobilePanelOpen(mobilePanelOpen === "career" ? null : "career")}
+            aria-label="Career"
+          >
+            <span style={{ fontSize: 18 }}>📊</span>
+            <span style={{ fontSize: 8, letterSpacing: 1, fontWeight: 900 }}>CAREER</span>
+          </button>
+          <button
+            style={mobileNavTab(mobilePanelOpen === "codex")}
+            onClick={() => setMobilePanelOpen(mobilePanelOpen === "codex" ? null : "codex")}
+            aria-label="Codex"
+          >
+            <span style={{ fontSize: 18 }}>📖</span>
+            <span style={{ fontSize: 8, letterSpacing: 1, fontWeight: 900 }}>CODEX</span>
+          </button>
+          {/* Center PLAY button — elevated above the nav bar */}
+          <button
+            data-testid="mobile-play-btn"
+            onClick={deploy}
+            aria-label="Deploy — play now"
+            style={{
+              flex: 1, background: "none", border: "none", cursor: "pointer",
+              display: "flex", alignItems: "flex-start", justifyContent: "center",
+              padding: 0, position: "relative", fontFamily: "inherit",
+            }}
+          >
+            <span style={{
+              width: 52, height: 52,
+              borderRadius: "50%",
+              background: "linear-gradient(180deg,#FF8A3D,#CC4400)",
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 0 20px rgba(255,107,0,0.55), 0 3px 10px rgba(0,0,0,0.5)",
+              position: "absolute", top: -16,
+              color: "#FFF", fontWeight: 900,
+            }}>
+              <span style={{ fontSize: 20, lineHeight: 1 }}>▶</span>
+              <span style={{ fontSize: 7, letterSpacing: 1 }}>PLAY</span>
+            </span>
+          </button>
+          <button
+            style={mobileNavTab(false)}
+            onClick={() => setShowSettings(true)}
+            aria-label="Settings"
+          >
+            <span style={{ fontSize: 18 }}>⚙</span>
+            <span style={{ fontSize: 8, letterSpacing: 1, fontWeight: 900 }}>SETTINGS</span>
+          </button>
+          <button
+            style={mobileNavTab(false)}
+            onClick={() => setShowSupporter(true)}
+            aria-label="Support"
+          >
+            <span style={{ fontSize: 18 }}>❤️</span>
+            <span style={{ fontSize: 8, letterSpacing: 1, fontWeight: 900 }}>SUPPORT</span>
+          </button>
+        </nav>
+      )}
 
       {/* Modals (lazy) */}
       {showLeaderboard && (
