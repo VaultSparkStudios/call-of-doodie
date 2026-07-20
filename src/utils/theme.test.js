@@ -9,10 +9,12 @@ describe("theme contract", () => {
     window.history.replaceState({}, "", "/");
   });
 
-  it("resolves URL over storage and storage over system preference", () => {
+  it("resolves explicit URL over storage and otherwise defaults to Sewer Night", () => {
     expect(resolveTheme({ query: "?theme=porcelain-day", stored: "sewer-night" })).toBe("porcelain-day");
     expect(resolveTheme({ stored: "porcelain-day" })).toBe("porcelain-day");
-    expect(resolveTheme({ stored: "broken", prefersLight: true })).toBe("porcelain-day");
+    expect(resolveTheme({ stored: "broken", prefersLight: true })).toBe("sewer-night");
+    expect(resolveTheme({ prefersLight: true })).toBe("sewer-night");
+    expect(resolveTheme()).toBe("sewer-night");
   });
 
   it("applies, persists, reads, and rotates the project theme", () => {

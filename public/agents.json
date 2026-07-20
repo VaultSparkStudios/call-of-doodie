@@ -19,6 +19,7 @@
     { "rel": "privacy", "href": "https://callofdoodie.wtf/privacy/" },
     { "rel": "terms", "href": "https://callofdoodie.wtf/terms/" },
     { "rel": "contact", "href": "https://callofdoodie.wtf/contact/" },
+    { "rel": "rights", "href": "https://callofdoodie.wtf/ip/" },
     { "rel": "llms", "href": "https://callofdoodie.wtf/.well-known/llms.txt" },
     { "rel": "sitemap", "href": "https://callofdoodie.wtf/sitemap.xml" }
   ],

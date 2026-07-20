@@ -12,6 +12,7 @@ import { encodeReplayCode } from "../utils/replayCode.js";
 import { buildReplayProofPresenter } from "../utils/replayProofPresenter.js";
 import { resolveRematchStartWave } from "../systems/rematchDrill.js";
 import { buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillOutcomeReceipt } from "../systems/runDrill.js";
+import { getRunIntegrityReceipt } from "../systems/runIntegrity.js";
 import { buildWeeklyContract, buildWeeklyContractProgressPayload } from "../utils/socialRetention.js";
 import { computeBuildGrade } from "../utils/buildReport.js";
 import { buildGhostDeathReadout, buildGhostKillerMarker } from "../utils/ghostPath.js";
@@ -537,6 +538,7 @@ export default function DeathScreen({
   // REMATCH drill: practice runs skip the leaderboard; the rematch wave is
   // derived from the death wave (boss waves start one wave early).
   const practiceRun = !!gsSnapshot?.practiceRun;
+  const runIntegrityReceipt = getRunIntegrityReceipt(gsSnapshot);
   const activeRunDrill = gsSnapshot?.activeRunDrill || null;
   const drillOutcome = useMemo(() => buildRunDrillOutcomeReceipt(activeRunDrill, { wave, score }), [activeRunDrill, score, wave]);
   const drillEvidence = useMemo(() => {
@@ -1324,6 +1326,14 @@ export default function DeathScreen({
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(0,229,255,0.25)" }}>
             <div style={{ fontSize: 12, color: "#00E5FF", letterSpacing: 1, fontWeight: 700 }}>🔁 DRILL RUN</div>
             <div style={{ fontSize: 11, color: "#AAD", marginTop: 4 }}>Practice rematches don't submit to the leaderboard or set career records.</div>
+          </div>
+        ) : !runIntegrityReceipt.onlineEligible ? (
+          <div data-testid="run-integrity-local-only" style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,150,72,0.5)", background: "rgba(72,18,0,0.16)" }}>
+            <div style={{ fontSize: 12, color: "#FFB06B", letterSpacing: 1, fontWeight: 900 }}>⚠ {runIntegrityReceipt.label}</div>
+            <div style={{ fontSize: 11, color: "#E8D5C7", marginTop: 5, lineHeight: 1.5 }}>{runIntegrityReceipt.detail}</div>
+            <div style={{ fontSize: 9, color: "#AFA09A", marginTop: 6, lineHeight: 1.4 }}>
+              Observed runtime evidence only. The game does not claim the recovered stage caused the final score.
+            </div>
           </div>
         ) : !submitStatus || submitStatus === 'pending' ? (
           <div style={{ ...card, marginBottom: 12, border: "1px solid rgba(255,215,0,0.15)" }}>

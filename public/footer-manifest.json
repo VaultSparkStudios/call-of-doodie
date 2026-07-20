@@ -8,6 +8,7 @@
     { "href": "/privacy/", "label": "Privacy" },
     { "href": "/terms/", "label": "Terms" },
     { "href": "/contact/", "label": "Contact" },
+    { "href": "/ip/", "label": "Rights & IP" },
     { "href": "/agents.json", "label": "Agents" },
     { "href": "/.well-known/llms.txt", "label": "LLMs" }
   ],
@@ -15,8 +16,9 @@
     "/privacy/",
     "/terms/",
     "/contact/",
+    "/ip/",
     "/agents.json",
     "/.well-known/llms.txt"
   ],
-  "legalPages": ["/privacy/", "/terms/", "/contact/"]
+  "legalPages": ["/privacy/", "/terms/", "/contact/", "/ip/"]
 }

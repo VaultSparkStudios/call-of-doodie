@@ -16,6 +16,7 @@ Players move, shoot, dash, throw grenades, switch weapons, choose perks and rout
 - Privacy: https://callofdoodie.wtf/privacy/
 - Terms: https://callofdoodie.wtf/terms/
 - Contact: https://callofdoodie.wtf/contact/
+- Rights and intellectual property: https://callofdoodie.wtf/ip/
 - Agent manifest: https://callofdoodie.wtf/agents.json
 - Sitemap: https://callofdoodie.wtf/sitemap.xml
 

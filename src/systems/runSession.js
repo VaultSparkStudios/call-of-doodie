@@ -49,6 +49,7 @@ export function createRunHistoryEntry({
   killedByName = null,
   traceEvidence = null,
   traceReceipt = null,
+  integrityReceipt = null,
 } = {}) {
   const entry = {
     score,
@@ -77,6 +78,19 @@ export function createRunHistoryEntry({
       label: traceReceipt.label,
       score: Number(traceReceipt.score) || 0,
       level: traceReceipt.level || traceEvidence?.level || traceEvidence?.evidenceLevel || "none",
+    };
+  }
+  if (integrityReceipt?.onlineEligible === false) {
+    entry.integrityReceipt = {
+      status: "degraded",
+      onlineEligible: false,
+      label: integrityReceipt.label || "LOCAL ONLY · RUNTIME RECOVERY",
+      faultCount: Math.max(1, Number(integrityReceipt.faultCount) || 1),
+      occurrenceCount: Math.max(1, Number(integrityReceipt.occurrenceCount) || 1),
+      stages: Array.isArray(integrityReceipt.stages)
+        ? integrityReceipt.stages.filter(Boolean).map(String).slice(0, 8)
+        : [],
+      claim: "competitive-eligibility-fails-closed",
     };
   }
   return entry;

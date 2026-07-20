@@ -380,6 +380,9 @@ export function RunHistoryPanel({
                       <span style={{ fontSize: 11, color: "#00FF88" }}>☠ {run.kills ?? 0}</span>
                       {modeLabel && <span style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.4)", color: "#FF6666", fontWeight: 900 }}>{modeLabel}</span>}
                       <span style={{ fontSize: 9, fontWeight: 700, color: diffColor }}>{(run.difficulty || "normal").toUpperCase()}</span>
+                      {run.integrityReceipt?.onlineEligible === false && (
+                        <span title={`Recovered stages: ${run.integrityReceipt.stages?.join(", ") || "runtime"}`} style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(255,128,0,0.16)", border: "1px solid rgba(255,160,72,0.5)", color: "#FFB06B", fontWeight: 900 }}>⚠ LOCAL ONLY</span>
+                      )}
                     </div>
                     <div style={{ display: "flex", gap: 8, marginTop: 3, fontSize: 9, color: "#888" }}>
                       <span>⏱ {timeFmt}</span>

@@ -940,6 +940,7 @@ export default function HomeV2(props) {
           <a href="privacy/" style={linkBtn}>PRIVACY</a>
           <a href="terms/" style={linkBtn}>TERMS</a>
           <a href="contact/" style={linkBtn}>CONTACT</a>
+          <a href="ip/" style={linkBtn}>RIGHTS &amp; IP</a>
           <a href="agents.json" style={linkBtn}>AGENTS</a>
           <a href=".well-known/llms.txt" style={linkBtn}>LLMS</a>
           <span style={{ color: "#777" }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>

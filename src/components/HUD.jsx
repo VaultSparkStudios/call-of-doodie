@@ -10,7 +10,8 @@ function useReducedEffects() {
   );
 }
 import { WEAPONS, DIFFICULTIES } from "../constants.js";
-import { getHudDebugSlots, isHudDebugEnabled } from "../utils/hudLayout.js";
+import { getHudCenterStackLayout, getHudDebugSlots, isHudDebugEnabled } from "../utils/hudLayout.js";
+import { buildRunDrillLiveProgress } from "../systems/runDrill.js";
 import { buildRivalPace } from "../utils/rivalPace.js";
 
 const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
@@ -36,6 +37,7 @@ export default function HUD({
   careerBestWave = 0,
   practiceDrill = null,
   runDrill = null,
+  runIntegrity = null,
   practiceMastery = null,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
@@ -45,6 +47,7 @@ export default function HUD({
     showMutationBanner: true, showCoinStreak: true,
   };
   const activeDrill = runDrill || practiceDrill;
+  const drillProgress = buildRunDrillLiveProgress(activeDrill, { wave, score });
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
@@ -61,10 +64,17 @@ export default function HUD({
   const reducedEffects = useReducedEffects();
   const hudDebugEnabled = isHudDebugEnabled();
   const rivalPace = buildRivalPace({ score, wave, topGhosts, weeklyRival });
-  const centerStackTop = 46
-    + (vsScore != null ? 28 : 0)
-    + (Array.isArray(topGhosts) && topGhosts.length > 0 ? 28 : 0)
-    + (weeklyRival ? 28 : 0);
+  const centerStack = getHudCenterStackLayout({
+    isMobile,
+    hasIntegrityWarning: runIntegrity?.onlineEligible === false,
+    hasDrill: Boolean(activeDrill),
+    hasSpeedrun: Boolean(speedrunMode),
+    hasRunModifier: Boolean(runModifier),
+    hasChallenge: vsScore != null,
+    hasGhosts: Array.isArray(topGhosts) && topGhosts.length > 0,
+    hasWeeklyRival: Boolean(weeklyRival),
+    hasRivalPace: Boolean(rivalPace),
+  });
 
   const Tooltip = ({ text, visible }) => {
     if (!visible) return null;
@@ -107,9 +117,35 @@ export default function HUD({
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
 
+      {runIntegrity?.onlineEligible === false && (
+        <div
+          data-testid="run-integrity-warning"
+          title={runIntegrity.detail}
+          style={{
+            position: "absolute", top: centerStack.slots.integrity, left: "50%", transform: "translateX(-50%)",
+            maxWidth: "min(94vw, 560px)",
+            background: "rgba(72,18,0,0.9)",
+            border: "1px solid rgba(255,150,72,0.7)",
+            borderRadius: 8,
+            padding: "5px 10px",
+            fontSize: 9,
+            fontFamily: "'Courier New',monospace",
+            color: "#FFD0A8",
+            textAlign: "center",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            letterSpacing: 0.8,
+            fontWeight: 900,
+          }}
+        >
+          ⚠ {runIntegrity.label} · {runIntegrity.faultCount} RECOVERED STAGE{runIntegrity.faultCount === 1 ? "" : "S"}
+        </div>
+      )}
+
       {activeDrill && (
         <div style={{
-          position: "absolute", top: 30, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: centerStack.slots.drill, left: "50%", transform: "translateX(-50%)",
           maxWidth: "min(92vw, 520px)",
           background: "rgba(0,229,255,0.12)",
           border: "1px solid rgba(0,229,255,0.45)",
@@ -126,6 +162,7 @@ export default function HUD({
         }} title={activeDrill.detail}>
           <strong>{activeDrill.label}</strong>{" "}
           <span style={{ color: "#FFF" }}>{activeDrill.title}</span>
+          {drillProgress?.label && <span style={{ color: drillProgress.color }}> · {drillProgress.label}</span>}
           {practiceMastery?.label && <span style={{ color: practiceMastery.complete ? "#00FF88" : "#FFD166" }}> · {practiceMastery.label}</span>}
         </div>
       )}
@@ -133,7 +170,7 @@ export default function HUD({
       {/* Challenge score tracker */}
       {vsScore != null && (
         <div style={{
-          position: "absolute", top: 46, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: centerStack.slots.challenge, left: "50%", transform: "translateX(-50%)",
           fontSize: 10, fontFamily: "'Courier New',monospace", fontWeight: 900,
           background: "rgba(0,0,0,0.6)", padding: "3px 12px", borderRadius: 8,
           border: score >= vsScore ? "1px solid rgba(0,255,136,0.5)" : "1px solid rgba(255,100,0,0.4)",
@@ -149,7 +186,7 @@ export default function HUD({
 
       {Array.isArray(topGhosts) && topGhosts.length > 0 && (
         <div style={{
-          position: "absolute", top: vsScore != null ? 74 : 46, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: centerStack.slots.ghosts, left: "50%", transform: "translateX(-50%)",
           maxWidth: "min(92vw, 520px)", display: "flex", gap: 5, alignItems: "center", justifyContent: "center",
           background: "rgba(0,0,0,0.52)", border: "1px solid rgba(0,229,255,0.22)", borderRadius: 8,
           padding: "3px 8px", fontSize: 9, fontFamily: "'Courier New',monospace", color: "#BEEFFF",
@@ -166,7 +203,7 @@ export default function HUD({
 
       {weeklyRival && (
         <div style={{
-          position: "absolute", top: vsScore != null ? 102 : Array.isArray(topGhosts) && topGhosts.length > 0 ? 74 : 46, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: centerStack.slots.weeklyRival, left: "50%", transform: "translateX(-50%)",
           maxWidth: "min(92vw, 460px)",
           background: "rgba(18,0,28,0.66)", border: `1px solid ${score >= (weeklyRival.score || 0) ? "rgba(0,255,136,0.45)" : "rgba(204,68,255,0.4)"}`, borderRadius: 8,
           padding: "3px 9px", fontSize: 9, fontFamily: "'Courier New',monospace",
@@ -183,7 +220,7 @@ export default function HUD({
 
       {rivalPace && (
         <div style={{
-          position: "absolute", top: centerStackTop, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: centerStack.slots.rivalPace, left: "50%", transform: "translateX(-50%)",
           maxWidth: "min(92vw, 430px)",
           background: rivalPace.ahead ? "rgba(0,38,25,0.68)" : "rgba(31,16,0,0.68)",
           border: `1px solid ${rivalPace.ahead ? "rgba(0,255,136,0.42)" : "rgba(255,160,64,0.42)"}`,
@@ -208,7 +245,7 @@ export default function HUD({
         const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
         const ss = String(elapsed % 60).padStart(2, "0");
         return (
-          <div style={{ position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)", fontSize: 20, fontWeight: 900, color: "#00FF80", fontFamily: "'Courier New',monospace", letterSpacing: 3, textShadow: "0 0 12px rgba(0,255,128,0.6)", background: "rgba(0,0,0,0.55)", padding: "2px 12px", borderRadius: 8, border: "1px solid rgba(0,255,128,0.35)", whiteSpace: "nowrap" }}>
+          <div style={{ position: "absolute", top: centerStack.slots.speedrun, left: "50%", transform: "translateX(-50%)", fontSize: 20, fontWeight: 900, color: "#00FF80", fontFamily: "'Courier New',monospace", letterSpacing: 3, textShadow: "0 0 12px rgba(0,255,128,0.6)", background: "rgba(0,0,0,0.55)", padding: "2px 12px", borderRadius: 8, border: "1px solid rgba(0,255,128,0.35)", whiteSpace: "nowrap" }}>
             ⏱ {mm}:{ss}
           </div>
         );
@@ -216,7 +253,7 @@ export default function HUD({
 
       {/* Run modifier badge */}
       {runModifier && (
-        <div style={{ position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)", fontSize: 9, color: "#FFD700", background: "rgba(0,0,0,0.55)", padding: "2px 9px", borderRadius: 8, fontWeight: 700, letterSpacing: 1, border: "1px solid rgba(255,215,0,0.28)", whiteSpace: "nowrap" }} title={runModifier.desc}>
+        <div style={{ position: "absolute", top: centerStack.slots.runModifier, left: "50%", transform: "translateX(-50%)", fontSize: 9, color: "#FFD700", background: "rgba(0,0,0,0.55)", padding: "2px 9px", borderRadius: 8, fontWeight: 700, letterSpacing: 1, border: "1px solid rgba(255,215,0,0.28)", whiteSpace: "nowrap" }} title={runModifier.desc}>
           {runModifier.emoji} {runModifier.name.toUpperCase()}
         </div>
       )}

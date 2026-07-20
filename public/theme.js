@@ -5,7 +5,7 @@
   let stored = null;
   try { stored = localStorage.getItem(key); } catch {}
   let theme = params.get("theme");
-  if (!themes.includes(theme)) theme = themes.includes(stored) ? stored : (matchMedia("(prefers-color-scheme: light)").matches ? "porcelain-day" : "sewer-night");
+  if (!themes.includes(theme)) theme = themes.includes(stored) ? stored : "sewer-night";
 
   const apply = (next, persist = true) => {
     theme = themes.includes(next) ? next : "sewer-night";

@@ -38,6 +38,14 @@ describe("runSession", () => {
       modifier: "chaos",
       traceEvidence: { level: "rich", count: 7, durationFrames: 96, weaknessReasons: [] },
       traceReceipt: { status: "verified", label: "Replay Proof Ready", score: 92, level: "rich" },
+      integrityReceipt: {
+        status: "degraded",
+        onlineEligible: false,
+        label: "LOCAL ONLY · RUNTIME RECOVERY",
+        faultCount: 2,
+        occurrenceCount: 3,
+        stages: ["objective_director"],
+      },
     });
     expect(historyEntry).toMatchObject({
       mode: "cursed",
@@ -46,7 +54,15 @@ describe("runSession", () => {
       time: 301,
       traceReceipt: { status: "verified", score: 92 },
       traceEvidence: { level: "rich", count: 7 },
+      integrityReceipt: {
+        status: "degraded",
+        onlineEligible: false,
+        faultCount: 2,
+        occurrenceCount: 3,
+        stages: ["objective_director"],
+      },
     });
+    expect(createRunHistoryEntry({ integrityReceipt: { onlineEligible: true } })).not.toHaveProperty("integrityReceipt");
 
     const events = createDeathStudioEvents({
       score: 9999,

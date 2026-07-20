@@ -80,6 +80,8 @@ import { getRunAct } from "./utils/runNarrative.js";
 import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSummonsFor, createEnemyFrameIndex } from "./systems/frameIndex.js";
+import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
+import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -1733,6 +1735,7 @@ export default function CallOfDoodie() {
       killedByName: _killerEnemy?.name || null,
       traceEvidence: deathTraceEvidence,
       traceReceipt: deathTraceReceipt,
+      integrityReceipt: getRunIntegrityReceipt(gs),
     }));
     createDeathStudioEvents({
       score: gs.score,
@@ -1932,6 +1935,15 @@ export default function CallOfDoodie() {
   const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {
     // Practice runs never touch the leaderboard (UI hides the form; this is the backstop)
     if (gsRef.current?.practiceRun) return { submission: "skipped_practice", board: [] };
+    const integrityReceipt = getRunIntegrityReceipt(gsRef.current);
+    if (!integrityReceipt.onlineEligible) {
+      track("score_submit_integrity_skip", {
+        faultCount: integrityReceipt.faultCount,
+        occurrenceCount: integrityReceipt.occurrenceCount,
+        stages: integrityReceipt.stages,
+      });
+      return buildIntegrityLocalSubmissionResult(integrityReceipt, leaderboard);
+    }
     const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
     const sett = settingsRef.current;
     const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
@@ -2005,7 +2017,7 @@ export default function CallOfDoodie() {
       traceEvidence: result.traceEvidence || entry.traceEvidence || null,
     }).events.forEach(saveStudioGameEvent);
     return { ...result, globalRank };
-  }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed]);
+  }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed, leaderboard]);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
   const gameLoop = useCallback(() => {
@@ -2061,7 +2073,7 @@ export default function CallOfDoodie() {
       if (dist < 16) { const ang = Math.atan2(p.y - cy, p.x - cx); p.x = cx + Math.cos(ang) * 17; p.y = cy + Math.sin(ang) * 17; }
     });
     if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (cosmeticRandom() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
-    gs.trail = gs.trail.filter(t => { t.life--; return t.life > 0; });
+    gs.trail = stepAndCompactInPlace(gs.trail, t => { t.life--; return t.life > 0; });
 
     // ── Aim ──
     const ss = shootStickRef.current;
@@ -2570,7 +2582,13 @@ export default function CallOfDoodie() {
             }
           }
         }
-      } catch { /* objective failure must never crash the game loop */ }
+      } catch (error) {
+        recordRunIntegrityFault(gs, {
+          stage: "objective_director",
+          error,
+          wave: gs.currentWave,
+        });
+      }
       // Boss Rush: bosses start wave 4+ (3-wave warmup to let player gear up)
       const _bossInterval = gs.bossRushMode ? 1 : 5;
       const nextIsBoss = gs.routeForceBoss || (gs.bossRushMode
@@ -2792,7 +2810,7 @@ export default function CallOfDoodie() {
     }
 
     // ── Bullet movement ──
-    gs.bullets = gs.bullets.filter(b => {
+    gs.bullets = stepAndCompactInPlace(gs.bullets, b => {
       // Boomerang: curve outbound, then steer back to player
       if (b.boomerang) {
         if (!b.returning) {
@@ -2833,7 +2851,7 @@ export default function CallOfDoodie() {
     });
 
     // ── Enemy bullet movement ──
-    gs.enemyBullets = gs.enemyBullets.filter(eb => {
+    gs.enemyBullets = stepAndCompactInPlace(gs.enemyBullets, eb => {
       const _tdm = (gs.timeDilationTimer || 0) > 0 ? 0.2 : 1;
       eb.x += eb.vx * _tdm; eb.y += eb.vy * _tdm; eb.life--;
       const hitWall = (gs.obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
@@ -2865,7 +2883,7 @@ export default function CallOfDoodie() {
     }
 
     // ── Grenade logic ──
-    gs.grenades = gs.grenades.filter(g => {
+    gs.grenades = stepAndCompactInPlace(gs.grenades, g => {
       g.x += g.vx; g.y += g.vy; g.vx *= 0.96; g.vy *= 0.96; g.life--;
       if (g.life <= 0) {
         addParticles(gs, g.x, g.y, "#FF4500", 30);
@@ -3069,7 +3087,7 @@ export default function CallOfDoodie() {
           }
         }
       });
-      gs.enemies = gs.enemies.filter(en => en.health > -999);
+      gs.enemies = stepAndCompactInPlace(gs.enemies, en => en.health > -999);
       gs.screenShake = Math.max(gs.screenShake, 10);
     }
 
@@ -3390,7 +3408,7 @@ export default function CallOfDoodie() {
         }
       });
     });
-    gs.enemies = gs.enemies.filter(e => e.health > -999);
+    gs.enemies = stepAndCompactInPlace(gs.enemies, e => e.health > -999);
     if (achCheckRef.current) { checkAchievements(gs); checkDailyMissions(gs); achCheckRef.current = false; }
 
     // ── Flow field rebuild (every 30 frames or on significant player movement) ──
@@ -3938,7 +3956,7 @@ export default function CallOfDoodie() {
 
     // ── Pickup collection ──
     const pickupRange = perkModsRef.current.pickupRange || 30;
-    gs.pickups = gs.pickups.filter(pk => {
+    gs.pickups = stepAndCompactInPlace(gs.pickups, pk => {
       pk.life--;
       const d2 = Math.hypot(p.x - pk.x, p.y - pk.y);
       // ── Proximity mine: explode when player gets within 40px ──
@@ -4041,9 +4059,9 @@ export default function CallOfDoodie() {
     });
 
     // ── Particles / floats ──
-    gs.particles = gs.particles.filter(pt => { pt.x += pt.vx; pt.y += pt.vy; pt.vx *= 0.95; pt.vy *= 0.95; pt.life--; return pt.life > 0; });
-    gs.floatingTexts = gs.floatingTexts.filter(ft => { ft.y += ft.vy; ft.life--; return ft.life > 0; });
-    gs.dyingEnemies = (gs.dyingEnemies || []).filter(de => { de.life--; return de.life > 0; });
+    stepTransientEffectsInPlace(gs);
+
+
     if (gs.screenShake > 0) gs.screenShake *= 0.85;
     if (gs.muzzleFlash > 0) gs.muzzleFlash--;
     if (gs.damageFlash > 0) gs.damageFlash--;
@@ -4068,8 +4086,8 @@ export default function CallOfDoodie() {
     } else { gs._nearDeathActive = false; }
     if (gs.coinMultTimer > 0) { gs.coinMultTimer--; if (gs.coinMultTimer === 0) { gs.coinMultActive = false; } }
     if (gs.coinStreakTimer > 0) { gs.coinStreakTimer--; if (gs.coinStreakTimer === 0) { gs.coinStreakKills = 0; } }
-    if (gs.lightningArcs) gs.lightningArcs = gs.lightningArcs.filter(a => { a.life--; return a.life > 0; });
-    if (gs.beams) gs.beams = gs.beams.filter(bm => { bm.life--; return bm.life > 0; });
+
+
     gs._deathSoundsThisFrame = 0; // reset death-sound throttle each frame
     frameCountRef.current++;
 
@@ -4786,6 +4804,7 @@ export default function CallOfDoodie() {
         careerBestWave={gsRef.current?.careerBest?.wave || 0}
         practiceDrill={gsRef.current?.practiceDrill || null}
         runDrill={gsRef.current?.activeRunDrill || null}
+        runIntegrity={getRunIntegrityReceipt(gsRef.current)}
         practiceMastery={gsRef.current?.practiceMastery || null}
       />
 

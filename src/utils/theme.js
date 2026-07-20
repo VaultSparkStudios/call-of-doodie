@@ -45,11 +45,11 @@ export function isTheme(value) {
   return Object.hasOwn(THEMES, value);
 }
 
-export function resolveTheme({ query = "", stored = null, prefersLight = false } = {}) {
+export function resolveTheme({ query = "", stored = null } = {}) {
   const requested = new URLSearchParams(query.startsWith("?") ? query : `?${query}`).get("theme");
   if (isTheme(requested)) return requested;
   if (isTheme(stored)) return stored;
-  return prefersLight ? "porcelain-day" : "sewer-night";
+  return "sewer-night";
 }
 
 export function readTheme(win = globalThis.window) {
@@ -59,7 +59,6 @@ export function readTheme(win = globalThis.window) {
   return resolveTheme({
     query: win.location?.search || "",
     stored,
-    prefersLight: Boolean(win.matchMedia?.("(prefers-color-scheme: light)")?.matches),
   });
 }
 

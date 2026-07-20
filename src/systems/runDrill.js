@@ -129,3 +129,35 @@ export function buildDrillLaunchPayload(drill, contract, {
     acceptedAt,
   };
 }
+
+
+export function buildRunDrillLiveProgress(activeDrill, {
+  wave = 1,
+  score = 0,
+} = {}) {
+  if (!activeDrill?.receiptId) return null;
+  const baselineWave = Math.max(1, whole(activeDrill.baseline?.wave, 1));
+  const baselineScore = whole(activeDrill.baseline?.score, 0);
+  const observedWave = Math.max(1, whole(wave, 1));
+  const observedScore = whole(score, 0);
+  const comparableScore = activeDrill.launchKind !== "rematch";
+  const waveDelta = observedWave - baselineWave;
+  const scoreDelta = comparableScore ? observedScore - baselineScore : null;
+  const passed = waveDelta > 0 || (waveDelta === 0 && comparableScore && scoreDelta > 0);
+  const held = waveDelta === 0 && (!comparableScore || scoreDelta === 0);
+  const status = passed ? "passed" : held ? "held" : "before";
+  return {
+    status,
+    baseline: { wave: baselineWave, score: baselineScore },
+    observed: { wave: observedWave, score: observedScore },
+    waveDelta,
+    scoreDelta,
+    claim: "observed-progress-not-causality",
+    label: status === "passed"
+      ? `BASELINE PASSED · W${observedWave}`
+      : status === "held"
+        ? `BASELINE HELD · W${observedWave}`
+        : `BEFORE BASELINE · W${observedWave}/${baselineWave}`,
+    color: status === "passed" ? "#7CFFBE" : status === "held" ? "#FFD166" : "#BFF7FF",
+  };
+}

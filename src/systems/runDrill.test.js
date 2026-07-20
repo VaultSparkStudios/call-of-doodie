@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildActiveRunDrill, buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillOutcomeReceipt } from "./runDrill.js";
+import { buildActiveRunDrill, buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillLiveProgress, buildRunDrillOutcomeReceipt } from "./runDrill.js";
 
 describe("next-run drill continuity", () => {
   const drill = { id: "strafe", title: "Strafe the burst", detail: "Move perpendicular." };
@@ -77,6 +77,36 @@ describe("next-run drill continuity", () => {
     });
     expect(buildRunDrillOutcomeReceipt(active, { wave: 10, score: 0 })).toMatchObject({
       status: "held", scoreDelta: null, masteryClaim: "observed-outcome-only",
+    });
+  });
+  it("reports honest live progress against the accepted baseline", () => {
+    const active = buildActiveRunDrill({
+      drill: buildDrillLaunchPayload(drill, contract, { baselineWave: 7, baselineScore: 1200, acceptedAt: 123 }),
+    });
+    expect(buildRunDrillLiveProgress(active, { wave: 6, score: 500 })).toMatchObject({
+      status: "before", label: "BEFORE BASELINE · W6/7", waveDelta: -1,
+      claim: "observed-progress-not-causality",
+    });
+    expect(buildRunDrillLiveProgress(active, { wave: 7, score: 1200 })).toMatchObject({
+      status: "held", label: "BASELINE HELD · W7",
+    });
+    expect(buildRunDrillLiveProgress(active, { wave: 7, score: 1201 })).toMatchObject({
+      status: "passed", label: "BASELINE PASSED · W7", scoreDelta: 1,
+    });
+    expect(buildRunDrillLiveProgress(active, { wave: 8, score: 100 })).toMatchObject({
+      status: "passed", waveDelta: 1,
+    });
+  });
+
+  it("never compares reset REMATCH scores during live progress", () => {
+    const active = buildActiveRunDrill({
+      drill: buildDrillLaunchPayload(drill, contract, { baselineWave: 10, baselineScore: 9000, launchKind: "rematch", acceptedAt: 123 }),
+    });
+    expect(buildRunDrillLiveProgress(active, { wave: 10, score: 0 })).toMatchObject({
+      status: "held", scoreDelta: null,
+    });
+    expect(buildRunDrillLiveProgress(active, { wave: 9, score: 99999 })).toMatchObject({
+      status: "before", scoreDelta: null,
     });
   });
 });

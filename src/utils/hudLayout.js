@@ -18,3 +18,46 @@ export function isHudDebugEnabled(search = globalThis.location?.search || "", st
     return false;
   }
 }
+
+
+export function getHudCenterStackLayout({
+  isMobile = false,
+  hasIntegrityWarning = false,
+  hasDrill = false,
+  hasSpeedrun = false,
+  hasRunModifier = false,
+  hasChallenge = false,
+  hasGhosts = false,
+  hasWeeklyRival = false,
+  hasRivalPace = false,
+} = {}) {
+  const heights = {
+    integrity: 30,
+    drill: 26,
+    speedrun: 36,
+    runModifier: 24,
+    challenge: 24,
+    ghosts: 24,
+    weeklyRival: 24,
+    rivalPace: 32,
+  };
+  const enabled = [
+    ["integrity", hasIntegrityWarning],
+    ["drill", hasDrill],
+    ["speedrun", hasSpeedrun],
+    ["runModifier", hasRunModifier],
+    ["challenge", hasChallenge],
+    ["ghosts", hasGhosts],
+    ["weeklyRival", hasWeeklyRival],
+    ["rivalPace", hasRivalPace],
+  ];
+  const gap = isMobile ? 3 : 4;
+  let cursor = isMobile ? 36 : 34;
+  const slots = {};
+  for (const [id, active] of enabled) {
+    if (!active) continue;
+    slots[id] = cursor;
+    cursor += heights[id] + gap;
+  }
+  return { slots, heights, gap, bottom: cursor };
+}
