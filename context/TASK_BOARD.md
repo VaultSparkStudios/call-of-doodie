@@ -28,6 +28,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:1] **DONE S125 second-order** Dark-default global bootstrap — Sewer Night owns fresh visits across every app entry surface and static page; explicit Porcelain Day remains available.
 - [x] [SIL:1] **DONE S125 second-order** Default-theme visual gate — light-OS fresh visits now join the two-theme/five-route/three-width matrix, which passes 255/255 locally.
 - [x] [SIL:2] **DONE S125 second-order** Post-push Dependabot ratchet — replaced vulnerable dev-only overrides with trusted patched `js-yaml@4.3.0` and `brace-expansion@1.1.16`; clean install, 685 tests, build, npm audit 0, and supply-chain incident scan pass.
+- [x] [SIL:1] **DONE S125 second-order** Node 24 action runtime pins — replaced deprecated floating Node 20 action tags with exact official Node 24 commit pins for checkout, setup-node, and Cloudflare Wrangler; exact-main CI is the acceptance gate.
 - [x] [SIL:1] **DONE S124** Truthful closeout derivation — autopilot verifies health read-only, and the board derives committed write-backs plus verified staging from authoritative sources; regression coverage enforces the boundary.
 - [x] [SIL:1] **DONE S124** Canonical SIL history truth — one parser now drives startup closeout age and forecast inputs across both supported formats.
 - [x] [SIL:1] **DONE S124** Evidence-backed Aim Check — keyboard, pointer/touch, and gamepad observations must reach 4/4 before a receipt can be saved.

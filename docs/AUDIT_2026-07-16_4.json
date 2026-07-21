@@ -40,7 +40,8 @@
       "innovation-title-identity",
       "stale-browser-qa-decomposition",
       "dark-default-global-bootstrap",
-      "post-push-dependabot-ratchet"
+      "post-push-dependabot-ratchet",
+      "node24-action-runtime-pins"
     ]
   },
   "gameLoopReview": {

@@ -38,7 +38,7 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 13↑                      ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 14↑                      ║
 ║    Last active: 0d  ·  Last closeout: 5d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
@@ -71,7 +71,7 @@
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         685/685 passing                                ║
-║  ✓  Velocity      13 ↑  ·  Debt: ↓                               ║
+║  ✓  Velocity      14 ↑  ·  Debt: ↓                               ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44175 FORGE  ·  5d old                         ║
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  13↑  (last 5 sessions)                       ║
+║  Velocity:   ▁▄▄▂▆  14↑  (last 5 sessions)                       ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝

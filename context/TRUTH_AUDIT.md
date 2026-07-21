@@ -42,7 +42,7 @@ Last reviewed: 2026-07-16
 
 ## 2026-07-16 — Session 125 — Competitive, dependency, theme, and public-rights truth
 
-- Audit truth — `docs/AUDIT_2026-07-16_4.json` / `.md` contain six live-verified primary items and seven implemented second-order innovations with shipped execution evidence.
+- Audit truth — `docs/AUDIT_2026-07-16_4.json` / `.md` contain six live-verified primary items and eight implemented second-order innovations with shipped execution evidence.
 - Competition truth — a recovered objective/director fault is bounded and sanitized but permanently local-only for that run; global submission fails closed and history preserves the receipt.
 - Dependency truth — a coherent parsed tree is insufficient if npm exited unexpectedly; only exit 0 or an optional-only exit 1 can pass. Post-push GitHub alerts additionally forced exact patched `js-yaml@4.3.0` and `brace-expansion@1.1.16`; clean install, npm audit 0, and Studio incident scan pass.
 - Runtime truth — hot transient collections compact in place, preserving array identity, survivor order, and one-step-per-snapshot semantics.
@@ -52,6 +52,7 @@ Last reviewed: 2026-07-16
 - Visual-review boundary — machine browser evidence is real; direct AI image inspection is not claimed because local image paths failed Windows CryptUnprotectData.
 - Validation truth — 685/685 tests, strict lint, build, public 13/13, dependency/security/npm-audit, replay/media, pointer E2E 2/2, and diff checks passed directly.
 - Production truth — security-ratchet SHA `701f52c` passed deploy `29804998578` and brief `29804998598`; Dependabot has zero open alerts; live shell 5/5, cutover 5/5, replay 3/3, and production visual audit 255/255 pass.
+- CI-runtime truth — every checkout, setup-node, and Wrangler use is exact-pinned to an official action commit whose manifest declares Node 24; the final exact-main CI run is the acceptance receipt.
 - Release truth — engineering is green; SPARKED remains NO-GO pending physical, inbound-mail, production-data, analytics-scope, publication, direct-pixel, and founder evidence.
 
 Overall status: green engineering closeout; NO-GO SPARKED

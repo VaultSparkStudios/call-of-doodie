@@ -14,6 +14,7 @@
 5. **stale-browser-qa-decomposition** — Replaced the obsolete “CLI cannot drive browser” blocker with verified automated coverage and a narrowly honest physical-device/media remainder.
 6. **dark-default-global-bootstrap** — Restored Sewer Night as the explicit fresh-visit default across React, callsign/auth entry surfaces, and static legal pages while retaining an intentional Porcelain Day selection; expanded the visual audit with light-OS/default-theme assertions.
 7. **post-push-dependabot-ratchet** — Consumed GitHub's post-push high-severity signal, trust-gated and pinned patched dev-only transitive overrides, then re-ran clean install, full tests, lint, build, dependency/security, npm-audit, and studio supply-chain gates.
+8. **node24-action-runtime-pins** — Eliminated GitHub's Node 20 compatibility fallback by pinning checkout, setup-node, and Wrangler deploy actions to exact, official Node 24 commits; workflow YAML and the resulting exact-main CI run must pass without runtime-deprecation annotations.
 
 ## Remaining Ranked Candidates
 

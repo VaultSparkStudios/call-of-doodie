@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 125 shipped six live-premise audit items and seven second-order innovations: fail-closed run integrity, collision-free HUD/drill feedback, in-place transient lifecycles, dependency/process truth, proprietary /ip/, truthful generated queues, global Sewer Night default, and a post-push Dependabot ratchet; 685/685 tests green.",
+  "currentFocus": "Session 125 shipped six live-premise audit items and eight second-order innovations: fail-closed run integrity, collision-free HUD/drill feedback, in-place transient lifecycles, dependency/process truth, proprietary /ip/, truthful generated queues, global Sewer Night default, a post-push Dependabot ratchet, and exact Node 24 action pins; 685/685 tests green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -72,7 +72,7 @@
   "silSession": 125,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 13,
+  "silVelocity": 14,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-16",
   "currentSession": 125,

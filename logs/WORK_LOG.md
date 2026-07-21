@@ -927,7 +927,7 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 ## 2026-07-16 — Session 125 — Saturated integrity, runtime, public-contract, and dark-default arc
 
 - Pulled/rebased `origin/main` first, ran the startup lock/context/secrets/blocker/canon/Ark gates, and verified the 664-test baseline plus the live code premises before auditing.
-- Generated `docs/AUDIT_2026-07-16_4.json` / `.md`; shipped all six ranked items and six second-order innovations without touching a sibling repo tree.
+- Generated `docs/AUDIT_2026-07-16_4.json` / `.md`; shipped all six ranked items and eight second-order innovations without touching a sibling repo tree.
 - Added fail-closed competitive run-integrity receipts; deterministic HUD airspace; live drill progress; in-place transient lifecycle compaction; dependency-tree/process truth; and a proprietary-first `/ip/` human/agent contract.
 - Fixed genius-list absent-limit parsing, innovation canonical-title dedupe, degraded run-history continuity, and a stale browser blocker decomposition.
 - Responded to founder visual direction by making Sewer Night the global fresh-visit default while preserving explicit Porcelain Day; expanded browser auditing to test light-OS defaults on every route.
@@ -935,6 +935,7 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - Deployed exact SHA `a9ae2b9` to isolated Cloudflare staging; Actions deploy `29796935326` and brief `29796935367` passed, hosted shell passed 5/5, and hosted visual evidence passed 255/255.
 - After main push, investigated two fresh high Dependabot alerts instead of closing out on npm-audit alone; trust-gated and pinned patched `js-yaml@4.3.0` / `brace-expansion@1.1.16`, terminated the leaked repo preview process holding esbuild, and revalidated the clean dependency tree, 685 tests, lint, build, security, and Studio supply-chain scan.
 - Final security-ratchet SHA `701f52c` passed Cloudflare deploy `29804998578` and brief `29804998598`; GitHub reports zero open Dependabot alerts and production passed shell 5/5, cutover 5/5, replay 3/3, and visual 255/255.
+- Removed the final CI deprecation warning by pinning checkout v6.1.0, setup-node v6.5.0, and Wrangler Action v4.0.0 to verified official Node 24 commit SHAs across every workflow.
 - Honest deferrals: direct AI pixel inspection failed at the host CryptUnprotectData boundary; physical hardware/full-run media, inbound email, production metrics, analytics scope, publication/community, and founder launch approval remain external evidence gates.
 
 Intent outcome: achieved for every agent-owned premise; Unified Genius List saturated and second-order pack implemented.

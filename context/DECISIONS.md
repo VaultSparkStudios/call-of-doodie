@@ -642,3 +642,9 @@ Decision: Fresh visits start in Sewer Night on every entry surface regardless of
 Rationale: The project's visual identity and first-load readability are intentionally dark-first. A system-preference fallback silently shifted the standard website into an unreviewed light presentation and left pre-home entry surfaces outside the theme contract.
 
 Trade-off accepted: The site does not mirror the operating-system color preference automatically; the visible theme toggle preserves user agency and durable preference.
+
+## 2026-07-16 — Session 125 — CI actions use mature Node 24 lines and immutable commits
+
+Decision: Pin official `actions/checkout` v6.1.0, `actions/setup-node` v6.5.0, and `cloudflare/wrangler-action` v4.0.0 by exact commit SHA. Do not retain Node 20 compatibility fallback tags or adopt release-day v7 tags merely because they are newest.
+
+Rationale: GitHub's exact-main run exposed the runtime deprecation after product closeout. Established Node 24 lines remove the warning, immutable commits reduce action supply-chain drift, and exact-main CI proves compatibility with this repository's deploy contract.
