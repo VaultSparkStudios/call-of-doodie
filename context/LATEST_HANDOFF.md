@@ -13,7 +13,7 @@
 - Public contract 13/13; dependency tree coherent (18 declared roots, two lockfile-optional platform packages); security release gate and npm audit 0 — PASS.
 - Patched override verification — clean `npm ci`; exact `js-yaml@4.3.0` / `brace-expansion@1.1.16`; full 685 tests, lint, build, supply-chain incident scan, and security gate — PASS.
 - Final production — security-ratchet SHA `701f52c` passed deploy run `29804998578` and brief run `29804998598`; Dependabot reports zero open alerts; live shell 5/5, cutover 5/5, replay trust 3/3, and production visual audit 255/255 passed.
-- CI runtime currency — all checkout, setup-node, and Wrangler uses are exact official Node 24 commit pins; final exact-main run is the acceptance receipt.
+- CI runtime currency — checkout, setup-node, Wrangler, and Supabase setup are exact official Node 24-compatible commit pins; Supabase CLI is trust-reviewed and fixed at 2.109.1; final exact-main runs are the acceptance receipt.
 - Replay state/edge fixtures 4/4 each; pointer/browser E2E 2/2 — PASS.
 - Local browser audit — 255/255 across fresh light-OS defaults plus two selectable themes, five routes, and three widths.
 - Isolated staging — Cloudflare deploy run `29796935326` and brief-format run `29796935367` passed for `a9ae2b9`; hosted shell 5/5 and hosted visual audit 255/255 passed at `https://session-125-staging.call-of-doodie.pages.dev/`.

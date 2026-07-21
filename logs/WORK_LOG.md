@@ -936,6 +936,7 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - After main push, investigated two fresh high Dependabot alerts instead of closing out on npm-audit alone; trust-gated and pinned patched `js-yaml@4.3.0` / `brace-expansion@1.1.16`, terminated the leaked repo preview process holding esbuild, and revalidated the clean dependency tree, 685 tests, lint, build, security, and Studio supply-chain scan.
 - Final security-ratchet SHA `701f52c` passed Cloudflare deploy `29804998578` and brief `29804998598`; GitHub reports zero open Dependabot alerts and production passed shell 5/5, cutover 5/5, replay 3/3, and visual 255/255.
 - Removed the final CI deprecation warning by pinning checkout v6.1.0, setup-node v6.5.0, and Wrangler Action v4.0.0 to verified official Node 24 commit SHAs across every workflow.
+- The first exact-main verification exposed `supabase/setup-cli@v1` as a remaining Node 20 fallback; upgraded it to exact official v3.0.0 and trust-reviewed/pinned the downloaded Supabase CLI at 2.109.1 before re-running CI.
 - Honest deferrals: direct AI pixel inspection failed at the host CryptUnprotectData boundary; physical hardware/full-run media, inbound email, production metrics, analytics scope, publication/community, and founder launch approval remain external evidence gates.
 
 Intent outcome: achieved for every agent-owned premise; Unified Genius List saturated and second-order pack implemented.

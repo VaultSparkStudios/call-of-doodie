@@ -52,7 +52,7 @@ Last reviewed: 2026-07-16
 - Visual-review boundary — machine browser evidence is real; direct AI image inspection is not claimed because local image paths failed Windows CryptUnprotectData.
 - Validation truth — 685/685 tests, strict lint, build, public 13/13, dependency/security/npm-audit, replay/media, pointer E2E 2/2, and diff checks passed directly.
 - Production truth — security-ratchet SHA `701f52c` passed deploy `29804998578` and brief `29804998598`; Dependabot has zero open alerts; live shell 5/5, cutover 5/5, replay 3/3, and production visual audit 255/255 pass.
-- CI-runtime truth — every checkout, setup-node, and Wrangler use is exact-pinned to an official action commit whose manifest declares Node 24; the final exact-main CI run is the acceptance receipt.
+- CI-runtime truth — checkout, setup-node, Wrangler, and Supabase setup are exact-pinned to official Node 24-compatible commits; the action-downloaded Supabase CLI is trust-reviewed and fixed at 2.109.1; final exact-main logs are the acceptance receipt.
 - Release truth — engineering is green; SPARKED remains NO-GO pending physical, inbound-mail, production-data, analytics-scope, publication, direct-pixel, and founder evidence.
 
 Overall status: green engineering closeout; NO-GO SPARKED

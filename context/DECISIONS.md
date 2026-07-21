@@ -645,6 +645,6 @@ Trade-off accepted: The site does not mirror the operating-system color preferen
 
 ## 2026-07-16 — Session 125 — CI actions use mature Node 24 lines and immutable commits
 
-Decision: Pin official `actions/checkout` v6.1.0, `actions/setup-node` v6.5.0, and `cloudflare/wrangler-action` v4.0.0 by exact commit SHA. Do not retain Node 20 compatibility fallback tags or adopt release-day v7 tags merely because they are newest.
+Decision: Pin official `actions/checkout` v6.1.0, `actions/setup-node` v6.5.0, `cloudflare/wrangler-action` v4.0.0, and `supabase/setup-cli` v3.0.0 by exact commit SHA. Pin the action-downloaded Supabase CLI to trust-reviewed `2.109.1`. Do not retain Node 20 compatibility fallback tags or adopt release-day v7 tags merely because they are newest.
 
 Rationale: GitHub's exact-main run exposed the runtime deprecation after product closeout. Established Node 24 lines remove the warning, immutable commits reduce action supply-chain drift, and exact-main CI proves compatibility with this repository's deploy contract.
