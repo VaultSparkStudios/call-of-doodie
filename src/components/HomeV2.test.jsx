@@ -342,4 +342,80 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  it("renders sticky bottom nav on mobile with CAREER, CODEX, PLAY, SETTINGS, SUPPORT", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    expect(nav).toBeTruthy();
+    expect(nav.getAttribute("aria-label")).toBe("Main navigation");
+    const labels = nav.textContent;
+    expect(labels).toContain("CAREER");
+    expect(labels).toContain("CODEX");
+    expect(labels).toContain("PLAY");
+    expect(labels).toContain("SETTINGS");
+    expect(labels).toContain("SUPPORT");
+  });
+
+  it("does not render sticky bottom nav on desktop", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={false} />);
+    });
+    expect(container.querySelector("[data-testid='mobile-bottom-nav']")).toBeNull();
+  });
+
+  it("mobile PLAY button in nav calls onStart", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onStart = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} onStart={onStart} />);
+    });
+    const playBtn = container.querySelector("[data-testid='mobile-play-btn']");
+    expect(playBtn).toBeTruthy();
+    await act(async () => { playBtn.click(); });
+    expect(onStart).toHaveBeenCalledTimes(1);
+  });
+
+  it("mobile CAREER tab opens bottom sheet panel and CODEX tab toggles it", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+    expect(container.querySelector("[data-testid='mobile-panel-overlay']")).toBeNull();
+
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    const careerBtn = [...nav.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "Career");
+    await act(async () => { careerBtn.click(); });
+    expect(container.querySelector("[data-testid='mobile-panel-overlay']")).toBeTruthy();
+
+    // Clicking same tab again closes it
+    await act(async () => { careerBtn.click(); });
+    expect(container.querySelector("[data-testid='mobile-panel-overlay']")).toBeNull();
+  });
+
+  it("hides inline desktop tab row on mobile", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+    // The inline tabsRow/tabBody section is not rendered on mobile
+    // (tabs appear only in the sticky nav + bottom sheet, not inline)
+    const inlineTabBtns = [...container.querySelectorAll("button")].filter(b =>
+      ["📊 CAREER", "📖 CODEX", "⚙ SETTINGS", "❤️ SUPPORT"].includes(b.textContent.trim())
+    );
+    expect(inlineTabBtns).toHaveLength(0);
+  });
 });
