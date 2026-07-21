@@ -36,7 +36,7 @@
     {
       "status": "green",
       "type": "deploy",
-      "command": "GitHub Actions staging Deploy to Cloudflare Pages 29796935326; brief-format 29796935367"
+      "command": "staging deploy 29796935326 + brief 29796935367; production security-ratchet deploy 29804998578 + brief 29804998598; Dependabot open alerts 0"
     },
     {
       "status": "green",

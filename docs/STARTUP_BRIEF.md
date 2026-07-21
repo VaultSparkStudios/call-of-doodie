@@ -26,7 +26,7 @@
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://session-125-staging.call-of-doodi ✓   ║
 ║  Unit tests    → npm test — 685/685 across 89 files ✓            ║
-║  deploy       → GitHub Actions staging Deploy to Cloudflare  ✓   ║
+║  deploy       → staging deploy 29796935326 + brief 297969353 ✓   ║
 ║  production-smoke → npm run live:site-check ✓                    ║
 ║  production-smoke → npm run post-cutover:smoke ✓                 ║
 ╚════════════════════════════════════════════════════════════════╝

@@ -51,6 +51,7 @@ Last reviewed: 2026-07-16
 - Staging truth — exact SHA `a9ae2b9` passed Cloudflare deploy run `29796935326`, brief-format run `29796935367`, hosted shell 5/5, and hosted visual checks 255/255 at the bounded Session 125 preview.
 - Visual-review boundary — machine browser evidence is real; direct AI image inspection is not claimed because local image paths failed Windows CryptUnprotectData.
 - Validation truth — 685/685 tests, strict lint, build, public 13/13, dependency/security/npm-audit, replay/media, pointer E2E 2/2, and diff checks passed directly.
+- Production truth — security-ratchet SHA `701f52c` passed deploy `29804998578` and brief `29804998598`; Dependabot has zero open alerts; live shell 5/5, cutover 5/5, replay 3/3, and production visual audit 255/255 pass.
 - Release truth — engineering is green; SPARKED remains NO-GO pending physical, inbound-mail, production-data, analytics-scope, publication, direct-pixel, and founder evidence.
 
 Overall status: green engineering closeout; NO-GO SPARKED
