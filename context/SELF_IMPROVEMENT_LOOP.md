@@ -272,11 +272,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=5 canonical parsed sessions]
+Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=6 canonical parsed sessions]
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-16 | Session 124 | Total: 1000/1000 | Velocity: 9 | protocolVelocity: 9
+Last session: 2026-07-16 | Session 125 | Total: 1000/1000 | Velocity: 12 | protocolVelocity: 12
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1767,3 +1767,28 @@ Brainstorm:
 1. Physical evidence bundle — serialize one real PWA install/relaunch and one controller pass into the existing input/PWA receipts. High probability with hardware.
 2. Drill-specific mechanics telemetry — compare target-specific events (dash retained, reload timing, wall contact) when those events become reliably captured, without causal overclaiming. Medium probability.
 3. Backend verification receipt endpoint — return a minimal signed supporter-status receipt through Obelisk when the unified identity plane is active. Medium probability after auth trigger.
+## 2026-07-16 — Session 125 | Total: 1000/1000 | Velocity: 12 | Debt: ↓
+
+SIL +12: Shipped six live-premise audit items and six second-order innovations in one continuous mission, including the founder-directed global Sewer Night default and a fresh-visit visual assertion matrix.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Full 685/685 suite, strict lint, build, dependency/public/security/replay/media/E2E gates, and diff checks are green. |
+| Creative Alignment | 100 | same | Sewer Night again owns the standard first impression; public provenance and parody boundaries are project-specific and proprietary-first. |
+| Momentum | 100 | up | Six primary and six second-order items shipped without a phase handback; no honest repo-executable genius item remains. |
+| Engagement | 100 | up | Live drill progress closes the coaching loop, while collision-free HUD airspace keeps compound modes readable. |
+| Process Quality | 100 | up | Every premise was checked against live code; failed command status, default-theme behavior, and generated-list identity all fail truthful. |
+| Cross-Repo Coherence | 100 | same | No sibling repo was edited; the sitemap checker defect is transported through Ark cargo. |
+| Security Posture | 100 | up | Degraded runs cannot submit globally, dependency state fails closed, security release audit passes, and npm audit reports zero vulnerabilities. |
+| Ecosystem Integration | 100 | up | Human/agent IP discovery, run-history receipts, security gates, and visual receipts share their authoritative sources. |
+| Capital Efficiency | 100 | same | All intelligence and verification remain local/deterministic; no paid service or variable per-user cost was added. |
+| Automation Coverage | 100 | up | Coverage rose to 685 tests and browser evidence to 255 checks, adding default-theme, process-exit, title-identity, integrity, HUD, drill, and lifecycle boundaries. |
+
+Top win: recovered runtime faults now preserve play continuity without ever laundering a divergent run into global competition.
+Top gap: SPARKED still needs physical hardware/media, inbound delivery, production data, scoped analytics, publication/direct-pixel, and founder evidence.
+Intent outcome: Achieved for every agent-owned premise; all remaining work is explicitly evidence- or decision-gated.
+
+Brainstorm:
+1. Signed local-only fault replay capsule — attach the bounded fault stage plus deterministic stream fingerprint to a shareable debug receipt without exposing user data. Medium probability after replay schema review.
+2. Adaptive HUD density rehearsal — generate deterministic maximal-surface fixtures for every mode combination and compare allocation envelopes at new viewport classes. High probability when another HUD surface lands.
+3. Provenance-linked asset explorer — derive a human-readable gallery from `assets/visual-assets.json` and `/ip/` without duplicating ownership truth. Medium probability before launch.

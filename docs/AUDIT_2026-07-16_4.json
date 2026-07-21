@@ -1,0 +1,368 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v2",
+  "generatedAt": "2026-07-16",
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "product + infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-16",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "combinedPriority": 163.4,
+    "top3": [
+      "competitive-integrity-fault-boundary",
+      "hud-airspace-allocator",
+      "dependency-tree-truth-gate"
+    ],
+    "livePremiseVerification": true,
+    "specialtyLenses": [
+      "game-loop review",
+      "app release gate",
+      "infrastructure rubric"
+    ],
+    "baseline": {
+      "tests": "664/664 across 84 files",
+      "lint": "pass",
+      "publicContract": "12/12",
+      "security": "npm audit 0",
+      "dependencyTree": "invalid"
+    },
+    "innovationReserve": [
+      "competitive-integrity-fault-boundary",
+      "hud-airspace-allocator",
+      "live-drill-progress-cue"
+    ],
+    "secondOrderImplemented": [
+      "genius-list-default-top-argument-truth",
+      "degraded-run-history-integrity-receipt",
+      "dependency-process-status-fails-closed",
+      "innovation-title-identity",
+      "stale-browser-qa-decomposition",
+      "dark-default-global-bootstrap"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 93,
+    "progression": 92,
+    "sessionEngagement": 90,
+    "retention": 95,
+    "soulFidelity": 94,
+    "evidence": "No docs/PLAYTESTS directory exists; scores are source/test-evidence reviews, not claimed player-research findings.",
+    "prioritizedFindings": [
+      "Top-center HUD surfaces use unrelated absolute offsets, so drills, speedrun timing, modifiers, rivalry and challenge cards can overlap during real compound modes.",
+      "Accepted coaching survives into the run but its HUD chip gives no live evidence of progress toward the prior wave/score baseline.",
+      "Recovered optional-system faults are swallowed while the competitive submission path remains eligible, weakening replay/leaderboard trust."
+    ],
+    "nextThreeMoves": [
+      "Fail score submission closed after a recovered competitive-integrity fault.",
+      "Allocate every top-center HUD surface through one deterministic stack.",
+      "Turn the active drill chip into an observed live-baseline progress cue."
+    ]
+  },
+  "infrastructureReview": {
+    "observabilityHonesty": 88,
+    "runtimeOrganization": 72,
+    "automationCoverage": 90,
+    "securityPosture": 100,
+    "costDiscipline": 100,
+    "topRisk": "The local dependency tree is invalid against package-lock and critical game-loop catches have no competitive-integrity receipt.",
+    "evidence": [
+      "npm ls --depth=0 exits 1: stale @supabase/supabase-js and @vitest/coverage-v8 plus extraneous packages.",
+      "src/App.jsx is 4,915 lines; transient lifecycle filters still allocate replacement arrays each frame.",
+      "The security release gate passes but only checks package-lock presence and npm audit, not installed-tree coherence."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED; implementation may continue against isolated staging",
+    "green": [
+      "current main deployment and brief-format workflows succeeded",
+      "public contract 12/12",
+      "security release gate and npm audit 0",
+      "footer completeness green",
+      "CANON-029 cost-neutral and cost-bleeder gates green",
+      "rollback and responsive parity documents exist",
+      "machine visual matrix previously passed 192/192"
+    ],
+    "red": [
+      "repo-side sitemap compliance scores 7/10 and the required /ip surface is genuinely absent",
+      "dependency tree is invalid against the lockfile",
+      "direct AI pixel inspection remains tool-blocked by Windows CryptUnprotectData",
+      "analytics capability/project-scoped Sentry DSN missing",
+      "on-domain inbound delivery unverified",
+      "physical PWA/gamepad evidence absent",
+      "production Lighthouse/funnel evidence absent",
+      "no founder launch approval"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "security / competitive trust / observability honesty",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 34.8,
+      "slug": "competitive-integrity-fault-boundary",
+      "title": "Fail leaderboard eligibility closed when the live simulation recovers from a score-affecting stage fault.",
+      "status": "shipped",
+      "why": "Live App.jsx inspection found the dynamic objective/wave transition stage catches every exception and silently continues, while submitScore remains online-eligible. A recovered run can therefore diverge from intended deterministic content without carrying any integrity receipt.",
+      "recipe": "Add a pure bounded run-integrity ledger with stage, sanitized reason, wave and timestamp; record recovered objective/director faults; expose a compact HUD/death-screen LOCAL ONLY receipt only when degraded; short-circuit online submission while preserving local history and explicit feedback; test dedupe, bounds, clean eligibility, degraded eligibility and non-causality/no-fabrication language.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1.5,
+          "recipe": "Mark the run degraded in the existing catch and block online submission."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Add a pure fault receipt, bounded dedupe and focused submission tests."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Ship end-to-end fault capture, HUD/debrief explanation, local-history preservation, fail-closed online eligibility and regression coverage."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "UI / UX / combat readability / accessibility",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 31.1,
+      "slug": "hud-airspace-allocator",
+      "title": "Replace independent top-center offsets with a deterministic combat-airspace stack.",
+      "status": "shipped",
+      "why": "HUD.jsx hard-codes active drill at top 30, speedrun and run modifier at top 28, challenge at 46, then derives ghost/rival offsets without accounting for those surfaces. Compound modes can render multiple cards on the same pixels, obscuring gameplay and assistive text.",
+      "recipe": "Create a pure getHudCenterStackLayout contract that reserves ordered slots for drill, speedrun/modifier, challenge, ghost pack, weekly rival and rival pace; collapse mutually exclusive timer/modifier states intentionally; wire every surface to its slot; add desktop/mobile/compound-mode tests and accessible titles without changing game balance.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Offset the known collisions with conditional arithmetic."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Centralize ordered offsets in hudLayout and cover major combinations."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship a deterministic responsive stack contract for every current top-center surface with compound-mode regression coverage."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "security / reproducibility / automation",
+      "effortHours": 2.5,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 27.4,
+      "slug": "dependency-tree-truth-gate",
+      "title": "Make installed dependency coherence a release gate instead of trusting a green suite on stale packages.",
+      "status": "shipped",
+      "why": "The current 664-test suite passes, yet npm ls --depth=0 exits ELSPROBLEMS: Supabase and Vitest coverage are older than package.json/package-lock and two packages are extraneous. security-release-gate only checks lock presence and npm audit, so its green status omits reproducibility truth.",
+      "recipe": "Package-trust the locked versions, run a clean npm ci, add a Windows-hidden dependency-tree checker that parses npm ls --json and classifies invalid/missing/extraneous roots, wire it into security:release, and test clean plus synthetic failure receipts. Preserve exact lockfile and introduce no dependency.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Run npm ci and verify npm ls."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Add a standalone deps:check script with structured output and tests."
+        },
+        "L3": {
+          "effortHours": 2.5,
+          "recipe": "Repair locally and enforce installed-tree coherence inside the release gate with fail-closed structured evidence."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "FIRE",
+      "axis": "legal / IP / dual-audience public contract",
+      "effortHours": 2.5,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 24.7,
+      "slug": "public-ip-provenance-surface",
+      "title": "Ship the missing personalized /ip page and make proprietary provenance part of every public contract.",
+      "status": "shipped",
+      "why": "The authoritative CANON-011 checker scores the repo 7/10 and confirms /ip is absent. docs/RIGHTS_PROVENANCE.md also lacks the required exact proprietary license declaration, while footer, sitemap, agents and public-contract validation do not include an IP destination.",
+      "recipe": "Add /ip/ using the shared legal theme with project-specific parody/trademark, first-party code/art/audio and third-party boundary language; add the exact proprietary rights declaration to RIGHTS_PROVENANCE; wire footer manifest, both React footers, sitemap, agents.json, llms.txt and the public validator; extend visual-audit routes. Ship Ark cargo for the sibling checker’s false negatives on directory-index privacy/terms/contact pages.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Add /ip and sitemap entry."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Wire footer, agent manifest, rights source and public contract."
+        },
+        "L3": {
+          "effortHours": 2.5,
+          "recipe": "Ship cross-theme /ip parity, personalized provenance/trademark copy, visual coverage and an Ark checker-fix receipt."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "BOLT",
+      "axis": "AI intelligence / feedback loop / retention",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 24,
+      "slug": "live-drill-progress-cue",
+      "title": "Turn accepted coaching into a live observed-progress cue before the death-screen verdict.",
+      "status": "shipped",
+      "why": "The accepted run drill reaches the HUD and post-run outcome ledger, but during play the chip only repeats title/detail. It never tells the player whether the prior wave baseline has been matched or passed, leaving the feedback loop open until death.",
+      "recipe": "Add a pure buildRunDrillLiveProgress helper using current wave/score and launch-kind semantics; show bounded BEFORE BASELINE, BASELINE HELD and BASELINE PASSED states in the HUD; never compare reset REMATCH scores or claim causal mastery; add exact-boundary and practice-mode tests.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Show current wave versus baseline in the drill chip."
+        },
+        "L2": {
+          "effortHours": 1.25,
+          "recipe": "Add honest status/color semantics and rematch score exclusion."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Ship live observed-evidence progress with accessibility copy, pure tests and seamless use by the centralized HUD stack."
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "tier": "BOLT",
+      "axis": "speed / runtime organization / efficiency",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 21.4,
+      "slug": "zero-allocation-transient-lifecycles",
+      "title": "Extract transient effect lifecycles and stop replacing eight hot arrays every frame.",
+      "status": "shipped",
+      "why": "After Session 124 removed filter(Boolean) churn, App.jsx still rebuilds trail, particle, floating-text, dying-enemy, lightning-arc, beam and other transient arrays inside the 60 FPS callback. The extraction roadmap is stale at ~3,500 lines while live App.jsx is 4,915 lines.",
+      "recipe": "Generalize tested in-place step-and-compact primitives; extract transient lifecycle stepping into a <=300-line system module; replace identity-breaking filters for safe transient collections; preserve order and mutation semantics; add identity/lifetime/boundary tests plus update the extraction roadmap with measured live line counts.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Replace simple transient filter callbacks with in-place compaction."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Extract shared lifecycle stepping and cover identity/order semantics."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship a dedicated tested transient system, remove all safe hot-array replacements and refresh the live extraction contract."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-deterministic-physics-resimulation",
+      "reason": "The premise is real, but the command trace still lacks full enemy/wave/physics inputs and App.jsx remains a 4,915-line coupled simulation. Claiming completion in one audit item would repeat the overclaiming explicitly forbidden by GAME_LOOP and recent decisions; this audit advances integrity and extraction foundations instead."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "node scripts/check-secrets.mjs --for analytics remains MISSING; PostHog and project-scoped Sentry configuration are external dashboard/credential work."
+    },
+    {
+      "slug": "homev2-retirement",
+      "reason": "Production Lighthouse and funnel evidence do not exist; deleting ?home=v1 would violate the recorded decision and no local fixture can fabricate traffic."
+    },
+    {
+      "slug": "supabase-auth-obelisk-bridge",
+      "reason": "The accepted trigger is paid tier or material account demand; neither is evidenced, so implementation would silently reverse guest-first scope."
+    },
+    {
+      "slug": "contact-email-forwarding",
+      "reason": "The public page truthfully says delivery verification pending. Brevo inbound/DNS delivery is cross-infrastructure and cannot be made true by repo copy alone."
+    },
+    {
+      "slug": "ai-theme-pixel-verdict",
+      "reason": "The 192/192 machine receipt is real, but direct image inspection failed again through both workspace and C:\\tmp paths with Windows CryptUnprotectData; no AI pixel verdict is claimed."
+    },
+    {
+      "slug": "sitemap-checker-directory-index-false-negatives",
+      "reason": "The Studio Ops checker does not recognize public/<page>/index.html for privacy/terms/contact. This repo will ship Ark cargo rather than edit the sibling control-plane tree."
+    },
+    {
+      "slug": "new-runtime-ai-service",
+      "reason": "The zero-token Run Intelligence system is already deep and cost-neutral; a hosted model would add variable cost, latency and privacy surface without a verified product gap."
+    }
+  ],
+  "validation": [
+    "focused tests for every item",
+    "npm run lint",
+    "npm test",
+    "npm run deps:check",
+    "npm run public:contract",
+    "npm run protocol:drift",
+    "npm run security:release:audit",
+    "npm run replay:state-stepper",
+    "npm run replay:edge-fixtures",
+    "npm run launch:media-check",
+    "npm run build",
+    "isolated GitHub Actions Cloudflare Pages staging deploy",
+    "npm run visual:audit -- --url <isolated-preview>",
+    "git diff --check"
+  ],
+  "executionLog": [
+    {
+      "slug": "competitive-integrity-fault-boundary",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Bounded sanitized runtime faults fail global eligibility closed, remain visible in HUD/debrief, and persist as local-only run-history receipts.",
+      "verification": "runIntegrity + runSession + App launch focused suites; full 683/683 suite; lint; build"
+    },
+    {
+      "slug": "hud-airspace-allocator",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "One responsive ordered stack allocates integrity, drill, speedrun, modifier, challenge, ghost, weekly-rival, and rival-pace surfaces.",
+      "verification": "hudLayout compound desktop/mobile tests; 240/240 browser visual checks; lint; build"
+    },
+    {
+      "slug": "dependency-tree-truth-gate",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Clean npm ci plus a structured release gate detects invalid, missing, unexplained extraneous, unparseable, and failed-process trees; optional platform packages require lockfile proof.",
+      "verification": "5 dependency-tree tests; deps:check 18 declared roots; security release audit; npm audit 0"
+    },
+    {
+      "slug": "public-ip-provenance-surface",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Project-specific proprietary provenance and parody boundaries ship at /ip/ across all human and agent discovery contracts.",
+      "verification": "public contract 13/13; browser visual matrix 240/240; lint; build; direct AI pixel verdict honestly unclaimed due host CryptUnprotectData failure"
+    },
+    {
+      "slug": "live-drill-progress-cue",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Observed live BEFORE, HELD, and PASSED states close the accepted-drill loop without comparing reset REMATCH scores or claiming causality.",
+      "verification": "runDrill focused boundaries; full 683/683 suite; lint; build"
+    },
+    {
+      "slug": "zero-allocation-transient-lifecycles",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Particles, text, death effects, arcs, beams, bullets, grenades, pickups, and related hot arrays now preserve identity through in-place lifecycle compaction; roadmap count derives from actual source lines.",
+      "verification": "transient lifecycle identity/order/snapshot tests; full 683/683 suite; lint; build"
+    }
+  ]
+}

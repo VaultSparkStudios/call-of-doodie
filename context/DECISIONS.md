@@ -628,3 +628,17 @@ Rationale: Cosmetic status should feel responsive offline, but a public browser 
 Decision: Canonical project closeout may read the sibling Studio Ops doctor verdict, but must not invoke `--update-json` against the sibling tree. The project autopilot routes through `scripts/ops.mjs doctor --json --quiet` and only stamps project-local state.
 
 Rationale: Health evidence does not require a cross-repo mutation. Keeping verification read-only preserves CANON-018 ownership boundaries and prevents a project closeout from changing the control plane merely to become green.
+
+## 2026-07-16 — Session 125 — Recovered runtime faults invalidate global competition
+
+Decision: A run may continue locally after a bounded objective/director recovery, but any such fault permanently marks that run LOCAL ONLY, suppresses global score submission, and persists its sanitized receipt into run history.
+
+Rationale: Silent recovery protects play continuity but cannot preserve competitive comparability when authoritative progression logic diverged. Availability and leaderboard integrity are separate claims.
+
+## 2026-07-16 — Session 125 — Sewer Night is the product default, not an operating-system inference
+
+Decision: Fresh visits start in Sewer Night on every entry surface regardless of the operating system's light preference. Porcelain Day remains a supported, accessible theme only when explicitly requested by URL or saved player choice.
+
+Rationale: The project's visual identity and first-load readability are intentionally dark-first. A system-preference fallback silently shifted the standard website into an unreviewed light presentation and left pre-home entry surfaces outside the theme contract.
+
+Trade-off accepted: The site does not mirror the operating-system color preference automatically; the visible theme toggle preserves user agency and durable preference.

@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "./lib/safe-spawn.mjs";
+import { runDependencyTreeCheck } from "./lib/dependency-tree.mjs";
 import { getObeliskRoute } from "../src/obeliskRoutes.js";
 
 const ROOT = process.cwd();
@@ -65,6 +66,7 @@ const sw = read("public/sw.js");
 const cfHeaders = read("cloudflare/vaultspark-security-headers.js");
 const packageLockExists = fs.existsSync(path.join(ROOT, "package-lock.json"));
 const obeliskVerifyExists = fs.existsSync(path.join(ROOT, "functions", "api", "obelisk-verify.js"));
+const dependencyTree = runDependencyTreeCheck(ROOT);
 
 const requiredHeaders = [
   "Referrer-Policy",
@@ -129,6 +131,13 @@ const checks = [
     id: "package-lock-present",
     ok: packageLockExists,
     detail: packageLockExists ? "package-lock.json present" : "package-lock.json missing",
+  },
+  {
+    id: "dependency-tree-coherent",
+    ok: dependencyTree.ok,
+    detail: dependencyTree.ok
+      ? dependencyTree.detail
+      : `${dependencyTree.detail}: ${dependencyTree.problems.slice(0, 3).join("; ")}`,
   },
 ];
 

@@ -1,13 +1,22 @@
 # App.jsx Extraction Roadmap
 
-`src/App.jsx` is ~3,500 lines. Sessions 50-51 already pulled out:
+Verified 2026-07-16 (Session 125): `src/App.jsx` is 4,933 physical lines. The
+previous ~3,500-line estimate had drifted as new modes and trust surfaces landed.
+This roadmap is a decomposition recipe, not evidence that extraction itself has
+happened; line counts must be re-measured before claiming progress.
+
+Extracted system boundaries now include:
 
 - `src/systems/mutationResolution.js` (S51)
 - `src/systems/pickupSpawning.js` (S51)
+- `src/systems/combatResolution.js`, `deathFlow.js`, `gameStep.js`
 - `src/systems/runSession.js`
 - `src/systems/shopResolution.js`, `shopOptions.js`
 - `src/systems/perkResolution.js`, `progressionFlow.js`
 - `src/systems/bossPhases.js`, `bossWaveFlow.js`, `waveDirector.js`
+- `src/systems/objectiveDirector.js`, `runRng.js`, `scoreLedger.js`
+- `src/systems/runDrill.js`, `rematchDrill.js`, `runIntegrity.js`
+- `src/systems/transientLifecycle.js` (in-place hot-array compaction, S125)
 - `src/utils/metaClarity.js`, `roastDirector.js`, `routeForecast.js`, `shopForecast.js`
 
 The remaining heavy clusters in `App.jsx`, in priority order:
@@ -20,6 +29,10 @@ The `gameLoop` useCallback. Largest single block. Already references
 - **Bullet update** (collision, bounces, ricochet, lifecycle) → `src/systems/bulletUpdate.js`
 - **Enemy update** (AI, ranged fire, boss phases) → `src/systems/enemyUpdate.js`
 - **Pickup magnet + apply** → already partially extracted; finish
+
+S125 removed recurring replacement allocations for bullets, enemy bullets,
+grenades, pickups, trail particles, death effects, floating text, arcs, and beams
+through `transientLifecycle.js`; collision and behavior still remain inline.
 
 Test boundary: each module gets a pure `step(gs, frame)` signature returning
 the next gs delta. Loop becomes orchestration only.
@@ -58,3 +71,6 @@ collapse into `src/hooks/useGameInput.js` with a single registration point.
 ## Target post-extraction
 `App.jsx` ≤ 1,500 lines, all top-level orchestration + JSX. Each system file
 ≤ 300 lines with its own test.
+
+Completion proof: `Measure-Object -Line` for `App.jsx`, focused unit tests for
+every new boundary, full suite, production build, and no frame-loop allocation regression.

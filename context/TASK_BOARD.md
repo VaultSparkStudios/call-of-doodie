@@ -6,6 +6,7 @@ Public-safe launch roadmap summary.
 - [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
 - [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination
 - [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end
+- [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
@@ -14,6 +15,18 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:3] **DONE S125** Competitive integrity fault boundary — recovered objective-director faults now create a bounded local-only receipt, disable global submission, persist into run history, and remain explicit about non-causality.
+- [x] [SIL:2] **DONE S125** HUD airspace allocator — every top-center combat surface now uses one deterministic mobile-aware stack with compound-mode non-overlap coverage.
+- [x] [SIL:2] **DONE S125** Dependency-tree truth gate — release checks fail closed on missing, invalid, unexplained extraneous, or failed-process roots while allowing only lockfile-proven optional platform packages.
+- [x] [SIL:2] **DONE S125** Public IP/provenance surface — proprietary-first `/ip/` now ships through human footers, agent resources, sitemap, public contract, and the 240/240 visual route matrix.
+- [x] [SIL:2] **DONE S125** Live drill progress cue — the active drill shows observed BEFORE/HELD/PASSED progress with REMATCH score exclusion and no causality claim.
+- [x] [SIL:2] **DONE S125** Zero-allocation transient lifecycles — hot transient arrays compact in place with preserved identity/order/snapshot semantics and a corrected live extraction roadmap.
+- [x] [SIL:1] **DONE S125 second-order** Genius-list default limit truth — an absent `--top` no longer becomes `NaN` and silently empties the queue.
+- [x] [SIL:1] **DONE S125 second-order** Run-history integrity continuity — degraded local-only receipts survive navigation and cannot regain competitive eligibility.
+- [x] [SIL:1] **DONE S125 second-order** Failed-process dependency truth — parseable npm JSON cannot hide an unacceptable command exit.
+- [x] [SIL:1] **DONE S125 second-order** Innovation identity + QA decomposition — canonical titles deduplicate correctly, and stale browser claims now separate automated evidence from physical verification.
+- [x] [SIL:1] **DONE S125 second-order** Dark-default global bootstrap — Sewer Night owns fresh visits across every app entry surface and static page; explicit Porcelain Day remains available.
+- [x] [SIL:1] **DONE S125 second-order** Default-theme visual gate — light-OS fresh visits now join the two-theme/five-route/three-width matrix, which passes 255/255 locally.
 - [x] [SIL:1] **DONE S124** Truthful closeout derivation — autopilot verifies health read-only, and the board derives committed write-backs plus verified staging from authoritative sources; regression coverage enforces the boundary.
 - [x] [SIL:1] **DONE S124** Canonical SIL history truth — one parser now drives startup closeout age and forecast inputs across both supported formats.
 - [x] [SIL:1] **DONE S124** Evidence-backed Aim Check — keyboard, pointer/touch, and gamepad observations must reach 4/4 before a receipt can be saved.
@@ -100,7 +113,7 @@ Public-safe launch roadmap summary.
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
 - [x] [SIL:2] **DONE S113 (bounded edge wiring)** [S59 carryover] validate-replay Phase 2B — edge validator now consumes deterministic slice receipts (contract, movement/aim, combat actions, derived contact enemy) under the existing advisory gate. Full physics parity remains future work, but the browser slices are no longer edge-invisible.
 - [x] [SIL:1] **DONE S61** [S59 carryover] App.jsx extraction slice 11 — extracted enemy projectile/player hit resolution, incoming damage math, contact-hit helpers, and grenade explosion damage into `src/systems/combatResolution.js`; wired enemy bullet hits and grenade blast damage through pure helpers in `src/App.jsx`; added regression tests.
-- [ ] [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHECKLIST.md` to confirm S55 GIF + white-card + lag fixes hold under real clicks (CLI cannot drive the browser)
+- [x] [SIL:2] **DONE S125 · stale composite decomposed** S55 browser QA — CLI browser control is proven by 2/2 desktop/mobile pointer-flow tests and the 240/240 route/theme matrix; settings/draft/performance contracts remain covered by source tests. The genuinely unautomated full-run GIF/device checks are now explicit Human Action rows rather than a false “CLI cannot drive browser” blocker.
 - [ ] [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 

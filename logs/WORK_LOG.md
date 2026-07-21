@@ -923,3 +923,15 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - S124 closeout root-fix: changed closeout-autopilot doctor verification from sibling `--update-json` mutation to read-only local-router `--json --quiet` and added regression coverage.
 
 - S124 closeout observability root-fix: closeout board write-back coverage now reads the committed session range, ignored local creative records use bounded mtime evidence, and staging comes from `PROJECT_STATUS.testingSurfaces`.
+
+## 2026-07-16 — Session 125 — Saturated integrity, runtime, public-contract, and dark-default arc
+
+- Pulled/rebased `origin/main` first, ran the startup lock/context/secrets/blocker/canon/Ark gates, and verified the 664-test baseline plus the live code premises before auditing.
+- Generated `docs/AUDIT_2026-07-16_4.json` / `.md`; shipped all six ranked items and six second-order innovations without touching a sibling repo tree.
+- Added fail-closed competitive run-integrity receipts; deterministic HUD airspace; live drill progress; in-place transient lifecycle compaction; dependency-tree/process truth; and a proprietary-first `/ip/` human/agent contract.
+- Fixed genius-list absent-limit parsing, innovation canonical-title dedupe, degraded run-history continuity, and a stale browser blocker decomposition.
+- Responded to founder visual direction by making Sewer Night the global fresh-visit default while preserving explicit Porcelain Day; expanded browser auditing to test light-OS defaults on every route.
+- Verified 685/685 tests, strict lint, build, dependency/public/security/replay/media gates, pointer E2E 2/2, and local browser visual audit 255/255.
+- Honest deferrals: direct AI pixel inspection failed at the host CryptUnprotectData boundary; physical hardware/full-run media, inbound email, production metrics, analytics scope, publication/community, and founder launch approval remain external evidence gates.
+
+Intent outcome: achieved for every agent-owned premise; Unified Genius List saturated and second-order pack implemented.

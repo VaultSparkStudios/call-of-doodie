@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from "./lib/safe-spawn.mjs";
+import { dedupeInnovationCandidates } from "./lib/innovation-candidates.mjs";
 import { syncDoctorScore } from "./lib/doctor-score-sync.mjs";
 import fs from "fs";
 import path from "path";
@@ -142,14 +143,7 @@ function innovationPack() {
     source: item.evidence || ".cache/genius-list.json",
     axis: item.axis || "protocol",
   }));
-  const seen = new Set();
-  const items = [...taskItems, ...geniusItems]
-    .filter((item) => {
-      if (seen.has(item.slug)) return false;
-      seen.add(item.slug);
-      return true;
-    })
-    .slice(0, 8);
+  const items = dedupeInnovationCandidates([...taskItems, ...geniusItems], 8);
 
   const generatedAt = new Date().toISOString();
   const lines = [

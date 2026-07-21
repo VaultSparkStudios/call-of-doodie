@@ -42,6 +42,7 @@ const requiredFiles = [
   relative("public", "privacy", "index.html"),
   relative("public", "terms", "index.html"),
   relative("public", "contact", "index.html"),
+  relative("public", "ip", "index.html"),
   relative("public", "agents.json"),
   relative("public", ".well-known", "llms.txt"),
   relative("public", "sitemap.xml"),
@@ -73,6 +74,7 @@ if (agents) {
     "cost-neutral",
     "advisory deterministic evidence",
     "https://callofdoodie.wtf/contact/",
+    "https://callofdoodie.wtf/ip/",
   ]);
   if (agents.access?.writeActions !== "not-offered") errors.push("agents.json must not invent a public write action");
 }
@@ -95,13 +97,14 @@ for (const file of [relative("src", "components", "HomeV2.jsx"), relative("src",
     "privacy/",
     "terms/",
     "contact/",
+    "ip/",
     "agents.json",
     ".well-known/llms.txt",
     "© 2026 VaultSpark Studios LLC. All rights reserved.",
   ]);
 }
 
-for (const page of ["privacy", "terms", "contact"]) {
+for (const page of ["privacy", "terms", "contact", "ip"]) {
   const file = relative("public", page, "index.html");
   requireIncludes(file, contentByFile[file], [
     "VaultSpark Studios LLC. All rights reserved.",
@@ -109,6 +112,7 @@ for (const page of ["privacy", "terms", "contact"]) {
     "../privacy/",
     "../terms/",
     "../contact/",
+    "../ip/",
     "../theme.js",
     "data-theme-toggle",
   ]);
@@ -124,13 +128,19 @@ requireIncludes("theme.js", contentByFile[relative("public", "theme.js")], [
   "cod-theme",
   "porcelain-day",
   "sewer-night",
-  "prefers-color-scheme: light",
+  'themes.includes(stored) ? stored : "sewer-night"',
 ]);
 
 requireIncludes("contact", contentByFile[relative("public", "contact", "index.html")], [
   "hello@callofdoodie.wtf",
   "DELIVERY VERIFICATION PENDING",
   "founder@vaultsparkstudios.com",
+]);
+requireIncludes("ip", contentByFile[relative("public", "ip", "index.html")], [
+  "License: Proprietary — All Rights Reserved, VaultSpark Studios LLC",
+  "First-party provenance",
+  "independent comedy parody",
+  "Call of Duty®",
 ]);
 requireIncludes("llms.txt", contentByFile[relative("public", ".well-known", "llms.txt")], [
   "Proprietary — All Rights Reserved",
@@ -141,6 +151,7 @@ requireIncludes("sitemap.xml", contentByFile[relative("public", "sitemap.xml")],
   "https://callofdoodie.wtf/privacy/",
   "https://callofdoodie.wtf/terms/",
   "https://callofdoodie.wtf/contact/",
+  "https://callofdoodie.wtf/ip/",
 ]);
 requireIncludes("robots.txt", contentByFile[relative("public", "robots.txt")], [
   "Allow: /",

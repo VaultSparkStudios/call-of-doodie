@@ -26,6 +26,7 @@ const routes = [
   { id: "privacy", path: "/privacy/", localPath: "/privacy/index.html" },
   { id: "terms", path: "/terms/", localPath: "/terms/index.html" },
   { id: "contact", path: "/contact/", localPath: "/contact/index.html" },
+  { id: "ip", path: "/ip/", localPath: "/ip/index.html" },
 ];
 const localTarget = /^(localhost|127\.0\.0\.1)$/i.test(new URL(baseUrl).hostname);
 
@@ -36,10 +37,35 @@ const receipt = {
   baseUrl,
   matrix: { widths, themes, routes: routes.map(({ id, path: routePath }) => ({ id, path: routePath })) },
   captures: [],
+  defaultThemeChecks: [],
 };
 
 const browser = await chromium.launch({ headless: true });
 try {
+  const defaultContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, colorScheme: "light" });
+  for (const route of routes) {
+    const page = await defaultContext.newPage();
+    const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
+    const response = await page.goto(url.href, { waitUntil: "networkidle" });
+    if (route.primary) await page.locator("button").filter({ hasText: /DEPLOY/ }).first().waitFor({ state: "visible" });
+    else await page.locator("main h1").waitFor({ state: "visible" });
+    const state = await page.evaluate(() => ({
+      theme: document.documentElement.dataset.codTheme || document.querySelector("[data-theme]")?.getAttribute("data-theme") || null,
+      colorScheme: getComputedStyle(document.documentElement).colorScheme,
+    }));
+    receipt.defaultThemeChecks.push({
+      route: route.id,
+      url: url.href,
+      checks: [
+        { id: "default-http-ok", ok: Boolean(response?.ok()), actual: response?.status() ?? null },
+        { id: "default-sewer-night", ok: state.theme === "sewer-night", actual: state.theme },
+        { id: "default-dark-color-scheme", ok: state.colorScheme === "dark", actual: state.colorScheme },
+      ],
+    });
+    await page.close();
+  }
+  await defaultContext.close();
+
   for (const theme of themes) {
     for (const width of widths) {
       const context = await browser.newContext({ viewport: { width, height: 1000 }, colorScheme: theme === "porcelain-day" ? "light" : "dark" });
@@ -121,7 +147,10 @@ try {
   await browser.close();
 }
 
-receipt.summary = summarizeVisualChecks(receipt.captures.flatMap((capture) => capture.checks.map((check) => ({ ...check, capture: `${capture.route}/${capture.theme}/${capture.width}` }))));
+receipt.summary = summarizeVisualChecks([
+  ...receipt.defaultThemeChecks.flatMap((entry) => entry.checks.map((check) => ({ ...check, capture: `${entry.route}/default/light-os` }))),
+  ...receipt.captures.flatMap((capture) => capture.checks.map((check) => ({ ...check, capture: `${capture.route}/${capture.theme}/${capture.width}` }))),
+]);
 const receiptPath = path.join(outputDir, "visual-audit-receipt.json");
 fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2) + "\n");
 console.log(`Visual audit: ${receipt.summary.pass ? "PASS" : "FAIL"} · ${receipt.summary.passed}/${receipt.summary.total} checks`);

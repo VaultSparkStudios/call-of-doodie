@@ -24,6 +24,7 @@
     "launch:surfaces": "node scripts/launch-surface-check.mjs",
     "security:release": "node scripts/security-release-gate.mjs",
     "security:release:audit": "node scripts/security-release-gate.mjs --npm-audit",
+    "deps:check": "node scripts/check-dependency-tree.mjs",
     "leaderboard:shared-check": "node scripts/shared-leaderboard-check.mjs",
     "replay:trust-smoke": "node scripts/replay-trust-smoke.mjs",
     "replay:edge-fixtures": "node scripts/validate-edge-replay-pressure-fixtures.mjs",

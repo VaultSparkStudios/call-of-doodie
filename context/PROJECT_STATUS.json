@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 124 shipped nine evidence-truth improvements: canonical SIL parsing, observed-input calibration, reusable enemy frame index, backend supporter verification, next-run drill continuity, supporter/input proof expiry, repeatable drill evidence, and truthful closeout health and status derivation; 664/664 tests green.",
-  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
+  "currentFocus": "Session 125 shipped six live-premise audit items and six second-order innovations: fail-closed run integrity, collision-free HUD airspace, live drill progress, in-place transient lifecycles, dependency/process truth, proprietary /ip/, truthful generated queues, and a global Sewer Night default; 685/685 tests green.",
+  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -31,12 +31,12 @@
     {
       "status": "green",
       "type": "tests",
-      "command": "npm test"
+      "command": "npm test — 685/685 across 89 files"
     },
     {
       "status": "green",
       "type": "deploy",
-      "command": "GitHub Actions staging Deploy to Cloudflare Pages 29549796742"
+      "command": "Session 125 isolated staging verification pending"
     },
     {
       "status": "green",
@@ -56,12 +56,12 @@
   ],
   "blockers": [
     "PostHog/Sentry/Ko-fi dashboard URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING. Supabase half already satisfied (Access-Control-Allow-Origin: * verified S112).",
-    "Physical launch QA still requires a real PWA install standalone relaunch and one real gamepad/browser combo; the local input QA and PWA install receipts can support that pass but do not replace it.",
+    "Physical launch QA still requires a real PWA install standalone relaunch, one real gamepad/browser combo, and full-run GIF encode/play/share evidence; local receipts and E2E automation do not replace the physical pass.",
     "HomeV2 v1 fallback retirement requires production Lighthouse LCP/CLS and funnel data before deleting the legacy path.",
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-17",
+  "lastUpdated": "2026-07-20",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
@@ -69,19 +69,19 @@
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 124,
+  "silSession": 125,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 9,
+  "silVelocity": 12,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-16",
-  "currentSession": 124,
+  "currentSession": 125,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 664,
-  "testsTotal": 664,
-  "entropyScore": 0.181,
-  "entropyLastComputed": "2026-07-16",
+  "testsPassing": 685,
+  "testsTotal": 685,
+  "entropyScore": 0.216,
+  "entropyLastComputed": "2026-07-20",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 500,
@@ -108,17 +108,18 @@
   "sessionModeAutoShiftedAt": "2026-05-08T21:06:48.992Z",
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
-  "stagingType": "github-pages",
+  "stagingType": "cloudflare-pages",
   "doctorScore": {
-    "date": "2026-07-17",
+    "date": "2026-07-20",
     "overallPass": true,
-    "passing": 122,
-    "warning": 24,
-    "failing": 0,
+    "passing": 120,
+    "warning": 29,
+    "failing": 1,
     "blockingFailing": 0,
+    "advisoryFailing": 1,
     "skipped": 2,
-    "ran": 146,
-    "total": 148,
-    "score": 84
+    "ran": 150,
+    "total": 152,
+    "score": 80
   }
 }

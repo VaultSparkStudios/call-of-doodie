@@ -1,7 +1,8 @@
 # Manual QA Checklist — Session 55
 
-Browser-driven only. Run `npm run dev`, open the URL it prints, work through
-this top to bottom. Each line takes ~10 seconds; whole sweep ~15 min.
+Browser/device-driven release evidence. Automatable browser paths belong in Playwright;
+gamepad, install-prompt, full-run media, and subjective feel checks still require the
+matching real device. Run `npm run dev` and work through any remaining unchecked lane.
 
 ## Front door
 - [ ] UsernameScreen renders with mini battle canvas
@@ -15,8 +16,8 @@ this top to bottom. Each line takes ~10 seconds; whole sweep ~15 min.
 
 ## Settings (S55 changes)
 - [ ] Settings opens on **Quick** tab by default
-- [ ] Quick tab shows exactly 6 entries: Crosshair / Particles / Screen Shake / Reduced Motion / Auto Reload / Rumble
-- [ ] Tab toggle switches to **Advanced** showing the remaining 11 settings
+- [ ] Quick tab shows exactly 7 entries: Crosshair / HUD Density / Particles / Screen Shake / Reduced Motion / Auto Reload / Rumble
+- [ ] Tab toggle switches to **Advanced** showing the remaining 11 entries
 - [ ] `↺ RESET` button reverts the current preview to defaults (without saving)
 - [ ] `✓ APPLY SETTINGS` saves and closes
 - [ ] Gamepad LB/RB cycles between Quick and Advanced

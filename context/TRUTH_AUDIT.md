@@ -40,6 +40,21 @@ Last reviewed: 2026-07-16
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-07-16 — Session 125 — Competitive, dependency, theme, and public-rights truth
+
+- Audit truth — `docs/AUDIT_2026-07-16_4.json` / `.md` contain six live-verified primary items and six implemented second-order innovations with shipped execution evidence.
+- Competition truth — a recovered objective/director fault is bounded and sanitized but permanently local-only for that run; global submission fails closed and history preserves the receipt.
+- Dependency truth — a coherent parsed tree is insufficient if npm exited unexpectedly; only exit 0 or exit 1 caused exclusively by lockfile-proven optional platform packages can pass.
+- Runtime truth — hot transient collections compact in place, preserving array identity, survivor order, and one-step-per-snapshot semantics.
+- Public-rights truth — `/ip/`, footers, sitemap, agents, LLM discovery, and rights provenance agree on proprietary ownership and parody/non-affiliation boundaries.
+- Theme truth — fresh light-OS visits resolve to Sewer Night globally; URL/storage-selected Porcelain Day remains real. The 255/255 local browser receipt explicitly tests defaults plus both themes across five routes and three widths.
+- Visual-review boundary — machine browser evidence is real; direct AI image inspection is not claimed because local image paths failed Windows CryptUnprotectData.
+- Validation truth — 685/685 tests, strict lint, build, public 13/13, dependency/security/npm-audit, replay/media, pointer E2E 2/2, and diff checks passed directly.
+- Release truth — engineering is green; SPARKED remains NO-GO pending physical, inbound-mail, production-data, analytics-scope, publication, direct-pixel, and founder evidence.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-16
+
 ## 2026-07-16 — Session 123 — Theme, staging, and run-trust truth
 
 - Theme truth — src/utils/theme.js owns two real player-selectable themes with URL/storage/system resolution; HomeV2 and all three legal pages expose accessible toggles. Combat remains dark-first intentionally.

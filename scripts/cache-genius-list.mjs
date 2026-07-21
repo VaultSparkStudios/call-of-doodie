@@ -9,7 +9,8 @@ const WRITE = process.argv.includes("--write");
 const CHECK = process.argv.includes("--check");
 const BRIEF = process.argv.includes("--brief");
 const topArg = process.argv.find((arg) => arg.startsWith("--top="));
-const top = Number(topArg?.split("=")[1] || process.argv[process.argv.indexOf("--top") + 1] || 5);
+const topIndex = process.argv.indexOf("--top");
+const top = Number(topArg?.split("=")[1] || (topIndex >= 0 ? process.argv[topIndex + 1] : null) || 5);
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 function readSection(file, heading) {
