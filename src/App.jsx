@@ -51,6 +51,7 @@ import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import UsernameScreen from "./components/UsernameScreen.jsx";
+import CalibrationScreen from "./components/CalibrationScreen.jsx";
 import HomeV2 from "./components/HomeV2.jsx";
 import HUD from "./components/HUD.jsx";
 const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
@@ -225,6 +226,8 @@ export default function CallOfDoodie() {
 
   // ── State ─────────────────────────────────────────────────────────────────
   const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
+  // Calibration screen is shown once for new callsigns whose calibration record is incomplete.
+  const needsCalibration = () => !loadInputCalibration()?.complete;
   const [username, setUsername]       = useState(() => getLockedCallsign() || "");
   const [score, setScore]             = useState(0);
   const [kills, setKills]             = useState(0);
@@ -4310,7 +4313,11 @@ export default function CallOfDoodie() {
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   if (screen === "username") {
-    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { const n = username.trim(); lockCallsign(n); claimCallsign(n); identify(n, { accountLevel: getAccountLevel(loadCareerStats().totalKills || 0), prestige: loadMetaProgress()?.prestige || 0 }); setScreen("menu"); } }} />;
+    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { const n = username.trim(); lockCallsign(n); claimCallsign(n); identify(n, { accountLevel: getAccountLevel(loadCareerStats().totalKills || 0), prestige: loadMetaProgress()?.prestige || 0 }); setScreen(needsCalibration() ? "calibrate" : "menu"); } }} />;
+  }
+
+  if (screen === "calibrate") {
+    return <CalibrationScreen isMobile={isMobile} onComplete={() => setScreen("menu")} onSkip={() => setScreen("menu")} />;
   }
 
   if (screen === "menu") {
