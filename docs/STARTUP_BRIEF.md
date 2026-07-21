@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-17 (Session 124 closeout) -->
+<!-- generated-at: 2026-07-21 (Session 125 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 124 closeout · 2026-07-17.
+> **Fast-boot brief** — generated at Session 125 closeout · 2026-07-21.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 125 · 2026-07-17 · FOUNDER MODE                         ║
+║  Session 126 · 2026-07-21 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -24,8 +24,8 @@
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
-║  staging-preview → https://session-124-staging.call-of-doodi ✓   ║
-║  Unit tests    → npm test ✓                                      ║
+║  staging-preview → https://session-125-staging.call-of-doodi ✓   ║
+║  Unit tests    → npm test — 685/685 across 89 files ✓            ║
 ║  deploy       → GitHub Actions staging Deploy to Cloudflare  ✓   ║
 ║  production-smoke → npm run live:site-check ✓                    ║
 ║  production-smoke → npm run post-cutover:smoke ✓                 ║
@@ -38,8 +38,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 9↑                       ║
-║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 12↑                      ║
+║    Last active: 1d  ·  Last closeout: 5d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -57,41 +57,41 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 124 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 125 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    664/664 passing  ·  Deploy: N/A                       ║
+║  Tests:    685/685 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.7% used                          ║
-║     3,308 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
-║     ~1,654 tok/turn  ·  cache 50%  ·  109 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.8% used                          ║
+║     37,777 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~18,889 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         664/664 passing                                ║
-║  ✓  Velocity      9 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         685/685 passing                                ║
+║  ✓  Velocity      12 ↑  ·  Debt: ↓                               ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         44175 FORGE  ·  1d old                         ║
+║  ✓  IGNIS         44175 FORGE  ·  5d old                         ║
 ║  ⛔  Truth         green locally; portfolio doctor warnings are   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.181  (healthy)                               ║
+║  ✓  Entropy       0.216  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⚠  Doctor        122/148 (84%)  ·  24 warn                      ║
-║  ✓  Cost          real $0.01/7d · 7d notional $0.21 (flat-rate   ║
+║  ⛔  Doctor        123/152 (82%)  ·  1 failing                    ║
+║  ✓  Cost          real $0.07/7d · 7d notional $1.09 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    64d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    86d · Physical launch QA                                      ║
+║    68d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    90d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  9↑  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  12↑  (last 5 sessions)                       ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -129,22 +129,18 @@
 ║  esired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of l  ║
 ║  ...                                                             ║
 ║                                                                  ║
-║  3. [Human] [SIL:2] Manual browser QA pass against `docs/QA_CHE  ║
-║  CKLIST.md` to confirm S55 GIF + white-card + lag fixes hold un  ║
-║  der real clicks (CLI cannot drive the browser)                  ║
-║                                                                  ║
-║  4. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
+║  3. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
 ║  re real LCP/CLS deltas vs legacy MenuScreen on production, con  ║
 ║  firm ≥200ms LCP improvement before removing v1 fallback         ║
 ║                                                                  ║
-║  5. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
+║  4. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
 ║  e_v2_deploy` vs legacy `front_door_action` completion rates af  ║
 ║  ter 48h of traffic                                              ║
 ║                                                                  ║
-║  6. Discord invite/community link when the community entry poin  ║
+║  5. Discord invite/community link when the community entry poin  ║
 ║  t is ready                                                      ║
 ║                                                                  ║
-║  7. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
+║  6. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
 ║  on ≥200ms Lighthouse LCP improvement confirmed on production (  ║
 ║  human measurement required)                                     ║
 ║                                                                  ║
@@ -154,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 124 closeout · 2026-07-17*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 125 closeout · 2026-07-21*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

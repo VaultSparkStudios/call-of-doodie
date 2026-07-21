@@ -18,5 +18,9 @@
   "[S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization": {
     "firstSeen": "2026-05-14",
     "session": null
+  },
+  "Real full-run media QA": {
+    "firstSeen": "2026-07-21",
+    "session": null
   }
 }

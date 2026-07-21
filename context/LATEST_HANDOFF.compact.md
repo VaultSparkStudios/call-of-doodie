@@ -1,41 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 97cab17a4f3a -->
-<!-- generated-at: 2026-07-17T07:54:00.396Z -->
+<!-- source-hash: 2a0366f8f36f -->
+<!-- generated-at: 2026-07-21T05:21:21.393Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 124
+# Handoff Summary — Session 125
 
-Shipped this session
-- Completed continuous /goal arc (start->audit->implement->closeout) with no phase handback.
-- Delivered all nine live-premise items in docs/AUDIT_2026-07-16_3.json: canonical SIL history truth, observed-input Aim Check, reusable frame index, backend supporter verification, next-run drill continuity, supporter cache expiry, repeatable drill evidence, calibration expiry, truthful closeout derivation.
-- Unified Genius List exhausted for repo-executable work; maintain-launch-confidence satisfied by full validation matrix.
+## Shipped
+- Completed continuous /goal mission from synced main, no phase handback.
+- All six ranked items in docs/AUDIT_2026-07-16_4.json: competitive fault boundary, deterministic HUD airspace, dependency-tree truth gate, proprietary /ip/, live drill progress, in-place transient lifecycles.
+- Six second-order innovations in docs/INNOVATION_PACK.md, including founder-requested Sewer Night fresh-visit default across React bootstrap and static pages.
 
-Current intent
-- Push completed implementation direct-to-main after staging verification; retain honest external deferrals. SPARKED remains NO-GO.
+## Current Intent
+- Unified Genius List exhausted for honest repo-executable work.
+- SPARKED remains NO-GO; implementation completeness is not launch approval.
+- Remaining work requires external gates (credentials, traffic, product/founder decisions, hardware).
 
-Validation status
-- npm test 664/664 across 84 files; lint, build, public:contract 12/12, security:release:audit (npm audit 0) PASS.
-- Replay state-stepper + edge fixtures 4/4 each.
-- Staging run 29549796742 PASS (commit b616e3f); live shell 5/5, route/header contract 8/8.
-- Visual matrix 192/192 across 24 captures.
-- Production run 29550017949 PASS (SHA ddf87a8); live shell 5/5, post-cutover 5/5, replay trust 3/3.
+## Now — Top 3
+- Physical hardware: one real PWA install/relaunch, controller/browser pass, full-run GIF encode/play/share check.
+- Production traffic + scoped analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1.
+- Pre-SPARKED gate: verify inbound mail delivery, analytics project scope, Itch/community publication, direct AI theme review, founder approval.
 
-Now bucket (top 3)
-- Physical hardware: one real PWA install/relaunch pass.
-- Physical hardware: one real controller/browser pass.
-- Production traffic + scoped analytics: collect HomeV2 Lighthouse/funnel evidence before retiring ?home=v1.
+## Blockers — Top 3
+- Direct AI pixel inspection unclaimed; host image path fails Windows CryptUnprotectData (persistent).
+- No production traffic/analytics scope for HomeV2 evidence.
+- No physical hardware for PWA/controller/GIF QA.
 
-Blockers (top 3)
-- No physical hardware for PWA/gamepad QA.
-- No production traffic or project-scoped analytics for HomeV2 evidence.
-- Direct AI pixel/theme inspection unclaimed (visual matrix is machine-check only).
+## Human-Blocked (with age)
+- Founder launch approval — open since S120+ (5+ sessions).
+- Analytics/Sentry credentials and dashboard allowlists — open since S120+ (5+ sessions).
+- Physical PWA/gamepad hardware QA — open since S120+ (5+ sessions).
+- Itch/community publication decision — open since S120+ (5+ sessions).
 
-Human-blocked items
-- Founder approval for SPARKED — outstanding.
-- Verified inbound email route on-domain — outstanding.
-- Itch publication/listing — outstanding.
-- Project-scoped analytics/Sentry credentials via secrets gateway — outstanding.
+## Validation (S125)
+- npm test 685/685 across 89 files.
+- Lint, build, diff check — PASS.
+- Public contract 13/13; dependency tree coherent; security gate and npm audit 0 — PASS.
+- Replay state/edge fixtures 4/4 each; pointer/browser E2E 2/2 — PASS.
+- Local browser audit 255/255; staging deploy 29796935326 + brief-format 29796935367 passed for a9ae2b9; hosted shell 5/5, hosted visual 255/255 at session-125-staging.call-of-doodie.pages.dev.
 
-Next session
-- Await hardware/production/credential access; until then continue repo-local launch-confidence work without fabricating external gates.
+Next session: resume repo-local launch-confidence work only; do not fabricate external gates — all remaining items need human/hardware/data unblocking.

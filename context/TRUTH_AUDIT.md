@@ -47,7 +47,8 @@ Last reviewed: 2026-07-16
 - Dependency truth — a coherent parsed tree is insufficient if npm exited unexpectedly; only exit 0 or exit 1 caused exclusively by lockfile-proven optional platform packages can pass.
 - Runtime truth — hot transient collections compact in place, preserving array identity, survivor order, and one-step-per-snapshot semantics.
 - Public-rights truth — `/ip/`, footers, sitemap, agents, LLM discovery, and rights provenance agree on proprietary ownership and parody/non-affiliation boundaries.
-- Theme truth — fresh light-OS visits resolve to Sewer Night globally; URL/storage-selected Porcelain Day remains real. The 255/255 local browser receipt explicitly tests defaults plus both themes across five routes and three widths.
+- Theme truth — fresh light-OS visits resolve to Sewer Night globally; URL/storage-selected Porcelain Day remains real. Both local and isolated hosted 255/255 browser receipts explicitly test defaults plus both themes across five routes and three widths.
+- Staging truth — exact SHA `a9ae2b9` passed Cloudflare deploy run `29796935326`, brief-format run `29796935367`, hosted shell 5/5, and hosted visual checks 255/255 at the bounded Session 125 preview.
 - Visual-review boundary — machine browser evidence is real; direct AI image inspection is not claimed because local image paths failed Windows CryptUnprotectData.
 - Validation truth — 685/685 tests, strict lint, build, public 13/13, dependency/security/npm-audit, replay/media, pointer E2E 2/2, and diff checks passed directly.
 - Release truth — engineering is green; SPARKED remains NO-GO pending physical, inbound-mail, production-data, analytics-scope, publication, direct-pixel, and founder evidence.

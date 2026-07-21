@@ -13,6 +13,7 @@
 - Public contract 13/13; dependency tree coherent (18 declared roots, two lockfile-optional platform packages); security release gate and npm audit 0 — PASS.
 - Replay state/edge fixtures 4/4 each; pointer/browser E2E 2/2 — PASS.
 - Local browser audit — 255/255 across fresh light-OS defaults plus two selectable themes, five routes, and three widths.
+- Isolated staging — Cloudflare deploy run `29796935326` and brief-format run `29796935367` passed for `a9ae2b9`; hosted shell 5/5 and hosted visual audit 255/255 passed at `https://session-125-staging.call-of-doodie.pages.dev/`.
 - Direct AI pixel inspection remains honestly unclaimed because the host image path repeatedly failed Windows CryptUnprotectData.
 
 ## Next

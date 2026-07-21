@@ -24,9 +24,9 @@
     },
     {
       "status": "green",
-      "url": "https://session-124-staging.call-of-doodie.pages.dev/",
+      "url": "https://session-125-staging.call-of-doodie.pages.dev/",
       "type": "staging-preview",
-      "command": "8/8 routes and security headers pass; hosted theme/viewport matrix 192/192"
+      "command": "live shell 5/5; hosted default/theme/viewport matrix 255/255"
     },
     {
       "status": "green",
@@ -36,7 +36,7 @@
     {
       "status": "green",
       "type": "deploy",
-      "command": "Session 125 isolated staging verification pending"
+      "command": "GitHub Actions staging Deploy to Cloudflare Pages 29796935326; brief-format 29796935367"
     },
     {
       "status": "green",
@@ -61,7 +61,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-20",
+  "lastUpdated": "2026-07-21",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
@@ -110,16 +110,15 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "doctorScore": {
-    "date": "2026-07-20",
-    "overallPass": true,
-    "passing": 120,
-    "warning": 29,
+    "date": "2026-07-21",
+    "overallPass": false,
+    "passing": 123,
+    "warning": 26,
     "failing": 1,
     "blockingFailing": 0,
-    "advisoryFailing": 1,
     "skipped": 2,
     "ran": 150,
     "total": 152,
-    "score": 80
+    "score": 82
   }
 }
