@@ -38,8 +38,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 12↑                      ║
-║    Last active: 1d  ·  Last closeout: 5d  ·  (active = newest o  ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 13↑                      ║
+║    Last active: 0d  ·  Last closeout: 5d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -63,15 +63,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.8% used                          ║
-║     37,777 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~18,889 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.6% used                          ║
+║     3,235 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,618 tok/turn  ·  cache 50%  ·  111 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         685/685 passing                                ║
-║  ✓  Velocity      12 ↑  ·  Debt: ↓                               ║
+║  ✓  Velocity      13 ↑  ·  Debt: ↓                               ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44175 FORGE  ·  5d old                         ║
@@ -84,7 +84,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        123/152 (82%)  ·  1 failing                    ║
+║  ⛔  Doctor        124/152 (83%)  ·  1 failing                    ║
 ║  ✓  Cost          real $0.07/7d · 7d notional $1.09 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  12↑  (last 5 sessions)                       ║
+║  Velocity:   ▁▄▄▂▆  13↑  (last 5 sessions)                       ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝

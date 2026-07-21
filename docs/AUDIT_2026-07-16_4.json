@@ -39,7 +39,8 @@
       "dependency-process-status-fails-closed",
       "innovation-title-identity",
       "stale-browser-qa-decomposition",
-      "dark-default-global-bootstrap"
+      "dark-default-global-bootstrap",
+      "post-push-dependabot-ratchet"
     ]
   },
   "gameLoopReview": {

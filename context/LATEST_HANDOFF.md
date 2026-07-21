@@ -3,7 +3,7 @@
 ## Where We Left Off
 - Completed the founder-requested continuous `/goal` mission from synced `main` without a phase handback.
 - Shipped all six ranked items in `docs/AUDIT_2026-07-16_4.json`: competitive fault boundary, deterministic HUD airspace, dependency-tree truth gate, proprietary `/ip/`, live drill progress, and in-place transient lifecycles.
-- Shipped six second-order innovations recorded in `docs/INNOVATION_PACK.md`, including the founder-requested Sewer Night fresh-visit default across the global React bootstrap and static pages.
+- Shipped seven second-order innovations recorded in `docs/INNOVATION_PACK.md`, including the founder-requested Sewer Night fresh-visit default and a post-push Dependabot ratchet for both newly disclosed high-severity dev-only transitive alerts.
 - The Unified Genius List is exhausted for honest repo-executable work. Remaining entries require analytics credentials, production traffic, a product decision, community readiness, physical hardware/media, or founder launch approval.
 - SPARKED remains NO-GO; implementation completeness is not presented as launch approval.
 
@@ -11,6 +11,7 @@
 - `npm test` — 685/685 across 89 files.
 - Strict source and changed-script lint, production build, diff check — PASS.
 - Public contract 13/13; dependency tree coherent (18 declared roots, two lockfile-optional platform packages); security release gate and npm audit 0 — PASS.
+- Patched override verification — clean `npm ci`; exact `js-yaml@4.3.0` / `brace-expansion@1.1.16`; full 685 tests, lint, build, supply-chain incident scan, and security gate — PASS.
 - Replay state/edge fixtures 4/4 each; pointer/browser E2E 2/2 — PASS.
 - Local browser audit — 255/255 across fresh light-OS defaults plus two selectable themes, five routes, and three widths.
 - Isolated staging — Cloudflare deploy run `29796935326` and brief-format run `29796935367` passed for `a9ae2b9`; hosted shell 5/5 and hosted visual audit 255/255 passed at `https://session-125-staging.call-of-doodie.pages.dev/`.

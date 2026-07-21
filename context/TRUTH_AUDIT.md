@@ -42,9 +42,9 @@ Last reviewed: 2026-07-16
 
 ## 2026-07-16 — Session 125 — Competitive, dependency, theme, and public-rights truth
 
-- Audit truth — `docs/AUDIT_2026-07-16_4.json` / `.md` contain six live-verified primary items and six implemented second-order innovations with shipped execution evidence.
+- Audit truth — `docs/AUDIT_2026-07-16_4.json` / `.md` contain six live-verified primary items and seven implemented second-order innovations with shipped execution evidence.
 - Competition truth — a recovered objective/director fault is bounded and sanitized but permanently local-only for that run; global submission fails closed and history preserves the receipt.
-- Dependency truth — a coherent parsed tree is insufficient if npm exited unexpectedly; only exit 0 or exit 1 caused exclusively by lockfile-proven optional platform packages can pass.
+- Dependency truth — a coherent parsed tree is insufficient if npm exited unexpectedly; only exit 0 or an optional-only exit 1 can pass. Post-push GitHub alerts additionally forced exact patched `js-yaml@4.3.0` and `brace-expansion@1.1.16`; clean install, npm audit 0, and Studio incident scan pass.
 - Runtime truth — hot transient collections compact in place, preserving array identity, survivor order, and one-step-per-snapshot semantics.
 - Public-rights truth — `/ip/`, footers, sitemap, agents, LLM discovery, and rights provenance agree on proprietary ownership and parody/non-affiliation boundaries.
 - Theme truth — fresh light-OS visits resolve to Sewer Night globally; URL/storage-selected Porcelain Day remains real. Both local and isolated hosted 255/255 browser receipts explicitly test defaults plus both themes across five routes and three widths.

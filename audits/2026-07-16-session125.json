@@ -14,7 +14,8 @@
     "Proprietary-first /ip/ human and agent discovery surface",
     "Truthful genius-list default limits and canonical innovation identity",
     "Global Sewer Night fresh-visit default with explicit Porcelain Day opt-in",
-    "Fresh light-OS default assertions in the browser visual matrix"
+    "Fresh light-OS default assertions in the browser visual matrix",
+    "Post-push high-severity Dependabot ratchet with exact patched dev-only overrides"
   ],
   "validation": [
     "npm test 685/685 across 89 files",
@@ -39,7 +40,7 @@
   ],
   "sil": {
     "score": 1000,
-    "velocity": 12,
+    "velocity": 13,
     "debt": "decreasing"
   },
   "headline": "Made competitive recovery, runtime lifecycles, dependency state, public rights, generated queues, and the dark-first visual identity fail truthful",

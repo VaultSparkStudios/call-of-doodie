@@ -13,6 +13,7 @@
 4. **innovation-title-identity** — Deduplicated generated candidates by canonical full title rather than independently truncated slugs, eliminating false “different” work.
 5. **stale-browser-qa-decomposition** — Replaced the obsolete “CLI cannot drive browser” blocker with verified automated coverage and a narrowly honest physical-device/media remainder.
 6. **dark-default-global-bootstrap** — Restored Sewer Night as the explicit fresh-visit default across React, callsign/auth entry surfaces, and static legal pages while retaining an intentional Porcelain Day selection; expanded the visual audit with light-OS/default-theme assertions.
+7. **post-push-dependabot-ratchet** — Consumed GitHub's post-push high-severity signal, trust-gated and pinned patched dev-only transitive overrides, then re-ran clean install, full tests, lint, build, dependency/security, npm-audit, and studio supply-chain gates.
 
 ## Remaining Ranked Candidates
 
