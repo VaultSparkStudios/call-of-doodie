@@ -220,7 +220,10 @@ function silCategoryRows(status) {
 
 function gitChangeSummary() {
   const s = sh('git status --short');
-  const lines = s.out.split('\n').filter((l) => l.trim());
+  const lines = s.out
+    .split('\n')
+    .filter((l) => l.trim())
+    .filter((l) => !l.replace(/\\/g, '/').endsWith('docs/CLOSEOUT_STATUS_BOARD.md'));
   const counts = { M: 0, A: 0, D: 0, R: 0, '??': 0 };
   for (const ln of lines) {
     const code = ln.slice(0, 2).trim() || '??';
