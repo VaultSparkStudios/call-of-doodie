@@ -129,7 +129,7 @@ function deploymentRows() {
     || p.localPath?.toLowerCase()?.endsWith(slug)
     || p.folderName?.toLowerCase() === slug
   ) || {};
-  const stagingSurface = status?.testingSurfaces?.find((surface) => surface?.type === 'staging-preview');
+  const stagingSurface = status?.testingSurfaces?.findLast((surface) => surface?.type === 'staging-preview');
   const stagingType = stagingSurface?.type ?? status?.stagingType ?? entry?.stagingType;
   const stagingUrl = status?.stagingUrl ?? stagingSurface?.url ?? entry?.stagingUrl;
   const liveUrl = status?.runtimeUrl || entry?.runtimeUrl || entry?.liveUrl || entry?.deployedUrl;
