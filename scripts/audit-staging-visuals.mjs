@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "@playwright/test";
-import { compositeColor, contrastRatio, parseCssColor, summarizeVisualChecks } from "./lib/visual-audit.mjs";
+import { compositeColor, contrastRatio, defaultVisualAuditStorage, parseCssColor, summarizeVisualChecks } from "./lib/visual-audit.mjs";
 
 const ROOT = process.cwd();
 const valueAfter = (name) => {
@@ -43,6 +43,9 @@ const receipt = {
 const browser = await chromium.launch({ headless: true });
 try {
   const defaultContext = await browser.newContext({ viewport: { width: 390, height: 1000 }, colorScheme: "light" });
+  await defaultContext.addInitScript((storage) => {
+    for (const [key, value] of Object.entries(storage)) localStorage.setItem(key, value);
+  }, defaultVisualAuditStorage());
   for (const route of routes) {
     const page = await defaultContext.newPage();
     const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);

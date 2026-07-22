@@ -867,7 +867,8 @@ Last reviewed: 2026-07-16
 - Performance truth — receipts use fixed memory, conservative hysteresis, simulated frames only, normalized persisted invariants, and explicit local-timing/non-causality language.
 - Economy truth — railgun and projectile reward planning share one deterministic contract while surrounding side-effect order and named-RNG timing remain unchanged.
 - Protocol truth — `/start`, `/audit`, `/implement`, and `/closeout` anchors plus the Studio Oracle proxy are locally reachable and drift-gated.
-- Validation truth — strict lint, 703/703 tests across 93 files, build, dependency/public/protocol/security/npm-audit gates, replay/media/live/cutover/trust checks, and doctor `overallPass: true` with `blockingFailing: 0` passed directly.
+- Validation truth — strict lint, 704/704 tests across 93 files, build, dependency/public/protocol/security/npm-audit gates, replay/media/live/cutover/trust checks, and doctor `overallPass: true` with `blockingFailing: 0` passed directly.
+- Staging truth — exact SHA `193fdd6` passed deploy `29889321484` and brief `29889321470`. The first visual attempt honestly failed on the required callsign gate; a callsign-only/default-theme-pure harness fix then passed 255/255 hosted checks and eight HTTP routes.
 - Release truth — engineering closeout is green; direct AI pixel, physical devices/media, inbound mail, production data, analytics scope, publication, and founder approval remain unclaimed launch gates.
 
 Overall status: green engineering closeout; NO-GO SPARKED

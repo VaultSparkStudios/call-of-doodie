@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { compositeColor, contrastRatio, parseCssColor, summarizeVisualChecks } from "../scripts/lib/visual-audit.mjs";
+import { compositeColor, contrastRatio, defaultVisualAuditStorage, parseCssColor, summarizeVisualChecks } from "../scripts/lib/visual-audit.mjs";
 
 describe("staged visual audit primitives", () => {
+  it("passes the callsign gate without contaminating fresh-theme evidence", () => {
+    const storage = defaultVisualAuditStorage();
+    expect(storage).toEqual({ "cod-callsign-v1": "VISUAL-QA" });
+    expect(storage).not.toHaveProperty("cod-theme");
+    expect(storage).not.toHaveProperty("cod-home-v2");
+  });
+
   it("parses and composites computed rgba colors", () => {
     const foreground = parseCssColor("rgba(255, 255, 255, 0.5)");
     const background = parseCssColor("rgb(0, 0, 0)");

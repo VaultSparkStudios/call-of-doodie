@@ -23,6 +23,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:1] **DONE S126 second-order** Boss-banner hot-array retention — newest matching floating text is retained in place with identity/order/cap tests.
 - [x] [SIL:1] **DONE S126 second-order** Suspended-frame evidence exclusion — paused and modal callbacks cannot dilute performance receipts.
 - [x] [SIL:1] **DONE S126 second-order** Performance-receipt invariants — persisted counts, percentages, percentiles, maxima, assistance labels, and activation counts cannot contradict one another.
+- [x] [SIL:1] **DONE S126 second-order** Fresh-theme visual harness truth — the default browser context passes only the required callsign gate, preserves empty theme storage, and re-proves the hosted 255/255 matrix.
 - [x] [SIL:3] **DONE S125** Competitive integrity fault boundary — recovered objective-director faults now create a bounded local-only receipt, disable global submission, persist into run history, and remain explicit about non-causality.
 - [x] [SIL:2] **DONE S125** HUD airspace allocator — every top-center combat surface now uses one deterministic mobile-aware stack with compound-mode non-overlap coverage.
 - [x] [SIL:2] **DONE S125** Dependency-tree truth gate — release checks fail closed on missing, invalid, unexplained extraneous, or failed-process roots while allowing only lockfile-proven optional platform packages.

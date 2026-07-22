@@ -43,8 +43,9 @@
 1. **boss-banner-hot-array-retention** — replaced the final boss-kill `filter().slice()` allocation with an identity-preserving newest-match retention primitive and exact order/cap tests.
 2. **suspended-frame-evidence-exclusion** — paused, hidden, draft, shop, route, cutscene, announcement, and mutation frames still render callbacks but cannot dilute run timing evidence.
 3. **performance-receipt-invariant-normalization** — persisted receipts now derive slow percentage from bounded counts, require `slowFrames <= totalFrames`, enforce `worstMs >= p95Ms`, and reconcile assistance labels/activation counts.
+4. **fresh-theme-visual-harness-truth** — the default browser context now seeds only the required callsign, never theme/home preference, so it reaches HomeV2 while preserving a genuine fresh-theme assertion.
 
-All three are local, deterministic, cost-neutral, covered by focused tests, and preserve replay/score honesty.
+All four are local, deterministic, cost-neutral, covered by focused tests, and preserve replay/score honesty.
 
 ## Saturation Disposition
 

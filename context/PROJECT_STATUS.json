@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 126 recovered and checkpointed the prior closeout, then shipped five L3 audit items and three second-order refinements across startup chronology, pause/input trust, bounded performance evidence, deterministic defeat economy, hot-array retention, and protocol reachability; 703/703 tests green.",
+  "currentFocus": "Session 126 recovered and checkpointed the prior closeout, then shipped five L3 audit items and four second-order refinements across startup chronology, pause/input trust, bounded performance evidence, deterministic defeat economy, hot-array retention, and protocol reachability; 704/704 tests green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -56,7 +56,13 @@
     {
       "status": "green",
       "type": "tests",
-      "command": "npm test — 703/703 across 93 files; strict lint; production build"
+      "command": "npm test — 704/704 across 93 files; strict lint; production build"
+    },
+    {
+      "status": "green",
+      "url": "https://session-126-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "SHA 193fdd6 · deploy 29889321484 · brief 29889321470 · hosted visual 255/255 · eight public routes HTTP 200"
     }
   ],
   "blockers": [
@@ -77,14 +83,14 @@
   "silSession": 126,
   "silScore": 1000,
   "silAvg3": 1000,
-  "silVelocity": 8,
+  "silVelocity": 9,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-21",
   "currentSession": 126,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 703,
-  "testsTotal": 703,
+  "testsPassing": 704,
+  "testsTotal": 704,
   "entropyScore": 0.216,
   "entropyLastComputed": "2026-07-20",
   "silRubricVersion": "3.0",
@@ -117,13 +123,13 @@
   "doctorScore": {
     "date": "2026-07-22",
     "overallPass": false,
-    "passing": 122,
-    "warning": 27,
+    "passing": 119,
+    "warning": 30,
     "failing": 1,
     "blockingFailing": 0,
     "skipped": 2,
     "ran": 150,
     "total": 152,
-    "score": 81
+    "score": 79
   }
 }

@@ -1,3 +1,8 @@
+export function defaultVisualAuditStorage() {
+  return {
+    "cod-callsign-v1": "VISUAL-QA",
+  };
+}
 export function parseCssColor(value) {
   const match = String(value || "").trim().match(/^rgba?\(\s*([\d.]+)[, ]+([\d.]+)[, ]+([\d.]+)(?:\s*[,/]\s*([\d.]+))?\s*\)$/i);
   if (!match) return null;

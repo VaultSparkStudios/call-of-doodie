@@ -276,7 +276,7 @@ Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=7 cano
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
 Velocity trend: ↓  |  Protocol velocity: ↓  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-21 | Session 126 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
+Last session: 2026-07-21 | Session 126 | Total: 1000/1000 | Velocity: 9 | protocolVelocity: 9
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1793,15 +1793,15 @@ Brainstorm:
 2. Adaptive HUD density rehearsal — generate deterministic maximal-surface fixtures for every mode combination and compare allocation envelopes at new viewport classes. High probability when another HUD surface lands.
 3. Provenance-linked asset explorer — derive a human-readable gallery from `assets/visual-assets.json` and `/ip/` without duplicating ownership truth. Medium probability before launch.
 
-## 2026-07-21 — Session 126 | Total: 1000/1000 | Velocity: 8 | Debt: ↓
+## 2026-07-21 — Session 126 | Total: 1000/1000 | Velocity: 9 | Debt: ↓
 
-SIL +8: Recovered the prior closeout as a clean checkpoint, shipped five verified L3 audit items and three second-order integrity refinements, then exhausted every safe repo-owned candidate.
+SIL +9: Recovered the prior closeout as a clean checkpoint, shipped five verified L3 audit items and four second-order integrity refinements, then exhausted every safe repo-owned candidate.
 
 | Category | Score | Delta | Rationale |
 |---|---:|---|---|
-| Dev Health | 100 | same | Strict lint, 703/703 tests, production build, dependency/public/security/replay/media/live gates, and diff checks are green. |
+| Dev Health | 100 | same | Strict lint, 704/704 tests, production build, dependency/public/security/replay/media/live gates, and diff checks are green. |
 | Creative Alignment | 100 | same | Pause and performance feedback fit the project voice while preserving the dark-first identity and proprietary, parody-safe posture. |
-| Momentum | 100 | up | Recovery, five primary L3 items, and three second-order refinements shipped continuously without a phase handback. |
+| Momentum | 100 | up | Recovery, five primary L3 items, and four second-order refinements shipped continuously without a phase handback. |
 | Engagement | 100 | up | Players receive safer background pauses and honest device-specific performance guidance without balance or score distortion. |
 | Process Quality | 100 | up | Session chronology, protocol anchors, RNG parity, suspended-frame sampling, and persisted evidence all fail closed. |
 | Cross-Repo Coherence | 100 | same | Studio Ops was consumed through read-only/proxy surfaces; no sibling repository file was edited. |

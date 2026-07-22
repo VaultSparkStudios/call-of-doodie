@@ -13,7 +13,7 @@ Headline: Made session chronology, pause/input state, frame evidence, defeat rew
 ## Validation
 
 - strict lint passed
-- npm test 703/703 across 93 files
+- npm test 704/704 across 93 files
 - production build passed
 - dependency tree coherent: 18 declared roots
 - public contract 13/13
@@ -22,6 +22,7 @@ Headline: Made session chronology, pause/input state, frame evidence, defeat rew
 - replay state and edge fixtures 4/4 each
 - launch QA 5/5; production shell 5/5; cutover 5/5; replay trust 3/3
 - doctor overallPass true with blockingFailing 0
+- isolated SHA 193fdd6 deploy 29889321484 and brief 29889321470 passed; hosted visual matrix 255/255; eight routes HTTP 200
 
 ## Remaining
 

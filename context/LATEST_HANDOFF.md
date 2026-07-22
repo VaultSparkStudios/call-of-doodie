@@ -4,16 +4,17 @@
 - Recovered and verified the interrupted Session 125 boundary before new work: no corruption or debris, full baseline and doctor real, dedicated `7b8d18f recover S125 closeout` commit pushed, and exact-main deploy/brief runs green.
 - Completed the founder-requested continuous arc from that clean checkpoint: `/start -> /audit -> /implement -> innovation saturation -> /closeout`.
 - Shipped all five L3 items in `docs/AUDIT_2026-07-21.json`: coherent startup evidence, visibility-safe replay-visible pausing, protocol reference drift enforcement, a bounded adaptive performance receipt, and shared deterministic defeat economy.
-- Implemented all three safe second-order candidates: in-place newest-match transient retention, suspended-frame timing exclusion, and persisted receipt invariant normalization.
+- Implemented all four safe second-order candidates: in-place newest-match transient retention, suspended-frame timing exclusion, persisted receipt invariant normalization, and a callsign-aware/fresh-theme-pure browser harness.
 - The Unified Genius List is exhausted for safe repo-executable work. Remaining candidates require credentials, production traffic, hardware/media evidence, community/product choices, or launch approval.
 - SPARKED remains NO-GO; engineering completeness is not launch approval.
 
 ## Validation
 - `npm run lint:strict` — PASS.
-- `npm test` — 703/703 across 93 files.
+- `npm test` — 704/704 across 93 files.
 - Production build; dependency tree (18 declared roots); public contract 13/13; protocol drift including all four arc anchors; security release audit and npm audit 0 — PASS.
 - Replay state-stepper and Edge fixtures 4/4 each; launch media; launch QA 5/5; production shell 5/5; cutover 5/5; replay trust 3/3 — PASS.
 - Medium game gate and focused pause/input/replay/performance/economy/launch suites — PASS.
+- Isolated staging — exact SHA `193fdd6` passed deploy `29889321484` and brief `29889321470`; hosted browser matrix 255/255 and eight public HTTP routes passed.
 - Doctor — `overallPass: true`, 122/150 passing, 2 expected skips, 1 advisory failure, `blockingFailing: 0`.
 
 ## Next

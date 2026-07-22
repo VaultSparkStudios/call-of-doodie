@@ -22,7 +22,7 @@
       "public web canon"
     ],
     "baseline": {
-      "tests": "703/703 across 93 files",
+      "tests": "704/704 across 93 files",
       "lint": "strict pass",
       "build": "pass",
       "publicContract": "13/13",
@@ -38,7 +38,8 @@
     "secondOrderImplemented": [
       "boss-banner-hot-array-retention",
       "suspended-frame-evidence-exclusion",
-      "performance-receipt-invariant-normalization"
+      "performance-receipt-invariant-normalization",
+      "fresh-theme-visual-harness-truth"
     ]
   },
   "gameLoopReview": {
@@ -254,7 +255,7 @@
       "status": "shipped",
       "shipped": true,
       "notes": "Active locks newer than the canonical brief now fail freshness with machine-readable reason codes.",
-      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+      "verification": "strict lint; 704/704 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0; isolated deploy 29889321484; brief 29889321470; hosted visual 255/255; eight public routes 200"
     },
     {
       "slug": "visibility-pause-trust-contract",
@@ -262,7 +263,7 @@
       "status": "shipped",
       "shipped": true,
       "notes": "One idempotent pause coordinator releases held input, records replay transitions, auto-pauses hidden tabs, and exposes accessible reason copy.",
-      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+      "verification": "strict lint; 704/704 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0; isolated deploy 29889321484; brief 29889321470; hosted visual 255/255; eight public routes 200"
     },
     {
       "slug": "protocol-reference-drift-gate",
@@ -270,7 +271,7 @@
       "status": "shipped",
       "shipped": true,
       "notes": "Public-safe audit and implement anchors, a safe Studio Oracle proxy, and anchor-aware drift checks now fail closed.",
-      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+      "verification": "strict lint; 704/704 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0; isolated deploy 29889321484; brief 29889321470; hosted visual 255/255; eight public routes 200"
     },
     {
       "slug": "adaptive-performance-flight-recorder",
@@ -278,7 +279,7 @@
       "status": "shipped",
       "shipped": true,
       "notes": "Fixed-memory timing receipts drive conservative assistance with hysteresis, survive run history, exclude suspended frames, and preserve non-causality language.",
-      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+      "verification": "strict lint; 704/704 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0; isolated deploy 29889321484; brief 29889321470; hosted visual 255/255; eight public routes 200"
     },
     {
       "slug": "enemy-defeat-economy-parity",
@@ -286,7 +287,7 @@
       "status": "shipped",
       "shipped": true,
       "notes": "Railgun and projectile kills share deterministic score, career-boss and coin-drop planning without changing named-RNG draw order.",
-      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+      "verification": "strict lint; 704/704 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0; isolated deploy 29889321484; brief 29889321470; hosted visual 255/255; eight public routes 200"
     }
   ]
 }

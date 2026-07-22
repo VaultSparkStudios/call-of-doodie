@@ -950,7 +950,8 @@ Intent outcome: achieved for every agent-owned premise; Unified Genius List satu
 - Centralized pause transitions, released held input, recorded replay-visible pause/resume evidence, and auto-paused hidden tabs with accessible reason copy.
 - Added fixed-memory performance percentiles, conservative assistance hysteresis, local run receipts, run-end guidance, suspended/modal-frame exclusion, and impossible-value normalization.
 - Unified railgun/projectile score, boss, and coin planning without changing named-RNG draw timing; removed the final boss-banner hot-array replacement.
+- Staging caught a stale harness premise: the fresh default browser context stopped at the required callsign gate while waiting for HomeV2. Added a pure callsign-only storage contract that leaves theme/home storage empty; hosted visual audit then passed 255/255 and eight routes returned 200.
 - Saturation disposition: all safe second-order candidates shipped; remaining Genius List items require external credentials, traffic, hardware, product/community decisions, or founder launch approval.
-- Validation: strict lint; 703/703 tests across 93 files; build; dependency/public/protocol/security/npm-audit gates; replay fixtures; media/live/cutover/trust smokes; doctor overallPass true and blockingFailing 0.
+- Validation: strict lint; 704/704 tests across 93 files; build; dependency/public/protocol/security/npm-audit gates; replay fixtures; media/live/cutover/trust smokes; doctor overallPass true and blockingFailing 0.
 
 Intent outcome: achieved. SPARKED remains evidence-gated rather than inferred from code completion.

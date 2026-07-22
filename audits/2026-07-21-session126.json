@@ -13,11 +13,12 @@
     "Shared deterministic railgun/projectile defeat economy planning",
     "In-place newest-match boss-banner retention",
     "Suspended/modal-frame exclusion from timing evidence",
-    "Persisted performance-receipt invariant normalization"
+    "Persisted performance-receipt invariant normalization",
+    "Fresh-theme visual harness callsign gate with empty theme/home storage"
   ],
   "validation": [
     "strict lint passed",
-    "npm test 703/703 across 93 files",
+    "npm test 704/704 across 93 files",
     "production build passed",
     "dependency tree coherent: 18 declared roots",
     "public contract 13/13",
@@ -25,7 +26,8 @@
     "security release audit passed; npm audit 0 vulnerabilities",
     "replay state and edge fixtures 4/4 each",
     "launch QA 5/5; production shell 5/5; cutover 5/5; replay trust 3/3",
-    "doctor overallPass true with blockingFailing 0"
+    "doctor overallPass true with blockingFailing 0",
+    "isolated SHA 193fdd6 deploy 29889321484 and brief 29889321470 passed; hosted visual matrix 255/255; eight routes HTTP 200"
   ],
   "deferred": [
     "direct AI pixel review after host CryptUnprotectData failures",
@@ -37,7 +39,7 @@
   ],
   "sil": {
     "score": 1000,
-    "velocity": 8,
+    "velocity": 9,
     "debt": "decreasing"
   },
   "headline": "Made session chronology, pause/input state, frame evidence, defeat rewards, and protocol reachability fail truthful",

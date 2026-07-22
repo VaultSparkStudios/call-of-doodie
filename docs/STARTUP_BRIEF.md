@@ -38,8 +38,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 8↓                       ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 9↓                       ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↓  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -59,19 +59,19 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 126 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    703/703 passing  ·  Deploy: N/A                       ║
+║  Tests:    704/704 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  5.4% used                          ║
-║     53,948 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~26,974 tok/turn  ·  cache 50%  ·  32 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.6% used                          ║
+║     3,235 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,618 tok/turn  ·  cache 50%  ·  111 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         703/703 passing                                ║
-║  ✓  Velocity      8 ↓  ·  Debt: ↓                                ║
+║  ✓  Tests         704/704 passing                                ║
+║  ✓  Velocity      9 ↓  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44175 FORGE  ·  6d old                         ║
@@ -84,7 +84,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        122/152 (81%)  ·  1 failing                    ║
+║  ⛔  Doctor        119/152 (79%)  ·  1 failing                    ║
 ║  ✓  Cost          real $0.13/7d · 7d notional $2.11 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  8↓  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  9↓  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
