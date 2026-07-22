@@ -1,19 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-17 (Session 124 closeout) -->
+<!-- generated-at: 2026-07-22 (Session 126 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S124 ════════════════════╗
-║  Date: 2026-07-17  ·  SIL: 1000/1000  ·  Velocity: 9 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S126 ════════════════════╗
+║  Date: 2026-07-22  ·  SIL: 1000/1000  ·  Velocity: 9 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Completed the requested continuous `/goal` mission from sync  ║
-║  ✓ Shipped all nine live-premise items in `docs/AUDIT_2026-07-1  ║
-║  ✓ The Unified Genius List is exhausted for repo-executable wor  ║
-║  ✓ SPARKED remains NO-GO. This session does not claim physical   ║
+║  ✓ Recovered and verified the interrupted Session 125 boundary   ║
+║  ✓ Completed the founder-requested continuous arc from that cle  ║
+║  ✓ Shipped all five L3 items in `docs/AUDIT_2026-07-21.json`: c  ║
+║  ✓ Implemented all four safe second-order candidates: in-place   ║
+║  ✓ The Unified Genius List is exhausted for safe repo-executabl  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -45,14 +46,14 @@
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-124-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-126-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        122/148                                          ║
+║  Doctor:        119/152                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         664/664                                          ║
-║  IGNIS:         1d ago                                           ║
+║  Tests:         704/704                                          ║
+║  IGNIS:         6d ago                                           ║
 ║  Truth:         green-code-no-go-launch                          ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝
