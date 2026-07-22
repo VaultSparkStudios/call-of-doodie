@@ -857,3 +857,18 @@ Last reviewed: 2026-07-16
 - Full suite after the root-fix: 664/664 tests; protocol drift 30/30; Windows hidden-spawn guard green.
 
 - Closeout board truth: committed write-backs are derived from the prior-to-current closeout commit range; ignored local creative-direction evidence uses a bounded recent-mtime fallback; staging uses the verified `testingSurfaces` entry. The regenerated board marks all ten write-backs and the Session 124 preview truthfully.
+
+## 2026-07-21 — Session 126 — Session, pause, performance, protocol, and economy truth
+
+- Recovery truth — Session 125 residual closeout work was uncommitted but internally complete; it was independently revalidated, committed as `7b8d18f`, pushed, and accepted by exact-main CI before Session 126 began.
+- Audit truth — `docs/AUDIT_2026-07-21.json` / `.md` contain five live-verified L3 items and three implemented second-order candidates; every primary item is marked shipped with execution evidence.
+- Startup truth — a coherent brief cannot outrank a newer active lock; freshness reports the exact chronological failure.
+- Pause truth — actual pause transitions are replay-visible and input-safe; duplicate touch/click events remain idempotent; no unsupported score-validity claim is made.
+- Performance truth — receipts use fixed memory, conservative hysteresis, simulated frames only, normalized persisted invariants, and explicit local-timing/non-causality language.
+- Economy truth — railgun and projectile reward planning share one deterministic contract while surrounding side-effect order and named-RNG timing remain unchanged.
+- Protocol truth — `/start`, `/audit`, `/implement`, and `/closeout` anchors plus the Studio Oracle proxy are locally reachable and drift-gated.
+- Validation truth — strict lint, 703/703 tests across 93 files, build, dependency/public/protocol/security/npm-audit gates, replay/media/live/cutover/trust checks, and doctor `overallPass: true` with `blockingFailing: 0` passed directly.
+- Release truth — engineering closeout is green; direct AI pixel, physical devices/media, inbound mail, production data, analytics scope, publication, and founder approval remain unclaimed launch gates.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-21

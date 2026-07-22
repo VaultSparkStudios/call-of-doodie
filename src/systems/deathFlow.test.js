@@ -102,6 +102,7 @@ describe("buildDeathScreenProps", () => {
       },
       challengeVsScore: 1500,
       challengeVsName: "Rival",
+      performanceReceipt: { assisted: true, slowPct: 22 },
     });
 
     expect(props).toMatchObject({
@@ -117,6 +118,7 @@ describe("buildDeathScreenProps", () => {
       ghostKey: "cod-ghost-normal-v1",
       vsScore: 1500,
       vsName: "Rival",
+      performanceReceipt: { assisted: true, slowPct: 22 },
     });
     expect(props.onStartGame).toBe(onStartGame);
     expect(props.proximityRivals).toHaveLength(1);

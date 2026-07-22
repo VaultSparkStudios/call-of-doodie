@@ -1,40 +1,51 @@
 <!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-07-16 -->
+<!-- generated-at: 2026-07-22T02:11:16.309Z -->
 
 # Innovation Pack — Call-Of-Doodie
 
-> Repo-local second-order results and the remaining evidence-gated candidate list for `/implement` saturation loops.
+> Repo-local second-order candidate list for `/implement` saturation loops.
 
-## Implemented Expansion
+## Ranked Candidates
 
-1. **genius-list-default-top-argument-truth** — Fixed the absent `--top` parser path that silently collapsed the Unified Genius List to zero items; regression-covered default and explicit limits.
-2. **degraded-run-history-integrity-receipt** — Preserved bounded LOCAL ONLY integrity evidence in run history so a recovered-but-divergent run can never regain competitive legitimacy through navigation.
-3. **dependency-process-status-fails-closed** — Made parseable npm output insufficient when the underlying process failed for anything except lockfile-proven optional platform packages.
-4. **innovation-title-identity** — Deduplicated generated candidates by canonical full title rather than independently truncated slugs, eliminating false “different” work.
-5. **stale-browser-qa-decomposition** — Replaced the obsolete “CLI cannot drive browser” blocker with verified automated coverage and a narrowly honest physical-device/media remainder.
-6. **dark-default-global-bootstrap** — Restored Sewer Night as the explicit fresh-visit default across React, callsign/auth entry surfaces, and static legal pages while retaining an intentional Porcelain Day selection; expanded the visual audit with light-OS/default-theme assertions.
-7. **post-push-dependabot-ratchet** — Consumed GitHub's post-push high-severity signal, trust-gated and pinned patched dev-only transitive overrides, then re-ran clean install, full tests, lint, build, dependency/security, npm-audit, and studio supply-chain gates.
-8. **node24-action-runtime-pins** — Eliminated GitHub's Node 20 compatibility fallback by pinning checkout, setup-node, and Wrangler deploy actions to exact, official Node 24 commits; workflow YAML and the resulting exact-main CI run must pass without runtime-deprecation annotations.
-
-## Remaining Ranked Candidates
-
-These are intentionally not repo-executable today; each requires a credential, live traffic, founder product decision, or real community state. Their premises were verified rather than fabricated.
-
-1. **analytics-dashboard-allowlists** — Configure PostHog/Sentry/Ko-fi allowlists after the `analytics` capability exists; Supabase origins are already verified in code/live OPTIONS evidence.
-   - Gate: analytics credential and wired provider projects.
-2. **supabase-auth-studio-membership-decision** — Implement the accepted auth plan only when paid membership or material cross-device demand exists.
-   - Gate: product decision backed by demand.
-3. **home-v2-production-lighthouse** — Capture real Largest Contentful Paint and Cumulative Layout Shift deltas against the legacy home before removing its fallback.
-   - Gate: production measurement, not a local synthetic claim.
-4. **home-v2-live-funnel** — Compare HomeV2 deploy completion with the legacy front-door funnel after a meaningful live traffic window.
-   - Gate: 48 hours of representative analytics.
-5. **discord-community-entry** — Add a community link only when a staffed, moderated entry point actually exists.
-   - Gate: real community readiness.
-6. **home-v1-retirement** — Retire the fallback only after the Lighthouse and funnel gates above pass.
-   - Gate: the recorded ≥200 ms improvement and non-regressing conversion evidence.
+1. **sil-2-blocker-s61-s60-follow-up-narrowed-s112-update-posthog-sentry-ko-f** — [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
+   - Axis: protocol
+   - Evidence: context/TASK_BOARD.md#now
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+2. **sil-2-s60-supabase-auth-studio-membership-implementation-decision-if-pai** — [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
+   - Axis: protocol
+   - Evidence: context/TASK_BOARD.md#now
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+3. **human-data-sil-2-homev2-lighthouse-measurement-capture-real-lcp-cls-delt** — [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
+   - Axis: product
+   - Evidence: context/TASK_BOARD.md#now
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+4. **human-data-sil-1-homev2-analytics-funnel-compare-homev2deploy-vs-legacy-** — [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
+   - Axis: product
+   - Evidence: context/TASK_BOARD.md#now
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+5. **discord-invite-community-link-when-the-community-entry-point-is-ready** — Discord invite/community link when the community entry point is ready
+   - Axis: product
+   - Evidence: context/TASK_BOARD.md#deferred
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+6. **sil-1-s62-deferred-homev2-v1-fallback-retirement-gate-on-200ms-lighthous** — [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
+   - Axis: product
+   - Evidence: context/TASK_BOARD.md#deferred
+   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
 
 ## Guardrails
 
 - Treat human/device/dashboard items as launch gates, not repo-code blockers.
 - Keep replay, leaderboard, and submission trust language evidence-backed.
 - Prefer local deterministic helpers over paid API or per-user variable cost.
+
+## Implemented Second-Order Refinements
+
+1. **boss-banner-hot-array-retention** — replaced the final boss-kill `filter().slice()` allocation with an identity-preserving newest-match retention primitive and exact order/cap tests.
+2. **suspended-frame-evidence-exclusion** — paused, hidden, draft, shop, route, cutscene, announcement, and mutation frames still render callbacks but cannot dilute run timing evidence.
+3. **performance-receipt-invariant-normalization** — persisted receipts now derive slow percentage from bounded counts, require `slowFrames <= totalFrames`, enforce `worstMs >= p95Ms`, and reconcile assistance labels/activation counts.
+
+All three are local, deterministic, cost-neutral, covered by focused tests, and preserve replay/score honesty.
+
+## Saturation Disposition
+
+The six generated candidates remain intentionally unimplemented: they require provider credentials, production traffic, founder product/community decisions, or physical evidence. No safe repo-owned primary candidate remains.

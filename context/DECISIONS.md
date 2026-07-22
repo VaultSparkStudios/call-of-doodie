@@ -648,3 +648,21 @@ Trade-off accepted: The site does not mirror the operating-system color preferen
 Decision: Pin official `actions/checkout` v6.1.0, `actions/setup-node` v6.5.0, `cloudflare/wrangler-action` v4.0.0, and `supabase/setup-cli` v3.0.0 by exact commit SHA. Pin the action-downloaded Supabase CLI to trust-reviewed `2.109.1`. Do not retain Node 20 compatibility fallback tags or adopt release-day v7 tags merely because they are newest.
 
 Rationale: GitHub's exact-main run exposed the runtime deprecation after product closeout. Established Node 24 lines remove the warning, immutable commits reduce action supply-chain drift, and exact-main CI proves compatibility with this repository's deploy contract.
+
+## 2026-07-21 — Session 126 — Active-session evidence outranks a coherent stale brief
+
+Decision: `STARTUP_BRIEF.md` is stale whenever an active session lock is newer, even if the brief is same-day and internally coherent. The checker emits explicit reason codes.
+
+Rationale: Internal coherence cannot make prior-session context-meter or doctor evidence current. Session chronology is the fail-closed authority.
+
+## 2026-07-21 — Session 126 — Pause is observable input state, not automatic score invalidity
+
+Decision: Every actual pause/resume transition records a bounded replay command and entering pause releases held keyboard, pointer, touch, joystick, and gamepad input. Visibility loss auto-pauses with player-facing explanation. The receipt does not invalidate score eligibility by itself.
+
+Rationale: Background throttling and held input can materially affect a run, so invisible freezes are unacceptable. Observation and fairness hygiene do not justify inventing a competitive penalty.
+
+## 2026-07-21 — Session 126 — Performance receipts measure simulated frames only
+
+Decision: Paused and modal callbacks are excluded from frame-timing evidence without resetting the run monitor. Persisted receipts derive percentage from bounded counts and enforce percentile/maximum and assistance invariants.
+
+Rationale: Fast no-op callbacks would dilute real gameplay evidence; contradictory persisted values would turn a diagnostic receipt into misinformation.

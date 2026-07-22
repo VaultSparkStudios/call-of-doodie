@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { makeFrameMonitor } from "./useGameLoop.js";
+import { makeFrameMonitor, runMeasuredFrame } from "./useGameLoop.js";
 
 describe("adaptive frame monitor", () => {
   beforeEach(() => {
@@ -23,10 +23,9 @@ describe("adaptive frame monitor", () => {
     const m = makeFrameMonitor();
     for (let i = 0; i < 130; i++) m.record(25);
     expect(window.__codReducedEffects).toBe(true);
-    // Need >1 full ADAPT_WINDOW (120 frames) of clean recordings; the first
-    // post-flip window inherits ~10 stragglers from the trigger window so it
-    // sits in the hysteresis dead zone. The second window is unambiguous.
-    for (let i = 0; i < 260; i++) m.record(8);
+    // The carried stragglers consume one window, then two fully clean windows
+    // are required by the anti-flap recovery hysteresis.
+    for (let i = 0; i < 380; i++) m.record(8);
     expect(window.__codReducedEffects).toBe(false);
   });
 
@@ -34,5 +33,44 @@ describe("adaptive frame monitor", () => {
     const m = makeFrameMonitor();
     m.record(50);
     expect(window.__codReducedEffects).toBeFalsy();
+  });
+  it("keeps histogram memory bounded and emits an honest assisted receipt", () => {
+    const receipts = [];
+    const m = makeFrameMonitor({ onSnapshot: (receipt) => receipts.push(receipt) });
+    for (let i = 0; i < 2400; i++) m.record(i < 240 ? 28 : 10);
+    const receipt = m.snapshot();
+    expect(receipt).toMatchObject({
+      totalFrames: 2400,
+      assisted: true,
+      assistActivations: 1,
+      histogramBuckets: 8,
+      claim: "observed-local-frame-timing-not-causality-or-score-validity",
+    });
+    expect(receipt.p95Ms).toBeGreaterThan(0);
+    expect(receipts.length).toBe(20);
+  });
+
+  it("executes suspended frames without diluting timing evidence", () => {
+    const m = makeFrameMonitor();
+    let callbacks = 0;
+    let now = 10;
+    const clock = () => {
+      const value = now;
+      now += 5;
+      return value;
+    };
+    runMeasuredFrame(() => { callbacks += 1; }, m, { shouldMeasure: false, now: clock });
+    expect(callbacks).toBe(1);
+    expect(m.snapshot()).toMatchObject({ totalFrames: 0, slowFrames: 0 });
+    expect(runMeasuredFrame(() => { callbacks += 1; }, m, { shouldMeasure: true, now: clock })).toBe(5);
+    expect(m.snapshot()).toMatchObject({ totalFrames: 1, slowFrames: 0 });
+  });
+
+  it("resets every run receipt without growing retained samples", () => {
+    const m = makeFrameMonitor();
+    for (let i = 0; i < 130; i++) m.record(30);
+    expect(m.snapshot().assisted).toBe(true);
+    m.reset();
+    expect(m.snapshot()).toMatchObject({ totalFrames: 0, slowFrames: 0, assisted: false, histogramBuckets: 8 });
   });
 });

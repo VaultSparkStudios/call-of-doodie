@@ -15,6 +15,14 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+- [x] [SIL:2] **DONE S126** Session-coherent startup evidence — active locks newer than the brief fail freshness with explicit reason codes and regression coverage.
+- [x] [SIL:2] **DONE S126** Visibility-aware pause trust contract — one idempotent coordinator releases held input, records replay pause/resume transitions, and explains automatic background pauses accessibly.
+- [x] [SIL:1] **DONE S126** Protocol reference drift gate — public-safe audit/implement anchors and the safe Oracle proxy are required and tested.
+- [x] [SIL:2] **DONE S126** Adaptive performance flight recorder — bounded percentiles, hysteresis, local run-history receipts, and honest assisted-run guidance now share one contract.
+- [x] [SIL:2] **DONE S126** Enemy-defeat economy parity — railgun and projectile paths share deterministic score, career-boss, and coin-drop planning with seeded parity tests.
+- [x] [SIL:1] **DONE S126 second-order** Boss-banner hot-array retention — newest matching floating text is retained in place with identity/order/cap tests.
+- [x] [SIL:1] **DONE S126 second-order** Suspended-frame evidence exclusion — paused and modal callbacks cannot dilute performance receipts.
+- [x] [SIL:1] **DONE S126 second-order** Performance-receipt invariants — persisted counts, percentages, percentiles, maxima, assistance labels, and activation counts cannot contradict one another.
 - [x] [SIL:3] **DONE S125** Competitive integrity fault boundary — recovered objective-director faults now create a bounded local-only receipt, disable global submission, persist into run history, and remain explicit about non-causality.
 - [x] [SIL:2] **DONE S125** HUD airspace allocator — every top-center combat surface now uses one deterministic mobile-aware stack with compound-mode non-overlap coverage.
 - [x] [SIL:2] **DONE S125** Dependency-tree truth gate — release checks fail closed on missing, invalid, unexplained extraneous, or failed-process roots while allowing only lockfile-proven optional platform packages.

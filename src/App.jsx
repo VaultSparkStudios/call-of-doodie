@@ -13,7 +13,7 @@ import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, appl
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
-import { computeKillPoints } from "./systems/scoreLedger.js";
+import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
 import { pickObjective, pickWaveChallengeContract, recordObjectiveResult, resolveWaveChallengeContract, startWaveChallengeContract, tickObjective } from "./systems/objectiveDirector.js";
 import {
   bulletEnemyCollision,
@@ -82,6 +82,7 @@ import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSummonsFor, createEnemyFrameIndex } from "./systems/frameIndex.js";
 import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
+import { planPauseTransition } from "./systems/pauseTransition.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -147,6 +148,7 @@ export default function CallOfDoodie() {
   const mouseRef       = useRef({ x: 0, y: 0, down: false, moved: false });
   const lastShotRef    = useRef(0);
   const frameRef       = useRef(null);
+  const frameMonitorRef = useRef(null);
   const joystickRef    = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null });
   const shootStickRef  = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false });
   const sizeRef        = useRef({ w: 800, h: 600 });
@@ -255,6 +257,7 @@ export default function CallOfDoodie() {
   const [timeSurvived, setTimeSurvived] = useState(0);
   const [tip, setTip]                 = useState("");
   const [paused, setPaused]           = useState(false);
+  const [pauseReason, setPauseReason] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
   const [extraLives, setExtraLives]   = useState(0);
   const [difficulty, setDifficulty]   = useState("normal");
@@ -1024,6 +1027,31 @@ export default function CallOfDoodie() {
       value,
     });
   }, []);
+  const transitionPause = useCallback((nextPaused, reason = "explicit") => {
+    const transition = planPauseTransition({
+      paused: pausedRef.current,
+      nextPaused,
+      reason,
+    });
+    if (!transition.changed) return transition;
+    pausedRef.current = transition.paused;
+    if (transition.releaseInputs) {
+      for (const key of Object.keys(keysRef.current)) keysRef.current[key] = false;
+      mouseRef.current.down = false;
+      joystickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null };
+      shootStickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false };
+      gamepadMoveRef.current = { x: 0, y: 0, active: false };
+      gamepadShootRef.current = false;
+      gamepadAngleRef.current = null;
+    }
+    setPaused(transition.paused);
+    setPauseReason(transition.paused && transition.label ? {
+      label: transition.label,
+      detail: transition.detail,
+    } : null);
+    recordCommandTrace("pause", transition.traceValue);
+    return transition;
+  }, [recordCommandTrace]);
   const sampleCommandTrace = useCallback((action, bucket, interval = 30) => {
     const state = action === "aim" ? lastTraceAimRef.current : lastTraceMoveRef.current;
     const frame = frameCountRef.current;
@@ -1736,6 +1764,7 @@ export default function CallOfDoodie() {
       traceEvidence: deathTraceEvidence,
       traceReceipt: deathTraceReceipt,
       integrityReceipt: getRunIntegrityReceipt(gs),
+      performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
     }));
     createDeathStudioEvents({
       score: gs.score,
@@ -1810,7 +1839,7 @@ export default function CallOfDoodie() {
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
     setBestStreak(0); setTotalDamage(0); setBerserkersKilled(0);
     setAchievementsUnlocked([]); setAchievementPopup(null); setTimeSurvived(0);
-    setPaused(false); setExtraLives(0); extraLivesRef.current = 0;
+    pausedRef.current = false; setPaused(false); setPauseReason(null); setExtraLives(0); extraLivesRef.current = 0;
     setGuardianAngelFlash(false); setWeaponUpgrades(WEAPONS.map(() => 0));
     starterLoadoutRef.current = starterLoadout;
     // Check if this run follows the last RunBrain experiment suggestion
@@ -2952,14 +2981,15 @@ export default function CallOfDoodie() {
             if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
             else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
             else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = 'unstoppable'; }
-            const pts = computeKillPoints({
-              basePoints: e.points,
+            const railDefeat = planEnemyDefeatScore({
+              enemy: e,
               comboMult: pbComboMult,
               killScoreMult: gs.killScoreMult || 1,
               routeKillScoreMult: gs.routeKillScoreMult || 1,
               activeObjective: gs.activeObjective || null,
               playerPos: gs.player,
             });
+            const pts = railDefeat.points;
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
             if (e.typeIndex != null) { const _wkt = gs._waveKillsByType || (gs._waveKillsByType = {}); _wkt[e.typeIndex] = { count: ((_wkt[e.typeIndex]?.count) || 0) + 1, name: e.name || ("TYPE" + e.typeIndex) }; }
@@ -2973,7 +3003,7 @@ export default function CallOfDoodie() {
             }
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (pbWpn != null) statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
-            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18 || e.typeIndex === 20 || e.typeIndex === 21) statsRef.current.bossKills++;
+            if (railDefeat.careerBoss) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
@@ -2982,7 +3012,7 @@ export default function CallOfDoodie() {
               gs.bossKillFlash = 22; gs.screenShake = Math.max(gs.screenShake, 30);
               addParticles(gs, e.x, e.y, e.color, 25); addParticles(gs, e.x, e.y, "#FFD700", 15); addParticles(gs, e.x, e.y, "#FFFFFF", 10);
               // Clear small damage texts so the boss kill banner reads clean
-              gs.floatingTexts = gs.floatingTexts.filter(ft => ft.big).slice(-4);
+              retainLastMatchingInPlace(gs.floatingTexts, (text) => text.big, 4);
               addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
               if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
               if (e.typeIndex === 20) gs.algorithmSurge = false;
@@ -3004,9 +3034,12 @@ export default function CallOfDoodie() {
             }
             // 💩 Doodie Coin drop
             const _railLootRng = getRunRng(gs, "loot");
-            const _coinDropBase = e.isBossEnemy ? (10 + Math.floor(_railLootRng() * 16)) : (e.elite ? (2 + Math.floor(_railLootRng() * 3)) : (_railLootRng() < 0.40 ? (1 + (_railLootRng() < 0.25 ? 1 : 0)) : 0));
-            const _coinTreeMult = gs._treeCoinBonus || 1;
-            const _coinDrop = Math.floor(_coinDropBase * (gs.coinMultActive ? 2 : 1) * _coinTreeMult);
+            const _coinDrop = planEnemyCoinDrop({
+              enemy: e,
+              rng: _railLootRng,
+              coinMultActive: gs.coinMultActive,
+              treeCoinBonus: gs._treeCoinBonus || 1,
+            }).amount;
             if (_coinDrop > 0) {
               gs.coins = (gs.coins || 0) + _coinDrop;
               setCoins(gs.coins);
@@ -3236,14 +3269,15 @@ export default function CallOfDoodie() {
             if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
             else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
             else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = 'unstoppable'; }
-            const pts = computeKillPoints({
-              basePoints: e.points,
+            const projectileDefeat = planEnemyDefeatScore({
+              enemy: e,
               comboMult,
               killScoreMult: gs.killScoreMult || 1,
               routeKillScoreMult: gs.routeKillScoreMult || 1,
               activeObjective: gs.activeObjective || null,
               playerPos: gs.player,
             });
+            const pts = projectileDefeat.points;
             gs.score += pts; gs.kills++; gs.killstreakCount++;
             addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
             // Beat-kill bonus: kills aligned to the music beat earn +1💩
@@ -3268,7 +3302,7 @@ export default function CallOfDoodie() {
             if (dashRef.current.active > 0) statsRef.current.dashKills++;
             if (b.wpnIdx != null) { statsRef.current.weaponKills[b.wpnIdx] = (statsRef.current.weaponKills[b.wpnIdx] || 0) + 1; }
             if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
-            if (e.typeIndex === 4 || e.typeIndex === 9 || e.typeIndex === 16 || e.typeIndex === 17 || e.typeIndex === 18 || e.typeIndex === 20 || e.typeIndex === 21) statsRef.current.bossKills++;
+            if (projectileDefeat.careerBoss) statsRef.current.bossKills++;
             if (e.typeIndex === 9) statsRef.current.landlordKills++;
             if (e.typeIndex === 10) statsRef.current.cryptoKills++;
             if (e.isBossEnemy) {
@@ -3285,8 +3319,12 @@ export default function CallOfDoodie() {
             }
             // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
             const _bulletLootRng = getRunRng(gs, "loot");
-            const _cd2Base = e.isBossEnemy ? (10 + Math.floor(_bulletLootRng() * 16)) : (e.elite ? (2 + Math.floor(_bulletLootRng() * 3)) : (_bulletLootRng() < 0.40 ? (1 + (_bulletLootRng() < 0.25 ? 1 : 0)) : 0));
-            const _cd2 = Math.floor(_cd2Base * (gs.coinMultActive ? 2 : 1) * (gs._treeCoinBonus || 1));
+            const _cd2 = planEnemyCoinDrop({
+              enemy: e,
+              rng: _bulletLootRng,
+              coinMultActive: gs.coinMultActive,
+              treeCoinBonus: gs._treeCoinBonus || 1,
+            }).amount;
             if (_cd2 > 0) {
               gs.coins = (gs.coins || 0) + _cd2;
               setCoins(gs.coins);
@@ -4097,17 +4135,39 @@ export default function CallOfDoodie() {
   }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
-  useGameLoop(gameLoop, screen === "game", frameRef);
+  useGameLoop(gameLoop, screen === "game", frameRef, {
+    monitorRef: frameMonitorRef,
+    shouldMeasure: () => Boolean(
+      gsRef.current?.player
+      && !pausedRef.current
+      && !perkPendingRef.current
+      && !shopPendingRef.current
+      && !routePendingRef.current
+      && !bossCutsceneRef.current
+      && !waveAnnouncePendingRef.current
+      && !mutationPendingRef.current
+    ),
+  });
+
+  // Background throttling must become an explicit, input-safe pause receipt.
+  useEffect(() => {
+    if (screen !== "game") return undefined;
+    const handleVisibility = () => {
+      if (document.hidden) transitionPause(true, "visibility");
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, [screen, transitionPause]);
 
   // ── Keyboard ──────────────────────────────────────────────────────────────
   useEffect(() => {
     const kd = (e) => {
       const tag = e.target?.tagName?.toLowerCase();
       if (tag === "input" || tag === "textarea" || tag === "select") {
-        if (e.key === "Escape" && screen === "game") { setPaused(p => !p); e.preventDefault(); }
+        if (e.key === "Escape" && screen === "game") { transitionPause(!pausedRef.current, "keyboard"); e.preventDefault(); }
         return;
       }
-      if (e.key === "Escape" && screen === "game") { setPaused(p => !p); e.preventDefault(); return; }
+      if (e.key === "Escape" && screen === "game") { transitionPause(!pausedRef.current, "keyboard"); e.preventDefault(); return; }
       if (pausedRef.current || perkPendingRef.current) return;
       keysRef.current[e.key.toLowerCase()] = true;
       if (e.key === "r") doReload(currentWeaponRef.current);
@@ -4139,7 +4199,7 @@ export default function CallOfDoodie() {
       window.removeEventListener("keydown", kd); window.removeEventListener("keyup", ku);
       window.removeEventListener("mousemove", mm); window.removeEventListener("mousedown", md); window.removeEventListener("mouseup", mu);
     };
-  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, screen]);
+  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, screen, transitionPause]);
 
   // ── Touch controls ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -4216,7 +4276,7 @@ export default function CallOfDoodie() {
       if (pausedRef.current || perkPendingRef.current || shopPendingRef.current || routePendingRef.current || bossCutsceneRef.current) {
         // While paused still handle Start button to unpause
         const start = gp.buttons[9]?.pressed;
-        if (start && !lastStart) setPaused(p => !p);
+        if (start && !lastStart) transitionPause(!pausedRef.current, "controller");
         lastStart = !!start;
         // Clear controller movement so player doesn't keep moving when unpaused.
         // Keyboard state is owned by keyboard events and must not be overwritten here.
@@ -4268,7 +4328,7 @@ export default function CallOfDoodie() {
 
       // Button 9 (Start/Options) → toggle pause (edge-triggered)
       const start = controls.pause;
-      if (start && !lastStart) setPaused(p => !p);
+      if (start && !lastStart) transitionPause(!pausedRef.current, "controller");
       lastStart = !!start;
     };
 
@@ -4285,7 +4345,7 @@ export default function CallOfDoodie() {
       gamepadShootRef.current = false;
       gamepadAngleRef.current = null;
     };
-  }, [doDash, doReload, throwGrenade, switchWeapon]);
+  }, [doDash, doReload, throwGrenade, switchWeapon, transitionPause]);
 
   // ── Respawn (from death screen) ───────────────────────────────────────────
   const _respawn = useCallback(() => {
@@ -4397,6 +4457,7 @@ export default function CallOfDoodie() {
       weaponKills: weaponKillsSnapshot,
       starterLoadout,
       traceEvidence: deathTraceEvidenceRef.current,
+      performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
       gs: gsRef.current,
       bossKillCount: statsRef.current.bossKills || 0,
       weaponMilestones: weaponMilestonesRef.current,
@@ -4447,13 +4508,14 @@ export default function CallOfDoodie() {
           musicVibe={musicVibe} onSetMusicVibe={(v) => { setMusicVibe(v); setMusicVibeState(v); localStorage.setItem("cod-music-vibe", v); }}
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
-          onResume={() => setPaused(false)}
+          pauseReason={pauseReason}
+          onResume={() => transitionPause(false, "resume")}
           onLeave={() => {
             const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
             const abandonPayload = { wave, score, mode, difficulty: difficultyRef.current, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) };
             track("mode_abandon", abandonPayload);
             saveStudioGameEvent(buildStudioGameEvent("mode_abandon", { surface: "pause_menu", ...abandonPayload }));
-            stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPaused(false); setScreen("menu");
+            stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); transitionPause(false, "leave"); setScreen("menu");
           }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore}
@@ -4761,7 +4823,7 @@ export default function CallOfDoodie() {
         weaponEvolutions={weaponEvolutionsRef.current}
         runModifier={RUN_MODIFIERS.find(m => m.id === runModifier) || null}
         onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)}
-        onDash={doDash} onGrenade={throwGrenade} onPause={() => setPaused(true)}
+        onDash={doDash} onGrenade={throwGrenade} onPause={() => transitionPause(true, "hud")}
         fmtTime={fmtTime}
         overclockedActive={activePerks.some(p => p.id === "overclocked")}
         overclockedShots={overclockedShots}
@@ -4855,8 +4917,8 @@ export default function CallOfDoodie() {
             }}
             style={{ width: "clamp(32px,8vw,42px)", height: 44, borderRadius: 8, background: autoAim ? "rgba(255,215,0,0.18)" : "rgba(255,255,255,0.06)", border: autoAim ? "2px solid rgba(255,215,0,0.7)" : "1px solid rgba(255,255,255,0.15)", color: autoAim ? "#FFD700" : "#888", fontSize: 15, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>🎯</button>
           <button
-            onTouchStart={(e) => { e.preventDefault(); setPaused(true); }}
-            onClick={() => setPaused(true)}
+            onTouchStart={(e) => { e.preventDefault(); transitionPause(true, "touch"); }}
+            onClick={() => transitionPause(true, "touch")}
             style={{ width: "clamp(32px,8vw,42px)", height: 44, borderRadius: 8, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 11, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontFamily: "monospace", letterSpacing: 1, flexShrink: 0 }}>II</button>
         </div>
       )}

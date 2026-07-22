@@ -23,6 +23,7 @@ const helpers = [
   { rel: "scripts/cache-genius-list.mjs", level: "optional", purpose: "keeps startup genius-list command executable" },
   { rel: "scripts/generate-genius-list.mjs", level: "optional", purpose: "renders brief startup recommendations" },
   { rel: "scripts/sample-codebase.mjs", level: "optional", purpose: "supports bounded audit code sampling" },
+  { rel: "scripts/studio-oracle.mjs", level: "required", purpose: "keeps audit premise verification executable" },
   { rel: "scripts/render-audit-md.mjs", level: "optional", purpose: "renders audit markdown from JSON sidecar" },
   { rel: "scripts/lib/audit-sidecar.mjs", level: "optional", purpose: "finds and updates audit JSON sidecars" },
   { rel: "scripts/session-floor.mjs", level: "optional", purpose: "gates implement/closeout saturation honestly" },
@@ -43,11 +44,28 @@ function exists(rel) {
   return fs.existsSync(path.join(ROOT, rel));
 }
 
-const checks = helpers.map((helper) => ({
-  ...helper,
-  ok: exists(helper.rel),
-  status: exists(helper.rel) ? "present" : helper.level === "required" ? "missing-required" : "missing-warning",
-}));
+const protocolAnchors = [
+  { rel: "docs/SESSION_PROTOCOL.md#§1", contains: "## §1 — `/start` protocol", purpose: "keeps /start canonical steps locally reachable" },
+  { rel: "docs/SESSION_PROTOCOL.md#§2B", contains: "## §2B — `/audit` protocol", purpose: "keeps /audit canonical steps locally reachable" },
+  { rel: "docs/SESSION_PROTOCOL.md#§2C", contains: "## §2C — `/implement` protocol", purpose: "keeps /implement canonical steps locally reachable" },
+  { rel: "docs/SESSION_PROTOCOL.md#§3", contains: "## §3 — /closeout protocol", purpose: "keeps /closeout canonical steps locally reachable" },
+];
+
+const checks = helpers.map((helper) => {
+  const ok = exists(helper.rel);
+  return {
+    ...helper,
+    ok,
+    status: ok ? "present" : helper.level === "required" ? "missing-required" : "missing-warning",
+  };
+});
+const protocolText = fs.existsSync(path.join(ROOT, "docs", "SESSION_PROTOCOL.md"))
+  ? fs.readFileSync(path.join(ROOT, "docs", "SESSION_PROTOCOL.md"), "utf8")
+  : "";
+for (const anchor of protocolAnchors) {
+  const ok = protocolText.includes(anchor.contains);
+  checks.push({ ...anchor, level: "required", ok, status: ok ? "present" : "missing-required" });
+}
 
 const missingRequired = checks.filter((check) => check.level === "required" && !check.ok);
 const missingOptional = checks.filter((check) => check.level === "optional" && !check.ok);

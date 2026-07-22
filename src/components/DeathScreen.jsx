@@ -49,6 +49,7 @@ export default function DeathScreen({
   waveScoreLog = [],
   communityChokeWaves = null,
   fairnessReceipt = null,
+  performanceReceipt = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [lastWords, setLastWords] = useState("");
@@ -931,6 +932,20 @@ export default function DeathScreen({
             </div>
             <p style={{ margin: "8px 0 0", color: "#91A4AE", fontSize: 9, lineHeight: 1.45 }}>
               This fingerprint proves the seeded decision streams used by this run. It is not a claim of full physics replay equivalence.
+            </p>
+          </div>
+        )}
+
+        {performanceReceipt?.assisted && (
+          <div data-testid="performance-receipt" role="status" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,209,102,0.4)", background: "linear-gradient(180deg,rgba(255,209,102,0.09),rgba(255,255,255,0.035))" }}>
+            <div style={{ fontSize: 10, color: "#FFD166", letterSpacing: 2, fontWeight: 900 }}>{performanceReceipt.label}</div>
+            <div style={{ marginTop: 7, display: "flex", gap: 12, flexWrap: "wrap", color: "#FFF4D1", fontSize: 10 }}>
+              <span>{performanceReceipt.slowPct}% SLOW FRAMES</span>
+              <span>95TH PERCENTILE {performanceReceipt.p95Ms}ms</span>
+              <span>{performanceReceipt.assistActivations} ADAPTATION{performanceReceipt.assistActivations === 1 ? "" : "S"}</span>
+            </div>
+            <p style={{ margin: "8px 0 0", color: "#C8BFA6", fontSize: 9, lineHeight: 1.45 }}>
+              Reduced effects protected readability after sustained slow frames on this device. This local timing receipt does not claim a cause or change score validity.
             </p>
           </div>
         )}

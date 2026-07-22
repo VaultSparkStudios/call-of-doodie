@@ -10,6 +10,29 @@ export function stepAndCompactInPlace(items, predicate) {
   return items;
 }
 
+export function retainLastMatchingInPlace(items, predicate, limit) {
+  if (!Array.isArray(items)) return [];
+  const cap = Math.max(0, Math.floor(Number(limit) || 0));
+  if (cap === 0) {
+    items.length = 0;
+    return items;
+  }
+  let skip = 0;
+
+  for (let index = items.length - 1; index >= 0; index -= 1) {
+    if (predicate(items[index], index, items)) skip += 1;
+  }
+  skip = Math.max(0, skip - cap);
+  return stepAndCompactInPlace(items, (item, index, source) => {
+    if (!predicate(item, index, source)) return false;
+    if (skip > 0) {
+      skip -= 1;
+      return false;
+    }
+    return true;
+  });
+}
+
 export function stepTransientEffectsInPlace(gs = {}) {
   gs.particles = stepAndCompactInPlace(gs.particles || [], (particle) => {
     particle.x += particle.vx;

@@ -38,6 +38,7 @@ describe("runSession", () => {
       modifier: "chaos",
       traceEvidence: { level: "rich", count: 7, durationFrames: 96, weaknessReasons: [] },
       traceReceipt: { status: "verified", label: "Replay Proof Ready", score: 92, level: "rich" },
+      performanceReceipt: { totalFrames: 720, slowFrames: 144, slowPct: 20, p95Ms: 25, worstMs: 48, assisted: true, assistActivations: 1 },
       integrityReceipt: {
         status: "degraded",
         onlineEligible: false,
@@ -54,6 +55,7 @@ describe("runSession", () => {
       time: 301,
       traceReceipt: { status: "verified", score: 92 },
       traceEvidence: { level: "rich", count: 7 },
+      performanceReceipt: { totalFrames: 720, slowFrames: 144, slowPct: 20, p95Ms: 25, worstMs: 48, assisted: true, assistActivations: 1 },
       integrityReceipt: {
         status: "degraded",
         onlineEligible: false,
@@ -80,6 +82,31 @@ describe("runSession", () => {
       wave: 12,
       score: 9999,
       kills: 55,
+    });
+  });
+
+  it("normalizes impossible performance evidence before persistence", () => {
+    const historyEntry = createRunHistoryEntry({
+      performanceReceipt: {
+        totalFrames: 10.9,
+        slowFrames: 99,
+        slowPct: -500,
+        p95Ms: 40,
+        worstMs: 12,
+        assisted: true,
+        assistActivations: 0,
+      },
+    });
+    expect(historyEntry.performanceReceipt).toMatchObject({
+      totalFrames: 10,
+      slowFrames: 10,
+      slowPct: 100,
+      p95Ms: 40,
+      worstMs: 40,
+      assisted: true,
+      assistActivations: 1,
+      label: "PERFORMANCE ASSISTED",
+      claim: "observed-local-frame-timing-not-causality-or-score-validity",
     });
   });
 
@@ -151,4 +178,3 @@ describe("runSession", () => {
     });
   });
 });
-

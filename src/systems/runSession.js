@@ -50,6 +50,7 @@ export function createRunHistoryEntry({
   traceEvidence = null,
   traceReceipt = null,
   integrityReceipt = null,
+  performanceReceipt = null,
 } = {}) {
   const entry = {
     score,
@@ -91,6 +92,27 @@ export function createRunHistoryEntry({
         ? integrityReceipt.stages.filter(Boolean).map(String).slice(0, 8)
         : [],
       claim: "competitive-eligibility-fails-closed",
+    };
+  }
+  if (performanceReceipt?.totalFrames > 0) {
+    const totalFrames = Math.max(1, Math.floor(Number(performanceReceipt.totalFrames) || 1));
+    const slowFrames = Math.min(totalFrames, Math.max(0, Math.floor(Number(performanceReceipt.slowFrames) || 0)));
+    const p95Ms = Math.max(0, Number(performanceReceipt.p95Ms) || 0);
+    const worstMs = Math.max(p95Ms, Number(performanceReceipt.worstMs) || 0);
+    let assistActivations = Math.max(0, Math.floor(Number(performanceReceipt.assistActivations) || 0));
+    const assisted = Boolean(performanceReceipt.assisted) || assistActivations > 0;
+    if (assisted) assistActivations = Math.max(1, assistActivations);
+    entry.performanceReceipt = {
+      version: 1,
+      totalFrames,
+      slowFrames,
+      slowPct: Math.round((slowFrames / totalFrames) * 1000) / 10,
+      p95Ms,
+      worstMs,
+      assisted,
+      assistActivations,
+      label: assisted ? "PERFORMANCE ASSISTED" : "PERFORMANCE STABLE",
+      claim: "observed-local-frame-timing-not-causality-or-score-validity",
     };
   }
   return entry;

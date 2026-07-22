@@ -940,3 +940,17 @@ Session 120 deploy verification: pushed 336b7b2 to origin/main; GitHub Actions b
 - Honest deferrals: direct AI pixel inspection failed at the host CryptUnprotectData boundary; physical hardware/full-run media, inbound email, production metrics, analytics scope, publication/community, and founder launch approval remain external evidence gates.
 
 Intent outcome: achieved for every agent-owned premise; Unified Genius List saturated and second-order pack implemented.
+
+## 2026-07-21 — Session 126 — Recovery checkpoint, evidence-coherent runtime arc
+
+- Reconstructed Session 125 from handoff, work log, closeout brief, git history, and the complete dirty diff; verified JSON/NDJSON/config integrity, found no debris, and distinguished committed from residual uncommitted work.
+- Revalidated the prior closeout with 685/685 tests and doctor blockingFailing 0, committed the residual boundary as `7b8d18f recover S125 closeout`, pushed main, and verified exact-main deploy and brief workflows.
+- Ran a fresh full arc and generated `docs/AUDIT_2026-07-21.json` / `.md`; all five ranked L3 items shipped.
+- Made startup-brief freshness session-aware; restored locally executable audit/implement protocol anchors plus a safe Oracle proxy.
+- Centralized pause transitions, released held input, recorded replay-visible pause/resume evidence, and auto-paused hidden tabs with accessible reason copy.
+- Added fixed-memory performance percentiles, conservative assistance hysteresis, local run receipts, run-end guidance, suspended/modal-frame exclusion, and impossible-value normalization.
+- Unified railgun/projectile score, boss, and coin planning without changing named-RNG draw timing; removed the final boss-banner hot-array replacement.
+- Saturation disposition: all safe second-order candidates shipped; remaining Genius List items require external credentials, traffic, hardware, product/community decisions, or founder launch approval.
+- Validation: strict lint; 703/703 tests across 93 files; build; dependency/public/protocol/security/npm-audit gates; replay fixtures; media/live/cutover/trust smokes; doctor overallPass true and blockingFailing 0.
+
+Intent outcome: achieved. SPARKED remains evidence-gated rather than inferred from code completion.

@@ -1,70 +1,177 @@
 import { useEffect, useRef } from "react";
 
-// ── Frame budget monitor (dev only) ──────────────────────────────────────────
-// Logs a warning when the game loop exceeds 16ms (60fps budget).
-// Aggregates: reports once per 300 frames to avoid console spam.
-
 const DEV = import.meta.env.DEV;
-const BUDGET_MS    = 16.67;
-const REPORT_EVERY = 300; // frames
-const ADAPT_WINDOW = 120; // frames (~2s @ 60fps) for adaptive quality
-const ADAPT_THRESHOLD = 0.20; // >20% frames over budget → reduce effects
+const BUDGET_MS = 16.67;
+const REPORT_EVERY = 300;
+const ADAPT_WINDOW = 120;
+const ADAPT_THRESHOLD = 0.20;
+const RECOVER_THRESHOLD = 0.08;
+const RECOVER_WINDOWS = 2;
+const HISTOGRAM_BOUNDS = [8, 12, BUDGET_MS, 25, 33, 50, 100, Infinity];
 
-// Adaptive quality flag: window.__codReducedEffects becomes true when
-// sustained frame drops are detected. Read by drawGame + emit paths.
-export function makeFrameMonitor() {
-  let drops = 0, total = 0, maxMs = 0;
-  let adaptDrops = 0, adaptTotal = 0;
+function round(value, digits = 1) {
+  const factor = 10 ** digits;
+  return Math.round(value * factor) / factor;
+}
+
+export function makeFrameMonitor({ onSnapshot = null } = {}) {
+  let reportDrops = 0;
+  let reportTotal = 0;
+  let reportMaxMs = 0;
+  let adaptDrops = 0;
+  let adaptTotal = 0;
+  let stableWindows = 0;
+  let active = false;
+  let totalFrames = 0;
+  let slowFrames = 0;
+  let worstMs = 0;
+  let assistActivations = 0;
+  const histogram = Array(HISTOGRAM_BOUNDS.length).fill(0);
+
+  const snapshot = () => {
+    const target = Math.max(1, Math.ceil(totalFrames * 0.95));
+    let seen = 0;
+    let p95Ms = 0;
+    for (let index = 0; index < histogram.length; index += 1) {
+      seen += histogram[index];
+      if (seen >= target) {
+        p95Ms = Number.isFinite(HISTOGRAM_BOUNDS[index]) ? HISTOGRAM_BOUNDS[index] : worstMs;
+        break;
+      }
+    }
+    const slowPct = totalFrames > 0 ? round((slowFrames / totalFrames) * 100) : 0;
+    const assisted = assistActivations > 0;
+    return {
+      version: 1,
+      totalFrames,
+      slowFrames,
+      slowPct,
+      p95Ms: round(p95Ms),
+      worstMs: round(worstMs),
+      assisted,
+      assistActive: active,
+      assistActivations,
+      histogramBuckets: histogram.length,
+      label: assisted ? "PERFORMANCE ASSISTED" : "PERFORMANCE STABLE",
+      detail: assisted
+        ? "Reduced effects activated after sustained slow frames on this device."
+        : "No sustained slow-frame window activated reduced effects.",
+      claim: "observed-local-frame-timing-not-causality-or-score-validity",
+    };
+  };
+
+  const reset = () => {
+    reportDrops = 0;
+    reportTotal = 0;
+    reportMaxMs = 0;
+    adaptDrops = 0;
+    adaptTotal = 0;
+    stableWindows = 0;
+    active = false;
+    totalFrames = 0;
+    slowFrames = 0;
+    worstMs = 0;
+    assistActivations = 0;
+    histogram.fill(0);
+    if (typeof window !== "undefined") window.__codReducedEffects = false;
+  };
+
   return {
     record(ms) {
-      total++; adaptTotal++;
-      const over = ms > BUDGET_MS;
-      if (over) { drops++; maxMs = Math.max(maxMs, ms); adaptDrops++; }
-      if (DEV && total % REPORT_EVERY === 0 && drops > 0) {
-        const pct = ((drops / REPORT_EVERY) * 100).toFixed(0);
-        console.warn(`[GameLoop] ${pct}% frames over budget in last ${REPORT_EVERY} (worst: ${maxMs.toFixed(1)}ms)`);
-        drops = 0; maxMs = 0;
+      const elapsed = Number.isFinite(ms) && ms >= 0 ? ms : 0;
+      totalFrames += 1;
+      reportTotal += 1;
+      adaptTotal += 1;
+      worstMs = Math.max(worstMs, elapsed);
+      const bucket = HISTOGRAM_BOUNDS.findIndex((bound) => elapsed <= bound);
+      histogram[bucket < 0 ? histogram.length - 1 : bucket] += 1;
+      const over = elapsed > BUDGET_MS;
+      if (over) {
+        slowFrames += 1;
+        reportDrops += 1;
+        adaptDrops += 1;
+        reportMaxMs = Math.max(reportMaxMs, elapsed);
+      }
+      if (DEV && reportTotal >= REPORT_EVERY) {
+        if (reportDrops > 0) {
+          const pct = ((reportDrops / reportTotal) * 100).toFixed(0);
+          console.warn(`[GameLoop] ${pct}% frames over budget in last ${reportTotal} (worst: ${reportMaxMs.toFixed(1)}ms)`);
+        }
+        reportDrops = 0;
+        reportTotal = 0;
+        reportMaxMs = 0;
       }
       if (adaptTotal >= ADAPT_WINDOW) {
         const pct = adaptDrops / adaptTotal;
-        if (typeof window !== "undefined") {
-          if (pct >= ADAPT_THRESHOLD) window.__codReducedEffects = true;
-          else if (pct < ADAPT_THRESHOLD * 0.4) window.__codReducedEffects = false;
+        if (pct >= ADAPT_THRESHOLD) {
+          stableWindows = 0;
+          if (!active) assistActivations += 1;
+          active = true;
+        } else if (active && pct <= RECOVER_THRESHOLD) {
+          stableWindows += 1;
+          if (stableWindows >= RECOVER_WINDOWS) {
+            active = false;
+            stableWindows = 0;
+          }
+        } else {
+          stableWindows = 0;
         }
-        adaptDrops = 0; adaptTotal = 0;
+        if (typeof window !== "undefined") window.__codReducedEffects = active;
+        adaptDrops = 0;
+        adaptTotal = 0;
+        onSnapshot?.(snapshot());
       }
     },
+    snapshot,
+    reset,
   };
 }
 
-/**
- * Drives a requestAnimationFrame loop.
- * - Calls `callback` every frame while `active` is true.
- * - Always uses the latest version of `callback` (via ref), so callers
- *   don't need to pass it as a dependency.
- * - In development, logs frame-drop warnings when the loop exceeds 16ms budget.
- * - Cleans up on unmount or when `active` becomes false.
- *
- * @param {Function} callback  Called once per animation frame.
- * @param {boolean}  active    When false the loop is stopped.
- * @param {React.MutableRefObject} [rafRef]  Optional external ref that will
- *   be kept in sync with the current rAF handle (for external cancellation).
- */
-export function useGameLoop(callback, active, rafRef) {
-  const cbRef    = useRef(callback);
-  const monRef   = useRef(makeFrameMonitor());
-  cbRef.current  = callback; // always latest — never stale
+export function runMeasuredFrame(callback, monitor, {
+  shouldMeasure = true,
+  now = () => performance.now(),
+} = {}) {
+  if (!shouldMeasure) {
+    callback();
+    return null;
+  }
+  const startedAt = now();
+  callback();
+  const elapsed = Math.max(0, now() - startedAt);
+  monitor.record(elapsed);
+  return elapsed;
+}
+
+export function useGameLoop(callback, active, rafRef, {
+  monitorRef = null,
+  onSnapshot = null,
+  shouldMeasure = true,
+} = {}) {
+  const cbRef = useRef(callback);
+  const snapshotRef = useRef(onSnapshot);
+  const measureRef = useRef(shouldMeasure);
+  const monRef = useRef(null);
+  cbRef.current = callback;
+  snapshotRef.current = onSnapshot;
+  measureRef.current = shouldMeasure;
+  if (!monRef.current) monRef.current = makeFrameMonitor({ onSnapshot: (receipt) => snapshotRef.current?.(receipt) });
+  if (monitorRef) monitorRef.current = monRef.current;
 
   useEffect(() => {
     if (!active) {
-      if (rafRef?.current) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
-      return;
+      if (rafRef?.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      return undefined;
     }
+    monRef.current.reset();
     let handle;
     const loop = () => {
-      const t0 = performance.now();
-      cbRef.current();
-      monRef.current?.record(performance.now() - t0);
+      const sample = typeof measureRef.current === "function"
+        ? measureRef.current()
+        : measureRef.current !== false;
+      runMeasuredFrame(() => cbRef.current(), monRef.current, { shouldMeasure: sample });
       handle = requestAnimationFrame(loop);
       if (rafRef) rafRef.current = handle;
     };
@@ -75,4 +182,6 @@ export function useGameLoop(callback, active, rafRef) {
       if (rafRef) rafRef.current = null;
     };
   }, [active]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return monRef.current;
 }

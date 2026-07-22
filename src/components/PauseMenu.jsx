@@ -8,7 +8,7 @@ const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
-export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot, activePerks, perkMods, activeSynergiesData }) {
+export default function PauseMenu({ wave, timeSurvived, score, isMobile, achievementsUnlocked, fmtTime, pauseReason, onResume, onLeave, musicMuted, onToggleMute, musicVibe, onSetMusicVibe, colorblindMode, onToggleColorblind, gameSettings, onSaveSettings, gamepadConnected, controllerType, leaderboard, lbLoading, lbHasMore, onLoadMore, onRefreshLeaderboard, username, gsSnapshot, activePerks, perkMods, activeSynergiesData }) {
   const labels = getControllerLabels(controllerType);
   const [view, setView] = useState("main");
   const [showAch, setShowAch] = useState(false);
@@ -293,6 +293,12 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
       <div style={{ textAlign: "center", maxWidth: 320, width: "100%" }}>
         <div style={{ fontSize: 36, marginBottom: 4 }}>⏸</div>
         <h2 style={{ color: "#FFD700", fontSize: 28, margin: "0 0 4px", letterSpacing: 3, fontFamily: "'Courier New',monospace" }}>PAUSED</h2>
+        {pauseReason?.label && (
+          <div role="status" aria-live="polite" style={{ margin: "8px 0 12px", padding: "8px 10px", border: "1px solid rgba(0,229,255,0.45)", borderRadius: 8, background: "rgba(0,229,255,0.08)", fontFamily: "'Courier New',monospace" }}>
+            <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900 }}>{pauseReason.label}</div>
+            <div style={{ color: "#CCC", fontSize: 9, marginTop: 3 }}>{pauseReason.detail}</div>
+          </div>
+        )}
         <p style={{ color: "#CCC", fontSize: 12, margin: "0 0 20px", fontFamily: "'Courier New',monospace" }}>
           Wave {wave} · {fmtTime(timeSurvived)} · Score: {score.toLocaleString()}
         </p>

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-21",
+  "session": 126,
+  "project": "Call-Of-Doodie",
+  "intent": "recover and verify the interrupted prior closeout, checkpoint it cleanly, then run the complete continuous arc through primary and second-order saturation",
+  "outcome": "achieved-agent-owned-boundary",
+  "shipped": [
+    "Session-aware startup-brief freshness with reason codes",
+    "Visibility-aware input-safe replay-visible pause coordination",
+    "Public-safe audit and implement protocol anchors plus safe Studio Oracle proxy",
+    "Bounded adaptive local performance receipt with hysteresis and run-end guidance",
+    "Shared deterministic railgun/projectile defeat economy planning",
+    "In-place newest-match boss-banner retention",
+    "Suspended/modal-frame exclusion from timing evidence",
+    "Persisted performance-receipt invariant normalization"
+  ],
+  "validation": [
+    "strict lint passed",
+    "npm test 703/703 across 93 files",
+    "production build passed",
+    "dependency tree coherent: 18 declared roots",
+    "public contract 13/13",
+    "protocol drift passed with all four arc anchors",
+    "security release audit passed; npm audit 0 vulnerabilities",
+    "replay state and edge fixtures 4/4 each",
+    "launch QA 5/5; production shell 5/5; cutover 5/5; replay trust 3/3",
+    "doctor overallPass true with blockingFailing 0"
+  ],
+  "deferred": [
+    "direct AI pixel review after host CryptUnprotectData failures",
+    "verified on-domain inbound email delivery",
+    "physical PWA, gamepad, and full-run media QA",
+    "production HomeV2 Lighthouse and funnel evidence",
+    "project-scoped analytics configuration",
+    "Itch/community publication and founder launch approval"
+  ],
+  "sil": {
+    "score": 1000,
+    "velocity": 8,
+    "debt": "decreasing"
+  },
+  "headline": "Made session chronology, pause/input state, frame evidence, defeat rewards, and protocol reachability fail truthful",
+  "items": [
+    {
+      "title": "Session evidence cannot masquerade as current",
+      "projectImpact": 10,
+      "ecosystemImpact": 9,
+      "evidence": "Active-lock chronology, reason-coded freshness, protocol anchor and Oracle tests"
+    },
+    {
+      "title": "Pause and performance feedback preserve trust",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "Input release, replay transitions, bounded simulated-frame receipts, persistence invariants"
+    },
+    {
+      "title": "Reward semantics are weapon-path neutral",
+      "projectImpact": 9,
+      "ecosystemImpact": 7,
+      "evidence": "Shared deterministic economy planner and seeded parity fixtures"
+    }
+  ],
+  "followUps": [
+    "Complete physical PWA, controller, and full-run media evidence when hardware is available",
+    "Verify inbound mail and project-scoped analytics before launch",
+    "Collect production performance and funnel evidence before retiring HomeV1"
+  ],
+  "blockers": [
+    "SPARKED launch requires physical, inbound-mail, production-data, direct visual, publication, and founder evidence"
+  ]
+}

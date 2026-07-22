@@ -272,11 +272,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=6 canonical parsed sessions]
+Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=7 canonical parsed sessions]
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
+Velocity trend: ↓  |  Protocol velocity: ↓  |  Debt: ↓
 Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-16 | Session 125 | Total: 1000/1000 | Velocity: 14 | protocolVelocity: 14
+Last session: 2026-07-21 | Session 126 | Total: 1000/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1792,3 +1792,29 @@ Brainstorm:
 1. Signed local-only fault replay capsule — attach the bounded fault stage plus deterministic stream fingerprint to a shareable debug receipt without exposing user data. Medium probability after replay schema review.
 2. Adaptive HUD density rehearsal — generate deterministic maximal-surface fixtures for every mode combination and compare allocation envelopes at new viewport classes. High probability when another HUD surface lands.
 3. Provenance-linked asset explorer — derive a human-readable gallery from `assets/visual-assets.json` and `/ip/` without duplicating ownership truth. Medium probability before launch.
+
+## 2026-07-21 — Session 126 | Total: 1000/1000 | Velocity: 8 | Debt: ↓
+
+SIL +8: Recovered the prior closeout as a clean checkpoint, shipped five verified L3 audit items and three second-order integrity refinements, then exhausted every safe repo-owned candidate.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint, 703/703 tests, production build, dependency/public/security/replay/media/live gates, and diff checks are green. |
+| Creative Alignment | 100 | same | Pause and performance feedback fit the project voice while preserving the dark-first identity and proprietary, parody-safe posture. |
+| Momentum | 100 | up | Recovery, five primary L3 items, and three second-order refinements shipped continuously without a phase handback. |
+| Engagement | 100 | up | Players receive safer background pauses and honest device-specific performance guidance without balance or score distortion. |
+| Process Quality | 100 | up | Session chronology, protocol anchors, RNG parity, suspended-frame sampling, and persisted evidence all fail closed. |
+| Cross-Repo Coherence | 100 | same | Studio Ops was consumed through read-only/proxy surfaces; no sibling repository file was edited. |
+| Security Posture | 100 | same | Release audit and npm audit are clean; no dependency, credential, new network path, or broadened data access was introduced. |
+| Ecosystem Integration | 100 | up | Startup, replay, run-history, death-screen, protocol, doctor, and audit receipts now agree on their evidence boundaries. |
+| Capital Efficiency | 100 | same | Every feature is deterministic and local with zero studio-paid variable per-user cost. |
+| Automation Coverage | 100 | up | Coverage rose to 703 tests across 93 files with new chronology, pause, timing, economy, retention, and protocol invariants. |
+
+Top win: real simulated gameplay evidence now survives pause/modal boundaries without being diluted, reset, or contradicted.
+Top gap: SPARKED still needs physical hardware/media, inbound delivery, production data, scoped analytics, direct visual/publication, and founder evidence.
+Intent outcome: Achieved for every agent-owned premise; external gates remain honest.
+
+Brainstorm:
+1. Pause-aware shareable replay timeline — render pause markers beside deterministic command evidence without treating them as faults. High probability when replay UI advances.
+2. Device performance rehearsal — feed fixed synthetic frame windows into a developer-only QA surface for deterministic assistance-state screenshots. Medium probability before physical QA.
+3. Defeat pipeline extraction continuation — lift side-effect orchestration around the shared economy plan into weapon-agnostic stages while preserving exact RNG order. High probability in the next App.jsx reduction wave.

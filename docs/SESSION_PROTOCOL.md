@@ -301,7 +301,38 @@ For any multi-step work (3 or more steps) or any multi-phase effort, every agent
 
 ---
 
-## §3 — `/closeout` protocol
+## §2B — `/audit` protocol  *(canonical — the SKILL.md is a pointer; S219)*
+
+**Mission:** one combined ranked improvement plan across 9 axes; genius-level, premise-verified, ready for `/implement`.
+
+1. Activate `audit` and resolve its skill profile; axis deltas and success bars are binding.
+2. Read project brief, soul, current state, task patterns, recent decisions, and registry type.
+3. Run the bounded code sampler and deduplicate against IGNIS portfolio patterns.
+4. Audit nine axes: feature depth, innovation, UX, feedback, engagement, AI, security, efficiency, and token/API reduction.
+5. Pre-verify every premise with `node scripts/studio-oracle.mjs preverify "<claim>" [surfaces...]`; false premise is a documented skip. Apply CANON-039 internal-first.
+6. Score Tier, Impact, Effort, Innovation, and Priority; cull low-value non-security items.
+7. Give every item concrete L1/L2/L3 effort and recipes.
+8. Write `docs/AUDIT_<date>.json` as sole truth, derive Markdown, and render the audit brief.
+
+**Quality bar:** concrete first steps, evidence for every premise, measurement for efficiency claims, and no reversal of canon or recent decisions.
+
+---
+
+## §2C — `/implement` protocol  *(canonical — the SKILL.md is a pointer; S219)*
+
+**Mission:** execute the latest audit in optimal-efficiency order; complete-all means complete-all.
+
+1. Activate `implement` and resolve its skill profile; success bars are mandatory gates.
+2. Load the latest audit JSON sidecar through `scripts/lib/audit-sidecar.mjs`.
+3. Re-sort into `docs/IMPLEMENT_PLAN.md`: foundations first, same-axis work together, measurement last.
+4. Run capability preflights for credential-naming items.
+5. Implement each deepest honest rung, verify behavior and tests before `shipped`, record the execution receipt, and run the session-floor saturation gate.
+6. Reconcile TASK_BOARD, SIL, summary, and audit execution log when the sprint stops.
+
+**Rules:** partial is not done · more than two failed retries becomes BLOCKED with evidence · never skip an existing test surface · re-running shipped items is a no-op · never stop with honest budget and repo-owned work remaining.
+
+---
+## §3 — /closeout protocol
 
 ### 3.0 Closeout-suggestion gate (context-aware)
 

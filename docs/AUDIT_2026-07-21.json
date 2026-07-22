@@ -1,0 +1,292 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill v2",
+  "generatedAt": "2026-07-21",
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "product",
+  "meta": {
+    "generatedAt": "2026-07-21",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "combinedPriority": 159.9,
+    "top3": [
+      "session-evidence-coherent-startup-brief",
+      "visibility-pause-trust-contract",
+      "protocol-reference-drift-gate"
+    ],
+    "livePremiseVerification": true,
+    "specialtyLenses": [
+      "game-loop review",
+      "app release gate",
+      "public web canon"
+    ],
+    "baseline": {
+      "tests": "703/703 across 93 files",
+      "lint": "strict pass",
+      "build": "pass",
+      "publicContract": "13/13",
+      "security": "npm audit 0",
+      "doctor": "overallPass true; blockingFailing 0"
+    },
+    "innovationReserve": [
+      "session-evidence-coherent-startup-brief",
+      "visibility-pause-trust-contract",
+      "adaptive-performance-flight-recorder",
+      "enemy-defeat-economy-parity"
+    ],
+    "secondOrderImplemented": [
+      "boss-banner-hot-array-retention",
+      "suspended-frame-evidence-exclusion",
+      "performance-receipt-invariant-normalization"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 94,
+    "progression": 92,
+    "sessionEngagement": 91,
+    "retention": 93,
+    "soulFidelity": 95,
+    "evidence": "No docs/PLAYTESTS directory exists; scores are source, test, staged-browser and production-receipt reviews, not claimed player-research findings.",
+    "prioritizedFindings": [
+      "Explicit and background-tab pauses halt the simulation but never enter the replay trace even though pause is part of the accepted evidence vocabulary.",
+      "Railgun and bullet defeat paths duplicate score-adjacent coin reward logic, creating an economic drift surface inside the 4,933-line orchestration component.",
+      "Adaptive reduced-effects mode reacts to slow frames globally but produces no bounded run receipt, recommendation, or hysteresis evidence for the player."
+    ],
+    "nextThreeMoves": [
+      "Ship one visibility-aware pause transition contract with input release and replay evidence.",
+      "Route all enemy coin drops through one deterministic pure reward planner.",
+      "Turn frame-budget adaptation into a bounded local performance receipt surfaced at run end."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED; implementation may continue against isolated staging",
+    "green": [
+      "latest five main workflow runs are green",
+      "Supabase and Cloudflare exact-recovery SHA deployments passed",
+      "public contract 13/13",
+      "security release gate and npm audit 0",
+      "footer completeness green",
+      "CANON-029 cost-neutral and cost gates green",
+      "doctor blockingFailing 0"
+    ],
+    "red": [
+      "direct AI pixel inspection remains host-blocked by Windows CryptUnprotectData",
+      "analytics capability and project-scoped Sentry DSN are unresolved",
+      "on-domain inbound delivery is unverified",
+      "physical PWA, gamepad and full-run media evidence are absent",
+      "production Lighthouse and funnel evidence are absent",
+      "no founder launch approval"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "observability honesty / token efficiency / protocol reliability",
+      "effortHours": 2,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 40,
+      "slug": "session-evidence-coherent-startup-brief",
+      "title": "Make startup-brief freshness session-aware so a new agent never inherits stale context-meter or doctor evidence as live truth.",
+      "status": "shipped",
+      "why": "scripts/check-brief-staleness.mjs accepts any coherent same-date brief for 48 hours. This session declared fresh while the brief still showed the prior 200k unknown/default context meter and old doctor tally, contradicting the live 1M Codex meter and doctor receipt.",
+      "recipe": "Parse the active session lock and brief generation/session metadata; mark a brief stale when the lock is newer or its agent/session evidence cannot match; add fail-closed unit tests and regenerate through the existing renderer.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Treat any active lock newer than the brief file as stale."
+        },
+        "L2": {
+          "effortHours": 1.25,
+          "recipe": "Extract a testable freshness evaluator covering coherent, aged and new-lock cases."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Add session-aware freshness with reason codes, JSON evidence, regression tests and a newly rendered canonical brief."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "competitive trust / input reliability / feedback loop",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 34.9,
+      "slug": "visibility-pause-trust-contract",
+      "title": "Make explicit and background-tab pauses observable, input-safe replay transitions instead of invisible simulation freezes.",
+      "status": "shipped",
+      "why": "The replay analyzer and edge validator count pause as an interaction, but App.jsx never records pause. The live loop has no visibilitychange contract, so hidden-tab throttling can freeze a competitive run without a trace transition or guaranteed held-input release.",
+      "recipe": "Add a pure pause-transition planner plus one App pause coordinator; auto-pause on hidden visibility, release held fire/touch/gamepad input, record bounded pause/resume commands, expose an honest auto-pause reason in PauseMenu, and test explicit, visibility and idempotent transitions.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Record explicit pause and resume commands."
+        },
+        "L2": {
+          "effortHours": 1.75,
+          "recipe": "Centralize pause toggles and auto-pause on page hide while releasing held input."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship the tested visibility-aware transition contract, accessible reason copy and replay-evidence assertions without changing score eligibility claims."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "process quality / automation / security",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 31.5,
+      "slug": "protocol-reference-drift-gate",
+      "title": "Fail protocol drift when a local skill points at a missing canonical section or helper.",
+      "status": "shipped",
+      "why": "The audit skill points to docs/SESSION_PROTOCOL.md section 2B and its Oracle helper, but this repo has neither. npm run protocol:drift still reports Status: ok because it checks file presence, not referenced section or helper reachability.",
+      "recipe": "Restore the public-safe local section 2B audit protocol, route Oracle through the existing Studio Ops proxy instead of a missing local binary, and extend protocol-drift tests to verify section anchors and executable helper routes.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Assert the section 2B heading exists."
+        },
+        "L2": {
+          "effortHours": 1.25,
+          "recipe": "Check all four arc phase section anchors and a local Oracle route."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Ship anchor-aware protocol drift, the missing audit section, a Windows-hidden Oracle proxy and regression coverage."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "BOLT",
+      "axis": "feedback loop / UX / performance intelligence",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 27.9,
+      "slug": "adaptive-performance-flight-recorder",
+      "title": "Convert adaptive reduced-effects behavior into a bounded, local run-performance receipt with an actionable recommendation.",
+      "status": "shipped",
+      "why": "useGameLoop counts slow frames and flips window.__codReducedEffects, but resets evidence every 120 frames. DeathScreen cannot distinguish adaptive protection from an ordinary run, and no bounded p95/drop receipt survives for device QA.",
+      "recipe": "Extract a pure bounded frame monitor with hysteresis, percentiles and snapshots; keep hot-path memory constant; attach its local-only receipt to run history and death props; show a concise PERFORMANCE ASSISTED card only when sustained drops occurred; never invalidate or overclaim competitive causality.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Expose total, slow and worst frame counters from makeFrameMonitor."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Add bounded histogram percentiles, hysteresis and a snapshot callback."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Persist one sanitized local run receipt, render an accessible recommendation at death and test boundedness, hysteresis and honesty language."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "BOLT",
+      "axis": "feature depth / progression economy / runtime organization",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 25.6,
+      "slug": "enemy-defeat-economy-parity",
+      "title": "Route railgun and projectile enemy defeats through one deterministic economy plan so weapon choice cannot drift reward semantics.",
+      "status": "shipped",
+      "why": "App.jsx contains separate large railgun and projectile defeat blocks with duplicated boss classification, combo, score and coin-drop formulas. The formulas already differ in surrounding side effects, making future progression changes path-dependent and hard to verify.",
+      "recipe": "Extract a pure enemy-defeat economy planner for score, boss identity and named-RNG coin drops; feed both railgun and projectile paths through it; preserve exact current outputs with seeded fixtures; document the remaining orchestration boundary in the App extraction roadmap.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1.5,
+          "recipe": "Share the coin-drop formula only."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Share score, boss and coin plan data with deterministic tests."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Ship one pure defeat-economy contract across both weapon paths with seeded parity fixtures and extraction-roadmap evidence."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "home-v2-retirement",
+      "reason": "Requires real production Lighthouse and funnel evidence; repo code cannot fabricate it."
+    },
+    {
+      "slug": "analytics-and-sentry-scope",
+      "reason": "Requires verified project-scoped provider credentials and dashboard configuration."
+    },
+    {
+      "slug": "physical-launch-qa",
+      "reason": "Requires real PWA, controller and full-run media hardware evidence."
+    },
+    {
+      "slug": "community-publication",
+      "reason": "Publication and community readiness remain founder-owned."
+    },
+    {
+      "slug": "full-physics-replay-resimulation",
+      "reason": "Strategically valuable but not a bounded honest item for this arc; current advisory language is correct."
+    },
+    {
+      "slug": "direct-ai-pixel-review",
+      "reason": "The local image path is host-blocked by Windows CryptUnprotectData; machine visual checks remain distinct evidence."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "session-evidence-coherent-startup-brief",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Active locks newer than the canonical brief now fail freshness with machine-readable reason codes.",
+      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+    },
+    {
+      "slug": "visibility-pause-trust-contract",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "One idempotent pause coordinator releases held input, records replay transitions, auto-pauses hidden tabs, and exposes accessible reason copy.",
+      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+    },
+    {
+      "slug": "protocol-reference-drift-gate",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Public-safe audit and implement anchors, a safe Studio Oracle proxy, and anchor-aware drift checks now fail closed.",
+      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+    },
+    {
+      "slug": "adaptive-performance-flight-recorder",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Fixed-memory timing receipts drive conservative assistance with hysteresis, survive run history, exclude suspended frames, and preserve non-causality language.",
+      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+    },
+    {
+      "slug": "enemy-defeat-economy-parity",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Railgun and projectile kills share deterministic score, career-boss and coin-drop planning without changing named-RNG draw order.",
+      "verification": "strict lint; 703/703 tests across 93 files; build; dependency tree; public contract 13/13; protocol drift; security release audit; npm audit 0; replay fixtures; launch media/QA; live/cutover/replay smokes; doctor overallPass true and blockingFailing 0"
+    }
+  ]
+}

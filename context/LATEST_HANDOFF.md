@@ -1,4 +1,28 @@
-# Latest Handoff — Session 125
+# Latest Handoff — Session 126
+
+## Where We Left Off
+- Recovered and verified the interrupted Session 125 boundary before new work: no corruption or debris, full baseline and doctor real, dedicated `7b8d18f recover S125 closeout` commit pushed, and exact-main deploy/brief runs green.
+- Completed the founder-requested continuous arc from that clean checkpoint: `/start -> /audit -> /implement -> innovation saturation -> /closeout`.
+- Shipped all five L3 items in `docs/AUDIT_2026-07-21.json`: coherent startup evidence, visibility-safe replay-visible pausing, protocol reference drift enforcement, a bounded adaptive performance receipt, and shared deterministic defeat economy.
+- Implemented all three safe second-order candidates: in-place newest-match transient retention, suspended-frame timing exclusion, and persisted receipt invariant normalization.
+- The Unified Genius List is exhausted for safe repo-executable work. Remaining candidates require credentials, production traffic, hardware/media evidence, community/product choices, or launch approval.
+- SPARKED remains NO-GO; engineering completeness is not launch approval.
+
+## Validation
+- `npm run lint:strict` — PASS.
+- `npm test` — 703/703 across 93 files.
+- Production build; dependency tree (18 declared roots); public contract 13/13; protocol drift including all four arc anchors; security release audit and npm audit 0 — PASS.
+- Replay state-stepper and Edge fixtures 4/4 each; launch media; launch QA 5/5; production shell 5/5; cutover 5/5; replay trust 3/3 — PASS.
+- Medium game gate and focused pause/input/replay/performance/economy/launch suites — PASS.
+- Doctor — `overallPass: true`, 122/150 passing, 2 expected skips, 1 advisory failure, `blockingFailing: 0`.
+
+## Next
+- With physical hardware: perform one real Progressive Web App install/relaunch, controller/browser pass, and full-run GIF encode/play/share check.
+- With production traffic and scoped analytics: capture Largest Contentful Paint/Cumulative Layout Shift and funnel evidence before retiring `?home=v1`.
+- Before SPARKED: verify inbound mail delivery, analytics project scope, Itch/community publication, direct AI theme review, and explicit founder approval.
+
+Session Intent outcome: Achieved for every agent-owned premise, including recovery, primary audit implementation, and second-order saturation; external/data/hardware/founder gates remain explicit.
+# Previous Handoff — Session 125
 
 ## Where We Left Off
 - Completed the founder-requested continuous `/goal` mission from synced `main` without a phase handback.

@@ -1,6 +1,6 @@
 # App.jsx Extraction Roadmap
 
-Verified 2026-07-16 (Session 125): `src/App.jsx` is 4,933 physical lines. The
+Verified 2026-07-21 (Session 126): `src/App.jsx` is 4,828 physical lines. The
 previous ~3,500-line estimate had drifted as new modes and trust surfaces landed.
 This roadmap is a decomposition recipe, not evidence that extraction itself has
 happened; line counts must be re-measured before claiming progress.
@@ -17,6 +17,8 @@ Extracted system boundaries now include:
 - `src/systems/objectiveDirector.js`, `runRng.js`, `scoreLedger.js`
 - `src/systems/runDrill.js`, `rematchDrill.js`, `runIntegrity.js`
 - `src/systems/transientLifecycle.js` (in-place hot-array compaction, S125)
+- `src/systems/pauseTransition.js` (centralized pause/input-release contract, S126)
+- `src/systems/defeatEconomy.js` (shared railgun/projectile score, boss, and coin parity, S126)
 - `src/utils/metaClarity.js`, `roastDirector.js`, `routeForecast.js`, `shopForecast.js`
 
 The remaining heavy clusters in `App.jsx`, in priority order:
@@ -32,7 +34,9 @@ The `gameLoop` useCallback. Largest single block. Already references
 
 S125 removed recurring replacement allocations for bullets, enemy bullets,
 grenades, pickups, trail particles, death effects, floating text, arcs, and beams
-through `transientLifecycle.js`; collision and behavior still remain inline.
+through `transientLifecycle.js`; S126 also extracted score, career-boss, and
+coin-drop planning shared by the railgun and projectile kill paths into
+`defeatEconomy.js`. Collision and behavior still remain inline.
 
 Test boundary: each module gets a pure `step(gs, frame)` signature returning
 the next gs delta. Loop becomes orchestration only.

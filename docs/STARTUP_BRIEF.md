@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-21 (Session 125 closeout) -->
+<!-- generated-at: 2026-07-22 (Session 126 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 125 closeout · 2026-07-21.
+> **Fast-boot brief** — generated at Session 126 closeout · 2026-07-22.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 126 · 2026-07-21 · FOUNDER MODE                         ║
+║  Session 127 · 2026-07-22 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -38,9 +38,9 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 14↑                      ║
-║    Last active: 0d  ·  Last closeout: 5d  ·  (active = newest o  ║
-║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 8↓                       ║
+║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Trend  ▁▄▄▂▆  ↓  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
@@ -57,24 +57,24 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 125 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 126 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    685/685 passing  ·  Deploy: N/A                       ║
+║  Tests:    703/703 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.6% used                          ║
-║     3,235 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
-║     ~1,618 tok/turn  ·  cache 50%  ·  111 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  5.4% used                          ║
+║     53,948 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~26,974 tok/turn  ·  cache 50%  ·  32 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         685/685 passing                                ║
-║  ✓  Velocity      14 ↑  ·  Debt: ↓                               ║
+║  ✓  Tests         703/703 passing                                ║
+║  ✓  Velocity      8 ↓  ·  Debt: ↓                                ║
 ║  ✓  Runway        ~14.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         44175 FORGE  ·  5d old                         ║
+║  ✓  IGNIS         44175 FORGE  ·  6d old                         ║
 ║  ⛔  Truth         green locally; portfolio doctor warnings are   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
@@ -84,14 +84,14 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        124/152 (83%)  ·  1 failing                    ║
-║  ✓  Cost          real $0.07/7d · 7d notional $1.09 (flat-rate   ║
+║  ⛔  Doctor        122/152 (81%)  ·  1 failing                    ║
+║  ✓  Cost          real $0.13/7d · 7d notional $2.11 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    68d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    90d · Physical launch QA                                      ║
+║    69d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    91d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  14↑  (last 5 sessions)                       ║
+║  Velocity:   ▁▄▄▂▆  8↓  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -150,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 125 closeout · 2026-07-21*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 126 closeout · 2026-07-22*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

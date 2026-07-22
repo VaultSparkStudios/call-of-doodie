@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./transientLifecycle.js";
+import { retainLastMatchingInPlace, stepAndCompactInPlace, stepTransientEffectsInPlace } from "./transientLifecycle.js";
 
 describe("transient lifecycle", () => {
   it("preserves identity and order while applying filter-compatible callbacks", () => {
@@ -22,6 +22,27 @@ describe("transient lifecycle", () => {
       return item.id === 1;
     });
     expect(items).toEqual([{ id: 1 }]);
+  });
+
+  it("retains only the newest matching items without replacing the hot array", () => {
+    const items = [
+      { id: 1, big: true },
+      { id: 2, big: false },
+      { id: 3, big: true },
+      { id: 4, big: true },
+      { id: 5, big: false },
+      { id: 6, big: true },
+      { id: 7, big: true },
+    ];
+    const original = items;
+    expect(retainLastMatchingInPlace(items, (item) => item.big, 4)).toBe(original);
+    expect(items.map((item) => item.id)).toEqual([3, 4, 6, 7]);
+  });
+
+  it("clears in place for a zero retention cap", () => {
+    const items = [{ big: true }];
+    expect(retainLastMatchingInPlace(items, (item) => item.big, 0)).toBe(items);
+    expect(items).toEqual([]);
   });
 
   it("steps all safe transient collections without replacing their arrays", () => {
