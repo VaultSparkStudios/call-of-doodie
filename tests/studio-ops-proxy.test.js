@@ -37,7 +37,7 @@ describe("project-local Studio Ops proxies", () => {
   });
   it("derives closeout write-backs and staging from committed source-of-truth state", () => {
     const source = fs.readFileSync(path.resolve("scripts/render-closeout-board.mjs"), "utf8");
-    expect(source).toContain("closeout session ${session}");
+    expect(source).toContain("close[ -]?out session ${session}");
     expect(source).toContain("testingSurfaces?.findLast");
     expect(source).toContain("docs/CLOSEOUT_STATUS_BOARD.md");
     expect(source).toContain("git check-ignore --quiet" );

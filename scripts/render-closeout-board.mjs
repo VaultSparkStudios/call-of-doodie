@@ -287,9 +287,9 @@ function writeBackCoverage(session) {
     }
   }
   if (session != null) {
-    const closeoutSha = sh(`git log -n 1 --format=%H --grep="closeout session ${session}"`).out.trim();
+    const closeoutSha = sh(`git log -n 1 --format=%H --extended-regexp --regexp-ignore-case --grep="close[ -]?out session ${session}"`).out.trim();
     if (closeoutSha) {
-      const previousCloseoutSha = sh(`git log -n 1 --format=%H ${closeoutSha}~1 --grep="closeout session"`).out.trim();
+      const previousCloseoutSha = sh(`git log -n 1 --format=%H ${closeoutSha}~1 --extended-regexp --regexp-ignore-case --grep="close[ -]?out session"`).out.trim();
       const committed = previousCloseoutSha
         ? sh(`git diff --name-only ${previousCloseoutSha}..${closeoutSha}`).out
         : sh(`git show --pretty=format: --name-only ${closeoutSha}`).out;
