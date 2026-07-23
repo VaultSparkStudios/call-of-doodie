@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-22 (Session 126 closeout) -->
+<!-- generated-at: 2026-07-23 (Session 127 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S126 ════════════════════╗
-║  Date: 2026-07-22  ·  SIL: 1000/1000  ·  Velocity: 9 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S127 ════════════════════╗
+║  Date: 2026-07-23  ·  SIL: 1000/1000  ·  Velocity: 10 decreasin  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Recovered and verified the interrupted Session 125 boundary   ║
-║  ✓ Completed the founder-requested continuous arc from that cle  ║
-║  ✓ Shipped all five L3 items in `docs/AUDIT_2026-07-21.json`: c  ║
-║  ✓ Implemented all four safe second-order candidates: in-place   ║
-║  ✓ The Unified Genius List is exhausted for safe repo-executabl  ║
+║  ✓ Completed the founder-requested continuous arc from synced m  ║
+║  ✓ Shipped all five L3 items in docs/AUDIT_2026-07-22.json: edg  ║
+║  ✓ Implemented all five second-order candidates: single edge di  ║
+║  ✓ The Unified Genius List is exhausted for honest repo-executa  ║
+║  ✓ SPARKED remains NO-GO; green engineering evidence is not lau  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -41,19 +41,19 @@
 ║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 14 files  ·  M:12 A:0 D:0 ?:2                          ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-126-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-127-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        119/152                                          ║
+║  Doctor:        121/153                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         704/704                                          ║
-║  IGNIS:         6d ago                                           ║
+║  Tests:         721/721                                          ║
+║  IGNIS:         7d ago                                           ║
 ║  Truth:         green-code-no-go-launch                          ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

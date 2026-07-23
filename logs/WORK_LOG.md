@@ -955,3 +955,11 @@ Intent outcome: achieved for every agent-owned premise; Unified Genius List satu
 - Validation: strict lint; 704/704 tests across 93 files; build; dependency/public/protocol/security/npm-audit gates; replay fixtures; media/live/cutover/trust smokes; doctor overallPass true and blockingFailing 0.
 
 Intent outcome: achieved. SPARKED remains evidence-gated rather than inferred from code completion.
+
+## 2026-07-22 — Session 127 — Edge, lifecycle, durability, onboarding, and recovery truth
+
+- Pulled/rebased origin/main first; ran startup lock, context, secrets, blocker, canon, Ark, and recovery checks; generated a live-premise infrastructure audit.
+- Shipped five L3 audit items and five second-order refinements across typed edge health/HSTS, service-worker lifecycle, per-surface storage durability, action-observed training, and lazy-panel containment.
+- Rejected a phantom simultaneous-reward-modal premise because the live queue already serializes it; preserved analytics, hardware, traffic, publication, and founder gates without fabricated evidence.
+- Validation: strict lint; 721/721 tests across 98 files; build; dependency/public/protocol/security/npm-audit/replay/media gates; isolated staging deploy 29973290482; hosted live 7/7; hosted visual 255/255.
+- Release verdict: engineering green on staging; SPARKED NO-GO pending direct AI pixel, physical device/media, inbound mail, production metrics, scoped analytics, publication, and founder approval.

@@ -15,6 +15,17 @@ Public-safe launch roadmap summary.
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
 ## Now
+
+- [x] [SIL:2] **DONE S127** Edge runtime truth contract — typed edge-only JSON health, explicit dispatch, HSTS source/live enforcement, and hosted 7/7 proof.
+- [x] [SIL:2] **DONE S127** Service-worker lifecycle truth — supported/registered/controlled/update-ready/failed state is observable and sanitized.
+- [x] [SIL:2] **DONE S127** Storage durability receipt — critical writes expose bounded per-surface failure/recovery without keys or values.
+- [x] [SIL:2] **DONE S127** Observed-action onboarding — movement, shooting, kills, dash, grenade, and perk evidence advance replayable training without timer claims.
+- [x] [SIL:2] **DONE S127** Recoverable lazy panels — accessible loading/error states and bounded local reload recovery replace every null Suspense fallback.
+- [x] [SIL:1] **DONE S127 second-order** Single edge dispatch — the health contract has one generic handler and explicit method rejection.
+- [x] [SIL:1] **DONE S127 second-order** Pre-mount worker latch — early lifecycle evidence survives React subscription timing.
+- [x] [SIL:1] **DONE S127 second-order** Same-surface storage recovery — unrelated successful writes cannot erase another surface's active failure.
+- [x] [SIL:1] **DONE S127 second-order** Tutorial evidence reset — replay begins clean instead of inheriting stale command observations.
+- [x] [SIL:1] **DONE S127 second-order** Lazy reload loop guard — automatic chunk recovery is capped at one attempt per minute.
 - [x] [SIL:2] **DONE S126** Session-coherent startup evidence — active locks newer than the brief fail freshness with explicit reason codes and regression coverage.
 - [x] [SIL:2] **DONE S126** Visibility-aware pause trust contract — one idempotent coordinator releases held input, records replay pause/resume transitions, and explains automatic background pauses accessibly.
 - [x] [SIL:1] **DONE S126** Protocol reference drift gate — public-safe audit/implement anchors and the safe Oracle proxy are required and tested.

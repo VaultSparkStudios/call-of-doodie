@@ -1,3 +1,11 @@
+- Session 127 (2026-07-22) completed the continuous /start -> /audit -> /implement -> innovation saturation arc from a synced main branch.
+- Edge truth — Cloudflare now serves a typed edge-health-v1 JSON contract at /_health, generic function dispatch is explicit, HSTS is required by source/live release checks, and isolated staging passed 7/7 at exact SHA 57dd40b.
+- Runtime trust — service-worker lifecycle is latched and observable; critical local writes emit sanitized per-surface durability/recovery receipts without keys or values.
+- Player loop — first-run training advances from observed movement/combat actions rather than elapsed time, supports replay, and clears stale evidence on reset.
+- Recovery — every lazy panel has accessible local loading/error containment and a one-per-minute reload-loop guard.
+- Saturation truth — all five live-premise L3 audit items and all five second-order candidates shipped; remaining Genius List entries require external credentials, product decisions, traffic, physical hardware/media, publication, or founder approval.
+- Validation truth — strict lint, 721/721 tests across 98 files, build, dependency/public/protocol/security/replay/media gates, staged live contract 7/7, and hosted visual matrix 255/255 passed directly.
+- Release truth — engineering staging is green; SPARKED remains NO-GO because direct AI pixel inspection failed at the host credential boundary and external/device/data/publication/founder evidence remains absent.
 - Session 126 (2026-07-21) began with a verified Session 125 recovery checkpoint, then completed the continuous `/start -> /audit -> /implement -> innovation saturation -> /closeout` arc.
 - Session-evidence truth — an active lock newer than `STARTUP_BRIEF.md` now makes the brief stale with explicit reason codes; a new agent cannot inherit prior-session context-meter or doctor claims as current.
 - Pause/input truth — every keyboard, controller, Head-Up Display, touch, visibility, resume, and leave pause route uses one idempotent coordinator; entering pause releases held input and records bounded replay transitions without claiming score invalidity.

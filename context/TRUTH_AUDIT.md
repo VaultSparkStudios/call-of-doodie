@@ -873,3 +873,18 @@ Last reviewed: 2026-07-16
 
 Overall status: green engineering closeout; NO-GO SPARKED
 Last reviewed: 2026-07-21
+
+## 2026-07-22 — Session 127 — Edge, lifecycle, durability, onboarding, and recovery truth
+
+- Audit truth — docs/AUDIT_2026-07-22.json/.md contain five live-verified L3 items; all are shipped with execution evidence, plus five implemented second-order candidates.
+- Edge truth — /_health is typed edge-health-v1 JSON and explicitly edge-only; HSTS and the contract passed isolated hosted verification 7/7.
+- Worker truth — lifecycle states come from browser registration/controller/update/error observations and an early-event latch, not manifest presence.
+- Storage truth — only sanitized surface/classification/time receipts persist; keys and values are excluded; recovery is same-surface.
+- Tutorial truth — observed commands advance guidance; elapsed time does not claim competence; replay clears prior action evidence.
+- Async truth — every lazy panel has accessible loading/error containment and a one-per-minute reload guard.
+- Validation truth — strict lint, 721/721 tests, build, dependency/public/protocol/security/npm-audit/replay/media gates, and staging visual 255/255 passed directly.
+- Visual truth — the machine matrix is real; direct AI pixel inspection remains unclaimed after CryptUnprotectData failures.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending external/device/data/publication/founder evidence.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-22

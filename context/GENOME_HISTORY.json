@@ -154,6 +154,23 @@
       },
       "delta": 0,
       "cause": "Session 126 recovered and checkpointed the prior closeout, then shipped five L3 audit items and three second-order refin"
+    },
+    {
+      "date": "2026-07-23",
+      "session": 127,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "green locally; portfolio doctor warnings are advisory and non-blocking for this repo closeout.",
+      "lastReviewed": "2026-07-06",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 127 shipped five L3 audit items and five second-order refinements across typed edge health/HSTS, service-worker "
     }
   ]
 }

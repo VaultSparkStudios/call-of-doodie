@@ -666,3 +666,27 @@ Rationale: Background throttling and held input can materially affect a run, so 
 Decision: Paused and modal callbacks are excluded from frame-timing evidence without resetting the run monitor. Persisted receipts derive percentage from bounded counts and enforce percentile/maximum and assistance invariants.
 
 Rationale: Fast no-op callbacks would dilute real gameplay evidence; contradictory persisted values would turn a diagnostic receipt into misinformation.
+
+## 2026-07-22 — Session 127 — Edge health is an edge-only contract
+
+Decision: /_health reports edge-health-v1 JSON for edge routing/configuration only. It does not claim browser gameplay, databases, email, analytics, or third-party readiness. Live HSTS and response shape are release invariants.
+
+Rationale: A 200 HTML fallback was not health evidence. Narrow typed scope makes the receipt useful without laundering unrelated dependencies into green.
+
+## 2026-07-22 — Session 127 — Storage recovery is per sanitized surface
+
+Decision: Critical local persistence records bounded surface/classification/time receipts, never storage keys or values. A surface recovers only after its own successful write.
+
+Rationale: A settings write cannot truthfully clear a progression failure, and diagnostics must not become a data-exfiltration channel.
+
+## 2026-07-22 — Session 127 — Training advances on observed input
+
+Decision: First-run training uses observed movement and combat actions; timers do not imply competence. Manual Next/Skip and replay remain available, and replay resets action evidence.
+
+Rationale: Guidance should respond to player behavior without claiming mastery or trapping accessibility users.
+
+## 2026-07-22 — Session 127 — Lazy recovery stays local and bounded
+
+Decision: Lazy panels own their loading/error/retry UI. Chunk reload recovery is limited to one attempt per minute.
+
+Rationale: One optional panel failure should not crash the game shell or create an infinite reload loop.

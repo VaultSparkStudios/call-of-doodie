@@ -272,11 +272,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=7 canonical parsed sessions]
+Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=8 canonical parsed sessions]
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
-Velocity trend: ↓  |  Protocol velocity: ↓  |  Debt: ↓
-Momentum runway: ~14.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-21 | Session 126 | Total: 1000/1000 | Velocity: 9 | protocolVelocity: 9
+Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
+Momentum runway: ~15.0 sessions  |  Intent rate: 100% (last 5 tracked)
+Last session: 2026-07-22 | Session 127 | Total: 1000/1000 | Velocity: 10 | protocolVelocity: 10
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1818,3 +1818,29 @@ Brainstorm:
 1. Pause-aware shareable replay timeline — render pause markers beside deterministic command evidence without treating them as faults. High probability when replay UI advances.
 2. Device performance rehearsal — feed fixed synthetic frame windows into a developer-only QA surface for deterministic assistance-state screenshots. Medium probability before physical QA.
 3. Defeat pipeline extraction continuation — lift side-effect orchestration around the shared economy plan into weapon-agnostic stages while preserving exact RNG order. High probability in the next App.jsx reduction wave.
+
+## 2026-07-22 — Session 127 | Total: 1000/1000 | Velocity: 10 | Debt: ↓
+
+SIL +10: Shipped five verified L3 items and five second-order innovations, exhausted every safe repo-owned candidate, and made edge, lifecycle, durability, onboarding, and async-recovery claims self-validating.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint, 721/721 tests, build, dependency/public/protocol/security/replay/media gates, and isolated staging are green. |
+| Creative Alignment | 100 | same | Action-responsive training and resilient panels deepen the fast guest-first game without changing its irreverent dark-first identity. |
+| Momentum | 100 | up | Five primary and five second-order items shipped continuously without phase handback. |
+| Engagement | 100 | up | Training now reacts to real play, remains replayable, and avoids timer-based competence claims. |
+| Process Quality | 100 | up | Every premise was live-verified; a phantom modal item was rejected and external gates remained honest. |
+| Cross-Repo Coherence | 100 | same | Studio Ops was consumed through read-only/proxy surfaces; no sibling repository tree was edited. |
+| Security Posture | 100 | up | HSTS is enforced, storage diagnostics exclude keys/values, release audit passes, and npm audit reports zero vulnerabilities. |
+| Ecosystem Integration | 100 | up | Human and agent health surfaces now share a typed edge receipt and hosted verification. |
+| Capital Efficiency | 100 | same | All additions are local/deterministic and add no variable per-user or inference cost. |
+| Automation Coverage | 100 | up | Coverage rose to 721 tests with edge, worker, storage, tutorial, boundary, and reload-loop invariants. |
+
+Top win: staging health is now typed edge evidence rather than an HTML SPA fallback masquerading as readiness.
+Top gap: SPARKED still needs physical, inbound-mail, production-data, scoped-analytics, direct-pixel, publication, and founder evidence.
+Intent outcome: Achieved for every agent-owned premise; external gates remain honest.
+
+Brainstorm:
+1. Structured public-safe playtest receipt schema — define opt-in qualitative evidence without inventing participant outcomes. Medium probability when real playtests are scheduled.
+2. Apply-after-run worker coordinator — defer a ready update until a run ends so freshness and continuity cooperate. Medium probability after physical PWA QA.
+3. Value-free durability timeline — correlate sanitized same-surface failures with local run history without persisting keys or player data. Medium probability after real degradation evidence exists.
