@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, lazy, Suspense } from "react";
+import { useState, useRef, useEffect, lazy } from "react";
+import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { getControllerLabels } from "../utils/gamepad.js";
@@ -86,9 +87,9 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     }
   }, [gsSnapshot]);
 
-  if (showAch) return <Suspense fallback={null}><AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} /></Suspense>;
-  if (showSettings && gameSettings) return <Suspense fallback={null}><SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} /></Suspense>;
-  if (showLb) return <Suspense fallback={null}><LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} /></Suspense>;
+  if (showAch) return <AsyncPanelBoundary><AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAch(false)} /></AsyncPanelBoundary>;
+  if (showSettings && gameSettings) return <AsyncPanelBoundary><SettingsPanel settings={gameSettings} onSave={s => onSaveSettings(s)} onClose={() => setShowSettings(false)} /></AsyncPanelBoundary>;
+  if (showLb) return <AsyncPanelBoundary><LeaderboardPanel leaderboard={leaderboard || []} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLb(false)} /></AsyncPanelBoundary>;
 
   if (view === "rules") return (
     <div style={overlay}>

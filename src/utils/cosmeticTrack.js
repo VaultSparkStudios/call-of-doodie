@@ -13,6 +13,7 @@
 // Anchor (week 0) = Mon 2026-05-04. Each "week" advances on Mondays.
 
 import { isSupporter } from "./supporter.js";
+import { writeLocalState } from "./storageHealth.js";
 
 const ANCHOR_MS = Date.UTC(2026, 4, 4); // 2026-05-04 Monday
 const STORAGE_KEY = "cod-cosmetic-track-v1";
@@ -53,7 +54,7 @@ function loadOwned() {
 }
 
 function saveOwned(state) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  writeLocalState(STORAGE_KEY, JSON.stringify(state), { surface: "cosmetics" });
 }
 
 /**

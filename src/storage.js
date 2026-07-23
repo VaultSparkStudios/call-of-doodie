@@ -2,6 +2,7 @@
 import { supabase, supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUid } from "./supabase.js";
 import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
+import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
 // Run these in the Supabase SQL console (one time, in order):
@@ -69,6 +70,14 @@ const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
+
+function persistProgression(key, value) {
+  return writeLocalState(key, value, { surface: "progression" }).ok;
+}
+
+function removeProgression(key) {
+  return removeLocalState(key, { surface: "progression" }).ok;
+}
 
 function _clampInt(value, min, max, fallback = min) {
   const num = Number.parseInt(value, 10);
@@ -206,7 +215,7 @@ export async function loadTopGhosts(mode = "standard", difficulty = "normal") {
       const { data, error } = await q;
       if (error) throw error;
       const ghosts = (data || []).map(r => ({ name: r.name || "Ghost", score: r.score || 0, wave: r.wave || 0, mode: r.mode || "standard", difficulty: r.difficulty || "normal" }));
-      try { localStorage.setItem(cacheKey, JSON.stringify(ghosts)); } catch {}
+      try { persistProgression(cacheKey, JSON.stringify(ghosts)); } catch {}
       return ghosts;
     } catch {}
   }
@@ -359,7 +368,7 @@ export async function saveToLeaderboard(entry) {
       .map(normalizeLeaderboardEntry)
       .sort((a, b) => compareLeaderboardEntries(a, b, null))
       .slice(0, 100);
-    localStorage.setItem(LB_KEY, JSON.stringify(top));
+    persistProgression(LB_KEY, JSON.stringify(top));
     return { board: top, online: false, submission: "local", rejectionReason: null, rejectionReasons: [], traceEvidence: entry?.traceEvidence || null };
   } catch { return { board: [], online: false, submission: "local", rejectionReason: null, rejectionReasons: [], traceEvidence: entry?.traceEvidence || null }; }
 }
@@ -516,7 +525,7 @@ export function loadCareerStats() {
 }
 
 export function saveCareerStats(stats) {
-  try { localStorage.setItem(CAREER_KEY, JSON.stringify(stats)); } catch {}
+  try { persistProgression(CAREER_KEY, JSON.stringify(stats)); } catch {}
 }
 
 // ===== DAILY MISSIONS =====
@@ -569,7 +578,7 @@ export function hasDailyChallengeSubmitted() {
   return !!localStorage.getItem("cod-daily-" + getTodayKey());
 }
 export function markDailyChallengeSubmitted() {
-  localStorage.setItem("cod-daily-" + getTodayKey(), "1");
+  persistProgression("cod-daily-" + getTodayKey(), "1");
 }
 
 export function getTodayKey() {
@@ -601,7 +610,7 @@ export function loadMissionProgress() {
   try { const raw = localStorage.getItem("cod-missions-" + getTodayKey()); return raw ? JSON.parse(raw) : {}; } catch { return {}; }
 }
 export function saveMissionProgress(completed) {
-  try { localStorage.setItem("cod-missions-" + getTodayKey(), JSON.stringify(completed)); } catch {}
+  try { persistProgression("cod-missions-" + getTodayKey(), JSON.stringify(completed)); } catch {}
 }
 export function isMissionCompleted(missionProgress = {}, mission = null, index = null) {
   if (!missionProgress || typeof missionProgress !== "object") return false;
@@ -649,13 +658,13 @@ export function advanceMissionStreak(now = new Date()) {
     const state = getMissionStreak();
     const next = buildMissionStreakState(state, now);
     if (state.lastCompleted === next.lastCompleted && Number(state.streak) === next.streak) return next;
-    localStorage.setItem(MISSION_STREAK_KEY, JSON.stringify(next));
+    persistProgression(MISSION_STREAK_KEY, JSON.stringify(next));
     return next;
   } catch { return { streak: 0, lastCompleted: null }; }
 }
 
 export function resetMissionStreak() {
-  try { localStorage.setItem(MISSION_STREAK_KEY, JSON.stringify({ streak: 0, lastCompleted: null })); } catch {}
+  try { persistProgression(MISSION_STREAK_KEY, JSON.stringify({ streak: 0, lastCompleted: null })); } catch {}
 }
 
 // ===== META PROGRESSION =====
@@ -681,7 +690,7 @@ export function loadMetaProgress() {
 }
 
 export function saveMetaProgress(meta) {
-  try { localStorage.setItem(META_KEY, JSON.stringify(meta)); } catch {}
+  try { persistProgression(META_KEY, JSON.stringify(meta)); } catch {}
 }
 
 export function addCareerPoints(amount) {
@@ -727,11 +736,11 @@ export function getLockedCallsign() {
 }
 
 export function lockCallsign(name) {
-  try { if (name) localStorage.setItem(CALLSIGN_KEY, name); } catch {}
+  try { if (name) persistProgression(CALLSIGN_KEY, name); } catch {}
 }
 
 export function clearLockedCallsign() {
-  try { localStorage.removeItem(CALLSIGN_KEY); } catch {}
+  try { removeProgression(CALLSIGN_KEY); } catch {}
 }
 
 // ===== RUN HISTORY =====
@@ -742,7 +751,7 @@ export function saveRunToHistory(run) {
   try {
     const history = JSON.parse(localStorage.getItem(RUN_HISTORY_KEY) || "[]");
     history.unshift({ ...run, ts: Date.now() });
-    localStorage.setItem(RUN_HISTORY_KEY, JSON.stringify(history.slice(0, 10)));
+    persistProgression(RUN_HISTORY_KEY, JSON.stringify(history.slice(0, 10)));
   } catch {}
 }
 
@@ -794,7 +803,7 @@ function normalizeStudioGameEvent(event = {}) {
 
 function persistStudioGameEvents(events) {
   try {
-    localStorage.setItem(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, MAX_STUDIO_EVENTS)));
+    persistProgression(STUDIO_EVENTS_KEY, JSON.stringify(events.slice(0, MAX_STUDIO_EVENTS)));
   } catch {}
 }
 
@@ -948,7 +957,7 @@ export function recordRivalryResult({ seed, vsScore = null, vsName = null, score
   try {
     const history = JSON.parse(localStorage.getItem(RIVALRY_HISTORY_KEY) || "[]");
     history.unshift(result);
-    localStorage.setItem(RIVALRY_HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+    persistProgression(RIVALRY_HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
   } catch {}
   return result;
 }
@@ -973,7 +982,7 @@ export function recordDeathByEnemy(typeId) {
   const kbRec = career.enemyKillBests[typeId] || { waveMax: 0, careerKills: 0, killedByCount: 0 };
   kbRec.killedByCount = (kbRec.killedByCount || 0) + 1;
   career.enemyKillBests[typeId] = kbRec;
-  try { localStorage.setItem(CAREER_KEY, JSON.stringify(career)); } catch {}
+  try { persistProgression(CAREER_KEY, JSON.stringify(career)); } catch {}
 }
 
 export function updateEnemyCareerStatsBatch(killsByType) {
@@ -1125,7 +1134,7 @@ export function saveCustomLoadout(idx, loadout) {
   try {
     const slots = loadCustomLoadouts();
     slots[idx] = loadout;
-    localStorage.setItem(CUSTOM_LOADOUTS_KEY, JSON.stringify(slots));
+    persistProgression(CUSTOM_LOADOUTS_KEY, JSON.stringify(slots));
   } catch {}
 }
 
@@ -1142,7 +1151,7 @@ export function loadMetaTree() {
 
 /** Saves a Set of unlocked node IDs. */
 function _saveMetaTree(unlocked) {
-  try { localStorage.setItem(META_TREE_KEY, JSON.stringify([...unlocked])); } catch {}
+  try { persistProgression(META_TREE_KEY, JSON.stringify([...unlocked])); } catch {}
 }
 
 /**
@@ -1165,7 +1174,7 @@ export function saveBossKillRecord(bossType, { kills = 0, deaths = 0 } = {}) {
     const all = JSON.parse(localStorage.getItem(BOSS_KILLS_KEY) || "{}");
     const t = String(bossType);
     all[t] = { kills, deaths };
-    localStorage.setItem(BOSS_KILLS_KEY, JSON.stringify(all));
+    persistProgression(BOSS_KILLS_KEY, JSON.stringify(all));
     return all[t];
   } catch { return null; }
 }
@@ -1179,7 +1188,7 @@ const EXPERIMENT_INTENT_KEY = "cod-last-experiment-v1";
 
 export function saveExperimentIntent(suggestion) {
   if (!suggestion) return;
-  try { localStorage.setItem(EXPERIMENT_INTENT_KEY, JSON.stringify({ suggestion, ts: Date.now() })); } catch {}
+  try { persistProgression(EXPERIMENT_INTENT_KEY, JSON.stringify({ suggestion, ts: Date.now() })); } catch {}
 }
 
 export function loadExperimentIntent() {
@@ -1192,7 +1201,7 @@ export function loadExperimentIntent() {
 }
 
 export function clearExperimentIntent() {
-  try { localStorage.removeItem(EXPERIMENT_INTENT_KEY); } catch {}
+  try { removeProgression(EXPERIMENT_INTENT_KEY); } catch {}
 }
 
 export function getWeaponEvolutionState(idx) {

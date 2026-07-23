@@ -2,85 +2,91 @@ import { describe, expect, it } from "vitest";
 import {
   buildPwaInstallAttempt,
   buildPwaInstallReceipt,
-  detectServiceWorkerReady,
+  detectServiceWorkerLifecycle,
   detectStandaloneDisplay,
   loadPwaInstallAttempt,
+  normalizeServiceWorkerLifecycle,
+  readServiceWorkerLifecycle,
   savePwaInstallAttempt,
 } from "./pwaInstallReadiness.js";
 
-describe("pwa install readiness", () => {
-  it("marks a browser install prompt as ready without claiming acceptance", () => {
+const controlledWorker = { supported: true, registered: true, controlled: true };
+
+describe("PWA install and worker lifecycle truth", () => {
+  it("keeps prompt readiness distinct from install acceptance", () => {
     expect(buildPwaInstallReceipt({
       promptReady: true,
-      serviceWorkerReady: true,
+      serviceWorkerLifecycle: controlledWorker,
       manifestLinked: true,
       mobile: true,
       timestamp: 123,
-    })).toEqual({
-      version: 1,
+    })).toMatchObject({
+      version: 2,
       status: "prompt-ready",
       label: "PWA PROMPT READY",
-      promptReady: true,
-      standalone: false,
       serviceWorkerReady: true,
-      manifestLinked: true,
-      lastOutcome: null,
-      mobile: true,
       readySignals: 3,
       summary: "3/4 install signals · Accept install prompt on device",
-      timestamp: 123,
     });
   });
 
-  it("marks standalone display separately from install prompt readiness", () => {
-    expect(buildPwaInstallReceipt({
-      standalone: true,
-      serviceWorkerReady: true,
-      manifestLinked: true,
-    })).toMatchObject({
-      status: "installed",
-      label: "PWA INSTALLED",
-      readySignals: 3,
+  it("does not mistake API support for registration readiness", () => {
+    const lifecycle = detectServiceWorkerLifecycle({ serviceWorker: { controller: null } });
+    expect(lifecycle).toEqual({
+      supported: true,
+      registered: false,
+      controlled: false,
+      updateReady: false,
+      failed: false,
+      errorCode: null,
     });
-  });
-
-  it("keeps launch QA honest when the browser has no install surface", () => {
-    expect(buildPwaInstallReceipt({
+    expect(buildPwaInstallReceipt({ serviceWorkerLifecycle: lifecycle, manifestLinked: true })).toMatchObject({
+      status: "worker-pending",
+      label: "PWA WORKER PENDING",
       serviceWorkerReady: false,
-      manifestLinked: true,
-      timestamp: 456,
-    })).toMatchObject({
-      status: "needs-browser",
-      label: "PWA CHECK NEEDED",
       readySignals: 1,
-      summary: "1/4 install signals · Verify manifest and service worker",
     });
   });
 
-  it("persists browser prompt outcomes as local install QA evidence", () => {
-    const storage = (() => {
-      const data = new Map();
-      return {
-        getItem: (key) => data.get(key) || null,
-        setItem: (key, value) => data.set(key, value),
-      };
-    })();
+  it("recovers a lifecycle event that fired before Home mounted", () => {
+    const latched = { supported: true, registered: true, controlled: false, updateReady: true };
+    expect(readServiceWorkerLifecycle({ __COD_SW_LIFECYCLE__: latched }, { serviceWorker: {} })).toMatchObject({
+      registered: true, controlled: false, updateReady: true,
+    });
+  });
+
+  it("reports controlled, update-ready, failed, and unsupported states honestly", () => {
+    expect(buildPwaInstallReceipt({ serviceWorkerLifecycle: controlledWorker })).toMatchObject({ status: "browser-ready" });
+    expect(buildPwaInstallReceipt({ serviceWorkerLifecycle: { ...controlledWorker, updateReady: true } })).toMatchObject({ status: "update-ready" });
+    expect(buildPwaInstallReceipt({ serviceWorkerLifecycle: { supported: true, failed: true, errorCode: "SecurityError:secret" } })).toMatchObject({
+      status: "worker-failed",
+      serviceWorker: { errorCode: "SecurityError:secret" },
+    });
+    expect(buildPwaInstallReceipt({ serviceWorkerLifecycle: {}, manifestLinked: true })).toMatchObject({ status: "needs-browser" });
+  });
+
+  it("normalizes impossible lifecycle combinations and bounds error codes", () => {
+    expect(normalizeServiceWorkerLifecycle({ controlled: true, errorCode: "x".repeat(100) })).toEqual({
+      supported: false,
+      registered: false,
+      controlled: false,
+      updateReady: false,
+      failed: false,
+      errorCode: null,
+    });
+    expect(normalizeServiceWorkerLifecycle({ supported: true, failed: true, errorCode: "x".repeat(100) }).errorCode).toHaveLength(48);
+  });
+
+  it("preserves standalone and local prompt-attempt evidence", () => {
+    expect(detectStandaloneDisplay({ matchMedia: () => ({ matches: true }) }, {})).toBe(true);
+    const data = new Map();
+    const storage = { getItem: (key) => data.get(key) || null, setItem: (key, value) => data.set(key, value) };
     const attempt = buildPwaInstallAttempt({ outcome: "accepted", timestamp: 789 });
     savePwaInstallAttempt(attempt, storage);
-
     expect(loadPwaInstallAttempt(storage)).toEqual(attempt);
-    expect(buildPwaInstallReceipt({ lastAttempt: attempt, serviceWorkerReady: true, manifestLinked: true })).toMatchObject({
+    expect(buildPwaInstallReceipt({ lastAttempt: attempt, serviceWorkerLifecycle: controlledWorker })).toMatchObject({
       status: "accepted",
-      label: "PWA ACCEPTED",
       lastOutcome: "accepted",
-      summary: "2/4 install signals · Reopen from app icon to finish QA",
     });
-  });
-
-  it("detects standalone and service worker support from injected browser objects", () => {
-    expect(detectStandaloneDisplay({ matchMedia: () => ({ matches: true }) }, {})).toBe(true);
-    expect(detectStandaloneDisplay({ matchMedia: () => ({ matches: false }) }, { standalone: true })).toBe(true);
-    expect(detectServiceWorkerReady({ serviceWorker: {} })).toBe(true);
-    expect(detectServiceWorkerReady({})).toBe(false);
   });
 });

@@ -1,3 +1,5 @@
+import { writeLocalState } from "./utils/storageHealth.js";
+
 export const SETTINGS_DEFAULTS = {
   enemySpawnMult:      1.0,   // how fast enemies spawn (0.5–2×)
   enemyHealthMult:     1.0,   // enemy HP multiplier (0.5–2×)
@@ -57,11 +59,11 @@ export function loadSettings() {
   try { const r = localStorage.getItem(SK); return r ? { ...SETTINGS_DEFAULTS, ...JSON.parse(r) } : { ...SETTINGS_DEFAULTS }; } catch { return { ...SETTINGS_DEFAULTS }; }
 }
 export function saveSettings(s) {
-  try { localStorage.setItem(SK, JSON.stringify(s)); } catch {}
+  writeLocalState(SK, JSON.stringify(s), { surface: "settings" });
 }
 export function loadPresets() {
   try { const r = localStorage.getItem(PK); return r ? JSON.parse(r) : []; } catch { return []; }
 }
 export function savePresets(p) {
-  try { localStorage.setItem(PK, JSON.stringify(p)); } catch {}
+  writeLocalState(PK, JSON.stringify(p), { surface: "settings" });
 }

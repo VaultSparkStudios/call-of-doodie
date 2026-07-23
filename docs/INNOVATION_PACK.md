@@ -1,52 +1,26 @@
-<!-- generated-by: node scripts/ops.mjs innovation-pack -->
-<!-- generated-at: 2026-07-22T02:11:16.309Z -->
+<!-- generated-by: /arc Session 127 compound refinement pass -->
+<!-- generated-at: 2026-07-22 -->
 
 # Innovation Pack — Call-Of-Doodie
 
-> Repo-local second-order candidate list for `/implement` saturation loops.
+> Code-derived second-order candidates generated after the Session 127 primary audit was fully implemented.
 
-## Ranked Candidates
+## Implemented candidates
 
-1. **sil-2-blocker-s61-s60-follow-up-narrowed-s112-update-posthog-sentry-ko-f** — [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
-   - Axis: protocol
-   - Evidence: context/TASK_BOARD.md#now
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-2. **sil-2-s60-supabase-auth-studio-membership-implementation-decision-if-pai** — [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
-   - Axis: protocol
-   - Evidence: context/TASK_BOARD.md#now
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-3. **human-data-sil-2-homev2-lighthouse-measurement-capture-real-lcp-cls-delt** — [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
-   - Axis: product
-   - Evidence: context/TASK_BOARD.md#now
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-4. **human-data-sil-1-homev2-analytics-funnel-compare-homev2deploy-vs-legacy-** — [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
-   - Axis: product
-   - Evidence: context/TASK_BOARD.md#now
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-5. **discord-invite-community-link-when-the-community-entry-point-is-ready** — Discord invite/community link when the community entry point is ready
-   - Axis: product
-   - Evidence: context/TASK_BOARD.md#deferred
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
-6. **sil-1-s62-deferred-homev2-v1-fallback-retirement-gate-on-200ms-lighthous** — [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)
-   - Axis: product
-   - Evidence: context/TASK_BOARD.md#deferred
-   - First step: verify the premise in source, then write a fresh `docs/AUDIT_<date>.json` item before implementation.
+1. **Edge handler single dispatch — SHIPPED.** The generic Cloudflare Pages handler now routes GET through the typed health response and rejects other methods, removing ambiguity between `onRequest` and `onRequestGet` exports.
+2. **Pre-mount service-worker lifecycle latch — SHIPPED.** Registration receipts are latched on `window` as well as emitted, so Home cannot miss success/failure/update evidence that fired before it mounted.
+3. **Same-surface storage recovery — SHIPPED.** A successful settings write can no longer mask an active progression-write failure; recovery clears only the matching sanitized surface.
+4. **Replayed-training evidence reset — SHIPPED.** Starting a run after `REPLAY TRAINING` clears stale observed-action evidence so the tutorial cannot instantly auto-complete from an earlier run.
+5. **Lazy-chunk reload-loop guard — SHIPPED.** Panel recovery allows one reload per minute and then fails visibly rather than trapping the player in a repeated stale-chunk reload loop.
 
-## Guardrails
+## Verified non-candidates / honest deferrals
 
-- Treat human/device/dashboard items as launch gates, not repo-code blockers.
-- Keep replay, leaderboard, and submission trust language evidence-backed.
-- Prefer local deterministic helpers over paid API or per-user variable cost.
+- Analytics, Sentry project scope, and provider dashboard allowlists remain credential-gated (`analytics` capability MISSING).
+- HomeV2 retirement remains gated on real production Lighthouse and funnel evidence.
+- Physical Progressive Web App (PWA), controller, and full-run media evidence require real-device observation.
+- Supabase membership, community publication, and launch approval remain product/founder decisions.
+- Simultaneous reward-modal overlap was a false premise: the existing reward plan already serializes perk, mutation, and shop surfaces.
 
-## Implemented Second-Order Refinements
+## Saturation evidence
 
-1. **boss-banner-hot-array-retention** — replaced the final boss-kill `filter().slice()` allocation with an identity-preserving newest-match retention primitive and exact order/cap tests.
-2. **suspended-frame-evidence-exclusion** — paused, hidden, draft, shop, route, cutscene, announcement, and mutation frames still render callbacks but cannot dilute run timing evidence.
-3. **performance-receipt-invariant-normalization** — persisted receipts now derive slow percentage from bounded counts, require `slowFrames <= totalFrames`, enforce `worstMs >= p95Ms`, and reconcile assistance labels/activation counts.
-4. **fresh-theme-visual-harness-truth** — the default browser context now seeds only the required callsign, never theme/home preference, so it reaches HomeV2 while preserving a genuine fresh-theme assertion.
-
-All four are local, deterministic, cost-neutral, covered by focused tests, and preserve replay/score honesty.
-
-## Saturation Disposition
-
-The six generated candidates remain intentionally unimplemented: they require provider credentials, production traffic, founder product/community decisions, or physical evidence. No safe repo-owned primary candidate remains.
+Primary audit: 5/5 L3 items shipped. Second-order pass: 5/5 candidates shipped. Focused regression set: 38/38. Full suite: 721/721 across 98 files. Context meter: CONTINUE.

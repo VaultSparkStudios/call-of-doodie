@@ -1,0 +1,297 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /arc Session 127",
+  "generatedAt": "2026-07-22",
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-22",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure (founder-directed)",
+    "combinedPriority": 157.6,
+    "top3": [
+      "edge-runtime-truth-contract",
+      "service-worker-lifecycle-truth",
+      "storage-durability-receipt"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Direct source inspection, current-head CI, staging/prod HTTP responses, and executable repository checks. The Studio Oracle proxy was attempted twice but stalled without output; no item relies on an Oracle assertion.",
+    "specialtyLenses": [
+      "infrastructure rubric",
+      "game-loop review",
+      "app release gate",
+      "public web canon"
+    ],
+    "baseline": {
+      "tests": "704/704 across 93 files (Session 126 receipt; reverify during implementation)",
+      "lint": "strict pass (Session 126 receipt; reverify during implementation)",
+      "build": "pass (Session 126 receipt; reverify during implementation)",
+      "publicContract": "13/13",
+      "security": "static release gate pass; live HSTS missing",
+      "doctor": "blockingFailing 0",
+      "release": "NO-GO"
+    },
+    "innovationReserve": [
+      "edge-runtime-truth-contract",
+      "service-worker-lifecycle-truth",
+      "storage-durability-receipt",
+      "observed-action-onboarding"
+    ],
+    "secondOrderImplemented": [
+      "edge-handler-single-dispatch",
+      "service-worker-pre-mount-lifecycle-latch",
+      "same-surface-storage-recovery",
+      "replayed-training-evidence-reset",
+      "lazy-chunk-reload-loop-guard"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 89,
+    "progression": 94,
+    "sessionEngagement": 91,
+    "retention": 93,
+    "soulFidelity": 96,
+    "evidence": "No docs/PLAYTESTS evidence exists; scores reflect live implementation, not proven player outcomes.",
+    "prioritizedFindings": [
+      "First-run teaching advances by timer rather than observed mastery.",
+      "No structured playtest receipts prove comprehension, frustration, run duration, or replay intent.",
+      "Decision density is rich, but changing cadence without player evidence would be speculative; the existing reward queue already prevents simultaneous modal overlap."
+    ],
+    "nextThreeMoves": [
+      "Replace timer-driven tutorial advancement with observed actions while retaining manual skip/reset.",
+      "Create a public-safe structured playtest receipt schema without fabricating participant data.",
+      "Collect real decision-time and replay-intent evidence before changing route/reward cadence."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED; implementation may continue against isolated staging",
+    "green": [
+      "current-head CI green",
+      "branding and public contract green",
+      "footer completeness green",
+      "CANON-029 cost-neutral and cost gates green",
+      "rollback plan executable",
+      "static security gate green"
+    ],
+    "red": [
+      "staging /_health is the SPA fallback rather than a health contract",
+      "production omits Strict-Transport-Security",
+      "analytics and project-scoped Sentry configuration unresolved",
+      "on-domain inbound delivery unverified",
+      "physical PWA, gamepad, full-run media, and parity evidence absent",
+      "production Lighthouse/funnel data, publication, and founder approval absent"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "observability honesty / security / release automation",
+      "effortHours": 2,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 40,
+      "slug": "edge-runtime-truth-contract",
+      "title": "Replace the SPA-shaped health false positive with a typed edge-health contract and make HSTS a tested live release invariant.",
+      "status": "shipped",
+      "why": "The staging /_health response is byte-identical to / and returns HTML, while production lacks Strict-Transport-Security even though the static security gate passes. Both are direct CANON-031 contradictions.",
+      "recipe": "Add a Cloudflare Pages /_health function returning bounded JSON and no-store headers; add HSTS to the Pages header policy; make local/live validators require status, content type, body contract, and HSTS rather than HTTP 200 alone.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Add a JSON /_health Pages function and HSTS header."
+        },
+        "L2": {
+          "effortHours": 1.25,
+          "recipe": "Add unit/static tests for content type, bounded payload, no-store, and HSTS configuration."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Extend staging/live release checks so SPA fallback HTML or missing HSTS fails closed with actionable evidence."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "PWA reliability / observability honesty / feedback",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 36,
+      "slug": "service-worker-lifecycle-truth",
+      "title": "Turn service-worker support into a real controlled/registered/update lifecycle receipt instead of labeling API availability as readiness.",
+      "status": "shipped",
+      "why": "detectServiceWorkerReady() currently returns true when navigator merely exposes serviceWorker, and register-sw.js discards registration failures. The Home PWA chip can therefore claim browser readiness without a controller or successful registration.",
+      "recipe": "Model supported, registered, controlled, update-ready, and failed states; emit a bounded browser event from registration; consume it in HomeV2; keep installation claims distinct from lifecycle readiness.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Rename support semantics and require controller/registration evidence for ready."
+        },
+        "L2": {
+          "effortHours": 1.25,
+          "recipe": "Emit and test registration success/failure/controller lifecycle states."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Render a truthful actionable lifecycle receipt and preserve physical-install NO-GO language."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "data durability / feedback / runtime organization",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 34.8,
+      "slug": "storage-durability-receipt",
+      "title": "Make local progression durability observable with a bounded write-health journal instead of silently swallowing persistence failures.",
+      "status": "shipped",
+      "why": "Critical settings, career, mission, meta, supporter-cache, and cosmetic writes catch and discard storage errors. A quota or privacy-mode failure can erase progression while the UI continues to imply success.",
+      "recipe": "Add a zero-dependency storage write/read contract with sanitized failure classes, bounded in-memory journal, last-success time, and persistence probe; route critical writes through it and surface an honest local-save degraded receipt without exposing values.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Wrap settings and career writes with boolean receipts."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Add bounded sanitized journal and cover critical progression keys."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Surface player-visible degraded/recovered state, add quota/privacy fixtures, and prove no stored values leak into diagnostics."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "BOLT",
+      "axis": "onboarding / input reliability / engagement",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 31.3,
+      "slug": "observed-action-onboarding",
+      "title": "Replace the three-second tutorial slideshow with observed-action mastery that advances on real move, shoot, dash, grenade, kill, and perk evidence.",
+      "status": "shipped",
+      "why": "TutorialOverlay auto-advances every three seconds, permanently dismisses, and vanishes after wave one regardless of player action. It can finish while a new player is still decoding the first control.",
+      "recipe": "Derive a bounded tutorial evidence map from the existing command trace and run counters; auto-advance only after evidence, retain manual NEXT/SKIP, expose replayable practice reset, and keep keyboard/touch/controller labels.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Stop timer advancement and add explicit completion actions."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Wire move/shoot/dash/grenade evidence from existing trace calls."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Include kill/perk mastery, accessible status copy, reset semantics, and cross-input regression tests."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "BOLT",
+      "axis": "UI resilience / accessibility / deployment reliability",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 15.5,
+      "slug": "recoverable-lazy-panels",
+      "title": "Replace invisible null Suspense gaps with a reusable accessible loading and chunk-recovery boundary for player-critical panels.",
+      "status": "shipped",
+      "why": "More than twenty lazy panel sites render fallback={null}; slow or stale chunks create blank interaction gaps, and a rejected lazy import escalates to the global crash screen rather than a local recovery path.",
+      "recipe": "Create one compact AsyncPanelBoundary with accessible loading status, local error capture, retry/reload action, and themed presentation; adopt it across game, HomeV2, pause, menu, and death surfaces with focused tests.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Provide a visible role=status loading fallback for critical modals."
+        },
+        "L2": {
+          "effortHours": 1.75,
+          "recipe": "Add a panel-level error boundary and retry/reload affordance."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Adopt consistently across all lazy player surfaces and verify theme/input/accessibility behavior."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "simultaneous-reward-modal-fix",
+      "reason": "False premise: createWaveRewardPlan and resolveQueuedReward already serialize perk, mutation, and shop surfaces."
+    },
+    {
+      "slug": "playtest-outcome-claims",
+      "reason": "No participant evidence exists. Create a schema later, but do not fabricate player outcomes."
+    },
+    {
+      "slug": "home-v2-retirement",
+      "reason": "Requires production Lighthouse and funnel evidence."
+    },
+    {
+      "slug": "analytics-and-sentry-scope",
+      "reason": "Canonical analytics capability is MISSING and the stored DSN is not proven project-scoped."
+    },
+    {
+      "slug": "physical-launch-qa",
+      "reason": "Requires real PWA, controller, and full-run media hardware evidence."
+    },
+    {
+      "slug": "publication-and-approval",
+      "reason": "Itch/community publication and launch approval remain founder-owned."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "edge-runtime-truth-contract",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Typed Cloudflare Pages edge-only JSON health contract, HSTS policy, static enforcement, and live-check rejection of SPA fallback HTML.",
+      "verification": "strict lint; 721/721 tests across 98 files; production build; dependency tree; public contract 13 files; protocol drift; security release audit; npm audit 0; replay state/edge fixtures; launch media"
+    },
+    {
+      "slug": "service-worker-lifecycle-truth",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Supported/registered/controlled/update-ready/failed lifecycle receipt with sanitized registration failures and a pre-mount event latch.",
+      "verification": "strict lint; 721/721 tests across 98 files; production build; dependency tree; public contract 13 files; protocol drift; security release audit; npm audit 0; replay state/edge fixtures; launch media"
+    },
+    {
+      "slug": "storage-durability-receipt",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Bounded sanitized write-health journal across critical progression/settings/cosmetic/PWA surfaces with same-surface recovery truth.",
+      "verification": "strict lint; 721/721 tests across 98 files; production build; dependency tree; public contract 13 files; protocol drift; security release audit; npm audit 0; replay state/edge fixtures; launch media"
+    },
+    {
+      "slug": "observed-action-onboarding",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Observed move, shoot+kill, dash, grenade, and perk onboarding with manual controls and replay-training reset semantics.",
+      "verification": "strict lint; 721/721 tests across 98 files; production build; dependency tree; public contract 13 files; protocol drift; security release audit; npm audit 0; replay state/edge fixtures; launch media"
+    },
+    {
+      "slug": "recoverable-lazy-panels",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Accessible non-empty loading and local chunk-error recovery across every lazy App/Home/Menu/Pause/Death surface with reload-loop protection.",
+      "verification": "strict lint; 721/721 tests across 98 files; production build; dependency tree; public contract 13 files; protocol drift; security release audit; npm audit 0; replay state/edge fixtures; launch media"
+    }
+  ]
+}

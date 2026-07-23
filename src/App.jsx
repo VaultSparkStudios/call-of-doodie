@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback, useMemo, lazy, Suspense } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
+import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
 import { drawGame } from "./drawGame.js";
 import {
   WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, TIPS,
@@ -74,6 +75,7 @@ import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./system
 import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
+import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
@@ -230,6 +232,8 @@ export default function CallOfDoodie() {
   const [username, setUsername]       = useState(() => getLockedCallsign() || "");
   const [score, setScore]             = useState(0);
   const [kills, setKills]             = useState(0);
+  const [tutorialEvidence, setTutorialEvidence] = useState(() => normalizeTutorialEvidence());
+  const tutorialEvidenceRef = useRef(tutorialEvidence);
   const [deaths, setDeaths]           = useState(0);
   const [wave, setWave]               = useState(1);
   const [currentWeapon, setCurrentWeapon] = useState(0);
@@ -1020,13 +1024,23 @@ export default function CallOfDoodie() {
     killFeedRef.current = [entry, ...killFeedRef.current].slice(0, 5);
     setKillFeed([...killFeedRef.current]);
   };
+  const markTutorialEvidence = useCallback((action) => {
+    if (!TUTORIAL_ACTIONS.includes(action) || tutorialEvidenceRef.current[action]) return;
+    const next = markTutorialAction(tutorialEvidenceRef.current, action);
+    tutorialEvidenceRef.current = next;
+    setTutorialEvidence(next);
+  }, []);
   const recordCommandTrace = useCallback((action, value = "") => {
+    markTutorialEvidence(action);
     recordReplayCommandEvent(commandTraceRef.current, {
       frame: frameCountRef.current,
       action,
       value,
     });
-  }, []);
+  }, [markTutorialEvidence]);
+  useEffect(() => {
+    if (kills > 0) markTutorialEvidence("kill");
+  }, [kills, markTutorialEvidence]);
   const transitionPause = useCallback((nextPaused, reason = "explicit") => {
     const transition = planPauseTransition({
       paused: pausedRef.current,
@@ -1802,6 +1816,11 @@ export default function CallOfDoodie() {
     }
     // Reset draft gate for next run
     draftShownRef.current = false;
+    if (shouldShowTutorial()) {
+      const resetEvidence = normalizeTutorialEvidence();
+      tutorialEvidenceRef.current = resetEvidence;
+      setTutorialEvidence(resetEvidence);
+    }
     // Store challenge vs data for HUD + DeathScreen.
     // If no explicit challenge, auto-load the most recent unbeaten rivalry as a pressure target.
     let vsScore = challengeOpts.vs ?? null;
@@ -4375,7 +4394,7 @@ export default function CallOfDoodie() {
 
   if (screen === "menu") {
     if (draftPending) {
-      return <Suspense fallback={null}><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></Suspense>;
+      return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
     }
     const homeV2 = (() => {
       try {
@@ -4389,7 +4408,7 @@ export default function CallOfDoodie() {
     })();
     const Home = homeV2 ? HomeV2 : MenuScreen;
     return (
-      <Suspense fallback={null}>
+      <AsyncPanelBoundary>
         <Home
           username={username} difficulty={difficulty} setDifficulty={setDifficulty}
           isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard}
@@ -4416,7 +4435,7 @@ export default function CallOfDoodie() {
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
           pwaInstallPromptReady={pwaPromptReady}
         />
-      </Suspense>
+      </AsyncPanelBoundary>
     );
   }
 
@@ -4477,9 +4496,9 @@ export default function CallOfDoodie() {
       communityChokeWaves: communityChokePointsRef.current,
     });
     return (
-      <Suspense fallback={null}>
+      <AsyncPanelBoundary>
         <DeathScreen {...deathScreenProps} />
-      </Suspense>
+      </AsyncPanelBoundary>
     );
   }
 
@@ -4501,7 +4520,7 @@ export default function CallOfDoodie() {
 
       {/* Pause menu */}
       {paused && (
-        <Suspense fallback={null}><PauseMenu
+        <AsyncPanelBoundary><PauseMenu
           wave={wave} timeSurvived={timeSurvived} score={score} isMobile={isMobile}
           achievementsUnlocked={achievementsUnlocked} fmtTime={fmtTime}
           musicMuted={musicMuted} onToggleMute={toggleMusicMuted}
@@ -4525,14 +4544,14 @@ export default function CallOfDoodie() {
           activePerks={activePerks}
           perkMods={perkModsRef.current}
           activeSynergiesData={gsRef.current?.activeSynergies || []}
-        /></Suspense>
+        /></AsyncPanelBoundary>
       )}
 
       {/* Wave route select */}
       {routePending && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <RouteSelectModal options={routeOptions} wave={wave} onSelect={applyRoute} buildArchetype={dominantArchetype} gs={gsRef.current} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
 
       {/* Wave mutation challenge */}
@@ -4579,23 +4598,23 @@ export default function CallOfDoodie() {
 
       {/* Wave clear shop */}
       {shopPending && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <WaveShopModal options={shopOptions} wave={wave} onSelect={applyShopOption} boughtHistory={shopHistory} currentWeapon={currentWeapon} coins={coins} coinShopOptions={coinShopOptions} onCoinBuy={applyCoinShopItem} buildArchetype={dominantArchetype} gs={gsRef.current} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
 
       {/* Perk selection modal */}
       {perkPending && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
 
       {/* Achievements panel (in-game) */}
       {showAchievements && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <AchievementsPanel achievementsUnlocked={achievementsUnlocked} onClose={() => setShowAchievements(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
 
       {/* Achievement popup */}
@@ -4801,9 +4820,9 @@ export default function CallOfDoodie() {
 
       {/* Tutorial overlay — first-run hints */}
       {!paused && !perkPending && !shopPending && !routePending && (
-        <Suspense fallback={null}>
-          <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} controllerType={controllerType} wave={wave} />
-        </Suspense>
+        <AsyncPanelBoundary>
+          <TutorialOverlay isMobile={isMobile} controllerConnected={gamepadConnected} controllerType={controllerType} evidence={tutorialEvidence} />
+        </AsyncPanelBoundary>
       )}
 
       {/* HUD overlay */}

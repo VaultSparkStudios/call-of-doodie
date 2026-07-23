@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, useMemo, lazy, Suspense } from "react";
+import { useState, useRef, useEffect, useMemo, lazy } from "react";
+import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { ACHIEVEMENTS, ENEMY_TYPES, RANK_NAMES, WEAPONS } from "../constants.js";
 import VirtualKeyboard from "./VirtualKeyboard.jsx";
 import { qrEncode } from "../utils/qrEncode.js";
@@ -652,9 +653,9 @@ export default function DeathScreen({
   return (
     <div style={{ ...base, touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
       {showLeaderboard && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px", paddingBottom: "max(56px, env(safe-area-inset-bottom, 24px))", boxSizing: "border-box" }}>
       <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>

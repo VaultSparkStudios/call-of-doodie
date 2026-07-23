@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, lazy } from "react";
+import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent, countIncompleteMissions, isMissionCompleted } from "../storage.js";
 import { supabase } from "../supabase.js";
@@ -27,7 +28,7 @@ const MetaTreePanel = lazy(() => import("./MetaTreePanel.jsx"));
 const SupporterModal = lazy(() => import("./SupporterModal.jsx"));
 
 function LazyPanel({ children }) {
-  return <Suspense fallback={null}>{children}</Suspense>;
+  return <AsyncPanelBoundary>{children}</AsyncPanelBoundary>;
 }
 
 const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];

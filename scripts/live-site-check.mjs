@@ -23,6 +23,7 @@ async function fetchText(url) {
     ok: response.ok,
     text,
     contentType: response.headers.get("content-type") || "",
+    headers: response.headers,
   };
 }
 
@@ -46,7 +47,18 @@ async function main() {
   assert(html.text.includes("favicon.svg"), "Favicon reference missing from live HTML");
   assert(html.text.includes("og-image.svg"), "OG image reference missing from live HTML");
   assert(html.text.includes('id="root"'), "App root node missing from live HTML");
+  const hsts = html.headers.get("strict-transport-security") || "";
+  assert(/^max-age=(?:31536000|[3-9]\d{7,});\s*includeSubDomains$/i.test(hsts), `HSTS policy missing or weak: ${hsts || "<missing>"}`);
   console.log("PASS live HTML shell checks");
+
+  const health = await fetchText(`${normalizedSiteUrl}_health`);
+  assert(health.status === 200, `Edge health expected 200, got ${health.status}`);
+  assert(health.contentType.includes("application/json"), `Edge health must be JSON, got ${health.contentType || "<missing>"}`);
+  const healthJson = JSON.parse(health.text);
+  assert(healthJson.contract === "edge-health-v1", `Edge health contract mismatch: ${healthJson.contract || "<missing>"}`);
+  assert(healthJson.status === "edge-ready", `Edge health status mismatch: ${healthJson.status || "<missing>"}`);
+  assert(healthJson.service === "call-of-doodie", `Edge health service mismatch: ${healthJson.service || "<missing>"}`);
+  console.log("PASS typed edge health + HSTS checks");
 
   const manifest = await fetchText(`${normalizedSiteUrl}manifest.json`);
   assert(manifest.status === 200, `Manifest expected 200, got ${manifest.status}`);
@@ -76,7 +88,7 @@ async function main() {
   assert(ogImage.contentType.includes("image/svg+xml"), `OG image content-type mismatch: ${ogImage.contentType}`);
   console.log("PASS OG image checks");
 
-  console.log("Live site check complete: 5/5 assertions passed.");
+  console.log("Live site check complete: 7/7 assertions passed.");
 }
 
 main().catch((error) => {

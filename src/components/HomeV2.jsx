@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useCallback, useRef, lazy, Suspense } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef, lazy } from "react";
+import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import {
@@ -16,11 +17,13 @@ import { encodeReplayCode, decodeReplayCode, isValidReplayCode } from "../utils/
 import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } from "../utils/runBrain.js";
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
-import { buildPwaInstallReceipt, detectServiceWorkerReady, detectStandaloneDisplay, loadPwaInstallAttempt } from "../utils/pwaInstallReadiness.js";
+import { buildPwaInstallReceipt, detectStandaloneDisplay, loadPwaInstallAttempt, readServiceWorkerLifecycle, SERVICE_WORKER_LIFECYCLE_EVENT } from "../utils/pwaInstallReadiness.js";
 import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
+import { getStorageHealth, probeLocalStorage, STORAGE_HEALTH_EVENT } from "../utils/storageHealth.js";
+import { resetTutorialProgress } from "../utils/tutorialProgress.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -131,12 +134,28 @@ export default function HomeV2(props) {
   const [inputCalibration, setInputCalibration] = useState(() => loadInputCalibration());
   const [controllerProfile] = useState(() => loadControllerProfile());
   const [pwaInstallAttempt] = useState(() => loadPwaInstallAttempt());
+  const [serviceWorkerLifecycle, setServiceWorkerLifecycle] = useState(() => readServiceWorkerLifecycle());
+  const [storageHealth, setStorageHealth] = useState(() => getStorageHealth());
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
   const themePalette = THEMES[theme];
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    const onLifecycle = (event) => setServiceWorkerLifecycle(event?.detail || readServiceWorkerLifecycle());
+    window.addEventListener(SERVICE_WORKER_LIFECYCLE_EVENT, onLifecycle);
+    setServiceWorkerLifecycle(readServiceWorkerLifecycle());
+    return () => window.removeEventListener(SERVICE_WORKER_LIFECYCLE_EVENT, onLifecycle);
+  }, []);
+
+  useEffect(() => {
+    const onStorageHealth = (event) => setStorageHealth(event?.detail || getStorageHealth());
+    window.addEventListener(STORAGE_HEALTH_EVENT, onStorageHealth);
+    setStorageHealth(probeLocalStorage().receipt);
+    return () => window.removeEventListener(STORAGE_HEALTH_EVENT, onStorageHealth);
+  }, []);
 
   useEffect(() => {
     const loaded = loadCareerStats();
@@ -239,12 +258,12 @@ export default function HomeV2(props) {
     () => buildPwaInstallReceipt({
       promptReady: pwaInstallPromptReady || Boolean(onInstallApp),
       standalone: detectStandaloneDisplay(),
-      serviceWorkerReady: detectServiceWorkerReady(),
+      serviceWorkerLifecycle,
       manifestLinked: true,
       lastAttempt: pwaInstallAttempt,
       mobile: isMobile,
     }),
-    [isMobile, onInstallApp, pwaInstallAttempt, pwaInstallPromptReady],
+    [isMobile, onInstallApp, pwaInstallAttempt, pwaInstallPromptReady, serviceWorkerLifecycle],
   );
   const journey = useMemo(
     () => buildPlayerJourney({
@@ -478,9 +497,9 @@ export default function HomeV2(props) {
   return (
     <div style={page} data-theme={theme} data-testid="home-v2-shell">
       <div style={gridBg} />
-      <Suspense fallback={null}>
+      <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
-      </Suspense>
+      </AsyncPanelBoundary>
       <div style={wrap}>
 
         {/* Top bar */}
@@ -713,6 +732,12 @@ export default function HomeV2(props) {
               🛡️ ASSIST +50HP
             </button>
           )}
+          <button style={quickBtn} onClick={() => {
+            resetTutorialProgress();
+            track("front_door_action", { actionId: "reset_training", surface: "home_v2" });
+          }}>
+            🎓 REPLAY TRAINING
+          </button>
           {onInstallApp && (
             <button
               style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
@@ -730,12 +755,29 @@ export default function HomeV2(props) {
               ...quickBtn,
               display: "inline-flex",
               alignItems: "center",
-              borderColor: pwaInstallReceipt.status === "needs-browser" ? "rgba(255,215,0,0.28)" : "rgba(0,229,255,0.3)",
-              color: pwaInstallReceipt.status === "needs-browser" ? "#FFE29A" : "#B9F3FF",
+              borderColor: ["needs-browser", "worker-pending", "worker-failed"].includes(pwaInstallReceipt.status) ? "rgba(255,215,0,0.28)" : "rgba(0,229,255,0.3)",
+              color: ["needs-browser", "worker-pending", "worker-failed"].includes(pwaInstallReceipt.status) ? "#FFE29A" : "#B9F3FF",
               cursor: "default",
             }}
           >
             {pwaInstallReceipt.label} · {pwaInstallReceipt.readySignals}/4
+          </span>
+          <span
+            role="status"
+            title={storageHealth.status === "degraded"
+              ? `${storageHealth.lastFailure?.surface || "local-state"} · ${storageHealth.lastFailure?.code || "write-failed"}; progression may not persist`
+              : `${storageHealth.successCount} verified local write${storageHealth.successCount === 1 ? "" : "s"}`
+            }
+            style={{
+              ...quickBtn,
+              display: "inline-flex",
+              alignItems: "center",
+              borderColor: storageHealth.status === "degraded" ? "rgba(255,96,72,0.5)" : "rgba(68,255,136,0.3)",
+              color: storageHealth.status === "degraded" ? "#FF9C88" : "#9BFFBD",
+              cursor: "default",
+            }}
+          >
+            {storageHealth.label}
           </span>
           {inputDebugEnabled && (
             <button
@@ -953,34 +995,34 @@ export default function HomeV2(props) {
       {/* Modals (lazy) */}
       {showLeaderboard && (
         <div style={PANEL}>
-          <Suspense fallback={null}>
+          <AsyncPanelBoundary>
             <LeaderboardPanel leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={onLoadMore} username={username} onClose={() => setShowLeaderboard(false)} />
-          </Suspense>
+          </AsyncPanelBoundary>
         </div>
       )}
       {showAchievements && (
         <div style={PANEL}>
-          <Suspense fallback={null}>
+          <AsyncPanelBoundary>
             <AchievementsPanel achievementsUnlocked={career?.achievementsEver || []} onClose={() => setShowAchievements(false)} />
-          </Suspense>
+          </AsyncPanelBoundary>
         </div>
       )}
       {showSettings && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <SettingsPanel settings={gameSettings} onSave={onSaveSettings} onClose={() => setShowSettings(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showMetaTree && (
         <div style={PANEL}>
-          <Suspense fallback={null}>
+          <AsyncPanelBoundary>
             <MetaTreePanel onClose={() => setShowMetaTree(false)} />
-          </Suspense>
+          </AsyncPanelBoundary>
         </div>
       )}
       {showSupporter && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <SupporterModal callsign={username} onClose={() => setShowSupporter(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showAimCheck && (
         <AimCheckPanel
@@ -996,37 +1038,37 @@ export default function HomeV2(props) {
         />
       )}
       {showCareerStats && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_CareerStats career={career} meta={meta} onClose={() => setShowCareerStats(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showRules && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_Rules onClose={() => setShowRules(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showControls && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_Controls isMobile={isMobile} controllerType={effectiveControllerType} onClose={() => setShowControls(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showMostWanted && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_MostWanted onClose={() => setShowMostWanted(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showMissions && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_Missions missions={missions} missionProgress={missionProgress} onClose={() => setShowMissions(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showUpgrades && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_Upgrades meta={meta} accountLevel={accountLevel} onClose={() => { setMeta(loadMetaProgress()); setShowUpgrades(false); }} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showRunHistory && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_RunHistory
             runHistory={runHistory}
             rivalryHistory={rivalryHistory}
@@ -1036,17 +1078,17 @@ export default function HomeV2(props) {
             onLaunchSeed={launchHistorySeed}
             onClose={() => setShowRunHistory(false)}
           />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showLoadoutBuilder && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_LoadoutBuilder onClose={() => setShowLoadoutBuilder(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
       {showNewFeatures && (
-        <Suspense fallback={null}>
+        <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
-        </Suspense>
+        </AsyncPanelBoundary>
       )}
     </div>
   );

@@ -66,9 +66,11 @@ const sw = read("public/sw.js");
 const cfHeaders = read("cloudflare/vaultspark-security-headers.js");
 const packageLockExists = fs.existsSync(path.join(ROOT, "package-lock.json"));
 const obeliskVerifyExists = fs.existsSync(path.join(ROOT, "functions", "api", "obelisk-verify.js"));
+const edgeHealthExists = fs.existsSync(path.join(ROOT, "functions", "_health.js"));
 const dependencyTree = runDependencyTreeCheck(ROOT);
 
 const requiredHeaders = [
+  "Strict-Transport-Security",
   "Referrer-Policy",
   "X-Content-Type-Options",
   "X-Frame-Options",
@@ -97,6 +99,11 @@ const checks = [
     detail: `${requiredHeaders.filter((name) => Boolean(headers[name])).length}/${requiredHeaders.length} required headers present`,
   },
   {
+    id: "hsts-policy",
+    ok: /^max-age=(?:31536000|[3-9]\d{7,});\s*includeSubDomains$/i.test(headers["Strict-Transport-Security"] || ""),
+    detail: "HSTS carries a one-year minimum and includes subdomains without claiming preload registration",
+  },
+  {
     id: "csp-directives",
     ok: Object.entries(requiredCsp).every(([directive, expected]) => includesAll(csp[directive] || [], expected)),
     detail: "required Content Security Policy directives and sources are present",
@@ -121,6 +128,13 @@ const checks = [
     detail: obeliskVerifyExists
       ? "functions/api/obelisk-verify.js exists"
       : "missing functions/api/obelisk-verify.js",
+  },
+  {
+    id: "edge-health-endpoint-present",
+    ok: edgeHealthExists,
+    detail: edgeHealthExists
+      ? "functions/_health.js provides a typed edge-health contract"
+      : "missing functions/_health.js; an SPA fallback must never count as health",
   },
   {
     id: "service-worker-cache-version",
