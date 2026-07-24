@@ -142,6 +142,28 @@
       "notes": "Signature 3D-styled boss sprite exported from the proprietary internal asset pack."
     },
     {
+      "id": "cod-doodie-operative-v2",
+      "kind": "runtime-character-sprite",
+      "sourceType": "ai-generated-proprietary",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/runtime-sprites/cod-doodie-operative-v2-source.png",
+      "runtimePath": "public/visual-assets/cod-doodie-operative-v2.png",
+      "dimensions": { "width": 384, "height": 384 },
+      "status": "production-ready",
+      "notes": "Transparent high-realization operative art consumed by the live canvas renderer; procedural character art remains the load/failure fallback."
+    },
+    {
+      "id": "cod-karen-nemesis-v2",
+      "kind": "runtime-character-sprite",
+      "sourceType": "ai-generated-proprietary",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/runtime-sprites/cod-karen-nemesis-v2-source.png",
+      "runtimePath": "public/visual-assets/cod-karen-nemesis-v2.png",
+      "dimensions": { "width": 384, "height": 384 },
+      "status": "production-ready",
+      "notes": "Transparent high-realization Karen art consumed by live Karen and Sergeant Karen rendering; procedural character art remains the load/failure fallback."
+    },
+    {
       "id": "real-boss-rush-capture",
       "kind": "launch-screenshot",
       "sourceType": "browser-capture",

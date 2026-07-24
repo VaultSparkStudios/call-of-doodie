@@ -1,6 +1,7 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
+import { getRuntimeCharacterSprite } from "./utils/visualAssetLibrary.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -682,6 +683,19 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.restore();
     }
 
+    // Signature art is a runtime layer, not a homepage gallery. Keep the
+    // procedural body beneath it as an instant-loading/failure fallback.
+    if (e.typeIndex === 1 || e.typeIndex === 13) {
+      const karenSprite = getRuntimeCharacterSprite("karen");
+      if (karenSprite) {
+        const spriteSize = Math.max(46, r * (e.isBossEnemy ? 3.2 : 2.7));
+        ctx.save();
+        ctx.globalAlpha = e.hitFlash > 0 ? Math.max(0.45, 1 - e.hitFlash / 14) : 1;
+        ctx.drawImage(karenSprite, -spriteSize / 2, -spriteSize * 0.56, spriteSize, spriteSize);
+        ctx.restore();
+      }
+    }
+
     // Boss glow ring
     if (e.isBossEnemy) {
       const rgb = e.enrageTriggered ? "255,80,0" : "255,0,0";
@@ -1106,6 +1120,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   if (gs.playerSkin) {
     ctx.font = "12px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText(gs.playerSkin, 0, 0);
+  }
+  const operativeSprite = getRuntimeCharacterSprite("player");
+  if (operativeSprite) {
+    const previousSmoothing = ctx.imageSmoothingEnabled;
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(operativeSprite, -26, -26, 52, 52);
+    ctx.imageSmoothingEnabled = previousSmoothing;
   }
   // Reset alpha before muzzle flash (so flash is always bright)
   ctx.globalAlpha = 1; ctx.shadowBlur = 0;

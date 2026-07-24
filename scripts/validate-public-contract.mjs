@@ -3,6 +3,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
 
 const root = process.cwd();
 const jsonMode = process.argv.includes("--json");
@@ -44,6 +45,7 @@ const requiredFiles = [
   relative("public", "contact", "index.html"),
   relative("public", "ip", "index.html"),
   relative("public", "agents.json"),
+  relative("public", "gameplay-contract.json"),
   relative("public", ".well-known", "llms.txt"),
   relative("public", "sitemap.xml"),
   relative("public", "robots.txt"),
@@ -57,6 +59,7 @@ const contentByFile = Object.fromEntries(requiredFiles.map((file) => [file, requ
 
 let agents = null;
 let footer = null;
+let gameplayContract = null;
 try {
   agents = JSON.parse(contentByFile[relative("public", "agents.json")]);
 } catch (error) {
@@ -66,6 +69,11 @@ try {
   footer = JSON.parse(contentByFile[relative("public", "footer-manifest.json")]);
 } catch (error) {
   errors.push("footer-manifest.json invalid JSON: " + error.message);
+}
+try {
+  gameplayContract = JSON.parse(contentByFile[relative("public", "gameplay-contract.json")]);
+} catch (error) {
+  errors.push("gameplay-contract.json invalid JSON: " + error.message);
 }
 
 if (agents) {
@@ -88,6 +96,13 @@ if (footer) {
   ]);
   for (const href of requiredLinks) {
     if (!allFooterLinks.has(href)) errors.push("footer manifest missing required destination: " + href);
+  }
+}
+
+if (gameplayContract) {
+  const expectedGameplayContract = buildPublicGameplayContract();
+  if (JSON.stringify(gameplayContract) !== JSON.stringify(expectedGameplayContract)) {
+    errors.push("gameplay-contract.json drifted from source; run npm run gameplay:contract");
   }
 }
 
@@ -145,6 +160,7 @@ requireIncludes("ip", contentByFile[relative("public", "ip", "index.html")], [
 requireIncludes("llms.txt", contentByFile[relative("public", ".well-known", "llms.txt")], [
   "Proprietary — All Rights Reserved",
   "advisory deterministic evidence",
+  "gameplay-contract.json",
 ]);
 requireIncludes("sitemap.xml", contentByFile[relative("public", "sitemap.xml")], [
   "https://callofdoodie.wtf/",

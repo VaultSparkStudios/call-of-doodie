@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 127 shipped five L3 audit items and five second-order refinements across typed edge health/HSTS, service-worker lifecycle truth, sanitized per-surface storage durability, observed-action onboarding, and bounded lazy-panel recovery; 721/721 tests green.",
+  "currentFocus": "Session 128 shipped four L3 evidence contracts plus seven second-order/founder refinements across playtest receipts, pressure/progression observability, agent mechanics, working Replay Training, player-first homepage organization, and runtime operative/Karen art; 737/737 tests green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -74,6 +74,16 @@
       "status": "green",
       "type": "tests",
       "command": "npm test — 721/721 across 98 files; strict lint; production build"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 128 — 737/737 across 102 files; strict lint; production build; public/protocol/dependency/security/media/assets gates; npm audit 0; browser E2E 2/2"
+    },
+    {
+      "status": "green",
+      "type": "local-browser-capture",
+      "command": "Five real Chromium desktop/mobile captures refreshed; no render failure. Direct host pixel viewer unavailable (CryptUnprotectData), so pixel-perfect review is unclaimed."
     }
   ],
   "blockers": [
@@ -87,21 +97,21 @@
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
-  "truthAuditLastRun": "2026-07-22",
+  "truthAuditLastRun": "2026-07-23",
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 127,
+  "silSession": 128,
   "silScore": 1000,
   "silAvg3": 1000,
   "silVelocity": 10,
   "silDebt": "decreasing",
-  "silLastSession": "2026-07-22",
-  "currentSession": 127,
+  "silLastSession": "2026-07-23",
+  "currentSession": 128,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 721,
-  "testsTotal": 721,
+  "testsPassing": 737,
+  "testsTotal": 737,
   "entropyScore": 0.201,
   "entropyLastComputed": "2026-07-22",
   "silRubricVersion": "3.0",
@@ -132,16 +142,17 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "doctorScore": {
-    "date": "2026-07-23",
+    "date": "2026-07-24",
+    "ranAt": "2026-07-24T02:10:40.432Z",
     "overallPass": true,
-    "passing": 121,
-    "warning": 29,
+    "passing": 117,
+    "warning": 34,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
-    "ran": 151,
-    "total": 153,
-    "score": 80
+    "ran": 152,
+    "total": 154,
+    "score": 77
   }
 }

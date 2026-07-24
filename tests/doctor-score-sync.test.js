@@ -54,4 +54,43 @@ describe("syncDoctorScore", () => {
 
     expect(() => syncDoctorScore({ sourceStatusPath, targetStatusPath })).toThrow(/doctorScore missing/);
   });
+
+  it("derives release pass from blocking failures instead of advisory failures", () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cod-doctor-sync-"));
+    created.push(dir);
+    const sourceStatusPath = path.join(dir, "source.json");
+    const targetStatusPath = path.join(dir, "target.json");
+    const doctorScore = {
+      date: "2026-07-24",
+      ranAt: "2026-07-24T02:00:38.517Z",
+      overallPass: false,
+      passing: 117,
+      warning: 34,
+      failing: 1,
+      blockingFailing: 0,
+      advisoryFailing: 1,
+      skipped: 2,
+      ran: 152,
+      total: 154,
+      score: 77,
+    };
+    fs.writeFileSync(sourceStatusPath, JSON.stringify({ doctorScore }));
+    fs.writeFileSync(targetStatusPath, JSON.stringify({ slug: "call-of-doodie" }));
+
+    expect(syncDoctorScore({ sourceStatusPath, targetStatusPath })).toMatchObject({
+      overallPass: true,
+      blockingFailing: 0,
+      advisoryFailing: 1,
+    });
+
+    doctorScore.overallPass = true;
+    doctorScore.blockingFailing = 1;
+    doctorScore.advisoryFailing = 0;
+    fs.writeFileSync(sourceStatusPath, JSON.stringify({ doctorScore }));
+
+    expect(syncDoctorScore({ sourceStatusPath, targetStatusPath })).toMatchObject({
+      overallPass: false,
+      blockingFailing: 1,
+    });
+  });
 });

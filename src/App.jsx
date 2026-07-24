@@ -76,6 +76,7 @@ import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/ga
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
+import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
 import { interpolateBossQuote, getBossTone } from "./utils/bossDialogue.js";
 import { getRunAct } from "./utils/runNarrative.js";
@@ -85,6 +86,7 @@ import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSum
 import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
+import { createPressureArc, finalizePressureArc, recordPressureSnapshot } from "./systems/pressureArc.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -212,6 +214,7 @@ export default function CallOfDoodie() {
   const experimentMatchedRef = useRef(null); // "matched" | "diverged" | null — set at run start
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
+  const playtestModeRef  = useRef(isPlaytestMode()); // query parsing stays off the input hot path
   const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
   const routePendingRef  = useRef(false); // blocks game loop like perkPending
   const bossCutsceneRef  = useRef(false); // blocks game loop during boss intro card
@@ -563,6 +566,15 @@ export default function CallOfDoodie() {
     // Seed creation is intentionally nondeterministic; once chosen, every
     // score-affecting branch uses a named stream derived from this value.
     const seed = (forceSeed && !isNaN(parseInt(forceSeed))) ? Math.abs(parseInt(forceSeed)) % 999999 : Math.floor(Math.random() * 999999);
+    if (playtestModeRef.current) {
+      startActivePlaytestFlight({
+        meta: {
+          difficulty: difficultyRef.current,
+          seed,
+          practice: Boolean(practiceDrill),
+        },
+      });
+    }
     const career = loadCareerStats();
     gsRef.current = {
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
@@ -580,7 +592,7 @@ export default function CallOfDoodie() {
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
-      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null,
+      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, pressureArc: createPressureArc(),
       precisionStreak: 0,
       _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
@@ -1032,6 +1044,7 @@ export default function CallOfDoodie() {
   }, []);
   const recordCommandTrace = useCallback((action, value = "") => {
     markTutorialEvidence(action);
+    if (playtestModeRef.current) recordActivePlaytestMilestone(action, { meta: { frame: frameCountRef.current } });
     recordReplayCommandEvent(commandTraceRef.current, {
       frame: frameCountRef.current,
       action,
@@ -1039,7 +1052,10 @@ export default function CallOfDoodie() {
     });
   }, [markTutorialEvidence]);
   useEffect(() => {
-    if (kills > 0) markTutorialEvidence("kill");
+    if (kills > 0) {
+      markTutorialEvidence("kill");
+      if (playtestModeRef.current) recordActivePlaytestMilestone("kill", { meta: { kills } });
+    }
   }, [kills, markTutorialEvidence]);
   const transitionPause = useCallback((nextPaused, reason = "explicit") => {
     const transition = planPauseTransition({
@@ -1750,6 +1766,16 @@ export default function CallOfDoodie() {
       } catch (err) { console.warn("[GIF] encode failed:", err); }
       setGifEncoding(false);
     })();
+    if (playtestModeRef.current) {
+      recordActivePlaytestMilestone("death", {
+        meta: {
+          wave: gs.currentWave,
+          score: gs.score,
+          kills: gs.kills,
+          difficulty: difficultyRef.current,
+        },
+      });
+    }
     const runFlags = {
       scoreAttack: scoreAttackRef.current,
       dailyChallenge: dailyChallengeRef.current,
@@ -1779,6 +1805,7 @@ export default function CallOfDoodie() {
       traceReceipt: deathTraceReceipt,
       integrityReceipt: getRunIntegrityReceipt(gs),
       performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
+      pressureReceipt: finalizePressureArc(gs.pressureArc, { deathWave: gs.currentWave }),
     }));
     createDeathStudioEvents({
       score: gs.score,
@@ -2418,6 +2445,11 @@ export default function CallOfDoodie() {
           }),
           ...telemetrySnapshot,
         });
+      }
+      if (telemetrySnapshot?.pressureBand) {
+        // Every sample may raise the observed peak even when the band is stable;
+        // recordPressureSnapshot itself deduplicates transition entries.
+        recordPressureSnapshot(gs.pressureArc, telemetrySnapshot);
       }
       if (telemetrySnapshot?.pressureBand && telemetrySnapshot.pressureBand !== gs.waveTelemetryBand) {
         gs.waveTelemetryBand = telemetrySnapshot.pressureBand;
@@ -4434,6 +4466,14 @@ export default function CallOfDoodie() {
           onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
           pwaInstallPromptReady={pwaPromptReady}
+          onReplayTraining={() => {
+            const resetEvidence = normalizeTutorialEvidence();
+            tutorialEvidenceRef.current = resetEvidence;
+            setTutorialEvidence(resetEvidence);
+            // Training is an immediate play action; bypass the pre-run draft once.
+            draftShownRef.current = true;
+            startGame(undefined, { training: true });
+          }}
         />
       </AsyncPanelBoundary>
     );

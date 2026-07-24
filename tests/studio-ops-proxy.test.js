@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { buildStudioProxyInvocation } from "../scripts/lib/studio-ops-proxy.mjs";
+import { bindProjectOracleArgs, buildStudioProxyInvocation } from "../scripts/lib/studio-ops-proxy.mjs";
 
 describe("project-local Studio Ops proxies", () => {
   const projectRoot = path.resolve("C:/repo/call-of-doodie");
@@ -29,6 +29,14 @@ describe("project-local Studio Ops proxies", () => {
       studioRoot,
     });
     expect(invocation.args).toEqual(["--path", path.join(projectRoot, ".claude", "settings.local.json"), "--check"]);
+  });
+  it("binds Oracle preverify surfaces to this project instead of Studio Ops", () => {
+    expect(bindProjectOracleArgs(["preverify", "claim", "src", "docs/file.md"], projectRoot)).toEqual([
+      "preverify",
+      "claim",
+      path.join(projectRoot, "src"),
+      path.join(projectRoot, "docs/file.md"),
+    ]);
   });
   it("keeps closeout doctor verification read-only across repo boundaries", () => {
     const source = fs.readFileSync(path.resolve("scripts/closeout-autopilot.mjs"), "utf8");

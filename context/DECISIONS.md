@@ -690,3 +690,21 @@ Rationale: Guidance should respond to player behavior without claiming mastery o
 Decision: Lazy panels own their loading/error/retry UI. Chunk reload recovery is limited to one attempt per minute.
 
 Rationale: One optional panel failure should not crash the game shell or create an infinite reload loop.
+
+## 2026-07-23 — Session 128 — Instrument before balance tuning
+
+Decision: Progression runway and wave pressure are preserved as source-derived descriptive receipts before any numeric curve changes. Playtest evidence remains opt-in, session-local, bounded, and explicit about participant judgments.
+
+Rationale: Mechanical richness is not empirical calibration. Receipts create a trustworthy future tuning substrate without inventing retention targets or causal claims.
+
+## 2026-07-23 — Session 128 — Signature character art belongs in gameplay
+
+Decision: The operative and Karen signature identities are optimized transparent runtime layers over deterministic procedural fallbacks. Internal art showcase cards do not occupy the player homepage.
+
+Rationale: Character art earns its cost by improving combat realization. Keeping procedural fallbacks preserves instant-load resilience, collision truth, telegraphs, and deterministic mechanics.
+
+## 2026-07-23 — Session 128 — Front-door diagnostics use player language
+
+Decision: Replay Training is an immediate guided-play action. Install and local-save evidence lives under one expandable Device & Save surface with plain-language explanations and an actionable save test; raw readiness fractions are not player navigation.
+
+Rationale: An unexplained status receipt is not a control. The homepage should organize play, tools, navigation, and device state by player intent.

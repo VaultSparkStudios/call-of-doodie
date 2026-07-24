@@ -39,6 +39,19 @@ describe("runSession", () => {
       traceEvidence: { level: "rich", count: 7, durationFrames: 96, weaknessReasons: [] },
       traceReceipt: { status: "verified", label: "Replay Proof Ready", score: 92, level: "rich" },
       performanceReceipt: { totalFrames: 720, slowFrames: 144, slowPct: 20, p95Ms: 25, worstMs: 48, assisted: true, assistActivations: 1 },
+      pressureReceipt: {
+        schemaVersion: "pressure-arc-v1",
+        deathWave: 12,
+        collapseBand: "overrun",
+        transitionCount: 2,
+        counts: { light: 1, stable: 0, overrun: 1 },
+        overrunShare: 50,
+        maxPressureRatio: 1.4,
+        transitions: [
+          { wave: 12, stage: "scouting", band: "light", pressureRatio: 0.4 },
+          { wave: 12, stage: "climax", band: "overrun", pressureRatio: 1.4 },
+        ],
+      },
       integrityReceipt: {
         status: "degraded",
         onlineEligible: false,
@@ -56,6 +69,13 @@ describe("runSession", () => {
       traceReceipt: { status: "verified", score: 92 },
       traceEvidence: { level: "rich", count: 7 },
       performanceReceipt: { totalFrames: 720, slowFrames: 144, slowPct: 20, p95Ms: 25, worstMs: 48, assisted: true, assistActivations: 1 },
+      pressureReceipt: {
+        schemaVersion: "pressure-arc-v1",
+        collapseBand: "overrun",
+        transitionCount: 2,
+        counts: { light: 1, stable: 0, overrun: 1 },
+        claim: "observed-wave-pressure-transitions-not-causality",
+      },
       integrityReceipt: {
         status: "degraded",
         onlineEligible: false,

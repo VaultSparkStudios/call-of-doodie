@@ -24,6 +24,8 @@ describe("PWA install and worker lifecycle truth", () => {
       version: 2,
       status: "prompt-ready",
       label: "PWA PROMPT READY",
+      playerLabel: "INSTALL AVAILABLE",
+      detail: "Accept install prompt on device",
       serviceWorkerReady: true,
       readySignals: 3,
       summary: "3/4 install signals · Accept install prompt on device",

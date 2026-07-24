@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/generate-icons.mjs",
+    "prebuild": "node scripts/generate-public-gameplay-contract.mjs && node scripts/generate-icons.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "icons:generate": "node scripts/generate-icons.mjs",
@@ -19,6 +19,7 @@
     "test:coverage": "vitest run --coverage",
     "launch:smoke": "vitest run src/App.launch.test.jsx",
     "public:contract": "node scripts/validate-public-contract.mjs",
+    "gameplay:contract": "node scripts/generate-public-gameplay-contract.mjs",
     "health:check": "node scripts/health-check.mjs",
     "live:site-check": "node scripts/live-site-check.mjs",
     "launch:surfaces": "node scripts/launch-surface-check.mjs",
@@ -48,7 +49,8 @@
     "domain:platform:apply": "node scripts/platform-domain-cutover.mjs --apply",
     "schema:lint": "node scripts/schema-lint.mjs",
     "leaderboard:audit": "node scripts/leaderboard-audit.mjs",
-    "replay:state-stepper": "node scripts/validate-replay-state-stepper-fixtures.mjs"
+    "replay:state-stepper": "node scripts/validate-replay-state-stepper-fixtures.mjs",
+    "progression:audit": "node scripts/progression-curve-audit.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.8",
@@ -63,7 +65,7 @@
     "form-data": "4.0.6",
     "js-yaml": "4.3.0",
     "picomatch": "4.0.4",
-    "postcss": "8.5.10",
+    "postcss": "8.5.12",
     "ws": "8.21.0"
   },
   "devDependencies": {

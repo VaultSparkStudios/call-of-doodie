@@ -21,13 +21,19 @@
     { "rel": "contact", "href": "https://callofdoodie.wtf/contact/" },
     { "rel": "rights", "href": "https://callofdoodie.wtf/ip/" },
     { "rel": "llms", "href": "https://callofdoodie.wtf/.well-known/llms.txt" },
-    { "rel": "sitemap", "href": "https://callofdoodie.wtf/sitemap.xml" }
+    { "rel": "sitemap", "href": "https://callofdoodie.wtf/sitemap.xml" },
+    { "rel": "gameplay-contract", "href": "https://callofdoodie.wtf/gameplay-contract.json" }
   ],
   "capabilities": [
     {
       "id": "game.describe",
       "mode": "read",
       "description": "Describe the public game loop, modes, accessibility, and competitive-trust posture from published pages."
+    },
+    {
+      "id": "game.inspect-rules",
+      "mode": "read",
+      "description": "Inspect the versioned public gameplay contract for modes, weapons, unlocks, enemies, and challenge-link grammar."
     }
   ],
   "trust": {

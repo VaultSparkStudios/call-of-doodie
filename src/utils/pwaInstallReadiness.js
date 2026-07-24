@@ -94,11 +94,24 @@ export function buildPwaInstallReceipt({
     "worker-failed": `Registration failed${worker.errorCode ? ` (${worker.errorCode})` : ""}`,
     "needs-browser": "Service workers unsupported in this browser",
   }[status];
+  const playerLabel = {
+    installed: "APP MODE ACTIVE",
+    "prompt-ready": "INSTALL AVAILABLE",
+    accepted: "INSTALL ACCEPTED",
+    "prompt-dismissed": "INSTALL DISMISSED",
+    "update-ready": "APP UPDATE READY",
+    "browser-ready": "OFFLINE SUPPORT READY",
+    "worker-pending": "OFFLINE SUPPORT STARTING",
+    "worker-failed": "OFFLINE SUPPORT NEEDS ATTENTION",
+    "needs-browser": "PLAYING IN BROWSER",
+  }[status];
 
   return {
     version: 2,
     status,
     label,
+    playerLabel,
+    detail: nextAction,
     promptReady: Boolean(promptReady),
     standalone: Boolean(standalone),
     serviceWorkerReady,

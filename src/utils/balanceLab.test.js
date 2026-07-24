@@ -11,6 +11,14 @@ describe("buildLocalBalanceLab", () => {
     expect(lab.topInsight).toMatchObject({ id: "repeat_wave_deaths" });
   });
 
+  it("surfaces repeated observed overrun finishes without causal wording", () => {
+    const pressureReceipt = { schemaVersion: "pressure-arc-v1", collapseBand: "overrun" };
+    const lab = buildLocalBalanceLab({ runHistory: [{ wave: 4, pressureReceipt }, { wave: 7, pressureReceipt }] });
+    const insight = lab.insights.find((entry) => entry.id === "pressure_arc");
+    expect(insight?.detail).toContain("does not prove the cause");
+    expect(lab.inspected.pressureRuns).toBe(2);
+  });
+
   it("detects repeated killer pressure", () => {
     const lab = buildLocalBalanceLab({
       career: { recentDeathsByEnemy: [{ t: 4 }, { t: 4 }, { t: 4 }] },
@@ -35,5 +43,17 @@ describe("buildLocalBalanceLab", () => {
 
     expect(lab.status).toBe("quiet");
     expect(lab.topInsight.id).toBe("quiet");
+  });
+
+  it("adds a descriptive progression runway without claiming balance quality", () => {
+    const lab = buildLocalBalanceLab({
+      career: { totalKills: 79 },
+      meta: { careerPoints: 50, upgradeTiers: {} },
+    });
+
+    const insight = lab.insights.find((entry) => entry.id === "progression_runway");
+    expect(insight?.receipt.schemaVersion).toBe("progression-runway-v1");
+    expect(insight?.detail).toContain("career kills");
+    expect(insight?.detail).not.toMatch(/balanced|retention|optimal/i);
   });
 });

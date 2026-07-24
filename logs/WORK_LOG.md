@@ -963,3 +963,17 @@ Intent outcome: achieved. SPARKED remains evidence-gated rather than inferred fr
 - Rejected a phantom simultaneous-reward-modal premise because the live queue already serializes it; preserved analytics, hardware, traffic, publication, and founder gates without fabricated evidence.
 - Validation: strict lint; 721/721 tests across 98 files; build; dependency/public/protocol/security/npm-audit/replay/media gates; isolated staging deploy 29973290482; hosted live 7/7; hosted visual 255/255.
 - Release verdict: engineering green on staging; SPARKED NO-GO pending direct AI pixel, physical device/media, inbound mail, production metrics, scoped analytics, publication, and founder approval.
+
+## 2026-07-23 — Session 128 — Evidence loop, working training, player-first homepage, and runtime character art
+
+- Pulled/rebased `origin/main` before startup; ran lock, context, blocker/secrets, canon, Ark, brief, game-loop, and release-gate checks. Doctor began with `overallPass: true`, `blockingFailing: 0`, and one portfolio advisory.
+- Generated `docs/AUDIT_2026-07-23.json` / `.md`; shipped four L3 items: local opt-in playtest flight receipts, bounded pressure arcs, exact progression runway receipts, and a source-derived public gameplay contract for agents.
+- Rejected the DeathScreen hierarchy item after direct inspection proved RUN THE FIX and MORE RUN ACTIONS already satisfy the proposed structure; recorded the false-premise result as an audit win.
+- Saturated the new boundaries: bound Oracle surfaces to this repo, preserved same-band pressure peaks, cached playtest opt-in outside the command hot path, made clipboard failure truthful, and clamped progression to live tier counts.
+- Responded to founder follow-ups: Replay Training now immediately launches a clean guided run; the homepage removes internal asset cards, separates Quick Play/Player Tools/Player Hub/device state, exposes navigation, explains install state, and gives local-save status a real test action.
+- Generated two proprietary transparent character sources, exported optimized 384x384 RGBA runtime PNGs, wired the operative and Karen into live canvas rendering with procedural fallbacks, and refreshed all five Chromium launch captures.
+- The security release gate surfaced a newly disclosed PostCSS file-read advisory. Obelisk approved exact 8.5.12 (86/100); npm registry provenance/integrity and Studio incident scan were clean; override/lockfile updated; npm audit returned zero.
+- Validation: strict lint; 737/737 tests across 102 files; production build; dependency/public/protocol/security/media/assets gates; Playwright desktop/mobile 2/2; focused wave 37/37; live Oracle evidence; five real Chromium captures.
+- Honest deferrals: no new isolated staging receipt because local `cloudflare.deploy` is MISSING and the required direct-main/no-branch path has no preview target. Physical devices/media, inbound mail, production metrics, scoped analytics, publication, hosted pixel review, and founder SPARKED approval remain external evidence gates.
+
+Intent outcome: achieved for every agent-owned premise; Unified Genius List and second-order frontier exhausted without fabricated evidence.

@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /goal /arc Session 128",
+  "generatedAt": "2026-07-23",
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "product",
+  "meta": {
+    "generatedAt": "2026-07-23",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "product",
+    "combinedPriority": 126.9,
+    "top3": [
+      "playtest-flight-recorder",
+      "pressure-arc-receipt",
+      "progression-runway-contract"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Direct inspection of current source, tests, public contracts, task context, assumptions, and executable health/release checks. The repo-local Oracle path-binding defect discovered during audit was root-fixed; live preverify now resolves and finds evidence in this project's absolute surfaces.",
+    "specialtyLenses": [
+      "product SIL rubric",
+      "game-loop review",
+      "app release gate",
+      "public web canon"
+    ],
+    "baseline": {
+      "tests": "721/721 across 98 files (Session 127 receipt; reverify during implementation)",
+      "lint": "strict pass (Session 127 receipt; reverify during implementation)",
+      "build": "pass (Session 127 receipt; reverify during implementation)",
+      "doctor": "overallPass true; blockingFailing 0; one portfolio advisory failure",
+      "release": "NO-GO: sitemap 7/10, stale staging parity, physical/device and contact-delivery evidence, analytics scope, publication/data evidence, and founder approval remain unresolved"
+    },
+    "innovationReserve": [
+      "playtest-flight-recorder",
+      "pressure-arc-receipt",
+      "progression-runway-contract",
+      "agent-gameplay-contract"
+    ],
+    "secondOrderImplemented": [
+      "project-bound-oracle-evidence",
+      "pressure-peak-integrity",
+      "playtest-hot-path-and-clipboard-truth",
+      "progression-tier-schema-resilience",
+      "replay-training-immediate-launch",
+      "player-first-homepage-information-architecture",
+      "runtime-character-realization"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 85,
+    "progression": 70,
+    "sessionEngagement": 80,
+    "retention": 85,
+    "soulFidelity": 70,
+    "evidence": "Implementation health is strong, but docs/PLAYTESTS is absent; empirical confidence is low and no player outcome is fabricated.",
+    "prioritizedFindings": [
+      "The repo has no current structured playtest evidence lane; the Session 55 QA checklist is stale relative to action-observed onboarding.",
+      "DeathScreen contains a strong RUN THE FIX action but repeats multiple competing replay, rematch, share, leaderboard, play-again, and exit actions.",
+      "Progression and pressure systems are mechanically rich but do not preserve a source-derived runway or run-level pressure arc for calibration."
+    ],
+    "nextThreeMoves": [
+      "Instrument opt-in, local-only first-run receipts without pretending synthetic data is playtest evidence.",
+      "Make one derived next move primary and progressively disclose all secondary post-run actions.",
+      "Persist deterministic progression and pressure receipts before tuning balance from real distributions."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or public launch; isolated staging implementation may continue",
+    "green": [
+      "last five deploy workflow runs succeeded",
+      "typed edge-health staging smoke passed",
+      "branding, proprietary rights, footer, rollback, security, and CANON-029 cost gates passed"
+    ],
+    "red": [
+      "staging revision/parity is stale and physical PWA/gamepad evidence remains absent",
+      "canonical sitemap score is 7/10",
+      "on-domain inbound delivery is not verified end to end",
+      "project-scoped analytics/Sentry evidence is missing",
+      "production data, publication, direct visual review, and founder approval are absent"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "feedback / engagement / intelligence",
+      "effortHours": 6,
+      "impact": 10,
+      "innovation": 10,
+      "priority": 33.3,
+      "slug": "playtest-flight-recorder",
+      "title": "Create an opt-in local playtest flight recorder that turns observed first-run behavior and explicit tester judgments into a portable, privacy-safe receipt.",
+      "status": "shipped",
+      "why": "docs/PLAYTESTS does not exist, docs/QA_CHECKLIST.md still describes obsolete timer-driven onboarding, and active assumptions about chaos readability, replay intent, and humor have no current participant evidence. Automated screenshots are not player-behavior evidence.",
+      "recipe": "Add a zero-network playtest session contract enabled only by ?playtest=1; record bounded milestone timing from existing command evidence, death/run facts, the selected continuation action, and explicit clarity/replay-intent answers; persist only in sessionStorage and expose a sanitized JSON copy/export card on DeathScreen.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Define and test a sanitized playtest receipt schema plus opt-in detection." },
+        "L2": { "effortHours": 3.5, "recipe": "Wire run start, first move/shot/kill, death, and continuation milestones through existing command/death paths." },
+        "L3": { "effortHours": 6, "recipe": "Add explicit death-clarity and replay-intent prompts, portable JSON copy, reset semantics, privacy copy, and cross-run regression coverage." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "feedback / game-loop readability / observability",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 31.3,
+      "slug": "pressure-arc-receipt",
+      "title": "Preserve each run's pressure arc so the debrief can distinguish a sudden overrun from sustained pressure instead of discarding wave-director evidence after telemetry emission.",
+      "status": "shipped",
+      "why": "App.jsx emits wave_pressure_band only when a band changes, but createRunHistoryEntry receives no pressure evidence. Local Balance Lab and post-run intelligence therefore cannot connect the collapse to the live director arc.",
+      "recipe": "Add a bounded pure pressure-arc accumulator, record band transitions from existing wave telemetry, finalize a sanitized max-ratio/transition/collapse-band receipt at death, preserve it in run history, and surface one observed-only debrief line without causal claims.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add the pure accumulator/finalizer with invariant tests." },
+        "L2": { "effortHours": 2.5, "recipe": "Wire transitions into App and persist the normalized receipt in run history." },
+        "L3": { "effortHours": 4, "recipe": "Use the receipt in Balance Lab and DeathScreen with bounded history, migration-safe normalization, and observed-only wording." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "progression / efficiency / feedback",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 31.3,
+      "slug": "progression-runway-contract",
+      "title": "Unify account levels, weapon unlocks, career-point earnings, and permanent-upgrade costs into a deterministic progression runway contract before any curve tuning.",
+      "status": "shipped",
+      "why": "getAccountLevel uses sqrt(totalKills/20), kills award career points, weapon unlock levels live separately, and META_UPGRADES span 200-3500 points. No shared simulator or invariant states when milestones become reachable, so curve edits cannot be reviewed coherently.",
+      "recipe": "Extract the pure account-level contract, build a source-derived runway simulator for configurable kills-per-run scenarios, emit next weapon/upgrade milestones from current career state, integrate descriptive evidence into Balance Lab, and test monotonicity and exact thresholds without inventing target retention claims.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Extract getAccountLevel into a pure utility and preserve storage API compatibility." },
+        "L2": { "effortHours": 2.5, "recipe": "Add simulator and milestone invariants across weapons/upgrades." },
+        "L3": { "effortHours": 4, "recipe": "Integrate a descriptive runway receipt into Balance Lab and add a deterministic audit CLI for future real-data calibration." }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "BOLT",
+      "axis": "AI integration / dual-audience / discoverability",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 31.0,
+      "slug": "agent-gameplay-contract",
+      "title": "Publish a versioned, source-derived gameplay contract so AI agents can inspect modes, weapons, unlocks, trust scope, and challenge-link grammar without scraping prose.",
+      "status": "shipped",
+      "why": "public/agents.json exposes only game.describe and links to prose/legal resources. No machine-readable gameplay resource exists, even though the project explicitly serves humans and AI agents and its mechanics already live in importable constants.",
+      "recipe": "Generate public/gameplay-contract.json from source constants at build time; include bounded public-safe mechanics and explicit advisory replay scope; link it from agents.json and llms.txt; make the public-contract validator recompute and compare the artifact so it cannot silently drift.",
+      "ladder": {
+        "L1": { "effortHours": 0.75, "recipe": "Define schema and generate modes/weapons/unlock metadata." },
+        "L2": { "effortHours": 1.75, "recipe": "Add enemies/bosses/challenge grammar and explicit trust/cost/rights scope." },
+        "L3": { "effortHours": 3, "recipe": "Wire build generation, exact drift validation, agent/LLM discovery links, and regression tests." }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "BOLT",
+      "axis": "UX / retention / accessibility",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 28.0,
+      "slug": "single-next-move-death-flow",
+      "title": "Turn RUN THE FIX into one derived post-death continuation decision and progressively disclose every secondary action without deleting player agency.",
+      "status": "skipped",
+      "why": "DeathScreen already computes a nextRunDrill and renders its primary CTA, then later presents Play Again, Replay Seed, Rematch, Share Run, Leaderboard, and Rage Quit together. The duplicated decision surface creates a verified hierarchy conflict even though its behavioral effect is not yet measured.",
+      "recipe": "Create a pure continuation plan from the existing drill/seed/rematch state, use it for one primary next-run action, move proof/replay/rematch/share/navigation alternatives behind an accessible More Options disclosure, and retain direct keyboard/controller reachability plus distinct analytics events.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add a pure continuation-plan builder and tests." },
+        "L2": { "effortHours": 2.5, "recipe": "Unify primary action behavior and progressively disclose duplicate run actions." },
+        "L3": { "effortHours": 4, "recipe": "Add accessible summary/focus semantics, preserve all alternatives, and connect the choice to the playtest receipt." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "force-observed-tutorial-step",
+      "reason": "Rejected: disabling manual NEXT would silently reverse the Session 127 accessibility decision that manual Next/Skip remain available. Observed evidence should inform receipts, not trap players."
+    },
+    {
+      "slug": "single-next-move-death-flow",
+      "reason": "False premise found during implementation inspection: the secondary seed/replay/rematch/share/navigation cluster already lives inside an accessible MORE RUN ACTIONS disclosure, while RUN THE FIX is already the standalone primary action. The valid playtest-choice receipt was implemented under playtest-flight-recorder; no redundant hierarchy rewrite was shipped."
+    },
+    {
+      "slug": "tune-progression-numbers-now",
+      "reason": "Rejected: no real playtest distribution supports changing upgrade prices, weapon levels, or points-per-kill. Instrument and model first."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "Rejected under CANON-029 and CANON-039: existing deterministic Run Brain is zero-cost and no paid inference need is proven."
+    },
+    {
+      "slug": "analytics-and-sentry-configuration",
+      "reason": "External credential/scope gate: analytics capability is MISSING and the available Sentry DSN is not proven project-scoped."
+    },
+    {
+      "slug": "launch-and-sparked-flip",
+      "reason": "Release gate is NO-GO due external/manual/data/publication/founder evidence. No launch state will be fabricated."
+    },
+    {
+      "slug": "new-security-package",
+      "reason": "No live dependency or browser security premise justified another package; current security/public gates pass and Internal-First forbids install-for-appearance."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "progression-runway-contract",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Pure account-level thresholds, source-derived weapon/upgrade runway scenarios, descriptive Balance Lab receipt, storage API compatibility, and deterministic audit CLI without tuning claims.",
+      "verification": "progressionCurve/balanceLab/HomeV2 focused tests 23/23; touched-file strict ESLint; progression receipt CLI; package JSON parse"
+    },
+    {
+      "slug": "pressure-arc-receipt",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Bounded wave-pressure transition accumulator, normalized run-history receipt, observed-only DeathScreen summary, and repeated-overrun Balance Lab signal.",
+      "verification": "pressureArc/runSession/balanceLab/App launch focused tests 16/16; touched-file strict ESLint"
+    },
+    {
+      "slug": "playtest-flight-recorder",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Explicit ?playtest=1 session-local flight recorder captures first observed actions, death facts, clarity/replay-intent answers, continuation choice, one bounded prior-run receipt, and portable privacy-safe JSON with no network or free text.",
+      "verification": "playtest/pressure/runSession/progression/balance/App launch focused tests 23/23; touched-file strict ESLint"
+    },
+    {
+      "slug": "agent-gameplay-contract",
+      "rung": "L3",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Build-generated gameplay-contract-v1 derives modes, difficulty, weapons, enemies/bosses, permanent upgrades, challenge grammar, rights, cost, and replay trust from source; agents.json/llms discovery and exact drift validation are wired.",
+      "verification": "gameplay-contract/replay/public-contract focused tests 8/8; public contract PASS 14 files; touched-file strict ESLint"
+    },
+    {
+      "slug": "single-next-move-death-flow",
+      "rung": "premise-check",
+      "status": "skipped",
+      "shipped": false,
+      "notes": "Honest skip: live code already makes RUN THE FIX primary and wraps secondary actions in MORE RUN ACTIONS. Only the independently valid continuation receipt shipped under playtest-flight-recorder.",
+      "verification": "direct DeathScreen source inspection at current HEAD"
+    },
+    {
+      "slug": "second-order-and-founder-follow-up-wave",
+      "rung": "saturation",
+      "status": "shipped",
+      "shipped": true,
+      "notes": "Root-fixed Oracle surface binding, same-band pressure peaks, hot-path parsing, clipboard truth, progression tier resilience, Replay Training launch, homepage hierarchy, and real runtime character art with deterministic optimized exports.",
+      "verification": "37/37 focused tests; strict touched-file ESLint; assets manifest 17/17; runtime PNGs 384x384 RGBA at 52-57 KB; live Oracle preverify; five Chromium desktop/mobile captures"
+    }
+  ]
+}

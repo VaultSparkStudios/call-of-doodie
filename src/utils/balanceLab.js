@@ -1,4 +1,5 @@
 import { ENEMY_TYPES, WEAPONS } from "../constants.js";
+import { buildProgressionRunway, describeProgressionRunway } from "./progressionCurve.js";
 
 function addInsight(list, insight) {
   if (insight?.title && insight?.detail) list.push(insight);
@@ -12,7 +13,7 @@ function topCount(entries) {
   return best;
 }
 
-export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], career = {} } = {}) {
+export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], career = {}, meta = {} } = {}) {
   const insights = [];
   const runs = Array.isArray(runHistory) ? runHistory : [];
   const events = Array.isArray(studioEvents) ? studioEvents : [];
@@ -29,6 +30,17 @@ export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], caree
       severity: topWave.count >= 4 ? "high" : "medium",
       title: `Wave ${topWave.key} is repeating`,
       detail: `${topWave.count} recent runs ended around wave ${topWave.key}. Treat that wave as the next tuning or coaching checkpoint.`,
+    });
+  }
+
+  const pressureRuns = runs.filter((run) => run?.pressureReceipt?.schemaVersion === "pressure-arc-v1");
+  const overrunFinishes = pressureRuns.filter((run) => run.pressureReceipt.collapseBand === "overrun").length;
+  if (pressureRuns.length >= 2 && overrunFinishes >= 2) {
+    addInsight(insights, {
+      id: "pressure_arc",
+      severity: overrunFinishes >= 4 ? "high" : "medium",
+      title: "Repeated overrun finish",
+      detail: `${overrunFinishes} of ${pressureRuns.length} pressure-instrumented runs ended with an observed overrun band. Review those run receipts before changing enemy counts; the band does not prove the cause of death.`,
     });
   }
 
@@ -83,12 +95,29 @@ export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], caree
     }
   }
 
+  if (Number(career?.totalKills || 0) > 0 || Number(meta?.careerPoints || 0) > 0) {
+    const runway = buildProgressionRunway({
+      totalKills: career?.totalKills,
+      careerPoints: meta?.careerPoints,
+      upgradeTiers: meta?.upgradeTiers,
+    });
+    addInsight(insights, {
+      id: "progression_runway",
+      severity: "low",
+      title: `Level ${runway.current.accountLevel} runway`,
+      detail: describeProgressionRunway(runway),
+      receipt: runway,
+    });
+  }
+
   return {
     status: insights.length > 0 ? "signals-found" : "quiet",
     inspected: {
       runs: runs.length,
       events: events.length,
       recentDeaths: recentDeaths.length,
+      progression: Number(career?.totalKills || 0) > 0 || Number(meta?.careerPoints || 0) > 0,
+      pressureRuns: pressureRuns.length,
     },
     insights,
     topInsight: insights[0] || {

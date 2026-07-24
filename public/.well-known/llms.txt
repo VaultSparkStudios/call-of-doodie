@@ -18,8 +18,9 @@ Players move, shoot, dash, throw grenades, switch weapons, choose perks and rout
 - Contact: https://callofdoodie.wtf/contact/
 - Rights and intellectual property: https://callofdoodie.wtf/ip/
 - Agent manifest: https://callofdoodie.wtf/agents.json
+- Gameplay contract: https://callofdoodie.wtf/gameplay-contract.json
 - Sitemap: https://callofdoodie.wtf/sitemap.xml
 
 ## Agent guidance
 
-Public pages may be summarized and linked. Do not imply an official affiliation with Activision Publishing, Inc. or the Call of Duty® franchise. Do not claim replay evidence is stronger than the advisory contract published above. No public write API or autonomous purchase capability is offered by this site.
+Public pages and the source-derived gameplay-contract.json may be summarized and linked. Do not imply an official affiliation with Activision Publishing, Inc. or the Call of Duty® franchise. Do not claim replay evidence is stronger than the advisory contract published above. No public write API or autonomous purchase capability is offered by this site.

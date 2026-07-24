@@ -1,0 +1,594 @@
+{
+  "schemaVersion": "gameplay-contract-v1",
+  "canonicalUrl": "https://callofdoodie.wtf/",
+  "publisher": "VaultSpark Studios LLC",
+  "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC",
+  "cost": {
+    "freeTierCostStatus": "cost-neutral",
+    "paidInferenceRequired": false
+  },
+  "trust": {
+    "replayEvidence": "advisory deterministic decision-stream evidence",
+    "excludedClaim": "not full physics resimulation",
+    "publicWriteActions": "not-offered"
+  },
+  "loop": [
+    "move",
+    "shoot",
+    "dash",
+    "grenade",
+    "switch_weapon",
+    "choose_perk",
+    "choose_route",
+    "survive_wave",
+    "review_debrief"
+  ],
+  "modes": [
+    {
+      "id": "standard",
+      "label": "Standard",
+      "seededReplayCode": true
+    },
+    {
+      "id": "score_attack",
+      "label": "Score Attack",
+      "seededReplayCode": true
+    },
+    {
+      "id": "daily_challenge",
+      "label": "Daily Challenge",
+      "seededReplayCode": true
+    },
+    {
+      "id": "cursed",
+      "label": "Cursed",
+      "seededReplayCode": true
+    },
+    {
+      "id": "boss_rush",
+      "label": "Boss Rush",
+      "seededReplayCode": true
+    },
+    {
+      "id": "speedrun",
+      "label": "Speedrun",
+      "seededReplayCode": true
+    },
+    {
+      "id": "gauntlet",
+      "label": "Gauntlet",
+      "seededReplayCode": true
+    }
+  ],
+  "difficulties": [
+    {
+      "id": "easy",
+      "label": "Easy",
+      "playerHp": 150,
+      "spawnMultiplier": 1.3
+    },
+    {
+      "id": "normal",
+      "label": "Normal",
+      "playerHp": 100,
+      "spawnMultiplier": 1
+    },
+    {
+      "id": "hard",
+      "label": "Hard",
+      "playerHp": 80,
+      "spawnMultiplier": 0.75
+    },
+    {
+      "id": "insane",
+      "label": "INSANE",
+      "playerHp": 60,
+      "spawnMultiplier": 0.5
+    },
+    {
+      "id": "nightmare",
+      "label": "Nightmare",
+      "playerHp": null,
+      "spawnMultiplier": null
+    },
+    {
+      "id": "doodie",
+      "label": "Doodie",
+      "playerHp": null,
+      "spawnMultiplier": null
+    }
+  ],
+  "starterLoadouts": [
+    {
+      "id": "standard",
+      "name": "Standard Issue",
+      "description": "Default soldier. Versatile and balanced."
+    },
+    {
+      "id": "cannon",
+      "name": "Glass Cannon",
+      "description": "+50% damage · start with only 60% HP."
+    },
+    {
+      "id": "tank",
+      "name": "Iron Tank",
+      "description": "+60 max HP · −20% move speed."
+    },
+    {
+      "id": "speedster",
+      "name": "Speed Freak",
+      "description": "+35% move speed · −40% dash cooldown."
+    }
+  ],
+  "weapons": [
+    {
+      "index": 0,
+      "name": "Banana Blaster",
+      "emoji": "🍌",
+      "unlockAccountLevel": 1
+    },
+    {
+      "index": 1,
+      "name": "Rubber Chicken RPG",
+      "emoji": "🐔",
+      "unlockAccountLevel": 1
+    },
+    {
+      "index": 2,
+      "name": "Nerf Minigun",
+      "emoji": "🔫",
+      "unlockAccountLevel": 1
+    },
+    {
+      "index": 3,
+      "name": "Plunger Launcher",
+      "emoji": "🪠",
+      "unlockAccountLevel": 2
+    },
+    {
+      "index": 4,
+      "name": "Sniper-ator 3000",
+      "emoji": "🎯",
+      "unlockAccountLevel": 3
+    },
+    {
+      "index": 5,
+      "name": "Spicy Squirt Gun",
+      "emoji": "🌶️",
+      "unlockAccountLevel": 4
+    },
+    {
+      "index": 6,
+      "name": "Confetti Cannon",
+      "emoji": "🎊",
+      "unlockAccountLevel": 6
+    },
+    {
+      "index": 7,
+      "name": "Shock Zapper",
+      "emoji": "⚡",
+      "unlockAccountLevel": 8
+    },
+    {
+      "index": 8,
+      "name": "Boomerang Blaster",
+      "emoji": "🪃",
+      "unlockAccountLevel": 10
+    },
+    {
+      "index": 9,
+      "name": "Railgun",
+      "emoji": "🔦",
+      "unlockAccountLevel": 12
+    },
+    {
+      "index": 10,
+      "name": "Ricochet Pistol",
+      "emoji": "🎱",
+      "unlockAccountLevel": 14
+    },
+    {
+      "index": 11,
+      "name": "Nuclear Kazoo",
+      "emoji": "🎵",
+      "unlockAccountLevel": 16
+    }
+  ],
+  "enemies": [
+    {
+      "index": 0,
+      "name": "Mall Cop",
+      "emoji": "👮",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 1,
+      "name": "Karen",
+      "emoji": "💇‍♀️",
+      "ranged": true,
+      "boss": false
+    },
+    {
+      "index": 2,
+      "name": "Florida Man",
+      "emoji": "🐊",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 3,
+      "name": "HOA President",
+      "emoji": "📋",
+      "ranged": true,
+      "boss": false
+    },
+    {
+      "index": 4,
+      "name": "Mega Karen",
+      "emoji": "👹",
+      "ranged": true,
+      "boss": true
+    },
+    {
+      "index": 5,
+      "name": "IT Guy",
+      "emoji": "💻",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 6,
+      "name": "Gym Bro",
+      "emoji": "💪",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 7,
+      "name": "Influencer",
+      "emoji": "🤳",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 8,
+      "name": "Conspiracy Bro",
+      "emoji": "🛸",
+      "ranged": true,
+      "boss": false
+    },
+    {
+      "index": 9,
+      "name": "Landlord",
+      "emoji": "🏠",
+      "ranged": true,
+      "boss": true
+    },
+    {
+      "index": 10,
+      "name": "Crypto Bro",
+      "emoji": "📈",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 11,
+      "name": "Shield Guy",
+      "emoji": "🛡️",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 12,
+      "name": "YOLO Bomber",
+      "emoji": "💥",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 13,
+      "name": "Sergeant Karen",
+      "emoji": "📣",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 14,
+      "name": "Life Coach",
+      "emoji": "📚",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 15,
+      "name": "Tech CEO",
+      "emoji": "💼",
+      "ranged": true,
+      "boss": false
+    },
+    {
+      "index": 16,
+      "name": "Splitter",
+      "emoji": "💔",
+      "ranged": true,
+      "boss": true
+    },
+    {
+      "index": 17,
+      "name": "Juggernaut",
+      "emoji": "🦏",
+      "ranged": false,
+      "boss": true
+    },
+    {
+      "index": 18,
+      "name": "Summoner",
+      "emoji": "🌀",
+      "ranged": true,
+      "boss": true
+    },
+    {
+      "index": 19,
+      "name": "Doomscroller",
+      "emoji": "📱",
+      "ranged": false,
+      "boss": false
+    },
+    {
+      "index": 20,
+      "name": "The Algorithm",
+      "emoji": "📊",
+      "ranged": true,
+      "boss": true
+    },
+    {
+      "index": 21,
+      "name": "The Developer",
+      "emoji": "💻",
+      "ranged": true,
+      "boss": false
+    }
+  ],
+  "permanentUpgrades": [
+    {
+      "id": "veteran",
+      "name": "Veteran",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 200,
+          "description": "Start each run with +20% XP gain"
+        },
+        {
+          "tier": 2,
+          "cost": 700,
+          "description": "Start each run with +45% XP gain"
+        },
+        {
+          "tier": 3,
+          "cost": 2000,
+          "description": "Start each run with +75% XP gain"
+        }
+      ]
+    },
+    {
+      "id": "field_medic",
+      "name": "Field Medic",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 250,
+          "description": "Start each run with +20 max HP"
+        },
+        {
+          "tier": 2,
+          "cost": 800,
+          "description": "Start each run with +50 max HP"
+        },
+        {
+          "tier": 3,
+          "cost": 2500,
+          "description": "Start each run with +100 max HP"
+        }
+      ]
+    },
+    {
+      "id": "swift_boots",
+      "name": "Swift Boots",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 300,
+          "description": "Start with −20% dash cooldown"
+        },
+        {
+          "tier": 2,
+          "cost": 900,
+          "description": "Start with −40% dash cooldown"
+        },
+        {
+          "tier": 3,
+          "cost": 2800,
+          "description": "Start with −60% dash cooldown"
+        }
+      ]
+    },
+    {
+      "id": "deep_mag",
+      "name": "Deep Magazine",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 200,
+          "description": "Start with +25% max ammo on all weapons"
+        },
+        {
+          "tier": 2,
+          "cost": 700,
+          "description": "Start with +60% max ammo on all weapons"
+        },
+        {
+          "tier": 3,
+          "cost": 2000,
+          "description": "Start with +100% max ammo on all weapons"
+        }
+      ]
+    },
+    {
+      "id": "hardened",
+      "name": "Hardened",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 400,
+          "description": "Start each run with +15% bullet damage"
+        },
+        {
+          "tier": 2,
+          "cost": 1200,
+          "description": "Start each run with +30% bullet damage"
+        },
+        {
+          "tier": 3,
+          "cost": 3500,
+          "description": "Start each run with +50% bullet damage"
+        }
+      ]
+    },
+    {
+      "id": "scavenger",
+      "name": "Scavenger",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 300,
+          "description": "Start with +50% pickup range"
+        },
+        {
+          "tier": 2,
+          "cost": 1000,
+          "description": "Start with +125% pickup range"
+        },
+        {
+          "tier": 3,
+          "cost": 3000,
+          "description": "Start with +225% pickup range"
+        }
+      ]
+    },
+    {
+      "id": "grenadier",
+      "name": "Grenadier",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 400,
+          "description": "Start with −25% grenade cooldown"
+        },
+        {
+          "tier": 2,
+          "cost": 1200,
+          "description": "Start with −45% grenade cooldown"
+        },
+        {
+          "tier": 3,
+          "cost": 3500,
+          "description": "Start with −65% grenade cooldown"
+        }
+      ]
+    },
+    {
+      "id": "crit_master",
+      "name": "Crit Master",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 400,
+          "description": "Start each run with +5% crit chance"
+        },
+        {
+          "tier": 2,
+          "cost": 1200,
+          "description": "Start each run with +12% crit chance"
+        },
+        {
+          "tier": 3,
+          "cost": 3500,
+          "description": "Start each run with +20% crit chance"
+        }
+      ]
+    },
+    {
+      "id": "speedster",
+      "name": "Speedster",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 500,
+          "description": "Start each run with +10% move speed"
+        },
+        {
+          "tier": 2,
+          "cost": 1500,
+          "description": "Start each run with +22% move speed"
+        },
+        {
+          "tier": 3,
+          "cost": 4000,
+          "description": "Start each run with +38% move speed"
+        }
+      ]
+    },
+    {
+      "id": "vampire_bite",
+      "name": "Vampire Bite",
+      "tiers": [
+        {
+          "tier": 1,
+          "cost": 600,
+          "description": "Start with 3% lifesteal on every hit"
+        },
+        {
+          "tier": 2,
+          "cost": 1800,
+          "description": "Start with 6% lifesteal on every hit"
+        },
+        {
+          "tier": 3,
+          "cost": 5000,
+          "description": "Start with 10% lifesteal on every hit"
+        }
+      ]
+    }
+  ],
+  "challengeLinks": {
+    "replayCode": {
+      "queryParameter": "replay",
+      "format": "12 hexadecimal characters",
+      "captures": [
+        "seed",
+        "mode",
+        "difficulty",
+        "weapon",
+        "starter_loadout"
+      ]
+    },
+    "rivalry": {
+      "queryParameters": [
+        "seed",
+        "diff",
+        "vs",
+        "vsName"
+      ],
+      "note": "Player choices remain player-controlled."
+    }
+  },
+  "resources": {
+    "agents": "https://callofdoodie.wtf/agents.json",
+    "llms": "https://callofdoodie.wtf/.well-known/llms.txt",
+    "privacy": "https://callofdoodie.wtf/privacy/",
+    "terms": "https://callofdoodie.wtf/terms/",
+    "rights": "https://callofdoodie.wtf/ip/"
+  }
+}

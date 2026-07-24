@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-22 (Session 126 closeout) -->
+<!-- generated-at: 2026-07-23 (Session 127 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 126 closeout · 2026-07-22.
+> **Fast-boot brief** — generated at Session 127 closeout · 2026-07-23.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 127 · 2026-07-22 · FOUNDER MODE                         ║
+║  Session 128 · 2026-07-23 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -38,9 +38,9 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 9↓                       ║
+║    SIL v3.0  ·  Avg3: 1000  ·  Velocity 10↑                      ║
 ║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
-║    Trend  ▁▄▄▂▆  ↓  (last 5 sessions)                            ║
+║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
@@ -57,41 +57,41 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 126 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 127 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    704/704 passing  ·  Deploy: N/A                       ║
+║  Tests:    721/721 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  0.6% used                          ║
-║     5,939 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
-║     ~2,970 tok/turn  ·  cache 50%  ·  307 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  0.7% used                          ║
+║     6,750 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
+║     ~3,375 tok/turn  ·  cache 50%  ·  270 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         704/704 passing                                ║
-║  ✓  Velocity      9 ↓  ·  Debt: ↓                                ║
-║  ✓  Runway        ~14.0 sessions                                 ║
+║  ✓  Tests         721/721 passing                                ║
+║  ✓  Velocity      10 ↑  ·  Debt: ↓                               ║
+║  ✓  Runway        ~15.0 sessions                                 ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         44175 FORGE  ·  6d old                         ║
+║  ⚠  IGNIS         44175 FORGE  ·  7d old                         ║
 ║  ⛔  Truth         green locally; portfolio doctor warnings are   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.216  (healthy)                               ║
+║  ✓  Entropy       0.201  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        119/152 (79%)  ·  1 failing                    ║
-║  ✓  Cost          real $0.13/7d · 7d notional $2.11 (flat-rate   ║
+║  ⛔  Doctor        120/154 (79%)  ·  1 failing                    ║
+║  ✓  Cost          real $0.14/7d · 7d notional $2.28 (flat-rate   ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    69d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    91d · Physical launch QA                                      ║
+║    70d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    92d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  9↓  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  10↑  (last 5 sessions)                       ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -150,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 126 closeout · 2026-07-22*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 127 closeout · 2026-07-23*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

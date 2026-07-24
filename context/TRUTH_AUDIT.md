@@ -888,3 +888,19 @@ Last reviewed: 2026-07-21
 
 Overall status: green engineering closeout; NO-GO SPARKED
 Last reviewed: 2026-07-22
+
+## 2026-07-23 — Session 128 — Evidence, homepage, runtime art, and dependency truth
+
+- Audit truth — `docs/AUDIT_2026-07-23.json` / `.md` contain four shipped L3 items, one live-inspection false-premise win, and seven implemented second-order/founder refinements.
+- Playtest truth — `?playtest=1` records only allowlisted local milestones, death facts, explicit tester choices, and a portable JSON receipt; it sends no network data and stores no callsign or free text.
+- Progression/pressure truth — runway scenarios are descriptive rather than tuning targets; pressure receipts describe observed bands and peaks without claiming a cause of death.
+- Agent truth — `public/gameplay-contract.json` is generated from live constants and exact-compared during public validation.
+- Homepage truth — Replay Training launches a clean guided run; internal signature cards are absent; install/save state is explanatory and local-save verification is actionable.
+- Visual truth — 384x384 alpha operative/Karen exports (about 52-57 KB each) are consumed by `drawGame.js`; procedural art remains the load/failure fallback. Five Chromium launch captures completed without render failure. Direct host-side screenshot viewing remains unavailable because of Windows CryptUnprotectData, so no unsupported pixel-perfect claim is made.
+- Dependency truth — PostCSS 8.5.12 passed Obelisk APPROVE 86/100, official npm registry provenance/integrity review, clean Studio supply-chain incident scan, and npm audit zero.
+- Validation truth — strict lint, 737/737 tests across 102 files, production build, dependency/public/protocol/security/media/assets gates, and desktop/mobile Playwright 2/2 passed directly.
+- Staging truth — no new isolated preview is claimed: local `cloudflare.deploy` discovery returned MISSING and the founder-required direct-main/no-branch path cannot create a non-production Pages preview.
+- Release truth — engineering is green; SPARKED remains NO-GO pending external/device/data/publication/founder evidence.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-23

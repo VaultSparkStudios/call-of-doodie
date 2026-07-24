@@ -18,7 +18,6 @@ import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } 
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
 import { buildPwaInstallReceipt, detectStandaloneDisplay, loadPwaInstallAttempt, readServiceWorkerLifecycle, SERVICE_WORKER_LIFECYCLE_EVENT } from "../utils/pwaInstallReadiness.js";
-import { SIGNATURE_VISUAL_ASSETS } from "../utils/visualAssetLibrary.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
@@ -78,6 +77,7 @@ export default function HomeV2(props) {
     gauntletMode, onSetGauntletMode,
     assistAvailable, onApplyAssist,
     onInstallApp,
+    onReplayTraining,
     pwaInstallPromptReady = false,
   } = props;
 
@@ -116,7 +116,8 @@ export default function HomeV2(props) {
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [theme, setTheme] = useState(() => readTheme());
-  const [cmdCenterExpanded, setCmdCenterExpanded] = useState(false);
+  const [cmdCenterExpanded, setCmdCenterExpanded] = useState(true);
+  const [trainingNotice, setTrainingNotice] = useState("");
   const [dailyChampion, setDailyChampion] = useState(null);
   const [missionStreak, setMissionStreak] = useState(0);
   const [replayInput, setReplayInput] = useState("");
@@ -238,8 +239,8 @@ export default function HomeV2(props) {
   const analyticsStatus = getAnalyticsStatus();
   const telemetrySummary = useMemo(() => summarizeStudioEvents(studioEvents), [studioEvents]);
   const balanceLab = useMemo(
-    () => buildLocalBalanceLab({ runHistory, studioEvents, career: career || {} }),
-    [runHistory, studioEvents, career],
+    () => buildLocalBalanceLab({ runHistory, studioEvents, career: career || {}, meta: meta || {} }),
+    [runHistory, studioEvents, career, meta],
   );
   const aimCheck = useMemo(
     () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
@@ -550,7 +551,6 @@ export default function HomeV2(props) {
           )}
         </div>
 
-        <SignatureAssetStrip />
 
         <div style={journeyCard}>
           <div style={{ minWidth: 0 }}>
@@ -694,7 +694,9 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Quick chips */}
+        <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>QUICK PLAY</div>
+        {/* Quick actions are grouped by player intent instead of mixing play,
+            navigation, installation, and diagnostic receipts in one strip. */}
         <div style={quickRow}>
           <button style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.4)", color: "#00E5FF" }} onClick={() => {
             const studioEvent = recordFrontDoorAction("daily_challenge", { source: "quick_chip", seed: todaySeedStr });
@@ -732,9 +734,13 @@ export default function HomeV2(props) {
               🛡️ ASSIST +50HP
             </button>
           )}
+          <div aria-hidden="true" style={{ flexBasis: "100%", height: 0 }} />
+          <div style={{ flexBasis: "100%", textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4, marginTop: 4 }}>PLAYER TOOLS</div>
           <button style={quickBtn} onClick={() => {
             resetTutorialProgress();
             track("front_door_action", { actionId: "reset_training", surface: "home_v2" });
+            setTrainingNotice(onReplayTraining ? "Launching guided training…" : "Training reset. Deploy a run to begin.");
+            onReplayTraining?.();
           }}>
             🎓 REPLAY TRAINING
           </button>
@@ -749,36 +755,27 @@ export default function HomeV2(props) {
               📲 INSTALL APP
             </button>
           )}
-          <span
-            title={pwaInstallReceipt.summary}
-            style={{
-              ...quickBtn,
-              display: "inline-flex",
-              alignItems: "center",
-              borderColor: ["needs-browser", "worker-pending", "worker-failed"].includes(pwaInstallReceipt.status) ? "rgba(255,215,0,0.28)" : "rgba(0,229,255,0.3)",
-              color: ["needs-browser", "worker-pending", "worker-failed"].includes(pwaInstallReceipt.status) ? "#FFE29A" : "#B9F3FF",
-              cursor: "default",
-            }}
-          >
-            {pwaInstallReceipt.label} · {pwaInstallReceipt.readySignals}/4
-          </span>
-          <span
-            role="status"
-            title={storageHealth.status === "degraded"
-              ? `${storageHealth.lastFailure?.surface || "local-state"} · ${storageHealth.lastFailure?.code || "write-failed"}; progression may not persist`
-              : `${storageHealth.successCount} verified local write${storageHealth.successCount === 1 ? "" : "s"}`
-            }
-            style={{
-              ...quickBtn,
-              display: "inline-flex",
-              alignItems: "center",
-              borderColor: storageHealth.status === "degraded" ? "rgba(255,96,72,0.5)" : "rgba(68,255,136,0.3)",
-              color: storageHealth.status === "degraded" ? "#FF9C88" : "#9BFFBD",
-              cursor: "default",
-            }}
-          >
-            {storageHealth.label}
-          </span>
+          <details style={{ flexBasis: "100%", maxWidth: 560, margin: "2px auto 0", padding: "8px 10px", borderRadius: 8, border: `1px solid ${themePalette.line}`, background: themePalette.panel, textAlign: "left" }}>
+            <summary style={{ cursor: "pointer", color: themePalette.ink, fontSize: 10, fontWeight: 900, letterSpacing: 1.5 }}>DEVICE &amp; SAVE STATUS</summary>
+            <div style={{ display: "grid", gap: 8, marginTop: 10, fontSize: 11, lineHeight: 1.45 }}>
+              <div>
+                <strong style={{ color: "#7FE6FF" }}>{pwaInstallReceipt.playerLabel}</strong>
+                <div style={{ color: themePalette.muted }}>{pwaInstallReceipt.detail}</div>
+              </div>
+              <div>
+                <strong style={{ color: storageHealth.status === "degraded" ? "#FF9C88" : "#9BFFBD" }}>
+                  {storageHealth.status === "degraded" ? "PROGRESS MAY NOT SAVE" : "PROGRESS SAVES ON THIS DEVICE"}
+                </strong>
+                <div style={{ color: themePalette.muted }}>
+                  {storageHealth.status === "degraded"
+                    ? "Your browser rejected a local save. Free space or allow site storage, then test again."
+                    : "Career progress stays in this browser. It is not a cloud-sync claim."}
+                </div>
+              </div>
+              <button type="button" onClick={() => setStorageHealth(probeLocalStorage().receipt)} style={{ ...quickBtn, justifySelf: "start", padding: "6px 10px", fontSize: 10 }}>TEST LOCAL SAVE</button>
+            </div>
+          </details>
+          {trainingNotice && <div role="status" style={{ flexBasis: "100%", color: "#9BFFBD", fontSize: 10, textAlign: "center" }}>{trainingNotice}</div>}
           {inputDebugEnabled && (
             <button
               style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
@@ -831,7 +828,7 @@ export default function HomeV2(props) {
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, fontFamily: "inherit", padding: 0 }}
               aria-expanded={cmdCenterExpanded}
             >
-              ⚙ COMMAND CENTER {cmdCenterExpanded ? "▴" : "▾"}
+              PLAYER HUB {cmdCenterExpanded ? "▴" : "▾"}
             </button>
             {missionStreak >= 2 && (
               <span style={{ fontSize: 10, color: "#FF8C00", fontWeight: 900, letterSpacing: 1 }}>
@@ -1240,18 +1237,16 @@ function StatChip({ label, value }) {
 }
 
 function CodexTab() {
-  const [section, setSection] = useState("assets");
+  const [section, setSection] = useState("arsenal");
   const btn = (active) => ({ padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: active ? "rgba(255,107,53,0.14)" : "transparent", border: "1px solid " + (active ? "rgba(255,107,53,0.5)" : "rgba(255,255,255,0.12)"), color: active ? "#FF9960" : "#AAA", borderRadius: 6 });
   return (
     <div>
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        <button style={btn(section === "assets")}  onClick={() => setSection("assets")}>🖼 ASSETS</button>
         <button style={btn(section === "arsenal")}  onClick={() => setSection("arsenal")}>🔫 ARSENAL</button>
         <button style={btn(section === "mostwanted")} onClick={() => setSection("mostwanted")}>👾 MOST WANTED</button>
         <button style={btn(section === "rules")}    onClick={() => setSection("rules")}>📜 RULES</button>
         <button style={btn(section === "news")}     onClick={() => setSection("news")}>✦ WHAT'S NEW</button>
       </div>
-      {section === "assets" && <SignatureAssetGrid />}
       {section === "arsenal" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 6 }}>
           {WEAPONS.map((w, i) => (
@@ -1299,33 +1294,6 @@ function CodexTab() {
           })}
         </div>
       )}
-    </div>
-  );
-}
-
-function SignatureAssetStrip() {
-  return (
-    <div style={{ margin: "10px auto 0", maxWidth: 650, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))", gap: 8 }}>
-      {SIGNATURE_VISUAL_ASSETS.map((asset) => (
-        <div key={asset.id} style={{ minWidth: 0, border: `1px solid ${asset.accent}55`, background: "rgba(0,0,0,0.34)", borderRadius: 8, padding: 7, boxShadow: `0 0 18px ${asset.accent}18` }}>
-          <img src={asset.src} alt={asset.label} loading="eager" width="96" height="96" style={{ width: "100%", maxWidth: 92, aspectRatio: "1 / 1", objectFit: "contain", display: "block", margin: "0 auto" }} />
-          <div style={{ marginTop: 4, color: asset.accent, fontSize: 9, fontWeight: 900, letterSpacing: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{asset.label.toUpperCase()}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function SignatureAssetGrid() {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 8 }}>
-      {SIGNATURE_VISUAL_ASSETS.map((asset) => (
-        <div key={asset.id} style={{ padding: 10, borderRadius: 8, border: `1px solid ${asset.accent}55`, background: "rgba(255,255,255,0.035)", textAlign: "center" }}>
-          <img src={asset.src} alt={asset.label} loading="lazy" width="128" height="128" style={{ width: 108, maxWidth: "100%", aspectRatio: "1 / 1", objectFit: "contain", filter: `drop-shadow(0 0 14px ${asset.accent}44)` }} />
-          <div style={{ color: asset.accent, fontSize: 12, fontWeight: 900, marginTop: 6 }}>{asset.label}</div>
-          <div style={{ color: "#999", fontSize: 10, letterSpacing: 1.2, textTransform: "uppercase", marginTop: 3 }}>{asset.role}</div>
-        </div>
-      ))}
     </div>
   );
 }

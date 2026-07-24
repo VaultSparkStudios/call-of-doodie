@@ -7,6 +7,14 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PROJECT_ROOT = path.resolve(HERE, "..", "..");
 export const STUDIO_OPS_ROOT = path.resolve(PROJECT_ROOT, "..", "vaultspark-studio-ops");
 
+export function bindProjectOracleArgs(args, projectRoot = PROJECT_ROOT) {
+  if (args[0] !== "preverify") return args;
+  return args.map((arg, index) => {
+    if (index < 2 || arg.startsWith("--") || path.isAbsolute(arg)) return arg;
+    return path.resolve(projectRoot, arg);
+  });
+}
+
 export function buildStudioProxyInvocation({
   script,
   args = [],

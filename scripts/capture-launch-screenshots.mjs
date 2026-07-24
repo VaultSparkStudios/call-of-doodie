@@ -160,7 +160,8 @@ async function capture() {
 
       const loadout = await browser.newPage();
       await primeGamePage(loadout, { width: 1280, height: 720 });
-      await clickByText(loadout, /COMMAND CENTER/i);
+      const playerHub = loadout.getByRole("button", { name: /PLAYER HUB/i }).first();
+      if (await playerHub.getAttribute("aria-expanded") !== "true") await playerHub.click();
       await clickByText(loadout, /LOADOUTS/i);
       await loadout.waitForSelector("text=CUSTOM LOADOUTS", { timeout: 15000 });
       await loadout.waitForTimeout(600);

@@ -12,13 +12,21 @@ export function syncDoctorScore({ sourceStatusPath, targetStatusPath }) {
   }
 
   const receipt = source.doctorScore;
+  const blockingFailing = Number(receipt.blockingFailing ?? receipt.failing ?? 0);
   const doctorScore = {
     date: receipt.date,
-    overallPass: receipt.overallPass ?? (receipt.failing === 0 && receipt.blockingFailing === 0),
+    ...(receipt.ranAt ? { ranAt: receipt.ranAt } : {}),
+    // Doctor's closeout gate is blockingFailing, not the aggregate advisory count.
+    // Derive this value so older receipts cannot turn a non-blocking advisory into
+    // a false release failure—or preserve a stale true when a blocker exists.
+    overallPass: blockingFailing === 0,
     passing: receipt.passing,
     warning: receipt.warning,
     failing: receipt.failing,
-    blockingFailing: receipt.blockingFailing,
+    blockingFailing,
+    ...(receipt.advisoryFailing !== undefined
+      ? { advisoryFailing: receipt.advisoryFailing }
+      : {}),
     skipped: receipt.skipped,
     ran: receipt.ran,
     total: receipt.total,

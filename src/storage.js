@@ -3,6 +3,7 @@ import { supabase, supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUi
 import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
+export { getAccountLevel } from "./utils/progressionCurve.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
 // Run these in the Supabase SQL console (one time, in order):
@@ -720,11 +721,6 @@ export function prestigeAccount() {
   meta.careerPoints = 0;
   saveMetaProgress(meta);
   return meta;
-}
-
-// Account level derived from total career kills (never resets on prestige).
-export function getAccountLevel(totalKills) {
-  return Math.floor(Math.sqrt((totalKills || 0) / 20)) + 1;
 }
 
 // ===== CALLSIGN LOCK =====

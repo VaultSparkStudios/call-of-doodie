@@ -21,6 +21,8 @@ import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
+import { describePressureArc } from "../systems/pressureArc.js";
+import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -66,10 +68,38 @@ export default function DeathScreen({
   const [showAllWeapons, setShowAllWeapons] = useState(false);
   const [replayNonce, setReplayNonce] = useState(0);
   const [replayMode, setReplayMode] = useState("full"); // "full" | "best_shot"
+  const playtestEnabled = isPlaytestMode();
+  const [playtestReceipt, setPlaytestReceipt] = useState(() => playtestEnabled ? loadPlaytestFlight() : null);
+  const [playtestCopied, setPlaytestCopied] = useState(false);
+  const [playtestCopyError, setPlaytestCopyError] = useState(false);
   const qrCanvasRef = useRef(null);
   const weeklyContractEventKeyRef = useRef(null);
   const debriefEventKeyRef = useRef(null);
   const drillOutcomeEventKeyRef = useRef(null);
+
+  const updatePlaytestAnswer = (answer) => {
+    const next = annotateActivePlaytestFlight(answer);
+    if (next) setPlaytestReceipt(next);
+  };
+  const recordPlaytestChoice = (continuation) => {
+    annotateActivePlaytestFlight({ continuation });
+    const next = recordActivePlaytestMilestone("continuation", { meta: { action: continuation } });
+    if (next) setPlaytestReceipt(next);
+  };
+  const copyPlaytestReceipt = async () => {
+    const portable = buildPortablePlaytestReceipt(playtestReceipt || loadPlaytestFlight());
+    if (!portable) return;
+    try {
+      if (typeof navigator.clipboard?.writeText !== "function") throw new Error("clipboard-unavailable");
+      await navigator.clipboard.writeText(JSON.stringify(portable, null, 2));
+      setPlaytestCopyError(false);
+      setPlaytestCopied(true);
+      setTimeout(() => setPlaytestCopied(false), 1500);
+    } catch {
+      setPlaytestCopied(false);
+      setPlaytestCopyError(true);
+    }
+  };
 
   // ── Ghost path visualization ───────────────────────────────────────────────
   const [ghostData, setGhostData] = useState(null);
@@ -422,6 +452,7 @@ export default function DeathScreen({
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
   const runHistory = loadRunHistory();
+  const pressureSummary = describePressureArc(runHistory[0]?.pressureReceipt);
   const replayProofPresenter = buildReplayProofPresenter({ traceEvidence, runHistory });
   const replayProofReceipt = replayProofPresenter.receipt;
   const proofTrend = replayProofPresenter.trend;
@@ -1018,6 +1049,11 @@ export default function DeathScreen({
           <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, marginTop: 5 }}>
             {postRunIntel.drill}
           </div>
+          {runHistory[0]?.pressureReceipt && (
+            <div data-testid="pressure-arc-summary" style={{ fontSize: 10, color: "#A9D8FF", lineHeight: 1.45, marginTop: 6 }}>
+              <strong style={{ color: "#6FC7FF" }}>Observed pressure arc:</strong> {pressureSummary}
+            </div>
+          )}
           <div style={{ fontSize: 11, color: "#FFB36B", lineHeight: 1.5, marginTop: 6, fontStyle: "italic" }}>
             "{postRunIntel.callout}"
           </div>
@@ -1037,6 +1073,7 @@ export default function DeathScreen({
             </div>
             <button
               onClick={() => {
+                recordPlaytestChoice(nextRunDrill.action || "run_the_fix");
                 track("next_run_drill_accept", { drillId: nextRunDrill.id, action: nextRunDrill.action, seed: nextRunDrill.seed || null, score, wave, mode });
                 saveStudioGameEvent(buildStudioGameEvent("next_run_drill_accept", {
                   surface: "death_screen",
@@ -1059,6 +1096,34 @@ export default function DeathScreen({
           </div>
         </div>
         </details>
+
+        {playtestEnabled && playtestReceipt && (
+          <section aria-label="Playtest flight receipt" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(180,140,255,0.48)", background: "rgba(110,70,180,0.11)" }}>
+            <div style={{ fontSize: 10, color: "#C8A8FF", letterSpacing: 2, fontWeight: 900 }}>PLAYTEST FLIGHT RECEIPT · LOCAL ONLY</div>
+            <p style={{ margin: "7px 0", fontSize: 10, color: "#D8D0E8", lineHeight: 1.45 }}>
+              This opt-in receipt stays in this browser session. It stores observed milestones and these button answers—no callsign, free text, or network upload.
+            </p>
+            <fieldset style={{ border: 0, padding: 0, margin: "8px 0" }}>
+              <legend style={{ fontSize: 10, color: "#FFF", fontWeight: 900 }}>Did the cause of death make sense?</legend>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5 }}>
+                {[["clear", "CLEAR"], ["partial", "PARTLY"], ["unclear", "UNCLEAR"]].map(([value, label]) => (
+                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.deathClarity === value} onClick={() => updatePlaytestAnswer({ deathClarity: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, borderColor: playtestReceipt.annotations?.deathClarity === value ? "#C8A8FF" : "#555" }}>{label}</button>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset style={{ border: 0, padding: 0, margin: "8px 0" }}>
+              <legend style={{ fontSize: 10, color: "#FFF", fontWeight: 900 }}>Would you start another run?</legend>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5 }}>
+                {[["now", "NOW"], ["later", "LATER"], ["no", "NO"]].map(([value, label]) => (
+                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.replayIntent === value} onClick={() => updatePlaytestAnswer({ replayIntent: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, borderColor: playtestReceipt.annotations?.replayIntent === value ? "#C8A8FF" : "#555" }}>{label}</button>
+                ))}
+              </div>
+            </fieldset>
+            <button type="button" onClick={copyPlaytestReceipt} style={{ ...btnS, width: "100%", fontSize: 10 }}>
+              {playtestCopied ? "COPIED" : playtestCopyError ? "CLIPBOARD UNAVAILABLE" : "COPY JAVASCRIPT OBJECT NOTATION (JSON) RECEIPT"}
+            </button>
+          </section>
+        )}
 
         {/* Weapon kill breakdown */}
         {weaponKills && weaponKills.some(k => k > 0) && (() => {
@@ -1516,14 +1581,15 @@ export default function DeathScreen({
         )}
 
         <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-          <button aria-label="Play again — start a new run" onClick={() => { track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
+          <button aria-label="Play again — start a new run" onClick={() => { recordPlaytestChoice("play_again"); track("debrief_play_again", { score, wave, runSeed, intelligenceCause: postRunIntel.cause }); onStartGame(); }} style={{ ...btnP, minWidth: 110, fontSize: 15 }}>PLAY AGAIN</button>
           {runSeed > 0 && (
-            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
+            <button aria-label={`Replay seed ${runSeed} — same map`} onClick={() => { recordPlaytestChoice("replay_seed"); track("debrief_replay_seed", { seed: runSeed, score, wave, intelligenceCause: postRunIntel.cause }); onStartGame(runSeed); }} style={{ ...btnS, minWidth: 130, fontSize: 13 }}>🔄 REPLAY #{runSeed}</button>
           )}
           {runSeed > 0 && rematchWave != null && (
             <button
               aria-label={`Rematch wave ${rematchWave} — practice the wave that killed you on the same seed`}
               onClick={() => {
+                recordPlaytestChoice("rematch_wave");
                 track("debrief_rematch_wave", { seed: runSeed, deathWave: wave, startWave: rematchWave, score, intelligenceCause: postRunIntel.cause, drillId: nextRunDrill.id });
                 onStartGame(runSeed, { startWave: rematchWave, drill: { ...makeDrillLaunch("rematch"), deathWave: wave } });
               }}
@@ -1542,8 +1608,8 @@ export default function DeathScreen({
               style={{ ...btnS, minWidth: 130, fontSize: 13 }}
             >🔗 SHARE RUN</button>
           )}
-          <button aria-label="View leaderboard" onClick={() => { track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button aria-label="Return to main menu" onClick={() => { track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause }); onMenu(); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
+          <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
+          <button aria-label="Return to main menu" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause }); onMenu(); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
         </details>
       </div>

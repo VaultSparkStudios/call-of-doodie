@@ -1,4 +1,28 @@
-# Latest Handoff — Session 127
+# Latest Handoff — Session 128
+
+## Where We Left Off
+- Completed the founder-requested continuous `/goal` arc from synchronized `main`: `/start -> /audit -> /implement -> second-order saturation -> /closeout`.
+- Shipped four verified L3 audit items: privacy-safe playtest flight recorder, pressure-arc receipt, deterministic progression runway, and source-derived public agent gameplay contract.
+- Recorded one audit win: the proposed DeathScreen hierarchy rewrite was dropped after live code proved the primary/disclosure behavior already existed.
+- Shipped seven second-order/founder refinements: project-bound Oracle evidence, same-band pressure peaks, hot-path/clipboard truth, progression tier resilience, immediate Replay Training launch, player-first homepage organization, and real runtime operative/Karen art.
+- The refreshed Genius List is exhausted for honest repo-executable work. Remaining candidates require credentials, a membership/community decision, production traffic, publication, physical device/media evidence, or founder approval.
+- SPARKED remains NO-GO; engineering completion is not launch approval.
+
+## Validation
+- `npm run lint:strict` — PASS; `npm test` — 737/737 across 102 files; production build — PASS.
+- Dependency/public/protocol/security/media/asset contracts — PASS; trust-reviewed PostCSS 8.5.12 override; npm audit zero; supply-chain incident scan clean.
+- Focused founder-follow-up and second-order tests 37/37; Playwright desktop/mobile pointer E2E 2/2; five real Chromium launch captures refreshed.
+- Doctor startup receipt: `overallPass: true`, `blockingFailing: 0`, one portfolio advisory. Final closeout doctor must preserve zero blocking failures.
+- Isolated staging is honestly unclaimed: `cloudflare.deploy` is MISSING locally and the required direct-main/no-branch workflow offers no non-production preview path.
+
+## Next
+- With physical hardware: verify one real Progressive Web App install/relaunch, controller/browser pass, and full-run GIF encode/play/share flow.
+- With production traffic and scoped analytics: capture Largest Contentful Paint/Cumulative Layout Shift and funnel evidence before retiring `?home=v1`.
+- Before SPARKED: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, direct hosted pixel review, and explicit founder approval.
+
+Session Intent outcome: Achieved for every agent-owned premise; external/data/hardware/publication/founder gates remain explicit.
+
+# Previous Handoff — Session 127
 
 ## Where We Left Off
 - Completed the founder-requested continuous arc from synced main: /start -> /audit -> /implement -> second-order saturation -> /closeout.
@@ -177,5 +201,3 @@ Session Intent: Complete continuous `/arc` with truthful audit, implementation s
 - Do not retire `?home=v1` until production Lighthouse and funnel evidence clear the documented gate.
 
 Session Intent: Complete continuous `/goal` `/arc` with audit, implementation saturation, and closeout.
-
-

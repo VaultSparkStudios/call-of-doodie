@@ -7,6 +7,7 @@ import sharp from "sharp";
 const ROOT = process.cwd();
 const sourceDir = path.join(ROOT, "assets", "source", "signature-pack");
 const runtimeDir = path.join(ROOT, "public", "visual-assets");
+const runtimeSpriteSourceDir = path.join(ROOT, "assets", "source", "runtime-sprites");
 
 fs.mkdirSync(sourceDir, { recursive: true });
 fs.mkdirSync(runtimeDir, { recursive: true });
@@ -136,4 +137,19 @@ for (const asset of assets) {
   console.log(`Generated ${path.relative(ROOT, svgPath)} -> ${path.relative(ROOT, pngPath)}`);
 }
 
-console.log(`Generated ${assets.length} proprietary visual asset(s).`);
+const runtimeSprites = [
+  ["cod-doodie-operative-v2-source.png", "cod-doodie-operative-v2.png"],
+  ["cod-karen-nemesis-v2-source.png", "cod-karen-nemesis-v2.png"],
+];
+for (const [sourceName, runtimeName] of runtimeSprites) {
+  const sourcePath = path.join(runtimeSpriteSourceDir, sourceName);
+  const runtimePath = path.join(runtimeDir, runtimeName);
+  await sharp(sourcePath)
+    .trim({ background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .resize(384, 384, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 }, kernel: sharp.kernel.lanczos3 })
+    .png({ compressionLevel: 9, palette: true, quality: 95 })
+    .toFile(runtimePath);
+  console.log(`Generated ${path.relative(ROOT, sourcePath)} -> ${path.relative(ROOT, runtimePath)}`);
+}
+
+console.log(`Generated ${assets.length + runtimeSprites.length} proprietary visual asset(s).`);

@@ -16,6 +16,16 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S128 founder follow-up** Runtime character realization — two proprietary transparent, optimized character sprites now drive the live player/Karen canvas layers with procedural fallbacks, deterministic export, manifest provenance, and refreshed desktop/mobile captures.
+- [x] [SIL:2] **DONE S128 founder follow-up** Player-first homepage organization — removed internal asset showcase cards, separated Quick Play from Player Tools, exposed Player Hub navigation by default, replaced unexplained PWA fractions with plain-language device state, and made local-save health an actionable test.
+- [x] [SIL:2] **DONE S128 founder follow-up** Replay Training contract — the button now clears observed evidence, bypasses the unrelated pre-run draft once, and immediately launches guided training instead of silently mutating storage.
+- [x] [SIL:1] **DONE S128 second-order** Verification-path truth — Oracle preverify now resolves repo surfaces to absolute project paths; pressure peaks update within stable bands; playtest mode parsing leaves the input hot path; unavailable clipboards no longer report a false copy.
+- [x] [SIL:2] **DONE S128** Playtest flight recorder — opt-in `?playtest=1` captures observed first actions, death facts, explicit clarity/replay-intent answers, and continuation choice into a session-local portable privacy-safe receipt with no network or free text.
+- [x] [SIL:2] **DONE S128** Pressure arc receipt — bounded director-band transitions now persist into run history and drive observed-only DeathScreen/Balance Lab feedback without causal claims.
+- [x] [SIL:2] **DONE S128** Progression runway contract — account levels, weapon unlocks, career points, and upgrade tiers now share exact source-derived milestone receipts, scenarios, tests, and an audit CLI without speculative tuning.
+- [x] [SIL:2] **DONE S128** Agent gameplay contract — build-generated `gameplay-contract-v1` gives AI agents source-derived public mechanics, trust, cost, rights, and challenge grammar with exact drift validation.
+- [x] [AUDIT WIN S128] Single-next-move rewrite dropped after live inspection proved RUN THE FIX already primary and secondary actions already enclosed by `MORE RUN ACTIONS`; no redundant churn shipped.
+
 - [x] [SIL:2] **DONE S127** Edge runtime truth contract — typed edge-only JSON health, explicit dispatch, HSTS source/live enforcement, and hosted 7/7 proof.
 - [x] [SIL:2] **DONE S127** Service-worker lifecycle truth — supported/registered/controlled/update-ready/failed state is observable and sanitized.
 - [x] [SIL:2] **DONE S127** Storage durability receipt — critical writes expose bounded per-surface failure/recovery without keys or values.

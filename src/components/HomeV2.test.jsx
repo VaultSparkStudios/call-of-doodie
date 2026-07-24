@@ -119,7 +119,7 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/SUPPORT/);
   });
 
-  it("shows a journey card and keeps Command Center collapsed by default", async () => {
+  it("shows a journey card and exposes the Player Hub by default", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -129,9 +129,10 @@ describe("HomeV2", () => {
 
     expect(container.textContent).toContain("JOURNEY");
     expect(container.textContent).toContain("NEXT:");
-    expect(container.textContent).toContain("COMMAND CENTER");
-    const commandToggle = [...container.querySelectorAll("button")].find(b => /COMMAND CENTER/.test(b.textContent));
-    expect(commandToggle?.getAttribute("aria-expanded")).toBe("false");
+    expect(container.textContent).toContain("PLAYER HUB");
+    const commandToggle = [...container.querySelectorAll("button")].find(b => /PLAYER HUB/.test(b.textContent));
+    expect(commandToggle?.getAttribute("aria-expanded")).toBe("true");
+    expect(container.textContent).toContain("STATS");
   });
 
   it("hydrates replay links including starter loadout", async () => {
@@ -251,9 +252,10 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} pwaInstallPromptReady onInstallApp={vi.fn()} />);
     });
 
-    expect(container.textContent).toContain("PWA PROMPT READY");
+    expect(container.textContent).toContain("INSTALL AVAILABLE");
     expect(container.textContent).toContain("INSTALL APP");
     expect(container.textContent).not.toContain("PWA INSTALLED");
+    expect(container.textContent).not.toContain("3/4");
   });
 
   it("renders stored PWA prompt acceptance as install QA evidence", async () => {
@@ -265,8 +267,41 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
 
-    expect(container.textContent).toContain("PWA ACCEPTED");
+    expect(container.textContent).toContain("INSTALL ACCEPTED");
     expect(container.textContent).not.toContain("PWA INSTALLED");
+  });
+
+  it("launches Replay Training through the app contract instead of only clearing storage", async () => {
+    localStorage.setItem("cod-tutorial-v2", "1");
+    const onReplayTraining = vi.fn();
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} onReplayTraining={onReplayTraining} />);
+    });
+
+    const replayTraining = [...container.querySelectorAll("button")].find(button => /REPLAY TRAINING/.test(button.textContent));
+    await act(async () => { replayTraining.click(); });
+    expect(onReplayTraining).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem("cod-tutorial-v2")).toBeNull();
+  });
+
+  it("keeps internal art cards off the homepage and makes local-save status actionable", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).not.toContain("Porcelain Throne");
+    expect(container.textContent).not.toContain("ASSETS");
+    expect(container.textContent).toContain("PROGRESS SAVES ON THIS DEVICE");
+    const testSave = [...container.querySelectorAll("button")].find(button => /TEST LOCAL SAVE/.test(button.textContent));
+    expect(testSave).toBeTruthy();
+    await act(async () => { testSave.click(); });
+    expect(container.textContent).toContain("PROGRESS SAVES ON THIS DEVICE");
   });
 
   it("hides operational measurement status from the default visitor surface", async () => {

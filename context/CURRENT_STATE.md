@@ -1,3 +1,12 @@
+- Session 128 (2026-07-23) completed the founder-requested continuous `/start -> /audit -> /implement -> innovation saturation -> /closeout` arc from synchronized `main`.
+- Evidence loop — opt-in local playtest receipts, bounded pressure arcs, and source-derived progression runway receipts now preserve observed behavior without fabricating balance, causality, or participant outcomes.
+- Dual-audience truth — `gameplay-contract-v1` is generated from live mechanics and exact-validated for agents; the repo-local Oracle now binds premise evidence to this project instead of misreporting valid paths missing.
+- Founder-follow-up truth — Replay Training immediately launches a clean guided run; the homepage separates Quick Play, Player Tools, and an open Player Hub while replacing internal PWA/save jargon with actionable player language.
+- Visual truth — proprietary optimized operative and Karen sprites now drive live canvas rendering with procedural fallbacks; the former homepage asset-card showcase was removed, and five desktop/mobile Chromium captures were refreshed.
+- Security truth — the newly disclosed PostCSS advisory was fixed through a trust-approved exact override; supply-chain incident scan and npm audit report zero findings.
+- Saturation truth — four primary audit items, seven second-order/founder refinements, and one honest false-premise audit win shipped; remaining candidates require credentials, product decisions, production data, publication, physical devices, or founder approval.
+- Validation truth — strict lint, 737/737 tests across 102 files, production build, public/protocol/dependency/security/media/asset gates, npm audit zero, and Playwright desktop/mobile 2/2 passed directly. Isolated staging is not claimed because the local Cloudflare deploy capability is missing.
+- Release truth — engineering is green; SPARKED remains NO-GO pending the existing external/device/data/publication/founder evidence.
 - Session 127 (2026-07-22) completed the continuous /start -> /audit -> /implement -> innovation saturation arc from a synced main branch.
 - Edge truth — Cloudflare now serves a typed edge-health-v1 JSON contract at /_health, generic function dispatch is explicit, HSTS is required by source/live release checks, and isolated staging passed 7/7 at exact SHA 57dd40b.
 - Runtime trust — service-worker lifecycle is latched and observable; critical local writes emit sanitized per-surface durability/recovery receipts without keys or values.
@@ -317,4 +326,3 @@
 - Session 114 shipped coordinated late-wave enemy formation archetypes: `src/systems/waveDirector.js` now retains the wave number on director plans, promotes wave-20+ pressure/climax spawns into deterministic PINCER / ESCORT / FLANK formations with lane and role metadata, stamps spawned enemies with formation metadata, and includes `formationSet` in telemetry snapshots.
 - Validation baseline after Session 114: focused waveDirector tests 20/20, `npm run lint` clean, full `npm test` 596/596, `npm run replay:state-stepper` 4/4, `npm run replay:edge-fixtures` 4/4, `npm run launch:media-check` passing, and `npm run build` passing.
 Session 117 deploy verification: pushed `dd3caca` to `origin/main`; GitHub Actions `brief-format-check` run `28635261186` and `Deploy to Cloudflare Pages` run `28635261198` both succeeded. Post-deploy verification passed: `npm run live:site-check` 5/5, `npm run post-cutover:smoke` 5/5, and `npm run replay:trust-smoke` 3/3.
-

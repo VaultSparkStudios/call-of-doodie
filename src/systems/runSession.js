@@ -51,6 +51,7 @@ export function createRunHistoryEntry({
   traceReceipt = null,
   integrityReceipt = null,
   performanceReceipt = null,
+  pressureReceipt = null,
 } = {}) {
   const entry = {
     score,
@@ -113,6 +114,32 @@ export function createRunHistoryEntry({
       assistActivations,
       label: assisted ? "PERFORMANCE ASSISTED" : "PERFORMANCE STABLE",
       claim: "observed-local-frame-timing-not-causality-or-score-validity",
+    };
+  }
+  if (pressureReceipt?.schemaVersion === "pressure-arc-v1") {
+    entry.pressureReceipt = {
+      schemaVersion: "pressure-arc-v1",
+      claim: "observed-wave-pressure-transitions-not-causality",
+      deathWave: Math.max(1, Math.floor(Number(pressureReceipt.deathWave) || wave || 1)),
+      collapseBand: ["light", "stable", "overrun", "unobserved"].includes(pressureReceipt.collapseBand)
+        ? pressureReceipt.collapseBand
+        : "unobserved",
+      transitionCount: Math.min(24, Math.max(0, Math.floor(Number(pressureReceipt.transitionCount) || 0))),
+      counts: {
+        light: Math.max(0, Math.floor(Number(pressureReceipt.counts?.light) || 0)),
+        stable: Math.max(0, Math.floor(Number(pressureReceipt.counts?.stable) || 0)),
+        overrun: Math.max(0, Math.floor(Number(pressureReceipt.counts?.overrun) || 0)),
+      },
+      overrunShare: Math.max(0, Math.min(100, Math.floor(Number(pressureReceipt.overrunShare) || 0))),
+      maxPressureRatio: Math.max(0, Math.min(9.99, Number(pressureReceipt.maxPressureRatio) || 0)),
+      transitions: Array.isArray(pressureReceipt.transitions)
+        ? pressureReceipt.transitions.slice(-24).map((transition) => ({
+            wave: Math.max(1, Math.floor(Number(transition.wave) || 1)),
+            stage: String(transition.stage || "unknown").slice(0, 24),
+            band: ["light", "stable", "overrun"].includes(transition.band) ? transition.band : "stable",
+            pressureRatio: Math.max(0, Math.min(9.99, Number(transition.pressureRatio) || 0)),
+          }))
+        : [],
     };
   }
   return entry;

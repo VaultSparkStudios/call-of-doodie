@@ -1,45 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 451d47a6473b -->
-<!-- generated-at: 2026-07-22T06:16:06.524Z -->
+<!-- source-hash: 6cddc45a2e62 -->
+<!-- generated-at: 2026-07-24T02:00:52.164Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 126 Handoff Summary
+# Handoff Summary — Session 128
 
-Session
-- Number: 126
-- Intent outcome: Achieved for all agent-owned premises (recovery, audit implementation, second-order saturation).
+## Session
+- Session 128; continuous /goal arc from synced main: /start -> /audit -> /implement -> second-order saturation -> /closeout.
 
-Shipped
-- Recovered/verified interrupted S125 boundary; dedicated commit 7b8d18f pushed; exact-main deploy/brief green.
-- Completed continuous arc: /start -> /audit -> /implement -> saturation -> /closeout.
-- Five L3 audit items (docs/AUDIT_2026-07-21.json): coherent startup evidence, replay-visible pausing, protocol reference drift enforcement, bounded adaptive performance receipt, shared deterministic defeat economy.
-- Four second-order candidates: in-place newest-match transient retention, suspended-frame timing exclusion, persisted receipt invariant normalization, callsign-aware/fresh-theme-pure browser harness.
+## Shipped
+- Four L3 audit items: privacy-safe playtest flight recorder, pressure-arc receipt, deterministic progression runway, source-derived public agent gameplay contract.
+- One audit win: dropped DeathScreen hierarchy rewrite (behavior already existed in live code).
+- Seven second-order/founder refinements: project-bound Oracle evidence, same-band pressure peaks, hot-path/clipboard truth, progression tier resilience, immediate Replay Training launch, player-first homepage, real runtime operative/Karen art.
 
-Current Intent
-- Unified Genius List exhausted for safe repo-executable work. Remaining candidates need credentials, production traffic, hardware/media, community/product decisions, or founder launch approval.
-- SPARKED remains NO-GO; engineering completeness is not launch approval.
+## Current Intent
+- Genius List exhausted for honest repo-executable work; remaining items require external gates (credentials, community decision, production traffic, publication, hardware/media, founder approval).
+- SPARKED remains NO-GO; engineering completion is not launch approval.
 
-Now Bucket (top items)
-- Physical hardware: PWA install/relaunch, controller/browser pass, full-run GIF encode/play/share.
+## Now Bucket (top 3)
+- Physical hardware: verify one real PWA install/relaunch, controller/browser pass, full-run GIF encode/play/share.
 - Production traffic + scoped analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1.
-- Pre-SPARKED: verify inbound mail delivery, analytics project scope, Itch/community publication, direct AI theme review.
+- Pre-SPARKED: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, hosted pixel review, founder approval.
 
-Blockers
-- No physical hardware for device/PWA/GIF QA.
-- No production traffic or scoped analytics credentials.
-- Founder launch approval not granted.
+## Blockers (top 3)
+- Isolated staging unclaimed: cloudflare.deploy MISSING locally; direct-main/no-branch workflow offers no non-production preview path.
+- No physical hardware for PWA/controller/GIF verification.
+- No production traffic or scoped analytics for LCP/CLS/funnel evidence.
 
-Human-Blocked Items (age)
-- Physical PWA/controller/GIF QA: open since S121+ (~5 sessions).
-- Production LCP/funnel evidence for ?home=v1 retirement: open since S120+ (~6 sessions).
-- Founder launch approval + inbound mail/analytics scope/Itch/AI theme review: open since S120+ (~6 sessions).
+## Human-Blocked (with age)
+- Founder launch approval (SPARKED) — open since S121+ (7+ sessions).
+- Analytics/Sentry credentials + project scope — open since S121+ (7+ sessions).
+- Itch/community publication decision — open since S121+ (7+ sessions).
+- Physical device/media QA — open since S121+ (7+ sessions).
 
-Validation
-- lint:strict PASS; npm test 704/704 across 93 files.
-- Build, dependency tree (18 roots), public contract 13/13, protocol drift, security/npm audit 0 PASS.
-- Replay/edge fixtures 4/4; launch QA 5/5; shell 5/5; cutover 5/5; replay trust 3/3.
-- Staging SHA 193fdd6: deploy 29889321484, brief 29889321470; browser matrix 255/255; 8 HTTP routes pass.
-- Doctor overallPass true, 122/150, 2 skips, 1 advisory, blockingFailing 0.
+## Validation Snapshot
+- lint:strict PASS; npm test 737/737 (102 files); production build PASS.
+- Contracts (dependency/public/protocol/security/media/asset) PASS; npm audit 0; supply-chain scan clean.
+- Founder follow-up + second-order 37/37; Playwright E2E 2/2; five Chromium launch captures refreshed.
+- Doctor: overallPass true, blockingFailing 0, one portfolio advisory. Closeout must preserve zero blocking failures.
 
-Next session: Resume repo-local launch-confidence work only; do not fabricate hardware/data/founder gates.
+## Next-Session Pointer
+- Start fresh /goal arc from synced main; all agent-owned work exhausted, so pursue new repo-local audit items or await external/founder gates without fabricating evidence.
