@@ -140,6 +140,7 @@ export default function HomeV2(props) {
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
   const themePalette = THEMES[theme];
   const cmdCenterRef = useRef(null);
+  const tabStripRef = useRef(null);
 
   useEffect(() => {
     applyTheme(theme);
@@ -949,7 +950,7 @@ export default function HomeV2(props) {
         )}
 
         {/* Tabbed nav */}
-        <div style={tabsRow}>
+        <div ref={tabStripRef} style={tabsRow}>
           {["career", "codex", "settings", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
               {t === "career" && "📊 CAREER"}
@@ -1135,7 +1136,10 @@ export default function HomeV2(props) {
 
           {/* CAREER tab */}
           <button
-            onClick={() => switchTab("career")}
+            onClick={() => {
+              switchTab("career");
+              setTimeout(() => tabStripRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+            }}
             aria-label="Career"
             aria-pressed={tab === "career"}
             style={{
@@ -1194,7 +1198,10 @@ export default function HomeV2(props) {
 
           {/* CODEX tab */}
           <button
-            onClick={() => switchTab("codex")}
+            onClick={() => {
+              switchTab("codex");
+              setTimeout(() => tabStripRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+            }}
             aria-label="Codex"
             aria-pressed={tab === "codex"}
             style={{
