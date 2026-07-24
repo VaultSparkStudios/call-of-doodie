@@ -1,6 +1,6 @@
 # Implementation Plan — Session 128
 
-Source: `docs/AUDIT_2026-07-23.json`
+Source: docs/AUDIT_2026-07-23.json
 
 ## Efficiency order
 

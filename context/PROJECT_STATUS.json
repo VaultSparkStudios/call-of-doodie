@@ -143,16 +143,16 @@
   "stagingType": "cloudflare-pages",
   "doctorScore": {
     "date": "2026-07-24",
-    "ranAt": "2026-07-24T02:10:40.432Z",
+    "ranAt": "2026-07-24T02:14:53.690Z",
     "overallPass": true,
-    "passing": 117,
-    "warning": 34,
+    "passing": 116,
+    "warning": 35,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
     "ran": 152,
     "total": 154,
-    "score": 77
+    "score": 76
   }
 }
