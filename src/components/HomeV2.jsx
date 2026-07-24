@@ -139,6 +139,8 @@ export default function HomeV2(props) {
   const [storageHealth, setStorageHealth] = useState(() => getStorageHealth());
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
   const themePalette = THEMES[theme];
+  const cmdCenterRef = useRef(null);
+  const tabStripRef = useRef(null);
 
   useEffect(() => {
     applyTheme(theme);
@@ -429,7 +431,7 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px ${isMobile ? "calc(72px + env(safe-area-inset-bottom, 0px))" : "max(32px, env(safe-area-inset-bottom))"}` };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -821,7 +823,7 @@ export default function HomeV2(props) {
         </div>
 
         {/* Command Center — full panel access */}
-        <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+        <div ref={cmdCenterRef} style={{ marginTop: 10, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: cmdCenterExpanded ? 8 : 0 }}>
             <button
               onClick={() => setCmdCenterExpanded(v => !v)}
@@ -948,7 +950,7 @@ export default function HomeV2(props) {
         )}
 
         {/* Tabbed nav */}
-        <div style={tabsRow}>
+        <div ref={tabStripRef} style={tabsRow}>
           {["career", "codex", "settings", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
               {t === "career" && "📊 CAREER"}
@@ -1086,6 +1088,144 @@ export default function HomeV2(props) {
         <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
+      )}
+
+      {/* Sticky mobile bottom nav — CANON-041: scrollable 100dvh mobile nav */}
+      {isMobile && (
+        <nav
+          aria-label="Mobile navigation"
+          data-testid="mobile-bottom-nav"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0,
+            height: "calc(56px + env(safe-area-inset-bottom, 0px))",
+            paddingBottom: "env(safe-area-inset-bottom, 0px)",
+            background: "rgba(8,8,8,0.97)",
+            borderTop: `1px solid ${themePalette.line}`,
+            display: "flex", alignItems: "stretch",
+            zIndex: 50,
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+          }}
+        >
+          {/* PLAY — primary CTA, wider slot */}
+          <button
+            onClick={deploy}
+            aria-label="Play now"
+            style={{
+              flex: 2,
+              background: "linear-gradient(180deg,rgba(255,107,0,0.22),rgba(204,68,0,0.15))",
+              border: "none",
+              borderRight: `1px solid ${themePalette.line}`,
+              color: "#FF7B35",
+              fontFamily: "'Courier New',monospace",
+              fontSize: 10,
+              fontWeight: 900,
+              letterSpacing: 2,
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              padding: 0,
+            }}
+          >
+            <span style={{ fontSize: 20 }}>🎮</span>
+            <span>PLAY</span>
+          </button>
+
+          {/* CAREER tab */}
+          <button
+            onClick={() => {
+              switchTab("career");
+              setTimeout(() => tabStripRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+            }}
+            aria-label="Career"
+            aria-pressed={tab === "career"}
+            style={{
+              flex: 1,
+              background: tab === "career" ? "rgba(255,107,0,0.1)" : "transparent",
+              border: "none",
+              borderRight: `1px solid ${themePalette.line}`,
+              color: tab === "career" ? "#FF7B35" : themePalette.muted,
+              fontFamily: "'Courier New',monospace",
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: 1,
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              padding: 0,
+            }}
+          >
+            <span style={{ fontSize: 18 }}>📊</span>
+            <span>CAREER</span>
+          </button>
+
+          {/* HUB — expands Player Hub and scrolls to it */}
+          <button
+            onClick={() => {
+              setCmdCenterExpanded(true);
+              switchTab("career");
+              setTimeout(() => cmdCenterRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
+            }}
+            aria-label="Player Hub"
+            style={{
+              flex: 1,
+              background: "transparent",
+              border: "none",
+              borderRight: `1px solid ${themePalette.line}`,
+              color: themePalette.muted,
+              fontFamily: "'Courier New',monospace",
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: 1,
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              padding: 0,
+            }}
+          >
+            <span style={{ fontSize: 18 }}>🎖️</span>
+            <span>HUB</span>
+          </button>
+
+          {/* CODEX tab */}
+          <button
+            onClick={() => {
+              switchTab("codex");
+              setTimeout(() => tabStripRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+            }}
+            aria-label="Codex"
+            aria-pressed={tab === "codex"}
+            style={{
+              flex: 1,
+              background: tab === "codex" ? "rgba(255,107,0,0.1)" : "transparent",
+              border: "none",
+              color: tab === "codex" ? "#FF7B35" : themePalette.muted,
+              fontFamily: "'Courier New',monospace",
+              fontSize: 9,
+              fontWeight: 700,
+              letterSpacing: 1,
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 2,
+              padding: 0,
+            }}
+          >
+            <span style={{ fontSize: 18 }}>📖</span>
+            <span>CODEX</span>
+          </button>
+        </nav>
       )}
     </div>
   );

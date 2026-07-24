@@ -377,4 +377,70 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  describe("mobile bottom nav (CANON-041)", () => {
+    it("renders sticky bottom nav when isMobile=true", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+      const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+      expect(nav).toBeTruthy();
+      expect(nav.tagName.toLowerCase()).toBe("nav");
+    });
+
+    it("does not render sticky nav when isMobile=false", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={false} />);
+      });
+      expect(container.querySelector("[data-testid='mobile-bottom-nav']")).toBeNull();
+    });
+
+    it("PLAY button in mobile nav calls onStart", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      const onStart = vi.fn();
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} onStart={onStart} />);
+      });
+      const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+      const playBtn = [...nav.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "Play now");
+      expect(playBtn).toBeTruthy();
+      await act(async () => { playBtn.click(); });
+      expect(onStart).toHaveBeenCalledTimes(1);
+    });
+
+    it("CAREER nav button switches to career tab", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+      const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+      const careerBtn = [...nav.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "Career");
+      expect(careerBtn).toBeTruthy();
+      expect(careerBtn.getAttribute("aria-pressed")).toBe("true");
+    });
+
+    it("CODEX nav button switches to codex tab", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+      const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+      const codexBtn = [...nav.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "Codex");
+      expect(codexBtn).toBeTruthy();
+      await act(async () => { codexBtn.click(); });
+      expect(codexBtn.getAttribute("aria-pressed")).toBe("true");
+    });
+  });
 });
