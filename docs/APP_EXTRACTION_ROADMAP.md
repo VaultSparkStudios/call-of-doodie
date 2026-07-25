@@ -19,6 +19,7 @@ Extracted system boundaries now include:
 - `src/systems/transientLifecycle.js` (in-place hot-array compaction, S125)
 - `src/systems/pauseTransition.js` (centralized pause/input-release contract, S126)
 - `src/systems/defeatEconomy.js` (shared railgun/projectile score, boss, and coin parity, S126)
+- `src/systems/bulletUpdate.js` (player and enemy bullet step functions, S130)
 - `src/utils/metaClarity.js`, `roastDirector.js`, `routeForecast.js`, `shopForecast.js`
 
 The remaining heavy clusters in `App.jsx`, in priority order:
@@ -28,7 +29,7 @@ The `gameLoop` useCallback. Largest single block. Already references
 `drawGame`, `useGameLoop`, and pure systems above. Candidate slices:
 
 - **Player update** (movement, dash, weapon switch, reload) → `src/systems/playerUpdate.js`
-- **Bullet update** (collision, bounces, ricochet, lifecycle) → `src/systems/bulletUpdate.js`
+- ~~**Bullet update** (collision, bounces, ricochet, lifecycle) → `src/systems/bulletUpdate.js`~~ **DONE S130**: `stepPlayerBullet` + `stepEnemyBullet` with 25 focused tests; boomerang, trail, obstacle bounce, time dilation, and bounds all covered.
 - **Enemy update** (AI, ranged fire, boss phases) → `src/systems/enemyUpdate.js`
 - **Pickup magnet + apply** → already partially extracted; finish
 

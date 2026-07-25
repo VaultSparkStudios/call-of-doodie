@@ -84,6 +84,7 @@ import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSummonsFor, createEnemyFrameIndex } from "./systems/frameIndex.js";
 import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
+import { stepPlayerBullet, stepEnemyBullet } from "./systems/bulletUpdate.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
 import { createPressureArc, finalizePressureArc, recordPressureSnapshot } from "./systems/pressureArc.js";
@@ -2893,52 +2894,17 @@ export default function CallOfDoodie() {
 
     // ── Bullet movement ──
     gs.bullets = stepAndCompactInPlace(gs.bullets, b => {
-      // Boomerang: curve outbound, then steer back to player
-      if (b.boomerang) {
-        if (!b.returning) {
-          const rot = 0.055; // curve angle per frame
-          const nvx = b.vx * Math.cos(rot) - b.vy * Math.sin(rot);
-          const nvy = b.vx * Math.sin(rot) + b.vy * Math.cos(rot);
-          b.vx = nvx; b.vy = nvy;
-          if (b.life <= b.outboundLife) b.returning = true;
-        } else {
-          const bdx = p.x - b.x, bdy = p.y - b.y, bdist = Math.hypot(bdx, bdy);
-          if (bdist < 24) return false; // caught by player
-          const spd = Math.hypot(b.vx, b.vy);
-          b.vx = (bdx / bdist) * spd; b.vy = (bdy / bdist) * spd;
-        }
-      }
-      b.x += b.vx; b.y += b.vy; b.life--;
-      if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
-      for (const ob of (gs.obstacles || [])) {
-        const bounce = resolveObstacleBounce(b, ob);
-        if (bounce.bounced) {
-          Object.assign(b, {
-            x: bounce.x, y: bounce.y, vx: bounce.vx, vy: bounce.vy,
-            bouncesLeft: bounce.bouncesLeft, life: bounce.life,
-          });
-          addParticles(gs, b.x, b.y, "#FFFFFF", 4);
-          gs.screenShake = Math.max(gs.screenShake, 1);
-          break;
-        }
-        if (bounce.consumed) {
-          addParticles(gs, b.x, b.y, b.color, 3);
-          return false;
-        }
-        if (bounce.bounced || bounce.consumed) {
-          break;
-        }
-      }
-      return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
+      const bResult = stepPlayerBullet(b, p, gs.obstacles || [], { W, H, frame: frameCountRef.current });
+      if (bResult.trailEvent) addParticles(gs, bResult.trailEvent.x, bResult.trailEvent.y, bResult.trailEvent.color, 1);
+      if (bResult.bounceEvent?.bounced) { addParticles(gs, bResult.bounceEvent.x, bResult.bounceEvent.y, "#FFFFFF", 4); gs.screenShake = Math.max(gs.screenShake, 1); }
+      if (bResult.bounceEvent?.consumed) addParticles(gs, bResult.bounceEvent.x, bResult.bounceEvent.y, bResult.bounceEvent.color, 3);
+      return bResult.alive;
     });
 
     // ── Enemy bullet movement ──
     gs.enemyBullets = stepAndCompactInPlace(gs.enemyBullets, eb => {
-      const _tdm = (gs.timeDilationTimer || 0) > 0 ? 0.2 : 1;
-      eb.x += eb.vx * _tdm; eb.y += eb.vy * _tdm; eb.life--;
-      const hitWall = (gs.obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
-      if (hitWall) return false;
-      return eb.life > 0 && eb.x > -10 && eb.x < W + 10 && eb.y > -10 && eb.y < H + 10;
+      const ebResult = stepEnemyBullet(eb, gs.obstacles || [], { W, H, timeDilationTimer: gs.timeDilationTimer || 0 });
+      return ebResult.alive;
     });
 
     // ── Enemy bullet hits player ──
