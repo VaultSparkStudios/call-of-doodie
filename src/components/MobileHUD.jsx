@@ -25,7 +25,7 @@ export default function MobileHUD({
   ].filter(Boolean);
 
   return (
-    <div style={{ position: "absolute", inset: "0 0 56px", zIndex: 40, pointerEvents: "none", color: "#FFF", fontFamily: "Inter,system-ui,sans-serif" }}>
+    <div style={{ position: "absolute", inset: "0 0 64px", zIndex: 40, pointerEvents: "none", color: "#FFF", fontFamily: "Inter,system-ui,sans-serif" }}>
       <div style={{ position: "absolute", top: "max(6px, env(safe-area-inset-top))", left: 6, right: 6, minHeight: 52, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 6, padding: "5px 6px", border: "1px solid rgba(255,255,255,.16)", borderRadius: 14, background: "rgba(5,8,10,.78)", boxShadow: "0 8px 24px rgba(0,0,0,.28)", backdropFilter: "blur(10px)" }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>LEVEL {level}</div>
@@ -82,3 +82,4 @@ export default function MobileHUD({
     </div>
   );
 }
+
