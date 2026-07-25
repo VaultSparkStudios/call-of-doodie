@@ -929,7 +929,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
   }
 
-  // Player bullets
+  // Player bullets — per-weapon visual signatures
   gs.bullets.forEach(b => {
     ctx.save(); ctx.translate(b.x, b.y);
     if (b.boomerang) {
@@ -941,8 +941,72 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.strokeStyle = "#FFF"; ctx.lineWidth = 1; ctx.globalAlpha = 0.4;
       ctx.beginPath(); ctx.ellipse(0, 0, b.size * 1.4, b.size * 0.5, 0, 0, Math.PI * 2); ctx.stroke();
     } else {
-      ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 10;
-      ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill();
+      const _wpn = b.wpnIdx ?? -1;
+      const _bAngle = (b.vx || b.vy) ? Math.atan2(b.vy, b.vx) : 0;
+      // Motion trail for high-velocity projectiles (sniper wpnIdx=4, RPG wpnIdx=1)
+      if (!_rm && b.trail && (b.vx || b.vy)) {
+        const _tLen = _wpn === 4 ? 26 : 16;
+        const _grd = ctx.createLinearGradient(
+          -Math.cos(_bAngle) * _tLen, -Math.sin(_bAngle) * _tLen, 0, 0
+        );
+        _grd.addColorStop(0, "rgba(0,0,0,0)");
+        _grd.addColorStop(1, b.color);
+        ctx.strokeStyle = _grd; ctx.lineWidth = b.size * (_wpn === 4 ? 1.1 : 0.85);
+        ctx.globalAlpha = _wpn === 4 ? 0.82 : 0.55; ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(-Math.cos(_bAngle) * _tLen, -Math.sin(_bAngle) * _tLen);
+        ctx.lineTo(0, 0); ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+      if (_wpn === 4) {
+        // Sniper: high-velocity needle tracer — elongated along flight axis
+        ctx.rotate(_bAngle);
+        ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 18;
+        ctx.beginPath(); ctx.ellipse(0, 0, b.size * 2.4, b.size * 0.45, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#FFFFFF"; ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.arc(b.size * 1.3, 0, b.size * 0.4, 0, Math.PI * 2); ctx.fill();
+      } else if (_wpn === 1) {
+        // RPG: firebolt — layered flame glow
+        ctx.fillStyle = "#FF8800"; ctx.shadowColor = "#FF4400"; ctx.shadowBlur = 22;
+        ctx.beginPath(); ctx.arc(0, 0, b.size * 1.25, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#FFDD44"; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(0, 0, b.size * 0.55, 0, Math.PI * 2); ctx.fill();
+      } else if (_wpn === 7) {
+        // Shock Zapper: electric core with pulsing ring
+        ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 14;
+        ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill();
+        if (!_rm) {
+          ctx.globalAlpha = 0.30 + Math.sin(dn / 55) * 0.18; ctx.shadowBlur = 0;
+          ctx.strokeStyle = b.color; ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(0, 0, b.size * 1.95, 0, Math.PI * 2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      } else if (_wpn === 10) {
+        // Ricochet Pistol: elongated oval in flight direction + bounce-charge ring
+        ctx.rotate(_bAngle);
+        ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 14;
+        ctx.beginPath(); ctx.ellipse(0, 0, b.size * 1.7, b.size * 0.65, 0, 0, Math.PI * 2); ctx.fill();
+        if (!_rm && (b.bouncesLeft || 0) > 2) {
+          ctx.globalAlpha = 0.28; ctx.shadowBlur = 0;
+          ctx.strokeStyle = b.color; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.arc(0, 0, b.size * 2.5, 0, Math.PI * 2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      } else if (_wpn === 2) {
+        // Nerf Minigun: hot-dart capsule, tight glow
+        ctx.rotate(_bAngle);
+        ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 7;
+        ctx.beginPath(); ctx.ellipse(0, 0, b.size * 1.6, b.size * 0.52, 0, 0, Math.PI * 2); ctx.fill();
+      } else if (_wpn === 6) {
+        // Confetti Cannon: tumbling chip — angle offset for spin effect
+        ctx.rotate(_bAngle + Math.PI / 4);
+        ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 8;
+        ctx.fillRect(-b.size * 1.2, -b.size * 0.5, b.size * 2.4, b.size);
+      } else {
+        // Default: glow circle
+        ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 12;
+        ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill();
+      }
     }
     ctx.restore();
   });
