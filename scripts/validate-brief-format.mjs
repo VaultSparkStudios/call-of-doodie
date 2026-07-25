@@ -31,6 +31,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { validateBriefEvidence } from './lib/brief-evidence.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -292,7 +293,16 @@ if (IS_DIRECT_RUN) {
   }
 
   const result = validateStartupBrief(body);
-  let fail = !result.ok;
+  let sourceCoherence = { ok: true, issues: [] };
+  if (!STDIN_MODE && path.resolve(targetPath) === path.join(ROOT, 'docs', 'STARTUP_BRIEF.md')) {
+    try {
+      const status = JSON.parse(fs.readFileSync(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), 'utf8'));
+      sourceCoherence = validateBriefEvidence(body, status);
+    } catch (error) {
+      sourceCoherence = { ok: false, issues: [`source coherence unavailable: ${error.message}`] };
+    }
+  }
+  let fail = !result.ok || !sourceCoherence.ok;
 
   // S124 #8 — Token-budget enforcer. Brief is the only canonical /start
   // surface — bloat = re-introducing the 100KB pre-v4 tax. Persist size to
@@ -344,13 +354,14 @@ if (IS_DIRECT_RUN) {
 
   if (JSON_MODE) {
     process.stdout.write(JSON.stringify({
-      ok: result.ok,
+      ok: result.ok && sourceCoherence.ok && budgetStatus !== 'fail',
       source: STDIN_MODE ? '<stdin>' : targetPath,
       missingRequired: result.missingRequired,
       missingRecommended: result.missingRecommended,
       forbiddenHits: result.forbiddenHits,
       bodyShape: result.bodyShape,
       staleBrief: result.staleBrief,
+      sourceCoherence,
       budget: {
         sizeBytes,
         warnBytes: BUDGET_WARN,
@@ -383,6 +394,10 @@ if (IS_DIRECT_RUN) {
         console.log(`       - ${h.label}`);
         console.log(`         reason: ${h.reason}`);
       }
+    }
+    if (!sourceCoherence.ok) {
+      console.log(`  ⛔  source-coherence failures:`);
+      for (const issue of sourceCoherence.issues) console.log(`       - ${issue}`);
     }
     if (!fail) {
       console.log(`  ✓   conformant — all required canonical blocks present, no drift markers`);

@@ -130,6 +130,31 @@ describe("runSession", () => {
     });
   });
 
+  it("persists a bounded, non-causal final damage receipt", () => {
+    const historyEntry = createRunHistoryEntry({
+      damageReceipt: {
+        schemaVersion: "damage-sequence-v1",
+        windowFrames: 999,
+        finalFrame: 720,
+        durationFrames: 500,
+        totalDamage: 82,
+        finalTwoSecondDamage: 48,
+        hitCount: 3,
+        finishStyle: "burst",
+        topSource: { sourceType: 4, sourceName: "Mega Karen", damage: 55, hits: 1 },
+        events: Array.from({ length: 20 }, (_, index) => ({ endFrame: index, damage: 1 })),
+      },
+    });
+    expect(historyEntry.damageReceipt).toMatchObject({
+      claim: "observed-final-damage-window-not-causality",
+      windowFrames: 360,
+      durationFrames: 360,
+      finishStyle: "burst",
+      topSource: { sourceType: 4, sourceName: "Mega Karen" },
+    });
+    expect(historyEntry.damageReceipt.events).toHaveLength(12);
+  });
+
   it("includes rejection metadata when score submission is rejected", () => {
     const result = createScoreSubmitStudioEvents({
       difficulty: "hard",

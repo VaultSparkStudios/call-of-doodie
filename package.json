@@ -26,6 +26,7 @@
     "security:release": "node scripts/security-release-gate.mjs",
     "security:release:audit": "node scripts/security-release-gate.mjs --npm-audit",
     "deps:check": "node scripts/check-dependency-tree.mjs",
+    "entry:boundaries": "node scripts/check-entry-vendor-boundaries.mjs",
     "leaderboard:shared-check": "node scripts/shared-leaderboard-check.mjs",
     "replay:trust-smoke": "node scripts/replay-trust-smoke.mjs",
     "replay:edge-fixtures": "node scripts/validate-edge-replay-pressure-fixtures.mjs",
@@ -60,12 +61,13 @@
   },
   "overrides": {
     "@babel/core": "7.29.7",
-    "brace-expansion": "1.1.16",
+    "brace-expansion": "5.0.8",
     "esbuild": "0.28.1",
     "form-data": "4.0.6",
     "js-yaml": "4.3.0",
+    "minimatch": "10.2.3",
     "picomatch": "4.0.4",
-    "postcss": "8.5.12",
+    "postcss": "8.5.22",
     "ws": "8.21.0"
   },
   "devDependencies": {

@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/security-release-gate.mjs [--json] [--npm-audit]
+// Audits local release hardening; networked npm audit is explicit and optional.
+
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "./lib/safe-spawn.mjs";
@@ -9,6 +12,11 @@ import { getObeliskRoute } from "../src/obeliskRoutes.js";
 const ROOT = process.cwd();
 const JSON_MODE = process.argv.includes("--json");
 const RUN_NPM_AUDIT = process.argv.includes("--npm-audit");
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/security-release-gate.mjs [--json] [--npm-audit]");
+  process.exit(0);
+}
 
 function read(relPath) {
   return fs.readFileSync(path.join(ROOT, relPath), "utf8");

@@ -22,6 +22,7 @@ import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
 import { describePressureArc } from "../systems/pressureArc.js";
+import { describeDamageSequence } from "../systems/damageSequence.js";
 import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -453,6 +454,7 @@ export default function DeathScreen({
   })();
   const runHistory = loadRunHistory();
   const pressureSummary = describePressureArc(runHistory[0]?.pressureReceipt);
+  const damageSummary = describeDamageSequence(runHistory[0]?.damageReceipt);
   const replayProofPresenter = buildReplayProofPresenter({ traceEvidence, runHistory });
   const replayProofReceipt = replayProofPresenter.receipt;
   const proofTrend = replayProofPresenter.trend;
@@ -1052,6 +1054,11 @@ export default function DeathScreen({
           {runHistory[0]?.pressureReceipt && (
             <div data-testid="pressure-arc-summary" style={{ fontSize: 10, color: "#A9D8FF", lineHeight: 1.45, marginTop: 6 }}>
               <strong style={{ color: "#6FC7FF" }}>Observed pressure arc:</strong> {pressureSummary}
+            </div>
+          )}
+          {runHistory[0]?.damageReceipt && (
+            <div data-testid="damage-sequence-summary" style={{ fontSize: 10, color: "#FFD3A8", lineHeight: 1.45, marginTop: 6 }}>
+              <strong style={{ color: "#FFB36B" }}>Observed final damage:</strong> {damageSummary}
             </div>
           )}
           <div style={{ fontSize: 11, color: "#FFB36B", lineHeight: 1.5, marginTop: 6, fontStyle: "italic" }}>

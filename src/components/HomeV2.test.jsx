@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-vi.mock("../supabase.js", () => ({ supabase: null, getOrCreateClientUid: () => "test-uid", getAuthUid: () => null }));
+vi.mock("../supabase.js", () => ({ getSupabaseClient: async () => null, getOrCreateClientUid: () => "test-uid", getAuthUid: () => null }));
 vi.mock("../utils/analytics.js", () => ({
   track: vi.fn(),
   analyticsInit: vi.fn(),

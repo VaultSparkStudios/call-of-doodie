@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-24 (Session 128 closeout) -->
+<!-- generated-at: 2026-07-25 (Session 129 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S128 ════════════════════╗
-║  Date: 2026-07-24  ·  SIL: 1000/1000  ·  Velocity: 10 decreasin  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S129 ════════════════════╗
+║  Date: 2026-07-25  ·  SIL: 1000/1000  ·  Velocity: 10 decreasin  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
 ║  ✓ Completed the founder-requested continuous `/goal` arc from   ║
-║  ✓ Shipped four verified L3 audit items: privacy-safe playtest   ║
-║  ✓ Recorded one audit win: the proposed DeathScreen hierarchy r  ║
-║  ✓ Shipped seven second-order/founder refinements: project-boun  ║
-║  ✓ The refreshed Genius List is exhausted for honest repo-execu  ║
+║  ✓ Shipped startup-brief source coherence, capability-gated Sup  ║
+║  ✓ Rejected a duplicate full-physics replay-hash proposal after  ║
+║  ✓ Closed nineteen generated operator-script gaps and four clos  ║
+║  ✓ Isolated staging at `https://session-129-staging.call-of-doo  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,31 +29,31 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
-║  · context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/PROJECT_STATUS.json                                   ║
+║  · agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 68 files  ·  M:55 A:0 D:0 ?:13                         ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-127-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-129-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        116/154                                          ║
+║  Doctor:        110/154                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         737/737                                          ║
-║  IGNIS:         8d ago                                           ║
+║  Tests:         780/780                                          ║
+║  IGNIS:         9d ago                                           ║
 ║  Truth:         green-code-no-go-launch                          ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

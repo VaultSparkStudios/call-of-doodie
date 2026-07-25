@@ -19,6 +19,15 @@ describe("buildLocalBalanceLab", () => {
     expect(lab.inspected.pressureRuns).toBe(2);
   });
 
+  it("surfaces repeated final-damage patterns without claiming causality", () => {
+    const damageReceipt = { schemaVersion: "damage-sequence-v1", finishStyle: "burst" };
+    const lab = buildLocalBalanceLab({ runHistory: [{ wave: 5, damageReceipt }, { wave: 8, damageReceipt }] });
+    const insight = lab.insights.find((entry) => entry.id === "damage_finish_pattern");
+    expect(insight?.title).toBe("Repeated burst finish");
+    expect(insight?.detail).toContain("does not establish unrecorded causality");
+    expect(lab.inspected.damageRuns).toBe(2);
+  });
+
   it("detects repeated killer pressure", () => {
     const lab = buildLocalBalanceLab({
       career: { recentDeathsByEnemy: [{ t: 4 }, { t: 4 }, { t: 4 }] },

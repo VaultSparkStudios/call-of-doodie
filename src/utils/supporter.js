@@ -1,4 +1,4 @@
-import { supabase } from "../supabase.js";
+import { getSupabaseClient } from "../supabase.js";
 
 const VERIFIED_KEY = "cod-supporter-verification-v2";
 export const SUPPORTER_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -71,16 +71,17 @@ export function supporterVerificationStatus(callsign, storage = globalThis.local
 }
 
 export async function verifySupporterCallsign(callsign, {
-  client = supabase,
+  client = undefined,
   storage = globalThis.localStorage,
   now = Date.now,
 } = {}) {
   const normalizedCallsign = normalizeSupporterCallsign(callsign);
   if (!normalizedCallsign) return { status: "missing-callsign", verified: false, callsign: "" };
-  if (!client) return { status: "offline", verified: false, callsign: normalizedCallsign };
+  const resolvedClient = client === undefined ? await getSupabaseClient() : client;
+  if (!resolvedClient) return { status: "offline", verified: false, callsign: normalizedCallsign };
 
   try {
-    const { data, error } = await client
+    const { data, error } = await resolvedClient
       .from("callsign_claims")
       .select("name,supporter")
       .eq("name", normalizedCallsign)

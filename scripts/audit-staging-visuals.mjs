@@ -1,11 +1,18 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/audit-staging-visuals.mjs --url <isolated-preview> [--output <dir>]
+// Captures the full route × theme × viewport matrix and validates human-readable contrast.
+
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "@playwright/test";
 import { compositeColor, contrastRatio, defaultVisualAuditStorage, parseCssColor, summarizeVisualChecks } from "./lib/visual-audit.mjs";
 
 const ROOT = process.cwd();
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/audit-staging-visuals.mjs --url <isolated-preview> [--output <dir>]");
+  process.exit(0);
+}
 const valueAfter = (name) => {
   const inline = process.argv.find((arg) => arg.startsWith(`${name}=`));
   if (inline) return inline.slice(name.length + 1);
@@ -30,6 +37,20 @@ const routes = [
 ];
 const localTarget = /^(localhost|127\.0\.0\.1)$/i.test(new URL(baseUrl).hostname);
 
+async function ensurePrimaryAuditSurface(page, storage) {
+  const action = page.locator('[data-testid="front-door-deploy"]');
+  if (!await action.isVisible().catch(() => false)) {
+    // Some hosted browsers restore a persisted blank profile after the context
+    // init script. Reassert the explicit QA profile and reload; never click
+    // through onboarding, which would audit the game instead of the front door.
+    await page.evaluate((entries) => {
+      for (const [key, value] of Object.entries(entries)) localStorage.setItem(key, value);
+    }, storage);
+    await page.reload({ waitUntil: "networkidle" });
+  }
+  await action.waitFor({ state: "visible" });
+}
+
 fs.mkdirSync(outputDir, { recursive: true });
 const receipt = {
   schemaVersion: "1.0",
@@ -50,7 +71,7 @@ try {
     const page = await defaultContext.newPage();
     const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
     const response = await page.goto(url.href, { waitUntil: "networkidle" });
-    if (route.primary) await page.locator("button").filter({ hasText: /DEPLOY/ }).first().waitFor({ state: "visible" });
+    if (route.primary) await ensurePrimaryAuditSurface(page, defaultVisualAuditStorage());
     else await page.locator("main h1").waitFor({ state: "visible" });
     const state = await page.evaluate(() => ({
       theme: document.documentElement.dataset.codTheme || document.querySelector("[data-theme]")?.getAttribute("data-theme") || null,
@@ -86,7 +107,11 @@ try {
         const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
         url.searchParams.set("theme", theme);
         const response = await page.goto(url.href, { waitUntil: "networkidle" });
-        if (route.primary) await page.locator("button").filter({ hasText: /DEPLOY/ }).first().waitFor({ state: "visible" });
+        if (route.primary) await ensurePrimaryAuditSurface(page, {
+          "cod-theme": theme,
+          "cod-callsign-v1": "VISUAL-QA",
+          "cod-home-v2": "1",
+        });
         else await page.locator("main h1").waitFor({ state: "visible" });
 
         const state = await page.evaluate(({ primary }) => {
@@ -94,7 +119,7 @@ try {
           const body = document.body;
           const toggle = document.querySelector("[data-theme-toggle]");
           const action = primary
-            ? [...document.querySelectorAll("button")].find((button) => /DEPLOY/.test(button.textContent || ""))
+            ? document.querySelector('[data-testid="front-door-deploy"]')
             : document.querySelector("main h1");
           const style = toggle ? getComputedStyle(toggle) : null;
           const rootStyle = getComputedStyle(root);

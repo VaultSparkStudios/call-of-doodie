@@ -1,0 +1,209 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /goal /arc Session 129",
+  "generatedAt": "2026-07-24",
+  "session": 129,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-24",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure",
+    "combinedPriority": 108.3,
+    "top3": [
+      "startup-brief-source-coherence",
+      "final-damage-sequence-receipt",
+      "capability-gated-browser-clients"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Direct current-HEAD inspection, Studio Oracle preverification, production build chunk evidence, canonical doctor JSON, exact public/release checks, GitHub Actions receipts, and live HTTP harnesses. No player, retention, visual, hardware, or production-funnel outcome is inferred.",
+    "specialtyLenses": [
+      "founder-requested infrastructure rubric",
+      "game-loop review",
+      "app release gate",
+      "public web canon"
+    ],
+    "baseline": {
+      "tests": "780/780 across 106 files (Session 129 direct full-suite receipt)",
+      "build": "PASS; initial main chunk 692.37 kB, vendor-data 212.87 kB, vendor-observability 17.90 kB",
+      "doctor": "overallPass true; blockingFailing 0; one control-plane advisory failure",
+      "public": "14-file public contract PASS; live site 7/7; cutover 5/5; security gate PASS with npm audit 0",
+      "release": "NO-GO for SPARKED: physical PWA/gamepad/full-run media, inbound email, scoped analytics, hosted pixel review, publication, production data, and founder approval remain unproven"
+    },
+    "innovationReserve": [
+      "startup-brief-source-coherence",
+      "final-damage-sequence-receipt",
+      "capability-gated-browser-clients"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 88,
+    "sessionEngagement": 89,
+    "retention": 82,
+    "soulFidelity": 94,
+    "evidence": "The live loop has deterministic decision streams, pressure/progression receipts, action-observed onboarding, immediate replay training, and strong post-run coaching. Empirical retention remains unscored beyond design judgment because production funnel and participant evidence are absent.",
+    "prioritizedFindings": [
+      "The final defeat explanation collapses to one likely killer plus aggregate pressure, so a player cannot distinguish a sudden burst from accumulated attrition.",
+      "The front door pays for optional remote-data and observability clients before the player opens a network-backed surface.",
+      "Physical input, install, and full-run media evidence remain genuinely external and must not be replaced by local automation."
+    ],
+    "nextThreeMoves": [
+      "Record a bounded observed final-damage sequence and explain burst versus attrition without causal overclaiming.",
+      "Move optional Supabase and Sentry clients behind capability/interaction boundaries and prove the initial-load delta.",
+      "Preserve the existing hardware and production-data gates until real evidence arrives."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or launch-state promotion; engineering implementation may continue",
+    "green": [
+      "latest ten main-branch GitHub Actions runs inspected are successful",
+      "live shell and typed edge health/HSTS checks pass 7/7",
+      "post-cutover routing passes 5/5",
+      "14-file public contract, footer completeness, proprietary rights, security headers, dependency tree, npm audit, and CANON-029 cost gates pass"
+    ],
+    "red": [
+      "physical PWA, gamepad, and full-run GIF evidence is absent",
+      "inbound on-domain email delivery and project-scoped analytics/Sentry evidence remain unverified",
+      "direct hosted pixel inspection is unavailable because the browser/image host fails Windows credential decryption",
+      "publication, production Lighthouse/funnel evidence, and explicit founder launch approval are absent"
+    ],
+    "auditToolDefect": "The canonical sitemap checker reports 7/10 because it ignores public/<route>/index.html pages even though the local 14-file public contract validates privacy, terms, contact, and IP. This is an upstream checker false negative, not missing project pages."
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "infrastructure / observability / process truth",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 34.8,
+      "slug": "startup-brief-source-coherence",
+      "title": "Make the startup brief a self-validating projection of current project truth instead of an ordered dump of historical receipts.",
+      "status": "shipped",
+      "why": "PROJECT_STATUS.testingSurfaces is append-only, while renderTestItNow slices the first eight entries; the live brief therefore shows 685/685 as the Unit tests target while the same brief and PROJECT_STATUS report 737/737. The cost tile can also render a red alarm in modelPlanMode even though the founder contract says Max Plan cost is notional and non-alarming.",
+      "recipe": "Add a pure testing-surface selector that keeps stable endpoint classes but chooses the newest receipt per volatile class, prioritizes current status tests/deploy evidence, and preserves explicit history outside the eight-row brief. Add a plan-aware cost presenter that never alarms on flat-rate Max Plan notional values. Extend brief validation with source-coherence assertions for test counts, selected surfaces, cost semantics, and profile metadata; then regenerate and exact-test the brief.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Select the newest tests receipt and neutralize Max Plan cost alarms." },
+        "L2": { "effortHours": 2.5, "recipe": "Create pure surface/cost presenters with unit tests and integrate the renderer." },
+        "L3": { "effortHours": 4, "recipe": "Add cross-source brief validation, duplicate/staleness invariants, explicit provenance, regression fixtures, and regenerate the canonical brief." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "feedback / engagement / replay intelligence",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 10,
+      "priority": 30.0,
+      "slug": "final-damage-sequence-receipt",
+      "title": "Turn the last seconds of a run into a bounded damage-sequence receipt that explains observed burst versus attrition.",
+      "status": "shipped",
+      "why": "Current death handling records one likely killer and the pressure arc but does not retain hit timing, damage class, health transition, or the final multi-source sequence. That makes the next-run coaching less actionable and hides whether the player was deleted by a burst, chipped down, or crossed a hazard while pressured.",
+      "recipe": "Create a pure fixed-memory damage-sequence recorder and finalizer; route every player-damage path through one observed-damage boundary without changing damage math, invulnerability, random-number draws, or controller/input behavior. Persist only sanitized bounded facts in run history, derive burst/attrition/mixed labels from explicit frame/health thresholds, surface one plain-language DeathScreen timeline plus a Balance Lab aggregate, and cover every damage class with invariant tests.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Define the bounded recorder/finalizer and exact burst/attrition tests." },
+        "L2": { "effortHours": 3.5, "recipe": "Wire projectile, contact, boss, hazard, and mine damage paths through the receipt boundary and persist it." },
+        "L3": { "effortHours": 6, "recipe": "Add player-facing timeline, Balance Lab aggregation, migration-safe normalization, accessibility copy, and launch/replay regression coverage." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "performance / architecture / capital efficiency",
+      "effortHours": 5,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 28.5,
+      "slug": "capability-gated-browser-clients",
+      "title": "Stop charging every first visit for optional Supabase and Sentry clients before a network-backed action needs them.",
+      "status": "shipped",
+      "why": "The production build proves a 212.87 kB vendor-data chunk and 17.90 kB vendor-observability chunk. src/supabase.js and src/main.jsx import both clients eagerly even though Sentry is unset and most of the initial homepage/game loop is local-first and cost-neutral.",
+      "recipe": "Replace the eager Supabase singleton with a memoized async getSupabaseClient() boundary and update every network-backed call site while preserving synchronous local storage APIs and offline fallback. Dynamically import Sentry only when a DSN exists. Add race/failure tests, ensure one client instance under concurrency, keep MenuScreen presence cleanup correct, and assert the production manifest no longer statically imports either optional vendor from the entry chunk; record exact raw/gzip deltas.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Dynamically import Sentry behind VITE_SENTRY_DSN." },
+        "L2": { "effortHours": 3, "recipe": "Add a memoized async Supabase loader and migrate storage/supporter call sites." },
+        "L3": { "effortHours": 5, "recipe": "Cover concurrency/failure/offline semantics, lazy presence teardown, build-manifest assertions, and measured entry-load deltas." }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "BOLT",
+      "axis": "ecosystem coherence / release automation",
+      "effortHours": 1,
+      "impact": 6,
+      "innovation": 7,
+      "priority": 15.0,
+      "slug": "upstream-release-truth-cargo",
+      "title": "Route exact evidence for the canonical sitemap path blind spot and stale registry staging/profile fields through Studio Ark.",
+      "status": "shipped",
+      "why": "The canonical sitemap checker ignores directory-index legal/contact/IP pages and falsely scores 7/10. The authoritative registry still says github-pages staging, an obsolete VaultSpark URL, and an old marketing focus while project-local truth says Cloudflare Pages and the canonical .wtf domain. Editing the sibling control plane from this repo is forbidden.",
+      "recipe": "Ship one signed repo-question/pattern-share cargo to studio-ops containing exact current file paths, checker output, local public-contract proof, registry field diffs, and requested acceptance checks. Record the cargo ID and keep this repo's release claim NO-GO until the control plane acknowledges the correction.",
+      "ladder": {
+        "L1": { "effortHours": 0.25, "recipe": "Ship the checker false-negative evidence." },
+        "L2": { "effortHours": 0.5, "recipe": "Include registry staging/runtime/focus drift and exact desired values." },
+        "L3": { "effortHours": 1, "recipe": "Add deterministic acceptance commands, cargo receipt tracking, and a local no-fabrication release note." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "full-physics-replay-hash-chain",
+      "reason": "False/newness premise rejected: current replay utilities already ship deterministic state/combat/contact-enemy checkpoints, named random streams, command digests, browser-edge fixtures, and explicit advisory scope. A new hash chain would duplicate evidence without physics parity."
+    },
+    {
+      "slug": "home-v1-retirement",
+      "reason": "Verified real but production Lighthouse and 48-hour funnel evidence remain absent; deleting the fallback would fabricate the release gate."
+    },
+    {
+      "slug": "auth-membership-build",
+      "reason": "A product decision is still intentionally open; implementing Supabase Auth/Obelisk membership without founder demand would expand product scope rather than fix a verified defect."
+    },
+    {
+      "slug": "visual-theme-pass",
+      "reason": "Direct hosted pixel inspection is unavailable because the browser/image host fails Windows CryptUnprotectData. Existing real captures and automated visual matrices remain evidence, but no AI visual verdict is claimed."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "startup-brief-source-coherence",
+      "status": "shipped",
+      "outcome": "The brief selects current volatile receipts, validates source coherence, and renders flat-rate Max Plan usage as informational rather than alarming.",
+      "verification": "5 focused tests; rendered brief reports 780/780 current tests; format validator and protocol drift pass."
+    },
+    {
+      "slug": "capability-gated-browser-clients",
+      "status": "shipped",
+      "outcome": "Supabase is a memoized retry-safe interaction boundary and Sentry loads only when a DSN exists; neither optional vendor is statically preloaded.",
+      "verification": "Entry boundary PASS with one React preload; removed 230.77 kB raw / 61.74 kB gzip of optional baseline preloads; loader/storage/menu tests pass."
+    },
+    {
+      "slug": "final-damage-sequence-receipt",
+      "status": "shipped",
+      "outcome": "Projectile, contact, boss, hazard, and mine damage now feed a bounded observed receipt; DeathScreen and Balance Lab distinguish burst, attrition, and mixed finishes without claiming causality.",
+      "verification": "20 focused damage/run-session/balance tests; full suite 780/780; deterministic replay fixtures 8/8."
+    },
+    {
+      "slug": "upstream-release-truth-cargo",
+      "status": "shipped",
+      "outcome": "Queued canonical Ark repo-question with exact directory-index sitemap false-negative and stale registry URL/staging evidence; no sibling tree was edited.",
+      "verification": "Local Ark outbox receipt generated 2026-07-24T09:09:17.777Z; delivery is not fabricated."
+    },
+    {
+      "slug": "second-order-saturation",
+      "status": "shipped",
+      "outcome": "Five expansion waves closed 19 operator-script usage/test gaps with side-effect-free help/check surfaces and executable smoke evidence.",
+      "verification": "26/26 operator smoke checks; regenerated innovation pack returns 0 ranked candidates."
+    },
+    {
+      "slug": "closeout-discovered-root-fixes",
+      "status": "shipped",
+      "outcome": "Pinned trusted PostCSS 8.5.22 to close GHSA-r28c-9q8g-f849 and made the hosted visual audit recover an explicit QA profile using a stable primary-action contract.",
+      "verification": "npm audit 0; Obelisk APPROVE 86/100 plus registry provenance; isolated staging 7/7 runtime and 255/255 visual checks."
+    }
+  ]
+}

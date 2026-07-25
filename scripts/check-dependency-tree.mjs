@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/check-dependency-tree.mjs [--json]
+// Verifies the installed dependency tree without modifying package state.
+
 import { runDependencyTreeCheck } from "./lib/dependency-tree.mjs";
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/check-dependency-tree.mjs [--json]");
+  process.exit(0);
+}
 
 const jsonMode = process.argv.includes("--json");
 const result = runDependencyTreeCheck(process.cwd());
@@ -16,4 +24,3 @@ if (jsonMode) {
 }
 
 process.exit(result.ok ? 0 : 1);
-

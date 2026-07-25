@@ -708,3 +708,21 @@ Rationale: Character art earns its cost by improving combat realization. Keeping
 Decision: Replay Training is an immediate guided-play action. Install and local-save evidence lives under one expandable Device & Save surface with plain-language explanations and an actionable save test; raw readiness fractions are not player navigation.
 
 Rationale: An unexplained status receipt is not a control. The homepage should organize play, tools, navigation, and device state by player intent.
+
+## 2026-07-24 — Session 129 — Optional remote clients are interaction costs
+
+Decision: Supabase and Sentry load only when a network-backed surface or configured observability capability needs them. Local storage, guest play, and the first game frame remain synchronous/local-first.
+
+Rationale: A package being installed does not make it part of every visitor's critical path. Memoized retry-safe boundaries preserve remote behavior while keeping cost-neutral guest play honest.
+
+## 2026-07-24 — Session 129 — Final-damage receipts describe a window, not a cause
+
+Decision: Persist at most twelve sanitized damage segments from the final six seconds and classify the observed shape as burst, attrition, or mixed using explicit health/frame thresholds. Do not infer unrecorded causality or change damage/invulnerability math.
+
+Rationale: A likely killer plus aggregate pressure is insufficient coaching evidence, but a bounded observed timeline can explain what happened without pretending to reconstruct the whole run.
+
+## 2026-07-24 — Session 129 — Operational scripts expose safe inspection surfaces
+
+Decision: Operational entrypoints publish a leading Usage contract and a side-effect-free `--help`/`--check`/listing surface where applicable; shared smoke coverage may prove several scripts when it names each target directly.
+
+Rationale: Discoverability and testability should not require triggering a deploy, browser, write, or sibling control-plane action.

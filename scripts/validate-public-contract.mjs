@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/validate-public-contract.mjs [--json]
+// Validates the complete public-safe static contract without network access.
+
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -9,6 +12,11 @@ const root = process.cwd();
 const jsonMode = process.argv.includes("--json");
 const errors = [];
 const warnings = [];
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/validate-public-contract.mjs [--json]");
+  process.exit(0);
+}
 
 function relative(...parts) {
   return path.join(...parts);

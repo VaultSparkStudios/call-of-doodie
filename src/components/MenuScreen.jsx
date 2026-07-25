@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, lazy } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent, countIncompleteMissions, isMissionCompleted } from "../storage.js";
-import { supabase } from "../supabase.js";
+import { getSupabaseClient } from "../supabase.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
@@ -89,43 +89,47 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
   // ── Live player count via Supabase Realtime presence ──────────────────────
   useEffect(() => {
-    if (!supabase) return;
     if (!canUseRealtimePresence()) {
       setOnlinePlayers(null);
       return;
     }
 
     let channel = null;
+    let supabase = null;
     let disposed = false;
 
-    try {
-      channel = supabase.channel("cod-presence", {
-        config: { presence: { key: Math.random().toString(36).slice(2) } },
-      });
+    void getSupabaseClient().then((client) => {
+      if (!client || disposed) return;
+      supabase = client;
+      try {
+        channel = supabase.channel("cod-presence", {
+          config: { presence: { key: Math.random().toString(36).slice(2) } },
+        });
 
-      channel
-        .on("presence", { event: "sync" }, () => {
-          if (disposed) return;
-          const state = channel.presenceState();
-          setOnlinePlayers(Object.keys(state).length);
-        })
-        .subscribe(async (status) => {
-          if (disposed) return;
-          if (status === "SUBSCRIBED") {
-            try {
-              await channel.track({ t: Date.now() });
-            } catch (error) {
-              console.warn("[MenuScreen] Presence tracking unavailable:", error);
+        channel
+          .on("presence", { event: "sync" }, () => {
+            if (disposed) return;
+            const state = channel.presenceState();
+            setOnlinePlayers(Object.keys(state).length);
+          })
+          .subscribe(async (status) => {
+            if (disposed) return;
+            if (status === "SUBSCRIBED") {
+              try {
+                await channel.track({ t: Date.now() });
+              } catch (error) {
+                console.warn("[MenuScreen] Presence tracking unavailable:", error);
+                setOnlinePlayers(null);
+              }
+            } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
               setOnlinePlayers(null);
             }
-          } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
-            setOnlinePlayers(null);
-          }
-        });
-    } catch (error) {
-      console.warn("[MenuScreen] Presence subscription unavailable:", error);
-      setOnlinePlayers(null);
-    }
+          });
+      } catch (error) {
+        console.warn("[MenuScreen] Presence subscription unavailable:", error);
+        setOnlinePlayers(null);
+      }
+    });
 
     return () => {
       disposed = true;

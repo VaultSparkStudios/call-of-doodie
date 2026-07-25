@@ -20,6 +20,7 @@ import { fileURLToPath } from 'url';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { normalizeContextMeterView } from './lib/context-meter-view.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
+import { presentCostSignal, selectCurrentTestingSurfaces } from './lib/brief-evidence.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
@@ -30,6 +31,11 @@ import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
 import { validateSilSession } from './lib/sil-history.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
+
+if (process.argv.includes('--help')) {
+  console.log('Usage: node scripts/render-startup-brief.mjs [--v5]');
+  process.exit(0);
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -645,11 +651,9 @@ try {
   const ledEntries = readEntries(ledgerPath);
   if (ledEntries.length > 0) {
     const v = evaluateCostAnomaly(ledEntries);
-    sigCost = v.sig;
-    const realPart = `real $${v.realMetered7d.toFixed(2)}/7d`;
-    costDetail = v.notionalNote
-      ? `${realPart} · ${v.notionalNote}`
-      : `${realPart} · ${v.reasons[0] || 'normal'}`;
+    const presented = presentCostSignal(v, { modelPlanMode: status.modelPlanMode === true });
+    sigCost = presented.sig;
+    costDetail = presented.detail;
   }
 } catch { /* best-effort */ }
 
@@ -1137,7 +1141,10 @@ const lines = [
   }),
   ``,
   ...(Array.isArray(status.testingSurfaces) && status.testingSurfaces.length
-    ? [renderTestItNow({ name: status.name || 'Studio Ops', testingSurfaces: status.testingSurfaces }), ``]
+    ? [renderTestItNow({
+        name: status.name || 'Studio Ops',
+        testingSurfaces: selectCurrentTestingSurfaces(status.testingSurfaces, status),
+      }), ``]
     : []),
   // S126 audit #28: PROJECT_PROFILE lens header
   renderProfileLensHeader(),

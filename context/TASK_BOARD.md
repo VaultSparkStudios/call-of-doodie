@@ -16,6 +16,14 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:2] **DONE S129** Startup-brief source coherence — current testing surfaces and flat-rate Max Plan semantics are selected and cross-source validated instead of inherited from stale append order.
+- [x] [SIL:2] **DONE S129** Capability-gated optional clients — memoized retry-safe Supabase and DSN-gated Sentry boundaries remove both optional vendors from initial static preloads.
+- [x] [SIL:2] **DONE S129** Final-damage sequence receipt — all player-damage classes feed one bounded observed timeline; DeathScreen and Balance Lab surface burst/attrition/mixed patterns without claiming causality.
+- [x] [SIL:1] **DONE S129** Upstream release-truth cargo — directory-index sitemap false-negative and stale registry runtime/staging fields were queued to Studio Ops through Ark; no sibling tree edit or delivery claim.
+- [x] [SIL:2] **DONE S129 second-order** Operator-script contract saturation — nineteen scripts gained side-effect-free usage/check surfaces and shared executable smoke evidence; refreshed innovation pack is empty.
+- [x] [SIL:1] **DONE S129 closeout** Security and hosted-visual root fixes — trusted PostCSS 8.5.22 closes the live advisory; isolated staging passes runtime 7/7 and hosted visual automation 255/255 with a stable primary-action contract.
+- [x] [AUDIT WIN S129] Full physics replay hash-chain proposal dropped after live code proved deterministic state/combat/contact slices, named streams, digests, fixtures, and appropriately advisory scope already exist.
+
 - [x] [SIL:3] **DONE S128 founder follow-up** Runtime character realization — two proprietary transparent, optimized character sprites now drive the live player/Karen canvas layers with procedural fallbacks, deterministic export, manifest provenance, and refreshed desktop/mobile captures.
 - [x] [SIL:2] **DONE S128 founder follow-up** Player-first homepage organization — removed internal asset showcase cards, separated Quick Play from Player Tools, exposed Player Hub navigation by default, replaced unexplained PWA fractions with plain-language device state, and made local-save health an actionable test.
 - [x] [SIL:2] **DONE S128 founder follow-up** Replay Training contract — the button now clears observed evidence, bypasses the unrelated pre-run draft once, and immediately launches guided training instead of silently mutating storage.

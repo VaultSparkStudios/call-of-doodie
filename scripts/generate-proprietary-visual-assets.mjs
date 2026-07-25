@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/generate-proprietary-visual-assets.mjs
+// Deterministically regenerates VaultSpark-proprietary source and runtime art.
+
 import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
@@ -8,6 +11,11 @@ const ROOT = process.cwd();
 const sourceDir = path.join(ROOT, "assets", "source", "signature-pack");
 const runtimeDir = path.join(ROOT, "public", "visual-assets");
 const runtimeSpriteSourceDir = path.join(ROOT, "assets", "source", "runtime-sprites");
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/generate-proprietary-visual-assets.mjs");
+  process.exit(0);
+}
 
 fs.mkdirSync(sourceDir, { recursive: true });
 fs.mkdirSync(runtimeDir, { recursive: true });

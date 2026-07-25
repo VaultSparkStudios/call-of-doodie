@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 128 shipped four L3 evidence contracts plus seven second-order/founder refinements across playtest receipts, pressure/progression observability, agent mechanics, working Replay Training, player-first homepage organization, and runtime operative/Karen art; 737/737 tests green.",
+  "currentFocus": "Session 129 shipped four live-premise improvements, nineteen second-order operator contracts, and four closeout root fixes across source-coherent startup truth, lazy optional clients, observed final-damage feedback, security, and hosted staging; 780/780 tests green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -84,6 +84,22 @@
       "status": "green",
       "type": "local-browser-capture",
       "command": "Five real Chromium desktop/mobile captures refreshed; no render failure. Direct host pixel viewer unavailable (CryptUnprotectData), so pixel-perfect review is unclaimed."
+    },
+    {
+      "status": "green",
+      "url": "https://session-129-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 129 direct-upload preview · typed runtime 7/7 · hosted visual route/theme/viewport matrix 255/255"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 129 — 780/780 across 106 files; strict lint; production build; dependency/public/protocol/security/replay/media/assets gates; npm audit 0"
+    },
+    {
+      "status": "green",
+      "type": "production-smoke",
+      "command": "Session 129 — live 7/7; post-cutover 5/5; launch surfaces and shared leaderboard collision checks pass"
     }
   ],
   "blockers": [
@@ -93,25 +109,25 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-24",
+  "lastUpdated": "2026-07-25",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
-  "truthAuditLastRun": "2026-07-23",
+  "truthAuditLastRun": "2026-07-24",
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 128,
+  "silSession": 129,
   "silScore": 1000,
   "silAvg3": 1000,
   "silVelocity": 10,
   "silDebt": "decreasing",
-  "silLastSession": "2026-07-23",
-  "currentSession": 128,
+  "silLastSession": "2026-07-24",
+  "currentSession": 129,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 737,
-  "testsTotal": 737,
+  "testsPassing": 780,
+  "testsTotal": 780,
   "entropyScore": 0.201,
   "entropyLastComputed": "2026-07-22",
   "silRubricVersion": "3.0",
@@ -142,17 +158,17 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "doctorScore": {
-    "date": "2026-07-24",
-    "ranAt": "2026-07-24T02:14:53.690Z",
+    "date": "2026-07-25",
+    "ranAt": "2026-07-25T08:11:06.164Z",
     "overallPass": true,
-    "passing": 116,
-    "warning": 35,
+    "passing": 110,
+    "warning": 41,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
     "ran": 152,
     "total": 154,
-    "score": 76
+    "score": 72
   }
 }

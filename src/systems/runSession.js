@@ -52,6 +52,7 @@ export function createRunHistoryEntry({
   integrityReceipt = null,
   performanceReceipt = null,
   pressureReceipt = null,
+  damageReceipt = null,
 } = {}) {
   const entry = {
     score,
@@ -140,6 +141,26 @@ export function createRunHistoryEntry({
             pressureRatio: Math.max(0, Math.min(9.99, Number(transition.pressureRatio) || 0)),
           }))
         : [],
+    };
+  }
+  if (damageReceipt?.schemaVersion === "damage-sequence-v1") {
+    entry.damageReceipt = {
+      schemaVersion: "damage-sequence-v1",
+      claim: "observed-final-damage-window-not-causality",
+      windowFrames: Math.min(360, Math.max(1, Math.floor(Number(damageReceipt.windowFrames) || 360))),
+      finalFrame: Math.max(0, Math.floor(Number(damageReceipt.finalFrame) || 0)),
+      durationFrames: Math.min(360, Math.max(0, Math.floor(Number(damageReceipt.durationFrames) || 0))),
+      totalDamage: Math.max(0, Number(damageReceipt.totalDamage) || 0),
+      finalTwoSecondDamage: Math.max(0, Number(damageReceipt.finalTwoSecondDamage) || 0),
+      hitCount: Math.min(999, Math.max(0, Math.floor(Number(damageReceipt.hitCount) || 0))),
+      finishStyle: ["burst", "attrition", "mixed"].includes(damageReceipt.finishStyle) ? damageReceipt.finishStyle : "mixed",
+      topSource: damageReceipt.topSource ? {
+        sourceType: Number.isFinite(Number(damageReceipt.topSource.sourceType)) ? Number(damageReceipt.topSource.sourceType) : null,
+        sourceName: String(damageReceipt.topSource.sourceName || "Unknown source").slice(0, 40),
+        damage: Math.max(0, Number(damageReceipt.topSource.damage) || 0),
+        hits: Math.min(999, Math.max(0, Math.floor(Number(damageReceipt.topSource.hits) || 0))),
+      } : null,
+      events: Array.isArray(damageReceipt.events) ? damageReceipt.events.slice(-12) : [],
     };
   }
   return entry;

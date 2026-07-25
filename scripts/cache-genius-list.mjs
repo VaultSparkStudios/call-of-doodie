@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/cache-genius-list.mjs [--write|--check|--brief] [--top N]
+// Maintains the bounded repo-local Unified Genius List cache.
+
 import fs from "node:fs";
 import path from "node:path";
 
@@ -12,6 +15,11 @@ const topArg = process.argv.find((arg) => arg.startsWith("--top="));
 const topIndex = process.argv.indexOf("--top");
 const top = Number(topArg?.split("=")[1] || (topIndex >= 0 ? process.argv[topIndex + 1] : null) || 5);
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/cache-genius-list.mjs [--write|--check|--brief] [--top N]");
+  process.exit(0);
+}
 
 function readSection(file, heading) {
   if (!fs.existsSync(file)) return "";

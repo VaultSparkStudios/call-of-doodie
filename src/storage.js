@@ -1,5 +1,5 @@
 // ===== LEADERBOARD =====
-import { supabase, supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUid } from "./supabase.js";
+import { supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUid, getSupabaseClient } from "./supabase.js";
 import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
@@ -45,9 +45,11 @@ export { getAccountLevel } from "./utils/progressionCurve.js";
 //     )
 //   );
 export async function claimCallsign(name) {
-  if (!supabase || !name) return false;
+  if (!name) return false;
   try {
-    const uid = await getAuthUid();
+    const supabase = await getSupabaseClient();
+    if (!supabase) return false;
+    const uid = await getAuthUid(supabase);
     if (!uid) return false;
     const { error } = await supabase
       .from("callsign_claims")
@@ -147,7 +149,8 @@ async function getFunctionHeaders() {
     "Content-Type": "application/json",
   };
   try {
-    const { data: { session } } = await supabase.auth.getSession();
+    const supabase = await getSupabaseClient();
+    const { data: { session } } = await supabase?.auth.getSession() || { data: { session: null } };
     if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
   } catch {}
   return headers;
@@ -171,6 +174,7 @@ async function invokeEdgeFunction(name, body) {
 }
 
 export async function loadLeaderboard(offset = 0, limit = 50) {
+  const supabase = await getSupabaseClient();
   if (supabase) {
     try {
       const { data, error } = await supabase
@@ -202,6 +206,7 @@ const WEEKLY_TOP_GHOST_KEY = "cod-weekly-top-ghost-v1";
  */
 export async function loadTopGhosts(mode = "standard", difficulty = "normal") {
   const cacheKey = `${TOP_GHOSTS_KEY}-${mode}-${difficulty}`;
+  const supabase = await getSupabaseClient();
   if (supabase) {
     try {
       const modeFilter = mode === "standard" ? null : mode;
@@ -250,6 +255,7 @@ export async function loadWeeklyTopGhost(mode = "standard", difficulty = "normal
     if (cached?.cachedAt && now - cached.cachedAt < ttlMs && cached.ghost) return cached.ghost;
   } catch {}
 
+  const supabase = await getSupabaseClient();
   if (supabase) {
     try {
       const modeFilter = mode === "standard" ? null : mode;
@@ -328,7 +334,7 @@ export async function saveToLeaderboard(entry) {
   const rawRunToken = typeof entry?.runToken === "string" ? entry.runToken.trim() : "";
   const safeEntry = normalizeLeaderboardEntry({ ...entry, supporter: isSupporter(entry?.name) });
 
-  if (supabase && supabaseUrl && supabaseAnonKey) {
+  if (supabaseUrl && supabaseAnonKey) {
     try {
       const response = await invokeEdgeFunction("submit-score", buildSubmitScorePayload(
         safeEntry,
@@ -375,7 +381,7 @@ export async function saveToLeaderboard(entry) {
 }
 
 export async function issueRunToken({ mode = null, difficulty = "normal", seed = null, starterLoadout = "standard" } = {}) {
-  if (!supabase || !supabaseUrl || !supabaseAnonKey) return null;
+  if (!supabaseUrl || !supabaseAnonKey) return null;
   try {
     const response = await invokeEdgeFunction("issue-run-token", {
       mode: VALID_MODES.has(mode) ? mode : null,
@@ -401,6 +407,7 @@ export async function issueRunToken({ mode = null, difficulty = "normal", seed =
 
 /** Fetch today's top 50 entries (since midnight UTC). Optional mode + difficulty filters. */
 export async function loadLeaderboardToday(mode = null, difficulty = null) {
+  const supabase = await getSupabaseClient();
   if (!supabase) return [];
   try {
     const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
@@ -423,6 +430,7 @@ export async function loadLeaderboardToday(mode = null, difficulty = null) {
 
 /** Today's #1 daily-challenge entry (the 👑 Crown holder). Returns null if none. */
 export async function getDailyChampion() {
+  const supabase = await getSupabaseClient();
   if (!supabase) return null;
   try {
     const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
@@ -445,6 +453,7 @@ export async function getDailyChampion() {
 
 /** Search leaderboard by player name (case-insensitive partial match). */
 export async function searchLeaderboard(nameQuery) {
+  const supabase = await getSupabaseClient();
   if (!supabase || !nameQuery.trim()) return [];
   try {
     const { data, error } = await supabase
@@ -463,6 +472,7 @@ export async function searchLeaderboard(nameQuery) {
 
 /** Returns the global rank for a given score (1-based). */
 export async function getPlayerGlobalRank(score, mode = null, time = null) {
+  const supabase = await getSupabaseClient();
   if (!supabase || score == null) return null;
   try {
     if (mode === "speedrun" && time) {

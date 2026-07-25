@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/ops.mjs <command> [args...]
+// Project-local command router; `help` is always side-effect free.
+
 import { spawnSync } from "./lib/safe-spawn.mjs";
 import { dedupeInnovationCandidates } from "./lib/innovation-candidates.mjs";
 import { syncDoctorScore } from "./lib/doctor-score-sync.mjs";
@@ -233,6 +236,7 @@ switch (command) {
     runNode(path.join(ROOT, "..", "vaultspark-studio-ops", "scripts", "rescore-ignis.mjs"), args);
     break;
   case "help":
+  case "--help":
   case undefined:
     printHelp();
     break;

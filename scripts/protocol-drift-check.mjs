@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/protocol-drift-check.mjs [--json]
+// Inventories required protocol helpers and canonical section anchors.
+
 import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
 const JSON_MODE = process.argv.includes("--json");
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/protocol-drift-check.mjs [--json]");
+  process.exit(0);
+}
 
 const helpers = [
   { rel: "scripts/set-active-skill.mjs", level: "required", purpose: "records active Studio OS skill" },

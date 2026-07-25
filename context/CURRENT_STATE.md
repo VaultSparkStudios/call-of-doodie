@@ -1,3 +1,13 @@
+- Session 129 (2026-07-24) completed the founder-requested continuous `/start -> /audit -> /implement -> innovation saturation -> /closeout` arc from synchronized `main`.
+- Runtime truth — the startup brief now selects current volatile receipts, self-validates test/cost provenance, and treats flat-rate Max Plan usage as informational rather than alarming.
+- Performance truth — optional Supabase and Sentry clients are interaction/capability gated; the entry document preloads only React and avoids 230.77 kB raw / 61.74 kB gzip of optional baseline vendors.
+- Combat-feedback truth — every projectile/contact/boss/hazard/mine damage path feeds a fixed-memory observed receipt; DeathScreen and Balance Lab distinguish burst, attrition, and mixed finishes without causal overclaiming.
+- Saturation truth — all four live-premise audit items plus nineteen second-order operator-script gaps and four closeout-discovered root fixes shipped; a fresh innovation pack reports zero candidates.
+- Security truth — the newly disclosed PostCSS path-disclosure advisory is closed by trust-reviewed `8.5.22`; npm audit reports zero vulnerabilities.
+- Staging truth — `https://session-129-staging.call-of-doodie.pages.dev/` passed typed runtime 7/7 and hosted route/theme/viewport automation 255/255 after the harness recovered its explicit QA profile.
+- Ecosystem truth — exact sitemap-checker and stale registry evidence was queued through Studio Ark; sibling files were not edited and delivery is not fabricated.
+- Validation truth — strict lint, 780/780 tests across 106 files, production build, dependency/public/protocol/security/replay/media/assets gates, live/cutover/leaderboard checks, and isolated staging are green.
+- Release truth — engineering is green; SPARKED remains NO-GO pending physical device/full-run media, verified inbound mail, production Lighthouse/funnel data, scoped analytics/Sentry, publication, direct AI pixel review, and founder approval.
 - Session 128 (2026-07-23) completed the founder-requested continuous `/start -> /audit -> /implement -> innovation saturation -> /closeout` arc from synchronized `main`.
 - Evidence loop — opt-in local playtest receipts, bounded pressure arcs, and source-derived progression runway receipts now preserve observed behavior without fabricating balance, causality, or participant outcomes.
 - Dual-audience truth — `gameplay-contract-v1` is generated from live mechanics and exact-validated for agents; the repo-local Oracle now binds premise evidence to this project instead of misreporting valid paths missing.

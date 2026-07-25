@@ -7,7 +7,7 @@ import MenuScreen from "./MenuScreen.jsx";
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 Element.prototype.scrollIntoView = vi.fn();
 
-vi.mock("../supabase.js", () => ({ supabase: null }));
+vi.mock("../supabase.js", () => ({ getSupabaseClient: async () => null }));
 vi.mock("../utils/analytics.js", () => ({
   track: vi.fn(),
 }));

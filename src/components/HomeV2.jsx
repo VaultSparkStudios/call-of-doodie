@@ -597,6 +597,7 @@ export default function HomeV2(props) {
         <div style={deployRow}>
           <button
             onClick={deploy}
+            data-testid="front-door-deploy"
             aria-label={`Deploy — ${selectedMode.label}, ${selectedDiff.label}`}
             style={deployBtn}
           >

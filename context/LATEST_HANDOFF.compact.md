@@ -1,44 +1,45 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 6cddc45a2e62 -->
-<!-- generated-at: 2026-07-24T02:00:52.164Z -->
+<!-- source-hash: a814b9dc984b -->
+<!-- generated-at: 2026-07-25T08:09:21.296Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 128
+SESSION 129 HANDOFF SUMMARY
 
-## Session
-- Session 128; continuous /goal arc from synced main: /start -> /audit -> /implement -> second-order saturation -> /closeout.
+Status
+- Engineering arc complete; Innovation Pack empty. SPARKED remains NO-GO (engineering completion is not launch approval).
 
-## Shipped
-- Four L3 audit items: privacy-safe playtest flight recorder, pressure-arc receipt, deterministic progression runway, source-derived public agent gameplay contract.
-- One audit win: dropped DeathScreen hierarchy rewrite (behavior already existed in live code).
-- Seven second-order/founder refinements: project-bound Oracle evidence, same-band pressure peaks, hot-path/clipboard truth, progression tier resilience, immediate Replay Training launch, player-first homepage, real runtime operative/Karen art.
+Shipped This Session
+- Startup-brief source coherence.
+- Capability-gated Supabase/Sentry.
+- Bounded final-damage sequence receipts.
+- Exact upstream release-truth Ark cargo.
+- Closed 19 operator-script gaps and 4 closeout root fixes.
+- Rejected duplicate full-physics replay-hash proposal (existing deterministic slices/fixtures already satisfy honest scope).
 
-## Current Intent
-- Genius List exhausted for honest repo-executable work; remaining items require external gates (credentials, community decision, production traffic, publication, hardware/media, founder approval).
-- SPARKED remains NO-GO; engineering completion is not launch approval.
+Current Intent
+- Preserve evidence-gated release posture. Pick next repo-owned improvement only when its premise is live. Agent-owned frontier currently exhausted.
 
-## Now Bucket (top 3)
-- Physical hardware: verify one real PWA install/relaunch, controller/browser pass, full-run GIF encode/play/share.
+Validation
+- lint:strict PASS; npm test 780/780 (106 files); production build PASS.
+- All contracts PASS (dependency/public/protocol/security/media/asset/replay); npm audit zero; PostCSS 8.5.22 override trust-reviewed.
+- Operator smoke 27/27; live 7/7; cutover 5/5; staged visual 255/255; leaderboard collision PASS.
+- Doctor: overallPass true, blockingFailing 0, one portfolio advisory. Closeout doctor must preserve zero blocking failures.
+
+Now Bucket (top 3)
+- Hardware: verify one real PWA install/relaunch, controller/browser pass, full GIF encode/play/share flow.
 - Production traffic + scoped analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1.
-- Pre-SPARKED: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, hosted pixel review, founder approval.
+- Pre-SPARKED gate: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, direct AI pixel review, founder approval.
 
-## Blockers (top 3)
-- Isolated staging unclaimed: cloudflare.deploy MISSING locally; direct-main/no-branch workflow offers no non-production preview path.
-- No physical hardware for PWA/controller/GIF verification.
-- No production traffic or scoped analytics for LCP/CLS/funnel evidence.
+Blockers (top 3)
+- Direct AI pixel review unclaimed: image viewer fails Windows CryptUnprotectData despite valid local screenshots.
+- No physical hardware available for PWA/controller/GIF verification.
+- No production traffic or scoped analytics for performance/funnel evidence.
 
-## Human-Blocked (with age)
-- Founder launch approval (SPARKED) — open since S121+ (7+ sessions).
-- Analytics/Sentry credentials + project scope — open since S121+ (7+ sessions).
-- Itch/community publication decision — open since S121+ (7+ sessions).
-- Physical device/media QA — open since S121+ (7+ sessions).
+Human-Blocked Items
+- Founder launch approval (SPARKED) — pending, open since Session 126+.
+- Publication readiness (Itch/community) — pending, open since Session 127+.
+- Analytics/Sentry project scoping and inbound email delivery verification — pending, open since Session 127+.
 
-## Validation Snapshot
-- lint:strict PASS; npm test 737/737 (102 files); production build PASS.
-- Contracts (dependency/public/protocol/security/media/asset) PASS; npm audit 0; supply-chain scan clean.
-- Founder follow-up + second-order 37/37; Playwright E2E 2/2; five Chromium launch captures refreshed.
-- Doctor: overallPass true, blockingFailing 0, one portfolio advisory. Closeout must preserve zero blocking failures.
-
-## Next-Session Pointer
-- Start fresh /goal arc from synced main; all agent-owned work exhausted, so pursue new repo-local audit items or await external/founder gates without fabricating evidence.
+Next Session Pointer
+- Advance only a live-premise repo item; otherwise pursue human/hardware/data gates above—do not treat green engineering as launch approval.

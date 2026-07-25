@@ -1,19 +1,39 @@
-import { createClient } from "@supabase/supabase-js";
-
 export const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 export const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// If env vars aren't set (e.g. local dev without .env.local), export null
-// and the storage functions fall back to localStorage gracefully.
-export const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey, {
-  realtime: { enabled: false },
-}) : null;
+export function createSupabaseClientLoader({
+  url,
+  anonKey,
+  loadModule = () => import("@supabase/supabase-js"),
+} = {}) {
+  let client = null;
+  let pending = null;
 
-// Returns a stable client-side UUID that persists across sessions.
-// Used as the "user identity" when Supabase anonymous auth is unavailable
-// (e.g. CAPTCHA protection enabled on the project).
-// Module-level cache ensures consistency when localStorage is unavailable
-// (Safari private browsing, strict storage blocking) — prevents issue/submit UID mismatch.
+  return async function loadSupabaseClient() {
+    if (!url || !anonKey) return null;
+    if (client) return client;
+    if (!pending) {
+      pending = loadModule()
+        .then(({ createClient }) => {
+          client = createClient(url, anonKey, { realtime: { enabled: false } });
+          return client;
+        })
+        .catch((error) => {
+          pending = null;
+          console.warn("[supabase] Optional client failed to load:", error?.message || String(error));
+          return null;
+        });
+    }
+    return pending;
+  };
+}
+
+const loadConfiguredClient = createSupabaseClientLoader({ url: supabaseUrl, anonKey: supabaseAnonKey });
+
+export function getSupabaseClient() {
+  return loadConfiguredClient();
+}
+
 let _fallbackUid = null;
 export function getOrCreateClientUid() {
   try {
@@ -28,11 +48,11 @@ export function getOrCreateClientUid() {
   }
 }
 
-// Returns the current session user UID, or null.
-export async function getAuthUid() {
-  if (!supabase) return null;
+export async function getAuthUid(client = null) {
+  const resolvedClient = client || await getSupabaseClient();
+  if (!resolvedClient) return null;
   try {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await resolvedClient.auth.getSession();
     return session?.user?.id || null;
   } catch { return null; }
 }

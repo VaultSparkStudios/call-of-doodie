@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/check-brief-staleness.mjs [--json]
+// Read-only freshness/coherence check; stale briefs intentionally exit nonzero.
+
 import fs from "node:fs";
 import path from "node:path";
 
@@ -7,6 +10,11 @@ const ROOT = process.cwd();
 const BRIEF_PATH = path.join(ROOT, "docs", "STARTUP_BRIEF.md");
 const LOCK_PATH = path.join(ROOT, "context", ".session-lock");
 const JSON_MODE = process.argv.includes("--json");
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/check-brief-staleness.mjs [--json]");
+  process.exit(0);
+}
 
 function readBrief() {
   try {

@@ -904,3 +904,18 @@ Last reviewed: 2026-07-22
 
 Overall status: green engineering closeout; NO-GO SPARKED
 Last reviewed: 2026-07-23
+
+## 2026-07-24 — Session 129 — Startup, optional-client, damage, and closeout truth
+
+- Audit truth — `docs/AUDIT_2026-07-24.json` / `.md` contain four shipped live-premise items, one rejected duplicate replay premise, nineteen second-order operator refinements, and exact closeout root-fix evidence.
+- Startup truth — the brief chooses current volatile receipts and fails source mismatch; flat-rate Max Plan usage is informational and alarms are disabled.
+- Client truth — Supabase/Sentry are absent from entry preloads and load only behind explicit async boundaries; no performance outcome beyond the measured preload graph is claimed.
+- Damage truth — the final sequence records observed health loss/timing/source classes only; labels do not establish unrecorded causality.
+- Security truth — PostCSS 8.5.22 passed package trust and official registry provenance checks; npm audit reports zero vulnerabilities.
+- Staging truth — the current tree passed `https://session-129-staging.call-of-doodie.pages.dev/` runtime 7/7 and hosted visual automation 255/255.
+- Visual truth — screenshots exist and automated readability/overflow/action checks are green; direct AI image inspection remains unclaimed after repeated CryptUnprotectData failures.
+- Ecosystem truth — Ark cargo is queued locally with exact evidence; upstream delivery/correction is not fabricated.
+- Release truth — engineering closeout is green; SPARKED remains NO-GO pending the existing external/device/data/publication/founder evidence.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-24

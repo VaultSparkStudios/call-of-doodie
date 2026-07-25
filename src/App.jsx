@@ -87,6 +87,7 @@ import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/tr
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
 import { createPressureArc, finalizePressureArc, recordPressureSnapshot } from "./systems/pressureArc.js";
+import { applyObservedPlayerDamage, createDamageSequence, finalizeDamageSequence } from "./systems/damageSequence.js";
 import {
   buildWaveTelemetrySnapshot,
   computeWaveThreatRating,
@@ -592,7 +593,7 @@ export default function CallOfDoodie() {
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
-      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, pressureArc: createPressureArc(),
+      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, pressureArc: createPressureArc(), damageSequence: createDamageSequence(),
       precisionStreak: 0,
       _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
@@ -1806,6 +1807,7 @@ export default function CallOfDoodie() {
       integrityReceipt: getRunIntegrityReceipt(gs),
       performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
       pressureReceipt: finalizePressureArc(gs.pressureArc, { deathWave: gs.currentWave }),
+      damageReceipt: finalizeDamageSequence(gs.damageSequence, { maxHealth: gs.player?.maxHealth, finalFrame: frameCountRef.current }),
     }));
     createDeathStudioEvents({
       score: gs.score,
@@ -2952,7 +2954,8 @@ export default function CallOfDoodie() {
         });
         if (hit.hit) {
           eb.life = hit.projectileLife;
-          p.health = hit.health; p.invincible = hit.invincibleFrames; gs.screenShake = hit.screenShake; gs.damageFlash = hit.damageFlash;
+          applyObservedPlayerDamage(gs, { healthAfter: hit.health, frame: frameCountRef.current, kind: "projectile", sourceType: eb.sourceType, sourceName: eb.sourceName || "Enemy projectile" });
+          p.invincible = hit.invincibleFrames; gs.screenShake = hit.screenShake; gs.damageFlash = hit.damageFlash;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(hit.damage), "#FF4444");
@@ -3597,7 +3600,7 @@ export default function CallOfDoodie() {
           const bCount = getBossRangedBurstCount(e);
           for (let bi = 0; bi < bCount; bi++) {
             const angle = pa + (bi - Math.floor(bCount / 2)) * 0.28;
-            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2 });
+            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(angle) * e.projSpeed, vy: Math.sin(angle) * e.projSpeed, life: 90, size: 4, color: e.color, damage: 6 + e.typeIndex * 2, sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || e.name });
           }
         }
       }
@@ -3638,7 +3641,7 @@ export default function CallOfDoodie() {
               gs.screenShake = 15;
               const rentDist = Math.hypot(p.x - e.x, p.y - e.y);
               if (rentDist < 220 && p.invincible <= 0) {
-                p.health -= 25 * (gs._treeArmorMult || 1); p.invincible = 30; gs.damageFlash = 12;
+                applyObservedPlayerDamage(gs, { damage: 25 * (gs._treeArmorMult || 1), frame: frameCountRef.current, kind: "boss", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Landlord"} rent nuke` }); p.invincible = 30; gs.damageFlash = 12;
                 gs.damageThisWave = (gs.damageThisWave || 0) + 1;
                 setHealth(Math.max(0, p.health));
                 addText(gs, p.x, p.y - 30, "-25 RENT DUE!", "#FFD700");
@@ -3707,7 +3710,7 @@ export default function CallOfDoodie() {
             const _brCount = gs.currentWave >= 40 ? 12 : 8;
             for (let _ri = 0; _ri < _brCount; _ri++) {
               const ba = (_ri / _brCount) * Math.PI * 2;
-              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12 });
+              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(ba) * 4.5, vy: Math.sin(ba) * 4.5, life: 120, size: 5, color: "#FF6600", damage: 12, sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} bullet ring` });
             }
             addText(gs, e.x, e.y - 80, "🔥 BULLET RING!", "#FF6600", true);
             addParticles(gs, e.x, e.y, "#FF6600", 14);
@@ -3735,7 +3738,7 @@ export default function CallOfDoodie() {
             if (e.groundSlamRadius > 40 && slamDist > e.groundSlamRadius - 28 && slamDist < e.groundSlamRadius + 18 && p.invincible <= 0) {
               const _slamBase = (gs.currentWave >= 40 ? 25 : 18) * (gs._treeArmorMult || 1);
               const _slamDmg = gs.glassjaw ? Math.round(_slamBase * (gs.glassjawMult || 2)) : _slamBase;
-              p.health -= _slamDmg; p.invincible = 25; gs.damageFlash = 10;
+              applyObservedPlayerDamage(gs, { damage: _slamDmg, frame: frameCountRef.current, kind: "boss", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} ground slam` }); p.invincible = 25; gs.damageFlash = 10;
               gs.damageThisWave = (gs.damageThisWave || 0) + 1;
               setHealth(Math.max(0, p.health));
               addText(gs, p.x, p.y - 30, "-" + _slamDmg + " SLAM!", "#FF4400");
@@ -3775,7 +3778,7 @@ export default function CallOfDoodie() {
           if (e.bulletSprayTimer >= e.bulletSprayCooldown) {
             e.bulletSprayTimer = 0;
             for (let _ang = 0; _ang < Math.PI * 2; _ang += Math.PI / 4) {
-              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, vy: Math.sin(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, damage: 8, life: 60, size: 5, color: "#FF4400" });
+              gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, vy: Math.sin(_ang) * (gs.mutEnemyProjSpeed || 1) * 4, damage: 8, life: 60, size: 5, color: "#FF4400", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Enemy"} bullet spray` });
             }
           }
         }
@@ -3830,7 +3833,7 @@ export default function CallOfDoodie() {
           // Hit player while charging
           if (Math.hypot(p.x - e.x, p.y - e.y) < e.size / 2 + 18 && p.invincible <= 0) {
             let cdmg = 30; if (gs.glassjaw) cdmg *= (gs.glassjawMult || 2); cdmg *= (gs._treeArmorMult || 1);
-            p.health -= cdmg; p.invincible = 35; gs.damageFlash = 12; gs.damageThisWave = (gs.damageThisWave || 0) + 1;
+            applyObservedPlayerDamage(gs, { damage: cdmg, frame: frameCountRef.current, kind: "contact", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Juggernaut"} charge` }); p.invincible = 35; gs.damageFlash = 12; gs.damageThisWave = (gs.damageThisWave || 0) + 1;
             setHealth(Math.max(0, p.health)); addText(gs, p.x, p.y - 30, "-" + Math.floor(cdmg) + " CHARGE!", "#FF4400");
             rumbleGamepad(0.5, 0.8, 200);
             if (p.health <= 0) handlePlayerDeath(gs);
@@ -3914,7 +3917,7 @@ export default function CallOfDoodie() {
           const _pa = Math.atan2(p.y - e.y, p.x - e.x);
           for (let _bi = -1; _bi <= 1; _bi++) {
             const _ang = _pa + _bi * 0.32;
-            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * e.projSpeed, vy: Math.sin(_ang) * e.projSpeed, life: 100, size: 5, color: "#1DA1F2", damage: 8 });
+            gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * e.projSpeed, vy: Math.sin(_ang) * e.projSpeed, life: 100, size: 5, color: "#1DA1F2", damage: 8, sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Enemy"} spread` });
           }
         }
       }
@@ -3952,7 +3955,7 @@ export default function CallOfDoodie() {
               const _baseAng = (_set / 3) * Math.PI * 2;
               for (let _spread = -1; _spread <= 1; _spread++) {
                 const _ang = _baseAng + _spread * 0.3;
-                gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * 5, vy: Math.sin(_ang) * 5, damage: 12, life: 80, size: 5, color: "#FF8800" });
+                gs.enemyBullets.push({ x: e.x, y: e.y, vx: Math.cos(_ang) * 5, vy: Math.sin(_ang) * 5, damage: 12, life: 80, size: 5, color: "#FF8800", sourceType: e.typeIndex, sourceName: `${ENEMY_TYPES[e.typeIndex]?.name || "Boss"} merge conflict` });
               }
             }
           }
@@ -3970,7 +3973,7 @@ export default function CallOfDoodie() {
           if (gs.dyingEnemies.length < MAX_DYING_ANIM)
             gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
-            p.health -= (gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35) * (gs._treeArmorMult || 1); p.invincible = 40; gs.damageFlash = 12;
+            applyObservedPlayerDamage(gs, { damage: (gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35) * (gs._treeArmorMult || 1), frame: frameCountRef.current, kind: "contact", sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || "Kamikaze" }); p.invincible = 40; gs.damageFlash = 12;
             gs.damageThisWave = (gs.damageThisWave || 0) + 1;
             setHealth(Math.max(0, p.health));
             addText(gs, p.x, p.y - 30, "-35 HP", "#FF0000");
@@ -4001,7 +4004,7 @@ export default function CallOfDoodie() {
           let dmg = 10 + e.typeIndex * 5;
           if (gs.glassjaw) dmg *= (gs.glassjawMult || 2);
           dmg *= (gs._treeArmorMult || 1);
-          p.health -= dmg; p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
+          applyObservedPlayerDamage(gs, { damage: dmg, frame: frameCountRef.current, kind: e.isBossEnemy ? "boss" : "contact", sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || e.name || "Enemy contact" }); p.invincible = 30; gs.screenShake = 8; gs.damageFlash = 10;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(dmg) + " HP", "#FF0000");
@@ -4020,7 +4023,7 @@ export default function CallOfDoodie() {
         if (hz.type === "acid") {
           // Acid pool: 0.5 damage per frame (~30/sec)
           const _acidDmg = 0.5 * (gs._treeArmorMult || 1) * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
-          p.health -= _acidDmg;
+          applyObservedPlayerDamage(gs, { damage: _acidDmg, frame: frameCountRef.current, kind: "hazard", sourceName: "Acid pool" });
           if (frameCountRef.current % 30 === 0) {
             addText(gs, p.x, p.y - 30, `-${Math.round(_acidDmg * 30)} ACID`, "#44FF44");
           }
@@ -4030,7 +4033,7 @@ export default function CallOfDoodie() {
           // Electro grid: zap for 15 damage every 90 frames
           if (hz.pulseTimer === 0) {
             const _elDmg = 15 * (gs.glassjaw ? (gs.glassjawMult || 2) : 1);
-            p.health -= _elDmg;
+            applyObservedPlayerDamage(gs, { damage: _elDmg, frame: frameCountRef.current, kind: "hazard", sourceName: "Electro grid" });
             setHealth(Math.floor(p.health));
             addText(gs, p.x, p.y - 30, `ZAP! -${Math.round(_elDmg)}`, "#FFFF00", true);
             gs.screenShake = Math.max(gs.screenShake, 4);
@@ -4052,7 +4055,7 @@ export default function CallOfDoodie() {
       if (pk.type === "mine") {
         if (d2 < 40 && p.invincible <= 0) {
           const _mineDmg = 25 * (gsRef.current?.glassjawMult || 1);
-          p.health -= _mineDmg; setHealth(Math.floor(p.health));
+          applyObservedPlayerDamage(gs, { damage: _mineDmg, frame: frameCountRef.current, kind: "mine", sourceName: "Proximity mine" }); setHealth(Math.floor(p.health));
           p.invincible = 30; gs.damageFlash = 12;
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           addText(gs, pk.x, pk.y - 20, "💥 MINE! -" + Math.round(_mineDmg), "#FF4400", true);

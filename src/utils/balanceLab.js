@@ -44,6 +44,22 @@ export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], caree
     });
   }
 
+  const damageRuns = runs.filter((run) => run?.damageReceipt?.schemaVersion === "damage-sequence-v1");
+  const finishCounts = new Map();
+  for (const run of damageRuns) {
+    const style = run.damageReceipt.finishStyle;
+    if (["burst", "attrition", "mixed"].includes(style)) finishCounts.set(style, (finishCounts.get(style) || 0) + 1);
+  }
+  const topFinish = topCount(finishCounts.entries());
+  if (topFinish && topFinish.count >= 2) {
+    addInsight(insights, {
+      id: "damage_finish_pattern",
+      severity: topFinish.count >= 4 ? "high" : "medium",
+      title: `Repeated ${topFinish.key} finish`,
+      detail: `${topFinish.count} of ${damageRuns.length} damage-instrumented runs ended with an observed ${topFinish.key} pattern. Inspect the bounded hit sequences before tuning; this pattern does not establish unrecorded causality.`,
+    });
+  }
+
   const recentDeaths = Array.isArray(career?.recentDeathsByEnemy) ? career.recentDeathsByEnemy : [];
   const killerCounts = new Map();
   for (const death of recentDeaths) {
@@ -118,6 +134,7 @@ export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], caree
       recentDeaths: recentDeaths.length,
       progression: Number(career?.totalKills || 0) > 0 || Number(meta?.careerPoints || 0) > 0,
       pressureRuns: pressureRuns.length,
+      damageRuns: damageRuns.length,
     },
     insights,
     topInsight: insights[0] || {

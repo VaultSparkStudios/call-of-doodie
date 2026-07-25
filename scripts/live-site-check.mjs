@@ -1,5 +1,15 @@
+#!/usr/bin/env node
+
+// Usage: node scripts/live-site-check.mjs
+// Runs seven read-only assertions against COD_LIVE_URL or the canonical site.
+
 import fs from "node:fs";
 import path from "node:path";
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/live-site-check.mjs");
+  process.exit(0);
+}
 
 function loadDotEnv(filePath) {
   if (!fs.existsSync(filePath)) return;

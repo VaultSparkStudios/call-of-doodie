@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Usage: node scripts/capture-launch-screenshots.mjs [--list-scenes]
+// Captures five real local-game scenes; --list-scenes is side-effect free.
+
 import fs from "node:fs";
 import path from "node:path";
 import { spawn } from "./lib/safe-spawn.mjs";
@@ -18,6 +21,15 @@ const SCENES = [
   "real-leaderboard.png",
   "real-mobile-controls.png",
 ];
+
+if (process.argv.includes("--help")) {
+  console.log("Usage: node scripts/capture-launch-screenshots.mjs [--list-scenes]");
+  process.exit(0);
+}
+if (process.argv.includes("--list-scenes")) {
+  console.log(JSON.stringify({ schemaVersion: "launch-scenes-v1", origin: ORIGIN, scenes: SCENES }, null, 2));
+  process.exit(0);
+}
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

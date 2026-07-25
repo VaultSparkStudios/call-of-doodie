@@ -10,8 +10,9 @@ export default defineConfig({
         manualChunks: {
           // React runtime in its own chunk — cached across deploys
           "vendor-react": ["react", "react-dom"],
-          // Optional telemetry and data clients stay cacheable outside the gameplay bundle.
-          "vendor-observability": ["@sentry/react"],
+          // Optional data stays cacheable outside the gameplay bundle. Sentry is
+          // intentionally left to Rollup's dynamic-import graph so it is not
+          // emitted as an entry preload when no DSN is configured.
           "vendor-data": ["@supabase/supabase-js"],
           // gifenc only loaded when GIF encoding triggers (dynamic import in App.jsx)
           // already split automatically; this keeps it explicit
@@ -24,7 +25,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}"],
+    include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}", "scripts/**/*.test.mjs"],
     testTimeout: 30000,
     coverage: {
       provider: "v8",

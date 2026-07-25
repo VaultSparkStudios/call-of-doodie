@@ -977,3 +977,16 @@ Intent outcome: achieved. SPARKED remains evidence-gated rather than inferred fr
 - Honest deferrals: no new isolated staging receipt because local `cloudflare.deploy` is MISSING and the required direct-main/no-branch path has no preview target. Physical devices/media, inbound mail, production metrics, scoped analytics, publication, hosted pixel review, and founder SPARKED approval remain external evidence gates.
 
 Intent outcome: achieved for every agent-owned premise; Unified Genius List and second-order frontier exhausted without fabricated evidence.
+
+## 2026-07-24 — Session 129 — Source-coherent startup, lazy clients, observed defeat receipts, and operator saturation
+
+- Pulled/rebased `origin/main` first and ran lock, context-meter, blocker/secrets, canon, Ark, brief, game-loop, and release preflights before auditing.
+- Generated `docs/AUDIT_2026-07-24.json` / `.md`; shipped all four ranked live-premise items and recorded the already-satisfied replay-hash premise as an audit win.
+- Made startup evidence self-validating, moved Supabase/Sentry behind lazy capability boundaries, and routed every player-damage class into a bounded observed final-sequence receipt with post-run and Balance Lab explanations.
+- Queued exact registry/sitemap drift evidence through Studio Ark without editing the sibling control plane.
+- Ran five second-order expansion waves: nineteen operator scripts gained discoverable side-effect-free usage/check contracts and 27 shared smoke checks; regenerated innovation pack reports zero candidates.
+- Closeout caught and fixed two real regressions: PostCSS GHSA-r28c-9q8g-f849 (trust-reviewed 8.5.22, npm audit zero) and a hosted visual harness profile/selector failure.
+- Verified strict lint; 780/780 tests across 106 files; build; dependency, public, protocol, security, replay, media, asset, live, cutover, leaderboard, and entry-boundary gates; isolated staging runtime 7/7 and visual automation 255/255.
+- Direct AI pixel viewing remains unclaimed because `view_image` still fails Windows CryptUnprotectData. Physical devices/media, inbound mail, production data, scoped analytics, publication, and founder SPARKED approval remain explicit gates.
+
+Intent outcome: achieved for every agent-owned premise; 27 shipped improvements, zero ranked innovation candidates, and no fabricated release evidence.
