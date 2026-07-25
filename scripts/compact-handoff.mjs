@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { MODELS, callClaude, withLongCache, logMetrics, safeJsonStringify } from './lib/model-router.mjs';
 import { getSecret } from './lib/secrets.mjs';
+import { splitHandoffSessions } from './lib/handoff-trim.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -60,11 +61,7 @@ if (trim) {
   const raw = readText(HANDOFF);
   if (!raw) { console.error('No LATEST_HANDOFF.md found.'); process.exit(1); }
 
-  // Split on "## Where We Left Off" session boundaries (robust to \r\n + \n)
-  const normalized = raw.replace(/\r\n/g, '\n');
-  const sections = normalized.split(/\n(?=## Where We Left Off)/);
-  const header   = sections[0].trimStart().startsWith('## Where We Left Off') ? '' : sections.shift();
-  const sessions = sections; // each starts with "## Where We Left Off ..."
+  const { header, sessions } = splitHandoffSessions(raw);
 
   const KEEP = 2;
   if (sessions.length <= KEEP) {
@@ -77,7 +74,7 @@ if (trim) {
 
   console.log(`✂ Trimming LATEST_HANDOFF.md: keeping ${KEEP} sessions, archiving ${toArchive.length}`);
   toArchive.forEach(s => {
-    const firstLine = s.split('\n')[0].replace('## Where We Left Off', '').trim();
+    const firstLine = s.split('\n')[0].replace(/^#+\s*/, '').trim();
     console.log(`  → archive: ${firstLine}`);
   });
 

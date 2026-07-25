@@ -1,0 +1,229 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-07-25",
+  "session": 130,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-25",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure",
+    "combinedPriority": 83.4,
+    "top3": [
+      "source-neutral-enemy-defeat-pipeline",
+      "live-multimodal-movement-contract",
+      "truthful-core-logic-coverage-contract"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Direct current-HEAD inspection, Studio Oracle preverification, a direct 780/780 coverage run, canonical doctor JSON, GitHub Actions metadata, exact public/security/cost gates, and live HTTP smokes. No player, retention, physical-device, visual, or production-funnel outcome is inferred.",
+    "specialtyLenses": [
+      "founder-requested infrastructure rubric",
+      "game-loop review",
+      "app release gate",
+      "public web canon"
+    ],
+    "baseline": {
+      "tests": "780/780 across 106 files; scoped coverage reports 66.35% statements / 71.67% lines but excludes src/systems and src/hooks",
+      "build": "Session 129 production build and exact current deployed SHA are green; build will be rerun after implementation",
+      "doctor": "overallPass true; blockingFailing 0; one advisory control-plane sanitization-ratchet failure",
+      "public": "latest ten main-branch Actions runs successful; 14-file public contract, live site 7/7, cutover 5/5, replay trust 3/3, security/npm audit, media, and CANON-029 cost gates pass",
+      "release": "NO-GO for SPARKED: physical PWA/gamepad/full-run media, inbound email, project-scoped analytics, direct hosted pixel review, publication, production data, and founder approval remain unproven"
+    },
+    "innovationReserve": [
+      "source-neutral-enemy-defeat-pipeline",
+      "live-multimodal-movement-contract",
+      "truthful-core-logic-coverage-contract"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 86,
+    "progression": 88,
+    "sessionEngagement": 89,
+    "retention": 82,
+    "soulFidelity": 94,
+    "evidence": "The live loop is mechanically deep and well instrumented, but grenade lethality bypasses the shared defeat lifecycle and live movement duplicates its extracted contract. Empirical retention remains unscored beyond design judgment because production funnel and participant evidence are absent.",
+    "prioritizedFindings": [
+      "A grenade can reduce an enemy to lethal health without awarding/removing it through the score, combo, loot, achievement, boss, and cleanup lifecycle; rail and projectile paths duplicate that lifecycle with observable drift.",
+      "Keyboard, touch, and gamepad movement are recomposed inline even though a tested pure movement contract already exists, leaving the extracted contract disconnected from live play.",
+      "The coverage headline excludes the systems and hooks that own most pure gameplay/runtime contracts, so the aggregate is narrower than its label implies."
+    ],
+    "nextThreeMoves": [
+      "Make enemy defeat source-neutral, exactly-once, and parity-tested across grenade, rail, and projectile kills.",
+      "Route live keyboard, touch, and gamepad movement through one tested frame contract.",
+      "Publish and enforce an explicit core-logic coverage scope with measured ratchets."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or launch-state promotion; repo-owned engineering implementation may continue",
+    "green": [
+      "latest ten main-branch GitHub Actions runs inspected are successful",
+      "live shell and typed edge health/HSTS checks pass 7/7; post-cutover routing passes 5/5; replay trust passes 3/3",
+      "14-file public contract, proprietary rights, security headers, dependency tree, npm audit, launch media, and CANON-029 cost gates pass"
+    ],
+    "red": [
+      "physical PWA, gamepad, and full-run GIF evidence is absent",
+      "inbound on-domain email delivery and project-scoped analytics/Sentry evidence remain unverified",
+      "direct hosted pixel inspection remains unavailable at the host credential-decryption boundary",
+      "publication, production Lighthouse/funnel evidence, and explicit founder launch approval are absent"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "feature depth / correctness / infrastructure",
+      "effortHours": 7,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 34.1,
+      "slug": "source-neutral-enemy-defeat-pipeline",
+      "title": "Make every lethal damage source enter one exactly-once enemy-defeat lifecycle instead of letting grenade kills bypass rewards and cleanup.",
+      "status": "shipped",
+      "why": "The grenade step only subtracts health and writes lastDmgSource. Rail and projectile collision own separate ~150-line defeat branches, while enemy movement continues after grenade processing. This can leave grenade-lethal enemies alive in the simulation until an unrelated projectile collision and makes combo, score, loot, boss, sound, split, and achievement semantics drift by damage source.",
+      "recipe": "Extract a source-neutral defeat transition with an idempotent enemy marker and one App-level effect executor. Route grenade, rail, and projectile lethality through it in the frame they occur; preserve source-specific precision/beat metadata outside the common lifecycle. Add parity fixtures for standard, boss, splitter, nemesis, grenade, rail, projectile, and duplicate-finalization cases, plus a static architecture guard that prevents new per-source defeat branches.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Finalize and remove grenade-lethal enemies immediately with focused regression coverage."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Share score/combo/coin/stat transitions across grenade, rail, and projectile kills while preserving source-specific effects."
+        },
+        "L3": {
+          "effortHours": 7,
+          "recipe": "Build the exactly-once source-neutral lifecycle, converge all defeat side effects, cover boss/split/loot/achievement parity, and add a regrowth guard."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "UX / input fairness / architecture",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 26.6,
+      "slug": "live-multimodal-movement-contract",
+      "title": "Connect the live keyboard, touch, and gamepad path to one pure movement-frame contract instead of maintaining a dead extraction beside inline runtime logic.",
+      "status": "shipped",
+      "why": "systems/gameStep.js exports and tests computeMovementVector/applyPlayerMovement, but App.jsx recomputes keyboard, touch, gamepad composition, normalization, speed modifiers, clamping, and obstacle push-out inline. The testable contract therefore does not prove the path players actually use, and gamepad is absent from the helper signature.",
+      "recipe": "Extend the pure input contract to combine keyboard, touch joystick, and gamepad vectors with finite-value sanitation and stable normalization. Wire App.jsx to the contract for all ordinary movement, retain dash ownership, and emit the existing debug source receipt from the same resolved frame. Cover simultaneous-source cancellation, analog bounds, rubble/adrenaline modifiers, canvas clamps, obstacle centers, keyboard-only, touch-only, and gamepad-only parity.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Call the existing helper for keyboard/touch while leaving gamepad addition inline."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Extend and wire one three-source movement vector with focused parity tests."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Add sanitized multimodal composition, live integration, source receipts, pathological-input fixtures, and architecture assertions."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "observability / security / process quality",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 22.7,
+      "slug": "truthful-core-logic-coverage-contract",
+      "title": "Turn coverage from an unlabeled subset headline into an explicit, source-derived core-logic contract with fail-closed ratchets.",
+      "status": "shipped",
+      "why": "test:coverage reports one All files aggregate, but vite.config.js includes only src/utils, storage.js, and constants.js. src/systems and src/hooks contain the pure gameplay, integrity, damage, progression, and frame contracts yet are absent from the coverage scope, so the headline can improve while critical logic regresses unmeasured.",
+      "recipe": "Create one importable coverage contract defining included surfaces, honest exclusions with rationale, minimum file count, and measured statement/branch/function/line floors. Consume it from Vitest, emit json-summary, and validate the summary after each coverage run. Expand scope to systems/hooks, add focused tests for newly exposed high-value gaps rather than lowering floors, and make the validator fail when scope, file count, or metrics silently shrink.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Expand include patterns to systems/hooks and add a JSON summary."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Centralize scope/floors and validate the measured summary after test:coverage."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Add fail-closed scope/file-count/metric ratchets, explicit exclusions, regression tests for the validator, and close the most important exposed gaps."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "Live check remains genuinely external: analytics capability is MISSING and GitHub Actions has neither VITE_POSTHOG_KEY nor VITE_SENTRY_DSN. No dashboard URL mutation or project-scope claim is fabricated."
+    },
+    {
+      "slug": "home-v1-retirement",
+      "reason": "Verified real but production Lighthouse and 48-hour funnel evidence remain absent; deleting the fallback would fabricate the release gate."
+    },
+    {
+      "slug": "frame-phase-profiler",
+      "reason": "The overall fixed-memory performance receipt is live and no current slow-frame regression is evidenced. Instrumenting more phases before a real symptom clears the priority floor would add measurement overhead without a decision it can change."
+    },
+    {
+      "slug": "whole-app-game-loop-rewrite",
+      "reason": "The 2,100-line loop is real debt, but a one-session rewrite would be high-risk and partial. The ranked defeat and movement boundaries are the deepest independently verifiable root slices; broader extraction should be generated only from evidence after they land."
+    },
+    {
+      "slug": "auth-membership-build",
+      "reason": "A product decision is still intentionally open; implementing membership without founder demand would expand scope rather than fix a verified defect."
+    },
+    {
+      "slug": "visual-theme-verdict",
+      "reason": "Direct hosted pixel inspection remains unavailable because the host image path fails Windows CryptUnprotectData. Existing real captures and automated visual matrices remain evidence, but no AI visual verdict is claimed."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "source-neutral-enemy-defeat-pipeline",
+      "status": "shipped",
+      "outcome": "Every combat-lethal source now queues one exactly-once defeat executor; explicit Kamikaze/Nuke retirements remain non-combat policies; duplicated rail/projectile reward branches were removed.",
+      "verification": "enemyDefeatLifecycle/defeatEconomy/combatResolution 24/24; architecture guard proves one score/kill executor; strict lint clean."
+    },
+    {
+      "slug": "live-multimodal-movement-contract",
+      "status": "shipped",
+      "outcome": "The live frame now composes keyboard, touch, and gamepad through one finite normalized movement contract and exposes the same active-source receipt in input diagnostics.",
+      "verification": "gameStep/gamepad/inputCalibration/App launch 36/36; live-wiring architecture assertions; strict lint clean."
+    },
+    {
+      "slug": "truthful-core-logic-coverage-contract",
+      "status": "shipped",
+      "outcome": "Coverage now declares and validates an exact 82-file core-logic scope, explicit visual/orchestration exclusions, and fail-closed metric/scope/freshness ratchets.",
+      "verification": "809/809 tests; coverage PASS at statements 72.27, branches 67.03, functions 71.14, lines 77.58; 82/82 expected files."
+    },
+    {
+      "slug": "second-order-unattributed-lethal-reconciliation",
+      "status": "shipped",
+      "outcome": "The defeat boundary now fail-closes future bypasses: stranded lethal enemies are reconciled into unattributed exactly-once defeats and invalidate the run through a source-derived integrity receipt.",
+      "verification": "Lifecycle fixtures distinguish orphaned, queued, retired, alive, and invalid entries; full 809-test suite green."
+    },
+    {
+      "slug": "second-order-input-contention-receipt",
+      "status": "shipped",
+      "outcome": "The multimodal movement contract now identifies materially opposing simultaneous sources without changing player motion semantics, and exposes the conflict in Input Debug.",
+      "verification": "Pathological keyboard/gamepad cancellation fixture and live diagnostic wiring pass; desktop and mobile pointer E2E 2/2."
+    },
+    {
+      "slug": "second-order-coverage-evidence-freshness",
+      "status": "shipped",
+      "outcome": "Coverage validation now rejects reports older than any measured source, focused test, or coverage-contract input, preventing yesterday's green JSON from certifying today's code.",
+      "verification": "Fail-closed stale-evidence fixture passes; freshly regenerated coverage evidence validates 82/82 at all ratchets."
+    },
+    {
+      "slug": "closeout-handoff-boundary-truth",
+      "status": "shipped",
+      "outcome": "The closeout trimmer now retains exactly the newest two top-level sessions instead of splitting on nested handoff subheadings; legacy files retain an explicit fallback.",
+      "verification": "Top-level and legacy boundary fixtures pass 3/3 with the existing Unicode smoke; full 809-test suite green."
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
+import { applyEnemyDamage, collectQueuedEnemyDefeats, collectUnqueuedLethalEnemies, queueEnemyDefeat, retireEnemyWithoutDefeat, takeQueuedEnemyDefeat } from "./systems/enemyDefeatLifecycle.js";
 import { pickObjective, pickWaveChallengeContract, recordObjectiveResult, resolveWaveChallengeContract, startWaveChallengeContract, tickObjective } from "./systems/objectiveDirector.js";
 import {
   bulletEnemyCollision,
@@ -72,7 +73,7 @@ import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolu
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
-import { buildPointerAimSweepReport, computePointerAimAngle } from "./systems/gameStep.js";
+import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveMovementVector } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
@@ -154,6 +155,7 @@ export default function CallOfDoodie() {
   const lastShotRef    = useRef(0);
   const frameRef       = useRef(null);
   const frameMonitorRef = useRef(null);
+  const drainEnemyDefeatsRef = useRef(() => 0);
   const joystickRef    = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null });
   const shootStickRef  = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false });
   const sizeRef        = useRef({ w: 800, h: 600 });
@@ -1598,7 +1600,10 @@ export default function CallOfDoodie() {
       const dmhRadius = 250;
       (gs.enemies || []).forEach(e => {
         const d = Math.hypot(e.x - gs.player.x, e.y - gs.player.y);
-        if (d < dmhRadius) { e.health -= Math.floor(200 * (1 - d / dmhRadius)); e.hitFlash = 15; }
+        if (d < dmhRadius) {
+          const result = applyEnemyDamage(e, Math.floor(200 * (1 - d / dmhRadius)), { source: "dead-mans-hand", weaponName: "DEAD MAN'S HAND" });
+          if (result.applied > 0) { e.hitFlash = 15; gs.totalDamage += result.applied; }
+        }
       });
       addParticles(gs, gs.player.x, gs.player.y, "#FFD700", 40);
       addParticles(gs, gs.player.x, gs.player.y, "#FF4400", 25);
@@ -1622,7 +1627,10 @@ export default function CallOfDoodie() {
       const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
       gs.player.health = diff.playerHP; gs.player.invincible = 120;
       setHealth(diff.playerHP);
-      gs.enemies.forEach(e => { e.health -= 30; e.hitFlash = 10; });
+      gs.enemies.forEach(e => {
+        const result = applyEnemyDamage(e, 30, { source: "guardian-angel", weaponName: "GUARDIAN ANGEL" });
+        if (result.applied > 0) { e.hitFlash = 10; gs.totalDamage += result.applied; }
+      });
       gs.enemyBullets = []; gs.screenShake = 20;
       addText(gs, gs.player.x, gs.player.y - 50, "GUARDIAN ANGEL!", "#FFD700", true);
       addParticles(gs, gs.player.x, gs.player.y, "#FFD700", 30);
@@ -1825,6 +1833,255 @@ export default function CallOfDoodie() {
     lastStandActiveRef.current = false; if (gs) gs.lastStandActive = false;
     return true;
   }, [difficulty, runSeed, username]);
+
+  // enemy-defeat-pipeline:single-executor
+  const finalizeEnemyDefeat = (gs, e) => {
+    const defeatMeta = takeQueuedEnemyDefeat(e);
+    if (!defeatMeta) return false;
+
+    const p = gs.player;
+    const W = GW();
+    const H = GH();
+    e.lastDmgSource = defeatMeta.source;
+    (gs._wkbt = gs._wkbt || {})[e.typeIndex] = (gs._wkbt[e.typeIndex] || 0) + 1;
+
+    const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
+    comboRef.current.count++;
+    comboRef.current.timer = comboTimerDuration;
+    if (comboRef.current.count > comboRef.current.max) {
+      comboRef.current.max = comboRef.current.count;
+      const peakLabel = comboRef.current.count >= 15 ? "UNSTOPPABLE" : comboRef.current.count >= 10 ? "GODLIKE" : comboRef.current.count >= 5 ? "RAMPAGE" : null;
+      if (peakLabel) peakMomentRef.current = { wave: gs.currentWave, count: comboRef.current.count, enemiesAlive: gs.enemies.length, label: peakLabel };
+    }
+    setCombo(comboRef.current.count);
+    if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = "rampage"; }
+    else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = "godlike"; }
+    else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = "unstoppable"; }
+
+    const comboMult = 1 + Math.max(0, comboRef.current.count - 1) * 0.1;
+    const defeat = planEnemyDefeatScore({
+      enemy: e,
+      comboMult,
+      killScoreMult: gs.killScoreMult || 1,
+      routeKillScoreMult: gs.routeKillScoreMult || 1,
+      activeObjective: gs.activeObjective || null,
+      playerPos: p,
+    });
+    const pts = defeat.points;
+    gs.score += pts;
+    gs.kills++;
+    gs.killstreakCount++;
+    addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
+
+    if (e.typeIndex != null) {
+      const waveKills = gs._waveKillsByType || (gs._waveKillsByType = {});
+      waveKills[e.typeIndex] = { count: (waveKills[e.typeIndex]?.count || 0) + 1, name: e.name || `TYPE${e.typeIndex}` };
+    }
+
+    if (defeatMeta.beatEligible) {
+      try {
+        const framesPerBeat = Math.round(60 / getMusicBPM() * 60);
+        const beatPhase = frameCountRef.current % framesPerBeat;
+        if (beatPhase < 4 || beatPhase > framesPerBeat - 4) {
+          gs.coins = (gs.coins || 0) + 1;
+          setCoins(gs.coins);
+          addText(gs, e.x, e.y - e.size - 20, "🎵 BEAT KILL! +1💩", "#FF44FF");
+          addParticles(gs, e.x, e.y, "#FF44FF", 4);
+        }
+      } catch {}
+    }
+
+    gs.coinStreakKills++;
+    gs.coinStreakTimer = 180;
+    if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
+      gs.coinMultActive = true;
+      gs.coinMultTimer = 600;
+      gs.coinStreakKills = 0;
+      addText(gs, p.x, p.y - 80, "💩×2 COIN FRENZY! 10s", "#C8A000", true);
+    }
+
+    if (dashRef.current.active > 0) statsRef.current.dashKills++;
+    if (defeatMeta.weaponIdx != null) statsRef.current.weaponKills[defeatMeta.weaponIdx] = (statsRef.current.weaponKills[defeatMeta.weaponIdx] || 0) + 1;
+    if (defeatMeta.source === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
+    if (defeat.careerBoss) statsRef.current.bossKills++;
+    if (e.typeIndex === 9) statsRef.current.landlordKills++;
+    if (e.typeIndex === 10) statsRef.current.cryptoKills++;
+    if (gs.killstreakCount > statsRef.current.bestStreak) {
+      statsRef.current.bestStreak = gs.killstreakCount;
+      bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 };
+    }
+
+    if (e.isBossEnemy) {
+      soundBossKill();
+      rumbleGamepad(0.5, 1.0, 500);
+      gs.bossKillFlash = 22;
+      gs.screenShake = Math.max(gs.screenShake, 30);
+      addParticles(gs, e.x, e.y, e.color, 50);
+      addParticles(gs, e.x, e.y, "#FFD700", 30);
+      addParticles(gs, e.x, e.y, "#FFFFFF", 20);
+      retainLastMatchingInPlace(gs.floatingTexts, (text) => text.big, 4);
+      addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
+      if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
+      if (e.typeIndex === 20) gs.algorithmSurge = false;
+      const bossRoast = getRoastCallout("boss_kill", roastCooldowns.current, gs.currentWave, 3);
+      if (bossRoast) addText(gs, W / 2, H / 3 + 36, bossRoast, "#FFD700");
+      try {
+        const wasNemesis = isNemesis(e.typeIndex);
+        const previous = getBossKillRecord(e.typeIndex);
+        saveBossKillRecord(e.typeIndex, { kills: previous.kills + 1, deaths: previous.deaths });
+        if (wasNemesis) {
+          gs.nemesisBossType = null;
+          statsRef.current.nemesisSlain = (statsRef.current.nemesisSlain || 0) + 1;
+          addText(gs, W / 2, H / 3 + 56, "🎯 NEMESIS SLAIN! +30💩", "#FF4400", true);
+          gs.coins = (gs.coins || 0) + 30;
+          setCoins(gs.coins);
+        }
+      } catch {}
+    }
+
+    const lootRng = getRunRng(gs, "loot");
+    const coinDrop = planEnemyCoinDrop({ enemy: e, rng: lootRng, coinMultActive: gs.coinMultActive, treeCoinBonus: gs._treeCoinBonus || 1 }).amount;
+    if (coinDrop > 0) {
+      gs.coins = (gs.coins || 0) + coinDrop;
+      setCoins(gs.coins);
+      addText(gs, e.x, e.y - 50, `💩+${coinDrop}`, "#C8A000");
+      if (!e.isBossEnemy && gs.coinMultActive && gs.floatingTexts.length < 28) {
+        const emojiCount = 2 + Math.floor(Math.min(gs.coinStreakKills || 0, 15) / 5);
+        for (let index = 0; index < emojiCount; index++) {
+          gs.floatingTexts.push({ text: "💩", x: e.x + (cosmeticRandom() - 0.5) * 60, y: e.y - 20 - cosmeticRandom() * 40, vy: -1.2 - cosmeticRandom() * 0.8, life: 35 + Math.floor(cosmeticRandom() * 20), color: "#C8A000" });
+        }
+      }
+      if (!e.isBossEnemy && Math.floor(gs.coins / 25) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
+        gs.lastCoinRoastMilestone = gs.coins;
+        const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
+        if (coinRoast) addText(gs, e.x, e.y - 74, coinRoast, "#FFE082");
+      }
+    }
+
+    if (gs._killFrenzyUnlocked) gs._killFrenzyTimer = 90;
+    setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
+    setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
+    if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
+      gs.newBestScore = true;
+      addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
+      addParticles(gs, p.x, p.y - 60, "#FFD700", 25);
+      addParticles(gs, p.x, p.y - 60, "#FF4400", 15);
+      addParticles(gs, p.x, p.y - 60, "#FFFFFF", 10);
+      gs.screenShake = Math.max(gs.screenShake, 8);
+    }
+
+    addParticles(gs, e.x, e.y, e.color, 20);
+    addText(gs, e.x, e.y - 30, `+${pts}${comboRef.current.count > 1 ? ` (x${comboRef.current.count})` : ""}`, "#FFD700");
+    if (!e.isBossEnemy) {
+      const deathQuote = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(cosmeticRandom() * e.deathQuotes.length)] : (e.deathQuote || "...");
+      addText(gs, e.x, e.y - 54, `"${deathQuote}"`, "#FF88CC", "quote");
+    }
+    addKillFeed(e.name, defeatMeta.weaponName);
+    if (!e.isBossEnemy) {
+      if (e.summonedBy) {
+        soundSummonDismissed();
+        addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
+      } else if ((gs._deathSoundsThisFrame || 0) < 2) {
+        gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
+        soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count);
+      }
+    }
+
+    addXp(pts);
+    gs.killFlash = 6;
+    if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
+    if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
+      gs.adrenalineRushTimer = perkModsRef.current.adrenalineRushDuration || 120;
+      addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
+      addParticles(gs, p.x, p.y, "#FF6600", 12);
+    }
+
+    gs.dyingEnemies = gs.dyingEnemies || [];
+    if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+    if (e.eliteType === "berserker") {
+      statsRef.current.berserkersKilled = (statsRef.current.berserkersKilled || 0) + 1;
+      setBerserkersKilled(statsRef.current.berserkersKilled);
+    }
+    if (e.eliteType === "explosive") {
+      const explosionRadius = 85;
+      addParticles(gs, e.x, e.y, "#FF6600", 20); addParticles(gs, e.x, e.y, "#FFAA00", 12);
+      gs.screenShake = Math.max(gs.screenShake, 8);
+      addText(gs, e.x, e.y - 40, "💥 CHAIN!", "#FF6600");
+      gs.enemies.forEach((nearbyEnemy) => {
+        if (nearbyEnemy === e || nearbyEnemy.health <= 0) return;
+        const deltaX = nearbyEnemy.x - e.x, deltaY = nearbyEnemy.y - e.y;
+        if (deltaX * deltaX + deltaY * deltaY < explosionRadius * explosionRadius) {
+          const result = applyEnemyDamage(nearbyEnemy, 35, { source: "elite-chain", weaponName: "CHAIN REACTION" });
+          if (result.applied > 0) nearbyEnemy.hitFlash = 10;
+        }
+      });
+    }
+
+    if (!e.isBossEnemy && KILL_MILESTONES[gs.kills]) {
+      addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
+      addText(gs, W / 2, H / 2 - 65, `${gs.kills} KILLS!`, "#FFF", true);
+      gs.screenShake = 10; addParticles(gs, W / 2, H / 2 - 80, "#FF44FF", 20);
+    }
+    if (gs.kills === 1) {
+      const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
+      if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
+    }
+    if (!e.isBossEnemy && gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
+      const streakIndex = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
+      addText(gs, W / 2, 80, `${KILLSTREAKS[streakIndex]}!`, "#FF4500", true);
+      const streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
+      if (streakRoast) addText(gs, W / 2, 108, streakRoast, "#FF8855");
+      gs.enemies.forEach((nearbyEnemy) => {
+        const result = applyEnemyDamage(nearbyEnemy, 40, { source: "killstreak", weaponName: "KILLSTREAK" });
+        if (result.applied > 0) nearbyEnemy.hitFlash = 15;
+      });
+      gs.screenShake = 12;
+    }
+
+    if (e.splitOnDeath && !e.splitDone) {
+      e.splitDone = true;
+      addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
+      for (let index = 0; index < 3; index++) {
+        const angle = (index / 3) * Math.PI * 2 + 0.5;
+        const shardHealth = e.maxHealth * 0.35;
+        gs.enemies.push({ x: e.x + Math.cos(angle) * 55, y: e.y + Math.sin(angle) * 55, health: shardHealth, maxHealth: shardHealth, speed: e.speed * 1.4 * (gs.waveEventSpeedMult || 1), size: e.size * 0.58, color: "#FF8899", name: "Splitter Shard", points: Math.floor(e.points * 0.25), deathQuotes: ["..."], emoji: "💔", typeIndex: 16, wobble: getRunRng(gs, "hazards")() * Math.PI * 2, hitFlash: 0, ranged: false, projSpeed: 0, projRate: 999, shootTimer: 60, isBossEnemy: false, splitOnDeath: false });
+      }
+      addParticles(gs, e.x, e.y, "#FF6688", 30);
+    }
+
+    const isShard = e.typeIndex === 16 && !e.isBossEnemy;
+    if (!isShard) {
+      if (e.isBossEnemy && extraLivesRef.current === 0 && lootRng() < 0.18) gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
+      else if ((e.isBossEnemy || lootRng() < 0.25) && !gs.siegeMode) spawnPickup(gs, e.x, e.y, e.isBossEnemy);
+    }
+    achCheckRef.current = true;
+    return true;
+  };
+
+  const drainEnemyDefeats = (gs) => {
+    const unattributed = collectUnqueuedLethalEnemies(gs.enemies);
+    if (unattributed.length > 0) {
+      for (const enemy of unattributed) queueEnemyDefeat(enemy, { source: "unattributed", weaponName: "UNATTRIBUTED" });
+      recordRunIntegrityFault(gs, {
+        stage: "enemy_defeat_unattributed",
+        error: new Error(`${unattributed.length} lethal enemies bypassed defeat attribution`),
+        wave: gs.currentWave,
+      });
+    }
+    let processed = 0;
+    while (true) {
+      const pending = collectQueuedEnemyDefeats(gs.enemies);
+      if (pending.length === 0) break;
+      for (const enemy of pending) if (finalizeEnemyDefeat(gs, enemy)) processed++;
+      if (processed > 2048) {
+        recordRunIntegrityFault(gs, { stage: "enemy_defeat_pipeline", error: new Error("enemy defeat chain exceeded fixed safety bound"), wave: gs.currentWave });
+        break;
+      }
+    }
+    gs.enemies = stepAndCompactInPlace(gs.enemies, (enemy) => !enemy._defeatResolved);
+    return processed;
+  };
+  drainEnemyDefeatsRef.current = drainEnemyDefeats;
 
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
@@ -2125,30 +2382,21 @@ export default function CallOfDoodie() {
     }
 
     // ── Player movement ──
-    let dx = 0, dy = 0;
     const keys = keysRef.current;
-    if (keys["w"] || keys["arrowup"]) dy -= 1;
-    if (keys["s"] || keys["arrowdown"]) dy += 1;
-    if (keys["a"] || keys["arrowleft"]) dx -= 1;
-    if (keys["d"] || keys["arrowright"]) dx += 1;
     const js = joystickRef.current;
-    if (js.active) { const dist = Math.hypot(js.dx, js.dy); if (dist > 5) { dx += js.dx / Math.max(dist, 50); dy += js.dy / Math.max(dist, 50); } }
     const gpMove = gamepadMoveRef.current;
-    if (gpMove.active) { dx += gpMove.x; dy += gpMove.y; }
-    const len = Math.hypot(dx, dy);
-    if (len > 0) { dx /= len; dy /= len; }
-    const _rushMult = (gs.adrenalineRushTimer || 0) > 0 ? 2.0 : 1.0;
-    const _rubbleMult = gs._rubbleSlowed ? 0.6 : 1;
-    if (dashRef.current.active <= 0) { p.x += dx * p.speed * _rushMult * _rubbleMult; p.y += dy * p.speed * _rushMult * _rubbleMult; }
-    sampleCommandTrace("move", Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 ? directionBucket(dx, dy) : "neutral");
-    p.x = Math.max(20, Math.min(W - 20, p.x));
-    p.y = Math.max(20, Math.min(H - 20, p.y));
-    (gs.obstacles || []).forEach(ob => {
-      const cx = Math.max(ob.x, Math.min(p.x, ob.x + ob.w));
-      const cy = Math.max(ob.y, Math.min(p.y, ob.y + ob.h));
-      const dist = Math.hypot(p.x - cx, p.y - cy);
-      if (dist < 16) { const ang = Math.atan2(p.y - cy, p.x - cx); p.x = cx + Math.cos(ang) * 17; p.y = cy + Math.sin(ang) * 17; }
+    const movement = resolveMovementVector({ keys, joystick: js, gamepad: gpMove });
+    const { dx, dy } = movement;
+    gs._movementReceipt = movement;
+    applyPlayerMovement(p, movement, {
+      dashActive: dashRef.current.active > 0,
+      adrenalineRushTimer: gs.adrenalineRushTimer || 0,
+      rubbleSlowed: !!gs._rubbleSlowed,
+      W,
+      H,
+      obstacles: gs.obstacles || [],
     });
+    sampleCommandTrace("move", Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1 ? directionBucket(dx, dy) : "neutral");
     if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) { if (cosmeticRandom() < 0.3) gs.trail.push({ x: p.x, y: p.y, life: 10 }); }
     gs.trail = stepAndCompactInPlace(gs.trail, t => { t.life--; return t.life > 0; });
 
@@ -2209,6 +2457,8 @@ export default function CallOfDoodie() {
       }
       setInputDebug({
         source: inputDeviceRef.current,
+        movementSources: gs._movementReceipt?.activeSources || [],
+        movementContention: gs._movementReceipt?.contention === true,
         connected: gamepadMetaRef.current.connected,
         controllerType: gamepadMetaRef.current.type,
         controllerIndex: gamepadMetaRef.current.index,
@@ -2982,14 +3232,16 @@ export default function CallOfDoodie() {
             damageMult: perkModsRef.current.grenadeDamageMult || 1,
           });
           if (blast.hit) {
-            e.health -= blast.damage; e.hitFlash = 10; gs.totalDamage += blast.damage;
-            e.lastDmgSource = "grenade";
+            const result = applyEnemyDamage(e, blast.damage, { source: "grenade", weaponName: "GRENADE" });
+            e.hitFlash = 10;
+            gs.totalDamage += result.applied;
           }
         });
         return false;
       }
       return true;
     });
+    drainEnemyDefeatsRef.current(gs);
 
     // ── Railgun beam: instant hitscan damage ──
     if (gs.pendingBeam) {
@@ -2997,7 +3249,6 @@ export default function CallOfDoodie() {
       gs.pendingBeam = null;
       const pbWeapon = WEAPONS[pbWpn];
       const pbDmgMult = (perkModsRef.current.damageMult || 1) * (1 + (gs.weaponUpgrades?.[pbWpn] || 0) * 0.25);
-      const pbComboMult = 1 + comboRef.current.count * 0.1;
       gs.enemies.forEach(e => {
         if (e.health <= 0) return;
         const ex = e.x - ox, ey = e.y - oy;
@@ -3010,7 +3261,13 @@ export default function CallOfDoodie() {
           const _pbRageMult = (gs.rageTimer || 0) > 0 ? 1.75 : 1.0;
           const _pbJugMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
           const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1) * _pbRageMult * _pbJugMult;
-          e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
+          const railDamage = applyEnemyDamage(e, dmg, {
+            source: "rail",
+            weaponIdx: pbWpn,
+            weaponName: pbWeapon.name,
+          });
+          e.hitFlash = isCrit ? 15 : 8;
+          gs.totalDamage += railDamage.applied;
           if (perkModsRef.current.lifesteal) {
             const _lsMult = (perkModsRef.current.comboVampireMult && comboRef.current.count > 0) ? 2 : 1;
             p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal * _lsMult);
@@ -3022,159 +3279,9 @@ export default function CallOfDoodie() {
           }
           addParticles(gs, e.x, e.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           addText(gs, e.x, e.y - e.size / 2 - 8, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(cosmeticRandom() * HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
-          if (e.health <= 0) {
-            (gs._wkbt = gs._wkbt || {})[e.typeIndex] = ((gs._wkbt)[e.typeIndex] || 0) + 1;
-            const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
-            comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
-            if (comboRef.current.count > comboRef.current.max) {
-              comboRef.current.max = comboRef.current.count;
-              const _pmLabel = comboRef.current.count >= 15 ? 'UNSTOPPABLE' : comboRef.current.count >= 10 ? 'GODLIKE' : comboRef.current.count >= 5 ? 'RAMPAGE' : null;
-              if (_pmLabel) peakMomentRef.current = { wave: gs.currentWave, count: comboRef.current.count, enemiesAlive: gs.enemies.length, label: _pmLabel };
-            }
-            setCombo(comboRef.current.count);
-            if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
-            else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
-            else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = 'unstoppable'; }
-            const railDefeat = planEnemyDefeatScore({
-              enemy: e,
-              comboMult: pbComboMult,
-              killScoreMult: gs.killScoreMult || 1,
-              routeKillScoreMult: gs.routeKillScoreMult || 1,
-              activeObjective: gs.activeObjective || null,
-              playerPos: gs.player,
-            });
-            const pts = railDefeat.points;
-            gs.score += pts; gs.kills++; gs.killstreakCount++;
-            addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
-            if (e.typeIndex != null) { const _wkt = gs._waveKillsByType || (gs._waveKillsByType = {}); _wkt[e.typeIndex] = { count: ((_wkt[e.typeIndex]?.count) || 0) + 1, name: e.name || ("TYPE" + e.typeIndex) }; }
-            gs.coinStreakKills++;
-            gs.coinStreakTimer = 180; // reset 3s window
-            if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
-              gs.coinMultActive = true;
-              gs.coinMultTimer = 600; // 10s
-              gs.coinStreakKills = 0;
-              addText(gs, p.x, p.y - 80, "💩×2 COIN FRENZY! 10s", "#C8A000", true);
-            }
-            if (dashRef.current.active > 0) statsRef.current.dashKills++;
-            if (pbWpn != null) statsRef.current.weaponKills[pbWpn] = (statsRef.current.weaponKills[pbWpn] || 0) + 1;
-            if (railDefeat.careerBoss) statsRef.current.bossKills++;
-            if (e.typeIndex === 9) statsRef.current.landlordKills++;
-            if (e.typeIndex === 10) statsRef.current.cryptoKills++;
-            if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
-            if (e.isBossEnemy) {
-              soundBossKill(); rumbleGamepad(0.5, 1.0, 500);
-              gs.bossKillFlash = 22; gs.screenShake = Math.max(gs.screenShake, 30);
-              addParticles(gs, e.x, e.y, e.color, 25); addParticles(gs, e.x, e.y, "#FFD700", 15); addParticles(gs, e.x, e.y, "#FFFFFF", 10);
-              // Clear small damage texts so the boss kill banner reads clean
-              retainLastMatchingInPlace(gs.floatingTexts, (text) => text.big, 4);
-              addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
-              if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
-              if (e.typeIndex === 20) gs.algorithmSurge = false;
-              const _bossRoast = getRoastCallout("boss_kill", roastCooldowns.current, gs.currentWave, 3);
-              if (_bossRoast) addText(gs, W / 2, H / 3 + 36, _bossRoast, "#FFD700");
-              // Nemesis kill: update record, award 3× extra coins, trigger NEMESIS_SLAIN achievement
-              try {
-                const _wasNemesis = isNemesis(e.typeIndex);
-                const _prev = getBossKillRecord(e.typeIndex);
-                saveBossKillRecord(e.typeIndex, { kills: _prev.kills + 1, deaths: _prev.deaths });
-                if (_wasNemesis) {
-                  gs.nemesisBossType = null;
-                  statsRef.current.nemesisSlain = (statsRef.current.nemesisSlain || 0) + 1;
-                  addText(gs, W / 2, H / 3 + 56, "🎯 NEMESIS SLAIN! +30💩", "#FF4400", true);
-                  gs.coins = (gs.coins || 0) + 30;
-                  setCoins(gs.coins);
-                }
-              } catch {}
-            }
-            // 💩 Doodie Coin drop
-            const _railLootRng = getRunRng(gs, "loot");
-            const _coinDrop = planEnemyCoinDrop({
-              enemy: e,
-              rng: _railLootRng,
-              coinMultActive: gs.coinMultActive,
-              treeCoinBonus: gs._treeCoinBonus || 1,
-            }).amount;
-            if (_coinDrop > 0) {
-              gs.coins = (gs.coins || 0) + _coinDrop;
-              setCoins(gs.coins);
-              addText(gs, e.x, e.y - 50, "💩+" + _coinDrop, "#C8A000");
-              if (!e.isBossEnemy && gs.coinMultActive && gs.floatingTexts.length < 28) {
-                const _streak = Math.min(gs.coinStreakKills || 0, 15);
-                const _n = 2 + Math.floor(_streak / 5);
-                for (let _ci = 0; _ci < _n; _ci++) {
-                  gs.floatingTexts.push({ text: "💩", x: e.x + (cosmeticRandom() - 0.5) * 60, y: e.y - 20 - cosmeticRandom() * 40, vy: -1.2 - cosmeticRandom() * 0.8, life: 35 + Math.floor(cosmeticRandom() * 20), color: "#C8A000" });
-                }
-              }
-              if (!e.isBossEnemy && (Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
-                gs.lastCoinRoastMilestone = gs.coins;
-                const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
-                if (coinRoast) addText(gs, e.x, e.y - 74, coinRoast, "#FFE082");
-              }
-            }
-            // META TREE off4: Kill Frenzy — speed burst
-            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 90; }
-            setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
-            setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
-            if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
-              gs.newBestScore = true; addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
-              addParticles(gs, p.x, p.y - 60, "#FFD700", 25);
-              addParticles(gs, p.x, p.y - 60, "#FF4400", 15);
-              addParticles(gs, p.x, p.y - 60, "#FFFFFF", 10);
-            }
-            addParticles(gs, e.x, e.y, e.color, 20);
-            addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
-            if (!e.isBossEnemy) {
-              const _rbDq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(cosmeticRandom() * e.deathQuotes.length)] : "...";
-              addText(gs, e.x, e.y - 54, `"${_rbDq}"`, "#FF88CC", "quote");
-            }
-            addKillFeed(e.name, pbWeapon.name);
-            if (!e.isBossEnemy) {
-              if (e.summonedBy) { soundSummonDismissed(); addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF"); }
-              else if ((gs._deathSoundsThisFrame || 0) < 1) { gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1; soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count); }
-            }
-            if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
-            if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
-              gs.adrenalineRushTimer = 120; addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
-            }
-            gs.dyingEnemies = gs.dyingEnemies || [];
-            if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
-            if (e.splitOnDeath && !e.splitDone) {
-              e.splitDone = true; addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
-              for (let _si = 0; _si < 3; _si++) {
-                const _sa = (_si / 3) * Math.PI * 2 + 0.5;
-                gs.enemies.push({ x: e.x + Math.cos(_sa) * 55, y: e.y + Math.sin(_sa) * 55, health: e.maxHealth * 0.35, maxHealth: e.maxHealth * 0.35, speed: e.speed * 1.4, size: e.size * 0.58, color: "#FF8899", name: "Splitter Shard", points: Math.floor(e.points * 0.25), deathQuotes: ["..."], emoji: "💔", typeIndex: 16, wobble: getRunRng(gs, "hazards")() * Math.PI * 2, hitFlash: 0, ranged: false, projSpeed: 0, projRate: 999, shootTimer: 60, isBossEnemy: false, splitOnDeath: false });
-              }
-              addParticles(gs, e.x, e.y, "#FF6688", 30);
-            }
-            const _rIsShd = e.typeIndex === 16 && !e.isBossEnemy;
-            if (!_rIsShd) {
-              if (e.isBossEnemy && extraLivesRef.current === 0 && _railLootRng() < 0.18) { gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 }); }
-              else if ((e.isBossEnemy || _railLootRng() < 0.25) && !gs.siegeMode) { spawnPickup(gs, e.x, e.y, e.isBossEnemy); }
-            }
-            if (!e.isBossEnemy && KILL_MILESTONES[gs.kills]) {
-              addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
-              addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
-              gs.screenShake = 10;
-            }
-            if (gs.kills === 1) {
-              const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
-              if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
-            }
-            if (!e.isBossEnemy && gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
-              const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
-              addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
-              const _streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
-              if (_streakRoast) addText(gs, W / 2, 108, _streakRoast, "#FF8855");
-              gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
-              gs.screenShake = 12;
-            }
-            addXp(pts); gs.killFlash = 6;
-            achCheckRef.current = true;
-            e.health = -999;
-          }
         }
       });
-      gs.enemies = stepAndCompactInPlace(gs.enemies, en => en.health > -999);
+      drainEnemyDefeatsRef.current(gs);
       gs.screenShake = Math.max(gs.screenShake, 10);
     }
 
@@ -3182,14 +3289,13 @@ export default function CallOfDoodie() {
     gs.bullets.forEach(b => {
       if (b.life <= 0) return;
       gs.enemies.forEach(e => {
-        if (e.health <= -999) return;
+        if (e.health <= 0) return;
         if (bulletEnemyCollision(b, e).hit) {
           // Shield pulse blocks all damage
           if (e.shieldPulseActive) {
             addParticles(gs, b.x, b.y, "#00BFFF", 4);
             b.life = 0; return;
           }
-          const comboMult = 1 + comboRef.current.count * 0.1;
           const { isCrit } = rollCrit({
             baseCrit: CRIT_CHANCE,
             perkCrit: perkModsRef.current.critBonus || 0,
@@ -3221,13 +3327,27 @@ export default function CallOfDoodie() {
               addParticles(gs, e.x, e.y, "#5599FF", 20);
             }
           }
-          e.health -= dmg; e.hitFlash = isCrit ? 15 : 8; gs.totalDamage += dmg;
+          const projectileDamage = applyEnemyDamage(e, dmg, {
+            source: "projectile",
+            weaponIdx: b.wpnIdx ?? wpnIdx,
+            weaponName: WEAPONS[b.wpnIdx ?? wpnIdx]?.name || "PROJECTILE",
+            beatEligible: true,
+          });
+          e.hitFlash = isCrit ? 15 : 8;
+          gs.totalDamage += projectileDamage.applied;
           // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
           if (gs.chainLightning && getRunRng(gs, "combat")() < 0.20) {
             const arcTarget = findLightningChainTarget(gs.enemies, e, { range: 200 });
             if (arcTarget) {
               const arcDmg = dmg * 0.5;
-              arcTarget.health -= arcDmg; arcTarget.hitFlash = 8; gs.totalDamage += arcDmg;
+              const arcDamage = applyEnemyDamage(arcTarget, arcDmg, {
+                source: "chain-lightning",
+                weaponIdx: b.wpnIdx ?? wpnIdx,
+                weaponName: "CHAIN LIGHTNING",
+                beatEligible: true,
+              });
+              arcTarget.hitFlash = 8;
+              gs.totalDamage += arcDamage.applied;
               gs.lightningArcs = gs.lightningArcs || [];
               gs.lightningArcs.push({ x1: e.x, y1: e.y, x2: arcTarget.x, y2: arcTarget.y, life: 8, maxLife: 8 });
             }
@@ -3310,197 +3430,10 @@ export default function CallOfDoodie() {
           b.pierceLeft = pierce.nextPierceLeft;
           if (pierce.consumeBullet) b.life = 0;
 
-          if (e.health <= 0) {
-            (gs._wkbt = gs._wkbt || {})[e.typeIndex] = ((gs._wkbt)[e.typeIndex] || 0) + 1;
-            const comboTimerDuration = Math.floor(COMBO_TIMER_BASE * (perkModsRef.current.comboTimerMult || 1));
-            comboRef.current.count++; comboRef.current.timer = comboTimerDuration;
-            if (comboRef.current.count > comboRef.current.max) {
-              comboRef.current.max = comboRef.current.count;
-              const _pmLabel = comboRef.current.count >= 15 ? 'UNSTOPPABLE' : comboRef.current.count >= 10 ? 'GODLIKE' : comboRef.current.count >= 5 ? 'RAMPAGE' : null;
-              if (_pmLabel) peakMomentRef.current = { wave: gs.currentWave, count: comboRef.current.count, enemiesAlive: gs.enemies.length, label: _pmLabel };
-            }
-            setCombo(comboRef.current.count);
-            if (comboRef.current.count === 5) { gs._comboCardTimer = 60; gs._comboCardTier = 'rampage'; }
-            else if (comboRef.current.count === 10) { gs._comboCardTimer = 60; gs._comboCardTier = 'godlike'; }
-            else if (comboRef.current.count === 15) { gs._comboCardTimer = 60; gs._comboCardTier = 'unstoppable'; }
-            const projectileDefeat = planEnemyDefeatScore({
-              enemy: e,
-              comboMult,
-              killScoreMult: gs.killScoreMult || 1,
-              routeKillScoreMult: gs.routeKillScoreMult || 1,
-              activeObjective: gs.activeObjective || null,
-              playerPos: gs.player,
-            });
-            const pts = projectileDefeat.points;
-            gs.score += pts; gs.kills++; gs.killstreakCount++;
-            addHeatOnKill(gs, { isBoss: !!e.isBossEnemy, killstreak: gs.killstreakCount });
-            // Beat-kill bonus: kills aligned to the music beat earn +1💩
-            try {
-              const _bpm = getMusicBPM();
-              const _fpb = Math.round(60 / _bpm * 60);
-              const _beatPhase = frameCountRef.current % _fpb;
-              if (_beatPhase < 4 || _beatPhase > _fpb - 4) {
-                gs.coins = (gs.coins || 0) + 1;
-                addText(gs, e.x, e.y - e.size - 20, "🎵 BEAT KILL! +1💩", "#FF44FF");
-                addParticles(gs, e.x, e.y, "#FF44FF", 4);
-              }
-            } catch {}
-            gs.coinStreakKills++;
-            gs.coinStreakTimer = 180; // reset 3s window
-            if (gs.coinStreakKills >= 5 && !gs.coinMultActive) {
-              gs.coinMultActive = true;
-              gs.coinMultTimer = 600; // 10s
-              gs.coinStreakKills = 0;
-              addText(gs, p.x, p.y - 80, "💩×2 COIN FRENZY! 10s", "#C8A000", true);
-            }
-            if (dashRef.current.active > 0) statsRef.current.dashKills++;
-            if (b.wpnIdx != null) { statsRef.current.weaponKills[b.wpnIdx] = (statsRef.current.weaponKills[b.wpnIdx] || 0) + 1; }
-            if (gs.killstreakCount > statsRef.current.bestStreak) { statsRef.current.bestStreak = gs.killstreakCount; bestMomentRef.current = { ts: Date.now(), score: gs.killstreakCount * 10 }; }
-            if (projectileDefeat.careerBoss) statsRef.current.bossKills++;
-            if (e.typeIndex === 9) statsRef.current.landlordKills++;
-            if (e.typeIndex === 10) statsRef.current.cryptoKills++;
-            if (e.isBossEnemy) {
-              soundBossKill();
-              rumbleGamepad(0.5, 1.0, 500);
-              gs.bossKillFlash = 22; // golden flash overlay
-              gs.screenShake = Math.max(gs.screenShake, 30);
-              addParticles(gs, e.x, e.y, e.color, 50);
-              addParticles(gs, e.x, e.y, "#FFD700", 30);
-              addParticles(gs, e.x, e.y, "#FFFFFF", 20);
-              addText(gs, W / 2, H / 3, "☠ BOSS ELIMINATED ☠", "#FF0000", true);
-              if (100 > bestMomentRef.current.score) bestMomentRef.current = { ts: Date.now(), score: 100 };
-              if (e.typeIndex === 20) gs.algorithmSurge = false;
-            }
-            // 💩 Coin drop (second kill block — grenade/dash/AoE kills)
-            const _bulletLootRng = getRunRng(gs, "loot");
-            const _cd2 = planEnemyCoinDrop({
-              enemy: e,
-              rng: _bulletLootRng,
-              coinMultActive: gs.coinMultActive,
-              treeCoinBonus: gs._treeCoinBonus || 1,
-            }).amount;
-            if (_cd2 > 0) {
-              gs.coins = (gs.coins || 0) + _cd2;
-              setCoins(gs.coins);
-              if ((Math.floor(gs.coins / 25)) > Math.floor((gs.lastCoinRoastMilestone || 0) / 25)) {
-                gs.lastCoinRoastMilestone = gs.coins;
-                const coinRoast = getRoastCallout("coin_milestone", roastCooldowns.current, gs.currentWave, 1);
-                if (coinRoast) addText(gs, e.x, e.y - 60, coinRoast, "#FFE082");
-              }
-            }
-            if (gs._killFrenzyUnlocked) { gs._killFrenzyTimer = 90; }
-            setScore(gs.score); setKills(gs.kills); setKillstreak(gs.killstreakCount);
-            setBestStreak(statsRef.current.bestStreak); setTotalDamage(Math.floor(gs.totalDamage));
-            if (!gs.newBestScore && gs.score > (gs.careerBest?.score || 0)) {
-              gs.newBestScore = true;
-              addText(gs, W / 2, H / 2 - 120, "🏆 NEW BEST SCORE!", "#FFD700", true);
-              addParticles(gs, p.x, p.y - 60, "#FFD700", 25);
-              addParticles(gs, p.x, p.y - 60, "#FF4400", 15);
-              addParticles(gs, p.x, p.y - 60, "#FFFFFF", 10);
-              gs.screenShake = Math.max(gs.screenShake, 8);
-            }
-            addParticles(gs, e.x, e.y, e.color, 20);
-            addText(gs, e.x, e.y - 30, "+" + pts + (comboRef.current.count > 1 ? " (x" + comboRef.current.count + ")" : ""), "#FFD700");
-            const dq = Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(cosmeticRandom() * e.deathQuotes.length)] : (e.deathQuote || "...");
-            addText(gs, e.x, e.y - 54, `"${dq}"`, "#FF88CC", "quote");
-            addKillFeed(e.name, WEAPONS[wpnIdx].name);
-            if (e.lastDmgSource === "grenade") statsRef.current.grenadeKills = (statsRef.current.grenadeKills || 0) + 1;
-            addXp(pts); gs.killFlash = 6;
-            if (gs.vampireMode) { p.health = Math.min(p.maxHealth, p.health + 3); setHealth(Math.floor(p.health)); }
-            // Adrenaline Rush: kill while <30% HP → 2s double speed
-            if (perkModsRef.current.adrenalineRush && p.health > 0 && p.health < p.maxHealth * 0.30) {
-              gs.adrenalineRushTimer = perkModsRef.current.adrenalineRushDuration || 120;
-              addText(gs, p.x, p.y - 50, "⚡ ADRENALINE!", "#FF6600", true);
-              addParticles(gs, p.x, p.y, "#FF6600", 12);
-            }
-            gs.dyingEnemies = gs.dyingEnemies || [];
-            if (gs.dyingEnemies.length < MAX_DYING_ANIM)
-              gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
-            // Track berserker kills (wave 40+ elite)
-            if (e.eliteType === "berserker") {
-              statsRef.current.berserkersKilled = (statsRef.current.berserkersKilled || 0) + 1;
-              setBerserkersKilled(statsRef.current.berserkersKilled);
-            }
-            // Explosive elite: chain AOE on death
-            if (e.eliteType === "explosive") {
-              const expRadius = 85;
-              addParticles(gs, e.x, e.y, "#FF6600", 20); addParticles(gs, e.x, e.y, "#FFAA00", 12);
-              gs.screenShake = Math.max(gs.screenShake, 8);
-              addText(gs, e.x, e.y - 40, "💥 CHAIN!", "#FF6600");
-              gs.enemies.forEach(ne => {
-                if (ne !== e && ne.health > 0) {
-                  const dx = ne.x - e.x, dy = ne.y - e.y;
-                  if (dx * dx + dy * dy < expRadius * expRadius) { ne.health -= 35; ne.hitFlash = 10; }
-                }
-              });
-            }
-            achCheckRef.current = true;
-            if (KILL_MILESTONES[gs.kills]) {
-              addText(gs, W / 2, H / 2 - 90, KILL_MILESTONES[gs.kills], "#FF44FF", true);
-              addText(gs, W / 2, H / 2 - 65, gs.kills + " KILLS!", "#FFF", true);
-              gs.screenShake = 10; addParticles(gs, W / 2, H / 2 - 80, "#FF44FF", 20);
-            }
-            if (gs.kills === 1) {
-              const firstBloodRoast = getRoastCallout("first_blood", roastCooldowns.current, gs.currentWave, 1);
-              if (firstBloodRoast) addText(gs, W / 2, 56, firstBloodRoast, "#FFB5C5", true);
-            }
-            if (gs.killstreakCount % 5 === 0 && gs.killstreakCount > 0) {
-              const ki = Math.min(Math.floor(gs.killstreakCount / 5) - 1, KILLSTREAKS.length - 1);
-              addText(gs, W / 2, 80, KILLSTREAKS[ki] + "!", "#FF4500", true);
-              const _streakRoast = getRoastCallout("kill_streak", roastCooldowns.current, gs.currentWave);
-              if (_streakRoast) addText(gs, W / 2, 108, _streakRoast, "#FF8855");
-              gs.enemies.forEach(en => { en.health -= 40; en.hitFlash = 15; });
-              gs.screenShake = 12;
-            }
-            // Enemy death sound (non-boss only — boss kill has soundBossKill; max 2/frame to avoid audio pile-up)
-            if (!e.isBossEnemy) {
-              if (e.summonedBy) {
-                soundSummonDismissed();
-                addText(gs, e.x, e.y - 38, "✨ SUMMON DISMISSED", "#CC88FF");
-              } else if ((gs._deathSoundsThisFrame || 0) < 2) {
-                gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
-                soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count);
-              }
-            }
-            // Splitter: split into 3 mini-copies on death
-            if (e.splitOnDeath && !e.splitDone) {
-              e.splitDone = true;
-              addText(gs, e.x, e.y - 50, "💔 SPLIT!", "#FF6688", true);
-              const _diff2 = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-              for (let _si = 0; _si < 3; _si++) {
-                const _sa = (_si / 3) * Math.PI * 2 + 0.5;
-                const _sx = e.x + Math.cos(_sa) * 55, _sy = e.y + Math.sin(_sa) * 55;
-                const _sHP = e.maxHealth * 0.35;
-                gs.enemies.push({
-                  x: _sx, y: _sy, health: _sHP, maxHealth: _sHP,
-                  speed: e.speed * 1.4 * (gs.waveEventSpeedMult || 1),
-                  size: e.size * 0.58, color: "#FF8899",
-                  name: "Splitter Shard", points: Math.floor(e.points * 0.25),
-                  deathQuotes: ["..."], emoji: "💔", typeIndex: 16,
-                  wobble: getRunRng(gs, "hazards")() * Math.PI * 2, hitFlash: 0,
-                  ranged: false, projSpeed: 0, projRate: 999,
-                  shootTimer: 60, isBossEnemy: false,
-                  splitOnDeath: false,
-                });
-              }
-              addParticles(gs, e.x, e.y, "#FF6688", 30);
-            }
-            // Pickup drops (skip during siege mode; Splitter shards never drop)
-            const isBossEnemy = e.isBossEnemy;
-            const isShard = e.typeIndex === 16 && !isBossEnemy;
-            if (!isShard) {
-              if (isBossEnemy && extraLivesRef.current === 0 && _bulletLootRng() < 0.18) {
-                gs.pickups.push({ x: e.x, y: e.y, type: "guardian_angel", life: 600 });
-              } else if ((isBossEnemy || _bulletLootRng() < 0.25) && !gs.siegeMode) {
-                spawnPickup(gs, e.x, e.y, isBossEnemy);
-              }
-            }
-            e.health = -999;
-          }
         }
       });
     });
-    gs.enemies = stepAndCompactInPlace(gs.enemies, e => e.health > -999);
+    drainEnemyDefeatsRef.current(gs);
     if (achCheckRef.current) { checkAchievements(gs); checkDailyMissions(gs); achCheckRef.current = false; }
 
     // ── Flow field rebuild (every 30 frames or on significant player movement) ──
@@ -3980,7 +3913,7 @@ export default function CallOfDoodie() {
             rumbleGamepad(0.5, 0.7, 200);
             if (p.health <= 0) handlePlayerDeath(gs);
           }
-          e.health = -999;
+          retireEnemyWithoutDefeat(e, "kamikaze-self-destruct");
         }
       }
       // ── Enemy-wall collision (push-out, same logic as player) ──
@@ -4094,7 +4027,11 @@ export default function CallOfDoodie() {
         } else if (pk.type === "nuke") {
           statsRef.current.nukes++;
           addText(gs, W / 2, H / 2, "TACTICAL NUKE!", "#FF0000", true);
-          gs.enemies.forEach((en, _ni) => { en.health = -999; gs.score += en.points; if (_ni < 12) addParticles(gs, en.x, en.y, en.color, 8); });
+          gs.enemies.forEach((en, _ni) => {
+            retireEnemyWithoutDefeat(en, "tactical-nuke");
+            gs.score += en.points;
+            if (_ni < 12) addParticles(gs, en.x, en.y, en.color, 8);
+          });
           gs.enemies = []; gs.screenShake = 20; setScore(gs.score); checkAchievements(gs);
         } else if (pk.type === "guardian_angel") {
           extraLivesRef.current = 1; setExtraLives(1); statsRef.current.guardianAngels++;
@@ -4186,7 +4123,7 @@ export default function CallOfDoodie() {
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, spawnPickup, openQueuedPerkSelection, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef, {
@@ -5011,6 +4948,7 @@ function InputDebugOverlay({ data }) {
   const d = data || {};
   const rows = [
     ["SRC", d.source || "--"],
+    ["MOVE", `${Array.isArray(d.movementSources) && d.movementSources.length ? d.movementSources.join("+") : "idle"}${d.movementContention ? " !CONFLICT" : ""}`],
     ["PAD", d.connected ? `${d.controllerType || "controller"} #${d.controllerIndex ?? "?"}` : "none"],
     ["ID", d.controllerId ? String(d.controllerId).slice(0, 34) : "--"],
     ["LSTICK", `${fmtDebugNumber(d.leftX)} ${fmtDebugNumber(d.leftY)} ${d.leftActive ? "ACTIVE" : "idle"}`],

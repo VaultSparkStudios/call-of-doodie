@@ -272,11 +272,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 1000.0 | 5: 1000.0 | 10: 1000.0 | 25: 1000.0 | all: 1000.0 [N=8 canonical parsed sessions]
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 100.0 | Process 100.0 [N=3]
-Velocity trend: ↑  |  Protocol velocity: ↑  |  Debt: ↓
-Momentum runway: ~15.0 sessions  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-22 | Session 127 | Total: 1000/1000 | Velocity: 10 | protocolVelocity: 10
+Avgs — 3: 999.0 | 5: 999.4 | 10: 999.7 [N=9] | 25: 999.7 [N=9] | all: 999.7 [N=9 canonical parsed sessions]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
+Velocity trend: ↓  |  Protocol velocity: →  |  Debt: ↓
+Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
+Last session: 2026-07-25 | Session 130 | Total: 997/1000 | Velocity: 8 | protocolVelocity: 8
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1896,3 +1896,29 @@ Brainstorm:
 1. No candidate met the implementation bar after live-premise filtering; the fresh innovation pack is intentionally empty.
 2. Revisit physical-device and production-evidence surfaces only when real evidence or credentials exist.
 3. Reopen causal damage analysis only if the deterministic replay contract expands beyond the bounded observed sequence.
+
+## 2026-07-25 — Session 130 | Total: 997/1000 | Velocity: 8 | Debt: ↓
+
+SIL +8: Completed the continuous founder-requested arc, shipped all three verified primary items, three second-order safeguards, a secrets-gateway staging path, and a closeout parser root fix, then exhausted every honest repo-owned candidate.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint, 809/809 tests, explicit coverage, production build, browser E2E, launch/security/public/replay/media gates, and staging pass directly. |
+| Creative Alignment | 100 | same | The work strengthens fast, fair combat and input trust without diluting the irreverent guest-first arcade identity. |
+| Momentum | 100 | same | Three primary items, three generated safeguards, one deploy path, and one closeout root fix shipped continuously without phase handback. |
+| Engagement | 97 | down | Measured feedback-loop health is 25/25 and proposal acceptance is 22/25; no player-growth or community data is fabricated. |
+| Process Quality | 100 | same | Every premise was checked against live code, false or evidence-gated items were recorded as wins, and reports derive from executable sources. |
+| Cross-Repo Coherence | 100 | same | Studio Ops was consumed read-only through canonical interfaces; no sibling repository tree was edited. |
+| Security Posture | 100 | same | No dependency was added, secrets stayed inside the gateway, security release passed, and npm audit reports zero vulnerabilities. |
+| Ecosystem Integration | 100 | same | Human gameplay, agent-facing coverage truth, integrity receipts, staging evidence, audit artifacts, and closeout surfaces agree. |
+| Capital Efficiency | 100 | same | Runtime changes are local and deterministic; no variable per-user charge or notional Max Plan alarm was introduced. |
+| Automation Coverage | 100 | up | Coverage now proves 82/82 core files, freshness, 809 tests, two browser paths, seven staging checks, 255 hosted visual cases, and exact handoff-trim boundaries. |
+
+Top win: one source-neutral combat boundary now makes exactly-once defeat attribution testable while future bypasses fail closed into honest integrity evidence.
+Top gap: direct AI pixel inspection and external launch evidence remain unavailable; automated hosted visual evidence is real but not mislabeled as human/AI visual approval.
+Intent outcome: Achieved — the complete arc, second-order expansion, staging, and write-back finished for every agent-owned premise.
+
+Brainstorm:
+1. Defeat-source receipt explorer — expose sanitized per-source counts in opt-in playtest exports once real balance questions need them. Medium probability after participant evidence exists.
+2. Input-contention calibration coach — turn sustained conflict receipts into a local device-specific prompt only after physical multi-device evidence proves recurrence. Medium probability.
+3. Coverage ratchet proposal engine — recommend floor increases from several consecutive green main builds instead of one unusually favorable run. High probability once CI history provides a stable window.

@@ -1,26 +1,24 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-25 (Session 129 closeout) -->
+<!-- generated-at: 2026-07-25 (Session 130 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S129 ════════════════════╗
-║  Date: 2026-07-25  ·  SIL: 1000/1000  ·  Velocity: 10 decreasin  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S130 ════════════════════╗
+║  Date: 2026-07-25  ·  SIL: 997/1000  ·  Velocity: 8 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Completed the founder-requested continuous `/goal` arc from   ║
-║  ✓ Shipped startup-brief source coherence, capability-gated Sup  ║
-║  ✓ Rejected a duplicate full-physics replay-hash proposal after  ║
-║  ✓ Closed nineteen generated operator-script gaps and four clos  ║
-║  ✓ Isolated staging at `https://session-129-staging.call-of-doo  ║
+║  ✓ Shipped: 8 improvements across combat architecture, input in  ║
+║  ✓ Tests: 809/809 across 111 files (+29 tests, +5 files versus   ║
+║  ✓ Deploy: isolated Cloudflare staging at `https://session-130-  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 1000/1000 ══════════════════════════════════════╗
+╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         100  ██████████                            ║
+║    Engagement         97   ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
@@ -41,19 +39,19 @@
 ║  · agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 68 files  ·  M:55 A:0 D:0 ?:13                         ║
+║  Changes: 37 files  ·  M:23 A:0 D:0 ?:14                         ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-129-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-130-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        110/154                                          ║
+║  Doctor:        115/154                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         780/780                                          ║
-║  IGNIS:         9d ago                                           ║
+║  Tests:         809/809                                          ║
+║  IGNIS:         10d ago                                          ║
 ║  Truth:         green-code-no-go-launch                          ║
 ║  Sanitization:  —                                                ║
 ╚════════════════════════════════════════════════════════════════╝

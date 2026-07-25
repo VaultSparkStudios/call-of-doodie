@@ -16,6 +16,18 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S130** Source-neutral enemy defeat lifecycle — every combat lethal enters one exactly-once executor; explicit no-reward retirements stay separate and unattributed future bypasses fail closed into run-integrity evidence.
+- [x] [SIL:2] **DONE S130** Live multimodal movement contract — keyboard, touch, and gamepad share one finite normalized frame contract with active-source and contention receipts.
+- [x] [SIL:2] **DONE S130** Truthful core-logic coverage contract — exact 82-file scope, metric ratchets, explicit exclusions, and stale-evidence rejection protect the coverage claim.
+- [x] [SIL:1] **DONE S130 second-order** Unattributed-lethal reconciler — future damage paths cannot strand a corpse or silently bypass defeat accounting.
+- [x] [SIL:1] **DONE S130 second-order** Multimodal contention visibility — opposing simultaneous sources appear in Input Debug without changing player motion semantics.
+- [x] [SIL:1] **DONE S130 second-order** Coverage freshness — yesterday's JSON cannot certify newer source, tests, or contract inputs.
+- [x] [SIL:1] **DONE S130 closeout** Secrets-gateway staging deploy — isolated direct-upload preview passed runtime 7/7 and hosted visual automation 255/255 without creating a Git branch.
+- [x] [SIL:1] **DONE S130 closeout root fix** Handoff trim truth — top-level session boundaries replace ambiguous nested subheading splits, with legacy-format fallback and regression fixtures.
+- [x] [AUDIT WIN S130] Analytics, membership, HomeV2 retirement, deeper profiling, whole-loop rewrite, and visual-verdict proposals were deferred or rejected after live premise checks; no credentials, production data, symptoms, product authority, or pixel evidence were fabricated.
+
+**Runway exception:** the repo-owned Genius List is exhausted after S130. The only open work is retained under Human Action Required because it needs credentials, product choice, production traffic, publication/community readiness, physical devices/media, or founder approval; inventing two unblocked Now items would be a phantom backlog.
+
 - [x] [SIL:2] **DONE S129** Startup-brief source coherence — current testing surfaces and flat-rate Max Plan semantics are selected and cross-source validated instead of inherited from stale append order.
 - [x] [SIL:2] **DONE S129** Capability-gated optional clients — memoized retry-safe Supabase and DSN-gated Sentry boundaries remove both optional vendors from initial static preloads.
 - [x] [SIL:2] **DONE S129** Final-damage sequence receipt — all player-damage classes feed one bounded observed timeline; DeathScreen and Balance Lab surface burst/attrition/mixed patterns without claiming causality.

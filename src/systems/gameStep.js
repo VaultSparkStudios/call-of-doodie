@@ -15,18 +15,66 @@
  * Compute normalized movement direction from keyboard + joystick input.
  * Returns { dx, dy } where |dx,dy| ≤ 1.0.
  */
-export function computeMovementVector(keys = {}, joystick = { active: false, dx: 0, dy: 0 }) {
+function finiteAxis(value, min = -1, max = 1) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? Math.max(min, Math.min(max, numeric)) : 0;
+}
+
+function keyboardVector(keys = {}) {
   let dx = 0, dy = 0;
   if (keys["w"] || keys["arrowup"])    dy -= 1;
   if (keys["s"] || keys["arrowdown"])  dy += 1;
   if (keys["a"] || keys["arrowleft"])  dx -= 1;
   if (keys["d"] || keys["arrowright"]) dx += 1;
-  if (joystick.active) {
-    const dist = Math.hypot(joystick.dx, joystick.dy);
-    if (dist > 5) { dx += joystick.dx / Math.max(dist, 50); dy += joystick.dy / Math.max(dist, 50); }
-  }
+  return { dx, dy };
+}
+
+function touchVector(joystick = {}) {
+  if (!joystick?.active) return { dx: 0, dy: 0, active: false };
+  const rawX = finiteAxis(joystick.dx, -10000, 10000);
+  const rawY = finiteAxis(joystick.dy, -10000, 10000);
+  const distance = Math.hypot(rawX, rawY);
+  if (distance <= 5) return { dx: 0, dy: 0, active: false };
+  return {
+    dx: rawX / Math.max(distance, 50),
+    dy: rawY / Math.max(distance, 50),
+    active: true,
+  };
+}
+
+function gamepadVector(gamepad = {}) {
+  if (!gamepad?.active) return { dx: 0, dy: 0, active: false };
+  const dx = finiteAxis(gamepad.x ?? gamepad.dx);
+  const dy = finiteAxis(gamepad.y ?? gamepad.dy);
+  return { dx, dy, active: Math.hypot(dx, dy) > 0 };
+}
+
+export function resolveMovementVector({ keys = {}, joystick = {}, gamepad = {} } = {}) {
+  const keyboard = keyboardVector(keys);
+  const touch = touchVector(joystick);
+  const controller = gamepadVector(gamepad);
+  let dx = keyboard.dx + touch.dx + controller.dx;
+  let dy = keyboard.dy + touch.dy + controller.dy;
+  const activeSources = [];
+  if (Math.hypot(keyboard.dx, keyboard.dy) > 0) activeSources.push("keyboard");
+  if (touch.active) activeSources.push("touch");
+  if (controller.active) activeSources.push("gamepad");
   const len = Math.hypot(dx, dy);
-  if (len > 0) { dx /= len; dy /= len; }
+  const strongestMagnitude = Math.max(
+    Math.hypot(keyboard.dx, keyboard.dy),
+    Math.hypot(touch.dx, touch.dy),
+    Math.hypot(controller.dx, controller.dy),
+  );
+  const contention = activeSources.length > 1 && strongestMagnitude >= 0.5 && len < strongestMagnitude * 0.35;
+  if (len > 0) {
+    dx /= len;
+    dy /= len;
+  }
+  return { dx, dy, activeSources, contention };
+}
+
+export function computeMovementVector(keys = {}, joystick = {}, gamepad = {}) {
+  const { dx, dy } = resolveMovementVector({ keys, joystick, gamepad });
   return { dx, dy };
 }
 
@@ -101,19 +149,30 @@ export function applyPlayerMovement(player, dir, {
   H = 600,
   obstacles = [],
 } = {}) {
+  const safeDx = finiteAxis(dir?.dx);
+  const safeDy = finiteAxis(dir?.dy);
+  const safeSpeed = Math.max(0, Number.isFinite(Number(player?.speed)) ? Number(player.speed) : 0);
+  const safeW = Math.max(40, Number.isFinite(Number(W)) ? Number(W) : 800);
+  const safeH = Math.max(40, Number.isFinite(Number(H)) ? Number(H) : 600);
+  player.x = Number.isFinite(Number(player.x)) ? Number(player.x) : safeW / 2;
+  player.y = Number.isFinite(Number(player.y)) ? Number(player.y) : safeH / 2;
   if (!dashActive) {
     const rushMult   = adrenalineRushTimer > 0 ? 2.0 : 1.0;
     const rubbleMult = rubbleSlowed ? 0.6 : 1.0;
-    player.x += dir.dx * player.speed * rushMult * rubbleMult;
-    player.y += dir.dy * player.speed * rushMult * rubbleMult;
+    player.x += safeDx * safeSpeed * rushMult * rubbleMult;
+    player.y += safeDy * safeSpeed * rushMult * rubbleMult;
   }
   // Canvas boundary clamp
-  player.x = Math.max(20, Math.min(W - 20, player.x));
-  player.y = Math.max(20, Math.min(H - 20, player.y));
+  player.x = Math.max(20, Math.min(safeW - 20, player.x));
+  player.y = Math.max(20, Math.min(safeH - 20, player.y));
   // Obstacle push-out
   for (const ob of obstacles) {
-    const cx = Math.max(ob.x, Math.min(player.x, ob.x + ob.w));
-    const cy = Math.max(ob.y, Math.min(player.y, ob.y + ob.h));
+    const obX = Number.isFinite(Number(ob?.x)) ? Number(ob.x) : 0;
+    const obY = Number.isFinite(Number(ob?.y)) ? Number(ob.y) : 0;
+    const obW = Math.max(0, Number.isFinite(Number(ob?.w)) ? Number(ob.w) : 0);
+    const obH = Math.max(0, Number.isFinite(Number(ob?.h)) ? Number(ob.h) : 0);
+    const cx = Math.max(obX, Math.min(player.x, obX + obW));
+    const cy = Math.max(obY, Math.min(player.y, obY + obH));
     const dist = Math.hypot(player.x - cx, player.y - cy);
     if (dist < 16) {
       const ang = Math.atan2(player.y - cy, player.x - cx);

@@ -2,6 +2,30 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-07-25 — Session 130 — Lethal attribution is one exactly-once lifecycle
+
+**Decision:** Every combat source queues metadata into one defeat executor; Kamikaze and Tactical Nuke remain explicit non-reward retirements, and any future unqueued lethal is reconciled as `unattributed` while recording a run-integrity fault.
+
+**Rationale:** Score, combo, heat, pickups, progression, boss, and split effects must not drift by weapon source. Failing closed preserves play continuity without certifying a run whose attribution contract was bypassed.
+
+## 2026-07-25 — Session 130 — Simultaneous input remains compositional but observable
+
+**Decision:** Keyboard, touch, and gamepad vectors retain their historical additive normalization; strong opposing sources emit a contention receipt instead of silently changing arbitration policy.
+
+**Rationale:** A new priority policy without physical-device evidence could break valid hybrid play. Visibility creates the evidence needed for a future device-specific choice while preserving current behavior.
+
+## 2026-07-25 — Session 130 — Coverage evidence must be fresh, scoped, and explicitly incomplete
+
+**Decision:** The coverage headline applies only to the declared 82-file core-logic surface, names visual/orchestration exclusions, and fails when its JSON predates a measured source, focused test, or coverage-contract input.
+
+**Rationale:** A stale or shrinking green report is worse than no report because it can certify code it never measured. Honest exclusions keep browser/canvas quality on the gates that actually observe it.
+
+## 2026-07-25 — Session 130 — Handoff retention follows session ownership, not content subheadings
+
+**Decision:** Closeout trimming splits on top-level session headings and retains the newest two complete session-owned sections; `Where We Left Off` splitting exists only as a legacy fallback.
+
+**Rationale:** Content subheadings recur inside every session and can survive malformed historical nesting. Treating them as ownership boundaries made the tool report success while keeping stale sessions, violating observability honesty.
+
 ## 2026-06-15 — Session 96 — Peak combo moment tier labels at 5/10/15
 
 **Decision:** `peakMomentRef` captures three named tiers: `_pmLabel = combo ≥ 15 ? "UNSTOPPABLE" : combo ≥ 10 ? "GODLIKE" : "RAMPAGE"` (triggered at 5+). Labels match the existing fullscreen combo card (S91), so both surfaces agree on tier identity.

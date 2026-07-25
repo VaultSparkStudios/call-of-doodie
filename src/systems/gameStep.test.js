@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { describe, it, expect } from "vitest";
 import {
   computeMovementVector,
@@ -5,6 +7,7 @@ import {
   computePointerAimAngle,
   angleToUnitVector,
   buildPointerAimSweepReport,
+  resolveMovementVector,
 } from "./gameStep.js";
 
 describe("computeMovementVector", () => {
@@ -37,6 +40,43 @@ describe("computeMovementVector", () => {
     const { dx, dy } = computeMovementVector({}, { active: true, dx: 3, dy: 0 });
     expect(dx).toBe(0);
     expect(dy).toBe(0);
+  });
+
+  it("composes keyboard, touch, and gamepad into one bounded frame receipt", () => {
+    const receipt = resolveMovementVector({
+      keys: { w: true },
+      joystick: { active: true, dx: 50, dy: 0 },
+      gamepad: { active: true, x: 0.5, y: 0.5 },
+    });
+    expect(receipt.activeSources).toEqual(["keyboard", "touch", "gamepad"]);
+    expect(Math.hypot(receipt.dx, receipt.dy)).toBeCloseTo(1, 5);
+    expect(receipt.dx).toBeGreaterThan(0);
+    expect(receipt.dy).toBeLessThan(0);
+  });
+
+  it("cancels opposing sources without manufacturing motion", () => {
+    expect(resolveMovementVector({
+      keys: { a: true },
+      gamepad: { active: true, x: 1, y: 0 },
+    })).toEqual({ dx: 0, dy: 0, activeSources: ["keyboard", "gamepad"], contention: true });
+  });
+
+  it("sanitizes non-finite analog values and clamps controller axes", () => {
+    const receipt = resolveMovementVector({
+      joystick: { active: true, dx: Number.NaN, dy: Infinity },
+      gamepad: { active: true, x: 4, y: -4 },
+    });
+    expect(receipt.activeSources).toEqual(["gamepad"]);
+    expect(receipt.dx).toBeCloseTo(Math.SQRT1_2, 5);
+    expect(receipt.dy).toBeCloseTo(-Math.SQRT1_2, 5);
+    expect(receipt.contention).toBe(false);
+  });
+
+  it("is the movement contract consumed by the live App frame", () => {
+    const appSource = fs.readFileSync(path.resolve(process.cwd(), "src/App.jsx"), "utf8");
+    expect(appSource.match(/resolveMovementVector\(/g) || []).toHaveLength(1);
+    expect(appSource.match(/applyPlayerMovement\(/g) || []).toHaveLength(1);
+    expect(appSource).not.toContain("p.x += dx * p.speed");
   });
 });
 
@@ -79,6 +119,16 @@ describe("applyPlayerMovement", () => {
     // Player should be pushed away from obstacle center (50, 50)
     const dist = Math.hypot(player.x - 50, player.y - 50);
     expect(dist).toBeGreaterThanOrEqual(16); // pushed to at least 17px from nearest obstacle edge
+  });
+
+  it("fails finite and deterministic for malformed runtime input", () => {
+    const player = { x: Number.NaN, y: Infinity, speed: Number.NaN };
+    applyPlayerMovement(player, { dx: Infinity, dy: Number.NaN }, {
+      W: Number.NaN,
+      H: Infinity,
+      obstacles: [{ x: Number.NaN, y: 0, w: -5, h: Number.NaN }],
+    });
+    expect(player).toMatchObject({ x: 400, y: 300 });
   });
 });
 

@@ -1,3 +1,12 @@
+- Session 130 (2026-07-25) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
+- Combat truth — grenade, projectile, rail, lightning, perk, boss, and environmental lethals now converge on one exactly-once defeat executor; explicit non-reward retirements remain distinct, and future unattributed lethals fail closed into a bounded integrity receipt.
+- Input truth — the live keyboard, touch, and gamepad path now consumes one finite pure movement contract; materially opposing simultaneous sources remain behavior-compatible and appear as a diagnostic contention receipt.
+- Coverage truth — the explicit 82-file core-logic contract measures systems, hooks, utilities, storage, and constants with honest visual/orchestration exclusions and rejects missing, regressed, or stale evidence.
+- Saturation truth — all three live-premise audit items and three generated second-order safeguards shipped; the regenerated Genius List contains only credential, product-decision, production-data, publication/community, or physical-evidence gates.
+- Staging truth — `https://session-130-staging.call-of-doodie.pages.dev/` passed typed runtime 7/7 and hosted route/theme/viewport automation 255/255 through a new secrets-gateway-only deploy command.
+- Closeout truth — handoff trimming now uses top-level session boundaries and is regression-gated; nested `Where We Left Off` subheadings can no longer make the tool claim a false two-session result.
+- Validation truth — strict lint, 809/809 tests across 111 files, explicit coverage ratchets, production build, launch/security/public/replay/media gates, and browser E2E 2/2 are green.
+- Release truth — engineering remains green; SPARKED remains NO-GO pending physical device/full-run media, verified inbound mail, production Lighthouse/funnel data, scoped analytics/Sentry, publication, direct AI pixel review, and founder approval.
 - Session 129 (2026-07-24) completed the founder-requested continuous `/start -> /audit -> /implement -> innovation saturation -> /closeout` arc from synchronized `main`.
 - Runtime truth — the startup brief now selects current volatile receipts, self-validates test/cost provenance, and treats flat-rate Max Plan usage as informational rather than alarming.
 - Performance truth — optional Supabase and Sentry clients are interaction/capability gated; the entry document preloads only React and avoids 230.77 kB raw / 61.74 kB gzip of optional baseline vendors.

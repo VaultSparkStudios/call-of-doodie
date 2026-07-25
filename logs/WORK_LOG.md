@@ -1,5 +1,16 @@
 # Work Log
 
+## 2026-07-25 (Session 130 — source-neutral combat, input integrity, and evidence truth)
+
+- Ran the complete continuous `/goal` arc from synchronized `main`: startup gates, live-premise audit, complete implementation, second-order innovation, isolated staging, and canonical closeout.
+- Replaced duplicated lethal reward branches with one exactly-once enemy-defeat lifecycle covering every combat source while preserving explicit Kamikaze/Tactical Nuke retirement policies.
+- Added fail-closed unattributed-lethal reconciliation so future damage-path drift creates a sanitized run-integrity receipt instead of silently stranding or miscounting enemies.
+- Wired the live keyboard/touch/gamepad frame through one finite movement contract and exposed material opposing-source contention in Input Debug without changing motion semantics.
+- Established an exact 82-file core-logic coverage contract with honest exclusions, metric/file/scope ratchets, and freshness checks against measured sources, focused tests, and contract inputs.
+- Added a reusable Cloudflare staging command that resolves deploy credentials only through the Studio secrets gateway and avoids Git branches; Session 130 preview passed runtime 7/7 and hosted visual automation 255/255.
+- Root-fixed the closeout handoff trimmer after it falsely claimed two retained sessions while splitting on nested subheadings; top-level session boundaries and legacy fallback now have regression fixtures.
+- Validation: strict lint; 809/809 tests across 111 files; coverage 72.27/67.03/71.14/77.58; build; launch/security/public/replay/media gates; browser E2E 2/2.
+
 ## 2026-06-15 (Session 96 — combat audio × career depth × coaching sprint)
 
 - Ran full `/start → /audit → /implement → /closeout` loop against `docs/AUDIT_2026-06-15_3.json` (14 items, 10 shipped this session).

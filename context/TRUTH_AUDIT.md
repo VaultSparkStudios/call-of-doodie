@@ -40,6 +40,21 @@ Last reviewed: 2026-07-16
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-07-25 — Session 130 — Defeat, input, coverage, and staging truth
+
+- Audit truth — `docs/AUDIT_2026-07-25.json` / `.md` contain three live-verified primary items, six honest deferrals/rejections, and three implemented second-order safeguards with execution evidence.
+- Combat truth — all combat lethals converge on one exactly-once executor; explicit no-reward retirements remain distinct; unqueued future lethals invalidate competitive trust through a bounded integrity receipt.
+- Input truth — the runtime consumes the same finite keyboard/touch/gamepad movement contract its tests exercise; simultaneous opposing sources are observable without a speculative arbitration rewrite.
+- Coverage truth — the reported aggregate is explicitly an 82-file core-logic surface, not whole-app visual coverage, and its validator rejects missing scope, metric regression, or evidence older than relevant source/test/contract inputs.
+- Deployment truth — `scripts/deploy-staging-preview.mjs` resolves Cloudflare capability through the Studio secrets gateway and deployed without a Git branch to `https://session-130-staging.call-of-doodie.pages.dev/`.
+- Staging truth — typed runtime checks passed 7/7 and hosted route/theme/viewport automation passed 255/255. Direct AI pixel inspection remains unclaimed because the Windows image sandbox failed CryptUnprotectData.
+- Protocol truth — handoff closeout retention now recognizes top-level session headings, falls back for legacy files, and cannot silently retain nested historical sessions while claiming only two.
+- Validation truth — strict lint, 809/809 tests across 111 files, coverage ratchets, production build, launch/security/public/replay/media gates, and browser E2E 2/2 passed directly.
+- Release truth — engineering is green; SPARKED remains NO-GO until physical device/full-run media, inbound delivery, production data, scoped analytics/Sentry, publication, direct AI pixel review, and founder approval exist.
+
+Overall status: green code and isolated staging; NO-GO public launch
+Last reviewed: 2026-07-25
+
 ## 2026-07-16 — Session 125 — Competitive, dependency, theme, and public-rights truth
 
 - Audit truth — `docs/AUDIT_2026-07-16_4.json` / `.md` contain six live-verified primary items and eight implemented second-order innovations with shipped execution evidence.

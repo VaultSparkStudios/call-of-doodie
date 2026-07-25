@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { toVitestCoverageConfig } from "./scripts/lib/coverage-contract.mjs";
 
 export default defineConfig({
   plugins: [react()],
@@ -27,10 +28,6 @@ export default defineConfig({
     globals: true,
     include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}", "scripts/**/*.test.mjs"],
     testTimeout: 30000,
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "lcov"],
-      include: ["src/utils/**", "src/storage.js", "src/constants.js"],
-    },
+    coverage: toVitestCoverageConfig(),
   },
 });

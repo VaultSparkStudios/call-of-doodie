@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-25",
+  "session": 130,
+  "project": "Call-Of-Doodie",
+  "intent": "complete one continuous founder-directed arc through synchronized startup, live-premise audit, all-item implementation, second-order saturation, isolated staging, and direct-main closeout",
+  "outcome": "achieved-agent-owned-boundary",
+  "shipped": [
+    "Source-neutral exactly-once enemy defeat lifecycle",
+    "Fail-closed unattributed lethal reconciliation",
+    "Live keyboard, touch, and gamepad movement contract",
+    "Multimodal input contention receipt",
+    "Exact 82-file core-logic coverage contract",
+    "Coverage evidence freshness enforcement",
+    "Studio-secrets-gateway Cloudflare staging deploy command",
+    "Top-level handoff retention boundary with legacy fallback"
+  ],
+  "validation": [
+    "strict lint passed",
+    "npm test 809/809 across 111 files",
+    "coverage 82/82 files at statements 72.27, branches 67.03, functions 71.14, lines 77.58",
+    "production build and browser E2E 2/2 passed",
+    "launch, security, public, replay, and media gates passed",
+    "npm audit 0 vulnerabilities",
+    "isolated staging runtime 7/7 and hosted visual matrix 255/255"
+  ],
+  "deferred": [
+    "verified inbound on-domain email delivery",
+    "physical PWA, gamepad, and full-run media QA",
+    "production Lighthouse and funnel evidence",
+    "project-scoped analytics and Sentry",
+    "Itch/community publication and founder launch approval",
+    "direct AI pixel review because the image sandbox still fails Windows CryptUnprotectData"
+  ],
+  "sil": {
+    "score": 997,
+    "velocity": 8,
+    "debt": "decreasing"
+  },
+  "ignisNote": "The strongest pattern was boundary compounding: centralize one live mutation contract, then immediately make future bypass, contention, and stale evidence observable without inventing player or release claims.",
+  "headline": "Made combat attribution, multimodal motion, and coverage evidence prove their own truth",
+  "items": [
+    {
+      "title": "Combat lethals now share one exactly-once executor",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "one score/kill executor; every combat source queued; explicit non-reward retirements preserved"
+    },
+    {
+      "title": "Future defeat drift fails closed",
+      "projectImpact": 10,
+      "ecosystemImpact": 9,
+      "evidence": "unqueued lethal reconciliation plus bounded competitive-integrity fault"
+    },
+    {
+      "title": "The runtime and tests share one movement contract",
+      "projectImpact": 9,
+      "ecosystemImpact": 8,
+      "evidence": "keyboard, touch, and gamepad finite composition with contention diagnostics"
+    },
+    {
+      "title": "Coverage is scoped, exact, and fresh",
+      "projectImpact": 10,
+      "ecosystemImpact": 9,
+      "evidence": "82/82 core files, four metric ratchets, explicit exclusions, stale-evidence failure"
+    },
+    {
+      "title": "Staging deploys without secret leakage or Git branches",
+      "projectImpact": 9,
+      "ecosystemImpact": 9,
+      "evidence": "gateway-only deploy wrapper, hosted runtime 7/7, hosted visual 255/255"
+    },
+    {
+      "title": "Closeout retention now proves its session boundaries",
+      "projectImpact": 8,
+      "ecosystemImpact": 9,
+      "evidence": "top-level session parser, legacy fallback, exact trim regression fixtures"
+    }
+  ],
+  "followUps": [
+    "Complete physical device and media evidence when hardware is available",
+    "Verify inbound mail and project-scoped analytics/Sentry",
+    "Collect production performance and funnel evidence before legacy retirement",
+    "Perform direct AI pixel review when the image sandbox credential boundary is repaired"
+  ],
+  "blockers": [
+    "SPARKED launch requires the remaining physical, inbound-mail, production-data, scoped-analytics, direct-AI-visual, publication, and founder evidence"
+  ]
+}
