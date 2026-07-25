@@ -129,8 +129,8 @@ vi.mock("./components/MenuScreen.jsx", () => ({
   },
 }));
 
-vi.mock("./components/HomeV2.jsx", () => ({
-  default: function HomeV2Mock({ onStart }) {
+vi.mock("./components/HomeV3.jsx", () => ({
+  default: function HomeV3Mock({ onStart }) {
     return <button onClick={() => onStart()}>start</button>;
   },
 }));
@@ -222,7 +222,7 @@ afterEach(async () => {
 });
 
 describe("CallOfDoodie launch smoke", () => {
-  it("can progress from username to menu to draft to game and request a run token", async () => {
+  it("can progress directly from menu to draft to game and request a run token", async () => {
     const { default: App } = await import("./App.jsx");
 
     container = document.createElement("div");

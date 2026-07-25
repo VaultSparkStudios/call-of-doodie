@@ -9,7 +9,7 @@ import {
   WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, clearLockedCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
@@ -52,8 +52,8 @@ import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberC
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
-import UsernameScreen from "./components/UsernameScreen.jsx";
-import HomeV2 from "./components/HomeV2.jsx";
+import DisplayNameScreen from "./components/DisplayNameScreen.jsx";
+import HomeV3 from "./components/HomeV3.jsx";
 import HUD from "./components/HUD.jsx";
 const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
@@ -234,8 +234,10 @@ export default function CallOfDoodie() {
   const deferredShopPendingRef     = useRef(false);
 
   // ── State ─────────────────────────────────────────────────────────────────
-  const [screen, setScreen]           = useState(() => getLockedCallsign() ? "menu" : "username");
-  const [username, setUsername]       = useState(() => getLockedCallsign() || "");
+  // Playing is never gated behind identity creation. New visitors enter the
+  // menu as a local guest and choose a public display name only when needed.
+  const [screen, setScreen]           = useState("menu");
+  const [username, setUsername]       = useState(() => getLockedCallsign() || "Guest");
   const [score, setScore]             = useState(0);
   const [kills, setKills]             = useState(0);
   const [tutorialEvidence, setTutorialEvidence] = useState(() => normalizeTutorialEvidence());
@@ -4361,31 +4363,45 @@ export default function CallOfDoodie() {
   const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   if (screen === "username") {
-    return <UsernameScreen username={username} setUsername={setUsername} onContinue={() => { if (username.trim().length >= 2) { const n = username.trim(); lockCallsign(n); claimCallsign(n); identify(n, { accountLevel: getAccountLevel(loadCareerStats().totalKills || 0), prestige: loadMetaProgress()?.prestige || 0 }); setScreen("menu"); } }} />;
+    return (
+      <DisplayNameScreen
+        initialName={username}
+        onSave={(name) => {
+          lockCallsign(name);
+          setUsername(name);
+          claimCallsign(name);
+          identify(name, {
+            accountLevel: getAccountLevel(loadCareerStats().totalKills || 0),
+            prestige: loadMetaProgress()?.prestige || 0,
+          });
+          setScreen("menu");
+        }}
+        onCancel={() => {
+          setUsername(getLockedCallsign() || "Guest");
+          setScreen("menu");
+        }}
+      />
+    );
   }
 
   if (screen === "menu") {
     if (draftPending) {
       return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
     }
-    const homeV2 = (() => {
+    const useLegacyHome = (() => {
       try {
         const params = new URLSearchParams(window.location.search);
-        if (params.get("home") === "v2") { localStorage.setItem("cod-home-v2", "1"); return true; }
-        if (params.get("home") === "v1") { localStorage.setItem("cod-home-v2", "0"); return false; }
-        const stored = localStorage.getItem("cod-home-v2");
-        if (stored === "0") return false;
-        return true; // v2 is now default — opt out via ?home=v1
-      } catch { return true; }
+        return params.get("home") === "v1";
+      } catch { return false; }
     })();
-    const Home = homeV2 ? HomeV2 : MenuScreen;
+    const Home = useLegacyHome ? MenuScreen : HomeV3;
     return (
       <AsyncPanelBoundary>
         <Home
           username={username} difficulty={difficulty} setDifficulty={setDifficulty}
           isMobile={isMobile} leaderboard={leaderboard} lbLoading={lbLoading} lbHasMore={lbHasMore} onLoadMore={loadMoreLeaderboard}
           onStart={startGame} onRefreshLeaderboard={refreshLeaderboard}
-          onChangeUsername={() => { clearLockedCallsign(); setUsername(""); setScreen("username"); }}
+          onChangeUsername={() => { setUsername(getLockedCallsign() || ""); setScreen("username"); }}
           starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
           gameSettings={gameSettings}
           onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}

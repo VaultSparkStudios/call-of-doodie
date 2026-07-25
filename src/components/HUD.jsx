@@ -13,6 +13,7 @@ import { WEAPONS, DIFFICULTIES } from "../constants.js";
 import { getHudCenterStackLayout, getHudDebugSlots, isHudDebugEnabled } from "../utils/hudLayout.js";
 import { buildRunDrillLiveProgress } from "../systems/runDrill.js";
 import { buildRivalPace } from "../utils/rivalPace.js";
+import MobileHUD from "./MobileHUD.jsx";
 
 const THEME_NAMES = ["OFFICE","BUNKER","FACTORY","RUINS","DESERT","FOREST","SPACE","ARCTIC"];
 const THEME_EMOJIS = ["🏢","🪖","🏭","🏚️","🌵","🌲","🚀","🧊"];
@@ -86,6 +87,21 @@ export default function HUD({
     );
   };
 
+  if (isMobile) {
+    return (
+      <MobileHUD
+        wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
+        health={health} maxHealth={diff.playerHP} level={level}
+        currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
+        fmtTime={fmtTime} onPause={onPause}
+        activeDrill={activeDrill} drillProgress={drillProgress} runIntegrity={runIntegrity}
+        runModifier={runModifier} rivalPace={rivalPace} vsScore={vsScore} vsName={vsName}
+        topGhosts={topGhosts} weeklyRival={weeklyRival}
+        bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
+        cursedHideScore={cursedHideScore}
+      />
+    );
+  }
   return (
     <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: isMobile ? 56 : 0, pointerEvents: "none", color: "#fff" }}>
 
