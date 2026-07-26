@@ -410,6 +410,7 @@ export default function HomeV2(props) {
   ], [recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
+  const tabBodyRef = useRef(null);
   const cmdFocusIdx = useGamepadNav({
     count: CMD_ACTIONS.length,
     cols: 5,
@@ -429,7 +430,8 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const mobilePadBottom = isMobile ? "max(88px, calc(72px + env(safe-area-inset-bottom)))" : "max(32px, env(safe-area-inset-bottom))";
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px ${mobilePadBottom}` };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -948,18 +950,20 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
-        <div style={tabBody}>
+        {/* Tabbed nav — desktop only; mobile uses the fixed bottom bar */}
+        {!isMobile && (
+          <div style={tabsRow}>
+            {["career", "codex", "settings", "support"].map(t => (
+              <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
+                {t === "career" && "📊 CAREER"}
+                {t === "codex" && "📖 CODEX"}
+                {t === "settings" && "⚙ SETTINGS"}
+                {t === "support" && "❤️ SUPPORT"}
+              </button>
+            ))}
+          </div>
+        )}
+        <div ref={tabBodyRef} style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
           {tab === "settings" && (
@@ -1087,6 +1091,54 @@ export default function HomeV2(props) {
         <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
+      )}
+
+      {/* Mobile bottom nav bar — CANON-041 mobile parity */}
+      {isMobile && (
+        <nav
+          role="navigation"
+          aria-label="Main navigation"
+          data-testid="mobile-bottom-nav"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 60,
+            display: "flex", alignItems: "stretch",
+            background: theme === "porcelain-day" ? "rgba(245,240,230,0.97)" : "rgba(8,8,12,0.97)",
+            borderTop: `1px solid ${themePalette.line}`,
+            paddingBottom: "env(safe-area-inset-bottom)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            boxShadow: "0 -4px 24px rgba(0,0,0,0.45)",
+          }}
+        >
+          {[
+            { id: "career",   emoji: "📊", label: "CAREER" },
+            { id: "codex",    emoji: "📖", label: "CODEX" },
+            { id: "settings", emoji: "⚙",  label: "SETTINGS" },
+            { id: "support",  emoji: "❤️", label: "SUPPORT" },
+          ].map(({ id, emoji, label }) => {
+            const isActive = tab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => { switchTab(id); tabBodyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
+                aria-label={label}
+                aria-current={isActive ? "page" : undefined}
+                style={{
+                  flex: 1, display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center", gap: 3,
+                  padding: "10px 4px", background: "none", border: "none",
+                  cursor: "pointer", fontFamily: "inherit", touchAction: "manipulation",
+                  color: isActive ? themePalette.accent : themePalette.muted,
+                  borderTop: isActive ? `2px solid ${themePalette.accent}` : "2px solid transparent",
+                  transition: "color 0.15s, border-color 0.15s",
+                }}
+              >
+                <span style={{ fontSize: 20, lineHeight: 1 }} aria-hidden="true">{emoji}</span>
+                <span style={{ fontSize: 9, fontWeight: isActive ? 900 : 600, letterSpacing: 0.8 }}>{label}</span>
+              </button>
+            );
+          })}
+        </nav>
       )}
     </div>
   );

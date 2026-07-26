@@ -377,4 +377,57 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  it("renders fixed bottom nav with all four tabs when isMobile is true", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    expect(nav).toBeTruthy();
+    expect(nav.getAttribute("role")).toBe("navigation");
+    const labels = ["CAREER", "CODEX", "SETTINGS", "SUPPORT"];
+    for (const label of labels) {
+      expect(nav.textContent).toContain(label);
+    }
+  });
+
+  it("does not render mobile bottom nav when isMobile is false", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={false} />);
+    });
+
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    expect(nav).toBeNull();
+  });
+
+  it("switching tabs via mobile bottom nav changes the active tab and scrolls panel into view", async () => {
+    const scrollIntoView = vi.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
+
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    const codexBtn = [...nav.querySelectorAll("button")].find(b => /CODEX/.test(b.textContent));
+    expect(codexBtn).toBeTruthy();
+    await act(async () => { codexBtn.click(); });
+    expect(codexBtn.getAttribute("aria-current")).toBe("page");
+
+    const careerBtn = [...nav.querySelectorAll("button")].find(b => /CAREER/.test(b.textContent));
+    expect(careerBtn.getAttribute("aria-current")).toBeNull();
+
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
+    delete window.HTMLElement.prototype.scrollIntoView;
+  });
 });
