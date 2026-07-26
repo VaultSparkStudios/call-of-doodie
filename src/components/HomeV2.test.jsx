@@ -407,7 +407,10 @@ describe("HomeV2", () => {
     expect(nav).toBeNull();
   });
 
-  it("switching tabs via mobile bottom nav changes the active tab", async () => {
+  it("switching tabs via mobile bottom nav changes the active tab and scrolls panel into view", async () => {
+    const scrollIntoView = vi.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
+
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -423,5 +426,8 @@ describe("HomeV2", () => {
 
     const careerBtn = [...nav.querySelectorAll("button")].find(b => /CAREER/.test(b.textContent));
     expect(careerBtn.getAttribute("aria-current")).toBeNull();
+
+    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
+    delete window.HTMLElement.prototype.scrollIntoView;
   });
 });

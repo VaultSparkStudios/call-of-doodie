@@ -410,6 +410,7 @@ export default function HomeV2(props) {
   ], [recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
+  const tabBodyRef = useRef(null);
   const cmdFocusIdx = useGamepadNav({
     count: CMD_ACTIONS.length,
     cols: 5,
@@ -962,7 +963,7 @@ export default function HomeV2(props) {
             ))}
           </div>
         )}
-        <div style={tabBody}>
+        <div ref={tabBodyRef} style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
           {tab === "settings" && (
@@ -1119,7 +1120,7 @@ export default function HomeV2(props) {
             return (
               <button
                 key={id}
-                onClick={() => switchTab(id)}
+                onClick={() => { switchTab(id); tabBodyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                 aria-label={label}
                 aria-current={isActive ? "page" : undefined}
                 style={{
