@@ -8,30 +8,31 @@ Rights: Proprietary — All Rights Reserved, VaultSpark Studios LLC
 
 ## What players do
 
-Players move, shoot, dash, throw grenades, switch weapons, choose upgrades and routes, survive escalating waves, fight a 22-character enemy roster, and compare run evidence. Daily and Gauntlet modes use shared seeds. Replay proof is advisory deterministic evidence and is not full physics resimulation.
+Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, survive wave, review debrief. The live contract publishes 7 seeded modes, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation.
 
 ## Public resources
 
-- Play: https://callofdoodie.wtf/play/
+- Play: https://callofdoodie.wtf/
 - About: https://callofdoodie.wtf/about/
-- How to play: https://callofdoodie.wtf/how-to-play/
-- Enemy codex: https://callofdoodie.wtf/enemies/
+- Play: https://callofdoodie.wtf/play/
+- How to Play: https://callofdoodie.wtf/how-to-play/
+- Enemies: https://callofdoodie.wtf/enemies/
 - Arsenal: https://callofdoodie.wtf/arsenal/
 - Modes: https://callofdoodie.wtf/modes/
-- Leaderboards and trust: https://callofdoodie.wtf/leaderboard/
+- Leaderboard: https://callofdoodie.wtf/leaderboard/
 - Accessibility: https://callofdoodie.wtf/accessibility/
 - Support: https://callofdoodie.wtf/support/
-- Press kit: https://callofdoodie.wtf/press-kit/
+- Press Kit: https://callofdoodie.wtf/press-kit/
 - Status: https://callofdoodie.wtf/status/
 - Changelog: https://callofdoodie.wtf/changelog/
 - Privacy: https://callofdoodie.wtf/privacy/
 - Terms: https://callofdoodie.wtf/terms/
 - Contact: https://callofdoodie.wtf/contact/
-- Rights and intellectual property: https://callofdoodie.wtf/ip/
-- Security contact: https://callofdoodie.wtf/.well-known/security.txt
-- Agent manifest: https://callofdoodie.wtf/agents.json
-- Gameplay contract: https://callofdoodie.wtf/gameplay-contract.json
+- Rights & IP: https://callofdoodie.wtf/ip/
+- Security: https://callofdoodie.wtf/.well-known/security.txt
+- Llms: https://callofdoodie.wtf/.well-known/llms.txt
 - Sitemap: https://callofdoodie.wtf/sitemap.xml
+- Gameplay-Contract: https://callofdoodie.wtf/gameplay-contract.json
 
 ## Agent guidance
 

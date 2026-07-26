@@ -1,24 +1,115 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "2.0",
   "headerLinks": [
-    { "href": "/", "label": "Play" }
+    {
+      "href": "/",
+      "label": "Play"
+    },
+    {
+      "href": "/about/",
+      "label": "About"
+    },
+    {
+      "href": "/how-to-play/",
+      "label": "How to Play"
+    },
+    {
+      "href": "/enemies/",
+      "label": "Enemies"
+    },
+    {
+      "href": "/contact/",
+      "label": "Contact"
+    }
   ],
   "footerLinks": [
-    { "href": "/", "label": "Play" },
-    { "href": "/privacy/", "label": "Privacy" },
-    { "href": "/terms/", "label": "Terms" },
-    { "href": "/contact/", "label": "Contact" },
-    { "href": "/ip/", "label": "Rights & IP" },
-    { "href": "/agents.json", "label": "Agents" },
-    { "href": "/.well-known/llms.txt", "label": "LLMs" }
+    {
+      "href": "/",
+      "label": "Play"
+    },
+    {
+      "href": "/about/",
+      "label": "About"
+    },
+    {
+      "href": "/play/",
+      "label": "Play"
+    },
+    {
+      "href": "/how-to-play/",
+      "label": "How to Play"
+    },
+    {
+      "href": "/enemies/",
+      "label": "Enemies"
+    },
+    {
+      "href": "/arsenal/",
+      "label": "Arsenal"
+    },
+    {
+      "href": "/modes/",
+      "label": "Modes"
+    },
+    {
+      "href": "/leaderboard/",
+      "label": "Leaderboard"
+    },
+    {
+      "href": "/accessibility/",
+      "label": "Accessibility"
+    },
+    {
+      "href": "/support/",
+      "label": "Support"
+    },
+    {
+      "href": "/press-kit/",
+      "label": "Press Kit"
+    },
+    {
+      "href": "/status/",
+      "label": "Status"
+    },
+    {
+      "href": "/changelog/",
+      "label": "Changelog"
+    },
+    {
+      "href": "/privacy/",
+      "label": "Privacy"
+    },
+    {
+      "href": "/terms/",
+      "label": "Terms"
+    },
+    {
+      "href": "/contact/",
+      "label": "Contact"
+    },
+    {
+      "href": "/ip/",
+      "label": "Rights & IP"
+    }
   ],
   "footerOnly": [
+    "/play/",
+    "/arsenal/",
+    "/modes/",
+    "/leaderboard/",
+    "/accessibility/",
+    "/support/",
+    "/press-kit/",
+    "/status/",
+    "/changelog/",
+    "/privacy/",
+    "/terms/",
+    "/ip/"
+  ],
+  "legalPages": [
     "/privacy/",
     "/terms/",
     "/contact/",
-    "/ip/",
-    "/agents.json",
-    "/.well-known/llms.txt"
-  ],
-  "legalPages": ["/privacy/", "/terms/", "/contact/", "/ip/"]
+    "/ip/"
+  ]
 }
