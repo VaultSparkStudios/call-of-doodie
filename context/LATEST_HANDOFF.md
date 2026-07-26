@@ -1,6 +1,6 @@
 # Latest Completed Handoff — Session 130
 
-Session Intent: Run the founder-requested continuous `/goal` arc from synchronized `main`: complete `/start -> /audit -> /implement -> second-order innovation -> /closeout`, exhaust every live repo-owned premise at the infrastructure rubric’s highest honest rung, preserve evidence-gated release truth, and push the verified result directly to `main`.
+Session Intent: Visually inspect the full public website and playable game across desktop and mobile, audit every in-game character and major screen, evaluate removing the pre-menu callsign gate, identify confusing main-menu language, reconcile missing public-site scaffold pages, and produce a prioritized elite UI/UX and responsive-visual improvement plan without implementing product changes.
 ## Where We Left Off (Session 130)
 - Shipped: 8 improvements across combat architecture, input integrity, coverage truth, observability, deployment operations, and protocol reliability.
 - Tests: 809/809 across 111 files (+29 tests, +5 files versus Session 129) plus browser E2E 2/2; strict lint and production build pass.

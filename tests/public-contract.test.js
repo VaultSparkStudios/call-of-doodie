@@ -22,10 +22,11 @@ describe("public human and agent contract", () => {
     });
   });
 
-  it("keeps the on-domain email claim explicitly unverified", () => {
+  it("keeps a clear on-domain email fallback", () => {
     const contact = fs.readFileSync(path.join(root, "public", "contact", "index.html"), "utf8");
     expect(contact).toContain("hello@callofdoodie.wtf");
-    expect(contact).toContain("DELIVERY VERIFICATION PENDING");
+    expect(contact).toContain("EMAIL SUPPORT");
     expect(contact).toContain("founder@vaultsparkstudios.com");
+    expect(contact).toContain("If the game address is unavailable");
   });
 });

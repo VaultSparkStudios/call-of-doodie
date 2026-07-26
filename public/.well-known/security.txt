@@ -1,0 +1,5 @@
+Contact: mailto:founder@vaultsparkstudios.com
+Expires: 2027-07-25T23:59:59Z
+Canonical: https://callofdoodie.wtf/.well-known/security.txt
+Policy: https://callofdoodie.wtf/privacy/
+Preferred-Languages: en

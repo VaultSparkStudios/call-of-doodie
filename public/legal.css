@@ -141,3 +141,47 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
 }
+
+/* Public companion pages */
+.primary-cta {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  gap: 12px;
+  margin: -12px 0 26px;
+  padding: 0 22px;
+  color: #111;
+  background: linear-gradient(135deg, #ffd84d, #ff8a3d);
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 12px;
+  box-shadow: 0 14px 36px rgba(255,107,53,.18);
+  font-weight: 900;
+  text-decoration: none;
+}
+.primary-cta:hover { color:#111; transform:translateY(-1px) }
+.card-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px }
+.card-grid .card { margin:0; min-height:100% }
+.card-grid .card:nth-child(3n) { grid-column:1 / -1 }
+.next-links { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:36px; padding-block:20px }
+.next-links strong { margin-right:auto }
+.next-links a { min-height:44px; display:inline-flex; align-items:center; font-weight:800; text-decoration:none }
+.roster-art { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; overflow:hidden; padding:12px; background:radial-gradient(circle at 50% 50%,rgba(92,231,255,.08),transparent 60%),var(--panel) }
+.roster-art img { width:100%; height:auto; object-fit:contain; filter:drop-shadow(0 16px 22px rgba(0,0,0,.28)) }
+.roster-art img:last-of-type { grid-column:1 / -1; width:min(620px,100%); margin:auto }
+.roster-art figcaption { grid-column:1 / -1; padding:6px 10px 4px; color:var(--muted); font-size:.78rem; text-align:center }
+@media (max-width:760px) {
+  .shell { width:min(100% - 24px,920px) }
+  .site-header { gap:14px; padding:16px 0 }
+  .site-header nav { width:100%; flex-wrap:nowrap; gap:6px; padding-bottom:4px; overflow-x:auto; scrollbar-width:thin }
+  .site-header nav a,.site-header nav button { min-height:48px; display:inline-flex; align-items:center; flex:0 0 auto; padding:0 12px; border:1px solid var(--line); border-radius:999px; background:var(--panel) }
+  main { padding:38px 0 58px }
+  h1 { font-size:clamp(2.25rem,13vw,4.2rem) }
+  .lede { margin:20px 0 32px; font-size:1rem }
+  .card-grid { grid-template-columns:1fr }
+  .card-grid .card:nth-child(3n) { grid-column:auto }
+  .roster-art { grid-template-columns:1fr }
+  .roster-art img:last-of-type,.roster-art figcaption { grid-column:auto }
+  .next-links { align-items:stretch; flex-direction:column }
+  .next-links strong { margin:0 }
+  .next-links a { min-height:48px; padding:0 12px; border:1px solid var(--line); border-radius:9px }
+}

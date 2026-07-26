@@ -1,7 +1,7 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
-import { getRuntimeCharacterSprite } from "./utils/visualAssetLibrary.js";
+import { getRuntimeCharacterSprite, getRuntimeEnemySprite } from "./utils/visualAssetLibrary.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -147,14 +147,14 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   // Background — per-theme gradient
   const THEME_BG = [
-    ["#1e1e3a","#0e0e1a"], // office: dark indigo
-    ["#0c1e0c","#060e06"], // bunker: deep military green
-    ["#201508","#100a04"], // factory: dark amber
-    ["#1a1008","#0a0804"], // ruins: dark sepia
-    ["#261808","#140c04"], // desert: deep warm ochre
-    ["#081a0c","#040e06"], // forest: deep forest green
-    ["#060010","#020008"], // space: deep black-purple
-    ["#0a1220","#050a14"], // arctic: cold midnight blue
+    ["#282849","#10101f"], // office: dark indigo
+    ["#123012","#071207"], // bunker: deep military green
+    ["#33220e","#140d05"], // factory: dark amber
+    ["#2a1b0d","#100b05"], // ruins: dark sepia
+    ["#382510","#180f06"], // desert: deep warm ochre
+    ["#0d2812","#051208"], // forest: deep forest green
+    ["#0e0322","#03000b"], // space: deep black-purple
+    ["#10213a","#07101e"], // arctic: cold midnight blue
   ];
   const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : (THEME_BG[gs.mapTheme] || THEME_BG[0]);
   const _bgKey = `${bgC0}:${bgC1}:${W}:${H}`;
@@ -174,7 +174,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   const fzTile = gs.bossWave ? "rgba(112,30,30," : (FZ_TILE[gs.mapTheme] || FZ_TILE[0]);
   (gs.floorZones || []).forEach(fz => {
     ctx.save(); ctx.translate(fz.x, fz.y); ctx.rotate(fz.rot);
-    const ba = fz.alpha * 2.8 * (gs.bossWave ? 0.75 : 1);
+    const ba = fz.alpha * 3.35 * (gs.bossWave ? 0.75 : 1);
     // Panel fill
     ctx.globalAlpha = ba;
     ctx.fillStyle = fzFill + "1)";
@@ -275,7 +275,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // ── Props (themed decorative emoji — no collision) ──
   (gs.props || []).forEach(pr => {
     ctx.save(); ctx.translate(pr.x, pr.y);
-    ctx.globalAlpha = gs.bossWave ? 0.18 : 0.32;
+    ctx.globalAlpha = gs.bossWave ? 0.24 : 0.42;
     ctx.font = `${Math.floor(14 * (pr.scale || 1))}px serif`;
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText(pr.emoji, 0, 0);
@@ -683,17 +683,23 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.restore();
     }
 
-    // Signature art is a runtime layer, not a homepage gallery. Keep the
-    // procedural body beneath it as an instant-loading/failure fallback.
-    if (e.typeIndex === 1 || e.typeIndex === 13) {
-      const karenSprite = getRuntimeCharacterSprite("karen");
-      if (karenSprite) {
-        const spriteSize = Math.max(46, r * (e.isBossEnemy ? 3.2 : 2.7));
-        ctx.save();
-        ctx.globalAlpha = e.hitFlash > 0 ? Math.max(0.45, 1 - e.hitFlash / 14) : 1;
-        ctx.drawImage(karenSprite, -spriteSize / 2, -spriteSize * 0.56, spriteSize, spriteSize);
-        ctx.restore();
-      }
+    // Every enemy has a distinct atlas silhouette. The procedural body remains
+    // beneath it as an instant-loading and reduced-data fallback.
+    const enemySprite = getRuntimeEnemySprite(e.typeIndex);
+    if (enemySprite) {
+      const spriteHeight = Math.max(e.isBossEnemy ? 92 : 58, r * (e.isBossEnemy ? 3.7 : 3.15));
+      const spriteWidth = spriteHeight * (enemySprite.sourceWidth / enemySprite.sourceHeight);
+      ctx.save();
+      ctx.globalAlpha = e.hitFlash > 0 ? Math.max(0.45, 1 - e.hitFlash / 14) : 1;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(
+        enemySprite.image,
+        enemySprite.sourceX, enemySprite.sourceY,
+        enemySprite.sourceWidth, enemySprite.sourceHeight,
+        -spriteWidth / 2, -spriteHeight * 0.55,
+        spriteWidth, spriteHeight,
+      );
+      ctx.restore();
     }
 
     // Boss glow ring

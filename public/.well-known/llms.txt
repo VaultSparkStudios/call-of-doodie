@@ -8,19 +8,31 @@ Rights: Proprietary — All Rights Reserved, VaultSpark Studios LLC
 
 ## What players do
 
-Players move, shoot, dash, throw grenades, switch weapons, choose perks and routes, survive escalating waves, fight bosses, and compare run evidence on public leaderboards. Daily and Gauntlet modes use shared run seeds. Replay proof is advisory deterministic evidence and is not described as full physics resimulation.
+Players move, shoot, dash, throw grenades, switch weapons, choose upgrades and routes, survive escalating waves, fight a 22-character enemy roster, and compare run evidence. Daily and Gauntlet modes use shared seeds. Replay proof is advisory deterministic evidence and is not full physics resimulation.
 
 ## Public resources
 
-- Home and game: https://callofdoodie.wtf/
+- Play: https://callofdoodie.wtf/play/
+- About: https://callofdoodie.wtf/about/
+- How to play: https://callofdoodie.wtf/how-to-play/
+- Enemy codex: https://callofdoodie.wtf/enemies/
+- Arsenal: https://callofdoodie.wtf/arsenal/
+- Modes: https://callofdoodie.wtf/modes/
+- Leaderboards and trust: https://callofdoodie.wtf/leaderboard/
+- Accessibility: https://callofdoodie.wtf/accessibility/
+- Support: https://callofdoodie.wtf/support/
+- Press kit: https://callofdoodie.wtf/press-kit/
+- Status: https://callofdoodie.wtf/status/
+- Changelog: https://callofdoodie.wtf/changelog/
 - Privacy: https://callofdoodie.wtf/privacy/
 - Terms: https://callofdoodie.wtf/terms/
 - Contact: https://callofdoodie.wtf/contact/
 - Rights and intellectual property: https://callofdoodie.wtf/ip/
+- Security contact: https://callofdoodie.wtf/.well-known/security.txt
 - Agent manifest: https://callofdoodie.wtf/agents.json
 - Gameplay contract: https://callofdoodie.wtf/gameplay-contract.json
 - Sitemap: https://callofdoodie.wtf/sitemap.xml
 
 ## Agent guidance
 
-Public pages and the source-derived gameplay-contract.json may be summarized and linked. Do not imply an official affiliation with Activision Publishing, Inc. or the Call of Duty® franchise. Do not claim replay evidence is stronger than the advisory contract published above. No public write API or autonomous purchase capability is offered by this site.
+Public pages and gameplay-contract.json may be summarized and linked. Do not imply affiliation with Activision Publishing, Inc. or the Call of Duty® franchise. Do not claim replay evidence is stronger than the advisory contract. No public write API or autonomous purchase capability is offered.

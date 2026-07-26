@@ -283,7 +283,6 @@ export default function CallOfDoodie() {
   const [bossWaveBanner, setBossWaveBanner] = useState(false);
   const [bossCutscene, setBossCutscene]     = useState(null); // { emoji, name, title, quote, wave }
   const [coins, setCoins]                   = useState(0);   // 💩 Doodie Coins per run
-  const [autoAim, setAutoAim]             = useState(false);
   const [starterLoadout, setStarterLoadout] = useState("standard");
   const [runSeed, setRunSeed]             = useState(0);
   const [runModifier, setRunModifier]     = useState(null);
@@ -419,7 +418,7 @@ export default function CallOfDoodie() {
     };
     check(); window.addEventListener("resize", check);
     const saved = localStorage.getItem("cod-autoaim") === "1";
-    setAutoAim(saved); autoAimRef.current = saved;
+    autoAimRef.current = saved;
     return () => window.removeEventListener("resize", check);
   }, []);
 
@@ -4993,4 +4992,3 @@ function InputDebugOverlay({ data }) {
     </div>
   );
 }
-

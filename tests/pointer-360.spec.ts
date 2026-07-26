@@ -1,13 +1,19 @@
 import { expect, test } from "@playwright/test";
 
 test("pointer aim sweep reaches all four calibration buckets", async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+    localStorage.setItem("cod-seen-new-player-guide-v1", "1");
+  });
   await page.goto("/?debug=input");
 
-  const callsign = page.getByRole("textbox").first();
-  await callsign.fill("Pointer360");
-  await page.getByRole("button", { name: /lock in/i }).click();
-  await page.getByRole("button", { name: /deploy/i }).first().click();
-  await page.getByRole("button", { name: /skip/i }).click();
+  // New players now enter through the play-first menu; identity is optional.
+  await page.getByTestId("front-door-deploy").click();
+  await page.getByRole("button", { name: /skip.*go in clean/i }).click();
+
+  const skipTraining = page.getByRole("button", { name: /skip training/i });
+  if (await skipTraining.isVisible().catch(() => false)) await skipTraining.click();
 
   const canvas = page.locator("#game-canvas");
   await expect(canvas).toBeVisible();

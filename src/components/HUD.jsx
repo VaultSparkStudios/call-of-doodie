@@ -87,9 +87,10 @@ export default function HUD({
     );
   };
 
-  if (isMobile) {
+  if (isMobile || hud?.useCompactDesktop !== false) {
     return (
       <MobileHUD
+        isMobile={isMobile}
         wave={wave} timeSurvived={timeSurvived} score={score} kills={kills} deaths={deaths}
         health={health} maxHealth={diff.playerHP} level={level}
         currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}

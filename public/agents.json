@@ -1,44 +1,37 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "name": "Call of Doodie",
   "canonicalUrl": "https://callofdoodie.wtf/",
-  "publisher": {
-    "name": "VaultSpark Studios LLC",
-    "url": "https://vaultsparkstudios.com/"
-  },
-  "description": "A free comedy-first browser roguelite shooter with daily seeds, boss rushes, buildcraft, replay-proof receipts, and public leaderboards.",
+  "publisher": { "name": "VaultSpark Studios LLC", "url": "https://vaultsparkstudios.com/" },
+  "description": "A free comedy-first browser roguelite shooter with shared seeds, 22 distinct enemies and bosses, buildcraft, advisory run receipts, and public leaderboards.",
   "audience": ["humans", "ai-agents"],
-  "access": {
-    "play": "public",
-    "readDocumentation": "public",
-    "writeActions": "not-offered",
-    "authentication": "none-required-for-public-read"
-  },
+  "access": { "play": "public", "readDocumentation": "public", "writeActions": "not-offered", "authentication": "none-required-for-public-read" },
   "resources": [
     { "rel": "home", "href": "https://callofdoodie.wtf/" },
+    { "rel": "play", "href": "https://callofdoodie.wtf/play/" },
+    { "rel": "about", "href": "https://callofdoodie.wtf/about/" },
+    { "rel": "guide", "href": "https://callofdoodie.wtf/how-to-play/" },
+    { "rel": "enemies", "href": "https://callofdoodie.wtf/enemies/" },
+    { "rel": "arsenal", "href": "https://callofdoodie.wtf/arsenal/" },
+    { "rel": "modes", "href": "https://callofdoodie.wtf/modes/" },
+    { "rel": "leaderboard", "href": "https://callofdoodie.wtf/leaderboard/" },
+    { "rel": "accessibility", "href": "https://callofdoodie.wtf/accessibility/" },
+    { "rel": "support", "href": "https://callofdoodie.wtf/support/" },
+    { "rel": "press-kit", "href": "https://callofdoodie.wtf/press-kit/" },
+    { "rel": "status", "href": "https://callofdoodie.wtf/status/" },
+    { "rel": "changelog", "href": "https://callofdoodie.wtf/changelog/" },
     { "rel": "privacy", "href": "https://callofdoodie.wtf/privacy/" },
     { "rel": "terms", "href": "https://callofdoodie.wtf/terms/" },
     { "rel": "contact", "href": "https://callofdoodie.wtf/contact/" },
     { "rel": "rights", "href": "https://callofdoodie.wtf/ip/" },
+    { "rel": "security", "href": "https://callofdoodie.wtf/.well-known/security.txt" },
     { "rel": "llms", "href": "https://callofdoodie.wtf/.well-known/llms.txt" },
     { "rel": "sitemap", "href": "https://callofdoodie.wtf/sitemap.xml" },
     { "rel": "gameplay-contract", "href": "https://callofdoodie.wtf/gameplay-contract.json" }
   ],
   "capabilities": [
-    {
-      "id": "game.describe",
-      "mode": "read",
-      "description": "Describe the public game loop, modes, accessibility, and competitive-trust posture from published pages."
-    },
-    {
-      "id": "game.inspect-rules",
-      "mode": "read",
-      "description": "Inspect the versioned public gameplay contract for modes, weapons, unlocks, enemies, and challenge-link grammar."
-    }
+    { "id": "game.describe", "mode": "read", "description": "Describe the public loop, modes, roster, accessibility, and competitive-trust posture." },
+    { "id": "game.inspect-rules", "mode": "read", "description": "Inspect the versioned gameplay contract for modes, weapons, unlocks, enemies, and challenge-link grammar." }
   ],
-  "trust": {
-    "competitiveReplayClaim": "advisory deterministic evidence; not full physics resimulation",
-    "freeTierCostStatus": "cost-neutral",
-    "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC"
-  }
+  "trust": { "competitiveReplayClaim": "advisory deterministic evidence; not full physics resimulation", "freeTierCostStatus": "cost-neutral", "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC" }
 }

@@ -156,7 +156,7 @@ requireIncludes("theme.js", contentByFile[relative("public", "theme.js")], [
 
 requireIncludes("contact", contentByFile[relative("public", "contact", "index.html")], [
   "hello@callofdoodie.wtf",
-  "DELIVERY VERIFICATION PENDING",
+  "EMAIL SUPPORT",
   "founder@vaultsparkstudios.com",
 ]);
 requireIncludes("ip", contentByFile[relative("public", "ip", "index.html")], [

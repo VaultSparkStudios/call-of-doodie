@@ -169,17 +169,17 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "doctorScore": {
-    "date": "2026-07-25",
-    "ranAt": "2026-07-25T20:44:57.220Z",
+    "date": "2026-07-26",
+    "ranAt": "2026-07-26T08:17:36.200Z",
     "overallPass": true,
-    "passing": 115,
-    "warning": 36,
+    "passing": 113,
+    "warning": 38,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
     "ran": 152,
     "total": 154,
-    "score": 76
+    "score": 74
   }
 }

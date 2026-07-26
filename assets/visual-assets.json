@@ -5,7 +5,10 @@
   "policy": {
     "defaultLicense": "Proprietary",
     "sourceLibrary": "assets/source",
-    "runtimeAssetRoots": ["public", "src"],
+    "runtimeAssetRoots": [
+      "public",
+      "src"
+    ],
     "externalAssetRule": "Record per-asset license and provenance before runtime use."
   },
   "assets": [
@@ -16,7 +19,10 @@
       "license": "Proprietary",
       "sourcePath": "public/launch-assets/launch-combat.svg",
       "runtimePath": "public/launch-assets/launch-combat.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "placeholder-export",
       "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
     },
@@ -27,7 +33,10 @@
       "license": "Proprietary",
       "sourcePath": "public/launch-assets/launch-boss.svg",
       "runtimePath": "public/launch-assets/launch-boss.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "placeholder-export",
       "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
     },
@@ -38,7 +47,10 @@
       "license": "Proprietary",
       "sourcePath": "public/launch-assets/launch-builds.svg",
       "runtimePath": "public/launch-assets/launch-builds.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "placeholder-export",
       "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
     },
@@ -49,7 +61,10 @@
       "license": "Proprietary",
       "sourcePath": "public/launch-assets/launch-leaderboard.svg",
       "runtimePath": "public/launch-assets/launch-leaderboard.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "placeholder-export",
       "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
     },
@@ -60,7 +75,10 @@
       "license": "Proprietary",
       "sourcePath": "public/launch-assets/launch-devices.svg",
       "runtimePath": "public/launch-assets/launch-devices.png",
-      "dimensions": { "width": 390, "height": 844 },
+      "dimensions": {
+        "width": 390,
+        "height": 844
+      },
       "status": "placeholder-export",
       "notes": "Generated PNG sibling from repo-authored launch SVG until real gameplay screenshot capture replaces it."
     },
@@ -71,7 +89,10 @@
       "license": "Proprietary",
       "sourcePath": "scripts/capture-launch-screenshots.mjs",
       "runtimePath": "public/launch-captures/real-combat.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "production-ready",
       "notes": "Verified gameplay capture from Chromium against the local Vite app."
     },
@@ -82,7 +103,10 @@
       "license": "Proprietary",
       "sourcePath": "scripts/capture-launch-screenshots.mjs",
       "runtimePath": "public/launch-captures/real-mobile-controls.png",
-      "dimensions": { "width": 390, "height": 844 },
+      "dimensions": {
+        "width": 390,
+        "height": 844
+      },
       "status": "production-ready",
       "notes": "Verified mobile gameplay/control capture from Chromium against the local Vite app."
     },
@@ -93,7 +117,10 @@
       "license": "Proprietary",
       "sourcePath": "src/utils/visualPrimitives.js",
       "runtimePath": "src/drawGame.js",
-      "dimensions": { "width": 0, "height": 0 },
+      "dimensions": {
+        "width": 0,
+        "height": 0
+      },
       "status": "runtime-generated",
       "notes": "Pseudo-3D primitives render player, enemy, and weapon material cues directly in canvas."
     },
@@ -104,7 +131,10 @@
       "license": "Proprietary",
       "sourcePath": "assets/source/signature-pack/cod-porcelain-throne.svg",
       "runtimePath": "public/visual-assets/cod-porcelain-throne.png",
-      "dimensions": { "width": 512, "height": 512 },
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
       "status": "production-ready",
       "notes": "Signature 3D-styled hero prop exported from the proprietary internal asset pack."
     },
@@ -115,7 +145,10 @@
       "license": "Proprietary",
       "sourcePath": "assets/source/signature-pack/cod-plunger-rocket.svg",
       "runtimePath": "public/visual-assets/cod-plunger-rocket.png",
-      "dimensions": { "width": 512, "height": 512 },
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
       "status": "production-ready",
       "notes": "Signature 3D-styled weapon prop exported from the proprietary internal asset pack."
     },
@@ -126,7 +159,10 @@
       "license": "Proprietary",
       "sourcePath": "assets/source/signature-pack/cod-doodie-operative.svg",
       "runtimePath": "public/visual-assets/cod-doodie-operative.png",
-      "dimensions": { "width": 512, "height": 512 },
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
       "status": "production-ready",
       "notes": "Signature 3D-styled protagonist sprite exported from the proprietary internal asset pack."
     },
@@ -137,7 +173,10 @@
       "license": "Proprietary",
       "sourcePath": "assets/source/signature-pack/cod-karen-nemesis.svg",
       "runtimePath": "public/visual-assets/cod-karen-nemesis.png",
-      "dimensions": { "width": 512, "height": 512 },
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
       "status": "production-ready",
       "notes": "Signature 3D-styled boss sprite exported from the proprietary internal asset pack."
     },
@@ -148,7 +187,10 @@
       "license": "Proprietary",
       "sourcePath": "assets/source/runtime-sprites/cod-doodie-operative-v2-source.png",
       "runtimePath": "public/visual-assets/cod-doodie-operative-v2.png",
-      "dimensions": { "width": 384, "height": 384 },
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      },
       "status": "production-ready",
       "notes": "Transparent high-realization operative art consumed by the live canvas renderer; procedural character art remains the load/failure fallback."
     },
@@ -159,7 +201,10 @@
       "license": "Proprietary",
       "sourcePath": "assets/source/runtime-sprites/cod-karen-nemesis-v2-source.png",
       "runtimePath": "public/visual-assets/cod-karen-nemesis-v2.png",
-      "dimensions": { "width": 384, "height": 384 },
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      },
       "status": "production-ready",
       "notes": "Transparent high-realization Karen art consumed by live Karen and Sergeant Karen rendering; procedural character art remains the load/failure fallback."
     },
@@ -170,7 +215,10 @@
       "license": "Proprietary",
       "sourcePath": "scripts/capture-launch-screenshots.mjs",
       "runtimePath": "public/launch-captures/real-boss-rush.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "production-ready",
       "notes": "Verified Boss Rush gameplay capture from Chromium against the local Vite app."
     },
@@ -181,7 +229,10 @@
       "license": "Proprietary",
       "sourcePath": "scripts/capture-launch-screenshots.mjs",
       "runtimePath": "public/launch-captures/real-loadout-builder.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "production-ready",
       "notes": "Verified loadout-builder capture from Chromium against the local Vite app."
     },
@@ -192,9 +243,54 @@
       "license": "Proprietary",
       "sourcePath": "scripts/capture-launch-screenshots.mjs",
       "runtimePath": "public/launch-captures/real-leaderboard.png",
-      "dimensions": { "width": 1280, "height": 720 },
+      "dimensions": {
+        "width": 1280,
+        "height": 720
+      },
       "status": "production-ready",
       "notes": "Verified leaderboard capture from Chromium against the local Vite app."
+    },
+    {
+      "id": "enemy-atlas-core",
+      "kind": "runtime-character-atlas",
+      "sourceType": "ai-generated-proprietary",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/runtime-sprites/enemy-atlas-core-source.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-core.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "status": "production-ready",
+      "notes": "Eight transparent core-enemy sprites generated as one consistent proprietary atlas; procedural canvas characters remain the load/failure fallback."
+    },
+    {
+      "id": "enemy-atlas-specialists",
+      "kind": "runtime-character-atlas",
+      "sourceType": "ai-generated-proprietary",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/runtime-sprites/enemy-atlas-specialists-source.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-specialists.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "status": "production-ready",
+      "notes": "Eight transparent specialist-enemy sprites generated as one consistent proprietary atlas; procedural canvas characters remain the load/failure fallback."
+    },
+    {
+      "id": "enemy-atlas-bosses",
+      "kind": "runtime-character-atlas",
+      "sourceType": "ai-generated-proprietary",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/runtime-sprites/enemy-atlas-bosses-source.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-bosses.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "status": "production-ready",
+      "notes": "Six transparent boss sprites generated as one consistent proprietary atlas; procedural canvas bosses remain the load/failure fallback."
     }
   ]
 }
