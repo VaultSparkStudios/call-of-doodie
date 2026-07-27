@@ -422,6 +422,7 @@ export default function HomeV2(props) {
   }, [cmdFocusIdx, gamepadConnected]);
 
   // ── Styles ────────────────────────────────────────────────────────────────
+  const MOBILE_NAV_H = 56;
   const page = {
     width: "100%", minHeight: "100dvh", height: "100dvh", margin: 0, overflowY: "auto", overflowX: "hidden",
     background: themePalette.page,
@@ -429,7 +430,12 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = {
+    position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto",
+    padding: isMobile
+      ? `max(14px, env(safe-area-inset-top)) 16px calc(${MOBILE_NAV_H + 16}px + env(safe-area-inset-bottom))`
+      : "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))",
+  };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -490,6 +496,26 @@ export default function HomeV2(props) {
     color: active ? themePalette.accent : themePalette.muted, borderRadius: 8,
   });
   const tabBody = { marginTop: 12, background: themePalette.panel, border: `1px solid ${themePalette.line}`, borderRadius: 10, padding: 14 };
+  const mobileNavBar = {
+    position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 50,
+    display: "flex", alignItems: "stretch",
+    paddingBottom: "env(safe-area-inset-bottom)",
+    background: theme === "porcelain-day" ? "rgba(244,238,225,.96)" : "rgba(5,8,10,.94)",
+    backdropFilter: "blur(14px)",
+    borderTop: `1px solid ${themePalette.line}`,
+    boxShadow: "0 -4px 20px rgba(0,0,0,.30)",
+  };
+  const mobileNavBtn = (active) => ({
+    flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
+    justifyContent: "center", gap: 3, padding: "8px 4px",
+    background: "none", border: "none", cursor: "pointer", fontFamily: "inherit",
+    color: active ? themePalette.accent : themePalette.muted,
+    fontSize: 9, fontWeight: 900, letterSpacing: 0.8,
+    borderTop: active ? `2px solid ${themePalette.accent}` : "2px solid transparent",
+    transition: "color 0.12s, border-color 0.12s",
+    WebkitTapHighlightColor: "transparent",
+    minHeight: 56,
+  });
   const footer = { marginTop: 22, paddingTop: 12, borderTop: `1px solid ${themePalette.line}`, display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: themePalette.quiet, letterSpacing: 1, flexWrap: "wrap" };
   const linkBtn = { background: "none", border: "none", color: isSupporter(username) ? "#9a6500" : themePalette.quiet, fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
 
@@ -948,17 +974,19 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
+        {/* Tabbed nav — desktop only; mobile uses fixed bottom bar */}
+        {!isMobile && (
+          <div style={tabsRow}>
+            {["career", "codex", "settings", "support"].map(t => (
+              <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
+                {t === "career" && "📊 CAREER"}
+                {t === "codex" && "📖 CODEX"}
+                {t === "settings" && "⚙ SETTINGS"}
+                {t === "support" && "❤️ SUPPORT"}
+              </button>
+            ))}
+          </div>
+        )}
         <div style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
@@ -989,6 +1017,28 @@ export default function HomeV2(props) {
           Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
         </div>
       </div>
+
+      {/* Mobile bottom nav — CANON-041 scrollable 100dvh mobile nav */}
+      {isMobile && (
+        <nav data-testid="home-v2-mobile-nav" aria-label="Main navigation" style={mobileNavBar}>
+          {[
+            { id: "career",   emoji: "📊", label: "CAREER" },
+            { id: "codex",    emoji: "📖", label: "CODEX" },
+            { id: "settings", emoji: "⚙",  label: "SETTINGS" },
+            { id: "support",  emoji: "❤️", label: "SUPPORT" },
+          ].map(({ id, emoji, label }) => (
+            <button
+              key={id}
+              style={mobileNavBtn(tab === id)}
+              onClick={() => switchTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+            >
+              <span style={{ fontSize: 20, lineHeight: 1 }}>{emoji}</span>
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
+      )}
 
       {/* Modals (lazy) */}
       {showLeaderboard && (

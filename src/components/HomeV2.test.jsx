@@ -377,4 +377,60 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  it("renders a fixed bottom nav bar on mobile instead of an inline tab row", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+    expect(nav).toBeTruthy();
+    expect(nav.tagName.toLowerCase()).toBe("nav");
+    expect(nav.getAttribute("aria-label")).toBe("Main navigation");
+    const navText = nav.textContent;
+    expect(navText).toContain("CAREER");
+    expect(navText).toContain("CODEX");
+    expect(navText).toContain("SETTINGS");
+    expect(navText).toContain("SUPPORT");
+  });
+
+  it("does not render the inline tab row on mobile", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const mobileNav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+    expect(mobileNav).toBeTruthy();
+    const allTabButtons = [...container.querySelectorAll("button")].filter(b =>
+      ["📊 CAREER", "📖 CODEX", "⚙ SETTINGS", "❤️ SUPPORT"].some(label => b.textContent.trim() === label)
+    );
+    // All tab-switching buttons should be inside the mobile nav, not outside it
+    allTabButtons.forEach(btn => {
+      expect(mobileNav.contains(btn)).toBe(true);
+    });
+  });
+
+  it("mobile bottom nav switches active tab and marks aria-current", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+    const codexBtn = [...nav.querySelectorAll("button")].find(b => b.textContent.includes("CODEX"));
+    expect(codexBtn).toBeTruthy();
+    await act(async () => { codexBtn.click(); });
+
+    expect(codexBtn.getAttribute("aria-current")).toBe("page");
+    const careerBtn = [...nav.querySelectorAll("button")].find(b => b.textContent.includes("CAREER"));
+    expect(careerBtn.getAttribute("aria-current")).toBeNull();
+  });
 });
