@@ -179,6 +179,17 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
+  "stagingUrl": "https://session-131-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-07-27T09:50:00Z",
+  "sanitizationLastCleared": "2026-07-27T09:50:00Z",
+  "sessionShellHygiene": {
+    "session": 131,
+    "started": 2,
+    "closed": 2,
+    "running": 0,
+    "enumeratedAt": "2026-07-27T09:53:00Z",
+    "scope": "session-owned background tasks; unrelated host services excluded"
+  },
   "doctorScore": {
     "date": "2026-07-27",
     "ranAt": "2026-07-27T08:35:46.530Z",

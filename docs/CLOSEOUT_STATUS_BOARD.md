@@ -1,24 +1,24 @@
-<!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-25 (Session 130 closeout) -->
+<!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
+<!-- generated-at: 2026-07-27 (Session 131 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S130 ════════════════════╗
-║  Date: 2026-07-25  ·  SIL: 997/1000  ·  Velocity: 8 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S131 ════════════════════╗
+║  Date: 2026-07-27  ·  SIL: 998/1000  ·  Velocity: 8 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: 8 improvements across combat architecture, input in  ║
-║  ✓ Tests: 809/809 across 111 files (+29 tests, +5 files versus   ║
-║  ✓ Deploy: isolated Cloudflare staging at `https://session-130-  ║
+║  ✓ Shipped: all three L3 audit items plus four second-order inn  ║
+║  ✓ Tests: 824/824 across 116 files plus browser E2E 2/2; strict  ║
+║  ✓ Deploy: isolated Cloudflare staging at `https://session-131-  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 997/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         97   ██████████                            ║
+║    Engagement         98   ██████████                            ║
 ║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
@@ -27,37 +27,39 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
-║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  ✓ logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
+║  · context/LATEST_HANDOFF.md                                     ║
+║  · logs/WORK_LOG.md                                              ║
+║  · context/DECISIONS.md                                          ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.codex or ~/.claude project memory)           ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 37 files  ·  M:23 A:0 D:0 ?:14                         ║
+║  Changes: 2 files  ·  M:2 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-130-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-131-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        115/154                                          ║
+║  Doctor:        113/158                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         809/809                                          ║
-║  IGNIS:         10d ago                                          ║
+║  Tests:         824/824                                          ║
+║  Validation:    full-fresh                                       ║
+║  IGNIS:         11d ago                                          ║
 ║  Truth:         green-code-no-go-launch                          ║
-║  Sanitization:  —                                                ║
+║  Sanitization:  0d ago                                           ║
+║  shells:        2 started · 2 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
-*Generated by `scripts/render-closeout-board.mjs v1.0`*
+*Generated by `scripts/render-closeout-board.mjs v1.1`*
