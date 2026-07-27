@@ -48,7 +48,7 @@
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        113/158                                          ║
+║  Doctor:        112/158                                          ║
 ║  Compliance:    —                                                ║
 ║  Tests:         824/824                                          ║
 ║  Validation:    full-fresh                                       ║

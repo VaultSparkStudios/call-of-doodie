@@ -192,10 +192,10 @@
   },
   "doctorScore": {
     "date": "2026-07-27",
-    "ranAt": "2026-07-27T08:35:46.530Z",
+    "ranAt": "2026-07-27T09:56:00.000Z",
     "overallPass": true,
-    "passing": 113,
-    "warning": 42,
+    "passing": 112,
+    "warning": 43,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,

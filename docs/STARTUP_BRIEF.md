@@ -70,7 +70,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         824/824 passing                                ║
+║  ✓  Tests         824/824 passing (2026-07-27T09:50:00Z)         ║
 ║  ✓  Velocity      8 ↓  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated frontier   ║
 ║  ⛔  Context age   ?d                                             ║
@@ -84,7 +84,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        113/158 (72%)  ·  1 failing                    ║
+║  ⛔  Doctor        112/158 (72%)  ·  1 failing                    ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger information  ║
 ╚════════════════════════════════════════════════════════════════╝
 
