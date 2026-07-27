@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 130 shipped one source-neutral defeat executor, a live multimodal movement contract, an exact fresh-evidence coverage contract, three second-order safeguards, secrets-gateway staging, and a handoff-trim root fix; 809/809 tests green.",
+  "currentFocus": "Session 131 shipped a 17-route proof-carrying public graph, 730586-byte integer-safe alpha atlas delivery, a capability-complete responsive HUD, and four second-order safeguards; 824/824 tests and staging visual 867/867 are green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -111,6 +111,17 @@
       "status": "green",
       "type": "tests",
       "command": "Session 130 — 809/809 across 111 files; core coverage 82/82 with freshness ratchet; strict lint; production build; browser E2E 2/2"
+    },
+    {
+      "status": "green",
+      "url": "https://session-131-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 131 direct-upload preview via secrets gateway · hosted visual route/theme/viewport matrix 867/867"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 131 — 824/824 across 116 files; strict lint; production build; public/assets/dependency/security/replay/schema/protocol/media gates; browser E2E 2/2"
     }
   ],
   "blockers": [
@@ -120,35 +131,35 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-25",
+  "lastUpdated": "2026-07-27",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
-  "truthAuditLastRun": "2026-07-25",
+  "truthAuditLastRun": "2026-07-26",
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 130,
-  "silScore": 997,
-  "silAvg3": 999,
+  "silSession": 131,
+  "silScore": 998,
+  "silAvg3": 998,
   "silVelocity": 8,
   "silDebt": "decreasing",
-  "silLastSession": "2026-07-25",
-  "currentSession": 130,
+  "silLastSession": "2026-07-26",
+  "currentSession": 131,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 809,
-  "testsTotal": 809,
+  "testsPassing": 824,
+  "testsTotal": 824,
   "entropyScore": 0.208,
   "entropyLastComputed": "2026-07-25",
   "silRubricVersion": "3.0",
   "silMax": 1000,
-  "silScoreLegacy500": 498.5,
+  "silScoreLegacy500": 499,
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 97,
+    "engagement": 98,
     "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
@@ -169,17 +180,17 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "doctorScore": {
-    "date": "2026-07-26",
-    "ranAt": "2026-07-26T08:17:36.200Z",
+    "date": "2026-07-27",
+    "ranAt": "2026-07-27T08:35:46.530Z",
     "overallPass": true,
     "passing": 113,
-    "warning": 38,
+    "warning": 42,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
-    "ran": 152,
-    "total": 154,
-    "score": 74
+    "ran": 156,
+    "total": 158,
+    "score": 72
   }
 }

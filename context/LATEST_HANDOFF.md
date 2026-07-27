@@ -1,3 +1,23 @@
+# Latest Completed Handoff — Session 131
+
+Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized startup through live-premise audit, all-item implementation, second-order saturation, staging, canonical closeout, and direct-main push.
+
+## Where We Left Off (Session 131)
+- Shipped: all three L3 audit items plus four second-order innovations across public route truth, runtime atlas delivery, responsive HUD parity, machine-readable proofs, and regression canaries.
+- Tests: 824/824 across 116 files plus browser E2E 2/2; strict lint, production build, and every applicable local contract/gate pass.
+- Deploy: isolated Cloudflare staging at `https://session-131-staging.call-of-doodie.pages.dev/` passed the full 867/867 route/theme/viewport matrix.
+
+## Validation
+- Public: 17 human routes, 12 generated companion pages, 27 validated files, exact agent/footer/sitemap/language-model parity, and a SHA-256 route-contract proof.
+- Assets: 730,586 bytes total across three alpha WebP atlases, all 22 type indices, exact integer grid coverage, truthful fallback/load receipts, and two-atlas proactive decode ceiling.
+- Runtime: compact minimal/standard and rich tactical HUD paths preserve vitals, weapon, ability, contract, mastery, integrity, rivalry, and performance context without combat-math changes.
+- Security/trust: zero npm vulnerabilities; dependency, entry-boundary, replay, schema, media, protocol, and secrets scans green.
+- Direct AI pixel review remains honestly unclaimed because the local image sandbox still fails Windows `CryptUnprotectData` despite fresh valid screenshots and 867 objective hosted checks.
+
+## Next
+- With physical hardware: verify one real Progressive Web App install/relaunch, controller/browser pass, and full-run Graphics Interchange Format encode/play/share flow.
+- With production traffic and scoped analytics: capture Largest Contentful Paint/Cumulative Layout Shift and funnel evidence before retiring `?home=v1`.
+- Before SPARKED: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, direct AI pixel review, and explicit founder approval.
 # Latest Completed Handoff — Session 130
 
 Session Intent: Visually inspect the full public website and playable game across desktop and mobile, audit every in-game character and major screen, evaluate removing the pre-menu callsign gate, identify confusing main-menu language, reconcile missing public-site scaffold pages, and produce a prioritized elite UI/UX and responsive-visual improvement plan without implementing product changes.

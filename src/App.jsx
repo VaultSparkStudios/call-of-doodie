@@ -11,6 +11,7 @@ import {
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
+import { preloadEnemyAtlasesForTypes } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -1400,9 +1401,13 @@ export default function CallOfDoodie() {
   const spawnBoss  = useCallback((gs, typeIndex) => _spawnBoss(gs, GW(), GH(), difficultyRef.current, typeIndex), []);
   const spawnEnemy = useCallback((gs) => {
     _spawnEnemy(gs, GW(), GH(), difficultyRef.current);
+    const ne = gs.enemies[gs.enemies.length - 1];
+    if (ne) {
+      const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
+      preloadEnemyAtlasesForTypes(activeRoster);
+    }
     // Proximity cluster: same-type enemies spawned within 3 frames get ±60px offset to form visible clusters
     if (gs.currentWave >= 15) {
-      const ne = gs.enemies[gs.enemies.length - 1];
       if (ne) {
         const _frame = frameCountRef.current;
         const _last = gs._lastSpawnByType?.[ne.typeIndex];

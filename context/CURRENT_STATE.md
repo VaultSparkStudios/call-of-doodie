@@ -1,3 +1,13 @@
+- Session 131 (2026-07-26) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc after recovering and checkpointing the interrupted visual-UX implementation.
+- Public truth — one 17-route registry now generates companion pages, navigation, sitemap, footer, agent/language-model discovery, visual routes, and a deterministic SHA-256 route-contract proof ledger; public validation covers 27 files.
+- Asset truth — three chroma-derived alpha WebP atlases total 730,586 bytes versus the 4,634,459-byte PNG baseline; cumulative integer rectangles cover every pixel and all 22 enemy types, with proactive decode capped at two active roster atlases.
+- HUD truth — minimal/standard use a capability-complete compact surface, tactical retains the rich desktop surface, and urgency-ranked context plus literal dash/grenade/reload readiness expose a machine-readable capability receipt without changing combat math.
+- Saturation truth — all three live-premise L3 audit items and four verified second-order innovations shipped; the refreshed Genius List contains only external-data, credential/dashboard, product-choice, publication, hardware, or founder gates.
+- Validation truth — strict lint, production build, 824/824 tests across 116 files, 27-file public contract, asset/dependency/security/replay/schema/protocol/media gates, npm audit zero, and desktop/mobile Playwright 2/2 pass directly.
+- Staging truth — `https://session-131-staging.call-of-doodie.pages.dev/` passed the complete 17-route × 2-theme × 3-viewport visual matrix at 867/867 objective checks.
+- Visual truth — fresh captures exist, but direct AI image inspection still fails at the host Windows `CryptUnprotectData` boundary; no subjective pixel verdict is fabricated.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending verified inbound mail, physical device/full-run media, production Lighthouse/funnel data, project-scoped analytics/Sentry, publication, direct AI pixel review, and founder approval.
+
 - Session 130 (2026-07-25) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
 - Combat truth — grenade, projectile, rail, lightning, perk, boss, and environmental lethals now converge on one exactly-once defeat executor; explicit non-reward retirements remain distinct, and future unattributed lethals fail closed into a bounded integrity receipt.
 - Input truth — the live keyboard, touch, and gamepad path now consumes one finite pure movement contract; materially opposing simultaneous sources remain behavior-compatible and appear as a diagnostic contention receipt.

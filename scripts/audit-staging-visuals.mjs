@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "@playwright/test";
+import { getVisualAuditRoutes } from "./lib/public-route-registry.mjs";
 import { compositeColor, contrastRatio, defaultVisualAuditStorage, parseCssColor, summarizeVisualChecks } from "./lib/visual-audit.mjs";
 
 const ROOT = process.cwd();
@@ -28,13 +29,7 @@ if (!baseUrl || !/^https?:\/\//.test(baseUrl)) {
 const outputDir = path.resolve(ROOT, valueAfter("--output") || "output/playwright/staging-visuals");
 const widths = [390, 768, 1440];
 const themes = ["sewer-night", "porcelain-day"];
-const routes = [
-  { id: "home", path: "/?home=v2", primary: true },
-  { id: "privacy", path: "/privacy/", localPath: "/privacy/index.html" },
-  { id: "terms", path: "/terms/", localPath: "/terms/index.html" },
-  { id: "contact", path: "/contact/", localPath: "/contact/index.html" },
-  { id: "ip", path: "/ip/", localPath: "/ip/index.html" },
-];
+const routes = getVisualAuditRoutes();
 const localTarget = /^(localhost|127\.0\.0\.1)$/i.test(new URL(baseUrl).hostname);
 
 async function ensurePrimaryAuditSurface(page, storage) {

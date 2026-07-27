@@ -33,12 +33,14 @@ export function hudFlags(density) {
     case "minimal":
       return {
         showMissionWidget: false, showWaveIncoming: false, showHeatMeter: false,
+        useCompactDesktop: true,
         showAmmoBars: false, showSynergyChips: false, showBuildSummary: false,
         showMutationBanner: false, showCoinStreak: false,
       };
     case "tactical":
       return {
         showMissionWidget: true, showWaveIncoming: true, showHeatMeter: true,
+        useCompactDesktop: false,
         showAmmoBars: true, showSynergyChips: true, showBuildSummary: true,
         showMutationBanner: true, showCoinStreak: true,
       };
@@ -46,6 +48,7 @@ export function hudFlags(density) {
     default:
       return {
         showMissionWidget: true, showWaveIncoming: true, showHeatMeter: true,
+        useCompactDesktop: true,
         showAmmoBars: true, showSynergyChips: true, showBuildSummary: false,
         showMutationBanner: true, showCoinStreak: true,
       };

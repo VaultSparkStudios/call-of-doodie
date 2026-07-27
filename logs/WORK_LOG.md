@@ -1001,3 +1001,16 @@ Intent outcome: achieved for every agent-owned premise; Unified Genius List and 
 - Direct AI pixel viewing remains unclaimed because `view_image` still fails Windows CryptUnprotectData. Physical devices/media, inbound mail, production data, scoped analytics, publication, and founder SPARKED approval remain explicit gates.
 
 Intent outcome: achieved for every agent-owned premise; 27 shipped improvements, zero ranked innovation candidates, and no fabricated release evidence.
+
+## 2026-07-26 — Session 131 — Recovered visual implementation, public/asset/HUD truth, and second-order saturation
+
+- Recovered and validated the interrupted Session 130 visual-UX implementation, committed checkpoint `c7bc765`, then pulled/rebased `origin/main` before the fresh startup protocol.
+- Generated `docs/AUDIT_2026-07-26.json` / `.md` with three Oracle-verified infrastructure L3 items; every item shipped and carries exact execution evidence.
+- Centralized 17 public routes and live mechanics summaries into one generator/validator registry; added deterministic route proof discovery for humans and agents.
+- Rebuilt enemy atlas delivery around deterministic chroma-key alpha extraction, compressed WebP output, integer cell coverage, byte/type/alpha gates, load/fallback receipts, and bounded active-roster preloading.
+- Made HUD density explicit and compact surfaces capability-complete with urgency-ranked disclosure, wave-contract/mastery/performance signals, literal readiness, and parity receipts.
+- Implemented four second-order innovations and documented exact rejected premises instead of fabricating balance, analytics, email, launch, or pixel evidence.
+- Validation passed: 824/824 tests across 116 files, strict lint, production build, browser E2E 2/2, public/assets/dependency/security/replay/schema/protocol/media gates, and npm audit zero.
+- Deployed the working implementation through the Studio secrets gateway to `https://session-131-staging.call-of-doodie.pages.dev/`; hosted visual automation passed 867/867.
+- Direct AI image inspection remains unavailable at the Windows `CryptUnprotectData` boundary; the release verdict remains NO-GO for SPARKED pending the established external/device/data/publication/founder evidence.
+Intent outcome: achieved for every agent-owned premise; Unified Genius List and second-order frontier exhausted without silent skips.

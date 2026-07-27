@@ -12,7 +12,7 @@ Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, su
 
 ## Public resources
 
-- Play: https://callofdoodie.wtf/
+- Home: https://callofdoodie.wtf/
 - About: https://callofdoodie.wtf/about/
 - Play: https://callofdoodie.wtf/play/
 - How to Play: https://callofdoodie.wtf/how-to-play/
@@ -33,6 +33,7 @@ Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, su
 - Llms: https://callofdoodie.wtf/.well-known/llms.txt
 - Sitemap: https://callofdoodie.wtf/sitemap.xml
 - Gameplay-Contract: https://callofdoodie.wtf/gameplay-contract.json
+- Route-Contract: https://callofdoodie.wtf/route-contract.json
 
 ## Agent guidance
 

@@ -95,11 +95,14 @@ export default function HUD({
         health={health} maxHealth={diff.playerHP} level={level}
         currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
         fmtTime={fmtTime} onPause={onPause}
-        activeDrill={activeDrill} drillProgress={drillProgress} runIntegrity={runIntegrity}
+        activeDrill={activeDrill} drillProgress={drillProgress} practiceMastery={practiceMastery} runIntegrity={runIntegrity}
         runModifier={runModifier} rivalPace={rivalPace} vsScore={vsScore} vsName={vsName}
         topGhosts={topGhosts} weeklyRival={weeklyRival}
         bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
         cursedHideScore={cursedHideScore}
+        activeWaveContract={activeWaveContract} grenadeReady={grenadeReady} dashReady={dashReady}
+        combo={combo} killstreak={killstreak} experimentMatched={experimentMatched}
+        reducedEffects={Boolean(reducedEffects)}
       />
     );
   }

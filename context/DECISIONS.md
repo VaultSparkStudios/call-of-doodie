@@ -750,3 +750,19 @@ Rationale: A likely killer plus aggregate pressure is insufficient coaching evid
 Decision: Operational entrypoints publish a leading Usage contract and a side-effect-free `--help`/`--check`/listing surface where applicable; shared smoke coverage may prove several scripts when it names each target directly.
 
 Rationale: Discoverability and testability should not require triggering a deploy, browser, write, or sibling control-plane action.
+
+## 2026-07-26 — Session 131 — Public route claims require a deterministic proof ledger
+
+Decision: Human pages, header/footer navigation, sitemap, agent resources, language-model index, and visual-audit routes derive from one registry. A public `route-contract.json` publishes a deterministic SHA-256 fingerprint and exact coverage counts; validation recomputes it from live route and gameplay sources.
+
+Rationale: A generator can still drift at its consumer boundary. A source-recomputed proof makes completeness inspectable by both humans and agents without allowing a stale manifest to certify itself.
+
+## 2026-07-26 — Session 131 — Enemy art separates provenance, matte, delivery, and fallback truth
+
+Decision: Opaque chroma PNGs remain the proprietary editing/provenance sources. Runtime atlases are deterministic soft-matte/despill WebPs with integer cumulative cell boundaries, explicit byte/type/alpha gates, bounded proactive decoding, and procedural bodies retained during load or failure.
+
+Rationale: Source alpha is not the contract for chroma-generated art. Separating provenance from the reproducible matte and delivery layers cuts transfer weight without losing edge quality, exact atlas coverage, or honest fallback behavior.
+
+## 2026-07-26 — Session 131 — Compact HUD parity is capability-based
+
+Decision: Minimal and standard densities use the compact responsive surface; tactical density retains the richer desktop surface. Compact parity is defined by always-visible vitals/weapon/action readiness plus urgency-ranked live context and a machine-readable capability receipt, not pixel identity with the tactical layout.

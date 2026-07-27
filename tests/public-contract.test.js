@@ -18,7 +18,7 @@ describe("public human and agent contract", () => {
     expect(JSON.parse(output)).toMatchObject({
       ok: true,
       errors: [],
-      checkedFiles: 14,
+      checkedFiles: 27,
     });
   });
 

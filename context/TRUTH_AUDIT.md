@@ -934,3 +934,19 @@ Last reviewed: 2026-07-23
 
 Overall status: green engineering closeout; NO-GO SPARKED
 Last reviewed: 2026-07-24
+
+## 2026-07-26 — Session 131 — Route, atlas, HUD, and staging truth
+
+- Audit truth — `docs/AUDIT_2026-07-26.json` / `.md` contain three Oracle-verified L3 items; all are implemented with exact sidecar evidence, plus four shipped second-order innovations.
+- Route truth — 17 human routes and 12 generated companions feed header/footer/sitemap/agents/language-model/visual consumers from one registry; `route-contract.json` is recomputed, not self-certified.
+- Mechanics truth — enemies, arsenal, and modes summaries derive from the live public gameplay contract; validation fails on source drift.
+- Asset truth — provenance PNGs are opaque chroma sources by design; deterministic soft-matte/despill output provides alpha WebP delivery. The aggregate runtime receipt is 730,586 bytes, all 22 types, and complete integer coverage.
+- Decode truth — proactive atlas loading requests at most two unique active-roster atlases; procedural art remains the actual load/failure fallback.
+- HUD truth — compact parity means vitals, score/time, weapon, literal action readiness, and priority-ranked live context; tactical desktop depth remains intentionally richer.
+- Validation truth — 824/824 tests, strict lint, build, objective contracts/gates, npm audit zero, and desktop/mobile Playwright 2/2 passed directly.
+- Staging truth — `https://session-131-staging.call-of-doodie.pages.dev/` passed 867/867 checks across 17 routes, both themes, and 390/768/1440 widths.
+- Visual truth — automated HTTP/theme/overflow/action/console/page-error/contrast evidence is real; subjective AI image review remains unclaimed after another Windows `CryptUnprotectData` failure.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending inbound-mail, physical-device/media, production-data, scoped-analytics, publication, direct-visual, and founder evidence.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-07-26

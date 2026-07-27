@@ -1,3 +1,5 @@
+import { ENEMY_ATLAS_CONTRACT, getIntegerGridRect } from "./enemyAtlasContract.js";
+
 export const SIGNATURE_VISUAL_ASSETS = [
   { id: "cod-porcelain-throne", label: "Porcelain Throne", role: "objective prop", src: "/visual-assets/cod-porcelain-throne.png", accent: "#BFE7FF" },
   { id: "cod-plunger-rocket", label: "Plunger Launcher", role: "weapon identity", src: "/visual-assets/cod-plunger-rocket.png", accent: "#FF7A30" },
@@ -14,28 +16,23 @@ const RUNTIME_CHARACTER_ASSETS = Object.freeze({
   karen: "/visual-assets/cod-karen-nemesis-v2.png",
 });
 
-export const ENEMY_ATLASES = Object.freeze({
-  core: { src: "/visual-assets/enemy-atlas-core.png", columns: 4, rows: 2 },
-  specialists: { src: "/visual-assets/enemy-atlas-specialists.png", columns: 4, rows: 2 },
-  bosses: { src: "/visual-assets/enemy-atlas-bosses.png", columns: 3, rows: 2 },
-});
+export const ENEMY_ATLASES = ENEMY_ATLAS_CONTRACT;
 
-const ENEMY_ATLAS_SLOTS = new Map([
-  [0, ["core", 0]], [1, ["core", 1]], [2, ["core", 2]], [3, ["core", 3]],
-  [5, ["core", 4]], [6, ["core", 5]], [7, ["core", 6]], [8, ["core", 7]],
-  [9, ["specialists", 0]], [10, ["specialists", 1]], [11, ["specialists", 2]], [12, ["specialists", 3]],
-  [13, ["specialists", 4]], [14, ["specialists", 5]], [15, ["specialists", 6]], [16, ["specialists", 7]],
-  [4, ["bosses", 0]], [17, ["bosses", 1]], [18, ["bosses", 2]],
-  [19, ["bosses", 3]], [20, ["bosses", 4]], [21, ["bosses", 5]],
-]);
+const ENEMY_ATLAS_SLOTS = new Map(Object.entries(ENEMY_ATLASES).flatMap(([atlasId, atlas]) => (
+  atlas.typeIndices.map((typeIndex, cell) => [typeIndex, [atlasId, cell]])
+)));
 
 const imageCache = new Map();
+const imageStatus = new Map();
 
 function getCachedImage(src, ImageCtor = globalThis.Image) {
   if (!src || typeof ImageCtor !== "function") return null;
   if (!imageCache.has(src)) {
     const image = new ImageCtor();
     image.decoding = "async";
+    imageStatus.set(src, "loading");
+    image.onload = () => imageStatus.set(src, "ready");
+    image.onerror = () => imageStatus.set(src, "fallback");
     image.src = src;
     imageCache.set(src, image);
   }
@@ -58,18 +55,35 @@ export function getEnemyAtlasSlot(typeIndex) {
   return { atlasId, cell, ...ENEMY_ATLASES[atlasId] };
 }
 
+export function preloadEnemyAtlasesForTypes(typeIndices, ImageCtor = globalThis.Image, limit = 2) {
+  const boundedLimit = Math.max(0, Math.min(2, Math.floor(Number(limit) || 0)));
+  const atlasIds = [];
+  for (const typeIndex of Array.isArray(typeIndices) ? typeIndices : []) {
+    const slot = getEnemyAtlasSlot(typeIndex);
+    if (slot && !atlasIds.includes(slot.atlasId)) atlasIds.push(slot.atlasId);
+    if (atlasIds.length >= boundedLimit) break;
+  }
+  for (const atlasId of atlasIds) getCachedImage(ENEMY_ATLASES[atlasId].src, ImageCtor);
+  return {
+    requestedTypes: Array.isArray(typeIndices) ? [...typeIndices] : [],
+    atlasIds,
+    boundedLimit,
+  };
+}
+
 export function getRuntimeEnemySprite(typeIndex, ImageCtor = globalThis.Image) {
   const slot = getEnemyAtlasSlot(typeIndex);
   if (!slot) return null;
   const image = getCachedImage(slot.src, ImageCtor);
   if (!image) return null;
-  const sourceWidth = image.naturalWidth / slot.columns;
-  const sourceHeight = image.naturalHeight / slot.rows;
-  return {
-    image,
-    sourceX: (slot.cell % slot.columns) * sourceWidth,
-    sourceY: Math.floor(slot.cell / slot.columns) * sourceHeight,
-    sourceWidth,
-    sourceHeight,
-  };
+  const rect = getIntegerGridRect(image.naturalWidth, image.naturalHeight, slot.columns, slot.rows, slot.cell);
+  if (!rect) return null;
+  return { image, ...rect };
+}
+
+export function getEnemyAtlasLoadReceipt() {
+  return Object.fromEntries(Object.values(ENEMY_ATLASES).map((atlas) => [
+    atlas.id,
+    imageStatus.get(atlas.src) || "idle",
+  ]));
 }

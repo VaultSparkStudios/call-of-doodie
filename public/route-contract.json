@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "source": "scripts/lib/public-route-registry.mjs",
+  "contentVersion": "2026-07-26",
+  "fingerprint": "a894962ab5be1641837834696a714c7f9624730efa92c922b117f61162c66f30",
+  "coverage": {
+    "routes": 17,
+    "headerRoutes": 5,
+    "footerRoutes": 17,
+    "visualAuditRoutes": 17,
+    "generatedPages": 12
+  },
+  "gameplay": {
+    "enemies": 22,
+    "weapons": 12,
+    "modes": 7,
+    "difficulties": 6
+  },
+  "routeIds": [
+    "home",
+    "about",
+    "play",
+    "how-to-play",
+    "enemies",
+    "arsenal",
+    "modes",
+    "leaderboard",
+    "accessibility",
+    "support",
+    "press-kit",
+    "status",
+    "changelog",
+    "privacy",
+    "terms",
+    "contact",
+    "ip"
+  ],
+  "consumers": [
+    "companion-pages",
+    "header",
+    "footer",
+    "sitemap",
+    "agents",
+    "llms",
+    "visual-audit"
+  ]
+}

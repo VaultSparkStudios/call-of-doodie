@@ -16,6 +16,16 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S131** Public route truth graph — one 17-route registry generates and exact-validates human pages, navigation, sitemap, footer, agent resources, language-model index, visual coverage, and a deterministic route proof ledger.
+- [x] [SIL:3] **DONE S131** Integer-safe enemy atlas pipeline — reproducible chroma matte, alpha WebP export, 730,586-byte aggregate budget, exact 22-type coverage, integer rectangles, fallback receipts, and bounded two-atlas proactive decoding.
+- [x] [SIL:3] **DONE S131** Capability-complete responsive HUD — explicit compact/tactical density semantics, urgency-ranked run context, ability readiness, accessible disclosure, and machine-readable parity receipts.
+- [x] [SIL:4] **DONE S131 second-order** Route proof ledger, synthetic chroma canary, HUD capability receipt, and bounded roster decode scheduler shipped with live-premise evidence and regression tests.
+- [x] [SIL:1] **DONE S131 staging** Secrets-gateway Cloudflare preview passed 867/867 checks across all 17 routes, two themes, and three viewport widths.
+- [x] [AUDIT WIN S131] Hosted run coaching, numeric balance changes, home-v1 retirement, identity expansion, analytics mutation, false inbound-mail green status, and subjective pixel approval were rejected or deferred because their evidence/authority prerequisites remain absent.
+
+**Runway exception:** the repo-owned Genius List is exhausted after S131. Open work remains under Human Action Required because it needs credentials, a product decision, production traffic, publication/community readiness, physical devices/media, or founder approval; no phantom Now work is invented.
+
+
 - [x] [SIL:3] **DONE S130** Source-neutral enemy defeat lifecycle — every combat lethal enters one exactly-once executor; explicit no-reward retirements stay separate and unattributed future bypasses fail closed into run-integrity evidence.
 - [x] [SIL:2] **DONE S130** Live multimodal movement contract — keyboard, touch, and gamepad share one finite normalized frame contract with active-source and contention receipts.
 - [x] [SIL:2] **DONE S130** Truthful core-logic coverage contract — exact 82-file scope, metric ratchets, explicit exclusions, and stale-evidence rejection protect the coverage claim.

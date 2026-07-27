@@ -101,6 +101,10 @@
     {
       "rel": "gameplay-contract",
       "href": "https://callofdoodie.wtf/gameplay-contract.json"
+    },
+    {
+      "rel": "route-contract",
+      "href": "https://callofdoodie.wtf/route-contract.json"
     }
   ],
   "capabilities": [

@@ -256,11 +256,15 @@
       "sourceType": "ai-generated-proprietary",
       "license": "Proprietary",
       "sourcePath": "assets/source/runtime-sprites/enemy-atlas-core-source.png",
-      "runtimePath": "public/visual-assets/enemy-atlas-core.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-core.webp",
+      "runtimeFormat": "webp",
       "dimensions": {
         "width": 1254,
         "height": 1254
       },
+      "grid": { "columns": 4, "rows": 2, "slots": 8 },
+      "typeIndices": [0, 1, 2, 3, 5, 6, 7, 8],
+      "maxBytes": 550000,
       "status": "production-ready",
       "notes": "Eight transparent core-enemy sprites generated as one consistent proprietary atlas; procedural canvas characters remain the load/failure fallback."
     },
@@ -270,11 +274,15 @@
       "sourceType": "ai-generated-proprietary",
       "license": "Proprietary",
       "sourcePath": "assets/source/runtime-sprites/enemy-atlas-specialists-source.png",
-      "runtimePath": "public/visual-assets/enemy-atlas-specialists.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-specialists.webp",
+      "runtimeFormat": "webp",
       "dimensions": {
         "width": 1254,
         "height": 1254
       },
+      "grid": { "columns": 4, "rows": 2, "slots": 8 },
+      "typeIndices": [9, 10, 11, 12, 13, 14, 15, 16],
+      "maxBytes": 500000,
       "status": "production-ready",
       "notes": "Eight transparent specialist-enemy sprites generated as one consistent proprietary atlas; procedural canvas characters remain the load/failure fallback."
     },
@@ -284,11 +292,15 @@
       "sourceType": "ai-generated-proprietary",
       "license": "Proprietary",
       "sourcePath": "assets/source/runtime-sprites/enemy-atlas-bosses-source.png",
-      "runtimePath": "public/visual-assets/enemy-atlas-bosses.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-bosses.webp",
+      "runtimeFormat": "webp",
       "dimensions": {
         "width": 1254,
         "height": 1254
       },
+      "grid": { "columns": 3, "rows": 2, "slots": 6 },
+      "typeIndices": [4, 17, 18, 19, 20, 21],
+      "maxBytes": 600000,
       "status": "production-ready",
       "notes": "Six transparent boss sprites generated as one consistent proprietary atlas; procedural canvas bosses remain the load/failure fallback."
     }

@@ -1,0 +1,220 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-07-26",
+  "session": 131,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-26",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure",
+    "combinedPriority": 96.4,
+    "top3": [
+      "capability-complete-responsive-hud",
+      "public-route-truth-graph",
+      "integer-budgeted-enemy-atlas-pipeline"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Direct current-HEAD inspection after recovery checkpoint c7bc765, Studio Oracle preverification for every ranked premise, 810/810 tests, strict lint, production build, public/asset/dependency/security gates, real Chromium desktop/mobile pointer flows, exact file-size and image-metadata inspection, cost gates, and GitHub Actions metadata. No physical-device, player-retention, inbound-email, production-funnel, or subjective pixel claim is inferred.",
+    "specialtyLenses": [
+      "founder-requested infrastructure rubric",
+      "game-loop review",
+      "app release gate",
+      "CANON-011 sitemap",
+      "CANON-041 mobile parity",
+      "CANON-047 themes",
+      "CANON-048 dual audience",
+      "CANON-045 Obelisk identity",
+      "proprietary public-repo sanitization"
+    ],
+    "baseline": {
+      "tests": "810/810 across 111 files; strict lint and production build pass",
+      "build": "Recovery checkpoint c7bc765 builds locally; no current-SHA staging or CI receipt exists yet",
+      "doctor": "blockingFailing 0 in project state; one advisory portfolio sanitization ratchet remains visible",
+      "public": "17 sitemap routes and 12 generated companion pages exist, but the footer manifest declares only one header route and the visual harness audits only five routes",
+      "assets": "Three 1254x1254 RGBA runtime enemy atlases total 4,634,459 bytes; core 4-column sampling produces fractional 313.5px cell boundaries",
+      "release": "NO-GO for SPARKED: current-SHA staging, full route/theme/viewport proof, physical PWA/gamepad/full-run media, inbound mail, scoped analytics, production metrics, direct subjective pixel review, publication, and founder approval remain unproven"
+    },
+    "innovationReserve": [
+      "capability-complete-responsive-hud",
+      "public-route-truth-graph",
+      "integer-budgeted-enemy-atlas-pipeline"
+    ]
+  },
+  "gameLoopReview": {
+    "loopTightness": 94,
+    "progression": 94,
+    "sessionEngagement": 88,
+    "retention": 90,
+    "soulFidelity": 97,
+    "evidence": "The action/progression/replay loops are deep and mechanically coherent, but the recovered compact HUD is effectively unconditional on desktop and does not receive several capability-bearing props. Retention remains a design score rather than an empirical outcome because production funnel and participant evidence are absent.",
+    "prioritizedFindings": [
+      "HUD.jsx routes every normal desktop density through MobileHUD because hudFlags() never defines useCompactDesktop; the compact component is not passed objective, wave-contract, ability-readiness, or reduced-effects state.",
+      "The 22-character art pass is live, but its three runtime atlases exceed 4.63 MB and the core atlas is divided at fractional source coordinates, creating avoidable load and sampling risk.",
+      "The expanded player website is not one truth graph: page copy, sitemap, footer manifest, agents manifest, and the visual-audit route list can drift independently."
+    ],
+    "nextThreeMoves": [
+      "Make one responsive HUD preserve every core gameplay capability while keeping pressure details collapsible.",
+      "Derive every public route and mechanics summary from one registry plus the live gameplay contract.",
+      "Normalize atlas rectangles to integer boundaries, ship modern compressed runtime assets, and enforce byte/coverage budgets."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or launch-state promotion; repo-owned engineering implementation should continue",
+    "green": [
+      "recovery checkpoint passes 810/810 tests, strict lint, production build, public contract, asset manifest, dependency tree, security headers, and npm audit with zero vulnerabilities",
+      "CANON-029 release and cost-bleeder gates both allow the project as cost-neutral",
+      "latest five observed main-branch workflow runs are successful",
+      "rollback and platform-parity posture are documented without claiming physical-device evidence"
+    ],
+    "red": [
+      "current recovery/audit SHA has not been deployed to isolated staging or exercised by CI",
+      "visual automation covers only five of seventeen sitemap routes and therefore cannot certify the expanded website",
+      "physical Progressive Web App install, real gamepad, and full-run media receipts are absent",
+      "on-domain inbound email, project-scoped analytics/Sentry, production Lighthouse/funnel data, publication, and founder launch approval remain unverified",
+      "direct subjective pixel inspection remains unavailable at the host CryptUnprotectData boundary"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "game-loop integrity / UX / accessibility",
+      "effortHours": 6,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 36.4,
+      "slug": "capability-complete-responsive-hud",
+      "title": "Turn the recovered compact HUD into a capability-complete responsive pressure aperture instead of silently bypassing the desktop HUD and dropping live run state.",
+      "status": "shipped",
+      "why": "HUD.jsx selects MobileHUD for desktop whenever hud?.useCompactDesktop is not exactly false, but hudFlags() never emits that property. The compact branch therefore wins for every normal density and is not passed objective/contract, grenade/dash readiness, reduced-effects state, missions, combo, or several feedback capabilities. This violates the master plan's desktop/mobile parity contract even though the component renders cleanly.",
+      "recipe": "Define an explicit responsive-HUD contract and a pure urgency-ranked run-intel model. Preserve the clean top/bottom frame, add literal ability readiness and current objective/contract signals, keep secondary rivalry/integrity/drill/performance evidence behind one accessible expandable rail, make tactical density retain its richer desktop presentation, and add behavioral tests proving capability parity at mobile, compact desktop, and tactical desktop breakpoints without changing combat math.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Make useCompactDesktop explicit in every hudFlags() result and restore the legacy desktop branch for standard/tactical density."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Add missing ability, objective, contract, and performance signals to MobileHUD with accessible labels and focused component tests."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "Build a pure urgency-ranked responsive HUD model, preserve all core capabilities across mobile/compact/tactical modes, add collision-safe disclosure behavior, and enforce parity with architecture and rendering tests."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "observability / public UX / dual-audience coherence",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 32,
+      "slug": "public-route-truth-graph",
+      "title": "Replace five independently maintained public-route surfaces with one source-derived truth graph that generates pages, navigation, sitemap, footer, agent resources, and the complete visual matrix.",
+      "status": "shipped",
+      "why": "The recovery added twelve companion pages and seventeen sitemap routes, but footer-manifest.json still declares one header destination and the visual harness audits only home/privacy/terms/contact/ip. The current footer gate passes because it validates the stale manifest against itself. Enemies, arsenal, and modes prose is also hand-authored beside an already source-derived gameplay contract.",
+      "recipe": "Create one importable public-route registry with route, label, audience, navigation/footer membership, sitemap metadata, visual-audit eligibility, and mechanics-section builders fed by buildPublicGameplayContract(). Generate companion pages, sitemap.xml, footer-manifest.json, agents.json resource routes, and llms route indexes from it. Make validate-public-contract compare actual HTML header/footer links, sitemap URLs, manifests, gameplay-derived roster/mode/weapon facts, and visual-audit coverage against the registry so a stale surface fails closed.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1.5,
+          "recipe": "Update the footer manifest and visual route list to include every newly shipped companion route."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Centralize route metadata and generate pages, sitemap, footer manifest, and visual routes from it."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Build the full route/mechanics truth graph, derive agent and language-model indexes, inspect actual HTML link parity, and add drift fixtures that make every consumer self-validating."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "performance / visual correctness / asset infrastructure",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 28,
+      "slug": "integer-budgeted-enemy-atlas-pipeline",
+      "title": "Make the 22-character art pass an integer-safe, byte-budgeted runtime pipeline instead of loading 4.63 MB of PNGs through fractional atlas rectangles.",
+      "status": "shipped",
+      "why": "The three 1254x1254 RGBA runtime atlases total 4,634,459 bytes. The four-column atlases yield 313.5px-wide cells, while getRuntimeEnemySprite() divides natural dimensions directly and has no integer coverage invariant, byte ceiling, decode-format choice, or fallback receipt. The art can therefore add first-encounter jank or edge bleed without a failing gate.",
+      "recipe": "Add a deterministic Sharp-backed export step from proprietary source PNGs to compressed WebP runtime atlases, preserve PNG sources, calculate integer cell boundaries with cumulative rounding so every source pixel belongs to exactly one cell, and expose format/fallback metadata. Extend the visual asset manifest validator with per-atlas dimensions, alpha, grid coverage, total runtime-byte ceiling, and required type-index coverage. Preload only the current/next roster atlas and keep the procedural body as truthful fallback.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Round atlas rectangle boundaries cumulatively and test exact full-image coverage."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Generate WebP runtime atlases, update consumers, and enforce an aggregate byte ceiling with PNG source preservation."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Ship deterministic integer-safe export, modern-format delivery, type/grid/alpha/byte validation, bounded preloading, fallback receipts, and regression tests."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "ai-generated-run-coach",
+      "reason": "A local deterministic RunBrain and debrief system already exists. Adding a hosted model would create variable per-user cost and unverified advice without a demonstrated gap; CANON-029 and the priority floor reject it."
+    },
+    {
+      "slug": "numeric-balance-retune",
+      "reason": "Pressure and progression receipts exist, but no new participant or production evidence supports changing damage, health, spawn, or reward numbers. Instrumented restraint is the honest win."
+    },
+    {
+      "slug": "home-v1-retirement",
+      "reason": "Production Lighthouse and 48-hour funnel evidence remain absent. Deleting the fallback would reverse a recorded decision without its evidence gate."
+    },
+    {
+      "slug": "auth-membership-expansion",
+      "reason": "Guest play and Obelisk placement are live; paid membership remains an explicit product choice. Expanding identity scope without founder demand is not a defect fix."
+    },
+    {
+      "slug": "analytics-dashboard-allowlists",
+      "reason": "The analytics capability is still missing/project scope is unverified. No dashboard mutation or Sentry stream claim is fabricated."
+    },
+    {
+      "slug": "inbound-email-green-label",
+      "reason": "The page provides an honest fallback, but delivery has not been proven. The release gate remains red rather than changing copy to simulate evidence."
+    },
+    {
+      "slug": "subjective-pixel-verdict",
+      "reason": "Filesystem and in-app browser image paths both fail at the Windows CryptUnprotectData boundary. Real Chromium automation can validate layout, contrast, overflow, and errors; subjective AI image approval remains explicitly unclaimed."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "public-route-truth-graph",
+      "status": "shipped",
+      "implementedAt": "2026-07-26T23:58:00-04:00",
+      "level": "L3",
+      "evidence": "17-route registry now generates 12 companion pages plus header/footer/sitemap/agents/llms/visual routes; public/route-contract.json publishes deterministic SHA-256 coverage proof; validator checks 27 files; focused route/public tests green."
+    },
+    {
+      "slug": "integer-budgeted-enemy-atlas-pipeline",
+      "status": "shipped",
+      "implementedAt": "2026-07-26T23:58:00-04:00",
+      "level": "L3",
+      "evidence": "Deterministic chroma matte to WebP pipeline preserves alpha; 730,586 runtime bytes vs 4,634,459 baseline; integer cumulative rectangles cover every pixel; 22 types covered; proactive decode capped at two active roster atlases; asset and focused tests green."
+    },
+    {
+      "slug": "capability-complete-responsive-hud",
+      "status": "shipped",
+      "implementedAt": "2026-07-26T23:58:00-04:00",
+      "level": "L3",
+      "evidence": "Explicit compact minimal/standard and rich tactical desktop surfaces; pure urgency-ranked context model, wave contract/mastery/performance and readiness parity, capability receipt, accessible disclosure, component/model/settings tests green."
+    }
+  ]
+}

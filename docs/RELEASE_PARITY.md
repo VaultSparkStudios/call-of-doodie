@@ -1,13 +1,13 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-07-16
+Last reviewed: 2026-07-26
 
 ## Surface ledger
 
 | Surface | Current evidence | Status |
 |---|---|---|
-| Desktop browser | Automated Chromium launch captures, unit tests, build, and live smoke exist. A fresh real-click pass is required after this implementation. | Pending recheck |
-| Mobile browser | Responsive layout and touch controls exist; automated 390px inspection is required after this implementation. | Pending recheck |
+| Desktop browser | Current desktop Chromium input flow and isolated staging inspection at 768px/1440px pass. | Automated pass |
+| Mobile browser | Current mobile-Chrome input flow and isolated staging inspection at 390px pass. | Automated pass |
 | Installed Progressive Web App (PWA) | Code emits install-readiness receipts, but no current physical install/relaunch receipt exists. | Manual gate |
 | Physical controller/browser | Local input contracts exist, but no current physical device/browser receipt exists. | Manual gate |
 | Native mobile app | No native app is shipped. | Not applicable |
@@ -21,8 +21,8 @@ Last reviewed: 2026-07-16
 
 ## Known gaps
 
-- GitHub Pages is a manually dispatched fallback, not an isolated current staging environment.
-- On-domain contact forwarding is not verified while the Brevo capability is unavailable.
+- An isolated Cloudflare preview exists for Session 131; production/current-commit parity is verified only after the direct-main push and CI.
+- Brevo credentials are ready, but the required inbound subdomain/MX/webhook receiver and end-to-end delivery are not configured or verified; the founder-address fallback remains explicit.
 - Real Progressive Web App install/relaunch and physical controller/browser checks remain open.
 - Production Lighthouse and HomeV2 funnel comparisons require measured external evidence.
 

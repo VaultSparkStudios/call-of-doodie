@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-26",
+  "session": 131,
+  "project": "Call-Of-Doodie",
+  "intent": "recover the interrupted implementation and complete one continuous founder-directed arc through synchronized startup, live-premise audit, all-item implementation, second-order saturation, isolated staging, and direct-main closeout",
+  "outcome": "achieved-agent-owned-boundary",
+  "shipped": [
+    "17-route public truth graph and exact 27-file validator",
+    "deterministic public route-contract SHA-256 proof ledger",
+    "integer-safe byte-budgeted alpha WebP enemy atlas pipeline",
+    "bounded two-atlas active-roster decode scheduler",
+    "capability-complete responsive compact HUD and rich tactical desktop path",
+    "synthetic deterministic chroma-matte canary",
+    "machine-readable HUD capability receipt"
+  ],
+  "validation": [
+    "strict lint passed",
+    "npm test 824/824 across 116 files",
+    "production build passed",
+    "public contract passed across 27 files",
+    "asset, dependency, entry-boundary, security, replay, schema, protocol, progression, and launch-media gates passed",
+    "npm audit 0 vulnerabilities",
+    "Playwright desktop/mobile pointer flows 2/2",
+    "isolated staging visual matrix 867/867 across 17 routes, 2 themes, and 3 viewports"
+  ],
+  "deferred": [
+    "verified inbound on-domain email delivery",
+    "physical PWA, gamepad, and full-run media QA",
+    "production Lighthouse and funnel evidence",
+    "project-scoped analytics and Sentry",
+    "Itch/community publication and founder launch approval",
+    "direct AI pixel review because the image sandbox still fails Windows CryptUnprotectData"
+  ],
+  "sil": {
+    "score": 998,
+    "velocity": 8,
+    "debt": "decreasing"
+  },
+  "ignisNote": "The strongest pattern was proof compounding: centralize a source graph or runtime contract, then publish a deterministic receipt and synthetic canary so future drift fails closed.",
+  "headline": "Made public discovery, character delivery, and responsive run context prove their own truth",
+  "items": [
+    {
+      "title": "Public routes share one proof-carrying graph",
+      "projectImpact": 10,
+      "ecosystemImpact": 9,
+      "evidence": "17 routes, 12 generated companions, 27 validated files, deterministic SHA-256 route contract"
+    },
+    {
+      "title": "Enemy art delivery is reproducible and bounded",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "730586 runtime bytes, alpha matte canary, integer coverage, 22 types, two-atlas preload ceiling"
+    },
+    {
+      "title": "Compact HUD preserves gameplay capabilities",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "explicit density semantics, urgency model, action readiness, capability receipt"
+    },
+    {
+      "title": "Hosted proof covers the expanded public surface",
+      "projectImpact": 9,
+      "ecosystemImpact": 8,
+      "evidence": "867 of 867 staging checks across route, theme, and viewport matrix"
+    }
+  ],
+  "followUps": [
+    "Complete physical device and media evidence when hardware is available",
+    "Verify inbound mail and project-scoped analytics/Sentry",
+    "Collect production performance and funnel evidence before legacy retirement",
+    "Perform direct AI pixel review when the image sandbox credential boundary is repaired"
+  ],
+  "blockers": [
+    "SPARKED launch requires the remaining physical, inbound-mail, production-data, scoped-analytics, direct-AI-visual, publication, and founder evidence"
+  ]
+}

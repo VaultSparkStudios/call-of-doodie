@@ -6,6 +6,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
+import { ENEMY_ATLAS_CONTRACT } from "../src/utils/enemyAtlasContract.js";
+import { removeChromaKey } from "./lib/chroma-key.mjs";
 
 const ROOT = process.cwd();
 const sourceDir = path.join(ROOT, "assets", "source", "signature-pack");
@@ -160,4 +162,22 @@ for (const [sourceName, runtimeName] of runtimeSprites) {
   console.log(`Generated ${path.relative(ROOT, sourcePath)} -> ${path.relative(ROOT, runtimePath)}`);
 }
 
-console.log(`Generated ${assets.length + runtimeSprites.length} proprietary visual asset(s).`);
+for (const atlas of Object.values(ENEMY_ATLAS_CONTRACT)) {
+  const sourcePath = path.join(ROOT, atlas.sourcePath);
+  const runtimePath = path.join(ROOT, atlas.runtimePath);
+  const source = await sharp(sourcePath).raw().toBuffer({ resolveWithObject: true });
+  const keyed = removeChromaKey(source, { transparentThreshold: 12, opaqueThreshold: 220, despill: true });
+  await sharp(keyed.data, { raw: keyed.info })
+    .webp({ quality: 84, alphaQuality: 92, effort: 6, smartSubsample: true })
+    .toFile(runtimePath);
+  if (keyed.receipt.transparentPixels === 0 || keyed.receipt.partialPixels === 0) {
+    throw new Error(`${atlas.id} chroma-key matte is missing transparent or softened edge pixels`);
+  }
+  const bytes = fs.statSync(runtimePath).size;
+  if (bytes > atlas.maxBytes) throw new Error(`${atlas.id} exceeds ${atlas.maxBytes} byte runtime budget (${bytes})`);
+  const alphaReceipt = `${keyed.receipt.transparentPixels} transparent / ${keyed.receipt.partialPixels} softened`;
+  console.log(`Generated ${path.relative(ROOT, sourcePath)} -> ${path.relative(ROOT, runtimePath)} (${bytes} bytes; ${alphaReceipt})`);
+}
+
+
+console.log(`Generated ${assets.length + runtimeSprites.length + Object.keys(ENEMY_ATLAS_CONTRACT).length} proprietary visual asset(s).`);

@@ -7,6 +7,16 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
+import {
+  buildAgentsManifest,
+  buildFooterManifest,
+  buildLlmsText,
+  buildSitemapXml,
+  buildRouteContractProof,
+  getPublicRouteRegistry,
+  renderFooterLinks,
+  renderHeaderNav,
+} from "./lib/public-route-registry.mjs";
 
 const root = process.cwd();
 const jsonMode = process.argv.includes("--json");
@@ -47,13 +57,12 @@ function hrefs(items = []) {
   return new Set(items.map((item) => typeof item === "string" ? item : item?.href).filter(Boolean));
 }
 
+const routeRegistry = getPublicRouteRegistry();
 const requiredFiles = [
-  relative("public", "privacy", "index.html"),
-  relative("public", "terms", "index.html"),
-  relative("public", "contact", "index.html"),
-  relative("public", "ip", "index.html"),
+  ...routeRegistry.filter((route) => route.path !== "/").map((route) => relative(...route.filePath.split("/"))),
   relative("public", "agents.json"),
   relative("public", "gameplay-contract.json"),
+  relative("public", "route-contract.json"),
   relative("public", ".well-known", "llms.txt"),
   relative("public", "sitemap.xml"),
   relative("public", "robots.txt"),
@@ -68,6 +77,7 @@ const contentByFile = Object.fromEntries(requiredFiles.map((file) => [file, requ
 let agents = null;
 let footer = null;
 let gameplayContract = null;
+let routeContractProof = null;
 try {
   agents = JSON.parse(contentByFile[relative("public", "agents.json")]);
 } catch (error) {
@@ -83,8 +93,22 @@ try {
 } catch (error) {
   errors.push("gameplay-contract.json invalid JSON: " + error.message);
 }
+try {
+  routeContractProof = JSON.parse(contentByFile[relative("public", "route-contract.json")]);
+} catch (error) {
+  errors.push("route-contract.json invalid JSON: " + error.message);
+}
 
+if (routeContractProof) {
+  if (JSON.stringify(routeContractProof) !== JSON.stringify(buildRouteContractProof())) {
+    errors.push("route-contract.json fingerprint drifted from source; run npm run build");
+  }
+  if (routeContractProof.coverage?.routes !== routeRegistry.length) errors.push("route-contract.json route count is incomplete");
+}
 if (agents) {
+  if (JSON.stringify(agents) !== JSON.stringify(buildAgentsManifest())) {
+    errors.push("agents.json drifted from the public route graph; run npm run build");
+  }
   requireIncludes("agents.json", JSON.stringify(agents), [
     "VaultSpark Studios LLC",
     "cost-neutral",
@@ -96,6 +120,9 @@ if (agents) {
 }
 
 if (footer) {
+  if (JSON.stringify(footer) !== JSON.stringify(buildFooterManifest())) {
+    errors.push("footer-manifest.json drifted from the public route graph; run npm run build");
+  }
   const allFooterLinks = hrefs(footer.footerLinks);
   const requiredLinks = new Set([
     ...hrefs(footer.headerLinks),
@@ -112,6 +139,26 @@ if (gameplayContract) {
   if (JSON.stringify(gameplayContract) !== JSON.stringify(expectedGameplayContract)) {
     errors.push("gameplay-contract.json drifted from source; run npm run gameplay:contract");
   }
+}
+
+const expectedHeaderNav = renderHeaderNav("../");
+const expectedFooterLinks = renderFooterLinks("../");
+for (const route of routeRegistry.filter((entry) => entry.path !== "/")) {
+  const file = relative(...route.filePath.split("/"));
+  requireIncludes(route.id, contentByFile[file], [
+    route.canonicalUrl,
+    expectedHeaderNav,
+    expectedFooterLinks,
+    "VaultSpark Studios LLC",
+    "data-theme-toggle",
+  ]);
+}
+
+if (contentByFile[relative("public", "sitemap.xml")] !== buildSitemapXml()) {
+  errors.push("sitemap.xml drifted from the public route graph; run npm run build");
+}
+if (contentByFile[relative("public", ".well-known", "llms.txt")] !== buildLlmsText()) {
+  errors.push("llms.txt drifted from the public route graph; run npm run build");
 }
 
 for (const file of [relative("src", "components", "HomeV2.jsx"), relative("src", "components", "MenuScreen.jsx")]) {
@@ -167,7 +214,7 @@ requireIncludes("ip", contentByFile[relative("public", "ip", "index.html")], [
 ]);
 requireIncludes("llms.txt", contentByFile[relative("public", ".well-known", "llms.txt")], [
   "Proprietary — All Rights Reserved",
-  "advisory deterministic evidence",
+  "advisory deterministic decision-stream evidence",
   "gameplay-contract.json",
 ]);
 requireIncludes("sitemap.xml", contentByFile[relative("public", "sitemap.xml")], [
