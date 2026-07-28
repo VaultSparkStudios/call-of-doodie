@@ -1,41 +1,36 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: acfdbfc0f8d9 -->
-<!-- generated-at: 2026-07-27T19:21:14.179Z -->
+<!-- source-hash: b20a58675265 -->
+<!-- generated-at: 2026-07-28T01:29:49.765Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 131 HANDOFF SUMMARY
+Session: 132 (continuation)
 
-Session
-- Session 131. Ran full agent-neutral /arc: startup, live-premise audit, implementation, second-order saturation, staging, closeout, direct-main push.
+Intent
+- Run full agent-neutral /arc from synchronized startup through live audit, implementation, second-order saturation, staging, canonical closeout, and direct-main push.
 
-Shipped
-- Three L3 audit items plus four second-order innovations: public route truth, runtime atlas delivery, responsive HUD parity, machine-readable proofs, regression canaries.
+Shipped this session
+- Four L3 audit items plus four second-order safeguards: evidence-ranked defeat coaching, durable creative identity, executable architecture truth, event-only CI schedule policy.
 
-Status
-- Tests 824/824 across 116 files; browser E2E 2/2; strict lint, production build, all local gates pass.
-- Staging https://session-131-staging.call-of-doodie.pages.dev/ passed 867/867 route/theme/viewport matrix.
-- Zero npm vulnerabilities; all security/trust scans green.
-- Public: 17 human routes, 12 companion pages, 27 validated files, SHA-256 route-contract proof.
-- Assets: 730,586 bytes, three alpha WebP atlases, 22 type indices, two-atlas decode ceiling.
+State
+- Tests: 840/840 across 121 files; browser E2E 2/2. Lint, build, schedule, replay, security, dependency, public, schema, protocol gates pass.
+- Deploy: main 9b3f2615b744 passed CI 30320143912, Cloudflare deploy 30320143925; live 7/7, cutover 5/5, replay 3/3, function health 5/5. Isolated staging 867/867.
+- Canonical closeout doctor: exit 1, blockingFailing 1.
 
-Current Intent
-- Engineering complete for all agent-owned premises. Remaining work gated on hardware, production traffic, and founder approval before SPARKED launch.
+Now bucket (top items)
+- Studio Ops apply missing sibling provenance classification from Ark cargo 01JUJ47JLK34AC54666CC59CE0, then rerun doctor for exit 0 / blockingFailing 0.
+- Studio Ops consume infrastructure-policy cargo 01JUJ4SVAL4D9F9405FA9BA2B2 so timer cannot be restored and callofdoodie.wtf gains receipt-producing delivery path.
+- Archive sanitized opt-in playtest receipts before changing pacing/economy/retention (requires participant evidence).
 
-Now Bucket (top 3)
-- Hardware: verify one real PWA install/relaunch, controller/browser pass, full GIF encode/play/share flow.
-- Production analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1.
-- Pre-SPARKED: verify inbound email delivery and analytics/Sentry project scope.
+Blockers (top)
+- Canonical closeout blocked: sole blocking finding is Studio Ops-owned ownership-provenance-sibling-coherence divergence; signed repair cargo 01JUJ47JLK34AC54666CC59CE0 awaiting owner application.
+- Direct AI pixel review unclaimed: local image sandbox fails Windows CryptUnprotectData despite valid screenshots and 867 hosted checks.
+- Infrastructure timer-propagation risk until policy cargo consumed.
 
-Blockers (top 3)
-- Local image sandbox fails Windows CryptUnprotectData; blocks direct AI pixel review despite valid screenshots and 867 hosted checks.
-- No physical hardware to validate PWA/controller/GIF flows.
-- No production traffic or scoped analytics for LCP/CLS/funnel evidence.
+Human-blocked (age = sessions open)
+- Physical hardware PWA install/relaunch, controller/browser pass, full GIF encode/play/share flow (open since S129, ~3 sessions).
+- Production traffic + scoped analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1 (since S129, ~3 sessions).
+- SPARKED go: verify inbound email, analytics/Sentry scope, Itch/community publication, direct pixel review, founder approval (since S129, ~3 sessions).
 
-Human-Blocked (with age)
-- Direct AI pixel review: blocked since Session 129 (3 sessions) by CryptUnprotectData sandbox failure.
-- Founder approval for SPARKED: outstanding, external gate.
-- Itch/community publication: outstanding, external gate.
-
-Next Session Pointer
-- No agent-owned engineering frontier remains; advance only external/hardware/founder gates or select a new live-premise improvement.
+Next session pointer
+- Confirm Studio Ops applied cargo 01JUJ47JLK34AC54666CC59CE0, rerun canonical doctor to blockingFailing 0, then complete direct-main closeout push.

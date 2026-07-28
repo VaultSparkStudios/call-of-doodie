@@ -10,9 +10,10 @@
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: three L3 audit items plus three second-order safegu  ║
-║  ✓ Tests: 836/836 across 120 files plus browser E2E 2/2; strict  ║
-║  ✓ Deploy: isolated Cloudflare staging at `https://session-132-  ║
+║  ✓ Shipped: four L3 audit items plus four second-order safeguar  ║
+║  ✓ Tests: 840/840 across 121 files plus browser E2E 2/2; strict  ║
+║  ✓ Deploy: exact main `9b3f2615b744` passed brief CI `303201439  ║
+║  ✓ Canonical closeout doctor: exit 1, `blockingFailing: 1`; sol  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,7 +30,7 @@
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  · context/CURRENT_STATE.md                                      ║
 ║  · context/TASK_BOARD.md                                         ║
-║  · context/LATEST_HANDOFF.md                                     ║
+║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  · logs/WORK_LOG.md                                              ║
 ║  · context/DECISIONS.md                                          ║
 ║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
@@ -39,7 +40,7 @@
 ║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 1 files  ·  M:1 A:0 D:0 ?:0                            ║
+║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -48,9 +49,9 @@
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        112/158                                          ║
+║  Doctor:        112/160                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         836/836                                          ║
+║  Tests:         840/840                                          ║
 ║  IGNIS:         12d ago                                          ║
 ║  Truth:         green-code-no-go-launch                          ║
 ║  Sanitization:  0d ago                                           ║

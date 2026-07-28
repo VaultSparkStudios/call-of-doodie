@@ -3,9 +3,9 @@
   "slug": "call-of-doodie",
   "name": "Call-Of-Doodie",
   "status": "active",
-  "health": "green",
-  "currentFocus": "Session 132 shipped evidence-ranked collapse coaching, a durable public-safe creative constitution, executable App architecture truth, and three second-order safeguards; 836/836 tests and staging visual 867/867 are green.",
-  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
+  "health": "yellow",
+  "currentFocus": "Session 132 plus its infrastructure-court continuation shipped four L3 audit items and four second-order safeguards; 840/840 tests, exact-main CI/deploy, production smoke, and the event-only schedule policy are green. Canonical fleet doctor remains blocked by one Studio Ops-owned ownership/provenance divergence.",
+  "nextMilestone": "Studio Ops applies Ark cargo 01JUJ47JLK34AC54666CC59CE0 to restore doctor blockingFailing 0; then preserve NO-GO until verified inbound email, physical QA, production evidence, scoped analytics, publication, direct AI pixel review, and founder approval pass.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -133,6 +133,17 @@
       "status": "green",
       "type": "tests",
       "command": "Session 132 — 836/836 across 120 files; strict lint; production build; public/dependency/security/replay/schema/protocol/media gates; browser E2E 2/2"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 132 continuation — 840/840 across 121 files; strict lint; build; public/dependency/security/schema/protocol/replay gates; browser E2E 2/2; schedule policy 5/5 workflows green"
+    },
+    {
+      "status": "green",
+      "url": "https://callofdoodie.wtf/",
+      "type": "production-deploy",
+      "command": "exact main 9b3f2615b744 · brief-format-check 30320143912 · Cloudflare deploy 30320143925 · live 7/7 · cutover 5/5 · replay 3/3 · function health 5/5"
     }
   ],
   "blockers": [
@@ -159,8 +170,8 @@
   "currentSession": 132,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 836,
-  "testsTotal": 836,
+  "testsPassing": 840,
+  "testsTotal": 840,
   "entropyScore": 0.208,
   "entropyLastComputed": "2026-07-25",
   "silRubricVersion": "3.0",
@@ -191,7 +202,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-132-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-07-27T23:42:00Z",
+  "testsLastRun": "2026-07-28T01:21:53Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
     "session": 132,
@@ -202,17 +213,18 @@
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
-    "date": "2026-07-27",
-    "ranAt": "2026-07-27T09:56:00.000Z",
-    "overallPass": true,
+    "date": "2026-07-28",
+    "ranAt": "2026-07-28T01:28:47.904Z",
+    "overallPass": false,
     "passing": 112,
-    "warning": 43,
-    "failing": 1,
-    "blockingFailing": 0,
+    "warning": 44,
+    "failing": 2,
+    "blockingFailing": 1,
     "advisoryFailing": 1,
     "skipped": 2,
-    "ran": 156,
-    "total": 158,
-    "score": 72
+    "ran": 158,
+    "total": 160,
+    "score": 71,
+    "blockingDetail": "Studio Ops coherence registry: ownership-provenance-sibling-coherence"
   }
 }
