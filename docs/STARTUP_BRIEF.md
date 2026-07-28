@@ -25,7 +25,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  Staging       → https://session-132-staging.call-of-doodie. ✓   ║
-║  Unit tests    → npm test — 836/836 passing ✓                    ║
+║  Unit tests    → npm test — 840/840 passing ✓                    ║
 ║  Browser proof → Five real Chromium desktop/mobile captures  ✓   ║
 ║  Live smoke    → npm run replay:trust-smoke ✓                    ║
 ║  Live smoke    → Session 129 — live 7/7; post-cutover 5/5; l ✓   ║
@@ -39,7 +39,7 @@
 ║                                                                  ║
 ║    999/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: 999  ·  Velocity 4↓                        ║
-║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↓  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -58,19 +58,19 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE WE LEFT OFF  ·  Session 132 ═══════════════════════════╗
-║  Shipped:  three L3 audit items plus three second-order safegua  ║
-║  Tests:    836/836 passing  ·  Deploy: N/A                       ║
+║  Shipped:  four L3 audit items plus four second-order safeguard  ║
+║  Tests:    840/840 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.9% used                          ║
-║     38,554 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~19,277 tok/turn  ·  cache 50%  ·  45 turns to compact       ║
+║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.6% used                          ║
+║     3,236 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,618 tok/turn  ·  cache 50%  ·  111 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         836/836 passing (2026-07-27T23:42:00Z)         ║
+║  ✓  Tests         840/840 passing (2026-07-28T01:21:53Z)         ║
 ║  ✓  Velocity      4 ↓  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated frontier   ║
 ║  ⛔  Context age   ?d                                             ║
@@ -84,7 +84,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        112/158 (72%)  ·  1 failing                    ║
+║  ⛔  Doctor        112/160 (71%)  ·  2 failing                    ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger information  ║
 ╚════════════════════════════════════════════════════════════════╝
 
