@@ -74,7 +74,7 @@
     "ws": "8.21.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.61.1",
     "@sentry/react": "^8.55.1",
     "@vitejs/plugin-react": "^5.1.4",
