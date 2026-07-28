@@ -5,7 +5,7 @@ Session Intent: Run the complete agent-neutral `/arc` continuously from synchron
 ## Where We Left Off (Session 132)
 - Shipped: four L3 audit items plus four second-order safeguards across evidence-ranked defeat coaching, durable creative identity, executable architecture truth, and event-only CI schedule policy.
 - Tests: 840/840 across 121 files plus browser E2E 2/2; strict lint, production build, schedule, replay, security, dependency, public, schema, and protocol gates pass.
-- Deploy: exact main `9b3f2615b744` passed brief CI `30320143912`, Cloudflare deploy `30320143925`, live 7/7, cutover 5/5, replay 3/3, and function health 5/5. Earlier isolated staging remains 867/867.
+- Deploy: implementation commit `9b3f2615b744` passed brief CI `30320143912`, Cloudflare deploy `30320143925`, live 7/7, cutover 5/5, replay 3/3, and function health 5/5. Follow-up closeout-only commits are separately CI/deploy gated; earlier isolated staging remains 867/867.
 - Canonical closeout doctor: exit 1, `blockingFailing: 1`; sole blocking finding is the Studio Ops-owned `ownership-provenance-sibling-coherence` divergence. Signed repair cargo `01JUJ47JLK34AC54666CC59CE0` is awaiting owner application.
 
 ## Validation

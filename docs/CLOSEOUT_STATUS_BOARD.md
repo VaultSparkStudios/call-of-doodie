@@ -12,7 +12,7 @@
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
 ║  ✓ Shipped: four L3 audit items plus four second-order safeguar  ║
 ║  ✓ Tests: 840/840 across 121 files plus browser E2E 2/2; strict  ║
-║  ✓ Deploy: exact main `9b3f2615b744` passed brief CI `303201439  ║
+║  ✓ Deploy: implementation commit `9b3f2615b744` passed brief CI  ║
 ║  ✓ Canonical closeout doctor: exit 1, `blockingFailing: 1`; sol  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
