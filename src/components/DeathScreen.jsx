@@ -23,6 +23,7 @@ import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
 import { describePressureArc } from "../systems/pressureArc.js";
 import { describeDamageSequence } from "../systems/damageSequence.js";
+import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
@@ -488,6 +489,11 @@ export default function DeathScreen({
     runSeed,
     mode,
   });
+  const collapseCoaching = buildCollapseCoaching({
+    damageReceipt: runHistory[0]?.damageReceipt,
+    debrief,
+    postRunIntel,
+  });
   const nextRunDrill = buildNextRunDrill({
     runSeed,
     runCoach,
@@ -524,6 +530,7 @@ export default function DeathScreen({
     postRunTelemetry: postRunIntel.telemetry,
     eventDigest,
     runCoach,
+    collapseCoaching,
   });
 
   useEffect(() => {
@@ -587,6 +594,7 @@ export default function DeathScreen({
   const runTheFix = buildRunTheFixContract({
     debrief,
     postRunIntel,
+    collapseCoaching,
     nextRunDrill,
     runSeed,
     wave,
@@ -928,7 +936,7 @@ export default function DeathScreen({
           <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>RUN THE FIX</div>
           <div style={{ marginTop: 7, fontSize: 16, color: "#FFF", fontWeight: 900, textTransform: "uppercase" }}>{runTheFix.focus}</div>
           <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
-            <strong style={{ color: "#FF9A67" }}>Diagnosis:</strong> {runTheFix.diagnosis}
+            <strong style={{ color: "#FF9A67" }}>{runTheFix.evidenceLabel}:</strong> {runTheFix.diagnosis}
           </div>
           <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
@@ -1011,9 +1019,9 @@ export default function DeathScreen({
             ))}
           </div>
 
-          <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginTop: 10, marginBottom: 5 }}>CAUSE OF COLLAPSE</div>
+          <div style={{ fontSize: 10, color: "#AAA", letterSpacing: 1, marginTop: 10, marginBottom: 5 }}>{collapseCoaching.primary.label}</div>
           <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, marginBottom: 10 }}>
-            {debrief.collapseReason}
+            {collapseCoaching.primary.statement}
           </div>
 
           {debrief.missedValue.length > 0 && (
@@ -1046,7 +1054,7 @@ export default function DeathScreen({
         <div style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(0,229,255,0.18)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
           <div style={{ fontSize: 10, color: "#00E5FF", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>RUN INTELLIGENCE</div>
           <div style={{ fontSize: 12, color: "#EAFBFF", lineHeight: 1.5 }}>
-            Diagnosis: <span style={{ color: "#FFF", fontWeight: 700 }}>{postRunIntel.cause.replace(/_/g, " ")}</span>
+            {collapseCoaching.contributingFactor.label}: <span style={{ color: "#FFF", fontWeight: 700 }}>{collapseCoaching.contributingFactor.statement}</span>
           </div>
           <div style={{ fontSize: 11, color: "#DDD", lineHeight: 1.5, marginTop: 5 }}>
             {postRunIntel.drill}

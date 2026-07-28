@@ -1,0 +1,187 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-07-27",
+  "session": 132,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure",
+  "meta": {
+    "generatedAt": "2026-07-27",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure",
+    "combinedPriority": 82.8,
+    "top3": [
+      "evidence-ranked-collapse-coaching",
+      "durable-soul-contract",
+      "executable-app-architecture-budget"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Current-HEAD inspection, bounded 18-file/120000-character sampler, Studio Oracle preverification, direct game-loop and release-gate reviews, exact source line inspection, and current worktree/release evidence. No player outcome, causal coaching, inbound-mail, physical-device, production-funnel, subjective-pixel, or launch-readiness claim is inferred.",
+    "specialtyLenses": [
+      "infrastructure rubric requested by founder",
+      "game-loop review",
+      "app release gate",
+      "CANON-031 observability honesty",
+      "CANON-035 project identity",
+      "CANON-041 browser/mobile parity",
+      "CANON-047 theme readability",
+      "CANON-048 dual audience",
+      "public-repo sanitization"
+    ],
+    "baseline": {
+      "tests": "824/824 across 116 files at Session 131 closeout; current session must re-run directly",
+      "doctor": "Stored evidence has blockingFailing 0 and one advisory failure; a fresh direct doctor attempt exceeded the bounded audit timeout and is not treated as green",
+      "gameLoop": "91/100 design health with low empirical confidence because docs/PLAYTESTS does not exist",
+      "coaching": "Observed final-damage receipts explicitly say not-causality, while separate heuristic surfaces render CAUSE OF COLLAPSE and Diagnosis",
+      "soul": "context/SOUL.md is a chronological session ledger rather than durable pillars and anti-pillars",
+      "architecture": "src/App.jsx is 4999 physical lines; the roadmap still describes an approximately 800-line inline loop and an open extraction task without an executable budget",
+      "release": "Committed HEAD is CI healthy; isolated staging is not exact-HEAD, analytics/inbound/physical/data/visual/founder gates remain red, so SPARKED remains NO-GO"
+    }
+  },
+  "gameLoopReview": {
+    "loopTightness": 94,
+    "progression": 90,
+    "sessionEngagement": 91,
+    "retention": 92,
+    "soulFidelity": 88,
+    "empiricalConfidence": "low",
+    "evidence": "The action, progression, rematch, rivalry, mission, replay, and proof loops are unusually deep. Confidence is capped because no sanitized participant receipts exist and the creative source of truth is not presently a stable design contract.",
+    "prioritizedFindings": [
+      "Heuristic correlations are rendered as collapse causes even though observed damage evidence is already available and explicitly non-causal.",
+      "The opt-in playtest recorder exists, but no participant receipts support pacing, comprehension, frustration, or retention tuning.",
+      "The public-safe SOUL surface cannot reliably constrain feature and copy decisions because it contains session history instead of stable pillars."
+    ],
+    "nextThreeMoves": [
+      "Unify observed and inferred coaching into one evidence-ranked contract consumed by UI, remediation actions, and telemetry.",
+      "Collect a bounded opt-in five-player/fifteen-run evidence pack before numeric balance changes.",
+      "Restore a durable public-safe creative contract and gate its required sections."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or public-launch promotion; repo-owned engineering work may continue",
+    "green": [
+      "Committed HEAD CI quality/build/deploy is green and production edge health reports that exact SHA",
+      "CANON-029 cost gates allow the cost-neutral project",
+      "footer completeness, branding, proprietary notice, rollback, and automated responsive surfaces pass"
+    ],
+    "red": [
+      "isolated staging is healthy but not exact current HEAD",
+      "analytics capability and project-scoped Sentry remain unavailable",
+      "on-domain inbound delivery, physical PWA/gamepad/full-run media, production Lighthouse/funnel evidence, direct subjective image review, publication, and founder approval remain unverified"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "observability / game-loop feedback / local intelligence",
+      "effortHours": 5,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 36,
+      "slug": "evidence-ranked-collapse-coaching",
+      "title": "Make one evidence-ranked collapse contract the sole source for observed death facts, explicitly inferred contributing factors, remediation copy, and telemetry.",
+      "status": "shipped",
+      "why": "damageSequence already preserves an observed, bounded, non-causal final-damage window, but runDebrief, runIntelligence, deathFlow, and DeathScreen independently elevate wave/streak/grenade heuristics into CAUSE OF COLLAPSE and Diagnosis. The remediation action can therefore diverge from the strongest evidence and the UI overstates correlation.",
+      "recipe": "Create a pure versioned collapse-coaching model with observed / likely-factor / hypothesis ranks, stable reason codes, sanitized evidence, and a single primary statement. Feed it the damage receipt plus existing run summaries; make buildRunDebrief, post-run intelligence, RUN THE FIX, DeathScreen labels, and Studio telemetry consume the same contract. Render OBSERVED FINISH when direct receipts exist and LIKELY FACTOR or COACHING HYPOTHESIS otherwise. Add fixtures for burst, attrition, absent receipt, unused cooldown, low-wave, and conflicting signals; forbid the words cause/diagnosis unless the contract explicitly carries observed causal authority, which this client does not.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Relabel causal UI copy and add evidence-level metadata to existing outputs." },
+        "L2": { "effortHours": 3, "recipe": "Create a pure ranked model and route DeathScreen plus RUN THE FIX through it with focused tests." },
+        "L3": { "effortHours": 5, "recipe": "Unify debrief, remediation, UI, and telemetry on a versioned evidence contract with conflict and sanitization tests." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "creative alignment / maintainability / public-safe truth",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 25.2,
+      "slug": "durable-soul-contract",
+      "title": "Restore SOUL as a durable, public-safe creative constitution and make schema validation reject session-ledger drift.",
+      "status": "shipped",
+      "why": "context/SOUL.md currently begins with a generic private-strategy disclaimer and then accumulates session receipts. It lacks stable fantasy, emotional arc, tone, proof ethos, audience pact, and anti-pillars, so soul fidelity cannot be audited reproducibly and future agents can mistake operational history for creative direction.",
+      "recipe": "Replace the ledger with concise public-safe sections for promise, audience, pillars, emotional arc, tone rules, proof ethos, and anti-pillars. Preserve detailed private strategy boundaries. Add a reusable parser/validator that reports missing/duplicate/empty sections and rejects Session-N ledger syntax; wire it into schema:lint and focused tests so closeout history remains in CURRENT_STATE rather than repolluting SOUL.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Rewrite SOUL with durable public-safe pillars and anti-pillars." },
+        "L2": { "effortHours": 1.5, "recipe": "Add a deterministic validator with helpful diagnostics and schema-lint wiring." },
+        "L3": { "effortHours": 3, "recipe": "Ship the contract, reusable parser, negative fixtures, schema integration, and a small machine-readable receipt for downstream audits." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "HIGH",
+      "axis": "engineering efficiency / architecture observability / token reduction",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 21.6,
+      "slug": "executable-app-architecture-budget",
+      "title": "Turn the App extraction roadmap into source-derived architecture evidence that fails on renewed monolith growth instead of relying on stale prose.",
+      "status": "shipped",
+      "why": "App.jsx is now 4999 lines and still contains a large inline gameLoop, while the roadmap's measured baseline is stale and the open task names a slice partly extracted long ago. There is no executable budget for total orchestration size, game-loop span, or imported system boundaries, so decomposition progress and regression are both observationally weak.",
+      "recipe": "Build a side-effect-free architecture analyzer that derives physical lines, gameLoop start/end/span, imported system/hook boundaries, and budget verdicts from current source. Store only explicit ratchets in a small contract; generate a receipt for humans and agents; wire architecture:check into schema:lint or the release verification surface. Add parser fixtures for missing/duplicated markers and Windows line endings, update the roadmap from the source-derived receipt, and define the next extraction boundary without claiming the full 1500-line target complete.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Add a source-derived line/span report and correct the roadmap baseline." },
+        "L2": { "effortHours": 1.5, "recipe": "Add explicit no-growth ratchets, import-boundary receipts, package wiring, and tests." },
+        "L3": { "effortHours": 3, "recipe": "Ship a robust analyzer, machine-readable receipt, schema/release integration, drift fixtures, and source-derived roadmap section." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "numeric-balance-retune",
+      "reason": "No participant or production distribution supports changing damage, health, spawn, cooldown, or reward values. The missing docs/PLAYTESTS surface is recorded as an evidence gate, not filled with fabricated data."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "A deterministic local intelligence stack exists; a hosted model would add variable per-user cost and weaker evidence discipline without a demonstrated need."
+    },
+    {
+      "slug": "auth-membership-expansion",
+      "reason": "Guest play is intentional and membership remains a product decision. The existing plan is not a defect premise."
+    },
+    {
+      "slug": "home-v1-retirement",
+      "reason": "Production Lighthouse and funnel evidence remain absent; the recorded gate still applies."
+    },
+    {
+      "slug": "analytics-and-sentry-configuration",
+      "reason": "The analytics capability is missing and the available Sentry DSN is not proven project-scoped."
+    },
+    {
+      "slug": "inbound-mail-green-status",
+      "reason": "Brevo readiness does not prove delivery. The on-domain address stays honestly unverified until an end-to-end receipt exists."
+    },
+    {
+      "slug": "physical-and-subjective-launch-proof",
+      "reason": "Automation cannot replace a physical PWA/gamepad/full-run pass or direct image judgment. These remain explicit launch-red gates."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "evidence-ranked-collapse-coaching",
+      "status": "shipped",
+      "implementedAt": "2026-07-27T18:48:00-04:00",
+      "level": "L3",
+      "evidence": "collapse-coaching-v1 ranks observed final-damage receipts above likely factors and hypotheses; DeathScreen, RUN THE FIX, and telemetry share the contract; focused coaching/death-flow tests 14/14."
+    },
+    {
+      "slug": "durable-soul-contract",
+      "status": "shipped",
+      "implementedAt": "2026-07-27T18:55:00-04:00",
+      "level": "L3",
+      "evidence": "SOUL now carries eight durable public-safe creative sections; soul-contract-v1 rejects missing, duplicate, empty, out-of-order, and session-ledger drift; focused tests 3/3 and schema lint green."
+    },
+    {
+      "slug": "executable-app-architecture-budget",
+      "status": "shipped",
+      "implementedAt": "2026-07-27T18:58:00-04:00",
+      "level": "L3",
+      "evidence": "app-architecture-receipt-v1 derives 4999 total lines, 1772-line gameLoop span, 27 system and one hook boundary from source; explicit ratchets are wired into schema:lint; focused tests 3/3."
+    }
+  ]
+}

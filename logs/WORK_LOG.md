@@ -1014,3 +1014,16 @@ Intent outcome: achieved for every agent-owned premise; 27 shipped improvements,
 - Deployed the working implementation through the Studio secrets gateway to `https://session-131-staging.call-of-doodie.pages.dev/`; hosted visual automation passed 867/867.
 - Direct AI image inspection remains unavailable at the Windows `CryptUnprotectData` boundary; the release verdict remains NO-GO for SPARKED pending the established external/device/data/publication/founder evidence.
 Intent outcome: achieved for every agent-owned premise; Unified Genius List and second-order frontier exhausted without silent skips.
+## 2026-07-27 — Session 132 — Evidence-ranked coaching, durable soul, and executable architecture truth
+
+- Pulled/rebased `origin/main` first; ran lock, context-meter, blocker/secrets, canon, Ark, startup brief, game-loop, and release preflights.
+- Generated `docs/AUDIT_2026-07-27.json` / `.md`; shipped all three ranked L3 items with live-premise and execution evidence.
+- Unified observed finish evidence, likely factors, hypotheses, RUN THE FIX, DeathScreen copy, and telemetry under `collapse-coaching-v1`.
+- Restored the public-safe creative constitution and added structural, drift, and SHA-256 validation through `soul-contract-v1`.
+- Added `app-architecture-receipt-v1`, explicit source-derived ratchets, headroom, invalid-budget failure, package wiring, and roadmap evidence.
+- Refreshed the Genius List and innovation pack; rechecked `analytics` as MISSING; implemented three second-order safeguards and left external/data/device/product gates explicit.
+- Verification passed directly: strict lint; 836/836 tests across 120 files; production build; public, dependency, security, replay, schema, protocol, media, and npm-audit gates; desktop/mobile Playwright 2/2.
+- Deployed `https://session-132-staging.call-of-doodie.pages.dev/`; hosted route/theme/viewport automation passed 867/867.
+- Direct image inspection remains unavailable at the Windows `CryptUnprotectData` boundary; no subjective visual approval was claimed.
+
+Intent outcome: achieved for every agent-owned premise; Unified Genius List and second-order frontier exhausted without silent skips or fabricated evidence.

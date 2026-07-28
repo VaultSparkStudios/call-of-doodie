@@ -16,6 +16,11 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S132** Evidence-ranked collapse coaching — observed finish receipts, likely factors, hypotheses, RUN THE FIX, DeathScreen copy, and telemetry now share `collapse-coaching-v1` without causal overclaiming.
+- [x] [SIL:2] **DONE S132** Durable public-safe SOUL — eight stable creative sections plus `soul-contract-v1` schema enforcement keep operational session history out of the creative constitution.
+- [x] [SIL:2] **DONE S132** Executable App architecture budget — source-derived line/span/import receipts and schema ratchets prevent renewed monolith growth or boundary loss.
+- [x] [SIL:3] **DONE S132 second-order** Causal-language tripwire, creative-contract SHA-256 fingerprint, and fail-closed architecture headroom/budget validation shipped with 22/22 focused tests.
+
 - [x] [SIL:3] **DONE S131** Public route truth graph — one 17-route registry generates and exact-validates human pages, navigation, sitemap, footer, agent resources, language-model index, visual coverage, and a deterministic route proof ledger.
 - [x] [SIL:3] **DONE S131** Integer-safe enemy atlas pipeline — reproducible chroma matte, alpha WebP export, 730,586-byte aggregate budget, exact 22-type coverage, integer rectangles, fallback receipts, and bounded two-atlas proactive decoding.
 - [x] [SIL:3] **DONE S131** Capability-complete responsive HUD — explicit compact/tactical density semantics, urgency-ranked run context, ability readiness, accessible disclosure, and machine-readable parity receipts.

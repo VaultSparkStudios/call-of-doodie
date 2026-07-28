@@ -4,13 +4,16 @@ import { buildRunRngFairnessReceipt } from "./runRng.js";
 export function buildRunTheFixContract({
   debrief = {},
   postRunIntel = {},
+  collapseCoaching = null,
   nextRunDrill = {},
   runSeed = 0,
   wave = 1,
   rematchWave = null,
 } = {}) {
   const nextContract = debrief?.nextRunContract || {};
-  const diagnosis = debrief?.collapseReason
+  const evidence = collapseCoaching?.contributingFactor || collapseCoaching?.primary || null;
+  const diagnosis = evidence?.statement
+    || debrief?.collapseReason
     || String(postRunIntel?.cause || "pressure breakdown").replace(/_/g, " ");
   const target = nextContract.target || nextRunDrill.detail || "Survive one more wave with one deliberate adjustment.";
   const proof = nextContract.proof || "Win condition: finish the target and bank the result.";
@@ -35,6 +38,8 @@ export function buildRunTheFixContract({
 
   return {
     diagnosis,
+    evidenceLabel: evidence?.label || "COACHING HYPOTHESIS",
+    evidenceLevel: evidence?.evidenceLevel || "hypothesis",
     focus: nextContract.focus || nextRunDrill.title || "Stabilize the opener",
     target,
     proof,
@@ -171,6 +176,7 @@ export function buildDeathCoachTelemetry({
   postRunTelemetry = {},
   eventDigest = null,
   runCoach = {},
+  collapseCoaching = null,
 } = {}) {
   const chokeWarning = runCoach?.brain?.chokeWarning || null;
   return {
@@ -183,6 +189,7 @@ export function buildDeathCoachTelemetry({
       crossRunPatternShown: Boolean(runCoach.crossRunTip),
       enemyLabShown: Boolean(runCoach.enemyLab),
       chokeWarningShown: Boolean(chokeWarning),
+      collapse: collapseCoaching?.telemetry || null,
     },
     weaponDeathTip: runCoach.weaponDeathTip || null,
     chokeWarning: chokeWarning

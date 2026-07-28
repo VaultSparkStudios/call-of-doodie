@@ -1,3 +1,13 @@
+- Session 132 (2026-07-27) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
+- Coaching truth — `collapse-coaching-v1` ranks observed final-damage windows above explicitly inferred likely factors and bounded hypotheses; DeathScreen, RUN THE FIX, and telemetry share the contract without causal labels.
+- Creative truth — `context/SOUL.md` is now an eight-section public-safe constitution for the player promise, audience, pillars, emotional arc, tone, proof ethos, anti-pillars, and public boundary; session-ledger drift fails schema lint.
+- Architecture truth — `app-architecture-receipt-v1` derives 4,999 total lines, a 1,772-line inline game-loop span, 27 system boundaries, one hook boundary, exact headroom, and fail-closed budget validation from live source.
+- Saturation truth — all three verified L3 audit items and three second-order refinements shipped; the refreshed Genius List contains only credential, product-choice, production-data, community, hardware, publication, or founder gates.
+- Validation truth — strict lint, production build, 836/836 tests across 120 files, 27-file public contract, dependency/security/replay/schema/protocol/media gates, npm audit zero, and desktop/mobile Playwright 2/2 pass directly.
+- Staging truth — `https://session-132-staging.call-of-doodie.pages.dev/` passed the complete 17-route × 2-theme × 3-viewport matrix at 867/867 objective checks.
+- Visual truth — fresh captures exist, but direct AI image inspection still fails at the host Windows `CryptUnprotectData` boundary; no subjective pixel verdict is fabricated.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending verified inbound mail, physical device/full-run media, production Lighthouse/funnel data, project-scoped analytics/Sentry, publication, direct AI pixel review, and founder approval.
+
 - Session 131 (2026-07-26) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc after recovering and checkpointing the interrupted visual-UX implementation.
 - Public truth — one 17-route registry now generates companion pages, navigation, sitemap, footer, agent/language-model discovery, visual routes, and a deterministic SHA-256 route-contract proof ledger; public validation covers 27 files.
 - Asset truth — three chroma-derived alpha WebP atlases total 730,586 bytes versus the 4,634,459-byte PNG baseline; cumulative integer rectangles cover every pixel and all 22 enemy types, with proactive decode capped at two active roster atlases.

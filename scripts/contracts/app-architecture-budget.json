@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "app-architecture-budget-v1",
+  "maxTotalLines": 5000,
+  "maxGameLoopSpan": 1775,
+  "minSystemBoundaries": 27,
+  "minHookBoundaries": 1
+}

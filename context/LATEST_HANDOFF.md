@@ -1,3 +1,25 @@
+# Latest Completed Handoff — Session 132
+
+Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized startup through live-premise audit, all-item implementation, second-order saturation, staging, canonical closeout, and direct-main push.
+
+## Where We Left Off (Session 132)
+- Shipped: three L3 audit items plus three second-order safeguards across evidence-ranked defeat coaching, durable creative identity, and executable architecture truth.
+- Tests: 836/836 across 120 files plus browser E2E 2/2; strict lint, production build, and every applicable local contract/gate pass.
+- Deploy: isolated Cloudflare staging at `https://session-132-staging.call-of-doodie.pages.dev/` passed the full 867/867 route/theme/viewport matrix.
+
+## Validation
+- Feedback: observed finish evidence, likely factors, hypotheses, remediation copy, and telemetry share `collapse-coaching-v1`; a regression tripwire forbids causal DeathScreen labels.
+- Creative: eight canonical SOUL sections validate with a SHA-256 fingerprint and reject operational session history.
+- Architecture: current source derives 4,999 total lines, 1,772 game-loop lines, 27 system boundaries, one hook boundary, and explicit ratchet headroom.
+- Security/trust: zero npm vulnerabilities; dependency, public, replay, schema, media, protocol, and staged secrets surfaces are green.
+- Direct AI pixel review remains honestly unclaimed because the local image sandbox still fails Windows `CryptUnprotectData` despite fresh valid screenshots and 867 objective hosted checks.
+
+## Next
+- With participant evidence: archive sanitized opt-in playtest receipts before changing pacing, economy, or retention assumptions.
+- With physical hardware: verify one real Progressive Web App install/relaunch, controller/browser pass, and full-run Graphics Interchange Format encode/play/share flow.
+- With production traffic and scoped analytics: capture Largest Contentful Paint/Cumulative Layout Shift and funnel evidence before retiring `?home=v1`.
+- Before SPARKED: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, direct AI pixel review, and explicit founder approval.
+
 # Latest Completed Handoff — Session 131
 
 Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized startup through live-premise audit, all-item implementation, second-order saturation, staging, canonical closeout, and direct-main push.

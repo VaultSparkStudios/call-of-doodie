@@ -1,5 +1,14 @@
 # App.jsx Extraction Roadmap
 
+## Source-derived architecture receipt
+
+Run `npm run architecture:check`. The executable `app-architecture-receipt-v1`
+contract currently derives 4,999 physical lines, game-loop lines 2,363–4,135
+(1,772-line span), 27 imported system boundaries, and one imported hook boundary
+from `src/App.jsx`. `schema:lint` now fails on renewed monolith growth, game-loop
+span growth, or boundary loss. These are regression ratchets, not a claim that
+the ≤1,500-line target is complete.
+
 Verified 2026-07-21 (Session 126): `src/App.jsx` is 4,828 physical lines. The
 previous ~3,500-line estimate had drifted as new modes and trust surfaces landed.
 This roadmap is a decomposition recipe, not evidence that extraction itself has

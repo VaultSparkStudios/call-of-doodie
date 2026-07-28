@@ -1,43 +1,41 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 0d89e3b9e2b5 -->
-<!-- generated-at: 2026-07-26T08:14:13.479Z -->
+<!-- source-hash: acfdbfc0f8d9 -->
+<!-- generated-at: 2026-07-27T19:21:14.179Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 130 HANDOFF SUMMARY
+SESSION 131 HANDOFF SUMMARY
 
 Session
-- Number: 130 (prior: 129)
+- Session 131. Ran full agent-neutral /arc: startup, live-premise audit, implementation, second-order saturation, staging, closeout, direct-main push.
 
 Shipped
-- 8 improvements: combat architecture, input integrity, coverage truth, observability, deployment operations, protocol reliability.
-- Tests: 809/809 across 111 files (+29 tests, +5 files vs 129); browser E2E 2/2.
-- Strict lint and production build pass.
-- Staging: https://session-130-staging.call-of-doodie.pages.dev/ — runtime 7/7, hosted visual automation 255/255.
+- Three L3 audit items plus four second-order innovations: public route truth, runtime atlas delivery, responsive HUD parity, machine-readable proofs, regression canaries.
+
+Status
+- Tests 824/824 across 116 files; browser E2E 2/2; strict lint, production build, all local gates pass.
+- Staging https://session-131-staging.call-of-doodie.pages.dev/ passed 867/867 route/theme/viewport matrix.
+- Zero npm vulnerabilities; all security/trust scans green.
+- Public: 17 human routes, 12 companion pages, 27 validated files, SHA-256 route-contract proof.
+- Assets: 730,586 bytes, three alpha WebP atlases, 22 type indices, two-atlas decode ceiling.
 
 Current Intent
-- Session 130 goal (audit/UX plan): achieved for all agent-owned premises.
-- Posture: evidence-gated release; engineering completion is not launch approval. SPARKED remains NO-GO.
+- Engineering complete for all agent-owned premises. Remaining work gated on hardware, production traffic, and founder approval before SPARKED launch.
 
 Now Bucket (top 3)
-- Physical hardware: verify one real PWA install/relaunch, controller/browser pass, full-run GIF encode/play/share flow.
-- With production traffic + scoped analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1.
-- Pre-SPARKED gate verification (email delivery, analytics/Sentry scope, publication, pixel review, founder approval).
+- Hardware: verify one real PWA install/relaunch, controller/browser pass, full GIF encode/play/share flow.
+- Production analytics: capture LCP/CLS and funnel evidence before retiring ?home=v1.
+- Pre-SPARKED: verify inbound email delivery and analytics/Sentry project scope.
 
 Blockers (top 3)
-- Direct AI pixel review honestly unclaimed: local image sandbox fails Windows CryptUnprotectData (persisted from 129).
-- Production traffic + scoped analytics not yet available for LCP/CLS/funnel evidence.
-- Physical hardware unavailable for PWA/controller/GIF validation.
+- Local image sandbox fails Windows CryptUnprotectData; blocks direct AI pixel review despite valid screenshots and 867 hosted checks.
+- No physical hardware to validate PWA/controller/GIF flows.
+- No production traffic or scoped analytics for LCP/CLS/funnel evidence.
 
-Human-Blocked / External Gates (unresolved before SPARKED)
-- Inbound email delivery verification (open since ≤S129).
-- Analytics/Sentry project scope confirmation (open since ≤S129).
-- Itch/community publication (open since ≤S129).
-- Explicit founder approval (open since ≤S129).
-
-Validation State
-- Coverage: 82/82 files; statements 72.27%, branches 67.03%, functions 71.14%, lines 77.58%; stale evidence fails closed.
-- Launch/security/public/replay/media gates pass; npm audit zero vulnerabilities; live production health green.
+Human-Blocked (with age)
+- Direct AI pixel review: blocked since Session 129 (3 sessions) by CryptUnprotectData sandbox failure.
+- Founder approval for SPARKED: outstanding, external gate.
+- Itch/community publication: outstanding, external gate.
 
 Next Session Pointer
-- Resume by executing hardware/analytics-dependent Now items or fixing the CryptUnprotectData pixel-review blocker; do not implement product changes without founder approval.
+- No agent-owned engineering frontier remains; advance only external/hardware/founder gates or select a new live-premise improvement.

@@ -766,3 +766,20 @@ Rationale: Source alpha is not the contract for chroma-generated art. Separating
 ## 2026-07-26 — Session 131 — Compact HUD parity is capability-based
 
 Decision: Minimal and standard densities use the compact responsive surface; tactical density retains the richer desktop surface. Compact parity is defined by always-visible vitals/weapon/action readiness plus urgency-ranked live context and a machine-readable capability receipt, not pixel identity with the tactical layout.
+## 2026-07-27 — Session 132 — Coaching claims carry evidence rank
+
+Decision: Death feedback uses one versioned contract with `observed`, `likely_factor`, and `hypothesis` ranks. An observed final-damage window may describe what was captured but never becomes proof of unrecorded causality. RUN THE FIX, debrief presentation, and telemetry consume the same contract.
+
+Rationale: Independent heuristic labels such as “cause” and “diagnosis” overstated correlation and could diverge from stronger observed receipts. One ranked contract keeps the learn-rematch loop useful without laundering inference into fact.
+
+## 2026-07-27 — Session 132 — SOUL is a constitution, not a session ledger
+
+Decision: `context/SOUL.md` contains only durable public-safe creative constraints in a canonical eight-section order. Session receipts stay in CURRENT_STATE, WORK_LOG, and handoff surfaces. Schema lint rejects missing, duplicate, empty, reordered, or session-ledger content.
+
+Rationale: Creative fidelity cannot be audited against a rolling implementation history. Stable pillars and anti-pillars give every agent the same player promise while preserving the private-strategy boundary.
+
+## 2026-07-27 — Session 132 — Architecture claims derive from executable ratchets
+
+Decision: App orchestration size, inline game-loop span, and imported system/hook boundaries derive from live source under `app-architecture-receipt-v1`. The initial ceilings are regression ratchets, not a claim that the ≤1,500-line roadmap target is complete.
+
+Rationale: A prose roadmap can drift in either direction. Source-derived headroom makes renewed monolith growth and boundary loss visible while leaving future extraction decisions evidence-led.

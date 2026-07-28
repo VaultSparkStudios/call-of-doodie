@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 131 shipped a 17-route proof-carrying public graph, 730586-byte integer-safe alpha atlas delivery, a capability-complete responsive HUD, and four second-order safeguards; 824/824 tests and staging visual 867/867 are green.",
+  "currentFocus": "Session 132 shipped evidence-ranked collapse coaching, a durable public-safe creative constitution, executable App architecture truth, and three second-order safeguards; 836/836 tests and staging visual 867/867 are green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse/funnel evidence, project-scoped analytics, direct AI pixel review, publication, and explicit founder launch approval pass.",
   "testingSurfaces": [
     {
@@ -122,6 +122,17 @@
       "status": "green",
       "type": "tests",
       "command": "Session 131 — 824/824 across 116 files; strict lint; production build; public/assets/dependency/security/replay/schema/protocol/media gates; browser E2E 2/2"
+    },
+    {
+      "status": "green",
+      "url": "https://session-132-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 132 direct-upload preview via secrets gateway · hosted visual route/theme/viewport matrix 867/867"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 132 — 836/836 across 120 files; strict lint; production build; public/dependency/security/replay/schema/protocol/media gates; browser E2E 2/2"
     }
   ],
   "blockers": [
@@ -131,7 +142,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-27",
+  "lastUpdated": "2026-07-28",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
@@ -139,17 +150,17 @@
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 131,
-  "silScore": 998,
+  "silSession": 132,
+  "silScore": 999,
   "silAvg3": 998,
-  "silVelocity": 8,
+  "silVelocity": 4,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-26",
-  "currentSession": 131,
+  "currentSession": 132,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 824,
-  "testsTotal": 824,
+  "testsPassing": 836,
+  "testsTotal": 836,
   "entropyScore": 0.208,
   "entropyLastComputed": "2026-07-25",
   "silRubricVersion": "3.0",
@@ -159,7 +170,7 @@
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 98,
+    "engagement": 99,
     "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
@@ -179,9 +190,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-131-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-07-27T09:50:00Z",
-  "sanitizationLastCleared": "2026-07-27T09:50:00Z",
+  "stagingUrl": "https://session-132-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-07-27T23:42:00Z",
   "sessionShellHygiene": {
     "session": 131,
     "started": 2,

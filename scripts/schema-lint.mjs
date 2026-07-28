@@ -11,6 +11,7 @@
 
 import { readFileSync, readdirSync } from "fs";
 import { join, resolve } from "path";
+import { validateSoulContract } from "./lib/soul-contract.mjs";
 
 const ROOT       = resolve(import.meta.dirname, "..");
 const MIGRATIONS = join(ROOT, "supabase", "migrations");
@@ -81,6 +82,18 @@ for (const name of migrations) {
       }
     }
   }
+}
+
+const soulContract = validateSoulContract(readFile(join(ROOT, "context", "SOUL.md")));
+for (const error of soulContract.errors) {
+  warnings.push({
+    severity: "⛔ ERROR",
+    file: "context/SOUL.md",
+    line: 1,
+    table: "soul-contract-v1",
+    label: error,
+  });
+  issues++;
 }
 
 // ── report ────────────────────────────────────────────────────────────────────

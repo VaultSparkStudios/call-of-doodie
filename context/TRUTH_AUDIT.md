@@ -950,3 +950,13 @@ Last reviewed: 2026-07-24
 
 Overall status: green engineering closeout; NO-GO SPARKED
 Last reviewed: 2026-07-26
+## 2026-07-27 — Session 132 — Ranked coaching and executable creative/architecture truth
+
+- Coaching truth — `collapse-coaching-v1` is the sole presentation/remediation/telemetry claim surface; observed finish, likely factor, and hypothesis are distinct.
+- Creative truth — `soul-contract-v1` validates eight stable public-safe sections and fingerprints the exact source; operational history is rejected.
+- Architecture truth — `app-architecture-receipt-v1` derives source digest, total lines, game-loop boundaries, imports, ratchet headroom, and invalid-budget failures from current source.
+- Verification truth — 836/836 tests, strict lint, build, public/security/dependency/replay/schema/protocol/media gates, browser 2/2, and staging 867/867 passed with direct exit codes.
+- Deferral truth — analytics remains credential-missing; player outcomes, inbound delivery, physical QA, production metrics, publication, subjective AI imagery, and founder approval remain unproven.
+
+Overall status: green engineering staging; SPARKED remains NO-GO.
+Last reviewed: 2026-07-27
