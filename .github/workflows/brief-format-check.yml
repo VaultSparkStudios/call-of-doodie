@@ -3,16 +3,14 @@ name: brief-format-check
 # Studio OS canonical brief-format gate (S87).
 #
 # Fails the run if docs/STARTUP_BRIEF.md has drifted from the canonical format
-# defined by scripts/validate-brief-format.mjs. Designed to be called two ways:
+# defined by scripts/validate-brief-format.mjs. It is intentionally event-driven:
 #
-#   1. Automatically on every push or PR that touches context/, docs/, scripts/,
-#      or the brief itself — catches drift at merge time.
-#   2. On a daily cron — catches drift introduced by out-of-band processes
-#      (manual edits, agents that skipped the canonical renderer).
+#   1. Automatically on every relevant push or pull request.
+#   2. Manually through workflow_dispatch for an explicit out-of-band check.
 #
 # Propagated to every registry repo by scripts/sync-studio-os-remote.mjs.
-# Do not edit the file in a child repo — the next 6h sync pass will overwrite it.
-# All format-rule changes happen in studio-ops and flow outward.
+# The infrastructure-policy guard below prevents a propagated hosted timer from
+# silently regrowing. The canonical template repair is routed to Studio Ops.
 
 on:
   push:
@@ -20,16 +18,19 @@ on:
       - 'docs/STARTUP_BRIEF.md'
       - 'scripts/validate-brief-format.mjs'
       - 'scripts/render-startup-brief.mjs'
+      - 'scripts/check-schedule-policy.mjs'
+      - 'scripts/lib/schedule-policy.mjs'
+      - '.github/workflows/brief-format-check.yml'
       - 'context/**'
   pull_request:
     paths:
       - 'docs/STARTUP_BRIEF.md'
       - 'scripts/validate-brief-format.mjs'
       - 'scripts/render-startup-brief.mjs'
+      - 'scripts/check-schedule-policy.mjs'
+      - 'scripts/lib/schedule-policy.mjs'
+      - '.github/workflows/brief-format-check.yml'
       - 'context/**'
-  schedule:
-    # Daily at 13:17 UTC — catches out-of-band drift (agent improvisation, manual edits)
-    - cron: '17 13 * * *'
   workflow_dispatch:
 
 permissions:
@@ -54,6 +55,9 @@ jobs:
             echo "::error title=validate-brief-format.mjs missing::scripts/validate-brief-format.mjs is not present in this repo. Run 'node scripts/ops.mjs onboard --repair --write' or wait for the next sync-studio-os cron (6h)."
             exit 1
           fi
+
+      - name: Enforce event-only workflow scheduling policy
+        run: node scripts/check-schedule-policy.mjs
 
       - name: Validate STARTUP_BRIEF.md (if present)
         run: |

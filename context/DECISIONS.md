@@ -2,6 +2,18 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-07-27 — Session 132 continuation — CI checks are events, not timers
+
+**Decision:** Brief-format validation runs on relevant pushes, pull requests, or explicit manual dispatch. A source-derived `schedule-policy-receipt-v1` fails if any repository workflow introduces a schedule trigger, a GitHub Actions self-hosted runner, or a scheduled Git writer.
+
+**Rationale:** The infrastructure court correctly identified the daily hosted cron as waste, but its generic self-hosted-runner prescription conflicts with live Studio Canon, which forbids GitHub Actions self-hosted runners. The canon-safe resolution removes the timer while retaining ephemeral GitHub-hosted event CI; the propagated source-template conflict is routed to Studio Ops rather than hidden locally.
+
+## 2026-07-27 — Session 132 continuation — Runtime and email claims remain evidence-bound
+
+**Decision:** Do not migrate this static Cloudflare Pages artifact to CPX51/Caddy without a real server requirement. Do not label `hello@callofdoodie.wtf` working until a signed `delivered-to-founder-mx` receipt exists.
+
+**Rationale:** The build exposes no listening runtime or port, and the infrastructure court records no port allocation requirement. Brevo credentials are ready, but the canonical delivery verifier excludes the domain while the email policy deliberately retains its registrar-forwarding route; provider readiness cannot substitute for delivery evidence.
+
 ## 2026-07-25 — Session 130 — Lethal attribution is one exactly-once lifecycle
 
 **Decision:** Every combat source queues metadata into one defeat executor; Kamikaze and Tactical Nuke remain explicit non-reward retirements, and any future unqueued lethal is reconciled as `unattributed` while recording a run-integrity fault.

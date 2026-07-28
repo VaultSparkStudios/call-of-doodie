@@ -1027,3 +1027,11 @@ Intent outcome: achieved for every agent-owned premise; Unified Genius List and 
 - Direct image inspection remains unavailable at the Windows `CryptUnprotectData` boundary; no subjective visual approval was claimed.
 
 Intent outcome: achieved for every agent-owned premise; Unified Genius List and second-order frontier exhausted without silent skips or fabricated evidence.
+
+## 2026-07-27 — Session 132 continuation — Infrastructure-court drain
+
+- Consumed live compliance cargo `01JUIVM51E88FB7E076DE93B79` after the initial closeout instead of declaring the queue permanently exhausted.
+- Removed the daily hosted brief-format cron and shipped `schedule-policy-receipt-v1`; direct receipt: 5 workflows, 0 schedules, 0 self-hosted runners, 0 scheduled Git writers. Four focused fixtures pass.
+- Preserved GitHub-hosted event CI because live Studio Canon forbids GitHub Actions self-hosted runners; routed the conflicting propagated template through signed Ark cargo `01JUJ4SVAL4D9F9405FA9BA2B2`.
+- Verified the runtime premise false: the artifact is static Cloudflare Pages with no server/port and the court assigns no port block.
+- Verified Brevo READY through the canonical secrets gateway, then directly proved the delivery tool rejects `hello@callofdoodie.wtf` because the retained registrar-forwarding domain is outside `EMAIL_DELIVERY_POLICY`. Delivery remains unclaimed; the policy/tool gap is in the same Ark cargo.

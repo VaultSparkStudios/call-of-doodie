@@ -11,7 +11,7 @@
     "project": "call-of-doodie",
     "type": "game-app",
     "rubric": "infrastructure",
-    "combinedPriority": 82.8,
+    "combinedPriority": 103.6,
     "top3": [
       "evidence-ranked-collapse-coaching",
       "durable-soul-contract",
@@ -129,6 +129,35 @@
         "L2": { "effortHours": 1.5, "recipe": "Add explicit no-growth ratchets, import-boundary receipts, package wiring, and tests." },
         "L3": { "effortHours": 3, "recipe": "Ship a robust analyzer, machine-readable receipt, schema/release integration, drift fixtures, and source-derived roadmap section." }
       }
+    },
+    {
+      "rank": 4,
+      "tier": "HIGH",
+      "axis": "infrastructure / cost discipline / observability",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 20.8,
+      "slug": "event-only-ci-schedule-policy",
+      "title": "Remove the propagated hosted timer and make schedule/runner/Git-writer policy source-derived and regression-gated.",
+      "status": "shipped",
+      "emergedFrom": "Studio Ark compliance-task 01JUIVM51E88FB7E076DE93B79 after the initial closeout",
+      "why": "The live brief-format workflow still carried a daily GitHub-hosted cron even though the current fleet policy forbids hosted timers. The task's generic self-hosted-runner wording conflicts with live Studio Canon, which forbids GitHub Actions self-hosted runners. A one-line timer deletion without a guard would silently regress on the next propagation pass.",
+      "recipe": "Remove the schedule trigger while retaining push, pull-request, and explicit manual dispatch on GitHub-hosted runners. Add schedule-policy-receipt-v1 to hash every workflow and fail on any schedule trigger, self-hosted runner, or scheduled Git writer. Run it inside the brief workflow, test block/inline/self-hosted/writer fixtures, and route the canonical template conflict to Studio Ops through signed Ark cargo.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.25,
+          "recipe": "Delete the daily schedule trigger."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Add a deterministic repository-wide workflow policy receipt and focused fixtures."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Self-enforce the guard in CI, bind exact workflow digests, preserve the canon-safe runner posture, and route the propagation root fix upstream."
+        }
+      }
     }
   ],
   "skipped": [
@@ -157,6 +186,10 @@
       "reason": "Brevo readiness does not prove delivery. The on-domain address stays honestly unverified until an end-to-end receipt exists."
     },
     {
+      "slug": "cpx-runtime-migration",
+      "reason": "The live build is a static Cloudflare Pages artifact with no listening server or port. The infrastructure court itself records candidatePortBlock=null and no-block-required-unless-build-proves-server, so a CPX51/Caddy migration would fabricate a runtime requirement."
+    },
+    {
       "slug": "physical-and-subjective-launch-proof",
       "reason": "Automation cannot replace a physical PWA/gamepad/full-run pass or direct image judgment. These remain explicit launch-red gates."
     }
@@ -182,6 +215,13 @@
       "implementedAt": "2026-07-27T18:58:00-04:00",
       "level": "L3",
       "evidence": "app-architecture-receipt-v1 derives 4999 total lines, 1772-line gameLoop span, 27 system and one hook boundary from source; explicit ratchets are wired into schema:lint; focused tests 3/3."
+    },
+    {
+      "slug": "event-only-ci-schedule-policy",
+      "status": "shipped",
+      "implementedAt": "2026-07-27T21:18:00-04:00",
+      "level": "L3",
+      "evidence": "schedule-policy-receipt-v1 proves 5 workflows, 0 schedules, 0 self-hosted runners, and 0 scheduled Git writers; four focused fixtures pass; the brief workflow runs the guard; Ark cargo 01JUJ4SVAL4D9F9405FA9BA2B2 routes the canonical template and email-policy gaps upstream."
     }
   ]
 }

@@ -20,6 +20,8 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S132** Durable public-safe SOUL — eight stable creative sections plus `soul-contract-v1` schema enforcement keep operational session history out of the creative constitution.
 - [x] [SIL:2] **DONE S132** Executable App architecture budget — source-derived line/span/import receipts and schema ratchets prevent renewed monolith growth or boundary loss.
 - [x] [SIL:3] **DONE S132 second-order** Causal-language tripwire, creative-contract SHA-256 fingerprint, and fail-closed architecture headroom/budget validation shipped with 22/22 focused tests.
+- [x] [SIL:2] **DONE S132 continuation** Event-only CI schedule policy — removed the propagated hosted timer; `schedule-policy-receipt-v1` proves 5 workflows, 0 schedules, 0 self-hosted runners, and 0 scheduled Git writers with four regression fixtures.
+- [x] [AUDIT WIN S132 continuation] Infrastructure court — CPX51 migration rejected because the artifact is static Cloudflare Pages with no server/port; Brevo is READY but the canonical delivery tool excludes this retained registrar-forwarding domain, so delivery remains unclaimed and the control-plane gap is routed through Ark cargo `01JUJ4SVAL4D9F9405FA9BA2B2`.
 
 - [x] [SIL:3] **DONE S131** Public route truth graph — one 17-route registry generates and exact-validates human pages, navigation, sitemap, footer, agent resources, language-model index, visual coverage, and a deterministic route proof ledger.
 - [x] [SIL:3] **DONE S131** Integer-safe enemy atlas pipeline — reproducible chroma matte, alpha WebP export, 730,586-byte aggregate budget, exact 22-type coverage, integer rectangles, fallback receipts, and bounded two-atlas proactive decoding.

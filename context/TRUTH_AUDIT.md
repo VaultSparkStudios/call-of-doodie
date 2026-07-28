@@ -960,3 +960,10 @@ Last reviewed: 2026-07-26
 
 Overall status: green engineering staging; SPARKED remains NO-GO.
 Last reviewed: 2026-07-27
+
+### Continuation — infrastructure-court truth
+
+- Schedule truth — `.github/workflows/brief-format-check.yml` is event/manual only; `schedule-policy-receipt-v1` hashes all five workflows and reports 0 schedules, 0 self-hosted runners, and 0 scheduled Git writers.
+- Canon truth — the generic court request for a self-hosted GitHub runner was rejected because live Studio Canon explicitly forbids it; hosted event CI remains, while the canonical propagation template repair is routed through Ark.
+- Runtime truth — no CPX51/Caddy migration is claimed because the production artifact is static Cloudflare Pages and has no listening server or port.
+- Email truth — `brevo` is READY, but the canonical end-to-end verifier exits 1 because `callofdoodie.wtf` is outside the receiving-domain policy and retained on registrar forwarding. No DNS/provider state is mislabeled as delivered mail.

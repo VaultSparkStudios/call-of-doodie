@@ -52,6 +52,7 @@
     "domain:platform:apply": "node scripts/platform-domain-cutover.mjs --apply",
     "schema:lint": "node scripts/schema-lint.mjs && node scripts/check-app-architecture.mjs",
     "architecture:check": "node scripts/check-app-architecture.mjs",
+    "infrastructure:schedule-check": "node scripts/check-schedule-policy.mjs",
     "leaderboard:audit": "node scripts/leaderboard-audit.mjs",
     "replay:state-stepper": "node scripts/validate-replay-state-stepper-fixtures.mjs",
     "progression:audit": "node scripts/progression-curve-audit.mjs"
