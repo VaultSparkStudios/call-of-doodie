@@ -8,6 +8,7 @@ import {
   WEAPON_UNLOCK_LEVELS,
 } from "../../src/constants.js";
 import { REPLAY_DIFFICULTIES, REPLAY_MODES, REPLAY_STARTERS } from "../../src/utils/replayCode.js";
+import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
@@ -27,6 +28,7 @@ export function buildPublicGameplayContract() {
       publicWriteActions: "not-offered",
     },
     loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "choose_perk", "choose_route", "survive_wave", "review_debrief"],
+    formations: Object.entries(FORMATION_COUNTERPLAY).map(([id, formation]) => ({ id, label: formation.label, counterplay: formation.drill })),
     modes: REPLAY_MODES.map((id) => ({ id, label: label(id), seededReplayCode: true })),
     difficulties: REPLAY_DIFFICULTIES.map((id) => ({
       id,

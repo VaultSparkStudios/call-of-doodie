@@ -21,7 +21,7 @@ import { buildRunDnaSharePayload } from "../utils/runDnaShareCard.js";
 import { buildNextRunDrill } from "../utils/drillDirector.js";
 import { CANONICAL_SITE_HOST, CANONICAL_SITE_URL } from "../config/site.js";
 import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixContract, buildScoreSubmitFallbackStudioEvent } from "../systems/deathFlow.js";
-import { describePressureArc } from "../systems/pressureArc.js";
+import { describeFormationPressure, describePressureArc } from "../systems/pressureArc.js";
 import { describeDamageSequence } from "../systems/damageSequence.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone } from "../utils/playtestFlightRecorder.js";
@@ -455,6 +455,7 @@ export default function DeathScreen({
   })();
   const runHistory = loadRunHistory();
   const pressureSummary = describePressureArc(runHistory[0]?.pressureReceipt);
+  const formationSummary = describeFormationPressure(runHistory[0]?.pressureReceipt);
   const damageSummary = describeDamageSequence(runHistory[0]?.damageReceipt);
   const replayProofPresenter = buildReplayProofPresenter({ traceEvidence, runHistory });
   const replayProofReceipt = replayProofPresenter.receipt;
@@ -1062,6 +1063,11 @@ export default function DeathScreen({
           {runHistory[0]?.pressureReceipt && (
             <div data-testid="pressure-arc-summary" style={{ fontSize: 10, color: "#A9D8FF", lineHeight: 1.45, marginTop: 6 }}>
               <strong style={{ color: "#6FC7FF" }}>Observed pressure arc:</strong> {pressureSummary}
+            </div>
+          )}
+          {runHistory[0]?.pressureReceipt?.formationExposureCount > 0 && (
+            <div data-testid="formation-pressure-summary" style={{ fontSize: 10, color: "#C8B7FF", lineHeight: 1.45, marginTop: 6 }}>
+              <strong style={{ color: "#B79AFF" }}>Observed formation drill:</strong> {formationSummary}
             </div>
           )}
           {runHistory[0]?.damageReceipt && (

@@ -1,0 +1,237 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-07-28",
+  "session": 133,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure-plus-product",
+  "meta": {
+    "generatedAt": "2026-07-28",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure-plus-product",
+    "combinedPriority": 82.5,
+    "top3": [
+      "formation-after-action-intelligence",
+      "bounded-ghost-recorder",
+      "storage-denial-boot-resilience"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Synchronized current HEAD; bounded 18-file/120000-character sampler; Studio Oracle preverification of all three item premises; direct inspection of App, wave-director, pressure-arc, storage-health, HomeV2, and DeathScreen paths; current doctor overallPass=true with blockingFailing=0. No player outcome, numeric balance, causal coaching, production metric, physical-device, inbound-delivery, subjective-pixel, or launch-readiness claim is inferred.",
+    "specialtyLenses": [
+      "founder-requested infrastructure rubric",
+      "game-loop review",
+      "app release gate",
+      "CANON-031 observability honesty",
+      "CANON-041 browser/mobile parity",
+      "CANON-047 theme readability",
+      "CANON-048 dual audience",
+      "public-repo sanitization"
+    ],
+    "baseline": {
+      "tests": "840/840 at the Session 132 closeout; current session must re-run directly",
+      "doctor": "Fresh direct doctor reports overallPass=true, blockingFailing=0, and one advisory control-plane sanitization failure",
+      "gameLoop": "94.6/100 design health; empirical confidence low because no sanitized participant playtest corpus exists",
+      "formationEvidence": "Wave spawns carry formation, lane, and role metadata; pressure-arc-v1 retains only band transitions and DeathScreen cannot report formation exposure",
+      "ghostRecorder": "App owns a plain-array recorder capped at 18000 samples and executes Array.shift() after the cap",
+      "storageResilience": "App and HomeV2 perform direct localStorage/sessionStorage reads and writes on entry paths despite an existing storage failure classifier and recovery receipt",
+      "release": "FORGE remains NO-GO for SPARKED pending the established inbound-mail, physical-device/media, production-data, scoped analytics/Sentry, direct visual, publication, and founder gates"
+    }
+  },
+  "gameLoopReview": {
+    "loopTightness": 95,
+    "progression": 93,
+    "sessionEngagement": 94,
+    "retention": 92,
+    "soulFidelity": 99,
+    "empiricalConfidence": "low",
+    "evidence": "The action, pressure, progression, build, rematch, rivalry, mission, replay, coaching, and proof loops are unusually deep and align with the durable SOUL. Confidence is capped because source and automation cannot establish comprehension, enjoyment, retention, or balance outcomes.",
+    "prioritizedFindings": [
+      "Formation tactics are visible during a wave but disappear from the durable after-action evidence, weakening the humiliation-to-revenge learning loop.",
+      "The ghost rivalry loop develops an avoidable O(n) recorder cliff after 18000 samples and keeps its lifecycle embedded in App orchestration.",
+      "Direct browser-storage access can violate the instant-guest-play promise in privacy-restricted or denied-storage environments before recovery surfaces can help."
+    ],
+    "nextThreeMoves": [
+      "Extend the observed pressure receipt with bounded formation exposure and render evidence-ranked counterplay without causal language.",
+      "Extract a fixed-capacity chronological ghost recorder with exact overwrite and terminal-sample tests.",
+      "Route boot and front-door preference storage through a fail-open adapter that emits sanitized failure receipts."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or public-launch promotion; repo-owned engineering work may continue",
+    "green": [
+      "Fresh doctor reports overallPass=true and blockingFailing=0",
+      "Cost-neutral deterministic local intelligence preserves CANON-029",
+      "Public route, rights, theme, and responsive contracts have current committed evidence"
+    ],
+    "red": [
+      "Current-session exact-HEAD staging and full verification have not yet run",
+      "Project-scoped analytics/Sentry, inbound delivery, physical PWA/gamepad/full-run media, production Lighthouse/funnel evidence, direct subjective image review, publication, and founder approval remain unverified"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "feature depth / game-loop feedback / local intelligence / engagement",
+      "effortHours": 5,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 36,
+      "slug": "formation-after-action-intelligence",
+      "title": "Turn coordinated enemy formations into bounded observed after-action evidence and formation-specific revenge drills.",
+      "status": "shipped",
+      "why": "getSpawnFormationPlan and applySpawnFormation already stamp formation identity, lane, and role on live enemies, but pressure-arc-v1 persists only pressure bands. DeathScreen therefore cannot distinguish a pincer, escort, flank, or surge exposure, even though formation tactics are a meaningful late-wave mastery signal.",
+      "recipe": "Upgrade the pressure receipt to a backward-compatible v2 formation ledger. Record only transitions/exposure counts from actual spawn plans, preserve a bounded chronological sample, and derive a dominant observed formation plus literal counterplay copy. Feed the receipt through deathFlow/run history and DeathScreen using OBSERVED FORMATION language, never cause-of-death language. Add invalid-input, cap, tie, backward-compatibility, description, and UI fixtures; expose the vocabulary in the public gameplay contract if the generator supports source-derived mechanics.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Persist formation exposure counts in the existing pressure receipt and add a literal DeathScreen line."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Add bounded transition evidence, dominant-formation derivation, counterplay vocabulary, and focused model/UI tests."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Ship a backward-compatible observed-formation contract across runtime, death flow, run history, public gameplay truth, telemetry, and fail-closed fixtures."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "speed / architecture / replay integrity / token reduction",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 24.3,
+      "slug": "bounded-ghost-recorder",
+      "title": "Replace the long-run ghost array shift cliff with an extracted fixed-capacity chronological recorder.",
+      "status": "shipped",
+      "why": "App records one ghost sample every six frames, caps the array at 18000, and then calls shift() on every additional sample. That is an O(n) hot-path operation during long runs, while reset, terminal marking, serialization, and capacity semantics remain inline in the 5000-line orchestrator.",
+      "recipe": "Create a pure fixed-capacity recorder with O(1) append/overwrite, finite integer normalization, chronological export, terminal-sample annotation, explicit capacity/count/overwrites receipt, and safe hydration of prior arrays. Replace App's array lifecycle without changing sessionStorage wire format or ghost playback behavior. Add wraparound, exact-cap, invalid-sample, terminal-update, reset, and serialization parity tests; ratchet the architecture receipt after the extraction.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.75,
+          "recipe": "Extract append/cap/export helpers while retaining an array implementation."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Implement the circular recorder and preserve chronological storage/playback compatibility with focused tests."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship the recorder, lifecycle integration, integrity receipt, malformed-input handling, App architecture ratchet, and exact behavior fixtures."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "HIGH",
+      "axis": "security / resilience / UX / observability",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 22.2,
+      "slug": "storage-denial-boot-resilience",
+      "title": "Make guest boot and front-door controls fail open when local or session storage is denied.",
+      "status": "shipped",
+      "why": "App and HomeV2 directly call localStorage/sessionStorage during state initialization and click handlers. The repository already classifies quota, security, and unavailable storage failures, but those direct calls can throw before or outside the recovery surface, contradicting the instant guest-play promise.",
+      "recipe": "Add one typed safe-browser-storage adapter for get/set/remove/JSON operations that never throws, preserves default values, and reports sanitized per-surface failures through the existing storage-health receipt. Migrate boot-critical App and HomeV2 preference/dismissal/debug paths plus ghost session hydration/persistence. Add throwing-storage fixtures, unavailable-global fixtures, JSON corruption fixtures, recovery tests, and an App/Home boot smoke proving the deploy surface remains usable without storage.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Wrap boot-time reads in try/catch defaults and add a denied-storage smoke."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Create a shared adapter, migrate entry reads/writes, and reuse the storage-health classifier."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Ship the unified adapter, boot/front-door/ghost integration, sanitized receipts, fail-open UI behavior, and browser-storage denial fixtures."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "numeric-balance-retune",
+      "reason": "No participant or production distribution supports changing damage, health, spawn, cooldown, reward, or progression values."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "The deterministic local intelligence stack is deep; a hosted model adds variable per-user cost and weaker evidence discipline without a demonstrated player need."
+    },
+    {
+      "slug": "auth-membership-expansion",
+      "reason": "Guest play is intentional and membership remains an explicit product decision rather than a defect."
+    },
+    {
+      "slug": "home-v1-retirement",
+      "reason": "Production Lighthouse and funnel evidence remain absent; the existing evidence gate still applies."
+    },
+    {
+      "slug": "analytics-and-sentry-configuration",
+      "reason": "The analytics capability remains missing and the available Sentry DSN is not proven project-scoped."
+    },
+    {
+      "slug": "inbound-mail-green-status",
+      "reason": "Brevo readiness does not prove delivery; the end-to-end policy/tool gap remains routed through Ark."
+    },
+    {
+      "slug": "physical-and-subjective-launch-proof",
+      "reason": "Automation cannot replace a physical PWA/gamepad/full-run pass or direct image judgment."
+    },
+    {
+      "slug": "generic-content-expansion",
+      "reason": "The game already has substantial modes, builds, bosses, missions, rivals, replay, and meta progression. More raw content ranks below closing live loop/resilience gaps."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "storage-denial-boot-resilience",
+      "status": "shipped",
+      "implementedAt": "2026-07-28T06:12:10.068Z",
+      "level": "L3",
+      "evidence": "Fail-open local/session storage reads, writes, JSON parsing, boot preferences, Home controls, and ghost persistence share sanitized per-surface receipts; 74/74 focused tests and strict lint pass."
+    },
+    {
+      "slug": "bounded-ghost-recorder",
+      "status": "shipped",
+      "implementedAt": "2026-07-28T06:12:10.068Z",
+      "level": "L3",
+      "evidence": "ghost-recorder-v1 provides O(1) fixed-capacity append/overwrite, chronological export, terminal annotation, integrity receipt, and unchanged session-storage array playback; App architecture is green at 4995 lines and 28 system boundaries."
+    },
+    {
+      "slug": "formation-after-action-intelligence",
+      "status": "shipped",
+      "implementedAt": "2026-07-28T06:12:10.068Z",
+      "level": "L3",
+      "evidence": "pressure-arc-v2 preserves bounded observed pincer/escort/flank/surge exposure, sanitizes it into run history, renders literal DeathScreen counterplay, remains Balance Lab compatible, and publishes source-derived formation vocabulary; 74/74 focused tests pass."
+    },
+    {
+      "slug": "second-order-boot-storage-boundary",
+      "status": "shipped",
+      "implementedAt": "2026-07-28T06:16:29.833Z",
+      "level": "L3",
+      "evidence": "boot-storage-boundary-v1 hashes and scans App/HomeV2, is wired into schema:lint, and passes live plus negative fixtures with zero direct access."
+    },
+    {
+      "slug": "second-order-ghost-receipt-invariant",
+      "status": "shipped",
+      "implementedAt": "2026-07-28T06:16:29.833Z",
+      "level": "L3",
+      "evidence": "Run-history sanitization caps ghost count to capacity and preserves overwrite/rejection evidence; impossible receipt fixture passes."
+    },
+    {
+      "slug": "second-order-formation-evidence-consistency",
+      "status": "shipped",
+      "implementedAt": "2026-07-28T06:16:29.833Z",
+      "level": "L3",
+      "evidence": "Dominant formation derives from sanitized counts and invalid transitions are dropped instead of coerced into false pincer evidence; focused consistency fixture passes."
+    }
+  ]
+}

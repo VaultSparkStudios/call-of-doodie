@@ -88,7 +88,10 @@ import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSum
 import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
-import { createPressureArc, finalizePressureArc, recordPressureSnapshot } from "./systems/pressureArc.js";
+import { createPressureArc, finalizePressureArc, recordFormationExposure, recordPressureSnapshot } from "./systems/pressureArc.js";
+import { createGhostRecorder, recordGhostSample } from "./systems/ghostRecorder.js";
+import { readPreference, writePreference } from "./utils/gamePreferences.js";
+import { loadGhostPlayback, persistGhostRecording } from "./utils/ghostStorage.js";
 import { applyObservedPlayerDamage, createDamageSequence, finalizeDamageSequence } from "./systems/damageSequence.js";
 import {
   buildWaveTelemetrySnapshot,
@@ -192,7 +195,7 @@ export default function CallOfDoodie() {
   const bestMomentRef    = useRef({ ts: 0, score: 0 }); // highest-excitement timestamp
   const gifOffscreenRef  = useRef(null);  // reusable downscale canvas
   const highlightUrlRef  = useRef(null);  // current object URL (for revocation)
-  const ghostRecordRef   = useRef([]);    // position samples for ghost race recording
+  const ghostRecordRef   = useRef(createGhostRecorder()); // bounded position samples for ghost race recording
   const commandTraceRef  = useRef([]);    // replay command trace events for trust submission
   const deathTraceEvidenceRef = useRef(null); // analyzeReplayCommandTrace result at moment of death
   const weaponMilestonesRef  = useRef([]);    // weapon legend milestones crossed this run
@@ -314,13 +317,13 @@ export default function CallOfDoodie() {
   const [shopOptions, setShopOptions]         = useState([]);
   const [coinShopOptions, setCoinShopOptions] = useState([]);
   const [shopHistory, setShopHistory]         = useState([]); // items bought this run
-  const [musicMuted, setMusicMuted]           = useState(() => { const s = localStorage.getItem("cod-music-muted") === "1"; setMuted(s); return s; });
+  const [musicMuted, setMusicMuted]           = useState(() => { const s = readPreference("cod-music-muted", "0") === "1"; setMuted(s); return s; });
   // Sync saved vibe to sounds module on first render
-  useState(() => { const v = localStorage.getItem("cod-music-vibe"); if (v) setMusicVibe(v); });
-  const [colorblindMode, setColorblindMode]   = useState(() => localStorage.getItem("cod-colorblind") === "1");
+  useState(() => { const v = readPreference("cod-music-vibe"); if (v) setMusicVibe(v); });
+  const [colorblindMode, setColorblindMode]   = useState(() => readPreference("cod-colorblind", "0") === "1");
   const [highlightGifUrl, setHighlightGifUrl] = useState(null);
   const [gifEncoding, setGifEncoding]         = useState(false);
-  const [musicVibe, setMusicVibeState]        = useState(() => localStorage.getItem("cod-music-vibe") || "action");
+  const [musicVibe, setMusicVibeState]        = useState(() => readPreference("cod-music-vibe", "action"));
   const [gameSettings, setGameSettings]       = useState(() => loadSettings());
   const [_showSettings, _setShowSettings]       = useState(false);
   const [gamepadConnected, setGamepadConnected] = useState(false);
@@ -328,7 +331,7 @@ export default function CallOfDoodie() {
   const [inputDebugEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("debug") === "input"
-      || localStorage.getItem("cod-debug-input") === "1";
+      || readPreference("cod-debug-input", "0") === "1";
   });
   const [inputDebug, setInputDebug] = useState(null);
   const [overclockedShots, setOverclockedShots] = useState(0);
@@ -418,7 +421,7 @@ export default function CallOfDoodie() {
       if (mobile) inputDeviceRef.current = "mobile";
     };
     check(); window.addEventListener("resize", check);
-    const saved = localStorage.getItem("cod-autoaim") === "1";
+    const saved = readPreference("cod-autoaim", "0") === "1";
     autoAimRef.current = saved;
     return () => window.removeEventListener("resize", check);
   }, []);
@@ -446,14 +449,14 @@ export default function CallOfDoodie() {
     const next = !getMuted();
     setMuted(next);
     setMusicMuted(next);
-    localStorage.setItem("cod-music-muted", next ? "1" : "0");
+    writePreference("cod-music-muted", next ? "1" : "0");
     if (next) { stopMusic(); stopAmbient(); } else if (gsRef.current) { startMusic(gsRef.current.bossWave); startAmbient(gsRef.current.mapTheme ?? 0); }
   }, []);
 
   const toggleColorblind = useCallback(() => {
     setColorblindMode(prev => {
       const next = !prev;
-      localStorage.setItem("cod-colorblind", next ? "1" : "0");
+      writePreference("cod-colorblind", next ? "1" : "0");
       return next;
     });
   }, []);
@@ -643,14 +646,11 @@ export default function CallOfDoodie() {
     frameBufferRef.current = [];
     bestMomentRef.current = { ts: 0, score: 0 };
     // Ghost race: load previous run's ghost for same mode, reset recorder
-    ghostRecordRef.current = [];
+    ghostRecordRef.current = createGhostRecorder();
     commandTraceRef.current = []; // reset command trace for this run
-    try {
-      const _gKey = "cod-ghost-" + (bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
-      gsRef.current._ghostKey = _gKey;
-      const _raw = sessionStorage.getItem(_gKey);
-      gsRef.current.ghost = _raw ? JSON.parse(_raw) : null;
-    } catch { gsRef.current.ghost = null; }
+    const _gKey = "cod-ghost-" + (bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
+    gsRef.current._ghostKey = _gKey;
+    gsRef.current.ghost = loadGhostPlayback(_gKey);
     // Persistent ghost leaderboard: load top-3 scores for this mode/difficulty as score targets
     loadTopGhosts(
       bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
@@ -1677,16 +1677,12 @@ export default function CallOfDoodie() {
       } catch { /* non-fatal */ }
     }
     // Ghost race: persist this run's positions under mode-specific key
-    try {
-      const _gKey = gsRef.current?._ghostKey || "cod-ghost-normal-v1";
-      if (ghostRecordRef.current.length > 10 && !gs?.practiceRun) {
-        ghostRecordRef.current[ghostRecordRef.current.length - 1] = {
-          ...ghostRecordRef.current[ghostRecordRef.current.length - 1],
-          killedByType: gs?._deathKillerType ?? gs?._lastDamageBy ?? null,
-        };
-        sessionStorage.setItem(_gKey, JSON.stringify(ghostRecordRef.current));
-      }
-    } catch { /* storage full — silent fail */ }
+    const _gKey = gsRef.current?._ghostKey || "cod-ghost-normal-v1";
+    const ghostFinal = persistGhostRecording(_gKey, ghostRecordRef.current, {
+      killedByType: gs?._deathKillerType ?? gs?._lastDamageBy ?? null,
+      practiceRun: gs?.practiceRun,
+    });
+    gs.ghostRecorderReceipt = ghostFinal.receipt;
     stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0);
     soundDeath();
     rumbleGamepad(0.7, 1.0, 600);
@@ -1820,6 +1816,7 @@ export default function CallOfDoodie() {
       traceReceipt: deathTraceReceipt,
       integrityReceipt: getRunIntegrityReceipt(gs),
       performanceReceipt: frameMonitorRef.current?.snapshot?.() || null,
+      ghostRecorderReceipt: gs.ghostRecorderReceipt,
       pressureReceipt: finalizePressureArc(gs.pressureArc, { deathWave: gs.currentWave }),
       damageReceipt: finalizeDamageSequence(gs.damageSequence, { maxHealth: gs.player?.maxHealth, finalFrame: frameCountRef.current }),
     }));
@@ -2616,9 +2613,7 @@ export default function CallOfDoodie() {
     // ── Weapon synergy check (every 30 frames) ──
     // ── Ghost race: record player position every 6 frames (~10 samples/sec) ──
     if (frameCountRef.current % 6 === 1 && p) {
-      ghostRecordRef.current.push({ x: Math.round(p.x), y: Math.round(p.y), f: frameCountRef.current });
-      // Cap at 18000 samples (~30 min) to bound memory
-      if (ghostRecordRef.current.length > 18000) ghostRecordRef.current.shift();
+      recordGhostSample(ghostRecordRef.current, { x: p.x, y: p.y, f: frameCountRef.current });
     }
 
     if (frameCountRef.current % 30 === 0) {
@@ -2731,6 +2726,7 @@ export default function CallOfDoodie() {
         const formation = heatBiasedFormation(heatTier(gs.heat || 0), _baseFormation, gs.enemiesThisWave - 1);
         if (formation) {
           applySpawnFormation(ne, formation, W, H);
+          recordFormationExposure(gs.pressureArc, formation, { wave: gs.currentWave, stageId: directorState?.stageId });
           gs._lastFormationLabel = formation.label;
           // Formation lore toast: show once per formation type per wave
           if (!gs._formationToastedThisWave) gs._formationToastedThisWave = new Set();
@@ -4524,7 +4520,7 @@ export default function CallOfDoodie() {
           wave={wave} timeSurvived={timeSurvived} score={score} isMobile={isMobile}
           achievementsUnlocked={achievementsUnlocked} fmtTime={fmtTime}
           musicMuted={musicMuted} onToggleMute={toggleMusicMuted}
-          musicVibe={musicVibe} onSetMusicVibe={(v) => { setMusicVibe(v); setMusicVibeState(v); localStorage.setItem("cod-music-vibe", v); }}
+          musicVibe={musicVibe} onSetMusicVibe={(v) => { setMusicVibe(v); setMusicVibeState(v); writePreference("cod-music-vibe", v); }}
           colorblindMode={colorblindMode} onToggleColorblind={toggleColorblind}
           gameSettings={gameSettings} onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
           pauseReason={pauseReason}

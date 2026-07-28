@@ -1,4 +1,28 @@
-# Latest Handoff — Session 132 continuation (canonical doctor blocked)
+# Latest Handoff — Session 133
+
+Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized startup through live-premise audit, all-item implementation, second-order saturation, staging, canonical closeout, and direct-main push.
+
+## Where We Left Off (Session 133)
+- Shipped: all three Oracle-verified L3 items plus three second-order safeguards across formation mastery, bounded ghost recording, boot storage resilience, and architecture root repair.
+- Tests: 857/857 across 125 files and core coverage 88/88; strict lint, production build, public/dependency/security/replay/schema/protocol/media/storage gates, npm audit zero, and browser E2E 2/2 pass.
+- Deploy: isolated Cloudflare staging at `https://session-133-staging.call-of-doodie.pages.dev/` passed 8/8 critical routes and the complete 867/867 route/theme/viewport matrix. The direct-main commit is exact-SHA CI/deploy gated before handback.
+
+## Validation
+- Formation: `pressure-arc-v2` records bounded observed formations/transitions, preserves legacy v1 reads, drops invalid transitions, and drives noncausal formation counterplay.
+- Ghost: a fixed-capacity ring preserves chronological samples and one terminal sample; history clamps count to capacity and persists only a sanitized recorder receipt.
+- Storage: preferences and ghost state use fail-closed adapters; unavailable, denied, malformed, and quota-failed storage cannot prevent boot.
+- Architecture: extraction reduced App from the correctly rejected 5,008-line state to 4,995 lines while increasing explicit system boundaries to 28; the ratchet was not weakened.
+- Security/trust: no dependency was added; zero npm vulnerabilities and staged secret scans remain required before push.
+- Direct AI pixel review remains honestly unclaimed because both the local viewer and in-app browser runtime fail at Windows `CryptUnprotectData`; 867 objective hosted checks are not mislabeled as subjective approval.
+
+## Next
+- Preserve exact-main CI/deploy verification as a mandatory closeout receipt for every future implementation commit.
+- With participant evidence: archive sanitized opt-in playtest receipts before changing pacing, economy, formation balance, or retention assumptions.
+- With physical hardware: verify one real Progressive Web App install/relaunch, controller/browser pass, and full-run Graphics Interchange Format encode/play/share flow.
+- With production traffic and scoped analytics: capture Largest Contentful Paint/Cumulative Layout Shift and funnel evidence before retiring `?home=v1`.
+- Before SPARKED: verify inbound email delivery, analytics/Sentry project scope, Itch/community publication, direct AI pixel review, and explicit founder approval.
+
+# Latest Completed Handoff — Session 132 continuation (canonical doctor blocked)
 
 Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized startup through live-premise audit, all-item implementation, second-order saturation, staging, canonical closeout, and direct-main push.
 

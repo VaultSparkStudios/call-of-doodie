@@ -1,51 +1,54 @@
-# Implementation Plan — Session 132
+# Implementation Plan — Session 133
 
-Source: `docs/AUDIT_2026-07-27.json`
+Source: `docs/AUDIT_2026-07-28.json`
 
 Status: **COMPLETE**
 
 ## Efficiency Order
 
-1. **Evidence-ranked collapse coaching** — establish the shared claim contract
-   before changing any debrief, remediation, or telemetry consumer.
-2. **Durable SOUL contract** — restore the creative source of truth, then gate
-   the public-safe section structure against operational-history drift.
-3. **Executable App architecture budget** — derive current line/span/import
-   evidence and ratchet it only after the new gameplay boundary is stable.
-4. **Second-order saturation** — refresh the Genius List, generate the
-   innovation pack, inspect the three new contracts for error-surface,
-   observability, and regression opportunities, and ship every verified safe
-   candidate while the context meter remains `CONTINUE`.
+1. **Storage-denial boot resilience** — establish one fail-open browser-storage
+   boundary, then migrate boot/front-door/ghost accesses without changing keys.
+2. **Bounded ghost recorder** — extract the hot-path lifecycle behind a fixed
+   capacity chronological contract while preserving the stored array wire shape.
+3. **Formation after-action intelligence** — extend observed pressure evidence
+   through run history, DeathScreen, Balance Lab, and public agent truth.
+4. **Second-order saturation** — refresh the Genius List and innovation pack,
+   inspect the three new contracts, and ship every premise-verified safeguard.
 
 ## Per-Item Gates
 
-- Implement L3 without changing combat math, random-number-generator timing,
-  progression, replay/leaderboard eligibility, guest play, or cost posture.
-- Observed, inferred, hypothesized, and missing evidence remain distinct.
-- Public-safe creative constraints contain no private operating strategy.
-- Architecture evidence derives from source and cannot certify itself.
-- Focused tests and behavior-specific checks pass before status becomes shipped.
+- No combat math, random-number-generator timing, progression values,
+  replay/leaderboard eligibility, guest-play defaults, or cost posture changed.
+- Storage denial degrades to defaults plus sanitized evidence, never boot failure.
+- Ghost exports remain chronological and retain the playback array wire format.
+- Formation receipts describe exposure and counterplay, never cause of death.
 
 ## Primary Completion Receipt
 
-- `collapse-coaching-v1`: focused coaching/death-flow tests 14/14.
-- `soul-contract-v1`: focused tests 3/3; validator and schema lint green.
-- `app-architecture-receipt-v1`: focused tests 3/3; 4,999 total lines,
-  1,772-line game-loop span, 27 system boundaries, one hook boundary.
+- `storage-denial-boot-resilience`: local/session reads, writes, JSON parsing,
+  public boot preferences, dismissals, diagnostics, and ghost persistence fail
+  open through sanitized per-surface receipts.
+- `bounded-ghost-recorder`: O(1) fixed-capacity recording, chronological export,
+  unchanged playback wire shape, terminal annotation, and integrity evidence;
+  App architecture is green at 4,995 lines / 28 system boundaries.
+- `formation-after-action-intelligence`: pressure-arc-v2 carries bounded
+  observed formation exposure through run history, DeathScreen counterplay,
+  Balance Lab, and the public gameplay contract without causal language.
+- Focused primary verification: 11 files, 74/74 tests; strict lint green.
 
 ## Saturation Receipt
 
-- Refreshed Genius List: five remaining entries, all credential, product-choice,
-  production-data, community, or founder gated; `analytics` rechecked MISSING.
-- Innovation pack: generated and premise-reviewed without converting external
-  evidence gates into phantom repo work.
-- Compound refinements: causal-language tripwire, creative-contract SHA-256
-  fingerprint, and fail-closed architecture headroom/budget validation.
-- Focused saturation verification: five files, 22/22 tests passing.
+- Genius List and innovation pack contain only analytics credentials,
+  membership choice, production traffic, community readiness, hardware/media,
+  publication, or founder gates; authoritative `analytics` probe is MISSING.
+- Implemented `boot-storage-boundary-v1`, ghost count/capacity consistency, and
+  formation count/dominant/transition consistency.
+- Focused second-order verification: 8 files, 33/33 tests; schema lint,
+  architecture receipt, boot-storage boundary, and strict lint green.
 
 ## Final Gates
 
 Full suite, strict lint, production build, public/security/replay/media/protocol
-contracts, exact-SHA isolated staging, direct doctor JSON with
-`blockingFailing: 0`, public sanitization, staged secret scan, canonical
-write-back, direct-main push, Ark broadcast, and zero session-owned shells.
+contracts, exact-HEAD isolated staging, doctor JSON with `blockingFailing: 0`,
+public sanitization, staged secret scan, canonical write-back, direct-main push,
+Ark broadcast, and zero session-owned shells.

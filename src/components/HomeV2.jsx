@@ -22,6 +22,7 @@ import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { getStorageHealth, probeLocalStorage, STORAGE_HEALTH_EVENT } from "../utils/storageHealth.js";
+import { readPreference, writePreference } from "../utils/gamePreferences.js";
 import { resetTutorialProgress } from "../utils/tutorialProgress.js";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -103,9 +104,9 @@ export default function HomeV2(props) {
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
   const [showAimCheck, setShowAimCheck] = useState(false);
-  const [tickerDismissed, setTickerDismissed] = useState(() => sessionStorage.getItem("cod-ticker-dismissed") === "1");
-  const [mutationDismissed, setMutationDismissed] = useState(() => sessionStorage.getItem("cod-mutation-dismissed") === "1");
-  const [insightDismissed, setInsightDismissed] = useState(() => sessionStorage.getItem("cod-insight-dismissed") === "1");
+  const [tickerDismissed, setTickerDismissed] = useState(() => readPreference("cod-ticker-dismissed", "0", "session", "home") === "1");
+  const [mutationDismissed, setMutationDismissed] = useState(() => readPreference("cod-mutation-dismissed", "0", "session", "home") === "1");
+  const [insightDismissed, setInsightDismissed] = useState(() => readPreference("cod-insight-dismissed", "0", "session", "home") === "1");
   const [showCareerStats, setShowCareerStats] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showControls, setShowControls] = useState(false);
@@ -125,12 +126,12 @@ export default function HomeV2(props) {
   const [inputDebugEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("debug") === "input"
-      || localStorage.getItem("cod-debug-input") === "1";
+      || readPreference("cod-debug-input", "0", "local", "home") === "1";
   });
   const [opsDebugEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("debug") === "ops"
-      || localStorage.getItem("cod-debug-ops") === "1";
+      || readPreference("cod-debug-ops", "0", "local", "home") === "1";
   });
   const [inputCalibration, setInputCalibration] = useState(() => loadInputCalibration());
   const [controllerProfile] = useState(() => loadControllerProfile());
@@ -781,7 +782,7 @@ export default function HomeV2(props) {
             <button
               style={{ ...quickBtn, borderColor: "rgba(0,229,255,0.45)", color: "#7FE6FF" }}
               onClick={() => {
-                localStorage.setItem("cod-debug-input", "1");
+                writePreference("cod-debug-input", "1", "local", "home");
                 recordFrontDoorAction("open_input_diagnostics", { source: "quick_chip" });
                 setDeployOpen(true);
               }}
@@ -884,7 +885,7 @@ export default function HomeV2(props) {
                 {runIntel.recommendation && <div style={{ marginTop: 6, color: "#8FEFFF" }}>{runIntel.recommendation}</div>}
               </div>
             </details>
-            <button onClick={() => { sessionStorage.setItem("cod-ticker-dismissed", "1"); setTickerDismissed(true); }} aria-label="Dismiss intel" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
+            <button onClick={() => { writePreference("cod-ticker-dismissed", "1", "session", "home"); setTickerDismissed(true); }} aria-label="Dismiss intel" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
 
@@ -907,7 +908,7 @@ export default function HomeV2(props) {
             <span style={{ flex: 1 }}>
               <strong style={{ color: "#FFB300" }}>THIS WEEK'S MUTATION:</strong> {weeklyMutation.emoji} {weeklyMutation.name} — <span style={{ color: "#CCC" }}>{weeklyMutation.desc}</span>
             </span>
-            <button onClick={() => { sessionStorage.setItem("cod-mutation-dismissed", "1"); setMutationDismissed(true); }} aria-label="Dismiss mutation banner" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
+            <button onClick={() => { writePreference("cod-mutation-dismissed", "1", "session", "home"); setMutationDismissed(true); }} aria-label="Dismiss mutation banner" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
         {/* Local balance insight — player-facing single-line surface (S112). Full lab table stays debug-gated below. */}
@@ -917,7 +918,7 @@ export default function HomeV2(props) {
             <span style={{ flex: 1 }}>
               <strong style={{ color: "#B48CFF" }}>PATTERN SPOTTED:</strong> {balanceLab.topInsight.title} — <span style={{ color: "#CCC" }}>{balanceLab.topInsight.detail}</span>
             </span>
-            <button onClick={() => { sessionStorage.setItem("cod-insight-dismissed", "1"); setInsightDismissed(true); }} aria-label="Dismiss pattern insight" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
+            <button onClick={() => { writePreference("cod-insight-dismissed", "1", "session", "home"); setInsightDismissed(true); }} aria-label="Dismiss pattern insight" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
         )}
         {opsDebugEnabled && (!analyticsStatus.enabled || telemetrySummary.pendingSyncCount > 0 || telemetrySummary.failedSyncCount > 0) && (
@@ -1027,7 +1028,7 @@ export default function HomeV2(props) {
           controllerType={effectiveControllerType}
           onVerify={completeAimCheck}
           onDiagnostics={() => {
-            localStorage.setItem("cod-debug-input", "1");
+            writePreference("cod-debug-input", "1", "local", "home");
             recordFrontDoorAction("aim_check_diagnostics", { source: "aim_check_panel" });
             setShowAimCheck(false);
             setDeployOpen(true);

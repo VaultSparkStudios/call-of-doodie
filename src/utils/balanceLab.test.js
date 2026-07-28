@@ -12,7 +12,7 @@ describe("buildLocalBalanceLab", () => {
   });
 
   it("surfaces repeated observed overrun finishes without causal wording", () => {
-    const pressureReceipt = { schemaVersion: "pressure-arc-v1", collapseBand: "overrun" };
+    const pressureReceipt = { schemaVersion: "pressure-arc-v2", collapseBand: "overrun" };
     const lab = buildLocalBalanceLab({ runHistory: [{ wave: 4, pressureReceipt }, { wave: 7, pressureReceipt }] });
     const insight = lab.insights.find((entry) => entry.id === "pressure_arc");
     expect(insight?.detail).toContain("does not prove the cause");

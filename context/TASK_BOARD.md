@@ -16,6 +16,14 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S133** Formation after-action intelligence — `pressure-arc-v2` preserves bounded observed pincer/escort/flank/surge exposure through run history, DeathScreen counterplay, Balance Lab, and the public gameplay contract without claiming cause of death.
+- [x] [SIL:2] **DONE S133** Bounded ghost recorder — fixed-capacity O(1) recording, chronological export, terminal evidence, safe session persistence, and `ghost-recorder-v1` replace the 18,000-sample `Array.shift()` hot-path cliff.
+- [x] [SIL:2] **DONE S133** Storage-denial boot resilience — App/Home preferences, dismissals, diagnostics, and ghost storage now fail open through sanitized local/session storage receipts.
+- [x] [SIL:3] **DONE S133 second-order** Boot-storage source ratchet, ghost count/capacity invariant, and formation evidence consistency reject direct-access regrowth and impossible or fabricated receipts.
+- [x] [AUDIT WIN S133] Numeric balance, hosted artificial intelligence coaching, auth expansion, HomeV2 retirement, analytics/Sentry, inbound-mail green status, generic content growth, and physical/subjective launch proof were rejected or deferred because their live prerequisites remain absent.
+
+**Runway exception:** the repo-owned primary and second-order lists are exhausted after S133. Open work remains credential, product-choice, production-data, community, hardware/media, publication, or founder gated; no phantom Now work is invented.
+
 - [x] [SIL:3] **DONE S132** Evidence-ranked collapse coaching — observed finish receipts, likely factors, hypotheses, RUN THE FIX, DeathScreen copy, and telemetry now share `collapse-coaching-v1` without causal overclaiming.
 - [x] [SIL:2] **DONE S132** Durable public-safe SOUL — eight stable creative sections plus `soul-contract-v1` schema enforcement keep operational session history out of the creative constitution.
 - [x] [SIL:2] **DONE S132** Executable App architecture budget — source-derived line/span/import receipts and schema ratchets prevent renewed monolith growth or boundary loss.

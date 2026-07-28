@@ -26,6 +26,7 @@ export function classifyStorageFailure(error) {
   if (name.includes("quota") || code === 22 || code === 1014) return "quota-exceeded";
   if (name.includes("security") || name.includes("denied")) return "access-denied";
   if (name.includes("invalidstate")) return "storage-unavailable";
+  if (name.includes("syntax")) return "invalid-data";
   return "write-failed";
 }
 
@@ -75,14 +76,42 @@ function recordFailure(surface, error, now) {
   return emit();
 }
 
+function unavailableStorage() {
+  return Object.assign(new Error("storage unavailable"), { name: "InvalidStateError" });
+}
+
+function resolveStorage(storage, storageType = "local") {
+  if (storage !== undefined) return storage;
+  return storageType === "session" ? globalThis.sessionStorage : globalThis.localStorage;
+}
+
+export function readLocalState(key, {
+  storage,
+  storageType = "local",
+  surface = "local-state",
+  fallback = null,
+  now = Date.now(),
+} = {}) {
+  try {
+    const target = resolveStorage(storage, storageType);
+    if (!target || typeof target.getItem !== "function") throw unavailableStorage();
+    const value = target.getItem(key);
+    return { ok: true, value: value ?? fallback, receipt: recordSuccess(surface, now) };
+  } catch (error) {
+    return { ok: false, value: fallback, receipt: recordFailure(surface, error, now) };
+  }
+}
+
 export function writeLocalState(key, value, {
-  storage = globalThis.localStorage,
+  storage,
+  storageType = "local",
   surface = "local-state",
   now = Date.now(),
 } = {}) {
   try {
-    if (!storage || typeof storage.setItem !== "function") throw Object.assign(new Error("storage unavailable"), { name: "InvalidStateError" });
-    storage.setItem(key, value);
+    const target = resolveStorage(storage, storageType);
+    if (!target || typeof target.setItem !== "function") throw unavailableStorage();
+    target.setItem(key, value);
     return { ok: true, receipt: recordSuccess(surface, now) };
   } catch (error) {
     return { ok: false, receipt: recordFailure(surface, error, now) };
@@ -90,27 +119,56 @@ export function writeLocalState(key, value, {
 }
 
 export function removeLocalState(key, {
-  storage = globalThis.localStorage,
+  storage,
+  storageType = "local",
   surface = "local-state",
   now = Date.now(),
 } = {}) {
   try {
-    if (!storage || typeof storage.removeItem !== "function") throw Object.assign(new Error("storage unavailable"), { name: "InvalidStateError" });
-    storage.removeItem(key);
+    const target = resolveStorage(storage, storageType);
+    if (!target || typeof target.removeItem !== "function") throw unavailableStorage();
+    target.removeItem(key);
     return { ok: true, receipt: recordSuccess(surface, now) };
   } catch (error) {
     return { ok: false, receipt: recordFailure(surface, error, now) };
   }
 }
 
-export function probeLocalStorage(storage = globalThis.localStorage, now = Date.now()) {
+export function readJsonState(key, {
+  storage,
+  storageType = "local",
+  surface = "local-state",
+  fallback = null,
+  now = Date.now(),
+} = {}) {
+  const result = readLocalState(key, { storage, storageType, surface, fallback: null, now });
+  if (!result.ok || result.value == null) return { ...result, value: fallback };
+  try {
+    return { ...result, value: JSON.parse(result.value) };
+  } catch (error) {
+    return { ok: false, value: fallback, receipt: recordFailure(surface, error, now) };
+  }
+}
+
+export function writeJsonState(key, value, options = {}) {
+  try {
+    return writeLocalState(key, JSON.stringify(value), options);
+  } catch (error) {
+    const surface = options.surface || "local-state";
+    const now = options.now ?? Date.now();
+    return { ok: false, receipt: recordFailure(surface, error, now) };
+  }
+}
+
+export function probeLocalStorage(storage, now = Date.now()) {
   const key = "__cod_storage_health_probe__";
   try {
-    const previous = storage?.getItem?.(key) ?? null;
-    const written = writeLocalState(key, "1", { storage, surface: "health-probe", now });
+    const target = resolveStorage(storage, "local");
+    const previous = target?.getItem?.(key) ?? null;
+    const written = writeLocalState(key, "1", { storage: target, surface: "health-probe", now });
     if (!written.ok) return written;
-    if (previous == null) return removeLocalState(key, { storage, surface: "health-probe", now: timestamp(now) + 1 });
-    return writeLocalState(key, previous, { storage, surface: "health-probe", now: timestamp(now) + 1 });
+    if (previous == null) return removeLocalState(key, { storage: target, surface: "health-probe", now: timestamp(now) + 1 });
+    return writeLocalState(key, previous, { storage: target, surface: "health-probe", now: timestamp(now) + 1 });
   } catch (error) {
     return { ok: false, receipt: recordFailure("health-probe", error, now) };
   }

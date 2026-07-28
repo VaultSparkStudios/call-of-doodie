@@ -12,5 +12,7 @@ describe("public gameplay contract", () => {
     expect(contract.trust.excludedClaim).toContain("not full physics resimulation");
     expect(contract.cost).toEqual({ freeTierCostStatus: "cost-neutral", paidInferenceRequired: false });
     expect(contract.modes).toHaveLength(7);
+    expect(contract.formations.map((formation) => formation.id)).toEqual(["pincer", "escort", "flank", "surge"]);
+    expect(contract.formations.every((formation) => formation.counterplay.length > 20)).toBe(true);
   });
 });

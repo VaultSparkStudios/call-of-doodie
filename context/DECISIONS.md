@@ -795,3 +795,26 @@ Rationale: Creative fidelity cannot be audited against a rolling implementation 
 Decision: App orchestration size, inline game-loop span, and imported system/hook boundaries derive from live source under `app-architecture-receipt-v1`. The initial ceilings are regression ratchets, not a claim that the ≤1,500-line roadmap target is complete.
 
 Rationale: A prose roadmap can drift in either direction. Source-derived headroom makes renewed monolith growth and boundary loss visible while leaving future extraction decisions evidence-led.
+## 2026-07-28 — Session 133 — Formation coaching is observational, bounded, and noncausal
+
+Decision: Record spawn-formation exposure and transitions under `pressure-arc-v2`, derive a dominant observed formation from sanitized counts, and offer counterplay as a drill. Never label a formation as the cause of death or infer mastery/outcomes from exposure alone. Invalid transitions are dropped, not normalized into plausible telemetry.
+
+Rationale: Formation literacy adds a deeper learn-rematch loop, but useful coaching does not justify laundering co-occurrence into causality. A bounded vocabulary and fail-closed sanitizer keep both player copy and agent receipts honest.
+
+## 2026-07-28 — Session 133 — Ghost capture is a bounded runtime instrument, not hidden telemetry
+
+Decision: Keep ghost samples in a fixed-capacity in-memory ring, export chronologically with a terminal sample, and persist only the existing bounded ghost plus a sanitized recorder receipt. Run-history count is clamped to recorder capacity.
+
+Rationale: Replay fidelity needs deterministic recent motion, not an unbounded event archive. The ring makes cost and privacy legible while terminal capture preserves the tactically meaningful endpoint.
+
+## 2026-07-28 — Session 133 — Boot persistence fails closed behind named adapters
+
+Decision: Boot-critical preference and ghost reads/writes must cross `gamePreferences`, `ghostStorage`, and `storageHealth`; direct local/session storage access in App and HomeV2 is forbidden by an executable boundary gate. Storage denial, absence, malformed data, and quota errors degrade to safe defaults.
+
+Rationale: Persistence is optional capability, not permission to make the game unbootable. Named boundaries centralize recovery semantics and prevent future direct-call regressions.
+
+## 2026-07-28 — Session 133 — Architecture ceilings are repaired, never moved to fit the code
+
+Decision: When App reached 5,008 lines against the 5,000-line ratchet, extract coherent persistence responsibilities and retain the ceiling. The passing state is 4,995 lines, a 1,771-line loop span, and 28 system boundaries.
+
+Rationale: Raising a source-derived budget would turn observability into theater. The failure correctly exposed renewed orchestration pressure and directly funded a cleaner boundary.

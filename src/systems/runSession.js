@@ -51,6 +51,7 @@ export function createRunHistoryEntry({
   traceReceipt = null,
   integrityReceipt = null,
   performanceReceipt = null,
+  ghostRecorderReceipt = null,
   pressureReceipt = null,
   damageReceipt = null,
 } = {}) {
@@ -117,10 +118,24 @@ export function createRunHistoryEntry({
       claim: "observed-local-frame-timing-not-causality-or-score-validity",
     };
   }
-  if (pressureReceipt?.schemaVersion === "pressure-arc-v1") {
+  if (ghostRecorderReceipt?.schemaVersion === "ghost-recorder-v1" && ghostRecorderReceipt.valid === true) {
+    const ghostCapacity = Math.max(1, Math.min(100000, Math.floor(Number(ghostRecorderReceipt.capacity) || 1)));
+    entry.ghostRecorderReceipt = {
+      schemaVersion: "ghost-recorder-v1",
+      valid: true,
+      capacity: ghostCapacity,
+      count: Math.min(ghostCapacity, Math.max(0, Math.floor(Number(ghostRecorderReceipt.count) || 0))),
+      overwrites: Math.max(0, Math.floor(Number(ghostRecorderReceipt.overwrites) || 0)),
+      rejected: Math.max(0, Math.floor(Number(ghostRecorderReceipt.rejected) || 0)),
+      claim: "bounded-chronological-position-samples",
+    };
+  }
+  if (["pressure-arc-v1", "pressure-arc-v2"].includes(pressureReceipt?.schemaVersion)) {
     entry.pressureReceipt = {
-      schemaVersion: "pressure-arc-v1",
-      claim: "observed-wave-pressure-transitions-not-causality",
+      schemaVersion: pressureReceipt.schemaVersion,
+      claim: pressureReceipt.schemaVersion === "pressure-arc-v2"
+        ? "observed-wave-pressure-and-formation-exposure-not-causality"
+        : "observed-wave-pressure-transitions-not-causality",
       deathWave: Math.max(1, Math.floor(Number(pressureReceipt.deathWave) || wave || 1)),
       collapseBand: ["light", "stable", "overrun", "unobserved"].includes(pressureReceipt.collapseBand)
         ? pressureReceipt.collapseBand
@@ -142,6 +157,28 @@ export function createRunHistoryEntry({
           }))
         : [],
     };
+    if (pressureReceipt.schemaVersion === "pressure-arc-v2") {
+      const formationIds = ["pincer", "escort", "flank", "surge"];
+      const formationCounts = Object.fromEntries(formationIds.map((id) => [
+        id,
+        Math.max(0, Math.min(99999, Math.floor(Number(pressureReceipt.formationCounts?.[id]) || 0))),
+      ]));
+      entry.pressureReceipt.formationClaim = "observed-spawn-formation-exposure-not-cause-of-death";
+      entry.pressureReceipt.formationCounts = formationCounts;
+      entry.pressureReceipt.formationExposureCount = Object.values(formationCounts).reduce((sum, value) => sum + value, 0);
+      entry.pressureReceipt.dominantFormation = formationIds.reduce((best, id) => (
+        formationCounts[id] > (best ? formationCounts[best] : 0) ? id : best
+      ), null);
+      entry.pressureReceipt.formationTransitions = Array.isArray(pressureReceipt.formationTransitions)
+        ? pressureReceipt.formationTransitions.slice(-24).map((transition) => ({
+            wave: Math.max(1, Math.floor(Number(transition.wave) || 1)),
+            stage: String(transition.stage || "unknown").slice(0, 24),
+            formation: formationIds.includes(transition.formation) ? transition.formation : null,
+            lane: String(transition.lane || "unknown").slice(0, 16),
+            role: String(transition.role || "unknown").slice(0, 16),
+          })).filter((transition) => transition.formation)
+        : [];
+    }
   }
   if (damageReceipt?.schemaVersion === "damage-sequence-v1") {
     entry.damageReceipt = {

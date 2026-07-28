@@ -967,3 +967,17 @@ Last reviewed: 2026-07-27
 - Canon truth — the generic court request for a self-hosted GitHub runner was rejected because live Studio Canon explicitly forbids it; hosted event CI remains, while the canonical propagation template repair is routed through Ark.
 - Runtime truth — no CPX51/Caddy migration is claimed because the production artifact is static Cloudflare Pages and has no listening server or port.
 - Email truth — `brevo` is READY, but the canonical end-to-end verifier exits 1 because `callofdoodie.wtf` is outside the receiving-domain policy and retained on registrar forwarding. No DNS/provider state is mislabeled as delivered mail.
+## 2026-07-28 — Session 133 — Formation, replay, storage, and staging truth
+
+- Audit truth — `docs/AUDIT_2026-07-28.json` / `.md` contain three Oracle-verified L3 items and three implemented second-order innovations; external/data/hardware/product premises remain explicit deferrals.
+- Formation truth — `pressure-arc-v2` records observed bounded formations/transitions and derives counterplay from sanitized counts; it does not claim cause, mastery, or participant outcome.
+- Replay truth — `ghost-recorder-v1` is a fixed-capacity ring with chronological/terminal export; persisted count cannot exceed capacity and no unbounded sample stream is stored.
+- Storage truth — boot preferences and ghost state cross fail-closed adapters; unavailable, denied, malformed, and quota-failed storage degrade to defaults. The boot boundary gate reports two protected surfaces and zero direct calls.
+- Architecture truth — the live 5,008-line failure was repaired through extraction; validation now derives 4,995 App lines, a 1,771-line game-loop span, and 28 system boundaries without budget inflation.
+- Verification truth — 857/857 tests, core coverage 88/88, strict lint, build, public/dependency/security/replay/schema/protocol/media/storage gates, npm audit zero, and browser E2E 2/2 passed with direct exit codes.
+- Staging truth — `https://session-133-staging.call-of-doodie.pages.dev/` passed 8/8 critical routes and 867/867 objective route/theme/viewport checks.
+- Visual truth — direct AI pixel inspection remains unavailable after both local-viewer and browser-runtime `CryptUnprotectData` failures; no subjective approval is claimed.
+- Release truth — engineering staging is green. Exact-main CI/deploy is pending closeout; SPARKED remains NO-GO pending external/device/data/publication/visual/founder evidence.
+
+Overall status: green engineering staging; SPARKED remains NO-GO.
+Last reviewed: 2026-07-28

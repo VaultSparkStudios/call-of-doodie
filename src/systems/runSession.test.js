@@ -39,8 +39,9 @@ describe("runSession", () => {
       traceEvidence: { level: "rich", count: 7, durationFrames: 96, weaknessReasons: [] },
       traceReceipt: { status: "verified", label: "Replay Proof Ready", score: 92, level: "rich" },
       performanceReceipt: { totalFrames: 720, slowFrames: 144, slowPct: 20, p95Ms: 25, worstMs: 48, assisted: true, assistActivations: 1 },
+      ghostRecorderReceipt: { schemaVersion: "ghost-recorder-v1", valid: true, capacity: 18000, count: 250, overwrites: 2, rejected: 1 },
       pressureReceipt: {
-        schemaVersion: "pressure-arc-v1",
+        schemaVersion: "pressure-arc-v2",
         deathWave: 12,
         collapseBand: "overrun",
         transitionCount: 2,
@@ -51,6 +52,10 @@ describe("runSession", () => {
           { wave: 12, stage: "scouting", band: "light", pressureRatio: 0.4 },
           { wave: 12, stage: "climax", band: "overrun", pressureRatio: 1.4 },
         ],
+        formationCounts: { pincer: 3, escort: 0, flank: 1, surge: 0 },
+        formationExposureCount: 4,
+        dominantFormation: "pincer",
+        formationTransitions: [{ wave: 12, stage: "climax", formation: "pincer", lane: "left", role: "encircle" }],
       },
       integrityReceipt: {
         status: "degraded",
@@ -69,12 +74,16 @@ describe("runSession", () => {
       traceReceipt: { status: "verified", score: 92 },
       traceEvidence: { level: "rich", count: 7 },
       performanceReceipt: { totalFrames: 720, slowFrames: 144, slowPct: 20, p95Ms: 25, worstMs: 48, assisted: true, assistActivations: 1 },
+      ghostRecorderReceipt: { schemaVersion: "ghost-recorder-v1", valid: true, capacity: 18000, count: 250, overwrites: 2, rejected: 1, claim: "bounded-chronological-position-samples" },
       pressureReceipt: {
-        schemaVersion: "pressure-arc-v1",
+        schemaVersion: "pressure-arc-v2",
         collapseBand: "overrun",
         transitionCount: 2,
         counts: { light: 1, stable: 0, overrun: 1 },
-        claim: "observed-wave-pressure-transitions-not-causality",
+        claim: "observed-wave-pressure-and-formation-exposure-not-causality",
+        formationExposureCount: 4,
+        dominantFormation: "pincer",
+        formationCounts: { pincer: 3, escort: 0, flank: 1, surge: 0 },
       },
       integrityReceipt: {
         status: "degraded",
@@ -128,6 +137,26 @@ describe("runSession", () => {
       label: "PERFORMANCE ASSISTED",
       claim: "observed-local-frame-timing-not-causality-or-score-validity",
     });
+  });
+
+  it("keeps ghost and formation receipts internally consistent", () => {
+    const historyEntry = createRunHistoryEntry({
+      ghostRecorderReceipt: { schemaVersion: "ghost-recorder-v1", valid: true, capacity: 3, count: 99, overwrites: 5, rejected: 2 },
+      pressureReceipt: {
+        schemaVersion: "pressure-arc-v2",
+        formationCounts: { pincer: 0, escort: 1, flank: 4, surge: 0 },
+        dominantFormation: "pincer",
+        formationTransitions: [
+          { wave: 20, stage: "pressure", formation: "invalid", lane: "secret", role: "fake" },
+          { wave: 20, stage: "climax", formation: "flank", lane: "right", role: "collapse" },
+        ],
+      },
+    });
+    expect(historyEntry.ghostRecorderReceipt).toMatchObject({ capacity: 3, count: 3, overwrites: 5, rejected: 2 });
+    expect(historyEntry.pressureReceipt).toMatchObject({ formationExposureCount: 5, dominantFormation: "flank" });
+    expect(historyEntry.pressureReceipt.formationTransitions).toEqual([
+      { wave: 20, stage: "climax", formation: "flank", lane: "right", role: "collapse" },
+    ]);
   });
 
   it("persists a bounded, non-causal final damage receipt", () => {

@@ -1035,3 +1035,17 @@ Intent outcome: achieved for every agent-owned premise; Unified Genius List and 
 - Preserved GitHub-hosted event CI because live Studio Canon forbids GitHub Actions self-hosted runners; routed the conflicting propagated template through signed Ark cargo `01JUJ4SVAL4D9F9405FA9BA2B2`.
 - Verified the runtime premise false: the artifact is static Cloudflare Pages with no server/port and the court assigns no port block.
 - Verified Brevo READY through the canonical secrets gateway, then directly proved the delivery tool rejects `hello@callofdoodie.wtf` because the retained registrar-forwarding domain is outside `EMAIL_DELIVERY_POLICY`. Delivery remains unclaimed; the policy/tool gap is in the same Ark cargo.
+## 2026-07-28 — Session 133 — Formation mastery, bounded replay, and boot resilience
+
+- Pulled/rebased origin/main first; installed the Windows Git guard; wrote the session lock; ran startup recovery, blocker/secrets, canon adoption/conformance, frontier, Ark, and context-meter checks.
+- Audited live code with the infrastructure and game-loop rubrics; accepted three Oracle-verified L3 premises and rejected external, hardware, production-data, and product-authority items rather than fabricating completion.
+- Shipped `pressure-arc-v2` formation exposure/transitions, dominant-formation derivation, legacy-v1 compatibility, formation-specific defeat drills, public gameplay-contract parity, and Balance Lab compatibility.
+- Shipped a fixed-capacity O(1) ghost recorder with chronological/terminal export, sanitized history receipts, capacity clamping, and regression coverage.
+- Shipped fail-closed boot storage adapters for preferences and ghost state, including denied/unavailable/malformed/quota classifications and a static boundary gate forbidding direct boot-critical storage calls.
+- Root-fixed an honest architecture ratchet failure by extracting preferences and ghost persistence; App moved from 5,008 rejected lines to 4,995 passing lines without increasing the ceiling.
+- Implemented second-order safeguards: storage boundary enforcement, recorder capacity integrity, and strict formation sanitization that drops invalid transitions instead of laundering them into valid telemetry.
+- Validation: 857/857 tests across 125 files; 88/88 core coverage; strict lint; production build; 27-file public contract; dependency/security/replay/schema/protocol/media/storage gates; npm audit 0; browser E2E 2/2.
+- Staging: `https://session-133-staging.call-of-doodie.pages.dev/` passed 8/8 critical routes and 867/867 route/theme/viewport objective checks.
+- Visual honesty: direct pixel inspection remains unavailable at the Windows `CryptUnprotectData` boundary; objective automation is reported separately and no subjective verdict is invented.
+
+Intent outcome: achieved for every agent-owned premise; the Unified Genius List and second-order candidates are exhausted. SPARKED remains evidence-gated.

@@ -23,6 +23,28 @@
     "survive_wave",
     "review_debrief"
   ],
+  "formations": [
+    {
+      "id": "pincer",
+      "label": "Pincer",
+      "counterplay": "Cut through one seam before both lanes close."
+    },
+    {
+      "id": "escort",
+      "label": "Escort",
+      "counterplay": "Break the guard screen before spending burst damage."
+    },
+    {
+      "id": "flank",
+      "label": "Flank",
+      "counterplay": "Keep a retreat lane open and rotate before the collapse."
+    },
+    {
+      "id": "surge",
+      "label": "Surge",
+      "counterplay": "Kite the center rush, then punish its recovery gap."
+    }
+  ],
   "modes": [
     {
       "id": "standard",

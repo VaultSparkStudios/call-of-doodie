@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 132 plus its infrastructure-court continuation shipped four L3 audit items and four second-order safeguards; 840/840 tests, exact-main CI/deploy, production smoke, and the event-only schedule policy are green. Canonical fleet doctor remains blocked by one Studio Ops-owned ownership/provenance divergence.",
-  "nextMilestone": "Studio Ops applies Ark cargo 01JUJ47JLK34AC54666CC59CE0 to restore doctor blockingFailing 0; then preserve NO-GO until verified inbound email, physical QA, production evidence, scoped analytics, publication, direct AI pixel review, and founder approval pass.",
+  "currentFocus": "Session 133 shipped three Oracle-verified L3 items and three second-order safeguards across formation mastery, bounded ghost replay, boot storage resilience, and architecture repair; 857/857 tests, 88/88 core coverage, and isolated staging 867/867 are green.",
+  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse and funnel evidence, project-scoped analytics/Sentry, publication, direct AI pixel review, and founder approval pass.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -144,6 +144,17 @@
       "url": "https://callofdoodie.wtf/",
       "type": "production-deploy",
       "command": "implementation commit 9b3f2615b744 · brief-format-check 30320143912 · Cloudflare deploy 30320143925 · live 7/7 · cutover 5/5 · replay 3/3 · function health 5/5; later closeout-only commits are separately CI/deploy gated"
+    },
+    {
+      "status": "green",
+      "url": "https://session-133-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 133 direct-upload preview via secrets gateway · 8/8 critical routes · hosted visual route/theme/viewport matrix 867/867"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 133 — 857/857 across 125 files; core coverage 88/88; strict lint; production build; public/dependency/security/replay/schema/protocol/media/storage gates; browser E2E 2/2"
     }
   ],
   "blockers": [
@@ -157,21 +168,21 @@
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
-  "truthAuditLastRun": "2026-07-26",
+  "truthAuditLastRun": "2026-07-28",
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 132,
-  "silScore": 999,
-  "silAvg3": 998,
-  "silVelocity": 4,
+  "silSession": 133,
+  "silScore": 1000,
+  "silAvg3": 999,
+  "silVelocity": 1,
   "silDebt": "decreasing",
-  "silLastSession": "2026-07-26",
-  "currentSession": 132,
+  "silLastSession": "2026-07-28",
+  "currentSession": 133,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 840,
-  "testsTotal": 840,
+  "testsPassing": 857,
+  "testsTotal": 857,
   "entropyScore": 0.208,
   "entropyLastComputed": "2026-07-25",
   "silRubricVersion": "3.0",
@@ -181,7 +192,7 @@
     "devHealth": 100,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 99,
+    "engagement": 100,
     "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
@@ -201,11 +212,11 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-132-staging.call-of-doodie.pages.dev/",
+  "stagingUrl": "https://session-133-staging.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-07-28T01:21:53Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
-    "session": 132,
+    "session": 133,
     "started": 0,
     "closed": 0,
     "running": 0,
@@ -214,17 +225,16 @@
   },
   "doctorScore": {
     "date": "2026-07-28",
-    "ranAt": "2026-07-28T01:28:47.904Z",
-    "overallPass": false,
-    "passing": 112,
-    "warning": 44,
-    "failing": 2,
-    "blockingFailing": 1,
+    "ranAt": "2026-07-28T07:41:00.917Z",
+    "overallPass": true,
+    "passing": 119,
+    "warning": 38,
+    "failing": 1,
+    "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
     "ran": 158,
     "total": 160,
-    "score": 71,
-    "blockingDetail": "Studio Ops coherence registry: ownership-provenance-sibling-coherence"
+    "score": 75
   }
 }

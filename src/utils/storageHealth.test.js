@@ -3,8 +3,11 @@ import {
   classifyStorageFailure,
   getStorageHealth,
   probeLocalStorage,
+  readJsonState,
+  readLocalState,
   removeLocalState,
   resetStorageHealthForTests,
+  writeJsonState,
   writeLocalState,
 } from "./storageHealth.js";
 
@@ -62,5 +65,30 @@ describe("local storage durability receipt", () => {
     };
     expect(probeLocalStorage(storage, 20).ok).toBe(true);
     expect(data.get("__cod_storage_health_probe__")).toBe("existing");
+  });
+
+  it("fails open on denied reads without retaining private errors", () => {
+    const storage = { getItem: () => { throw Object.assign(new Error("private browser detail"), { name: "SecurityError" }); } };
+    const result = readLocalState("callsign", { storage, surface: "guest-boot", fallback: "guest", now: 30 });
+    expect(result).toMatchObject({ ok: false, value: "guest" });
+    expect(result.receipt).toMatchObject({ status: "degraded", lastFailure: { surface: "guest-boot", code: "access-denied" } });
+    expect(JSON.stringify(result.receipt)).not.toContain("private browser detail");
+  });
+
+  it("normalizes unavailable and malformed JSON reads", () => {
+    expect(readJsonState("ghost", { storage: null, surface: "ghost", fallback: [] })).toMatchObject({ ok: false, value: [] });
+    const malformed = { getItem: () => "{not-json" };
+    const result = readJsonState("ghost", { storage: malformed, surface: "ghost", fallback: [], now: 40 });
+    expect(result).toMatchObject({ ok: false, value: [] });
+    expect(result.receipt.lastFailure).toMatchObject({ surface: "ghost", code: "invalid-data" });
+  });
+
+  it("writes JSON safely and rejects cyclic values without throwing", () => {
+    const data = new Map();
+    const storage = { setItem: (key, value) => data.set(key, value) };
+    expect(writeJsonState("profile", { level: 3 }, { storage, surface: "profile" }).ok).toBe(true);
+    expect(data.get("profile")).toBe('{"level":3}');
+    const cyclic = {}; cyclic.self = cyclic;
+    expect(writeJsonState("profile", cyclic, { storage, surface: "profile" })).toMatchObject({ ok: false });
   });
 });

@@ -33,7 +33,7 @@ export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], caree
     });
   }
 
-  const pressureRuns = runs.filter((run) => run?.pressureReceipt?.schemaVersion === "pressure-arc-v1");
+  const pressureRuns = runs.filter((run) => ["pressure-arc-v1", "pressure-arc-v2"].includes(run?.pressureReceipt?.schemaVersion));
   const overrunFinishes = pressureRuns.filter((run) => run.pressureReceipt.collapseBand === "overrun").length;
   if (pressureRuns.length >= 2 && overrunFinishes >= 2) {
     addInsight(insights, {
