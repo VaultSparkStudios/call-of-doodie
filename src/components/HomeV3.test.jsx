@@ -147,6 +147,11 @@ describe("HomeV3", () => {
     expect(container.textContent).toContain("Daily Challenge");
     expect(container.textContent).toContain("Boss Rush");
     expect(container.textContent).toContain("Cursed Run");
+    expect(container.textContent).toContain("Weekly Gauntlet");
+    expect(container.textContent).toContain("Score Attack");
+    expect(container.textContent).toContain("Speed Run");
+    const modeButtons = modeGrid.querySelectorAll("button");
+    expect(modeButtons.length).toBe(7);
 
     // Close button dismisses the drawer
     const closeBtn = container.querySelector(".home3__drawer-heading button");
@@ -292,6 +297,7 @@ describe("HomeV3", () => {
     expect(navBtns.length).toBe(4);
     const labels = [...navBtns].map((b) => b.textContent);
     expect(labels.some((l) => /Play/i.test(l))).toBe(true);
+    expect(labels.some((l) => /Challenges/i.test(l))).toBe(true);
     expect(labels.some((l) => /Progress/i.test(l))).toBe(true);
     expect(labels.some((l) => /More/i.test(l))).toBe(true);
   });
