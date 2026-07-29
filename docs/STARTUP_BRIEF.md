@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-07-28 (Session 133 closeout) -->
+<!-- generated-at: 2026-07-29 (Session 134 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 133 closeout · 2026-07-28.
+> **Fast-boot brief** — generated at Session 134 closeout · 2026-07-29.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 134 · 2026-07-28 · FOUNDER MODE                         ║
+║  Session 135 · 2026-07-29 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -25,7 +25,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  Staging       → https://session-133-staging.call-of-doodie. ✓   ║
-║  Unit tests    → npm test — 857/857 passing ✓                    ║
+║  Unit tests    → npm test — 866/866 passing ✓                    ║
 ║  Browser proof → Five real Chromium desktop/mobile captures  ✓   ║
 ║  Live smoke    → npm run replay:trust-smoke ✓                    ║
 ║  Live smoke    → Session 129 — live 7/7; post-cutover 5/5; l ✓   ║
@@ -37,61 +37,61 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    1000/1000   ████████████████████████   100%                   ║
-║    SIL v3.0  ·  Avg3: 999  ·  Velocity 1↓                        ║
+║    998/1000   ███████████████████████░   100%                    ║
+║    SIL v3.0  ·  Avg3: 999  ·  Velocity 5↑                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest o  ║
-║    Trend  ▁▄▄▂▆  ↓  (last 5 sessions)                            ║
+║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement       100    ██████████  ████▇▇▇█ →                ║
+║    Engagement        99    ██████████  ███▇▇▇█▇ →                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem        100    ██████████  ········ →                ║
 ║    Capital          100    ██████████  ········ →                ║
-║    Automation       100    ██████████  ········ →                ║
+║    Automation        99    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 133 ═══════════════════════════╗
-║  Shipped:  all three Oracle-verified L3 items plus three second  ║
-║  Tests:    857/857 passing  ·  Deploy: N/A                       ║
+╔══ WHERE WE LEFT OFF  ·  Session 134 ═══════════════════════════╗
+║  Shipped:  the richer HomeV2 arcade command center is the defau  ║
+║  Tests:    866/866 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  1.6% used                          ║
-║     3,236 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
-║     ~1,618 tok/turn  ·  cache 50%  ·  111 turns to compact       ║
+║     3,237 / 200,000 tok  ·  unknown/default  ·  heuristic        ║
+║     ~1,619 tok/turn  ·  cache 50%  ·  111 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         857/857 passing (2026-07-28T01:21:53Z)         ║
-║  ⚠  Velocity      1 ↓  ·  Debt: ↓                                ║
+║  ✓  Tests         866/866 passing (2026-07-29T08:39:00Z)         ║
+║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated frontier   ║
 ║  ⛔  Context age   ?d                                             ║
-║  ⚠  IGNIS         44175 FORGE  ·  12d old                        ║
+║  ⚠  IGNIS         44175 FORGE  ·  13d old                        ║
 ║  ⛔  Truth         green locally; portfolio doctor warnings are   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.208  (healthy)                               ║
+║  ✓  Entropy       0.214  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        119/160 (75%)  ·  1 failing                    ║
+║  ⛔  Doctor        122/160 (77%)  ·  1 failing                    ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger information  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    75d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║    97d · Physical launch QA                                      ║
+║    76d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║    98d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -108,14 +108,14 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  1↓  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  5↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIL FORECAST (next session) ═════════════════════════════════╗
-║  Projected:  996/1000  (↓4 vs current 1000)                      ║
-║  At-risk:    Momentum Δ-3                                        ║
+║  Projected:  995/1000  (↓3 vs current 998)                       ║
+║  All categories forecast stable or rising.                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -150,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 133 closeout · 2026-07-28*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 134 closeout · 2026-07-29*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*
