@@ -272,11 +272,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 999.0 | 5: 999.4 | 10: 999.7 [N=9] | 25: 999.7 [N=9] | all: 999.7 [N=9 canonical parsed sessions]
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
-Velocity trend: ↓  |  Protocol velocity: →  |  Debt: ↓
+Avgs — 3: 999.0 | 5: 998.4 | 10: 999.2 | 25: 999.7 | all: 961.3 [N=88 canonical parsed sessions]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.3 | Process 100.0 [N=3]
+Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-25 | Session 130 | Total: 997/1000 | Velocity: 8 | protocolVelocity: 8
+Last session: 2026-07-29 | Session 134 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -1998,3 +1998,30 @@ Brainstorm:
 1. Formation-conflict explorer — compare observed formation pressure with existing finish-style coaching only after real participant receipts exist, without selecting a causal winner.
 2. Ghost compression ratchet — consider a smaller deterministic encoding only if physical-device traces show transfer or memory pressure; current bounded storage is already adequate.
 3. Storage recovery coach — expose an actionable player notice only if real denial/quota receipts recur; do not turn a graceful fallback into alarm spam.
+## 2026-07-29 — Session 134 | Total: 998/1000 | Velocity: 5 | Debt: ↓
+
+SIL +5: Converted direct founder dissatisfaction into a complete retro front-door restoration, character-art upgrade, upright transform contract, persistent arsenal, and a browser-discovered desktop root fix.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint, 866/866 tests, production build, asset validation, architecture ratchet, and desktop/mobile E2E pass directly. |
+| Creative Alignment | 100 | same | The full retro command center, cabinet language, proprietary character art, and comic arsenal directly implement the founder's requested identity. |
+| Momentum | 100 | same | Five cohesive product and verification outcomes shipped in one pass, including the compact-desktop root fix discovered during browser QA. |
+| Engagement | 99 | down | Weapon choice and combat readability are materially clearer, but no participant retention or preference outcome is fabricated. |
+| Process Quality | 100 | same | The work preserved all prior elements, traced inversion to the renderer, and used real Chromium failure evidence to repair desktop visibility. |
+| Cross-Repo Coherence | 100 | same | All changes remain within this project and public-safe provenance; no sibling repository tree was edited. |
+| Security Posture | 100 | same | No dependency or secret was added; proprietary assets are manifest-tracked and existing security boundaries remain unchanged. |
+| Ecosystem Integration | 100 | same | Homepage choice, run initialization, HUD state, asset contracts, public enemy page, and tests agree on the same runtime sources. |
+| Capital Efficiency | 100 | same | Runtime art is compact and local; the change introduces no variable per-user charge or Max Plan cost alarm. |
+| Automation Coverage | 99 | down | Unit and real-browser coverage is strong, but direct host-side subjective screenshot inspection remains unavailable at the Windows credential boundary. |
+
+Rolling averages: 3-session 999.0 · 5-session 998.4 · sparkline `█████`.
+
+Top win: the founder's preferred arcade identity and full arsenal are now both visually prominent and mechanically persistent from menu choice through combat.
+Top gap: objective browser evidence is green, but participant preference/readability outcomes and direct host-side subjective pixel review remain unclaimed.
+Intent outcome: Achieved — every requested product change shipped and passed the applicable local and browser gates.
+
+Brainstorm:
+1. Pose-state micro-atlas — add dash/reload/impact variants only after gameplay-scale review proves they remain readable and do not obscure aim.
+2. Enemy silhouette spotlight — use opt-in playtest misidentification evidence to target the next specialist/boss atlas upgrade rather than replacing art speculatively.
+3. Primary-weapon quick compare — consider a two-stat pre-run comparison only if players still struggle to choose after the direct selector ships.

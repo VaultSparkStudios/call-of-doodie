@@ -195,6 +195,20 @@
       "notes": "Transparent high-realization operative art consumed by the live canvas renderer; procedural character art remains the load/failure fallback."
     },
     {
+      "id": "cod-doodie-operative-v3",
+      "kind": "runtime-character-sprite",
+      "sourceType": "ai-generated-proprietary",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/runtime-sprites/cod-doodie-operative-v3-source.png",
+      "runtimePath": "public/visual-assets/cod-doodie-operative-v3.png",
+      "dimensions": {
+        "width": 384,
+        "height": 384
+      },
+      "status": "production-ready",
+      "notes": "Refined upright operative with stronger expression, materials, silhouette, and no baked-in weapon; live aiming rotates the equipped weapon independently while the body stays readable."
+    },
+    {
       "id": "cod-karen-nemesis-v2",
       "kind": "runtime-character-sprite",
       "sourceType": "ai-generated-proprietary",
@@ -255,18 +269,18 @@
       "kind": "runtime-character-atlas",
       "sourceType": "ai-generated-proprietary",
       "license": "Proprietary",
-      "sourcePath": "assets/source/runtime-sprites/enemy-atlas-core-source.png",
-      "runtimePath": "public/visual-assets/enemy-atlas-core.webp",
+      "sourcePath": "assets/source/runtime-sprites/enemy-atlas-core-v3-source.png",
+      "runtimePath": "public/visual-assets/enemy-atlas-core-v3.webp",
       "runtimeFormat": "webp",
       "dimensions": {
-        "width": 1254,
-        "height": 1254
+        "width": 1774,
+        "height": 887
       },
       "grid": { "columns": 4, "rows": 2, "slots": 8 },
       "typeIndices": [0, 1, 2, 3, 5, 6, 7, 8],
       "maxBytes": 550000,
       "status": "production-ready",
-      "notes": "Eight transparent core-enemy sprites generated as one consistent proprietary atlas; procedural canvas characters remain the load/failure fallback."
+      "notes": "Eight upgraded transparent core-enemy sprites with stronger costume storytelling, expressions, silhouettes, and consistent gameplay-scale composition; procedural canvas characters remain the load/failure fallback."
     },
     {
       "id": "enemy-atlas-specialists",

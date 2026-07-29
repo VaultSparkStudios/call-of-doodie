@@ -38,7 +38,7 @@ function card([title, body]) {
 function renderArt() {
   return `
     <figure class="roster-art card">
-      <img src="../visual-assets/enemy-atlas-core.webp" alt="Core enemy roster atlas">
+      <img src="../visual-assets/enemy-atlas-core-v3.webp" alt="Core enemy roster atlas">
       <img src="../visual-assets/enemy-atlas-specialists.webp" alt="Specialist enemy roster atlas">
       <img src="../visual-assets/enemy-atlas-bosses.webp" alt="Signature encounter roster atlas">
       <figcaption>Production character art shown at high resolution; in-game silhouettes are optimized for combat scale. Gameplay classifications come from the live contract below.</figcaption>

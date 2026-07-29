@@ -818,3 +818,20 @@ Rationale: Persistence is optional capability, not permission to make the game u
 Decision: When App reached 5,008 lines against the 5,000-line ratchet, extract coherent persistence responsibilities and retain the ceiling. The passing state is 4,995 lines, a 1,771-line loop span, and 28 system boundaries.
 
 Rationale: Raising a source-derived budget would turn observability into theater. The failure correctly exposed renewed orchestration pressure and directly funded a cleaner boundary.
+## 2026-07-29 — Session 134 — The rich arcade command center is the default front door
+
+Decision: Restore HomeV2 as the default homepage, retain HomeV3 only at `?home=v3`, and preserve the legacy menu at `?home=v1`. Elevate rather than delete HomeV2's Journey, deployment, challenge, tool, hub, career, codex, settings, support, and legal surfaces.
+
+Rationale: The founder explicitly preferred the previous retro/arcade identity and its functional completeness. A thinner replacement discarded useful player context; progressive hierarchy and arcade craft solve density without erasing capability.
+
+## 2026-07-29 — Session 134 — Body orientation and weapon aim are independent transforms
+
+Decision: Render the operative body, sprite, legs, and skin at world-up orientation, then rotate a nested arm/weapon transform using a finite normalized aim angle.
+
+Rationale: Rotating the whole character made southward aim read as an upside-down soldier. Independent transforms preserve character legibility while retaining full 360-degree combat aim.
+
+## 2026-07-29 — Session 134 — Primary weapon choice is explicit, persistent, and reversible
+
+Decision: Expose all 12 weapons before deployment, persist the selected primary locally, initialize the next run from it, and keep every weapon directly selectable from responsive in-run docks.
+
+Rationale: A hidden or tiny cycle control makes the arsenal functionally disappear. One visible choice before the run plus direct reversible switching during combat improves agency without changing balance or unlock rules.

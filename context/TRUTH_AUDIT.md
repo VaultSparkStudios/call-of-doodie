@@ -981,3 +981,16 @@ Last reviewed: 2026-07-27
 
 Overall status: green engineering staging; SPARKED remains NO-GO.
 Last reviewed: 2026-07-28
+## 2026-07-29 — Session 134 — Arcade front door, arsenal, and character-rendering truth
+
+- Homepage truth — HomeV2 is the default, HomeV3 is explicit at `?home=v3`, and no prior functional panel was silently deleted.
+- Selection truth — the primary index is bounded to the live 12-weapon array, persisted through the preference adapter, and applied to run ammo/state/telemetry at start.
+- HUD truth — desktop and mobile docks render at the game-shell boundary, so compact HUD mode cannot suppress weapon access.
+- Orientation truth — body rendering precedes the nested aim rotation; `bodyAngle` is always zero and weapon aim is finite-normalized.
+- Asset truth — v3 operative and core-enemy runtime files derive from retained proprietary sources through the checked chroma pipeline; the core atlas is 209,946 bytes and fallbacks remain live.
+- Verification truth — 866/866 tests, strict lint, architecture 4,975/5,000, asset validation, browser E2E 4/4, and production build passed with direct exit codes.
+- Visual truth — Chromium screenshots exist and interaction/readability contracts pass; host image inspection still fails at Windows `CryptUnprotectData`, so subjective pixel approval is not claimed.
+- Release truth — this product change is engineering-complete; SPARKED remains NO-GO under the existing external/device/data/publication/direct-visual/founder gates.
+
+Overall status: green engineering implementation; SPARKED remains NO-GO.
+Last reviewed: 2026-07-29

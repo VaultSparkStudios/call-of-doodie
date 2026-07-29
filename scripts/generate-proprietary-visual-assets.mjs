@@ -148,18 +148,27 @@ for (const asset of assets) {
 }
 
 const runtimeSprites = [
-  ["cod-doodie-operative-v2-source.png", "cod-doodie-operative-v2.png"],
-  ["cod-karen-nemesis-v2-source.png", "cod-karen-nemesis-v2.png"],
+  ["cod-doodie-operative-v2-source.png", "cod-doodie-operative-v2.png", false],
+  ["cod-doodie-operative-v3-source.png", "cod-doodie-operative-v3.png", true],
+  ["cod-karen-nemesis-v2-source.png", "cod-karen-nemesis-v2.png", false],
 ];
-for (const [sourceName, runtimeName] of runtimeSprites) {
+for (const [sourceName, runtimeName, removeGreen] of runtimeSprites) {
   const sourcePath = path.join(runtimeSpriteSourceDir, sourceName);
   const runtimePath = path.join(runtimeDir, runtimeName);
-  await sharp(sourcePath)
+  let image = sharp(sourcePath);
+  let transparencyNote = "source alpha";
+  if (removeGreen) {
+    const source = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const keyed = removeChromaKey(source, { transparentThreshold: 12, opaqueThreshold: 220, despill: true });
+    image = sharp(keyed.data, { raw: keyed.info });
+    transparencyNote = `${keyed.receipt.transparentPixels} transparent pixels`;
+  }
+  await image
     .trim({ background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .resize(384, 384, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 }, kernel: sharp.kernel.lanczos3 })
     .png({ compressionLevel: 9, palette: true, quality: 95 })
     .toFile(runtimePath);
-  console.log(`Generated ${path.relative(ROOT, sourcePath)} -> ${path.relative(ROOT, runtimePath)}`);
+  console.log(`Generated ${path.relative(ROOT, sourcePath)} -> ${path.relative(ROOT, runtimePath)} (${transparencyNote})`);
 }
 
 for (const atlas of Object.values(ENEMY_ATLAS_CONTRACT)) {

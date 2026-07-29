@@ -1,3 +1,13 @@
+- Session 134 (2026-07-29) completed the founder-directed retro homepage, character-art, orientation, and arsenal recovery pass.
+- Homepage truth — the feature-rich HomeV2 command center is again the default; HomeV3 remains an explicit `?home=v3` comparison path and the legacy menu remains `?home=v1`.
+- Arcade identity — CRT scanlines, cabinet framing, marquee portraits, insert-courage messaging, stronger deploy treatment, responsive layouts, and the full Journey/modes/challenges/tools/hub/career/codex/settings/support surface preserve the previous menu's depth while improving hierarchy.
+- Arsenal truth — all 12 weapons are visible before deployment, the chosen primary persists locally and enters the next run, and dedicated desktop/mobile docks expose direct selection, ammo, upgrades, reload, dash, and grenade controls.
+- Character truth — the operative v3 transparent sprite and upgraded eight-character core enemy atlas are proprietary, manifest-tracked, chroma-keyed through the deterministic asset pipeline, and retain procedural/load-failure fallbacks.
+- Orientation truth — the player's body and skin remain upright while only the aim arm and equipped weapon rotate; `playerRenderPose` normalizes invalid and multi-turn aim input and regression-tests all cardinal directions.
+- Validation truth — asset validation, strict lint, the 4,975-line architecture ratchet, 866/866 tests across 127 files, desktop/mobile Chromium 4/4, and the production build pass directly.
+- Visual honesty — browser screenshots and objective desktop/mobile flows were captured, but host-side image viewing still fails at Windows `CryptUnprotectData`; no unsupported subjective pixel verdict is claimed.
+- Release truth — the implementation is ready on `main`; SPARKED remains NO-GO under the existing inbound-mail, physical-device/media, production-data, scoped-analytics, publication, direct-visual, and founder approval gates.
+
 - Session 133 (2026-07-28) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
 - Formation truth — `pressure-arc-v2` records bounded spawn-formation exposure and transitions, derives one dominant observed formation, and gives DeathScreen a formation-specific counterplay drill without causal or outcome claims.
 - Replay truth — `ghost-recorder-v1` is a fixed-capacity O(1) ring with chronological export, terminal-sample capture, capacity-clamped history, and a sanitized recorder receipt; run history persists no unbounded sample stream.

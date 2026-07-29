@@ -1049,3 +1049,16 @@ Intent outcome: achieved for every agent-owned premise; Unified Genius List and 
 - Visual honesty: direct pixel inspection remains unavailable at the Windows `CryptUnprotectData` boundary; objective automation is reported separately and no subjective verdict is invented.
 
 Intent outcome: achieved for every agent-owned premise; the Unified Genius List and second-order candidates are exhausted. SPARKED remains evidence-gated.
+## 2026-07-29 — Session 134 — Retro command center, character refinement, and arsenal recovery
+
+- Restored HomeV2 as the default front door while preserving HomeV3 at `?home=v3` and the legacy comparison path at `?home=v1`.
+- Elevated the complete homepage with responsive CRT/cabinet framing, character marquees, clearer hierarchy, and retained Journey, deployment modes, daily/gauntlet, player tools, hub, tabs, stats, support, and legal/footer elements.
+- Added a persistent primary-weapon preference and a direct 12-weapon pre-run selector; the selected primary now initializes the run and telemetry honestly.
+- Replaced the tiny/vanished weapon controls with capability-complete desktop and mobile docks containing direct selection, ammo, upgrades/mods, hotkeys, reload, dash, and grenade state.
+- Generated and integrated proprietary operative v3 and core-enemy v3 sources; deterministic chroma removal produced a 384×384 player sprite and 209,946-byte alpha WebP atlas with manifest/provenance coverage.
+- Root-fixed upside-down movement/aim rendering by drawing the body upright and rotating only the arm/weapon transform; added finite cardinal and multi-turn pose tests.
+- Real Chromium verification found that compact desktop HUD mode bypassed the dock; moved the dock to the game shell and proved selection-to-combat persistence on Desktop Chrome and Pixel 7.
+- Validation: asset check; strict lint; architecture 4,975/5,000; 866/866 unit tests across 127 files; Playwright 4/4; production build.
+- Visual honesty: screenshots were produced but direct host image viewing remains unavailable at Windows `CryptUnprotectData`; objective browser evidence is not mislabeled as subjective approval.
+
+Intent outcome: achieved for the requested product surface. Existing external/device/data/publication/founder launch gates remain unchanged.

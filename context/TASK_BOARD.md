@@ -16,6 +16,12 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S134** Retro command-center restoration — HomeV2 again owns the default front door with its full Journey, modes, challenges, Player Tools/Hub, career, codex, settings, support, and footer surface under an elevated CRT arcade cabinet treatment.
+- [x] [SIL:3] **DONE S134** Persistent 12-weapon arsenal — a prominent pre-run primary selector carries the chosen weapon into combat; full desktop and mobile docks expose direct selection, ammo, upgrades, reload, dash, and grenade controls.
+- [x] [SIL:2] **DONE S134** Upright operative transform contract — the body and skin never rotate with aim; only the arm/weapon pivot, with finite cardinal/multi-turn regression coverage.
+- [x] [SIL:3] **DONE S134** Proprietary character-art upgrade — operative v3 and the eight-character core enemy v3 atlas ship through deterministic chroma removal, manifest provenance, byte/alpha validation, and procedural failure fallbacks.
+- [x] [SIL:2] **DONE S134 verification root fix** Real Chromium exposed compact-desktop dock omission; the dock moved to the game shell and desktop/mobile selection-to-combat flows now pass 4/4.
+
 - [x] [SIL:3] **DONE S133** Formation after-action intelligence — `pressure-arc-v2` preserves bounded observed pincer/escort/flank/surge exposure through run history, DeathScreen counterplay, Balance Lab, and the public gameplay contract without claiming cause of death.
 - [x] [SIL:2] **DONE S133** Bounded ghost recorder — fixed-capacity O(1) recording, chronological export, terminal evidence, safe session persistence, and `ghost-recorder-v1` replace the 18,000-sample `Array.shift()` hot-path cliff.
 - [x] [SIL:2] **DONE S133** Storage-denial boot resilience — App/Home preferences, dismissals, diagnostics, and ghost storage now fail open through sanitized local/session storage receipts.

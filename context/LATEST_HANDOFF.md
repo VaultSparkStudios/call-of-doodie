@@ -1,4 +1,20 @@
-# Latest Handoff — Session 133
+# Latest Handoff — Session 134
+
+Session Intent: Restore and elevate the previous retro/arcade homepage experience and all of its useful elements; improve enemy and player character art; keep the player upright; and make the complete weapon arsenal unmistakable and easy to select.
+
+## Where We Left Off (Session 134)
+- Shipped: the richer HomeV2 arcade command center is the default again, with HomeV3 retained at `?home=v3`; all prior Journey, mode, challenge, tool, hub, career, codex, settings, support, and footer surfaces remain.
+- Arsenal: all 12 weapons are directly selectable before and during a run; the primary choice persists and carries into combat; desktop and mobile expose distinct responsive docks.
+- Characters: proprietary operative v3 and core-enemy v3 art are live through deterministic transparent exports; procedural fallbacks remain intact.
+- Orientation: the body stays upright at every aim angle because only the arm/weapon transform rotates.
+- Validation: 866/866 unit tests across 127 files, strict lint, architecture 4,975/5,000, asset manifest/alpha budgets, browser E2E 4/4 across Desktop Chrome and Pixel 7, and production build pass.
+
+## Next
+- Preserve HomeV2 as the default until production evidence supports any future front-door replacement; compare HomeV3 only through its explicit query path.
+- Gather sanitized participant evidence before changing weapon balance, menu density, retention assumptions, or enemy readability based on outcomes.
+- Complete the existing inbound-email, physical PWA/gamepad/full-run media, production performance/funnel, scoped analytics/Sentry, publication, direct visual-review, and founder launch gates before SPARKED.
+
+# Previous Handoff — Session 133
 
 Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized startup through live-premise audit, all-item implementation, second-order saturation, staging, canonical closeout, and direct-main push.
 
