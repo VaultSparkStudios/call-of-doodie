@@ -3,9 +3,9 @@ export const ENEMY_ATLAS_TOTAL_BYTE_BUDGET = 1_500_000;
 export const ENEMY_ATLAS_CONTRACT = Object.freeze({
   core: Object.freeze({
     id: "enemy-atlas-core",
-    src: "/visual-assets/enemy-atlas-core.webp",
-    sourcePath: "assets/source/runtime-sprites/enemy-atlas-core-source.png",
-    runtimePath: "public/visual-assets/enemy-atlas-core.webp",
+    src: "/visual-assets/enemy-atlas-core-v3.webp",
+    sourcePath: "assets/source/runtime-sprites/enemy-atlas-core-v3-source.png",
+    runtimePath: "public/visual-assets/enemy-atlas-core-v3.webp",
     columns: 4,
     rows: 2,
     slots: 8,

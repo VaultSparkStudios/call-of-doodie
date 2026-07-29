@@ -2,6 +2,7 @@ import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
 import { getRuntimeCharacterSprite, getRuntimeEnemySprite } from "./utils/visualAssetLibrary.js";
+import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -1090,50 +1091,43 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.fillStyle = "#284A28";
   ctx.beginPath(); ctx.ellipse(-5 + _lb * 0.5, 11, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.ellipse(4 - _lb * 0.5, 11, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
-  // === Rotate to aim angle ===
-  ctx.rotate(p.angle);
-  const curWpn = WEAPONS[wpnIdx];
-  const weaponAccent = buildWeaponAccent(curWpn);
-  // Gun grip + barrel
-  ctx.fillStyle = "#444"; ctx.fillRect(8, -3, 6, 6);         // grip
-  drawWeaponBarrel(ctx, weaponAccent);
-  // Tactical vest body
-  drawShadedOrb(ctx, { radius: 13, material: "combatGreen", squash: 0.85, rimWidth: 2 });
-  // Vest strap lines
-  ctx.strokeStyle = "rgba(18,45,18,0.7)"; ctx.lineWidth = 1.2;
-  ctx.beginPath(); ctx.moveTo(-4, -8); ctx.lineTo(-4, 8); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(3, -8); ctx.lineTo(3, 8); ctx.stroke();
-  // Small pouch on vest
-  ctx.fillStyle = "rgba(28,55,28,0.8)";
-  ctx.fillRect(-8, -4, 5, 5);
-  ctx.strokeStyle = "rgba(18,45,18,0.5)"; ctx.lineWidth = 0.8; ctx.strokeRect(-8, -4, 5, 5);
-  // Chest highlight
-  ctx.fillStyle = "rgba(255,255,255,0.07)";
-  ctx.beginPath(); ctx.ellipse(-1, -3, 6, 4, 0, 0, Math.PI * 2); ctx.fill();
-  // Helmet
-  drawShadedOrb(ctx, { radius: 10, material: "combatGreen", rimWidth: 1.5 });
-  // Helmet brim detail
-  ctx.strokeStyle = "rgba(45,90,45,0.55)"; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.arc(0, 0, 10, Math.PI * 0.6, Math.PI * 1.4); ctx.stroke();
-  // Visor slit (green HUD glow)
-  ctx.fillStyle = "rgba(70,240,110,0.55)";
-  ctx.beginPath(); ctx.ellipse(6, 0, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = "rgba(0,200,80,0.4)"; ctx.lineWidth = 1; ctx.stroke();
-  // Helmet highlight
-  ctx.fillStyle = "rgba(255,255,255,0.1)";
-  ctx.beginPath(); ctx.arc(-3, -4, 4, 0, Math.PI * 2); ctx.fill();
-  // Player skin emoji overlay (prestige unlocks)
-  if (gs.playerSkin) {
-    ctx.font = "12px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.fillText(gs.playerSkin, 0, 0);
-  }
+  // The operative is an upright world character. Only the weapon pivots toward
+  // aim; rotating the whole body made southward aim flip the soldier upside down.
   const operativeSprite = getRuntimeCharacterSprite("player");
   if (operativeSprite) {
     const previousSmoothing = ctx.imageSmoothingEnabled;
     ctx.imageSmoothingEnabled = true;
-    ctx.drawImage(operativeSprite, -26, -26, 52, 52);
+    ctx.shadowColor = "rgba(0,0,0,0.58)"; ctx.shadowBlur = 7;
+    ctx.drawImage(operativeSprite, -30, -34, 60, 60);
+    ctx.shadowBlur = 0;
     ctx.imageSmoothingEnabled = previousSmoothing;
+  } else {
+    // Upright procedural fallback — still premium enough to remain readable
+    // while the v3 raster source is loading or reduced-data mode is active.
+    drawShadedOrb(ctx, { radius: 13, material: "combatGreen", squash: 0.85, rimWidth: 2 });
+    ctx.strokeStyle = "rgba(18,45,18,0.7)"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(-4, -8); ctx.lineTo(-4, 8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(3, -8); ctx.lineTo(3, 8); ctx.stroke();
+    ctx.fillStyle = "rgba(28,55,28,0.8)"; ctx.fillRect(-8, -4, 5, 5);
+    drawShadedOrb(ctx, { radius: 10, material: "combatGreen", rimWidth: 1.5 });
+    ctx.fillStyle = "rgba(70,240,110,0.55)";
+    ctx.beginPath(); ctx.ellipse(6, 0, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
   }
+  // Player skin overlay remains upright with the character.
+  if (gs.playerSkin) {
+    ctx.font = "12px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(gs.playerSkin, 0, 0);
+  }
+
+  ctx.save();
+  ctx.rotate(getPlayerRenderPose(p.angle).weaponAngle);
+  const curWpn = WEAPONS[wpnIdx];
+  const weaponAccent = buildWeaponAccent(curWpn);
+  // Independent aim arm, grip, and weapon silhouette.
+  ctx.strokeStyle = "rgba(230,235,220,0.82)"; ctx.lineWidth = 5; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(6, 2); ctx.lineTo(13, 0); ctx.stroke(); ctx.lineCap = "butt";
+  ctx.fillStyle = "#2A313A"; ctx.fillRect(8, -3, 7, 7);
+  drawWeaponBarrel(ctx, weaponAccent);
   // Reset alpha before muzzle flash (so flash is always bright)
   ctx.globalAlpha = 1; ctx.shadowBlur = 0;
   if (gs.muzzleFlash > 0) {
@@ -1142,6 +1136,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.beginPath(); ctx.arc(35, 0, 5 + gs.muzzleFlash * 2, 0, Math.PI * 2); ctx.fill();
     ctx.shadowBlur = 0;
   }
+  ctx.restore();
   ctx.restore();
 
   // Floating texts

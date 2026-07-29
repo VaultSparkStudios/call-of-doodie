@@ -54,8 +54,10 @@ import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import DisplayNameScreen from "./components/DisplayNameScreen.jsx";
+import HomeV2 from "./components/HomeV2.jsx";
 import HomeV3 from "./components/HomeV3.jsx";
 import HUD from "./components/HUD.jsx";
+import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
 const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
 const PerkModal       = lazy(() => import("./components/PerkModal.jsx"));
@@ -164,7 +166,7 @@ export default function CallOfDoodie() {
   const shootStickRef  = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false });
   const sizeRef        = useRef({ w: 800, h: 600 });
 
-  const currentWeaponRef = useRef(0);
+  const currentWeaponRef = useRef(Math.max(0, Math.min(WEAPONS.length - 1, Number(readPreference("cod-primary-weapon", "0")) || 0)));
   const isReloadingRef   = useRef(false);
   const comboRef         = useRef({ count: 0, timer: 0, max: 0 });
   const peakMomentRef    = useRef(null); // { wave, count, enemiesAlive, label } at run-best combo
@@ -248,7 +250,7 @@ export default function CallOfDoodie() {
   const tutorialEvidenceRef = useRef(tutorialEvidence);
   const [deaths, setDeaths]           = useState(0);
   const [wave, setWave]               = useState(1);
-  const [currentWeapon, setCurrentWeapon] = useState(0);
+  const [currentWeapon, setCurrentWeapon] = useState(() => currentWeaponRef.current);
   const [ammo, setAmmo]               = useState(WEAPONS[0].ammo);
   const [health, setHealth]           = useState(100);
   const [killstreak, setKillstreak]   = useState(0);
@@ -2142,7 +2144,9 @@ export default function CallOfDoodie() {
     resetHeat(gsRef.current);
     gsRef.current._lastHeatTier = 0;
     setScreen("game"); setScore(0); setKills(0); setDeaths(0); setWave(gsRef.current.currentWave || 1);
-    setCurrentWeapon(0); setAmmo(WEAPONS[0].ammo); setHealth(gsRef.current.player.health);
+    const starterWeapon = Math.max(0, Math.min(WEAPONS.length - 1, currentWeaponRef.current));
+    gsRef.current.ammoCount = gsRef.current.weaponAmmos[starterWeapon] ?? WEAPONS[starterWeapon].ammo;
+    setCurrentWeapon(starterWeapon); setAmmo(gsRef.current.ammoCount); setHealth(gsRef.current.player.health);
     setKillstreak(0); setIsReloading(false); setCombo(0); setComboTimer(0);
     setXp(0); setLevel(1); setKillFeed([]); setGrenadeReady(true); setDashReady(true);
     setBestStreak(0); setTotalDamage(0); setBerserkersKilled(0);
@@ -2184,7 +2188,7 @@ export default function CallOfDoodie() {
     setActiveWaveContract(null);
     runTokenRef.current = null;
     runSummarySigRef.current = "";
-    currentWeaponRef.current = 0; isReloadingRef.current = false;
+    currentWeaponRef.current = starterWeapon; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setTimeout(() => {
@@ -2214,7 +2218,7 @@ export default function CallOfDoodie() {
       runTokenRef.current = null;
       runSummarySigRef.current = "";
     });
-    track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[0]?.name, starterLoadout });
+    track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[starterWeapon]?.name, starterLoadout });
     if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
     // Weapon unlock snapshot — PostHog can derive unlock-rate funnels by account level
     try {
@@ -4357,6 +4361,13 @@ export default function CallOfDoodie() {
     setScreen("game");
   }, []);
 
+  const selectPrimaryWeapon = useCallback((idx) => {
+    const next = Math.max(0, Math.min(WEAPONS.length - 1, Math.floor(Number(idx) || 0)));
+    currentWeaponRef.current = next;
+    setCurrentWeapon(next);
+    writePreference("cod-primary-weapon", String(next));
+  }, []);
+
   // ────────────────────────────────────────────────────────────────────────
   // RENDER
   // ────────────────────────────────────────────────────────────────────────
@@ -4388,13 +4399,13 @@ export default function CallOfDoodie() {
     if (draftPending) {
       return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
     }
-    const useLegacyHome = (() => {
+    const homeVersion = (() => {
       try {
         const params = new URLSearchParams(window.location.search);
-        return params.get("home") === "v1";
-      } catch { return false; }
+        return params.get("home");
+      } catch { return null; }
     })();
-    const Home = useLegacyHome ? MenuScreen : HomeV3;
+    const Home = homeVersion === "v1" ? MenuScreen : homeVersion === "v3" ? HomeV3 : HomeV2;
     return (
       <AsyncPanelBoundary>
         <Home
@@ -4422,6 +4433,8 @@ export default function CallOfDoodie() {
           onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
           pwaInstallPromptReady={pwaPromptReady}
+          primaryWeaponIndex={currentWeapon}
+          onSelectPrimaryWeapon={selectPrimaryWeapon}
           onReplayTraining={() => {
             const resetEvidence = normalizeTutorialEvidence();
             tutorialEvidenceRef.current = resetEvidence;
@@ -4886,41 +4899,8 @@ export default function CallOfDoodie() {
       />
 
       {/* Mobile action bar */}
-      {isMobile && (
-        <div style={{ height: 64, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 4px", background: "rgba(10,10,10,0.95)", borderTop: "1px solid rgba(255,255,255,0.12)", flexShrink: 0, gap: 2 }}>
-          {/* Weapon prev/current/next cycle — scales to any number of weapons */}
-          <div style={{ display: "flex", alignItems: "center", gap: 2, flex: 1, minWidth: 0 }}>
-            <button
-              onTouchStart={(e) => { e.preventDefault(); switchWeapon(((currentWeapon - 1) + WEAPONS.length) % WEAPONS.length); }}
-              onClick={() => switchWeapon(((currentWeapon - 1) + WEAPONS.length) % WEAPONS.length)}
-              style={{ width: 48, height: 52, borderRadius: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 16, cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>◀</button>
-            <div style={{ flex: 1, height: 52, borderRadius: 8, background: "rgba(255,255,255,0.12)", border: "2px solid " + WEAPONS[currentWeapon].color, display: "flex", alignItems: "center", justifyContent: "center", gap: 4, minWidth: 0, position: "relative" }}>
-              <span style={{ fontSize: 20 }}>{WEAPONS[currentWeapon].emoji}</span>
-              <span style={{ fontSize: 10, color: WEAPONS[currentWeapon].color, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "60%" }}>{WEAPONS[currentWeapon].name}</span>
-              {weaponUpgrades[currentWeapon] > 0 && <span style={{ position: "absolute", top: 2, right: 4, fontSize: 8, color: "#AA44FF" }}>{"⭐".repeat(weaponUpgrades[currentWeapon])}</span>}
-              <span style={{ position: "absolute", bottom: 2, left: 5, fontSize: 8, color: "#aaa" }}>{currentWeapon + 1}/{WEAPONS.length}</span>
-            </div>
-            <button
-              onTouchStart={(e) => { e.preventDefault(); switchWeapon((currentWeapon + 1) % WEAPONS.length); }}
-              onClick={() => switchWeapon((currentWeapon + 1) % WEAPONS.length)}
-              style={{ width: 48, height: 52, borderRadius: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)", color: "#FFF", fontSize: 16, cursor: "pointer", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>▶</button>
-          </div>
-          <button
-            onTouchStart={(e) => { e.preventDefault(); doReload(currentWeaponRef.current); }}
-            onClick={() => doReload(currentWeaponRef.current)}
-            style={{ width: 48, height: 52, borderRadius: 8, fontSize: 12, fontWeight: 900, fontFamily: "'Courier New',monospace", background: isReloading ? "rgba(255,215,0,0.15)" : "rgba(255,255,255,0.08)", color: isReloading ? "#FFD700" : "#FFF", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", flexShrink: 0 }}
-          >{isReloading ? ".." : "R"}</button>
-          <button
-            onTouchStart={(e) => { e.preventDefault(); doDash(); }}
-            onClick={doDash}
-            style={{ width: 52, height: 52, borderRadius: 8, background: dashReady ? "rgba(0,229,255,0.12)" : "rgba(255,255,255,0.04)", border: dashReady ? "2px solid rgba(0,229,255,0.6)" : "1px solid rgba(255,255,255,0.08)", color: dashReady ? "#00E5FF" : "#777", fontSize: "clamp(14px,4vw,18px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>💨</button>
-          <button
-            onTouchStart={(e) => { e.preventDefault(); throwGrenade(); }}
-            onClick={throwGrenade}
-            style={{ width: 52, height: 52, borderRadius: 8, background: grenadeReady ? "rgba(255,69,0,0.15)" : "rgba(255,255,255,0.04)", border: grenadeReady ? "2px solid rgba(255,69,0,0.6)" : "1px solid rgba(255,255,255,0.08)", color: grenadeReady ? "#FF4500" : "#777", fontSize: "clamp(14px,4vw,18px)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>💣</button>
-          
-        </div>
-      )}
+      {isMobile && <MobileWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
+      {!isMobile && <DesktopWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} showAmmoBars onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
 
       <style>{`
         @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }

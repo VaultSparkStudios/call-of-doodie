@@ -23,7 +23,7 @@ describe("visualAssetLibrary", () => {
   });
 
   it("maps showcase identities to optimized runtime character art", () => {
-    expect(getRuntimeCharacterAsset("player")).toBe("/visual-assets/cod-doodie-operative-v2.png");
+    expect(getRuntimeCharacterAsset("player")).toBe("/visual-assets/cod-doodie-operative-v3.png");
     expect(getRuntimeCharacterAsset("karen")).toBe("/visual-assets/cod-karen-nemesis-v2.png");
     expect(getRuntimeCharacterSprite("missing")).toBeNull();
   });

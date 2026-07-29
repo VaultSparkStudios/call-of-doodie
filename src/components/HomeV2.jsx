@@ -24,6 +24,8 @@ import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { getStorageHealth, probeLocalStorage, STORAGE_HEALTH_EVENT } from "../utils/storageHealth.js";
 import { readPreference, writePreference } from "../utils/gamePreferences.js";
 import { resetTutorialProgress } from "../utils/tutorialProgress.js";
+import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
+import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -80,6 +82,8 @@ export default function HomeV2(props) {
     onInstallApp,
     onReplayTraining,
     pwaInstallPromptReady = false,
+    primaryWeaponIndex = 0,
+    onSelectPrimaryWeapon = () => {},
   } = props;
 
   const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode });
@@ -497,12 +501,12 @@ export default function HomeV2(props) {
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
-    <div style={page} data-theme={theme} data-testid="home-v2-shell">
-      <div style={gridBg} />
+    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell">
+      <div className="arcade-home__grid" style={gridBg} />
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
       </AsyncPanelBoundary>
-      <div style={wrap}>
+      <div className="arcade-home__cabinet" style={wrap}>
 
         {/* Top bar */}
         <div style={topBar}>
@@ -534,8 +538,17 @@ export default function HomeV2(props) {
         </div>
 
         {/* Hero */}
-        <div style={hero}>
-          <h1 style={title}>CALL OF DOODIE</h1>
+        <div className="arcade-home__hero" style={hero}>
+          <div className="arcade-home__portrait arcade-home__portrait--operative" aria-hidden="true">
+            <img src="/visual-assets/cod-doodie-operative-v3.png" alt="" />
+            <span>OPERATIVE READY</span>
+          </div>
+          <div className="arcade-home__portrait arcade-home__portrait--nemesis" aria-hidden="true">
+            <img src="/visual-assets/cod-karen-nemesis-v2.png" alt="" />
+            <span>THREAT DETECTED</span>
+          </div>
+          <div className="arcade-home__insert-coin" aria-hidden="true">● INSERT COURAGE ●</div>
+          <h1 className="arcade-home__title" style={title}>CALL OF DOODIE</h1>
           <div style={tag}>MODERN WARFARE ON MOM'S WIFI</div>
           {dailyChampion && (
             <div
@@ -595,11 +608,12 @@ export default function HomeV2(props) {
         )}
 
         {/* DEPLOY split-button */}
-        <div style={deployRow}>
+        <div className="arcade-home__deploy" style={deployRow}>
           <button
             onClick={deploy}
             data-testid="front-door-deploy"
             aria-label={`Deploy — ${selectedMode.label}, ${selectedDiff.label}`}
+            className="arcade-home__deploy-button"
             style={deployBtn}
           >
             ▶ DEPLOY
@@ -695,6 +709,8 @@ export default function HomeV2(props) {
             </div>
           </div>
         )}
+
+        <PrimaryWeaponSelector selectedIndex={primaryWeaponIndex} onSelect={onSelectPrimaryWeapon} />
 
         <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>QUICK PLAY</div>
         {/* Quick actions are grouped by player intent instead of mixing play,
@@ -950,7 +966,7 @@ export default function HomeV2(props) {
         )}
 
         {/* Tabbed nav */}
-        <div style={tabsRow}>
+        <div className="arcade-home__tabs" style={tabsRow}>
           {["career", "codex", "settings", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
               {t === "career" && "📊 CAREER"}

@@ -23,9 +23,9 @@ export default function HUD({
   currentWeapon, combo, comboTimer, killstreak, level, xp, xpNeeded,
   killFeed, username, grenadeReady, dashReady, extraLives, guardianAngelFlash,
   bankedPerkChoices, nextPerkLevel,
-  difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponAmmos, weaponMods, weaponEvolutions,
+  difficulty, isMobile, weaponUpgrades, activePerks, runModifier, weaponEvolutions,
   buildArchetype, unlockedArchetypes,
-  onSwitchWeapon, onReload, onDash, onGrenade, onPause,
+  onPause,
   fmtTime,
   overclockedActive, overclockedShots, waveStreak, activeWaveContract = null, mapTheme,
   vsScore, vsName,
@@ -76,16 +76,6 @@ export default function HUD({
     hasWeeklyRival: Boolean(weeklyRival),
     hasRivalPace: Boolean(rivalPace),
   });
-
-  const Tooltip = ({ text, visible }) => {
-    if (!visible) return null;
-    return (
-      <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", marginBottom: 8, background: "rgba(0,0,0,0.92)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 6, padding: "6px 10px", color: "#FFF", fontSize: 11, whiteSpace: "nowrap", pointerEvents: "none", zIndex: 20, maxWidth: 220, textAlign: "center" }}>
-        {text}
-        <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderTop: "5px solid rgba(0,0,0,0.92)" }} />
-      </div>
-    );
-  };
 
   if (isMobile || hud?.useCompactDesktop !== false) {
     return (
@@ -480,19 +470,6 @@ export default function HUD({
         </div>
       )}
 
-      {/* Desktop weapon toolbar */}
-      {!isMobile && (
-        <DesktopToolbar
-          currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades}
-          weaponAmmos={weaponAmmos} ammo={ammo}
-          grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading}
-          weaponMods={weaponMods}
-          showAmmoBars={HUD_FLAGS.showAmmoBars}
-          onSwitchWeapon={onSwitchWeapon} onGrenade={onGrenade} onDash={onDash} onReload={onReload}
-          Tooltip={Tooltip}
-        />
-      )}
-
       {/* Heat meter (top-right) */}
       {HUD_FLAGS.showHeatMeter && typeof heat === "number" && heat > 5 && (
         <div title={`Heat ${Math.round(heat)} — kills + multikills increase, decays over time`} style={{ position: "absolute", top: 8, right: 8, padding: "3px 9px", background: "rgba(0,0,0,0.55)", border: `1px solid rgba(255,${Math.max(40, 200 - heat * 1.6)},0,0.6)`, borderRadius: 999, fontSize: 10, color: heat >= 70 ? "#FF3300" : heat >= 40 ? "#FF8800" : "#FFC800", fontWeight: 900, letterSpacing: 1.5 }}>
@@ -524,80 +501,6 @@ export default function HUD({
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-const WEAPON_HOTKEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
-
-function DesktopToolbar({ currentWeapon, weaponUpgrades, weaponAmmos, ammo, grenadeReady, dashReady, isReloading, weaponMods, showAmmoBars = true, onSwitchWeapon, onGrenade, onDash, onReload, Tooltip }) {
-  const [hoveredTool, setHoveredTool] = useState(null);
-  // Shrink weapon buttons when there are many weapons so the bar stays on-screen
-  const btnSize = WEAPONS.length > 8 ? 32 : 38;
-  const btnFont = WEAPONS.length > 8 ? 14 : 17;
-
-  return (
-    <div style={{ position: "absolute", bottom: 12, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 3, alignItems: "center", background: "rgba(0,0,0,0.4)", padding: "4px 8px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.08)", pointerEvents: "all", maxWidth: "calc(100vw - 24px)", flexWrap: "nowrap", overflowX: "auto" }}>
-      {WEAPONS.map((w, i) => {
-        const curAmmo = i === currentWeapon ? ammo : (weaponAmmos?.[i] ?? w.maxAmmo);
-        const maxAmmo = w.maxAmmo;
-        const ammoPct = Math.min(1, curAmmo / maxAmmo);
-        const ammoColor = ammoPct > 0.5 ? "#00CC66" : ammoPct > 0.2 ? "#FFD700" : "#FF3322";
-        const wMod = weaponMods?.[i];
-        const isCursed  = !!(wMod?.cursed);
-        const isBlessed = !!(wMod?.blessed);
-        const modBorderColor = isCursed ? "#CC00FF" : isBlessed ? "#FFD700" : null;
-        return (
-          <div key={i} style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("wpn-" + i)} onMouseLeave={() => setHoveredTool(null)}>
-            <div
-              style={{ width: btnSize, height: btnSize + 6, borderRadius: 6, position: "relative", background: i === currentWeapon ? "rgba(255,255,255,0.2)" : isCursed ? "rgba(180,0,255,0.08)" : isBlessed ? "rgba(255,215,0,0.1)" : "rgba(255,255,255,0.05)", border: modBorderColor ? `2px solid ${modBorderColor}` : i === currentWeapon ? "2px solid " + w.color : "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontSize: btnFont, cursor: "pointer", paddingBottom: 4 }}
-              onClick={() => onSwitchWeapon(i)}
-            >
-              {w.emoji}
-              <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: i === currentWeapon ? w.color : "#AAA", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>{WEAPON_HOTKEYS[i] || i + 1}</span>
-              {weaponUpgrades?.[i] > 0 && (
-                <span style={{ position: "absolute", top: 0, left: 2, fontSize: 7, color: "#AA44FF", lineHeight: 1 }}>{"⭐".repeat(weaponUpgrades[i])}</span>
-              )}
-              {/* Curse/bless icon */}
-              {(isCursed || isBlessed) && (
-                <span style={{ position: "absolute", bottom: 6, right: 1, fontSize: 8, lineHeight: 1 }}>
-                  {isCursed ? "☠️" : "✨"}
-                </span>
-              )}
-              {/* Ammo bar */}
-              {showAmmoBars && (
-                <div style={{ position: "absolute", bottom: 2, left: 3, right: 3, height: 3, background: "rgba(0,0,0,0.5)", borderRadius: 2, overflow: "hidden" }}>
-                  <div style={{ width: ammoPct * 100 + "%", height: "100%", background: ammoColor, borderRadius: 2, transition: i === currentWeapon ? "width 0.08s" : "none", animation: ammoPct < 0.1 ? "ammoPulseRed 0.15s ease-in-out infinite" : ammoPct < 0.3 ? "ammoPulseYellow 0.4s ease-in-out infinite" : "none" }} />
-                </div>
-              )}
-            </div>
-            <Tooltip text={"[" + (WEAPON_HOTKEYS[i] || i + 1) + "] " + w.name + " — " + w.desc + " (" + curAmmo + "/" + maxAmmo + ")" + (isBlessed ? " ✨ BLESSED" : isCursed ? " ☠️ CURSED" : "")} visible={hoveredTool === "wpn-" + i} />
-          </div>
-        );
-      })}
-
-      <div style={{ width: 1, height: 26, background: "rgba(255,255,255,0.15)", margin: "0 2px" }} />
-
-      <div style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("grenade")} onMouseLeave={() => setHoveredTool(null)}>
-        <div onClick={onGrenade} style={{ width: 38, height: 38, borderRadius: 6, position: "relative", background: grenadeReady ? "rgba(255,69,0,0.15)" : "rgba(255,255,255,0.05)", border: grenadeReady ? "1px solid rgba(255,69,0,0.4)" : "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, cursor: "pointer" }}>
-          💣
-          <span style={{ position: "absolute", top: 0, right: 2, fontSize: 9, color: grenadeReady ? "#FF4500" : "#777", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>Q</span>
-        </div>
-        <Tooltip text="[Q/G] Grenade — AOE explosion" visible={hoveredTool === "grenade"} />
-      </div>
-
-      <div style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("dash")} onMouseLeave={() => setHoveredTool(null)}>
-        <div onClick={onDash} style={{ width: 38, height: 38, borderRadius: 6, position: "relative", background: dashReady ? "rgba(0,229,255,0.12)" : "rgba(255,255,255,0.05)", border: dashReady ? "1px solid rgba(0,229,255,0.4)" : "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, cursor: "pointer" }}>
-          💨
-          <span style={{ position: "absolute", bottom: 0, right: 2, fontSize: 7, color: dashReady ? "#0EF" : "#777", fontWeight: 900, fontFamily: "monospace", lineHeight: 1 }}>⇧</span>
-        </div>
-        <Tooltip text="[Space/Shift] Dash — Invincible dodge" visible={hoveredTool === "dash"} />
-      </div>
-
-      <div style={{ position: "relative" }} onMouseEnter={() => setHoveredTool("reload")} onMouseLeave={() => setHoveredTool(null)}>
-        <div onClick={onReload} style={{ width: 38, height: 38, borderRadius: 6, background: isReloading ? "rgba(255,215,0,0.15)" : "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, color: isReloading ? "#FFD700" : "#FFF", fontWeight: 900, cursor: "pointer", fontFamily: "monospace" }}>R</div>
-        <Tooltip text="[R] Reload — Refill your magazine" visible={hoveredTool === "reload"} />
-      </div>
     </div>
   );
 }

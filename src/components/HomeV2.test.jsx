@@ -87,6 +87,24 @@ describe("HomeV2", () => {
     expect(onStart).toHaveBeenCalledTimes(1);
   });
 
+  it("shows every primary weapon before deployment and makes selection direct", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onSelectPrimaryWeapon = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} primaryWeaponIndex={0} onSelectPrimaryWeapon={onSelectPrimaryWeapon} />);
+    });
+
+    const arsenal = container.querySelector('[aria-label="Choose primary weapon"]');
+    expect(arsenal).not.toBeNull();
+    expect(arsenal.querySelectorAll("button")).toHaveLength(12);
+    const rpg = arsenal.querySelector('[aria-label^="Equip Rubber Chicken RPG"]');
+    expect(rpg).not.toBeNull();
+    await act(async () => { rpg.click(); });
+    expect(onSelectPrimaryWeapon).toHaveBeenCalledWith(1);
+  });
+
   it("persists an accessible project-specific theme toggle", async () => {
     window.history.replaceState({}, "", "/?theme=porcelain-day");
     container = document.createElement("div");
