@@ -16,6 +16,12 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S135** Input lifecycle recovery — one source-aware release boundary clears keyboard, pointer, touch, and gamepad movement across focus loss, page lifecycle, pause, disconnect, teardown, run start, respawn, and terminal ending.
+- [x] [SIL:3] **DONE S135** Idempotent terminal-run contract — explicit run phases claim the debrief before optional finalizers, forced timeouts bypass recoveries, duplicate endings no-op, and loop faults fail into a safe terminal path.
+- [x] [SIL:3] **DONE S135 root fix** Real Chromium exposed undefined `timeNow` references in low-health rendering; both branches now use the frame timestamp, and a reproduced 10-HP death reaches the complete debrief.
+- [x] [SIL:2] **DONE S135** Selectable Retro character pack — Modern stays default; a persisted pre-run Retro selector restores the complete first-playable player/enemy visual language without changing gameplay geometry or telegraphs.
+- [x] [SIL:2] **DONE S135 verification** 881/881 tests across 130 files, strict lint, asset validation, production build, diff check, and focused desktop/mobile browser coverage 8/8 pass directly.
+
 - [x] [SIL:3] **DONE S134** Retro command-center restoration — HomeV2 again owns the default front door with its full Journey, modes, challenges, Player Tools/Hub, career, codex, settings, support, and footer surface under an elevated CRT arcade cabinet treatment.
 - [x] [SIL:3] **DONE S134** Persistent 12-weapon arsenal — a prominent pre-run primary selector carries the chosen weapon into combat; full desktop and mobile docks expose direct selection, ammo, upgrades, reload, dash, and grenade controls.
 - [x] [SIL:2] **DONE S134** Upright operative transform contract — the body and skin never rotate with aim; only the arm/weapon pivot, with finite cardinal/multi-turn regression coverage.

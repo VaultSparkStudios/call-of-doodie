@@ -41,6 +41,7 @@ const baseProps = {
   setStarterLoadout: noop,
   gameSettings: {},
   onSaveSettings: noop,
+  onSetVisualPack: noop,
   gamepadConnected: false,
   controllerType: null,
   scoreAttackMode: false, onSetScoreAttackMode: noop,
@@ -103,6 +104,25 @@ describe("HomeV2", () => {
     expect(rpg).not.toBeNull();
     await act(async () => { rpg.click(); });
     expect(onSelectPrimaryWeapon).toHaveBeenCalledWith(1);
+  });
+
+  it("offers the non-default Retro character pack before deployment", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onSetVisualPack = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} gameSettings={{ visualPack: "modern" }} onSetVisualPack={onSetVisualPack} />);
+    });
+
+    const selector = container.querySelector('[data-testid="visual-pack-selector"]');
+    expect(selector).not.toBeNull();
+    const modern = [...selector.querySelectorAll("button")].find(button => /MODERN/.test(button.textContent));
+    const retro = [...selector.querySelectorAll("button")].find(button => /RETRO/.test(button.textContent));
+    expect(modern?.getAttribute("aria-pressed")).toBe("true");
+    expect(retro?.getAttribute("aria-pressed")).toBe("false");
+    await act(async () => { retro.click(); });
+    expect(onSetVisualPack).toHaveBeenCalledWith("retro");
   });
 
   it("persists an accessible project-specific theme toggle", async () => {

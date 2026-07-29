@@ -13,7 +13,7 @@ import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats,
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadEnemyAtlasesForTypes } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
-import { loadSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
+import { loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
 import { applyEnemyDamage, collectQueuedEnemyDefeats, collectUnqueuedLethalEnemies, queueEnemyDefeat, retireEnemyWithoutDefeat, takeQueuedEnemyDefeat } from "./systems/enemyDefeatLifecycle.js";
@@ -90,6 +90,9 @@ import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSum
 import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
+import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle.js";
+import { resolveRunEndAttempt, RUN_PHASE } from "./systems/runTermination.js";
+import { normalizeVisualPack, VISUAL_PACKS } from "./utils/visualPack.js";
 import { createPressureArc, finalizePressureArc, recordFormationExposure, recordPressureSnapshot } from "./systems/pressureArc.js";
 import { createGhostRecorder, recordGhostSample } from "./systems/ghostRecorder.js";
 import { readPreference, writePreference } from "./utils/gamePreferences.js";
@@ -219,6 +222,8 @@ export default function CallOfDoodie() {
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
   const gamepadPollRef   = useRef(null);  // interval id for gamepad polling
   const gamepadMetaRef   = useRef({ connected: false, index: null, id: "", type: "controller" });
+  const inputActivityRef = useRef({ keyboard: 0, mouse: 0, touch: 0, gamepad: 0 });
+  const inputReleaseReceiptRef = useRef(null);
   const inputCalibrationRef = useRef(typeof window === "undefined" ? null : loadInputCalibration());
   const experimentMatchedRef = useRef(null); // "matched" | "diverged" | null — set at run start
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
@@ -232,7 +237,7 @@ export default function CallOfDoodie() {
   const postMutationShopRef     = useRef(false); // whether to show shop after mutation resolves
   const bankedPerkChoicesRef    = useRef(0);
   const perksThisWaveRef        = useRef(0); // cap perk screens per wave
-  const lastStandActiveRef      = useRef(false);
+  const criticalHealthVisualRef = useRef(false);
   const bossFinalePlayedRef     = useRef(false);
   const heartbeatCounterRef     = useRef(0);
   const deferredMutationOptionsRef = useRef([]);
@@ -587,6 +592,9 @@ export default function CallOfDoodie() {
     }
     const career = loadCareerStats();
     gsRef.current = {
+      runPhase: RUN_PHASE.PLAYING,
+      runEndCause: null,
+      visualPack: normalizeVisualPack(settingsRef.current.visualPack),
       player: { x: w / 2, y: h / 2, angle: 0, health: diff.playerHP, maxHealth: diff.playerHP, speed: 4, invincible: 0 },
       enemies: [], bullets: [], particles: [], pickups: [], grenades: [], enemyBullets: [],
       dyingEnemies: [], obstacles: [], terrain: [], floorZones: [], props: [], hazards: [], mapTheme: 0,
@@ -1064,6 +1072,23 @@ export default function CallOfDoodie() {
       if (playtestModeRef.current) recordActivePlaytestMilestone("kill", { meta: { kills } });
     }
   }, [kills, markTutorialEvidence]);
+  const markInputActivity = useCallback((source) => {
+    const key = ["keyboard", "mouse", "touch", "gamepad"].includes(source) ? source : "keyboard";
+    inputActivityRef.current[key] = Date.now();
+  }, []);
+  const releaseAllInputs = useCallback((reason = "explicit", scopes) => {
+    const receipt = releaseInputState({
+      keysRef,
+      mouseRef,
+      joystickRef,
+      shootStickRef,
+      gamepadMoveRef,
+      gamepadShootRef,
+      gamepadAngleRef,
+    }, { reason, scopes });
+    inputReleaseReceiptRef.current = receipt;
+    return receipt;
+  }, []);
   const transitionPause = useCallback((nextPaused, reason = "explicit") => {
     const transition = planPauseTransition({
       paused: pausedRef.current,
@@ -1073,13 +1098,7 @@ export default function CallOfDoodie() {
     if (!transition.changed) return transition;
     pausedRef.current = transition.paused;
     if (transition.releaseInputs) {
-      for (const key of Object.keys(keysRef.current)) keysRef.current[key] = false;
-      mouseRef.current.down = false;
-      joystickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null };
-      shootStickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false };
-      gamepadMoveRef.current = { x: 0, y: 0, active: false };
-      gamepadShootRef.current = false;
-      gamepadAngleRef.current = null;
+      releaseAllInputs(`pause:${transition.reason}`);
     }
     setPaused(transition.paused);
     setPauseReason(transition.paused && transition.label ? {
@@ -1088,7 +1107,7 @@ export default function CallOfDoodie() {
     } : null);
     recordCommandTrace("pause", transition.traceValue);
     return transition;
-  }, [recordCommandTrace]);
+  }, [recordCommandTrace, releaseAllInputs]);
   const sampleCommandTrace = useCallback((action, bucket, interval = 30) => {
     const state = action === "aim" ? lastTraceAimRef.current : lastTraceMoveRef.current;
     const frame = frameCountRef.current;
@@ -1404,7 +1423,7 @@ export default function CallOfDoodie() {
   const spawnEnemy = useCallback((gs) => {
     _spawnEnemy(gs, GW(), GH(), difficultyRef.current);
     const ne = gs.enemies[gs.enemies.length - 1];
-    if (ne) {
+    if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
       preloadEnemyAtlasesForTypes(activeRoster);
     }
@@ -1601,9 +1620,14 @@ export default function CallOfDoodie() {
   }, [recordCommandTrace]);
 
   // ── Player death ──────────────────────────────────────────────────────────
-  const handlePlayerDeath = useCallback((gs) => {
+  const handlePlayerDeath = useCallback((gs, {
+    cause = "lethal_damage",
+    allowRecovery = cause === "lethal_damage",
+  } = {}) => {
+    if (!gs) return false;
+    if (gs.runPhase === RUN_PHASE.ENDING || gs.runPhase === RUN_PHASE.ENDED) return true;
     // Dead Man's Hand: massive AOE + grant a free guardian angel (once per run)
-    if (gs?.deadMansHand && !gs.deadMansHandUsed) {
+    if (allowRecovery && gs.deadMansHand && !gs.deadMansHandUsed) {
       gs.deadMansHandUsed = true;
       const dmhRadius = 250;
       (gs.enemies || []).forEach(e => {
@@ -1620,20 +1644,29 @@ export default function CallOfDoodie() {
       gs.screenShake = 25;
       if (extraLivesRef.current === 0) { extraLivesRef.current = 1; setExtraLives(1); }
     }
-    // META TREE def4: Last Stand — survive one lethal hit, restore 50 HP
-    if (gs?._treeLastStand && !gs._treeLastStandUsed) {
+    const endAttempt = resolveRunEndAttempt({
+      phase: gs.runPhase || RUN_PHASE.PLAYING,
+      cause,
+      allowRecovery,
+      metaLastStandAvailable: !!gs._treeLastStand,
+      metaLastStandUsed: !!gs._treeLastStandUsed,
+      extraLives: extraLivesRef.current,
+    });
+    // META TREE def4: Last Stand — survive one recoverable lethal hit, restore 50 HP.
+    if (endAttempt.kind === "recover" && endAttempt.recovery === "meta-last-stand") {
       gs._treeLastStandUsed = true;
-      gs.player.health = 50; gs.player.invincible = 120;
-      setHealth(50);
+      gs.player.health = endAttempt.health; gs.player.invincible = endAttempt.invincibleFrames;
+      setHealth(endAttempt.health);
       addText(gs, gs.player.x, gs.player.y - 50, "👊 LAST STAND!", "#4488FF", true);
       addParticles(gs, gs.player.x, gs.player.y, "#4488FF", 25);
       gs.screenShake = 12;
       return false;
     }
-    if (extraLivesRef.current > 0) {
-      extraLivesRef.current--; setExtraLives(extraLivesRef.current);
+    if (endAttempt.kind === "recover" && endAttempt.recovery === "guardian-angel") {
+      extraLivesRef.current = endAttempt.remainingExtraLives;
+      setExtraLives(extraLivesRef.current);
       const diff = DIFFICULTIES[difficultyRef.current] || DIFFICULTIES.normal;
-      gs.player.health = diff.playerHP; gs.player.invincible = 120;
+      gs.player.health = diff.playerHP; gs.player.invincible = endAttempt.invincibleFrames;
       setHealth(diff.playerHP);
       gs.enemies.forEach(e => {
         const result = applyEnemyDamage(e, 30, { source: "guardian-angel", weaponName: "GUARDIAN ANGEL" });
@@ -1647,6 +1680,22 @@ export default function CallOfDoodie() {
       setTimeout(() => setGuardianAngelFlash(false), 1500);
       return false;
     }
+    if (endAttempt.kind === "duplicate") return true;
+
+    // Claim the terminal transition before any storage, audio, analytics, or rendering finalizer.
+    gs.runPhase = RUN_PHASE.ENDING;
+    gs.runEndCause = endAttempt.cause;
+    gs.runEndReceipt = endAttempt;
+    releaseAllInputs(`run-ending:${endAttempt.cause}`);
+    criticalHealthVisualRef.current = false;
+    gs.criticalHealthVisualActive = false;
+    setScreen("death");
+    setDeathMessage(endAttempt.cause === "score_attack_timeout"
+      ? "⏱ TIME's UP! Your final score stands."
+      : endAttempt.cause === "runtime_fault"
+        ? "The simulation recovered from an unexpected fault. Your run was safely closed."
+        : DEATH_MESSAGES[Math.floor(cosmeticRandom() * DEATH_MESSAGES.length)]);
+    try {
     if (gs) {
       gs.waveStreak = 0; // reset streak on death
       // Adaptive difficulty: track deaths on this wave — offer assist after 3
@@ -1689,7 +1738,6 @@ export default function CallOfDoodie() {
     soundDeath();
     rumbleGamepad(0.7, 1.0, 600);
     setDeaths(dd => dd + 1);
-    setDeathMessage(gs?.scoreAttackDone ? "⏱ TIME's UP! Your final score stands." : DEATH_MESSAGES[Math.floor(cosmeticRandom() * DEATH_MESSAGES.length)]);
     setTotalDamage(Math.floor(gs.totalDamage));
     setWeaponKillsSnapshot([...(statsRef.current.weaponKills || [])]);
     setBestStreak(statsRef.current.bestStreak);
@@ -1834,10 +1882,15 @@ export default function CallOfDoodie() {
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
     track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
-    setScreen("death"); gs.killstreakCount = 0; setKillstreak(0);
-    lastStandActiveRef.current = false; if (gs) gs.lastStandActive = false;
+    gs.killstreakCount = 0; setKillstreak(0);
+    } catch (error) {
+      console.error("[RUN END] Non-critical finalizer failed after terminal transition:", error);
+      gs.runEndFinalizerError = String(error?.message || error || "unknown finalizer error");
+    } finally {
+      gs.runPhase = RUN_PHASE.ENDED;
+    }
     return true;
-  }, [difficulty, runSeed, username]);
+  }, [difficulty, releaseAllInputs, runSeed, username]);
 
   // enemy-defeat-pipeline:single-executor
   const finalizeEnemyDefeat = (gs, e) => {
@@ -2107,6 +2160,7 @@ export default function CallOfDoodie() {
     }
     // Reset draft gate for next run
     draftShownRef.current = false;
+    releaseAllInputs("run-start");
     if (shouldShowTutorial()) {
       const resetEvidence = normalizeTutorialEvidence();
       tutorialEvidenceRef.current = resetEvidence;
@@ -2177,7 +2231,7 @@ export default function CallOfDoodie() {
     bankedPerkChoicesRef.current = 0;
     setBankedPerkChoices(0);
     perksThisWaveRef.current = 0;
-    lastStandActiveRef.current = false;
+    criticalHealthVisualRef.current = false;
     bossFinalePlayedRef.current = false;
     heartbeatCounterRef.current = 0;
     deferredMutationOptionsRef.current = [];
@@ -2228,7 +2282,7 @@ export default function CallOfDoodie() {
         track("weapon_unlock_snapshot", { accountLevel: _acctLevel, unlockedCount: _unlockedCount, totalWeapons: WEAPONS.length });
       }
     } catch {}
-  }, [applyPerk, dailyChallengeMode, difficulty, initGame, starterLoadout]);
+  }, [applyPerk, dailyChallengeMode, difficulty, initGame, releaseAllInputs, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {
@@ -2364,6 +2418,7 @@ export default function CallOfDoodie() {
   const gameLoop = useCallback(() => {
     const gs = gsRef.current;
     if (!gs) return;
+    if ((gs.runPhase || RUN_PHASE.PLAYING) !== RUN_PHASE.PLAYING) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
@@ -2447,6 +2502,18 @@ export default function CallOfDoodie() {
       const gpMove = gamepadMoveRef.current;
       const mouse = mouseRef.current;
       const trace = commandTraceRef.current || [];
+      const movementSources = gs._movementReceipt?.activeSources || [];
+      const activeInputSource = movementSources.includes("keyboard")
+        ? "keyboard"
+        : movementSources.includes("touch")
+          ? "touch"
+          : movementSources.includes("gamepad")
+            ? "gamepad"
+            : inputDeviceRef.current === "mouse"
+              ? "mouse"
+              : inputDeviceRef.current;
+      const releaseReceipt = inputReleaseReceiptRef.current;
+      const debugNow = Date.now();
       let calibration = inputCalibrationRef.current;
       let pointerSweep = null;
       const rect = canvasRef.current?.getBoundingClientRect?.();
@@ -2464,7 +2531,7 @@ export default function CallOfDoodie() {
       }
       setInputDebug({
         source: inputDeviceRef.current,
-        movementSources: gs._movementReceipt?.activeSources || [],
+        movementSources,
         movementContention: gs._movementReceipt?.contention === true,
         connected: gamepadMetaRef.current.connected,
         controllerType: gamepadMetaRef.current.type,
@@ -2485,6 +2552,9 @@ export default function CallOfDoodie() {
         traceEvents: trace.length,
         traceAim: trace.filter(e => e.action === "aim").length,
         traceMove: trace.filter(e => e.action === "move").length,
+        inputAgeMs: getInputActivityAge(inputActivityRef.current, activeInputSource, debugNow),
+        lastReleaseReason: releaseReceipt?.reason || null,
+        lastReleaseAgeMs: releaseReceipt ? Math.max(0, debugNow - releaseReceipt.at) : null,
         calibration: summarizeInputCalibration(calibration),
       });
     }
@@ -2609,7 +2679,7 @@ export default function CallOfDoodie() {
         gs.scoreAttackDone = true;
         gs.deadMansHand = false;
         extraLivesRef.current = 0; setExtraLives(0);
-        handlePlayerDeath(gs);
+        handlePlayerDeath(gs, { cause: "score_attack_timeout", allowRecovery: false });
         return;
       }
     }
@@ -2633,18 +2703,18 @@ export default function CallOfDoodie() {
       const _dangerLevel = Math.min(1, (gs.enemies?.length || 0) / 25);
       const _hp = gs.player?.health || 0;
       const _maxHp = gs.player?.maxHealth || 100;
-      const _isLastStand = _hp > 0 && _hp < _maxHp * 0.15 && !gs.bossWave;
-      if (_isLastStand && !lastStandActiveRef.current) {
-        lastStandActiveRef.current = true;
-        gs.lastStandActive = true;
+      const _isCriticalHealth = _hp > 0 && _hp < _maxHp * 0.15 && !gs.bossWave;
+      if (_isCriticalHealth && !criticalHealthVisualRef.current) {
+        criticalHealthVisualRef.current = true;
+        gs.criticalHealthVisualActive = true;
         soundLastStand();
-        addText(gs, GW() / 2, GH() / 2 - 80, "LAST STAND!!", "#FF2222", true);
+        addText(gs, GW() / 2, GH() / 2 - 80, "ON THE BRINK!!", "#FF2222", true);
         heartbeatCounterRef.current = 30;
-      } else if (!_isLastStand && lastStandActiveRef.current) {
-        lastStandActiveRef.current = false;
-        gs.lastStandActive = false;
+      } else if (!_isCriticalHealth && criticalHealthVisualRef.current) {
+        criticalHealthVisualRef.current = false;
+        gs.criticalHealthVisualActive = false;
       }
-      setDangerIntensity(_isLastStand ? 1.0 : _dangerLevel);
+      setDangerIntensity(_isCriticalHealth ? 1.0 : _dangerLevel);
       // Synergy charge: ready when active synergies exist AND both weapons above 50% ammo
       if (synergyChargeCooldownRef.current > 0) synergyChargeCooldownRef.current -= 30; // decrement by 30 (once per 30-frame block)
       if (synergyChargeCooldownRef.current < 0) synergyChargeCooldownRef.current = 0;
@@ -2669,7 +2739,7 @@ export default function CallOfDoodie() {
     }
 
     // ── Per-frame heartbeat while in last stand ──
-    if (gs.lastStandActive && (gs.player?.health || 0) > 0) {
+    if (gs.criticalHealthVisualActive && (gs.player?.health || 0) > 0) {
       heartbeatCounterRef.current--;
       if (heartbeatCounterRef.current <= 0) {
         soundHeartbeatPulse();
@@ -4144,17 +4214,34 @@ export default function CallOfDoodie() {
       && !waveAnnouncePendingRef.current
       && !mutationPendingRef.current
     ),
+    onError: (error) => {
+      console.error("[GAME LOOP] Frame fault closed the run instead of freezing the canvas:", error);
+      handlePlayerDeath(gsRef.current, { cause: "runtime_fault", allowRecovery: false });
+    },
   });
 
-  // Background throttling must become an explicit, input-safe pause receipt.
+  // Browser lifecycle transitions must become explicit, input-safe pause receipts.
   useEffect(() => {
     if (screen !== "game") return undefined;
-    const handleVisibility = () => {
-      if (document.hidden) transitionPause(true, "visibility");
+    const pauseForLifecycle = (reason) => {
+      const transition = transitionPause(true, reason);
+      if (!transition?.releaseInputs) releaseAllInputs(reason);
     };
+    const handleVisibility = () => {
+      if (document.hidden) pauseForLifecycle("visibility");
+    };
+    const handleBlur = () => pauseForLifecycle("blur");
+    const handlePageHide = () => pauseForLifecycle("pagehide");
     document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
-  }, [screen, transitionPause]);
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("pagehide", handlePageHide);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("pagehide", handlePageHide);
+      releaseAllInputs("lifecycle-listener-cleanup");
+    };
+  }, [releaseAllInputs, screen, transitionPause]);
 
   // ── Keyboard ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -4166,6 +4253,8 @@ export default function CallOfDoodie() {
       }
       if (e.key === "Escape" && screen === "game") { transitionPause(!pausedRef.current, "keyboard"); e.preventDefault(); return; }
       if (pausedRef.current || perkPendingRef.current) return;
+      inputDeviceRef.current = "keyboard";
+      markInputActivity("keyboard");
       keysRef.current[e.key.toLowerCase()] = true;
       if (e.key === "r") doReload(currentWeaponRef.current);
       if (e.key === "q" || e.key === "g") throwGrenade();
@@ -4178,8 +4267,13 @@ export default function CallOfDoodie() {
       if (e.key === "=" && WEAPONS.length >= 12) switchWeapon(11);
       if (["w","a","s","d","r","q","g","e","1","2","3","4","5","6","7","8","9","0","-","="," "].includes(e.key.toLowerCase()) || e.key === "Shift") e.preventDefault();
     };
-    const ku = (e) => { keysRef.current[e.key.toLowerCase()] = false; };
+    const ku = (e) => {
+      markInputActivity("keyboard");
+      keysRef.current[e.key.toLowerCase()] = false;
+    };
     const updateMouseAim = (e) => {
+      inputDeviceRef.current = "mouse";
+      markInputActivity("mouse");
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
       mouseRef.current.moved = true;
@@ -4189,26 +4283,31 @@ export default function CallOfDoodie() {
       updateMouseAim(e);
       if (e.button === 0 && !pausedRef.current && !perkPendingRef.current) mouseRef.current.down = true;
     };
-    const mu = (e) => { if (e.button === 0) mouseRef.current.down = false; };
+    const mu = (e) => {
+      markInputActivity("mouse");
+      if (e.button === 0) mouseRef.current.down = false;
+    };
     window.addEventListener("keydown", kd); window.addEventListener("keyup", ku);
     window.addEventListener("mousemove", mm); window.addEventListener("mousedown", md); window.addEventListener("mouseup", mu);
     return () => {
       window.removeEventListener("keydown", kd); window.removeEventListener("keyup", ku);
       window.removeEventListener("mousemove", mm); window.removeEventListener("mousedown", md); window.removeEventListener("mouseup", mu);
+      releaseAllInputs("keyboard-listener-cleanup", ["keyboard", "mouse"]);
     };
-  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, screen, transitionPause]);
+  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, markInputActivity, releaseAllInputs, screen, transitionPause]);
 
   // ── Touch controls ────────────────────────────────────────────────────────
   useEffect(() => {
     // Always reset sticks on screen change so stale active state never carries over
-    joystickRef.current   = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null };
-    shootStickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false };
+    releaseAllInputs("touch-screen-change", ["touch"]);
     if (screen !== "game") return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ts = (e) => {
       if (pausedRef.current || perkPendingRef.current) return;
       e.preventDefault();
+      inputDeviceRef.current = "mobile";
+      markInputActivity("touch");
       const rect = canvas.getBoundingClientRect(), midX = rect.left + rect.width / 2;
       for (const t of e.changedTouches) {
         if (t.clientX < midX && !joystickRef.current.active) joystickRef.current = { active: true, startX: t.clientX, startY: t.clientY, dx: 0, dy: 0, id: t.identifier };
@@ -4218,12 +4317,14 @@ export default function CallOfDoodie() {
     const tm = (e) => {
       if (pausedRef.current || perkPendingRef.current) return;
       e.preventDefault();
+      markInputActivity("touch");
       for (const t of e.changedTouches) {
         if (t.identifier === joystickRef.current.id) { joystickRef.current.dx = t.clientX - joystickRef.current.startX; joystickRef.current.dy = t.clientY - joystickRef.current.startY; }
         if (t.identifier === shootStickRef.current.id) { shootStickRef.current.dx = t.clientX - shootStickRef.current.startX; shootStickRef.current.dy = t.clientY - shootStickRef.current.startY; }
       }
     };
     const te = (e) => {
+      markInputActivity("touch");
       for (const t of e.changedTouches) {
         if (t.identifier === joystickRef.current.id) joystickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null };
         if (t.identifier === shootStickRef.current.id) shootStickRef.current = { active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false };
@@ -4235,8 +4336,9 @@ export default function CallOfDoodie() {
     return () => {
       canvas.removeEventListener("touchstart", ts); canvas.removeEventListener("touchmove", tm);
       canvas.removeEventListener("touchend", te); canvas.removeEventListener("touchcancel", te);
+      releaseAllInputs("touch-listener-cleanup", ["touch"]);
     };
-  }, [screen]);
+  }, [markInputActivity, releaseAllInputs, screen]);
 
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {
@@ -4256,7 +4358,12 @@ export default function CallOfDoodie() {
           setControllerType("controller");
         }
       }
-      if (!gp) return;
+      if (!gp) {
+        if (gamepadMoveRef.current.active || gamepadShootRef.current || gamepadAngleRef.current != null) {
+          releaseAllInputs("gamepad-missing", ["gamepad"]);
+        }
+        return;
+      }
 
       // Detect controller type
       const cType = detectControllerType(gp);
@@ -4277,14 +4384,16 @@ export default function CallOfDoodie() {
         lastStart = !!start;
         // Clear controller movement so player doesn't keep moving when unpaused.
         // Keyboard state is owned by keyboard events and must not be overwritten here.
-        gamepadMoveRef.current = { x: 0, y: 0, active: false };
-        gamepadShootRef.current = false;
-        gamepadAngleRef.current = null;
+        releaseAllInputs("gamepad-paused", ["gamepad"]);
         return;
       }
 
       const deadZone = settingsRef.current.controllerDeadZone ?? 0.2;
       const controls = readGamepadControls(gp, deadZone);
+      if (controls.left.active || controls.right.active || controls.shoot || controls.dash
+        || controls.grenade || controls.reload || controls.previousWeapon || controls.nextWeapon || controls.pause) {
+        markInputActivity("gamepad");
+      }
 
       // Left stick → movement. Keep this isolated from keyboard state so an
       // idle/paired controller cannot erase WASD input every poll.
@@ -4329,23 +4438,19 @@ export default function CallOfDoodie() {
       lastStart = !!start;
     };
 
-    const keys = keysRef.current;
+    const handleGamepadDisconnected = () => releaseAllInputs("gamepad-disconnected", ["gamepad"]);
+    window.addEventListener("gamepaddisconnected", handleGamepadDisconnected);
     gamepadPollRef.current = setInterval(poll, 16);
     return () => {
       clearInterval(gamepadPollRef.current);
-      // Clear any synthesised key state on unmount
-      keys["w"] = false;
-      keys["a"] = false;
-      keys["s"] = false;
-      keys["d"] = false;
-      gamepadMoveRef.current = { x: 0, y: 0, active: false };
-      gamepadShootRef.current = false;
-      gamepadAngleRef.current = null;
+      window.removeEventListener("gamepaddisconnected", handleGamepadDisconnected);
+      releaseAllInputs("gamepad-listener-cleanup", ["gamepad"]);
     };
-  }, [doDash, doReload, throwGrenade, switchWeapon, transitionPause]);
+  }, [doDash, doReload, markInputActivity, releaseAllInputs, throwGrenade, switchWeapon, transitionPause]);
 
   // ── Respawn (from death screen) ───────────────────────────────────────────
   const _respawn = useCallback(() => {
+    releaseAllInputs("respawn");
     const gs = gsRef.current, W = GW(), H = GH();
     if (gs) {
       gs.player.health = 100; gs.player.x = W / 2; gs.player.y = H / 2; gs.player.invincible = 60;
@@ -4359,7 +4464,7 @@ export default function CallOfDoodie() {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setScreen("game");
-  }, []);
+  }, [releaseAllInputs]);
 
   const selectPrimaryWeapon = useCallback((idx) => {
     const next = Math.max(0, Math.min(WEAPONS.length - 1, Math.floor(Number(idx) || 0)));
@@ -4416,6 +4521,12 @@ export default function CallOfDoodie() {
           starterLoadout={starterLoadout} setStarterLoadout={setStarterLoadout}
           gameSettings={gameSettings}
           onSaveSettings={s => { setGameSettings(s); settingsRef.current = s; }}
+          onSetVisualPack={visualPack => {
+            const next = { ...settingsRef.current, visualPack: normalizeVisualPack(visualPack) };
+            settingsRef.current = next;
+            setGameSettings(next);
+            saveSettings(next);
+          }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           scoreAttackMode={scoreAttackMode}
           onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
@@ -4937,6 +5048,8 @@ function InputDebugOverlay({ data }) {
     ["PTR", `${d.pointerX ?? "--"},${d.pointerY ?? "--"}`],
     ["SWEEP", d.pointerSweep ? `pointer:${d.pointerSweep}` : "--"],
     ["CAL", d.calibration || "unverified"],
+    ["INPUT AGE", d.inputAgeMs == null ? "--" : `${Math.round(d.inputAgeMs)} ms`],
+    ["RELEASE", d.lastReleaseReason ? `${d.lastReleaseReason} · ${Math.round(d.lastReleaseAgeMs || 0)} ms` : "--"],
     ["ACTIONS", `shoot:${d.shoot ? "1" : "0"} dash:${d.dashReady ? "ready" : "cool"} grenade:${d.grenadeReady ? "ready" : "cool"} reload:${d.reloading ? "1" : "0"}`],
     ["TRACE", `${d.traceEvents || 0} events · aim ${d.traceAim || 0} · move ${d.traceMove || 0}`],
   ];

@@ -2025,3 +2025,31 @@ Brainstorm:
 1. Pose-state micro-atlas — add dash/reload/impact variants only after gameplay-scale review proves they remain readable and do not obscure aim.
 2. Enemy silhouette spotlight — use opt-in playtest misidentification evidence to target the next specialist/boss atlas upgrade rather than replacing art speculatively.
 3. Primary-weapon quick compare — consider a two-stat pre-run comparison only if players still struggle to choose after the direct selector ships.
+
+## 2026-07-29 — Session 135 | Total: 999/1000 | Velocity: 5 | Debt: ↓
+
+SIL +4: Eliminated two founder-reported reliability classes, root-fixed the browser-reproduced renderer crash behind one freeze path, and shipped a complete opt-in original Retro character mode.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint, 881/881 tests across 130 files, production build, asset validation, clean diff check, and desktop/mobile browser 8/8 pass directly. |
+| Creative Alignment | 100 | same | The optional complete first-playable visual language honors the requested original Retro identity while Modern remains the intended default. |
+| Momentum | 100 | same | Input recovery, terminal ownership, Retro coverage, and the browser-discovered low-health root fix shipped in one continuous plan. |
+| Engagement | 99 | same | Runs no longer strand on the reproduced failure paths and visual choice is clearer, but participant preference or retention is not fabricated. |
+| Process Quality | 100 | same | Both symptom classes were converted into explicit state contracts, and real-browser reproduction found the undefined renderer timestamp instead of accepting a shallow green test. |
+| Cross-Repo Coherence | 100 | same | Work stayed inside this project and consumed Studio Ops only through canonical protocol interfaces. |
+| Security Posture | 100 | same | No dependency, secret, networked runtime, or storage expansion shipped; transient browser tooling was trust-reviewed and left no lockfile change. |
+| Ecosystem Integration | 100 | same | Pre-run choice, persisted settings, run snapshot, renderer, manifest, debug receipt, debrief, and tests agree on shared contracts. |
+| Capital Efficiency | 100 | same | Reliability logic and Retro rendering are local, bounded, and introduce no variable per-user cost. |
+| Automation Coverage | 100 | up | New pure lifecycle/termination/visual-pack tests plus Desktop Chrome and Pixel 7 flows cover selection, persistence, combat, focus loss, low health, and completion. |
+
+Rolling averages: 3-session 999.0 · 5-session 998.8 · sparkline `█████`.
+
+Top win: intermittent device and terminal symptoms now resolve through named, exactly-once lifecycle contracts, with the remaining freeze root cause reproduced and fixed in a real browser.
+Top gap: physical gamepad/PWA/full-run media and participant preference evidence remain external; objective browser proof is not labeled as physical or subjective approval.
+Intent outcome: Achieved — the two reported reliability bugs and complete selectable Retro mode shipped with direct unit, build, and desktop/mobile browser evidence.
+
+Brainstorm:
+1. Input-source replay strip — retain a tiny local debug-only sequence only if physical multi-device evidence shows another latch; current release receipt is sufficient without hidden telemetry.
+2. Terminal chaos fixtures — expand optional-finalizer fault injection only when a new side effect joins run completion; the current exactly-once boundary already isolates existing finalizers.
+3. Retro readability review — alter original silhouettes only from opt-in participant misidentification evidence, preserving authenticity until data supports a targeted exception.

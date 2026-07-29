@@ -1062,3 +1062,17 @@ Intent outcome: achieved for every agent-owned premise; the Unified Genius List 
 - Visual honesty: screenshots were produced but direct host image viewing remains unavailable at Windows `CryptUnprotectData`; objective browser evidence is not mislabeled as subjective approval.
 
 Intent outcome: achieved for the requested product surface. Existing external/device/data/publication/founder launch gates remain unchanged.
+
+## 2026-07-29 — Session 135 — Input recovery, terminal-run reliability, and Retro visual pack
+
+- Ran the complete `/start`, diagnosed both founder-reported reliability bugs from live code, wrote `docs/IMPLEMENT_PLAN.md`, implemented the full plan, and entered canonical `/closeout`.
+- Added one source-aware input release contract across keyboard, pointer, touch, and gamepad state; wired blur, visibility, pagehide, pause, controller loss, listener teardown, run start, respawn, and terminal ending.
+- Added explicit run termination phases, recovery policy, exactly-once terminal ownership, best-effort finalizers, duplicate suppression, and game-loop fault fallback.
+- Preserved Last Stand and Guardian Angel for ordinary lethal damage while making forced Score Attack timeout non-recoverable so the clock cannot revive into an unfinished run.
+- Added a persisted, non-default Retro selector to HomeV2, HomeV3, and Settings. Retro restores the first-playable circular player and complete emoji/color enemy language while leaving mechanics, hitboxes, telegraphs, markers, and effects shared.
+- Real Chromium reproduced the remaining low-health freeze and identified undefined `timeNow` references in two `drawGame.js` branches; both now use the current frame timestamp. The rerun crossed 10 HP, died normally, and rendered the full debrief.
+- Validation: 881/881 tests across 130 files; strict lint; production build; asset validation; clean diff check; 8/8 focused Desktop Chrome and Pixel 7 browser cases.
+- Package trust: transient official Microsoft `@playwright/cli@0.1.17` was registry-reviewed and used through `npx`; it was not added to dependencies or the lockfile. Temporary browser artifacts were removed.
+- Visual honesty: objective browser behavior and the terminal screen are proven; direct host-side subjective pixel review remains unavailable at Windows `CryptUnprotectData`.
+
+Intent outcome: achieved. Both reported freeze/stuck classes have explicit lifecycle contracts and regression evidence; Retro is complete, selectable, persistent, and opt-in.

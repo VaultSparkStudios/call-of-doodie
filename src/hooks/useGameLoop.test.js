@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { makeFrameMonitor, runMeasuredFrame } from "./useGameLoop.js";
+import { makeFrameMonitor, runFrameSafely, runMeasuredFrame } from "./useGameLoop.js";
 
 describe("adaptive frame monitor", () => {
   beforeEach(() => {
@@ -72,5 +72,18 @@ describe("adaptive frame monitor", () => {
     expect(m.snapshot().assisted).toBe(true);
     m.reset();
     expect(m.snapshot()).toMatchObject({ totalFrames: 0, slowFrames: 0, assisted: false, histogramBuckets: 8 });
+  });
+});
+
+describe("game loop fault boundary", () => {
+  it("reports a frame error without rethrowing it", () => {
+    const seen = [];
+    const result = runFrameSafely(() => { throw new Error("frame exploded"); }, error => seen.push(error.message));
+    expect(result.ok).toBe(false);
+    expect(seen).toEqual(["frame exploded"]);
+  });
+
+  it("returns an honest success result for a healthy frame", () => {
+    expect(runFrameSafely(() => {})).toEqual({ ok: true, error: null });
   });
 });

@@ -70,7 +70,7 @@ export default function HomeV2(props) {
     username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore,
     onStart, onRefreshLeaderboard, onChangeUsername,
     starterLoadout, setStarterLoadout,
-    gameSettings, onSaveSettings,
+    gameSettings, onSaveSettings, onSetVisualPack,
     gamepadConnected, controllerType,
     scoreAttackMode, onSetScoreAttackMode,
     dailyChallengeMode, onSetDailyChallengeMode,
@@ -631,6 +631,22 @@ export default function HomeV2(props) {
               {selectedDiff.emoji} {selectedDiff.label} {deployOpen ? "▴" : "▾"}
             </span>
           </button>
+        </div>
+
+        <div data-testid="visual-pack-selector" aria-label="Character visual pack" style={{ marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
+          <span style={{ color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>CHARACTER VISUALS</span>
+          {[{ id: "modern", label: "MODERN ATLAS" }, { id: "retro", label: "RETRO ORIGINAL" }].map(pack => {
+            const selected = (gameSettings?.visualPack || "modern") === pack.id;
+            return (
+              <button
+                key={pack.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => onSetVisualPack?.(pack.id)}
+                style={{ padding: "5px 9px", borderRadius: 6, border: `1px solid ${selected ? "rgba(255,215,0,0.65)" : "rgba(255,255,255,0.13)"}`, background: selected ? "rgba(255,215,0,0.12)" : "rgba(0,0,0,0.22)", color: selected ? "#FFD700" : themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 0.8, cursor: "pointer" }}
+              >{pack.label}</button>
+            );
+          })}
         </div>
 
         {/* Deploy dropdown */}

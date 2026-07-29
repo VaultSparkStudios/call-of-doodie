@@ -73,6 +73,7 @@ export default function HomeV3(props) {
     setStarterLoadout,
     gameSettings,
     onSaveSettings,
+    onSetVisualPack,
     controllerType,
     onReplayTraining,
     onInstallApp,
@@ -193,6 +194,14 @@ export default function HomeV3(props) {
               <small>{selectedDifficulty.label} Difficulty</small>
               <b aria-hidden="true">{modeOpen ? "▲" : "▼"}</b>
             </button>
+          </div>
+
+          <div data-testid="visual-pack-selector" aria-label="Character visual pack" style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.2, opacity: 0.72 }}>CHARACTER VISUALS</span>
+            {[{ id: "modern", label: "Modern Atlas" }, { id: "retro", label: "Retro Original" }].map(pack => {
+              const selected = (gameSettings?.visualPack || "modern") === pack.id;
+              return <button key={pack.id} type="button" aria-pressed={selected} onClick={() => onSetVisualPack?.(pack.id)} style={{ border: selected ? "1px solid #FFB36B" : "1px solid rgba(255,255,255,0.16)", background: selected ? "rgba(255,107,53,0.14)" : "rgba(255,255,255,0.04)", color: "inherit", borderRadius: 999, padding: "6px 10px", cursor: "pointer", fontWeight: 750 }}>{pack.label}</button>;
+            })}
           </div>
 
           {modeOpen && (

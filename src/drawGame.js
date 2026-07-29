@@ -3,6 +3,7 @@ import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
 import { getRuntimeCharacterSprite, getRuntimeEnemySprite } from "./utils/visualAssetLibrary.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
+import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -134,6 +135,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   const { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx } = refs;
   const p = gs.player;
   const dn = Date.now();
+  const retroCharacters = gs.visualPack === VISUAL_PACKS.RETRO;
 
   // ────────────────── RENDER ────────────────────────────────────────────
   const _rm = gs.reducedMotion === true;
@@ -497,7 +499,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const readability = getEnemyReadabilityStyle(e, dn);
     // Phantom elite: pulse between 15% and 100% opacity
     if (e.eliteType === "phantom") {
-      ctx.globalAlpha = e.phantomVisible ? 0.95 : (0.15 + Math.sin(timeNow / 200) * 0.05);
+      ctx.globalAlpha = e.phantomVisible ? 0.95 : (0.15 + Math.sin(dn / 200) * 0.05);
     }
     // Drop shadow
     ctx.fillStyle = "rgba(0,0,0,0.3)";
@@ -529,6 +531,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.globalAlpha = 1;
     }
 
+    if (retroCharacters) {
+      drawRetroEnemyCharacter(ctx, e);
+    } else {
     // Body base
     if (readability?.haloAlpha) {
       ctx.globalAlpha = readability.haloAlpha;
@@ -701,6 +706,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
         spriteWidth, spriteHeight,
       );
       ctx.restore();
+    }
     }
 
     // Boss glow ring
@@ -1086,6 +1092,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.beginPath(); ctx.arc(0, 0, 27 + _psNorm * 4, 0, Math.PI * 2); ctx.stroke();
     ctx.shadowBlur = 0; ctx.globalAlpha = _blink ? 0.35 : 1;
   }
+  if (retroCharacters) {
+    drawRetroPlayerCharacter(ctx, { angle: p.angle, weapon: WEAPONS[wpnIdx], muzzleFlash: gs.muzzleFlash });
+    if (gs.playerSkin) {
+      ctx.font = "12px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(gs.playerSkin, 0, 0);
+    }
+  } else {
   // Legs (unrotated — bob south)
   const _lb = Math.sin(frameCountRef.current * 0.28) * 3.5;
   ctx.fillStyle = "#284A28";
@@ -1137,6 +1150,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.shadowBlur = 0;
   }
   ctx.restore();
+  }
   ctx.restore();
 
   // Floating texts
@@ -1209,9 +1223,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillStyle = `rgba(255,200,30,${(gs.bossKillFlash / 22) * 0.5})`;
     ctx.fillRect(0, 0, W, H);
   }
-  // Last Stand: pulsing deep-red vignette when HP < 15%
-  if (!_rm && gs.lastStandActive) {
-    const _lsPulse = 0.20 + Math.sin(timeNow / 110) * 0.08;
+  // Critical-health visual: pulsing deep-red vignette when HP < 15%.
+  if (!_rm && gs.criticalHealthVisualActive) {
+    const _lsPulse = 0.20 + Math.sin(dn / 110) * 0.08;
     const _lsGrad = ctx.createRadialGradient(W / 2, H / 2, H * 0.18, W / 2, H / 2, H * 0.68);
     _lsGrad.addColorStop(0, "rgba(0,0,0,0)");
     _lsGrad.addColorStop(1, `rgba(200,0,0,${_lsPulse})`);

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-07-29",
+  "session": 135,
+  "project": "Call-Of-Doodie",
+  "intent": "eliminate intermittent latched movement and terminal Last Stand freezes, then add a complete selectable non-default Retro character visual pack using the original playable look",
+  "outcome": "achieved",
+  "shipped": [
+    "source-aware input release across focus, page, pause, controller, listener, run, respawn, and terminal boundaries",
+    "exactly-once run termination with explicit recovery policy and best-effort optional finalizers",
+    "forced Score Attack timeout that cannot revive into an unfinished run",
+    "browser-reproduced low-health renderer timestamp root fix",
+    "persisted pre-run Retro selector with complete first-playable player and enemy coverage",
+    "shared gameplay geometry and telegraphs across Modern and Retro"
+  ],
+  "validation": [
+    "strict lint passed",
+    "npm test 881/881 across 130 files",
+    "visual asset validation passed",
+    "production build passed",
+    "git diff --check passed",
+    "focused Playwright desktop/mobile flows 8/8",
+    "real Chromium crossed 10 HP and reached the complete debrief after the renderer fix"
+  ],
+  "deferred": [
+    "physical gamepad and PWA evidence before device-specific deadzone or arbitration changes",
+    "participant preference/readability outcomes before modifying the authentic Retro language",
+    "direct host-side subjective pixel review because Windows CryptUnprotectData blocks image viewing",
+    "existing inbound-email, physical-device/media, production-data, analytics, publication, and founder launch gates"
+  ],
+  "sil": {
+    "score": 999,
+    "velocity": 5,
+    "debt": "decreasing"
+  },
+  "ignisNote": "Model intermittent gameplay failures as lifecycle ownership contracts; terminal UI must precede optional side effects; keep nostalgia opt-in and mechanically neutral.",
+  "headline": "Eliminated latched movement and terminal freezes, then restored the complete original character look as an opt-in Retro mode",
+  "items": [
+    {
+      "title": "Movement state now releases at every ownership boundary",
+      "projectImpact": 10,
+      "ecosystemImpact": 9,
+      "evidence": "input-release-v1 unit coverage plus browser focus-loss pause/release on desktop and mobile"
+    },
+    {
+      "title": "Run completion is exactly-once and recovery-aware",
+      "projectImpact": 10,
+      "ecosystemImpact": 9,
+      "evidence": "explicit run phases, forced-timeout policy, duplicate suppression, finalizer isolation, and loop fault fallback"
+    },
+    {
+      "title": "Low-health renderer crash was reproduced and root-fixed",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "undefined timeNow replaced by frame timestamp; real Chromium death reaches full debrief"
+    },
+    {
+      "title": "Complete original Retro character mode is selectable",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "Modern default, persisted pre-run selector, complete visual manifest, shared mechanics, desktop/mobile combat proof"
+    }
+  ],
+  "followUps": [
+    "Collect physical multi-device receipts before changing input arbitration or deadzones",
+    "Use opt-in participant misidentification evidence before altering original Retro silhouettes",
+    "Complete existing physical, inbound-mail, production-data, analytics, publication, visual, and founder launch gates"
+  ],
+  "blockers": [
+    "SPARKED launch still requires the existing external, physical, production-data, direct-visual, publication, and founder evidence"
+  ]
+}

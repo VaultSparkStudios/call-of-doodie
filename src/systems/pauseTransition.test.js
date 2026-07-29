@@ -20,6 +20,19 @@ describe("pause transition contract", () => {
     });
   });
 
+  it.each([
+    ["blur", "AUTO-PAUSED · FOCUS LOST"],
+    ["pagehide", "AUTO-PAUSED · PAGE HIDDEN"],
+  ])("describes the %s lifecycle pause", (reason, label) => {
+    expect(planPauseTransition({ paused: false, nextPaused: true, reason })).toMatchObject({
+      changed: true,
+      paused: true,
+      reason,
+      releaseInputs: true,
+      label,
+    });
+  });
+
   it("records resume without releasing inputs again", () => {
     expect(planPauseTransition({ paused: true, nextPaused: false, reason: "resume" })).toMatchObject({
       changed: true,

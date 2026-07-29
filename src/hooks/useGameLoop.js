@@ -142,18 +142,33 @@ export function runMeasuredFrame(callback, monitor, {
   return elapsed;
 }
 
+export function runFrameSafely(callback, onError) {
+  try {
+    callback();
+    return { ok: true, error: null };
+  } catch (error) {
+    try { onError?.(error); } catch (handlerError) {
+      console.error("[GAME LOOP] Fault handler failed:", handlerError);
+    }
+    return { ok: false, error };
+  }
+}
+
 export function useGameLoop(callback, active, rafRef, {
   monitorRef = null,
   onSnapshot = null,
+  onError = null,
   shouldMeasure = true,
 } = {}) {
   const cbRef = useRef(callback);
   const snapshotRef = useRef(onSnapshot);
   const measureRef = useRef(shouldMeasure);
+  const errorRef = useRef(onError);
   const monRef = useRef(null);
   cbRef.current = callback;
   snapshotRef.current = onSnapshot;
   measureRef.current = shouldMeasure;
+  errorRef.current = onError;
   if (!monRef.current) monRef.current = makeFrameMonitor({ onSnapshot: (receipt) => snapshotRef.current?.(receipt) });
   if (monitorRef) monitorRef.current = monRef.current;
 
@@ -171,7 +186,10 @@ export function useGameLoop(callback, active, rafRef, {
       const sample = typeof measureRef.current === "function"
         ? measureRef.current()
         : measureRef.current !== false;
-      runMeasuredFrame(() => cbRef.current(), monRef.current, { shouldMeasure: sample });
+      runFrameSafely(
+        () => runMeasuredFrame(() => cbRef.current(), monRef.current, { shouldMeasure: sample }),
+        (error) => errorRef.current?.(error),
+      );
       handle = requestAnimationFrame(loop);
       if (rafRef) rafRef.current = handle;
     };

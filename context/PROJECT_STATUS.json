@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 134 restored the complete retro arcade command center, persistent 12-weapon selection, upright operative rendering, and upgraded proprietary player/core-enemy art; 866/866 tests and desktop/mobile browser 4/4 are green.",
+  "currentFocus": "Session 135 eliminated stale-direction input state, made terminal run completion exactly-once, fixed the browser-reproduced low-health renderer crash, and shipped an opt-in complete Retro character pack; 881/881 tests and focused desktop/mobile browser 8/8 are green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse and funnel evidence, project-scoped analytics/Sentry, publication, direct AI pixel review, and founder approval pass.",
   "testingSurfaces": [
     {
@@ -160,6 +160,11 @@
       "status": "green",
       "type": "tests",
       "command": "Session 134 — 866/866 across 127 files; strict lint; architecture 4975/5000; asset validation; production build; browser E2E 4/4 across Desktop Chrome and Pixel 7"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 135 — 881/881 across 130 files; strict lint; asset validation; production build; diff check; focused input/Retro/browser completion E2E 8/8 across Desktop Chrome and Pixel 7"
     }
   ],
   "blockers": [
@@ -177,22 +182,22 @@
   "ignisScore": 44175,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-07-16",
-  "silSession": 134,
-  "silScore": 998,
+  "silSession": 135,
+  "silScore": 999,
   "silAvg3": 999,
   "silVelocity": 5,
   "silDebt": "decreasing",
   "silLastSession": "2026-07-29",
-  "currentSession": 134,
+  "currentSession": 135,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 866,
-  "testsTotal": 866,
-  "entropyScore": 0.214,
+  "testsPassing": 881,
+  "testsTotal": 881,
+  "entropyScore": 0.215,
   "entropyLastComputed": "2026-07-29",
   "silRubricVersion": "3.0",
   "silMax": 1000,
-  "silScoreLegacy500": 499,
+  "silScoreLegacy500": 499.5,
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
@@ -203,7 +208,7 @@
     "securityPosture": 100,
     "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 99
+    "automationCoverage": 100
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -218,28 +223,28 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-133-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-07-29T08:39:00Z",
+  "testsLastRun": "2026-07-29T19:48:14.0019764Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
-    "session": 134,
+    "session": 135,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-07-29T08:49:29Z",
+    "enumeratedAt": "2026-07-29T19:48:14.0019764Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
     "date": "2026-07-29",
-    "ranAt": "2026-07-29T08:27:48.600Z",
+    "ranAt": "2026-07-29T19:46:46.5067489Z",
     "overallPass": true,
-    "passing": 122,
-    "warning": 35,
+    "passing": 123,
+    "warning": 36,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
-    "ran": 158,
-    "total": 160,
+    "ran": 160,
+    "total": 162,
     "score": 77
   }
 }

@@ -1,4 +1,32 @@
-# Latest Handoff — Session 134
+# Latest Handoff — Session 135
+
+Session Intent: Eliminate intermittent latched movement and Last Stand/run-end freezes, then add a complete selectable non-default Retro character visual pack using the game's original playable look.
+
+## Impact Summary (Session 135)
+
+**Headline.** Movement can no longer stay latched across device or page boundaries, run endings now complete exactly once even when optional work fails, and the complete original character look is back as an opt-in Retro mode.
+
+**Impact.**
+- One input lifecycle boundary makes blur, pause, disconnect, teardown, respawn, and run transitions reliably return every movement source to neutral.
+- Forced timeouts cannot revive through Last Stand, duplicate terminal attempts no-op, and analytics/storage/capture failures cannot keep the game from reaching its debrief.
+- Real Chromium exposed and verified the low-health renderer crash root cause, converting an intermittent freeze report into a direct timestamp fix and full-death-screen proof.
+- Modern remains the default while Retro gives players a persistent pre-run choice covering the original player and every enemy without splitting mechanics.
+
+**Synopsis.** The session turned two intermittent symptoms into explicit, testable lifecycle contracts and then used a real browser to find the remaining renderer exception behind the death freeze. It also restored the entire first-playable character language as a deliberate compatibility/art option, with shared gameplay behavior and desktop/mobile proof.
+
+## Where We Left Off (Session 135)
+- Input: every movement source now crosses `releaseInputState()` on focus/page/pause/controller/listener/run lifecycle boundaries; input debug exposes a bounded release receipt and activity age.
+- Run ending: `runTermination.js` owns explicit `playing`, `ending`, and `ended` transitions; forced timeouts cannot revive, optional finalizers cannot strand the terminal screen, duplicate attempts are idempotent, and loop faults enter a safe debrief.
+- Root cause: browser reproduction found two undefined `timeNow` reads in the low-health renderer. Both use the current frame timestamp; a real Chromium run crossed 10 HP and reached the full death screen.
+- Retro: Modern remains default. HomeV2, HomeV3, and Settings expose persisted pre-run selection; Retro uses the first-playable circular soldier plus complete emoji/color enemies and synthetic shard coverage while gameplay geometry and feedback remain shared.
+- Validation: 881/881 tests across 130 files, strict lint, asset validation, production build, diff check, and 8/8 focused desktop/mobile browser cases pass.
+
+## Next
+- Gather real participant/device evidence before tuning deadzones, movement arbitration, recovery balance, or visual-pack preference based on outcomes.
+- Keep Retro as an explicit opt-in compatibility/art mode; new mechanics and telegraphs must remain visual-pack neutral.
+- Complete the existing inbound-email, physical PWA/gamepad/full-run media, production performance/funnel, scoped analytics/Sentry, publication, direct visual-review, and founder launch gates before SPARKED.
+
+# Previous Handoff — Session 134
 
 Session Intent: Restore and elevate the previous retro/arcade homepage experience and all of its useful elements; improve enemy and player character art; keep the player upright; and make the complete weapon arsenal unmistakable and easy to select.
 

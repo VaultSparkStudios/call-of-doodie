@@ -1,3 +1,14 @@
+- Session 135 (2026-07-29) completed the founder-directed movement reliability, terminal-run recovery, and selectable Retro visual-pack pass.
+- Input truth — keyboard, pointer, touch, and gamepad state now cross one lifecycle release boundary; blur, page hide, visibility loss, pause, listener teardown, controller loss, run start, respawn, and terminal ending cannot leave a stale directional source latched.
+- Debug truth — the input receipt records reason, scope, timestamp, and activity age, while gamepad disappearance emits only when state was active instead of producing frame-rate receipt spam.
+- Run-end truth — explicit `playing -> ending -> ended` phases claim terminal ownership before optional persistence/analytics work; duplicate finalizers are idempotent and loop faults route to a safe debrief.
+- Last Stand truth — ordinary lethal damage may still consume Last Stand or Guardian Angel, but forced Score Attack timeout bypasses recovery and completes the run deterministically.
+- Freeze root cause — real Chromium reproduced a low-health crash in `drawGame.js`: two branches referenced undefined `timeNow`. Both now use the renderer's frame timestamp, and the same browser run crossed 10 HP, died, and rendered the full debrief.
+- Retro truth — Modern remains the default; players can select and persist Retro before deployment. Retro restores the first-playable circular soldier and complete emoji/color enemy roster while preserving hitboxes, telegraphs, health, boss/elite markers, effects, score, and mechanics.
+- Validation truth — strict lint, asset validation, 881/881 tests across 130 files, production build, `git diff --check`, and 8/8 focused Desktop Chrome/Pixel 7 browser cases pass directly.
+- Visual honesty — direct host image inspection remains unavailable at Windows `CryptUnprotectData`; objective browser interaction and complete death-screen evidence are reported without a subjective pixel verdict.
+- Release truth — this reliability and optional-visual implementation is engineering-complete; SPARKED remains NO-GO under the existing external/device/data/publication/direct-visual/founder gates.
+
 - Session 134 (2026-07-29) completed the founder-directed retro homepage, character-art, orientation, and arsenal recovery pass.
 - Homepage truth — the feature-rich HomeV2 command center is again the default; HomeV3 remains an explicit `?home=v3` comparison path and the legacy menu remains `?home=v1`.
 - Arcade identity — CRT scanlines, cabinet framing, marquee portraits, insert-courage messaging, stronger deploy treatment, responsive layouts, and the full Journey/modes/challenges/tools/hub/career/codex/settings/support surface preserve the previous menu's depth while improving hierarchy.

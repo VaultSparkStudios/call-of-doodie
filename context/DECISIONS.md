@@ -835,3 +835,21 @@ Rationale: Rotating the whole character made southward aim read as an upside-dow
 Decision: Expose all 12 weapons before deployment, persist the selected primary locally, initialize the next run from it, and keep every weapon directly selectable from responsive in-run docks.
 
 Rationale: A hidden or tiny cycle control makes the arsenal functionally disappear. One visible choice before the run plus direct reversible switching during combat improves agency without changing balance or unlock rules.
+
+## 2026-07-29 — Session 135 — Input sources release through one lifecycle boundary
+
+Decision: Keyboard, pointer, touch, and gamepad state must be neutralized through `releaseInputState()` at every ownership boundary: focus/page loss, pause, controller loss, listener teardown, new run, respawn, and terminal ending. A missing gamepad emits a release receipt only when active state existed.
+
+Rationale: Clearing one device or one event leaves other latched state intact and makes intermittent drift hard to diagnose. One source-aware contract makes neutralization complete, observable, and testable without changing movement math.
+
+## 2026-07-29 — Session 135 — Terminal ownership precedes optional run finalizers
+
+Decision: Run endings transition exactly once through `playing -> ending -> ended`, claim the debrief before persistence/analytics/capture work, and treat those finalizers as best effort. Forced terminal causes such as Score Attack timeout bypass player recoveries; ordinary lethal damage retains Last Stand and Guardian Angel.
+
+Rationale: A thrown or stalled optional side effect must never keep the game alive, and a forced clock expiry cannot revive into an impossible continuation. Explicit ownership separates recovery policy from reliable completion.
+
+## 2026-07-29 — Session 135 — Retro is an opt-in visual pack, not a mechanics fork
+
+Decision: Keep Modern as the default and persist an explicit pre-run Retro selection. Retro restores the first-playable player and complete enemy character language, while collision, damage, telegraphs, health, boss/elite markers, effects, timing, and score remain shared.
+
+Rationale: Players can revisit the original visual identity without fragmenting balance or silently degrading gameplay readability. A complete manifest and one renderer branch make pack coverage executable rather than aspirational.

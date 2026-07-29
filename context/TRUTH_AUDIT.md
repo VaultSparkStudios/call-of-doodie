@@ -994,3 +994,19 @@ Last reviewed: 2026-07-28
 
 Overall status: green engineering implementation; SPARKED remains NO-GO.
 Last reviewed: 2026-07-29
+
+## 2026-07-29 — Session 135 — Input, termination, and Retro-pack truth
+
+- Input truth — `input-release-v1` neutralizes every requested input scope through one pure boundary; App lifecycle wiring covers focus/page loss, pause, controller loss, teardown, run start, respawn, and terminal ending.
+- Receipt truth — release reason, scope, timestamp, and input activity age are bounded and visible in Input Debug; an absent controller does not generate idle-frame receipt spam.
+- Termination truth — `runTermination.js` owns explicit phases and exactly-once claiming. The terminal screen is selected before optional finalizers; finalizer failure cannot strand gameplay and duplicate attempts are ignored.
+- Recovery truth — ordinary lethal damage may consume the configured recovery effects; Score Attack timeout uses an explicit forced-terminal cause and cannot be revived.
+- Renderer truth — direct Chromium reproduction identified undefined `timeNow` reads in low-health vignette and phantom opacity branches. Both use `dn`; the post-fix browser run crossed 10 HP and reached the full debrief.
+- Visual-pack truth — Modern is the normalized default. Retro selection persists pre-run and covers the player, every live enemy type, and synthetic shard rendering through `visual-pack-v1`; mechanics and gameplay feedback remain common.
+- Verification truth — 881/881 tests across 130 files, strict lint, production build, asset validation, diff check, and 8/8 focused desktop/mobile browser cases passed directly.
+- Dependency truth — no package or lockfile changed. The transient official Microsoft Playwright CLI was trust-reviewed and invoked through `npx`; its temporary artifacts were removed.
+- Visual truth — direct host pixel inspection still fails at Windows `CryptUnprotectData`; objective interaction/death evidence is not mislabeled as subjective visual approval.
+- Release truth — requested engineering work is complete; existing external/device/data/publication/direct-visual/founder SPARKED gates remain unchanged.
+
+Overall status: green engineering implementation; SPARKED remains NO-GO.
+Last reviewed: 2026-07-29

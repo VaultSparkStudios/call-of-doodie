@@ -4,6 +4,16 @@ const REASONS = {
     label: "AUTO-PAUSED · TAB HIDDEN",
     detail: "Held movement and fire input were released before the simulation stopped.",
   },
+  blur: {
+    code: "blur",
+    label: "AUTO-PAUSED · FOCUS LOST",
+    detail: "Held movement and fire input were released when the game window lost focus.",
+  },
+  pagehide: {
+    code: "pagehide",
+    label: "AUTO-PAUSED · PAGE HIDDEN",
+    detail: "Held movement and fire input were released before the page was suspended.",
+  },
   keyboard: { code: "keyboard", label: null, detail: null },
   controller: { code: "controller", label: null, detail: null },
   hud: { code: "hud", label: null, detail: null },

@@ -22,6 +22,8 @@ export const SETTINGS_DEFAULTS = {
   reducedMotion:       false, // disable screen shake, flashes, trails (photosensitivity)
   // HUD density preset: "minimal" (HP/ammo/score only), "standard" (default), "tactical" (everything)
   hudDensity:          "standard",
+  // Character art pack: Modern is the default; Retro restores the first playable's circle-and-emoji cast.
+  visualPack:          "modern",
 };
 
 // HUD widget visibility derived from density preset.
