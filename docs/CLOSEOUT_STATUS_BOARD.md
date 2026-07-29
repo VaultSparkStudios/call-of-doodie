@@ -1,21 +1,22 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-07-28 (Session 132 closeout) -->
+<!-- generated-at: 2026-07-29 (Session 134 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S132 ════════════════════╗
-║  Date: 2026-07-28  ·  SIL: 999/1000  ·  Velocity: 4 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S134 ════════════════════╗
+║  Date: 2026-07-29  ·  SIL: 998/1000  ·  Velocity: 5 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: four L3 audit items plus four second-order safeguar  ║
-║  ✓ Tests: 840/840 across 121 files plus browser E2E 2/2; strict  ║
-║  ✓ Deploy: implementation commit `9b3f2615b744` passed brief CI  ║
-║  ✓ Canonical closeout doctor: exit 1, `blockingFailing: 1`; sol  ║
+║  ✓ Shipped: the richer HomeV2 arcade command center is the defa  ║
+║  ✓ Arsenal: all 12 weapons are directly selectable before and d  ║
+║  ✓ Characters: proprietary operative v3 and core-enemy v3 art a  ║
+║  ✓ Orientation: the body stays upright at every aim angle becau  ║
+║  ✓ Validation: 866/866 unit tests across 127 files, strict lint  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
@@ -25,36 +26,39 @@
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         99   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 3 files  ·  M:3 A:0 D:0 ?:0                            ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
+║  Commit: a9de831  ·  Push: yes → origin/main                     ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-132-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-133-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        112/160                                          ║
+║  Doctor:        blockingFailing 0  ·  overallPass true            ║
 ║  Compliance:    —                                                ║
-║  Tests:         840/840                                          ║
-║  IGNIS:         12d ago                                          ║
+║  Tests:         866/866                                          ║
+║  IGNIS:         13d ago                                          ║
 ║  Truth:         green-code-no-go-launch                          ║
-║  Sanitization:  0d ago                                           ║
+║  Sanitization:  clean staged diff · 0 findings                    ║
+║  Shells:        1 started · 1 closed · 0 running                  ║
+║  Ark:           session-impact-summary queued to *                ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
