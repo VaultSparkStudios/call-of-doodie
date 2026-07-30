@@ -59,7 +59,7 @@
     "progression:audit": "node scripts/progression-curve-audit.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.110.8",
+    "@supabase/supabase-js": "^2.111.0",
     "gifenc": "^1.0.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
