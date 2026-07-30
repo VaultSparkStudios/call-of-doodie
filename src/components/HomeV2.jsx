@@ -342,7 +342,8 @@ export default function HomeV2(props) {
     onStart(seed, challenge);
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
-  const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const pageRef = useRef(null);
+  const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); pageRef.current?.scrollTo?.({ top: 0, behavior: "smooth" }); }, []);
   const handleJourneySecondary = useCallback(() => {
     const action = journey.secondary?.action;
     recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
@@ -441,7 +442,7 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px max(${isMobile ? 72 : 32}px, env(safe-area-inset-bottom))` };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px ${isMobile ? "calc(72px + env(safe-area-inset-bottom))" : "32px"}` };
   const mobileNavBar = {
     position: "fixed", bottom: 0, left: 0, right: 0,
     background: themePalette.panelStrong,
@@ -528,7 +529,7 @@ export default function HomeV2(props) {
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
-    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell">
+    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell" ref={pageRef}>
       <div className="arcade-home__grid" style={gridBg} />
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
