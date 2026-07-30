@@ -415,4 +415,72 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  describe("CANON-041 mobile nav parity", () => {
+    it("renders a fixed bottom mobile nav and hides the desktop tab row when isMobile=true", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+
+      const mobileNav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+      expect(mobileNav).not.toBeNull();
+      expect(mobileNav.tagName).toBe("NAV");
+      expect(mobileNav.getAttribute("aria-label")).toBe("Main navigation");
+
+      const desktopTabs = container.querySelector("[data-testid='home-v2-desktop-tabs']");
+      expect(desktopTabs).toBeNull();
+    });
+
+    it("mobile nav exposes all 4 sections as buttons with aria-labels", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+
+      const mobileNav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+      const buttons = [...mobileNav.querySelectorAll("button")];
+      const labels = buttons.map(b => b.getAttribute("aria-label"));
+      expect(labels).toContain("CAREER");
+      expect(labels).toContain("CODEX");
+      expect(labels).toContain("SETTINGS");
+      expect(labels).toContain("SUPPORT");
+    });
+
+    it("mobile nav tab switch sets aria-current=page on the active tab and updates content", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={true} />);
+      });
+
+      const mobileNav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+      const codexBtn = [...mobileNav.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "CODEX");
+      expect(codexBtn).toBeTruthy();
+      expect(codexBtn.getAttribute("aria-current")).toBeFalsy();
+
+      await act(async () => { codexBtn.click(); });
+      expect(codexBtn.getAttribute("aria-current")).toBe("page");
+    });
+
+    it("renders the desktop tab row and no mobile nav when isMobile=false", async () => {
+      container = document.createElement("div");
+      document.body.appendChild(container);
+      await act(async () => {
+        root = createRoot(container);
+        root.render(<HomeV2 {...baseProps} isMobile={false} />);
+      });
+
+      const mobileNav = container.querySelector("[data-testid='home-v2-mobile-nav']");
+      expect(mobileNav).toBeNull();
+
+      const desktopTabs = container.querySelector("[data-testid='home-v2-desktop-tabs']");
+      expect(desktopTabs).not.toBeNull();
+    });
+  });
 });

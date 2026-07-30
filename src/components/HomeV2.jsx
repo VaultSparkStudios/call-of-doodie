@@ -55,6 +55,13 @@ const MODE_DEFS = [
   { id: "gauntlet",        label: "GAUNTLET",      emoji: "🏆", color: "#FFC800", blurb: "Weekly fixed challenge · no shop" },
 ];
 
+const MOBILE_NAV_TABS = [
+  { id: "career",   icon: "📊", label: "CAREER"   },
+  { id: "codex",    icon: "📖", label: "CODEX"    },
+  { id: "settings", icon: "⚙",  label: "SETTINGS" },
+  { id: "support",  icon: "❤️", label: "SUPPORT"  },
+];
+
 function currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode }) {
   if (bossRushMode) return "boss_rush";
   if (cursedRunMode) return "cursed";
@@ -335,7 +342,8 @@ export default function HomeV2(props) {
     onStart(seed, challenge);
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
-  const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const pageRef = useRef(null);
+  const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); pageRef.current?.scrollTo?.({ top: 0, behavior: "smooth" }); }, []);
   const handleJourneySecondary = useCallback(() => {
     const action = journey.secondary?.action;
     recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
@@ -434,7 +442,27 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px ${isMobile ? "calc(72px + env(safe-area-inset-bottom))" : "32px"}` };
+  const mobileNavBar = {
+    position: "fixed", bottom: 0, left: 0, right: 0,
+    background: themePalette.panelStrong,
+    borderTop: `1px solid ${themePalette.line}`,
+    display: "flex",
+    zIndex: 40,
+    paddingBottom: "env(safe-area-inset-bottom)",
+    backdropFilter: "blur(8px)",
+  };
+  const mobileNavBtn = (active) => ({
+    flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
+    justifyContent: "center", gap: 2,
+    background: "transparent",
+    border: "none",
+    borderTop: `2px solid ${active ? "#FF6B35" : "transparent"}`,
+    color: active ? "#FF6B35" : themePalette.muted,
+    fontSize: 9, fontWeight: 800, fontFamily: "inherit",
+    letterSpacing: 1, cursor: "pointer", padding: "6px 2px",
+    minHeight: 52, WebkitTapHighlightColor: "transparent",
+  });
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -501,7 +529,7 @@ export default function HomeV2(props) {
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
-    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell">
+    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell" ref={pageRef}>
       <div className="arcade-home__grid" style={gridBg} />
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
@@ -981,17 +1009,16 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
-        <div className="arcade-home__tabs" style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
-            <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
-              {t === "support" && "❤️ SUPPORT"}
-            </button>
-          ))}
-        </div>
+        {/* Tabbed nav — desktop only; mobile uses the fixed bottom nav bar */}
+        {!isMobile && (
+          <div className="arcade-home__tabs" data-testid="home-v2-desktop-tabs" style={tabsRow}>
+            {MOBILE_NAV_TABS.map(({ id, icon, label }) => (
+              <button key={id} style={tabBtn(tab === id)} onClick={() => switchTab(id)}>
+                {icon} {label}
+              </button>
+            ))}
+          </div>
+        )}
         <div style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
@@ -1120,6 +1147,28 @@ export default function HomeV2(props) {
         <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
+      )}
+
+      {/* CANON-041 — fixed bottom mobile nav; replaces the inline desktop tab row on small screens */}
+      {isMobile && (
+        <nav
+          data-testid="home-v2-mobile-nav"
+          aria-label="Main navigation"
+          style={mobileNavBar}
+        >
+          {MOBILE_NAV_TABS.map(({ id, icon, label }) => (
+            <button
+              key={id}
+              style={mobileNavBtn(tab === id)}
+              onClick={() => switchTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+              aria-label={label}
+            >
+              <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">{icon}</span>
+              <span>{label}</span>
+            </button>
+          ))}
+        </nav>
       )}
     </div>
   );
