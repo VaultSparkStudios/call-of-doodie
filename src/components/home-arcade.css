@@ -7,6 +7,7 @@
     radial-gradient(circle at 50% -15%,rgba(255,110,25,.2),transparent 38%),
     radial-gradient(circle at 12% 45%,rgba(0,229,255,.08),transparent 27%),
     linear-gradient(180deg,#070b10 0%,#020305 72%,#070402 100%) !important;
+  animation:crtWarmup .55s ease-out both;
 }
 .arcade-home::before {
   content:""; position:fixed; inset:0; z-index:4; pointer-events:none; opacity:.16;
@@ -24,7 +25,7 @@
   width:max-content; max-width:100%; border:1px solid rgba(255,160,60,.25); border-radius:999px;
   color:#9a6b43; background:rgba(0,0,0,.5); font-size:8px; font-weight:900; letter-spacing:2.4px; text-align:center;
 }
-.arcade-home__hero { min-height:166px; position:relative; display:flex; flex-direction:column; justify-content:center; padding:20px 145px 14px; overflow:hidden; border:1px solid rgba(255,135,40,.28); border-radius:18px; background:linear-gradient(180deg,rgba(27,15,7,.78),rgba(5,8,12,.82)); box-shadow:inset 0 0 40px rgba(255,90,20,.08),0 18px 45px rgba(0,0,0,.28); }
+.arcade-home__hero { min-height:166px; position:relative; display:flex; flex-direction:column; justify-content:center; padding:20px 145px 14px; overflow:hidden; border:1px solid rgba(255,135,40,.28); border-radius:18px; background:linear-gradient(180deg,rgba(27,15,7,.78),rgba(5,8,12,.82)); box-shadow:inset 0 0 40px rgba(255,90,20,.08),0 18px 45px rgba(0,0,0,.28); animation:crtGlow 4.4s ease-in-out infinite; }
 .arcade-home__hero::before,.arcade-home__hero::after { content:""; position:absolute; top:10px; bottom:10px; width:3px; background:repeating-linear-gradient(180deg,var(--arcade-gold) 0 9px,transparent 9px 17px); opacity:.5; }
 .arcade-home__hero::before{left:10px}.arcade-home__hero::after{right:10px}
 .arcade-home__portrait { width:138px; position:absolute; bottom:-12px; z-index:0; filter:drop-shadow(0 0 17px rgba(255,130,40,.28)); }
@@ -32,7 +33,7 @@
 .arcade-home__portrait span { position:absolute; right:0; bottom:12px; left:0; padding:4px; color:#ffcf88; background:rgba(2,4,8,.82); border:1px solid rgba(255,160,60,.25); font-size:7px; font-weight:900; letter-spacing:1px; }
 .arcade-home__portrait--operative{left:14px}.arcade-home__portrait--nemesis{right:14px;filter:drop-shadow(0 0 17px rgba(255,60,145,.25))}.arcade-home__portrait--nemesis span{color:#ff8ec6}
 .arcade-home__insert-coin { position:relative; z-index:1; margin-bottom:5px; color:#67efff; font-size:8px; font-weight:900; letter-spacing:2.6px; animation:arcadeBlink 1.8s steps(2,end) infinite; }
-.arcade-home__title { position:relative; z-index:1; font-family:Impact,"Arial Black",sans-serif !important; font-style:italic; letter-spacing:-1px !important; -webkit-text-stroke:1px rgba(72,20,0,.8); transform:skewX(-4deg); }
+.arcade-home__title { position:relative; z-index:1; font-family:Impact,"Arial Black",sans-serif !important; font-style:italic; letter-spacing:-1px !important; -webkit-text-stroke:1px rgba(72,20,0,.8); transform:skewX(-4deg); animation:crtFlicker 8s ease-in-out infinite; }
 .arcade-home__deploy { max-width:620px !important; filter:drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
 .arcade-home__deploy-button { min-height:72px; position:relative; overflow:hidden; text-shadow:0 2px rgba(90,20,0,.7); border:1px solid #ffad62 !important; box-shadow:0 0 32px rgba(255,92,18,.36),inset 0 2px rgba(255,255,255,.24),inset 0 -8px rgba(92,22,0,.18) !important; }
 .arcade-home__deploy-button::after { content:""; position:absolute; inset:-60% -20%; background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.28) 48%,transparent 58%); transform:translateX(-70%); animation:deploySweep 4.5s ease-in-out infinite; }
@@ -46,4 +47,21 @@
   .arcade-home__cabinet{padding-right:12px!important;padding-left:12px!important}.arcade-home__hero{min-height:184px;padding:25px 82px 12px}.arcade-home__portrait{width:96px}.arcade-home__portrait--operative{left:3px}.arcade-home__portrait--nemesis{right:3px}.arcade-home__portrait span{font-size:5px}.arcade-home__title{font-size:clamp(36px,11.5vw,58px)!important}.arcade-home__insert-coin{font-size:7px;letter-spacing:1.4px}
 }
 @media(max-width:460px){.arcade-home__hero{min-height:165px;padding:23px 62px 10px}.arcade-home__portrait{width:73px}.arcade-home__portrait span{display:none}.arcade-home__title{font-size:clamp(33px,11vw,46px)!important}.arcade-home__deploy{margin-top:12px!important}.arcade-home__deploy-button{font-size:18px!important;padding:14px 10px!important}}
-@media(prefers-reduced-motion:reduce){.arcade-home__insert-coin,.arcade-home__deploy-button::after{animation:none}}
+/* Elite visual keyframes */
+@keyframes crtWarmup{0%{opacity:0;filter:brightness(.2) blur(3px)}28%{opacity:.75;filter:brightness(1.25) blur(.5px)}40%{opacity:.55;filter:brightness(.9)}52%{opacity:1;filter:brightness(1.08)}65%{opacity:.93;filter:brightness(1)}100%{opacity:1;filter:brightness(1)}}
+@keyframes crtGlow{0%,100%{box-shadow:inset 0 0 40px rgba(255,90,20,.08),0 18px 45px rgba(0,0,0,.28)}50%{box-shadow:inset 0 0 64px rgba(255,90,20,.15),0 18px 45px rgba(0,0,0,.28),0 0 28px rgba(255,130,40,.1)}}
+@keyframes crtFlicker{0%,89%,100%{opacity:1}90%{opacity:.82}91%{opacity:1}94%{opacity:.91}95%{opacity:1}}
+
+/* Mobile sticky bottom nav — visible only on small screens */
+.arcade-home__mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:60;background:rgba(3,5,8,.97);border-top:1px solid rgba(255,140,40,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.arcade-home__mobile-nav__inner{display:flex}
+.arcade-home__mobile-nav__item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px 2px;font-family:'Courier New',monospace;font-size:7px;font-weight:900;letter-spacing:1.2px;cursor:pointer;border:none;background:none;color:#666;transition:color .12s ease;-webkit-tap-highlight-color:transparent}
+.arcade-home__mobile-nav__item--active{color:var(--arcade-orange)}
+.arcade-home__mobile-nav__icon{font-size:19px;line-height:1}
+.arcade-home__mobile-nav__safe{height:env(safe-area-inset-bottom,0px)}
+@media(max-width:640px){
+  .arcade-home__mobile-nav{display:block}
+  .arcade-home__tabs{display:none!important}
+  .arcade-home__cabinet{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))!important}
+}
+@media(prefers-reduced-motion:reduce){.arcade-home__insert-coin,.arcade-home__deploy-button::after,.arcade-home,.arcade-home__hero,.arcade-home__title{animation:none}}
