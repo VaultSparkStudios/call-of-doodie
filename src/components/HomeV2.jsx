@@ -507,7 +507,7 @@ export default function HomeV2(props) {
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
-    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell">
+    <div className={`arcade-home${gameSettings?.reducedMotion ? " arcade-home--reduced-motion" : ""}`} style={page} data-theme={theme} data-testid="home-v2-shell">
       <div className="arcade-home__grid" style={gridBg} />
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
