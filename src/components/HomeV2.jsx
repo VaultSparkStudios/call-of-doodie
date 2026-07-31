@@ -336,6 +336,11 @@ export default function HomeV2(props) {
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const openMobileTab = useCallback((t) => {
+    setTab(t);
+    track("home_v2_tab", { tab: t, source: "mobile_nav" });
+    requestAnimationFrame(() => tabBodyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }, []);
   const handleJourneySecondary = useCallback(() => {
     const action = journey.secondary?.action;
     recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
@@ -415,6 +420,7 @@ export default function HomeV2(props) {
   ], [recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
+  const tabBodyRef = useRef(null);
   const cmdFocusIdx = useGamepadNav({
     count: CMD_ACTIONS.length,
     cols: 5,
@@ -501,7 +507,7 @@ export default function HomeV2(props) {
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
-    <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell">
+    <div className={`arcade-home${gameSettings?.reducedMotion ? " arcade-home--reduced-motion" : ""}`} style={page} data-theme={theme} data-testid="home-v2-shell">
       <div className="arcade-home__grid" style={gridBg} />
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
@@ -992,7 +998,7 @@ export default function HomeV2(props) {
             </button>
           ))}
         </div>
-        <div style={tabBody}>
+        <div ref={tabBodyRef} style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
           {tab === "settings" && (
@@ -1121,6 +1127,30 @@ export default function HomeV2(props) {
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
       )}
+
+      {/* Mobile sticky bottom nav — CANON-041: scrollable 100dvh mobile nav */}
+      <nav className="arcade-home__mobile-nav" aria-label="Navigation">
+        <div className="arcade-home__mobile-nav__inner">
+          {[
+            { id: "career",   icon: "📊", label: "CAREER"   },
+            { id: "codex",    icon: "📖", label: "CODEX"    },
+            { id: "settings", icon: "⚙", label: "SETTINGS" },
+            { id: "support",  icon: "❤️", label: "SUPPORT"  },
+          ].map(({ id, icon, label }) => (
+            <button
+              key={id}
+              className={`arcade-home__mobile-nav__item${tab === id ? " arcade-home__mobile-nav__item--active" : ""}`}
+              onClick={() => openMobileTab(id)}
+              aria-label={label}
+              aria-current={tab === id ? "page" : undefined}
+            >
+              <span className="arcade-home__mobile-nav__icon" aria-hidden="true">{icon}</span>
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="arcade-home__mobile-nav__safe" aria-hidden="true" />
+      </nav>
     </div>
   );
 }
