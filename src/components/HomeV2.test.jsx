@@ -157,6 +157,44 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/SUPPORT/);
   });
 
+  it("shows mobile bottom nav only when isMobile=true", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+
+    // Desktop: no bottom nav
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={false} />);
+    });
+    expect(container.querySelector("[data-testid='mobile-bottom-nav']")).toBeNull();
+
+    // Mobile: bottom nav renders with expected buttons
+    await act(async () => { root.render(<HomeV2 {...baseProps} isMobile={true} />); });
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    expect(nav).toBeTruthy();
+    const labels = [...nav.querySelectorAll("button")].map(b => b.getAttribute("aria-label"));
+    expect(labels).toContain("PLAY");
+    expect(labels).toContain("CAREER");
+    expect(labels).toContain("CODEX");
+    expect(labels).toContain("SETTINGS");
+    expect(labels).toContain("SUPPORT");
+  });
+
+  it("mobile bottom nav PLAY triggers onStart", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onStart = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} onStart={onStart} />);
+    });
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    const playBtn = [...nav.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "PLAY");
+    expect(playBtn).toBeTruthy();
+    await act(async () => { playBtn.click(); });
+    expect(onStart).toHaveBeenCalledTimes(1);
+  });
+
   it("shows a journey card and exposes the Player Hub by default", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);

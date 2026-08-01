@@ -415,6 +415,7 @@ export default function HomeV2(props) {
   ], [recordFrontDoorAction]);
 
   const cmdBtnRefs = useRef([]);
+  const tabBodyRef = useRef(null);
   const cmdFocusIdx = useGamepadNav({
     count: CMD_ACTIONS.length,
     cols: 5,
@@ -434,7 +435,7 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: `max(14px, env(safe-area-inset-top)) 16px ${isMobile ? "max(80px, calc(56px + env(safe-area-inset-bottom)))" : "max(32px, env(safe-area-inset-bottom))"}` };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -992,7 +993,7 @@ export default function HomeV2(props) {
             </button>
           ))}
         </div>
-        <div style={tabBody}>
+        <div ref={tabBodyRef} style={tabBody}>
           {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
           {tab === "codex" && <CodexTab />}
           {tab === "settings" && (
@@ -1120,6 +1121,55 @@ export default function HomeV2(props) {
         <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
+      )}
+
+      {/* CANON-041: sticky mobile bottom nav — always-visible thumb-accessible shortcuts */}
+      {isMobile && (
+        <nav
+          aria-label="Navigation"
+          data-testid="mobile-bottom-nav"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0,
+            height: "calc(56px + env(safe-area-inset-bottom))",
+            paddingBottom: "env(safe-area-inset-bottom)",
+            background: theme === "porcelain-day" ? "rgba(247,240,230,0.97)" : "rgba(8,6,3,0.97)",
+            borderTop: `1px solid ${themePalette.line}`,
+            display: "flex", alignItems: "stretch", zIndex: 200,
+            backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+            boxShadow: "0 -4px 24px rgba(0,0,0,0.4)",
+          }}
+        >
+          {[
+            { id: "play",     emoji: "▶",  label: "PLAY",     action: deploy },
+            { id: "career",   emoji: "📊", label: "CAREER",   action: () => { switchTab("career");   tabBodyRef.current?.scrollIntoView({ behavior: "smooth" }); } },
+            { id: "codex",    emoji: "📖", label: "CODEX",    action: () => { switchTab("codex");    tabBodyRef.current?.scrollIntoView({ behavior: "smooth" }); } },
+            { id: "settings", emoji: "⚙", label: "SETTINGS", action: () => setShowSettings(true) },
+            { id: "support",  emoji: "❤",  label: "SUPPORT",  action: () => setShowSupporter(true) },
+          ].map(({ id, emoji, label, action }) => {
+            const isPlay = id === "play";
+            const isActive = !isPlay && tab === id;
+            return (
+              <button
+                key={id}
+                onClick={action}
+                aria-label={label}
+                aria-current={isActive ? "page" : undefined}
+                style={{
+                  flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
+                  justifyContent: "center", gap: 2, background: "none", border: "none",
+                  color: isPlay ? "#FF6B35" : isActive ? "#FF6B35" : themePalette.muted,
+                  fontFamily: "inherit", fontSize: 9, letterSpacing: 0.8, fontWeight: 900,
+                  cursor: "pointer", padding: "6px 2px 4px",
+                  borderTop: isActive ? "2px solid #FF6B35" : "2px solid transparent",
+                  transition: "color 0.15s",
+                }}
+              >
+                <span style={{ fontSize: isPlay ? 20 : 16, lineHeight: 1 }}>{emoji}</span>
+                {label}
+              </button>
+            );
+          })}
+        </nav>
       )}
     </div>
   );
