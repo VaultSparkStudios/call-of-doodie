@@ -1,5 +1,5 @@
 <!-- generated-by: deterministic closeout write-back (paid model call intentionally skipped) -->
-<!-- source-hash: dd7d87ecfad1 -->
+<!-- source-hash: 51ef142db654 -->
 <!-- generated-at: 2026-08-02T00:33:59.6854697Z -->
 
 # LATEST_HANDOFF (compact)
@@ -18,8 +18,8 @@ CURRENT STATE
 - Architecture: 4,986 App lines / 1,768 inline-loop span / 32 boundaries / 1 hook; budgets 5,000/1,775/27/1 unchanged.
 - Control plane: Genius schema 2.0 reports executable=0, deferred=6, exhausted=true.
 - Staging: https://session-136-staging.call-of-doodie.pages.dev/ passes 7 hosted checks, 1-year HSTS, 867/867 route/theme/width.
-- Validation: 918/918 tests across 137 files; strict lint, prod build, local gates, desktop/mobile Playwright 8/8 pass.
-- Release: engineering staged; SPARKED remains NO-GO; no production launch claim.
+- Validation: 919/919 tests across 137 files; strict lint, prod build, local gates, desktop/mobile Playwright 8/8, exact-main brief/Cloudflare workflows, and production 7/7 + 5/5 + 3/3 + 5/5 smokes pass.
+- Release: engineering deployed and verified; SPARKED remains NO-GO; no public-launch claim.
 
 NOW BUCKET (top 3)
 - Gather sanitized participant evidence before changing balance/pacing/progression/retention.

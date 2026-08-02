@@ -13,8 +13,8 @@
 ║  ✓ Architecture: 4,986 App lines, 1,768 inline-loop span, 32 sy  ║
 ║  ✓ Control plane: Genius schema 2.0 reports `executable=0`, `de  ║
 ║  ✓ Staging: `https://session-136-staging.call-of-doodie.pages.d  ║
-║  ✓ Validation: 918/918 tests across 137 files, strict lint, pro  ║
-║  ✓ Release: engineering is staged; SPARKED remains NO-GO and no  ║
+║  ✓ Validation: 919/919 tests across 137 files, strict lint, pro  ║
+║  ✓ Production proof: the deployed tree passes live site 7/7, cu  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,19 +29,19 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  ✓ context/CURRENT_STATE.md                                      ║
-║  ✓ context/TASK_BOARD.md                                         ║
+║  · context/CURRENT_STATE.md                                      ║
+║  · context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
 ║  · logs/WORK_LOG.md                                              ║
-║  ✓ context/DECISIONS.md                                          ║
-║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  · context/DECISIONS.md                                          ║
+║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  ✓ context/TRUTH_AUDIT.md                                        ║
+║  · context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 51 files  ·  M:32 A:0 D:0 ?:19                         ║
+║  Changes: 5 files  ·  M:5 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -50,9 +50,9 @@
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        121/163                                          ║
+║  Doctor:        123/163                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         918/918                                          ║
+║  Tests:         919/919                                          ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         green-code-no-go-launch                          ║
 ║  Sanitization:  5d ago                                           ║

@@ -18,14 +18,15 @@ Session Intent: Run the complete agent-neutral `/arc` continuously from synchron
 - Architecture: 4,986 App lines, 1,768 inline-loop span, 32 system boundaries, one hook boundary, and unchanged 5,000/1,775/27/1 budgets.
 - Control plane: Genius schema 2.0 reports `executable=0`, `deferred=6`, `exhausted=true`; local capability audit reports the shared 41/68 readiness universe with provenance.
 - Staging: `https://session-136-staging.call-of-doodie.pages.dev/` passes seven hosted surface checks with one-year HSTS and 867/867 route/theme/width checks.
-- Validation: 918/918 tests across 137 files, strict lint, production build, all applicable local gates, and desktop/mobile Playwright 8/8 pass directly.
-- Release: engineering is staged; SPARKED remains NO-GO and no production launch claim is made.
+- Validation: 919/919 tests across 137 files, strict lint, production build, all applicable local gates, desktop/mobile Playwright 8/8, and the exact-main brief plus Cloudflare workflows pass.
+- Production proof: the deployed tree passes live site 7/7, cutover 5/5, replay trust 3/3, and Function health 5/5 checks.
+- Release: engineering is deployed and verified; SPARKED remains NO-GO and no public-launch claim is made.
 
 ## Next
 - Gather sanitized participant evidence before changing balance, pacing, progression, or retention assumptions.
 - With physical hardware, verify PWA install/relaunch, a real gamepad/browser, and the full-run Graphics Interchange Format encode/play/share path.
 - With production traffic and scoped analytics, collect Largest Contentful Paint/Cumulative Layout Shift and funnel evidence before retiring `?home=v1`.
-- Before SPARKED, verify inbound email delivery, project-scoped analytics/Sentry, publication/community, direct AI pixel review, exact-main CI/deploy, and explicit founder approval.
+- Before SPARKED, verify inbound email delivery, project-scoped analytics/Sentry, publication/community, direct AI pixel review, and explicit founder approval.
 
 # Latest Handoff — Session 135
 

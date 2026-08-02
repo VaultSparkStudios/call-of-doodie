@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 136 made executable-work, capability, routing, architecture, deployment, edge-security, suite-resource, closeout-derived, and shell-process observability source-derived and self-validating; five L3 items plus eight compound refinements are staged with 918/918 tests, browser 8/8, and hosted visual 867/867 green.",
+  "currentFocus": "Session 136 made executable-work, capability, routing, architecture, deployment, edge-security, suite-resource, closeout-derived, and shell-process observability source-derived and self-validating; five L3 items plus eight compound refinements are deployed with 919/919 tests, browser 8/8, hosted visual 867/867, and exact-main CI green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse and funnel evidence, project-scoped analytics/Sentry, publication, direct AI pixel review, and founder approval pass.",
   "testingSurfaces": [
     {
@@ -176,6 +176,17 @@
       "status": "green",
       "type": "tests",
       "command": "Session 136 — 918/918 across 137 files; strict lint; production build; dependency/security/public/schema/protocol/replay/assets/home gates; desktop/mobile browser E2E 8/8"
+    },
+    {
+      "status": "green",
+      "url": "https://callofdoodie.wtf/",
+      "type": "production-deploy",
+      "command": "Session 136 SHA b821837382ea · brief 30725877849 · Cloudflare quality/build/deploy 30725877848 · live 7/7 · cutover 5/5 · replay 3/3 · function health 5/5"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 136 final — 919/919 across 137 files; isolated public-CI capability-boundary proof added; exact-main workflows green"
     }
   ],
   "blockers": [
@@ -202,8 +213,8 @@
   "currentSession": 136,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 918,
-  "testsTotal": 918,
+  "testsPassing": 919,
+  "testsTotal": 919,
   "entropyScore": 0.178,
   "entropyLastComputed": "2026-08-02",
   "silRubricVersion": "3.0",
@@ -234,7 +245,7 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-136-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-02T00:33:17.1797039Z",
+  "testsLastRun": "2026-08-02T00:51:16.5243258Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
     "session": 136,
@@ -246,16 +257,16 @@
   },
   "doctorScore": {
     "date": "2026-08-02",
-    "ranAt": "2026-08-02T00:17:51.300Z",
+    "ranAt": "2026-08-02T04:48:21.1843623Z",
     "overallPass": true,
-    "passing": 121,
-    "warning": 39,
+    "passing": 123,
+    "warning": 37,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
     "ran": 161,
     "total": 163,
-    "score": 75
+    "score": 76
   }
 }

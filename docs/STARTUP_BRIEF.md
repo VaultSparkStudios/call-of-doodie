@@ -25,7 +25,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  Staging       → https://session-136-staging.call-of-doodie. ✓   ║
-║  Unit tests    → npm test — 918/918 passing ✓                    ║
+║  Unit tests    → npm test — 919/919 passing ✓                    ║
 ║  Browser proof → Five real Chromium desktop/mobile captures  ✓   ║
 ║  Live smoke    → npm run replay:trust-smoke ✓                    ║
 ║  Live smoke    → Session 129 — live 7/7; post-cutover 5/5; l ✓   ║
@@ -59,18 +59,18 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 136 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    918/918 passing  ·  Deploy: N/A                       ║
+║  Tests:    919/919 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.8% used                          ║
-║     37,928 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
-║     ~18,964 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
+║     37,905 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~18,953 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         918/918 passing (2026-08-02T00:33:17.1797039Z  ║
+║  ✓  Tests         919/919 passing (2026-08-02T00:51:16.5243258Z  ║
 ║  ✓  Velocity      13 ↑  ·  Debt: ↓                               ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated frontier   ║
 ║  ⛔  Context age   ?d                                             ║

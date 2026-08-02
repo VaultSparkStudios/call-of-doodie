@@ -14,18 +14,20 @@ Headline: Made the project control plane source-derived, restored architecture h
 ## Validation
 
 - strict lint passed
-- npm test 918/918 across 137 files
+- npm test 919/919 across 137 files
 - production build passed
 - dependency, security, public, schema, protocol, replay, assets, and home gates passed
 - Playwright desktop/mobile flows 8/8 passed
 - isolated Cloudflare preview passed seven HTTP/edge HSTS surfaces
 - hosted 21-route by 2-theme by 3-width visual matrix passed 867/867
+- exact-main brief-format and Cloudflare quality/build/deploy workflows passed
+- production live-site 7/7, cutover 5/5, replay-trust 3/3, and Function-health 5/5 checks passed
 
 ## Remaining
 
 - Collect participant evidence before changing game balance or progression
 - Collect production performance and funnel evidence before retiring the legacy home
-- Complete physical, inbound-mail, analytics-scope, publication, direct-visual, exact-main CI, and founder launch gates
+- Complete physical, inbound-mail, analytics-scope, publication, direct-visual, and founder launch gates
 
 ## Blockers
 
