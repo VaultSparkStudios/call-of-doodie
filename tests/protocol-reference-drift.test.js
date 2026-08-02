@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { describe, expect, it } from "vitest";
@@ -20,7 +21,9 @@ describe("protocol reference drift", () => {
     }
     expect(receipt.checks.find((check) => check.rel === "scripts/studio-oracle.mjs")?.ok).toBe(true);
     expect(receipt.checks.find((check) => check.rel === "behavior:ops-router-suggest")?.status).toBe("verified");
-    expect(receipt.checks.find((check) => check.rel === "behavior:secrets-audit-map")?.status).toBe("verified");
+    expect(["verified", "isolated"]).toContain(
+      receipt.checks.find((check) => check.rel === "behavior:secrets-audit-map")?.status,
+    );
   });
 
   it("routes Oracle calls through the Windows-hidden Studio Ops proxy", () => {
@@ -28,6 +31,34 @@ describe("protocol reference drift", () => {
     expect(source).toContain('script: "studio-oracle.mjs"');
     expect(source).toContain("runStudioScript");
     expect(source).toContain("projectBound: false");
+  });
+
+  it("reports the intentional private-map boundary explicitly in isolated CI", () => {
+    const isolatedSecrets = fs.mkdtempSync(path.join(os.tmpdir(), "cod-protocol-ci-"));
+    try {
+      const result = spawnSync(process.execPath, [path.join(ROOT, "scripts", "protocol-drift-check.mjs"), "--json"], {
+        cwd: ROOT,
+        encoding: "utf8",
+        windowsHide: true,
+        env: {
+          ...process.env,
+          CI: "true",
+          VAULTSPARK_SECRETS_DIR_OVERRIDE: isolatedSecrets,
+          STUDIO_OPS_SECRETS_DIR: isolatedSecrets,
+        },
+      });
+      const receipt = JSON.parse(result.stdout);
+      const capabilityProbe = receipt.checks.find((check) => check.rel === "behavior:secrets-audit-map");
+      expect(result.status).toBe(0);
+      expect(receipt.status).toBe("ok");
+      expect(capabilityProbe).toMatchObject({
+        ok: true,
+        status: "isolated",
+        detail: "isolated: private capability map intentionally absent from public CI checkout",
+      });
+    } finally {
+      fs.rmSync(isolatedSecrets, { recursive: true, force: true });
+    }
   });
 
   it("routes Pages previews through the broker-native fallback boundary", () => {

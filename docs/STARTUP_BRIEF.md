@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-01 (Session 135 closeout) -->
+<!-- generated-at: 2026-08-02 (Session 136 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 135 closeout · 2026-08-01.
+> **Fast-boot brief** — generated at Session 136 closeout · 2026-08-02.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,7 +14,7 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 136 · 2026-08-01 · FOUNDER MODE                         ║
+║  Session 137 · 2026-08-02 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -24,8 +24,8 @@
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
-║  Staging       → https://session-133-staging.call-of-doodie. ✓   ║
-║  Unit tests    → npm test — 881/881 passing ✓                    ║
+║  Staging       → https://session-136-staging.call-of-doodie. ✓   ║
+║  Unit tests    → npm test — 918/918 passing ✓                    ║
 ║  Browser proof → Five real Chromium desktop/mobile captures  ✓   ║
 ║  Live smoke    → npm run replay:trust-smoke ✓                    ║
 ║  Live smoke    → Session 129 — live 7/7; post-cutover 5/5; l ✓   ║
@@ -38,8 +38,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    999/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 999  ·  Velocity 5↑                        ║
-║    Last active: 3d  ·  Last closeout: 3d  ·  (active = newest o  ║
+║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 13↑                     ║
+║    Last active: 1d  ·  Last closeout: 1d  ·  (active = newest o  ║
 ║    Trend  ▁▄▄▂▆  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -47,7 +47,7 @@
 ║    Dev Health       100    ██████████  ████████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement        99    ██████████  ██▇▇▇█▇▇ →                ║
+║    Engagement        99    ██████████  █▇▇▇█▇▇▇ →                ║
 ║    Process Qual     100    ██████████  ████████ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -57,41 +57,41 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 135 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 136 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    881/881 passing  ·  Deploy: N/A                       ║
+║  Tests:    918/918 passing  ·  Deploy: N/A                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ░░░░░░░░░░░░░░░░░░░░░░░░  0.7% used                          ║
-║     6,951 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heuri  ║
-║     ~3,476 tok/turn  ·  cache 50%  ·  262 turns to compact       ║
+║  ✓  █░░░░░░░░░░░░░░░░░░░░░░░  3.8% used                          ║
+║     37,928 / 1,000,000 tok  ·  codex/codex-1m  ·  measured+heur  ║
+║     ~18,964 tok/turn  ·  cache 50%  ·  46 turns to compact       ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         881/881 passing (2026-07-29T19:48:14.0019764Z  ║
-║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         918/918 passing (2026-08-02T00:33:17.1797039Z  ║
+║  ✓  Velocity      13 ↑  ·  Debt: ↓                               ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated frontier   ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         45706 FORGE  ·  3d old                         ║
-║  ⛔  Truth         green locally; portfolio doctor warnings are   ║
+║  ✓  IGNIS         45706 FORGE  ·  1d old                         ║
+║  ⛔  Truth         green engineering closeout; NO-GO SPARKED  ·   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs compli  ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
-║  ✓  Entropy       0.215  (healthy)                               ║
+║  ✓  Entropy       0.178  (healthy)                               ║
 ║  ✓  CDR           no gap detected                                ║
 ║  ✓  Patterns      no recurring pressure detected                 ║
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        123/162 (77%)  ·  1 failing                    ║
+║  ⛔  Doctor        121/163 (75%)  ·  1 failing                    ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger information  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    79d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║   101d · Physical launch QA                                      ║
+║    80d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║   102d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -108,7 +108,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▁▄▄▂▆  5↑  (last 5 sessions)                        ║
+║  Velocity:   ▁▄▄▂▆  13↑  (last 5 sessions)                       ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -131,18 +131,19 @@
 ║                                                                  ║
 ║  3. [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — captu  ║
 ║  re real LCP/CLS deltas vs legacy MenuScreen on production, con  ║
-║  firm ≥200ms LCP improvement before removing v1 fallback         ║
+║  firm ≥200ms LCP improvement before removing v1 fallback [data-  ║
+║  ...                                                             ║
 ║                                                                  ║
 ║  4. [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `hom  ║
 ║  e_v2_deploy` vs legacy `front_door_action` completion rates af  ║
-║  ter 48h of traffic                                              ║
+║  ter 48h of traffic [data-blocked]                               ║
 ║                                                                  ║
-║  5. Discord invite/community link when the community entry poin  ║
-║  t is ready                                                      ║
-║                                                                  ║
-║  6. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
+║  5. [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate  ║
 ║  on ≥200ms Lighthouse LCP improvement confirmed on production (  ║
-║  human measurement required)                                     ║
+║  human measurement required) [data-blocked]                      ║
+║                                                                  ║
+║  6. Discord invite/community link when the community entry poin  ║
+║  t is ready [community-blocked]                                  ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -150,5 +151,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 135 closeout · 2026-08-01*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 136 closeout · 2026-08-02*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*
