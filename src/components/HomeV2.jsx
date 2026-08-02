@@ -101,6 +101,7 @@ export default function HomeV2(props) {
   const [customSeed, setCustomSeed] = useState("");
   const [challengeMode, setChallengeMode] = useState(null);
   const [tab, setTab] = useState("career");
+  const [mobileSection, setMobileSection] = useState("play");
   const [deployOpen, setDeployOpen] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
@@ -335,7 +336,8 @@ export default function HomeV2(props) {
     onStart(seed, challenge);
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
-  const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
+  const switchTab = useCallback((t) => { setTab(t); setMobileSection("tabs"); track("home_v2_tab", { tab: t }); }, []);
+  const switchMobileSection = useCallback((s) => { setMobileSection(s); track("home_v2_mobile_nav", { section: s }); }, []);
   const handleJourneySecondary = useCallback(() => {
     const action = journey.secondary?.action;
     recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
@@ -506,7 +508,7 @@ export default function HomeV2(props) {
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
       </AsyncPanelBoundary>
-      <div className="arcade-home__cabinet" style={wrap}>
+      <div className="arcade-home__cabinet" style={wrap} data-mob-section={mobileSection}>
 
         {/* Top bar */}
         <div style={topBar}>
@@ -537,6 +539,7 @@ export default function HomeV2(props) {
           </div>
         </div>
 
+        <div className="arcade-home__play-content">
         {/* Hero */}
         <div className="arcade-home__hero" style={hero}>
           <div className="arcade-home__portrait arcade-home__portrait--operative" aria-hidden="true">
@@ -981,6 +984,8 @@ export default function HomeV2(props) {
           </div>
         )}
 
+        </div>{/* /arcade-home__play-content */}
+        <div className="arcade-home__tabs-content">
         {/* Tabbed nav */}
         <div className="arcade-home__tabs" style={tabsRow}>
           {["career", "codex", "settings", "support"].map(t => (
@@ -1005,6 +1010,39 @@ export default function HomeV2(props) {
             <SupportTab onOpen={() => setShowSupporter(true)} />
           )}
         </div>
+
+        </div>{/* /arcade-home__tabs-content */}
+
+        <nav className="arcade-home__mobile-nav" aria-label="Main sections">
+          <button
+            className={mobileSection === "play" ? "is-active" : ""}
+            onClick={() => switchMobileSection("play")}
+          >
+            <span className="mob-icon" aria-hidden="true">▶</span>
+            <strong>PLAY</strong>
+          </button>
+          <button
+            className={mobileSection === "tabs" && tab === "career" ? "is-active" : ""}
+            onClick={() => switchTab("career")}
+          >
+            <span className="mob-icon" aria-hidden="true">📊</span>
+            <strong>CAREER</strong>
+          </button>
+          <button
+            className={mobileSection === "tabs" && tab === "codex" ? "is-active" : ""}
+            onClick={() => switchTab("codex")}
+          >
+            <span className="mob-icon" aria-hidden="true">📖</span>
+            <strong>CODEX</strong>
+          </button>
+          <button
+            className={mobileSection === "tabs" && (tab === "settings" || tab === "support") ? "is-active" : ""}
+            onClick={() => switchTab("settings")}
+          >
+            <span className="mob-icon" aria-hidden="true">⚙</span>
+            <strong>MORE</strong>
+          </button>
+        </nav>
 
         {/* Footer */}
         <div style={footer}>
