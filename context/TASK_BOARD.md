@@ -16,6 +16,19 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S136** Architecture orchestration recovery — objective outcomes, Input Diagnostics, and transient presentation moved into tested boundaries; App is 4,986 lines with a 1,768-line loop span and 32 system imports under unchanged budgets.
+- [x] [SIL:3] **DONE S136** Executable-work truth — schema-v2 Genius cache, one shared source-derived classifier, deterministic scoring, and SHA-256 input fingerprints prove 0 executable / 6 deferred / exhausted=true without padding.
+- [x] [SIL:3] **DONE S136** Capability and protocol truth — local secret audits resolve the authoritative 68-capability shared map with provenance; the canonical ops router works; protocol drift behavior-probes both boundaries.
+- [x] [SIL:3] **DONE S136** Semantic home routing — App and the retirement gate execute one default/v1/v2/v3 resolver while production evidence remains independently required before fallback retirement.
+- [x] [SIL:3] **DONE S136 second-order** Objective contradictions fail closed without rewards, hostile random-number generators cannot create non-finite presentation state, and ordinary missing-test work is no longer mislabeled credential-blocked.
+- [x] [SIL:3] **DONE S136 staging hardening** Pages deploy now crosses the broker-native credential proof/fallback boundary, and the dynamic edge-health response carries its own one-year HSTS/nosniff/resource-policy contract.
+- [x] [SIL:3] **DONE S136 closeout hardening** Vitest file workers are bounded at four after direct reproduction proved the launch smoke was starved only inside the unbounded full corpus; canonical `npm test` now passes 918/918.
+- [x] [SIL:3] **DONE S136 derived-view parity** The closeout board consumes Genius schema 2 and renders executable exhaustion with six deferred gates instead of falsely reporting a missing cache.
+- [x] [SIL:3] **DONE S136 shell hardening** Staging and operator-smoke subprocesses use the enforced safe-spawn boundary; the direct Windows-hide gate proves zero raw child-process imports and no visible window-storm path.
+- [x] [AUDIT WIN S136] Balance tuning, new content, hosted artificial intelligence, auth expansion, HomeV1 retirement, analytics/Sentry configuration, inbound-mail delivery, physical/subjective proof, and launch promotion were rejected or deferred because their live authority or evidence prerequisites remain absent.
+
+**Runway exception:** the source-derived repo-executable Genius List is exhausted after S136. The six open items are credential, product-decision, production-data, or community gated; no phantom work was invented to saturate the session.
+
 - [x] [SIL:3] **DONE S135** Input lifecycle recovery — one source-aware release boundary clears keyboard, pointer, touch, and gamepad movement across focus loss, page lifecycle, pause, disconnect, teardown, run start, respawn, and terminal ending.
 - [x] [SIL:3] **DONE S135** Idempotent terminal-run contract — explicit run phases claim the debrief before optional finalizers, forced timeouts bypass recoveries, duplicate endings no-op, and loop faults fail into a safe terminal path.
 - [x] [SIL:3] **DONE S135 root fix** Real Chromium exposed undefined `timeNow` references in low-health rendering; both branches now use the frame timestamp, and a reproduced 10-HP death reaches the complete debrief.

@@ -44,7 +44,14 @@ function findStudioOpsSecretsDir() {
   return null;
 }
 const STUDIO_OPS_SECRETS_DIR = findStudioOpsSecretsDir();
-const CAP_MAP_PATH = path.join(SECRETS_DIR, 'CAPABILITY_MAP.json');
+const LOCAL_CAP_MAP_PATH = path.join(SECRETS_DIR, 'CAPABILITY_MAP.json');
+const SHARED_CAP_MAP_PATH = STUDIO_OPS_SECRETS_DIR ? path.join(STUDIO_OPS_SECRETS_DIR, 'CAPABILITY_MAP.json') : null;
+const CAP_MAP_RESOLUTION = fs.existsSync(LOCAL_CAP_MAP_PATH)
+  ? { path: LOCAL_CAP_MAP_PATH, source: 'local' }
+  : SHARED_CAP_MAP_PATH && fs.existsSync(SHARED_CAP_MAP_PATH)
+    ? { path: SHARED_CAP_MAP_PATH, source: 'studio-ops' }
+    : { path: null, source: 'none' };
+const CAP_MAP_PATH = CAP_MAP_RESOLUTION.path;
 const ACCESS_LOG = path.join(SECRETS_DIR, '.access.log');
 
 let _cache = null;         // flat merged env
@@ -110,16 +117,20 @@ function loadCapMap() {
   // single curly quote could make getSecret/resolveCapability fail to find any
   // capability with no signal. Corruption now fails LOUD (stderr + access log)
   // while still returning empty so callers degrade gracefully rather than crash.
-  if (!fs.existsSync(CAP_MAP_PATH)) { _capMap = { capabilities: {} }; return _capMap; }
+  if (!CAP_MAP_PATH || !fs.existsSync(CAP_MAP_PATH)) {
+    _capMap = { capabilities: {}, _source: 'none' };
+    return _capMap;
+  }
   try {
     _capMap = JSON.parse(fs.readFileSync(CAP_MAP_PATH, 'utf8'));
+    _capMap._source = CAP_MAP_RESOLUTION.source;
   } catch (e) {
     const msg = `CAPABILITY_MAP.json is present but UNPARSEABLE (${e.message}). ` +
       `Capability resolution is degraded to empty — fix the file. ` +
       `Common cause: smart quotes (U+201C/U+201D) or encoding mojibake from a paste.`;
     try { process.stderr.write(`⚠ secrets: ${msg}\n`); } catch { /* stream closed */ }
     try { audit({ event: 'capability-map-corrupt', error: e.message }); } catch { /* never break callers */ }
-    _capMap = { capabilities: {}, _corrupt: true, _corruptError: e.message };
+    _capMap = { capabilities: {}, _source: CAP_MAP_RESOLUTION.source, _corrupt: true, _corruptError: e.message };
   }
   return _capMap;
 }
@@ -209,7 +220,16 @@ export function resolveCapability(capability) {
   }
   const ok = required.length > 0 && missing.length === 0;
   audit({ capability, action: 'resolveCapability', ok, missing });
-  return { ok, required, missing, found };
+  return { ok, required, missing, found, mapSource: map._source || CAP_MAP_RESOLUTION.source };
+}
+
+export function getCapabilityMapProvenance() {
+  const map = loadCapMap();
+  return {
+    source: map._source || CAP_MAP_RESOLUTION.source,
+    available: Boolean(CAP_MAP_PATH),
+    corrupt: Boolean(map._corrupt),
+  };
 }
 
 /**

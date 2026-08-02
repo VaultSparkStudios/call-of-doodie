@@ -1,0 +1,278 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-08-01",
+  "session": 136,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure-plus-product",
+  "meta": {
+    "generatedAt": "2026-08-01",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure-plus-product",
+    "combinedPriority": 137.4,
+    "top3": [
+      "architecture-orchestration-recovery",
+      "genius-list-execution-truth",
+      "shared-capability-map-truth"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Synchronized main at 493cfa2; bounded 18-file/120000-character sampler; direct architecture contract failure at 5088 total lines and a 1787-line game-loop span; direct reproduction of unknown ops router command, false local 0/0 capability audit, false HomeV2-default retirement check, and age-only/status-free Genius cache; Studio Oracle preverification for all five premises; public contract and protocol inventory green. No balance, retention, production-metric, physical-device, delivery, subjective-pixel, or launch-readiness claim is inferred.",
+    "specialtyLenses": [
+      "founder-requested infrastructure rubric",
+      "game-loop review",
+      "public app release gate",
+      "CANON-031 observability honesty",
+      "CANON-039 internal-first reuse",
+      "CANON-041 browser/mobile parity",
+      "CANON-047 theme readability",
+      "CANON-048 dual audience",
+      "public-repo sanitization"
+    ],
+    "baseline": {
+      "tests": "Session 135 closed at 881/881; current exact worktree must re-run directly after implementation",
+      "doctor": "Fresh Studio doctor exits 0 with blockingFailing=0 but one advisory control-plane sanitization failure outside this repo; local architecture contract independently fails",
+      "gameLoop": "97.0/100 design health; empirical confidence remains low because no sanitized participant playtest corpus exists",
+      "architecture": "app-architecture-receipt-v1 fails totalLines 5088 > 5000 and gameLoopSpan 1787 > 1775",
+      "geniusList": "Six open founder/data/product-decision items are emitted without status or score; cache freshness is age-only",
+      "capabilities": "Local check-secrets reports 0/0 while the authoritative shared gateway reports 41/68 ready",
+      "router": "scripts/router.mjs suggest succeeds, but the canonical ops.mjs router suggest path exits unknown-command",
+      "homeGate": "HomeV2 is the live default in App, yet home:retirement-gate fails because it searches for a removed comment literal",
+      "release": "FORGE remains NO-GO for SPARKED; cost gates and public contract pass, while current-session staging plus established analytics, delivery, physical, publication, direct-visual, and founder gates remain red"
+    }
+  },
+  "gameLoopReview": {
+    "loopTightness": 98,
+    "progression": 96,
+    "sessionEngagement": 97,
+    "retention": 95,
+    "soulFidelity": 99,
+    "empiricalConfidence": "low",
+    "evidence": "The action, escalating pressure, perk/shop/route cadence, daily and gauntlet seeds, rivalry ghosts, replay receipts, evidence-ranked defeat coaching, and immediate rematch paths are deep and coherent with SOUL. Progression-runway output is descriptive rather than prescriptive. Source and automation cannot establish comprehension, fun, balance, or retention outcomes.",
+    "prioritizedFindings": [
+      "The core loop is not the limiting factor; App orchestration has regrown past both executable architecture ratchets, increasing the chance that future gameplay changes reintroduce lifecycle faults.",
+      "The HomeV2 fallback evidence gate contradicts the actual route even though the design decision remains correct, weakening trust around the front-door experiment.",
+      "Physical PWA, real-gamepad, full-run media, production Lighthouse/funnel, and participant enjoyment evidence remain legitimately unavailable and must not be replaced by source claims."
+    ],
+    "nextThreeMoves": [
+      "Extract objective-frame orchestration and the input diagnostic presentation into tested boundaries until both App ratchets are green without raising budgets.",
+      "Replace source-comment matching with an executable home-version contract shared by App and the retirement gate.",
+      "Preserve current gameplay tuning; collect physical and production evidence before balance, fallback retirement, or launch promotion."
+    ]
+  },
+  "infrastructureDebtSweep": {
+    "staleScripts": "No stale-script item promoted without trustworthy git-age and reachability evidence.",
+    "orphanedWorkflows": "No orphaned workflow premise found; latest GitHub runs are successful or intentionally skipped Dependabot automation.",
+    "divergentRenderers": "No duplicate renderer promoted; public contract is green.",
+    "parserDrift": "Task-board parsing is duplicated across router, ops, cache, and innovation pack, but the actionable defect is status/freshness truth in the Genius cache; consolidation is included in item 2.",
+    "godObjects": "App.jsx is 5088 lines and is the only sampled god-object with a failing executable budget; MenuScreen, DeathScreen, drawGame, HomeV2, storage, and constants are large but have no live failing premise.",
+    "highestLeverage": [
+      "Restore architecture ratchets by extraction, never by increasing budgets.",
+      "Make the task-to-Genius control surface status-aware and input-fresh.",
+      "Make protocol helpers behavior-tested, not merely present."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or public-launch promotion; repo-owned engineering work may continue",
+    "green": [
+      "CANON-029 release and cost-bleeder gates report ALLOW with cost-neutral status",
+      "Public contract passes 27 files and current workflow evidence has no failed run in the latest five",
+      "Guest play, rights, route, theme, replay, and cost semantics remain source-backed"
+    ],
+    "red": [
+      "Current-session exact-HEAD staging and full suite have not yet run",
+      "VITE_POSTHOG_KEY and a project-scoped VITE_SENTRY_DSN are absent from GitHub secrets",
+      "Inbound delivery, physical PWA/gamepad/full-run media, production Lighthouse/funnel evidence, direct pixel review, publication, and founder approval remain unverified"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "efficiency / architecture / game-loop reliability",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 31.0,
+      "slug": "architecture-orchestration-recovery",
+      "title": "Restore both App architecture ratchets through cohesive objective-frame and input-diagnostics extraction.",
+      "status": "shipped",
+      "why": "The executable receipt fails at 5088 total lines and a 1787-line game-loop span. The live Dynamic Objective reward block remains inline, while InputDebugOverlay and formatting are presentation code embedded in App. Raising the 5000/1775 budgets would make the gate dishonest.",
+      "recipe": "Create a tested objective-frame system that converts tick results into bounded score/coin/perk/failure effects and leaves App as React synchronization only. Move InputDebugOverlay plus finite formatting into its own component. Preserve reward values, objective histories, achievements, rendering copy, and input diagnostic semantics. Add score/coin/perk/expiry and component fixtures; require totalLines <=5000, gameLoopSpan <=1775, no boundary loss, focused tests, strict lint, and full suite.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Move InputDebugOverlay and enough literal loop code to clear both existing budgets." },
+        "L2": { "effortHours": 2, "recipe": "Extract a typed objective outcome planner plus the diagnostic component and add focused behavior tests." },
+        "L3": { "effortHours": 4, "recipe": "Ship both boundaries with invalid-state handling, exact reward/failure fixtures, App integration, architecture receipt proof, and no budget increase." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "observability / prioritization / automation",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 30.5,
+      "slug": "genius-list-execution-truth",
+      "title": "Turn the local Unified Genius List from an age-only title cache into an honest executable-work contract.",
+      "status": "shipped",
+      "why": "The cache marks anything under Now or Deferred as generic work, even titles tagged BLOCKER, Human/Data, product decision, or community readiness. It emits no status/final score and --check only tests a 24-hour mtime, so task-board changes can leave stale priorities. The current six-item cache therefore cannot prove exhaustion or guide /implement safely.",
+      "recipe": "Extract one task classifier shared by cache, router, and innovation candidate collection. Emit schema v2 items with status, reason, source section, SIL escalation, axis, score components, and deterministic finalScore. Classify device/data/credential/publication/product-decision work as non-executable without inventing blockers. Make freshness compare input mtimes or digests for TASK_BOARD, SIL, PROJECT_STATUS, STUDIO_BRAIN, and GENOME_HISTORY. Add fixtures for every status, default limits, stale inputs, and deterministic ordering; innovation-pack must exclude non-executable items while retaining an honest deferred ledger.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add status fields and exclude explicit Human/Data/BLOCKER rows from executable work." },
+        "L2": { "effortHours": 2.5, "recipe": "Add deterministic scoring, shared classification, and input-aware freshness with fixtures." },
+        "L3": { "effortHours": 4, "recipe": "Ship a schema-v2 control surface consumed consistently by cache, router, innovation pack, and saturation receipts with no fabricated padding." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "security / credentials / observability",
+      "effortHours": 2,
+      "impact": 10,
+      "innovation": 6,
+      "priority": 30.0,
+      "slug": "shared-capability-map-truth",
+      "title": "Make the project-local secrets gateway resolve the authoritative shared capability map and report provenance honestly.",
+      "status": "shipped",
+      "why": "scripts/lib/secrets.mjs merges shared .env values but CAP_MAP_PATH is hard-coded to the local secrets directory. With no local map, check-secrets --audit reports 0/0 even though the authoritative gateway reports 41/68 ready, creating phantom-blocker risk.",
+      "recipe": "Resolve capability-map precedence as explicit test override/local map first, then shared Studio Ops map, with an observable provenance field that never contains values. Preserve environment override seams and loud corrupt-map behavior. Make --audit explicit, distinguish no-map from empty-map, and add spawned CLI fixtures for local override, shared fallback, corrupt map, unknown capability, and redaction. Verify the real local audit matches authoritative capability counts without printing raw secrets.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Fallback CAP_MAP_PATH to the discovered shared map." },
+        "L2": { "effortHours": 1, "recipe": "Add precedence/provenance and shared-fallback tests." },
+        "L3": { "effortHours": 2, "recipe": "Ship explicit audit semantics, corruption/no-map distinction, CLI fixtures, and exact live parity proof." }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "HIGH",
+      "axis": "process quality / protocol parity / token efficiency",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 24.5,
+      "slug": "router-executable-parity",
+      "title": "Make the canonical ops router path executable and ratchet protocol behavior instead of file presence.",
+      "status": "shipped",
+      "why": "The startup skeleton invokes node scripts/ops.mjs router suggest, scripts/router.mjs implements suggest, but ops.mjs omits the command and exits 1. protocol:drift still passes because it only checks that helper files exist.",
+      "recipe": "Add an ops router dispatcher using the existing hidden-window spawn boundary and forward arguments exactly. Extend help text. Add command-smoke fixtures proving ops router suggest JSON parity, unknown-command failure, and no extra process/window leakage. Upgrade protocol drift with bounded behavior probes for router and check-secrets audit so future present-but-broken helpers fail.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Add the missing ops router case and help line." },
+        "L2": { "effortHours": 1, "recipe": "Add argument-forwarding and JSON parity tests." },
+        "L3": { "effortHours": 2, "recipe": "Add behavior-level protocol drift receipts for the canonical startup helper path and failure semantics." }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "HIGH",
+      "axis": "UX / experimentation / observability",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 8,
+      "priority": 21.4,
+      "slug": "home-routing-semantic-proof",
+      "title": "Replace HomeV2 source-comment matching with one executable routing contract shared by App and its retirement gate.",
+      "status": "shipped",
+      "why": "App currently maps the default to HomeV2, ?home=v1 to MenuScreen, and ?home=v3 to HomeV3. The retirement gate instead searches for a removed 'v2 is now default' comment and falsely fails homev2-default, even while printing the positive detail.",
+      "recipe": "Create a tiny pure home-version resolver with a closed v1/v2/v3 result contract and safe malformed-search fallback. Use it in App and execute it from the retirement gate rather than grepping comments. Separate routing truth from the evidence-required retirement decision, emit JSON reason codes, and add default/v1/v2/v3/unknown/malformed fixtures plus the live gate smoke.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Update the brittle literal to match current App routing." },
+        "L2": { "effortHours": 1, "recipe": "Extract a pure resolver shared by App and the gate with route fixtures." },
+        "L3": { "effortHours": 2, "recipe": "Ship semantic routing proof, reason-coded gate output, malformed-input coverage, and a regression check that retirement evidence remains independently required." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "numeric-balance-retune", "reason": "No participant or production distribution supports changing damage, health, spawn, cooldown, reward, or progression values." },
+    { "slug": "new-gameplay-content", "reason": "The loop is already unusually deep; live architecture and trust defects outrank adding another mode, enemy, weapon, or metagame system." },
+    { "slug": "hosted-ai-coach", "reason": "Deterministic local intelligence is deep; a hosted model adds variable per-user cost without a demonstrated player need." },
+    { "slug": "auth-membership-expansion", "reason": "Guest play is intentional and membership remains an explicit product decision rather than a defect." },
+    { "slug": "home-v1-retirement", "reason": "Production Lighthouse and funnel evidence remain absent; this audit fixes the lying gate but does not waive the evidence threshold." },
+    { "slug": "analytics-and-sentry-configuration", "reason": "GitHub secret names prove both project keys remain absent; the available Sentry credential is not proven project-scoped." },
+    { "slug": "inbound-mail-green-status", "reason": "Brevo readiness does not prove end-to-end delivery." },
+    { "slug": "physical-and-subjective-launch-proof", "reason": "Automation cannot replace physical PWA/gamepad/full-run media passes or direct rendered-pixel judgment." },
+    { "slug": "canon-045-checker-error", "reason": "The conformance checker emitted a parse error owned by Studio Ops; this repo will ship signed Ark evidence rather than edit a sibling tree." },
+    { "slug": "registry-profile-rewrite", "reason": "The registry reports app/github-pages while local skill/status truth is game/cloudflare-pages; the fix is control-plane-owned and must travel through Ark." }
+  ],
+  "executionLog": [
+    {
+      "slug": "architecture-orchestration-recovery",
+      "status": "shipped",
+      "level": "L3",
+      "evidence": "Extracted objective-frame, Input Diagnostics, and transient-presentation boundaries; direct receipt is green at 4,986 App lines, 1,768 loop span, 32 system boundaries, unchanged 5,000/1,775/27/1 budgets."
+    },
+    {
+      "slug": "genius-list-execution-truth",
+      "status": "shipped",
+      "level": "L3",
+      "evidence": "Schema 2.0 cache uses declared SHA-256 input fingerprints, deterministic source-derived classifications and scores, and reports 0 executable / 6 honestly deferred / exhausted=true."
+    },
+    {
+      "slug": "shared-capability-map-truth",
+      "status": "shipped",
+      "level": "L3",
+      "evidence": "Local audit now resolves the shared Studio Ops map with explicit provenance and the authoritative 68-capability universe; override, fallback, corruption, unknown, and redaction fixtures pass."
+    },
+    {
+      "slug": "router-executable-parity",
+      "status": "shipped",
+      "level": "L3",
+      "evidence": "Canonical ops router path is executable and protocol drift now behavior-probes router and secrets audit; direct 37/37 drift checks pass."
+    },
+    {
+      "slug": "home-routing-semantic-proof",
+      "status": "shipped",
+      "level": "L3",
+      "evidence": "App and retirement gate execute one pure resolver for default/v1/v2/v3/malformed routes; the gate is green while preserving the independent production-evidence requirement."
+    },
+    {
+      "slug": "second-order-objective-outcome-consistency",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "Contradictory completed-and-expired objective ticks now fail closed as expired, emit no reward, and carry an explicit consistency receipt."
+    },
+    {
+      "slug": "second-order-finite-transient-rng",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "Transient-presentation randomness now clamps and normalizes hostile/non-finite RNG output so particle state remains finite."
+    },
+    {
+      "slug": "second-order-task-classifier-missing-coverage",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "Removed the generic missing-word credential heuristic; ordinary engineering work such as missing test coverage remains executable."
+    },
+    {
+      "slug": "second-order-broker-native-pages-deploy",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "The staging command now uses the canonical broker-native Pages credential proof/fallback boundary; the initially rejected narrow token fell back safely and deployed the Session 136 preview without exposing values."
+    },
+    {
+      "slug": "second-order-edge-health-hsts",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "The Cloudflare Function emits HSTS, nosniff, and same-origin resource policy itself; the exact redeployed /_health response proves one-year HSTS live."
+    },
+    {
+      "slug": "second-order-bounded-test-workers",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "Vitest file workers are capped at four after the App launch smoke passed alone but reproducibly starved under the unbounded full suite; the canonical npm test path now passes 918/918."
+    },
+    {
+      "slug": "second-order-closeout-genius-schema-parity",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "The closeout board consumes schema-2 executable items and explicit exhaustion while retaining legacy ranked-cache compatibility; it now reports six deferred items instead of falsely claiming the cache is missing."
+    },
+    {
+      "slug": "second-order-windows-hidden-spawns",
+      "status": "shipped",
+      "level": "compound",
+      "evidence": "The staging subprocess and operator smoke suite now import the enforced safe-spawn boundary; the direct windows-hide gate proves zero raw child-process imports and windowsHide:true coverage."
+    }
+  ]
+}

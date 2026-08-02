@@ -1,0 +1,11 @@
+# IGNIS Batch Genius Summary — Call of Doodie
+Generated: 2026-08-01T07:41:45.759Z
+
+**Summary:** Call of Doodie is engineering-complete and green (881/881 tests) after Session 135's reliability and Retro-pack work, but SPARKED launch remains NO-GO pending a cluster of founder/credential-gated actions that are now the only unblocked path forward.
+
+## Top 5 Items
+1. **Resolve Sentry DSN scope ambiguity and set launch secrets** — S112's probe flagged that the available Sentry credential may not be correctly scoped to this project; shipping error monitoring blind risks cross-project data pollution. Founder confirmation unblocks both VITE_SENTRY_DSN and VITE_POSTHOG_KEY secrets, which are wired but inert — highest-leverage 10-minute action clearing two Human Action items at once.
+2. **Rotate the broad Cloudflare access token (S60)** — An account/user/zone-wide token has sat live since before domain stabilization; every session that passes is unnecessary standing security exposure with no engineering dependency blocking it — pure founder/ops action with outsized risk-reduction per unit effort.
+3. **Run physical device QA: PWA install flow + real gamepad** — Engineering has exhausted repo-owned runway three sessions running (S130-133 all note 'Runway exception'); these two physical-device checks are explicitly named launch blockers that no further code session can substitute for — they are the critical path to lifting NO-GO.
+4. **Verify real full-run DeathScreen GIF capture/share on desktop** — This is the last untested end-to-end media feature gating launch confidence; it's cheap to execute now (feature is implementation-complete) and closes another named NO-GO gate before it becomes a forgotten loose end at actual launch time.
+5. **Publish the Itch.io listing using the prepared launch copy** — Launch copy has been ready since S133-era work; this is the actual go-to-market unlock sitting idle while engineering keeps polishing an already-green game — publishing converts finished work into real player exposure and starts the feedback loop the roadmap has no other path to trigger.

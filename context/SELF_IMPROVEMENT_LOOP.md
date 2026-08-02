@@ -272,11 +272,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 999.0 | 5: 998.4 | 10: 999.2 | 25: 999.7 | all: 961.3 [N=88 canonical parsed sessions]
-  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.3 | Process 100.0 [N=3]
+Avgs — 3: 998.7 | 5: 999.0 | 10: 999.0 | 25: 999.6 | all: 964.5 [N=96 canonical parsed sessions]
+  └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-07-29 | Session 134 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
+Last session: 2026-08-01 | Session 136 | Total: 999/1000 | Velocity: 13 | protocolVelocity: 13
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 
@@ -2053,3 +2053,31 @@ Brainstorm:
 1. Input-source replay strip — retain a tiny local debug-only sequence only if physical multi-device evidence shows another latch; current release receipt is sufficient without hidden telemetry.
 2. Terminal chaos fixtures — expand optional-finalizer fault injection only when a new side effect joins run completion; the current exactly-once boundary already isolates existing finalizers.
 3. Retro readability review — alter original silhouettes only from opt-in participant misidentification evidence, preserving authenticity until data supports a targeted exception.
+
+## 2026-08-01 — Session 136 | Total: 999/1000 | Velocity: 13 | Debt: ↓
+
+SIL +5: Completed the continuous founder-requested arc, shipped all five verified L3 items, eight compound refinements including two live-staging and three closeout root fixes, and exhausted every honest repo-owned candidate.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint, 918/918 tests across 137 files, production build, all local contracts, browser E2E, isolated staging, and npm audit zero pass directly. |
+| Creative Alignment | 100 | same | The work protects the guest-first arcade experience by making objective rewards, home routing, diagnostics, and effects semantically reliable without speculative content churn. |
+| Momentum | 100 | same | Five L3 items and eight compound safeguards shipped continuously with no phase handback. |
+| Engagement | 99 | same | Contradictory objectives cannot pay impossible rewards and routing remains reliable, but no participant retention or preference outcome is fabricated. |
+| Process Quality | 100 | same | Every premise was live-verified; the suite’s dependency failure, Pages auth denial, and missing edge HSTS were each root-fixed rather than waived. |
+| Cross-Repo Coherence | 100 | same | Studio Ops definitions and broker helpers were consumed through canonical read/import/Ark surfaces; no sibling repository tree was edited. |
+| Security Posture | 100 | same | Trust-reviewed lockfile versions, coherent dependencies, npm audit zero, broker-native Cloudflare credentials, staged HSTS, and secret-value isolation pass. |
+| Ecosystem Integration | 100 | same | Human routes, agent discovery, task control surfaces, capability provenance, audit artifacts, edge health, and staging evidence agree. |
+| Capital Efficiency | 100 | same | Runtime intelligence remains local and deterministic; no variable per-user charge or notional Max Plan alarm was introduced. |
+| Automation Coverage | 100 | same | Coverage rose to 918 tests across 137 files, 867 hosted visual checks, 8 desktop/mobile browser flows, and behavior-level protocol/deploy/edge/derived-view tripwires. |
+
+Rolling averages: 3-session 998.7 · 5-session 999.0 · sparkline `█████`.
+
+Top win: operational truth now spans task executability, capability provenance, architecture headroom, semantic routing, brokered deployment, and hosted edge headers with executable proofs.
+Top gap: participant outcomes, direct AI pixel inspection, and external launch evidence remain unavailable; objective hosted evidence is not mislabeled as subjective or empirical approval.
+Intent outcome: Achieved for every agent-owned premise; the source-derived Genius List is exhausted and remaining work is evidence- or authority-gated.
+
+Brainstorm:
+1. Control-surface contract bundle — publish one sanitized JSON receipt joining Genius exhaustion, architecture headroom, capability provenance, and protocol behavior after several main builds prove schema stability.
+2. Edge-header parity registry — derive Function/static header expectations from one source only if another dynamic route appears; today’s single health endpoint is adequately bounded.
+3. Architecture ratchet proposal — recommend tighter ceilings only after consecutive exact-main builds preserve current headroom, never from this one favorable snapshot.

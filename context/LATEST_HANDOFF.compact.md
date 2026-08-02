@@ -1,28 +1,40 @@
-<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: b88891b32c24 -->
-<!-- generated-at: 2026-07-29T10:31:34.676Z -->
+<!-- generated-by: deterministic closeout write-back (paid model call intentionally skipped) -->
+<!-- source-hash: dd7d87ecfad1 -->
+<!-- generated-at: 2026-08-02T00:33:59.6854697Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Compression — Session 135
+SESSION
+- Session 136 (latest); Session 135 retained, older handoffs archived.
 
-Session: 135
-Shipped: Input latching fixed across lifecycle boundaries; run-ending freezes eliminated via explicit state machine; Retro character pack restored as opt-in mode; 881/881 tests pass.
+SHIPPED THIS SESSION
+- Unified Genius List: deterministic executable-work contract with source fingerprints, statuses, scores, honest 0/6 exhaustion receipt (replaces age-only caching).
+- Local capability audit exposes authoritative 68-capability Studio universe (41/68 readiness) without leaking values; canonical router and protocol probes verified.
+- Objective outcomes, transient effects, Input Diagnostics refactored as tested boundaries; both App architecture ratchets restored without raising limits.
+- Home routing now semantic (not comment-grepped); Pages staging uses broker-native credential fallback; `/_health` carries own HSTS header at Function boundary.
+- Five live-premise L3 audit items, three planned compound refinements, two staging fixes, and three closeout suite/derived-view/shell fixes.
 
-Current Intent: Gather real participant/device evidence before tuning deadzones, movement arbitration, recovery balance, or visual-pack preference; keep Retro as explicit opt-in; complete pre-launch gates.
+CURRENT STATE
+- Architecture: 4,986 App lines / 1,768 inline-loop span / 32 boundaries / 1 hook; budgets 5,000/1,775/27/1 unchanged.
+- Control plane: Genius schema 2.0 reports executable=0, deferred=6, exhausted=true.
+- Staging: https://session-136-staging.call-of-doodie.pages.dev/ passes 7 hosted checks, 1-year HSTS, 867/867 route/theme/width.
+- Validation: 918/918 tests across 137 files; strict lint, prod build, local gates, desktop/mobile Playwright 8/8 pass.
+- Release: engineering staged; SPARKED remains NO-GO; no production launch claim.
 
-Now Bucket (Top 3)
-- Gather real participant/device evidence on movement, deadzones, recovery balance before tuning
-- Keep Retro as explicit opt-in compatibility/art mode; new mechanics must remain visual-pack neutral
-- Complete inbound-email, PWA/gamepad/full-run media, production performance/funnel, scoped analytics/Sentry, publication, visual-review, founder launch gates
+NOW BUCKET (top 3)
+- Gather sanitized participant evidence before changing balance/pacing/progression/retention.
+- On physical hardware: verify PWA install/relaunch, real gamepad/browser, full-run GIF encode/play/share.
+- With production traffic + scoped analytics: collect LCP/CLS and funnel evidence before retiring `?home=v1`.
 
-Blockers (Top 3)
-- Direct AI pixel review: Windows CryptUnprotectData sandbox failure persists despite valid screenshots; 867 objective hosted checks not mislabeled as subjective approval
-- Physical hardware: need one real PWA install/relaunch, controller/browser pass, full-run GIF encode/play/share flow
-- Production traffic/analytics: need LCP/CLS and funnel evidence before retiring ?home=v1
+BLOCKERS (top 3)
+- Direct AI pixel review unclaimable: local viewer + in-app browser fail Windows CryptUnprotectData (persists since ~S131).
+- SPARKED launch gated on external verifications (email, analytics/Sentry scope, publication, founder approval).
+- No participant/production evidence available for tuning or `?home=v1` retirement.
 
-Human-Blocked Items (Age)
-- Session 132 canonical doctor: Studio Ops must apply sibling provenance classification from Ark cargo 01JUJ47JLK34AC54666CC59CE0, then rerun to exit 0/blockingFailing:0 (blocking since S132)
-- Session 132 infrastructure-policy: Studio Ops must consume cargo 01JUJ4SVAL4D9F9405FA9BA2B2 for delivery path to callofdoodie.wtf (blocking since S132)
+HUMAN-BLOCKED (with age)
+- Founder launch approval — open since S129+.
+- Inbound email delivery verification (callofdoodie.wtf) — open since S132.
+- Itch/community publication — open since S129+.
+- Physical-hardware PWA/gamepad/full-run media verification — open since S129+.
 
-Next Session: Continue evidence gathering on movement/visual-pack user outcomes while Studio Ops clears S132 canonical/infrastructure blockers; maintain zero-blocking-failure posture through all pre-SPARKED gates.
+NEXT SESSION: Genius list is empty (executable=0); re-run `/arc` from synced main to surface new live-premise audit items, or advance a human-blocked external gate.

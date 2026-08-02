@@ -853,3 +853,21 @@ Rationale: A thrown or stalled optional side effect must never keep the game ali
 Decision: Keep Modern as the default and persist an explicit pre-run Retro selection. Retro restores the first-playable player and complete enemy character language, while collision, damage, telegraphs, health, boss/elite markers, effects, timing, and score remain shared.
 
 Rationale: Players can revisit the original visual identity without fragmenting balance or silently degrading gameplay readability. A complete manifest and one renderer branch make pack coverage executable rather than aspirational.
+
+## 2026-08-01 — Session 136 — Executable work is a source-derived status, not an open checkbox
+
+Decision: Router, Genius cache, and innovation saturation share one deterministic classifier. Every emitted item carries source section, status, reason, score, executable truth, and declared-input fingerprints; cache age alone cannot certify freshness and no placeholder work is generated.
+
+Rationale: A backlog title is not proof that an agent can act on it. Credential, data, community, publication, device, and product decisions must remain visible without being laundered into fake implementation runway.
+
+## 2026-08-01 — Session 136 — Route and architecture truth execute against live semantics
+
+Decision: App home selection and fallback-retirement checks execute one pure default/v1/v2/v3 resolver. When architecture ratchets fail, extract cohesive boundaries and retain the existing budgets; do not make a failing receipt green by editing prose or raising ceilings.
+
+Rationale: Comment matching and movable limits turn observability into theater. Shared executable semantics make both the front door and decomposition posture independently testable.
+
+## 2026-08-01 — Session 136 — Deploy credentials stay brokered and edge responses own edge headers
+
+Decision: Cloudflare Pages subprocesses use the canonical `withPagesDeployEnv` boundary, including its proven narrow-token-to-Studio-token fallback. Function responses emit required transport/security headers themselves rather than assuming static `_headers` applies.
+
+Rationale: A capability marked READY can still lack one control-plane permission, and Cloudflare Functions can bypass static headers. Broker-native fallback plus hosted response proof closes both gaps without exposing credentials or fabricating a staging result.

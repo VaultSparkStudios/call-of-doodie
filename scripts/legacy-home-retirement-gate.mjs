@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { HOME_VERSION, resolveHomeVersion } from "../src/utils/homeVersion.js";
 
 const ROOT = process.cwd();
 const JSON_MODE = process.argv.includes("--json");
@@ -24,8 +25,11 @@ const decisions = read("context/DECISIONS.md");
 const checks = [
   {
     id: "homev2-default",
-    ok: app.includes("return true; // v2 is now default") && app.includes('params.get("home") === "v1"'),
-    detail: "HomeV2 is default and legacy fallback is explicit via ?home=v1",
+    ok: resolveHomeVersion("") === HOME_VERSION.CURRENT
+      && resolveHomeVersion("?home=v1") === HOME_VERSION.LEGACY
+      && resolveHomeVersion("?home=v3") === HOME_VERSION.EXPERIMENTAL
+      && resolveHomeVersion("?home=unknown") === HOME_VERSION.CURRENT,
+    detail: "executable route contract proves HomeV2 default, ?home=v1 legacy, and ?home=v3 comparison",
   },
   {
     id: "legacy-lazy-loaded",

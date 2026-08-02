@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Usage: node scripts/deploy-staging-preview.mjs --branch session-130-staging
-import { spawnSync } from "node:child_process";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 import fs from "node:fs";
 import path from "node:path";
-import { getSecret } from "../../vaultspark-studio-ops/scripts/lib/secrets.mjs";
+import { withPagesDeployEnv } from "../../vaultspark-studio-ops/scripts/lib/cf-deploy.mjs";
 
 const args = process.argv.slice(2);
 if (args.includes("--help") || args.includes("-h")) {
@@ -19,13 +19,6 @@ if (!/^session-\d+-staging$/.test(branch)) {
   process.exit(2);
 }
 
-const apiToken = await getSecret("CLOUDFLARE_API_TOKEN", "cloudflare.deploy");
-const accountId = await getSecret("CLOUDFLARE_ACCOUNT_ID", "cloudflare.deploy");
-if (!apiToken || !accountId) {
-  console.error("Cloudflare deploy capability is not READY in the Studio secrets gateway.");
-  process.exit(3);
-}
-
 const windowsEntry = process.env.APPDATA
   ? path.join(process.env.APPDATA, "npm", "node_modules", "wrangler", "bin", "wrangler.js")
   : "";
@@ -35,15 +28,17 @@ if (process.platform === "win32" && !fs.existsSync(windowsEntry)) {
   console.error("Unable to locate the installed Wrangler JavaScript entrypoint.");
   process.exit(4);
 }
-const result = spawnSync(command, [...commandPrefix,
-  "pages", "deploy", "dist",
-  "--project-name=call-of-doodie",
-  `--branch=${branch}`,
-], {
-  env: { ...process.env, CLOUDFLARE_API_TOKEN: apiToken, CLOUDFLARE_ACCOUNT_ID: accountId },
-  stdio: "inherit",
-  shell: false,
-});
+const result = await withPagesDeployEnv("call-of-doodie-staging-preview", (deployEnv) =>
+  spawnSync(command, [...commandPrefix,
+    "pages", "deploy", "dist",
+    "--project-name=call-of-doodie",
+    `--branch=${branch}`,
+  ], {
+    env: { ...process.env, ...deployEnv },
+    stdio: "inherit",
+    shell: false,
+    windowsHide: true,
+  }));
 
 if (result.error) {
   console.error(`Unable to start Wrangler: ${result.error.message}`);

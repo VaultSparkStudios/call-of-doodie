@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { collectTaskWork } from "./lib/task-work.mjs";
 
 const ROOT = process.cwd();
 const [, , command, ...args] = process.argv;
@@ -21,50 +22,20 @@ function argInt(name, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
-function section(markdown, heading) {
-  return markdown.match(new RegExp(`## ${heading}\\s+([\\s\\S]*?)(?:\\n## |\\n$)`))?.[1] || "";
-}
-
-function openItems(block) {
-  const seen = new Set();
-  return block
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => line.startsWith("- [ ]"))
-    .map((line) => line.replace(/^- \[ \]\s*/, ""))
-    .filter((line) => {
-      if (seen.has(line)) return false;
-      seen.add(line);
-      return true;
-    });
-}
-
 function suggest() {
   const top = argInt("--top", 3);
   const board = readText("context/TASK_BOARD.md");
-  const now = openItems(section(board, "Now"));
-  const next = openItems(section(board, "Next"));
-  const human = openItems(section(board, "Human Action Required"));
-  const items = [
-    ...now.map((title, index) => ({
-      id: `now-${index + 1}`,
-      lane: "now",
-      title,
-      reason: "Open Now item in the local task board.",
-    })),
-    ...next.map((title, index) => ({
-      id: `next-${index + 1}`,
-      lane: "next",
-      title,
-      reason: "Next-lane item available after the active Now queue.",
-    })),
-    ...human.map((title, index) => ({
-      id: `founder-${index + 1}`,
-      lane: "founder-unlock",
-      title,
-      reason: "Founder/device/dashboard gate surfaced by blocker preflight.",
-    })),
-  ].slice(0, top);
+  const items = collectTaskWork(board, ["Now", "Next", "Human Action Required"])
+    .slice(0, top)
+    .map((item, index) => ({
+      id: item.status + "-" + (index + 1),
+      lane: item.executable ? item.section.toLowerCase() : item.status,
+      title: item.title,
+      status: item.status,
+      executable: item.executable,
+      finalScore: item.score.finalScore,
+      reason: item.reason,
+    }));
 
   const result = {
     schemaVersion: "1.0",
@@ -78,7 +49,7 @@ function suggest() {
     console.log("Router Suggestions");
     console.log("==================");
     if (!items.length) console.log("No open local task-board items found.");
-    for (const item of items) console.log(`- [${item.lane}] ${item.title}`);
+    for (const item of items) console.log("- [" + item.lane + "] " + item.title + " - " + item.reason);
   }
 }
 

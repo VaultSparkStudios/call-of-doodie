@@ -19,6 +19,8 @@ describe("protocol reference drift", () => {
       expect(receipt.checks.find((check) => check.rel.endsWith(anchor))?.ok).toBe(true);
     }
     expect(receipt.checks.find((check) => check.rel === "scripts/studio-oracle.mjs")?.ok).toBe(true);
+    expect(receipt.checks.find((check) => check.rel === "behavior:ops-router-suggest")?.status).toBe("verified");
+    expect(receipt.checks.find((check) => check.rel === "behavior:secrets-audit-map")?.status).toBe("verified");
   });
 
   it("routes Oracle calls through the Windows-hidden Studio Ops proxy", () => {
@@ -26,5 +28,13 @@ describe("protocol reference drift", () => {
     expect(source).toContain('script: "studio-oracle.mjs"');
     expect(source).toContain("runStudioScript");
     expect(source).toContain("projectBound: false");
+  });
+
+  it("routes Pages previews through the broker-native fallback boundary", () => {
+    const source = fs.readFileSync(path.join(ROOT, "scripts", "deploy-staging-preview.mjs"), "utf8");
+    expect(source).toContain("withPagesDeployEnv");
+    expect(source).toContain("windowsHide: true");
+    expect(source).not.toContain('getSecret("CLOUDFLARE_API_TOKEN"');
+    expect(source).not.toContain('getSecret("CLOUDFLARE_ACCOUNT_ID"');
   });
 });

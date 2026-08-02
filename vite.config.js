@@ -26,6 +26,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    // Keep the full App launch smoke from competing with an unbounded set of
+    // module transforms. Four workers is faster in practice on the Windows
+    // closeout host and gives the launch contract deterministic CPU/memory.
+    maxWorkers: 4,
     include: ["src/**/*.test.{js,jsx}", "tests/**/*.test.{js,jsx}", "scripts/**/*.test.mjs"],
     testTimeout: 30000,
     coverage: toVitestCoverageConfig(),

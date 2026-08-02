@@ -19,6 +19,9 @@ describe("edge runtime truth contract", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("application/json");
     expect(response.headers.get("cache-control")).toContain("no-store");
+    expect(response.headers.get("strict-transport-security")).toBe("max-age=31536000; includeSubDomains");
+    expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+    expect(response.headers.get("cross-origin-resource-policy")).toBe("same-origin");
     expect(await response.json()).toMatchObject({ contract: "edge-health-v1", status: "edge-ready" });
 
     const routedGet = onRequest({ request: { method: "GET" }, env: {} });
@@ -28,6 +31,7 @@ describe("edge runtime truth contract", () => {
     const rejected = onRequest({ request: { method: "POST" } });
     expect(rejected.status).toBe(405);
     expect(rejected.headers.get("allow")).toBe("GET");
+    expect(rejected.headers.get("strict-transport-security")).toBe("max-age=31536000; includeSubDomains");
   });
 
   it("makes HSTS and the endpoint mandatory static release evidence", () => {

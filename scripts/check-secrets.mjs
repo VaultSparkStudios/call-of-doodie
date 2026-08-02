@@ -8,6 +8,7 @@
  * Usage:
  *   node scripts/check-secrets.mjs                        # list all capabilities
  *   node scripts/check-secrets.mjs --for <capability>     # check one
+ *   node scripts/check-secrets.mjs --audit                # list all with map provenance
  *   node scripts/check-secrets.mjs --json                 # machine output
  *   node scripts/check-secrets.mjs --for claude.api --json
  */
@@ -48,6 +49,8 @@ function render(rows) {
   console.log('');
   const ready = rows.filter(r => r.ok).length;
   console.log(`${ready}/${rows.length} capabilities ready. Missing → see docs/STUDIO_CANON.md + TASK_BOARD Human Action Required.`);
+  const sources = [...new Set(rows.map((row) => row.mapSource).filter(Boolean))];
+  console.log(`Capability map: ${sources.join(', ') || 'none'} (definitions only; secret values never printed).`);
   console.log('');
 }
 

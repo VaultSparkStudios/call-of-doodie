@@ -17,7 +17,8 @@ import { loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./setti
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
 import { applyEnemyDamage, collectQueuedEnemyDefeats, collectUnqueuedLethalEnemies, queueEnemyDefeat, retireEnemyWithoutDefeat, takeQueuedEnemyDefeat } from "./systems/enemyDefeatLifecycle.js";
-import { pickObjective, pickWaveChallengeContract, recordObjectiveResult, resolveWaveChallengeContract, startWaveChallengeContract, tickObjective } from "./systems/objectiveDirector.js";
+import { pickObjective, pickWaveChallengeContract, resolveWaveChallengeContract, startWaveChallengeContract } from "./systems/objectiveDirector.js";
+import { resolveObjectiveFrame } from "./systems/objectiveFrame.js";
 import {
   bulletEnemyCollision,
   computeBulletDamage,
@@ -52,11 +53,13 @@ import { analyzeReplayCommandTrace, buildReplayProofReceipt, directionBucket, en
 import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberControllerProfile } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
+import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import DisplayNameScreen from "./components/DisplayNameScreen.jsx";
 import HomeV2 from "./components/HomeV2.jsx";
 import HomeV3 from "./components/HomeV3.jsx";
 import HUD from "./components/HUD.jsx";
+import InputDebugOverlay from "./components/InputDebugOverlay.jsx";
 import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
 const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
@@ -88,6 +91,7 @@ import { buildStudioGameEvent } from "./utils/runIntelligence.js";
 import { buildFlowField, sampleFlowField } from "./systems/flowField.js";
 import { applySergeantAura, buildEnemyFrameIndex, compactTruthyInPlace, countSummonsFor, createEnemyFrameIndex } from "./systems/frameIndex.js";
 import { stepAndCompactInPlace, stepTransientEffectsInPlace } from "./systems/transientLifecycle.js";
+import { addParticles, addText, MAX_PARTICLES } from "./systems/transientPresentation.js";
 import { buildIntegrityLocalSubmissionResult, getRunIntegrityReceipt, recordRunIntegrityFault } from "./systems/runIntegrity.js";
 import { planPauseTransition } from "./systems/pauseTransition.js";
 import { getInputActivityAge, releaseInputState } from "./systems/inputLifecycle.js";
@@ -148,10 +152,7 @@ function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
     }
   } catch (_) { /* not supported */ }
 }
-
 // ── Performance caps ─────────────────────────────────────────────────────────
-const MAX_PARTICLES  = 150;  // hard cap on concurrent particle objects
-const MAX_FLOAT_TEXTS = 30;  // hard cap on floating damage/event texts
 const MAX_DYING_ANIM  = 20;  // hard cap on death animation objects
 
 export default function CallOfDoodie() {
@@ -1023,29 +1024,6 @@ export default function CallOfDoodie() {
   }, [leaderboard]);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  const addParticles = (gs, x, y, color, count = 8) => {
-    const space = MAX_PARTICLES - gs.particles.length;
-    if (space <= 0) return;
-    count = Math.max(1, Math.floor(count * (gs.settParticlesMult || 1)));
-    const n = Math.min(count, space);
-    for (let i = 0; i < n; i++) {
-      const a = cosmeticRandom() * Math.PI * 2, sp = 1 + cosmeticRandom() * 4;
-      gs.particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 30 + cosmeticRandom() * 20, maxLife: 50, color, size: 2 + cosmeticRandom() * 4 });
-    }
-  };
-  const addText = (gs, x, y, text, color = "#FFF", big = false) => {
-    if (gs.floatingTexts.length >= MAX_FLOAT_TEXTS) {
-      if (!big) return; // drop small texts when full
-      gs.floatingTexts.splice(0, 3); // evict oldest 3 to make room for big text
-    }
-    const isQuote = big === "quote";
-    gs.floatingTexts.push({
-      x, y, text, color,
-      life: isQuote ? 110 : big ? 90 : 60,
-      vy: isQuote ? -0.65 : big ? -1 : -2,
-      big: big === true, quote: isQuote,
-    });
-  };
   const addKillFeed = (enemyName, weaponName) => {
     const entry = { enemy: enemyName, weapon: weaponName, id: Date.now() + cosmeticRandom() };
     killFeedRef.current = [entry, ...killFeedRef.current].slice(0, 5);
@@ -2604,35 +2582,16 @@ export default function CallOfDoodie() {
     }
 
     // ── Dynamic Objective tick + reward resolution ──
-    if (gs.activeObjective) {
-      const r = tickObjective(gs);
-      if (r.completed) {
-        const obj = gs.activeObjective;
-        statsRef.current.objectiveChains = recordObjectiveResult(statsRef.current.objectiveChains, obj, r);
-        if (obj.reward === "score") {
-          const bonus = 250 + (gs.currentWave * 25);
-          gs.score += bonus;
-          addText(gs, GW() / 2, GH() / 2, `+${bonus} ${obj.label} CLEARED!`, obj.color, true);
-        } else if (obj.reward === "coins") {
-          const coinBonus = 5 + Math.floor(gs.currentWave / 3);
-          gs.coins = (gs.coins || 0) + coinBonus;
-          setCoins(gs.coins);
-          addText(gs, GW() / 2, GH() / 2, `+${coinBonus}💩 ${obj.label} CLEARED!`, obj.color, true);
-        } else if (obj.reward === "perk_reroll") {
-          bankedPerkChoicesRef.current++;
-          setBankedPerkChoices(bankedPerkChoicesRef.current);
-          addText(gs, GW() / 2, GH() / 2, `🎁 ${obj.label} CLEARED · +1 PERK CHOICE`, obj.color, true);
-        }
-        gs.screenShake = Math.max(gs.screenShake || 0, 8);
-        gs.objectivesCompleted = [...(gs.objectivesCompleted || []), { type: obj.type, label: obj.label }];
-        gs.activeObjective = null;
-        achCheckRef.current = true;
-      } else if (r.expired) {
-        statsRef.current.objectiveChains = recordObjectiveResult(statsRef.current.objectiveChains, gs.activeObjective, r);
-        gs.objectivesFailed = [...(gs.objectivesFailed || []), { type: gs.activeObjective.type, label: gs.activeObjective.label }];
-        addText(gs, GW() / 2, GH() / 2, `${gs.activeObjective.label} FAILED`, "#FF3333");
-        gs.activeObjective = null;
+    const objectiveFrame = resolveObjectiveFrame(gs, statsRef.current.objectiveChains);
+    if (objectiveFrame) {
+      statsRef.current.objectiveChains = objectiveFrame.objectiveChains;
+      if (objectiveFrame.coinsTotal != null) setCoins(objectiveFrame.coinsTotal);
+      if (objectiveFrame.bankedPerkDelta) {
+        bankedPerkChoicesRef.current += objectiveFrame.bankedPerkDelta;
+        setBankedPerkChoices(bankedPerkChoicesRef.current);
       }
+      addText(gs, GW() / 2, GH() / 2, objectiveFrame.message, objectiveFrame.color, objectiveFrame.kind === "completed");
+      if (objectiveFrame.achievementCheck) achCheckRef.current = true;
     }
     // ── Frame capture for highlight GIF (~10fps) ──
     // Heat decay + adaptive music tier
@@ -4504,12 +4463,7 @@ export default function CallOfDoodie() {
     if (draftPending) {
       return <AsyncPanelBoundary><DraftScreen options={draftOptions} onSelect={applyDraftPerk} /></AsyncPanelBoundary>;
     }
-    const homeVersion = (() => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        return params.get("home");
-      } catch { return null; }
-    })();
+    const homeVersion = resolveHomeVersion(window.location.search);
     const Home = homeVersion === "v1" ? MenuScreen : homeVersion === "v3" ? HomeV3 : HomeV2;
     return (
       <AsyncPanelBoundary>
@@ -5027,62 +4981,6 @@ export default function CallOfDoodie() {
         .skip-link { position:absolute; top:-9999px; left:0; z-index:9999; padding:8px 16px; background:#FFD700; color:#000; font-weight:900; text-decoration:none; border-radius:0 0 6px 0; font-family:'Courier New',monospace; }
         .skip-link:focus { top:0; }
       `}</style>
-    </div>
-  );
-}
-
-function fmtDebugNumber(value, digits = 2) {
-  return Number.isFinite(value) ? value.toFixed(digits) : "--";
-}
-
-function InputDebugOverlay({ data }) {
-  const d = data || {};
-  const rows = [
-    ["SRC", d.source || "--"],
-    ["MOVE", `${Array.isArray(d.movementSources) && d.movementSources.length ? d.movementSources.join("+") : "idle"}${d.movementContention ? " !CONFLICT" : ""}`],
-    ["PAD", d.connected ? `${d.controllerType || "controller"} #${d.controllerIndex ?? "?"}` : "none"],
-    ["ID", d.controllerId ? String(d.controllerId).slice(0, 34) : "--"],
-    ["LSTICK", `${fmtDebugNumber(d.leftX)} ${fmtDebugNumber(d.leftY)} ${d.leftActive ? "ACTIVE" : "idle"}`],
-    ["AIM", `${fmtDebugNumber(d.aimAngle)} rad`],
-    ["PAD AIM", d.gamepadAimAngle == null ? "--" : `${fmtDebugNumber(d.gamepadAimAngle)} rad`],
-    ["PTR", `${d.pointerX ?? "--"},${d.pointerY ?? "--"}`],
-    ["SWEEP", d.pointerSweep ? `pointer:${d.pointerSweep}` : "--"],
-    ["CAL", d.calibration || "unverified"],
-    ["INPUT AGE", d.inputAgeMs == null ? "--" : `${Math.round(d.inputAgeMs)} ms`],
-    ["RELEASE", d.lastReleaseReason ? `${d.lastReleaseReason} · ${Math.round(d.lastReleaseAgeMs || 0)} ms` : "--"],
-    ["ACTIONS", `shoot:${d.shoot ? "1" : "0"} dash:${d.dashReady ? "ready" : "cool"} grenade:${d.grenadeReady ? "ready" : "cool"} reload:${d.reloading ? "1" : "0"}`],
-    ["TRACE", `${d.traceEvents || 0} events · aim ${d.traceAim || 0} · move ${d.traceMove || 0}`],
-  ];
-
-  return (
-    <div
-      data-testid="input-debug-hud"
-      style={{
-        position: "absolute",
-        top: 42,
-        right: 8,
-        width: 260,
-        maxWidth: "calc(100vw - 16px)",
-        zIndex: 80,
-        pointerEvents: "none",
-        background: "rgba(0,0,0,0.78)",
-        border: "1px solid rgba(0,229,255,0.45)",
-        borderRadius: 8,
-        padding: "8px 10px",
-        color: "#DDFBFF",
-        fontFamily: "'Courier New',monospace",
-        fontSize: 10,
-        lineHeight: 1.45,
-        boxShadow: "0 0 18px rgba(0,229,255,0.16)",
-      }}
-    >
-      <div style={{ color: "#00E5FF", fontWeight: 900, letterSpacing: 1, marginBottom: 4 }}>INPUT DIAGNOSTICS</div>
-      {rows.map(([label, value]) => (
-        <div key={label} style={{ display: "grid", gridTemplateColumns: "62px 1fr", gap: 6 }}>
-          <span style={{ color: "#7FE6FF", fontWeight: 900 }}>{label}</span>
-          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</span>
-        </div>
-      ))}
     </div>
   );
 }

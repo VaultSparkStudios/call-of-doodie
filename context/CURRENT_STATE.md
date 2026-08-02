@@ -1,3 +1,14 @@
+- Session 136 (2026-08-01) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
+- Control-surface truth — one source-derived classifier powers router, Genius cache, and innovation saturation; SHA-256 input fingerprints prove 0 repo-executable and 6 honestly deferred items instead of using cache age or fabricated padding.
+- Capability truth — local secrets auditing now resolves the authoritative shared 68-capability definition map with explicit provenance and no values; canonical router and secrets behavior are enforced by protocol drift.
+- Architecture truth — objective-frame planning, Input Diagnostics, and transient presentation moved behind tested boundaries; App is 4,986 lines with a 1,768-line loop span and 32 systems under unchanged 5,000/1,775/27/1 ratchets.
+- Routing truth — App and the retirement gate execute one pure default/v1/v2/v3 home resolver; production Lighthouse/funnel evidence remains independently required before legacy retirement.
+- Compound truth — contradictory objective outcomes fail closed, hostile random-number output stays finite, ordinary “missing coverage” work stays executable, Pages deploys use the broker-native credential fallback, the edge health Function emits HSTS itself, bounded test workers prevent launch-smoke starvation, the closeout board understands schema-2 exhaustion, and every subprocess uses the hidden safe-spawn boundary.
+- Validation truth — strict lint, 918/918 tests across 137 files, production build, dependency/security/public/schema/protocol/replay/assets/home gates, and desktop/mobile Playwright 8/8 pass directly.
+- Staging truth — `https://session-136-staging.call-of-doodie.pages.dev/` passes seven HTTP/edge surfaces with HSTS and the complete 21-route × 2-theme × 3-width matrix at 867/867 objective checks.
+- Visual honesty — fresh hosted screenshots exist, but direct host image inspection still fails at Windows `CryptUnprotectData`; no subjective pixel verdict is fabricated.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending verified inbound mail, physical device/full-run media, production performance/funnel data, project-scoped analytics/Sentry, publication/community, direct AI pixel review, exact-main CI, and founder approval.
+
 - Session 135 (2026-07-29) completed the founder-directed movement reliability, terminal-run recovery, and selectable Retro visual-pack pass.
 - Input truth — keyboard, pointer, touch, and gamepad state now cross one lifecycle release boundary; blur, page hide, visibility loss, pause, listener teardown, controller loss, run start, respawn, and terminal ending cannot leave a stale directional source latched.
 - Debug truth — the input receipt records reason, scope, timestamp, and activity age, while gamepad disappearance emits only when state was active instead of producing frame-rate receipt spam.

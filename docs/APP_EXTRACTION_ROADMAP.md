@@ -3,8 +3,8 @@
 ## Source-derived architecture receipt
 
 Run `npm run architecture:check`. The executable `app-architecture-receipt-v1`
-contract currently derives 4,999 physical lines, game-loop lines 2,363–4,135
-(1,772-line span), 27 imported system boundaries, and one imported hook boundary
+contract currently derives 4,986 physical lines, game-loop lines 2,396–4,164
+(1,768-line span), 32 imported system boundaries, and one imported hook boundary
 from `src/App.jsx`. `schema:lint` now fails on renewed monolith growth, game-loop
 span growth, or boundary loss. These are regression ratchets, not a claim that
 the ≤1,500-line target is complete.
@@ -13,6 +13,11 @@ Verified 2026-07-21 (Session 126): `src/App.jsx` is 4,828 physical lines. The
 previous ~3,500-line estimate had drifted as new modes and trust surfaces landed.
 This roadmap is a decomposition recipe, not evidence that extraction itself has
 happened; line counts must be re-measured before claiming progress.
+
+Verified again 2026-08-01 (Session 136): both executable ratchets are green
+without changing either budget. The session extracted objective-frame planning,
+Input Diagnostics presentation, and finite transient-presentation helpers. The
+remaining ≤1,500-line target is still explicitly incomplete.
 
 Extracted system boundaries now include:
 
@@ -28,6 +33,9 @@ Extracted system boundaries now include:
 - `src/systems/transientLifecycle.js` (in-place hot-array compaction, S125)
 - `src/systems/pauseTransition.js` (centralized pause/input-release contract, S126)
 - `src/systems/defeatEconomy.js` (shared railgun/projectile score, boss, and coin parity, S126)
+- `src/systems/objectiveFrame.js` (bounded objective outcomes and contradiction handling, S136)
+- `src/systems/transientPresentation.js` (finite particle/text presentation helpers, S136)
+- `src/components/InputDebugOverlay.jsx` + `inputDebugRows.js` (diagnostic presentation boundary, S136)
 - `src/utils/metaClarity.js`, `roastDirector.js`, `routeForecast.js`, `shopForecast.js`
 
 The remaining heavy clusters in `App.jsx`, in priority order:

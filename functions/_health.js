@@ -1,4 +1,9 @@
 const CONTRACT = "edge-health-v1";
+const EDGE_SECURITY_HEADERS = Object.freeze({
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Content-Type-Options": "nosniff",
+  "Cross-Origin-Resource-Policy": "same-origin",
+});
 
 function deployReceipt(env = {}) {
   const candidate = String(env.CF_PAGES_COMMIT_SHA || "").trim().toLowerCase();
@@ -20,8 +25,8 @@ export function onRequestGet(context) {
   return Response.json(buildEdgeHealthReceipt(context?.env), {
     status: 200,
     headers: {
+      ...EDGE_SECURITY_HEADERS,
       "Cache-Control": "no-store, max-age=0",
-      "X-Content-Type-Options": "nosniff",
     },
   });
 }
@@ -34,6 +39,7 @@ export function onRequest(context = {}) {
   }, {
     status: 405,
     headers: {
+      ...EDGE_SECURITY_HEADERS,
       Allow: "GET",
       "Cache-Control": "no-store, max-age=0",
     },

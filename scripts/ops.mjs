@@ -6,6 +6,7 @@
 import { spawnSync } from "./lib/safe-spawn.mjs";
 import { dedupeInnovationCandidates } from "./lib/innovation-candidates.mjs";
 import { syncDoctorScore } from "./lib/doctor-score-sync.mjs";
+import { collectTaskWork, slugifyTask } from "./lib/task-work.mjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -56,6 +57,7 @@ Commands:
   innovation-pack  Write docs/INNOVATION_PACK.md from repo-local open work and genius signals
   onboard          Verify local startup tooling exists; use --repair --write to report repair state
   rescore          Proxy the authoritative IGNIS rescore command
+  router           Run the local intent router (for example: router suggest --json)
   help             Show this help`);
 }
 
@@ -99,39 +101,17 @@ function blockerPreflight() {
   }
 }
 
-function cleanTask(line) {
-  return line.replace(/^- \[ \]\s*/, "").trim();
-}
-
-function slugify(text) {
-  return text
-    .toLowerCase()
-    .replace(/[`*_#[\]]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 72) || "innovation-item";
-}
-
 function collectOpenTasks() {
   const board = readText("context/TASK_BOARD.md");
-  const sections = ["Now", "Deferred"];
-  const tasks = [];
-  for (const section of sections) {
-    const body = board.match(new RegExp(`## ${section}\\s+([\\s\\S]*?)(?:\\n## |\\n$)`))?.[1] || "";
-    for (const line of body.split(/\r?\n/).filter((entry) => entry.trim().startsWith("- [ ]"))) {
-      const title = cleanTask(line);
-      tasks.push({
-        slug: slugify(title),
-        title,
-        source: `context/TASK_BOARD.md#${section.toLowerCase()}`,
-        axis: /protocol|script|startup|closeout|audit|implement/i.test(title) ? "protocol"
-          : /qa|input|gamepad|pwa|screenshot/i.test(title) ? "launch-confidence"
-            : /replay|leaderboard|trust|score/i.test(title) ? "trust"
-              : "product",
-      });
-    }
-  }
-  return tasks;
+  return collectTaskWork(board).map((item) => ({
+    slug: item.slug,
+    title: item.title,
+    source: item.source,
+    axis: item.axis,
+    status: item.status,
+    executable: item.executable,
+    reason: item.reason,
+  }));
 }
 
 function innovationPack() {
@@ -139,13 +119,22 @@ function innovationPack() {
   spawnSync(process.execPath, [cacheScript, "--write"], { cwd: ROOT, stdio: "ignore" });
   const cachePath = path.join(ROOT, ".cache", "genius-list.json");
   const genius = fs.existsSync(cachePath) ? JSON.parse(fs.readFileSync(cachePath, "utf8")) : { items: [] };
-  const taskItems = collectOpenTasks();
-  const geniusItems = (genius.items || []).map((item) => ({
-    slug: item.slug || slugify(item.title || item.insight || "genius-item"),
+  const allTaskItems = collectOpenTasks();
+  const taskItems = allTaskItems.filter((item) => item.executable);
+  const allGeniusItems = (genius.items || []).map((item) => ({
+    slug: item.slug || slugifyTask(item.title || item.insight || "genius-item"),
     title: item.title || item.insight || "Maintain launch confidence.",
     source: item.evidence || ".cache/genius-list.json",
     axis: item.axis || "protocol",
+    status: item.status || "unblocked",
+    executable: item.executable !== false,
+    reason: item.reason || "Repo-owned work.",
   }));
+  const geniusItems = allGeniusItems.filter((item) => item.executable);
+  const deferredItems = dedupeInnovationCandidates([
+    ...allTaskItems.filter((item) => !item.executable),
+    ...allGeniusItems.filter((item) => !item.executable),
+  ], 12);
   const items = dedupeInnovationCandidates([...taskItems, ...geniusItems], 8);
 
   const generatedAt = new Date().toISOString();
@@ -170,6 +159,11 @@ function innovationPack() {
       lines.push(`   - First step: verify the premise in source, then write a fresh \`docs/AUDIT_<date>.json\` item before implementation.`);
     });
   }
+  lines.push("");
+  lines.push("## Deferred Evidence");
+  lines.push("");
+  if (deferredItems.length === 0) lines.push("- No external or decision-gated work is currently open.");
+  else deferredItems.forEach((item) => lines.push("- **" + item.status + "** - " + item.title + " (" + item.reason + ")"));
   lines.push("");
   lines.push("## Guardrails");
   lines.push("");
@@ -234,6 +228,9 @@ switch (command) {
     break;
   case "rescore":
     runNode(path.join(ROOT, "..", "vaultspark-studio-ops", "scripts", "rescore-ignis.mjs"), args);
+    break;
+  case "router":
+    runNode(path.join(__dirname, "router.mjs"), args);
     break;
   case "help":
   case "--help":

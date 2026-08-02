@@ -5,6 +5,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "./lib/safe-spawn.mjs";
 
 const ROOT = process.cwd();
 const JSON_MODE = process.argv.includes("--json");
@@ -73,6 +74,37 @@ const protocolText = fs.existsSync(path.join(ROOT, "docs", "SESSION_PROTOCOL.md"
 for (const anchor of protocolAnchors) {
   const ok = protocolText.includes(anchor.contains);
   checks.push({ ...anchor, level: "required", ok, status: ok ? "present" : "missing-required" });
+}
+
+const behaviorProbes = [
+  {
+    rel: "behavior:ops-router-suggest",
+    purpose: "canonical /start router path returns structured suggestions",
+    run: () => spawnSync(process.execPath, ["scripts/ops.mjs", "router", "suggest", "--top", "1", "--json"], { cwd: ROOT, encoding: "utf8" }),
+    validate: (result) => JSON.parse(result.stdout)?.status === "ok",
+  },
+  {
+    rel: "behavior:secrets-audit-map",
+    purpose: "local secrets audit resolves a real capability map with provenance",
+    run: () => spawnSync(process.execPath, ["scripts/check-secrets.mjs", "--audit", "--json"], { cwd: ROOT, encoding: "utf8" }),
+    validate: (result) => {
+      const rows = JSON.parse(result.stdout);
+      return Array.isArray(rows) && rows.length > 0 && rows.every((row) => typeof row.mapSource === "string" && row.mapSource !== "none");
+    },
+  },
+];
+
+for (const probe of behaviorProbes) {
+  let ok = false;
+  let detail = "probe did not run";
+  try {
+    const execution = probe.run();
+    ok = execution.status === 0 && probe.validate(execution);
+    detail = ok ? "behavior verified" : "exit=" + (execution.status ?? "null");
+  } catch (error) {
+    detail = error.message;
+  }
+  checks.push({ rel: probe.rel, purpose: probe.purpose, level: "required", ok, status: ok ? "verified" : "behavior-failed", detail });
 }
 
 const missingRequired = checks.filter((check) => check.level === "required" && !check.ok);

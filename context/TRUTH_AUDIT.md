@@ -1,3 +1,25 @@
+<!-- truth-audit-version: 1.1 -->
+# Truth Audit
+
+## 2026-08-01 — Session 136 — Control-plane, architecture, and hosted-edge truth
+
+- Audit truth — `docs/AUDIT_2026-08-01.json` / `.md` contain five live-verified L3 items, explicit rejected/deferred premises, and eight implemented compound refinements with execution evidence.
+- Genius truth — the source-derived schema-2 cache distinguishes executable work from credential, data, community, and product-decision gates; input hashes, not elapsed time, decide freshness.
+- Capability truth — the project-local audit resolves the authoritative shared definition map and labels its provenance; it prints no secret values and no longer creates a false 0/0 universe.
+- Architecture truth — App is 4,986 lines with a 1,768-line loop span, 32 system boundaries, and unchanged executable budgets; the ≤1,500-line roadmap target remains incomplete and is not claimed.
+- Routing truth — default/v1/v2/v3 behavior is executed by one resolver shared with the retirement gate; fallback deletion still requires production evidence.
+- Deployment truth — the Pages preview path uses the Studio broker-native helper, proves the narrow token before selecting the ready fallback, and never returns a token to application code.
+- Edge truth — `/_health` now emits one-year HSTS, nosniff, and same-origin resource policy from the Function response itself; the redeployed endpoint and six companion surfaces return HTTP 200 with HSTS.
+- Staging truth — the isolated Session 136 preview passed 867/867 objective route/theme/width checks. Direct AI pixel inspection remains unclaimed because the host image viewer failed `CryptUnprotectData`.
+- Validation truth — strict lint, 918/918 tests across 137 files, production build, dependency/security/public/schema/protocol/replay/assets/home gates, and browser E2E 8/8 pass directly.
+- Suite truth — an isolated launch smoke passed in 2.8 seconds but starved reproducibly under unbounded file parallelism; a four-worker contract restores canonical 918/918 completion without inflating its timeout.
+- Derived-view truth — the closeout board accepts both schema-2 executable/exhaustion receipts and legacy ranked caches; it no longer calls a fresh exhausted cache missing.
+- Shell truth — staging and operator-smoke child processes cross `safe-spawn`; the Windows-hide gate reports zero raw imports and no visible window-storm path.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending external/device/data/publication/direct-visual/founder gates.
+
+Overall status: green engineering closeout; NO-GO SPARKED
+Last reviewed: 2026-08-01
+
 ## 2026-07-06 — Session 121 continuation — Doctor route truth
 
 - Protocol truth — `scripts/ops.mjs` now lists and routes `doctor`, proxying to the Studio Ops doctor path from the current repo.
@@ -37,9 +59,6 @@ Last reviewed: 2026-07-03
 
 Overall status: green recovered code; NO-GO public launch
 Last reviewed: 2026-07-16
-<!-- truth-audit-version: 1.1 -->
-# Truth Audit
-
 ## 2026-07-25 — Session 130 — Defeat, input, coverage, and staging truth
 
 - Audit truth — `docs/AUDIT_2026-07-25.json` / `.md` contain three live-verified primary items, six honest deferrals/rejections, and three implemented second-order safeguards with execution evidence.

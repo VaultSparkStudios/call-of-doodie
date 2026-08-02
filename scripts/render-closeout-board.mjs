@@ -24,6 +24,7 @@ import os from 'os';
 import path from 'path';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
+import { buildCloseoutNextHint } from './lib/closeout-next.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STUDIO_ROOT = path.resolve(__dirname, '..');
@@ -347,14 +348,7 @@ function postSessionSignals(status) {
 }
 
 function nextSessionHint() {
-  const cache = readJson(GENIUS_CACHE);
-  const top = cache?.list?.ranked?.[0];
-  if (!top) return null;
-  return {
-    title: top.title || top.id,
-    rationale: top.rationale || '',
-    cmd: top.command || null,
-  };
+  return buildCloseoutNextHint(readJson(GENIUS_CACHE));
 }
 
 function render() {

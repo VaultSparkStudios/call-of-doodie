@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync } from "../lib/safe-spawn.mjs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 

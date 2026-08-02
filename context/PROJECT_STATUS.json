@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 135 eliminated stale-direction input state, made terminal run completion exactly-once, fixed the browser-reproduced low-health renderer crash, and shipped an opt-in complete Retro character pack; 881/881 tests and focused desktop/mobile browser 8/8 are green.",
+  "currentFocus": "Session 136 made executable-work, capability, routing, architecture, deployment, edge-security, suite-resource, closeout-derived, and shell-process observability source-derived and self-validating; five L3 items plus eight compound refinements are staged with 918/918 tests, browser 8/8, and hosted visual 867/867 green.",
   "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production Lighthouse and funnel evidence, project-scoped analytics/Sentry, publication, direct AI pixel review, and founder approval pass.",
   "testingSurfaces": [
     {
@@ -165,6 +165,17 @@
       "status": "green",
       "type": "tests",
       "command": "Session 135 — 881/881 across 130 files; strict lint; asset validation; production build; diff check; focused input/Retro/browser completion E2E 8/8 across Desktop Chrome and Pixel 7"
+    },
+    {
+      "status": "green",
+      "url": "https://session-136-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 136 broker-native direct-upload preview · seven HTTP/edge surfaces with one-year HSTS · hosted 21-route × 2-theme × 3-width matrix 867/867"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 136 — 918/918 across 137 files; strict lint; production build; dependency/security/public/schema/protocol/replay/assets/home gates; desktop/mobile browser E2E 8/8"
     }
   ],
   "blockers": [
@@ -174,27 +185,27 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-07-29",
+  "lastUpdated": "2026-08-01",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
-  "truthAuditLastRun": "2026-07-29",
-  "ignisScore": 44175,
+  "truthAuditLastRun": "2026-08-01",
+  "ignisScore": 45706,
   "ignisGrade": "FORGE",
-  "ignisLastComputed": "2026-07-16",
-  "silSession": 135,
+  "ignisLastComputed": "2026-08-01",
+  "silSession": 136,
   "silScore": 999,
   "silAvg3": 999,
-  "silVelocity": 5,
+  "silVelocity": 13,
   "silDebt": "decreasing",
-  "silLastSession": "2026-07-29",
-  "currentSession": 135,
+  "silLastSession": "2026-08-01",
+  "currentSession": 136,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 881,
-  "testsTotal": 881,
-  "entropyScore": 0.215,
-  "entropyLastComputed": "2026-07-29",
+  "testsPassing": 918,
+  "testsTotal": 918,
+  "entropyScore": 0.178,
+  "entropyLastComputed": "2026-08-02",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 499.5,
@@ -222,29 +233,29 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-133-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-07-29T19:48:14.0019764Z",
+  "stagingUrl": "https://session-136-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-02T00:33:17.1797039Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
-    "session": 135,
+    "session": 136,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-07-29T19:48:14.0019764Z",
+    "enumeratedAt": "2026-08-02T00:13:02.3503865Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
-    "date": "2026-07-29",
-    "ranAt": "2026-07-29T19:46:46.5067489Z",
+    "date": "2026-08-02",
+    "ranAt": "2026-08-02T00:17:51.300Z",
     "overallPass": true,
-    "passing": 123,
-    "warning": 36,
+    "passing": 121,
+    "warning": 39,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 2,
-    "ran": 160,
-    "total": 162,
-    "score": 77
+    "ran": 161,
+    "total": 163,
+    "score": 75
   }
 }
