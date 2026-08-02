@@ -46,4 +46,48 @@
   .arcade-home__cabinet{padding-right:12px!important;padding-left:12px!important}.arcade-home__hero{min-height:184px;padding:25px 82px 12px}.arcade-home__portrait{width:96px}.arcade-home__portrait--operative{left:3px}.arcade-home__portrait--nemesis{right:3px}.arcade-home__portrait span{font-size:5px}.arcade-home__title{font-size:clamp(36px,11.5vw,58px)!important}.arcade-home__insert-coin{font-size:7px;letter-spacing:1.4px}
 }
 @media(max-width:460px){.arcade-home__hero{min-height:165px;padding:23px 62px 10px}.arcade-home__portrait{width:73px}.arcade-home__portrait span{display:none}.arcade-home__title{font-size:clamp(33px,11vw,46px)!important}.arcade-home__deploy{margin-top:12px!important}.arcade-home__deploy-button{font-size:18px!important;padding:14px 10px!important}}
-@media(prefers-reduced-motion:reduce){.arcade-home__insert-coin,.arcade-home__deploy-button::after{animation:none}}
+@media(prefers-reduced-motion:reduce){.arcade-home__insert-coin,.arcade-home__deploy-button::after{animation:none}.arcade-home__mobile-nav button{transition:none}}
+
+/* CANON-041 mobile bottom nav — hidden on desktop */
+.arcade-home__mobile-nav{display:none}
+
+@media(max-width:620px){
+  /* Extra bottom clearance so the fixed nav doesn't overlap content */
+  .arcade-home__cabinet{padding-bottom:calc(82px + env(safe-area-inset-bottom))!important}
+
+  /* Section switching: only one content region visible at a time */
+  .arcade-home__cabinet[data-mob-section="play"] .arcade-home__tabs-content{display:none}
+  .arcade-home__cabinet[data-mob-section="tabs"] .arcade-home__play-content{display:none}
+
+  /* Desktop tab buttons replaced by the bottom nav on mobile */
+  .arcade-home__tabs{display:none!important}
+
+  /* Fixed bottom nav shell */
+  .arcade-home__mobile-nav{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:3px;
+    position:fixed;left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));
+    z-index:90;min-height:66px;padding:5px;
+    border:1px solid rgba(255,160,60,.22);border-radius:18px;
+    background:rgba(7,11,16,.94);
+    box-shadow:0 18px 40px rgba(0,0,0,.5),0 0 24px rgba(255,107,0,.06),inset 0 1px rgba(255,255,255,.04);
+    backdrop-filter:blur(16px);
+  }
+  .arcade-home__mobile-nav button{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    padding:5px 4px;background:transparent;border:none;border-radius:14px;cursor:pointer;
+    color:rgba(255,255,255,.4);font-family:'Courier New',monospace;
+    font-size:8px;font-weight:900;letter-spacing:.8px;line-height:1;
+    transition:color .12s,background .12s;
+  }
+  .arcade-home__mobile-nav .mob-icon{font-size:18px;line-height:1;margin-bottom:1px;display:block}
+  .arcade-home__mobile-nav button.is-active{background:rgba(255,107,53,.16);color:#FF8C3D}
+  .arcade-home__mobile-nav button.is-active .mob-icon{filter:drop-shadow(0 0 5px rgba(255,107,0,.55))}
+
+  /* Porcelain-day theme variant */
+  [data-theme="porcelain-day"] .arcade-home__mobile-nav{
+    background:rgba(248,242,234,.96);border-color:rgba(180,120,60,.22);
+    box-shadow:0 18px 40px rgba(0,0,0,.2),0 0 24px rgba(180,100,0,.06);
+  }
+  [data-theme="porcelain-day"] .arcade-home__mobile-nav button{color:rgba(60,40,20,.4)}
+  [data-theme="porcelain-day"] .arcade-home__mobile-nav button.is-active{background:rgba(200,100,20,.12);color:#B25A00}
+}
