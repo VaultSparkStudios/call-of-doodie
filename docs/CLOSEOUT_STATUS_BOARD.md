@@ -1,20 +1,20 @@
-<!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->
-<!-- generated-at: 2026-08-02 (Session 136 closeout) -->
+<!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
+<!-- generated-at: 2026-08-03 (Session 137 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S136 ════════════════════╗
-║  Date: 2026-08-02  ·  SIL: 999/1000  ·  Velocity: 13 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S137 ════════════════════╗
+║  Date: 2026-08-03  ·  SIL: 999/1000  ·  Velocity: 13 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Architecture: 4,986 App lines, 1,768 inline-loop span, 32 sy  ║
-║  ✓ Control plane: Genius schema 2.0 reports `executable=0`, `de  ║
-║  ✓ Staging: `https://session-136-staging.call-of-doodie.pages.d  ║
-║  ✓ Validation: 919/919 tests across 137 files, strict lint, pro  ║
-║  ✓ Production proof: the deployed tree passes live site 7/7, cu  ║
+║  ✓ Architecture: 4,999 App lines, 1,768 inline-loop span, and u  ║
+║  ✓ Validation: 935/935 tests across 143 files, strict lint, pro  ║
+║  ✓ Staging: `https://session-137-staging.call-of-doodie.pages.d  ║
+║  ✓ Performance: production HomeV2 median LCP 3,226 ms versus v1  ║
+║  ✓ Release: engineering staging is green; SPARKED remains NO-GO  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -29,33 +29,35 @@
 ║    Automation         100  ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
-║  · context/CURRENT_STATE.md                                      ║
-║  · context/TASK_BOARD.md                                         ║
+║  ✓ context/CURRENT_STATE.md                                      ║
+║  ✓ context/TASK_BOARD.md                                         ║
 ║  ✓ context/LATEST_HANDOFF.md                                     ║
-║  · logs/WORK_LOG.md                                              ║
-║  · context/DECISIONS.md                                          ║
-║  · context/SELF_IMPROVEMENT_LOOP.md                              ║
+║  ✓ logs/WORK_LOG.md                                              ║
+║  ✓ context/DECISIONS.md                                          ║
+║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
 ║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
-║  · context/TRUTH_AUDIT.md                                        ║
+║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 5 files  ·  M:5 A:0 D:0 ?:0                            ║
+║  Changes: 2 files  ·  M:2 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-136-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-137-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        123/163                                          ║
+║  Doctor:        120/163                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         919/919                                          ║
-║  IGNIS:         1d ago                                           ║
+║  Tests:         935/935                                          ║
+║  Validation:    full-fresh                                       ║
+║  IGNIS:         2d ago                                           ║
 ║  Truth:         green-code-no-go-launch                          ║
-║  Sanitization:  5d ago                                           ║
+║  Sanitization:  6d ago                                           ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  #1: Repo-executable Genius List exhausted                       ║
@@ -64,4 +66,4 @@
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
-*Generated by `scripts/render-closeout-board.mjs v1.0`*
+*Generated by `scripts/render-closeout-board.mjs v1.1`*

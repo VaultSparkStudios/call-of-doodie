@@ -298,6 +298,31 @@ function writeBackCoverage(session) {
         }
       }
     }
+
+    // A custom conventional commit message is explicitly supported by
+    // closeout-autopilot, so commit-message grep cannot be the only evidence
+    // source. Fall back to the newest PROJECT_STATUS-changing commit whose
+    // committed snapshot declares this exact session.
+    if (!touched.has('context/PROJECT_STATUS.json')) {
+      const candidates = sh('git log -n 20 --format=%H -- context/PROJECT_STATUS.json').out
+        .split('\n')
+        .map((value) => value.trim())
+        .filter(Boolean);
+      for (const sha of candidates) {
+        const snapshot = sh(`git show ${sha}:context/PROJECT_STATUS.json`);
+        if (snapshot.code !== 0) continue;
+        let committedStatus;
+        try { committedStatus = JSON.parse(snapshot.out); } catch { continue; }
+        if (Number(committedStatus?.currentSession) !== Number(session)) continue;
+        const committed = sh(`git show --pretty=format: --name-only ${sha}`).out;
+        for (const file of committed.split('\n').map((value) => value.trim().replace(/\\/g, '/'))) {
+          for (const target of TARGETS) {
+            if (file.endsWith(target)) touched.add(target);
+          }
+        }
+        break;
+      }
+    }
   }
   const recentCutoff = Date.now() - 24 * 3600_000;
   for (const target of TARGETS) {

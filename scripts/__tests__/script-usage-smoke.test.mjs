@@ -1,4 +1,5 @@
 import { execFileSync } from "../lib/safe-spawn.mjs";
+import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -70,6 +71,8 @@ describe("operator script smoke surfaces", () => {
   it("runs the protocol drift inventory as structured evidence", () => {
     const receipt = JSON.parse(run("scripts/protocol-drift-check.mjs", ["--json"]));
     expect(receipt).toMatchObject({ status: "ok", summary: { missingRequired: 0 } });
+    const boardSource = fs.readFileSync(path.join(ROOT, "scripts/render-closeout-board.mjs"), "utf8");
+    expect(boardSource).toContain("git log -n 20 --format=%H -- context/PROJECT_STATUS.json");
   });
 
   it("runs the installed dependency-tree gate as structured evidence", () => {
