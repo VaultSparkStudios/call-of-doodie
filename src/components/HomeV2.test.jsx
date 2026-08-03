@@ -463,4 +463,22 @@ describe("HomeV2", () => {
     const stickyBar = container.querySelector('[data-testid="mobile-sticky-deploy"]');
     expect(stickyBar).toBeNull();
   });
+
+  it("opens an inline picker inside the sticky bar when OPTIONS is tapped, not the scroll-away in-page dropdown", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    expect(container.querySelector('[data-testid="mobile-sticky-picker"]')).toBeNull();
+
+    const optionsBtn = [...container.querySelectorAll("button")].find(b => b.getAttribute("aria-label") === "Change game mode");
+    expect(optionsBtn).toBeTruthy();
+    await act(async () => { optionsBtn.click(); });
+
+    expect(container.querySelector('[data-testid="mobile-sticky-picker"]')).toBeTruthy();
+    expect(optionsBtn.getAttribute("aria-expanded")).toBe("true");
+  });
 });

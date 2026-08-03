@@ -103,6 +103,7 @@ export default function HomeV2(props) {
   const [challengeMode, setChallengeMode] = useState(null);
   const [tab, setTab] = useState("career");
   const [deployOpen, setDeployOpen] = useState(false);
+  const [stickyPickerOpen, setStickyPickerOpen] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -1180,6 +1181,46 @@ export default function HomeV2(props) {
             WebkitBackdropFilter: "blur(20px)",
           }}
         >
+          {/* Inline compact picker — rendered inside the fixed bar so it stays visible regardless of scroll position */}
+          {stickyPickerOpen && (
+            <div data-testid="mobile-sticky-picker" style={{ marginBottom: 10, padding: "10px 8px 8px", background: "rgba(255,107,35,0.06)", borderRadius: 8, border: "1px solid rgba(255,107,35,0.22)" }}>
+              <div style={{ fontSize: 9, color: "#888", letterSpacing: 2, marginBottom: 6 }}>MODE</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(110px,1fr))", gap: 5, marginBottom: 8 }}>
+                {MODE_DEFS.map(m => (
+                  <button
+                    key={m.id}
+                    onClick={() => { selectMode(m.id); setStickyPickerOpen(false); }}
+                    style={{
+                      padding: "6px 6px", borderRadius: 7, cursor: "pointer", textAlign: "left", fontFamily: "inherit",
+                      background: modeId === m.id ? `${m.color}22` : "rgba(0,0,0,0.3)",
+                      border: modeId === m.id ? `2px solid ${m.color}` : "1px solid rgba(255,255,255,0.1)",
+                      color: "#EEE",
+                    }}
+                  >
+                    <div style={{ fontSize: 11, fontWeight: 900, color: m.color }}>{m.emoji} {m.label}</div>
+                  </button>
+                ))}
+              </div>
+              <div style={{ fontSize: 9, color: "#888", letterSpacing: 2, marginBottom: 6 }}>DIFFICULTY</div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 5 }}>
+                {Object.entries(DIFFICULTIES).map(([k, d]) => (
+                  <button
+                    key={k}
+                    onClick={() => { setDifficulty(k); setStickyPickerOpen(false); }}
+                    style={{
+                      padding: "6px 4px", borderRadius: 7, cursor: "pointer", textAlign: "center", fontFamily: "inherit",
+                      background: difficulty === k ? `${d.color}22` : "rgba(0,0,0,0.3)",
+                      border: difficulty === k ? `2px solid ${d.color}` : "1px solid rgba(255,255,255,0.1)",
+                      color: "#EEE", fontWeight: 900, fontSize: 11,
+                    }}
+                  >
+                    <div style={{ color: d.color }}>{d.emoji}</div>
+                    <div>{d.label}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, gap: 10 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
               <span style={{ fontSize: 14 }}>{selectedMode.emoji}</span>
@@ -1191,16 +1232,16 @@ export default function HomeV2(props) {
               </span>
             </div>
             <button
-              onClick={() => setDeployOpen(v => !v)}
+              onClick={() => setStickyPickerOpen(v => !v)}
               style={{
                 flexShrink: 0, padding: "5px 10px", fontSize: 10, fontWeight: 900, letterSpacing: 1,
                 background: "rgba(255,107,35,0.1)", border: "1px solid rgba(255,107,35,0.35)",
                 borderRadius: 6, color: "#FF8A3D", cursor: "pointer", fontFamily: "inherit",
               }}
-              aria-expanded={deployOpen}
+              aria-expanded={stickyPickerOpen}
               aria-label="Change game mode"
             >
-              {deployOpen ? "HIDE ▴" : "OPTIONS ▾"}
+              {stickyPickerOpen ? "HIDE ▴" : "OPTIONS ▾"}
             </button>
           </div>
           <button
