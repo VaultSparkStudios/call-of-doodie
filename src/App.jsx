@@ -59,7 +59,7 @@ import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import DisplayNameScreen from "./components/DisplayNameScreen.jsx";
 import HomeV2 from "./components/HomeV2.jsx";
-import HomeV3 from "./components/HomeV3.jsx";
+const HomeV3 = lazy(() => import("./components/HomeV3.jsx"));
 import HUD from "./components/HUD.jsx";
 import InputDebugOverlay from "./components/InputDebugOverlay.jsx";
 import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
