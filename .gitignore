@@ -4,6 +4,8 @@ dist
 *.local
 .claude/
 context/internal-startup.local.json
+context/SIGNALS.md
+portfolio/compiled/
 context/.session-lock
 logs/dev-server*.log
 secrets/

@@ -14,6 +14,12 @@ describe("menuGuidance", () => {
     });
 
     expect(stack[0].id).toBe("daily_challenge");
+    expect(stack[0]).toMatchObject({
+      schemaVersion: "continuation-action-v2",
+      action: "daily",
+      reasonCode: "daily_challenge",
+      payload: { seed: 12345 },
+    });
     expect(stack.some(action => action.id === "best_next_upgrade")).toBe(true);
     expect(stack.some(action => action.id === "play_now")).toBe(true);
   });
@@ -43,6 +49,19 @@ describe("menuGuidance", () => {
     expect(stack).toHaveLength(1);
     expect(stack[0].id).toBe("play_now");
     expect(stack[0].title).toBe("Your First Drop");
+    expect(stack[0].action).toBe("deploy");
+  });
+
+  test("input verification outranks every other continuation until controls are proved", () => {
+    const stack = buildFrontDoorActionStack({
+      hasVerifiedInput: false,
+      challenge: { seed: 7788, vsScore: 42000 },
+      totalRuns: 20,
+      todaySeed: 12345,
+    });
+
+    expect(stack).toHaveLength(1);
+    expect(stack[0]).toMatchObject({ id: "aim_check", action: "aim_check", reasonCode: "aim_check" });
   });
 
   test("best_next_upgrade action includes metaRec when career analysis yields a recommendation", () => {
@@ -82,6 +101,7 @@ describe("menuGuidance", () => {
     expect(drill).toBeDefined();
     expect(drill.detail).toContain("Enemy #12");
     expect(drill.killerType).toBe("12");
+    expect(drill).toMatchObject({ action: "codex", payload: { killerType: "12" } });
   });
 
   test("builds a command brief that reflects the selected mode and loadout", () => {

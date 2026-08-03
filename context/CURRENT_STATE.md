@@ -1,3 +1,13 @@
+- Session 137 (2026-08-03) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
+- Gameplay truth — every primary is available immediately; levels award mastery recognition and evolution targets rather than access locks, and public/runtime contracts share `open-arsenal-mastery-v2`.
+- Continuation truth — Journey, command ticker, analytics, Daily, and Weekly Gauntlet execute one reason-coded action stack; Gauntlet launches immediately with a deterministic weekly contract and fixed opening kit.
+- Control-plane truth — startup acceptance guards capability provenance, brief framing, cost semantics, and public artifact boundaries; the release manifest derives staging and lifecycle truth from authoritative project state.
+- Performance truth — three production runs per surface at deployed revision `f1d4d825742c` measure HomeV2 median Largest Contentful Paint at 3,226 ms versus legacy v1 at 2,651 ms. The fallback stays; no funnel evidence is implied.
+- Second-order truth — Supabase work waits for browser idle, the entry HTML preloads only React, Gauntlet cardinality/time inputs fail closed, and performance evidence binds sample count, exact URLs, source revision, raw hashes, and derived diagnostics.
+- Validation truth — strict lint, 935/935 tests across 143 files, production build, browser E2E 8/8, hosted visual checks 867/867, four hash-bound inspected captures, and exact-session staging pass directly.
+- Staging truth — `https://session-137-staging.call-of-doodie.pages.dev/` and immutable preview `https://dd1b8c97.call-of-doodie.pages.dev/` carry the exact implementation tree.
+- Release truth — engineering staging is green; SPARKED remains NO-GO pending inbound-mail, physical-device/full-run media, production funnel, scoped analytics/Sentry, publication, and founder evidence.
+
 - Session 136 (2026-08-01) completed the founder-requested continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` arc from synchronized `main`.
 - Control-surface truth — one source-derived classifier powers router, Genius cache, and innovation saturation; SHA-256 input fingerprints prove 0 repo-executable and 6 honestly deferred items instead of using cache age or fabricated padding.
 - Capability truth — local secrets auditing now resolves the authoritative shared 68-capability definition map with explicit provenance and no values; canonical router and secrets behavior are enforced by protocol drift.

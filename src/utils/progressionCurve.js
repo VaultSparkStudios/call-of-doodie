@@ -1,4 +1,5 @@
-import { META_UPGRADES, WEAPON_UNLOCK_LEVELS, WEAPONS } from "../constants.js";
+import { META_UPGRADES } from "../constants.js";
+import { buildArsenalMasteryContract } from "./arsenalMastery.js";
 
 const DEFAULT_KILLS_PER_RUN = Object.freeze([10, 25, 50]);
 
@@ -36,18 +37,17 @@ export function buildProgressionRunway({
   const points = count(careerPoints);
   const accountLevel = getAccountLevel(kills);
 
-  const nextWeaponIndex = WEAPON_UNLOCK_LEVELS.findIndex((level) => level > accountLevel);
-  const nextWeapon = nextWeaponIndex >= 0
+  const arsenalMastery = buildArsenalMasteryContract(accountLevel);
+  const nextMastery = arsenalMastery.nextMastery
     ? {
-        index: nextWeaponIndex,
-        name: WEAPONS[nextWeaponIndex]?.name || `Weapon ${nextWeaponIndex + 1}`,
-        accountLevel: WEAPON_UNLOCK_LEVELS[nextWeaponIndex],
-        totalKillsRequired: killsRequiredForAccountLevel(WEAPON_UNLOCK_LEVELS[nextWeaponIndex]),
+        ...arsenalMastery.nextMastery,
+        accountLevel: arsenalMastery.nextMastery.masteryAccountLevel,
+        totalKillsRequired: killsRequiredForAccountLevel(arsenalMastery.nextMastery.masteryAccountLevel),
       }
     : null;
-  if (nextWeapon) {
-    nextWeapon.killsRemaining = Math.max(0, nextWeapon.totalKillsRequired - kills);
-    nextWeapon.runsByKillsPerRun = runsForKills(nextWeapon.killsRemaining, killsPerRunScenarios);
+  if (nextMastery) {
+    nextMastery.killsRemaining = Math.max(0, nextMastery.totalKillsRequired - kills);
+    nextMastery.runsByKillsPerRun = runsForKills(nextMastery.killsRemaining, killsPerRunScenarios);
   }
 
   const upgradeCandidates = META_UPGRADES.flatMap((group) => {
@@ -72,8 +72,13 @@ export function buildProgressionRunway({
   const nextLevelKills = killsRequiredForAccountLevel(nextAccountLevel);
 
   return {
-    schemaVersion: "progression-runway-v1",
+    schemaVersion: "progression-runway-v2",
     source: "career-kills-and-points",
+    arsenal: {
+      availability: arsenalMastery.availability,
+      totalWeapons: arsenalMastery.weapons.length,
+      masteredCount: arsenalMastery.masteredCount,
+    },
     assumptions: {
       careerPointsPerKill: 1,
       scenariosAreDescriptiveNotTargets: true,
@@ -86,7 +91,7 @@ export function buildProgressionRunway({
       killsRemaining: Math.max(0, nextLevelKills - kills),
       runsByKillsPerRun: runsForKills(Math.max(0, nextLevelKills - kills), killsPerRunScenarios),
     },
-    nextWeapon,
+    nextMastery,
     nextUpgrade,
     remainingUpgradePaths: upgradeCandidates.length,
   };
@@ -97,11 +102,11 @@ export function describeProgressionRunway(runway) {
   if (runway.nextUpgrade?.pointsRemaining === 0) {
     return `${runway.nextUpgrade.name} tier ${runway.nextUpgrade.tier} is affordable now; no balance outcome is inferred.`;
   }
-  if (runway.nextWeapon && runway.nextUpgrade) {
-    return `${runway.nextWeapon.name} needs ${runway.nextWeapon.killsRemaining} more career kills; ${runway.nextUpgrade.name} tier ${runway.nextUpgrade.tier} needs ${runway.nextUpgrade.pointsRemaining} more career points.`;
+  if (runway.nextMastery && runway.nextUpgrade) {
+    return `${runway.nextMastery.name} mastery needs ${runway.nextMastery.killsRemaining} more career kills; ${runway.nextUpgrade.name} tier ${runway.nextUpgrade.tier} needs ${runway.nextUpgrade.pointsRemaining} more career points.`;
   }
   if (runway.nextUpgrade) {
-    return `Full arsenal unlocked; ${runway.nextUpgrade.name} tier ${runway.nextUpgrade.tier} needs ${runway.nextUpgrade.pointsRemaining} more career points.`;
+    return `All weapon mastery badges earned; ${runway.nextUpgrade.name} tier ${runway.nextUpgrade.tier} needs ${runway.nextUpgrade.pointsRemaining} more career points.`;
   }
-  return "Full arsenal and every permanent upgrade path are complete.";
+  return "Every weapon mastery badge and permanent upgrade path is complete.";
 }

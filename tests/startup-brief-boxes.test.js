@@ -27,6 +27,16 @@ describe('startup brief box helpers', () => {
     expect(validateStartupBrief(minimalBrief(block)).ok).toBe(true);
   });
 
+  it('wraps long recommendations on words and marks the bounded truncation', () => {
+    const action = 'Repair the launch path with a source-derived compatibility receipt that proves every startup contract remains executable.';
+    const block = normalizeGeniusBlock(action, { width: 32 });
+
+    expect(block).toContain('Repair the launch path');
+    expect(block).toContain('source-derived');
+    expect(block).toContain('...');
+    expect(block).not.toContain('so  ║\n║  urce');
+  });
+
   it('preserves already boxed genius-list output', () => {
     const boxed = [
       '╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗',

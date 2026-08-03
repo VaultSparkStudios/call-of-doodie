@@ -1400,7 +1400,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
                 background: gauntletMode ? "rgba(255,200,0,0.12)" : "rgba(255,255,255,0.03)",
                 border: gauntletMode ? "2px solid #FFC800" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FFC800" }}>🏆 GAUNTLET</div>
-              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Weekly fixed challenge · no shop</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Weekly fixed opening kit · no shop</div>
             </button>
           </div>
         </div>

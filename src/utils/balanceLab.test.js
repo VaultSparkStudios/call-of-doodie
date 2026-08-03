@@ -61,7 +61,7 @@ describe("buildLocalBalanceLab", () => {
     });
 
     const insight = lab.insights.find((entry) => entry.id === "progression_runway");
-    expect(insight?.receipt.schemaVersion).toBe("progression-runway-v1");
+    expect(insight?.receipt.schemaVersion).toBe("progression-runway-v2");
     expect(insight?.detail).toContain("career kills");
     expect(insight?.detail).not.toMatch(/balanced|retention|optimal/i);
   });

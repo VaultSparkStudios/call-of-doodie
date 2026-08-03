@@ -1,41 +1,41 @@
-# Implementation Plan - Session 136
+# Implementation Plan - Session 137
 
-Source: `docs/AUDIT_2026-08-01.json`; all five live-premise items execute at L3.
+Source: `docs/AUDIT_2026-08-02.json`; all five verified items target the deepest honest rung.
 
 Status: **COMPLETE**
 
 ## Efficiency Order
 
-1. **Shared control-surface foundations** - create one status-aware task classifier and one authoritative capability-map resolution contract.
-2. **Protocol execution parity** - wire `ops.mjs router suggest`, then make protocol drift exercise helper behavior rather than file presence.
-3. **Genius List truth** - upgrade cache freshness, status, reason, deterministic scoring, and executable/deferred receipts; consume the same classifier from router and innovation pack.
-4. **Home routing semantic proof** - extract one pure route resolver shared by App and the retirement gate.
-5. **App architecture recovery** - extract objective-frame outcome planning and Input Diagnostics presentation until both existing ratchets pass without raising budgets.
-6. **Second-order saturation** - run context meter, refresh/reclassify Genius work, generate the innovation pack, and harden the three most recently shipped boundaries.
-7. **Cross-surface verification** - focused fixtures, architecture/schema/protocol/public gates, strict lint, full unit suite, build, browser staging proof, security scan.
+1. **Propagation compatibility court** - preserve the startup repairs, wire the live renderer to shared box helpers, quarantine generated internal artifacts, and add a real-entrypoint acceptance receipt.
+2. **Open-arsenal mastery contract** - establish one all-twelve-available contract, convert access-lock language to earned mastery, and update every consumer plus fixtures.
+3. **Executable continuation plan** - make one ranked plan power Journey, ticker, analytics, and the direct weekly Gauntlet launch.
+4. **Source-derived release manifest** - reconcile local staging/public/identity posture from authoritative project status, fail on contradictions, and route upstream drift through Studio Ark.
+5. **Production performance evidence court** - trust-gate an exact transient Lighthouse release, capture repeated default/v1 production evidence, validate/hash the receipt, and preserve the separate funnel gate.
+6. **Second-order saturation** - derive compound failure modes from the new contracts and implement every repo-owned candidate while the context meter says continue.
+7. **Cross-surface proof** - focused tests after each item, then strict lint, full suite, build, browser/theme/mobile inspection, exact-revision isolated staging, security scan, doctor, and release gates.
 
 ## Outcome Contracts
 
-- Shared capability definitions resolve with explicit local-override then Studio Ops fallback precedence; no raw value is printed.
-- The canonical `node scripts/ops.mjs router suggest` path succeeds and forwards arguments exactly.
-- Genius cache v2 distinguishes executable, credential, device, data, publication, community, and product-decision work; freshness is derived from declared inputs, not age alone.
-- Innovation saturation never launders blocked/founder work into repo-executable candidates.
-- HomeV2 remains default, `?home=v1` remains the legacy fallback, and `?home=v3` remains the comparison surface through one executable resolver.
-- `src/App.jsx` finishes at or below 5,000 lines and the inline loop at or below 1,775 lines, with existing budgets unchanged.
-- No gameplay tuning, paid runtime dependency, secret mutation, product decision, or launch-readiness claim is introduced.
+- Startup cannot silently regress shared capability-map provenance, brief boxes, flat-rate cost semantics, or public-boundary artifact handling.
+- All twelve weapons are selectable before and during a run; levels communicate earned mastery rather than contradictory access.
+- Journey and recommendation surfaces execute the same reason-coded plan; Weekly Gauntlet starts in one action with its deterministic contract.
+- Local release metadata is derived and self-validating without claiming external identity, analytics, email, publication, or launch gates.
+- Lighthouse receipts bind URL, final URL, current source SHA, tool/browser versions, timestamps, raw hashes, and median metrics; they never impersonate funnel evidence.
+- Keyboard/mouse, touch, controller, replay, leaderboard, cost-neutrality, acronym, and public-safe behavior remain intact.
 
 ## Required Evidence
 
-- Focused unit/CLI fixtures for task classification/freshness, router forwarding, capability precedence/corruption, home routing, objective outcomes, and Input Diagnostics rendering.
-- Direct `npm run architecture:check`, `npm run schema:lint`, `npm run protocol:drift -- --json`, `npm run public:contract`, and `npm run home:retirement-gate` exits.
-- Direct `npm run lint:strict`, full `npm test`, `npm run build`, and applicable browser/staging checks.
-- Audit execution log and TASK_BOARD receipts reflect shipped, deferred, and false-premise wins separately.
+- Focused fixtures for startup acceptance, secrets provenance, rendered brief helpers, arsenal mastery, progression runway, continuation priorities/dispatch, weekly Gauntlet launch, and manifest reconciliation.
+- Direct protocol/public/security/architecture/schema gates with unmasked exit codes.
+- Exact `npm run lint:strict`, full `npm test`, `npm run build`, and browser/staging matrices.
+- Current-revision Lighthouse receipt or an explicit tool/runtime failure receipt; no fabricated measurements.
+- Audit execution log, TASK_BOARD, SIL, decisions, truth surfaces, and Ark receipts distinguish shipped work from honest deferrals.
 
 ## Execution Log
 
 | Wave | Outcome | Status |
 | --- | --- | --- |
-| 1 | Shared classifier + capability-map truth | Complete — schema-v2 source fingerprints; live 68-capability Studio Ops provenance |
-| 2 | Router/protocol + Genius cache truth | Complete — canonical router path and 37 behavior-level drift checks green |
-| 3 | Home semantic route + App architecture | Complete — semantic gate green; App 4,986 lines / loop span 1,768 / 32 boundaries |
-| 4 | Second-order saturation + full verification | Complete — eight compound hardenings, 918/918 tests, browser 8/8, staging 867/867, Windows-hide green, and seven hosted HSTS surfaces green |
+| 1 | Propagation compatibility and public boundary | Complete — executable startup acceptance passes |
+| 2 | Arsenal mastery and executable continuation | Complete — all-open mastery and one-action Gauntlet ship |
+| 3 | Release manifest and performance evidence | Complete — manifest reconciles and production receipt preserves v1 |
+| 4 | Second-order saturation and full verification | Complete — four innovations, 935/935, browser 8/8, visual 867/867 |

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
-  "generatedFrom": "ops runtime-pack synthesized manifest",
-  "synthesized": true,
+  "generatedFrom": "project-status release projection",
+  "synthesized": false,
   "identity": {
     "slug": "call-of-doodie",
     "name": "Call of Doodie",
@@ -43,7 +43,12 @@
         "path": "<dev-root>\\Call-Of-Doodie"
       }
     ],
-    "staging": [],
+    "staging": [
+      {
+        "label": "cloudflare-pages",
+        "url": "https://session-137-staging.call-of-doodie.pages.dev/"
+      }
+    ],
     "production": [
       {
         "label": "live",
@@ -112,7 +117,7 @@
   "hosting": {
     "hostingProvider": "cloudflare-pages",
     "liveUrl": "https://callofdoodie.wtf/",
-    "stagingUrl": null,
+    "stagingUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
     "privatePreviewUrl": "https://call-of-doodie.pages.dev/",
     "localDevUrl": null,
     "deployStatus": "deployed-unannounced",
@@ -131,11 +136,12 @@
   "publicMetadata": {
     "privateByDefault": true,
     "publicReady": false,
-    "publicRepoSanitized": false,
+    "publicRepoSanitized": true,
     "brandingRequired": true,
     "brandingCompliant": true,
     "footerAttribution": "A VaultSpark Studios Game",
-    "websiteListingRequired": true
+    "websiteListingRequired": true,
+    "sanitizationEvidence": "2026-07-28T00:53:00Z"
   },
   "automation": {
     "safeActions": [
@@ -156,5 +162,17 @@
     "socialDashboard": "context/contracts/social-dashboard.json",
     "sparkFunnel": "context/contracts/sparkfunnel.json",
     "ignis": "context/contracts/ignis.json"
+  },
+  "obeliskArchitecture": "external",
+  "identityPosture": {
+    "play": "guest-first",
+    "accountStatus": "route-present-verification-deferred",
+    "provider": "Obelisk",
+    "sourceDecision": "context/DECISIONS.md#obelisk-surfaces-are-explicit-routes-not-a-gameplay-gate"
+  },
+  "releaseProjection": {
+    "schemaVersion": "release-manifest-projection-v1",
+    "source": "context/PROJECT_STATUS.json",
+    "sourceFingerprint": "7cf7d8fac5345176eb18c1cda9b9c135d3a17d95d757637c0f4d8ca1e07c6fb3"
   }
 }

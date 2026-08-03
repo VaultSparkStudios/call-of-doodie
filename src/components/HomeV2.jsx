@@ -19,6 +19,7 @@ import { loadControllerProfile } from "../utils/gamepad.js";
 import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
 import { buildPwaInstallReceipt, detectStandaloneDisplay, loadPwaInstallAttempt, readServiceWorkerLifecycle, SERVICE_WORKER_LIFECYCLE_EVENT } from "../utils/pwaInstallReadiness.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
+import { buildWeeklyGauntletLaunch } from "../utils/gauntletLaunch.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { getStorageHealth, probeLocalStorage, STORAGE_HEALTH_EVENT } from "../utils/storageHealth.js";
@@ -52,7 +53,7 @@ const MODE_DEFS = [
   { id: "cursed",          label: "CURSED",        emoji: "☠",  color: "#CC00FF", blurb: "All cursed perks · 3× score" },
   { id: "boss_rush",       label: "BOSS RUSH",     emoji: "☠",  color: "#FF3333", blurb: "Every wave is a boss" },
   { id: "speedrun",        label: "SPEEDRUN",      emoji: "⏱",  color: "#00FF80", blurb: "Race the clock · live timer" },
-  { id: "gauntlet",        label: "GAUNTLET",      emoji: "🏆", color: "#FFC800", blurb: "Weekly fixed challenge · no shop" },
+  { id: "gauntlet",        label: "GAUNTLET",      emoji: "🏆", color: "#FFC800", blurb: "Weekly fixed opening kit · no shop" },
 ];
 
 function currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode }) {
@@ -224,6 +225,10 @@ export default function HomeV2(props) {
   );
   const canSpendMeta = (meta?.careerPoints || 0) >= 10;
   const incompleteMissionCount = countIncompleteMissions(missions, missionProgress);
+  const aimCheck = useMemo(
+    () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
+    [inputCalibration, inputDebugEnabled],
+  );
   const actionStack = useMemo(
     () => buildFrontDoorActionStack({
       challenge: challengeMode?.vs ? { seed: challengeMode.seed, vsScore: challengeMode.vs, vsName: challengeMode.vsName } : null,
@@ -234,11 +239,12 @@ export default function HomeV2(props) {
       currentModeLabel: selectedMode.label,
       todaySeed: todaySeedStr,
       totalRuns: career?.totalRuns || 0,
+      hasVerifiedInput: aimCheck.status === "verified",
       unlocked: meta?.unlocked || [],
       meta,
       career: career || {},
     }),
-    [challengeMode, dailyAlreadyPlayed, canSpendMeta, incompleteMissionCount, meta, selectedLoadout, selectedMode.label, todaySeedStr, career],
+    [challengeMode, dailyAlreadyPlayed, canSpendMeta, incompleteMissionCount, meta, selectedLoadout, selectedMode.label, todaySeedStr, career, aimCheck.status],
   );
   const recommendedAction = actionStack[0];
   const analyticsStatus = getAnalyticsStatus();
@@ -246,10 +252,6 @@ export default function HomeV2(props) {
   const balanceLab = useMemo(
     () => buildLocalBalanceLab({ runHistory, studioEvents, career: career || {}, meta: meta || {} }),
     [runHistory, studioEvents, career, meta],
-  );
-  const aimCheck = useMemo(
-    () => buildInputCalibrationNudge(inputCalibration, { debugEnabled: inputDebugEnabled }),
-    [inputCalibration, inputDebugEnabled],
   );
   const inputQaReceipt = useMemo(
     () => buildInputQaReceipt({
@@ -274,15 +276,11 @@ export default function HomeV2(props) {
   const journey = useMemo(
     () => buildPlayerJourney({
       totalRuns: career?.totalRuns || 0,
-      challengeActive: Boolean(challengeMode?.vs),
-      hasVerifiedInput: aimCheck.status === "verified",
-      dailyAlreadyPlayed,
-      canSpendMeta,
-      incompleteMissionCount,
       accountLevel,
       prestige,
+      recommendedAction,
     }),
-    [career?.totalRuns, challengeMode?.vs, aimCheck.status, dailyAlreadyPlayed, canSpendMeta, incompleteMissionCount, accountLevel, prestige],
+    [career?.totalRuns, accountLevel, prestige, recommendedAction],
   );
   const onboarding = useMemo(() => {
     const runs = career?.totalRuns || 0;
@@ -336,16 +334,33 @@ export default function HomeV2(props) {
   }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
-  const handleJourneySecondary = useCallback(() => {
-    const action = journey.secondary?.action;
-    recordFrontDoorAction(`journey_${action || "secondary"}`, { source: "journey_card", stage: journey.stage });
+  const handleContinuationAction = useCallback((plan = journey.secondary, source = "journey_card") => {
+    const action = plan?.action;
+    if (!action) return;
+    const studioEvent = recordFrontDoorAction(plan.id || action, {
+      source,
+      stage: journey.stage,
+      reasonCode: plan.reasonCode || plan.id || action,
+      payload: plan.payload || {},
+    });
+    track("front_door_action", {
+      actionId: plan.id || action,
+      execution: action,
+      reasonCode: plan.reasonCode || plan.id || action,
+      source,
+      surface: "home_v2",
+      mode: modeId,
+      difficulty,
+      loadout: selectedLoadout.id,
+      studioEvent,
+    });
     if (action === "aim_check") {
       setShowAimCheck(true);
       return;
     }
     if (action === "daily") {
       onSetDailyChallengeMode?.(true);
-      onStart(todaySeedStr, {});
+      onStart(plan.payload?.seed || todaySeedStr, {});
       return;
     }
     if (action === "upgrades") {
@@ -360,11 +375,26 @@ export default function HomeV2(props) {
       return;
     }
     if (action === "challenge") {
-      setDeployOpen(true);
+      const seed = plan.payload?.seed || challengeMode?.seed;
+      onStart(seed, {
+        vs: plan.payload?.vsScore ?? challengeMode?.vs,
+        vsName: plan.payload?.vsName ?? challengeMode?.vsName,
+      });
+      return;
+    }
+    if (action === "deploy") {
+      deploy();
+      return;
+    }
+    if (action === "challenge_share") {
+      const seed = Number(customSeed) || Number(todaySeedStr);
+      copyChallengeUrl({ seed, difficulty }).then((url) => {
+        track("challenge_link_copied", { source, success: Boolean(url), seed });
+      });
       return;
     }
     switchTab("codex");
-  }, [journey.secondary?.action, journey.stage, onSetDailyChallengeMode, onStart, recordFrontDoorAction, switchTab, todaySeedStr]);
+  }, [challengeMode, customSeed, deploy, difficulty, journey.secondary, journey.stage, modeId, onSetDailyChallengeMode, onStart, recordFrontDoorAction, selectedLoadout.id, switchTab, todaySeedStr]);
   const completeAimCheck = useCallback((evidence = {}) => {
     const record = buildInputCalibrationRecord({
       source: resolveAimCalibrationSource(evidence.sources),
@@ -576,7 +606,7 @@ export default function HomeV2(props) {
             <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
           </div>
           <button
-            onClick={handleJourneySecondary}
+            onClick={() => handleContinuationAction(journey.secondary, "journey_card")}
             style={{ ...quickBtn, color: journey.secondary.accent, borderColor: `${journey.secondary.accent}66`, background: `${journey.secondary.accent}12`, whiteSpace: "nowrap" }}
           >
             {journey.secondary.cta.toUpperCase()}
@@ -744,7 +774,8 @@ export default function HomeV2(props) {
             const studioEvent = recordFrontDoorAction("gauntlet_focus", { source: "quick_chip" });
             track("front_door_action", { actionId: "gauntlet_focus", surface: "home_v2", mode: "gauntlet", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
             onSetGauntletMode?.(true);
-            getWeeklyGauntlet();
+            const launch = buildWeeklyGauntletLaunch(getWeeklyGauntlet());
+            onStart(launch.seed, { gauntletWeek: launch.week });
           }}>
             🏆 GAUNTLET
           </button>
@@ -909,6 +940,15 @@ export default function HomeV2(props) {
                 <span style={{ color: "#AAA" }}> · <em>{recommendedAction.title}</em></span>
               )}
             </span>
+            {recommendedAction && (
+              <button
+                type="button"
+                onClick={() => handleContinuationAction(recommendedAction, "intel_ticker")}
+                style={{ ...quickBtn, padding: "4px 8px", fontSize: 9, color: recommendedAction.accent, borderColor: `${recommendedAction.accent}66` }}
+              >
+                {recommendedAction.cta}
+              </button>
+            )}
             <details style={{ fontSize: 10, color: "#7FE6FF", cursor: "pointer" }}>
               <summary style={{ outline: "none" }}>(?)</summary>
               <div style={{ marginTop: 8, padding: "8px 10px", background: "rgba(0,0,0,0.4)", borderRadius: 6, color: "#CCC", fontSize: 11, maxWidth: 340 }}>

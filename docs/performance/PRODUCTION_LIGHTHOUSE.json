@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "production-performance-evidence-v1",
+  "ok": true,
+  "issues": [],
+  "warnings": [
+    "chrome-profile-cleanup-eperm-after-complete-report"
+  ],
+  "capturedAt": "2026-08-03T02:36:23.387Z",
+  "baseUrl": "https://callofdoodie.wtf/",
+  "sourceSha": "f1d4d825742cc9561cfc2068d6a990228e584abf",
+  "hostedRevision": "f1d4d825742c",
+  "healthBodyHash": "23feb961bf156656f287e056e951e6844d14de4d66b6d0339a53ef8e6fba43a1",
+  "tool": {
+    "lighthouseVersion": "13.4.1",
+    "chromeVersion": "150.0.0.0"
+  },
+  "packageTrust": {
+    "offlineVerdict": "REVIEW",
+    "offlineScore": 60,
+    "liveVerdict": "APPROVE",
+    "source": "https://github.com/GoogleChrome/lighthouse",
+    "registry": "https://registry.npmjs.org/lighthouse/-/lighthouse-13.4.1.tgz",
+    "integrity": "sha512-fDu8lt3QLK/lTqIxtp1HkzQNJ32rsFHhbadYOepcMZFLgA8oINhxutMbMv8XXnpTOvZ0TXCo4JCk1LDTWaRLnA==",
+    "releasedAt": "2026-07-20T19:59:46.318Z",
+    "license": "Apache-2.0",
+    "provenance": "SLSA npm attestation plus registry signature; no install lifecycle scripts",
+    "incidentMatches": 0,
+    "installMode": "transient exact version with ignore-scripts; package.json and lockfile unchanged"
+  },
+  "surfaces": {
+    "default": {
+      "sampleCount": 3,
+      "median": {
+        "performance": 0.88,
+        "lcpMs": 3226.371,
+        "cls": 0,
+        "tbtMs": 115
+      },
+      "diagnostics": {
+        "medianUnusedJavascriptBytes": 183547,
+        "medianEstimatedLcpSavingsMs": 750,
+        "medianMainThreadWorkMs": 2422.819999999998,
+        "medianTotalTransferBytes": 424972,
+        "medianRenderBlockingBytes": 6917,
+        "highWasteAssets": [
+          {
+            "url": "https://callofdoodie.wtf/assets/index-CWiy9B_p.js",
+            "transferBytes": 230425,
+            "wastedBytes": 137033
+          },
+          {
+            "url": "https://callofdoodie.wtf/assets/vendor-data-CrFcxBfb.js",
+            "transferBytes": 57809,
+            "wastedBytes": 46514
+          }
+        ]
+      },
+      "samples": [
+        {
+          "run": 1,
+          "requestedUrl": "https://callofdoodie.wtf/",
+          "finalUrl": "https://callofdoodie.wtf/",
+          "rawSha256": "ce822d3181caab64822de19e7ff101462a5e49fc416d2be65241cacacf04b8ca",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 0.81,
+          "lcpMs": 3574.015,
+          "cls": 0,
+          "tbtMs": 217.5
+        },
+        {
+          "run": 2,
+          "requestedUrl": "https://callofdoodie.wtf/",
+          "finalUrl": "https://callofdoodie.wtf/",
+          "rawSha256": "0f612e486747b48f5b72bfb7cc5359c81c452940e8f5eaa865f3a045f02d2dfc",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 0.88,
+          "lcpMs": 3216.0389999999998,
+          "cls": 0,
+          "tbtMs": 115
+        },
+        {
+          "run": 3,
+          "requestedUrl": "https://callofdoodie.wtf/",
+          "finalUrl": "https://callofdoodie.wtf/",
+          "rawSha256": "d972646b8c6635a54574dfc0e2d8d234b6766adbb8ec5f0e25b39b81ae366648",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 0.89,
+          "lcpMs": 3226.371,
+          "cls": 0,
+          "tbtMs": 71
+        }
+      ]
+    },
+    "legacy-v1": {
+      "sampleCount": 3,
+      "median": {
+        "performance": 0.86,
+        "lcpMs": 2651.205,
+        "cls": 0,
+        "tbtMs": 258
+      },
+      "diagnostics": {
+        "medianUnusedJavascriptBytes": 188952,
+        "medianEstimatedLcpSavingsMs": 620,
+        "medianMainThreadWorkMs": 1924.4239999999988,
+        "medianTotalTransferBytes": 358466,
+        "medianRenderBlockingBytes": 6917,
+        "highWasteAssets": [
+          {
+            "url": "https://callofdoodie.wtf/assets/index-CWiy9B_p.js",
+            "transferBytes": 223611,
+            "wastedBytes": 147875
+          },
+          {
+            "url": "https://callofdoodie.wtf/assets/vendor-data-CrFcxBfb.js",
+            "transferBytes": 57809,
+            "wastedBytes": 41077
+          }
+        ]
+      },
+      "samples": [
+        {
+          "run": 1,
+          "requestedUrl": "https://callofdoodie.wtf/?home=v1",
+          "finalUrl": "https://callofdoodie.wtf/?home=v1",
+          "rawSha256": "1f47e1cb287a0d92cc5c8ba03737fad132913e4ce6106a63a8937a105f523e64",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 0.82,
+          "lcpMs": 2651.205,
+          "cls": 0,
+          "tbtMs": 425
+        },
+        {
+          "run": 2,
+          "requestedUrl": "https://callofdoodie.wtf/?home=v1",
+          "finalUrl": "https://callofdoodie.wtf/?home=v1",
+          "rawSha256": "cd50b8c0086bc0079229b9743900bf46287898ec8728bd062a2912f60e6d7b43",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 0.92,
+          "lcpMs": 2028.083,
+          "cls": 0,
+          "tbtMs": 258
+        },
+        {
+          "run": 3,
+          "requestedUrl": "https://callofdoodie.wtf/?home=v1",
+          "finalUrl": "https://callofdoodie.wtf/?home=v1",
+          "rawSha256": "55cefc4992de1d8601d872e39b953e6db2390b99b3ae70e306b798da12fa2fe9",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 0.86,
+          "lcpMs": 3509.712,
+          "cls": 0,
+          "tbtMs": 85
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "lcpImprovementMs": -575.1660000000002,
+    "requiredImprovementMs": 200,
+    "lighthouseGatePassed": false
+  },
+  "retirement": {
+    "lighthouseGate": "fail",
+    "funnelGate": "not-collected",
+    "eligible": false,
+    "reason": "Legacy retirement requires both measured Lighthouse improvement and independent production funnel evidence."
+  }
+}

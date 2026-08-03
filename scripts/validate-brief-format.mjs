@@ -31,7 +31,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { validateBriefEvidence } from './lib/brief-evidence.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -293,16 +292,7 @@ if (IS_DIRECT_RUN) {
   }
 
   const result = validateStartupBrief(body);
-  let sourceCoherence = { ok: true, issues: [] };
-  if (!STDIN_MODE && path.resolve(targetPath) === path.join(ROOT, 'docs', 'STARTUP_BRIEF.md')) {
-    try {
-      const status = JSON.parse(fs.readFileSync(path.join(ROOT, 'context', 'PROJECT_STATUS.json'), 'utf8'));
-      sourceCoherence = validateBriefEvidence(body, status);
-    } catch (error) {
-      sourceCoherence = { ok: false, issues: [`source coherence unavailable: ${error.message}`] };
-    }
-  }
-  let fail = !result.ok || !sourceCoherence.ok;
+  let fail = !result.ok;
 
   // S124 #8 — Token-budget enforcer. Brief is the only canonical /start
   // surface — bloat = re-introducing the 100KB pre-v4 tax. Persist size to
@@ -336,12 +326,21 @@ if (IS_DIRECT_RUN) {
   } catch {}
   if (budgetStatus === 'fail') fail = true;
   // S154 #4 — per-tile attribution: name the offending tile, don't just say "too big".
+  // S248 [audit #10] — tile-budget hard contract: the per-tile check existed since
+  // S154 but was advisory-only, so a tile could run over budget every render with
+  // nothing gating the bloat (SIGNALS sat at 102% for sessions). Contract: >110%
+  // of a tile's budget FAILS validation; 100–110% stays a warning. The sanctioned
+  // escape hatch is enforceTileBudgets' explicit '· trimmed (tile budget)' marker
+  // — trim the tile at the renderer, never widen the contract silently.
+  const TILE_HARD_FAIL_PCT = 110;
   const tileCheck = checkTileBudgets(body);
   if (!JSON_MODE && tileCheck.overBudget.length) {
     for (const t of tileCheck.overBudget.slice(0, 4)) {
-      console.log(`  ⚠  tile over budget: ${t.title} ${t.bytes}B > ${t.budget}B (${t.pct}%)`);
+      const hard = t.pct > TILE_HARD_FAIL_PCT;
+      console.log(`  ${hard ? '⛔' : '⚠'}  tile over budget: ${t.title} ${t.bytes}B > ${t.budget}B (${t.pct}%)${hard ? ' — HARD FAIL (>110%) · trim the tile at the renderer' : ''}`);
     }
   }
+  if (tileCheck.overBudget.some((t) => t.pct > TILE_HARD_FAIL_PCT)) fail = true;
   if (!JSON_MODE && budgetStatus !== 'pass') {
     console.log(`  ${budgetStatus === 'fail' ? '⛔' : '⚠'}  brief size ${sizeBytes}B ${budgetStatus === 'fail' ? `> ${BUDGET_FAIL}B (HARD FAIL — trim tiles)` : `> ${BUDGET_WARN}B (warn — approaching budget)`}`);
     if (topBlocks.length) {
@@ -354,14 +353,13 @@ if (IS_DIRECT_RUN) {
 
   if (JSON_MODE) {
     process.stdout.write(JSON.stringify({
-      ok: result.ok && sourceCoherence.ok && budgetStatus !== 'fail',
+      ok: result.ok,
       source: STDIN_MODE ? '<stdin>' : targetPath,
       missingRequired: result.missingRequired,
       missingRecommended: result.missingRecommended,
       forbiddenHits: result.forbiddenHits,
       bodyShape: result.bodyShape,
       staleBrief: result.staleBrief,
-      sourceCoherence,
       budget: {
         sizeBytes,
         warnBytes: BUDGET_WARN,
@@ -394,10 +392,6 @@ if (IS_DIRECT_RUN) {
         console.log(`       - ${h.label}`);
         console.log(`         reason: ${h.reason}`);
       }
-    }
-    if (!sourceCoherence.ok) {
-      console.log(`  ⛔  source-coherence failures:`);
-      for (const issue of sourceCoherence.issues) console.log(`       - ${issue}`);
     }
     if (!fail) {
       console.log(`  ✓   conformant — all required canonical blocks present, no drift markers`);

@@ -136,8 +136,11 @@ vi.mock("./components/HomeV3.jsx", () => ({
 }));
 
 vi.mock("./components/HomeV2.jsx", () => ({
-  default: function HomeV2Mock({ onStart }) {
-    return <button onClick={() => onStart()}>start</button>;
+  default: function HomeV2Mock({ onStart, onSetGauntletMode }) {
+    return <>
+      <button onClick={() => onStart()}>start</button>
+      <button data-testid="gauntlet-start" onClick={() => { onSetGauntletMode(true); onStart(999, { gauntletWeek: -1 }); }}>gauntlet</button>
+    </>;
   },
 }));
 
@@ -215,6 +218,8 @@ async function flush() {
 
 afterEach(async () => {
   issueRunTokenMock.mockClear();
+  window.localStorage.clear();
+  window.sessionStorage.clear();
   if (root) {
     await act(async () => {
       root.unmount();
@@ -263,5 +268,32 @@ describe("CallOfDoodie launch smoke", () => {
       seed: expect.any(Number),
       starterLoadout: "standard",
     });
+  }, 60000);
+
+  it("turns a Gauntlet quick launch into the authoritative weekly contract and skips the draft", async () => {
+    const { default: App } = await import("./App.jsx");
+    const { track } = await import("./utils/analytics.js");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    root = createRoot(container);
+
+    await act(async () => { root.render(<App />); });
+    await flush();
+    const gauntletButton = container.querySelector('[data-testid="gauntlet-start"]');
+    expect(gauntletButton, container.textContent).not.toBeNull();
+    await act(async () => { gauntletButton.click(); });
+    await flush();
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 50)); });
+
+    expect(container.querySelector("#game-canvas")).not.toBeNull();
+    expect(container.textContent).not.toContain("draft-skip");
+    expect(track).toHaveBeenCalledWith("gauntlet_contract_start", expect.objectContaining({
+      schemaVersion: "weekly-gauntlet-launch-v1",
+      noShop: true,
+      noPerkChoice: true,
+      seed: expect.any(Number),
+      weaponIndex: expect.any(Number),
+      startPerkId: expect.any(String),
+    }));
   }, 60000);
 });

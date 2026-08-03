@@ -1,3 +1,29 @@
+# Latest Handoff — Session 137
+
+Session Intent: Run the complete agent-neutral `/arc` as one continuous mission from synchronized `main`: canonical `/start`, live-premise `/audit`, exhaustive `/implement` with second-order innovation saturation, and full `/closeout`; preserve evidence honesty, verify staging before direct-to-main promotion, and finish with blocking doctor and suites green.
+
+## Impact Summary (Session 137)
+
+**Headline.** Every weapon is honestly open, every return-run recommendation is executable, and release/performance truth now derives from evidence instead of prose.
+
+**Impact.**
+- `open-arsenal-mastery-v2` replaces contradictory locks with immediate access plus earned mastery recognition.
+- One reason-coded action stack powers Journey, ticker, analytics, Daily, and a one-action deterministic Weekly Gauntlet.
+- Startup acceptance, release-manifest reconciliation, entry-asset boundaries, and production performance receipts fail closed on stale or contradictory evidence.
+- Optional Supabase work leaves first paint; exact-session staging passed the full rendered-pixel court and direct desktop/mobile dark/light inspection.
+
+## Where We Left Off (Session 137)
+- Architecture: 4,999 App lines, 1,768 inline-loop span, and unchanged 5,000/1,775 ratchets.
+- Validation: 935/935 tests across 143 files, strict lint, production build, browser E2E 8/8, hosted visual 867/867, and four hash-bound inspected captures.
+- Staging: `https://session-137-staging.call-of-doodie.pages.dev/`; immutable build `https://dd1b8c97.call-of-doodie.pages.dev/`.
+- Performance: production HomeV2 median LCP 3,226 ms versus v1 at 2,651 ms on deployed revision `f1d4d825742c`; keep the fallback and collect funnel evidence separately.
+- Release: engineering staging is green; SPARKED remains NO-GO under the existing external, physical, production-data, publication, and founder gates.
+
+## Next
+- Diagnose HomeV2's production LCP regression from the receipt's unused-JavaScript, main-thread, and network diagnostics before considering another retirement measurement.
+- Collect production funnel evidence and participant outcomes before changing the fallback, balance, or retention assumptions.
+- Complete inbound mail, physical PWA/gamepad/full-run media, scoped analytics/Sentry, publication, and founder launch gates.
+
 # Latest Handoff — Session 136
 
 Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized `main` through canonical `/start`, premise-verified infrastructure-plus-product `/audit`, exhaustive `/implement` with second-order innovation saturation, and full `/closeout`; preserve evidence honesty, stage the exact tree, and push directly to `main`.

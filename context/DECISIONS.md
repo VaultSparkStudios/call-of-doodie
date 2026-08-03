@@ -871,3 +871,27 @@ Rationale: Comment matching and movable limits turn observability into theater. 
 Decision: Cloudflare Pages subprocesses use the canonical `withPagesDeployEnv` boundary, including its proven narrow-token-to-Studio-token fallback. Function responses emit required transport/security headers themselves rather than assuming static `_headers` applies.
 
 Rationale: A capability marked READY can still lack one control-plane permission, and Cloudflare Functions can bypass static headers. Broker-native fallback plus hosted response proof closes both gaps without exposing credentials or fabricating a staging result.
+
+## 2026-08-03 — Session 137 — Immediate access and mastery are separate contracts
+
+Decision: Keep all twelve primary weapons selectable before and during every run. Level thresholds award mastery licenses, recognition, evolution targets, and analytics reason codes; they never deny access.
+
+Rationale: A lock that can be bypassed from another first-party selector is confusion, not progression. Immediate experimentation serves the game's improvisational promise while deterministic mastery preserves a long-term competence runway.
+
+## 2026-08-03 — Session 137 — One executable plan owns every return-run recommendation
+
+Decision: Journey, the intelligence ticker, quick actions, telemetry, Daily, and Weekly Gauntlet consume one reason-coded continuation stack. Weekly Gauntlet launches in one action with a deterministic weekly contract and fixed opening kit; it is not a locked build.
+
+Rationale: Decorative advice and a second executable priority tree can disagree. A shared action/payload/evidence contract makes the recommendation useful, accessible, measurable, and testable.
+
+## 2026-08-03 — Session 137 — Release and performance truth are derived evidence
+
+Decision: Derive local release posture from authoritative project status and require exact URL/revision/sample/tool/raw-hash bindings for performance comparisons. Retain HomeV1 because current production evidence measures HomeV2 slower; funnel evidence remains a separate gate.
+
+Rationale: Mutable duplicated fields and one-off speed impressions cannot authorize retirement. An unfavorable measured result is a successful evidence court, not a failed implementation.
+
+## 2026-08-03 — Session 137 — Optional data work begins after first paint
+
+Decision: Do not preload the Supabase data-plane chunk from entry HTML. Warm optional leaderboard work only through the browser-idle boundary, while gameplay-critical local state remains immediate.
+
+Rationale: The default front door does not need network-backed leaderboard code to become interactive. A checked post-build asset boundary prevents manual chunking from silently turning into eager transport.

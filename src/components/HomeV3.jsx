@@ -39,7 +39,7 @@ const NewsPanel = lazy(() => import("./MenuPanels.jsx").then((module) => ({ defa
 const MODES = [
   { id: "standard", label: "Standard Run", short: "Standard", description: "Survive escalating waves and build a powerful loadout.", icon: "▶" },
   { id: "daily_challenge", label: "Daily Challenge", short: "Daily", description: "The same seeded run for every player today.", icon: "◈" },
-  { id: "gauntlet", label: "Weekly Gauntlet", short: "Gauntlet", description: "A fixed weekly build with no shop.", icon: "◆" },
+  { id: "gauntlet", label: "Weekly Gauntlet", short: "Gauntlet", description: "A fixed weekly opening kit with no shop.", icon: "◆" },
   { id: "boss_rush", label: "Boss Rush", short: "Boss Rush", description: "Face boss pressure on every wave.", icon: "⚠" },
   { id: "score_attack", label: "Score Attack", short: "Score", description: "Five minutes, faster spawns, maximum score.", icon: "⌁" },
   { id: "speedrun", label: "Speed Run", short: "Speed", description: "Race the clock with a live timer.", icon: "»" },
@@ -138,7 +138,7 @@ export default function HomeV3(props) {
 
   const primaryCards = [
     { id: "daily", icon: "◈", title: "Daily Challenge", detail: `Seed ${todaySeed}`, action: () => start({ mode: "daily_challenge", seed: todaySeed, actionId: "daily_challenge" }) },
-    { id: "gauntlet", icon: "◆", title: "Weekly Gauntlet", detail: gauntlet?.name || "Fixed weekly build", action: () => start({ mode: "gauntlet", actionId: "weekly_gauntlet" }) },
+    { id: "gauntlet", icon: "◆", title: "Weekly Gauntlet", detail: gauntlet?.name || "Fixed weekly opening kit", action: () => start({ mode: "gauntlet", actionId: "weekly_gauntlet" }) },
     { id: "training", icon: "◎", title: "Training Run", detail: "Practice movement and aim", action: () => onReplayTraining?.() },
   ];
 

@@ -2,11 +2,11 @@ import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
 import { drawGame } from "./drawGame.js";
 import {
-  WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, TIPS,
+  WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, TIPS, PERKS,
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
-  WAVE_CHALLENGE_MUTATIONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked, BOSS_GRUDGE_QUOTES,
+  WAVE_CHALLENGE_MUTATIONS, WEAPON_MASTERY_LEVELS, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
@@ -52,6 +52,8 @@ import { buildSessionSubmission } from "./utils/runSubmission.js";
 import { analyzeReplayCommandTrace, buildReplayProofReceipt, directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
 import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberControllerProfile } from "./utils/gamepad.js";
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
+import { buildWeeklyGauntletLaunch } from "./utils/gauntletLaunch.js";
+import { scheduleIdleWork } from "./utils/deferredWork.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
@@ -492,7 +494,8 @@ export default function CallOfDoodie() {
     setLbLoading(false);
   }, [lbLoading]);
 
-  useEffect(() => { refreshLeaderboard(); }, [refreshLeaderboard]);
+  // Online rivalry warms after first paint; explicit leaderboard actions refresh immediately.
+  useEffect(() => scheduleIdleWork(refreshLeaderboard), [refreshLeaderboard]);
 
   // ── Achievements ──────────────────────────────────────────────────────────
   const checkAchievements = useCallback((gs) => {
@@ -1156,7 +1159,7 @@ export default function CallOfDoodie() {
         addText(gsRef.current, GW() / 2, GH() / 2 - 60, "⬆ LEVEL " + ref.level + "!", "#00FF88", true);
         gsRef.current.player.speed += 0.12;
       }
-      if (shouldAwardPerkChoice(ref.level) && perksThisWaveRef.current < 1) {
+      if (!gauntletRef.current && shouldAwardPerkChoice(ref.level) && perksThisWaveRef.current < 1) {
         bankedPerkChoicesRef.current += 1;
         perksThisWaveRef.current += 1;
         setBankedPerkChoices(bankedPerkChoicesRef.current);
@@ -1744,10 +1747,10 @@ export default function CallOfDoodie() {
     try {
       const _newAcctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
       if (_newAcctLevel > _prevAcctLevel) {
-        for (let _wi = 0; _wi < WEAPON_UNLOCK_LEVELS.length; _wi++) {
-          const _req = WEAPON_UNLOCK_LEVELS[_wi];
+        for (let _wi = 0; _wi < WEAPON_MASTERY_LEVELS.length; _wi++) {
+          const _req = WEAPON_MASTERY_LEVELS[_wi];
           if (_req > _prevAcctLevel && _req <= _newAcctLevel) {
-            track("weapon_unlock", { weaponIdx: _wi, accountLevel: _newAcctLevel, prevLevel: _prevAcctLevel, wave: gs?.currentWave || 0 });
+            track("weapon_mastery_earned", { weaponIdx: _wi, masteryAccountLevel: _req, accountLevel: _newAcctLevel, prevLevel: _prevAcctLevel, wave: gs?.currentWave || 0 });
           }
         }
       }
@@ -2121,8 +2124,15 @@ export default function CallOfDoodie() {
 
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
+    const gauntletLaunch = gauntletRef.current ? buildWeeklyGauntletLaunch(getWeeklyGauntlet()) : null;
+    if (gauntletLaunch) {
+      forceSeed = gauntletLaunch.seed;
+      difficultyRef.current = gauntletLaunch.difficulty; setDifficulty(gauntletLaunch.difficulty);
+      currentWeaponRef.current = gauntletLaunch.weaponIndex; setCurrentWeapon(gauntletLaunch.weaponIndex);
+      challengeOpts = { ...challengeOpts, gauntletWeek: gauntletLaunch.week };
+    }
     // Show pre-deployment perk draft (skip in Daily Challenge to preserve seed fairness)
-    if (!draftShownRef.current && !dailyChallengeMode) {
+    if (!draftShownRef.current && !dailyChallengeMode && !gauntletLaunch) {
       const draftSeed = Number(forceSeed);
       const draftRng = Number.isFinite(draftSeed) && draftSeed > 0
         ? createNamedRunRng({ seed: draftSeed, wave: 1, name: "choices" })
@@ -2199,7 +2209,7 @@ export default function CallOfDoodie() {
     archetypeUnlocksRef.current = new Set();
     setUnlockedArchetypes([]);
     // Apply draft perk if one was chosen — defer so applyPerk runs after state resets
-    const _draftPerk = draftChosenRef.current;
+    const _draftPerk = gauntletLaunch ? PERKS[gauntletLaunch.startPerkIndex] : draftChosenRef.current;
     draftChosenRef.current = null;
     if (_draftPerk) {
       setTimeout(() => applyPerk(_draftPerk), 80);
@@ -2229,7 +2239,7 @@ export default function CallOfDoodie() {
     }, 200); // small delay to let audio context resume
     // ── Analytics: game start ──
     const startArtifacts = createRunStartArtifacts({
-      difficulty,
+      difficulty: difficultyRef.current,
       starterLoadout,
       seed,
       flags: {
@@ -2250,17 +2260,20 @@ export default function CallOfDoodie() {
       runTokenRef.current = null;
       runSummarySigRef.current = "";
     });
-    track("game_start", { difficulty, mode: _startMode, weapon: WEAPONS[starterWeapon]?.name, starterLoadout });
-    if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty });
-    // Weapon unlock snapshot — PostHog can derive unlock-rate funnels by account level
+    track("game_start", { difficulty: difficultyRef.current, mode: _startMode, weapon: WEAPONS[starterWeapon]?.name, starterLoadout });
+    if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty: difficultyRef.current });
+    if (gauntletLaunch) {
+      gsRef.current._gauntletLaunch = gauntletLaunch;
+      track("gauntlet_contract_start", gauntletLaunch);
+    }
     try {
       const _acctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
-      const _unlockedCount = WEAPON_UNLOCK_LEVELS.filter((_, i) => isWeaponUnlocked(i, _acctLevel)).length;
-      if (_unlockedCount < WEAPONS.length) {
-        track("weapon_unlock_snapshot", { accountLevel: _acctLevel, unlockedCount: _unlockedCount, totalWeapons: WEAPONS.length });
+      const _masteredCount = WEAPON_MASTERY_LEVELS.filter((requiredLevel) => _acctLevel >= requiredLevel).length;
+      if (_masteredCount < WEAPONS.length) {
+        track("weapon_mastery_snapshot", { accountLevel: _acctLevel, masteredCount: _masteredCount, totalWeapons: WEAPONS.length, availability: "all-open" });
       }
     } catch {}
-  }, [applyPerk, dailyChallengeMode, difficulty, initGame, releaseAllInputs, starterLoadout]);
+  }, [applyPerk, dailyChallengeMode, initGame, releaseAllInputs, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {

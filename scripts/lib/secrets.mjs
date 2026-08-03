@@ -1,7 +1,8 @@
 /**
  * secrets.mjs — Studio Ops secrets gateway (v3.1)
  *
- * Single API for agents to read secrets from `secrets/*.env`.
+ * Single API for agents to read secrets from `secrets/*.env` plus a narrowly
+ * allowlisted set of legacy single-value files normalized into canonical keys.
  * Every access is audited to `secrets/.access.log` (gitignored).
  * Raw values are scrubbable from any downstream log via `redact()`.
  *
@@ -59,6 +60,13 @@ let _cacheStamp = 0;
 let _capMap = null;
 let _redactList = new Set();
 
+// CANON-012/019/040: legacy single-value credentials are normalized HERE, never
+// read by project call sites. Keep this list explicit: arbitrary *.txt loading
+// would turn every note/file in secrets/ into ambient credential state.
+export const LEGACY_SINGLE_VALUE_SOURCES = Object.freeze({
+  'supabase-pat.txt': 'SUPABASE_ACCESS_TOKEN',
+});
+
 /**
  * Load and merge every `secrets/*.env` file into a flat key→value map.
  * Cached for 60s to avoid repeated disk reads across a single session.
@@ -82,6 +90,16 @@ function loadEnv() {
   }
 
   for (const dir of dirSet) {
+    // Low precedence inside a directory: a canonical .env value wins over its
+    // legacy adapter. The allowlisted raw file remains untouched on disk.
+    for (const [file, key] of Object.entries(LEGACY_SINGLE_VALUE_SOURCES)) {
+      const source = path.join(dir, file);
+      if (!fs.existsSync(source)) continue;
+      const value = fs.readFileSync(source, 'utf8').trim();
+      if (!value || /[\r\n]/.test(value) || value === 'REPLACE_ME' || value.startsWith('REPLACE_ME')) continue;
+      merged[key] = value;
+      if (value.length >= 8) _redactList.add(value);
+    }
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.env') && !f.startsWith('.'));
     for (const f of files) {
       const text = fs.readFileSync(path.join(dir, f), 'utf8');

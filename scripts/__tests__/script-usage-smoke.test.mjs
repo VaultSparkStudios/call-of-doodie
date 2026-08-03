@@ -54,7 +54,7 @@ describe("operator script smoke surfaces", () => {
     const first = run("scripts/progression-curve-audit.mjs", ["--kills", "79", "--points", "50"]);
     const second = run("scripts/progression-curve-audit.mjs", ["--kills", "79", "--points", "50"]);
     expect(second).toBe(first);
-    expect(JSON.parse(first)).toMatchObject({ schemaVersion: "progression-runway-v1" });
+    expect(JSON.parse(first)).toMatchObject({ schemaVersion: "progression-runway-v2" });
   });
 
   it("executes the local public-contract validator as a real smoke gate", () => {

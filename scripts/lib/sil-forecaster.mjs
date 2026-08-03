@@ -7,17 +7,43 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { parseSilSessions } from './sil-ledger.mjs';
 
-import { parseSilHistory, SIL_CATEGORIES } from './sil-history.mjs';
+const CATEGORIES = [
+  'Dev Health', 'Creative Alignment', 'Momentum',
+  'Engagement', 'Process Quality', 'Cross-Repo Coher',
+  'Security Posture', 'Ecosystem Integ', 'Capital Efficiency',
+  'Automation Cover'
+];
 
-export { parseSilHistory };
+const CATEGORY_ALIASES = {
+  'Cross-Repo Coherence': 'Cross-Repo Coher',
+  'Ecosystem Integration': 'Ecosystem Integ',
+  'Automation Coverage': 'Automation Cover',
+  'Engagement (infra)': 'Engagement'
+};
+
+export function parseSilHistory(silText, maxSessions = 5) {
+  return parseSilSessions(silText)
+    .filter((entry) => entry.total != null)
+    .slice(0, maxSessions)
+    .map((entry) => ({
+      date: entry.date,
+      session: entry.session,
+      total: entry.totalNormalized,
+      categories: Object.fromEntries(Object.entries(entry.categories).map(([raw, value]) => [CATEGORY_ALIASES[raw] || raw, value])),
+    }));
+}
 
 export function forecastNext(sessions, signals = {}) {
   // signals: { velocity, blockerPressure, contextAge, unblocked }
   if (!sessions.length) return null;
+  const validSessions = sessions.filter((session) =>
+    CATEGORIES.every((category) => typeof session?.categories?.[category] === 'number'));
+  if (!validSessions.length) return null;
   const forecast = {};
-  for (const cat of SIL_CATEGORIES) {
-    const series = sessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
+  for (const cat of CATEGORIES) {
+    const series = validSessions.map(s => s.categories[cat]).filter(n => typeof n === 'number');
     if (!series.length) { forecast[cat] = { predicted: null, confidence: 'none' }; continue; }
     // Simple AR(1): predict = last + alpha * (last - last-1), clamped 0..100
     const last = series[0];
@@ -45,7 +71,7 @@ export function forecastNext(sessions, signals = {}) {
     .filter(f => f.predicted != null)
     .reduce((sum, f) => sum + f.predicted, 0);
   if (totalPred === 0) return null;
-  return { categories: forecast, totalPredicted: totalPred, basis: sessions.length };
+  return { categories: forecast, totalPredicted: totalPred, basis: validSessions.length };
 }
 
 export function renderForecastBlock(forecast, currentTotal = null) {

@@ -11,10 +11,9 @@ export default defineConfig({
         manualChunks: {
           // React runtime in its own chunk — cached across deploys
           "vendor-react": ["react", "react-dom"],
-          // Optional data stays cacheable outside the gameplay bundle. Sentry is
-          // intentionally left to Rollup's dynamic-import graph so it is not
-          // emitted as an entry preload when no DSN is configured.
-          "vendor-data": ["@supabase/supabase-js"],
+          // Keep optional data clients on their natural dynamic-import graph.
+          // Forcing Supabase into a manual chunk turns it into an entry preload,
+          // paying the data-plane cost before a player opens an online surface.
           // gifenc only loaded when GIF encoding triggers (dynamic import in App.jsx)
           // already split automatically; this keeps it explicit
         },

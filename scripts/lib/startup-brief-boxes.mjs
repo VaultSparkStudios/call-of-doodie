@@ -25,6 +25,25 @@ function stripFence(text) {
     .trim();
 }
 
+function wrapLine(value, width, maxChunks = 3) {
+  const chunks = [];
+  let remaining = String(value || '').replace(/\s+/g, ' ').trim();
+  while (remaining && chunks.length < maxChunks) {
+    if (remaining.length <= width) {
+      chunks.push(remaining);
+      remaining = '';
+      break;
+    }
+    const window = remaining.slice(0, width + 1);
+    const wordBreak = window.lastIndexOf(' ');
+    const breakAt = wordBreak > 0 ? wordBreak : width;
+    chunks.push(remaining.slice(0, breakAt).trimEnd());
+    remaining = remaining.slice(breakAt).trimStart();
+  }
+  if (remaining) chunks[chunks.length - 1] = `${chunks[chunks.length - 1].slice(0, Math.max(0, width - 3))}...`;
+  return chunks;
+}
+
 export function looksBoxed(text) {
   return /╔══\s*GENIUS HIT LIST|╔═+\s*GENIUS HIT LIST|║\s*GENIUS HIT LIST/.test(String(text || ''));
 }
@@ -48,11 +67,8 @@ export function normalizeGeniusBlock(raw, options = {}) {
     .filter(Boolean)
     .slice(0, maxLines);
 
-  return [
-    top('GENIUS HIT LIST', width),
-    ...lines.map((line) => row(line, width)),
-    bot(width),
-  ].join('\n');
+  const rows = lines.flatMap((line) => wrapLine(line, width).map((chunk) => row(chunk, width)));
+  return [top('GENIUS HIT LIST', width), ...rows, bot(width)].join('\n');
 }
 
 export function renderHumanPressureBlock(item, options = {}) {

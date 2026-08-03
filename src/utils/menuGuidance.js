@@ -33,7 +33,7 @@ export function buildCommandBrief({
   else if (mode === "score_attack") actions.push("Play for tempo and chain control. Safe-but-slow routing leaves score on the table.");
   else if (mode === "daily_challenge") actions.push("Use the first run as reconnaissance, then replay the same seed with cleaner routing and better shop discipline.");
   else if (mode === "speedrun") actions.push("Commit early and move with intent. Speedrun pace dies when you hedge between multiple build lines.");
-  else if (mode === "gauntlet") actions.push("Respect the forced build. The gauntlet rewards learning its strengths, not fighting the preset.");
+  else if (mode === "gauntlet") actions.push("Learn the fixed opening kit. The gauntlet keeps the weekly start comparable while weapon switching stays open.");
   else actions.push("Specialize early. A clear two-weapon identity pays off harder than a flat all-rounder run.");
 
   if (selectedLoadout.id === "tank") actions.push("Tank buys time, not burst. Convert that time into safer routes and cleaner boss phases.");
@@ -46,8 +46,27 @@ export function buildCommandBrief({
   return actions.slice(0, 3);
 }
 
+const EXECUTION_BY_ID = Object.freeze({
+  aim_check: "aim_check",
+  accept_challenge: "challenge",
+  daily_challenge: "daily",
+  best_next_upgrade: "upgrades",
+  mission_cleanup: "missions",
+  revenge_drill: "codex",
+  play_now: "deploy",
+  challenge_friend: "challenge_share",
+});
+
 function normalizeAction(action, order) {
-  return { ...action, order };
+  return {
+    schemaVersion: "continuation-action-v2",
+    ...action,
+    action: EXECUTION_BY_ID[action.id] || "codex",
+    reasonCode: action.reasonCode || action.id || "unknown",
+    payload: action.payload || {},
+    evidence: action.evidence || { kind: "local-state", basis: action.id || "unknown" },
+    order,
+  };
 }
 
 export function buildFrontDoorActionStack({
@@ -59,13 +78,26 @@ export function buildFrontDoorActionStack({
   currentModeLabel = "Standard",
   todaySeed = null,
   totalRuns = 0,
+  hasVerifiedInput = true,
   unlocked = [],
   meta = {},
   career = {},
 }) {
+  if (!hasVerifiedInput) {
+    return [normalizeAction({
+      id: "aim_check",
+      title: "Prove Your Controls",
+      detail: "Verify four aim directions once before committing a serious run.",
+      whyNow: "A verified input path protects the first run from a dead direction or stale control profile.",
+      urgency: "Takes seconds and stays local to this browser.",
+      accent: "#FFD34D",
+      cta: "AIM CHECK",
+    }, 0)];
+  }
+
   // First-run players get a stripped action stack — just deploy
   if (totalRuns === 0) {
-    return [{
+    return [normalizeAction({
       id: "play_now",
       title: "Your First Drop",
       detail: "Move with WASD, aim with mouse, shoot automatically. Survive as many waves as you can.",
@@ -73,8 +105,7 @@ export function buildFrontDoorActionStack({
       urgency: "The rest of the menu unlocks as you play.",
       accent: "#FF6B35",
       cta: "▶ DEPLOY",
-      order: 0,
-    }];
+    }, 0)];
   }
   const actions = [];
 
@@ -87,6 +118,7 @@ export function buildFrontDoorActionStack({
       urgency: "Best when your routing memory is still fresh.",
       accent: "#FFB36B",
       cta: "⚔️ ACCEPT CHALLENGE",
+      payload: { seed: challenge.seed, vsScore: challenge.vsScore, vsName: challenge.vsName || null },
     }, 0));
   }
 
@@ -99,6 +131,7 @@ export function buildFrontDoorActionStack({
       urgency: "Best before the daily pool gets crowded.",
       accent: "#00E5FF",
       cta: "📅 PLAY TODAY",
+      payload: { seed: todaySeed },
     }, actions.length));
   }
 
@@ -116,6 +149,7 @@ export function buildFrontDoorActionStack({
       accent: "#FFD700",
       cta: "🎖️ OPEN UPGRADES",
       metaRec: rec,
+      payload: { upgradeId: rec?.node?.id || null },
     }, actions.length));
   }
 
@@ -128,6 +162,7 @@ export function buildFrontDoorActionStack({
       urgency: "Worth prioritizing when your next clean run is uncertain.",
       accent: "#7CFF8A",
       cta: "📋 REVIEW MISSIONS",
+      payload: { incompleteMissionCount },
     }, actions.length));
   }
 
@@ -142,6 +177,7 @@ export function buildFrontDoorActionStack({
       accent: "#FF8888",
       cta: "👾 STUDY TARGET",
       killerType: killerPressure.type,
+      payload: { killerType: killerPressure.type },
     }, actions.length));
   }
 
@@ -153,6 +189,7 @@ export function buildFrontDoorActionStack({
     urgency: "Use this when there is no higher-leverage prep still sitting idle.",
     accent: "#FF6B35",
     cta: "▶ DEPLOY",
+    payload: { modeLabel: currentModeLabel, loadoutName: selectedLoadout.name },
   }, actions.length));
 
   actions.push(normalizeAction({

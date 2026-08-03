@@ -1,40 +1,44 @@
-<!-- generated-by: deterministic closeout write-back (paid model call intentionally skipped) -->
-<!-- source-hash: 51ef142db654 -->
-<!-- generated-at: 2026-08-02T00:33:59.6854697Z -->
+<!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
+<!-- source-hash: 18e153c3b1ff -->
+<!-- generated-at: 2026-08-03T03:24:36.929Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION
-- Session 136 (latest); Session 135 retained, older handoffs archived.
+SESSION 137 HANDOFF SUMMARY
 
-SHIPPED THIS SESSION
-- Unified Genius List: deterministic executable-work contract with source fingerprints, statuses, scores, honest 0/6 exhaustion receipt (replaces age-only caching).
-- Local capability audit exposes authoritative 68-capability Studio universe (41/68 readiness) without leaking values; canonical router and protocol probes verified.
-- Objective outcomes, transient effects, Input Diagnostics refactored as tested boundaries; both App architecture ratchets restored without raising limits.
-- Home routing now semantic (not comment-grepped); Pages staging uses broker-native credential fallback; `/_health` carries own HSTS header at Function boundary.
-- Five live-premise L3 audit items, three planned compound refinements, two staging fixes, and three closeout suite/derived-view/shell fixes.
+Session
+- Latest completed: 137 (agent-neutral /arc: /start, /audit, /implement, /closeout from synced main; direct-to-main promotion after staging verification).
 
-CURRENT STATE
-- Architecture: 4,986 App lines / 1,768 inline-loop span / 32 boundaries / 1 hook; budgets 5,000/1,775/27/1 unchanged.
-- Control plane: Genius schema 2.0 reports executable=0, deferred=6, exhausted=true.
-- Staging: https://session-136-staging.call-of-doodie.pages.dev/ passes 7 hosted checks, 1-year HSTS, 867/867 route/theme/width.
-- Validation: 919/919 tests across 137 files; strict lint, prod build, local gates, desktop/mobile Playwright 8/8, exact-main brief/Cloudflare workflows, and production 7/7 + 5/5 + 3/3 + 5/5 smokes pass.
-- Release: engineering deployed and verified; SPARKED remains NO-GO; no public-launch claim.
+Shipped This Session
+- open-arsenal-mastery-v2: replaced contradictory weapon locks with immediate access plus earned mastery recognition.
+- Unified reason-coded action stack powering Journey, ticker, analytics, Daily, and one-action deterministic Weekly Gauntlet.
+- Fail-closed evidence gates: startup acceptance, release-manifest reconciliation, entry-asset boundaries, production performance receipts.
+- Optional Supabase work moved off first paint.
 
-NOW BUCKET (top 3)
-- Gather sanitized participant evidence before changing balance/pacing/progression/retention.
-- On physical hardware: verify PWA install/relaunch, real gamepad/browser, full-run GIF encode/play/share.
-- With production traffic + scoped analytics: collect LCP/CLS and funnel evidence before retiring `?home=v1`.
+Current Intent
+- Diagnose and resolve HomeV2 production LCP regression; keep v1 fallback until funnel evidence justifies retirement.
 
-BLOCKERS (top 3)
-- Direct AI pixel review unclaimable: local viewer + in-app browser fail Windows CryptUnprotectData (persists since ~S131).
-- SPARKED launch gated on external verifications (email, analytics/Sentry scope, publication, founder approval).
-- No participant/production evidence available for tuning or `?home=v1` retirement.
+Now Bucket (Top 3)
+- Diagnose HomeV2 production LCP regression using receipt diagnostics (unused JS, main-thread, network) before re-measuring retirement.
+- Collect production funnel evidence and participant outcomes before changing fallback, balance, or retention assumptions.
+- Complete launch gates: inbound mail, physical PWA/gamepad/full-run media, scoped analytics/Sentry, publication, founder approval.
 
-HUMAN-BLOCKED (with age)
-- Founder launch approval — open since S129+.
-- Inbound email delivery verification (callofdoodie.wtf) — open since S132.
-- Itch/community publication — open since S129+.
-- Physical-hardware PWA/gamepad/full-run media verification — open since S129+.
+Blockers (Top 3)
+- HomeV2 LCP regression: production median 3,226 ms vs v1 2,651 ms on revision f1d4d825742c; must diagnose before retiring ?home=v1.
+- No production funnel/participant evidence yet; blocks balance/retention/fallback decisions.
+- SPARKED remains NO-GO; engineering staging green but external gates unmet.
 
-NEXT SESSION: Genius list is empty (executable=0); re-run `/arc` from synced main to surface new live-premise audit items, or advance a human-blocked external gate.
+Human-Blocked Items (with age)
+- Inbound email delivery verification: open since S136 (1+ session).
+- Physical PWA install/gamepad/full-run media capture: open since S135 (2+ sessions).
+- Production analytics/Sentry scoping + funnel evidence: open since S136 (1+ session).
+- Publication/community + direct AI pixel review: open since S136 (1+ session).
+- Founder launch approval: open since S136 (1+ session).
+
+State
+- Architecture: 4,999 App lines, 1,768 inline-loop span; ratchets 5,000/1,775 unchanged.
+- Validation: 935/935 tests across 143 files, strict lint, production build, E2E 8/8, hosted visual 867/867, four hash-bound captures.
+- Staging: session-137-staging.call-of-doodie.pages.dev; immutable dd1b8c97.call-of-doodie.pages.dev.
+
+Next Session Pointer
+- Start by diagnosing HomeV2 LCP regression from the production performance receipt before any retirement re-measurement.

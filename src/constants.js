@@ -34,13 +34,10 @@ export const WEAPON_EVOLVED_NAMES = [
 // ===== WEAPON UNLOCK PROGRESSION =====
 // Account-level gates per weapon index. Levels 1-3 are starter; later weapons
 // unlock as the player accumulates kills (account level = sqrt(totalKills/20)+1).
-// Tuned so a casual player reaches the full arsenal in ~30 runs (~5,000 kills,
-// ~L16). Earliest unlocks are tight to give early-game momentum, later ones
-// space out so the arsenal isn't given away in two sessions.
-export const WEAPON_UNLOCK_LEVELS = [1, 1, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16];
-export function isWeaponUnlocked(weaponIdx, accountLevel) {
-  return (accountLevel || 1) >= (WEAPON_UNLOCK_LEVELS[weaponIdx] ?? 1);
-}
+// All weapons are available before deployment. These thresholds award mastery
+// recognition without denying access, preserving progression while keeping the
+// twelve-weapon sandbox honest across every selector.
+export const WEAPON_MASTERY_LEVELS = Object.freeze([1, 1, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16]);
 
 // ===== ENEMIES =====
 // deathQuotes: array — one is picked randomly on death
@@ -1027,24 +1024,24 @@ export const WEEKLY_THEMES = [
 ];
 
 // ===== WEEKLY GAUNTLET =====
-// Fixed-loadout weekly challenge: one weapon, one forced perk, no free perk-ups mid-run.
+// Fixed-opening weekly challenge: one starting weapon, one starting perk, no perk-choice screens.
 // Seeded deterministically by week number so every player sees the same config.
-export function getWeeklyGauntlet() {
+export function getWeeklyGauntlet(now = Date.now()) {
   const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
   const EPOCH = new Date("2024-01-01T00:00:00Z").getTime();
-  const weekNum = Math.floor((Date.now() - EPOCH) / MS_PER_WEEK);
+  const weekNum = Math.floor((Number(now) - EPOCH) / MS_PER_WEEK);
 
   // Mulberry32 seeded PRNG — fast, deterministic, good distribution
   let _s = (weekNum * 0x9e3779b9) >>> 0;
   const rand = () => { _s += 0x6D2B79F5; let t = _s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 0xFFFFFFFF; };
 
-  const weaponIdx = Math.floor(rand() * 12);            // 0-11 (skip Nuclear Kazoo edge)
+  const weaponIdx = Math.floor(rand() * WEAPONS.length); // every open-arsenal weapon is eligible
   const diffKeys  = ["easy", "normal", "hard"];
   const diffId    = diffKeys[Math.floor(rand() * 3)];
   // Pick a non-cursed starting perk by index (resolved in App.jsx against PERKS array)
   const startPerkRoll = rand();
 
-  const themeIdx = Math.floor(rand() * WEEKLY_THEMES.length);  // 6th rand() call
+  const themeIdx = Math.floor(rand() * WEEKLY_THEMES.length);  // fourth PRNG draw
   const theme = WEEKLY_THEMES[themeIdx];
 
   return {

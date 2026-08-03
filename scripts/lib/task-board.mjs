@@ -42,6 +42,49 @@ export function parseUnifiedItems(markdown) {
   return items;
 }
 
+/**
+ * Parse every numeric task row in every historical/current Markdown table.
+ * Unlike parseUnifiedItems(), this is intentionally not scoped to the first
+ * Unified Genius section: ops task --id must find an old committed ID without
+ * loading the whole board into an agent's context.
+ */
+export function parseTaskRows(markdown) {
+  const rows = [];
+  let section = '(root)';
+  const lines = String(markdown || '').split(/\r?\n/);
+  for (let index = 0; index < lines.length; index++) {
+    const line = lines[index];
+    const heading = line.match(/^#{2,6}\s+(.+?)\s*$/);
+    if (heading) section = heading[1].trim();
+    if (!/^\|\s*\d+(?:\.\d+)?\s*\|/.test(line)) continue;
+    const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
+    if (cells.length < 6) continue;
+    const [id, tier, category, status, effort, ...itemCells] = cells;
+    const rawItem = itemCells.join(' | ').trim();
+    const titleMatch = rawItem.match(/\*\*(.+?)\*\*/);
+    rows.push({
+      id,
+      idNumber: Number(id),
+      tier,
+      category,
+      status,
+      effort,
+      item: rawItem.replace(/\*\*/g, ''),
+      rawItem,
+      title: (titleMatch?.[1] || rawItem).replace(/\*\*/g, '').replace(/\s+/g, ' ').trim(),
+      section,
+      line: index + 1,
+      raw: line,
+    });
+  }
+  return rows;
+}
+
+export function findTaskRowsById(markdown, id) {
+  const key = String(id ?? '').trim();
+  return parseTaskRows(markdown).filter((row) => row.id === key);
+}
+
 export function parseHumanItems(markdown) {
   const section = extractSection(markdown, 'Human Action Required');
   if (!section) return [];

@@ -5,7 +5,7 @@ import {
   META_UPGRADES,
   STARTER_LOADOUTS,
   WEAPONS,
-  WEAPON_UNLOCK_LEVELS,
+  WEAPON_MASTERY_LEVELS,
 } from "../../src/constants.js";
 import { REPLAY_DIFFICULTIES, REPLAY_MODES, REPLAY_STARTERS } from "../../src/utils/replayCode.js";
 import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
@@ -17,7 +17,7 @@ function label(id) {
 export function buildPublicGameplayContract() {
   const bossTypes = new Set(BOSS_ROTATION);
   return {
-    schemaVersion: "gameplay-contract-v1",
+    schemaVersion: "gameplay-contract-v2",
     canonicalUrl: "https://callofdoodie.wtf/",
     publisher: "VaultSpark Studios LLC",
     rights: "Proprietary — All Rights Reserved, VaultSpark Studios LLC",
@@ -44,7 +44,8 @@ export function buildPublicGameplayContract() {
       index,
       name: weapon.name,
       emoji: weapon.emoji,
-      unlockAccountLevel: WEAPON_UNLOCK_LEVELS[index] ?? 1,
+      availableAtStart: true,
+      masteryAccountLevel: WEAPON_MASTERY_LEVELS[index] ?? 1,
     })),
     enemies: ENEMY_TYPES.map((enemy, index) => ({
       index,

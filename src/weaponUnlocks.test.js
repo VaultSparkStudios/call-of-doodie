@@ -1,39 +1,34 @@
-import { describe, it, expect } from "vitest";
-import { WEAPONS, WEAPON_UNLOCK_LEVELS, isWeaponUnlocked } from "./constants.js";
+import { describe, expect, it } from 'vitest';
+import { WEAPONS, WEAPON_MASTERY_LEVELS } from './constants.js';
+import { buildArsenalMasteryContract, getWeaponMastery } from './utils/arsenalMastery.js';
 
-describe("weapon unlocks", () => {
-  it("WEAPON_UNLOCK_LEVELS covers every weapon", () => {
-    expect(WEAPON_UNLOCK_LEVELS.length).toBe(WEAPONS.length);
-  });
-
-  it("first three weapons are unlocked from level 1", () => {
-    expect(isWeaponUnlocked(0, 1)).toBe(true);
-    expect(isWeaponUnlocked(1, 1)).toBe(true);
-    expect(isWeaponUnlocked(2, 1)).toBe(true);
-  });
-
-  it("late-game weapons are locked at low account levels", () => {
-    const lastIdx = WEAPONS.length - 1;
-    expect(isWeaponUnlocked(lastIdx, 1)).toBe(false);
-    expect(isWeaponUnlocked(lastIdx, 5)).toBe(false);
-  });
-
-  it("unlocks at the threshold level and above", () => {
-    const idx = 6;
-    const threshold = WEAPON_UNLOCK_LEVELS[idx];
-    expect(isWeaponUnlocked(idx, threshold - 1)).toBe(false);
-    expect(isWeaponUnlocked(idx, threshold)).toBe(true);
-    expect(isWeaponUnlocked(idx, threshold + 5)).toBe(true);
-  });
-
-  it("treats missing/zero account level as level 1", () => {
-    expect(isWeaponUnlocked(0, undefined)).toBe(true);
-    expect(isWeaponUnlocked(0, 0)).toBe(true);
-  });
-
-  it("unlock thresholds are non-decreasing", () => {
-    for (let i = 1; i < WEAPON_UNLOCK_LEVELS.length; i++) {
-      expect(WEAPON_UNLOCK_LEVELS[i]).toBeGreaterThanOrEqual(WEAPON_UNLOCK_LEVELS[i - 1]);
+describe('open arsenal mastery contract', () => {
+  it('covers every weapon with monotonic mastery thresholds', () => {
+    expect(WEAPON_MASTERY_LEVELS).toHaveLength(WEAPONS.length);
+    for (let index = 1; index < WEAPON_MASTERY_LEVELS.length; index += 1) {
+      expect(WEAPON_MASTERY_LEVELS[index]).toBeGreaterThanOrEqual(WEAPON_MASTERY_LEVELS[index - 1]);
     }
+  });
+
+  it('makes every weapon available at every account level', () => {
+    for (const accountLevel of [1, 5, 16]) {
+      const contract = buildArsenalMasteryContract(accountLevel);
+      expect(contract.schemaVersion).toBe('arsenal-mastery-v2');
+      expect(contract.availability).toBe('all-open');
+      expect(contract.weapons).toHaveLength(WEAPONS.length);
+      expect(contract.weapons.every((weapon) => weapon.available)).toBe(true);
+    }
+  });
+
+  it('awards recognition at the threshold without changing access', () => {
+    const index = WEAPONS.length - 1;
+    const threshold = WEAPON_MASTERY_LEVELS[index];
+    expect(getWeaponMastery(index, threshold - 1)).toMatchObject({ available: true, mastered: false, levelsRemaining: 1 });
+    expect(getWeaponMastery(index, threshold)).toMatchObject({ available: true, mastered: true, levelsRemaining: 0 });
+  });
+
+  it('normalizes hostile indices and account levels safely', () => {
+    expect(getWeaponMastery(-99, Number.NaN)).toMatchObject({ index: 0, available: true, masteryAccountLevel: 1 });
+    expect(getWeaponMastery(999, 0).index).toBe(WEAPONS.length - 1);
   });
 });

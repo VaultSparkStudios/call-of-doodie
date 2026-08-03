@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-03T02:53:27.558Z",
+  "stagingUrl": "https://session-137-staging.call-of-doodie.pages.dev",
+  "workingTreeUiSha256": "0c3f46d53d206d1c1b12aeeab71d5cc9481e0286650330cd74a2b1ab3821a1f1",
+  "sourceMatrix": {
+    "receipt": "output/playwright/session-137-staging/visual-audit-receipt.json",
+    "sha256": "07e41106d34ddb287fabf98a8b526b45848d58885e02b6c494fb62214e6efb08",
+    "checks": {
+      "pass": true,
+      "total": 867,
+      "passed": 867,
+      "failures": []
+    }
+  },
+  "themes": [
+    "dark",
+    "light"
+  ],
+  "captures": [
+    {
+      "file": "home-dark-mobile.png",
+      "sha256": "6beea10388a106e87d58c9242bfa6380ed2fa9684372b4c7499829f0ccc481f5",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Home v2 default command center and all-open loadout"
+    },
+    {
+      "file": "home-light-desktop.png",
+      "sha256": "76a5c3b47b6aa9b4b0a3332becce8b439df0c743907be27729163bafb8a56ecc",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Home v2 default command center and all-open loadout"
+    },
+    {
+      "file": "arsenal-dark-desktop.png",
+      "sha256": "25d3d606375dea865325fde29dfe24dc979d5244501d65e3a940e68f152f6799",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1546
+      },
+      "page": "Public Arsenal open-roster contract"
+    },
+    {
+      "file": "arsenal-light-mobile.png",
+      "sha256": "6d827445fd2dd1c90a3d717b6772c6068f0e46de5e091205d7c0e315ad262a27",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 2082
+      },
+      "page": "Public Arsenal open-roster contract"
+    }
+  ],
+  "inspection": {
+    "renderedPixelsReviewed": true,
+    "reviewer": "Codex image-capable rendered-pixel review",
+    "findings": [
+      "Home v2 remains legible and compositionally stable at 390px dark and 1440px light; the deploy action and open-arsenal roster are visible without overlap.",
+      "The Arsenal page clearly presents all twelve weapons as available now, with mastery as recognition rather than access, on desktop dark and mobile light.",
+      "No black-on-black, light-on-white, horizontal overflow, clipped primary action, console error, or page error was observed in the complete matrix."
+    ],
+    "fixesApplied": [
+      "Added exact route/theme/viewport diagnostics to visual-audit timeouts after the first transient unlabeled browser wait; the complete rerun passed."
+    ],
+    "blockingDefectsOpen": 0
+  }
+}

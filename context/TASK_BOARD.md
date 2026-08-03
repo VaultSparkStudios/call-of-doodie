@@ -16,6 +16,17 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S137** Propagation compatibility court — the real startup entrypoint now proves shared capability provenance, valid brief boxes, flat-rate Max Plan semantics, and public-safe generated-artifact boundaries.
+- [x] [SIL:3] **DONE S137** Open-arsenal mastery contract — all twelve primaries are immediately selectable; levels recognize mastery and evolution goals without contradictory access locks.
+- [x] [SIL:3] **DONE S137** Executable continuation and Gauntlet — one reason-coded action stack powers Journey, ticker, telemetry, and deterministic one-action Weekly Gauntlet deployment.
+- [x] [SIL:3] **DONE S137** Source-derived release manifest — local staging/lifecycle/identity posture reconciles from authoritative status and fails on contradictions.
+- [x] [SIL:3] **DONE S137** Production performance court — three runs per surface bind exact production URLs/revision/tool/browser/raw hashes; measured HomeV2 LCP is slower than v1, so fallback retirement remains false.
+- [x] [SIL:3] **DONE S137 second-order** Optional Supabase work defers to browser idle, entry assets enforce no data-plane preload, Gauntlet inputs fail closed, and performance diagnostics self-derive.
+- [x] [SIL:3] **DONE S137 rendered-pixel proof** Exact-session staging passed 867/867 objective checks; four dark/light desktop/mobile captures were directly inspected and hash-bound in `docs/visual-qa/LATEST.json`.
+- [x] [AUDIT WIN S137] HomeV1 retirement, funnel claims, balance tuning, hosted AI, identity expansion, analytics/Sentry mutation, inbound-mail green status, and physical/public launch claims were rejected or deferred because their live prerequisites remain absent.
+
+**Runway exception:** all five live-premise audit items and four repo-owned second-order candidates are exhausted after S137. Remaining work requires production traffic, scoped credentials, physical devices/media, publication, or founder approval; no phantom implementation item is invented.
+
 - [x] [SIL:3] **DONE S136** Architecture orchestration recovery — objective outcomes, Input Diagnostics, and transient presentation moved into tested boundaries; App is 4,986 lines with a 1,768-line loop span and 32 system imports under unchanged budgets.
 - [x] [SIL:3] **DONE S136** Executable-work truth — schema-v2 Genius cache, one shared source-derived classifier, deterministic scoring, and SHA-256 input fingerprints prove 0 executable / 6 deferred / exhausted=true without padding.
 - [x] [SIL:3] **DONE S136** Capability and protocol truth — local secret audits resolve the authoritative 68-capability shared map with provenance; the canonical ops router works; protocol drift behavior-probes both boundaries.
@@ -216,7 +227,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S113 (bounded edge wiring)** [S59 carryover] validate-replay Phase 2B — edge validator now consumes deterministic slice receipts (contract, movement/aim, combat actions, derived contact enemy) under the existing advisory gate. Full physics parity remains future work, but the browser slices are no longer edge-invisible.
 - [x] [SIL:1] **DONE S61** [S59 carryover] App.jsx extraction slice 11 — extracted enemy projectile/player hit resolution, incoming damage math, contact-hit helpers, and grenade explosion damage into `src/systems/combatResolution.js`; wired enemy bullet hits and grenade blast damage through pure helpers in `src/App.jsx`; added regression tests.
 - [x] [SIL:2] **DONE S125 · stale composite decomposed** S55 browser QA — CLI browser control is proven by 2/2 desktop/mobile pointer-flow tests and the 240/240 route/theme matrix; settings/draft/performance contracts remain covered by source tests. The genuinely unautomated full-run GIF/device checks are now explicit Human Action rows rather than a false “CLI cannot drive browser” blocker.
-- [ ] [Human/Data] [SIL:2⛔] HomeV2 Lighthouse measurement — capture real LCP/CLS deltas vs legacy MenuScreen on production, confirm ≥200ms LCP improvement before removing v1 fallback
+- [x] [SIL:2] **DONE S137 · adverse evidence accepted** HomeV2 Lighthouse measurement — three production runs per surface at revision `f1d4d825742c` measured HomeV2 median LCP 3,226 ms vs legacy 2,651 ms; the required ≥200 ms improvement failed, so v1 remains.
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
 
 ## Next
@@ -232,7 +243,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S68** Replay command trace contract — client trace binding already shipped in S67; S68 updates `validate-replay` to accept `traceDigest`/`traceLength` as a trace-backed replay contract and updates `submit-score` to reject malformed trace metadata before leaderboard insert.
 - [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
 - [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
-- [ ] [SIL:1] App.jsx extraction roadmap per `docs/APP_EXTRACTION_ROADMAP.md` — slice 1 is the game loop (player/bullet/enemy update); pure `step(gs, frame)` modules with their own tests
+- [x] [SIL:1] **DONE S67 · stale duplicate reconciled S137** App.jsx extraction roadmap slice 1 — `gameStep.js` shipped pure movement/player stepping with tests in S67, followed by combat/lifecycle/storage/replay extractions; current architecture is 4,999/5,000 and any new overage remains a root-fix trigger.
 - [x] [SIL:1] **DONE S67** Weapon unlock telemetry — `handlePlayerDeath` detects newly unlocked weapons after account-level changes and emits `track("weapon_unlock", {...})`; future balance work needs real traffic, not more local wiring.
 - [x] [SIL:2] **DONE S69** Trace body storage contract — compact command trace bodies now reach `submit-score`, are checked against digest/count, and are retained in member session metadata only; deterministic resim still needs the runner itself.
 - [x] [SIL:2] **DONE S55** GIF highlight encoder — non-blocking palette reuse + 36-frame cap + 6-frame yields + skip on mobile/PERF mode

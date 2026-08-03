@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * render-closeout-board.mjs (v1.0)
+ * render-closeout-board.mjs (v1.1)
  *
  * Renders docs/CLOSEOUT_STATUS_BOARD.md — the canonical end-of-session board
  * checked by validate-closeout-board-format.mjs. Composed from live state:
@@ -241,12 +241,10 @@ function agentMemoryRecentlyTouched() {
   if (!home) return false;
   const slug = path.basename(ROOT);
   const cutoff = Date.now() - 24 * 3600_000;
-
   const candidates = [
     path.join(home, '.codex', 'memories', slug.toLowerCase()),
     path.join(home, '.codex', 'memories', slug),
   ];
-
   try {
     const projectsDir = path.join(home, '.claude', 'projects');
     if (fs.existsSync(projectsDir)) {
@@ -310,7 +308,7 @@ function writeBackCoverage(session) {
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
   // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
   result.push({
-    file: 'agent memory (~/.codex or ~/.claude project memory)' ,
+    file: 'agent memory (~/.codex or ~/.claude project memory)',
     touched: agentMemoryRecentlyTouched(),
   });
   return result;
@@ -323,6 +321,44 @@ function daysSinceISO(iso) {
   return Math.max(0, Math.round((Date.now() - t) / 86400000));
 }
 
+function validationBadge(status) {
+  const mode = String(status?.testsLastRunMode || '');
+  if (status?.testsShardProofDir) {
+    const rel = `${status.testsShardProofDir}/aggregate.json`;
+    const aggregate = readJson(path.join(ROOT, rel));
+    const shardCount = aggregate?.shardCount || Number(String(mode).split(':')[1]) || '?';
+    const clean = aggregate
+      && aggregate.failures === 0
+      && !aggregate.childParseFailed
+      && !aggregate.budgetExhausted
+      && !(aggregate.deferred || []).length
+      && !(aggregate.envBlocked || []).length;
+    const executed = new Set([...(aggregate?.executedShards || []), ...(aggregate?.resumedShards || [])]).size;
+    return clean ? `shard-clean ${shardCount}/${shardCount}` : `shard-partial ${executed || '?'}/${shardCount}`;
+  }
+  if (/changed/i.test(mode)) return 'changed-fresh';
+  if ((status?.testsDeferred || []).length || status?.testsBudgetExhausted) return 'full-deferred';
+  if (status?.testsLastRun) return 'full-fresh';
+  return 'unknown';
+}
+
+// S240 [audit #11] · SIL S235 #1 — quiet-host defer/resume receipt state:
+// distinguishes "broad proof PENDING until the host is quiet" from "aggregate
+// proof completed" on the founder-facing board.
+function quietHostReceiptBadge() {
+  try {
+    // Lazy import keeps the board render resilient if the lib is absent in a
+    // propagated repo that predates S240.
+    const receiptsPath = path.join(ROOT, '.cache', 'quiet-host-proof-receipts.json');
+    const rows = readJson(receiptsPath);
+    const last = Array.isArray(rows) ? rows[rows.length - 1] : null;
+    if (!last) return null;
+    if (last.kind === 'deferred') return `pending-quiet (deferred ${String(last.at || '').slice(0, 16)})`;
+    if (last.kind === 'resumed') return last.ok ? `proven (resumed ${String(last.resumedAt || '').slice(0, 16)})` : 'resume-FAILED';
+    return null;
+  } catch { return null; }
+}
+
 function postSessionSignals(status) {
   const doctor = status?.doctorScore && typeof status.doctorScore === 'object'
     ? `${status.doctorScore.passing ?? status.doctorScore.ran ?? '?'}/${status.doctorScore.total ?? '?'}`
@@ -330,6 +366,10 @@ function postSessionSignals(status) {
   const tests = status?.testsPassing != null && status?.testsTotal != null
     ? `${status.testsPassing}/${status.testsTotal}`
     : '—';
+  const shardProof = status?.testsShardProofDir
+    ? `${status.testsLastRunMode || 'sharded'} · ${status.testsShardProofDir}/aggregate.json`
+    : null;
+  const quietHostReceipt = quietHostReceiptBadge();
   const ignisDays = daysSinceISO(status?.ignisLastComputed);
   const ignisLabel = ignisDays == null ? '—' : `${ignisDays}d ago`;
   const truth = status?.truthAuditStatus || status?.truthGenome?.status || '—';
@@ -339,12 +379,33 @@ function postSessionSignals(status) {
       ? `${status.complianceScore}/${status.complianceTotal ?? 27}`
       : '—',
     tests,
+    validationBadge: validationBadge(status),
+    shardProof,
+    quietHostReceipt,
     ignis: ignisLabel,
     truth,
     sanitization: status?.sanitizationLastCleared
       ? `${daysSinceISO(status.sanitizationLastCleared) ?? '—'}d ago`
       : '—',
   };
+}
+
+/**
+ * CANON-031 shell hygiene: only a session-scoped, internally coherent
+ * enumeration may render numeric counts. Missing, stale, negative, or
+ * arithmetically inconsistent evidence stays explicitly unknown; the board
+ * must never manufacture a comforting zero.
+ */
+export function sessionShellHygiene(status, session) {
+  const evidence = status?.sessionShellHygiene;
+  const counts = ['started', 'closed', 'running'].map((key) => evidence?.[key]);
+  const validCounts = counts.every((value) => Number.isInteger(value) && value >= 0);
+  const sameSession = Number(evidence?.session) === Number(session);
+  const coherent = validCounts && counts[0] === counts[1] + counts[2];
+  if (!sameSession || !coherent || !evidence?.enumeratedAt) {
+    return 'unknown · missing/stale enumeration';
+  }
+  return `${counts[0]} started · ${counts[1]} closed · ${counts[2]} running`;
 }
 
 function nextSessionHint() {
@@ -433,9 +494,13 @@ function render() {
   lines.push(row(`Doctor:        ${sig.doctor}`));
   lines.push(row(`Compliance:    ${sig.compliance}`));
   lines.push(row(`Tests:         ${sig.tests}`));
+  lines.push(row(`Validation:    ${sig.validationBadge}`));
+  if (sig.shardProof) lines.push(row(`Shard proof:   ${sig.shardProof.slice(0, W - 15)}`));
+  if (sig.quietHostReceipt) lines.push(row(`Broad proof:   ${sig.quietHostReceipt.slice(0, W - 15)}`));
   lines.push(row(`IGNIS:         ${sig.ignis}`));
   lines.push(row(`Truth:         ${sig.truth}`));
   lines.push(row(`Sanitization:  ${sig.sanitization}`));
+  lines.push(row(`shells:        ${sessionShellHygiene(status, session)}`));
   lines.push(bottom());
 
   // 7. NEXT SESSION
@@ -449,8 +514,8 @@ function render() {
   }
   lines.push(bottom());
 
-  const header = `<!-- generated-by: scripts/render-closeout-board.mjs v1.0 -->\n<!-- generated-at: ${date} (Session ${session} closeout) -->\n\n# Closeout Status Board — ${name}\n\n\`\`\`\n`;
-  const footer = '\n```\n\n*Generated by `scripts/render-closeout-board.mjs v1.0`*\n';
+  const header = `<!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->\n<!-- generated-at: ${date} (Session ${session} closeout) -->\n\n# Closeout Status Board — ${name}\n\n\`\`\`\n`;
+  const footer = '\n```\n\n*Generated by `scripts/render-closeout-board.mjs v1.1`*\n';
 
   return header + lines.join('\n') + footer;
 }

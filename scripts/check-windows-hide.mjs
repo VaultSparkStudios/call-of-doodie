@@ -96,7 +96,12 @@ export function scanWindowsHide(root = join(ROOT, 'scripts')) {
   const violations = [];
   for (const file of walk(root)) {
     if (file.endsWith('check-windows-hide.mjs')) continue; // don't lint the guard's own pattern doc
-    const src = readFileSync(file, 'utf8');
+    // This is a source guard, not a prose linter. Comments routinely explain
+    // why shell mode is avoided; treating those words as executable options
+    // creates false failures and hides real regressions in noise.
+    const src = readFileSync(file, 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/(^|[^:])\/\/[^\n]*/g, '$1');
     SHELL_RE.lastIndex = 0;
     let m;
     while ((m = SHELL_RE.exec(src)) !== null) {

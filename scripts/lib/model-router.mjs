@@ -7,8 +7,13 @@
  *
  * Rules:
  *   COMPLEX  → claude-opus-4-8    (strategy, deep analysis, extended thinking)
- *   MODERATE → claude-sonnet-4-6  (implementation, code, Q&A, most work)
+ *   MODERATE → claude-sonnet-5    (implementation, code, Q&A, most work — 1M ctx,
+ *                                  $2/$10 intro through 2026-08-31, then $3/$15)
  *   SIMPLE   → claude-haiku-4-5-20251001  (validations, lookups, quick checks)
+ *
+ * Model currency (verified 2026-07-01, S219 — docs/FRONTIER_CAPABILITIES_2026-07.md):
+ *   Sonnet 5 launched 2026-06-30 (1M ctx native, default in Claude Code).
+ *   Retired/retiring: Sonnet 4 + Opus 4 (retired 2026-06-15) · Opus 4.1 (2026-08-05).
  *
  * Usage:
  *   import { selectModel, MODELS, buildCacheHeaders } from './lib/model-router.mjs';
@@ -42,9 +47,23 @@ const LEDGER_DEFAULT = path.resolve(__dirname, '..', '..', 'docs', 'cache-ledger
 
 export const MODELS = {
   opus:   'claude-opus-4-8',
-  sonnet: 'claude-sonnet-4-6',
+  sonnet: 'claude-sonnet-5',
   haiku:  'claude-haiku-4-5-20251001',
 };
+
+/**
+ * S244 (D-S244.3) — models that run ADAPTIVE thinking when the `thinking`
+ * param is omitted (a silent default change with the sonnet-5 tier). Small
+ * extraction-style requests on these models must disable thinking explicitly,
+ * or the whole max_tokens budget can burn inside thinking blocks and return
+ * ZERO text (stop_reason max_tokens) — 16/23 of the S244 genius batch failed
+ * exactly this way. Fable/Mythos tier is adaptive-ALWAYS but rejects an
+ * explicit disabled with a 400 — never route it through this predicate.
+ * Model-behavior knowledge lives HERE (the chokepoint), never in callers.
+ */
+export function adaptiveThinkingByDefault(model) {
+  return String(model || '').startsWith('claude-sonnet-5');
+}
 
 /**
  * Context window sizes (tokens), keyed by resolved model ID or agent name.
@@ -53,21 +72,28 @@ export const MODELS = {
  * import this instead of hardcoding their own map.
  */
 export const CONTEXT_WINDOWS = {
-  [MODELS.opus]:   200_000,
-  [MODELS.sonnet]: 200_000,
+  [MODELS.opus]:   1_000_000, // Opus 4.8: 1M ctx (verified 2026-07-01)
+  [MODELS.sonnet]: 1_000_000, // Sonnet 5: 1M ctx native (verified 2026-07-01)
   [MODELS.haiku]:  200_000,
   'opus-1m':       1_000_000,
-  'codex-1m':      1_000_000,
+  // Codex CLI 0.144.6 corrected GPT-5.6 Sol/Terra/Luna context metadata to
+  // 272K (official changelog, 2026-07-18). Keep this provider-specific: a
+  // Claude extended-context setting must never silently recalibrate Codex.
+  'codex-272k':     272_000,
   default:         200_000,
 };
 
 export function contextWindowForAgent(agent) {
-  // Env override: CLAUDE_CONTEXT_LIMIT=1000000 for Max/extended-context plans
-  if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
   // Studio Ops founder runs Opus 4.8 (1M context) exclusively across Claude Code sessions.
   // Set CLAUDE_CONTEXT_LIMIT=200000 to pin to the legacy 200K window.
-  if (agent === 'claude-code') return CONTEXT_WINDOWS['opus-1m'];
-  if (agent === 'codex') return CONTEXT_WINDOWS['codex-1m'];
+  if (agent === 'claude-code') {
+    if (process.env.CLAUDE_CONTEXT_LIMIT) return parseInt(process.env.CLAUDE_CONTEXT_LIMIT, 10);
+    return CONTEXT_WINDOWS['opus-1m'];
+  }
+  if (agent === 'codex') {
+    if (process.env.CODEX_CONTEXT_LIMIT) return parseInt(process.env.CODEX_CONTEXT_LIMIT, 10);
+    return CONTEXT_WINDOWS['codex-272k'];
+  }
   return CONTEXT_WINDOWS.default;
 }
 
@@ -76,11 +102,42 @@ export function contextWindowForAgent(agent) {
  * Kept here — alongside MODELS — so the chokepoint remains the single place
  * in scripts/ that references claude-* model IDs verbatim.
  */
+// Sonnet 5 intro pricing ($2/$10) runs through 2026-08-31; list price after is $3/$15.
+// Date-aware so the ledger never silently overstates or understates (CANON-031).
+const SONNET5_INTRO_ENDS = Date.UTC(2026, 7, 31, 23, 59, 59); // 2026-08-31 UTC
+const SONNET5_PRICE = Date.now() <= SONNET5_INTRO_ENDS
+  ? { input: 2.00, cacheWrite: 2.50, cacheRead: 0.20, output: 10.00 }
+  : { input: 3.00, cacheWrite: 3.75, cacheRead: 0.30, output: 15.00 };
+
 export const PRICING_PER_MTOK = {
-  [MODELS.opus]:   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 },
-  [MODELS.sonnet]: { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
+  [MODELS.opus]:   { input:  5.00, cacheWrite:  6.25, cacheRead: 0.50, output: 25.00 }, // Opus 4.8 (verified 2026-07-01)
+  [MODELS.sonnet]: SONNET5_PRICE,
   [MODELS.haiku]:  { input:  1.00, cacheWrite:  1.25, cacheRead: 0.10, output:  5.00 },
 };
+
+// Exact-prefix per-generation overrides (single source of truth — consumers use
+// priceForModel(), never their own tables). Legacy generations keep their own price.
+export const PRICING_BY_ID = {
+  'claude-fable-5':    { input: 10.00, cacheWrite: 12.50, cacheRead: 1.00, output: 50.00 },
+  'claude-opus-4-8':   PRICING_PER_MTOK[MODELS.opus],
+  'claude-opus-4-1':   { input: 15.00, cacheWrite: 18.75, cacheRead: 1.50, output: 75.00 }, // retires 2026-08-05
+  'claude-sonnet-5':   PRICING_PER_MTOK[MODELS.sonnet],
+  'claude-sonnet-4-6': { input:  3.00, cacheWrite:  3.75, cacheRead: 0.30, output: 15.00 },
+  'claude-haiku-4-5':  PRICING_PER_MTOK[MODELS.haiku],
+};
+
+/** Resolve price for any model ID: exact-prefix override first, tier substring fallback. */
+export function priceForModel(modelId) {
+  if (!modelId) return PRICING_PER_MTOK[MODELS.sonnet];
+  for (const [prefix, p] of Object.entries(PRICING_BY_ID)) {
+    if (modelId.startsWith(prefix)) return p;
+  }
+  if (modelId.includes('fable'))  return PRICING_BY_ID['claude-fable-5'];
+  if (modelId.includes('opus'))   return PRICING_PER_MTOK[MODELS.opus];
+  if (modelId.includes('haiku'))  return PRICING_PER_MTOK[MODELS.haiku];
+  return PRICING_PER_MTOK[MODELS.sonnet];
+}
+
 // Batch API pricing: 50% discount on input/output (cache pricing unchanged)
 export const BATCH_PRICING_PER_MTOK = Object.fromEntries(
   Object.entries(PRICING_PER_MTOK).map(([model, p]) => [
@@ -181,7 +238,7 @@ export function buildHeaders(apiKey, opts = {}) {
     compaction = false, contextEditing = false, mcpServers = false,
     managedAgents = false,
     // S114 additions
-    memory = false, citations = false, webSearch = false, codeExecution = false,
+    memory = false, citations = false, webSearch = false, codeExecution = false, outputConfig = false,
   } = opts;
   const headers = {
     'Content-Type':       'application/json',
@@ -201,6 +258,7 @@ export function buildHeaders(apiKey, opts = {}) {
   if (citations)      betas.push('citations-2025-04-01');
   if (webSearch)      betas.push('web-search-2025-03-13');
   if (codeExecution)  betas.push('code-execution-2025-05-22');
+  if (outputConfig)   betas.push('output-config-2025-02-19');
   if (betas.length) headers['anthropic-beta'] = [...new Set(betas)].join(',');
   return headers;
 }
@@ -473,7 +531,7 @@ export function safeJsonStringify(value) {
  *   object → reserved for future per-tool config. No-op for callers that don't set it.
  * @returns {Promise<object>} parsed API response
  */
-export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null, compaction = false, contextEditing = false, mcpServers = null, tools = null, memory = false, citations = false, webSearch = false, codeExecution = false, files = false, turnClassify = true, cachePrefix = null, cachePrefixTtl = '1h' }, httpsModule) {
+export function callClaude({ apiKey, model, maxTokens, system, messages, thinking, longCache = false, logAs = null, compaction = false, contextEditing = false, mcpServers = null, tools = null, memory = false, citations = false, webSearch = false, codeExecution = false, outputConfig = false, files = false, turnClassify = true, cachePrefix = null, cachePrefixTtl = '1h' }, httpsModule) {
   // S120 #3 — turn-classifier wire (SIL #612). Auto-route haiku-able turns
   // to haiku when classifier confidently identifies pure transform/short
   // transactional work. Caller can disable with turnClassify:false.
@@ -533,6 +591,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
   if (webSearch)     toolsList.push(typeof webSearch === 'object' ? webSearchTool(webSearch) : webSearchTool());
   if (codeExecution) toolsList.push(codeExecutionTool());
   if (toolsList.length) body.tools = toolsList;
+  if (outputConfig) body.output_config = outputConfig;
 
   // Auto-detect 1h cache usage in system/messages to flip the beta header on
   const detectLong = (blocks) => Array.isArray(blocks) && blocks.some(b => b?.cache_control?.ttl === '1h');
@@ -554,6 +613,7 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
     citations:      !!citations,
     webSearch:      !!webSearch,
     codeExecution:  !!codeExecution,
+    outputConfig:   !!outputConfig,
   });
   const payload = safeJsonStringify(body);
 
@@ -596,6 +656,33 @@ export function callClaude({ apiKey, model, maxTokens, system, messages, thinkin
   });
 }
 
+/**
+ * Call Claude with a JSON schema and return parsed JSON.
+ * Keeps schema-guaranteed JSON callers on the model-router chokepoint instead
+ * of duplicating fragile content-block parsing across scripts.
+ */
+export async function callClaudeJson(opts, httpsModule) {
+  const { schema, outputConfig, ...callOpts } = opts;
+  if (!schema && !outputConfig?.schema) throw new Error('callClaudeJson requires schema or outputConfig.schema');
+  const config = outputConfig || { type: 'json_schema', schema };
+  const response = await callClaude({ ...callOpts, outputConfig: config }, httpsModule);
+  return extractJsonOutput(response);
+}
+
+export function extractJsonOutput(response) {
+  for (const block of response?.content || []) {
+    if (block?.type === 'json' && block.json != null) return block.json;
+    if (block?.type === 'input_json' && block.input_json != null) return block.input_json;
+    if (block?.json != null) return block.json;
+    if (block?.input_json != null) return block.input_json;
+    if (typeof block?.text === 'string') {
+      const text = block.text.trim();
+      if (!text) continue;
+      try { return JSON.parse(text); } catch {}
+    }
+  }
+  throw new Error('Claude response did not contain parseable JSON output');
+}
 /**
  * Call Claude with Haiku-first escalation.
  *

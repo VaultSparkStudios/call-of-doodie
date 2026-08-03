@@ -116,7 +116,7 @@
     {
       "id": "game.inspect-rules",
       "mode": "read",
-      "description": "Inspect the versioned gameplay contract for modes, weapons, unlocks, enemies, and challenge-link grammar."
+      "description": "Inspect the versioned gameplay contract for modes, weapons, mastery, enemies, and challenge-link grammar."
     }
   ],
   "trust": {

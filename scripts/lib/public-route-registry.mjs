@@ -41,7 +41,7 @@ function buildEnemySections(gameplay) {
 
 function buildArsenalSections(gameplay) {
   const weaponLines = gameplay.weapons.map((weapon) => (
-    `${weapon.emoji} ${weapon.name} (account level ${weapon.unlockAccountLevel})`
+    `${weapon.emoji} ${weapon.name} (available now; mastery level ${weapon.masteryAccountLevel})`
   ));
   return [
     ["Live weapon roster", weaponLines.join(" · ")],
@@ -316,7 +316,7 @@ export function buildAgentsManifest() {
     resources: getAgentResources(),
     capabilities: [
       { id: "game.describe", mode: "read", description: "Describe the public loop, modes, roster, accessibility, and competitive-trust posture." },
-      { id: "game.inspect-rules", mode: "read", description: "Inspect the versioned gameplay contract for modes, weapons, unlocks, enemies, and challenge-link grammar." },
+      { id: "game.inspect-rules", mode: "read", description: "Inspect the versioned gameplay contract for modes, weapons, mastery, enemies, and challenge-link grammar." },
     ],
     trust: {
       competitiveReplayClaim: "advisory deterministic evidence; not full physics resimulation",

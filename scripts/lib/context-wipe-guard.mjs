@@ -77,10 +77,14 @@ const APPEND_ONLY = [
   'logs/WORK_LOG.md',
 ];
 
-// Files allowed to shrink (compact-handoff trims it; TASK_BOARD.md items get struck)
+// Files allowed to shrink (compact-handoff trims it; TASK_BOARD.md items get
+// struck; S246 — TASK_BOARD + CURRENT_STATE rotate shipped-session sections to
+// context/archive/ via rotate-context-files.mjs, so large legitimate shrinks
+// are now by-design; archives + git history hold the rotated content).
 const SHRINK_ALLOWED = [
   'context/LATEST_HANDOFF.md',
   'context/TASK_BOARD.md',
+  'context/CURRENT_STATE.md',
 ];
 
 // Machine-GENERATED living-protocol artifacts. These are rewritten from scratch
@@ -95,6 +99,13 @@ const GENERATED = [
   'docs/GENIUS_LIST.md',
   'docs/INNOVATION_PACK.md',
   'docs/AUDIT_',
+  // S244 — brief-v5 canonical flip: the startup brief is now the diff-rendered
+  // v5 surface (~63% smaller than v3 BY DESIGN), and SIGNALS.md is rewritten
+  // each render as bare rows (previously ║-framed). Both are regenerated from
+  // scratch every session; ratio tests false-positive on every legitimate
+  // render. The shape check still catches a true wipe (empty scaffold).
+  'docs/STARTUP_BRIEF.md',
+  'context/SIGNALS.md',
 ];
 
 // Template-placeholder markers that signal an empty scaffold overwrote real
@@ -109,9 +120,25 @@ const PLACEHOLDER_RE = /(^|\n)\s*-\s*(active item:|Date:|systems:)\s*(\n|$)/i;
  */
 function isGeneratedWiped(content) {
   if (!content || !content.trim()) return true;               // empty == wiped
+  // JSON sidecars (docs/AUDIT_<date>.json) match the GENERATED prefixes too, but
+  // the markdown-shape heuristics below can never match valid JSON (S219 false
+  // positive: a healthy 12-item sidecar read as "contentless"). Parseable JSON
+  // with real keys/items is content; an empty object/array is a wipe.
+  if (/^\s*[{[]/.test(content)) {
+    try {
+      const j = JSON.parse(content);
+      const size = Array.isArray(j) ? j.length : Object.keys(j ?? {}).length;
+      return size === 0;
+    } catch { return true; }                                  // corrupt JSON == wiped
+  }
   if (PLACEHOLDER_RE.test(content)) return true;              // template scaffold
-  const hasGenStamp = /generated\s*(by|:)/i.test(content);
-  const hasRealEntry = /^##\s+\S/m.test(content) || /^\s*[-*]\s+\S/m.test(content);
+  // S244: also accept hyphenated stamps (`<!-- generated-by: ... -->`, the v5
+  // brief header) and status-row artifacts (context/SIGNALS.md is bare ✓/⚠/⛔
+  // rows — rows ARE the content; no headings or list markers exist by design).
+  const hasGenStamp = /generated[-\s]*(by|at|:)/i.test(content);
+  const hasRealEntry = /^##\s+\S/m.test(content)
+    || /^\s*[-*]\s+\S/m.test(content)
+    || /^[✓⚠⛔]\s+\S/mu.test(content);
   // Lost both its generator stamp AND any structured entry → contentless.
   return !hasGenStamp && !hasRealEntry;
 }

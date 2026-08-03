@@ -44,6 +44,7 @@ const ALLOW = [
   /PROPOSAL_2026-05-21_HIVEMIND\.md/,
   /obelisk-verify/,
   /cod-obelisk-receipt-v1/,
+  /obelisk-surfaces-are-explicit-routes-not-a-gameplay-gate/,
   /OBELISK_VERIFY_SECRET/,
   /session-token/,
   /secret-value/,

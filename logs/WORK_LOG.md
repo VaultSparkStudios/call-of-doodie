@@ -1076,3 +1076,16 @@ Intent outcome: achieved for the requested product surface. Existing external/de
 - Visual honesty: objective browser behavior and the terminal screen are proven; direct host-side subjective pixel review remains unavailable at Windows `CryptUnprotectData`.
 
 Intent outcome: achieved. Both reported freeze/stuck classes have explicit lifecycle contracts and regression evidence; Retro is complete, selectable, persistent, and opt-in.
+
+## 2026-08-03 — Session 137 — Continuous arc, mastery coherence, executable continuation, and evidence court
+
+- Pulled/rebased main first, ran canonical startup/canon/Ark/blocker/secrets/frontier/context preflights, and repaired propagated capability, brief, cost, model-router, SIL, and closeout regressions with executable acceptance.
+- Audited live code using infrastructure, game-loop, and release-gate rubrics; accepted five L3 premises and recorded false or external premises as wins.
+- Shipped the all-open mastery contract, one reason-coded next-run stack, deterministic one-action Weekly Gauntlet, source-derived release manifest, and repeated production Lighthouse evidence.
+- Implemented second-order idle data-plane loading, entry-asset enforcement, Gauntlet input/cardinality hardening, performance schema/diagnostic hardening, and a hash-bound visual receipt writer.
+- Measured production honestly: HomeV2 median LCP 3,226 ms versus v1 2,651 ms at revision `f1d4d825742c`; retained the fallback and kept funnel authority separate.
+- Deployed exact-session Cloudflare staging at `https://session-137-staging.call-of-doodie.pages.dev/`; passed browser 8/8, hosted visual 867/867, and direct dark/light desktop/mobile pixel inspection.
+- Restored shared-server capacity admission from 85% deny to 78% allow with a guarded cache reclaim and hash-locked superseded-image retention; container and volume identities and backup/restore proof remained intact.
+- Final direct suite: 935/935 across 143 files. Strict lint, production build, architecture/schema/public/security/replay/assets/startup/manifest/entry gates are green.
+
+Intent outcome: achieved for every agent-owned premise; all five audit items and all four second-order innovations shipped, and remaining work is genuinely evidence/credential/device/publication/founder gated.

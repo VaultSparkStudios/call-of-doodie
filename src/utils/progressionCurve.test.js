@@ -16,7 +16,7 @@ describe("progression runway contract", () => {
     }
   });
 
-  it("derives the next weapon and affordable upgrade without tuning claims", () => {
+  it("derives the next mastery badge and affordable upgrade without access or tuning claims", () => {
     const runway = buildProgressionRunway({
       totalKills: 79,
       careerPoints: 250,
@@ -25,8 +25,9 @@ describe("progression runway contract", () => {
     });
 
     expect(runway.current.accountLevel).toBe(2);
-    expect(runway.nextWeapon).toMatchObject({ accountLevel: 3, killsRemaining: 1 });
-    expect(runway.nextWeapon.runsByKillsPerRun).toEqual({ "10": 1, "25": 1 });
+    expect(runway.arsenal).toMatchObject({ availability: "all-open", totalWeapons: 12 });
+    expect(runway.nextMastery).toMatchObject({ accountLevel: 3, killsRemaining: 1, available: true });
+    expect(runway.nextMastery.runsByKillsPerRun).toEqual({ "10": 1, "25": 1 });
     expect(runway.nextUpgrade).toMatchObject({ tier: 1, cost: 200, pointsRemaining: 0 });
     expect(runway.assumptions.scenariosAreDescriptiveNotTargets).toBe(true);
     expect(describeProgressionRunway(runway)).toContain("affordable now");
@@ -39,9 +40,9 @@ describe("progression runway contract", () => {
       upgradeTiers: Object.fromEntries(META_UPGRADES.map((group) => [group.id, group.tiers.length])),
     });
 
-    expect(runway.nextWeapon).toBeNull();
+    expect(runway.nextMastery).toBeNull();
     expect(runway.nextUpgrade).toBeNull();
     expect(runway.remainingUpgradePaths).toBe(0);
-    expect(describeProgressionRunway(runway)).toContain("every permanent upgrade path");
+    expect(describeProgressionRunway(runway)).toContain("permanent upgrade path");
   });
 });

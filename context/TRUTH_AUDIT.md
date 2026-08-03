@@ -1014,6 +1014,22 @@ Last reviewed: 2026-07-28
 Overall status: green engineering implementation; SPARKED remains NO-GO.
 Last reviewed: 2026-07-29
 
+## 2026-08-03 — Session 137 — Arsenal, continuation, release, and performance truth
+
+- Arsenal truth — `open-arsenal-mastery-v2` exposes all twelve primaries on every checked surface; level thresholds describe earned mastery and evolution rather than access.
+- Continuation truth — one source-derived stack owns reason codes, evidence, actions, payloads, Journey, ticker, analytics, Daily, and Weekly Gauntlet dispatch.
+- Gauntlet truth — the weekly seed/loadout is deterministic and launches immediately; copy identifies a fixed opening kit, not an irreversible locked build.
+- Release truth — `context/STUDIO_MANIFEST.json` is reconciled from `PROJECT_STATUS.json`; staging URL/type, lifecycle, audience, and sanitization cannot silently contradict.
+- Performance truth — the checked receipt contains three Lighthouse 13.4.1 mobile runs per surface against production revision `f1d4d825742c`. HomeV2 median LCP is 3,226 ms; v1 is 2,651 ms; delta is -575 ms. Retirement is false and no conversion/funnel conclusion is claimed.
+- Asset truth — only the React runtime is preloaded from entry HTML; the Supabase/data chunk is deferred and validated after every build.
+- Visual truth — exact-session staging passed 867/867 objective checks, and four dark/light desktop/mobile captures were directly inspected for readability, overlap, arsenal access, and deploy affordance; hashes bind the receipt to the PNGs.
+- Validation truth — 935/935 tests across 143 files pass directly; strict lint, production build, architecture/schema/public/security/replay/assets/entry/startup/manifest gates, and browser E2E 8/8 are green.
+- Infrastructure truth — shared-server admission was repaired from 85% deny to 78% allow using the guarded build-cache service plus a hash-locked superseded-image retention pass; all container and volume identity sets remained identical and backup/restore proof stayed green.
+- Release truth — exact-session engineering staging is green. SPARKED remains NO-GO pending inbound mail, physical PWA/gamepad/full-run media, production funnel, scoped analytics/Sentry, publication, and founder approval.
+
+Overall status: green engineering staging; SPARKED remains NO-GO.
+Last reviewed: 2026-08-03
+
 ## 2026-07-29 — Session 135 — Input, termination, and Retro-pack truth
 
 - Input truth — `input-release-v1` neutralizes every requested input scope through one pure boundary; App lifecycle wiring covers focus/page loss, pause, controller loss, teardown, run start, respawn, and terminal ending.

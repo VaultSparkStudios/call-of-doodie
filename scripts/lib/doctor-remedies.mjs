@@ -50,6 +50,7 @@ export const HEAL_MAP = {
   // self-owned (see SELF_REMEDIABLE_NO_AUTOHEAL).
   'agents-md-drift':     { script: 'validate-agents-md.mjs',        args: [],          label: 'refresh AGENTS.md drift report',        kind: 'refresh', remediation: 'node scripts/propagate-agents-sections.mjs --apply' },
   'analytica-freshness': { script: 'build-analytica-dashboard.mjs', args: [],          label: 'refresh Analytica dashboard',           kind: 'remediate' },
+  'maintenance-overdue': { script: 'run-maintenance.mjs',          args: ['--apply', '--auto'], label: 'run safe due maintenance jobs', kind: 'remediate' },
   // S210 — lastSessionSummary had a detector but no writer, so it silently went stale
   // (S208 prose survived the S209 closeout). --fix mirrors the agent-maintained
   // currentFocus into lastSessionSummary when currentFocus names the expected session;
@@ -68,6 +69,7 @@ export const SELF_REMEDIABLE_NO_AUTOHEAL = {
   // copy studio-ops publishes. studio-ops owns the re-propagation (cross-repo
   // write, deliberately not auto-run): re-applying the canonical wiring snippet.
   'consumer-adoption': 'node scripts/verify-consumer-adoption.mjs --apply-snippets',
+  'codex-trusted-project': 'node scripts/check-codex-trusted-project.mjs --fix',
 };
 
 // S171 [audit #1/#3] — single source of truth for "can studio-ops actually fix
@@ -116,7 +118,10 @@ export const DRIFT_META = {
   ignis:                 { driftClass: 'derived-stale', blocking: false },
   genome:                { driftClass: 'local-broken', blocking: true },
   'prompt-ver':          { driftClass: 'local-broken', blocking: true },
+  'codex-trusted-project': { driftClass: 'local-broken', blocking: false },
   'registry-drift':      { driftClass: 'portfolio-outdated', blocking: false },
+  'launch-truth-drift':  { driftClass: 'portfolio-outdated', blocking: false },
+
   'website-products-drift': { driftClass: 'expected-external', blocking: false },
   'studio-os-conformance': { driftClass: 'portfolio-outdated', blocking: false },
   // S171 [audit #1] — self-OWNED but the drift KIND is "portfolio copies are
@@ -139,6 +144,26 @@ export const DRIFT_META = {
   // in COHERENCE_REGISTRY is studio-ops's own structural gap (local-broken).
   // blocking:false — warn only; the fix is a COHERENCE_REGISTRY row addition.
   'unregistered-maps':     { driftClass: 'local-broken', blocking: false },
+  'truth-audit-duplicates': { driftClass: 'local-broken', blocking: false },
+  'derived-surface-coherence': { driftClass: 'local-broken', blocking: false },
+  'doctor-probe-metadata': { driftClass: 'local-broken', blocking: false },
+  // S237 [arc audit #7] — four self-owned advisory probes that lacked an
+  // explicit driftClass (relying on the fail-honest local-broken default). All
+  // are studio-ops's OWN state, warn-only: unmapped-warnings (a warning not yet
+  // owner-classified), no-tracked-gitignored (a gitignored file still tracked),
+  // unbounded-fetch (a new raw fetch in our scripts), analytica-freshness (our
+  // ANALYTICA_DASHBOARD build is stale — remedy build-analytica-dashboard.mjs).
+  'unmapped-warnings':     { driftClass: 'local-broken', blocking: false },
+  'no-tracked-gitignored': { driftClass: 'local-broken', blocking: false },
+  'unbounded-fetch':       { driftClass: 'local-broken', blocking: false },
+  'analytica-freshness':   { driftClass: 'local-broken', blocking: false },
+  'maintenance-overdue':   { driftClass: 'local-broken', blocking: false },
+  'scheduled-writer-boundary': { driftClass: 'local-broken', blocking: true },
+  'fleet-schedule-policy': { driftClass: 'portfolio-outdated', blocking: false },
+  'cpx-capacity-admission': { driftClass: 'local-broken', blocking: true },
+  'maintenance-execution-plane': { driftClass: 'local-broken', blocking: true },
+  'portfolio-infrastructure-court': { driftClass: 'portfolio-outdated', blocking: false },
+  'postgres-recovery-contract': { driftClass: 'local-broken', blocking: true },
 };
 
 // S171 [audit #1] — provenance-derived driftClass. The old run-doctor default

@@ -88,6 +88,25 @@ describe("HomeV2", () => {
     expect(onStart).toHaveBeenCalledTimes(1);
   });
 
+  it("launches the deterministic weekly Gauntlet in one quick action", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onStart = vi.fn();
+    const onSetGauntletMode = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} onStart={onStart} onSetGauntletMode={onSetGauntletMode} />);
+    });
+
+    const gauntlet = [...container.querySelectorAll("button")].find((button) => button.textContent.includes("GAUNTLET"));
+    expect(gauntlet).toBeTruthy();
+    await act(async () => { gauntlet.click(); });
+
+    expect(onSetGauntletMode).toHaveBeenCalledWith(true);
+    expect(onStart).toHaveBeenCalledWith(expect.any(Number), expect.objectContaining({ gauntletWeek: expect.any(Number) }));
+    expect(onSetGauntletMode.mock.invocationCallOrder[0]).toBeLessThan(onStart.mock.invocationCallOrder[0]);
+  });
+
   it("shows every primary weapon before deployment and makes selection direct", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);

@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-08-02",
+  "session": 137,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure-plus-product",
+  "meta": {
+    "generatedAt": "2026-08-02",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure-plus-product",
+    "combinedPriority": 141.8,
+    "top3": [
+      "propagation-compatibility-court",
+      "open-arsenal-mastery-contract",
+      "executable-continuation-plan"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Synchronized main before file loading; bounded live-code sample plus direct file inspection; Studio Oracle exact-surface preverification found the wrong getAccountLevel argument, title-only recommendation rendering, discarded weekly Gauntlet result, manifest/status staging contradiction, and unignored generated internal artifacts. Startup directly reproduced and repaired the propagated 0/0 capability audit, malformed brief boxes, and cost-semantics regression. No balance, retention, funnel, physical-device, email-delivery, analytics-scope, subjective-pixel, or launch-readiness claim is inferred.",
+    "specialtyLenses": [
+      "founder-requested infrastructure rubric",
+      "game-loop review",
+      "public app release gate",
+      "CANON-031 observability honesty",
+      "CANON-039 internal-first reuse",
+      "CANON-041 browser/mobile parity",
+      "CANON-047 theme readability",
+      "CANON-048 dual audience",
+      "public-repo sanitization"
+    ],
+    "baseline": {
+      "tests": "Session 136 closed at 919/919; exact current worktree requires direct focused and full-suite verification after implementation",
+      "doctor": "Fresh doctor invocation exceeded the initial 120-second diagnostic window; blockingFailing remains unclaimed until the canonical long-run doctor exits directly",
+      "gameLoop": "Action loop 9/10, progression 6.5/10, session engagement 8.5/10, retention 8/10, SOUL fidelity 9/10; empirical pacing confidence is low because no receipt-backed participant corpus exists",
+      "propagation": "Canonical startup propagation overwrote previously shipped capability-map and brief semantics; local reproduction showed 0/0 capabilities, malformed Genius/Human Pressure boxes, and variable-cost presentation until repaired",
+      "progression": "All twelve primaries are directly selectable before play under the latest decision, while the custom builder and progression runway still describe level-gated weapon unlocks; the builder also passes a career object where a kill count is required",
+      "frontDoor": "buildFrontDoorActionStack computes rich ranked actions, but HomeV2 renders only the first title; buildPlayerJourney independently owns the actionable CTA; Gauntlet quick play selects the mode and discards its weekly contract without starting",
+      "releaseMetadata": "PROJECT_STATUS names Cloudflare Pages staging while synthesized STUDIO_MANIFEST exposes no staging surface and null stagingUrl; current staging is not exact current main",
+      "release": "FORGE remains NO-GO for SPARKED: automated public/visual/legal/cost gates are strong, but exact-current staging, scoped analytics/Sentry, inbound reply identity, physical PWA/gamepad/full-run proof, production funnel data, publication, direct pixel judgment, and founder approval remain unverified"
+    }
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 65,
+    "sessionEngagement": 85,
+    "retention": 80,
+    "soulFidelity": 90,
+    "empiricalConfidence": "low",
+    "evidence": "The escalating arena loop, readable humiliation-to-revenge coaching, deterministic daily/Gauntlet seeds, rivalry/replay systems, perk/shop cadence, and twelve-weapon improvisation remain unusually deep. Progression language and the return-run decision surface are the present clarity limits. Source and automation cannot establish fun, balance, or retention outcomes.",
+    "prioritizedFindings": [
+      "The latest open-arsenal decision conflicts with level-lock copy and behavior in the custom builder and with next-weapon promises in the progression runway; one wrong argument additionally forces the builder to level one.",
+      "Two recommendation systems can disagree because only playerJourney is executable while the richer action stack is reduced to decorative ticker text.",
+      "Quick Daily starts immediately, while Quick Gauntlet requires another click and silently discards the deterministic weekly challenge object."
+    ],
+    "nextThreeMoves": [
+      "Replace access locks with an honest all-open arsenal plus level-earned mastery licenses/evolution goals and one cross-surface contract.",
+      "Make one ranked continuation plan the source for both Journey and ticker CTAs, with reason-coded executable handlers.",
+      "Launch the weekly Gauntlet directly from its deterministic seed/loadout contract and prove Daily/Gauntlet parity in fixtures."
+    ]
+  },
+  "infrastructureDebtSweep": {
+    "staleScripts": "Newly propagated runtime helpers are active protocol surfaces, not presumed stale; compatibility behavior must be exercised before propagation is accepted.",
+    "orphanedWorkflows": "No orphaned local workflow promoted; the current release issue is exact-revision staging parity rather than workflow absence.",
+    "divergentRenderers": "render-startup-brief duplicates Genius and Human Pressure box behavior already exported by scripts/lib/startup-brief-boxes.mjs, allowing propagation to regress the live renderer while helper-only tests stay green.",
+    "parserDrift": "Capability-map provenance and brief formatting regressed across propagated files despite existing unit fixtures, proving an integration/acceptance-test gap rather than an isolated parser bug.",
+    "godObjects": "App.jsx remains near its architecture ceiling but the current executable receipt was green at Session 136; no new extraction is promoted without a failing current receipt.",
+    "highestLeverage": [
+      "Ratchet canonical propagation at the runtime entry points and quarantine generated internal artifacts from the public repository.",
+      "Collapse duplicate player-intent models into one executable contract.",
+      "Make release metadata source-derived from current project status rather than a stale synthesized snapshot."
+    ]
+  },
+  "releaseGate": {
+    "decision": "NO-GO for SPARKED or public-launch promotion; isolated staging and repo-owned engineering may continue",
+    "green": [
+      "Current-main GitHub workflows are healthy aside from a superseded failed SHA in the literal last-five history",
+      "Branding, legal routes, public contract, rollback, and flat-rate/cost-neutral policy checks pass",
+      "Prior automated desktop/mobile/theme staging matrix closed at 867/867"
+    ],
+    "red": [
+      "Existing isolated staging fingerprint is not exact current main and must be replaced after this implementation",
+      "Project-scoped PostHog/Sentry, Zoho alias delivery/reply, physical PWA/gamepad/full-run media, and production funnel evidence are absent",
+      "Obelisk identity architecture is undeclared locally while auth remains intentionally guest/callsign-based; publication, direct visual judgment, and founder approval remain open"
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "security / observability / automation / public-boundary hygiene",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 34.8,
+      "slug": "propagation-compatibility-court",
+      "title": "Turn protocol propagation into an executable compatibility court at the real startup entry points.",
+      "status": "shipped",
+      "why": "The latest canonical propagation silently replaced working capability-map fallback and brief presentation semantics. Existing unit tests covered shared helpers but not renderer wiring, so startup reported 0/0 capabilities, malformed Genius/Human Pressure boxes, and misleading variable-cost language. It also created internal status/forecast artifacts that are currently unignored in a public repo.",
+      "recipe": "Keep the repaired shared capability-map precedence and flat-rate presentation; make render-startup-brief consume normalizeGeniusBlock/renderHumanPressureBlock instead of duplicate logic; add an integration fixture that runs the actual renderer against adversarial propagated input and validates the brief; add a bounded startup acceptance command covering capability count/provenance, brief schema, cost semantics, and public-artifact policy; ignore only generated context/SIGNALS.md and portfolio/compiled artifacts. Fail closed without reading or printing values.",
+      "ladder": {
+        "L1": {"effortHours": 1, "recipe": "Retain the startup repairs and ignore the two generated private artifact paths."},
+        "L2": {"effortHours": 2, "recipe": "Wire the renderer to shared box helpers and add real-entrypoint regression fixtures."},
+        "L3": {"effortHours": 4, "recipe": "Ship one self-validating propagation acceptance receipt spanning secrets provenance, rendered boxes, flat-rate cost semantics, and public-boundary artifact policy."}
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "progression / UX / game-loop coherence",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 31.5,
+      "slug": "open-arsenal-mastery-contract",
+      "title": "Resolve weapon progression into an all-open arsenal with earned mastery rather than contradictory access locks.",
+      "status": "shipped",
+      "why": "The latest decision exposes all twelve primaries before deployment, but the custom builder still locks later weapons and the runway promises a next weapon unlock. The builder also passes the full career object into a numeric level function, forcing level one. Players can bypass those locks through the primary selector, so the gate creates confusion rather than progression.",
+      "recipe": "Define one arsenal progression contract: every primary is selectable; WEAPON_UNLOCK_LEVELS becomes mastery-license levels that award visible proficiency/evolution/cosmetic status without access denial; replace nextWeapon with nextMastery in the runway; update level-up analytics and copy; remove disabled weapon options while retaining earned-state badges; add contract tests proving every pre-run/in-run surface allows all twelve and every mastery threshold remains deterministic. Record the resolution against the S55/S134 decisions.",
+      "ladder": {
+        "L1": {"effortHours": 0.5, "recipe": "Fix the object-versus-totalKills argument bug."},
+        "L2": {"effortHours": 2, "recipe": "Remove contradictory access locks and rename runway/telemetry language to mastery."},
+        "L3": {"effortHours": 4, "recipe": "Ship a versioned cross-surface arsenal contract with earned badges, migration-safe storage, analytics reason codes, and exact all-twelve/threshold fixtures."}
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "retention / UX / game-loop intelligence",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 30.0,
+      "slug": "executable-continuation-plan",
+      "title": "Collapse the menu's two recommendation systems into one reason-coded, executable next-run plan.",
+      "status": "shipped",
+      "why": "buildFrontDoorActionStack computes high-value context such as rival rematches, upgrades, missions, and revenge drills, but HomeV2 exposes only its first title. A separate buildPlayerJourney priority tree owns the real button and can disagree. Quick Gauntlet then selects mode without starting the deterministic weekly contract.",
+      "recipe": "Evolve action-stack entries into a pure versioned continuation-plan contract with action, payload, reasonCode, evidence, and analytics metadata. Derive Journey and the intel ticker from the same top plan. Route every action through one exhaustive dispatcher with safe fallback; preserve aim-check precedence and challenge/daily semantics; launch Gauntlet immediately using its weekly seed/loadout. Add first-run, input, rival, daily, upgrade, mission, revenge, play-now, and Gauntlet fixtures plus keyboard/controller accessible CTA coverage.",
+      "ladder": {
+        "L1": {"effortHours": 1, "recipe": "Attach the existing recommended action to a handler and make Gauntlet start immediately."},
+        "L2": {"effortHours": 2.5, "recipe": "Unify action priorities and payloads while retaining all current destinations and analytics."},
+        "L3": {"effortHours": 4, "recipe": "Ship one versioned continuation contract consumed by Journey, ticker, quick actions, analytics, and deterministic challenge launch with exhaustive fixtures."}
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "HIGH",
+      "axis": "release truth / architecture / ecosystem coherence",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 24.5,
+      "slug": "source-derived-release-manifest",
+      "title": "Replace stale synthesized release fields with a self-validating local manifest projection and signed upstream evidence.",
+      "status": "shipped",
+      "why": "context/STUDIO_MANIFEST.json declares no staging surface, null stagingUrl, auth false, and publicRepoSanitized false while PROJECT_STATUS records Cloudflare Pages staging and public routes describe guest-readable identity. Generic control-plane readiness can therefore disagree with the actual project and release gate.",
+      "recipe": "Add a local reconciler that projects mutable staging/runtime/public-sanitization facts from PROJECT_STATUS and declared identity posture into STUDIO_MANIFEST without guessing external readiness. Declare obeliskArchitecture as external/guest-deferred only if supported by existing decisions and routes; otherwise encode an explicit not-applicable reason. Add contradiction checks and fixtures. Ship a signed Ark repo-question containing the stale registry/runtime-pack fields and desired acceptance criteria; never edit Studio Ops directly.",
+      "ladder": {
+        "L1": {"effortHours": 0.5, "recipe": "Correct the current local staging URL/type and sanitization fields."},
+        "L2": {"effortHours": 1, "recipe": "Derive mutable fields from source status and fail on contradictions."},
+        "L3": {"effortHours": 2, "recipe": "Ship a versioned manifest projection/receipt plus signed upstream cargo for registry and runtime-pack ownership gaps."}
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "HIGH",
+      "axis": "performance / evidence / release automation",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 8,
+      "priority": 21.0,
+      "slug": "production-performance-evidence-court",
+      "title": "Capture reproducible production Lighthouse evidence for HomeV2 and the legacy route without pretending it is funnel data.",
+      "status": "shipped",
+      "why": "The HomeV1 retirement gate has remained Lighthouse-and-funnel blocked for months. Lighthouse performance is agent-executable against production, but there is no checked-in, source-hash-bound comparison receipt. Funnel conversion and the required observation window remain genuinely external.",
+      "recipe": "After package-trust approval of an exact transient Lighthouse CLI, create a bounded capture command for production default and ?home=v1 with repeated mobile runs, median LCP/CLS/TBT/performance, URL/final URL, timestamp, git SHA, Lighthouse/browser versions, and raw-artifact hashes. Validate schema and reject mixed revisions/errors. Record the measured delta honestly; do not retire HomeV1 unless both the existing speed threshold and separate funnel gate pass.",
+      "ladder": {
+        "L1": {"effortHours": 0.5, "recipe": "Run one real production comparison and retain raw JSON outside git."},
+        "L2": {"effortHours": 1, "recipe": "Add median multi-run capture plus a checked-in bounded receipt."},
+        "L3": {"effortHours": 2, "recipe": "Ship a source-hash-bound evidence court with trust provenance, schema validation, mixed-revision rejection, and explicit separation from funnel/retirement authority."}
+      }
+    }
+  ],
+  "skipped": [
+    {"slug": "numeric-balance-retune", "reason": "No five-session receipt-backed playtest or production distribution supports changing damage, health, spawn, cooldown, reward, or progression pacing."},
+    {"slug": "new-gameplay-content", "reason": "The core loop is already deep; progression truth and return-path execution outrank another weapon, mode, enemy, or metagame."},
+    {"slug": "hosted-ai-coach", "reason": "Local deterministic intelligence is deep and a hosted model would add variable per-user cost without demonstrated need."},
+    {"slug": "auth-membership-expansion", "reason": "Guest play is intentional; the local auth plan triggers only at traffic or paid-tier thresholds and must converge on Obelisk rather than silently shipping project-local identity."},
+    {"slug": "home-v1-retirement", "reason": "This mission can capture production Lighthouse, but 48-hour funnel evidence and the recorded threshold remain absent; deletion would fabricate the gate."},
+    {"slug": "analytics-and-sentry-configuration", "reason": "Project-scoped credentials are unproven; a generic available credential is not authority to mutate another project's telemetry."},
+    {"slug": "inbound-mail-green-status", "reason": "No Zoho alias delivery and reply-as-alias receipt exists."},
+    {"slug": "physical-and-subjective-launch-proof", "reason": "Automation cannot replace physical PWA/gamepad/full-run media passes or direct human/AI rendered-pixel judgment."},
+    {"slug": "launch-promotion", "reason": "Publication, exact external proofs, and explicit founder approval remain distinct from engineering completion."},
+    {"slug": "canon-045-checker-parser", "reason": "The checker parse error is Studio Ops-owned; this repo will ship signed Ark evidence instead of editing a sibling tree."}
+  ],
+  "executionLog": [
+    "Wave 1 shipped startup-acceptance-v1 across authoritative capability provenance, rendered brief framing, flat-rate cost semantics, and public-artifact boundaries.",
+    "Wave 2 shipped open-arsenal-mastery-v2 plus one reason-coded continuation stack and deterministic one-action Weekly Gauntlet launch.",
+    "Wave 3 shipped release-manifest-v1 reconciliation and production-performance-evidence-v1 with three runs per surface; the measured slower HomeV2 result preserves v1.",
+    "Wave 4 shipped four second-order innovations: idle data-plane warmup, entry-asset boundary enforcement, Gauntlet input/cardinality hardening, and derived performance diagnostics.",
+    "Exact-session staging passed browser E2E 8/8 and 867/867 route/theme/viewport checks; four captures were directly inspected and hash-bound.",
+    "Final direct suite passed 935/935 across 143 files. External/data/device/publication/founder gates remain honest deferrals."
+  ]
+}

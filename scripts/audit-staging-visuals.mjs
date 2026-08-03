@@ -65,9 +65,14 @@ try {
   for (const route of routes) {
     const page = await defaultContext.newPage();
     const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
+    console.log(`Default-theme probe: ${route.id} -> ${url.href}`);
     const response = await page.goto(url.href, { waitUntil: "networkidle" });
-    if (route.primary) await ensurePrimaryAuditSurface(page, defaultVisualAuditStorage());
-    else await page.locator("main h1").waitFor({ state: "visible" });
+    try {
+      if (route.primary) await ensurePrimaryAuditSurface(page, defaultVisualAuditStorage());
+      else await page.locator("main h1").waitFor({ state: "visible" });
+    } catch (error) {
+      throw new Error(`Default visual surface failed for ${route.id} at ${url.href}: ${error.message}`, { cause: error });
+    }
     const state = await page.evaluate(() => ({
       theme: document.documentElement.dataset.codTheme || document.querySelector("[data-theme]")?.getAttribute("data-theme") || null,
       colorScheme: getComputedStyle(document.documentElement).colorScheme,
@@ -101,13 +106,18 @@ try {
         page.on("pageerror", (error) => pageErrors.push(error.message));
         const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
         url.searchParams.set("theme", theme);
+        console.log(`Capture: ${route.id} / ${theme} / ${width}`);
         const response = await page.goto(url.href, { waitUntil: "networkidle" });
-        if (route.primary) await ensurePrimaryAuditSurface(page, {
-          "cod-theme": theme,
-          "cod-callsign-v1": "VISUAL-QA",
-          "cod-home-v2": "1",
-        });
-        else await page.locator("main h1").waitFor({ state: "visible" });
+        try {
+          if (route.primary) await ensurePrimaryAuditSurface(page, {
+            "cod-theme": theme,
+            "cod-callsign-v1": "VISUAL-QA",
+            "cod-home-v2": "1",
+          });
+          else await page.locator("main h1").waitFor({ state: "visible" });
+        } catch (error) {
+          throw new Error(`Visual surface failed for ${route.id}/${theme}/${width} at ${url.href}: ${error.message}`, { cause: error });
+        }
 
         const state = await page.evaluate(({ primary }) => {
           const root = document.documentElement;
