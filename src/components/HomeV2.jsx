@@ -462,6 +462,7 @@ export default function HomeV2(props) {
     background: themePalette.page,
     fontFamily: "'Courier New', monospace", color: themePalette.ink, position: "relative",
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
+    ...(isMobile ? { paddingBottom: "calc(98px + env(safe-area-inset-bottom))" } : {}),
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
   const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
@@ -1160,6 +1161,70 @@ export default function HomeV2(props) {
         <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
+      )}
+
+      {/* Mobile sticky deploy bar — CANON-041: scrollable 100dvh mobile nav with always-accessible primary action */}
+      {isMobile && (
+        <div
+          data-testid="mobile-sticky-deploy"
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 50,
+            padding: `10px 14px max(14px, env(safe-area-inset-bottom))`,
+            background: "rgba(5, 8, 12, 0.96)",
+            borderTop: "1px solid rgba(255, 107, 35, 0.28)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+              <span style={{ fontSize: 14 }}>{selectedMode.emoji}</span>
+              <span style={{ fontSize: 10, fontWeight: 900, letterSpacing: 1, color: selectedMode.color, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {selectedMode.label}
+              </span>
+              <span style={{ fontSize: 9, color: "#888", letterSpacing: 0.5 }}>
+                · {selectedDiff.emoji} {selectedDiff.label}
+              </span>
+            </div>
+            <button
+              onClick={() => setDeployOpen(v => !v)}
+              style={{
+                flexShrink: 0, padding: "5px 10px", fontSize: 10, fontWeight: 900, letterSpacing: 1,
+                background: "rgba(255,107,35,0.1)", border: "1px solid rgba(255,107,35,0.35)",
+                borderRadius: 6, color: "#FF8A3D", cursor: "pointer", fontFamily: "inherit",
+              }}
+              aria-expanded={deployOpen}
+              aria-label="Change game mode"
+            >
+              {deployOpen ? "HIDE ▴" : "OPTIONS ▾"}
+            </button>
+          </div>
+          <button
+            onClick={deploy}
+            data-testid="mobile-deploy-btn"
+            aria-label={`Deploy — ${selectedMode.label}, ${selectedDiff.label} difficulty`}
+            style={{
+              width: "100%",
+              padding: "15px 20px",
+              fontSize: 20,
+              fontWeight: 900,
+              fontFamily: "'Courier New', monospace",
+              background: "linear-gradient(180deg, #FF8A3D, #CC4400)",
+              color: "#FFF",
+              border: "none",
+              borderRadius: 10,
+              cursor: "pointer",
+              letterSpacing: 3,
+              boxShadow: "0 0 28px rgba(255, 107, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25)",
+            }}
+          >
+            ▶ DEPLOY
+          </button>
+        </div>
       )}
     </div>
   );

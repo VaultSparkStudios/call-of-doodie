@@ -434,4 +434,33 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  it("shows mobile sticky deploy bar only on mobile and triggers onStart when clicked", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const stickyBar = container.querySelector('[data-testid="mobile-sticky-deploy"]');
+    expect(stickyBar).toBeTruthy();
+
+    const mobileDeployBtn = container.querySelector('[data-testid="mobile-deploy-btn"]');
+    expect(mobileDeployBtn).toBeTruthy();
+    await act(async () => { mobileDeployBtn.click(); });
+    expect(baseProps.onStart).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides mobile sticky deploy bar on desktop", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={false} />);
+    });
+
+    const stickyBar = container.querySelector('[data-testid="mobile-sticky-deploy"]');
+    expect(stickyBar).toBeNull();
+  });
 });
