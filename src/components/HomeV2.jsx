@@ -490,7 +490,15 @@ export default function HomeV2(props) {
     WebkitUserSelect: "none", userSelect: "none", WebkitOverflowScrolling: "touch", overscrollBehavior: "contain",
   };
   const gridBg = { position: "fixed", inset: 0, backgroundImage: `repeating-linear-gradient(0deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px),repeating-linear-gradient(90deg,transparent,transparent 49px,${themePalette.grid} 49px,${themePalette.grid} 50px)`, pointerEvents: "none" };
-  const wrap = { position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto", padding: "max(14px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom))" };
+  const MOBILE_BOTTOM_NAV_H = 52;
+  const wrap = {
+    position: "relative", zIndex: 1, maxWidth: 820, margin: "0 auto",
+    paddingTop: "max(14px, env(safe-area-inset-top))",
+    paddingLeft: 16, paddingRight: 16,
+    paddingBottom: isMobile
+      ? `calc(${MOBILE_BOTTOM_NAV_H}px + max(16px, env(safe-area-inset-bottom)))`
+      : "max(32px, env(safe-area-inset-bottom))",
+  };
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
@@ -543,7 +551,7 @@ export default function HomeV2(props) {
     background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
     display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, alignItems: "center",
   };
-  const tabsRow = { display: "flex", gap: 4, justifyContent: "center", marginTop: 22, flexWrap: "wrap" };
+  const tabsRow = { display: isMobile ? "none" : "flex", gap: 4, justifyContent: "center", marginTop: 22, flexWrap: "wrap" };
   const tabBtn = (active) => ({
     padding: "8px 16px", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "inherit", cursor: "pointer",
     background: active ? "rgba(255,107,53,0.12)" : "transparent",
@@ -1213,6 +1221,50 @@ export default function HomeV2(props) {
         <AsyncPanelBoundary>
           <MP_NewFeatures onClose={() => setShowNewFeatures(false)} />
         </AsyncPanelBoundary>
+      )}
+
+      {/* Mobile sticky bottom tab nav — CANON-041 scrollable 100dvh mobile nav pattern */}
+      {isMobile && (
+        <nav
+          aria-label="Main sections"
+          data-testid="mobile-bottom-nav"
+          style={{
+            position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 60,
+            display: "flex",
+            background: "rgba(5,8,12,0.97)",
+            borderTop: `1px solid ${themePalette.line}`,
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+            paddingBottom: "env(safe-area-inset-bottom)",
+          }}
+        >
+          {[
+            { id: "progress",     label: "PROGRESS",     emoji: "📊" },
+            { id: "field_manual", label: "FIELD MANUAL",  emoji: "📖" },
+            { id: "support",      label: "SUPPORT",       emoji: "❤️" },
+          ].map(({ id, label, emoji }) => {
+            const active = tab === id;
+            return (
+              <button
+                key={id}
+                role="tab"
+                aria-selected={active}
+                onClick={() => switchTab(id)}
+                style={{
+                  flex: 1, padding: "7px 4px 5px",
+                  background: "none", border: "none",
+                  borderTop: `2px solid ${active ? "rgba(255,107,53,0.85)" : "transparent"}`,
+                  color: active ? "#FF8A3D" : themePalette.quiet,
+                  cursor: "pointer", fontFamily: "inherit",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+                }}
+              >
+                <span aria-hidden="true" style={{ fontSize: 18, lineHeight: 1 }}>{emoji}</span>
+                <span style={{ fontSize: 8, fontWeight: 900, letterSpacing: 0.8 }}>{label}</span>
+              </button>
+            );
+          })}
+        </nav>
       )}
     </div>
   );
