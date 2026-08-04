@@ -433,4 +433,50 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("PATTERN SPOTTED");
     expect(sessionStorage.getItem("cod-insight-dismissed")).toBe("1");
   });
+
+  it("renders a sticky mobile bottom nav with all three sections on mobile (CANON-041)", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    const nav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    expect(nav).not.toBeNull();
+    const tabs = [...nav.querySelectorAll("button[role='tab']")];
+    expect(tabs).toHaveLength(3);
+    const labels = tabs.map(t => t.textContent);
+    expect(labels.some(l => /PROGRESS/.test(l))).toBe(true);
+    expect(labels.some(l => /FIELD MANUAL/.test(l))).toBe(true);
+    expect(labels.some(l => /SUPPORT/.test(l))).toBe(true);
+
+    // Active tab defaults to "progress"
+    const progressTab = tabs.find(t => /PROGRESS/.test(t.textContent));
+    expect(progressTab?.getAttribute("aria-selected")).toBe("true");
+
+    // Clicking FIELD MANUAL switches the active tab
+    const fieldManualTab = tabs.find(t => /FIELD MANUAL/.test(t.textContent));
+    await act(async () => { fieldManualTab.click(); });
+    expect(fieldManualTab?.getAttribute("aria-selected")).toBe("true");
+    expect(progressTab?.getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("hides the inline tab row on mobile in favour of the sticky bottom nav (CANON-041)", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile={true} />);
+    });
+
+    // The inline tabsRow uses display:none on mobile
+    const allTabs = [...container.querySelectorAll("button")].filter(
+      b => b.getAttribute("role") === "tab",
+    );
+    // All tab role buttons should be in the mobile-bottom-nav
+    const mobileNav = container.querySelector("[data-testid='mobile-bottom-nav']");
+    const navTabCount = mobileNav?.querySelectorAll("button[role='tab']").length ?? 0;
+    expect(allTabs.length).toBe(navTabCount);
+  });
 });
