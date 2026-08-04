@@ -1,6 +1,33 @@
+# Latest Handoff — Session 138
+
+Session Intent: After canonical `/start`, audit the complete product and public/authenticated website, implement the combined plan in optimal dependency order at the highest creative and technical bar, add a second-order innovation when the value floor required it, then run `/closeout` without overstating external evidence.
+
+## Impact Summary (Session 138)
+
+**Headline.** Call of Doodie now opens in 1.3 seconds on staging, teaches through one trusted verdict, compounds each failure into local evidence and revenge, and publishes one truthful Field Manual to humans and agents.
+
+**Impact.**
+- The 12-item audit shipped at the deepest safe verified rung, plus a startup-enforced Hot Context contract; the implementation value-floor gate passes at 13 items.
+- The front door is a coherent operations table, the post-run experience is one Insight Graph decision, and new Pulse/Cartridge/Chronicle systems deepen replay without paid inference or realtime infrastructure.
+- Public score APIs now have live origin/rate/replay controls and a reversible anomaly court; Passport copy and storage behavior are truthful and optional.
+- The entry shell is roughly 73% smaller, staging Lighthouse is 1.00/1.301s/0 CLS/8ms TBT, and nineteen routes pass the complete hosted theme/viewport court.
+
+## Where We Left Off (Session 138)
+- Validation: 954/954 tests across 152 files; strict lint; build; browser 12/12; public 27/27; replay 3/3; startup/drift/security/dependency/schema/architecture/runtime/asset/Hot Context courts green; npm audit zero.
+- Visual evidence: hosted 19-route × 2-theme × 3-width matrix 969/969 plus four hash-bound representative captures; the receipt claims measured browser geometry/contrast/runtime evidence, not unsupported subjective aesthetics.
+- Staging: `https://session-138-staging.call-of-doodie.pages.dev/`; immutable build `https://daa4b291.call-of-doodie.pages.dev/`; HTTP/edge smoke 7/7.
+- Performance: default staging median LCP 1,301ms across three clean origin-scoped runs, versus the prior production baseline of 3,226ms; no production improvement or funnel outcome is fabricated until the exact main build deploys and traffic accrues.
+- Release: engineering staging is green; SPARKED remains NO-GO under inbound-mail, physical-device/media, production-funnel/participant, scoped telemetry, publication, and founder gates.
+
+## Next
+- Collect explicit Playtest Pulse exports from consenting participants before numerical balance, retention, or pacing conclusions.
+- After exact-main production deployment and enough traffic, compare the new default shell with HomeV1 funnel outcomes before retiring `?home=v1`.
+- Complete verified Zoho reply-as delivery, physical PWA/gamepad/full-run media, project-scoped analytics/Sentry, publication/community, and founder release approval.
+- Only with community/moderation authority, graduate Scenario Cartridges from checksums and URL relay to cryptographic signing, inherited ghost batons, expiry, and curated rotation.
+
 # Latest Handoff — Session 137
 
-Session Intent: Run the complete agent-neutral `/arc` as one continuous mission from synchronized `main`: canonical `/start`, live-premise `/audit`, exhaustive `/implement` with second-order innovation saturation, and full `/closeout`; preserve evidence honesty, verify staging before direct-to-main promotion, and finish with blocking doctor and suites green.
+Session Intent: Run canonical `/start`, then conduct a premise-verified full-project audit across every public and authenticated surface; produce one ranked, implementation-ready plan covering feature depth, game-loop engagement, visual and interaction quality, feedback loops, human/agent usability, AI integration, security, performance, organization, and token/API efficiency without implementing the recommendations.
 
 ## Impact Summary (Session 137)
 

@@ -162,7 +162,7 @@ describe("HomeV2", () => {
     expect(localStorage.getItem("cod-theme")).toBe("sewer-night");
   });
 
-  it("exposes all 4 tab labels (Career / Codex / Settings / Support)", async () => {
+  it("exposes the streamlined Progress / Field Manual / Support information architecture", async () => {
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -170,9 +170,8 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
     const txt = container.textContent;
-    expect(txt).toMatch(/CAREER/);
-    expect(txt).toMatch(/CODEX/);
-    expect(txt).toMatch(/SETTINGS/);
+    expect(txt).toMatch(/PLAYER PROGRESS/);
+    expect(txt).toMatch(/FIELD MANUAL/);
     expect(txt).toMatch(/SUPPORT/);
   });
 
@@ -184,10 +183,10 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
 
-    expect(container.textContent).toContain("JOURNEY");
+    expect(container.textContent).toContain("ORDERS");
     expect(container.textContent).toContain("NEXT:");
-    expect(container.textContent).toContain("PLAYER HUB");
-    const commandToggle = [...container.querySelectorAll("button")].find(b => /PLAYER HUB/.test(b.textContent));
+    expect(container.textContent).toContain("PROGRESS TOOLS");
+    const commandToggle = [...container.querySelectorAll("button")].find(b => /PROGRESS TOOLS/.test(b.textContent));
     expect(commandToggle?.getAttribute("aria-expanded")).toBe("true");
     expect(container.textContent).toContain("STATS");
   });

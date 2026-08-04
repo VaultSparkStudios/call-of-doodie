@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { evaluateStartupAcceptance, GENERATED_PRIVATE_PATHS } from './lib/startup-acceptance.mjs';
 
@@ -24,6 +25,12 @@ if (!skipRender) {
     process.stderr.write(rendered.stderr || rendered.stdout || 'Startup brief renderer failed.\n');
     process.exit(rendered.status || 1);
   }
+}
+
+const hotContextCheck = run(node, [path.join(root, 'scripts', 'render-hot-context.mjs'), '--check']);
+if (hotContextCheck.status !== 0) {
+  process.stderr.write(hotContextCheck.stderr || hotContextCheck.stdout || 'Hot context freshness/budget check failed.\n');
+  process.exit(hotContextCheck.status || 1);
 }
 
 const secretAudit = run(node, [path.join(root, 'scripts', 'check-secrets.mjs'), '--audit', '--json']);
@@ -53,6 +60,7 @@ const sourceFiles = [
   'scripts/render-startup-brief.mjs',
   'scripts/lib/startup-brief-boxes.mjs',
   'scripts/lib/brief-evidence.mjs',
+  'scripts/render-hot-context.mjs',
   '.gitignore',
 ];
 const sourceText = sourceFiles
@@ -66,6 +74,16 @@ const receipt = evaluateStartupAcceptance({
   ignoredPaths,
   sourceText,
 });
+const hotContextJson = fs.readFileSync(path.join(root, 'context', 'HOT_CONTEXT.json'));
+const hotContextMd = fs.readFileSync(path.join(root, 'context', 'HOT_CONTEXT.md'));
+receipt.hotContext = {
+  ok: true,
+  jsonBytes: hotContextJson.byteLength,
+  markdownBytes: hotContextMd.byteLength,
+  maximumBytesPerArtifact: 24000,
+  jsonSha256: createHash('sha256').update(hotContextJson).digest('hex'),
+  markdownSha256: createHash('sha256').update(hotContextMd).digest('hex'),
+};
 
 fs.mkdirSync(path.join(root, '.cache'), { recursive: true });
 fs.writeFileSync(path.join(root, '.cache', 'startup-acceptance.json'), `${JSON.stringify(receipt, null, 2)}\n`);

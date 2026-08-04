@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
 
 export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
-export const PUBLIC_CONTENT_VERSION_DATE = "2026-07-26";
+export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-03";
 
 const CORE_ATLAS_INDICES = [0, 1, 2, 3, 5, 6, 7, 8];
 const SPECIALIST_ATLAS_INDICES = [9, 10, 11, 12, 13, 14, 15, 16];
@@ -172,9 +172,9 @@ const ROUTE_DEFINITIONS = [
     description: "Current public service posture for Call of Doodie.",
     lede: "The browser game and public documentation are the primary surfaces. This page states product behavior without promising uninterrupted availability.",
     sections: [
-      ["Browser game", "Available as a public web experience. Local play may continue when optional online score services are unavailable."],
-      ["Leaderboards", "Online comparison depends on the score service. A run may be labeled local-only when eligibility or connectivity cannot be verified."],
-      ["Known limitation", "Progress is primarily browser-local. Cross-device synchronization is not currently promised."],
+      ["Browser game · operational", "Public health checks passed August 3, 2026. Local play can continue when optional online score services are unavailable."],
+      ["Leaderboard trust · operational", "Origin controls, bounded request quotas, replay checks, and reversible anomaly quarantine are active. Eligibility can still fall back to local-only."],
+      ["Known limitation", "Progress is browser-local. Porcelain Passport can export a minimal verification receipt, but cross-device career synchronization is not currently promised."],
     ],
   },
   {
@@ -183,6 +183,8 @@ const ROUTE_DEFINITIONS = [
     description: "Recent player-facing Call of Doodie changes.",
     lede: "This log highlights meaningful player-facing releases rather than every internal code change.",
     sections: [
+      ["August 3, 2026 · Command deck and deeper runs", "Recomposed the Home screen into Orders, Operations, Player Progress, and a live Field Manual; added Scenario Cartridges, account-free Sewer Relay links, a three-chapter Nemesis Chronicle, and opt-in local Playtest Pulse receipts."],
+      ["August 3, 2026 · Trust, speed, and debrief intelligence", "Deferred the heavy arena runtime behind a lightweight command deck, reduced initial JavaScript by about 73%, made debriefs lead with one evidence-backed verdict, and activated origin, quota, and reversible leaderboard trust controls."],
       ["July 25, 2026 · Play-first interface", "Removed the mandatory first-visit display-name gate, rebuilt the main menu around Start Run, simplified language, added a mobile navigation dock, and preserved optional profile identity."],
       ["July 25, 2026 · Combat clarity", "Introduced a compact responsive heads-up display, larger action targets, contextual action-observed training, and distinct production art for all 22 enemies and bosses."],
       ["July 25, 2026 · Expanded website", "Added the player guide, enemy codex, arsenal, modes, accessibility, support, press, status, changelog, and missing public standard files."],
@@ -262,10 +264,12 @@ ${rows}
 
 export function buildRouteContractProof() {
   const routes = getPublicRouteRegistry();
+  const visualRoutes = getVisualAuditRoutes();
   const gameplay = buildPublicGameplayContract();
   const payload = {
     contentVersion: PUBLIC_CONTENT_VERSION_DATE,
     routes: routes.map(({ id, path, header, footer, visualAudit, generated }) => ({ id, path, header, footer, visualAudit, generated })),
+    visualRoutes: visualRoutes.map(({ id, path }) => ({ id, path })),
     gameplay: {
       enemies: gameplay.enemies.length,
       weapons: gameplay.weapons.length,
@@ -282,7 +286,7 @@ export function buildRouteContractProof() {
       routes: routes.length,
       headerRoutes: routes.filter((route) => route.header).length,
       footerRoutes: routes.filter((route) => route.footer).length,
-      visualAuditRoutes: routes.filter((route) => route.visualAudit).length,
+      visualAuditRoutes: visualRoutes.length,
       generatedPages: routes.filter((route) => route.generated).length,
     },
     gameplay: payload.gameplay,
@@ -300,6 +304,8 @@ export function getAgentResources() {
     { rel: "sitemap", href: `${PUBLIC_CANONICAL_ORIGIN}/sitemap.xml` },
     { rel: "gameplay-contract", href: `${PUBLIC_CANONICAL_ORIGIN}/gameplay-contract.json` },
     { rel: "route-contract", href: `${PUBLIC_CANONICAL_ORIGIN}/route-contract.json` },
+    { rel: "field-manual", href: `${PUBLIC_CANONICAL_ORIGIN}/field-manual.json` },
+    { rel: "service-status", href: `${PUBLIC_CANONICAL_ORIGIN}/status.json` },
   ];
 }
 
@@ -317,6 +323,7 @@ export function buildAgentsManifest() {
     capabilities: [
       { id: "game.describe", mode: "read", description: "Describe the public loop, modes, roster, accessibility, and competitive-trust posture." },
       { id: "game.inspect-rules", mode: "read", description: "Inspect the versioned gameplay contract for modes, weapons, mastery, enemies, and challenge-link grammar." },
+      { id: "game.inspect-live-truth", mode: "read", description: "Inspect effective-dated product claims, source links, current service posture, and known limitations." },
     ],
     trust: {
       competitiveReplayClaim: "advisory deterministic evidence; not full physics resimulation",
@@ -356,7 +363,7 @@ Public pages and gameplay-contract.json may be summarized and linked. Do not imp
 }
 
 export function getVisualAuditRoutes() {
-  return getPublicRouteRegistry()
+  const publicRoutes = getPublicRouteRegistry()
     .filter((route) => route.visualAudit)
     .map((route) => ({
       id: route.id,
@@ -364,4 +371,9 @@ export function getVisualAuditRoutes() {
       localPath: route.path === "/" ? "/?home=v2" : `${route.path}index.html`,
       primary: route.path === "/",
     }));
+  return [
+    ...publicRoutes,
+    { id: "login", path: "/login", localPath: "/login", primary: false },
+    { id: "auth-callback", path: "/auth/callback", localPath: "/auth/callback", primary: false },
+  ];
 }

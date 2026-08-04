@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "production-performance-evidence-v1",
+  "ok": true,
+  "issues": [],
+  "warnings": [
+    "chrome-profile-cleanup-eperm-after-complete-report"
+  ],
+  "capturedAt": "2026-08-03T23:04:31.943Z",
+  "baseUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+  "sourceSha": "553fb44bc756e9deedc8fe4a6e2a1c5bf5ec10ae",
+  "hostedRevision": "553fb44bc756",
+  "healthBodyHash": "e7012fa11a12e57172c5d9fe410ed5858aebd75572943eaf9136e27824e22005",
+  "tool": {
+    "lighthouseVersion": "13.4.1",
+    "chromeVersion": "150.0.0.0"
+  },
+  "packageTrust": {
+    "offlineVerdict": "REVIEW",
+    "offlineScore": 60,
+    "liveVerdict": "APPROVE",
+    "source": "https://github.com/GoogleChrome/lighthouse",
+    "registry": "https://registry.npmjs.org/lighthouse/-/lighthouse-13.4.1.tgz",
+    "integrity": "sha512-fDu8lt3QLK/lTqIxtp1HkzQNJ32rsFHhbadYOepcMZFLgA8oINhxutMbMv8XXnpTOvZ0TXCo4JCk1LDTWaRLnA==",
+    "releasedAt": "2026-07-20T19:59:46.318Z",
+    "license": "Apache-2.0",
+    "provenance": "SLSA npm attestation plus registry signature; no install lifecycle scripts",
+    "incidentMatches": 0,
+    "installMode": "transient exact version with ignore-scripts; package.json and lockfile unchanged"
+  },
+  "surfaces": {
+    "default": {
+      "sampleCount": 3,
+      "median": {
+        "performance": 1,
+        "lcpMs": 1300.906,
+        "cls": 0,
+        "tbtMs": 8
+      },
+      "diagnostics": {
+        "medianUnusedJavascriptBytes": 0,
+        "medianEstimatedLcpSavingsMs": 0,
+        "medianMainThreadWorkMs": 795.5480000000003,
+        "medianTotalTransferBytes": 80184,
+        "medianRenderBlockingBytes": 2436,
+        "highWasteAssets": [
+          {
+            "url": "https://session-137-staging.call-of-doodie.pages.dev/assets/index-ttqDNhxg.js",
+            "transferBytes": 60311,
+            "wastedBytes": 22674
+          }
+        ]
+      },
+      "samples": [
+        {
+          "run": 1,
+          "requestedUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+          "finalUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+          "rawSha256": "759656ecfcf949d794519c065259ef5e223ffbc22e8b6727c617b536cadc6b78",
+          "performance": 1,
+          "lcpMs": 1309.37,
+          "cls": 0,
+          "tbtMs": 13.5
+        },
+        {
+          "run": 2,
+          "requestedUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+          "finalUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+          "rawSha256": "2055690b3872288a5f7348efbe986f0e312a82366b6897e2e82af0dcd2e9b34d",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 1,
+          "lcpMs": 1300.906,
+          "cls": 0,
+          "tbtMs": 3
+        },
+        {
+          "run": 3,
+          "requestedUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+          "finalUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
+          "rawSha256": "679d0082b19a5ea5559a788cab3fb2872e6b9dbc6aabf28cb4b491906142830b",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 1,
+          "lcpMs": 1292.48,
+          "cls": 0,
+          "tbtMs": 8
+        }
+      ]
+    },
+    "legacy-v1": {
+      "sampleCount": 3,
+      "median": {
+        "performance": 1,
+        "lcpMs": 1273.257,
+        "cls": 0,
+        "tbtMs": 8.5
+      },
+      "diagnostics": {
+        "medianUnusedJavascriptBytes": 23879,
+        "medianEstimatedLcpSavingsMs": 150,
+        "medianMainThreadWorkMs": 599.6560000000005,
+        "medianTotalTransferBytes": 80159,
+        "medianRenderBlockingBytes": 2437,
+        "highWasteAssets": [
+          {
+            "url": "https://session-137-staging.call-of-doodie.pages.dev/assets/index-ttqDNhxg.js",
+            "transferBytes": 54782,
+            "wastedBytes": 23879
+          }
+        ]
+      },
+      "samples": [
+        {
+          "run": 1,
+          "requestedUrl": "https://session-137-staging.call-of-doodie.pages.dev/?home=v1",
+          "finalUrl": "https://session-137-staging.call-of-doodie.pages.dev/?home=v1",
+          "rawSha256": "1dc8ef8c76ed05294ffc0814384ecb0787f74e0924bb424618262f85aa533b6b",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 1,
+          "lcpMs": 1273.257,
+          "cls": 0,
+          "tbtMs": 8.5
+        },
+        {
+          "run": 2,
+          "requestedUrl": "https://session-137-staging.call-of-doodie.pages.dev/?home=v1",
+          "finalUrl": "https://session-137-staging.call-of-doodie.pages.dev/?home=v1",
+          "rawSha256": "4670aca754172c54a7e84474918081dc3e1d635e620d9091cae349a175157461",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 1,
+          "lcpMs": 1227.0140000000001,
+          "cls": 0,
+          "tbtMs": 10
+        },
+        {
+          "run": 3,
+          "requestedUrl": "https://session-137-staging.call-of-doodie.pages.dev/?home=v1",
+          "finalUrl": "https://session-137-staging.call-of-doodie.pages.dev/?home=v1",
+          "rawSha256": "aaff0ad58582382085bc2ff9118abf9fad0a9d2f9d7c54b7119bc2c7c554354a",
+          "captureWarning": "chrome-profile-cleanup-eperm-after-complete-report",
+          "performance": 1,
+          "lcpMs": 1299.9475,
+          "cls": 0,
+          "tbtMs": 0
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "lcpImprovementMs": -27.648999999999887,
+    "requiredImprovementMs": 200,
+    "lighthouseGatePassed": false
+  },
+  "retirement": {
+    "lighthouseGate": "fail",
+    "funnelGate": "not-collected",
+    "eligible": false,
+    "reason": "Legacy retirement requires both measured Lighthouse improvement and independent production funnel evidence."
+  }
+}

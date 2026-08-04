@@ -24,7 +24,6 @@ import os from 'os';
 import path from 'path';
 import { spawnSync } from './lib/safe-spawn.mjs';
 import { fileURLToPath } from 'url';
-import { buildCloseoutNextHint } from './lib/closeout-next.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STUDIO_ROOT = path.resolve(__dirname, '..');
@@ -221,10 +220,7 @@ function silCategoryRows(status) {
 
 function gitChangeSummary() {
   const s = sh('git status --short');
-  const lines = s.out
-    .split('\n')
-    .filter((l) => l.trim())
-    .filter((l) => !l.replace(/\\/g, '/').endsWith('docs/CLOSEOUT_STATUS_BOARD.md'));
+  const lines = s.out.split('\n').filter((l) => l.trim());
   const counts = { M: 0, A: 0, D: 0, R: 0, '??': 0 };
   for (const ln of lines) {
     const code = ln.slice(0, 2).trim() || '??';
@@ -235,27 +231,23 @@ function gitChangeSummary() {
 }
 
 function agentMemoryRecentlyTouched() {
-  // Check whether Claude or Codex agent memory has files modified within the
-  // last 24h. Best-effort — absence is reported as "·" rather than failing.
+  // Check whether agent memory (~/.claude/projects/<slug>/memory) has files
+  // modified within the last 24h. Best-effort — cross-platform path resolution
+  // varies; absence is reported as "·" rather than failing.
   const home = os?.homedir?.() || process.env.HOME || process.env.USERPROFILE;
   if (!home) return false;
   const slug = path.basename(ROOT);
-  const cutoff = Date.now() - 24 * 3600_000;
-  const candidates = [
-    path.join(home, '.codex', 'memories', slug.toLowerCase()),
-    path.join(home, '.codex', 'memories', slug),
-  ];
+  // Project memory dirs use a prefix-encoded form; fall back to a glob scan.
+  const projectsDir = path.join(home, '.claude', 'projects');
+  if (!fs.existsSync(projectsDir)) return false;
   try {
-    const projectsDir = path.join(home, '.claude', 'projects');
-    if (fs.existsSync(projectsDir)) {
-      for (const entry of fs.readdirSync(projectsDir)) {
-        if (entry.includes(slug)) candidates.push(path.join(projectsDir, entry, 'memory'));
-      }
-    }
-    for (const dir of candidates) {
-      if (!fs.existsSync(dir)) continue;
-      for (const f of fs.readdirSync(dir)) {
-        const stat = fs.statSync(path.join(dir, f));
+    const cutoff = Date.now() - 24 * 3600_000;
+    for (const entry of fs.readdirSync(projectsDir)) {
+      if (!entry.includes(slug)) continue;
+      const memDir = path.join(projectsDir, entry, 'memory');
+      if (!fs.existsSync(memDir)) continue;
+      for (const f of fs.readdirSync(memDir)) {
+        const stat = fs.statSync(path.join(memDir, f));
         if (stat.mtimeMs > cutoff) return true;
       }
     }
@@ -287,41 +279,14 @@ function writeBackCoverage(session) {
   }
   if (session != null) {
     const closeoutSha = sh(`git log -n 1 --format=%H --extended-regexp --regexp-ignore-case --grep="close[ -]?out session ${session}"`).out.trim();
-    if (closeoutSha) {
-      const previousCloseoutSha = sh(`git log -n 1 --format=%H ${closeoutSha}~1 --extended-regexp --regexp-ignore-case --grep="close[ -]?out session"`).out.trim();
-      const committed = previousCloseoutSha
-        ? sh(`git diff --name-only ${previousCloseoutSha}..${closeoutSha}`).out
-        : sh(`git show --pretty=format: --name-only ${closeoutSha}`).out;
+    const candidates = sh('git log -n 20 --format=%H -- context/PROJECT_STATUS.json').out
+      .split('\n').map((value) => value.trim()).filter(Boolean);
+    for (const sha of [closeoutSha, ...candidates].filter(Boolean)) {
+      const committed = sh(`git show --pretty=format: --name-only ${sha}`).out;
       for (const file of committed.split('\n').map((value) => value.trim().replace(/\\/g, '/'))) {
-        for (const target of TARGETS) {
-          if (file.endsWith(target)) touched.add(target);
-        }
+        for (const target of TARGETS) if (file.endsWith(target)) touched.add(target);
       }
-    }
-
-    // A custom conventional commit message is explicitly supported by
-    // closeout-autopilot, so commit-message grep cannot be the only evidence
-    // source. Fall back to the newest PROJECT_STATUS-changing commit whose
-    // committed snapshot declares this exact session.
-    if (!touched.has('context/PROJECT_STATUS.json')) {
-      const candidates = sh('git log -n 20 --format=%H -- context/PROJECT_STATUS.json').out
-        .split('\n')
-        .map((value) => value.trim())
-        .filter(Boolean);
-      for (const sha of candidates) {
-        const snapshot = sh(`git show ${sha}:context/PROJECT_STATUS.json`);
-        if (snapshot.code !== 0) continue;
-        let committedStatus;
-        try { committedStatus = JSON.parse(snapshot.out); } catch { continue; }
-        if (Number(committedStatus?.currentSession) !== Number(session)) continue;
-        const committed = sh(`git show --pretty=format: --name-only ${sha}`).out;
-        for (const file of committed.split('\n').map((value) => value.trim().replace(/\\/g, '/'))) {
-          for (const target of TARGETS) {
-            if (file.endsWith(target)) touched.add(target);
-          }
-        }
-        break;
-      }
+      if (closeoutSha) break;
     }
   }
   const recentCutoff = Date.now() - 24 * 3600_000;
@@ -333,7 +298,7 @@ function writeBackCoverage(session) {
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
   // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
   result.push({
-    file: 'agent memory (~/.codex or ~/.claude project memory)',
+    file: 'agent memory (~/.claude/projects/<slug>/memory/)',
     touched: agentMemoryRecentlyTouched(),
   });
   return result;
@@ -386,8 +351,8 @@ function quietHostReceiptBadge() {
 
 function postSessionSignals(status) {
   const doctor = status?.doctorScore && typeof status.doctorScore === 'object'
-    ? `${status.doctorScore.passing ?? status.doctorScore.ran ?? '?'}/${status.doctorScore.total ?? '?'}`
-    : (typeof status?.doctorScore === 'number' ? String(status.doctorScore) : '—');
+    ? `${status.doctorScore.passing ?? '?'}/${status.doctorScore.total ?? '?'}`
+    : (typeof status?.doctorScore === 'number' ? String(status?.doctorScore) : '—');
   const tests = status?.testsPassing != null && status?.testsTotal != null
     ? `${status.testsPassing}/${status.testsTotal}`
     : '—';
@@ -434,7 +399,14 @@ export function sessionShellHygiene(status, session) {
 }
 
 function nextSessionHint() {
-  return buildCloseoutNextHint(readJson(GENIUS_CACHE));
+  const cache = readJson(GENIUS_CACHE);
+  const top = cache?.list?.ranked?.[0];
+  if (!top) return null;
+  return {
+    title: top.title || top.id,
+    rationale: top.rationale || '',
+    cmd: top.command || null,
+  };
 }
 
 function render() {

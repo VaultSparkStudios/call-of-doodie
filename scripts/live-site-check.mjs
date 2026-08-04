@@ -1,28 +1,11 @@
 #!/usr/bin/env node
 
-// Usage: node scripts/live-site-check.mjs
-// Runs seven read-only assertions against COD_LIVE_URL or the canonical site.
-
-import fs from "node:fs";
-import path from "node:path";
+// Usage: node scripts/live-site-check.mjs [--url=<origin>]
+// Runs seven read-only assertions against an explicit URL or the canonical site.
 
 if (process.argv.includes("--help")) {
-  console.log("Usage: node scripts/live-site-check.mjs");
+  console.log("Usage: node scripts/live-site-check.mjs [--url=<origin>]");
   process.exit(0);
-}
-
-function loadDotEnv(filePath) {
-  if (!fs.existsSync(filePath)) return;
-  const contents = fs.readFileSync(filePath, "utf8");
-  for (const rawLine of contents.split(/\r?\n/)) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith("#")) continue;
-    const eqIndex = line.indexOf("=");
-    if (eqIndex === -1) continue;
-    const key = line.slice(0, eqIndex).trim();
-    const value = line.slice(eqIndex + 1).trim();
-    if (!process.env[key]) process.env[key] = value;
-  }
 }
 
 async function fetchText(url) {
@@ -42,9 +25,8 @@ function assert(condition, message) {
 }
 
 async function main() {
-  loadDotEnv(path.join(process.cwd(), ".env.local"));
-
-  const siteUrl = process.env.COD_LIVE_URL || "https://callofdoodie.wtf/";
+  const siteUrl = process.argv.find((arg) => arg.startsWith("--url="))?.slice("--url=".length)
+    || "https://callofdoodie.wtf/";
   const normalizedSiteUrl = siteUrl.endsWith("/") ? siteUrl : `${siteUrl}/`;
 
   console.log(`Live site target: ${normalizedSiteUrl}`);

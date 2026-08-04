@@ -10,12 +10,15 @@ const root = process.cwd();
 const packageVersion = '13.4.1';
 const runsArg = process.argv.find((arg) => arg.startsWith('--runs='));
 const baseArg = process.argv.find((arg) => arg.startsWith('--base-url='));
+const receiptArg = process.argv.find((arg) => arg.startsWith('--receipt='));
 const reuseCache = process.argv.includes('--reuse-cache');
+const resumeCache = process.argv.includes('--resume-cache');
 const runsPerSurface = Math.max(1, Math.min(5, Number(runsArg?.split('=')[1]) || 3));
 const baseUrl = new URL(baseArg?.split('=').slice(1).join('=') || 'https://callofdoodie.wtf/');
-const cacheDir = path.join(root, '.cache', 'lighthouse');
+const cacheDir = path.join(root, '.cache', 'lighthouse', createHash('sha256').update(baseUrl.origin).digest('hex').slice(0, 12));
 const tempDir = path.join(cacheDir, 'tmp');
-const receiptPath = path.join(root, 'docs', 'performance', 'PRODUCTION_LIGHTHOUSE.json');
+const receiptPath = path.resolve(root, receiptArg?.split('=').slice(1).join('=')
+  || path.join('docs', 'performance', 'PRODUCTION_LIGHTHOUSE.json'));
 
 function run(command, args, options = {}) {
   return spawnSync(command, args, {
@@ -87,17 +90,27 @@ for (const surface of ['default', 'legacy-v1']) {
     const target = new URL(baseUrl);
     if (surface === 'legacy-v1') target.searchParams.set('home', 'v1');
     const outputPath = path.join(cacheDir, `${surface}-${index + 1}.json`);
-    if (reuseCache) {
+    if (reuseCache || (resumeCache && fs.existsSync(outputPath))) {
       if (!fs.existsSync(outputPath)) throw new Error(`Missing cached Lighthouse report: ${outputPath}`);
       const raw = fs.readFileSync(outputPath, 'utf8');
+      const report = JSON.parse(raw);
+      const completeReport = report?.categories?.performance?.score != null
+        && report?.audits?.['largest-contentful-paint']?.numericValue != null
+        && report?.audits?.['cumulative-layout-shift']?.numericValue != null
+        && report?.audits?.['total-blocking-time']?.numericValue != null;
+      if (!completeReport) {
+        if (reuseCache) throw new Error(`Incomplete cached Lighthouse report: ${outputPath}`);
+        fs.rmSync(outputPath, { force: true });
+      } else {
       captures.push({
         surface,
-        report: JSON.parse(raw),
+        report,
         rawSha256: sha256(raw),
-        captureWarning: 'chrome-profile-cleanup-eperm-after-complete-report',
+        captureWarning: 'verified-complete-resumed-report',
       });
       console.log(`Reused ${surface} ${index + 1}/${runsPerSurface}`);
       continue;
+      }
     }
     fs.rmSync(outputPath, { force: true });
     const result = runNpm([
@@ -115,7 +128,7 @@ for (const surface of ['default', 'legacy-v1']) {
     const output = processOutput(result);
     const cleanupOnlyFailure = result.status !== 0
       && fs.existsSync(outputPath)
-      && /Runtime error encountered: EPERM[\s\S]*destroyTmp/.test(output);
+      && /EPERM[\s\S]*(?:destroyTmp|lighthouse\.)/.test(output);
     if (result.status !== 0 && !cleanupOnlyFailure) {
       throw new Error(`Lighthouse ${surface} run ${index + 1} failed: ${processOutput(result)}`);
     }

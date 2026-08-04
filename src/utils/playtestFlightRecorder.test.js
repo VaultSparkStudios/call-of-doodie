@@ -6,6 +6,9 @@ import {
   isPlaytestMode,
   recordPlaytestMilestone,
   startActivePlaytestFlight,
+  setPlaytestPulseEnabled,
+  recordPlaytestPulse,
+  loadPlaytestPulse,
 } from "./playtestFlightRecorder.js";
 
 describe("playtest flight recorder", () => {
@@ -55,4 +58,15 @@ describe("playtest flight recorder", () => {
     expect(portable.run).not.toHaveProperty("callsign");
     expect(JSON.stringify(portable)).not.toContain("not-stored-by-caller");
   });
+});
+
+it("supports explicit persistent opt-in and aggregates only complete redacted flights", () => {
+  const storage = { values: new Map(), getItem(k) { return this.values.get(k) || null; }, setItem(k, v) { this.values.set(k, v); }, removeItem(k) { this.values.delete(k); } };
+  expect(setPlaytestPulseEnabled(true, storage)).toBe(true);
+  let receipt = createPlaytestFlight({ now: 1000, meta: { mode: "standard" } });
+  expect(recordPlaytestPulse(receipt, storage)).toBeNull();
+  receipt = recordPlaytestMilestone(receipt, "death", { now: 2000 });
+  receipt = annotatePlaytestFlight(receipt, { deathClarity: "clear", replayIntent: "now" });
+  expect(recordPlaytestPulse(receipt, storage).sampleSize).toBe(1);
+  expect(loadPlaytestPulse(storage).clarity.clear).toBe(1);
 });

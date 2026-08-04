@@ -62,6 +62,13 @@ export function buildPublicGameplayContract() {
     challengeLinks: {
       replayCode: { queryParameter: "replay", format: "12 hexadecimal characters", captures: ["seed", "mode", "difficulty", "weapon", "starter_loadout"] },
       rivalry: { queryParameters: ["seed", "diff", "vs", "vsName"], note: "Player choices remain player-controlled." },
+      scenarioCartridge: {
+        schemaVersion: "sewer-scenario-v1",
+        queryParameter: "scenario",
+        captures: ["seed", "mode", "difficulty", "starter_loadout", "optional_target_score", "optional_rival"],
+        integrity: "FNV-1a checksum rejects accidental or opportunistic field tampering; it is not a cryptographic signature.",
+        relay: "Account-free asynchronous URL handoff. Loading never auto-starts a run.",
+      },
     },
     resources: {
       agents: "https://callofdoodie.wtf/agents.json",
@@ -69,6 +76,8 @@ export function buildPublicGameplayContract() {
       privacy: "https://callofdoodie.wtf/privacy/",
       terms: "https://callofdoodie.wtf/terms/",
       rights: "https://callofdoodie.wtf/ip/",
+      fieldManual: "https://callofdoodie.wtf/field-manual.json",
+      status: "https://callofdoodie.wtf/status.json",
     },
   };
 }

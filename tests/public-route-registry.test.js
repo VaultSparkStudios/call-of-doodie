@@ -18,7 +18,11 @@ describe("public route truth graph", () => {
     expect(new Set(routes.map((route) => route.id)).size).toBe(routes.length);
     expect(new Set(routes.map((route) => route.path)).size).toBe(routes.length);
     expect(getGeneratedCompanionPages()).toHaveLength(12);
-    expect(getVisualAuditRoutes().map((route) => route.id)).toEqual(routes.map((route) => route.id));
+    expect(getVisualAuditRoutes().map((route) => route.id)).toEqual([
+      ...routes.map((route) => route.id),
+      "login",
+      "auth-callback",
+    ]);
   });
 
   it("makes the footer a complete index of header and public destinations", () => {
@@ -59,7 +63,7 @@ describe("public route truth graph", () => {
     const second = buildRouteContractProof();
     expect(first).toEqual(second);
     expect(first.fingerprint).toMatch(/^[a-f0-9]{64}$/);
-    expect(first.coverage).toMatchObject({ routes: 17, headerRoutes: 5, footerRoutes: 17, visualAuditRoutes: 17, generatedPages: 12 });
+    expect(first.coverage).toMatchObject({ routes: 17, headerRoutes: 5, footerRoutes: 17, visualAuditRoutes: 19, generatedPages: 12 });
     expect(first.consumers).toEqual(expect.arrayContaining(["sitemap", "agents", "llms", "visual-audit"]));
     expect(buildAgentsManifest().resources).toContainEqual(expect.objectContaining({ rel: "route-contract" }));
   });

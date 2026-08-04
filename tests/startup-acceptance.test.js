@@ -51,4 +51,17 @@ describe('startup acceptance contract', () => {
     expect(receipt.issues).toContain('Capability audit resolved zero capabilities.');
     expect(receipt.issues.some((issue) => issue.includes('Generated private artifact is not ignored'))).toBe(true);
   });
+
+  it('returns actionable findings instead of crashing when the brief is malformed', () => {
+    const ignoredPaths = Object.fromEntries(GENERATED_PRIVATE_PATHS.map((relativePath) => [relativePath, true]));
+    const receipt = evaluateStartupAcceptance({
+      capabilities: [{ ok: true, mapSource: 'studio-ops' }],
+      briefText: 'not a rendered brief',
+      status: { testsPassing: 30, testsTotal: 30, modelPlanMode: true },
+      ignoredPaths,
+    });
+
+    expect(receipt.ok).toBe(false);
+    expect(receipt.issues.some((issue) => issue.startsWith('Brief format:'))).toBe(true);
+  });
 });

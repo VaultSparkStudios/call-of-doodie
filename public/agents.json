@@ -105,6 +105,14 @@
     {
       "rel": "route-contract",
       "href": "https://callofdoodie.wtf/route-contract.json"
+    },
+    {
+      "rel": "field-manual",
+      "href": "https://callofdoodie.wtf/field-manual.json"
+    },
+    {
+      "rel": "service-status",
+      "href": "https://callofdoodie.wtf/status.json"
     }
   ],
   "capabilities": [
@@ -117,6 +125,11 @@
       "id": "game.inspect-rules",
       "mode": "read",
       "description": "Inspect the versioned gameplay contract for modes, weapons, mastery, enemies, and challenge-link grammar."
+    },
+    {
+      "id": "game.inspect-live-truth",
+      "mode": "read",
+      "description": "Inspect effective-dated product claims, source links, current service posture, and known limitations."
     }
   ],
   "trust": {

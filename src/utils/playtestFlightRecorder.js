@@ -1,4 +1,6 @@
 const STORAGE_KEY = "cod-playtest-flight-v1";
+const OPT_IN_KEY = "cod-playtest-pulse-enabled";
+const PULSE_KEY = "cod-playtest-pulse-v1";
 const ALLOWED_MILESTONES = new Set(["run_start", "move", "shoot", "kill", "dash", "grenade", "perk", "death", "continuation"]);
 const MAX_META_KEYS = 8;
 const ALLOWED_META_KEYS = new Set(["difficulty", "seed", "practice", "frame", "kills", "wave", "score", "source", "mode", "action"]);
@@ -26,10 +28,20 @@ function sanitizeMeta(meta = {}) {
 
 export function isPlaytestMode(search = globalThis.location?.search || "") {
   try {
-    return new URLSearchParams(String(search)).get("playtest") === "1";
+    const query = new URLSearchParams(String(search)).get("playtest");
+    if (query === "1") return true;
+    if (query === "0") return false;
+    return globalThis.localStorage?.getItem(OPT_IN_KEY) === "1";
   } catch {
     return false;
   }
+}
+
+export function setPlaytestPulseEnabled(enabled, storage = globalThis.localStorage) {
+  try {
+    storage?.setItem(OPT_IN_KEY, enabled ? "1" : "0");
+    return Boolean(enabled);
+  } catch { return false; }
 }
 
 export function createPlaytestFlight({ now = Date.now(), meta = {} } = {}) {
@@ -38,6 +50,7 @@ export function createPlaytestFlight({ now = Date.now(), meta = {} } = {}) {
     schemaVersion: "playtest-flight-v1",
     privacy: "session-local-no-network-no-callsign-no-free-text",
     startedAt,
+    flightId: `flight-${startedAt.toString(36)}`,
     finalizedAt: null,
     milestones: {},
     annotations: { deathClarity: null, replayIntent: null },
@@ -90,6 +103,7 @@ export function buildPortablePlaytestReceipt(receipt) {
     schemaVersion: "playtest-flight-v1",
     evidenceScope: "observed-input-and-explicit-tester-answers",
     privacy: receipt.privacy,
+    flightId: safeString(receipt.flightId, 32) || null,
     run: sanitizeMeta(receipt.run),
     milestones: Object.fromEntries(order.filter((key) => receipt.milestones?.[key]).map((key) => [key, receipt.milestones[key]])),
     annotations: {
@@ -100,6 +114,32 @@ export function buildPortablePlaytestReceipt(receipt) {
     previousRun: receipt.previousRun || null,
     complete: Boolean(receipt.milestones?.death && receipt.annotations?.deathClarity && receipt.annotations?.replayIntent),
   };
+}
+
+export function recordPlaytestPulse(receipt, storage = globalThis.localStorage) {
+  const portable = buildPortablePlaytestReceipt(receipt);
+  if (!portable?.complete) return null;
+  try {
+    const current = JSON.parse(storage?.getItem(PULSE_KEY) || "null");
+    const flights = Array.isArray(current?.flights) ? current.flights : [];
+    const nextFlights = [portable, ...flights.filter((item) => item.flightId !== portable.flightId)].slice(0, 20);
+    const clarity = { clear: 0, partial: 0, unclear: 0 };
+    const replay = { now: 0, later: 0, no: 0 };
+    nextFlights.forEach((item) => {
+      if (clarity[item.annotations.deathClarity] != null) clarity[item.annotations.deathClarity] += 1;
+      if (replay[item.annotations.replayIntent] != null) replay[item.annotations.replayIntent] += 1;
+    });
+    const pulse = { schemaVersion: "playtest-pulse-v1", privacy: "device-local-aggregate-no-upload", sampleSize: nextFlights.length, clarity, replay, flights: nextFlights };
+    storage?.setItem(PULSE_KEY, JSON.stringify(pulse));
+    return pulse;
+  } catch { return null; }
+}
+
+export function loadPlaytestPulse(storage = globalThis.localStorage) {
+  try {
+    const value = JSON.parse(storage?.getItem(PULSE_KEY) || "null");
+    return value?.schemaVersion === "playtest-pulse-v1" ? value : { schemaVersion: "playtest-pulse-v1", privacy: "device-local-aggregate-no-upload", sampleSize: 0, clarity: { clear: 0, partial: 0, unclear: 0 }, replay: { now: 0, later: 0, no: 0 }, flights: [] };
+  } catch { return null; }
 }
 
 export function loadPlaytestFlight(storage = globalThis.sessionStorage) {

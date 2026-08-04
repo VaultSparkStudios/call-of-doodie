@@ -1,10 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
@@ -61,6 +56,9 @@ async function signSummary(secret: string, parts: Parameters<typeof canonicalSum
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsHeadersFor(req);
+  const originRejection = rejectDisallowedOrigin(req, corsHeaders);
+  if (originRejection) return originRejection;
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -92,6 +90,18 @@ Deno.serve(async (req) => {
     const uid: string = user?.id
       ?? (typeof body.clientUid === "string" && /^[0-9a-f-]{36}$/i.test(body.clientUid) ? body.clientUid : null)
       ?? crypto.randomUUID();
+
+    const requestKey = await requestBucket(req, Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? serviceRoleKey, "issue-run-token");
+    const [withinMinuteBudget, withinDayBudget] = await Promise.all([
+      consumeRateLimit(serviceClient, `${requestKey}:minute`, 12, 60),
+      consumeRateLimit(serviceClient, `${requestKey}:day`, 240, 86_400),
+    ]);
+    if (!withinMinuteBudget || !withinDayBudget) {
+      return new Response(JSON.stringify({ error: "Run-token request limit reached. Try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": withinMinuteBudget ? "3600" : "60" },
+      });
+    }
 
     const mode = VALID_MODES.has(String(body.mode ?? "")) ? String(body.mode) : null;
     const difficulty = VALID_DIFFICULTIES.has(String(body.difficulty ?? "")) ? String(body.difficulty) : "normal";

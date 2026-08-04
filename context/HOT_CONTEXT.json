@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "hot-context-v1",
+  "generatedAt": "2026-08-04T01:55:25.151Z",
+  "purpose": "Bounded startup projection; full append-only artifacts remain authoritative and discoverable by source hash.",
+  "budgets": {
+    "maximumBytes": 24000,
+    "maximumOpenWorkLines": 55,
+    "maximumDecisionSections": 4
+  },
+  "sources": {
+    "currentState": {
+      "file": "context/CURRENT_STATE.md",
+      "sha256": "9c7233fa7407ee75d7670d36c0bb7d53c43ea19dd3cd5af088b939b4b4925673",
+      "bytes": 145027
+    },
+    "taskBoard": {
+      "file": "context/TASK_BOARD.md",
+      "sha256": "fa675b5f941a8bdb65caabc4898d70fb361e61b0b440c434055568bf053ce169",
+      "bytes": 99005
+    },
+    "decisions": {
+      "file": "context/DECISIONS.md",
+      "sha256": "5bf14ad66c142e7aeb3be3d4af60b14afae036022a548b55b8aee4ffcb70066a",
+      "bytes": 88710
+    },
+    "audit": {
+      "file": "docs/AUDIT_2026-08-03.json",
+      "sha256": "8c4c56e6141f8046ff1748b8c9b899f8be63a17864eac0fa78224e753fe7e7aa",
+      "bytes": 34377
+    }
+  },
+  "currentSession": "- Session 138 (2026-08-03) implemented all 12 items from the full-project audit plus one second-order startup enforcement item, then completed the canonical closeout court.\n- Experience truth — Home is one porcelain operations table organized around Orders, Operations, Player Progress, Field Manual, and Support; duplicate settings/progress/action surfaces were removed while all canonical public URLs remain.\n- Intelligence truth — `insight-graph-v1` converts existing deterministic run evidence into one Verdict, Lesson, and Action with contradiction handling and zero hosted-model/API token cost.\n- Engagement truth — explicit local Playtest Pulse, bounded Scenario Cartridges with Sewer Relay URLs, and a three-chapter Nemesis Chronicle add evidence, authored challenge depth, and revenge arcs without accounts, arbitrary code, realtime infrastructure, or power purchases.\n- Trust truth — the live leaderboard anomaly is reversibly quarantined; hardened token/score Functions enforce declared origins and quotas; live health is 5/5, replay trust is 3/3, and the visible 36-row audit has zero remaining flags.\n- Identity/accessibility truth — Porcelain Passport is an optional local verification receipt with integrity-checked export/import, not cloud progress; document zoom is restored and gesture suppression is scoped to the active arena.\n- Performance truth — the two-phase shell reduces entry JavaScript from about 734KB to 196KB raw. Three isolated staging runs measure median performance 1.00, LCP 1,301ms, CLS 0, and TBT 8ms; HomeV1 remains available because retirement still requires production funnel evidence.\n- Human/agent truth — one effective-dated Field Manual source projects to UI, `field-manual.json`, `status.json`, `agents.json`, `llms.txt`, and gameplay contracts; Hot Context is source-hashed, under 24KB per artifact, freshness-checked, and startup-enforced.\n- Infrastructure truth — closeout restored CPX51 from 85% deny to 69% allow after guarded retention exposed a sub-six-hour unused-image spike; the emergency receipt preserves all 56 containers, 46 volumes, and 53 pre-existing referenced images, while all four maintenance timers remain active.\n- Validation truth — 954/954 tests across 152 files, strict lint, deterministic build, browser 12/12, hosted visual 969/969 across 19 routes/two themes/three widths, security gate and npm audit zero, public 27/27, drift 37/37, and all architecture/runtime/asset/schema checks pass.\n- Staging truth — `https://session-138-staging.call-of-doodie.pages.dev/` and immutable `https://daa4b291.call-of-doodie.pages.dev/` carry the final dependency-clean tree and pass the seven-surface HTTP/edge smoke court.\n- Release truth — engineering staging is green; SPARKED remains NO-GO pending verified inbound mail, physical PWA/gamepad/full-run media, production funnel/participant evidence, project-scoped analytics/Sentry, publication, and founder approval.",
+  "openWork": "# Task Board\n## Human Action Required\n- [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens\n- [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination\n- [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end\n- [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed\n- [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`\n- [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)\n- [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.\n## Now\n- [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.\n- [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only\n- [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic\n## Next\n- [ ] [SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Auth, profiles, nullable leaderboard `user_id`, guest-to-account migration, and signed migration/callsign claim receipts.\n- [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk\n- [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships\n- [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through\n## Done\n## Deferred\n- [ ] Discord invite/community link when the community entry point is ready\n- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)\n## Deferred to Project Agents",
+  "recentDecisions": "## 2026-07-27 — Session 132 continuation — CI checks are events, not timers\n\n**Decision:** Brief-format validation runs on relevant pushes, pull requests, or explicit manual dispatch. A source-derived `schedule-policy-receipt-v1` fails if any repository workflow introduces a schedule trigger, a GitHub Actions self-hosted runner, or a scheduled Git writer.\n\n**Rationale:** The infrastructure court correctly identified the daily hosted cron as waste, but its generic self-hosted-runner prescription conflicts with live Studio Canon, which forbids GitHub Actions self-hosted runners. The canon-safe resolution removes the timer while retaining ephemeral GitHub-hosted event CI; the propagated source-template conflict is routed to Studio Ops rather than hidden locally.\n\n\n## 2026-07-27 — Session 132 continuation — Runtime and email claims remain evidence-bound\n\n**Decision:** Do not migrate this static Cloudflare Pages artifact to CPX51/Caddy without a real server requirement. Do not label `hello@callofdoodie.wtf` working until a signed `delivered-to-founder-mx` receipt exists.\n\n**Rationale:** The build exposes no listening runtime or port, and the infrastructure court records no port allocation requirement. Brevo credentials are ready, but the canonical delivery verifier excludes the domain while the email policy deliberately retains its registrar-forwarding route; provider readiness cannot substitute for delivery evidence.\n\n\n## 2026-07-25 — Session 130 — Lethal attribution is one exactly-once lifecycle\n\n**Decision:** Every combat source queues metadata into one defeat executor; Kamikaze and Tactical Nuke remain explicit non-reward retirements, and any future unqueued lethal is reconciled as `unattributed` while recording a run-integrity fault.\n\n**Rationale:** Score, combo, heat, pickups, progression, boss, and split effects must not drift by weapon source. Failing closed preserves play continuity without certifying a run whose attribution contract was bypassed.\n\n\n## 2026-07-25 — Session 130 — Simultaneous input remains compositional but observable\n\n**Decision:** Keyboard, touch, and gamepad vectors retain their historical additive normalization; strong opposing sources emit a contention receipt instead of silently changing arbitration policy.\n\n**Rationale:** A new priority policy without physical-device evidence could break valid hybrid play. Visibility creates the evidence needed for a future device-specific choice while preserving current behavior.",
+  "audit": {
+    "date": "2026-08-03",
+    "title": null,
+    "items": [
+      {
+        "slug": "evidence-plane-recovery",
+        "title": "Restore a trustworthy startup and release evidence plane before feature work.",
+        "status": "shipped",
+        "priority": 41.2
+      },
+      {
+        "slug": "two-phase-boot-runtime-boundary",
+        "title": "Build a two-phase boot boundary that protects first paint from the game runtime and data plane.",
+        "status": "shipped",
+        "priority": 38.7
+      },
+      {
+        "slug": "one-verdict-debrief-insight-graph",
+        "title": "Turn the fragmented coach stack into one local Insight Graph and one decisive debrief.",
+        "status": "shipped",
+        "priority": 37.4
+      },
+      {
+        "slug": "playtest-pulse-evidence-flywheel",
+        "title": "Promote the hidden flight recorder into a privacy-safe Playtest Pulse.",
+        "status": "shipped",
+        "priority": 35.8
+      },
+      {
+        "slug": "leaderboard-api-trust-court",
+        "title": "Quarantine implausible scores and make public score APIs fail safely under abuse.",
+        "status": "shipped",
+        "priority": 34.6
+      },
+      {
+        "slug": "truthful-porcelain-passport",
+        "title": "Make the Obelisk login a truthful optional Porcelain Passport instead of a phantom account panel.",
+        "status": "shipped",
+        "priority": 32.8
+      },
+      {
+        "slug": "home-ops-table-recomposition",
+        "title": "Recompose HomeV2 as an elite porcelain operations table with one decision per region.",
+        "status": "shipped",
+        "priority": 31.5
+      },
+      {
+        "slug": "field-manual-live-truth-graph",
+        "title": "Replace templated public pages with a versioned Field Manual projected for humans and agents.",
+        "status": "shipped",
+        "priority": 29.4
+      },
+      {
+        "slug": "scenario-cartridges-and-sewer-relay",
+        "title": "Create shareable Scenario Cartridges and an asynchronous Sewer Relay without realtime infrastructure.",
+        "status": "shipped",
+        "priority": 28.7
+      },
+      {
+        "slug": "document-zoom-and-arena-gesture-boundary",
+        "title": "Restore document zoom and confine gesture suppression to the active arena.",
+        "status": "shipped",
+        "priority": 26.8
+      },
+      {
+        "slug": "personal-nemesis-chronicle",
+        "title": "Turn repeated enemies and failures into a personal Nemesis Chronicle with three-run revenge arcs.",
+        "status": "shipped",
+        "priority": 25.9
+      },
+      {
+        "slug": "hot-context-and-artifact-compaction",
+        "title": "Generate a small hot context layer and archive historical operational prose without losing evidence.",
+        "status": "shipped",
+        "priority": 24.6
+      }
+    ]
+  }
+}

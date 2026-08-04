@@ -1014,6 +1014,26 @@ Last reviewed: 2026-07-28
 Overall status: green engineering implementation; SPARKED remains NO-GO.
 Last reviewed: 2026-07-29
 
+## 2026-08-03 — Session 138 — Unified experience, trust, performance, and human/agent truth
+
+- Audit truth — all twelve promoted items in `docs/AUDIT_2026-08-03.json` are `shipped` with explicit delivered rungs and verification; seven broader L3 outcomes remain honestly gated rather than implied.
+- Runtime truth — `RuntimeBoundary` owns a lightweight first frame and loads the arena on intent or a bounded post-frame budget; build evidence reports 195,631 entry bytes and 547,615 deferred runtime bytes with no data-plane preload leak.
+- Performance truth — six clean, origin-scoped staging reports produce default medians of performance 1.00, LCP 1,301ms, CLS 0, and TBT 8ms. This does not replace exact-main production or funnel evidence and does not retire HomeV1.
+- Intelligence truth — `insight-graph-v1` is deterministic, local, versioned, evidence-ranked, contradiction-aware, and costs zero hosted-model tokens; one Verdict/Lesson/Action is primary while proof remains inspectable.
+- Trust truth — the known implausible leaderboard row is reversibly quarantined with a reason-coded audit receipt; issue/submit Functions enforce declared origins and quotas; live health 5/5, replay 3/3, and visible audit 36/0 flagged pass.
+- Identity/privacy truth — Passport is an optional local verification receipt with bounded fields and export/import; no cross-device progress or full account panel is claimed. Pulse is explicit opt-in, bounded, local, clearable, and not uploaded.
+- Challenge truth — Scenario Cartridges are bounded, sanitized, versioned, and checksum-verified; the current Sewer Relay shares a deterministic URL and does not claim cryptographic signing, inherited ghosts, moderation, or community rotation.
+- Content truth — effective-dated Field Manual claims project to human UI, `field-manual.json`, `status.json`, `agents.json`, `llms.txt`, gameplay contracts, changelog, and route registry; public contract validation passes 27/27.
+- Visual truth — the hosted matrix passes 969/969 computed-style, geometry, contrast, overflow, and runtime assertions across nineteen routes, two themes, and three widths; four representative captures are hash-bound. Unsupported subjective aesthetic judgment is not claimed.
+- Context truth — HOT_CONTEXT projections are deterministic, source-hashed, freshness-checked, and 11,792/8,294 bytes under a 24KB-per-artifact budget; startup acceptance records their hashes and fails closed on drift.
+- Dependency truth — `brace-expansion@5.0.9` and `postcss@8.5.23` were trust-reviewed against official registry integrity/maintainer/license evidence, installed with lifecycle scripts disabled, and leave npm audit at zero with zero known supply-chain incident matches.
+- Infrastructure truth — the closeout doctor observed CPX51 at 84%/deny; guarded retention briefly restored 78% before a sub-six-hour unused-image spike reached 85%. An explicitly approved emergency prune removed only images referenced by no container and reached 69%/allow; all 56 containers, 46 volumes, and 53 pre-existing referenced images remained exact. The foreign sanitization ratchet is advisory: Call of Doodie is 0 critical, the baseline was not lowered, and ownership was routed through Ark.
+- Verification truth — 954/954 tests, strict lint, build, browser 12/12, security, dependency, public, schema, architecture, replay, runtime, asset, startup, protocol, Hot Context, and diff courts pass; Session 138 staging smoke passes 7/7.
+- Release truth — exact Session 138 engineering staging is green at `https://session-138-staging.call-of-doodie.pages.dev/`. SPARKED remains NO-GO pending inbound-mail, physical PWA/gamepad/full-run media, production funnel/participant, scoped telemetry, publication, and founder evidence.
+
+Overall status: green engineering staging; SPARKED remains NO-GO.
+Last reviewed: 2026-08-03
+
 ## 2026-08-03 — Session 137 — Arsenal, continuation, release, and performance truth
 
 - Arsenal truth — `open-arsenal-mastery-v2` exposes all twelve primaries on every checked surface; level thresholds describe earned mastery and evolution rather than access.

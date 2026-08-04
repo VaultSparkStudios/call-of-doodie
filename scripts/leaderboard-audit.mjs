@@ -1,124 +1,140 @@
 #!/usr/bin/env node
 /**
- * leaderboard-audit.mjs — Leaderboard trust v2 operator review tool
+ * Reversible leaderboard trust court.
  *
- * Pulls recent leaderboard rows from Supabase, runs plausibility checks,
- * and prints a ranked anomaly report. Intended for operator spot-checks.
- *
- * Usage:
- *   node scripts/leaderboard-audit.mjs [--limit 200] [--mode normal] [--top 20]
- *
- * Flags detected as anomalous:
- *   • kills/wave ratio > 120  (more kills than realistic for any wave)
- *   • score/kill ratio > 5000 (implausible score per kill)
- *   • totalDamage < kills * 20 (damage impossibly low for kill count)
- *   • totalDamage > kills * 20000 (damage impossibly high — likely overflow)
- *   • wave < 1 (submitted at wave 0)
- *   • level > wave * 3 + 5 (leveled faster than theoretically possible)
+ * Default: inspect without mutation. --strict exits 2 on an actionable row.
+ * --quarantine hides every high-confidence anomaly through Row Level Security.
+ * --restore <id> reverses one operator decision. Every mutation writes a
+ * value-free receipt to audits/leaderboard-trust.ndjson.
  */
 
 import fs from "node:fs";
 import path from "node:path";
+import { getSecret, redact } from "./lib/secrets.mjs";
+import { assessLeaderboardRow, buildTrustReceipt } from "./lib/leaderboard-trust.mjs";
 
-// ── env loading ───────────────────────────────────────────────────────────────
+const args = process.argv.slice(2);
+const has = (flag) => args.includes(flag);
+const value = (flag, fallback = null) => {
+  const index = args.indexOf(flag);
+  return index >= 0 && args[index + 1] ? args[index + 1] : fallback;
+};
 
-function loadDotEnv(p) {
-  if (!fs.existsSync(p)) return;
-  for (const line of fs.readFileSync(p, "utf8").split(/\r?\n/)) {
-    const t = line.trim();
-    if (!t || t.startsWith("#")) continue;
-    const eq = t.indexOf("=");
-    if (eq === -1) continue;
-    const k = t.slice(0, eq).trim();
-    const v = t.slice(eq + 1).trim();
-    if (!process.env[k]) process.env[k] = v;
-  }
-}
-loadDotEnv(path.join(process.cwd(), ".env.local"));
+const limit = Math.min(1000, Math.max(1, Number.parseInt(value("--limit", "200"), 10) || 200));
+const top = Math.min(limit, Math.max(1, Number.parseInt(value("--top", "20"), 10) || 20));
+const mode = value("--mode");
+const restoreId = value("--restore");
+const json = has("--json");
+const strict = has("--strict");
+const quarantine = has("--quarantine");
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-const ANON_KEY     = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-
-if (!SUPABASE_URL || !ANON_KEY) {
-  console.error("Missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY in .env.local");
+const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
+const serviceRoleKey = getSecret("SUPABASE_SERVICE_ROLE_KEY", "supabase.admin");
+if (!supabaseUrl || !serviceRoleKey) {
+  console.error("Supabase admin capability is unavailable through the secrets gateway.");
   process.exit(1);
 }
 
-// ── CLI args ──────────────────────────────────────────────────────────────────
-
-const args = process.argv.slice(2);
-const getArg = (flag, def) => {
-  const i = args.indexOf(flag);
-  return i !== -1 && args[i + 1] ? args[i + 1] : def;
+const headers = {
+  ["apikey"]: serviceRoleKey,
+  Authorization: `Bearer ${serviceRoleKey}`,
+  "Content-Type": "application/json",
+  Prefer: "return=representation",
 };
-const LIMIT = parseInt(getArg("--limit", "200"), 10);
-const MODE  = getArg("--mode", null);
-const TOP   = parseInt(getArg("--top", "20"), 10);
 
-// ── fetch rows ────────────────────────────────────────────────────────────────
+async function request(relativeUrl, options = {}) {
+  const response = await fetch(`${supabaseUrl}/rest/v1/${relativeUrl}`, { ...options, headers: { ...headers, ...(options.headers || {}) } });
+  if (!response.ok) throw new Error(`Supabase REST error ${response.status}: ${redact(await response.text())}`);
+  if (response.status === 204) return null;
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
+}
 
-async function fetchRows() {
-  let url = `${SUPABASE_URL}/rest/v1/leaderboard?select=id,name,score,kills,wave,totalDamage,level,mode,difficulty,ts&game_id=eq.cod&order=score.desc&limit=${LIMIT}`;
-  if (MODE) url += `&mode=eq.${MODE}`;
+async function fetchRows({ includeQuarantined = false, id = null } = {}) {
+  let query = "leaderboard?select=id,name,score,kills,wave,totalDamage,level,mode,difficulty,ts,quarantined,quarantine_reason,quarantined_at&game_id=eq.cod";
+  if (id) query += `&id=eq.${encodeURIComponent(id)}`;
+  if (!includeQuarantined) query += "&quarantined=eq.false";
+  if (mode) query += `&mode=eq.${encodeURIComponent(mode)}`;
+  query += `&order=score.desc&limit=${limit}`;
+  return request(query);
+}
 
-  const res = await fetch(url, {
-    headers: { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}`, "Content-Type": "application/json" },
+function appendReceipt(receipt) {
+  const receiptPath = path.join(process.cwd(), "audits", "leaderboard-trust.ndjson");
+  fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
+  fs.appendFileSync(receiptPath, `${JSON.stringify(receipt)}\n`, "utf8");
+}
+
+async function patchRow(id, patch) {
+  return request(`leaderboard?id=eq.${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: JSON.stringify(patch),
   });
-  if (!res.ok) {
-    throw new Error(`Supabase REST error ${res.status}: ${await res.text()}`);
-  }
-  return res.json();
 }
 
-// ── plausibility checks ───────────────────────────────────────────────────────
-
-function checkRow(row) {
-  const flags = [];
-  const { score = 0, kills = 0, wave = 0, totalDamage = 0, level = 0 } = row;
-
-  if (wave < 1)
-    flags.push("wave=0 at submission");
-  if (kills > 0 && wave > 0 && kills / wave > 120)
-    flags.push(`kills/wave=${(kills / wave).toFixed(0)} > 120`);
-  if (kills > 0 && score / kills > 5000)
-    flags.push(`score/kill=${(score / kills).toFixed(0)} > 5000`);
-  if (kills > 5 && totalDamage < kills * 20)
-    flags.push(`damage/kill=${(totalDamage / kills).toFixed(0)} < 20`);
-  if (kills > 5 && totalDamage > kills * 20000)
-    flags.push(`damage/kill=${(totalDamage / kills).toFixed(0)} > 20000`);
-  if (wave > 0 && level > wave * 3 + 5)
-    flags.push(`level ${level} vs wave ${wave} — levelled implausibly fast`);
-
-  return flags;
+async function restore() {
+  const [row] = await fetchRows({ includeQuarantined: true, id: restoreId });
+  if (!row) throw new Error(`Leaderboard row not found: ${restoreId}`);
+  const assessment = assessLeaderboardRow(row);
+  await patchRow(row.id, { quarantined: false, quarantine_reason: null, quarantined_at: null });
+  const receipt = buildTrustReceipt({ action: "restore", row, assessment });
+  appendReceipt(receipt);
+  console.log(json ? JSON.stringify({ ok: true, receipt }, null, 2) : `Restored leaderboard row ${row.id}.`);
 }
 
-// ── report ────────────────────────────────────────────────────────────────────
-
-async function main() {
-  console.log(`\nLeaderboard Audit — top ${LIMIT} rows${MODE ? ` (mode: ${MODE})` : ""}\n`);
+async function audit() {
   const rows = await fetchRows();
-  console.log(`Fetched ${rows.length} rows\n`);
-
   const flagged = rows
-    .map(row => ({ row, flags: checkRow(row) }))
-    .filter(({ flags }) => flags.length > 0)
-    .sort((a, b) => b.flags.length - a.flags.length);
+    .map((row) => ({ row, assessment: assessLeaderboardRow(row) }))
+    .filter(({ assessment }) => assessment.severity !== "clear")
+    .sort((a, b) => b.assessment.flags.length - a.assessment.flags.length);
 
-  if (flagged.length === 0) {
-    console.log("✅  No anomalies detected in top rows.");
-    return;
+  const receipts = [];
+  if (quarantine) {
+    for (const { row, assessment } of flagged.filter((entry) => entry.assessment.severity === "high")) {
+      await patchRow(row.id, {
+        quarantined: true,
+        quarantine_reason: assessment.reason,
+        quarantined_at: new Date().toISOString(),
+      });
+      const receipt = buildTrustReceipt({ action: "quarantine", row, assessment });
+      appendReceipt(receipt);
+      receipts.push(receipt);
+    }
   }
 
-  console.log(`⚠  ${flagged.length} anomalous row(s) detected (showing top ${Math.min(TOP, flagged.length)}):\n`);
-  for (const { row, flags } of flagged.slice(0, TOP)) {
-    console.log(`  ${row.name || "?"} [${row.id?.slice(0, 8)}] score=${row.score} kills=${row.kills} wave=${row.wave} dmg=${row.totalDamage} mode=${row.mode}`);
-    for (const f of flags) console.log(`    ⛔ ${f}`);
-    console.log();
+  const report = {
+    schemaVersion: "leaderboard-trust-v1",
+    ok: flagged.length === 0 || (quarantine && receipts.length === flagged.filter((entry) => entry.assessment.severity === "high").length),
+    fetched: rows.length,
+    flagged: flagged.length,
+    quarantined: receipts.length,
+    rows: flagged.slice(0, top).map(({ row, assessment }) => ({
+      id: row.id,
+      callsign: String(row.name || "?").slice(0, 24),
+      score: row.score,
+      kills: row.kills,
+      wave: row.wave,
+      level: row.level,
+      severity: assessment.severity,
+      flags: assessment.flags,
+    })),
+    receipts,
+  };
+
+  if (json) console.log(JSON.stringify(report, null, 2));
+  else {
+    console.log(`Leaderboard trust court: ${report.fetched} inspected · ${report.flagged} actionable · ${report.quarantined} quarantined`);
+    for (const entry of report.rows) {
+      console.log(`  ${entry.callsign} [${String(entry.id).slice(0, 8)}] score=${entry.score} kills=${entry.kills} wave=${entry.wave} level=${entry.level}`);
+      for (const flag of entry.flags) console.log(`    ${flag.severity === "high" ? "⛔" : "⚠"} ${flag.code}: ${flag.detail}`);
+    }
   }
 
-  if (flagged.length > TOP) {
-    console.log(`  … and ${flagged.length - TOP} more. Re-run with --top ${flagged.length} to see all.\n`);
-  }
+  if (strict && flagged.length > 0 && !quarantine) process.exitCode = 2;
 }
 
-main().catch(err => { console.error(err.message); process.exit(1); });
+(restoreId ? restore() : audit()).catch((error) => {
+  console.error(redact(error instanceof Error ? error.message : String(error)));
+  process.exit(1);
+});

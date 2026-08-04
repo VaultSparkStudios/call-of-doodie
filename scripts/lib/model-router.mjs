@@ -481,14 +481,9 @@ function sanitizeUnicodeString(value) {
       if (next >= 0xDC00 && next <= 0xDFFF) {
         out += value[i] + value[i + 1];
         i++;
-      } else {
-        out += '\uFFFD';
-      }
-    } else if (code >= 0xDC00 && code <= 0xDFFF) {
-      out += '\uFFFD';
-    } else {
-      out += value[i];
-    }
+      } else out += '\uFFFD';
+    } else if (code >= 0xDC00 && code <= 0xDFFF) out += '\uFFFD';
+    else out += value[i];
   }
   return out;
 }

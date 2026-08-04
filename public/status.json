@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "public-service-status-v1",
+  "effectiveDate": "2026-08-03",
+  "overall": "operational",
+  "surfaces": {
+    "browserGame": {
+      "status": "operational",
+      "fallback": "local-play"
+    },
+    "leaderboard": {
+      "status": "operational",
+      "controls": [
+        "origin-allowlist",
+        "bounded-request-quota",
+        "replay-check",
+        "reversible-anomaly-quarantine"
+      ]
+    },
+    "careerProgress": {
+      "status": "browser-local",
+      "crossDeviceSync": false
+    },
+    "identity": {
+      "status": "guest-first",
+      "passport": "optional-local-receipt"
+    }
+  },
+  "source": "/status/"
+}

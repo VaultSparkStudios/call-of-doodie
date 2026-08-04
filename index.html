@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Call of Doodie" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -33,8 +33,8 @@
     <title>Call of Doodie | Free Browser Roguelite Shooter</title>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body, #root { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; }
-      body { -webkit-overflow-scrolling: touch; overscroll-behavior: none; }
+      html, body, #root { width: 100%; min-height: 100%; background: #0a0a0a; }
+      body { overflow-x: hidden; -webkit-overflow-scrolling: touch; }
       button { -webkit-tap-highlight-color: transparent; }
       button:active { transform: scale(0.96) !important; opacity: 0.85; }
       button:focus-visible { outline: 2px solid #FF6B35; outline-offset: 2px; }

@@ -585,7 +585,7 @@ export default function CallOfDoodie() {
     // Seed creation is intentionally nondeterministic; once chosen, every
     // score-affecting branch uses a named stream derived from this value.
     const seed = (forceSeed && !isNaN(parseInt(forceSeed))) ? Math.abs(parseInt(forceSeed)) % 999999 : Math.floor(Math.random() * 999999);
-    if (playtestModeRef.current) {
+    playtestModeRef.current = isPlaytestMode(); if (playtestModeRef.current) {
       startActivePlaytestFlight({
         meta: {
           difficulty: difficultyRef.current,
@@ -4448,7 +4448,7 @@ export default function CallOfDoodie() {
   // ────────────────────────────────────────────────────────────────────────
   // RENDER
   // ────────────────────────────────────────────────────────────────────────
-  const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
+  const base = { width: "100%", height: "100dvh", margin: 0, overflow: "hidden", overscrollBehavior: "none", background: "#0a0a0a", fontFamily: "'Courier New', monospace", display: "flex", flexDirection: "column", position: "relative", touchAction: "none", userSelect: "none", WebkitUserSelect: "none" };
 
   if (screen === "username") {
     return (

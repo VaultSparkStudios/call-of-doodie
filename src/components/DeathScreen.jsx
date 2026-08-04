@@ -7,6 +7,7 @@ import { buildRunDebrief } from "../utils/runDebrief.js";
 import { buildRunNarrative } from "../utils/runNarrative.js";
 import { buildRunCoach } from "../utils/runCoach.js";
 import { buildPostRunIntelligence, buildRunEventDigest, buildStudioGameEvent } from "../utils/runIntelligence.js";
+import { buildInsightGraph } from "../utils/insightGraph.js";
 import { track } from "../utils/analytics.js";
 import { buildChallengeUrl, copyChallengeUrl } from "../utils/challengeLinks.js";
 import { encodeReplayCode } from "../utils/replayCode.js";
@@ -24,7 +25,7 @@ import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixCo
 import { describeFormationPressure, describePressureArc } from "../systems/pressureArc.js";
 import { describeDamageSequence } from "../systems/damageSequence.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
-import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone } from "../utils/playtestFlightRecorder.js";
+import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -81,7 +82,10 @@ export default function DeathScreen({
 
   const updatePlaytestAnswer = (answer) => {
     const next = annotateActivePlaytestFlight(answer);
-    if (next) setPlaytestReceipt(next);
+    if (next) {
+      setPlaytestReceipt(next);
+      recordPlaytestPulse(next);
+    }
   };
   const recordPlaytestChoice = (continuation) => {
     annotateActivePlaytestFlight({ continuation });
@@ -503,6 +507,16 @@ export default function DeathScreen({
     debrief,
     mode,
   });
+  const runTheFix = buildRunTheFixContract({
+    debrief,
+    postRunIntel,
+    collapseCoaching,
+    nextRunDrill,
+    runSeed,
+    wave,
+    rematchWave: resolveRematchStartWave(wave),
+  });
+  const insightGraph = buildInsightGraph({ runCoach, collapseCoaching, postRunIntel, debrief, runTheFix });
   const eventDigest = buildRunEventDigest({
     mode,
     difficulty,
@@ -592,15 +606,6 @@ export default function DeathScreen({
     return buildDrillEvidenceLedger([...prior, drillOutcome], { drillId: drillOutcome.drillId });
   }, [drillOutcome]);
   const rematchWave = resolveRematchStartWave(wave);
-  const runTheFix = buildRunTheFixContract({
-    debrief,
-    postRunIntel,
-    collapseCoaching,
-    nextRunDrill,
-    runSeed,
-    wave,
-    rematchWave,
-  });
   useEffect(() => {
     if (!drillOutcome || drillOutcomeEventKeyRef.current === drillOutcome.receiptId) return;
     const alreadyRecorded = loadStudioGameEvents().some((event) => (
@@ -856,9 +861,10 @@ export default function DeathScreen({
           ))}
         </div>
 
-        {/* AI Run Coach — 3-line verdict */}
-        <div style={{ ...card, marginBottom: 8, textAlign: "left", border: "1px solid rgba(0,229,255,0.25)", background: "linear-gradient(180deg,rgba(0,229,255,0.06),rgba(255,255,255,0.03))" }}>
-          <div style={{ fontSize: 10, color: "#5CE6FF", letterSpacing: 2, fontWeight: 900, marginBottom: 6 }}>🧠 AI RUN COACH</div>
+        {/* Inspectable evidence stays available without competing with the one-verdict card. */}
+        <details data-testid="coach-evidence" style={{ ...card, marginBottom: 8, textAlign: "left", border: "1px solid rgba(0,229,255,0.25)", background: "linear-gradient(180deg,rgba(0,229,255,0.06),rgba(255,255,255,0.03))" }}>
+          <summary style={{ color: "#9EDFF0", fontSize: 10, fontWeight: 900, letterSpacing: 1.6, cursor: "pointer" }}>WHY THIS VERDICT · {insightGraph.nodes.length} EVIDENCE NODES · {insightGraph.fingerprint}</summary>
+          <div style={{ fontSize: 10, color: "#5CE6FF", letterSpacing: 2, fontWeight: 900, margin: "10px 0 6px" }}>🧠 RUN COACH EVIDENCE</div>
           <div style={{ fontSize: 11, color: "#FFB3B3", lineHeight: 1.45, marginBottom: 4 }}>
             <span style={{ color: "#FF6B6B", fontWeight: 700 }}>Killed by:</span> {runCoach.killedBy}
           </div>
@@ -922,7 +928,7 @@ export default function DeathScreen({
             <span style={{ color: "#FFB36B", fontWeight: 800 }}>Next Contract:</span> {nextContract.title}
             <div style={{ color: "#C9A26F", marginTop: 2 }}>{nextContract.progress}</div>
           </div>
-        </div>
+        </details>
 
         {drillOutcome && (
           <div data-testid="run-drill-outcome" style={{ ...card, marginBottom: 12, textAlign: "left", border: `1px solid ${drillOutcome.status === "improved" ? "rgba(0,255,136,0.58)" : "rgba(255,209,102,0.42)"}`, background: "rgba(0,0,0,0.28)" }}>
@@ -933,16 +939,28 @@ export default function DeathScreen({
             <div style={{ marginTop: 5, color: "#8FA0AF", fontSize: 9, lineHeight: 1.4 }}>Observed result only—this receipt does not claim the drill caused the outcome.</div>
           </div>
         )}
-        <div data-focus-order="run_the_fix" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
-          <div style={{ fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>RUN THE FIX</div>
-          <div style={{ marginTop: 7, fontSize: 16, color: "#FFF", fontWeight: 900, textTransform: "uppercase" }}>{runTheFix.focus}</div>
+        <div data-focus-order="run_the_fix" data-testid="insight-verdict" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>
+            <span>ONE VERDICT</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
+          </div>
+          <div style={{ marginTop: 9, fontSize: 16, color: "#FFF", fontWeight: 900 }}>{insightGraph.verdict.statement}</div>
           <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
-            <strong style={{ color: "#FF9A67" }}>{runTheFix.evidenceLabel}:</strong> {runTheFix.diagnosis}
+            <strong style={{ color: "#FF9A67" }}>Lesson:</strong> {insightGraph.lesson}
           </div>
           <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
-            <div style={{ marginTop: 4, fontSize: 10, color: "#8FEFFF", lineHeight: 1.45 }}>{runTheFix.proof}</div>
+            <div style={{ marginTop: 4, fontSize: 10, color: "#8FEFFF", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
           </div>
+          <details style={{ marginTop: 8 }}>
+            <summary style={{ color: "#B9C4D8", fontSize: 9, fontWeight: 900, cursor: "pointer" }}>INSPECT RANKED REASONING · {insightGraph.contradictions.length ? `${insightGraph.contradictions.length} CONFLICT` : "NO CONFLICTS"}</summary>
+            <div style={{ marginTop: 7, display: "grid", gap: 5 }}>
+              {insightGraph.nodes.slice(0, 4).map((node) => (
+                <div key={node.id} style={{ color: "#C9D2DF", fontSize: 9, lineHeight: 1.45 }}>
+                  {Math.round(node.confidence * 100)}% · {node.evidenceLevel.replaceAll("_", " ").toUpperCase()} · {node.statement}
+                </div>
+              ))}
+            </div>
+          </details>
           <button
             data-testid="run-the-fix"
             aria-label={`${runTheFix.action.label}: ${runTheFix.target}`}

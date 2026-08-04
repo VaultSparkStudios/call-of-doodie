@@ -895,3 +895,21 @@ Rationale: Mutable duplicated fields and one-off speed impressions cannot author
 Decision: Do not preload the Supabase data-plane chunk from entry HTML. Warm optional leaderboard work only through the browser-idle boundary, while gameplay-critical local state remains immediate.
 
 Rationale: The default front door does not need network-backed leaderboard code to become interactive. A checked post-build asset boundary prevents manual chunking from silently turning into eager transport.
+
+## 2026-08-03 — Session 138 — One evidence graph owns the post-run answer
+
+Decision: Normalize existing deterministic coaching inputs into versioned observation, cause, contradiction, confidence, lesson, and action nodes; rank them into one primary Verdict/Lesson/Action and leave supporting proof in an optional drawer. Do not add a hosted large-language-model dependency without a measured quality gap.
+
+Rationale: The product already had strong local intelligence but forced players to reconcile overlapping cards. A shared causal graph improves clarity, explainability, agent projection, latency, privacy, and capital efficiency at zero runtime token cost.
+
+## 2026-08-03 — Session 138 — Identity, feedback, and challenge sharing remain guest-first
+
+Decision: Porcelain Passport describes and stores only a minimal local verification receipt with integrity-checked export/import; Playtest Pulse is explicit opt-in and local; Scenario Cartridges accept only a bounded sanitized schema and identify their current checksum as integrity detection, not a cryptographic signature.
+
+Rationale: Cross-device sync, uploaded participant data, and community signing create consent, deletion, abuse, recovery, moderation, and cost obligations. Shipping honest local primitives preserves guest play and creates evidence without laundering future infrastructure into present-tense promises.
+
+## 2026-08-03 — Session 138 — Performance evidence is isolated by origin
+
+Decision: Namespace Lighthouse caches by target origin, allow only verified complete reports to resume, and keep staging receipts separate from production evidence. HomeV1 remains until exact-main production performance and independent funnel evidence satisfy the existing retirement gate.
+
+Rationale: A closeout run exposed a stale production report in a staging cache. Origin-scoped evidence prevents cross-environment contamination, and a fast staging shell cannot by itself authorize a production funnel decision.

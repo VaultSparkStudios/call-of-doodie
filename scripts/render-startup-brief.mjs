@@ -278,6 +278,7 @@ const meterView = normalizeContextMeterView(meter, { fallbackLimit: meterLimit }
 const meterUsed = meterView.usedTokens;
 const meterRemaining = meterView.remainingTokens;
 const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);
+// context-meter returns pctUsed in percentage form (0-100), not 0-1. Normalize.
 const meterUsedPctRaw = meterView.pctUsed;
 // S262 — the `Math.min(100, …)` here clamped the DISPLAY while the brief's own
 // token figure said 154%, and that internal disagreement is what tripped

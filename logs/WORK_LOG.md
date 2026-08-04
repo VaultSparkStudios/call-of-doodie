@@ -1089,3 +1089,19 @@ Intent outcome: achieved. Both reported freeze/stuck classes have explicit lifec
 - Final direct suite: 935/935 across 143 files. Strict lint, production build, architecture/schema/public/security/replay/assets/startup/manifest/entry gates are green.
 
 Intent outcome: achieved for every agent-owned premise; all five audit items and all four second-order innovations shipped, and remaining work is genuinely evidence/credential/device/publication/founder gated.
+
+## 2026-08-03 — Session 138 — Full-product refinement, trust court, fast shell, and compounding run memory
+
+- Implemented all 12 promoted items from `docs/AUDIT_2026-08-03.json` in foundation-first waves, then shipped one second-order startup enforcement item to satisfy the value floor.
+- Restored startup/capability/brief/protocol evidence, routed the studio-owned CANON-045 parser defect through signed Ark cargo, and made bounded Hot Context freshness/bytes/hash provenance a startup acceptance gate.
+- Applied the live leaderboard trust migration, reversibly quarantined the implausible row, deployed hardened token/submit Functions, and verified 5/5 live health, 3/3 replay trust, and zero remaining flags across 36 visible rows.
+- Rebuilt identity as a truthful optional local Porcelain Passport, restored document zoom, scoped gestures to play, and covered login/callback in route, theme, privacy, terms, and visual contracts.
+- Split the first-frame shell from the arena/data plane, reducing entry JavaScript from about 734KB to 196KB; three isolated staging runs measure performance 1.00, LCP 1,301ms, CLS 0, and TBT 8ms.
+- Consolidated debrief intelligence into one deterministic `insight-graph-v1` Verdict/Lesson/Action and recomposed Home into Orders, Operations, Player Progress, Field Manual, and Support.
+- Added explicit local Playtest Pulse, bounded Scenario Cartridges and URL-based Sewer Relay, and an evidence-backed three-chapter Nemesis Chronicle without hosted inference, accounts, arbitrary code, or realtime infrastructure.
+- Published effective-dated Field Manual/status projections for humans and agents; hosted visual automation passed 969/969 across nineteen routes, two themes, and three widths.
+- Closed fresh dependency advisories through trust-reviewed `brace-expansion@5.0.9` and `postcss@8.5.23`; lifecycle scripts were disabled during install, supply-chain incident matches are zero, and npm audit is zero.
+- Closeout first restored CPX51 from 84% deny to 78% allow, then diagnosed a rapid rebound to 85% as 53.94GB of unused images younger than the six-hour retention floor. An explicitly approved emergency `docker image prune -af` removed only container-unreferenced images and reached 69% allow; exact receipts prove all 56 containers, 46 volumes, and 53 pre-existing referenced images survived. The foreign fleet sanitization ratchet remains advisory (Call of Doodie is 0 critical); an Ark ownership request was queued without lowering the baseline or editing sibling repos.
+- Final validation: 954/954 tests across 152 files, strict lint, production build, browser 12/12, public 27/27, protocol 37/37, replay 3/3, security/dependency/schema/architecture/runtime/asset/Hot Context courts green, and Session 138 staging HTTP/edge smoke 7/7.
+
+Intent outcome: achieved. Every promoted audit item and the required second-order value-floor item shipped at an honest evidence-backed rung; launch-only external gates remain explicit.

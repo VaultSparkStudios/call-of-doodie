@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "field-manual-truth-v1",
+  "effectiveDate": "2026-08-03",
+  "canonicalUrl": "https://callofdoodie.wtf/field-manual.json",
+  "claims": {
+    "price": {
+      "value": "free-to-play",
+      "source": "/terms/"
+    },
+    "progress": {
+      "value": "browser-local-no-cloud-sync-claim",
+      "source": "/privacy/"
+    },
+    "roster": {
+      "value": {
+        "weapons": 12,
+        "enemies": 22,
+        "modes": 7
+      },
+      "source": "/gameplay-contract.json"
+    },
+    "replayProof": {
+      "value": "advisory deterministic decision-stream evidence",
+      "excludedClaim": "not full physics resimulation",
+      "source": "/gameplay-contract.json"
+    },
+    "identity": {
+      "value": "guest-first-optional-local-porcelain-passport",
+      "source": "/privacy/"
+    }
+  }
+}

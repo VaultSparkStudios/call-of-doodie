@@ -17,6 +17,7 @@ import {
   renderFooterLinks,
   renderHeaderNav,
 } from "./lib/public-route-registry.mjs";
+import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
 
 const root = path.resolve("public");
 const checkOnly = process.argv.includes("--check");
@@ -103,6 +104,31 @@ queue("sitemap.xml", buildSitemapXml());
 queue("agents.json", JSON.stringify(buildAgentsManifest(), null, 2));
 queue("route-contract.json", JSON.stringify(buildRouteContractProof(), null, 2));
 queue(path.join(".well-known", "llms.txt"), buildLlmsText());
+const liveGameplay = buildPublicGameplayContract();
+queue("field-manual.json", JSON.stringify({
+  schemaVersion: "field-manual-truth-v1",
+  effectiveDate: "2026-08-03",
+  canonicalUrl: "https://callofdoodie.wtf/field-manual.json",
+  claims: {
+    price: { value: "free-to-play", source: "/terms/" },
+    progress: { value: "browser-local-no-cloud-sync-claim", source: "/privacy/" },
+    roster: { value: { weapons: liveGameplay.weapons.length, enemies: liveGameplay.enemies.length, modes: liveGameplay.modes.length }, source: "/gameplay-contract.json" },
+    replayProof: { value: liveGameplay.trust.replayEvidence, excludedClaim: liveGameplay.trust.excludedClaim, source: "/gameplay-contract.json" },
+    identity: { value: "guest-first-optional-local-porcelain-passport", source: "/privacy/" },
+  },
+}, null, 2));
+queue("status.json", JSON.stringify({
+  schemaVersion: "public-service-status-v1",
+  effectiveDate: "2026-08-03",
+  overall: "operational",
+  surfaces: {
+    browserGame: { status: "operational", fallback: "local-play" },
+    leaderboard: { status: "operational", controls: ["origin-allowlist", "bounded-request-quota", "replay-check", "reversible-anomaly-quarantine"] },
+    careerProgress: { status: "browser-local", crossDeviceSync: false },
+    identity: { status: "guest-first", passport: "optional-local-receipt" },
+  },
+  source: "/status/",
+}, null, 2));
 
 const stale = [];
 for (const [target, content] of expected) {

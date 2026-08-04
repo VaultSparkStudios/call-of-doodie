@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 137 unified the all-open arsenal, mastery progression, next-run guidance, and one-action Weekly Gauntlet; made startup/release/performance evidence executable; deferred the optional data plane beyond first paint; and verified 935/935 tests, browser 8/8, hosted visual 867/867, and direct pixel review on exact-session staging.",
-  "nextMilestone": "Preserve NO-GO until verified inbound email, physical PWA/gamepad/full-run media QA, production funnel evidence, project-scoped analytics/Sentry, publication, and founder approval pass; production Lighthouse now proves HomeV2 is slower than v1, so retain the fallback.",
+  "currentFocus": "Session 138 shipped all 12 full-product audit items plus one second-order startup gate: a 73%-smaller first-frame shell, one local Insight Graph verdict, a recomposed porcelain command center, human/agent Field Manual truth, Playtest Pulse, Scenario Cartridges/Sewer Relay, Nemesis Chronicle, live leaderboard hardening, truthful Passport, and bounded Hot Context.",
+  "nextMilestone": "Preserve NO-GO while gathering consented Playtest Pulse and exact-main production funnel evidence; complete verified inbound email, physical PWA/gamepad/full-run media QA, project-scoped analytics/Sentry, publication, and founder approval before SPARKED. Retain HomeV1 until its retirement court passes.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -203,6 +203,22 @@
       "status": "measured-no-go",
       "type": "production-performance",
       "command": "Three Lighthouse runs per surface at production revision f1d4d825742c: HomeV2 median LCP 3226ms vs v1 2651ms; fallback retirement remains false and funnel evidence remains separate"
+    },
+    {
+      "status": "green",
+      "url": "https://session-138-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 138 dependency-clean direct upload; immutable https://daa4b291.call-of-doodie.pages.dev; HTTP/edge smoke 7/7; hosted 19-route × 2-theme × 3-width matrix 969/969"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 138 — 954/954 across 152 files; strict lint; production build; browser 12/12; public 27/27; security/npm audit 0; dependency/schema/architecture/runtime/asset/startup/protocol/Hot Context gates green"
+    },
+    {
+      "status": "green",
+      "type": "staging-performance",
+      "command": "Three clean origin-scoped Lighthouse runs per surface: default median performance 1.00, LCP 1301ms, CLS 0, TBT 8ms; production/funnel authority remains separate"
     }
   ],
   "blockers": [
@@ -212,7 +228,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-08-03",
+  "lastUpdated": "2026-08-04",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "green-code-no-go-launch",
@@ -220,17 +236,17 @@
   "ignisScore": 45706,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "silSession": 137,
+  "silSession": 138,
   "silScore": 999,
   "silAvg3": 999,
   "silVelocity": 13,
   "silDebt": "decreasing",
   "silLastSession": "2026-08-03",
-  "currentSession": 137,
+  "currentSession": 138,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 935,
-  "testsTotal": 935,
+  "testsPassing": 954,
+  "testsTotal": 954,
   "entropyScore": 0.189,
   "entropyLastComputed": "2026-08-03",
   "silRubricVersion": "3.0",
@@ -260,30 +276,30 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-137-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-03T03:19:02Z",
+  "stagingUrl": "https://session-138-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-03T23:34:27Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
-    "session": 137,
+    "session": 138,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-03T03:32:30Z",
+    "enumeratedAt": "2026-08-03T23:34:27Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
-    "date": "2026-08-03",
-    "ranAt": "2026-08-03T03:29:59.466Z",
+    "date": "2026-08-04",
+    "ranAt": "2026-08-04T01:54:42.262Z",
     "overallPass": true,
-    "passing": 120,
-    "warning": 40,
+    "passing": 125,
+    "warning": 38,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
-    "skipped": 2,
-    "ran": 161,
-    "total": 163,
-    "score": 75
+    "skipped": 3,
+    "ran": 164,
+    "total": 167,
+    "score": 76
   },
-  "lastSessionSummary": "Session 137 shipped five verified L3 audit items and four second-order innovations: startup compatibility acceptance, an all-open mastery arsenal, one executable next-run/Gauntlet plan, source-derived release truth, production performance evidence, idle data-plane loading, asset-boundary enforcement, and hash-bound rendered-pixel proof."
+  "lastSessionSummary": "Session 138 shipped all 12 full-product audit items plus a second-order startup enforcement item: fast runtime shell, one-verdict Insight Graph, porcelain operations table, Field Manual truth graph, local Pulse/Cartridge/Chronicle engagement, live leaderboard hardening, truthful Passport, accessibility, and bounded Hot Context."
 }

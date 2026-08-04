@@ -1,0 +1,52 @@
+:root {
+  --auth-page: radial-gradient(circle at 20% 0%, #40210f 0%, #120c09 34%, #070707 78%);
+  --auth-panel: rgba(20, 15, 12, 0.92);
+  --auth-ink: #fff8ea;
+  --auth-muted: #c9bca9;
+  --auth-line: rgba(255, 238, 208, 0.18);
+  --auth-accent: #ff7a38;
+  --auth-accent-ink: #1c0900;
+  --auth-shadow: rgba(0, 0, 0, 0.55);
+}
+
+:root[data-cod-theme="porcelain-day"] {
+  --auth-page: radial-gradient(circle at 20% 0%, #fff8e9 0%, #eee4d6 45%, #d6c7b5 100%);
+  --auth-panel: rgba(255, 252, 244, 0.94);
+  --auth-ink: #26160d;
+  --auth-muted: #695344;
+  --auth-line: rgba(75, 45, 24, 0.24);
+  --auth-accent: #b83c00;
+  --auth-accent-ink: #fff;
+  --auth-shadow: rgba(77, 48, 28, 0.2);
+}
+
+.auth-shell { min-height: 100dvh; display: grid; place-items: center; padding: clamp(18px, 4vw, 48px); overflow: auto; color: var(--auth-ink); background: var(--auth-page); font-family: "Courier New", monospace; }
+.auth-card { width: min(700px, 100%); padding: clamp(24px, 6vw, 54px); border: 1px solid var(--auth-line); border-radius: 28px 8px 28px 8px; background: var(--auth-panel); box-shadow: 0 32px 90px var(--auth-shadow), inset 0 1px rgba(255,255,255,.08); position: relative; overflow: hidden; }
+.auth-card::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .32; background: repeating-linear-gradient(112deg, transparent 0 24px, var(--auth-line) 25px, transparent 26px 52px); mask-image: linear-gradient(to bottom, #000, transparent 48%); }
+.auth-card > * { position: relative; }
+.auth-masthead { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 54px; }
+.auth-brand { color: var(--auth-ink); font-weight: 900; letter-spacing: .08em; text-decoration: none; }
+.auth-brand span, .auth-eyebrow { color: var(--auth-accent); }
+.auth-theme { min-height: 42px; padding: 8px 12px; }
+:root:not([data-cod-theme="porcelain-day"]) .auth-theme { background: #fff8ea; color: #26160d; border-color: #fff8ea; }
+:root[data-cod-theme="porcelain-day"] .auth-theme { background: #26160d; color: #fff8ea; border-color: #26160d; }
+.auth-eyebrow { text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 800; }
+.auth-card h1 { margin: 10px 0; font-size: clamp(34px, 7vw, 66px); line-height: .94; letter-spacing: -.06em; }
+.auth-lede { color: var(--auth-muted); max-width: 58ch; line-height: 1.65; margin-bottom: 30px; }
+.auth-actions { display: grid; gap: 10px; }
+.auth-actions button, .auth-theme { border: 1px solid var(--auth-line); border-radius: 10px 3px 10px 3px; background: transparent; color: var(--auth-ink); cursor: pointer; font: inherit; font-weight: 800; }
+.auth-actions button { min-height: 52px; padding: 13px 16px; }
+.auth-actions .auth-primary { background: var(--auth-accent); color: var(--auth-accent-ink); border-color: transparent; }
+.auth-actions .auth-link { border-color: transparent; text-decoration: underline; }
+.auth-actions .auth-danger { color: #e84646; }
+.auth-actions--compact { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 18px; }
+.passport-receipt { border: 1px solid var(--auth-line); padding: 20px; border-radius: 14px 4px 14px 4px; background: color-mix(in srgb, var(--auth-panel), transparent 18%); }
+.passport-receipt > div:not(.auth-actions) { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--auth-line); }
+.passport-receipt span, .passport-receipt p, .auth-footer { color: var(--auth-muted); }
+.passport-receipt p { margin-top: 16px; line-height: 1.5; }
+.auth-file { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.auth-notice { margin-top: 16px; color: var(--auth-accent); font-weight: 800; }
+.auth-footer { display: grid; gap: 8px; margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--auth-line); font-size: 13px; line-height: 1.5; }
+.auth-footer a { color: var(--auth-ink); font-weight: 800; }
+@media (max-width: 620px) { .auth-masthead { align-items: flex-start; margin-bottom: 38px; } .auth-theme { font-size: 0; } .auth-theme::first-letter { font-size: 18px; } .auth-actions--compact { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .auth-card, .auth-actions button { scroll-behavior: auto; transition: none !important; } }

@@ -1,10 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
@@ -270,6 +265,9 @@ function normalizeEntry(entry: Record<string, unknown>) {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsHeadersFor(req);
+  const originRejection = rejectDisallowedOrigin(req, corsHeaders);
+  if (originRejection) return originRejection;
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -290,6 +288,18 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
     const serviceClient = createClient(supabaseUrl, serviceRoleKey);
+
+    const requestKey = await requestBucket(req, Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? serviceRoleKey, "submit-score");
+    const [withinMinuteBudget, withinDayBudget] = await Promise.all([
+      consumeRateLimit(serviceClient, `${requestKey}:minute`, 30, 60),
+      consumeRateLimit(serviceClient, `${requestKey}:day`, 500, 86_400),
+    ]);
+    if (!withinMinuteBudget || !withinDayBudget) {
+      return new Response(JSON.stringify({ error: "Score submission limit reached. Try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": withinMinuteBudget ? "3600" : "60" },
+      });
+    }
 
     // Try Supabase user auth first; fall back to client-provided stable UUID.
     // This supports projects with CAPTCHA protection enabled where anonymous

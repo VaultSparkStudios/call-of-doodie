@@ -24,7 +24,12 @@ export function evaluateStartupAcceptance({
   }
 
   const format = validateStartupBrief(briefText);
-  if (!format.ok) issues.push(...format.issues.map((issue) => `Brief format: ${issue}`));
+  if (!format.ok) {
+    issues.push(...format.missingRequired.map((issue) => `Brief format: missing ${issue}`));
+    issues.push(...format.forbiddenHits.map((issue) => `Brief format: forbidden ${issue.label}`));
+    if (format.bodyShape) issues.push(`Brief format: ${format.bodyShape}`);
+    if (format.staleBrief) issues.push(`Brief format: ${format.staleBrief}`);
+  }
 
   const evidence = validateBriefEvidence(briefText, status);
   if (!evidence.ok) issues.push(...evidence.issues.map((issue) => `Brief evidence: ${issue}`));

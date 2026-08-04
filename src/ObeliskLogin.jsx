@@ -1,28 +1,98 @@
-// obelisk-passport — themed login component (generated, type=game).
-// Drop into your app; render at your unauthenticated route. Dependency-free
-// (plain DOM + the Obelisk client script). Works in any React/Vite SPA.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { clearPassport, exportPassport, importPassport, readPassport, savePassport } from "./utils/obeliskPassport.js";
+import { applyTheme, nextTheme, readTheme, THEMES } from "./utils/theme.js";
+
 const IDP = "https://obeliskgate.com";
+
 export function ObeliskLogin({ project = "Call of Doodie", tier = "T4", returnUrl }) {
-  const ref = useRef(null);
+  const fileRef = useRef(null);
+  const [passport, setPassport] = useState(() => readPassport());
+  const [notice, setNotice] = useState("");
+  const [theme, setTheme] = useState(() => readTheme());
+
   useEffect(() => {
-    const ret = returnUrl || (location.origin + "/auth/callback");
-    const s = document.createElement("script");
-    s.src = IDP + "/auth-client.js";
-    s.dataset.obeliskIdp = IDP; s.dataset.obeliskProject = project;
-    s.dataset.obeliskTier = tier; s.dataset.obeliskReturn = ret;
-    document.body.appendChild(s);
-    return () => { s.remove(); };
+    const ret = returnUrl || `${location.origin}/auth/callback`;
+    const script = document.createElement("script");
+    script.src = `${IDP}/auth-client.js`;
+    script.dataset.obeliskIdp = IDP;
+    script.dataset.obeliskProject = project;
+    script.dataset.obeliskTier = tier;
+    script.dataset.obeliskReturn = ret;
+    document.body.appendChild(script);
+    return () => script.remove();
   }, [project, tier, returnUrl]);
+
+  const toggleTheme = () => {
+    const next = nextTheme(theme);
+    applyTheme(next);
+    setTheme(next);
+  };
+
+  const downloadPassport = () => {
+    const blob = new Blob([exportPassport(passport)], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = href;
+    anchor.download = "call-of-doodie-porcelain-passport.json";
+    anchor.click();
+    URL.revokeObjectURL(href);
+    setNotice("Local Passport backup downloaded.");
+  };
+
+  const restorePassport = async (event) => {
+    try {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const restored = importPassport(await file.text());
+      savePassport(restored);
+      setPassport(restored);
+      setNotice("Local Passport restored on this device.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Passport restore failed.");
+    } finally {
+      event.target.value = "";
+    }
+  };
+
   return (
-    <div ref={ref} className="obelisk-passport" style={{ maxWidth: 380, margin: "0 auto", padding: 28, borderRadius: 16, background: "#0b0f17", color: "#e6edf3", textAlign: "center" }}>
-      <div style={{ fontSize: 13, letterSpacing: ".12em", textTransform: "uppercase", opacity: .6 }}>{project}</div>
-      <h1 style={{ fontSize: 22, margin: "10px 0 6px" }}>Play — Sign in</h1>
-      <p style={{ opacity: .7, fontSize: 14, margin: "0 0 22px" }}>One account. Every VaultSpark game. Your progress, carried.</p>
-      <button data-obelisk-signin style={{ width: "100%", padding: 13, border: 0, borderRadius: 10, background: "#f5c542", color: "#001018", fontWeight: 600, fontSize: 15, cursor: "pointer" }}>Play — Sign in</button>
-      <button data-obelisk-signup style={{ width: "100%", padding: 12, marginTop: 10, border: "1px solid #ff5d8f", borderRadius: 10, background: "transparent", color: "inherit", fontSize: 14, cursor: "pointer" }}>Create your player account</button>
-      <button data-obelisk-recover style={{ marginTop: 14, border: 0, background: "none", color: "inherit", opacity: .6, fontSize: 13, textDecoration: "underline", cursor: "pointer" }}>Can't sign in? Recover access</button>
-      <div style={{ marginTop: 14, fontSize: 11, opacity: .45 }}>Secured by Obelisk · passwordless · lost your device? recover with a backup code</div>
-    </div>
+    <main className="auth-shell">
+      <section className="auth-card" aria-labelledby="passport-title">
+        <header className="auth-masthead">
+          <a href="/" className="auth-brand">CALL OF <span>DOODIE</span></a>
+          <button data-theme-toggle type="button" className="auth-theme" onClick={toggleTheme} aria-label={`Switch to ${THEMES[nextTheme(theme)].label}`}>{THEMES[theme].icon} {THEMES[theme].label}</button>
+        </header>
+        <p className="auth-eyebrow">Optional identity · powered by Obelisk</p>
+        <h1 id="passport-title">Porcelain Passport</h1>
+        <p className="auth-lede">Verify one VaultSpark identity on this device. Guest play and game progress remain browser-local; cross-device progress sync is not active.</p>
+
+        {passport ? (
+          <section className="passport-receipt" aria-label="Local Passport receipt">
+            <div><span>Identity</span><strong>Verified locally</strong></div>
+            <div><span>Issuer</span><strong>{passport.issuer}</strong></div>
+            <div><span>Verified</span><strong>{new Date(passport.verifiedAt).toLocaleDateString()}</strong></div>
+            <p>This receipt identifies you to supported VaultSpark surfaces. It does not upload this game’s local progress.</p>
+            <div className="auth-actions auth-actions--compact">
+              <button type="button" onClick={downloadPassport}>Download backup</button>
+              <button type="button" onClick={() => fileRef.current?.click()}>Restore backup</button>
+              <button type="button" className="auth-danger" onClick={() => { clearPassport(); setPassport(null); setNotice("Local Passport forgotten."); }}>Forget this device</button>
+            </div>
+          </section>
+        ) : (
+          <div className="auth-actions">
+            <button data-obelisk-signin type="button" className="auth-primary">Verify with Obelisk</button>
+            <button data-obelisk-signup type="button">Create a VaultSpark identity</button>
+            <button data-obelisk-recover type="button" className="auth-link">Recover Obelisk access</button>
+          </div>
+        )}
+
+        <input ref={fileRef} className="auth-file" type="file" accept="application/json" onChange={restorePassport} aria-label="Restore Porcelain Passport backup" />
+        {notice ? <p className="auth-notice" role="status">{notice}</p> : null}
+        <footer className="auth-footer">
+          <a href="/">Continue as guest</a>
+          <span>Obelisk verifies identity; Call of Doodie keeps progress local.</span>
+          <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+        </footer>
+      </section>
+    </main>
   );
 }

@@ -25,6 +25,10 @@ import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { getStorageHealth, probeLocalStorage, STORAGE_HEALTH_EVENT } from "../utils/storageHealth.js";
 import { readPreference, writePreference } from "../utils/gamePreferences.js";
 import { resetTutorialProgress } from "../utils/tutorialProgress.js";
+import { buildScenarioCartridge, buildSewerRelayUrl, decodeScenarioCartridge } from "../utils/scenarioCartridge.js";
+import { buildNemesisChronicle } from "../utils/nemesisChronicle.js";
+import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
+import { isPlaytestMode, loadPlaytestPulse, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
 import "./home-arcade.css";
 
@@ -101,7 +105,7 @@ export default function HomeV2(props) {
   const [studioEvents, setStudioEvents] = useState([]);
   const [customSeed, setCustomSeed] = useState("");
   const [challengeMode, setChallengeMode] = useState(null);
-  const [tab, setTab] = useState("career");
+  const [tab, setTab] = useState("progress");
   const [deployOpen, setDeployOpen] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
@@ -128,6 +132,10 @@ export default function HomeV2(props) {
   const [missionStreak, setMissionStreak] = useState(0);
   const [replayInput, setReplayInput] = useState("");
   const [replayCopied, setReplayCopied] = useState(false);
+  const [scenarioInput, setScenarioInput] = useState("");
+  const [scenarioNotice, setScenarioNotice] = useState("");
+  const [playtestPulseEnabled, setPlaytestPulseState] = useState(() => isPlaytestMode());
+  const [playtestPulse, setPlaytestPulse] = useState(() => loadPlaytestPulse());
   const [inputDebugEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("debug") === "input"
@@ -176,8 +184,18 @@ export default function HomeV2(props) {
     setMissionStreak(getMissionStreak().streak || 0);
     track("home_v2_view");
     const params = new URLSearchParams(window.location.search);
+    const scenario = decodeScenarioCartridge(params.get("scenario"));
+    if (scenario) {
+      setCustomSeed(String(scenario.seed));
+      setDifficulty(scenario.difficulty);
+      setStarterLoadout?.(scenario.loadout);
+      selectMode(scenario.mode);
+      setChallengeMode(scenario.targetScore ? { seed: String(scenario.seed), diff: scenario.difficulty, vs: scenario.targetScore, vsName: scenario.rival } : null);
+      setDeployOpen(true);
+      setScenarioNotice("Scenario Cartridge verified and loaded.");
+    }
     const urlReplay = params.get("replay");
-    if (urlReplay && isValidReplayCode(urlReplay)) {
+    if (!scenario && urlReplay && isValidReplayCode(urlReplay)) {
       const r = decodeReplayCode(urlReplay);
       if (r) {
         setCustomSeed(String(r.seed));
@@ -281,6 +299,14 @@ export default function HomeV2(props) {
       recommendedAction,
     }),
     [career?.totalRuns, accountLevel, prestige, recommendedAction],
+  );
+  const nemesisChronicle = useMemo(
+    () => buildNemesisChronicle({ career: career || {}, rivalryHistory, enemyTypes: ENEMY_TYPES }),
+    [career, rivalryHistory],
+  );
+  const truthGraph = useMemo(
+    () => buildFieldManualTruth({ weapons: WEAPONS, enemies: ENEMY_TYPES, modes: MODE_DEFS }),
+    [],
   );
   const onboarding = useMemo(() => {
     const runs = career?.totalRuns || 0;
@@ -393,7 +419,7 @@ export default function HomeV2(props) {
       });
       return;
     }
-    switchTab("codex");
+    switchTab("field_manual");
   }, [challengeMode, customSeed, deploy, difficulty, journey.secondary, journey.stage, modeId, onSetDailyChallengeMode, onStart, recordFrontDoorAction, selectedLoadout.id, switchTab, todaySeedStr]);
   const completeAimCheck = useCallback((evidence = {}) => {
     const record = buildInputCalibrationRecord({
@@ -563,7 +589,7 @@ export default function HomeV2(props) {
               data-theme-toggle
             >{themePalette.icon}</button>
             <button style={iconBtn} onClick={() => setShowSettings(true)} aria-label="Settings">⚙</button>
-            <button style={iconBtn} onClick={() => switchTab("codex")} aria-label="Help / Codex">❓</button>
+            <button style={iconBtn} onClick={() => switchTab("field_manual")} aria-label="Open Field Manual">❓</button>
           </div>
         </div>
 
@@ -598,7 +624,7 @@ export default function HomeV2(props) {
 
         <div style={journeyCard}>
           <div style={{ minWidth: 0 }}>
-            <div style={{ color: "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>JOURNEY · {journey.label.toUpperCase()}</div>
+            <div style={{ color: "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>ORDERS · {journey.label.toUpperCase()}</div>
             <div style={{ color: "#EEE", fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>
             <div style={{ color: journey.secondary.accent, fontSize: 11, fontWeight: 900, marginTop: 6 }}>
               NEXT: {journey.secondary.title}
@@ -753,12 +779,35 @@ export default function HomeV2(props) {
                 style={{ marginLeft: "auto", padding: "5px 10px", fontSize: 10, fontWeight: 800, letterSpacing: 1, color: replayCopied ? "#00FF88" : "#FFD700", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, cursor: "pointer" }}
               >{replayCopied ? "✓ LINK COPIED" : "🔗 SHARE LINK"}</button>
             </div>
+            <div data-testid="scenario-cartridge" style={{ marginTop: 10, display: "grid", gap: 7, paddingTop: 9, borderTop: "1px solid rgba(127,230,255,0.18)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
+                <strong style={{ color: "#7FE6FF", fontSize: 10, letterSpacing: 1.4 }}>SCENARIO CARTRIDGE</strong>
+                <span style={{ color: "#888", fontSize: 9 }}>seed + mode + difficulty + loadout + optional rival</span>
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                <input value={scenarioInput} onChange={(event) => setScenarioInput(event.target.value.trim())} placeholder="paste cartridge code" aria-label="Scenario Cartridge code" style={{ flex: "1 1 190px", minWidth: 0, padding: "6px 8px", fontSize: 10, fontFamily: "monospace", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(127,230,255,0.25)", borderRadius: 6, color: "#EEE" }} />
+                <button type="button" style={quickBtn} onClick={() => {
+                  const cartridge = decodeScenarioCartridge(scenarioInput);
+                  if (!cartridge) { setScenarioNotice("Cartridge rejected: schema or integrity check failed."); return; }
+                  setCustomSeed(String(cartridge.seed)); setDifficulty(cartridge.difficulty); setStarterLoadout?.(cartridge.loadout); selectMode(cartridge.mode);
+                  setChallengeMode(cartridge.targetScore ? { seed: String(cartridge.seed), diff: cartridge.difficulty, vs: cartridge.targetScore, vsName: cartridge.rival } : null);
+                  setScenarioNotice("Scenario Cartridge verified and loaded.");
+                }}>LOAD</button>
+                <button type="button" style={{ ...quickBtn, color: "#7FE6FF", borderColor: "rgba(127,230,255,0.4)" }} onClick={async () => {
+                  const cartridge = buildScenarioCartridge({ seed: Number(customSeed || todaySeedStr), mode: modeId, difficulty, loadout: selectedLoadout.id, targetScore: challengeMode?.vs, rival: challengeMode?.vsName });
+                  const url = buildSewerRelayUrl(cartridge);
+                  try { await navigator.clipboard?.writeText?.(url); setScenarioNotice("Sewer Relay copied — asynchronous, deterministic, and account-free."); }
+                  catch { setScenarioNotice("Relay built; clipboard access was unavailable."); }
+                }}>SEWER RELAY</button>
+              </div>
+              {scenarioNotice && <div role="status" style={{ color: scenarioNotice.includes("rejected") ? "#FF9C88" : "#9BFFBD", fontSize: 9 }}>{scenarioNotice}</div>}
+            </div>
           </div>
         )}
 
         <PrimaryWeaponSelector selectedIndex={primaryWeaponIndex} onSelect={onSelectPrimaryWeapon} />
 
-        <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>QUICK PLAY</div>
+        <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>OPERATIONS</div>
         {/* Quick actions are grouped by player intent instead of mixing play,
             navigation, installation, and diagnostic receipts in one strip. */}
         <div style={quickRow}>
@@ -883,6 +932,17 @@ export default function HomeV2(props) {
               {inputQaReceipt.deviceIndex != null ? ` · #${inputQaReceipt.deviceIndex}` : ""}
             </span>
           )}
+          <button
+            type="button"
+            aria-pressed={playtestPulseEnabled}
+            style={{ ...quickBtn, borderColor: playtestPulseEnabled ? "rgba(180,140,255,0.55)" : themePalette.line, color: playtestPulseEnabled ? "#D5C2FF" : themePalette.muted }}
+            onClick={() => {
+              const next = !playtestPulseEnabled;
+              setPlaytestPulseEnabled(next);
+              setPlaytestPulseState(next);
+              setPlaytestPulse(loadPlaytestPulse());
+            }}
+          >🫀 PLAYTEST PULSE {playtestPulseEnabled ? "ON" : "OFF"} · {playtestPulse?.sampleSize || 0} LOCAL</button>
         </div>
 
         {/* Command Center — full panel access */}
@@ -893,7 +953,7 @@ export default function HomeV2(props) {
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, fontFamily: "inherit", padding: 0 }}
               aria-expanded={cmdCenterExpanded}
             >
-              PLAYER HUB {cmdCenterExpanded ? "▴" : "▾"}
+              PROGRESS TOOLS {cmdCenterExpanded ? "▴" : "▾"}
             </button>
             {missionStreak >= 2 && (
               <span style={{ fontSize: 10, color: "#FF8C00", fontWeight: 900, letterSpacing: 1 }}>
@@ -1023,24 +1083,17 @@ export default function HomeV2(props) {
 
         {/* Tabbed nav */}
         <div className="arcade-home__tabs" style={tabsRow}>
-          {["career", "codex", "settings", "support"].map(t => (
+          {["progress", "field_manual", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>
-              {t === "career" && "📊 CAREER"}
-              {t === "codex" && "📖 CODEX"}
-              {t === "settings" && "⚙ SETTINGS"}
+              {t === "progress" && "📊 PLAYER PROGRESS"}
+              {t === "field_manual" && "📖 FIELD MANUAL"}
               {t === "support" && "❤️ SUPPORT"}
             </button>
           ))}
         </div>
         <div style={tabBody}>
-          {tab === "career" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} />}
-          {tab === "codex" && <CodexTab />}
-          {tab === "settings" && (
-            <div style={{ textAlign: "center" }}>
-              <button style={{ ...quickBtn, padding: "10px 20px" }} onClick={() => setShowSettings(true)}>⚙ OPEN SETTINGS PANEL</button>
-              <div style={{ fontSize: 10, color: "#888", marginTop: 10 }}>Audio, visuals, accessibility, controls, colorblind + reduced-motion modes</div>
-            </div>
-          )}
+          {tab === "progress" && <CareerTab career={career} meta={meta} missions={missions} missionProgress={missionProgress} onOpenMetaTree={() => setShowMetaTree(true)} nemesis={nemesisChronicle} />}
+          {tab === "field_manual" && <CodexTab truthGraph={truthGraph} />}
           {tab === "support" && (
             <SupportTab onOpen={() => setShowSupporter(true)} />
           )}
@@ -1278,7 +1331,7 @@ function AimCheckPanel({ controllerType, onVerify, onDiagnostics, onClose }) {
     </div>
   );
 }
-function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree }) {
+function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree, nemesis }) {
   if (!career) return <div style={{ color: "#888", textAlign: "center" }}>Loading…</div>;
   const incomplete = countIncompleteMissions(missions, missionProgress);
   return (
@@ -1297,6 +1350,13 @@ function CareerTab({ career, meta, missions, missionProgress, onOpenMetaTree }) 
       <div style={{ marginTop: 12, fontSize: 10, color: "#888", textAlign: "center" }}>
         Daily missions: <strong style={{ color: incomplete > 0 ? "#FFD700" : "#00FF88" }}>{incomplete}</strong> incomplete
       </div>
+      <div data-testid="nemesis-chronicle" style={{ marginTop: 12, padding: "11px 12px", borderRadius: 9, border: "1px solid rgba(255,105,180,0.3)", background: "linear-gradient(135deg,rgba(255,105,180,0.08),rgba(127,230,255,0.04))" }}>
+        <div style={{ color: "#FF9BCD", fontSize: 9, fontWeight: 900, letterSpacing: 1.7 }}>{nemesis.threat} · CHAPTER {nemesis.chapter}/3</div>
+        <div style={{ color: "#FFF", fontSize: 13, fontWeight: 900, marginTop: 4 }}>{nemesis.title}</div>
+        <div style={{ color: "#CCC", fontSize: 10, lineHeight: 1.45, marginTop: 3 }}>{nemesis.detail}</div>
+        <div style={{ color: "#9FEAFF", fontSize: 10, lineHeight: 1.45, marginTop: 5 }}>Countermove: {nemesis.counterMove}</div>
+        <div style={{ color: "#A98CC8", fontSize: 9, marginTop: 5 }}>{nemesis.cosmeticSignal}</div>
+      </div>
     </div>
   );
 }
@@ -1310,17 +1370,29 @@ function StatChip({ label, value }) {
   );
 }
 
-function CodexTab() {
-  const [section, setSection] = useState("arsenal");
+function CodexTab({ truthGraph }) {
+  const [section, setSection] = useState("truth");
   const btn = (active) => ({ padding: "5px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", background: active ? "rgba(255,107,53,0.14)" : "transparent", border: "1px solid " + (active ? "rgba(255,107,53,0.5)" : "rgba(255,255,255,0.12)"), color: active ? "#FF9960" : "#AAA", borderRadius: 6 });
   return (
     <div>
       <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 10, flexWrap: "wrap" }}>
+        <button style={btn(section === "truth")} onClick={() => setSection("truth")}>◎ LIVE TRUTH</button>
         <button style={btn(section === "arsenal")}  onClick={() => setSection("arsenal")}>🔫 ARSENAL</button>
         <button style={btn(section === "mostwanted")} onClick={() => setSection("mostwanted")}>👾 MOST WANTED</button>
         <button style={btn(section === "rules")}    onClick={() => setSection("rules")}>📜 RULES</button>
         <button style={btn(section === "news")}     onClick={() => setSection("news")}>✦ WHAT'S NEW</button>
       </div>
+      {section === "truth" && (
+        <div data-testid="field-manual-truth" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", gap: 8 }}>
+          {truthGraph.claims.map((claim) => (
+            <a key={claim.id} href={claim.source} style={{ display: "block", padding: "10px 11px", borderRadius: 8, border: "1px solid rgba(127,230,255,0.16)", background: "rgba(127,230,255,0.04)", color: "inherit", textDecoration: "none" }}>
+              <div style={{ color: "#7FE6FF", fontSize: 9, letterSpacing: 1.4, fontWeight: 900 }}>{claim.label.toUpperCase()} · {claim.effectiveDate}</div>
+              <div style={{ color: "#FFF", fontSize: 13, fontWeight: 900, marginTop: 4 }}>{claim.value}</div>
+              <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.45, marginTop: 4 }}>{claim.evidence}</div>
+            </a>
+          ))}
+        </div>
+      )}
       {section === "arsenal" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 6 }}>
           {WEAPONS.map((w, i) => (

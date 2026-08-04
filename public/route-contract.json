@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
-  "contentVersion": "2026-07-26",
-  "fingerprint": "a894962ab5be1641837834696a714c7f9624730efa92c922b117f61162c66f30",
+  "contentVersion": "2026-08-03",
+  "fingerprint": "1596e47ab465ce5c4e82e073ae1f4d614fb2dcd2e1f2d4f4e11be83f7b9f7f53",
   "coverage": {
     "routes": 17,
     "headerRoutes": 5,
     "footerRoutes": 17,
-    "visualAuditRoutes": 17,
+    "visualAuditRoutes": 19,
     "generatedPages": 12
   },
   "gameplay": {
