@@ -1,19 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-03 (Session 137 closeout) -->
+<!-- generated-at: 2026-08-04 (Session 138 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S137 ════════════════════╗
-║  Date: 2026-08-03  ·  SIL: 999/1000  ·  Velocity: 13 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S138 ════════════════════╗
+║  Date: 2026-08-04  ·  SIL: 999/1000  ·  Velocity: 13 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Architecture: 4,999 App lines, 1,768 inline-loop span, and u  ║
-║  ✓ Validation: 935/935 tests across 143 files, strict lint, pro  ║
-║  ✓ Staging: `https://session-137-staging.call-of-doodie.pages.d  ║
-║  ✓ Performance: production HomeV2 median LCP 3,226 ms versus v1  ║
+║  ✓ Validation: 954/954 tests across 152 files; strict lint; bui  ║
+║  ✓ Visual evidence: hosted 19-route × 2-theme × 3-width matrix   ║
+║  ✓ Staging: `https://session-138-staging.call-of-doodie.pages.d  ║
+║  ✓ Performance: default staging median LCP 1,301ms across three  ║
 ║  ✓ Release: engineering staging is green; SPARKED remains NO-GO  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
@@ -38,7 +38,7 @@
 ║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (~/.codex or ~/.claude project memory)           ║
+║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
 ║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
@@ -46,23 +46,21 @@
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-137-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-138-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        120/163                                          ║
+║  Doctor:        125/167                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         935/935                                          ║
+║  Tests:         954/954                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         2d ago                                           ║
+║  IGNIS:         3d ago                                           ║
 ║  Truth:         green-code-no-go-launch                          ║
-║  Sanitization:  6d ago                                           ║
+║  Sanitization:  7d ago                                           ║
 ║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
-║  #1: Repo-executable Genius List exhausted                       ║
-║      6 deferred item(s) remain visible behind evidence, credent  ║
-║      ↳ node scripts/ops.mjs genius-list                          ║
+║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
 ╚════════════════════════════════════════════════════════════════╝
 ```
 
