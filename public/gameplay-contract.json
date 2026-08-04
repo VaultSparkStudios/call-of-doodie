@@ -596,6 +596,18 @@
       ]
     }
   ],
+  "prestige": {
+    "requiredAccountLevel": 25,
+    "totalKillsRequired": 11520,
+    "levelFormula": "floor(sqrt(totalCareerKills / 20)) + 1",
+    "projectionScenariosKillsPerRun": [
+      10,
+      25,
+      50
+    ],
+    "projectionClaimScope": "descriptive scenario, not promised player outcome",
+    "source": "src/utils/progressionCurve.js"
+  },
   "challengeLinks": {
     "replayCode": {
       "queryParameter": "replay",

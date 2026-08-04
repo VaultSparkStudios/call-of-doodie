@@ -35,6 +35,7 @@ import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 import { runBriefPreflight } from './lib/brief-preflight.mjs';
 import { normalizeGeniusBlock, renderHumanPressureBlock } from './lib/startup-brief-boxes.mjs';
 import { run as codexTrustedProjectRun } from './check-codex-trusted-project.mjs';
+import { updateProjectStatus } from './lib/write-project-status.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -1135,13 +1136,8 @@ if (silMaxSession == null) {
 } else if (statusLatest != null && statusLatest !== silMaxSession) {
   // PROJECT_STATUS.json lagged the SIL log (the historical failure mode). Self-heal it.
   try {
-    const statusPath = path.join(root, 'context', 'PROJECT_STATUS.json');
-    const live = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
-    // Sync ONLY the session number. silScore/silCategoriesV3 are owned by the
-    // closeout SIL scorer — writing silScore here would desync it from the
-    // category breakdown (tier1-sil-migration invariant: score == sum(categories)).
-    live.currentSession = silMaxSession;
-    fs.writeFileSync(statusPath, JSON.stringify(live, null, 2) + '\n', 'utf8');
+    // Sync only the session number through the invariant-preserving atomic writer.
+    updateProjectStatus(root, (live) => ({ ...live, currentSession: silMaxSession }));
     console.log(`  ↻ self-heal: PROJECT_STATUS.currentSession ${statusLatest} → ${silMaxSession} (synced from SIL log)`);
   } catch (e) {
     console.warn(`  ⚠ could not self-heal PROJECT_STATUS.json: ${e.message}`);

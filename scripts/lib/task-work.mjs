@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { parseSectionCheckboxItems } from "./task-board.mjs";
 
 export const GENIUS_INPUTS = [
   "context/TASK_BOARD.md",
@@ -21,10 +22,6 @@ const STATUS_REASONS = {
   "cross-repo-locked": "Owned by another repository and must travel through Studio Ark.",
   "human-blocked": "Explicitly retained in the Human Action Required lane after agent preflight.",
 };
-
-function normalizedTitle(line) {
-  return String(line || "").replace(/^- \[ \]\s*/, "").trim();
-}
 
 export function slugifyTask(value) {
   return String(value || "")
@@ -74,21 +71,17 @@ export function classifyTaskTitle(title, section = "Now") {
   };
 }
 
-export function readMarkdownSection(markdown, heading) {
-  return String(markdown || "").match(new RegExp(`## ${heading}\\s+([\\s\\S]*?)(?:\\n## |\\n$)`))?.[1] || "";
-}
-
 export function collectTaskWork(markdown, sections = ["Now", "Deferred"]) {
   const items = [];
   let sourceOrder = 0;
   for (const section of sections) {
-    const body = readMarkdownSection(markdown, section);
-    for (const line of body.split(/\r?\n/).filter((entry) => entry.trim().startsWith("- [ ]"))) {
-      const title = normalizedTitle(line);
+    for (const node of parseSectionCheckboxItems(markdown, section)) {
+      const title = node.body;
       const classification = classifyTaskTitle(title, section);
       items.push({
         slug: slugifyTask(title),
         title,
+        line: node.line,
         source: `context/TASK_BOARD.md#${section.toLowerCase().replace(/\s+/g, "-")}`,
         section,
         sourceOrder: sourceOrder++,

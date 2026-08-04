@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 138 shipped all 12 full-product audit items plus one second-order startup gate: a 73%-smaller first-frame shell, one local Insight Graph verdict, a recomposed porcelain command center, human/agent Field Manual truth, Playtest Pulse, Scenario Cartridges/Sewer Relay, Nemesis Chronicle, live leaderboard hardening, truthful Passport, and bounded Hot Context.",
+  "currentFocus": "Session 139 shipped eight verified audit items and two second-order innovations: one task semantics engine, atomic PROJECT_STATUS writes, closed-loop Playtest Pulse, a three-run journey, prestige pressure projection, one execution-budget ledger, a QR reference-vector court, lifecycle hooks, render-loop stability, and provider-first launch truth.",
   "nextMilestone": "Preserve NO-GO while gathering consented Playtest Pulse and exact-main production funnel evidence; complete verified inbound email, physical PWA/gamepad/full-run media QA, project-scoped analytics/Sentry, publication, and founder approval before SPARKED. Retain HomeV1 until its retirement court passes.",
   "testingSurfaces": [
     {
@@ -219,6 +219,22 @@
       "status": "green",
       "type": "staging-performance",
       "command": "Three clean origin-scoped Lighthouse runs per surface: default median performance 1.00, LCP 1301ms, CLS 0, TBT 8ms; production/funnel authority remains separate"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 139 — 979/979 across 161 files in four direct Vitest shards; strict lint; schema/public/security/dependency/runtime/architecture/replay/health gates green; npm audit 0"
+    },
+    {
+      "status": "green",
+      "type": "local-rendered-pixel-qa",
+      "command": "Session 139 — 19 routes × 2 themes × 3 widths: 969/969; six hash-bound captures; focused Prestige desktop/mobile state probe; direct host pixel viewer unavailable (CryptUnprotectData), so manual pixel-perfect review is unclaimed"
+    },
+    {
+      "status": "green",
+      "url": "https://session-139-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 139 recovery — brokered direct upload; immutable https://e4f2498c.call-of-doodie.pages.dev/; hosted 19-route × 2-theme × 3-width visual court 969/969"
     }
   ],
   "blockers": [
@@ -236,19 +252,19 @@
   "ignisScore": 45706,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "silSession": 138,
+  "silSession": 139,
   "silScore": 999,
   "silAvg3": 999,
   "silVelocity": 13,
   "silDebt": "decreasing",
   "silLastSession": "2026-08-03",
-  "currentSession": 138,
+  "currentSession": 139,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 954,
-  "testsTotal": 954,
-  "entropyScore": 0.189,
-  "entropyLastComputed": "2026-08-03",
+  "testsPassing": 979,
+  "testsTotal": 979,
+  "entropyScore": 0.196,
+  "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 499.5,
@@ -276,30 +292,38 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-138-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-03T23:34:27Z",
+  "stagingUrl": "https://session-139-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-04T18:25:54.925Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
-    "session": 138,
+    "session": 139,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-03T23:34:27Z",
+    "enumeratedAt": "2026-08-04T18:59:52.400Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
     "date": "2026-08-04",
-    "ranAt": "2026-08-04T01:54:42.262Z",
+    "ranAt": "2026-08-04T20:51:06.445Z",
     "overallPass": true,
-    "passing": 125,
-    "warning": 38,
+    "passing": 132,
+    "warning": 31,
     "failing": 1,
     "blockingFailing": 0,
     "advisoryFailing": 1,
     "skipped": 3,
     "ran": 164,
     "total": 167,
-    "score": 76
+    "score": 80
   },
-  "lastSessionSummary": "Session 138 shipped all 12 full-product audit items plus a second-order startup enforcement item: fast runtime shell, one-verdict Insight Graph, porcelain operations table, Field Manual truth graph, local Pulse/Cartridge/Chronicle engagement, live leaderboard hardening, truthful Passport, accessibility, and bounded Hot Context."
+  "lastSessionSummary": "Session 139 shipped eight verified audit items and two second-order innovations: one task semantics engine, atomic PROJECT_STATUS writes, closed-loop Playtest Pulse, a three-run journey, prestige pressure projection, one execution-budget ledger, a QR reference-vector court, lifecycle hooks, render-loop stability, and provider-first launch truth.",
+  "testsAssertionsPassing": 979,
+  "testsAssertionsTotal": 979,
+  "testsAssertionsFiles": 161,
+  "testsFlaky": [],
+  "testsInconclusive": [],
+  "testsEnvBlocked": [],
+  "testsDeferred": [],
+  "testsBudgetExhausted": false
 }

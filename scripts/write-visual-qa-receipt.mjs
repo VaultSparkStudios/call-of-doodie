@@ -14,6 +14,12 @@ const valueAfter = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
 };
+const valuesAfter = (name) => process.argv.reduce((values, arg, index) => {
+  if (arg === name && process.argv[index + 1]) values.push(process.argv[index + 1]);
+  return values;
+}, []);
+const fixNotes = valuesAfter("--fix");
+
 const auditDir = path.resolve(root, valueAfter("--audit-dir", "output/playwright/session-137-staging"));
 const canonicalDir = path.join(root, "docs", "visual-qa");
 const auditPath = path.join(auditDir, "visual-audit-receipt.json");
@@ -21,10 +27,12 @@ const audit = JSON.parse(fs.readFileSync(auditPath, "utf8"));
 if (!audit?.summary?.pass) throw new Error("Refusing visual receipt: source matrix did not pass.");
 
 const selected = [
-  { source: "home--sewer-night--390.png", file: "home-dark-mobile.png", theme: "dark", width: 390, height: 1000, page: "Home v2 default command center and all-open loadout" },
-  { source: "home--porcelain-day--1440.png", file: "home-light-desktop.png", theme: "light", width: 1440, height: 1000, page: "Home v2 default command center and all-open loadout" },
+  { source: "home--sewer-night--390.png", file: "home-dark-mobile.png", theme: "dark", width: 390, height: 1000, page: "Home v2 first-run command center" },
+  { source: "home--porcelain-day--1440.png", file: "home-light-desktop.png", theme: "light", width: 1440, height: 1000, page: "Home v2 first-run command center" },
   { source: "login--sewer-night--1440.png", file: "login-dark-desktop.png", theme: "dark", width: 1440, height: 1000, page: "Porcelain Passport login receipt surface" },
   { source: "auth-callback--porcelain-day--390.png", file: "auth-callback-light-mobile.png", theme: "light", width: 390, height: 1000, page: "Porcelain Passport callback receipt surface" },
+  { source: "prestige--sewer-night--1440.png", file: "prestige-dark-desktop.png", theme: "dark", width: 1440, height: 1000, page: "Prestige pressure gauge" },
+  { source: "prestige--porcelain-day--390.png", file: "prestige-light-mobile.png", theme: "light", width: 390, height: 1000, page: "Prestige pressure gauge" },
 ];
 
 const sha256 = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
@@ -63,13 +71,11 @@ const receipt = {
     renderedPixelsReviewed: true,
     reviewer: "Playwright rendered-pixel analytics and screenshot artifact court",
     findings: [
-      "The browser measured Home v2 at 390px dark and 1440px light with no horizontal overflow, clipped primary action, page error, or contrast failure.",
-      "Login and callback are included in the route court; both expose a theme toggle and pass the same geometry, contrast, overflow, and runtime-error assertions as public routes.",
-      "All 969 computed-style and rendered-geometry assertions passed across nineteen routes, two project themes, and 390px, 768px, and 1440px widths.",
+      `The source matrix passed ${audit.summary.passed}/${audit.summary.total} checks across nineteen routes, both project themes, and 390px, 768px, and 1440px widths.`,
+      "Home first-run captures and focused Prestige gauge captures are hash-bound at dark/mobile and light/desktop complementary viewports.",
+      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
     ],
-    fixesApplied: [
-      "Added auth routes to the visual contract, added missing auth theme controls, and fixed the light-theme toggle contrast defect discovered by the matrix.",
-    ],
+    fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],
     blockingDefectsOpen: 0,
   },
 };

@@ -93,6 +93,21 @@ const RULES = [
     signupUiOnly: true,
   },
   {
+    id: 'posthog-project-key',
+    test: /posthog|vite_posthog_key/i,
+    capability: 'posthog.api',
+    category: 'Analytics',
+    elevatedProbe: 'Resolve the PostHog capability before treating GitHub secret write access as sufficient.',
+    probeCommands: [
+      'node scripts/ops.mjs check-secrets --for posthog.api',
+      'node scripts/ops.mjs check-secrets --for github.org',
+    ],
+    humanAction: 'Studio Owner must create or authorize the project-scoped PostHog key when the PostHog capability is missing.',
+    attemptable: true,
+    signupUiOnly: true,
+  },
+
+  {
     id: 'github-workflow',
     test: /github|workflow scope|workflow token|repo creation|label/i,
     capability: 'github.org',

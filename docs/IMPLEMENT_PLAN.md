@@ -1,3 +1,31 @@
+# Implementation Plan — Audit 2026-08-04 — COMPLETE
+
+Source: `docs/AUDIT_2026-08-04.json`. All eight live-premise items shipped in dependency order; two second-order defects discovered by the new courts were also root-fixed.
+
+## Wave A — One operational truth — COMPLETE
+
+1. `one-task-semantics` — shared bounded task AST, reconciliation, and parser drift ratchet.
+2. `atomic-project-status-boundary` — serialized atomic mutation boundary and direct-writer ratchet.
+3. `one-execution-budget-ledger` — one self-validating flat-rate execution-efficiency ledger.
+
+## Wave B — One player learning loop — COMPLETE
+
+4. `closed-loop-playtest-pulse` — order-independent answer + continuation Pulse, including RUN THE FIX.
+5. `evidence-backed-first-three-runs` — reachable, source-derived Run 1/2/3 journey.
+6. `prestige-pressure-gauge` — truthful source-derived runway with no balance retune or outcome promise.
+
+## Wave C — Boundary courts — COMPLETE
+
+7. `qr-reference-vector-court` — fail-closed byte bound and complete deterministic matrix court.
+8. `shell-lifecycle-hook-boundary` — install/navigation lifecycle hook with cleanup tests.
+
+## Second-order saturation — COMPLETE
+
+9. `render-side-preference-read` — the 969-check browser matrix exposed a cross-component render update; one-time ref initialization removed it and the full recapture passed.
+10. `provider-aware-secret-blocker` — live PostHog/GitHub probing exposed a false executable classification; provider capability now gates repository-secret readiness.
+
+---
+
 # Implementation Plan — Audit 2026-08-03
 
 Source: `docs/AUDIT_2026-08-03.json`. Foundations precede façades; shared contracts precede their human and agent projections; measurement follows each behavior wave rather than being deferred to the end.

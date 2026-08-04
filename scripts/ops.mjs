@@ -7,6 +7,7 @@ import { spawnSync } from "./lib/safe-spawn.mjs";
 import { dedupeInnovationCandidates } from "./lib/innovation-candidates.mjs";
 import { syncDoctorScore } from "./lib/doctor-score-sync.mjs";
 import { collectTaskWork, slugifyTask } from "./lib/task-work.mjs";
+import { parseSectionCheckboxItems } from "./lib/task-board.mjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -67,8 +68,7 @@ function readText(relPath) {
 
 function printActionQueue() {
   const board = readText("context/TASK_BOARD.md");
-  const now = board.match(/## Now\s+([\s\S]*?)(?:\n## |\n$)/)?.[1] || "";
-  const items = now.split(/\r?\n/).filter(line => line.trim().startsWith("- [ ]"));
+  const items = parseSectionCheckboxItems(board, "Now");
   console.log("Action Queue");
   console.log("============");
   if (items.length === 0) {
@@ -76,30 +76,10 @@ function printActionQueue() {
     return;
   }
   items.forEach((item, index) => {
-    console.log(`${index + 1}. ${item.replace(/^- \[ \]\s*/, "")}`);
+    console.log(`${index + 1}. ${item.body}`);
   });
 }
 
-function blockerPreflight() {
-  const board = readText("context/TASK_BOARD.md");
-  const human = board.match(/## Human Action Required\s+([\s\S]*?)(?:\n## |\n$)/)?.[1] || "";
-  const items = human.split(/\r?\n/).filter(line => line.trim().startsWith("- [ ]"));
-  console.log("Blocker Preflight");
-  console.log("=================");
-  if (items.length === 0) {
-    console.log("No human-action items found.");
-    return;
-  }
-  for (const item of items) {
-    const text = item.replace(/^- \[ \]\s*/, "");
-    const capability = /posthog|sentry/i.test(text) ? "analytics"
-      : /kofi|webhook/i.test(text) ? "kofi-webhook"
-        : null;
-    const status = capability ? `check with: node scripts/check-secrets.mjs --for ${capability}` : "manual/device or publication step";
-    console.log(`- ${text}`);
-    console.log(`  ${status}`);
-  }
-}
 
 function collectOpenTasks() {
   const board = readText("context/TASK_BOARD.md");
@@ -205,8 +185,7 @@ switch (command) {
     printActionQueue();
     break;
   case "blocker-preflight":
-    blockerPreflight();
-    break;
+    runNode(path.join(__dirname, "blocker-preflight.mjs"), args);
   case "c":
   case "closeout":
     runNode(path.join(__dirname, "closeout-autopilot.mjs"), args);

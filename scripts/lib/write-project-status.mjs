@@ -71,25 +71,93 @@ export function enforceSilInvariant(status) {
   return { status: v6.status, violations };
 }
 
+const LOCK_NAME = '.project-status.lock';
+const waitBuffer = new Int32Array(new SharedArrayBuffer(4));
+
+function pause(ms) {
+  Atomics.wait(waitBuffer, 0, 0, Math.max(1, ms));
+}
+
+/** Serialize every status mutation behind one bounded, stale-recovering lock. */
+export function withProjectStatusLock(repoRoot, work, { timeoutMs = 2500, staleMs = 30_000, pollMs = 20 } = {}) {
+  const contextDir = path.join(repoRoot, 'context');
+  const lockPath = path.join(contextDir, LOCK_NAME);
+  fs.mkdirSync(contextDir, { recursive: true });
+  const started = Date.now();
+  const lockOwnerId = `${process.pid}:${started}:${Math.random().toString(36).slice(2)}`;
+  let handle = null;
+  while (handle == null) {
+    try {
+      handle = fs.openSync(lockPath, 'wx');
+      fs.writeFileSync(handle, lockOwnerId, 'utf8');
+    } catch (error) {
+      if (error?.code !== 'EEXIST') throw error;
+      try {
+        if (Date.now() - fs.statSync(lockPath).mtimeMs > staleMs) {
+          fs.unlinkSync(lockPath);
+          continue;
+        }
+      } catch (statError) {
+        if (statError?.code === 'ENOENT') continue;
+        throw statError;
+      }
+      if (Date.now() - started >= timeoutMs) {
+        throw new Error(`PROJECT_STATUS write lock timed out after ${timeoutMs}ms: ${lockPath}`);
+      }
+      pause(pollMs);
+    }
+  }
+  try {
+    return work();
+  } finally {
+    try { fs.closeSync(handle); } catch { /* already closed */ }
+    try {
+      if (fs.readFileSync(lockPath, 'utf8') === lockOwnerId) fs.unlinkSync(lockPath);
+    } catch { /* lock cleanup is best-effort */ }
+  }
+}
+
+function writeProjectStatusUnlocked(repoRoot, status, { touchLastUpdated = true, statusPath = null } = {}) {
+  const { status: fixed, violations } = enforceSilInvariant(status);
+  if (touchLastUpdated) fixed.lastUpdated = new Date().toISOString().slice(0, 10);
+  const p = statusPath || path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  const temporary = path.join(path.dirname(p), `.PROJECT_STATUS.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2)}.tmp`);
+  try {
+    fs.writeFileSync(temporary, JSON.stringify(fixed, null, 2) + '\n', 'utf8');
+    fs.renameSync(temporary, p);
+  } finally {
+    try { if (fs.existsSync(temporary)) fs.unlinkSync(temporary); } catch { /* best-effort */ }
+  }
+  return { written: p, violations, status: fixed };
+}
+
 /**
  * Validate + write context/PROJECT_STATUS.json under the invariant.
  * Returns { written, violations }. Throws only on I/O failure.
  */
 export function writeProjectStatus(repoRoot, status, { touchLastUpdated = true } = {}) {
-  const { status: fixed, violations } = enforceSilInvariant(status);
-  if (touchLastUpdated) fixed.lastUpdated = new Date().toISOString().slice(0, 10);
-  const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
-  fs.mkdirSync(path.dirname(p), { recursive: true });
-  fs.writeFileSync(p, JSON.stringify(fixed, null, 2) + '\n');
-  return { written: p, violations };
+  return withProjectStatusLock(repoRoot, () => writeProjectStatusUnlocked(repoRoot, status, { touchLastUpdated }));
 }
 
 /** Read-modify-write helper: apply a mutator fn under the invariant. */
 export function updateProjectStatus(repoRoot, mutate, opts = {}) {
-  const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
-  const current = JSON.parse(fs.readFileSync(p, 'utf8'));
-  const next = mutate({ ...current }) || current;
-  return writeProjectStatus(repoRoot, next, opts);
+  return withProjectStatusLock(repoRoot, () => {
+    const p = path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
+    const current = JSON.parse(fs.readFileSync(p, 'utf8'));
+    const next = mutate({ ...current }) || current;
+    return writeProjectStatusUnlocked(repoRoot, next, opts);
+  }, opts);
+}
+
+/** Atomic read-modify-write for status fixtures or imported project paths. */
+export function updateProjectStatusFile(statusPath, mutate, opts = {}) {
+  const root = path.dirname(path.resolve(statusPath));
+  return withProjectStatusLock(root, () => {
+    const current = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+    const next = mutate({ ...current }) || current;
+    return writeProjectStatusUnlocked(root, next, { ...opts, statusPath });
+  }, opts);
 }
 
 // ── CLI ──────────────────────────────────────────────────────────────────────
@@ -106,7 +174,7 @@ if (isMain) {
   const { status: fixed, violations } = enforceSilInvariant(current);
   if (args.includes('--fix')) {
     if (violations.length) {
-      fs.writeFileSync(p, JSON.stringify(fixed, null, 2) + '\n');
+      writeProjectStatus(repoRoot, fixed, { touchLastUpdated: false });
       console.log(`✓ fixed ${violations.length} violation(s):`);
       for (const v of violations) console.log(`  - ${v.field}=${JSON.stringify(v.value)} → ${v.fix}`);
     } else {
@@ -124,4 +192,4 @@ if (isMain) {
   process.exit(0);
 }
 
-export default { enforceSilInvariant, writeProjectStatus, updateProjectStatus };
+export default { enforceSilInvariant, withProjectStatusLock, writeProjectStatus, updateProjectStatus, updateProjectStatusFile };

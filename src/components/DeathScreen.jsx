@@ -25,7 +25,7 @@ import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixCo
 import { describeFormationPressure, describePressureArc } from "../systems/pressureArc.js";
 import { describeDamageSequence } from "../systems/damageSequence.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
-import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestMilestone, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
+import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestContinuation, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -88,9 +88,8 @@ export default function DeathScreen({
     }
   };
   const recordPlaytestChoice = (continuation) => {
-    annotateActivePlaytestFlight({ continuation });
-    const next = recordActivePlaytestMilestone("continuation", { meta: { action: continuation } });
-    if (next) setPlaytestReceipt(next);
+    const next = recordActivePlaytestContinuation(continuation);
+    if (next?.receipt) setPlaytestReceipt(next.receipt);
   };
   const copyPlaytestReceipt = async () => {
     const portable = buildPortablePlaytestReceipt(playtestReceipt || loadPlaytestFlight());
@@ -639,6 +638,7 @@ export default function DeathScreen({
   });
 
   const executeRunTheFix = () => {
+    recordPlaytestChoice(runTheFix.action.type || "run_the_fix");
     track("run_the_fix_accept", {
       action: runTheFix.action.type,
       seed: runTheFix.action.seed || null,

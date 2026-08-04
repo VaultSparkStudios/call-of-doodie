@@ -1,0 +1,259 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-08-04",
+  "session": 139,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "infrastructure-plus-product",
+  "meta": {
+    "generatedAt": "2026-08-04",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "infrastructure-plus-product",
+    "candidateCount": 29,
+    "promotedCount": 8,
+    "combinedPriority": 214.5,
+    "top3": [
+      "one-task-semantics",
+      "atomic-project-status-boundary",
+      "closed-loop-playtest-pulse"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Fresh Studio Oracle preverification plus direct inspection of the live task board, status writers, execution-budget ledgers, DeathScreen continuation path, First 3 Runs model, progression curve, architecture receipt, and QR share path. Oracle reported evidence-found for task parsing, ledger divergence, Pulse continuation, onboarding, and progression; it returned a lexical no-evidence result for the status-writer wording, while direct source inspection found exact fs.writeFileSync bypasses. No player-outcome, retention, production-funnel, physical-device, delivery, or subjective-pixel claim is inferred.",
+    "baseline": {
+      "release": "FORGE and NO-GO for SPARKED promotion; implementation may continue behind the staging gate.",
+      "quality": "Session 138 recorded 954/954 tests. A fresh coverage run was not classified green: it exceeded 240 seconds while another repository's Vitest suite was active, and the exact Call-of-Doodie process tree was terminated and verified closed.",
+      "architecture": "App architecture is green at 4,999/5,000 lines, a 1,768/1,775-line loop span, 32 system boundaries, and 1/1 hook boundary: only one total line, seven loop lines, and zero hook-boundary headroom remain.",
+      "runtime": "The two-phase runtime boundary remains green at 195,631 entry bytes and 547,615 deferred runtime bytes.",
+      "gameLoop": "Structural review scores 40/50: loop tightness 9, progression 6, engagement 9, retention hooks 7, soul fidelity 9. No consented playtest corpus exists, so these are implementation scores, not fun or retention outcomes.",
+      "geniusList": "Schema-v2 cache is fresh and honestly exhausted: 0 executable and 5 deferred items, all gated by credentials, product choice, production data, or a real community destination.",
+      "cost": "Flat-rate Max Plan remains the operating model. This audit does not create dollar alarms or variable-cost player features."
+    }
+  },
+  "axisCoverage": {
+    "featureDepth": "Prestige runway truth and first-three-run mastery staging.",
+    "innovation": "A closed-loop local playtest receipt joins explicit answers, continuation choice, and next-run evidence without hosted inference.",
+    "ux": "Reachable onboarding stages, an honest progression pressure gauge, and QR/share conformance.",
+    "feedback": "RUN THE FIX becomes part of the same persisted Pulse observation rather than a lost side event.",
+    "engagement": "Descriptive mastery runway and onboarding repair; no numerical rebalance without participant evidence.",
+    "ai": "No new hosted model: the local Insight Graph has no measured quality gap and preserves zero runtime token cost.",
+    "security": "Atomic status invariants, bounded task semantics, and QR reference-vector tests.",
+    "efficiency": "One task parser, one status mutation boundary, one execution-budget ledger, and recovered App headroom.",
+    "tokenApiReduction": "Unify token-budget telemetry as an execution-efficiency receipt; do not present notional Max Plan usage as cash spend."
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 60,
+    "sessionEngagement": 90,
+    "retention": 70,
+    "soulFidelity": 90,
+    "empiricalConfidence": "low",
+    "evidence": "Wave pressure, serialized reward choices, one dominant RUN THE FIX action, observed-vs-inferred language, and deterministic drill outcomes are strong. The feedback loop loses the primary continuation, the onboarding stage arithmetic hides its last stage, and the prestige runway is not presented to players. No docs/PLAYTESTS corpus exists.",
+    "nextThreeMoves": [
+      "Persist the complete answer-plus-continuation Pulse atomically for every continuation path.",
+      "Replace run-count arithmetic with a pure evidence-backed onboarding stage model.",
+      "Show the existing progression runway descriptively before considering any balance change."
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "observability / protocol / security",
+      "effortHours": 6,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 34.0,
+      "slug": "one-task-semantics",
+      "title": "Make one executable task model own blockers, Genius routing, startup pressure, and queue truth.",
+      "status": "shipped",
+      "why": "The canonical ops blocker-preflight hand-parses only a narrow subset, the richer entrypoint depends on parseHumanItems(), and that parser rejects the live board's unbolded checkbox form. Cross-repo, task-work, and startup code carry still more parsers, allowing the same task to be executable, invisible, or human-blocked depending on the caller.",
+      "recipe": "Extend the shared task-board library into a bounded AST for checkbox and table rows with section, checked state, title, description, tags, age, status, and source line. Route local blocker-preflight, ops, task-work, cross-repo task loading, and startup pressure through it. Add fixtures copied from the live board and a reconciliation receipt proving parsed open counts against raw checkbox/table counts.",
+      "verificationPremise": "Studio Oracle evidence-found (17 hits); direct live-board fixture proves current unbolded Human Action Required rows.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Accept plain and bold checkbox forms in parseHumanItems and route ops blocker-preflight through it." },
+        "L2": { "effortHours": 4, "recipe": "Add the shared AST, migrate every local task consumer, and fixture all live forms." },
+        "L3": { "effortHours": 6, "recipe": "Add source-count reconciliation, reason-coded executable status, and a drift ratchet forbidding new private parsers." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "observability / state integrity / infrastructure",
+      "effortHours": 6,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 33.0,
+      "slug": "atomic-project-status-boundary",
+      "title": "Turn the declared PROJECT_STATUS writer into the actual atomic mutation boundary.",
+      "status": "shipped",
+      "why": "The shared writer enforces SIL invariants, but multiple scripts still read-modify-write PROJECT_STATUS.json directly. A passing invariant check can therefore be followed by a clobber or score drift, and the current helper itself writes non-atomically.",
+      "recipe": "Upgrade writeProjectStatus/updateProjectStatus to write a same-directory temporary file and rename atomically, preserving invariant enforcement. Migrate every direct local writer, add merge/invariant/atomicity tests, and add a source ratchet that permits PROJECT_STATUS writes only through the shared library and its CLI.",
+      "verificationPremise": "Oracle lexical verdict was no-evidence; direct inspection proves bypasses in check-last-session-summary, render-startup-brief, verify-plan-mode, closeout-autopilot, and run-tests.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Migrate the known direct writers to updateProjectStatus." },
+        "L2": { "effortHours": 4, "recipe": "Add atomic replacement plus invariant and merge tests." },
+        "L3": { "effortHours": 6, "recipe": "Add a source boundary ratchet and a deterministic mutation receipt exercised by startup and closeout." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "feedback loop / retention evidence / UX",
+      "effortHours": 3,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 31.5,
+      "slug": "closed-loop-playtest-pulse",
+      "title": "Close the local Playtest Pulse around answer, continuation, and RUN THE FIX.",
+      "status": "shipped",
+      "why": "The primary RUN THE FIX path never records the playtest continuation. The shared continuation recorder updates the active flight but does not persist the resulting Pulse, so answer-before-action ordering stores an incomplete aggregate. The most important replay-intent evidence is therefore systematically lossy.",
+      "recipe": "Create one recorder operation that annotates continuation, records the continuation milestone, and upserts the resulting portable flight by flight ID. Call it from RUN THE FIX and every alternate continuation. Make answer and action ordering commutative, preserve opt-in/local-only boundaries, and test both orders plus duplicate clicks.",
+      "verificationPremise": "Studio Oracle evidence-found (24 hits); DeathScreen lines 83-94 and 641-673 prove the split path.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Record RUN THE FIX and persist the updated Pulse." },
+        "L2": { "effortHours": 2, "recipe": "Create one atomic helper with order-independent upsert and duplicate protection." },
+        "L3": { "effortHours": 3, "recipe": "Add a versioned completion receipt and exhaustive answer/action ordering fixtures." }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "FIRE",
+      "axis": "onboarding / engagement / accessibility",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 27.0,
+      "slug": "evidence-backed-first-three-runs",
+      "title": "Replace unreachable onboarding arithmetic with an evidence-backed First Three Flushes contract.",
+      "status": "shipped",
+      "why": "The card defines four stages, indexes with completed runs, and hides at three completed runs. Its final Run 3/Build stage can never be active, while the test checks only static copy. Run count also cannot distinguish an unverified control path from genuine progression.",
+      "recipe": "Extract a pure onboarding-stage model keyed by total runs plus tutorial/input-calibration evidence. Define reachable Calibrate, Survive, Adapt, and Build stages, explicit completion reasons, and a bounded receipt. Render from the model and add 0/1/2/3+ run matrices with and without calibration evidence.",
+      "verificationPremise": "Studio Oracle evidence-found; direct HomeV2 inspection proves four stages with a runs >= 3 hide gate.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Fix the off-by-one hide/index logic and add transition tests." },
+        "L2": { "effortHours": 2, "recipe": "Extract the pure evidence-backed stage model and render it." },
+        "L3": { "effortHours": 3, "recipe": "Add reason-coded completion receipts and a full accessibility/test matrix." }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "HIGH",
+      "axis": "progression / trust / engagement",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 25.5,
+      "slug": "prestige-pressure-gauge",
+      "title": "Expose a truthful Prestige Pressure Gauge before changing the curve.",
+      "status": "shipped",
+      "why": "Level 25 resolves to 11,520 kills under the current formula, roughly 231-1,152 runs under the project's own 50/10-kill scenarios. The Upgrades surface states only the level gate. That may violate the no-manufactured-grind pact, but retuning without participant evidence would be equally dishonest.",
+      "recipe": "Extend the existing progression runway model into a player-safe receipt: current level/XP, kills remaining, conservative run-range scenarios, assumption labels, and no completion-time promise. Render it beside Prestige, project it to the agent contract, and add formula/boundary/copy tests. Do not alter XP, costs, or Level 25 in this item.",
+      "verificationPremise": "Studio Oracle evidence-found (9 hits); direct progression formula evaluation yields 11,520 kills.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Show kills remaining and the explicit Level 25 formula." },
+        "L2": { "effortHours": 3, "recipe": "Add bounded run scenarios, assumption labels, and tests." },
+        "L3": { "effortHours": 5, "recipe": "Project the receipt to human and agent surfaces and bind future retuning to consented Pulse evidence." }
+      }
+    },
+    {
+      "rank": 6,
+      "tier": "HIGH",
+      "axis": "token efficiency / observability / infrastructure",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 22.0,
+      "slug": "one-execution-budget-ledger",
+      "title": "Collapse three skill-cost ledgers into one self-validating execution-budget receipt.",
+      "status": "shipped",
+      "why": "The active library writes .cache/skill-costs.jsonl and session-floor reads it, while record-skill-cost writes skill-cost-ledger.jsonl and log-skill-cost writes ignis/output/agent-spend.json. The protocol checks presence of a producer whose records its consumer never reads.",
+      "recipe": "Make record-skill-cost a thin CLI over lib/skill-cost-ledger, migrate any live callers, retire the unconsumed local producer, and make protocol drift behavior-probe the same ledger session-floor reads. Define the output as token/context execution efficiency under a flat-rate plan, never a dollar-spend alarm. Add schema, malformed-row, and reconciliation tests.",
+      "verificationPremise": "Studio Oracle evidence-found (23 hits) including all three paths and the mismatched session-floor consumer.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Point record-skill-cost at the canonical library/path." },
+        "L2": { "effortHours": 2.5, "recipe": "Migrate callers, behavior-probe the consumer path, and add reconciliation tests." },
+        "L3": { "effortHours": 4, "recipe": "Remove dead local producers and emit a source-derived execution-budget receipt with malformed-row accounting." }
+      }
+    },
+    {
+      "rank": 7,
+      "tier": "HIGH",
+      "axis": "security / sharing / test depth",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 21.0,
+      "slug": "qr-reference-vector-court",
+      "title": "Give the hand-rolled challenge QR encoder a reference-vector and decode court.",
+      "status": "shipped",
+      "why": "qrEncode.js implements 174 lines of QR and Reed-Solomon logic and is used for share links, but it has no direct test. The last coverage receipt is stale; the fresh coverage command could not be classified because it exceeded the bound during an unrelated concurrent repository suite.",
+      "recipe": "Add deterministic matrix/hash fixtures for empty, maximum bounded, Unicode, and real challenge URLs; validate finder/timing/quiet-zone invariants and decode at least one generated image through an already-installed/local decoder if available. Add a size bound and fail closed on overlong input without adding a dependency.",
+      "verificationPremise": "Direct source and test search found the encoder and consumer but no direct test; no package install is needed.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add deterministic structural reference vectors and length bounds." },
+        "L2": { "effortHours": 2, "recipe": "Cover production challenge URLs, Unicode, quiet zones, and matrix fingerprints." },
+        "L3": { "effortHours": 3, "recipe": "Add an end-to-end decode check using only an existing trusted local surface." }
+      }
+    },
+    {
+      "rank": 8,
+      "tier": "HIGH",
+      "axis": "architecture / reliability / efficiency",
+      "effortHours": 5,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 20.5,
+      "slug": "shell-lifecycle-hook-boundary",
+      "title": "Recover App and hook headroom through one tested shell-lifecycle boundary.",
+      "status": "shipped",
+      "why": "The live architecture court passes with one App line, seven loop lines, and zero hook-boundary headroom. Raising the ratchet is forbidden. Responsive state, install-prompt ownership, before-unload protection, theme/music preference sync, and controller connection lifecycle remain embedded in App orchestration.",
+      "recipe": "Extract one useShellLifecycle hook that owns non-gameplay browser lifecycle only: viewport/mobile state, install prompt, accidental-navigation protection, and controller connection notifications. Keep input math and game-loop refs in App. Add hook-level cleanup/idempotency tests and retain the existing 5,000/1,775/27/1 budgets unchanged.",
+      "verificationPremise": "Live architecture receipt: totalLines 4,999, gameLoopSpan 1,768, hookBoundaryCount 1; all current checks green with effectively no headroom.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Extract viewport and install-prompt lifecycle with cleanup tests." },
+        "L2": { "effortHours": 3.5, "recipe": "Also extract before-unload and controller connection lifecycle behind one hook." },
+        "L3": { "effortHours": 5, "recipe": "Add a lifecycle receipt and regression court while preserving every architecture ratchet." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "hosted-ai-run-coach",
+      "reason": "False premise / low value: the deterministic local Insight Graph already provides one explainable verdict at zero runtime token cost, and no measured quality gap justifies hosted inference."
+    },
+    {
+      "slug": "numeric-progression-rebalance",
+      "reason": "Deferred honestly: source math exposes a grind risk but there is no consented participant corpus. Ship the runway receipt and collect evidence before changing numbers."
+    },
+    {
+      "slug": "supabase-obelisk-account-expansion",
+      "reason": "Product-decision gated: guest-first local Passport is deliberate; cloud identity/sync changes consent, deletion, recovery, abuse, and cost scope."
+    },
+    {
+      "slug": "dependency-major-upgrades",
+      "reason": "Culled: no live defect premise and package-trust/migration cost exceeds current value. Existing pinned graph remains green and npm audit was zero at S138."
+    },
+    {
+      "slug": "production-funnel-or-homev1-retirement",
+      "reason": "Data-blocked WIN: current production performance measured HomeV2 slower and no valid funnel corpus exists. Retain the fallback."
+    },
+    {
+      "slug": "sparked-launch-claim",
+      "reason": "External evidence gates remain: physical PWA/gamepad/full-run media, project-scoped analytics/Sentry, inbound reply identity, publication, and founder approval."
+    }
+  ],
+  "executionLog": [
+    { "slug": "one-task-semantics", "result": "shipped", "evidence": "Shared AST consumers, 16/16 reconciliation, 7 live Human Action rows, drift ratchet." },
+    { "slug": "atomic-project-status-boundary", "result": "shipped", "evidence": "Bounded lock, same-directory atomic rename, migrated writers, source ratchet." },
+    { "slug": "closed-loop-playtest-pulse", "result": "shipped", "evidence": "Commutative answer/action upsert and RUN THE FIX coverage." },
+    { "slug": "evidence-backed-first-three-runs", "result": "shipped", "evidence": "Pure 0/1/2/3+ journey makes Run 3 reachable and evidence-labeled." },
+    { "slug": "prestige-pressure-gauge", "result": "shipped", "evidence": "11,520-kill source threshold, 231–1,152-run scenarios, human and agent projections." },
+    { "slug": "one-execution-budget-ledger", "result": "shipped", "evidence": "One canonical JSONL path, malformed-row receipt, flat-rate semantics." },
+    { "slug": "qr-reference-vector-court", "result": "shipped", "evidence": "Bounded payloads, deterministic structural vectors, complete boolean matrices." },
+    { "slug": "shell-lifecycle-hook-boundary", "result": "shipped", "evidence": "Install/navigation lifecycle extracted; App 4,968 lines; two hook boundaries." },
+    { "slug": "render-side-preference-read", "result": "second-order-shipped", "evidence": "Visual court exposed and verified removal of cross-component render updates." },
+    { "slug": "provider-aware-secret-blocker", "result": "second-order-shipped", "evidence": "PostHog provider readiness now precedes GitHub write readiness." }
+  ]
+}

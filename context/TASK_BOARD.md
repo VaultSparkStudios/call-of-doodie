@@ -16,6 +16,17 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S139** One task semantics engine — shared parser/abstract syntax tree/reconciliation powers human and machine task surfaces with a 16/16 live court.
+- [x] [SIL:3] **DONE S139** Atomic project-status boundary — bounded stale-lock recovery, same-directory atomic replacement, invariants, and a direct-writer ratchet cover all status mutations.
+- [x] [SIL:3] **DONE S139** Closed-loop Playtest Pulse — terminal continuation atomically records one flight and one Pulse update before executing the shared next action.
+- [x] [SIL:3] **DONE S139** First-three-run journey — Calibrate, Counter, and Commit guidance is reachable, deterministic, and retires after run three.
+- [x] [SIL:3] **DONE S139** Prestige pressure runway — scenario-bounded pressure and kill projections remain explicitly non-promissory while preserving the canonical level-25 curve.
+- [x] [SIL:3] **DONE S139** Execution-budget ledger — one append-only receipt records flat-rate plan token efficiency with malformed-row detection.
+- [x] [SIL:3] **DONE S139** QR reference-vector court — payloads above 62 bytes fail closed and structural verification covers every module class.
+- [x] [SIL:3] **DONE S139** Shell lifecycle ownership — install prompting and guarded exit behavior live behind a tested hook boundary.
+- [x] [SIL:2] **DONE S139 second-order** One-time preference initialization removed a React render-loop warning exposed by the complete visual matrix.
+- [x] [SIL:2] **DONE S139 second-order** Provider-first blocker classification keeps missing PostHog capability visible even when GitHub credentials are ready.
+
 - [x] [SIL:3] **DONE S137** Propagation compatibility court — the real startup entrypoint now proves shared capability provenance, valid brief boxes, flat-rate Max Plan semantics, and public-safe generated-artifact boundaries.
 - [x] [SIL:3] **DONE S137** Open-arsenal mastery contract — all twelve primaries are immediately selectable; levels recognize mastery and evolution goals without contradictory access locks.
 - [x] [SIL:3] **DONE S137** Executable continuation and Gauntlet — one reason-coded action stack powers Journey, ticker, telemetry, and deterministic one-action Weekly Gauntlet deployment.

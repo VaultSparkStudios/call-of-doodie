@@ -19,6 +19,7 @@ import {
   buildTrustRecommendations,
   summarizeStudioEvents,
 } from "../utils/studioEventOps.js";
+import { buildPrestigeRunway, PRESTIGE_REQUIRED_LEVEL } from "../utils/progressionCurve.js";
 
 const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
@@ -671,8 +672,8 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
   const [meta, setMeta] = useState(initMeta);
   const [showPrestigeConfirm, setShowPrestigeConfirm] = useState(false);
   const prestige = meta?.prestige || 0;
-  const PRESTIGE_REQUIRED_LEVEL = 25;
   const canPrestige = accountLevel >= PRESTIGE_REQUIRED_LEVEL;
+  const prestigeRunway = buildPrestigeRunway({ totalKills: loadCareerStats().totalKills || 0 });
   const handlePrestige = () => {
     const updated = prestigeAccount();
     setMeta(updated);
@@ -704,9 +705,16 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
                   : "Resets all upgrades & points. Permanently raises difficulty. Earn prestige badge."}
               </div>
               {!canPrestige && (
-                <div style={{ fontSize: 10, color: "#FF6B35", marginTop: 2 }}>
+                <>
+                  <div style={{ fontSize: 10, color: "#FF6B35", marginTop: 2 }}>
                   Requires Account Level {PRESTIGE_REQUIRED_LEVEL} · You are Level {accountLevel}
                 </div>
+                  <div style={{ color: "#AAA", marginTop: 2 }}>
+                    {prestigeRunway.killsRemaining.toLocaleString()} lifetime kills remain
+                    {prestigeRunway.projectedRuns ? ` · about ${prestigeRunway.projectedRuns.fastest.toLocaleString()}–${prestigeRunway.projectedRuns.slowest.toLocaleString()} runs at 50–10 kills per run` : ""}.
+                    <span style={{ display: "block", color: "#777" }}>Scenario projection, not a promised player outcome.</span>
+                  </div>
+                </>
               )}
             </div>
             <button

@@ -185,6 +185,28 @@ export function annotateActivePlaytestFlight(annotations = {}, storage = globalT
   return next;
 }
 
+export function recordPlaytestContinuation(receipt, continuation, { now = Date.now() } = {}) {
+  const annotated = annotatePlaytestFlight(receipt, { continuation });
+  return recordPlaytestMilestone(annotated, "continuation", { now, meta: { action: continuation } });
+}
+
+/**
+ * Commit the continuation to session flight and local Pulse as one operation.
+ * Pulse upserts by flightId, so answer→action and action→answer converge.
+ */
+export function recordActivePlaytestContinuation(continuation, {
+  now = Date.now(),
+  sessionStorage = globalThis.sessionStorage,
+  localStorage = globalThis.localStorage,
+} = {}) {
+  const current = loadPlaytestFlight(sessionStorage);
+  if (!current) return null;
+  const receipt = recordPlaytestContinuation(current, continuation, { now });
+  savePlaytestFlight(receipt, sessionStorage);
+  const pulse = recordPlaytestPulse(receipt, localStorage);
+  return { receipt, pulse };
+}
+
 export function clearPlaytestFlight(storage = globalThis.sessionStorage) {
   try {
     storage?.removeItem(STORAGE_KEY);

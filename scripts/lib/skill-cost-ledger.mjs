@@ -16,7 +16,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-const LEDGER = path.join('.cache', 'skill-costs.jsonl');
+export const LEDGER_RELATIVE_PATH = path.join('.cache', 'skill-costs.jsonl');
 const MANIFEST = path.join(os.homedir(), '.claude', 'skills', 'MANIFEST.json');
 
 function readManifestSlo(skill) {
@@ -31,7 +31,7 @@ function readManifestSlo(skill) {
  * @param {object} info { skill, sessionId, actualTokens, durationSec?, status? }
  */
 export function recordSkillCost(repoRoot, info) {
-  const ledgerPath = path.join(repoRoot, LEDGER);
+  const ledgerPath = path.join(repoRoot, LEDGER_RELATIVE_PATH);
   fs.mkdirSync(path.dirname(ledgerPath), { recursive: true });
   const slo = readManifestSlo(info.skill);
   const entry = {
@@ -39,6 +39,9 @@ export function recordSkillCost(repoRoot, info) {
     skill: info.skill,
     sessionId: info.sessionId || null,
     medium: info.medium || null,
+    phase: info.phase || null,
+    step: info.step || null,
+    model: info.model || null,
     slo: slo ? { tokenBudget: slo.tokenBudget, wallClockMaxSec: slo.wallClockMaxSec } : null,
     actual: { tokens: info.actualTokens ?? null, durationSec: info.durationSec ?? null },
     overrun: slo?.tokenBudget && info.actualTokens
@@ -54,14 +57,37 @@ export function recordSkillCost(repoRoot, info) {
   return entry;
 }
 
+export function readSkillCostLedger(repoRoot) {
+  const ledgerPath = path.join(repoRoot, LEDGER_RELATIVE_PATH);
+  if (!fs.existsSync(ledgerPath)) return { path: ledgerPath, entries: [], totalRows: 0, malformedRows: 0 };
+  const rows = fs.readFileSync(ledgerPath, 'utf8').split('\n').filter(Boolean);
+  const entries = [];
+  let malformedRows = 0;
+  for (const row of rows) {
+    try { entries.push(JSON.parse(row)); } catch { malformedRows += 1; }
+  }
+  return { path: ledgerPath, entries, totalRows: rows.length, malformedRows };
+}
+
+export function skillCostLedgerReceipt(repoRoot) {
+  const ledger = readSkillCostLedger(repoRoot);
+  return {
+    schemaVersion: 'execution-budget-ledger-v1',
+    ok: ledger.malformedRows === 0,
+    semantics: 'flat-rate-plan-token-efficiency-not-cash-spend',
+    path: path.relative(repoRoot, ledger.path).replace(/\\/g, '/'),
+    entries: ledger.entries.length,
+    totalRows: ledger.totalRows,
+    malformedRows: ledger.malformedRows,
+    lastEntryAt: ledger.entries.at(-1)?.ts || null,
+  };
+}
+
 /**
  * Most-recent entries from the ledger, optionally filtered to a skill.
  */
 export function recentSkillCosts(repoRoot, { skill, limit = 10 } = {}) {
-  const p = path.join(repoRoot, LEDGER);
-  if (!fs.existsSync(p)) return [];
-  const lines = fs.readFileSync(p, 'utf8').trim().split('\n').filter(Boolean);
-  const parsed = lines.map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  const parsed = readSkillCostLedger(repoRoot).entries;
   const filtered = skill ? parsed.filter(e => e.skill === skill) : parsed;
   return filtered.slice(-limit).reverse();
 }
@@ -83,7 +109,7 @@ export function priorOverrun(repoRoot, skill) {
  * for skills with ≥threshold consecutive overruns in their most-recent runs.
  */
 export function detectRegressions(repoRoot, { threshold = 3, lookback = 5 } = {}) {
-  const p = path.join(repoRoot, LEDGER);
+  const p = path.join(repoRoot, LEDGER_RELATIVE_PATH);
   if (!fs.existsSync(p)) return [];
   const lines = fs.readFileSync(p, 'utf8').trim().split('\n').filter(Boolean);
   const parsed = lines.map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
@@ -122,7 +148,7 @@ export function detectRegressions(repoRoot, { threshold = 3, lookback = 5 } = {}
  * Returns [{ skill, consecutive, lastPct, budget, lastActual, hint }].
  */
 export function detectSevereOverruns(repoRoot, { pctThreshold = 50, consecutive = 2, lookback = 6 } = {}) {
-  const p = path.join(repoRoot, LEDGER);
+  const p = path.join(repoRoot, LEDGER_RELATIVE_PATH);
   if (!fs.existsSync(p)) return [];
   const lines = fs.readFileSync(p, 'utf8').trim().split('\n').filter(Boolean);
   const parsed = lines.map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
@@ -206,4 +232,4 @@ export function recommendedBudget(repoRoot, skill, medium) {
   return { source: 'default', budget: 5000, medium };
 }
 
-export default { recordSkillCost, recentSkillCosts, priorOverrun, detectRegressions, detectSevereOverruns, flagRegressionsInManifest, mediumBucketAvg, recommendedBudget };
+export default { recordSkillCost, readSkillCostLedger, skillCostLedgerReceipt, recentSkillCosts, priorOverrun, detectRegressions, detectSevereOverruns, flagRegressionsInManifest, mediumBucketAvg, recommendedBudget };

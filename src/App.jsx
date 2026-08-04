@@ -58,6 +58,7 @@ import { getRouteOptions } from "./utils/routeOptions.js";
 import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import DisplayNameScreen from "./components/DisplayNameScreen.jsx";
+import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 import HomeV2 from "./components/HomeV2.jsx";
 import HomeV3 from "./components/HomeV3.jsx";
 import HUD from "./components/HUD.jsx";
@@ -83,7 +84,6 @@ import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
 import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveMovementVector } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
-import { buildPwaInstallAttempt, savePwaInstallAttempt } from "./utils/pwaInstallReadiness.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
 import { getRoastCallout } from "./utils/roastDirector.js";
@@ -172,7 +172,10 @@ export default function CallOfDoodie() {
   const shootStickRef  = useRef({ active: false, startX: 0, startY: 0, dx: 0, dy: 0, id: null, shooting: false });
   const sizeRef        = useRef({ w: 800, h: 600 });
 
-  const currentWeaponRef = useRef(Math.max(0, Math.min(WEAPONS.length - 1, Number(readPreference("cod-primary-weapon", "0")) || 0)));
+  const currentWeaponRef = useRef(null);
+  if (currentWeaponRef.current === null) {
+    currentWeaponRef.current = Math.max(0, Math.min(WEAPONS.length - 1, Number(readPreference("cod-primary-weapon", "0")) || 0));
+  }
   const isReloadingRef   = useRef(false);
   const comboRef         = useRef({ count: 0, timer: 0, max: 0 });
   const peakMomentRef    = useRef(null); // { wave, count, enemiesAlive, label } at run-best combo
@@ -232,7 +235,6 @@ export default function CallOfDoodie() {
   const controllerTypeRef = useRef("controller"); // "xbox" | "ps" | "controller"
   const inputDeviceRef   = useRef("mouse"); // "mouse" | "xbox" | "ps" | "controller" | "mobile"
   const playtestModeRef  = useRef(isPlaytestMode()); // query parsing stays off the input hot path
-  const pwaPromptRef     = useRef(null);  // deferred beforeinstallprompt event
   const routePendingRef  = useRef(false); // blocks game loop like perkPending
   const bossCutsceneRef  = useRef(false); // blocks game loop during boss intro card
   const waveAnnouncePendingRef = useRef(false);
@@ -347,7 +349,7 @@ export default function CallOfDoodie() {
   const [overclockedShots, setOverclockedShots] = useState(0);
   const [waveStreak, setWaveStreak]             = useState(0);
   const [berserkersKilled, setBerserkersKilled] = useState(0);
-  const [pwaPromptReady, setPwaPromptReady]     = useState(false);
+  const { pwaPromptReady, promptInstallApp } = useShellLifecycle({ screen });
   const [mapTheme, setMapTheme]                 = useState(0);
   const [routePending, setRoutePending]         = useState(false);
   const [routeOptions, setRouteOptions]         = useState([]);
@@ -380,36 +382,6 @@ export default function CallOfDoodie() {
   // ── Analytics init ────────────────────────────────────────────────────────
   useEffect(() => { analyticsInit(); }, []);
   const dominantArchetype = getDominantArchetype(activePerks);
-
-  // ── PWA install prompt ────────────────────────────────────────────────────
-  useEffect(() => {
-    const handler = (e) => { e.preventDefault(); pwaPromptRef.current = e; setPwaPromptReady(true); };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
-  const promptInstallApp = useCallback(async () => {
-    if (!pwaPromptRef.current) return;
-    const promptEvent = pwaPromptRef.current;
-    promptEvent.prompt();
-    const result = await promptEvent.userChoice.catch(() => null);
-    if (result?.outcome) {
-      savePwaInstallAttempt(buildPwaInstallAttempt({ outcome: result.outcome }));
-    }
-    if (!result || result.outcome === "accepted" || result.outcome === "dismissed") {
-      pwaPromptRef.current = null;
-      setPwaPromptReady(false);
-    }
-  }, []);
-
-  // ── Warn before accidental tab close / refresh during a run ───────────────
-  useEffect(() => {
-    const handler = (e) => { e.preventDefault(); e.returnValue = ""; };
-    if (screen === "game") {
-      window.addEventListener("beforeunload", handler);
-      return () => window.removeEventListener("beforeunload", handler);
-    }
-  }, [screen]);
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
   useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);

@@ -9,6 +9,7 @@ import {
 } from "../../src/constants.js";
 import { REPLAY_DIFFICULTIES, REPLAY_MODES, REPLAY_STARTERS } from "../../src/utils/replayCode.js";
 import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
+import { killsRequiredForAccountLevel, PRESTIGE_REQUIRED_LEVEL } from "../../src/utils/progressionCurve.js";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
@@ -59,6 +60,14 @@ export function buildPublicGameplayContract() {
       name: group.name,
       tiers: group.tiers.map((tier, index) => ({ tier: index + 1, cost: tier.cost, description: tier.desc })),
     })),
+    prestige: {
+      requiredAccountLevel: PRESTIGE_REQUIRED_LEVEL,
+      totalKillsRequired: killsRequiredForAccountLevel(PRESTIGE_REQUIRED_LEVEL),
+      levelFormula: "floor(sqrt(totalCareerKills / 20)) + 1",
+      projectionScenariosKillsPerRun: [10, 25, 50],
+      projectionClaimScope: "descriptive scenario, not promised player outcome",
+      source: "src/utils/progressionCurve.js",
+    },
     challengeLinks: {
       replayCode: { queryParameter: "replay", format: "12 hexadecimal characters", captures: ["seed", "mode", "difficulty", "weapon", "starter_loadout"] },
       rivalry: { queryParameters: ["seed", "diff", "vs", "vsName"], note: "Player choices remain player-controlled." },

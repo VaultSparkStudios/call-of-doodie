@@ -29,6 +29,7 @@ import { buildScenarioCartridge, buildSewerRelayUrl, decodeScenarioCartridge } f
 import { buildNemesisChronicle } from "../utils/nemesisChronicle.js";
 import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
 import { isPlaytestMode, loadPlaytestPulse, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
+import { buildFirstRunsJourney } from "../utils/firstRunsJourney.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
 import "./home-arcade.css";
 
@@ -308,17 +309,10 @@ export default function HomeV2(props) {
     () => buildFieldManualTruth({ weapons: WEAPONS, enemies: ENEMY_TYPES, modes: MODE_DEFS }),
     [],
   );
-  const onboarding = useMemo(() => {
-    const runs = career?.totalRuns || 0;
-    if (runs >= 3) return null;
-    const steps = [
-      { label: "RUN 1", title: "Survive", text: "Use WASD or left stick to keep space. Aim in a full circle and fire only when lanes open." },
-      { label: "CHECK", title: "Calibrate", text: "Sweep aim around the player once. If any direction feels dead, open diagnostics before a serious run." },
-      { label: "RUN 2", title: "Prove It", text: "Try the Daily seed. Fixed conditions make every dodge, perk, and mistake easier to read." },
-      { label: "RUN 3", title: "Build", text: "Spend upgrades, replay a seed, then compare whether your build actually changed the run." },
-    ];
-    return { current: runs + 1, steps };
-  }, [career?.totalRuns]);
+  const onboarding = useMemo(
+    () => buildFirstRunsJourney({ totalRuns: career?.totalRuns || 0 }),
+    [career?.totalRuns],
+  );
 
   const recordFrontDoorAction = useCallback((actionId, extra = {}) => {
     const studioEvent = buildStudioGameEvent("front_door_action", {
@@ -646,9 +640,9 @@ export default function HomeV2(props) {
               <div style={{ color: "#AAA", fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 6 }}>
-            {onboarding.steps.map((step, index) => {
-              const active = index + 1 === onboarding.current;
-              const done = index + 1 < onboarding.current;
+            {onboarding.steps.map((step) => {
+              const active = step.active;
+              const done = step.complete;
               return (
                 <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
                   <div style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>

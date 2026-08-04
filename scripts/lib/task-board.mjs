@@ -12,6 +12,87 @@ export function extractSection(markdown, heading) {
   return nl === -1 ? '' : match.slice(nl + 1);
 }
 
+function stripMarkdown(value) {
+  return String(value || '')
+    .replace(/^\*\*(.*?)\*\*$/, '$1')
+    .replace(/\*\*/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function splitCheckboxBody(body) {
+  const normalized = String(body || '').trim();
+  const bold = normalized.match(/^\*\*(.*?)\*\*(?:\s+[—-]\s+([\s\S]*))?$/);
+  if (bold) {
+    return {
+      title: stripMarkdown(bold[1]),
+      description: stripMarkdown(bold[2] || ''),
+    };
+  }
+  const divider = normalized.match(/^([\s\S]*?)\s+[—]\s+([\s\S]+)$/);
+  return {
+    title: stripMarkdown(divider?.[1] || normalized),
+    description: stripMarkdown(divider?.[2] || ''),
+  };
+}
+
+/**
+ * Parse every checkbox and numeric task-table row into one source-located AST.
+ * Consumers may filter this model; they must not reinterpret Markdown privately.
+ */
+export function parseTaskBoardAst(markdown) {
+  const nodes = [];
+  const lines = String(markdown || '').split(/\r?\n/);
+  let section = '(root)';
+  for (let index = 0; index < lines.length; index++) {
+    const raw = lines[index];
+    const heading = raw.match(/^#{2,6}\s+(.+?)\s*$/);
+    if (heading) {
+      section = heading[1].trim();
+      continue;
+    }
+    const checkbox = raw.match(/^- \[([ xX])\]\s+([\s\S]+)$/);
+    if (checkbox) {
+      const body = checkbox[2].trim();
+      const fields = splitCheckboxBody(body);
+      nodes.push({
+        kind: 'checkbox',
+        section,
+        checked: checkbox[1].toLowerCase() === 'x',
+        body,
+        ...fields,
+        tags: [...body.matchAll(/\[([^\]]+)\]/g)].map((match) => match[1]),
+        line: index + 1,
+        raw,
+      });
+    }
+  }
+  for (const row of parseTaskRows(markdown)) {
+    nodes.push({ kind: 'table', checked: /done|shipped|complete/i.test(row.status), ...row });
+  }
+  return nodes.sort((left, right) => left.line - right.line);
+}
+
+export function parseSectionCheckboxItems(markdown, headings, { includeChecked = false } = {}) {
+  const accepted = new Set(Array.isArray(headings) ? headings : [headings]);
+  return parseTaskBoardAst(markdown).filter((node) => (
+    node.kind === 'checkbox'
+    && accepted.has(node.section)
+    && (includeChecked || !node.checked)
+  ));
+}
+
+export function reconcileTaskBoard(markdown) {
+  const rawOpenCheckboxes = String(markdown || '').split(/\r?\n/).filter((line) => /^- \[ \]\s+/.test(line)).length;
+  const parsedOpenCheckboxes = parseTaskBoardAst(markdown).filter((node) => node.kind === 'checkbox' && !node.checked).length;
+  return {
+    schemaVersion: 'taskboard-reconciliation-v1',
+    ok: rawOpenCheckboxes === parsedOpenCheckboxes,
+    rawOpenCheckboxes,
+    parsedOpenCheckboxes,
+  };
+}
+
 export function parseUnifiedItems(markdown) {
   const section = extractSection(markdown, 'Unified Genius List');
   if (!section) return [];
@@ -86,24 +167,19 @@ export function findTaskRowsById(markdown, id) {
 }
 
 export function parseHumanItems(markdown) {
-  const section = extractSection(markdown, 'Human Action Required');
-  if (!section) return [];
-
-  return section
-    .split(/\r?\n/)
-    .map((line) => line.match(/^- \[ \] \*\*(.*?)\*\* — (.*)$/))
-    .filter(Boolean)
-    .map((parts) => {
-      const title = parts[1].trim();
-      const description = parts[2].trim();
+  return parseSectionCheckboxItems(markdown, 'Human Action Required')
+    .map((item) => {
+      const searchable = `${item.title} ${item.description}`.trim();
       const ageMatch =
-        description.match(/\((~?\d+)\s+sessions?\)/i) ||
-        description.match(/\((\d+)\s+sessions?\s+old\)/i);
+        searchable.match(/\((~?\d+)\s+sessions?\)/i) ||
+        searchable.match(/\((\d+)\s+sessions?\s+old\)/i);
       const ageSessions = ageMatch ? parseInt(ageMatch[1].replace('~', ''), 10) : null;
       return {
-        title,
-        description,
-        raw: `**${title}** — ${description}`,
+        title: item.title,
+        description: item.description,
+        raw: item.body,
+        line: item.line,
+        tags: item.tags,
         ageSessions,
       };
     });

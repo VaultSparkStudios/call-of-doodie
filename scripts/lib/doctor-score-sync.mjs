@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { updateProjectStatusFile } from "./write-project-status.mjs";
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -6,7 +7,6 @@ function readJson(filePath) {
 
 export function syncDoctorScore({ sourceStatusPath, targetStatusPath }) {
   const source = readJson(sourceStatusPath);
-  const target = readJson(targetStatusPath);
   if (!source.doctorScore || typeof source.doctorScore !== "object") {
     throw new Error(`source doctorScore missing: ${sourceStatusPath}`);
   }
@@ -32,10 +32,6 @@ export function syncDoctorScore({ sourceStatusPath, targetStatusPath }) {
     total: receipt.total,
     score: receipt.score,
   };
-  const next = {
-    ...target,
-    doctorScore,
-  };
-  fs.writeFileSync(targetStatusPath, `${JSON.stringify(next, null, 2)}\n`);
+  updateProjectStatusFile(targetStatusPath, (target) => ({ ...target, doctorScore }), { touchLastUpdated: false });
   return doctorScore;
 }

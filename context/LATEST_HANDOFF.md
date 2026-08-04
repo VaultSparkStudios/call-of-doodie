@@ -1,3 +1,36 @@
+# Latest Handoff — Session 139
+
+Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized `main` through `/start`, premise-verified infrastructure-plus-product `/audit`, exhaustive `/implement` with second-order saturation, and canonical `/closeout`; stage exact evidence and push directly to `main` without fabricating external outcomes.
+
+## Impact Summary (Session 139)
+
+**Headline.** Operational truth now has one task model, one atomic status boundary, and one execution ledger, while each first run, death answer, continuation, and Prestige gate presents source-derived evidence instead of lossy or unreachable guidance.
+
+**Impact.**
+- All eight audit items shipped, plus two second-order fixes discovered by the new courts.
+- RUN THE FIX now completes the same local Pulse as explicit tester answers in either ordering; First Run 3 is reachable; Prestige exposes the unchanged 11,520-kill threshold as labeled scenarios, not a promise.
+- PROJECT_STATUS mutations serialize and replace atomically; task consumers reconcile 16/16 live rows; provider readiness now prevents false GitHub-secret executability.
+- QR output is bounded and fully boolean; install/navigation lifecycle moved behind a tested hook; App headroom recovered to 32 lines.
+
+## Evidence
+- Focused/related regression: 56/56 plus task/status/ledger courts; strict lint, schema/architecture boundaries, and production build pass.
+- Rendered-pixel matrix: 969/969 across 19 routes, two themes, and 390/768/1440 widths; focused Prestige dark-desktop/light-mobile state probes pass without overflow or console errors.
+- Recovery staging: `https://session-139-staging.call-of-doodie.pages.dev/` (immutable `https://e4f2498c.call-of-doodie.pages.dev/`) carries the recovered tree and independently passes the hosted 969/969 route/theme/width court.
+- Recovery verification: every changed JSON parses, diff checks pass, the exact S139 test surface is 26/26, strict lint/build pass, and refreshed doctor reports 132 passing with `blockingFailing: 0`. A wider recovery shard was host-load timing-sensitive; its isolated protocol court passed 4/4 with the enlarged bound, so no fresh all-suite claim replaces the original direct S139 receipt.
+- Unified Genius List: no local executable product item remains; PostHog is correctly provider-credential gated after live secrets discovery.
+
+## Where We Left Off
+- Architecture: App 4,968/5,000 lines, game loop 1,768/1,775, 32 system boundaries, 2 hook boundaries.
+- Release: FORGE; SPARKED remains NO-GO behind physical PWA/gamepad/full-run media, verified reply-as email, project-scoped analytics/Sentry, publication/community, production outcomes, and founder approval.
+- Cost: runtime remains local and deterministic; execution-budget telemetry is explicitly flat-rate token efficiency, never cash spend.
+
+## Next
+- Collect consented participant Pulse exports before changing progression, balance, fun, or retention claims.
+- Supply project-scoped PostHog/Sentry credentials and finish physical/email/publication gates before requesting SPARKED promotion.
+- Keep the exact HomeV2/v1 production performance comparison; do not retire the fallback without favorable production and funnel evidence.
+
+---
+
 # Latest Handoff — Session 138
 
 Session Intent: After canonical `/start`, audit the complete product and public/authenticated website, implement the combined plan in optimal dependency order at the highest creative and technical bar, add a second-order innovation when the value floor required it, then run `/closeout` without overstating external evidence.

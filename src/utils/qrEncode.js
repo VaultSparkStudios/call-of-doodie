@@ -47,8 +47,12 @@ const VERSIONS = [
   [5,'M', 64, 48, 2, 32, 24],
 ];
 
+export const MAX_QR_PAYLOAD_BYTES = 62;
 export function qrEncode(text) {
   const bytes = new TextEncoder().encode(text);
+  if (bytes.length > MAX_QR_PAYLOAD_BYTES) {
+    throw new RangeError(`QR payload is ${bytes.length} bytes; maximum supported payload is ${MAX_QR_PAYLOAD_BYTES} bytes`);
+  }
   const len = bytes.length;
   // Pick version
   const vInfo = VERSIONS.find(v => v[2] >= Math.ceil(len * 8 / 8) + 2) || VERSIONS[VERSIONS.length-1];
@@ -144,6 +148,11 @@ export function qrEncode(text) {
         if (!fn[r][c] && di < dataStream.length) {
           m[r][c] = dataStream[di++] === 1;
         }
+  // Remainder modules are zero data bits. Resolve them before masking so the
+  // public contract is a complete boolean matrix, never a sparse/null bitmap.
+  for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+    if (!fn[r][c] && m[r][c] === null) m[r][c] = false;
+  }
       }
     }
   }

@@ -16,6 +16,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { latestSilSession as latestLedgerSession } from './lib/sil-ledger.mjs';
+import { updateProjectStatus } from './lib/write-project-status.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const JSON_OUT = process.argv.includes('--json');
@@ -72,9 +73,8 @@ export function fix(root = ROOT) {
     return { ...verdict, healed: false, healable: false,
       reason: `${verdict.reason}; currentFocus names S${focusSession ?? '?'} (not S${verdict.expected}) — cannot auto-heal` };
   }
-  status.lastSessionSummary = String(status.currentFocus);
-  fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n', 'utf8');
-  const after = evaluateLastSessionSummary({ status, silText });
+  const written = updateProjectStatus(root, (current) => ({ ...current, lastSessionSummary: String(status.currentFocus) }));
+  const after = evaluateLastSessionSummary({ status: written.status, silText });
   return { ...after, healed: true, reason: `healed from currentFocus → S${after.actual}` };
 }
 

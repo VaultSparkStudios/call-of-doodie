@@ -1,43 +1,49 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 74aedfbe4ff2 -->
-<!-- generated-at: 2026-08-03T23:36:07.366Z -->
+<!-- source-hash: faa089408e7a -->
+<!-- generated-at: 2026-08-04T18:26:21.958Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 138 HANDOFF SUMMARY
+Session 139 Handoff Summary
 
-Session
-- Number: 138
-- Intent: Post-audit product/website review; implement combined plan in dependency order; add second-order innovation; run closeout without overstating external evidence.
+Status
+- Session 139 complete; pushed directly to main.
+- Release: FORGE. SPARKED remains NO-GO.
 
-What Shipped
-- 12-item audit at deepest safe verified rung plus startup-enforced Hot Context contract; value-floor gate passes at 13 items.
-- Front door now coherent operations table; post-run is one Insight Graph decision; new Pulse/Cartridge/Chronicle systems deepen replay without paid inference/realtime infra.
-- Public score APIs gained live origin/rate/replay controls and reversible anomaly court; Passport copy/storage truthful and optional.
-- Entry shell ~73% smaller; staging Lighthouse 1.00/1.301s/0 CLS/8ms TBT; 19 routes pass hosted theme/viewport court.
+Shipped This Session
+- All 8 audit items plus 2 second-order fixes.
+- Unified task model, atomic PROJECT_STATUS status boundary, single execution ledger.
+- RUN THE FIX completes local Pulse in either ordering; First Run 3 reachable.
+- Prestige exposes unchanged 11,520-kill threshold as labeled scenarios, not a promise.
+- PROJECT_STATUS mutations serialize/replace atomically; 16/16 live rows reconcile.
+- Provider readiness prevents false GitHub-secret executability.
+- QR output bounded and boolean; install/navigation lifecycle behind tested hook; App headroom recovered to 32 lines.
 
-Current State
-- Validation: 954/954 tests across 152 files; strict lint; build; browser 12/12; public 27/27; replay 3/3; all courts green; npm audit zero.
-- Visual: hosted 19-route x 2-theme x 3-width = 969/969 plus four hash-bound captures.
-- Staging: session-138-staging.call-of-doodie.pages.dev; immutable daa4b291; HTTP/edge smoke 7/7.
-- Performance: staging median LCP 1,301ms vs prior production baseline 3,226ms; no production/funnel gains claimed until exact main deploys and traffic accrues.
-- Release: staging green; SPARKED NO-GO.
+Current Intent
+- Run agent-neutral /arc continuously from synced main through /start, premise-verified audit, exhaustive /implement, canonical /closeout; stage exact evidence, push to main, no fabricated external outcomes.
 
-Now Bucket (Top 3)
-- Collect explicit Playtest Pulse exports from consenting participants before balance/retention/pacing conclusions.
-- After exact-main production deploy and traffic, compare new default shell vs HomeV1 funnel before retiring ?home=v1.
-- Graduate Scenario Cartridges from checksums/URL relay to cryptographic signing, ghost batons, expiry, rotation (only with community/moderation authority).
+Now Bucket (top 3)
+- Collect consented participant Pulse exports before changing progression/balance/fun/retention claims.
+- Supply project-scoped PostHog/Sentry credentials; finish physical/email/publication gates before SPARKED promotion.
+- Keep exact HomeV2/v1 production performance comparison; do not retire fallback without favorable production/funnel evidence.
 
-Blockers (Top 3)
-- Production performance/funnel improvement unverifiable until exact-main deploys and traffic accrues.
-- Numerical balance conclusions blocked pending participant Pulse exports.
-- Cartridge cryptographic upgrade blocked pending community/moderation authority.
+Blockers (top 3)
+- No consented participant Pulse data; blocks balance/retention/pacing conclusions.
+- PostHog/Sentry require project-scoped credentials (live secrets discovered but not project-scoped).
+- HomeV2 vs v1 fallback retirement blocked pending production funnel evidence.
 
-Human-Blocked (SPARKED gates, open since ~S135-136)
-- Verified Zoho inbound reply-as email delivery.
-- Physical PWA install/gamepad/full-run media capture.
-- Project-scoped analytics/Sentry telemetry.
-- Publication/community setup.
-- Founder release approval.
+Human-Blocked Items
+- Physical PWA/gamepad/full-run media capture (pending device access; open since Session 135+).
+- Verified reply-as email delivery (Zoho; open since Session 138).
+- Project-scoped analytics/Sentry credentials (open since Session 137+).
+- Publication/community + founder release approval (open across sessions).
+- Consented participant Pulse exports (open since Session 135+).
 
-Next Session: Deploy exact-main to production, accrue traffic, and gather participant Pulse exports to unblock funnel/balance decisions.
+State Snapshot
+- Architecture: App 4,968/5,000 lines; game loop 1,768/1,775; 32 system boundaries; 2 hook boundaries.
+- Validation: 56/56 focused/related plus task/status/ledger courts; strict lint, schema/architecture boundaries, production build pass.
+- Rendered-pixel: 969/969 across 19 routes, 2 themes, 390/768/1440 widths; Prestige state probes pass.
+- Cost: runtime local/deterministic; execution-budget telemetry is flat-rate token efficiency, not cash spend.
+
+Next Session Pointer
+- Run full /arc from synced main; begin with consented Pulse export collection and credential/gate closure before touching progression or SPARKED promotion.

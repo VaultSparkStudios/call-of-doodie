@@ -29,6 +29,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { updateProjectStatus } from './lib/write-project-status.mjs';
 
 const ROOT = process.cwd();
 const args = process.argv.slice(2);
@@ -53,9 +54,7 @@ const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || status.lastAgent || ''
 
 function stampPlanModeDetected(value) {
   try {
-    status.planModeDetected = value;
-    status.planModeCheckedAt = new Date().toISOString();
-    fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+    updateProjectStatus(ROOT, (current) => ({ ...current, planModeDetected: value, planModeCheckedAt: new Date().toISOString() }));
   } catch { /* non-fatal */ }
   try {
     if (fs.existsSync(lockPath)) {
@@ -139,10 +138,12 @@ const result = {
 
 // Stamp status + lock
 try {
-  status.planModeDetected = result.status;
-  status.planModeCheckedAt = new Date().toISOString();
-  if (active) status.planModeLastActivatedAt = status.planModeLastActivatedAt || new Date().toISOString();
-  fs.writeFileSync(statusPath, JSON.stringify(status, null, 2) + '\n');
+  updateProjectStatus(ROOT, (current) => ({
+    ...current,
+    planModeDetected: result.status,
+    planModeCheckedAt: new Date().toISOString(),
+    ...(active ? { planModeLastActivatedAt: current.planModeLastActivatedAt || new Date().toISOString() } : {}),
+  }));
 } catch { /* non-fatal */ }
 try {
   if (fs.existsSync(lockPath)) {

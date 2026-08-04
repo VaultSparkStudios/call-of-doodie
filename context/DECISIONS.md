@@ -913,3 +913,21 @@ Rationale: Cross-device sync, uploaded participant data, and community signing c
 Decision: Namespace Lighthouse caches by target origin, allow only verified complete reports to resume, and keep staging receipts separate from production evidence. HomeV1 remains until exact-main production performance and independent funnel evidence satisfy the existing retirement gate.
 
 Rationale: A closeout run exposed a stale production report in a staging cache. Origin-scoped evidence prevents cross-environment contamination, and a fast staging shell cannot by itself authorize a production funnel decision.
+
+## 2026-08-04 — Session 139 — Shared semantics and atomic boundaries own control-plane truth
+
+Decision: Parse task state once for every human and machine consumer, and route every PROJECT_STATUS mutation through one invariant-preserving, lock-bounded, same-directory atomic writer. Keep source ratchets executable so new direct writers fail the court.
+
+Rationale: Divergent regexes and read/modify/write paths can each look locally correct while publishing contradictory task or session truth. Shared executable semantics plus atomic replacement make concurrency and observability failures testable rather than rhetorical.
+
+## 2026-08-04 — Session 139 — Progression guidance remains deterministic and evidence-bounded
+
+Decision: Close each run by saving one flight, updating one local Pulse, and dispatching one shared continuation action. Introduce the first three runs as Calibrate, Counter, and Commit; project prestige pressure only through named scenario bounds and explicit non-promise language.
+
+Rationale: A feedback loop compounds only when observation, reflection, and the next action are one transaction. Deterministic bounded projections improve motivation without fabricating outcomes, hosted intelligence, or future guarantees.
+
+## 2026-08-04 — Session 139 — Provider readiness outranks transport readiness
+
+Decision: Classify analytics blockers by the missing provider capability before considering a ready transport such as GitHub. Record execution budget as flat-rate plan token efficiency, never as fictional cash expenditure.
+
+Rationale: A ready secret destination cannot create a missing vendor credential. Provider-first evidence and honest cost semantics prevent operational convenience from laundering a launch claim.

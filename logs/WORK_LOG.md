@@ -1105,3 +1105,24 @@ Intent outcome: achieved for every agent-owned premise; all five audit items and
 - Final validation: 954/954 tests across 152 files, strict lint, production build, browser 12/12, public 27/27, protocol 37/37, replay 3/3, security/dependency/schema/architecture/runtime/asset/Hot Context courts green, and Session 138 staging HTTP/edge smoke 7/7.
 
 Intent outcome: achieved. Every promoted audit item and the required second-order value-floor item shipped at an honest evidence-backed rung; launch-only external gates remain explicit.
+
+## 2026-08-04 — Session 139 — One-source control plane, closed-loop progression, and evidence saturation
+
+- Pulled/rebased `origin/main` first, ran canonical startup/canon/Ark/secrets/blocker courts, and audited live premises before promotion.
+- Shipped all eight items in `docs/AUDIT_2026-08-04.json`: shared task semantics, atomic project-status writes, closed-loop Pulse, first-three-run guidance, prestige runway, one execution-budget ledger, QR reference vectors, and shell lifecycle ownership.
+- Shipped two second-order fixes discovered by verification: one-time preference initialization eliminated a React render-loop warning, and provider-first blocker classification stopped GitHub readiness from masking missing PostHog capability.
+- Regenerated the Unified Genius List from source hashes: 0 executable, 5 honestly deferred, exhausted true. Remaining items require credentials, a product choice, real production/participant evidence, or a real community destination.
+- Verified 979/979 tests across 161 files in four direct shards, strict lint, build, schema/public/security/dependency/runtime/architecture/replay/health courts, npm audit zero, visual matrix 969/969, and doctor `blockingFailing: 0`.
+
+Intent outcome: achieved. The complete arc, every verified audit item, and two second-order innovations shipped without fabricated evidence or sibling-tree edits; SPARKED remains honestly gated.
+
+## 2026-08-04 — Session 139 recovery — Interrupted closeout completion
+
+- Classified the stale S139 lock plus staged audit/closeout artifacts and absent matching commit as a cut-off mid-closeout; `origin/main...HEAD` was 0/0 before recovery.
+- Parsed every changed JSON, confirmed no changed NDJSON, passed Git diff checks, and verified the configuration guard reported no corruption or recent events.
+- Revalidated the exact S139 change surface at 26/26, strict lint, production build, and doctor 132 passing / 31 warnings / one advisory / zero blocking failures.
+- Classified the broad recovery rerun honestly under severe shared-host contention: one 40-file shard passed 263/263; two fixed-timeout protocol cases passed 4/4 in isolation with a larger bound; a later shard exceeded the harness window without emitting a result and was stopped without claiming green.
+- Deployed the recovered tree through the brokered Cloudflare Pages path to `https://session-139-staging.call-of-doodie.pages.dev/` (immutable `https://e4f2498c.call-of-doodie.pages.dev/`) and passed the hosted visual court at 969/969.
+- Reconfirmed the host `CryptUnprotectData` boundary blocks both local and in-app direct image viewing; no subjective visual approval or SPARKED claim was fabricated.
+
+Recovery outcome: S139 engineering work and canonical write-back are verified and staging-green; only the recovery commit/push remained after this entry.

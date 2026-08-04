@@ -1,3 +1,15 @@
+- Session 139 (2026-08-04) completed the continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` mission from synchronized `main`.
+- Control-plane truth — one shared task parser owns human and machine task semantics; atomic, lock-bounded PROJECT_STATUS writes replace direct read/modify/write paths; source ratchets prevent regressions.
+- Continuation truth — every terminal run path records one bounded playtest flight and upserts Playtest Pulse before dispatching the same reason-coded next action.
+- Onboarding/progression truth — the first three runs form an explicit Calibrate/Counter/Commit journey, while prestige exposes a scenario-bounded pressure runway without presenting projections as promises.
+- Protocol truth — one canonical execution-budget ledger records flat-rate plan token efficiency rather than fictional cash spend; malformed rows fail the receipt.
+- Boundary truth — QR generation fails closed above 62 payload bytes and passes a complete structural reference-vector court; shell lifecycle ownership covers install prompting and guarded exit behavior.
+- Second-order truth — one-time preference initialization removed a render-loop warning found by the full visual matrix, and provider-first blocker classification prevents GitHub readiness from laundering missing PostHog capability.
+- Validation truth — 979/979 tests across 161 files, strict lint, build, schema/public/security/dependency/runtime/architecture/replay/health gates, npm audit zero, and rendered-pixel automation 969/969 pass directly.
+- Recovery staging truth — the exact recovered S139 tree is deployed at `https://session-139-staging.call-of-doodie.pages.dev/` (immutable `https://e4f2498c.call-of-doodie.pages.dev/`) and passes the hosted 19-route × 2-theme × 3-width court at 969/969.
+- Recovery visual honesty — both local image viewing and the in-app browser remain unavailable at the host `CryptUnprotectData` boundary; objective hosted pixels are green, but no subjective pixel verdict is fabricated.
+- Release truth — engineering implementation is green; SPARKED remains NO-GO pending real credentials, production/participant evidence, physical QA, publication/community destination, and founder approval.
+
 - Session 138 (2026-08-03) implemented all 12 items from the full-project audit plus one second-order startup enforcement item, then completed the canonical closeout court.
 - Experience truth — Home is one porcelain operations table organized around Orders, Operations, Player Progress, Field Manual, and Support; duplicate settings/progress/action surfaces were removed while all canonical public URLs remain.
 - Intelligence truth — `insight-graph-v1` converts existing deterministic run evidence into one Verdict, Lesson, and Action with contradiction handling and zero hosted-model/API token cost.

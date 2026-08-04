@@ -17,6 +17,9 @@ describe("public gameplay contract", () => {
     expect(contract.cost).toEqual({ freeTierCostStatus: "cost-neutral", paidInferenceRequired: false });
     expect(contract.modes).toHaveLength(7);
     expect(contract.formations.map((formation) => formation.id)).toEqual(["pincer", "escort", "flank", "surge"]);
+    expect(contract.prestige.totalKillsRequired).toBe(11_520);
+    expect(contract.prestige.source).toBe("src/utils/progressionCurve.js");
+    expect(contract.prestige.projectionClaimScope).toContain("not promised");
     expect(contract.formations.every((formation) => formation.counterplay.length > 20)).toBe(true);
   });
 });

@@ -27,6 +27,34 @@ export function killsRequiredForAccountLevel(level) {
   return 20 * (normalizedLevel - 1) ** 2;
 }
 
+export const PRESTIGE_REQUIRED_LEVEL = 25;
+
+export function buildPrestigeRunway({
+  totalKills = 0,
+  killsPerRunScenarios = DEFAULT_KILLS_PER_RUN,
+  requiredLevel = PRESTIGE_REQUIRED_LEVEL,
+} = {}) {
+  const kills = count(totalKills);
+  const targetLevel = Math.max(1, count(requiredLevel));
+  const totalKillsRequired = killsRequiredForAccountLevel(targetLevel);
+  const killsRemaining = Math.max(0, totalKillsRequired - kills);
+  const runsByKillsPerRun = runsForKills(killsRemaining, killsPerRunScenarios);
+  const projections = Object.values(runsByKillsPerRun);
+  return {
+    schemaVersion: 'prestige-runway-v1',
+    source: 'career.totalKills-and-progression-curve',
+    targetLevel,
+    currentLevel: getAccountLevel(kills),
+    totalKills: kills,
+    totalKillsRequired,
+    killsRemaining,
+    eligible: killsRemaining === 0,
+    runsByKillsPerRun,
+    projectedRuns: projections.length ? { fastest: Math.min(...projections), slowest: Math.max(...projections) } : null,
+    claimScope: 'scenario-projection-not-player-outcome',
+  };
+}
+
 export function buildProgressionRunway({
   totalKills = 0,
   careerPoints = 0,

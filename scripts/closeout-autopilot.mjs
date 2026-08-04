@@ -6,6 +6,7 @@ import readline from "readline";
 import { spawnSync } from "./lib/safe-spawn.mjs";
 import { fileURLToPath } from "url";
 import { redact } from "./lib/secrets.mjs";
+import { updateProjectStatus } from "./lib/write-project-status.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -103,7 +104,7 @@ function stampStatus() {
   const status = JSON.parse(fs.readFileSync(STATUS_PATH, "utf8"));
   const today = new Date().toISOString().slice(0, 10);
   status.lastUpdated = today;
-  if (!DRY) fs.writeFileSync(STATUS_PATH, JSON.stringify(status, null, 2) + "\n");
+  if (!DRY) updateProjectStatus(ROOT, (current) => ({ ...current, ...status }));
   console.log(`lastUpdated → ${today}`);
 }
 

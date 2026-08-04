@@ -23,6 +23,7 @@ import { isSpawnExhaustion, spawnBackoffMs, spawnResilient } from './lib/spawn-r
 import { getHostLoad } from './lib/host-load.mjs';
 import { readDurationCache, recordDuration, sortByHistoricalDuration, writeDurationCache } from './lib/test-duration-ordering.mjs';
 import { buildProofSourceManifest } from './lib/proof-source-manifest.mjs';
+import { updateProjectStatus } from './lib/write-project-status.mjs';
 // Re-export the pure helpers so existing importers of run-tests keep working and the
 // single source of truth stays scripts/lib/spawn-resilience.mjs.
 export { isSpawnExhaustion, spawnBackoffMs };
@@ -709,9 +710,8 @@ if (JSON_OUT) {
 }
 
 if (!NO_WRITE) {
-  const sp = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
   try {
-    const j = JSON.parse(fs.readFileSync(sp, 'utf8'));
+    const written = updateProjectStatus(ROOT, (j) => {
     // S160 audit #4: refresh-test-count.mjs is the SOLE owner of the canonical file-level
     // testsPassing/testsTotal (the .cache/test-count.json source the brief + doctor read).
     // run-tests.mjs scans a different, fuller set (153 files / assertion granularity) than
@@ -735,12 +735,13 @@ if (!NO_WRITE) {
     j.testsDeferred = deferred;
     j.testsBudgetExhausted = budgetExhausted;
     j.testsLastRun = new Date().toISOString().slice(0, 10);
-    fs.writeFileSync(sp, JSON.stringify(j, null, 2) + '\n', 'utf8');
+      return j;
+    });
     // S166 [SIL][S165 #1]: record this session's flaky set so the flaky-trend
     // probe can escalate a chronically-flaky test (≥3 consecutive sessions).
     try {
       const { recordFlaky } = await import('./lib/flaky-trend.mjs');
-      recordFlaky({ session: j.currentSession, date: j.testsLastRun, flaky });
+      recordFlaky({ session: written.status.currentSession, date: written.status.testsLastRun, flaky });
     } catch { /* trend recording is best-effort; never fail the test run */ }
   } catch (e) { /* ignore write failure in CI */ }
 }
@@ -920,9 +921,8 @@ async function runShardAggregate(shardCount) {
     console.log(`  proof: ${path.relative(ROOT, aggregateProofPath).replace(/\\/g, '/')}`);
   }
   if (!NO_WRITE) {
-    const sp = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
     try {
-      const j = JSON.parse(fs.readFileSync(sp, 'utf8'));
+      updateProjectStatus(ROOT, (j) => {
       j.testsAssertionsTotal = totalAll;
       j.testsAssertionsPassing = totalPass;
       j.testsAssertionsFiles = mergedResults.length;
@@ -935,7 +935,8 @@ async function runShardAggregate(shardCount) {
       j.testsLastRunMode = `sharded:${shardCount}`;
       j.testsShardProofDir = path.relative(ROOT, proofDir).replace(/\\/g, '/');
       j.testsShardProofResumed = resumedShards;
-      fs.writeFileSync(sp, JSON.stringify(j, null, 2) + '\n', 'utf8');
+        return j;
+      });
     } catch { /* ignore write failure in CI */ }
   }
   process.exit(failedFiles.length || childParseFailed ? 1 : 0);
