@@ -568,9 +568,17 @@ export default function HomeV2(props) {
             <span style={chip} onClick={onChangeUsername} title="Change callsign">
               @{username} <span style={{ color: "#888" }}>▾</span>
             </span>
-            <span style={{ ...chip, cursor: "default", background: prestige > 0 ? "rgba(255,215,0,0.15)" : chip.background, borderColor: prestige > 0 ? "rgba(255,215,0,0.45)" : chip.border, color: prestige > 0 ? "#FFD700" : "#CCC" }}>
-              {prestige > 0 ? `P${prestige} · ` : ""}LVL {accountLevel}
-            </span>
+            {(() => {
+              const ptIcon  = prestige >= 10 ? "💀" : prestige >= 6 ? "💩" : prestige >= 3 ? "🦠" : prestige >= 1 ? "🚽" : null;
+              const ptColor = prestige >= 10 ? "#FF5555" : prestige >= 6 ? "#FFD700" : prestige >= 3 ? "#C0C0C0" : prestige >= 1 ? "#CD7F32" : "#CCC";
+              const ptBg    = prestige >= 10 ? "rgba(255,60,60,0.15)"  : prestige >= 6 ? "rgba(255,215,0,0.15)"  : prestige >= 3 ? "rgba(192,192,192,0.12)" : prestige >= 1 ? "rgba(205,127,50,0.14)" : chip.background;
+              const ptBord  = prestige >= 10 ? "rgba(255,80,80,0.5)"   : prestige >= 6 ? "rgba(255,215,0,0.5)"   : prestige >= 3 ? "rgba(192,192,192,0.4)"  : prestige >= 1 ? "rgba(205,127,50,0.45)"  : null;
+              return (
+                <span style={{ ...chip, cursor: "default", background: ptBg, ...(ptBord ? { border: `1px solid ${ptBord}` } : {}), color: ptColor }} title={prestige > 0 ? `Prestige ${prestige}` : undefined}>
+                  {ptIcon ? `${ptIcon} P${prestige} · ` : ""}LVL {accountLevel}
+                </span>
+              );
+            })()}
             {gamepadConnected && (
               <span style={{ ...chip, color: controllerType === "xbox" ? "#4DBD61" : controllerType === "ps" ? "#6699FF" : "#CCC" }} title="Controller connected">🎮</span>
             )}
