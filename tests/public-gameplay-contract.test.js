@@ -14,6 +14,12 @@ describe("public gameplay contract", () => {
     expect(contract.permanentUpgrades).toHaveLength(META_UPGRADES.length);
     expect(contract.enemies.filter((enemy) => enemy.boss).map((enemy) => enemy.index)).toEqual([...BOSS_ROTATION].sort((a, b) => a - b));
     expect(contract.trust.excludedClaim).toContain("not full physics resimulation");
+    expect(contract.trust.replayCoverage).toMatchObject({
+      schemaVersion: "replay-coverage-v1",
+      confidenceCeiling: "advisory",
+    });
+    expect(contract.trust.replayCoverage.covered).toHaveLength(3);
+    expect(contract.trust.replayCoverage.excluded).toHaveLength(3);
     expect(contract.cost).toEqual({ freeTierCostStatus: "cost-neutral", paidInferenceRequired: false });
     expect(contract.modes).toHaveLength(7);
     expect(contract.formations.map((formation) => formation.id)).toEqual(["pincer", "escort", "flank", "surge"]);

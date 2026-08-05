@@ -327,6 +327,7 @@ export function buildAgentsManifest() {
     ],
     trust: {
       competitiveReplayClaim: "advisory deterministic evidence; not full physics resimulation",
+      replayCoverage: gameplay.trust.replayCoverage,
       freeTierCostStatus: gameplay.cost.freeTierCostStatus,
       rights: gameplay.rights,
     },

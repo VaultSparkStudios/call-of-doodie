@@ -1,3 +1,25 @@
+- Session 140 (2026-08-04) recovered and closed the cut-off Session 139 boundary, then completed a fresh `/start -> /audit -> /implement -> second-order saturation -> /closeout` arc.
+- Evidence truth — Hot Context selects the latest audit semantically and derives its timestamp/fingerprint from source content, so checkout mtimes cannot make exact-main CI stale or nondeterministic.
+- Runtime truth — package metadata and all five GitHub Actions setup surfaces require Node.js 22 or newer, enforced by an executable runtime contract.
+- Release truth — launch readiness now separates engineering readiness from SPARKED readiness; external credentials, physical QA, verified reply email, participant evidence, publication, direct subjective pixel review, and founder approval remain explicit reason-coded gates.
+- Governance truth — the Canon adoption ledger has 50 checked adoptions, two evidence-backed exemptions, and zero pending/review rows; startup acceptance fails on ledger drift.
+- Replay truth — `replay-coverage-passport-v1` names three deterministic replay lanes and three excluded authoritative/full-physics lanes, and projects the same advisory ceiling to Run History, Field Manual, gameplay contract, and agent manifest.
+- Validation truth — 990/990 tests across 168 files, strict lint, build, schema/runtime/architecture/public/security/replay gates, and npm audit zero pass on the final tree.
+- Visual truth — isolated Session 140 staging passes the 969/969 route/theme/viewport matrix, and the expanded Replay Coverage Passport passes 32/32 focused state checks across both themes at 390px and 1440px; 10 captures are hash-bound. Direct subjective image inspection remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
+- Staging truth — the exact Session 140 tree is available at `https://session-140-staging.call-of-doodie.pages.dev/` (immutable `https://a13582fb.call-of-doodie.pages.dev/`).
+- Saturation truth — all five verified audit items shipped; the generated innovation pack found no repo-local candidate, and remaining work is credential, product-decision, real-data, community, hardware/media, or founder gated.
+
+- Session 140 (2026-08-04) recovered and closed the cut-off Session 139 boundary, then completed a fresh `/start -> /audit -> /implement -> second-order saturation -> /closeout` arc.
+- Evidence truth — Hot Context selects the latest audit semantically and derives its timestamp/fingerprint from source content, so checkout mtimes cannot make exact-main CI stale or nondeterministic.
+- Runtime truth — package metadata and all five GitHub Actions setup surfaces require Node.js 22 or newer, enforced by an executable runtime contract.
+- Release truth — launch readiness now separates engineering readiness from SPARKED readiness; external credentials, physical QA, verified reply email, participant evidence, publication, direct subjective pixel review, and founder approval remain explicit reason-coded gates.
+- Governance truth — the Canon adoption ledger has 50 checked adoptions, two evidence-backed exemptions, and zero pending/review rows; startup acceptance fails on ledger drift.
+- Replay truth — `replay-coverage-passport-v1` names three deterministic replay lanes and three excluded authoritative/full-physics lanes, and projects the same advisory ceiling to Run History, Field Manual, gameplay contract, and agent manifest.
+- Validation truth — 990/990 tests across 168 files, strict lint, build, schema/runtime/architecture/public/security/replay gates, and npm audit zero pass on the final tree.
+- Visual truth — isolated Session 140 staging passes the 969/969 route/theme/viewport matrix, and the expanded Replay Coverage Passport passes 32/32 focused state checks across both themes at 390px and 1440px; 10 captures are hash-bound. Direct subjective image inspection remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
+- Staging truth — the exact Session 140 tree is available at `https://session-140-staging.call-of-doodie.pages.dev/` (immutable `https://a13582fb.call-of-doodie.pages.dev/`).
+- Saturation truth — all five verified audit items shipped; the generated innovation pack found no repo-local candidate, and remaining work is credential, product-decision, real-data, community, hardware/media, or founder gated.
+
 - Session 139 (2026-08-04) completed the continuous `/start -> /audit -> /implement -> second-order innovation -> /closeout` mission from synchronized `main`.
 - Control-plane truth — one shared task parser owns human and machine task semantics; atomic, lock-bounded PROJECT_STATUS writes replace direct read/modify/write paths; source ratchets prevent regressions.
 - Continuation truth — every terminal run path records one bounded playtest flight and upserts Playtest Pulse before dispatching the same reason-coded next action.

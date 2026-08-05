@@ -10,6 +10,7 @@ import {
 import { REPLAY_DIFFICULTIES, REPLAY_MODES, REPLAY_STARTERS } from "../../src/utils/replayCode.js";
 import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
 import { killsRequiredForAccountLevel, PRESTIGE_REQUIRED_LEVEL } from "../../src/utils/progressionCurve.js";
+import { buildReplayCoveragePassport } from "../../src/utils/replayCoverage.js";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
@@ -26,6 +27,7 @@ export function buildPublicGameplayContract() {
     trust: {
       replayEvidence: "advisory deterministic decision-stream evidence",
       excludedClaim: "not full physics resimulation",
+      replayCoverage: buildReplayCoveragePassport(),
       publicWriteActions: "not-offered",
     },
     loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "choose_perk", "choose_route", "survive_wave", "review_debrief"],

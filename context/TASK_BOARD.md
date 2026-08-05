@@ -16,6 +16,16 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S140** Reproducible Hot Context — semantic audit ordering plus content-derived stamps/fingerprints keep fresh-checkout and exact-main output deterministic.
+- [x] [SIL:2] **DONE S140** Canonical Node runtime — package and lock metadata plus all five workflow setup surfaces require Node.js 22+, enforced by a tested receipt.
+- [x] [SIL:3] **DONE S140** Dual-rung launch readiness — engineering and SPARKED verdicts have separate reason-coded gates without reading raw environment files.
+- [x] [SIL:3] **DONE S140** Checked Canon posture — 50 adopted and two evidence-backed exemptions remain startup-enforced with zero pending/review rows.
+- [x] [SIL:3] **DONE S140** Replay Coverage Passport — three verified deterministic lanes and three explicit exclusions share one advisory contract across player and agent surfaces.
+- [x] [SIL:2] **DONE S140 visual evidence** The canonical hosted matrix passed 969/969 and the expanded Replay Coverage Passport passed 32/32 focused checks across both themes at mobile and desktop widths.
+- [x] [AUDIT WIN S140] Balance/progression changes, fallback retirement, hosted artificial intelligence, identity expansion, credential mutation, physical/public launch claims, and subjective pixel approval were rejected or deferred because their live prerequisites remain absent.
+
+**Runway exception:** all five live-premise audit items are shipped and the generated innovation pack found no repo-local candidate. Remaining work requires credentials, a product decision, production/participant evidence, a real community destination, physical hardware/media, or founder approval; no phantom item is invented.
+
 - [x] [SIL:3] **DONE S139** One task semantics engine — shared parser/abstract syntax tree/reconciliation powers human and machine task surfaces with a 16/16 live court.
 - [x] [SIL:3] **DONE S139** Atomic project-status boundary — bounded stale-lock recovery, same-directory atomic replacement, invariants, and a direct-writer ratchet cover all status mutations.
 - [x] [SIL:3] **DONE S139** Closed-loop Playtest Pulse — terminal continuation atomically records one flight and one Pulse update before executing the shared next action.

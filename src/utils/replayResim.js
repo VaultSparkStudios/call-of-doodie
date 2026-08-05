@@ -4,6 +4,7 @@ import {
   summarizeReplayCommandTrace,
 } from "./replayCommandTrace.js";
 import { createWaveRng } from "../gameHelpers.js";
+import { REPLAY_METHODS } from "./replayCoverage.js";
 
 function clampInt(value, min, max, fallback = min) {
   const num = Number.parseInt(value, 10);
@@ -180,8 +181,8 @@ export function runDeterministicReplayStateStepper(seed, traceBodyOrTrace, {
   if (!isValidReplayCommandTrace(trace)) {
     return {
       ok: false,
-      method: "deterministic_replay_state_stepper_v1",
-      coverage: "movement_aim_only",
+      method: REPLAY_METHODS.stateStepper.method,
+      coverage: REPLAY_METHODS.stateStepper.coverage,
       reason: "invalid-trace",
       checkpoints: [],
       finalState: null,
@@ -219,8 +220,8 @@ export function runDeterministicReplayStateStepper(seed, traceBodyOrTrace, {
 
   return {
     ok: true,
-    method: "deterministic_replay_state_stepper_v1",
-    coverage: "movement_aim_only",
+    method: REPLAY_METHODS.stateStepper.method,
+    coverage: REPLAY_METHODS.stateStepper.coverage,
     seed: clampInt(seed, 0, 999999999, 0),
     framesSimulated: currentFrame,
     commandCount: events.length,
@@ -239,8 +240,8 @@ export function runDeterministicReplayCombatSlice(seed, traceBodyOrTrace, {
   if (!isValidReplayCommandTrace(trace)) {
     return {
       ok: false,
-      method: "deterministic_replay_combat_slice_v1",
-      coverage: "trace_movement_actions_no_enemies",
+      method: REPLAY_METHODS.combatSlice.method,
+      coverage: REPLAY_METHODS.combatSlice.coverage,
       reason: "invalid-trace",
       checkpoints: [],
       finalState: null,
@@ -320,8 +321,8 @@ export function runDeterministicReplayCombatSlice(seed, traceBodyOrTrace, {
 
   return {
     ok: true,
-    method: "deterministic_replay_combat_slice_v1",
-    coverage: "trace_movement_actions_no_enemies",
+    method: REPLAY_METHODS.combatSlice.method,
+    coverage: REPLAY_METHODS.combatSlice.coverage,
     seed: clampInt(seed, 0, 999999999, 0),
     framesSimulated: currentFrame,
     commandCount: events.length,
@@ -391,8 +392,8 @@ export function runDeterministicContactEnemySlice(seed, traceBodyOrTrace, {
   if (!isValidReplayCommandTrace(trace)) {
     return {
       ok: false,
-      method: "deterministic_contact_enemy_slice_v1",
-      coverage: "trace_movement_one_contact_enemy_derived",
+      method: REPLAY_METHODS.contactEnemySlice.method,
+      coverage: REPLAY_METHODS.contactEnemySlice.coverage,
       reason: "invalid-trace",
       checkpoints: [],
       finalState: null,
@@ -445,8 +446,8 @@ export function runDeterministicContactEnemySlice(seed, traceBodyOrTrace, {
   const finalState = contactEnemySnapshot(finalFrame, player, enemy, contactState, "final");
   return {
     ok: true,
-    method: "deterministic_contact_enemy_slice_v1",
-    coverage: "trace_movement_one_contact_enemy_derived",
+    method: REPLAY_METHODS.contactEnemySlice.method,
+    coverage: REPLAY_METHODS.contactEnemySlice.coverage,
     seed: clampInt(seed, 0, 999999999, 0),
     framesSimulated: finalFrame,
     commandCount: events.length,
@@ -528,6 +529,5 @@ export function runResim(seed, traceBodyOrTrace, maxFrames = 36000, submitted = 
     reason: pressureProfile.valid ? null : "invalid-trace",
   };
 }
-
 
 

@@ -1126,3 +1126,18 @@ Intent outcome: achieved. The complete arc, every verified audit item, and two s
 - Reconfirmed the host `CryptUnprotectData` boundary blocks both local and in-app direct image viewing; no subjective visual approval or SPARKED claim was fabricated.
 
 Recovery outcome: S139 engineering work and canonical write-back are verified and staging-green; only the recovery commit/push remained after this entry.
+
+## 2026-08-04 — Session 140 — Reproducible evidence, dual-rung release truth, and replay passport
+
+- Recovered the cut-off S139 closeout first, revalidated/staged its tree, committed it as `93c6832`, pushed it, and started the fresh arc from a clean synchronized boundary.
+- Ran canonical startup and a fresh game/product/public-release audit; promoted five live-premise items and rejected unsupported balance, identity, hosted-artificial-intelligence, launch, and participant claims.
+- Made Hot Context deterministic across fresh checkouts through semantic audit ordering plus source-content timestamps and fingerprints.
+- Declared Node.js 22+ in package/lock metadata, aligned five GitHub Actions runtime setups, and added an executable runtime contract.
+- Split launch readiness into engineering and SPARKED verdicts with reason-coded ownership and removed raw environment-file reads from the release checker.
+- Checked all active Canon adoption rows: 50 adopted, two evidence-backed exemptions, zero pending/review; startup acceptance now enforces the ledger.
+- Added `replay-coverage-passport-v1` across Run History, Field Manual, gameplay contract, and agents manifest with three verified lanes and three explicit exclusions.
+- Generated the innovation pack; no repo-local candidate remained. Routed the shared sitemap checker’s directory-index false negatives to Studio Ops through signed Ark cargo.
+- Deployed exact S140 staging at `https://session-140-staging.call-of-doodie.pages.dev/` (immutable `https://a13582fb.call-of-doodie.pages.dev/`). Hosted visual verification passed 969/969; the expanded Replay Coverage Passport passed 32/32 focused checks; 10 captures are hash-bound.
+- Final verification: 990/990 tests across 168 files, strict lint, production build, schema/runtime/architecture/public/security/replay courts, launch smoke, diff integrity, and npm audit zero.
+
+Intent outcome: achieved for recovery and every repo-owned audit item; SPARKED remains honestly NO-GO behind external evidence and founder gates.

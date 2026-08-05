@@ -1,0 +1,235 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-08-04",
+  "session": 140,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-game-and-release",
+  "meta": {
+    "generatedAt": "2026-08-04",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-game-and-release",
+    "candidateCount": 27,
+    "promotedCount": 5,
+    "combinedPriority": 136.5,
+    "top3": [
+      "reproducible-hot-context",
+      "replay-coverage-passport",
+      "canonical-node-runtime"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle returned evidence-found for all five promoted premises. Direct evidence includes the exact 93c6832 GitHub Actions failure at tests/hot-context.test.js, filesystem-mtime-derived generatedAt and a pinned 2026-08-03 audit source, Node 20 workflows against Supabase packages requiring Node >=22, contradictory launch-readiness language, three deterministic replay slices collapsed into one generic advisory label, and 44 unchecked canon-adoption rows despite zero live conformance gaps.",
+    "baseline": {
+      "release": "FORGE. Local engineering and isolated Cloudflare Pages staging are green; SPARKED remains NO-GO under provider, physical-device, verified reply-as email, publication, production-outcome, direct subjective pixel, and founder gates.",
+      "quality": "Recovered Session 139 evidence is 979/979. Exact-main GitHub Actions ran 978/979 and failed only because committed Hot Context changed when source mtimes changed on checkout.",
+      "architecture": "Green at 4,971/5,000 App lines, a 1,768/1,775-line loop span, 32 system boundaries, and two hook boundaries.",
+      "runtime": "Green at 195,631 entry bytes and 548,961 deferred runtime bytes, but CI uses unsupported Node 20 for the current Supabase dependency graph.",
+      "gameLoop": "Structural review scores 43/50: loop tightness 9, progression 8, engagement 9, retention 8, soul fidelity 9. These are implementation scores, not measured fun or retention outcomes.",
+      "geniusList": "The prior schema-v2 Genius cache was honestly exhausted. This audit uses expansion-pass discoveries and does not recycle provider-, data-, device-, publication-, community-, or product-decision-gated work.",
+      "cost": "All promoted work is local/static and introduces no dependency, hosted inference, or variable per-user cost."
+    }
+  },
+  "axisCoverage": {
+    "featureDepth": "Replay evidence gains an inspectable coverage passport without inflating its claim.",
+    "innovation": "A source-derived replay coverage/exclusion map and dual-rung release receipt are new compositional surfaces.",
+    "ux": "Player trust copy can distinguish what the replay court reproduced from what remains advisory.",
+    "feedback": "Release and canon warnings become reason-coded receipts with concrete next actions.",
+    "engagement": "No balance or retention change is promoted without participant evidence; replay trust deepens competitive confidence.",
+    "ai": "Hosted AI remains culled because deterministic local intelligence has no measured quality gap.",
+    "security": "Runtime alignment, reproducible evidence artifacts, scoped telemetry truth, and checked canon posture reduce false certification.",
+    "efficiency": "One deterministic audit selector and one runtime-version contract replace checkout-sensitive or duplicated assumptions.",
+    "tokenApiReduction": "Hot Context remains bounded and source-indexed; no model call or runtime token cost is added."
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 80,
+    "sessionEngagement": 90,
+    "retention": 80,
+    "soulFidelity": 90,
+    "empiricalConfidence": "low",
+    "evidence": "The deploy-survive-adapt-debrief-rematch spine, reachable first-three-run journey, progression runway, local Pulse, continuation actions, and evidence-ranked coaching are structurally strong. Replay resimulation has meaningful deterministic slices but does not yet tell players which mechanics those slices cover. No consented docs/PLAYTESTS corpus exists.",
+    "nextThreeMoves": [
+      "Publish a source-derived replay coverage and exclusion passport while retaining the advisory ceiling.",
+      "Keep numerical progression and balance unchanged until consented Pulse evidence exists.",
+      "Use the dual-rung release receipt to protect engineering momentum without laundering launch readiness."
+    ]
+  },
+  "releaseGate": {
+    "ci": "red: exact-main Cloudflare workflow failed Hot Context freshness after checkout",
+    "staging": "green: recovered exact tree staged and hosted visual/HTTP courts passed",
+    "secrets": "red for SPARKED: sentry.observability and posthog.analytics are missing",
+    "branding": "green in local public contract; Studio sitemap checker has directory-index false negatives",
+    "parity": "engineering staging verified; production outcome parity not inferred",
+    "rollback": "documented through Cloudflare Pages immutable preview and retained production fallback",
+    "founderApproval": "not captured",
+    "verdict": "NO-GO for SPARKED; GO for repository implementation and isolated staging"
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "verification / efficiency / observability",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 31.0,
+      "slug": "reproducible-hot-context",
+      "title": "Make Hot Context and latest-audit selection reproducible across fresh checkouts.",
+      "status": "shipped",
+      "why": "The exact recovered commit fails CI because Hot Context derives generatedAt from filesystem mtimes, which change on checkout. The generator also pins docs/AUDIT_2026-08-03.json while a newer sidecar exists, and the shared local selector itself sorts by mtime.",
+      "recipe": "Make audit-sidecar ordering semantic and deterministic by filename date/ordinal with session metadata as a tie-breaker. Have Hot Context consume that selector, derive its evidence stamp from source content rather than mtimes, and test identical output under perturbed mtimes plus selection of same-day suffixed audits.",
+      "verificationPremise": "Studio Oracle evidence-found (10 lines); GitHub Actions run 30955047803 proves the checkout-only failure at 978/979.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Remove mtime from Hot Context generatedAt." },
+        "L2": { "effortHours": 2.5, "recipe": "Use deterministic latest-audit selection and add fresh-checkout fixtures." },
+        "L3": { "effortHours": 4, "recipe": "Add mtime-perturbation, same-day suffix, stale-audit, and byte-identical regeneration courts." }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "gameplay trust / UX / innovation",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 29.0,
+      "slug": "replay-coverage-passport",
+      "title": "Publish what replay evidence actually reproduces—and what it does not.",
+      "status": "shipped",
+      "why": "The code owns deterministic movement/aim state stepping, a combat slice, and a derived contact-enemy slice, but player and agent surfaces collapse these into one advisory label. That is honest but undersells verified depth and makes the exclusion boundary difficult to inspect.",
+      "recipe": "Create one pure replay-coverage-v1 model sourced from the actual resimulation methods. List covered lanes, excluded dynamics, confidence ceiling, and next verification frontier. Render it in the Trust & Replay panel and project the same contract into gameplay-contract.json, field-manual.json, and agents.json without changing the advisory claim.",
+      "verificationPremise": "Studio Oracle evidence-found (14 lines) across replayResim, MenuPanels, Field Manual, and the public gameplay contract.",
+      "ladder": {
+        "L1": { "effortHours": 1.5, "recipe": "Add a pure coverage/exclusion model with tests." },
+        "L2": { "effortHours": 3, "recipe": "Render the model in the player trust panel and human Field Manual." },
+        "L3": { "effortHours": 5, "recipe": "Project one source-derived passport to every human/agent surface and add drift/fail-closed courts." }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "CI / dependency reliability / security",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 27.0,
+      "slug": "canonical-node-runtime",
+      "title": "Align every workflow and local contract on the supported Node runtime.",
+      "status": "shipped",
+      "why": "All GitHub Actions jobs use Node 20 while the installed Supabase 2.111 graph declares Node 22 or newer. npm ci currently warns and continues, so the unsupported runtime can remain green until an upstream code path breaks.",
+      "recipe": "Declare Node >=22 in package.json, move every setup-node step to Node 22, and add a zero-dependency runtime-contract checker that parses workflow YAML and the installed lockfile engine floor. Wire it into schema:lint so runtime drift cannot silently return.",
+      "verificationPremise": "Studio Oracle evidence-found (22 lines); exact CI logs show six EBADENGINE warnings under Node 20.20.2.",
+      "ladder": {
+        "L1": { "effortHours": 0.5, "recipe": "Upgrade workflow setup-node values to 22." },
+        "L2": { "effortHours": 1.5, "recipe": "Declare the package engine and test every workflow occurrence." },
+        "L3": { "effortHours": 3, "recipe": "Add a source-derived runtime receipt covering workflows, package engines, and dependency floors, then enforce it in schema lint." }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "HIGH",
+      "axis": "release truth / feedback / operations",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 27.5,
+      "slug": "dual-rung-release-receipt",
+      "title": "Separate engineering readiness from SPARKED readiness in one executable receipt.",
+      "status": "shipped",
+      "why": "launch-readiness reports missing PostHog and Sentry, then calls them post-launch optional, while the canonical handoff records project-scoped telemetry as a SPARKED gate. Its JSON counts assets and owner gates but cannot answer whether engineering staging or public promotion is ready.",
+      "recipe": "Refactor launch-readiness into a pure receipt with engineering and SPARKED rungs, reason-coded gate ownership, required/optional semantics per rung, evidence locations, and next commands. Preserve asset/device/publication distinctions and never read raw env files; capability status must enter as declared/redacted inputs or remain unknown.",
+      "verificationPremise": "Studio Oracle evidence-found (10 lines); secrets-gateway probes independently report both provider capabilities missing.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Stop describing missing scoped telemetry as globally optional." },
+        "L2": { "effortHours": 2.5, "recipe": "Emit separate engineeringReady and sparkedReady booleans with reasons." },
+        "L3": { "effortHours": 4, "recipe": "Add pure fixtures, redacted capability inputs, evidence receipts, and human output derived from the same model." }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "HIGH",
+      "axis": "canon coherence / process quality",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 22.0,
+      "slug": "checked-canon-adoption-posture",
+      "title": "Replace 44 generic review rows with a checked project-specific canon posture.",
+      "status": "shipped",
+      "why": "Startup reports 44/52 pending review even though live conformance reports zero applicable gaps. The ledger therefore warns without recording which canons are adopted, project-inapplicable, evidence-gated, or owned by the Studio control plane.",
+      "recipe": "Walk every review row against live canon, project type, manifest, public contracts, decisions, and conformance evidence. Mark adopted or exempt-with-reason only when supported; retain genuine pending gates. Add a small ledger court that validates statuses, nonempty evidence, count reconciliation, and zero blank review rows.",
+      "verificationPremise": "Studio Oracle evidence-found (44 lines); live conformance reports 0 ABSOLUTE gaps and 0 unmeasured applicable canons.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Classify all current review rows with evidence or an explicit reason." },
+        "L2": { "effortHours": 2, "recipe": "Add status/evidence/count validation." },
+        "L3": { "effortHours": 3, "recipe": "Integrate the court into startup acceptance and preserve real provider/human gates without generic warning noise." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "numeric-balance-or-progression-retune",
+      "reason": "Evidence-gated WIN: no consented participant corpus exists; source-derived runway remains descriptive and no number changes are justified."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "Culled: the deterministic local Insight Graph has no measured quality gap and hosted inference would add variable cost, latency, and privacy scope."
+    },
+    {
+      "slug": "supabase-obelisk-account-expansion",
+      "reason": "Product-decision gated: guest-first local identity remains deliberate and account work changes consent, recovery, deletion, abuse, and cost scope."
+    },
+    {
+      "slug": "sitemap-directory-index-false-negatives",
+      "reason": "Cross-repo owner issue: the Studio checker recognizes privacy.html/contact.html/ip.html but not public/<route>/index.html. The project already passes its 27-file route contract; route the checker defect through signed Ark cargo rather than duplicating pages."
+    },
+    {
+      "slug": "posthog-sentry-configuration",
+      "reason": "Provider-credential gated after canonical secrets discovery; GitHub transport readiness cannot create missing project-scoped vendor credentials."
+    },
+    {
+      "slug": "sparked-promotion",
+      "reason": "NO-GO: physical PWA/gamepad/full-run evidence, verified reply-as email, provider-scoped telemetry, publication/community, production outcomes, subjective pixel review, and founder approval remain incomplete."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "reproducible-hot-context",
+      "status": "shipped",
+      "outcome": "Audit selection now follows semantic date/ordinal order, Hot Context is content-stamped and checkout-deterministic, and recent decisions are actually recent.",
+      "verification": "4/4 focused tests plus byte-identical mtime perturbation and live freshness check."
+    },
+    {
+      "slug": "canonical-node-runtime",
+      "status": "shipped",
+      "outcome": "Package, lockfile, all five setup-node jobs, current runtime, and dependency engine floors share an executable Node >=22 contract.",
+      "verification": "Runtime receipt PASS, focused test 1/1, and schema lint PASS."
+    },
+    {
+      "slug": "dual-rung-release-receipt",
+      "status": "shipped",
+      "outcome": "Launch readiness now separates engineering readiness from SPARKED readiness, accepts redacted capability state, and enumerates provider/external/founder evidence without raw env reads.",
+      "verification": "Focused launch-readiness tests 3/3; live declared-missing receipt reports engineering READY and SPARKED NO-GO."
+    },
+    {
+      "slug": "checked-canon-adoption-posture",
+      "status": "shipped",
+      "outcome": "All 52 active canons have project-specific evidence: 50 adopted, two inapplicable, zero generic review/pending rows; startup acceptance enforces the ledger.",
+      "verification": "Ledger test 1/1 and canonical startup acceptance PASS."
+    },
+    {
+      "slug": "replay-coverage-passport",
+      "status": "shipped",
+      "outcome": "One replay-coverage-v1 contract binds three deterministic method lanes and three explicit exclusions across runtime, Run History, Field Manual, gameplay contract, and agents manifest.",
+      "verification": "Replay/public focused suite 23/23 and public contract 27-file PASS; advisory ceiling unchanged."
+    },
+    {
+      "slug": "saturation-expansion",
+      "status": "exhausted",
+      "outcome": "Innovation Pack reports no repo-local candidates; remaining work is credential, product-decision, production-data, or community gated.",
+      "verification": "node scripts/ops.mjs innovation-pack and all five game medium gates PASS."
+    }
+  ]
+}

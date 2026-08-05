@@ -1,49 +1,49 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: faa089408e7a -->
-<!-- generated-at: 2026-08-04T18:26:21.958Z -->
+<!-- source-hash: 1362f02d2f5a -->
+<!-- generated-at: 2026-08-05T16:27:37.929Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 139 Handoff Summary
+SESSION 140 HANDOFF SUMMARY
 
-Status
-- Session 139 complete; pushed directly to main.
-- Release: FORGE. SPARKED remains NO-GO.
+Session
+- Session 140. Continues from recovered/pushed Session 139 (commit 93c6832) at clean synchronized main.
 
-Shipped This Session
-- All 8 audit items plus 2 second-order fixes.
-- Unified task model, atomic PROJECT_STATUS status boundary, single execution ledger.
-- RUN THE FIX completes local Pulse in either ordering; First Run 3 reachable.
-- Prestige exposes unchanged 11,520-kill threshold as labeled scenarios, not a promise.
-- PROJECT_STATUS mutations serialize/replace atomically; 16/16 live rows reconcile.
-- Provider readiness prevents false GitHub-secret executability.
-- QR output bounded and boolean; install/navigation lifecycle behind tested hook; App headroom recovered to 32 lines.
+What Shipped (S140)
+- Recovered, revalidated, staged, and pushed S139; started S140 from clean boundary.
+- Replaced checkout-mtime Hot Context selection with semantic audit ordering and content-derived timestamps/fingerprints; closed exact-main CI failure.
+- Declared/enforced Node.js 22+ across package metadata and all five workflow runtime setups.
+- Split release evidence into engineering READY vs SPARKED NO-GO with named gates (provider, physical, email, participant, publication, subjective-visual, founder).
+- Converted active Canon adoption rows to checked adopted/exempt evidence; zero-pending ledger now a startup acceptance contract.
+- Added source-derived Replay Coverage Passport: three verified deterministic lanes, three excluded authoritative/full-physics lanes.
 
-Current Intent
-- Run agent-neutral /arc continuously from synced main through /start, premise-verified audit, exhaustive /implement, canonical /closeout; stage exact evidence, push to main, no fabricated external outcomes.
+Current State
+- Architecture: App 4,971/5,000 lines; game loop 1,768/1,775; 32 system boundaries; 2 hook boundaries.
+- Canon: 50 adopted, 2 evidence-backed exemptions, 0 pending/review.
+- Release: engineering READY; SPARKED NO-GO.
+- Saturation: five audit items shipped; no repo-local second-order candidate remains.
 
-Now Bucket (top 3)
-- Collect consented participant Pulse exports before changing progression/balance/fun/retention claims.
-- Supply project-scoped PostHog/Sentry credentials; finish physical/email/publication gates before SPARKED promotion.
-- Keep exact HomeV2/v1 production performance comparison; do not retire fallback without favorable production/funnel evidence.
+Evidence
+- Direct suite 990/990 across 168 files; strict lint, build, schema/runtime/architecture/public/security/replay, launch smoke, npm audit zero all pass.
+- Canonical staging matrix 969/969 across 19 routes, 2 themes, 390/768/1440 widths.
+- Replay Coverage Passport 32/32 at 390px/1440px in sewer-night and porcelain-day; 10 hash-bound captures in docs/visual-qa/LATEST.json.
+- Staging: session-140-staging.call-of-doodie.pages.dev; immutable preview a13582fb.call-of-doodie.pages.dev.
 
-Blockers (top 3)
-- No consented participant Pulse data; blocks balance/retention/pacing conclusions.
-- PostHog/Sentry require project-scoped credentials (live secrets discovered but not project-scoped).
-- HomeV2 vs v1 fallback retirement blocked pending production funnel evidence.
+Now Bucket (Top 3)
+- Collect consented Playtest Pulse exports before changing balance/progression/fun/retention claims.
+- Supply project-scoped PostHog/Sentry credentials; complete verified reply-as email, physical PWA/gamepad/full-run media, publication/community, founder gates before SPARKED.
+- Keep replay claims advisory; retain HomeV1 until real exact-main production/funnel evidence clears retirement court.
 
-Human-Blocked Items
-- Physical PWA/gamepad/full-run media capture (pending device access; open since Session 135+).
-- Verified reply-as email delivery (Zoho; open since Session 138).
-- Project-scoped analytics/Sentry credentials (open since Session 137+).
-- Publication/community + founder release approval (open across sessions).
-- Consented participant Pulse exports (open since Session 135+).
+Blockers (Top 3)
+- Subjective image viewing unavailable: host image sandbox fails CryptUnprotectData; no subjective visual approval fabricated.
+- SPARKED promotion blocked pending real external credentials and outcome evidence.
+- HomeV1 retirement blocked pending exact-main production/funnel data.
 
-State Snapshot
-- Architecture: App 4,968/5,000 lines; game loop 1,768/1,775; 32 system boundaries; 2 hook boundaries.
-- Validation: 56/56 focused/related plus task/status/ledger courts; strict lint, schema/architecture boundaries, production build pass.
-- Rendered-pixel: 969/969 across 19 routes, 2 themes, 390/768/1440 widths; Prestige state probes pass.
-- Cost: runtime local/deterministic; execution-budget telemetry is flat-rate token efficiency, not cash spend.
+Human-Blocked Items (age)
+- Real provider/analytics credentials (PostHog/Sentry): outstanding since S136+.
+- Physical PWA/gamepad/full-run media: outstanding since S135+.
+- Verified reply-as email, publication/community, founder approval: outstanding since S135+.
+- Consented participant Pulse exports: outstanding since S135+.
 
-Next Session Pointer
-- Run full /arc from synced main; begin with consented Pulse export collection and credential/gate closure before touching progression or SPARKED promotion.
+Next Session
+- Await human external evidence/credentials; hold SPARKED and HomeV1 retirement until production data clears their courts.

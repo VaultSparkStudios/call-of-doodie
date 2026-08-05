@@ -8,9 +8,19 @@ export function findLatestAuditSidecar(root = process.cwd()) {
     .filter((name) => /^AUDIT_\d{4}-\d{2}-\d{2}(?:_\d+)?\.json$/.test(name))
     .map((name) => {
       const fullPath = path.join(docs, name);
-      return { name, fullPath, mtimeMs: fs.statSync(fullPath).mtimeMs };
+      const match = name.match(/^AUDIT_(\d{4}-\d{2}-\d{2})(?:_(\d+))?\.json$/);
+      return {
+        name,
+        fullPath,
+        date: match?.[1] || "",
+        ordinal: Number(match?.[2] || 1),
+        mtimeMs: fs.statSync(fullPath).mtimeMs,
+      };
     })
-    .sort((a, b) => b.mtimeMs - a.mtimeMs || b.name.localeCompare(a.name));
+    .sort((a, b) =>
+      b.date.localeCompare(a.date)
+      || b.ordinal - a.ordinal
+      || b.name.localeCompare(a.name));
   return files[0] || null;
 }
 

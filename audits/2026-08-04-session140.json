@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-08-04",
+  "session": 140,
+  "project": "Call-Of-Doodie",
+  "intent": "recover the cut-off prior session, then run the complete canonical arc through a fresh audit, exhaustive implementation, saturation, isolated staging, and direct-main closeout",
+  "outcome": "achieved",
+  "shipped": [
+    "semantic and content-derived Hot Context reproducibility",
+    "Node.js 22+ package and five-workflow runtime contract",
+    "dual-rung engineering versus SPARKED launch readiness",
+    "fully checked Canon adoption ledger with startup enforcement",
+    "source-derived Replay Coverage Passport across player and agent surfaces"
+  ],
+  "validation": [
+    "Vitest 990/990 across 168 files",
+    "strict lint, deterministic build, schema, runtime, architecture, public, security, replay, and launch-smoke gates passed",
+    "npm audit zero vulnerabilities",
+    "hosted route/theme/viewport matrix 969/969",
+    "expanded Replay Coverage Passport visual state 32/32 across two themes and mobile/desktop widths",
+    "Canon 053 receipt with 10 hash-bound captures",
+    "innovation pack found zero repo-local candidates"
+  ],
+  "deferred": [
+    "project-scoped PostHog and Sentry credentials",
+    "membership expansion until an explicit product decision",
+    "HomeV2 funnel and fallback-retirement conclusions until real production evidence",
+    "community links until a real moderated destination exists",
+    "physical PWA, gamepad, full-run media, reply-as email, subjective image review, publication, and founder approval"
+  ],
+  "sil": { "score": 999, "velocity": 13, "debt": "decreasing" },
+  "headline": "Made release evidence reproducible, split readiness truth into honest rungs, and published replay's exact advisory boundary",
+  "items": [
+    { "title": "Reproducible evidence", "projectImpact": 10, "ecosystemImpact": 9, "evidence": "fresh-checkout mtime perturbation tests and exact-main-safe content identity" },
+    { "title": "Dual-rung release truth", "projectImpact": 10, "ecosystemImpact": 9, "evidence": "engineering READY remains distinct from reason-coded SPARKED NO-GO" },
+    { "title": "Replay coverage passport", "projectImpact": 9, "ecosystemImpact": 8, "evidence": "three verified lanes and three exclusions projected consistently to human and agent surfaces" }
+  ],
+  "followUps": [
+    "collect consented participant evidence before tuning balance or progression",
+    "wire provider credentials only after project scope is proven",
+    "complete physical, email, publication, community, subjective-visual, and founder launch gates"
+  ],
+  "blockers": [
+    "SPARKED remains gated by real credentials, physical/email/participant/publication/community evidence, subjective review, and founder approval"
+  ]
+}

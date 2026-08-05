@@ -1,6 +1,22 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-04 — Session 140 — Reproducible release and replay-coverage truth
+
+- Recovery truth — S139 was proven cut off mid-closeout, revalidated, staged, committed as `93c6832`, pushed, and left clean before S140 work began.
+- Audit truth — all five live-premise items in `docs/AUDIT_2026-08-04_2.json` are shipped with execution evidence; unsupported product/outcome premises remained rejected or external.
+- Context truth — semantic audit ordering and source-content timestamps/fingerprints make Hot Context deterministic across fresh-checkout mtime changes.
+- Runtime truth — package metadata and all five workflow setup surfaces enforce Node.js 22+ through a tested contract.
+- Release truth — engineering readiness and SPARKED readiness are separate; provider, physical, email, participant, publication, subjective-visual, and founder gates remain named and unclaimed.
+- Canon truth — the active adoption ledger records 50 adopted, two evidence-backed exemptions, and zero pending/review rows; startup acceptance enforces the ledger.
+- Replay truth — three deterministic lanes and three explicit exclusions share one advisory passport across player and agent surfaces; no authoritative full-physics outcome is claimed.
+- Verification truth — 990/990 tests across 168 files, strict lint, build, schema/runtime/architecture/public/security/replay courts, launch smoke, and npm audit zero pass.
+- Visual truth — hosted matrix 969/969 and focused expanded-passport state 32/32 pass across both themes at mobile/desktop widths; 10 captures are hash-bound. Direct subjective image inspection remains unavailable at `CryptUnprotectData` and is not claimed.
+- Saturation truth — all five audit items shipped and the innovation pack found zero repo-local candidates; remaining work is externally gated.
+
+Overall status: engineering READY; SPARKED NO-GO.
+Last reviewed: 2026-08-04
+
 ## 2026-08-04 — Session 139 — Shared semantics, atomic status, and closed-loop progression truth
 
 - Audit truth — all eight live-premise items in `docs/AUDIT_2026-08-04.json` are shipped with execution logs; six rejected or external premises were not silently promoted.

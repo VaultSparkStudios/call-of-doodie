@@ -20,6 +20,7 @@ import {
   summarizeStudioEvents,
 } from "../utils/studioEventOps.js";
 import { buildPrestigeRunway, PRESTIGE_REQUIRED_LEVEL } from "../utils/progressionCurve.js";
+import { buildReplayCoveragePassport } from "../utils/replayCoverage.js";
 
 const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
@@ -200,6 +201,7 @@ export function RunHistoryPanel({
   const ghostBoard = buildGhostBoard(history, rivalry);
   const bountyBoard = buildBountyBoard(history, rivalry, dailyChampion);
   const trustRecommendations = buildTrustRecommendations(trustSummary);
+  const replayCoverage = buildReplayCoveragePassport();
   const launchSeed = (seed, challenge = null) => {
     if (!seed || typeof onLaunchSeed !== "function") return;
     onLaunchSeed(seed, challenge || {});
@@ -332,6 +334,22 @@ export function RunHistoryPanel({
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: "#FFE0A3", border: "1px solid rgba(255,224,163,0.2)" }}>Trace weak {trustSummary.traceEvidenceCounts.weak}</span>
             <span style={{ fontSize: 10, padding: "4px 8px", borderRadius: 999, background: "rgba(255,255,255,0.04)", color: trustSummary.resimReadiness.score >= 75 ? "#B8FFB8" : "#FFD79C", border: "1px solid rgba(255,215,156,0.2)" }}>{trustSummary.resimReadiness.label} {trustSummary.resimReadiness.score}</span>
           </div>
+          <details style={{ marginBottom: 8, padding: "8px 9px", borderRadius: 7, background: "rgba(0,0,0,0.22)", border: "1px solid rgba(155,231,255,0.16)" }}>
+            <summary style={{ color: "#9BE7FF", fontSize: 10, fontWeight: 900, cursor: "pointer", letterSpacing: 0.8 }}>
+              REPLAY COVERAGE PASSPORT · {replayCoverage.covered.length} VERIFIED LANES · ADVISORY
+            </summary>
+            <div style={{ marginTop: 7, display: "grid", gap: 6 }}>
+              {replayCoverage.covered.map((lane) => (
+                <div key={lane.id} style={{ fontSize: 10, lineHeight: 1.45, color: "#D9F7FF" }}>
+                  <strong style={{ color: "#B8FFB8" }}>✓ {lane.label}</strong> — {lane.evidence}
+                </div>
+              ))}
+              <div style={{ color: "#FFCECE", fontSize: 10, lineHeight: 1.45 }}>
+                <strong>Not reproduced:</strong> {replayCoverage.excluded.map((lane) => lane.label).join(" · ")}
+              </div>
+              <div style={{ color: "#AAA", fontSize: 9, lineHeight: 1.45 }}>{replayCoverage.claim}</div>
+            </div>
+          </details>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 8 }}>
             {trustRecommendations.map((line, index) => (
               <div key={`trust-line-${index}`} style={{ color: "#FFD6D6", fontSize: 10, lineHeight: 1.4 }}>{line}</div>

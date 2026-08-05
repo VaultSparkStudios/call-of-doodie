@@ -931,3 +931,21 @@ Rationale: A feedback loop compounds only when observation, reflection, and the 
 Decision: Classify analytics blockers by the missing provider capability before considering a ready transport such as GitHub. Record execution budget as flat-rate plan token efficiency, never as fictional cash expenditure.
 
 Rationale: A ready secret destination cannot create a missing vendor credential. Provider-first evidence and honest cost semantics prevent operational convenience from laundering a launch claim.
+
+## 2026-08-04 — Session 140 — Reproducible evidence uses semantic identity, not checkout time
+
+Decision: Latest-audit selection is based on the audit filename’s semantic date and ordinal, while Hot Context freshness and fingerprints derive from source content rather than filesystem modification time.
+
+Rationale: A fresh Git checkout rewrites mtimes without changing project truth. Release evidence and exact-main CI must be reproducible from content identity, not workstation history.
+
+## 2026-08-04 — Session 140 — Engineering readiness and SPARKED readiness are separate verdicts
+
+Decision: The launch checker reports an engineering rung independently from the public SPARKED rung and accepts only redacted declared provider states; it does not read `.env.local` or infer physical, participant, publication, email, subjective-visual, or founder evidence.
+
+Rationale: A green implementation tree is meaningful without laundering absent external evidence into a launch claim. Separate rungs preserve momentum and observability honesty simultaneously.
+
+## 2026-08-04 — Session 140 — Replay coverage is a source-derived advisory passport
+
+Decision: Replay surfaces share one `replay-coverage-passport-v1` contract. Deterministic movement/aim, combat actions, and one derived contact-enemy slice are named as covered; full wave state, full combat physics, and authoritative outcome are explicitly excluded.
+
+Rationale: Players and agents need a precise trust boundary. Naming both evidence and exclusions prevents a useful partial resimulation from being mistaken for authoritative server replay.

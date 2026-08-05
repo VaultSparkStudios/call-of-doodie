@@ -1,3 +1,39 @@
+# Latest Handoff — Session 140
+
+Session Intent: Recover and verify the cut-off Session 139 before trusting it, then run the complete full-profile arc continuously through canonical `/start`, a fresh premise-verified game/product/public-release `/audit`, exhaustive `/implement` with second-order innovation saturation, and canonical `/closeout`; preserve evidence honesty, stage the exact tree, and push directly to `main` without claiming external outcomes.
+
+## Impact Summary (Session 140)
+
+**Headline.** The release court is now reproducible from a fresh checkout, explicit about its two readiness rungs, and precise about exactly which replay behavior it can and cannot reproduce.
+
+**Impact.**
+- Recovered S139 from its interrupted closeout, revalidated it, staged it, committed `93c6832`, pushed it, and began S140 from a clean synchronized boundary.
+- Replaced checkout-mtime Hot Context selection with semantic audit ordering and content-derived timestamps/fingerprints, closing the exact-main CI failure.
+- Declared and enforced Node.js 22+ across package metadata and all five workflow runtime setups.
+- Split release evidence into engineering READY versus SPARKED NO-GO with named provider, physical, email, participant, publication, subjective-visual, and founder gates.
+- Converted every active Canon adoption row into checked adopted/exempt evidence and made the zero-pending ledger a startup acceptance contract.
+- Added one source-derived Replay Coverage Passport with three verified deterministic lanes and three excluded authoritative/full-physics lanes across player and agent surfaces.
+
+## Evidence
+- Final direct suite: 990/990 tests across 168 files; strict lint, build, schema/runtime/architecture/public/security/replay checks, launch smoke, and npm audit zero pass.
+- Canonical staging matrix: 969/969 across 19 routes, two themes, and 390/768/1440 widths.
+- Touched-state court: expanded Replay Coverage Passport passes 32/32 at 390px and 1440px in sewer-night and porcelain-day; 10 captures are hash-bound in `docs/visual-qa/LATEST.json`.
+- Staging: `https://session-140-staging.call-of-doodie.pages.dev/`; immutable current-tree preview `https://a13582fb.call-of-doodie.pages.dev/`.
+- Subjective image viewing remains unavailable because the host image sandbox fails `CryptUnprotectData`; no subjective visual approval is fabricated.
+
+## Where We Left Off
+- Architecture: App 4,971/5,000 lines, game loop 1,768/1,775, 32 system boundaries, and two hook boundaries.
+- Canon: 50 adopted, two evidence-backed exemptions, zero pending/review.
+- Release: engineering READY; SPARKED NO-GO pending real credentials, physical/email/participant/publication/community evidence, direct subjective pixel review, and founder approval.
+- Saturation: five audit items shipped; no repo-local second-order candidate remains.
+
+## Next
+- Collect consented Playtest Pulse exports before changing balance, progression, fun, or retention claims.
+- Supply project-scoped PostHog/Sentry credentials and complete verified reply-as email, physical PWA/gamepad/full-run media, publication/community, and founder gates before SPARKED.
+- Keep replay claims advisory and retain HomeV1 until real exact-main production/funnel evidence clears its retirement court.
+
+---
+
 # Latest Handoff — Session 139
 
 Session Intent: Run the complete agent-neutral `/arc` continuously from synchronized `main` through `/start`, premise-verified infrastructure-plus-product `/audit`, exhaustive `/implement` with second-order saturation, and canonical `/closeout`; stage exact evidence and push directly to `main` without fabricating external outcomes.

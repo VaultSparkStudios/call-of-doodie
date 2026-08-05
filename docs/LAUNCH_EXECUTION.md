@@ -23,7 +23,7 @@ Helpful commands:
 
 - `npm run launch:assets` exports PNG versions of the prepared launch stills
 - `npm run launch:screenshots` captures verified desktop/mobile gameplay screenshots
-- `npm run launch:readiness` prints the current telemetry/assets/human-gate status
+- `npm run launch:readiness` prints separate engineering and SPARKED readiness. Provider status defaults to unknown; after secrets-gateway discovery, pass only redacted state such as `--posthog=missing --sentry=ready`.
 
 ## Launch decision
 

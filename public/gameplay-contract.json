@@ -10,6 +10,50 @@
   "trust": {
     "replayEvidence": "advisory deterministic decision-stream evidence",
     "excludedClaim": "not full physics resimulation",
+    "replayCoverage": {
+      "schemaVersion": "replay-coverage-v1",
+      "confidenceCeiling": "advisory",
+      "claim": "Deterministic slices reproduce declared command and derived-state lanes; they do not reproduce the full played fight.",
+      "covered": [
+        {
+          "id": "movement-aim",
+          "label": "Movement + aim",
+          "method": "deterministic_replay_state_stepper_v1",
+          "coverage": "movement_aim_only",
+          "evidence": "Steps bounded movement vectors, aim buckets, canvas bounds, and command checkpoints from the recorded trace."
+        },
+        {
+          "id": "combat-actions",
+          "label": "Combat actions",
+          "method": "deterministic_replay_combat_slice_v1",
+          "coverage": "trace_movement_actions_no_enemies",
+          "evidence": "Steps dash, shoot, reload, grenade, ammunition, reserve, and cooldown state without enemies."
+        },
+        {
+          "id": "derived-contact-enemy",
+          "label": "One derived contact enemy",
+          "method": "deterministic_contact_enemy_slice_v1",
+          "coverage": "trace_movement_one_contact_enemy_derived",
+          "evidence": "Derives one basic seeded chase/contact model; it is not the enemy history from the played run."
+        }
+      ],
+      "excluded": [
+        {
+          "id": "full-wave-state",
+          "label": "Actual wave spawns, formations, elites, bosses, and objective state"
+        },
+        {
+          "id": "full-combat-physics",
+          "label": "Projectile paths, enemy attacks, hit resolution, pickups, perks, shops, and damage parity"
+        },
+        {
+          "id": "authoritative-outcome",
+          "label": "Exact played score, wave, health, deaths, or leaderboard authority"
+        }
+      ],
+      "nextFrontier": "Capture versioned enemy/projectile state and prove physics parity before raising the advisory ceiling.",
+      "source": "src/utils/replayResim.js"
+    },
     "publicWriteActions": "not-offered"
   },
   "loop": [

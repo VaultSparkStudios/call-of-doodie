@@ -33,6 +33,13 @@ if (hotContextCheck.status !== 0) {
   process.exit(hotContextCheck.status || 1);
 }
 
+const canonAdoptionCheck = run(node, [path.join(root, 'scripts', 'check-canon-adoption-ledger.mjs'), '--json']);
+if (canonAdoptionCheck.status !== 0) {
+  process.stderr.write(canonAdoptionCheck.stderr || canonAdoptionCheck.stdout || 'Canon adoption ledger check failed.\n');
+  process.exit(canonAdoptionCheck.status || 1);
+}
+const canonAdoption = JSON.parse(canonAdoptionCheck.stdout);
+
 const secretAudit = run(node, [path.join(root, 'scripts', 'check-secrets.mjs'), '--audit', '--json']);
 if (secretAudit.status !== 0) {
   process.stderr.write(secretAudit.stderr || 'Capability audit failed.\n');
@@ -84,6 +91,7 @@ receipt.hotContext = {
   jsonSha256: createHash('sha256').update(hotContextJson).digest('hex'),
   markdownSha256: createHash('sha256').update(hotContextMd).digest('hex'),
 };
+receipt.canonAdoption = canonAdoption;
 
 fs.mkdirSync(path.join(root, '.cache'), { recursive: true });
 fs.writeFileSync(path.join(root, '.cache', 'startup-acceptance.json'), `${JSON.stringify(receipt, null, 2)}\n`);
@@ -93,6 +101,7 @@ else {
   console.log(`Startup acceptance: ${receipt.ok ? 'PASS' : 'FAIL'}`);
   console.log(`Capabilities: ${receipt.capabilities.ready}/${receipt.capabilities.total} via ${receipt.capabilities.sources.join(', ') || 'unknown'}`);
   console.log(`Brief: format=${receipt.brief.formatOk} evidence=${receipt.brief.evidenceOk} flatRate=${receipt.brief.hasFlatRateCost}`);
+  console.log(`Canon adoption: ${receipt.canonAdoption.adopted} adopted · ${receipt.canonAdoption.exempt} exempt · ${receipt.canonAdoption.pending} pending`);
   for (const issue of receipt.issues) console.log(`- ${issue}`);
 }
 process.exit(receipt.ok ? 0 : 1);

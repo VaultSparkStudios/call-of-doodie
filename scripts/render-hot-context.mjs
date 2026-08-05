@@ -2,14 +2,16 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { findLatestAuditSidecar } from "./lib/audit-sidecar.mjs";
 
 const root = process.cwd();
 const checkOnly = process.argv.includes("--check");
+const latestAudit = findLatestAuditSidecar(root);
 const sources = {
   currentState: "context/CURRENT_STATE.md",
   taskBoard: "context/TASK_BOARD.md",
   decisions: "context/DECISIONS.md",
-  audit: "docs/AUDIT_2026-08-03.json",
+  audit: latestAudit ? path.relative(root, latestAudit.fullPath).replace(/\\/g, "/") : "",
 };
 
 function read(relative) {
@@ -33,7 +35,7 @@ function openWork(text) {
 
 function recentDecisions(text) {
   const sections = text.split(/(?=^##\s)/m).filter((section) => /^##\s/.test(section));
-  return sections.slice(0, 4).join("\n").trim().slice(0, 7000);
+  return sections.slice(-4).join("\n").trim().slice(0, 7000);
 }
 
 function auditProjection(text) {
@@ -48,12 +50,17 @@ function auditProjection(text) {
 }
 
 const sourceText = Object.fromEntries(Object.entries(sources).map(([key, file]) => [key, read(file)]));
-const generatedAt = new Date(Math.max(...Object.values(sources).map((file) => {
-  try { return fs.statSync(path.join(root, file)).mtimeMs; } catch { return 0; }
-}))).toISOString();
+const sourceFingerprint = hash(Object.entries(sourceText)
+  .map(([key, value]) => `${key}:\n${value}`)
+  .join("\n---\n"));
+const sourceDates = Object.values(sourceText).flatMap((text) =>
+  Array.from(text.matchAll(/\b20\d{2}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)?\b/g), (match) => Date.parse(match[0]))
+    .filter(Number.isFinite));
+const generatedAt = new Date(sourceDates.length ? Math.max(...sourceDates) : 0).toISOString();
 const projection = {
   schemaVersion: "hot-context-v1",
   generatedAt,
+  sourceFingerprint,
   purpose: "Bounded startup projection; full append-only artifacts remain authoritative and discoverable by source hash.",
   budgets: { maximumBytes: 24000, maximumOpenWorkLines: 55, maximumDecisionSections: 4 },
   sources: Object.fromEntries(Object.entries(sources).map(([key, file]) => [key, { file, sha256: hash(sourceText[key]), bytes: Buffer.byteLength(sourceText[key]) }])),
