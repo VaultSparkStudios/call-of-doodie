@@ -50,5 +50,7 @@ describe("project-local Studio Ops proxies", () => {
     expect(source).toContain("docs/CLOSEOUT_STATUS_BOARD.md");
     expect(source).toContain("git check-ignore --quiet" );
     expect(source).toContain("writeBackCoverage(status.currentSession ?? status.silSession)");
+    expect(source).toContain("'.codex', 'memories'");
+    expect(source).toContain("agent memory (Claude/Codex project memory)");
   });
 });

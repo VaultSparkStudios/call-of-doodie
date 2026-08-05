@@ -1,18 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-04 (Session 139 closeout) -->
+<!-- generated-at: 2026-08-05 (Session 140 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S139 ════════════════════╗
-║  Date: 2026-08-04  ·  SIL: 999/1000  ·  Velocity: 13 decreasing  ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S140 ════════════════════╗
+║  Date: 2026-08-05  ·  SIL: 999/1000  ·  Velocity: 13 decreasing  ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Architecture: App 4,968/5,000 lines, game loop 1,768/1,775,   ║
-║  ✓ Release: FORGE; SPARKED remains NO-GO behind physical PWA/ga  ║
-║  ✓ Cost: runtime remains local and deterministic; execution-bud  ║
+║  ✓ Architecture: App 4,971/5,000 lines, game loop 1,768/1,775,   ║
+║  ✓ Canon: 50 adopted, two evidence-backed exemptions, zero pend  ║
+║  ✓ Release: engineering READY; SPARKED NO-GO pending real crede  ║
+║  ✓ Saturation: five audit items shipped; no repo-local second-o  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -36,26 +37,26 @@
 ║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (~/.claude/projects/<slug>/memory/)              ║
+║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 64 files  ·  M:47 A:17 D:0 ?:0                         ║
+║  Changes: 4 files  ·  M:4 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-139-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-140-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        132/167                                          ║
+║  Doctor:        132/170                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         979/979                                          ║
+║  Tests:         990/990                                          ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         4d ago                                           ║
-║  Truth:         green-code-no-go-launch                          ║
-║  Sanitization:  8d ago                                           ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  IGNIS:         5d ago                                           ║
+║  Truth:         engineering-ready-sparked-no-go                  ║
+║  Sanitization:  9d ago                                           ║
+║  shells:        0 started · 0 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

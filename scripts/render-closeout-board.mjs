@@ -231,25 +231,27 @@ function gitChangeSummary() {
 }
 
 function agentMemoryRecentlyTouched() {
-  // Check whether agent memory (~/.claude/projects/<slug>/memory) has files
-  // modified within the last 24h. Best-effort — cross-platform path resolution
-  // varies; absence is reported as "·" rather than failing.
+  // Check whether Claude or Codex project memory has files modified within the
+  // last 24h. Best-effort — absence is reported as "·" rather than failing.
   const home = os?.homedir?.() || process.env.HOME || process.env.USERPROFILE;
   if (!home) return false;
   const slug = path.basename(ROOT);
+  const cutoff = Date.now() - 24 * 3600_000;
+  const hasRecentFile = (directory) => {
+    if (!fs.existsSync(directory)) return false;
+    return fs.readdirSync(directory).some((file) => fs.statSync(path.join(directory, file)).mtimeMs > cutoff);
+  };
+  try {
+    if (hasRecentFile(path.join(home, '.codex', 'memories', slug.toLowerCase()))) return true;
+  } catch { /* best-effort */ }
   // Project memory dirs use a prefix-encoded form; fall back to a glob scan.
   const projectsDir = path.join(home, '.claude', 'projects');
   if (!fs.existsSync(projectsDir)) return false;
   try {
-    const cutoff = Date.now() - 24 * 3600_000;
     for (const entry of fs.readdirSync(projectsDir)) {
       if (!entry.includes(slug)) continue;
       const memDir = path.join(projectsDir, entry, 'memory');
-      if (!fs.existsSync(memDir)) continue;
-      for (const f of fs.readdirSync(memDir)) {
-        const stat = fs.statSync(path.join(memDir, f));
-        if (stat.mtimeMs > cutoff) return true;
-      }
+      if (hasRecentFile(memDir)) return true;
     }
   } catch { /* best-effort */ }
   return false;
@@ -296,9 +298,9 @@ function writeBackCoverage(session) {
     if (ignored && fs.existsSync(targetPath) && fs.statSync(targetPath).mtimeMs > recentCutoff) touched.add(target);
   }
   const result = TARGETS.map((t) => ({ file: t, touched: touched.has(t) }));
-  // 10th item (per closeout spec): agent memory at ~/.claude/projects/<slug>/memory/
+  // 10th item (per closeout spec): agent-neutral project memory.
   result.push({
-    file: 'agent memory (~/.claude/projects/<slug>/memory/)',
+    file: 'agent memory (Claude/Codex project memory)',
     touched: agentMemoryRecentlyTouched(),
   });
   return result;

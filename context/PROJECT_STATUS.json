@@ -296,11 +296,11 @@
   "testsLastRun": "2026-08-05T16:26:47.567Z",
   "sanitizationLastCleared": "2026-07-28T00:53:00Z",
   "sessionShellHygiene": {
-    "session": 139,
-    "started": 1,
-    "closed": 1,
+    "session": 140,
+    "started": 0,
+    "closed": 0,
     "running": 0,
-    "enumeratedAt": "2026-08-04T18:59:52.400Z",
+    "enumeratedAt": "2026-08-05T16:57:35.975Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
