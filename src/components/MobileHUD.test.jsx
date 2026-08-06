@@ -56,4 +56,10 @@ describe("MobileHUD", () => {
     expect(html).toContain("BURST");
     expect(html).toContain("synBurst");
   });
+
+  it("disables synergy burst animation when reducedEffects is true", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} synergyChargeReady={true} onSynergyCharge={() => {}} reducedEffects={true} />);
+    expect(html).toContain('data-testid="synergy-burst-btn"');
+    expect(html).not.toContain("synBurst 1s");
+  });
 });

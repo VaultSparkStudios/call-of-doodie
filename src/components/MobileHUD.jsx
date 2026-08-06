@@ -98,7 +98,7 @@ export default function MobileHUD({
             data-testid="synergy-burst-btn"
             onClick={onSynergyCharge}
             aria-label="Fire synergy burst"
-            style={{ position: "absolute", bottom: 82, right: 8, minWidth: 56, minHeight: 56, padding: "6px 10px", pointerEvents: "all", touchAction: "manipulation", border: "2px solid #FF88FF", borderRadius: 12, background: "rgba(255,136,255,.18)", color: "#FF88FF", fontFamily: "'Courier New',monospace", fontSize: 11, fontWeight: 900, letterSpacing: 1, animation: "synBurst 1s infinite", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, cursor: "pointer" }}
+            style={{ position: "absolute", bottom: 82, right: 8, minWidth: 56, minHeight: 56, padding: "6px 10px", pointerEvents: "all", touchAction: "manipulation", border: "2px solid #FF88FF", borderRadius: 12, background: "rgba(255,136,255,.18)", color: "#FF88FF", fontFamily: "'Courier New',monospace", fontSize: 11, fontWeight: 900, letterSpacing: 1, animation: reducedEffects ? "none" : "synBurst 1s infinite", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, cursor: "pointer" }}
           >
             <span style={{ fontSize: 16 }}>⚡</span>
             <span style={{ fontSize: 8 }}>BURST</span>
