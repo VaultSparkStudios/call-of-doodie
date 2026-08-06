@@ -3,6 +3,7 @@
 - Session truth — one shared leading-session parser distinguishes the canonical session from nested recovery references, so `Session 140 recovered S139` cannot make startup report S139 as the latest completed boundary.
 - State truth — schema lint now rejects repeated contiguous session blocks in `CURRENT_STATE.md`; the duplicated S140 block was removed and exact valid chronology remains accepted.
 - Second-order truth — Hot Context freshness tests now discover the semantic latest audit sidecar instead of pinning Session 140, so a new audit cannot create a false regression.
+- Rebase truth — the trusted incoming `@playwright/test@1.62.1` patch is lockfile-integrity verified; Playwright server readiness has a 90-second host-load allowance while individual test/expect bounds remain unchanged.
 - Validation truth — 1,000/1,000 tests across 169 files, focused unit courts 37/37, browser input/Retro/focus coverage 6/6 across desktop and mobile Chromium, strict lint/build/schema/public/protocol/startup/security/replay/media gates pass.
 - Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
 - Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).

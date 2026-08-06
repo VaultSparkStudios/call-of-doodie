@@ -10,13 +10,15 @@
     "shared leading-session identity parser for startup and summary validation",
     "current-state repeated-block coherence court wired into schema lint",
     "semantic latest-audit discovery in Hot Context regression coverage",
-    "bounded dependency-tree operator smoke resilient to shared-host scheduling"
+    "bounded dependency-tree operator smoke resilient to shared-host scheduling",
+    "trusted Playwright 1.62.1 rebase with bounded server-readiness court"
   ],
   "validation": [
     "focused session/startup 11/11, game-step 26/26, and Hot Context 3/3 courts passed",
     "final exact-tree Vitest aggregate 1000/1000 across 169 files in 255.92 seconds",
     "strict lint, deterministic production build, schema, public, protocol, startup, security, replay, and media gates passed",
     "browser input and Retro reliability 6/6 across desktop and mobile Chromium",
+    "rebased Playwright 1.62.1 browser input court 6/6 in 36.1 seconds",
     "isolated staging route/theme/viewport matrix 969/969",
     "CANON-053 receipt with six hash-bound captures across both themes and mobile/desktop widths",
     "registry release gate, cost gate, and 17-destination footer completeness passed",
@@ -29,7 +31,7 @@
     "community links until a real moderated destination exists",
     "physical PWA, gamepad, full-run media, reply-as email, subjective image review, publication, participant evidence, and SPARKED approval"
   ],
-  "sil": { "score": 999, "velocity": 5, "debt": "decreasing" },
+  "sil": { "score": 999, "velocity": 6, "debt": "decreasing" },
   "headline": "Made input and session truth single-source, prevented duplicate closeout state, and kept engineering deployment distinct from SPARKED authority",
   "items": [
     { "title": "Input arbitration kernel", "projectImpact": 9, "ecosystemImpact": 5, "evidence": "pure resolver plus direct precedence, finite-output, and controller target-scoring coverage" },

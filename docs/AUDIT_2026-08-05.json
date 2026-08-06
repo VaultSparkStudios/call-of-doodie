@@ -199,6 +199,12 @@
       "status": "shipped",
       "outcome": "The installed dependency-tree operator smoke retains a finite allowance but no longer misclassifies shared-host scheduling beyond Vitest's default 30 seconds as dependency failure.",
       "verification": "Real dependency gate completed in about 2 seconds; isolated operator script smoke passes 27/27 with a 90-second per-test bound."
+    },
+    {
+      "slug": "playwright-server-readiness-bound",
+      "status": "shipped",
+      "outcome": "The rebased Playwright court allows bounded host-loaded Vite startup without changing individual test or expect timeouts.",
+      "verification": "Package trust 86/100 and registry checksum match for @playwright/test 1.62.1; rebased desktop/mobile input court passes 6/6 in 36.1 seconds with a 90-second server-readiness bound."
     }
   ]
 }

@@ -9,6 +9,7 @@
 - Session truth — one shared leading-session parser distinguishes the canonical session from nested recovery references, so `Session 140 recovered S139` cannot make startup report S139 as the latest completed boundary.
 - State truth — schema lint now rejects repeated contiguous session blocks in `CURRENT_STATE.md`; the duplicated S140 block was removed and exact valid chronology remains accepted.
 - Second-order truth — Hot Context freshness tests now discover the semantic latest audit sidecar instead of pinning Session 140, so a new audit cannot create a false regression.
+- Rebase truth — the trusted incoming `@playwright/test@1.62.1` patch is lockfile-integrity verified; Playwright server readiness has a 90-second host-load allowance while individual test/expect bounds remain unchanged.
 - Validation truth — 1,000/1,000 tests across 169 files, focused unit courts 37/37, browser input/Retro/focus coverage 6/6 across desktop and mobile Chromium, strict lint/build/schema/public/protocol/startup/security/replay/media gates pass.
 - Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
 - Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).
@@ -71,7 +72,7 @@ Rationale: Deployment freshness and public-launch authority are separate courts.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 151,447 bytes · SHA-256 `632a8af1d502…`
-- `context/TASK_BOARD.md` · 104,017 bytes · SHA-256 `f485d9640592…`
+- `context/CURRENT_STATE.md` · 151,669 bytes · SHA-256 `17985cc30b0f…`
+- `context/TASK_BOARD.md` · 104,286 bytes · SHA-256 `acd71dd27844…`
 - `context/DECISIONS.md` · 93,803 bytes · SHA-256 `5c5388ba16d1…`
-- `docs/AUDIT_2026-08-05.json` · 11,567 bytes · SHA-256 `1d91a9a167b3…`
+- `docs/AUDIT_2026-08-05.json` · 12,005 bytes · SHA-256 `5fb07ba221f3…`

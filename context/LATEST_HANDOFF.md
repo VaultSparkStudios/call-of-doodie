@@ -12,11 +12,13 @@ Session Intent: Run the complete full-profile Arc continuously through canonical
 - Added a conservative exact-block coherence checker to schema lint and removed the duplicated S140 state block.
 - Root-fixed the verification-discovered Hot Context test so it follows the semantic latest audit rather than a hard-coded Session 140 artifact.
 - Root-fixed the full-suite dependency-tree smoke timeout with a bounded 90-second operator allowance after the real gate completed in ~2 seconds and the isolated court passed 27/27.
-- Exhausted the source-derived repo-local frontier: three audit items plus two second-order regressions shipped; five remaining candidates are honestly gated.
+- Rebased onto the signed Dependabot `@playwright/test@1.62.1` patch after an 86/100 package-trust approval and matching registry checksum; widened only Playwright server readiness to 90 seconds after the old 30-second startup ceiling failed under host load.
+- Exhausted the source-derived repo-local frontier: three audit items plus three second-order safeguards shipped; five remaining candidates are honestly gated.
 
 ## Evidence
 - Focused courts: 11/11 session/startup, 26/26 game-step, and 3/3 Hot Context tests pass; strict lint and production build pass.
 - Browser input court: 6/6 across Chromium and mobile Chromium, covering pointer calibration, Retro-to-combat persistence, and focus-loss input release.
+- Rebased browser court: the same 6/6 passes under Playwright 1.62.1 in 36.1 seconds; lint, build, dependency-tree, Node runtime, npm audit, and supply-chain checks remain green.
 - Isolated staging: `https://session-141-staging.call-of-doodie.pages.dev/`; immutable preview `https://542f6c31.call-of-doodie.pages.dev/`.
 - Rendered-pixel court: 969/969 across 19 routes, two themes, and 390/768/1440 widths; six representative captures are hash-bound and CANON-053 passes.
 - Release court: cost-neutral, footer complete, engineering READY; SPARKED remains NO-GO behind named external evidence.

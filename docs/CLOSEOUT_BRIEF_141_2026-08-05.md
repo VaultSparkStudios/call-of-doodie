@@ -16,6 +16,7 @@ Headline: Made input and session truth single-source, prevented duplicate closeo
 - final exact-tree Vitest aggregate 1000/1000 across 169 files in 255.92 seconds
 - strict lint, deterministic production build, schema, public, protocol, startup, security, replay, and media gates passed
 - browser input and Retro reliability 6/6 across desktop and mobile Chromium
+- rebased Playwright 1.62.1 browser input court 6/6 in 36.1 seconds
 - isolated staging route/theme/viewport matrix 969/969
 - CANON-053 receipt with six hash-bound captures across both themes and mobile/desktop widths
 - registry release gate, cost gate, and 17-destination footer completeness passed

@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 141 extracted mixed-input aim arbitration, unified canonical session identity, added current-state idempotence enforcement, and root-fixed semantic latest-audit plus dependency-smoke regressions.",
+  "currentFocus": "Session 141 extracted mixed-input aim arbitration, unified canonical session identity, added current-state idempotence, and hardened Hot Context, dependency-smoke, and Playwright readiness courts.",
   "nextMilestone": "Preserve engineering READY and SPARKED NO-GO while collecting consented participant evidence, project-scoped analytics/Sentry, verified reply-as email, physical PWA/gamepad/full-run media QA, publication/community, direct subjective pixel review, and founder approval.",
   "testingSurfaces": [
     {
@@ -266,7 +266,7 @@
   "silSession": 141,
   "silScore": 999,
   "silAvg3": 999,
-  "silVelocity": 5,
+  "silVelocity": 6,
   "silDebt": "decreasing",
   "silLastSession": "2026-08-05",
   "currentSession": 141,
@@ -328,7 +328,7 @@
     "total": 170,
     "score": 80
   },
-  "lastSessionSummary": "Session 141 shipped three verified audit items plus two second-order regression fixes, passed 1000/1000 tests and staged 969/969 rendered-pixel evidence, exhausted repo-local candidates, and retained an honest SPARKED NO-GO.",
+  "lastSessionSummary": "Session 141 shipped three verified audit items plus three second-order safeguards, passed 1000/1000 tests and staged 969/969 rendered-pixel evidence, exhausted repo-local candidates, and retained an honest SPARKED NO-GO.",
   "testsAssertionsPassing": 1000,
   "testsAssertionsTotal": 1000,
   "testsAssertionsFiles": 168,

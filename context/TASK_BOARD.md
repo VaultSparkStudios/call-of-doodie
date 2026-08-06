@@ -21,6 +21,7 @@ Public-safe launch roadmap summary.
 - [x] [SIL:3] **DONE S141** Current-state idempotence court — schema lint rejects repeated contiguous session blocks and the duplicated S140 block is removed.
 - [x] [SIL:2] **DONE S141 second-order** Hot Context freshness coverage discovers the semantic latest audit rather than pinning a prior session filename.
 - [x] [SIL:2] **DONE S141 second-order** The installed dependency-tree smoke has a bounded 90-second operator allowance; the real command completes in ~2 seconds and the isolated 27/27 script court passes under shared-host load.
+- [x] [SIL:2] **DONE S141 rebase safeguard** Trust-reviewed `@playwright/test@1.62.1` is integrated from current `origin/main`; a 90-second server-readiness allowance survives host load while all six desktop/mobile input cases pass and assertion bounds stay unchanged.
 - [x] [SIL:2] **DONE S141 staging/visual court** Browser input reliability passes 6/6 and isolated staging passes 969/969 across 19 routes, two themes, and three widths with six hash-bound captures.
 - [x] [AUDIT WIN S141] Balance tuning, new content, hosted artificial intelligence, identity expansion, fallback retirement, and SPARKED claims were rejected because their evidence or authority prerequisites remain absent.
 

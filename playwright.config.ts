@@ -13,7 +13,7 @@ export default defineConfig({
     command: "npm run dev -- --host 127.0.0.1 --port 53173 --strictPort",
     url: "http://127.0.0.1:53173",
     reuseExistingServer: !process.env.CI,
-    timeout: 30_000,
+    timeout: 90_000,
   },
   projects: [
     {
