@@ -1,24 +1,21 @@
-# Implementation Plan — Session 140
+# Implementation Plan — 2026-08-05
 
-Source: `docs/AUDIT_2026-08-04_2.json`
+Source: `docs/AUDIT_2026-08-05.json` (Session 141)
 
-## Wave A — Deterministic evidence foundations
+## Efficiency order
 
-- [x] `reproducible-hot-context` — semantic audit selection, content-derived stamp, fresh-checkout courts.
-- [x] `canonical-node-runtime` — Node 22 declaration, workflow alignment, executable runtime receipt.
+1. **Canonical session reference** — establish one recovery-aware parser, then route both truth surfaces through it.
+2. **Current State idempotence court** — reuse the session semantics to remove and prevent repeated contiguous session blocks.
+3. **Input arbitration kernel** — extract the highest-risk live frame slice after the protocol courts are stable, preserving every input precedence rule.
 
-## Wave B — Truthful release and governance controls
+## Verification gates
 
-- [x] `dual-rung-release-receipt` — separate engineering and SPARKED readiness with reason-coded gates.
-- [x] `checked-canon-adoption-posture` — evidence-classify all canon rows and enforce ledger integrity.
+- Focused session-reference and Current State coherence tests.
+- Startup brief render, last-session-summary check, Hot Context freshness, startup acceptance, and protocol drift.
+- Focused game-step, pointer, controller, and input-retro reliability tests.
+- Architecture receipt must increase total-line and game-loop-span headroom.
+- Strict lint, production build, full suite, release/security courts, isolated staging, and live production smoke before completion.
 
-## Wave C — Player and agent trust projection
+## Completion rule
 
-- [x] `replay-coverage-passport` — one source-derived coverage/exclusion contract across the Trust panel and public agent surfaces.
-
-## Saturation and closeout gates
-
-- [x] Run focused tests after each cohesive item and the complete existing verification surface before closeout.
-- [x] Run `node scripts/session-floor.mjs --shipped 5`; if CONTINUE, execute the innovation pack and ship every valid repo-owned finding.
-- [x] For UI changes, build, deploy isolated staging, run the complete hosted theme/viewport court, and preserve subjective-pixel honesty.
-- [x] Update the audit execution log, canonical context, SIL, staging receipt, and direct-to-main closeout.
+An item is shipped only when its behavior and named verification surface both pass. Partial work is marked blocked with evidence; external SPARKED gates remain explicit and are not laundered into this implementation.

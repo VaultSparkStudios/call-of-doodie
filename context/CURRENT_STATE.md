@@ -1,13 +1,12 @@
-- Session 140 (2026-08-04) recovered and closed the cut-off Session 139 boundary, then completed a fresh `/start -> /audit -> /implement -> second-order saturation -> /closeout` arc.
-- Evidence truth — Hot Context selects the latest audit semantically and derives its timestamp/fingerprint from source content, so checkout mtimes cannot make exact-main CI stale or nondeterministic.
-- Runtime truth — package metadata and all five GitHub Actions setup surfaces require Node.js 22 or newer, enforced by an executable runtime contract.
-- Release truth — launch readiness now separates engineering readiness from SPARKED readiness; external credentials, physical QA, verified reply email, participant evidence, publication, direct subjective pixel review, and founder approval remain explicit reason-coded gates.
-- Governance truth — the Canon adoption ledger has 50 checked adoptions, two evidence-backed exemptions, and zero pending/review rows; startup acceptance fails on ledger drift.
-- Replay truth — `replay-coverage-passport-v1` names three deterministic replay lanes and three excluded authoritative/full-physics lanes, and projects the same advisory ceiling to Run History, Field Manual, gameplay contract, and agent manifest.
-- Validation truth — 990/990 tests across 168 files, strict lint, build, schema/runtime/architecture/public/security/replay gates, and npm audit zero pass on the final tree.
-- Visual truth — isolated Session 140 staging passes the 969/969 route/theme/viewport matrix, and the expanded Replay Coverage Passport passes 32/32 focused state checks across both themes at 390px and 1440px; 10 captures are hash-bound. Direct subjective image inspection remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
-- Staging truth — the exact Session 140 tree is available at `https://session-140-staging.call-of-doodie.pages.dev/` (immutable `https://a13582fb.call-of-doodie.pages.dev/`).
-- Saturation truth — all five verified audit items shipped; the generated innovation pack found no repo-local candidate, and remaining work is credential, product-decision, real-data, community, hardware/media, or founder gated.
+- Session 141 (2026-08-05) completed the full `/start -> /audit -> /implement -> second-order saturation -> /closeout` engineering arc from synchronized `main`.
+- Input truth — `resolveAimFrame` now owns pointer, touch-shoot-stick, controller, and aim-assist arbitration while preserving the established precedence and controller target scoring; App consumes one finite reason-coded aim frame.
+- Session truth — one shared leading-session parser distinguishes the canonical session from nested recovery references, so `Session 140 recovered S139` cannot make startup report S139 as the latest completed boundary.
+- State truth — schema lint now rejects repeated contiguous session blocks in `CURRENT_STATE.md`; the duplicated S140 block was removed and exact valid chronology remains accepted.
+- Second-order truth — Hot Context freshness tests now discover the semantic latest audit sidecar instead of pinning Session 140, so a new audit cannot create a false regression.
+- Validation truth — 1,000/1,000 tests across 169 files, focused unit courts 37/37, browser input/Retro/focus coverage 6/6 across desktop and mobile Chromium, strict lint/build/schema/public/protocol/startup/security/replay/media gates pass.
+- Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
+- Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).
+- Release truth — cost, footer, and registry release gates allow engineering deployment; SPARKED remains NO-GO pending project-scoped telemetry, physical device/media, verified reply-as mail, participant/publication evidence, subjective review, and explicit SPARKED approval.
 
 - Session 140 (2026-08-04) recovered and closed the cut-off Session 139 boundary, then completed a fresh `/start -> /audit -> /implement -> second-order saturation -> /closeout` arc.
 - Evidence truth — Hot Context selects the latest audit semantically and derives its timestamp/fingerprint from source content, so checkout mtimes cannot make exact-main CI stale or nondeterministic.

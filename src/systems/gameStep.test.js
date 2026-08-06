@@ -7,6 +7,7 @@ import {
   computePointerAimAngle,
   angleToUnitVector,
   buildPointerAimSweepReport,
+  resolveAimFrame,
   resolveMovementVector,
 } from "./gameStep.js";
 
@@ -175,5 +176,62 @@ describe("computePointerAimAngle", () => {
     expect(report.complete).toBe(true);
     expect(report.buckets).toEqual(["east", "north", "south", "west"]);
     expect(report.probes.map(probe => probe.id)).toEqual(["east", "south", "west", "north"]);
+  });
+});
+
+describe("resolveAimFrame", () => {
+  const player = { x: 100, y: 100, angle: 0 };
+
+  it("uses a live touch shooting stick and preserves its dead zone", () => {
+    expect(resolveAimFrame({
+      player,
+      shootStick: { active: true, dx: 0, dy: 40, shooting: false },
+    })).toMatchObject({ angle: Math.PI / 2, shootStickShooting: true, source: "shoot-stick" });
+    expect(resolveAimFrame({
+      player,
+      shootStick: { active: true, dx: 3, dy: 4, shooting: true },
+    })).toMatchObject({ angle: 0, shootStickShooting: false, source: "unchanged" });
+  });
+
+  it("applies the same distance-plus-angle controller assist score", () => {
+    const result = resolveAimFrame({
+      player,
+      gamepadAngle: 0,
+      aimAssist: true,
+      enemies: [
+        { x: 100, y: 140 },
+        { x: 180, y: 100 },
+        { x: 400, y: 100 },
+      ],
+    });
+    expect(result.source).toBe("controller-assist");
+    expect(result.angle).toBeCloseTo(0, 5);
+  });
+
+  it("keeps controller precedence over pointer input", () => {
+    expect(resolveAimFrame({
+      player,
+      gamepadAngle: Math.PI,
+      pointerActive: true,
+      pointerAngle: Math.PI / 2,
+    })).toMatchObject({ angle: Math.PI, source: "controller" });
+  });
+
+  it("lets touch auto-aim select the nearest target after stick arbitration", () => {
+    const result = resolveAimFrame({
+      player,
+      joystickActive: true,
+      autoAim: true,
+      enemies: [{ x: 100, y: 160 }, { x: 120, y: 100 }],
+    });
+    expect(result.source).toBe("touch-auto");
+    expect(result.angle).toBeCloseTo(0, 5);
+  });
+
+  it("is the only aim-arbitration contract consumed by the live App frame", () => {
+    const appSource = fs.readFileSync(path.resolve(process.cwd(), "src/App.jsx"), "utf8");
+    expect(appSource.match(/resolveAimFrame\(/g) || []).toHaveLength(1);
+    expect(appSource).not.toContain("const ASSIST_RADIUS = 160");
+    expect(appSource).not.toContain("nearestScore = Infinity");
   });
 });

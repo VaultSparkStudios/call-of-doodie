@@ -1141,3 +1141,19 @@ Recovery outcome: S139 engineering work and canonical write-back are verified an
 - Final verification: 990/990 tests across 168 files, strict lint, production build, schema/runtime/architecture/public/security/replay courts, launch smoke, diff integrity, and npm audit zero.
 
 Intent outcome: achieved for recovery and every repo-owned audit item; SPARKED remains honestly NO-GO behind external evidence and founder gates.
+
+## 2026-08-05 — Session 141 — Input arbitration, canonical session truth, and closeout coherence
+
+- Started from clean synchronized `main` and ran the canonical startup, Canon adoption/conformance, Ark, secrets, blocker, frontier, game-loop, audit, and implementation courts.
+- Generated `docs/AUDIT_2026-08-05.json` / `.md`; shipped all three premise-verified items: the input arbitration kernel, canonical session-reference parser, and current-state idempotence court.
+- Extracted `resolveAimFrame` from the monolithic game loop while preserving touch shoot-stick, controller plus aim-assist, pointer, and touch auto-aim precedence; direct unit coverage proves finite output and source classification.
+- Unified startup and summary validation on the leading session heading so a nested recovery reference cannot downgrade the latest completed session.
+- Wired conservative repeated-block detection into schema lint and removed the duplicated S140 block from Current State.
+- Root-fixed the second-order Hot Context regression exposed by the new audit: tests now discover the semantic latest audit sidecar instead of pinning S140.
+- The exact-tree full suite passed 999/1000 and exposed one operational false red: the installed dependency-tree subprocess crossed Vitest's fixed 30-second per-test bound under host load. The gate itself completed in ~2 seconds in isolation; its smoke now has a bounded 90-second allowance and the repaired file passes 27/27.
+- The final exact-tree aggregate passed 1,000/1,000 across 169 files in 255.92 seconds after the bounded operator-smoke repair.
+- Verified focused courts, strict lint/build, public/protocol/startup/security/replay/media gates, and 6/6 desktop/mobile Chromium input reliability cases.
+- Deployed the working tree to `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`); the 19-route × 2-theme × 3-width court passed 969/969 and six representative captures are hash-bound.
+- Direct subjective image inspection remains unavailable at the host `CryptUnprotectData` boundary; automated pixel evidence is reported separately and SPARKED remains NO-GO.
+
+Intent outcome: achieved for every repo-owned Arc item; closeout, exact-main push, production deployment, and live verification continue at this boundary.

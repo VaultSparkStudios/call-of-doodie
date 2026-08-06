@@ -127,6 +127,80 @@ export function buildPointerAimSweepReport(rect, canvasSize, player) {
   };
 }
 
+export function resolveAimFrame({
+  player = {},
+  enemies = [],
+  shootStick = {},
+  gamepadAngle = null,
+  aimAssist = false,
+  pointerAngle = null,
+  pointerActive = false,
+  joystickActive = false,
+  autoAim = false,
+  assistRadius = 160,
+} = {}) {
+  let angle = Number.isFinite(Number(player.angle)) ? Number(player.angle) : 0;
+  let source = "unchanged";
+  const stickActive = !!shootStick.active;
+  const stickMagnitude = Math.hypot(Number(shootStick.dx) || 0, Number(shootStick.dy) || 0);
+  let shootStickShooting = stickActive ? stickMagnitude > 10 : !!shootStick.shooting;
+
+  if (stickActive && shootStickShooting) {
+    angle = Math.atan2(Number(shootStick.dy) || 0, Number(shootStick.dx) || 0);
+    source = "shoot-stick";
+  }
+
+  if (gamepadAngle !== null && Number.isFinite(Number(gamepadAngle))) {
+    const controllerAngle = Number(gamepadAngle);
+    angle = controllerAngle;
+    source = "controller";
+    if (aimAssist && enemies.length > 0) {
+      let nearestScore = Infinity;
+      for (const enemy of enemies) {
+        const ex = Number(enemy?.x);
+        const ey = Number(enemy?.y);
+        const px = Number(player?.x);
+        const py = Number(player?.y);
+        if (![ex, ey, px, py].every(Number.isFinite)) continue;
+        const distance = Math.hypot(ex - px, ey - py);
+        if (distance >= assistRadius) continue;
+        const enemyAngle = Math.atan2(ey - py, ex - px);
+        let difference = Math.abs(enemyAngle - controllerAngle);
+        if (difference > Math.PI) difference = (2 * Math.PI) - difference;
+        const score = (distance * 0.5) + (difference * 80);
+        if (score < nearestScore) {
+          nearestScore = score;
+          angle = enemyAngle;
+          source = "controller-assist";
+        }
+      }
+    }
+  }
+
+  if (!joystickActive && !stickActive && gamepadAngle === null && pointerActive && Number.isFinite(Number(pointerAngle))) {
+    angle = Number(pointerAngle);
+    source = "pointer";
+  }
+
+  if (autoAim && joystickActive && !stickActive && enemies.length > 0) {
+    let nearest = null;
+    let nearestDistance = Infinity;
+    for (const enemy of enemies) {
+      const distance = Math.hypot(Number(enemy?.x) - Number(player?.x), Number(enemy?.y) - Number(player?.y));
+      if (Number.isFinite(distance) && distance < nearestDistance) {
+        nearest = enemy;
+        nearestDistance = distance;
+      }
+    }
+    if (nearest) {
+      angle = Math.atan2(Number(nearest.y) - Number(player.y), Number(nearest.x) - Number(player.x));
+      source = "touch-auto";
+    }
+  }
+
+  return { angle, shootStickShooting, source };
+}
+
 /**
  * Apply player movement for one frame. Mutates player.x / player.y in place.
  * Returns the (possibly mutated) player object for chaining.

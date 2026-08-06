@@ -1046,6 +1046,21 @@ Last reviewed: 2026-07-28
 Overall status: green engineering implementation; SPARKED remains NO-GO.
 Last reviewed: 2026-07-29
 
+## 2026-08-05 — Session 141 — Input, session, state, and deployment truth
+
+- Audit truth — `docs/AUDIT_2026-08-05.json` / `.md` contain three Oracle-verified items; all three are shipped with execution evidence, plus one verification-discovered second-order fix.
+- Input truth — `resolveAimFrame` preserves the established touch shoot-stick, controller/aim-assist, pointer, and touch auto-aim precedence and always returns a finite angle plus explicit source.
+- Session truth — startup and summary validation consume one leading-session parser; nested recovery references do not redefine the canonical completed session.
+- State truth — schema lint rejects repeated exact contiguous session blocks; the duplicated S140 Current State block is removed.
+- Hot Context truth — freshness coverage follows semantic latest-audit discovery and cannot fail merely because a newer legitimate audit exists.
+- Verification truth — the final exact-tree suite passes 1,000/1,000 across 169 files; focused unit courts, strict lint/build, public/protocol/startup/security/replay/media gates, and browser input 6/6 pass.
+- Staging truth — `https://session-141-staging.call-of-doodie.pages.dev/` serves the working tree; the complete visual court passes 969/969 and six captures are hash-bound.
+- Visual honesty — direct host pixel viewing remains unavailable after repeated `CryptUnprotectData` failures; objective automation is green but subjective approval is not claimed.
+- Release truth — registry, cost, and footer gates allow engineering deployment. SPARKED remains NO-GO pending project-scoped telemetry, physical/email/participant/publication evidence, subjective review, and explicit approval.
+
+Overall status: green engineering staging; SPARKED remains NO-GO.
+Last reviewed: 2026-08-05
+
 ## 2026-08-03 — Session 138 — Unified experience, trust, performance, and human/agent truth
 
 - Audit truth — all twelve promoted items in `docs/AUDIT_2026-08-03.json` are `shipped` with explicit delivered rungs and verification; seven broader L3 outcomes remain honestly gated rather than implied.

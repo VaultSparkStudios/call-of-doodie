@@ -1,6 +1,43 @@
+# Latest Handoff — Session 141
+
+Session Intent: Run the complete full-profile Arc continuously through canonical `/start`, a fresh premise-verified game/product/public-release `/audit`, exhaustive `/implement` with second-order saturation, canonical `/closeout`, direct commit and push to `main`, full production deployment, and live verification without fabricating external outcomes.
+
+## Impact Summary (Session 141)
+
+**Headline.** Input intent and session truth now cross one tested authority each, while closeout state is protected against duplicate-history and stale-audit regressions.
+
+**Impact.**
+- Extracted pointer, touch shoot-stick, controller, and aim-assist arbitration from App into a pure finite `resolveAimFrame` kernel without changing the established priority or target scoring.
+- Unified startup and summary validation on a leading-session parser that ignores nested recovery references when identifying the canonical completed session.
+- Added a conservative exact-block coherence checker to schema lint and removed the duplicated S140 state block.
+- Root-fixed the verification-discovered Hot Context test so it follows the semantic latest audit rather than a hard-coded Session 140 artifact.
+- Root-fixed the full-suite dependency-tree smoke timeout with a bounded 90-second operator allowance after the real gate completed in ~2 seconds and the isolated court passed 27/27.
+- Exhausted the source-derived repo-local frontier: three audit items plus two second-order regressions shipped; five remaining candidates are honestly gated.
+
+## Evidence
+- Focused courts: 11/11 session/startup, 26/26 game-step, and 3/3 Hot Context tests pass; strict lint and production build pass.
+- Browser input court: 6/6 across Chromium and mobile Chromium, covering pointer calibration, Retro-to-combat persistence, and focus-loss input release.
+- Isolated staging: `https://session-141-staging.call-of-doodie.pages.dev/`; immutable preview `https://542f6c31.call-of-doodie.pages.dev/`.
+- Rendered-pixel court: 969/969 across 19 routes, two themes, and 390/768/1440 widths; six representative captures are hash-bound and CANON-053 passes.
+- Release court: cost-neutral, footer complete, engineering READY; SPARKED remains NO-GO behind named external evidence.
+- Full-corpus court: the first aggregate exposed only the dependency-tree smoke's fixed 30-second host-load timeout; after its bounded repair, the exact-tree aggregate passes 1,000/1,000 across 169 files in 255.92 seconds.
+
+## Where We Left Off
+- Architecture: App 4,959/5,000 lines, game loop 1,756/1,775, 32 system boundaries, and two hook boundaries.
+- Validation: exact-tree full suite is 1,000/1,000 across 169 files; doctor is overall-pass with zero blocking failures; final staged security and closeout rendering run immediately before commit.
+- Release: production push/deployment follows this writeback; no SPARKED lifecycle transition is authorized or implied.
+- Visual honesty: automated rendered-pixel evidence is green; direct subjective viewing remains unavailable because the host returns `CryptUnprotectData` errors.
+
+## Next
+- Collect consented participant evidence before changing balance, progression, fun, or retention claims.
+- Supply project-scoped PostHog/Sentry evidence and verified reply-as mail; finish physical PWA/gamepad/full-run media and publication gates before SPARKED.
+- Retry direct subjective image review when the host viewer is healthy; keep HomeV1 until exact-main production and funnel evidence clears retirement.
+
+---
+
 # Latest Handoff — Session 140
 
-Session Intent: Recover and verify the cut-off Session 139 before trusting it, then run the complete full-profile arc continuously through canonical `/start`, a fresh premise-verified game/product/public-release `/audit`, exhaustive `/implement` with second-order innovation saturation, and canonical `/closeout`; preserve evidence honesty, stage the exact tree, and push directly to `main` without claiming external outcomes.
+Session Intent: Run the complete full-profile Arc continuously through canonical `/start`, a fresh premise-verified game/product/public-release `/audit`, exhaustive `/implement` with second-order innovation saturation, canonical `/closeout`, direct commit and push to `main`, full deployment, and live verification without fabricating external outcomes.
 
 ## Impact Summary (Session 140)
 

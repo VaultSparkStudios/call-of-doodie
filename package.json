@@ -60,7 +60,7 @@
     "domain:cloudflare:apply": "node scripts/cloudflare-domain-cutover.mjs --apply",
     "domain:platform:plan": "node scripts/platform-domain-cutover.mjs",
     "domain:platform:apply": "node scripts/platform-domain-cutover.mjs --apply",
-    "schema:lint": "node scripts/schema-lint.mjs && node scripts/check-app-architecture.mjs && node scripts/check-boot-storage-boundary.mjs && node scripts/check-task-semantics.mjs && node scripts/check-project-status-writers.mjs && node scripts/check-node-runtime.mjs && node scripts/record-skill-cost.mjs --check",
+    "schema:lint": "node scripts/schema-lint.mjs && node scripts/check-current-state-coherence.mjs && node scripts/check-app-architecture.mjs && node scripts/check-boot-storage-boundary.mjs && node scripts/check-task-semantics.mjs && node scripts/check-project-status-writers.mjs && node scripts/check-node-runtime.mjs && node scripts/record-skill-cost.mjs --check",
     "runtime:node": "node scripts/check-node-runtime.mjs",
     "canon:adoption-check": "node scripts/check-canon-adoption-ledger.mjs",
     "architecture:check": "node scripts/check-app-architecture.mjs",

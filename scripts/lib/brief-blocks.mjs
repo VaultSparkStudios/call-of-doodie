@@ -8,6 +8,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { extractSessionId } from './session-reference.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
@@ -54,7 +55,7 @@ export function renderTitleHeader({ name, type, lifecycle, audience, vaultStatus
  */
 export function renderLastCompleted(summary, opts = {}) {
   if (typeof summary === 'string') {
-    const session = summary.match(/\bS(\d+)\b/i)?.[1] || '?';
+    const session = extractSessionId(summary)?.toString() || '?';
     const expected = opts.expectedSession != null ? String(opts.expectedSession) : null;
     if (expected && session !== '?' && session !== expected) {
       const fallback = opts.fallback || 'Use WHERE WE LEFT OFF and CURRENT_STATE for the live latest-session summary.';

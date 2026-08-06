@@ -78,5 +78,5 @@ describe("operator script smoke surfaces", () => {
   it("runs the installed dependency-tree gate as structured evidence", () => {
     const receipt = JSON.parse(run("scripts/check-dependency-tree.mjs", ["--json"]));
     expect(receipt).toMatchObject({ ok: true, problems: [] });
-  });
+  }, 90_000);
 });

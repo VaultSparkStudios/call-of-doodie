@@ -82,7 +82,7 @@ import { applyCoinShopEffect, applyShopOptionEffect } from "./systems/shopResolu
 import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.js";
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
-import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveMovementVector } from "./systems/gameStep.js";
+import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveAimFrame, resolveMovementVector } from "./systems/gameStep.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
@@ -2427,39 +2427,27 @@ export default function CallOfDoodie() {
 
     // ── Aim ──
     const ss = shootStickRef.current;
-    if (ss.active && Math.hypot(ss.dx, ss.dy) > 10) { p.angle = Math.atan2(ss.dy, ss.dx); ss.shooting = true; }
-    else if (ss.active) { ss.shooting = false; }
-    if (gamepadAngleRef.current !== null) {
-      // Aim assist: snap to nearest enemy within range when using right stick
-      if (settingsRef.current.aimAssist && gs.enemies.length > 0) {
-        let nearestAngle = gamepadAngleRef.current, nearestScore = Infinity;
-        const ASSIST_RADIUS = 160;
-        for (const e of gs.enemies) {
-          const dist = Math.hypot(e.x - p.x, e.y - p.y);
-          if (dist < ASSIST_RADIUS) {
-            const eAngle = Math.atan2(e.y - p.y, e.x - p.x);
-            let diff = Math.abs(eAngle - gamepadAngleRef.current);
-            if (diff > Math.PI) diff = 2 * Math.PI - diff;
-            const score = dist * 0.5 + diff * 80;
-            if (score < nearestScore) { nearestScore = score; nearestAngle = eAngle; }
-          }
-        }
-        p.angle = nearestAngle;
-      } else {
-        p.angle = gamepadAngleRef.current;
-      }
-    }
     const mouse = mouseRef.current;
-    if (!js.active && !ss.active && gamepadAngleRef.current === null && (mouse.down || mouse.moved)) {
+    const pointerActive = !js.active && !ss.active && gamepadAngleRef.current === null && (mouse.down || mouse.moved);
+    let pointerAngle = null;
+    if (pointerActive) {
       const rect = canvas.getBoundingClientRect();
-      p.angle = computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
+      pointerAngle = computePointerAimAngle(mouse, rect, { w: W, h: H }, p);
       inputDeviceRef.current = "mouse";
     }
-    if (autoAimRef.current && js.active && !ss.active && gs.enemies.length > 0) {
-      let nearest = null, nd = Infinity;
-      gs.enemies.forEach(e => { const d = Math.hypot(e.x - p.x, e.y - p.y); if (d < nd) { nd = d; nearest = e; } });
-      if (nearest) p.angle = Math.atan2(nearest.y - p.y, nearest.x - p.x);
-    }
+    const aimFrame = resolveAimFrame({
+      player: p,
+      enemies: gs.enemies,
+      shootStick: ss,
+      gamepadAngle: gamepadAngleRef.current,
+      aimAssist: settingsRef.current.aimAssist,
+      pointerAngle,
+      pointerActive,
+      joystickActive: js.active,
+      autoAim: autoAimRef.current,
+    });
+    p.angle = aimFrame.angle;
+    ss.shooting = aimFrame.shootStickShooting;
     sampleCommandTrace("aim", directionBucket(Math.cos(p.angle), Math.sin(p.angle)));
     if (inputDebugEnabled && frameCountRef.current % 15 === 0) {
       const gpMove = gamepadMoveRef.current;

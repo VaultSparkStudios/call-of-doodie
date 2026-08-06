@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-05T04:13:53.425Z",
-  "stagingUrl": "https://session-140-staging.call-of-doodie.pages.dev/",
-  "workingTreeUiSha256": "6d0ea1fdc37248c5d6bcdc135f24adbd8cfc47b938ad868b04a25976c823e30f",
+  "capturedAt": "2026-08-06T03:07:23.242Z",
+  "stagingUrl": "https://session-141-staging.call-of-doodie.pages.dev/",
+  "workingTreeUiSha256": "9ec79ba7da46d7bd128b4ed67e47cb98b59f17df2b86b7d8ee53b66b62f3cc29",
   "sourceMatrix": {
-    "receipt": ".cache/visual-audit-s140/visual-audit-receipt.json",
-    "sha256": "da3cc1da7c1bdb9e6ddadfb841fc85706ce8d71583bfb48903467bc2463973df",
+    "receipt": "output/playwright/session-141-staging/visual-audit-receipt.json",
+    "sha256": "aae88812f3e5f85e69babc588bbdc758887d857481e96971bd661e28e1a198a0",
     "checks": {
       "pass": true,
       "total": 969,
@@ -13,15 +13,7 @@
       "failures": []
     }
   },
-  "touchedState": {
-    "surface": "Expanded Replay Coverage Passport in Run History",
-    "checks": {
-      "pass": true,
-      "captures": 4,
-      "checks": 32,
-      "passed": 32
-    }
-  },
+  "touchedState": null,
   "themes": [
     "dark",
     "light"
@@ -29,7 +21,7 @@
   "captures": [
     {
       "file": "home-dark-mobile.png",
-      "sha256": "3e4a63cf57c65db56af4c2d96848d5d3442660aa53e5f2da20783d54dd096216",
+      "sha256": "a294a2b683478fa1cb4740fa9691b3fcaafd57ed67763d9feefe4dd2a6854d04",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -40,7 +32,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "7904814a8fd528c8bb113f29e3b9b5bf35149eae20d7e59325ed271308d93d7b",
+      "sha256": "253d77e15fdd3584a4977fec4b693391a98833964d4feab2b17f58740d0f49ec",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -92,50 +84,6 @@
         "height": 1000
       },
       "page": "Leaderboard surface"
-    },
-    {
-      "file": "replay-passport--sewer-night--390.png",
-      "sha256": "60bdf301eee0a4536b52d0c5c4671b4004b7e9dd3abebb245b7c6e142d7e83af",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
-    },
-    {
-      "file": "replay-passport--sewer-night--1440.png",
-      "sha256": "deb4c2d94847f59d03a94ef7ab06d6cb10be101f0f8b56c2dce776c89e3d88b2",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
-    },
-    {
-      "file": "replay-passport--porcelain-day--390.png",
-      "sha256": "1b8a01d1d044039dc054b3a90039f2aa71159cab3911962b4e0e51eca12d045e",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
-    },
-    {
-      "file": "replay-passport--porcelain-day--1440.png",
-      "sha256": "b0494d21aec809bbfa345fd32a7089133e4e94e18c31b83120e7089563f1880e",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
     }
   ],
   "inspection": {
@@ -144,12 +92,10 @@
     "findings": [
       "The source matrix passed 969/969 checks across 19 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
-      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The expanded Replay Coverage Passport passed 32/32 focused state checks at mobile and desktop in both themes."
+      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix."
     ],
     "fixesApplied": [
-      "Receipt selection now derives canonical representative captures from the live passing matrix; removed stale Prestige filename assumptions.",
-      "Expanded Replay Coverage Passport verified at 390px and 1440px in sewer-night and porcelain-day."
+      "No fix narrative supplied; the source matrix is authoritative."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": false,

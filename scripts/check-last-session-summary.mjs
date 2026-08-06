@@ -16,7 +16,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { latestSilSession as latestLedgerSession } from './lib/sil-ledger.mjs';
+import { extractSessionId } from './lib/session-reference.mjs';
 import { updateProjectStatus } from './lib/write-project-status.mjs';
+
+export { extractSessionId } from './lib/session-reference.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const JSON_OUT = process.argv.includes('--json');
@@ -28,15 +31,6 @@ function readJson(file, fallback = null) {
 
 function readText(file) {
   try { return fs.readFileSync(file, 'utf8'); } catch { return ''; }
-}
-
-export function extractSessionId(value) {
-  if (value == null) return null;
-  if (typeof value === 'number' && Number.isFinite(value)) return value;
-  if (typeof value === 'object') return extractSessionId(value.session ?? value.id ?? value.label ?? '');
-  const text = String(value);
-  const match = text.match(/\bS(?:ession\s*)?(\d+)\b/i) || text.match(/\bSession\s+(\d+)\b/i);
-  return match ? Number(match[1]) : null;
 }
 
 export function latestSilSession(silText) {

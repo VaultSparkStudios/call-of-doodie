@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit",
+  "generatedAt": "2026-08-05",
+  "session": 141,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-game-and-release",
+  "meta": {
+    "generatedAt": "2026-08-05",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-game-and-release",
+    "candidateCount": 26,
+    "promotedCount": 3,
+    "combinedPriority": 73.5,
+    "top3": [
+      "input-arbitration-kernel",
+      "canonical-session-reference",
+      "current-state-idempotence-court"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle returned evidence-found for all three promoted premises. Direct courts prove App.jsx has seven game-loop lines of budget headroom with inline cross-device aim arbitration, renderLastCompleted reads the nested recovered S139 marker before the leading Session 140 marker, and CURRENT_STATE begins with two identical Session 140 blocks.",
+    "baseline": {
+      "release": "FORGE. Engineering READY; SPARKED NO-GO under project-scoped telemetry, physical-device, reply-as email, publication, participant, direct visual, and founder gates.",
+      "quality": "Last committed receipt is 990/990. Live Doctor has blockingFailing 0; its one red is advisory portfolio maintenance.",
+      "architecture": "Green at 4,971/5,000 App lines, a 1,768/1,775-line loop span, 32 system boundaries, and two hook boundaries.",
+      "gameLoop": "Structural review scores 43/50: loop tightness 9, progression 8, engagement 9, retention 8, soul fidelity 9. Empirical confidence remains low because no consented playtest corpus exists.",
+      "cost": "All promoted work is local and deterministic, adds no dependency, hosted inference, or variable per-user cost."
+    }
+  },
+  "axisCoverage": {
+    "featureDepth": "Cross-device aim resolution becomes an explicit, reusable game-step contract without changing balance.",
+    "innovation": "One input-arbitration receipt and two session-truth courts turn implicit ordering into executable contracts.",
+    "ux": "Controller, touch, and mouse aim precedence remains behaviorally identical but gains focused parity evidence.",
+    "feedback": "False stale-session guidance is removed; genuine stale summaries remain visible and actionable.",
+    "engagement": "No balance or retention retune is promoted without participant evidence; input fairness is protected.",
+    "ai": "Hosted artificial intelligence is culled because local deterministic systems have no measured quality gap.",
+    "security": "No credential or identity expansion is attempted without scoped provider and product evidence.",
+    "efficiency": "The game loop regains architecture headroom and closeout context avoids repeated blocks.",
+    "tokenApiReduction": "Duplicated Current State content is removed and guarded; no runtime model calls are added."
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 80,
+    "sessionEngagement": 90,
+    "retention": 80,
+    "soulFidelity": 90,
+    "empiricalConfidence": "low",
+    "evidence": "The deploy-survive-adapt-debrief-rematch spine, first-three-run journey, progression runway, local Pulse, and proof-ranked coaching are structurally strong. Input arbitration remains inline near the architecture ceiling, and no consented docs/PLAYTESTS corpus exists.",
+    "nextThreeMoves": [
+      "Extract and test cross-device aim arbitration without changing input precedence or balance.",
+      "Keep numerical progression and retention changes frozen until consented participant evidence exists.",
+      "Preserve engineering READY and SPARKED NO-GO while external release evidence is collected."
+    ]
+  },
+  "releaseGate": {
+    "ci": "not yet refreshed for this tree; required before production",
+    "staging": "required before main promotion because the project has isolated Cloudflare Pages staging",
+    "secrets": "red for SPARKED: project-scoped PostHog, Sentry, and verified reply-as evidence remain incomplete",
+    "branding": "local public contract previously green; must be rechecked",
+    "parity": "desktop and mobile rendered-pixel court required if UI changes; this audit changes no UI",
+    "rollback": "Cloudflare Pages immutable deployment plus retained prior production deployment",
+    "founderApproval": "explicit production deploy requested; SPARKED promotion not requested or claimed",
+    "verdict": "GO for repo implementation and isolated staging; NO-GO for SPARKED transition"
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "gameplay input / architecture / UX",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 28,
+      "slug": "input-arbitration-kernel",
+      "title": "Extract cross-device aim arbitration into the pure game-step boundary.",
+      "status": "shipped",
+      "why": "The live architecture receipt leaves only seven game-loop lines of headroom. Touch stick, controller aim assist, mouse pointer, and auto-aim precedence remain inline in App.jsx even though movement and pointer projection already use the pure gameStep system.",
+      "recipe": "Add a pure resolveAimFrame contract that preserves the exact touch, controller, mouse, and auto-aim precedence; use it once from App.jsx; cover nearest-target scoring, dead-zone shooting, and source precedence; rerun focused input, architecture, lint, build, and full tests.",
+      "verificationPremise": "Studio Oracle evidence-found (8 lines) plus the direct architecture receipt: 1,768/1,775 loop lines.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Extract controller aim-assist selection."
+        },
+        "L2": {
+          "effortHours": 2,
+          "recipe": "Unify touch, controller, mouse, and auto-aim precedence with focused tests."
+        },
+        "L3": {
+          "effortHours": 3,
+          "recipe": "Ship the unified pure receipt, live-callsite court, architecture headroom proof, and full input regressions."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "observability / process quality / feedback",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 25,
+      "slug": "canonical-session-reference",
+      "title": "Make session-reference parsing recovery-aware and consistent.",
+      "status": "shipped",
+      "why": "PROJECT_STATUS correctly begins with Session 140 but also mentions recovered S139. The startup renderer extracts the nested S139 token and emits a false stale banner while the dedicated coherence checker correctly passes.",
+      "recipe": "Create one session-reference helper that prefers a leading current-session marker before nested recovery references, route both the brief block and summary checker through it, and add nested-recovery plus genuine-stale regression tests.",
+      "verificationPremise": "Studio Oracle evidence-found (26 lines); the rendered brief and dedicated checker currently contradict each other.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Prefer leading Session markers in renderLastCompleted."
+        },
+        "L2": {
+          "effortHours": 1,
+          "recipe": "Share the parser with the coherence checker and cover nested recovery."
+        },
+        "L3": {
+          "effortHours": 2,
+          "recipe": "Add object/string fixtures, genuine-stale protection, and startup acceptance proof."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "HIGH",
+      "axis": "context efficiency / truth hygiene",
+      "effortHours": 2.5,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 20.5,
+      "slug": "current-state-idempotence-court",
+      "title": "Reject repeated contiguous session-summary blocks in Current State.",
+      "status": "shipped",
+      "why": "CURRENT_STATE starts with the same ten-line Session 140 summary twice. The duplicate inflates every startup and Hot Context read while no current closeout court detects repeated contiguous blocks.",
+      "recipe": "Remove the duplicated block, add a pure repeated-contiguous-block detector with a conservative minimum block length, expose a check-current-state-coherence command, and wire it into schema lint so closeout cannot reintroduce exact repeated session blocks.",
+      "verificationPremise": "Studio Oracle evidence-found (41 lines); direct line comparison proves the leading Session 140 blocks are identical.",
+      "ladder": {
+        "L1": {
+          "effortHours": 0.5,
+          "recipe": "Remove the duplicate leading block."
+        },
+        "L2": {
+          "effortHours": 1.5,
+          "recipe": "Add a conservative exact-block detector and fixtures."
+        },
+        "L3": {
+          "effortHours": 2.5,
+          "recipe": "Wire the court into schema lint and prove Hot Context remains deterministic."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "numeric-balance-or-progression-retune",
+      "reason": "Evidence-gated WIN: no consented participant corpus exists; the source-derived runway is descriptive and does not justify number changes."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "Culled: deterministic local coaching has no measured quality gap and hosted inference would add variable cost, latency, and privacy scope."
+    },
+    {
+      "slug": "supabase-obelisk-account-expansion",
+      "reason": "Product-decision gated: guest-first identity is deliberate and account work changes consent, recovery, deletion, abuse, and cost scope."
+    },
+    {
+      "slug": "posthog-sentry-configuration",
+      "reason": "Provider-credential gated after canonical secrets discovery; transport readiness cannot create project-scoped vendor credentials."
+    },
+    {
+      "slug": "sparked-promotion",
+      "reason": "NO-GO: physical device, reply-as email, scoped telemetry, publication, participant, direct visual, and lifecycle approval evidence remain incomplete."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "canonical-session-reference",
+      "status": "shipped",
+      "outcome": "One recovery-aware parser now keeps startup and summary truth aligned when the current summary mentions an older recovered session.",
+      "verification": "Session truth and startup block suite 11/11; last-session-summary coherent at S140; regenerated brief renders LAST SESSION S140."
+    },
+    {
+      "slug": "current-state-idempotence-court",
+      "status": "shipped",
+      "outcome": "The duplicated Session 140 block is removed and a conservative repeated-block court now runs inside schema lint.",
+      "verification": "Current State coherence PASS; focused session truth suite 11/11."
+    },
+    {
+      "slug": "input-arbitration-kernel",
+      "status": "shipped",
+      "outcome": "Touch, controller assist, pointer, and auto-aim precedence now resolve through one pure game-step receipt consumed once by App.",
+      "verification": "Focused game-step/input suite 26/26; strict lint PASS; architecture improved to 4,959 lines and 1,756 loop span."
+    },
+    {
+      "slug": "dependency-tree-smoke-bound",
+      "status": "shipped",
+      "outcome": "The installed dependency-tree operator smoke retains a finite allowance but no longer misclassifies shared-host scheduling beyond Vitest's default 30 seconds as dependency failure.",
+      "verification": "Real dependency gate completed in about 2 seconds; isolated operator script smoke passes 27/27 with a 90-second per-test bound."
+    }
+  ]
+}

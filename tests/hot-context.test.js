@@ -3,6 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { findLatestAuditSidecar } from "../scripts/lib/audit-sidecar.mjs";
 
 describe("hot context contract", () => {
   it("is bounded, source-indexed, and keeps authoritative artifacts discoverable", () => {
@@ -11,7 +12,8 @@ describe("hot context contract", () => {
     expect(context.budgets.maximumBytes).toBe(24000);
     expect(context.sourceFingerprint).toMatch(/^[a-f0-9]{64}$/);
     expect(context.sources.currentState.file).toBe("context/CURRENT_STATE.md");
-    expect(context.sources.audit.file).toBe("docs/AUDIT_2026-08-04_2.json");
+    const latestAudit = findLatestAuditSidecar(process.cwd());
+    expect(context.sources.audit.file).toBe(path.relative(process.cwd(), latestAudit.fullPath).replace(/\\/g, "/"));
     expect(context.sources.taskBoard.sha256).toMatch(/^[a-f0-9]{64}$/);
     expect(Buffer.byteLength(JSON.stringify(context))).toBeLessThan(24000);
   });

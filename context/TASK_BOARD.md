@@ -16,6 +16,16 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S141** Input arbitration kernel — one pure finite resolver preserves pointer, touch shoot-stick, controller, and aim-assist precedence with direct regression coverage.
+- [x] [SIL:3] **DONE S141** Canonical session reference — startup and summary validation share one leading-session parser, so nested recovery references cannot masquerade as the completed session.
+- [x] [SIL:3] **DONE S141** Current-state idempotence court — schema lint rejects repeated contiguous session blocks and the duplicated S140 block is removed.
+- [x] [SIL:2] **DONE S141 second-order** Hot Context freshness coverage discovers the semantic latest audit rather than pinning a prior session filename.
+- [x] [SIL:2] **DONE S141 second-order** The installed dependency-tree smoke has a bounded 90-second operator allowance; the real command completes in ~2 seconds and the isolated 27/27 script court passes under shared-host load.
+- [x] [SIL:2] **DONE S141 staging/visual court** Browser input reliability passes 6/6 and isolated staging passes 969/969 across 19 routes, two themes, and three widths with six hash-bound captures.
+- [x] [AUDIT WIN S141] Balance tuning, new content, hosted artificial intelligence, identity expansion, fallback retirement, and SPARKED claims were rejected because their evidence or authority prerequisites remain absent.
+
+**Runway exception:** all three live-premise audit items and the verification-discovered regression are shipped. The source-derived Genius List reports 0 executable / 5 deferred / exhausted=true; remaining work needs credentials, a product decision, real production/participant evidence, a community destination, physical hardware/media, or SPARKED approval.
+
 - [x] [SIL:3] **DONE S140** Reproducible Hot Context — semantic audit ordering plus content-derived stamps/fingerprints keep fresh-checkout and exact-main output deterministic.
 - [x] [SIL:2] **DONE S140** Canonical Node runtime — package and lock metadata plus all five workflow setup surfaces require Node.js 22+, enforced by a tested receipt.
 - [x] [SIL:3] **DONE S140** Dual-rung launch readiness — engineering and SPARKED verdicts have separate reason-coded gates without reading raw environment files.

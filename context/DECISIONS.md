@@ -949,3 +949,21 @@ Rationale: A green implementation tree is meaningful without laundering absent e
 Decision: Replay surfaces share one `replay-coverage-passport-v1` contract. Deterministic movement/aim, combat actions, and one derived contact-enemy slice are named as covered; full wave state, full combat physics, and authoritative outcome are explicitly excluded.
 
 Rationale: Players and agents need a precise trust boundary. Naming both evidence and exclusions prevents a useful partial resimulation from being mistaken for authoritative server replay.
+
+## 2026-08-05 — Session 141 — Canonical session identity comes from the leading boundary
+
+Decision: Identify a handoff or summary by its leading `Session N` / `SN` boundary and use one parser across startup rendering and summary validation. Nested recovery references remain descriptive context and cannot replace the canonical session identity.
+
+Rationale: A correct summary such as `Session 140 recovered S139` must not cause startup to report S139 as the latest completed session. One executable semantic boundary prevents independent regular expressions from publishing contradictory chronology.
+
+## 2026-08-05 — Session 141 — Input arbitration is pure policy, not inline loop state
+
+Decision: Resolve aim through one pure `resolveAimFrame` kernel while preserving the existing precedence: active touch shoot-stick, controller with bounded aim-assist scoring, pointer, then touch auto-aim fallback. Extraction does not authorize balance or aim-assist tuning.
+
+Rationale: Centralizing arbitration makes mixed-input behavior directly testable and reduces loop pressure without changing player feel or widening claims beyond current evidence.
+
+## 2026-08-05 — Session 141 — Production deployment does not imply SPARKED promotion
+
+Decision: A cost-neutral, footer-complete, engineering-ready build may deploy to the existing production surface while lifecycle status remains FORGE/public-unlaunched and SPARKED remains NO-GO.
+
+Rationale: Deployment freshness and public-launch authority are separate courts. Missing project-scoped telemetry, physical and email evidence, participant/publication evidence, subjective visual review, and explicit SPARKED approval cannot be inferred from a green engineering pipeline.

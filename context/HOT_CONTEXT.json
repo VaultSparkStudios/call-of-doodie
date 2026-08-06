@@ -1,7 +1,7 @@
 {
   "schemaVersion": "hot-context-v1",
-  "generatedAt": "2026-08-04T00:00:00.000Z",
-  "sourceFingerprint": "8809d161a2ba90f35c0817cab46bb68bcc562d53525d9587934c113093a76699",
+  "generatedAt": "2026-08-05T00:00:00.000Z",
+  "sourceFingerprint": "ac265eb27e9970151a1a980d4d43934b63eecb59617e2ab1b8e3f5bd4d4464d3",
   "purpose": "Bounded startup projection; full append-only artifacts remain authoritative and discoverable by source hash.",
   "budgets": {
     "maximumBytes": 24000,
@@ -11,61 +11,49 @@
   "sources": {
     "currentState": {
       "file": "context/CURRENT_STATE.md",
-      "sha256": "ed357d437e5279f7be12a1affebfa36db8872ed588651c3d1f52f27d115b02a2",
-      "bytes": 151656
+      "sha256": "632a8af1d50254e04024ed6dc9efc97f75cc30bd4a24a0141cf3552a26fc443f",
+      "bytes": 151447
     },
     "taskBoard": {
       "file": "context/TASK_BOARD.md",
-      "sha256": "5ae2d662b6a6cb55a86f5c98acb196bbbb651ec52579a19871f085ab2a3d5da2",
-      "bytes": 102300
+      "sha256": "f485d9640592acc80eb5204962823f0fad7ae79393c6552b0f77c144a8d6ce43",
+      "bytes": 104017
     },
     "decisions": {
       "file": "context/DECISIONS.md",
-      "sha256": "6c1a31f2a8cdd4340995c5ec1a5e8214590b24473b99f6737dc1c467ccdc7e22",
-      "bytes": 92075
+      "sha256": "5c5388ba16d1a1c351f84c98befa91c5c6c088453df705727d4ca238dd8fa5d8",
+      "bytes": 93803
     },
     "audit": {
-      "file": "docs/AUDIT_2026-08-04_2.json",
-      "sha256": "23d2b0667cc6329fd240181baab85bff9b249c6ab2185908bc1962ac5fe9133a",
-      "bytes": 16564
+      "file": "docs/AUDIT_2026-08-05.json",
+      "sha256": "1d91a9a167b33ff5fe6641987ccb07a99288553d228fe287f189e3464735c4d5",
+      "bytes": 11567
     }
   },
-  "currentSession": "- Session 140 (2026-08-04) recovered and closed the cut-off Session 139 boundary, then completed a fresh `/start -> /audit -> /implement -> second-order saturation -> /closeout` arc.\n- Evidence truth — Hot Context selects the latest audit semantically and derives its timestamp/fingerprint from source content, so checkout mtimes cannot make exact-main CI stale or nondeterministic.\n- Runtime truth — package metadata and all five GitHub Actions setup surfaces require Node.js 22 or newer, enforced by an executable runtime contract.\n- Release truth — launch readiness now separates engineering readiness from SPARKED readiness; external credentials, physical QA, verified reply email, participant evidence, publication, direct subjective pixel review, and founder approval remain explicit reason-coded gates.\n- Governance truth — the Canon adoption ledger has 50 checked adoptions, two evidence-backed exemptions, and zero pending/review rows; startup acceptance fails on ledger drift.\n- Replay truth — `replay-coverage-passport-v1` names three deterministic replay lanes and three excluded authoritative/full-physics lanes, and projects the same advisory ceiling to Run History, Field Manual, gameplay contract, and agent manifest.\n- Validation truth — 990/990 tests across 168 files, strict lint, build, schema/runtime/architecture/public/security/replay gates, and npm audit zero pass on the final tree.\n- Visual truth — isolated Session 140 staging passes the 969/969 route/theme/viewport matrix, and the expanded Replay Coverage Passport passes 32/32 focused state checks across both themes at 390px and 1440px; 10 captures are hash-bound. Direct subjective image inspection remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.\n- Staging truth — the exact Session 140 tree is available at `https://session-140-staging.call-of-doodie.pages.dev/` (immutable `https://a13582fb.call-of-doodie.pages.dev/`).\n- Saturation truth — all five verified audit items shipped; the generated innovation pack found no repo-local candidate, and remaining work is credential, product-decision, real-data, community, hardware/media, or founder gated.",
+  "currentSession": "- Session 141 (2026-08-05) completed the full `/start -> /audit -> /implement -> second-order saturation -> /closeout` engineering arc from synchronized `main`.\n- Input truth — `resolveAimFrame` now owns pointer, touch-shoot-stick, controller, and aim-assist arbitration while preserving the established precedence and controller target scoring; App consumes one finite reason-coded aim frame.\n- Session truth — one shared leading-session parser distinguishes the canonical session from nested recovery references, so `Session 140 recovered S139` cannot make startup report S139 as the latest completed boundary.\n- State truth — schema lint now rejects repeated contiguous session blocks in `CURRENT_STATE.md`; the duplicated S140 block was removed and exact valid chronology remains accepted.\n- Second-order truth — Hot Context freshness tests now discover the semantic latest audit sidecar instead of pinning Session 140, so a new audit cannot create a false regression.\n- Validation truth — 1,000/1,000 tests across 169 files, focused unit courts 37/37, browser input/Retro/focus coverage 6/6 across desktop and mobile Chromium, strict lint/build/schema/public/protocol/startup/security/replay/media gates pass.\n- Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.\n- Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).\n- Release truth — cost, footer, and registry release gates allow engineering deployment; SPARKED remains NO-GO pending project-scoped telemetry, physical device/media, verified reply-as mail, participant/publication evidence, subjective review, and explicit SPARKED approval.",
   "openWork": "# Task Board\n## Human Action Required\n- [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens\n- [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination\n- [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end\n- [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed\n- [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`\n- [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)\n- [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.\n## Now\n- [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.\n- [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only\n- [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic\n## Next\n- [ ] [SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Auth, profiles, nullable leaderboard `user_id`, guest-to-account migration, and signed migration/callsign claim receipts.\n- [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk\n- [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships\n- [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through\n## Done\n## Deferred\n- [ ] Discord invite/community link when the community entry point is ready\n- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)\n## Deferred to Project Agents",
-  "recentDecisions": "## 2026-08-04 — Session 139 — Provider readiness outranks transport readiness\n\nDecision: Classify analytics blockers by the missing provider capability before considering a ready transport such as GitHub. Record execution budget as flat-rate plan token efficiency, never as fictional cash expenditure.\n\nRationale: A ready secret destination cannot create a missing vendor credential. Provider-first evidence and honest cost semantics prevent operational convenience from laundering a launch claim.\n\n\n## 2026-08-04 — Session 140 — Reproducible evidence uses semantic identity, not checkout time\n\nDecision: Latest-audit selection is based on the audit filename’s semantic date and ordinal, while Hot Context freshness and fingerprints derive from source content rather than filesystem modification time.\n\nRationale: A fresh Git checkout rewrites mtimes without changing project truth. Release evidence and exact-main CI must be reproducible from content identity, not workstation history.\n\n\n## 2026-08-04 — Session 140 — Engineering readiness and SPARKED readiness are separate verdicts\n\nDecision: The launch checker reports an engineering rung independently from the public SPARKED rung and accepts only redacted declared provider states; it does not read `.env.local` or infer physical, participant, publication, email, subjective-visual, or founder evidence.\n\nRationale: A green implementation tree is meaningful without laundering absent external evidence into a launch claim. Separate rungs preserve momentum and observability honesty simultaneously.\n\n\n## 2026-08-04 — Session 140 — Replay coverage is a source-derived advisory passport\n\nDecision: Replay surfaces share one `replay-coverage-passport-v1` contract. Deterministic movement/aim, combat actions, and one derived contact-enemy slice are named as covered; full wave state, full combat physics, and authoritative outcome are explicitly excluded.\n\nRationale: Players and agents need a precise trust boundary. Naming both evidence and exclusions prevents a useful partial resimulation from being mistaken for authoritative server replay.",
+  "recentDecisions": "## 2026-08-04 — Session 140 — Replay coverage is a source-derived advisory passport\n\nDecision: Replay surfaces share one `replay-coverage-passport-v1` contract. Deterministic movement/aim, combat actions, and one derived contact-enemy slice are named as covered; full wave state, full combat physics, and authoritative outcome are explicitly excluded.\n\nRationale: Players and agents need a precise trust boundary. Naming both evidence and exclusions prevents a useful partial resimulation from being mistaken for authoritative server replay.\n\n\n## 2026-08-05 — Session 141 — Canonical session identity comes from the leading boundary\n\nDecision: Identify a handoff or summary by its leading `Session N` / `SN` boundary and use one parser across startup rendering and summary validation. Nested recovery references remain descriptive context and cannot replace the canonical session identity.\n\nRationale: A correct summary such as `Session 140 recovered S139` must not cause startup to report S139 as the latest completed session. One executable semantic boundary prevents independent regular expressions from publishing contradictory chronology.\n\n\n## 2026-08-05 — Session 141 — Input arbitration is pure policy, not inline loop state\n\nDecision: Resolve aim through one pure `resolveAimFrame` kernel while preserving the existing precedence: active touch shoot-stick, controller with bounded aim-assist scoring, pointer, then touch auto-aim fallback. Extraction does not authorize balance or aim-assist tuning.\n\nRationale: Centralizing arbitration makes mixed-input behavior directly testable and reduces loop pressure without changing player feel or widening claims beyond current evidence.\n\n\n## 2026-08-05 — Session 141 — Production deployment does not imply SPARKED promotion\n\nDecision: A cost-neutral, footer-complete, engineering-ready build may deploy to the existing production surface while lifecycle status remains FORGE/public-unlaunched and SPARKED remains NO-GO.\n\nRationale: Deployment freshness and public-launch authority are separate courts. Missing project-scoped telemetry, physical and email evidence, participant/publication evidence, subjective visual review, and explicit SPARKED approval cannot be inferred from a green engineering pipeline.",
   "audit": {
-    "date": "2026-08-04",
+    "date": "2026-08-05",
     "title": null,
     "items": [
       {
-        "slug": "reproducible-hot-context",
-        "title": "Make Hot Context and latest-audit selection reproducible across fresh checkouts.",
+        "slug": "input-arbitration-kernel",
+        "title": "Extract cross-device aim arbitration into the pure game-step boundary.",
         "status": "shipped",
-        "priority": 31
+        "priority": 28
       },
       {
-        "slug": "replay-coverage-passport",
-        "title": "Publish what replay evidence actually reproduces—and what it does not.",
+        "slug": "canonical-session-reference",
+        "title": "Make session-reference parsing recovery-aware and consistent.",
         "status": "shipped",
-        "priority": 29
+        "priority": 25
       },
       {
-        "slug": "canonical-node-runtime",
-        "title": "Align every workflow and local contract on the supported Node runtime.",
+        "slug": "current-state-idempotence-court",
+        "title": "Reject repeated contiguous session-summary blocks in Current State.",
         "status": "shipped",
-        "priority": 27
-      },
-      {
-        "slug": "dual-rung-release-receipt",
-        "title": "Separate engineering readiness from SPARKED readiness in one executable receipt.",
-        "status": "shipped",
-        "priority": 27.5
-      },
-      {
-        "slug": "checked-canon-adoption-posture",
-        "title": "Replace 44 generic review rows with a checked project-specific canon posture.",
-        "status": "shipped",
-        "priority": 22
+        "priority": 20.5
       }
     ]
   }
