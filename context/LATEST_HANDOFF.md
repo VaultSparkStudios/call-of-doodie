@@ -23,11 +23,13 @@ Session Intent: Run the complete full-profile Arc continuously through canonical
 - Rendered-pixel court: 969/969 across 19 routes, two themes, and 390/768/1440 widths; six representative captures are hash-bound and CANON-053 passes.
 - Release court: cost-neutral, footer complete, engineering READY; SPARKED remains NO-GO behind named external evidence.
 - Full-corpus court: the first aggregate exposed only the dependency-tree smoke's fixed 30-second host-load timeout; after its bounded repair, the exact-tree aggregate passes 1,000/1,000 across 169 files in 255.92 seconds.
+- Production court: exact implementation tip `80a0891e922b` passed brief run `31076182617` and Cloudflare quality/deploy run `31076182684`; immutable deployment `https://33f65ed2.call-of-doodie.pages.dev/` and `https://callofdoodie.wtf/_health` report the deployed revision.
+- Live court: custom-domain shell/edge/manifest/service-worker/Open Graph 7/7, cutover 5/5, replay trust 3/3, score backend health 5/5, and Studio launch-surface checks pass.
 
 ## Where We Left Off
 - Architecture: App 4,959/5,000 lines, game loop 1,756/1,775, 32 system boundaries, and two hook boundaries.
 - Validation: exact-tree full suite is 1,000/1,000 across 169 files; doctor is overall-pass with zero blocking failures; final staged security and closeout rendering run immediately before commit.
-- Release: production push/deployment follows this writeback; no SPARKED lifecycle transition is authorized or implied.
+- Release: engineering production is deployed and live-verified at `80a0891e922b`; the receipt-only closeout commit is separately quality/deploy gated. No SPARKED lifecycle transition is authorized or implied.
 - Visual honesty: automated rendered-pixel evidence is green; direct subjective viewing remains unavailable because the host returns `CryptUnprotectData` errors.
 
 ## Next

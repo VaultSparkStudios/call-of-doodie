@@ -12,7 +12,7 @@
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
 ║  ✓ Architecture: App 4,959/5,000 lines, game loop 1,756/1,775,   ║
 ║  ✓ Validation: exact-tree full suite is 1,000/1,000 across 169   ║
-║  ✓ Release: production push/deployment follows this writeback;   ║
+║  ✓ Release: engineering production is deployed and live-verifie  ║
 ║  ✓ Visual honesty: automated rendered-pixel evidence is green;   ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
@@ -40,8 +40,8 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 15 files  ·  M:15 A:0 D:0 ?:0                          ║
-║  Ahead: 1  ·  Behind: 0                                          ║
+║  Changes: 12 files  ·  M:12 A:0 D:0 ?:0                          ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -55,7 +55,7 @@
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         5d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  9d ago                                           ║
+║  Sanitization:  0d ago                                           ║
 ║  shells:        0 started · 0 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗

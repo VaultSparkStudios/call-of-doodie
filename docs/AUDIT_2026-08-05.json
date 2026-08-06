@@ -55,14 +55,14 @@
     ]
   },
   "releaseGate": {
-    "ci": "not yet refreshed for this tree; required before production",
-    "staging": "required before main promotion because the project has isolated Cloudflare Pages staging",
+    "ci": "brief-format run 31076182617 and Cloudflare quality/deploy run 31076182684 passed for exact implementation tip 80a0891e922b",
+    "staging": "session-141-staging.call-of-doodie.pages.dev passed the 969/969 route/theme/viewport court before main promotion",
     "secrets": "red for SPARKED: project-scoped PostHog, Sentry, and verified reply-as evidence remain incomplete",
     "branding": "local public contract previously green; must be rechecked",
     "parity": "desktop and mobile rendered-pixel court required if UI changes; this audit changes no UI",
     "rollback": "Cloudflare Pages immutable deployment plus retained prior production deployment",
     "founderApproval": "explicit production deploy requested; SPARKED promotion not requested or claimed",
-    "verdict": "GO for repo implementation and isolated staging; NO-GO for SPARKED transition"
+    "verdict": "GO and verified for engineering production deployment; NO-GO for SPARKED transition"
   },
   "items": [
     {

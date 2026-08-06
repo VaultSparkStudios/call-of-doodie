@@ -14,6 +14,8 @@
 - Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
 - Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).
 - Release truth — cost, footer, and registry release gates allow engineering deployment; SPARKED remains NO-GO pending project-scoped telemetry, physical device/media, verified reply-as mail, participant/publication evidence, subjective review, and explicit SPARKED approval.
+- Production truth — exact implementation tip `80a0891e922b` passed GitHub quality and Cloudflare deployment run `31076182684`, produced immutable deployment `https://33f65ed2.call-of-doodie.pages.dev/`, and serves the custom-domain typed health receipt as `edge-ready`.
+- Live truth — production passes shell/edge/manifest/service-worker/Open Graph 7/7, domain cutover 5/5, replay trust 3/3, score backend health 5/5, and Studio launch-surface checks.
 
 ## Open Work
 
@@ -72,7 +74,7 @@ Rationale: Deployment freshness and public-launch authority are separate courts.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 151,669 bytes · SHA-256 `17985cc30b0f…`
+- `context/CURRENT_STATE.md` · 152,126 bytes · SHA-256 `c3acf7c02bae…`
 - `context/TASK_BOARD.md` · 104,286 bytes · SHA-256 `acd71dd27844…`
 - `context/DECISIONS.md` · 93,803 bytes · SHA-256 `5c5388ba16d1…`
-- `docs/AUDIT_2026-08-05.json` · 12,005 bytes · SHA-256 `5fb07ba221f3…`
+- `docs/AUDIT_2026-08-05.json` · 12,099 bytes · SHA-256 `efb2dd977a0f…`

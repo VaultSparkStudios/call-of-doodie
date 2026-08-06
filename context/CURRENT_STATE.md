@@ -8,6 +8,8 @@
 - Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.
 - Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).
 - Release truth — cost, footer, and registry release gates allow engineering deployment; SPARKED remains NO-GO pending project-scoped telemetry, physical device/media, verified reply-as mail, participant/publication evidence, subjective review, and explicit SPARKED approval.
+- Production truth — exact implementation tip `80a0891e922b` passed GitHub quality and Cloudflare deployment run `31076182684`, produced immutable deployment `https://33f65ed2.call-of-doodie.pages.dev/`, and serves the custom-domain typed health receipt as `edge-ready`.
+- Live truth — production passes shell/edge/manifest/service-worker/Open Graph 7/7, domain cutover 5/5, replay trust 3/3, score backend health 5/5, and Studio launch-surface checks.
 
 - Session 140 (2026-08-04) recovered and closed the cut-off Session 139 boundary, then completed a fresh `/start -> /audit -> /implement -> second-order saturation -> /closeout` arc.
 - Evidence truth — Hot Context selects the latest audit semantically and derives its timestamp/fingerprint from source content, so checkout mtimes cannot make exact-main CI stale or nondeterministic.

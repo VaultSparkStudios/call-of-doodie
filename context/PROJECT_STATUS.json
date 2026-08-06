@@ -246,6 +246,17 @@
       "status": "green",
       "type": "tests",
       "command": "Session 141 — 1000/1000 across 169 files in 255.92s; focused 40/40 plus browser input/Retro/focus 6/6; strict lint/build/public/protocol/startup/security/replay/media and CANON-053 gates green"
+    },
+    {
+      "status": "green",
+      "url": "https://callofdoodie.wtf/",
+      "type": "production-deploy",
+      "command": "Session 141 implementation tip 80a0891e922b · brief 31076182617 · Cloudflare quality/deploy 31076182684 · immutable https://33f65ed2.call-of-doodie.pages.dev/ · typed edge health matches revision"
+    },
+    {
+      "status": "green",
+      "type": "production-smoke",
+      "command": "Session 141 — live 7/7 · cutover 5/5 · replay trust 3/3 · score backend 5/5 · Studio launch surfaces pass"
     }
   ],
   "blockers": [
@@ -305,7 +316,7 @@
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-141-staging.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-08-06T05:10:44.000Z",
-  "sanitizationLastCleared": "2026-07-28T00:53:00Z",
+  "sanitizationLastCleared": "2026-08-06T05:41:13.066Z",
   "sessionShellHygiene": {
     "session": 141,
     "started": 0,
@@ -328,7 +339,7 @@
     "total": 170,
     "score": 80
   },
-  "lastSessionSummary": "Session 141 shipped three verified audit items plus three second-order safeguards, passed 1000/1000 tests and staged 969/969 rendered-pixel evidence, exhausted repo-local candidates, and retained an honest SPARKED NO-GO.",
+  "lastSessionSummary": "Session 141 shipped three verified audit items plus three second-order safeguards, passed 1000/1000 tests and 969/969 rendered-pixel evidence, deployed and live-verified implementation tip 80a0891e922b, exhausted repo-local candidates, and retained an honest SPARKED NO-GO.",
   "testsAssertionsPassing": 1000,
   "testsAssertionsTotal": 1000,
   "testsAssertionsFiles": 168,

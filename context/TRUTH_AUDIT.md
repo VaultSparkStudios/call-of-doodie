@@ -1057,6 +1057,8 @@ Last reviewed: 2026-07-29
 - Staging truth — `https://session-141-staging.call-of-doodie.pages.dev/` serves the working tree; the complete visual court passes 969/969 and six captures are hash-bound.
 - Visual honesty — direct host pixel viewing remains unavailable after repeated `CryptUnprotectData` failures; objective automation is green but subjective approval is not claimed.
 - Release truth — registry, cost, and footer gates allow engineering deployment. SPARKED remains NO-GO pending project-scoped telemetry, physical/email/participant/publication evidence, subjective review, and explicit approval.
+- Production truth — GitHub brief and Cloudflare quality/deploy are green for `80a0891e922b`; the custom-domain typed health receipt matches that revision and the immutable deployment is `https://33f65ed2.call-of-doodie.pages.dev/`.
+- Live truth — production shell/edge/manifest/service-worker/Open Graph 7/7, cutover 5/5, replay trust 3/3, score backend 5/5, and Studio launch-surface checks pass.
 
 Overall status: green engineering staging; SPARKED remains NO-GO.
 Last reviewed: 2026-08-05
