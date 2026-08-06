@@ -38,4 +38,22 @@ describe("MobileHUD", () => {
     expect(html).toContain('data-action-state="cooldown"');
     expect(html).toContain("GRENADE · COOL");
   });
+
+  it("hides synergy burst button when synergyChargeReady is false", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} synergyChargeReady={false} onSynergyCharge={() => {}} />);
+    expect(html).not.toContain('data-testid="synergy-burst-btn"');
+  });
+
+  it("hides synergy burst button when onSynergyCharge is not provided", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} synergyChargeReady={true} />);
+    expect(html).not.toContain('data-testid="synergy-burst-btn"');
+  });
+
+  it("renders synergy burst button when ready and handler provided", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} synergyChargeReady={true} onSynergyCharge={() => {}} />);
+    expect(html).toContain('data-testid="synergy-burst-btn"');
+    expect(html).toContain('aria-label="Fire synergy burst"');
+    expect(html).toContain("BURST");
+    expect(html).toContain("synBurst");
+  });
 });
