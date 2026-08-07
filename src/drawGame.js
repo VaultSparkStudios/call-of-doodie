@@ -1329,21 +1329,82 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillRect(0, 0, W, H);
   }
 
-  // Touch joysticks
+  // Touch joysticks — elite visual with ring, sector, arrow, dead-zone, and glowing knob
   const drawStick = (ref, baseColor) => {
     if (!ref.current.active) return;
     const j = ref.current, rect = canvas.getBoundingClientRect();
     const sx = W / rect.width, sy = H / rect.height;
     const cx = (j.startX - rect.left) * sx, cy = (j.startY - rect.top) * sy;
-    ctx.globalAlpha = 0.15; ctx.fillStyle = baseColor;
+    const rawD = Math.hypot(j.dx, j.dy);
+    const clampD = Math.min(rawD, 50);
+    const travel = rawD > 2 ? Math.min(1, rawD / 50) : 0;
+    const ang = rawD > 2 ? Math.atan2(j.dy, j.dx) : 0;
+    const kx = cx + Math.cos(ang) * clampD * sx;
+    const ky = cy + Math.sin(ang) * clampD * sy;
+
+    // Base fill — dark translucent disc
+    ctx.globalAlpha = 0.08;
+    ctx.fillStyle = baseColor;
     ctx.beginPath(); ctx.arc(cx, cy, 60, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 0.45;
-    const clampD = Math.min(Math.hypot(j.dx, j.dy), 50);
-    const ang = Math.atan2(j.dy, j.dx);
-    ctx.beginPath(); ctx.arc(cx + Math.cos(ang) * clampD * sx, cy + Math.sin(ang) * clampD * sy, 22, 0, Math.PI * 2); ctx.fill();
+
+    // Outer ring — brightens with travel distance
+    ctx.globalAlpha = 0.2 + travel * 0.25;
+    ctx.strokeStyle = baseColor;
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, 60, 0, Math.PI * 2); ctx.stroke();
+
+    if (travel > 0.05) {
+      // Directional sector highlight (±35° around push direction)
+      const sectorSpan = Math.PI / 5.1;
+      ctx.globalAlpha = 0.12 + travel * 0.1;
+      ctx.fillStyle = baseColor;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, 58, ang - sectorSpan, ang + sectorSpan);
+      ctx.closePath();
+      ctx.fill();
+
+      // Direction arrow line from center toward ring edge
+      ctx.globalAlpha = 0.5 + travel * 0.35;
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(ang) * 14, cy + Math.sin(ang) * 14);
+      ctx.lineTo(cx + Math.cos(ang) * 50, cy + Math.sin(ang) * 50);
+      ctx.stroke();
+      ctx.lineCap = "butt";
+    }
+
+    // Dead-zone indicator ring (dashed)
+    ctx.globalAlpha = 0.14;
+    ctx.strokeStyle = baseColor;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 5]);
+    ctx.beginPath(); ctx.arc(cx, cy, 14, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Knob glow
+    ctx.shadowColor = baseColor;
+    ctx.shadowBlur = 14;
+    ctx.globalAlpha = 0.28 + travel * 0.2;
+    ctx.fillStyle = baseColor;
+    ctx.beginPath(); ctx.arc(kx, ky, 26, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Knob core
+    ctx.globalAlpha = 0.72 + travel * 0.18;
+    ctx.fillStyle = baseColor;
+    ctx.beginPath(); ctx.arc(kx, ky, 20, 0, Math.PI * 2); ctx.fill();
+
+    // Knob specular highlight
+    ctx.globalAlpha = 0.32;
+    ctx.fillStyle = "#FFFFFF";
+    ctx.beginPath(); ctx.arc(kx - 5, ky - 5, 7, 0, Math.PI * 2); ctx.fill();
+
     ctx.globalAlpha = 1;
   };
-  drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+  drawStick(joystickRef, "#88CCFF"); drawStick(shootStickRef, "#FF7755");
 
   // Wave kill attribution card (shows top-3 killed types after each wave)
   if (!_rm && (gs._waveKillFeed?.framesLeft || 0) > 0) {
