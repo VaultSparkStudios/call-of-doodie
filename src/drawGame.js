@@ -1330,7 +1330,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   // Touch joysticks — elite visual with ring, sector, arrow, dead-zone, and glowing knob
-  const drawStick = (ref, baseColor) => {
+  // deadZoneScreenPx: actual threshold used by game logic (move=5, shoot=10 screen px)
+  const drawStick = (ref, baseColor, deadZoneScreenPx) => {
     if (!ref.current.active) return;
     const j = ref.current, rect = canvas.getBoundingClientRect();
     const sx = W / rect.width, sy = H / rect.height;
@@ -1341,6 +1342,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const ang = rawD > 2 ? Math.atan2(j.dy, j.dx) : 0;
     const kx = cx + Math.cos(ang) * clampD * sx;
     const ky = cy + Math.sin(ang) * clampD * sy;
+    const deadZoneR = deadZoneScreenPx * sx;
 
     // Base fill — dark translucent disc
     ctx.globalAlpha = 0.08;
@@ -1370,18 +1372,18 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.lineWidth = 2;
       ctx.lineCap = "round";
       ctx.beginPath();
-      ctx.moveTo(cx + Math.cos(ang) * 14, cy + Math.sin(ang) * 14);
+      ctx.moveTo(cx + Math.cos(ang) * deadZoneR, cy + Math.sin(ang) * deadZoneR);
       ctx.lineTo(cx + Math.cos(ang) * 50, cy + Math.sin(ang) * 50);
       ctx.stroke();
       ctx.lineCap = "butt";
     }
 
-    // Dead-zone indicator ring (dashed)
+    // Dead-zone indicator ring — radius matches actual game-logic threshold
     ctx.globalAlpha = 0.14;
     ctx.strokeStyle = baseColor;
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 5]);
-    ctx.beginPath(); ctx.arc(cx, cy, 14, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, deadZoneR, 0, Math.PI * 2); ctx.stroke();
     ctx.setLineDash([]);
 
     // Knob glow
@@ -1404,7 +1406,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
     ctx.globalAlpha = 1;
   };
-  drawStick(joystickRef, "#88CCFF"); drawStick(shootStickRef, "#FF7755");
+  drawStick(joystickRef, "#88CCFF", 5); drawStick(shootStickRef, "#FF7755", 10);
 
   // Wave kill attribution card (shows top-3 killed types after each wave)
   if (!_rm && (gs._waveKillFeed?.framesLeft || 0) > 0) {
