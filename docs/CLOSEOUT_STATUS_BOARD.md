@@ -1,20 +1,19 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-08 (Session 143 closeout) -->
+<!-- generated-at: 2026-08-08 (Session 144 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S143 ════════════════════╗
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S144 ════════════════════╗
 ║  Date: 2026-08-08  ·  SIL: 998/1000  ·  Velocity: 5 decreasing   ║
-║  Mode: FOUNDER  ·  Agent: codex                                  ║
+║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Product: Community Stats is live on Command Deck, leaderboar  ║
-║  ✓ Data: every recoverable server record is included. Historica  ║
-║  ✓ Operations: the browser outbox preserves new completed runs   ║
-║  ✓ Release: the engineering FORGE update is deployed and verifi  ║
-║  ✓ Next: gather real rich-run volume and participant feedback b  ║
+║  ✓ Product: Doctrine Archive, doctrine near-miss coaching, Gaun  ║
+║  ✓ Descoped: the button-size/density half of the mobile-handedn  ║
+║  ✓ Known cosmetic nuance: off-screen threat arrow anchoring inh  ║
+║  ✓ Release: engineering FORGE, deployed/public-unlaunched; SPAR  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -41,8 +40,8 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
-║  Ahead: 1  ·  Behind: 0                                          ║
+║  Changes: 1 files  ·  M:0 A:0 D:0 ?:1                            ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -52,7 +51,7 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        129/173                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1022/1022                                        ║
+║  Tests:         1054/1054                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         7d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
