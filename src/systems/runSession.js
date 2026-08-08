@@ -8,6 +8,7 @@ export function resolveRunModeFromFlags({
   bossRush = false,
   speedrun = false,
   gauntlet = false,
+  zombies = false,
 } = {}) {
   if (scoreAttack) return "score_attack";
   if (dailyChallenge) return "daily_challenge";
@@ -15,7 +16,28 @@ export function resolveRunModeFromFlags({
   if (bossRush) return "boss_rush";
   if (speedrun) return "speedrun";
   if (gauntlet) return "gauntlet";
+  if (zombies) return "zombies";
   return "standard";
+}
+
+export function readRunModeFlags(
+  scoreAttackRef,
+  dailyChallengeRef,
+  cursedRef,
+  bossRushRef,
+  speedrunRef,
+  gauntletRef,
+  zombiesRef,
+) {
+  return {
+    scoreAttack: Boolean(scoreAttackRef?.current),
+    dailyChallenge: Boolean(dailyChallengeRef?.current),
+    cursed: Boolean(cursedRef?.current),
+    bossRush: Boolean(bossRushRef?.current),
+    speedrun: Boolean(speedrunRef?.current),
+    gauntlet: Boolean(gauntletRef?.current),
+    zombies: Boolean(zombiesRef?.current),
+  };
 }
 
 export function createRunStartArtifacts({
@@ -54,6 +76,11 @@ export function createRunHistoryEntry({
   ghostRecorderReceipt = null,
   pressureReceipt = null,
   damageReceipt = null,
+  totalDamage = 0,
+  totalShots = 0,
+  totalHits = 0,
+  totalCrits = 0,
+  bossKills = 0,
 } = {}) {
   const entry = {
     score,
@@ -66,6 +93,11 @@ export function createRunHistoryEntry({
     modifier,
     killedByType,
     killedByName,
+    totalDamage: Math.max(0, Math.floor(Number(totalDamage) || 0)),
+    totalShots: Math.max(0, Math.floor(Number(totalShots) || 0)),
+    totalHits: Math.max(0, Math.floor(Number(totalHits) || 0)),
+    totalCrits: Math.max(0, Math.floor(Number(totalCrits) || 0)),
+    bossKills: Math.max(0, Math.floor(Number(bossKills) || 0)),
     ts: Date.now(),
   };
   if (traceEvidence) {

@@ -14,10 +14,10 @@ import {
 describe("public route truth graph", () => {
   it("owns every human route once and sends each route through visual verification", () => {
     const routes = getPublicRouteRegistry();
-    expect(routes).toHaveLength(17);
+    expect(routes).toHaveLength(18);
     expect(new Set(routes.map((route) => route.id)).size).toBe(routes.length);
     expect(new Set(routes.map((route) => route.path)).size).toBe(routes.length);
-    expect(getGeneratedCompanionPages()).toHaveLength(12);
+    expect(getGeneratedCompanionPages()).toHaveLength(13);
     expect(getVisualAuditRoutes().map((route) => route.id)).toEqual([
       ...routes.map((route) => route.id),
       "login",
@@ -29,7 +29,7 @@ describe("public route truth graph", () => {
     const manifest = buildFooterManifest();
     const footer = new Set(manifest.footerLinks.map((link) => link.href));
     expect(manifest.headerLinks).toHaveLength(5);
-    expect(manifest.footerLinks).toHaveLength(17);
+    expect(manifest.footerLinks).toHaveLength(18);
     for (const link of [...manifest.headerLinks, ...manifest.legalPages.map((href) => ({ href }))]) {
       expect(footer.has(link.href)).toBe(true);
     }
@@ -63,8 +63,9 @@ describe("public route truth graph", () => {
     const second = buildRouteContractProof();
     expect(first).toEqual(second);
     expect(first.fingerprint).toMatch(/^[a-f0-9]{64}$/);
-    expect(first.coverage).toMatchObject({ routes: 17, headerRoutes: 5, footerRoutes: 17, visualAuditRoutes: 19, generatedPages: 12 });
+    expect(first.coverage).toMatchObject({ routes: 18, headerRoutes: 5, footerRoutes: 18, visualAuditRoutes: 20, generatedPages: 13 });
     expect(first.consumers).toEqual(expect.arrayContaining(["sitemap", "agents", "llms", "visual-audit"]));
     expect(buildAgentsManifest().resources).toContainEqual(expect.objectContaining({ rel: "route-contract" }));
+    expect(buildAgentsManifest().resources).toContainEqual(expect.objectContaining({ rel: "game-stats", href: "https://callofdoodie.wtf/stats-surface.json" }));
   });
 });

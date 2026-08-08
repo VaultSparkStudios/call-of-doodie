@@ -98,7 +98,7 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} onStart={onStart} onSetGauntletMode={onSetGauntletMode} />);
     });
 
-    const gauntlet = [...container.querySelectorAll("button")].find((button) => button.textContent.includes("GAUNTLET"));
+    const gauntlet = container.querySelector('[aria-label="Launch weekly Gauntlet"]');
     expect(gauntlet).toBeTruthy();
     await act(async () => { gauntlet.click(); });
 

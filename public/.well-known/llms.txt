@@ -8,7 +8,7 @@ Rights: Proprietary — All Rights Reserved, VaultSpark Studios LLC
 
 ## What players do
 
-Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, survive wave, review debrief. The live contract publishes 7 seeded modes, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation.
+Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, survive wave, review debrief. The live contract publishes 8 seeded modes, 12 weapons, and 22 enemies. Replay proof is advisory deterministic decision-stream evidence and not full physics resimulation.
 
 ## Public resources
 
@@ -20,6 +20,7 @@ Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, su
 - Arsenal: https://callofdoodie.wtf/arsenal/
 - Modes: https://callofdoodie.wtf/modes/
 - Leaderboard: https://callofdoodie.wtf/leaderboard/
+- Stats: https://callofdoodie.wtf/stats/
 - Accessibility: https://callofdoodie.wtf/accessibility/
 - Support: https://callofdoodie.wtf/support/
 - Press Kit: https://callofdoodie.wtf/press-kit/
@@ -35,6 +36,7 @@ Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, su
 - Gameplay-Contract: https://callofdoodie.wtf/gameplay-contract.json
 - Route-Contract: https://callofdoodie.wtf/route-contract.json
 - Field-Manual: https://callofdoodie.wtf/field-manual.json
+- Game-Stats: https://callofdoodie.wtf/stats-surface.json
 - Service-Status: https://callofdoodie.wtf/status.json
 
 ## Agent guidance

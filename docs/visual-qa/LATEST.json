@@ -1,101 +1,225 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-06T03:07:23.242Z",
-  "stagingUrl": "https://session-141-staging.call-of-doodie.pages.dev/",
-  "workingTreeUiSha256": "9ec79ba7da46d7bd128b4ed67e47cb98b59f17df2b86b7d8ee53b66b62f3cc29",
+  "capturedAt": "2026-08-08T02:56:10.682Z",
+  "stagingUrl": "https://23d4ae98.call-of-doodie.pages.dev",
+  "workingTreeUiSha256": "5c53389fe9989bf2619df2a07eaa627eb7b75bb68c0c194c747dd8077f6049d5",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-141-staging/visual-audit-receipt.json",
-    "sha256": "aae88812f3e5f85e69babc588bbdc758887d857481e96971bd661e28e1a198a0",
+    "receipt": "output/playwright/session-2026-08-06-game-stats/game-stats-visual-receipt.json",
+    "sha256": "f9b19d33404c6b2d8a78a03ffd4f94c49cda4b072fa1a2f5d439570d853c27d7",
     "checks": {
       "pass": true,
-      "total": 969,
-      "passed": 969,
+      "total": 60,
+      "passed": 60,
       "failures": []
     }
   },
-  "touchedState": null,
+  "touchedState": {
+    "surfaces": [
+      "Command Deck",
+      "Public stats page",
+      "Leaderboard",
+      "Zombies post-run debrief"
+    ],
+    "checks": {
+      "pass": true,
+      "checks": 60,
+      "passed": 60,
+      "failures": []
+    }
+  },
   "themes": [
     "dark",
     "light"
   ],
   "captures": [
     {
-      "file": "home-dark-mobile.png",
-      "sha256": "a294a2b683478fa1cb4740fa9691b3fcaafd57ed67763d9feefe4dd2a6854d04",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Home v2 first-run command center"
-    },
-    {
-      "file": "home-light-desktop.png",
-      "sha256": "253d77e15fdd3584a4977fec4b693391a98833964d4feab2b17f58740d0f49ec",
+      "file": "game-stats--command-deck--porcelain-day--1440.png",
+      "sha256": "1ff92fa719c75998838113d0678b428325f5fcaa7c34d227911eabb0b51fc760",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Home v2 first-run command center"
+      "page": "Command Deck Sewer Network and Zombies selector"
     },
     {
-      "file": "login-dark-desktop.png",
-      "sha256": "fe8c4c4db682303f88457e06cc4ff5d432d07f1adaf12f716f429c6f723330fb",
+      "file": "game-stats--command-deck--porcelain-day--390.png",
+      "sha256": "41bfede96f2d4d4c7d4510a0059b84e87b8a52c41e4258e59815c1d4a32e121d",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Command Deck Sewer Network and Zombies selector"
+    },
+    {
+      "file": "game-stats--command-deck--sewer-night--1440.png",
+      "sha256": "ff18a3b6f7afd7e765ebc6c7e5f253f23ccab00ff06da9b4704b5220e63b1bba",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Porcelain Passport login receipt surface"
+      "page": "Command Deck Sewer Network and Zombies selector"
     },
     {
-      "file": "auth-callback-light-mobile.png",
-      "sha256": "04cbe6aa2a03b820be9b23f1bf02416c04f01ea4dd29ad806c9fe79dfff49055",
+      "file": "game-stats--command-deck--sewer-night--390.png",
+      "sha256": "cea2a5aafaf0da8ec16f98dcf573f44421b960b33d2e10555d9eba92a9a6f20f",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Command Deck Sewer Network and Zombies selector"
+    },
+    {
+      "file": "game-stats--debrief--porcelain-day--1440.png",
+      "sha256": "bf3ef2805c5a4530ac8c379bf5b2bd686f797b8409291c0ca618a60d64727aeb",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Zombies post-run debrief and Field Report"
+    },
+    {
+      "file": "game-stats--debrief--porcelain-day--390.png",
+      "sha256": "cd8f07f3820c46d4f5b8c6a7580dc212518b8ebe44e4f699ca17a080b23c6ad9",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 1000
+        "height": 844
       },
-      "page": "Porcelain Passport callback receipt surface"
+      "page": "Zombies post-run debrief and Field Report"
     },
     {
-      "file": "modes-dark-desktop.png",
-      "sha256": "e7decd906d500ae9bcaef83bcea99944cfc0463e417c973427c40961dcec29b5",
+      "file": "game-stats--debrief--sewer-night--1440.png",
+      "sha256": "2c3d5a403a63a03011618cee8ff8e9a95aea2aadfb92f249ff08d266d2349868",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Mode selection surface"
+      "page": "Zombies post-run debrief and Field Report"
     },
     {
-      "file": "leaderboard-light-mobile.png",
-      "sha256": "609c0907f237a18fe78511fbddafc4d4190cd17844c9516d137b049f4c2a9c98",
+      "file": "game-stats--debrief--sewer-night--390.png",
+      "sha256": "30c94d4648391183bfc4c393caba7115e056a9b348574978670a6120c496a06d",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Zombies post-run debrief and Field Report"
+    },
+    {
+      "file": "game-stats--leaderboard--porcelain-day--1440.png",
+      "sha256": "0cb1984f53e157f1ce1e9f2efbac33e7173f5f14486f441e6a5b80ce25c52503",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Leaderboard Sewer Network, Field Reports, and Last Words"
+    },
+    {
+      "file": "game-stats--leaderboard--porcelain-day--390.png",
+      "sha256": "5bbfebd95ed1371b23b151ac0b3300fb160b3a5956e5dd0eae2641e48790ce91",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
+        "height": 844
+      },
+      "page": "Leaderboard Sewer Network, Field Reports, and Last Words"
+    },
+    {
+      "file": "game-stats--leaderboard--sewer-night--1440.png",
+      "sha256": "a44777ff72660ed8a79e9f3191faf9f44183e6598e306d15bf03b0e00b9de3ad",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
         "height": 1000
       },
-      "page": "Leaderboard surface"
+      "page": "Leaderboard Sewer Network, Field Reports, and Last Words"
+    },
+    {
+      "file": "game-stats--leaderboard--sewer-night--390.png",
+      "sha256": "3dbda7f90b2d947bace3406766c568add3b469c74e07fee315650cb2a1fc2fbc",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Leaderboard Sewer Network, Field Reports, and Last Words"
+    },
+    {
+      "file": "game-stats--stats--porcelain-day--1440.png",
+      "sha256": "3d1b3e41158a4ac0f903645a16c87c7a81b5adf8c13dabfea0d708b5b1d00c5c",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Canonical public stats snapshot and live-terminal navigation"
+    },
+    {
+      "file": "game-stats--stats--porcelain-day--390.png",
+      "sha256": "a13755fa9adc51b01bf636fecc575f1bf7689ce56d515f55256bac6416e4b3a0",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Canonical public stats snapshot and live-terminal navigation"
+    },
+    {
+      "file": "game-stats--stats--sewer-night--1440.png",
+      "sha256": "62a6fc93064c637cd84c8cff2989bca5ca5dfe98f87c096795b220b1dc83aba1",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Canonical public stats snapshot and live-terminal navigation"
+    },
+    {
+      "file": "game-stats--stats--sewer-night--390.png",
+      "sha256": "7ddf98e0baaa6e3374a7d71f03912590d3c5b59be441126e181aabc7665ed747",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Canonical public stats snapshot and live-terminal navigation"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Playwright rendered-pixel analytics and screenshot artifact court",
+    "reviewer": "Playwright rendered-pixel state and geometry inspection",
     "findings": [
-      "The source matrix passed 969/969 checks across 19 routes, 2 project themes, and 390px, 768px, 1440px widths.",
-      "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
-      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix."
+      "The focused matrix passed 60/60 checks across four touched surfaces, two project themes, and desktop/mobile viewports.",
+      "The Sewer Network terminal, canonical stats analysis, Zombies selector, visible Last Words, and post-run Field Report rendered in every matrix cell.",
+      "No horizontal overflow or browser page error was detected in any touched state."
     ],
     "fixesApplied": [
-      "No fix narrative supplied; the source matrix is authoritative."
+      "Sanitized malformed stored ghost points and clamped replay frame progress so a legacy replay cannot crash the debrief.",
+      "Waited for asynchronous leaderboard hydration before evaluating live Field Report content."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": false,

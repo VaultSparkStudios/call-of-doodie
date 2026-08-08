@@ -3,6 +3,7 @@ import { supabaseUrl, supabaseAnonKey, getAuthUid, getOrCreateClientUid, getSupa
 import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
+import { normalizeCommunityStats } from "./utils/gameStats.js";
 export { getAccountLevel } from "./utils/progressionCurve.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
@@ -70,7 +71,7 @@ export async function claimCallsign(name) {
 }
 
 const LB_KEY = "cod-lb-v5"; // kept as localStorage fallback key
-const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
+const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "normal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
 
@@ -136,6 +137,13 @@ export function normalizeLeaderboardEntry(entry) {
     mode,
     customSettings: Boolean(entry?.customSettings),
     supporter: Boolean(entry?.supporter),
+    feedbackDifficulty: ["too_easy", "dialed_in", "brutal"].includes(entry?.feedback_difficulty ?? entry?.feedbackDifficulty)
+      ? (entry.feedback_difficulty ?? entry.feedbackDifficulty)
+      : null,
+    totalShots: _clampInt(entry?.total_shots ?? entry?.totalShots, 0, 10000000, 0),
+    totalHits: _clampInt(entry?.total_hits ?? entry?.totalHits, 0, 10000000, 0),
+    totalCrits: _clampInt(entry?.total_crits ?? entry?.totalCrits, 0, 1000000, 0),
+    bossKills: _clampInt(entry?.boss_kills ?? entry?.bossKills, 0, 100000, 0),
     seed: entry?.seed == null ? null : _clampInt(entry.seed, 0, 999999999, 0),
     ts: entry?.ts ?? null,
     created_at: entry?.created_at ?? null,
@@ -179,7 +187,7 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
     try {
       const { data, error } = await supabase
         .from("leaderboard")
-        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,supporter")
+        .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,supporter,feedback_difficulty,total_shots,total_hits,total_crits,boss_kills")
         .order("score", { ascending: false })
         .range(offset, offset + limit - 1);
       if (error) throw error;
@@ -403,6 +411,36 @@ export async function issueRunToken({ mode = null, difficulty = "normal", seed =
   }
 }
 
+export async function syncCompletedRunFact(run = {}) {
+  if (!supabaseUrl || !supabaseAnonKey || !run?.runToken || !run?.summarySig) return { ok: false, stats: null };
+  try {
+    const response = await invokeEdgeFunction("sync-game-run", {
+      ...run,
+      mode: run.mode === "standard" ? "standard" : (VALID_MODES.has(run.mode) ? run.mode : "standard"),
+      difficulty: VALID_DIFFICULTIES.has(run.difficulty) ? run.difficulty : "normal",
+      clientUid: getOrCreateClientUid(),
+    });
+    if (!response.ok) throw new Error(response.data?.error || "Run fact sync failed.");
+    return { ok: true, stats: normalizeCommunityStats(response.data?.stats) };
+  } catch (err) {
+    console.warn("[game-stats] Run fact sync failed:", err?.message ?? String(err));
+    return { ok: false, stats: null };
+  }
+}
+
+export async function loadCommunityStats() {
+  const supabase = await getSupabaseClient();
+  if (!supabase) return normalizeCommunityStats();
+  try {
+    const { data, error } = await supabase.rpc("get_cod_community_stats");
+    if (error) throw error;
+    return normalizeCommunityStats(data);
+  } catch (err) {
+    console.warn("[game-stats] Community aggregate unavailable:", err?.message ?? String(err));
+    return normalizeCommunityStats();
+  }
+}
+
 // ===== LEADERBOARD — TODAY / SEARCH / RANK =====
 
 /** Fetch today's top 50 entries (since midnight UTC). Optional mode + difficulty filters. */
@@ -522,6 +560,8 @@ const DEFAULT_CAREER = {
   totalGrenades: 0,
   totalDashes: 0,
   totalBossKills: 0,
+  totalShots: 0,
+  totalHits: 0,
   totalPlayTime: 0,
   achievementsEver: [],
   enemyKillBests: {}, // typeIndex → { waveMax, careerKills, killedByCount }
@@ -757,8 +797,35 @@ export function saveRunToHistory(run) {
   try {
     const history = JSON.parse(localStorage.getItem(RUN_HISTORY_KEY) || "[]");
     history.unshift({ ...run, ts: Date.now() });
-    persistProgression(RUN_HISTORY_KEY, JSON.stringify(history.slice(0, 10)));
+    persistProgression(RUN_HISTORY_KEY, JSON.stringify(history.slice(0, 50)));
   } catch {}
+}
+
+const FIELD_REPORTS_KEY = "cod-field-reports-v1";
+
+export function loadFieldReports(limit = 20) {
+  try {
+    const reports = JSON.parse(localStorage.getItem(FIELD_REPORTS_KEY) || "[]");
+    return Array.isArray(reports) ? reports.slice(0, Math.max(1, limit)) : [];
+  } catch { return []; }
+}
+
+export function saveFieldReport(report = {}) {
+  const feedback = ["too_easy", "dialed_in", "brutal"].includes(report.feedback) ? report.feedback : null;
+  if (!feedback) return loadFieldReports();
+  const reports = loadFieldReports(50);
+  const next = [{
+    feedback,
+    mode: VALID_MODES.has(report.mode) ? report.mode : "standard",
+    difficulty: VALID_DIFFICULTIES.has(report.difficulty) ? report.difficulty : "normal",
+    score: _clampInt(report.score, 0, 10000000, 0),
+    kills: _clampInt(report.kills, 0, 1000000, 0),
+    wave: _clampInt(report.wave, 1, 10000, 1),
+    runSeed: report.runSeed == null ? null : _clampInt(report.runSeed, 0, 999999999, 0),
+    ts: Date.now(),
+  }, ...reports].slice(0, 50);
+  persistProgression(FIELD_REPORTS_KEY, JSON.stringify(next));
+  return next;
 }
 
 export function loadRunHistory() {
@@ -1055,7 +1122,7 @@ export function getWeaponLegendRank(kills) {
   return null;
 }
 
-export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills, weaponKills, practiceRun = false }) {
+export function updateCareerStats({ kills, deaths, score, wave, streak, damage, playTime, achievementIds, crits, grenades, dashes, level, combo, bossKills, weaponKills, totalShots = 0, totalHits = 0, practiceRun = false }) {
   const career = loadCareerStats();
   career.totalRuns += 1;
   if (practiceRun) {
@@ -1081,6 +1148,8 @@ export function updateCareerStats({ kills, deaths, score, wave, streak, damage, 
   career.totalGrenades = (career.totalGrenades || 0) + (grenades || 0);
   career.totalDashes = (career.totalDashes || 0) + (dashes || 0);
   career.totalBossKills = (career.totalBossKills || 0) + (bossKills || 0);
+  career.totalShots = (career.totalShots || 0) + Math.max(0, Math.floor(totalShots || 0));
+  career.totalHits = (career.totalHits || 0) + Math.max(0, Math.floor(totalHits || 0));
   career.totalPlayTime += Math.floor(playTime || 0);
   if (achievementIds?.length) {
     const all = new Set([...career.achievementsEver, ...achievementIds]);

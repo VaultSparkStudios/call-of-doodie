@@ -1,5 +1,5 @@
 const SCHEMA = "sewer-scenario-v1";
-const MODES = new Set(["standard", "score_attack", "daily_challenge", "cursed", "boss_rush", "speedrun", "gauntlet"]);
+const MODES = new Set(["standard", "score_attack", "daily_challenge", "cursed", "boss_rush", "speedrun", "gauntlet", "zombies"]);
 const DIFFICULTIES = new Set(["easy", "normal", "hard", "nightmare"]);
 
 function safeText(value, max = 24) {

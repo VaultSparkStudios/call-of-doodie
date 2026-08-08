@@ -56,6 +56,10 @@
       "label": "Leaderboard"
     },
     {
+      "href": "/stats/",
+      "label": "Stats"
+    },
+    {
       "href": "/accessibility/",
       "label": "Accessibility"
     },
@@ -97,6 +101,7 @@
     "/arsenal/",
     "/modes/",
     "/leaderboard/",
+    "/stats/",
     "/accessibility/",
     "/support/",
     "/press-kit/",

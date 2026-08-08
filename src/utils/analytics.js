@@ -86,12 +86,13 @@ export function gameCtx({ difficulty, mode, wave, score } = {}) {
  * Resolve the canonical mode string from ref values.
  * Pass boolean values (not refs) — call with ref.current at each site.
  */
-export function resolveMode(scoreAttack, dailyChallenge, cursed, bossRush, speedrun, gauntlet) {
+export function resolveMode(scoreAttack, dailyChallenge, cursed, bossRush, speedrun, gauntlet, zombies) {
   if (scoreAttack)    return "score_attack";
   if (dailyChallenge) return "daily_challenge";
   if (cursed)         return "cursed";
   if (bossRush)       return "boss_rush";
   if (speedrun)       return "speedrun";
   if (gauntlet)       return "gauntlet";
+  if (zombies)        return "zombies";
   return "standard";
 }

@@ -51,6 +51,10 @@
       "href": "https://callofdoodie.wtf/leaderboard/"
     },
     {
+      "rel": "stats",
+      "href": "https://callofdoodie.wtf/stats/"
+    },
+    {
       "rel": "accessibility",
       "href": "https://callofdoodie.wtf/accessibility/"
     },
@@ -109,6 +113,10 @@
     {
       "rel": "field-manual",
       "href": "https://callofdoodie.wtf/field-manual.json"
+    },
+    {
+      "rel": "game-stats",
+      "href": "https://callofdoodie.wtf/stats-surface.json"
     },
     {
       "rel": "service-status",

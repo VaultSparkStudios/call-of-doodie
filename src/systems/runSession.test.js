@@ -6,13 +6,28 @@ import {
   createScoreSubmitStudioEvents,
   buildScoreSubmitAnalyticsPayload,
   resolveRunModeFromFlags,
+  readRunModeFlags,
 } from "./runSession.js";
 
 describe("runSession", () => {
   it("resolves the active run mode from flags", () => {
     expect(resolveRunModeFromFlags({ bossRush: true })).toBe("boss_rush");
     expect(resolveRunModeFromFlags({ dailyChallenge: true })).toBe("daily_challenge");
+    expect(resolveRunModeFromFlags({ zombies: true })).toBe("zombies");
     expect(resolveRunModeFromFlags({})).toBe("standard");
+  });
+
+  it("reads current mode refs into one canonical flag contract", () => {
+    const ref = (current) => ({ current });
+    expect(readRunModeFlags(ref(false), ref(false), ref(false), ref(false), ref(false), ref(false), ref(true))).toEqual({
+      scoreAttack: false,
+      dailyChallenge: false,
+      cursed: false,
+      bossRush: false,
+      speedrun: false,
+      gauntlet: false,
+      zombies: true,
+    });
   });
 
   it("builds run start artifacts with a canonical mode", () => {

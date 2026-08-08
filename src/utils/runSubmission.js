@@ -36,6 +36,11 @@ export function buildLeaderboardEntry({
   runToken,
   summarySig,
   eventDigest,
+  feedbackDifficulty = null,
+  totalShots = 0,
+  totalHits = 0,
+  bossKills = 0,
+  totalCrits = 0,
 } = {}) {
   const claim = buildRunClaim({ mode, difficulty, seed, starterLoadout });
   return {
@@ -61,6 +66,11 @@ export function buildLeaderboardEntry({
     runToken,
     summarySig,
     eventDigest,
+    feedbackDifficulty,
+    totalShots,
+    totalHits,
+    bossKills,
+    totalCrits,
   };
 }
 
@@ -88,6 +98,11 @@ export function buildSessionSubmission({
   summarySig,
   eventDigest,
   commandTrace = null,
+  feedbackDifficulty = null,
+  totalShots = 0,
+  totalHits = 0,
+  bossKills = 0,
+  totalCrits = 0,
 } = {}) {
   const validTrace = isValidReplayCommandTrace(commandTrace) ? commandTrace : null;
   const traceAnalysis = validTrace ? analyzeReplayCommandTrace(validTrace) : null;
@@ -117,6 +132,11 @@ export function buildSessionSubmission({
     runToken,
     summarySig,
     eventDigest,
+    feedbackDifficulty,
+    totalShots,
+    totalHits,
+    bossKills,
+    totalCrits,
   });
   if (traceDigest) entry.traceDigest = traceDigest;
   if (traceLength > 0) entry.traceLength = traceLength;

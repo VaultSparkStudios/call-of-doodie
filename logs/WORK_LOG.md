@@ -1161,3 +1161,22 @@ Intent outcome: achieved for recovery and every repo-owned audit item; SPARKED r
 - Direct subjective image inspection remains unavailable at the host `CryptUnprotectData` boundary; automated pixel evidence is reported separately and SPARKED remains NO-GO.
 
 Intent outcome: achieved for every repo-owned Arc item; closeout, exact-main push, production deployment, and live verification continue at this boundary.
+
+## 2026-08-07 — Session 142 — Live Sewer Network, Field Reports, and Zombies
+
+- Ran canonical `/start`, audited the actual production data plane and game loop, generated `docs/AUDIT_2026-08-06.md` / `.json`, and implemented all seven promoted items.
+- Production inspection separated 12 player rows across five callsigns from 28 deterministic health-check rows; unavailable legacy hours/shots/hits were retained as unknown rather than inferred.
+- Added the `game-run-facts-v1` migration, idempotent complete-run synchronization, aggregate-only community statistics, public-safe row-level policies, bounded polling, and leaderboard Realtime refresh; applied the migration and deployed four Supabase Edge Functions.
+- Added the shared Sewer Network terminal across Command Deck, leaderboard, and debrief with YOU / COMMUNITY / LIVE views, explicit provenance, data coverage, freshness, and offline states.
+- Added structured Field Reports (TOO EASY / DIALED IN / BRUTAL), visible Last Words, local/remote persistence, community aggregates, and reason-coded player-controlled threat recommendations.
+- Added seeded Sewer Zombies with outbreak escalation, horde budgets, surge waves, Shambler/Rotter/Sprinter/Bloater variants, separate mode ranking/history, and full Home/HUD/debrief/public-contract routing.
+- Completed personal career and bounded 50-run history metrics for projectiles, hits, measured accuracy, criticals, bosses, modes, and feedback.
+- Replaced permissive public leaderboard selection with one canonical synthetic/quarantine filter; live verification reports zero public synthetic rows while retaining 28 service-visible checks.
+- Hosted verification exposed and fixed touch-property desktop misclassification; mobile now receives compact always-ready controls while desktop receives the richer native popover.
+- Package Trust approved exact transient Lighthouse 13.4.1 after official registry/source/integrity/license/provenance verification; no dependency or lockfile changed.
+- Deployed staging candidate `b8732629` and production `8ff1b286`; live 7/7, cutover 5/5, replay trust 3/3, production gameplay states 44/44, staging rendered pixels 969/969, focused states 44/44, public contract 27/27, and CANON-053 pass.
+- Full Vitest reached 1,010/1,011 before a 30-second operator-smoke timeout; its security command passed all 10 checks directly in 30.9 seconds. The smoke now has a bounded 90-second allowance without weakened assertions.
+- Final rerun after public-stats/canon/hot-context reconciliation passed 1,011/1,011 tests across 173 files in 218.60 seconds.
+- Preserved lifecycle honesty: this is a cost-neutral FORGE engineering deployment, not a SPARKED flip. The 390px synthetic native-select interaction remains red at 832ms and every external launch gate remains named.
+
+Intent outcome: achieved — the requested statistics, analytics, feedback, difficulty response, leaderboard/post-game improvements, Zombies mode, production deployment, and full closeout scope are complete.

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "hot-context-v1",
-  "generatedAt": "2026-08-05T00:00:00.000Z",
-  "sourceFingerprint": "8a6839eff1edc13f98b8ec260d74638e901a8d1a3f0d8d3d7ddffb43d39b2eeb",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "sourceFingerprint": "81fd7c6149e8a21beee02089fba02cf06b5f148922c187ce31959191e3a6f6fb",
   "purpose": "Bounded startup projection; full append-only artifacts remain authoritative and discoverable by source hash.",
   "budgets": {
     "maximumBytes": 24000,
@@ -11,49 +11,73 @@
   "sources": {
     "currentState": {
       "file": "context/CURRENT_STATE.md",
-      "sha256": "c3acf7c02baec6b85c161df9db2f4d0d23ec4eae2e0f67354f1ff634c69e66cb",
-      "bytes": 152126
+      "sha256": "88e04eb4453b87596c3b571809e61c5177d8e7b7a11bc7b0871a72479cd809df",
+      "bytes": 154898
     },
     "taskBoard": {
       "file": "context/TASK_BOARD.md",
-      "sha256": "acd71dd27844b6a8006ef21703eb17ec655b2d8ad7a951ca6c64dc4a63cc0226",
-      "bytes": 104286
+      "sha256": "a7155a314b47266cbb6ee75c1da2379d7b70073b1065115008390f7a6f048f9d",
+      "bytes": 106748
     },
     "decisions": {
       "file": "context/DECISIONS.md",
-      "sha256": "5c5388ba16d1a1c351f84c98befa91c5c6c088453df705727d4ca238dd8fa5d8",
-      "bytes": 93803
+      "sha256": "3ac647ff58d3f831574df8c84285cdd64aebac3c5cb4230525c3aae921777409",
+      "bytes": 97119
     },
     "audit": {
-      "file": "docs/AUDIT_2026-08-05.json",
-      "sha256": "efb2dd977a0fa183d2cd9e01c30cf118a5ada7e5f21c0b4d20c7eaec18243723",
-      "bytes": 12099
+      "file": "docs/AUDIT_2026-08-06.json",
+      "sha256": "4725c516bdb490b1f01511a5e87b36739c6ceb2848d158a6ea07d4e85b72b63a",
+      "bytes": 19395
     }
   },
-  "currentSession": "- Session 141 (2026-08-05) completed the full `/start -> /audit -> /implement -> second-order saturation -> /closeout` engineering arc from synchronized `main`.\n- Input truth — `resolveAimFrame` now owns pointer, touch-shoot-stick, controller, and aim-assist arbitration while preserving the established precedence and controller target scoring; App consumes one finite reason-coded aim frame.\n- Session truth — one shared leading-session parser distinguishes the canonical session from nested recovery references, so `Session 140 recovered S139` cannot make startup report S139 as the latest completed boundary.\n- State truth — schema lint now rejects repeated contiguous session blocks in `CURRENT_STATE.md`; the duplicated S140 block was removed and exact valid chronology remains accepted.\n- Second-order truth — Hot Context freshness tests now discover the semantic latest audit sidecar instead of pinning Session 140, so a new audit cannot create a false regression.\n- Rebase truth — the trusted incoming `@playwright/test@1.62.1` patch is lockfile-integrity verified; Playwright server readiness has a 90-second host-load allowance while individual test/expect bounds remain unchanged.\n- Validation truth — 1,000/1,000 tests across 169 files, focused unit courts 37/37, browser input/Retro/focus coverage 6/6 across desktop and mobile Chromium, strict lint/build/schema/public/protocol/startup/security/replay/media gates pass.\n- Visual truth — isolated Session 141 staging passes 969/969 checks across 19 routes, two themes, and three widths; six representative captures are hash-bound and CANON-053 passes. Direct subjective image viewing remains unavailable at the host `CryptUnprotectData` boundary and is not claimed.\n- Staging truth — the working implementation is deployed at `https://session-141-staging.call-of-doodie.pages.dev/` (immutable `https://542f6c31.call-of-doodie.pages.dev/`).\n- Release truth — cost, footer, and registry release gates allow engineering deployment; SPARKED remains NO-GO pending project-scoped telemetry, physical device/media, verified reply-as mail, participant/publication evidence, subjective review, and explicit SPARKED approval.\n- Production truth — exact implementation tip `80a0891e922b` passed GitHub quality and Cloudflare deployment run `31076182684`, produced immutable deployment `https://33f65ed2.call-of-doodie.pages.dev/`, and serves the custom-domain typed health receipt as `edge-ready`.\n- Live truth — production passes shell/edge/manifest/service-worker/Open Graph 7/7, domain cutover 5/5, replay trust 3/3, score backend health 5/5, and Studio launch-surface checks.",
+  "currentSession": "- Session 142 (2026-08-07) completed the founder-directed `/start -> /audit -> /implement -> deploy -> /closeout` arc for live full-game statistics, feedback intelligence, challenge depth, and Zombies.\n- Data truth — one idempotent run-fact spine and aggregate-only community contract now combine verified completed-run facts with labeled legacy public scores; device-local YOU statistics remain explicitly THIS DEVICE and unknown legacy fields remain unknown.\n- Synthetic truth — 28 exact health-check rows are server-marked synthetic, excluded from public reads and aggregates, and retained for operator verification; production public evidence reports 12 real rows, five runners, 259 kills, 119,223 score, and 21,628 damage.\n- Player-loop truth — the reusable Sewer Network terminal surfaces YOU / COMMUNITY / LIVE statistics on the Command Deck, leaderboard, and post-game debrief with timestamps, coverage labels, polling, and Realtime refresh.\n- Public-stats truth — `/stats/` and `/stats-surface.json` publish the same verified corpus as a dated, interpreted, aggregate-only release snapshot; the live terminal links to the canonical page and remains the current view.\n- Feedback truth — TOO EASY / DIALED IN / BRUTAL and bounded Last Words form one Field Report contract across local history, score/run-fact transport, public rows, and evidence-ranked next-run recommendations; one ease signal never silently retunes Normal.\n- Mode truth — seeded Sewer Zombies adds outbreak tiers, horde budgets, surge waves, four undead variants, separate leaderboard/history identity, and full Home/HUD/debrief/public-contract routing without new infrastructure or paid services.\n- Personal truth — lifetime career and bounded 50-run history now retain measured projectiles, hits, accuracy, criticals, bosses, mode, and feedback with legacy-safe normalization and provenance.\n- Release truth — the verified FORGE update is live at `https://callofdoodie.wtf/` (immutable `https://8ff1b286.call-of-doodie.pages.dev/`); production smoke passes 7/7, cutover 5/5, replay trust 3/3, community verification passes, and focused production visuals pass 44/44.\n- Validation truth — 1,011/1,011 tests across 173 files and strict lint/build/schema/public/security/architecture gates pass; final staging visual evidence passes 1,020/1,020 plus focused 60/60 and 16 hash-bound captures; six Lighthouse samples measure default median performance 1.00, LCP 1,263ms, CLS 0, and TBT 11.5ms.\n- Launch truth — SPARKED remains NO-GO. The synthetic narrow-viewport native-select interaction probe measured 832ms, and physical PWA/gamepad/full-run media, reply-capable mail, participant/publication, scoped telemetry, subjective review, and explicit SPARKED approval remain open.",
   "openWork": "# Task Board\n## Human Action Required\n- [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens\n- [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination\n- [ ] Physical launch QA — verify one real gamepad/browser combo end-to-end\n- [ ] Real full-run media QA — on desktop verify the DeathScreen best-moment GIF encodes, plays, and shares without freezing; on mobile verify capture is skipped as designed\n- [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`\n- [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)\n- [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.\n## Now\n- [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.\n- [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only\n- [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic\n## Next\n- [ ] [SIL:2] Supabase Auth + Obelisk account bridge — implement magic-link/Google Auth, profiles, nullable leaderboard `user_id`, guest-to-account migration, and signed migration/callsign claim receipts.\n- [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk\n- [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships\n- [ ] Optional: Ko-fi → leaderboard end-to-end test once the webhook is live and a real donation flows through\n## Done\n## Deferred\n- [ ] Discord invite/community link when the community entry point is ready\n- [ ] [SIL:1] [S62 deferred] HomeV2 v1 fallback retirement — gate on ≥200ms Lighthouse LCP improvement confirmed on production (human measurement required)\n## Deferred to Project Agents",
-  "recentDecisions": "## 2026-08-04 — Session 140 — Replay coverage is a source-derived advisory passport\n\nDecision: Replay surfaces share one `replay-coverage-passport-v1` contract. Deterministic movement/aim, combat actions, and one derived contact-enemy slice are named as covered; full wave state, full combat physics, and authoritative outcome are explicitly excluded.\n\nRationale: Players and agents need a precise trust boundary. Naming both evidence and exclusions prevents a useful partial resimulation from being mistaken for authoritative server replay.\n\n\n## 2026-08-05 — Session 141 — Canonical session identity comes from the leading boundary\n\nDecision: Identify a handoff or summary by its leading `Session N` / `SN` boundary and use one parser across startup rendering and summary validation. Nested recovery references remain descriptive context and cannot replace the canonical session identity.\n\nRationale: A correct summary such as `Session 140 recovered S139` must not cause startup to report S139 as the latest completed session. One executable semantic boundary prevents independent regular expressions from publishing contradictory chronology.\n\n\n## 2026-08-05 — Session 141 — Input arbitration is pure policy, not inline loop state\n\nDecision: Resolve aim through one pure `resolveAimFrame` kernel while preserving the existing precedence: active touch shoot-stick, controller with bounded aim-assist scoring, pointer, then touch auto-aim fallback. Extraction does not authorize balance or aim-assist tuning.\n\nRationale: Centralizing arbitration makes mixed-input behavior directly testable and reduces loop pressure without changing player feel or widening claims beyond current evidence.\n\n\n## 2026-08-05 — Session 141 — Production deployment does not imply SPARKED promotion\n\nDecision: A cost-neutral, footer-complete, engineering-ready build may deploy to the existing production surface while lifecycle status remains FORGE/public-unlaunched and SPARKED remains NO-GO.\n\nRationale: Deployment freshness and public-launch authority are separate courts. Missing project-scoped telemetry, physical and email evidence, participant/publication evidence, subjective visual review, and explicit SPARKED approval cannot be inferred from a green engineering pipeline.",
+  "recentDecisions": "## 2026-08-07 — Session 142 — Difficulty feedback recommends; it never silently retunes\n\nDecision: Structured player Field Reports and observed performance may produce a reason-coded harder/easier next-run recommendation, including Zombies, but a player action is required before mode or difficulty changes. Arbitrary Last Words never substitute for structured sentiment.\n\nRationale: The verified EASY WORLD signal is useful evidence, not a representative balance sample. Consent-driven escalation respects skilled players without making the new-player default harder from a sparse contaminated corpus.\n\n\n## 2026-08-07 — Session 142 — Zombies is a seeded separated mode on the existing trust spine\n\nDecision: Sewer Zombies reuses deterministic spawning, run claims, replay evidence, and the current leaderboard backend while owning distinct outbreak tiers, horde pacing, undead presentation, and mode identity. It adds no separate realtime server, paid service, or account requirement.\n\nRationale: The horde fantasy is mechanically and thematically distinct enough to deepen replayability, while reuse of the proven guest-first trust spine keeps costs, fairness, and operational complexity bounded.\n\n\n## 2026-08-07 — Session 142 — Responsive configuration follows actual input capability\n\nDecision: Mobile detection uses viewport width plus the coarse-pointer media query, never mere `ontouchstart` property presence. Mobile mode/difficulty controls remain always ready in-flow; desktop uses the richer native popover.\n\nRationale: Hosted Chromium proved property existence can misclassify desktop browsers. Capability-aware rendering protects touch laptops, mobile interaction clarity, desktop feature depth, and deterministic visual verification.\n\n\n## 2026-08-07 — Session 142 — Public statistics have a dated canonical twin\n\nDecision: Keep the Command Deck Sewer Network as the live player surface, and publish `/stats/` plus `/stats-surface.json` as a dated, precomputed, aggregate-only release snapshot with plain-language interpretation and explicit exclusions.\n\nRationale: Live game telemetry answers “what is happening now,” while a stable canonical page gives humans and agents a citable scope/freshness contract. CANON-054 is satisfied without turning an unbounded per-visitor query into a cost surface or presenting stale data as current.\n\nCANON-010 gap justification: the live checker reports one Studio-OS-owned `claude:arc` reference to missing §0; Session 142 changed no skills, hooks, or Model Context Protocol registration, so this public-game repo records and routes the external parity drift rather than manufacturing a local fix.",
   "audit": {
-    "date": "2026-08-05",
+    "date": "2026-08-06",
     "title": null,
     "items": [
       {
-        "slug": "input-arbitration-kernel",
-        "title": "Extract cross-device aim arbitration into the pure game-step boundary.",
-        "status": "shipped",
-        "priority": 28
+        "slug": "truthful-community-stats-spine",
+        "title": "Create one truthful run-fact and community-stat authority.",
+        "status": "complete",
+        "priority": 28.4
       },
       {
-        "slug": "canonical-session-reference",
-        "title": "Make session-reference parsing recovery-aware and consistent.",
-        "status": "shipped",
-        "priority": 25
+        "slug": "zombie-sewer-outbreak",
+        "title": "Ship Sewer Zombies as a distinct escalating horde mode.",
+        "status": "complete",
+        "priority": 27.1
       },
       {
-        "slug": "current-state-idempotence-court",
-        "title": "Reject repeated contiguous session-summary blocks in Current State.",
-        "status": "shipped",
-        "priority": 20.5
+        "slug": "field-report-feedback-loop",
+        "title": "Turn post-run difficulty sentiment and Last Words into an actionable Field Report.",
+        "status": "complete",
+        "priority": 26.7
+      },
+      {
+        "slug": "sewer-network-live-terminal",
+        "title": "Add a YOU / COMMUNITY / LIVE statistics terminal to the Command Deck, leaderboard, and debrief.",
+        "status": "complete",
+        "priority": 24
+      },
+      {
+        "slug": "evidence-ranked-threat-response",
+        "title": "Respond to easy-run evidence with an opt-in threat ladder, not a blanket Normal-mode nerf.",
+        "status": "complete",
+        "priority": 23.7
+      },
+      {
+        "slug": "synthetic-leaderboard-isolation",
+        "title": "Remove health automation from player statistics and public ranking truth.",
+        "status": "complete",
+        "priority": 21.3
+      },
+      {
+        "slug": "career-stat-completeness",
+        "title": "Make personal accuracy, playtime, enemy, weapon, and history statistics complete and provenance-labeled.",
+        "status": "complete",
+        "priority": 19.2
       }
     ]
   }

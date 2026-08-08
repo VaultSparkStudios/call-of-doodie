@@ -13,7 +13,7 @@
 // player choices. The seed makes the world deterministic; player choices
 // remain the player's own. This is the right shareable surface.
 
-export const REPLAY_MODES = Object.freeze(["standard", "score_attack", "daily_challenge", "cursed", "boss_rush", "speedrun", "gauntlet"]);
+export const REPLAY_MODES = Object.freeze(["standard", "score_attack", "daily_challenge", "cursed", "boss_rush", "speedrun", "gauntlet", "zombies"]);
 export const REPLAY_DIFFICULTIES = Object.freeze(["easy", "normal", "hard", "insane", "nightmare", "doodie"]);
 export const REPLAY_STARTERS = Object.freeze(["standard", "cannon", "tank", "speedster"]);
 

@@ -124,6 +124,11 @@
       "id": "gauntlet",
       "label": "Gauntlet",
       "seededReplayCode": true
+    },
+    {
+      "id": "zombies",
+      "label": "Zombies",
+      "seededReplayCode": true
     }
   ],
   "difficulties": [

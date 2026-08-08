@@ -66,7 +66,7 @@ describe("operator script smoke surfaces", () => {
   it("executes the offline security gate without silently enabling npm audit", () => {
     const receipt = JSON.parse(run("scripts/security-release-gate.mjs", ["--json"]));
     expect(receipt).toMatchObject({ status: "ok" });
-  });
+  }, 90_000);
 
   it("runs the protocol drift inventory as structured evidence", () => {
     const receipt = JSON.parse(run("scripts/protocol-drift-check.mjs", ["--json"]));

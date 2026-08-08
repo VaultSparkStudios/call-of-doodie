@@ -1,0 +1,324 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "Codex /audit + /game-loop-review",
+  "generatedAt": "2026-08-06",
+  "session": 142,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-game-live-stats-feedback-and-mode-depth",
+  "meta": {
+    "generatedAt": "2026-08-06",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-game-live-stats-feedback-and-mode-depth",
+    "candidateCount": 31,
+    "promotedCount": 7,
+    "combinedPriority": 170.4,
+    "top3": [
+      "truthful-community-stats-spine",
+      "zombie-sewer-outbreak",
+      "field-report-feedback-loop"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Production Supabase inspection found 40 visible leaderboard rows, of which 28 are deterministic hc-* health-check submissions; the remaining 12 rows span five callsigns and include the verified Last Words signal EASY WORLD from the callsign holding the second-highest non-health-check score. Production exposes no studio_game_events table, no Call of Doodie game_sessions rows, and no centralized career snapshots. Studio Oracle preverify was attempted twice and timed out; direct source, schema, and production REST evidence is retained instead of fabricating an Oracle verdict.",
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Engineering READY; SPARKED remains NO-GO.",
+      "quality": "Session 141 closed at 1000/1000 tests. No current test failures are known.",
+      "architecture": "React/Vite browser game with local career state, Supabase leaderboard/functions, Realtime disabled, and optional PostHog disabled without a project key.",
+      "gameLoop": "Strong deploy-survive-adapt-debrief-rematch spine, but mode breadth lacks a dedicated horde fantasy and empirical balance feedback is unstructured. One verified EASY WORLD signal justifies an opt-in threat response, not a universal Normal-mode nerf.",
+      "cost": "All promoted work reuses the current Supabase and browser stack, adds no package, hosted inference, or variable per-user paid service."
+    }
+  },
+  "axisCoverage": {
+    "featureDepth": "Add a mechanically distinct Sewer Zombies horde mode and deeper career/community statistics.",
+    "innovation": "Turn Last Words into a public field-report loop and combine verified score facts, device-local career history, and live aggregate receipts without pretending they have equal authority.",
+    "ux": "Put a compact Sewer Network status strip on the Command Deck and full YOU / COMMUNITY / LIVE terminal in the existing panel system.",
+    "feedback": "Capture structured difficulty sentiment after every run, retain five-word Last Words, and visibly project safe feedback on leaderboard rows.",
+    "engagement": "Use Zombies, threat recommendations, records, milestones, and community pulses to create more reasons to replay without a grind wall.",
+    "ai": "Extend deterministic local run intelligence with evidence-ranked difficulty and feedback recommendations; no hosted model calls.",
+    "security": "Expose aggregate-only public statistics, preserve row-level security, keep raw client identity private, and label synthetic/test data explicitly.",
+    "efficiency": "Reuse current run tokens, leaderboard, local career, MenuPanels, and Supabase functions; incremental aggregation avoids scanning raw events on every render.",
+    "tokenApiReduction": "One typed statistics contract and one feedback contract replace repeated ad-hoc calculations across Home, leaderboard, and debrief."
+  },
+  "gameLoopReview": {
+    "loopTightness": 90,
+    "progression": 84,
+    "sessionEngagement": 86,
+    "retention": 82,
+    "soulFidelity": 94,
+    "empiricalConfidence": "medium-low",
+    "evidence": "The core loop and proof-ranked debrief remain strong. Production Last Words provide one genuine ease signal, but 28 of 40 visible rows are health automation and most remaining rows are developer/test-labelled, so global retuning would overfit. Sewer Zombies fits readable chaos, humiliation-to-revenge, and plumbing parody while offering a higher-pressure opt-in lane.",
+    "nextThreeMoves": [
+      "Ship a truthful run-fact and community-stat spine that excludes synthetic checks and labels coverage.",
+      "Ship Sewer Zombies as a seeded, leaderboard-separated horde mode with readable outbreak escalation.",
+      "Close every run with a structured difficulty Field Report that feeds the next difficulty/mode recommendation and the public Last Words experience."
+    ]
+  },
+  "items": [
+    {
+      "rank": 1,
+      "tier": "FIRE",
+      "axis": "analytics / trust / security / feature depth",
+      "effortHours": 10,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 28.4,
+      "slug": "truthful-community-stats-spine",
+      "title": "Create one truthful run-fact and community-stat authority.",
+      "status": "complete",
+      "why": "Career totals live only in one browser; run history keeps ten entries; leaderboard submission is optional; production has no studio_game_events table or game-session corpus. Full user-base claims are currently impossible.",
+      "recipe": "Add a migration for aggregate-safe run facts and community statistics, a bounded Edge Function that upserts one run-end receipt per token/client, a public aggregate read contract, local career snapshot import metadata, and polling plus Realtime refresh hooks. Backfill only fields supported by leaderboard evidence and label unknown coverage.",
+      "verificationPremise": "Direct production REST/schema inspection plus storage.js, runSession.js, submit-score, and missing studio_game_events evidence.",
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Expose verified leaderboard aggregates with explicit coverage labels."
+        },
+        "L2": {
+          "effortHours": 6,
+          "recipe": "Add run-end facts, client queries, and local-career snapshot handoff."
+        },
+        "L3": {
+          "effortHours": 10,
+          "recipe": "Ship idempotent run facts, aggregate reconciliation, live refresh, privacy-safe policies, backfill, tests, and production migration/function verification."
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "tier": "FIRE",
+      "axis": "gameplay depth / engagement / soul",
+      "effortHours": 9,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 27.1,
+      "slug": "zombie-sewer-outbreak",
+      "title": "Ship Sewer Zombies as a distinct escalating horde mode.",
+      "status": "complete",
+      "why": "Seven modes exist, but none provides the iconic dense horde/reanimation fantasy requested by the founder. Existing seeded spawning, formations, enemy lifecycle, mode routing, and separated leaderboard filters make a brand-native implementation viable without a new engine.",
+      "recipe": "Add a zombies flag through HomeV2/HomeV3/App/run claims/history/analytics/functions/leaderboard; implement seeded outbreak tiers, undead enemy presentation, tighter spawn cadence, larger alive budgets, periodic surge waves, and clear HUD/debrief language; keep boss and input trust intact; add focused mode, spawn, history, submission, UI, and replay tests.",
+      "verificationPremise": "No zombie/outbreak mode exists; current routing covers standard, score attack, daily, cursed, boss rush, speedrun, and gauntlet.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Add a routed Zombies mode with horde-biased spawn parameters."
+        },
+        "L2": {
+          "effortHours": 5,
+          "recipe": "Add outbreak tiers, undead presentation, surge waves, and separated leaderboard/history contracts."
+        },
+        "L3": {
+          "effortHours": 9,
+          "recipe": "Ship the full seeded mode across gameplay, HUD, Home surfaces, debrief, score trust, tests, and rendered-pixel QA."
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "tier": "FIRE",
+      "axis": "feedback / UX / deterministic intelligence",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 26.7,
+      "slug": "field-report-feedback-loop",
+      "title": "Turn post-run difficulty sentiment and Last Words into an actionable Field Report.",
+      "status": "complete",
+      "why": "The verified EASY WORLD message is useful but unstructured. DeathScreen captures only five-word text, and leaderboard feedback is hidden in a title tooltip that is weak on touch/mobile.",
+      "recipe": "Add TOO EASY / DIALED IN / BRUTAL quick feedback, optional five-word Last Words, local persistence and run-event/submission fields, a compact leaderboard Field Report line, and evidence-ranked next-run actions. Never infer sentiment from arbitrary text when the structured value is absent.",
+      "verificationPremise": "Production row evidence plus DeathScreen input and LeaderboardPanel title-only rendering.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Add local structured feedback controls and visible Last Words."
+        },
+        "L2": {
+          "effortHours": 3,
+          "recipe": "Persist feedback through run history/submission/events and render leaderboard badges."
+        },
+        "L3": {
+          "effortHours": 5,
+          "recipe": "Feed structured sentiment into next-run recommendations, community aggregates, accessibility, tests, and visual QA."
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "tier": "HIGH",
+      "axis": "UX / analytics / engagement",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 24,
+      "slug": "sewer-network-live-terminal",
+      "title": "Add a YOU / COMMUNITY / LIVE statistics terminal to the Command Deck, leaderboard, and debrief.",
+      "status": "complete",
+      "why": "Home exposes only a few local career chips and a separate leaderboard. Players cannot see lifetime verified totals, recent community activity, data coverage, personal records, or live score movement in one place.",
+      "recipe": "Create a shared StatisticsPanel with YOU, COMMUNITY, and LIVE views; add a compact Sewer Network strip to HomeV2/HomeV3; add community summary and refresh state to leaderboard; add post-game personal/community deltas; show source labels, timestamps, loading/offline states, and poll/Reatime freshness.",
+      "verificationPremise": "HomeV2/HomeV3, CareerStatsPanel, LeaderboardPanel, and disabled Supabase Realtime source inspection.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Add a combined local and verified-submission stats panel."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Share the panel across Home and leaderboard with coverage/freshness states."
+        },
+        "L3": {
+          "effortHours": 6,
+          "recipe": "Add live refresh, post-game deltas, responsive/theme-complete UI, accessibility, tests, and visual receipts."
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "tier": "HIGH",
+      "axis": "balance / progression / retention",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 23.7,
+      "slug": "evidence-ranked-threat-response",
+      "title": "Respond to easy-run evidence with an opt-in threat ladder, not a blanket Normal-mode nerf.",
+      "status": "complete",
+      "why": "One strong player signaled EASY WORLD, while the production corpus is too contaminated and sparse for universal tuning. The game already owns Hard, Insane, local career history, run intelligence, and mode suggestions but does not close the feedback-to-selection loop.",
+      "recipe": "Create a pure threat recommendation using structured feedback plus recent score/wave/kills; show a one-click HARDER ORDERS action on DeathScreen/Home; expose a clear threat multiplier/record distinction; make Zombies the highest-pressure recommendation for repeated easy signals; do not silently change the selected difficulty.",
+      "verificationPremise": "DIFFICULTIES, runBrain suggestions, local run history, and production feedback evidence.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Recommend Hard after an easy high-performance run."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Use bounded recent history and feedback with one-click mode/difficulty actions."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Ship reason-coded recommendations across DeathScreen/Home, feedback telemetry, and focused fairness regressions."
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "tier": "HIGH",
+      "axis": "leaderboard trust / observability",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 21.3,
+      "slug": "synthetic-leaderboard-isolation",
+      "title": "Remove health automation from player statistics and public ranking truth.",
+      "status": "complete",
+      "why": "Twenty-eight of forty visible rows are known health checks. They inflate runs, kills, score, damage, callsigns, and mode counts while passing the current plausibility court by design.",
+      "recipe": "Add an explicit synthetic marker derived server-side for the exact health-check contract, exclude synthetic rows from public reads/aggregates, backfill hc-* rows reversibly, keep operator health evidence queryable, and ratchet the health check plus leaderboard audit against future contamination.",
+      "verificationPremise": "Production aggregate and public row inspection plus the exact health-check payload in scripts/health-check.mjs.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Filter exact hc-* rows from aggregate/UI counts."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Persist is_synthetic server-side and backfill exact health rows."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Separate public policies/queries, retain operator observability, and add production-safe contamination tests."
+        }
+      }
+    },
+    {
+      "rank": 7,
+      "tier": "HIGH",
+      "axis": "data quality / personal progression",
+      "effortHours": 4,
+      "impact": 7,
+      "innovation": 6,
+      "priority": 19.2,
+      "slug": "career-stat-completeness",
+      "title": "Make personal accuracy, playtime, enemy, weapon, and history statistics complete and provenance-labeled.",
+      "status": "complete",
+      "why": "Career Stats renders accuracy and critical rate from totalShots/totalHits, but those counters are never initialized or updated. Run history drops everything older than ten entries even though lifetime totals continue.",
+      "recipe": "Track run/career shots and confirmed hits through the existing combat lifecycle; persist feedback and mode; expand bounded history with schema migration and compact storage; display per-enemy/per-weapon records and THIS DEVICE provenance; add legacy migration and divide-by-zero tests.",
+      "verificationPremise": "storage.js and CareerStatsPanel direct source inspection; totalShots/totalHits have no production update path.",
+      "ladder": {
+        "L1": {
+          "effortHours": 1,
+          "recipe": "Remove false accuracy surfaces or label them unavailable."
+        },
+        "L2": {
+          "effortHours": 2.5,
+          "recipe": "Track shots/hits and migrate career state."
+        },
+        "L3": {
+          "effortHours": 4,
+          "recipe": "Add bounded deeper history, enemy/weapon breakdowns, provenance, and complete tests."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "blanket-normal-mode-buff",
+      "reason": "Rejected as overfit: one verified EASY WORLD signal is valuable but does not justify making the default harder for new players without structured feedback volume."
+    },
+    {
+      "slug": "posthog-as-score-authority",
+      "reason": "Rejected: provider capability is unavailable and product analytics would not be the authoritative public gameplay ledger."
+    },
+    {
+      "slug": "paid-hosted-ai-balance-coach",
+      "reason": "Rejected: deterministic local evidence is sufficient and hosted inference would violate cost-neutrality without a measured benefit."
+    },
+    {
+      "slug": "account-wall-before-stats",
+      "reason": "Rejected: guest-first play is a durable product decision; device-local YOU stats remain available while future Obelisk identity may add cross-device merge."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "truthful-community-stats-spine",
+      "status": "complete",
+      "notes": "Shipped idempotent complete-run facts, aggregate-only public statistics, personal THIS DEVICE stats, live polling, and Realtime refresh.",
+      "verification": "Production RPC reports 12 player runs, 5 runners, 259 kills, 119223 score, and 21628 damage; migration and four Edge Functions deployed."
+    },
+    {
+      "slug": "zombie-sewer-outbreak",
+      "status": "complete",
+      "notes": "Shipped seeded Sewer Zombies with escalating horde budgets, surge waves, Shambler/Rotter/Sprinter/Bloater variants, full mode routing, debrief, history, analytics, and isolated leaderboard tab.",
+      "verification": "Focused mode tests pass; public gameplay contract exposes eight modes; desktop/mobile debrief matrix shows Zombies in both themes."
+    },
+    {
+      "slug": "field-report-feedback-loop",
+      "status": "complete",
+      "notes": "Added TOO EASY, DIALED IN, and BRUTAL post-run feedback, visible Last Words, local retention, score/run-fact transport, aggregates, and accessible leaderboard badges.",
+      "verification": "Field-report unit tests and the 44/44 rendered state court pass."
+    },
+    {
+      "slug": "sewer-network-live-terminal",
+      "status": "complete",
+      "notes": "Added one reusable YOU / COMMUNITY / LIVE Sewer Network terminal to Command Deck, leaderboard, and post-game debrief with truthful provenance and freshness states.",
+      "verification": "Production RPC verified; 15-second polling plus leaderboard Realtime subscription; the deployed session-142 staging preview passes 44/44 state checks with 12 hash-bound captures across both themes."
+    },
+    {
+      "slug": "evidence-ranked-threat-response",
+      "status": "complete",
+      "notes": "Added deterministic recommendations that require repeated or strong evidence and always ask the player before changing difficulty or launching Zombies.",
+      "verification": "Recommendation tests prove one weak easy signal cannot silently retune the game."
+    },
+    {
+      "slug": "synthetic-leaderboard-isolation",
+      "status": "complete",
+      "notes": "Marked exact health-check signatures synthetic and replaced all permissive public SELECT policies with one canonical quarantine/synthetic filter.",
+      "verification": "Post-deploy public probe sees 12 player rows and 0 synthetic rows while service verification sees 28 synthetic health checks."
+    },
+    {
+      "slug": "career-stat-completeness",
+      "status": "complete",
+      "notes": "Expanded device career and 50-run history with projectiles, hits, measured accuracy, criticals, bosses, mode, feedback, and explicit THIS DEVICE scope.",
+      "verification": "Storage/run-session/run-fact/stat normalization tests pass within the 1011-test full suite."
+    }
+  ]
+}

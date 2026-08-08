@@ -27,6 +27,8 @@ import { describeDamageSequence } from "../systems/damageSequence.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestContinuation, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
+import { FIELD_REPORTS } from "../utils/fieldReport.js";
+import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -38,6 +40,7 @@ export default function DeathScreen({
   activePerks, missionsSummary,
   leaderboard, lbLoading, lbHasMore, onLoadMore, username, DIFFICULTIES,
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
+  onSaveFieldReport, onApplyThreatRecommendation,
   highlightGifUrl, gifEncoding,
   fmtTime,
   gamepadConnected, onInstallApp,
@@ -50,6 +53,7 @@ export default function DeathScreen({
   proximityRivals = [],
   nearDeathEvents = [], flowStateFired = 0, bossKillCount = 0, weaponMilestones = [],
   speedrunMode: _speedrunMode = false, gauntletMode: _gauntletMode = false,
+  zombiesMode = false,
   controllerType: _controllerType = null,
   peakMoment = null,
   waveScoreLog = [],
@@ -61,6 +65,8 @@ export default function DeathScreen({
   const [lastWords, setLastWords] = useState("");
   const [submitStatus, setSubmitStatus] = useState(null); // null | 'pending' | 'online' | 'local'
   const [submitFeedback, setSubmitFeedback] = useState(null);
+  const [difficultyFeedback, setDifficultyFeedback] = useState(null);
+  const [threatRecommendation, setThreatRecommendation] = useState(null);
   const [globalRank, setGlobalRank] = useState(null);
   const [sharing, setSharing] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
@@ -115,7 +121,13 @@ export default function DeathScreen({
     if (!ghostKey) return;
     try {
       const raw = sessionStorage.getItem(ghostKey);
-      if (raw) setGhostData(JSON.parse(raw));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const points = Array.isArray(parsed)
+          ? parsed.filter(point => point && Number.isFinite(Number(point.x)) && Number.isFinite(Number(point.y)))
+          : [];
+        setGhostData(points);
+      }
     } catch {}
   }, [ghostKey]);
 
@@ -203,7 +215,7 @@ export default function DeathScreen({
     if (replayFrames.length >= 2) {
       const replayStart = performance.now();
       const drawReplay = (now) => {
-        const progress = Math.min(1, (now - replayStart) / 4000);
+        const progress = Math.max(0, Math.min(1, (now - replayStart) / 4000));
         const frameIndex = Math.min(replayFrames.length - 1, Math.floor(progress * (replayFrames.length - 1)));
         const startIndex = Math.max(0, frameIndex - 45);
         for (let i = startIndex + 1; i <= frameIndex; i++) {
@@ -422,11 +434,14 @@ export default function DeathScreen({
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const ghostDeathReadout = buildGhostDeathReadout(ghostData, ENEMY_TYPES);
   const rankIndex = Math.min(Math.floor(kills / 10), RANK_NAMES.length - 1);
-  const mode = bossRushMode ? "boss_rush"
+  const mode = zombiesMode ? "zombies"
+    : bossRushMode ? "boss_rush"
     : cursedRunMode ? "cursed"
       : scoreAttackMode ? "score_attack"
         : dailyChallengeMode ? "daily_challenge"
-          : "standard";
+          : _speedrunMode ? "speedrun"
+            : _gauntletMode ? "gauntlet"
+              : "standard";
   const debrief = buildRunDebrief({
     score,
     kills,
@@ -678,7 +693,7 @@ export default function DeathScreen({
     setSubmitStatus('pending');
     setSubmitFeedback(null);
     try {
-      const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex], eventDigest });
+      const result = await onSubmitScore({ lastWords: lastWords.trim() || "...", rank: RANK_NAMES[rankIndex], eventDigest, feedbackDifficulty: difficultyFeedback });
       setSubmitStatus(result?.submission || (result?.online ? "online" : "local"));
       setSubmitFeedback(result || null);
       if (result?.globalRank) setGlobalRank(result.globalRank);
@@ -718,6 +733,7 @@ export default function DeathScreen({
           {dailyChallengeMode && <span style={{ marginLeft: 8, color: "#00E5FF" }}>📅 DAILY CHALLENGE</span>}
           {bossRushMode     && <span style={{ marginLeft: 8, color: "#FF3333", fontWeight: 900 }}>☠ BOSS RUSH</span>}
           {cursedRunMode    && <span style={{ marginLeft: 8, color: "#CC00FF", fontWeight: 900 }}>☠ CURSED</span>}
+          {zombiesMode      && <span style={{ marginLeft: 8, color: "#8DFF67", fontWeight: 900 }}>🧟 SEWER ZOMBIES</span>}
         </div>
 
         {/* Challenge result card */}
@@ -1431,6 +1447,34 @@ export default function DeathScreen({
         <div style={{ marginBottom: 10, color: "#EEE", fontSize: 13 }}>
           Rank: <span style={{ color: "#FFD700", fontWeight: 700 }}>{RANK_NAMES[rankIndex]}</span>
         </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <SewerNetworkPanel compact />
+        </div>
+
+        {!practiceRun && (
+          <div data-testid="field-report" style={{ ...card, marginBottom: 12, border: "1px solid rgba(127,230,255,0.22)", background: "rgba(4,24,28,0.58)" }}>
+            <div style={{ color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIELD REPORT · HOW WAS THE THREAT?</div>
+            <div style={{ color: "#8B989F", fontSize: 9, marginTop: 4 }}>One tap helps tune future modes. Your answer never changes difficulty without your approval.</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 6, marginTop: 9 }}>
+              {Object.values(FIELD_REPORTS).map(report => {
+                const selected = difficultyFeedback === report.id;
+                return <button key={report.id} type="button" aria-pressed={selected} onClick={async () => {
+                  setDifficultyFeedback(report.id);
+                  const recommendation = await onSaveFieldReport?.(report.id);
+                  setThreatRecommendation(recommendation || null);
+                }} style={{ minWidth: 0, padding: "9px 4px", borderRadius: 6, cursor: "pointer", border: selected ? `1px solid ${report.color}` : "1px solid rgba(255,255,255,0.12)", background: selected ? `${report.color}18` : "rgba(255,255,255,0.035)", color: selected ? report.color : "#AAB3B8", fontSize: 9, fontWeight: 900, letterSpacing: 0.7 }}>{report.emoji} {report.label}</button>;
+              })}
+            </div>
+            {threatRecommendation && threatRecommendation.kind !== "practice" && (
+              <div style={{ marginTop: 9, padding: 8, borderRadius: 6, textAlign: "left", border: "1px solid rgba(141,255,103,0.28)", background: "rgba(141,255,103,0.06)" }}>
+                <div style={{ color: "#8DFF67", fontSize: 9, fontWeight: 900, letterSpacing: 1 }}>OPTIONAL THREAT RESPONSE</div>
+                <div style={{ color: "#C8D2D5", fontSize: 9, lineHeight: 1.45, marginTop: 3 }}>{threatRecommendation.reason}</div>
+                <button type="button" onClick={() => { onApplyThreatRecommendation?.(threatRecommendation); onStartGame(); }} style={{ ...btnP, width: "100%", marginTop: 7, padding: "8px", fontSize: 11, background: "linear-gradient(180deg,#5B8F35,#315C1F)" }}>{threatRecommendation.label}</button>
+              </div>
+            )}
+          </div>
+        )}
 
         {showLastWordsKeyboard && (
           <VirtualKeyboard

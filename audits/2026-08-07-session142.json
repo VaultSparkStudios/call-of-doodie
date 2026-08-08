@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-08-07",
+  "session": 142,
+  "project": "Call-Of-Doodie",
+  "intent": "run startup, audit actual full-game and user-base statistics, implement live stats, feedback, challenge response, and Zombies, deploy production, and complete canonical closeout",
+  "outcome": "achieved",
+  "shipped": [
+    "idempotent verified run-fact and aggregate-only community statistics spine",
+    "shared YOU / COMMUNITY / LIVE Sewer Network terminal across Home, leaderboard, and debrief",
+    "structured Field Reports, visible Last Words, and consent-driven threat recommendations",
+    "seeded Sewer Zombies horde mode with outbreak tiers, surges, four undead variants, and separated rankings",
+    "server-owned synthetic health-check isolation from public leaderboard and aggregate truth",
+    "complete device-local accuracy, playtime, combat, mode, feedback, and bounded history metrics",
+    "responsive device-detection and mobile/desktop configuration hardening",
+    "verified Cloudflare production deployment and live Supabase data plane"
+    ,"canonical /stats/ page and machine-readable stats-surface.json with dated analysis"
+  ],
+  "validation": [
+    "strict lint, production build, schema, architecture, storage, task, runtime, public, and security gates passed",
+    "final full Vitest corpus passed 1011/1011 across 173 files; the earlier operator-smoke timeout was closed by a bounded 90-second host-load allowance with assertions unchanged",
+    "production gameplay visual state passed 44/44 across two themes and mobile/desktop widths",
+    "immutable staging route/theme/viewport matrix passed 1020/1020 across 20 routes",
+    "sixteen current captures are hash-bound and CANON-053 passes; focused touched-state matrix passed 60/60",
+    "three Lighthouse 13.4.1 samples per surface; default median performance 1.00, LCP 1263ms, CLS 0, TBT 11.5ms",
+    "production live check 7/7, cutover 5/5, replay trust 3/3, and community-stat verification passed",
+    "public community path reports 12 real rows and zero synthetic rows while service verification retains 28 synthetic health checks"
+    ,"CANON-054 public stats checker passes 6/6 analyzed metrics with no findings"
+  ],
+  "deferred": [
+    "mobile interaction remains red for SPARKED after an 832ms synthetic 390px native-select sample",
+    "physical PWA, gamepad, and full-run media evidence",
+    "verified reply-capable project email",
+    "consented participant and publication/community evidence",
+    "project-scoped PostHog and browser Sentry evidence",
+    "direct subjective rendered-pixel review and explicit SPARKED approval"
+  ],
+  "sil": { "score": 998, "velocity": 7, "debt": "decreasing" },
+  "headline": "Turned verified runs into a live Sewer Network, closed player feedback into consensual challenge escalation, and shipped Zombies without weakening guest-first trust",
+  "items": [
+    { "title": "Truthful community statistics spine", "projectImpact": 10, "ecosystemImpact": 8, "evidence": "production run facts, aggregate RPC, synthetic isolation, and live public/service verification" },
+    { "title": "Sewer Zombies", "projectImpact": 10, "ecosystemImpact": 5, "evidence": "seeded mode routing, horde/surge mechanics, separated rank/history, tests, and production visuals" },
+    { "title": "Field Report feedback loop", "projectImpact": 9, "ecosystemImpact": 7, "evidence": "structured sentiment, Last Words, persistence, aggregates, and evidence-ranked consent-driven actions" },
+    { "title": "Sewer Network terminal", "projectImpact": 9, "ecosystemImpact": 7, "evidence": "shared provenance/freshness UI across pre-run, leaderboard, and post-game surfaces" }
+    ,{ "title": "Canonical public stats twin", "projectImpact": 8, "ecosystemImpact": 8, "evidence": "navigable /stats/, dated aggregate analysis, stats-surface.json, and agent discovery" }
+  ],
+  "followUps": [
+    "collect field or physical mobile interaction evidence before changing the selector again or requesting SPARKED",
+    "import future historical evidence only through an explicit versioned provenance passport",
+    "collect real Zombies volume before deriving community outbreak orders or tuning horde balance"
+  ],
+  "blockers": [
+    "SPARKED remains gated by mobile interaction quality and real physical, email, participant, publication, provider-scope, subjective-review, and founder evidence"
+  ]
+}

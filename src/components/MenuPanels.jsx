@@ -192,7 +192,7 @@ export function RunHistoryPanel({
   const history = Array.isArray(runHistory) ? runHistory : loadRunHistory();
   const rivalry = Array.isArray(rivalryHistory) ? rivalryHistory : loadRivalryHistory();
   const events = Array.isArray(studioEvents) ? studioEvents : loadStudioGameEvents();
-  const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR", speedrun: "🏃 SR", gauntlet: "🏋 GT" };
+  const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR", speedrun: "🏃 SR", gauntlet: "🏋 GT", zombies: "🧟 Z" };
   const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
   const rivalrySummary = summarizeRivalryHistory(rivalry);
   const trustSummary = summarizeStudioEvents(events);
@@ -597,6 +597,7 @@ export function CareerStatsPanel({ career, meta, onClose }) {
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 440, border: "1px solid rgba(0,229,255,0.25)" }}>
         <button onClick={onClose} style={CLOSE_X}>X</button>
         <h3 style={{ color: "#00E5FF", margin: "0 0 8px", fontSize: 18, letterSpacing: 2 }}>📊 CAREER STATS</h3>
+        <div style={{ margin: "-3px 0 10px", color: "#7F8C92", fontSize: 9, letterSpacing: 1.2 }}>THIS DEVICE · COMPLETE RUN HISTORY IS BOUNDED TO THE LATEST 50 RUNS</div>
         {meta && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, padding: "7px 12px", borderRadius: 6, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.25)" }}>
             <span style={{ fontSize: 16 }}>⭐</span>
@@ -622,6 +623,8 @@ export function CareerStatsPanel({ career, meta, onClose }) {
             <Row label="⚔️ Total Damage" value={(career.totalDamage || 0).toLocaleString()} color="#E040FB" />
             <Row label="📈 Avg Damage / Run" value={dmgPerRun.toLocaleString()} />
             <Row label="💥 Total Crits" value={(career.totalCrits || 0).toLocaleString()} color="#FF4500" />
+            <Row label="🔫 Projectiles Fired" value={(career.totalShots || 0).toLocaleString()} />
+            <Row label="✴ Confirmed Hits" value={(career.totalHits || 0).toLocaleString()} />
             <Row label="🎯 Accuracy" value={accuracy != null ? `${accuracy}%` : "—"} />
             <Row label="🎯 Crit Rate" value={critRate != null ? `${critRate}%` : "—"} />
             <Row label="💣 Grenades Thrown" value={(career.totalGrenades || 0).toLocaleString()} />

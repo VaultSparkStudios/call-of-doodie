@@ -19,6 +19,7 @@ import {
 import { isSupporter } from "../utils/supporter.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { track } from "../utils/analytics.js";
+import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
 import "./home-v3.css";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -44,9 +45,11 @@ const MODES = [
   { id: "score_attack", label: "Score Attack", short: "Score", description: "Five minutes, faster spawns, maximum score.", icon: "⌁" },
   { id: "speedrun", label: "Speed Run", short: "Speed", description: "Race the clock with a live timer.", icon: "»" },
   { id: "cursed", label: "Cursed Run", short: "Cursed", description: "Hard modifiers with a three-times score multiplier.", icon: "✦" },
+  { id: "zombies", label: "Sewer Zombies", short: "Zombies", description: "Escalating undead hordes with a surge every third wave.", icon: "🧟" },
 ];
 
 function currentMode(props) {
+  if (props.zombiesMode) return "zombies";
   if (props.bossRushMode) return "boss_rush";
   if (props.cursedRunMode) return "cursed";
   if (props.scoreAttackMode) return "score_attack";
@@ -116,6 +119,7 @@ export default function HomeV3(props) {
     props.onSetBossRushMode?.(nextMode === "boss_rush");
     props.onSetSpeedrunMode?.(nextMode === "speedrun");
     props.onSetGauntletMode?.(nextMode === "gauntlet");
+    props.onSetZombiesMode?.(nextMode === "zombies");
   };
 
   const start = (override = {}) => {
@@ -263,6 +267,7 @@ export default function HomeV3(props) {
             <div><strong>{meta?.careerPoints || 0}</strong><span>Upgrade points</span></div>
             <div><strong>{career?.achievementsEver?.length || 0}</strong><span>Achievements</span></div>
           </div>
+          <SewerNetworkPanel career={career} compact />
           <div className="home3__next-action">
             <span>Next up</span>
             <strong>{firstRun ? "Complete one Standard run" : `${missions.filter((_, index) => !missionProgress[index]).length} daily missions remaining`}</strong>

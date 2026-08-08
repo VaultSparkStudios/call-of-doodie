@@ -127,10 +127,13 @@ import {
   createScoreSubmitStudioEvents,
   buildScoreSubmitAnalyticsPayload,
   resolveRunModeFromFlags,
+  readRunModeFlags,
 } from "./systems/runSession.js";
 import { buildDeathScreenProps } from "./systems/deathFlow.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
+import { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./systems/zombieMode.js";
+import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -183,7 +186,7 @@ export default function CallOfDoodie() {
   const xpRef            = useRef({ xp: 0, level: 1 });
   const grenadeRef       = useRef({ ready: true, lastUse: 0 });
   const dashRef          = useRef({ ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 });
-  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0 });
+  const statsRef         = useRef({ bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, totalShots: 0, totalHits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0 });
   const achievedRef      = useRef(new Set());
   const startTimeRef     = useRef(0);
   const timerRef         = useRef(null);
@@ -223,6 +226,7 @@ export default function CallOfDoodie() {
   const dailyChallengeRef     = useRef(false); // synced with dailyChallengeMode
   const cursedRunRef          = useRef(false); // synced with cursedRunMode
   const bossRushRef           = useRef(false); // synced with bossRushMode
+  const zombiesRef            = useRef(false); // synced with Sewer Zombies mode
   const runTokenRef           = useRef(null);  // server-issued one-time token for score submit
   const runSummarySigRef      = useRef("");
   const gamepadAngleRef  = useRef(null);  // gamepad right-stick aim angle (null = not active)
@@ -308,6 +312,7 @@ export default function CallOfDoodie() {
   const [bossRushMode, setBossRushMode]             = useState(false);
   const [speedrunMode, setSpeedrunMode]             = useState(false);
   const [gauntletMode, setGauntletMode]             = useState(false);
+  const [zombiesMode, setZombiesMode]                = useState(false);
   const [assistAvailable, setAssistAvailable]       = useState(false);
   const [assistUsed, setAssistUsed]                 = useState(false);
   const speedrunRef  = useRef(false);
@@ -398,7 +403,7 @@ export default function CallOfDoodie() {
   // ── Responsive ────────────────────────────────────────────────────────────
   useEffect(() => {
     const check = () => {
-      const mobile = window.innerWidth <= 900 || "ontouchstart" in window;
+      const mobile = window.innerWidth <= 900 || window.matchMedia?.("(pointer: coarse)")?.matches === true;
       setIsMobile(mobile);
       if (mobile) inputDeviceRef.current = "mobile";
     };
@@ -521,6 +526,7 @@ export default function CallOfDoodie() {
       timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000),
       crits: statsRef.current.crits, grenadeKills: statsRef.current.grenadeKills || 0,
       bossKills: statsRef.current.bossKills || 0,
+      totalCrits: statsRef.current.crits || 0,
       bestStreak: statsRef.current.bestStreak || 0,
       dashKills: statsRef.current.dashKills || 0,
       perksSelected: statsRef.current.perksSelected || 0,
@@ -634,16 +640,16 @@ export default function CallOfDoodie() {
     // Ghost race: load previous run's ghost for same mode, reset recorder
     ghostRecordRef.current = createGhostRecorder();
     commandTraceRef.current = []; // reset command trace for this run
-    const _gKey = "cod-ghost-" + (bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
+    const _gKey = "cod-ghost-" + (zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
     gsRef.current._ghostKey = _gKey;
     gsRef.current.ghost = loadGhostPlayback(_gKey);
     // Persistent ghost leaderboard: load top-3 scores for this mode/difficulty as score targets
     loadTopGhosts(
-      bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
+      zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
       difficultyRef.current || "normal"
     ).then(ghosts => { if (gsRef.current) gsRef.current.topGhosts = ghosts; }).catch(() => {});
     loadWeeklyTopGhost(
-      bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
+      zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
       difficultyRef.current || "normal"
     ).then(ghost => { if (gsRef.current) gsRef.current.weeklyRival = ghost; }).catch(() => {});
     // Proximity rivals: 3 leaderboard players within ±10% of personal best — continuous rivalry ladder
@@ -662,7 +668,7 @@ export default function CallOfDoodie() {
     xpRef.current = { xp: 0, level: 1 };
     grenadeRef.current = { ready: true, lastUse: 0 };
     dashRef.current = { ready: true, lastUse: 0, active: 0, dx: 0, dy: 0 };
-    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0, nemesisSlain: 0 };
+    statsRef.current = { bestStreak: 0, totalDamage: 0, nukes: 0, bossKills: 0, dashes: 0, grenades: 0, crits: 0, totalShots: 0, totalHits: 0, landlordKills: 0, cryptoKills: 0, guardianAngels: 0, perksSelected: 0, weaponUpgradesCollected: 0, maxWeaponLevel: 0, bossWavesCleared: 0, dashKills: 0, grenadeKills: 0, noHitWaves: 0, weaponKills: new Array(WEAPONS.length).fill(0), objectiveChains: {}, bestPrecisionStreak: 0, nemesisSlain: 0 };
     roastCooldowns.current = {};
     achievedRef.current = new Set();
     perkModsRef.current = {};
@@ -779,6 +785,9 @@ export default function CallOfDoodie() {
     // ── Gauntlet mode init ─────────────────────────────────────────────────
     gsRef.current.gauntletMode = gauntletRef.current;
     gsRef.current.speedrunMode = speedrunRef.current;
+    gsRef.current.zombiesMode = zombiesRef.current;
+    gsRef.current.zombieOutbreak = zombiesRef.current ? getZombieOutbreakPlan(gsRef.current.currentWave) : null;
+    if (zombiesRef.current) gsRef.current.maxEnemiesThisWave = getZombieWaveEnemyCount(gsRef.current.maxEnemiesThisWave, gsRef.current.currentWave);
     if (gauntletRef.current) {
       try {
         const _gt = getWeeklyGauntlet();
@@ -1167,7 +1176,7 @@ export default function CallOfDoodie() {
     statsRef.current.perksSelected++;
     // ── Perk pick-rate analytics ──
     const _gs = gsRef.current;
-    const _mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    const _mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current);
     track("perk_chosen", { perkId: perk.id, perkName: perk.name, perkTier: perk.tier, offeredIds: perkOptionsRef.current.map(p => p.id), wave: _gs?.currentWave, difficulty: difficultyRef.current, mode: _mode });
     saveStudioGameEvent(buildStudioGameEvent("perk_choice", {
       surface: "perk_modal",
@@ -1267,7 +1276,7 @@ export default function CallOfDoodie() {
       setShopHistory(h => [...h, resolution.shopHistoryEntry]);
     }
     recordCommandTrace("shop", optionId);
-    track("shop_buy", { itemId: optionId, wave: gs.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current });
+    track("shop_buy", { itemId: optionId, wave: gs.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), difficulty: difficultyRef.current });
   }, [recordCommandTrace]);
 
   // ── Coin shop apply ───────────────────────────────────────────────────────
@@ -1301,7 +1310,7 @@ export default function CallOfDoodie() {
     }
     soundPerkSelect();
     recordCommandTrace("shop", `coin-${optionId}`);
-    track("coin_shop_buy", { itemId: optionId, cost, wave: gs.currentWave, coinsAfter: resolution.coins, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), difficulty: difficultyRef.current });
+    track("coin_shop_buy", { itemId: optionId, cost, wave: gs.currentWave, coinsAfter: resolution.coins, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), difficulty: difficultyRef.current });
   }, [recordCommandTrace]);
 
   // ── Wave mutation challenge: accept or skip ──────────────────────────────
@@ -1348,7 +1357,7 @@ export default function CallOfDoodie() {
     if (!gs) return;
     route.apply(gs, perkModsRef.current, getRunRng(gs, "choices"));
     recordCommandTrace("route", route.id);
-    const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+    const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current);
     track("route_chosen", {
       routeId: route.id,
       wave: gs.currentWave,
@@ -1376,6 +1385,7 @@ export default function CallOfDoodie() {
   const spawnEnemy = useCallback((gs) => {
     _spawnEnemy(gs, GW(), GH(), difficultyRef.current);
     const ne = gs.enemies[gs.enemies.length - 1];
+    if (ne && gs.zombiesMode) mutateEnemyForZombieMode(ne, { wave: gs.currentWave, ordinal: gs.enemiesThisWave });
     if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
       preloadEnemyAtlasesForTypes(activeRoster);
@@ -1491,7 +1501,9 @@ export default function CallOfDoodie() {
       trail: weapon.bulletTrail || weaponIdx === 1, pierceLeft: pierce,
       bouncesLeft: noRicochet ? 0 : 10 + (gs.extraBounces || 0) + (gs.synergyExtraBounces || 0),
       wpnIdx: weaponIdx,
+      statHit: false,
     });
+    statsRef.current.totalShots = (statsRef.current.totalShots || 0) + (weapon.pellets ? weapon.pellets + (gs.synergyExtraPellets || 0) : weapon.burst || 1);
     if (weapon.pellets) {
       // Shotgun — fire N pellets with independent spread (+ synergy extra)
       const totalPellets = weapon.pellets + (gs.synergyExtraPellets || 0);
@@ -1712,6 +1724,8 @@ export default function CallOfDoodie() {
       combo: _isPracticeRun ? 0 : comboRef.current.max,
       bossKills: statsRef.current.bossKills,
       weaponKills: statsRef.current.weaponKills,
+      totalShots: statsRef.current.totalShots || 0,
+      totalHits: statsRef.current.totalHits || 0,
       practiceRun: _isPracticeRun,
     });
     weaponMilestonesRef.current = _careerResult?.weaponMilestones || [];
@@ -1790,14 +1804,7 @@ export default function CallOfDoodie() {
         },
       });
     }
-    const runFlags = {
-      scoreAttack: scoreAttackRef.current,
-      dailyChallenge: dailyChallengeRef.current,
-      cursed: cursedRunRef.current,
-      bossRush: bossRushRef.current,
-      speedrun: speedrunRef.current,
-      gauntlet: gauntletRef.current,
-    };
+    const runFlags = readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef);
     let deathTraceEvidence = null;
     try { deathTraceEvidence = analyzeReplayCommandTrace(encodeReplayCommandTrace(commandTraceRef.current || [])); } catch { deathTraceEvidence = null; }
     deathTraceEvidenceRef.current = deathTraceEvidence;
@@ -1822,7 +1829,19 @@ export default function CallOfDoodie() {
       ghostRecorderReceipt: gs.ghostRecorderReceipt,
       pressureReceipt: finalizePressureArc(gs.pressureArc, { deathWave: gs.currentWave }),
       damageReceipt: finalizeDamageSequence(gs.damageSequence, { maxHealth: gs.player?.maxHealth, finalFrame: frameCountRef.current }),
+      totalDamage: gs.totalDamage,
+      totalShots: statsRef.current.totalShots || 0,
+      totalHits: statsRef.current.totalHits || 0,
+      totalCrits: statsRef.current.crits || 0,
+      bossKills: statsRef.current.bossKills || 0,
     }));
+    void queueCompletedRunFact({
+      runToken: runTokenRef.current, summarySig: runSummarySigRef.current, name: username,
+      runFlags, difficulty: difficultyRef.current, seed: gs.runSeed, starterLoadout,
+      score: gs.score, kills: gs.kills, wave: gs.currentWave,
+      durationSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000),
+      totalDamage: gs.totalDamage, stats: statsRef.current, practiceRun: _isPracticeRun,
+    });
     createDeathStudioEvents({
       score: gs.score,
       kills: gs.kills,
@@ -1834,7 +1853,7 @@ export default function CallOfDoodie() {
     const deathRoast = getRoastCallout("death", roastCooldowns.current, gs.currentWave, 1);
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
-    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
+    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
     gs.killstreakCount = 0; setKillstreak(0);
     } catch (error) {
       console.error("[RUN END] Non-critical finalizer failed after terminal transition:", error);
@@ -1843,7 +1862,7 @@ export default function CallOfDoodie() {
       gs.runPhase = RUN_PHASE.ENDED;
     }
     return true;
-  }, [difficulty, releaseAllInputs, runSeed, username]);
+  }, [difficulty, releaseAllInputs, runSeed, starterLoadout, username]);
 
   // enemy-defeat-pipeline:single-executor
   const finalizeEnemyDefeat = (gs, e) => {
@@ -2173,7 +2192,7 @@ export default function CallOfDoodie() {
       const _intent = loadExperimentIntent();
       experimentMatchedRef.current = matchesExperiment({
         starterLoadout,
-        mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+        mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current),
         difficulty: difficultyRef.current,
       }, _intent);
     } catch { experimentMatchedRef.current = null; }
@@ -2214,14 +2233,7 @@ export default function CallOfDoodie() {
       difficulty: difficultyRef.current,
       starterLoadout,
       seed,
-      flags: {
-        scoreAttack: scoreAttackRef.current,
-        dailyChallenge: dailyChallengeRef.current,
-        cursed: cursedRunRef.current,
-        bossRush: bossRushRef.current,
-        speedrun: speedrunRef.current,
-        gauntlet: gauntletRef.current,
-      },
+      flags: readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef),
     });
     const _startMode = startArtifacts.mode;
     const runClaim = startArtifacts.runClaim;
@@ -2285,12 +2297,12 @@ export default function CallOfDoodie() {
     const _now = Date.now();
     if (_now - weaponSwitchTrackRef.current > 2000) {
       weaponSwitchTrackRef.current = _now;
-      track("weapon_switch", { from: WEAPONS[prevIdx]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current) });
+      track("weapon_switch", { from: WEAPONS[prevIdx]?.name, to: WEAPONS[idx]?.name, wave: gsRef.current?.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current) });
     }
   }, [recordCommandTrace]);
 
   // ── Score submit ──────────────────────────────────────────────────────────
-  const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null }) => {
+  const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null, feedbackDifficulty = null }) => {
     // Practice runs never touch the leaderboard (UI hides the form; this is the backstop)
     if (gsRef.current?.practiceRun) return { submission: "skipped_practice", board: [] };
     const integrityReceipt = getRunIntegrityReceipt(gsRef.current);
@@ -2305,14 +2317,7 @@ export default function CallOfDoodie() {
     const GAMEPLAY_KEYS = ["enemySpawnMult","enemyHealthMult","enemySpeedMult","playerSpeedMult","xpGainMult","pickupMagnet","grenadeRadiusMult"];
     const sett = settingsRef.current;
     const customSettings = GAMEPLAY_KEYS.some(k => sett[k] !== SETTINGS_DEFAULTS[k]);
-    const mode = resolveRunModeFromFlags({
-      scoreAttack: scoreAttackRef.current,
-      dailyChallenge: dailyChallengeRef.current,
-      cursed: cursedRunRef.current,
-      bossRush: bossRushRef.current,
-      speedrun: speedrunRef.current,
-      gauntlet: gauntletRef.current,
-    });
+    const mode = resolveRunModeFromFlags(readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef));
     const commandTrace = encodeReplayCommandTrace(commandTraceRef.current || []);
     const entry = buildSessionSubmission({
       username,
@@ -2338,6 +2343,11 @@ export default function CallOfDoodie() {
       summarySig: runSummarySigRef.current,
       eventDigest,
       commandTrace,
+      feedbackDifficulty,
+      totalShots: statsRef.current.totalShots || 0,
+      totalHits: statsRef.current.totalHits || 0,
+      bossKills: statsRef.current.bossKills || 0,
+      totalCrits: statsRef.current.crits || 0,
     });
     if (dailyChallengeRef.current) markDailyChallengeSubmitted();
     const result = await saveToLeaderboard(entry);
@@ -2361,14 +2371,7 @@ export default function CallOfDoodie() {
       score,
       wave,
       runSeed,
-      flags: {
-        scoreAttack: scoreAttackRef.current,
-        dailyChallenge: dailyChallengeRef.current,
-        cursed: cursedRunRef.current,
-        bossRush: bossRushRef.current,
-        speedrun: speedrunRef.current,
-        gauntlet: gauntletRef.current,
-      },
+      flags: readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef),
       globalRank,
       result,
       eventDigest,
@@ -2376,6 +2379,18 @@ export default function CallOfDoodie() {
     }).events.forEach(saveStudioGameEvent);
     return { ...result, globalRank };
   }, [username, score, kills, wave, bestStreak, totalDamage, level, timeSurvived, achievementsUnlocked, difficulty, starterLoadout, runSeed, leaderboard]);
+
+  const savePostRunFieldReport = useCallback((feedback) => recordPostRunFieldReport(feedback, {
+    runToken: runTokenRef.current, summarySig: runSummarySigRef.current, name: username,
+    runFlags: readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef),
+    difficulty, seed: runSeed, starterLoadout, score, kills, wave, durationSeconds: timeSurvived,
+    totalDamage, stats: statsRef.current, practiceRun: gsRef.current?.practiceRun,
+  }), [difficulty, kills, runSeed, score, starterLoadout, timeSurvived, totalDamage, username, wave]);
+
+  const applyThreatRecommendation = useCallback((recommendation) => applyThreatRecommendationChoice(recommendation, {
+    difficultyRef, setDifficulty, zombiesRef, setZombiesMode,
+    otherModes: [[setSpeedrunMode, speedrunRef], [setGauntletMode, gauntletRef], [setScoreAttackMode, scoreAttackRef], [setDailyChallengeMode, dailyChallengeRef], [setCursedRunMode, cursedRunRef], [setBossRushMode, bossRushRef]],
+  }), []);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
   const gameLoop = useCallback(() => {
@@ -2698,7 +2713,7 @@ export default function CallOfDoodie() {
         track("wave_director_stage", {
           ...gameCtx({
             difficulty: difficultyRef.current,
-            mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+            mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current),
             wave: gs.currentWave,
             score: gs.score,
           }),
@@ -2715,7 +2730,7 @@ export default function CallOfDoodie() {
         track("wave_pressure_band", {
           ...gameCtx({
             difficulty: difficultyRef.current,
-            mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current),
+            mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current),
             wave: gs.currentWave,
             score: gs.score,
           }),
@@ -2724,7 +2739,8 @@ export default function CallOfDoodie() {
       }
       const _arcMult = gs._runAct === 'THE LEGEND' ? 0.88 : gs._runAct === 'THE OPENER' ? 1.12 : 1;
       const baseSpawnRate = Math.max(6, Math.floor((100 - gs.currentWave * 7) * diffS.spawnMult / (gs.settSpawnMult || 1) / (gs.blitzSpawnMult || 1) * _arcMult));
-      const spawnRate = getWaveSpawnRate(baseSpawnRate, directorState);
+      const zombiePlan = gs.zombiesMode ? getZombieOutbreakPlan(gs.currentWave) : null;
+      const spawnRate = Math.max(4, Math.floor(getWaveSpawnRate(baseSpawnRate, directorState) * (zombiePlan?.spawnRateMult || 1)));
       if (gs.spawnTimer >= spawnRate && gs.enemiesThisWave < gs.maxEnemiesThisWave && !gs._respiteLock) {
         gs.spawnTimer = 0; gs.enemiesThisWave++; spawnEnemy(gs);
         const ne = gs.enemies[gs.enemies.length - 1];
@@ -2828,7 +2844,7 @@ export default function CallOfDoodie() {
 
       // Analytics: wave clear event (every 5 waves to avoid spam)
       if (gs.currentWave % 5 === 0) {
-        const _wCtx = gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score });
+        const _wCtx = gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs.currentWave, score: gs.score });
         track("wave_reached", _wCtx);
         if (gs.currentWave === 5 || gs.currentWave === 10 || gs.currentWave === 20 || gs.currentWave === 50) {
           track("wave_milestone", { ..._wCtx, milestone: gs.currentWave });
@@ -2942,6 +2958,10 @@ export default function CallOfDoodie() {
       } else {
         const _waveMax = gs.currentWave >= 50 ? 100 : gs.currentWave >= 40 ? 80 : 60;
         gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), _waveMax);
+        if (gs.zombiesMode) {
+          gs.zombieOutbreak = getZombieOutbreakPlan(gs.currentWave);
+          gs.maxEnemiesThisWave = getZombieWaveEnemyCount(gs.maxEnemiesThisWave, gs.currentWave);
+        }
         // Apply route modifiers to the upcoming wave
         if (gs.routeDoubleEnemies) { gs.maxEnemiesThisWave = Math.min(gs.maxEnemiesThisWave * 2, 80); gs.routeDoubleEnemies = false; }
         if (gs.routeEliteWave)    { gs.waveEliteOnly = true; gs.routeEliteWave = false; }
@@ -3030,7 +3050,7 @@ export default function CallOfDoodie() {
           setLiveAnnounce("Boss wave! " + (bossPlan.previewCard.name || "Boss") + " incoming on wave " + gs.currentWave);
         }
         track("boss_wave_preview", {
-          ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current), wave: gs.currentWave, score: gs.score }),
+          ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs.currentWave, score: gs.score }),
           boss: _bossGuidance.headline,
           verb: _bossGuidance.verb,
         });
@@ -3299,6 +3319,7 @@ export default function CallOfDoodie() {
       gs.enemies.forEach(e => {
         if (e.health <= 0) return;
         if (bulletEnemyCollision(b, e).hit) {
+          if (!b.statHit) { b.statHit = true; statsRef.current.totalHits = (statsRef.current.totalHits || 0) + 1; }
           // Shield pulse blocks all damage
           if (e.shieldPulseActive) {
             addParticles(gs, b.x, b.y, "#00BFFF", 4);
@@ -4456,17 +4477,19 @@ export default function CallOfDoodie() {
           }}
           gamepadConnected={gamepadConnected} controllerType={controllerType}
           scoreAttackMode={scoreAttackMode}
-          onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          onSetScoreAttackMode={v => { setScoreAttackMode(v); scoreAttackRef.current = v; if (v) { setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; setSpeedrunMode(false); speedrunRef.current = false; setGauntletMode(false); gauntletRef.current = false; setZombiesMode(false); zombiesRef.current = false; } }}
           dailyChallengeMode={dailyChallengeMode}
-          onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          onSetDailyChallengeMode={v => { setDailyChallengeMode(v); dailyChallengeRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; setSpeedrunMode(false); speedrunRef.current = false; setGauntletMode(false); gauntletRef.current = false; setZombiesMode(false); zombiesRef.current = false; } }}
           cursedRunMode={cursedRunMode}
-          onSetCursedRunMode={v => { setCursedRunMode(v); cursedRunRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          onSetCursedRunMode={v => { setCursedRunMode(v); cursedRunRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setBossRushMode(false); bossRushRef.current = false; setSpeedrunMode(false); speedrunRef.current = false; setGauntletMode(false); gauntletRef.current = false; setZombiesMode(false); zombiesRef.current = false; } }}
           bossRushMode={bossRushMode}
-          onSetBossRushMode={v => { setBossRushMode(v); bossRushRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; } }}
+          onSetBossRushMode={v => { setBossRushMode(v); bossRushRef.current = v; if (v) { setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setSpeedrunMode(false); speedrunRef.current = false; setGauntletMode(false); gauntletRef.current = false; setZombiesMode(false); zombiesRef.current = false; } }}
           speedrunMode={speedrunMode}
-          onSetSpeedrunMode={v => { setSpeedrunMode(v); speedrunRef.current = v; if (v) { setGauntletMode(false); gauntletRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          onSetSpeedrunMode={v => { setSpeedrunMode(v); speedrunRef.current = v; if (v) { setGauntletMode(false); gauntletRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; setZombiesMode(false); zombiesRef.current = false; } }}
           gauntletMode={gauntletMode}
-          onSetGauntletMode={v => { setGauntletMode(v); gauntletRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
+          onSetGauntletMode={v => { setGauntletMode(v); gauntletRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; setZombiesMode(false); zombiesRef.current = false; } }}
+          zombiesMode={zombiesMode}
+          onSetZombiesMode={v => { setZombiesMode(v); zombiesRef.current = v; if (v) { setSpeedrunMode(false); speedrunRef.current = false; setGauntletMode(false); gauntletRef.current = false; setScoreAttackMode(false); scoreAttackRef.current = false; setDailyChallengeMode(false); dailyChallengeRef.current = false; setCursedRunMode(false); cursedRunRef.current = false; setBossRushMode(false); bossRushRef.current = false; } }}
           assistAvailable={assistAvailable}
           onApplyAssist={() => { if (!assistUsed) { setAssistUsed(true); setAssistAvailable(false); const gs = gsRef.current; if (gs && gs.player) { gs.player.health = Math.min(gs.player.maxHealth, gs.player.health + 50); setHealth(gs.player.health); } } }}
           onInstallApp={pwaPromptReady ? promptInstallApp : null}
@@ -4515,6 +4538,8 @@ export default function CallOfDoodie() {
       onMenu: () => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); },
       onRefreshLeaderboard: refreshLeaderboard,
       onSubmitScore: submitScore,
+      onSaveFieldReport: savePostRunFieldReport,
+      onApplyThreatRecommendation: applyThreatRecommendation,
       highlightGifUrl,
       gifEncoding,
       fmtTime,
@@ -4535,6 +4560,7 @@ export default function CallOfDoodie() {
       cursedRunMode,
       speedrunMode,
       gauntletMode,
+      zombiesMode,
       challengeVsScore,
       challengeVsName,
       onInstallApp: pwaPromptReady ? promptInstallApp : null,
@@ -4577,7 +4603,7 @@ export default function CallOfDoodie() {
           pauseReason={pauseReason}
           onResume={() => transitionPause(false, "resume")}
           onLeave={() => {
-            const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current);
+            const mode = resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current);
             const abandonPayload = { wave, score, mode, difficulty: difficultyRef.current, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000) };
             track("mode_abandon", abandonPayload);
             saveStudioGameEvent(buildStudioGameEvent("mode_abandon", { surface: "pause_menu", ...abandonPayload }));

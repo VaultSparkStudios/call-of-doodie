@@ -4,7 +4,7 @@
 import { spawnSync } from "./lib/safe-spawn.mjs";
 import { envForSpawn, getSecret, redact, resolveCapability } from "./lib/secrets.mjs";
 
-const allowed = new Set(["issue-run-token", "submit-score", "validate-replay", "kofi-webhook", "sync-studio-events"]);
+const allowed = new Set(["issue-run-token", "submit-score", "validate-replay", "kofi-webhook", "sync-studio-events", "sync-game-run"]);
 const requested = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 const functions = requested.length ? requested : ["issue-run-token", "submit-score"];
 if (functions.some((name) => !allowed.has(name))) {

@@ -1046,6 +1046,24 @@ Last reviewed: 2026-07-28
 Overall status: green engineering implementation; SPARKED remains NO-GO.
 Last reviewed: 2026-07-29
 
+## 2026-08-07 — Session 142 — Live statistics, feedback, Zombies, and production truth
+
+- Audit truth — all seven premise-verified items in `docs/AUDIT_2026-08-06.json` / `.md` are complete; blanket default buffs, analytics authority, paid hosted coaching, and account-wall proposals remained rejected.
+- Historical-data truth — the public aggregate includes supported legacy leaderboard fields and richer verified complete-run facts. Missing historical duration, accuracy, boss, or feedback fields remain unavailable rather than inferred.
+- Synthetic truth — exact health-check contracts set `is_synthetic`; the public path sees zero synthetic rows while service verification retains 28 operator rows.
+- Production-data truth — the verified public aggregate reports 12 runs, five runners, 259 kills, 119,223 score, best wave nine, best kills 133, best score 79,398, and 21,628 damage.
+- Personal-data truth — browser career and 50-run history are labeled THIS DEVICE; shots, hits, measured accuracy, criticals, bosses, mode, and feedback normalize safely across legacy state.
+- Feedback truth — difficulty sentiment comes only from explicit TOO EASY / DIALED IN / BRUTAL input. Last Words remain bounded player text and never imply sentiment or causality on their own.
+- Recommendation truth — repeated/strong evidence may recommend Hard, Insane, or Zombies, but no recommendation changes the selected mode/difficulty without a player action.
+- Mode truth — Sewer Zombies is deterministic, leaderboard-separated, and routed through claims, submission, history, analytics, Home, HUD, debrief, and public contracts; it uses existing infrastructure.
+- Release truth — production deployment `8ff1b286` serves `assets/index-Ds1eK-77.js` at `https://callofdoodie.wtf/`; rollback `5d49fd44` remains immutable.
+- Verification truth — production live 7/7, cutover 5/5, replay 3/3, community verification pass, focused production states 44/44; staging route/theme/width matrix 969/969 and focused states 44/44; 12 captures are hash-bound and CANON-053 passes.
+- Performance truth — six immutable staging Lighthouse samples measure default median performance 1.00, Largest Contentful Paint 1,263ms, Cumulative Layout Shift 0, and Total Blocking Time 11.5ms. The 390px synthetic native-select interaction measured 832ms and remains a named red SPARKED gate.
+- Lifecycle truth — this is an engineering FORGE deployment. No physical, mail-delivery, participant, publication, scoped-provider, subjective-review, or SPARKED evidence is fabricated.
+
+Overall status: engineering deployment green; SPARKED remains NO-GO.
+Last reviewed: 2026-08-07
+
 ## 2026-08-05 — Session 141 — Input, session, state, and deployment truth
 
 - Audit truth — `docs/AUDIT_2026-08-05.json` / `.md` contain three Oracle-verified items; all three are shipped with execution evidence, plus one verification-discovered second-order fix.

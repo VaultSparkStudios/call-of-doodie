@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "1.0",
+  "title": "Call of Doodie verified game statistics",
+  "page": "https://callofdoodie.wtf/stats/",
+  "machineReadable": "https://callofdoodie.wtf/stats-surface.json",
+  "precomputed": true,
+  "source": "Production get_public_game_stats verification receipt",
+  "scope": "Verified completed public runs; automated health checks excluded",
+  "freshness": "Release snapshot through 2026-08-07; use the in-game Sewer Network for live refresh",
+  "metrics": [
+    {
+      "id": "verified_runs",
+      "label": "Verified public runs",
+      "value": 12,
+      "period": "All supported production history through 2026-08-07",
+      "computedAt": "2026-08-07",
+      "unitOrDenominator": "completed non-synthetic runs",
+      "interpretation": "The production fact pipeline is live, but twelve runs are too few for broad retention or balance conclusions."
+    },
+    {
+      "id": "distinct_runners",
+      "label": "Distinct runners",
+      "value": 5,
+      "period": "All supported production history through 2026-08-07",
+      "computedAt": "2026-08-07",
+      "unitOrDenominator": "privacy-safe distinct public runner identifiers",
+      "interpretation": "Five runners establish real multi-player coverage without supporting a mass-audience claim."
+    },
+    {
+      "id": "enemies_terminated",
+      "label": "Enemies terminated",
+      "value": 259,
+      "period": "All supported production history through 2026-08-07",
+      "computedAt": "2026-08-07",
+      "unitOrDenominator": "kills across verified completed runs",
+      "interpretation": "Combat activity is present across the verified corpus; this total is not a per-player average."
+    },
+    {
+      "id": "total_score",
+      "label": "Total score",
+      "value": 119223,
+      "period": "All supported production history through 2026-08-07",
+      "computedAt": "2026-08-07",
+      "unitOrDenominator": "score points across verified completed runs",
+      "interpretation": "The total proves score ingestion coverage, while mode and difficulty mix still limit direct comparisons."
+    },
+    {
+      "id": "total_damage",
+      "label": "Total damage",
+      "value": 21628,
+      "period": "All supported production history through 2026-08-07",
+      "computedAt": "2026-08-07",
+      "unitOrDenominator": "damage points across verified completed runs",
+      "interpretation": "Damage is available for current rich run facts; unsupported legacy detail is not reconstructed."
+    },
+    {
+      "id": "excluded_health_checks",
+      "label": "Excluded health checks",
+      "value": 28,
+      "period": "All supported production history through 2026-08-07",
+      "computedAt": "2026-08-07",
+      "unitOrDenominator": "server-identified synthetic rows",
+      "interpretation": "Automation remains queryable for operations but cannot inflate public player, score, or combat totals."
+    }
+  ]
+}

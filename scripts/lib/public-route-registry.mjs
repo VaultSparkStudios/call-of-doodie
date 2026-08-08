@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
 
 export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
-export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-03";
+export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-07";
 
 const CORE_ATLAS_INDICES = [0, 1, 2, 3, 5, 6, 7, 8];
 const SPECIALIST_ATLAS_INDICES = [9, 10, 11, 12, 13, 14, 15, 16];
@@ -129,6 +129,19 @@ const ROUTE_DEFINITIONS = [
       ["Run receipts", "Replay proof is advisory deterministic evidence, not a promise of full physics resimulation. Integrity indicators explain when a run is local-only or has unusual conditions."],
       ["Respectful identity", "Use a display name that is safe to publish. Do not include an email address, phone number, real-world address, or other private information."],
     ],
+  },
+  {
+    id: "stats", path: "/stats/", label: "Stats", rel: "stats", priority: 0.7, generated: true,
+    eyebrow: "Verified sewer telemetry", title: "The sewer keeps receipts.",
+    description: "Verified Call of Doodie player and run statistics with scope, freshness, and plain-language analysis.",
+    lede: "This release snapshot reports supported production history through August 7, 2026. The in-game Sewer Network refreshes live; this page stays deliberately dated so a stale count can never masquerade as current.",
+    sections: [
+      ["Runs and runners", "12 verified public runs came from 5 distinct runners. That is enough to prove the live pipeline, but not enough to infer retention or broad balance conclusions."],
+      ["Combat output", "Those runs recorded 259 enemies terminated, 21,628 damage, and 119,223 score. These are totals across verified completed runs, not per-player claims."],
+      ["What is excluded", "28 automated health-check rows remain available to operators but are excluded from every public total. Missing legacy hours, shots, and hits stay unmeasured rather than being estimated."],
+      ["Live view", "Open the Command Deck, leaderboard, or post-game debrief for the live Sewer Network. It polls every 15 seconds while visible and labels its source and freshness."],
+    ],
+    cta: ["Open the live Sewer Network", "../"],
   },
   {
     id: "accessibility", path: "/accessibility/", label: "Accessibility", rel: "accessibility", priority: 0.6, generated: true,
@@ -305,6 +318,7 @@ export function getAgentResources() {
     { rel: "gameplay-contract", href: `${PUBLIC_CANONICAL_ORIGIN}/gameplay-contract.json` },
     { rel: "route-contract", href: `${PUBLIC_CANONICAL_ORIGIN}/route-contract.json` },
     { rel: "field-manual", href: `${PUBLIC_CANONICAL_ORIGIN}/field-manual.json` },
+    { rel: "game-stats", href: `${PUBLIC_CANONICAL_ORIGIN}/stats-surface.json` },
     { rel: "service-status", href: `${PUBLIC_CANONICAL_ORIGIN}/status.json` },
   ];
 }

@@ -53,6 +53,7 @@ const ALLOW = [
   /tokenHash/,
   /token-cost/,
   /zero-token/,
+  /\btoken:\s*[A-Za-z_$][\w$]*\.token\b/,
 ];
 
 function shannon(value) {

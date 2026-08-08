@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 141 extracted mixed-input aim arbitration, unified canonical session identity, added current-state idempotence, and hardened Hot Context, dependency-smoke, and Playwright readiness courts.",
-  "nextMilestone": "Preserve engineering READY and SPARKED NO-GO while collecting consented participant evidence, project-scoped analytics/Sentry, verified reply-as email, physical PWA/gamepad/full-run media QA, publication/community, direct subjective pixel review, and founder approval.",
+  "currentFocus": "Session 142 shipped truthful live community statistics, the Sewer Network terminal, Field Reports, consent-driven threat recommendations, complete personal metrics, synthetic isolation, and seeded Sewer Zombies; production is deployed and verified.",
+  "nextMilestone": "Preserve engineering READY and SPARKED NO-GO while improving measured mobile interaction quality and collecting physical PWA/gamepad/full-run media, reply-capable email, participant/publication, scoped provider, subjective review, and explicit founder evidence.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -257,6 +257,28 @@
       "status": "green",
       "type": "production-smoke",
       "command": "Session 141 — live 7/7 · cutover 5/5 · replay trust 3/3 · score backend 5/5 · Studio launch surfaces pass"
+    },
+    {
+      "status": "green",
+      "url": "https://session-142-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "Session 142 immutable b8732629 · 19 routes × 2 themes × 3 widths 969/969 · focused gameplay states 44/44 · 12 hash-bound captures"
+    },
+    {
+      "status": "green",
+      "url": "https://callofdoodie.wtf/",
+      "type": "production-deploy",
+      "command": "Session 142 production 8ff1b286 · live 7/7 · cutover 5/5 · replay trust 3/3 · production gameplay states 44/44"
+    },
+    {
+      "status": "green",
+      "type": "community-data",
+      "command": "12 real public rows · 5 runners · 259 kills · 119223 score · 21628 damage · 0 visible synthetic · 28 service-visible synthetic checks"
+    },
+    {
+      "status": "yellow",
+      "type": "mobile-interaction",
+      "command": "Synthetic 390px native mode-select interaction 832ms; retained as a red SPARKED gate, not a FORGE functional/visual failure"
     }
   ],
   "blockers": [
@@ -266,7 +288,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-08-06",
+  "lastUpdated": "2026-08-08",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
@@ -274,28 +296,28 @@
   "ignisScore": 45706,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "silSession": 141,
-  "silScore": 999,
-  "silAvg3": 999,
-  "silVelocity": 6,
+  "silSession": 142,
+  "silScore": 998,
+  "silAvg3": 998.7,
+  "silVelocity": 7,
   "silDebt": "decreasing",
-  "silLastSession": "2026-08-05",
-  "currentSession": 141,
+  "silLastSession": "2026-08-07",
+  "currentSession": 142,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 1000,
-  "testsTotal": 1000,
+  "testsPassing": 1011,
+  "testsTotal": 1011,
   "entropyScore": 0.196,
   "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
   "silMax": 1000,
-  "silScoreLegacy500": 499.5,
+  "silScoreLegacy500": 499,
   "silCategoriesV3": {
-    "devHealth": 100,
+    "devHealth": 99,
     "creativeAlignment": 100,
     "momentum": 100,
-    "engagement": 99,
-    "processQuality": 100,
+    "engagement": 100,
+    "processQuality": 99,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 100,
@@ -314,15 +336,15 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-141-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-06T05:10:44.000Z",
+  "stagingUrl": "https://session-142-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-08T03:14:50.000Z",
   "sanitizationLastCleared": "2026-08-06T05:41:13.066Z",
   "sessionShellHygiene": {
-    "session": 141,
-    "started": 0,
-    "closed": 0,
+    "session": 142,
+    "started": 1,
+    "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-05T16:57:35.975Z",
+    "enumeratedAt": "2026-08-08T02:02:10.701Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
@@ -339,10 +361,10 @@
     "total": 170,
     "score": 80
   },
-  "lastSessionSummary": "Session 141 shipped three verified audit items plus three second-order safeguards, passed 1000/1000 tests and 969/969 rendered-pixel evidence, deployed and live-verified implementation tip 80a0891e922b, exhausted repo-local candidates, and retained an honest SPARKED NO-GO.",
-  "testsAssertionsPassing": 1000,
-  "testsAssertionsTotal": 1000,
-  "testsAssertionsFiles": 168,
+  "lastSessionSummary": "Session 142 shipped all seven verified stats/feedback/Zombies audit items, deployed production 8ff1b286, passed production 44/44 and staging 969/969 rendered checks, verified 12 real public rows with zero synthetic contamination, and retained an honest SPARKED NO-GO.",
+  "testsAssertionsPassing": 1011,
+  "testsAssertionsTotal": 1011,
+  "testsAssertionsFiles": 173,
   "testsFlaky": [],
   "testsInconclusive": [],
   "testsEnvBlocked": [],

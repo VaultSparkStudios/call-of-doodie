@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { compareLeaderboardEntries, getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
+import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -10,6 +11,7 @@ const MODE_TABS = [
   { key: "cursed",          label: "☠ CURSED",      color: "#CC00FF" },
   { key: "speedrun",        label: "🏃 SPEEDRUN",   color: "#00FF88" },
   { key: "gauntlet",        label: "🏋️ GAUNTLET",   color: "#AA44FF" },
+  { key: "zombies",         label: "🧟 ZOMBIES",    color: "#8DFF67" },
   { key: "__today__",       label: "🌅 TODAY",      color: "#00FF88" },
 ];
 
@@ -139,6 +141,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
     : activeMode === "cursed"          ? leaderboard.filter(e => e.mode === "cursed")
     : activeMode === "speedrun"        ? leaderboard.filter(e => e.mode === "speedrun")
     : activeMode === "gauntlet"        ? leaderboard.filter(e => e.mode === "gauntlet")
+    : activeMode === "zombies"         ? leaderboard.filter(e => e.mode === "zombies")
     : activeMode === "normal"          ? leaderboard.filter(e => !e.mode || e.mode === "normal")
     : leaderboard
   );
@@ -161,6 +164,8 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
 
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
         <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
+
+        <div style={{ marginBottom: 12 }}><SewerNetworkPanel compact /></div>
 
         {/* Search bar */}
         <div style={{ position: "relative", marginBottom: 10 }}>
@@ -361,6 +366,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       {e.mode === "cursed"    && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(204,0,255,0.18)", border: "1px solid rgba(204,0,255,0.5)", color: "#CC00FF", fontWeight: 900, flexShrink: 0 }}>☠CU</span>}
                       {e.mode === "speedrun"  && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(0,255,136,0.15)", border: "1px solid rgba(0,255,136,0.5)", color: "#00FF88", fontWeight: 900, flexShrink: 0 }}>🏃SR</span>}
                       {e.mode === "gauntlet"  && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(170,68,255,0.18)", border: "1px solid rgba(170,68,255,0.5)", color: "#AA44FF", fontWeight: 900, flexShrink: 0 }}>🏋GT</span>}
+                      {e.mode === "zombies"   && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(141,255,103,0.14)", border: "1px solid rgba(141,255,103,0.5)", color: "#8DFF67", fontWeight: 900, flexShrink: 0 }}>🧟Z</span>}
                       <span style={{ flexShrink: 0 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
                     </div>
                     {/* Bottom row: seed + today badge + prestige label */}
@@ -374,7 +380,9 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       {e.prestige > 0 && (
                         <span style={{ fontSize: 8, color: e.prestige >= 5 ? "#FF44FF" : e.prestige >= 3 ? "#FFD700" : "#888", fontWeight: 700, letterSpacing: 0.5 }}>Prestige {e.prestige}</span>
                       )}
+                      {e.feedbackDifficulty && <span style={{ fontSize: 8, color: e.feedbackDifficulty === "too_easy" ? "#7FE6FF" : e.feedbackDifficulty === "brutal" ? "#FF8C7A" : "#00FF88", fontWeight: 900 }}>{e.feedbackDifficulty === "too_easy" ? "🥱 TOO EASY" : e.feedbackDifficulty === "brutal" ? "💀 BRUTAL" : "🎯 DIALED IN"}</span>}
                     </div>
+                    {e.lastWords && e.lastWords !== "..." && <div style={{ marginTop: 3, color: "#9DA6AA", fontSize: 8, fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>“{e.lastWords}”</div>}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>

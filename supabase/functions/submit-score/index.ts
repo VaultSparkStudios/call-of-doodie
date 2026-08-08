@@ -1,7 +1,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
-const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "normal"]);
+const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "normal"]);
+const VALID_FEEDBACK = new Set(["too_easy", "dialed_in", "brutal"]);
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_INPUT_DEVICES = new Set(["mouse", "mobile", "controller", "generic", "xbox", "ps"]);
 const MAX_TRACE_BODY_BYTES = 10000;
@@ -261,6 +262,11 @@ function normalizeEntry(entry: Record<string, unknown>) {
     prestige: clampInt(entry.prestige, 0, 99, 0),
     mode,
     game_id: "cod",
+    feedback_difficulty: VALID_FEEDBACK.has(String(entry.feedbackDifficulty ?? "")) ? String(entry.feedbackDifficulty) : null,
+    total_shots: clampInt(entry.totalShots, 0, 10000000, 0),
+    total_hits: clampInt(entry.totalHits, 0, 10000000, 0),
+    boss_kills: clampInt(entry.bossKills, 0, 100000, 0),
+    total_crits: clampInt(entry.totalCrits, 0, 1000000, 0),
   };
 }
 
@@ -511,7 +517,13 @@ Deno.serve(async (req) => {
     }
 
     const supporter = Boolean(claim?.supporter);
-    const row = { ...payload, supporter, ts: Date.now() };
+    const isSynthetic = payload.name.startsWith("hc-")
+      && payload.seed === 424242
+      && payload.lastWords === "health-check clear"
+      && payload.score === 1875
+      && payload.kills === 24
+      && payload.wave === 5;
+    const row = { ...payload, supporter, is_synthetic: isSynthetic, source_run_token: runToken, ts: Date.now() };
 
     const { data: consumeRows, error: consumeError } = await serviceClient
       .from("run_tokens")
@@ -529,6 +541,31 @@ Deno.serve(async (req) => {
 
     const { error: insertError } = await serviceClient.from("leaderboard").insert([row]);
     if (insertError) throw insertError;
+
+    await serviceClient.from("game_run_facts").upsert([{
+      run_key: runToken,
+      player_key: uid,
+      user_id: user?.id ?? null,
+      game_id: "cod",
+      callsign: row.name,
+      mode: row.mode || "standard",
+      difficulty: row.difficulty,
+      seed: row.seed,
+      score: row.score,
+      kills: row.kills,
+      wave: row.wave,
+      duration_s: parseRunTime(row.time),
+      total_damage: row.totalDamage,
+      total_shots: row.total_shots,
+      total_hits: row.total_hits,
+      total_crits: row.total_crits,
+      boss_kills: row.boss_kills,
+      feedback_difficulty: row.feedback_difficulty,
+      last_words: row.lastWords,
+      practice: false,
+      is_synthetic: isSynthetic,
+      received_at: new Date().toISOString(),
+    }], { onConflict: "run_key" });
 
     const { data: member } = uid ? await serviceClient
       .from("vault_members")

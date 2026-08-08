@@ -967,3 +967,35 @@ Rationale: Centralizing arbitration makes mixed-input behavior directly testable
 Decision: A cost-neutral, footer-complete, engineering-ready build may deploy to the existing production surface while lifecycle status remains FORGE/public-unlaunched and SPARKED remains NO-GO.
 
 Rationale: Deployment freshness and public-launch authority are separate courts. Missing project-scoped telemetry, physical and email evidence, participant/publication evidence, subjective visual review, and explicit SPARKED approval cannot be inferred from a green engineering pipeline.
+
+## 2026-08-07 — Session 142 — Community statistics separate authority and coverage
+
+Decision: Verified completed-run facts are authoritative for rich community totals; legacy public leaderboard rows contribute only fields they actually contain; device career data is labeled THIS DEVICE; exact health automation remains operator-visible but is excluded from public reads and aggregates.
+
+Rationale: “All past data” is valuable only when missing historical fields are not reverse-engineered into fiction. One typed aggregate contract can combine supported history while preserving provenance, privacy, idempotency, and synthetic isolation.
+
+## 2026-08-07 — Session 142 — Difficulty feedback recommends; it never silently retunes
+
+Decision: Structured player Field Reports and observed performance may produce a reason-coded harder/easier next-run recommendation, including Zombies, but a player action is required before mode or difficulty changes. Arbitrary Last Words never substitute for structured sentiment.
+
+Rationale: The verified EASY WORLD signal is useful evidence, not a representative balance sample. Consent-driven escalation respects skilled players without making the new-player default harder from a sparse contaminated corpus.
+
+## 2026-08-07 — Session 142 — Zombies is a seeded separated mode on the existing trust spine
+
+Decision: Sewer Zombies reuses deterministic spawning, run claims, replay evidence, and the current leaderboard backend while owning distinct outbreak tiers, horde pacing, undead presentation, and mode identity. It adds no separate realtime server, paid service, or account requirement.
+
+Rationale: The horde fantasy is mechanically and thematically distinct enough to deepen replayability, while reuse of the proven guest-first trust spine keeps costs, fairness, and operational complexity bounded.
+
+## 2026-08-07 — Session 142 — Responsive configuration follows actual input capability
+
+Decision: Mobile detection uses viewport width plus the coarse-pointer media query, never mere `ontouchstart` property presence. Mobile mode/difficulty controls remain always ready in-flow; desktop uses the richer native popover.
+
+Rationale: Hosted Chromium proved property existence can misclassify desktop browsers. Capability-aware rendering protects touch laptops, mobile interaction clarity, desktop feature depth, and deterministic visual verification.
+
+## 2026-08-07 — Session 142 — Public statistics have a dated canonical twin
+
+Decision: Keep the Command Deck Sewer Network as the live player surface, and publish `/stats/` plus `/stats-surface.json` as a dated, precomputed, aggregate-only release snapshot with plain-language interpretation and explicit exclusions.
+
+Rationale: Live game telemetry answers “what is happening now,” while a stable canonical page gives humans and agents a citable scope/freshness contract. CANON-054 is satisfied without turning an unbounded per-visitor query into a cost surface or presenting stale data as current.
+
+CANON-010 gap justification: the live checker reports one Studio-OS-owned `claude:arc` reference to missing §0; Session 142 changed no skills, hooks, or Model Context Protocol registration, so this public-game repo records and routes the external parity drift rather than manufacturing a local fix.

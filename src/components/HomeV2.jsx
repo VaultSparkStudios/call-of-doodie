@@ -31,6 +31,7 @@ import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
 import { isPlaytestMode, loadPlaytestPulse, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 import { buildFirstRunsJourney } from "../utils/firstRunsJourney.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
+import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
 import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -59,9 +60,11 @@ const MODE_DEFS = [
   { id: "boss_rush",       label: "BOSS RUSH",     emoji: "☠",  color: "#FF3333", blurb: "Every wave is a boss" },
   { id: "speedrun",        label: "SPEEDRUN",      emoji: "⏱",  color: "#00FF80", blurb: "Race the clock · live timer" },
   { id: "gauntlet",        label: "GAUNTLET",      emoji: "🏆", color: "#FFC800", blurb: "Weekly fixed opening kit · no shop" },
+  { id: "zombies",         label: "SEWER ZOMBIES", emoji: "🧟", color: "#8DFF67", blurb: "Escalating hordes · surge every 3 waves" },
 ];
 
-function currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode }) {
+function currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode }) {
+  if (zombiesMode) return "zombies";
   if (bossRushMode) return "boss_rush";
   if (cursedRunMode) return "cursed";
   if (scoreAttackMode) return "score_attack";
@@ -84,6 +87,7 @@ export default function HomeV2(props) {
     bossRushMode, onSetBossRushMode,
     speedrunMode, onSetSpeedrunMode,
     gauntletMode, onSetGauntletMode,
+    zombiesMode, onSetZombiesMode,
     assistAvailable, onApplyAssist,
     onInstallApp,
     onReplayTraining,
@@ -92,7 +96,7 @@ export default function HomeV2(props) {
     onSelectPrimaryWeapon = () => {},
   } = props;
 
-  const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode });
+  const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode });
   const selectedMode = MODE_DEFS.find(m => m.id === modeId) || MODE_DEFS[0];
   const selectedLoadout = STARTER_LOADOUTS.find(l => l.id === starterLoadout) || STARTER_LOADOUTS[0];
   const selectedDiff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
@@ -107,7 +111,32 @@ export default function HomeV2(props) {
   const [customSeed, setCustomSeed] = useState("");
   const [challengeMode, setChallengeMode] = useState(null);
   const [tab, setTab] = useState("progress");
-  const [deployOpen, setDeployOpen] = useState(false);
+  const deployDetailsRef = useRef(null);
+  const deployToggleRef = useRef(null);
+  const setDeployPanelOpen = useCallback((open) => {
+    const panel = deployDetailsRef.current;
+    if (panel) {
+      const expanded = Boolean(open);
+      if (panel.dataset.alwaysOpen === "true") {
+        if (expanded) panel.querySelector("select")?.focus();
+        deployToggleRef.current?.setAttribute("aria-expanded", "true");
+        return;
+      }
+      const nativePopover = panel.hasAttribute("popover") && panel.showPopover;
+      const isOpen = nativePopover ? panel.matches(":popover-open") : panel.dataset.open === "true";
+      if (nativePopover) {
+        if (expanded && !isOpen) panel.showPopover();
+        else if (!expanded && isOpen) panel.hidePopover();
+      } else {
+        panel.dataset.open = String(expanded);
+        panel.setAttribute("aria-hidden", String(!expanded));
+        panel.inert = !expanded;
+        panel.style.opacity = expanded ? "1" : "0.001";
+        panel.style.pointerEvents = expanded ? "auto" : "none";
+      }
+    }
+    deployToggleRef.current?.setAttribute("aria-expanded", String(Boolean(open)));
+  }, []);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -192,7 +221,7 @@ export default function HomeV2(props) {
       setStarterLoadout?.(scenario.loadout);
       selectMode(scenario.mode);
       setChallengeMode(scenario.targetScore ? { seed: String(scenario.seed), diff: scenario.difficulty, vs: scenario.targetScore, vsName: scenario.rival } : null);
-      setDeployOpen(true);
+      setDeployPanelOpen(true);
       setScenarioNotice("Scenario Cartridge verified and loaded.");
     }
     const urlReplay = params.get("replay");
@@ -203,7 +232,7 @@ export default function HomeV2(props) {
         setDifficulty(r.difficulty);
         setStarterLoadout?.(r.starterLoadout);
         selectMode(r.mode);
-        setDeployOpen(true);
+        setDeployPanelOpen(true);
       }
     } else {
       const urlSeed = params.get("seed");
@@ -333,16 +362,17 @@ export default function HomeV2(props) {
 
   const selectMode = useCallback((id) => {
     const setters = {
-      standard:        () => { onSetScoreAttackMode?.(false); onSetDailyChallengeMode?.(false); onSetCursedRunMode?.(false); onSetBossRushMode?.(false); onSetSpeedrunMode?.(false); onSetGauntletMode?.(false); },
+      standard:        () => { onSetScoreAttackMode?.(false); onSetDailyChallengeMode?.(false); onSetCursedRunMode?.(false); onSetBossRushMode?.(false); onSetSpeedrunMode?.(false); onSetGauntletMode?.(false); onSetZombiesMode?.(false); },
       score_attack:    () => onSetScoreAttackMode?.(true),
       daily_challenge: () => onSetDailyChallengeMode?.(true),
       cursed:          () => onSetCursedRunMode?.(true),
       boss_rush:       () => onSetBossRushMode?.(true),
       speedrun:        () => onSetSpeedrunMode?.(true),
       gauntlet:        () => onSetGauntletMode?.(true),
+      zombies:         () => onSetZombiesMode?.(true),
     };
     (setters[id] || setters.standard)();
-  }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode]);
+  }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode, onSetZombiesMode]);
 
   const deploy = useCallback(() => {
     const seed = dailyChallengeMode ? todaySeedStr : (customSeed || undefined);
@@ -506,9 +536,11 @@ export default function HomeV2(props) {
     cursor: "pointer", letterSpacing: 1, minWidth: 150, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3,
   };
   const dropdownPanel = {
-    position: "relative", margin: "6px auto 0", maxWidth: 540,
+    position: "fixed", inset: "auto", top: "50%", left: "50%", width: "min(540px, calc(100vw - 32px))",
+    transform: "translate(-50%, -50%)", maxHeight: "min(78dvh, 720px)", overflowY: "auto", margin: 0,
     background: themePalette.panelStrong, border: "1px solid rgba(255,107,53,0.42)",
-    borderRadius: 10, padding: 12, boxShadow: `0 12px 36px ${themePalette.shadow}`,
+    borderRadius: 10, padding: 12, boxShadow: `0 12px 36px ${themePalette.shadow}`, zIndex: 40,
+    contain: "layout paint style",
   };
   const modeGrid = { display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 6 };
   const modeCell = (active, color) => ({
@@ -668,19 +700,21 @@ export default function HomeV2(props) {
           >
             ▶ DEPLOY
           </button>
-          <button
-            onClick={() => setDeployOpen(o => !o)}
+          {!isMobile && <button
+            ref={deployToggleRef}
+            popoverTarget="deploy-config-panel"
             aria-label="Change mode or difficulty"
-            aria-expanded={deployOpen}
+            aria-expanded="false"
+            aria-controls="deploy-config-panel"
             style={deployDropdownBtn}
           >
             <span style={{ fontSize: 11, color: selectedMode.color, letterSpacing: 1 }}>
               {selectedMode.emoji} {selectedMode.label}
             </span>
             <span style={{ fontSize: 10, color: selectedDiff.color }}>
-              {selectedDiff.emoji} {selectedDiff.label} {deployOpen ? "▴" : "▾"}
+              {selectedDiff.emoji} {selectedDiff.label} ▾
             </span>
-          </button>
+          </button>}
         </div>
 
         <div data-testid="visual-pack-selector" aria-label="Character visual pack" style={{ marginTop: 8, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexWrap: "wrap" }}>
@@ -700,8 +734,50 @@ export default function HomeV2(props) {
         </div>
 
         {/* Deploy dropdown */}
-        {deployOpen && (
-          <div style={dropdownPanel}>
+        <div style={isMobile ? { position: "relative", zIndex: 4, marginTop: 8 } : { position: "relative", height: 0, zIndex: 40 }}>
+          <div
+            ref={deployDetailsRef}
+            id="deploy-config-panel"
+            popover={isMobile ? undefined : "auto"}
+            data-open={isMobile ? "true" : "false"}
+            data-always-open={isMobile ? "true" : undefined}
+            onToggle={(event) => deployToggleRef.current?.setAttribute("aria-expanded", String(event.currentTarget.matches(":popover-open")))}
+            style={{
+              ...dropdownPanel,
+              ...(isMobile ? {
+                position: "static", inset: "auto", transform: "none", width: "auto", maxHeight: "none",
+                overflow: "visible", margin: 0, boxShadow: "none",
+              } : {}),
+            }}
+          >
+            {isMobile && (
+              <div style={{ display: "grid", gap: 12, minWidth: "min(310px, calc(100vw - 58px))" }}>
+                <strong style={{ color: "#FFB36B", fontSize: 11, letterSpacing: 1.8 }}>QUICK DEPLOY CONFIG</strong>
+                <label style={{ display: "grid", gap: 5, color: "#AAA", fontSize: 10, letterSpacing: 1.2 }}>
+                  MODE
+                  <select
+                    aria-label="Mobile game mode"
+                    value={modeId}
+                    onChange={(event) => selectMode(event.target.value)}
+                    style={{ padding: "10px 9px", borderRadius: 7, color: "#FFF", background: "#17191D", border: "1px solid rgba(255,179,107,0.45)", font: "inherit" }}
+                  >
+                    {MODE_DEFS.map((mode) => <option key={mode.id} value={mode.id}>{mode.emoji} {mode.label}</option>)}
+                  </select>
+                </label>
+                <label style={{ display: "grid", gap: 5, color: "#AAA", fontSize: 10, letterSpacing: 1.2 }}>
+                  DIFFICULTY
+                  <select
+                    aria-label="Mobile difficulty"
+                    value={difficulty}
+                    onChange={(event) => setDifficulty(event.target.value)}
+                    style={{ padding: "10px 9px", borderRadius: 7, color: "#FFF", background: "#17191D", border: "1px solid rgba(255,179,107,0.45)", font: "inherit" }}
+                  >
+                    {Object.entries(DIFFICULTIES).map(([key, item]) => <option key={key} value={key}>{item.emoji} {item.label}</option>)}
+                  </select>
+                </label>
+              </div>
+            )}
+            {!isMobile && <>
             <div style={{ fontSize: 10, color: "#888", letterSpacing: 2, marginBottom: 6 }}>MODE</div>
             <div style={modeGrid}>
               {MODE_DEFS.map(m => (
@@ -735,6 +811,8 @@ export default function HomeV2(props) {
               <span style={{ fontSize: 10, color: "#666", marginLeft: "auto" }}>Loadout: <strong style={{ color: selectedLoadout.color }}>{selectedLoadout.emoji} {selectedLoadout.name}</strong></span>
             </div>
             {/* Replay code share + paste */}
+            <details style={{ marginTop: 9, paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <summary style={{ cursor: "pointer", color: "#7FE6FF", fontSize: 10, fontWeight: 900, letterSpacing: 1.2 }}>ADVANCED RUN CODES &amp; RELAYS</summary>
             <div style={{ marginTop: 10, display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <label style={{ fontSize: 10, color: "#888", letterSpacing: 1 }}>REPLAY</label>
               <input
@@ -796,10 +874,16 @@ export default function HomeV2(props) {
               </div>
               {scenarioNotice && <div role="status" style={{ color: scenarioNotice.includes("rejected") ? "#FF9C88" : "#9BFFBD", fontSize: 9 }}>{scenarioNotice}</div>}
             </div>
+            </details>
+            </>}
           </div>
-        )}
+        </div>
 
         <PrimaryWeaponSelector selectedIndex={primaryWeaponIndex} onSelect={onSelectPrimaryWeapon} />
+
+        <div style={{ marginTop: 14 }}>
+          <SewerNetworkPanel career={career} runHistory={runHistory} compact />
+        </div>
 
         <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>OPERATIONS</div>
         {/* Quick actions are grouped by player intent instead of mixing play,
@@ -813,7 +897,7 @@ export default function HomeV2(props) {
           }}>
             📅 {dailyAlreadyPlayed ? "DAILY (REPLAY)" : `DAILY #${todaySeedStr}`}
           </button>
-          <button style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => {
+          <button aria-label="Launch weekly Gauntlet" style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => {
             const studioEvent = recordFrontDoorAction("gauntlet_focus", { source: "quick_chip" });
             track("front_door_action", { actionId: "gauntlet_focus", surface: "home_v2", mode: "gauntlet", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
             onSetGauntletMode?.(true);
@@ -890,7 +974,7 @@ export default function HomeV2(props) {
               onClick={() => {
                 writePreference("cod-debug-input", "1", "local", "home");
                 recordFrontDoorAction("open_input_diagnostics", { source: "quick_chip" });
-                setDeployOpen(true);
+                setDeployPanelOpen(true);
               }}
             >
               DEBUG INPUT
@@ -1150,7 +1234,7 @@ export default function HomeV2(props) {
             writePreference("cod-debug-input", "1", "local", "home");
             recordFrontDoorAction("aim_check_diagnostics", { source: "aim_check_panel" });
             setShowAimCheck(false);
-            setDeployOpen(true);
+            setDeployPanelOpen(true);
           }}
           onClose={() => setShowAimCheck(false)}
         />

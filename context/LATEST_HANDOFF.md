@@ -1,3 +1,39 @@
+# Latest Handoff — Session 142
+
+Session Intent: Run `/start`, audit actual full-game and user-base statistics, implement the complete live stats/feedback/difficulty/Zombies plan, deploy it to production, then perform canonical full closeout.
+
+## Impact Summary (Session 142)
+
+**Headline.** Call of Doodie now turns every verified run into a truthful live Sewer Network, closes difficulty feedback into the next play decision, and adds a distinct seeded Zombies horde fantasy without compromising guest-first trust.
+
+**Impact.**
+- Added idempotent run facts and one aggregate-only public community contract while labeling legacy coverage and keeping browser career data explicitly device-local.
+- Isolated 28 health-check submissions from public rankings and aggregates without deleting operator evidence.
+- Added the shared YOU / COMMUNITY / LIVE Sewer Network terminal to Home, leaderboard, and post-game surfaces.
+- Added a navigable `/stats/` release snapshot and `/stats-surface.json` machine twin with six analyzed, dated, aggregate-only metrics; the live terminal links to it directly.
+- Added structured Field Reports, visible Last Words, community sentiment counts, and opt-in threat recommendations that never silently retune the default game.
+- Shipped full Sewer Zombies routing with seeded outbreak tiers, dense surge pacing, four undead variants, leaderboard/history separation, and debrief/public-contract language.
+- Completed personal accuracy/playtime/combat/history tracking and corrected desktop/mobile device detection discovered by immutable hosted verification.
+- Deployed the verified FORGE build to production while preserving an evidence-backed SPARKED NO-GO.
+
+## Evidence
+
+- Production: `https://callofdoodie.wtf/`; immutable deployment `https://8ff1b286.call-of-doodie.pages.dev/`; rollback `https://5d49fd44.call-of-doodie.pages.dev/`.
+- Live community receipt: 12 real public runs, five runners, 259 kills, 119,223 score, 21,628 damage, zero visible synthetic rows, 28 service-visible synthetic checks.
+- Production courts: live shell/edge/manifest/service-worker/Open Graph 7/7, cutover 5/5, replay trust 3/3, focused gameplay visuals 44/44.
+- Final staging courts: 20 routes × two themes × 390/768/1440 widths at 1,020/1,020; focused state matrix 60/60; 16 current captures hash-bound and CANON-053 green at `https://23d4ae98.call-of-doodie.pages.dev/`.
+- Performance: three Lighthouse 13.4.1 samples per surface; default median performance 1.00, Largest Contentful Paint 1,263ms, Cumulative Layout Shift 0, Total Blocking Time 11.5ms.
+- Code courts: strict lint, production build, schema/architecture/storage/task/runtime gates, public contract 27/27, direct offline security gate 10/10.
+- Final full Vitest corpus passes 1,011/1,011 across 173 files; the earlier operator-smoke timeout is closed by a bounded 90-second host-load allowance with assertions unchanged.
+
+## Where We Left Off
+
+- Product: live stats, canonical human/machine stats pages, Field Reports, Last Words, threat recommendations, career completeness, synthetic isolation, and Sewer Zombies are implemented; the exact-main deploy still needs post-push verification.
+- Data: all supported historical leaderboard data is included; unavailable legacy hours/shots/hits are not fabricated. New complete runs populate the richer fact contract idempotently.
+- Release: engineering FORGE deployment is green. SPARKED remains NO-GO because the synthetic 390px native-select interaction measured 832ms and external physical/email/participant/publication/provider/subjective-review gates remain open.
+- Architecture: App is 4,985/5,000 lines, game loop 1,762/1,775, 34 system boundaries, and two hook boundaries; headroom is narrow and future App work should extract before expanding.
+- Operations: Supabase migration and four Edge Functions are live; Cloudflare production and rollback URLs are recorded in `docs/RELEASE_PARITY.md`.
+
 # Latest Handoff — Session 141
 
 Session Intent: Run the complete full-profile Arc continuously through canonical `/start`, a fresh premise-verified game/product/public-release `/audit`, exhaustive `/implement` with second-order saturation, canonical `/closeout`, direct commit and push to `main`, full production deployment, and live verification without fabricating external outcomes.

@@ -31,8 +31,8 @@
 - Session 125 current truth: Sewer Night is the global fresh-visit default; runIntegrity owns recovered-fault competitive eligibility; transientLifecycle owns hot-array compaction; dependency-tree and visual-audit gates fail closed on process/default-theme truth.
 - Session 133 current truth: `pressure-arc-v2` owns bounded formation observations; `ghostRecorder` owns fixed-capacity chronological capture; boot preferences/ghost persistence cross fail-closed named storage adapters; architecture ceilings are repair triggers, never movable reporting targets.
 - Session 137 current truth: `open-arsenal-mastery-v2` separates immediate access from earned mastery; one continuation stack owns every return-run action; release/performance/visual receipts bind source truth and permit adverse evidence to keep a fallback alive.
+- Session 142 current truth: `game-run-facts-v1` and the Sewer Network terminal separate verified community facts, legacy coverage, device-local career truth, and synthetic health evidence; Field Reports remain player-observed, threat changes require consent, and Zombies is a seeded separated mode. See Codex `session-142.md`.
 - Treat `handoffs/LATEST_HANDOFF.md`, `HANDOFF.md`, and dated handoffs as history only
 - Use the docs in `plans/` for ongoing constraints and experiments
 - Preserve comedy-first tone while respecting the live deployed build
 - Use `docs/IMPROVEMENT_PLAN.md` when deciding whether a feature is polish, depth, trust, pacing, or architecture work
-

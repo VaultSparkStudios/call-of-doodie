@@ -5,7 +5,7 @@
 > Suggest: `node ../vaultspark-studio-ops/scripts/check-canon-adoption.mjs --project . --suggest` uses conformance evidence to pre-fill safe suggestions.
 > Mark each: **adopted** · **pending** · **review** · **exempt (reason)**. This file is maintained, not auto-trusted.
 
-Audience: public-unlaunched · Live ACTIVE canons: 52 · Pending review: 0
+Audience: public-unlaunched · Live ACTIVE canons: 54 · Pending review: 0
 
 | Canon | Title | Status | Evidence / note |
 |---|---|---|---|
@@ -61,4 +61,5 @@ Audience: public-unlaunched · Live ACTIVE canons: 52 · Pending review: 0
 | CANON-051 | Web Hardening: every public surface meets the edge-security  | adopted | Source-controlled CSP/HSTS/security headers, health Function, standard files, and npm audit gate pass. |
 | CANON-052 | Project Lifecycle Ladder: FORGE/SPARKED/VAULTED with sub-sta | adopted | PROJECT_STATUS and release receipts keep the project in FORGE until every SPARKED gate is evidenced. |
 | CANON-053 | Rendered-Pixel UI Discipline: look at the real interface whi | adopted | Hosted route/theme/viewport courts and hash-bound visual receipts are mandatory for UI changes; unavailable subjective viewing is not fabricated. |
-
+| CANON-054 | Public Stats Surface: every website reports and analyzes its | adopted | `/stats/` publishes a dated six-metric release snapshot with interpretations, scope, privacy-safe aggregates, and `/stats-surface.json`; the live Sewer Network remains the current in-game view. |
+| CANON-055 | Surface Follow-Through: every project change reaches the thi | adopted | Session 142 reaches Command Deck, leaderboard, debrief, Zombies gameplay, and the public stats route; 12 hash-bound gameplay captures and the hosted route court prove visible follow-through. |

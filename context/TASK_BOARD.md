@@ -16,6 +16,19 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S142** Truthful community statistics spine — idempotent run facts, aggregate-only reads, THIS DEVICE provenance, bounded live refresh, and production migration/function verification.
+- [x] [SIL:3] **DONE S142** Sewer Zombies — seeded outbreak escalation, horde/surge pacing, undead variants, isolated leaderboard/history identity, and complete runtime/public routing.
+- [x] [SIL:3] **DONE S142** Field Report loop — structured difficulty sentiment, visible Last Words, score/run-fact persistence, community aggregates, and evidence-ranked player-controlled threat recommendations.
+- [x] [SIL:3] **DONE S142** Sewer Network terminal — shared YOU / COMMUNITY / LIVE intelligence across Command Deck, leaderboard, and debrief with coverage and freshness states.
+- [x] [SIL:2] **DONE S142** Canonical public stats twin — navigable `/stats/`, dated six-metric analysis, machine-readable `/stats-surface.json`, agent discovery, and direct live-terminal navigation.
+- [x] [SIL:2] **DONE S142** Synthetic leaderboard isolation — exact health automation remains operator-visible but cannot contaminate public rows, rankings, or aggregate truth.
+- [x] [SIL:2] **DONE S142** Career-stat completeness — measured shots/hits/accuracy, criticals, bosses, mode, feedback, and 50-run bounded history with legacy-safe migration.
+- [x] [SIL:2] **DONE S142** Responsive release hardening — corrected coarse-pointer device detection, always-ready mobile mode/difficulty controls, native desktop popover, immutable-origin verification, and a bounded 90-second operator security-smoke allowance with assertions unchanged.
+- [x] [SIL:2] **DONE S142 production** Cost-neutral FORGE deployment `8ff1b286`, live community verification, 44/44 production gameplay states, 969/969 staging route matrix, and green shell/cutover/replay courts.
+- [x] [AUDIT WIN S142] Blanket Normal buffs, analytics-as-score authority, paid hosted balance coaching, and an account wall were rejected because the production corpus is sparse/contaminated or the proposal conflicts with guest-first, evidence-bound, cost-neutral play.
+
+**Runway exception:** all seven premise-verified audit items and verification-discovered responsive/release fixes are shipped. SPARKED remains gated by measured mobile interaction quality and real physical, email, participant, publication, scoped-provider, subjective-review, and founder evidence; no phantom green launch claim is created.
+
 - [x] [SIL:3] **DONE S141** Input arbitration kernel — one pure finite resolver preserves pointer, touch shoot-stick, controller, and aim-assist precedence with direct regression coverage.
 - [x] [SIL:3] **DONE S141** Canonical session reference — startup and summary validation share one leading-session parser, so nested recovery references cannot masquerade as the completed session.
 - [x] [SIL:3] **DONE S141** Current-state idempotence court — schema lint rejects repeated contiguous session blocks and the duplicated S140 block is removed.

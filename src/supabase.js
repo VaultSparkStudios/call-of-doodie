@@ -15,7 +15,7 @@ export function createSupabaseClientLoader({
     if (!pending) {
       pending = loadModule()
         .then(({ createClient }) => {
-          client = createClient(url, anonKey, { realtime: { enabled: false } });
+          client = createClient(url, anonKey, { realtime: { params: { eventsPerSecond: 2 } } });
           return client;
         })
         .catch((error) => {
