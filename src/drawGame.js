@@ -4,6 +4,7 @@ import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visu
 import { getRuntimeCharacterSprite, getRuntimeEnemySprite } from "./utils/visualAssetLibrary.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
+import { getOffscreenThreatArrows } from "./utils/offscreenIndicators.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -924,6 +925,23 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.strokeText(_nameStr, 0, r + 14); ctx.fillText(_nameStr, 0, r + 14);
     ctx.restore();
   }
+
+  // Off-screen threat direction arrows — legibility for enemies past the viewport edge
+  // (spawn bursts, Siege events, formation flanks). Suppressed during Fog of War.
+  const _offscreenArrows = getOffscreenThreatArrows(_enemiesDraw, W, H, { fogOfWar: Boolean(gs.fogOfWar) });
+  for (let _ai = 0; _ai < _offscreenArrows.length; _ai++) {
+    const arrow = _offscreenArrows[_ai];
+    ctx.save();
+    ctx.translate(arrow.x, arrow.y);
+    ctx.rotate(arrow.angle);
+    ctx.globalAlpha = arrow.alpha;
+    ctx.fillStyle = arrow.color;
+    ctx.beginPath();
+    ctx.moveTo(9, 0); ctx.lineTo(-6, -6); ctx.lineTo(-6, 6); ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
 
   // Railgun beams
   if (gs.beams && gs.beams.length > 0) {

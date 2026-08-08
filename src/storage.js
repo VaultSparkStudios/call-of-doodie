@@ -953,6 +953,36 @@ export function clearLockedCallsign() {
   try { removeProgression(CALLSIGN_KEY); } catch {}
 }
 
+// ===== DOCTRINE ARCHIVE =====
+// Permanent record of which build archetypes have ever reached "DOCTRINE FORGED"
+// status (src/utils/buildArchetypes.js doctrineForgeAt). Unlike the per-run
+// archetypeUnlocksRef in App.jsx, this persists across runs like achievements.
+const DOCTRINE_ARCHIVE_KEY = "cod-doctrine-archive-v1";
+
+export function loadDoctrineArchive() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(DOCTRINE_ARCHIVE_KEY) || "{}");
+    return raw && typeof raw === "object" ? raw : {};
+  } catch { return {}; }
+}
+
+export function isDoctrineForged(archetypeId, archive = null) {
+  const record = archive || loadDoctrineArchive();
+  return Boolean(record[archetypeId]);
+}
+
+export function recordDoctrineForge(archetypeId) {
+  if (!archetypeId) return loadDoctrineArchive();
+  try {
+    const archive = loadDoctrineArchive();
+    if (!archive[archetypeId]) {
+      archive[archetypeId] = { firstForgedAt: Date.now() };
+      persistProgression(DOCTRINE_ARCHIVE_KEY, JSON.stringify(archive));
+    }
+    return archive;
+  } catch { return loadDoctrineArchive(); }
+}
+
 // ===== RUN HISTORY =====
 const RUN_HISTORY_KEY = "cod-run-history-v1";
 

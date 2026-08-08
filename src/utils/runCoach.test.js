@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildRunCoach, buildWeaponDeathCoach } from "./runCoach.js";
+import { buildRunCoach, buildWeaponDeathCoach, buildDoctrineNearMissTip } from "./runCoach.js";
 
 describe("runCoach", () => {
   it("returns three non-empty lines for a default run", () => {
@@ -119,5 +119,37 @@ describe("buildWeaponDeathCoach", () => {
   it("returns null on empty inputs", () => {
     expect(buildWeaponDeathCoach([], [])).toBeNull();
     expect(buildWeaponDeathCoach(null, null)).toBeNull();
+  });
+});
+
+describe("buildDoctrineNearMissTip", () => {
+  it("returns null with no perks", () => {
+    expect(buildDoctrineNearMissTip([], {})).toBeNull();
+    expect(buildDoctrineNearMissTip(null, null)).toBeNull();
+  });
+
+  it("surfaces the nearest unforged doctrine when >=75% satisfied", () => {
+    // Vanguard: perkIds length 6, doctrineForgeAt 5 -> 4/5 = 0.8 >= 0.75, remaining 1
+    const perks = [{ id: "iron_gut" }, { id: "vampire" }, { id: "bloodlust" }, { id: "parkour_pro" }];
+    const tip = buildDoctrineNearMissTip(perks, {});
+    expect(tip).toContain("1 perk");
+    expect(tip).toContain("Wall of Flesh");
+  });
+
+  it("stays silent below the 75% threshold", () => {
+    // Only 2/5 toward Vanguard's doctrine forge.
+    const perks = [{ id: "iron_gut" }, { id: "vampire" }];
+    expect(buildDoctrineNearMissTip(perks, {})).toBeNull();
+  });
+
+  it("does not re-surface a doctrine already forged this career", () => {
+    const perks = [{ id: "iron_gut" }, { id: "vampire" }, { id: "bloodlust" }, { id: "parkour_pro" }, { id: "last_resort" }];
+    // 5/5 -> doctrineForged true for this run regardless of archive.
+    expect(buildDoctrineNearMissTip(perks, {})).toBeNull();
+  });
+
+  it("skips an archetype already in the permanent archive", () => {
+    const perks = [{ id: "iron_gut" }, { id: "vampire" }, { id: "bloodlust" }, { id: "parkour_pro" }];
+    expect(buildDoctrineNearMissTip(perks, { vanguard: { firstForgedAt: 1 } })).toBeNull();
   });
 });

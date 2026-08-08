@@ -258,6 +258,7 @@ export default function HomeV2(props) {
   const todaySeedStr = String(getDailyChallengeSeed());
   const dailyAlreadyPlayed = hasDailyChallengeSubmitted();
   const weeklyMutation = getWeeklyMutation();
+  const weeklyGauntletLaunch = useMemo(() => buildWeeklyGauntletLaunch(getWeeklyGauntlet()), []);
 
   const commandBrief = useMemo(
     () => buildCommandBrief({ mode: modeId, selectedLoadout, weeklyMutation }),
@@ -897,7 +898,7 @@ export default function HomeV2(props) {
           }}>
             📅 {dailyAlreadyPlayed ? "DAILY (REPLAY)" : `DAILY #${todaySeedStr}`}
           </button>
-          <button aria-label="Launch weekly Gauntlet" style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => {
+          <button aria-label="Launch weekly Gauntlet" title={weeklyGauntletLaunch.doctrineTagName ? `This week's contract: ${weeklyGauntletLaunch.doctrineTagName}` : undefined} style={{ ...quickBtn, borderColor: "rgba(255,200,0,0.4)", color: "#FFC800" }} onClick={() => {
             const studioEvent = recordFrontDoorAction("gauntlet_focus", { source: "quick_chip" });
             track("front_door_action", { actionId: "gauntlet_focus", surface: "home_v2", mode: "gauntlet", difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
             onSetGauntletMode?.(true);

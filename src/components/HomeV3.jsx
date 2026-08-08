@@ -17,6 +17,7 @@ import {
   loadStudioGameEvents,
 } from "../storage.js";
 import { isSupporter } from "../utils/supporter.js";
+import { buildWeeklyGauntletLaunch } from "../utils/gauntletLaunch.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { track } from "../utils/analytics.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
@@ -99,6 +100,7 @@ export default function HomeV3(props) {
   const accountLevel = getAccountLevel(career?.totalKills || 0);
   const todaySeed = String(getDailyChallengeSeed());
   const gauntlet = useMemo(() => getWeeklyGauntlet(), []);
+  const gauntletLaunch = useMemo(() => buildWeeklyGauntletLaunch(gauntlet), [gauntlet]);
   const firstRun = (career?.totalRuns || 0) === 0;
 
   useEffect(() => {
@@ -142,7 +144,7 @@ export default function HomeV3(props) {
 
   const primaryCards = [
     { id: "daily", icon: "◈", title: "Daily Challenge", detail: `Seed ${todaySeed}`, action: () => start({ mode: "daily_challenge", seed: todaySeed, actionId: "daily_challenge" }) },
-    { id: "gauntlet", icon: "◆", title: "Weekly Gauntlet", detail: gauntlet?.name || "Fixed weekly opening kit", action: () => start({ mode: "gauntlet", actionId: "weekly_gauntlet" }) },
+    { id: "gauntlet", icon: "◆", title: "Weekly Gauntlet", detail: gauntletLaunch.doctrineTagName ? `This week's contract: ${gauntletLaunch.doctrineTagName}` : (gauntlet?.theme?.label || "Fixed weekly opening kit"), action: () => start({ mode: "gauntlet", actionId: "weekly_gauntlet" }) },
     { id: "training", icon: "◎", title: "Training Run", detail: "Practice movement and aim", action: () => onReplayTraining?.() },
   ];
 

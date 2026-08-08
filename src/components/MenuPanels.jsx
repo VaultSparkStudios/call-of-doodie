@@ -3,7 +3,9 @@ import { WEAPONS, ENEMY_TYPES, STARTER_LOADOUTS, ACHIEVEMENTS, META_UPGRADES, NE
 import {
   loadCustomLoadouts, saveCustomLoadout, loadRunHistory, loadRivalryHistory, loadStudioGameEvents,
   saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, loadCareerStats, getAccountLevel, isMissionCompleted,
+  loadDoctrineArchive,
 } from "../storage.js";
+import { BUILD_ARCHETYPES } from "../utils/buildArchetypes.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { copyChallengeUrl } from "../utils/challengeLinks.js";
 import { buildArsenalMasteryContract } from "../utils/arsenalMastery.js";
@@ -773,6 +775,38 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
               );
             })}
           </div>
+        </div>
+
+        {/* Doctrine Archive */}
+        <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)" }}>
+          {(() => {
+            const archive = loadDoctrineArchive();
+            const forgedCount = BUILD_ARCHETYPES.filter(a => archive[a.id]).length;
+            return (
+              <>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#EEE", marginBottom: 8 }}>
+                  ⚔️ DOCTRINE ARCHIVE <span style={{ color: "#888", fontWeight: 400 }}>({forgedCount}/{BUILD_ARCHETYPES.length} forged)</span>
+                </div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {BUILD_ARCHETYPES.map(a => {
+                    const forged = Boolean(archive[a.id]);
+                    return (
+                      <div key={a.id}
+                        title={forged ? a.doctrineDesc : `Forge by fully committing to the ${a.name} lane (${a.doctrineForgeAt ?? a.unlockAt + 2} aligned perks).`}
+                        style={{ padding: "8px 14px", borderRadius: 8,
+                          background: forged ? `${a.color}22` : "rgba(255,255,255,0.02)",
+                          border: forged ? `1px solid ${a.color}` : "1px solid rgba(255,255,255,0.06)",
+                          fontFamily: "'Courier New',monospace", minWidth: 92 }}>
+                        <div style={{ fontSize: 20, marginBottom: 3, filter: forged ? "none" : "grayscale(1) opacity(0.35)" }}>{a.emoji}</div>
+                        <div style={{ fontSize: 9, color: forged ? a.color : "#555", fontWeight: 700 }}>{forged ? a.doctrineName : "???"}</div>
+                        <div style={{ fontSize: 8, color: "#777", marginTop: 1 }}>{a.name}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            );
+          })()}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>

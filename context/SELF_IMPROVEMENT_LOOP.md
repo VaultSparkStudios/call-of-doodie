@@ -2283,3 +2283,34 @@ Brainstorm:
 3. Asset upgrade court — test higher-expression enemy hit/death frames, environmental landmark decals, and weapon-impact silhouettes against the current readability baseline before adoption.
 
 **Committed to TASK_BOARD:** [SIL:1] require representative rich-run volume before global balance changes; [SIL:1] preserve the current two-theme mobile/desktop readability baseline for future visual-asset upgrades.
+
+## 2026-08-08 — Session 144 | Total: 998/1000 | Velocity: 5 | Debt: ↓
+
+SIL 998/1000: Recovery-verified Session 143's closeout was genuine (not cut off), then generated a fresh premise-verified audit against a mature (998/1000, 1022/1022-test) codebase and shipped all 7 items — a permanent Doctrine Archive, doctrine near-miss coaching, weekly Gauntlet doctrine tags, mobile haptic feedback, mobile touch handedness, off-screen threat direction arrows, and a stale-string fix. The first full-suite run caught a real hot-context staleness failure; it was root-fixed and reconfirmed, not masked.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | same | Strict lint 0 errors, production build passing, full suite grew to 1054/1054 across 179 files; a real staleness gate (hot-context referencing the prior audit sidecar) was caught and root-fixed via regeneration, then reconfirmed green rather than skipped. |
+| Creative Alignment | 100 | same | Doctrine Archive and near-miss coaching directly serve "Improvised doctrine" (SOUL.md); off-screen arrows directly serve "Readable chaos"; nothing prescribes one correct build. |
+| Momentum | 100 | same | Recovery-check, fresh audit, full 7-item implementation, and canonical closeout completed in one continuous mission with no founder pause required. |
+| Engagement | 99 | same | Six new player-facing systems (doctrine archive/coaching/tags, haptics, handedness, threat arrows) create real replay/accessibility value, but no participant outcome data exists yet — the game remains public-unlaunched. |
+| Process Quality | 99 | same | Every audit premise was grepped against live code before inclusion (one suspected regression was checked and disproven rather than assumed); the one real test failure this session was diagnosed to its root cause and fixed, not worked around. |
+| Cross-Repo Coherence | 100 | same | All work stayed inside this repo; no sibling repository file was edited. |
+| Security Posture | 100 | same | No new dependency, no secret touched; new localStorage key and settings field follow existing persistence patterns exactly. |
+| Ecosystem Integration | 100 | same | New systems reuse existing exports (getArchetypeProgress, getPerkArchetypeMatches, the rumble setting) instead of introducing parallel state or duplicate settings. |
+| Capital Efficiency | 100 | same | Every shipped item is local/deterministic — zero hosted inference, zero new paid service, zero variable per-user cost. |
+| Automation Coverage | 100 | same | 32 new tests across 5 new/modified test files cover every new pure function (haptics, touch handedness, offscreen geometry, doctrine archive, doctrine near-miss, gauntlet tagging); full suite and build both verified directly, not through a masked pipe. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.4 · sparkline `█████`.
+
+Top win: a fully computed, zero-cost doctrine-forge classifier that had been silently unused since it shipped is now a permanent completionist system, discovered purely by grepping live code for dead call sites.
+Top gap: the button-size/density half of the mobile-handedness audit item was descoped this session (handedness mirror only) — logged honestly as a future ladder rung rather than claimed complete.
+
+Intent outcome: Achieved — recovery check found no cut-off session, and all 7 fresh audit items shipped and verified in one continuous arc.
+
+Brainstorm:
+1. Doctrine Archive share card — once the collection has real usage data, add a shareable "N/M doctrines forged" card alongside the existing score share card.
+2. Mobile touch density control — the descoped half of this session's handedness item; implement button-size/touch-zone scaling once real mobile usage signals which sizes matter.
+3. Off-screen arrow ADS-zoom correction — recompute edge projection in true screen-space (post-transform) instead of world-space if the current cosmetic drift under aim-down-sights zoom ever becomes a real complaint.
+
+**Committed to TASK_BOARD:** [SIL:1] implement mobile touch button-size/density control as a follow-up to controlHandedness; [SIL:1] recompute off-screen threat arrow anchoring in screen-space if ADS-zoom drift is ever reported as a real issue.

@@ -77,4 +77,4 @@ Rationale: Content identity must survive Windows and Linux checkouts. Raw workin
 - `context/CURRENT_STATE.md` · 157,418 bytes · SHA-256 `0fdb8912e09a…`
 - `context/TASK_BOARD.md` · 108,230 bytes · SHA-256 `bad6513d53eb…`
 - `context/DECISIONS.md` · 99,255 bytes · SHA-256 `4419bcbc6775…`
-- `docs/AUDIT_2026-08-06.json` · 20,016 bytes · SHA-256 `cc7f56c7aef6…`
+- `docs/AUDIT_2026-08-08.json` · 15,256 bytes · SHA-256 `7a6dafefb397…`

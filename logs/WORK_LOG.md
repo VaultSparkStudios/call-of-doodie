@@ -1196,3 +1196,17 @@ Intent outcome: achieved — the requested statistics, analytics, feedback, diff
 - Exact-main Linux CI exposed a CRLF/LF-sensitive Hot Context fingerprint after the first closeout push; source normalization plus a cross-platform byte-identity test closes the root cause.
 
 Intent outcome: achieved. Community Stats is deployed, live, resilient, and inclusive of every recoverable server record; unrecoverable never-submitted history and absent rich historical fields remain explicitly unclaimed.
+
+## 2026-08-08 — Session 144 — Doctrine archive, mobile haptics/handedness, off-screen threat arrows
+
+- Ran the recovery-checked continuous arc: Phase 0 confirmed Session 143 had closed out cleanly (clean tree, synced remote, no write-back debt), then start → audit → implement → closeout ran as one mission.
+- Generated a fresh 7-item audit against live code (`docs/AUDIT_2026-08-08.json`/`.md`) after verifying the prior audit (2026-08-06) was 7/7 shipped; every candidate premise was grepped against source before inclusion, including disproving a suspected regression in `buildWeaponDeathCoach` (it was intact).
+- Shipped a permanent Doctrine Archive: `cod-doctrine-archive-v1` persistence in `storage.js`, hooked at the doctrine-forge milestone in App.jsx's perk-choice handler, and a collection grid in `MenuPanels.jsx`'s UpgradesPanel — closing the gap where the archetype/doctrine build-identity system computed forge state but never remembered it across runs.
+- Shipped a doctrine near-miss coaching line on DeathScreen (`buildDoctrineNearMissTip` in `runCoach.js`) that surfaces when a run ended >=75% toward an unforged doctrine — pure composition of the existing `getArchetypeProgress` classifier, zero new state.
+- Tagged the weekly Gauntlet's fixed opening kit with its nearest build archetype (`getPerkArchetypeMatches` in `gauntletLaunch.js`), surfaced on HomeV3's Gauntlet card and a HomeV2 tooltip; this also fixed a dead `gauntlet.name` field access in HomeV3 that had silently always fallen back to generic flavor text.
+- Shipped mobile haptic feedback (`src/utils/haptics.js`, `navigator.vibrate`, gated by the existing `rumble` setting) at hit/crit/kill/boss-phase-2/low-HP/achievement cues, and a `controlHandedness` setting + `resolveTouchStick` helper mirroring the touch move/aim stick assignment for left-handed play.
+- Shipped off-screen threat direction arrows (`src/utils/offscreenIndicators.js`, rendered in `drawGame.js`) for enemies currently outside the fixed-viewport arena, prioritized by boss/elite styling, fully suppressed during Fog of War.
+- Fixed a stale "Bestiary" player-facing loading-tip string in `src/constants.js` that had leaked past the Session 49 MOST WANTED rename.
+- Full validation: `npm test` 1054/1054 across 179 files, `npm run lint` 0 errors, `npm run build` passing. The first full-suite run caught a real staleness failure in `tests/hot-context.test.js` (hot context referenced the prior audit sidecar) — fixed by regenerating via `node scripts/render-hot-context.mjs`, then reconfirmed green.
+
+Intent outcome: achieved — all 7 audit items shipped and verified; no items deferred except the button-density half of the mobile-handedness item, explicitly descoped to a future ladder rung.

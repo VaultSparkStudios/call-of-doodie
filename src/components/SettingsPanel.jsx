@@ -16,7 +16,8 @@ const META = {
   screenShakeMult:     { label: "Screen Shake",            desc: "Camera shake intensity on hits & explosions",              tab: "Visual",   quick: true, type: "slider",  min: 0.0,  max: 2.0,  step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   reducedMotion:       { label: "Reduced Motion",           desc: "Disables screen shake, flashes & other intense effects",    tab: "Visual",   quick: true, type: "toggle" },
   autoReload:          { label: "Auto Reload on Empty",    desc: "Automatically reload when magazine hits zero",             tab: "Controls", quick: true, type: "toggle" },
-  rumble:              { label: "Controller Rumble",       desc: "Haptic vibration feedback when using a gamepad",           tab: "Controls", quick: true, type: "toggle" },
+  rumble:              { label: "Haptic Feedback",         desc: "Vibration on gamepad rumble or mobile touch — hits, kills, boss phase 2, low HP", tab: "Controls", quick: true, type: "toggle" },
+  controlHandedness:   { label: "Touch Control Side",       desc: "Which side of the screen moves vs. aims/shoots on touch devices", tab: "Controls", quick: true, type: "options", options: [{v:"right",l:"Move Left / Aim Right"},{v:"left",l:"Move Right / Aim Left"}] },
   // ── Advanced ─────────────────────────────────────────────────────────────
   enemySpawnMult:      { label: "Enemy Spawn Rate",       desc: "How frequently enemies appear each wave",                   tab: "Gameplay", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   enemyHealthMult:     { label: "Enemy Health",            desc: "Scales all enemy HP — lower = faster kills",               tab: "Gameplay", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },

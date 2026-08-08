@@ -1,3 +1,36 @@
+# Latest Handoff — Session 144
+
+Session Intent: Recover-check the prior session (confirmed Session 143 closed out cleanly, no cut-off), then run the complete continuous arc — fresh premise-verified audit, full implementation of all 7 items, and canonical closeout — surfacing genuine gaps in a mature (SIL 998/1000) codebase rather than re-litigating an already-shipped audit.
+
+## Impact Summary (Session 144)
+
+**Headline.** The doctrine build-identity system now remembers what players actually forge, mobile touch play gets the same tactile and directional signal desktop already has, and a fixed field of dead/leaking code (an unused progress classifier, a broken Gauntlet flavor-text field, a stale rename leak) is closed.
+
+**Impact.**
+- Doctrine Archive: `cod-doctrine-archive-v1` persists every forged build doctrine permanently (`storage.js`, `App.jsx`), with a collection grid in `MenuPanels.jsx` — closing a gap where `getArchetypeProgress`'s doctrine-forge milestone was fully computed but never remembered or shown.
+- Doctrine near-miss coaching: DeathScreen now tells a player when they ended a run one perk from an unforged doctrine (`buildDoctrineNearMissTip` in `runCoach.js`), pure composition of existing exports.
+- Weekly Gauntlet doctrine tag: the fixed opening kit is now labeled with its nearest archetype (`gauntletLaunch.js`), fixing a dead `gauntlet.name` field access in HomeV3 along the way.
+- Mobile haptic feedback: `navigator.vibrate` wired at hit/crit/kill/boss-phase-2/low-HP/achievement cues (`src/utils/haptics.js`), gated by the existing rumble setting.
+- Mobile handedness: `controlHandedness` setting mirrors the touch move/aim stick screen-half split for left-handed play.
+- Off-screen threat direction arrows: edge-of-viewport indicators for enemies outside the fixed arena (spawn bursts, Siege events, formations), suppressed during Fog of War.
+- Fixed a stale "Bestiary" player-facing string that leaked past the Session 49 MOST WANTED rename.
+
+## Evidence
+
+- Full `npm test`: 1054/1054 across 179 files (up from 1022/1022 at Session 143 start — 32 new tests across 5 new/modified test files).
+- `npm run lint`: 0 errors. `npm run build`: passing.
+- A real staleness failure surfaced in `tests/hot-context.test.js` on the first full-suite run (hot context referenced the prior audit sidecar); fixed via `node scripts/render-hot-context.mjs` and reconfirmed green on rerun — not masked, not skipped.
+- `docs/AUDIT_2026-08-08.json`/`.md`: 7/7 items complete, combined priority 150.2, every premise pre-verified against live source.
+
+## Where We Left Off
+
+- Product: Doctrine Archive, doctrine near-miss coaching, Gauntlet doctrine tags, mobile haptics, mobile handedness, and off-screen threat arrows are all live in the working tree pending this closeout's commit/push.
+- Descoped: the button-size/density half of the mobile-handedness audit item was not implemented this session (handedness mirror only) — logged as a future L3 ladder rung, not a silent drop.
+- Known cosmetic nuance: off-screen threat arrow anchoring inherits the ADS-zoom canvas transform, so arrow position may shift slightly from the true screen edge while aim-down-sights zoom is active. Not a correctness bug.
+- Release: engineering FORGE, deployed/public-unlaunched; SPARKED remains NO-GO under the existing external/physical/publication/founder gates (unchanged this session).
+
+---
+
 # Latest Handoff — Session 143
 
 Session Intent: Complete the founder follow-up by shipping only Community Stats as an always-live, failure-resilient, all-recoverable-history surface; deploy the data and web changes; then run canonical full closeout.

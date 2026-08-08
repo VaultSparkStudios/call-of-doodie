@@ -753,7 +753,7 @@ export const TIPS = [
   "Tip: The HOA President files complaints while attacking", "Tip: Nuke pickups are 5% drop rate. Good luck.",
   "Tip: Auto-aim is not cheating, it's accessibility", "Tip: Your mom says dinner's ready",
   "Tip: 15% crit chance = every bullet is a gamble", "Tip: The Conspiracy Bro knows what you did",
-  "Tip: Press 5 for grenade (the spicy option)", "Tip: Pause to read the Bestiary. Know your enemy.",
+  "Tip: Press 5 for grenade (the spicy option)", "Tip: Pause to read MOST WANTED. Know your enemy.",
   "Tip: Landlords are tanky AND ranged. Evict them fast.", "Tip: Crypto Bros zigzag like the market. HODL your aim.",
   "Tip: Kill milestones unlock bragging rights at 25/50/100+",
   "Tip: Level up to pick a perk. Choose wisely.", "Tip: Perks stack — grab the same one twice for double effect.",

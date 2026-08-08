@@ -31,6 +31,9 @@ import {
   loadCareerStats,
   saveCareerStats,
   updateCareerStats,
+  loadDoctrineArchive,
+  isDoctrineForged,
+  recordDoctrineForge,
 } from "./storage.js";
 
 // Formula: Math.floor(Math.sqrt(kills / 20)) + 1
@@ -184,6 +187,40 @@ describe("local Studio event and rivalry persistence", () => {
     expect(result.won).toBe(false);
     expect(result.delta).toBe(-2000);
     expect(loadRivalryHistory()[0].seed).toBe(123);
+  });
+});
+
+describe("doctrine archive persistence", () => {
+  it("starts empty and reports nothing forged", () => {
+    localStorage.clear();
+    expect(loadDoctrineArchive()).toEqual({});
+    expect(isDoctrineForged("vanguard")).toBe(false);
+  });
+
+  it("records a forged doctrine permanently and is idempotent", () => {
+    localStorage.clear();
+    const first = recordDoctrineForge("vanguard");
+    expect(first.vanguard.firstForgedAt).toBeGreaterThan(0);
+    expect(isDoctrineForged("vanguard")).toBe(true);
+
+    const firstForgedAt = first.vanguard.firstForgedAt;
+    const second = recordDoctrineForge("vanguard");
+    expect(second.vanguard.firstForgedAt).toBe(firstForgedAt);
+  });
+
+  it("tracks multiple archetypes independently", () => {
+    localStorage.clear();
+    recordDoctrineForge("vanguard");
+    recordDoctrineForge("tempo");
+    const archive = loadDoctrineArchive();
+    expect(Object.keys(archive).sort()).toEqual(["tempo", "vanguard"]);
+    expect(isDoctrineForged("gunslinger", archive)).toBe(false);
+  });
+
+  it("ignores an empty archetype id", () => {
+    localStorage.clear();
+    expect(recordDoctrineForge(null)).toEqual({});
+    expect(loadDoctrineArchive()).toEqual({});
   });
 });
 

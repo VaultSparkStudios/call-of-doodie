@@ -15,6 +15,32 @@
 import { getRecommendedMetaUpgrade } from "./metaClarity.js";
 import { WEAPONS, ENEMY_TYPES } from "../constants.js";
 import { buildRunBrain, mostFrequentKiller } from "./runBrain.js";
+import { getArchetypeProgress } from "./buildArchetypes.js";
+
+/**
+ * Surfaces a "you were one perk from forging a doctrine" line when the run's
+ * final build ended >=75% of the way toward an archetype's DOCTRINE FORGED
+ * milestone that the player has never permanently forged (per doctrineArchive).
+ * Pure composition of the already-shipped getArchetypeProgress classifier —
+ * no new state, zero cost.
+ */
+export function buildDoctrineNearMissTip(activePerks, doctrineArchive) {
+  const perks = Array.isArray(activePerks) ? activePerks : [];
+  const archive = doctrineArchive && typeof doctrineArchive === "object" ? doctrineArchive : {};
+  if (!perks.length) return null;
+  const progress = getArchetypeProgress(perks);
+  let best = null;
+  for (const archetype of progress) {
+    if (archetype.doctrineForged || archive[archetype.id]) continue;
+    const forgeAt = archetype.doctrineForgeAt ?? archetype.unlockAt + 2;
+    if (!forgeAt || archetype.count / forgeAt < 0.75) continue;
+    const remaining = forgeAt - archetype.count;
+    if (!best || remaining < best.remaining) best = { archetype, remaining };
+  }
+  if (!best) return null;
+  const { archetype, remaining } = best;
+  return `${remaining} perk${remaining === 1 ? "" : "s"} from ${archetype.emoji} ${archetype.doctrineName} — commit to the ${archetype.name} lane next run.`;
+}
 
 // Enemy-specific evasion tips keyed by ENEMY_TYPES index
 const ENEMY_EVASION_TIPS = {
@@ -217,10 +243,10 @@ export function buildWeaponDeathCoach(weaponKills, recentDeathsByEnemy) {
 }
 
 /**
- * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[] }} ctx
- * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, enemyLab: object|null, brain: object }}
+ * @param {{ career: object, meta: object, runSummary: object, runHistory: object[], studioEvents: object[], doctrineArchive: object|null }} ctx
+ * @returns {{ killedBy: string, tryNext: string, working: string, weaponTip: string|null, precisionTip: string|null, crossRunTip: string|null, doctrineNearMissTip: string|null, enemyLab: object|null, brain: object }}
  */
-export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [], chokeWaves = null } = {}) {
+export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHistory = [], studioEvents = [], chokeWaves = null, doctrineArchive = null } = {}) {
   const brain = buildRunBrain({
     career,
     runHistory,
@@ -254,6 +280,7 @@ export function buildRunCoach({ career = {}, meta = {}, runSummary = {}, runHist
     precisionTip: buildPrecisionTip(runSummary),
     crossRunTip,
     weaponDeathTip: buildWeaponDeathCoach(runSummary?.weaponKills, career?.recentDeathsByEnemy),
+    doctrineNearMissTip: buildDoctrineNearMissTip(runSummary?.activePerks, doctrineArchive),
     enemyLab: buildEnemyLab(career, runSummary),
     brain,
   };

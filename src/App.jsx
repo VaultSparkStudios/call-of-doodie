@@ -9,7 +9,7 @@ import {
   WAVE_CHALLENGE_MUTATIONS, WEAPON_MASTERY_LEVELS, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadEnemyAtlasesForTypes } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
@@ -46,7 +46,9 @@ import {
   getMusicBPM,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
-import { getDominantArchetype, getNewlyUnlockedArchetypes } from "./utils/buildArchetypes.js";
+import { getDominantArchetype, getNewlyUnlockedArchetypes, getArchetypeProgress } from "./utils/buildArchetypes.js";
+import { vibrate, setHapticsEnabled } from "./utils/haptics.js";
+import { resolveTouchStick } from "./utils/touchHandedness.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
 import { analyzeReplayCommandTrace, buildReplayProofReceipt, directionBucket, encodeReplayCommandTrace, recordReplayCommandEvent } from "./utils/replayCommandTrace.js";
@@ -368,6 +370,7 @@ export default function CallOfDoodie() {
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const synergyChargeCooldownRef = useRef(0);
   const archetypeUnlocksRef = useRef(new Set());
+  const doctrineForgedRunRef = useRef(new Set());
 
   // ── Sync refs to state ────────────────────────────────────────────────────
   useEffect(() => { currentWeaponRef.current = currentWeapon; }, [currentWeapon]);
@@ -389,7 +392,7 @@ export default function CallOfDoodie() {
   const dominantArchetype = getDominantArchetype(activePerks);
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
-  useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; }, [gameSettings.rumble]);
+  useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; setHapticsEnabled(gameSettings.rumble !== false); }, [gameSettings.rumble]);
   const hudFlagsMemo = useMemo(() => hudFlags(gameSettings.hudDensity || "standard"), [gameSettings.hudDensity]);
 
   // ── Gamepad connect/disconnect sounds ─────────────────────────────────────
@@ -510,6 +513,7 @@ export default function CallOfDoodie() {
         setAchievementsUnlocked(prev => [...prev, a.id]);
         setAchievementPopup(a);
         soundAchievement();
+        vibrate("achievement");
         setTimeout(() => setAchievementPopup(p => p?.id === a.id ? null : p), 3000);
       }
     });
@@ -1214,6 +1218,23 @@ export default function CallOfDoodie() {
       });
       setUnlockedArchetypes([...archetypeUnlocksRef.current]);
     }
+    const forgedProgress = getArchetypeProgress(nextActivePerks).filter(
+      archetype => archetype.doctrineForged && !doctrineForgedRunRef.current.has(archetype.id)
+    );
+    forgedProgress.forEach(archetype => {
+      doctrineForgedRunRef.current.add(archetype.id);
+      recordDoctrineForge(archetype.id);
+      track("doctrine_forged", {
+        archetype: archetype.id,
+        wave: _gs?.currentWave,
+        mode: _mode,
+        difficulty: difficultyRef.current,
+      });
+      if (gsRef.current) {
+        addText(gsRef.current, GW() / 2, GH() / 2 - 140, `⚔️ DOCTRINE FORGED: ${archetype.doctrineName}`, archetype.color, true);
+      }
+      soundLevelUp();
+    });
     setPerkPending(false);
     perkPendingRef.current = false;
     soundPerkSelect();
@@ -2014,6 +2035,7 @@ export default function CallOfDoodie() {
       } else if ((gs._deathSoundsThisFrame || 0) < 2) {
         gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
         soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count);
+        vibrate("kill");
       }
     }
 
@@ -2198,6 +2220,7 @@ export default function CallOfDoodie() {
     } catch { experimentMatchedRef.current = null; }
     setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false); setBossWaveBanner(false);
     archetypeUnlocksRef.current = new Set();
+    doctrineForgedRunRef.current = new Set();
     setUnlockedArchetypes([]);
     // Apply draft perk if one was chosen — defer so applyPerk runs after state resets
     const _draftPerk = gauntletLaunch ? PERKS[gauntletLaunch.startPerkIndex] : draftChosenRef.current;
@@ -2690,6 +2713,7 @@ export default function CallOfDoodie() {
       heartbeatCounterRef.current--;
       if (heartbeatCounterRef.current <= 0) {
         soundHeartbeatPulse();
+        vibrate("lowHealth");
         heartbeatCounterRef.current = 55;
       }
     }
@@ -3397,7 +3421,7 @@ export default function CallOfDoodie() {
             if (perkModsRef.current.critGrantsXp) addXp(10);
           }
           const _hn = performance.now();
-          if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); }
+          if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); vibrate(isCrit ? "crit" : "hit"); }
           addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
           addText(gs, e.x + (cosmeticRandom() - 0.5) * 20, e.y - e.size / 2 - cosmeticRandom() * 10,
@@ -3924,7 +3948,7 @@ export default function CallOfDoodie() {
         }
       }
       // ── Universal boss phase 2 at 50% HP ─────────────────────────────────
-      triggerBossPhaseTwoTransition({ enemy: e, gs, addText, addParticles, soundWaveClear });
+      if (triggerBossPhaseTwoTransition({ enemy: e, gs, addText, addParticles, soundWaveClear })) vibrate("bossPhase2");
       // ── Kamikaze (ti=12) ──
       if (e.typeIndex === 12 && dashRef.current.active <= 0) {
         const kd = Math.hypot(p.x - e.x, p.y - e.y);
@@ -4263,8 +4287,9 @@ export default function CallOfDoodie() {
       markInputActivity("touch");
       const rect = canvas.getBoundingClientRect(), midX = rect.left + rect.width / 2;
       for (const t of e.changedTouches) {
-        if (t.clientX < midX && !joystickRef.current.active) joystickRef.current = { active: true, startX: t.clientX, startY: t.clientY, dx: 0, dy: 0, id: t.identifier };
-        else if (t.clientX >= midX && !shootStickRef.current.active) shootStickRef.current = { active: true, startX: t.clientX, startY: t.clientY, dx: 0, dy: 0, id: t.identifier, shooting: false };
+        const wantsMove = resolveTouchStick(t.clientX, midX, gameSettings.controlHandedness) === "move";
+        if (wantsMove && !joystickRef.current.active) joystickRef.current = { active: true, startX: t.clientX, startY: t.clientY, dx: 0, dy: 0, id: t.identifier };
+        else if (!wantsMove && !shootStickRef.current.active) shootStickRef.current = { active: true, startX: t.clientX, startY: t.clientY, dx: 0, dy: 0, id: t.identifier, shooting: false };
       }
     };
     const tm = (e) => {
@@ -4291,7 +4316,7 @@ export default function CallOfDoodie() {
       canvas.removeEventListener("touchend", te); canvas.removeEventListener("touchcancel", te);
       releaseAllInputs("touch-listener-cleanup", ["touch"]);
     };
-  }, [markInputActivity, releaseAllInputs, screen]);
+  }, [markInputActivity, releaseAllInputs, screen, gameSettings.controlHandedness]);
 
   // ── Gamepad polling ───────────────────────────────────────────────────────
   useEffect(() => {

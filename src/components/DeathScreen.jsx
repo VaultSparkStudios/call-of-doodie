@@ -26,7 +26,7 @@ import { describeFormationPressure, describePressureArc } from "../systems/press
 import { describeDamageSequence } from "../systems/damageSequence.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestContinuation, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
-import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
+import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent, loadDoctrineArchive } from "../storage.js";
 import { FIELD_REPORTS } from "../utils/fieldReport.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
@@ -489,10 +489,11 @@ export default function DeathScreen({
   const runCoach = buildRunCoach({
     career: loadCareerStats(),
     meta: loadMetaProgress(),
-    runSummary: { wave, kills, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [], bestPrecisionStreak },
+    runSummary: { wave, kills, bestStreak, crits, topWeapon: _topWpn, weaponKills: weaponKills || [], bestPrecisionStreak, activePerks },
     runHistory,
     studioEvents,
     chokeWaves: communityChokeWaves,
+    doctrineArchive: loadDoctrineArchive(),
   });
   // Persist the next experiment so the followthrough loop can check it on the next run start
   if (runCoach?.brain?.nextExperiment) saveExperimentIntent(runCoach.brain.nextExperiment);
@@ -903,6 +904,11 @@ export default function DeathScreen({
           {runCoach.precisionTip && (
             <div style={{ fontSize: 11, color: "#FFD8FF", lineHeight: 1.45, marginTop: runCoach.weaponTip ? 4 : 0 }}>
               <span style={{ color: "#FF88FF", fontWeight: 700 }}>Precision:</span> {runCoach.precisionTip}
+            </div>
+          )}
+          {runCoach.doctrineNearMissTip && (
+            <div style={{ fontSize: 11, color: "#B0E0FF", lineHeight: 1.45, marginTop: 4 }}>
+              <span style={{ color: "#5EC8FF", fontWeight: 700 }}>Doctrine:</span> {runCoach.doctrineNearMissTip}
             </div>
           )}
           {runCoach.crossRunTip && (

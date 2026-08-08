@@ -18,6 +18,8 @@ export const SETTINGS_DEFAULTS = {
   rumble:              true,  // haptic vibration feedback
   controllerDeadZone:  0.2,   // analog stick dead zone (0.05–0.4)
   aimAssist:           false, // snap aim toward nearest enemy when using gamepad
+  // Touch settings
+  controlHandedness:  "right", // "right" (default: move-left/aim-right) | "left" (mirrored)
   // Accessibility
   reducedMotion:       false, // disable screen shake, flashes, trails (photosensitivity)
   // HUD density preset: "minimal" (HP/ammo/score only), "standard" (default), "tactical" (everything)
