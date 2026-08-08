@@ -1,26 +1,23 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-06 (Session 141 closeout) -->
+<!-- generated-at: 2026-08-08 (Session 142 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S141 ════════════════════╗
-║  Date: 2026-08-06  ·  SIL: 999/1000  ·  Velocity: 6 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S142 ════════════════════╗
+║  Date: 2026-08-08  ·  SIL: 998/1000  ·  Velocity: 7 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Architecture: App 4,959/5,000 lines, game loop 1,756/1,775,   ║
-║  ✓ Validation: exact-tree full suite is 1,000/1,000 across 169   ║
-║  ✓ Release: engineering production is deployed and live-verifie  ║
-║  ✓ Visual honesty: automated rendered-pixel evidence is green;   ║
+║  ✓ Product: live stats, canonical human/machine stats pages, Fi  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 999/1000 ═══════════════════════════════════════╗
-║    Dev Health         100  ██████████                            ║
+╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
+║    Dev Health         99   ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         99   ██████████                            ║
-║    Process Qual       100  ██████████                            ║
+║    Engagement         100  ██████████                            ║
+║    Process Qual       99   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
 ║    Ecosystem          100  ██████████                            ║
@@ -34,29 +31,29 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 12 files  ·  M:12 A:0 D:0 ?:0                          ║
+║  Changes: 1 files  ·  M:1 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-141-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-142-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        134/170                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1000/1000                                        ║
+║  Tests:         1011/1011                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         5d ago                                           ║
+║  IGNIS:         7d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
-║  shells:        0 started · 0 closed · 0 running                 ║
+║  Sanitization:  2d ago                                           ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
