@@ -1,22 +1,26 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-08 (Session 142 closeout) -->
+<!-- generated-at: 2026-08-08 (Session 143 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S142 ════════════════════╗
-║  Date: 2026-08-08  ·  SIL: 998/1000  ·  Velocity: 7 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S143 ════════════════════╗
+║  Date: 2026-08-08  ·  SIL: 998/1000  ·  Velocity: 5 decreasing   ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Product: live stats, canonical human/machine stats pages, Fi  ║
+║  ✓ Product: Community Stats is live on Command Deck, leaderboar  ║
+║  ✓ Data: every recoverable server record is included. Historica  ║
+║  ✓ Operations: the browser outbox preserves new completed runs   ║
+║  ✓ Release: the engineering FORGE update is deployed and verifi  ║
+║  ✓ Next: gather real rich-run volume and participant feedback b  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
-║    Dev Health         99   ██████████                            ║
+║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
 ║    Momentum           100  ██████████                            ║
-║    Engagement         100  ██████████                            ║
+║    Engagement         99   ██████████                            ║
 ║    Process Qual       99   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
@@ -37,22 +41,22 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 1 files  ·  M:1 A:0 D:0 ?:0                            ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-142-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-143-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        134/170                                          ║
+║  Doctor:        129/173                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1011/1011                                        ║
+║  Tests:         1022/1022                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         7d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  2d ago                                           ║
+║  Sanitization:  0d ago                                           ║
 ║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗

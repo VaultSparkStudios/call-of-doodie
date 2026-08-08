@@ -360,13 +360,13 @@
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-143-staging.call-of-doodie.pages.dev/",
   "testsLastRun": "2026-08-08T05:56:31.681Z",
-  "sanitizationLastCleared": "2026-08-06T05:41:13.066Z",
+  "sanitizationLastCleared": "2026-08-08T07:10:38.026Z",
   "sessionShellHygiene": {
-    "session": 142,
+    "session": 143,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-08T02:02:10.701Z",
+    "enumeratedAt": "2026-08-08T07:10:38.026Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
