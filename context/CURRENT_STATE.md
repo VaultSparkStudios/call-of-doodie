@@ -8,6 +8,7 @@
 - Production truth — Supabase migration `2026-08-08_community_stats_history_contract.sql`, the hardened `sync-game-run` Function, and Cloudflare deployment `e0b481c3` are live.
 - Data receipt — production reports 12 real runs, five runners, 259 enemies terminated, 119,223 score, 21,628 damage, 0 rich runs, 12 legacy runs, and 28 excluded synthetic probes; oldest supported record is March 12, 2026.
 - Validation truth — 1,022/1,022 tests across 176 files, strict lint/schema/build, npm audit zero, supply-chain incident matches zero, 16 hash-bound desktop/mobile theme captures, staging browser/API proof, and production shell 7/7 + cutover 5/5 + replay 3/3 pass.
+- Build-truth — exact-main Linux CI exposed CRLF/LF-sensitive Hot Context hashes; source text is now canonicalized before projection, with a byte-identical cross-platform regression court.
 - Release truth — the cost-neutral FORGE engineering update is deployed and verified. SPARKED remains NO-GO behind the existing physical, email, participant, publication, provider, interaction, subjective-review, and explicit lifecycle-approval gates.
 
 - Session 142 (2026-08-07) completed the founder-directed `/start -> /audit -> /implement -> deploy -> /closeout` arc for live full-game statistics, feedback intelligence, challenge depth, and Zombies.

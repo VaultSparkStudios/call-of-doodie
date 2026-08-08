@@ -1193,5 +1193,6 @@ Intent outcome: achieved — the requested statistics, analytics, feedback, diff
 - Release verification passed 1,022/1,022 tests across 176 files, strict lint/schema/build, 16 current rendered captures, security headers, npm audit zero, supply-chain incident scan zero, live 7/7, cutover 5/5, and replay trust 3/3.
 - The generic Studio responsive-audit script explicitly skipped because its adjacent-repo runtime could not resolve Playwright; the project-local 16-capture desktop/mobile two-theme court remains the applicable rendered proof and the skip is not counted as a pass.
 - Trust-reviewed and pinned patched transitive build dependencies `js-yaml@4.3.1` and `nanoid@3.3.17`; lifecycle scripts were disabled during installation and registry integrity/source/license/maintainer evidence was checked.
+- Exact-main Linux CI exposed a CRLF/LF-sensitive Hot Context fingerprint after the first closeout push; source normalization plus a cross-platform byte-identity test closes the root cause.
 
 Intent outcome: achieved. Community Stats is deployed, live, resilient, and inclusive of every recoverable server record; unrecoverable never-submitted history and absent rich historical fields remain explicitly unclaimed.

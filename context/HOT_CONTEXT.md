@@ -14,6 +14,7 @@
 - Production truth — Supabase migration `2026-08-08_community_stats_history_contract.sql`, the hardened `sync-game-run` Function, and Cloudflare deployment `e0b481c3` are live.
 - Data receipt — production reports 12 real runs, five runners, 259 enemies terminated, 119,223 score, 21,628 damage, 0 rich runs, 12 legacy runs, and 28 excluded synthetic probes; oldest supported record is March 12, 2026.
 - Validation truth — 1,022/1,022 tests across 176 files, strict lint/schema/build, npm audit zero, supply-chain incident matches zero, 16 hash-bound desktop/mobile theme captures, staging browser/API proof, and production shell 7/7 + cutover 5/5 + replay 3/3 pass.
+- Build-truth — exact-main Linux CI exposed CRLF/LF-sensitive Hot Context hashes; source text is now canonicalized before projection, with a byte-identical cross-platform regression court.
 - Release truth — the cost-neutral FORGE engineering update is deployed and verified. SPARKED remains NO-GO behind the existing physical, email, participant, publication, provider, interaction, subjective-review, and explicit lifecycle-approval gates.
 
 ## Open Work
@@ -44,15 +45,6 @@
 
 ## Recent Decisions
 
-## 2026-08-07 — Session 142 — Public statistics have a dated canonical twin
-
-Decision: Keep the Command Deck Sewer Network as the live player surface, and publish `/stats/` plus `/stats-surface.json` as a dated, precomputed, aggregate-only release snapshot with plain-language interpretation and explicit exclusions.
-
-Rationale: Live game telemetry answers “what is happening now,” while a stable canonical page gives humans and agents a citable scope/freshness contract. CANON-054 is satisfied without turning an unbounded per-visitor query into a cost surface or presenting stale data as current.
-
-CANON-010 gap justification: the live checker reports one Studio-OS-owned `claude:arc` reference to missing §0; Session 142 changed no skills, hooks, or Model Context Protocol registration, so this public-game repo records and routes the external parity drift rather than manufacturing a local fix.
-
-
 ## 2026-08-08 — Session 143 — Community Stats is the player-facing identity
 
 Decision: Use Community Stats for the shared player-facing and component identity. Keep Sewer only where it describes the authored world or mode, including Sewer Zombies and the sewer-night theme.
@@ -71,9 +63,18 @@ Rationale: “Always working” means honest degraded behavior, not an impossibl
 
 Decision: Aggregate every supported server record without an arbitrary time window, distinguish rich run facts from legacy leaderboard records, expose per-metric coverage, and mark never-submitted pre-telemetry runs as not measurable rather than estimating them.
 
+Rationale: Historical completeness is bounded by what was actually recorded. Explicit coverage lets players trust totals while allowing richer metrics to improve naturally as new idempotent run facts arrive.
+
+
+## 2026-08-08 — Session 143 — Generated evidence canonicalizes line endings
+
+Decision: Normalize CRLF and CR source text to LF before Hot Context parsing, byte counts, and hashes. Enforce byte-identical regeneration after an LF-to-CRLF rewrite in the regression court.
+
+Rationale: Content identity must survive Windows and Linux checkouts. Raw working-tree line endings are transport representation, not project truth, and cannot be allowed to make exact-main CI stale.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 157,228 bytes · SHA-256 `0b638691cad4…`
+- `context/CURRENT_STATE.md` · 157,418 bytes · SHA-256 `0fdb8912e09a…`
 - `context/TASK_BOARD.md` · 108,230 bytes · SHA-256 `bad6513d53eb…`
-- `context/DECISIONS.md` · 98,571 bytes · SHA-256 `2e96e24f589e…`
+- `context/DECISIONS.md` · 99,255 bytes · SHA-256 `4419bcbc6775…`
 - `docs/AUDIT_2026-08-06.json` · 20,016 bytes · SHA-256 `cc7f56c7aef6…`

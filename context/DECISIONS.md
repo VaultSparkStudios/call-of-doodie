@@ -1015,3 +1015,11 @@ Rationale: “Always working” means honest degraded behavior, not an impossibl
 ## 2026-08-08 — Session 143 — All past data means all recoverable server history
 
 Decision: Aggregate every supported server record without an arbitrary time window, distinguish rich run facts from legacy leaderboard records, expose per-metric coverage, and mark never-submitted pre-telemetry runs as not measurable rather than estimating them.
+
+Rationale: Historical completeness is bounded by what was actually recorded. Explicit coverage lets players trust totals while allowing richer metrics to improve naturally as new idempotent run facts arrive.
+
+## 2026-08-08 — Session 143 — Generated evidence canonicalizes line endings
+
+Decision: Normalize CRLF and CR source text to LF before Hot Context parsing, byte counts, and hashes. Enforce byte-identical regeneration after an LF-to-CRLF rewrite in the regression court.
+
+Rationale: Content identity must survive Windows and Linux checkouts. Raw working-tree line endings are transport representation, not project truth, and cannot be allowed to make exact-main CI stale.

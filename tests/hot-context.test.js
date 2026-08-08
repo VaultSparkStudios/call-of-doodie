@@ -55,10 +55,18 @@ describe("hot context contract", () => {
       }
       const check = spawnSync(process.execPath, [script, "--check"], { cwd: root, encoding: "utf8" });
       expect(check.status, check.stderr || check.stdout).toBe(0);
-      expect([
+      const afterMtimeChange = [
         fs.readFileSync(path.join(root, "context/HOT_CONTEXT.json"), "utf8"),
         fs.readFileSync(path.join(root, "context/HOT_CONTEXT.md"), "utf8"),
-      ]).toEqual(before);
+      ];
+      expect(afterMtimeChange).toEqual(before);
+
+      for (const [relative, value] of Object.entries(sources)) {
+        fs.writeFileSync(path.join(root, relative), value.replace(/\n/g, "\r\n"));
+      }
+      const crossPlatformCheck = spawnSync(process.execPath, [script, "--check"], { cwd: root, encoding: "utf8" });
+      expect(crossPlatformCheck.status, crossPlatformCheck.stderr || crossPlatformCheck.stdout).toBe(0);
+      expect(fs.readFileSync(path.join(root, "context/HOT_CONTEXT.json"), "utf8")).toBe(before[0]);
     } finally {
       fs.rmSync(root, { recursive: true, force: true });
     }

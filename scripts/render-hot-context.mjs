@@ -14,8 +14,10 @@ const sources = {
   audit: latestAudit ? path.relative(root, latestAudit.fullPath).replace(/\\/g, "/") : "",
 };
 
+function canonicalText(value) { return String(value || "").replace(/\r\n?/g, "\n"); }
+
 function read(relative) {
-  try { return fs.readFileSync(path.join(root, relative), "utf8"); } catch { return ""; }
+  try { return canonicalText(fs.readFileSync(path.join(root, relative), "utf8")); } catch { return ""; }
 }
 
 function hash(value) { return crypto.createHash("sha256").update(value).digest("hex"); }
