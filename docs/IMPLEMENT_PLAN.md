@@ -2,7 +2,7 @@
 
 Source: `docs/AUDIT_2026-08-06.json`
 
-Status: **COMPLETE** — all seven promoted audit items shipped; production migration/functions and synthetic isolation verified; 1,011/1,011 tests and the 44/44 rendered-state matrix pass.
+Status: **COMPLETE** — all seven promoted audit items plus the founder-requested Community Stats reliability addendum shipped; production data/function/site deployment verified; 1,022/1,022 tests and the current 16-capture two-theme desktop/mobile matrix pass.
 
 ## Outcome
 
@@ -24,7 +24,7 @@ Turn every completed run into durable, trustworthy game intelligence; expose per
 
 ### Phase 3 — Player-facing intelligence
 
-7. **Sewer Network terminal** — ship responsive `YOU / COMMUNITY / LIVE` statistics on both Command Deck variants with freshness, provenance, empty/offline states, and polling plus Realtime-assisted refresh.
+7. **Community Stats terminal** — ship responsive `YOU / COMMUNITY / LIVE` statistics on both Command Deck variants with freshness, provenance, empty/offline states, and polling plus Realtime-assisted refresh.
 8. **Leaderboard and debrief expansion** — add community pulse, difficulty feedback, Last Words, run deltas, personal best context, and direct harder-mode/Zombies actions to the surfaces players already use.
 
 ### Phase 4 — Proof and rollout
@@ -46,3 +46,11 @@ Turn every completed run into durable, trustworthy game intelligence; expose per
 ## Completion rule
 
 An audit item is complete only when its production-facing behavior, fallback behavior, named tests, and relevant rendered states pass. Schema or deployment work that cannot be safely applied is implemented and verified locally, then recorded as an explicit rollout gate rather than reported as live.
+
+## Founder completion addendum — live-history reliability
+
+- Renamed all player-facing and component terminology from Sewer Network to Community Stats.
+- Persist completed runs synchronously into a durable retry outbox before network submission; retry on startup, focus, connectivity restoration, and refresh.
+- Keep a last-known-good aggregate cache so temporary provider failures never collapse a previously known community total to zero.
+- Refresh the game and public stats surfaces every 15 seconds, on Realtime leaderboard inserts, focus, visibility, online, and manual refresh.
+- Aggregate every recoverable server record, label full-detail versus legacy coverage, and state honestly that never-submitted pre-telemetry runs cannot be reconstructed.

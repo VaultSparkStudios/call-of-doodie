@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { compareLeaderboardEntries, getDailyChallengeSeed, loadLeaderboardToday, searchLeaderboard } from "../storage.js";
-import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
+import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
@@ -165,7 +165,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
         <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
 
-        <div style={{ marginBottom: 12 }}><SewerNetworkPanel compact /></div>
+        <div style={{ marginBottom: 12 }}><CommunityStatsPanel compact /></div>
 
         {/* Search bar */}
         <div style={{ position: "relative", marginBottom: 10 }}>

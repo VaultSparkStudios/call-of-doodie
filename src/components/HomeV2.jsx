@@ -31,7 +31,7 @@ import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
 import { isPlaytestMode, loadPlaytestPulse, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 import { buildFirstRunsJourney } from "../utils/firstRunsJourney.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
-import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
+import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -882,7 +882,7 @@ export default function HomeV2(props) {
         <PrimaryWeaponSelector selectedIndex={primaryWeaponIndex} onSelect={onSelectPrimaryWeapon} />
 
         <div style={{ marginTop: 14 }}>
-          <SewerNetworkPanel career={career} runHistory={runHistory} compact />
+          <CommunityStatsPanel career={career} runHistory={runHistory} compact />
         </div>
 
         <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>OPERATIONS</div>

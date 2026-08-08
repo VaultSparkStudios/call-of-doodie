@@ -1180,3 +1180,18 @@ Intent outcome: achieved for every repo-owned Arc item; closeout, exact-main pus
 - Preserved lifecycle honesty: this is a cost-neutral FORGE engineering deployment, not a SPARKED flip. The 390px synthetic native-select interaction remains red at 832ms and every external launch gate remains named.
 
 Intent outcome: achieved — the requested statistics, analytics, feedback, difficulty response, leaderboard/post-game improvements, Zombies mode, production deployment, and full closeout scope are complete.
+
+## 2026-08-08 — Session 143 — Community Stats live-history reliability and production closeout
+
+- Scoped the founder follow-up to Community Stats only and replaced the Sewer Network player/component name without changing intentional world terminology.
+- Added synchronous durable outbox capture before remote submission, bounded retry/deduplication, and last-known-good aggregate caching so transient failures cannot lose completed runs or display false zeroes.
+- Added 15-second, Realtime, focus, visibility, online, and manual refresh paths with explicit LIVE/CACHED/OFFLINE states across Command Deck, leaderboard, and debrief.
+- Applied the production all-history aggregate migration with rich-versus-legacy coverage, oldest-supported chronology, per-metric availability, and an honest not-measurable marker for never-submitted pre-telemetry runs.
+- Hardened `sync-game-run` for delayed offline delivery, token-derived completion time, exact synthetic health signatures, and bounded plausibility validation; deployed the Function.
+- Added the Cloudflare Pages `/api/community-stats` proxy and live public `/stats/` hydration while retaining a static last-known snapshot on failure.
+- Deployed isolated staging `7b9b6cb0` and production `e0b481c3`; production browser/API proof reports 12 real runs, five runners, 259 kills, 119,223 score, 21,628 damage, and 28 excluded synthetic probes.
+- Release verification passed 1,022/1,022 tests across 176 files, strict lint/schema/build, 16 current rendered captures, security headers, npm audit zero, supply-chain incident scan zero, live 7/7, cutover 5/5, and replay trust 3/3.
+- The generic Studio responsive-audit script explicitly skipped because its adjacent-repo runtime could not resolve Playwright; the project-local 16-capture desktop/mobile two-theme court remains the applicable rendered proof and the skip is not counted as a pass.
+- Trust-reviewed and pinned patched transitive build dependencies `js-yaml@4.3.1` and `nanoid@3.3.17`; lifecycle scripts were disabled during installation and registry integrity/source/license/maintainer evidence was checked.
+
+Intent outcome: achieved. Community Stats is deployed, live, resilient, and inclusive of every recoverable server record; unrecoverable never-submitted history and absent rich historical fields remain explicitly unclaimed.

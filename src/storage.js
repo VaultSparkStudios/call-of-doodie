@@ -4,6 +4,16 @@ import { isSupporter } from "./utils/supporter.js";
 import { WEAPON_EVOLVED_NAMES } from "./constants.js";
 import { removeLocalState, writeLocalState } from "./utils/storageHealth.js";
 import { normalizeCommunityStats } from "./utils/gameStats.js";
+import {
+  buildCommunityStatsCacheRecord,
+  COMMUNITY_STATS_CACHE_KEY,
+  normalizeCommunityStatsCache,
+  normalizeRunFactOutbox,
+  RUN_FACT_OUTBOX_KEY,
+  selectRunnableRunFacts,
+  settleRunFactAttempt,
+  upsertRunFactOutbox,
+} from "./utils/communityStatsReliability.js";
 export { getAccountLevel } from "./utils/progressionCurve.js";
 
 // ===== SUPABASE SQL MIGRATIONS =====
@@ -411,8 +421,62 @@ export async function issueRunToken({ mode = null, difficulty = "normal", seed =
   }
 }
 
-export async function syncCompletedRunFact(run = {}) {
-  if (!supabaseUrl || !supabaseAnonKey || !run?.runToken || !run?.summarySig) return { ok: false, stats: null };
+let runFactSyncPromise = null;
+let runFactLastAttemptAt = 0;
+const RUN_FACT_SYNC_THROTTLE_MS = 5000;
+
+function persistCompletedRunFactOutbox(entries) {
+  try {
+    persistProgression(RUN_FACT_OUTBOX_KEY, JSON.stringify(normalizeRunFactOutbox(entries)));
+  } catch {}
+}
+
+export function loadCompletedRunFactOutbox() {
+  try {
+    return normalizeRunFactOutbox(JSON.parse(localStorage.getItem(RUN_FACT_OUTBOX_KEY) || "[]"));
+  } catch {
+    return [];
+  }
+}
+
+export function queueCompletedRunFactForRetry(run = {}) {
+  const next = upsertRunFactOutbox(loadCompletedRunFactOutbox(), run);
+  persistCompletedRunFactOutbox(next);
+  return next;
+}
+
+function cacheCommunityStats(stats) {
+  const normalized = normalizeCommunityStats(stats);
+  try {
+    persistProgression(
+      COMMUNITY_STATS_CACHE_KEY,
+      JSON.stringify(buildCommunityStatsCacheRecord(normalized)),
+    );
+  } catch {}
+  return normalized;
+}
+
+export function loadCachedCommunityStats() {
+  try {
+    const record = normalizeCommunityStatsCache(
+      JSON.parse(localStorage.getItem(COMMUNITY_STATS_CACHE_KEY) || "null"),
+    );
+    if (!record) return normalizeCommunityStats({ dataSource: "empty", checkedAt: null, cacheAgeMs: null });
+    return normalizeCommunityStats({
+      ...record.stats,
+      dataSource: "cache",
+      checkedAt: new Date(record.cachedAt).toISOString(),
+      cacheAgeMs: Math.max(0, Date.now() - record.cachedAt),
+    });
+  } catch {
+    return normalizeCommunityStats({ dataSource: "empty", checkedAt: null, cacheAgeMs: null });
+  }
+}
+
+async function submitCompletedRunFact(run = {}) {
+  if (!supabaseUrl || !supabaseAnonKey || !run?.runToken || !run?.summarySig) {
+    return { ok: false, status: 0, stats: null, error: "Run sync configuration unavailable." };
+  }
   try {
     const response = await invokeEdgeFunction("sync-game-run", {
       ...run,
@@ -420,24 +484,124 @@ export async function syncCompletedRunFact(run = {}) {
       difficulty: VALID_DIFFICULTIES.has(run.difficulty) ? run.difficulty : "normal",
       clientUid: getOrCreateClientUid(),
     });
-    if (!response.ok) throw new Error(response.data?.error || "Run fact sync failed.");
-    return { ok: true, stats: normalizeCommunityStats(response.data?.stats) };
+    if (!response.ok) {
+      return {
+        ok: false,
+        status: response.status,
+        stats: null,
+        error: response.data?.error || "Run fact sync failed.",
+      };
+    }
+    const checkedAt = new Date().toISOString();
+    const stats = cacheCommunityStats({
+      ...response.data?.stats,
+      dataSource: "live",
+      checkedAt,
+      cacheAgeMs: 0,
+    });
+    try {
+      window.dispatchEvent(new CustomEvent("cod:community-stats-updated", { detail: { stats } }));
+    } catch {}
+    return { ok: true, status: response.status, stats, error: null };
   } catch (err) {
     console.warn("[game-stats] Run fact sync failed:", err?.message ?? String(err));
-    return { ok: false, stats: null };
+    return { ok: false, status: 0, stats: null, error: err?.message ?? String(err) };
   }
+}
+
+export async function syncCompletedRunFactOutbox({ limit = 20, force = false } = {}) {
+  const current = loadCompletedRunFactOutbox();
+  if (current.length === 0) {
+    return { ok: true, synced: 0, pending: 0, failed: 0, syncedTokens: [], stats: null, reason: "empty" };
+  }
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return { ok: false, synced: 0, pending: current.length, failed: 0, syncedTokens: [], stats: null, reason: "env_missing" };
+  }
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    return { ok: false, synced: 0, pending: current.length, failed: 0, syncedTokens: [], stats: null, reason: "offline" };
+  }
+
+  const runnable = selectRunnableRunFacts(current, { limit, force });
+  if (runnable.length === 0) {
+    return { ok: true, synced: 0, pending: current.length, failed: 0, syncedTokens: [], stats: null, reason: "backoff" };
+  }
+
+  let outbox = current;
+  let stats = null;
+  const syncedTokens = [];
+  let failed = 0;
+  for (const entry of runnable) {
+    const result = await submitCompletedRunFact(entry.payload);
+    outbox = settleRunFactAttempt(outbox, entry.runToken, result);
+    persistCompletedRunFactOutbox(outbox);
+    if (result.ok) {
+      syncedTokens.push(entry.runToken);
+      stats = result.stats || stats;
+    } else {
+      failed += 1;
+      if (result.status === 429 || result.status >= 500 || result.status === 0) break;
+    }
+  }
+  return {
+    ok: failed === 0,
+    synced: syncedTokens.length,
+    pending: outbox.length,
+    failed,
+    syncedTokens,
+    stats,
+    reason: failed ? "retry_scheduled" : "synced",
+  };
+}
+
+export function requestCompletedRunFactSync({ limit = 20, force = false } = {}) {
+  if (runFactSyncPromise) return runFactSyncPromise;
+  const now = Date.now();
+  if (!force && now - runFactLastAttemptAt < RUN_FACT_SYNC_THROTTLE_MS) {
+    return Promise.resolve({
+      ok: true,
+      synced: 0,
+      pending: loadCompletedRunFactOutbox().length,
+      failed: 0,
+      syncedTokens: [],
+      stats: null,
+      reason: "throttled",
+    });
+  }
+  runFactLastAttemptAt = now;
+  runFactSyncPromise = syncCompletedRunFactOutbox({ limit, force })
+    .finally(() => { runFactSyncPromise = null; });
+  return runFactSyncPromise;
+}
+
+export async function syncCompletedRunFact(run = {}) {
+  if (!run?.runToken || !run?.summarySig) return { ok: false, stats: null, submission: "skipped", pending: loadCompletedRunFactOutbox().length };
+  queueCompletedRunFactForRetry(run);
+  const result = await requestCompletedRunFactSync({ limit: 20, force: true });
+  const ok = result.syncedTokens.includes(String(run.runToken).trim());
+  return {
+    ok,
+    stats: result.stats,
+    submission: ok ? "synced" : "queued",
+    pending: result.pending,
+  };
 }
 
 export async function loadCommunityStats() {
   const supabase = await getSupabaseClient();
-  if (!supabase) return normalizeCommunityStats();
+  if (!supabase) return loadCachedCommunityStats();
   try {
     const { data, error } = await supabase.rpc("get_cod_community_stats");
     if (error) throw error;
-    return normalizeCommunityStats(data);
+    const checkedAt = new Date().toISOString();
+    return cacheCommunityStats({
+      ...data,
+      dataSource: "live",
+      checkedAt,
+      cacheAgeMs: 0,
+    });
   } catch (err) {
     console.warn("[game-stats] Community aggregate unavailable:", err?.message ?? String(err));
-    return normalizeCommunityStats();
+    return loadCachedCommunityStats();
   }
 }
 

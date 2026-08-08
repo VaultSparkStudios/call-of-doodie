@@ -1,3 +1,15 @@
+- Session 143 (2026-08-08) completed the founder follow-up that renamed and hardened Community Stats, deployed it to production, and ran the full closeout court.
+- Naming truth — every player-facing game surface and shared component now says Community Stats; Sewer remains only in intentional world/theme terms such as Sewer Zombies and sewer-night.
+- Delivery truth — every completed run is written to a bounded durable browser outbox before remote submission; transient failures retry on startup, focus, visibility, connectivity restoration, and manual refresh.
+- Availability truth — live aggregates refresh every 15 seconds plus Realtime/focus/online signals, while a last-known-good cache prevents temporary provider failures from replacing known totals with false zeroes.
+- History truth — the aggregate includes all recoverable server history, reports full-detail versus legacy coverage, dates the oldest supported record, and explicitly marks never-submitted pre-telemetry runs as not measurable.
+- Public truth — `/api/community-stats` and `/stats/` expose the same live aggregate without browser credentials; the static snapshot remains a graceful fallback when the live endpoint is unavailable.
+- Trust truth — delayed uploads use token-derived completion chronology and face bounded plausibility checks; the exact synthetic health signature remains isolated from player totals.
+- Production truth — Supabase migration `2026-08-08_community_stats_history_contract.sql`, the hardened `sync-game-run` Function, and Cloudflare deployment `e0b481c3` are live.
+- Data receipt — production reports 12 real runs, five runners, 259 enemies terminated, 119,223 score, 21,628 damage, 0 rich runs, 12 legacy runs, and 28 excluded synthetic probes; oldest supported record is March 12, 2026.
+- Validation truth — 1,022/1,022 tests across 176 files, strict lint/schema/build, npm audit zero, supply-chain incident matches zero, 16 hash-bound desktop/mobile theme captures, staging browser/API proof, and production shell 7/7 + cutover 5/5 + replay 3/3 pass.
+- Release truth — the cost-neutral FORGE engineering update is deployed and verified. SPARKED remains NO-GO behind the existing physical, email, participant, publication, provider, interaction, subjective-review, and explicit lifecycle-approval gates.
+
 - Session 142 (2026-08-07) completed the founder-directed `/start -> /audit -> /implement -> deploy -> /closeout` arc for live full-game statistics, feedback intelligence, challenge depth, and Zombies.
 - Data truth — one idempotent run-fact spine and aggregate-only community contract now combine verified completed-run facts with labeled legacy public scores; device-local YOU statistics remain explicitly THIS DEVICE and unknown legacy fields remain unknown.
 - Synthetic truth — 28 exact health-check rows are server-marked synthetic, excluded from public reads and aggregates, and retained for operator verification; production public evidence reports 12 real rows, five runners, 259 kills, 119,223 score, and 21,628 damage.

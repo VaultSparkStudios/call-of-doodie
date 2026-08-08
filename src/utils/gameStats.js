@@ -53,6 +53,25 @@ export function normalizeCommunityStats(value = {}) {
       dialed_in: Math.max(0, Math.floor(number(source.feedback?.dialed_in))),
       brutal: Math.max(0, Math.floor(number(source.feedback?.brutal))),
     },
+    coverage: source.coverage && typeof source.coverage === "object" ? {
+      history: source.coverage.history === "all_available_server_history"
+        ? source.coverage.history
+        : "supported_server_history",
+      richRuns: Math.max(0, Math.floor(number(source.coverage.richRuns ?? source.coverage.rich_runs))),
+      legacyRuns: Math.max(0, Math.floor(number(source.coverage.legacyRuns ?? source.coverage.legacy_runs))),
+      oldestSupportedAt: source.coverage.oldestSupportedAt ?? source.coverage.oldest_supported_at ?? null,
+      richCoverageStartsAt: source.coverage.richCoverageStartsAt ?? source.coverage.rich_coverage_starts_at ?? null,
+      durationRuns: Math.max(0, Math.floor(number(source.coverage.durationRuns ?? source.coverage.duration_runs))),
+      damageRuns: Math.max(0, Math.floor(number(source.coverage.damageRuns ?? source.coverage.damage_runs))),
+      accuracyRuns: Math.max(0, Math.floor(number(source.coverage.accuracyRuns ?? source.coverage.accuracy_runs))),
+      feedbackRuns: Math.max(0, Math.floor(number(source.coverage.feedbackRuns ?? source.coverage.feedback_runs))),
+      unrecoverablePreTelemetryRuns: source.coverage.unrecoverablePreTelemetryRuns
+        ?? source.coverage.unrecoverable_pre_telemetry_runs
+        ?? "not_measurable",
+      unknownLegacyMetrics: Array.isArray(source.coverage.unknownLegacyMetrics)
+        ? source.coverage.unknownLegacyMetrics.map(String).slice(0, 12)
+        : [],
+    } : null,
     updatedAt: source.updatedAt ?? source.updated_at ?? null,
   };
 }

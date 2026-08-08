@@ -1,3 +1,37 @@
+# Latest Handoff — Session 143
+
+Session Intent: Complete the founder follow-up by shipping only Community Stats as an always-live, failure-resilient, all-recoverable-history surface; deploy the data and web changes; then run canonical full closeout.
+
+## Impact Summary (Session 143)
+
+**Headline.** Community Stats now keeps the best known truth through outages, queues completed runs until the server accepts them, and publishes the same honest all-history aggregate in the game and on the public site.
+
+**Impact.**
+- Renamed the shared player surface and component from Sewer Network to Community Stats while retaining intentional Sewer Zombies/world terminology.
+- Added a bounded durable completed-run outbox with token deduplication and exponential retry, plus a last-known-good aggregate cache.
+- Added 15-second polling, leaderboard Realtime refresh, focus/visibility/online wakeups, manual refresh, and explicit LIVE/CACHED/OFFLINE states.
+- Replaced windowed aggregate behavior with an all-available-server-history contract that separates full-detail run facts from legacy leaderboard history.
+- Added a credential-safe Cloudflare Pages `/api/community-stats` proxy and live public `/stats/` hydration with static fallback.
+- Hardened delayed run ingestion with token-derived chronology, a seven-day offline grace window, exact synthetic detection, and bounded plausibility checks.
+- Closed three transitive build-tool advisories through trust-reviewed exact overrides and finished with npm audit zero.
+
+## Evidence
+
+- Production: `https://callofdoodie.wtf/`; immutable deployment `https://e0b481c3.call-of-doodie.pages.dev/`.
+- Live aggregate: 12 real runs, five runners, 259 enemies terminated, 119,223 score, 21,628 damage; 0 full-detail and 12 legacy runs; oldest supported record March 12, 2026; 28 synthetic probes excluded.
+- Staging and production browser/API proofs both pass with in-game LIVE, all-history coverage, public totals parity, and zero page errors.
+- Production courts: shell/edge/manifest/service-worker/Open Graph 7/7, cutover 5/5, replay trust 3/3, and aggregate reconciliation pass.
+- Code courts: 1,022/1,022 tests across 176 files, strict lint, schema/architecture/storage/task/runtime checks, deployable build, diff hygiene, security gate, npm audit zero, and supply-chain incident scan zero.
+- Visual court: 16 hash-bound captures cover Command Deck, leaderboard, debrief, and public stats in both themes at 390px and 1440px; CANON-053 passes.
+
+## Where We Left Off
+
+- Product: Community Stats is live on Command Deck, leaderboard, debrief, and `/stats/`, with graceful cached/static fallback and manual refresh.
+- Data: every recoverable server record is included. Historical runs that were never submitted before telemetry existed remain impossible to reconstruct and are not estimated.
+- Operations: the browser outbox preserves new completed runs across transient submission failures; production currently has no rich run facts because all 12 supported historical rows predate the richer contract.
+- Release: the engineering FORGE update is deployed and verified. SPARKED remains NO-GO under the existing external and lifecycle gates.
+- Next: gather real rich-run volume and participant feedback before changing global balance; consider asset upgrades only through new rendered-pixel evidence and without replacing the current readable silhouettes.
+
 # Latest Handoff — Session 142
 
 Session Intent: Run `/start`, audit actual full-game and user-base statistics, implement the complete live stats/feedback/difficulty/Zombies plan, deploy it to production, then perform canonical full closeout.

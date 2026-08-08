@@ -2253,3 +2253,33 @@ Brainstorm:
 3. Outbreak community orders — derive deterministic weekly Zombies targets from verified aggregates only after real mode volume exists.
 
 **Committed to TASK_BOARD:** [SIL:1] retain the mobile interaction result as a SPARKED red gate until field or physical evidence clears it; [SIL:1] require provenance for any future historical backfill.
+
+## 2026-08-08 — Session 143 | Total: 998/1000 | Velocity: 5 | Debt: ↓
+
+SIL 998/1000: Converted Community Stats from a best-effort live panel into a durable, all-recoverable-history contract spanning run delivery, cached degradation, game/public presentation, production aggregation, and exact synthetic isolation. Closed newly disclosed build-tool advisories during the release gate instead of waiving them.
+
+| Category | Score | Delta | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | up | Durable outbox/cache boundaries, delayed-ingestion validation, strict lint/schema/build, and 1,022/1,022 tests pass on the final dependency tree. |
+| Creative Alignment | 100 | same | Community Stats is clearer while intentional Sewer Zombies and sewer-night vocabulary preserve the plumbing-combat identity. |
+| Momentum | 100 | same | The scoped reliability addendum, data migration, Function, public API, staging, production, advisory repair, and closeout completed continuously. |
+| Engagement | 99 | down | Live shared totals and persistent history strengthen return value, but no rich post-migration run or representative retention outcome is yet observed. |
+| Process Quality | 99 | same | Production claims are tightly reconciled and skips are explicit; the generic adjacent-repo responsive auditor could not resolve Playwright, so project-local rendered evidence remains the honest proof. |
+| Cross-Repo Coherence | 100 | same | Studio gates and secrets were consumed through canonical boundaries; no sibling repository files were edited. |
+| Security Posture | 100 | same | Aggregate credentials stay server-side, ingestion is bounded, synthetic probes remain excluded, npm audit is zero, and the Studio incident scan is clean. |
+| Ecosystem Integration | 100 | same | Game UI, public page, agent resources, Cloudflare API, Supabase aggregate, migration, and release receipts share one coverage vocabulary. |
+| Capital Efficiency | 100 | same | The feature reuses browser storage, Supabase, and Cloudflare Pages with cost-neutral polling/cache behavior and no hosted inference. |
+| Automation Coverage | 100 | same | Unit/integration coverage, production browser/API reconciliation, two-theme desktop/mobile captures, shell/cutover/replay courts, and supply-chain gates cover the changed boundaries. |
+
+Rolling averages: 3-session 998.3 · 5-session 998.6 · 10-session 998.8 · 25-session 999.2 · all-session 993.2 · sparkline `█████`.
+
+Top win: a completed run can now survive a transient provider failure and eventually join the same community aggregate shown in-game and publicly, without inventing missing historical fields.
+Top gap: the production corpus has twelve legacy runs and zero rich run facts, so accuracy, feedback, boss, and detailed combat trends need real post-migration play before they become meaningful.
+Intent outcome: Achieved — the founder-scoped Community Stats implementation, production deployment, and full closeout are complete.
+
+Brainstorm:
+1. Coverage maturity ribbon — unlock additional aggregate cards only when their measured-run denominator is large enough to be useful.
+2. Outbreak pulse — add a Zombies-only community beat after real mode volume exists, without fragmenting the canonical aggregate.
+3. Asset upgrade court — test higher-expression enemy hit/death frames, environmental landmark decals, and weapon-impact silhouettes against the current readability baseline before adoption.
+
+**Committed to TASK_BOARD:** [SIL:1] require representative rich-run volume before global balance changes; [SIL:1] preserve the current two-theme mobile/desktop readability baseline for future visual-asset upgrades.

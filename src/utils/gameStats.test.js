@@ -11,6 +11,28 @@ describe("game statistics contracts", () => {
     });
   });
 
+  it("normalizes explicit all-history coverage without inventing unavailable legacy detail", () => {
+    const stats = normalizeCommunityStats({
+      runs: 12,
+      coverage: {
+        history: "all_available_server_history",
+        richRuns: "2",
+        legacyRuns: "10",
+        accuracyRuns: "2",
+        unknownLegacyMetrics: ["shots", "hits"],
+        unrecoverablePreTelemetryRuns: "not_measurable",
+      },
+    });
+    expect(stats.coverage).toEqual(expect.objectContaining({
+      history: "all_available_server_history",
+      richRuns: 2,
+      legacyRuns: 10,
+      accuracyRuns: 2,
+      unknownLegacyMetrics: ["shots", "hits"],
+      unrecoverablePreTelemetryRuns: "not_measurable",
+    }));
+  });
+
   it("labels personal statistics from complete career counters", () => {
     expect(buildPersonalStats({ totalRuns: 2, totalPlayTime: 5400, totalKills: 40, totalShots: 80, totalHits: 20, bestWave: 8 }, [{}, {}])).toMatchObject({
       runs: 2,

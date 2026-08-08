@@ -10,6 +10,7 @@
     "dev": "vite",
     "prebuild": "node scripts/generate-public-pages.mjs && node scripts/generate-public-gameplay-contract.mjs && node scripts/generate-icons.mjs",
     "build": "vite build",
+    "build:deployable": "node scripts/build-deployable.mjs",
     "preview": "vite preview",
     "icons:generate": "node scripts/generate-icons.mjs",
     "launch:assets": "node scripts/generate-launch-assets.mjs",
@@ -86,8 +87,9 @@
     "brace-expansion": "5.0.9",
     "esbuild": "0.28.1",
     "form-data": "4.0.6",
-    "js-yaml": "4.3.0",
+    "js-yaml": "4.3.1",
     "minimatch": "10.2.3",
+    "nanoid": "3.3.17",
     "picomatch": "4.0.4",
     "postcss": "8.5.23",
     "ws": "8.21.0"

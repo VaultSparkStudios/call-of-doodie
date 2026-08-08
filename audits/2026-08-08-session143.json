@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.3",
+  "date": "2026-08-08",
+  "session": 143,
+  "project": "Call-Of-Doodie",
+  "intent": "ship only Community Stats as a live, durable, all-recoverable-history surface; deploy the data and web changes; complete canonical closeout",
+  "outcome": "achieved",
+  "shipped": [
+    "Community Stats naming across Command Deck, leaderboard, debrief, public copy, and shared component",
+    "durable completed-run retry outbox with token deduplication and bounded exponential retry",
+    "last-known-good aggregate cache with explicit live, cached, and offline states",
+    "15-second polling plus Realtime, focus, visibility, online, and manual refresh paths",
+    "all-available-server-history aggregate with rich-versus-legacy and per-metric coverage",
+    "credential-safe Cloudflare Pages community stats API and live public stats hydration",
+    "delayed-run chronology, offline grace, exact synthetic detection, and plausibility validation",
+    "production Supabase migration, sync-game-run Function, Pages environment, and web deployment",
+    "trust-reviewed js-yaml and nanoid security overrides with zero remaining advisories"
+  ],
+  "validation": [
+    "1022/1022 tests passed across 176 files on the final dependency tree",
+    "strict lint, schema, architecture, storage, task, runtime, deployable build, and git diff checks passed",
+    "security release gate and npm audit report zero vulnerabilities; Studio incident scan reports zero matches",
+    "16 hash-bound Community Stats captures cover four surfaces, two themes, and 390/1440 widths; CANON-053 passes",
+    "staging and production browser/API proofs show live all-history parity with zero page errors",
+    "production site 7/7, cutover 5/5, replay trust 3/3, and aggregate reconciliation passed",
+    "production reports 12 real runs, 5 runners, 259 kills, 119223 score, 21628 damage, and 28 excluded synthetic probes"
+  ],
+  "deferred": [
+    "historical runs never submitted before telemetry existed cannot be reconstructed",
+    "rich accuracy, feedback, boss, and critical trends await real post-migration run facts",
+    "generic Studio responsive audit explicitly skipped because its adjacent runtime could not resolve Playwright; project-local rendered evidence passed",
+    "global balance changes await representative rich-run and participant evidence",
+    "physical PWA, gamepad, full-run media, verified reply email, provider-scoped telemetry, publication, subjective review, mobile interaction, and SPARKED approval remain open"
+  ],
+  "sil": {
+    "score": 998,
+    "velocity": 5,
+    "debt": "decreasing"
+  },
+  "headline": "Made Community Stats live, durable, and honest across every recoverable historical record",
+  "items": [
+    {
+      "title": "Durable run delivery",
+      "projectImpact": 10,
+      "ecosystemImpact": 7,
+      "evidence": "outbox, deduplication, retry, and transient-failure tests"
+    },
+    {
+      "title": "All-history coverage contract",
+      "projectImpact": 10,
+      "ecosystemImpact": 8,
+      "evidence": "production migration, coverage metadata, and reconciliation"
+    },
+    {
+      "title": "Live game and public surfaces",
+      "projectImpact": 9,
+      "ecosystemImpact": 8,
+      "evidence": "polling, Realtime, cached fallback, public API, and browser proofs"
+    },
+    {
+      "title": "Release trust",
+      "projectImpact": 9,
+      "ecosystemImpact": 7,
+      "evidence": "ingestion bounds, synthetic isolation, zero advisories, production deployment"
+    }
+  ],
+  "followUps": [
+    "collect representative rich run facts before unlocking additional aggregate trend cards",
+    "measure real mobile interaction and participant outcomes before global balance tuning",
+    "evaluate visual asset upgrades against the current two-theme desktop/mobile readability baseline"
+  ],
+  "blockers": [
+    "SPARKED remains gated by existing physical, email, participant, publication, provider, interaction, subjective-review, and explicit founder evidence"
+  ]
+}

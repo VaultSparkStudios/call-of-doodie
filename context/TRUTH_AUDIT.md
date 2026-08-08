@@ -1,6 +1,22 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+
+## 2026-08-08 — Session 143 — Community Stats delivery, history, and release truth
+
+- Naming truth — the player-facing feature and shared component are Community Stats; intentional Sewer Zombies/world/theme vocabulary remains unchanged.
+- Delivery truth — completed runs enter a bounded durable outbox before remote submission and retry idempotently; a transient failure cannot silently discard the run.
+- Availability truth — aggregates refresh every 15 seconds and on Realtime/focus/visibility/online/manual signals; a labeled last-known-good cache prevents false zero totals during provider failures.
+- History truth — the production aggregate covers every recoverable server record without a time window and distinguishes 0 rich runs from 12 legacy runs; never-submitted pre-telemetry runs are explicitly not measurable.
+- Public truth — `/api/community-stats`, `/stats/`, and the game consume one aggregate vocabulary while the public browser receives no secret or service credential.
+- Synthetic truth — 28 exact health probes remain service-visible and public-invisible; the public corpus reconciles to 12 real runs across five runners.
+- Release truth — migration, hardened run Function, Pages runtime configuration, and immutable production deployment `e0b481c3` are live; custom-domain browser/API parity passes.
+- Verification truth — 1,022/1,022 tests, strict lint/schema/build, security headers, npm audit zero, supply-chain incident scan zero, 16 hash-bound renders, live 7/7, cutover 5/5, and replay 3/3 pass.
+- Evidence boundary — historical detailed accuracy, feedback, boss, and critical metrics remain unknown because the twelve legacy records predate run facts; no estimate is published.
+- Lifecycle truth — this is a cost-neutral FORGE engineering update. Existing SPARKED evidence gates remain open and no lifecycle transition is claimed.
+
+Overall status: production Community Stats green; SPARKED remains NO-GO.
+Last reviewed: 2026-08-08
 ## 2026-08-04 — Session 140 — Reproducible release and replay-coverage truth
 
 - Recovery truth — S139 was proven cut off mid-closeout, revalidated, staged, committed as `93c6832`, pushed, and left clean before S140 work began.

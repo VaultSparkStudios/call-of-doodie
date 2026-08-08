@@ -54,7 +54,12 @@ export async function requestBucket(req: Request, secret: string, scope: string)
 }
 
 export async function consumeRateLimit(
-  serviceClient: { rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> },
+  serviceClient: {
+    rpc: (
+      name: string,
+      args: Record<string, unknown>,
+    ) => PromiseLike<{ data: unknown; error: unknown }>;
+  },
   bucket: string,
   limit: number,
   windowSeconds: number,

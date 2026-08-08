@@ -37,6 +37,7 @@ Players move, shoot, dash, grenade, switch weapon, choose perk, choose route, su
 - Route-Contract: https://callofdoodie.wtf/route-contract.json
 - Field-Manual: https://callofdoodie.wtf/field-manual.json
 - Game-Stats: https://callofdoodie.wtf/stats-surface.json
+- Game-Stats-Live: https://callofdoodie.wtf/api/community-stats
 - Service-Status: https://callofdoodie.wtf/status.json
 
 ## Agent guidance

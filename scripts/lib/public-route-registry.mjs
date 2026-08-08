@@ -132,16 +132,16 @@ const ROUTE_DEFINITIONS = [
   },
   {
     id: "stats", path: "/stats/", label: "Stats", rel: "stats", priority: 0.7, generated: true,
-    eyebrow: "Verified sewer telemetry", title: "The sewer keeps receipts.",
+    eyebrow: "Live player analytics", title: "Community Stats",
     description: "Verified Call of Doodie player and run statistics with scope, freshness, and plain-language analysis.",
-    lede: "This release snapshot reports supported production history through August 7, 2026. The in-game Sewer Network refreshes live; this page stays deliberately dated so a stale count can never masquerade as current.",
+    lede: "Community Stats refresh every 15 seconds and include every recoverable server record, from legacy public scores through full-detail completed-run facts. The verified snapshot remains visible whenever the live service is temporarily unreachable.",
     sections: [
-      ["Runs and runners", "12 verified public runs came from 5 distinct runners. That is enough to prove the live pipeline, but not enough to infer retention or broad balance conclusions."],
+      ["Runs and runners", "The current supported history contains 12 verified public runs from 5 distinct runners. The live cards above update automatically; this small corpus does not support broad retention conclusions."],
       ["Combat output", "Those runs recorded 259 enemies terminated, 21,628 damage, and 119,223 score. These are totals across verified completed runs, not per-player claims."],
-      ["What is excluded", "28 automated health-check rows remain available to operators but are excluded from every public total. Missing legacy hours, shots, and hits stay unmeasured rather than being estimated."],
-      ["Live view", "Open the Command Deck, leaderboard, or post-game debrief for the live Sewer Network. It polls every 15 seconds while visible and labels its source and freshness."],
+      ["What is excluded", "28 automated health-check rows remain available to operators but are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated."],
+      ["Live view", "This page, the Command Deck, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes."],
     ],
-    cta: ["Open the live Sewer Network", "../"],
+    cta: ["Play with Community Stats", "../"],
   },
   {
     id: "accessibility", path: "/accessibility/", label: "Accessibility", rel: "accessibility", priority: 0.6, generated: true,
@@ -319,6 +319,7 @@ export function getAgentResources() {
     { rel: "route-contract", href: `${PUBLIC_CANONICAL_ORIGIN}/route-contract.json` },
     { rel: "field-manual", href: `${PUBLIC_CANONICAL_ORIGIN}/field-manual.json` },
     { rel: "game-stats", href: `${PUBLIC_CANONICAL_ORIGIN}/stats-surface.json` },
+    { rel: "game-stats-live", href: `${PUBLIC_CANONICAL_ORIGIN}/api/community-stats` },
     { rel: "service-status", href: `${PUBLIC_CANONICAL_ORIGIN}/status.json` },
   ];
 }

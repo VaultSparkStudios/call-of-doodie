@@ -5,6 +5,7 @@ const VALID_MODES = new Set(["standard", "normal", "score_attack", "daily_challe
 const VALID_DIFFICULTIES = new Set(["easy", "normal", "hard", "insane"]);
 const VALID_FEEDBACK = new Set(["too_easy", "dialed_in", "brutal"]);
 const encoder = new TextEncoder();
+const OFFLINE_SYNC_GRACE_MS = 7 * 24 * 60 * 60 * 1000;
 
 function clampInt(value: unknown, min: number, max: number, fallback = min) {
   const parsed = Number.parseInt(String(value ?? ""), 10);
@@ -14,6 +15,38 @@ function clampInt(value: unknown, min: number, max: number, fallback = min) {
 function cleanText(value: unknown, max: number, fallback = "") {
   const text = String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
   return text ? text.slice(0, max) : fallback;
+}
+
+function modePlausibilityScale(mode: string) {
+  if (mode === "zombies") return 2.5;
+  if (mode === "boss_rush") return 1.8;
+  if (mode === "score_attack") return 1.35;
+  return 1;
+}
+
+function collectFactFailures(row: Record<string, unknown>, runAgeSeconds: number) {
+  const duration = Number(row.duration_s);
+  const kills = Number(row.kills);
+  const wave = Number(row.wave);
+  const score = Number(row.score);
+  const damage = Number(row.total_damage);
+  const shots = Number(row.total_shots);
+  const hits = Number(row.total_hits);
+  const crits = Number(row.total_crits);
+  const bosses = Number(row.boss_kills);
+  const safeTime = Math.max(1, duration);
+  const scale = modePlausibilityScale(String(row.mode));
+  const failures: string[] = [];
+  if (duration > runAgeSeconds + 5) failures.push("duration exceeds token age");
+  if (hits > shots) failures.push("hits exceed shots");
+  if (crits > hits) failures.push("critical hits exceed hits");
+  if (bosses > kills) failures.push("boss kills exceed kills");
+  if (wave > kills + 50) failures.push("wave exceeds kill envelope");
+  if (kills / safeTime > 18 * scale) failures.push("kills per second exceed cap");
+  if (shots > safeTime * 200 + 5000) failures.push("shots exceed time envelope");
+  if (damage > (120000 + kills * 4500 + wave * 18000 + safeTime * 10000) * scale) failures.push("damage exceeds combat envelope");
+  if (score > (250000 + kills * 18000 + wave * 250000 + safeTime * 120000) * scale) failures.push("score exceeds combat envelope");
+  return failures;
 }
 
 function base64Url(bytes: ArrayBuffer) {
@@ -69,12 +102,16 @@ Deno.serve(async (req) => {
 
     const { data: tokenRow, error: tokenError } = await serviceClient
       .from("run_tokens")
-      .select("token,uid,mode,difficulty,seed,created_at,expires_at")
+      .select("token,uid,mode,difficulty,seed,created_at,expires_at,used_at")
       .eq("token", runToken)
       .maybeSingle();
     if (tokenError) throw tokenError;
     if (!tokenRow || tokenRow.uid !== playerKey) {
       return new Response(JSON.stringify({ error: "Invalid run token." }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    const tokenCreatedAt = new Date(tokenRow.created_at).getTime();
+    if (!Number.isFinite(tokenCreatedAt) || Date.now() - tokenCreatedAt > OFFLINE_SYNC_GRACE_MS) {
+      return new Response(JSON.stringify({ error: "Run sync window expired." }), { status: 410, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     const mode = VALID_MODES.has(String(body.mode ?? "")) ? String(body.mode) : "standard";
@@ -102,7 +139,21 @@ Deno.serve(async (req) => {
     const callsign = cleanText(body.name, 24, "Anonymous");
     const lastWords = cleanText(body.lastWords, 60) || null;
     const feedback = VALID_FEEDBACK.has(String(body.feedbackDifficulty ?? "")) ? String(body.feedbackDifficulty) : null;
-    const isSynthetic = callsign.startsWith("hc-") && seed === 424242 && lastWords === "health-check clear";
+    const durationSeconds = clampInt(body.durationSeconds, 0, 86400, 0);
+    const score = clampInt(body.score, 0, 10000000, 0);
+    const kills = clampInt(body.kills, 0, 1000000, 0);
+    const wave = clampInt(body.wave, 1, 10000, 1);
+    const totalDamage = clampInt(body.totalDamage, 0, 100000000, 0);
+    const totalShots = clampInt(body.totalShots, 0, 10000000, 0);
+    const totalHits = clampInt(body.totalHits, 0, 10000000, 0);
+    const totalCrits = clampInt(body.totalCrits, 0, 1000000, 0);
+    const bossKills = clampInt(body.bossKills, 0, 100000, 0);
+    const isSynthetic = callsign.startsWith("hc-")
+      && seed === 424242
+      && lastWords === "health-check clear"
+      && score === 1875
+      && kills === 24
+      && wave === 5;
     const row = {
       run_key: runToken,
       player_key: playerKey,
@@ -112,22 +163,29 @@ Deno.serve(async (req) => {
       mode,
       difficulty,
       seed,
-      score: clampInt(body.score, 0, 10000000, 0),
-      kills: clampInt(body.kills, 0, 1000000, 0),
-      wave: clampInt(body.wave, 1, 10000, 1),
-      duration_s: clampInt(body.durationSeconds, 0, 86400, 0),
-      total_damage: clampInt(body.totalDamage, 0, 100000000, 0),
-      total_shots: clampInt(body.totalShots, 0, 10000000, 0),
-      total_hits: clampInt(body.totalHits, 0, 10000000, 0),
-      total_crits: clampInt(body.totalCrits, 0, 1000000, 0),
-      boss_kills: clampInt(body.bossKills, 0, 100000, 0),
+      score,
+      kills,
+      wave,
+      duration_s: durationSeconds,
+      total_damage: totalDamage,
+      total_shots: totalShots,
+      total_hits: totalHits,
+      total_crits: totalCrits,
+      boss_kills: bossKills,
       feedback_difficulty: feedback,
       last_words: lastWords,
       practice: Boolean(body.practice),
       is_synthetic: isSynthetic,
-      completed_at: new Date(Math.max(new Date(tokenRow.created_at).getTime(), Date.now() - 86400000)).toISOString(),
+      completed_at: new Date(tokenCreatedAt + durationSeconds * 1000).toISOString(),
       received_at: new Date().toISOString(),
     };
+    const factFailures = collectFactFailures(row, Math.max(0, Math.floor((Date.now() - tokenCreatedAt) / 1000)));
+    if (factFailures.length > 0) {
+      return new Response(JSON.stringify({
+        error: "Run fact rejected by plausibility validation.",
+        reasons: factFailures.slice(0, 3),
+      }), { status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
     const { error: upsertError } = await serviceClient.from("game_run_facts").upsert([row], { onConflict: "run_key" });
     if (upsertError) throw upsertError;
     const { data: stats, error: statsError } = await serviceClient.rpc("get_cod_community_stats");

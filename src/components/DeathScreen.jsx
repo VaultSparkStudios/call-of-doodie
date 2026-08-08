@@ -28,7 +28,7 @@ import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
 import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestContinuation, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent } from "../storage.js";
 import { FIELD_REPORTS } from "../utils/fieldReport.js";
-import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
+import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 
@@ -1449,7 +1449,7 @@ export default function DeathScreen({
         </div>
 
         <div style={{ marginBottom: 12 }}>
-          <SewerNetworkPanel compact />
+          <CommunityStatsPanel compact />
         </div>
 
         {!practiceRun && (

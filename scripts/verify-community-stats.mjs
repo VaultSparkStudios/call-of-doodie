@@ -51,6 +51,10 @@ async function verifyThroughRest() {
     visibleSyntheticRows: publicRows.filter((row) => row.is_synthetic).length,
     serviceSyntheticRows: syntheticRows.length,
     completedRunFacts: factRows.length,
+    allAvailableHistoryReconciled:
+      Number((Array.isArray(aggregateRows) ? aggregateRows[0] : aggregateRows)?.runs) ===
+      Number((Array.isArray(aggregateRows) ? aggregateRows[0] : aggregateRows)?.coverage?.richRuns) +
+        Number((Array.isArray(aggregateRows) ? aggregateRows[0] : aggregateRows)?.coverage?.legacyRuns),
     publicSyntheticPolicyPresent: true,
   };
 }
@@ -59,7 +63,7 @@ async function verifyThroughManagementApi() {
   const projectRef = new URL(supabaseUrl).hostname.split(".")[0];
   const query = `
     select jsonb_build_object(
-      'aggregate', (select to_jsonb(stats) from public.get_cod_community_stats() stats),
+      'aggregate', public.get_cod_community_stats(),
       'visibleLeaderboardRows', (
         select count(*) from public.leaderboard
         where game_id = 'cod'
@@ -71,7 +75,12 @@ async function verifyThroughManagementApi() {
         select count(*) from public.leaderboard
         where game_id = 'cod' and coalesce(is_synthetic, false) = true
       ),
-      'completedRunFacts', (select count(*) from private.game_run_facts),
+      'completedRunFacts', (select count(*) from public.game_run_facts),
+      'allAvailableHistoryReconciled', (
+        (public.get_cod_community_stats()->>'runs')::bigint =
+        (public.get_cod_community_stats()->'coverage'->>'richRuns')::bigint +
+        (public.get_cod_community_stats()->'coverage'->>'legacyRuns')::bigint
+      ),
       'publicSyntheticPolicyPresent', exists (
         select 1 from pg_policies
         where schemaname = 'public'
@@ -116,6 +125,10 @@ const report = {
   ...facts,
   pass:
     Boolean(facts.aggregate) &&
+    facts.aggregate?.scope === "all_available_server_history" &&
+    facts.aggregate?.coverage?.history === "all_available_server_history" &&
+    facts.allAvailableHistoryReconciled === true &&
+    Number(facts.completedRunFacts) >= Number(facts.aggregate?.coverage?.richRuns || 0) &&
     Number(facts.visibleSyntheticRows) === 0 &&
     Number(facts.serviceSyntheticRows) > 0 &&
     facts.publicSyntheticPolicyPresent === true,

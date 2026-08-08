@@ -9,7 +9,8 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../legal.css">
   <script src="../theme.js" defer></script>
-  <title>The sewer keeps receipts. | Call of Doodie</title>
+  <script src="../community-stats-live.js" defer></script>
+  <title>Community Stats | Call of Doodie</title>
 </head>
 <body>
   <div class="shell">
@@ -22,11 +23,20 @@
   <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme">Theme</button>
     </nav></header>
     <main>
-      <p class="eyebrow">Verified sewer telemetry</p>
-      <h1>The sewer keeps receipts.</h1>
-      <p class="lede">This release snapshot reports supported production history through August 7, 2026. The in-game Sewer Network refreshes live; this page stays deliberately dated so a stale count can never masquerade as current.</p>
-      <a class="primary-cta" href="../">Open the live Sewer Network <span aria-hidden="true">→</span></a>
-      <div class="card-grid"><section class="card"><h2>Runs and runners</h2><p>12 verified public runs came from 5 distinct runners. That is enough to prove the live pipeline, but not enough to infer retention or broad balance conclusions.</p></section><section class="card"><h2>Combat output</h2><p>Those runs recorded 259 enemies terminated, 21,628 damage, and 119,223 score. These are totals across verified completed runs, not per-player claims.</p></section><section class="card"><h2>What is excluded</h2><p>28 automated health-check rows remain available to operators but are excluded from every public total. Missing legacy hours, shots, and hits stay unmeasured rather than being estimated.</p></section><section class="card"><h2>Live view</h2><p>Open the Command Deck, leaderboard, or post-game debrief for the live Sewer Network. It polls every 15 seconds while visible and labels its source and freshness.</p></section></div>
+      <p class="eyebrow">Live player analytics</p>
+      <h1>Community Stats</h1>
+      <p class="lede">Community Stats refresh every 15 seconds and include every recoverable server record, from legacy public scores through full-detail completed-run facts. The verified snapshot remains visible whenever the live service is temporarily unreachable.</p>
+      <a class="primary-cta" href="../">Play with Community Stats <span aria-hidden="true">→</span></a>
+      <section class="live-stats" aria-labelledby="live-community-heading">
+        <div class="live-stats-head">
+          <div><p class="eyebrow">Always-current aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
+          <span class="status" data-community-status data-state="connecting" aria-live="polite">Connecting to live totals…</span>
+        </div>
+        <div class="live-stat-grid"><div class="live-stat"><span>Runs</span><strong data-community-stat="runs">12</strong></div><div class="live-stat"><span>Runners</span><strong data-community-stat="runners">5</strong></div><div class="live-stat"><span>Hours played</span><strong data-community-stat="hours">0.2 h</strong></div><div class="live-stat"><span>Enemies terminated</span><strong data-community-stat="kills">259</strong></div><div class="live-stat"><span>Total score</span><strong data-community-stat="score">119,223</strong></div><div class="live-stat"><span>Damage dealt</span><strong data-community-stat="damage">21,628</strong></div><div class="live-stat"><span>Measured accuracy</span><strong data-community-stat="accuracy">—</strong></div><div class="live-stat"><span>Bosses terminated</span><strong data-community-stat="bosses">0</strong></div></div>
+        <p class="live-coverage" data-community-coverage>All 12 supported runs · 0 full-detail · 12 legacy · oldest supported record March 12, 2026.</p>
+        <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
+      </section>
+      <div class="card-grid"><section class="card"><h2>Runs and runners</h2><p>The current supported history contains 12 verified public runs from 5 distinct runners. The live cards above update automatically; this small corpus does not support broad retention conclusions.</p></section><section class="card"><h2>Combat output</h2><p>Those runs recorded 259 enemies terminated, 21,628 damage, and 119,223 score. These are totals across verified completed runs, not per-player claims.</p></section><section class="card"><h2>What is excluded</h2><p>28 automated health-check rows remain available to operators but are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated.</p></section><section class="card"><h2>Live view</h2><p>This page, the Command Deck, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes.</p></section></div>
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
     </main>
     <footer><div class="footer-links"><a href="../">Home</a><a href="../about/">About</a><a href="../play/">Play</a><a href="../how-to-play/">How to Play</a><a href="../enemies/">Enemies</a><a href="../arsenal/">Arsenal</a><a href="../modes/">Modes</a><a href="../leaderboard/">Leaderboard</a><a href="../stats/">Stats</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a><a href="../press-kit/">Press Kit</a><a href="../status/">Status</a><a href="../changelog/">Changelog</a><a href="../privacy/">Privacy</a><a href="../terms/">Terms</a><a href="../contact/">Contact</a><a href="../ip/">Rights &amp; IP</a></div><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>

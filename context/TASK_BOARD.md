@@ -16,6 +16,14 @@ Public-safe launch roadmap summary.
 
 ## Now
 
+- [x] [SIL:3] **DONE S143** Community Stats live-history reliability — durable completed-run outbox, last-known-good cache, explicit LIVE/CACHED/OFFLINE states, 15-second polling, Realtime/focus/online refresh, and manual retry.
+- [x] [SIL:3] **DONE S143** All-recoverable-history contract — full-detail and legacy coverage, oldest-supported date, metric availability, and explicit not-measurable treatment for never-submitted pre-telemetry runs.
+- [x] [SIL:2] **DONE S143** Public live stats twin — credential-safe Pages API, live `/stats/` hydration, static fallback, and matching human/agent coverage language.
+- [x] [SIL:3] **DONE S143** Run-ingestion and release trust — delayed chronology, plausibility bounds, exact synthetic isolation, zero-vulnerability dependency tree, production migration/Function/site deployment, and live reconciliation.
+- [x] [SIL:2] **DONE S143** Rendered Community Stats proof — Command Deck, leaderboard, debrief, and public stats pass both themes at 390px/1440px with 16 hash-bound captures.
+- [x] [AUDIT WIN S143] Global balance changes and unrecoverable historical reconstruction remain rejected until rich run facts and representative participant evidence exist.
+
+**Runway exception:** the founder-scoped Community Stats follow-up is fully deployed. Open work remains physical, email, participant, publication, provider, subjective-review, interaction-quality, or explicit SPARKED authority gated; no phantom local item is invented.
 - [x] [SIL:3] **DONE S142** Truthful community statistics spine — idempotent run facts, aggregate-only reads, THIS DEVICE provenance, bounded live refresh, and production migration/function verification.
 - [x] [SIL:3] **DONE S142** Sewer Zombies — seeded outbreak escalation, horde/surge pacing, undead variants, isolated leaderboard/history identity, and complete runtime/public routing.
 - [x] [SIL:3] **DONE S142** Field Report loop — structured difficulty sentiment, visible Last Words, score/run-fact persistence, community aggregates, and evidence-ranked player-controlled threat recommendations.

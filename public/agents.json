@@ -119,6 +119,10 @@
       "href": "https://callofdoodie.wtf/stats-surface.json"
     },
     {
+      "rel": "game-stats-live",
+      "href": "https://callofdoodie.wtf/api/community-stats"
+    },
+    {
       "rel": "service-status",
       "href": "https://callofdoodie.wtf/status.json"
     }

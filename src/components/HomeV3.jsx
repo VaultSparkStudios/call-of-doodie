@@ -19,7 +19,7 @@ import {
 import { isSupporter } from "../utils/supporter.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { track } from "../utils/analytics.js";
-import SewerNetworkPanel from "./SewerNetworkPanel.jsx";
+import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 import "./home-v3.css";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
@@ -267,7 +267,7 @@ export default function HomeV3(props) {
             <div><strong>{meta?.careerPoints || 0}</strong><span>Upgrade points</span></div>
             <div><strong>{career?.achievementsEver?.length || 0}</strong><span>Achievements</span></div>
           </div>
-          <SewerNetworkPanel career={career} compact />
+          <CommunityStatsPanel career={career} compact />
           <div className="home3__next-action">
             <span>Next up</span>
             <strong>{firstRun ? "Complete one Standard run" : `${missions.filter((_, index) => !missionProgress[index]).length} daily missions remaining`}</strong>

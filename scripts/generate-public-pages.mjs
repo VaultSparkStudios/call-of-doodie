@@ -46,8 +46,34 @@ function renderArt() {
     </figure>`;
 }
 
+function renderLiveCommunityStats(page) {
+  if (page.id !== "stats") return "";
+  const metrics = [
+    ["runs", "Runs", "12"],
+    ["runners", "Runners", "5"],
+    ["hours", "Hours played", "0.2 h"],
+    ["kills", "Enemies terminated", "259"],
+    ["score", "Total score", "119,223"],
+    ["damage", "Damage dealt", "21,628"],
+    ["accuracy", "Measured accuracy", "—"],
+    ["bosses", "Bosses terminated", "0"],
+  ];
+  return `
+      <section class="live-stats" aria-labelledby="live-community-heading">
+        <div class="live-stats-head">
+          <div><p class="eyebrow">Always-current aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
+          <span class="status" data-community-status data-state="connecting" aria-live="polite">Connecting to live totals…</span>
+        </div>
+        <div class="live-stat-grid">${metrics.map(([id, label, fallback]) => `<div class="live-stat"><span>${escapeHtml(label)}</span><strong data-community-stat="${id}">${escapeHtml(fallback)}</strong></div>`).join("")}</div>
+        <p class="live-coverage" data-community-coverage>All 12 supported runs · 0 full-detail · 12 legacy · oldest supported record March 12, 2026.</p>
+        <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
+      </section>`;
+}
+
 function renderPage(page) {
   const art = page.art ? renderArt() : "";
+  const liveStats = renderLiveCommunityStats(page);
+  const liveStatsScript = page.id === "stats" ? '<script src="../community-stats-live.js" defer></script>' : "";
   const cta = page.cta
     ? `<a class="primary-cta" href="${escapeHtml(page.cta[1])}">${escapeHtml(page.cta[0])} <span aria-hidden="true">→</span></a>`
     : "";
@@ -62,7 +88,7 @@ function renderPage(page) {
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../legal.css">
   <script src="../theme.js" defer></script>
-  <title>${escapeHtml(page.title)} | Call of Doodie</title>
+${liveStatsScript ? `  ${liveStatsScript}\n` : ""}  <title>${escapeHtml(page.title)} | Call of Doodie</title>
 </head>
 <body>
   <div class="shell">
@@ -73,7 +99,7 @@ ${renderHeaderNav("../")}
       <p class="eyebrow">${escapeHtml(page.eyebrow)}</p>
       <h1>${escapeHtml(page.title)}</h1>
       <p class="lede">${escapeHtml(page.lede)}</p>
-      ${cta}${art}
+      ${cta}${liveStats}${art}
       <div class="card-grid">${page.sections.map(card).join("")}</div>
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
     </main>

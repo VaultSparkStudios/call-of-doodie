@@ -18,6 +18,14 @@ if (!/^session-\d+-staging$/.test(branch)) {
   console.error("Refusing deploy: --branch must match session-<number>-staging.");
   process.exit(2);
 }
+const deployManifest = path.resolve("dist", "deploy-manifest.json");
+const manifest = fs.existsSync(deployManifest)
+  ? JSON.parse(fs.readFileSync(deployManifest, "utf8"))
+  : null;
+if (manifest?.communityStats?.configured !== true) {
+  console.error("Refusing staging deploy: Community Stats runtime is not configured. Run npm run build:deployable.");
+  process.exit(2);
+}
 
 const windowsEntry = process.env.APPDATA
   ? path.join(process.env.APPDATA, "npm", "node_modules", "wrangler", "bin", "wrangler.js")

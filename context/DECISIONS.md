@@ -999,3 +999,19 @@ Decision: Keep the Command Deck Sewer Network as the live player surface, and pu
 Rationale: Live game telemetry answers “what is happening now,” while a stable canonical page gives humans and agents a citable scope/freshness contract. CANON-054 is satisfied without turning an unbounded per-visitor query into a cost surface or presenting stale data as current.
 
 CANON-010 gap justification: the live checker reports one Studio-OS-owned `claude:arc` reference to missing §0; Session 142 changed no skills, hooks, or Model Context Protocol registration, so this public-game repo records and routes the external parity drift rather than manufacturing a local fix.
+
+## 2026-08-08 — Session 143 — Community Stats is the player-facing identity
+
+Decision: Use Community Stats for the shared player-facing and component identity. Keep Sewer only where it describes the authored world or mode, including Sewer Zombies and the sewer-night theme.
+
+Rationale: Community Stats states the feature’s purpose immediately, while Sewer Network sounded like unexplained infrastructure. The narrower naming preserves the game’s plumbing brand without making analytics vocabulary obscure.
+
+## 2026-08-08 — Session 143 — Live totals preserve known truth through outages
+
+Decision: Queue every completed run durably before network submission, retry idempotently, and render a last-known-good aggregate with an explicit cached/offline label when live refresh fails. Never replace a known aggregate with zero because of a transient provider error.
+
+Rationale: “Always working” means honest degraded behavior, not an impossible guarantee of provider uptime. Durable local delivery plus labeled cached truth prevents both silent run loss and misleading availability claims.
+
+## 2026-08-08 — Session 143 — All past data means all recoverable server history
+
+Decision: Aggregate every supported server record without an arbitrary time window, distinguish rich run facts from legacy leaderboard records, expose per-metric coverage, and mark never-submitted pre-telemetry runs as not measurable rather than estimating them.

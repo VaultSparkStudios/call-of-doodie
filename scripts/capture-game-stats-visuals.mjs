@@ -35,6 +35,26 @@ async function prime(page, item, errors = []) {
       score: 22000 - index * 700, kills: 80 - index, wave: 9 - Math.floor(index / 3), time: 540,
       difficulty: index < 3 ? "hard" : "normal", mode: index === 0 ? "zombies" : "standard", ts: Date.now() - index * 60000,
     }))));
+    localStorage.setItem("cod-community-stats-cache-v1", JSON.stringify({
+      schemaVersion: 1,
+      cachedAt: Date.now(),
+      stats: {
+        scope: "all_available_server_history",
+        runs: 12, runners: 5, hours: 0.2, kills: 259, score: 119223, damage: 21628,
+        shots: 0, hits: 0, bosses: 0, bestScore: 79398, bestKills: 133, bestWave: 9,
+        runs24h: 0, kills24h: 0, modes: { standard: 12 },
+        feedback: { too_easy: 0, dialed_in: 0, brutal: 0 },
+        coverage: {
+          history: "all_available_server_history",
+          richRuns: 0,
+          legacyRuns: 12,
+          oldestSupportedAt: "2026-03-12T17:07:10.609742+00:00",
+          unknownLegacyMetrics: ["shots", "hits", "criticals", "bosses", "feedback"],
+          unrecoverablePreTelemetryRuns: "not_measurable",
+        },
+        updatedAt: "2026-07-17T22:38:02.110951+00:00",
+      },
+    }));
     localStorage.setItem("cod-lb-v5", JSON.stringify([
       { name: "7272uwhe", score: 22370, wave: 4, kills: 34, lastWords: "EASY WORLD", feedbackDifficulty: "too_easy", difficulty: "normal", mode: "normal", time: "3:20" },
       { name: "RottenRoyalty", score: 19840, wave: 9, kills: 96, lastWords: "THE SEWER REMEMBERS", feedbackDifficulty: "dialed_in", difficulty: "hard", mode: "zombies", time: "8:01" },
@@ -72,12 +92,16 @@ async function captureItem(browser, item) {
     width: innerWidth,
     coarse: matchMedia("(pointer: coarse)").matches,
   }));
+  const communityPanel = page.locator('[data-testid="community-stats"]');
+  await communityPanel.getByRole("button", { name: "COMMUNITY", exact: true }).click();
   console.log(`Command Deck device state · ${JSON.stringify({ ...item, ...deviceState, desktopControl: await modeButton.isVisible(), mobileControl: await mobileMode.isVisible() })}`);
   if (await modeButton.isVisible()) await modeButton.click();
   else await mobileMode.waitFor({ state: "visible" });
   await screenshot(page, `command-deck--${suffix}.png`);
   const homeState = await page.evaluate(() => ({
-    terminal: Boolean(document.querySelector('[data-testid="sewer-network"]')),
+    terminal: Boolean(document.querySelector('[data-testid="community-stats"]')),
+    communityName: document.body.textContent.includes("COMMUNITY STATS"),
+    allHistory: document.body.textContent.includes("ALL AVAILABLE HISTORY"),
     zombies: [...document.querySelectorAll("button, option")].some(node => /SEWER ZOMBIES/i.test(node.textContent || "")),
     overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) > innerWidth + 1,
     cachedLeaderboard: JSON.parse(localStorage.getItem("cod-lb-v5") || "[]").length,
@@ -87,12 +111,14 @@ async function captureItem(browser, item) {
   const statsErrors = [];
   statsPage.on("pageerror", error => statsErrors.push(error.stack || error.message));
   await statsPage.goto(`${origin}/stats/?theme=${item.theme}`, { waitUntil: "networkidle" });
-  await statsPage.getByRole("heading", { name: "The sewer keeps receipts." }).waitFor({ state: "visible" });
+  await statsPage.getByRole("heading", { name: "Community Stats" }).waitFor({ state: "visible" });
   await screenshot(statsPage, `stats--${suffix}.png`);
   const statsState = await statsPage.evaluate(() => ({
     analyzedMetrics: document.querySelectorAll("main .card-grid .card").length,
     syntheticExclusionVisible: document.body.textContent.includes("28 automated health-check rows"),
-    liveLinkVisible: [...document.querySelectorAll("a")].some(node => /OPEN THE LIVE SEWER NETWORK/i.test(node.textContent || "")),
+    liveLinkVisible: [...document.querySelectorAll("a")].some(node => /COMMUNITY STATS/i.test(node.textContent || "")),
+    liveMetricCards: document.querySelectorAll("[data-community-stat]").length,
+    allHistory: document.body.textContent.includes("All supported history"),
     overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) > innerWidth + 1,
   }));
   await statsPage.close();
@@ -103,7 +129,7 @@ async function captureItem(browser, item) {
   await page.waitForTimeout(700);
   await screenshot(page, `leaderboard--${suffix}.png`);
   const leaderboardState = await page.evaluate(() => ({
-    terminal: Boolean(document.querySelector('[data-testid="sewer-network"]')),
+    terminal: Boolean(document.querySelector('[data-testid="community-stats"]')),
     lastWordsVisible: document.body.textContent.includes("EASY WORLD") || document.body.textContent.includes("THE SEWER REMEMBERS"),
     overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) > innerWidth + 1,
   }));
@@ -128,7 +154,7 @@ async function captureItem(browser, item) {
   await page.waitForTimeout(800);
   await screenshot(page, `debrief--${suffix}.png`);
   const debriefState = await page.evaluate(() => ({
-    terminal: Boolean(document.querySelector('[data-testid="sewer-network"]')),
+    terminal: Boolean(document.querySelector('[data-testid="community-stats"]')),
     fieldReport: Boolean(document.querySelector('[data-testid="field-report"]')),
     zombies: document.body.textContent.includes("SEWER ZOMBIES"),
     overflow: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) > innerWidth + 1,
@@ -146,11 +172,15 @@ try {
 }
 const checks = results.flatMap(result => [
   { id: "command-terminal", ok: result.homeState.terminal, capture: `${result.theme}/${result.width}/home` },
+  { id: "community-name", ok: result.homeState.communityName, capture: `${result.theme}/${result.width}/home` },
+  { id: "all-history-coverage", ok: result.homeState.allHistory, capture: `${result.theme}/${result.width}/home` },
   { id: "zombies-option", ok: result.homeState.zombies, capture: `${result.theme}/${result.width}/home` },
   { id: "home-overflow", ok: !result.homeState.overflow, capture: `${result.theme}/${result.width}/home` },
   { id: "stats-analysis", ok: result.statsState.analyzedMetrics >= 4, capture: `${result.theme}/${result.width}/stats` },
   { id: "stats-synthetic-exclusion", ok: result.statsState.syntheticExclusionVisible, capture: `${result.theme}/${result.width}/stats` },
   { id: "stats-live-link", ok: result.statsState.liveLinkVisible, capture: `${result.theme}/${result.width}/stats` },
+  { id: "stats-live-metrics", ok: result.statsState.liveMetricCards >= 8, capture: `${result.theme}/${result.width}/stats` },
+  { id: "stats-all-history", ok: result.statsState.allHistory, capture: `${result.theme}/${result.width}/stats` },
   { id: "stats-overflow", ok: !result.statsState.overflow, capture: `${result.theme}/${result.width}/stats` },
   { id: "leaderboard-terminal", ok: result.leaderboardState.terminal, capture: `${result.theme}/${result.width}/leaderboard` },
   { id: "visible-last-words", ok: result.leaderboardState.lastWordsVisible, capture: `${result.theme}/${result.width}/leaderboard` },

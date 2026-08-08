@@ -7,9 +7,19 @@ import { withPagesDeployEnv } from "../../vaultspark-studio-ops/scripts/lib/cf-d
 
 const listOnly = process.argv.includes("--list");
 const distIndex = path.resolve("dist", "index.html");
+const deployManifest = path.resolve("dist", "deploy-manifest.json");
 if (!listOnly && !fs.existsSync(distIndex)) {
-  console.error("Refusing production deploy: dist/index.html is missing. Run npm run build first.");
+  console.error("Refusing production deploy: dist/index.html is missing. Run npm run build:deployable first.");
   process.exit(2);
+}
+if (!listOnly) {
+  const manifest = fs.existsSync(deployManifest)
+    ? JSON.parse(fs.readFileSync(deployManifest, "utf8"))
+    : null;
+  if (manifest?.communityStats?.configured !== true) {
+    console.error("Refusing production deploy: Community Stats runtime is not configured. Run npm run build:deployable.");
+    process.exit(2);
+  }
 }
 
 const windowsEntry = process.env.APPDATA

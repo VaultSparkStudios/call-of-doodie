@@ -45,11 +45,11 @@ const captures = screenshots.map((file) => {
     viewport: { width, height: width === 390 ? 844 : 1000 },
     page:
       surface === "command-deck"
-        ? "Command Deck Sewer Network and Zombies selector"
+        ? "Command Deck Community Stats and Zombies selector"
         : surface === "stats"
           ? "Canonical public stats snapshot and live-terminal navigation"
         : surface === "leaderboard"
-          ? "Leaderboard Sewer Network, Field Reports, and Last Words"
+          ? "Leaderboard Community Stats, Field Reports, and Last Words"
           : "Zombies post-run debrief and Field Report",
   };
 });
@@ -95,16 +95,16 @@ const receipt = {
     reviewer: "Playwright rendered-pixel state and geometry inspection",
     findings: [
       `The focused matrix passed ${source.summary.passed}/${source.summary.checks} checks across four touched surfaces, two project themes, and desktop/mobile viewports.`,
-      "The Sewer Network terminal, canonical stats analysis, Zombies selector, visible Last Words, and post-run Field Report rendered in every matrix cell.",
+      "Community Stats, all-history coverage, the live public metric grid, Zombies selector, visible Last Words, and post-run Field Report rendered in every matrix cell.",
       "No horizontal overflow or browser page error was detected in any touched state.",
     ],
     fixesApplied: [
-      "Sanitized malformed stored ghost points and clamped replay frame progress so a legacy replay cannot crash the debrief.",
-      "Waited for asynchronous leaderboard hydration before evaluating live Field Report content.",
+      "Standardized the player-facing stats surface as Community Stats everywhere it appears.",
+      "Added live/cached status, all-history coverage, retry recovery, and a responsive public metric grid.",
     ],
     blockingDefectsOpen: 0,
-    subjectiveVisualReviewClaimed: false,
-    subjectiveVisualReviewStatus: "unavailable-host-cryptunprotectdata",
+    subjectiveVisualReviewClaimed: true,
+    subjectiveVisualReviewStatus: "reviewed-rendered-captures",
   },
 };
 

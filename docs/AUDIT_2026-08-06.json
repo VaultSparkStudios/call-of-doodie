@@ -319,6 +319,12 @@
       "status": "complete",
       "notes": "Expanded device career and 50-run history with projectiles, hits, measured accuracy, criticals, bosses, mode, feedback, and explicit THIS DEVICE scope.",
       "verification": "Storage/run-session/run-fact/stat normalization tests pass within the 1011-test full suite."
+    },
+    {
+      "slug": "community-stats-live-history-reliability",
+      "status": "complete",
+      "notes": "Renamed the player surface to Community Stats and added a durable completed-run retry outbox, last-known-good cache, 15-second/focus/online/manual refresh, a public live API, and an all-available-server-history coverage contract.",
+      "verification": "Production deployment e0b481c3 reports 12 real runs (0 full-detail, 12 legacy) from March 12, 2026 onward; 1,022 tests, strict lint/schema/build, 16 rendered captures, and production browser/API reconciliation pass with 28 synthetic probes excluded."
     }
   ]
 }
