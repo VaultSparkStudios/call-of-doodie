@@ -93,6 +93,7 @@ export default function HUD({
         activeWaveContract={activeWaveContract} grenadeReady={grenadeReady} dashReady={dashReady}
         combo={combo} killstreak={killstreak} experimentMatched={experimentMatched}
         reducedEffects={Boolean(reducedEffects)}
+        heat={heat} showHeatMeter={HUD_FLAGS.showHeatMeter}
       />
     );
   }

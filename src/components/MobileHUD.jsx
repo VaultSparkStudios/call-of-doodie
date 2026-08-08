@@ -17,6 +17,7 @@ export default function MobileHUD({
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
   combo, killstreak, experimentMatched, reducedEffects,
+  heat = 0, showHeatMeter = true,
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const weapon = WEAPONS[currentWeapon];
@@ -35,6 +36,11 @@ export default function MobileHUD({
         <div style={{ minWidth: 0 }}>
           <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>LEVEL {level}</div>
           <div style={{ marginTop: 2, fontSize: 12, fontWeight: 900, whiteSpace: "nowrap" }}>WAVE {wave}</div>
+          {showHeatMeter && heat > 5 && (
+            <div data-testid="hud-heat-chip" style={{ marginTop: 2, fontSize: 8, fontWeight: 900, letterSpacing: 0.8, color: heat >= 70 ? "#FF3300" : heat >= 40 ? "#FF8800" : "#FFC800" }}>
+              🔥{Math.round(heat)}{heat >= 70 ? " OD" : ""}
+            </div>
+          )}
         </div>
         <div style={{ minWidth: 84, textAlign: "center" }}>
           <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>TIME</div>
