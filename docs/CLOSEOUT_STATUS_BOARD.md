@@ -1,25 +1,24 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-08 (Session 144 closeout) -->
+<!-- generated-at: 2026-08-09 (Session 145 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S144 ════════════════════╗
-║  Date: 2026-08-08  ·  SIL: 998/1000  ·  Velocity: 5 decreasing   ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S145 ════════════════════╗
+║  Date: 2026-08-09  ·  SIL: 998/1000  ·  Velocity: 18 down        ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Product: Doctrine Archive, doctrine near-miss coaching, Gaun  ║
-║  ✓ Descoped: the button-size/density half of the mobile-handedn  ║
-║  ✓ Known cosmetic nuance: off-screen threat arrow anchoring inh  ║
-║  ✓ Release: engineering FORGE, deployed/public-unlaunched; SPAR  ║
+║  ✓ Descoped honestly: onboarding-funnel-merge and website-redun  ║
+║  ✓ Human/data gates: staging INP re-measure (390×844) to confir  ║
+║  ✓ Release: engineering FORGE deployed/public-unlaunched; SPARK  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           100  ██████████                            ║
-║    Engagement         99   ██████████                            ║
+║    Momentum           99   ██████████                            ║
+║    Engagement         100  ██████████                            ║
 ║    Process Qual       99   ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
@@ -34,13 +33,13 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (Claude/Codex project memory)                    ║
+║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 1 files  ·  M:0 A:0 D:0 ?:1                            ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -51,12 +50,12 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        129/173                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1054/1054                                        ║
+║  Tests:         1102/1054                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         7d ago                                           ║
+║  IGNIS:         9d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  Sanitization:  2d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
