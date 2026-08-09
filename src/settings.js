@@ -20,6 +20,7 @@ export const SETTINGS_DEFAULTS = {
   aimAssist:           false, // snap aim toward nearest enemy when using gamepad
   // Touch settings
   controlHandedness:  "right", // "right" (default: move-left/aim-right) | "left" (mirrored)
+  touchButtonSize:    "standard", // "standard" | "large" — bigger action buttons for easier tapping
   // Accessibility
   reducedMotion:       false, // disable screen shake, flashes, trails (photosensitivity)
   // HUD density preset: "minimal" (HP/ammo/score only), "standard" (default), "tactical" (everything)

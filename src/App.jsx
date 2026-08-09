@@ -420,7 +420,8 @@ export default function CallOfDoodie() {
     const resize = () => {
       if (containerRef.current) {
         const w = containerRef.current.clientWidth;
-        const actionBarHeight = isMobile ? 56 : 0;
+        const dockLarge = isMobile && gameSettings.touchButtonSize === "large";
+        const actionBarHeight = isMobile ? (dockLarge ? 72 : 56) : 0;
         const h = Math.max(0, containerRef.current.clientHeight - actionBarHeight);
         sizeRef.current = { w, h };
         if (canvasRef.current) { canvasRef.current.width = w; canvasRef.current.height = h; }
@@ -428,7 +429,7 @@ export default function CallOfDoodie() {
     };
     resize(); window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, [screen, isMobile]);
+  }, [screen, isMobile, gameSettings.touchButtonSize]);
 
   const GW = () => sizeRef.current.w;
   const GH = () => sizeRef.current.h;
@@ -4612,7 +4613,7 @@ export default function CallOfDoodie() {
       <canvas
         id="game-canvas"
         ref={canvasRef}
-        style={{ width: "100%", height: isMobile ? "calc(100% - 64px)" : "100%", display: "block", cursor: isMobile ? "default" : (gameSettings.crosshair !== "cross" ? "none" : "crosshair"),
+        style={{ width: "100%", height: isMobile ? (gameSettings.touchButtonSize === "large" ? "calc(100% - 80px)" : "calc(100% - 64px)") : "100%", display: "block", cursor: isMobile ? "default" : (gameSettings.crosshair !== "cross" ? "none" : "crosshair"),
           filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
       />
 
@@ -4988,7 +4989,7 @@ export default function CallOfDoodie() {
       />
 
       {/* Mobile action bar */}
-      {isMobile && <MobileWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
+      {isMobile && <MobileWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} touchButtonSize={gameSettings.touchButtonSize} onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
       {!isMobile && <DesktopWeaponDock currentWeapon={currentWeapon} weaponUpgrades={weaponUpgrades} weaponAmmos={gsRef.current?.weaponAmmos || []} ammo={ammo} weaponMods={gsRef.current?.weaponMods || {}} grenadeReady={grenadeReady} dashReady={dashReady} isReloading={isReloading} showAmmoBars onSwitchWeapon={switchWeapon} onReload={() => doReload(currentWeaponRef.current)} onDash={doDash} onGrenade={throwGrenade} />}
 
       <style>{`

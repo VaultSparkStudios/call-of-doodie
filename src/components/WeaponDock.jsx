@@ -94,12 +94,14 @@ export function MobileWeaponDock(props) {
   const {
     currentWeapon = 0, weaponUpgrades, weaponAmmos, ammo, weaponMods,
     grenadeReady, dashReady, isReloading,
+    touchButtonSize = "standard",
     onSwitchWeapon, onGrenade, onDash, onReload,
   } = props;
   const [open, setOpen] = useState(false);
   const selected = WEAPONS[currentWeapon] || WEAPONS[0];
+  const sizeClass = touchButtonSize === "large" ? " is-large" : "";
   return (
-    <div className={`weapon-dock-mobile ${open ? "is-open" : ""}`} data-testid="mobile-weapon-dock">
+    <div className={`weapon-dock-mobile${open ? " is-open" : ""}${sizeClass}`} data-testid="mobile-weapon-dock">
       {open && (
         <div className="weapon-dock-mobile__drawer">
           <div><strong>CHOOSE WEAPON</strong><button type="button" onClick={() => setOpen(false)} aria-label="Close weapon selector">×</button></div>
