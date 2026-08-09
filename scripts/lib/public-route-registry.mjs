@@ -2,7 +2,16 @@ import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
 
 export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
-export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-07";
+export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-09";
+
+export function formatPublicContentDate() {
+  const [year, month, day] = PUBLIC_CONTENT_VERSION_DATE.split("-").map(Number);
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  return `${months[month - 1]} ${day}, ${year}`;
+}
+
+export const PARODY_DISCLAIMER =
+  "Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.";
 
 const CORE_ATLAS_INDICES = [0, 1, 2, 3, 5, 6, 7, 8];
 const SPECIALIST_ATLAS_INDICES = [9, 10, 11, 12, 13, 14, 15, 16];
@@ -136,10 +145,9 @@ const ROUTE_DEFINITIONS = [
     description: "Verified Call of Doodie player and run statistics with scope, freshness, and plain-language analysis.",
     lede: "Community Stats refresh every 15 seconds and include every recoverable server record, from legacy public scores through full-detail completed-run facts. The verified snapshot remains visible whenever the live service is temporarily unreachable.",
     sections: [
-      ["Runs and runners", "The current supported history contains 12 verified public runs from 5 distinct runners. The live cards above update automatically; this small corpus does not support broad retention conclusions."],
-      ["Combat output", "Those runs recorded 259 enemies terminated, 21,628 damage, and 119,223 score. These are totals across verified completed runs, not per-player claims."],
-      ["What is excluded", "28 automated health-check rows remain available to operators but are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated."],
-      ["Live view", "This page, the Command Deck, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes."],
+      ["How to read this page", "Every number above is a live total across verified completed runs — never a per-player claim. The small corpus means trends are directional, not statistical. Community records show the single best verified wave, score, and kill count anyone has posted."],
+      ["What is excluded", "Automated health-check rows remain available to operators but are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated."],
+      ["Live view", "This page, the Home screen, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes. Sparklines chart the totals this browser has observed changing."],
     ],
     cta: ["Play with Community Stats", "../"],
   },
@@ -185,7 +193,7 @@ const ROUTE_DEFINITIONS = [
     description: "Current public service posture for Call of Doodie.",
     lede: "The browser game and public documentation are the primary surfaces. This page states product behavior without promising uninterrupted availability.",
     sections: [
-      ["Browser game · operational", "Public health checks passed August 3, 2026. Local play can continue when optional online score services are unavailable."],
+      ["Browser game · operational", `Public health checks passed ${formatPublicContentDate()}. Local play can continue when optional online score services are unavailable.`],
       ["Leaderboard trust · operational", "Origin controls, bounded request quotas, replay checks, and reversible anomaly quarantine are active. Eligibility can still fall back to local-only."],
       ["Known limitation", "Progress is browser-local. Porcelain Passport can export a minimal verification receipt, but cross-device career synchronization is not currently promised."],
     ],
@@ -196,8 +204,11 @@ const ROUTE_DEFINITIONS = [
     description: "Recent player-facing Call of Doodie changes.",
     lede: "This log highlights meaningful player-facing releases rather than every internal code change.",
     sections: [
-      ["August 3, 2026 · Command deck and deeper runs", "Recomposed the Home screen into Orders, Operations, Player Progress, and a live Field Manual; added Scenario Cartridges, account-free Sewer Relay links, a three-chapter Nemesis Chronicle, and opt-in local Playtest Pulse receipts."],
-      ["August 3, 2026 · Trust, speed, and debrief intelligence", "Deferred the heavy arena runtime behind a lightweight command deck, reduced initial JavaScript by about 73%, made debriefs lead with one evidence-backed verdict, and activated origin, quota, and reversible leaderboard trust controls."],
+      ["August 9, 2026 · Sharper, richer, more honest", "Refreshed player-facing facts across every page, expanded Community Stats presentation, and continued the in-game visual overhaul with crisper rendering and upgraded combat feedback."],
+      ["August 8, 2026 · Doctrine Archive and mobile feel", "Added a permanent Doctrine Archive collection for every build doctrine ever forged, mobile haptic feedback for hits, kills, bosses, and low health, and off-screen threat-direction arrows."],
+      ["August 7, 2026 · Live Community Stats and Sewer Zombies", "Launched verified live Community Stats on the Home screen, debrief, leaderboard, and a public stats page; added the seeded Sewer Zombies outbreak mode with four undead variants; introduced TOO EASY / DIALED IN / BRUTAL run feedback."],
+      ["August 3, 2026 · Command center and deeper runs", "Recomposed the Home screen into Orders, Operations, Player Progress, and a live Field Manual; added Scenario Cartridges, account-free Sewer Relay links, a three-chapter Nemesis Chronicle, and opt-in local Playtest Pulse receipts."],
+      ["August 3, 2026 · Trust, speed, and debrief intelligence", "Deferred the heavy arena runtime behind a lightweight command center, reduced initial JavaScript by about 73%, made debriefs lead with one evidence-backed verdict, and activated origin, quota, and reversible leaderboard trust controls."],
       ["July 25, 2026 · Play-first interface", "Removed the mandatory first-visit display-name gate, rebuilt the main menu around Start Run, simplified language, added a mobile navigation dock, and preserved optional profile identity."],
       ["July 25, 2026 · Combat clarity", "Introduced a compact responsive heads-up display, larger action targets, contextual action-observed training, and distinct production art for all 22 enemies and bosses."],
       ["July 25, 2026 · Expanded website", "Added the player guide, enemy codex, arsenal, modes, accessibility, support, press, status, changelog, and missing public standard files."],

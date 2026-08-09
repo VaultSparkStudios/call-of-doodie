@@ -25,6 +25,25 @@ async function mtime(path) {
   }
 }
 
+async function generateOgImage() {
+  const ogSource = resolve(publicDir, "og-image.svg");
+  const ogOut = resolve(publicDir, "og-image.png");
+  const sourceMtime = await mtime(ogSource);
+  if (!sourceMtime) {
+    console.log("[generate-icons] og-image.svg not found — skipping social card PNG.");
+    return 0;
+  }
+  if ((await mtime(ogOut)) >= sourceMtime) return 0;
+  const svg = await readFile(ogSource);
+  const buf = await sharp(svg, { density: 192 })
+    .resize(1200, 630, { fit: "contain", background: { r: 10, g: 10, b: 10, alpha: 1 } })
+    .png({ compressionLevel: 9 })
+    .toBuffer();
+  await writeFile(ogOut, buf);
+  console.log(`[generate-icons] wrote ${ogOut} (1200x630, ${buf.length} bytes)`);
+  return 1;
+}
+
 async function main() {
   const sourceMtime = await mtime(sourcePath);
   if (!sourceMtime) {
@@ -48,6 +67,8 @@ async function main() {
     generated += 1;
     console.log(`[generate-icons] wrote ${out} (${size}x${size}, ${buf.length} bytes)`);
   }
+
+  generated += await generateOgImage();
 
   if (generated === 0) {
     console.log("[generate-icons] PNGs up to date — no work.");

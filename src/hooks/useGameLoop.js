@@ -14,6 +14,21 @@ function round(value, digits = 1) {
   return Math.round(value * factor) / factor;
 }
 
+// S145 degradation ladder — pure resolver so the policy is unit-testable.
+// Step 0: full fidelity. 1: halve particles + no tracer trails.
+// 2: also zero shadowBlur + ambient theme effects. 3: also drop DPR to 1×
+// and collapse sprite-motion to static transforms.
+export const PERF_STEP_MAX = 3;
+export function resolvePerfStep(currentStep, dropPct, {
+  adaptThreshold = ADAPT_THRESHOLD,
+  recoverThreshold = RECOVER_THRESHOLD,
+} = {}) {
+  const step = Math.min(PERF_STEP_MAX, Math.max(0, Math.floor(currentStep) || 0));
+  if (dropPct >= adaptThreshold) return Math.min(PERF_STEP_MAX, step + 1);
+  if (dropPct <= recoverThreshold) return Math.max(0, step - 1);
+  return step;
+}
+
 export function makeFrameMonitor({ onSnapshot = null } = {}) {
   let reportDrops = 0;
   let reportTotal = 0;
@@ -22,6 +37,7 @@ export function makeFrameMonitor({ onSnapshot = null } = {}) {
   let adaptTotal = 0;
   let stableWindows = 0;
   let active = false;
+  let perfStep = 0;
   let totalFrames = 0;
   let slowFrames = 0;
   let worstMs = 0;
@@ -43,6 +59,7 @@ export function makeFrameMonitor({ onSnapshot = null } = {}) {
     const assisted = assistActivations > 0;
     return {
       version: 1,
+      perfStep,
       totalFrames,
       slowFrames,
       slowPct,
@@ -68,12 +85,13 @@ export function makeFrameMonitor({ onSnapshot = null } = {}) {
     adaptTotal = 0;
     stableWindows = 0;
     active = false;
+    perfStep = 0;
     totalFrames = 0;
     slowFrames = 0;
     worstMs = 0;
     assistActivations = 0;
     histogram.fill(0);
-    if (typeof window !== "undefined") window.__codReducedEffects = false;
+    if (typeof window !== "undefined") { window.__codReducedEffects = false; window.__codPerfStep = 0; }
   };
 
   return {
@@ -107,16 +125,21 @@ export function makeFrameMonitor({ onSnapshot = null } = {}) {
           stableWindows = 0;
           if (!active) assistActivations += 1;
           active = true;
+          perfStep = resolvePerfStep(perfStep, pct);
         } else if (active && pct <= RECOVER_THRESHOLD) {
           stableWindows += 1;
           if (stableWindows >= RECOVER_WINDOWS) {
-            active = false;
+            perfStep = resolvePerfStep(perfStep, pct);
+            active = perfStep > 0;
             stableWindows = 0;
           }
         } else {
           stableWindows = 0;
         }
-        if (typeof window !== "undefined") window.__codReducedEffects = active;
+        if (typeof window !== "undefined") {
+          window.__codReducedEffects = active;
+          window.__codPerfStep = perfStep;
+        }
         adaptDrops = 0;
         adaptTotal = 0;
         onSnapshot?.(snapshot());

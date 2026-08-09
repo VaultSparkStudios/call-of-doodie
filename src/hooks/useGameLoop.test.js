@@ -1,5 +1,38 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { makeFrameMonitor, runFrameSafely, runMeasuredFrame } from "./useGameLoop.js";
+import { makeFrameMonitor, resolvePerfStep, runFrameSafely, runMeasuredFrame, PERF_STEP_MAX } from "./useGameLoop.js";
+
+describe("degradation ladder resolver (S145)", () => {
+  it("escalates one step per sustained-drop window and caps at max", () => {
+    expect(resolvePerfStep(0, 0.25)).toBe(1);
+    expect(resolvePerfStep(1, 0.25)).toBe(2);
+    expect(resolvePerfStep(2, 0.25)).toBe(3);
+    expect(resolvePerfStep(3, 0.9)).toBe(PERF_STEP_MAX);
+  });
+
+  it("de-escalates one step on recovery and floors at zero", () => {
+    expect(resolvePerfStep(3, 0.01)).toBe(2);
+    expect(resolvePerfStep(1, 0.01)).toBe(0);
+    expect(resolvePerfStep(0, 0)).toBe(0);
+  });
+
+  it("holds the current step in the hysteresis band", () => {
+    expect(resolvePerfStep(2, 0.12)).toBe(2);
+  });
+
+  it("normalizes hostile step input", () => {
+    expect(resolvePerfStep(NaN, 0.25)).toBe(1);
+    expect(resolvePerfStep(-5, 0.01)).toBe(0);
+    expect(resolvePerfStep(99, 0.25)).toBe(PERF_STEP_MAX);
+  });
+
+  it("monitor escalates the published perf step under repeated slow windows", () => {
+    const m = makeFrameMonitor();
+    for (let i = 0; i < 250; i++) m.record(25);
+    expect(window.__codPerfStep).toBeGreaterThanOrEqual(2);
+    m.reset();
+    expect(window.__codPerfStep).toBe(0);
+  });
+});
 
 describe("adaptive frame monitor", () => {
   beforeEach(() => {

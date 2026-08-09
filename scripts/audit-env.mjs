@@ -7,7 +7,11 @@ const groups = [
   {
     name: "Supabase Edge Function runtime",
     required: ["SUPABASE_URL", "SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"],
-    optional: [],
+    optional: ["RUN_TOKEN_SIGNING_SECRET"],
+    warnings: [{
+      key: "RUN_TOKEN_SIGNING_SECRET",
+      whenMissing: "HMAC signing falls back to the service-role key — set a dedicated secret so a signing-key rotation never requires a service-role rotation (S145).",
+    }],
   },
   {
     name: "GitHub Actions function deploy",
@@ -45,6 +49,10 @@ for (const group of selectedGroups) {
   for (const key of group.optional) {
     const present = Boolean(process.env[key]);
     console.log(`- ${present ? "SET" : "OPTIONAL"} ${key}`);
+  }
+
+  for (const warning of group.warnings || []) {
+    if (!process.env[warning.key]) console.log(`- WARN ${warning.key}: ${warning.whenMissing}`);
   }
 }
 

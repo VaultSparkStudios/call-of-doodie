@@ -7,6 +7,8 @@ import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { ENEMY_ATLAS_CONTRACT } from "../src/utils/enemyAtlasContract.js";
+import { WEAPON_ATLAS_CONTRACT, WORLD_OBJECT_ATLAS_CONTRACT, WORLD_OBJECT_CELLS } from "../src/utils/objectAtlasContract.js";
+import { buildWeaponAtlasSvg, buildWorldObjectAtlasSvg } from "./lib/object-atlas-svg.mjs";
 import { removeChromaKey } from "./lib/chroma-key.mjs";
 
 const ROOT = process.cwd();
@@ -189,4 +191,25 @@ for (const atlas of Object.values(ENEMY_ATLAS_CONTRACT)) {
 }
 
 
-console.log(`Generated ${assets.length + runtimeSprites.length + Object.keys(ENEMY_ATLAS_CONTRACT).length} proprietary visual asset(s).`);
+// S145 — repo-authored SVG object atlases (transparent source, no chroma key).
+const objectAtlases = [
+  { contract: WEAPON_ATLAS_CONTRACT, svg: buildWeaponAtlasSvg({ width: WEAPON_ATLAS_CONTRACT.width, height: WEAPON_ATLAS_CONTRACT.height, columns: WEAPON_ATLAS_CONTRACT.columns }) },
+  { contract: WORLD_OBJECT_ATLAS_CONTRACT, svg: buildWorldObjectAtlasSvg({ width: WORLD_OBJECT_ATLAS_CONTRACT.width, height: WORLD_OBJECT_ATLAS_CONTRACT.height, columns: WORLD_OBJECT_ATLAS_CONTRACT.columns, cells: WORLD_OBJECT_CELLS }) },
+];
+for (const { contract, svg } of objectAtlases) {
+  const svgPath = path.join(ROOT, contract.sourcePath);
+  const runtimePath = path.join(ROOT, contract.runtimePath);
+  fs.mkdirSync(path.dirname(svgPath), { recursive: true });
+  fs.writeFileSync(svgPath, svg, "utf8");
+  await sharp(Buffer.from(svg))
+    .resize(contract.width, contract.height, { fit: "fill" })
+    .webp({ quality: 86, alphaQuality: 92, effort: 6, smartSubsample: true })
+    .toFile(runtimePath);
+  const bytes = fs.statSync(runtimePath).size;
+  if (bytes > contract.maxBytes) throw new Error(`${contract.id} exceeds ${contract.maxBytes} byte runtime budget (${bytes})`);
+  const metadata = await sharp(runtimePath).metadata();
+  if (!metadata.hasAlpha) throw new Error(`${contract.id} lost alpha transparency during export`);
+  console.log(`Generated ${path.relative(ROOT, svgPath)} -> ${path.relative(ROOT, runtimePath)} (${bytes} bytes)`);
+}
+
+console.log(`Generated ${assets.length + runtimeSprites.length + Object.keys(ENEMY_ATLAS_CONTRACT).length + objectAtlases.length} proprietary visual asset(s).`);

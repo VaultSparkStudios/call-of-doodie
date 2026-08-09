@@ -319,6 +319,9 @@ export default function HomeV3(props) {
         <div>
           <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/contact/">Contact</a><a href="/ip/">Rights &amp; IP</a>
         </div>
+        <p style={{ opacity: 0.75, fontSize: 11, lineHeight: 1.5 }}>
+          Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.
+        </p>
         <p>© 2026 VaultSpark Studios LLC. All rights reserved.</p>
       </footer>
 

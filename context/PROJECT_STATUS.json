@@ -310,7 +310,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-08-08",
+  "lastUpdated": "2026-08-09",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
@@ -320,7 +320,7 @@
   "ignisLastComputed": "2026-08-01",
   "silSession": 144,
   "silScore": 998,
-  "silAvg3": 998.0,
+  "silAvg3": 998,
   "silVelocity": 5,
   "silDebt": "decreasing",
   "silLastSession": "2026-08-08",

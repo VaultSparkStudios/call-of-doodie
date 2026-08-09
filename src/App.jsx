@@ -11,9 +11,9 @@ import {
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
-import { preloadEnemyAtlasesForTypes } from "./utils/visualAssetLibrary.js";
+import { preloadEnemyAtlasesForTypes, preloadObjectAtlases } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
-import { loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
+import { applyRunSettings, loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
 import { applyEnemyDamage, collectQueuedEnemyDefeats, collectUnqueuedLethalEnemies, queueEnemyDefeat, retireEnemyWithoutDefeat, takeQueuedEnemyDefeat } from "./systems/enemyDefeatLifecycle.js";
@@ -47,6 +47,7 @@ import {
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes, getArchetypeProgress } from "./utils/buildArchetypes.js";
+import { createWhisperLedger, tickTacticalWhisper } from "./systems/tacticalWhisper.js";
 import { vibrate, setHapticsEnabled } from "./utils/haptics.js";
 import { resolveTouchStick } from "./utils/touchHandedness.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
@@ -56,16 +57,18 @@ import { detectControllerType, getPrimaryGamepad, readGamepadControls, rememberC
 import { getRandomPerks, getFullyCursedPerks } from "./utils/perkOptions.js";
 import { buildWeeklyGauntletLaunch } from "./utils/gauntletLaunch.js";
 import { scheduleIdleWork } from "./utils/deferredWork.js";
+import { applyCanvasScale, watchCanvasScale } from "./utils/canvasScale.js";
+import { captureGifFrame } from "./utils/gifCapture.js";
 import { getRouteOptions } from "./utils/routeOptions.js";
 import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
-import DisplayNameScreen from "./components/DisplayNameScreen.jsx";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
-import HomeV2 from "./components/HomeV2.jsx";
-import HomeV3 from "./components/HomeV3.jsx";
 import HUD from "./components/HUD.jsx";
-import InputDebugOverlay from "./components/InputDebugOverlay.jsx";
+const HomeV2 = lazy(() => import("./components/HomeV2.jsx"));
 import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
+const DisplayNameScreen = lazy(() => import("./components/DisplayNameScreen.jsx"));
+const HomeV3          = lazy(() => import("./components/HomeV3.jsx"));
+const InputDebugOverlay = lazy(() => import("./components/InputDebugOverlay.jsx"));
 const MenuScreen     = lazy(() => import("./components/MenuScreen.jsx"));
 const PauseMenu       = lazy(() => import("./components/PauseMenu.jsx"));
 const PerkModal       = lazy(() => import("./components/PerkModal.jsx"));
@@ -298,6 +301,7 @@ export default function CallOfDoodie() {
   const [guardianAngelFlash, setGuardianAngelFlash] = useState(false);
   const [weaponUpgrades, setWeaponUpgrades] = useState(() => WEAPONS.map(() => 0));
   const [activePerks, setActivePerks] = useState([]);
+  const activePerksRef = useRef([]);
   const [unlockedArchetypes, setUnlockedArchetypes] = useState([]);
   const [perkPending, setPerkPending] = useState(false);
   const [perkOptions, setPerkOptions] = useState([]);
@@ -420,14 +424,14 @@ export default function CallOfDoodie() {
     const resize = () => {
       if (containerRef.current) {
         const w = containerRef.current.clientWidth;
-        const actionBarHeight = isMobile ? 56 : 0;
-        const h = Math.max(0, containerRef.current.clientHeight - actionBarHeight);
+        const h = Math.max(0, containerRef.current.clientHeight - (isMobile ? 56 : 0));
         sizeRef.current = { w, h };
-        if (canvasRef.current) { canvasRef.current.width = w; canvasRef.current.height = h; }
+        applyCanvasScale(canvasRef.current, w, h);
       }
     };
     resize(); window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    const unwatch = watchCanvasScale(() => canvasRef.current, () => sizeRef.current, resize);
+    return () => { window.removeEventListener("resize", resize); unwatch(); };
   }, [screen, isMobile]);
 
   const GW = () => sizeRef.current.w;
@@ -644,18 +648,15 @@ export default function CallOfDoodie() {
     // Ghost race: load previous run's ghost for same mode, reset recorder
     ghostRecordRef.current = createGhostRecorder();
     commandTraceRef.current = []; // reset command trace for this run
-    const _gKey = "cod-ghost-" + (zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "normal") + "-v1";
+    const _ghostMode = zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard";
+    const _gKey = `cod-ghost-${_ghostMode === "standard" ? "normal" : _ghostMode}-v1`;
     gsRef.current._ghostKey = _gKey;
     gsRef.current.ghost = loadGhostPlayback(_gKey);
     // Persistent ghost leaderboard: load top-3 scores for this mode/difficulty as score targets
-    loadTopGhosts(
-      zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
-      difficultyRef.current || "normal"
-    ).then(ghosts => { if (gsRef.current) gsRef.current.topGhosts = ghosts; }).catch(() => {});
-    loadWeeklyTopGhost(
-      zombiesRef.current ? "zombies" : bossRushRef.current ? "boss_rush" : cursedRunRef.current ? "cursed" : scoreAttackRef.current ? "score_attack" : "standard",
-      difficultyRef.current || "normal"
-    ).then(ghost => { if (gsRef.current) gsRef.current.weeklyRival = ghost; }).catch(() => {});
+    loadTopGhosts(_ghostMode, difficultyRef.current || "normal")
+      .then(ghosts => { if (gsRef.current) gsRef.current.topGhosts = ghosts; }).catch(() => {});
+    loadWeeklyTopGhost(_ghostMode, difficultyRef.current || "normal")
+      .then(ghost => { if (gsRef.current) gsRef.current.weeklyRival = ghost; }).catch(() => {});
     // Proximity rivals: 3 leaderboard players within ±10% of personal best — continuous rivalry ladder
     try {
       const _careerForRivals = loadCareerStats();
@@ -862,17 +863,8 @@ export default function CallOfDoodie() {
 
     // Apply user settings to this run
     const sett = settingsRef.current;
-    gsRef.current.player.speed *= sett.playerSpeedMult;
-    gsRef.current.settSpawnMult       = sett.enemySpawnMult;
-    gsRef.current.settEnemyHealthMult = sett.enemyHealthMult;
-    gsRef.current.settEnemySpeedMult  = sett.enemySpeedMult;
-    gsRef.current.settScreenShakeMult = sett.screenShakeMult;
-    gsRef.current.settParticlesMult   = sett.particlesMult;
-    gsRef.current.settGrenadeRadMult  = sett.grenadeRadiusMult;
-    gsRef.current.settAutoReload            = sett.autoReload;
-    gsRef.current.settShowDPS               = sett.showDPS;
-    gsRef.current.settCrosshair             = sett.crosshair;
-    gsRef.current.settShowEnemyHealthBars   = sett.showEnemyHealthBars ?? false;
+    applyRunSettings(gsRef.current, sett);
+    gsRef.current._whisperLedger = createWhisperLedger();
     perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
     if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
 
@@ -1198,6 +1190,7 @@ export default function CallOfDoodie() {
     });
     const nextActivePerks = [...activePerks, perk];
     setActivePerks(nextActivePerks);
+    activePerksRef.current = nextActivePerks;
     const newlyUnlockedArchetypes = getNewlyUnlockedArchetypes(nextActivePerks, [...archetypeUnlocksRef.current]);
     if (newlyUnlockedArchetypes.length > 0) {
       newlyUnlockedArchetypes.forEach(archetype => {
@@ -1410,6 +1403,7 @@ export default function CallOfDoodie() {
     if (ne && gs.visualPack !== VISUAL_PACKS.RETRO) {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
       preloadEnemyAtlasesForTypes(activeRoster);
+      preloadObjectAtlases();
     }
     // Proximity cluster: same-type enemies spawned within 3 frames get ±60px offset to form visible clusters
     if (gs.currentWave >= 15) {
@@ -1718,7 +1712,9 @@ export default function CallOfDoodie() {
     const ghostFinal = persistGhostRecording(_gKey, ghostRecordRef.current, {
       killedByType: gs?._deathKillerType ?? gs?._lastDamageBy ?? null,
       practiceRun: gs?.practiceRun,
+      runScore: gs?.score || 0,
     });
+    if (ghostFinal.newBestGhost) { try { addText(gs, GW() / 2, GH() / 2 - 80, "👻 NEW BEST GHOST RECORDED", "#7FE6FF", false); } catch { /* non-fatal */ } }
     gs.ghostRecorderReceipt = ghostFinal.receipt;
     stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0);
     soundDeath();
@@ -2049,7 +2045,7 @@ export default function CallOfDoodie() {
     }
 
     gs.dyingEnemies = gs.dyingEnemies || [];
-    if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+    if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, typeIndex: e.typeIndex, life: 22, maxLife: 22 });
     if (e.eliteType === "berserker") {
       statsRef.current.berserkersKilled = (statsRef.current.berserkersKilled || 0) + 1;
       setBerserkersKilled(statsRef.current.berserkersKilled);
@@ -2218,7 +2214,7 @@ export default function CallOfDoodie() {
         difficulty: difficultyRef.current,
       }, _intent);
     } catch { experimentMatchedRef.current = null; }
-    setActivePerks([]); setPerkPending(false); setPerkOptions([]); setBossWaveActive(false); setBossWaveBanner(false);
+    setActivePerks([]); activePerksRef.current = []; setPerkPending(false); setPerkOptions([]); setBossWaveActive(false); setBossWaveBanner(false);
     archetypeUnlocksRef.current = new Set();
     doctrineForgedRunRef.current = new Set();
     setUnlockedArchetypes([]);
@@ -2604,6 +2600,13 @@ export default function CallOfDoodie() {
       addText(gs, GW() / 2, GH() / 2, objectiveFrame.message, objectiveFrame.color, objectiveFrame.kind === "completed");
       if (objectiveFrame.achievementCheck) achCheckRef.current = true;
     }
+    // ── Tactical whisper (S145): one quiet, rate-limited mid-run coaching line ──
+    if (frameCountRef.current % 90 === 0) {
+      try {
+        const _whisper = tickTacticalWhisper(gs, { frame: frameCountRef.current, activePerks: activePerksRef.current, unlockedArchetypeIds: archetypeUnlocksRef.current });
+        if (_whisper) addText(gs, GW() / 2, 96, `▸ ${_whisper.text}`, _whisper.color, false);
+      } catch { /* whisper must never break the loop */ }
+    }
     // ── Frame capture for highlight GIF (~10fps) ──
     // Heat decay + adaptive music tier
     decayHeat(gs);
@@ -2615,31 +2618,11 @@ export default function CallOfDoodie() {
     // Auto-reload when ammo empty (setting)
     if (gs.ammoCount === 0 && !isReloadingRef.current && gs.settAutoReload) doReload(currentWeaponRef.current);
 
-    // Capture frames for the highlight GIF. Skipped on mobile (too costly: full
-    // canvas readback forces a CPU sync) and when adaptive quality has flagged
-    // sustained frame drops. Capture every 10 frames (~6fps) instead of every 6.
-    // Always capture frames into the rolling buffer when desktop + setting on.
-    // Under sustained frame drops we widen the cadence so capture itself never
-    // becomes the cause of drops — but never disable, or the death-screen GIF
-    // is silently empty (the bug Session 57 fixed).
+    // Highlight-GIF capture — S57 never-disable invariant lives in utils/gifCapture.js.
     const _captureGif = !isMobile && gs.settHighlightCapture !== false;
     const _captureCadence = window.__codReducedEffects ? 20 : 10; // ~3fps under load, ~6fps normal
     if (_captureGif && frameCountRef.current % _captureCadence === 0 && canvasRef.current) {
-      const cv = canvasRef.current;
-      if (!gifOffscreenRef.current) {
-        const scale = Math.min(1, 240 / cv.width);
-        const oc = document.createElement("canvas");
-        oc.width = Math.floor(cv.width * scale);
-        oc.height = Math.floor(cv.height * scale);
-        gifOffscreenRef.current = oc;
-      }
-      const oc = gifOffscreenRef.current;
-      const octx = oc.getContext("2d", { willReadFrequently: true });
-      octx.drawImage(cv, 0, 0, oc.width, oc.height);
-      const id = octx.getImageData(0, 0, oc.width, oc.height);
-      const buf = frameBufferRef.current;
-      buf.push({ data: new Uint8Array(id.data.buffer), ts: Date.now() });
-      if (buf.length > 60) buf.shift(); // keep ~10s at 6fps
+      captureGifFrame(canvasRef.current, gifOffscreenRef, frameBufferRef.current);
     }
 
     // ── Score attack: countdown + forced end when time expires ──
@@ -3275,6 +3258,8 @@ export default function CallOfDoodie() {
         addParticles(gs, g.x, g.y, "#FFD700", 20);
         addText(gs, g.x, g.y, "BOOM!", "#FF4500", true);
         gs.screenShake = 15;
+        // S145: bounded persistent scorch decal (reuses the terrain stain renderer).
+        if (gs.terrain) { gs.terrain.push({ x: g.x, y: g.y, type: 0, size: 26, rot: (g.x + g.y) % 3 }); if (gs.terrain.length > 44) gs.terrain.shift(); }
         gs.enemies.forEach(e => {
           const _gradius = 130 * (gs.settGrenadeRadMult || 1);
           const blast = resolveGrenadeEnemyDamage({
@@ -3957,7 +3942,7 @@ export default function CallOfDoodie() {
           addText(gs, e.x, e.y, "💥 BOOM!", "#FF4400", true); gs.screenShake = 12;
           gs.dyingEnemies = gs.dyingEnemies || [];
           if (gs.dyingEnemies.length < MAX_DYING_ANIM)
-            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, life: 22, maxLife: 22 });
+            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, typeIndex: e.typeIndex, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
             applyObservedPlayerDamage(gs, { damage: (gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35) * (gs._treeArmorMult || 1), frame: frameCountRef.current, kind: "contact", sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || "Kamikaze" }); p.invincible = 40; gs.damageFlash = 12;
             gs.damageThisWave = (gs.damageThisWave || 0) + 1;
@@ -4458,6 +4443,7 @@ export default function CallOfDoodie() {
 
   if (screen === "username") {
     return (
+      <AsyncPanelBoundary>
       <DisplayNameScreen
         initialName={username}
         onSave={(name) => {
@@ -4475,6 +4461,7 @@ export default function CallOfDoodie() {
           setScreen("menu");
         }}
       />
+      </AsyncPanelBoundary>
     );
   }
 
@@ -4913,7 +4900,9 @@ export default function CallOfDoodie() {
         </div>
       )}
       {inputDebugEnabled && (
-        <InputDebugOverlay data={inputDebug} />
+        <AsyncPanelBoundary>
+          <InputDebugOverlay data={inputDebug} />
+        </AsyncPanelBoundary>
       )}
 
       {/* Tutorial overlay — first-run hints */}

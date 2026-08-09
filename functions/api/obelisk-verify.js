@@ -1,6 +1,46 @@
 const PROJECT = "Call of Doodie";
 const RECEIPT_VERSION = "cod-obelisk-receipt-v1";
 
+// S145 — browser origin allowlist mirroring the Supabase http-trust pattern.
+// Requests without an Origin header (curl, server-to-server) are allowed;
+// browser requests from foreign origins are rejected.
+const ALLOWED_ORIGINS = new Set([
+  "https://callofdoodie.wtf",
+  "https://www.callofdoodie.wtf",
+  "https://playcallofdoodie.com",
+  "https://www.playcallofdoodie.com",
+  "http://localhost:5173",
+  "http://localhost:4173",
+]);
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+  // Cloudflare Pages preview deployments of this project.
+  try {
+    const host = new URL(origin).hostname;
+    return host.endsWith(".call-of-doodie.pages.dev") || host === "call-of-doodie.pages.dev";
+  } catch { return false; }
+}
+
+// Best-effort per-isolate rate bucket (12 requests/min per client IP). This is
+// not a distributed quota — it bounds abuse cheaply until a KV/DO budget is
+// justified; the upstream verifier keeps its own authoritative limits.
+const RATE_LIMIT_PER_MINUTE = 12;
+const rateBuckets = new Map();
+
+function consumeLocalRate(key, now = Date.now()) {
+  const minute = Math.floor(now / 60000);
+  const bucket = rateBuckets.get(key);
+  if (!bucket || bucket.minute !== minute) {
+    rateBuckets.set(key, { minute, count: 1 });
+    if (rateBuckets.size > 2048) rateBuckets.clear();
+    return true;
+  }
+  bucket.count += 1;
+  return bucket.count <= RATE_LIMIT_PER_MINUTE;
+}
+
 function json(body, init = {}) {
   return new Response(JSON.stringify(body), {
     status: init.status || 200,
@@ -50,6 +90,15 @@ async function readToken(request) {
 export async function verifyObeliskRequest({ request, env = {}, fetchImpl = fetch, now = () => Date.now() }) {
   if (request.method !== "POST") {
     return json({ ok: false, reason: "method-not-allowed" }, { status: 405, headers: { allow: "POST" } });
+  }
+
+  if (!isAllowedOrigin(request.headers.get("origin"))) {
+    return json({ ok: false, reason: "origin-not-allowed" }, { status: 403 });
+  }
+
+  const clientIp = request.headers.get("cf-connecting-ip") || "unknown";
+  if (!consumeLocalRate(clientIp, now())) {
+    return json({ ok: false, reason: "rate-limited" }, { status: 429, headers: { "retry-after": "60" } });
   }
 
   const token = await readToken(request);

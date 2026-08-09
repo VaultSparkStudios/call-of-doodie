@@ -155,20 +155,9 @@
       "label": "INSANE",
       "playerHp": 60,
       "spawnMultiplier": 0.5
-    },
-    {
-      "id": "nightmare",
-      "label": "Nightmare",
-      "playerHp": null,
-      "spawnMultiplier": null
-    },
-    {
-      "id": "doodie",
-      "label": "Doodie",
-      "playerHp": null,
-      "spawnMultiplier": null
     }
   ],
+  "replayCodeDifficultySlots": 6,
   "starterLoadouts": [
     {
       "id": "standard",

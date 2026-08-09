@@ -384,7 +384,7 @@ export const NEW_FEATURES = [
   "🎵 Nuclear Kazoo — nasal 3-pellet shotgun blast",
   "🎮 Full Controller Support — RT shoot, R3 dash, X/□ reload, aim assist",
   "📚 Life Coach & 💼 Tech CEO — 2 new enemy types",
-  "🏆 49 Achievements — wave 25, 500 kills, 3 nukes, 10 boss kills & more",
+  "🏆 66 Achievements — wave 25, 500 kills, 3 nukes, 10 boss kills & more",
   "⚔️ Challenge Links — share a run seed + difficulty for friends to race",
   "📷 GIF Highlight Reel — auto-captures your peak killstreak moment",
   "🗺️ 8 Map Themes — Office, Bunker, Factory, Ruins, Desert, Forest, Space, Arctic",
@@ -405,6 +405,13 @@ export const NEW_FEATURES = [
   "🏋️ Gauntlet Mode — weekly locked weapon + perk loadout, no shop; pure skill on a shared build",
   "🌳 META Tree — 16 permanent upgrade nodes across 4 branches; bonuses carry into every run forever",
   "🃏 Run Draft — pick one bonus perk before deploying; reshuffles every run for fresh builds",
+  "🧟 Sewer Zombies — seeded outbreak mode with horde budgets, surge waves & 4 undead variants",
+  "📊 Community Stats — live verified player + run totals on the menu, debrief & /stats/ page",
+  "🗂️ Doctrine Archive — every build doctrine you forge is recorded forever in a collection grid",
+  "📳 Mobile Haptics — tactile hit, kill, boss & low-HP feedback on touch devices",
+  "🧭 Threat Arrows — off-screen enemy direction indicators keep pressure readable",
+  "🕹️ Retro Visual Pack — switch back to the original first-playable look any time in Settings",
+  "🎯 Field Report Feedback — rate every run TOO EASY / DIALED IN / BRUTAL and shape your next drill",
 ];
 
 // ===== KILLSTREAKS =====

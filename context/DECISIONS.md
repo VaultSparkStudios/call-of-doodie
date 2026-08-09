@@ -2,6 +2,18 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-09 — Session 145 — validate-replay is hardened, not removed
+
+**Decision:** The deployed `validate-replay` Edge Function adopts the shared `http-trust` origin allowlist and the bounded `consume_api_rate_limit` quota (30/min) instead of being deleted, and its wildcard CORS is replaced with origin-echo. The rate check fails open only when the rate service itself is unavailable.
+
+**Rationale:** The endpoint is not dead code — the replay-trust smoke court (`scripts/replay-trust-smoke.mjs`, part of the production 3/3 replay-trust check) exercises it directly, and its pressure module carries fixture tests. An unauthenticated, unlimited public endpoint was the actual defect; removing the endpoint would have broken a live verification court to fix a hardening gap.
+
+## 2026-08-09 — Session 145 — Retro pack is a pinned render-path contract
+
+**Decision:** The Retro visual pack must never receive Modern-pack upgrades: no atlas sprites, no sprite-motion transforms, no object-atlas swaps. A call-shape contract test (`src/utils/visualPackRetroContract.test.js`) pins circle+emoji rendering, and every new visual branch gates on the pack explicitly.
+
+**Rationale:** Retro exists as the preserved first-playable look. The S145 visual overhaul (DPR scaling, weapon/world atlases, single-layer sprite policy, motion microsystem) changes every Modern draw path; without an executable invariant the nostalgia mode would silently drift with each renderer edit.
+
 ## 2026-07-27 — Session 132 continuation — CI checks are events, not timers
 
 **Decision:** Brief-format validation runs on relevant pushes, pull requests, or explicit manual dispatch. A source-derived `schedule-policy-receipt-v1` fails if any repository workflow introduces a schedule trigger, a GitHub Actions self-hosted runner, or a scheduled Git writer.

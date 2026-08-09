@@ -23,6 +23,9 @@
 .weapon-dock__weapon.is-selected { border:2px solid var(--weapon-color); background:color-mix(in srgb,var(--weapon-color) 17%,#081018); box-shadow:0 0 15px color-mix(in srgb,var(--weapon-color) 35%,transparent),inset 0 0 12px rgba(255,255,255,.05); }
 .weapon-dock__key { position:absolute; top:3px; right:4px; color:#9da7b1; font-size:8px; font-weight:900; }
 .weapon-dock__icon { display:block; font-size:19px; line-height:1.05; }
+.weapon-dock__icon--sprite { margin:0 auto; background-repeat:no-repeat; image-rendering:auto; font-size:0; }
+.weapon-dock__icon--sprite .weapon-dock__icon-fallback { font-size:0; }
+.weapon-dock__mastery { position:absolute; top:3px; right:4px; font-size:7px; line-height:1; text-shadow:0 0 4px currentColor; }
 .weapon-dock__name { display:block; margin-top:3px; overflow:hidden; color:var(--weapon-color); font-size:8px; font-weight:900; line-height:1.05; text-overflow:ellipsis; white-space:nowrap; }
 .weapon-dock__stars { position:absolute; top:3px; left:4px; color:#d78cff; font-size:6px; }
 .weapon-dock__mod { position:absolute; bottom:5px; right:3px; color:#ffe86a; font-size:8px; }.weapon-dock__mod.is-cursed{color:#dc5cff}

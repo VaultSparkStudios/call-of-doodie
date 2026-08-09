@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useRef, lazy } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef, lazy, startTransition } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
@@ -372,7 +372,9 @@ export default function HomeV2(props) {
       gauntlet:        () => onSetGauntletMode?.(true),
       zombies:         () => onSetZombiesMode?.(true),
     };
-    (setters[id] || setters.standard)();
+    // Mode changes fan out to App-level state; keep the select interaction
+    // responsive on narrow viewports (S142 INP evidence) by deferring the fan-out.
+    startTransition(() => { (setters[id] || setters.standard)(); });
   }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode, onSetZombiesMode]);
 
   const deploy = useCallback(() => {
@@ -649,7 +651,10 @@ export default function HomeV2(props) {
         </div>
 
 
-        <div style={journeyCard}>
+        {/* S145 onboarding arbitration: while the FIRST 3 RUNS strip is active
+            it is the single directive — the ORDERS card and Intel Ticker stand
+            down so a new player sees one instruction, not four. */}
+        {!onboarding && <div style={journeyCard}>
           <div style={{ minWidth: 0 }}>
             <div style={{ color: "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>ORDERS · {journey.label.toUpperCase()}</div>
             <div style={{ color: "#EEE", fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>
@@ -664,7 +669,7 @@ export default function HomeV2(props) {
           >
             {journey.secondary.cta.toUpperCase()}
           </button>
-        </div>
+        </div>}
 
         {onboarding && (
           <div style={{ margin: "0 auto 12px", maxWidth: 720, border: "1px solid rgba(255,107,53,0.18)", borderRadius: 10, background: "rgba(0,0,0,0.22)", padding: 8 }}>
@@ -770,7 +775,7 @@ export default function HomeV2(props) {
                   <select
                     aria-label="Mobile difficulty"
                     value={difficulty}
-                    onChange={(event) => setDifficulty(event.target.value)}
+                    onChange={(event) => { const value = event.target.value; startTransition(() => setDifficulty(value)); }}
                     style={{ padding: "10px 9px", borderRadius: 7, color: "#FFF", background: "#17191D", border: "1px solid rgba(255,179,107,0.45)", font: "inherit" }}
                   >
                     {Object.entries(DIFFICULTIES).map(([key, item]) => <option key={key} value={key}>{item.emoji} {item.label}</option>)}
@@ -1068,8 +1073,9 @@ export default function HomeV2(props) {
           </div>}
         </div>
 
-        {/* Intel Ticker — merges Command Brief + Run Intel + Recommended Action */}
-        {intelLine && (
+        {/* Intel Ticker — merges Command Brief + Run Intel + Recommended Action.
+            Stands down during FIRST 3 RUNS onboarding (S145 arbitration). */}
+        {!onboarding && intelLine && (
           <div style={tickerCard} role="status" aria-live="polite">
             <span style={{ fontSize: 14 }}>💡</span>
             <span style={{ flex: 1 }}>
@@ -1490,7 +1496,7 @@ function CodexTab({ truthGraph }) {
             <div key={i} style={{ padding: "6px 8px", fontSize: 11, background: "rgba(255,255,255,0.03)", borderRadius: 6, textAlign: "center" }}>
               <div style={{ fontSize: 18 }}>{e.emoji}</div>
               <div style={{ fontWeight: 800, color: e.color, fontSize: 11 }}>{e.name}</div>
-              <div style={{ color: "#888", fontSize: 9 }}>HP {e.hp} · SPD {e.speed}</div>
+              <div style={{ color: "#888", fontSize: 9 }}>HP {e.health} · SPD {e.speed}</div>
             </div>
           ))}
         </div>

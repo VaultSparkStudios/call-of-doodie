@@ -301,6 +301,40 @@
       "notes": "Eight transparent specialist-enemy sprites generated as one consistent proprietary atlas; procedural canvas characters remain the load/failure fallback."
     },
     {
+      "id": "weapon-atlas",
+      "kind": "runtime-object-atlas",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/weapon-pack/weapon-atlas-source.svg",
+      "runtimePath": "public/visual-assets/weapon-atlas-v1.webp",
+      "runtimeFormat": "webp",
+      "dimensions": {
+        "width": 1024,
+        "height": 768
+      },
+      "grid": { "columns": 4, "rows": 3, "slots": 12 },
+      "maxBytes": 260000,
+      "status": "production-ready",
+      "notes": "Twelve side-profile comedy weapon sprites in WEAPONS index order, facing +x for arm-pivot rotation; the procedural barrel remains the load/failure fallback."
+    },
+    {
+      "id": "world-object-atlas",
+      "kind": "runtime-object-atlas",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/weapon-pack/world-object-atlas-source.svg",
+      "runtimePath": "public/visual-assets/world-object-atlas-v1.webp",
+      "runtimeFormat": "webp",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "grid": { "columns": 4, "rows": 4, "slots": 16 },
+      "maxBytes": 220000,
+      "status": "production-ready",
+      "notes": "Nine pickups, grenade, three hazard markers, and the escort cart in one consistent light direction; emoji glyphs remain the load/failure and Retro-pack fallback."
+    },
+    {
       "id": "enemy-atlas-bosses",
       "kind": "runtime-character-atlas",
       "sourceType": "ai-generated-proprietary",

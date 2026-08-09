@@ -1,7 +1,8 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
-import { getRuntimeCharacterSprite, getRuntimeEnemySprite } from "./utils/visualAssetLibrary.js";
+import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getWeaponSprite, getWorldObjectSprite } from "./utils/visualAssetLibrary.js";
+import { motionPhaseSeed, resolveSpriteDeath, resolveSpriteMotion } from "./systems/spriteMotion.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
 import { getOffscreenThreatArrows } from "./utils/offscreenIndicators.js";
@@ -14,6 +15,20 @@ const CROC_SCALE_DOTS = [[-0.38, 0], [0, -0.38], [0.38, 0], [0, 0.38], [0, 0]];
 const CLIPBOARD_ROW_OFFSETS = [-0.18, 0.03, 0.24];
 const CRYPTO_ZIGZAG_POINTS = [[-0.44, -0.08], [-0.22, 0.22], [0, -0.24], [0.22, 0.08], [0.44, -0.28]];
 const KAREN_CHEVRON_ROWS = [0.36, 0.1];
+
+// S145 — one identity table per arena theme (was seven parallel arrays
+// re-allocated inside the frame function). Order: office, bunker, factory,
+// ruins, desert, forest, space, arctic — indexed by gs.mapTheme.
+export const ARENA_THEMES = [
+  { name: "office",  bg: ["#282849", "#10101f"], fzFill: "rgba(62,55,92,",  fzTile: "rgba(88,76,125,",  tc: { s: "#1c1c3c", c: "rgba(70,70,115,0.28)", r: "#2a2a4e", t: "#20203e" }, grid: "rgba(100,100,180,0.06)", border: "rgba(80,80,220,",  vignette: "60,60,120",  wall: ["rgba(50,50,90,0.95)", "rgba(105,105,190,0.75)", "#6060CC", [88, 88, 155]],  ambient: ["255,255,255", 0.05, 9000] },
+  { name: "bunker",  bg: ["#123012", "#071207"], fzFill: "rgba(35,62,35,",  fzTile: "rgba(50,85,50,",   tc: { s: "#0c200c", c: "rgba(40,100,40,0.28)", r: "#182818", t: "#122012" }, grid: "rgba(55,120,55,0.06)",   border: "rgba(55,160,55,",  vignette: "20,55,20",   wall: ["rgba(30,56,30,0.95)", "rgba(65,125,65,0.75)", "#42AA42", [52, 102, 52]],    ambient: ["180,220,160", 0.05, 11000] },
+  { name: "factory", bg: ["#33220e", "#140d05"], fzFill: "rgba(60,54,36,",  fzTile: "rgba(82,74,48,",   tc: { s: "#201408", c: "rgba(100,88,40,0.28)", r: "#281a08", t: "#1e1408" }, grid: "rgba(140,115,55,0.06)",  border: "rgba(175,145,55,", vignette: "80,55,15",   wall: ["rgba(56,50,34,0.95)", "rgba(125,110,68,0.75)", "#A89540", [102, 88, 52]],   ambient: ["255,180,80", 0.07, 6000] },
+  { name: "ruins",   bg: ["#2a1b0d", "#100b05"], fzFill: "rgba(72,46,22,",  fzTile: "rgba(98,62,28,",   tc: { s: "#1a1008", c: "rgba(90,65,35,0.28)",  r: "#241808", t: "#1a1208" }, grid: "rgba(120,85,45,0.06)",   border: "rgba(155,110,55,", vignette: "55,35,10",   wall: ["rgba(66,44,22,0.95)", "rgba(140,100,55,0.75)", "#B88440", [115, 78, 40]],   ambient: ["210,180,140", 0.06, 8000] },
+  { name: "desert",  bg: ["#382510", "#180f06"], fzFill: "rgba(90,68,30,",  fzTile: "rgba(125,95,42,",  tc: { s: "#201408", c: "rgba(120,92,42,0.28)", r: "#2a1a08", t: "#201408" }, grid: "rgba(160,125,55,0.06)",  border: "rgba(200,155,55,", vignette: "100,70,10",  wall: ["rgba(90,72,38,0.95)", "rgba(178,148,85,0.75)", "#C8A855", [148, 120, 65]],  ambient: ["240,200,120", 0.07, 5200] },
+  { name: "forest",  bg: ["#0d2812", "#051208"], fzFill: "rgba(28,62,28,",  fzTile: "rgba(42,90,42,",   tc: { s: "#0a1c0a", c: "rgba(38,90,38,0.28)",  r: "#101e10", t: "#0a160a" }, grid: "rgba(45,120,45,0.06)",   border: "rgba(55,165,55,",  vignette: "10,50,10",   wall: ["rgba(24,54,24,0.95)", "rgba(52,115,52,0.75)", "#368A36", [44, 90, 44]],     ambient: ["190,255,190", 0.05, 10000] },
+  { name: "space",   bg: ["#0e0322", "#03000b"], fzFill: "rgba(25,12,55,",  fzTile: "rgba(70,35,155,",  tc: { s: "#0e0820", c: "rgba(90,42,200,0.28)", r: "#1a1030", t: "#0c0818" }, grid: "rgba(110,55,220,0.07)",  border: "rgba(150,70,255,", vignette: "30,0,80",    wall: ["rgba(14,8,34,0.95)", "rgba(65,32,140,0.75)", "#7030C0", [52, 24, 112]],     ambient: ["220,220,255", 0.09, 14000] },
+  { name: "arctic",  bg: ["#10213a", "#07101e"], fzFill: "rgba(40,60,90,",  fzTile: "rgba(65,100,148,", tc: { s: "#0c1a28", c: "rgba(60,100,155,0.28)", r: "#142230", t: "#0c1820" }, grid: "rgba(70,120,190,0.06)", border: "rgba(75,150,220,", vignette: "5,30,70",   wall: ["rgba(22,42,66,0.95)", "rgba(55,95,148,0.75)", "#4878B8", [44, 76, 118]],    ambient: ["235,245,255", 0.08, 6500] },
+];
 
 function getEnemyReadabilityStyle(enemy, timeNow) {
   if (enemy.isBossEnemy) {
@@ -140,6 +155,21 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   // ────────────────── RENDER ────────────────────────────────────────────
   const _rm = gs.reducedMotion === true;
+  // Backing store may be DPR-scaled (S145); W/H stay CSS pixels so all game
+  // math is unchanged — one root transform maps game space onto device pixels.
+  const _dpr = W > 0 ? canvas.width / W : 1;
+  ctx.setTransform(_dpr, 0, 0, _dpr, 0, 0);
+  // Degradation ladder step 2+: shadowBlur is the most expensive canvas state
+  // in this renderer — an own-property override no-ops every write at once,
+  // and deleting it restores the prototype accessor on recovery.
+  const _perfStep = (typeof window !== "undefined" && window.__codPerfStep) || 0;
+  if (_perfStep >= 2 && !ctx.__codShadowKill) {
+    Object.defineProperty(ctx, "shadowBlur", { get() { return 0; }, set() {}, configurable: true });
+    ctx.__codShadowKill = true;
+  } else if (_perfStep < 2 && ctx.__codShadowKill) {
+    delete ctx.shadowBlur;
+    ctx.__codShadowKill = false;
+  }
   ctx.save();
   if (!_rm && gs.screenShake > 0.5) { const _sm = gs.settScreenShakeMult ?? 1; ctx.translate((Math.random() - 0.5) * gs.screenShake * 2 * _sm, (Math.random() - 0.5) * gs.screenShake * 2 * _sm); }
   // ADS zoom: scale 1.28× centered on player for aim-down-sights effect
@@ -149,18 +179,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.translate(-p.x, -p.y);
   }
 
-  // Background — per-theme gradient
-  const THEME_BG = [
-    ["#282849","#10101f"], // office: dark indigo
-    ["#123012","#071207"], // bunker: deep military green
-    ["#33220e","#140d05"], // factory: dark amber
-    ["#2a1b0d","#100b05"], // ruins: dark sepia
-    ["#382510","#180f06"], // desert: deep warm ochre
-    ["#0d2812","#051208"], // forest: deep forest green
-    ["#0e0322","#03000b"], // space: deep black-purple
-    ["#10213a","#07101e"], // arctic: cold midnight blue
-  ];
-  const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : (THEME_BG[gs.mapTheme] || THEME_BG[0]);
+  // Background — per-theme gradient (identity table at module scope, S145)
+  const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
+  const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : _theme.bg;
   const _bgKey = `${bgC0}:${bgC1}:${W}:${H}`;
   if (!gs._bgGradStyle || gs._bgGradKey !== _bgKey) {
     const _bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
@@ -172,10 +193,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.fillStyle = gs._bgGradStyle; ctx.fillRect(0, 0, W, H);
 
   // ── Floor zone panels (room sections with tile grid, themed per run) ──
-  const FZ_FILL = ["rgba(62,55,92,","rgba(35,62,35,","rgba(60,54,36,","rgba(72,46,22,","rgba(90,68,30,","rgba(28,62,28,","rgba(25,12,55,","rgba(40,60,90,"];
-  const FZ_TILE = ["rgba(88,76,125,","rgba(50,85,50,","rgba(82,74,48,","rgba(98,62,28,","rgba(125,95,42,","rgba(42,90,42,","rgba(70,35,155,","rgba(65,100,148,"];
-  const fzFill = gs.bossWave ? "rgba(82,22,22," : (FZ_FILL[gs.mapTheme] || FZ_FILL[0]);
-  const fzTile = gs.bossWave ? "rgba(112,30,30," : (FZ_TILE[gs.mapTheme] || FZ_TILE[0]);
+  const fzFill = gs.bossWave ? "rgba(82,22,22," : _theme.fzFill;
+  const fzTile = gs.bossWave ? "rgba(112,30,30," : _theme.fzTile;
   (gs.floorZones || []).forEach(fz => {
     ctx.save(); ctx.translate(fz.x, fz.y); ctx.rotate(fz.rot);
     const ba = fz.alpha * 3.35 * (gs.bossWave ? 0.75 : 1);
@@ -209,18 +228,40 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(_obj.cx, _obj.cy, _obj.r, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = `rgba(255,102,0,${_pulse})`; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.arc(_obj.cx, _obj.cy, _obj.r, 0, Math.PI * 2); ctx.stroke();
+      // S145: rotating dashed marker ring makes the hotspot read as live.
+      if (!_rm) {
+        ctx.save();
+        ctx.translate(_obj.cx, _obj.cy);
+        ctx.rotate((dn / 900) % (Math.PI * 2));
+        ctx.setLineDash([14, 18]); ctx.lineWidth = 2;
+        ctx.strokeStyle = `rgba(255,160,60,${_pulse * 0.8})`;
+        ctx.beginPath(); ctx.arc(0, 0, _obj.r - 8, 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+      }
       ctx.fillStyle = "rgba(255,102,0,0.85)"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
       ctx.fillText("🔥 HOT ZONE x" + (_obj.scoreMult || 2), _obj.cx, _obj.cy - _obj.r - 8);
     } else if (_obj.type === "lockdown" && _obj.cx != null) {
+      ctx.save();
+      ctx.translate(_obj.cx, _obj.cy);
+      if (!_rm) ctx.rotate((-dn / 1400) % (Math.PI * 2));
       ctx.strokeStyle = `rgba(136,204,255,${_pulse})`; ctx.lineWidth = 3;
       ctx.setLineDash([10, 8]);
-      ctx.beginPath(); ctx.arc(_obj.cx, _obj.cy, _obj.r, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(0, 0, _obj.r, 0, Math.PI * 2); ctx.stroke();
       ctx.setLineDash([]);
+      ctx.restore();
       ctx.fillStyle = "rgba(136,204,255,0.9)"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
       ctx.fillText("🛡 LOCKDOWN · " + Math.ceil((_obj.timeLeft || 0) / 60) + "s", _obj.cx, _obj.cy - _obj.r - 8);
     } else if (_obj.type === "escort" && _obj.cart) {
-      ctx.fillStyle = "rgba(170,68,255,0.95)"; ctx.font = "20px sans-serif"; ctx.textAlign = "center";
-      ctx.fillText("🚚", _obj.cart.x, _obj.cart.y);
+      const _cartSprite = retroCharacters ? null : getWorldObjectSprite("escort-cart");
+      if (_cartSprite) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.drawImage(_cartSprite.image, _cartSprite.x, _cartSprite.y, _cartSprite.width, _cartSprite.height, _obj.cart.x - 20, _obj.cart.y - 20, 40, 40);
+      } else {
+        ctx.fillStyle = "rgba(170,68,255,0.95)"; ctx.font = "20px sans-serif"; ctx.textAlign = "center";
+        ctx.fillText("🚚", _obj.cart.x, _obj.cart.y);
+      }
+      ctx.fillStyle = "rgba(170,68,255,0.95)"; ctx.textAlign = "center";
       ctx.fillStyle = "rgba(170,68,255,0.85)"; ctx.font = "bold 10px sans-serif";
       ctx.fillText("ESCORT · HP " + Math.max(0, Math.round(_obj.cart.hp)), _obj.cart.x, _obj.cart.y - 22);
     } else if (_obj.type === "sniper" || _obj.type === "bounty") {
@@ -232,16 +273,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   // ── Terrain decorations (floor level, below grid) ──
-  const TC = gs.bossWave ? { s:"#3a0808",c:"rgba(90,20,20,0.30)",r:"#4a2020",t:"#2a0a0a" } : [
-    { s:"#1c1c3c", c:"rgba(70,70,115,0.28)",  r:"#2a2a4e", t:"#20203e" }, // office
-    { s:"#0c200c", c:"rgba(40,100,40,0.28)",   r:"#182818", t:"#122012" }, // bunker
-    { s:"#201408", c:"rgba(100,88,40,0.28)",   r:"#281a08", t:"#1e1408" }, // factory
-    { s:"#1a1008", c:"rgba(90,65,35,0.28)",    r:"#241808", t:"#1a1208" }, // ruins
-    { s:"#201408", c:"rgba(120,92,42,0.28)",   r:"#2a1a08", t:"#201408" }, // desert
-    { s:"#0a1c0a", c:"rgba(38,90,38,0.28)",    r:"#101e10", t:"#0a160a" }, // forest
-    { s:"#0e0820", c:"rgba(90,42,200,0.28)",   r:"#1a1030", t:"#0c0818" }, // space
-    { s:"#0c1a28", c:"rgba(60,100,155,0.28)",  r:"#142230", t:"#0c1820" }, // arctic
-  ][gs.mapTheme] || { s:"#1c1c3c",c:"rgba(70,70,115,0.28)",r:"#2a2a4e",t:"#20203e" };
+  const TC = gs.bossWave ? { s:"#3a0808",c:"rgba(90,20,20,0.30)",r:"#4a2020",t:"#2a0a0a" } : _theme.tc;
   (gs.terrain || []).forEach(t => {
     ctx.save();
     ctx.translate(t.x, t.y);
@@ -311,35 +343,26 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
     ctx.stroke();
     ctx.shadowBlur = 0;
-    // Icon
+    // Icon \u2014 sprite hazard marker (Modern); glyph fallback + Retro.
     ctx.globalAlpha = 0.5 + _pulse * 0.3;
-    ctx.font = `${Math.floor(hz.radius * 0.5)}px serif`;
-    ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.fillText(hz.type === "acid" ? "\u2620" : hz.type === "electro" ? "\u26a1" : "\uD83E\uDEA8", hz.x, hz.y);
-    ctx.textBaseline = "alphabetic";
+    const _hzSprite = retroCharacters ? null : getWorldObjectSprite(
+      hz.type === "acid" ? "hazard:poison" : hz.type === "electro" ? "hazard:shock" : "hazard:rock",
+    );
+    if (_hzSprite) {
+      const _hzSize = hz.radius * 0.9;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(_hzSprite.image, _hzSprite.x, _hzSprite.y, _hzSprite.width, _hzSprite.height, hz.x - _hzSize / 2, hz.y - _hzSize / 2, _hzSize, _hzSize);
+    } else {
+      ctx.font = `${Math.floor(hz.radius * 0.5)}px serif`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(hz.type === "acid" ? "\u2620" : hz.type === "electro" ? "\u26a1" : "\uD83E\uDEA8", hz.x, hz.y);
+      ctx.textBaseline = "alphabetic";
+    }
     ctx.restore();
   }
 
-  const GRID_CLR = gs.bossWave ? "rgba(180,50,50,0.08)" : [
-    "rgba(100,100,180,0.06)", // office
-    "rgba(55,120,55,0.06)",   // bunker
-    "rgba(140,115,55,0.06)",  // factory
-    "rgba(120,85,45,0.06)",   // ruins
-    "rgba(160,125,55,0.06)",  // desert
-    "rgba(45,120,45,0.06)",   // forest
-    "rgba(110,55,220,0.07)",  // space
-    "rgba(70,120,190,0.06)",  // arctic
-  ][gs.mapTheme] || "rgba(100,100,180,0.06)";
-  const BORDER_CLR = gs.bossWave ? null : [
-    "rgba(80,80,220,",  // office
-    "rgba(55,160,55,",  // bunker
-    "rgba(175,145,55,", // factory
-    "rgba(155,110,55,", // ruins
-    "rgba(200,155,55,", // desert
-    "rgba(55,165,55,",  // forest
-    "rgba(150,70,255,", // space
-    "rgba(75,150,220,", // arctic
-  ][gs.mapTheme] || "rgba(80,80,220,";
+  const GRID_CLR = gs.bossWave ? "rgba(180,50,50,0.08)" : _theme.grid;
+  const BORDER_CLR = gs.bossWave ? null : _theme.border;
   ctx.strokeStyle = GRID_CLR;
   ctx.lineWidth = 1;
   for (let gx = 0; gx < W; gx += 50) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
@@ -356,17 +379,7 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
   // Theme atmosphere — radial vignette overlay tinted per map theme
   if (!gs.bossWave) {
-    const VIGNETTE_CLR = [
-      "60,60,120",   // office: cool indigo
-      "20,55,20",    // bunker: military green
-      "80,55,15",    // factory: amber soot
-      "55,35,10",    // ruins: sepia brown
-      "100,70,10",   // desert: warm ochre
-      "10,50,10",    // forest: deep green
-      "30,0,80",     // space: void purple
-      "5,30,70",     // arctic: cold blue
-    ];
-    const vc = VIGNETTE_CLR[gs.mapTheme] || VIGNETTE_CLR[0];
+    const vc = _theme.vignette;
     const _vigKey = `${vc}:${W}:${H}`;
     if (!gs._themeVignetteStyle || gs._themeVignetteKey !== _vigKey) {
       const _vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.28, W / 2, H / 2, W * 0.72);
@@ -376,6 +389,26 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       gs._themeVignetteKey = _vigKey;
     }
     ctx.fillStyle = gs._themeVignetteStyle; ctx.fillRect(0, 0, W, H);
+  }
+
+  // S145 ambient theme signature — stateless drifting motes (snow, dust,
+  // stars, embers…) derived from time + index; no arrays, no allocation.
+  // Off under reduced motion, boss waves, and perf step ≥2.
+  if (!_rm && !gs.bossWave && _perfStep < 2) {
+    const [ambC, ambA, ambPeriod] = _theme.ambient;
+    const _isSnow = gs.mapTheme === 7;
+    for (let _mi = 0; _mi < 14; _mi++) {
+      const _seedX = ((_mi * 971 + 137) % 1000) / 1000;
+      const _seedY = ((_mi * 613 + 389) % 1000) / 1000;
+      const _t = (dn / ambPeriod + _mi * 0.17) % 1;
+      const _mx = ((_seedX + _t * 0.22 + (_isSnow ? Math.sin(_t * 6.28 + _mi) * 0.02 : 0)) % 1) * W;
+      const _my = _isSnow || gs.mapTheme === 5 ? ((_seedY + _t) % 1) * H : ((_seedY + _t * 0.35) % 1) * H;
+      const _ms = 1 + (_mi % 3) * 0.7;
+      ctx.globalAlpha = ambA * (0.6 + Math.sin(_t * 6.28) * 0.4 + 0.4);
+      ctx.fillStyle = `rgb(${ambC})`;
+      ctx.beginPath(); ctx.arc(_mx, _my, _ms, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
   }
 
   // Trail
@@ -396,8 +429,16 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     const em = _pkEmojis[pk.type] || "✨";
     const isSpecial = pk.type === "guardian_angel" || pk.type === "upgrade";
     const isNew = pk.type === "rage" || pk.type === "magnet" || pk.type === "freeze";
-    ctx.font = isSpecial ? "28px serif" : "22px serif";
-    ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(em, 0, 0);
+    // S145: sprite pickup pucks (Modern pack); emoji remains fallback + Retro.
+    const _pkSprite = retroCharacters ? null : getWorldObjectSprite(`pickup:${pk.type}`);
+    if (_pkSprite) {
+      const _pkSize = isSpecial ? 40 : 34;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(_pkSprite.image, _pkSprite.x, _pkSprite.y, _pkSprite.width, _pkSprite.height, -_pkSize / 2, -_pkSize / 2, _pkSize, _pkSize);
+    } else {
+      ctx.font = isSpecial ? "28px serif" : "22px serif";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(em, 0, 0);
+    }
     ctx.globalAlpha = (isSpecial || isNew) ? 0.25 + Math.sin(Date.now() / 200) * 0.12 : 0.15;
     ctx.fillStyle = _pkColors[pk.type] || "#FFF";
     ctx.beginPath(); ctx.arc(0, 0, 18, 0, Math.PI * 2); ctx.fill();
@@ -416,11 +457,20 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1; ctx.restore();
   });
 
-  // Grenades
+  // Grenades — sprite bomb with a spin (Modern); emoji fallback + Retro.
   gs.grenades.forEach(g => {
     ctx.save(); ctx.translate(g.x, g.y);
-    ctx.font = (g.size * 2) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.fillText("💣", 0, 0); ctx.restore();
+    const _gSprite = retroCharacters ? null : getWorldObjectSprite("grenade");
+    if (_gSprite) {
+      const _gSize = g.size * 2.4;
+      ctx.rotate(((g.timer || 0) * 0.12) % (Math.PI * 2));
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(_gSprite.image, _gSprite.x, _gSprite.y, _gSprite.width, _gSprite.height, -_gSize / 2, -_gSize / 2, _gSize, _gSize);
+    } else {
+      ctx.font = (g.size * 2) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("💣", 0, 0);
+    }
+    ctx.restore();
   });
 
   // Enemy bullets
@@ -431,19 +481,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   });
 
   // Obstacles — themed, floor shadow + 3D top-left highlight + internal stripes
-  const WALL_T = [
-    ["rgba(50,50,90,0.95)",  "rgba(105,105,190,0.75)", "#6060CC", [88,88,155]],   // office
-    ["rgba(30,56,30,0.95)",  "rgba(65,125,65,0.75)",   "#42AA42", [52,102,52]],   // bunker
-    ["rgba(56,50,34,0.95)",  "rgba(125,110,68,0.75)",  "#A89540", [102,88,52]],   // factory
-    ["rgba(66,44,22,0.95)",  "rgba(140,100,55,0.75)",  "#B88440", [115,78,40]],   // ruins
-    ["rgba(90,72,38,0.95)",  "rgba(178,148,85,0.75)",  "#C8A855", [148,120,65]],  // desert: sand/sandstone
-    ["rgba(24,54,24,0.95)",  "rgba(52,115,52,0.75)",   "#368A36", [44,90,44]],    // forest: bark green
-    ["rgba(14,8,34,0.95)",   "rgba(65,32,140,0.75)",   "#7030C0", [52,24,112]],   // space: dark purple metal
-    ["rgba(22,42,66,0.95)",  "rgba(55,95,148,0.75)",   "#4878B8", [44,76,118]],   // arctic: blue ice
-  ];
   const wt = gs.bossWave
     ? ["rgba(76,20,20,0.95)", "rgba(165,45,45,0.75)", "#CC3030", [135,32,32]]
-    : (WALL_T[gs.mapTheme] || WALL_T[0]);
+    : _theme.wall;
   (gs.obstacles || []).forEach(ob => {
     // Cast shadow
     ctx.fillStyle = "rgba(0,0,0,0.32)"; ctx.fillRect(ob.x + 5, ob.y + 5, ob.w, ob.h);
@@ -451,6 +491,11 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillStyle = wt[0]; ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
     // Internal stripe detail
     const [sr, sg, sb] = wt[3];
+    // S145: lit top face gives every wall real depth at zero texture cost.
+    ctx.fillStyle = `rgba(${Math.min(255, sr + 46)},${Math.min(255, sg + 46)},${Math.min(255, sb + 46)},0.5)`;
+    ctx.fillRect(ob.x, ob.y, ob.w, Math.min(6, ob.h * 0.18));
+    ctx.fillStyle = "rgba(0,0,0,0.28)";
+    ctx.fillRect(ob.x, ob.y + ob.h - Math.min(4, ob.h * 0.12), ob.w, Math.min(4, ob.h * 0.12));
     ctx.strokeStyle = `rgba(${sr},${sg},${sb},0.22)`; ctx.lineWidth = 1;
     const isH = ob.w > ob.h;
     const step = isH ? Math.max(6, Math.floor(ob.h / 3)) : Math.max(6, Math.floor(ob.w / 3));
@@ -532,6 +577,10 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.globalAlpha = 1;
     }
 
+    // S145 single-layer policy: when the atlas sprite is decoded it IS the
+    // body — the procedural orb, hand-drawn type details, eyes, and emoji
+    // glyph render only as the instant-loading / load-failure fallback.
+    const enemySprite = retroCharacters ? null : getRuntimeEnemySprite(e.typeIndex);
     if (retroCharacters) {
       drawRetroEnemyCharacter(ctx, e);
     } else {
@@ -542,14 +591,14 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(0, 0, r + 6, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
     }
-    drawShadedOrb(ctx, {
+    if (!enemySprite) drawShadedOrb(ctx, {
       radius: r,
       material: e.isBossEnemy ? "porcelain" : "enemyFlesh",
       baseColor: e.color,
       rimWidth: 2,
     });
-    // Hit-flash white overlay
-    if (e.hitFlash > 0) {
+    // Hit-flash white overlay (fallback body only; sprite path flashes via rim + alpha)
+    if (!enemySprite && e.hitFlash > 0) {
       ctx.globalAlpha = Math.min(0.9, e.hitFlash / 12);
       ctx.fillStyle = "#FFFFFF";
       ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
@@ -574,8 +623,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.beginPath(); ctx.arc(0, 0, r + 1.5, 0, Math.PI * 2); ctx.stroke();
     }
 
-    // Type-specific visual details
-    if (e.hitFlash <= 6) {
+    // Type-specific visual details (fallback body only — the atlas art carries identity)
+    if (!enemySprite && e.hitFlash <= 6) {
       switch (e.typeIndex) {
         case 0: { // Mall Cop — gold star badge on chest
           const bs = Math.max(5, r * 0.3);
@@ -675,8 +724,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       }
     }
 
-    // Eyes facing player (skip during hit flash)
-    if (e.hitFlash <= 4) {
+    // Eyes facing player (fallback body only; skip during hit flash)
+    if (!enemySprite && e.hitFlash <= 4) {
       ctx.save(); ctx.rotate(faceA);
       const er = Math.max(1.8, r * 0.18);
       SIGN_PAIR.forEach(side => {
@@ -690,23 +739,62 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.restore();
     }
 
-    // Every enemy has a distinct atlas silhouette. The procedural body remains
-    // beneath it as an instant-loading and reduced-data fallback.
-    const enemySprite = getRuntimeEnemySprite(e.typeIndex);
+    // Atlas sprite body with S145 procedural motion (velocity lean, hit
+    // squash, idle breathing). RETRO pack never reaches this branch.
     if (enemySprite) {
       const spriteHeight = Math.max(e.isBossEnemy ? 92 : 58, r * (e.isBossEnemy ? 3.7 : 3.15));
       const spriteWidth = spriteHeight * (enemySprite.sourceWidth / enemySprite.sourceHeight);
+      const motion = resolveSpriteMotion({
+        frame: refs.frameCountRef?.current || 0,
+        facingAngle: faceA,
+        speed: e.speed || 0,
+        hitFlash: e.hitFlash || 0,
+        phase: e._motionPhase === undefined ? (e._motionPhase = motionPhaseSeed(e.x, e.y)) : e._motionPhase,
+        reduced: _rm || _perfStep >= 3,
+      });
       ctx.save();
       ctx.globalAlpha = e.hitFlash > 0 ? Math.max(0.45, 1 - e.hitFlash / 14) : 1;
       ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(
-        enemySprite.image,
-        enemySprite.sourceX, enemySprite.sourceY,
-        enemySprite.sourceWidth, enemySprite.sourceHeight,
-        -spriteWidth / 2, -spriteHeight * 0.55,
-        spriteWidth, spriteHeight,
-      );
+      ctx.rotate(motion.rotation);
+      ctx.scale(motion.scaleX, motion.scaleY);
+      // Karen v2 dedicated sprite upgrades both Karen bodies over the atlas cell.
+      const karenSprite = (e.typeIndex === 1 || e.typeIndex === 13 || (e.isBossEnemy && e.typeIndex === 4))
+        ? getRuntimeCharacterSprite("karen") : null;
+      if (karenSprite) {
+        ctx.drawImage(karenSprite, -spriteWidth / 2, -spriteHeight * 0.55 + motion.offsetY, spriteWidth, spriteHeight);
+      } else {
+        ctx.drawImage(
+          enemySprite.image,
+          enemySprite.sourceX, enemySprite.sourceY,
+          enemySprite.sourceWidth, enemySprite.sourceHeight,
+          -spriteWidth / 2, -spriteHeight * 0.55 + motion.offsetY,
+          spriteWidth, spriteHeight,
+        );
+      }
       ctx.restore();
+      // Hit-flash rim keeps damage readable over the sprite art.
+      if (e.hitFlash > 0) {
+        ctx.strokeStyle = `rgba(255,255,255,${Math.min(0.85, e.hitFlash / 10)})`;
+        ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(0, 0, r + 2, 0, Math.PI * 2); ctx.stroke();
+      }
+      // Impact sparks — stateless back-scatter toward the shooter for the
+      // first frames of a fresh hit (S145 FX pass; off under perf pressure).
+      if (e.hitFlash >= 9 && _perfStep < 1 && !_rm) {
+        const _skT = (12 - e.hitFlash) / 3; // 0→1 across frames 12..9
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.lineCap = "round"; ctx.lineWidth = 2;
+        for (let _si = 0; _si < 4; _si++) {
+          const _sa = faceA + (_si - 1.5) * 0.42;
+          const _sd = r * 0.5 + _skT * 14;
+          ctx.strokeStyle = `rgba(255,220,120,${0.8 - _skT * 0.7})`;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(_sa) * _sd, Math.sin(_sa) * _sd);
+          ctx.lineTo(Math.cos(_sa) * (_sd + 6 + _skT * 6), Math.sin(_sa) * (_sd + 6 + _skT * 6));
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
     }
     }
 
@@ -855,11 +943,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       drawThreatBrackets(ctx, r, readability.ringColor, readability.marker);
     }
 
-    // Emoji
-    ctx.font = Math.floor(r * 0.72) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.globalAlpha = e.hitFlash > 6 ? 0.15 : 0.88;
-    ctx.fillText(e.emoji, 0, 1);
-    ctx.globalAlpha = 1;
+    // Emoji identity glyph — fallback/Retro only; sprite bodies carry their own identity.
+    if (retroCharacters || !enemySprite) {
+      ctx.font = Math.floor(r * 0.72) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.globalAlpha = e.hitFlash > 6 ? 0.15 : 0.88;
+      ctx.fillText(e.emoji, 0, 1);
+      ctx.globalAlpha = 1;
+    }
     // Chain enrage spawn label: ⚡ above enemy during first 20 frames
     if ((e._spawnFlashTimer || 0) > 0) {
       const _ef = e._spawnFlashTimer / 20;
@@ -961,6 +1051,28 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   // Player bullets
+  // S145 FX: weapon-tinted tracer trails drawn back along the velocity vector
+  // (zero per-bullet memory). Additive blend; off at perf step ≥1 or reduced motion.
+  const _tracersOn = _perfStep < 1 && !_rm;
+  if (_tracersOn) {
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.lineCap = "round";
+    gs.bullets.forEach(b => {
+      const _bvx = b.dx ?? b.vx ?? 0, _bvy = b.dy ?? b.vy ?? 0;
+      if (!_bvx && !_bvy) return;
+      const _tl = Math.min(4.5, 2.5 + (b.size || 4) * 0.25);
+      const grad = ctx.createLinearGradient(b.x, b.y, b.x - _bvx * _tl, b.y - _bvy * _tl);
+      grad.addColorStop(0, b.color || "#FFD700");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.strokeStyle = grad;
+      ctx.globalAlpha = 0.55;
+      ctx.lineWidth = Math.max(1.5, (b.size || 4) * 0.7);
+      ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(b.x - _bvx * _tl, b.y - _bvy * _tl); ctx.stroke();
+    });
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
   gs.bullets.forEach(b => {
     ctx.save(); ctx.translate(b.x, b.y);
     if (b.boomerang) {
@@ -978,20 +1090,17 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   });
 
-  // Particles — when frame budget is hot, render only every other particle.
+  // Particles — additive glow (S145); when frame budget is hot, render only
+  // every other particle, and drop the blend mode entirely at step ≥2.
   const _reduced = typeof window !== "undefined" && window.__codReducedEffects;
-  if (_reduced) {
-    for (let i = 0; i < gs.particles.length; i += 2) {
-      const pt = gs.particles[i];
-      ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
-      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
-    }
-  } else {
-    gs.particles.forEach(pt => {
-      ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
-      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
-    });
+  const _pStride = _reduced ? 2 : 1;
+  if (_perfStep < 2) ctx.globalCompositeOperation = "lighter";
+  for (let i = 0; i < gs.particles.length; i += _pStride) {
+    const pt = gs.particles[i];
+    ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
+    ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
   }
+  ctx.globalCompositeOperation = "source-over";
   ctx.globalAlpha = 1;
 
   // Chain Lightning arcs
@@ -1016,13 +1125,29 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
   }
 
-  // Dying enemy animations
+  // Dying enemy animations — the enemy's own sprite squash-falls (S145);
+  // emoji rise-out remains the fallback and the Retro-pack look.
   (gs.dyingEnemies || []).forEach(de => {
     const t = de.life / de.maxLife; // 1→0
-    ctx.save(); ctx.translate(de.x, de.y - (1 - t) * 25);
-    ctx.globalAlpha = t; ctx.scale(1 + (1 - t) * 0.6, 1 + (1 - t) * 0.6);
-    ctx.font = (de.size * 0.55) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.fillText(de.emoji, 0, 0); ctx.restore();
+    const _deSprite = (!retroCharacters && de.typeIndex !== undefined) ? getRuntimeEnemySprite(de.typeIndex) : null;
+    ctx.save();
+    if (_deSprite && !_rm) {
+      const death = resolveSpriteDeath(1 - t);
+      const _dh = Math.max(58, (de.size / 2) * 3.15);
+      const _dw = _dh * (_deSprite.sourceWidth / _deSprite.sourceHeight);
+      ctx.translate(de.x, de.y + death.offsetY);
+      ctx.rotate(death.rotation);
+      ctx.scale(death.scaleX, death.scaleY);
+      ctx.globalAlpha = death.alpha;
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(_deSprite.image, _deSprite.sourceX, _deSprite.sourceY, _deSprite.sourceWidth, _deSprite.sourceHeight, -_dw / 2, -_dh * 0.55, _dw, _dh);
+    } else {
+      ctx.translate(de.x, de.y - (1 - t) * 25);
+      ctx.globalAlpha = t; ctx.scale(1 + (1 - t) * 0.6, 1 + (1 - t) * 0.6);
+      ctx.font = (de.size * 0.55) + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(de.emoji, 0, 0);
+    }
+    ctx.restore();
   });
   ctx.globalAlpha = 1;
 
@@ -1158,14 +1283,34 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   ctx.strokeStyle = "rgba(230,235,220,0.82)"; ctx.lineWidth = 5; ctx.lineCap = "round";
   ctx.beginPath(); ctx.moveTo(6, 2); ctx.lineTo(13, 0); ctx.stroke(); ctx.lineCap = "butt";
   ctx.fillStyle = "#2A313A"; ctx.fillRect(8, -3, 7, 7);
-  drawWeaponBarrel(ctx, weaponAccent);
+  // S145: dedicated weapon sprite (atlas, facing +x); procedural barrel stays
+  // as the load-failure fallback so weapon identity never disappears.
+  const weaponSprite = getWeaponSprite(wpnIdx);
+  if (weaponSprite) {
+    const _wH = 46;
+    const _wW = _wH * (weaponSprite.width / weaponSprite.height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(weaponSprite.image, weaponSprite.x, weaponSprite.y, weaponSprite.width, weaponSprite.height, 4, -_wH / 2 + 1, _wW, _wH);
+  } else {
+    drawWeaponBarrel(ctx, weaponAccent);
+  }
   // Reset alpha before muzzle flash (so flash is always bright)
   ctx.globalAlpha = 1; ctx.shadowBlur = 0;
   if (gs.muzzleFlash > 0) {
+    const _mfX = weaponSprite ? 42 : 35;
     ctx.shadowColor = "#FFD740"; ctx.shadowBlur = gs.muzzleFlash * 5;
+    // Star-burst muzzle: bright core + weapon-tinted spikes (S145 FX pass).
     ctx.fillStyle = `rgba(255,220,60,${gs.muzzleFlash / 4})`;
-    ctx.beginPath(); ctx.arc(35, 0, 5 + gs.muzzleFlash * 2, 0, Math.PI * 2); ctx.fill();
-    ctx.shadowBlur = 0;
+    ctx.beginPath(); ctx.arc(_mfX, 0, 4 + gs.muzzleFlash * 1.6, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = `rgba(255,240,150,${gs.muzzleFlash / 5})`;
+    ctx.lineWidth = 2; ctx.lineCap = "round";
+    const _mfLen = 6 + gs.muzzleFlash * 3;
+    for (let _mi = 0; _mi < 3; _mi++) {
+      const _ma = (_mi - 1) * 0.5;
+      ctx.beginPath(); ctx.moveTo(_mfX + 2, 0);
+      ctx.lineTo(_mfX + 2 + Math.cos(_ma) * _mfLen, Math.sin(_ma) * _mfLen); ctx.stroke();
+    }
+    ctx.lineCap = "butt"; ctx.shadowBlur = 0;
   }
   ctx.restore();
   }

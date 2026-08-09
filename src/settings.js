@@ -14,6 +14,8 @@ export const SETTINGS_DEFAULTS = {
   autoReload:          false,
   grenadeRadiusMult:   1.0,  // grenade blast radius (0.5–2×)
   showEnemyHealthBars: false,  // show health bars above all enemies at all times
+  tacticalWhisper:     true,   // rate-limited mid-run coaching lines (S145)
+
   // Controller settings
   rumble:              true,  // haptic vibration feedback
   controllerDeadZone:  0.2,   // analog stick dead zone (0.05–0.4)
@@ -73,4 +75,21 @@ export function loadPresets() {
 }
 export function savePresets(p) {
   writeLocalState(PK, JSON.stringify(p), { surface: "settings" });
+}
+
+// S145 — copy per-run user settings onto live game state (extracted from
+// startGame so App.jsx stays inside its architecture line budget).
+export function applyRunSettings(gs, sett) {
+  gs.player.speed *= sett.playerSpeedMult;
+  gs.settSpawnMult = sett.enemySpawnMult;
+  gs.settEnemyHealthMult = sett.enemyHealthMult;
+  gs.settEnemySpeedMult = sett.enemySpeedMult;
+  gs.settScreenShakeMult = sett.screenShakeMult;
+  gs.settParticlesMult = sett.particlesMult;
+  gs.settGrenadeRadMult = sett.grenadeRadiusMult;
+  gs.settAutoReload = sett.autoReload;
+  gs.settShowDPS = sett.showDPS;
+  gs.settCrosshair = sett.crosshair;
+  gs.settShowEnemyHealthBars = sett.showEnemyHealthBars ?? false;
+  gs.settTacticalWhisper = sett.tacticalWhisper ?? true;
 }

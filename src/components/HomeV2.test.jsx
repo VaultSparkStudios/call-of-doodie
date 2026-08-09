@@ -175,7 +175,10 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/SUPPORT/);
   });
 
-  it("shows a journey card and exposes the Player Hub by default", async () => {
+  it("shows a journey card and exposes the Player Hub once onboarding completes", async () => {
+    // S145 arbitration: the ORDERS card only appears after the FIRST 3 RUNS
+    // strip retires (career.totalRuns ≥ 3).
+    localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -189,6 +192,20 @@ describe("HomeV2", () => {
     const commandToggle = [...container.querySelectorAll("button")].find(b => /PROGRESS TOOLS/.test(b.textContent));
     expect(commandToggle?.getAttribute("aria-expanded")).toBe("true");
     expect(container.textContent).toContain("STATS");
+    localStorage.removeItem("cod-career-v1");
+  });
+
+  it("suppresses the ORDERS card and Intel Ticker while FIRST 3 RUNS onboarding is active", async () => {
+    localStorage.removeItem("cod-career-v1");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    expect(container.textContent).toContain("FIRST 3 RUNS");
+    expect(container.textContent).not.toContain("ORDERS ·");
   });
 
   it("hydrates replay links including starter loadout", async () => {

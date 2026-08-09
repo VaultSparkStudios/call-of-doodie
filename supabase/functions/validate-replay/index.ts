@@ -11,12 +11,11 @@ import {
   buildTracePressureReceipt,
   collectTraceBodyFailures,
 } from "./pressure.js";
+import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+// S145 — this endpoint now enforces the same origin allowlist and bounded
+// request quota as issue-run-token/submit-score instead of ACAO * with no limit.
+const RATE_LIMIT = { perMinute: 30 };
 
 const VALID_MODES = new Set(["score_attack", "daily_challenge", "boss_rush", "cursed", "speedrun", "gauntlet", "zombies", "normal", "standard"]);
 interface ValidateRequest {
@@ -207,8 +206,28 @@ export function validateRunHeuristic(req: ValidateRequest): ValidateResult {
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsHeadersFor(req);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const originRejection = rejectDisallowedOrigin(req, corsHeaders);
+  if (originRejection) return originRejection;
   try {
+    // Bounded quota via the shared RPC; fail open only when the rate service
+    // itself is unavailable (validation stays advisory, never load-bearing).
+    try {
+      const url = Deno.env.get("SUPABASE_URL");
+      const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (url && key) {
+        const secret = Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? key;
+        const sb = createClient(url, key);
+        const bucket = await requestBucket(req, secret, "validate-replay:minute");
+        const allowed = await consumeRateLimit(sb, bucket, RATE_LIMIT.perMinute, 60);
+        if (!allowed) {
+          return new Response(JSON.stringify({ ok: false, drift: 1, reasons: ["rate-limited"] }), {
+            status: 429, headers: { ...corsHeaders, "Content-Type": "application/json", "Retry-After": "60" },
+          });
+        }
+      }
+    } catch { /* rate service unavailable — advisory endpoint fails open */ }
     const body = (await req.json()) as ValidateRequest;
     const result = validateRunHeuristic(body || {});
     if (!result.ok) {

@@ -1,15 +1,51 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { WEAPONS } from "../constants.js";
+import { loadCareerStats } from "../storage.js";
+import { getWeaponKillMastery } from "../utils/arsenalMastery.js";
+import { WEAPON_ATLAS_CONTRACT, getWeaponAtlasRect } from "../utils/objectAtlasContract.js";
 import "./weapon-dock.css";
 
 const WEAPON_HOTKEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "="];
+const WEAPON_ATLAS_URL = "/visual-assets/weapon-atlas-v1.webp";
 
-function WeaponButton({ index, selected, ammo, maxAmmo, upgrades = 0, mod, onSelect, compact = false }) {
+// CSS-sprite weapon icon from the S145 weapon atlas; emoji stays as the
+// instant/fallback glyph underneath (shown until the image paints).
+function WeaponSpriteIcon({ index, emoji, size = 26 }) {
+  const rect = getWeaponAtlasRect(index);
+  if (!rect) return <span className="weapon-dock__icon" aria-hidden="true">{emoji}</span>;
+  const scale = size / rect.height;
+  return (
+    <span
+      className="weapon-dock__icon weapon-dock__icon--sprite"
+      aria-hidden="true"
+      style={{
+        width: size, height: size,
+        backgroundImage: `url(${WEAPON_ATLAS_URL})`,
+        backgroundSize: `${WEAPON_ATLAS_CONTRACT.width * scale}px ${WEAPON_ATLAS_CONTRACT.height * scale}px`,
+        backgroundPosition: `-${rect.x * scale}px -${rect.y * scale}px`,
+      }}
+    >
+      <span className="weapon-dock__icon-fallback">{emoji}</span>
+    </span>
+  );
+}
+
+function useWeaponMastery() {
+  return useMemo(() => {
+    try {
+      const kills = loadCareerStats()?.weaponLegendKills || {};
+      return WEAPONS.map((_, index) => getWeaponKillMastery(index, kills[index] || 0));
+    } catch { return WEAPONS.map((_, index) => getWeaponKillMastery(index, 0)); }
+  }, []);
+}
+
+function WeaponButton({ index, selected, ammo, maxAmmo, upgrades = 0, mod, mastery = null, onSelect, compact = false }) {
   const weapon = WEAPONS[index];
   const safeAmmo = Math.max(0, Number(ammo ?? maxAmmo ?? weapon.maxAmmo) || 0);
   const safeMax = Math.max(1, Number(maxAmmo ?? weapon.maxAmmo) || 1);
   const ammoPercent = Math.min(100, (safeAmmo / safeMax) * 100);
   const ammoTone = ammoPercent > 50 ? "healthy" : ammoPercent > 20 ? "low" : "critical";
+  const masteryTitle = mastery && mastery.tier !== "rookie" ? ` · ${mastery.tierLabel} (${mastery.kills} kills)` : "";
   return (
     <button
       type="button"
@@ -18,10 +54,13 @@ function WeaponButton({ index, selected, ammo, maxAmmo, upgrades = 0, mod, onSel
       onClick={() => onSelect(index)}
       aria-pressed={selected}
       aria-label={`${selected ? "Equipped" : "Equip"} ${weapon.name}, ${Math.round(safeAmmo)} of ${safeMax} ammo`}
-      title={`${WEAPON_HOTKEYS[index]} · ${weapon.name} — ${weapon.desc}`}
+      title={`${WEAPON_HOTKEYS[index]} · ${weapon.name} — ${weapon.desc}${masteryTitle}`}
     >
       <span className="weapon-dock__key">{WEAPON_HOTKEYS[index]}</span>
-      <span className="weapon-dock__icon" aria-hidden="true">{weapon.emoji}</span>
+      <WeaponSpriteIcon index={index} emoji={weapon.emoji} size={compact ? 22 : 26} />
+      {mastery && mastery.tier !== "rookie" && (
+        <span className="weapon-dock__mastery" style={{ color: mastery.tierColor }} aria-label={`${mastery.tierLabel} mastery`}>●</span>
+      )}
       <span className="weapon-dock__name">{weapon.name}</span>
       {upgrades > 0 && <span className="weapon-dock__stars" aria-label={`${upgrades} upgrades`}>{"★".repeat(upgrades)}</span>}
       {mod?.blessed && <span className="weapon-dock__mod" aria-label="Blessed">✦</span>}
@@ -33,6 +72,7 @@ function WeaponButton({ index, selected, ammo, maxAmmo, upgrades = 0, mod, onSel
 
 export function PrimaryWeaponSelector({ selectedIndex = 0, onSelect }) {
   const selected = WEAPONS[selectedIndex] || WEAPONS[0];
+  const mastery = useWeaponMastery();
   return (
     <section className="primary-weapon" aria-labelledby="primary-weapon-title">
       <div className="primary-weapon__header">
@@ -45,7 +85,7 @@ export function PrimaryWeaponSelector({ selectedIndex = 0, onSelect }) {
       </div>
       <div className="primary-weapon__grid" role="group" aria-label="Choose primary weapon">
         {WEAPONS.map((weapon, index) => (
-          <WeaponButton key={weapon.name} index={index} selected={index === selectedIndex} onSelect={onSelect} />
+          <WeaponButton key={weapon.name} index={index} selected={index === selectedIndex} mastery={mastery[index]} onSelect={onSelect} />
         ))}
       </div>
     </section>
@@ -59,6 +99,7 @@ export function DesktopWeaponDock(props) {
     onSwitchWeapon, onGrenade, onDash, onReload,
   } = props;
   const selected = WEAPONS[currentWeapon] || WEAPONS[0];
+  const mastery = useWeaponMastery();
   return (
     <div className="weapon-dock weapon-dock--desktop" data-testid="desktop-weapon-dock">
       <div className="weapon-dock__current" style={{ "--weapon-color": selected.color }}>
@@ -77,6 +118,7 @@ export function DesktopWeaponDock(props) {
             maxAmmo={weapon.maxAmmo}
             upgrades={weaponUpgrades?.[index]}
             mod={weaponMods?.[index]}
+            mastery={mastery[index]}
             onSelect={onSwitchWeapon}
             compact
           />
@@ -98,6 +140,7 @@ export function MobileWeaponDock(props) {
   } = props;
   const [open, setOpen] = useState(false);
   const selected = WEAPONS[currentWeapon] || WEAPONS[0];
+  const mastery = useWeaponMastery();
   return (
     <div className={`weapon-dock-mobile ${open ? "is-open" : ""}`} data-testid="mobile-weapon-dock">
       {open && (
@@ -113,6 +156,7 @@ export function MobileWeaponDock(props) {
                 maxAmmo={weapon.maxAmmo}
                 upgrades={weaponUpgrades?.[index]}
                 mod={weaponMods?.[index]}
+                mastery={mastery[index]}
                 onSelect={(next) => { onSwitchWeapon(next); setOpen(false); }}
                 compact
               />

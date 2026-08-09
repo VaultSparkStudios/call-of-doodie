@@ -6,6 +6,7 @@ import sharp from "sharp";
 import {
   ENEMY_ATLAS_CONTRACT, ENEMY_ATLAS_TOTAL_BYTE_BUDGET, getAtlasGridCoverage,
 } from "../src/utils/enemyAtlasContract.js";
+import { WEAPON_ATLAS_CONTRACT, WORLD_OBJECT_ATLAS_CONTRACT } from "../src/utils/objectAtlasContract.js";
 
 
 const ROOT = process.cwd();
@@ -81,6 +82,30 @@ for (const asset of assets) {
         if (!coverage.complete) fail(`${label} integer grid does not cover the complete atlas.`);
       }
       atlasTypeIndices.push(...contract.typeIndices);
+    }
+  }
+
+  if (asset.kind === "runtime-object-atlas") {
+    const objectContracts = new Map([
+      [WEAPON_ATLAS_CONTRACT.id, WEAPON_ATLAS_CONTRACT],
+      [WORLD_OBJECT_ATLAS_CONTRACT.id, WORLD_OBJECT_ATLAS_CONTRACT],
+    ]);
+    const contract = objectContracts.get(asset.id);
+    if (!contract) {
+      fail(`${label} has no object atlas contract.`);
+    } else {
+      if (asset.runtimePath !== contract.runtimePath) fail(`${label} runtimePath drifted from object atlas contract.`);
+      if (Number(asset.maxBytes) !== contract.maxBytes) fail(`${label} maxBytes drifted from object atlas contract.`);
+      if (JSON.stringify(asset.grid) !== JSON.stringify({ columns: contract.columns, rows: contract.rows, slots: contract.slots })) fail(`${label} grid drifted from object atlas contract.`);
+      const runtimeFullPath = path.join(ROOT, asset.runtimePath);
+      if (fs.existsSync(runtimeFullPath)) {
+        const bytes = fs.statSync(runtimeFullPath).size;
+        if (bytes > contract.maxBytes) fail(`${label} exceeds ${contract.maxBytes} byte budget (${bytes}).`);
+        const metadata = await sharp(runtimeFullPath).metadata();
+        if (metadata.format !== "webp") fail(`${label} runtime format must be webp, received ${metadata.format}.`);
+        if (metadata.width !== Number(dims.width) || metadata.height !== Number(dims.height)) fail(`${label} runtime dimensions drifted from manifest.`);
+        if (!metadata.hasAlpha) fail(`${label} must preserve alpha transparency.`);
+      }
     }
   }
 }

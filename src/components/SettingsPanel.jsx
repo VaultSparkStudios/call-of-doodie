@@ -27,6 +27,7 @@ const META = {
   pickupMagnet:        { label: "Pickup Magnet Range",     desc: "Auto-collect radius for health, ammo & upgrades",          tab: "Gameplay", type: "slider",  min: 1.0,  max: 4.0,  step: 0.5,  fmt: v => v === 1 ? "Normal" : `${v.toFixed(1)}×` },
   showDPS:             { label: "Show DPS Counter",        desc: "Display live damage-per-second on the canvas",             tab: "Visual",   type: "toggle" },
   showEnemyHealthBars: { label: "Enemy HP Bars",           desc: "Show health bars above all enemies at all times",           tab: "Visual",   type: "toggle" },
+  tacticalWhisper:     { label: "Tactical Whisper",        desc: "One quiet mid-run coaching line when the evidence is clear — rival pace, damage patterns, doctrine near-misses", tab: "Gameplay", type: "toggle" },
   grenadeRadiusMult:   { label: "Grenade Blast Radius",    desc: "Explosion size — bigger = more enemies hit",               tab: "Controls", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   controllerDeadZone:  { label: "Controller Dead Zone",   desc: "Analog stick dead zone — increase if your stick drifts",   tab: "Controls", type: "slider",  min: 0.05, max: 0.40, step: 0.05, fmt: v => v.toFixed(2) },
   aimAssist:           { label: "Aim Assist (Controller)", desc: "Gently snaps aim toward the nearest enemy when using RT to shoot", tab: "Controls", type: "toggle" },

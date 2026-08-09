@@ -33,12 +33,13 @@ export function buildPublicGameplayContract() {
     loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "choose_perk", "choose_route", "survive_wave", "review_debrief"],
     formations: Object.entries(FORMATION_COUNTERPLAY).map(([id, formation]) => ({ id, label: formation.label, counterplay: formation.drill })),
     modes: REPLAY_MODES.map((id) => ({ id, label: label(id), seededReplayCode: true })),
-    difficulties: REPLAY_DIFFICULTIES.map((id) => ({
+    difficulties: Object.entries(DIFFICULTIES).map(([id, difficulty]) => ({
       id,
-      label: DIFFICULTIES[id]?.label || label(id),
-      playerHp: Number(DIFFICULTIES[id]?.playerHP) || null,
-      spawnMultiplier: Number(DIFFICULTIES[id]?.spawnMult) || null,
+      label: difficulty.label || label(id),
+      playerHp: Number(difficulty.playerHP) || null,
+      spawnMultiplier: Number(difficulty.spawnMult) || null,
     })),
+    replayCodeDifficultySlots: REPLAY_DIFFICULTIES.length,
     starterLoadouts: REPLAY_STARTERS.map((id) => {
       const loadout = STARTER_LOADOUTS.find((entry) => entry.id === id);
       return { id, name: loadout?.name || label(id), description: loadout?.desc || "" };

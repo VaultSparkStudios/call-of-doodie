@@ -16,6 +16,7 @@ import {
   getPublicRouteRegistry,
   renderFooterLinks,
   renderHeaderNav,
+  PARODY_DISCLAIMER,
 } from "./lib/public-route-registry.mjs";
 import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
 
@@ -30,6 +31,22 @@ const expected = new Map();
 
 function queue(relativePath, content) {
   expected.set(path.join(root, relativePath), content.endsWith("\n") ? content : `${content}\n`);
+}
+
+const EXPLORE_POOL = [
+  ["modes", "Modes"],
+  ["arsenal", "Arsenal"],
+  ["accessibility", "Accessibility"],
+  ["support", "Support"],
+  ["stats", "Stats"],
+];
+
+function buildExploreLinks(page) {
+  return EXPLORE_POOL
+    .filter(([id]) => id !== page.id)
+    .slice(0, 4)
+    .map(([id, label]) => `<a href="../${id}/">${escapeHtml(label)}</a>`)
+    .join("");
 }
 
 function card([title, body]) {
@@ -64,7 +81,19 @@ function renderLiveCommunityStats(page) {
           <div><p class="eyebrow">Always-current aggregate</p><h2 id="live-community-heading">All supported history</h2></div>
           <span class="status" data-community-status data-state="connecting" aria-live="polite">Connecting to live totals…</span>
         </div>
-        <div class="live-stat-grid">${metrics.map(([id, label, fallback]) => `<div class="live-stat"><span>${escapeHtml(label)}</span><strong data-community-stat="${id}">${escapeHtml(fallback)}</strong></div>`).join("")}</div>
+        <div class="live-stat-grid">${metrics.map(([id, label, fallback]) => `<div class="live-stat"><span>${escapeHtml(label)}</span><strong data-community-stat="${id}">${escapeHtml(fallback)}</strong><svg class="live-spark" data-community-spark="${id}" viewBox="0 0 64 18" preserveAspectRatio="none" aria-hidden="true"></svg></div>`).join("")}</div>
+        <div class="live-records" data-community-records hidden>
+          <strong>🏆 Community records</strong>
+          <span>Best wave <b data-community-record="bestWave">—</b></span>
+          <span>Best score <b data-community-record="bestScore">—</b></span>
+          <span>Best kills <b data-community-record="bestKills">—</b></span>
+          <span>Last 24h: <b data-community-record="runs24h">—</b> runs · <b data-community-record="kills24h">—</b> kills</span>
+        </div>
+        <div class="live-feedback" data-community-feedback hidden>
+          <strong>Field reports</strong>
+          <div class="live-feedback-bar" aria-hidden="true"><i data-feedback-seg="too_easy"></i><i data-feedback-seg="dialed_in"></i><i data-feedback-seg="brutal"></i></div>
+          <span data-feedback-legend></span>
+        </div>
         <p class="live-coverage" data-community-coverage>All 12 supported runs · 0 full-detail · 12 legacy · oldest supported record March 12, 2026.</p>
         <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
       </section>`;
@@ -101,9 +130,9 @@ ${renderHeaderNav("../")}
       <p class="lede">${escapeHtml(page.lede)}</p>
       ${cta}${liveStats}${art}
       <div class="card-grid">${page.sections.map(card).join("")}</div>
-      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
+      <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong>${buildExploreLinks(page)}</aside>
     </main>
-    <footer><div class="footer-links">${renderFooterLinks("../")}</div><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
+    <footer><div class="footer-links">${renderFooterLinks("../")}</div><p class="parody-note">${escapeHtml(PARODY_DISCLAIMER)}</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
   </div>
 </body>
 </html>`;

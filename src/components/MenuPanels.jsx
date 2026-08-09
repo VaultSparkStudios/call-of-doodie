@@ -9,6 +9,7 @@ import { BUILD_ARCHETYPES } from "../utils/buildArchetypes.js";
 import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { copyChallengeUrl } from "../utils/challengeLinks.js";
 import { buildArsenalMasteryContract } from "../utils/arsenalMastery.js";
+import { buildNemesisChronicle } from "../utils/nemesisChronicle.js";
 import {
   buildBountyBoard,
   buildFeaturedSeeds,
@@ -152,14 +153,24 @@ export function MostWantedPanel({ onClose }) {
   const [enemyBests] = useState(() => {
     try { return loadCareerStats().enemyKillBests || {}; } catch { return {}; }
   });
+  // S145 — the Nemesis Chronicle's promised dossier border finally renders:
+  // the enemy behind the active chronicle gets a chapter-tiered case-file frame.
+  const [nemesis] = useState(() => {
+    try {
+      return buildNemesisChronicle({ career: loadCareerStats(), rivalryHistory: loadRivalryHistory(), enemyTypes: ENEMY_TYPES });
+    } catch { return null; }
+  });
+  const nemesisType = nemesis && nemesis.losses > 0 ? Number(nemesis.agentProjection?.type) : null;
   return (
     <div style={OVERLAY}>
       <div data-gamepad-scroll="" style={{ ...CARD, maxWidth: 460, border: "1px solid rgba(255,215,0,0.25)" }}>
         <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
         {ENEMY_TYPES.map((e, i) => {
           const rec = enemyBests[i] || null;
+          const isNemesis = nemesisType === i;
+          const dossierEarned = isNemesis && nemesis.losses >= 3;
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: isNemesis ? "rgba(255,68,0,0.07)" : "rgba(255,255,255,0.03)", border: dossierEarned ? "2px solid rgba(255,68,0,0.75)" : isNemesis ? "1px dashed rgba(255,68,0,0.5)" : "1px solid rgba(255,255,255,0.05)", boxShadow: dossierEarned ? "0 0 10px rgba(255,68,0,0.25)" : "none" }}>
               <span style={{ fontSize: 24 }}>{e.emoji}</span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
@@ -171,6 +182,11 @@ export function MostWantedPanel({ onClose }) {
                     {rec.killedByCount > 0 ? ` · killed you ${rec.killedByCount}×` : ""}
                   </div>
                 ) : null}
+                {isNemesis && (
+                  <div style={{ fontSize: 9, color: "#FF6B3C", marginTop: 2, fontWeight: 700, letterSpacing: 0.5 }}>
+                    📕 {nemesis.threat} · CHAPTER {nemesis.chapter}/3 · {nemesis.cosmeticSignal}
+                  </div>
+                )}
               </div>
             </div>
           );
@@ -194,6 +210,8 @@ export function RunHistoryPanel({
   const history = Array.isArray(runHistory) ? runHistory : loadRunHistory();
   const rivalry = Array.isArray(rivalryHistory) ? rivalryHistory : loadRivalryHistory();
   const events = Array.isArray(studioEvents) ? studioEvents : loadStudioGameEvents();
+  const opsDebugEnabled = typeof window !== "undefined"
+    && new URLSearchParams(window.location.search).get("debug") === "ops";
   const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR", speedrun: "🏃 SR", gauntlet: "🏋 GT", zombies: "🧟 Z" };
   const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
   const rivalrySummary = summarizeRivalryHistory(rivalry);
@@ -319,7 +337,9 @@ export function RunHistoryPanel({
             </div>
           )}
         </div>
-        <div style={{ marginBottom: 14, padding: "10px 12px", borderRadius: 8, background: "rgba(255,70,70,0.04)", border: "1px solid rgba(255,120,120,0.18)" }}>
+        {/* S145: TRUST OPS is operator telemetry — gated behind ?debug=ops like
+            the other ops surfaces, never shown to ordinary players. */}
+        {opsDebugEnabled && <div style={{ marginBottom: 14, padding: "10px 12px", borderRadius: 8, background: "rgba(255,70,70,0.04)", border: "1px solid rgba(255,120,120,0.18)" }}>
           <div style={{ color: "#FFB5B5", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>🛡️ TRUST OPS</div>
           <div style={{ fontSize: 10, color: "#AAA", marginBottom: 6 }}>
             Front-door events: {trustSummary.frontDoorCount} · Debriefs: {trustSummary.debriefCount} · Trust flags: {trustSummary.trust.length} · Rejections: {trustSummary.rejectionCount}
@@ -379,7 +399,7 @@ export function RunHistoryPanel({
               ))}
             </div>
           )}
-        </div>
+        </div>}
         {history.length === 0 ? (
           <p style={{ color: "#aaa", fontSize: 13, textAlign: "center", marginTop: 20 }}>No runs yet — get out there!</p>
         ) : (
@@ -880,7 +900,19 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
                 <div style={{ color: "#00FF88", marginTop: 4 }}>✓ Prestige {prestige + 1} badge earned</div>
                 <div style={{ color: "#00FF88" }}>✓ All difficulties +{(prestige + 1) * 10}% harder (more glory)</div>
               </div>
-              <div style={{ fontSize: 11, color: "#aaa", marginBottom: 20 }}>Kill records & achievements are preserved forever.</div>
+              <div style={{ fontSize: 11, color: "#aaa", marginBottom: 12 }}>Kill records & achievements are preserved forever.</div>
+              {/* S145 prestige ritual: the Doctrine Archive stamps the ceremony —
+                  forged doctrines are permanent and named at the moment of reset. */}
+              {(() => {
+                try {
+                  const forged = Object.keys(loadDoctrineArchive() || {});
+                  return (
+                    <div style={{ fontSize: 10, color: "#7FE6FF", marginBottom: 20, padding: "8px 12px", borderRadius: 8, background: "rgba(127,230,255,0.06)", border: "1px solid rgba(127,230,255,0.2)", letterSpacing: 0.5 }}>
+                      🗂️ DOCTRINE ARCHIVE STAMP · {forged.length > 0 ? `${forged.length} doctrine${forged.length === 1 ? "" : "s"} forged this era — carried into Prestige ${prestige + 1}` : "No doctrines forged this era — the archive awaits your first capstone"}
+                    </div>
+                  );
+                } catch { return null; }
+              })()}
               <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
                 <button onClick={() => setShowPrestigeConfirm(false)} style={{ ...BTN_S, padding: "10px 24px" }}>CANCEL</button>
                 <button onClick={handlePrestige} style={{ ...BTN_P, padding: "10px 24px", background: "linear-gradient(180deg,#FF3333,#AA0000)", border: "1px solid rgba(255,50,50,0.6)" }}>CONFIRM PRESTIGE</button>
