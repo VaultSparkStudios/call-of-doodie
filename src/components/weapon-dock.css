@@ -47,6 +47,7 @@
 .weapon-dock-mobile.is-large { height:88px; grid-template-columns:minmax(0,1fr) 64px 68px 72px; }
 .weapon-dock-mobile.is-large .weapon-dock-mobile__action { font-size:18px; }
 .weapon-dock-mobile.is-large .weapon-dock-mobile__action small { font-size:8px; }
+.weapon-dock-mobile.is-large .weapon-dock-mobile__drawer { bottom:92px; }
 .weapon-dock-mobile__drawer { position:absolute; right:6px; bottom:76px; left:6px; padding:9px; border:1px solid rgba(255,170,70,.55); border-radius:12px; background:rgba(4,7,11,.98); box-shadow:0 -12px 35px rgba(0,0,0,.7); }
 .weapon-dock-mobile__drawer>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;color:#ffb45d;font:900 10px "Courier New",monospace;letter-spacing:1.5px}.weapon-dock-mobile__drawer>div:first-child button{width:38px;height:34px;border:0;color:#fff;background:transparent;font-size:23px}.weapon-dock-mobile__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
 @media(max-width:760px){.primary-weapon__grid{grid-template-columns:repeat(4,minmax(0,1fr))}.primary-weapon__header{align-items:flex-start}.primary-weapon__hint{max-width:110px}}
