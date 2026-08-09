@@ -56,4 +56,22 @@ describe("WeaponDock", () => {
     expect(onSwitchWeapon).toHaveBeenCalledWith(4);
     expect(container.querySelector('[aria-label="Choose weapon"]')).toBeNull();
   });
+
+  it("mobile dock defaults to standard size (no is-large class)", async () => {
+    await render(<MobileWeaponDock {...sharedProps} onSwitchWeapon={noop} />);
+    const dock = container.querySelector('[data-testid="mobile-weapon-dock"]');
+    expect(dock.classList.contains("is-large")).toBe(false);
+  });
+
+  it("mobile dock applies is-large class when touchButtonSize is large", async () => {
+    await render(<MobileWeaponDock {...sharedProps} onSwitchWeapon={noop} touchButtonSize="large" />);
+    const dock = container.querySelector('[data-testid="mobile-weapon-dock"]');
+    expect(dock.classList.contains("is-large")).toBe(true);
+  });
+
+  it("mobile dock does not apply is-large class for standard touchButtonSize", async () => {
+    await render(<MobileWeaponDock {...sharedProps} onSwitchWeapon={noop} touchButtonSize="standard" />);
+    const dock = container.querySelector('[data-testid="mobile-weapon-dock"]');
+    expect(dock.classList.contains("is-large")).toBe(false);
+  });
 });
