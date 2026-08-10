@@ -665,10 +665,10 @@ export default function HomeV2(props) {
           {/* Header row */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, flexWrap: "wrap" }}>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ color: onboarding ? "#FFB36B" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>
+              <div style={{ color: onboarding ? "#FFB36B" : themePalette.quiet, fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>
                 {onboarding ? "COMMANDER'S ORDERS" : `ORDERS · ${journey.label.toUpperCase()}`}
               </div>
-              {!onboarding && <div style={{ color: "#EEE", fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>}
+              {!onboarding && <div style={{ color: themePalette.ink, fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>}
             </div>
             {!onboarding && (
               <button
@@ -685,19 +685,19 @@ export default function HomeV2(props) {
             <>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", margin: "7px 0", flexWrap: "wrap" }}>
                 <div style={{ color: "#FFB36B", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIRST 3 RUNS</div>
-                <div style={{ color: "#AAA", fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
+                <div style={{ color: themePalette.muted, fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 6 }}>
                 {onboarding.steps.map((step) => {
                   const active = step.active;
                   const done = step.complete;
                   return (
-                    <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
+                    <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : themePalette.panel, border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : themePalette.line}` }}>
                       <div style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>
-                        <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
-                        <div style={{ color: active ? "#FFF" : "#AAA", fontSize: 10, fontWeight: 900 }}>{step.title}</div>
+                        <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : themePalette.quiet, fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
+                        <div style={{ color: active ? themePalette.ink : themePalette.muted, fontSize: 10, fontWeight: 900 }}>{step.title}</div>
                       </div>
-                      <div style={{ color: "#DDD", fontSize: 10, lineHeight: 1.35, marginTop: 5 }}>{step.text}</div>
+                      <div style={{ color: themePalette.ink, fontSize: 10, lineHeight: 1.35, marginTop: 5 }}>{step.text}</div>
                     </div>
                   );
                 })}
@@ -711,15 +711,15 @@ export default function HomeV2(props) {
               <div style={{ color: journey.secondary.accent, fontSize: 11, fontWeight: 900, marginTop: 6 }}>
                 NEXT: {journey.secondary.title}
               </div>
-              <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
+              <div style={{ color: themePalette.muted, fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
               {intelLine && (
-                <div role="status" aria-live="polite" style={{ marginTop: 9, paddingTop: 8, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "flex-start", gap: 8, flexWrap: "wrap" }}>
+                <div role="status" aria-live="polite" style={{ marginTop: 9, paddingTop: 8, borderTop: `1px solid ${themePalette.line}`, display: "flex", alignItems: "flex-start", gap: 8, flexWrap: "wrap" }}>
                   <span style={{ fontSize: 13, flexShrink: 0 }}>💡</span>
-                  <span style={{ flex: 1, fontSize: 11, color: "#DDEFFF", lineHeight: 1.4 }}>
-                    <strong style={{ color: "#7FE6FF" }}>{runIntel.focus.replace(/_/g, " ").toUpperCase()}:</strong>{" "}
+                  <span style={{ flex: 1, fontSize: 11, color: themePalette.ink, lineHeight: 1.4 }}>
+                    <strong style={{ color: themePalette.cyan }}>{runIntel.focus.replace(/_/g, " ").toUpperCase()}:</strong>{" "}
                     {runIntel.directive}
                     {recommendedAction?.title && (
-                      <span style={{ color: "#AAA" }}> · <em>{recommendedAction.title}</em></span>
+                      <span style={{ color: themePalette.muted }}> · <em>{recommendedAction.title}</em></span>
                     )}
                   </span>
                   {recommendedAction && (
@@ -729,18 +729,18 @@ export default function HomeV2(props) {
                       style={{ ...quickBtn, padding: "4px 8px", fontSize: 9, color: recommendedAction.accent, borderColor: `${recommendedAction.accent}66`, flexShrink: 0 }}
                     >{recommendedAction.cta}</button>
                   )}
-                  <details style={{ fontSize: 10, color: "#7FE6FF", cursor: "pointer", flexShrink: 0 }}>
+                  <details style={{ fontSize: 10, color: themePalette.cyan, cursor: "pointer", flexShrink: 0 }}>
                     <summary style={{ outline: "none" }}>(?)</summary>
-                    <div style={{ marginTop: 8, padding: "8px 10px", background: "rgba(0,0,0,0.4)", borderRadius: 6, color: "#CCC", fontSize: 11, maxWidth: 340 }}>
+                    <div style={{ marginTop: 8, padding: "8px 10px", background: themePalette.panelStrong, borderRadius: 6, color: themePalette.ink, fontSize: 11, maxWidth: 340, border: `1px solid ${themePalette.line}` }}>
                       <div style={{ fontWeight: 900, color: "#FFB36B", marginBottom: 4 }}>COMMAND BRIEF</div>
                       {commandBrief.map((l, i) => <div key={i}>{i + 1}. {l}</div>)}
-                      {runIntel.recommendation && <div style={{ marginTop: 6, color: "#8FEFFF" }}>{runIntel.recommendation}</div>}
+                      {runIntel.recommendation && <div style={{ marginTop: 6, color: themePalette.cyan }}>{runIntel.recommendation}</div>}
                     </div>
                   </details>
                   <button
                     onClick={() => { writePreference("cod-ticker-dismissed", "1", "session", "home"); setTickerDismissed(true); }}
                     aria-label="Dismiss intel"
-                    style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14, flexShrink: 0 }}
+                    style={{ background: "none", border: "none", color: themePalette.quiet, cursor: "pointer", fontSize: 14, flexShrink: 0 }}
                   >✕</button>
                 </div>
               )}
@@ -749,7 +749,7 @@ export default function HomeV2(props) {
 
           {/* Aim Check — unverified: button to open check; verified+onboarding: receipt */}
           {(aimCheck.status !== "verified" || onboarding) && (
-            <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${onboarding ? "rgba(255,107,53,0.22)" : "rgba(255,255,255,0.07)"}`, display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${onboarding ? "rgba(255,107,53,0.22)" : themePalette.line}`, display: "flex", justifyContent: "flex-end" }}>
               {aimCheck.status !== "verified" ? (
                 <button
                   style={{ ...quickBtn, borderColor: "rgba(255,211,77,0.48)", color: "#FFD34D" }}
