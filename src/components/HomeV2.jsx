@@ -568,16 +568,9 @@ export default function HomeV2(props) {
     border: "1px solid rgba(0,229,255,0.25)", borderRadius: 10,
     display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#DDEFFF", lineHeight: 1.4,
   };
-  const journeyCard = {
-    margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
-    background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
-    display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, alignItems: "center",
-  };
-  // S147: shared outer chrome for the single-directive slot — the ORDERS
-  // card and FIRST 3 RUNS onboarding strip are mutually exclusive (only one
-  // renders at a time) but now share one frame (margin/maxWidth/radius/
-  // border) so the slot's visual size and position stay constant across the
-  // phase swap instead of jumping between two differently-shaped containers.
+  // S148: single adaptive container for the Commander's Orders surface — the
+  // merged replacement for the previously separate ORDERS card, FIRST 3 RUNS
+  // strip, Intel Ticker, and Aim Check chip.
   const ordersFrame = {
     margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
     background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
@@ -659,49 +652,122 @@ export default function HomeV2(props) {
         </div>
 
 
-        {/* S145 onboarding arbitration: while the FIRST 3 RUNS strip is active
-            it is the single directive — the ORDERS card and Intel Ticker stand
-            down so a new player sees one instruction, not four. */}
-        {!onboarding && <div style={journeyCard}>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ color: "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>ORDERS · {journey.label.toUpperCase()}</div>
-            <div style={{ color: "#EEE", fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>
-            <div style={{ color: journey.secondary.accent, fontSize: 11, fontWeight: 900, marginTop: 6 }}>
-              NEXT: {journey.secondary.title}
+        {/* Commander's Orders — single adaptive directive surface (S148 merge).
+            Replaces the previously separate ORDERS card, FIRST 3 RUNS strip,
+            and Intel Ticker which were mutually-exclusion-arbitrated but
+            rendered as three different UI fragments. Now one card adapts:
+            onboarding players see the three-run guide + aim prompt; veterans
+            see their journey directive + intel inline. */}
+        <div
+          data-testid="commanders-orders-card"
+          style={{ ...ordersFrame, ...(onboarding ? { borderColor: "rgba(255,107,53,0.28)" } : {}) }}
+        >
+          {/* Header row */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ color: onboarding ? "#FFB36B" : themePalette.quiet, fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>
+                {onboarding ? "COMMANDER'S ORDERS" : `ORDERS · ${journey.label.toUpperCase()}`}
+              </div>
+              {!onboarding && <div style={{ color: themePalette.ink, fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>}
             </div>
-            <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
+            {!onboarding && (
+              <button
+                onClick={() => handleContinuationAction(journey.secondary, "orders_card")}
+                style={{ ...quickBtn, color: journey.secondary.accent, borderColor: `${journey.secondary.accent}66`, background: `${journey.secondary.accent}12`, whiteSpace: "nowrap", flexShrink: 0 }}
+              >
+                {journey.secondary.cta.toUpperCase()}
+              </button>
+            )}
           </div>
-          <button
-            onClick={() => handleContinuationAction(journey.secondary, "journey_card")}
-            style={{ ...quickBtn, color: journey.secondary.accent, borderColor: `${journey.secondary.accent}66`, background: `${journey.secondary.accent}12`, whiteSpace: "nowrap" }}
-          >
-            {journey.secondary.cta.toUpperCase()}
-          </button>
-        </div>}
 
-        {onboarding && (
-          <div style={{ ...ordersFrame, borderColor: "rgba(255,107,53,0.28)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginBottom: 7, flexWrap: "wrap" }}>
-              <div style={{ color: "#FFB36B", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIRST 3 RUNS</div>
-              <div style={{ color: "#AAA", fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 6 }}>
-            {onboarding.steps.map((step) => {
-              const active = step.active;
-              const done = step.complete;
-              return (
-                <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>
-                    <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
-                    <div style={{ color: active ? "#FFF" : "#AAA", fontSize: 10, fontWeight: 900 }}>{step.title}</div>
-                  </div>
-                  <div style={{ color: "#DDD", fontSize: 10, lineHeight: 1.35, marginTop: 5 }}>{step.text}</div>
+          {/* Onboarding body: first-3-runs step grid */}
+          {onboarding && (
+            <>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", margin: "7px 0", flexWrap: "wrap" }}>
+                <div style={{ color: "#FFB36B", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIRST 3 RUNS</div>
+                <div style={{ color: themePalette.muted, fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 6 }}>
+                {onboarding.steps.map((step) => {
+                  const active = step.active;
+                  const done = step.complete;
+                  return (
+                    <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : themePalette.panel, border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : themePalette.line}` }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>
+                        <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : themePalette.quiet, fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
+                        <div style={{ color: active ? themePalette.ink : themePalette.muted, fontSize: 10, fontWeight: 900 }}>{step.title}</div>
+                      </div>
+                      <div style={{ color: themePalette.ink, fontSize: 10, lineHeight: 1.35, marginTop: 5 }}>{step.text}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {/* Veteran body: secondary action detail + inline Intel Ticker */}
+          {!onboarding && (
+            <>
+              <div style={{ color: journey.secondary.accent, fontSize: 11, fontWeight: 900, marginTop: 6 }}>
+                NEXT: {journey.secondary.title}
+              </div>
+              <div style={{ color: themePalette.muted, fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
+              {intelLine && (
+                <div role="status" aria-live="polite" style={{ marginTop: 9, paddingTop: 8, borderTop: `1px solid ${themePalette.line}`, display: "flex", alignItems: "flex-start", gap: 8, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 13, flexShrink: 0 }}>💡</span>
+                  <span style={{ flex: 1, fontSize: 11, color: themePalette.ink, lineHeight: 1.4 }}>
+                    <strong style={{ color: themePalette.cyan }}>{runIntel.focus.replace(/_/g, " ").toUpperCase()}:</strong>{" "}
+                    {runIntel.directive}
+                    {recommendedAction?.title && (
+                      <span style={{ color: themePalette.muted }}> · <em>{recommendedAction.title}</em></span>
+                    )}
+                  </span>
+                  {recommendedAction && (
+                    <button
+                      type="button"
+                      onClick={() => handleContinuationAction(recommendedAction, "intel_ticker")}
+                      style={{ ...quickBtn, padding: "4px 8px", fontSize: 9, color: recommendedAction.accent, borderColor: `${recommendedAction.accent}66`, flexShrink: 0 }}
+                    >{recommendedAction.cta}</button>
+                  )}
+                  <details style={{ fontSize: 10, color: themePalette.cyan, cursor: "pointer", flexShrink: 0 }}>
+                    <summary style={{ outline: "none" }}>(?)</summary>
+                    <div style={{ marginTop: 8, padding: "8px 10px", background: themePalette.panelStrong, borderRadius: 6, color: themePalette.ink, fontSize: 11, maxWidth: 340, border: `1px solid ${themePalette.line}` }}>
+                      <div style={{ fontWeight: 900, color: "#FFB36B", marginBottom: 4 }}>COMMAND BRIEF</div>
+                      {commandBrief.map((l, i) => <div key={i}>{i + 1}. {l}</div>)}
+                      {runIntel.recommendation && <div style={{ marginTop: 6, color: themePalette.cyan }}>{runIntel.recommendation}</div>}
+                    </div>
+                  </details>
+                  <button
+                    onClick={() => { writePreference("cod-ticker-dismissed", "1", "session", "home"); setTickerDismissed(true); }}
+                    aria-label="Dismiss intel"
+                    style={{ background: "none", border: "none", color: themePalette.quiet, cursor: "pointer", fontSize: 14, flexShrink: 0 }}
+                  >✕</button>
                 </div>
-              );
-            })}
+              )}
+            </>
+          )}
+
+          {/* Aim Check — unverified: button to open check; verified+onboarding: receipt */}
+          {(aimCheck.status !== "verified" || onboarding) && (
+            <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${onboarding ? "rgba(255,107,53,0.22)" : themePalette.line}`, display: "flex", justifyContent: "flex-end" }}>
+              {aimCheck.status !== "verified" ? (
+                <button
+                  style={{ ...quickBtn, borderColor: "rgba(255,211,77,0.48)", color: "#FFD34D" }}
+                  onClick={() => {
+                    recordFrontDoorAction("aim_check_chip", { source: "orders_card", status: aimCheck.status });
+                    setShowAimCheck(true);
+                  }}
+                >
+                  {aimCheck.label} · {aimCheck.detail.toUpperCase()}
+                </button>
+              ) : (
+                <span style={{ ...quickBtn, borderColor: "rgba(0,255,136,0.4)", color: "#00FF88", cursor: "default" }}>
+                  {aimCheck.label} · {aimCheck.detail.toUpperCase()}
+                </span>
+              )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* DEPLOY split-button */}
         <div className="arcade-home__deploy" style={deployRow}>
@@ -994,7 +1060,9 @@ export default function HomeV2(props) {
               DEBUG INPUT
             </button>
           )}
-          {(inputDebugEnabled || onboarding || aimCheck.status !== "verified") && (
+          {/* Aim Check chip remains in quick-chips only for debug visibility;
+              non-debug players access it inline in the Commander's Orders card */}
+          {inputDebugEnabled && (
             <button
               style={{
                 ...quickBtn,
@@ -1080,39 +1148,6 @@ export default function HomeV2(props) {
             ))}
           </div>}
         </div>
-
-        {/* Intel Ticker — merges Command Brief + Run Intel + Recommended Action.
-            Stands down during FIRST 3 RUNS onboarding (S145 arbitration). */}
-        {!onboarding && intelLine && (
-          <div style={tickerCard} role="status" aria-live="polite">
-            <span style={{ fontSize: 14 }}>💡</span>
-            <span style={{ flex: 1 }}>
-              <strong style={{ color: "#7FE6FF" }}>{runIntel.focus.replace(/_/g, " ").toUpperCase()}:</strong>{" "}
-              {runIntel.directive}
-              {recommendedAction?.title && (
-                <span style={{ color: "#AAA" }}> · <em>{recommendedAction.title}</em></span>
-              )}
-            </span>
-            {recommendedAction && (
-              <button
-                type="button"
-                onClick={() => handleContinuationAction(recommendedAction, "intel_ticker")}
-                style={{ ...quickBtn, padding: "4px 8px", fontSize: 9, color: recommendedAction.accent, borderColor: `${recommendedAction.accent}66` }}
-              >
-                {recommendedAction.cta}
-              </button>
-            )}
-            <details style={{ fontSize: 10, color: "#7FE6FF", cursor: "pointer" }}>
-              <summary style={{ outline: "none" }}>(?)</summary>
-              <div style={{ marginTop: 8, padding: "8px 10px", background: "rgba(0,0,0,0.4)", borderRadius: 6, color: "#CCC", fontSize: 11, maxWidth: 340 }}>
-                <div style={{ fontWeight: 900, color: "#FFB36B", marginBottom: 4 }}>COMMAND BRIEF</div>
-                {commandBrief.map((l, i) => <div key={i}>{i + 1}. {l}</div>)}
-                {runIntel.recommendation && <div style={{ marginTop: 6, color: "#8FEFFF" }}>{runIntel.recommendation}</div>}
-              </div>
-            </details>
-            <button onClick={() => { writePreference("cod-ticker-dismissed", "1", "session", "home"); setTickerDismissed(true); }} aria-label="Dismiss intel" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
-          </div>
-        )}
 
         {/* Challenge link banner */}
         {challengeMode && (

@@ -1,29 +1,27 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-08T05:12:23.578Z",
-  "stagingUrl": "http://127.0.0.1:4179",
-  "workingTreeUiSha256": "de34663cb1251dff4f707935e05256c9bb76fe19d49f379a1d834294eaafcb1a",
+  "capturedAt": "2026-08-10T11:53:22.662Z",
+  "stagingUrl": "http://127.0.0.1:53173",
+  "workingTreeUiSha256": "b4185a1e8022528cdb50b47b2435bb72fa078b8c1d25f6408e353f70c425fc64",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-2026-08-06-game-stats/game-stats-visual-receipt.json",
-    "sha256": "4374f10e129cc8e73cda2390850ef72e382fe03fb842290268664edc25ca3e65",
+    "receipt": "output/playwright/session-148-commanders-orders/commanders-orders-receipt.json",
+    "sha256": "95e6289f1434fadd463d1476dfdc66a34d0b6c7676f89142f888d51620493366",
     "checks": {
       "pass": true,
-      "total": 76,
-      "passed": 76,
+      "total": 8,
+      "passed": 8,
       "failures": []
     }
   },
   "touchedState": {
     "surfaces": [
-      "Command Deck",
-      "Public stats page",
-      "Leaderboard",
-      "Zombies post-run debrief"
+      "Commander's Orders card — onboarding state (FIRST 3 RUNS step grid + Aim Check)",
+      "Commander's Orders card — veteran state (ORDERS directive + Intel Ticker inline)"
     ],
     "checks": {
       "pass": true,
-      "checks": 76,
-      "passed": 76,
+      "checks": 8,
+      "passed": 8,
       "failures": []
     }
   },
@@ -33,193 +31,106 @@
   ],
   "captures": [
     {
-      "file": "game-stats--command-deck--porcelain-day--1440.png",
-      "sha256": "d25c8e2c6334e17504054f4db3ebbc9d6b6147077e9dbe531cdec0093bbe5369",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Command Deck Community Stats and Zombies selector"
-    },
-    {
-      "file": "game-stats--command-deck--porcelain-day--390.png",
-      "sha256": "1a4e6ccdb105f380cf8c0bea7989f41fe55a8406b9342a59e025e95d728ee657",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Command Deck Community Stats and Zombies selector"
-    },
-    {
-      "file": "game-stats--command-deck--sewer-night--1440.png",
-      "sha256": "cc3ceb65371ab81fb9e2f35bd8014131e07e4bdf01addc07411de0e2a6bf415e",
+      "file": "commanders-orders--onboarding--sewer-night--1440.png",
+      "sha256": "e8acdf1af02f84db6bf5513189b08751b6bb6b24a8db75069d129fea21562197",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Command Deck Community Stats and Zombies selector"
+      "page": "Commander's Orders card — Onboarding (FIRST 3 RUNS view)"
     },
     {
-      "file": "game-stats--command-deck--sewer-night--390.png",
-      "sha256": "d5ab80d82ff312f3877181a9ae1d9e60482f8c32bb715f230dd6ffa65791e58f",
+      "file": "commanders-orders--onboarding--sewer-night--390.png",
+      "sha256": "39a16f52a0235f353b00a775e8cc6959bb9fb32d92d2c85316259e52cd3a8a8e",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Command Deck Community Stats and Zombies selector"
+      "page": "Commander's Orders card — Onboarding (FIRST 3 RUNS view)"
     },
     {
-      "file": "game-stats--debrief--porcelain-day--1440.png",
-      "sha256": "ca93632b694fc66c62e5904f4470d033c466d3db6bef8c63524f9690f43b71c0",
+      "file": "commanders-orders--onboarding--porcelain-day--1440.png",
+      "sha256": "7782b0a5f79a66a901ba19b29c41bedd4860132e1497277c95ca2b9ba7b840c0",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Zombies post-run debrief and Field Report"
+      "page": "Commander's Orders card — Onboarding (FIRST 3 RUNS view)"
     },
     {
-      "file": "game-stats--debrief--porcelain-day--390.png",
-      "sha256": "559178b62da3f6e7fed9515ff41462693329629adea7b7daf388f2361083ac77",
+      "file": "commanders-orders--onboarding--porcelain-day--390.png",
+      "sha256": "9a21bf6e8f0631ff2b7b0ef99dac61fa5930800af9bff9f4ae4adc48a333cfd0",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Zombies post-run debrief and Field Report"
+      "page": "Commander's Orders card — Onboarding (FIRST 3 RUNS view)"
     },
     {
-      "file": "game-stats--debrief--sewer-night--1440.png",
-      "sha256": "65957dbd1b7545053f7544534501b6a4208fec811ab606581bf12277971fec30",
+      "file": "commanders-orders--veteran--sewer-night--1440.png",
+      "sha256": "c8ec2b6cab59e7569715a3a4c9fb94992e28ac9749b7344be3854d938f835fb1",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Zombies post-run debrief and Field Report"
+      "page": "Commander's Orders card — Veteran (ORDERS directive + Intel Ticker)"
     },
     {
-      "file": "game-stats--debrief--sewer-night--390.png",
-      "sha256": "b0382e2c07ed4a0812dbfa2c3f5723ddae16d90ce72c3575cef16248b8baa70b",
+      "file": "commanders-orders--veteran--sewer-night--390.png",
+      "sha256": "1192728f147ff17146247925b118d332fac5c98bcb9bdea0f0e3ca10db539cf4",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Zombies post-run debrief and Field Report"
+      "page": "Commander's Orders card — Veteran (ORDERS directive + Intel Ticker)"
     },
     {
-      "file": "game-stats--leaderboard--porcelain-day--1440.png",
-      "sha256": "b503ddad9bc34763529783a1bcfd310b4ee2831973468817c10d5afb8c8d69d9",
+      "file": "commanders-orders--veteran--porcelain-day--1440.png",
+      "sha256": "742f73cd1d1a9b3b56b7d4516cd87912ae78f624da72f96a68977c89793eb046",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Leaderboard Community Stats, Field Reports, and Last Words"
+      "page": "Commander's Orders card — Veteran (ORDERS directive + Intel Ticker)"
     },
     {
-      "file": "game-stats--leaderboard--porcelain-day--390.png",
-      "sha256": "3e05ca404c54788a616ff361d9100e2b6dab815a975a9f9879d7f8ffe03dc4b9",
+      "file": "commanders-orders--veteran--porcelain-day--390.png",
+      "sha256": "e84e77a535703102f2de21983a02ad73c06c1d29b734d6897369cf0a46b9a28c",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Leaderboard Community Stats, Field Reports, and Last Words"
-    },
-    {
-      "file": "game-stats--leaderboard--sewer-night--1440.png",
-      "sha256": "bcc85488daf44171e4a7cc79c645bee5bc2b0cd35c3e633b953fdfc544f77abf",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Leaderboard Community Stats, Field Reports, and Last Words"
-    },
-    {
-      "file": "game-stats--leaderboard--sewer-night--390.png",
-      "sha256": "00f25712ef173f079133894e276c1552ee0c51a17b644444c2a5256cf20472a3",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Leaderboard Community Stats, Field Reports, and Last Words"
-    },
-    {
-      "file": "game-stats--stats--porcelain-day--1440.png",
-      "sha256": "d17f304dfd824014b2609d3e39a65b1a8be94783933ad33f02f5427fe34e3643",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Canonical public stats snapshot and live-terminal navigation"
-    },
-    {
-      "file": "game-stats--stats--porcelain-day--390.png",
-      "sha256": "dccc32da53d170a40fea9652bf556b204a97d9234b3ecdd2d424ed5b1855b2ba",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Canonical public stats snapshot and live-terminal navigation"
-    },
-    {
-      "file": "game-stats--stats--sewer-night--1440.png",
-      "sha256": "252ed88308e30ac6c848daf5986c086fe206749d14a22b174ab90f850114cc7e",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Canonical public stats snapshot and live-terminal navigation"
-    },
-    {
-      "file": "game-stats--stats--sewer-night--390.png",
-      "sha256": "26c7eb2b2244738b7ebe8ab54091f666ac82a9466cfc7802c6bedd6b84c98199",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Canonical public stats snapshot and live-terminal navigation"
+      "page": "Commander's Orders card — Veteran (ORDERS directive + Intel Ticker)"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Playwright rendered-pixel state and geometry inspection",
+    "reviewer": "Playwright rendered-pixel capture and Claude Code image review",
     "findings": [
-      "The focused matrix passed 76/76 checks across four touched surfaces, two project themes, and desktop/mobile viewports.",
-      "Community Stats, all-history coverage, the live public metric grid, Zombies selector, visible Last Words, and post-run Field Report rendered in every matrix cell.",
-      "No horizontal overflow or browser page error was detected in any touched state."
+      "All 8 focused state/theme/viewport matrix cells passed content presence checks.",
+      "Commander's Orders card renders the correct adaptive content: onboarding shows FIRST 3 RUNS three-step grid; veteran shows ORDERS directive with Intel Ticker inline.",
+      "Theme defect found and fixed: hardcoded dark-mode hex colors (#EEE, #DDD, #AAA, #888, #DDEFFF, #CCC, #7FE6FF, #8FEFFF) in the card replaced with themePalette tokens (ink, muted, quiet, cyan, panelStrong) — all text is now legible in both sewer-night and porcelain-day.",
+      "Aim Check renders inline as a button (unverified) or green receipt span (verified+onboarding) in both themes.",
+      "No horizontal overflow detected at 390px or 1440px in either state."
     ],
     "fixesApplied": [
-      "Standardized the player-facing stats surface as Community Stats everywhere it appears.",
-      "Added live/cached status, all-history coverage, retry recovery, and a responsive public metric grid."
+      "Replaced hardcoded dark-mode colors with themePalette.ink/muted/quiet/cyan/panelStrong tokens throughout the Commander's Orders card block."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,
