@@ -1,30 +1,30 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-09 (Session 145 closeout) -->
+<!-- generated-at: 2026-08-10 (Session 147 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S145 ════════════════════╗
-║  Date: 2026-08-09  ·  SIL: 998/1000  ·  Velocity: 18 down        ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S147 ════════════════════╗
+║  Date: 2026-08-10  ·  SIL: 992/1000  ·  Velocity: 6 down         ║
 ║  Mode: FOUNDER  ·  Agent: claude-code                            ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Descoped honestly: onboarding-funnel-merge and website-redun  ║
-║  ✓ Human/data gates: staging INP re-measure (390×844) to confir  ║
+║  ✓ Mobile INP root cause remains a leading hypothesis (native `  ║
+║  ✓ Theme-prop atlas covers 16/96 emoji; the remaining ~80 stay   ║
 ║  ✓ Release: engineering FORGE deployed/public-unlaunched; SPARK  ║
 ╚════════════════════════════════════════════════════════════════╝
-╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
+╔══ SCORES · SIL 992/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
 ║    Alignment          100  ██████████                            ║
-║    Momentum           99   ██████████                            ║
-║    Engagement         100  ██████████                            ║
-║    Process Qual       99   ██████████                            ║
+║    Momentum           98   ██████████                            ║
+║    Engagement         99   ██████████                            ║
+║    Process Qual       100  ██████████                            ║
 ║    Coherence          100  ██████████                            ║
 ║    Security           100  ██████████                            ║
-║    Ecosystem          100  ██████████                            ║
+║    Ecosystem          99   ██████████                            ║
 ║    Capital            100  ██████████                            ║
-║    Automation         100  ██████████                            ║
+║    Automation         96   ██████████                            ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WRITE-BACK STATUS ═══════════════════════════════════════════╗
 ║  ✓ context/CURRENT_STATE.md                                      ║
@@ -39,7 +39,7 @@
 ║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Changes: 40 files  ·  M:33 A:0 D:0 ?:7                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -50,12 +50,12 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        129/173                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1102/1054                                        ║
+║  Tests:         1108/1108                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         9d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  2d ago                                           ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  shells:        3 started · 3 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

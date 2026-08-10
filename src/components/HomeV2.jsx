@@ -573,6 +573,15 @@ export default function HomeV2(props) {
     background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
     display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, alignItems: "center",
   };
+  // S147: shared outer chrome for the single-directive slot — the ORDERS
+  // card and FIRST 3 RUNS onboarding strip are mutually exclusive (only one
+  // renders at a time) but now share one frame (margin/maxWidth/radius/
+  // border) so the slot's visual size and position stay constant across the
+  // phase swap instead of jumping between two differently-shaped containers.
+  const ordersFrame = {
+    margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
+    background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
+  };
   const tabsRow = { display: "flex", gap: 4, justifyContent: "center", marginTop: 22, flexWrap: "wrap" };
   const tabBtn = (active) => ({
     padding: "8px 16px", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "inherit", cursor: "pointer",
@@ -671,7 +680,7 @@ export default function HomeV2(props) {
         </div>}
 
         {onboarding && (
-          <div style={{ margin: "0 auto 12px", maxWidth: 720, border: "1px solid rgba(255,107,53,0.18)", borderRadius: 10, background: "rgba(0,0,0,0.22)", padding: 8 }}>
+          <div style={{ ...ordersFrame, borderColor: "rgba(255,107,53,0.28)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginBottom: 7, flexWrap: "wrap" }}>
               <div style={{ color: "#FFB36B", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIRST 3 RUNS</div>
               <div style={{ color: "#AAA", fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>

@@ -1,3 +1,32 @@
+# Latest Handoff — Session 147
+
+Session Intent: Run the continuous arc (`/goal /arc`) — confirm Session 146 closed out cleanly (F7 write-back-currency), generate a fresh premise-verified audit, implement every item, and closeout.
+
+## Impact Summary (Session 147)
+
+**Headline.** A real Chrome trace (not another guess) ruled out a JS cause for the mobile INP regression, the tactical whisper system finally speaks at the near-death moment it was built for, a public endpoint gained the hardening its sibling already had, an unused AI-ready payload got wired into an actual surface, and two honestly-scoped cosmetic/UX gaps from S145/S146 closed at their L1 rung.
+
+**Impact.**
+- Perf investigation: `scripts/trace-mobile-inp.mjs` (new) opens a real CDP `Tracing` session around the production mobile mode-selector click. Longest task measured 13.5ms — no JS compute bottleneck exists. Leading hypothesis (native `<select>` picker overhead) recorded in `context/DECISIONS.md`, explicitly not yet real-device confirmed; no blind fix shipped.
+- Gamification: `tacticalWhisper.js` gains a critical-health priority branch (≤35% HP → "CRITICAL HEALTH — DISENGAGE"), closing the one state the S145 system's own scaffolding supported but never used.
+- Security: `functions/api/community-stats.js` ported the origin-allowlist + rate-limit pattern already proven on `obelisk-verify.js` — the public stats proxy was previously unbounded.
+- AI: `insightGraph.agentProjection` (computed every death, zero consumers) now flows into the existing debrief analytics event via `buildDeathCoachTelemetry`.
+- Visual (L1 scope): new `theme-prop-atlas-v1.webp` (24.8KB/16 cells) sprites the 2 highest-visibility decorative props per arena theme; ~10 lower-visibility emoji per theme intentionally stay on the fallback — the audit itself flagged full 96-prop coverage as low-value against the atlas-slot ceiling.
+- UX (L1 scope): ORDERS card and FIRST 3 RUNS onboarding strip now share one outer frame (`ordersFrame`) so the single-directive slot doesn't visually jump shape across the onboarding-to-veteran transition.
+
+## Evidence
+
+- Full suite: 184 test files, 1,108 tests pass (`vitest run --no-file-parallelism`; +10 over Session 146 across 5 new/modified test files). Strict lint clean. Production build clean. Runtime boundary 494,760B (gate 560,000B). Public contract 28/28 PASS. Schema lint clean. Visual asset manifest 24 assets ok.
+- `npm run assets:check`, `node scripts/schema-lint.mjs`, `node scripts/runtime:boundary` (via `npm run runtime:boundary`) all pass directly (not through a masking pipe).
+
+## Where We Left Off
+
+- Mobile INP root cause remains a leading hypothesis (native `<select>` overhead), not a device-confirmed fact — a real Android device trace or a scoped custom-dropdown accessibility experiment is the honest next step.
+- Theme-prop atlas covers 16/96 emoji; the remaining ~80 stay on the emoji fallback by design (documented low-value tradeoff, not a gap to silently claim complete).
+- Release: engineering FORGE deployed/public-unlaunched; SPARKED remains NO-GO under unchanged external gates.
+
+---
+
 # Latest Handoff — Session 146
 
 Session Intent: Run the recovery-checked continuous arc (`/goal /arc`) — confirm Session 145 closed out cleanly, then reverify its 19-item audit against live code (not its stale status column), implement the highest-value genuinely-open item, and closeout.

@@ -208,6 +208,46 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("ORDERS ·");
   });
 
+  it("renders the ORDERS card and the FIRST 3 RUNS strip in the same outer frame (S147 unification)", async () => {
+    // The single-directive slot must not change size/shape/radius when it
+    // swaps between the pre-onboarding and post-onboarding phase.
+    localStorage.removeItem("cod-career-v1");
+    const onboardingContainer = document.createElement("div");
+    document.body.appendChild(onboardingContainer);
+    let onboardingRoot;
+    await act(async () => {
+      onboardingRoot = createRoot(onboardingContainer);
+      onboardingRoot.render(<HomeV2 {...baseProps} />);
+    });
+    const onboardingLabel = [...onboardingContainer.querySelectorAll("div")]
+      .find((el) => el.children.length === 0 && el.textContent === "FIRST 3 RUNS");
+    const onboardingFrame = onboardingLabel?.parentElement?.parentElement;
+
+    localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
+    const ordersContainer = document.createElement("div");
+    document.body.appendChild(ordersContainer);
+    let ordersRoot;
+    await act(async () => {
+      ordersRoot = createRoot(ordersContainer);
+      ordersRoot.render(<HomeV2 {...baseProps} />);
+    });
+    const ordersLabel = [...ordersContainer.querySelectorAll("div")]
+      .find((el) => el.children.length === 0 && el.textContent.startsWith("ORDERS ·"));
+    const ordersFrameEl = ordersLabel?.parentElement?.parentElement;
+
+    expect(onboardingFrame).toBeTruthy();
+    expect(ordersFrameEl).toBeTruthy();
+    expect(onboardingFrame.style.maxWidth).toBe(ordersFrameEl.style.maxWidth);
+    expect(onboardingFrame.style.borderRadius).toBe(ordersFrameEl.style.borderRadius);
+    expect(onboardingFrame.style.padding).toBe(ordersFrameEl.style.padding);
+    expect(onboardingFrame.style.margin).toBe(ordersFrameEl.style.margin);
+
+    await act(async () => { onboardingRoot.unmount(); ordersRoot.unmount(); });
+    onboardingContainer.remove();
+    ordersContainer.remove();
+    localStorage.removeItem("cod-career-v1");
+  });
+
   it("hydrates replay links including starter loadout", async () => {
     const code = encodeReplayCode({
       seed: 424242,

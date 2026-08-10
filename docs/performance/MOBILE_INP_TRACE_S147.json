@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "mobile-inp-trace-v1",
+  "capturedAt": "2026-08-10T05:23:06.501Z",
+  "baseUrl": "https://callofdoodie.wtf/",
+  "method": "Raw CDP Tracing session (devtools.timeline + v8.cpu_profiler categories) around a real click on the mobile mode-selector, anchored to the trace's own EventDispatch(click) timestamp — not wall-clock.",
+  "priorEvidence": "docs/performance/STAGING_SESSION_142_INP.json recorded 1408ms via the Event Timing API; context/DECISIONS.md S146 found no synchronous work in HomeV2.jsx by grep alone.",
+  "clickAnchorFound": true,
+  "totalTraceEvents": 7055,
+  "eventsInWindow": 5876,
+  "topEventsByDuration": [
+    {
+      "name": "RunTask",
+      "durMs": 13.5,
+      "tsOffsetMs": 647.4,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12.7,
+      "tsOffsetMs": 219.2,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12.5,
+      "tsOffsetMs": 997.7,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12.3,
+      "tsOffsetMs": 9.8,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12.3,
+      "tsOffsetMs": 1098,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12.1,
+      "tsOffsetMs": 1330.3,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12,
+      "tsOffsetMs": 881,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 12,
+      "tsOffsetMs": 963.9,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.9,
+      "tsOffsetMs": 179.7,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.9,
+      "tsOffsetMs": 847.8,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.8,
+      "tsOffsetMs": 22.9,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.8,
+      "tsOffsetMs": 747.1,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.7,
+      "tsOffsetMs": 496.6,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.7,
+      "tsOffsetMs": 599.3,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.6,
+      "tsOffsetMs": 1464.4,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.5,
+      "tsOffsetMs": 79.6,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.5,
+      "tsOffsetMs": 1563.5,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.4,
+      "tsOffsetMs": 914.2,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.4,
+      "tsOffsetMs": 1232.1,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.3,
+      "tsOffsetMs": 129.7,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.3,
+      "tsOffsetMs": 1513,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.2,
+      "tsOffsetMs": 46.5,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.2,
+      "tsOffsetMs": 546.3,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.2,
+      "tsOffsetMs": 1364.1,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    },
+    {
+      "name": "RunTask",
+      "durMs": 11.1,
+      "tsOffsetMs": 263,
+      "functionName": null,
+      "url": null,
+      "lineNumber": null
+    }
+  ],
+  "wallClockClickToSettleMs": 2697
+}

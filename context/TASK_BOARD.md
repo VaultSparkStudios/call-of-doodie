@@ -62,6 +62,13 @@ Public-safe launch roadmap summary.
 
 **Runway exception:** all three live-premise audit items and the verification-discovered regression are shipped. The source-derived Genius List reports 0 executable / 5 deferred / exhausted=true; remaining work needs credentials, a product decision, real production/participant evidence, a community destination, physical hardware/media, or SPARKED approval.
 
+- [x] [SIL] **DONE S147** Tactical whisper critical-health tier — a fourth priority branch whispers "CRITICAL HEALTH — DISENGAGE" at ≤35% HP, the near-death decision point the S145 system left silent.
+- [x] [SIL] **DONE S147** Mobile INP root-cause trace — `scripts/trace-mobile-inp.mjs` captured a real CDP trace of the production mode-selector click; no task exceeded 13.5ms, ruling out a JS compute cause. Leading hypothesis (native `<select>` picker overhead) recorded in `context/DECISIONS.md`, not yet real-device confirmed.
+- [x] [SIL] **DONE S147** insightGraph agent-projection wiring — the previously-computed-and-discarded `agentProjection` payload now flows into the existing debrief analytics event.
+- [x] [SIL] **DONE S147** community-stats endpoint hardening — `functions/api/community-stats.js` gains the same origin-allowlist + rate-limit pattern already proven on `obelisk-verify.js`.
+- [x] [SIL:1] **DONE S147 (L1 scope)** Decorative theme-prop sprite coverage — a new 16-cell `theme-prop-atlas-v1.webp` covers the 2 highest-visibility props per arena theme; ~10 lower-visibility props per theme remain on the emoji fallback given the atlas-slot ceiling.
+- [x] [SIL:1] **DONE S147 (L1 scope)** Onboarding surface unification — the ORDERS card and FIRST 3 RUNS strip now share one outer frame so the single-directive slot's size/shape stays constant across the phase swap.
+
 - [x] [SIL:3] **DONE S140** Reproducible Hot Context — semantic audit ordering plus content-derived stamps/fingerprints keep fresh-checkout and exact-main output deterministic.
 - [x] [SIL:2] **DONE S140** Canonical Node runtime — package and lock metadata plus all five workflow setup surfaces require Node.js 22+, enforced by a tested receipt.
 - [x] [SIL:3] **DONE S140** Dual-rung launch readiness — engineering and SPARKED verdicts have separate reason-coded gates without reading raw environment files.
@@ -426,6 +433,8 @@ Public-safe launch roadmap summary.
 - [x] [SIL] **DONE S101** Full `/audit` implementation sweep — shipped all 12 items from `docs/AUDIT_2026-06-18_3.md`: visitor-safe ops copy, release security header gate, Obelisk verify endpoint, legacy home retirement gate, Journey card/front-door clarity, Aim Check control rite, DeathScreen next-run drill bridge, local Balance Lab, HUD debug collision overlay, Rival Pace ghost chip, screenshot truth pack with verified captures, and DeathScreen prop extraction. Validation: full suite 540/540, build passing, release security gate with npm audit 0 vulnerabilities, launch media gate passing.
 
 ## Deferred
+- [ ] [SIL:1] [S147] Real-device confirmation of the native-`<select>` mobile INP hypothesis before attempting any fix — `context/DECISIONS.md` records the CDP trace evidence but a physical Android device trace is needed to confirm
+- [ ] [SIL:1] [S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells once production feedback confirms the current highest-visibility coverage reads well
 - [ ] Discord invite/community link when the community entry point is ready
 - [x] [SIL:2] Obelisk verify backend — `/api/obelisk-verify` now exists as a Cloudflare Pages Function proxy with redacted receipts and honest not-configured behavior; guest play remains default.
 - [x] [SIL:3] **DONE S67** App.jsx extraction slice 1 — `gameStep.js` exports `computeMovementVector` + `applyPlayerMovement`; 11 tests; 347/347 passing.

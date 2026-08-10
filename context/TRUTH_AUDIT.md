@@ -1,6 +1,15 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-10 — Session 147 — Mobile INP evidence advances from unknown to JS-cause-ruled-out
+
+- Performance truth — the mobile mode-selector INP regression (1408ms, S146) is no longer "root cause unknown." A real CDP `Tracing` capture (`scripts/trace-mobile-inp.mjs`, `docs/performance/MOBILE_INP_TRACE_S147.json`) found no single main-thread task exceeding 13.5ms across the full interaction window, ruling out a JS compute-bound cause. The leading hypothesis (native `<select>` picker overhead outside the renderer's task queue) is recorded but explicitly NOT device-confirmed — this session's headless Chromium trace cannot fully reproduce a real Android device's native picker path.
+- Security truth — `functions/api/community-stats.js` now carries the same origin-allowlist + rate-limit protection as `functions/api/obelisk-verify.js`; it was previously unprotected beyond a 5s upstream timeout.
+- Scope truth — the new `theme-prop-atlas-v1.webp` covers 16 of ~96 total decorative theme-prop emoji (the 2 highest-visibility per arena theme). This is a deliberate, documented scope decision (atlas-slot ceiling vs. low collision-free/low-alpha visual return), not a claimed full fix — the remaining ~80 emoji stay on the pre-existing fallback.
+- Lifecycle truth — unchanged. Engineering FORGE remains deployed/public-unlaunched; SPARKED remains NO-GO under the same external, physical, participant, publication, provider, subjective-review, and founder-approval gates.
+
+Overall status: engineering READY, one performance hypothesis advanced with real evidence but not device-confirmed; SPARKED remains NO-GO.
+Last reviewed: 2026-08-10
 
 ## 2026-08-08 — Session 143 — Community Stats delivery, history, and release truth
 

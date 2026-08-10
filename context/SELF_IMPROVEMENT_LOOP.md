@@ -4,6 +4,34 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-10 — Session 147 | Total: 992/1000 | Velocity: 6 | Debt: ↓
+
+SIL 992/1000: Confirmed Session 146 closed out cleanly (F7 write-back-currency clean), generated a fresh premise-verified 6-item audit, and shipped all six — a real CDP trace that ruled out a JS cause for the mobile INP regression instead of another guess, a tactical-whisper critical-health tier, community-stats endpoint hardening, insightGraph AI-payload wiring, a scoped theme-prop atlas, and an onboarding-frame unification. Tests: 184/184 files (1,108, +10) in isolation. Lint/build/public-contract/schema gates: green.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite green in isolation, strict lint clean, production build clean, runtime boundary and public-contract/schema gates all pass directly (not through a masking pipe). |
+| Alignment | 100 | → | Every item stayed inside SOUL non-negotiables; the theme-prop item explicitly declined full 96-prop coverage rather than overreach into low-value cosmetic churn. |
+| Momentum | 98 | ↑ | 6 items shipped in one continuous pass, spanning perf investigation, gamification, security, AI, visual, and UX axes. |
+| Engagement | 99 | ↑ | Two genuine player-facing loop improvements (critical-health whisper, unified onboarding frame) plus a visual polish item, all real code paths exercised in live testing. |
+| Process Qual | 100 | → | Cross-checked all 16 new atlas emoji against the live `THEME_PROPS` pools before generating art (caught 2 invalid picks pre-generation); ran a real CDP trace instead of another source-reading guess on the INP item; recorded an honest not-yet-confirmed hypothesis rather than a claimed root cause. |
+| Coherence | 100 | → | No sibling-repo edits; every decision recorded with rationale in DECISIONS.md. |
+| Security | 100 | ↑ | Closed a real gap — the public community-stats proxy previously had no origin/rate protection; now matches its sibling endpoint's proven pattern. |
+| Ecosystem | 99 | ↑ | Public contract 28/28, schema lint clean, visual asset manifest validator extended to cover the new atlas contract rather than left uncovered. |
+| Capital | 100 | → | Zero new dependencies or paid services; the new atlas asset (24.8KB) reuses the existing local sharp/SVG pipeline. |
+| Automation | 96 | ↑ | 10 new tests directly covering every shipped item (3 security hardening, 1 AI wiring, 3 whisper, 2 atlas contract, 1 onboarding-frame consistency) — closes the Session 146 gap where `SiteFooter.jsx` shipped without direct coverage. |
+
+Top win: catching two invalid emoji (comet/crystal not present in the actual `THEME_PROPS` pools) before generating the new atlas art, by writing and running a verification script first instead of trusting the initial design pass — the same discipline applied to the INP trace (real CDP evidence over another grep-based guess).
+Top gap: the mobile INP root cause remains a leading hypothesis (native `<select>` picker overhead), not a device-confirmed fact; the theme-prop atlas intentionally covers only 16 of ~96 decorative emoji.
+Intent outcome: Achieved — the continuous arc ran start-to-closeout with every item premise-verified against live code and no item overclaimed beyond its actual scope.
+
+**Brainstorm**
+1. Real Android-device DevTools trace (or a scoped custom-dropdown accessibility experiment) to move the INP root cause from hypothesis to confirmed fact. High value, human/hardware-gated.
+2. Theme-prop atlas L2 expansion — extend coverage from 16 to ~32 cells (roughly half of all theme props) once the current 16 are confirmed to read well in production.
+3. A shared Pages-Functions http-trust helper module so obelisk-verify/validate-replay/community-stats import one hardening implementation instead of three parallel copies (noted as the L3 ladder rung on the community-stats item).
+
+**Committed to TASK_BOARD:** [SIL:1] real-device confirmation of the native-`<select>` INP hypothesis before attempting any fix; [SIL:1] theme-prop atlas L2 expansion once production feedback confirms the current 16-cell coverage reads well.
+
 ## 2026-08-10 — Session 146 | Total: 976/1000 | Velocity: 1 | Debt: steady
 
 SIL 976/1000: Reverified all 19 Session 145 audit items against live code instead of trusting the stale status column (14 confirmed shipped, 3 partial, 2 open), shipped the shared `SiteFooter.jsx` consolidation Session 145 flagged as its top brainstorm candidate, and caught a real production INP regression (832ms → 1408ms) that a superficial read would have missed. Also backfilled a genuinely missing Session 145 `WORK_LOG.md` entry found during this session's own write-back check. Tests: 184/184 files (1,098) in isolation. Lint/build/public-contract gates: green.

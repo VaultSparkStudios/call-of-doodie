@@ -6,7 +6,7 @@ import sharp from "sharp";
 import {
   ENEMY_ATLAS_CONTRACT, ENEMY_ATLAS_TOTAL_BYTE_BUDGET, getAtlasGridCoverage,
 } from "../src/utils/enemyAtlasContract.js";
-import { WEAPON_ATLAS_CONTRACT, WORLD_OBJECT_ATLAS_CONTRACT } from "../src/utils/objectAtlasContract.js";
+import { WEAPON_ATLAS_CONTRACT, WORLD_OBJECT_ATLAS_CONTRACT, THEME_PROP_ATLAS_CONTRACT } from "../src/utils/objectAtlasContract.js";
 
 
 const ROOT = process.cwd();
@@ -89,6 +89,7 @@ for (const asset of assets) {
     const objectContracts = new Map([
       [WEAPON_ATLAS_CONTRACT.id, WEAPON_ATLAS_CONTRACT],
       [WORLD_OBJECT_ATLAS_CONTRACT.id, WORLD_OBJECT_ATLAS_CONTRACT],
+      [THEME_PROP_ATLAS_CONTRACT.id, THEME_PROP_ATLAS_CONTRACT],
     ]);
     const contract = objectContracts.get(asset.id);
     if (!contract) {

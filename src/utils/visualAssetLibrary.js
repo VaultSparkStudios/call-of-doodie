@@ -1,5 +1,5 @@
 import { ENEMY_ATLAS_CONTRACT, getIntegerGridRect } from "./enemyAtlasContract.js";
-import { getWeaponAtlasRect, getWorldObjectAtlasRect } from "./objectAtlasContract.js";
+import { getWeaponAtlasRect, getWorldObjectAtlasRect, getThemePropAtlasRect } from "./objectAtlasContract.js";
 
 export const SIGNATURE_VISUAL_ASSETS = [
   { id: "cod-porcelain-throne", label: "Porcelain Throne", role: "objective prop", src: "/visual-assets/cod-porcelain-throne.png", accent: "#BFE7FF" },
@@ -85,10 +85,12 @@ export function getRuntimeEnemySprite(typeIndex, ImageCtor = globalThis.Image) {
 // ── S145 object atlases ────────────────────────────────────────────────────
 const WEAPON_ATLAS_SRC = "/visual-assets/weapon-atlas-v1.webp";
 const WORLD_OBJECT_ATLAS_SRC = "/visual-assets/world-object-atlas-v1.webp";
+const THEME_PROP_ATLAS_SRC = "/visual-assets/theme-prop-atlas-v1.webp";
 
 export function preloadObjectAtlases(ImageCtor = globalThis.Image) {
   getCachedImage(WEAPON_ATLAS_SRC, ImageCtor);
   getCachedImage(WORLD_OBJECT_ATLAS_SRC, ImageCtor);
+  getCachedImage(THEME_PROP_ATLAS_SRC, ImageCtor);
 }
 
 export function getWeaponSprite(weaponIndex, ImageCtor = globalThis.Image) {
@@ -103,6 +105,14 @@ export function getWorldObjectSprite(cellId, ImageCtor = globalThis.Image) {
   const rect = getWorldObjectAtlasRect(cellId);
   if (!rect) return null;
   const image = getCachedImage(WORLD_OBJECT_ATLAS_SRC, ImageCtor);
+  if (!image) return null;
+  return { image, ...rect };
+}
+
+export function getThemePropSprite(cellId, ImageCtor = globalThis.Image) {
+  const rect = getThemePropAtlasRect(cellId);
+  if (!rect) return null;
+  const image = getCachedImage(THEME_PROP_ATLAS_SRC, ImageCtor);
   if (!image) return null;
   return { image, ...rect };
 }

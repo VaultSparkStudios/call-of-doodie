@@ -48,6 +48,34 @@ export const WORLD_OBJECT_ATLAS_CONTRACT = Object.freeze({
   maxBytes: 220000,
 });
 
+// S147 — the two highest-visibility decorative props per THEME_PROPS pool
+// (App.jsx) get a real sprite; the remaining ~10 per theme stay on the
+// existing emoji fillText fallback. Cell order matches THEME_PROPS theme
+// index (0=office .. 7=arctic), two cells per theme.
+export const THEME_PROP_CELLS = Object.freeze([
+  "office:chair", "office:monitor",
+  "bunker:crate", "bunker:helmet",
+  "factory:gear", "factory:barrel",
+  "ruins:rubble", "ruins:skull",
+  "desert:cactus", "desert:scorpion",
+  "forest:pine", "forest:mushroom",
+  "space:rocket", "space:ufo",
+  "arctic:snowflake", "arctic:peak",
+]);
+
+export const THEME_PROP_ATLAS_CONTRACT = Object.freeze({
+  id: "theme-prop-atlas",
+  runtimePath: "public/visual-assets/theme-prop-atlas-v1.webp",
+  sourcePath: "assets/source/weapon-pack/theme-prop-atlas-source.svg",
+  columns: 4,
+  rows: 4,
+  slots: 16,
+  usedSlots: THEME_PROP_CELLS.length,
+  width: 1024,
+  height: 1024,
+  maxBytes: 200000,
+});
+
 function integerGridRect(index, contract) {
   const column = index % contract.columns;
   const row = Math.floor(index / contract.columns);
@@ -68,3 +96,23 @@ export function getWorldObjectAtlasRect(cellId) {
   if (index < 0) return null;
   return integerGridRect(index, WORLD_OBJECT_ATLAS_CONTRACT);
 }
+
+export function getThemePropAtlasRect(cellId) {
+  const index = THEME_PROP_CELLS.indexOf(cellId);
+  if (index < 0) return null;
+  return integerGridRect(index, THEME_PROP_ATLAS_CONTRACT);
+}
+
+// Maps each theme's two covered emoji (App.jsx THEME_PROPS) to their atlas
+// cell id. Only the first two entries per theme pool are sprite-covered;
+// every other emoji in the pool keeps rendering via the existing fallback.
+export const THEME_PROP_EMOJI_TO_CELL = Object.freeze({
+  "🪑": "office:chair", "💻": "office:monitor",
+  "📦": "bunker:crate", "🪖": "bunker:helmet",
+  "⚙️": "factory:gear", "🛢️": "factory:barrel",
+  "🪨": "ruins:rubble", "💀": "ruins:skull",
+  "🌵": "desert:cactus", "🦂": "desert:scorpion",
+  "🌲": "forest:pine", "🍄": "forest:mushroom",
+  "🚀": "space:rocket", "🛸": "space:ufo",
+  "❄️": "arctic:snowflake", "🏔️": "arctic:peak",
+});

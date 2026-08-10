@@ -41,4 +41,46 @@ describe("Community Stats Pages API", () => {
     });
     expect(response.status).toBe(405);
   });
+
+  it("rejects browser requests from a foreign origin", async () => {
+    const response = await readCommunityStats({
+      request: new Request("https://callofdoodie.wtf/api/community-stats", {
+        headers: { origin: "https://evil.example.com" },
+      }),
+      env,
+      fetchImpl: vi.fn(),
+    });
+    expect(response.status).toBe(403);
+    expect(await response.json()).toMatchObject({ ok: false, reason: "origin-not-allowed" });
+  });
+
+  it("allows Cloudflare Pages preview origins for this project", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response(JSON.stringify(stats), { status: 200 }));
+    const response = await readCommunityStats({
+      request: new Request("https://callofdoodie.wtf/api/community-stats", {
+        headers: { origin: "https://session-147-staging.call-of-doodie.pages.dev" },
+      }),
+      env,
+      fetchImpl,
+    });
+    expect(response.status).toBe(200);
+  });
+
+  it("rate-limits a client IP past the per-minute ceiling", async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(new Response(JSON.stringify(stats), { status: 200 }));
+    const now = () => 60000;
+    let last;
+    for (let i = 0; i < 61; i++) {
+      last = await readCommunityStats({
+        request: new Request("https://callofdoodie.wtf/api/community-stats", {
+          headers: { "cf-connecting-ip": "203.0.113.9" },
+        }),
+        env,
+        fetchImpl,
+        now,
+      });
+    }
+    expect(last.status).toBe(429);
+    expect(await last.json()).toMatchObject({ ok: false, reason: "rate-limited" });
+  });
 });

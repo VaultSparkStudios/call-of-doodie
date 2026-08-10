@@ -1,47 +1,42 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 9562ad8e2af5 -->
-<!-- generated-at: 2026-08-08T03:18:05.459Z -->
+<!-- source-hash: fdcecd91348e -->
+<!-- generated-at: 2026-08-10T04:41:53.605Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session: 142
+# Handoff Summary — Session 146
 
-What Shipped (S142)
-- Live Sewer Network terminal (YOU/COMMUNITY/LIVE) on Home, leaderboard, and post-game surfaces.
-- Idempotent run facts + aggregate-only public community contract; browser career data kept device-local.
-- Isolated 28 health-check submissions from public rankings/aggregates without deleting evidence.
-- Navigable /stats/ snapshot plus /stats-surface.json machine twin, six dated aggregate metrics.
-- Field Reports, Last Words, community sentiment counts, opt-in threat recommendations (never silent retune).
-- Full Sewer Zombies routing: seeded outbreak tiers, surge pacing, four undead variants, separated leaderboard/history.
-- Personal accuracy/playtime/combat/history tracking; corrected desktop/mobile device detection.
-- Deployed verified FORGE build to production.
+Session Intent
+- Recovery-checked continuous arc: verify S145 landed, reverify its 19-item audit against live code, ship highest-value open item, closeout.
+
+Shipped This Session
+- Read-only verification pass on all 19 items in docs/AUDIT_2026-08-09.md against live source (file:line citations): 14 SHIPPED, 3 PARTIAL, 2 OPEN. Recorded in docs/AUDIT_2026-08-09_2.md.
+- SiteFooter.jsx: one shared footer replacing drifted inline renderers in HomeV2/HomeV3/MenuScreen. validate-public-contract.mjs updated to check shared source.
+- Investigated (not blind-fixed) mobile INP regression via capture-staging-inp.mjs.
 
 Current Intent
-- Post-push verification of the exact-main deploy remains outstanding.
+- Hand off with INP regression evidenced but deliberately unfixed; awaiting a dedicated performance session with browser trace tooling.
 
-Now Bucket (Top 3)
-- Verify exact-main production deploy post-push.
-- Collect consented participant evidence before changing balance/progression/fun/retention claims.
-- Extract App logic before further expansion; headroom near limit.
+Now-Bucket (Top 3)
+- Mobile INP regression: dedicated perf session with Chrome DevTools trace tooling (do not second-guess without profiling).
+- world-object-sprite-pack: at S145 partial; needs design pass. Recipe in AUDIT_2026-08-09_2.md.
+- onboarding-funnel-merge: at S145 partial; needs design pass. Recipe in AUDIT_2026-08-09_2.md.
 
 Blockers (Top 3)
-- SPARKED NO-GO: 390px native-select interaction measured 832ms (perf gate).
-- External gates open: physical/email/participant/publication/provider/subjective-review.
-- Legacy hours/shots/hits unavailable; not fabricated (partial data).
+- INP root cause unresolvable via static analysis; needs browser profiling tooling not available this session.
+- Full suite shows 1-3 timeout flakes under default file-parallelism (script-usage-smoke, App.launch) — diagnosed as machine resource contention; pass individually. Run with --no-file-parallelism.
+- world-object-sprite-pack and onboarding-funnel-merge blocked on design scope beyond arc.
 
-Human-Blocked (with age)
-- Direct subjective pixel review: host viewer fails CryptUnprotectData (blocked since S140, 2 sessions).
-- Verified reply-as email / project-scoped PostHog+Sentry credentials (open since S136+, 6 sessions).
-- Physical PWA/gamepad/full-run media (open since S136+, 6 sessions).
-- Founder release approval (open since S140, 2 sessions).
-- HomeV1 retirement pending production funnel evidence (open since S137+, 5 sessions).
+Human-Blocked
+- Staging INP re-measure (390×844) to confirm/quantify regression — open since S145.
+- Production Lighthouse/funnel evidence gating HomeV1 retirement — open since S145.
+- SPARKED NO-GO under unchanged external/publication/founder gates — carried since S144+.
 
-Evidence Refs
-- Production: callofdoodie.wtf; immutable 8ff1b286; rollback 5d49fd44.
-- Vitest 1,011/1,011 across 173 files; pixel court CANON-053 green; Lighthouse perf 1.00, LCP 1,263ms, CLS 0.
-- Live receipt: 12 public runs, 5 runners, 259 kills, 119,223 score.
+Evidence
+- 184/184 test files, 1,098/1,098 tests pass in isolation. Strict lint clean. Production build clean (SiteFooter chunk 2.26KB). validate-public-contract: 28/28 PASS.
 
-Architecture
-- App 4,985/5,000 lines; game loop 1,762/1,775; 34 system + 2 hook boundaries. Narrow headroom.
+Release State
+- Engineering FORGE deployed/public-unlaunched; SPARKED NO-GO.
 
-Next Session: Verify exact-main production deploy, then pursue open external/founder gates toward SPARKED.
+Next Session Pointer
+- Start a dedicated performance session: profile mobile mode-selector INP (1408ms, was 832ms at S142) with real browser trace tooling before attempting any fix.

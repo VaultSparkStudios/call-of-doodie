@@ -3,8 +3,12 @@ import {
   WEAPON_ATLAS_CONTRACT,
   WORLD_OBJECT_ATLAS_CONTRACT,
   WORLD_OBJECT_CELLS,
+  THEME_PROP_ATLAS_CONTRACT,
+  THEME_PROP_CELLS,
+  THEME_PROP_EMOJI_TO_CELL,
   getWeaponAtlasRect,
   getWorldObjectAtlasRect,
+  getThemePropAtlasRect,
 } from "./objectAtlasContract.js";
 import { WEAPONS } from "../constants.js";
 
@@ -50,5 +54,27 @@ describe("object atlas contracts (S145)", () => {
   it("pickup cell keys match the live pickup type keys used by the renderer", () => {
     const pickupKeys = WORLD_OBJECT_CELLS.filter((cell) => cell.startsWith("pickup:")).map((cell) => cell.slice(7));
     expect(pickupKeys).toEqual(["health", "ammo", "speed", "guardian_angel", "upgrade", "nuke", "rage", "magnet", "freeze"]);
+  });
+
+  it("theme-prop cells are unique, fill exactly the declared 16-slot grid, and tile with integer pixels", () => {
+    expect(new Set(THEME_PROP_CELLS).size).toBe(THEME_PROP_CELLS.length);
+    expect(THEME_PROP_CELLS.length).toBe(THEME_PROP_ATLAS_CONTRACT.slots);
+    expect(THEME_PROP_ATLAS_CONTRACT.usedSlots).toBe(THEME_PROP_CELLS.length);
+    let area = 0;
+    for (const cellId of THEME_PROP_CELLS) {
+      const rect = getThemePropAtlasRect(cellId);
+      expect(rect).toBeTruthy();
+      expect(Number.isInteger(rect.x) && Number.isInteger(rect.y)).toBe(true);
+      area += rect.width * rect.height;
+    }
+    expect(area).toBe(THEME_PROP_ATLAS_CONTRACT.width * THEME_PROP_ATLAS_CONTRACT.height);
+    expect(getThemePropAtlasRect("nonexistent:cell")).toBeNull();
+  });
+
+  it("every theme-prop emoji mapping points at a real declared cell", () => {
+    for (const cellId of Object.values(THEME_PROP_EMOJI_TO_CELL)) {
+      expect(THEME_PROP_CELLS).toContain(cellId);
+    }
+    expect(Object.keys(THEME_PROP_EMOJI_TO_CELL).length).toBe(THEME_PROP_CELLS.length);
   });
 });

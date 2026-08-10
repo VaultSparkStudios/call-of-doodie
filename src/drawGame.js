@@ -1,7 +1,7 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
-import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getWeaponSprite, getWorldObjectSprite } from "./utils/visualAssetLibrary.js";
+import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getWeaponSprite, getWorldObjectSprite, getThemePropSprite } from "./utils/visualAssetLibrary.js";
 import { motionPhaseSeed, resolveSpriteDeath, resolveSpriteMotion } from "./systems/spriteMotion.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
@@ -308,13 +308,24 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   });
 
-  // ── Props (themed decorative emoji — no collision) ──
+  // ── Props (themed decorative furniture — no collision) ──
+  // S147: the 2 highest-visibility props per theme render as an atlas
+  // sprite (visualPackRetroContract.test.js keeps Retro on the emoji-only
+  // path); the remaining props stay on the emoji fillText fallback.
   (gs.props || []).forEach(pr => {
     ctx.save(); ctx.translate(pr.x, pr.y);
     ctx.globalAlpha = gs.bossWave ? 0.24 : 0.42;
-    ctx.font = `${Math.floor(14 * (pr.scale || 1))}px serif`;
-    ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.fillText(pr.emoji, 0, 0);
+    const _prSprite = (!retroCharacters && pr.spriteKey) ? getThemePropSprite(pr.spriteKey) : null;
+    if (_prSprite) {
+      const _prSize = 28 * (pr.scale || 1);
+      ctx.rotate(pr.rot || 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(_prSprite.image, _prSprite.x, _prSprite.y, _prSprite.width, _prSprite.height, -_prSize / 2, -_prSize / 2, _prSize, _prSize);
+    } else {
+      ctx.font = `${Math.floor(14 * (pr.scale || 1))}px serif`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(pr.emoji, 0, 0);
+    }
     ctx.globalAlpha = 1; ctx.restore();
   });
 

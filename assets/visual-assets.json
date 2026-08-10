@@ -335,6 +335,23 @@
       "notes": "Nine pickups, grenade, three hazard markers, and the escort cart in one consistent light direction; emoji glyphs remain the load/failure and Retro-pack fallback."
     },
     {
+      "id": "theme-prop-atlas",
+      "kind": "runtime-object-atlas",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/weapon-pack/theme-prop-atlas-source.svg",
+      "runtimePath": "public/visual-assets/theme-prop-atlas-v1.webp",
+      "runtimeFormat": "webp",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "grid": { "columns": 4, "rows": 4, "slots": 16 },
+      "maxBytes": 200000,
+      "status": "production-ready",
+      "notes": "S147 — the two highest-visibility ambient decorative props per arena theme (office/bunker/factory/ruins/desert/forest/space/arctic); the remaining ~10 props per theme keep the original emoji fillText fallback (also the Retro-pack path) given the low collision-free, low-alpha visual return of full 96-prop coverage."
+    },
+    {
       "id": "enemy-atlas-bosses",
       "kind": "runtime-character-atlas",
       "sourceType": "ai-generated-proprietary",

@@ -2,6 +2,17 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-10 — Session 147 — Mobile INP trace rules out a JS compute cause; native `<select>` overhead is now the leading hypothesis
+
+**Decision:** `mobile-inp-and-bundle-gate` stays open, but the investigation advances from "root cause unknown" to "JS compute-bound causes ruled out by real trace evidence." No blind fix ships this session.
+
+**Rationale:** `scripts/trace-mobile-inp.mjs` (new) opens a real CDP `Tracing` session — the same trace format the DevTools Performance panel records — around the actual mobile mode-selector click on `https://callofdoodie.wtf/`, anchored to the trace's own `EventDispatch(click)` timestamp rather than wall-clock. Across the full ~1.6s window after the click, the longest single main-thread task (`RunTask`) measured 13.5ms — nowhere near the 1408ms the Event Timing API reported at S146, and far below the 50ms long-task threshold. `docs/performance/MOBILE_INP_TRACE_S147.json` holds the full top-25 event list. This rules out a synchronous JS bottleneck as the cause — the S146 grep finding (no heavy synchronous work in `HomeV2.jsx`) is now trace-confirmed, not just source-inferred.
+
+**Leading hypothesis, not yet confirmed:** mobile `<select>` elements open a native OS/browser-chrome picker UI outside the renderer's own task queue; that overhead would count toward the Event Timing API's interaction duration without ever appearing as a `RunTask` in a CDP trace. This matches the evidence exactly (measured delay with no corresponding renderer-side task) but is **not conclusively proven** here: this trace ran in headless Chromium via Playwright's synthetic `.click()`, which does not necessarily reproduce a real Android device's native picker rendering path. A real-device trace (physical phone + remote DevTools) would be needed to fully confirm.
+
+**Trade-off accepted:** the item stays open rather than shipping the native-`<select>`-replacement fix S146 explicitly flagged as accessibility-risky without stronger confirmation. The honest next step is either a real-device trace, or a scoped custom-dropdown experiment with an explicit accessibility regression check — both are physical/founder-gated steps beyond what this session's tooling can verify.
+
+
 ## 2026-08-09 — Session 146 — Mobile mode-selector INP regression is recorded, not blind-fixed
 
 **Decision:** `mobile-inp-and-bundle-gate` stays open with fresh production evidence (`docs/performance/STAGING_SESSION_142_INP.json`, re-measured against `https://callofdoodie.wtf/` via `scripts/capture-staging-inp.mjs`) rather than shipping a guessed fix.

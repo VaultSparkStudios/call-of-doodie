@@ -12,6 +12,7 @@ import {
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadEnemyAtlasesForTypes, preloadObjectAtlases } from "./utils/visualAssetLibrary.js";
+import { THEME_PROP_EMOJI_TO_CELL } from "./utils/objectAtlasContract.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { applyRunSettings, loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
@@ -962,7 +963,10 @@ export default function CallOfDoodie() {
       const onWall = walls.some(ob => px > ob.x - 10 && px < ob.x + ob.w + 10 && py > ob.y - 10 && py < ob.y + ob.h + 10);
       const nearCenter = Math.hypot(px - w / 2, py - h / 2) < 90;
       if (!onWall && !nearCenter) {
-        props.push({ x: px, y: py, emoji: propsPool[Math.floor(_sr() * propsPool.length)], rot: _sr() * Math.PI * 2, scale: 0.7 + _sr() * 0.5 });
+        const propEmoji = propsPool[Math.floor(_sr() * propsPool.length)];
+        // S147: the 2 highest-visibility props per theme get a real sprite
+        // (THEME_PROP_EMOJI_TO_CELL); the rest keep the emoji fillText fallback.
+        props.push({ x: px, y: py, emoji: propEmoji, spriteKey: THEME_PROP_EMOJI_TO_CELL[propEmoji] || null, rot: _sr() * Math.PI * 2, scale: 0.7 + _sr() * 0.5 });
       }
     }
     gsRef.current.props = props;

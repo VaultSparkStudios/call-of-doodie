@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "yellow",
-  "currentFocus": "Session 146 verified every Session 145 audit item against live code (14 shipped, 3 partial, 2 open) instead of trusting the stale audit file, shipped the registry-driven SiteFooter.jsx consolidation flagged as S145's top brainstorm candidate, and re-measured production mobile INP — finding it regressed to 1408ms (was 832ms) despite the S142 startTransition mitigation already in place; recorded as an honest open finding rather than a blind fix.",
-  "nextMilestone": "Run a dedicated performance session with real Chrome DevTools Performance-panel tracing on the mobile mode-selector INP regression (grep alone could not find the blocking task); finish onboarding-funnel-merge and world-object-sprite-pack to their L2 rungs; continue collecting rich runs and participant evidence behind the unchanged SPARKED gates.",
+  "currentFocus": "Session 147 shipped a fresh 6-item audit: a real CDP trace ruled out a JS-compute cause for the mobile INP regression (leading hypothesis now native <select> picker overhead, not device-confirmed), a tactical-whisper critical-health tier, community-stats endpoint hardening matching obelisk-verify, insightGraph agent-projection wiring into the debrief analytics event, a scoped 16-cell theme-prop atlas, and an ORDERS/onboarding shared-frame unification.",
+  "nextMilestone": "Confirm the native-<select> INP hypothesis on a real Android device (or run a scoped custom-dropdown accessibility experiment); expand the theme-prop atlas to L2 (~32 cells) once production feedback confirms the current 16-cell coverage reads well; continue collecting rich runs and participant evidence behind the unchanged SPARKED gates.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -301,6 +301,16 @@
       "status": "green",
       "type": "community-data",
       "command": "All recoverable history — 12 real runs (0 rich, 12 legacy) · 5 runners · 259 kills · 119223 score · 21628 damage · 28 synthetic excluded"
+    },
+    {
+      "status": "green",
+      "type": "tests",
+      "command": "Session 147 — 1108/1108 across 184 files in isolation (vitest run --no-file-parallelism); strict lint; production build; runtime boundary 494,760B (gate 560,000B); public contract 28/28; schema lint clean; visual asset manifest 24 assets ok"
+    },
+    {
+      "status": "measured-not-device-confirmed",
+      "type": "mobile-performance-trace",
+      "command": "Session 147 real CDP Tracing capture of the production mobile mode-selector click: longest task 13.5ms, ruling out a JS compute cause for the 1408ms Event Timing API regression; leading hypothesis (native <select> picker overhead) not yet real-device confirmed"
     }
   ],
   "blockers": [
@@ -314,21 +324,21 @@
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
-  "truthAuditLastRun": "2026-08-08",
+  "truthAuditLastRun": "2026-08-10",
   "ignisScore": 45706,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-01",
-  "silSession": 146,
-  "silScore": 976,
-  "silAvg3": 991,
-  "silVelocity": 1,
-  "silDebt": "steady",
-  "silLastSession": 146,
-  "currentSession": 146,
+  "silSession": 147,
+  "silScore": 992,
+  "silAvg3": 988.7,
+  "silVelocity": 6,
+  "silDebt": "down",
+  "silLastSession": 147,
+  "currentSession": 147,
   "sessionMode": "founder",
   "lastAgent": "claude-code",
-  "testsPassing": 1098,
-  "testsTotal": 1098,
+  "testsPassing": 1108,
+  "testsTotal": 1108,
   "entropyScore": 0.196,
   "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
@@ -337,14 +347,14 @@
   "silCategoriesV3": {
     "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 92,
-    "engagement": 96,
+    "momentum": 98,
+    "engagement": 99,
     "processQuality": 100,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
-    "ecosystemIntegration": 98,
+    "ecosystemIntegration": 99,
     "capitalEfficiency": 100,
-    "automationCoverage": 90
+    "automationCoverage": 96
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -359,14 +369,14 @@
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
   "stagingUrl": "https://session-143-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-10T02:57:42.000Z",
+  "testsLastRun": "2026-08-10T05:40:00.000Z",
   "sanitizationLastCleared": "2026-08-08T07:10:38.026Z",
   "sessionShellHygiene": {
-    "session": 146,
-    "started": 9,
-    "closed": 9,
+    "session": 147,
+    "started": 3,
+    "closed": 3,
     "running": 0,
-    "enumeratedAt": "2026-08-10T03:00:00.000Z",
+    "enumeratedAt": "2026-08-10T05:40:00.000Z",
     "scope": "session-owned background tasks; unrelated host services excluded"
   },
   "doctorScore": {
@@ -383,9 +393,9 @@
     "total": 173,
     "score": 76
   },
-  "lastSessionSummary": "Session 146 reverified every Session 145 audit item against live code, shipped the shared SiteFooter.jsx consolidation (S145's top brainstorm candidate), and re-measured production mobile INP — confirming a real regression (832ms to 1408ms) recorded as an honest open finding rather than a blind fix; full suite holds at 1098/1098 across 184 files.",
-  "testsAssertionsPassing": 1098,
-  "testsAssertionsTotal": 1098,
+  "lastSessionSummary": "Session 147 shipped a fresh 6-item audit: a real CDP trace ruled out a JS-compute cause for the mobile INP regression, a tactical-whisper critical-health tier, community-stats endpoint hardening, insightGraph agent-projection wiring, a scoped 16-cell theme-prop atlas, and an ORDERS/onboarding shared-frame unification; full suite holds at 1108/1108 across 184 files.",
+  "testsAssertionsPassing": 1108,
+  "testsAssertionsTotal": 1108,
   "testsAssertionsFiles": 184,
   "testsFlaky": [],
   "testsInconclusive": [],

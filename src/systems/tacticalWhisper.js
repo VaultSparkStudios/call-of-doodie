@@ -28,12 +28,13 @@ export function tickTacticalWhisper(gs, { frame = 0, activePerks = [], unlockedA
 
 export const WHISPER_COOLDOWN_FRAMES = 20 * 60; // ≥20s between whispers
 export const WHISPER_MAX_PER_WAVE = 3;
+export const CRITICAL_HEALTH_RATIO = 0.35;
 
 export function createWhisperLedger() {
   return { lastFrame: -WHISPER_COOLDOWN_FRAMES, waveCount: 0, wave: 0, lastKind: null };
 }
 
-// Priority order: survival pattern > rival pace > doctrine progress.
+// Priority order: survival pattern > critical health > rival pace > doctrine progress.
 export function selectTacticalWhisper({
   frame = 0,
   wave = 1,
@@ -69,9 +70,16 @@ export function selectTacticalWhisper({
     }
   }
 
-  // 2. Rival pace: only whisper on meaningful swings, and only when healthy
+  // 2. Critical health: the near-death decision point itself — a quiet,
+  // non-scorekeeping nudge to disengage rather than a score/doctrine prompt.
+  const healthRatio = health / Math.max(1, maxHealth);
+  if (!whisper && healthRatio <= CRITICAL_HEALTH_RATIO && ledger.lastKind !== "critical-health") {
+    whisper = { kind: "critical-health", text: "CRITICAL HEALTH — DISENGAGE AND CREATE DISTANCE", color: "#FF4C4C" };
+  }
+
+  // 3. Rival pace: only whisper on meaningful swings, and only when healthy
   // enough that a score prompt is not a distraction.
-  if (!whisper && rivalPace && (health / Math.max(1, maxHealth)) > 0.35) {
+  if (!whisper && rivalPace && healthRatio > CRITICAL_HEALTH_RATIO) {
     const kind = rivalPace.ahead ? "rival:ahead" : "rival:behind";
     if (ledger.lastKind !== kind && Math.abs(rivalPace.delta) >= 500) {
       whisper = rivalPace.ahead
@@ -80,7 +88,7 @@ export function selectTacticalWhisper({
     }
   }
 
-  // 3. Doctrine progress: one perk from a capstone the player has not forged.
+  // 4. Doctrine progress: one perk from a capstone the player has not forged.
   if (!whisper && doctrineProgress && doctrineProgress.remaining === 1 && doctrineProgress.label) {
     const kind = `doctrine:${doctrineProgress.id || doctrineProgress.label}`;
     if (ledger.lastKind !== kind) {

@@ -183,11 +183,13 @@ export function buildDeathCoachTelemetry({
   eventDigest = null,
   runCoach = {},
   collapseCoaching = null,
+  insightAgentProjection = null,
 } = {}) {
   const chokeWarning = runCoach?.brain?.chokeWarning || null;
   return {
     ...postRunTelemetry,
     digestVersion: eventDigest?.v ?? null,
+    insightAgentProjection,
     coaching: {
       weaponTipShown: Boolean(runCoach.weaponTip),
       weaponMismatchShown: Boolean(runCoach.weaponDeathTip),

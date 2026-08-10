@@ -166,6 +166,15 @@ describe("buildDeathScreenProps", () => {
       },
     });
   });
+  it("carries the insight-graph agent projection through to debrief telemetry", () => {
+    const agentProjection = { schemaVersion: "run-insight-graph-v1", claim: "evidence-ranked-coaching-not-causality", verdict: { statement: "test" } };
+    const telemetry = buildDeathCoachTelemetry({
+      postRunTelemetry: { surface: "death_screen" },
+      insightAgentProjection: agentProjection,
+    });
+
+    expect(telemetry.insightAgentProjection).toEqual(agentProjection);
+  });
   it("builds debrief Studio event plans from visible death-screen truth", () => {
     const plan = buildDebriefStudioEventPlan({
       debriefTelemetry: { surface: "death_screen", cause: "cornered" },

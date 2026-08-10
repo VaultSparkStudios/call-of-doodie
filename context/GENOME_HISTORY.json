@@ -460,6 +460,23 @@
       },
       "delta": 0,
       "cause": "Session 145 shipped the 18-item visual-overhaul arc: DPR-crisp rendering with a degradation ladder, weapon/world-object "
+    },
+    {
+      "date": "2026-08-10",
+      "session": 147,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "engineering READY, one performance hypothesis advanced with real evidence but not device-confirmed; SPARKED remains NO-GO.",
+      "lastReviewed": "2026-08-10",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 147 shipped a fresh 6-item audit: a real CDP trace ruled out a JS-compute cause for the mobile INP regression (l"
     }
   ]
 }

@@ -561,6 +561,7 @@ export default function DeathScreen({
     eventDigest,
     runCoach,
     collapseCoaching,
+    insightAgentProjection: insightGraph.agentProjection,
   });
 
   useEffect(() => {
