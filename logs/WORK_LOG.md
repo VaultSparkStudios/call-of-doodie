@@ -1210,3 +1210,27 @@ Intent outcome: achieved. Community Stats is deployed, live, resilient, and incl
 - Full validation: `npm test` 1054/1054 across 179 files, `npm run lint` 0 errors, `npm run build` passing. The first full-suite run caught a real staleness failure in `tests/hot-context.test.js` (hot context referenced the prior audit sidecar) — fixed by regenerating via `node scripts/render-hot-context.mjs`, then reconfirmed green.
 
 Intent outcome: achieved — all 7 audit items shipped and verified; no items deferred except the button-density half of the mobile-handedness item, explicitly descoped to a future ladder rung.
+
+## 2026-08-09 — Session 145 — Visual overhaul, Community Stats v2, and site freshness pass
+
+- Ran the founder-directed full arc: an 18-item audit spanning a full in-game visual overhaul, a Community Stats panel/page upgrade, site-wide freshness corrections, progression-loop deepening, and edge hardening.
+- Shipped DPR-crisp canvas rendering with a tested three-step degradation ladder; weapon and world-object sprite atlases replacing grey-bar/emoji placeholders; single-layer enemy sprite rendering with procedural motion (velocity-lean, hit-squash, breathing); a projectile/impact FX pass (tracers, sparks, muzzle burst, scorch decals); one consolidated arena-theme identity table.
+- Shipped Community Stats v2: one shared store (`communityStatsStore.js`) replacing four independent pollers, trend sparklines, community records, and a rebuilt live `/stats/` page.
+- Fixed site-wide freshness defects (HP-undefined Field Manual bug, stale difficulty list, missing changelog entries) and hardened the edge (security headers via middleware, obelisk-verify origin+quota, validate-replay http-trust).
+- Shipped ghost-rivalry localStorage persistence, per-weapon mastery tiers, and a rate-limited mid-run tactical whisper.
+- Retro pack pinned as a render-path contract to prevent future Modern-pack drift.
+- Full validation: 184/184 test files (~1,102 tests), strict lint, production build, runtime bundle back under its 560KB gate at 493KB.
+- Note (S146 backfill): this entry was missing from WORK_LOG.md despite being fully shipped and committed (`70d15b3`) — the Session 145 closeout write-back missed this surface. Backfilled during Session 146's arc after live-code verification confirmed the work was real and complete.
+
+Intent outcome: achieved — all 18 items landed in one pass; two (onboarding-funnel-merge, website-redundancy-consolidation) explicitly logged as shipped at an L1 rung with L2 follow-ups queued.
+
+## 2026-08-09/10 — Session 146 — Audit reverification, shared footer, and an honest INP regression finding
+
+- Ran the recovery-checked continuous arc: Phase 0 confirmed Session 145 closed out with a clean tree, synced remote, and clean write-back-currency check (F7), then start → audit → implement → closeout ran as one mission.
+- Reverified all 19 items in the stale `docs/AUDIT_2026-08-09.md` against live source via a dedicated read-only pass (file:line evidence per item, not trust in the status column): 14 confirmed SHIPPED, 3 PARTIAL, 2 OPEN. Recorded in `docs/AUDIT_2026-08-09_2.md`.
+- Shipped `src/components/SiteFooter.jsx`, the single shared footer consumed by `HomeV2.jsx`, `HomeV3.jsx`, and `MenuScreen.jsx` — closing the drift where HomeV3 was missing Agents/LLMS links and HomeV2/MenuScreen were missing About/How to Play/Enemies/Accessibility/Support links, with unified parody-disclaimer wording. Updated `scripts/validate-public-contract.mjs` to check the shared component.
+- Re-ran `scripts/capture-staging-inp.mjs` against production (`callofdoodie.wtf`) and found the mobile mode-selector INP regressed to 1408ms (was 832ms at Session 142) despite the existing `startTransition` mitigation. Grepped for other synchronous work on the interaction path and found none — root cause needs real browser trace tooling. Recorded as an honest open finding in `context/DECISIONS.md` rather than shipping a blind fix.
+- Backfilled the missing Session 145 `logs/WORK_LOG.md` entry discovered during F7-style verification of this file.
+- Full validation: 184/184 test files, 1,098/1,098 tests pass in isolation (`vitest run --no-file-parallelism`); the same suite under default parallelism showed transient timeout flakes in unrelated pre-existing smoke scripts, diagnosed as machine resource contention (each flaky script verified <15s standalone) and not a regression. Strict lint clean. Production build clean. Public contract 28/28 files PASS.
+
+Intent outcome: achieved for the scoped goal — verified Session 145's claims instead of assuming them, shipped the one genuinely open low-risk item, and surfaced a real regression with evidence instead of guessing at a fix.

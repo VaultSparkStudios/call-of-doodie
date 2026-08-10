@@ -4,6 +4,34 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-10 — Session 146 | Total: 976/1000 | Velocity: 1 | Debt: steady
+
+SIL 976/1000: Reverified all 19 Session 145 audit items against live code instead of trusting the stale status column (14 confirmed shipped, 3 partial, 2 open), shipped the shared `SiteFooter.jsx` consolidation Session 145 flagged as its top brainstorm candidate, and caught a real production INP regression (832ms → 1408ms) that a superficial read would have missed. Also backfilled a genuinely missing Session 145 `WORK_LOG.md` entry found during this session's own write-back check. Tests: 184/184 files (1,098) in isolation. Lint/build/public-contract gates: green.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full suite green in isolation, strict lint clean, production build clean; the transient parallel-run timeout flakes were diagnosed (not force-greened) as machine contention, each script verified fast standalone. |
+| Alignment | 100 | → | Footer consolidation is pure legal/consistency cleanup; no gameplay or tone drift. |
+| Momentum | 92 | ↓ | Small shipped scope (1 item) by design — most of the session was verification and honest-deferral work rather than net-new feature velocity. |
+| Engagement | 96 | ↓ | No player-facing loop deepened this session; footer fix is trust/legal-completeness, not retention. |
+| Process Qual | 100 | ↑ | Did not trust a stale audit file's status column; verified against live source before implementing anything; rejected a blind INP fix in favor of recording real evidence; caught and fixed a resource-contention test flake instead of shipping past it; found and backfilled a real Session 145 write-back gap. |
+| Coherence | 100 | → | No sibling repo edits; every decision recorded with rationale in DECISIONS.md. |
+| Security | 100 | → | No security-relevant change this session. |
+| Ecosystem | 98 | ↓ | Public contract 28/28 PASS after updating the validator to match the new shared-component architecture; no other ecosystem surface touched. |
+| Capital | 100 | → | Zero new dependencies, services, or per-user variable cost. |
+| Automation | 90 | ↓ | No new automated test was added specifically for `SiteFooter.jsx` — existing HomeV2/HomeV3/MenuScreen render tests cover it indirectly, but a direct component test is a scoped gap. |
+
+Top win: refusing to trust a stale audit's "open" status column and instead reverifying all 19 items against live code — this both prevented re-implementing 14 already-shipped items and caught a real, worsening production regression (mobile INP) that would otherwise have gone unnoticed until a player or Lighthouse run surfaced it.
+Top gap: the mobile INP regression is evidenced but unfixed; a dedicated performance session with real browser trace tooling is needed before attempting a fix. `SiteFooter.jsx` also shipped without a dedicated unit test.
+Intent outcome: Achieved — recovery-checked continuous arc completed with the one genuinely open low-risk item shipped and the one genuinely unclear item (INP) investigated honestly rather than guessed at.
+
+**Brainstorm**
+1. Dedicated performance session with Chrome DevTools Performance-panel tracing to find the real cause of the mobile mode-selector INP regression. High probability, high value — SPARKED-adjacent gate.
+2. Direct `SiteFooter.jsx` render/props unit test (currently only indirectly covered via parent-component tests). High probability, low effort.
+3. Finish world-object-sprite-pack (props/death-animation) and onboarding-funnel-merge (single Commander's Orders surface) to their L2 rungs. Medium probability — both need a short design pass.
+
+**Committed to TASK_BOARD:** [SIL] Dedicated performance session for the mobile INP regression with real browser trace tooling (not grep).
+
 ## 2026-08-09 — Session 145 | Total: 998/1000 | Velocity: 18 | Debt: ↓
 
 SIL 998/1000: Shipped the largest single-session sweep to date — an 18-item premise-verified audit covering a full in-game visual overhaul (DPR rendering, weapon/world sprite atlases, sprite motion, FX, arena identity), the founder-directed Community Stats v2, site-wide freshness corrections, progression-loop deepening, edge hardening, and a docs token diet — while pulling App.jsx back under its architecture budget and the runtime bundle back under its byte gate. Tests: 184/184 files (~1,102). Lint/schema/build/boundary/public/asset gates: green.

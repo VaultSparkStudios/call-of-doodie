@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, lazy } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
+import SiteFooter from "./SiteFooter.jsx";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent, countIncompleteMissions, isMissionCompleted } from "../storage.js";
 import { getSupabaseClient } from "../supabase.js";
@@ -1635,44 +1636,12 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
           ✨ Perks on level-up · 🔧 Weapon upgrades · ⚠️ Boss waves every 5 waves
         </div>
 
-        {/* Community footer */}
-        <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 10, color: "#777", letterSpacing: 1 }}>
-            A{" "}
-            <a href="https://vaultsparkstudios.com/" rel="author" target="_blank"
-              style={{ color: "#999", textDecoration: "none" }}>
-              VaultSpark Studios
-            </a>
-            {" "}Game
-          </span>
-          {/* Add your Discord invite link here when ready */}
-          {/* <a href="https://discord.gg/YOUR_INVITE" target="_blank" rel="noopener noreferrer"
-            style={{ fontSize: 10, color: "#7289DA", textDecoration: "none", letterSpacing: 1, fontWeight: 700 }}>
-            💬 JOIN DISCORD
-          </a> */}
-          {onlinePlayers !== null && (
-            <span style={{ fontSize: 10, color: "#0F0", letterSpacing: 1 }}>
-              ● {onlinePlayers} ONLINE
-            </span>
-          )}
-          <button
-            onClick={() => setShowSupporter(true)}
-            aria-label="Support the developer"
-            style={{ background: "none", border: "none", color: isSupporter(username) ? "#FFD700" : "#888", fontSize: 10, cursor: "pointer", padding: "2px 6px", letterSpacing: 1, fontFamily: "'Courier New',monospace", textDecoration: "underline dotted" }}
-          >
-            {isSupporter(username) ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
-          </button>
-          <a href="privacy/" style={{ fontSize: 10, color: "#999" }}>PRIVACY</a>
-          <a href="terms/" style={{ fontSize: 10, color: "#999" }}>TERMS</a>
-          <a href="contact/" style={{ fontSize: 10, color: "#999" }}>CONTACT</a>
-          <a href="ip/" style={{ fontSize: 10, color: "#999" }}>RIGHTS &amp; IP</a>
-          <a href="agents.json" style={{ fontSize: 10, color: "#999" }}>AGENTS</a>
-          <a href=".well-known/llms.txt" style={{ fontSize: 10, color: "#999" }}>LLMS</a>
-          <span style={{ fontSize: 10, color: "#777" }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>
-        </div>
-        <div style={{ marginTop: 6, padding: "0 8px", fontSize: 9, lineHeight: 1.5, color: "#666", textAlign: "center", maxWidth: 720, marginLeft: "auto", marginRight: "auto", fontFamily: "'Courier New',monospace" }}>
-          Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
-        </div>
+        <SiteFooter
+          onSupporterClick={() => setShowSupporter(true)}
+          isSupporterActive={isSupporter(username)}
+          onlinePlayers={onlinePlayers}
+          style={{ fontFamily: "'Courier New',monospace" }}
+        />
       </div>
       </div>
       {showSupporter && (

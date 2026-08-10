@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef, lazy, startTransition } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
+import SiteFooter from "./SiteFooter.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
 import {
@@ -580,8 +581,6 @@ export default function HomeV2(props) {
     color: active ? themePalette.accent : themePalette.muted, borderRadius: 8,
   });
   const tabBody = { marginTop: 12, background: themePalette.panel, border: `1px solid ${themePalette.line}`, borderRadius: 10, padding: 14 };
-  const footer = { marginTop: 22, paddingTop: 12, borderTop: `1px solid ${themePalette.line}`, display: "flex", justifyContent: "center", gap: 14, fontSize: 10, color: themePalette.quiet, letterSpacing: 1, flexWrap: "wrap" };
-  const linkBtn = { background: "none", border: "none", color: isSupporter(username) ? "#9a6500" : themePalette.quiet, fontSize: 10, cursor: "pointer", fontFamily: "inherit", textDecoration: "underline dotted", letterSpacing: 1 };
 
   const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
@@ -1184,21 +1183,11 @@ export default function HomeV2(props) {
           )}
         </div>
 
-        {/* Footer */}
-        <div style={footer}>
-          <span>A <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ color: "#999", textDecoration: "none" }}>VaultSpark Studios</a> Game</span>
-          <button style={linkBtn} onClick={() => setShowSupporter(true)}>{isSupporter(username) ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}</button>
-          <a href="privacy/" style={linkBtn}>PRIVACY</a>
-          <a href="terms/" style={linkBtn}>TERMS</a>
-          <a href="contact/" style={linkBtn}>CONTACT</a>
-          <a href="ip/" style={linkBtn}>RIGHTS &amp; IP</a>
-          <a href="agents.json" style={linkBtn}>AGENTS</a>
-          <a href=".well-known/llms.txt" style={linkBtn}>LLMS</a>
-          <span style={{ color: "#777" }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>
-        </div>
-        <div style={{ marginTop: 6, padding: "0 8px", fontSize: 9, lineHeight: 1.5, color: "#666", textAlign: "center", maxWidth: 720, marginLeft: "auto", marginRight: "auto" }}>
-          Call of Doodie is an independent comedy parody and is not affiliated with, endorsed by, sponsored by, or associated with Activision Publishing, Inc. or the Call of Duty&reg; franchise. All trademarks are property of their respective owners.
-        </div>
+        <SiteFooter
+          onSupporterClick={() => setShowSupporter(true)}
+          isSupporterActive={isSupporter(username)}
+          palette={{ line: themePalette.line, quiet: themePalette.quiet }}
+        />
       </div>
 
       {/* Modals (lazy) */}

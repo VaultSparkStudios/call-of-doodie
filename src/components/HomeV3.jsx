@@ -1,5 +1,6 @@
 import { lazy, useEffect, useMemo, useState } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
+import SiteFooter from "./SiteFooter.jsx";
 import {
   DIFFICULTIES,
   STARTER_LOADOUTS,
@@ -312,18 +313,11 @@ export default function HomeV3(props) {
         ))}
       </nav>
 
-      <footer className="home3__footer">
-        <div>
-          <a href="/play/">Play</a><a href="/about/">About</a><a href="/how-to-play/">How to Play</a><a href="/enemies/">Enemies</a><a href="/accessibility/">Accessibility</a><a href="/support/">Support</a>
-        </div>
-        <div>
-          <a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/contact/">Contact</a><a href="/ip/">Rights &amp; IP</a>
-        </div>
-        <p style={{ opacity: 0.75, fontSize: 11, lineHeight: 1.5 }}>
-          Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.
-        </p>
-        <p>© 2026 VaultSpark Studios LLC. All rights reserved.</p>
-      </footer>
+      <SiteFooter
+        onSupporterClick={() => setPanel("support")}
+        isSupporterActive={isSupporter(username)}
+        style={{ borderTop: "none", paddingTop: 0 }}
+      />
 
       {panel && (
         <AsyncPanelBoundary>

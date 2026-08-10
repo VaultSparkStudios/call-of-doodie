@@ -161,17 +161,25 @@ if (contentByFile[relative("public", ".well-known", "llms.txt")] !== buildLlmsTe
   errors.push("llms.txt drifted from the public route graph; run npm run build");
 }
 
-for (const file of [relative("src", "components", "HomeV2.jsx"), relative("src", "components", "MenuScreen.jsx")]) {
-  const content = read(file);
-  requireIncludes(file, content, [
-    "privacy/",
-    "terms/",
-    "contact/",
-    "ip/",
-    "agents.json",
-    ".well-known/llms.txt",
-    "© 2026 VaultSpark Studios LLC. All rights reserved.",
-  ]);
+// S146: HomeV2/HomeV3/MenuScreen consolidated their three drifted inline footers into one
+// shared SiteFooter.jsx component (CANON — single source of truth for legal/agent links).
+// Verify the shared component carries the required destinations, and that each home wires it in.
+const siteFooterFile = relative("src", "components", "SiteFooter.jsx");
+requireIncludes(siteFooterFile, read(siteFooterFile), [
+  "privacy/",
+  "terms/",
+  "contact/",
+  "ip/",
+  "agents.json",
+  ".well-known/llms.txt",
+  "© 2026 VaultSpark Studios LLC. All rights reserved.",
+]);
+for (const file of [
+  relative("src", "components", "HomeV2.jsx"),
+  relative("src", "components", "MenuScreen.jsx"),
+  relative("src", "components", "HomeV3.jsx"),
+]) {
+  requireIncludes(file, read(file), ["./SiteFooter.jsx", "<SiteFooter"]);
 }
 
 for (const page of ["privacy", "terms", "contact", "ip"]) {

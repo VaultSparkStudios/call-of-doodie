@@ -1,7 +1,7 @@
 {
   "schemaVersion": "staging-inp-v1",
-  "capturedAt": "2026-08-08T01:16:14.108Z",
-  "baseUrl": "https://b8732629.call-of-doodie.pages.dev/",
+  "capturedAt": "2026-08-10T02:09:54.745Z",
+  "baseUrl": "https://callofdoodie.wtf/",
   "method": "Event Timing API interactionId durations for the visible Command Deck mode selector after a 1s post-hydration quiet window",
   "results": [
     {
@@ -9,11 +9,11 @@
       "height": 844,
       "theme": "sewer-night",
       "samplesMs": [
-        832,
-        832,
-        832
+        1408,
+        1408,
+        1408
       ],
-      "inpMs": 832
+      "inpMs": 1408
     },
     {
       "width": 1440,
@@ -27,7 +27,7 @@
       "inpMs": 104
     }
   ],
-  "maxInpMs": 832,
+  "maxInpMs": 1408,
   "thresholdMs": 200,
   "pass": false
 }

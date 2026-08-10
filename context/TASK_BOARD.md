@@ -22,9 +22,13 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S145** Progression loops — persistent best-ghost rivalry, per-weapon kill mastery in docks, nemesis dossier border, prestige archive stamp, mid-run tactical whisper.
 - [x] [SIL:2] **DONE S145** Performance/architecture — runtime chunk 578→493KB (gate green), INP startTransition fix, App.jsx back under 5,000-line budget via five extractions.
 - [x] [SIL:2] **DONE S145** Edge hardening — function security headers, obelisk-verify origin+quota, validate-replay http-trust adoption, HMAC-fallback warning; docs token diet (195 files archived).
-- [ ] [Human/Data] Staging INP re-measure on the 390×844 profile to confirm the mode-selector startTransition fix clears the 200ms threshold (S142 evidence: 832ms).
+- [x] [SIL:1] **DONE S146** Production INP re-measure on the 390×844 profile — measured 1408ms via `scripts/capture-staging-inp.mjs` against `callofdoodie.wtf` (was 832ms at S142); the S142 `startTransition` mitigation did NOT clear the regression. See `context/DECISIONS.md` S146 entry.
+- [x] [SIL:2] **DONE S146** Website redundancy consolidation — `src/components/SiteFooter.jsx` is now the single shared footer for `HomeV2.jsx`/`HomeV3.jsx`/`MenuScreen.jsx`, closing the Agents/LLMS vs. About/How to Play/Enemies/Accessibility/Support link drift between them.
+- [ ] [SIL:2] [Perf] Dedicated performance session with real Chrome DevTools Performance-panel tracing on the mobile mode-selector INP regression (1408ms vs 200ms threshold) — grep-only investigation could not locate the blocking task; see S146 SIL brainstorm.
+- [ ] [SIL:2] [S145 L2 follow-up] Onboarding funnel merge — combine the FIRST 3 RUNS strip, ORDERS card, Intel Ticker, and Aim Check chip into one adaptive Commander's Orders surface (currently only mutually-exclusion-arbitrated, not merged).
+- [ ] [SIL:1] [S145 L2 follow-up] World-object sprite pack completion — extend the object atlas to cover remaining prop and death-animation emoji glyphs (`drawGame.js:311-317`, `1129-1148`).
 
-**Runway exception:** all 18 premise-verified S145 audit items shipped (onboarding merge and redundancy consolidation at their L1 rungs by budget, logged honestly). Remaining open work is physical, credential, participant, publication, provider, measurement, or founder gated.
+**Runway exception:** all 18 premise-verified S145 audit items shipped (onboarding merge and redundancy consolidation at their L1 rungs by budget, logged honestly); S146 shipped redundancy consolidation's L2 rung and found the INP item's staging fix did not hold in production. Remaining open work is physical, credential, participant, publication, provider, measurement, or founder gated.
 
 - [x] [SIL:3] **DONE S143** Community Stats live-history reliability — durable completed-run outbox, last-known-good cache, explicit LIVE/CACHED/OFFLINE states, 15-second polling, Realtime/focus/online refresh, and manual retry.
 - [x] [SIL:3] **DONE S143** All-recoverable-history contract — full-detail and legacy coverage, oldest-supported date, metric availability, and explicit not-measurable treatment for never-submitted pre-telemetry runs.

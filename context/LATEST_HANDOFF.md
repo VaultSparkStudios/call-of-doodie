@@ -1,3 +1,30 @@
+# Latest Handoff — Session 146
+
+Session Intent: Run the recovery-checked continuous arc (`/goal /arc`) — confirm Session 145 closed out cleanly, then reverify its 19-item audit against live code (not its stale status column), implement the highest-value genuinely-open item, and closeout.
+
+## Impact Summary (Session 146)
+
+**Headline.** Verified — rather than assumed — that Session 145's 18-item sweep actually landed (14/19 confirmed shipped in live code), shipped the shared footer consolidation Session 145 flagged as its top brainstorm candidate, and caught a real, worsening production performance regression (mobile INP 832ms → 1408ms) that a superficial "the file says open" read would have either re-implemented blindly or missed entirely.
+
+**Impact.**
+- Verification: dispatched a read-only Explore pass across all 19 `docs/AUDIT_2026-08-09.md` items against current source (file:line citations, not claims) — 14 SHIPPED, 3 PARTIAL, 2 OPEN. Result recorded in `docs/AUDIT_2026-08-09_2.md`.
+- Shipped: `src/components/SiteFooter.jsx` — one shared footer for `HomeV2.jsx`/`HomeV3.jsx`/`MenuScreen.jsx`, replacing three hand-drifted inline renderers. `scripts/validate-public-contract.mjs` updated to check the shared source instead of duplicating checks per file.
+- Investigated, not blind-fixed: re-ran `scripts/capture-staging-inp.mjs` against production and found mobile mode-selector INP at 1408ms (was 832ms at S142), despite the S142 `startTransition` mitigation still being in place in `HomeV2.jsx`. Grep ruled out obvious synchronous-work culprits; real root cause needs Chrome DevTools trace tooling, not static analysis. Recorded in `context/DECISIONS.md` and re-ranked open in `docs/AUDIT_2026-08-09_2.md`.
+- Deferred with reasoning: docs-token-diet (already near target, 1 file over), world-object-sprite-pack and onboarding-funnel-merge (each partial from S145, need a design pass beyond this session's scope).
+
+## Evidence
+
+- Full suite: 184/184 test files, 1,098/1,098 tests pass in isolation (`vitest run --no-file-parallelism`). Note: the same run under default file-parallelism showed 1-3 unrelated timeout flakes (`script-usage-smoke.test.mjs`, `App.launch.test.jsx`) that passed individually in <15s direct invocation — diagnosed as machine resource contention during this session's heavy background-process load, not a real regression. Strict lint clean. Production build clean (`SiteFooter` chunks separately at 2.26KB).
+- `node scripts/validate-public-contract.mjs --json`: 28/28 files PASS (after updating the check to point at the new shared component).
+
+## Where We Left Off
+
+- Mobile INP regression is real, evidenced, and unfixed — needs a dedicated performance session with actual browser trace tooling before attempting a fix; a second guess without profiling was explicitly rejected this session.
+- world-object-sprite-pack and onboarding-funnel-merge remain at their S145 partial state; recipes carried forward in `docs/AUDIT_2026-08-09_2.md`.
+- Release: engineering FORGE deployed/public-unlaunched; SPARKED remains NO-GO under unchanged external gates.
+
+---
+
 # Latest Handoff — Session 145
 
 Session Intent: Founder-directed full arc — audit every axis plus a deep in-game visual asset review and a major stats upgrade, implement the entire 18-item plan in one pass, then closeout.

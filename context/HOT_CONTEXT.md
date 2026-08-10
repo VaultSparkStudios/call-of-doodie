@@ -4,18 +4,12 @@
 
 ## Current Session
 
-- Session 143 (2026-08-08) completed the founder follow-up that renamed and hardened Community Stats, deployed it to production, and ran the full closeout court.
-- Naming truth — every player-facing game surface and shared component now says Community Stats; Sewer remains only in intentional world/theme terms such as Sewer Zombies and sewer-night.
-- Delivery truth — every completed run is written to a bounded durable browser outbox before remote submission; transient failures retry on startup, focus, visibility, connectivity restoration, and manual refresh.
-- Availability truth — live aggregates refresh every 15 seconds plus Realtime/focus/online signals, while a last-known-good cache prevents temporary provider failures from replacing known totals with false zeroes.
-- History truth — the aggregate includes all recoverable server history, reports full-detail versus legacy coverage, dates the oldest supported record, and explicitly marks never-submitted pre-telemetry runs as not measurable.
-- Public truth — `/api/community-stats` and `/stats/` expose the same live aggregate without browser credentials; the static snapshot remains a graceful fallback when the live endpoint is unavailable.
-- Trust truth — delayed uploads use token-derived completion chronology and face bounded plausibility checks; the exact synthetic health signature remains isolated from player totals.
-- Production truth — Supabase migration `2026-08-08_community_stats_history_contract.sql`, the hardened `sync-game-run` Function, and Cloudflare deployment `e0b481c3` are live.
-- Data receipt — production reports 12 real runs, five runners, 259 enemies terminated, 119,223 score, 21,628 damage, 0 rich runs, 12 legacy runs, and 28 excluded synthetic probes; oldest supported record is March 12, 2026.
-- Validation truth — 1,022/1,022 tests across 176 files, strict lint/schema/build, npm audit zero, supply-chain incident matches zero, 16 hash-bound desktop/mobile theme captures, staging browser/API proof, and production shell 7/7 + cutover 5/5 + replay 3/3 pass.
-- Build-truth — exact-main Linux CI exposed CRLF/LF-sensitive Hot Context hashes; source text is now canonicalized before projection, with a byte-identical cross-platform regression court.
-- Release truth — the cost-neutral FORGE engineering update is deployed and verified. SPARKED remains NO-GO behind the existing physical, email, participant, publication, provider, interaction, subjective-review, and explicit lifecycle-approval gates.
+- Session 146 (2026-08-09/10) ran a recovery-checked continuous arc (confirmed Session 145 closed out cleanly — clean tree, synced remote, no write-back debt) and reverified every item in the Session 145 audit against live source instead of trusting its stale "open" status column.
+- Verification truth — of 19 Session 145 audit items: 14 were confirmed genuinely shipped (DPR rendering, weapon/world atlases, sprite motion, FX pass, ghost persistence, Community Stats v2, progression mastery, tactical whisper, single-layer enemy render, arena theme identity, degradation ladder, site freshness, edge hardening, Retro contract), 3 were partial (world-object props/death-animation still emoji, onboarding widgets arbitrated but not merged, docs archive one file over target), and 2 were genuinely still open.
+- Redundancy truth — `src/components/SiteFooter.jsx` is now the single shared footer consumed by `HomeV2.jsx`, `HomeV3.jsx`, and `MenuScreen.jsx`, closing the drift where HomeV3 lacked the Agents/LLMS links and HomeV2/MenuScreen lacked the About/How to Play/Enemies/Accessibility/Support links. `scripts/validate-public-contract.mjs` now checks the shared component instead of duplicating the literal-string check per home file.
+- Performance truth — re-measuring production (`callofdoodie.wtf`) mobile (390×844) mode-selector INP found it regressed to 1408ms, worse than the 832ms recorded at Session 142, despite Session 142's `startTransition` mitigation already being in place. Root cause is not yet found (grep ruled out the obvious candidates); this is recorded as an honest open finding requiring real browser trace tooling, not blind-fixed.
+- Validation truth — full suite holds at 184/184 test files (1,098/1,098 tests, unchanged count — no new tests added this session, a scoped gap noted in SIL), strict lint clean, production build clean, public contract 28/28 files PASS.
+- Release truth — engineering FORGE remains deployed/public-unlaunched; SPARKED remains NO-GO under the unchanged external, physical, participant, publication, provider, subjective-review, and founder-approval gates.
 
 ## Open Work
 
@@ -29,6 +23,9 @@
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
 ## Now
+- [ ] [SIL:2] [Perf] Dedicated performance session with real Chrome DevTools Performance-panel tracing on the mobile mode-selector INP regression (1408ms vs 200ms threshold) — grep-only investigation could not locate the blocking task; see S146 SIL brainstorm.
+- [ ] [SIL:2] [S145 L2 follow-up] Onboarding funnel merge — combine the FIRST 3 RUNS strip, ORDERS card, Intel Ticker, and Aim Check chip into one adaptive Commander's Orders surface (currently only mutually-exclusion-arbitrated, not merged).
+- [ ] [SIL:1] [S145 L2 follow-up] World-object sprite pack completion — extend the object atlas to cover remaining prop and death-animation emoji glyphs (`drawGame.js:311-317`, `1129-1148`).
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
 - [ ] [Human/Data] [SIL:1] HomeV2 analytics funnel — compare `home_v2_deploy` vs legacy `front_door_action` completion rates after 48h of traffic
@@ -76,7 +73,7 @@ Rationale: Content identity must survive Windows and Linux checkouts. Raw workin
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 159,663 bytes · SHA-256 `a141b63ef033…`
-- `context/TASK_BOARD.md` · 108,841 bytes · SHA-256 `c619ec49828d…`
-- `context/DECISIONS.md` · 100,731 bytes · SHA-256 `78a955e7bfbe…`
+- `context/CURRENT_STATE.md` · 165,542 bytes · SHA-256 `032e6b415719…`
+- `context/TASK_BOARD.md` · 111,736 bytes · SHA-256 `b67de40c0773…`
+- `context/DECISIONS.md` · 102,210 bytes · SHA-256 `c848c3ea9983…`
 - `docs/AUDIT_2026-08-09.json` · 39,456 bytes · SHA-256 `91c413a83cd9…`

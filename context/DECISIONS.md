@@ -2,6 +2,14 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-09 — Session 146 — Mobile mode-selector INP regression is recorded, not blind-fixed
+
+**Decision:** `mobile-inp-and-bundle-gate` stays open with fresh production evidence (`docs/performance/STAGING_SESSION_142_INP.json`, re-measured against `https://callofdoodie.wtf/` via `scripts/capture-staging-inp.mjs`) rather than shipping a guessed fix.
+
+**Rationale:** The narrow-viewport (390×844) mode-selector click now measures 1408ms INP against a 200ms threshold — worse than the 832ms recorded in Session 142, despite Session 142's `selectMode` already wrapping its state fan-out in `startTransition`. Grepping `HomeV2.jsx` found no other synchronous work on that interaction path (no click listeners, no heavy render tree change gated behind it), which means the regression's root cause is not the mitigation already in place. Shipping another guess (e.g. swapping the native `<select>` for a custom picker) without first profiling in a real browser (Chrome DevTools Performance panel / trace) risks trading one unverified perf claim for another, and could introduce accessibility regressions on the native control. Desktop (1440×1000) remains fine at 104ms, confirming this is mobile/native-select-specific.
+
+**Trade-off accepted:** The item stays ranked open in the next audit with this evidence attached instead of being marked done or silently dropped. A dedicated performance session with real Chrome trace tooling (not just grep) is the honest next step.
+
 ## 2026-08-09 — Session 145 — validate-replay is hardened, not removed
 
 **Decision:** The deployed `validate-replay` Edge Function adopts the shared `http-trust` origin allowlist and the bounded `consume_api_rate_limit` quota (30/min) instead of being deleted, and its wildcard CORS is replaced with origin-echo. The rate check fails open only when the rate service itself is unavailable.
