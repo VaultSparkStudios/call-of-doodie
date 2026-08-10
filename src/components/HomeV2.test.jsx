@@ -175,9 +175,8 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/SUPPORT/);
   });
 
-  it("shows a journey card and exposes the Player Hub once onboarding completes", async () => {
-    // S145 arbitration: the ORDERS card only appears after the FIRST 3 RUNS
-    // strip retires (career.totalRuns ≥ 3).
+  it("Commander's Orders card shows ORDERS directive for veteran players", async () => {
+    // S148 merge: the unified card shows "ORDERS · {stage}" for veterans.
     localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -186,7 +185,7 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
 
-    expect(container.textContent).toContain("ORDERS");
+    expect(container.textContent).toContain("ORDERS ·");
     expect(container.textContent).toContain("NEXT:");
     expect(container.textContent).toContain("PROGRESS TOOLS");
     const commandToggle = [...container.querySelectorAll("button")].find(b => /PROGRESS TOOLS/.test(b.textContent));
@@ -195,7 +194,9 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-career-v1");
   });
 
-  it("suppresses the ORDERS card and Intel Ticker while FIRST 3 RUNS onboarding is active", async () => {
+  it("Commander's Orders card shows onboarding guide for new players and not the veteran ORDERS label", async () => {
+    // S148 merge: onboarding shows "COMMANDER'S ORDERS" header and "FIRST 3 RUNS"
+    // subtitle; the veteran "ORDERS ·" label is absent during this phase.
     localStorage.removeItem("cod-career-v1");
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -205,12 +206,14 @@ describe("HomeV2", () => {
     });
 
     expect(container.textContent).toContain("FIRST 3 RUNS");
+    expect(container.textContent).toContain("COMMANDER'S ORDERS");
     expect(container.textContent).not.toContain("ORDERS ·");
   });
 
-  it("renders the ORDERS card and the FIRST 3 RUNS strip in the same outer frame (S147 unification)", async () => {
-    // The single-directive slot must not change size/shape/radius when it
-    // swaps between the pre-onboarding and post-onboarding phase.
+  it("Commander's Orders card uses consistent frame dimensions across onboarding and veteran states (S148 merge)", async () => {
+    // S148: one card replaces the previously separate ORDERS card and FIRST 3
+    // RUNS strip. Both states must resolve to the same outer frame node via
+    // the data-testid so the slot never changes size across the phase swap.
     localStorage.removeItem("cod-career-v1");
     const onboardingContainer = document.createElement("div");
     document.body.appendChild(onboardingContainer);
@@ -219,9 +222,7 @@ describe("HomeV2", () => {
       onboardingRoot = createRoot(onboardingContainer);
       onboardingRoot.render(<HomeV2 {...baseProps} />);
     });
-    const onboardingLabel = [...onboardingContainer.querySelectorAll("div")]
-      .find((el) => el.children.length === 0 && el.textContent === "FIRST 3 RUNS");
-    const onboardingFrame = onboardingLabel?.parentElement?.parentElement;
+    const onboardingCard = onboardingContainer.querySelector("[data-testid='commanders-orders-card']");
 
     localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     const ordersContainer = document.createElement("div");
@@ -231,21 +232,38 @@ describe("HomeV2", () => {
       ordersRoot = createRoot(ordersContainer);
       ordersRoot.render(<HomeV2 {...baseProps} />);
     });
-    const ordersLabel = [...ordersContainer.querySelectorAll("div")]
-      .find((el) => el.children.length === 0 && el.textContent.startsWith("ORDERS ·"));
-    const ordersFrameEl = ordersLabel?.parentElement?.parentElement;
+    const ordersCard = ordersContainer.querySelector("[data-testid='commanders-orders-card']");
 
-    expect(onboardingFrame).toBeTruthy();
-    expect(ordersFrameEl).toBeTruthy();
-    expect(onboardingFrame.style.maxWidth).toBe(ordersFrameEl.style.maxWidth);
-    expect(onboardingFrame.style.borderRadius).toBe(ordersFrameEl.style.borderRadius);
-    expect(onboardingFrame.style.padding).toBe(ordersFrameEl.style.padding);
-    expect(onboardingFrame.style.margin).toBe(ordersFrameEl.style.margin);
+    expect(onboardingCard).toBeTruthy();
+    expect(ordersCard).toBeTruthy();
+    expect(onboardingCard.style.maxWidth).toBe(ordersCard.style.maxWidth);
+    expect(onboardingCard.style.borderRadius).toBe(ordersCard.style.borderRadius);
+    expect(onboardingCard.style.padding).toBe(ordersCard.style.padding);
+    expect(onboardingCard.style.margin).toBe(ordersCard.style.margin);
 
     await act(async () => { onboardingRoot.unmount(); ordersRoot.unmount(); });
     onboardingContainer.remove();
     ordersContainer.remove();
     localStorage.removeItem("cod-career-v1");
+  });
+
+  it("Commander's Orders card shows Aim Check inline when input is unverified", async () => {
+    // S148 merge: the Aim Check button lives inside the unified card when the
+    // player's aim has not been verified; it no longer requires a separate chip.
+    localStorage.removeItem("cod-career-v1");
+    localStorage.removeItem("cod-input-calibration");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    const card = container.querySelector("[data-testid='commanders-orders-card']");
+    expect(card).toBeTruthy();
+    const aimBtn = [...card.querySelectorAll("button")].find(b => /AIM CHECK/i.test(b.textContent));
+    expect(aimBtn).toBeTruthy();
+    localStorage.removeItem("cod-input-calibration");
   });
 
   it("hydrates replay links including starter loadout", async () => {
