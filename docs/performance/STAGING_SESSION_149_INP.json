@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "staging-inp-v2",
+  "capturedAt": "2026-08-11T20:40:02.152Z",
+  "baseUrl": "https://session-149-staging.call-of-doodie.pages.dev/",
+  "method": "Event Timing API interactionId durations for selecting Score Attack with a real button after a 1s post-hydration quiet window",
+  "comparisonBaseline": {
+    "path": "docs/performance/STAGING_SESSION_142_INP.json",
+    "mobileInpMs": 1408,
+    "note": "Historical production synthetic measurement on the retired native select; not a physical-device claim."
+  },
+  "results": [
+    {
+      "width": 390,
+      "height": 844,
+      "theme": "sewer-night",
+      "controlKind": "accessible-radio-button",
+      "samplesMs": [
+        16,
+        16,
+        16
+      ],
+      "inpMs": 16
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "theme": "porcelain-day",
+      "controlKind": "desktop-popover-button",
+      "samplesMs": [
+        40,
+        40,
+        40
+      ],
+      "inpMs": 40
+    }
+  ],
+  "maxInpMs": 40,
+  "thresholdMs": 200,
+  "pass": true
+}

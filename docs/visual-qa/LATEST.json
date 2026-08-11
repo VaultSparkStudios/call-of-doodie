@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-11T06:02:01.205Z",
-  "stagingUrl": "https://session-148-staging.call-of-doodie.pages.dev",
-  "workingTreeUiSha256": "613f6f986bfa4c0cbc028a05eb5dca5fa5fcdb26e1a50ca4a262a96bf8fa598b",
+  "capturedAt": "2026-08-11T20:40:20.203Z",
+  "stagingUrl": "https://session-149-staging.call-of-doodie.pages.dev/",
+  "workingTreeUiSha256": "7578e244ffcdf63d7a8c3765e1eab853612df0d32a2443edb8a5d3d350cba3d4",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-148-recovery/visual-audit-receipt.json",
-    "sha256": "a2eae802ea9214a92e437aa19338275c464136a867536ed1b168287508cb6f26",
+    "receipt": "output/playwright/staging-visuals/visual-audit-receipt.json",
+    "sha256": "81f33cc9c745ba1bcce5f445542fc2ba7da0531f73b7425128cecc08ee05bc26",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -21,7 +21,7 @@
   "captures": [
     {
       "file": "home-dark-mobile.png",
-      "sha256": "e893f7766134f0902f3046bd3c35b3135926ba2a7983829a1c6f6a831c34f615",
+      "sha256": "bc4672a0839daa5c958b55342163ac9a3fc726688236cf525008ef5d5adc13d8",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -32,7 +32,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "b2628178a054aac74bb4f6b18bd29960638bd2e234f77cdde49632a1543eaec2",
+      "sha256": "84702b79eaab3ca24bab947559d557700743122cdf4a9d31adc8041e2f55cb4d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -95,11 +95,12 @@
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix."
     ],
     "fixesApplied": [
-      "Independent viewport recapture confirmed the gray areas were image-viewer masking, not screenshot pixels; sampled source pixels remained theme-correct.",
-      "Reviewed both themes on desktop Modes and mobile Leaderboard; automated matrix remains authoritative because the signed-in viewer bridge was unavailable."
+      "Porcelain Day now uses its light page canvas and theme tokens across Commander's Orders, deploy configuration, and visual-pack controls.",
+      "Mobile hides decorative full-viewport blend layers and pauses the background canvas; first audio context construction moved to idle prewarm.",
+      "Bounded JPEG crops were visually inspected in both themes at 390px and 1440px; no clipping, overflow, unreadable text, or broken hierarchy remains."
     ],
     "blockingDefectsOpen": 0,
-    "subjectiveVisualReviewClaimed": false,
-    "subjectiveVisualReviewStatus": "unavailable-host-cryptunprotectdata"
+    "subjectiveVisualReviewClaimed": true,
+    "subjectiveVisualReviewStatus": "completed-via-bounded-jpeg-fallback"
   }
 }

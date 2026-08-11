@@ -1,3 +1,41 @@
+# Latest Handoff — Session 149
+
+Session Intent: Run the full autonomous arc from a clean, recovered main: canonical startup, specialty game-loop review, fresh nine-axis audit capped at 12 primary items, complete implementation plus second-order innovation, isolated staging and rendered-pixel QA, release gate and closeout, direct commit/push to main, then production deployment and live custom-domain verification. The founder explicitly authorized the direct-main commit/push and full engineering production deploy; SPARKED lifecycle promotion remains evidence-gated.
+
+## Impact Summary
+
+**Headline.** Session 149 closes the menu-to-run feedback loop, replaces fragile mobile pickers with accessible command controls, and eliminates the 1.4-second first-interaction regression at its real audio-initialization cause while preserving guest-first, deterministic play.
+
+**Impact.**
+- A bounded post-run contract survives Return to Menu in session memory and resolves through one reason-coded Commander's Orders surface alongside Aim Check, first-three-run onboarding, Journey, and Run Intelligence.
+- Mobile mode and difficulty controls are 44px radiogroups with roving keyboard behavior, visible/polite acknowledgement, and a post-paint App commit.
+- Idle audio prewarm plus gesture fallback removes synchronous `AudioContext` construction from the first pointer event; final isolated staging records 16ms mobile and 40ms desktop versus the 1,408ms production baseline.
+- Porcelain Day now renders a genuinely light, readable canvas and all new controls use theme tokens; mobile-only decorative compositing is bounded.
+- Two second-order protocol defects were root-fixed: blocked/non-executable Genius items no longer count as runnable, and a reverified exhausted list can stop below the velocity floor.
+
+## Evidence
+
+- Full exact-tree suite: 188 files / 1,121 tests pass with one thread worker; ESLint, deployable build, schema, architecture (4,990/5,000), protocol drift, asset, runtime, security, npm audit, supply-chain, cost, and Hot Context gates pass.
+- Isolated staging: `https://session-149-staging.call-of-doodie.pages.dev/`; immutable deployment: `https://b93bb53a.call-of-doodie.pages.dev/`.
+- Hosted visual matrix: 1,020/1,020; six desktop/mobile, dark/light captures are hash-bound in `docs/visual-qa/LATEST.json`; subjective bounded-image review found zero blockers.
+- Cloudflare deployment capability is READY. The prior main workflow red was solely stale generated Hot Context from S148; that exact freshness court is green on the S149 tree.
+- The mandatory project-targeted IGNIS rescore reached the external scorer but failed without a project diagnostic; the Studio Doctor separately completed at 123/177 passing with two external control-plane reds. Neither is represented as a Call-Of-Doodie runtime or release-candidate failure.
+
+## Where We Left Off
+
+- Commit and push the exact verified S149 tree directly to `main` under the founder's explicit authorization.
+- Allow or execute the Cloudflare production deployment, then verify the immutable deployment, `https://callofdoodie.wtf/`, typed `/_health`, cutover aliases, replay trust, and current workflow green.
+- Record the production deployment receipt after live verification. SPARKED remains NO-GO; this authorization covers the cost-neutral FORGE engineering deployment only.
+
+## Startup Signal
+
+- Top action: diagnose and resolve the mobile mode-selector Interaction to Next Paint (INP) regression using real browser evidence.
+- Secondary product slice: merge the fragmented onboarding widgets into one adaptive Commander's Orders surface.
+- Required specialty lens: game-loop health, progression, session engagement, retention hooks, and SOUL fidelity.
+- Scope cap: 12 primary audit items (last velocity 8 × 1.5).
+
+---
+
 # Latest Handoff — Session 148 (recovered during S149)
 
 Session Intent: Deliver the founder-directed leaderboard fix, Sewer Zombies visual/behavior overhaul, weapon balance adjustments, character/cosmetic selection, mode/menu cleanup, readability pass, and honest feasibility treatment for multiplayer and multi-floor terrain.

@@ -38,7 +38,7 @@ export function classifyTaskTitle(title, section = "Now") {
   let status = "unblocked";
 
   if (/cross-repo|owned by another repo|\[ark\]/i.test(text)) status = "cross-repo-locked";
-  else if (/\[human\/data\]|lighthouse|funnel data|production (?:metric|traffic|measurement)|human measurement/i.test(text)) status = "data-blocked";
+  else if (/\[data-blocked(?:[^\]]*)?\]|\[human\/data\]|lighthouse|funnel data|production (?:metric|traffic|measurement|feedback)|human measurement|participant evidence/i.test(text)) status = "data-blocked";
   else if (/physical launch qa|real gamepad|pwa install|full-run media|physical-device/i.test(text)) status = "device-blocked";
   else if (/itch\.io|publish the prepared|publication|launch announcement/i.test(text)) status = "publication-blocked";
   else if (/discord invite|community (?:link|entry point).*ready/i.test(text)) status = "community-blocked";

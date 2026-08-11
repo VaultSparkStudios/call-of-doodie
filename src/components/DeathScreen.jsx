@@ -1699,7 +1699,7 @@ export default function DeathScreen({
             >🔗 SHARE RUN</button>
           )}
           <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button aria-label="Return to main menu" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause }); onMenu(); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
+          <button aria-label="Return to main menu" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(debrief.nextRunContract); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
         </details>
       </div>

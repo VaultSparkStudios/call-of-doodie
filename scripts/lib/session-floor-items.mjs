@@ -5,6 +5,13 @@ const BLOCKED_OR_DONE_STATUSES = new Set([
   'cross-repo-dirty',
   'blocked-active-lock',
   'external-blocked',
+  'credential-blocked',
+  'data-blocked',
+  'device-blocked',
+  'publication-blocked',
+  'community-blocked',
+  'product-decision',
+  'cross-repo-locked',
   'done',
   'shipped',
   'verified',
@@ -26,7 +33,7 @@ export function extractRankedGeniusItems(cache) {
 
 export function isLocallyActionableSessionFloorItem(item) {
   const status = String(item?.status ?? '').toLowerCase();
-  if (item?.blocked || item?.done || item?.shipped || BLOCKED_OR_DONE_STATUSES.has(status)) return false;
+  if (item?.executable === false || item?.blocked || item?.done || item?.shipped || BLOCKED_OR_DONE_STATUSES.has(status)) return false;
 
   const surface = String(item?.sourceSurface ?? '');
   if (surface.startsWith('xrepo:')) return false;

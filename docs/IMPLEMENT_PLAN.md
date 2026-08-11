@@ -1,12 +1,15 @@
-# Implement Plan — Session 147
+# Implement Plan — Session 149
 
-Source: `docs/AUDIT_2026-08-10.json` (6 items, all promoted). Re-sorted for implementation efficiency, not raw priority score: small FIRE items first, security foundational work early, investigation item before cosmetic ICE items, biggest façade last.
+Source: `docs/AUDIT_2026-08-11.json` (3 completed items). Default rung: L2.
 
-1. `community-stats-endpoint-hardening` — 2h — port proven origin-allowlist + rate-limit pattern (security, foundational)
-2. `insight-graph-agent-projection-wiring` — 2h — wire existing computed payload into death analytics event
-3. `tactical-whisper-critical-health-tier` — 3h — new priority-4 branch on existing scaffolding
-4. `mobile-inp-regression-root-cause-trace` — 3h — Playwright CDP trace capture + evidence-based finding
-5. `decorative-prop-sprite-coverage` — 3h — new 16-cell theme-prop atlas (L1 scope)
-6. `onboarding-surface-unification` — 5h — shared CommandersOrders wrapper (L1/L2 scope)
+1. [x] `next-run-contract-menu-bridge` — bounded session-memory contract schema, App handoff, dismissal, and deploy consumption shipped.
+2. [x] `adaptive-commanders-orders-surface` — one pure precedence resolver and one reason-coded menu component shipped.
+3. [x] `mobile-accessible-quick-deploy-grid` — accessible controls, post-paint commit, audio idle prewarm, mobile compositor cleanup, and staging remeasurement shipped.
 
-Default ladder rung: L1/L2 per item as scoped in the audit `why`/`ladder` fields — full L2 where cheap, L1 for the two largest-effort items (prop atlas, onboarding merge) given the honest low-impact/high-authoring-cost tradeoff already noted in the audit.
+Verification after each item:
+
+- Focused pure/component tests and touched-file lint.
+- Medium gate: keyboard/mouse/controller launch contracts, acronym rules, zero new variable cost, protocol commands intact.
+- Final combined court: focused suites, architecture, lint, build, staging interaction receipt, and rendered-pixel review.
+
+Final evidence: 1,116/1,116 tests across 187 files; touched-file ESLint clean; deployable build green; isolated staging Event Timing 16ms mobile / 40ms desktop; visual matrix 1,020/1,020; CANON-053 six-capture receipt green. No credentialed service or variable per-user cost was added.

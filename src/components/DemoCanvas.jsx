@@ -12,7 +12,9 @@ export default function DemoCanvas({ opacity = 0.35 }) {
 
     const reduceMotion = typeof window !== "undefined"
       && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
+    const smallScreen = typeof window !== "undefined"
+      && window.matchMedia?.("(max-width: 760px)").matches;
+    if (reduceMotion || smallScreen) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
@@ -171,6 +173,7 @@ export default function DemoCanvas({ opacity = 0.35 }) {
   return (
     <canvas
       ref={ref}
+      className="home-demo-canvas"
       aria-hidden="true"
       style={{
         position: "fixed", inset: 0, width: "100%", height: "100%",

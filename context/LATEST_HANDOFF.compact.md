@@ -1,42 +1,45 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: fdcecd91348e -->
-<!-- generated-at: 2026-08-10T04:41:53.605Z -->
+<!-- source-hash: a26f02ca8634 -->
+<!-- generated-at: 2026-08-11T22:52:49.857Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 146
+SESSION 149 HANDOFF SUMMARY
 
-Session Intent
-- Recovery-checked continuous arc: verify S145 landed, reverify its 19-item audit against live code, ship highest-value open item, closeout.
+Session
+- Session 149. Prior sessions (145-148) recovered/archived below; only S149 state is live.
 
-Shipped This Session
-- Read-only verification pass on all 19 items in docs/AUDIT_2026-08-09.md against live source (file:line citations): 14 SHIPPED, 3 PARTIAL, 2 OPEN. Recorded in docs/AUDIT_2026-08-09_2.md.
-- SiteFooter.jsx: one shared footer replacing drifted inline renderers in HomeV2/HomeV3/MenuScreen. validate-public-contract.mjs updated to check shared source.
-- Investigated (not blind-fixed) mobile INP regression via capture-staging-inp.mjs.
+What Shipped
+- Post-run contract survives Return to Menu via session memory; resolves in one reason-coded Commander's Orders surface (with Aim Check, onboarding, Journey, Run Intelligence).
+- Mobile mode/difficulty controls converted to 44px accessible radiogroups with roving keyboard nav and post-paint App commit.
+- Fixed 1.4s first-interaction regression at true cause: removed synchronous AudioContext construction from first pointer event; added idle audio prewarm + gesture fallback. Staging now 16ms mobile / 40ms desktop vs 1,408ms baseline.
+- Porcelain Day theme rendered light/readable; new controls use theme tokens.
+- Two protocol defects root-fixed: blocked/non-executable Genius items no longer count as runnable; reverified exhausted list can stop below velocity floor.
 
 Current Intent
-- Hand off with INP regression evidenced but deliberately unfixed; awaiting a dedicated performance session with browser trace tooling.
+- Commit and push verified S149 tree directly to main (founder-authorized).
+- Execute Cloudflare production deploy, verify live custom domain, record receipt.
+- SPARKED remains NO-GO; authorization covers cost-neutral FORGE engineering deploy only.
 
-Now-Bucket (Top 3)
-- Mobile INP regression: dedicated perf session with Chrome DevTools trace tooling (do not second-guess without profiling).
-- world-object-sprite-pack: at S145 partial; needs design pass. Recipe in AUDIT_2026-08-09_2.md.
-- onboarding-funnel-merge: at S145 partial; needs design pass. Recipe in AUDIT_2026-08-09_2.md.
+Now Bucket (Top 3)
+1. Commit/push exact verified S149 tree to main.
+2. Execute/verify Cloudflare production deploy: immutable URL, callofdoodie.wtf, /_health, cutover aliases, replay trust, workflow green.
+3. Record production deployment receipt after live verification.
 
 Blockers (Top 3)
-- INP root cause unresolvable via static analysis; needs browser profiling tooling not available this session.
-- Full suite shows 1-3 timeout flakes under default file-parallelism (script-usage-smoke, App.launch) — diagnosed as machine resource contention; pass individually. Run with --no-file-parallelism.
-- world-object-sprite-pack and onboarding-funnel-merge blocked on design scope beyond arc.
+1. IGNIS project-targeted rescore reached scorer but failed without a project diagnostic; not a runtime/RC failure.
+2. Studio Doctor: 123/177 passing with two external control-plane reds (external, not COD runtime).
+3. Prior main workflow red was stale S148 Hot Context; green on S149 tree — confirm on push.
 
-Human-Blocked
-- Staging INP re-measure (390×844) to confirm/quantify regression — open since S145.
-- Production Lighthouse/funnel evidence gating HomeV1 retirement — open since S145.
-- SPARKED NO-GO under unchanged external/publication/founder gates — carried since S144+.
+Human-Blocked / Gated
+- SPARKED lifecycle promotion: evidence-gated, NO-GO (persists across S145-149).
+- Production deploy authorization: granted this session (engineering only).
 
-Evidence
-- 184/184 test files, 1,098/1,098 tests pass in isolation. Strict lint clean. Production build clean (SiteFooter chunk 2.26KB). validate-public-contract: 28/28 PASS.
+Evidence Anchors
+- Full suite: 188 files / 1,121 tests pass; all gates pass (architecture 4,990/5,000).
+- Staging: session-149-staging.call-of-doodie.pages.dev; immutable: b93bb53a.call-of-doodie.pages.dev.
+- Visual matrix 1,020/1,020; captures hash-bound in docs/visual-qa/LATEST.json; zero blockers.
+- Cloudflare deploy capability READY.
 
-Release State
-- Engineering FORGE deployed/public-unlaunched; SPARKED NO-GO.
-
-Next Session Pointer
-- Start a dedicated performance session: profile mobile mode-selector INP (1408ms, was 832ms at S142) with real browser trace tooling before attempting any fix.
+Next Session
+- Confirm S149 committed/pushed and production-verified; if not, complete deploy + receipt before starting new arc.

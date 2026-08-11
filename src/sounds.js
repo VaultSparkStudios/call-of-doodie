@@ -23,19 +23,30 @@ function _detune(freq, cents) {
 
 // iOS / Safari require AudioContext to be created & resumed inside a user gesture.
 // This one-shot listener fires on first pointer interaction and unlocks audio globally.
+function _createAudioContext() {
+  if (audioCtx) return audioCtx;
+  try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { /* ignore */ }
+  return audioCtx;
+}
+
 function _unlockAudio() {
   if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
-  if (!audioCtx) {
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { /* ignore */ }
-  }
+  if (!audioCtx) _createAudioContext();
 }
 document.addEventListener("pointerdown", _unlockAudio, { once: true });
 
+// Construct the context during an idle slice so the first meaningful mobile
+// interaction does not pay device/audio-backend initialization synchronously.
+// Browsers that forbid pre-gesture creation still use the pointerdown fallback.
+if (typeof window !== "undefined") {
+  const prewarm = () => { if (!muted) _createAudioContext(); };
+  if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(prewarm, { timeout: 750 });
+  else window.setTimeout(prewarm, 500);
+}
+
 function getCtx() {
   if (muted) return null;
-  if (!audioCtx) {
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; }
-  }
+  if (!audioCtx && !_createAudioContext()) return null;
   // Resume if suspended (browser autoplay policy / iOS background)
   if (audioCtx.state === "suspended") audioCtx.resume();
   return audioCtx;

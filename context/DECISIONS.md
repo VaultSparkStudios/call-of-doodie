@@ -1078,3 +1078,34 @@ Rationale: The current loop is client-only and every entity is flat `x,y`. Concu
 Decision: Move desktop gamepad rumble beside touch vibration in `utils/haptics.js` and let `setHapticsEnabled` gate both paths.
 
 Rationale: Recovery found the S148 tree four lines over the App-shell architecture budget. Consolidation restores headroom by removing duplicate state and prevents one player setting from enabling contradictory feedback paths.
+
+## 2026-08-11 — Session 149 — One evidence-ranked order owns menu intent
+
+Decision: Resolve input proof, first-three-run onboarding, a bounded carried post-run contract, Journey, and Run Intelligence through one deterministic Commander's Orders precedence. Keep the carried contract in session memory only, sanitize its fields, expose its reason/evidence, and clear it on dismissal or deploy.
+
+Rationale: Multiple directive shapes diluted the death-to-redeploy feedback loop. One pure local resolver preserves a single player action without hosted inference, persistence of free text, or hidden automatic mode changes.
+
+## 2026-08-11 — Session 149 — First-interaction audio initialization is idle work
+
+Decision: Preconstruct `AudioContext` during an idle slice and keep a gesture-time construction fallback for browsers that forbid pre-gesture creation. On narrow screens, pause/hide the decorative full-viewport canvas/blend layers, acknowledge deploy configuration locally, and commit App-wide mode state after the presentation boundary.
+
+Rationale: The measurement sequence moved from 1,408ms native-picker evidence through 832ms/408ms/112ms intermediate experiments, but hardware-composited phase timing finally identified roughly 500ms of synchronous first-`pointerdown` audio initialization. The final staging court measures 16ms mobile and 40ms desktop. This is synthetic browser evidence, not a physical-device claim.
+
+## 2026-08-11 — Session 149 — Rendered pixels can overrule mechanical theme checks
+
+Decision: Treat the 1,020-case matrix as necessary but insufficient. Image-capable inspection must also verify representative touched pixels; when it exposes a defect, fix and repeat the entire matrix before issuing the hash-bound receipt.
+
+Rationale: The matrix checked theme identity and toggle contrast but did not detect `home-arcade.css` overriding Porcelain Day's page canvas or night-only accents inside the new controls. Bounded JPEG fallback inspection found both, and the final recapture proves readable light/dark hierarchy at mobile and desktop.
+
+CANON-010 gap justification: the conformance checker continues to report malformed Studio-OS-owned parity evidence rather than a project skill/hook change; Session 149 changed no MCP or cross-agent registration, so the public game records the checker gap without inventing local conformance.
+
+CANON-045 gap justification: the checker could not parse a passing Obelisk proxy posture even though public auth remains delegated/optional and no project-local account system was added; the release remains FORGE and this parser gap is not laundered into adoption.
+
+CANON-054 gap justification: the checker emitted malformed evidence while the dated `/stats/` and machine-readable stats twin remain present and the full public-route visual court passes; Session 149 records the measurement defect and makes no broader analytics claim.
+## 2026-08-11 — Session 149 closeout — external scorer failures stay advisory
+
+**Decision:** Preserve the failed project-targeted IGNIS rescore and the Studio Doctor's cross-portfolio reds as explicit control-plane advisories; do not mutate sibling repositories or downgrade a green Call-Of-Doodie release candidate without a project-local failing gate.
+
+**Why:** `node scripts/ops.mjs rescore --project call-of-doodie` reached the canonical IGNIS CLI but returned only `Scoring Call of Doodie ... failed` with no project diagnostic. The separately completed Doctor reported 123/177 passing and two red control-plane probes (CPX51 capacity admission and cross-surface coherence), while every project-local runtime, test, build, security, cost, staging, and rendered-pixel court is green. Treating the external routing/scorer failure as a product blocker would violate evidence ownership and CANON-018.
+
+**Follow-up:** Studio Ops owns the scorer/doctor routing repair through its normal control plane. This project records the evidence and proceeds with the explicitly authorized cost-neutral engineering release; SPARKED remains separately gated.

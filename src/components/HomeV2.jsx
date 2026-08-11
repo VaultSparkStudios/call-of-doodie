@@ -31,8 +31,11 @@ import { buildNemesisChronicle } from "../utils/nemesisChronicle.js";
 import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
 import { isPlaytestMode, loadPlaytestPulse, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 import { buildFirstRunsJourney } from "../utils/firstRunsJourney.js";
+import { buildCommandersOrder } from "../utils/commandersOrders.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
+import CommandersOrders from "./CommandersOrders.jsx";
+import MobileDeployConfig from "./MobileDeployConfig.jsx";
 import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -95,6 +98,8 @@ export default function HomeV2(props) {
     pwaInstallPromptReady = false,
     primaryWeaponIndex = 0,
     onSelectPrimaryWeapon = () => {},
+    pendingNextRunContract = null,
+    onConsumeNextRunContract = () => {},
   } = props;
 
   const modeId = currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode });
@@ -119,7 +124,7 @@ export default function HomeV2(props) {
     if (panel) {
       const expanded = Boolean(open);
       if (panel.dataset.alwaysOpen === "true") {
-        if (expanded) panel.querySelector("select")?.focus();
+        if (expanded) panel.querySelector('[role="radio"]')?.focus();
         deployToggleRef.current?.setAttribute("aria-expanded", "true");
         return;
       }
@@ -144,7 +149,6 @@ export default function HomeV2(props) {
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
   const [showAimCheck, setShowAimCheck] = useState(false);
-  const [tickerDismissed, setTickerDismissed] = useState(() => readPreference("cod-ticker-dismissed", "0", "session", "home") === "1");
   const [mutationDismissed, setMutationDismissed] = useState(() => readPreference("cod-mutation-dismissed", "0", "session", "home") === "1");
   const [insightDismissed, setInsightDismissed] = useState(() => readPreference("cod-insight-dismissed", "0", "session", "home") === "1");
   const [showCareerStats, setShowCareerStats] = useState(false);
@@ -344,6 +348,17 @@ export default function HomeV2(props) {
     () => buildFirstRunsJourney({ totalRuns: career?.totalRuns || 0 }),
     [career?.totalRuns],
   );
+  const commandersOrder = useMemo(
+    () => buildCommandersOrder({
+      aimCheck,
+      onboarding,
+      pendingNextRunContract,
+      journey,
+      runIntel,
+      commandBrief,
+    }),
+    [aimCheck, onboarding, pendingNextRunContract, journey, runIntel, commandBrief],
+  );
 
   const recordFrontDoorAction = useCallback((actionId, extra = {}) => {
     const studioEvent = buildStudioGameEvent("front_door_action", {
@@ -384,8 +399,9 @@ export default function HomeV2(props) {
     const studioEvent = recordFrontDoorAction("deploy", { source: "deploy_button", seed: seed || null });
     track("front_door_action", { actionId: "deploy", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
     track("home_v2_deploy", { mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
+    onConsumeNextRunContract();
     onStart(seed, challenge);
-  }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
+  }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onConsumeNextRunContract, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
   const handleContinuationAction = useCallback((plan = journey.secondary, source = "journey_card") => {
@@ -535,7 +551,7 @@ export default function HomeV2(props) {
   };
   const deployDropdownBtn = {
     padding: "18px 18px", fontSize: 14, fontWeight: 900, fontFamily: "'Courier New',monospace",
-    background: theme === "porcelain-day" ? "linear-gradient(180deg,#fff6e8,#ead8c5)" : "linear-gradient(180deg,#3a2012,#1a0f08)", color: selectedMode.color,
+    background: theme === "porcelain-day" ? "linear-gradient(180deg,#fff6e8,#ead8c5)" : "linear-gradient(180deg,#3a2012,#1a0f08)", color: theme === "porcelain-day" ? themePalette.accent : selectedMode.color,
     border: "none", borderLeft: `1px solid ${themePalette.line}`, borderRadius: "0 10px 10px 0",
     cursor: "pointer", letterSpacing: 1, minWidth: 150, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3,
   };
@@ -568,20 +584,6 @@ export default function HomeV2(props) {
     border: "1px solid rgba(0,229,255,0.25)", borderRadius: 10,
     display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#DDEFFF", lineHeight: 1.4,
   };
-  const journeyCard = {
-    margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
-    background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
-    display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: 10, alignItems: "center",
-  };
-  // S147: shared outer chrome for the single-directive slot — the ORDERS
-  // card and FIRST 3 RUNS onboarding strip are mutually exclusive (only one
-  // renders at a time) but now share one frame (margin/maxWidth/radius/
-  // border) so the slot's visual size and position stay constant across the
-  // phase swap instead of jumping between two differently-shaped containers.
-  const ordersFrame = {
-    margin: "12px auto 0", maxWidth: 640, padding: "10px 12px",
-    background: themePalette.panelSoft, border: `1px solid ${themePalette.line}`, borderRadius: 10,
-  };
   const tabsRow = { display: "flex", gap: 4, justifyContent: "center", marginTop: 22, flexWrap: "wrap" };
   const tabBtn = (active) => ({
     padding: "8px 16px", fontSize: 12, fontWeight: 800, letterSpacing: 1.5, fontFamily: "inherit", cursor: "pointer",
@@ -590,8 +592,6 @@ export default function HomeV2(props) {
     color: active ? themePalette.accent : themePalette.muted, borderRadius: 8,
   });
   const tabBody = { marginTop: 12, background: themePalette.panel, border: `1px solid ${themePalette.line}`, borderRadius: 10, padding: 14 };
-
-  const intelLine = !tickerDismissed && runIntel?.directive ? runIntel.directive : null;
 
   return (
     <div className="arcade-home" style={page} data-theme={theme} data-testid="home-v2-shell">
@@ -659,49 +659,12 @@ export default function HomeV2(props) {
         </div>
 
 
-        {/* S145 onboarding arbitration: while the FIRST 3 RUNS strip is active
-            it is the single directive — the ORDERS card and Intel Ticker stand
-            down so a new player sees one instruction, not four. */}
-        {!onboarding && <div style={journeyCard}>
-          <div style={{ minWidth: 0 }}>
-            <div style={{ color: "#888", fontSize: 9, fontWeight: 900, letterSpacing: 2 }}>ORDERS · {journey.label.toUpperCase()}</div>
-            <div style={{ color: "#EEE", fontSize: 12, lineHeight: 1.45, marginTop: 4 }}>{journey.detail}</div>
-            <div style={{ color: journey.secondary.accent, fontSize: 11, fontWeight: 900, marginTop: 6 }}>
-              NEXT: {journey.secondary.title}
-            </div>
-            <div style={{ color: "#AAA", fontSize: 10, lineHeight: 1.35, marginTop: 2 }}>{journey.secondary.detail}</div>
-          </div>
-          <button
-            onClick={() => handleContinuationAction(journey.secondary, "journey_card")}
-            style={{ ...quickBtn, color: journey.secondary.accent, borderColor: `${journey.secondary.accent}66`, background: `${journey.secondary.accent}12`, whiteSpace: "nowrap" }}
-          >
-            {journey.secondary.cta.toUpperCase()}
-          </button>
-        </div>}
-
-        {onboarding && (
-          <div style={{ ...ordersFrame, borderColor: "rgba(255,107,53,0.28)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 10, alignItems: "center", marginBottom: 7, flexWrap: "wrap" }}>
-              <div style={{ color: "#FFB36B", fontSize: 10, fontWeight: 900, letterSpacing: 2 }}>FIRST 3 RUNS</div>
-              <div style={{ color: "#AAA", fontSize: 10 }}>Aim test: rotate around your soldier once before the first wave closes in.</div>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: 6 }}>
-            {onboarding.steps.map((step) => {
-              const active = step.active;
-              const done = step.complete;
-              return (
-                <div key={step.label} style={{ minHeight: 74, padding: "9px 10px", borderRadius: 8, background: active ? "rgba(255,107,53,0.13)" : done ? "rgba(0,255,136,0.08)" : "rgba(255,255,255,0.035)", border: `1px solid ${active ? "rgba(255,107,53,0.4)" : done ? "rgba(0,255,136,0.22)" : "rgba(255,255,255,0.08)"}` }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: 6, alignItems: "center" }}>
-                    <div style={{ color: active ? "#FFB36B" : done ? "#8CFFB8" : "#888", fontSize: 9, fontWeight: 900, letterSpacing: 1.4 }}>{done ? "DONE" : step.label}</div>
-                    <div style={{ color: active ? "#FFF" : "#AAA", fontSize: 10, fontWeight: 900 }}>{step.title}</div>
-                  </div>
-                  <div style={{ color: "#DDD", fontSize: 10, lineHeight: 1.35, marginTop: 5 }}>{step.text}</div>
-                </div>
-              );
-            })}
-            </div>
-          </div>
-        )}
+        <CommandersOrders
+          order={commandersOrder}
+          palette={themePalette}
+          onAction={(action) => handleContinuationAction(action, "commanders_orders")}
+          onDismiss={onConsumeNextRunContract}
+        />
 
         {/* DEPLOY split-button */}
         <div className="arcade-home__deploy" style={deployRow}>
@@ -722,10 +685,10 @@ export default function HomeV2(props) {
             aria-controls="deploy-config-panel"
             style={deployDropdownBtn}
           >
-            <span style={{ fontSize: 11, color: selectedMode.color, letterSpacing: 1 }}>
+            <span style={{ fontSize: 11, color: theme === "porcelain-day" ? themePalette.accent : selectedMode.color, letterSpacing: 1 }}>
               {selectedMode.emoji} {selectedMode.label}
             </span>
-            <span style={{ fontSize: 10, color: selectedDiff.color }}>
+            <span style={{ fontSize: 10, color: theme === "porcelain-day" ? themePalette.ink : selectedDiff.color }}>
               {selectedDiff.emoji} {selectedDiff.label} ▾
             </span>
           </button>}
@@ -741,7 +704,7 @@ export default function HomeV2(props) {
                 type="button"
                 aria-pressed={selected}
                 onClick={() => onSetVisualPack?.(pack.id)}
-                style={{ padding: "5px 9px", borderRadius: 6, border: `1px solid ${selected ? "rgba(255,215,0,0.65)" : "rgba(255,255,255,0.13)"}`, background: selected ? "rgba(255,215,0,0.12)" : "rgba(0,0,0,0.22)", color: selected ? "#FFD700" : themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 0.8, cursor: "pointer" }}
+                style={{ padding: "5px 9px", borderRadius: 6, border: `1px solid ${selected ? (theme === "porcelain-day" ? themePalette.accent : "rgba(255,215,0,0.65)") : themePalette.line}`, background: selected ? (theme === "porcelain-day" ? "rgba(184,60,0,0.10)" : "rgba(255,215,0,0.12)") : themePalette.panel, color: selected ? (theme === "porcelain-day" ? themePalette.accent : "#FFD700") : themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 0.8, cursor: "pointer" }}
               >{pack.label}</button>
             );
           })}
@@ -765,31 +728,15 @@ export default function HomeV2(props) {
             }}
           >
             {isMobile && (
-              <div style={{ display: "grid", gap: 12, minWidth: "min(310px, calc(100vw - 58px))" }}>
-                <strong style={{ color: "#FFB36B", fontSize: 11, letterSpacing: 1.8 }}>QUICK DEPLOY CONFIG</strong>
-                <label style={{ display: "grid", gap: 5, color: "#AAA", fontSize: 10, letterSpacing: 1.2 }}>
-                  MODE
-                  <select
-                    aria-label="Mobile game mode"
-                    value={modeId}
-                    onChange={(event) => selectMode(event.target.value)}
-                    style={{ padding: "10px 9px", borderRadius: 7, color: "#FFF", background: "#17191D", border: "1px solid rgba(255,179,107,0.45)", font: "inherit" }}
-                  >
-                    {MODE_DEFS.map((mode) => <option key={mode.id} value={mode.id}>{mode.emoji} {mode.label}</option>)}
-                  </select>
-                </label>
-                <label style={{ display: "grid", gap: 5, color: "#AAA", fontSize: 10, letterSpacing: 1.2 }}>
-                  DIFFICULTY
-                  <select
-                    aria-label="Mobile difficulty"
-                    value={difficulty}
-                    onChange={(event) => { const value = event.target.value; startTransition(() => setDifficulty(value)); }}
-                    style={{ padding: "10px 9px", borderRadius: 7, color: "#FFF", background: "#17191D", border: "1px solid rgba(255,179,107,0.45)", font: "inherit" }}
-                  >
-                    {Object.entries(DIFFICULTIES).map(([key, item]) => <option key={key} value={key}>{item.emoji} {item.label}</option>)}
-                  </select>
-                </label>
-              </div>
+              <MobileDeployConfig
+                modes={MODE_DEFS}
+                modeId={modeId}
+                onSelectMode={selectMode}
+                difficulties={DIFFICULTIES}
+                difficulty={difficulty}
+                onSelectDifficulty={(value) => startTransition(() => setDifficulty(value))}
+                palette={themePalette}
+              />
             )}
             {!isMobile && <>
             <div style={{ fontSize: 10, color: "#888", letterSpacing: 2, marginBottom: 6 }}>MODE</div>
@@ -994,7 +941,7 @@ export default function HomeV2(props) {
               DEBUG INPUT
             </button>
           )}
-          {(inputDebugEnabled || onboarding || aimCheck.status !== "verified") && (
+          {inputDebugEnabled && (
             <button
               style={{
                 ...quickBtn,
@@ -1006,7 +953,7 @@ export default function HomeV2(props) {
                 setShowAimCheck(true);
               }}
             >
-              {aimCheck.label} · {aimCheck.detail.toUpperCase()}
+              OPEN AIM DIAGNOSTICS · {aimCheck.status.toUpperCase()}
             </button>
           )}
           {(inputCalibration || controllerProfile) && (
@@ -1080,39 +1027,6 @@ export default function HomeV2(props) {
             ))}
           </div>}
         </div>
-
-        {/* Intel Ticker — merges Command Brief + Run Intel + Recommended Action.
-            Stands down during FIRST 3 RUNS onboarding (S145 arbitration). */}
-        {!onboarding && intelLine && (
-          <div style={tickerCard} role="status" aria-live="polite">
-            <span style={{ fontSize: 14 }}>💡</span>
-            <span style={{ flex: 1 }}>
-              <strong style={{ color: "#7FE6FF" }}>{runIntel.focus.replace(/_/g, " ").toUpperCase()}:</strong>{" "}
-              {runIntel.directive}
-              {recommendedAction?.title && (
-                <span style={{ color: "#AAA" }}> · <em>{recommendedAction.title}</em></span>
-              )}
-            </span>
-            {recommendedAction && (
-              <button
-                type="button"
-                onClick={() => handleContinuationAction(recommendedAction, "intel_ticker")}
-                style={{ ...quickBtn, padding: "4px 8px", fontSize: 9, color: recommendedAction.accent, borderColor: `${recommendedAction.accent}66` }}
-              >
-                {recommendedAction.cta}
-              </button>
-            )}
-            <details style={{ fontSize: 10, color: "#7FE6FF", cursor: "pointer" }}>
-              <summary style={{ outline: "none" }}>(?)</summary>
-              <div style={{ marginTop: 8, padding: "8px 10px", background: "rgba(0,0,0,0.4)", borderRadius: 6, color: "#CCC", fontSize: 11, maxWidth: 340 }}>
-                <div style={{ fontWeight: 900, color: "#FFB36B", marginBottom: 4 }}>COMMAND BRIEF</div>
-                {commandBrief.map((l, i) => <div key={i}>{i + 1}. {l}</div>)}
-                {runIntel.recommendation && <div style={{ marginTop: 6, color: "#8FEFFF" }}>{runIntel.recommendation}</div>}
-              </div>
-            </details>
-            <button onClick={() => { writePreference("cod-ticker-dismissed", "1", "session", "home"); setTickerDismissed(true); }} aria-label="Dismiss intel" style={{ background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14 }}>✕</button>
-          </div>
-        )}
 
         {/* Challenge link banner */}
         {challengeMode && (

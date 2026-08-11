@@ -1268,3 +1268,15 @@ Intent outcome: achieved — all 6 fresh audit items shipped with real verificat
 - Studio Doctor reported one blocking tests-total/tests-passing coherence mismatch in the sibling control plane; it was classified external and routed through Ark rather than fixed by cross-repo editing.
 
 Intent outcome: achieved for the shipped S148 implementation and recovery record; the broad corpus and rendered-pixel receipt remain explicit follow-ups, and SPARKED remains NO-GO.
+
+## 2026-08-11 — Session 149 — Commander's Orders, mobile interaction root fix, and full arc saturation
+
+- Ran the complete recovery-checked arc: specialty game-loop review, fresh premise-verified audit, full implementation, second-order innovation, isolated staging, rendered-pixel QA, release/security gates, and canonical closeout.
+- Shipped one adaptive Commander's Orders surface with explicit precedence across Aim Check, first-three-run onboarding, carried post-run intent, Journey, and Run Intelligence; DeathScreen-to-menu intent remains session-only and is consumed on deploy.
+- Replaced mobile native mode/difficulty selects with accessible 44px radiogroups, roving keys, polite visual acknowledgement, and post-paint App commits.
+- Used hardware-composited browser evidence to isolate the historic 1,408ms first interaction to synchronous global-pointer `AudioContext` construction; idle prewarm plus gesture fallback yields final staging measures of 16ms mobile and 40ms desktop.
+- Fixed Porcelain Day's dark-canvas override and bounded mobile decorative compositor work. Isolated staging passed 1,020/1,020 checks and six hash-bound captures received direct bounded-image inspection in both themes and target widths.
+- Root-fixed two protocol truth defects found after primary saturation: blocked/non-executable work is excluded from runnable counts, and a reverified exhausted list stops below the velocity target unless an explicit token budget governs.
+- Final validation: 188/188 test files and 1,121/1,121 assertions pass; ESLint, deployable build, schema/architecture/protocol/assets/runtime/security/npm-audit/supply-chain/cost/Hot Context gates pass.
+
+Intent outcome: implementation, staging, release readiness, and saturation achieved; direct-main push and production verification proceed under explicit founder authority. SPARKED remains NO-GO.

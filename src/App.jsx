@@ -136,6 +136,7 @@ import {
   readRunModeFlags,
 } from "./systems/runSession.js";
 import { buildDeathScreenProps } from "./systems/deathFlow.js";
+import { sanitizeNextRunContract } from "./utils/commandersOrders.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./systems/zombieMode.js";
@@ -244,6 +245,7 @@ export default function CallOfDoodie() {
   // Playing is never gated behind identity creation. New visitors enter the
   // menu as a local guest and choose a public display name only when needed.
   const [screen, setScreen]           = useState("menu");
+  const [pendingNextRunContract, setPendingNextRunContract] = useState(null);
   const [username, setUsername]       = useState(() => getLockedCallsign() || "Guest");
   const [score, setScore]             = useState(0);
   const [kills, setKills]             = useState(0);
@@ -2119,6 +2121,7 @@ export default function CallOfDoodie() {
 
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
+    setPendingNextRunContract(null);
     const gauntletLaunch = gauntletRef.current ? buildWeeklyGauntletLaunch(getWeeklyGauntlet()) : null;
     if (gauntletLaunch) {
       forceSeed = gauntletLaunch.seed;
@@ -4494,6 +4497,8 @@ export default function CallOfDoodie() {
           pwaInstallPromptReady={pwaPromptReady}
           primaryWeaponIndex={currentWeapon}
           onSelectPrimaryWeapon={selectPrimaryWeapon}
+          pendingNextRunContract={pendingNextRunContract}
+          onConsumeNextRunContract={() => setPendingNextRunContract(null)}
           onReplayTraining={() => {
             const resetEvidence = normalizeTutorialEvidence();
             tutorialEvidenceRef.current = resetEvidence;
@@ -4533,7 +4538,7 @@ export default function CallOfDoodie() {
       username,
       DIFFICULTIES,
       onStartGame: startGame,
-      onMenu: () => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setScreen("menu"); },
+      onMenu: (nextRunContract) => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPendingNextRunContract(sanitizeNextRunContract(nextRunContract)); setScreen("menu"); },
       onRefreshLeaderboard: refreshLeaderboard,
       onSubmitScore: submitScore,
       onSaveFieldReport: savePostRunFieldReport,

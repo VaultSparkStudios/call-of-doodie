@@ -14,6 +14,10 @@ Public-safe launch roadmap summary.
 - [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
+## Current Session Intent: Session 149
+
+Run the complete `/arc` from the recovered, synchronized main: specialty game-loop review; fresh nine-axis audit capped at 12 primary items; implementation of every accepted item plus second-order innovation; isolated staging and CANON-053 rendered-pixel proof; release gate and canonical closeout; authorized direct-main commit/push; production deploy and live custom-domain verification. SPARKED promotion is not implied.
+
 ## Now
 
 - [x] [SIL:3] **DONE S145** In-game visual overhaul — DPR-crisp canvas + degradation ladder, weapon/world-object sprite atlases, single-layer enemy sprites with procedural motion, FX pass (tracers/sparks/muzzle/additive/decals), arena theme identity table, pinned Retro contract.
@@ -24,9 +28,9 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S145** Edge hardening — function security headers, obelisk-verify origin+quota, validate-replay http-trust adoption, HMAC-fallback warning; docs token diet (195 files archived).
 - [x] [SIL:1] **DONE S146** Production INP re-measure on the 390×844 profile — measured 1408ms via `scripts/capture-staging-inp.mjs` against `callofdoodie.wtf` (was 832ms at S142); the S142 `startTransition` mitigation did NOT clear the regression. See `context/DECISIONS.md` S146 entry.
 - [x] [SIL:2] **DONE S146** Website redundancy consolidation — `src/components/SiteFooter.jsx` is now the single shared footer for `HomeV2.jsx`/`HomeV3.jsx`/`MenuScreen.jsx`, closing the Agents/LLMS vs. About/How to Play/Enemies/Accessibility/Support link drift between them.
-- [ ] [SIL:2] [Perf] Dedicated performance session with real Chrome DevTools Performance-panel tracing on the mobile mode-selector INP regression (1408ms vs 200ms threshold) — grep-only investigation could not locate the blocking task; see S146 SIL brainstorm.
-- [ ] [SIL:2] [S145 L2 follow-up] Onboarding funnel merge — combine the FIRST 3 RUNS strip, ORDERS card, Intel Ticker, and Aim Check chip into one adaptive Commander's Orders surface (currently only mutually-exclusion-arbitrated, not merged).
-- [ ] [SIL:1] [S145 L2 follow-up] World-object sprite pack completion — extend the object atlas to cover remaining prop and death-animation emoji glyphs (`drawGame.js:311-317`, `1129-1148`).
+- [x] [SIL:2] **DONE S149** Mobile mode-selector performance — a real hardware-composited Event Timing breakdown found the first `pointerdown` synchronously constructing `AudioContext`; idle prewarm plus a gesture-time Safari fallback, mobile compositor-layer removal, and post-paint App commits reduce final isolated-staging interaction timing from the 1,408ms production baseline to 16ms mobile / 40ms desktop.
+- [x] [SIL:2] **DONE S149** Onboarding funnel merge — FIRST 3 RUNS, Journey/ORDERS, Run Intelligence, carried post-run intent, and Aim Check now resolve through one reason-coded Commander's Orders surface with explicit precedence and one primary action.
+- [x] [SIL:1] **AUDIT WIN S149** World-object/death sprite expansion was a false premise: live source and Oracle evidence confirm Modern deaths already use enemy/Zombies atlases; emoji remains only the intentional Retro/load-failure fallback. No redundant atlas was fabricated.
 
 **Runway exception:** all 18 premise-verified S145 audit items shipped (onboarding merge and redundancy consolidation at their L1 rungs by budget, logged honestly); S146 shipped redundancy consolidation's L2 rung and found the INP item's staging fix did not hold in production. Remaining open work is physical, credential, participant, publication, provider, measurement, or founder gated.
 
@@ -68,7 +72,9 @@ Public-safe launch roadmap summary.
 - [x] [SIL:2] **DONE S148** Weapon travel-profile balance — bounded range/speed adjustments for Spicy Squirt Gun, Confetti Cannon, and Shock Zapper preserve damage and the cost-neutral guest-first contract.
 - [x] [SIL:2] **DONE S148 recovery** App-shell architecture root-fix — desktop rumble and touch vibration share one tested haptics module/settings gate; App is 4,985/5,000.
 - [x] [AUDIT WIN S148] Multiplayer and multi-floor terrain were scoped into staged design records rather than misrepresented as safe same-session features.
-- [ ] [SIL:1] Re-run the full Vitest corpus under lower host contention; S148 recovery focused courts are green but the 15-minute broad run is explicitly inconclusive.
+- [x] [SIL:1] **DONE S149** Full Vitest corpus rerun — the first 1,114/1,116 pass exposed only the newly created audit missing from generated Hot Context; regeneration made the focused court 3/3 and the final exact-tree corpus passes 1,121/1,121 across 188 files.
+- [x] [SIL:2] **DONE S149 second-order** Executable-work truth — the Genius cache/session-floor path now excludes `executable:false` and credential/data/device/publication/community/product-decision/cross-repo blocked statuses instead of counting deferred work as runnable.
+- [x] [SIL:2] **DONE S149 second-order** Saturation truth — a reverified exhausted list now returns STOP even below the velocity floor, while an explicit token budget retains precedence; regression tests pin both decisions.
 
 - [x] [SIL] **DONE S147** Tactical whisper critical-health tier — a fourth priority branch whispers "CRITICAL HEALTH — DISENGAGE" at ≤35% HP, the near-death decision point the S145 system left silent.
 - [x] [SIL] **DONE S147** Mobile INP root-cause trace — `scripts/trace-mobile-inp.mjs` captured a real CDP trace of the production mode-selector click; no task exceeded 13.5ms, ruling out a JS compute cause. Leading hypothesis (native `<select>` picker overhead) recorded in `context/DECISIONS.md`, not yet real-device confirmed.
@@ -441,8 +447,8 @@ Public-safe launch roadmap summary.
 - [x] [SIL] **DONE S101** Full `/audit` implementation sweep — shipped all 12 items from `docs/AUDIT_2026-06-18_3.md`: visitor-safe ops copy, release security header gate, Obelisk verify endpoint, legacy home retirement gate, Journey card/front-door clarity, Aim Check control rite, DeathScreen next-run drill bridge, local Balance Lab, HUD debug collision overlay, Rival Pace ghost chip, screenshot truth pack with verified captures, and DeathScreen prop extraction. Validation: full suite 540/540, build passing, release security gate with npm audit 0 vulnerabilities, launch media gate passing.
 
 ## Deferred
-- [ ] [SIL:1] [S147] Real-device confirmation of the native-`<select>` mobile INP hypothesis before attempting any fix — `context/DECISIONS.md` records the CDP trace evidence but a physical Android device trace is needed to confirm
-- [ ] [SIL:1] [S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells once production feedback confirms the current highest-visibility coverage reads well
+- [x] [SIL:1] **SUPERSEDED S149** Native-`<select>` hypothesis — the native picker no longer exists on mobile, and hardware-composited timing isolated the actual first-gesture AudioContext tax. Generic physical launch QA remains separately listed under Human Action Required.
+- [ ] [SIL:1] [DATA-BLOCKED S147] Theme-prop atlas L2 expansion — extend `theme-prop-atlas-v1.webp` from 16 to ~32 cells only after production feedback confirms the current highest-visibility coverage reads well; no participant evidence exists yet.
 - [ ] Discord invite/community link when the community entry point is ready
 - [x] [SIL:2] Obelisk verify backend — `/api/obelisk-verify` now exists as a Cloudflare Pages Function proxy with redacted receipts and honest not-configured behavior; guest play remains default.
 - [x] [SIL:3] **DONE S67** App.jsx extraction slice 1 — `gameStep.js` exports `computeMovementVector` + `applyPlayerMovement`; 11 tests; 347/347 passing.

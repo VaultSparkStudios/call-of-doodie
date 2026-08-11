@@ -10,6 +10,7 @@ import {
   inputStateMatches,
   summarizeTaskWork,
 } from "../scripts/lib/task-work.mjs";
+import { locallyActionableSessionFloorItems } from "../scripts/lib/session-floor-items.mjs";
 
 const tempRoots = [];
 
@@ -22,6 +23,7 @@ describe("task work classification", () => {
     ["[SIL:2] Implement a repo-owned architecture extraction", "unblocked"],
     ["[BLOCKER S61] Update PostHog dashboard allowlist", "credential-blocked"],
     ["[Human/Data] Capture production Lighthouse evidence", "data-blocked"],
+    ["[DATA-BLOCKED S147] Expand only after production feedback", "data-blocked"],
     ["Physical launch QA - verify one real gamepad", "device-blocked"],
     ["Create Itch.io listing and publish the prepared package", "publication-blocked"],
     ["Discord invite when the community entry point is ready", "community-blocked"],
@@ -37,6 +39,17 @@ describe("task work classification", () => {
     const items = collectTaskWork(markdown);
     expect(items.map((item) => item.status)).toContain("unblocked");
     expect(summarizeTaskWork(items)).toMatchObject({ total: 3, executable: 1, deferred: 2, exhausted: false });
+  });
+
+  it("keeps every non-executable genius status out of the session floor", () => {
+    const items = [
+      { title: "Ship local fix", status: "unblocked", executable: true },
+      { title: "Needs provider key", status: "credential-blocked", executable: false },
+      { title: "Needs product choice", status: "product-decision", executable: false },
+      { title: "Needs participant evidence", status: "data-blocked", executable: false },
+      { title: "Needs community destination", status: "community-blocked", executable: false },
+    ];
+    expect(locallyActionableSessionFloorItems({ items })).toEqual([items[0]]);
   });
 
   it("fingerprints declared inputs instead of trusting cache age", () => {

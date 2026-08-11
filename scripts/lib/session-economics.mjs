@@ -107,6 +107,14 @@ export function sessionFloorVerdict({
     return { verdict: 'CONTINUE', reason: `budget floor not met (${pctOfBudget}% of +${k}k) — keep shipping verified work`, signals };
   }
 
+  // A freshly reverified exhausted list is genuine saturation. The velocity
+  // floor is a historical throughput target, not authority to fabricate work
+  // after every executable item and innovation candidate has been consumed.
+  // Explicit token budgets still win because their floor is checked above.
+  if (listExhausted) {
+    return { verdict: 'STOP', reason: `saturated (list exhausted + re-verified, ${itemsShipped} items shipped) — closeout is honest`, signals };
+  }
+
   // 3. Below the velocity floor → CONTINUE even if the current item feels done.
   //    This is the line that makes Codex behave like Claude: shipping 1 of N when
   //    the budget has room is a wasted boot, not a finished session.

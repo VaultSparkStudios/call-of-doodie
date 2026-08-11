@@ -76,6 +76,7 @@ describe("buildDeathScreenProps", () => {
     expect(moreActions).toBeGreaterThan(analysis);
     expect(source).toContain('data-testid="run-the-fix"');
     expect(source).toContain("<summary");
+    expect(source).toContain("onMenu(debrief.nextRunContract)");
   });
 
   it("maps death screen state without reaching into React", () => {

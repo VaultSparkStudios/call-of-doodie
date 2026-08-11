@@ -87,7 +87,7 @@ async function captureItem(browser, item) {
   await prime(page, item, errors);
   const suffix = `${item.theme}--${item.width}`;
   const modeButton = page.getByRole("button", { name: /Change mode or difficulty/i });
-  const mobileMode = page.locator('select[aria-label="Mobile game mode"]');
+  const mobileMode = page.locator('[data-testid="mobile-deploy-config"]');
   const deviceState = await page.evaluate(() => ({
     width: innerWidth,
     coarse: matchMedia("(pointer: coarse)").matches,

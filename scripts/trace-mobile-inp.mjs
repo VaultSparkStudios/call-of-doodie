@@ -34,7 +34,7 @@ try {
   });
   await page.goto(new URL("?home=v2&theme=sewer-night", baseUrl).href, { waitUntil: "networkidle" });
 
-  const action = page.locator('select[aria-label="Mobile game mode"]');
+  const action = page.locator('button[data-mode-id="score_attack"]');
   await action.waitFor({ state: "visible" });
   await page.waitForTimeout(1000);
 
@@ -83,7 +83,7 @@ try {
     schemaVersion: "mobile-inp-trace-v1",
     capturedAt: new Date().toISOString(),
     baseUrl,
-    method: "Raw CDP Tracing session (devtools.timeline + v8.cpu_profiler categories) around a real click on the mobile mode-selector, anchored to the trace's own EventDispatch(click) timestamp — not wall-clock.",
+    method: "Raw CDP Tracing session (devtools.timeline + v8.cpu_profiler categories) around a real click on the mobile Score Attack button, anchored to the trace's own EventDispatch(click) timestamp — not wall-clock.",
     priorEvidence: "docs/performance/STAGING_SESSION_142_INP.json recorded 1408ms via the Event Timing API; context/DECISIONS.md S146 found no synchronous work in HomeV2.jsx by grep alone.",
     clickAnchorFound: Boolean(clickDispatch),
     totalTraceEvents: events.length,

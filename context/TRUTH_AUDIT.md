@@ -1,6 +1,20 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-11 — Session 149 — Menu-loop, interaction, rendered-pixel, and saturation truth
+
+- Loop truth — one sanitized session-memory `nextRunContract` crosses DeathScreen → App → Home, is dismissible, and is consumed on deploy; fresh boot fabricates nothing.
+- Directive truth — Aim Check, first-three-run onboarding, carried post-run intent, Journey, and Run Intelligence resolve through one pure reason-coded Commander's Orders precedence. Status alerts are not misrepresented as player commands.
+- Performance truth — hardware-composited Event Timing identified synchronous `AudioContext` creation on the first global pointer event as the historic delay. Idle prewarm plus a gesture fallback measures 16ms mobile and 40ms desktop on final isolated staging versus the 1,408ms historical production baseline. No physical-device claim is made.
+- Accessibility truth — mobile mode/difficulty controls are labelled 44px radiogroups with `aria-checked`, roving keyboard navigation, and polite selection feedback; App-wide fan-out occurs after paint.
+- Visual truth — the Porcelain Day canvas override was corrected after direct rendered-pixel inspection. The hosted 20-route × 2-theme × 3-width court passes 1,020/1,020 and six captures are hash-bound with subjective bounded-image review completed.
+- Protocol truth — explicit non-executable/blocked items do not count as runnable, and reverified list exhaustion stops the session below velocity floor unless an explicit token budget governs.
+- Verification truth — exact-tree full suite passes 1,121/1,121 across 188 files; lint, deployable build, schema, architecture, protocol, asset, runtime, security, npm audit, supply-chain, cost, and Hot Context checks pass.
+- Lifecycle truth — isolated staging is green and production engineering promotion is explicitly authorized. SPARKED remains NO-GO; no launch or participant outcome is claimed.
+
+Overall status: S149 implementation and release candidate green; production promotion and live verification are the remaining authorized release steps; SPARKED NO-GO.
+Last reviewed: 2026-08-11
+
 ## 2026-08-11 — Session 148 recovery — Shipped code verified, missing closeout restored
 
 - Recovery truth — commit `4522f7f` was already on synchronized `main`, but CURRENT_STATE, TASK_BOARD, HANDOFF, WORK_LOG, DECISIONS, SIL, CDR, and TRUTH_AUDIT still stopped at S147. S148 was a write-back-skipped session, not an uncommitted implementation.

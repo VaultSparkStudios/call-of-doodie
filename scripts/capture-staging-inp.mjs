@@ -6,7 +6,11 @@ import { chromium } from "@playwright/test";
 
 const root = process.cwd();
 const baseUrl = process.argv[2] || "https://session-142-staging.call-of-doodie.pages.dev/";
-const outPath = path.join(root, "docs", "performance", "STAGING_SESSION_142_INP.json");
+const outputIndex = process.argv.indexOf("--output");
+const outputArg = process.argv.find((arg) => arg.startsWith("--output="))?.split("=")[1]
+  || (outputIndex >= 0 ? process.argv[outputIndex + 1] : null)
+  || "docs/performance/STAGING_SESSION_149_INP.json";
+const outPath = path.resolve(root, outputArg);
 const matrix = [
   { width: 390, height: 844, theme: "sewer-night" },
   { width: 1440, height: 1000, theme: "porcelain-day" },
@@ -20,6 +24,7 @@ try {
       viewport: { width: item.width, height: item.height },
     });
     const page = await context.newPage();
+    page.setDefaultTimeout(15000);
     await page.addInitScript(({ theme }) => {
       localStorage.setItem("cod-theme", theme);
       localStorage.setItem("cod-callsign-v1", "RELEASE-QA");
@@ -31,30 +36,44 @@ try {
         }
       }).observe({ type: "event", buffered: true, durationThreshold: 0 });
     }, { theme: item.theme });
-    await page.goto(new URL(`?home=v2&theme=${item.theme}`, baseUrl).href, { waitUntil: "networkidle" });
-    const action = item.width <= 430
-      ? page.locator('select[aria-label="Mobile game mode"]')
-      : page.locator('button[aria-label="Change mode or difficulty"]');
+    console.log(`INP capture: navigate ${item.width}x${item.height} ${item.theme}`);
+    await page.goto(new URL(`?home=v2&theme=${item.theme}`, baseUrl).href, { waitUntil: "domcontentloaded", timeout: 30000 });
+    await page.locator('[data-testid="home-v2-shell"]').waitFor({ state: "visible" });
+    let action;
+    let controlKind;
+    if (item.width <= 430) {
+      action = page.locator('button[data-mode-id="score_attack"]');
+      controlKind = "accessible-radio-button";
+    } else {
+      const toggle = page.locator('button[aria-label="Change mode or difficulty"]');
+      await toggle.waitFor({ state: "visible" });
+      await toggle.click({ timeout: 15000 });
+      action = page.locator('#deploy-config-panel button').filter({ hasText: "SCORE ATTACK" }).first();
+      controlKind = "desktop-popover-button";
+    }
     try {
       await action.waitFor({ state: "visible" });
     } catch (error) {
       const diagnostic = await page.evaluate(() => ({
         url: location.href,
         body: String(document.body?.innerText || "").slice(0, 1000),
-        selects: [...document.querySelectorAll("select")].map((node) => node.getAttribute("aria-label")),
+        modeControls: [...document.querySelectorAll("[data-mode-id], #deploy-config-panel button")].map((node) => node.getAttribute("data-mode-id") || node.textContent?.trim()),
       }));
       throw new Error(`${error.message}\n${JSON.stringify(diagnostic, null, 2)}`);
     }
     await page.waitForTimeout(1000);
     await page.evaluate(() => { window.__releaseEventDurations = []; });
-    await action.click();
+    console.log(`INP capture: click ${controlKind}`);
+    await action.click({ timeout: 15000 });
     await page.waitForTimeout(750);
     const durations = await page.evaluate(() => window.__releaseEventDurations || []);
     results.push({
       ...item,
+      controlKind,
       samplesMs: durations,
       inpMs: durations.length ? Math.max(...durations) : null,
     });
+    console.log(`INP capture: ${controlKind} -> ${results.at(-1).inpMs ?? "no-sample"}ms`);
     await context.close();
   }
 } finally {
@@ -63,10 +82,15 @@ try {
 
 const measured = results.map((result) => result.inpMs).filter(Number.isFinite);
 const receipt = {
-  schemaVersion: "staging-inp-v1",
+  schemaVersion: "staging-inp-v2",
   capturedAt: new Date().toISOString(),
   baseUrl,
-  method: "Event Timing API interactionId durations for the visible Command Deck mode selector after a 1s post-hydration quiet window",
+  method: "Event Timing API interactionId durations for selecting Score Attack with a real button after a 1s post-hydration quiet window",
+  comparisonBaseline: {
+    path: "docs/performance/STAGING_SESSION_142_INP.json",
+    mobileInpMs: 1408,
+    note: "Historical production synthetic measurement on the retired native select; not a physical-device claim.",
+  },
   results,
   maxInpMs: measured.length ? Math.max(...measured) : null,
   thresholdMs: 200,

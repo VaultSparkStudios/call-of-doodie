@@ -53,6 +53,14 @@ const baseProps = {
   assistAvailable: false, onApplyAssist: noop,
 };
 
+function saveVerifiedInput() {
+  saveInputCalibration(buildInputCalibrationRecord({
+    source: "mouse",
+    buckets: ["east", "west", "north", "south"],
+    timestamp: Date.now(),
+  }));
+}
+
 describe("HomeV2", () => {
   let container, root;
   afterEach(() => {
@@ -65,9 +73,11 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-controller-profile");
     localStorage.removeItem("cod-pwa-install-attempt");
     localStorage.removeItem("cod-run-history-v1");
+    localStorage.removeItem("cod-career-v1");
     localStorage.removeItem("cod-theme");
     document.documentElement.removeAttribute("data-cod-theme");
     sessionStorage.removeItem("cod-insight-dismissed");
+    vi.unstubAllGlobals();
   });
 
   it("renders hero title + DEPLOY button and calls onStart on click", async () => {
@@ -176,8 +186,7 @@ describe("HomeV2", () => {
   });
 
   it("shows a journey card and exposes the Player Hub once onboarding completes", async () => {
-    // S145 arbitration: the ORDERS card only appears after the FIRST 3 RUNS
-    // strip retires (career.totalRuns ≥ 3).
+    saveVerifiedInput();
     localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -186,8 +195,8 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
 
-    expect(container.textContent).toContain("ORDERS");
-    expect(container.textContent).toContain("NEXT:");
+    expect(container.textContent).toContain("COMMANDER'S ORDERS");
+    expect(container.querySelector('[data-order-kind="journey"]')).toBeTruthy();
     expect(container.textContent).toContain("PROGRESS TOOLS");
     const commandToggle = [...container.querySelectorAll("button")].find(b => /PROGRESS TOOLS/.test(b.textContent));
     expect(commandToggle?.getAttribute("aria-expanded")).toBe("true");
@@ -195,7 +204,8 @@ describe("HomeV2", () => {
     localStorage.removeItem("cod-career-v1");
   });
 
-  it("suppresses the ORDERS card and Intel Ticker while FIRST 3 RUNS onboarding is active", async () => {
+  it("renders first-run training as the single Commander's Orders surface after input proof", async () => {
+    saveVerifiedInput();
     localStorage.removeItem("cod-career-v1");
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -205,12 +215,12 @@ describe("HomeV2", () => {
     });
 
     expect(container.textContent).toContain("FIRST 3 RUNS");
-    expect(container.textContent).not.toContain("ORDERS ·");
+    expect(container.querySelectorAll('[data-testid="commanders-orders"]')).toHaveLength(1);
+    expect(container.querySelector('[data-order-kind="first-runs"]')).toBeTruthy();
   });
 
-  it("renders the ORDERS card and the FIRST 3 RUNS strip in the same outer frame (S147 unification)", async () => {
-    // The single-directive slot must not change size/shape/radius when it
-    // swaps between the pre-onboarding and post-onboarding phase.
+  it("keeps one stable Commander's Orders component across onboarding and journey phases", async () => {
+    saveVerifiedInput();
     localStorage.removeItem("cod-career-v1");
     const onboardingContainer = document.createElement("div");
     document.body.appendChild(onboardingContainer);
@@ -219,9 +229,7 @@ describe("HomeV2", () => {
       onboardingRoot = createRoot(onboardingContainer);
       onboardingRoot.render(<HomeV2 {...baseProps} />);
     });
-    const onboardingLabel = [...onboardingContainer.querySelectorAll("div")]
-      .find((el) => el.children.length === 0 && el.textContent === "FIRST 3 RUNS");
-    const onboardingFrame = onboardingLabel?.parentElement?.parentElement;
+    const onboardingFrame = onboardingContainer.querySelector('[data-testid="commanders-orders"]');
 
     localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     const ordersContainer = document.createElement("div");
@@ -231,12 +239,12 @@ describe("HomeV2", () => {
       ordersRoot = createRoot(ordersContainer);
       ordersRoot.render(<HomeV2 {...baseProps} />);
     });
-    const ordersLabel = [...ordersContainer.querySelectorAll("div")]
-      .find((el) => el.children.length === 0 && el.textContent.startsWith("ORDERS ·"));
-    const ordersFrameEl = ordersLabel?.parentElement?.parentElement;
+    const ordersFrameEl = ordersContainer.querySelector('[data-testid="commanders-orders"]');
 
     expect(onboardingFrame).toBeTruthy();
     expect(ordersFrameEl).toBeTruthy();
+    expect(onboardingFrame.dataset.orderKind).toBe("first-runs");
+    expect(ordersFrameEl.dataset.orderKind).toBe("journey");
     expect(onboardingFrame.style.maxWidth).toBe(ordersFrameEl.style.maxWidth);
     expect(onboardingFrame.style.borderRadius).toBe(ordersFrameEl.style.borderRadius);
     expect(onboardingFrame.style.padding).toBe(ordersFrameEl.style.padding);
@@ -245,6 +253,59 @@ describe("HomeV2", () => {
     await act(async () => { onboardingRoot.unmount(); ordersRoot.unmount(); });
     onboardingContainer.remove();
     ordersContainer.remove();
+    localStorage.removeItem("cod-career-v1");
+  });
+
+  it("uses accessible mobile radio buttons instead of native mode and difficulty pickers", async () => {
+    vi.stubGlobal("requestAnimationFrame", (callback) => { callback(); return 1; });
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onSetZombiesMode = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} isMobile onSetZombiesMode={onSetZombiesMode} />);
+    });
+
+    expect(container.querySelectorAll("select")).toHaveLength(0);
+    const groups = container.querySelectorAll('[role="radiogroup"]');
+    expect(groups).toHaveLength(2);
+    const zombies = container.querySelector('[data-mode-id="zombies"]');
+    expect(zombies.getAttribute("aria-checked")).toBe("false");
+    expect(zombies.style.minHeight).toBe("44px");
+    await act(async () => {
+      zombies.click();
+      await new Promise((resolve) => setTimeout(resolve, 60));
+    });
+    expect(onSetZombiesMode).toHaveBeenCalledWith(true);
+  });
+
+  it("renders and consumes a bounded next-run contract through the single order CTA", async () => {
+    saveVerifiedInput();
+    localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    const onStart = vi.fn();
+    const onConsumeNextRunContract = vi.fn();
+    await act(async () => {
+      root = createRoot(container);
+      root.render(
+        <HomeV2
+          {...baseProps}
+          onStart={onStart}
+          pendingNextRunContract={{ id: "tempo", focus: "Spend cooldowns", target: "Throw before the crowd peaks.", proof: "No unused-grenade death." }}
+          onConsumeNextRunContract={onConsumeNextRunContract}
+        />,
+      );
+    });
+
+    const order = container.querySelector('[data-order-kind="next-run-contract"]');
+    expect(order).toBeTruthy();
+    expect(order.textContent).toContain("Spend cooldowns");
+    expect(order.dataset.reasonCode).toBe("next-run-contract:tempo");
+    const action = [...order.querySelectorAll("button")].find((button) => /DEPLOY/.test(button.textContent));
+    await act(async () => { action.click(); });
+    expect(onConsumeNextRunContract).toHaveBeenCalledTimes(1);
+    expect(onStart).toHaveBeenCalledTimes(1);
     localStorage.removeItem("cod-career-v1");
   });
 
@@ -292,7 +353,7 @@ describe("HomeV2", () => {
       root.render(<HomeV2 {...baseProps} />);
     });
 
-    expect(container.textContent).toContain("Calibrate");
+    expect(container.textContent).toContain("INPUT PROOF");
     expect(container.textContent).toContain("DEBUG INPUT");
   });
 
@@ -327,15 +388,11 @@ describe("HomeV2", () => {
     expect(saved?.complete).toBe(true);
     expect(saved?.buckets).toEqual(["east", "north", "south", "west"]);
     expect(saved?.source).toBe("keyboard");
-    expect(container.textContent).toContain("AIM CHECK VERIFIED");
+    expect(container.textContent).toContain("INPUT QA READY");
   });
 
   it("surfaces remembered input calibration and controller profile status", async () => {
-    saveInputCalibration(buildInputCalibrationRecord({
-      source: "mouse",
-      buckets: ["east", "west", "north", "south"],
-      timestamp: Date.now(),
-    }));
+    saveVerifiedInput();
     localStorage.setItem("cod-controller-profile", JSON.stringify({
       version: 1,
       type: "xbox",
