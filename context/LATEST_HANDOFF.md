@@ -23,9 +23,9 @@ Session Intent: Run the full autonomous arc from a clean, recovered main: canoni
 
 ## Where We Left Off
 
-- Commit and push the exact verified S149 tree directly to `main` under the founder's explicit authorization.
-- Allow or execute the Cloudflare production deployment, then verify the immutable deployment, `https://callofdoodie.wtf/`, typed `/_health`, cutover aliases, replay trust, and current workflow green.
-- Record the production deployment receipt after live verification. SPARKED remains NO-GO; this authorization covers the cost-neutral FORGE engineering deployment only.
+- Production source `5bae6c1` is live at immutable revision `https://6a3ec909.call-of-doodie.pages.dev/` through green workflow `31544887734`; custom domain, typed health, cutover, replay, backend, leaderboard, and launch-surface courts pass.
+- The only post-deploy defect was a stale operator assertion for `og-image.svg`; the canonical site has intentionally used `og-image.png` since S145. The verifier now checks the PNG and its MIME type, with a source regression contract and live 7/7 proof on both hosts.
+- No repo-owned executable arc item remains. Use real production funnel/participant evidence before changing Commander's Orders precedence, balance, fallback retirement, or cosmetic scope. SPARKED remains NO-GO.
 
 ## Startup Signal
 

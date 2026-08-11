@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 149 release candidate: adaptive Commander's Orders, accessible mobile deploy controls, audio-initialization INP root fix, and honest session-saturation protocol.",
-  "nextMilestone": "Push the exact verified S149 tree to main, deploy production, verify the immutable revision and custom-domain health/cutover/replay courts, then record the live receipt while preserving SPARKED NO-GO.",
+  "currentFocus": "Session 149 deployed: adaptive Commander's Orders, accessible mobile deploy controls, audio-initialization INP root fix, and honest session-saturation protocol are live at immutable revision 6a3ec909.",
+  "nextMilestone": "Collect real production funnel and participant evidence before changing directive precedence, balance, fallback retirement, or cosmetic scope; preserve SPARKED NO-GO until its external gates are real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -346,9 +346,9 @@
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-08",
   "silSession": 149,
-  "silScore": 979,
+  "silScore": 997,
   "silAvg3": 989.3,
-  "silVelocity": 5,
+  "silVelocity": 13,
   "silDebt": "down",
   "silLastSession": 149,
   "currentSession": 149,
@@ -412,7 +412,7 @@
     "scope": "studio-ops-control-plane external to this repo",
     "blockingDetail": "coherence tests-total/tests-passing mismatch; routed through Ark, no sibling tree edit"
   },
-  "lastSessionSummary": "Session 149 shipped adaptive Commander's Orders, accessible mobile deploy controls, the measured audio-initialization INP root fix, light-theme correction, and two session-saturation protocol fixes. Final staging passes 1020/1020 visual checks; the exact tree passes 1121/1121 tests across 188 files plus full release/security gates.",
+  "lastSessionSummary": "Session 149 shipped adaptive Commander's Orders, accessible mobile deploy controls, the measured audio-initialization INP root fix, light-theme correction, and two saturation-protocol fixes; source 5bae6c1 deployed at immutable Cloudflare revision 6a3ec909 with exact-SHA CI, live 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard, and launch-surface courts green.",
   "testsAssertionsPassing": 1121,
   "testsAssertionsTotal": 1121,
   "testsAssertionsFiles": 188,

@@ -1109,3 +1109,10 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** `node scripts/ops.mjs rescore --project call-of-doodie` reached the canonical IGNIS CLI but returned only `Scoring Call of Doodie ... failed` with no project diagnostic. The separately completed Doctor reported 123/177 passing and two red control-plane probes (CPX51 capacity admission and cross-surface coherence), while every project-local runtime, test, build, security, cost, staging, and rendered-pixel court is green. Treating the external routing/scorer failure as a product blocker would violate evidence ownership and CANON-018.
 
 **Follow-up:** Studio Ops owns the scorer/doctor routing repair through its normal control plane. This project records the evidence and proceeds with the explicitly authorized cost-neutral engineering release; SPARKED remains separately gated.
+## 2026-08-11 — Session 149 production — live verification follows the canonical PNG asset
+
+**Decision:** Make `scripts/live-site-check.mjs` assert the canonical `og-image.png` reference and `image/png` response while retaining the source SVG check in the service-worker cache contract.
+
+**Why:** Production correctly served the S145 PNG social card from `index.html`, but the live checker still expected the old SVG HTML reference and therefore failed after every other live court passed. The SVG remains the authored source and a cached fallback; the PNG is the public Open Graph/Twitter asset. The verifier must follow the current public contract rather than force a regression to an obsolete reference.
+
+**Evidence:** Focused verifier/public-contract court passes 30/30; both `https://callofdoodie.wtf/` and immutable `https://6a3ec909.call-of-doodie.pages.dev/` pass the corrected live court 7/7.

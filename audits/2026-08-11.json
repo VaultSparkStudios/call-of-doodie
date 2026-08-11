@@ -4,7 +4,7 @@
   "session": 149,
   "project": "Call-Of-Doodie",
   "intent": "run the complete autonomous arc, commit and push directly to main, and fully deploy the cost-neutral engineering release",
-  "outcome": "implementation-staging-and-release-candidate-achieved-production-promotion-in-progress",
+  "outcome": "achieved-and-production-verified",
   "shipped": [
     "session-memory post-run contract carried from DeathScreen to the next menu decision",
     "one reason-coded Commander's Orders precedence across onboarding, intent, Journey, and Run Intelligence",
@@ -23,6 +23,9 @@
     "cost gate allows the cost-neutral release and Cloudflare deploy capability is ready",
     "isolated staging measures 16ms mobile and 40ms desktop interaction timing",
     "hosted visual court passes 1020/1020 with six hash-bound captures and subjective bounded-image review"
+    ,"source 5bae6c1 deployed through green workflow 31544887734 to immutable production revision 6a3ec909"
+    ,"custom-domain and immutable live shell/typed-health courts pass 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard and launch surfaces pass"
+    ,"stale SVG social-card verifier corrected to the canonical PNG contract and focused verifier court passes 30/30"
   ],
   "deferred": [
     "SPARKED lifecycle promotion remains gated and is not implied",
@@ -32,7 +35,7 @@
   ],
   "sil": {
     "score": 997,
-    "velocity": 5,
+    "velocity": 13,
     "debt": "decreasing"
   },
   "headline": "Closed the post-run command loop and eliminated the first-interaction stall at its measured audio-initialization cause",
@@ -57,7 +60,6 @@
     }
   ],
   "followUps": [
-    "record immutable production deployment and live custom-domain verification",
     "require an App extraction before adding more App-level wiring",
     "use production evidence before changing directive precedence or expanding cosmetic scope"
   ],

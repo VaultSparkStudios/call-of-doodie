@@ -1280,3 +1280,12 @@ Intent outcome: achieved for the shipped S148 implementation and recovery record
 - Final validation: 188/188 test files and 1,121/1,121 assertions pass; ESLint, deployable build, schema/architecture/protocol/assets/runtime/security/npm-audit/supply-chain/cost/Hot Context gates pass.
 
 Intent outcome: implementation, staging, release readiness, and saturation achieved; direct-main push and production verification proceed under explicit founder authority. SPARKED remains NO-GO.
+
+### Production follow-through
+
+- Closeout commit `5bae6c1` pushed directly to `main`; brief-format and Cloudflare workflow `31544887734` passed lint, full CI tests, build, and deployment without bypasses.
+- Cloudflare lists production deployment `6a3ec909-a211-4328-9c65-84a6324470ad` for source `5bae6c1`; immutable origin is `https://6a3ec909.call-of-doodie.pages.dev/`.
+- Custom-domain/immutable live shell and typed health pass 7/7, cutover aliases 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation and launch surfaces pass.
+- The first live shell run exposed a stale verifier expectation for `og-image.svg`; the actual canonical social card has been PNG since S145. Corrected the verifier to assert `og-image.png` plus `image/png`, added a source regression contract, and proved the focused court 30/30.
+
+Intent outcome: achieved through verified production deployment. SPARKED remains explicitly unpromoted.

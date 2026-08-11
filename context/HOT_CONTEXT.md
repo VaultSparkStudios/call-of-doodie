@@ -4,7 +4,7 @@
 
 ## Current Session
 
-- Session 149 (2026-08-11) completed the full `/arc` implementation and staging court from recovered synchronized main; production promotion remains a separate authorized release step until the release gate, push, deployment, and live verification finish.
+- Session 149 (2026-08-11) completed the full `/arc` from recovered synchronized main through implementation, staging, canonical closeout, direct-main push, production deployment, and live verification.
 - Loop truth — DeathScreen's bounded `nextRunContract` now survives Return to Menu in session memory, wins the appropriate directive precedence, can be dismissed, and is consumed on deploy without fabricating a fresh-boot instruction.
 - Command truth — input proof, first-three-run onboarding, carried post-run intent, Journey, and Run Intelligence resolve through one pure reason-coded Commander's Orders schema/component with a single primary action; unrelated status alerts remain separate.
 - Mobile truth — native mode/difficulty pickers are replaced by labelled 44px radiogroups with `aria-checked`, roving keyboard behavior, visible/polite selection feedback, immediate local acknowledgement, and a deferred App-wide state commit.
@@ -13,6 +13,7 @@
 - Validation truth — final full Vitest passes 1,121/1,121 across 188 files after deterministic Hot Context regeneration; focused S149 courts, ESLint, deployable build, architecture/schema/protocol/asset/security/supply-chain gates, 1,020/1,020 staging visual checks, and the six-capture CANON-053 receipt pass.
 - Staging truth — the final implementation is deployed at `https://session-149-staging.call-of-doodie.pages.dev/` (immutable `https://b93bb53a.call-of-doodie.pages.dev/`). Subjective image-capable review completed through bounded JPEG crops at 390px and 1440px in both themes with zero blocking defects.
 - Protocol truth — the executable-work cache now excludes explicit non-executable and modern blocked-status items, and the session floor stops on a reverified exhausted list even below the velocity target; an explicit token budget still wins. Direct regression courts cover both root fixes.
+- Production truth — source `5bae6c1` deployed through green GitHub workflow `31544887734` to immutable Cloudflare revision `https://6a3ec909.call-of-doodie.pages.dev/`. Custom-domain and immutable shell/typed-health checks pass 7/7, cutover passes 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation passes, and launch surfaces pass. The live verifier's stale SVG social-card expectation was corrected to the canonical PNG contract and pinned by a focused 30/30 court.
 - Scope truth — the proposed extra Modern death atlas was rejected as redundant because current Modern deaths already use enemy/Zombies atlases; the optional 32-cell theme-prop expansion remains production-feedback gated. SPARKED is not implied.
 
 ## Open Work
@@ -47,13 +48,6 @@
 
 ## Recent Decisions
 
-## 2026-08-11 — Session 149 — One evidence-ranked order owns menu intent
-
-Decision: Resolve input proof, first-three-run onboarding, a bounded carried post-run contract, Journey, and Run Intelligence through one deterministic Commander's Orders precedence. Keep the carried contract in session memory only, sanitize its fields, expose its reason/evidence, and clear it on dismissal or deploy.
-
-Rationale: Multiple directive shapes diluted the death-to-redeploy feedback loop. One pure local resolver preserves a single player action without hosted inference, persistence of free text, or hidden automatic mode changes.
-
-
 ## 2026-08-11 — Session 149 — First-interaction audio initialization is idle work
 
 Decision: Preconstruct `AudioContext` during an idle slice and keep a gesture-time construction fallback for browsers that forbid pre-gesture creation. On narrow screens, pause/hide the decorative full-viewport canvas/blend layers, acknowledge deploy configuration locally, and commit App-wide mode state after the presentation boundary.
@@ -81,9 +75,17 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 
 **Follow-up:** Studio Ops owns the scorer/doctor routing repair through its normal control plane. This project records the evidence and proceeds with the explicitly authorized cost-neutral engineering release; SPARKED remains separately gated.
 
+## 2026-08-11 — Session 149 production — live verification follows the canonical PNG asset
+
+**Decision:** Make `scripts/live-site-check.mjs` assert the canonical `og-image.png` reference and `image/png` response while retaining the source SVG check in the service-worker cache contract.
+
+**Why:** Production correctly served the S145 PNG social card from `index.html`, but the live checker still expected the old SVG HTML reference and therefore failed after every other live court passed. The SVG remains the authored source and a cached fallback; the PNG is the public Open Graph/Twitter asset. The verifier must follow the current public contract rather than force a regression to an obsolete reference.
+
+**Evidence:** Focused verifier/public-contract court passes 30/30; both `https://callofdoodie.wtf/` and immutable `https://6a3ec909.call-of-doodie.pages.dev/` pass the corrected live court 7/7.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 173,794 bytes · SHA-256 `d8eabdb13e7b…`
+- `context/CURRENT_STATE.md` · 174,233 bytes · SHA-256 `e6e8e8a7754a…`
 - `context/TASK_BOARD.md` · 116,343 bytes · SHA-256 `aa559df8835a…`
-- `context/DECISIONS.md` · 110,786 bytes · SHA-256 `8be137a3199e…`
+- `context/DECISIONS.md` · 111,692 bytes · SHA-256 `63c68a78e84f…`
 - `docs/AUDIT_2026-08-11.json` · 13,052 bytes · SHA-256 `a5a532d11663…`

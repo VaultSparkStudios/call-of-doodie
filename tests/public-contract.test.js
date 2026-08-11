@@ -29,4 +29,12 @@ describe("public human and agent contract", () => {
     expect(contact).toContain("founder@vaultsparkstudios.com");
     expect(contact).toContain("If the game address is unavailable");
   });
+
+  it("keeps the live verifier aligned with the canonical PNG social card", () => {
+    const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
+    const liveCheck = fs.readFileSync(path.join(root, "scripts", "live-site-check.mjs"), "utf8");
+    expect(index).toContain("og-image.png");
+    expect(liveCheck).toContain("og-image.png");
+    expect(liveCheck).toContain("image/png");
+  });
 });

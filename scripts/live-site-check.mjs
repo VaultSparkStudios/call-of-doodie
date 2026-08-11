@@ -37,7 +37,7 @@ async function main() {
   assert(html.text.includes('rel="canonical" href="https://callofdoodie.wtf/"'), "Canonical URL missing");
   assert(html.text.includes("manifest.json"), "Manifest link missing from live HTML");
   assert(html.text.includes("favicon.svg"), "Favicon reference missing from live HTML");
-  assert(html.text.includes("og-image.svg"), "OG image reference missing from live HTML");
+  assert(html.text.includes("og-image.png"), "Canonical PNG social-card reference missing from live HTML");
   assert(html.text.includes('id="root"'), "App root node missing from live HTML");
   const hsts = html.headers.get("strict-transport-security") || "";
   assert(/^max-age=(?:31536000|[3-9]\d{7,});\s*includeSubDomains$/i.test(hsts), `HSTS policy missing or weak: ${hsts || "<missing>"}`);
@@ -75,10 +75,10 @@ async function main() {
   assert(sw.text.includes("fetch"), "Service worker fetch handler missing");
   console.log("PASS service worker file checks");
 
-  const ogImage = await fetchText(`${normalizedSiteUrl}og-image.svg`);
-  assert(ogImage.status === 200, `og-image.svg expected 200, got ${ogImage.status}`);
-  assert(ogImage.contentType.includes("image/svg+xml"), `OG image content-type mismatch: ${ogImage.contentType}`);
-  console.log("PASS OG image checks");
+  const ogImage = await fetchText(`${normalizedSiteUrl}og-image.png`);
+  assert(ogImage.status === 200, `og-image.png expected 200, got ${ogImage.status}`);
+  assert(ogImage.contentType.includes("image/png"), `OG image content-type mismatch: ${ogImage.contentType}`);
+  console.log("PASS canonical PNG social-card checks");
 
   console.log("Live site check complete: 7/7 assertions passed.");
 }
