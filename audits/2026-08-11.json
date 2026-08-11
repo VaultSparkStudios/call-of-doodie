@@ -26,6 +26,7 @@
     ,"source 5bae6c1 deployed through green workflow 31544887734 to immutable production revision 6a3ec909"
     ,"custom-domain and immutable live shell/typed-health courts pass 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard and launch surfaces pass"
     ,"stale SVG social-card verifier corrected to the canonical PNG contract and focused verifier court passes 30/30"
+    ,"verifier follow-up 18d4af2 passes final exact-main CI at 188 files and 1122 assertions and deploys to immutable revision 44e6603d"
   ],
   "deferred": [
     "SPARKED lifecycle promotion remains gated and is not implied",

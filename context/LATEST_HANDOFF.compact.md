@@ -1,45 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 5c0030918583 -->
-<!-- generated-at: 2026-08-11T23:24:16.344Z -->
+<!-- source-hash: f197e0d69d30 -->
+<!-- generated-at: 2026-08-11T23:35:20.636Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 149 HANDOFF SUMMARY
+# Handoff Summary — Session 149
 
 Session
-- Number: 149 (includes recovered S148 checkpoint)
-- Intent: Full autonomous arc from clean main through production deploy and live custom-domain verification.
+- 149 closed. Full autonomous arc from recovered clean main; founder-authorized direct main commit/push and engineering production deploy. SPARKED remains evidence-gated (NO-GO).
 
-What Shipped
-- Bounded post-run contract survives Return to Menu; resolves via single reason-coded Commander's Orders surface (with Aim Check, onboarding, Journey, Run Intelligence).
-- Mobile mode/difficulty controls: 44px radiogroups, roving keyboard, polite acknowledgement, post-paint commit.
-- Fixed 1,408ms first-interaction regression at root cause (synchronous AudioContext construction): idle prewarm + gesture fallback. Staging now 16ms mobile / 40ms desktop.
-- Porcelain Day theme now renders light/readable; new controls use theme tokens.
-- Two protocol defects root-fixed: blocked/non-executable Genius items no longer counted runnable; reverified exhausted list can stop below velocity floor.
+Shipped This Session
+- Post-run contract survives Return to Menu; resolves via one reason-coded Commander's Orders surface.
+- Mobile mode/difficulty controls now 44px radiogroups with roving keyboard nav and polite acknowledgement.
+- Fixed 1.4s first-interaction regression at audio-init cause: idle prewarm + gesture fallback; staging 16ms mobile / 40ms desktop vs 1,408ms baseline.
+- Porcelain Day theme readable; new controls use theme tokens.
+- Two protocol root-fixes: blocked/non-executable Genius items no longer count runnable; reverified exhausted list can stop below velocity floor.
 
 Evidence
-- Suite: 188 files / 1,121 tests pass (single worker). Lint, build, schema, architecture (4,990/5,000), protocol, asset, runtime, security, npm audit, supply-chain, cost, Hot Context all green.
-- Visual matrix 1,020/1,020; hash-bound captures; zero subjective blockers.
-- Production source 5bae6c1 live at immutable 6a3ec909 via green workflow 31544887734. Custom domain, health, cutover, replay, backend, leaderboard, launch-surface courts pass.
-- og-image verifier corrected to check PNG (canonical since S145); live 7/7 on both hosts.
+- Full suite 188 files / 1,121 tests pass (1-thread); all gates green (lint, build, schema, architecture 4,990/5,000, security, audit, cost, Hot Context).
+- Visual matrix 1,020/1,020; hash-bound captures in docs/visual-qa/LATEST.json; zero blockers.
+- Production source 5bae6c1 live; follow-up 18d4af2 (og-image.png/MIME check) live at 44e6603d, CI 188/1,122.
 
-Current Intent
-- Arc complete and deployed. No repo-owned executable arc item remains.
-- Next changes to Commander's Orders precedence, balance, fallback retirement, or cosmetic scope require real production funnel/participant evidence first.
+Current Intent (Next Session)
+- Diagnose/resolve mobile mode-selector INP regression using real browser evidence.
+- Secondary: merge fragmented onboarding widgets into one adaptive Commander's Orders surface.
+- Scope cap: 12 primary audit items; specialty lens = game-loop health, progression, engagement, retention, SOUL fidelity.
 
-Now Bucket (top 3)
-- Gather real production funnel/participant evidence before touching Orders precedence or balance.
-- Diagnose mobile mode-selector INP with real browser evidence if regression recurs.
-- Continue adaptive onboarding consolidation only with evidence backing.
+Now-Bucket (Top 3)
+- Real-browser INP diagnosis of mobile mode selector (leading hypothesis: native picker overhead, not device-confirmed).
+- Adaptive Commander's Orders surface consolidation.
+- Re-run full corpus when host saturation permits; keep haptics court canonical.
 
-Blockers (top 3)
-- No production funnel/participant data yet; gates all evidence-based changes.
-- IGNIS project-targeted rescore reached scorer but failed without project diagnostic (not a runtime/RC failure).
-- Studio Doctor: 123/177 passing, two external control-plane reds (external to this repo).
+Blockers (Top 3)
+- Mobile INP root cause remains leading hypothesis only; needs real Android device trace before any fix.
+- No repo-owned executable arc item remains; further Commander's Orders precedence/balance/fallback/cosmetic changes require real production funnel/participant evidence.
+- IGNIS project-targeted rescore failed (missing project diagnostic); Studio Doctor 123/177 with two external control-plane reds — both external, not runtime failures.
 
-Human-Blocked
-- SPARKED lifecycle promotion: NO-GO, evidence-gated (persistent across S144-149). Direct-deploy authorization covers engineering production only.
-- Subjective browser-bridge approval unclaimed from S148 recovery (host secure-store init failed).
+Human-Blocked / Data-Gated
+- SPARKED lifecycle promotion: NO-GO pending external gates (carried multiple sessions; direct-deploy auth covers engineering production only).
+- Production funnel/Lighthouse evidence gates HomeV1 retirement and any Orders precedence/balance change (open since S145).
+- Subjective browser-bridge visual approval unclaimed on some recovery items (host secure-store init failure, from S148).
 
-Next Session
-- Start fresh arc only after real production funnel/participant evidence exists; otherwise no repo-owned executable work remains.
+Next-session pointer: Start by capturing a real mobile-device INP trace of the mode selector before touching any code.

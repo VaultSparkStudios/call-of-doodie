@@ -12,7 +12,7 @@
 - Verification truth — exact-tree full suite passes 1,121/1,121 across 188 files; lint, deployable build, schema, architecture, protocol, asset, runtime, security, npm audit, supply-chain, cost, and Hot Context checks pass.
 - Lifecycle truth — isolated staging is green and production engineering promotion is explicitly authorized. SPARKED remains NO-GO; no launch or participant outcome is claimed.
 
-Overall status: S149 engineering release is deployed and verified at immutable revision `6a3ec909`; SPARKED remains NO-GO.
+Overall status: S149 engineering release and verifier follow-up are deployed and verified at immutable revisions `6a3ec909` and `44e6603d`; final exact-main CI passes 1,122/1,122; SPARKED remains NO-GO.
 Last reviewed: 2026-08-11
 
 ## 2026-08-11 — Session 148 recovery — Shipped code verified, missing closeout restored

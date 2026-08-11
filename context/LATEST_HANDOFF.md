@@ -24,7 +24,7 @@ Session Intent: Run the full autonomous arc from a clean, recovered main: canoni
 ## Where We Left Off
 
 - Production source `5bae6c1` is live at immutable revision `https://6a3ec909.call-of-doodie.pages.dev/` through green workflow `31544887734`; custom domain, typed health, cutover, replay, backend, leaderboard, and launch-surface courts pass.
-- The only post-deploy defect was a stale operator assertion for `og-image.svg`; the canonical site has intentionally used `og-image.png` since S145. The verifier now checks the PNG and its MIME type, with a source regression contract and live 7/7 proof on both hosts.
+- The only post-deploy defect was a stale operator assertion for `og-image.svg`; the canonical site has intentionally used `og-image.png` since S145. Follow-up `18d4af2` now checks the PNG and its MIME type, passes final CI at 188 files / 1,122 tests, and is live at immutable `https://44e6603d.call-of-doodie.pages.dev/`.
 - No repo-owned executable arc item remains. Use real production funnel/participant evidence before changing Commander's Orders precedence, balance, fallback retirement, or cosmetic scope. SPARKED remains NO-GO.
 
 ## Startup Signal
