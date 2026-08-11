@@ -49,7 +49,7 @@ import {
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes, getArchetypeProgress } from "./utils/buildArchetypes.js";
 import { createWhisperLedger, tickTacticalWhisper } from "./systems/tacticalWhisper.js";
-import { vibrate, setHapticsEnabled } from "./utils/haptics.js";
+import { rumbleGamepad, vibrate, setHapticsEnabled } from "./utils/haptics.js";
 import { resolveTouchStick } from "./utils/touchHandedness.js";
 import { getLevelXpNeeded, getNextPerkLevel, shouldAwardPerkChoice, getWaveSurvivalBonus } from "./utils/levelFlow.js";
 import { buildSessionSubmission } from "./utils/runSubmission.js";
@@ -144,25 +144,6 @@ import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFi
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
 
-// ── Controller helpers ────────────────────────────────────────────────────────
-let _rumbleEnabled = true; // gated by settings.rumble
-
-// Fires haptic feedback on the first connected gamepad if the Vibration Actuator
-// API is available (Chrome 68+). Silently no-ops on unsupported browsers/devices.
-function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
-  if (!_rumbleEnabled) return;
-  try {
-    const gp = getPrimaryGamepad();
-    if (gp?.vibrationActuator) {
-      gp.vibrationActuator.playEffect("dual-rumble", {
-        startDelay: 0,
-        duration: durationMs,
-        weakMagnitude,
-        strongMagnitude,
-      });
-    }
-  } catch (_) { /* not supported */ }
-}
 // ── Performance caps ─────────────────────────────────────────────────────────
 const MAX_DYING_ANIM  = 20;  // hard cap on death animation objects
 
@@ -397,7 +378,7 @@ export default function CallOfDoodie() {
   const dominantArchetype = getDominantArchetype(activePerks);
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
-  useEffect(() => { _rumbleEnabled = gameSettings.rumble !== false; setHapticsEnabled(gameSettings.rumble !== false); }, [gameSettings.rumble]);
+  useEffect(() => { setHapticsEnabled(gameSettings.rumble !== false); }, [gameSettings.rumble]);
   const hudFlagsMemo = useMemo(() => hudFlags(gameSettings.hudDensity || "standard"), [gameSettings.hudDensity]);
 
   // ── Gamepad connect/disconnect sounds ─────────────────────────────────────

@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-10/11 — Session 148 | Total: 979/1000 | Velocity: 8 | Debt: ↓
+
+SIL 979/1000: Shipped the founder-directed leaderboard, Sewer Zombies, player-choice, readability, and weapon-travel pass; honestly scoped multiplayer and multi-floor work; then recovered a skipped closeout. Recovery caught and root-fixed a real 5,004/5,000 App-shell regression by unifying touch/gamepad haptics. Focused tests, lint, asset, schema/architecture, and build gates pass; the full corpus remains inconclusive after host saturation.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 97 | ↓ | Recovery restored App to 4,985/5,000 and all deterministic local gates pass, but the broad corpus did not complete under host load. |
+| Alignment | 100 | → | Zombies gained authored identity and the large architectural asks were scoped without violating readable chaos, guest-first play, or proof-over-posture. |
+| Momentum | 100 | ↑ | Eight material implementation/design outcomes shipped across gameplay, visuals, trust, choice, and readability. |
+| Engagement | 99 | → | Zombies composition/identity, cosmetics, discoverability, and weapon feel deepen replay value; no participant outcome is fabricated. |
+| Process Qual | 92 | ↓ | The implementation skipped closeout and rendered-pixel evidence, and crossed the App budget; recovery repaired the ledger and root cause but cannot erase those misses. |
+| Coherence | 100 | → | No sibling tree was edited; the external Studio Doctor red is routed through Ark with provenance. |
+| Security | 100 | → | Query isolation and explicit rejection handling strengthen trust without a new secret, dependency, or public-data expansion. |
+| Ecosystem | 98 | ↓ | Human/runtime/asset/trust surfaces agree; recovery closed the temporary closeout and objective visual-receipt drift, while subjective browser-bridge review remains unavailable. |
+| Capital | 100 | → | All work is local/deterministic and reuses current Cloudflare/Supabase/browser infrastructure with no variable per-user cost. |
+| Automation | 93 | ↓ | Focused changed-surface coverage passes 80 assertions and the hosted pixel court passes 1,020/1,020, but no authoritative full-corpus green exists yet. |
+
+Rolling averages: 3-session 982.3 · 5-session 988.6 · sparkline `█████`.
+
+Top win: the recovery did more than backfill prose—it found a real architecture regression and converted duplicated haptics state into one tested authority.
+Top gap: the full test corpus remains unproven under the current saturated host, and subjective browser-bridge approval remains unavailable; neither is represented as green.
+Intent outcome: Achieved for the implementation and recovery checkpoint; SPARKED remains NO-GO.
+
+**Brainstorm**
+1. Run the complete corpus in a lower-contention window and preserve the focused haptics/zombie/leaderboard courts as fast failure localization.
+2. Prototype async daily-ghost racing before considering real-time co-op; reuse the existing seeded/ghost proof spine.
+3. If multi-floor play is still desired after player evidence, start with one Zombies watchtower whose upper level excludes enemy spawning.
+
+**Committed to TASK_BOARD:** [SIL:1] rerun the full corpus under lower contention; [SIL:1] require a new CANON-053 visual receipt before promoting any S149 UI work.
+
 ## 2026-08-10 — Session 147 | Total: 992/1000 | Velocity: 6 | Debt: ↓
 
 SIL 992/1000: Confirmed Session 146 closed out cleanly (F7 write-back-currency clean), generated a fresh premise-verified 6-item audit, and shipped all six — a real CDP trace that ruled out a JS cause for the mobile INP regression instead of another guess, a tactical-whisper critical-health tier, community-stats endpoint hardening, insightGraph AI-payload wiring, a scoped theme-prop atlas, and an onboarding-frame unification. Tests: 184/184 files (1,108, +10) in isolation. Lint/build/public-contract/schema gates: green.

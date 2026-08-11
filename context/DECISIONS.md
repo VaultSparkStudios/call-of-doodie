@@ -1054,3 +1054,27 @@ Rationale: Historical completeness is bounded by what was actually recorded. Exp
 Decision: Normalize CRLF and CR source text to LF before Hot Context parsing, byte counts, and hashes. Enforce byte-identical regeneration after an LF-to-CRLF rewrite in the regression court.
 
 Rationale: Content identity must survive Windows and Linux checkouts. Raw working-tree line endings are transport representation, not project truth, and cannot be allowed to make exact-main CI stale.
+
+## 2026-08-10/11 — Session 148 — Leaderboard rejection and quarantine remain evidence-separated
+
+Decision: Scope every leaderboard read/rank path to `game_id = cod`; loosen the level-velocity review heuristic to `wave*4+10`; reverse the named reviewed false positive through a migration plus append-only trust receipt. Persist 4xx-rejected runs locally while keeping the remote board as the displayed global authority and explicitly reporting `submission: rejected`.
+
+Rationale: A plausibility heuristic is a review trigger, not infallible proof. Local preservation protects player effort, while separate local/global receipts prevent a rejected run from laundering itself into a public acceptance claim.
+
+## 2026-08-10/11 — Session 148 — Sewer Zombies owns a visual and composition identity
+
+Decision: Give Zombies a dedicated proprietary atlas and tier-weighted variant mix, falling back to base/procedural rendering only when its asset is unavailable. Preserve the existing seeded, guest-first, cost-neutral run/trust spine.
+
+Rationale: Green-tinting the ordinary roster did not fulfill the authored horde fantasy. A bounded atlas and deterministic weighted composition add identity without forking infrastructure or sacrificing replayability.
+
+## 2026-08-10/11 — Session 148 — Multiplayer and multi-floor terrain are staged architecture initiatives
+
+Decision: Recommend async ghost racing before server-authoritative co-op, and a single watchtower v0 before generalized floor-aware AI/collision/rendering. Do not claim either design record as shipped gameplay.
+
+Rationale: The current loop is client-only and every entity is flat `x,y`. Concurrent simulation and vertical collision/pathing are separate multi-session systems whose integrity and playability cannot be established as a bolt-on beside a broad polish pass.
+
+## 2026-08-11 — Session 148 recovery — One haptics gate owns touch and gamepad feedback
+
+Decision: Move desktop gamepad rumble beside touch vibration in `utils/haptics.js` and let `setHapticsEnabled` gate both paths.
+
+Rationale: Recovery found the S148 tree four lines over the App-shell architecture budget. Consolidation restores headroom by removing duplicate state and prevents one player setting from enabling contradictory feedback paths.

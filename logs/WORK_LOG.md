@@ -1,5 +1,14 @@
 # Work Log
 
+## 2026-08-11 (Session 148 recovery — skipped closeout, architecture budget, and staging proof)
+
+- Proved commit `4522f7f` had shipped while every canonical write-back surface still stopped at Session 147, then recovered the missing ledger before starting fresh work.
+- Revalidated the changed surface at 71/71 plus 9/9 shared-haptics tests, strict lint, 25 assets, schema/architecture/storage/task/runtime gates, and production build; the full serialized corpus remains honestly inconclusive after a bounded 15-minute timeout under severe shared-host contention.
+- Root-fixed the discovered 5,004/5,000 App-shell regression by consolidating desktop rumble and touch vibration in `src/utils/haptics.js`; App now measures 4,985/5,000.
+- Deployed isolated staging to `https://session-148-staging.call-of-doodie.pages.dev/`; the hosted 20-route × 2-theme × 3-width court passed 1,020/1,020 and `docs/visual-qa/LATEST.json` hash-binds six captures.
+- Independent viewport recaptures and pixel sampling confirmed gray areas shown by the host image viewer were viewer masks, not staging pixels. Subjective browser-bridge approval remains unclaimed because Windows secure-store initialization failed.
+- Routed the sibling Studio Doctor coherence mismatch through Ark without editing the Studio Ops repository.
+
 ## 2026-07-25 (Session 130 — source-neutral combat, input integrity, and evidence truth)
 
 - Ran the complete continuous `/goal` arc from synchronized `main`: startup gates, live-premise audit, complete implementation, second-order innovation, isolated staging, and canonical closeout.
@@ -1247,3 +1256,15 @@ Intent outcome: achieved for the scoped goal — verified Session 145's claims i
 - Full validation: 184/184 test files, 1,108/1,108 tests pass (`vitest run --no-file-parallelism`; +10 over Session 146). Strict lint clean. Production build clean. Runtime boundary 494,760B (gate 560,000B). Public contract 28/28 PASS. Schema lint clean. Visual asset manifest 24 assets ok.
 
 Intent outcome: achieved — all 6 fresh audit items shipped with real verification (a genuine CDP trace, not another grep guess; 16 emoji cross-checked against live pools before art generation) and two items honestly scoped down (L1 rung) rather than overclaimed.
+
+## 2026-08-10/11 — Session 148 — Leaderboard repair, Sewer Zombies identity, and recovered closeout
+
+- Shipped COD-only leaderboard query/rank scoping, a reviewed false-positive unquarantine migration/receipt, a less brittle level-velocity heuristic, and local preservation for 4xx-rejected submissions without global-success claims.
+- Shipped a proprietary five-cell Sewer Zombies atlas with an explicit grid/byte contract, tier-weighted Shambler/Rotter/Sprinter/Bloater composition, zombie-aware death rendering, and a visible Zombies mode selector.
+- Shipped Doodie Pass skin equipping through the canonical player-skin path, a grid-based mode menu, larger dense menu/leaderboard text, and bounded projectile travel-profile adjustments for three weapons.
+- Scoped concurrent multiplayer and multi-floor terrain into evidence-based staged design records; neither was falsely represented as shipped.
+- Recovery found the implementation commit on synchronized `main` with every canonical write-back surface still at S147. It also caught `App.jsx` at 5,004/5,000; gamepad rumble and touch vibration were consolidated into one tested haptics module/settings gate, restoring 4,985/5,000.
+- Verification: focused S148 courts 71/71, haptics 9/9, strict lint, 25-asset manifest, schema/architecture/storage/task/runtime chain, and production build pass. The full serialized corpus timed out after 15 minutes under 97-process host saturation and remains explicitly inconclusive.
+- Studio Doctor reported one blocking tests-total/tests-passing coherence mismatch in the sibling control plane; it was classified external and routed through Ark rather than fixed by cross-repo editing.
+
+Intent outcome: achieved for the shipped S148 implementation and recovery record; the broad corpus and rendered-pixel receipt remain explicit follow-ups, and SPARKED remains NO-GO.

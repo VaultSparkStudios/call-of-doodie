@@ -1,16 +1,28 @@
 /**
  * haptics.js — mobile touch vibration feedback.
  *
- * Desktop already gets gamepad rumble (App.jsx rumbleGamepad via the
- * Gamepad Vibration Actuator API). Touch play had no tactile channel at all —
- * this closes that gap with navigator.vibrate, gated by capability + the
- * existing "rumble" settings flag so one toggle controls both haptic paths.
+ * Gamepad rumble and touch vibration share one settings gate so input paths
+ * cannot drift into contradictory enabled states.
  */
+
+import { getPrimaryGamepad } from "./gamepad.js";
 
 let _hapticsEnabled = true; // gated by settings.rumble, mirrors App.jsx's _rumbleEnabled
 
 export function setHapticsEnabled(enabled) {
   _hapticsEnabled = enabled !== false;
+}
+
+export function rumbleGamepad(weakMagnitude, strongMagnitude, durationMs) {
+  if (!_hapticsEnabled) return;
+  try {
+    getPrimaryGamepad()?.vibrationActuator?.playEffect("dual-rumble", {
+      startDelay: 0,
+      duration: durationMs,
+      weakMagnitude,
+      strongMagnitude,
+    });
+  } catch (_) { /* not supported */ }
 }
 
 export function hasVibrationSupport() {

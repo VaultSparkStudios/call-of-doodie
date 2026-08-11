@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { vibrate, hasVibrationSupport, setHapticsEnabled } from "./haptics.js";
+import { rumbleGamepad, vibrate, hasVibrationSupport, setHapticsEnabled } from "./haptics.js";
 
 describe("haptics", () => {
   let vibrateSpy;
@@ -53,5 +53,20 @@ describe("haptics", () => {
   it("never throws if navigator.vibrate itself throws", () => {
     navigator.vibrate = () => { throw new Error("blocked"); };
     expect(() => vibrate("hit")).not.toThrow();
+  });
+
+  it("uses the shared settings gate for gamepad rumble", () => {
+    const playEffect = vi.fn();
+    navigator.getGamepads = () => [{ connected: true, vibrationActuator: { playEffect } }];
+    rumbleGamepad(0.25, 0.5, 80);
+    expect(playEffect).toHaveBeenCalledWith("dual-rumble", {
+      startDelay: 0,
+      duration: 80,
+      weakMagnitude: 0.25,
+      strongMagnitude: 0.5,
+    });
+    setHapticsEnabled(false);
+    rumbleGamepad(1, 1, 100);
+    expect(playEffect).toHaveBeenCalledTimes(1);
   });
 });

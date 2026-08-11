@@ -1,6 +1,20 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-11 — Session 148 recovery — Shipped code verified, missing closeout restored
+
+- Recovery truth — commit `4522f7f` was already on synchronized `main`, but CURRENT_STATE, TASK_BOARD, HANDOFF, WORK_LOG, DECISIONS, SIL, CDR, and TRUTH_AUDIT still stopped at S147. S148 was a write-back-skipped session, not an uncommitted implementation.
+- Leaderboard truth — reads and rank calculations are scoped to Call-Of-Doodie; one reviewed false-positive quarantine is reversed through a migration/receipt; 4xx-rejected runs remain local and are never represented as globally accepted.
+- Zombies truth — the mode owns a five-cell proprietary atlas and tier-weighted variant composition. Ordinary base enemies remain the fallback only when asset loading fails.
+- Scope truth — multiplayer and multi-floor terrain are feasibility records with staged recommendations; neither is represented as shipped gameplay.
+- Verification truth — focused changed-surface tests, strict lint, visual-asset validation, schema/architecture/storage/task/runtime gates, and production build pass. The full suite timed out under host saturation and is recorded as inconclusive.
+- Architecture truth — the recovered S148 tree exceeded the unchanged App-shell limit by four lines. Consolidating gamepad and touch haptics restores 4,985/5,000 and removes duplicate settings state.
+- Visual truth — isolated staging passed 1,020/1,020 objective checks across twenty routes, both themes, and 390/768/1440 widths. Six representative captures are hash-bound; source-pixel sampling disproved the host viewer's gray-mask artifact. Subjective browser-bridge approval remains unclaimed.
+- Lifecycle truth — unchanged. Engineering FORGE remains deployed/public-unlaunched; SPARKED remains NO-GO.
+
+Overall status: S148 implementation recovered, root-fixed, staged, and objectively pixel-verified; broad corpus pending a lower-contention run; SPARKED NO-GO.
+Last reviewed: 2026-08-11
+
 ## 2026-08-10 — Session 147 — Mobile INP evidence advances from unknown to JS-cause-ruled-out
 
 - Performance truth — the mobile mode-selector INP regression (1408ms, S146) is no longer "root cause unknown." A real CDP `Tracing` capture (`scripts/trace-mobile-inp.mjs`, `docs/performance/MOBILE_INP_TRACE_S147.json`) found no single main-thread task exceeding 13.5ms across the full interaction window, ruling out a JS compute-bound cause. The leading hypothesis (native `<select>` picker overhead outside the renderer's task queue) is recorded but explicitly NOT device-confirmed — this session's headless Chromium trace cannot fully reproduce a real Android device's native picker path.

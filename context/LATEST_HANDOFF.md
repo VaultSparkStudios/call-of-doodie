@@ -1,3 +1,35 @@
+# Latest Handoff — Session 148 (recovered during S149)
+
+Session Intent: Deliver the founder-directed leaderboard fix, Sewer Zombies visual/behavior overhaul, weapon balance adjustments, character/cosmetic selection, mode/menu cleanup, readability pass, and honest feasibility treatment for multiplayer and multi-floor terrain.
+
+## Impact Summary (Session 148)
+
+**Headline.** The prior session shipped meaningful gameplay and trust improvements but skipped closeout. Recovery proved the code, caught and fixed a four-line architecture-budget regression, and restored all missing truth surfaces without inventing a full-suite green.
+
+**Impact.**
+- Leaderboard: COD-only query scoping, locally preserved rejected runs, reviewed false-positive unquarantine, and a less brittle level-velocity heuristic.
+- Sewer Zombies: dedicated proprietary atlas, tier-weighted horde composition, death-state sprite continuity, and visible mode selection.
+- Player control/readability: equip-ready Doodie Pass skins, grid-based mode selection, larger dense text, and bounded projectile-range retuning.
+- Design restraint: multiplayer and multi-floor terrain became staged feasibility plans, not unsafe same-session architectural overreach.
+- Recovery root-fix: desktop gamepad rumble moved beside touch vibration in `utils/haptics.js`; one settings gate now owns both and `App.jsx` is 4,985/5,000 lines.
+
+## Evidence
+
+- Focused S148 courts: 7 files / 71 tests pass; haptics court: 9/9.
+- Strict lint, 25-asset manifest, full schema/architecture/storage/task/runtime chain, and production build pass.
+- Isolated staging `https://session-148-staging.call-of-doodie.pages.dev/` passed 1,020/1,020 route/theme/viewport checks; six representative captures are hash-bound in `docs/visual-qa/LATEST.json`.
+- Broad serialized corpus: inconclusive after a bounded 15-minute timeout under severe shared-host contention; not claimed green.
+- Studio Doctor: one blocking control-plane coherence mismatch is external to this repo and routed through Ark; this repo was not used to edit the sibling tree.
+
+## Where We Left Off
+
+- Begin a fresh Session 149 arc only after committing/pushing this recovery checkpoint.
+- Re-run the full corpus when host saturation permits and keep the new haptics court in the canonical suite.
+- Stage and visually inspect S149 UI changes before production; S148 recovery now has an objective CANON-053 receipt, while subjective browser-bridge approval remains unclaimed because the host secure-store initialization failed.
+- SPARKED remains NO-GO; direct deployment authorization covers engineering production only.
+
+---
+
 # Latest Handoff — Session 147
 
 Session Intent: Run the continuous arc (`/goal /arc`) — confirm Session 146 closed out cleanly (F7 write-back-currency), generate a fresh premise-verified audit, implement every item, and closeout.

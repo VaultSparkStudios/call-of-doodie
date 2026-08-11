@@ -62,6 +62,14 @@ Public-safe launch roadmap summary.
 
 **Runway exception:** all three live-premise audit items and the verification-discovered regression are shipped. The source-derived Genius List reports 0 executable / 5 deferred / exhausted=true; remaining work needs credentials, a product decision, real production/participant evidence, a community destination, physical hardware/media, or SPARKED approval.
 
+- [x] [SIL:3] **DONE S148** Leaderboard truth repair — Call-Of-Doodie query/rank paths scope `game_id=cod`, one reviewed elite run is unquarantined with a migration/receipt, and rejected server submissions remain local without global-success claims.
+- [x] [SIL:3] **DONE S148** Sewer Zombies identity pass — dedicated proprietary enemy atlas, tier-weighted horde composition, zombie-aware death rendering, manifest contract, and visible menu selection.
+- [x] [SIL:2] **DONE S148** Player choice/readability pass — Doodie Pass skins equip through the canonical player-skin path; the mode grid and leaderboard/menu typography are more legible.
+- [x] [SIL:2] **DONE S148** Weapon travel-profile balance — bounded range/speed adjustments for Spicy Squirt Gun, Confetti Cannon, and Shock Zapper preserve damage and the cost-neutral guest-first contract.
+- [x] [SIL:2] **DONE S148 recovery** App-shell architecture root-fix — desktop rumble and touch vibration share one tested haptics module/settings gate; App is 4,985/5,000.
+- [x] [AUDIT WIN S148] Multiplayer and multi-floor terrain were scoped into staged design records rather than misrepresented as safe same-session features.
+- [ ] [SIL:1] Re-run the full Vitest corpus under lower host contention; S148 recovery focused courts are green but the 15-minute broad run is explicitly inconclusive.
+
 - [x] [SIL] **DONE S147** Tactical whisper critical-health tier — a fourth priority branch whispers "CRITICAL HEALTH — DISENGAGE" at ≤35% HP, the near-death decision point the S145 system left silent.
 - [x] [SIL] **DONE S147** Mobile INP root-cause trace — `scripts/trace-mobile-inp.mjs` captured a real CDP trace of the production mode-selector click; no task exceeded 13.5ms, ruling out a JS compute cause. Leading hypothesis (native `<select>` picker overhead) recorded in `context/DECISIONS.md`, not yet real-device confirmed.
 - [x] [SIL] **DONE S147** insightGraph agent-projection wiring — the previously-computed-and-discarded `agentProjection` payload now flows into the existing debrief analytics event.
