@@ -24,6 +24,7 @@ import {
 } from "../utils/studioEventOps.js";
 import { buildPrestigeRunway, PRESTIGE_REQUIRED_LEVEL } from "../utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../utils/replayCoverage.js";
+import { COSMETICS, isCosmeticOwned, equipCosmetic } from "../utils/cosmeticTrack.js";
 
 const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 const CARD = { background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", padding: "20px 16px", color: "#fff", maxHeight: "none", width: "100%", position: "relative", margin: "auto 0" };
@@ -42,6 +43,10 @@ const PLAYER_SKINS = [
   { emoji: "🦊", label: "Fox",      required: 4 },
   { emoji: "🐉", label: "Dragon",   required: 5 },
 ];
+// Doodie Pass cosmetic-track skins (cosmeticTrack.js) share the same emoji-overlay
+// render pipeline as PLAYER_SKINS (meta.playerSkin) — this is what actually equips
+// them; equipCosmetic() only updates the Doodie Pass's own "last equipped" record.
+const COSMETIC_SKINS = COSMETICS.filter(c => c.type === "skin");
 
 function fmtTime(s) {
   if (!s) return "0:00";
@@ -791,6 +796,34 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
                     color: unlocked ? "#FFF" : "#444", fontFamily: "'Courier New',monospace" }}>
                   <div style={{ fontSize: 20, marginBottom: 3 }}>{s.emoji || "🪖"}</div>
                   <div style={{ fontSize: 9, color: unlocked ? "#AAA" : "#444" }}>{unlocked ? s.label : `P${s.required}`}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Doodie Pass skins (cosmeticTrack.js — equips via the same meta.playerSkin overlay) */}
+        <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#EEE", marginBottom: 8 }}>🎽 DOODIE PASS SKINS</div>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {COSMETIC_SKINS.map(c => {
+              const owned = isCosmeticOwned(c.id);
+              const selected = (meta.playerSkin || "") === c.emoji;
+              return (
+                <button key={c.id} disabled={!owned}
+                  onClick={() => {
+                    if (!owned) return;
+                    equipCosmetic(c.id);
+                    const u = { ...meta, playerSkin: c.emoji };
+                    saveMetaProgress(u); setMeta(u);
+                  }}
+                  title={owned ? c.desc : `Locked — ${c.milestone ? `reach ${c.milestone.n} ${c.milestone.kind.replace("_", " ")}` : "unlock via Doodie Pass"}`}
+                  style={{ padding: "8px 14px", borderRadius: 8, cursor: owned ? "pointer" : "not-allowed",
+                    background: selected ? "rgba(255,215,0,0.15)" : owned ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)",
+                    border: selected ? "2px solid #FFD700" : owned ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(255,255,255,0.06)",
+                    color: owned ? "#FFF" : "#444", fontFamily: "'Courier New',monospace" }}>
+                  <div style={{ fontSize: 20, marginBottom: 3 }}>{c.emoji}</div>
+                  <div style={{ fontSize: 9, color: owned ? "#AAA" : "#444" }}>{owned ? c.name : "🔒"}</div>
                 </button>
               );
             })}

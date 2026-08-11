@@ -21,10 +21,33 @@ export function getZombieWaveEnemyCount(baseCount, wave = 1) {
   return Math.min(96, Math.max(1, Math.ceil((Number(baseCount) || 1) * plan.enemyCountMult)));
 }
 
+// Tier-weighted variant mix: early outbreak tiers are mostly slow Shamblers/Rotters;
+// higher tiers escalate toward faster Sprinters and tankier Bloaters so the horde's
+// *composition* changes as waves climb, not just its size (S148 — was flat round-robin).
+const TIER_VARIANT_WEIGHTS = [
+  [55, 30, 10, 5],   // tier 1
+  [40, 30, 20, 10],  // tier 2
+  [25, 25, 30, 20],  // tier 3
+  [15, 20, 35, 30],  // tier 4
+  [10, 15, 40, 35],  // tier 5 (apex outbreak)
+];
+
+function pickWeightedVariant(tier, wave, ordinal) {
+  const weights = TIER_VARIANT_WEIGHTS[Math.min(4, Math.max(0, tier - 1))];
+  const total = weights.reduce((a, b) => a + b, 0);
+  const roll = Math.abs((Math.floor(Number(wave) || 1) * 31 + Math.floor(Number(ordinal) || 0) * 17)) % total;
+  let acc = 0;
+  for (let i = 0; i < weights.length; i++) {
+    acc += weights[i];
+    if (roll < acc) return i;
+  }
+  return weights.length - 1;
+}
+
 export function mutateEnemyForZombieMode(enemy, { wave = 1, ordinal = 0 } = {}) {
   if (!enemy || enemy.isZombie) return enemy;
   const plan = getZombieOutbreakPlan(wave);
-  const variant = Math.abs((Math.floor(Number(wave) || 1) * 31 + Math.floor(Number(ordinal) || 0) * 17)) % 4;
+  const variant = pickWeightedVariant(plan.tier, wave, ordinal);
   const variantName = ["Shambler", "Rotter", "Sprinter", "Bloater"][variant];
   const variantHealth = variant === 3 ? 1.35 : variant === 2 ? 0.82 : 1;
   const variantSpeed = variant === 2 ? 1.42 : variant === 3 ? 0.72 : 1;

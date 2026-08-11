@@ -198,6 +198,7 @@ export async function loadLeaderboard(offset = 0, limit = 50) {
       const { data, error } = await supabase
         .from("leaderboard")
         .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,supporter,feedback_difficulty,total_shots,total_hits,total_crits,boss_kills")
+        .eq("game_id", "cod")
         .order("score", { ascending: false })
         .range(offset, offset + limit - 1);
       if (error) throw error;
@@ -359,18 +360,34 @@ export async function saveToLeaderboard(entry) {
         { ...entry, runToken: rawRunToken },
       ));
       if (!response.ok) {
-        const failure = {
-          board: await loadLeaderboard(),
-          online: false,
-          submission: "rejected",
-          rejectionReason: response.data?.error || "Score submission rejected.",
-          rejectionReasons: Array.isArray(response.data?.reasons) ? response.data.reasons : [],
-          traceEvidence: response.data?.traceEvidence || entry?.traceEvidence || null,
-        };
+        const rejectionReason = response.data?.error || "Score submission rejected.";
+        const rejectionReasons = Array.isArray(response.data?.reasons) ? response.data.reasons : [];
+        const traceEvidence = response.data?.traceEvidence || entry?.traceEvidence || null;
         if (response.status >= 400 && response.status < 500) {
-          return failure;
+          // Server-side check rejected this run (e.g. plausibility gate, expired token,
+          // callsign-ownership conflict). Persist locally so the run isn't lost outright,
+          // but keep the online board for display since this run never made it to Supabase.
+          let localBoard = [];
+          try {
+            const board = JSON.parse(localStorage.getItem(LB_KEY) || "[]");
+            board.push({ ...safeEntry, ts: Date.now(), game_id: "cod" });
+            localBoard = board
+              .map(normalizeLeaderboardEntry)
+              .sort((a, b) => compareLeaderboardEntries(a, b, null))
+              .slice(0, 100);
+            persistProgression(LB_KEY, JSON.stringify(localBoard));
+          } catch {}
+          return {
+            board: await loadLeaderboard(),
+            localBoard,
+            online: false,
+            submission: "rejected",
+            rejectionReason,
+            rejectionReasons,
+            traceEvidence,
+          };
         }
-        throw new Error(failure.rejectionReason);
+        throw new Error(rejectionReason);
       }
       const board = await loadLeaderboard();
       return {
@@ -616,6 +633,7 @@ export async function loadLeaderboardToday(mode = null, difficulty = null) {
     let q = supabase
       .from("leaderboard")
       .select("name,score,kills,wave,lastWords,rank,bestStreak,totalDamage,level,time,achievements,difficulty,ts,starterLoadout,customSettings,inputDevice,seed,accountLevel,mode,prestige,supporter,created_at")
+      .eq("game_id", "cod")
       .gte("created_at", midnight.toISOString())
       .order("score", { ascending: false })
       .limit(50);
@@ -640,6 +658,7 @@ export async function getDailyChampion() {
     const { data, error } = await supabase
       .from("leaderboard")
       .select("name,score,wave,kills,supporter,prestige,accountLevel,seed,mode,created_at")
+      .eq("game_id", "cod")
       .eq("mode", "daily_challenge")
       .eq("seed", Number(todaySeed))
       .gte("created_at", midnight.toISOString())
@@ -661,6 +680,7 @@ export async function searchLeaderboard(nameQuery) {
     const { data, error } = await supabase
       .from("leaderboard")
       .select("name,score,kills,wave,difficulty,mode,ts,accountLevel,inputDevice,starterLoadout,seed,level,time,lastWords,bestStreak,totalDamage,achievements,rank,customSettings,prestige,supporter")
+      .eq("game_id", "cod")
       .ilike("name", `%${nameQuery.trim()}%`)
       .order("score", { ascending: false })
       .limit(20);
@@ -681,6 +701,7 @@ export async function getPlayerGlobalRank(score, mode = null, time = null) {
       const timeRows = await supabase
         .from("leaderboard")
         .select("time,score", { count: "exact" })
+        .eq("game_id", "cod")
         .eq("mode", "speedrun")
         .limit(2000);
       if (timeRows.error) throw timeRows.error;
@@ -694,6 +715,7 @@ export async function getPlayerGlobalRank(score, mode = null, time = null) {
     let query = supabase
       .from("leaderboard")
       .select("*", { count: "exact", head: true })
+      .eq("game_id", "cod")
       .gt("score", score);
     if (mode) query = query.eq("mode", mode);
     const { count, error } = await query;

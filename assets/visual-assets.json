@@ -352,6 +352,23 @@
       "notes": "S147 — the two highest-visibility ambient decorative props per arena theme (office/bunker/factory/ruins/desert/forest/space/arctic); the remaining ~10 props per theme keep the original emoji fillText fallback (also the Retro-pack path) given the low collision-free, low-alpha visual return of full 96-prop coverage."
     },
     {
+      "id": "zombie-atlas",
+      "kind": "runtime-object-atlas",
+      "sourceType": "repo-authored-svg",
+      "license": "Proprietary",
+      "sourcePath": "assets/source/weapon-pack/zombie-atlas-source.svg",
+      "runtimePath": "public/visual-assets/zombie-atlas-v1.webp",
+      "runtimeFormat": "webp",
+      "dimensions": {
+        "width": 1024,
+        "height": 512
+      },
+      "grid": { "columns": 4, "rows": 2, "slots": 8 },
+      "maxBytes": 220000,
+      "status": "production-ready",
+      "notes": "S148 — Sewer Zombies mode-exclusive enemy atlas (Shambler/Rotter/Sprinter/Bloater + Apex boss cell), fixing the bug where zombie mode reused the base enemy roster re-tinted green. Overrides the base enemy-atlas sprite whenever an enemy is zombie-mutated; falls back to the base atlas/procedural orb + 🧟 emoji on load failure."
+    },
+    {
       "id": "enemy-atlas-bosses",
       "kind": "runtime-character-atlas",
       "sourceType": "ai-generated-proprietary",

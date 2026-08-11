@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512">
+  <defs>
+    <radialGradient id="zFlesh" cx="38%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#8FBF5A"/><stop offset="55%" stop-color="#4E7A34"/><stop offset="100%" stop-color="#243D18"/>
+    </radialGradient>
+    <radialGradient id="zFleshRot" cx="38%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#9C8B3E"/><stop offset="55%" stop-color="#5E5320"/><stop offset="100%" stop-color="#2B2510"/>
+    </radialGradient>
+    <radialGradient id="zEyeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/><stop offset="35%" stop-color="#B6FF3C"/><stop offset="100%" stop-color="#B6FF3C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="zEyeGlowRed" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/><stop offset="35%" stop-color="#FF3C3C"/><stop offset="100%" stop-color="#FF3C3C" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="zOoze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C4FF5C" stop-opacity="0.9"/><stop offset="100%" stop-color="#4E7A18" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="zRags" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3C4238"/><stop offset="100%" stop-color="#16180F"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(128 128)">
+  <ellipse cx="0" cy="92" rx="60" ry="15" fill="#000" opacity="0.35"/>
+  <path d="M-42 92 Q-58 20 -34 -30 Q-14 -66 18 -60 Q46 -54 44 -14 Q50 30 30 92 Z" fill="url(#zFlesh)" stroke="#16250D" stroke-width="5"/>
+  <path d="M-30 40 L-52 74 M28 44 L50 80" stroke="url(#zFlesh)" stroke-width="18" stroke-linecap="round"/>
+  <path d="M-38 10 Q-4 30 26 6" fill="none" stroke="#16250D" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+  <path d="M-40 -18 L18 -30 L36 2 L-30 18 Z" fill="url(#zRags)" opacity="0.85"/>
+  <circle cx="-4" cy="-58" r="30" fill="url(#zFlesh)" stroke="#16250D" stroke-width="5"/>
+  <circle cx="-14" cy="-60" r="7" fill="url(#zEyeGlow)"/>
+  <circle cx="10" cy="-56" r="6" fill="url(#zEyeGlow)"/>
+  <path d="M-16 -42 Q-4 -34 10 -44" fill="#16250D" stroke="#16250D" stroke-width="3"/>
+  <path d="M-14 -54 q4 20 -3 32" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M10 -50 q4 16 -3 25.6" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+  <g transform="translate(384 128)">
+  <ellipse cx="0" cy="94" rx="66" ry="16" fill="#000" opacity="0.35"/>
+  <ellipse cx="0" cy="6" rx="56" ry="66" fill="url(#zFleshRot)" stroke="#211D0B" stroke-width="5"/>
+  <path d="M-30 -24 Q0 -6 30 -24 M-34 4 Q0 22 34 4 M-30 32 Q0 48 30 32" fill="none" stroke="#161307" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <path d="M-40 40 L-58 78 M38 42 L58 80" stroke="url(#zFleshRot)" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="0" cy="-56" r="28" fill="url(#zFleshRot)" stroke="#211D0B" stroke-width="5"/>
+  <circle cx="-11" cy="-58" r="7" fill="url(#zEyeGlow)"/>
+  <circle cx="12" cy="-54" r="6" fill="url(#zEyeGlow)"/>
+  <path d="M-14 -40 Q0 -30 14 -42" fill="#161307"/>
+  <g fill="#14171C" opacity="0.85">
+    <circle cx="34" cy="-70" r="4"/><circle cx="44" cy="-60" r="3.5"/><circle cx="38" cy="-48" r="3"/>
+  </g>
+  <path d="M-20 -20 q4 26 -3 41.6" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M22 0 q4 22 -3 35.2" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+  <g transform="translate(640 128)">
+  <ellipse cx="0" cy="88" rx="58" ry="14" fill="#000" opacity="0.35"/>
+  <path d="M-26 86 Q-40 10 -8 -44 Q10 -72 32 -50 Q48 -30 30 12 Q40 50 20 86 Z" fill="url(#zFlesh)" stroke="#16250D" stroke-width="5" transform="skewX(-6)"/>
+  <path d="M-6 -10 L-52 30 L-60 62 M22 -6 L60 24 L66 58" stroke="url(#zFlesh)" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="8" cy="-62" r="24" fill="url(#zFlesh)" stroke="#16250D" stroke-width="5"/>
+  <circle cx="-2" cy="-66" r="7" fill="url(#zEyeGlowRed)"/>
+  <circle cx="18" cy="-62" r="6" fill="url(#zEyeGlowRed)"/>
+  <path d="M-6 -48 L4 -38 L14 -50" fill="#16250D"/>
+  <path d="M-2 -40 l-4 8 M4 -38 l0 9 M10 -40 l4 8" stroke="#E8F3EE" stroke-width="3" stroke-linecap="round"/>
+  <path d="M-2 -58 q4 14 -3 22.400000000000002" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+  <g transform="translate(896 128)">
+  <ellipse cx="0" cy="98" rx="78" ry="18" fill="#000" opacity="0.35"/>
+  <circle cx="0" cy="0" r="0" />
+  <ellipse cx="0" cy="10" rx="70" ry="80" fill="url(#zFlesh)" stroke="#16250D" stroke-width="6"/>
+  <circle cx="0" cy="10" r="80" fill="url(#zEyeGlow)" opacity="0.1"/>
+  <circle cx="-30" cy="-10" r="12" fill="#C4FF5C" opacity="0.55"/>
+  <circle cx="22" cy="20" r="9" fill="#C4FF5C" opacity="0.55"/>
+  <circle cx="-6" cy="34" r="7" fill="#C4FF5C" opacity="0.5"/>
+  <path d="M-46 50 L-64 88 M42 52 L60 92" stroke="url(#zFlesh)" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="0" cy="-64" r="26" fill="url(#zFlesh)" stroke="#16250D" stroke-width="5"/>
+  <circle cx="-11" cy="-66" r="7" fill="url(#zEyeGlow)"/>
+  <circle cx="12" cy="-62" r="6" fill="url(#zEyeGlow)"/>
+  <path d="M-15 -48 Q0 -40 15 -50" fill="#16250D"/>
+  <path d="M-30 -2 q4 22 -3 35.2" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M22 26 q4 18 -3 28.8" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M-6 40 q4 20 -3 32" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+  <g transform="translate(128 384)">
+  <ellipse cx="0" cy="96" rx="74" ry="18" fill="#000" opacity="0.35"/>
+  <path d="M-50 96 Q-68 0 -30 -60 Q0 -100 30 -60 Q66 0 48 96 Z" fill="url(#zFlesh)" stroke="#0F1C08" stroke-width="6"/>
+  <path d="M-8 -108 L-2 -128 L6 -108 M-24 -100 L-22 -122 L-10 -102 M22 -100 L24 -122 L10 -102" fill="#E8E4D8" stroke="#8A8570" stroke-width="3"/>
+  <path d="M-48 30 L-78 60 L-88 100 M44 32 L76 58 L88 98" stroke="url(#zFlesh)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M-88 100 l-14 10 M-88 100 l4 16 M88 98 l14 10 M88 98 l-4 16" stroke="#E8E4D8" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="0" cy="-76" r="34" fill="url(#zFlesh)" stroke="#0F1C08" stroke-width="6"/>
+  <circle cx="-14" cy="-80" r="9" fill="url(#zEyeGlowRed)"/>
+  <circle cx="16" cy="-74" r="8" fill="url(#zEyeGlowRed)"/>
+  <path d="M-20 -56 Q0 -42 22 -58" fill="#0F1C08"/>
+  <path d="M-16 -50 l-5 10 M-4 -46 l0 11 M8 -48 l5 10" stroke="#E8F3EE" stroke-width="4" stroke-linecap="round"/>
+  <path d="M-18 -70 q4 26 -3 41.6" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M18 -64 q4 22 -3 35.2" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M-40 10 q4 30 -3 48" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M36 14 q4 26 -3 41.6" stroke="url(#zOoze)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

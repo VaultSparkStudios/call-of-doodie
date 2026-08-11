@@ -11,7 +11,11 @@ export function assessLeaderboardRow(row = {}) {
   if (kills > 0 && score / kills > 5000) flags.push({ code: "score-per-kill", severity: "high", detail: `score/kill=${(score / kills).toFixed(0)} > 5000` });
   if (kills > 5 && totalDamage < kills * 20) flags.push({ code: "damage-too-low", severity: "high", detail: `damage/kill=${(totalDamage / kills).toFixed(0)} < 20` });
   if (kills > 5 && totalDamage > kills * 20000) flags.push({ code: "damage-too-high", severity: "high", detail: `damage/kill=${(totalDamage / kills).toFixed(0)} > 20000` });
-  if (wave > 0 && level > wave * 3 + 5) flags.push({ code: "level-velocity", severity: "high", detail: `level ${level} vs wave ${wave} — levelled implausibly fast` });
+  // Loosened 2026-08-10 (Session 148): wave*3+5 false-positived on a legitimate elite
+  // run (score 1,063,334, "level-velocity") — account level isn't tightly coupled to
+  // in-run wave count for efficient/meta-progressed players. See
+  // supabase/migrations/2026-08-10_leaderboard_unquarantine_review.sql.
+  if (wave > 0 && level > wave * 4 + 10) flags.push({ code: "level-velocity", severity: "high", detail: `level ${level} vs wave ${wave} — levelled implausibly fast` });
 
   return {
     flags,

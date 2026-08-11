@@ -8,7 +8,8 @@ import path from "node:path";
 import sharp from "sharp";
 import { ENEMY_ATLAS_CONTRACT } from "../src/utils/enemyAtlasContract.js";
 import { WEAPON_ATLAS_CONTRACT, WORLD_OBJECT_ATLAS_CONTRACT, WORLD_OBJECT_CELLS, THEME_PROP_ATLAS_CONTRACT, THEME_PROP_CELLS } from "../src/utils/objectAtlasContract.js";
-import { buildWeaponAtlasSvg, buildWorldObjectAtlasSvg, buildThemePropAtlasSvg } from "./lib/object-atlas-svg.mjs";
+import { ZOMBIE_ATLAS_CONTRACT } from "../src/utils/zombieAtlasContract.js";
+import { buildWeaponAtlasSvg, buildWorldObjectAtlasSvg, buildThemePropAtlasSvg, buildZombieAtlasSvg } from "./lib/object-atlas-svg.mjs";
 import { removeChromaKey } from "./lib/chroma-key.mjs";
 
 const ROOT = process.cwd();
@@ -196,6 +197,8 @@ const objectAtlases = [
   { contract: WEAPON_ATLAS_CONTRACT, svg: buildWeaponAtlasSvg({ width: WEAPON_ATLAS_CONTRACT.width, height: WEAPON_ATLAS_CONTRACT.height, columns: WEAPON_ATLAS_CONTRACT.columns }) },
   { contract: WORLD_OBJECT_ATLAS_CONTRACT, svg: buildWorldObjectAtlasSvg({ width: WORLD_OBJECT_ATLAS_CONTRACT.width, height: WORLD_OBJECT_ATLAS_CONTRACT.height, columns: WORLD_OBJECT_ATLAS_CONTRACT.columns, cells: WORLD_OBJECT_CELLS }) },
   { contract: THEME_PROP_ATLAS_CONTRACT, svg: buildThemePropAtlasSvg({ width: THEME_PROP_ATLAS_CONTRACT.width, height: THEME_PROP_ATLAS_CONTRACT.height, columns: THEME_PROP_ATLAS_CONTRACT.columns, cells: THEME_PROP_CELLS }) },
+  // S148 — Sewer Zombies mode-exclusive atlas, fixes zombies reusing the base enemy roster re-tinted.
+  { contract: ZOMBIE_ATLAS_CONTRACT, svg: buildZombieAtlasSvg({ width: ZOMBIE_ATLAS_CONTRACT.width, height: ZOMBIE_ATLAS_CONTRACT.height, columns: ZOMBIE_ATLAS_CONTRACT.columns }) },
 ];
 for (const { contract, svg } of objectAtlases) {
   const svgPath = path.join(ROOT, contract.sourcePath);

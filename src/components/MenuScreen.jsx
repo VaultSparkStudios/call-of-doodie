@@ -52,7 +52,7 @@ function canUseRealtimePresence() {
   return false;
 }
 
-export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode, cursedRunMode, onSetCursedRunMode, bossRushMode, onSetBossRushMode, speedrunMode, onSetSpeedrunMode, gauntletMode, onSetGauntletMode, assistAvailable, onApplyAssist }) {
+export default function MenuScreen({ username, difficulty, setDifficulty, isMobile, leaderboard, lbLoading, lbHasMore, onLoadMore, onStart, onRefreshLeaderboard, onChangeUsername, starterLoadout, setStarterLoadout, gameSettings, onSaveSettings, gamepadConnected, controllerType, scoreAttackMode, onSetScoreAttackMode, dailyChallengeMode, onSetDailyChallengeMode, cursedRunMode, onSetCursedRunMode, bossRushMode, onSetBossRushMode, speedrunMode, onSetSpeedrunMode, gauntletMode, onSetGauntletMode, zombiesMode, onSetZombiesMode, assistAvailable, onApplyAssist }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showAchievements, setShowAchievements] = useState(false);
   const [showCareer, setShowCareer] = useState(false);
@@ -1345,10 +1345,10 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
         {/* Game Mode */}
         <div style={{ ...card, margin: "0 0 10px", textAlign: "center" }}>
           <div style={{ fontSize: 12, color: "#DDD", marginBottom: 8, letterSpacing: 2, fontWeight: 700 }}>GAME MODE</div>
-          <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(140px,1fr))", gap: 6 }}>
             <button
               onClick={() => onSetScoreAttackMode?.(false)}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: !scoreAttackMode ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.03)",
                 border: !scoreAttackMode ? "2px solid #FFD700" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FFD700" }}>🎯 NORMAL</div>
@@ -1356,7 +1356,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
             <button
               onClick={() => onSetScoreAttackMode?.(true)}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: scoreAttackMode ? "rgba(255,100,0,0.15)" : "rgba(255,255,255,0.03)",
                 border: scoreAttackMode ? "2px solid #FF6600" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FF6600" }}>⏱ SCORE ATTACK</div>
@@ -1364,7 +1364,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
             <button
               onClick={() => onSetDailyChallengeMode?.(true)}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: dailyChallengeMode ? "rgba(0,229,255,0.12)" : "rgba(255,255,255,0.03)",
                 border: dailyChallengeMode ? "2px solid #00E5FF" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#00E5FF" }}>📅 DAILY</div>
@@ -1373,7 +1373,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
             <button
               onClick={() => onSetCursedRunMode?.(!cursedRunMode)}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: cursedRunMode ? "rgba(180,0,255,0.15)" : "rgba(255,255,255,0.03)",
                 border: cursedRunMode ? "2px solid #CC00FF" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#CC00FF" }}>☠ CURSED</div>
@@ -1381,7 +1381,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
             <button
               onClick={() => onSetBossRushMode?.(!bossRushMode)}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: bossRushMode ? "rgba(255,50,50,0.15)" : "rgba(255,255,255,0.03)",
                 border: bossRushMode ? "2px solid #FF3333" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FF3333" }}>☠ BOSS RUSH</div>
@@ -1389,7 +1389,7 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
             <button
               onClick={() => onSetSpeedrunMode?.(!speedrunMode)}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: speedrunMode ? "rgba(0,255,128,0.12)" : "rgba(255,255,255,0.03)",
                 border: speedrunMode ? "2px solid #00FF80" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#00FF80" }}>⏱ SPEEDRUN</div>
@@ -1397,11 +1397,19 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
             </button>
             <button
               onClick={() => { const _g = getWeeklyGauntlet(); onSetGauntletMode?.(!gauntletMode); }}
-              style={{ flex: 1, padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace",
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
                 background: gauntletMode ? "rgba(255,200,0,0.12)" : "rgba(255,255,255,0.03)",
                 border: gauntletMode ? "2px solid #FFC800" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
               <div style={{ fontSize: 14, fontWeight: 900, color: "#FFC800" }}>🏆 GAUNTLET</div>
               <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Weekly fixed opening kit · no shop</div>
+            </button>
+            <button
+              onClick={() => onSetZombiesMode?.(!zombiesMode)}
+              style={{ padding: "9px 8px", borderRadius: 8, cursor: "pointer", fontFamily: "'Courier New',monospace", textAlign: "left",
+                background: zombiesMode ? "rgba(141,255,103,0.12)" : "rgba(255,255,255,0.03)",
+                border: zombiesMode ? "2px solid #8DFF67" : "1px solid rgba(255,255,255,0.1)", color: "#FFF" }}>
+              <div style={{ fontSize: 14, fontWeight: 900, color: "#8DFF67" }}>🧟 ZOMBIES</div>
+              <div style={{ fontSize: 9, color: "#bbb", marginTop: 2 }}>Escalating undead hordes · surge every 3rd wave</div>
             </button>
           </div>
         </div>

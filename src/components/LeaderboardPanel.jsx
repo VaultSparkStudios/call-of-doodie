@@ -19,20 +19,20 @@ const MODE_TABS = [
 function InputDeviceBadge({ device }) {
   if (!device) return null;
   if (device === "xbox") return (
-    <span title="Xbox Controller" style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(16,124,16,0.18)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900, letterSpacing: 0.5, flexShrink: 0 }}>Xbox</span>
+    <span title="Xbox Controller" style={{ fontSize: 10, padding: "1px 4px", borderRadius: 3, background: "rgba(16,124,16,0.18)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900, letterSpacing: 0.5, flexShrink: 0 }}>Xbox</span>
   );
   if (device === "ps") return (
-    <span title="PlayStation Controller" style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900, letterSpacing: 0.5, flexShrink: 0 }}>PS</span>
+    <span title="PlayStation Controller" style={{ fontSize: 10, padding: "1px 4px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900, letterSpacing: 0.5, flexShrink: 0 }}>PS</span>
   );
   if (device === "controller" || device === "generic") return (
-    <span title="Controller" style={{ fontSize: 10, flexShrink: 0 }}>🎮</span>
+    <span title="Controller" style={{ fontSize: 11, flexShrink: 0 }}>🎮</span>
   );
   if (device === "mobile") return (
-    <span title="Mobile / Touch" style={{ fontSize: 10, flexShrink: 0 }}>📱</span>
+    <span title="Mobile / Touch" style={{ fontSize: 11, flexShrink: 0 }}>📱</span>
   );
   // "mouse" or anything else
   return (
-    <span title="Mouse & Keyboard" style={{ fontSize: 10, flexShrink: 0 }}>🖱️</span>
+    <span title="Mouse & Keyboard" style={{ fontSize: 11, flexShrink: 0 }}>🖱️</span>
   );
 }
 
@@ -51,7 +51,7 @@ function SupporterBadge({ supporter }) {
     <span
       title="Supporter"
       style={{
-        fontSize: 8, padding: "1px 4px", borderRadius: 3,
+        fontSize: 10, padding: "1px 4px", borderRadius: 3,
         background: "rgba(255,215,0,0.15)",
         border: "1px solid rgba(255,215,0,0.5)",
         color: "#FFD700", fontWeight: 900, flexShrink: 0,
@@ -68,7 +68,7 @@ function AccountLevelBadge({ level }) {
     <span
       title={`Account Level ${level}`}
       style={{
-        fontSize: 8, padding: "1px 4px", borderRadius: 3,
+        fontSize: 10, padding: "1px 4px", borderRadius: 3,
         background: tier.bg, border: `1px solid ${tier.border}`,
         color: tier.color, fontWeight: 900, letterSpacing: 0.5, flexShrink: 0,
         fontFamily: "'Courier New', monospace",
@@ -163,7 +163,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         <button onClick={onClose} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
 
         <h3 style={{ color: "#FFD700", margin: "0 0 2px", fontSize: 18, letterSpacing: 2 }}>GLOBAL LEADERBOARD</h3>
-        <p style={{ color: "#BBB", fontSize: 10, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
+        <p style={{ color: "#BBB", fontSize: 11, margin: "0 0 8px" }}>Global leaderboard · showing {leaderboard.length}</p>
 
         <div style={{ marginBottom: 12 }}><CommunityStatsPanel compact /></div>
 
@@ -178,18 +178,18 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
               width: "100%", boxSizing: "border-box",
               background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)",
               borderRadius: 6, padding: "7px 36px 7px 12px",
-              color: "#FFF", fontSize: 12, fontFamily: "'Courier New', monospace",
+              color: "#FFF", fontSize: 13, fontFamily: "'Courier New', monospace",
               outline: "none",
             }}
           />
           {searchQuery && (
             <button
               onClick={() => handleSearchChange("")}
-              style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 14, lineHeight: 1 }}
+              style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "#888", cursor: "pointer", fontSize: 15, lineHeight: 1 }}
             >×</button>
           )}
           {searchLoading && (
-            <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: "#666", fontSize: 10 }}>...</span>
+            <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: "#666", fontSize: 11 }}>...</span>
           )}
         </div>
 
@@ -202,7 +202,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                 key={String(tab.key)}
                 onClick={() => { setActiveMode(tab.key); if (tab.key !== "boss_rush") setBossRushDiff(null); if (tab.key !== "gauntlet") setGauntletDiff(null); }}
                 style={{
-                  padding: "3px 10px", fontSize: 10, fontWeight: 700,
+                  padding: "3px 10px", fontSize: 11, fontWeight: 700,
                   fontFamily: "'Courier New', monospace", letterSpacing: 1,
                   cursor: "pointer", borderRadius: 4,
                   background: isActive ? `rgba(${hexToRgb(tab.color)},0.18)` : "rgba(255,255,255,0.04)",
@@ -218,7 +218,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         {/* Boss Rush difficulty sub-tabs */}
         {activeMode === "boss_rush" && (
           <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap", paddingLeft: 4 }}>
-            <span style={{ fontSize: 8, color: "#FF3333", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>BR DIFF:</span>
+            <span style={{ fontSize: 10, color: "#FF3333", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>BR DIFF:</span>
             {[{ key: null, label: "ALL" }, { key: "easy", label: "EASY" }, { key: "normal", label: "NRM" }, { key: "hard", label: "HARD" }, { key: "insane", label: "INS" }].map(st => {
               const isActive = bossRushDiff === st.key;
               return (
@@ -226,7 +226,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   key={String(st.key)}
                   onClick={() => setBossRushDiff(st.key)}
                   style={{
-                    padding: "2px 7px", fontSize: 9, fontWeight: 700,
+                    padding: "2px 7px", fontSize: 10, fontWeight: 700,
                     fontFamily: "'Courier New', monospace", letterSpacing: 0.5,
                     cursor: "pointer", borderRadius: 3,
                     background: isActive ? "rgba(255,51,51,0.2)" : "rgba(255,255,255,0.04)",
@@ -242,7 +242,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         {/* Gauntlet difficulty sub-tabs */}
         {activeMode === "gauntlet" && (
           <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap", paddingLeft: 4 }}>
-            <span style={{ fontSize: 8, color: "#FFC800", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>GT DIFF:</span>
+            <span style={{ fontSize: 10, color: "#FFC800", fontWeight: 700, letterSpacing: 1, alignSelf: "center", marginRight: 2 }}>GT DIFF:</span>
             {[{ key: null, label: "ALL" }, { key: "easy", label: "EASY" }, { key: "normal", label: "NRM" }, { key: "hard", label: "HARD" }, { key: "insane", label: "INS" }].map(st => {
               const isActive = gauntletDiff === st.key;
               return (
@@ -250,7 +250,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   key={String(st.key)}
                   onClick={() => setGauntletDiff(st.key)}
                   style={{
-                    padding: "2px 7px", fontSize: 9, fontWeight: 700,
+                    padding: "2px 7px", fontSize: 10, fontWeight: 700,
                     fontFamily: "'Courier New', monospace", letterSpacing: 0.5,
                     cursor: "pointer", borderRadius: 3,
                     background: isActive ? "rgba(255,200,0,0.2)" : "rgba(255,255,255,0.04)",
@@ -272,7 +272,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                 key={String(tab.key)}
                 onClick={() => setActiveDiff(tab.key)}
                 style={{
-                  padding: "4px 10px", fontSize: 10, fontWeight: 700,
+                  padding: "4px 10px", fontSize: 11, fontWeight: 700,
                   fontFamily: "'Courier New', monospace", letterSpacing: 1,
                   cursor: "pointer", borderRadius: 4,
                   background: isActive ? `rgba(${hexToRgb(tab.color)},0.18)` : "rgba(255,255,255,0.04)",
@@ -283,7 +283,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
               >
                 {tab.emoji} {tab.label}
                 {tab.key !== null && (
-                  <span style={{ marginLeft: 4, fontSize: 9, opacity: 0.7 }}>
+                  <span style={{ marginLeft: 4, fontSize: 10, opacity: 0.7 }}>
                     ({leaderboard.filter(e => e.difficulty === tab.key).length})
                   </span>
                 )}
@@ -293,9 +293,9 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
         </div>
 
         {(lbLoading && !isToday && searchResults === null) || (isToday && todayLoading) || (searchResults === null && searchLoading) ? (
-          <p style={{ color: "#DDD", fontSize: 13 }}>Loading...</p>
+          <p style={{ color: "#DDD", fontSize: 14 }}>Loading...</p>
         ) : sorted.length === 0 ? (
-          <p style={{ color: "#CCC", fontStyle: "italic", fontSize: 13 }}>
+          <p style={{ color: "#CCC", fontStyle: "italic", fontSize: 14 }}>
             {searchResults !== null
               ? `No players found matching "${searchQuery}".`
               : isToday
@@ -305,9 +305,9 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                   : "No entries yet. Be the first to die gloriously!"}
           </p>
         ) : (
-          <div style={{ fontSize: 11 }}>
+          <div style={{ fontSize: 12 }}>
             {/* Header */}
-            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px 28px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 9, letterSpacing: 1 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "26px 1fr 62px 46px 44px 38px 50px 28px", gap: 4, padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.15)", color: "#DDD", fontWeight: 700, fontSize: 10, letterSpacing: 1 }}>
               <span>#</span>
               <span>PLAYER</span>
               <span style={{ textAlign: "right" }}>SCORE</span>
@@ -348,7 +348,7 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                       <SupporterBadge supporter={e.supporter} />
                       {(e.prestige > 0) && (
                         <span style={{
-                          fontSize: 9, fontWeight: 900, marginRight: 4,
+                          fontSize: 10, fontWeight: 900, marginRight: 4,
                           color: e.prestige >= 5 ? "#FF44FF" : e.prestige >= 3 ? "#FFD700" : "#888",
                           letterSpacing: 0,
                         }}>
@@ -356,45 +356,45 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
                         </span>
                       )}
                       {activeMode === "daily_challenge" && i === 0 && e.seed === todaySeed && (
-                        <span title="Today's Daily Crown" style={{ fontSize: 12, flexShrink: 0 }}>👑</span>
+                        <span title="Today's Daily Crown" style={{ fontSize: 13, flexShrink: 0 }}>👑</span>
                       )}
                       <span style={{ fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.name}</span>
-                      {e.level && <span style={{ color: "#bbb", fontSize: 9, flexShrink: 0 }} title="In-run XP level">⬆{e.level}</span>}
-                      {loadoutEmoji && <span style={{ fontSize: 9, flexShrink: 0 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
-                      {e.customSettings && <span style={{ fontSize: 9, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
-                      {e.mode === "boss_rush" && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.5)", color: "#FF3333", fontWeight: 900, flexShrink: 0 }}>☠BR</span>}
-                      {e.mode === "cursed"    && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(204,0,255,0.18)", border: "1px solid rgba(204,0,255,0.5)", color: "#CC00FF", fontWeight: 900, flexShrink: 0 }}>☠CU</span>}
-                      {e.mode === "speedrun"  && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(0,255,136,0.15)", border: "1px solid rgba(0,255,136,0.5)", color: "#00FF88", fontWeight: 900, flexShrink: 0 }}>🏃SR</span>}
-                      {e.mode === "gauntlet"  && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(170,68,255,0.18)", border: "1px solid rgba(170,68,255,0.5)", color: "#AA44FF", fontWeight: 900, flexShrink: 0 }}>🏋GT</span>}
-                      {e.mode === "zombies"   && <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(141,255,103,0.14)", border: "1px solid rgba(141,255,103,0.5)", color: "#8DFF67", fontWeight: 900, flexShrink: 0 }}>🧟Z</span>}
+                      {e.level && <span style={{ color: "#bbb", fontSize: 10, flexShrink: 0 }} title="In-run XP level">⬆{e.level}</span>}
+                      {loadoutEmoji && <span style={{ fontSize: 10, flexShrink: 0 }} title={e.starterLoadout}>{loadoutEmoji}</span>}
+                      {e.customSettings && <span style={{ fontSize: 10, flexShrink: 0 }} title="Custom settings used">⚙️</span>}
+                      {e.mode === "boss_rush" && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.5)", color: "#FF3333", fontWeight: 900, flexShrink: 0 }}>☠BR</span>}
+                      {e.mode === "cursed"    && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(204,0,255,0.18)", border: "1px solid rgba(204,0,255,0.5)", color: "#CC00FF", fontWeight: 900, flexShrink: 0 }}>☠CU</span>}
+                      {e.mode === "speedrun"  && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(0,255,136,0.15)", border: "1px solid rgba(0,255,136,0.5)", color: "#00FF88", fontWeight: 900, flexShrink: 0 }}>🏃SR</span>}
+                      {e.mode === "gauntlet"  && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(170,68,255,0.18)", border: "1px solid rgba(170,68,255,0.5)", color: "#AA44FF", fontWeight: 900, flexShrink: 0 }}>🏋GT</span>}
+                      {e.mode === "zombies"   && <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(141,255,103,0.14)", border: "1px solid rgba(141,255,103,0.5)", color: "#8DFF67", fontWeight: 900, flexShrink: 0 }}>🧟Z</span>}
                       <span style={{ flexShrink: 0 }}><InputDeviceBadge device={e.inputDevice || "mouse"} /></span>
                     </div>
                     {/* Bottom row: seed + today badge + prestige label */}
                     <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}>
                       {e.seed > 0 && (
-                        <span style={{ fontSize: 8, color: "#666", fontFamily: "'Courier New', monospace", letterSpacing: 0.5 }}>seed #{e.seed}</span>
+                        <span style={{ fontSize: 10, color: "#666", fontFamily: "'Courier New', monospace", letterSpacing: 0.5 }}>seed #{e.seed}</span>
                       )}
                       {activeMode === "daily_challenge" && e.seed === todaySeed && (
-                        <span style={{ fontSize: 8, padding: "0px 4px", borderRadius: 3, background: "rgba(0,229,255,0.18)", border: "1px solid rgba(0,229,255,0.5)", color: "#00E5FF", fontWeight: 900, letterSpacing: 0.5 }}>TODAY</span>
+                        <span style={{ fontSize: 10, padding: "0px 4px", borderRadius: 3, background: "rgba(0,229,255,0.18)", border: "1px solid rgba(0,229,255,0.5)", color: "#00E5FF", fontWeight: 900, letterSpacing: 0.5 }}>TODAY</span>
                       )}
                       {e.prestige > 0 && (
-                        <span style={{ fontSize: 8, color: e.prestige >= 5 ? "#FF44FF" : e.prestige >= 3 ? "#FFD700" : "#888", fontWeight: 700, letterSpacing: 0.5 }}>Prestige {e.prestige}</span>
+                        <span style={{ fontSize: 10, color: e.prestige >= 5 ? "#FF44FF" : e.prestige >= 3 ? "#FFD700" : "#888", fontWeight: 700, letterSpacing: 0.5 }}>Prestige {e.prestige}</span>
                       )}
-                      {e.feedbackDifficulty && <span style={{ fontSize: 8, color: e.feedbackDifficulty === "too_easy" ? "#7FE6FF" : e.feedbackDifficulty === "brutal" ? "#FF8C7A" : "#00FF88", fontWeight: 900 }}>{e.feedbackDifficulty === "too_easy" ? "🥱 TOO EASY" : e.feedbackDifficulty === "brutal" ? "💀 BRUTAL" : "🎯 DIALED IN"}</span>}
+                      {e.feedbackDifficulty && <span style={{ fontSize: 10, color: e.feedbackDifficulty === "too_easy" ? "#7FE6FF" : e.feedbackDifficulty === "brutal" ? "#FF8C7A" : "#00FF88", fontWeight: 900 }}>{e.feedbackDifficulty === "too_easy" ? "🥱 TOO EASY" : e.feedbackDifficulty === "brutal" ? "💀 BRUTAL" : "🎯 DIALED IN"}</span>}
                     </div>
-                    {e.lastWords && e.lastWords !== "..." && <div style={{ marginTop: 3, color: "#9DA6AA", fontSize: 8, fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>“{e.lastWords}”</div>}
+                    {e.lastWords && e.lastWords !== "..." && <div style={{ marginTop: 3, color: "#9DA6AA", fontSize: 10, fontStyle: "italic", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>“{e.lastWords}”</div>}
                   </div>
                   <span style={{ textAlign: "right", fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>{e.score?.toLocaleString()}</span>
                   <span style={{ textAlign: "right", color: "#00FF88", fontVariantNumeric: "tabular-nums" }}>{e.kills ?? "—"}</span>
-                  <span style={{ textAlign: "right", color: "#CCC", fontSize: 10, fontVariantNumeric: "tabular-nums" }}>{e.wave ?? "—"}</span>
-                  <span style={{ textAlign: "right", color: "#BBB", fontSize: 10, fontVariantNumeric: "tabular-nums" }}>{e.time || "--"}</span>
-                  <span style={{ textAlign: "right", paddingRight: 4, fontSize: 9, color: diffTab?.color || "#888", fontWeight: 700 }}>
+                  <span style={{ textAlign: "right", color: "#CCC", fontSize: 11, fontVariantNumeric: "tabular-nums" }}>{e.wave ?? "—"}</span>
+                  <span style={{ textAlign: "right", color: "#BBB", fontSize: 11, fontVariantNumeric: "tabular-nums" }}>{e.time || "--"}</span>
+                  <span style={{ textAlign: "right", paddingRight: 4, fontSize: 10, color: diffTab?.color || "#888", fontWeight: 700 }}>
                     {diffTab ? diffTab.emoji : ""} {e.difficulty?.toUpperCase() || "?"}
                   </span>
                   <button
                     onClick={handleCopyChallenge}
                     title="Copy challenge link"
-                    style={{ padding: "3px 5px", fontSize: 10, cursor: "pointer", background: copiedRow === i ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.05)", border: copiedRow === i ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.12)", borderRadius: 4, color: copiedRow === i ? "#00FF88" : "#888", fontFamily: "'Courier New',monospace", lineHeight: 1 }}
+                    style={{ padding: "3px 5px", fontSize: 11, cursor: "pointer", background: copiedRow === i ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.05)", border: copiedRow === i ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.12)", borderRadius: 4, color: copiedRow === i ? "#00FF88" : "#888", fontFamily: "'Courier New',monospace", lineHeight: 1 }}
                   >{copiedRow === i ? "✓" : "⚔️"}</button>
                 </div>
               );
@@ -407,14 +407,14 @@ export default function LeaderboardPanel({ leaderboard, lbLoading, lbHasMore, on
           <div style={{ textAlign: "center", marginTop: 12 }}>
             <button
               onClick={onLoadMore}
-              style={{ padding: "7px 24px", fontSize: 11, fontFamily: "'Courier New', monospace", fontWeight: 700, letterSpacing: 1, cursor: "pointer", borderRadius: 4, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "#FFD700" }}
+              style={{ padding: "7px 24px", fontSize: 12, fontFamily: "'Courier New', monospace", fontWeight: 700, letterSpacing: 1, cursor: "pointer", borderRadius: 4, background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.3)", color: "#FFD700" }}
             >
               LOAD MORE ↓
             </button>
           </div>
         )}
         {lbLoading && leaderboard.length > 0 && (
-          <p style={{ textAlign: "center", color: "#bbb", fontSize: 11, marginTop: 10 }}>Loading…</p>
+          <p style={{ textAlign: "center", color: "#bbb", fontSize: 12, marginTop: 10 }}>Loading…</p>
         )}
       </div>
     </div>

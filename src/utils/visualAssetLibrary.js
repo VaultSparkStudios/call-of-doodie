@@ -1,5 +1,6 @@
 import { ENEMY_ATLAS_CONTRACT, getIntegerGridRect } from "./enemyAtlasContract.js";
 import { getWeaponAtlasRect, getWorldObjectAtlasRect, getThemePropAtlasRect } from "./objectAtlasContract.js";
+import { ZOMBIE_VARIANT_CELLS, ZOMBIE_BOSS_CELL, getZombieAtlasRect } from "./zombieAtlasContract.js";
 
 export const SIGNATURE_VISUAL_ASSETS = [
   { id: "cod-porcelain-throne", label: "Porcelain Throne", role: "objective prop", src: "/visual-assets/cod-porcelain-throne.png", accent: "#BFE7FF" },
@@ -113,6 +114,24 @@ export function getThemePropSprite(cellId, ImageCtor = globalThis.Image) {
   const rect = getThemePropAtlasRect(cellId);
   if (!rect) return null;
   const image = getCachedImage(THEME_PROP_ATLAS_SRC, ImageCtor);
+  if (!image) return null;
+  return { image, ...rect };
+}
+
+// ── S148 zombie mode atlas ──────────────────────────────────────────────────
+const ZOMBIE_ATLAS_SRC = "/visual-assets/zombie-atlas-v1.webp";
+
+export function preloadZombieAtlas(ImageCtor = globalThis.Image) {
+  getCachedImage(ZOMBIE_ATLAS_SRC, ImageCtor);
+}
+
+/** Returns the atlas sprite for a mutated zombie enemy, or null (caller falls back). */
+export function getRuntimeZombieSprite(zombieVariant, isBossEnemy, ImageCtor = globalThis.Image) {
+  const cellId = isBossEnemy ? ZOMBIE_BOSS_CELL : (ZOMBIE_VARIANT_CELLS.includes(zombieVariant) ? zombieVariant : null);
+  if (!cellId) return null;
+  const rect = getZombieAtlasRect(cellId);
+  if (!rect) return null;
+  const image = getCachedImage(ZOMBIE_ATLAS_SRC, ImageCtor);
   if (!image) return null;
   return { image, ...rect };
 }

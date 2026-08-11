@@ -1562,7 +1562,7 @@ export default function DeathScreen({
               </div>
             )}
             <div style={{ color: "#999", fontSize: 10, marginTop: 8, lineHeight: 1.5 }}>
-              Local fallback skipped — this was a server-side validity check, not a network outage. Common causes: impossibly high kill/damage ratio for the reported wave, or a corrupted run token. Your career stats are still updated locally.
+              This was a server-side validity check, not a network outage — your score did not reach the global leaderboard. Common causes: impossibly high kill/damage ratio for the reported wave, a corrupted run token, or a callsign claimed under a different device/browser. Your run has been saved to your local leaderboard and your career stats are still updated.
             </div>
             {submitProofPresenter?.receipt && (
               <div style={{ color: submitProofPresenter.receipt.color, fontSize: 10, marginTop: 8, lineHeight: 1.4, fontFamily: "'Courier New',monospace" }}>

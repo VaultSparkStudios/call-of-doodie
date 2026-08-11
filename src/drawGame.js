@@ -1,7 +1,7 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
-import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getWeaponSprite, getWorldObjectSprite, getThemePropSprite } from "./utils/visualAssetLibrary.js";
+import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getRuntimeZombieSprite, getWeaponSprite, getWorldObjectSprite, getThemePropSprite } from "./utils/visualAssetLibrary.js";
 import { motionPhaseSeed, resolveSpriteDeath, resolveSpriteMotion } from "./systems/spriteMotion.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
@@ -591,7 +591,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     // S145 single-layer policy: when the atlas sprite is decoded it IS the
     // body — the procedural orb, hand-drawn type details, eyes, and emoji
     // glyph render only as the instant-loading / load-failure fallback.
-    const enemySprite = retroCharacters ? null : getRuntimeEnemySprite(e.typeIndex);
+    const enemySprite = retroCharacters ? null
+      : (e.isZombie && getRuntimeZombieSprite(e.zombieVariant, e.isBossEnemy)) || getRuntimeEnemySprite(e.typeIndex);
     if (retroCharacters) {
       drawRetroEnemyCharacter(ctx, e);
     } else {
@@ -1140,7 +1141,9 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   // emoji rise-out remains the fallback and the Retro-pack look.
   (gs.dyingEnemies || []).forEach(de => {
     const t = de.life / de.maxLife; // 1→0
-    const _deSprite = (!retroCharacters && de.typeIndex !== undefined) ? getRuntimeEnemySprite(de.typeIndex) : null;
+    const _deSprite = (!retroCharacters && de.typeIndex !== undefined)
+      ? ((de.isZombie && getRuntimeZombieSprite(de.zombieVariant, de.isBossEnemy)) || getRuntimeEnemySprite(de.typeIndex))
+      : null;
     ctx.save();
     if (_deSprite && !_rm) {
       const death = resolveSpriteDeath(1 - t);

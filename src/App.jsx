@@ -11,7 +11,7 @@ import {
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
-import { preloadEnemyAtlasesForTypes, preloadObjectAtlases } from "./utils/visualAssetLibrary.js";
+import { preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { THEME_PROP_EMOJI_TO_CELL } from "./utils/objectAtlasContract.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { applyRunSettings, loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
@@ -1408,6 +1408,7 @@ export default function CallOfDoodie() {
       const activeRoster = [ne.typeIndex, ...gs.enemies.slice(-12).map((enemy) => enemy.typeIndex)];
       preloadEnemyAtlasesForTypes(activeRoster);
       preloadObjectAtlases();
+      if (gs.zombiesMode) preloadZombieAtlas();
     }
     // Proximity cluster: same-type enemies spawned within 3 frames get ±60px offset to form visible clusters
     if (gs.currentWave >= 15) {
@@ -2049,7 +2050,7 @@ export default function CallOfDoodie() {
     }
 
     gs.dyingEnemies = gs.dyingEnemies || [];
-    if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, typeIndex: e.typeIndex, life: 22, maxLife: 22 });
+    if (gs.dyingEnemies.length < MAX_DYING_ANIM) gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, typeIndex: e.typeIndex, isZombie: e.isZombie, zombieVariant: e.zombieVariant, isBossEnemy: e.isBossEnemy, life: 22, maxLife: 22 });
     if (e.eliteType === "berserker") {
       statsRef.current.berserkersKilled = (statsRef.current.berserkersKilled || 0) + 1;
       setBerserkersKilled(statsRef.current.berserkersKilled);
@@ -3946,7 +3947,7 @@ export default function CallOfDoodie() {
           addText(gs, e.x, e.y, "💥 BOOM!", "#FF4400", true); gs.screenShake = 12;
           gs.dyingEnemies = gs.dyingEnemies || [];
           if (gs.dyingEnemies.length < MAX_DYING_ANIM)
-            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, typeIndex: e.typeIndex, life: 22, maxLife: 22 });
+            gs.dyingEnemies.push({ x: e.x, y: e.y, emoji: e.emoji, color: e.color, size: e.size, typeIndex: e.typeIndex, isZombie: e.isZombie, zombieVariant: e.zombieVariant, isBossEnemy: e.isBossEnemy, life: 22, maxLife: 22 });
           if (p.invincible <= 0) {
             applyObservedPlayerDamage(gs, { damage: (gs.glassjaw ? Math.round(35 * (gs.glassjawMult || 2)) : 35) * (gs._treeArmorMult || 1), frame: frameCountRef.current, kind: "contact", sourceType: e.typeIndex, sourceName: ENEMY_TYPES[e.typeIndex]?.name || "Kamikaze" }); p.invincible = 40; gs.damageFlash = 12;
             gs.damageThisWave = (gs.damageThisWave || 0) + 1;
