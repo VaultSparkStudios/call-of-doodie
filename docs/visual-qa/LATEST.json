@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-11T06:02:01.205Z",
-  "stagingUrl": "https://session-148-staging.call-of-doodie.pages.dev",
-  "workingTreeUiSha256": "613f6f986bfa4c0cbc028a05eb5dca5fa5fcdb26e1a50ca4a262a96bf8fa598b",
+  "capturedAt": "2026-08-11T11:50:43.855Z",
+  "stagingUrl": "local-dev-session-149",
+  "workingTreeUiSha256": null,
   "sourceMatrix": {
     "receipt": "output/playwright/session-148-recovery/visual-audit-receipt.json",
     "sha256": "a2eae802ea9214a92e437aa19338275c464136a867536ed1b168287508cb6f26",
@@ -19,28 +19,6 @@
     "light"
   ],
   "captures": [
-    {
-      "file": "home-dark-mobile.png",
-      "sha256": "e893f7766134f0902f3046bd3c35b3135926ba2a7983829a1c6f6a831c34f615",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Home v2 first-run command center"
-    },
-    {
-      "file": "home-light-desktop.png",
-      "sha256": "b2628178a054aac74bb4f6b18bd29960638bd2e234f77cdde49632a1543eaec2",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Home v2 first-run command center"
-    },
     {
       "file": "login-dark-desktop.png",
       "sha256": "fe8c4c4db682303f88457e06cc4ff5d432d07f1adaf12f716f429c6f723330fb",
@@ -84,6 +62,102 @@
         "height": 1000
       },
       "page": "Leaderboard surface"
+    },
+    {
+      "file": "home-dark-desktop-onboarding.png",
+      "sha256": "9bc185449084bff83429b89490b8c688e8cb8575d62041dbfa84def059c6ce91",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Home v2 onboarding Commander's Orders block",
+      "state": "onboarding"
+    },
+    {
+      "file": "home-dark-mobile-onboarding.png",
+      "sha256": "57c4db47fbec2fd473b31d844d00f79a613ee45f763e37fbcbb3fdb472a1e6f6",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Home v2 onboarding Commander's Orders block",
+      "state": "onboarding"
+    },
+    {
+      "file": "home-light-desktop-onboarding.png",
+      "sha256": "a252dae06c4b1f8945185d0c52c1c7e087287a01bc70fd2e1f84e761689a2549",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Home v2 onboarding Commander's Orders block",
+      "state": "onboarding"
+    },
+    {
+      "file": "home-light-mobile-onboarding.png",
+      "sha256": "a2285c71fa4a46798e7cb15451fc0a08f27a868839a5b9c70463831e526aa955",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Home v2 onboarding Commander's Orders block",
+      "state": "onboarding"
+    },
+    {
+      "file": "home-dark-desktop-veteran.png",
+      "sha256": "7f3e9b47977ce1a66531de7ec4963bac220de4bf65db03e477045d36c5a92178",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Home v2 veteran Commander's Orders block",
+      "state": "veteran"
+    },
+    {
+      "file": "home-dark-mobile-veteran.png",
+      "sha256": "7cbbe5c20ae8500d10866c4dd7b8764e1f4d5533f83e2d4ae2878def552aa931",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Home v2 veteran Commander's Orders block",
+      "state": "veteran"
+    },
+    {
+      "file": "home-light-desktop-veteran.png",
+      "sha256": "08e15bb498c8e1ddcedc3aeca78ef29232e9a9ab70c10330ba5b50623602eaad",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Home v2 veteran Commander's Orders block",
+      "state": "veteran"
+    },
+    {
+      "file": "home-light-mobile-veteran.png",
+      "sha256": "0e5d37cdf64579043a3bb146a9225fdd27b3a0001a854b3681220c89ef77b062",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Home v2 veteran Commander's Orders block",
+      "state": "veteran"
     }
   ],
   "inspection": {
@@ -92,11 +166,13 @@
     "findings": [
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
-      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix."
+      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
+      "S149: Commander's Orders unified block captured in onboarding and veteran states, both themes (sewer-night, porcelain-day), both viewports (390, 1440)."
     ],
     "fixesApplied": [
       "Independent viewport recapture confirmed the gray areas were image-viewer masking, not screenshot pixels; sampled source pixels remained theme-correct.",
-      "Reviewed both themes on desktop Modes and mobile Leaderboard; automated matrix remains authoritative because the signed-in viewer bridge was unavailable."
+      "Reviewed both themes on desktop Modes and mobile Leaderboard; automated matrix remains authoritative because the signed-in viewer bridge was unavailable.",
+      "S149: Replaced four separate surfaces (FIRST 3 RUNS strip, ORDERS card, Intel Ticker card, Aim Check chip) with one adaptive orders-block; visual QA confirms unified slot renders correctly in all 8 state/theme/viewport combinations."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": false,

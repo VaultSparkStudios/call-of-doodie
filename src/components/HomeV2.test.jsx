@@ -208,9 +208,10 @@ describe("HomeV2", () => {
     expect(container.textContent).not.toContain("ORDERS ·");
   });
 
-  it("renders the ORDERS card and the FIRST 3 RUNS strip in the same outer frame (S147 unification)", async () => {
+  it("renders both phases of the Commander's Orders block in the same outer frame (S149 unified block)", async () => {
     // The single-directive slot must not change size/shape/radius when it
-    // swaps between the pre-onboarding and post-onboarding phase.
+    // swaps between the onboarding and veteran phase. Both phases share the
+    // same data-testid="orders-block" element with identical outer geometry.
     localStorage.removeItem("cod-career-v1");
     const onboardingContainer = document.createElement("div");
     document.body.appendChild(onboardingContainer);
@@ -219,9 +220,7 @@ describe("HomeV2", () => {
       onboardingRoot = createRoot(onboardingContainer);
       onboardingRoot.render(<HomeV2 {...baseProps} />);
     });
-    const onboardingLabel = [...onboardingContainer.querySelectorAll("div")]
-      .find((el) => el.children.length === 0 && el.textContent === "FIRST 3 RUNS");
-    const onboardingFrame = onboardingLabel?.parentElement?.parentElement;
+    const onboardingFrame = onboardingContainer.querySelector('[data-testid="orders-block"]');
 
     localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     const ordersContainer = document.createElement("div");
@@ -231,20 +230,52 @@ describe("HomeV2", () => {
       ordersRoot = createRoot(ordersContainer);
       ordersRoot.render(<HomeV2 {...baseProps} />);
     });
-    const ordersLabel = [...ordersContainer.querySelectorAll("div")]
-      .find((el) => el.children.length === 0 && el.textContent.startsWith("ORDERS ·"));
-    const ordersFrameEl = ordersLabel?.parentElement?.parentElement;
+    const ordersFrame = ordersContainer.querySelector('[data-testid="orders-block"]');
 
     expect(onboardingFrame).toBeTruthy();
-    expect(ordersFrameEl).toBeTruthy();
-    expect(onboardingFrame.style.maxWidth).toBe(ordersFrameEl.style.maxWidth);
-    expect(onboardingFrame.style.borderRadius).toBe(ordersFrameEl.style.borderRadius);
-    expect(onboardingFrame.style.padding).toBe(ordersFrameEl.style.padding);
-    expect(onboardingFrame.style.margin).toBe(ordersFrameEl.style.margin);
+    expect(ordersFrame).toBeTruthy();
+    expect(onboardingFrame.style.maxWidth).toBe(ordersFrame.style.maxWidth);
+    expect(onboardingFrame.style.borderRadius).toBe(ordersFrame.style.borderRadius);
+    expect(onboardingFrame.style.padding).toBe(ordersFrame.style.padding);
+    expect(onboardingFrame.style.margin).toBe(ordersFrame.style.margin);
 
     await act(async () => { onboardingRoot.unmount(); ordersRoot.unmount(); });
     onboardingContainer.remove();
     ordersContainer.remove();
+    localStorage.removeItem("cod-career-v1");
+  });
+
+  it("integrates Aim Check inside the Commander's Orders block rather than as a standalone chip (S149 merge)", async () => {
+    // Onboarding phase: Aim Check button lives inside orders-block.
+    localStorage.removeItem("cod-career-v1");
+    localStorage.removeItem("cod-input-calibration");
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+    const onboardingBlock = container.querySelector('[data-testid="orders-block"]');
+    expect(onboardingBlock).toBeTruthy();
+    const onboardingAimChip = [...onboardingBlock.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    expect(onboardingAimChip).toBeTruthy();
+
+    // Veteran phase (unverified): Aim Check button also inside orders-block.
+    localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5 }));
+    const vetContainer = document.createElement("div");
+    document.body.appendChild(vetContainer);
+    let vetRoot;
+    await act(async () => {
+      vetRoot = createRoot(vetContainer);
+      vetRoot.render(<HomeV2 {...baseProps} />);
+    });
+    const vetBlock = vetContainer.querySelector('[data-testid="orders-block"]');
+    expect(vetBlock).toBeTruthy();
+    const vetAimChip = [...vetBlock.querySelectorAll("button")].find(b => /AIM CHECK/.test(b.textContent));
+    expect(vetAimChip).toBeTruthy();
+
+    await act(async () => { vetRoot.unmount(); });
+    vetContainer.remove();
     localStorage.removeItem("cod-career-v1");
   });
 
