@@ -2,10 +2,10 @@
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
   "contentVersion": "2026-08-09",
-  "fingerprint": "18c36c2559f9cb010071f8fc41109b0fa471cb8e5f351318e9f82bfb29d91c3a",
+  "fingerprint": "75305fffb35c5072d6ad6deaabd2ea6b6f8818a16fa833c396785290911383e3",
   "coverage": {
     "routes": 18,
-    "headerRoutes": 5,
+    "headerRoutes": 6,
     "footerRoutes": 18,
     "visualAuditRoutes": 20,
     "generatedPages": 13

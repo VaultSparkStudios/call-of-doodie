@@ -2,6 +2,16 @@
 
 Public-safe launch roadmap summary.
 
+## Session 150 — Homepage readability and navigation
+
+- [x] [SIL:3] **DONE S150** One public navigation authority drives desktop, mobile, generated pages, and footer; `/stats/` is primary.
+- [x] [SIL:3] **DONE S150** Homepage type and control readability floor with 44px targets and visible focus treatment.
+- [x] [SIL:2] **DONE S150** Live Community Stats homepage showcase with an explicit full-stats route.
+- [x] [SIL:2] **DONE S150** Command Deck simplification — performance shell retained, redundant concept removed, secondary tools grouped and collapsed.
+- [x] [SIL:2] **DONE S150** Hosted visual proof — 1,020/1,020 broad checks plus focused navigation court and six-capture CANON-053 receipt.
+
+**Runway exception:** the founder-approved homepage plan is complete. SPARKED remains evidence-gated; no physical-device, participant, email, provider, publication, or subjective pixel-perfect claim is invented.
+
 ## Human Action Required
 - [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
 - [ ] Physical launch QA — verify PWA install prompt/accept flow on a real mobile/browser combination

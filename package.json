@@ -43,6 +43,7 @@
     "launch:screenshots": "node scripts/capture-launch-screenshots.mjs",
     "visual:audit": "node scripts/audit-staging-visuals.mjs",
     "visual:receipt": "node scripts/write-visual-qa-receipt.mjs",
+    "visual:home-nav": "node scripts/capture-home-navigation-visuals.mjs",
     "deploy:staging": "node scripts/deploy-staging-preview.mjs",
     "launch:media-check": "node scripts/validate-launch-media.mjs",
     "home:retirement-gate": "node scripts/legacy-home-retirement-gate.mjs",

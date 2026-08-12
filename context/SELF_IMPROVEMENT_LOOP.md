@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-12 — Session 150 | Total: 992/1000 | Velocity: 5 | Debt: ↓
+
+SIL 992/1000: Completed the founder-approved front-door plan as one coherent information-architecture pass. The homepage now has a readable type floor, one navigation authority, direct and live Stats access, progressive disclosure for deep tools, and a performance shell that adds resilience without becoming a second product hierarchy. Focused tests, build/contracts, isolated staging, security/cost checks, and the 1,020/1,020 rendered-pixel court are green; subjective image review remains explicitly unavailable on this host.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 97 | ↓ | Focused regression, strict lint, schema/architecture, public contract, and deployable build pass; two bounded broad-corpus attempts exceeded 15 minutes under host contention and remain inconclusive. |
+| Alignment | 100 | → | Readable chaos, guest-first play, honest live data, and a game-first front door are strengthened. |
+| Momentum | 99 | → | Five founder-approved outcomes shipped together without feature sprawl. |
+| Engagement | 100 | → | Play, live activity, progress, and loadout routes are immediately understandable and reachable. |
+| Process Qual | 99 | ↓ | Route drift was fixed at the shared authority; direct image viewing remained unavailable but objective evidence is complete and honest. |
+| Coherence | 100 | → | React, generated pages, footer, route contract, docs, and staging share the same navigation truth. |
+| Security | 100 | → | No new dependencies, secrets, auth, or public-write surfaces; security and npm audit pass. |
+| Ecosystem | 99 | → | Human and agent/public routes agree; SPARKED stays separately gated. |
+| Capital | 100 | → | Existing Cloudflare and Community Stats infrastructure reused with zero variable cost. |
+| Automation | 98 | ↓ | Focused component/accessibility and 1,020 objective visual checks cover the change; broad-corpus completion and host-level subjective pixel inspection remain unavailable. |
+
+Rolling averages: 3-session 989.3 · 5-session 990.4 · sparkline `█████`.
+
+Top win: separated the genuinely valuable fast shell from the low-value Command Deck hierarchy, producing a clearer player lobby without sacrificing startup resilience.
+Top gap: future additions must not bypass the shared route registry or erode the type/target floor.
+Intent outcome: Achieved on isolated staging; engineering publication follows the authorized closeout path while SPARKED remains NO-GO.
+
+**Brainstorm**
+1. Measure production navigation usage before moving any secondary destination into the primary six.
+2. Give live stats a compact “since your last visit” delta only when real historical evidence can support it.
+3. Keep the More drawer content finite; a destination that becomes frequent should graduate into the primary registry instead of accumulating in the drawer.
+
+**Committed to TASK_BOARD:** no speculative repo-owned item added; future navigation changes are evidence-gated.
+
 ## 2026-08-11 — Session 149 | Total: 997/1000 | Velocity: 13 | Debt: ↓
 
 SIL 997/1000: Completed the full arc with three premise-verified product items and two second-order protocol root fixes. The menu now carries one honest next-run command, mobile controls are accessible and responsive, and real browser evidence traced the 1,408ms interaction regression to synchronous audio initialization instead of blaming React or a native picker. Final exact-tree validation is 188 files / 1,121 tests with full build, security, supply-chain, protocol, and rendered-pixel gates green.

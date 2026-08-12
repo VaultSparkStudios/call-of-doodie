@@ -185,7 +185,7 @@ describe("HomeV2", () => {
     expect(txt).toMatch(/SUPPORT/);
   });
 
-  it("shows a journey card and exposes the Player Hub once onboarding completes", async () => {
+  it("shows one journey order and keeps secondary player tools collapsed", async () => {
     saveVerifiedInput();
     localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120 }));
     container = document.createElement("div");
@@ -197,11 +197,30 @@ describe("HomeV2", () => {
 
     expect(container.textContent).toContain("COMMANDER'S ORDERS");
     expect(container.querySelector('[data-order-kind="journey"]')).toBeTruthy();
-    expect(container.textContent).toContain("PROGRESS TOOLS");
-    const commandToggle = [...container.querySelectorAll("button")].find(b => /PROGRESS TOOLS/.test(b.textContent));
+    expect(container.textContent).toContain("ALL PLAYER TOOLS");
+    const commandToggle = [...container.querySelectorAll("button")].find(b => /ALL PLAYER TOOLS/.test(b.textContent));
+    expect(commandToggle?.getAttribute("aria-expanded")).toBe("false");
+    await act(async () => { commandToggle.click(); });
     expect(commandToggle?.getAttribute("aria-expanded")).toBe("true");
-    expect(container.textContent).toContain("STATS");
+    expect(container.textContent).toContain("COMMUNITY STATS");
     localStorage.removeItem("cod-career-v1");
+  });
+
+  it("exposes primary public navigation and live Stats in the first homepage flow", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+
+    const navigation = container.querySelector('[data-testid="primary-navigation"]');
+    expect(navigation).toBeTruthy();
+    expect(navigation.querySelector('a[href="/stats/"]')?.textContent).toBe("Stats");
+    expect(container.querySelector('#live-stats [data-testid="community-stats"]')).toBeTruthy();
+    expect(container.querySelector('#live-stats a[href$="stats/"]')?.textContent).toContain("VIEW ALL STATS");
+    expect(container.querySelector('#live-stats').textContent).toContain("RUNS · 24H");
+    expect(container.querySelector('#live-stats').textContent).not.toContain("YOUCOMMUNITYLIVE");
   });
 
   it("renders first-run training as the single Commander's Orders surface after input proof", async () => {

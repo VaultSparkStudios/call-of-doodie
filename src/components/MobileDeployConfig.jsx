@@ -28,7 +28,7 @@ export default function MobileDeployConfig({
     background: selected ? (isLight ? "rgba(184,60,0,0.10)" : `${color}1F`) : (palette?.panel || "rgba(0,0,0,0.24)"),
     color: selected ? (isLight ? palette.ink : color) : (palette?.ink || "#DDD"),
     font: "inherit",
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: 900,
     cursor: "pointer",
     textAlign: "left",
@@ -71,9 +71,9 @@ export default function MobileDeployConfig({
 
   return (
     <div data-testid="mobile-deploy-config" style={{ display: "grid", gap: 12, minWidth: "min(310px, calc(100vw - 58px))" }}>
-      <strong style={{ color: isLight ? palette.accent : "#FFB36B", fontSize: 11, letterSpacing: 1.8 }}>QUICK DEPLOY CONFIG</strong>
+      <strong style={{ color: isLight ? palette.accent : "#FFB36B", fontSize: 15, letterSpacing: 1.2 }}>QUICK DEPLOY CONFIG</strong>
       <div>
-        <div id="mobile-mode-label" style={{ color: palette?.muted || "#AAA", fontSize: 10, letterSpacing: 1.2, marginBottom: 5 }}>MODE</div>
+        <div id="mobile-mode-label" style={{ color: palette?.muted || "#AAA", fontSize: 13, letterSpacing: 0.8, marginBottom: 7 }}>MODE</div>
         <div role="radiogroup" aria-labelledby="mobile-mode-label" style={groupStyle}>
           {modes.map((mode, index) => {
             const selected = mode.id === acknowledgedModeId;
@@ -97,7 +97,7 @@ export default function MobileDeployConfig({
         </div>
       </div>
       <div>
-        <div id="mobile-difficulty-label" style={{ color: palette?.muted || "#AAA", fontSize: 10, letterSpacing: 1.2, marginBottom: 5 }}>DIFFICULTY</div>
+        <div id="mobile-difficulty-label" style={{ color: palette?.muted || "#AAA", fontSize: 13, letterSpacing: 0.8, marginBottom: 7 }}>DIFFICULTY</div>
         <div role="radiogroup" aria-labelledby="mobile-difficulty-label" style={groupStyle}>
           {Object.entries(difficulties).map(([key, item], index, entries) => {
             const selected = key === acknowledgedDifficulty;
@@ -120,7 +120,7 @@ export default function MobileDeployConfig({
           })}
         </div>
       </div>
-      <div role="status" aria-live="polite" style={{ color: palette?.cyan || "#B9F3FF", fontSize: 10 }}>
+      <div role="status" aria-live="polite" style={{ color: palette?.cyan || "#B9F3FF", fontSize: 14 }}>
         Selected: {selectedMode?.label || acknowledgedModeId} · {selectedDifficulty?.label || acknowledgedDifficulty}
       </div>
     </div>

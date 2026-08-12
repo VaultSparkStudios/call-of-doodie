@@ -1,6 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-12 — Session 150 — Front-door readability and navigation truth
+
+- Readability truth — player-facing homepage body, support, label, navigation, status, and statistics text is larger; 44px target and focus-visible checks are automated.
+- Discoverability truth — `/stats/` is directly reachable from the performance shell, desktop header, mobile dock/More drawer, homepage live showcase, generated-page headers, and footer.
+- Live-data truth — the homepage showcase consumes the same Community Stats component/store as the full stats experience; it is not a decorative or separately maintained snapshot.
+- Architecture truth — the performance shell remains for first-paint resilience. “Command Deck” is no longer represented as a necessary second navigation layer; deeper tools are grouped and collapsed.
+- Visual truth — hosted staging passes 1,020/1,020 broad checks and the focused theme/viewport navigation court. Six captures are hash-bound; Windows `CryptUnprotectData` prevents direct subjective image viewing, so subjective pixel-perfect approval is unclaimed.
+- Suite truth — changed-surface regression is green at 35/35. Two broad-suite attempts exceeded a bounded 15-minute allowance under shared-host process contention without a captured failure; no S150 full-corpus green is claimed.
+- Lifecycle truth — isolated staging is green and the update adds no dependency, credential scope, or variable cost. SPARKED remains NO-GO.
+
+Overall status: Session 150 plan implemented and objectively staging-verified; subjective visual and external SPARKED gates remain open.
+Last reviewed: 2026-08-12
+
 ## 2026-08-11 — Session 149 — Menu-loop, interaction, rendered-pixel, and saturation truth
 
 - Loop truth — one sanitized session-memory `nextRunContract` crosses DeathScreen → App → Home, is dismissible, and is consumed on deploy; fresh boot fabricates nothing.

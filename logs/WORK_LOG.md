@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-08-12 (Session 150 — readable front door, unified navigation, and live Stats)
+
+- Implemented the complete founder-approved homepage plan: larger type, clearer information hierarchy, desktop/mobile navigation, direct `/stats/` access, and a four-metric live Community Stats showcase.
+- Added one shared public-navigation authority and applied it across the React homepage, generated public pages, mobile dock/More drawer, and footer, eliminating route drift.
+- Retained the lightweight runtime shell for performance but removed Command Deck as an extra concept; the experience now leads with Play Next and groups secondary tools into Progress, Build, History, and Learn.
+- Added focused regression coverage for route presence, mobile menu behavior, shell links, stats placement, and collapsed secondary tools.
+- Two bounded broad Vitest attempts (four threads, then one fork) exceeded 15 minutes under shared-host process contention without a captured assertion failure; focused 35/35 and all deterministic release gates are green, and no fresh full-corpus claim is made.
+- Deployed isolated staging to `https://session-150-staging.call-of-doodie.pages.dev/`; broad rendered-pixel automation passed 1,020/1,020, focused navigation checks passed at 390px/1440px in both themes, and CANON-053 accepted six hash-bound captures.
+- Release posture remains cost-neutral FORGE. Direct image viewing remains unavailable on the host, so subjective pixel-perfect approval and SPARKED are not claimed.
+
 ## 2026-08-11 (Session 148 recovery — skipped closeout, architecture budget, and staging proof)
 
 - Proved commit `4522f7f` had shipped while every canonical write-back surface still stopped at Session 147, then recovered the missing ledger before starting fresh work.

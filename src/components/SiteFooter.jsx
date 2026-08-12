@@ -1,24 +1,16 @@
-// S146: single shared footer consumed by HomeV2, HomeV3, and MenuScreen — replaces three
-// hand-maintained renderers that had drifted (missing Agents/LLMS links in HomeV3, missing
-// About/How to Play/Enemies/Accessibility/Support links in HomeV2 and MenuScreen).
-const SITE_LINKS = [
-  { href: "about/", label: "About" },
-  { href: "how-to-play/", label: "How to Play" },
-  { href: "enemies/", label: "Enemies" },
-  { href: "accessibility/", label: "Accessibility" },
-  { href: "support/", label: "Support" },
-];
+import { FOOTER_PUBLIC_NAV } from "../config/publicNavigation.js";
+
+// Shared footer consumed by every game home.
 
 const LEGAL_LINKS = [
-  { href: "privacy/", label: "Privacy" },
-  { href: "terms/", label: "Terms" },
-  { href: "contact/", label: "Contact" },
-  { href: "ip/", label: "Rights & IP" },
+  { href: "/privacy/", label: "Privacy" },
+  { href: "/terms/", label: "Terms" },
+  { href: "/ip/", label: "Rights & IP" },
 ];
 
 const AGENT_LINKS = [
-  { href: "agents.json", label: "Agents" },
-  { href: ".well-known/llms.txt", label: "LLMS" },
+  { href: "/agents.json", label: "Agents" },
+  { href: "/.well-known/llms.txt", label: "LLMS" },
 ];
 
 const PARODY_DISCLAIMER =
@@ -45,10 +37,10 @@ export default function SiteFooter({
   const quiet = palette.quiet || "#999";
   const resolvedLinkColor = linkColor || quiet;
 
-  const linkStyle = { fontSize: 10, color: resolvedLinkColor, letterSpacing: 1, textDecoration: "none" };
+  const linkStyle = { fontSize: 14, color: resolvedLinkColor, letterSpacing: 0.35, textDecoration: "none", minHeight: 44, display: "inline-flex", alignItems: "center", padding: "0 4px" };
   const buttonStyle = {
     background: "none", border: "none", cursor: "pointer", fontFamily: "inherit",
-    fontSize: 10, letterSpacing: 1, textDecoration: "underline dotted",
+    fontSize: 14, letterSpacing: 0.35, textDecoration: "underline dotted", minHeight: 44,
     color: isSupporterActive ? "#FFD700" : resolvedLinkColor,
   };
 
@@ -61,23 +53,23 @@ export default function SiteFooter({
         gap: 12, flexWrap: "wrap", ...style,
       }}
     >
-      <span style={{ fontSize: 10, color: quiet, letterSpacing: 1 }}>
+      <span style={{ fontSize: 14, color: quiet, letterSpacing: 0.35 }}>
         A <a href="https://vaultsparkstudios.com/" rel="author" target="_blank" style={{ color: resolvedLinkColor, textDecoration: "none" }}>VaultSpark Studios</a> Game
       </span>
       {onlinePlayers !== null && (
-        <span style={{ fontSize: 10, color: "#0F0", letterSpacing: 1 }}>● {onlinePlayers} ONLINE</span>
+        <span style={{ fontSize: 14, color: "#0F0", letterSpacing: 0.35 }}>● {onlinePlayers} ONLINE</span>
       )}
       {onSupporterClick && (
         <button type="button" aria-label="Support the developer" onClick={onSupporterClick} style={buttonStyle}>
           {isSupporterActive ? "⭐ SUPPORTER" : "❤️ SUPPORT THE DEV"}
         </button>
       )}
-      {SITE_LINKS.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label.toUpperCase()}</a>)}
+      {FOOTER_PUBLIC_NAV.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label}</a>)}
       {LEGAL_LINKS.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label.toUpperCase()}</a>)}
       {AGENT_LINKS.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label.toUpperCase()}</a>)}
-      <span style={{ fontSize: 10, color: quiet }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>
+      <span style={{ fontSize: 13, color: quiet }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>
       <p style={{
-        flexBasis: "100%", margin: "6px 0 0", padding: "0 8px", fontSize: 9, lineHeight: 1.5,
+        flexBasis: "100%", margin: "6px 0 0", padding: "0 8px", fontSize: 12, lineHeight: 1.6,
         color: "#666", textAlign: "center", maxWidth: 720, marginLeft: "auto", marginRight: "auto",
       }}>
         {PARODY_DISCLAIMER}

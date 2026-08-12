@@ -166,12 +166,11 @@ if (contentByFile[relative("public", ".well-known", "llms.txt")] !== buildLlmsTe
 // Verify the shared component carries the required destinations, and that each home wires it in.
 const siteFooterFile = relative("src", "components", "SiteFooter.jsx");
 requireIncludes(siteFooterFile, read(siteFooterFile), [
-  "privacy/",
-  "terms/",
-  "contact/",
-  "ip/",
-  "agents.json",
-  ".well-known/llms.txt",
+  "/privacy/",
+  "/terms/",
+  "/ip/",
+  "/agents.json",
+  "/.well-known/llms.txt",
   "© 2026 VaultSpark Studios LLC. All rights reserved.",
 ]);
 for (const file of [

@@ -36,6 +36,7 @@ import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 import CommandersOrders from "./CommandersOrders.jsx";
 import MobileDeployConfig from "./MobileDeployConfig.jsx";
+import PrimaryNavigation from "./PrimaryNavigation.jsx";
 import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -161,7 +162,7 @@ export default function HomeV2(props) {
   const [showLoadoutBuilder, setShowLoadoutBuilder] = useState(false);
   const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [theme, setTheme] = useState(() => readTheme());
-  const [cmdCenterExpanded, setCmdCenterExpanded] = useState(true);
+  const [cmdCenterExpanded, setCmdCenterExpanded] = useState(false);
   const [trainingNotice, setTrainingNotice] = useState("");
   const [dailyChampion, setDailyChampion] = useState(null);
   const [missionStreak, setMissionStreak] = useState(0);
@@ -538,7 +539,7 @@ export default function HomeV2(props) {
   const topBar = { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 };
   const brandRow = { display: "flex", alignItems: "center", gap: 8, fontSize: 11, letterSpacing: 3, color: themePalette.quiet, fontWeight: 700 };
   const chip = { padding: "4px 10px", borderRadius: 20, fontSize: 11, fontWeight: 700, background: themePalette.panel, border: `1px solid ${themePalette.line}`, color: themePalette.muted, cursor: "pointer", fontFamily: "inherit" };
-  const iconBtn = { ...chip, padding: "4px 8px", fontSize: 14 };
+  const iconBtn = { ...chip, width: 44, minWidth: 44, minHeight: 44, padding: 0, display: "inline-grid", placeItems: "center", fontSize: 16 };
   const hero = { textAlign: "center", marginBottom: 14 };
   const title = { fontSize: "clamp(40px,10vw,72px)", fontWeight: 900, margin: 0, lineHeight: 1, letterSpacing: -2, background: "linear-gradient(180deg,#FFD700,#FF6B00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", filter: "drop-shadow(0 0 24px rgba(255,107,0,0.45))" };
   const tag = { marginTop: 4, fontSize: "clamp(11px,2.4vw,15px)", color: "#FF6B35", letterSpacing: 4, fontWeight: 700 };
@@ -599,13 +600,18 @@ export default function HomeV2(props) {
       <AsyncPanelBoundary>
         <DemoCanvas opacity={0.28} />
       </AsyncPanelBoundary>
-      <div className="arcade-home__cabinet" style={wrap}>
+      <div className="arcade-home__cabinet" style={wrap} data-readable-ui>
+
+        <PrimaryNavigation
+          palette={themePalette}
+          onOpenProgress={() => { setCmdCenterExpanded(true); requestAnimationFrame(() => document.getElementById("player-tools")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}
+          onOpenLoadout={() => { setShowLoadoutBuilder(true); }}
+        />
 
         {/* Top bar */}
         <div style={topBar}>
           <div style={brandRow}>
-            <span aria-hidden>💩</span>
-            <span>VAULTSPARK · CALL OF DOODIE</span>
+            <span>PLAYER PROFILE</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
             <span style={chip} onClick={onChangeUsername} title="Change callsign">
@@ -667,7 +673,7 @@ export default function HomeV2(props) {
         />
 
         {/* DEPLOY split-button */}
-        <div className="arcade-home__deploy" style={deployRow}>
+        <div id="deploy" className="arcade-home__deploy" style={deployRow}>
           <button
             onClick={deploy}
             data-testid="front-door-deploy"
@@ -842,11 +848,11 @@ export default function HomeV2(props) {
 
         <PrimaryWeaponSelector selectedIndex={primaryWeaponIndex} onSelect={onSelectPrimaryWeapon} />
 
-        <div style={{ marginTop: 14 }}>
-          <CommunityStatsPanel career={career} runHistory={runHistory} compact />
+        <div id="live-stats" style={{ marginTop: 18, scrollMarginTop: 86 }}>
+          <CommunityStatsPanel career={career} runHistory={runHistory} compact defaultTab="live" showcase />
         </div>
 
-        <div style={{ marginTop: 14, textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4 }}>OPERATIONS</div>
+        <h2 className="home-section-label">PLAY NEXT</h2>
         {/* Quick actions are grouped by player intent instead of mixing play,
             navigation, installation, and diagnostic receipts in one strip. */}
         <div style={quickRow}>
@@ -888,7 +894,7 @@ export default function HomeV2(props) {
             </button>
           )}
           <div aria-hidden="true" style={{ flexBasis: "100%", height: 0 }} />
-          <div style={{ flexBasis: "100%", textAlign: "center", color: themePalette.muted, fontSize: 9, fontWeight: 900, letterSpacing: 2.4, marginTop: 4 }}>PLAYER TOOLS</div>
+          <h2 className="home-section-label" style={{ flexBasis: "100%" }}>QUICK TOOLS</h2>
           <button style={quickBtn} onClick={() => {
             resetTutorialProgress();
             track("front_door_action", { actionId: "reset_training", surface: "home_v2" });
@@ -984,15 +990,15 @@ export default function HomeV2(props) {
           >🫀 PLAYTEST PULSE {playtestPulseEnabled ? "ON" : "OFF"} · {playtestPulse?.sampleSize || 0} LOCAL</button>
         </div>
 
-        {/* Command Center — full panel access */}
-        <div style={{ marginTop: 10, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)" }}>
+        {/* Progress and reference systems stay one layer below the play loop. */}
+        <div id="player-tools" style={{ marginTop: 18, padding: "14px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", scrollMarginTop: 86 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: cmdCenterExpanded ? 8 : 0 }}>
             <button
               onClick={() => setCmdCenterExpanded(v => !v)}
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: 9, color: "#888", letterSpacing: 2, fontWeight: 900, fontFamily: "inherit", padding: 0 }}
               aria-expanded={cmdCenterExpanded}
             >
-              PROGRESS TOOLS {cmdCenterExpanded ? "▴" : "▾"}
+              ALL PLAYER TOOLS {cmdCenterExpanded ? "▴" : "▾"}
             </button>
             {missionStreak >= 2 && (
               <span style={{ fontSize: 10, color: "#FF8C00", fontWeight: 900, letterSpacing: 1 }}>
@@ -1000,30 +1006,29 @@ export default function HomeV2(props) {
               </span>
             )}
           </div>
-          {cmdCenterExpanded && <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+          {cmdCenterExpanded && <div className="home-tool-groups">
             {[
-              ["📊 STATS",       CMD_ACTIONS[0]],
-              ["📋 MISSIONS",    CMD_ACTIONS[1]],
-              ["🎖️ UPGRADES",   CMD_ACTIONS[2]],
-              ["🌳 META TREE",   CMD_ACTIONS[3]],
-              ["📜 HISTORY",     CMD_ACTIONS[4]],
-              ["⚙️ LOADOUTS",   CMD_ACTIONS[5]],
-              ["📜 RULES",       CMD_ACTIONS[6]],
-              ["⌨ CONTROLS",    CMD_ACTIONS[7]],
-              ["👾 MOST WANTED", CMD_ACTIONS[8]],
-              ["✦ WHAT'S NEW",   CMD_ACTIONS[9]],
-            ].map(([label, action], i) => (
+              ["Progress", [["📊 CAREER STATS", CMD_ACTIONS[0], 0], ["📋 MISSIONS", CMD_ACTIONS[1], 1], ["🏅 ACHIEVEMENTS", () => setShowAchievements(true), null]]],
+              ["Build", [["🎖️ UPGRADES", CMD_ACTIONS[2], 2], ["🌳 META TREE", CMD_ACTIONS[3], 3], ["⚙️ LOADOUTS", CMD_ACTIONS[5], 5]]],
+              ["History", [["📜 RUN HISTORY", CMD_ACTIONS[4], 4], ["⚔️ LEADERBOARD", () => { onRefreshLeaderboard(); setShowLeaderboard(true); }, null], ["📊 COMMUNITY STATS", () => { location.href = `${import.meta.env.BASE_URL}stats/`; }, null]]],
+              ["Learn", [["📜 RULES", CMD_ACTIONS[6], 6], ["⌨ CONTROLS", CMD_ACTIONS[7], 7], ["👾 MOST WANTED", CMD_ACTIONS[8], 8], ["✦ WHAT'S NEW", CMD_ACTIONS[9], 9]]],
+            ].map(([group, items]) => (
+              <section key={group} className="home-tool-group">
+                <h3>{group}</h3>
+                {items.map(([label, action, i]) => (
               <button
                 key={label}
-                ref={el => { cmdBtnRefs.current[i] = el; }}
+                ref={el => { if (i != null) cmdBtnRefs.current[i] = el; }}
                 style={{
                   ...quickBtn,
-                  ...(gamepadConnected && cmdFocusIdx === i ? { borderColor: "rgba(0,229,255,0.7)", outline: "2px solid rgba(0,229,255,0.5)", outlineOffset: 1 } : {}),
+                  ...(i != null && gamepadConnected && cmdFocusIdx === i ? { borderColor: "rgba(0,229,255,0.7)", outline: "2px solid rgba(0,229,255,0.5)", outlineOffset: 1 } : {}),
                 }}
                 onClick={action}
               >
                 {label}
               </button>
+                ))}
+              </section>
             ))}
           </div>}
         </div>
@@ -1088,7 +1093,7 @@ export default function HomeV2(props) {
           </div>
         )}
 
-        {/* Tabbed nav */}
+        {/* Secondary detail area */}
         <div className="arcade-home__tabs" style={tabsRow}>
           {["progress", "field_manual", "support"].map(t => (
             <button key={t} style={tabBtn(tab === t)} onClick={() => switchTab(t)}>

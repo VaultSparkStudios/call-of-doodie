@@ -43,10 +43,10 @@ function Sparkline({ points, width = 56, height = 16, color = "#7FE6FF" }) {
 
 function Stat({ label, value, suffix = "", spark = null }) {
   return (
-    <div style={{ minWidth: 0, padding: "7px 8px", borderRadius: 7, background: "rgba(0,0,0,0.3)", border: "1px solid rgba(127,230,255,0.13)" }}>
-      <div style={{ color: "#7B8790", fontSize: 8, letterSpacing: 1.2, fontWeight: 900 }}>{label}</div>
+    <div className="community-stats__stat">
+      <div className="community-stats__stat-label" style={{ color: "#7B8790", fontSize: 8, letterSpacing: 1.2, fontWeight: 900 }}>{label}</div>
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 4 }}>
-        <div style={{ color: "#F3F7F8", fontSize: 15, lineHeight: 1.2, fontWeight: 900, fontVariantNumeric: "tabular-nums", overflow: "hidden", textOverflow: "ellipsis" }}>{value}{suffix}</div>
+        <div className="community-stats__stat-value" style={{ color: "#F3F7F8", fontSize: 15, lineHeight: 1.2, fontWeight: 900, fontVariantNumeric: "tabular-nums", overflow: "hidden", textOverflow: "ellipsis" }}>{value}{suffix}</div>
         {spark}
       </div>
     </div>
@@ -95,8 +95,8 @@ function FeedbackBar({ feedback }) {
   );
 }
 
-export default function CommunityStatsPanel({ career: suppliedCareer = null, runHistory: suppliedHistory = null, compact = false }) {
-  const [tab, setTab] = useState("you");
+export default function CommunityStatsPanel({ career: suppliedCareer = null, runHistory: suppliedHistory = null, compact = false, defaultTab = "you", showcase = false }) {
+  const [tab, setTab] = useState(defaultTab);
   const community = useSyncExternalStore(subscribeCommunityStats, getCommunityStatsSnapshot, getCommunityStatsSnapshot);
   const status = useSyncExternalStore(subscribeCommunityStats, getCommunityStatsStatus, getCommunityStatsStatus);
   const trend = useSyncExternalStore(subscribeCommunityStats, getCommunityStatsTrend, getCommunityStatsTrend);
@@ -126,24 +126,25 @@ export default function CommunityStatsPanel({ career: suppliedCareer = null, run
         ["BOSSES", formatStat(shown.bosses)],
         ["BEST WAVE", formatStat(shown.bestWave)],
       ];
+  const visibleStats = showcase ? stats.slice(0, 4) : stats;
 
   return (
     <section data-testid="community-stats" style={{ width: "100%", boxSizing: "border-box", padding: compact ? 10 : 12, borderRadius: 10, border: "1px solid rgba(127,230,255,0.28)", background: "linear-gradient(135deg,rgba(3,20,24,0.9),rgba(7,10,12,0.88))", boxShadow: "inset 0 0 28px rgba(0,229,255,0.035)" }}>
       <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <div style={{ color: "#7FE6FF", fontSize: 10, letterSpacing: 2.2, fontWeight: 900 }}>📊 COMMUNITY STATS</div>
-            <a href={`${import.meta.env.BASE_URL}stats/`} style={{ color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2 }}>FULL STATS</a>
-            <button type="button" onClick={refreshCommunityStatsNow} aria-label="Refresh Community Stats now" style={{ padding: 0, border: 0, background: "transparent", color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>REFRESH</button>
+            <div className="community-stats__header" style={{ color: "#7FE6FF", fontSize: 10, letterSpacing: 2.2, fontWeight: 900 }}>● LIVE SEWER NETWORK</div>
+            <a className="community-stats__full-link" href={`${import.meta.env.BASE_URL}stats/`} style={{ color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2 }}>VIEW ALL STATS →</a>
+            {!showcase && <button type="button" onClick={refreshCommunityStatsNow} aria-label="Refresh Community Stats now" style={{ padding: 0, border: 0, background: "transparent", color: "#9CEBFF", fontSize: 8, letterSpacing: 1, textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>REFRESH</button>}
           </div>
           <div style={{ color: "#748089", fontSize: 8, marginTop: 2, letterSpacing: 0.8 }}>VERIFIED PLAYER + RUN TOTALS · HEALTH CHECKS EXCLUDED</div>
         </div>
-        <div style={{ display: "flex", gap: 4 }}>
+        {!showcase && <div className="community-stats__tabs" style={{ display: "flex", gap: 4 }}>
           {TABS.map(item => <button key={item.id} type="button" onClick={() => setTab(item.id)} aria-pressed={tab === item.id} style={{ padding: "4px 8px", borderRadius: 4, cursor: "pointer", border: tab === item.id ? "1px solid #7FE6FF" : "1px solid rgba(255,255,255,0.1)", color: tab === item.id ? "#7FE6FF" : "#717A80", background: tab === item.id ? "rgba(127,230,255,0.1)" : "rgba(255,255,255,0.025)", fontSize: 8, fontWeight: 900, letterSpacing: 1 }}>{item.label}</button>)}
-        </div>
+        </div>}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 6, marginTop: 9 }}>
-        {stats.map(([label, value, suffix, spark]) => <Stat key={label} label={label} value={value} suffix={suffix} spark={spark || null} />)}
+      <div className="community-stats__grid">
+        {visibleStats.map(([label, value, suffix, spark]) => <Stat key={label} label={label} value={value} suffix={suffix} spark={spark || null} />)}
       </div>
       {tab === "community" && (
         <>

@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 149 deployed: adaptive Commander's Orders, accessible mobile deploy controls, audio-initialization INP root fix, and honest session-saturation protocol are live at immutable revision 6a3ec909.",
-  "nextMilestone": "Collect real production funnel and participant evidence before changing directive precedence, balance, fallback retirement, or cosmetic scope; preserve SPARKED NO-GO until its external gates are real.",
+  "currentFocus": "Session 150 staging-verified: a readable player-first homepage, one public navigation authority, direct and live Stats access, and a simplified Command Deck hierarchy.",
+  "nextMilestone": "Publish the verified FORGE engineering update through closeout, then use real production navigation evidence before changing the primary route set; preserve SPARKED NO-GO until external gates are real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -328,6 +328,19 @@
       "url": "https://session-148-staging.call-of-doodie.pages.dev/",
       "type": "staging-preview",
       "command": "Session 148 recovery — immutable 9d4caec8.call-of-doodie.pages.dev; hosted 20-route × 2-theme × 3-width court 1020/1020; six hash-bound captures in docs/visual-qa/LATEST.json; subjective browser-bridge approval unclaimed"
+    },
+    {
+      "session": 150,
+      "status": "green",
+      "url": "https://session-150-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "immutable 684db11d.call-of-doodie.pages.dev; hosted broad visual court 1020/1020; focused desktop/mobile dark/light navigation court green; six hash-bound captures"
+    },
+    {
+      "session": 150,
+      "status": "green",
+      "type": "focused-tests",
+      "command": "35/35 changed-surface tests; strict lint; schema/architecture; public contract 28/28; deployable build; security/npm audit; dependency/assets/media/cost/release gates; two broad-suite attempts timed out after 15 minutes under shared-host contention without a captured assertion failure"
     }
   ],
   "blockers": [
@@ -337,21 +350,21 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-08-11",
+  "lastUpdated": "2026-08-12",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
-  "truthAuditLastRun": "2026-08-11",
+  "truthAuditLastRun": "2026-08-12",
   "ignisScore": 45208,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-08",
-  "silSession": 149,
-  "silScore": 997,
+  "silSession": 150,
+  "silScore": 992,
   "silAvg3": 989.3,
-  "silVelocity": 13,
+  "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 149,
-  "currentSession": 149,
+  "silLastSession": 150,
+  "currentSession": 150,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 1122,
@@ -360,18 +373,18 @@
   "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
   "silMax": 1000,
-  "silScoreLegacy500": 490,
+  "silScoreLegacy500": 492,
   "silCategoriesV3": {
-    "devHealth": 100,
+    "devHealth": 99,
     "creativeAlignment": 100,
     "momentum": 99,
     "engagement": 100,
-    "processQuality": 100,
+    "processQuality": 99,
     "crossRepoCoherence": 100,
     "securityPosture": 100,
     "ecosystemIntegration": 99,
     "capitalEfficiency": 100,
-    "automationCoverage": 99
+    "automationCoverage": 96
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -385,8 +398,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-149-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-11T23:29:30.000Z",
+  "stagingUrl": "https://session-150-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-12T04:45:09.853Z",
   "sanitizationLastCleared": "2026-08-08T07:10:38.026Z",
   "sessionShellHygiene": {
     "session": 148,
@@ -412,7 +425,7 @@
     "scope": "studio-ops-control-plane external to this repo",
     "blockingDetail": "CPX51 capacity admission and cross-surface coherence are Studio Ops control-plane findings; project-local release gates remain green"
   },
-  "lastSessionSummary": "Session 149 shipped adaptive Commander's Orders, accessible mobile deploy controls, the measured audio-initialization INP root fix, light-theme correction, and two saturation-protocol fixes; source 5bae6c1 deployed at immutable Cloudflare revision 6a3ec909 with exact-SHA CI, live 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard, and launch-surface courts green.",
+  "lastSessionSummary": "Session 150 turned the compressed operator-style homepage into a readable player lobby: one shared desktop/mobile/public navigation system, direct and live Stats access, grouped progressive disclosure, and a retained performance shell without a redundant Command Deck hierarchy; isolated staging and 1,020/1,020 objective visual checks are green.",
   "testsAssertionsPassing": 1122,
   "testsAssertionsTotal": 1122,
   "testsAssertionsFiles": 188,

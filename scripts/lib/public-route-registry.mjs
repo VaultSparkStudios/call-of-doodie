@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
+import { PRIMARY_PUBLIC_NAV } from "../../src/config/publicNavigation.js";
 
 export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
 export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-09";
@@ -220,7 +221,7 @@ const ROUTE_DEFINITIONS = [
   { id: "ip", path: "/ip/", label: "Rights & IP", rel: "rights", priority: 0.6, generated: false },
 ];
 
-const HEADER_ROUTE_IDS = new Set(["home", "how-to-play", "enemies", "about", "contact"]);
+const HEADER_ROUTE_IDS = new Set(PRIMARY_PUBLIC_NAV.map((item) => item.id));
 
 export function getPublicRouteRegistry() {
   const gameplay = buildPublicGameplayContract();

@@ -2,6 +2,14 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-12 — Session 150 — Keep the performance shell; retire Command Deck as a navigation concept
+
+**Decision:** Preserve `RuntimeBoundary` as the quick, resilient first-paint shell, but make it an honest public front door with Play, Stats, Modes, How to Play, and Leaderboard links. Do not present “Command Deck” as a second navigation architecture. The loaded homepage uses one primary play decision, one live-stats showcase, and four collapsed player-tool groups.
+
+**Rationale:** The shell provides real performance and failure-containment value. The Command Deck label and flat wall of tools did not: they duplicated navigation, hid public pages such as `/stats/`, and made first-time scanning harder. Separating performance infrastructure from the player-facing information architecture preserves the useful part while removing the cognitive tax.
+
+**Invariant:** Every new public route joins `src/config/publicNavigation.js` or documents why it is intentionally secondary. Player-facing body/control text must keep the readable floor and primary touch targets remain at least 44px.
+
 ## 2026-08-10 — Session 147 — Mobile INP trace rules out a JS compute cause; native `<select>` overhead is now the leading hypothesis
 
 **Decision:** `mobile-inp-and-bundle-gate` stays open, but the investigation advances from "root cause unknown" to "JS compute-bound causes ruled out by real trace evidence." No blind fix ships this session.

@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-11T20:40:20.203Z",
-  "stagingUrl": "https://session-149-staging.call-of-doodie.pages.dev/",
-  "workingTreeUiSha256": "7578e244ffcdf63d7a8c3765e1eab853612df0d32a2443edb8a5d3d350cba3d4",
+  "capturedAt": "2026-08-12T04:19:00.117Z",
+  "stagingUrl": "https://session-150-staging.call-of-doodie.pages.dev/",
+  "workingTreeUiSha256": "4a104145ca03d560f44b5382a8fd83a6292225ba7a88664583f06f2d494b3fc4",
   "sourceMatrix": {
-    "receipt": "output/playwright/staging-visuals/visual-audit-receipt.json",
-    "sha256": "81f33cc9c745ba1bcce5f445542fc2ba7da0531f73b7425128cecc08ee05bc26",
+    "receipt": "output/playwright/staging-home-nav-s150/visual-audit-receipt.json",
+    "sha256": "e388f5723f281c6d07dd0d7f6f131d00a5b26798100255b6101e4842c9179b21",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -21,7 +21,7 @@
   "captures": [
     {
       "file": "home-dark-mobile.png",
-      "sha256": "bc4672a0839daa5c958b55342163ac9a3fc726688236cf525008ef5d5adc13d8",
+      "sha256": "b00966afb6a792b5e538d3e14eb472e6f9ca141cad886435621a08316c4d25a3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -32,7 +32,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "84702b79eaab3ca24bab947559d557700743122cdf4a9d31adc8041e2f55cb4d",
+      "sha256": "77c52853013ff3a969e61890cd6b4181b97ec957493252a5cd9d151c2ff02c6d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -65,7 +65,7 @@
     },
     {
       "file": "modes-dark-desktop.png",
-      "sha256": "dbcf4766795c2ba6531f66c1c266395e224e6174364a37969804c871dc8db543",
+      "sha256": "43b68e5c2c15493bb9595c4bf29f42b68988c18c441aafd2cbdb78b4e1deb3f3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -76,7 +76,7 @@
     },
     {
       "file": "leaderboard-light-mobile.png",
-      "sha256": "6633f17622cb3c6e84b588da8b866fa403be5f6751418dc7b05692094f034010",
+      "sha256": "4ea6e72891c9cc51f261c9b395e98eac6cbee02f47275e2143cdb3300e0a6b3c",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -95,12 +95,13 @@
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix."
     ],
     "fixesApplied": [
-      "Porcelain Day now uses its light page canvas and theme tokens across Commander's Orders, deploy configuration, and visual-pack controls.",
-      "Mobile hides decorative full-viewport blend layers and pauses the background canvas; first audio context construction moved to idle prewarm.",
-      "Bounded JPEG crops were visually inspected in both themes at 390px and 1440px; no clipping, overflow, unreadable text, or broken hierarchy remains."
+      "Raised homepage body, label, navigation, stats, and control text to a readable token floor.",
+      "Added a desktop primary nav plus a 44px mobile bottom dock and full-height More drawer.",
+      "Promoted live sewer stats and the /stats destination into the front door.",
+      "Collapsed the old Command Deck tool wall into four scannable player-tool groups and removed duplicate top-bar branding."
     ],
     "blockingDefectsOpen": 0,
-    "subjectiveVisualReviewClaimed": true,
-    "subjectiveVisualReviewStatus": "completed-via-bounded-jpeg-fallback"
+    "subjectiveVisualReviewClaimed": false,
+    "subjectiveVisualReviewStatus": "unavailable-host-cryptunprotectdata"
   }
 }

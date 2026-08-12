@@ -6,20 +6,24 @@
       "label": "Home"
     },
     {
-      "href": "/about/",
-      "label": "About"
+      "href": "/play/",
+      "label": "Play"
     },
     {
-      "href": "/how-to-play/",
-      "label": "How to Play"
+      "href": "/arsenal/",
+      "label": "Arsenal"
     },
     {
-      "href": "/enemies/",
-      "label": "Enemies"
+      "href": "/modes/",
+      "label": "Modes"
     },
     {
-      "href": "/contact/",
-      "label": "Contact"
+      "href": "/leaderboard/",
+      "label": "Leaderboard"
+    },
+    {
+      "href": "/stats/",
+      "label": "Stats"
     }
   ],
   "footerLinks": [
@@ -97,11 +101,9 @@
     }
   ],
   "footerOnly": [
-    "/play/",
-    "/arsenal/",
-    "/modes/",
-    "/leaderboard/",
-    "/stats/",
+    "/about/",
+    "/how-to-play/",
+    "/enemies/",
     "/accessibility/",
     "/support/",
     "/press-kit/",
@@ -109,6 +111,7 @@
     "/changelog/",
     "/privacy/",
     "/terms/",
+    "/contact/",
     "/ip/"
   ],
   "legalPages": [
