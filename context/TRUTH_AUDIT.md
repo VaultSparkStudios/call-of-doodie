@@ -10,8 +10,9 @@
 - Visual truth — hosted staging passes 1,020/1,020 broad checks and the focused theme/viewport navigation court. Six captures are hash-bound; Windows `CryptUnprotectData` prevents direct subjective image viewing, so subjective pixel-perfect approval is unclaimed.
 - Suite truth — changed-surface regression is green at 35/35. Two broad-suite attempts exceeded a bounded 15-minute allowance under shared-host process contention without a captured failure; no S150 full-corpus green is claimed.
 - Lifecycle truth — isolated staging is green and the update adds no dependency, credential scope, or variable cost. SPARKED remains NO-GO.
+- Production truth — source `c260d77` deployed through green workflow `31566376617` to immutable revision `76855535`; production shell, redirects, replay trust, Studio launch surfaces, and focused homepage navigation/readability checks pass.
 
-Overall status: Session 150 plan implemented and objectively staging-verified; subjective visual and external SPARKED gates remain open.
+Overall status: Session 150 plan implemented, deployed, and objectively production-verified; subjective visual and external SPARKED gates remain open.
 Last reviewed: 2026-08-12
 
 ## 2026-08-11 — Session 149 — Menu-loop, interaction, rendered-pixel, and saturation truth

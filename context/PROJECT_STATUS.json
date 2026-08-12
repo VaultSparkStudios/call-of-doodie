@@ -4,7 +4,7 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 150 staging-verified: a readable player-first homepage, one public navigation authority, direct and live Stats access, and a simplified Command Deck hierarchy.",
+  "currentFocus": "Session 150 live: readable player-first homepage, one public navigation authority, direct/live Stats, and a simplified Command Deck hierarchy are production-verified.",
   "nextMilestone": "Publish the verified FORGE engineering update through closeout, then use real production navigation evidence before changing the primary route set; preserve SPARKED NO-GO until external gates are real.",
   "testingSurfaces": [
     {
@@ -341,6 +341,13 @@
       "status": "green",
       "type": "focused-tests",
       "command": "35/35 changed-surface tests; strict lint; schema/architecture; public contract 28/28; deployable build; security/npm audit; dependency/assets/media/cost/release gates; two broad-suite attempts timed out after 15 minutes under shared-host contention without a captured assertion failure"
+    },
+    {
+      "session": 150,
+      "status": "green",
+      "url": "https://callofdoodie.wtf/",
+      "type": "production-deploy",
+      "command": "commit c260d77; workflow 31566376617; immutable 76855535.call-of-doodie.pages.dev; shell 7/7; redirects 5/5; replay 3/3; launch surfaces and focused desktop/mobile theme navigation court pass"
     }
   ],
   "blockers": [
@@ -425,7 +432,7 @@
     "scope": "studio-ops-control-plane external to this repo",
     "blockingDetail": "CPX51 capacity admission and cross-surface coherence are Studio Ops control-plane findings; project-local release gates remain green"
   },
-  "lastSessionSummary": "Session 150 turned the compressed operator-style homepage into a readable player lobby: one shared desktop/mobile/public navigation system, direct and live Stats access, grouped progressive disclosure, and a retained performance shell without a redundant Command Deck hierarchy; isolated staging and 1,020/1,020 objective visual checks are green.",
+  "lastSessionSummary": "Session 150 turned the compressed operator-style homepage into a readable player lobby, published commit c260d77 through green workflow 31566376617 to immutable Cloudflare revision 76855535, and passed production shell 7/7, redirects 5/5, replay 3/3, launch-surface, and focused navigation courts.",
   "testsAssertionsPassing": 1122,
   "testsAssertionsTotal": 1122,
   "testsAssertionsFiles": 188,

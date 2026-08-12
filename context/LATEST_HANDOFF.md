@@ -21,7 +21,7 @@ Session Intent: Implement the full founder-approved plan for larger homepage tex
 
 ## Where We Left Off
 
-- The founder-approved front-door plan is implemented and staging-verified; no repo-owned plan item remains.
+- The founder-approved front-door plan is live from commit `c260d77` at immutable Cloudflare revision `https://76855535.call-of-doodie.pages.dev/`; exact-SHA workflow `31566376617`, shell 7/7, redirects 5/5, replay 3/3, launch surfaces, and production desktop/mobile theme navigation checks pass.
 - Preserve the single navigation registry and readable type/target floor when adding public pages.
 - Keep the performance shell, but do not reintroduce Command Deck as a competing navigation hierarchy.
 - SPARKED remains NO-GO under the existing external and explicit lifecycle gates.

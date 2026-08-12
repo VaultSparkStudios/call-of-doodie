@@ -4,7 +4,7 @@
   "session": 150,
   "project": "Call-Of-Doodie",
   "intent": "implement the founder-approved homepage readability, navigation, stats discoverability, live-stats showcase, and Command Deck value plan, then close out",
-  "outcome": "achieved-and-staging-verified",
+  "outcome": "achieved-and-production-verified",
   "shipped": [
     "readable homepage typography and 44px interaction floor",
     "one public navigation authority across React and generated surfaces",
@@ -18,7 +18,9 @@
     "public contract passes 28/28 and deployable build passes",
     "security release gate with npm audit, dependency, asset, launch-media, cost, and release gates pass",
     "isolated staging is live at session-150-staging.call-of-doodie.pages.dev",
-    "hosted visual matrix passes 1020/1020 and six captures are hash-bound"
+    "hosted visual matrix passes 1020/1020 and six captures are hash-bound",
+    "commit c260d77 passed GitHub workflow 31566376617 and deployed to immutable production revision 76855535",
+    "production shell 7/7, redirects 5/5, replay trust 3/3, launch surfaces, and focused navigation checks pass"
   ],
   "deferred": [
     "two bounded broad-suite attempts exceeded 15 minutes under shared-host contention and are inconclusive",

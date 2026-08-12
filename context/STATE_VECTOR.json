@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-12",
-  "generatedAtMs": 1786511799254,
+  "generatedAtMs": 1786513149717,
   "session": 150,
-  "vectorHash": "9884c5d4ae34488c",
+  "vectorHash": "85f5b5d3ed74d4e7",
   "silTotal": 992,
   "silAvg3": 989.3,
   "velocity": 13,
@@ -24,7 +24,7 @@
     "[SIL:1] [S144] Mobile touch button-size/density control — the descoped half of t"
   ],
   "health": "green",
-  "truthStatus": "Session 150 plan implemented and objectively staging-verified; subjective visual and external SPARKED gates remain open.",
+  "truthStatus": "Session 150 plan implemented, deployed, and objectively production-verified; subjective visual and external SPARKED gates remain open.",
   "genome": null,
   "ignisScore": 45208,
   "ignisGrade": "FORGE",
@@ -34,7 +34,7 @@
   "type": null,
   "lifecycle": "deployed",
   "nextMilestone": "Publish the verified FORGE engineering update through closeout, then use real production navigation evidence before changing the primary route set; preserve SPARKED NO-GO until external gates are real.",
-  "currentFocus": "Session 150 staging-verified: a readable player-first homepage, one public navigation authority, direct and live Stats access, and a simplified Command Deck hierarchy.",
+  "currentFocus": "Session 150 live: readable player-first homepage, one public navigation authority, direct/live Stats, and a simplified Command Deck hierarchy are production-verified.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog/Sentry/Ko-fi dashboard URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING. Supabase half already satisfied (Access-Control-Allow-Origin: * verified S112).",

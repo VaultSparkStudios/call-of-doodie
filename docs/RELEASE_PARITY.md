@@ -7,7 +7,7 @@ Last reviewed: 2026-08-12
 - Immutable staging origin: `https://684db11d.call-of-doodie.pages.dev`
 - Stable staging alias: `https://session-150-staging.call-of-doodie.pages.dev`
 - Production origin: `https://callofdoodie.wtf/`
-- Immutable production deployment: `https://e0b481c3.call-of-doodie.pages.dev`
+- Immutable production deployment: `https://76855535.call-of-doodie.pages.dev`
 - Scope: deploy an engineering update to the existing public FORGE surface. This is **not** a SPARKED lifecycle flip.
 - Founder authorization: explicit request to implement the full plan and run `/closeout`.
 
@@ -44,8 +44,8 @@ No Core Web Vitals-green or SPARKED claim is made for this release. The mobile h
 ## Continuous integration and rollback
 
 - The latest five GitHub workflow runs are green, including Cloudflare deployment and brief-format checks.
-- Cloudflare Pages retains immutable deployments. The latest verified production rollback target remains `https://44e6603d.call-of-doodie.pages.dev/` until this engineering update is promoted.
-- Isolated staging is the authoritative parity proof for this release candidate; production verification follows the closeout push workflow.
+- Cloudflare Pages retains immutable deployments. Current production is `76855535`; the immediately previous verified rollback target is `https://44e6603d.call-of-doodie.pages.dev/`.
+- Exact-source workflow `31566376617` passed quality/build/deploy; production shell 7/7, redirects 5/5, replay trust 3/3, launch surfaces, and focused theme/viewport navigation checks pass.
 - The edge health endpoint reports the repository HEAD rather than a dirty-worktree content digest. Static asset identity and immutable deployment URLs are therefore the authoritative proof for this direct deployment.
 
 ## Launch posture

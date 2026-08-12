@@ -8,6 +8,7 @@
 - Added focused regression coverage for route presence, mobile menu behavior, shell links, stats placement, and collapsed secondary tools.
 - Two bounded broad Vitest attempts (four threads, then one fork) exceeded 15 minutes under shared-host process contention without a captured assertion failure; focused 35/35 and all deterministic release gates are green, and no fresh full-corpus claim is made.
 - Deployed isolated staging to `https://session-150-staging.call-of-doodie.pages.dev/`; broad rendered-pixel automation passed 1,020/1,020, focused navigation checks passed at 390px/1440px in both themes, and CANON-053 accepted six hash-bound captures.
+- Published commit `c260d77`; GitHub workflow `31566376617` passed quality/build/deploy and produced immutable production revision `76855535`. Live shell 7/7, redirects 5/5, replay trust 3/3, launch surfaces, and the focused production navigation court pass.
 - Release posture remains cost-neutral FORGE. Direct image viewing remains unavailable on the host, so subjective pixel-perfect approval and SPARKED are not claimed.
 
 ## 2026-08-11 (Session 148 recovery — skipped closeout, architecture budget, and staging proof)

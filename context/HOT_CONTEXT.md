@@ -86,7 +86,7 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 176,528 bytes · SHA-256 `1be9253c318d…`
+- `context/CURRENT_STATE.md` · 176,884 bytes · SHA-256 `96ad0614a471…`
 - `context/TASK_BOARD.md` · 117,265 bytes · SHA-256 `adb6d1dc8d26…`
 - `context/DECISIONS.md` · 112,792 bytes · SHA-256 `3342e860c110…`
 - `docs/AUDIT_2026-08-11.json` · 13,052 bytes · SHA-256 `a5a532d11663…`
