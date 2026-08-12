@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 150 live: readable player-first homepage, one public navigation authority, direct/live Stats, and a simplified Command Deck hierarchy are production-verified.",
-  "nextMilestone": "Publish the verified FORGE engineering update through closeout, then use real production navigation evidence before changing the primary route set; preserve SPARKED NO-GO until external gates are real.",
+  "currentFocus": "Session 151 staged: first-viewport revenge brief, per-weapon mastery truth, Analytica stats twin, and pure seeded arena boundary are verified.",
+  "nextMilestone": "Publish the verified FORGE engineering update and confirm production; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -348,6 +348,19 @@
       "url": "https://callofdoodie.wtf/",
       "type": "production-deploy",
       "command": "commit c260d77; workflow 31566376617; immutable 76855535.call-of-doodie.pages.dev; shell 7/7; redirects 5/5; replay 3/3; launch surfaces and focused desktop/mobile theme navigation court pass"
+    },
+    {
+      "session": 151,
+      "status": "green",
+      "url": "https://session-151-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "immutable 1fc32adb; hosted public visual matrix 1020/1020; eight hash-bound captures; direct death-screen mobile/desktop review complete"
+    },
+    {
+      "session": 151,
+      "status": "green",
+      "type": "tests",
+      "command": "1138/1138 assertions across 191 files via four bounded shards plus focused final-tree reruns; strict lint; schema/architecture; public 28/28; deployable build; security/npm audit; dependency/assets/media/cost/stats/visual gates"
     }
   ],
   "blockers": [
@@ -365,17 +378,17 @@
   "ignisScore": 45208,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-08",
-  "silSession": 150,
-  "silScore": 992,
-  "silAvg3": 989.3,
+  "silSession": 151,
+  "silScore": 994,
+  "silAvg3": 994.3,
   "silVelocity": 5,
   "silDebt": "down",
-  "silLastSession": 150,
-  "currentSession": 150,
+  "silLastSession": 151,
+  "currentSession": 151,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 1122,
-  "testsTotal": 1122,
+  "testsPassing": 1138,
+  "testsTotal": 1138,
   "entropyScore": 0.196,
   "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
@@ -387,11 +400,11 @@
     "momentum": 99,
     "engagement": 100,
     "processQuality": 99,
-    "crossRepoCoherence": 100,
+    "crossRepoCoherence": 97,
     "securityPosture": 100,
-    "ecosystemIntegration": 99,
+    "ecosystemIntegration": 100,
     "capitalEfficiency": 100,
-    "automationCoverage": 96
+    "automationCoverage": 100
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -405,8 +418,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-150-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-12T04:45:09.853Z",
+  "stagingUrl": "https://session-151-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-12T08:03:09.836Z",
   "sanitizationLastCleared": "2026-08-08T07:10:38.026Z",
   "sessionShellHygiene": {
     "session": 148,
@@ -432,12 +445,14 @@
     "scope": "studio-ops-control-plane external to this repo",
     "blockingDetail": "CPX51 capacity admission and cross-surface coherence are Studio Ops control-plane findings; project-local release gates remain green"
   },
-  "lastSessionSummary": "Session 150 turned the compressed operator-style homepage into a readable player lobby, published commit c260d77 through green workflow 31566376617 to immutable Cloudflare revision 76855535, and passed production shell 7/7, redirects 5/5, replay 3/3, launch-surface, and focused navigation courts.",
-  "testsAssertionsPassing": 1122,
-  "testsAssertionsTotal": 1122,
-  "testsAssertionsFiles": 188,
+  "lastSessionSummary": "Session 151 put RUN THE FIX in the first death-screen viewport, made weapon mastery depend only on per-weapon kills, bound the public stats twin to one 15-second contract, extracted exact-parity arena generation, and passed direct rendered-pixel staging review while preserving SPARKED NO-GO.",
+  "testsAssertionsPassing": 1138,
+  "testsAssertionsTotal": 1138,
+  "testsAssertionsFiles": 191,
   "testsFlaky": [],
-  "testsInconclusive": [],
+  "testsInconclusive": [
+    "Monolithic single-worker corpus exceeded 20 minutes under shared-host contention; the same corpus completed through four deterministic shards."
+  ],
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false

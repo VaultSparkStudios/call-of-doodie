@@ -1124,3 +1124,20 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** Production correctly served the S145 PNG social card from `index.html`, but the live checker still expected the old SVG HTML reference and therefore failed after every other live court passed. The SVG remains the authored source and a cached fallback; the PNG is the public Open Graph/Twitter asset. The verifier must follow the current public contract rather than force a regression to an obsolete reference.
 
 **Evidence:** Focused verifier/public-contract court passes 30/30; both `https://callofdoodie.wtf/` and immutable `https://6a3ec909.call-of-doodie.pages.dev/` pass the corrected live court 7/7.
+# 2026-08-12 — Session 151 — Mastery requires weapon evidence
+
+**Decision:** Reserve weapon mastery for per-weapon career kills. Keep global account thresholds only as explicitly named arsenal milestones; never infer mastery from total career kills.
+
+**Why:** The prior split authority called three fresh-profile weapons mastered at zero weapon kills while WeaponDock correctly showed ROOKIE. One evidence source now drives loadouts, progression analysis, telemetry vocabulary, and public contracts without changing weapon availability.
+
+## 2026-08-12 — Session 151 — Revenge action precedes analysis
+
+**Decision:** Render ONE VERDICT / RUN THE FIX immediately after death and any challenge result, with build/stat/evidence analysis under one disclosure; do not autofocus the later Famous Last Words field.
+
+**Why:** The loop promises humiliation → lesson → rematch. Direct staging pixels proved autofocus scrolled the entire primary action 854–1,207px above the viewport; source order alone could not reveal it. The corrected screen opens at scrollTop 0 with the action visible at both 390px and 1440px.
+
+## 2026-08-12 — Session 151 — Stats liveness is one contract
+
+**Decision:** Treat `analytica-feed-v1`, the four showcase metric IDs, and the 15-second poll cadence as one shared source contract across the homepage, store, and public descriptor.
+
+**Why:** The UI was live but the machine twin did not declare what “live” meant. Shared constants and a cross-surface test close that structural gap without updating or fabricating any metric value.

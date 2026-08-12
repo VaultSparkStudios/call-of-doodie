@@ -714,6 +714,40 @@ export default function DeathScreen({
     }
   };
 
+  const revengeBrief = (
+    <div data-focus-order="run_the_fix" data-testid="insight-verdict" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>
+        <span>ONE VERDICT</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
+      </div>
+      <div style={{ marginTop: 9, fontSize: 16, color: "#FFF", fontWeight: 900 }}>{insightGraph.verdict.statement}</div>
+      <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
+        <strong style={{ color: "#FF9A67" }}>Lesson:</strong> {insightGraph.lesson}
+      </div>
+      <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
+        <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
+        <div style={{ marginTop: 4, fontSize: 10, color: "#8FEFFF", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
+      </div>
+      <details style={{ marginTop: 8 }}>
+        <summary style={{ color: "#B9C4D8", fontSize: 9, fontWeight: 900, cursor: "pointer" }}>INSPECT RANKED REASONING · {insightGraph.contradictions.length ? `${insightGraph.contradictions.length} CONFLICT` : "NO CONFLICTS"}</summary>
+        <div style={{ marginTop: 7, display: "grid", gap: 5 }}>
+          {insightGraph.nodes.slice(0, 4).map((node) => (
+            <div key={node.id} style={{ color: "#C9D2DF", fontSize: 9, lineHeight: 1.45 }}>
+              {Math.round(node.confidence * 100)}% · {node.evidenceLevel.replaceAll("_", " ").toUpperCase()} · {node.statement}
+            </div>
+          ))}
+        </div>
+      </details>
+      <button
+        data-testid="run-the-fix"
+        aria-label={`${runTheFix.action.label}: ${runTheFix.target}`}
+        onClick={executeRunTheFix}
+        style={{ marginTop: 10, width: "100%", padding: "11px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 13, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}
+      >
+        {runTheFix.action.label}
+      </button>
+    </div>
+  );
+
   return (
     <div style={{ ...base, touchAction: "pan-y", overflowY: "auto", overflowX: "hidden", color: "#fff", background: "linear-gradient(135deg,#1a0000 0%,#2a0808 50%,#1a0000 100%)", boxSizing: "border-box" }}>
       {showLeaderboard && (
@@ -773,6 +807,13 @@ export default function DeathScreen({
             )}
           </div>
         )}
+
+        {revengeBrief}
+
+        <details data-focus-order="secondary_analysis" data-testid="secondary-run-analysis" style={{ width: "100%", marginBottom: 12 }}>
+          <summary style={{ padding: "9px 11px", marginBottom: 10, borderRadius: 7, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.045)", color: "#B8C0D0", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
+            {runTheFix.secondaryDisclosureLabel}
+          </summary>
 
         {runModifier && (
           <div style={{ marginBottom: 10, padding: "5px 14px", borderRadius: 8, border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.06)", display: "inline-block" }}>
@@ -962,43 +1003,6 @@ export default function DeathScreen({
             <div style={{ marginTop: 5, color: "#8FA0AF", fontSize: 9, lineHeight: 1.4 }}>Observed result only—this receipt does not claim the drill caused the outcome.</div>
           </div>
         )}
-        <div data-focus-order="run_the_fix" data-testid="insight-verdict" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>
-            <span>ONE VERDICT</span><span>{Math.round(insightGraph.verdict.confidence * 100)}% · {insightGraph.verdict.evidenceLevel.replaceAll("_", " ").toUpperCase()}</span>
-          </div>
-          <div style={{ marginTop: 9, fontSize: 16, color: "#FFF", fontWeight: 900 }}>{insightGraph.verdict.statement}</div>
-          <div style={{ marginTop: 7, fontSize: 11, color: "#FFD7C2", lineHeight: 1.5 }}>
-            <strong style={{ color: "#FF9A67" }}>Lesson:</strong> {insightGraph.lesson}
-          </div>
-          <div style={{ marginTop: 8, padding: "9px 10px", borderRadius: 7, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.1)" }}>
-            <div style={{ fontSize: 11, color: "#FFF", lineHeight: 1.45 }}>{runTheFix.target}</div>
-            <div style={{ marginTop: 4, fontSize: 10, color: "#8FEFFF", lineHeight: 1.45 }}>Proof target: {runTheFix.proof}</div>
-          </div>
-          <details style={{ marginTop: 8 }}>
-            <summary style={{ color: "#B9C4D8", fontSize: 9, fontWeight: 900, cursor: "pointer" }}>INSPECT RANKED REASONING · {insightGraph.contradictions.length ? `${insightGraph.contradictions.length} CONFLICT` : "NO CONFLICTS"}</summary>
-            <div style={{ marginTop: 7, display: "grid", gap: 5 }}>
-              {insightGraph.nodes.slice(0, 4).map((node) => (
-                <div key={node.id} style={{ color: "#C9D2DF", fontSize: 9, lineHeight: 1.45 }}>
-                  {Math.round(node.confidence * 100)}% · {node.evidenceLevel.replaceAll("_", " ").toUpperCase()} · {node.statement}
-                </div>
-              ))}
-            </div>
-          </details>
-          <button
-            data-testid="run-the-fix"
-            aria-label={`${runTheFix.action.label}: ${runTheFix.target}`}
-            onClick={executeRunTheFix}
-            style={{ marginTop: 10, width: "100%", padding: "11px 12px", borderRadius: 8, border: "none", background: "linear-gradient(180deg,#FF9A4D,#D54500)", color: "#FFF", fontSize: 13, fontWeight: 900, letterSpacing: 1.4, cursor: "pointer", fontFamily: "'Courier New',monospace" }}
-          >
-            {runTheFix.action.label}
-          </button>
-        </div>
-
-        <details data-focus-order="secondary_analysis" style={{ width: "100%", marginBottom: 12 }}>
-          <summary style={{ padding: "9px 11px", borderRadius: 7, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.045)", color: "#B8C0D0", fontSize: 10, fontWeight: 900, letterSpacing: 1.5, cursor: "pointer" }}>
-            {runTheFix.secondaryDisclosureLabel}
-          </summary>
-
         {fairnessReceipt?.seed > 0 && (
           <div data-testid="fairness-receipt" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(143,239,255,0.28)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
             <div style={{ fontSize: 10, color: "#8FEFFF", letterSpacing: 2, fontWeight: 900 }}>FAIRNESS RECEIPT · {fairnessReceipt.fingerprint}</div>
@@ -1513,7 +1517,6 @@ export default function DeathScreen({
               type="text"
               value={lastWords}
               maxLength={60}
-              autoFocus
               onChange={e => { const w = e.target.value.split(/\s+/).filter(Boolean); if (w.length <= 5) setLastWords(e.target.value); }}
               placeholder="Famous last words (5 words max)"
               style={{ width: "100%", padding: "10px 12px", fontSize: 13, fontFamily: "'Courier New',monospace", fontStyle: "italic", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 6, color: "#FFF", textAlign: "center", outline: "none", marginBottom: 6, boxSizing: "border-box" }}

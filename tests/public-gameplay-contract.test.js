@@ -9,7 +9,7 @@ describe("public gameplay contract", () => {
     expect(contract.weapons).toHaveLength(WEAPONS.length);
     expect(contract.schemaVersion).toBe("gameplay-contract-v2");
     expect(contract.weapons.every((weapon) => weapon.availableAtStart)).toBe(true);
-    expect(contract.weapons.every((weapon) => Number.isInteger(weapon.masteryAccountLevel))).toBe(true);
+    expect(contract.weapons.every((weapon) => Number.isInteger(weapon.arsenalMilestoneLevel))).toBe(true);
     expect(contract.weapons.some((weapon) => "unlockAccountLevel" in weapon)).toBe(false);
     expect(contract.permanentUpgrades).toHaveLength(META_UPGRADES.length);
     expect(contract.enemies.filter((enemy) => enemy.boss).map((enemy) => enemy.index)).toEqual([...BOSS_ROTATION].sort((a, b) => a - b));

@@ -6,14 +6,14 @@ import {
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
   CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
-  WAVE_CHALLENGE_MUTATIONS, WEAPON_MASTERY_LEVELS, BOSS_GRUDGE_QUOTES,
+  WAVE_CHALLENGE_MUTATIONS, WEAPON_ARSENAL_MILESTONE_LEVELS, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
-import { THEME_PROP_EMOJI_TO_CELL } from "./utils/objectAtlasContract.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
+import { buildArenaEnvironment } from "./systems/arenaEnvironment.js";
 import { applyRunSettings, loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
 import { addHeatOnKill, decayHeat, heatTier, resetHeat } from "./systems/heatMeter.js";
 import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy.js";
@@ -852,120 +852,14 @@ export default function CallOfDoodie() {
     perkModsRef.current.xpMult        = (perkModsRef.current.xpMult || 1) * sett.xpGainMult;
     if (sett.pickupMagnet > 1) perkModsRef.current.pickupRange = Math.max(perkModsRef.current.pickupRange || 30, 30 * sett.pickupMagnet);
 
-    // Generate seeded arena layout (4 named layouts, reproducible per seed)
-    let _ws = seed;
-    const _sr = () => { _ws = Math.abs((Math.imul(_ws, 1664525) + 1013904223) | 0); return (_ws >>> 0) / 0xFFFFFFFF; };
-    const SPAWN_SAFE = 115;
-    // ── Named arena layouts ──
-    const _LAYOUT_NAMES = ["Pillars", "Corridors", "Cross-Rooms", "Bunker"];
-    const _layouts = [
-      // 0: Pillars — 8 square pillars in a loose grid
-      () => {
-        const pts = [[.18,.22],[.50,.12],[.82,.22],[.12,.50],[.88,.50],[.18,.78],[.50,.88],[.82,.78]];
-        return pts.map(([rx,ry]) => ({ x: w*rx-15, y: h*ry-15, w:30, h:30 }))
-          .filter(ob => Math.hypot(ob.x+15-w/2, ob.y+15-h/2) > SPAWN_SAFE);
-      },
-      // 1: Corridors — two long horizontal walls with center gaps, tri-lane arena
-      () => [
-        { x: w*.07, y: h*.34, w: w*.36, h: 18 },
-        { x: w*.57, y: h*.34, w: w*.36, h: 18 },
-        { x: w*.07, y: h*.63, w: w*.36, h: 18 },
-        { x: w*.57, y: h*.63, w: w*.36, h: 18 },
-        { x: w*.08, y: h*.10, w: 18, h: h*.22 },
-        { x: w*.74, y: h*.10, w: 18, h: h*.22 },
-        { x: w*.08, y: h*.68, w: 18, h: h*.22 },
-        { x: w*.74, y: h*.68, w: 18, h: h*.22 },
-      ],
-      // 2: Cross-Rooms — L-shaped walls in each corner, open center
-      () => [
-        { x: w*.05, y: h*.05, w: w*.20, h: 14 }, { x: w*.05, y: h*.05, w: 14, h: h*.22 },
-        { x: w*.75, y: h*.05, w: w*.20, h: 14 }, { x: w*.81, y: h*.05, w: 14, h: h*.22 },
-        { x: w*.05, y: h*.81, w: w*.20, h: 14 }, { x: w*.05, y: h*.73, w: 14, h: h*.22 },
-        { x: w*.75, y: h*.81, w: w*.20, h: 14 }, { x: w*.81, y: h*.73, w: 14, h: h*.22 },
-      ],
-      // 3: Bunker — central cover + flanking vertical walls
-      () => [
-        { x: w*.34, y: h*.28, w: w*.32, h: 18 },
-        { x: w*.34, y: h*.54, w: w*.32, h: 18 },
-        { x: w*.10, y: h*.18, w: 16, h: h*.28 },
-        { x: w*.74, y: h*.18, w: 16, h: h*.28 },
-        { x: w*.10, y: h*.54, w: 16, h: h*.28 },
-        { x: w*.74, y: h*.54, w: 16, h: h*.28 },
-      ],
-    ];
-    const layoutIdx = Math.floor(_sr() * _layouts.length);
-    const walls = _layouts[layoutIdx]();
-    gsRef.current._layoutName = _LAYOUT_NAMES[layoutIdx];
-    gsRef.current.obstacles = walls;
-
-    // Generate terrain decorations (visual only — no collision)
-    const terrainCount = 22 + Math.floor(_sr() * 14); // 22–36 decorations
-    const terrain = [];
-    for (let _ti = 0; _ti < terrainCount; _ti++) {
-      terrain.push({
-        x: w * 0.03 + _sr() * w * 0.94,
-        y: h * 0.03 + _sr() * h * 0.94,
-        type: Math.floor(_sr() * 4), // 0=stain, 1=crack, 2=rubble, 3=worn tile
-        size: 14 + _sr() * 40,
-        rot: _sr() * Math.PI * 2,
-      });
-    }
-    gsRef.current.terrain = terrain;
-
-    // Map theme + floor zones + props
-    const mapTheme = Math.floor(_sr() * 8); // 0=office 1=bunker 2=factory 3=ruins 4=desert 5=forest 6=space 7=arctic
-    gsRef.current.mapTheme = mapTheme;
-    const THEME_PROPS = [
-      ["🪑","💻","☕","🌿","📋","📁","🗑️","🖥️","📎","🖨️","📞","🗃️"],            // office
-      ["📦","🪖","🔦","⛽","🪝","🗝️","🧱","🪜","🪤","🔒","💣","🪃"],            // bunker
-      ["⚙️","🔧","🔩","⛽","📦","🪛","🏭","🔌","🪚","🛢️","🔋","⚗️"],            // factory
-      ["🪨","💀","🏚️","🪵","⚰️","🕸️","🌑","🦴","🧟","🕯️","📜","🗡️"],          // ruins
-      ["🌵","🏜️","🦂","🪨","⛺","🐍","🦎","☀️","🌡️","🪬","🌾","🐪"],           // desert
-      ["🌲","🌿","🍄","🦊","🐾","🌱","🪵","🦋","🐸","🌳","🍃","🦝"],            // forest
-      ["🚀","🛸","🌙","⭐","🪐","🌌","👾","🌟","🛰️","🌠","🔭","👽"],            // space
-      ["❄️","🏔️","🐧","🌨️","🦭","⛷️","🐻‍❄️","🧊","🌬️","🏂","🎿","🦌"],      // arctic
-    ];
-    // Floor zones: large irregular colored patches for visual variety
-    const floorZones = [];
-    for (let _fz = 0; _fz < 4 + Math.floor(_sr() * 4); _fz++) {
-      floorZones.push({
-        x: w * 0.04 + _sr() * w * 0.92,
-        y: h * 0.04 + _sr() * h * 0.92,
-        rx: 55 + _sr() * 120, ry: 35 + _sr() * 80,
-        rot: _sr() * Math.PI,
-        alpha: 0.04 + _sr() * 0.05,
-      });
-    }
-    gsRef.current.floorZones = floorZones;
-    // Props: themed decorative emoji on the floor (no collision)
-    const propsPool = THEME_PROPS[mapTheme];
-    const props = [];
-    for (let _pi = 0; _pi < 12 + Math.floor(_sr() * 6); _pi++) {
-      const px = w * 0.06 + _sr() * w * 0.88;
-      const py = h * 0.06 + _sr() * h * 0.88;
-      const onWall = walls.some(ob => px > ob.x - 10 && px < ob.x + ob.w + 10 && py > ob.y - 10 && py < ob.y + ob.h + 10);
-      const nearCenter = Math.hypot(px - w / 2, py - h / 2) < 90;
-      if (!onWall && !nearCenter) {
-        const propEmoji = propsPool[Math.floor(_sr() * propsPool.length)];
-        // S147: the 2 highest-visibility props per theme get a real sprite
-        // (THEME_PROP_EMOJI_TO_CELL); the rest keep the emoji fillText fallback.
-        props.push({ x: px, y: py, emoji: propEmoji, spriteKey: THEME_PROP_EMOJI_TO_CELL[propEmoji] || null, rot: _sr() * Math.PI * 2, scale: 0.7 + _sr() * 0.5 });
-      }
-    }
-    gsRef.current.props = props;
-
-    // Generate arena hazards (3-6 per map, seeded)
-    const _hTypes = ["acid", "electro", "rubble"];
-    const _hCount = 3 + Math.floor(_sr() * 4); // 3-6 hazards
-    const hazards = [];
-    for (let hi = 0; hi < _hCount; hi++) {
-      const _hType = _hTypes[Math.floor(_sr() * _hTypes.length)];
-      const _hx = 80 + _sr() * (w - 160);
-      const _hy = 80 + _sr() * (h - 160);
-      const _hr = 35 + _sr() * 30; // radius 35-65
-      hazards.push({ x: _hx, y: _hy, radius: _hr, type: _hType, pulseTimer: Math.floor(_sr() * 120) });
-    }
-    gsRef.current.hazards = hazards;
+    const arena = buildArenaEnvironment({ seed, width: w, height: h });
+    gsRef.current._layoutName = arena.layoutName;
+    gsRef.current.obstacles = arena.obstacles;
+    gsRef.current.terrain = arena.terrain;
+    gsRef.current.mapTheme = arena.mapTheme;
+    gsRef.current.floorZones = arena.floorZones;
+    gsRef.current.props = arena.props;
+    gsRef.current.hazards = arena.hazards;
 
     // Show meta toast if upgrades active
     const metaSnap = loadMetaProgress();
@@ -1738,10 +1632,10 @@ export default function CallOfDoodie() {
     try {
       const _newAcctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
       if (_newAcctLevel > _prevAcctLevel) {
-        for (let _wi = 0; _wi < WEAPON_MASTERY_LEVELS.length; _wi++) {
-          const _req = WEAPON_MASTERY_LEVELS[_wi];
+        for (let _wi = 0; _wi < WEAPON_ARSENAL_MILESTONE_LEVELS.length; _wi++) {
+          const _req = WEAPON_ARSENAL_MILESTONE_LEVELS[_wi];
           if (_req > _prevAcctLevel && _req <= _newAcctLevel) {
-            track("weapon_mastery_earned", { weaponIdx: _wi, masteryAccountLevel: _req, accountLevel: _newAcctLevel, prevLevel: _prevAcctLevel, wave: gs?.currentWave || 0 });
+            track("arsenal_milestone_earned", { weaponIdx: _wi, arsenalMilestoneLevel: _req, accountLevel: _newAcctLevel, prevLevel: _prevAcctLevel, wave: gs?.currentWave || 0 });
           }
         }
       }
@@ -2260,9 +2154,9 @@ export default function CallOfDoodie() {
     }
     try {
       const _acctLevel = getAccountLevel(loadCareerStats().totalKills || 0);
-      const _masteredCount = WEAPON_MASTERY_LEVELS.filter((requiredLevel) => _acctLevel >= requiredLevel).length;
-      if (_masteredCount < WEAPONS.length) {
-        track("weapon_mastery_snapshot", { accountLevel: _acctLevel, masteredCount: _masteredCount, totalWeapons: WEAPONS.length, availability: "all-open" });
+      const _milestonesReached = WEAPON_ARSENAL_MILESTONE_LEVELS.filter((requiredLevel) => _acctLevel >= requiredLevel).length;
+      if (_milestonesReached < WEAPONS.length) {
+        track("arsenal_milestone_snapshot", { accountLevel: _acctLevel, milestonesReached: _milestonesReached, totalWeapons: WEAPONS.length, availability: "all-open" });
       }
     } catch {}
   }, [applyPerk, dailyChallengeMode, initGame, releaseAllInputs, starterLoadout]);

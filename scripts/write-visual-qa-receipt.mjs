@@ -20,6 +20,8 @@ const valuesAfter = (name) => process.argv.reduce((values, arg, index) => {
   return values;
 }, []);
 const fixNotes = valuesAfter("--fix");
+const reviewedCapturePaths = valuesAfter("--reviewed-capture");
+const subjectiveReview = process.argv.includes("--subjective-review");
 
 const auditDir = path.resolve(root, valueAfter("--audit-dir", "output/playwright/session-137-staging"));
 const canonicalDir = path.join(root, "docs", "visual-qa");
@@ -46,6 +48,23 @@ if (stateDirArg) {
       page: "Expanded Replay Coverage Passport in Run History",
     });
   }
+}
+
+for (const capturePath of reviewedCapturePaths) {
+  const source = path.resolve(root, capturePath);
+  if (!fs.existsSync(source)) throw new Error(`Reviewed capture missing: ${capturePath}`);
+  const basename = path.basename(source);
+  const theme = /(?:^|[-_])light(?:[-_.]|$)/i.test(basename) ? "light" : "dark";
+  const width = /(?:^|[-_])mobile(?:[-_.]|$)/i.test(basename) ? 390 : 1440;
+  selected.push({
+    source,
+    file: `death-brief-${theme}-${width}.png`,
+    theme,
+    projectTheme: theme === "dark" ? "sewer-night" : "porcelain-day",
+    width,
+    height: width === 390 ? 844 : 1000,
+    page: "Death-screen revenge brief first viewport",
+  });
 }
 
 const sha256 = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
@@ -86,17 +105,20 @@ const receipt = {
   captures,
   inspection: {
     renderedPixelsReviewed: true,
-    reviewer: "Playwright rendered-pixel analytics and screenshot artifact court",
+    reviewer: subjectiveReview
+      ? "Codex direct rendered-pixel review plus Playwright screenshot and analytics court"
+      : "Playwright rendered-pixel analytics and screenshot artifact court",
     findings: [
       `The source matrix passed ${audit.summary.passed}/${audit.summary.total} checks across ${audit.matrix.routes.length} routes, ${audit.matrix.themes.length} project themes, and ${audit.matrix.widths.join("px, ")}px widths.`,
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
+      ...(reviewedCapturePaths.length ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
       ...(stateReceipt ? [`The expanded Replay Coverage Passport passed ${stateReceipt.summary.passed}/${stateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
     ],
     fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],
     blockingDefectsOpen: 0,
-    subjectiveVisualReviewClaimed: false,
-    subjectiveVisualReviewStatus: "unavailable-host-cryptunprotectdata",
+    subjectiveVisualReviewClaimed: subjectiveReview,
+    subjectiveVisualReviewStatus: subjectiveReview ? "completed" : "not-claimed",
   },
 };
 fs.writeFileSync(path.join(canonicalDir, "LATEST.json"), JSON.stringify(receipt, null, 2) + "\n");

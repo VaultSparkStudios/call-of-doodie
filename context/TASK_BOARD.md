@@ -2,6 +2,16 @@
 
 Public-safe launch roadmap summary.
 
+## Session 151 — Revenge loop, mastery truth, stats twin, and architecture headroom
+
+- [x] [SIL:3] **DONE S151** `RUN THE FIX` is first-viewport primary after death/challenge; secondary debrief analysis is one accessible collapsed disclosure.
+- [x] [SIL:3] **DONE S151** Per-weapon kill evidence is the sole mastery authority; account-level recognition is consistently named arsenal milestones.
+- [x] [SIL:2] **DONE S151** `analytica-feed-v1` binds four homepage showcase metrics to the public descriptor and 15-second store cadence; CANON-054 conforms.
+- [x] [SIL:2] **DONE S151** Pure seeded arena-environment boundary preserves 40/40 legacy parity and restores App headroom from 10 to 116 lines.
+- [x] [SIL:2] **DONE S151** Direct pixel review caught and fixed death-screen autofocus scrolling; 1,020/1,020 hosted checks and eight hash-bound captures pass CANON-053.
+
+**Runway exception:** every repo-owned S151 audit item is complete. Participant playtests, Prestige retuning, physical-device proof, provider/mail/identity verification, publication, current full Core Web Vitals, and SPARKED approval remain evidence- or authority-gated and are not fabricated as local tasks.
+
 ## Session 150 — Homepage readability and navigation
 
 - [x] [SIL:3] **DONE S150** One public navigation authority drives desktop, mobile, generated pages, and footer; `/stats/` is primary.
@@ -24,9 +34,9 @@ Public-safe launch roadmap summary.
 - [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
-## Current Session Intent: Session 149
+## Current Session Intent: Session 151
 
-Run the complete `/arc` from the recovered, synchronized main: specialty game-loop review; fresh nine-axis audit capped at 12 primary items; implementation of every accepted item plus second-order innovation; isolated staging and CANON-053 rendered-pixel proof; release gate and canonical closeout; authorized direct-main commit/push; production deploy and live custom-domain verification. SPARKED promotion is not implied.
+Complete the autonomous `/arc` from synchronized main: specialty game-loop and release review, fresh nine-axis audit, implementation of every accepted repo-owned item, isolated staging and CANON-053 rendered-pixel proof, canonical closeout, direct-main publication, and production verification. SPARKED promotion is not implied.
 
 ## Now
 

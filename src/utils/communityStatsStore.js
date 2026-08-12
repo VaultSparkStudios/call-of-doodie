@@ -14,8 +14,9 @@ import {
   requestCompletedRunFactSync,
 } from "../storage.js";
 import { getSupabaseClient } from "../supabase.js";
+import { COMMUNITY_STATS_REFRESH_SECONDS } from "./communityStatsContract.js";
 
-const POLL_MS = 15000;
+export const COMMUNITY_STATS_POLL_MS = COMMUNITY_STATS_REFRESH_SECONDS * 1000;
 const TREND_CAP = 32;
 const TREND_KEYS = ["runs", "kills", "score", "damage", "runners"];
 
@@ -71,7 +72,7 @@ function start() {
   if (timer !== null || typeof window === "undefined") return;
   disposed = false;
   refresh();
-  timer = setInterval(wake, POLL_MS);
+  timer = setInterval(wake, COMMUNITY_STATS_POLL_MS);
   window.addEventListener("online", wake);
   window.addEventListener("focus", wake);
   window.addEventListener("cod:community-stats-updated", wake);

@@ -1,6 +1,20 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-12 — Session 151 — Revenge, mastery, stats, architecture, and pixel truth
+
+- Loop truth — ONE VERDICT / RUN THE FIX follows death and optional challenge outcome. Secondary analysis remains inspectable but collapsed; the action is visible without scroll at 390px and 1440px.
+- Mastery truth — only per-weapon career kills produce mastery tiers. Account-level thresholds are arsenal milestones and weapon access remains all-open.
+- Stats truth — `analytica-feed-v1`, four showcase IDs, and `refreshSeconds: 15` / `refreshMechanism: poll` agree across public descriptor, visible homepage tile, and store; metric values remain the dated verified snapshot/live endpoint and were not rewritten.
+- Architecture truth — pure seeded arena generation is byte-equivalent to the prior inline path across 40 seed/dimension cases; App is 4,884/5,000 lines.
+- Pixel truth — the first staging render was mechanically 1,020/1,020 green yet Famous Last Words autofocus scrolled the death verdict above the viewport. The final build removes autofocus, opens at scrollTop 0, and passes direct image review with eight hash-bound captures.
+- Verification truth — focused/integrated tests, strict lint, schema/architecture, public/security/dependency/assets/media, build, cost, CANON-054, and CANON-053 pass. Recovery additionally proves the exact closing tree at 191/191 files and 1,138/1,138 assertions in one direct serialized run.
+- Doctor truth — Call of Doodie's project-targeted visual and canon checkers pass with eight captures and zero ABSOLUTE gaps. The Studio-wide Doctor's three blocking reds belong to Studio Ops' stale wallet court and active-tree receipts; they are routed through Ark and are not relabeled as a product failure or silently hidden.
+- Lifecycle truth — engineering-ready FORGE remains public-unlaunched. SPARKED stays NO-GO behind external/provider/device/participant/performance/identity/founder evidence.
+
+Overall status: all S151 repository-owned audit items are implemented and staging-verified; closeout publication follows; SPARKED remains NO-GO.
+Last reviewed: 2026-08-12
+
 ## 2026-08-12 — Session 150 — Front-door readability and navigation truth
 
 - Readability truth — player-facing homepage body, support, label, navigation, status, and statistics text is larger; 44px target and focus-visible checks are automated.

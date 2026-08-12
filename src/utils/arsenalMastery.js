@@ -1,27 +1,28 @@
-import { WEAPONS, WEAPON_MASTERY_LEVELS } from '../constants.js';
+import { WEAPONS, WEAPON_ARSENAL_MILESTONE_LEVELS } from '../constants.js';
 
 function level(value) {
   const number = Number(value);
   return Number.isFinite(number) ? Math.max(1, Math.floor(number)) : 1;
 }
 
-export function getWeaponMastery(weaponIndex, accountLevel = 1) {
+export function getWeaponArsenalMilestone(weaponIndex, accountLevel = 1) {
   const index = Math.max(0, Math.min(WEAPONS.length - 1, Math.floor(Number(weaponIndex) || 0)));
-  const masteryAccountLevel = WEAPON_MASTERY_LEVELS[index] ?? 1;
+  const arsenalMilestoneLevel = WEAPON_ARSENAL_MILESTONE_LEVELS[index] ?? 1;
   const currentAccountLevel = level(accountLevel);
   return {
     index,
     name: WEAPONS[index]?.name || `Weapon ${index + 1}`,
     available: true,
-    mastered: currentAccountLevel >= masteryAccountLevel,
-    masteryAccountLevel,
-    levelsRemaining: Math.max(0, masteryAccountLevel - currentAccountLevel),
+    reached: currentAccountLevel >= arsenalMilestoneLevel,
+    arsenalMilestoneLevel,
+    levelsRemaining: Math.max(0, arsenalMilestoneLevel - currentAccountLevel),
   };
 }
 
 // S145 — real per-weapon mastery derived from career kills with that weapon
 // (career.weaponLegendKills, the same source as the 1000-kill LEGEND
-// evolution). Account-level mastery labels remain as the legacy fallback.
+// evolution). Account-level thresholds are separate arsenal milestones; they
+// never imply mastery of a weapon the player has not used.
 export const WEAPON_KILL_TIERS = Object.freeze([
   { id: "rookie", label: "ROOKIE", kills: 0, color: "#8A949C" },
   { id: "trained", label: "TRAINED", kills: 50, color: "#5EE68A" },
@@ -48,15 +49,37 @@ export function getWeaponKillMastery(weaponIndex, weaponKills = 0) {
   };
 }
 
-export function buildArsenalMasteryContract(accountLevel = 1) {
-  const currentAccountLevel = level(accountLevel);
-  const weapons = WEAPONS.map((_, index) => getWeaponMastery(index, currentAccountLevel));
+export function buildWeaponMasteryContract(weaponKills = null) {
+  const evidenceAvailable = Array.isArray(weaponKills);
+  const weapons = WEAPONS.map((_, index) => (
+    evidenceAvailable ? getWeaponKillMastery(index, weaponKills[index] || 0) : null
+  ));
+  const targets = weapons
+    .filter(Boolean)
+    .filter((weapon) => weapon.nextTier)
+    .sort((a, b) => a.nextTier.killsNeeded - b.nextTier.killsNeeded || a.index - b.index);
   return {
-    schemaVersion: 'arsenal-mastery-v2',
+    schemaVersion: 'weapon-mastery-v1',
+    source: 'career.weaponLegendKills',
+    availability: 'all-open',
+    evidenceAvailable,
+    weapons,
+    masteredCount: evidenceAvailable ? weapons.filter((weapon) => weapon.tier === 'legend').length : null,
+    nextMastery: targets[0]
+      ? { ...targets[0], name: WEAPONS[targets[0].index]?.name || `Weapon ${targets[0].index + 1}` }
+      : null,
+  };
+}
+
+export function buildArsenalMilestoneContract(accountLevel = 1) {
+  const currentAccountLevel = level(accountLevel);
+  const weapons = WEAPONS.map((_, index) => getWeaponArsenalMilestone(index, currentAccountLevel));
+  return {
+    schemaVersion: 'arsenal-milestones-v1',
     availability: 'all-open',
     currentAccountLevel,
     weapons,
-    masteredCount: weapons.filter((weapon) => weapon.mastered).length,
-    nextMastery: weapons.find((weapon) => !weapon.mastered) || null,
+    reachedCount: weapons.filter((weapon) => weapon.reached).length,
+    nextMilestone: weapons.find((weapon) => !weapon.reached) || null,
   };
 }

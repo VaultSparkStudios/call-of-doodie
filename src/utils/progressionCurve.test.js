@@ -21,12 +21,14 @@ describe("progression runway contract", () => {
       totalKills: 79,
       careerPoints: 250,
       upgradeTiers: {},
+      weaponKills: [49, 50],
       killsPerRunScenarios: [10, 25],
     });
 
     expect(runway.current.accountLevel).toBe(2);
     expect(runway.arsenal).toMatchObject({ availability: "all-open", totalWeapons: 12 });
-    expect(runway.nextMastery).toMatchObject({ accountLevel: 3, killsRemaining: 1, available: true });
+    expect(runway.arsenal).toMatchObject({ evidenceAvailable: true, masteredCount: 0 });
+    expect(runway.nextMastery).toMatchObject({ index: 0, killsRemaining: 1, tier: "rookie" });
     expect(runway.nextMastery.runsByKillsPerRun).toEqual({ "10": 1, "25": 1 });
     expect(runway.nextUpgrade).toMatchObject({ tier: 1, cost: 200, pointsRemaining: 0 });
     expect(runway.assumptions.scenariosAreDescriptiveNotTargets).toBe(true);
@@ -38,11 +40,19 @@ describe("progression runway contract", () => {
       totalKills: 6000,
       careerPoints: 100,
       upgradeTiers: Object.fromEntries(META_UPGRADES.map((group) => [group.id, group.tiers.length])),
+      weaponKills: Array(12).fill(1000),
     });
 
     expect(runway.nextMastery).toBeNull();
     expect(runway.nextUpgrade).toBeNull();
     expect(runway.remainingUpgradePaths).toBe(0);
     expect(describeProgressionRunway(runway)).toContain("permanent upgrade path");
+  });
+
+  it("does not convert account progression into weapon mastery", () => {
+    const runway = buildProgressionRunway({ totalKills: 6000, careerPoints: 0 });
+    expect(runway.arsenal).toMatchObject({ evidenceAvailable: false, masteredCount: null });
+    expect(runway.nextMastery).toBeNull();
+    expect(describeProgressionRunway(runway)).toContain("evidence is unavailable");
   });
 });

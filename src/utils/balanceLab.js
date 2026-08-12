@@ -116,6 +116,7 @@ export function buildLocalBalanceLab({ runHistory = [], studioEvents = [], caree
       totalKills: career?.totalKills,
       careerPoints: meta?.careerPoints,
       upgradeTiers: meta?.upgradeTiers,
+      weaponKills: career?.weaponLegendKills,
     });
     addInsight(insights, {
       id: "progression_runway",

@@ -1,17 +1,10 @@
-# Implement Plan — Session 150
+# Implement Plan — Session 151
 
-Source: founder-approved homepage readability and navigation plan. Default rung: L2.
+Source: `docs/AUDIT_2026-08-12.json`. Default rung: L2.
 
-1. [x] `readable-front-door-type-system` — raised body, support, label, action, status, and stat typography while retaining the compact arcade character.
-2. [x] `single-public-navigation-authority` — one route registry now drives the React header, generated-page header, mobile dock, More drawer, and shared footer.
-3. [x] `stats-discoverability-and-live-showcase` — `/stats/` is a primary destination and the homepage carries a four-metric live Community Stats showcase with a clear full-page route.
-4. [x] `command-deck-value-recomposition` — retained the useful performance shell, removed Command Deck as an extra concept, kept one primary play decision, and collapsed secondary tools into four scannable groups.
-5. [x] `mobile-navigation-and-accessibility` — fixed bottom navigation, full-height More drawer, focus restoration, Escape close, 44px targets, and clear focus treatment.
+1. [x] `seeded-arena-environment-boundary` — extracted deterministic arena-environment generation from `App.jsx` behind a pure, tested system boundary; 40/40 legacy seed/dimension parity and 116 lines of App headroom.
+2. [x] `canonical-weapon-mastery-authority` — mastery now derives only from per-weapon kill evidence; account-level thresholds are named arsenal milestones across UI, telemetry, audits, and public contracts.
+3. [x] `revenge-brief-first` — the actionable revenge brief now follows the death/challenge result, with build, statistics, evidence, and tactical analysis in one accessible disclosure.
+4. [x] `analytica-stats-twin-v1` — the public descriptor, homepage showcase, and 15-second polling cadence share one tested contract; CANON-054 conforms.
 
-Verification after each item:
-
-- Focused pure/component tests, touched-file strict lint, public-route contract, and production build.
-- Hosted staging proof across desktop/mobile and both themes, including direct `/stats/` reachability and open-menu state.
-- Final rendered-pixel court, architecture/schema checks, security/dependency/media gates, and broad regression evidence.
-
-Final evidence: focused 35/35 tests; strict lint, schema/architecture, public contract 28/28, deployable build, security/npm audit, dependency, asset, and media checks green; isolated staging `https://session-150-staging.call-of-doodie.pages.dev/`; hosted visual matrix 1,020/1,020; CANON-053 six-capture receipt green. Two broad-suite attempts exceeded 15 minutes under shared-host contention without a captured assertion failure and are recorded as inconclusive. No dependency, credential scope, hosted intelligence, or variable per-player cost was added.
+Per-item gates: focused tests, strict lint on touched source, architecture budget, and the applicable canon checker. Final gates: full test suite, production build, public contract, security/supply-chain checks, hosted staging smoke, and rendered-pixel review for both themes at desktop and mobile widths.

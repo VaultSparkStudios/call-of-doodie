@@ -19,6 +19,7 @@
 ## Open Work
 
 # Task Board
+## Session 151 — Revenge loop, mastery truth, stats twin, and architecture headroom
 ## Session 150 — Homepage readability and navigation
 ## Human Action Required
 - [ ] [S60] Rotate or narrow the broad Cloudflare `cloudflare-studio-access.txt` token after domain stabilization — current token has account/user/zone-wide powers and should be replaced by narrower domain-migration tokens
@@ -28,7 +29,7 @@
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
-## Current Session Intent: Session 149
+## Current Session Intent: Session 151
 ## Now
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
@@ -49,25 +50,6 @@
 
 ## Recent Decisions
 
-## 2026-08-11 — Session 149 — First-interaction audio initialization is idle work
-
-Decision: Preconstruct `AudioContext` during an idle slice and keep a gesture-time construction fallback for browsers that forbid pre-gesture creation. On narrow screens, pause/hide the decorative full-viewport canvas/blend layers, acknowledge deploy configuration locally, and commit App-wide mode state after the presentation boundary.
-
-Rationale: The measurement sequence moved from 1,408ms native-picker evidence through 832ms/408ms/112ms intermediate experiments, but hardware-composited phase timing finally identified roughly 500ms of synchronous first-`pointerdown` audio initialization. The final staging court measures 16ms mobile and 40ms desktop. This is synthetic browser evidence, not a physical-device claim.
-
-
-## 2026-08-11 — Session 149 — Rendered pixels can overrule mechanical theme checks
-
-Decision: Treat the 1,020-case matrix as necessary but insufficient. Image-capable inspection must also verify representative touched pixels; when it exposes a defect, fix and repeat the entire matrix before issuing the hash-bound receipt.
-
-Rationale: The matrix checked theme identity and toggle contrast but did not detect `home-arcade.css` overriding Porcelain Day's page canvas or night-only accents inside the new controls. Bounded JPEG fallback inspection found both, and the final recapture proves readable light/dark hierarchy at mobile and desktop.
-
-CANON-010 gap justification: the conformance checker continues to report malformed Studio-OS-owned parity evidence rather than a project skill/hook change; Session 149 changed no MCP or cross-agent registration, so the public game records the checker gap without inventing local conformance.
-
-CANON-045 gap justification: the checker could not parse a passing Obelisk proxy posture even though public auth remains delegated/optional and no project-local account system was added; the release remains FORGE and this parser gap is not laundered into adoption.
-
-CANON-054 gap justification: the checker emitted malformed evidence while the dated `/stats/` and machine-readable stats twin remain present and the full public-route visual court passes; Session 149 records the measurement defect and makes no broader analytics claim.
-
 ## 2026-08-11 — Session 149 closeout — external scorer failures stay advisory
 
 **Decision:** Preserve the failed project-targeted IGNIS rescore and the Studio Doctor's cross-portfolio reds as explicit control-plane advisories; do not mutate sibling repositories or downgrade a green Call-Of-Doodie release candidate without a project-local failing gate.
@@ -83,10 +65,29 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** Production correctly served the S145 PNG social card from `index.html`, but the live checker still expected the old SVG HTML reference and therefore failed after every other live court passed. The SVG remains the authored source and a cached fallback; the PNG is the public Open Graph/Twitter asset. The verifier must follow the current public contract rather than force a regression to an obsolete reference.
 
 **Evidence:** Focused verifier/public-contract court passes 30/30; both `https://callofdoodie.wtf/` and immutable `https://6a3ec909.call-of-doodie.pages.dev/` pass the corrected live court 7/7.
+# 2026-08-12 — Session 151 — Mastery requires weapon evidence
+
+**Decision:** Reserve weapon mastery for per-weapon career kills. Keep global account thresholds only as explicitly named arsenal milestones; never infer mastery from total career kills.
+
+**Why:** The prior split authority called three fresh-profile weapons mastered at zero weapon kills while WeaponDock correctly showed ROOKIE. One evidence source now drives loadouts, progression analysis, telemetry vocabulary, and public contracts without changing weapon availability.
+
+
+## 2026-08-12 — Session 151 — Revenge action precedes analysis
+
+**Decision:** Render ONE VERDICT / RUN THE FIX immediately after death and any challenge result, with build/stat/evidence analysis under one disclosure; do not autofocus the later Famous Last Words field.
+
+**Why:** The loop promises humiliation → lesson → rematch. Direct staging pixels proved autofocus scrolled the entire primary action 854–1,207px above the viewport; source order alone could not reveal it. The corrected screen opens at scrollTop 0 with the action visible at both 390px and 1440px.
+
+
+## 2026-08-12 — Session 151 — Stats liveness is one contract
+
+**Decision:** Treat `analytica-feed-v1`, the four showcase metric IDs, and the 15-second poll cadence as one shared source contract across the homepage, store, and public descriptor.
+
+**Why:** The UI was live but the machine twin did not declare what “live” meant. Shared constants and a cross-surface test close that structural gap without updating or fabricating any metric value.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 176,884 bytes · SHA-256 `96ad0614a471…`
-- `context/TASK_BOARD.md` · 117,265 bytes · SHA-256 `adb6d1dc8d26…`
-- `context/DECISIONS.md` · 112,792 bytes · SHA-256 `3342e860c110…`
-- `docs/AUDIT_2026-08-11.json` · 13,052 bytes · SHA-256 `a5a532d11663…`
+- `context/CURRENT_STATE.md` · 179,264 bytes · SHA-256 `52204c50adcc…`
+- `context/TASK_BOARD.md` · 118,353 bytes · SHA-256 `4cbd18262a5f…`
+- `context/DECISIONS.md` · 114,365 bytes · SHA-256 `dbad0a39eb4d…`
+- `docs/AUDIT_2026-08-12.json` · 14,648 bytes · SHA-256 `2591320497a8…`

@@ -219,7 +219,10 @@ describe("HomeV2", () => {
     expect(navigation.querySelector('a[href="/stats/"]')?.textContent).toBe("Stats");
     expect(container.querySelector('#live-stats [data-testid="community-stats"]')).toBeTruthy();
     expect(container.querySelector('#live-stats a[href$="stats/"]')?.textContent).toContain("VIEW ALL STATS");
-    expect(container.querySelector('#live-stats').textContent).toContain("RUNS · 24H");
+    expect(container.querySelector('#live-stats').textContent).toContain("VERIFIED RUNS");
+    expect(container.querySelector('#live-stats').textContent).toContain("DISTINCT RUNNERS");
+    expect(container.querySelector('#live-stats').textContent).toContain("ENEMIES TERMINATED");
+    expect(container.querySelector('#live-stats').textContent).toContain("TOTAL SCORE");
     expect(container.querySelector('#live-stats').textContent).not.toContain("YOUCOMMUNITYLIVE");
   });
 

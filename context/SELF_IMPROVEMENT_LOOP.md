@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-12 — Session 151 | Total: 994/1000 | Velocity: 5 | Debt: ↓
+
+SIL 994/1000: Shipped all four verified audit items and let rendered pixels overrule the apparently green source/analytics story. The direct court exposed a late autofocus that hid the entire revenge brief; fixing it made the core death → lesson → rematch promise true in the first viewport.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 99 | ↑ | Strict lint, build, schema/architecture, public/security/dependency courts, focused tests, and the four-shard 1,138-assertion corpus are green; one monolithic host timeout remains inconclusive rather than misreported. |
+| Alignment | 100 | → | Humiliation now converts directly into an evidence-backed revenge action; mastery reflects actual weapon use and improvised doctrine remains non-prescriptive. |
+| Momentum | 99 | → | Four audit items plus the pixel-discovered autofocus defect shipped in one continuous arc without speculative content or balance churn. |
+| Engagement | 100 | → | The actionable rematch is first, per-weapon progress is honest, and public activity is visible through one live stats contract. |
+| Process Qual | 99 | → | Premises were verified before implementation and pixels caught what DOM/contrast checks missed; full-suite sharding converted host contention into attributable evidence. |
+| Coherence | 97 | ↓ | Project surfaces agree, but the closeout-checklist renderer was invoked from its sibling path and refreshed one generated Studio Ops file before the mistake was detected and routed back through Ark. |
+| Security | 100 | → | Settings sanitizer, secret scan, release headers/CSP, npm audit zero, and dependency tree pass; no secret scope or dependency changed. |
+| Ecosystem | 100 | ↑ | Human UI, generated pages, public JSON, CANON-054/053 receipts, staging, and agent-readable contracts share one vocabulary. |
+| Capital | 100 | → | All intelligence remains deterministic/local and the existing Cloudflare/Supabase path is reused with no variable per-player cost. |
+| Automation | 100 | ↑ | Exact arena parity, cross-surface mastery/stats courts, debrief-order regression, hosted 1,020/1,020 matrix, and eight hash-bound direct-reviewed captures cover every changed boundary. |
+
+Rolling averages: 3-session 994.3 · 5-session 990.8 · sparkline `█████`.
+
+Top win: direct browser pixels caught and closed an autofocus bug that mechanically green checks could not see, proving RUN THE FIX now occupies the first mobile and desktop viewport.
+Top gap: real participant outcomes and physical controller/PWA evidence remain absent, so loop quality is implementation maturity rather than demonstrated retention.
+Intent outcome: Achieved for every repo-owned arc item on isolated staging; closeout publication/production verification follows without changing SPARKED.
+
+**Brainstorm**
+1. Use consented playtest receipts to compare first-action time before any Prestige or balance retune.
+2. Promote per-weapon mastery into Commander's Orders only after the new resolver has real usage evidence.
+3. Add a death-screen state capture directly to the canonical visual matrix if future debrief work recurs.
+
+**Committed to TASK_BOARD:** [SIL:1] keep the death-transition no-autofocus/first-viewport regression court; [SIL:1] never infer weapon mastery without per-weapon evidence.
+
 ## 2026-08-12 — Session 150 | Total: 992/1000 | Velocity: 5 | Debt: ↓
 
 SIL 992/1000: Completed the founder-approved front-door plan as one coherent information-architecture pass. The homepage now has a readable type floor, one navigation authority, direct and live Stats access, progressive disclosure for deep tools, and a performance shell that adds resilience without becoming a second product hierarchy. Focused tests, build/contracts, isolated staging, security/cost checks, and the 1,020/1,020 rendered-pixel court are green; subjective image review remains explicitly unavailable on this host.

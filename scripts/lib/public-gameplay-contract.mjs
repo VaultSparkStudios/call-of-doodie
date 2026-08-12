@@ -5,7 +5,7 @@ import {
   META_UPGRADES,
   STARTER_LOADOUTS,
   WEAPONS,
-  WEAPON_MASTERY_LEVELS,
+  WEAPON_ARSENAL_MILESTONE_LEVELS,
 } from "../../src/constants.js";
 import { REPLAY_DIFFICULTIES, REPLAY_MODES, REPLAY_STARTERS } from "../../src/utils/replayCode.js";
 import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
@@ -49,7 +49,7 @@ export function buildPublicGameplayContract() {
       name: weapon.name,
       emoji: weapon.emoji,
       availableAtStart: true,
-      masteryAccountLevel: WEAPON_MASTERY_LEVELS[index] ?? 1,
+      arsenalMilestoneLevel: WEAPON_ARSENAL_MILESTONE_LEVELS[index] ?? 1,
     })),
     enemies: ENEMY_TYPES.map((enemy, index) => ({
       index,

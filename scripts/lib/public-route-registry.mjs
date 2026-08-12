@@ -51,7 +51,7 @@ function buildEnemySections(gameplay) {
 
 function buildArsenalSections(gameplay) {
   const weaponLines = gameplay.weapons.map((weapon) => (
-    `${weapon.emoji} ${weapon.name} (available now; mastery level ${weapon.masteryAccountLevel})`
+    `${weapon.emoji} ${weapon.name} (available now; arsenal milestone level ${weapon.arsenalMilestoneLevel})`
   ));
   return [
     ["Live weapon roster", weaponLines.join(" · ")],

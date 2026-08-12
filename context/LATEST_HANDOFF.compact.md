@@ -1,44 +1,48 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: f197e0d69d30 -->
-<!-- generated-at: 2026-08-11T23:35:20.636Z -->
+<!-- source-hash: 152535a05198 -->
+<!-- generated-at: 2026-08-12T19:07:58.762Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 149
+SESSION 151 HANDOFF SUMMARY
 
 Session
-- 149 closed. Full autonomous arc from recovered clean main; founder-authorized direct main commit/push and engineering production deploy. SPARKED remains evidence-gated (NO-GO).
+- S151: Autonomous /arc from synced main through staging, QA, release gate, closeout, direct-main publish, production verify. SPARKED separately gated.
 
-Shipped This Session
-- Post-run contract survives Return to Menu; resolves via one reason-coded Commander's Orders surface.
-- Mobile mode/difficulty controls now 44px radiogroups with roving keyboard nav and polite acknowledgement.
-- Fixed 1.4s first-interaction regression at audio-init cause: idle prewarm + gesture fallback; staging 16ms mobile / 40ms desktop vs 1,408ms baseline.
-- Porcelain Day theme readable; new controls use theme tokens.
-- Two protocol root-fixes: blocked/non-executable Genius items no longer count runnable; reverified exhausted list can stop below velocity floor.
+Shipped
+- All four repo-owned audit items implemented and verified on isolated staging.
+- Death routes directly into evidence-backed revenge action (ONE VERDICT / RUN THE FIX under single accessible disclosure).
+- Per-weapon career.weaponLegendKills drives mastery (ROOKIE/TRAINED/VETERAN/LEGEND); all-open availability unchanged.
+- Homepage stats showcase shares analytica-feed-v1 contract with /stats-surface.json and Community Stats store.
+- buildArenaEnvironment refactored to pure seeded system with legacy parity; App.jsx 4,990 to 4,884 lines.
 
-Evidence
-- Full suite 188 files / 1,121 tests pass (1-thread); all gates green (lint, build, schema, architecture 4,990/5,000, security, audit, cost, Hot Context).
-- Visual matrix 1,020/1,020; hash-bound captures in docs/visual-qa/LATEST.json; zero blockers.
-- Production source 5bae6c1 live; follow-up 18d4af2 (og-image.png/MIME check) live at 44e6603d, CI 188/1,122.
+Current Intent
+- Complete final S151 steps: labeled recovery commit/push and production verification. Corpus, gates, security audit already green.
 
-Current Intent (Next Session)
-- Diagnose/resolve mobile mode-selector INP regression using real browser evidence.
-- Secondary: merge fragmented onboarding widgets into one adaptive Commander's Orders surface.
-- Scope cap: 12 primary audit items; specialty lens = game-loop health, progression, engagement, retention, SOUL fidelity.
+Now Bucket
+- Publish clearly labeled recovery commit/push to main.
+- Run production verification post-publish.
+- Do not represent this engineering update as SPARKED.
 
-Now-Bucket (Top 3)
-- Real-browser INP diagnosis of mobile mode selector (leading hypothesis: native picker overhead, not device-confirmed).
-- Adaptive Commander's Orders surface consolidation.
-- Re-run full corpus when host saturation permits; keep haptics court canonical.
+Blockers
+- Studio-wide Doctor reports three Studio Ops-owned blocking probes (canon/visual receipts, wallet-court freshness). Not repo-owned; signed Ark repo-question filed.
+- Direct host image viewing fails at Windows CryptUnprotectData (S150 carryover); worked around via hosted matrix.
+- Broad-suite runs prone to >15min shared-host contention (S150 note); mitigated via serialized shards.
 
-Blockers (Top 3)
-- Mobile INP root cause remains leading hypothesis only; needs real Android device trace before any fix.
-- No repo-owned executable arc item remains; further Commander's Orders precedence/balance/fallback/cosmetic changes require real production funnel/participant evidence.
-- IGNIS project-targeted rescore failed (missing project diagnostic); Studio Doctor 123/177 with two external control-plane reds — both external, not runtime failures.
+Human-Blocked
+- Wallet-court freshness probe: 171 hours stale, awaiting Studio Ops owner refresh.
+- SPARKED promotion: NO-GO pending physical PWA/controller, reply-capable mail, participant/publication, scoped provider, performance, Obelisk verification, founder approval.
 
-Human-Blocked / Data-Gated
-- SPARKED lifecycle promotion: NO-GO pending external gates (carried multiple sessions; direct-deploy auth covers engineering production only).
-- Production funnel/Lighthouse evidence gates HomeV1 retirement and any Orders precedence/balance change (open since S145).
-- Subjective browser-bridge visual approval unclaimed on some recovery items (host secure-store init failure, from S148).
+Verification State
+- Full Vitest: 191/191 files, 1,138/1,138 assertions (268.85s), passed twice by independent shapes.
+- All gates green: lint, schema/architecture, public contract 28/28, build, security zero, dependency, asset, launch-media, cost, stats/canon.
+- CANON-053: 8 hash-bound captures pass, zero ABSOLUTE gaps.
+- Hosted matrix 1,020/1,020 across 20 routes, 2 themes, 390/768/1440px. Fixed Famous Last Words autofocus scroll defect.
+- docs/visual-qa/LATEST.json: 8 hash-bound captures, direct review complete, zero blocking visual defects.
 
-Next-session pointer: Start by capturing a real mobile-device INP trace of the mode selector before touching any code.
+Constraints
+- Keep FORGE/public-unlaunched.
+- Preserve single navigation registry and readable type/target floor (S150).
+- Do not reintroduce Command Deck as competing navigation.
+
+Next: Publish the labeled recovery commit to main, then run production verification to close S151.

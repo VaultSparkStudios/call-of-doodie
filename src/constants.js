@@ -35,9 +35,9 @@ export const WEAPON_EVOLVED_NAMES = [
 // Account-level gates per weapon index. Levels 1-3 are starter; later weapons
 // unlock as the player accumulates kills (account level = sqrt(totalKills/20)+1).
 // All weapons are available before deployment. These thresholds award mastery
-// recognition without denying access, preserving progression while keeping the
+// account-level arsenal milestones without denying access, preserving progression while keeping the
 // twelve-weapon sandbox honest across every selector.
-export const WEAPON_MASTERY_LEVELS = Object.freeze([1, 1, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16]);
+export const WEAPON_ARSENAL_MILESTONE_LEVELS = Object.freeze([1, 1, 1, 2, 3, 4, 6, 8, 10, 12, 14, 16]);
 
 // ===== ENEMIES =====
 // deathQuotes: array — one is picked randomly on death

@@ -62,7 +62,8 @@ describe("buildLocalBalanceLab", () => {
 
     const insight = lab.insights.find((entry) => entry.id === "progression_runway");
     expect(insight?.receipt.schemaVersion).toBe("progression-runway-v2");
-    expect(insight?.detail).toContain("career kills");
+    expect(insight?.detail).toContain("Per-weapon mastery evidence is unavailable");
+    expect(insight?.detail).toContain("career points");
     expect(insight?.detail).not.toMatch(/balanced|retention|optimal/i);
   });
 });

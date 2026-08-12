@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-08-12 (Session 151 — revenge brief, mastery truth, stats twin, and arena boundary)
+
+- Shipped all four premise-verified audit items: first-viewport RUN THE FIX, per-weapon-kill mastery authority, `analytica-feed-v1` public stats twin, and a pure deterministic arena-environment boundary.
+- Restored App architecture headroom to 116 lines while preserving 40/40 legacy seed/dimension outputs; focused and integrated courts pass.
+- Deployed isolated staging at `https://session-151-staging.call-of-doodie.pages.dev/`; hosted public visual automation passes 1,020/1,020.
+- Direct pixel review caught Famous Last Words autofocus scrolling the entire revenge brief above the viewport. Removed autofocus, redeployed, and verified zero inherited scroll with the verdict/action in the first viewport at 390px and 1440px.
+- Recovery reran the exact closing tree directly: 191/191 Vitest files and 1,138/1,138 assertions pass in one serialized run, alongside security/npm audit zero, strict lint, schema/architecture, public 28/28, deployable build, and project-targeted CANON-053/conformance.
+- The Studio-wide Doctor remains red on three Studio Ops-owned probes (stale agent-wallet readiness and Studio Ops' own canon/visual receipt state). Routed exact evidence through signed Ark cargo; preserved the project-local green candidate and did not edit the sibling repository.
+- Release posture remains engineering-ready, cost-neutral FORGE/public-unlaunched; SPARKED is still NO-GO.
+
 ## 2026-08-12 (Session 150 — readable front door, unified navigation, and live Stats)
 
 - Implemented the complete founder-approved homepage plan: larger type, clearer information hierarchy, desktop/mobile navigation, direct `/stats/` access, and a four-metric live Community Stats showcase.

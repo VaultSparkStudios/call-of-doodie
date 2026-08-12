@@ -20,6 +20,7 @@ import {
   getCommunityStatsTrend,
   refreshCommunityStatsNow,
   subscribeCommunityStats,
+  COMMUNITY_STATS_POLL_MS,
 } from "./communityStatsStore.js";
 
 const liveStats = (overrides = {}) => ({
@@ -53,7 +54,7 @@ describe("community stats store (S145)", () => {
     const un3 = subscribeCommunityStats(() => {});
     await refreshCommunityStatsNow();
     const callsAfterMount = loadCommunityStats.mock.calls.length;
-    await vi.advanceTimersByTimeAsync(15000);
+    await vi.advanceTimersByTimeAsync(COMMUNITY_STATS_POLL_MS);
     // One interval tick → exactly one more fetch even with three subscribers.
     expect(loadCommunityStats.mock.calls.length).toBe(callsAfterMount + 1);
     un1(); un2(); un3();

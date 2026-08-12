@@ -186,84 +186,84 @@
       "name": "Banana Blaster",
       "emoji": "🍌",
       "availableAtStart": true,
-      "masteryAccountLevel": 1
+      "arsenalMilestoneLevel": 1
     },
     {
       "index": 1,
       "name": "Rubber Chicken RPG",
       "emoji": "🐔",
       "availableAtStart": true,
-      "masteryAccountLevel": 1
+      "arsenalMilestoneLevel": 1
     },
     {
       "index": 2,
       "name": "Nerf Minigun",
       "emoji": "🔫",
       "availableAtStart": true,
-      "masteryAccountLevel": 1
+      "arsenalMilestoneLevel": 1
     },
     {
       "index": 3,
       "name": "Plunger Launcher",
       "emoji": "🪠",
       "availableAtStart": true,
-      "masteryAccountLevel": 2
+      "arsenalMilestoneLevel": 2
     },
     {
       "index": 4,
       "name": "Sniper-ator 3000",
       "emoji": "🎯",
       "availableAtStart": true,
-      "masteryAccountLevel": 3
+      "arsenalMilestoneLevel": 3
     },
     {
       "index": 5,
       "name": "Spicy Squirt Gun",
       "emoji": "🌶️",
       "availableAtStart": true,
-      "masteryAccountLevel": 4
+      "arsenalMilestoneLevel": 4
     },
     {
       "index": 6,
       "name": "Confetti Cannon",
       "emoji": "🎊",
       "availableAtStart": true,
-      "masteryAccountLevel": 6
+      "arsenalMilestoneLevel": 6
     },
     {
       "index": 7,
       "name": "Shock Zapper",
       "emoji": "⚡",
       "availableAtStart": true,
-      "masteryAccountLevel": 8
+      "arsenalMilestoneLevel": 8
     },
     {
       "index": 8,
       "name": "Boomerang Blaster",
       "emoji": "🪃",
       "availableAtStart": true,
-      "masteryAccountLevel": 10
+      "arsenalMilestoneLevel": 10
     },
     {
       "index": 9,
       "name": "Railgun",
       "emoji": "🔦",
       "availableAtStart": true,
-      "masteryAccountLevel": 12
+      "arsenalMilestoneLevel": 12
     },
     {
       "index": 10,
       "name": "Ricochet Pistol",
       "emoji": "🎱",
       "availableAtStart": true,
-      "masteryAccountLevel": 14
+      "arsenalMilestoneLevel": 14
     },
     {
       "index": 11,
       "name": "Nuclear Kazoo",
       "emoji": "🎵",
       "availableAtStart": true,
-      "masteryAccountLevel": 16
+      "arsenalMilestoneLevel": 16
     }
   ],
   "enemies": [

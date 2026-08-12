@@ -79,6 +79,22 @@ describe("buildDeathScreenProps", () => {
     expect(source).toContain("onMenu(debrief.nextRunContract)");
   });
 
+  it("renders the revenge brief before one collapsed secondary analysis block", () => {
+    const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreen.jsx"), "utf8");
+    const challenge = source.indexOf("{/* Challenge result card */}");
+    const brief = source.indexOf("{revengeBrief}", challenge);
+    const analysis = source.indexOf('data-testid="secondary-run-analysis"', brief);
+    const buildGrade = source.indexOf("BUILD GRADE", analysis);
+    const runDna = source.indexOf("RUN DNA", analysis);
+
+    expect(challenge).toBeGreaterThan(-1);
+    expect(brief).toBeGreaterThan(challenge);
+    expect(analysis).toBeGreaterThan(brief);
+    expect(buildGrade).toBeGreaterThan(analysis);
+    expect(runDna).toBeGreaterThan(analysis);
+    expect(source).not.toContain("autoFocus");
+  });
+
   it("maps death screen state without reaching into React", () => {
     const onStartGame = vi.fn();
     const props = buildDeathScreenProps({

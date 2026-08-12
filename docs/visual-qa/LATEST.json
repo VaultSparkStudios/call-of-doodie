@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-12T04:19:00.117Z",
-  "stagingUrl": "https://session-150-staging.call-of-doodie.pages.dev/",
-  "workingTreeUiSha256": "4a104145ca03d560f44b5382a8fd83a6292225ba7a88664583f06f2d494b3fc4",
+  "capturedAt": "2026-08-12T07:48:23.248Z",
+  "stagingUrl": "https://1fc32adb.call-of-doodie.pages.dev",
+  "workingTreeUiSha256": "03398fecc4e41a61f649bb8dc661f403e1a804cd417a81493a9adbd90a2539c3",
   "sourceMatrix": {
-    "receipt": "output/playwright/staging-home-nav-s150/visual-audit-receipt.json",
-    "sha256": "e388f5723f281c6d07dd0d7f6f131d00a5b26798100255b6101e4842c9179b21",
+    "receipt": "output/playwright/session-151-final/visual-audit-receipt.json",
+    "sha256": "03d4c7cadd1bfe8eb9049e3b56236c83aa76f0ab3fdd2d781f3b45e759ad8a4a",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -32,7 +32,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "77c52853013ff3a969e61890cd6b4181b97ec957493252a5cd9d151c2ff02c6d",
+      "sha256": "ed5ad633ea28b6f79fdadd2284df571b2ec982eee8b9b555e49401526aac79c8",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -84,24 +84,45 @@
         "height": 1000
       },
       "page": "Leaderboard surface"
+    },
+    {
+      "file": "death-brief-dark-390.png",
+      "sha256": "f036d2fbb182da17bb298d9070b5fb7181115e0c1c4ec083175bcdf29f48d71a",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death-screen revenge brief first viewport"
+    },
+    {
+      "file": "death-brief-light-1440.png",
+      "sha256": "c12553f0deea9e657c06d3e5c809bfac0d0085d25d21fa6c30b1bb67a7ba4d6c",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Death-screen revenge brief first viewport"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Playwright rendered-pixel analytics and screenshot artifact court",
+    "reviewer": "Codex direct rendered-pixel review plus Playwright screenshot and analytics court",
     "findings": [
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
-      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix."
+      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
+      "The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."
     ],
     "fixesApplied": [
-      "Raised homepage body, label, navigation, stats, and control text to a readable token floor.",
-      "Added a desktop primary nav plus a 44px mobile bottom dock and full-height More drawer.",
-      "Promoted live sewer stats and the /stats destination into the front door.",
-      "Collapsed the old Command Deck tool wall into four scannable player-tool groups and removed duplicate top-bar branding."
+      "Removed Famous Last Words autofocus that scrolled the death verdict above the viewport.",
+      "Confirmed the revenge brief and corrective action fit the first viewport at 390px and 1440px."
     ],
     "blockingDefectsOpen": 0,
-    "subjectiveVisualReviewClaimed": false,
-    "subjectiveVisualReviewStatus": "unavailable-host-cryptunprotectdata"
+    "subjectiveVisualReviewClaimed": true,
+    "subjectiveVisualReviewStatus": "completed"
   }
 }

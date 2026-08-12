@@ -7,6 +7,7 @@ import {
   refreshCommunityStatsNow,
   subscribeCommunityStats,
 } from "../utils/communityStatsStore.js";
+import { COMMUNITY_STATS_SHOWCASE } from "../utils/communityStatsContract.js";
 import { buildPersonalStats, formatStat } from "../utils/gameStats.js";
 
 const TABS = [
@@ -126,7 +127,9 @@ export default function CommunityStatsPanel({ career: suppliedCareer = null, run
         ["BOSSES", formatStat(shown.bosses)],
         ["BEST WAVE", formatStat(shown.bestWave)],
       ];
-  const visibleStats = showcase ? stats.slice(0, 4) : stats;
+  const visibleStats = showcase
+    ? COMMUNITY_STATS_SHOWCASE.map((metric) => [metric.label, formatStat(community[metric.field])])
+    : stats;
 
   return (
     <section data-testid="community-stats" style={{ width: "100%", boxSizing: "border-box", padding: compact ? 10 : 12, borderRadius: 10, border: "1px solid rgba(127,230,255,0.28)", background: "linear-gradient(135deg,rgba(3,20,24,0.9),rgba(7,10,12,0.88))", boxShadow: "inset 0 0 28px rgba(0,229,255,0.035)" }}>
