@@ -10,9 +10,10 @@
 - Pixel truth — the first staging render was mechanically 1,020/1,020 green yet Famous Last Words autofocus scrolled the death verdict above the viewport. The final build removes autofocus, opens at scrollTop 0, and passes direct image review with eight hash-bound captures.
 - Verification truth — focused/integrated tests, strict lint, schema/architecture, public/security/dependency/assets/media, build, cost, CANON-054, and CANON-053 pass. Recovery additionally proves the exact closing tree at 191/191 files and 1,138/1,138 assertions in one direct serialized run.
 - Doctor truth — Call of Doodie's project-targeted visual and canon checkers pass with eight captures and zero ABSOLUTE gaps. The Studio-wide Doctor's three blocking reds belong to Studio Ops' stale wallet court and active-tree receipts; they are routed through Ark and are not relabeled as a product failure or silently hidden.
+- Production truth — exact source `1952f5107c1c0e0bf21da053dfe3321271e9156a` passed GitHub quality/build/deploy run `31631272045`, serves from immutable Cloudflare revision `5be7b044`, and passes shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard-isolation, and Studio launch-surface courts.
 - Lifecycle truth — engineering-ready FORGE remains public-unlaunched. SPARKED stays NO-GO behind external/provider/device/participant/performance/identity/founder evidence.
 
-Overall status: all S151 repository-owned audit items are implemented and staging-verified; closeout publication follows; SPARKED remains NO-GO.
+Overall status: all S151 repository-owned audit items are implemented, recovery-verified, and production-verified; SPARKED remains NO-GO.
 Last reviewed: 2026-08-12
 
 ## 2026-08-12 — Session 150 — Front-door readability and navigation truth

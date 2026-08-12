@@ -4,8 +4,8 @@ Session Intent: Run the complete autonomous `/arc` from synchronized main throug
 
 ## Where We Left Off
 
-- All four repository-owned audit items are implemented and verified on isolated staging at `https://session-151-staging.call-of-doodie.pages.dev/` (immutable `https://1fc32adb.call-of-doodie.pages.dev/`).
-- Recovery reconstructed and integrity-checked the complete S151 tree. The direct exact-tree corpus, closing gates, and security audit are green; the clearly labeled recovery commit/push and production verification are the only remaining S151 steps.
+- All four repository-owned audit items are implemented, verified on isolated staging at `https://session-151-staging.call-of-doodie.pages.dev/` (immutable `https://1fc32adb.call-of-doodie.pages.dev/`), and production-verified from exact commit `1952f5107c1c0e0bf21da053dfe3321271e9156a`.
+- Recovery reconstructed and integrity-checked the complete S151 tree, reran the exact corpus and closing gates, pushed the clearly labeled checkpoint, and verified exact-SHA CI plus immutable production `https://5be7b044.call-of-doodie.pages.dev/`. Session 151 is complete; begin fresh work as Session 152.
 - Keep FORGE/public-unlaunched. Do not represent this engineering update as SPARKED: physical PWA/controller, reply-capable mail, participant/publication, scoped provider, current performance, Obelisk verification, and founder approval remain open.
 
 ## Impact Summary
@@ -26,6 +26,7 @@ Session Intent: Run the complete autonomous `/arc` from synchronized main throug
 - Project-targeted CANON-053 passes eight hash-bound captures and canon conformance has zero ABSOLUTE gaps. The Studio-wide Doctor still reports three Studio Ops-owned blocking probes (171-hour wallet-court freshness and Studio Ops' own canon/visual receipts); a signed Ark `repo-question` requests the owner refresh, and no sibling tree was edited.
 - Hosted public matrix passes 1,020/1,020 across twenty routes, two themes, and 390/768/1440px. Direct image review found and fixed the Famous Last Words autofocus scroll defect; final death-screen verdict bounds are 160–516px mobile and 172–478px desktop with no inherited scroll.
 - `docs/visual-qa/LATEST.json` hash-binds eight inspected captures and records direct subjective review complete with zero blocking visual defects.
+- Recovery commit `1952f510` passed brief-format run `31631272095` and Cloudflare quality/build/deploy run `31631272045`. Production independently passes shell 7/7, cutover 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch surfaces.
 
 ---
 # Latest Handoff — Session 150

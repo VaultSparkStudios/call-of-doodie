@@ -10,6 +10,13 @@
 - The Studio-wide Doctor remains red on three Studio Ops-owned probes (stale agent-wallet readiness and Studio Ops' own canon/visual receipt state). Routed exact evidence through signed Ark cargo; preserved the project-local green candidate and did not edit the sibling repository.
 - Release posture remains engineering-ready, cost-neutral FORGE/public-unlaunched; SPARKED is still NO-GO.
 
+### Production follow-through
+
+- Committed the recovered boundary as `1952f51 recover S151 closeout` and pushed directly to synchronized `main`; the closeout autopilot cleared the stale lock without bypassing hooks or force-pushing.
+- Exact-source brief-format run `31631272095` and Cloudflare quality/build/deploy run `31631272045` passed, publishing immutable revision `https://5be7b044.call-of-doodie.pages.dev/`.
+- Production passes live shell 7/7, cutover routes 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch-surface checks. `docs/RELEASE_PARITY.md` now carries S151 evidence and removes the obsolete 832 ms interaction claim.
+- Intent outcome: achieved through production verification. SPARKED remains explicitly unpromoted.
+
 ## 2026-08-12 (Session 150 — readable front door, unified navigation, and live Stats)
 
 - Implemented the complete founder-approved homepage plan: larger type, clearer information hierarchy, desktop/mobile navigation, direct `/stats/` access, and a four-metric live Community Stats showcase.

@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 151 staged: first-viewport revenge brief, per-weapon mastery truth, Analytica stats twin, and pure seeded arena boundary are verified.",
-  "nextMilestone": "Publish the verified FORGE engineering update and confirm production; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
+  "currentFocus": "Session 151 production-verified: first-viewport revenge brief, per-weapon mastery truth, Analytica stats twin, and pure seeded arena boundary are live from 1952f510.",
+  "nextMilestone": "Begin Session 152 from the exhausted repo-owned frontier; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -360,7 +360,14 @@
       "session": 151,
       "status": "green",
       "type": "tests",
-      "command": "1138/1138 assertions across 191 files via four bounded shards plus focused final-tree reruns; strict lint; schema/architecture; public 28/28; deployable build; security/npm audit; dependency/assets/media/cost/stats/visual gates"
+      "command": "1138/1138 assertions across 191 files via four bounded shards plus one recovered exact-tree serialized run; strict lint; schema/architecture; public 28/28; deployable build; security/npm audit; dependency/assets/media/cost/stats/visual gates"
+    },
+    {
+      "session": 151,
+      "status": "green",
+      "url": "https://5be7b044.call-of-doodie.pages.dev/",
+      "type": "production-deploy",
+      "command": "source 1952f510; workflow 31631272045; shell 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard isolation and Studio launch surfaces pass"
     }
   ],
   "blockers": [
@@ -445,7 +452,7 @@
     "scope": "studio-ops-control-plane external to this repo",
     "blockingDetail": "CPX51 capacity admission and cross-surface coherence are Studio Ops control-plane findings; project-local release gates remain green"
   },
-  "lastSessionSummary": "Session 151 put RUN THE FIX in the first death-screen viewport, made weapon mastery depend only on per-weapon kills, bound the public stats twin to one 15-second contract, extracted exact-parity arena generation, and passed direct rendered-pixel staging review while preserving SPARKED NO-GO.",
+  "lastSessionSummary": "Session 151 put RUN THE FIX in the first death-screen viewport, made weapon mastery depend only on per-weapon kills, bound the public stats twin to one 15-second contract, extracted exact-parity arena generation, and passed direct rendered-pixel plus exact-source production verification while preserving SPARKED NO-GO.",
   "testsAssertionsPassing": 1138,
   "testsAssertionsTotal": 1138,
   "testsAssertionsFiles": 191,

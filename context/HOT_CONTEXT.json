@@ -1,7 +1,7 @@
 {
   "schemaVersion": "hot-context-v1",
   "generatedAt": "2026-08-12T00:00:00.000Z",
-  "sourceFingerprint": "3f16f9a939e5933ed5338699d2073a7ddd0eab5efefec78cf983a55a4750ddce",
+  "sourceFingerprint": "f8eba3a74bb9afc5c535fc552e1f407e82bbdaacd1e48f9dfc09aa12471d8ea9",
   "purpose": "Bounded startup projection; full append-only artifacts remain authoritative and discoverable by source hash.",
   "budgets": {
     "maximumBytes": 24000,
@@ -11,8 +11,8 @@
   "sources": {
     "currentState": {
       "file": "context/CURRENT_STATE.md",
-      "sha256": "52204c50adcc74e2b766d3c7d9ee605998590a6310dcecdbc413be8977615ce1",
-      "bytes": 179264
+      "sha256": "5417cbc8a9066861d69552974ccbb3340d4b778e1d8a16b70dc02fdbed18cf49",
+      "bytes": 179638
     },
     "taskBoard": {
       "file": "context/TASK_BOARD.md",
