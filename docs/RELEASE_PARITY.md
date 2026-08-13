@@ -7,7 +7,7 @@ Last reviewed: 2026-08-12 (Session 152 release candidate)
 - Immutable staging origin: `https://25837962.call-of-doodie.pages.dev/`
 - Stable staging alias: `https://session-152-staging.call-of-doodie.pages.dev/`
 - Production origin: `https://callofdoodie.wtf/`
-- Exact source/workflow/immutable production: pending direct-main closeout commit and exact-SHA CI.
+- Exact source/workflow/immutable production: `471cd6762b828f61d6bd55e47d614cec47d3abeb` / brief `31657471854` / quality-build-deploy `31657471851` / `https://a1fe44a3.call-of-doodie.pages.dev/`.
 - First exact-SHA attempt: `2e56892` / workflow `31656064776` failed its Hot Context freshness court because closeout autopilot stamped PROJECT_STATUS after cache generation. The ordering is root-fixed; no flaky retry claim is made.
 - Scope: deploy a cost-neutral engineering update to the existing public FORGE surface. This is **not** a SPARKED lifecycle flip.
 - Founder authorization: explicit recovery-first `/goal` and continuous `/arc` direction authorizes direct-main engineering publication and verification only.
@@ -27,7 +27,7 @@ Last reviewed: 2026-08-12 (Session 152 release candidate)
 | Cost gates | Release and cost-bleeder gates | Pass; cost-neutral |
 | Deploy credentials | Cloudflare 3/3 and Supabase client 2/2 | Ready |
 | Security | Release headers/CSP/auth boundary, dependency tree, npm audit | Pass; 0 vulnerabilities |
-| Staging parity | Local `dist/index.html` equals hosted staging; staged asset differs from production as expected before publication | Pass |
+| Staging parity | Local `dist/index.html` equals hosted staging; exact source then passed quality/build/deploy to immutable production | Pass |
 | Core Web Vitals (CWV) | No current S152 Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) receipt | **Not current — blocks SPARKED** |
 
 The generic Studio responsive script explicitly skipped because it could not resolve its own Playwright dependency. That skip is not counted as a pass; the project-owned hosted Chromium matrix provides stronger functional/visual browser coverage for the engineering release, but does not replace current CWV or physical-device evidence.
@@ -44,8 +44,8 @@ The generic Studio responsive script explicitly skipped because it could not res
 
 ## Continuous integration and rollback
 
-- Exact-SHA CI and production deployment are recorded after the authorized closeout push.
-- Cloudflare Pages retains immutable deployments. The last verified production before S152 is `https://5be7b044.call-of-doodie.pages.dev/`.
+- Exact-SHA brief run `31657471854` and quality/build/deploy run `31657471851` pass for source `471cd6762b828f61d6bd55e47d614cec47d3abeb`.
+- Cloudflare Pages retains immutable deployments. S152 is verified at `https://a1fe44a3.call-of-doodie.pages.dev/`; the custom domain passes shell 7/7, cutover 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch-surface checks.
 - `docs/DEPLOY_ROLLBACK.md` documents a reversible `git revert` path and smoke checks; reset-hard and force-push are excluded.
 
 ## Launch posture

@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 152 staged and release-gated: accepted coaching now survives menu return, its observed outcome precedes the next verdict, and Commander's Orders projects authoritative weapon mastery.",
-  "nextMilestone": "Complete exact-tree S152 closeout, direct-main CI/deploy, and production smoke; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
+  "currentFocus": "Session 152 production-verified: accepted coaching survives menu return, observed outcome precedes the next verdict, authoritative mastery stays visible, and closeout freshness is self-consistent.",
+  "nextMilestone": "Begin Session 153 from synchronized main; preserve SPARKED NO-GO until current performance, provider, physical-device, publication, participant, and explicit founder evidence are real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -387,6 +387,13 @@
       "status": "green",
       "type": "tests",
       "command": "final root-fixed closeout tree: 1143/1143 assertions across 191 files in 126.86s; focused implementation 57/57; closeout order/freshness 9/9"
+    },
+    {
+      "session": 152,
+      "status": "green",
+      "url": "https://a1fe44a3.call-of-doodie.pages.dev/",
+      "type": "production-deploy",
+      "command": "source 471cd6762b828f61d6bd55e47d614cec47d3abeb; brief 31657471854; quality/build/deploy 31657471851; shell 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard isolation and Studio launch surfaces pass"
     }
   ],
   "blockers": [
@@ -405,7 +412,7 @@
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-08",
   "silSession": 152,
-  "silScore": 994,
+  "silScore": 997,
   "silAvg3": 994.3,
   "silVelocity": 5,
   "silDebt": "down",
@@ -413,24 +420,24 @@
   "currentSession": 152,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 1138,
-  "testsTotal": 1138,
+  "testsPassing": 1143,
+  "testsTotal": 1143,
   "entropyScore": 0.196,
   "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
   "silMax": 1000,
   "silScoreLegacy500": 492,
   "silCategoriesV3": {
-    "devHealth": 99,
+    "devHealth": 100,
     "creativeAlignment": 100,
-    "momentum": 99,
+    "momentum": 100,
     "engagement": 100,
-    "processQuality": 99,
-    "crossRepoCoherence": 97,
+    "processQuality": 100,
+    "crossRepoCoherence": 99,
     "securityPosture": 100,
-    "ecosystemIntegration": 100,
+    "ecosystemIntegration": 99,
     "capitalEfficiency": 100,
-    "automationCoverage": 100
+    "automationCoverage": 99
   },
   "silScoreV3MigratedAt": "2026-04-21",
   "modelTier": "T2_opusplan",
@@ -471,7 +478,7 @@
     "scope": "studio-ops-control-plane external to this repo",
     "blockingDetail": "CPX51 live capacity admission receipt is a Studio Ops control-plane finding; signed Ark repo-question queued. Project-local release gates remain green."
   },
-  "lastSessionSummary": "Session 152 recovered S151 independently, closed accepted coaching across menu return, put observed drill outcome before the next verdict, projected authoritative mastery into Commander's Orders, exhausted executable work, and passed isolated staging/rendered-pixel release gates while preserving SPARKED NO-GO.",
+  "lastSessionSummary": "Session 152 recovered S151 independently, closed the coaching transaction and mastery command, exhausted executable work, root-fixed closeout freshness, and passed exact-SHA production verification while preserving SPARKED NO-GO.",
   "testsAssertionsPassing": 1143,
   "testsAssertionsTotal": 1143,
   "testsAssertionsFiles": 191,

@@ -38,4 +38,6 @@ Headline: Accepted coaching now survives every route into the next run, reports 
 
 ## Production follow-through
 
-- Exact source, workflow, immutable production origin, and post-deploy smoke are appended after the authorized direct-main closeout push.
+- Root-fixed source `471cd6762b828f61d6bd55e47d614cec47d3abeb` passed exact-SHA brief run `31657471854` and quality/build/deploy run `31657471851`.
+- Cloudflare published immutable revision `https://a1fe44a3.call-of-doodie.pages.dev/`. Production passes shell 7/7, cutover 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch-surface checks.
+- Intent outcome: achieved through production verification. SPARKED remains explicitly unpromoted.

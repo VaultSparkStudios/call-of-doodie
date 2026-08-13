@@ -17,6 +17,12 @@
 
 Intent outcome: repository-owned recovery, audit, implementation, saturation, and staging objectives achieved. Exact-tree final suite, canonical closeout, direct-main push, CI, production deployment, and live smoke complete the authorized follow-through.
 
+### Production follow-through
+
+- First closeout source `2e56892` passed its brief check but exact-SHA deploy workflow `31656064776` correctly failed stale Hot Context; no retry-only green was accepted.
+- Root-fixed source `471cd6762b828f61d6bd55e47d614cec47d3abeb` passed brief run `31657471854` and quality/build/deploy run `31657471851`, publishing immutable revision `https://a1fe44a3.call-of-doodie.pages.dev/`.
+- Production passes live shell 7/7, cutover 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch-surface checks. Intent outcome is achieved; SPARKED remains NO-GO.
+
 ## 2026-08-12 (Session 151 — revenge brief, mastery truth, stats twin, and arena boundary)
 
 - Shipped all four premise-verified audit items: first-viewport RUN THE FIX, per-weapon-kill mastery authority, `analytica-feed-v1` public stats twin, and a pure deterministic arena-environment boundary.

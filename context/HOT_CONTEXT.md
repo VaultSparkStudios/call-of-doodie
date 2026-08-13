@@ -86,7 +86,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 182,062 bytes · SHA-256 `e6a486c58266…`
+- `context/CURRENT_STATE.md` · 182,408 bytes · SHA-256 `a063ed266dd5…`
 - `context/TASK_BOARD.md` · 119,772 bytes · SHA-256 `29f6e526af64…`
 - `context/DECISIONS.md` · 116,894 bytes · SHA-256 `b2de40d5de2d…`
 - `docs/AUDIT_2026-08-12_2.json` · 11,681 bytes · SHA-256 `3b3bbed30f27…`

@@ -19,7 +19,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S152) - WHAT SHIPPED ══════════════════════════╗
-║  Session 152 recovered S151 independently, closed accepted coac  ║
+║  Session 152 recovered S151 independently, closed the coaching   ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -29,7 +29,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://session-152-staging.call-of-doodi ✓   ║
-║  Unit tests    → npm test — 1138/1138 passing ✓                  ║
+║  Unit tests    → npm test — 1143/1143 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
 ║  production-smoke → Session 141 — live 7/7 · cutover 5/5 · r ✓   ║
@@ -53,17 +53,17 @@
 ║    Momentum         100    ██████████  ▇▇▇█▇▇▇█ →                ║
 ║    Engagement       100    ██████████  █▇▇▇████ →                ║
 ║    Process Qual     100    ██████████  █████▇▇▇ →                ║
-║    Coherence         97    ██████████  ········ →                ║
+║    Coherence         99    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
-║    Ecosystem        100    ██████████  ········ →                ║
+║    Ecosystem         99    ██████████  ········ →                ║
 ║    Capital          100    ██████████  ········ →                ║
-║    Automation       100    ██████████  ········ →                ║
+║    Automation        99    ██████████  ········ →                ║
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ WHERE WE LEFT OFF  ·  Session 152 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    1138/1138 passing  ·  Deploy: N/A                     ║
+║  Tests:    1143/1143 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
@@ -73,7 +73,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1138/1138 passing (2026-08-13T00:43:14.000Z)   ║
+║  ✓  Tests         1143/1143 passing (2026-08-13T00:43:14.000Z)   ║
 ║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║

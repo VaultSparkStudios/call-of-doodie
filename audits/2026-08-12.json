@@ -4,14 +4,15 @@
   "session": 152,
   "project": "Call-Of-Doodie",
   "intent": "recover and prove Session 151, then execute one continuous autonomous arc through audit, complete implementation, saturation, staging, closeout, direct-main publication, and production verification",
-  "outcome": "implemented-and-staging-verified-closeout-in-progress",
+  "outcome": "achieved-and-production-verified",
   "shipped": [
     "independent S151 recovery and clean checkpoint/proof boundaries",
     "bounded versioned drill envelope across direct replay and menu-return deploy paths",
     "prior observed drill outcome before the next verdict with non-causal evidence language",
     "authoritative per-weapon mastery projection in mature-player Commander's Orders",
     "state-aware visual receipt classification for mastery and drill-outcome captures",
-    "React border shorthand rerender warning repair"
+    "React border shorthand rerender warning repair",
+    "post-status-stamp closeout context regeneration with exact-SHA regression court"
   ],
   "validation": [
     "focused changed-surface courts pass 57/57",
@@ -23,7 +24,9 @@
     "real browser completes death to rage-quit to menu to deploy to second-death outcome transaction",
     "isolated staging is live at session-152-staging.call-of-doodie.pages.dev",
     "hosted visual matrix passes 1020/1020 and 14 captures are hash-bound with zero blocking defects",
-    "independent release gate returns engineering GO and SPARKED NO-GO"
+    "independent release gate returns engineering GO and SPARKED NO-GO",
+    "exact-SHA brief 31657471854 and quality-build-deploy 31657471851 pass for 471cd6762b828f61d6bd55e47d614cec47d3abeb",
+    "immutable production a1fe44a3 passes shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation, and Studio launch-surface checks"
   ],
   "deferred": [
     "current S152 Core Web Vitals receipt",
@@ -35,7 +38,7 @@
   ],
   "sil": {
     "score": 997,
-    "velocity": 4,
+    "velocity": 5,
     "debt": "decreasing"
   },
   "headline": "Turned accepted post-death coaching into a path-independent observed evidence loop and made the next real weapon campaign visible at deploy",

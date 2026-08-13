@@ -14,8 +14,9 @@
 - Lifecycle truth — independent release gate says GO for the authorized cost-neutral FORGE engineering update and NO-GO for SPARKED. Current CWV, physical PWA/controller/media, Zoho reply-as, project-scoped observability, Obelisk verification, participant/publication, and explicit founder lifecycle approval remain open.
 - Doctor truth — canonical Studio Doctor improved to 127/177 passing with one blocking failure: the Studio Ops-owned CPX51 live capacity admission receipt. A signed Ark repo-question routes it to its owner. Project-local canon, visual, build, security, cost, and release courts remain green; the external red is not hidden or relabeled as product green.
 - CI truth — exact-SHA workflow `31656064776` rejected the first S152 closeout commit because autopilot changed PROJECT_STATUS after Hot Context generation. This is a deterministic closeout ordering defect, not a flaky test. Autopilot now refreshes both derived context artifacts after its final stamp and has a source-order regression court.
+- Production truth — root-fixed source `471cd6762b828f61d6bd55e47d614cec47d3abeb` passes brief run `31657471854` and quality/build/deploy run `31657471851`, serves from immutable revision `https://a1fe44a3.call-of-doodie.pages.dev/`, and passes shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation, and Studio launch-surface courts.
 
-Overall status: S152 repository-owned arc scope is implemented and isolated-staging verified; direct-main exact-SHA publication and production smoke finish closeout. SPARKED remains NO-GO.
+Overall status: S152 repository-owned arc scope is implemented, saturated, exact-SHA published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-12
 
 ## 2026-08-12 — Session 151 — Revenge, mastery, stats, architecture, and pixel truth

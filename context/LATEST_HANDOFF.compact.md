@@ -1,46 +1,46 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: a73056831155 -->
-<!-- generated-at: 2026-08-13T00:40:21.217Z -->
+<!-- source-hash: fb921c17a6b0 -->
+<!-- generated-at: 2026-08-13T01:26:40.417Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 152 HANDOFF SUMMARY
+# Handoff Summary — Session 152
 
-Status
-- Session 152 complete through implementation, staging, QA, and release gate.
-- Project state: FORGE / public-unlaunched. Not SPARKED.
+## Session
+- Session 152 complete; resume from synchronized main as Session 153.
+- Project status: FORGE/public-unlaunched. No SPARKED promotion.
 
-Shipped This Session
-- Bounded menu drill continuity: RAGE QUIT carries accepted drill via strict allowlist; envelope consumed on deploy.
-- Outcome-first coaching: LAST ORDER RESULT precedes ONE VERDICT; refuses causal/non-comparable score claims.
-- Authoritative mastery projection in Commander's Orders: nearest per-weapon mastery tier shown; precedence and all-open play retained.
-- Visual QA tool now names mastery and drill-outcome captures accurately.
+## Shipped This Session
+- Recovered and independently proved S151 closeout (recovery commit 1952f510, proof f2255936); S151 production 5be7b044 verified.
+- Implemented three promoted L2 audit items:
+  - Bounded menu drill continuity (RAGE QUIT no longer drops accepted drill; strict allowlist, envelope consumed on deploy).
+  - Outcome-first coaching (LAST ORDER RESULT precedes ONE VERDICT; rejects causal/non-comparable score claims).
+  - Authoritative per-weapon mastery projection in Commander's Orders (retains precedence, all-open play).
+- Visual receipt tool now names mastery/drill-outcome captures accurately.
 
-Current Intent
-- Recovery of S151 proven and checkpointed (`1952f510` + proof `f2255936`, exact-SHA CI green, prod `5be7b044` verified).
-- Continuous agent-neutral `/arc` from synchronized main through startup, audit, implementation, staging, QA, release gate, closeout, direct-main publication, production verification.
+## Current State (Verified)
+- S152 source 471cd6762b828f61d6bd55e47d614cec47d3abeb passes brief run 31657471854 and quality/build/deploy 31657471851.
+- Production immutable https://a1fe44a3.call-of-doodie.pages.dev/: shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation, launch-surface pass.
+- Staging green: 1,020/1,020 matrix; CANON-053 14 captures, zero blockers; rendered-pixel review complete.
+- Courts: changed-surface 57/57, hot-context 3/3; App 4,883/5,000 (117 headroom); game loop 1,752/1,775 (23 headroom).
+- Unified Genius List exhausted; no repo-local innovation candidates remain.
 
-Now Bucket (Top 3)
-1. Record exact-SHA CI + production smoke before proceeding from synchronized main.
-2. Execute canonical closeout and direct-main publication for S152.
-3. Run production verification post-publish.
+## Now Bucket (Top 3)
+- Start Session 153 canonical startup from synchronized main.
+- Run fresh premise-verified nine-axis audit; game-loop and release specialty reviews.
+- Implement any newly accepted repository-owned items plus viable second-order innovations.
 
-Blockers (Top 3)
-1. SPARKED release gate is NO-GO (engineering GO). Publication authority withheld.
-2. Unified Genius List exhausted at zero executable items; no repo-local innovation candidates remain.
-3. Remaining audit items require external evidence, credentials/providers, physical devices, or participant/performance data.
+## Blockers (Top 3)
+- Release gate: SPARKED NO-GO (engineering publication GO). Founder approval required.
+- Remaining backlog items need external evidence: credentials/providers, physical devices, participant/publication data.
+- Performance measurement and Obelisk verification pending.
 
-Human-Blocked Items
-- SPARKED founder approval / promotion authority: open (carried from S151).
-- Studio Ops-owned blocking probes: 171-hour wallet-court freshness plus Studio Ops canon/visual receipts; signed Ark repo-question filed for owner refresh (age from S151).
+## Human-Blocked Items
+- SPARKED/founder approval: open, carried from S151+.
+- Studio Ops-owned Doctor probes (wallet-court freshness, Studio Ops canon/visual receipts): signed Ark repo-question filed in S151 (~171-hour freshness at that time); no sibling tree edited.
+- Physical PWA/controller, reply-capable mail, scoped provider, participant/publication: open.
 
-Preserve / Invariants
-- Versioned drill sanitizer; outcome-before-prescription order; mastery source label; all-open weapon availability; theme-invariant tactical DeathScreen palette.
+## Invariants to Preserve
+- Versioned drill sanitizer; outcome-before-prescription order; mastery source label; all-open weapon availability; theme-invariant tactical DeathScreen palette; post-status-stamp derived-context ordering.
 
-Evidence Snapshot
-- Changed-surface court 57/57; hot-context 3/3; App 4,883/5,000; game loop 1,752/1,775.
-- Staging green: 1,020/1,020 matrix; CANON-053 14 hash-bound captures; zero blockers.
-- Security/dependency/asset/media/cost courts pass; public contract 28/28.
-
-Next Session
-- Proceed only from synchronized main after exact-SHA CI and production smoke recorded; complete closeout, publish to main, verify production.
+Next session: Begin Session 153 startup from synchronized main and run a fresh nine-axis audit.

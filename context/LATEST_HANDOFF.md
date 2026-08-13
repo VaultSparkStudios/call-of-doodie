@@ -8,7 +8,8 @@ Session Intent: Recover and independently prove the interrupted Session 151 clos
 - S152 implemented all three promoted L2 audit items: bounded menu drill continuity, outcome-first coaching, and authoritative mastery projection in Commander's Orders.
 - Isolated staging is green at `https://session-152-staging.call-of-doodie.pages.dev/` (immutable `https://25837962.call-of-doodie.pages.dev/`); the broad matrix passes 1,020/1,020 and CANON-053 binds 14 directly reviewed captures with zero blockers.
 - The Unified Genius List is exhausted at zero executable items and the innovation pack found no additional repository-local candidate. Remaining items require external evidence, credentials/providers, physical devices, publication, participant data, performance measurement, or explicit SPARKED authority.
-- Proceed only from synchronized main after exact-SHA CI and production smoke are recorded. Preserve the versioned drill sanitizer, outcome-before-prescription order, mastery source label, all-open weapon availability, and theme-invariant tactical DeathScreen palette.
+- S152 exact source `471cd6762b828f61d6bd55e47d614cec47d3abeb` passes brief run `31657471854` and quality/build/deploy run `31657471851`; immutable production `https://a1fe44a3.call-of-doodie.pages.dev/` passes shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation, and launch-surface checks.
+- Resume from synchronized main as Session 153. Preserve the versioned drill sanitizer, outcome-before-prescription order, mastery source label, all-open weapon availability, theme-invariant tactical DeathScreen palette, and post-status-stamp derived-context ordering.
 
 ## Impact Summary
 
