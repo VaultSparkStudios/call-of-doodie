@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 153 production-verified: explicit playtest signal, advisory replay plans, exact edge trust, and project-routed release probes are green.",
-  "nextMilestone": "Publish and verify the S153 verifier seal, then begin Session 154 from synchronized clean main; preserve SPARKED NO-GO until external evidence is real.",
+  "currentFocus": "Session 153 complete: implementation and verifier seal are exact-main published and production-verified; SPARKED remains independently gated.",
+  "nextMilestone": "Begin Session 154 from synchronized clean main; preserve explicit playtest/replay truth and project-validated backend routing.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -420,6 +420,13 @@
       "status": "green",
       "type": "verifier-seal",
       "command": "project-ref-validating public Supabase resolver; full 196 files / 1155 assertions; lint, deployable build, runtime, security, backend, replay, and leaderboard gates pass"
+    },
+    {
+      "session": 153,
+      "status": "green",
+      "url": "https://ce9e4ae3.call-of-doodie.pages.dev/",
+      "type": "production-verifier-seal",
+      "command": "source 10c05add; brief 31745229611; Cloudflare 31745229701; immutable and custom health exact-ID; shell 7/7; cutover 5/5; backend 5/5; replay 3/3; leaderboard and launch surfaces pass"
     }
   ],
   "blockers": [
@@ -503,7 +510,7 @@
     "total": 181,
     "score": 74
   },
-  "lastSessionSummary": "Session 153 is production-published and verified; follow-through also root-fixed generic Supabase verifier routing while preserving direct-env prohibition and SPARKED NO-GO.",
+  "lastSessionSummary": "Session 153 completed the full arc through exact-main implementation, verifier seal, immutable production verification, and truthful FORGE closeout.",
   "testsAssertionsPassing": 1155,
   "testsAssertionsTotal": 1155,
   "testsAssertionsFiles": 196,

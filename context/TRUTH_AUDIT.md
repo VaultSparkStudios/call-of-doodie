@@ -15,8 +15,9 @@
 - Canon truth — applicable ABSOLUTE canon have no gaps. CANON-045 and CANON-055 remain STRONG external/checker findings; they are not hidden, and they do not substitute for a project-local auth implementation or a SPARKED claim.
 - Production truth — exact source `4b78142e0b3744c024f42e44f971ab89c8939b0f` passed brief `31743411548`, Supabase `31743411535`, and Cloudflare `31743411559`; immutable `c9ee3b5e` and the custom domain pass shell, cutover, launch-surface, and real 11/11 player-flow checks.
 - Verifier truth — the application remained healthy, but the three backend CLIs initially addressed an unrelated generic Supabase capability. The seal rejects mismatched project/key identities and resolves the game's public deployed config without direct `.env` access; full 196-file / 1,155-assertion, build/security/runtime, backend 5/5, replay 3/3, and leaderboard courts pass.
+- Final-seal truth — `10c05add70f4dadbc9b3fc25f215bad2c1797392` passes brief `31745229611` and Cloudflare `31745229701`, serves as immutable `ce9e4ae3`, and is exact-ID verified on both immutable and custom-domain typed health. The full production court remains green.
 
-Overall status: all S153 repository-owned audit items and discovered release/verifier defects are implemented, production-published, and verified; the verifier seal awaits exact-main publication. SPARKED remains NO-GO.
+Overall status: all S153 repository-owned audit items and discovered release/verifier defects are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-13
 
 ## 2026-08-12 — Session 152 — Recovery, coaching transaction, mastery command, and saturation truth

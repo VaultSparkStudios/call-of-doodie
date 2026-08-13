@@ -9,6 +9,7 @@ Last reviewed: 2026-08-13 (Session 153 production verification)
 - Production origin: `https://callofdoodie.wtf/`
 - Published source: `4b78142e0b3744c024f42e44f971ab89c8939b0f`; brief-format workflow `31743411548`, Supabase workflow `31743411535`, Cloudflare quality/build/deploy workflow `31743411559`.
 - Immutable production: `https://c9ee3b5e.call-of-doodie.pages.dev/`; typed production health reports deploy prefix `4b78142e0b37`.
+- Final verifier seal: source `10c05add70f4dadbc9b3fc25f215bad2c1797392`; brief-format workflow `31745229611`, Cloudflare quality/build/deploy workflow `31745229701`, immutable `https://ce9e4ae3.call-of-doodie.pages.dev/`. Both immutable and custom-domain health report deploy prefix `10c05add70f4`.
 - Previous known-good production: source `471cd6762b828f61d6bd55e47d614cec47d3abeb`, Cloudflare workflow `31657471851`, immutable `https://a1fe44a3.call-of-doodie.pages.dev/`.
 - Scope: cost-neutral FORGE engineering update. This is not a SPARKED lifecycle transition or launch announcement.
 - Founder authorization: the explicit `/arc` request plus direct commit/push and full-deployment authorization covers this engineering publication and verification.
@@ -52,9 +53,9 @@ The generic Studio responsive helper explicitly skipped because it could not res
 ## Continuous integration and rollback
 
 - The latest two Cloudflare production runs are green. Four of the last five are green; the one failure is the already-documented Session 152 Hot Context ordering defect, root-fixed before two subsequent green runs. All five latest brief-format runs are green.
-- Exact source `4b78142e0b3744c024f42e44f971ab89c8939b0f` passes brief-format, Supabase deploy, and Cloudflare quality/build/deploy workflows. The verifier follow-up must pass the same exact-SHA gates before its immutable revision becomes the final rollback-forward target.
+- Exact implementation source `4b78142e…` and verifier seal `10c05add…` pass their brief-format and Cloudflare quality/build/deploy workflows; the implementation source also passed the Supabase deployment workflow.
 - Cloudflare Pages retains immutable deployments. `docs/DEPLOY_ROLLBACK.md` documents a reversible `git revert` path; reset-hard and force-push are excluded.
-- Current known-good application rollback target is `4b78142e0b3744c024f42e44f971ab89c8939b0f` / `https://c9ee3b5e.call-of-doodie.pages.dev/`; prior fallback remains `471cd676…` / `https://a1fe44a3.call-of-doodie.pages.dev/`.
+- Current known-good rollback-forward target is `10c05add70f4dadbc9b3fc25f215bad2c1797392` / `https://ce9e4ae3.call-of-doodie.pages.dev/`; implementation rollback target is `4b78142e…` / `https://c9ee3b5e.call-of-doodie.pages.dev/`, and prior fallback remains `471cd676…` / `https://a1fe44a3.call-of-doodie.pages.dev/`.
 
 ## Release verdict
 

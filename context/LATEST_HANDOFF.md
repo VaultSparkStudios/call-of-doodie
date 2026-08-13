@@ -11,7 +11,7 @@ Session Intent: Run one continuous `/arc` from synchronized `main` through canon
 - Independent gate: GO for the explicitly authorized cost-neutral FORGE engineering publish; NO-GO for SPARKED. Do not promote lifecycle status without current Core Web Vitals, physical-device/media, reply-as mail, project-scoped provider, Obelisk, participant/publication, and explicit lifecycle evidence.
 - Production source `4b78142e0b3744c024f42e44f971ab89c8939b0f` is green in brief `31743411548`, Supabase deploy `31743411535`, and Cloudflare workflow `31743411559`; immutable `https://c9ee3b5e.call-of-doodie.pages.dev/` and the custom domain pass the production court.
 - Production follow-through caught and fixed a verifier-only project-routing defect: backend CLI checks now reject unrelated generic Supabase credentials and resolve the game's validated public configuration from the gateway or deployed artifact. Full seal tree passes 196/196 files and 1,155/1,155 assertions plus corrected backend 5/5, replay 3/3, and leaderboard isolation.
-- Immediate continuation: publish this verifier seal, follow its exact-SHA CI/deployment, confirm the final immutable revision, then begin Session 154 from synchronized clean main.
+- Verifier seal `10c05add70f4dadbc9b3fc25f215bad2c1797392` is green in brief `31745229611` and Cloudflare workflow `31745229701`; immutable `https://ce9e4ae3.call-of-doodie.pages.dev/` and custom-domain health report the exact deploy prefix. Begin Session 154 from synchronized clean main after this receipt-only commit verifies.
 
 ## Impact Summary
 
