@@ -44,6 +44,7 @@ Recover and independently prove Session 151, then complete one continuous autono
 - [x] [SIL:3] **DONE S152** The prior observed drill result appears before the next verdict exactly once, with comparable-only deltas and no causal overclaim.
 - [x] [SIL:2] **DONE S152** Commander's Orders projects the nearest per-weapon mastery tier from the authoritative local kill ledger while every weapon remains open.
 - [x] [SIL:1] **DONE S152** React's death-screen playtest controls no longer mix border shorthand with `borderColor` during rerender.
+- [x] [SIL:2] **DONE S152** Closeout autopilot now refreshes Hot Context and Startup Brief after its final PROJECT_STATUS stamp, preventing a pushed closeout from making its own exact-SHA CI stale.
 
 **Runway exception:** the Unified Genius List has zero executable items and the generated innovation pack found no additional repository-local candidate beyond the implemented audit innovations. Remaining work requires participant, physical-device, credential/provider, publication, current performance, or explicit SPARKED evidence.
 

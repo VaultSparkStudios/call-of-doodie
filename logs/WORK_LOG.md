@@ -11,7 +11,9 @@
 - Real Chromium completed the full two-death transaction. Pixel review found and fixed a mobile bottom-dock overlap in the mastery receipt; the death screen's tactical palette is intentionally theme-invariant.
 - Deployed isolated staging `session-152-staging` / immutable `25837962`; hosted matrix passed 1,020/1,020 and CANON-053 bound 14 inspected captures with zero blockers.
 - Saturation confirmed zero executable Genius items; the innovation pack found no additional viable repository-local candidate. Independent release gate returned GO for engineering publication and NO-GO for SPARKED.
-- Final exact closeout tree passed 191/191 files and 1,142/1,142 assertions in 152.21 seconds after every canonical write-back surface and generated cache was current.
+- Final pre-CI closeout tree passed 191/191 files and 1,142/1,142 assertions in 152.21 seconds after canonical write-back.
+- Exact-SHA workflow `31656064776` then caught a post-test closeout mutation: autopilot stamped PROJECT_STATUS after Hot Context was rendered. Root-fixed autopilot to refresh Hot Context and Startup Brief after the stamp and added an ordering regression court; no retry-only green was accepted.
+- Final root-fixed tree passes 191/191 files and 1,143/1,143 assertions in 126.86 seconds; the focused closeout-order/Hot Context court passes 9/9.
 
 Intent outcome: repository-owned recovery, audit, implementation, saturation, and staging objectives achieved. Exact-tree final suite, canonical closeout, direct-main push, CI, production deployment, and live smoke complete the authorized follow-through.
 

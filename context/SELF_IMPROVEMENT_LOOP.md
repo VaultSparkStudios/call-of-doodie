@@ -4,7 +4,7 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
-## 2026-08-12 — Session 152 | Total: 997/1000 | Velocity: 4 | Debt: ↓
+## 2026-08-12 — Session 152 | Total: 997/1000 | Velocity: 5 | Debt: ↓
 
 SIL 997/1000: Recovered an interrupted closeout without trusting phantom green, then closed the game's coaching loop across the least obvious navigation path. Real browser pixels changed the implementation twice: mastery was compacted around the mobile dock, while a suspected death overlay was disproved through DOM and element-level evidence instead of prompting a false fix.
 
@@ -12,9 +12,9 @@ SIL 997/1000: Recovered an interrupted closeout without trusting phantom green, 
 |---|---:|---|---|
 | Dev Health | 100 | ↑ | Focused courts, exact architecture headroom, lint, build, schema, public/security/dependency/assets/media, staging, and CANON-053 pass; the generated-cache miss was attributable and repaired before the final tree court. |
 | Alignment | 100 | → | Humiliation → lesson → accepted correction → observed result → next prescription is now one honest loop, and mastery still requires real weapon evidence. |
-| Momentum | 100 | ↑ | Recovery plus three L2 audit items and one second-order React warning fix completed continuously without speculative breadth. |
+| Momentum | 100 | ↑ | Recovery plus three L2 audit items and two second-order root fixes completed continuously without speculative breadth. |
 | Engagement | 100 | → | Accepted coaching survives the menu, its outcome leads the next death screen, and the nearest weapon campaign stays visible at deploy. |
-| Process Qual | 100 | ↑ | Recovery verified claims independently; real browser state proved the complete two-death path; DOM evidence prevented a false visual fix. |
+| Process Qual | 100 | ↑ | Recovery verified claims independently; real browser state proved the complete two-death path; DOM evidence prevented a false visual fix; exact-SHA CI exposed and drove a closeout ordering repair. |
 | Coherence | 99 | ↑ | DeathScreen, App, HomeV2, Commander's Orders, mastery, audit, public status, and visual receipts share one versioned contract; global Doctor remains externally owned. |
 | Security | 100 | → | Explicit allowlisting and field bounds harden carried state; release security and npm audit pass with no dependency or credential expansion. |
 | Ecosystem | 99 | ↓ | Human and agent receipts agree and staging is isolated; external Studio Doctor reds and provider gates remain honestly separate. |

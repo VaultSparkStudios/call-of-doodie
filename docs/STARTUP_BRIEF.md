@@ -42,8 +42,8 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    997/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 4↑                      ║
-║    Last active: 1d  ·  Last closeout: 12d  ·  (active =…         ║
+║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 5↑                      ║
+║    Last active: 0d  ·  Last closeout: 12d  ·  (active =…         ║
 ║    Trend  ▆█▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
@@ -67,15 +67,14 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  ██████░░░░░░░░░░░░░░░░░░   27% used                          ║
-║     73,297 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~36,649 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ████████████████████████  100% used                          ║
+║     200,000 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         1138/1138 passing (2026-08-13T00:43:14.000Z)   ║
-║  ✓  Velocity      4 ↑  ·  Debt: ↓                                ║
+║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         45208 FORGE  ·  5d old                         ║
@@ -114,7 +113,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▆█▄▄▄  4↑  (last 5 sessions)                        ║
+║  Velocity:   ▆█▄▄▄  5↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝

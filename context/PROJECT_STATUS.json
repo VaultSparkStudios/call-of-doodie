@@ -386,7 +386,7 @@
       "session": 152,
       "status": "green",
       "type": "tests",
-      "command": "final exact closeout tree: 1142/1142 assertions across 191 files in 152.21s; focused 57/57; Hot Context freshness 3/3"
+      "command": "final root-fixed closeout tree: 1143/1143 assertions across 191 files in 126.86s; focused implementation 57/57; closeout order/freshness 9/9"
     }
   ],
   "blockers": [
@@ -407,7 +407,7 @@
   "silSession": 152,
   "silScore": 994,
   "silAvg3": 994.3,
-  "silVelocity": 4,
+  "silVelocity": 5,
   "silDebt": "down",
   "silLastSession": 152,
   "currentSession": 152,
@@ -472,8 +472,8 @@
     "blockingDetail": "CPX51 live capacity admission receipt is a Studio Ops control-plane finding; signed Ark repo-question queued. Project-local release gates remain green."
   },
   "lastSessionSummary": "Session 152 recovered S151 independently, closed accepted coaching across menu return, put observed drill outcome before the next verdict, projected authoritative mastery into Commander's Orders, exhausted executable work, and passed isolated staging/rendered-pixel release gates while preserving SPARKED NO-GO.",
-  "testsAssertionsPassing": 1142,
-  "testsAssertionsTotal": 1142,
+  "testsAssertionsPassing": 1143,
+  "testsAssertionsTotal": 1143,
   "testsAssertionsFiles": 191,
   "testsFlaky": [],
   "testsInconclusive": [],

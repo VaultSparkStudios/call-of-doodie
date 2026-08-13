@@ -18,11 +18,12 @@ Headline: Accepted coaching now survives every route into the next run, reports 
 | Outcome-first coaching | High | Medium | LAST ORDER RESULT precedes ONE VERDICT exactly once with non-causal language |
 | Mastery command brief | High | Medium | `career.weaponLegendKills` projection, precedence preservation, accessible source label |
 | Visual receipt semantics | Medium | Medium | mastery/outcome captures retain accurate state labels and hashes |
+| Self-consistent closeout | Medium | High | exact-SHA CI found the final status-stamp freshness bug; autopilot now regenerates derived context before commit |
 
 ## Validation
 
 - Focused changed-surface courts 57/57; hot-context freshness 3/3.
-- Final exact closeout tree passes 191/191 files and 1,142/1,142 assertions in 152.21 seconds.
+- Final root-fixed closeout tree passes 191/191 files and 1,143/1,143 assertions in 126.86 seconds; focused closeout-order/freshness court passes 9/9.
 - Strict lint, schema/coherence/architecture, public contract 28/28, deployable build, security/npm audit zero, dependency/assets/media/cost gates pass.
 - Real browser completed death → RAGE QUIT → Commander's Orders → deploy → death and exposed LAST ORDER RESULT before ONE VERDICT.
 - Staging matrix passes 1,020/1,020; 14 inspected captures are hash-bound with CANON-053 blocking defects 0.

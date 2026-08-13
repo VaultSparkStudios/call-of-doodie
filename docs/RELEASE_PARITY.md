@@ -8,6 +8,7 @@ Last reviewed: 2026-08-12 (Session 152 release candidate)
 - Stable staging alias: `https://session-152-staging.call-of-doodie.pages.dev/`
 - Production origin: `https://callofdoodie.wtf/`
 - Exact source/workflow/immutable production: pending direct-main closeout commit and exact-SHA CI.
+- First exact-SHA attempt: `2e56892` / workflow `31656064776` failed its Hot Context freshness court because closeout autopilot stamped PROJECT_STATUS after cache generation. The ordering is root-fixed; no flaky retry claim is made.
 - Scope: deploy a cost-neutral engineering update to the existing public FORGE surface. This is **not** a SPARKED lifecycle flip.
 - Founder authorization: explicit recovery-first `/goal` and continuous `/arc` direction authorizes direct-main engineering publication and verification only.
 
@@ -17,7 +18,7 @@ Last reviewed: 2026-08-12 (Session 152 release candidate)
 |---|---|---|
 | Build and lint | Deployable build, strict ESLint, schema/coherence/architecture/storage/task/runtime gates | Pass |
 | Focused tests | Changed-surface drill/mastery/order/browser-contract courts | 57/57 pass |
-| Full tests | Final closeout tree: 191/191 files and 1,142/1,142 assertions in 152.21s. The first run's only failures were generated Hot Context freshness after the new audit; regeneration was separately proved 3/3 before the exact-tree pass. | Pass |
+| Full tests | Final root-fixed closeout tree: 191/191 files and 1,143/1,143 assertions in 126.86s. The first pre-fix run's only failures were generated Hot Context freshness; the new closeout-order/freshness court passes 9/9. | Pass |
 | Public contract | 28 public files validated | Pass |
 | Broad visual QA | 20 routes × 2 themes × 390/768/1440px on isolated staging | 1,020/1,020 pass |
 | CANON-053 receipt | 14 current hash-bound captures, including mastery and drill outcome in both project themes and target widths | Pass; 0 blockers |

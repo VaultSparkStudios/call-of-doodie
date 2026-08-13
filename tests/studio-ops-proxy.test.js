@@ -43,6 +43,12 @@ describe("project-local Studio Ops proxies", () => {
     expect(source).toContain("doctor --json --quiet");
     expect(source).not.toContain("doctor --update-json");
   });
+  it("refreshes derived context after the final status stamp and before commit preview", () => {
+    const source = fs.readFileSync(path.resolve("scripts/closeout-autopilot.mjs"), "utf8");
+    expect(source).toContain('for (const script of ["render-hot-context.mjs", "render-startup-brief.mjs"])');
+    expect(source.indexOf("stampStatus();")).toBeLessThan(source.indexOf("refreshDerivedContext();"));
+    expect(source.indexOf("refreshDerivedContext();")).toBeLessThan(source.indexOf("showGitPreview();"));
+  });
   it("derives closeout write-backs and staging from committed source-of-truth state", () => {
     const source = fs.readFileSync(path.resolve("scripts/render-closeout-board.mjs"), "utf8");
     expect(source).toContain("close[ -]?out session ${session}");

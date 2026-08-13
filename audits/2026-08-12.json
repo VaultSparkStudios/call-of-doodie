@@ -15,7 +15,7 @@
   ],
   "validation": [
     "focused changed-surface courts pass 57/57",
-    "final exact closeout tree passes 191 files and 1142 assertions in 152.21 seconds",
+    "final root-fixed closeout tree passes 191 files and 1143 assertions in 126.86 seconds",
     "hot-context freshness court passes 3/3 after canonical regeneration",
     "strict lint, schema/coherence/architecture, public contract 28/28, and deployable build pass",
     "security release gate and npm audit pass with zero vulnerabilities",

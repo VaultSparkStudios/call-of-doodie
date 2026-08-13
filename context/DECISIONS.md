@@ -1132,6 +1132,12 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 
 **Boundaries:** Carried fields are bounded and sanitized; score deltas appear only for comparable runs; the result is explicitly observational rather than causal; no hosted inference or persistent account state is introduced.
 
+## 2026-08-12 — Session 152 — Final status stamp precedes derived context
+
+**Decision:** Closeout autopilot must regenerate Hot Context and Startup Brief after its final PROJECT_STATUS stamp and before git preview/commit.
+
+**Why:** Exact-SHA workflow `31656064776` correctly rejected `2e56892`: local tests were green before autopilot, but autopilot then changed `PROJECT_STATUS.lastUpdated` without refreshing hash-bound Hot Context. Retrying CI would preserve a deterministic closeout defect. The ordering is now executable and source-tested.
+
 ## 2026-08-12 — Session 152 — Death state is intentionally theme-invariant
 
 **Decision:** Keep DeathScreen's high-contrast tactical palette invariant across Sewer Night and Porcelain Day while still capturing both themed host states for CANON-053.

@@ -108,8 +108,24 @@ function stampStatus() {
   console.log(`lastUpdated → ${today}`);
 }
 
+function refreshDerivedContext() {
+  header("Step 3 · Refresh derived closeout context");
+  if (DRY) {
+    console.log("(dry-run) would refresh Hot Context and Startup Brief after the status stamp");
+    return;
+  }
+  for (const script of ["render-hot-context.mjs", "render-startup-brief.mjs"]) {
+    const result = run(process.execPath, [path.join(ROOT, "scripts", script)]);
+    process.stdout.write(result.stdout || "");
+    process.stderr.write(result.stderr || "");
+    if ((result.status ?? 1) !== 0) {
+      throw new Error(`${script} failed after PROJECT_STATUS stamp`);
+    }
+  }
+}
+
 function showGitPreview() {
-  header("Step 3 · Git status + diff preview");
+  header("Step 4 · Git status + diff preview");
   const status = sh("git status --short");
   process.stdout.write(status.stdout || "");
   if (status.stderr) process.stderr.write(status.stderr);
@@ -132,7 +148,7 @@ function parseBeaconEnv() {
 }
 
 function clearSessionArtifacts() {
-  header("Step 5 · Clear lock + beacon");
+  header("Step 6 · Clear lock + beacon");
   if (fs.existsSync(LOCK_PATH) && !DRY) fs.unlinkSync(LOCK_PATH);
   console.log(fs.existsSync(LOCK_PATH) && DRY ? "(dry-run) would clear context/.session-lock" : "Session lock cleared");
 
@@ -153,7 +169,7 @@ function defaultCommitMessage() {
 }
 
 function commitAndPush(skipPush) {
-  header("Step 4 · Commit + push");
+  header("Step 5 · Commit + push");
   if (DRY) {
     console.log(`(dry-run) would run: git add -A && git commit -m "${defaultCommitMessage()}"${skipPush ? "" : " && git push"}`);
     return { committed: false, pushed: false };
@@ -198,6 +214,7 @@ function printBoard(result) {
 try {
   bestEffortDoctor();
   stampStatus();
+  refreshDerivedContext();
   showGitPreview();
 
   const answer = YES ? "yes" : await prompt("Commit + push the current project changes?");
