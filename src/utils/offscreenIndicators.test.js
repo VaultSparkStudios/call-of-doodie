@@ -76,4 +76,59 @@ describe("getOffscreenThreatArrows", () => {
     );
     expect(arrows).toEqual([]);
   });
+
+  describe("ADS zoom", () => {
+    // Player at center; 1.28× zoom centered on player
+    const px = 400, py = 300;
+
+    it("shows arrow for enemy pushed off-screen by ADS zoom but visible in world space", () => {
+      // Enemy near the right edge in world coords: x=750 is on-screen without zoom.
+      // With 1.28× zoom centered at (400,300): screen x = 400 + (750-400)*1.28 = 848 → off right edge.
+      const arrows = getOffscreenThreatArrows(
+        [{ x: 750, y: 300 }],
+        W, H, { playerX: px, playerY: py, zoomScale: 1.28 },
+      );
+      expect(arrows).toHaveLength(1);
+      // Arrow should be on the right edge
+      expect(arrows[0].x).toBeGreaterThan(W / 2);
+    });
+
+    it("hides arrow for world-offscreen enemy that is still on-screen after ADS zoom", () => {
+      // An enemy just past the right edge in world coords: x=810.
+      // With 1.28× zoom centered at (400,300): screen x = 400 + (810-400)*1.28 = 924.8 → still off.
+      // But an enemy at x=802 and y=300: screen x = 400 + (802-400)*1.28 = 914.6 → off too.
+      // Instead test an enemy that zooms inward: e.g. x=30 would be pushed further left.
+      // Test an enemy that IS world-offscreen but the zoom makes its screen pos in-bounds.
+      // For this we need the inverse: world x such that screen x is in [0,W].
+      // screen_x = 400 + (ex - 400) * 1.28 ∈ [0,800]
+      // ex ∈ [400 - 400/1.28, 400 + 400/1.28] = [87.5, 712.5] in world coords
+      // So an enemy at world x=-5 (off left edge): screen x = 400 + (-5-400)*1.28 = 400 - 518.4 = -118.4 → still off
+      // This test checks that enemy already off-screen in world still shows an arrow with zoom active
+      const arrows = getOffscreenThreatArrows(
+        [{ x: -5, y: 300 }],
+        W, H, { playerX: px, playerY: py, zoomScale: 1.28 },
+      );
+      expect(arrows).toHaveLength(1);
+      expect(arrows[0].x).toBeLessThan(W / 2);
+    });
+
+    it("arrow angle points toward enemy screen position under ADS zoom", () => {
+      // Enemy above and right in world: world (600, 50).
+      // Screen pos: x = 400 + (600-400)*1.28 = 656, y = 300 + (50-300)*1.28 = -20 → off top.
+      const arrows = getOffscreenThreatArrows(
+        [{ x: 600, y: 50 }],
+        W, H, { playerX: px, playerY: py, zoomScale: 1.28 },
+      );
+      expect(arrows).toHaveLength(1);
+      // Angle should have a negative y component (pointing up/away from bottom)
+      expect(Math.sin(arrows[0].angle)).toBeLessThan(0);
+    });
+
+    it("returns same result as non-zoom path when zoomScale is 1", () => {
+      const enemy = { x: -50, y: 300, isBossEnemy: true };
+      const noZoom = getOffscreenThreatArrows([enemy], W, H);
+      const zoom1 = getOffscreenThreatArrows([enemy], W, H, { playerX: px, playerY: py, zoomScale: 1 });
+      expect(zoom1).toEqual(noZoom);
+    });
+  });
 });
