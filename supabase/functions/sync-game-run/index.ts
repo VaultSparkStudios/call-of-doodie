@@ -55,18 +55,21 @@ function base64Url(bytes: ArrayBuffer) {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
+function canonicalSummary(payload: Record<string, unknown>) {
+  return [
+    payload.uid,
+    payload.token,
+    payload.mode ?? "",
+    payload.difficulty,
+    payload.seed ?? "",
+    payload.starterLoadout,
+    payload.expiresAt,
+  ].join("|");
+}
+
 async function signSummary(secret: string, payload: Record<string, unknown>) {
   const key = await crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const serialized = JSON.stringify({
-    uid: payload.uid,
-    token: payload.token,
-    mode: payload.mode,
-    difficulty: payload.difficulty,
-    seed: payload.seed,
-    starterLoadout: payload.starterLoadout,
-    expiresAt: payload.expiresAt,
-  });
-  return base64Url(await crypto.subtle.sign("HMAC", key, encoder.encode(serialized)));
+  return base64Url(await crypto.subtle.sign("HMAC", key, encoder.encode(canonicalSummary(payload))));
 }
 
 Deno.serve(async (req) => {

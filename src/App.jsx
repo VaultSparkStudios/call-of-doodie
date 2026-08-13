@@ -123,6 +123,7 @@ import {
   getWaveSpawnRate,
   heatBiasedFormation,
 } from "./systems/waveDirector.js";
+import { buildWavePlanReceipt, recordWavePlanSnapshot } from "./systems/wavePlanReceipt.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 import { buildRematchKit, buildRematchDrillBrief, buildRematchMasteryReceipt, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
 import { buildActiveRunDrill, sanitizeCarriedRunDrill } from "./systems/runDrill.js";
@@ -583,7 +584,7 @@ export default function CallOfDoodie() {
       careerBest: { score: career.bestScore || 0, wave: career.bestWave || 0 },
       newBestScore: false, newBestWave: false,
       coinStreakKills: 0, coinStreakTimer: 0, coinMultActive: false, coinMultTimer: 0,
-      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, pressureArc: createPressureArc(), damageSequence: createDamageSequence(),
+      waveDirector: null, waveDirectorStage: -1, waveTelemetryBand: null, wavePlanLedger: [], pressureArc: createPressureArc(), damageSequence: createDamageSequence(),
       precisionStreak: 0,
       _adaptiveSpawnMods: getAdaptiveSpawnMods(career),
     };
@@ -621,6 +622,7 @@ export default function CallOfDoodie() {
         dailyChallengeMode: false,
         random: getWaveSpawnRng(gs0),
       });
+      gs0.wavePlanLedger = recordWavePlanSnapshot(gs0.wavePlanLedger, gs0.waveDirector);
     }
     setRunSeed(seed);
     comboRef.current = { count: 0, timer: 0, max: 0 };
@@ -1727,6 +1729,7 @@ export default function CallOfDoodie() {
       ghostRecorderReceipt: gs.ghostRecorderReceipt,
       pressureReceipt: finalizePressureArc(gs.pressureArc, { deathWave: gs.currentWave }),
       damageReceipt: finalizeDamageSequence(gs.damageSequence, { maxHealth: gs.player?.maxHealth, finalFrame: frameCountRef.current }),
+      wavePlanReceipt: buildWavePlanReceipt(gs.wavePlanLedger),
       totalDamage: gs.totalDamage,
       totalShots: statsRef.current.totalShots || 0,
       totalHits: statsRef.current.totalHits || 0,
@@ -2865,6 +2868,7 @@ export default function CallOfDoodie() {
           dailyChallengeMode: gs.dailyChallengeMode,
           random: getWaveSpawnRng(gs),
         });
+        gs.wavePlanLedger = recordWavePlanSnapshot(gs.wavePlanLedger, gs.waveDirector);
         gs.waveDirectorStage = -1;
         gs._formationToastedThisWave = new Set();
       }

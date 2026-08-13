@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-12T21:39:45.672Z",
-  "stagingUrl": "https://session-152-staging.call-of-doodie.pages.dev",
-  "workingTreeUiSha256": "b9c775f017a7d4010e485b010225a8024a7815f7e85065edd6cf44ccb9077230",
+  "capturedAt": "2026-08-13T07:37:20.117Z",
+  "stagingUrl": "https://session-153-staging.call-of-doodie.pages.dev/",
+  "workingTreeUiSha256": "43d1adbcb44e55df257c44b2b16bab8915259696ef92aa20950a9aa1bc704035",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-152-staging/visual-audit-receipt.json",
-    "sha256": "23a92b86c7b3c40921797d8e582b5a55c98b9aa562f6b9df47d79344ca4e2fbd",
+    "receipt": "output/playwright/session-153-staging/visual-audit-receipt.json",
+    "sha256": "b609de296d8cee1bece751b06e06a9e83633117756e8cf61e4c2e6a1e8fda866",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -13,7 +13,26 @@
       "failures": []
     }
   },
-  "touchedState": null,
+  "touchedState": {
+    "surface": "Expanded Replay Coverage Passport in Run History",
+    "checks": {
+      "pass": true,
+      "captures": 4,
+      "checks": 32,
+      "passed": 32
+    }
+  },
+  "additionalTouchedStates": [
+    {
+      "surface": "Playtest Flight Receipt and aggregate Playtest Command Post",
+      "checks": {
+        "pass": true,
+        "captures": 8,
+        "checks": 44,
+        "passed": 44
+      }
+    }
+  ],
   "themes": [
     "dark",
     "light"
@@ -86,92 +105,136 @@
       "page": "Leaderboard surface"
     },
     {
-      "file": "mastery-command-dark-1440.png",
-      "sha256": "7ebdd352c4de480fe3cf1d192a442d416ce331a7bdc0718a85c1c001a368f45a",
+      "file": "replay-passport--sewer-night--390.png",
+      "sha256": "4c9e2d6e022f4f5f2a3749402dec488d5fe7d48c75c64b979333f5e6eb7b76ab",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Expanded Replay Coverage Passport in Run History"
+    },
+    {
+      "file": "replay-passport--sewer-night--1440.png",
+      "sha256": "44acd2c4d91eaa477e7f45023180fabcd2613697ec33aab6ac4474083966faf6",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Commander's Orders weapon-mastery projection"
+      "page": "Expanded Replay Coverage Passport in Run History"
     },
     {
-      "file": "mastery-command-light-1440.png",
-      "sha256": "f459b20e5e8f44157cab88e02a4fa78ddd094809c0fe839e6d65260c26634450",
+      "file": "replay-passport--porcelain-day--390.png",
+      "sha256": "8008009857a794619a0fa28f40769afde37450e582412c28fc7583c9affc3a78",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Expanded Replay Coverage Passport in Run History"
+    },
+    {
+      "file": "replay-passport--porcelain-day--1440.png",
+      "sha256": "af51dccfb43018ac9dbb9cd89634a6268912ab9c7564d95acca0e32359c3a627",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Commander's Orders weapon-mastery projection"
+      "page": "Expanded Replay Coverage Passport in Run History"
     },
     {
-      "file": "mastery-command-dark-390.png",
-      "sha256": "c01ca36905872299a4663c93a9f7ee16b7b851876583ec322558989d1ea343e6",
+      "file": "playtest-flight--sewer-night--390.png",
+      "sha256": "7ae81d967e30567ccc5ab65fc2bc60132a3b20b644f872fd65fcd8827668aacd",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 1000
       },
-      "page": "Commander's Orders weapon-mastery projection"
+      "page": "Structured Playtest Flight Receipt after an observed run"
     },
     {
-      "file": "mastery-command-light-390.png",
-      "sha256": "89e8451b8e32383e008de4433c768ee4bfe683257add05f26ca3b5a83712206c",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
+      "file": "playtest-pulse--sewer-night--390.png",
+      "sha256": "9a148fc0d7cad1dda37d454d10bdfbe38896f63472b697c50f3adf5ed7da34cd",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 844
+        "height": 1000
       },
-      "page": "Commander's Orders weapon-mastery projection"
+      "page": "Expanded aggregate Playtest Command Post on Home"
     },
     {
-      "file": "drill-outcome-dark-1440.png",
-      "sha256": "570bfd9d14700333e99a4818d2b73965bb28cd2301b466287f3ca68d34569228",
+      "file": "playtest-flight--sewer-night--1440.png",
+      "sha256": "19b427eabe11fb12cadd44cbc34f37d574753e4258de228db7bdd583cea7a1a5",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Death-screen prior drill outcome before next verdict"
+      "page": "Structured Playtest Flight Receipt after an observed run"
     },
     {
-      "file": "drill-outcome-light-1440.png",
-      "sha256": "570bfd9d14700333e99a4818d2b73965bb28cd2301b466287f3ca68d34569228",
+      "file": "playtest-pulse--sewer-night--1440.png",
+      "sha256": "337b4d4ecf25f7c51919f32f50d7f04cd4eca95fdc506d3f14f608b49651e872",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Expanded aggregate Playtest Command Post on Home"
+    },
+    {
+      "file": "playtest-flight--porcelain-day--390.png",
+      "sha256": "02f1c6d39f203a40853312cba41c5e0e9b047bc6064ca3f302e82b0be354acea",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Structured Playtest Flight Receipt after an observed run"
+    },
+    {
+      "file": "playtest-pulse--porcelain-day--390.png",
+      "sha256": "0fa9e0e1f64ea0e6fdbe643833ebd6ff4480153189df92355bfac67e66d8ed8c",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Expanded aggregate Playtest Command Post on Home"
+    },
+    {
+      "file": "playtest-flight--porcelain-day--1440.png",
+      "sha256": "e5ad8d3e9d394eae32a6cb9e4aaf1943da30901f3b032184122c7e7e5de85382",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Death-screen prior drill outcome before next verdict"
+      "page": "Structured Playtest Flight Receipt after an observed run"
     },
     {
-      "file": "drill-outcome-dark-390.png",
-      "sha256": "e20fb32c4f9be3a895df4e6919483016a3b7701d7a7ab0eec39644aa468efffb",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Death-screen prior drill outcome before next verdict"
-    },
-    {
-      "file": "drill-outcome-light-390.png",
-      "sha256": "e20fb32c4f9be3a895df4e6919483016a3b7701d7a7ab0eec39644aa468efffb",
+      "file": "playtest-pulse--porcelain-day--1440.png",
+      "sha256": "5f646a71f21668f1d36c7ecd1b5f81dd40b4c99cb1647d7de9d9e9008feecf8a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 1000
       },
-      "page": "Death-screen prior drill outcome before next verdict"
+      "page": "Expanded aggregate Playtest Command Post on Home"
     }
   ],
   "inspection": {
@@ -181,12 +244,12 @@
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The compact weapon-mastery projection is readable in Commander's Orders at 390px and 1440px across both project themes without colliding with the mobile dock.",
-      "The prior drill's observed result appears before ONE VERDICT at 390px and 1440px; its wave, comparable score, repeatability evidence, and non-causal boundary remain readable."
+      "The expanded Replay Coverage Passport passed 32/32 focused state checks at mobile and desktop in both themes.",
+      "The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed 44/44 focused state checks at mobile and desktop in both themes."
     ],
     "fixesApplied": [
-      "Compacted the mastery receipt to two mobile-safe rows after direct pixel review found bottom-dock overlap.",
-      "Death state intentionally retains its fixed high-contrast tactical palette across project themes; both themed hosts were captured and are pixel-identical by design."
+      "Repaired stale Replay Passport harness locators and enabled the operator query before recapture.",
+      "Direct pixel review found no blocking layout, contrast, clipping, or hierarchy defect in the Playtest Flight Receipt, Command Post, or fourth replay lane."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

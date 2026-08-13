@@ -2,6 +2,24 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-13 — Session 153 — Playtest signal is explicit, local, and aggregate-only
+
+**Decision:** Input trust and threat readability are direct post-run questions, not inferred telemetry. The local flight recorder may retain the bounded four-answer receipt; any portable Playtest Pulse contains only distributions, sample size, and completeness state—never identifiers, free text, or a behavioral-outcome claim.
+
+**Rationale:** The game needs evidence about whether controls and threats read fairly, but synthetic confidence or covert identity would corrupt the feedback loop. Requiring four explicit answers and showing aggregate distributions keeps the evidence useful, consentful, and honest.
+
+## 2026-08-13 — Session 153 — Recorded wave plans are advisory replay evidence
+
+**Decision:** A bounded recorded-wave-plan receipt may appear as the fourth Replay Passport lane, labelled planned pressure. It does not reconstruct spawn decisions, physics, collisions, damage, random draws, or outcomes, and must never upgrade an incomplete replay into an authoritative one.
+
+**Rationale:** The plan records intended pressure at the boundary where it was computed. That improves diagnosis without making the deterministic-replay promise broader than the data can support.
+
+## 2026-08-13 — Session 153 — Preview trust is project-scoped and edge signatures share one canonical form
+
+**Decision:** Supabase Edge Functions accept Cloudflare previews only when the origin is HTTPS and the host is exactly `call-of-doodie.pages.dev` or a subdomain of it. Run-summary verification uses the same pipe-delimited canonical field order as issuance/submission. Public Studio-event ingestion uses shared explicit-origin CORS and a hashed 60/minute quota.
+
+**Rationale:** Isolated staging must exercise the real backend, but broad `pages.dev` trust would admit unrelated tenants. Canonical signatures and a shared public-ingress policy prevent silent issuer/consumer drift and unbounded anonymous writes.
+
 ## 2026-08-12 — Session 150 — Keep the performance shell; retire Command Deck as a navigation concept
 
 **Decision:** Preserve `RuntimeBoundary` as the quick, resilient first-paint shell, but make it an honest public front door with Play, Stats, Modes, How to Play, and Leaderboard links. Do not present “Command Deck” as a second navigation architecture. The loaded homepage uses one primary play decision, one live-stats showcase, and four collapsed player-tool groups.

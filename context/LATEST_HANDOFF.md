@@ -1,6 +1,31 @@
+# Latest Handoff — Session 153
+
+Session Intent: Run one continuous `/arc` from synchronized `main` through canonical startup, game-loop and public-release review, fresh audit, complete repository-owned implementation, isolated staging, rendered-pixel proof, closeout, direct-main publication, and exact production verification. Preserve FORGE/public-unlaunched lifecycle truth.
+
+## Where We Left Off
+
+- All four S153 audit items are implemented: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, and truthful Startup Brief closeout age.
+- Second-order release testing found and repaired three real edge defects: preview-origin CORS parity, issuer/consumer run-signature drift, and wildcard/unrated public Studio-event ingestion. The affected Supabase functions are deployed and the final real staging playtest transaction passes 44/44.
+- Final isolated staging is `https://session-153-staging.call-of-doodie.pages.dev/` (immutable `https://d7ec86f1.call-of-doodie.pages.dev/`). Broad hosted checks pass 1,020/1,020; focused Replay Passport passes 32/32; 18 hash-bound captures have direct pixel review in both themes at 390px and 1440px.
+- The exact candidate passes 195/195 test files and 1,153/1,153 assertions plus lint, build, architecture/runtime, public-contract, security, dependency, supply-chain, cost, canon, backend, replay, and leaderboard courts.
+- Independent gate: GO for the explicitly authorized cost-neutral FORGE engineering publish; NO-GO for SPARKED. Do not promote lifecycle status without current Core Web Vitals, physical-device/media, reply-as mail, project-scoped provider, Obelisk, participant/publication, and explicit lifecycle evidence.
+- Immediate continuation: commit and push the closeout candidate to `main`, follow exact-SHA CI and Cloudflare deployment, verify the immutable production revision and custom domain, then seal the production receipt.
+
+## Impact Summary
+
+**Headline.** Playtest feedback is now explicit instead of inferred, replay coverage names planned pressure without pretending to recreate simulation, and the release path proves its own trust boundaries through a real run.
+
+**Evidence.** 1,153/1,153 tests; 1,020/1,020 broad visual checks; focused 32/32 and 44/44 browser courts; 18 direct-reviewed captures; backend 5/5; replay trust 3/3; dependency/security audits zero.
+
+---
+
 # Latest Handoff — Session 152
 
 Session Intent: Recover and independently prove the interrupted Session 151 closeout, checkpoint it cleanly, then run one continuous agent-neutral `/arc` through startup, game-loop review, fresh nine-axis audit, complete implementation, second-order saturation, isolated staging, rendered-pixel QA, release gate, canonical closeout, direct-main publication, and production verification. Keep the project FORGE/public-unlaunched.
+
+## Active Session 153 Intent
+
+Run one continuous `/arc` from synchronized `main`: canonical startup, game-loop and public-release review, a fresh premise-verified nine-axis audit, complete repository-owned implementation plus viable second-order innovation, isolated staging and rendered-pixel proof for any user-interface changes, full closeout, direct commit/push to `main`, production deployment, and exact-revision verification. Preserve the public-unlaunched/FORGE lifecycle unless every SPARKED gate has independent current evidence.
 
 ## Where We Left Off
 

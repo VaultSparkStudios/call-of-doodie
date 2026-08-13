@@ -171,12 +171,19 @@
           "method": "deterministic_contact_enemy_slice_v1",
           "coverage": "trace_movement_one_contact_enemy_derived",
           "evidence": "Derives one basic seeded chase/contact model; it is not the enemy history from the played run."
+        },
+        {
+          "id": "recorded-wave-plans",
+          "label": "Recorded planned pressure",
+          "method": "recorded_wave_plan_fingerprint_v1",
+          "coverage": "planned_pressure_not_spawn_physics_or_outcomes",
+          "evidence": "Fingerprints bounded wave-director plan snapshots recorded by the played run; it does not replay the resulting spawns or fight."
         }
       ],
       "excluded": [
         {
           "id": "full-wave-state",
-          "label": "Actual wave spawns, formations, elites, bosses, and objective state"
+          "label": "Actual wave spawns, formation execution, elites, bosses, and objective outcomes"
         },
         {
           "id": "full-combat-physics",
@@ -188,7 +195,7 @@
         }
       ],
       "nextFrontier": "Capture versioned enemy/projectile state and prove physics parity before raising the advisory ceiling.",
-      "source": "src/utils/replayResim.js"
+      "source": "src/utils/replayResim.js + src/systems/wavePlanReceipt.js"
     },
     "freeTierCostStatus": "cost-neutral",
     "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC"

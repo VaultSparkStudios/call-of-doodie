@@ -1,11 +1,11 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-13",
-  "generatedAtMs": 1786581457481,
-  "session": 152,
-  "vectorHash": "76efe69ca44246aa",
-  "silTotal": 997,
-  "silAvg3": 994.3,
+  "generatedAtMs": 1786654409885,
+  "session": 153,
+  "vectorHash": "1eb8464150f1054e",
+  "silTotal": 998,
+  "silAvg3": 996.3,
   "velocity": 13,
   "debt": "down",
   "runway": "0 repo-owned items — evidence-gated frontier exhausted",
@@ -24,7 +24,7 @@
     "[SIL:1] [S144] Mobile touch button-size/density control — the descoped half of t"
   ],
   "health": "green",
-  "truthStatus": "S152 repository-owned arc scope is implemented and isolated-staging verified; direct-main exact-SHA publication and production smoke finish closeout. SPARKED remains NO-GO.",
+  "truthStatus": "all S153 repository-owned audit items and discovered release-path defects are implemented and isolated-staging verified; exact-main production publication is the remaining engineering closeout step. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 45208,
   "ignisGrade": "FORGE",
@@ -33,12 +33,12 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Complete exact-tree S152 closeout, direct-main CI/deploy, and production smoke; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
-  "currentFocus": "Session 152 staged and release-gated: accepted coaching now survives menu return, its observed outcome precedes the next verdict, and Commander's Orders projects authoritative weapon mastery.",
+  "nextMilestone": "Publish the authorized S153 candidate to main, verify exact-SHA CI and immutable production, then seal the production receipt; preserve SPARKED NO-GO.",
+  "currentFocus": "Session 153 release candidate verified: explicit playtest signal, advisory wave-plan replay evidence, and exact edge trust pass on isolated staging.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
-    "PostHog/Sentry/Ko-fi dashboard URL allowlists require analytics/dashboard credentials; node scripts/check-secrets.mjs --for analytics reports analytics MISSING. Supabase half already satisfied (Access-Control-Allow-Origin: * verified S112).",
-    "Physical launch QA still requires a real PWA install standalone relaunch, one real gamepad/browser combo, and full-run GIF encode/play/share evidence; local receipts and E2E automation do not replace the physical pass.",
-    "HomeV2 v1 fallback retirement requires production Lighthouse LCP/CLS and funnel data before deleting the legacy path."
+    "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",
+    "Physical launch QA still requires a real PWA install/standalone relaunch, one real gamepad/browser combination, and full-run GIF encode/play/share evidence.",
+    "Current production Core Web Vitals and participant playtest outcomes remain unmeasured; synthetic and staging evidence do not replace them."
   ]
 }

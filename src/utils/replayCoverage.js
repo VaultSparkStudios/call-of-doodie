@@ -11,6 +11,10 @@ export const REPLAY_METHODS = Object.freeze({
     method: "deterministic_contact_enemy_slice_v1",
     coverage: "trace_movement_one_contact_enemy_derived",
   }),
+  recordedWavePlan: Object.freeze({
+    method: "recorded_wave_plan_fingerprint_v1",
+    coverage: "planned_pressure_not_spawn_physics_or_outcomes",
+  }),
 });
 
 export function buildReplayCoveragePassport() {
@@ -40,13 +44,20 @@ export function buildReplayCoveragePassport() {
         coverage: REPLAY_METHODS.contactEnemySlice.coverage,
         evidence: "Derives one basic seeded chase/contact model; it is not the enemy history from the played run.",
       },
+      {
+        id: "recorded-wave-plans",
+        label: "Recorded planned pressure",
+        method: REPLAY_METHODS.recordedWavePlan.method,
+        coverage: REPLAY_METHODS.recordedWavePlan.coverage,
+        evidence: "Fingerprints bounded wave-director plan snapshots recorded by the played run; it does not replay the resulting spawns or fight.",
+      },
     ],
     excluded: [
-      { id: "full-wave-state", label: "Actual wave spawns, formations, elites, bosses, and objective state" },
+      { id: "full-wave-state", label: "Actual wave spawns, formation execution, elites, bosses, and objective outcomes" },
       { id: "full-combat-physics", label: "Projectile paths, enemy attacks, hit resolution, pickups, perks, shops, and damage parity" },
       { id: "authoritative-outcome", label: "Exact played score, wave, health, deaths, or leaderboard authority" },
     ],
     nextFrontier: "Capture versioned enemy/projectile state and prove physics parity before raising the advisory ceiling.",
-    source: "src/utils/replayResim.js",
+    source: "src/utils/replayResim.js + src/systems/wavePlanReceipt.js",
   };
 }

@@ -1,46 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: fb921c17a6b0 -->
-<!-- generated-at: 2026-08-13T01:26:40.417Z -->
+<!-- source-hash: 1cdbfcf59e68 -->
+<!-- generated-at: 2026-08-13T20:48:22.322Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 152
+SESSION 153 HANDOFF SUMMARY
 
-## Session
-- Session 152 complete; resume from synchronized main as Session 153.
-- Project status: FORGE/public-unlaunched. No SPARKED promotion.
+Status
+- Session 153 closeout candidate ready; final step is commit/push to main, exact-SHA CI, Cloudflare deploy, production verification, seal receipt.
+- Project remains FORGE/public-unlaunched. SPARKED promotion NO-GO.
 
-## Shipped This Session
-- Recovered and independently proved S151 closeout (recovery commit 1952f510, proof f2255936); S151 production 5be7b044 verified.
-- Implemented three promoted L2 audit items:
-  - Bounded menu drill continuity (RAGE QUIT no longer drops accepted drill; strict allowlist, envelope consumed on deploy).
-  - Outcome-first coaching (LAST ORDER RESULT precedes ONE VERDICT; rejects causal/non-comparable score claims).
-  - Authoritative per-weapon mastery projection in Commander's Orders (retains precedence, all-open play).
-- Visual receipt tool now names mastery/drill-outcome captures accurately.
+Shipped This Session
+- Four S153 audit items implemented: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, truthful Startup Brief closeout age.
+- Repaired three release edge defects: preview-origin CORS parity, issuer/consumer run-signature drift, wildcard/unrated public Studio-event ingestion. Affected Supabase functions deployed.
 
-## Current State (Verified)
-- S152 source 471cd6762b828f61d6bd55e47d614cec47d3abeb passes brief run 31657471854 and quality/build/deploy 31657471851.
-- Production immutable https://a1fe44a3.call-of-doodie.pages.dev/: shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation, launch-surface pass.
-- Staging green: 1,020/1,020 matrix; CANON-053 14 captures, zero blockers; rendered-pixel review complete.
-- Courts: changed-surface 57/57, hot-context 3/3; App 4,883/5,000 (117 headroom); game loop 1,752/1,775 (23 headroom).
-- Unified Genius List exhausted; no repo-local innovation candidates remain.
+Current Intent
+- Run continuous /arc from synchronized main through startup, review, audit, implementation, staging, pixel proof, closeout, direct-main publication, exact production verification. Preserve FORGE/public-unlaunched lifecycle.
 
-## Now Bucket (Top 3)
-- Start Session 153 canonical startup from synchronized main.
-- Run fresh premise-verified nine-axis audit; game-loop and release specialty reviews.
-- Implement any newly accepted repository-owned items plus viable second-order innovations.
+Now Bucket (top 3)
+- Commit and push closeout candidate to main.
+- Follow exact-SHA CI and Cloudflare deployment; verify immutable production revision and custom domain.
+- Seal production receipt.
 
-## Blockers (Top 3)
-- Release gate: SPARKED NO-GO (engineering publication GO). Founder approval required.
-- Remaining backlog items need external evidence: credentials/providers, physical devices, participant/publication data.
-- Performance measurement and Obelisk verification pending.
+Blockers (top 3)
+- SPARKED gate NO-GO: requires current Core Web Vitals evidence.
+- SPARKED gate NO-GO: physical-device/media, reply-as mail, project-scoped provider evidence missing.
+- SPARKED gate NO-GO: Obelisk, participant/publication, and explicit lifecycle evidence missing.
 
-## Human-Blocked Items
-- SPARKED/founder approval: open, carried from S151+.
-- Studio Ops-owned Doctor probes (wallet-court freshness, Studio Ops canon/visual receipts): signed Ark repo-question filed in S151 (~171-hour freshness at that time); no sibling tree edited.
-- Physical PWA/controller, reply-capable mail, scoped provider, participant/publication: open.
+Human-Blocked Items
+- Explicit SPARKED lifecycle authority / founder approval (open since S151, ~2 sessions).
+- Provider credentials and project-scoped provider setup (open since S151, ~2 sessions).
+- Physical PWA/controller device and media evidence (open since S151, ~2 sessions).
 
-## Invariants to Preserve
-- Versioned drill sanitizer; outcome-before-prescription order; mastery source label; all-open weapon availability; theme-invariant tactical DeathScreen palette; post-status-stamp derived-context ordering.
+Verification State
+- Candidate passes 195/195 test files, 1,153/1,153 assertions.
+- All courts green: lint, build, architecture/runtime, public-contract, security, dependency, supply-chain, cost, canon, backend, replay, leaderboard.
+- Staging: session-153-staging.call-of-doodie.pages.dev (immutable d7ec86f1); broad 1,020/1,020; focused Replay Passport 32/32; playtest transaction 44/44; 18 hash-bound captures pixel-reviewed both themes at 390px/1440px.
+- Independent gate: GO for cost-neutral FORGE engineering publish.
 
-Next session: Begin Session 153 startup from synchronized main and run a fresh nine-axis audit.
+Preserve
+- Do not promote lifecycle status without current SPARKED evidence listed above.
+
+Next session: Complete main publication and production verification of the S153 closeout candidate, then seal the receipt.

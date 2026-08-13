@@ -50,6 +50,30 @@ if (stateDirArg) {
   }
 }
 
+const playtestStateDirArg = valueAfter("--playtest-state-dir", null);
+let playtestStateReceipt = null;
+if (playtestStateDirArg) {
+  const playtestStateDir = path.resolve(root, playtestStateDirArg);
+  const playtestStatePath = path.join(playtestStateDir, "playtest-signal-receipt.json");
+  playtestStateReceipt = JSON.parse(fs.readFileSync(playtestStatePath, "utf8"));
+  if (!playtestStateReceipt?.summary?.pass) throw new Error("Refusing visual receipt: playtest signal state checks did not pass.");
+  for (const capture of playtestStateReceipt.captures) {
+    for (const screenshot of capture.screenshots) {
+      selected.push({
+        source: path.join(playtestStateDir, screenshot),
+        file: screenshot,
+        theme: capture.theme === "sewer-night" ? "dark" : "light",
+        projectTheme: capture.theme,
+        width: capture.width,
+        height: 1000,
+        page: screenshot.includes("flight")
+          ? "Structured Playtest Flight Receipt after an observed run"
+          : "Expanded aggregate Playtest Command Post on Home",
+      });
+    }
+  }
+}
+
 for (const capturePath of reviewedCapturePaths) {
   const source = path.resolve(root, capturePath);
   if (!fs.existsSync(source)) throw new Error(`Reviewed capture missing: ${capturePath}`);
@@ -106,6 +130,10 @@ const receipt = {
     surface: "Expanded Replay Coverage Passport in Run History",
     checks: stateReceipt.summary,
   } : null,
+  additionalTouchedStates: playtestStateReceipt ? [{
+    surface: "Playtest Flight Receipt and aggregate Playtest Command Post",
+    checks: playtestStateReceipt.summary,
+  }] : [],
   themes: ["dark", "light"],
   captures,
   inspection: {
@@ -121,6 +149,7 @@ const receipt = {
       ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("drill-outcome")) ? ["The prior drill's observed result appears before ONE VERDICT at 390px and 1440px; its wave, comparable score, repeatability evidence, and non-causal boundary remain readable."] : []),
       ...(reviewedCapturePaths.some((capturePath) => !path.basename(capturePath).includes("mastery") && !path.basename(capturePath).includes("drill-outcome")) ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
       ...(stateReceipt ? [`The expanded Replay Coverage Passport passed ${stateReceipt.summary.passed}/${stateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
+      ...(playtestStateReceipt ? [`The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed ${playtestStateReceipt.summary.passed}/${playtestStateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
     ],
     fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],
     blockingDefectsOpen: 0,

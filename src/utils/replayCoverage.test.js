@@ -7,12 +7,13 @@ describe("replay coverage passport", () => {
     expect(passport).toMatchObject({
       schemaVersion: "replay-coverage-v1",
       confidenceCeiling: "advisory",
-      source: "src/utils/replayResim.js",
+      source: "src/utils/replayResim.js + src/systems/wavePlanReceipt.js",
     });
     expect(passport.covered.map((lane) => lane.method)).toEqual([
       REPLAY_METHODS.stateStepper.method,
       REPLAY_METHODS.combatSlice.method,
       REPLAY_METHODS.contactEnemySlice.method,
+      REPLAY_METHODS.recordedWavePlan.method,
     ]);
     expect(passport.excluded.map((lane) => lane.id)).toEqual([
       "full-wave-state",

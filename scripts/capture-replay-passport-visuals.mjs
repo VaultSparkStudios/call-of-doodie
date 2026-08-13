@@ -34,12 +34,13 @@ try {
       page.on("pageerror", (error) => pageErrors.push(error.message));
       const url = new URL("/?home=v2", baseUrl);
       url.searchParams.set("theme", theme);
+      url.searchParams.set("debug", "ops");
       const response = await page.goto(url.href, { waitUntil: "networkidle" });
       const blockingDialog = page.getByRole("dialog");
       if (await blockingDialog.isVisible().catch(() => false)) {
         await blockingDialog.getByRole("button").last().click();
       }
-      const progressToolsButton = page.locator("button").filter({ hasText: "PROGRESS TOOLS" }).first();
+      const progressToolsButton = page.getByRole("button", { name: /ALL PLAYER TOOLS/ }).first();
       const historyButton = page.locator("button").filter({ hasText: "HISTORY" }).first();
       if (await progressToolsButton.getAttribute("aria-expanded") === "false") {
         await progressToolsButton.click();

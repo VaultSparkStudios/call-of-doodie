@@ -2,6 +2,16 @@
 
 Public-safe launch roadmap summary.
 
+## Session 153 — Playtest signal, replay plans, and release trust
+
+- [x] [SIL:3] **DONE S153** Explicit input-trust and threat-readability questions complete the bounded local playtest receipt; portable pulse data is aggregate-only and identifier-free.
+- [x] [SIL:2] **DONE S153** The opt-in Playtest Pulse command post renders honest distributions and sample size only when a complete local sample exists.
+- [x] [SIL:2] **DONE S153** Recorded wave plans add a fourth Replay Passport lane while remaining explicitly advisory and excluding spawn, physics, and outcome reconstruction.
+- [x] [SIL:1] **DONE S153** Startup Brief closeout age resolves from the latest dated SIL entry instead of a stale prose match.
+- [x] [SIL:2] **DONE S153** Exact Pages-origin trust, canonical run signatures, rated public event ingestion, and zero-vulnerability dependency closure make the staged release path truthful end to end.
+
+**Runway exception:** every repository-owned S153 audit item and viable second-order release repair is complete. SPARKED remains evidence-gated; no physical-device, participant, mail, provider, publication, Core Web Vitals, Obelisk, or lifecycle claim is invented.
+
 ## Session 151 — Revenge loop, mastery truth, stats twin, and architecture headroom
 
 - [x] [SIL:3] **DONE S151** `RUN THE FIX` is first-viewport primary after death/challenge; secondary debrief analysis is one accessible collapsed disclosure.

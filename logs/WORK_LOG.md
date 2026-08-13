@@ -1340,3 +1340,16 @@ Intent outcome: implementation, staging, release readiness, and saturation achie
 - The first live shell run exposed a stale verifier expectation for `og-image.svg`; the actual canonical social card has been PNG since S145. Corrected the verifier to assert `og-image.png` plus `image/png`, added a source regression contract, and proved the focused court 30/30.
 
 Intent outcome: achieved through verified production deployment. SPARKED remains explicitly unpromoted.
+
+## 2026-08-13 — Session 153 — Explicit playtest signal, advisory replay plans, and release trust
+
+- Ran the complete recovery-checked `/arc`: synchronized main, canonical startup/canon checks, specialty game-loop review, fresh four-item audit, implementation, second-order release saturation, isolated staging, rendered-pixel review, release gate, and canonical closeout.
+- Shipped two explicit post-run signal questions (input trust and threat readability), aggregate-only Playtest Pulse projection, and a sample-gated command-post panel without identifiers, free text, or inferred player outcomes.
+- Shipped bounded recorded wave-plan receipts through App → death flow → Replay Passport as a fourth planned-pressure lane with explicit spawn/physics/outcome exclusions.
+- Root-fixed Startup Brief closeout-age resolution and the stale runtime-boundary delay expectation.
+- Real hosted playtest execution found and fixed exact-preview CORS parity, pipe-vs-JSON signed-run canonicalization drift, and wildcard/unrated public Studio-event ingestion. Redeployed the affected Supabase functions and passed the final 44/44 transaction.
+- Cleared the fresh Nanoid advisory with verified `nanoid@3.3.18`; npm/security/supply-chain audits finish at zero known vulnerabilities/incidents.
+- Final staging `https://session-153-staging.call-of-doodie.pages.dev/` (immutable `https://d7ec86f1.call-of-doodie.pages.dev/`) passes broad 1,020/1,020, Replay Passport 32/32, and playtest 44/44 browser courts. Directly reviewed 18 hash-bound captures in both themes at mobile and desktop sizes; blocking defects 0.
+- Final candidate validation: 195/195 test files, 1,153/1,153 assertions, strict lint, build, schema/coherence/architecture/runtime/storage/task/public/security/dependency/supply-chain/cost/canon/manifest/visual gates, backend 5/5, replay trust 3/3, and shared-leaderboard isolation.
+
+Intent outcome: achieved through implementation, isolated staging, pixel proof, and engineering release readiness; direct-main exact-SHA publication/production verification follows under explicit founder authority. SPARKED remains NO-GO.

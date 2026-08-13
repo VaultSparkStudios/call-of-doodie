@@ -1,6 +1,22 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-13 — Session 153 — Explicit playtest, advisory replay, edge trust, and pixel truth
+
+- Signal truth — the flight recorder accepts four bounded answers: confidence, threat clarity, input trust, and threat readability. Portable pulse output is aggregate-only and contains no player identifier or free text.
+- Command-post truth — Playtest Pulse is opt-in and sample-gated. It shows distributions/sample count and makes no retention, causality, or population claim.
+- Replay truth — recorded wave plans describe planned pressure only. The fourth passport lane explicitly excludes spawn, physics, damage, random-draw, and outcome reconstruction.
+- Edge truth — project Pages preview origins receive exact origin-echo CORS while unrelated `pages.dev` origins receive 403; signed run summaries verify with the issuer's canonical pipe-delimited field order; public event ingestion is explicit-origin and rate-limited.
+- Dependency truth — `nanoid@3.3.18` passed Obelisk review plus official registry/repository verification; final `npm audit` and release security audit report zero vulnerabilities.
+- Browser truth — the real hosted death → four answers → aggregate transaction passes 44/44 and caught both preview CORS and signature parity defects before release. Focused Replay Passport passes 32/32.
+- Visual truth — final staging is `https://session-153-staging.call-of-doodie.pages.dev/` (immutable `https://d7ec86f1.call-of-doodie.pages.dev/`); broad route/theme/viewport checks pass 1,020/1,020. Eighteen hash-bound captures received direct review at 390px and 1440px in both themes with zero blocking defects.
+- Validation truth — exact candidate passes 195/195 files and 1,153/1,153 assertions in 156.19 seconds, strict lint, deployable build, schema/coherence/architecture/runtime/storage/task/public-contract/security/supply-chain/cost/canon/manifest gates, backend health 5/5, replay trust 3/3, and leaderboard isolation.
+- Lifecycle truth — cost-neutral FORGE engineering publication is founder-authorized and independently GO. SPARKED is NO-GO pending current Core Web Vitals, physical PWA/controller/media proof, reply-as mail, project-scoped observability, Obelisk identity, participant/publication evidence, and explicit lifecycle approval.
+- Canon truth — applicable ABSOLUTE canon have no gaps. CANON-045 and CANON-055 remain STRONG external/checker findings; they are not hidden, and they do not substitute for a project-local auth implementation or a SPARKED claim.
+
+Overall status: all S153 repository-owned audit items and discovered release-path defects are implemented and isolated-staging verified; exact-main production publication is the remaining engineering closeout step. SPARKED remains NO-GO.
+Last reviewed: 2026-08-13
+
 ## 2026-08-12 — Session 152 — Recovery, coaching transaction, mastery command, and saturation truth
 
 - Recovery truth — S151 was committed in implementation but interrupted during closeout. Recovery parsed all changed JSON/NDJSON, verified `~/.claude.json`, reran 191/191 files and 1,138/1,138 tests, then pushed clean recovery/proof boundaries `1952f510` and `f2255936`.

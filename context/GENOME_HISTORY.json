@@ -528,6 +528,23 @@
       },
       "delta": 0,
       "cause": "Session 152 staged and release-gated: accepted coaching now survives menu return, its observed outcome precedes the next"
+    },
+    {
+      "date": "2026-08-13",
+      "session": 153,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "all S153 repository-owned audit items and discovered release-path defects are implemented and isolated-staging verified; exact-main production publication is the remaining engineering closeout step. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-08-13",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 153 release candidate verified: explicit playtest signal, advisory wave-plan replay evidence, and exact edge tru"
     }
   ]
 }

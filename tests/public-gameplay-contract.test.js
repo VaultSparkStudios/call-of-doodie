@@ -18,7 +18,11 @@ describe("public gameplay contract", () => {
       schemaVersion: "replay-coverage-v1",
       confidenceCeiling: "advisory",
     });
-    expect(contract.trust.replayCoverage.covered).toHaveLength(3);
+    expect(contract.trust.replayCoverage.covered).toHaveLength(4);
+    expect(contract.trust.replayCoverage.covered).toContainEqual(expect.objectContaining({
+      id: "recorded-wave-plans",
+      coverage: "planned_pressure_not_spawn_physics_or_outcomes",
+    }));
     expect(contract.trust.replayCoverage.excluded).toHaveLength(3);
     expect(contract.cost).toEqual({ freeTierCostStatus: "cost-neutral", paidInferenceRequired: false });
     expect(contract.modes).toHaveLength(8);

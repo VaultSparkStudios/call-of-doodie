@@ -1,5 +1,6 @@
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { buildRunRngFairnessReceipt } from "./runRng.js";
+import { buildWavePlanReceipt } from "./wavePlanReceipt.js";
 
 export function buildRunTheFixContract({
   debrief = {},
@@ -175,6 +176,7 @@ export function buildDeathScreenProps({
     communityChokeWaves,
     gsSnapshot: gs,
     fairnessReceipt: buildRunRngFairnessReceipt(gs),
+    wavePlanReceipt: buildWavePlanReceipt(gs?.wavePlanLedger),
   };
 }
 

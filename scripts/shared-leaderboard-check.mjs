@@ -1,26 +1,9 @@
-import fs from "node:fs";
-import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
-
-function loadDotEnv(filePath) {
-  if (!fs.existsSync(filePath)) return;
-  const contents = fs.readFileSync(filePath, "utf8");
-  for (const rawLine of contents.split(/\r?\n/)) {
-    const line = rawLine.trim();
-    if (!line || line.startsWith("#")) continue;
-    const eqIndex = line.indexOf("=");
-    if (eqIndex === -1) continue;
-    const key = line.slice(0, eqIndex).trim();
-    const value = line.slice(eqIndex + 1).trim();
-    if (!process.env[key]) process.env[key] = value;
-  }
-}
+import { getSecret } from "./lib/secrets.mjs";
 
 function getClient() {
-  loadDotEnv(path.join(process.cwd(), ".env.local"));
-
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const anonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+  const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
+  const anonKey = getSecret("SUPABASE_ANON_KEY", "supabase.admin");
 
   if (!supabaseUrl || !anonKey) {
     throw new Error("Missing VITE_SUPABASE_URL/SUPABASE_URL or VITE_SUPABASE_ANON_KEY/SUPABASE_ANON_KEY.");

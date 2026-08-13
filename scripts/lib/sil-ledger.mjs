@@ -80,6 +80,18 @@ export function latestSilSession(markdown = '') {
   return latestSilEntry(markdown)?.session ?? null;
 }
 
+/**
+ * Resolve the newest closeout date from session-number-sorted ledger entries.
+ * The rolling-status header is a compatibility fallback only because it can
+ * remain stale even while newer append-only session blocks are present.
+ */
+export function resolveLatestSilDate(entries = [], fallbackText = '') {
+  const parsedDate = Array.isArray(entries)
+    ? entries.find((entry) => /^\d{4}-\d{2}-\d{2}$/.test(String(entry?.date || '')))?.date
+    : null;
+  return parsedDate ?? String(fallbackText).match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? null;
+}
+
 export function selectSilPair(markdown = '', { requireScore = false } = {}) {
   const entries = parseSilSessions(markdown);
   const current = (requireScore ? entries.find((entry) => entry.total != null) : entries[0]) ?? null;
@@ -89,4 +101,4 @@ export function selectSilPair(markdown = '', { requireScore = false } = {}) {
   return { current, previous };
 }
 
-export default { parseSilSessions, latestSilEntry, latestSilSession, selectSilPair };
+export default { parseSilSessions, latestSilEntry, latestSilSession, resolveLatestSilDate, selectSilPair };

@@ -53,7 +53,7 @@ export function createPlaytestFlight({ now = Date.now(), meta = {} } = {}) {
     flightId: `flight-${startedAt.toString(36)}`,
     finalizedAt: null,
     milestones: {},
-    annotations: { deathClarity: null, replayIntent: null },
+    annotations: { deathClarity: null, replayIntent: null, inputTrust: null, threatReadability: null },
     continuation: null,
     run: sanitizeMeta(meta),
     previousRun: null,
@@ -86,12 +86,18 @@ export function annotatePlaytestFlight(receipt, annotations = {}) {
   const replayIntent = ["now", "later", "no"].includes(annotations.replayIntent)
     ? annotations.replayIntent
     : receipt.annotations.replayIntent;
+  const inputTrust = ["trusted", "mixed", "failed"].includes(annotations.inputTrust)
+    ? annotations.inputTrust
+    : receipt.annotations.inputTrust;
+  const threatReadability = ["clear", "busy", "lost"].includes(annotations.threatReadability)
+    ? annotations.threatReadability
+    : receipt.annotations.threatReadability;
   const continuation = annotations.continuation
     ? safeString(annotations.continuation, 32)
     : receipt.continuation;
   return {
     ...receipt,
-    annotations: { deathClarity, replayIntent },
+    annotations: { deathClarity, replayIntent, inputTrust, threatReadability },
     continuation,
   };
 }
@@ -109,10 +115,65 @@ export function buildPortablePlaytestReceipt(receipt) {
     annotations: {
       deathClarity: receipt.annotations?.deathClarity || null,
       replayIntent: receipt.annotations?.replayIntent || null,
+      inputTrust: receipt.annotations?.inputTrust || null,
+      threatReadability: receipt.annotations?.threatReadability || null,
     },
     continuation: receipt.continuation || null,
     previousRun: receipt.previousRun || null,
     complete: Boolean(receipt.milestones?.death && receipt.annotations?.deathClarity && receipt.annotations?.replayIntent),
+    signalComplete: Boolean(receipt.milestones?.death
+      && receipt.annotations?.deathClarity
+      && receipt.annotations?.replayIntent
+      && receipt.annotations?.inputTrust
+      && receipt.annotations?.threatReadability),
+  };
+}
+
+function emptyPulse() {
+  return {
+    schemaVersion: "playtest-pulse-v1",
+    privacy: "device-local-aggregate-no-upload",
+    sampleSize: 0,
+    clarity: { clear: 0, partial: 0, unclear: 0 },
+    replay: { now: 0, later: 0, no: 0 },
+    inputTrust: { trusted: 0, mixed: 0, failed: 0 },
+    threatReadability: { clear: 0, busy: 0, lost: 0 },
+    flights: [],
+  };
+}
+
+function boundedCounts(value, keys) {
+  return Object.fromEntries(keys.map((key) => [key, Math.max(0, Math.floor(Number(value?.[key]) || 0))]));
+}
+
+function normalizePulse(value) {
+  const base = emptyPulse();
+  if (!value || value.schemaVersion !== "playtest-pulse-v1") return base;
+  const flights = Array.isArray(value.flights) ? value.flights.slice(0, 20) : [];
+  return {
+    ...base,
+    ...value,
+    sampleSize: Math.max(0, Math.min(20, Math.floor(Number(value.sampleSize) || flights.length))),
+    clarity: boundedCounts(value.clarity, ["clear", "partial", "unclear"]),
+    replay: boundedCounts(value.replay, ["now", "later", "no"]),
+    inputTrust: boundedCounts(value.inputTrust, ["trusted", "mixed", "failed"]),
+    threatReadability: boundedCounts(value.threatReadability, ["clear", "busy", "lost"]),
+    flights,
+  };
+}
+
+export function buildPortablePlaytestPulse(pulse) {
+  const normalized = normalizePulse(pulse);
+  return {
+    schemaVersion: "playtest-pulse-export-v1",
+    evidenceScope: "explicit-tester-answers-aggregate-only",
+    privacy: "device-local-aggregate-no-flight-identifiers-no-free-text",
+    sampleSize: normalized.sampleSize,
+    signalCompleteCount: normalized.flights.filter((flight) => flight?.signalComplete).length,
+    clarity: normalized.clarity,
+    replay: normalized.replay,
+    inputTrust: normalized.inputTrust,
+    threatReadability: normalized.threatReadability,
   };
 }
 
@@ -125,11 +186,15 @@ export function recordPlaytestPulse(receipt, storage = globalThis.localStorage) 
     const nextFlights = [portable, ...flights.filter((item) => item.flightId !== portable.flightId)].slice(0, 20);
     const clarity = { clear: 0, partial: 0, unclear: 0 };
     const replay = { now: 0, later: 0, no: 0 };
+    const inputTrust = { trusted: 0, mixed: 0, failed: 0 };
+    const threatReadability = { clear: 0, busy: 0, lost: 0 };
     nextFlights.forEach((item) => {
       if (clarity[item.annotations.deathClarity] != null) clarity[item.annotations.deathClarity] += 1;
       if (replay[item.annotations.replayIntent] != null) replay[item.annotations.replayIntent] += 1;
+      if (inputTrust[item.annotations.inputTrust] != null) inputTrust[item.annotations.inputTrust] += 1;
+      if (threatReadability[item.annotations.threatReadability] != null) threatReadability[item.annotations.threatReadability] += 1;
     });
-    const pulse = { schemaVersion: "playtest-pulse-v1", privacy: "device-local-aggregate-no-upload", sampleSize: nextFlights.length, clarity, replay, flights: nextFlights };
+    const pulse = { schemaVersion: "playtest-pulse-v1", privacy: "device-local-aggregate-no-upload", sampleSize: nextFlights.length, clarity, replay, inputTrust, threatReadability, flights: nextFlights };
     storage?.setItem(PULSE_KEY, JSON.stringify(pulse));
     return pulse;
   } catch { return null; }
@@ -138,8 +203,8 @@ export function recordPlaytestPulse(receipt, storage = globalThis.localStorage) 
 export function loadPlaytestPulse(storage = globalThis.localStorage) {
   try {
     const value = JSON.parse(storage?.getItem(PULSE_KEY) || "null");
-    return value?.schemaVersion === "playtest-pulse-v1" ? value : { schemaVersion: "playtest-pulse-v1", privacy: "device-local-aggregate-no-upload", sampleSize: 0, clarity: { clear: 0, partial: 0, unclear: 0 }, replay: { now: 0, later: 0, no: 0 }, flights: [] };
-  } catch { return null; }
+    return normalizePulse(value);
+  } catch { return emptyPulse(); }
 }
 
 export function loadPlaytestFlight(storage = globalThis.sessionStorage) {

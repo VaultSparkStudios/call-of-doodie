@@ -17,9 +17,10 @@ describe("Run History replay coverage passport", () => {
     );
     window.history.pushState({}, "", "/");
     expect(html).toContain("REPLAY COVERAGE PASSPORT");
-    expect(html).toContain("3 VERIFIED LANES");
+    expect(html).toContain("4 VERIFIED LANES");
     expect(html).toContain("Movement + aim");
     expect(html).toContain("Combat actions");
+    expect(html).toContain("Recorded planned pressure");
     expect(html).toContain("Not reproduced:");
     expect(html).toContain("full played fight");
   });

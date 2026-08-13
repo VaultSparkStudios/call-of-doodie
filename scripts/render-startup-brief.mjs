@@ -29,7 +29,7 @@ import { loadProvenanceMap } from './classify-warning-provenance.mjs';
 import { isWarning } from './lib/doctor-predicates.mjs';
 import { sparkline as _sparkline } from './lib/visual-blocks.mjs';
 import { parseSilHistory, forecastNext } from './lib/sil-forecaster.mjs';
-import { parseSilSessions } from './lib/sil-ledger.mjs';
+import { parseSilSessions, resolveLatestSilDate } from './lib/sil-ledger.mjs';
 import { recordAndResolve, rollingMae } from './lib/forecast-ledger.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 import { runBriefPreflight } from './lib/brief-preflight.mjs';
@@ -507,8 +507,7 @@ const scopeCap       = velocity > 0 ? Math.floor(velocity * 1.5) : null;
 // ── Last active (freshest of: SIL closeout, lastUpdated, lastHandoffDate) ────
 // "Days since last" was previously SIL-only, which lied when sessions shipped without
 // running /closeout. Now takes the newest signal across all three sources.
-const lastSilDateMatch = lastSessionStr.match(/(\d{4}-\d{2}-\d{2})/);
-const lastSilDate = lastSilDateMatch?.[1] || null;
+const lastSilDate = resolveLatestSilDate(allSilEntries, lastSessionStr);
 // S220 audit #12 — strict date guard: silLastSession is a session NUMBER, not a
 // date; "219" lex-sorts after "2026-07-02" and produced "Last active: 660175d".
 // Only well-formed ISO dates may enter the max.

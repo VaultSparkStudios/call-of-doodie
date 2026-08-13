@@ -12,7 +12,23 @@ describe("buildDeathScreenProps", () => {
       contract: "deterministic-decision-stream-evidence-not-full-physics-replay",
     });
     expect(props.fairnessReceipt.fingerprint).toMatch(/^[0-9A-F]{8}$/);
+    expect(props.wavePlanReceipt).toMatchObject({
+      contract: "recorded-planned-pressure-evidence-not-spawn-physics-or-outcome-replay",
+      confidence: "advisory",
+      count: 0,
+    });
     expect(props.gsSnapshot).toBe(gs);
+  });
+
+  it("carries recorded wave-plan evidence without claiming spawn or outcome replay", () => {
+    const props = buildDeathScreenProps({
+      gs: {
+        runSeed: 404,
+        wavePlanLedger: [{ wave: 3, themeId: "vanguard", event: null, eliteType: "fast", stages: [{ id: "scouting", aliveBudget: 7, eliteEvery: 0, progressUntil: 0.24 }] }],
+      },
+    });
+    expect(props.wavePlanReceipt).toMatchObject({ count: 1, firstWave: 3, lastWave: 3 });
+    expect(props.wavePlanReceipt.combinedFingerprint).toMatch(/^[0-9A-F]{8}$/);
   });
 
   it("promotes a seeded corrective REMATCH into the single primary action", () => {

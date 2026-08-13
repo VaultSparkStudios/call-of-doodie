@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   annotatePlaytestFlight,
   buildPortablePlaytestReceipt,
+  buildPortablePlaytestPulse,
   createPlaytestFlight,
   isPlaytestMode,
   recordPlaytestMilestone,
@@ -47,13 +48,14 @@ describe("playtest flight recorder", () => {
     let receipt = createPlaytestFlight({ now: 1000, meta: { difficulty: "hard", mode: "boss_rush" } });
     receipt = recordPlaytestMilestone(receipt, "run_start", { now: 1000 });
     receipt = recordPlaytestMilestone(receipt, "death", { now: 61000, meta: { wave: 4, score: 900 } });
-    receipt = annotatePlaytestFlight(receipt, { deathClarity: "clear", replayIntent: "now", continuation: "run_the_fix" });
+    receipt = annotatePlaytestFlight(receipt, { deathClarity: "clear", replayIntent: "now", inputTrust: "trusted", threatReadability: "clear", continuation: "run_the_fix" });
     const portable = buildPortablePlaytestReceipt(receipt);
     expect(portable).toMatchObject({
       evidenceScope: "observed-input-and-explicit-tester-answers",
-      annotations: { deathClarity: "clear", replayIntent: "now" },
+      annotations: { deathClarity: "clear", replayIntent: "now", inputTrust: "trusted", threatReadability: "clear" },
       continuation: "run_the_fix",
       complete: true,
+      signalComplete: true,
     });
     expect(portable.run).not.toHaveProperty("callsign");
     expect(JSON.stringify(portable)).not.toContain("not-stored-by-caller");
@@ -66,7 +68,13 @@ it("supports explicit persistent opt-in and aggregates only complete redacted fl
   let receipt = createPlaytestFlight({ now: 1000, meta: { mode: "standard" } });
   expect(recordPlaytestPulse(receipt, storage)).toBeNull();
   receipt = recordPlaytestMilestone(receipt, "death", { now: 2000 });
-  receipt = annotatePlaytestFlight(receipt, { deathClarity: "clear", replayIntent: "now" });
+  receipt = annotatePlaytestFlight(receipt, { deathClarity: "clear", replayIntent: "now", inputTrust: "mixed", threatReadability: "busy" });
   expect(recordPlaytestPulse(receipt, storage).sampleSize).toBe(1);
   expect(loadPlaytestPulse(storage).clarity.clear).toBe(1);
+  expect(loadPlaytestPulse(storage).inputTrust.mixed).toBe(1);
+  expect(loadPlaytestPulse(storage).threatReadability.busy).toBe(1);
+  const portable = buildPortablePlaytestPulse(loadPlaytestPulse(storage));
+  expect(portable).toMatchObject({ sampleSize: 1, signalCompleteCount: 1, inputTrust: { mixed: 1 }, threatReadability: { busy: 1 } });
+  expect(portable).not.toHaveProperty("flights");
+  expect(JSON.stringify(portable)).not.toContain("flight-rs");
 });

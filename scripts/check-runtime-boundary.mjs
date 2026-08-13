@@ -10,7 +10,7 @@ const htmlPath = path.join(root, "dist", "index.html");
 const issues = [];
 if (/from\s+["']\.\/App\.jsx["']/.test(mainSource)) issues.push("main.jsx statically imports App.jsx");
 if (!/import\(["']\.\/App\.jsx["']\)/.test(boundarySource)) issues.push("RuntimeBoundary does not lazy-import App.jsx");
-if (!/DEFER_RUNTIME_MS\s*=\s*2200/.test(boundarySource)) issues.push("runtime activation does not protect the first-frame budget");
+if (!/DEFER_RUNTIME_MS\s*=\s*900/.test(boundarySource)) issues.push("runtime activation does not match the validated 900ms first-frame budget");
 if (!fs.existsSync(htmlPath)) issues.push("dist/index.html missing; run npm run build");
 
 let entryBytes = null;

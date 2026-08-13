@@ -1,53 +1,60 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-08-12 (Session 152 release candidate)
+Last reviewed: 2026-08-13 (Session 153 release candidate)
 
 ## Release candidate
 
-- Immutable staging origin: `https://25837962.call-of-doodie.pages.dev/`
-- Stable staging alias: `https://session-152-staging.call-of-doodie.pages.dev/`
+- Immutable staging origin: `https://d7ec86f1.call-of-doodie.pages.dev/`
+- Stable staging alias: `https://session-153-staging.call-of-doodie.pages.dev/`
 - Production origin: `https://callofdoodie.wtf/`
-- Exact source/workflow/immutable production: `471cd6762b828f61d6bd55e47d614cec47d3abeb` / brief `31657471854` / quality-build-deploy `31657471851` / `https://a1fe44a3.call-of-doodie.pages.dev/`.
-- First exact-SHA attempt: `2e56892` / workflow `31656064776` failed its Hot Context freshness court because closeout autopilot stamped PROJECT_STATUS after cache generation. The ordering is root-fixed; no flaky retry claim is made.
-- Scope: deploy a cost-neutral engineering update to the existing public FORGE surface. This is **not** a SPARKED lifecycle flip.
-- Founder authorization: explicit recovery-first `/goal` and continuous `/arc` direction authorizes direct-main engineering publication and verification only.
+- Candidate source: the verified Session 153 tree atop `bc1e1c5`; exact direct-main commit/workflow/immutable production identifiers are recorded after the authorized push finishes.
+- Previous known-good production: source `471cd6762b828f61d6bd55e47d614cec47d3abeb`, Cloudflare workflow `31657471851`, immutable `https://a1fe44a3.call-of-doodie.pages.dev/`.
+- Scope: cost-neutral FORGE engineering update. This is not a SPARKED lifecycle transition or launch announcement.
+- Founder authorization: the explicit `/arc` request plus direct commit/push and full-deployment authorization covers this engineering publication and verification.
 
 ## Automated evidence
 
 | Gate | Evidence | Status |
 |---|---|---|
-| Build and lint | Deployable build, strict ESLint, schema/coherence/architecture/storage/task/runtime gates | Pass |
-| Focused tests | Changed-surface drill/mastery/order/browser-contract courts | 57/57 pass |
-| Full tests | Final root-fixed closeout tree: 191/191 files and 1,143/1,143 assertions in 126.86s. The first pre-fix run's only failures were generated Hot Context freshness; the new closeout-order/freshness court passes 9/9. | Pass |
+| Full tests | Final tree: 195/195 files and 1,153/1,153 assertions | Pass |
+| Build and code quality | Deployable build, strict ESLint, schema/coherence/architecture/storage/task/runtime gates | Pass |
 | Public contract | 28 public files validated | Pass |
 | Broad visual QA | 20 routes × 2 themes × 390/768/1440px on isolated staging | 1,020/1,020 pass |
-| CANON-053 receipt | 14 current hash-bound captures, including mastery and drill outcome in both project themes and target widths | Pass; 0 blockers |
-| Direct stateful browser | Death → RAGE QUIT → menu order → deploy → death produces LAST ORDER RESULT before ONE VERDICT | Pass |
-| Branding/footer | Proprietary rights posture and footer completeness | Pass; 18/18 |
-| Cost gates | Release and cost-bleeder gates | Pass; cost-neutral |
-| Deploy credentials | Cloudflare 3/3 and Supabase client 2/2 | Ready |
-| Security | Release headers/CSP/auth boundary, dependency tree, npm audit | Pass; 0 vulnerabilities |
-| Staging parity | Local `dist/index.html` equals hosted staging; exact source then passed quality/build/deploy to immutable production | Pass |
-| Core Web Vitals (CWV) | No current S152 Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) receipt | **Not current — blocks SPARKED** |
+| Replay Passport state | Fourth planned-pressure lane at 390/1440px in both themes | 32/32 pass |
+| Real playtest signal flow | Deploy → natural defeat → four structured answers → aggregate command post at 390/1440px in both themes | 44/44 pass |
+| CANON-053 receipt | 18 hash-bound captures with direct rendered-pixel review | Pass; 0 blockers |
+| Hosted shell | Immutable staging HTML, typed health, manifest, service worker, social card | 7/7 pass |
+| Backend health | Token issuance, accepted/rejected submissions, replay defense | 5/5 + 3/3 pass |
+| Run/event data plane | Staging origin-echo CORS, unrelated Pages origin 403, canonical run signature, rated event ingestion | Live verified |
+| Shared leaderboard | Latest 200-readable-row isolation court | Pass; only `cod` rows |
+| Branding/footer | Public contract plus Studio footer completeness | Pass; 18/18 destinations |
+| Cost gates | Release and cost-bleeder gates | Pass; `cost-neutral` |
+| Deploy credentials | Cloudflare deploy and Supabase admin/client/management | Ready |
+| Security | Explicit origins, hashed quotas, dependency tree, supply-chain incident scan, npm audit | Pass; 0 vulnerabilities |
+| Package trust | Nanoid 3.3.18 security override reviewed through Obelisk plus official registry metadata/integrity | Pass |
+| Core Web Vitals (CWV) | No current Session 153 Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) receipt | Not current — blocks SPARKED |
 
-The generic Studio responsive script explicitly skipped because it could not resolve its own Playwright dependency. That skip is not counted as a pass; the project-owned hosted Chromium matrix provides stronger functional/visual browser coverage for the engineering release, but does not replace current CWV or physical-device evidence.
+The generic Studio responsive helper explicitly skipped because it could not resolve its standalone Playwright package. That skip is not counted as a pass. The project-owned pinned-Chromium matrix is the authoritative engineering-release browser court, but it does not replace physical-device or current CWV evidence.
 
 ## Surface ledger
 
 | Surface | Current evidence | Status |
 |---|---|---|
-| Desktop browser | Chromium 768/1440px, both themes, 20-route matrix; directly inspected Commander's Orders and two-death outcome state | Automated and subjective pass |
-| Mobile browser | Chromium 390px, both themes, 20-route matrix; directly inspected compact mastery and outcome-first receipt | Automated and subjective pass |
-| Installed Progressive Web App (PWA) | Install-readiness receipts exist, but no current physical install/relaunch receipt | Manual gate |
-| Physical controller/browser | Local input contracts exist, but no current physical-device receipt | Manual gate |
+| Desktop browser | Chromium at 768/1440px across 20 routes and both themes; direct review of Playtest Flight Receipt, Command Post, and Replay Passport | Automated and subjective pass |
+| Mobile browser | Chromium at 390px across 20 routes and both themes; persistent navigation, structured chips, aggregates, and advisory copy remain readable | Automated and subjective pass |
+| Installed Progressive Web App (PWA) | Install-readiness receipts exist, but no current physical install/relaunch receipt | Manual SPARKED gate |
+| Physical controller/browser | Input contracts exist, but no current physical-device receipt | Manual SPARKED gate |
 | Native mobile app | No native app is shipped | Not applicable |
 
 ## Continuous integration and rollback
 
-- Exact-SHA brief run `31657471854` and quality/build/deploy run `31657471851` pass for source `471cd6762b828f61d6bd55e47d614cec47d3abeb`.
-- Cloudflare Pages retains immutable deployments. S152 is verified at `https://a1fe44a3.call-of-doodie.pages.dev/`; the custom domain passes shell 7/7, cutover 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch-surface checks.
-- `docs/DEPLOY_ROLLBACK.md` documents a reversible `git revert` path and smoke checks; reset-hard and force-push are excluded.
+- The latest two Cloudflare production runs are green. Four of the last five are green; the one failure is the already-documented Session 152 Hot Context ordering defect, root-fixed before two subsequent green runs. All five latest brief-format runs are green.
+- The exact Session 153 SHA must pass both brief-format and Cloudflare quality/build/deploy workflows after push; a local/staging pass does not substitute for this.
+- Cloudflare Pages retains immutable deployments. `docs/DEPLOY_ROLLBACK.md` documents a reversible `git revert` path; reset-hard and force-push are excluded.
+- Previous known-good application rollback target remains `471cd6762b828f61d6bd55e47d614cec47d3abeb` / `https://a1fe44a3.call-of-doodie.pages.dev/` until the Session 153 production court finishes.
 
-## Launch posture
+## Release verdict
 
-Independent gate verdict: **GO** for the direct-main FORGE engineering update; **NO-GO** for SPARKED/public launch. SPARKED remains blocked by current CWV evidence, physical PWA/controller/full-run media proof, verified on-domain Zoho delivery and reply-as identity, public Itch.io publication, consented participant evidence, project-scoped analytics/error monitoring, functioning Obelisk relying-party verification, and explicit founder SPARKED approval.
+Independent gate verdict: **GO** for the authorized direct-main FORGE engineering update, conditional on exact-SHA CI/deployment and post-production smoke. **NO-GO** for SPARKED/public launch.
+
+SPARKED remains blocked by current CWV evidence, physical PWA/controller/full-run media proof, verified on-domain Zoho delivery and reply-as identity, public Itch.io publication, consented participant outcomes, project-scoped product analytics/error monitoring, functioning Obelisk relying-party verification, sitemap score ≥8/10, and explicit founder SPARKED approval.

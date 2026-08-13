@@ -25,7 +25,8 @@ import { buildDeathCoachTelemetry, buildDebriefStudioEventPlan, buildRunTheFixCo
 import { describeFormationPressure, describePressureArc } from "../systems/pressureArc.js";
 import { describeDamageSequence } from "../systems/damageSequence.js";
 import { buildCollapseCoaching } from "../systems/collapseCoaching.js";
-import { annotateActivePlaytestFlight, buildPortablePlaytestReceipt, isPlaytestMode, loadPlaytestFlight, recordActivePlaytestContinuation, recordPlaytestPulse } from "../utils/playtestFlightRecorder.js";
+import { recordActivePlaytestContinuation } from "../utils/playtestFlightRecorder.js";
+import PlaytestFlightReceipt from "./PlaytestFlightReceipt.jsx";
 import { recordRivalryResult, requestStudioEventSync, saveStudioGameEvent, loadCareerStats, loadMetaProgress, loadRunHistory, loadRivalryHistory, loadStudioGameEvents, saveExperimentIntent, loadDoctrineArchive } from "../storage.js";
 import { FIELD_REPORTS } from "../utils/fieldReport.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
@@ -59,6 +60,7 @@ export default function DeathScreen({
   waveScoreLog = [],
   communityChokeWaves = null,
   fairnessReceipt = null,
+  wavePlanReceipt = null,
   performanceReceipt = null,
 }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -77,39 +79,13 @@ export default function DeathScreen({
   const [showAllWeapons, setShowAllWeapons] = useState(false);
   const [replayNonce, setReplayNonce] = useState(0);
   const [replayMode, setReplayMode] = useState("full"); // "full" | "best_shot"
-  const playtestEnabled = isPlaytestMode();
-  const [playtestReceipt, setPlaytestReceipt] = useState(() => playtestEnabled ? loadPlaytestFlight() : null);
-  const [playtestCopied, setPlaytestCopied] = useState(false);
-  const [playtestCopyError, setPlaytestCopyError] = useState(false);
   const qrCanvasRef = useRef(null);
   const weeklyContractEventKeyRef = useRef(null);
   const debriefEventKeyRef = useRef(null);
   const drillOutcomeEventKeyRef = useRef(null);
 
-  const updatePlaytestAnswer = (answer) => {
-    const next = annotateActivePlaytestFlight(answer);
-    if (next) {
-      setPlaytestReceipt(next);
-      recordPlaytestPulse(next);
-    }
-  };
   const recordPlaytestChoice = (continuation) => {
-    const next = recordActivePlaytestContinuation(continuation);
-    if (next?.receipt) setPlaytestReceipt(next.receipt);
-  };
-  const copyPlaytestReceipt = async () => {
-    const portable = buildPortablePlaytestReceipt(playtestReceipt || loadPlaytestFlight());
-    if (!portable) return;
-    try {
-      if (typeof navigator.clipboard?.writeText !== "function") throw new Error("clipboard-unavailable");
-      await navigator.clipboard.writeText(JSON.stringify(portable, null, 2));
-      setPlaytestCopyError(false);
-      setPlaytestCopied(true);
-      setTimeout(() => setPlaytestCopied(false), 1500);
-    } catch {
-      setPlaytestCopied(false);
-      setPlaytestCopyError(true);
-    }
+    recordActivePlaytestContinuation(continuation);
   };
 
   // ── Ghost path visualization ───────────────────────────────────────────────
@@ -1030,6 +1006,20 @@ export default function DeathScreen({
           </div>
         )}
 
+        {wavePlanReceipt?.count > 0 && (
+          <div data-testid="wave-plan-receipt" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(180,140,255,0.42)", background: "linear-gradient(180deg,rgba(118,78,190,0.10),rgba(255,255,255,0.035))" }}>
+            <div style={{ fontSize: 10, color: "#C8A8FF", letterSpacing: 2, fontWeight: 900 }}>PLANNED PRESSURE RECEIPT · {wavePlanReceipt.combinedFingerprint}</div>
+            <div style={{ marginTop: 7, display: "flex", gap: 12, flexWrap: "wrap", color: "#EEE7FA", fontSize: 10 }}>
+              <span>{wavePlanReceipt.count} WAVE PLAN{wavePlanReceipt.count === 1 ? "" : "S"}</span>
+              <span>W{wavePlanReceipt.firstWave}{wavePlanReceipt.lastWave !== wavePlanReceipt.firstWave ? `–W${wavePlanReceipt.lastWave}` : ""}</span>
+              <span>ADVISORY</span>
+            </div>
+            <p style={{ margin: "8px 0 0", color: "#B9AEC8", fontSize: 9, lineHeight: 1.45 }}>
+              Fingerprints the pressure plans recorded during this run. It does not replay actual spawns, combat physics, pickups, or outcomes.
+            </p>
+          </div>
+        )}
+
         {performanceReceipt?.assisted && (
           <div data-testid="performance-receipt" role="status" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,209,102,0.4)", background: "linear-gradient(180deg,rgba(255,209,102,0.09),rgba(255,255,255,0.035))" }}>
             <div style={{ fontSize: 10, color: "#FFD166", letterSpacing: 2, fontWeight: 900 }}>{performanceReceipt.label}</div>
@@ -1169,33 +1159,7 @@ export default function DeathScreen({
         </div>
         </details>
 
-        {playtestEnabled && playtestReceipt && (
-          <section aria-label="Playtest flight receipt" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(180,140,255,0.48)", background: "rgba(110,70,180,0.11)" }}>
-            <div style={{ fontSize: 10, color: "#C8A8FF", letterSpacing: 2, fontWeight: 900 }}>PLAYTEST FLIGHT RECEIPT · LOCAL ONLY</div>
-            <p style={{ margin: "7px 0", fontSize: 10, color: "#D8D0E8", lineHeight: 1.45 }}>
-              This opt-in receipt stays in this browser session. It stores observed milestones and these button answers—no callsign, free text, or network upload.
-            </p>
-            <fieldset style={{ border: 0, padding: 0, margin: "8px 0" }}>
-              <legend style={{ fontSize: 10, color: "#FFF", fontWeight: 900 }}>Did the cause of death make sense?</legend>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5 }}>
-                {[["clear", "CLEAR"], ["partial", "PARTLY"], ["unclear", "UNCLEAR"]].map(([value, label]) => (
-                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.deathClarity === value} onClick={() => updatePlaytestAnswer({ deathClarity: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, border: `1px solid ${playtestReceipt.annotations?.deathClarity === value ? "#C8A8FF" : "#555"}` }}>{label}</button>
-                ))}
-              </div>
-            </fieldset>
-            <fieldset style={{ border: 0, padding: 0, margin: "8px 0" }}>
-              <legend style={{ fontSize: 10, color: "#FFF", fontWeight: 900 }}>Would you start another run?</legend>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5 }}>
-                {[["now", "NOW"], ["later", "LATER"], ["no", "NO"]].map(([value, label]) => (
-                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.replayIntent === value} onClick={() => updatePlaytestAnswer({ replayIntent: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, border: `1px solid ${playtestReceipt.annotations?.replayIntent === value ? "#C8A8FF" : "#555"}` }}>{label}</button>
-                ))}
-              </div>
-            </fieldset>
-            <button type="button" onClick={copyPlaytestReceipt} style={{ ...btnS, width: "100%", fontSize: 10 }}>
-              {playtestCopied ? "COPIED" : playtestCopyError ? "CLIPBOARD UNAVAILABLE" : "COPY JAVASCRIPT OBJECT NOTATION (JSON) RECEIPT"}
-            </button>
-          </section>
-        )}
+        <PlaytestFlightReceipt cardStyle={card} buttonStyle={btnS} />
 
         {/* Weapon kill breakdown */}
         {weaponKills && weaponKills.some(k => k > 0) && (() => {

@@ -37,6 +37,7 @@ import { buildCommandersOrder } from "../utils/commandersOrders.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 import CommandersOrders from "./CommandersOrders.jsx";
+import PlaytestPulsePanel from "./PlaytestPulsePanel.jsx";
 import MobileDeployConfig from "./MobileDeployConfig.jsx";
 import PrimaryNavigation from "./PrimaryNavigation.jsx";
 import "./home-arcade.css";
@@ -996,6 +997,7 @@ export default function HomeV2(props) {
             }}
           >🫀 PLAYTEST PULSE {playtestPulseEnabled ? "ON" : "OFF"} · {playtestPulse?.sampleSize || 0} LOCAL</button>
         </div>
+        {playtestPulseEnabled && <PlaytestPulsePanel pulse={playtestPulse} palette={themePalette} />}
 
         {/* Progress and reference systems stay one layer below the play loop. */}
         <div id="player-tools" style={{ marginTop: 18, padding: "14px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", scrollMarginTop: 86 }}>

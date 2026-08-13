@@ -1,10 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+import { consumeRateLimit, corsHeadersFor, rejectDisallowedOrigin, requestBucket } from "../_shared/http-trust.ts";
 
 function cleanText(value: unknown, maxLen: number, fallback = "") {
   const text = String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
@@ -54,6 +49,9 @@ function normalizeEvent(raw: Record<string, unknown>, uid: string | null, client
 }
 
 Deno.serve(async (req) => {
+  const corsHeaders = corsHeadersFor(req);
+  const originRejection = rejectDisallowedOrigin(req, corsHeaders);
+  if (originRejection) return originRejection;
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -74,6 +72,13 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
     const serviceClient = createClient(supabaseUrl, serviceRoleKey);
+    const bucket = await requestBucket(req, Deno.env.get("RUN_TOKEN_SIGNING_SECRET") ?? serviceRoleKey, "sync-studio-events");
+    if (!await consumeRateLimit(serviceClient, `${bucket}:minute`, 60, 60)) {
+      return new Response(JSON.stringify({ error: "Studio event sync limit reached." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
     const { data: { user } } = await userClient.auth.getUser().catch(() => ({ data: { user: null } }));
 
     const body = await req.json();
@@ -117,7 +122,7 @@ Deno.serve(async (req) => {
       .from("studio_game_events")
       .upsert(normalized, { onConflict: "client_event_id", ignoreDuplicates: true })
       .select("client_event_id");
-    if (error) throw error;
+    if (error) throw new Error(error.message || "Studio event upsert failed.");
 
     const inserted = Array.isArray(data) ? data.length : normalized.length;
     const deduped = Math.max(0, normalized.length - inserted);
@@ -126,7 +131,7 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown sync-studio-events failure";
+    const message = error instanceof Error ? error.message : String(error || "Unknown sync-studio-events failure");
     return new Response(JSON.stringify({ error: message }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -14,9 +14,20 @@ function allowedOrigins() {
   return new Set(configured.length ? configured : DEFAULT_ALLOWED_ORIGINS);
 }
 
+function isProjectPagesOrigin(origin: string | null) {
+  if (!origin) return false;
+  try {
+    const url = new URL(origin);
+    return url.protocol === "https:"
+      && (url.hostname === "call-of-doodie.pages.dev" || url.hostname.endsWith(".call-of-doodie.pages.dev"));
+  } catch {
+    return false;
+  }
+}
+
 export function isAllowedOrigin(req: Request) {
   const origin = req.headers.get("origin");
-  return !origin || allowedOrigins().has(origin);
+  return !origin || allowedOrigins().has(origin) || isProjectPagesOrigin(origin);
 }
 
 export function corsHeadersFor(req: Request) {
@@ -26,7 +37,7 @@ export function corsHeadersFor(req: Request) {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };
-  if (origin && allowedOrigins().has(origin)) headers["Access-Control-Allow-Origin"] = origin;
+  if (origin && (allowedOrigins().has(origin) || isProjectPagesOrigin(origin))) headers["Access-Control-Allow-Origin"] = origin;
   return headers;
 }
 

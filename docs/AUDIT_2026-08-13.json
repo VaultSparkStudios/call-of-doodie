@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S153)",
+  "generatedAt": "2026-08-13",
+  "session": 153,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-product-game-loop-public-release",
+  "meta": {
+    "generatedAt": "2026-08-13",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-product-game-loop-public-release",
+    "candidateCount": 31,
+    "promotedCount": 4,
+    "combinedPriority": 100.0,
+    "top3": ["playtest-pulse-command-post", "wave-plan-replay-passport", "playtest-signal-contract"],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle found direct live-source evidence for all four promoted premises: HomeV2 exposes only the Playtest Pulse toggle/sample count; DeathScreen and playtestFlightRecorder collect only deathClarity/replayIntent; replayCoverage explicitly excludes wave plans while waveDirector supplies bounded plan/formation data; and the freshly rendered S153 brief reports a 12-day closeout age despite same-day S152 evidence.",
+    "gameLoopReview": {
+      "loopTightness": 9.4,
+      "progressionCurve": 9.1,
+      "sessionEngagement": 9.4,
+      "retentionHooks": 9.2,
+      "soulFidelity": 9.7,
+      "overall": 9.4,
+      "evidenceBoundary": "No docs/PLAYTESTS corpus exists, so participant retention, balance, pacing, input quality, and threat readability remain unclaimed until real tester receipts exist.",
+      "topActions": [
+        "Turn the local Playtest Pulse into an inspectable/exportable aggregate command post.",
+        "Capture explicit input-trust and threat-readability answers without free text or network upload.",
+        "Add a planned-pressure replay lane whose label never implies spawn, physics, or outcome reproduction."
+      ]
+    },
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. The user authorized direct-main engineering deployment; SPARKED promotion remains separately evidence-gated.",
+      "quality": "S152 closed at 1,143/1,143 assertions across 191 files with strict lint, deployable build, release security, isolated staging, rendered-pixel proof, and exact-SHA production verification.",
+      "architecture": "React 19/Vite canvas game. App.jsx is 4,883 lines; DeathScreen is 1,736 lines; new feedback UI should be extracted instead of expanding either monolith inline.",
+      "gameLoop": "The revenge and mastery loops are closed. The highest-value local frontier is converting already-consented playtest evidence into inspectable truth and extending replay proof by one honest pressure-planning lane.",
+      "cost": "All promoted work is client-side deterministic/local logic over existing state. No new package, hosted inference, API call, paid service, or variable per-player cost is introduced."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Finish the already-authored Playtest Pulse and wave-director evidence paths instead of adding disconnected content breadth.",
+    "innovation": "Create a privacy-bounded local research command post and a planned-pressure proof lane without converting evidence into authority.",
+    "ui / ux / user-experience": "Make aggregate playtest signal readable, keyboard-accessible, theme-safe, and exportable from the pre-run surface.",
+    "feedback loop": "Collect the two missing SOUL-critical answers and let testers inspect the aggregate they consented to create.",
+    "gamification / engagement / immersion": "Measure whether the one-more-run loop, control trust, and readable chaos survive actual sessions without retuning from invented data.",
+    "ai / intelligence integration": "Keep intelligence deterministic and local; the command post summarizes explicit evidence rather than inferring sentiment.",
+    "security": "Preserve allowlisted annotations, bounded histories, no callsign/free text/network upload, and aggregate-only export.",
+    "speed / organization / efficiency": "Extract new UI into a focused component and fix the startup age source at the shared SIL parser boundary.",
+    "token / api cost reduction": "Reuse existing Pulse, wave director, and replay passport contracts; add zero API or model calls."
+  },
+  "items": [
+    {
+      "slug": "playtest-pulse-command-post",
+      "tier": "FIRE",
+      "axis": "feedback / ui / engagement / innovation",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 31.3,
+      "status": "implemented",
+      "why": "The local Pulse already stores distributions and up to 20 redacted flights, but the only home-screen representation is an ON/OFF button with a sample count. The evidence cannot guide a tester or be shared as a bounded aggregate.",
+      "recipe": "Add buildPortablePlaytestPulse() that exports aggregates only, then extract a PlaytestPulsePanel component with sample count, four distributions, privacy boundary, and clipboard export. Render it only when Pulse is enabled and data exists; keep default visitors free of operator clutter.",
+      "measurement": "Pure tests prove no flight IDs, callsigns, free text, or raw flights enter aggregate export. Component coverage verifies accessible labels, distribution counts, clipboard success/failure, and hidden default state. Desktop/mobile dark/light pixel proof is required.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Render the existing clarity/replay totals in a collapsed local panel." },
+        "L2": { "effortHours": 4, "recipe": "Full: extracted component, four distributions, aggregate-only JSON export, accessibility, tests, and rendered-pixel proof." },
+        "L3": { "effortHours": 7, "recipe": "Add cohort comparison only after real multi-device receipt import exists; do not invent it locally." }
+      }
+    },
+    {
+      "slug": "wave-plan-replay-passport",
+      "tier": "FIRE",
+      "axis": "replay trust / feature depth / innovation",
+      "effortHours": 5,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 25.7,
+      "status": "implemented",
+      "why": "Replay coverage proves movement, combat commands, and one derived contact enemy but excludes the runtime's deterministic wave plan and formation lane wholesale.",
+      "recipe": "Record a bounded canonical snapshot whenever createWaveDirectorPlan is assigned, fingerprint each snapshot plus the ledger, finalize a planned-pressure receipt at death, persist it with run history, render it beside the fairness receipt, and add a replay-passport lane labeled recorded plan evidence—not actual spawn, physics, or outcome replay.",
+      "measurement": "Pure tests prove stable fingerprints, mutation sensitivity, bounds, and explicit contract language. Death-flow and public-gameplay tests prove the receipt reaches the UI/contract while confidence remains advisory and full wave outcomes remain excluded.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Fingerprint one current wave-director plan and show it after death." },
+        "L2": { "effortHours": 5, "recipe": "Full: bounded multi-wave ledger, death/run-history wiring, UI receipt, passport lane, and regression courts." },
+        "L3": { "effortHours": 12, "recipe": "Capture versioned spawn checkpoints and replay them against physics fixtures before raising any confidence ceiling." }
+      }
+    },
+    {
+      "slug": "playtest-signal-contract",
+      "tier": "ICE",
+      "axis": "feedback / input fairness / soul fidelity",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 20.9,
+      "status": "implemented",
+      "why": "The opt-in receipt measures death clarity and replay intent but omits explicit control trust and threat readability—the two launch-critical preconditions named by the game profile and SOUL.",
+      "recipe": "Extend the existing v1 annotation envelope backwards-compatibly with allowlisted inputTrust and threatReadability values. Add two compact button questions to the Playtest Flight Receipt, include them in portable receipts and Pulse aggregates, and keep legacy two-answer receipts valid but marked signalComplete=false.",
+      "measurement": "Pure tests cover allowlists, legacy compatibility, four-answer signal completeness, and aggregate counts. DeathScreen tests prove the questions are explicit buttons with no free-text path.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add one input-trust answer to the local receipt." },
+        "L2": { "effortHours": 3, "recipe": "Full: input trust + threat readability, backwards-compatible schema, Pulse aggregation, UI, and tests." },
+        "L3": { "effortHours": 6, "recipe": "Correlate the answers with device/input receipt classes only after real participant samples exist." }
+      }
+    },
+    {
+      "slug": "startup-closeout-age-truth",
+      "tier": "ICE",
+      "axis": "efficiency / observability / protocol integrity",
+      "effortHours": 1,
+      "impact": 7,
+      "innovation": 5,
+      "priority": 22.1,
+      "status": "implemented",
+      "why": "The S153 brief says Last closeout: 12d because it reads a stale rolling-status date (S136) even though parseSilSessions already identifies S152 and its 2026-08-12 header.",
+      "recipe": "Derive lastSilDate from allSilEntries[0].date and use the rolling-status text only as a compatibility fallback. Add a mixed-order/stale-header regression court and re-render the canonical brief.",
+      "measurement": "The focused parser/renderer court passes, S153 renders Last closeout: 1d (or 0d under UTC boundary), the brief validator passes, and no session-number fallback is treated as a date.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Use the latest parsed SIL entry date with a stale-header fallback and regression test." },
+        "L2": { "effortHours": 2, "recipe": "Also add a rolling-status freshness probe and closeout repair path." },
+        "L3": { "effortHours": 4, "recipe": "Replace every renderer-local SIL date parser with the shared ledger helper across Studio Ops via Ark cargo." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "participant-balance-retune", "reason": "DEFER — no docs/PLAYTESTS corpus or imported tester receipt establishes a numeric balance change." },
+    { "slug": "prestige-retune", "reason": "CULL — current progression audit is source-derived; no new outcome evidence supports changing thresholds." },
+    { "slug": "new-mode-or-enemy-pack", "reason": "CULL — eight modes and deep pressure/build variety already exist; feedback observability outranks more breadth." },
+    { "slug": "hosted-ai-playtest-analysis", "reason": "CULL — explicit local aggregates answer the current question without latency, data transfer, or variable cost." },
+    { "slug": "full-physics-replay", "reason": "DEFER — the planned-pressure lane must remain advisory; full physics parity is a separate architecture program." },
+    { "slug": "mobile-density-retune", "reason": "DATA-BLOCKED — no physical-device usage signal identifies a correct size/density change." },
+    { "slug": "theme-prop-atlas-expansion", "reason": "DATA-BLOCKED — S147 explicitly gates lower-visibility expansion on production feedback." },
+    { "slug": "identity-mail-provider-readiness", "reason": "DEFER — provider, Obelisk, and reply-as evidence remain external SPARKED gates." },
+    { "slug": "dependency-replacement", "reason": "CULL — the fetched Supabase bump passed Obelisk trust and official registry provenance checks; compatibility belongs in the closing test matrix, not a new architecture." }
+  ],
+  "executionLog": [
+    {
+      "at": "2026-08-13",
+      "status": "implemented",
+      "items": [
+        "startup-closeout-age-truth",
+        "playtest-signal-contract",
+        "playtest-pulse-command-post",
+        "wave-plan-replay-passport"
+      ],
+      "evidence": "Final tree passes 195/195 test files and 1,153/1,153 assertions, strict lint, schema/coherence/architecture, deployable build, public contract, security audit with 0 vulnerabilities, replay fixtures, and CANON-053. Isolated staging d7ec86f1 passes hosted shell 7/7, backend health 5/5, replay trust 3/3, shared leaderboard isolation, route/theme/viewport visual matrix 1,020/1,020, Replay Passport state 32/32, and real deploy-to-defeat playtest signal flow 44/44. Eighteen captures are hash-bound after direct pixel review."
+    },
+    {
+      "at": "2026-08-13",
+      "status": "second-order-repairs",
+      "evidence": "Rendered-browser verification exposed and closed staging CORS drift, a run-summary signature reconstruction mismatch, wildcard/unrated Studio event ingestion, stale browser-harness locators, a stale runtime-delay checker, and a newly published Nanoid advisory. Supabase functions were deployed and live-probed; the final secure run/event path is green."
+    }
+  ]
+}

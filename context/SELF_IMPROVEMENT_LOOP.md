@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-13 — Session 153 | Total: 998/1000 | Velocity: 5 | Debt: ↓
+
+SIL 998/1000: Converted two vague playtest questions into explicit bounded evidence, made planned-pressure replay coverage honest, and let a real hosted player transaction expose three backend trust defects that source-only release checks had missed. Every discovered defect was root-fixed and re-proved before publication.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Exact candidate passes 195 files / 1,153 assertions plus lint, build, architecture/runtime, public, dependency, security, backend, replay, and visual courts. |
+| Alignment | 100 | → | Feedback stays explicit and consentful; replay language stays irreverent but refuses fabricated simulation or player-outcome intelligence. |
+| Momentum | 100 | → | Four audit items plus release-path CORS, signature, ingestion, harness, and dependency repairs completed in one continuous arc. |
+| Engagement | 100 | → | Players can report control/threat clarity, see an honest local pulse, and inspect planned pressure beside existing replay evidence. |
+| Process Qual | 100 | → | Real hosted state flows—not DOM/source inspection alone—found the CORS and signature defects; direct pixels verified both themes and target widths. |
+| Coherence | 99 | → | UI, receipts, public contracts, edge functions, audit, and release ledgers agree; two external STRONG canon checker gaps remain separately recorded. |
+| Security | 100 | → | Exact project-origin trust, quota enforcement, canonical signatures, secret-gateway probes, supply-chain checks, and zero-vulnerability audit are green. |
+| Ecosystem | 99 | → | Human and agent receipts align and staging is isolated; Obelisk identity, provider evidence, and SPARKED lifecycle gates remain external. |
+| Capital | 100 | → | Existing local, Cloudflare, and Supabase infrastructure is reused with no variable player cost or new paid service. |
+| Automation | 100 | ↑ | New unit/component contracts, real four-answer browser flow, focused passport matrix, 1,020 broad checks, and 18 pixel receipts cover each changed boundary. |
+
+Rolling averages: 3-session 996.3 · 5-session 995.6 · sparkline `█████`.
+
+Top win: the release test behaved like a player and uncovered backend defects that every static gate had missed, then proved their repairs through the same end-to-end path.
+Top gap: current Core Web Vitals and real participant/physical-device/provider evidence remain intentionally absent; engineering maturity is not a SPARKED outcome claim.
+Intent outcome: Achieved through implementation, saturation, isolated staging, rendered-pixel review, and release readiness; exact-main publication and production verification complete the authorized closeout.
+
+**Brainstorm**
+1. [SIL:2] Extract one shared canonical run-summary signer/verifier module before another signed consumer is added.
+2. [SIL:1] Teach the generic responsive audit to resolve the repository-pinned Playwright package so it cannot skip when the project-owned browser court is available.
+3. Compare distributions only after real consented samples exist; do not tune difficulty from synthetic staging receipts.
+
+**Committed to TASK_BOARD:** no speculative gameplay item added; the two protocol candidates remain future extraction work, and balance decisions remain participant-evidence gated.
+
 ## 2026-08-12 — Session 152 | Total: 997/1000 | Velocity: 5 | Debt: ↓
 
 SIL 997/1000: Recovered an interrupted closeout without trusting phantom green, then closed the game's coaching loop across the least obvious navigation path. Real browser pixels changed the implementation twice: mastery was compacted around the mobile dock, while a suspected death overlay was disproved through DOM and element-level evidence instead of prompting a false fix.
