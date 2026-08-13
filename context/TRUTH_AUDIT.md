@@ -1,6 +1,22 @@
 <!-- truth-audit-version: 1.1 -->
 # Truth Audit
 
+## 2026-08-12 — Session 152 — Recovery, coaching transaction, mastery command, and saturation truth
+
+- Recovery truth — S151 was committed in implementation but interrupted during closeout. Recovery parsed all changed JSON/NDJSON, verified `~/.claude.json`, reran 191/191 files and 1,138/1,138 tests, then pushed clean recovery/proof boundaries `1952f510` and `f2255936`.
+- Continuity truth — `menu-run-drill-v1` is the one bounded carried-drill envelope. It survives direct replay and RAGE QUIT → menu → draft → deploy; malformed or oversized state cannot cross the App boundary.
+- Feedback truth — LAST ORDER RESULT appears before ONE VERDICT exactly once. It reports baseline-to-observed wave, comparable-only score delta, evidence count, and an explicit no-causality statement.
+- Mastery truth — Commander's Orders derives the nearest weapon campaign only from `career.weaponLegendKills`, labels that source accessibly, preserves higher-priority directives, and never locks or auto-switches weapons.
+- Browser truth — real Chromium completed two deaths with the menu handoff between them and rendered the outcome-first receipt. Direct pixels found and fixed mastery/mobile-dock collision; the dedicated death palette is intentionally theme-invariant.
+- Visual truth — isolated staging passes 1,020/1,020 checks across 20 routes, two themes, and 390/768/1440px. Four mastery plus four drill-outcome captures join six representative captures in a 14-file hash-bound receipt; blocking defects are zero and subjective inspection is claimed.
+- Validation truth — focused 57/57, lint, schema/architecture, public contract 28/28, deployable build, security/npm audit zero, dependency, assets, media, and cost gates pass. A first broad run correctly failed only on generated Hot Context staleness after the new audit; regeneration made its focused freshness court 3/3, and the final canonical-writeback tree passes 191/191 files and 1,142/1,142 assertions in 152.21 seconds.
+- Saturation truth — six Genius entries remain but zero are executable; the generated innovation pack contains no further local candidate. Deferred work is not silently counted as runnable.
+- Lifecycle truth — independent release gate says GO for the authorized cost-neutral FORGE engineering update and NO-GO for SPARKED. Current CWV, physical PWA/controller/media, Zoho reply-as, project-scoped observability, Obelisk verification, participant/publication, and explicit founder lifecycle approval remain open.
+- Doctor truth — canonical Studio Doctor improved to 127/177 passing with one blocking failure: the Studio Ops-owned CPX51 live capacity admission receipt. A signed Ark repo-question routes it to its owner. Project-local canon, visual, build, security, cost, and release courts remain green; the external red is not hidden or relabeled as product green.
+
+Overall status: S152 repository-owned arc scope is implemented and isolated-staging verified; direct-main exact-SHA publication and production smoke finish closeout. SPARKED remains NO-GO.
+Last reviewed: 2026-08-12
+
 ## 2026-08-12 — Session 151 — Revenge, mastery, stats, architecture, and pixel truth
 
 - Loop truth — ONE VERDICT / RUN THE FIX follows death and optional challenge outcome. Secondary analysis remains inspectable but collapsed; the action is visible without scroll at 390px and 1440px.

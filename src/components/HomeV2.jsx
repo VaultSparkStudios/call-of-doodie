@@ -19,6 +19,8 @@ import { getDifficultyBriefing, getMutationDifficultyBrief, suggestDifficulty } 
 import { loadControllerProfile } from "../utils/gamepad.js";
 import { AIM_CALIBRATION_BUCKETS, aimBucketFromKey, aimBucketFromVector, buildInputCalibrationNudge, buildInputCalibrationRecord, buildInputQaReceipt, loadInputCalibration, mergeAimCalibrationEvidence, resolveAimCalibrationSource, saveInputCalibration } from "../utils/inputCalibration.js";
 import { buildPwaInstallReceipt, detectStandaloneDisplay, loadPwaInstallAttempt, readServiceWorkerLifecycle, SERVICE_WORKER_LIFECYCLE_EVENT } from "../utils/pwaInstallReadiness.js";
+import { buildWeaponMasteryProjection } from "../utils/arsenalMastery.js";
+import { sanitizeCarriedRunDrill } from "../systems/runDrill.js";
 import { buildPlayerJourney } from "../utils/playerJourney.js";
 import { buildWeeklyGauntletLaunch } from "../utils/gauntletLaunch.js";
 import { buildLocalBalanceLab } from "../utils/balanceLab.js";
@@ -357,8 +359,9 @@ export default function HomeV2(props) {
       journey,
       runIntel,
       commandBrief,
+      masteryProjection: buildWeaponMasteryProjection(career?.weaponLegendKills),
     }),
-    [aimCheck, onboarding, pendingNextRunContract, journey, runIntel, commandBrief],
+    [aimCheck, onboarding, pendingNextRunContract, journey, runIntel, commandBrief, career?.weaponLegendKills],
   );
 
   const recordFrontDoorAction = useCallback((actionId, extra = {}) => {
@@ -395,14 +398,18 @@ export default function HomeV2(props) {
   }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode, onSetZombiesMode]);
 
   const deploy = useCallback(() => {
-    const seed = dailyChallengeMode ? todaySeedStr : (customSeed || undefined);
-    const challenge = challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {};
+    const carriedDrill = sanitizeCarriedRunDrill(pendingNextRunContract);
+    const seed = carriedDrill?.seed || (dailyChallengeMode ? todaySeedStr : (customSeed || undefined));
+    const challenge = {
+      ...(challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {}),
+      ...(carriedDrill ? { drill: carriedDrill } : {}),
+    };
     const studioEvent = recordFrontDoorAction("deploy", { source: "deploy_button", seed: seed || null });
     track("front_door_action", { actionId: "deploy", surface: "home_v2", mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
     track("home_v2_deploy", { mode: modeId, difficulty, loadout: selectedLoadout.id, intelligenceFocus: runIntel.focus, studioEvent });
     onConsumeNextRunContract();
     onStart(seed, challenge);
-  }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onConsumeNextRunContract, onStart, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
+  }, [challengeMode, customSeed, dailyChallengeMode, difficulty, modeId, onConsumeNextRunContract, onStart, pendingNextRunContract, recordFrontDoorAction, runIntel.focus, selectedLoadout.id, todaySeedStr]);
 
   const switchTab = useCallback((t) => { setTab(t); track("home_v2_tab", { tab: t }); }, []);
   const handleContinuationAction = useCallback((plan = journey.secondary, source = "journey_card") => {

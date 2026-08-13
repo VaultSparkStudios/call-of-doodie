@@ -3,6 +3,10 @@ function cleanText(value, fallback = "") {
   return text || fallback;
 }
 
+function boundedText(value, maxLength, fallback = "") {
+  return cleanText(value, fallback).slice(0, maxLength);
+}
+
 function whole(value, fallback = 0) {
   const parsed = Math.floor(Number(value));
   return Number.isFinite(parsed) ? Math.max(0, parsed) : fallback;
@@ -122,11 +126,39 @@ export function buildDrillLaunchPayload(drill, contract, {
 } = {}) {
   return {
     ...drill,
-    contract: contract ? { focus: contract.focus, target: contract.target, proof: contract.proof } : null,
+    schemaVersion: "menu-run-drill-v1",
+    contract: contract ? { id: contract.id, focus: contract.focus, target: contract.target, proof: contract.proof } : null,
     baselineWave: Math.max(1, whole(baselineWave, 1)),
     baselineScore: whole(baselineScore, 0),
     launchKind,
     acceptedAt,
+  };
+}
+
+export function sanitizeCarriedRunDrill(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const contractSource = value.contract && typeof value.contract === "object" ? value.contract : value;
+  const contract = {
+    id: boundedText(contractSource.id || value.id, 48),
+    focus: boundedText(contractSource.focus, 72),
+    target: boundedText(contractSource.target, 220),
+    proof: boundedText(contractSource.proof, 220),
+  };
+  if (!contract.id || !contract.focus || !contract.target || !contract.proof) return null;
+  const launchKind = ["new_run", "replay_seed"].includes(value.launchKind) ? value.launchKind : "new_run";
+  const acceptedAt = Number(value.acceptedAt);
+  const seed = Number(value.seed);
+  return {
+    schemaVersion: "menu-run-drill-v1",
+    id: boundedText(value.id || contract.id, 48, contract.id),
+    title: boundedText(value.title, 120, contract.focus),
+    detail: boundedText(value.detail, 280, contract.target),
+    contract,
+    baselineWave: Math.max(1, whole(value.baselineWave, 1)),
+    baselineScore: whole(value.baselineScore, 0),
+    seed: Number.isFinite(seed) && seed > 0 ? Math.floor(seed) % 999999 : null,
+    launchKind,
+    acceptedAt: Number.isFinite(acceptedAt) && acceptedAt > 0 ? Math.floor(acceptedAt) : Date.now(),
   };
 }
 

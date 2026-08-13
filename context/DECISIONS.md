@@ -1124,6 +1124,26 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** Production correctly served the S145 PNG social card from `index.html`, but the live checker still expected the old SVG HTML reference and therefore failed after every other live court passed. The SVG remains the authored source and a cached fallback; the PNG is the public Open Graph/Twitter asset. The verifier must follow the current public contract rather than force a regression to an obsolete reference.
 
 **Evidence:** Focused verifier/public-contract court passes 30/30; both `https://callofdoodie.wtf/` and immutable `https://6a3ec909.call-of-doodie.pages.dev/` pass the corrected live court 7/7.
+# 2026-08-12 — Session 152 — Accepted coaching is a closed evidence transaction
+
+**Decision:** Preserve a versioned, allowlisted drill envelope across every accepted navigation path and show its observed result before issuing the next verdict.
+
+**Why:** Direct RUN THE FIX already created an active drill, but RAGE QUIT carried only descriptive text and the menu consumed it without passing drill evidence to the next run. That made the visible correction promise path-dependent and prevented an outcome receipt. The closed transaction now accepts, carries, executes, observes, and only then prescribes again.
+
+**Boundaries:** Carried fields are bounded and sanitized; score deltas appear only for comparable runs; the result is explicitly observational rather than causal; no hosted inference or persistent account state is introduced.
+
+## 2026-08-12 — Session 152 — Death state is intentionally theme-invariant
+
+**Decision:** Keep DeathScreen's high-contrast tactical palette invariant across Sewer Night and Porcelain Day while still capturing both themed host states for CANON-053.
+
+**Why:** Project theme state applies to the front door, but the death debrief is a dedicated tactical mode with its own readability contract. The dark and light host captures are byte-identical by design, not a missing-toggle defect. The mastery projection remains genuinely theme-responsive on the front door.
+
+## 2026-08-12 — Session 152 — Saturation stops at evidence boundaries
+
+**Decision:** Treat zero executable Genius items plus a no-candidate innovation pack as honest saturation; do not manufacture balance, retention, hosted AI, provider, or physical-device work from absent evidence.
+
+**Why:** The remaining list is data-, credential-, provider-, participant-, publication-, or device-gated. The fresh audit already promoted and shipped the viable second-order loop innovations. Inventing another local feature would weaken coherence and violate observability truth.
+
 # 2026-08-12 — Session 151 — Mastery requires weapon evidence
 
 **Decision:** Reserve weapon mastery for per-weapon career kills. Keep global account thresholds only as explicitly named arsenal milestones; never infer mastery from total career kills.

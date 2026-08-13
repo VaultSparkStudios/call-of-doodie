@@ -714,6 +714,20 @@ export default function DeathScreen({
     }
   };
 
+  const drillOutcomeBrief = drillOutcome ? (
+    <div data-focus-order="last_order_result" data-testid="run-drill-outcome" style={{ ...card, marginBottom: 12, textAlign: "left", border: `1px solid ${drillOutcome.status === "improved" ? "rgba(0,255,136,0.58)" : "rgba(255,209,102,0.42)"}`, background: "linear-gradient(145deg,rgba(0,229,255,0.10),rgba(12,12,18,0.96))" }}>
+      <div style={{ fontSize: 10, color: drillOutcome.status === "improved" ? "#7CFFBE" : "#FFD166", letterSpacing: 2, fontWeight: 900 }}>LAST ORDER RESULT · {drillOutcome.label}</div>
+      <div style={{ marginTop: 6, color: "#FFF", fontSize: 13, fontWeight: 900 }}>{drillOutcome.title}</div>
+      <div style={{ marginTop: 5, color: "#D4D8E0", fontSize: 10, lineHeight: 1.45 }}>{drillOutcome.summary}</div>
+      <div style={{ marginTop: 6, display: "flex", gap: 10, flexWrap: "wrap", color: "#BFF7FF", fontSize: 10, fontWeight: 900 }}>
+        <span>W{drillOutcome.baseline.wave} → W{drillOutcome.observed.wave}</span>
+        {drillOutcome.scoreDelta != null && <span>SCORE {drillOutcome.scoreDelta >= 0 ? "+" : ""}{drillOutcome.scoreDelta.toLocaleString()}</span>}
+        {drillEvidence && <span style={{ color: drillEvidence.repeatable ? "#7CFFBE" : "#FFD166" }}>{drillEvidence.label}</span>}
+      </div>
+      <div style={{ marginTop: 5, color: "#8FA0AF", fontSize: 9, lineHeight: 1.4 }}>Observed result only—this receipt does not claim the drill caused the outcome.</div>
+    </div>
+  ) : null;
+
   const revengeBrief = (
     <div data-focus-order="run_the_fix" data-testid="insight-verdict" style={{ ...card, marginBottom: 12, textAlign: "left", border: "1px solid rgba(255,138,61,0.72)", background: "linear-gradient(145deg,rgba(255,107,53,0.24),rgba(12,12,18,0.96))", boxShadow: "0 18px 44px rgba(0,0,0,0.28)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", fontSize: 10, color: "#FFB36B", letterSpacing: 2.4, fontWeight: 900 }}>
@@ -808,6 +822,7 @@ export default function DeathScreen({
           </div>
         )}
 
+        {drillOutcomeBrief}
         {revengeBrief}
 
         <details data-focus-order="secondary_analysis" data-testid="secondary-run-analysis" style={{ width: "100%", marginBottom: 12 }}>
@@ -994,15 +1009,6 @@ export default function DeathScreen({
           </div>
         </details>
 
-        {drillOutcome && (
-          <div data-testid="run-drill-outcome" style={{ ...card, marginBottom: 12, textAlign: "left", border: `1px solid ${drillOutcome.status === "improved" ? "rgba(0,255,136,0.58)" : "rgba(255,209,102,0.42)"}`, background: "rgba(0,0,0,0.28)" }}>
-            <div style={{ fontSize: 10, color: drillOutcome.status === "improved" ? "#7CFFBE" : "#FFD166", letterSpacing: 2, fontWeight: 900 }}>DRILL OUTCOME · {drillOutcome.label}</div>
-            <div style={{ marginTop: 6, color: "#FFF", fontSize: 13, fontWeight: 900 }}>{drillOutcome.title}</div>
-            <div style={{ marginTop: 5, color: "#D4D8E0", fontSize: 10, lineHeight: 1.45 }}>{drillOutcome.summary}</div>
-            {drillEvidence && <div style={{ marginTop: 6, color: drillEvidence.repeatable ? "#7CFFBE" : "#FFD166", fontSize: 10, fontWeight: 900 }}>{drillEvidence.label} · LAST {drillEvidence.attempts}/{drillEvidence.windowSize} ATTEMPTS</div>}
-            <div style={{ marginTop: 5, color: "#8FA0AF", fontSize: 9, lineHeight: 1.4 }}>Observed result only—this receipt does not claim the drill caused the outcome.</div>
-          </div>
-        )}
         {fairnessReceipt?.seed > 0 && (
           <div data-testid="fairness-receipt" style={{ ...card, marginTop: 8, marginBottom: 12, textAlign: "left", border: "1px solid rgba(143,239,255,0.28)", background: "linear-gradient(180deg,rgba(0,229,255,0.07),rgba(255,255,255,0.035))" }}>
             <div style={{ fontSize: 10, color: "#8FEFFF", letterSpacing: 2, fontWeight: 900 }}>FAIRNESS RECEIPT · {fairnessReceipt.fingerprint}</div>
@@ -1173,7 +1179,7 @@ export default function DeathScreen({
               <legend style={{ fontSize: 10, color: "#FFF", fontWeight: 900 }}>Did the cause of death make sense?</legend>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5 }}>
                 {[["clear", "CLEAR"], ["partial", "PARTLY"], ["unclear", "UNCLEAR"]].map(([value, label]) => (
-                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.deathClarity === value} onClick={() => updatePlaytestAnswer({ deathClarity: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, borderColor: playtestReceipt.annotations?.deathClarity === value ? "#C8A8FF" : "#555" }}>{label}</button>
+                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.deathClarity === value} onClick={() => updatePlaytestAnswer({ deathClarity: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, border: `1px solid ${playtestReceipt.annotations?.deathClarity === value ? "#C8A8FF" : "#555"}` }}>{label}</button>
                 ))}
               </div>
             </fieldset>
@@ -1181,7 +1187,7 @@ export default function DeathScreen({
               <legend style={{ fontSize: 10, color: "#FFF", fontWeight: 900 }}>Would you start another run?</legend>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 5 }}>
                 {[["now", "NOW"], ["later", "LATER"], ["no", "NO"]].map(([value, label]) => (
-                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.replayIntent === value} onClick={() => updatePlaytestAnswer({ replayIntent: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, borderColor: playtestReceipt.annotations?.replayIntent === value ? "#C8A8FF" : "#555" }}>{label}</button>
+                  <button key={value} type="button" aria-pressed={playtestReceipt.annotations?.replayIntent === value} onClick={() => updatePlaytestAnswer({ replayIntent: value })} style={{ ...btnS, padding: "6px 9px", fontSize: 10, border: `1px solid ${playtestReceipt.annotations?.replayIntent === value ? "#C8A8FF" : "#555"}` }}>{label}</button>
                 ))}
               </div>
             </fieldset>
@@ -1702,7 +1708,7 @@ export default function DeathScreen({
             >🔗 SHARE RUN</button>
           )}
           <button aria-label="View leaderboard" onClick={() => { recordPlaytestChoice("leaderboard"); track("debrief_view_leaderboard", { score, wave, intelligenceCause: postRunIntel.cause }); onRefreshLeaderboard(); setShowLeaderboard(true); }} style={{ ...btnS, minWidth: 130, fontSize: 15 }}>LEADERBOARD</button>
-          <button aria-label="Return to main menu" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(debrief.nextRunContract); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
+          <button aria-label="Return to main menu" onClick={() => { recordPlaytestChoice("menu"); track("debrief_menu", { score, wave, intelligenceCause: postRunIntel.cause, nextRunContractId: debrief.nextRunContract?.id || null }); onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run")); }} style={{ ...btnS, minWidth: 110, fontSize: 15 }}>RAGE QUIT</button>
         </div>
         </details>
       </div>

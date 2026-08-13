@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-12T07:48:23.248Z",
-  "stagingUrl": "https://1fc32adb.call-of-doodie.pages.dev",
-  "workingTreeUiSha256": "03398fecc4e41a61f649bb8dc661f403e1a804cd417a81493a9adbd90a2539c3",
+  "capturedAt": "2026-08-12T21:39:45.672Z",
+  "stagingUrl": "https://session-152-staging.call-of-doodie.pages.dev",
+  "workingTreeUiSha256": "b9c775f017a7d4010e485b010225a8024a7815f7e85065edd6cf44ccb9077230",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-151-final/visual-audit-receipt.json",
-    "sha256": "03d4c7cadd1bfe8eb9049e3b56236c83aa76f0ab3fdd2d781f3b45e759ad8a4a",
+    "receipt": "output/playwright/session-152-staging/visual-audit-receipt.json",
+    "sha256": "23a92b86c7b3c40921797d8e582b5a55c98b9aa562f6b9df47d79344ca4e2fbd",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -86,26 +86,92 @@
       "page": "Leaderboard surface"
     },
     {
-      "file": "death-brief-dark-390.png",
-      "sha256": "f036d2fbb182da17bb298d9070b5fb7181115e0c1c4ec083175bcdf29f48d71a",
+      "file": "mastery-command-dark-1440.png",
+      "sha256": "7ebdd352c4de480fe3cf1d192a442d416ce331a7bdc0718a85c1c001a368f45a",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 1000
       },
-      "page": "Death-screen revenge brief first viewport"
+      "page": "Commander's Orders weapon-mastery projection"
     },
     {
-      "file": "death-brief-light-1440.png",
-      "sha256": "c12553f0deea9e657c06d3e5c809bfac0d0085d25d21fa6c30b1bb67a7ba4d6c",
+      "file": "mastery-command-light-1440.png",
+      "sha256": "f459b20e5e8f44157cab88e02a4fa78ddd094809c0fe839e6d65260c26634450",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Death-screen revenge brief first viewport"
+      "page": "Commander's Orders weapon-mastery projection"
+    },
+    {
+      "file": "mastery-command-dark-390.png",
+      "sha256": "c01ca36905872299a4663c93a9f7ee16b7b851876583ec322558989d1ea343e6",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Commander's Orders weapon-mastery projection"
+    },
+    {
+      "file": "mastery-command-light-390.png",
+      "sha256": "89e8451b8e32383e008de4433c768ee4bfe683257add05f26ca3b5a83712206c",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Commander's Orders weapon-mastery projection"
+    },
+    {
+      "file": "drill-outcome-dark-1440.png",
+      "sha256": "570bfd9d14700333e99a4818d2b73965bb28cd2301b466287f3ca68d34569228",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Death-screen prior drill outcome before next verdict"
+    },
+    {
+      "file": "drill-outcome-light-1440.png",
+      "sha256": "570bfd9d14700333e99a4818d2b73965bb28cd2301b466287f3ca68d34569228",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Death-screen prior drill outcome before next verdict"
+    },
+    {
+      "file": "drill-outcome-dark-390.png",
+      "sha256": "e20fb32c4f9be3a895df4e6919483016a3b7701d7a7ab0eec39644aa468efffb",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death-screen prior drill outcome before next verdict"
+    },
+    {
+      "file": "drill-outcome-light-390.png",
+      "sha256": "e20fb32c4f9be3a895df4e6919483016a3b7701d7a7ab0eec39644aa468efffb",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Death-screen prior drill outcome before next verdict"
     }
   ],
   "inspection": {
@@ -115,11 +181,12 @@
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."
+      "The compact weapon-mastery projection is readable in Commander's Orders at 390px and 1440px across both project themes without colliding with the mobile dock.",
+      "The prior drill's observed result appears before ONE VERDICT at 390px and 1440px; its wave, comparable score, repeatability evidence, and non-causal boundary remain readable."
     ],
     "fixesApplied": [
-      "Removed Famous Last Words autofocus that scrolled the death verdict above the viewport.",
-      "Confirmed the revenge brief and corrective action fit the first viewport at 390px and 1440px."
+      "Compacted the mastery receipt to two mobile-safe rows after direct pixel review found bottom-dock overlap.",
+      "Death state intentionally retains its fixed high-contrast tactical palette across project themes; both themed hosts were captured and are pixel-identical by design."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

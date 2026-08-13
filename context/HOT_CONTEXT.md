@@ -29,7 +29,8 @@
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
-## Current Session Intent: Session 151
+## Current Session Intent: Session 152
+## Session 152 — Closed-loop coaching and mastery command
 ## Now
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
 - [ ] [SIL:2] [S60] Supabase Auth / Studio membership implementation decision — if paid tier or membership integration is now desired, implement `docs/AUTH_INTEGRATION_PLAN.md` instead of leaving membership server-only
@@ -50,21 +51,19 @@
 
 ## Recent Decisions
 
-## 2026-08-11 — Session 149 closeout — external scorer failures stay advisory
+## 2026-08-12 — Session 152 — Death state is intentionally theme-invariant
 
-**Decision:** Preserve the failed project-targeted IGNIS rescore and the Studio Doctor's cross-portfolio reds as explicit control-plane advisories; do not mutate sibling repositories or downgrade a green Call-Of-Doodie release candidate without a project-local failing gate.
+**Decision:** Keep DeathScreen's high-contrast tactical palette invariant across Sewer Night and Porcelain Day while still capturing both themed host states for CANON-053.
 
-**Why:** `node scripts/ops.mjs rescore --project call-of-doodie` reached the canonical IGNIS CLI but returned only `Scoring Call of Doodie ... failed` with no project diagnostic. The separately completed Doctor reported 123/177 passing and two red control-plane probes (CPX51 capacity admission and cross-surface coherence), while every project-local runtime, test, build, security, cost, staging, and rendered-pixel court is green. Treating the external routing/scorer failure as a product blocker would violate evidence ownership and CANON-018.
+**Why:** Project theme state applies to the front door, but the death debrief is a dedicated tactical mode with its own readability contract. The dark and light host captures are byte-identical by design, not a missing-toggle defect. The mastery projection remains genuinely theme-responsive on the front door.
 
-**Follow-up:** Studio Ops owns the scorer/doctor routing repair through its normal control plane. This project records the evidence and proceeds with the explicitly authorized cost-neutral engineering release; SPARKED remains separately gated.
 
-## 2026-08-11 — Session 149 production — live verification follows the canonical PNG asset
+## 2026-08-12 — Session 152 — Saturation stops at evidence boundaries
 
-**Decision:** Make `scripts/live-site-check.mjs` assert the canonical `og-image.png` reference and `image/png` response while retaining the source SVG check in the service-worker cache contract.
+**Decision:** Treat zero executable Genius items plus a no-candidate innovation pack as honest saturation; do not manufacture balance, retention, hosted AI, provider, or physical-device work from absent evidence.
 
-**Why:** Production correctly served the S145 PNG social card from `index.html`, but the live checker still expected the old SVG HTML reference and therefore failed after every other live court passed. The SVG remains the authored source and a cached fallback; the PNG is the public Open Graph/Twitter asset. The verifier must follow the current public contract rather than force a regression to an obsolete reference.
+**Why:** The remaining list is data-, credential-, provider-, participant-, publication-, or device-gated. The fresh audit already promoted and shipped the viable second-order loop innovations. Inventing another local feature would weaken coherence and violate observability truth.
 
-**Evidence:** Focused verifier/public-contract court passes 30/30; both `https://callofdoodie.wtf/` and immutable `https://6a3ec909.call-of-doodie.pages.dev/` pass the corrected live court 7/7.
 # 2026-08-12 — Session 151 — Mastery requires weapon evidence
 
 **Decision:** Reserve weapon mastery for per-weapon career kills. Keep global account thresholds only as explicitly named arsenal milestones; never infer mastery from total career kills.
@@ -87,7 +86,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 179,638 bytes · SHA-256 `5417cbc8a906…`
-- `context/TASK_BOARD.md` · 118,353 bytes · SHA-256 `4cbd18262a5f…`
-- `context/DECISIONS.md` · 114,365 bytes · SHA-256 `dbad0a39eb4d…`
-- `docs/AUDIT_2026-08-12.json` · 14,648 bytes · SHA-256 `2591320497a8…`
+- `context/CURRENT_STATE.md` · 182,062 bytes · SHA-256 `e6a486c58266…`
+- `context/TASK_BOARD.md` · 119,574 bytes · SHA-256 `3222e390d461…`
+- `context/DECISIONS.md` · 116,344 bytes · SHA-256 `28323fec52e9…`
+- `docs/AUDIT_2026-08-12_2.json` · 11,680 bytes · SHA-256 `d2f743a1b3a6…`

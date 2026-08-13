@@ -1,6 +1,42 @@
+# Latest Handoff — Session 152
+
+Session Intent: Recover and independently prove the interrupted Session 151 closeout, checkpoint it cleanly, then run one continuous agent-neutral `/arc` through startup, game-loop review, fresh nine-axis audit, complete implementation, second-order saturation, isolated staging, rendered-pixel QA, release gate, canonical closeout, direct-main publication, and production verification. Keep the project FORGE/public-unlaunched.
+
+## Where We Left Off
+
+- Recovery is complete in its own boundary: `1952f510 recover S151 closeout` plus proof commit `f2255936` are on synchronized main, exact-SHA CI is green, and S151 production revision `5be7b044` is independently verified.
+- S152 implemented all three promoted L2 audit items: bounded menu drill continuity, outcome-first coaching, and authoritative mastery projection in Commander's Orders.
+- Isolated staging is green at `https://session-152-staging.call-of-doodie.pages.dev/` (immutable `https://25837962.call-of-doodie.pages.dev/`); the broad matrix passes 1,020/1,020 and CANON-053 binds 14 directly reviewed captures with zero blockers.
+- The Unified Genius List is exhausted at zero executable items and the innovation pack found no additional repository-local candidate. Remaining items require external evidence, credentials/providers, physical devices, publication, participant data, performance measurement, or explicit SPARKED authority.
+- Proceed only from synchronized main after exact-SHA CI and production smoke are recorded. Preserve the versioned drill sanitizer, outcome-before-prescription order, mastery source label, all-open weapon availability, and theme-invariant tactical DeathScreen palette.
+
+## Impact Summary
+
+**Headline.** The revenge loop is now a closed evidence transaction: accept a fix, carry it through any return-to-menu path, observe the result before receiving another prescription, and keep the next weapon campaign visible without invented intelligence.
+
+**Impact.**
+- RAGE QUIT no longer drops the accepted drill. A strict allowlist bounds every carried field and consumes the envelope on deploy.
+- LAST ORDER RESULT precedes ONE VERDICT and refuses causal or non-comparable score claims.
+- Commander's Orders exposes the nearest authoritative per-weapon mastery tier while retaining precedence and all-open play.
+- The visual receipt tool now names mastery and drill-outcome captures accurately instead of misclassifying every reviewed state as a generic death brief.
+
+## Evidence
+
+- Focused changed-surface court: 57/57. Hot-context freshness court: 3/3.
+- Strict lint; schema/coherence/architecture; App 4,883/5,000 with 117 lines headroom; game loop 1,752/1,775 with 23 lines headroom.
+- Deployable build, public contract 28/28, security release/npm audit zero, dependency, asset, media, and cost courts pass.
+- Real browser: death → RAGE QUIT → Commander's Orders → deploy → death produces LAST ORDER RESULT before ONE VERDICT.
+- Hosted staging: 1,020/1,020 route/theme/viewport checks; 14 hash-bound captures; direct subjective rendered-pixel review complete; blocking defects 0.
+- Independent release gate: engineering publication GO; SPARKED NO-GO.
+
+---
 # Latest Handoff — Session 151
 
 Session Intent: Run the complete autonomous `/arc` from synchronized main through canonical startup, specialty reviews, fresh audit, implementation, isolated staging, rendered-pixel QA, release gate, closeout, direct-main publication, and production verification. SPARKED promotion remains separately gated.
+
+## Active Session 152 Intent
+
+Recover and independently prove Session 151 before beginning a new continuous `/arc`; then run canonical startup, specialty game-loop and release review, a fresh premise-verified nine-axis audit, implementation of every accepted repository-owned item plus viable second-order innovations, isolated staging, rendered-pixel proof for any UI changes, canonical closeout, direct-main publication, and production verification. Keep the project FORGE/public-unlaunched; do not imply SPARKED promotion.
 
 ## Where We Left Off
 
@@ -27,34 +63,5 @@ Session Intent: Run the complete autonomous `/arc` from synchronized main throug
 - Hosted public matrix passes 1,020/1,020 across twenty routes, two themes, and 390/768/1440px. Direct image review found and fixed the Famous Last Words autofocus scroll defect; final death-screen verdict bounds are 160–516px mobile and 172–478px desktop with no inherited scroll.
 - `docs/visual-qa/LATEST.json` hash-binds eight inspected captures and records direct subjective review complete with zero blocking visual defects.
 - Recovery commit `1952f510` passed brief-format run `31631272095` and Cloudflare quality/build/deploy run `31631272045`. Production independently passes shell 7/7, cutover 5/5, replay trust 3/3, backend health 5/5, shared-leaderboard isolation, and Studio launch surfaces.
-
----
-# Latest Handoff — Session 150
-
-Session Intent: Implement the full founder-approved plan for larger homepage text, clearer navigation, direct access to `/stats/`, a live statistics homepage showcase, and an evidence-based decision about the Command Deck; verify on isolated staging and complete canonical closeout.
-
-## Impact Summary
-
-**Headline.** The front door now reads like a game lobby instead of a compressed operator console: play is obvious, Stats is always reachable, live community activity is visible, and deeper tools stay available without dominating the first screen.
-
-**Impact.**
-- One public-navigation registry drives the desktop header, mobile dock, More drawer, generated page headers, and shared footer.
-- Homepage typography and controls have a readable floor, visible focus states, and 44px touch targets.
-- Live Community Stats now appears directly on the homepage and links to the complete `/stats/` page.
-- The Command Deck performance shell is retained for fast first paint, but “Command Deck” is removed as a redundant product/navigation layer; deep tools are grouped under Progress, Build, History, and Learn.
-
-## Evidence
-
-- Focused React/public-route court: 35/35; strict lint, schema/architecture, public contract 28/28, deployable build, security/npm audit, dependency, assets, launch media, release, and cost gates pass. Two serialized/limited broad-suite attempts exceeded 15 minutes under shared-host contention with no captured assertion failure; they are inconclusive, not green.
-- Isolated staging: `https://session-150-staging.call-of-doodie.pages.dev/`; immutable deployment: `https://684db11d.call-of-doodie.pages.dev/`.
-- Hosted broad visual matrix: 1,020/1,020. Focused desktop/mobile × dark/light navigation court reports zero overflow, undersized controls, measured contrast failures, or missing Stats routes.
-- Six representative captures are hash-bound in `docs/visual-qa/LATEST.json`. Direct host image viewing still fails at Windows `CryptUnprotectData`, so subjective pixel-perfect approval is unclaimed.
-
-## Where We Left Off
-
-- The founder-approved front-door plan is live from commit `c260d77` at immutable Cloudflare revision `https://76855535.call-of-doodie.pages.dev/`; exact-SHA workflow `31566376617`, shell 7/7, redirects 5/5, replay 3/3, launch surfaces, and production desktop/mobile theme navigation checks pass.
-- Preserve the single navigation registry and readable type/target floor when adding public pages.
-- Keep the performance shell, but do not reintroduce Command Deck as a competing navigation hierarchy.
-- SPARKED remains NO-GO under the existing external and explicit lifecycle gates.
 
 ---

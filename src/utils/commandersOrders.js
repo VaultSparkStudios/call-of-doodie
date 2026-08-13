@@ -46,6 +46,7 @@ export function buildCommandersOrder({
   journey = null,
   runIntel = null,
   commandBrief = [],
+  masteryProjection = null,
 } = {}) {
   const inputUnverified = aimCheck && aimCheck.status !== "verified";
   if (inputUnverified) {
@@ -101,7 +102,7 @@ export function buildCommandersOrder({
     };
   }
 
-  const contract = sanitizeNextRunContract(pendingNextRunContract);
+  const contract = sanitizeNextRunContract(pendingNextRunContract?.contract || pendingNextRunContract);
   if (contract) {
     return {
       schemaVersion: "commanders-order-v1",
@@ -122,6 +123,7 @@ export function buildCommandersOrder({
       }),
       steps: [],
       briefLines: [],
+      masteryProjection,
       dismissible: true,
     };
   }
@@ -139,6 +141,7 @@ export function buildCommandersOrder({
       action: normalizedAction(journey.secondary),
       steps: [],
       briefLines: Array.isArray(commandBrief) ? commandBrief.slice(0, 3) : [],
+      masteryProjection,
       dismissible: false,
     };
   }
@@ -155,7 +158,7 @@ export function buildCommandersOrder({
     action: normalizedAction(journey?.primary, { id: "deploy", cta: "DEPLOY", action: "deploy" }),
     steps: [],
     briefLines: Array.isArray(commandBrief) ? commandBrief.slice(0, 3) : [],
+    masteryProjection,
     dismissible: false,
   };
 }
-

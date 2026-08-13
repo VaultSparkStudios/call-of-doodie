@@ -76,23 +76,27 @@ describe("buildDeathScreenProps", () => {
     expect(moreActions).toBeGreaterThan(analysis);
     expect(source).toContain('data-testid="run-the-fix"');
     expect(source).toContain("<summary");
-    expect(source).toContain("onMenu(debrief.nextRunContract)");
+    expect(source).toContain('onMenu(makeDrillLaunch(runSeed > 0 ? "replay_seed" : "new_run"))');
   });
 
   it("renders the revenge brief before one collapsed secondary analysis block", () => {
     const source = fs.readFileSync(path.resolve(import.meta.dirname, "..", "components", "DeathScreen.jsx"), "utf8");
     const challenge = source.indexOf("{/* Challenge result card */}");
+    const outcome = source.indexOf("{drillOutcomeBrief}", challenge);
     const brief = source.indexOf("{revengeBrief}", challenge);
     const analysis = source.indexOf('data-testid="secondary-run-analysis"', brief);
     const buildGrade = source.indexOf("BUILD GRADE", analysis);
     const runDna = source.indexOf("RUN DNA", analysis);
 
     expect(challenge).toBeGreaterThan(-1);
+    expect(outcome).toBeGreaterThan(challenge);
+    expect(brief).toBeGreaterThan(outcome);
     expect(brief).toBeGreaterThan(challenge);
     expect(analysis).toBeGreaterThan(brief);
     expect(buildGrade).toBeGreaterThan(analysis);
     expect(runDna).toBeGreaterThan(analysis);
     expect(source).not.toContain("autoFocus");
+    expect(source.match(/data-testid="run-drill-outcome"/g)).toHaveLength(1);
   });
 
   it("maps death screen state without reaching into React", () => {

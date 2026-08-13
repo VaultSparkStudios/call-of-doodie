@@ -1,11 +1,11 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-12 (Session 151 closeout) -->
+<!-- generated-at: 2026-08-13 (Session 152 closeout) -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 151 closeout · 2026-08-12.
+> **Fast-boot brief** — generated at Session 152 closeout · 2026-08-13.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,12 +14,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 152 · 2026-08-12 · FOUNDER MODE                         ║
+║  Session 153 · 2026-08-13 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S151) - WHAT SHIPPED ══════════════════════════╗
-║  Session 151 put RUN THE FIX in the first death-screen viewport  ║
+╔══ LAST SESSION (S152) - WHAT SHIPPED ══════════════════════════╗
+║  Session 152 recovered S151 independently, closed accepted coac  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -28,7 +28,7 @@
 ║  Production    → https://callofdoodie.wtf/ ✓                     ║
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
-║  staging-preview → https://session-151-staging.call-of-doodi ✓   ║
+║  staging-preview → https://session-152-staging.call-of-doodi ✓   ║
 ║  Unit tests    → npm test — 1138/1138 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
@@ -41,17 +41,17 @@
 
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
-║    994/1000   ███████████████████████░   99%                     ║
-║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 5↑                      ║
-║    Last active: 0d  ·  Last closeout: 11d  ·  (active =…         ║
-║    Trend  ▆▆█▄▄  ↑  (last 5 sessions)                            ║
+║    997/1000   ███████████████████████░   100%                    ║
+║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 4↑                      ║
+║    Last active: 1d  ·  Last closeout: 12d  ·  (active =…         ║
+║    Trend  ▆█▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health        99    ██████████  ████▇█▇▇ →                ║
+║    Dev Health       100    ██████████  ███▇█▇▇█ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum          99    ██████████  █▇▇▇█▇▇▇ →                ║
-║    Engagement       100    ██████████  ▇█▇▇▇███ →                ║
+║    Momentum         100    ██████████  ▇▇▇█▇▇▇█ →                ║
+║    Engagement       100    ██████████  █▇▇▇████ →                ║
 ║    Process Qual     100    ██████████  █████▇▇▇ →                ║
 ║    Coherence         97    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -61,24 +61,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 151 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 152 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    1138/1138 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ████████████████████████  100% used                          ║
-║     200,000 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
-║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
+║  ✓  ██████░░░░░░░░░░░░░░░░░░   27% used                          ║
+║     73,297 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~36,649 tok/turn  ·  cache 50%  ·  4 turns to compact        ║
+║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1138/1138 passing (2026-08-12T08:03:09.836Z)   ║
-║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         1138/1138 passing (2026-08-13T00:43:14.000Z)   ║
+║  ✓  Velocity      4 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         45208 FORGE  ·  4d old                         ║
-║  ⛔  Truth         all S151 repository-owned audit items are…     ║
+║  ✓  IGNIS         45208 FORGE  ·  5d old                         ║
+║  ⛔  Truth         S152 repository-owned arc scope is…            ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.196  (healthy)                               ║
@@ -87,7 +88,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⛔  Doctor        123/180 (69%)  ·  2 failing                    ║
+║  ⛔  Doctor        127/180 (72%)  ·  1 failing                    ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
@@ -95,8 +96,8 @@
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    90d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║   112d · Physical launch QA                                      ║
+║    91d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║   113d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -113,7 +114,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▆▆█▄▄  5↑  (last 5 sessions)                        ║
+║  Velocity:   ▆█▄▄▄  4↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -142,5 +143,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 151 closeout · 2026-08-12*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 152 closeout · 2026-08-13*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

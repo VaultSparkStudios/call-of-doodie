@@ -46,7 +46,7 @@
     "staging": [
       {
         "label": "cloudflare-pages",
-        "url": "https://session-151-staging.call-of-doodie.pages.dev/"
+        "url": "https://session-152-staging.call-of-doodie.pages.dev/"
       }
     ],
     "production": [
@@ -117,7 +117,7 @@
   "hosting": {
     "hostingProvider": "cloudflare-pages",
     "liveUrl": "https://callofdoodie.wtf/",
-    "stagingUrl": "https://session-151-staging.call-of-doodie.pages.dev/",
+    "stagingUrl": "https://session-152-staging.call-of-doodie.pages.dev/",
     "privatePreviewUrl": "https://call-of-doodie.pages.dev/",
     "localDevUrl": null,
     "deployStatus": "deployed-unannounced",
@@ -173,6 +173,6 @@
   "releaseProjection": {
     "schemaVersion": "release-manifest-projection-v1",
     "source": "context/PROJECT_STATUS.json",
-    "sourceFingerprint": "b84b7b64cef89fc4da40ac0921362c790b03c3472c7549639e4a96a44b814c2e"
+    "sourceFingerprint": "576657c49fdd458bebda21ebd53c26d911648e645cb0fc68641f92759ab0f475"
   }
 }

@@ -71,6 +71,38 @@ export function buildWeaponMasteryContract(weaponKills = null) {
   };
 }
 
+export function buildWeaponMasteryProjection(weaponKills = null) {
+  const contract = buildWeaponMasteryContract(weaponKills);
+  if (!contract.evidenceAvailable) return null;
+  if (!contract.nextMastery) {
+    return {
+      schemaVersion: 'weapon-mastery-projection-v1',
+      source: contract.source,
+      availability: contract.availability,
+      complete: true,
+      label: 'ARSENAL MASTERY COMPLETE',
+      detail: `${contract.masteredCount}/${contract.weapons.length} weapons at LEGEND`,
+    };
+  }
+  const target = contract.nextMastery;
+  return {
+    schemaVersion: 'weapon-mastery-projection-v1',
+    source: contract.source,
+    availability: contract.availability,
+    complete: false,
+    weaponIndex: target.index,
+    weaponName: target.name,
+    currentTier: target.tier,
+    currentTierLabel: target.tierLabel,
+    currentKills: target.kills,
+    nextTier: target.nextTier.id,
+    nextTierLabel: target.nextTier.label,
+    killsRemaining: target.nextTier.killsNeeded,
+    label: `${target.name.toUpperCase()} · ${target.tierLabel} → ${target.nextTier.label}`,
+    detail: `${target.nextTier.killsNeeded} weapon kill${target.nextTier.killsNeeded === 1 ? '' : 's'} to the next tier`,
+  };
+}
+
 export function buildArsenalMilestoneContract(accountLevel = 1) {
   const currentAccountLevel = level(accountLevel);
   const weapons = WEAPONS.map((_, index) => getWeaponArsenalMilestone(index, currentAccountLevel));

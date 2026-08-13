@@ -125,7 +125,7 @@ import {
 } from "./systems/waveDirector.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
 import { buildRematchKit, buildRematchDrillBrief, buildRematchMasteryReceipt, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
-import { buildActiveRunDrill } from "./systems/runDrill.js";
+import { buildActiveRunDrill, sanitizeCarriedRunDrill } from "./systems/runDrill.js";
 import {
   createDeathStudioEvents,
   createRunHistoryEntry,
@@ -136,7 +136,6 @@ import {
   readRunModeFlags,
 } from "./systems/runSession.js";
 import { buildDeathScreenProps } from "./systems/deathFlow.js";
-import { sanitizeNextRunContract } from "./utils/commandersOrders.js";
 import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./systems/zombieMode.js";
@@ -4432,7 +4431,7 @@ export default function CallOfDoodie() {
       username,
       DIFFICULTIES,
       onStartGame: startGame,
-      onMenu: (nextRunContract) => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPendingNextRunContract(sanitizeNextRunContract(nextRunContract)); setScreen("menu"); },
+      onMenu: (nextRunDrill) => { stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0); setPendingNextRunContract(sanitizeCarriedRunDrill(nextRunDrill)); setScreen("menu"); },
       onRefreshLeaderboard: refreshLeaderboard,
       onSubmitScore: submitScore,
       onSaveFieldReport: savePostRunFieldReport,

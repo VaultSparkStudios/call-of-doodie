@@ -314,7 +314,7 @@ describe("HomeV2", () => {
         <HomeV2
           {...baseProps}
           onStart={onStart}
-          pendingNextRunContract={{ id: "tempo", focus: "Spend cooldowns", target: "Throw before the crowd peaks.", proof: "No unused-grenade death." }}
+          pendingNextRunContract={{ id: "tempo", title: "Spend cooldowns", detail: "Throw before the crowd peaks.", contract: { id: "tempo", focus: "Spend cooldowns", target: "Throw before the crowd peaks.", proof: "No unused-grenade death." }, baselineWave: 7, baselineScore: 1200, seed: 99, launchKind: "replay_seed", acceptedAt: 123 }}
           onConsumeNextRunContract={onConsumeNextRunContract}
         />,
       );
@@ -327,8 +327,25 @@ describe("HomeV2", () => {
     const action = [...order.querySelectorAll("button")].find((button) => /DEPLOY/.test(button.textContent));
     await act(async () => { action.click(); });
     expect(onConsumeNextRunContract).toHaveBeenCalledTimes(1);
-    expect(onStart).toHaveBeenCalledTimes(1);
+    expect(onStart).toHaveBeenCalledWith(99, expect.objectContaining({ drill: expect.objectContaining({ schemaVersion: "menu-run-drill-v1", id: "tempo", baselineWave: 7, baselineScore: 1200 }) }));
     localStorage.removeItem("cod-career-v1");
+  });
+
+  it("projects authoritative weapon mastery inside mature-player orders", async () => {
+    saveVerifiedInput();
+    localStorage.setItem("cod-career-v1", JSON.stringify({ totalRuns: 5, totalKills: 120, weaponLegendKills: [49, 10, 0] }));
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<HomeV2 {...baseProps} />);
+    });
+    const receipt = container.querySelector('[data-testid="mastery-command-brief"]');
+    expect(receipt).toBeTruthy();
+    expect(receipt.textContent).toContain("MASTERY · BANANA BLASTER");
+    expect(receipt.textContent).toContain("ROOKIE → TRAINED · 1 KILL");
+    expect(receipt.textContent).toContain("ALL OPEN");
+    expect(receipt.dataset.masterySource).toBe("career.weaponLegendKills");
   });
 
   it("hydrates replay links including starter loadout", async () => {

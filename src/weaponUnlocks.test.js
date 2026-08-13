@@ -3,6 +3,7 @@ import { WEAPONS, WEAPON_ARSENAL_MILESTONE_LEVELS } from './constants.js';
 import {
   buildArsenalMilestoneContract,
   buildWeaponMasteryContract,
+  buildWeaponMasteryProjection,
   getWeaponArsenalMilestone,
 } from './utils/arsenalMastery.js';
 
@@ -50,5 +51,30 @@ describe('open arsenal milestone contract', () => {
 
   it('does not infer mastery when per-weapon evidence is absent', () => {
     expect(buildWeaponMasteryContract()).toMatchObject({ evidenceAvailable: false, masteredCount: null, nextMastery: null });
+    expect(buildWeaponMasteryProjection()).toBeNull();
+  });
+
+  it('projects the nearest evidence-backed mastery tier without changing access', () => {
+    const projection = buildWeaponMasteryProjection([49, 10, 1000]);
+    expect(projection).toMatchObject({
+      schemaVersion: 'weapon-mastery-projection-v1',
+      source: 'career.weaponLegendKills',
+      availability: 'all-open',
+      complete: false,
+      weaponIndex: 0,
+      currentTier: 'rookie',
+      nextTier: 'trained',
+      killsRemaining: 1,
+    });
+    expect(projection.label).toContain('ROOKIE → TRAINED');
+    expect(projection.detail).toContain('1 weapon kill');
+  });
+
+  it('reports a complete arsenal only when every weapon has legend evidence', () => {
+    expect(buildWeaponMasteryProjection(WEAPONS.map(() => 1000))).toMatchObject({
+      complete: true,
+      label: 'ARSENAL MASTERY COMPLETE',
+      availability: 'all-open',
+    });
   });
 });

@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-08-12 (Session 152 — recovery, closed-loop coaching, and mastery command)
+
+- Reconstructed S151 from handoff/worklog/closeout/diff/git evidence, parsed every changed JSON/NDJSON, verified `~/.claude.json`, reran the exact 191-file / 1,138-test corpus, and distinguished committed implementation from interrupted closeout metadata.
+- Finished and pushed the clean recovery boundary as `1952f510 recover S151 closeout`, then sealed exact-SHA workflow and immutable production evidence in `f2255936`; no reset-hard or force-push was used.
+- Ran fresh startup, game-loop review, and `docs/AUDIT_2026-08-12_2.json`; promoted and implemented all three L2 items.
+- Added `menu-run-drill-v1` sanitization and preserved drill identity/seed/baseline/contract through direct replay and RAGE QUIT → menu → draft → deploy.
+- Moved the observed prior drill receipt before ONE VERDICT with comparable-only score delta and explicit no-causality language.
+- Projected the nearest authoritative per-weapon mastery tier into mature-player Commander's Orders while retaining precedence and all-open availability.
+- Real Chromium completed the full two-death transaction. Pixel review found and fixed a mobile bottom-dock overlap in the mastery receipt; the death screen's tactical palette is intentionally theme-invariant.
+- Deployed isolated staging `session-152-staging` / immutable `25837962`; hosted matrix passed 1,020/1,020 and CANON-053 bound 14 inspected captures with zero blockers.
+- Saturation confirmed zero executable Genius items; the innovation pack found no additional viable repository-local candidate. Independent release gate returned GO for engineering publication and NO-GO for SPARKED.
+- Final exact closeout tree passed 191/191 files and 1,142/1,142 assertions in 152.21 seconds after every canonical write-back surface and generated cache was current.
+
+Intent outcome: repository-owned recovery, audit, implementation, saturation, and staging objectives achieved. Exact-tree final suite, canonical closeout, direct-main push, CI, production deployment, and live smoke complete the authorized follow-through.
+
 ## 2026-08-12 (Session 151 — revenge brief, mastery truth, stats twin, and arena boundary)
 
 - Shipped all four premise-verified audit items: first-viewport RUN THE FIX, per-weapon-kill mastery authority, `analytica-feed-v1` public stats twin, and a pure deterministic arena-environment boundary.

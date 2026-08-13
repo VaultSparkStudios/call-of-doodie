@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildActiveRunDrill, buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillLiveProgress, buildRunDrillOutcomeReceipt } from "./runDrill.js";
+import { buildActiveRunDrill, buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillLiveProgress, buildRunDrillOutcomeReceipt, sanitizeCarriedRunDrill } from "./runDrill.js";
 
 describe("next-run drill continuity", () => {
   const drill = { id: "strafe", title: "Strafe the burst", detail: "Move perpendicular." };
@@ -21,6 +21,25 @@ describe("next-run drill continuity", () => {
       practice: false,
       label: "LIVE DRILL",
     });
+  });
+
+  it("allowlists and bounds the drill envelope carried through the menu", () => {
+    const carried = sanitizeCarriedRunDrill({
+      id: " strafe ", title: "t".repeat(200), detail: "d".repeat(400),
+      contract: { id: "tempo", focus: "Spend cooldowns", target: "x".repeat(300), proof: "Use one grenade." },
+      baselineWave: 7, baselineScore: 1200, seed: 99, launchKind: "replay_seed", acceptedAt: 123,
+      ignored: "nope",
+    });
+    expect(carried).toMatchObject({
+      schemaVersion: "menu-run-drill-v1", id: "strafe", baselineWave: 7, baselineScore: 1200,
+      seed: 99, launchKind: "replay_seed", acceptedAt: 123,
+      contract: { id: "tempo", focus: "Spend cooldowns", proof: "Use one grenade." },
+    });
+    expect(carried.title).toHaveLength(120);
+    expect(carried.detail).toHaveLength(280);
+    expect(carried.contract.target).toHaveLength(220);
+    expect(carried.ignored).toBeUndefined();
+    expect(sanitizeCarriedRunDrill({ id: "partial" })).toBeNull();
   });
 
   it("reports observed improvement without claiming the drill caused it", () => {

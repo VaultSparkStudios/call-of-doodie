@@ -38,10 +38,11 @@ describe("commandersOrders", () => {
 
     const contract = buildCommandersOrder({
       aimCheck: { status: "verified" },
-      pendingNextRunContract: { id: "tempo", focus: "Spend", target: "Throw.", proof: "No unused grenade." },
+      pendingNextRunContract: { contract: { id: "tempo", focus: "Spend", target: "Throw.", proof: "No unused grenade." } },
       journey,
+      masteryProjection: { label: "PLUNGER · ROOKIE → TRAINED" },
     });
-    expect(contract).toMatchObject({ kind: "next-run-contract", dismissible: true, reasonCode: "next-run-contract:tempo" });
+    expect(contract).toMatchObject({ kind: "next-run-contract", dismissible: true, reasonCode: "next-run-contract:tempo", masteryProjection: { label: "PLUNGER · ROOKIE → TRAINED" } });
 
     expect(buildCommandersOrder({ aimCheck: { status: "verified" }, journey }).kind).toBe("journey");
     expect(buildCommandersOrder({ aimCheck: { status: "verified" }, runIntel: { focus: "safe_opener", directive: "Keep space." } }).kind).toBe("run-intelligence");
@@ -56,4 +57,3 @@ describe("commandersOrders", () => {
     expect(order.kind).toBe("journey");
   });
 });
-

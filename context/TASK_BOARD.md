@@ -34,9 +34,18 @@ Public-safe launch roadmap summary.
 - [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
-## Current Session Intent: Session 151
+## Current Session Intent: Session 152
 
-Complete the autonomous `/arc` from synchronized main: specialty game-loop and release review, fresh nine-axis audit, implementation of every accepted repo-owned item, isolated staging and CANON-053 rendered-pixel proof, canonical closeout, direct-main publication, and production verification. SPARKED promotion is not implied.
+Recover and independently prove Session 151, then complete one continuous autonomous `/arc` from synchronized main: canonical startup, specialty game-loop and release review, a fresh premise-verified nine-axis audit, implementation of every accepted repository-owned item plus viable second-order innovations, isolated staging and CANON-053 rendered-pixel proof for any UI changes, canonical closeout, direct-main publication, and production verification. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
+
+## Session 152 — Closed-loop coaching and mastery command
+
+- [x] [SIL:3] **DONE S152** Versioned, bounded drill evidence now survives direct replay and RAGE QUIT → menu → deploy, including seed and baseline receipts.
+- [x] [SIL:3] **DONE S152** The prior observed drill result appears before the next verdict exactly once, with comparable-only deltas and no causal overclaim.
+- [x] [SIL:2] **DONE S152** Commander's Orders projects the nearest per-weapon mastery tier from the authoritative local kill ledger while every weapon remains open.
+- [x] [SIL:1] **DONE S152** React's death-screen playtest controls no longer mix border shorthand with `borderColor` during rerender.
+
+**Runway exception:** the Unified Genius List has zero executable items and the generated innovation pack found no additional repository-local candidate beyond the implemented audit innovations. Remaining work requires participant, physical-device, credential/provider, publication, current performance, or explicit SPARKED evidence.
 
 ## Now
 

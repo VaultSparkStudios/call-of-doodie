@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-12 — Session 152 | Total: 997/1000 | Velocity: 4 | Debt: ↓
+
+SIL 997/1000: Recovered an interrupted closeout without trusting phantom green, then closed the game's coaching loop across the least obvious navigation path. Real browser pixels changed the implementation twice: mastery was compacted around the mobile dock, while a suspected death overlay was disproved through DOM and element-level evidence instead of prompting a false fix.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | ↑ | Focused courts, exact architecture headroom, lint, build, schema, public/security/dependency/assets/media, staging, and CANON-053 pass; the generated-cache miss was attributable and repaired before the final tree court. |
+| Alignment | 100 | → | Humiliation → lesson → accepted correction → observed result → next prescription is now one honest loop, and mastery still requires real weapon evidence. |
+| Momentum | 100 | ↑ | Recovery plus three L2 audit items and one second-order React warning fix completed continuously without speculative breadth. |
+| Engagement | 100 | → | Accepted coaching survives the menu, its outcome leads the next death screen, and the nearest weapon campaign stays visible at deploy. |
+| Process Qual | 100 | ↑ | Recovery verified claims independently; real browser state proved the complete two-death path; DOM evidence prevented a false visual fix. |
+| Coherence | 99 | ↑ | DeathScreen, App, HomeV2, Commander's Orders, mastery, audit, public status, and visual receipts share one versioned contract; global Doctor remains externally owned. |
+| Security | 100 | → | Explicit allowlisting and field bounds harden carried state; release security and npm audit pass with no dependency or credential expansion. |
+| Ecosystem | 99 | ↓ | Human and agent receipts agree and staging is isolated; external Studio Doctor reds and provider gates remain honestly separate. |
+| Capital | 100 | → | Deterministic local evidence reuses existing runtime/state and adds zero variable cost or hosted inference. |
+| Automation | 99 | ↓ | Unit/component/order courts plus 1,020 hosted checks and 14 pixel captures cover the change; physical-device and current CWV evidence remain deliberately unclaimed. |
+
+Rolling averages: 3-session 994.3 · 5-session 992.8 · sparkline `█████`.
+
+Top win: made accepted coaching path-independent and outcome-first, then proved the exact player transaction in a real browser.
+Top gap: participant outcomes, physical input/install, project-scoped providers, and current Core Web Vitals remain external evidence gaps rather than local implementation gaps.
+Intent outcome: Achieved for recovery, complete repo-owned arc, saturation, isolated staging, and engineering release readiness; direct-main/production follow-through completes closeout while SPARKED remains NO-GO.
+
+**Brainstorm**
+1. When consented receipts exist, compare accepted-drill repeatability across two attempts before changing coaching rank weights.
+2. Let players pin a weapon campaign only after production evidence shows the compact mastery projection is used.
+3. Teach the broad visual matrix one reusable authenticated/stateful fixture protocol if touched-state work becomes frequent.
+
+**Committed to TASK_BOARD:** no new executable work invented; all candidates remain evidence- or provider-gated.
+
 ## 2026-08-12 — Session 151 | Total: 994/1000 | Velocity: 5 | Debt: ↓
 
 SIL 994/1000: Shipped all four verified audit items and let rendered pixels overrule the apparently green source/analytics story. The direct court exposed a late autofocus that hid the entire revenge brief; fixing it made the core death → lesson → rematch promise true in the first viewport.

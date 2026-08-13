@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 151 production-verified: first-viewport revenge brief, per-weapon mastery truth, Analytica stats twin, and pure seeded arena boundary are live from 1952f510.",
-  "nextMilestone": "Begin Session 152 from the exhausted repo-owned frontier; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
+  "currentFocus": "Session 152 staged and release-gated: accepted coaching now survives menu return, its observed outcome precedes the next verdict, and Commander's Orders projects authoritative weapon mastery.",
+  "nextMilestone": "Complete exact-tree S152 closeout, direct-main CI/deploy, and production smoke; preserve SPARKED NO-GO until external evidence and explicit founder approval are real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -368,6 +368,25 @@
       "url": "https://5be7b044.call-of-doodie.pages.dev/",
       "type": "production-deploy",
       "command": "source 1952f510; workflow 31631272045; shell 7/7; cutover 5/5; replay 3/3; backend 5/5; leaderboard isolation and Studio launch surfaces pass"
+    },
+    {
+      "session": 152,
+      "status": "green",
+      "url": "https://session-152-staging.call-of-doodie.pages.dev/",
+      "type": "staging-preview",
+      "command": "immutable 25837962; hosted public visual matrix 1020/1020; 14 hash-bound captures; direct mastery and drill-outcome desktop/mobile review complete"
+    },
+    {
+      "session": 152,
+      "status": "green",
+      "type": "release-candidate",
+      "command": "focused 57/57; strict lint; schema/architecture; public 28/28; deployable build; security/npm audit zero; dependency/assets/media/cost/CANON-053 gates; independent engineering GO and SPARKED NO-GO"
+    },
+    {
+      "session": 152,
+      "status": "green",
+      "type": "tests",
+      "command": "final exact closeout tree: 1142/1142 assertions across 191 files in 152.21s; focused 57/57; Hot Context freshness 3/3"
     }
   ],
   "blockers": [
@@ -377,7 +396,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "VITE_SENTRY_DSN GitHub secret is unset; S112 probe found a SENTRY_DSN key in the studio-ops secrets store but its capability declaration does not confirm project-scope to call-of-doodie - founder confirmation needed before wiring."
   ],
-  "lastUpdated": "2026-08-12",
+  "lastUpdated": "2026-08-13",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",
@@ -385,13 +404,13 @@
   "ignisScore": 45208,
   "ignisGrade": "FORGE",
   "ignisLastComputed": "2026-08-08",
-  "silSession": 151,
+  "silSession": 152,
   "silScore": 994,
   "silAvg3": 994.3,
-  "silVelocity": 5,
+  "silVelocity": 4,
   "silDebt": "down",
-  "silLastSession": 151,
-  "currentSession": 151,
+  "silLastSession": 152,
+  "currentSession": 152,
   "sessionMode": "founder",
   "lastAgent": "codex",
   "testsPassing": 1138,
@@ -425,8 +444,8 @@
   "freeTierCostStatus": "cost-neutral",
   "runtimeUrl": "https://callofdoodie.wtf/",
   "stagingType": "cloudflare-pages",
-  "stagingUrl": "https://session-151-staging.call-of-doodie.pages.dev/",
-  "testsLastRun": "2026-08-12T08:03:09.836Z",
+  "stagingUrl": "https://session-152-staging.call-of-doodie.pages.dev/",
+  "testsLastRun": "2026-08-13T00:43:14.000Z",
   "sanitizationLastCleared": "2026-08-08T07:10:38.026Z",
   "sessionShellHygiene": {
     "session": 148,
@@ -437,29 +456,27 @@
     "scope": "session-owned timed-out Vitest process and children were explicitly identified and closed; unrelated host services excluded"
   },
   "doctorScore": {
-    "date": "2026-08-11",
-    "ranAt": "2026-08-11T05:55:34.106Z",
+    "date": "2026-08-13",
+    "ranAt": "2026-08-13T00:38:08.871Z",
     "overallPass": false,
-    "passing": 123,
-    "warning": 52,
-    "failing": 2,
-    "blockingFailing": 2,
+    "passing": 127,
+    "warning": 49,
+    "failing": 1,
+    "blockingFailing": 1,
     "advisoryFailing": 0,
     "skipped": 3,
     "ran": 177,
     "total": 180,
-    "score": 69,
+    "score": 72,
     "scope": "studio-ops-control-plane external to this repo",
-    "blockingDetail": "CPX51 capacity admission and cross-surface coherence are Studio Ops control-plane findings; project-local release gates remain green"
+    "blockingDetail": "CPX51 live capacity admission receipt is a Studio Ops control-plane finding; signed Ark repo-question queued. Project-local release gates remain green."
   },
-  "lastSessionSummary": "Session 151 put RUN THE FIX in the first death-screen viewport, made weapon mastery depend only on per-weapon kills, bound the public stats twin to one 15-second contract, extracted exact-parity arena generation, and passed direct rendered-pixel plus exact-source production verification while preserving SPARKED NO-GO.",
-  "testsAssertionsPassing": 1138,
-  "testsAssertionsTotal": 1138,
+  "lastSessionSummary": "Session 152 recovered S151 independently, closed accepted coaching across menu return, put observed drill outcome before the next verdict, projected authoritative mastery into Commander's Orders, exhausted executable work, and passed isolated staging/rendered-pixel release gates while preserving SPARKED NO-GO.",
+  "testsAssertionsPassing": 1142,
+  "testsAssertionsTotal": 1142,
   "testsAssertionsFiles": 191,
   "testsFlaky": [],
-  "testsInconclusive": [
-    "Monolithic single-worker corpus exceeded 20 minutes under shared-host contention; the same corpus completed through four deterministic shards."
-  ],
+  "testsInconclusive": [],
   "testsEnvBlocked": [],
   "testsDeferred": [],
   "testsBudgetExhausted": false

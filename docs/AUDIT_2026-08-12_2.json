@@ -1,0 +1,163 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S152)",
+  "generatedAt": "2026-08-12",
+  "session": 152,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-product-game-loop-public-release",
+  "meta": {
+    "generatedAt": "2026-08-12",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-product-game-loop-public-release",
+    "candidateCount": 29,
+    "promotedCount": 3,
+    "combinedPriority": 63.2,
+    "top3": [
+      "menu-revenge-drill-continuity",
+      "drill-outcome-first",
+      "mastery-command-brief"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "The bounded sampler covered every repository category within 30,000 tokens. Studio Oracle returned no-evidence for the cross-component continuity claim, so the premise was verified directly: DeathScreen passes only debrief.nextRunContract to onMenu; HomeV2 consumes that copy before calling onStart with no drill; App creates activeRunDrill only from challengeOpts.drill. Direct source also confirms drillOutcome currently lives inside the collapsed secondary analysis and buildWeaponMasteryContract.nextMastery has no Commander's Orders consumer.",
+    "gameLoopReview": {
+      "loopTightness": 9.1,
+      "progressionCurve": 8.7,
+      "sessionEngagement": 8.9,
+      "retentionHooks": 8.8,
+      "soulFidelity": 9.4,
+      "overall": 9.0,
+      "evidenceBoundary": "No docs/PLAYTESTS corpus exists, so participant retention, balance, and pacing outcomes remain unclaimed. Scores describe implementation maturity and source-backed loop coherence only.",
+      "topActions": [
+        "Preserve accepted drill evidence through the death-to-menu-to-run path.",
+        "Close the feedback transaction by showing the prior observed outcome before the next prescription.",
+        "Project the nearest authoritative weapon-mastery target without inventing hosted intelligence."
+      ]
+    },
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. Engineering updates may use isolated staging and direct-main closeout; SPARKED promotion is neither authorized nor implied.",
+      "quality": "Recovered Session 151 exact tree passes 191/191 files and 1,138/1,138 tests plus strict lint, deployable build, security, project canon, and CANON-053 courts.",
+      "architecture": "React 19/Vite 7 canvas shooter. App.jsx is green at 4,884/5,000 lines and 1,752/1,775 game-loop lines with 36 system boundaries.",
+      "gameLoop": "Combat, progression, rivalry, coaching, and advisory replay trust are deep. The highest-value current gap is a broken evidence handoff in the already-authored revenge loop, not another content pack or unmeasured balance retune.",
+      "cost": "All promoted work is deterministic client-side logic over existing local career and run evidence. No dependency, hosted inference, new service, or variable per-player cost is introduced."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Finish the existing drill contract across every accepted navigation path instead of adding disconnected breadth.",
+    "innovation": "Treat post-run coaching as a closed evidence transaction: accept, execute, observe, then prescribe again.",
+    "ui / ux / user-experience": "Put the observed prior outcome beside the first-viewport revenge brief and keep mastery projection compact and readable.",
+    "feedback loop": "Repair the death-to-menu evidence handoff and make the result visible before the next recommendation.",
+    "gamification / engagement / immersion": "Turn authoritative per-weapon kills into a concrete nearest-tier campaign without locking weapons or inventing grind.",
+    "ai / intelligence integration": "Use deterministic local evidence ranking for coaching and mastery projection; hosted inference remains unnecessary.",
+    "security": "Sanitize the carried drill envelope to an explicit allowlist and bounded fields before it crosses component state.",
+    "speed / organization / efficiency": "Centralize menu drill normalization in a pure system helper with focused tests, avoiding another bespoke state shape.",
+    "token / api cost reduction": "Reuse runDrill, arsenalMastery, and Commander's Orders authorities; add zero API calls and keep regression proof in small pure-module courts."
+  },
+  "items": [
+    {
+      "slug": "menu-revenge-drill-continuity",
+      "tier": "FIRE",
+      "axis": "feedback / feature depth / security",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 23.7,
+      "status": "implemented",
+      "why": "RUN THE FIX launches a versioned drill directly, but RAGE QUIT passes only four text fields to the menu. HomeV2 then clears them and starts a plain run, so a player who accepts the visible menu order receives no activeRunDrill and no outcome receipt.",
+      "recipe": "Create one bounded menu-drill envelope carrying sanitized contract copy, drill identity, seed, baseline wave/score, launch kind, and acceptance time. Make DeathScreen hand that envelope to the menu, let Commander's Orders render its contract, and have every deploy action pass the envelope through challengeOpts.drill before consumption.",
+      "measurement": "Pure tests reject malformed or oversized fields and preserve baseline/seed. Component tests prove DeathScreen hands off a drill envelope, HomeV2 deploy passes it, and App creates activeRunDrill. Existing direct RUN THE FIX behavior remains green.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Pass the existing drill launch object through menu state and deploy." },
+        "L2": { "effortHours": 5, "recipe": "Full: versioned allowlisted sanitizer, all deploy paths, focused component/system tests, and honest evidence metadata." },
+        "L3": { "effortHours": 8, "recipe": "Persist a bounded interrupted drill across page reload with explicit expiry and storage-health receipts." }
+      }
+    },
+    {
+      "slug": "drill-outcome-first",
+      "tier": "FIRE",
+      "axis": "ui / ux / feedback / engagement",
+      "effortHours": 3,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 20.9,
+      "status": "implemented",
+      "why": "When an active drill does generate an outcome, the result is currently inside the collapsed secondary-analysis block. The first viewport immediately prescribes another fix without first telling the player whether the accepted prior correction improved, held, or regressed against its baseline.",
+      "recipe": "Render one compact LAST ORDER RESULT receipt immediately before ONE VERDICT whenever drillOutcome exists. Show observed-versus-baseline wave, comparable score delta only when valid, and repeatability evidence without causal language. Remove the duplicate detailed outcome from the collapsed analysis.",
+      "measurement": "Order tests prove outcome precedes the next verdict and appears once. Pure receipt tests preserve rematch score non-comparability and observed-outcome-only language. Desktop/mobile dark/light captures show a readable first-viewport hierarchy with no overflow.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Move the existing drill outcome above the revenge brief." },
+        "L2": { "effortHours": 3, "recipe": "Full: compact outcome-first receipt, de-duplication, semantic labels, order tests, and rendered-pixel proof." },
+        "L3": { "effortHours": 5, "recipe": "Add a three-attempt mini-trend when enough local receipts exist, still avoiding causal claims." }
+      }
+    },
+    {
+      "slug": "mastery-command-brief",
+      "tier": "ICE",
+      "axis": "gamification / ai / innovation",
+      "effortHours": 3,
+      "impact": 7,
+      "innovation": 9,
+      "priority": 18.6,
+      "status": "implemented",
+      "why": "Session 151 established one authoritative per-weapon mastery contract and computes its nearest target, but Commander's Orders never consumes it. The front door therefore knows the player's next evidence-backed weapon tier yet leaves that progression thread outside the one unified directive surface.",
+      "recipe": "Build a portable weapon-mastery projection from career.weaponLegendKills and attach it to every mature-player Commander's Order as a compact supporting receipt: weapon, current tier/kills, next tier, kills remaining, source, and all-open availability. Keep input proof, onboarding, and last-run correction precedence unchanged; do not auto-switch weapons or claim projected time.",
+      "measurement": "Pure tests cover zero-kill, threshold, legend-complete, unavailable-evidence, and order precedence. HomeV2 component coverage proves the receipt is driven by career.weaponLegendKills and renders no invented target when evidence is absent.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add one nearest-tier line to the existing command brief." },
+        "L2": { "effortHours": 3, "recipe": "Full: portable projection receipt, mature-player integration, accessible rendering, and cross-authority tests." },
+        "L3": { "effortHours": 5, "recipe": "Let the player explicitly pin one weapon campaign while keeping all weapons open and local-only." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "participant-retention-retune",
+      "reason": "DEFER — no docs/PLAYTESTS corpus exists. Session length, return rate, and numeric balance cannot be inferred from implementation depth."
+    },
+    {
+      "slug": "prestige-curve-retune",
+      "reason": "CULL — no new participant or production outcome establishes a better numeric curve."
+    },
+    {
+      "slug": "new-mode-content-pack",
+      "reason": "CULL — source shows broad mode, enemy, build, mission, rivalry, and weekly depth; the broken continuation path outranks new breadth."
+    },
+    {
+      "slug": "hosted-ai-coach",
+      "reason": "CULL — existing deterministic run receipts contain the necessary evidence, while hosted inference would add latency and variable cost."
+    },
+    {
+      "slug": "mobile-control-density-retune",
+      "reason": "DATA-BLOCKED — the router suggestion itself depends on real mobile usage evidence that does not exist in this repository."
+    },
+    {
+      "slug": "full-replay-authority",
+      "reason": "DEFER — current replay coverage is explicitly advisory; full physics parity is a separate architecture initiative, not a safe audit bolt-on."
+    },
+    {
+      "slug": "identity-provider-and-mail-readiness",
+      "reason": "DEFER — project-scoped identity verification, telemetry credentials, and reply-capable mail require external provider evidence and remain SPARKED gates."
+    },
+    {
+      "slug": "app-shell-extraction-for-its-own-sake",
+      "reason": "CULL — the architecture court is green with 116 total lines and 23 game-loop lines of headroom. No current feature is blocked by that margin."
+    },
+    {
+      "slug": "production-performance-claim",
+      "reason": "DEFER — S149 interaction timing is useful historical staging evidence, not a current full Core Web Vitals receipt."
+    }
+  ],
+  "executionLog": [
+    {
+      "session": 152,
+      "completedAt": "2026-08-12",
+      "items": [
+        "menu-revenge-drill-continuity",
+        "drill-outcome-first",
+        "mastery-command-brief"
+      ],
+      "evidence": "Focused courts pass 57/57 with strict lint green. A real browser completed death → RAGE QUIT → Commander's Orders deploy → second death and exposed LAST ORDER RESULT before ONE VERDICT. Desktop/mobile dark/light mastery captures and theme-invariant death-state captures were directly reviewed; hosted staging and full-suite evidence are added during closeout."
+    }
+  ]
+}

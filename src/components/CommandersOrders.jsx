@@ -46,6 +46,24 @@ export default function CommandersOrders({
         </div>
       )}
 
+      {order.masteryProjection && (
+        <div
+          data-testid="mastery-command-brief"
+          data-mastery-source={order.masteryProjection.source}
+          aria-label={`Weapon mastery target from ${order.masteryProjection.source}`}
+          style={{ marginTop: 9, padding: "8px 9px", borderRadius: 7, background: isLight ? "rgba(0,100,66,0.06)" : "rgba(127,230,255,0.07)", border: `1px solid ${isLight ? "rgba(0,100,66,0.22)" : "rgba(127,230,255,0.22)"}` }}
+        >
+          <div style={{ color: supporting, fontSize: 12, fontWeight: 900, letterSpacing: 1 }}>
+            MASTERY · {order.masteryProjection.complete ? "ARSENAL COMPLETE" : order.masteryProjection.weaponName.toUpperCase()}
+          </div>
+          <div style={{ color: palette.ink, fontSize: 13, lineHeight: 1.4, marginTop: 3, fontWeight: 900 }}>
+            {order.masteryProjection.complete
+              ? `${order.masteryProjection.detail} · ALL OPEN`
+              : `${order.masteryProjection.currentTierLabel} → ${order.masteryProjection.nextTierLabel} · ${order.masteryProjection.killsRemaining} KILL${order.masteryProjection.killsRemaining === 1 ? "" : "S"} · ALL OPEN`}
+          </div>
+        </div>
+      )}
+
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 9, flexWrap: "wrap" }}>
         {order.action && (
           <button

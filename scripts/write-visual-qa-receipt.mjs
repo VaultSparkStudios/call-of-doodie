@@ -56,14 +56,19 @@ for (const capturePath of reviewedCapturePaths) {
   const basename = path.basename(source);
   const theme = /(?:^|[-_])light(?:[-_.]|$)/i.test(basename) ? "light" : "dark";
   const width = /(?:^|[-_])mobile(?:[-_.]|$)/i.test(basename) ? 390 : 1440;
+  const state = basename.includes("mastery")
+    ? { file: `mastery-command-${theme}-${width}.png`, page: "Commander's Orders weapon-mastery projection" }
+    : basename.includes("drill-outcome")
+      ? { file: `drill-outcome-${theme}-${width}.png`, page: "Death-screen prior drill outcome before next verdict" }
+      : { file: `death-brief-${theme}-${width}.png`, page: "Death-screen revenge brief first viewport" };
   selected.push({
     source,
-    file: `death-brief-${theme}-${width}.png`,
+    file: state.file,
     theme,
     projectTheme: theme === "dark" ? "sewer-night" : "porcelain-day",
     width,
     height: width === 390 ? 844 : 1000,
-    page: "Death-screen revenge brief first viewport",
+    page: state.page,
   });
 }
 
@@ -112,7 +117,9 @@ const receipt = {
       `The source matrix passed ${audit.summary.passed}/${audit.summary.total} checks across ${audit.matrix.routes.length} routes, ${audit.matrix.themes.length} project themes, and ${audit.matrix.widths.join("px, ")}px widths.`,
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      ...(reviewedCapturePaths.length ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
+      ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("mastery")) ? ["The compact weapon-mastery projection is readable in Commander's Orders at 390px and 1440px across both project themes without colliding with the mobile dock."] : []),
+      ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("drill-outcome")) ? ["The prior drill's observed result appears before ONE VERDICT at 390px and 1440px; its wave, comparable score, repeatability evidence, and non-causal boundary remain readable."] : []),
+      ...(reviewedCapturePaths.some((capturePath) => !path.basename(capturePath).includes("mastery") && !path.basename(capturePath).includes("drill-outcome")) ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
       ...(stateReceipt ? [`The expanded Replay Coverage Passport passed ${stateReceipt.summary.passed}/${stateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
     ],
     fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],

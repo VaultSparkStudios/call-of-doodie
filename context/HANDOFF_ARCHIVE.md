@@ -509,3 +509,37 @@ Session Intent: Recover-check the prior session (confirmed Session 143 closed ou
 - Descoped: the button-size/density half of the mobile-handedness audit item was not implemented this session (handedness mirror only) — logged as a future L3 ladder rung, not a silent drop.
 - Known cosmetic nuance: off-screen threat arrow anchoring inherits the ADS-zoom canvas transform, so arrow position may shift slightly from the true screen edge while aim-down-sights zoom is active. Not a correctness bug.
 - Release: engineering FORGE, deployed/public-unlaunched; SPARKED remains NO-GO under the existing external/physical/publication/founder gates (unchanged this session).
+
+
+---
+<!-- archived: 2026-08-13 -->
+
+# Latest Handoff — Session 150
+
+Session Intent: Implement the full founder-approved plan for larger homepage text, clearer navigation, direct access to `/stats/`, a live statistics homepage showcase, and an evidence-based decision about the Command Deck; verify on isolated staging and complete canonical closeout.
+
+## Impact Summary
+
+**Headline.** The front door now reads like a game lobby instead of a compressed operator console: play is obvious, Stats is always reachable, live community activity is visible, and deeper tools stay available without dominating the first screen.
+
+**Impact.**
+- One public-navigation registry drives the desktop header, mobile dock, More drawer, generated page headers, and shared footer.
+- Homepage typography and controls have a readable floor, visible focus states, and 44px touch targets.
+- Live Community Stats now appears directly on the homepage and links to the complete `/stats/` page.
+- The Command Deck performance shell is retained for fast first paint, but “Command Deck” is removed as a redundant product/navigation layer; deep tools are grouped under Progress, Build, History, and Learn.
+
+## Evidence
+
+- Focused React/public-route court: 35/35; strict lint, schema/architecture, public contract 28/28, deployable build, security/npm audit, dependency, assets, launch media, release, and cost gates pass. Two serialized/limited broad-suite attempts exceeded 15 minutes under shared-host contention with no captured assertion failure; they are inconclusive, not green.
+- Isolated staging: `https://session-150-staging.call-of-doodie.pages.dev/`; immutable deployment: `https://684db11d.call-of-doodie.pages.dev/`.
+- Hosted broad visual matrix: 1,020/1,020. Focused desktop/mobile × dark/light navigation court reports zero overflow, undersized controls, measured contrast failures, or missing Stats routes.
+- Six representative captures are hash-bound in `docs/visual-qa/LATEST.json`. Direct host image viewing still fails at Windows `CryptUnprotectData`, so subjective pixel-perfect approval is unclaimed.
+
+## Where We Left Off
+
+- The founder-approved front-door plan is live from commit `c260d77` at immutable Cloudflare revision `https://76855535.call-of-doodie.pages.dev/`; exact-SHA workflow `31566376617`, shell 7/7, redirects 5/5, replay 3/3, launch surfaces, and production desktop/mobile theme navigation checks pass.
+- Preserve the single navigation registry and readable type/target floor when adding public pages.
+- Keep the performance shell, but do not reintroduce Command Deck as a competing navigation hierarchy.
+- SPARKED remains NO-GO under the existing external and explicit lifecycle gates.
+
+---

@@ -511,6 +511,23 @@
       },
       "delta": 0,
       "cause": "Session 150 staging-verified: a readable player-first homepage, one public navigation authority, direct and live Stats a"
+    },
+    {
+      "date": "2026-08-13",
+      "session": 152,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "S152 repository-owned arc scope is implemented and isolated-staging verified; direct-main exact-SHA publication and production smoke finish closeout. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-08-12",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 152 staged and release-gated: accepted coaching now survives menu return, its observed outcome precedes the next"
     }
   ]
 }
