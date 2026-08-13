@@ -1,14 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { getSecret } from "./lib/secrets.mjs";
+import { resolveProjectSupabasePublicConfig } from "./lib/project-supabase-config.mjs";
 
-function getConfig() {
-  const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
-  const anonKey = getSecret("SUPABASE_ANON_KEY", "supabase.admin");
-
-  if (!supabaseUrl || !anonKey) {
-    throw new Error("Missing VITE_SUPABASE_URL/SUPABASE_URL or VITE_SUPABASE_ANON_KEY/SUPABASE_ANON_KEY.");
-  }
-
+async function getConfig() {
+  const { supabaseUrl, anonKey } = await resolveProjectSupabasePublicConfig();
   return {
     functionsBaseUrl: `${supabaseUrl.replace(/\/+$/, "")}/functions/v1`,
     anonKey,
@@ -44,7 +38,7 @@ function assertStatus(result, expectedStatus, label) {
 }
 
 async function main() {
-  const { functionsBaseUrl, anonKey } = getConfig();
+  const { functionsBaseUrl, anonKey } = await getConfig();
   const clientUid = randomUUID();
   const suffix = clientUid.slice(0, 8);
   const callsign = `hc-${suffix}`;

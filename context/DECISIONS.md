@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-13 — Session 153 follow-through — Backend probes validate project identity, not generic capability presence
+
+**Decision:** Release probes and deployable builds may use a gateway Supabase client pair only when its URL and anonymous-key claims match Call of Doodie's declared project ref. If the shared gateway contains another project's generic pair, the tools resolve the same public configuration carried by the deployed artifact. They never return to direct `.env` parsing and never print the public key.
+
+**Rationale:** The application passed its production player flow while three CLIs produced 404/auth errors against an unrelated project. Credential presence is not project identity; a release verifier must prove it addressed the deployment it claims to test.
+
 ## 2026-08-13 — Session 153 — Playtest signal is explicit, local, and aggregate-only
 
 **Decision:** Input trust and threat readability are direct post-run questions, not inferred telemetry. The local flight recorder may retain the bounded four-answer receipt; any portable Playtest Pulse contains only distributions, sample size, and completeness state—never identifiers, free text, or a behavioral-outcome claim.

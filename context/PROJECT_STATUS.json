@@ -4,8 +4,8 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 153 release candidate verified: explicit playtest signal, advisory wave-plan replay evidence, and exact edge trust pass on isolated staging.",
-  "nextMilestone": "Publish the authorized S153 candidate to main, verify exact-SHA CI and immutable production, then seal the production receipt; preserve SPARKED NO-GO.",
+  "currentFocus": "Session 153 production-verified: explicit playtest signal, advisory replay plans, exact edge trust, and project-routed release probes are green.",
+  "nextMilestone": "Publish and verify the S153 verifier seal, then begin Session 154 from synchronized clean main; preserve SPARKED NO-GO until external evidence is real.",
   "testingSurfaces": [
     {
       "status": "green",
@@ -407,6 +407,19 @@
       "status": "green",
       "type": "release-candidate",
       "command": "195/195 files; 1153/1153 assertions; lint/build/architecture/runtime/public/security/dependency/supply-chain/cost/canon/visual/backend/replay/leaderboard gates green; FORGE GO, SPARKED NO-GO"
+    },
+    {
+      "session": 153,
+      "status": "green",
+      "url": "https://c9ee3b5e.call-of-doodie.pages.dev/",
+      "type": "production-deploy",
+      "command": "source 4b78142e; brief 31743411548; Supabase 31743411535; Cloudflare 31743411559; shell 7/7; cutover 5/5; playtest 11/11; backend 5/5; replay 3/3; leaderboard and launch surfaces pass"
+    },
+    {
+      "session": 153,
+      "status": "green",
+      "type": "verifier-seal",
+      "command": "project-ref-validating public Supabase resolver; full 196 files / 1155 assertions; lint, deployable build, runtime, security, backend, replay, and leaderboard gates pass"
     }
   ],
   "blockers": [
@@ -434,8 +447,8 @@
   "currentSession": 153,
   "sessionMode": "founder",
   "lastAgent": "codex",
-  "testsPassing": 1153,
-  "testsTotal": 1153,
+  "testsPassing": 1155,
+  "testsTotal": 1155,
   "entropyScore": 0.196,
   "entropyLastComputed": "2026-08-04",
   "silRubricVersion": "3.0",
@@ -490,10 +503,10 @@
     "total": 181,
     "score": 74
   },
-  "lastSessionSummary": "Session 153 made playtest feedback explicit and aggregate-only, added advisory wave-plan replay evidence, root-fixed the real edge trust path, and passed isolated staging/pixel/release gates while preserving SPARKED NO-GO.",
-  "testsAssertionsPassing": 1153,
-  "testsAssertionsTotal": 1153,
-  "testsAssertionsFiles": 195,
+  "lastSessionSummary": "Session 153 is production-published and verified; follow-through also root-fixed generic Supabase verifier routing while preserving direct-env prohibition and SPARKED NO-GO.",
+  "testsAssertionsPassing": 1155,
+  "testsAssertionsTotal": 1155,
+  "testsAssertionsFiles": 196,
   "testsFlaky": [],
   "testsInconclusive": 0,
   "testsEnvBlocked": [],

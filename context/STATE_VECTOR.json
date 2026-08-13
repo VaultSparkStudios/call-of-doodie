@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-13",
-  "generatedAtMs": 1786654409885,
+  "generatedAtMs": 1786655948297,
   "session": 153,
-  "vectorHash": "1eb8464150f1054e",
+  "vectorHash": "57d2878f9e2ac06b",
   "silTotal": 998,
   "silAvg3": 996.3,
   "velocity": 13,
@@ -24,7 +24,7 @@
     "[SIL:1] [S144] Mobile touch button-size/density control — the descoped half of t"
   ],
   "health": "green",
-  "truthStatus": "all S153 repository-owned audit items and discovered release-path defects are implemented and isolated-staging verified; exact-main production publication is the remaining engineering closeout step. SPARKED remains NO-GO.",
+  "truthStatus": "all S153 repository-owned audit items and discovered release/verifier defects are implemented, production-published, and verified; the verifier seal awaits exact-main publication. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 45208,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish the authorized S153 candidate to main, verify exact-SHA CI and immutable production, then seal the production receipt; preserve SPARKED NO-GO.",
-  "currentFocus": "Session 153 release candidate verified: explicit playtest signal, advisory wave-plan replay evidence, and exact edge trust pass on isolated staging.",
+  "nextMilestone": "Publish and verify the S153 verifier seal, then begin Session 154 from synchronized clean main; preserve SPARKED NO-GO until external evidence is real.",
+  "currentFocus": "Session 153 production-verified: explicit playtest signal, advisory replay plans, exact edge trust, and project-routed release probes are green.",
   "lastShipped": "see LATEST_HANDOFF.md",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

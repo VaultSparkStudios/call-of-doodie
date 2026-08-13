@@ -1,13 +1,14 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-08-13 (Session 153 release candidate)
+Last reviewed: 2026-08-13 (Session 153 production verification)
 
 ## Release candidate
 
 - Immutable staging origin: `https://d7ec86f1.call-of-doodie.pages.dev/`
 - Stable staging alias: `https://session-153-staging.call-of-doodie.pages.dev/`
 - Production origin: `https://callofdoodie.wtf/`
-- Candidate source: the verified Session 153 tree atop `bc1e1c5`; exact direct-main commit/workflow/immutable production identifiers are recorded after the authorized push finishes.
+- Published source: `4b78142e0b3744c024f42e44f971ab89c8939b0f`; brief-format workflow `31743411548`, Supabase workflow `31743411535`, Cloudflare quality/build/deploy workflow `31743411559`.
+- Immutable production: `https://c9ee3b5e.call-of-doodie.pages.dev/`; typed production health reports deploy prefix `4b78142e0b37`.
 - Previous known-good production: source `471cd6762b828f61d6bd55e47d614cec47d3abeb`, Cloudflare workflow `31657471851`, immutable `https://a1fe44a3.call-of-doodie.pages.dev/`.
 - Scope: cost-neutral FORGE engineering update. This is not a SPARKED lifecycle transition or launch announcement.
 - Founder authorization: the explicit `/arc` request plus direct commit/push and full-deployment authorization covers this engineering publication and verification.
@@ -16,7 +17,7 @@ Last reviewed: 2026-08-13 (Session 153 release candidate)
 
 | Gate | Evidence | Status |
 |---|---|---|
-| Full tests | Final tree: 195/195 files and 1,153/1,153 assertions | Pass |
+| Full tests | Published source: 195/195 files and 1,153/1,153 assertions in exact-SHA CI; verifier seal: 196/196 files and 1,155/1,155 assertions locally | Pass |
 | Build and code quality | Deployable build, strict ESLint, schema/coherence/architecture/storage/task/runtime gates | Pass |
 | Public contract | 28 public files validated | Pass |
 | Broad visual QA | 20 routes × 2 themes × 390/768/1440px on isolated staging | 1,020/1,020 pass |
@@ -34,6 +35,8 @@ Last reviewed: 2026-08-13 (Session 153 release candidate)
 | Package trust | Nanoid 3.3.18 security override reviewed through Obelisk plus official registry metadata/integrity | Pass |
 | Core Web Vitals (CWV) | No current Session 153 Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) receipt | Not current — blocks SPARKED |
 
+Production follow-through found one verifier-only defect after the live application passed: the three backend CLI probes resolved a generic Studio Supabase capability belonging to another project. The application itself used the correct deployed client configuration and passed a real 11/11 production player transaction. The probes and deployable build now validate the project ref and resolve public client configuration through the gateway or the deployed/public artifact; direct `.env` reads remain removed. Corrected probes pass backend 5/5, replay 3/3, and leaderboard isolation against `fjnpzjjyhnpmunfoycrp`.
+
 The generic Studio responsive helper explicitly skipped because it could not resolve its standalone Playwright package. That skip is not counted as a pass. The project-owned pinned-Chromium matrix is the authoritative engineering-release browser court, but it does not replace physical-device or current CWV evidence.
 
 ## Surface ledger
@@ -49,12 +52,12 @@ The generic Studio responsive helper explicitly skipped because it could not res
 ## Continuous integration and rollback
 
 - The latest two Cloudflare production runs are green. Four of the last five are green; the one failure is the already-documented Session 152 Hot Context ordering defect, root-fixed before two subsequent green runs. All five latest brief-format runs are green.
-- The exact Session 153 SHA must pass both brief-format and Cloudflare quality/build/deploy workflows after push; a local/staging pass does not substitute for this.
+- Exact source `4b78142e0b3744c024f42e44f971ab89c8939b0f` passes brief-format, Supabase deploy, and Cloudflare quality/build/deploy workflows. The verifier follow-up must pass the same exact-SHA gates before its immutable revision becomes the final rollback-forward target.
 - Cloudflare Pages retains immutable deployments. `docs/DEPLOY_ROLLBACK.md` documents a reversible `git revert` path; reset-hard and force-push are excluded.
-- Previous known-good application rollback target remains `471cd6762b828f61d6bd55e47d614cec47d3abeb` / `https://a1fe44a3.call-of-doodie.pages.dev/` until the Session 153 production court finishes.
+- Current known-good application rollback target is `4b78142e0b3744c024f42e44f971ab89c8939b0f` / `https://c9ee3b5e.call-of-doodie.pages.dev/`; prior fallback remains `471cd676…` / `https://a1fe44a3.call-of-doodie.pages.dev/`.
 
 ## Release verdict
 
-Independent gate verdict: **GO** for the authorized direct-main FORGE engineering update, conditional on exact-SHA CI/deployment and post-production smoke. **NO-GO** for SPARKED/public launch.
+Independent gate verdict: **DEPLOYED AND VERIFIED** for the authorized direct-main FORGE engineering update. **NO-GO** for SPARKED/public launch.
 
 SPARKED remains blocked by current CWV evidence, physical PWA/controller/full-run media proof, verified on-domain Zoho delivery and reply-as identity, public Itch.io publication, consented participant outcomes, project-scoped product analytics/error monitoring, functioning Obelisk relying-party verification, sitemap score ≥8/10, and explicit founder SPARKED approval.

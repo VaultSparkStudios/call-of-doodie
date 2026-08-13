@@ -5,14 +5,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "./lib/safe-spawn.mjs";
-import { getSecret } from "./lib/secrets.mjs";
+import { resolveProjectSupabasePublicConfig } from "./lib/project-supabase-config.mjs";
 
-const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
-const supabaseAnonKey = getSecret("SUPABASE_ANON_KEY", "supabase.admin");
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Deployable build requires Supabase URL and anonymous key through the secrets gateway.");
-  process.exit(1);
-}
+const { supabaseUrl, anonKey: supabaseAnonKey } = await resolveProjectSupabasePublicConfig();
 
 const windowsNpmCli = path.join(path.dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js");
 const command = process.platform === "win32" ? process.execPath : "npm";

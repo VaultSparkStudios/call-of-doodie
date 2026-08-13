@@ -19,7 +19,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ LAST SESSION (S153) - WHAT SHIPPED ══════════════════════════╗
-║  Session 153 made playtest feedback explicit and aggregate-only  ║
+║  Session 153 is production-published and verified; follow-throu  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -29,7 +29,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://d7ec86f1.call-of-doodie.pages.dev ✓   ║
-║  Unit tests    → npm test — 1153/1153 passing ✓                  ║
+║  Unit tests    → npm test — 1155/1155 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
 ║  production-smoke → Session 141 — live 7/7 · cutover 5/5 · r ✓   ║
@@ -63,18 +63,17 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 153 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    1153/1153 passing  ·  Deploy: N/A                     ║
+║  Tests:    1155/1155 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████░░░░░░░░░░░░░░░░░░░   19% used                          ║
-║     51,149 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~25,575 tok/turn  ·  cache 50%  ·  7 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ████████████████████████  100% used                          ║
+║     200,000 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1153/1153 passing (2026-08-13)                 ║
+║  ✓  Tests         1155/1155 passing (2026-08-13)                 ║
 ║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║

@@ -1,44 +1,41 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 1cdbfcf59e68 -->
-<!-- generated-at: 2026-08-13T20:48:22.322Z -->
+<!-- source-hash: 18afc648803e -->
+<!-- generated-at: 2026-08-13T21:19:54.873Z -->
 
 # LATEST_HANDOFF (compact)
 
 SESSION 153 HANDOFF SUMMARY
 
 Status
-- Session 153 closeout candidate ready; final step is commit/push to main, exact-SHA CI, Cloudflare deploy, production verification, seal receipt.
-- Project remains FORGE/public-unlaunched. SPARKED promotion NO-GO.
+- Session 153 complete through verifier seal; ready to publish seal, follow exact-SHA CI, confirm final immutable revision, then begin S154 from clean main.
+- Lifecycle: FORGE / public-unlaunched. Engineering publish authorized (cost-neutral). SPARKED remains NO-GO.
 
-Shipped This Session
-- Four S153 audit items implemented: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, truthful Startup Brief closeout age.
-- Repaired three release edge defects: preview-origin CORS parity, issuer/consumer run-signature drift, wildcard/unrated public Studio-event ingestion. Affected Supabase functions deployed.
+What Shipped
+- Four S153 audit items: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, truthful Startup Brief closeout age.
+- Three edge defects repaired: preview-origin CORS parity, issuer/consumer run-signature drift, wildcard/unrated public Studio-event ingestion. Supabase functions deployed.
+- Verifier-only project-routing fix: backend CLI checks now reject unrelated generic Supabase credentials; resolve game's validated public config from gateway or deployed artifact.
 
 Current Intent
-- Run continuous /arc from synchronized main through startup, review, audit, implementation, staging, pixel proof, closeout, direct-main publication, exact production verification. Preserve FORGE/public-unlaunched lifecycle.
+- Publish verifier seal, follow its exact-SHA CI/deployment, confirm final immutable revision, then start Session 154 from synchronized clean main.
 
-Now Bucket (top 3)
-- Commit and push closeout candidate to main.
-- Follow exact-SHA CI and Cloudflare deployment; verify immutable production revision and custom domain.
-- Seal production receipt.
+Now Bucket (Top 3)
+- Publish the verifier seal commit.
+- Follow exact-SHA CI/deployment to green.
+- Confirm final immutable production revision.
 
-Blockers (top 3)
-- SPARKED gate NO-GO: requires current Core Web Vitals evidence.
-- SPARKED gate NO-GO: physical-device/media, reply-as mail, project-scoped provider evidence missing.
-- SPARKED gate NO-GO: Obelisk, participant/publication, and explicit lifecycle evidence missing.
+Blockers (Top 3)
+- SPARKED gates lack current evidence: Core Web Vitals, physical-device/media, reply-as mail, project-scoped provider, Obelisk, participant/publication, explicit lifecycle proof.
+- Studio-wide Doctor (prior session) reported Studio Ops-owned blocking probes; not repo-owned.
+- No repository-local executable items remain; further work needs external evidence/credentials/providers.
 
-Human-Blocked Items
-- Explicit SPARKED lifecycle authority / founder approval (open since S151, ~2 sessions).
-- Provider credentials and project-scoped provider setup (open since S151, ~2 sessions).
-- Physical PWA/controller device and media evidence (open since S151, ~2 sessions).
+Human-Blocked / External
+- SPARKED lifecycle promotion requires founder approval plus above evidence — open across S151-153 (3 sessions).
+- Studio Ops-owned wallet-court/canon/visual receipts refresh requested via signed Ark repo-question — pending since S151.
 
 Verification State
-- Candidate passes 195/195 test files, 1,153/1,153 assertions.
-- All courts green: lint, build, architecture/runtime, public-contract, security, dependency, supply-chain, cost, canon, backend, replay, leaderboard.
-- Staging: session-153-staging.call-of-doodie.pages.dev (immutable d7ec86f1); broad 1,020/1,020; focused Replay Passport 32/32; playtest transaction 44/44; 18 hash-bound captures pixel-reviewed both themes at 390px/1440px.
-- Independent gate: GO for cost-neutral FORGE engineering publish.
+- Candidate/seal: 196/196 files, 1,155/1,155 assertions; all courts pass (lint, build, architecture, public-contract, security, dependency, supply-chain, cost, canon, backend 5/5, replay 3/3, leaderboard isolation).
+- Staging: broad 1,020/1,020; focused Replay Passport 32/32; playtest 44/44; 18 hash-bound captures reviewed both themes at 390px/1440px.
+- Production source 4b78142e green in brief 31743411548, Supabase 31743411535, Cloudflare 31743411559; immutable c9ee3b5e + custom domain pass.
 
-Preserve
-- Do not promote lifecycle status without current SPARKED evidence listed above.
-
-Next session: Complete main publication and production verification of the S153 closeout candidate, then seal the receipt.
+Next Session Pointer
+- Confirm S153 seal deployed and immutable revision, then start S154 /arc from synchronized clean main.

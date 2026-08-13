@@ -1,11 +1,7 @@
-import { getSecret } from "./lib/secrets.mjs";
+import { resolveProjectSupabasePublicConfig } from "./lib/project-supabase-config.mjs";
 
-function getConfig() {
-  const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
-  const anonKey = getSecret("SUPABASE_ANON_KEY", "supabase.admin");
-  if (!supabaseUrl || !anonKey) {
-    throw new Error("Missing VITE_SUPABASE_URL/SUPABASE_URL or VITE_SUPABASE_ANON_KEY/SUPABASE_ANON_KEY.");
-  }
+async function getConfig() {
+  const { supabaseUrl, anonKey } = await resolveProjectSupabasePublicConfig();
   return {
     endpoint: `${supabaseUrl.replace(/\/+$/, "")}/functions/v1/validate-replay`,
     anonKey,
@@ -40,7 +36,7 @@ function assert(condition, message) {
 }
 
 async function main() {
-  const config = getConfig();
+  const config = await getConfig();
   const traceBody = "0.move.n~i.aim.ne~o.shoot.w0~1i.move.e~20.dash.e~2i.aim.se~2o.shoot.w0";
   const weakTraceBody = "0.shoot.w0";
   const baseRun = {

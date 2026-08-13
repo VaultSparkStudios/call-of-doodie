@@ -1,19 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
-import { getSecret } from "./lib/secrets.mjs";
+import { resolveProjectSupabasePublicConfig } from "./lib/project-supabase-config.mjs";
 
-function getClient() {
-  const supabaseUrl = getSecret("SUPABASE_URL", "supabase.admin");
-  const anonKey = getSecret("SUPABASE_ANON_KEY", "supabase.admin");
-
-  if (!supabaseUrl || !anonKey) {
-    throw new Error("Missing VITE_SUPABASE_URL/SUPABASE_URL or VITE_SUPABASE_ANON_KEY/SUPABASE_ANON_KEY.");
-  }
-
+async function getClient() {
+  const { supabaseUrl, anonKey } = await resolveProjectSupabasePublicConfig();
   return createClient(supabaseUrl, anonKey, { realtime: { enabled: false } });
 }
 
 async function main() {
-  const supabase = getClient();
+  const supabase = await getClient();
 
   const { data, error } = await supabase
     .from("leaderboard")

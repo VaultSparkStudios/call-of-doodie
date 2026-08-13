@@ -13,6 +13,8 @@
 - Visual truth — final staging is `https://session-153-staging.call-of-doodie.pages.dev/` (immutable `https://d7ec86f1.call-of-doodie.pages.dev/`). The broad hosted court passes 1,020/1,020, focused Replay Passport passes 32/32, real playtest flow passes 44/44, and 18 hash-bound captures received direct pixel review across 390px/1440px and both themes with zero blocking defects.
 - Validation truth — the exact candidate passes 195/195 files and 1,153/1,153 assertions, strict lint, deployable build, schema/coherence/architecture/runtime/storage/public-contract/security/supply-chain/cost/canon/manifest/visual gates, backend health 5/5, replay trust 3/3, and shared-leaderboard isolation.
 - Lifecycle truth — the independent release gate is GO for the founder-authorized, cost-neutral FORGE engineering update and NO-GO for SPARKED. Current Core Web Vitals, physical PWA/controller/media evidence, reply-as mail, project-scoped observability, Obelisk identity, participant/publication evidence, and lifecycle approval remain unclaimed.
+- Production truth — source `4b78142e0b3744c024f42e44f971ab89c8939b0f` passed brief `31743411548`, Supabase deploy `31743411535`, and Cloudflare quality/build/deploy `31743411559`, serving immutable `https://c9ee3b5e.call-of-doodie.pages.dev/`. Custom-domain shell 7/7, cutover 5/5, launch surfaces, real playtest 11/11, backend 5/5, replay 3/3, and leaderboard isolation pass.
+- Verifier truth — production follow-through caught the three CLI probes selecting an unrelated generic Supabase project after direct `.env` reads were removed. A project-ref-validating public-config resolver now uses gateway values only when they match Call of Doodie and otherwise reads the deployed/public artifact; focused 2/2, full 196 files / 1,155 assertions, lint, deployable build, runtime, security, and corrected live probes pass.
 
 ## Open Work
 
@@ -85,7 +87,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 184,960 bytes · SHA-256 `6d8e620e2259…`
+- `context/CURRENT_STATE.md` · 185,784 bytes · SHA-256 `f9ecd66c81b9…`
 - `context/TASK_BOARD.md` · 120,954 bytes · SHA-256 `735986480cf0…`
-- `context/DECISIONS.md` · 118,897 bytes · SHA-256 `5fb9f25e096d…`
+- `context/DECISIONS.md` · 119,680 bytes · SHA-256 `26df753a6551…`
 - `docs/AUDIT_2026-08-13.json` · 12,845 bytes · SHA-256 `fc09f251f61f…`

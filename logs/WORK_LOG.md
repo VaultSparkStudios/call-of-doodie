@@ -1353,3 +1353,9 @@ Intent outcome: achieved through verified production deployment. SPARKED remains
 - Final candidate validation: 195/195 test files, 1,153/1,153 assertions, strict lint, build, schema/coherence/architecture/runtime/storage/task/public/security/dependency/supply-chain/cost/canon/manifest/visual gates, backend 5/5, replay trust 3/3, and shared-leaderboard isolation.
 
 Intent outcome: achieved through implementation, isolated staging, pixel proof, and engineering release readiness; direct-main exact-SHA publication/production verification follows under explicit founder authority. SPARKED remains NO-GO.
+
+### Production follow-through
+
+- Published `4b78142e0b3744c024f42e44f971ab89c8939b0f`; brief `31743411548`, Supabase deploy `31743411535`, and Cloudflare quality/build/deploy `31743411559` are green. Immutable production is `https://c9ee3b5e.call-of-doodie.pages.dev/`.
+- Production shell 7/7, cutover 5/5, launch surfaces, and the real death → four answers → aggregate transaction 11/11 pass.
+- The raw backend CLIs initially failed because generic gateway keys belonged to another project. Root-fixed with a project-ref-validating public-config resolver; direct `.env` reads remain absent. Full seal corpus passes 196 files / 1,155 assertions; lint, deployable build, runtime/security, backend 5/5, replay 3/3, and leaderboard isolation pass.

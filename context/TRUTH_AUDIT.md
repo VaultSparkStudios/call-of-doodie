@@ -13,8 +13,10 @@
 - Validation truth — exact candidate passes 195/195 files and 1,153/1,153 assertions in 156.19 seconds, strict lint, deployable build, schema/coherence/architecture/runtime/storage/task/public-contract/security/supply-chain/cost/canon/manifest gates, backend health 5/5, replay trust 3/3, and leaderboard isolation.
 - Lifecycle truth — cost-neutral FORGE engineering publication is founder-authorized and independently GO. SPARKED is NO-GO pending current Core Web Vitals, physical PWA/controller/media proof, reply-as mail, project-scoped observability, Obelisk identity, participant/publication evidence, and explicit lifecycle approval.
 - Canon truth — applicable ABSOLUTE canon have no gaps. CANON-045 and CANON-055 remain STRONG external/checker findings; they are not hidden, and they do not substitute for a project-local auth implementation or a SPARKED claim.
+- Production truth — exact source `4b78142e0b3744c024f42e44f971ab89c8939b0f` passed brief `31743411548`, Supabase `31743411535`, and Cloudflare `31743411559`; immutable `c9ee3b5e` and the custom domain pass shell, cutover, launch-surface, and real 11/11 player-flow checks.
+- Verifier truth — the application remained healthy, but the three backend CLIs initially addressed an unrelated generic Supabase capability. The seal rejects mismatched project/key identities and resolves the game's public deployed config without direct `.env` access; full 196-file / 1,155-assertion, build/security/runtime, backend 5/5, replay 3/3, and leaderboard courts pass.
 
-Overall status: all S153 repository-owned audit items and discovered release-path defects are implemented and isolated-staging verified; exact-main production publication is the remaining engineering closeout step. SPARKED remains NO-GO.
+Overall status: all S153 repository-owned audit items and discovered release/verifier defects are implemented, production-published, and verified; the verifier seal awaits exact-main publication. SPARKED remains NO-GO.
 Last reviewed: 2026-08-13
 
 ## 2026-08-12 — Session 152 — Recovery, coaching transaction, mastery command, and saturation truth
