@@ -41,14 +41,25 @@ const ELITE_ARROW_COLORS = {
 
 /**
  * Builds render-ready arrow descriptors for every off-screen enemy.
+ *
+ * When ADS zoom is active the canvas is scaled around the player, so world
+ * coordinates no longer match screen coordinates. Pass playerX/playerY and
+ * zoomScale (1.28 for ADS) so the function can project each enemy through the
+ * same transform before checking visibility and computing the edge position.
+ * Arrow positions are always returned in screen space so they can be drawn
+ * outside the zoom transform.
+ *
  * @returns {{x:number,y:number,angle:number,color:string,alpha:number}[]}
  */
-export function getOffscreenThreatArrows(enemies, W, H, { margin = 18, fogOfWar = false } = {}) {
+export function getOffscreenThreatArrows(enemies, W, H, { margin = 18, fogOfWar = false, playerX = null, playerY = null, zoomScale = 1 } = {}) {
   if (fogOfWar || !Array.isArray(enemies) || !enemies.length) return [];
+  const doZoom = zoomScale > 1 && playerX != null && playerY != null;
   const arrows = [];
   for (const e of enemies) {
-    if (!isOffscreen(e.x, e.y, W, H)) continue;
-    const edge = projectToEdge(e.x, e.y, W, H, margin);
+    const sx = doZoom ? playerX + (e.x - playerX) * zoomScale : e.x;
+    const sy = doZoom ? playerY + (e.y - playerY) * zoomScale : e.y;
+    if (!isOffscreen(sx, sy, W, H)) continue;
+    const edge = projectToEdge(sx, sy, W, H, margin);
     const priority = Boolean(e.isBossEnemy || e.eliteType);
     arrows.push({
       x: edge.x,
