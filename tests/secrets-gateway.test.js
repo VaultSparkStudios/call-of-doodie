@@ -26,7 +26,11 @@ function runAudit(local, shared) {
   return spawnSync(process.execPath, [path.resolve("scripts/check-secrets.mjs"), "--audit", "--json"], {
     cwd: process.cwd(),
     encoding: "utf8",
-    env: { ...process.env, VAULTSPARK_SECRETS_DIR_OVERRIDE: local, STUDIO_OPS_SECRETS_DIR: shared },
+    // These fixtures assert developer-host fail-closed behavior. Pin CI=false
+    // so a hosted runner's ambient CI=true cannot silently change the contract
+    // under test; the isolated-public-CI allowance has its own explicit court in
+    // protocol-reference-drift.test.js.
+    env: { ...process.env, CI: "false", VAULTSPARK_SECRETS_DIR_OVERRIDE: local, STUDIO_OPS_SECRETS_DIR: shared },
   });
 }
 

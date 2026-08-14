@@ -8,10 +8,11 @@ Session Intent: Complete the founder-authorized S154 `/arc` from synchronized `m
 - All five items in `docs/AUDIT_2026-08-13_2.json` are implemented at L2: capability-map provenance/fail-closed discovery, task-board contract composition, atomic schema-bound status writes, truthful startup chronology/pressure, and an executable compatibility court.
 - Broad verification also restored execution-budget receipts, Unicode-safe transport and handoff smoke, provider-first blocker precedence, fail-closed SIL forecasting, honest session saturation, Codex plan-mode behavior, and committed closeout/staging/memory evidence.
 - Protocol drift passes 42/42; focused regression passes 53/53; full Vitest passes 196/196 files and 1,158/1,158 tests. Strict lint, schema, deployable build, public/assets/dependency/runtime/security gates, npm audit zero, and supply-chain incident scan pass.
+- First exact source `b61d883` passed brief run `31769146459`; deploy run `31769146435` failed before deployment because developer-host secrets fixtures inherited ambient GitHub `CI=true`. The fixture is now hermetic (`CI=false`), the separate isolated-CI court stays explicit, and exact CI-mode local Vitest passes 196/196 files / 1,158 tests.
 - The innovation pack has no executable repo-local candidates. Mobile density, progression tuning, content expansion, provider/mail/identity work, physical-device proof, participant evidence, and SPARKED promotion remain explicitly gated.
 - Final isolated staging is `https://session-154-staging.call-of-doodie.pages.dev/` (immutable `https://5da63921.call-of-doodie.pages.dev/`). Hosted shell/edge/manifest/service-worker/social-card checks pass 7/7; the root is HTTP 200 with one-year HSTS, strict CSP, frame denial, and `noindex`.
 - Independent release/cost gate: GO for the authorized cost-neutral FORGE engineering update; NO-GO for SPARKED. S154 changed no player-facing pixels, so a new CANON-053 receipt is correctly not claimed.
-- Next: commit and push the canonical S154 closeout directly to synchronized `main`, wait for exact-SHA brief/deploy workflows, verify the immutable production revision and custom-domain smoke, then append the production receipt if needed.
+- Next: publish the CI verifier commit to synchronized `main`, wait for fresh exact-SHA brief/deploy workflows, verify the immutable production revision and custom-domain smoke, then append the production receipt if needed.
 
 ## Impact Summary
 

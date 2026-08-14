@@ -20,7 +20,9 @@
     "strict lint, schema, deployable build, public contract, assets, dependency/runtime boundaries, and security release pass",
     "npm audit reports zero vulnerabilities and supply-chain incident scan reports zero matches",
     "isolated staging session-154-staging and immutable 5da63921 pass hosted 7/7 plus HTTP/security-header inspection",
-    "cost and release gates allow the cost-neutral FORGE engineering update"
+    "cost and release gates allow the cost-neutral FORGE engineering update",
+    "source b61d883 brief run 31769146459 passes; deploy run 31769146435 correctly blocks before deployment on ambient-CI fixture drift",
+    "root-fixed hermetic developer-host fixture; exact CI=true local Vitest passes 196 files and 1158 tests"
   ],
   "deferred": [
     "current production Core Web Vitals",

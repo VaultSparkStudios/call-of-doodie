@@ -20,6 +20,11 @@
     },
     {
       "status": "green",
+      "type": "ci-verifier",
+      "command": "b61d883 brief 31769146459 green; deploy 31769146435 blocked pre-deploy on ambient-CI fixture drift; hermetic fix proves CI=true full Vitest 196/196 files / 1158/1158 tests locally"
+    },
+    {
+      "status": "green",
       "url": "https://callofdoodie.wtf/",
       "type": "production"
     },

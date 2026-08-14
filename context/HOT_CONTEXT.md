@@ -11,6 +11,7 @@
 - Staging truth — immutable `https://5da63921.call-of-doodie.pages.dev/` and alias `https://session-154-staging.call-of-doodie.pages.dev/` serve the exact candidate. Hosted shell/edge/manifest/service-worker/social-card checks pass 7/7 with HTTP 200, one-year HSTS, strict Content Security Policy, and `noindex`.
 - Game-loop truth — specialty review scores the mature loop 9.4/10 overall. No balance, progression, mobile-density, content, or visual retune is claimed because no participant/physical-device evidence exists and S154 made no player-facing change.
 - Lifecycle truth — the cost-neutral FORGE engineering update is release-ready. SPARKED remains NO-GO behind current Core Web Vitals, physical PWA/controller/media, reply-as mail, project-scoped observability, Obelisk identity, participant/publication evidence, and explicit lifecycle approval.
+- CI verifier truth — source `b61d883` passed brief run `31769146459`, but deploy run `31769146435` correctly stopped before deployment because two developer-host secrets fixtures inherited ambient GitHub `CI=true`. The fixture now pins `CI=false`, the explicit isolated-CI court remains separate, and an exact CI-mode local run passes 196/196 files and 1,158/1,158 tests; verifier publication is pending.
 
 ## Open Work
 
@@ -84,7 +85,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 188,187 bytes · SHA-256 `3ab9d826eb99…`
+- `context/CURRENT_STATE.md` · 188,595 bytes · SHA-256 `26aa12d6805b…`
 - `context/TASK_BOARD.md` · 122,294 bytes · SHA-256 `3aba5516864d…`
 - `context/DECISIONS.md` · 120,567 bytes · SHA-256 `3ed5866e507e…`
 - `docs/AUDIT_2026-08-13_2.json` · 14,566 bytes · SHA-256 `6545a859d44d…`

@@ -14,7 +14,7 @@
 ║  ✓ All five items in `docs/AUDIT_2026-08-13_2.json` are impleme  ║
 ║  ✓ Broad verification also restored execution-budget receipts,   ║
 ║  ✓ Protocol drift passes 42/42; focused regression passes 53/53  ║
-║  ✓ The innovation pack has no executable repo-local candidates.  ║
+║  ✓ First exact source `b61d883` passed brief run `31769146459`;  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -41,7 +41,7 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 55 files  ·  M:40 A:0 D:0 ?:15                         ║
+║  Changes: 10 files  ·  M:10 A:0 D:0 ?:0                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝

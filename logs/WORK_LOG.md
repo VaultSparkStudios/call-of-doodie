@@ -14,6 +14,13 @@
 
 Intent outcome: repository-owned arc, audit implementation, saturation, complete local verification, and isolated staging achieved. Authorized direct-main publication, exact-SHA workflows, production deployment, and live smoke complete the follow-through.
 
+### CI verifier follow-through
+
+- Published source `b61d883961f6a059f15b908659ce280ea08bc7bb`; exact brief-format run `31769146459` passed.
+- Cloudflare run `31769146435` stopped in quality tests before build/deploy: two developer-host secrets fixtures inherited GitHub's ambient `CI=true`, activating the intentional public-CI empty-map allowance and invalidating their non-CI expectation.
+- Root-fixed the test boundary by pinning `CI=false` inside the developer-host fixture helper. The explicit isolated-public-CI court remains independently `CI=true` and green.
+- Reproduced the exact runner environment locally with `CI=true npm test`: 196/196 files and 1,158/1,158 tests pass in 78.48 seconds. No retry-only green is accepted; a verifier commit and fresh exact-SHA workflow must deploy production.
+
 ## 2026-08-12 (Session 152 — recovery, closed-loop coaching, and mastery command)
 
 - Reconstructed S151 from handoff/worklog/closeout/diff/git evidence, parsed every changed JSON/NDJSON, verified `~/.claude.json`, reran the exact 191-file / 1,138-test corpus, and distinguished committed implementation from interrupted closeout metadata.
