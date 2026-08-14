@@ -25,9 +25,12 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
+export function resolveSecretsRoot(repoRoot = REPO_ROOT, env = process.env) {
+  return path.resolve(env.VAULTSPARK_SECRETS_DIR_OVERRIDE || path.join(repoRoot, 'secrets'));
+}
 // Tests can redirect lookups with VAULTSPARK_SECRETS_DIR_OVERRIDE (see
 // scripts/test/lib/credential-mocks.mjs). Production code never sets this.
-const SECRETS_DIR = process.env.VAULTSPARK_SECRETS_DIR_OVERRIDE || path.join(REPO_ROOT, 'secrets');
+const SECRETS_DIR = resolveSecretsRoot();
 // Sibling Studio Ops secrets dir — per AGENTS.md, all Studio credentials live here.
 // Walk parents (up to 6 levels) so this script works whether it's running in
 // studio-ops itself, a sibling project repo, or a worktree.
@@ -245,6 +248,7 @@ export function getCapabilityMapProvenance() {
   const map = loadCapMap();
   return {
     source: map._source || CAP_MAP_RESOLUTION.source,
+    path: CAP_MAP_PATH,
     available: Boolean(CAP_MAP_PATH),
     corrupt: Boolean(map._corrupt),
   };

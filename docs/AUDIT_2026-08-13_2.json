@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S154)",
+  "generatedAt": "2026-08-13",
+  "session": 154,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-product-game-loop-public-release",
+  "meta": {
+    "generatedAt": "2026-08-13",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-product-game-loop-public-release",
+    "candidateCount": 34,
+    "promotedCount": 5,
+    "combinedPriority": 167.0,
+    "top3": [
+      "secrets-universe-provenance",
+      "propagation-task-board-contract",
+      "protocol-import-compatibility-court"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle found live callers for the removed project-status and task-board exports, the local secrets audit measured a false-green 0/0 capability universe despite the available sibling control plane, focused courts failed 7/8 relevant writer/SIL tests, and the freshly rendered S154 brief repeated a stale 13-day closeout age. The defects appeared only after start-canon-sync drained the pending propagation bundle into the previously clean S153 tree.",
+    "gameLoopReview": {
+      "loopTightness": 9.4,
+      "progressionCurve": 9.1,
+      "sessionEngagement": 9.4,
+      "retentionHooks": 9.2,
+      "soulFidelity": 9.7,
+      "overall": 9.4,
+      "evidenceBoundary": "No docs/PLAYTESTS corpus exists. Current code and S153 receipts support strong loop architecture, but no new balance, density, pacing, retention, or content retune is honest without participant or physical-device evidence.",
+      "topActions": [
+        "Restore the session automation that protects playable-loop and release truth before adding new gameplay scope.",
+        "Keep the mobile density, progression retune, and theme-atlas expansions evidence-gated.",
+        "Re-run keyboard/mouse, controller-contract, replay, and staging courts after the propagated protocol repair."
+      ]
+    },
+    "releaseGateReview": {
+      "engineeringVerdict": "IMPLEMENTED and locally verified: protocol drift 42/42, schema/lint/build/security/public gates green, focused compatibility 53/53, full suite 1,158/1,158. Isolated Cloudflare staging, sanitization, and exact-SHA publication verification remain closeout gates.",
+      "sparkedVerdict": "NO-GO: current Core Web Vitals, physical PWA/controller/media proof, reply-as Zoho mail, project-scoped observability, Obelisk identity, participant/publication evidence, and explicit lifecycle approval remain absent.",
+      "costPosture": "cost-neutral",
+      "founderAuthority": "The founder explicitly authorized the S154 direct commit/push to main; this does not authorize a SPARKED lifecycle flip."
+    },
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched; main was synchronized at cc734dc before S154 startup propagation.",
+      "quality": "S154 restores and expands the propagation compatibility boundary: protocol drift 42/42, focused regression courts 53/53, and the full suite 196 files / 1,158 assertions green. Strict lint, deployable build, public contract, assets, dependency/runtime boundaries, schema, and security gates pass.",
+      "architecture": "React 19/Vite canvas game. App.jsx is 4,887 lines with 113 total-line and 22 game-loop-line headroom; no new gameplay monolith growth is justified.",
+      "gameLoop": "The revenge, mastery, replay-passport, explicit playtest-signal, and aggregate command-post loops are closed. The current executable frontier is protocol integrity, not speculative content breadth.",
+      "cost": "All promoted work is repo-local deterministic tooling and tests. No package, hosted inference, API call, paid service, or variable per-player cost is introduced."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Preserve the mature game surface; repair the automation required to evolve it safely.",
+    "innovation": "Compose new Studio truth/schema checks with stronger project-local atomicity and compatibility instead of choosing one contract and regressing the other.",
+    "ui / ux / user-experience": "Make the startup brief chronologically truthful and restore the canonical Human Pressure empty state.",
+    "feedback loop": "Keep explicit player signals intact; do not infer a balance or density answer from absent participant evidence.",
+    "gamification / engagement / immersion": "Retain the high-scoring revenge, mastery, rivalry, challenge, and replay loops; validate them after tooling repair.",
+    "ai / intelligence integration": "Use Studio Oracle and deterministic local receipts; no hosted inference is needed.",
+    "security": "Fail closed on an empty capability universe and keep status writes atomic, locked, schema-validated, and provenance-aware.",
+    "speed / organization / efficiency": "Restore router, innovation-pack, schema, Doctor-sync, and startup execution through stable helper APIs.",
+    "token / api cost reduction": "One compatibility court catches propagation drift before multiple expensive phase commands fail; all checks remain local."
+  },
+  "items": [
+    {
+      "slug": "secrets-universe-provenance",
+      "tier": "FIRE",
+      "axis": "security / observability / protocol integrity",
+      "effortHours": 2,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 40.0,
+      "status": "implemented",
+      "why": "The propagated gateway now binds CAPABILITY_MAP.json only to this public repo's absent secrets directory. `check-secrets --audit` exits green while reporting 0/0, erasing 72 known Studio capabilities and breaking Founder-Action Discipline.",
+      "recipe": "Retain action probes and status emission, but restore local-first/sibling-Studio-Ops capability-map discovery plus provenance. Make a zero-capability audit non-green outside explicitly isolated public CI, and add fixture coverage for local override, sibling fallback, corrupt map, and empty-universe failure.",
+      "measurement": "The live audit reports the real non-zero Studio capability universe without values, provenance names the selected map, focused tests cover every resolution branch, and protocol drift's secrets-audit behavior passes.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Restore sibling CAPABILITY_MAP fallback and map provenance." },
+        "L2": { "effortHours": 2, "recipe": "Full: discovery, provenance, zero-universe fail-closed behavior, action-probe compatibility, and tests." },
+        "L3": { "effortHours": 4, "recipe": "Add signed capability-map freshness receipts when the control plane defines a canonical transport contract." }
+      }
+    },
+    {
+      "slug": "propagation-task-board-contract",
+      "tier": "FIRE",
+      "axis": "efficiency / protocol integrity / feedback",
+      "effortHours": 2,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 36.0,
+      "status": "implemented",
+      "why": "The propagation bundle removed parseTaskBoardAst, parseSectionCheckboxItems, and reconcileTaskBoard while live router, task-work, task-semantics, and ops commands still import them. Router and schema gates now fail at module instantiation.",
+      "recipe": "Merge the richer project-local task AST/reconciliation API back into the propagated parser while retaining current policy semantics. Cover bold and unbolded human tasks, checked-state filtering, sections, line provenance, numeric task rows, and every live import.",
+      "measurement": "Router suggestion, innovation-pack, task semantics, schema lint, and focused task-board/task-work courts pass with the current 507-line board and no task loss or duplicate interpretation.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Restore the three removed exports exactly." },
+        "L2": { "effortHours": 2, "recipe": "Full: compose both parsers, normalize human rows, preserve source locations, and run all consumers." },
+        "L3": { "effortHours": 4, "recipe": "Publish a versioned task-board AST contract through Studio Ark after control-plane acceptance." }
+      }
+    },
+    {
+      "slug": "protocol-import-compatibility-court",
+      "tier": "FIRE",
+      "axis": "automation / efficiency / cross-agent coherence",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 9,
+      "priority": 36.0,
+      "status": "implemented",
+      "why": "Existing file-presence and skill-parity probes stayed green while multiple propagated ES-module imports were invalid. Presence is too weak to prove that /start, /audit, /implement, and /closeout are executable after propagation.",
+      "recipe": "Add a bounded compatibility court that dynamically imports every phase-critical local script/library contract and behavior-smokes router suggestions, non-zero secrets universe, SIL chronology, task semantics, and project-status writer APIs. Wire it into protocol drift/schema gates without spawning OS windows.",
+      "measurement": "The court fails against the current broken propagation, passes after repair, and produces named missing-export/behavior evidence instead of a generic module crash.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Static named-export assertions for the four broken helpers." },
+        "L2": { "effortHours": 2, "recipe": "Full: named exports plus bounded behavior probes wired into the existing protocol drift surface." },
+        "L3": { "effortHours": 5, "recipe": "Generate the import contract from the Studio protocol registry when a canonical registry schema exists." }
+      }
+    },
+    {
+      "slug": "propagation-status-writer-composition",
+      "tier": "FIRE",
+      "axis": "security / observability / state integrity",
+      "effortHours": 3,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 31.0,
+      "status": "implemented",
+      "why": "The propagated writer added schema and structured test-deferral truth, but removed atomic replacement, stale-recovering locks, withProjectStatusLock, and updateProjectStatusFile. Doctor sync crashes, concurrent writers can race, and the new schema file was not propagated.",
+      "recipe": "Compose both contracts: add the canonical project-status schema, retain the new schema/test-signal validation, restore bounded lock ownership and atomic temp-file replacement, restore file-targeted mutation for Doctor/test fixtures, and ensure every writer goes through the invariant path.",
+      "measurement": "Writer and Doctor-sync courts pass, recent locks time out, stale locks recover, malformed status fails schema validation, no partial file remains, CLI --check passes, and innovation-pack/Doctor imports load.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Restore the missing exports and schema file." },
+        "L2": { "effortHours": 3, "recipe": "Full: schema + truth invariant + locked atomic writes + arbitrary-file helper + concurrency/error tests." },
+        "L3": { "effortHours": 6, "recipe": "Add crash-recovery journaling only if real interrupted-write evidence appears." }
+      }
+    },
+    {
+      "slug": "startup-brief-chronology-and-pressure",
+      "tier": "ICE",
+      "axis": "ui / ux / observability / protocol integrity",
+      "effortHours": 2,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 24.0,
+      "status": "implemented",
+      "why": "Propagation removed resolveLatestSilDate and made the startup renderer trust stale rolling prose again. The S154 brief says the last closeout was 13 days ago although S153 closed today, and the canonical Human Pressure block disappears when compiled pressure is empty.",
+      "recipe": "Merge addendum-aware SIL parsing with the shared newest-session date resolver, bind the renderer back to it, always render the canonical Human Pressure empty state, retain Founder Unlocks as a separate action surface, and add a real-ledger renderer court.",
+      "measurement": "SIL courts pass, the regenerated S154 brief reports a 0-1 day closeout age, Human Pressure is present, format/startup acceptance pass, and the new addendum-revision behavior remains green.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Restore resolveLatestSilDate and renderer usage." },
+        "L2": { "effortHours": 2, "recipe": "Full: addendum-aware date resolution, pressure empty state, real-ledger renderer regression, and format checks." },
+        "L3": { "effortHours": 4, "recipe": "Consolidate all chronology/pressure renderers through one versioned brief evidence model." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "participant-balance-retune", "reason": "DEFER — no docs/PLAYTESTS corpus or imported tester receipt establishes a numeric balance change." },
+    { "slug": "mobile-density-retune", "reason": "DATA-BLOCKED — no physical-device usage signal identifies a correct touch size/density change." },
+    { "slug": "progression-retune", "reason": "CULL — the source-derived progression audit has no player history and therefore cannot justify threshold changes." },
+    { "slug": "theme-prop-atlas-expansion", "reason": "DATA-BLOCKED — S147 explicitly gates lower-visibility expansion on production feedback." },
+    { "slug": "new-mode-or-enemy-pack", "reason": "CULL — the mature loop has sufficient breadth; adding content while release automation is broken lowers confidence." },
+    { "slug": "hosted-ai-analysis", "reason": "CULL — deterministic local evidence identifies the failures without variable cost or data transfer." },
+    { "slug": "sparked-promotion", "reason": "DEFER — physical, participant, mail, scoped provider, Obelisk, performance, publication, and lifecycle evidence remain external." }
+  ],
+  "executionLog": [
+    {
+      "at": "2026-08-13",
+      "session": 154,
+      "status": "implemented",
+      "summary": "Implemented all five ranked findings at L2 and exhausted the repo-local innovation pack. Broad verification exposed additional propagation API downgrades in skill-cost telemetry, Unicode transport, blocker precedence, session truth/economics, SIL forecasting, Codex plan-mode handling, and closeout evidence; each was composed back into the propagated bundle and locked behind existing or expanded courts.",
+      "verification": [
+        "protocol drift 42/42",
+        "schema lint green",
+        "focused compatibility regression set 53/53",
+        "full Vitest 196 files / 1,158 tests",
+        "strict lint, deployable build, public contract, asset, dependency, runtime-boundary, and security-release gates green",
+        "innovation pack: no repo-local candidates"
+      ]
+    }
+  ]
+}

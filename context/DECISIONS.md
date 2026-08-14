@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-14 — Session 154 — Propagation compatibility is an executable contract, not file presence
+
+**Decision:** A propagated protocol bundle must compose with the repository's live named exports and behavior. Phase-critical task-board, project-status, SIL, secrets, and execution-budget modules are dynamically imported by protocol drift, and bounded router/secrets behavior is smoked before a phase is considered executable. Additive Studio features do not authorize removal of stronger project-local safety contracts.
+
+**Rationale:** S154 received every expected file, so presence and skill-parity checks stayed green, yet live consumers crashed or silently misreported state after exports and behavior were downgraded. Executable compatibility catches that class at the propagation boundary and preserves atomicity, provenance, fail-closed truth, and cross-agent continuity.
+
 ## 2026-08-13 — Session 153 follow-through — Backend probes validate project identity, not generic capability presence
 
 **Decision:** Release probes and deployable builds may use a gateway Supabase client pair only when its URL and anonymous-key claims match Call of Doodie's declared project ref. If the shared gateway contains another project's generic pair, the tools resolve the same public configuration carried by the deployed artifact. They never return to direct `.env` parsing and never print the public key.

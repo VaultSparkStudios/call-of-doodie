@@ -76,6 +76,66 @@ for (const anchor of protocolAnchors) {
   checks.push({ ...anchor, level: "required", ok, status: ok ? "present" : "missing-required" });
 }
 
+// File presence is too weak for propagated ES modules: S154 received every
+// expected path while task/status/SIL named exports had been removed, so all
+// presence checks stayed green and the phase commands crashed at import time.
+// Import the bounded phase-critical library set in-process and name the exact
+// missing export. This opens no shell and catches propagation API drift before
+// /start, /audit, /implement, or /closeout pays the failure cost.
+const moduleContracts = [
+  {
+    rel: 'contract:task-board-exports',
+    module: './lib/task-board.mjs',
+    exports: ['parseTaskBoardAst', 'parseSectionCheckboxItems', 'reconcileTaskBoard', 'parseHumanItems'],
+    purpose: 'task router and session-floor consumers share one executable task AST',
+  },
+  {
+    rel: 'contract:project-status-writer-exports',
+    module: './lib/write-project-status.mjs',
+    exports: ['withProjectStatusLock', 'writeProjectStatus', 'updateProjectStatus', 'updateProjectStatusFile'],
+    purpose: 'closeout and Doctor status writes remain locked, atomic, and file-targetable',
+  },
+  {
+    rel: 'contract:sil-ledger-exports',
+    module: './lib/sil-ledger.mjs',
+    exports: ['parseSilSessions', 'latestSilSession', 'resolveLatestSilDate'],
+    purpose: 'startup chronology resolves from the newest append-only session boundary',
+  },
+  {
+    rel: 'contract:secrets-gateway-exports',
+    module: './lib/secrets.mjs',
+    exports: ['listCapabilities', 'resolveCapability', 'getCapabilityMapProvenance'],
+    purpose: 'Founder-Action preflight retains capability discovery and provenance',
+  },
+  {
+    rel: 'contract:skill-cost-ledger-exports',
+    module: './lib/skill-cost-ledger.mjs',
+    exports: ['recordSkillCost', 'readSkillCostLedger', 'skillCostLedgerReceipt'],
+    purpose: 'schema and closeout gates retain execution-budget receipt compatibility',
+  },
+];
+
+for (const contract of moduleContracts) {
+  let ok = false;
+  let detail = 'module did not load';
+  try {
+    const loaded = await import(new URL(contract.module, import.meta.url));
+    const missing = contract.exports.filter((name) => typeof loaded[name] !== 'function');
+    ok = missing.length === 0;
+    detail = ok ? `exports verified: ${contract.exports.join(', ')}` : `missing export(s): ${missing.join(', ')}`;
+  } catch (error) {
+    detail = `import failed: ${error.message}`;
+  }
+  checks.push({
+    rel: contract.rel,
+    purpose: contract.purpose,
+    level: 'required',
+    ok,
+    status: ok ? 'verified' : 'contract-failed',
+    detail,
+  });
+}
+
 const behaviorProbes = [
   {
     rel: "behavior:ops-router-suggest",

@@ -1,42 +1,43 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 917b9bf83906 -->
-<!-- generated-at: 2026-08-13T21:25:29.148Z -->
+<!-- source-hash: 5332f30c0621 -->
+<!-- generated-at: 2026-08-14T03:20:52.448Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 153 HANDOFF SUMMARY
+Session 154 Handoff Summary
 
-Status
-- Session 153 complete. Begin Session 154 from synchronized clean main after receipt-only commit verifies.
-- Lifecycle: FORGE/public-unlaunched. SPARKED NO-GO.
+Session Intent
+- One continuous /arc from synced main: startup, game-loop/public-release review, fresh audit, repo-owned implementation, isolated staging, rendered-pixel proof, closeout, direct-main publish, exact production verification. Preserve FORGE/public-unlaunched lifecycle.
 
-Shipped This Session
-- All four S153 audit items: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, truthful Startup Brief closeout age.
-- Fixed three release-testing edge defects: preview-origin CORS parity, issuer/consumer run-signature drift, wildcard/unrated public Studio-event ingestion. Supabase functions deployed.
-- Fixed verifier-only project-routing defect: backend CLI checks now reject unrelated generic Supabase credentials, resolve validated public config from gateway/deployed artifact.
+What Shipped (S154)
+- Four S153 audit items implemented: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, truthful Startup Brief closeout age.
+- Three edge defects repaired and deployed (Supabase functions): preview-origin CORS parity, issuer/consumer run-signature drift, wildcard/unrated public Studio-event ingestion.
+- Verifier-only project-routing defect fixed: backend CLI now rejects unrelated generic Supabase credentials, resolves game's validated public config from gateway or deployed artifact.
+- Verifier seal 10c05add70f4dadbc9b3fc25f215bad2c1797392 green (brief 31745229611, Cloudflare 31745229701). Immutable https://ce9e4ae3.call-of-doodie.pages.dev/ and custom domain report exact deploy prefix.
 
-Current Intent
-- Preserve FORGE/public-unlaunched lifecycle. Do not promote to SPARKED without current evidence across Core Web Vitals, physical-device/media, reply-as mail, project-scoped provider, Obelisk, participant/publication, and explicit lifecycle authority.
+Production State
+- Source 4b78142e green; immutable https://c9ee3b5e.call-of-doodie.pages.dev/ and custom domain pass production court.
+- Seal tree: 196/196 files, 1,155/1,155 assertions; backend 5/5, replay 3/3, leaderboard isolation pass.
 
-Verification State
-- Seal tree: 196/196 files, 1,155/1,155 assertions. Backend 5/5, replay 3/3, leaderboard isolation.
-- Staging: 1,020/1,020 broad; 32/32 focused Replay Passport; 44/44 staging playtest; 18 hash-bound captures reviewed in both themes at 390px/1440px.
-- Verifier seal 10c05add70f4dadbc9b3fc25f215bad2c1797392 green in brief 31745229611 and Cloudflare 31745229701. Immutable ce9e4ae3 and custom domain confirm deploy prefix.
+Evidence
+- 1,155/1,155 seal tests; 1,020/1,020 broad visual; focused 32/32, staging 44/44, production browser 11/11; 18 direct-reviewed captures both themes at 390px/1440px; dependency/security audits zero.
 
-Now Bucket
-1. Verify receipt-only commit, then start Session 154 from synchronized clean main.
-2. Run canonical /arc startup, game-loop and public-release review.
-3. Fresh nine-axis premise-verified audit.
+Now Bucket (Top 3)
+1. Begin S155 from synchronized clean main after receipt-only commit verifies.
+2. Run fresh premise-verified nine-axis audit; implement repo-owned items plus viable second-order innovation.
+3. Preserve S154 fixes: playtest signal, aggregate command post, advisory replay lane, closeout age truth, backend credential routing.
 
-Blockers (top 3)
-1. Zero executable repository-local items remain; new work needs fresh audit.
-2. SPARKED promotion blocked pending independent current evidence (multiple axes).
-3. Second-order innovation exhausted at repository scope.
+Blockers (Top 3)
+1. SPARKED NO-GO: requires current Core Web Vitals evidence.
+2. SPARKED NO-GO: physical-device/media, reply-as mail, project-scoped provider, Obelisk verification.
+3. SPARKED NO-GO: participant/publication data and explicit lifecycle authority.
 
-Human-Blocked / External-Blocked Items
-- SPARKED lifecycle authority and founder approval (open, carried since S151).
-- Physical-device/PWA/controller and reply-capable mail evidence (open since S151).
-- Participant/publication data, project-scoped provider, Obelisk verification, current Core Web Vitals (open since S151).
+Human-Blocked Items
+- Founder SPARKED authorization and lifecycle promotion (carried across S151-154, ~4 sessions).
+- Studio Ops-owned probes: wallet-court freshness and Studio Ops canon/visual receipts (noted S151, signed Ark repo-question filed).
 
-Next Session Pointer
-- Session 154: confirm receipt commit green, then run fresh /arc from synchronized main preserving all named invariants.
+Lifecycle
+- FORGE/public-unlaunched. Engineering publish GO (cost-neutral, authorized); SPARKED NO-GO. Do not imply promotion.
+
+Next Session
+- Start S155 from synchronized main; verify receipt commit, then run full continuous /arc with fresh nine-axis audit.

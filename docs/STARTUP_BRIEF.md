@@ -1,11 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-13 (Session 153 closeout) -->
+<!-- generated-at: 2026-08-14 (Session 154 closeout) -->
+<!-- semantic-freshness: hash=cdac46ed3e347b48 next=155 silSession=154 silScore=998 handoff=- tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 153 closeout · 2026-08-13.
+> **Fast-boot brief** — generated at Session 154 closeout · 2026-08-14.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -14,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 154 · 2026-08-13 · FOUNDER MODE                         ║
+║  Session 155 · 2026-08-14 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S153) - WHAT SHIPPED ══════════════════════════╗
-║  Session 153 completed the full arc through exact-main implemen  ║
+╔══ LAST SESSION (S154) - WHAT SHIPPED ══════════════════════════╗
+║  Session 154 completed propagation reconciliation, five L2 audi  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -29,7 +30,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://d7ec86f1.call-of-doodie.pages.dev ✓   ║
-║  Unit tests    → npm test — 1155/1155 passing ✓                  ║
+║  Unit tests    → npm test — 1158/1158 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
 ║  production-smoke → Session 141 — live 7/7 · cutover 5/5 · r ✓   ║
@@ -44,14 +45,14 @@
 ║    998/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: 998.7  ·  Velocity 5↑                      ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  █▄▄▄▄  ↑  (last 5 sessions)                            ║
+║    Trend  ▄▄▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ██▇█▇▇██ →                ║
+║    Dev Health       100    ██████████  █▇█▇▇███ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  ▇▇█▇▇▇██ →                ║
-║    Engagement       100    ██████████  ▇▇▇█████ →                ║
+║    Momentum         100    ██████████  ▇█▇▇▇███ →                ║
+║    Engagement       100    ██████████  ▇▇██████ →                ║
 ║    Process Qual     100    ██████████  █████▇▇▇ →                ║
 ║    Coherence         99    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -61,24 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 153 ═══════════════════════════╗
+╔══ WHERE WE LEFT OFF  ·  Session 154 ═══════════════════════════╗
 ║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    1155/1155 passing  ·  Deploy: N/A                     ║
+║  Tests:    1158/1158 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ████████████████████████  100% used                          ║
-║     200,000 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
-║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
+║  ✓  █████░░░░░░░░░░░░░░░░░░░   19% used                          ║
+║     51,872 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~25,936 tok/turn  ·  cache 50%  ·  7 turns to compact        ║
+║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1155/1155 passing (2026-08-13)                 ║
+║  ✓  Tests         1158/1158 passing (2026-08-14)                 ║
 ║  ✓  Velocity      5 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         45208 FORGE  ·  5d old                         ║
-║  ⛔  Truth         all S153 repository-owned audit items and…     ║
+║  ✓  IGNIS         45208 FORGE  ·  6d old                         ║
+║  ⛔  Truth         S154 repository-owned implementation,…         ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.196  (healthy)                               ║
@@ -90,13 +92,13 @@
 ║  ⚠  Doctor        132/181 (74%)  ·  46 warn                      ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
-║  ✓  Cost          flat-rate Max Plan · usage ledger…             ║
+║  ✓  Cost          real $0.22/7d · 7d notional $1.34…             ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║    91d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║   113d · Physical launch QA                                      ║
+║    92d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║   114d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -113,7 +115,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   █▄▄▄▄  5↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▄▄▄  5↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -142,5 +144,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 153 closeout · 2026-08-13*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 154 closeout · 2026-08-14*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

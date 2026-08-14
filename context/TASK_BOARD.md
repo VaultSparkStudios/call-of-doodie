@@ -2,6 +2,16 @@
 
 Public-safe launch roadmap summary.
 
+## Session 154 — Propagation compatibility and protocol truth
+
+- [x] [SIL:3] **DONE S154** Capability discovery is provenance-aware and fails closed on a false-green empty universe while preserving private-map isolation in public continuous integration.
+- [x] [SIL:3] **DONE S154** Task-board parsing, status mutation, SIL chronology, and execution-budget APIs compose the propagated features with the stronger project-local contracts.
+- [x] [SIL:3] **DONE S154** Protocol drift now imports and behavior-smokes five phase-critical contracts; broad propagation regressions are named before phase commands fail.
+- [x] [SIL:2] **DONE S154** Startup and closeout surfaces recover current chronology, canonical Human Pressure, committed write-back evidence, staging truth, and agent-neutral memory.
+- [x] [SIL:2] **DONE S154** Full regression verification closes at 196 files / 1,158 tests with strict lint, deployable build, schema, public, dependency, runtime, asset, and security gates green.
+
+**Runway exception:** the S154 audit and second-order innovation pack are exhausted. Mobile density, progression retuning, new content breadth, and SPARKED promotion remain evidence- or authority-gated; no participant, physical-device, provider, mail, identity, performance, publication, or lifecycle evidence is fabricated.
+
 ## Session 153 — Playtest signal, replay plans, and release trust
 
 - [x] [SIL:3] **DONE S153** Explicit input-trust and threat-readability questions complete the bounded local playtest receipt; portable pulse data is aggregate-only and identifier-free.
@@ -370,7 +380,7 @@ Recover and independently prove Session 151, then complete one continuous autono
 - [x] [SIL:1] **DONE S124 bounded slice** First-session control calibration — the target ring now observes real keyboard, pointer/touch, and gamepad direction evidence, disables verification until 4/4, and expires proof after 30 days. Analog dead-zone drift measurement remains part of physical device QA, not a fabricated local claim.
 - [x] [SIL:2] **DONE S68** Replay command trace contract — client trace binding already shipped in S67; S68 updates `validate-replay` to accept `traceDigest`/`traceLength` as a trace-backed replay contract and updates `submit-score` to reject malformed trace metadata before leaderboard insert.
 - [ ] [SIL:1] HomeV2/MenuScreen retirement gate — once Lighthouse + funnel data confirms HomeV2 wins, remove the legacy `?home=v1` path and reclaim the `MenuScreen` chunk
-- [ ] [SIL:1] [S144] Mobile touch button-size/density control — the descoped half of the S144 mobile-handedness audit item; add a touch-zone size/density setting once real mobile usage signals which sizes matter (`SETTINGS_DEFAULTS`, `MobileHUD.jsx`)
+- [ ] [SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — the descoped half of the S144 mobile-handedness audit item; add a touch-zone size/density setting once real mobile usage signals which sizes matter (`SETTINGS_DEFAULTS`, `MobileHUD.jsx`)
 - [ ] [SIL:1] [S144] Off-screen threat arrow ADS-zoom correction — `src/utils/offscreenIndicators.js` arrows are anchored in world-space and inherit the ADS-zoom canvas transform in `drawGame.js`, so anchoring drifts slightly from the true screen edge during aim-down-sights zoom. Cosmetic only; recompute in screen-space if ever reported as a real issue.
 - [ ] [SIL:2] Supabase Auth integration per `docs/AUTH_INTEGRATION_PLAN.md` — magic-link + Google OAuth, profiles table, leaderboard user_id backfill, grace-period dual-path on submit-score; trigger when traffic warrants or paid tier ships
 - [x] [SIL:1] **DONE S67 · stale duplicate reconciled S137** App.jsx extraction roadmap slice 1 — `gameStep.js` shipped pure movement/player stepping with tests in S67, followed by combat/lifecycle/storage/replay extractions; current architecture is 4,999/5,000 and any new overage remains a root-fix trigger.

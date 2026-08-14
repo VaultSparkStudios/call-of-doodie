@@ -1,5 +1,19 @@
 # Work Log
 
+## 2026-08-14 (Session 154 — propagation compatibility and protocol truth)
+
+- Began from synchronized clean `main` at `cc734dc`; canonical `/start` drained a pending Studio propagation bundle and exposed regressions that file-presence checks had missed.
+- Ran specialty game-loop review (9.4/10 overall), release review, Studio Oracle premise verification, and `docs/AUDIT_2026-08-13_2.json`; promoted five repository-owned L2 findings.
+- Restored a provenance-aware 72-capability universe with local-first/sibling fallback and fail-closed zero-universe behavior outside isolated public continuous integration.
+- Composed task-board abstract syntax tree/reconciliation, schema-validated locked atomic project-status writes, addendum-aware SIL chronology, Startup Brief Human Pressure, and phase-critical import/behavior courts.
+- Broad verification found and repaired additional propagation downgrades in skill-cost receipts, Unicode-safe model transport, handoff splitting, blocker precedence, SIL fail-closed forecasting, session saturation, Codex plan-mode handling, and closeout evidence.
+- Exhausted the innovation pack with no executable repo-local candidates; preserved mobile density, progression, content expansion, provider, physical-device, participant, and SPARKED work as evidence/authority gated.
+- Final local proof passes protocol drift 42/42, regression 53/53, full Vitest 196/196 files and 1,158/1,158 tests, strict lint, schema, deployable build, public/assets/dependency/runtime/security gates, npm audit zero, and supply-chain incident scan.
+- Deployed isolated staging at `https://session-154-staging.call-of-doodie.pages.dev/` (immutable `https://5da63921.call-of-doodie.pages.dev/`); hosted verification passes 7/7 with HTTP 200, strict headers, typed edge health, manifest, service worker, and social card.
+- Release/cost gate allows the cost-neutral FORGE engineering update. No UI changed, so CANON-053 recapture is not applicable; SPARKED remains independently NO-GO.
+
+Intent outcome: repository-owned arc, audit implementation, saturation, complete local verification, and isolated staging achieved. Authorized direct-main publication, exact-SHA workflows, production deployment, and live smoke complete the follow-through.
+
 ## 2026-08-12 (Session 152 — recovery, closed-loop coaching, and mastery command)
 
 - Reconstructed S151 from handoff/worklog/closeout/diff/git evidence, parsed every changed JSON/NDJSON, verified `~/.claude.json`, reran the exact 191-file / 1,138-test corpus, and distinguished committed implementation from interrupted closeout metadata.

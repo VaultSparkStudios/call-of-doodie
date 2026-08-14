@@ -22,6 +22,7 @@ import { readFileSync, existsSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from './safe-spawn.mjs';
+import { STUDIO_STATE_DIRS } from './studio-state-dirs.mjs';
 
 const WIPE_THRESHOLD = 0.5; // warn/abort if new content < 50% of existing
 
@@ -106,6 +107,15 @@ const GENERATED = [
   // render. The shape check still catches a true wipe (empty scaffold).
   'docs/STARTUP_BRIEF.md',
   'context/SIGNALS.md',
+  // S283 — a LIVE CENSUS: orchestrate.mjs rewrites this from the session locks
+  // that exist right now, so shrinking IS the measurement, not damage. It halved
+  // (19,273 → 8,665 bytes) purely because five sibling sessions ended between
+  // renders: identical schema, every key present, sessions 11 → 6 and collisions
+  // 17 → 4. Classified GENERATED rather than SHRINK_ALLOWED deliberately — the
+  // JSON branch of isGeneratedWiped still catches the true wipe (an empty object,
+  // or corrupt JSON), so this keeps the guard armed instead of blanket-exempting
+  // a file. Declaring a false positive beats weakening the detector (D-S282.3).
+  'portfolio/compiled/SESSION_ORCHESTRATOR.json',
 ];
 
 // Template-placeholder markers that signal an empty scaffold overwrote real
@@ -242,7 +252,15 @@ export function checkContextFiles(root, opts = {}) {
     return new Set(r.stdout.trim().split('\n').filter(Boolean));
   }
 
-  const CONTEXT_DIRS = ['context', 'docs', 'logs'];
+  // S263 — `portfolio/` was OUT of scope, so portfolio/SKILL_CATALOG.json was
+  // never protected by this gate at all. The nightly out-of-session lane
+  // overwrote it 27 skills -> 7 on four consecutive nights (29576e73, a92717a3,
+  // d6cb27b3) because its cloud environment cannot see ~/.claude/skills, and a
+  // local session restored it in between — a flip-flop nobody saw because
+  // nothing compared the artifact against its own prior size. Portfolio holds
+  // studio-wide source-of-truth indexes; it belongs under the same wipe rule as
+  // context/ and docs/. Shared with the context meter (see the lib's own note).
+  const CONTEXT_DIRS = STUDIO_STATE_DIRS;
   const changedFiles = getChangedFiles(CONTEXT_DIRS); // null = fallback
 
   // Check append-only files for prefix violation.

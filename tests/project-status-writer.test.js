@@ -8,8 +8,23 @@ import { V3_CATS } from '../scripts/lib/sil-categories.mjs';
 function fixture() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cod-status-'));
   fs.mkdirSync(path.join(root, 'context'));
+  fs.copyFileSync(
+    path.resolve('context', 'PROJECT_STATUS.schema.json'),
+    path.join(root, 'context', 'PROJECT_STATUS.schema.json'),
+  );
   const categories = Object.fromEntries(V3_CATS.map((category, index) => [category, index === 0 ? 100 : 0]));
-  fs.writeFileSync(path.join(root, 'context', 'PROJECT_STATUS.json'), JSON.stringify({ silCategoriesV3: categories, silScore: 999, silMax: 2 }));
+  fs.writeFileSync(path.join(root, 'context', 'PROJECT_STATUS.json'), JSON.stringify({
+    schemaVersion: '1.3',
+    slug: 'writer-fixture',
+    name: 'Writer Fixture',
+    status: 'active',
+    health: 'green',
+    currentFocus: 'Verify the canonical writer.',
+    lastUpdated: '2026-08-13',
+    silCategoriesV3: categories,
+    silScore: 999,
+    silMax: 2,
+  }));
   return root;
 }
 
@@ -29,6 +44,12 @@ describe('canonical PROJECT_STATUS writer', () => {
     updateProjectStatus(root, (status) => ({ ...status, proof: 'source-derived' }));
     const saved = JSON.parse(fs.readFileSync(path.join(root, 'context', 'PROJECT_STATUS.json')));
     expect(saved.proof).toBe('source-derived');
+  });
+
+  it('fails closed on a malformed canonical status shape', () => {
+    const root = fixture();
+    const current = JSON.parse(fs.readFileSync(path.join(root, 'context', 'PROJECT_STATUS.json')));
+    expect(() => writeProjectStatus(root, { ...current, slug: 'NOT A SLUG' })).toThrow(/contract invalid/);
   });
 
   it('times out on a recent lock and reclaims a stale one', () => {

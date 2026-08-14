@@ -157,7 +157,25 @@ function measuredSpend() {
   const tokens = scoped.reduce((s, r) => s + (Number(r?.actual?.tokens) || 0), 0);
   return { tokens, measured: true, source: `skill-cost ledger (${scoped.length} row(s) since session start)` };
 }
-const spend = measuredSpend();
+// S264 [S262 #5] — the ledger records only INSTRUMENTED skills, so a /goal +Nk
+// floor could under-count real spend forever ("11.5k measured against a real
+// spend far higher") and never be MET. The context-meter's transcript-growth
+// proxy measures the session's actual total tokens; when it reads higher than
+// the ledger, it is the closer-to-true total. Take max(ledger, meter) and say
+// which source produced the number — never silently blend.
+function totalSpend() {
+  const ledger = measuredSpend();
+  const meterTokens = ctx.contextMeasured && Number.isFinite(ctx.usedTokens) ? ctx.usedTokens : null;
+  if (meterTokens != null && meterTokens > ledger.tokens) {
+    return {
+      tokens: meterTokens,
+      measured: true,
+      source: `context-meter transcript proxy (${meterTokens.toLocaleString()} tok total; skill ledger covers ${ledger.tokens.toLocaleString()} — ${meterTokens > 0 ? Math.round((ledger.tokens / meterTokens) * 100) : 0}% instrumented)`,
+    };
+  }
+  return ledger;
+}
+const spend = totalSpend();
 const budgetSpent = spend.tokens;
 
 const workTokens = ctx.usedTokens == null ? 0 : Math.max(0, ctx.usedTokens - ctx.bootstrap);

@@ -14,6 +14,7 @@
 //   node scripts/run-tests.mjs --no-retry     # disable isolation-retry of failed files
 //   node scripts/run-tests.mjs --shard=1/4    # run deterministic shard 1 of 4
 //   node scripts/run-tests.mjs --shards=4     # run all shards sequentially and aggregate JSON proof
+//   node scripts/run-tests.mjs --shards=64 --resume-shards --max-shards-per-run=8
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,7 +24,8 @@ import { isSpawnExhaustion, spawnBackoffMs, spawnResilient } from './lib/spawn-r
 import { getHostLoad } from './lib/host-load.mjs';
 import { readDurationCache, recordDuration, sortByHistoricalDuration, writeDurationCache } from './lib/test-duration-ordering.mjs';
 import { buildProofSourceManifest } from './lib/proof-source-manifest.mjs';
-import { updateProjectStatus } from './lib/write-project-status.mjs';
+import { liveStateBlockedMessage, missingLiveState } from './lib/test-live-state.mjs';
+import { updateProjectStatusFile } from './lib/write-project-status.mjs';
 // Re-export the pure helpers so existing importers of run-tests keep working and the
 // single source of truth stays scripts/lib/spawn-resilience.mjs.
 export { isSpawnExhaustion, spawnBackoffMs };
@@ -32,7 +34,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DURATION_CACHE = path.join(ROOT, '.cache', 'test-durations.json');
 const argv = process.argv.slice(2);
 if (argv.includes('--help') || argv.includes('-h')) {
-  console.log('Usage: node scripts/run-tests.mjs [--tier=1|2] [--json] [--no-write] [--changed] [--no-retry] [--shard=N/M|--shards=N]');
+  console.log('Usage: node scripts/run-tests.mjs [--tier=1|2] [--json] [--no-write] [--changed] [--no-retry] [--shard=N/M|--shards=N] [--resume-shards] [--max-shards-per-run=N]');
   process.exit(0);
 }
 const TIER = (argv.find(a => a.startsWith('--tier=')) || '').split('=')[1] || null;
@@ -41,6 +43,7 @@ const CHANGED = argv.includes('--changed');
 const SHARD_SPEC = (argv.find(a => a.startsWith('--shard=')) || '').split('=')[1] || '';
 const SHARD_COUNT = parsePositiveInt((argv.find(a => a.startsWith('--shards=')) || '').split('=')[1]);
 const RESUME_SHARDS = argv.includes('--resume-shards');
+const MAX_SHARDS_PER_RUN = parsePositiveInt((argv.find(a => a.startsWith('--max-shards-per-run=')) || '').split('=')[1]);
 const PROOF_DIR_ARG = (argv.find(a => a.startsWith('--proof-dir=')) || '').split('=')[1] || '';
 // --changed runs a SUBSET, so it must never overwrite the canonical PROJECT_STATUS
 // test counts (that would report a partial run as the whole suite). Always no-write.
@@ -175,6 +178,11 @@ export function reusableShardProof(proof, { shardCount, shardIndex, proofShape =
     && !parsed.budgetExhausted;
 }
 
+export function boundedShardDecision({ reusable = false, executed = 0, max = null } = {}) {
+  if (reusable) return 'reuse';
+  if (max && executed >= max) return 'checkpoint';
+  return 'execute';
+}
 // S167 [audit #2] test-runner-inconclusive-honesty — pure, unit-testable
 // classifier for a file that FAILED in-suite, given its solo-retry result.
 // Honest discriminator: a real regression shows pass < total; concurrent-load
@@ -200,11 +208,34 @@ export const SIDECAR_PATH = path.join(ROOT, '.cache', 'test-failures.ndjson');
 // Extract the single most diagnostic line from a captured test output blob.
 // Prefers a line that looks like an assertion/failure/error; falls back to the
 // last non-empty line. Bounded so the sidecar stays line-oriented and greppable.
+// S276 — a candidate line must also CARRY information. `⛔ …` matched the harness's
+// bare `{` (the first line of a pretty-printed JSON blob a test threw), so the sidecar
+// recorded `{` as an entire failure cause. Structural punctuation is not a diagnosis:
+// a line whose content is only brackets/quotes/commas is skipped in favour of the next
+// candidate, and only falls through if nothing better exists.
+const PUNCTUATION_ONLY = /^[\s{}[\](),;:'"`]*$/;
+// The status glyph is stripped BEFORE judging content: `⛔ {` is a marker attached to
+// nothing, and counting the marker itself as content would re-admit the exact line
+// this guard exists to reject.
+const STATUS_GLYPHS = /[⛔✗✘×✓⚠◐⊘]/g;
+// The harness's own truncation notice is METADATA about the message, not the message.
+// Introduced with the full-message render and immediately observed being selected as a
+// failure cause (`… +28 more line(s)`), which would have replaced one uninformative
+// cause with another.
+const ELISION_NOTICE = /^…\s*\+\d+\s+more line\(s\)$/;
+
 export function lastFailureCause(output) {
   const lines = (output || '').split('\n').map(s => s.trim()).filter(Boolean);
   if (!lines.length) return '';
+  const informative = (s) =>
+    !ELISION_NOTICE.test(s) && !PUNCTUATION_ONLY.test(s.replace(STATUS_GLYPHS, ''));
   for (let i = lines.length - 1; i >= 0; i--) {
-    if (/⛔|FAIL|Error|✗|assert|Expected|Received|throw/i.test(lines[i])) return lines[i].slice(0, 200);
+    if (/⛔|FAIL|Error|✗|assert|Expected|Received|throw/i.test(lines[i]) && informative(lines[i])) {
+      return lines[i].slice(0, 200);
+    }
+  }
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (informative(lines[i])) return lines[i].slice(0, 200);
   }
   return lines[lines.length - 1].slice(0, 200);
 }
@@ -284,6 +315,22 @@ export function cleanupLeakedTestNodeChildren(root = ROOT, { spawnSyncFn = spawn
 }
 function runOne(file, { spawnRetries = SPAWN_RETRIES } = {}) {
   const relFile = path.relative(ROOT, file.path).replace(/\\/g, '/');
+  // S280 [audit #2] — a test that DECLARES a live-state dependency it cannot
+  // find has no verdict to give. Before S280 the declaration was decorative:
+  // `tier1-session-lock.mjs` announced `@integration-live-state
+  // context/.session-lock` and then hard-threw whenever no session was open, so
+  // the suite headline silently encoded whether a human happened to be mid-
+  // session. Reuse the existing `env-blocked` class (CANON-031: never green,
+  // never red) rather than letting ambient state masquerade as a regression.
+  // Checked BEFORE spawn — running a file to a guaranteed throw is pure cost.
+  const liveState = missingLiveState(file.path, ROOT);
+  if (liveState.missing.length) {
+    return {
+      file: relFile, tier: file.tier, pass: 0, total: 0,
+      status: 'env-blocked',
+      output: liveStateBlockedMessage(liveState.missing),
+    };
+  }
   if (CHANGED && CHANGED_HEAVY_DEFER.has(relFile)) {
     const proof = directTestProofFor(relFile);
     if (proof) return coveredDirectlyResult(file, proof);
@@ -710,17 +757,20 @@ if (JSON_OUT) {
 }
 
 if (!NO_WRITE) {
+  const sp = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
   try {
-    const written = updateProjectStatus(ROOT, (j) => {
+    let writtenStatus = null;
     // S160 audit #4: refresh-test-count.mjs is the SOLE owner of the canonical file-level
     // testsPassing/testsTotal (the .cache/test-count.json source the brief + doctor read).
     // run-tests.mjs scans a different, fuller set (153 files / assertion granularity) than
     // refresh-test-count (113 files), so writing those same fields here made last-writer-wins
     // flip the numbers (855/858 assertions vs 113/113 files) and the doctor Test-suite probe
     // contradict the Test-signal-fresh probe + brief. Keep ONLY assertion-level detail here.
-    j.testsAssertionsTotal = totalAll;
-    j.testsAssertionsPassing = totalPass;
-    j.testsAssertionsFiles = results.length;
+    const assertionsLastRun = new Date().toISOString().slice(0, 10);
+    const update = updateProjectStatusFile(sp, (j) => {
+      j.testsAssertionsTotal = totalAll;
+      j.testsAssertionsPassing = totalPass;
+      j.testsAssertionsFiles = results.length;
     // Honest flake accounting (S165): record which files only passed on isolated
     // retry so the green count never silently masks instability (CANON-031).
     j.testsFlaky = flaky;
@@ -732,16 +782,27 @@ if (!NO_WRITE) {
     j.testsEnvBlocked = envBlocked;
     // S205 [SIL][S204 #2]: surface deliberately-deferred slow sibling-walkers (host
     // saturated) and budget-deferred files so a smaller-green run is auditable and never read as a full pass.
-    j.testsDeferred = deferred;
-    j.testsBudgetExhausted = budgetExhausted;
-    j.testsLastRun = new Date().toISOString().slice(0, 10);
+    // S263 — this used to write `testsDeferred` and `testsLastRun`, the scope and
+    // FRESHNESS metadata of the file-level counts it deliberately refuses to write
+    // (see the S160 #4 note above). A red run therefore re-dated a stale green:
+    // testsPassing sat frozen at 346/346 from 2026-08-01 while testsLastRun was
+    // bumped to 2026-08-03 by a RED run, so the brief rendered "✓ 346/346
+    // (2026-08-03)" and the doctor's staleness guard — which reads this same
+    // field — reset to 0 days old. A freshness stamp belongs to the producer of
+    // the numbers it dates. Keep assertion-scoped metadata under assertion-scoped
+    // names; leave the file-level surface to refresh-test-count.mjs and
+    // test-proof-reconciliation.mjs.
+      j.testsAssertionsDeferred = deferred;
+      j.testsBudgetExhausted = budgetExhausted;
+      j.testsAssertionsLastRun = assertionsLastRun;
       return j;
-    });
+    }, { touchLastUpdated: false });
+    writtenStatus = update.status;
     // S166 [SIL][S165 #1]: record this session's flaky set so the flaky-trend
     // probe can escalate a chronically-flaky test (≥3 consecutive sessions).
     try {
       const { recordFlaky } = await import('./lib/flaky-trend.mjs');
-      recordFlaky({ session: written.status.currentSession, date: written.status.testsLastRun, flaky });
+      recordFlaky({ session: writtenStatus.currentSession, date: writtenStatus.testsAssertionsLastRun, flaky });
     } catch { /* trend recording is best-effort; never fail the test run */ }
   } catch (e) { /* ignore write failure in CI */ }
 }
@@ -761,12 +822,14 @@ async function runShardAggregate(shardCount) {
   let childParseFailed = false;
   const resumedShards = [];
   const executedShards = [];
+  const pendingShards = [];
   const passthrough = [];
   for (const a of argv) {
     if (a.startsWith('--shards=')) continue;
     if (a.startsWith('--shard=')) continue;
     if (a.startsWith('--proof-dir=')) continue;
     if (a === '--resume-shards') continue;
+    if (a.startsWith('--max-shards-per-run=')) continue;
     if (a === '--json') continue;
     if (a === '--no-write') continue;
     passthrough.push(a);
@@ -791,6 +854,7 @@ async function runShardAggregate(shardCount) {
   }
   for (let i = 1; i <= shardCount; i++) {
     const proofPath = shardProofPath(proofDir, shardCount, i);
+    let reused = false;
     if (RESUME_SHARDS && fs.existsSync(proofPath)) {
       try {
         const proof = JSON.parse(fs.readFileSync(proofPath, 'utf8'));
@@ -799,11 +863,16 @@ async function runShardAggregate(shardCount) {
           for (const r of parsed.results || []) mergedResults.push(r);
           shardResults.push({ ...(proof.summary || {}), reused: true, proofPath: path.relative(ROOT, proofPath).replace(/\\/g, '/') });
           resumedShards.push(`${i}/${shardCount}`);
-          continue;
+          reused = true;
         }
       } catch { /* bad proof is ignored and regenerated */ }
     }
-    const childArgs = [
+    const epochDecision = boundedShardDecision({ reusable: reused, executed: executedShards.length, max: MAX_SHARDS_PER_RUN });
+    if (epochDecision === 'reuse') continue;
+    if (epochDecision === 'checkpoint') {
+      pendingShards.push(`${i}/${shardCount}`);
+      continue;
+    }    const childArgs = [
       fileURLToPath(import.meta.url),
       ...passthrough,
       `--shard=${i}/${shardCount}`,
@@ -883,11 +952,15 @@ async function runShardAggregate(shardCount) {
   const budgetExhausted = shardResults.some(s => s.budgetExhausted);
   const aggregate = {
     mode: 'sharded',
+    state: pendingShards.length ? 'checkpoint-incomplete' : 'complete',
+    complete: pendingShards.length === 0,
     shardCount,
     proofShape,
     proofDir: path.relative(ROOT, proofDir).replace(/\\/g, '/'),
     resumedShards,
     executedShards,
+    pendingShards,
+    maxShardsPerRun: MAX_SHARDS_PER_RUN,
     totalPass,
     totalAll,
     files: mergedResults.length,
@@ -917,27 +990,34 @@ async function runShardAggregate(shardCount) {
     const defNote = deferred.length ? ` · ${deferred.length} deferred (not counted green)` : '';
     const envNote = envBlocked.length ? ` · ${envBlocked.length} env-blocked` : '';
     const resumeNote = resumedShards.length ? ` · ${resumedShards.length} shard proof(s) resumed` : '';
-    console.log(`  ${totalPass}/${totalAll} assertions · ${passFiles}/${mergedResults.length} files${envNote}${defNote}${resumeNote} · ${failedFiles.length ? '⛔' : deferred.length ? '✓ (smaller-green)' : '✓'}`);
+    const checkpointNote = pendingShards.length ? ` · checkpoint (${pendingShards.length} shard(s) pending)` : '';
+    console.log(`  ${totalPass}/${totalAll} assertions · ${passFiles}/${mergedResults.length} files${envNote}${defNote}${resumeNote}${checkpointNote} · ${failedFiles.length ? '⛔' : pendingShards.length ? '◐' : deferred.length ? '✓ (smaller-green)' : '✓'}`);
     console.log(`  proof: ${path.relative(ROOT, aggregateProofPath).replace(/\\/g, '/')}`);
   }
-  if (!NO_WRITE) {
+  if (!NO_WRITE && aggregate.complete) {
+    const sp = path.join(ROOT, 'context', 'PROJECT_STATUS.json');
     try {
-      updateProjectStatus(ROOT, (j) => {
-      j.testsAssertionsTotal = totalAll;
-      j.testsAssertionsPassing = totalPass;
-      j.testsAssertionsFiles = mergedResults.length;
-      j.testsFlaky = flaky;
-      j.testsInconclusive = inconclusive;
-      j.testsEnvBlocked = envBlocked;
-      j.testsDeferred = deferred;
-      j.testsBudgetExhausted = budgetExhausted;
-      j.testsLastRun = new Date().toISOString().slice(0, 10);
-      j.testsLastRunMode = `sharded:${shardCount}`;
-      j.testsShardProofDir = path.relative(ROOT, proofDir).replace(/\\/g, '/');
-      j.testsShardProofResumed = resumedShards;
+      updateProjectStatusFile(sp, (j) => {
+        j.testsAssertionsTotal = totalAll;
+        j.testsAssertionsPassing = totalPass;
+        j.testsAssertionsFiles = mergedResults.length;
+        j.testsFlaky = flaky;
+        j.testsInconclusive = inconclusive;
+        j.testsEnvBlocked = envBlocked;
+      // S263 — assertion-scoped stamps only (see the note in the non-sharded
+      // writer). A sharded run that is GREEN is promoted to the file-level
+      // surface by test-proof-reconciliation.mjs, which stamps testsLastRun from
+      // the proof's own generatedAt. A sharded run that is RED must not re-date
+      // the file-level counts it did not produce.
+        j.testsAssertionsDeferred = deferred;
+        j.testsBudgetExhausted = budgetExhausted;
+        j.testsAssertionsLastRun = new Date().toISOString().slice(0, 10);
+        j.testsLastRunMode = `sharded:${shardCount}`;
+        j.testsShardProofDir = path.relative(ROOT, proofDir).replace(/\\/g, '/');
+        j.testsShardProofResumed = resumedShards;
         return j;
-      });
+      }, { touchLastUpdated: false });
     } catch { /* ignore write failure in CI */ }
   }
-  process.exit(failedFiles.length || childParseFailed ? 1 : 0);
+  process.exit(failedFiles.length || childParseFailed ? 1 : pendingShards.length ? 2 : 0);
 }

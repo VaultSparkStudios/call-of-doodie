@@ -24,4 +24,19 @@ describe("SIL ledger freshness", () => {
     expect(resolveLatestSilDate([], "Last session: 2026-07-30 | Session 135")).toBe("2026-07-30");
     expect(resolveLatestSilDate([], "Last session: unknown")).toBeNull();
   });
+
+  it("keeps addendum score revisions without turning subheadings into phantom sessions", () => {
+    const markdown = [
+      "## 2026-08-13 — Session 154 | Total: 980/1000 | Velocity: 3",
+      "",
+      "### 2026-08-13 — Session 154 addendum | Score revised: 980 → 984 | Kind: verifier seal",
+      "",
+      "## 2026-08-12 — Session 153 | Total: 998/1000 | Velocity: 5",
+    ].join("\n");
+    const entries = parseSilSessions(markdown);
+    expect(entries.map((entry) => entry.session)).toEqual([154, 153]);
+    expect(entries[0]).toMatchObject({ total: 984, baseTotal: 980 });
+    expect(entries[0].revisions).toEqual([{ from: 980, to: 984 }]);
+    expect(resolveLatestSilDate(entries, "Last session: 2026-08-01")).toBe("2026-08-13");
+  });
 });

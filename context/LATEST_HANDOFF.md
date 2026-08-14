@@ -1,23 +1,23 @@
-# Latest Handoff — Session 153
+# Latest Handoff — Session 154
 
-Session Intent: Run one continuous `/arc` from synchronized `main` through canonical startup, game-loop and public-release review, fresh audit, complete repository-owned implementation, isolated staging, rendered-pixel proof, closeout, direct-main publication, and exact production verification. Preserve FORGE/public-unlaunched lifecycle truth.
+Session Intent: Complete the founder-authorized S154 `/arc` from synchronized `main` through propagation reconciliation, specialty review, premise-verified audit, complete repository-owned implementation, second-order saturation, isolated staging, closeout, direct-main publication, and exact production verification. Preserve FORGE/public-unlaunched lifecycle truth.
 
 ## Where We Left Off
 
-- All four S153 audit items are implemented: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, and truthful Startup Brief closeout age.
-- Second-order release testing found and repaired three real edge defects: preview-origin CORS parity, issuer/consumer run-signature drift, and wildcard/unrated public Studio-event ingestion. The affected Supabase functions are deployed and the final real staging playtest transaction passes 44/44.
-- Final isolated staging is `https://session-153-staging.call-of-doodie.pages.dev/` (immutable `https://d7ec86f1.call-of-doodie.pages.dev/`). Broad hosted checks pass 1,020/1,020; focused Replay Passport passes 32/32; 18 hash-bound captures have direct pixel review in both themes at 390px and 1440px.
-- The exact candidate passes 195/195 test files and 1,153/1,153 assertions plus lint, build, architecture/runtime, public-contract, security, dependency, supply-chain, cost, canon, backend, replay, and leaderboard courts.
-- Independent gate: GO for the explicitly authorized cost-neutral FORGE engineering publish; NO-GO for SPARKED. Do not promote lifecycle status without current Core Web Vitals, physical-device/media, reply-as mail, project-scoped provider, Obelisk, participant/publication, and explicit lifecycle evidence.
-- Production source `4b78142e0b3744c024f42e44f971ab89c8939b0f` is green in brief `31743411548`, Supabase deploy `31743411535`, and Cloudflare workflow `31743411559`; immutable `https://c9ee3b5e.call-of-doodie.pages.dev/` and the custom domain pass the production court.
-- Production follow-through caught and fixed a verifier-only project-routing defect: backend CLI checks now reject unrelated generic Supabase credentials and resolve the game's validated public configuration from the gateway or deployed artifact. Full seal tree passes 196/196 files and 1,155/1,155 assertions plus corrected backend 5/5, replay 3/3, and leaderboard isolation.
-- Verifier seal `10c05add70f4dadbc9b3fc25f215bad2c1797392` is green in brief `31745229611` and Cloudflare workflow `31745229701`; immutable `https://ce9e4ae3.call-of-doodie.pages.dev/` and custom-domain health report the exact deploy prefix. Begin Session 154 from synchronized clean main after this receipt-only commit verifies.
+- S154 started clean at `cc734dc`, then canonical startup drained a propagation bundle that delivered expected files while removing live module APIs and stronger repository safety behavior. Studio Oracle confirmed the failure premises before implementation.
+- All five items in `docs/AUDIT_2026-08-13_2.json` are implemented at L2: capability-map provenance/fail-closed discovery, task-board contract composition, atomic schema-bound status writes, truthful startup chronology/pressure, and an executable compatibility court.
+- Broad verification also restored execution-budget receipts, Unicode-safe transport and handoff smoke, provider-first blocker precedence, fail-closed SIL forecasting, honest session saturation, Codex plan-mode behavior, and committed closeout/staging/memory evidence.
+- Protocol drift passes 42/42; focused regression passes 53/53; full Vitest passes 196/196 files and 1,158/1,158 tests. Strict lint, schema, deployable build, public/assets/dependency/runtime/security gates, npm audit zero, and supply-chain incident scan pass.
+- The innovation pack has no executable repo-local candidates. Mobile density, progression tuning, content expansion, provider/mail/identity work, physical-device proof, participant evidence, and SPARKED promotion remain explicitly gated.
+- Final isolated staging is `https://session-154-staging.call-of-doodie.pages.dev/` (immutable `https://5da63921.call-of-doodie.pages.dev/`). Hosted shell/edge/manifest/service-worker/social-card checks pass 7/7; the root is HTTP 200 with one-year HSTS, strict CSP, frame denial, and `noindex`.
+- Independent release/cost gate: GO for the authorized cost-neutral FORGE engineering update; NO-GO for SPARKED. S154 changed no player-facing pixels, so a new CANON-053 receipt is correctly not claimed.
+- Next: commit and push the canonical S154 closeout directly to synchronized `main`, wait for exact-SHA brief/deploy workflows, verify the immutable production revision and custom-domain smoke, then append the production receipt if needed.
 
 ## Impact Summary
 
-**Headline.** Playtest feedback is now explicit instead of inferred, replay coverage names planned pressure without pretending to recreate simulation, and the release path proves its own trust boundaries through a real run.
+**Headline.** Protocol propagation now proves that the delivered system is executable—not merely that expected files exist—while retaining every newer safety and observability contract.
 
-**Evidence.** 1,155/1,155 seal tests; 1,020/1,020 broad visual checks; focused 32/32 and 44/44 staging plus 11/11 production browser courts; 18 direct-reviewed captures; backend 5/5; replay trust 3/3; dependency/security audits zero.
+**Evidence.** Protocol 42/42; focused 53/53; full 196 files / 1,158 tests; strict lint/build/schema/public/security; npm audit zero; isolated staging 7/7 at immutable `5da63921`; cost-neutral FORGE release gate GO.
 
 ---
 

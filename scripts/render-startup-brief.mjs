@@ -17,10 +17,10 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolveTestSignal, testSignalSeverity, testSignalMark } from './lib/test-signal.mjs';
 import { spawnSync } from './lib/safe-spawn.mjs';
-import { normalizeContextMeterView } from './lib/context-meter-view.mjs';
 import { renderTitleHeader, renderLastCompleted, renderTestItNow } from './lib/brief-blocks.mjs';
-import { presentCostSignal, selectCurrentTestingSurfaces } from './lib/brief-evidence.mjs';
+import { selectCurrentTestingSurfaces } from './lib/brief-evidence.mjs';
 import { parseUnifiedItems } from './lib/task-board.mjs';
 import { loadPortfolioTaskBoards } from './lib/cross-repo-tasks.mjs';
 import { loadIgnisInsight } from './lib/ignis-insight.mjs';
@@ -34,7 +34,9 @@ import { recordAndResolve, rollingMae } from './lib/forecast-ledger.mjs';
 import { BLOCKED_STATUSES_CORE } from './lib/shared-policies.mjs';
 import { runBriefPreflight } from './lib/brief-preflight.mjs';
 import { normalizeGeniusBlock, renderHumanPressureBlock } from './lib/startup-brief-boxes.mjs';
+import { buildBriefSemanticFingerprint, formatBriefSemanticFingerprint } from './lib/brief-semantic-fingerprint.mjs';
 import { run as codexTrustedProjectRun } from './check-codex-trusted-project.mjs';
+import { readableDoctorScore } from './lib/doctor-score-coherence.mjs';
 import { updateProjectStatus } from './lib/write-project-status.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -275,19 +277,19 @@ function loadLiveContextMeter() {
 }
 
 const meter = loadLiveContextMeter();
-const meterView = normalizeContextMeterView(meter, { fallbackLimit: meterLimit });
-const meterUsed = meterView.usedTokens;
-const meterRemaining = meterView.remainingTokens;
+const meterUsed = meter.usedTokens;
+const meterRemaining = Math.max(0, meter.limit - meterUsed);
 const meterRemainingPct = Math.round((meterRemaining / meter.limit) * 100);
 // context-meter returns pctUsed in percentage form (0-100), not 0-1. Normalize.
-const meterUsedPctRaw = meterView.pctUsed;
+const meterUsedPctRaw = meter.pctUsed == null ? null : (meter.pctUsed > 1 ? meter.pctUsed : meter.pctUsed * 100);
 // S262 — the `Math.min(100, …)` here clamped the DISPLAY while the brief's own
 // token figure said 154%, and that internal disagreement is what tripped
 // check-startup-meter-freshness. An overrun is the single most important thing
 // this line can say, and clipping it hides the magnitude. The number is now
 // unclamped; only the bar fill (below) is bounded, because it is a fixed width.
-const meterUsedPct = meterView.displayPercent;
-const meterUsedFrac = meterView.fraction;
+const meterUsedPct = meterUsedPctRaw == null ? null : Math.max(0, Math.round(meterUsedPctRaw));
+// pctUsedFraction is 0-1 for bar rendering math
+const meterUsedFrac = (meterUsedPctRaw ?? 0) / 100;
 const estimatedItemsFit = Math.max(0, Math.floor(meterRemaining / 100000));
 
 // ── Parse Rolling Status ──────────────────────────────────────────────────────
@@ -686,14 +688,19 @@ try {
   const ledEntries = readEntries(ledgerPath);
   if (ledEntries.length > 0) {
     const v = evaluateCostAnomaly(ledEntries);
-    const presented = presentCostSignal(v, { modelPlanMode: status.modelPlanMode === true });
-    sigCost = presented.sig;
-    costDetail = presented.detail;
+    sigCost = v.sig;
+    const realPart = `real $${v.realMetered7d.toFixed(2)}/7d`;
+    costDetail = v.notionalNote
+      ? `${realPart} · ${v.notionalNote}`
+      : `${realPart} · ${v.reasons[0] || 'normal'}`;
   }
 } catch { /* best-effort */ }
 
 // ── Doctor score ─────────────────────────────────────────────────────────────
-const doctorScore  = status.doctorScore ?? null;
+// Shape-guarded: a malformed doctorScore (S276 found a bare `124`) is treated as
+// UNMEASURED rather than dereferenced into `undefined/undefined (undefined%)`.
+const doctorRead   = readableDoctorScore(status.doctorScore);
+const doctorScore  = doctorRead.score;
 const sigDoctor    = !doctorScore ? '⚠' : doctorScore.failing === 0 ? (doctorScore.warning > 0 ? '⚠' : '✓') : '⛔';
 // S171 [audit #4] — aggregate-honesty: a bare "9 warning" reads as 9 studio-ops
 // problems. Append the ownership split (self vs sibling-rollout) so the founder
@@ -726,7 +733,7 @@ try {
   }
 } catch { /* split is advisory */ }
 const doctorDetail = !doctorScore
-  ? 'not yet tracked — run: node scripts/ops.mjs doctor --update-json'
+  ? `${doctorRead.reason} — run: node scripts/ops.mjs doctor --update-json`
   : doctorScore.failing > 0
     ? `${doctorScore.passing}/${doctorScore.total} (${doctorScore.score}%)  ·  ${doctorScore.failing} failing`
     : doctorScore.warning > 0
@@ -840,8 +847,18 @@ if (typeof status.testsPassing === 'number' && typeof status.testsTotal === 'num
   const envBlockedCount = listSignalCount(status.testsEnvBlocked);
   const allPass = status.testsPassing === status.testsTotal;
   const mostlyPass = status.testsPassing / status.testsTotal >= 0.9;
-  sigTests = testsStale || deferredCount || envBlockedCount ? '⚠' : allPass ? '✓' : mostlyPass ? '⚠' : '⛔';
-  testsLabel = `${status.testsPassing}/${status.testsTotal} passing` + (status.testsLastRun ? ` (${status.testsLastRun})` : '');
+  // S263 — reconcile both test surfaces before drawing a mark. The v3 fallback
+  // renderer had the same phantom-green as v5: file-level counts drawn beside a
+  // freshness stamp a RED run had refreshed. See lib/test-signal.mjs (D-S263.1).
+  // S283 — severity comes from the library, so a state this renderer has never
+  // heard of cannot fall through to the green branch (the enumeration here was
+  // fail-open in exactly that way).
+  const signal = resolveTestSignal(status);
+  const contradicted = testSignalSeverity(signal) !== 'ok';
+  sigTests = contradicted ? testSignalMark(signal) : testsStale || deferredCount || envBlockedCount ? '⚠' : allPass ? '✓' : mostlyPass ? '⚠' : '⛔';
+  testsLabel = contradicted
+    ? signal.detail
+    : `${status.testsPassing}/${status.testsTotal} passing` + (status.testsLastRun ? ` (${status.testsLastRun})` : '');
   if (deferredCount) testsLabel += ` · ${deferredCount} deferred: ${compactFileList(status.testsDeferred)}`;
   if (envBlockedCount) testsLabel += ` · ${envBlockedCount} env-blocked: ${compactFileList(status.testsEnvBlocked)}`;
   if (testsStale) testsLabel += ' · STALE — run node scripts/run-tests.mjs';
@@ -1155,6 +1172,7 @@ const pct = silTotal > 0 ? `${Math.round(silTotal / silMax * 100)}%` : '?%';
 const lines = [
   `<!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->`,
   `<!-- generated-at: ${today} (Session ${currentSession - 1} closeout) -->`,
+  formatBriefSemanticFingerprint(buildBriefSemanticFingerprint(root)),
   `<!-- fast-boot-valid-until: next session if within 24h -->`,
   `<!-- brief-coherent: ${briefCoherent} -->`,
   ``,

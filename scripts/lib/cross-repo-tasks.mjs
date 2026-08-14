@@ -8,13 +8,20 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { parseSectionCheckboxItems, parseUnifiedItems } from './task-board.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STUDIO_ROOT = path.resolve(__dirname, '..', '..');
 
 function readText(p) { try { return fs.readFileSync(p, 'utf8'); } catch { return ''; } }
 function readJson(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
+
+function extractSection(content, heading) {
+  const parts = content.split(/^## /m);
+  const match = parts.find(p => p.startsWith(heading));
+  if (!match) return '';
+  const nl = match.indexOf('\n');
+  return nl === -1 ? '' : match.slice(nl + 1);
+}
 
 function tierFromCell(cell) {
   if (cell.includes('🔥')) return 'critical';
@@ -26,19 +33,24 @@ function tierFromCell(cell) {
 
 export function parseTaskBoard(content) {
   const items = [];
-  const unified = parseUnifiedItems(content);
-  if (unified.length) {
-    for (const row of unified) {
-      const tierCell = row.tier;
+  const unifiedSection = extractSection(content, 'Unified Genius List');
+  if (unifiedSection) {
+    const rows = unifiedSection.split(/\r?\n/).filter(l => /^\|\s*[\d.]+\s*\|/.test(l));
+    for (const row of rows) {
+      const cells = row.split('|').map(c => c.trim());
+      if (cells.length < 7) continue;
+      const [, rank, tierCell, cat, status, effort, item] = cells;
       const tier = tierFromCell(tierCell);
-      const isDone = /done/i.test(row.status) || /✅/.test(tierCell);
+      const titleMatch = item.match(/\*\*(.+?)\*\*/);
+      const title = (titleMatch ? titleMatch[1] : item).slice(0, 120);
+      const isDone = /done/i.test(status) || /^done/i.test(status) || /✅/.test(tierCell);
       items.push({
-        rank: row.rankNumber,
+        rank: parseFloat(rank),
         tier,
-        cat: (row.category || '').toLowerCase(),
-        status: (row.status || '').toLowerCase(),
-        effort: row.effort,
-        title: row.title.slice(0, 120),
+        cat: (cat || '').toLowerCase(),
+        status: (status || '').toLowerCase(),
+        effort,
+        title,
         source: 'unified',
         done: isDone,
       });
@@ -47,15 +59,15 @@ export function parseTaskBoard(content) {
 
   // Fallback: legacy Now/Next buckets for repos that have not adopted the unified table.
   if (items.length === 0) {
-    const nowLines = parseSectionCheckboxItems(content, 'Now').map((item) => item.body);
-    const nextLines = parseSectionCheckboxItems(content, 'Next').map((item) => item.body);
+    const nowLines = extractSection(content, 'Now').split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
+    const nextLines = extractSection(content, 'Next').split(/\r?\n/).filter(l => /^- \[ \]/.test(l));
     nowLines.forEach((l, i) => items.push({
       rank: i + 1,
       tier: 'critical',
       cat: 'legacy',
       status: 'unblocked',
       effort: '',
-      title: l.replace(/\*\*/g, '').slice(0, 120),
+      title: l.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '').slice(0, 120),
       source: 'legacy-now',
       done: false,
     }));
@@ -65,7 +77,7 @@ export function parseTaskBoard(content) {
       cat: 'legacy',
       status: 'unblocked',
       effort: '',
-      title: l.replace(/\*\*/g, '').slice(0, 120),
+      title: l.replace(/^- \[ \]\s*/, '').replace(/\*\*/g, '').slice(0, 120),
       source: 'legacy-next',
       done: false,
     }));

@@ -29,7 +29,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { updateProjectStatus } from './lib/write-project-status.mjs';
+import { updateProjectStatusFile } from './lib/write-project-status.mjs';
 
 const ROOT = process.cwd();
 const args = process.argv.slice(2);
@@ -54,7 +54,11 @@ const agent = (lockText.match(/^agent:\s*(\S+)/m)?.[1] || status.lastAgent || ''
 
 function stampPlanModeDetected(value) {
   try {
-    updateProjectStatus(ROOT, (current) => ({ ...current, planModeDetected: value, planModeCheckedAt: new Date().toISOString() }));
+    updateProjectStatusFile(statusPath, (current) => ({
+      ...current,
+      planModeDetected: value,
+      planModeCheckedAt: new Date().toISOString(),
+    }), { touchLastUpdated: false });
   } catch { /* non-fatal */ }
   try {
     if (fs.existsSync(lockPath)) {
@@ -138,12 +142,13 @@ const result = {
 
 // Stamp status + lock
 try {
-  updateProjectStatus(ROOT, (current) => ({
+  const checkedAt = new Date().toISOString();
+  updateProjectStatusFile(statusPath, (current) => ({
     ...current,
     planModeDetected: result.status,
-    planModeCheckedAt: new Date().toISOString(),
-    ...(active ? { planModeLastActivatedAt: current.planModeLastActivatedAt || new Date().toISOString() } : {}),
-  }));
+    planModeCheckedAt: checkedAt,
+    ...(active ? { planModeLastActivatedAt: current.planModeLastActivatedAt || checkedAt } : {}),
+  }), { touchLastUpdated: false });
 } catch { /* non-fatal */ }
 try {
   if (fs.existsSync(lockPath)) {

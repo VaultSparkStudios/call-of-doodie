@@ -25,10 +25,12 @@ import { fileURLToPath } from 'node:url';
 
 // S156 #21: canonical list lives in lib/sil-categories.mjs (policy-drift extraction)
 import { V3_CATS as CATS } from './sil-categories.mjs';
+import { describeBound } from './test-signal.mjs';
 // S196: SIL v6 dual-axis. Single write path — the Impact-axis invariant runs here
 // too (non-breaking: fires only when silImpactCategories is present), so there is
 // never a second divergent write path for the new fields.
 import { enforceSilV6Invariant } from './sil-v6.mjs';
+import { validateProjectStatusShape } from './project-status-contract.mjs';
 
 /**
  * Pure invariant pass. Returns { status, violations } — status is a new object
@@ -68,6 +70,26 @@ export function enforceSilInvariant(status) {
   // SIL v6 Impact-axis invariant (non-breaking — no-op unless silImpactCategories present).
   const v6 = enforceSilV6Invariant(out);
   for (const v of v6.violations) violations.push(v);
+
+  // ── S283 [audit #2] · structured-vs-prose test deferral ────────────────────
+  // testsDeferredNote and testsLastRunMode are hand-authored at closeout;
+  // testsDeferred is machine-owned. When the prose says "30 files remained
+  // budget-deferred and are not counted green" and the array beside it is [],
+  // every consumer reads zero deferrals and renders a checkmark — the S283
+  // unfalsifiable green. This is a WRITER defect, so it is reported here, at the
+  // write path, and NOT auto-"fixed": the honest file list is knowable only to
+  // the run that deferred them, and fabricating placeholder entries to clear a
+  // violation would be exactly the invented measurement CANON-031 forbids.
+  const bound = describeBound(v6.status);
+  if (bound.writerDefect) {
+    violations.push({
+      field: 'testsDeferred',
+      value: v6.status.testsDeferred,
+      fix: `NOT auto-fixed — record the ${bound.claimedDeferred ?? 'deferred'} file(s) the run actually skipped (${bound.reason}). An empty array beside a deferral note makes the green unfalsifiable; never fabricate entries to clear this.`,
+      unfixable: true,
+    });
+  }
+
   return { status: v6.status, violations };
 }
 
@@ -117,9 +139,22 @@ export function withProjectStatusLock(repoRoot, work, { timeoutMs = 2500, staleM
   }
 }
 
-function writeProjectStatusUnlocked(repoRoot, status, { touchLastUpdated = true, statusPath = null } = {}) {
+function validateStatusShape(status, repoRoot, { requireSchema = true } = {}) {
+  const shape = validateProjectStatusShape(status, repoRoot);
+  if (shape.schemaMissing && !requireSchema) return;
+  if (!shape.ok) {
+    throw new Error(`PROJECT_STATUS contract invalid:\n${shape.errors.map((error) => `  - ${error}`).join('\n')}`);
+  }
+}
+
+function writeProjectStatusUnlocked(repoRoot, status, {
+  touchLastUpdated = true,
+  statusPath = null,
+  requireSchema = true,
+} = {}) {
   const { status: fixed, violations } = enforceSilInvariant(status);
   if (touchLastUpdated) fixed.lastUpdated = new Date().toISOString().slice(0, 10);
+  validateStatusShape(fixed, repoRoot, { requireSchema });
   const p = statusPath || path.join(repoRoot, 'context', 'PROJECT_STATUS.json');
   fs.mkdirSync(path.dirname(p), { recursive: true });
   const temporary = path.join(path.dirname(p), `.PROJECT_STATUS.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2)}.tmp`);
@@ -134,7 +169,7 @@ function writeProjectStatusUnlocked(repoRoot, status, { touchLastUpdated = true,
 
 /**
  * Validate + write context/PROJECT_STATUS.json under the invariant.
- * Returns { written, violations }. Throws only on I/O failure.
+ * Returns { written, violations }. Throws on schema-contract or I/O failure.
  */
 export function writeProjectStatus(repoRoot, status, { touchLastUpdated = true } = {}) {
   return withProjectStatusLock(repoRoot, () => writeProjectStatusUnlocked(repoRoot, status, { touchLastUpdated }));
@@ -150,13 +185,24 @@ export function updateProjectStatus(repoRoot, mutate, opts = {}) {
   }, opts);
 }
 
+function repoRootForStatusPath(statusPath) {
+  const absolute = path.resolve(statusPath);
+  const parent = path.dirname(absolute);
+  return path.basename(parent).toLowerCase() === 'context' ? path.dirname(parent) : parent;
+}
+
 /** Atomic read-modify-write for status fixtures or imported project paths. */
 export function updateProjectStatusFile(statusPath, mutate, opts = {}) {
-  const root = path.dirname(path.resolve(statusPath));
-  return withProjectStatusLock(root, () => {
+  const repoRoot = repoRootForStatusPath(statusPath);
+  const schemaExists = fs.existsSync(path.join(repoRoot, 'context', 'PROJECT_STATUS.schema.json'));
+  return withProjectStatusLock(repoRoot, () => {
     const current = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
     const next = mutate({ ...current }) || current;
-    return writeProjectStatusUnlocked(root, next, { ...opts, statusPath });
+    return writeProjectStatusUnlocked(repoRoot, next, {
+      ...opts,
+      statusPath,
+      requireSchema: opts.requireSchema ?? schemaExists,
+    });
   }, opts);
 }
 
@@ -172,13 +218,31 @@ if (isMain) {
   if (!fs.existsSync(p)) { console.error(`⛔ no PROJECT_STATUS.json at ${p}`); process.exit(2); }
   const current = JSON.parse(fs.readFileSync(p, 'utf8'));
   const { status: fixed, violations } = enforceSilInvariant(current);
+  const shape = validateProjectStatusShape(fixed, repoRoot);
+  if (!shape.ok) {
+    console.error(`⛔ PROJECT_STATUS contract invalid (${shape.errors.length}):`);
+    for (const error of shape.errors) console.error(`  - ${error}`);
+    process.exit(shape.schemaMissing ? 2 : 1);
+  }
+  // S283: some violations are deliberately NOT auto-fixable — the honest value
+  // is knowable only to the run that produced it, and inventing one to clear the
+  // check is the exact lie the check exists to catch. Counting those as "fixed"
+  // would make --fix itself a dishonest heal, so they are reported separately and
+  // still fail the exit code.
+  const fixable = violations.filter(v => !v.unfixable);
+  const unfixable = violations.filter(v => v.unfixable);
   if (args.includes('--fix')) {
-    if (violations.length) {
+    if (fixable.length) {
       writeProjectStatus(repoRoot, fixed, { touchLastUpdated: false });
-      console.log(`✓ fixed ${violations.length} violation(s):`);
-      for (const v of violations) console.log(`  - ${v.field}=${JSON.stringify(v.value)} → ${v.fix}`);
-    } else {
+      console.log(`✓ fixed ${fixable.length} violation(s):`);
+      for (const v of fixable) console.log(`  - ${v.field}=${JSON.stringify(v.value)} → ${v.fix}`);
+    } else if (!unfixable.length) {
       console.log('✓ invariant clean — no changes');
+    }
+    if (unfixable.length) {
+      console.error(`⛔ ${unfixable.length} violation(s) --fix cannot honestly repair:`);
+      for (const v of unfixable) console.error(`  - ${v.field}=${JSON.stringify(v.value)} → ${v.fix}`);
+      process.exit(1);
     }
     process.exit(0);
   }

@@ -20,9 +20,9 @@
  */
 
 import fs from 'fs';
-import { updateProjectStatus } from './lib/write-project-status.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { updateProjectStatusFile } from './lib/write-project-status.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -242,7 +242,11 @@ if (shouldFlip) {
   console.log(`   Founder score: ${founderScore}  ·  Builder score: ${builderScore}`);
   if (matchedFounder.length) console.log(`   Founder signals: ${matchedFounder.slice(0, 4).join(', ')}`);
   // Persist the flip
-  updateProjectStatus(ROOT, (current) => ({ ...current, sessionMode: recommended, sessionModeAutoShiftedAt: new Date().toISOString() }));
+  updateProjectStatusFile(STATUS, (current) => ({
+    ...current,
+    sessionMode: recommended,
+    sessionModeAutoShiftedAt: new Date().toISOString(),
+  }), { touchLastUpdated: false });
   console.log(`   PROJECT_STATUS.json updated.`);
 } else {
   console.log(`= Mode stable: ${currentMode.toUpperCase()}  (founder ${founderScore} / builder ${builderScore})`);

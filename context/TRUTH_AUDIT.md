@@ -1,4 +1,18 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-14 — Session 154 — Propagation compatibility and release truth
+
+- Source truth — S154 began from clean synchronized `main` at `cc734dc`; all current changes are the drained propagation bundle plus bounded compatibility repairs and canonical write-back.
+- Audit truth — all five items in `docs/AUDIT_2026-08-13_2.json` are implemented at L2; the regenerated innovation pack contains no executable repo-local candidate.
+- Protocol truth — protocol drift passes 42/42 and behavior-verifies router suggestions plus the non-zero, provenance-named capability universe.
+- Test truth — focused compatibility passes 53/53; the complete serial Vitest run passes 196 files and 1,158 tests with no flake, deferral, or environment-blocked claim.
+- Build/security truth — strict lint, schema/coherence/architecture/storage/task/status-writer/runtime, deployable build, public contract, visual assets, dependency/runtime boundaries, security release, npm audit zero, and supply-chain incident scan pass.
+- Staging truth — immutable `5da63921.call-of-doodie.pages.dev` and alias `session-154-staging.call-of-doodie.pages.dev` serve the candidate; hosted verification passes 7/7 and the root response carries HTTP 200, one-year HSTS, strict CSP, frame denial, and `noindex`.
+- Visual truth — S154 changes protocol tooling and ledgers only. No player-facing pixel changed, so a new rendered-pixel receipt would be false scope; S153 remains the latest applicable UI receipt.
+- Lifecycle truth — cost-neutral FORGE engineering release is GO. SPARKED remains NO-GO; current Core Web Vitals, physical PWA/controller/media, Zoho reply-as, project-scoped observability, Obelisk identity, participant/publication, and explicit lifecycle evidence are absent.
+
+Overall status: S154 repository-owned implementation, saturation, local verification, and isolated staging are complete; direct-main publication and exact-production proof are the remaining authorized follow-through.
+Last reviewed: 2026-08-14
+
 # Truth Audit
 
 ## 2026-08-13 — Session 153 — Explicit playtest, advisory replay, edge trust, and pixel truth

@@ -24,6 +24,15 @@ describe("protocol reference drift", () => {
     expect(["verified", "isolated"]).toContain(
       receipt.checks.find((check) => check.rel === "behavior:secrets-audit-map")?.status,
     );
+    for (const contract of [
+      "contract:task-board-exports",
+      "contract:project-status-writer-exports",
+      "contract:sil-ledger-exports",
+      "contract:secrets-gateway-exports",
+      "contract:skill-cost-ledger-exports",
+    ]) {
+      expect(receipt.checks.find((check) => check.rel === contract)).toMatchObject({ ok: true, status: "verified" });
+    }
   });
 
   it("routes Oracle calls through the Windows-hidden Studio Ops proxy", () => {

@@ -27,13 +27,24 @@ export const WASTED_AVG_BAND = 1.5;        // trailing measured avg < this (thin
 // Read the live context-meter and classify this session's boot amortization. Returns the same shape
 // as bootAmortization() plus the raw token inputs (for transparency in the persisted record).
 export function liveAmortization(root = ROOT) {
-  let usedTokens = 0, startupTokens = 0;
+  // S264: `j.usedTokens ?? 0` was the S262 non-measurement class again — a null
+  // meter reading became workTokens=0 → ratio=0 → a MEASURED-looking "wasted"
+  // verdict. 9 of the 10 live history rows were fabricated zeros, and the
+  // boot-amortization probe was chronic-red on data that never existed. A
+  // non-measurement must reach bootAmortization as unmeasured (ratio:null).
+  let usedTokens = null, startupTokens = 0;
   try {
     const out = spawnSync('node', [path.join(root, 'scripts', 'context-meter.mjs'), '--json'], { encoding: 'utf8' });
     const j = JSON.parse(out.stdout);
-    usedTokens = j.usedTokens ?? 0;
-    startupTokens = j.freshSessionBootstrap ?? 0;
+    const measured = j.measured_ok !== false && j.usedTokens != null;
+    if (measured) {
+      usedTokens = j.usedTokens;
+      startupTokens = j.freshSessionBootstrap ?? 0;
+    }
   } catch { /* unmeasured → unknown below */ }
+  if (usedTokens == null) {
+    return { ...bootAmortization({ workTokens: 0, startupTokens: 0 }), workTokens: null, startupTokens: null };
+  }
   const workTokens = Math.max(0, usedTokens - startupTokens);
   const amort = bootAmortization({ workTokens, startupTokens });
   return { ...amort, workTokens, startupTokens };

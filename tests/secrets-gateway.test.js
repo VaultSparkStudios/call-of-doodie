@@ -53,8 +53,18 @@ describe("shared secrets capability map", () => {
     const { local, shared } = fixture();
     fs.writeFileSync(path.join(shared, "CAPABILITY_MAP.json"), "{not-json");
     const result = runAudit(local, shared);
-    expect(result.status).toBe(0);
+    expect(result.status).toBe(2);
     expect(JSON.parse(result.stdout)).toEqual([]);
     expect(result.stderr).toContain("UNPARSEABLE");
+    expect(result.stderr).toContain("resolved 0 capabilities");
+  });
+
+  it("fails closed on an empty capability universe outside isolated CI", () => {
+    const { local, shared } = fixture();
+    fs.writeFileSync(path.join(shared, "CAPABILITY_MAP.json"), JSON.stringify({ capabilities: {} }));
+    const result = runAudit(local, shared);
+    expect(result.status).toBe(2);
+    expect(JSON.parse(result.stdout)).toEqual([]);
+    expect(result.stderr).toContain("resolved 0 capabilities");
   });
 });

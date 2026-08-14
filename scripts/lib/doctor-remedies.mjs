@@ -50,6 +50,11 @@ export const HEAL_MAP = {
   // self-owned (see SELF_REMEDIABLE_NO_AUTOHEAL).
   'agents-md-drift':     { script: 'validate-agents-md.mjs',        args: [],          label: 'refresh AGENTS.md drift report',        kind: 'refresh', remediation: 'node scripts/propagate-agents-sections.mjs --apply' },
   'analytica-freshness': { script: 'build-analytica-dashboard.mjs', args: [],          label: 'refresh Analytica dashboard',           kind: 'remediate' },
+  // S274 — refresh-only by design. Re-collecting proves what the fleet is
+  // currently emitting; it cannot make a project start emitting. The real
+  // remediation is per-project (publish a Feed v1 document), which is a
+  // cross-repo write and therefore deliberately not auto-healed.
+  'analytica-feed-coverage': { script: 'collect-analytica-feeds.mjs', args: [],        label: 'recollect Analytica feeds',             kind: 'refresh', remediation: 'publish an Analytica Feed v1 document per project (docs/ANALYTICA_FEED_SPEC.md)' },
   'maintenance-overdue': { script: 'run-maintenance.mjs',          args: ['--apply', '--auto'], label: 'run safe due maintenance jobs', kind: 'remediate' },
   // S210 — lastSessionSummary had a detector but no writer, so it silently went stale
   // (S208 prose survived the S209 closeout). --fix mirrors the agent-maintained
@@ -161,9 +166,22 @@ export const DRIFT_META = {
   'scheduled-writer-boundary': { driftClass: 'local-broken', blocking: true },
   'fleet-schedule-policy': { driftClass: 'portfolio-outdated', blocking: false },
   'cpx-capacity-admission': { driftClass: 'local-broken', blocking: true },
+  'protocol-skill-parity': { driftClass: 'local-broken', blocking: true },
   'maintenance-execution-plane': { driftClass: 'local-broken', blocking: true },
   'portfolio-infrastructure-court': { driftClass: 'portfolio-outdated', blocking: false },
   'postgres-recovery-contract': { driftClass: 'local-broken', blocking: true },
+  // S276 — a test whose named import no longer resolves runs ZERO assertions. Always
+  // this repo's own breakage, and never a judgement call (the module either provides
+  // the name or it does not), so it blocks.
+  'test-import-resolution': { driftClass: 'local-broken', blocking: true },
+  // S276 — both were non-green with NO explicit metadata, so they fell through to the
+  // provenance-derived default and showed up as findings of `doctor-probe-metadata`.
+  // `coherence` compares metrics ACROSS surfaces in this repo: a disagreement is always
+  // local and always actionable here, so it blocks (matching its derived behaviour).
+  coherence:               { driftClass: 'local-broken', blocking: true },
+  // CANON-055 adoption across SIBLING repos — studio-ops surfaces it but does not own
+  // the fix, and the checker is explicitly structural-only, so it warns rather than blocks.
+  'surface-followthrough': { driftClass: 'portfolio-outdated', blocking: false },
 };
 
 // S171 [audit #1] — provenance-derived driftClass. The old run-doctor default

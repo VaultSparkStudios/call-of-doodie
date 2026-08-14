@@ -28,6 +28,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execSync } from './lib/safe-spawn.mjs';
 import { VERDICT_EXITS } from './lib/context-verdicts.mjs';
+import { STUDIO_STATE_DIRS } from './lib/studio-state-dirs.mjs';
 import { captureLockTrigger } from './lib/boot-amortization.mjs';
 // Provider context and pricing are owned by the model-router chokepoint. The
 // meter is already propagated with its lib dependencies, so duplicating these
@@ -217,7 +218,7 @@ const HOT_FILE_WEIGHT = 0.15;
 const STARTUP_BASELINE = bytesOf(path.join(ROOT, 'docs/STARTUP_BRIEF.md'));
 
 function hotFilesBytes() {
-  const dirs = ['context', 'docs', 'logs', 'portfolio'];
+  const dirs = STUDIO_STATE_DIRS;
   let total = 0;
   for (const dir of dirs) {
     const dirPath = path.join(ROOT, dir);
@@ -558,8 +559,20 @@ if (asJson) {
   if (measurementSource === 'transcript-proxy') {
     console.log(`  live-turn:   transcript ${proxy.file} · ${proxy.bytes.toLocaleString()} bytes (${proxy.ageSeconds}s fresh) → ~${proxy.tokens.toLocaleString()} tok proxy`);
   }
-  console.log(`  used:        ${out.usedTokens.toLocaleString()} / ${limit.toLocaleString()} tokens (${out.pctUsed}%)`);
-  console.log(`  remaining:   ${out.remainingTokens.toLocaleString()} tokens`);
+  // S263 — S262 made usedTokens/remainingTokens/pctUsed NULL when the meter
+  // cannot measure (UNMEASURED honesty), but this human branch still called
+  // .toLocaleString() on them, so `context-meter` without --json threw
+  // "Cannot read properties of null" on exactly the hosts that cannot measure.
+  // That is the normal state in a SIBLING repo — and this meter was propagated
+  // to the fleet. The JSON path was fixed; its paired consumer was not.
+  if (out.measured_ok) {
+    const over = out.overLimit ? `  ⛔ OVER LIMIT by ${(out.usedTokens - limit).toLocaleString()}` : '';
+    console.log(`  used:        ${out.usedTokens.toLocaleString()} / ${limit.toLocaleString()} tokens (${out.pctUsed}%)${over}`);
+    console.log(`  remaining:   ${out.remainingTokens.toLocaleString()} tokens`);
+  } else {
+    console.log(`  used:        UNMEASURED — context usage is unknown (limit ${limit.toLocaleString()})`);
+    console.log(`  remaining:   UNMEASURED`);
+  }
   console.log(`  continue:    ~${out.continueCostPerTurn.toLocaleString()} tokens/turn (cache hit ${(cacheHitRate * 100).toFixed(0)}%)`);
   console.log(`  fresh:       ~${out.freshSessionBootstrap.toLocaleString()} tokens bootstrap`);
   console.log(`  break-even:  ${out.breakEvenTurns ?? '∞'} turns`);

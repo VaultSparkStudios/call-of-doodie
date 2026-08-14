@@ -16,6 +16,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { getSecret } from './secrets.mjs';
+import { resolveAgentIdentity } from './agent-identity.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const POLICY_PATH = path.join(ROOT, 'portfolio', 'obelisk-policy.json');
@@ -49,9 +50,21 @@ function riskScore(capability, action, actor) {
 const RISK_ORDER = { allow: 0, 'step-up': 1, deny: 2, quarantine: 3 };
 
 // ── receipts (append-only, signed if a signing key exists) ───────────────────
+// S271: every receipt now carries WHICH AGENT acted, not just which repo.
+// `actor` is untouched (4,176 historical receipts + every downstream parser
+// depend on its meaning); the agent rides in its own field. Resolution is
+// honest — an unresolvable agent is recorded as null, never guessed, so the
+// access ledger can distinguish "codex did this" from "we don't know who did
+// this". Applied here because emitReceipt is the sole receipt chokepoint.
 export function emitReceipt(rec) {
   const key = getSecret('OBELISK_RECEIPT_SIGNING_KEY', 'obelisk.receipt.write');
-  const body = { ...rec, ts: rec.ts || new Date().toISOString() };
+  const id = resolveAgentIdentity({ repoRoot: ROOT, explicit: rec.agent });
+  const body = {
+    ...rec,
+    agent: id.agent,
+    agentSource: id.source,
+    ts: rec.ts || new Date().toISOString(),
+  };
   body.sig = key
     ? 'hmac:' + crypto.createHmac('sha256', key).update(JSON.stringify(body)).digest('hex').slice(0, 32)
     : 'UNSIGNED'; // honest: no signing key yet → marked, not faked (CANON-031)
