@@ -9,8 +9,9 @@
 - Staging truth — immutable `5da63921.call-of-doodie.pages.dev` and alias `session-154-staging.call-of-doodie.pages.dev` serve the candidate; hosted verification passes 7/7 and the root response carries HTTP 200, one-year HSTS, strict CSP, frame denial, and `noindex`.
 - Visual truth — S154 changes protocol tooling and ledgers only. No player-facing pixel changed, so a new rendered-pixel receipt would be false scope; S153 remains the latest applicable UI receipt.
 - Lifecycle truth — cost-neutral FORGE engineering release is GO. SPARKED remains NO-GO; current Core Web Vitals, physical PWA/controller/media, Zoho reply-as, project-scoped observability, Obelisk identity, participant/publication, and explicit lifecycle evidence are absent.
+- Production truth — verifier source `5b8b704052f62690af66501ec029cfa8b2250252` passes brief `31769440471` and quality/build/deploy `31769440455`, serving immutable `11c3148b`. Immutable/custom shell and typed edge health pass 7/7, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces pass.
 
-Overall status: S154 repository-owned implementation, saturation, local verification, and isolated staging are complete; direct-main publication and exact-production proof are the remaining authorized follow-through.
+Overall status: S154 repository-owned arc is implemented, saturated, exact-SHA published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-14
 
 # Truth Audit

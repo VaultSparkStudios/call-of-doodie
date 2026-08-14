@@ -20,6 +20,9 @@ Intent outcome: repository-owned arc, audit implementation, saturation, complete
 - Cloudflare run `31769146435` stopped in quality tests before build/deploy: two developer-host secrets fixtures inherited GitHub's ambient `CI=true`, activating the intentional public-CI empty-map allowance and invalidating their non-CI expectation.
 - Root-fixed the test boundary by pinning `CI=false` inside the developer-host fixture helper. The explicit isolated-public-CI court remains independently `CI=true` and green.
 - Reproduced the exact runner environment locally with `CI=true npm test`: 196/196 files and 1,158/1,158 tests pass in 78.48 seconds. No retry-only green is accepted; a verifier commit and fresh exact-SHA workflow must deploy production.
+- Verifier source `5b8b704052f62690af66501ec029cfa8b2250252` passed brief run `31769440471` and quality/build/deploy run `31769440455`, publishing immutable Cloudflare revision `https://11c3148b.call-of-doodie.pages.dev/`.
+- Final production verification passes immutable shell/typed health 7/7, custom-domain shell/typed health 7/7, cutover 5/5, replay trust 3/3, backend token/score health 5/5, shared-leaderboard isolation, and Studio launch-surface checks.
+- Intent outcome: achieved and exact-production-verified. SPARKED remains explicitly unpromoted.
 
 ## 2026-08-12 (Session 152 — recovery, closed-loop coaching, and mastery command)
 

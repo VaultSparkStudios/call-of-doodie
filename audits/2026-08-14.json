@@ -4,7 +4,7 @@
   "session": 154,
   "project": "Call-Of-Doodie",
   "intent": "run one continuous arc through startup, specialty review, premise-verified audit, complete repository-owned implementation, saturation, isolated staging, closeout, direct-main publication, and exact production verification",
-  "outcome": "implementation-and-staging-achieved-publication-follow-through-active",
+  "outcome": "achieved-and-production-verified",
   "shipped": [
     "provenance-aware non-zero capability discovery with fail-closed empty-universe behavior",
     "composed task-board abstract syntax tree and reconciliation contract",
@@ -22,7 +22,9 @@
     "isolated staging session-154-staging and immutable 5da63921 pass hosted 7/7 plus HTTP/security-header inspection",
     "cost and release gates allow the cost-neutral FORGE engineering update",
     "source b61d883 brief run 31769146459 passes; deploy run 31769146435 correctly blocks before deployment on ambient-CI fixture drift",
-    "root-fixed hermetic developer-host fixture; exact CI=true local Vitest passes 196 files and 1158 tests"
+    "root-fixed hermetic developer-host fixture; exact CI=true local Vitest passes 196 files and 1158 tests",
+    "verifier 5b8b704 passes brief 31769440471 and quality/build/deploy 31769440455; immutable production 11c3148b",
+    "immutable and custom shell/edge 7/7, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces pass"
   ],
   "deferred": [
     "current production Core Web Vitals",

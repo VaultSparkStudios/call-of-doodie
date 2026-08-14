@@ -9,16 +9,17 @@ Session Intent: Complete the founder-authorized S154 `/arc` from synchronized `m
 - Broad verification also restored execution-budget receipts, Unicode-safe transport and handoff smoke, provider-first blocker precedence, fail-closed SIL forecasting, honest session saturation, Codex plan-mode behavior, and committed closeout/staging/memory evidence.
 - Protocol drift passes 42/42; focused regression passes 53/53; full Vitest passes 196/196 files and 1,158/1,158 tests. Strict lint, schema, deployable build, public/assets/dependency/runtime/security gates, npm audit zero, and supply-chain incident scan pass.
 - First exact source `b61d883` passed brief run `31769146459`; deploy run `31769146435` failed before deployment because developer-host secrets fixtures inherited ambient GitHub `CI=true`. The fixture is now hermetic (`CI=false`), the separate isolated-CI court stays explicit, and exact CI-mode local Vitest passes 196/196 files / 1,158 tests.
+- Verifier source `5b8b704052f62690af66501ec029cfa8b2250252` passes brief `31769440471` and quality/build/deploy `31769440455`, serving immutable `https://11c3148b.call-of-doodie.pages.dev/`. Immutable/custom shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation, and launch surfaces pass.
 - The innovation pack has no executable repo-local candidates. Mobile density, progression tuning, content expansion, provider/mail/identity work, physical-device proof, participant evidence, and SPARKED promotion remain explicitly gated.
 - Final isolated staging is `https://session-154-staging.call-of-doodie.pages.dev/` (immutable `https://5da63921.call-of-doodie.pages.dev/`). Hosted shell/edge/manifest/service-worker/social-card checks pass 7/7; the root is HTTP 200 with one-year HSTS, strict CSP, frame denial, and `noindex`.
 - Independent release/cost gate: GO for the authorized cost-neutral FORGE engineering update; NO-GO for SPARKED. S154 changed no player-facing pixels, so a new CANON-053 receipt is correctly not claimed.
-- Next: publish the CI verifier commit to synchronized `main`, wait for fresh exact-SHA brief/deploy workflows, verify the immutable production revision and custom-domain smoke, then append the production receipt if needed.
+- Next: begin Session 155 from synchronized clean `main`; preserve the executable propagation court, hermetic secrets fixtures, and FORGE/SPARKED evidence boundary.
 
 ## Impact Summary
 
 **Headline.** Protocol propagation now proves that the delivered system is executable—not merely that expected files exist—while retaining every newer safety and observability contract.
 
-**Evidence.** Protocol 42/42; focused 53/53; full 196 files / 1,158 tests; strict lint/build/schema/public/security; npm audit zero; isolated staging 7/7 at immutable `5da63921`; cost-neutral FORGE release gate GO.
+**Evidence.** Protocol 42/42; focused 53/53; full and exact-CI 196 files / 1,158 tests; strict lint/build/schema/public/security; npm audit zero; staging `5da63921` 7/7; production `11c3148b` plus custom 7/7, cutover 5/5, backend 5/5, replay 3/3; cost-neutral FORGE release gate GO.
 
 ---
 
