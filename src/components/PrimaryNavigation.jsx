@@ -3,7 +3,7 @@ import { MORE_PUBLIC_NAV, PRIMARY_PUBLIC_NAV } from "../config/publicNavigation.
 
 const iconById = { play: "▶", stats: "▥", progress: "◆", loadout: "⚙", more: "•••" };
 
-export default function PrimaryNavigation({ palette, onOpenProgress, onOpenLoadout }) {
+export default function PrimaryNavigation({ palette, activeSection = "play", onOpenProgress, onOpenLoadout }) {
   const [moreOpen, setMoreOpen] = useState(false);
   const closeRef = useRef(null);
   const priorFocus = useRef(null);
@@ -40,8 +40,8 @@ export default function PrimaryNavigation({ palette, onOpenProgress, onOpenLoado
       </header>
 
       <nav className="home-mobile-nav" aria-label="Game navigation">
-        <a href="#deploy"><span aria-hidden="true">{iconById.play}</span>Play</a>
-        <a href="#live-stats"><span aria-hidden="true">{iconById.stats}</span>Stats</a>
+        <a href="#deploy" aria-current={activeSection === "play" ? "true" : undefined}><span aria-hidden="true">{iconById.play}</span>Play</a>
+        <a href="#live-stats" aria-current={activeSection === "stats" ? "true" : undefined}><span aria-hidden="true">{iconById.stats}</span>Stats</a>
         <button type="button" onClick={onOpenProgress}><span aria-hidden="true">{iconById.progress}</span>Progress</button>
         <button type="button" onClick={onOpenLoadout}><span aria-hidden="true">{iconById.loadout}</span>Loadout</button>
         <button type="button" aria-expanded={moreOpen} aria-controls="home-more-menu" onClick={() => setMoreOpen(true)}><span aria-hidden="true">{iconById.more}</span>More</button>

@@ -51,4 +51,24 @@ describe("PrimaryNavigation", () => {
     expect(onOpenProgress).toHaveBeenCalledTimes(1);
     expect(onOpenLoadout).toHaveBeenCalledTimes(1);
   });
+
+  it("marks Play as active by default and Stats when activeSection is stats", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<PrimaryNavigation activeSection="play" />);
+    });
+    const mobile = container.querySelector('[aria-label="Game navigation"]');
+    const playLink = mobile.querySelector('a[href="#deploy"]');
+    const statsLink = mobile.querySelector('a[href="#live-stats"]');
+    expect(playLink.getAttribute("aria-current")).toBe("true");
+    expect(statsLink.getAttribute("aria-current")).toBeNull();
+
+    await act(async () => {
+      root.render(<PrimaryNavigation activeSection="stats" />);
+    });
+    expect(playLink.getAttribute("aria-current")).toBeNull();
+    expect(statsLink.getAttribute("aria-current")).toBe("true");
+  });
 });
