@@ -190,6 +190,7 @@ export default function HomeV2(props) {
   const [pwaInstallAttempt] = useState(() => loadPwaInstallAttempt());
   const [serviceWorkerLifecycle, setServiceWorkerLifecycle] = useState(() => readServiceWorkerLifecycle());
   const [storageHealth, setStorageHealth] = useState(() => getStorageHealth());
+  const [activeMobileSection, setActiveMobileSection] = useState("play");
   const effectiveControllerType = gamepadConnected ? controllerType : (controllerProfile?.type || controllerType);
   const themePalette = THEMES[theme];
 
@@ -209,6 +210,18 @@ export default function HomeV2(props) {
     window.addEventListener(STORAGE_HEALTH_EVENT, onStorageHealth);
     setStorageHealth(probeLocalStorage().receipt);
     return () => window.removeEventListener(STORAGE_HEALTH_EVENT, onStorageHealth);
+  }, []);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return undefined;
+    const target = document.getElementById("live-stats");
+    if (!target) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => setActiveMobileSection(entry.isIntersecting ? "stats" : "play"),
+      { threshold: 0.15 },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -612,6 +625,7 @@ export default function HomeV2(props) {
 
         <PrimaryNavigation
           palette={themePalette}
+          activeSection={activeMobileSection}
           onOpenProgress={() => { setCmdCenterExpanded(true); requestAnimationFrame(() => document.getElementById("player-tools")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}
           onOpenLoadout={() => { setShowLoadoutBuilder(true); }}
         />
