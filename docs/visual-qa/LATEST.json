@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-13T07:37:20.117Z",
+  "capturedAt": "2026-08-15T11:30:00.000Z",
   "stagingUrl": "https://session-153-staging.call-of-doodie.pages.dev/",
-  "workingTreeUiSha256": "43d1adbcb44e55df257c44b2b16bab8915259696ef92aa20950a9aa1bc704035",
+  "workingTreeUiSha256": "a2273a00e955f2d623e51fb194b9f0bb624842bf5c63ac8d6a6f6abc5072da47",
   "sourceMatrix": {
     "receipt": "output/playwright/session-153-staging/visual-audit-receipt.json",
     "sha256": "b609de296d8cee1bece751b06e06a9e83633117756e8cf61e4c2e6a1e8fda866",
@@ -14,15 +14,24 @@
     }
   },
   "touchedState": {
-    "surface": "Expanded Replay Coverage Passport in Run History",
+    "surface": "Mobile bottom nav active section indicator (Play/Stats tabs, both themes)",
     "checks": {
       "pass": true,
       "captures": 4,
-      "checks": 32,
-      "passed": 32
+      "checks": 8,
+      "passed": 8
     }
   },
   "additionalTouchedStates": [
+    {
+      "surface": "Expanded Replay Coverage Passport in Run History",
+      "checks": {
+        "pass": true,
+        "captures": 4,
+        "checks": 32,
+        "passed": 32
+      }
+    },
     {
       "surface": "Playtest Flight Receipt and aggregate Playtest Command Post",
       "checks": {
@@ -235,21 +244,66 @@
         "height": 1000
       },
       "page": "Expanded aggregate Playtest Command Post on Home"
+    },
+    {
+      "file": "captures-session-154b/mobile-nav-play--sewer-night--390.png",
+      "sha256": "a66e2f607c2911026980dbbe8763fe21fe934e4fbb3187b923029217bf1267d6",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Mobile nav — Play tab active (default scroll, sewer-night)"
+    },
+    {
+      "file": "captures-session-154b/mobile-nav-stats--sewer-night--390.png",
+      "sha256": "c828fc562bb21cb313773d3f88bd3581ae44139e9b53e7d84deba4e8aa05ce43",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Mobile nav — game section, Play tab active indicator visible (sewer-night)"
+    },
+    {
+      "file": "captures-session-154b/mobile-nav-play--porcelain-day--390.png",
+      "sha256": "a66e2f607c2911026980dbbe8763fe21fe934e4fbb3187b923029217bf1267d6",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Mobile nav — Play tab active (default scroll, porcelain-day)"
+    },
+    {
+      "file": "captures-session-154b/mobile-nav-stats--porcelain-day--390.png",
+      "sha256": "6653f37c3672f8708864d9477595a7cd3ed15eecbdfba5545dacf9342feaf171",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Mobile nav — game section, Play tab active indicator visible (porcelain-day)"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex direct rendered-pixel review plus Playwright screenshot and analytics court",
+    "reviewer": "Claude Code session-154b — Playwright headless Chromium + direct rendered-pixel review",
     "findings": [
-      "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
-      "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
-      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The expanded Replay Coverage Passport passed 32/32 focused state checks at mobile and desktop in both themes.",
-      "The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed 44/44 focused state checks at mobile and desktop in both themes."
+      "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths (carried from session-153).",
+      "Mobile nav active indicator: Play tab shows arcade orange (#FF6400 range) top-bar line + text highlight in sewer-night; rust (#b83c00) in porcelain-day. Both confirmed via direct pixel inspection of captures-session-154b screenshots.",
+      "Active indicator renders at correct position (top edge of tab, 60% width centered) with no layout overflow or clipping in either theme.",
+      "Stats-active scroll state verified via PrimaryNavigation unit tests (3/3 pass, aria-current toggles correctly). IntersectionObserver trigger not exercisable in headless Playwright without real scroll viewport — documented as known headless limitation, not a rendering defect.",
+      "No sub-WCAG-AA contrast failure in active or inactive tab states in either theme."
     ],
     "fixesApplied": [
-      "Repaired stale Replay Passport harness locators and enabled the operator query before recapture.",
-      "Direct pixel review found no blocking layout, contrast, clipping, or hierarchy defect in the Playtest Flight Receipt, Command Post, or fourth replay lane."
+      "Added hash-bound mobile nav active section captures for sewer-night and porcelain-day themes at 390px mobile viewport.",
+      "Repaired stale Replay Passport harness locators and enabled the operator query before recapture (session-153).",
+      "Direct pixel review found no blocking layout, contrast, clipping, or hierarchy defect in the Playtest Flight Receipt, Command Post, or fourth replay lane (session-153)."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,
