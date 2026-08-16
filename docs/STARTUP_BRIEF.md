@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-16 (Session 156 closeout) -->
-<!-- semantic-freshness: hash=8191119ce2ba317f next=157 silSession=156 silScore=998 handoff=156 tests=- -->
+<!-- generated-at: 2026-08-16 (Session 157 closeout) -->
+<!-- semantic-freshness: hash=3d5f241a07717a52 next=158 silSession=157 silScore=998 handoff=157 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 156 closeout · 2026-08-16.
+> **Fast-boot brief** — generated at Session 157 closeout · 2026-08-16.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 157 · 2026-08-16 · FOUNDER MODE                         ║
+║  Session 158 · 2026-08-16 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S156) - WHAT SHIPPED ══════════════════════════╗
-║  Session 156 recovered the Session 155 post-closeout verifier s  ║
+╔══ LAST SESSION (S157) - WHAT SHIPPED ══════════════════════════╗
+║  Session 157 made all seven Operation verbs authoritative, adde  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -30,7 +30,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://d7ec86f1.call-of-doodie.pages.dev ✓   ║
-║  Unit tests    → npm test — 1205/1205 passing ✓                  ║
+║  Unit tests    → npm test — 1214/1214 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
 ║  production-smoke → Session 141 — live 7/7 · cutover 5/5 · r ✓   ║
@@ -43,16 +43,16 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    998/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998  ·  Velocity 2↑                        ║
+║    SIL v3.0  ·  Avg3: 998  ·  Velocity 4↑                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  ▄▄▄▇▂  ↑  (last 5 sessions)                            ║
+║    Trend  ▄▄▇▂▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  █▇▇█████ →                ║
+║    Dev Health       100    ██████████  ▇▇██████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  ▇▇▇█████ →                ║
-║    Engagement        99    ██████████  ██████▇▇ →                ║
+║    Momentum         100    ██████████  ▇▇██████ →                ║
+║    Engagement        99    ██████████  █████▇▇▇ →                ║
 ║    Process Qual     100    ██████████  █████▇▇▇ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -62,25 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 156 ═══════════════════════════╗
-║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    1205/1205 passing  ·  Deploy: N/A                     ║
+╔══ WHERE WE LEFT OFF  ·  Session 157 ═══════════════════════════╗
+║  Shipped:  Operation encounters now require their exact authore  ║
+║  Tests:    1214/1214 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █████░░░░░░░░░░░░░░░░░░░   21% used                          ║
-║     57,181 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~28,591 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
+║     55,975 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~27,988 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1205/1205 passing (2026-08-16)                 ║
-║  ✓  Velocity      2 ↑  ·  Debt: ↓                                ║
+║  ✓  Tests         1214/1214 passing (2026-08-16)                 ║
+║  ✓  Velocity      4 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44277 FORGE  ·  0d old                         ║
-║  ⛔  Truth         S156 closes the post-closeout evidence gap…    ║
+║  ⛔  Truth         all repository-owned S157 audit items are…     ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.171  (healthy)                               ║
@@ -115,9 +115,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▄▇▂  2↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▇▂▄  4↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
+║  Streak:     — (last intent not achieved)                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -144,5 +144,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 156 closeout · 2026-08-16*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 157 closeout · 2026-08-16*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

@@ -1216,3 +1216,19 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Decision:** When an exact-production verifier or documentation seal lands after the session's Self-Improvement Loop entry, record it in a new recovery boundary instead of silently treating the earlier closeout as current. Do not reopen or relabel the completed product session.
 
 **Why:** Session 155's implementation and production release were real, but the final `b37da9c` deployment receipt and `a4549a4` documentation seal postdated its append-only closeout anchor. A bounded S156 recovery preserves both Git chronology and lifecycle honesty.
+
+## 2026-08-16 — Session 157 — Authored actions, not wave clears, own Operation progression
+
+**Decision:** Treat each encounter's authored verb as a required, evidence-bearing action. Enemy clearance cannot advance an incomplete objective; instead, the same encounter remains active and gains bounded reinforcement pressure.
+
+**Why:** Session 155 gave Operations authored labels and interactions, but the runtime could still advance after a wave clear without proving the named action. Making the action authoritative converts narrative framing into gameplay and prevents the mode from collapsing back into ordinary wave survival.
+
+**Boundaries:** The contract is deterministic and local. Reinforcement pressure is capped, each verb has a distinct bounded effect, and all legacy modes continue to use their existing progression rules.
+
+## 2026-08-16 — Session 157 — Campaign continuity remains guest-first and evidence-safe
+
+**Decision:** Persist only bounded, typed, idempotent Operation completion receipts and authored route carry-ins. Bind paired feedback to eligible local Standard and Operation evidence references, excluding legacy/unbound rows from readiness.
+
+**Why:** Cross-mission consequence is valuable only if it is truthful and reversible, while paired feedback is meaningful only when both sides identify real runs. Local bounded storage supplies continuity without inventing accounts, server authority, participant conclusions, or a network dependency.
+
+**Boundaries:** The ledger retains at most 12 completions, does not lock Operations, and exports no raw run or identity data. Campaign expansion and realtime co-op remain behind their existing participant and capacity gates.

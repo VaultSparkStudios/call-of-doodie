@@ -1,4 +1,20 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-16 — Session 157 — Objective, campaign, evidence, and pixel truth
+
+- Objective truth — clearing enemies is necessary but insufficient. The exact authored action must be confirmed; otherwise the encounter remains active and bounded reinforcement pressure is recorded.
+- Consequence truth — route effects are typed. A schema-v1 local ledger retains at most 12 idempotent completion receipts and applies only authored carry-ins; it never locks a guest out of an Operation.
+- Evidence truth — a paired playtest receipt names evidence references for both an eligible Standard run and the current Operation run. Legacy/unbound rows are excluded from readiness and aggregate calculations.
+- Export truth — paired evidence remains local, bounded, identity-free, and aggregate-only; no free text or raw run history is exported.
+- Runtime truth — lazy-loading the Operation presentation layer reduced the application runtime from 567,601 to 551,153 bytes, inside the 560,000-byte deploy budget.
+- Browser truth — the current command deck and runtime paths pass 19 E2E cases with one intentional mobile-only Scenario Cartridge skip.
+- Visual truth — exact staging is `https://session-157-staging.call-of-doodie.pages.dev/` (immutable `https://906bded2.call-of-doodie.pages.dev/`); broad hosted checks pass 1,020/1,020 and focused Operation checks pass 36/36. Twenty-six hash-bound captures received direct review across both themes and 390/1440px with zero blocking defects.
+- Validation truth — the synchronized candidate passes 212/212 Vitest files and 1,214/1,214 tests, strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, and npm audit zero.
+- Health truth — staging edge health is green. One pre-publication production Supabase probe returned a rate-limit-service 500; backend health is not claimed green until the post-deploy retry proves it.
+- Lifecycle truth — cost-neutral FORGE engineering release is GO. SPARKED remains NO-GO behind physical-device, participant, provider/mail, performance, identity, publication, and explicit lifecycle evidence.
+
+Overall status: all repository-owned S157 audit items are implemented, staged, and visually verified; direct-main publication and exact production verification remain in authorized follow-through. SPARKED remains NO-GO.
+Last reviewed: 2026-08-16
+
 ## 2026-08-16 — Session 156 — Post-closeout production-evidence recovery
 
 - Chronology truth — Session 155's append-only SIL anchor preceded production-evidence source `b37da9c` and documentation seal `a4549a4`; S156 records that follow-through without rewriting S155.
@@ -41,8 +57,6 @@ Last reviewed: 2026-08-16
 
 Overall status: S154 repository-owned arc is implemented, saturated, exact-SHA published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-14
-
-# Truth Audit
 
 ## 2026-08-13 — Session 153 — Explicit playtest, advisory replay, edge trust, and pixel truth
 

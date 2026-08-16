@@ -1,3 +1,27 @@
+# Latest Handoff — Session 157
+
+Session Intent: Complete one continuous autonomous arc from synchronized main through a premise-verified game-loop and nine-axis audit, all repository-owned implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, and exact production verification while preserving FORGE/public-unlaunched lifecycle truth.
+
+## Where We Left Off (Session 157)
+
+- Shipped: Operation encounters now require their exact authored BREACH/HOLD/ESCORT/HUNT/SABOTAGE/ESCAPE/BOSS action before a cleared arena can advance; skipped objectives retain the room and add bounded reinforcement pressure.
+- Campaign continuity: typed route effects and a bounded, idempotent local completion ledger apply authored carry-ins across Operations without locking content or requiring an account.
+- Evidence truth: paired Standard-versus-Operation playtest receipts bind both sides to eligible local run-history evidence; legacy and unbound rows are excluded, and export remains aggregate-only.
+- Runtime: the Operation presentation layer is lazy-loaded, closing the deployable runtime at 551,153 bytes within its 560,000-byte budget.
+- Validation: full Vitest passes 212/212 files and 1,214/1,214 tests; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, and npm audit zero pass. Browser E2E passes 19 tests with one intentional mobile-only skip.
+- Staging: exact candidate is `https://session-157-staging.call-of-doodie.pages.dev/` (immutable `https://906bded2.call-of-doodie.pages.dev/`). Hosted broad pixels pass 1,020/1,020 and focused Operation pixels pass 36/36.
+- Visual truth: 26 hash-bound dark/light, 390/1440px captures were directly reviewed across the command deck, required/confirmed encounter states, completion modal, and playtest command post with no blocking defect.
+- Release truth: engineering release is GO and SPARKED is independently NO-GO. One production-backend health attempt returned a transient rate-limit-service 500; production backend health is not claimed until the post-deploy retry passes.
+- Next: commit and push the sealed candidate directly to `main`, wait for exact-SHA GitHub workflows and Cloudflare deployment, then verify immutable/custom production surfaces and record the actual receipt.
+
+## Impact Summary
+
+**Headline.** Operations now make the authored verb mechanically authoritative, remember route consequences across missions, and accept paired feedback only when both runs carry real local evidence.
+
+**Evidence.** 212 files / 1,214 tests; 19 browser tests; 1,056 hosted pixel checks; 26 reviewed captures; runtime 551,153 bytes; immutable staging `906bded2`; zero new dependencies or variable-cost services.
+
+---
+
 # Latest Handoff — Session 156
 
 Session Intent: Recover the post-closeout Session 155 production-evidence seal with a complete, evidence-bound ledger and checkpoint it before beginning a fresh autonomous arc.

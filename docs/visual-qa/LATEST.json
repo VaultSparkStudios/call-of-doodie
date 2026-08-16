@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-16T05:57:27.570Z",
-  "stagingUrl": "https://session-155-staging.call-of-doodie.pages.dev",
-  "workingTreeUiSha256": "33c27d89d09b1e4aba28dd83f30b4ee0ce142110c6eb839ef2d815efaf313c9b",
+  "capturedAt": "2026-08-16T19:46:38.805Z",
+  "stagingUrl": "https://session-157-staging.call-of-doodie.pages.dev",
+  "workingTreeUiSha256": "90c7297f232044b19f32453fc0b4bf5f945422ea9e389fa7f2c40eae1a6b51fd",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-155-staging/visual-audit-receipt.json",
-    "sha256": "513e0594fac08c43cdaedf70ab9bca066fc95c8e3dd7ade4b5458680ee7dec2f",
+    "receipt": "output/playwright/s157-staging-final/visual-audit-receipt.json",
+    "sha256": "a33e21e4e57057313af51d9bc3332046260977506a81cded254ddd0c494842ef",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -41,7 +41,7 @@
   "captures": [
     {
       "file": "home-dark-mobile.png",
-      "sha256": "4e8c36d86b6e99bc17b279a05601c51a9f2f0b79835794aeaec78cf3cf4fd6c7",
+      "sha256": "468271cf72be225d6fcdd4405008e1cab617c87281d368dab8e55319f39e8a08",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -52,7 +52,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "fee2c73ac1c70ab07fb4f8bf06fce9d60b4cc7ad9e456f11b48f484cb8324f92",
+      "sha256": "58e8ccb7cc5343bd51a2c63dedcde4bf258fc411c523524c6ddc0a13cf96f002",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -107,7 +107,7 @@
     },
     {
       "file": "operation-deck--sewer-night--390.png",
-      "sha256": "b4ec16dea025a472d5e5f8e5b646216a9c4443d8bb2d6c7b0c27d1950496d82a",
+      "sha256": "3fce144ea8dbc59a66b42328d0d0ba4de5d007ce64af8b6b5a295c052e08c791",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -118,7 +118,7 @@
     },
     {
       "file": "operation-arena--sewer-night--390.png",
-      "sha256": "1ac5e6d74416315cbf6462a19547036901613c1bf7e58eca4a8dfe11171c251e",
+      "sha256": "d1880751015cc66e01d988ed952446e126d0fa2883f90d32cc070f9700aa677a",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -129,7 +129,7 @@
     },
     {
       "file": "operation-arena-complete--sewer-night--390.png",
-      "sha256": "e253833df452deee09fe46c1bae7c4c703df229c755ddec5bfd6bdf5b1c154e9",
+      "sha256": "f13d0498f1a6bf902d974d7193bbed0689d743d0d6bf71829dee7695dc158d12",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -140,7 +140,7 @@
     },
     {
       "file": "operation-deck--sewer-night--1440.png",
-      "sha256": "12f8eeb60d83edc6db88b8a4f4a10b60ccea62cc5986fb7be7db71598f641dd2",
+      "sha256": "ce65d29fd193000a7df42647a67a7451c94ba24e75b0be379e3daec063184035",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -151,7 +151,7 @@
     },
     {
       "file": "operation-arena--sewer-night--1440.png",
-      "sha256": "8b4885341bbbcd251e4c0f9a146b2ad64c51e5f98a8206142dc053486d89acfc",
+      "sha256": "0d892fca2ba66fc04907bb2fa37854522071a587a63111632692d26bd1fa2312",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -162,7 +162,7 @@
     },
     {
       "file": "operation-arena-complete--sewer-night--1440.png",
-      "sha256": "a83dee1dac3fab2ee148e8f8a1e409a71f58153c0f00e00766db0f7d1c316a65",
+      "sha256": "a410583699b8245218bb0288b47ffb9f2e0d80c8d5f903eebf9d4531272f6e05",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -173,7 +173,7 @@
     },
     {
       "file": "operation-deck--porcelain-day--390.png",
-      "sha256": "42e71575655b875a9de734de8971444fa313969af23e1e4e34046284c3fe28b4",
+      "sha256": "159cba176aaac2e0c6010a3a31a27d5bd7a72f731510318ac1761ef3204a6480",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -184,7 +184,7 @@
     },
     {
       "file": "operation-arena--porcelain-day--390.png",
-      "sha256": "00af8853adc3f612849cd8f5d0dd35c592ad4ffffc6011f14d3ba0f49a3a5ad4",
+      "sha256": "2a8a72b5cae3623d168b439a5eb5dddad06652a3392511a6bad97f1fd272b3f2",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -195,7 +195,7 @@
     },
     {
       "file": "operation-arena-complete--porcelain-day--390.png",
-      "sha256": "bc9defe62aba8776385b96478aa7f81f58046bcd2bf3461973fe4e70e8c49012",
+      "sha256": "f4b1c20903f574e8c8d64bc69e2edd14bf1eabe6c549d50e0cab1688f2711782",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -206,7 +206,7 @@
     },
     {
       "file": "operation-deck--porcelain-day--1440.png",
-      "sha256": "21e85b3a3856d01f5cadb5e3b9f69a70749b8f1bf2129ff13944deb45e58d006",
+      "sha256": "554dd2f3ec6dd714a8da7241f4aba6a528d29a0239ac05caa0a27f482ec7c0c5",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -217,7 +217,7 @@
     },
     {
       "file": "operation-arena--porcelain-day--1440.png",
-      "sha256": "b8114190bf875d4da8f917672e1275248af6fe13b71e0e4995bc6f036b91f38d",
+      "sha256": "16ea3a4f4d1322e59da0925854451eb5bcf6b9ec9ab156267a6cf0c2ae71c0ed",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -228,7 +228,7 @@
     },
     {
       "file": "operation-arena-complete--porcelain-day--1440.png",
-      "sha256": "fee201aa979091d6b9175ee499416a556c3aebd2e170dafcda116fcaa459cbb2",
+      "sha256": "674129acefe5c01e2e1972223d37ad1e079024e7ef661978c6e00b92980f1a66",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -250,7 +250,7 @@
     },
     {
       "file": "operation-command-post--sewer-night--390.png",
-      "sha256": "f6cab8ccb9b2d55e0a6a97881886ec1dfb18de8ad4c80201a3cc4d9971e8749a",
+      "sha256": "f8ce7f922ad04ff1de61b3d2ce4acc1bd0e000a9c944631ff8a3cb76a3c913a1",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -272,7 +272,7 @@
     },
     {
       "file": "operation-command-post--sewer-night--1440.png",
-      "sha256": "58ffedcf2847a39c09aa7092557951c48f01cc491b2aa01ed93e3c101a004241",
+      "sha256": "be1ec88e196bf13164e45539bca6d748cee85807b6763012b16b5307d9be5719",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -294,7 +294,7 @@
     },
     {
       "file": "operation-command-post--porcelain-day--390.png",
-      "sha256": "d8a332560255428cb50335997bd59204db0b345b7793b4fda91045241379ff77",
+      "sha256": "1210069e9b0296ae89ebcf974ba572ac2c60902f7321560bd8ad5c87f33b15ae",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -316,7 +316,7 @@
     },
     {
       "file": "operation-command-post--porcelain-day--1440.png",
-      "sha256": "a7fed095146ca8c02315831943e9be31114af92e9446c9620ea937bbeefb20a4",
+      "sha256": "c42d37ff06baffda284441e446886a1c63e219f62b6304c367c6139b5375de9a",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -337,8 +337,7 @@
       "The Operation completion receipt and expanded opt-in paired playtest command post passed 36/36 focused checks at 390px and 1440px in both project themes."
     ],
     "fixesApplied": [
-      "Moved the Operation overlay below the first-run training and HUD band after direct mobile pixel inspection.",
-      "Added safe command-deck scroll clearance and verified authored route controls in both project themes."
+      "No blocking visual defect remained after direct review; required and confirmed objective states, campaign deck, completion modal, and evidence-empty state are readable in both themes at 390px and 1440px."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

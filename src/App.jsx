@@ -56,7 +56,6 @@ import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 import HUD from "./components/HUD.jsx";
-import OperationRuntimeLayer from "./components/OperationRuntimeLayer.jsx";
 import { getOperation } from "./systems/operationCampaign.js";
 import { buildOperationReceipt, getCurrentEncounter } from "./systems/operationDirector.js";
 import { useOperationMode } from "./hooks/useOperationMode.js";
@@ -65,6 +64,7 @@ import { useOperationMode } from "./hooks/useOperationMode.js";
 const WEAPON_RECOIL = [3, 12, 2, 4, 18, 2, 6, 4, 7, 14, 4, 8];
 
 const HomeV2 = lazy(() => import("./components/HomeV2.jsx"));
+const OperationRuntimeLayer = lazy(() => import("./components/OperationRuntimeLayer.jsx"));
 import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
 const DisplayNameScreen = lazy(() => import("./components/DisplayNameScreen.jsx"));
 const HomeV3          = lazy(() => import("./components/HomeV3.jsx"));
@@ -361,7 +361,7 @@ export default function CallOfDoodie() {
   const operationModeRefs = useMemo(() => [scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef], []);
   const operationRuntime = useOperationMode({ gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, modeRefs: operationModeRefs, setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce });
   const {
-    stateRef: operationStateRef, completeRef: operationCompleteRef, state: operationState, arenaState: operationArenaState,
+    stateRef: operationStateRef, completeRef: operationCompleteRef, state: operationState, arenaState: operationArenaState, objectiveState: operationObjectiveState,
     directive: operationDirective, completeReceipt: operationCompleteReceipt, start: startOperation, reset: resetOperation,
     interact: applyOperationInteraction, resolveWave: resolveOperationWave, setCompleteReceipt: setOperationCompleteReceipt,
   } = operationRuntime;
@@ -2959,7 +2959,7 @@ export default function CallOfDoodie() {
         gs.waveDirectorStage = -1;
       } else {
         const _waveMax = gs.currentWave >= 50 ? 100 : gs.currentWave >= 40 ? 80 : 60;
-        gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1)), _waveMax);
+        gs.maxEnemiesThisWave = Math.min(Math.floor((5 + gs.currentWave * 3) * (gs.waveEnemyMult || 1) * (gs.operationMode ? (gs._operationPressureMultiplier || 1) : 1)), _waveMax);
         if (gs.zombiesMode) {
           gs.zombieOutbreak = getZombieOutbreakPlan(gs.currentWave);
           gs.maxEnemiesThisWave = getZombieWaveEnemyCount(gs.maxEnemiesThisWave, gs.currentWave);
@@ -4353,10 +4353,12 @@ export default function CallOfDoodie() {
           filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
       />
 
-      <OperationRuntimeLayer {...{
-        operationState, operationArenaState, operationDirective, operationCompleteReceipt, paused, gamepadConnected,
-        onInteract: applyOperationInteraction, onContinue: returnFromOperationToMenu, onRematch: rematchCompletedOperation,
-      }} />
+      <AsyncPanelBoundary label="Operation interface">
+        <OperationRuntimeLayer {...{
+          operationState, operationArenaState, operationObjectiveState, operationDirective, operationCompleteReceipt, paused, gamepadConnected,
+          onInteract: applyOperationInteraction, onContinue: returnFromOperationToMenu, onRematch: rematchCompletedOperation,
+        }} />
+      </AsyncPanelBoundary>
       {/* Pause menu */}
       {paused && !operationCompleteReceipt && (
         <AsyncPanelBoundary><PauseMenu

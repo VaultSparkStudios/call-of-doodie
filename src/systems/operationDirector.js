@@ -28,6 +28,7 @@ export function createOperationState({ operationId, seed } = {}) {
     currentEncounterIndex: 0,
     route: null,
     routeConsequence: null,
+    campaignCarryIn: null,
     score: 0,
     lastResolutionKey: null,
     encounterReceipts: [],
@@ -50,7 +51,9 @@ export function chooseOperationRoute(state, routeId) {
   return {
     ...state,
     route,
-    routeConsequence: routeIndex === 0 ? "tempo_bonus" : "score_bonus",
+    routeConsequence: routeIndex === 0
+      ? { id: "tempo_bonus", label: "TEMPO RELIEF", pressureMultiplier: 0.9, scoreMultiplier: 1 }
+      : { id: "score_bonus", label: "SCORE PREMIUM", pressureMultiplier: 1, scoreMultiplier: 1.1 },
   };
 }
 
@@ -61,7 +64,7 @@ export function resolveOperationEncounter(state, outcome = {}) {
   if (resolutionKey && state.lastResolutionKey === resolutionKey) return state;
   const operation = getOperation(state.operationId);
   const completed = outcome.completed !== false;
-  const routeMultiplier = state.routeConsequence === "score_bonus" ? 1.1 : 1;
+  const routeMultiplier = Number(state.routeConsequence?.scoreMultiplier) || 1;
   const awardedScore = completed
     ? Math.floor((encounter.scoreValue + safeScore(outcome.bonusScore)) * routeMultiplier)
     : 0;
@@ -74,6 +77,12 @@ export function resolveOperationEncounter(state, outcome = {}) {
     route: state.route,
     arenaFingerprint: outcome.arenaFingerprint || null,
     directorReason: outcome.directorReason || null,
+    objectiveEvidence: outcome.objectiveEvidence ? {
+      targetId: String(outcome.objectiveEvidence.targetId || "").slice(0, 32),
+      command: String(outcome.objectiveEvidence.command || "").slice(0, 24),
+      arenaSequence: safeScore(outcome.objectiveEvidence.arenaSequence),
+      transitionFingerprint: String(outcome.objectiveEvidence.transitionFingerprint || "").slice(0, 16) || null,
+    } : null,
   };
   const encounterReceipt = { ...receiptBase, fingerprint: hash(receiptBase) };
   const nextIndex = state.currentEncounterIndex + 1;
@@ -100,6 +109,13 @@ export function buildOperationReceipt(state, extra = {}) {
     score: safeScore(state.score + safeScore(extra.scoreBonus)),
     act: state.status === "complete" ? 3 : (getCurrentEncounter(state)?.act || 1),
     route: state.route || "uncommitted",
+    routeConsequence: state.routeConsequence ? { id: state.routeConsequence.id, label: state.routeConsequence.label } : null,
+    campaignCarryIn: state.campaignCarryIn ? {
+      id: state.campaignCarryIn.id,
+      sourceOperationId: state.campaignCarryIn.sourceOperationId,
+      sourceRoute: state.campaignCarryIn.sourceRoute,
+      sourceFingerprint: state.campaignCarryIn.sourceFingerprint,
+    } : null,
     checkpoint: `${state.encounterReceipts.length}/${operation?.encounters?.length || 7} encounters`,
     encounterFingerprints: state.encounterReceipts.map((entry) => entry.fingerprint),
     trust: "local-deterministic-operation-receipt-not-server-authoritative",

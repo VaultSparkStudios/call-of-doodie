@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { OPERATIONS, getOperation } from "../systems/operationCampaign.js";
+import { deriveOperationCampaignCarryIn, loadOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
 
 const FALLBACK_PALETTE = Object.freeze({
   accent: "#FF7A38",
@@ -70,6 +71,7 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
   const [selectedRoutes, setSelectedRoutes] = useState(() => Object.fromEntries(
     OPERATIONS.map((operation) => [operation.id, routeOptions(operation)[0]?.id || ""]),
   ));
+  const campaignProgress = useMemo(() => loadOperationCampaignProgress(), []);
 
   return (
     <section
@@ -105,6 +107,8 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
           const operationId = readable(operation.id, `operation-${index + 1}`);
           const seed = operationSeed(operation);
           const routes = routeOptions(operation);
+          const completion = campaignProgress.completions.findLast((entry) => entry.operationId === operationId);
+          const carryIn = deriveOperationCampaignCarryIn(campaignProgress, operationId);
           return (
             <article
               key={operationId}
@@ -120,7 +124,7 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
               }}
             >
               <div style={{ color: colors.accent, fontSize: 9, fontWeight: 900, letterSpacing: 1.6 }}>
-                OP {String(index + 1).padStart(2, "0")} · 7 ENCOUNTERS
+                OP {String(index + 1).padStart(2, "0")} · 7 ENCOUNTERS · {completion ? "CLEARED" : "READY"}
               </div>
               <h3 style={{ color: colors.ink, fontSize: 16, margin: "6px 0 8px" }}>{title}</h3>
               <p style={{ color: colors.muted, fontSize: 10, lineHeight: 1.45, margin: "0 0 9px" }}>
@@ -137,6 +141,9 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
                 <dt style={{ color: colors.muted }}>TIME</dt>
                 <dd style={{ color: colors.ink, margin: 0 }}>{durationLabel(operation)}</dd>
               </dl>
+              {carryIn && <p data-testid={`operation-carry-in-${operationId}`} style={{ margin: "0 0 9px", padding: 7, border: `1px solid ${colors.accent}55`, borderRadius: 7, color: colors.ink, fontSize: 9, lineHeight: 1.35 }}>
+                ROUTE ECHO · {carryIn.description}
+              </p>}
               <fieldset aria-label={`Choose route for ${title}`} style={{ margin: "5px 0 8px", padding: 0, border: 0 }}>
                 <legend style={{ color: colors.muted, fontSize: 9, fontWeight: 900, letterSpacing: 1 }}>CHOOSE ROUTE</legend>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}>

@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S157)",
+  "generatedAt": "2026-08-16",
+  "session": 157,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-operation-depth-and-evidence-truth",
+  "meta": {
+    "generatedAt": "2026-08-16",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-operation-depth-and-evidence-truth",
+    "candidateCount": 34,
+    "promotedCount": 3,
+    "combinedPriority": 67.6,
+    "top3": [
+      "operation-verb-objective-authority",
+      "operation-campaign-consequence-ledger",
+      "operation-paired-evidence-binding"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle and direct source inspection confirm four live gaps: App calls resolveOperationWave only from the common enemy-wave-clear branch; useOperationMode advances every verb with completed:true; overlay interactions are optional and award one identical +25/+5 result; priorRouteConsequence has no consumer while routeConsequence is a string whose callers read .id; and paired playtest creation does not select a real local Standard run. The S156 baseline remains 209/209 files and 1,205/1,205 tests.",
+    "recommendation": {
+      "firstBuild": "Make the seven shipped Operation verbs mechanically authoritative before adding content breadth.",
+      "productDestination": "Objective-gated Operations with durable local consequences and provenance-bound participant evidence.",
+      "keep": "Preserve guest-first play, all eight Arcade identifiers, local deterministic trust, async rivalry boundaries, and FORGE/SPARKED separation.",
+      "rejectNow": "A fourth Operation, broad campaign expansion, realtime co-op, competitive multiplayer, battle royale, hosted mission generation, or automatic balance tuning.",
+      "reason": "The highest-value work converts already-shipped presentation into executable grammar and improves the evidence used for future expansion decisions without new infrastructure or variable cost."
+    },
+    "gameLoopReview": {
+      "source": "docs/GAME_LOOP_REVIEW_2026-08-16.md",
+      "loopTightness": 9.3,
+      "progressionCurve": 9.1,
+      "sessionEngagement": 8.8,
+      "retentionHooks": 8.7,
+      "soulFidelity": 9.8,
+      "overall": 9.1,
+      "evidenceBoundary": "No participant playtest corpus exists. Scores measure executable design structure, not fun, balance, retention, or satisfaction."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Promote each Operation verb from a label/bonus into an objective authority that can block advancement and emit a distinct consequence.",
+    "innovation": "Use reinforcement pressure and replay-bound encounter proofs to make an arcade wave spine behave like authored mission grammar without a separate engine.",
+    "ui / ux / user-experience": "Show required objective state, blocked reason, reinforcement count, route effect, and carry-in consequence in the existing compact overlay/deck.",
+    "feedback loop": "Require a real local Standard-run evidence reference before a paired receipt counts toward campaign or co-op gates.",
+    "gamification / engagement / immersion": "Persist completion routes and authored carry-ins so choices echo across Operations without an account wall or grind treadmill.",
+    "ai / intelligence integration": "Repair Mission Director route-consequence inputs and keep all guidance deterministic, reason-coded, local, and player-opt-in.",
+    "security": "Treat local evidence as untrusted, bounded, schema-versioned data; export aggregates only and never let Operation receipts mint standard leaderboard authority.",
+    "speed / organization / efficiency": "Centralize encounter action definitions and campaign-state reducers instead of adding more App.jsx conditionals or duplicated UI maps.",
+    "token / api cost reduction": "No hosted inference, realtime service, new dependency, or per-player API call; all logic remains compact deterministic data."
+  },
+  "items": [
+    {
+      "slug": "operation-verb-objective-authority",
+      "tier": "FIRE",
+      "axis": "feature depth / engagement / UX / innovation",
+      "effortHours": 12,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 24.4,
+      "status": "complete",
+      "why": "All seven encounter verbs currently advance from the same enemy-wave-clear path, and every arena action is optional with the same score/health reward. That leaves the Operation grammar presentational rather than authoritative.",
+      "recipe": "Create one pure encounter-objective contract owning verb actions, completion evidence, effects, blocked reasons, and reinforcement receipts. Require the correct interaction plus arena clear before advancement; if absent, keep the encounter active for a reinforcement wave. Wire the overlay, Mission Director, operation receipt, and focused browser/runtime tests to the same source.",
+      "measurement": "Each verb has one source-derived objective/action contract; a cleared wave without the action cannot advance; a valid action plus clear advances exactly once; keyboard/controller/touch paths remain available; receipts identify action, effect, reinforcement count, and reason; all legacy modes remain unchanged.",
+      "ladder": {
+        "L1": { "effortHours": 6, "recipe": "Centralize the seven action definitions and require interaction before wave-clear advancement." },
+        "L2": { "effortHours": 12, "recipe": "Add objective reducer, reinforcement pressure, distinct bounded action effects, overlay progress/reasons, receipt evidence, App integration, and tests." },
+        "L3": { "effortHours": 22, "recipe": "Add spatial proximity and moving-objective simulation only after participant evidence shows the L2 grammar is understood and replayed." }
+      }
+    },
+    {
+      "slug": "operation-campaign-consequence-ledger",
+      "tier": "FIRE",
+      "axis": "progression / retention / AI / efficiency",
+      "effortHours": 10,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 22.5,
+      "status": "complete",
+      "why": "Operation definitions declare a priorRouteConsequence, but completion history has no campaign reducer or consumer. Current routeConsequence is also a string while Mission Director callers read an object id, so the explanation path is silent.",
+      "recipe": "Represent route consequences as typed objects, persist a bounded local campaign ledger, record completion/route/fingerprint, derive authored carry-ins for later Operations, apply those carry-ins through deterministic arena transitions, and show completion/carry-in state on the command deck without locking guest content.",
+      "measurement": "Completing an Operation records one idempotent bounded entry; replay/rematch does not duplicate progress; later Operation start deterministically applies only a matching declared carry-in; Mission Director and receipts name the route/carry-in reason; all Operations remain guest-playable.",
+      "ladder": {
+        "L1": { "effortHours": 5, "recipe": "Fix typed route consequences and persist completion/route receipts locally." },
+        "L2": { "effortHours": 10, "recipe": "Add bounded campaign reducer/storage, authored cross-Operation carry-ins, command-deck status, Mission Director/receipt wiring, and tests." },
+        "L3": { "effortHours": 18, "recipe": "Add branching finales only after ten provenance-valid paired receipts justify campaign expansion." }
+      }
+    },
+    {
+      "slug": "operation-paired-evidence-binding",
+      "tier": "FIRE",
+      "axis": "feedback / security / observability",
+      "effortHours": 7,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 20.7,
+      "status": "complete",
+      "why": "The paired feedback form is consentful and aggregate-only, but it accepts a manually entered Standard duration and ratings without selecting an actual local Standard run. Such rows are explicit opinions but weak comparative evidence for the 10/20 expansion gates.",
+      "recipe": "Select a bounded recent non-practice Standard run from local history, derive an identifier-free evidence reference, require both that reference and the completed Operation fingerprint in schema v2, exclude legacy/unbound rows from decision gates, and explain the missing-baseline state in plain player language.",
+      "measurement": "No paired receipt is created without one valid local Standard evidence reference and the current Operation fingerprint; exports contain aggregates and provenance counts but no raw runs, identifiers, free text, or exact timestamps; old rows remain readable but do not count toward gates.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Require evidence-reference fields in a versioned receipt and reject unbound rows from gates." },
+        "L2": { "effortHours": 7, "recipe": "Add recent-Standard selector, identifier-free reference derivation, schema-v2 aggregation/provenance, honest empty state, and tests." },
+        "L3": { "effortHours": 13, "recipe": "Import consented aggregate cohorts into Balance Lab only after a real sample exists and governance is defined." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "new-operation-content", "reason": "CULL - three authored Operations already exist; deeper executable verbs and consequences dominate another content pack." },
+    { "slug": "numeric-balance-retune", "reason": "DATA-BLOCKED - no participant corpus supports enemy, reward, duration, or progression tuning." },
+    { "slug": "realtime-coop", "reason": "GATED - retain the existing 20-receipt plus authoritative-capacity requirement; this audit provides no new participant evidence." },
+    { "slug": "hosted-ai-director", "reason": "CULL - deterministic local Mission Director fits replay truth and cost discipline better." },
+    { "slug": "visual-restyle", "reason": "FALSE PREMISE / CULL - S155 directly reviewed 26 Operation captures after fixing the only observed mobile collision; no new visual defect is evidenced before implementation." },
+    { "slug": "dependency-or-framework-change", "reason": "CULL - the work needs no package, download, paid service, or framework migration." }
+  ],
+  "executionLog": [
+    {
+      "slug": "operation-verb-objective-authority",
+      "status": "complete",
+      "rung": "L2",
+      "evidence": "Seven centralized action contracts, exact-action objective evidence, reason-coded reinforcement blocking, distinct bounded effects, overlay state, director receipt wiring, and focused tests."
+    },
+    {
+      "slug": "operation-campaign-consequence-ledger",
+      "status": "complete",
+      "rung": "L2",
+      "evidence": "Typed route effects, bounded idempotent local completion ledger, authored cross-Operation carry-ins, deterministic arena transitions, visible command-deck state, and focused tests."
+    },
+    {
+      "slug": "operation-paired-evidence-binding",
+      "status": "complete",
+      "rung": "L2",
+      "evidence": "Schema-v2 Standard/Operation evidence references, eligible history selector, fail-closed empty state, legacy exclusion, aggregate-only provenance counts, and component/pure-contract tests."
+    }
+  ]
+}

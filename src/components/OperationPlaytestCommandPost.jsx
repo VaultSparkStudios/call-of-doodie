@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { aggregateOperationPlaytestReceipts, createPairedOperationPlaytestReceipt } from "../utils/operationPlaytest.js";
+import { loadRunHistory } from "../storage.js";
+import { aggregateOperationPlaytestReceipts, buildRunEvidenceReference, createPairedOperationPlaytestReceipt, selectComparableStandardRuns } from "../utils/operationPlaytest.js";
 
 const STORAGE_KEY = "cod-operation-paired-playtests-v1";
 const RATING_FIELDS = ["repeatedness", "objectiveClarity", "controlTrust", "threatReadability", "memorableMoment", "immediateReplayIntent"];
@@ -11,17 +12,21 @@ function readReceipts() {
 
 export default function OperationPlaytestCommandPost({ receipt }) {
   const defaults = useMemo(() => Object.fromEntries(RATING_FIELDS.flatMap((field) => [[`standard-${field}`, 3], [`operation-${field}`, 3]])), []);
+  const standardRuns = useMemo(() => selectComparableStandardRuns(loadRunHistory()), []);
   const [ratings, setRatings] = useState(defaults);
-  const [standardDuration, setStandardDuration] = useState(600);
+  const [standardEvidenceRef, setStandardEvidenceRef] = useState(standardRuns[0]?.evidenceRef || "");
   const [preferredNextMode, setPreferredNextMode] = useState("operation");
   const [aggregate, setAggregate] = useState(null);
   const score = (mode, field) => Number(ratings[`${mode}-${field}`]);
+  const selectedStandard = standardRuns.find((run) => run.evidenceRef === standardEvidenceRef) || null;
   const run = (mode) => ({
-    route: mode === "operation" ? receipt?.route || "uncommitted" : "standard-fixed",
-    durationSeconds: mode === "operation" ? Math.max(1, Number(receipt?.durationSeconds) || 900) : Number(standardDuration),
+    evidenceRef: mode === "operation" ? buildRunEvidenceReference(receipt, "operation") : selectedStandard?.evidenceRef,
+    route: mode === "operation" ? receipt?.route || "uncommitted" : selectedStandard?.route,
+    durationSeconds: mode === "operation" ? Math.max(1, Number(receipt?.durationSeconds) || 900) : selectedStandard?.durationSeconds,
     ...Object.fromEntries(RATING_FIELDS.map((field) => [field, score(mode, field)])),
   });
   const submit = () => {
+    if (!selectedStandard) return;
     const paired = createPairedOperationPlaytestReceipt({ optIn: true, standard: run("standard"), operation: run("operation"), preferredNextMode });
     if (!paired) return;
     const receipts = [...readReceipts(), paired].slice(-50);
@@ -35,10 +40,12 @@ export default function OperationPlaytestCommandPost({ receipt }) {
   };
   return <details style={{ margin: "16px 0", border: "1px solid #465463", borderRadius: 8, padding: 12 }}>
     <summary style={{ cursor: "pointer", color: "#7FE6FF", fontWeight: 900 }}>OPT-IN PAIRED PLAYTEST COMMAND POST</summary>
-    <p style={{ color: "#AAB7C4", fontSize: 11 }}>Compare one Standard run with this Operation. Stored locally; export contains aggregates only, with no identity or free text.</p>
-    <label style={{ display: "grid", gap: 4, fontSize: 11 }}>Standard duration (seconds)
-      <input type="number" min="1" max="3600" value={standardDuration} onChange={(event) => setStandardDuration(event.target.value)} style={{ minHeight: 44 }} />
-    </label>
+    <p style={{ color: "#AAB7C4", fontSize: 11 }}>Compare one eligible Standard history run with this Operation. Stored locally; export contains aggregate counts only, with no run references, identity, or free text.</p>
+    {standardRuns.length ? <label style={{ display: "grid", gap: 4, fontSize: 11 }}>Verified Standard run
+      <select aria-label="Verified Standard run" value={standardEvidenceRef} onChange={(event) => setStandardEvidenceRef(event.target.value)} style={{ minHeight: 44 }}>
+        {standardRuns.map((run) => <option key={run.evidenceRef} value={run.evidenceRef}>WAVE {run.wave} · {run.durationSeconds}s · {run.score.toLocaleString()} PTS · {run.difficulty.toUpperCase()}</option>)}
+      </select>
+    </label> : <p role="status" style={{ color: "#FFD57B", fontSize: 11 }}>Finish one eligible non-practice Standard run before saving a paired comparison.</p>}
     <div style={{ display: "grid", gridTemplateColumns: "1fr 70px 70px", gap: 6, alignItems: "center", marginTop: 10, fontSize: 10 }}>
       <strong>1 = low · 5 = high</strong><strong>STANDARD</strong><strong>OP</strong>
       {RATING_FIELDS.map((field) => <div key={field} style={{ display: "contents" }}>
@@ -53,7 +60,7 @@ export default function OperationPlaytestCommandPost({ receipt }) {
         {['operation', 'standard', 'either', 'neither'].map((value) => <option key={value} value={value}>{value}</option>)}
       </select>
     </label>
-    <input type="button" value="SAVE OPT-IN PAIR" onClick={submit} style={{ minHeight: 48, width: "100%", marginTop: 10 }} />
+    <input type="button" value="SAVE OPT-IN PAIR" disabled={!selectedStandard} onClick={submit} style={{ minHeight: 48, width: "100%", marginTop: 10 }} />
     {aggregate && <div role="status" style={{ marginTop: 8, fontSize: 10 }}>
       SAMPLE {aggregate.sampleSize} · CAMPAIGN {aggregate.gates.campaignBreadth.eligible ? "ELIGIBLE" : `${aggregate.gates.campaignBreadth.remaining} MORE`} · CO-OP {aggregate.gates.realtimeCoop.eligible ? "EVIDENCE ELIGIBLE" : `${aggregate.gates.realtimeCoop.remaining} MORE`}
       <input type="button" value="EXPORT AGGREGATE JSON" onClick={download} style={{ minHeight: 44, width: "100%", marginTop: 8 }} />

@@ -50,7 +50,7 @@ function gateCopy(campaignGate) {
     campaign: safeText(
       gate.campaignMessage,
       campaignEnabled
-        ? "Campaign route enabled for this build."
+        ? "Local campaign route continuity is enabled for this build."
         : "Campaign progression is not live yet; this victory is a local operation checkpoint.",
     ),
     coop: safeText(

@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-08-16 (Session 157 — objective-authoritative Operations and evidence truth)
+
+- Ran the game-loop review and combined nine-axis audit against the shipped Operation foundation; promoted three premise-verified repository-owned gaps.
+- Added a central seven-action encounter contract. A cleared arena no longer completes the room without its exact authored interaction; the room stays active and accumulates bounded, reason-coded reinforcement pressure.
+- Added typed route consequences plus a bounded 12-entry, idempotent local campaign ledger. Blacksite and Porcelain route choices now produce authored carry-ins while every Operation remains directly playable.
+- Bound paired Standard-versus-Operation feedback to eligible local run-history evidence on both sides. Legacy/unbound receipts do not count, and portable output remains aggregate-only.
+- Repaired the Operation command-post UI around an honest Standard-run selector and explicit empty state; refreshed runtime overlay/deck language for required, confirmed, reinforcement, cleared, and route-echo states.
+- Lazy-loaded the Operation presentation boundary after the first-runtime budget exposed a 567,601-byte regression; the final application runtime is 551,153 bytes against the 560,000-byte cap.
+- Full Vitest passes 212/212 files and 1,214/1,214 tests; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, npm audit zero, and 19-browser-test E2E with one intentional mobile skip pass.
+- Deployed exact isolated staging at `session-157-staging` / immutable `906bded2`; hosted broad visual checks pass 1,020/1,020 and focused Operation checks pass 36/36.
+- Directly reviewed 26 hash-bound dark/light mobile/desktop captures across deck, live objective, completed objective, modal, and command-post states with zero blocking defects.
+- Independent release/cost review allows the cost-neutral FORGE engineering update and rejects SPARKED promotion. One pre-publication production backend probe returned a transient rate-limit-service 500, so no backend-green claim is made before post-deploy retry.
+
+Intent outcome: implementation, isolated staging, visual review, and release gating achieved; direct-main publication and exact production verification are the remaining authorized follow-through.
+
 ## 2026-08-16 (Session 156 — production-evidence recovery)
 
 - Detected that Session 155's code and primary closeout were complete, but production-evidence source `b37da9c` and final documentation seal `a4549a4` landed after the SIL anchor.

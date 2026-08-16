@@ -33,6 +33,7 @@ export function chooseMissionDirective({
   recentDamageSource = null,
   objectiveHistory = [],
 } = {}) {
+  const routeConsequenceId = typeof routeConsequence === "object" ? routeConsequence?.id : routeConsequence;
   const health = Math.max(0, Math.min(1, Number(healthRatio) || 0));
   let reasonCode = MISSION_DIRECTOR_REASON_CODES.ENCOUNTER_DEFAULT;
   let directive = VERB_DIRECTIVES[String(encounter?.verb || "").toUpperCase()] || "Secure the current objective.";
@@ -54,9 +55,9 @@ export function chooseMissionDirective({
   } else if (buildArchetype) {
     reasonCode = MISSION_DIRECTOR_REASON_CODES.BUILD_COUNTERPLAY;
     directive = `${directive} Director read: ${String(buildArchetype).slice(0, 24)} build.`;
-  } else if (routeChoice && routeConsequence) {
+  } else if (routeChoice && routeConsequenceId) {
     reasonCode = MISSION_DIRECTOR_REASON_CODES.ROUTE_CONSEQUENCE;
-    directive = `${directive} Route consequence ${String(routeConsequence).slice(0, 32)} is active.`;
+    directive = `${directive} Route consequence ${String(routeConsequenceId).slice(0, 32)} is active.`;
   } else if (!interactionComplete) {
     reasonCode = MISSION_DIRECTOR_REASON_CODES.INTERACTION_PENDING;
   } else if ((Number(scorePace) || 0) < 0.65) {

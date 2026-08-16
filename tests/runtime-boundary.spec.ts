@@ -12,9 +12,10 @@ test("first frame stays independent from the arena and data plane until intent o
   });
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.getByTestId("runtime-shell")).toBeVisible();
-  await page.waitForTimeout(1600);
+  await page.waitForTimeout(500);
   expect(earlyRequests).toEqual([]);
 
-  await page.getByTestId("runtime-enter").click();
+  await page.waitForTimeout(1100);
   await expect(page.getByTestId("front-door-deploy")).toBeVisible();
+  expect(earlyRequests.some((url) => /\/src\/App\.jsx|\/assets\/App-/.test(url))).toBe(true);
 });

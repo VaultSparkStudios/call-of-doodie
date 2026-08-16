@@ -1,27 +1,15 @@
 import { useEffect, useMemo, useRef } from "react";
 import { getOperationArenaCues } from "../systems/operationArenaState.js";
-
-const ENCOUNTER_ACTIONS = Object.freeze({
-  BREACH: { targetId: "door-north", command: "open", label: "BREACH THE NORTH DOOR", benefit: "Opens the short assault lane." },
-  HOLD: { targetId: "turret-northwest", command: "power", label: "POWER THE HOLD TURRET", benefit: "Adds bounded auto-defense pressure." },
-  ESCORT: { targetId: "valve-east", command: "power", label: "PRESSURIZE THE ESCORT LANE", benefit: "Keeps the cart lane clean and readable." },
-  HUNT: { targetId: "watchtower-center", command: "enter", label: "TAKE THE WATCHTOWER", benefit: "Marks the target sightline." },
-  SABOTAGE: { targetId: "pump-west", command: "flood", label: "FLOOD THE ENEMY LINE", benefit: "Changes the west lane into a hazard." },
-  ESCAPE: { targetId: "extraction-toilet-alpha", command: "arm", label: "ARM EXTRACTION", benefit: "Prepares the porcelain exit." },
-  BOSS: { targetId: "pump-west", command: "drain", label: "DRAIN THE BOSS FLOOR", benefit: "Clears the finale arena." },
-});
+import { getOperationEncounterAction } from "../systems/operationEncounterContract.js";
 
 function verbOf(encounter) {
   return String(encounter?.verb || encounter?.type || "").toUpperCase();
 }
 
-function getOperationEncounterAction(encounter) {
-  return ENCOUNTER_ACTIONS[verbOf(encounter)] || null;
-}
-
 export default function OperationArenaOverlay({
   arenaState,
   encounter,
+  objectiveState,
   progress,
   missionScore = 0,
   directorReason = "",
@@ -32,7 +20,7 @@ export default function OperationArenaOverlay({
   const cues = useMemo(() => arenaState ? getOperationArenaCues(arenaState) : [], [arenaState]);
   const target = action ? arenaState?.interactables?.find((item) => item.id === action.targetId) : null;
   const cue = action ? cues.find((item) => item.id === action.targetId) : null;
-  const completed = Boolean(target && target.transitionReceipts) || (
+  const completed = objectiveState ? objectiveState.actionComplete : Boolean(target && target.transitionReceipts) || (
     action?.command === "open" && target?.state === "open"
   ) || (
     action?.command === "power" && target?.state === "powered"
@@ -109,6 +97,9 @@ export default function OperationArenaOverlay({
         {encounter.description || encounter.objective || action?.benefit}
       </span>
       {directorReason && <span style={{ display: "block", marginTop: 5, color: "#FFD57B", fontSize: 9 }}>DIRECTOR: {directorReason}</span>}
+      {objectiveState && <span data-testid="operation-objective-status" style={{ display: "block", marginTop: 5, color: objectiveState.actionComplete ? "#7CFFB8" : "#FFD57B", fontSize: 9, fontWeight: 900 }}>
+        {objectiveState.actionComplete ? "OBJECTIVE CONFIRMED" : objectiveState.reinforcementCount > 0 ? `OBJECTIVE REQUIRED · REINFORCEMENTS ${objectiveState.reinforcementCount}` : "OBJECTIVE ACTION REQUIRED"}
+      </span>}
       {action && (
         <button
           type="button"

@@ -20,6 +20,7 @@ describe("OperationArenaOverlay", () => {
       <OperationArenaOverlay
         arenaState={createOperationArenaState({ width: 960, height: 640, seed: 7 })}
         encounter={{ verb: "BREACH", label: "Open the intake", description: "Choose the assault lane." }}
+        objectiveState={{ actionComplete: false, reinforcementCount: 0 }}
         progress={{ act: 1, encounterNumber: 1, encounterTotal: 7 }}
         missionScore={125}
         {...props}
@@ -35,6 +36,11 @@ describe("OperationArenaOverlay", () => {
     expect(button.style.minHeight).toBe("48px");
     expect(container.querySelector("[data-testid='operation-arena-overlay']").style.top).toContain("150px");
     expect(button.textContent).toContain("E / A / USE");
+  });
+
+  it("makes the required objective and reinforcement state explicit", () => {
+    render({ objectiveState: { actionComplete: false, reinforcementCount: 2 } });
+    expect(container.querySelector("[data-testid='operation-objective-status']").textContent).toContain("REINFORCEMENTS 2");
   });
 
   it("dispatches touch and keyboard receipts through the same command", () => {

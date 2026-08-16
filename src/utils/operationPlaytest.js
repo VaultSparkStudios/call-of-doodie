@@ -1,4 +1,4 @@
-export const OPERATION_PLAYTEST_SCHEMA = "operation-paired-playtest-v1";
+export const OPERATION_PLAYTEST_SCHEMA = "operation-paired-playtest-v2";
 export const CAMPAIGN_BREADTH_SAMPLE_MINIMUM = 10;
 export const REALTIME_COOP_SAMPLE_MINIMUM = 20;
 
@@ -26,14 +26,67 @@ function boundedInteger(value, min, max) {
   return Math.max(min, Math.min(max, number));
 }
 
+function fingerprint(value) {
+  let result = 2166136261;
+  for (const character of JSON.stringify(value)) {
+    result ^= character.charCodeAt(0);
+    result = Math.imul(result, 16777619);
+  }
+  return (result >>> 0).toString(16).padStart(8, "0").toUpperCase();
+}
+
+export function buildRunEvidenceReference(run, kind = "standard") {
+  const evidenceKind = kind === "operation" ? "operation" : "standard";
+  const bounded = {
+    kind: evidenceKind,
+    mode: boundedString(run?.mode || evidenceKind, 16),
+    score: boundedInteger(run?.score ?? run?.runScore, 0, 100000000) ?? 0,
+    kills: boundedInteger(run?.kills, 0, 1000000) ?? 0,
+    wave: boundedInteger(run?.wave, 0, 10000) ?? 0,
+    durationSeconds: boundedInteger(run?.time ?? run?.durationSeconds, 1, 60 * 60) ?? 1,
+    difficulty: boundedString(run?.difficulty, 16),
+    runSeed: boundedInteger(run?.runSeed ?? run?.seed, 0, 0xffffffff),
+    operationId: boundedString(run?.operationId ?? run?.operation?.operationId, 32),
+    route: boundedString(run?.route ?? run?.operation?.route, 32),
+    sourceFingerprint: boundedString(run?.fingerprint ?? run?.operation?.fingerprint, 16),
+  };
+  return `${evidenceKind}:${fingerprint(bounded)}`;
+}
+
+export function selectComparableStandardRuns(history, limit = 8) {
+  const result = [];
+  const seen = new Set();
+  for (const run of Array.isArray(history) ? history : []) {
+    if (run?.mode !== "standard" || run?.practiceRun === true || run?.integrityReceipt?.onlineEligible === false) continue;
+    const durationSeconds = boundedInteger(run.time, 1, 60 * 60);
+    const wave = boundedInteger(run.wave, 1, 10000);
+    if (durationSeconds == null || wave == null) continue;
+    const evidenceRef = buildRunEvidenceReference(run, "standard");
+    if (seen.has(evidenceRef)) continue;
+    seen.add(evidenceRef);
+    result.push({
+      evidenceRef,
+      route: `standard-${boundedString(run.difficulty || "normal", 16).toLowerCase()}`,
+      durationSeconds,
+      wave,
+      score: boundedInteger(run.score, 0, 100000000) ?? 0,
+      difficulty: boundedString(run.difficulty || "normal", 16).toLowerCase(),
+    });
+    if (result.length >= Math.max(1, Math.min(20, Math.floor(Number(limit) || 8)))) break;
+  }
+  return result;
+}
+
 function normalizeRun(run) {
   const route = boundedString(run?.route, 32).toLowerCase();
   const durationSeconds = boundedInteger(run?.durationSeconds, 1, 60 * 60);
   const scores = Object.fromEntries(SCORE_FIELDS.map((field) => [field, boundedInteger(run?.[field], 1, 5)]));
+  const evidenceRef = boundedString(run?.evidenceRef, 27);
   if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(route)
+    || !/^(standard|operation):[A-F0-9]{8}$/.test(evidenceRef)
     || durationSeconds == null
     || Object.values(scores).some((value) => value == null)) return null;
-  return { route, durationSeconds, ...scores };
+  return { evidenceRef, route, durationSeconds, ...scores };
 }
 
 function emptyCounts(keys) {
@@ -108,11 +161,16 @@ export function aggregateOperationPlaytestReceipts(input = []) {
     operation: summarizeScores(receipts, "operation", field),
   }]));
   return {
-    schemaVersion: "operation-paired-playtest-aggregate-v1",
-    evidenceScope: "opt-in-paired-explicit-answers-aggregate-only",
+    schemaVersion: "operation-paired-playtest-aggregate-v2",
+    evidenceScope: "opt-in-evidence-bound-paired-explicit-answers-aggregate-only",
     privacy: "no-source-receipts-no-identifiers-no-free-text",
     interpretation: "Descriptive participant evidence only; not causal, representative, or a population estimate.",
     sampleSize: receipts.length,
+    provenance: {
+      evidenceBoundReceipts: receipts.length,
+      legacyExcluded: Array.isArray(input) ? input.length - receipts.length : 0,
+      referenceDisclosure: "counts-only-no-run-references",
+    },
     gates: evaluateOperationPlaytestGates(receipts.length),
     routes,
     durationBuckets: durations,

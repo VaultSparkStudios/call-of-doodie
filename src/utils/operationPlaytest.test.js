@@ -4,9 +4,12 @@ import {
   createPairedOperationPlaytestReceipt,
   evaluateOperationPlaytestGates,
   OPERATION_PLAYTEST_QUESTIONS,
+  buildRunEvidenceReference,
+  selectComparableStandardRuns,
 } from "./operationPlaytest.js";
 
 const run = (route, overrides = {}) => ({
+  evidenceRef: route === "arena" ? "standard:9A7F20C1" : "operation:9A7F20C2",
   route,
   durationSeconds: 720,
   repeatedness: 3,
@@ -59,5 +62,18 @@ describe("Operation paired playtest evidence", () => {
     expect(evaluateOperationPlaytestGates(10).campaignBreadth.eligible).toBe(true);
     expect(evaluateOperationPlaytestGates(19).realtimeCoop.eligible).toBe(false);
     expect(evaluateOperationPlaytestGates(20).realtimeCoop.eligible).toBe(true);
+  });
+
+  it("selects only actual eligible Standard history and creates identifier-free references", () => {
+    const history = [
+      { mode: "operation", time: 800, wave: 7, score: 2000 },
+      { mode: "standard", time: 640, wave: 8, score: 1200, difficulty: "hard", runSeed: 42, ts: 123 },
+      { mode: "standard", time: 300, wave: 4, score: 400, integrityReceipt: { onlineEligible: false } },
+    ];
+    const selected = selectComparableStandardRuns(history);
+    expect(selected).toHaveLength(1);
+    expect(selected[0]).toMatchObject({ route: "standard-hard", durationSeconds: 640, wave: 8, score: 1200 });
+    expect(selected[0].evidenceRef).toBe(buildRunEvidenceReference(history[1], "standard"));
+    expect(JSON.stringify(selected)).not.toContain("123");
   });
 });

@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-16 — Session 157 | Total: 998/1000 | Velocity: 4 | Debt: ↓
+
+SIL 998/1000: Closed the three highest-value Operation truth gaps—objective authority, route continuity, and evidence provenance—while preserving every legacy mode, guest-first play, cost neutrality, and the independent SPARKED gate.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | The exact staging tree passes 212/212 files, 1,214/1,214 tests, strict lint, deployable build, runtime, schema, public, security, and dependency courts. |
+| Alignment | 100 | → | Each authored Operation verb now changes play rather than serving as descriptive copy, deepening the solo-first campaign grammar. |
+| Momentum | 100 | → | All three premise-verified audit items and the discovered runtime/E2E release repairs closed in one continuous arc. |
+| Engagement | 99 | → | Objective consequences and cross-mission route echoes strengthen agency; real participant fun and balance outcomes remain deliberately unclaimed. |
+| Process Qual | 100 | → | Contracts, integration tests, isolated staging, real-browser E2E, hosted matrices, direct pixel review, and independent release review agree. |
+| Coherence | 100 | → | Director, campaign, runtime, deck, modal, local history, and aggregate evidence share typed contracts. |
+| Security | 100 | → | Local bounded persistence, aggregate-only export, zero new dependencies, and a zero-vulnerability audit preserve the trust boundary. |
+| Ecosystem | 99 | → | Human-visible and evidence-facing Operation surfaces agree; Obelisk, mail, and participant gates remain external and explicit. |
+| Capital | 100 | → | The update reuses the existing client and Cloudflare path with no variable-cost service. |
+| Automation | 100 | → | Unit, component, browser, hosted visual, runtime-budget, and release courts make the behavior falsifiable. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `█████`.
+
+Top win: an Operation cannot be completed by merely clearing enemies—the authored verb, its evidence, and its consequence now own progression.
+Top gap: the playtest corpus still has no real participant sample, so campaign expansion and realtime co-op remain evidence-gated.
+Intent outcome: Repository-owned implementation, staging, pixel review, and release gating achieved; authorized publication and exact production verification remain as follow-through.
+
+**Brainstorm**
+1. Use the typed campaign ledger to surface a compact route-history map after sufficient real completion evidence exists.
+2. Add participant-facing comparison guidance only after the first eligible paired corpus proves where confusion occurs.
+3. Keep objective authority in the pure contract so future authored verbs cannot bypass required evidence.
+
+**Committed to TASK_BOARD:** the three audited Operation gaps and the runtime/E2E release repairs are complete; no participant or network scope was fabricated.
+
 ## 2026-08-16 — Session 156 | Total: 998/1000 | Velocity: 2 | Debt: ↓
 
 SIL 998/1000: Recovered the final Operation production-evidence seal into every canonical write-back surface without inventing a new product change or weakening the FORGE/SPARKED evidence boundary.

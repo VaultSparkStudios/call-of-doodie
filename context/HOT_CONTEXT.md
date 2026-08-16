@@ -17,6 +17,7 @@
 ## Open Work
 
 # Task Board
+## Session 157 - Objective-authoritative Operations and evidence truth
 ## Session 156 - Production-evidence recovery
 ## Session 155 — Operation mode, authored missions, and evidence-gated expansion
 ## Session 154 — Propagation compatibility and protocol truth
@@ -31,7 +32,7 @@
 - [ ] Create Itch.io listing and publish the prepared launch copy package from `docs/LAUNCH_EXECUTION.md`
 - [ ] Add `VITE_POSTHOG_KEY` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml)
 - [ ] Add `VITE_SENTRY_DSN` to GitHub repo Settings → Secrets → Actions (workflow already wired in deploy.yml) — S112 probe: the studio-ops `secrets/sentry.env` file does carry a `SENTRY_DSN` key, but the declared `sentry.api` capability in `CAPABILITY_MAP.json` only covers `SENTRY_AUTH_TOKEN` (org/user auth token for releases), not a per-project DSN grant. Wiring an unverified DSN into this public game's error stream risks misattributing errors to the wrong Sentry project. Founder should confirm that DSN is actually scoped to call-of-doodie before it's set as a GitHub secret.
-## Current Session Intent: Session 155
+## Current Session Intent: Session 157
 ## Session 152 — Closed-loop coaching and mastery command
 ## Now
 - [ ] [SIL:2] [BLOCKER S61] [S60 follow-up · narrowed S112] Update PostHog/Sentry/Ko-fi dashboard URL allowlists for `https://callofdoodie.wtf/` — the Supabase half is CLOSED with evidence (all five edge functions ship `Access-Control-Allow-Origin: *` in code; live OPTIONS on `sync-studio-events` with `Origin: https://callofdoodie.wtf` returns 200, verified S112). Remaining half stays credential-gated: `node scripts/check-secrets.mjs --for analytics` MISSING, and PostHog/Sentry aren't wired until `VITE_POSTHOG_KEY`/`VITE_SENTRY_DSN` exist.
@@ -53,21 +54,6 @@
 
 ## Recent Decisions
 
-## 2026-08-12 — Session 151 — Stats liveness is one contract
-
-**Decision:** Treat `analytica-feed-v1`, the four showcase metric IDs, and the 15-second poll cadence as one shared source contract across the homepage, store, and public descriptor.
-
-**Why:** The UI was live but the machine twin did not declare what “live” meant. Shared constants and a cross-surface test close that structural gap without updating or fabricating any metric value.
-
-## 2026-08-16 — Session 155 — Operations change the grammar before adding network scope
-
-**Decision:** Make solo-first Operations the primary new experience: one deterministic runtime composes BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS encounters while Arcade retains every existing mode and replay identifier.
-
-**Why:** The game already had abundant enemies, weapons, modifiers, progression, and social proof; repetition came from every choice converging on the same spawn/clear/reward cadence. Authored objectives and persistent route consequences attack that structural cause while reusing the mature combat and trust spine.
-
-**Boundaries:** Operation score does not mint the standard leaderboard token. The Mission Director explains local rule decisions and never silently changes difficulty. Campaign progression remains unavailable before 10 opt-in paired receipts; realtime co-op remains unavailable before 20 receipts plus a real-service capacity rerun and authoritative implementation.
-
-
 ## 2026-08-16 — Session 155 — Rendered pixels own overlay placement
 
 **Decision:** Position the Operation command overlay below the shared first-run training/HUD band and preserve an explicit scroll margin on the Operations deck.
@@ -81,9 +67,27 @@
 
 **Why:** Session 155's implementation and production release were real, but the final `b37da9c` deployment receipt and `a4549a4` documentation seal postdated its append-only closeout anchor. A bounded S156 recovery preserves both Git chronology and lifecycle honesty.
 
+
+## 2026-08-16 — Session 157 — Authored actions, not wave clears, own Operation progression
+
+**Decision:** Treat each encounter's authored verb as a required, evidence-bearing action. Enemy clearance cannot advance an incomplete objective; instead, the same encounter remains active and gains bounded reinforcement pressure.
+
+**Why:** Session 155 gave Operations authored labels and interactions, but the runtime could still advance after a wave clear without proving the named action. Making the action authoritative converts narrative framing into gameplay and prevents the mode from collapsing back into ordinary wave survival.
+
+**Boundaries:** The contract is deterministic and local. Reinforcement pressure is capped, each verb has a distinct bounded effect, and all legacy modes continue to use their existing progression rules.
+
+
+## 2026-08-16 — Session 157 — Campaign continuity remains guest-first and evidence-safe
+
+**Decision:** Persist only bounded, typed, idempotent Operation completion receipts and authored route carry-ins. Bind paired feedback to eligible local Standard and Operation evidence references, excluding legacy/unbound rows from readiness.
+
+**Why:** Cross-mission consequence is valuable only if it is truthful and reversible, while paired feedback is meaningful only when both sides identify real runs. Local bounded storage supplies continuity without inventing accounts, server authority, participant conclusions, or a network dependency.
+
+**Boundaries:** The ledger retains at most 12 completions, does not lock Operations, and exports no raw run or identity data. Campaign expansion and realtime co-op remain behind their existing participant and capacity gates.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 192,971 bytes · SHA-256 `505222733b30…`
-- `context/TASK_BOARD.md` · 124,838 bytes · SHA-256 `83df7e71306f…`
-- `context/DECISIONS.md` · 122,751 bytes · SHA-256 `792caa9c09ac…`
-- `docs/AUDIT_2026-08-15.json` · 29,252 bytes · SHA-256 `0bef39051e6c…`
+- `context/CURRENT_STATE.md` · 194,619 bytes · SHA-256 `2ab12e8014e5…`
+- `context/TASK_BOARD.md` · 126,042 bytes · SHA-256 `151776432f69…`
+- `context/DECISIONS.md` · 124,455 bytes · SHA-256 `b8e29daf5188…`
+- `docs/AUDIT_2026-08-16.json` · 11,186 bytes · SHA-256 `fb0b2b28f3d3…`

@@ -2,6 +2,15 @@
 
 Public-safe launch roadmap summary.
 
+## Session 157 - Objective-authoritative Operations and evidence truth
+
+- [x] [SIL:3] **DONE S157** All seven Operation verbs now require their exact authored interaction plus arena clear; incomplete rooms retain the encounter and add bounded, reason-coded reinforcement pressure.
+- [x] [SIL:2] **DONE S157** Route consequences are typed and a bounded idempotent local ledger applies authored cross-Operation carry-ins while every Operation remains guest-playable.
+- [x] [SIL:2] **DONE S157** Paired Standard-versus-Operation receipts require real eligible run-history evidence on both sides; legacy rows do not count and exports remain aggregate-only.
+- [x] [SIL:2] **DONE S157** Full Vitest passes 212/212 files and 1,214/1,214 tests; strict lint, deployable build, schema/public/security/dependency courts, browser E2E 19 pass/1 intentional skip, hosted pixels 1,020/1,020 + 36/36, and 26 directly reviewed captures pass.
+
+**Runway exception:** participant fun/balance conclusions, realtime co-op, further campaign breadth, physical-device proof, SPARKED promotion, and provider evidence remain gated; no local implementation substitutes for them.
+
 ## Session 156 - Production-evidence recovery
 
 - [x] [SIL:1] **DONE S156** Reconciled the post-closeout Operation verifier deployment and final documentation seal into every canonical write-back surface.
@@ -75,9 +84,9 @@ Public-safe launch roadmap summary.
 - [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
-## Current Session Intent: Session 155
+## Current Session Intent: Session 157
 
-Complete one continuous autonomous `/arc` from synchronized main: premise-verified game-loop and nine-axis audit, implement the strongest repository-owned route for reducing structural repetition, preserve every legacy mode and trust boundary, prove touched pixels on isolated staging, close out canonically, publish directly to `main`, and verify production. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
+Complete one continuous autonomous `/arc` from synchronized main: premise-verified game-loop and nine-axis audit, make authored Operation objectives authoritative, persist bounded route consequences, bind paired feedback to real local run evidence, preserve every legacy mode and trust boundary, prove touched pixels on isolated staging, close out canonically, publish directly to `main`, and verify production. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
 
 ## Session 152 — Closed-loop coaching and mastery command
 

@@ -47,7 +47,7 @@ export const OPERATIONS = [
     routeLabel: "Laundry Annex / Boiler Room",
     routeOptions: ["laundry-annex", "boiler-room"],
     antagonist: { id: "deputy-landlord", name: "Deputy Landlord", recurring: true },
-    priorRouteConsequence: { sourceOperationId: "blacksite-flush", routeId: "service-tunnel", id: "tunnel-debt", description: "The prior tunnel route powers a defensive pump." },
+    priorRouteConsequence: { sourceOperationId: "blacksite-flush", routeId: "service-tunnel", id: "tunnel-debt", description: "The prior tunnel route powers clean pressure for the opening siege.", targetId: "valve-east", command: "power" },
     titles: ["Serve Notice", "Security Deposit", "Eviction Convoy", "Leasebreaker", "Cut Utilities", "Thirty-Day Notice", "Deputy Landlord"],
   }),
   operation({
@@ -56,6 +56,7 @@ export const OPERATIONS = [
     routeLabel: "Records Office / Executive Penthouse",
     routeOptions: ["records-office", "executive-penthouse"],
     antagonist: { id: "hoa-board", name: "The HOA Board", recurring: false },
+    priorRouteConsequence: { sourceOperationId: "porcelain-siege", routeId: "boiler-room", id: "boiler-paper-trail", description: "The prior boiler route opens a rear records lane.", targetId: "door-south", command: "open" },
     titles: ["Break Quorum", "Appeals Window", "Certified Mail", "Paper Trail", "Shred Fine Print", "Return to Sender", "The HOA Board"],
   }),
 ];

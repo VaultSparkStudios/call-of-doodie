@@ -4,15 +4,15 @@ import { getOperation } from "../systems/operationCampaign.js";
 import { getCurrentEncounter } from "../systems/operationDirector.js";
 
 const CAMPAIGN_GATE = Object.freeze({
-  campaignEnabled: false,
+  campaignEnabled: true,
   continueAvailable: true,
-  campaignMessage: "Campaign breadth remains gated until at least 10 opt-in paired Standard-versus-Operation receipts; Continue returns to the command deck.",
+  campaignMessage: "Local route continuity is active; broader campaign expansion remains gated until at least 10 evidence-bound paired receipts. Continue returns to the command deck.",
   coopEnabled: false,
   coopMessage: "Realtime co-op remains gated until at least 20 paired receipts and the authoritative capacity court pass.",
 });
 
 export default function OperationRuntimeLayer({
-  operationState, operationArenaState, operationDirective, operationCompleteReceipt,
+  operationState, operationArenaState, operationObjectiveState, operationDirective, operationCompleteReceipt,
   paused, gamepadConnected, onInteract, onContinue, onRematch,
 }) {
   const encounter = getCurrentEncounter(operationState);
@@ -21,6 +21,7 @@ export default function OperationRuntimeLayer({
       <OperationArenaOverlay
         arenaState={operationArenaState}
         encounter={encounter}
+        objectiveState={operationObjectiveState}
         progress={{ encounterNumber: operationState.currentEncounterIndex + 1, encounterTotal: getOperation(operationState.operationId)?.encounters.length || 7, act: encounter.act }}
         missionScore={operationState.score}
         directorReason={operationDirective?.directive || operationDirective?.reasonCode || ""}

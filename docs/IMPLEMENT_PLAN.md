@@ -1,34 +1,26 @@
-# Implementation Plan — Session 155
+# Implementation Plan - Session 157
 
-Source: `docs/AUDIT_2026-08-15.json`
+Source: `docs/AUDIT_2026-08-16.json`
 
-Status: **IMPLEMENTED; EXACT-MAIN PUBLISHED; PRODUCTION VERIFIED** — all buildable audit lanes are integrated and the corrected candidate passes local, clean-Linux CI, hosted, rendered-pixel, immutable-production, and custom-domain courts. Participant-gated campaign progression and realtime co-op remain honestly gated.
+Status: **IMPLEMENTED — VERIFICATION IN PROGRESS** - all three verified L2 items shipped; staging and production courts remain.
 
-## Wave A — Preserve the existing game while opening an encounter seam
+## Wave A - Make encounter verbs authoritative
 
-1. **mode-rules-and-encounter-extraction** — move mode policy and encounter lifecycle decisions behind pure contracts; restore at least 250 lines of `App.jsx` headroom while retaining legacy mode/input/replay behavior.
-2. **operation-encounter-spine** — add one deterministic three-act Operation with BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS encounters, a route fork, checkpoints, mission score, and replay receipt.
+1. [x] **operation-verb-objective-authority** - centralized seven action contracts; exact interaction plus arena clear is authoritative; incomplete encounters emit reason-coded reinforcement pressure; effects and receipts are distinct and bounded.
 
-## Wave B — Make Operations spatial, readable, and adaptive
+## Wave B - Carry choices across Operations
 
-3. **operation-map-state-and-interactables** — add deterministic doors, pumps, valves, barricades, turrets, extraction toilets, watchtower v0, three visible state transitions, multi-input affordances, and replay receipts.
-4. **deterministic-mission-director** — select reason-coded encounters and optional contracts locally from observed run state; no hosted inference or hidden rubber-banding.
-5. **operations-and-arcade-mode-taxonomy** — make Operations the primary front-door path while preserving all eight Arcade/Rivals modes and every replay identifier.
+2. [x] **operation-campaign-consequence-ledger** - typed route consequences, bounded idempotent local completions, declared carry-ins, deterministic arena transitions, and visible guest-open command-deck state are implemented.
 
-## Wave C — Turn the vertical slice into a staged product path
+## Wave C - Upgrade expansion evidence
 
-6. **async-operation-rivals** — add bounded split/branch ghosts, rematch cartridges, and trust-separated Operation rivalry receipts.
-7. **three-operation-mini-campaign** — author three concise schema-reusing Operations with recurring comic antagonists and one prior-route consequence.
-8. **operation-playtest-decision-court** — collect only opt-in, aggregate paired Standard-vs-Operation evidence with explicit sample thresholds and no causal claims.
-9. **realtime-capacity-and-trust-gate** — check in the authoritative co-op capacity, abuse, reconnect, score-boundary, hard-cap, and kill-switch model plus a synthetic benchmark.
-10. **authoritative-two-player-operation-coop** — remain gated until the audit's participant threshold is honestly met; ship the executable capacity/trust prerequisite, never fabricate the missing participant evidence.
+3. [x] **operation-paired-evidence-binding** - real eligible Standard history selection, identifier-free references, schema-v2 provenance, legacy exclusion, and aggregate-only export are implemented.
 
 ## Verification order
 
-- Focused Vitest courts after every foundation and integration boundary.
-- Strict lint, architecture/schema/runtime/public/security/dependency/assets and deployable build gates.
-- Real browser desktop/mobile captures in Porcelain Day and Sewer Night; inspect and hash-bind the touched Operation states.
-- Isolated staging deploy and full release gate before direct-to-`main` publication.
-- Exact-revision production deployment, immutable/custom-domain probes, continuous integration verification, and canonical Session 155 closeout.
+- Focused pure-contract and component tests after each wave.
+- Integrated Operation/App tests, strict lint, schema/architecture/runtime/public/security/dependency gates, and deployable build.
+- Real Chromium keyboard and mobile/touch Operation flows; both themes at 390px and 1440px for every touched state.
+- Isolated `session-157-staging` deploy, hosted visual/health courts, direct pixel inspection, release gate, direct-main publication, exact-production deployment, and live verification.
 
-No SPARKED lifecycle promotion is implied: engineering publication and full deployment are authorized, while participant, physical-device, reply-as-mail, and Obelisk launch evidence remain independently gated.
+No SPARKED lifecycle promotion is implied. This implementation remains cost-neutral, guest-first, local-deterministic, and trust-separated from standard leaderboard authority.
