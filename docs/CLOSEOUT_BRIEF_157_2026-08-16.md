@@ -19,9 +19,11 @@ Headline: Operation verbs now own progression, routes echo across missions, and 
 - 26 hash-bound dark/light mobile/desktop captures directly reviewed with zero blocking defects
 - schema, public, security, dependency, asset, media, release, and cost gates pass; npm audit reports zero vulnerabilities
 - isolated staging immutable https://906bded2.call-of-doodie.pages.dev/
+- source 5ce42226349b2c3998745d33dd8d4115382885b4 passed brief workflow 31970693660 and quality/build/deploy workflow 31970693652
+- immutable production https://228f133b.call-of-doodie.pages.dev/ and custom-domain health report exact deploy prefix 5ce42226349b
+- production shell 7/7 on immutable and custom origins, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and Operation pixels 36/36
 
 ## Remaining
 
-- publish the sealed candidate directly to main
-- verify exact-SHA GitHub workflows and immutable/custom production health
 - preserve the independent FORGE/SPARKED boundary
+- wait for real participant evidence before expanding campaign breadth or realtime scope

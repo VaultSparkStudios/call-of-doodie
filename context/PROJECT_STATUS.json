@@ -4,9 +4,15 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 157 made Operation objectives authoritative, added bounded cross-mission route continuity, and bound paired feedback to real local run evidence; exact staging and rendered-pixel review are green.",
-  "nextMilestone": "Publish the sealed Session 157 candidate directly to main, verify exact-SHA workflows and immutable/custom production health, and preserve the independent SPARKED gates.",
+  "currentFocus": "Session 157 made Operation objectives authoritative, added bounded cross-mission route continuity, bound paired feedback to real local run evidence, and is exact-main published and production-verified.",
+  "nextMilestone": "Preserve the Session 157 objective/campaign/evidence contracts and wait for real participant evidence before expanding campaign breadth or realtime scope; SPARKED remains independently gated.",
   "testingSurfaces": [
+    {
+      "status": "green",
+      "url": "https://228f133b.call-of-doodie.pages.dev/",
+      "type": "production-verifier",
+      "command": "source 5ce42226349b · brief 31970693660 · quality/build/deploy 31970693652 · immutable/custom health exact · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard, launch surfaces, and Operation pixels 36/36 pass"
+    },
     {
       "status": "green",
       "url": "https://906bded2.call-of-doodie.pages.dev/",
@@ -571,7 +577,7 @@
     "total": 181,
     "score": 74
   },
-  "lastSessionSummary": "Session 157 made all seven Operation verbs authoritative, added bounded route carry-ins, bound paired evidence to eligible local runs, and proved the isolated candidate with 212/212 files, 1214/1214 tests, 19 browser passes, and hosted rendered-pixel review; publication follow-through remains.",
+  "lastSessionSummary": "Session 157 made all seven Operation verbs authoritative, added bounded route carry-ins, bound paired evidence to eligible local runs, passed 212/212 files and 1214/1214 tests plus hosted pixel review, and deployed exact source 5ce42226349b to immutable production 228f133b with complete live verification; SPARKED remains independently gated.",
   "testsAssertionsPassing": 1214,
   "testsAssertionsTotal": 1214,
   "testsAssertionsFiles": 212,

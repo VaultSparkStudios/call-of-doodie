@@ -68,10 +68,9 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████░░░░░░░░░░░░░░░░░░░   21% used                          ║
-║     55,975 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~27,988 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ░░░░░░░░░░░░░░░░░░░░░░░░    1% used                          ║
+║     240,142 / 200,000 tok  ·  unknown  ·  heuristic-stale        ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
@@ -117,7 +116,7 @@
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
 ║  Velocity:   ▄▄▇▂▄  4↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
-║  Streak:     — (last intent not achieved)                        ║
+║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗

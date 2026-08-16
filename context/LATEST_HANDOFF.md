@@ -11,14 +11,16 @@ Session Intent: Complete one continuous autonomous arc from synchronized main th
 - Validation: full Vitest passes 212/212 files and 1,214/1,214 tests; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, and npm audit zero pass. Browser E2E passes 19 tests with one intentional mobile-only skip.
 - Staging: exact candidate is `https://session-157-staging.call-of-doodie.pages.dev/` (immutable `https://906bded2.call-of-doodie.pages.dev/`). Hosted broad pixels pass 1,020/1,020 and focused Operation pixels pass 36/36.
 - Visual truth: 26 hash-bound dark/light, 390/1440px captures were directly reviewed across the command deck, required/confirmed encounter states, completion modal, and playtest command post with no blocking defect.
-- Release truth: engineering release is GO and SPARKED is independently NO-GO. One production-backend health attempt returned a transient rate-limit-service 500; production backend health is not claimed until the post-deploy retry passes.
-- Next: commit and push the sealed candidate directly to `main`, wait for exact-SHA GitHub workflows and Cloudflare deployment, then verify immutable/custom production surfaces and record the actual receipt.
+- Production: source `5ce42226349b2c3998745d33dd8d4115382885b4` is synchronized to `origin/main`; brief workflow `31970693660` and quality/build/deploy workflow `31970693652` passed, publishing immutable `https://228f133b.call-of-doodie.pages.dev/`.
+- Live verification: immutable and custom-domain typed health report `5ce42226349b`; shell checks pass 7/7 on both, cutover 5/5, backend 5/5, replay trust 3/3, leaderboard isolation, launch surfaces, and production Operation pixels 36/36 pass.
+- Release truth: the cost-neutral FORGE engineering release is deployed and verified. The earlier transient backend 500 cleared on the bounded retry. SPARKED remains independently NO-GO.
+- Next: preserve the objective/campaign/evidence contracts and wait for real participant evidence before expanding campaign breadth or realtime scope.
 
 ## Impact Summary
 
 **Headline.** Operations now make the authored verb mechanically authoritative, remember route consequences across missions, and accept paired feedback only when both runs carry real local evidence.
 
-**Evidence.** 212 files / 1,214 tests; 19 browser tests; 1,056 hosted pixel checks; 26 reviewed captures; runtime 551,153 bytes; immutable staging `906bded2`; zero new dependencies or variable-cost services.
+**Evidence.** 212 files / 1,214 tests; 19 browser tests; 1,056 staging pixel checks plus 36/36 production Operation checks; 26 reviewed captures; runtime 551,153 bytes; immutable staging `906bded2`; immutable production `228f133b`; exact health `5ce42226349b`; zero new dependencies or variable-cost services.
 
 ---
 

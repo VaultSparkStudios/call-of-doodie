@@ -1,6 +1,19 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-08-16 (Session 155 production verification)
+Last reviewed: 2026-08-16 (Session 157 production verification)
+
+## Session 157 verified release
+
+- Application source: `5ce42226349b2c3998745d33dd8d4115382885b4`; synchronized with `origin/main`.
+- Exact staging: `https://session-157-staging.call-of-doodie.pages.dev/`; immutable `https://906bded2.call-of-doodie.pages.dev/`. Broad hosted pixels pass 1,020/1,020 and focused Operation pixels pass 36/36; 26 hash-bound captures received direct review.
+- Production: `https://callofdoodie.wtf/`; immutable `https://228f133b.call-of-doodie.pages.dev/`. Both typed health endpoints report `5ce42226349b`.
+- Continuous integration: brief-format workflow `31970693660` and quality/build/deploy workflow `31970693652` passed the exact source.
+- Local and CI corpus: 212/212 files and 1,214/1,214 tests; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, staged secret scan, and npm audit zero pass. Browser E2E passes 19 cases with one intentional mobile-only skip.
+- Live evidence: shell/edge/manifest/service-worker/social-card checks pass 7/7 on immutable and custom origins; cutover passes 5/5; backend passes 5/5; replay trust passes 3/3; shared-leaderboard isolation, Studio launch surfaces, and production Operation pixels 36/36 pass.
+- Scope: cost-neutral FORGE engineering update. This is not a SPARKED lifecycle transition, participant conclusion, realtime co-op launch, or launch announcement.
+- Rollback: Cloudflare retains immutable `906bded2` staging plus previous production revisions; `docs/DEPLOY_ROLLBACK.md` provides the non-force-push revert path.
+
+Engineering release evidence is complete for Session 157. SPARKED remains NO-GO behind the separately listed lifecycle, provider, participant, physical-device, performance, identity, publication, and founder-approval gates.
 
 ## Session 155 verified release
 

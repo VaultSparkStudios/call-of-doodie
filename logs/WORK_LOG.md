@@ -12,8 +12,11 @@
 - Deployed exact isolated staging at `session-157-staging` / immutable `906bded2`; hosted broad visual checks pass 1,020/1,020 and focused Operation checks pass 36/36.
 - Directly reviewed 26 hash-bound dark/light mobile/desktop captures across deck, live objective, completed objective, modal, and command-post states with zero blocking defects.
 - Independent release/cost review allows the cost-neutral FORGE engineering update and rejects SPARKED promotion. One pre-publication production backend probe returned a transient rate-limit-service 500, so no backend-green claim is made before post-deploy retry.
+- Canonical closeout published source `5ce42226349b2c3998745d33dd8d4115382885b4` directly to `main`. Brief workflow `31970693660` and quality/build/deploy workflow `31970693652` passed.
+- Cloudflare published immutable production `https://228f133b.call-of-doodie.pages.dev/`; immutable and custom-domain typed health both report deploy prefix `5ce42226349b`.
+- Final production courts pass shell 7/7 on immutable and custom origins, cutover 5/5, backend 5/5, replay trust 3/3, leaderboard isolation, launch surfaces, and focused Operation pixels 36/36. The earlier backend 500 cleared on the bounded retry.
 
-Intent outcome: implementation, isolated staging, visual review, and release gating achieved; direct-main publication and exact production verification are the remaining authorized follow-through.
+Intent outcome: achieved through implementation, isolated staging, rendered-pixel review, direct-main publication, exact-SHA continuous integration, production deployment, and live verification. SPARKED remains independently NO-GO.
 
 ## 2026-08-16 (Session 156 — production-evidence recovery)
 

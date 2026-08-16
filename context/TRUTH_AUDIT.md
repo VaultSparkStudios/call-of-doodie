@@ -9,10 +9,11 @@
 - Browser truth — the current command deck and runtime paths pass 19 E2E cases with one intentional mobile-only Scenario Cartridge skip.
 - Visual truth — exact staging is `https://session-157-staging.call-of-doodie.pages.dev/` (immutable `https://906bded2.call-of-doodie.pages.dev/`); broad hosted checks pass 1,020/1,020 and focused Operation checks pass 36/36. Twenty-six hash-bound captures received direct review across both themes and 390/1440px with zero blocking defects.
 - Validation truth — the synchronized candidate passes 212/212 Vitest files and 1,214/1,214 tests, strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, and npm audit zero.
-- Health truth — staging edge health is green. One pre-publication production Supabase probe returned a rate-limit-service 500; backend health is not claimed green until the post-deploy retry proves it.
+- Health truth — the pre-publication rate-limit-service 500 cleared on bounded retry. Production backend health passes 5/5, replay trust passes 3/3, and shared-leaderboard isolation passes.
+- Production truth — source `5ce42226349b2c3998745d33dd8d4115382885b4` passed brief `31970693660` and quality/build/deploy `31970693652`, serving immutable `228f133b`. Immutable and custom health report `5ce42226349b`; shell passes 7/7 on both, cutover 5/5, launch surfaces, and focused Operation pixels 36/36 pass.
 - Lifecycle truth — cost-neutral FORGE engineering release is GO. SPARKED remains NO-GO behind physical-device, participant, provider/mail, performance, identity, publication, and explicit lifecycle evidence.
 
-Overall status: all repository-owned S157 audit items are implemented, staged, and visually verified; direct-main publication and exact production verification remain in authorized follow-through. SPARKED remains NO-GO.
+Overall status: all repository-owned S157 audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-16
 
 ## 2026-08-16 — Session 156 — Post-closeout production-evidence recovery

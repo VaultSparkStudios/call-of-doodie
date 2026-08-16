@@ -25,7 +25,9 @@ Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `████�
 
 Top win: an Operation cannot be completed by merely clearing enemies—the authored verb, its evidence, and its consequence now own progression.
 Top gap: the playtest corpus still has no real participant sample, so campaign expansion and realtime co-op remain evidence-gated.
-Intent outcome: Repository-owned implementation, staging, pixel review, and release gating achieved; authorized publication and exact production verification remain as follow-through.
+Intent outcome: Achieved — repository-owned implementation, staging, pixel review, direct-main publication, exact-SHA continuous integration, production deployment, and live verification are complete; SPARKED remains independently gated.
+
+Production follow-through: source `5ce42226349b2c3998745d33dd8d4115382885b4` passed brief workflow `31970693660` and quality/build/deploy workflow `31970693652`, published immutable `228f133b`, and passed exact immutable/custom health, shell 7/7 on both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and focused production Operation pixels 36/36.
 
 **Brainstorm**
 1. Use the typed campaign ledger to surface a compact route-history map after sufficient real completion evidence exists.
