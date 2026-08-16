@@ -77,6 +77,7 @@ function buildArsenalSections(gameplay) {
 
 function buildModeSections(gameplay) {
   return [
+    ["Authored Operations", gameplay.operations.map((operation) => `${operation.title} · ${operation.encounterVerbs.length} encounters · ${operation.durationMinutes[0]}–${operation.durationMinutes[1]} min`).join(" | ")],
     ["Seeded run modes", gameplay.modes.map((mode) => mode.label).join(" · ")],
     ["Difficulty profiles", gameplay.difficulties.map((difficulty) => difficulty.label).join(" · ")],
     ["Replay-code scope", `Replay codes capture ${gameplay.challengeLinks.replayCode.captures.map(titleCase).join(", ")}. They are ${gameplay.trust.replayEvidence}, ${gameplay.trust.excludedClaim}.`],
@@ -140,8 +141,8 @@ const ROUTE_DEFINITIONS = [
   {
     id: "modes", path: "/modes/", label: "Modes", rel: "modes", priority: 0.6, generated: true,
     eyebrow: "Ways to play", title: "One arena. Several reasons to come back.",
-    description: "Compare the live seeded modes and difficulty profiles in Call of Doodie.",
-    lede: (gameplay) => `The gameplay contract currently publishes ${gameplay.modes.length} seeded modes and ${gameplay.difficulties.length} difficulty profiles.`,
+    description: "Compare authored Operations, live seeded arcade modes, and difficulty profiles in Call of Doodie.",
+    lede: (gameplay) => `Deploy into ${gameplay.operations.length} authored Operations, or pick from ${gameplay.modes.length} seeded Arcade & Rivals modes across ${gameplay.difficulties.length} difficulty profiles.`,
     sections: buildModeSections,
   },
   {
@@ -198,7 +199,7 @@ const ROUTE_DEFINITIONS = [
     lede: "Call of Doodie is a free comedy-first browser roguelite shooter created by VaultSpark Studios LLC.",
     sections: (gameplay) => [
       ["One-line description", "A fast browser arena shooter where improvised weapons, absurd enemies, and escalating buildcraft turn every short run into a story."],
-      ["Live feature facts", `Instant browser play · desktop, touch, and gamepad input · ${gameplay.enemies.length}-character roster · ${gameplay.modes.length} seeded modes · permanent progression · advisory replay receipts`],
+      ["Live feature facts", `Instant browser play · desktop, touch, and gamepad input · ${gameplay.operations.length} authored Operations · ${gameplay.enemies.length}-character roster · ${gameplay.modes.length} seeded Arcade & Rivals modes · permanent progression · advisory replay receipts`],
       ["Rights and attribution", "All original code, content, characters, assets, and designs are proprietary and all rights are reserved by VaultSpark Studios LLC. Review the Rights & IP page before reuse."],
     ],
     cta: ["Request press materials", "../contact/"],

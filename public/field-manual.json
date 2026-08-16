@@ -15,6 +15,7 @@
       "value": {
         "weapons": 12,
         "enemies": 22,
+        "operations": 3,
         "modes": 8
       },
       "source": "/gameplay-contract.json"

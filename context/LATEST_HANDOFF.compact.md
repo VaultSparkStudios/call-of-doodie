@@ -1,43 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 5332f30c0621 -->
-<!-- generated-at: 2026-08-14T03:20:52.448Z -->
+<!-- source-hash: b348256f95b9 -->
+<!-- generated-at: 2026-08-16T03:32:16.028Z -->
 
 # LATEST_HANDOFF (compact)
 
-Session 154 Handoff Summary
+# Handoff Summary — Session 154
 
-Session Intent
-- One continuous /arc from synced main: startup, game-loop/public-release review, fresh audit, repo-owned implementation, isolated staging, rendered-pixel proof, closeout, direct-main publish, exact production verification. Preserve FORGE/public-unlaunched lifecycle.
+Session: 154 (last completed). Resume as Session 155.
+
+Status: FORGE / public-unlaunched. No SPARKED promotion. S154 changed no player-facing pixels; CANON-053 correctly not re-claimed.
 
 What Shipped (S154)
-- Four S153 audit items implemented: four-question playtest signal, aggregate-only command post, advisory recorded-wave-plan Replay Passport lane, truthful Startup Brief closeout age.
-- Three edge defects repaired and deployed (Supabase functions): preview-origin CORS parity, issuer/consumer run-signature drift, wildcard/unrated public Studio-event ingestion.
-- Verifier-only project-routing defect fixed: backend CLI now rejects unrelated generic Supabase credentials, resolves game's validated public config from gateway or deployed artifact.
-- Verifier seal 10c05add70f4dadbc9b3fc25f215bad2c1797392 green (brief 31745229611, Cloudflare 31745229701). Immutable https://ce9e4ae3.call-of-doodie.pages.dev/ and custom domain report exact deploy prefix.
+- All 5 items from AUDIT_2026-08-13_2.json implemented at L2: capability-map provenance/fail-closed discovery, task-board contract composition, atomic schema-bound status writes, truthful startup chronology/pressure, executable compatibility court.
+- Restored: execution-budget receipts, Unicode-safe transport/handoff smoke, provider-first blocker precedence, fail-closed SIL forecasting, honest session saturation, Codex plan-mode behavior, committed closeout/staging/memory evidence.
+- Made secrets fixtures hermetic (CI=false) after deploy run failed on ambient GitHub CI=true; isolated-CI court kept explicit.
 
-Production State
-- Source 4b78142e green; immutable https://c9ee3b5e.call-of-doodie.pages.dev/ and custom domain pass production court.
-- Seal tree: 196/196 files, 1,155/1,155 assertions; backend 5/5, replay 3/3, leaderboard isolation pass.
+Verification
+- Protocol 42/42; focused regression 53/53; full and exact-CI Vitest 196 files / 1,158 tests.
+- Strict lint, schema, deployable build, public/asset/dependency/runtime/security gates, npm audit zero, supply-chain scan pass.
+- Staging: session-154-staging (immutable 5da63921) 7/7.
+- Production: verifier source 5b8b704 serving 11c3148b, custom shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation pass.
+- Release gate: GO for cost-neutral FORGE engineering update; NO-GO for SPARKED.
 
-Evidence
-- 1,155/1,155 seal tests; 1,020/1,020 broad visual; focused 32/32, staging 44/44, production browser 11/11; 18 direct-reviewed captures both themes at 390px/1440px; dependency/security audits zero.
+Current Intent (was S154)
+- Nine-axis audit focused on making core gameplay more fun / less repetitive; score revamped wave mode, CoD-style campaign, conventional multiplayer, hybrids, and battle royale against existing systems; recommend strongest route without altering FORGE lifecycle truth.
 
-Now Bucket (Top 3)
-1. Begin S155 from synchronized clean main after receipt-only commit verifies.
-2. Run fresh premise-verified nine-axis audit; implement repo-owned items plus viable second-order innovation.
-3. Preserve S154 fixes: playtest signal, aggregate command post, advisory replay lane, closeout age truth, backend credential routing.
+Now Bucket (top 3 for S155)
+- Begin S155 from synchronized clean main.
+- Preserve executable propagation court and hermetic secrets fixtures.
+- Preserve FORGE/SPARKED evidence boundary.
 
-Blockers (Top 3)
-1. SPARKED NO-GO: requires current Core Web Vitals evidence.
-2. SPARKED NO-GO: physical-device/media, reply-as mail, project-scoped provider, Obelisk verification.
-3. SPARKED NO-GO: participant/publication data and explicit lifecycle authority.
+Blockers (top 3)
+- Innovation pack has no executable repo-local candidates remaining.
+- Deploy path depends on hermetic fixtures; ambient CI=true previously broke it.
+- No new player-facing changes possible without content/mode work (audit-dependent).
 
-Human-Blocked Items
-- Founder SPARKED authorization and lifecycle promotion (carried across S151-154, ~4 sessions).
-- Studio Ops-owned probes: wallet-court freshness and Studio Ops canon/visual receipts (noted S151, signed Ark repo-question filed).
+Human-Blocked / Gated (age unspecified in handoff)
+- SPARKED promotion: requires founder approval.
+- Physical-device proof + participant evidence: external.
+- Provider/mail/identity work: requires credentials.
+- Also gated: mobile density, progression tuning, content expansion.
 
-Lifecycle
-- FORGE/public-unlaunched. Engineering publish GO (cost-neutral, authorized); SPARKED NO-GO. Do not imply promotion.
-
-Next Session
-- Start S155 from synchronized main; verify receipt commit, then run full continuous /arc with fresh nine-axis audit.
+Next: Start Session 155 from clean main; run the fun-focused game-mode audit and recommend strongest route.

@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S155)",
+  "generatedAt": "2026-08-15",
+  "session": 155,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-gameplay-direction-and-route-selection",
+  "meta": {
+    "generatedAt": "2026-08-15",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-gameplay-direction-and-route-selection",
+    "candidateCount": 46,
+    "promotedCount": 10,
+    "combinedPriority": 174.5,
+    "top3": [
+      "operation-encounter-spine",
+      "mode-rules-and-encounter-extraction",
+      "operation-map-state-and-interactables"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle and direct source inspection confirm that eight public modes feed one App.jsx game loop and flat seeded-arena model; the reusable systems include wave planning, objectives, routes, bosses, hazards, scenario cartridges, ghosts, replay proof, and post-run coaching. The live architecture court reports App.jsx at 4,958/5,000 lines and a 1,776-line game-loop span against a 1,775-line cap, so new orchestration requires extraction first. The repo contains Realtime Presence and leaderboard invalidation but no authoritative gameplay simulation, lobby, reconciliation, or matchmaking. No docs/PLAYTESTS corpus exists, so the route scores are design and delivery estimates rather than measured player outcomes.",
+    "recommendation": {
+      "firstBuild": "Extract ModeRules and encounter lifecycle from the over-budget game loop, then build the solo-first Operation Mode vertical slice on that seam",
+      "productDestination": "Operations core → three-operation mini-campaign → async Operation Rivals → two-player authoritative co-op",
+      "keep": "Retain Endless Waves, Boss Rush, Sewer Zombies, Daily Challenge, and Weekly Gauntlet as mastery or playlist variants on the shared systems spine.",
+      "rejectNow": "Conventional competitive PvP, battle royale, and a big-bang campaign-plus-multiplayer suite.",
+      "reason": "The recommended route attacks structural repetition while reusing the majority of the shipped combat, progression, trust, social, and content systems. It earns evidence before adding netcode and avoids making concurrent population a prerequisite for fun."
+    },
+    "decisionCriteria": {
+      "structuralFunAndRepetitionSolved": 22,
+      "existingSystemReuse": 16,
+      "shipSpeed": 12,
+      "technicalSafety": 12,
+      "costAndOperations": 10,
+      "retentionAndSocialUpside": 12,
+      "soulAndBrandFit": 10,
+      "differentiationAndIpSafety": 6
+    },
+    "strategicRouteMatrix": [
+      {
+        "rank": 1,
+        "route": "Operation-mode wave overhaul (solo-first)",
+        "score": 90.1,
+        "verdict": "RECOMMENDED FIRST BUILD",
+        "why": "Replaces wave monotony with a reusable encounter graph while preserving the mature combat, progression, boss, seed, replay, and leaderboard spine."
+      },
+      {
+        "rank": 2,
+        "route": "Staged hybrid: Operations → mini-campaign → async rivals → co-op",
+        "score": 89.6,
+        "verdict": "RECOMMENDED PRODUCT DESTINATION",
+        "why": "Highest durable ceiling without a big-bang rewrite; each stage is independently fun, testable, and reversible."
+      },
+      {
+        "rank": 3,
+        "route": "Async ghost rivalry expansion",
+        "score": 83.4,
+        "verdict": "BEST SOCIAL QUICK WIN",
+        "why": "Ghost paths, seeded challenges, scenario cartridges, leaderboards, and replay receipts already exist, but rivalry alone does not solve core structural repetition."
+      },
+      {
+        "rank": 4,
+        "route": "Extraction-lite sorties (solo-first, co-op-ready)",
+        "score": 82.5,
+        "verdict": "STRONG ALTERNATIVE",
+        "why": "Objectives, routes, risk escalation, optional extraction, and carried rewards fit the existing systems, but inventory loss and economy design add friction that the SOUL explicitly resists."
+      },
+      {
+        "rank": 5,
+        "route": "Incremental wave polish and content packs only",
+        "score": 78.2,
+        "verdict": "SAFE BUT INSUFFICIENT",
+        "why": "Fastest and safest technically, but more enemies, modifiers, perks, and arenas still return to the same spawn-clear-shop-boss grammar."
+      },
+      {
+        "rank": 6,
+        "route": "Call-of-Duty-style single-player mini-campaign only",
+        "score": 75.7,
+        "verdict": "GOOD WRAPPER, WEAK FIRST FOUNDATION",
+        "why": "Authored missions and recurring antagonists can create memorable pacing, but campaign content becomes expensive if the encounter grammar is not built first."
+      },
+      {
+        "rank": 7,
+        "route": "Two-to-four-player online co-op wave survival",
+        "score": 68.9,
+        "verdict": "LATER PHASE",
+        "why": "Excellent social fit, but the client-only loop has no authoritative server simulation, reconciliation, lobby, rejoin, or anti-cheat foundation."
+      },
+      {
+        "rank": 8,
+        "route": "Local shared-screen co-op",
+        "score": 66.8,
+        "verdict": "NICHE PROTOTYPE ONLY",
+        "why": "Avoids server cost but creates camera, density, multi-input, pause, mobile, and readability problems while offering weak online distribution leverage."
+      },
+      {
+        "rank": 9,
+        "route": "Small-scale competitive multiplayer PvP",
+        "score": 55.7,
+        "verdict": "DO NOT START HERE",
+        "why": "Direct combat needs prediction, reconciliation, latency compensation, matchmaking, authoritative hit validation, balance bifurcation, and a concurrent audience."
+      },
+      {
+        "rank": 10,
+        "route": "Full campaign + multiplayer + battle royale suite",
+        "score": 45.6,
+        "verdict": "REJECT BIG-BANG SCOPE",
+        "why": "It multiplies content production, netcode, live operations, testing, and population dependencies before any one new loop proves itself."
+      },
+      {
+        "rank": 11,
+        "route": "Multiplayer battle royale",
+        "score": 45.3,
+        "verdict": "REJECT",
+        "why": "It has the lowest reuse and highest architecture, population, operations, cost, fairness, map, inventory, and spectating burden while weakening the game's distinctive compact browser identity."
+      }
+    ],
+    "gameLoopReview": {
+      "loopTightness": 9.2,
+      "progressionCurve": 9.0,
+      "sessionEngagement": 7.8,
+      "retentionHooks": 8.3,
+      "soulFidelity": 9.7,
+      "overall": 8.8,
+      "evidenceBoundary": "No participant playtest corpus exists. The lower engagement score measures structural sameness in source, not proven boredom or retention loss.",
+      "topActions": [
+        "Build one Operation Mode vertical slice around an encounter graph rather than another wave modifier.",
+        "Use three Operations as a compact campaign season after the encounter spine proves fun.",
+        "Add async rivals before testing authoritative two-player co-op; reject PvP and battle royale until both netcode and audience prerequisites exist."
+      ]
+    },
+    "platformEvidence": [
+      {
+        "source": "Cloudflare Durable Objects pricing",
+        "url": "https://developers.cloudflare.com/durable-objects/platform/pricing/",
+        "finding": "Durable Objects are available on free and paid plans, but active compute and WebSocket messages are metered; hibernation reduces idle duration charges, not active game-tick cost."
+      },
+      {
+        "source": "Cloudflare Durable Objects WebSockets",
+        "url": "https://developers.cloudflare.com/durable-objects/best-practices/websockets/",
+        "finding": "WebSocket hibernation is designed for idle connections; an authoritative action game still needs active simulation and state restoration design."
+      },
+      {
+        "source": "Supabase Realtime limits",
+        "url": "https://supabase.com/docs/guides/realtime/limits",
+        "finding": "The free tier currently lists 200 concurrent connections and 100 messages per second; high-frequency multiplayer state would require careful budgeting or a different authoritative path."
+      },
+      {
+        "source": "Supabase Presence",
+        "url": "https://supabase.com/docs/guides/realtime/presence",
+        "finding": "Presence is explicitly for slow-changing state and not high-frequency movement updates."
+      }
+    ],
+    "baseline": {
+      "release": "FORGE, deployed/public-unlaunched. This audit does not authorize a lifecycle promotion or production gameplay change.",
+      "quality": "Startup brief reports 1,158/1,158 tests passing; this strategy audit changes documentation only and does not alter runtime behavior.",
+      "architecture": "React 19/Vite single-canvas game. The live architecture court reports App.jsx at 4,958/5,000 lines and its game-loop span at 1,776/1,775, so the current architecture gate is red by one game-loop line. The simulation is client-side requestAnimationFrame with no authoritative gameplay server.",
+      "gameplay": "Eight public modes, eleven weapons, enemy and boss families, four wave themes, four arena layouts, five dynamic objective families, three wave contracts, route choices, hazards, mutations, progression, ghosts, challenge sharing, and replay-proof systems already exist.",
+      "cost": "Solo Operations and async rivalry stay local-first and cost-neutral. Concurrent co-op introduces metered realtime compute/messages and therefore requires a declared capacity and shutdown budget."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Turn existing wave ingredients into mission-grade encounter compositions before adding broad new content families.",
+    "innovation": "Use a deterministic Operation graph that can generate authored-feeling runs from current systems and later become the shared contract for campaign, rivals, and co-op.",
+    "ui / ux / user-experience": "Replace eight competing front-door mode identities with a clear Operations/Arcade split and make mission state, objectives, route consequences, and extraction/finale progress readable.",
+    "feedback loop": "Ship a route-specific playtest receipt that asks about repetition, objective clarity, control trust, threat readability, replay intent, and memorable moments.",
+    "gamification / engagement / immersion": "Create mission arcs, persistent map state, interactables, named finales, recurring antagonists, branching risks, and async rivals rather than only increasing enemy density.",
+    "ai / intelligence integration": "Extend deterministic local directors and the Run Brain into a Mission Director; do not add hosted inference or variable per-player cost.",
+    "security": "Keep solo/async runs on the current replay-proof spine; require authoritative simulation, input validation, rate limits, and trust-separated scoreboards before any synchronous multiplayer claim.",
+    "speed / organization / efficiency": "Extract ModeRules, EncounterDirector, and mission state from App.jsx before significant new orchestration so the architecture budget and test surface remain viable.",
+    "token / api cost reduction": "Represent Operations as compact data contracts and deterministic recipes; reuse existing directors and local analysis instead of generating bespoke content through paid APIs."
+  },
+  "items": [
+    {
+      "slug": "operation-encounter-spine",
+      "tier": "FIRE",
+      "axis": "feature depth / engagement / innovation",
+      "effortHours": 24,
+      "impact": 10,
+      "innovation": 10,
+      "priority": 21.3,
+      "status": "implemented",
+      "why": "Eight modes currently alter parameters around one flat-arena wave grammar. The game needs a higher-order encounter graph that changes objectives, space, pacing, and victory conditions while reusing its mature systems.",
+      "recipe": "Create a pure deterministic OperationDirector that composes three acts from BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS encounter nodes. Prototype one 12–18 minute Operation with a route fork, persistent consequence, named finale, mission score, replay fingerprint, and Endless-Waves fallback.",
+      "measurement": "A source-bound playtest build produces at least five materially different player verbs across one Operation; 10 consented tester receipts compare repetition, clarity, memorable moment, and immediate replay intent against Standard Run without claiming causality.",
+      "ladder": {
+        "L1": { "effortHours": 12, "recipe": "Pure Operation graph plus three encounter verbs using existing objectives and one boss finale." },
+        "L2": { "effortHours": 24, "recipe": "Full vertical slice: seven encounter verbs, three acts, one route consequence, map-state changes, mission score, replay fingerprint, UI, and tests." },
+        "L3": { "effortHours": 45, "recipe": "Three authored Operations with shared schema, content tooling, accessibility receipts, and balance telemetry." }
+      }
+    },
+    {
+      "slug": "mode-rules-and-encounter-extraction",
+      "tier": "FIRE",
+      "axis": "efficiency / architecture / security",
+      "effortHours": 12,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 21.3,
+      "status": "implemented",
+      "why": "App.jsx owns the client simulation and the live court reports its game-loop span at 1,776/1,775, already one line over budget, with only 42 total-file lines of headroom. Adding campaign, Operations, or multiplayer orchestration inline would deepen the red gate and make replay and input parity harder to prove.",
+      "recipe": "Extract a tested ModeRules contract, encounter lifecycle reducer, objective adapter, and mission-state boundary from App.jsx. Preserve existing eight-mode behavior byte-for-byte or fixture-for-fixture before Operation Mode consumes the new seam.",
+      "measurement": "All 1,158 baseline tests plus focused parity fixtures pass; App.jsx gains at least 250 lines of headroom; current replay, keyboard/mouse, controller, and mobile paths remain behaviorally unchanged.",
+      "ladder": {
+        "L1": { "effortHours": 6, "recipe": "Extract mode flags and wave lifecycle decisions into pure contracts with parity tests." },
+        "L2": { "effortHours": 12, "recipe": "Add encounter reducer, objective adapters, mission state, and App integration with replay/input parity." },
+        "L3": { "effortHours": 22, "recipe": "Move the full deterministic simulation state machine behind a worker-ready interface for later authoritative reuse." }
+      }
+    },
+    {
+      "slug": "operation-map-state-and-interactables",
+      "tier": "FIRE",
+      "axis": "ui / ux / immersion / feature depth",
+      "effortHours": 18,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 18.7,
+      "status": "implemented",
+      "why": "The current arena has four deterministic layouts and hazards, but encounters do not materially transform the map. Spatial sameness makes distinct enemy and perk combinations feel more repetitive than their content count suggests.",
+      "recipe": "Add an ArenaState contract with readable interactables such as doors, pumps, valves, barricades, turrets, extraction toilets, and one watchtower v0. Let encounter outcomes open, close, flood, power, or contaminate bounded zones without introducing full 3D physics.",
+      "measurement": "The Operation slice contains at least three visible before/after arena states, every interaction has keyboard/controller/touch affordances, threat telegraphs stay readable, and deterministic seed/replay receipts include the state transitions.",
+      "ladder": {
+        "L1": { "effortHours": 8, "recipe": "Doors, valves, and one persistent hazard-state change in the current flat arena." },
+        "L2": { "effortHours": 18, "recipe": "Six interactables, three arena-state transitions, watchtower v0, accessibility cues, replay binding, and tests." },
+        "L3": { "effortHours": 35, "recipe": "Multi-room Operations with generalized floor-aware AI only after the watchtower proves its value." }
+      }
+    },
+    {
+      "slug": "operation-playtest-decision-court",
+      "tier": "FIRE",
+      "axis": "feedback loop / observability",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 6,
+      "priority": 18.0,
+      "status": "implemented_evidence_pending",
+      "why": "There is no participant playtest corpus, so source quality cannot establish that any route is less repetitive or more fun. The next architecture investment needs an explicit evidence court.",
+      "recipe": "Extend the existing opt-in Playtest Pulse with route, session duration, repeatedness, objective clarity, control trust, threat readability, memorable moment, immediate replay intent, and preferred-next-mode. Compare a fixed Standard seed with a fixed Operation seed and export aggregate-only JSON.",
+      "measurement": "At least 10 consented paired receipts exist before greenlighting campaign breadth and at least 20 before greenlighting realtime co-op; publish distributions and sample size without causal or representative claims.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Add Operation-specific structured questions and aggregate export." },
+        "L2": { "effortHours": 6, "recipe": "Paired Standard-vs-Operation protocol, in-game command post, anonymized aggregate export, and decision thresholds." },
+        "L3": { "effortHours": 12, "recipe": "Automated build cohorting and balance-lab import after a representative sample exists." }
+      }
+    },
+    {
+      "slug": "deterministic-mission-director",
+      "tier": "FIRE",
+      "axis": "ai / intelligence / engagement",
+      "effortHours": 10,
+      "impact": 8,
+      "innovation": 8,
+      "priority": 17.9,
+      "status": "implemented",
+      "why": "The game already uses deterministic directors, weakness models, coaching, and rival pace. A local Mission Director can personalize encounter ordering and optional contracts without hosted inference, hidden rubber-banding, or variable cost.",
+      "recipe": "Build a rule-based director that selects the next encounter or side contract from observed build archetype, recent damage source, objective history, and route choice. Render the reason, keep difficulty changes opt-in, and stamp every decision into the Operation receipt.",
+      "measurement": "Every director decision is deterministic for the same seed and state, reason-coded in the UI, replay-fingerprintable, cost-zero, and covered by archetype/weakness boundary tests.",
+      "ladder": {
+        "L1": { "effortHours": 5, "recipe": "Deterministic next-encounter selection with reason codes." },
+        "L2": { "effortHours": 10, "recipe": "Encounter, side-contract, nemesis, and finale pressure selection with receipts and tests." },
+        "L3": { "effortHours": 20, "recipe": "Offline balance simulation across thousands of seeded Operation graphs; no hosted model required." }
+      }
+    },
+    {
+      "slug": "async-operation-rivals",
+      "tier": "FIRE",
+      "axis": "gamification / retention / social",
+      "effortHours": 8,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 16.9,
+      "status": "implemented",
+      "why": "Ghost paths, seeded scenarios, challenge links, rival pacing, leaderboards, and replay proof already exist. They can add social pressure to Operations without making liveness or netcode a prerequisite.",
+      "recipe": "Store bounded Operation split times, objective outcomes, and ghost path samples; show a rival's room-by-room pace and branch choice; issue one-click rematch cartridges and trust-separated leaderboards per Operation seed.",
+      "measurement": "A shared Operation cartridge reproduces seed, route options, and scoring contract; rival state never affects combat authority; payload, privacy, and free-tier budgets remain bounded.",
+      "ladder": {
+        "L1": { "effortHours": 4, "recipe": "Operation split ghost and final-score rival card." },
+        "L2": { "effortHours": 8, "recipe": "Room splits, branch ghosts, replay receipts, rematch links, and Operation-specific leaderboard views." },
+        "L3": { "effortHours": 16, "recipe": "Scheduled community Operations and team-aggregate rivalry after participation evidence exists." }
+      }
+    },
+    {
+      "slug": "three-operation-mini-campaign",
+      "tier": "FIRE",
+      "axis": "feature depth / narrative / soul",
+      "effortHours": 30,
+      "impact": 9,
+      "innovation": 9,
+      "priority": 16.2,
+      "status": "implemented_evidence_pending",
+      "why": "A campaign can supply authored pacing and memorable antagonists, but it should consume the proven Operation schema instead of becoming a separate linear engine or an imitation of a third-party military franchise.",
+      "recipe": "After the vertical slice passes its playtest gate, author a three-Operation first season with concise briefings, recurring comic antagonists, optional intel, checkpoints, side contracts, mission grades, and a finale that changes based on one prior route decision.",
+      "measurement": "All three missions reuse the Operation runtime, remain guest-first and replayable, complete in under 60 minutes total, preserve non-affiliation/IP boundaries, and produce mission-specific replay/score receipts.",
+      "ladder": {
+        "L1": { "effortHours": 12, "recipe": "One authored Operation with briefing, checkpoint, antagonist, and ending." },
+        "L2": { "effortHours": 30, "recipe": "Three-operation season with recurring cast, route consequence, mission grades, and accessibility/replay proof." },
+        "L3": { "effortHours": 60, "recipe": "Six-operation season only after completion and replay data justify content expansion." }
+      }
+    },
+    {
+      "slug": "realtime-capacity-and-trust-gate",
+      "tier": "FIRE",
+      "axis": "security / cost / observability",
+      "effortHours": 6,
+      "impact": 8,
+      "innovation": 6,
+      "priority": 16.0,
+      "status": "implemented",
+      "why": "Any synchronous mode changes the cost and trust model. Supabase Presence is not high-frequency gameplay transport, and Durable Objects meter active compute and messages even when idle hibernation is available.",
+      "recipe": "Before a co-op prototype, define tick rate, input/state payload size, maximum rooms, concurrency target, monthly hard cap, hibernation behavior, abuse limits, disconnect/rejoin policy, authoritative score boundary, and an automatic kill switch. Benchmark synthetic two-player rooms before public matchmaking.",
+      "measurement": "A checked-in capacity model predicts per-match messages and active compute, a load test stays within the declared cap, abusive clients cannot author scores or world state, and cost alarms can disable new lobbies without affecting solo play.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Capacity spreadsheet/contract plus authoritative trust and shutdown design." },
+        "L2": { "effortHours": 6, "recipe": "Synthetic room benchmark, rate-limit court, cost alarm, kill switch, and reconnect policy." },
+        "L3": { "effortHours": 14, "recipe": "Regional load and chaos testing after the co-op simulation exists." }
+      }
+    },
+    {
+      "slug": "operations-and-arcade-mode-taxonomy",
+      "tier": "ICE",
+      "axis": "ui / ux / efficiency",
+      "effortHours": 10,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 15.6,
+      "status": "implemented",
+      "why": "Eight top-level modes overstate structural choice and increase first-run decision tax. Several are better expressed as playlists, challenge rules, or mastery variants once Operations becomes the primary experience.",
+      "recipe": "Reframe the front door into OPERATIONS, ARCADE, and RIVALS. Put Standard/Score Attack/Boss Rush/Speed Run/Zombies under Arcade; make Daily/Gauntlet/Cursed rotating contracts; preserve every replay-code identifier and deep link through a compatibility mapper.",
+      "measurement": "No mode or replay link is lost, first-run deployment requires one clear primary choice, keyboard/controller/touch parity passes, and production funnel comparison remains truthfully gated on real traffic.",
+      "ladder": {
+        "L1": { "effortHours": 4, "recipe": "Information-architecture prototype and compatibility mapping without runtime changes." },
+        "L2": { "effortHours": 10, "recipe": "Operations/Arcade/Rivals front door, preserved deep links, mobile parity, analytics events, and visual QA." },
+        "L3": { "effortHours": 18, "recipe": "Personalized recent/favorite deployment shortcuts after real usage patterns exist." }
+      }
+    },
+    {
+      "slug": "authoritative-two-player-operation-coop",
+      "tier": "ICE",
+      "axis": "multiplayer / security / engagement",
+      "effortHours": 50,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 12.6,
+      "status": "gated",
+      "why": "Two-player co-op is the synchronous mode with the best SOUL and system fit, but the current simulation is entirely client-side. It should reuse a proven Operation contract and never be the experiment that decides whether Operations are fun.",
+      "recipe": "Only after the Operation playtest gate and capacity court pass, implement one invite-code two-player room with an authoritative fixed-tick simulation, input buffering, client interpolation, deterministic spawn plans, revive/down state, disconnect/rejoin, trust-separated score, and no public matchmaking.",
+      "measurement": "Two remote players complete one Operation at an agreed latency envelope with no divergent encounter state; reconnect and malicious-input courts pass; solo mode remains available during service failure; measured per-room cost stays below the declared cap.",
+      "ladder": {
+        "L1": { "effortHours": 20, "recipe": "Headless authoritative simulation and two synthetic clients; no public UI." },
+        "L2": { "effortHours": 50, "recipe": "Invite-only two-player Operation with prediction/interpolation, revive, reconnect, trust, load, and cost courts." },
+        "L3": { "effortHours": 100, "recipe": "Four-player rooms and matchmaking only after concurrency and retention evidence justify them." }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "battle-royale",
+      "reason": "REJECT — lowest reuse and highest map, loot, inventory, netcode, matchmaking, spectator, population, live-operations, fairness, and cost burden; it does not directly exploit the game's compact browser/SOUL advantage."
+    },
+    {
+      "slug": "competitive-pvp-first",
+      "reason": "REJECT — requires latency compensation, authoritative hit validation, balance bifurcation, matchmaking, and audience concurrency before the co-op networking foundation exists."
+    },
+    {
+      "slug": "full-franchise-suite",
+      "reason": "REJECT — campaign, competitive multiplayer, co-op, and battle royale together are a big-bang portfolio, not one shippable route; the scope would bury learning beneath infrastructure and content production."
+    },
+    {
+      "slug": "content-pack-only",
+      "reason": "CULL AS PRIMARY STRATEGY — additional enemies, perks, bosses, and modifiers are useful inside Operations but do not change the repeated wave grammar on their own."
+    },
+    {
+      "slug": "hosted-ai-mission-generation",
+      "reason": "CULL — deterministic local directors already fit the proof ethos and avoid variable per-player API cost, unsafe generated copy, and replay drift."
+    },
+    {
+      "slug": "automatic-balance-retune",
+      "reason": "DATA-BLOCKED — no participant playtest corpus or representative run history establishes numeric balance changes; recommendations must stay opt-in and evidence-bounded."
+    }
+  ],
+  "executionLog": [
+    {
+      "executedAt": "2026-08-16",
+      "session": 155,
+      "result": "implemented",
+      "summary": "Shipped the solo-first Operation runtime, seven-verb encounter director, persistent route-specific arena state, local mission director, Operation-first taxonomy, three authored schema-compatible Operations, bounded async rivalry/rematch receipts, paired aggregate-only playtest command post, and authoritative co-op capacity/trust court. Extracted projectile and Operation orchestration boundaries; App.jsx closes at 4,753/5,000 lines with 247 lines of total headroom and 277 game-loop lines of headroom.",
+      "evidenceBoundary": "No participant receipts were fabricated. Campaign breadth remains evidence-pending until 10 opt-in paired receipts; realtime co-op remains gated until 20 paired receipts plus the capacity court. No SPARKED lifecycle promotion is implied.",
+      "verification": [
+        "focused Operation/App courts green",
+        "architecture court green at App.jsx 4753/5000 and game-loop span 1498/1775",
+        "full Vitest green: 209 files and 1205 tests; strict lint, deployable build, public contract, asset, dependency, runtime, security, and zero-vulnerability courts pass",
+        "isolated staging immutable 51e02fe5 passes the 1020-check hosted matrix plus 72 Operation-state checks; 26 hash-bound captures were directly reviewed across both themes and 390/1440 widths"
+      ]
+    }
+  ]
+}

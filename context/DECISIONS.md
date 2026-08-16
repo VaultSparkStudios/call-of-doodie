@@ -1197,3 +1197,16 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Decision:** Treat `analytica-feed-v1`, the four showcase metric IDs, and the 15-second poll cadence as one shared source contract across the homepage, store, and public descriptor.
 
 **Why:** The UI was live but the machine twin did not declare what “live” meant. Shared constants and a cross-surface test close that structural gap without updating or fabricating any metric value.
+## 2026-08-16 — Session 155 — Operations change the grammar before adding network scope
+
+**Decision:** Make solo-first Operations the primary new experience: one deterministic runtime composes BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS encounters while Arcade retains every existing mode and replay identifier.
+
+**Why:** The game already had abundant enemies, weapons, modifiers, progression, and social proof; repetition came from every choice converging on the same spawn/clear/reward cadence. Authored objectives and persistent route consequences attack that structural cause while reusing the mature combat and trust spine.
+
+**Boundaries:** Operation score does not mint the standard leaderboard token. The Mission Director explains local rule decisions and never silently changes difficulty. Campaign progression remains unavailable before 10 opt-in paired receipts; realtime co-op remains unavailable before 20 receipts plus a real-service capacity rerun and authoritative implementation.
+
+## 2026-08-16 — Session 155 — Rendered pixels own overlay placement
+
+**Decision:** Position the Operation command overlay below the shared first-run training/HUD band and preserve an explicit scroll margin on the Operations deck.
+
+**Why:** The 1,092 automated visual checks were green, but direct 390px pixel inspection showed the training card covering the Operation title and progress. The corrected staging capture shows both surfaces readable simultaneously; mechanical selector visibility alone was insufficient.

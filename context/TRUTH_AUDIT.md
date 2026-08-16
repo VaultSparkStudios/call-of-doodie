@@ -1,4 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-16 — Session 155 — Operation runtime, evidence gates, and staging truth
+
+- Source truth — S155 begins at synchronized `8df346e`; the release candidate contains only repository-owned Operation/runtime/public-contract/QA/write-back changes and no dependency or private credential.
+- Runtime truth — three authored Operations share one deterministic seven-encounter director, exactly one resolution per cleared wave, selectable persistent route consequences, bounded arena interactions, local scoring/history, and route-preserving rematch.
+- Compatibility truth — all eight prior modes retain their canonical priority, rewards, boss cadence, replay identifiers, and standard leaderboard authority behind ModeRules.
+- Architecture truth — `App.jsx` is 4,753/5,000 lines and its game-loop span is 1,498/1,775 after extracting projectile and Operation orchestration; schema architecture gates pass.
+- Evidence truth — paired playtest receipts are explicit opt-in, locally bounded, identity/free-text-free in aggregate export, and truthfully gated at 10/20. Authored mission availability is not represented as live campaign progression; capacity design is not represented as connected co-op.
+- Validation truth — 209/209 Vitest files and 1,205/1,205 assertions pass; strict lint, deployable build, schema/public/dependency/assets/runtime/security, full working-tree secret scan, and npm audit zero pass.
+- Visual truth — corrected staging passes 1,020/1,020 broad checks plus 72/72 focused Operation/completion checks. Twenty-six hash-bound captures received direct pixel review across both themes and 390/1440px; the discovered training/Operation overlap is fixed.
+- Staging truth — alias `session-155-staging.call-of-doodie.pages.dev` and immutable `51e02fe5.call-of-doodie.pages.dev` serve the corrected candidate with typed edge health.
+- Lifecycle truth — founder authorization covers the cost-neutral FORGE engineering commit/push/deploy. SPARKED remains NO-GO behind current physical-device, Zoho reply-as, project-scoped observability, Obelisk, participant/publication, and explicit lifecycle evidence.
+
+Overall status: S155 repository-owned implementation and staging are green; direct-main production follow-through is authorized and pending exact-revision verification. SPARKED remains NO-GO.
+Last reviewed: 2026-08-16
+
 ## 2026-08-14 — Session 154 — Propagation compatibility and release truth
 
 - Source truth — S154 began from clean synchronized `main` at `cc734dc`; all current changes are the drained propagation bundle plus bounded compatibility repairs and canonical write-back.

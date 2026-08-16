@@ -43,6 +43,7 @@ import CommandersOrders from "./CommandersOrders.jsx";
 import PlaytestPulsePanel from "./PlaytestPulsePanel.jsx";
 import MobileDeployConfig from "./MobileDeployConfig.jsx";
 import PrimaryNavigation from "./PrimaryNavigation.jsx";
+import OperationCommandDeck from "./OperationCommandDeck.jsx";
 import "./home-arcade.css";
 
 const DemoCanvas = lazy(() => import("./DemoCanvas.jsx"));
@@ -654,6 +655,19 @@ export default function HomeV2(props) {
           )}
         </div>
 
+        <OperationCommandDeck onStart={onStart} palette={themePalette} />
+
+        <div
+          id="arcade-rivals-title"
+          role="heading"
+          aria-level="2"
+          style={{ margin: "12px auto 4px", color: themePalette.ink, fontSize: 14, fontWeight: 900, letterSpacing: 2.4, textAlign: "center" }}
+        >
+          ARCADE &amp; RIVALS
+        </div>
+        <p style={{ margin: "0 auto 10px", color: themePalette.muted, fontSize: 10, textAlign: "center" }}>
+          Instant runs, daily seeds, weekly Gauntlet, and rivalry challenges
+        </p>
 
         <CommandersOrders
           order={commandersOrder}

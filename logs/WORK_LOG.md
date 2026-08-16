@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-08-16 (Session 155 — Operation mode and evidence-gated campaign path)
+
+- Began from synchronized `main` at `8df346e`; recovered the in-progress Session 155 tree after Windows secure-store instability and verified no partial patch corruption.
+- Ran the game-loop review and nine-axis audit, compared wave overhaul, authored campaign, multiplayer, hybrid, and battle-royale routes, and selected solo-first Operations as the highest-reuse answer to structural repetition.
+- Extracted ModeRules, projectile resolution, and Operation orchestration; App closes at 4,753/5,000 lines and 1,498/1,775 game-loop lines while all eight legacy modes remain compatible.
+- Added three 12–18 minute Operations with the seven-verb encounter spine, two selectable routes, recurring comic antagonists, persistent arena consequences, deterministic score/checkpoint/fingerprint receipts, and exact-once wave resolution.
+- Added bounded doors, pumps, valves, barricades, turrets, extraction toilets, and watchtower interactions with keyboard/controller/touch cues; Operation score and history remain local and separate from standard leaderboard authority.
+- Added deterministic reason-coded Mission Director guidance, bounded async rivalry/rematch receipts, aggregate-only paired playtest evidence, and a checked authoritative two-player capacity/trust design. Campaign progression and realtime co-op remain honestly gated.
+- Reframed the front door around Operations before Arcade & Rivals, published gameplay-contract v3 and matching human/agent surfaces, and added an honest completion receipt with Continue/Rematch/Menu actions.
+- Full Vitest passes 209/209 files and 1,205/1,205 tests; strict lint, schema/architecture/runtime/public/security/dependency/assets, deployable build, secret scan, and npm audit zero pass.
+- Deployed corrected isolated staging at `session-155-staging` / immutable `51e02fe5`; broad pixels pass 1,020/1,020 and focused Operation/completion states pass 72/72.
+- Direct mobile pixel inspection found the first-run training card covering the Operation title/progress. Moved the overlay below the HUD/training band, redeployed, recaptured, and hash-bound 26 dark/light mobile/desktop states with zero open blocking defects.
+
+Intent outcome: achieved through implementation and staging. Independent release gate, canonical closeout, authorized direct-main publication, exact production deployment, and live verification complete the follow-through; SPARKED remains separately NO-GO.
+
 ## 2026-08-14 (Session 154 — propagation compatibility and protocol truth)
 
 - Began from synchronized clean `main` at `cc734dc`; canonical `/start` drained a pending Studio propagation bundle and exposed regressions that file-presence checks had missed.

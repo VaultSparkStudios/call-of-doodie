@@ -2,14 +2,14 @@ import { useState, useEffect, useRef, useCallback, useMemo, lazy } from "react";
 import AsyncPanelBoundary from "./components/AsyncPanelBoundary.jsx";
 import { drawGame } from "./drawGame.js";
 import {
-  WEAPONS, ENEMY_TYPES, KILLSTREAKS, HITMARKERS, DEATH_MESSAGES, TIPS, PERKS,
+  WEAPONS, ENEMY_TYPES, KILLSTREAKS, DEATH_MESSAGES, TIPS, PERKS,
   ACHIEVEMENTS, DIFFICULTIES, KILL_MILESTONES, META_UPGRADES,
   GRENADE_COOLDOWN, DASH_COOLDOWN, DASH_SPEED, DASH_DURATION,
-  CRIT_CHANCE, CRIT_MULT, COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
+  COMBO_TIMER_BASE, RUN_MODIFIERS, getWeeklyMutation, WEAPON_SYNERGIES,
   WAVE_CHALLENGE_MUTATIONS, WEAPON_ARSENAL_MILESTONE_LEVELS, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
@@ -20,24 +20,12 @@ import { planEnemyCoinDrop, planEnemyDefeatScore } from "./systems/defeatEconomy
 import { applyEnemyDamage, collectQueuedEnemyDefeats, collectUnqueuedLethalEnemies, queueEnemyDefeat, retireEnemyWithoutDefeat, takeQueuedEnemyDefeat } from "./systems/enemyDefeatLifecycle.js";
 import { pickObjective, pickWaveChallengeContract, resolveWaveChallengeContract, startWaveChallengeContract } from "./systems/objectiveDirector.js";
 import { resolveObjectiveFrame } from "./systems/objectiveFrame.js";
-import {
-  bulletEnemyCollision,
-  computeBulletDamage,
-  computeJuggernautShieldDamage,
-  findLightningChainTarget,
-  resolveEnemyProjectilePlayerHit,
-  resolveGrenadeEnemyDamage,
-  resolveObstacleBounce,
-  resolvePierce,
-  rollCrit,
-  isPrecisionHit,
-} from "./systems/combatResolution.js";
 import { identifyWeakness as _identifyWeakness } from "./utils/metaClarity.js";
 import {
-  soundShoot, soundHitAt, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
+  soundShoot, soundDeath, soundLevelUp, soundPickupAt, soundEnemyDeathAt,
   soundLastStand, soundHeartbeatPulse, soundBossFinale,
   soundGrenadeAt, soundBossWave, soundAchievement, soundReload,
-  soundDash, soundBossKill, soundWaveClear, soundPerkSelect, soundPrecisionClick, soundPrecisionLock, soundChainEscalate,
+  soundDash, soundBossKill, soundWaveClear, soundPerkSelect, soundChainEscalate,
   soundBossGrudge, soundComboTick, soundComboBreak,
   soundSummonDismissed,
   soundGamepadConnect, soundGamepadDisconnect,
@@ -68,6 +56,10 @@ import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 import HUD from "./components/HUD.jsx";
+import OperationRuntimeLayer from "./components/OperationRuntimeLayer.jsx";
+import { getOperation } from "./systems/operationCampaign.js";
+import { buildOperationReceipt, getCurrentEncounter } from "./systems/operationDirector.js";
+import { useOperationMode } from "./hooks/useOperationMode.js";
 // Per-weapon camera recoil magnitude (index-aligned with WEAPONS). Heavy
 // weapons (≥5) also kick the camera opposite the muzzle direction.
 const WEAPON_RECOIL = [3, 12, 2, 4, 18, 2, 6, 4, 7, 14, 4, 8];
@@ -149,6 +141,8 @@ import { reconcileOwnership } from "./utils/cosmeticTrack.js";
 import { matchesExperiment } from "./utils/runBrain.js";
 import { getZombieOutbreakPlan, getZombieWaveEnemyCount, mutateEnemyForZombieMode } from "./systems/zombieMode.js";
 import { applyThreatRecommendationChoice, queueCompletedRunFact, recordPostRunFieldReport } from "./systems/runFactFlow.js";
+import { stepProjectileFrame } from "./systems/projectileFrame.js";
+import { applyModeRules, getModeRewardFlow, isBossWaveForMode, resolveModeId } from "./systems/modeRules.js";
 
 const AchievementsPanel = lazy(() => import("./components/AchievementsPanel.jsx"));
 const DeathScreen = lazy(() => import("./components/DeathScreen.jsx"));
@@ -364,6 +358,13 @@ export default function CallOfDoodie() {
   const [mutationOptions, setMutationOptions]   = useState([]);
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
+  const operationModeRefs = useMemo(() => [scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef], []);
+  const operationRuntime = useOperationMode({ gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, modeRefs: operationModeRefs, setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce });
+  const {
+    stateRef: operationStateRef, completeRef: operationCompleteRef, state: operationState, arenaState: operationArenaState,
+    directive: operationDirective, completeReceipt: operationCompleteReceipt, start: startOperation, reset: resetOperation,
+    interact: applyOperationInteraction, resolveWave: resolveOperationWave, setCompleteReceipt: setOperationCompleteReceipt,
+  } = operationRuntime;
   const synergyChargeCooldownRef = useRef(0);
   const archetypeUnlocksRef = useRef(new Set());
   const doctrineForgedRunRef = useRef(new Set());
@@ -689,11 +690,15 @@ export default function CallOfDoodie() {
     gsRef.current.prestigeMult = 1 + (meta.prestige || 0) * 0.10;
     gsRef.current.blitzCount = 0;
     gsRef.current.hyperspeedActive = false;
-    gsRef.current.scoreAttackMode = scoreAttackRef.current;
-    gsRef.current.scoreAttackTimeLeft = scoreAttackRef.current ? 300 * 60 : 0;
-    gsRef.current.cursedRunMode = cursedRunRef.current;
-    if (cursedRunRef.current) gsRef.current.killScoreMult = (gsRef.current.killScoreMult || 1) * 3;
-    gsRef.current.bossRushMode = bossRushRef.current;
+    Object.assign(gsRef.current, applyModeRules(gsRef.current, resolveModeId({
+      scoreAttackMode: scoreAttackRef.current,
+      dailyChallengeMode: dailyChallengeRef.current,
+      cursedRunMode: cursedRunRef.current,
+      bossRushMode: bossRushRef.current,
+      speedrunMode: speedrunRef.current,
+      gauntletMode: gauntletRef.current,
+      zombiesMode: zombiesRef.current,
+    })));
     gsRef.current.developerBossSpawned = false;
     // Apply weekly mutation on top of normal game
     const _weeklyMut = getWeeklyMutation();
@@ -1750,7 +1755,7 @@ export default function CallOfDoodie() {
     const deathTraceReceipt = deathTraceEvidence ? buildReplayProofReceipt(deathTraceEvidence) : null;
     const _killerType = gs?._deathKillerType ?? gs?._lastDamageBy ?? null;
     const _killerEnemy = _killerType != null ? (gs.enemies || []).find(e => e.type === _killerType) : null;
-    saveRunToHistory(createRunHistoryEntry({
+    const runHistoryEntry = createRunHistoryEntry({
       score: gs.score,
       kills: gs.kills,
       wave: gs.currentWave,
@@ -1774,14 +1779,26 @@ export default function CallOfDoodie() {
       totalHits: statsRef.current.totalHits || 0,
       totalCrits: statsRef.current.crits || 0,
       bossKills: statsRef.current.bossKills || 0,
-    }));
-    void queueCompletedRunFact({
-      runToken: runTokenRef.current, summarySig: runSummarySigRef.current, name: username,
-      runFlags, difficulty: difficultyRef.current, seed: gs.runSeed, starterLoadout,
-      score: gs.score, kills: gs.kills, wave: gs.currentWave,
-      durationSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000),
-      totalDamage: gs.totalDamage, stats: statsRef.current, practiceRun: _isPracticeRun,
     });
+    if (gs.operationMode && operationStateRef.current) {
+      const partialOperationReceipt = buildOperationReceipt(operationStateRef.current);
+      runHistoryEntry.mode = "operation";
+      runHistoryEntry.operation = {
+        operationId: partialOperationReceipt.operationId, route: partialOperationReceipt.route, routeSource: gs.operationRouteSource,
+        status: partialOperationReceipt.status, operationScore: partialOperationReceipt.score,
+        checkpoint: partialOperationReceipt.checkpoint, fingerprint: partialOperationReceipt.fingerprint,
+      };
+    }
+    saveRunToHistory(runHistoryEntry);
+    if (!gs.operationMode) {
+      void queueCompletedRunFact({
+        runToken: runTokenRef.current, summarySig: runSummarySigRef.current, name: username,
+        runFlags, difficulty: difficultyRef.current, seed: gs.runSeed, starterLoadout,
+        score: gs.score, kills: gs.kills, wave: gs.currentWave,
+        durationSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000),
+        totalDamage: gs.totalDamage, stats: statsRef.current, practiceRun: _isPracticeRun,
+      });
+    }
     createDeathStudioEvents({
       score: gs.score,
       kills: gs.kills,
@@ -1793,7 +1810,7 @@ export default function CallOfDoodie() {
     const deathRoast = getRoastCallout("death", roastCooldowns.current, gs.currentWave, 1);
     if (deathRoast) setTip(deathRoast);
     // ── Analytics: death ──
-    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected });
+    track("death", { ...gameCtx({ difficulty: difficultyRef.current, mode: gs?.operationMode ? "operation" : resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), wave: gs?.currentWave, score: gs?.score }), kills: gs?.kills, timeSurvived: Math.floor((Date.now() - startTimeRef.current) / 1000), bossKills: statsRef.current.bossKills, perksSelected: statsRef.current.perksSelected, ...(gs?.operationMode ? { operationId: gs.operationId, operationRoute: gs.operationRoute, operationEncounterIndex: gs.operationEncounterIndex } : {}) });
     gs.killstreakCount = 0; setKillstreak(0);
     } catch (error) {
       console.error("[RUN END] Non-critical finalizer failed after terminal transition:", error);
@@ -1802,7 +1819,7 @@ export default function CallOfDoodie() {
       gs.runPhase = RUN_PHASE.ENDED;
     }
     return true;
-  }, [difficulty, releaseAllInputs, runSeed, starterLoadout, username]);
+  }, [difficulty, operationStateRef, releaseAllInputs, runSeed, starterLoadout, username]);
 
   // enemy-defeat-pipeline:single-executor
   const finalizeEnemyDefeat = (gs, e) => {
@@ -2062,6 +2079,7 @@ export default function CallOfDoodie() {
   // ── Start game ────────────────────────────────────────────────────────────
   const startGame = useCallback(async (forceSeed, challengeOpts = {}) => {
     setPendingNextRunContract(null);
+    const requestedOperation = challengeOpts.operationId ? getOperation(challengeOpts.operationId) : null;
     const gauntletLaunch = gauntletRef.current ? buildWeeklyGauntletLaunch(getWeeklyGauntlet()) : null;
     if (gauntletLaunch) {
       forceSeed = gauntletLaunch.seed;
@@ -2108,6 +2126,13 @@ export default function CallOfDoodie() {
     stopMusic(); stopAmbient();
     settingsRef.current = loadSettings(); // refresh settings at game start
     const seed = initGame(forceSeed, challengeOpts.startWave, challengeOpts.drill || null);
+    if (requestedOperation) {
+      Object.assign(gsRef.current, startOperation({ operation: requestedOperation, challenge: challengeOpts, seed }));
+      gsRef.current._ghostKey = `cod-ghost-operation-${requestedOperation.id}-v1`;
+      gsRef.current.ghost = loadGhostPlayback(gsRef.current._ghostKey);
+    } else {
+      resetOperation();
+    }
     // Adaptive telegraph: precompute per-enemy-type warning multiplier from
     // recent deaths. Read once per run; written by handlePlayerDeath.
     try {
@@ -2185,16 +2210,32 @@ export default function CallOfDoodie() {
       seed,
       flags: readRunModeFlags(scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef),
     });
-    const _startMode = startArtifacts.mode;
+    const _startMode = requestedOperation ? "operation" : startArtifacts.mode;
     const runClaim = startArtifacts.runClaim;
-    issueRunToken(runClaim).then(runTicket => {
-      runTokenRef.current = runTicket?.token || null;
-      runSummarySigRef.current = runTicket?.summarySig || "";
-    }).catch(() => {
+    if (requestedOperation) {
       runTokenRef.current = null;
       runSummarySigRef.current = "";
+    } else {
+      issueRunToken(runClaim).then(runTicket => {
+        runTokenRef.current = runTicket?.token || null;
+        runSummarySigRef.current = runTicket?.summarySig || "";
+      }).catch(() => {
+        runTokenRef.current = null;
+        runSummarySigRef.current = "";
+      });
+    }
+    track("game_start", {
+      difficulty: difficultyRef.current,
+      mode: _startMode,
+      weapon: WEAPONS[starterWeapon]?.name,
+      starterLoadout,
+      ...(requestedOperation ? {
+        operationId: requestedOperation.id,
+        operationRoute: operationStateRef.current?.route,
+        operationRouteSource: gsRef.current?.operationRouteSource,
+        operationEncounterCount: requestedOperation.encounters.length,
+      } : {}),
     });
-    track("game_start", { difficulty: difficultyRef.current, mode: _startMode, weapon: WEAPONS[starterWeapon]?.name, starterLoadout });
     if (_startMode !== "standard") track("mode_start", { mode: _startMode, difficulty: difficultyRef.current });
     if (gauntletLaunch) {
       gsRef.current._gauntletLaunch = gauntletLaunch;
@@ -2207,7 +2248,7 @@ export default function CallOfDoodie() {
         track("arsenal_milestone_snapshot", { accountLevel: _acctLevel, milestonesReached: _milestonesReached, totalWeapons: WEAPONS.length, availability: "all-open" });
       }
     } catch {}
-  }, [applyPerk, dailyChallengeMode, initGame, releaseAllInputs, starterLoadout]);
+  }, [applyPerk, dailyChallengeMode, initGame, operationStateRef, releaseAllInputs, resetOperation, startOperation, starterLoadout]);
 
   // ── Draft perk selection ───────────────────────────────────────────────────
   const applyDraftPerk = useCallback((perk) => {
@@ -2256,6 +2297,8 @@ export default function CallOfDoodie() {
   const submitScore = useCallback(async ({ lastWords, rank, eventDigest = null, feedbackDifficulty = null }) => {
     // Practice runs never touch the leaderboard (UI hides the form; this is the backstop)
     if (gsRef.current?.practiceRun) return { submission: "skipped_practice", board: [] };
+    // Operation receipts use their own local deterministic scoring contract.
+    if (gsRef.current?.operationMode) return { submission: "skipped_operation", board: [] };
     const integrityReceipt = getRunIntegrityReceipt(gsRef.current);
     if (!integrityReceipt.onlineEligible) {
       track("score_submit_integrity_skip", {
@@ -2744,8 +2787,8 @@ export default function CallOfDoodie() {
       }
       if (!gs._waveTransitDone) {
       // Show route select on non-boss waves (wave 2+, not special competitive modes)
-      const _showRoute = !gs.bossWave && gs.currentWave >= 2
-        && !gs.bossRushMode && !gs.scoreAttackMode && !gs.dailyChallengeMode
+      const _showRoute = getModeRewardFlow(resolveModeId(gs), gs.currentWave, { bossWave: gs.bossWave }).showRoute
+        && !gs.operationMode
         && !gs._routeSelectDone;
       if (_showRoute) {
         gs._routeSelectDone = true; // prevent re-entry next frame
@@ -2757,6 +2800,10 @@ export default function CallOfDoodie() {
       }
       gs._routeSelectDone = false; // reset for next wave
       gs._waveTransitDone = true; // mark effects as firing; blocks re-entry this wave
+      if (gs.operationMode) {
+        const operationResult = resolveOperationWave({ player: p });
+        if (operationResult.completed) return;
+      }
       const contractResult = resolveWaveChallengeContract(gs);
       if (contractResult) {
         if (contractResult.completed) {
@@ -2860,8 +2907,10 @@ export default function CallOfDoodie() {
       gs.activeWaveContract = null;
       setActiveWaveContract(null);
       try {
-        const _bossNext = gs.routeForceBoss || (gs.bossRushMode ? gs.currentWave >= 4 : gs.currentWave % 5 === 0);
-        if (!_bossNext) {
+        const _bossNext = gs.operationMode
+          ? getCurrentEncounter(operationStateRef.current)?.verb === "BOSS"
+          : isBossWaveForMode(resolveModeId(gs), gs.currentWave, gs.routeForceBoss);
+        if (!_bossNext && !gs.operationMode) {
           const career = loadCareerStats();
           const weakness = _identifyWeakness(career);
           const obj = pickObjective({
@@ -2898,9 +2947,11 @@ export default function CallOfDoodie() {
       }
       // Boss Rush: bosses start wave 4+ (3-wave warmup to let player gear up)
       const _bossInterval = gs.bossRushMode ? 1 : 5;
-      const nextIsBoss = gs.routeForceBoss || (gs.bossRushMode
-        ? gs.currentWave >= 4
-        : gs.currentWave % _bossInterval === 0);
+      const nextIsBoss = gs.operationMode
+        ? getCurrentEncounter(operationStateRef.current)?.verb === "BOSS"
+        : gs.routeForceBoss || (gs.bossRushMode
+          ? gs.currentWave >= 4
+          : gs.currentWave % _bossInterval === 0);
       gs.routeForceBoss = false; // consume the flag
       if (nextIsBoss) {
         gs.maxEnemiesThisWave = gs.currentWave >= 15 ? 2 : 1;
@@ -3084,9 +3135,9 @@ export default function CallOfDoodie() {
           });
         }
         // After preview: offer mutation challenge (every 5th non-boss wave, not in special modes)
-        const _showMutation = !nextIsBoss && !gs.gauntletMode && !gs.bossRushMode
-          && !gs.scoreAttackMode && !gs.dailyChallengeMode && gs.currentWave % 5 === 0;
-        const _showShop = !gs.gauntletMode && (gs.currentWave < 5 || gs.currentWave % 2 === 0);
+        const _rewardFlow = getModeRewardFlow(resolveModeId(gs), gs.currentWave, { bossWave: nextIsBoss });
+        const _showMutation = !nextIsBoss && _rewardFlow.showMutation;
+        const _showShop = _rewardFlow.showShop;
         postMutationShopRef.current = !nextIsBoss && _showShop;
         if (!nextIsBoss) setTimeout(() => {
           waveAnnouncePendingRef.current = false;
@@ -3122,309 +3173,25 @@ export default function CallOfDoodie() {
       }
     }
 
-    // ── Bullet movement ──
-    gs.bullets = stepAndCompactInPlace(gs.bullets, b => {
-      // Boomerang: curve outbound, then steer back to player
-      if (b.boomerang) {
-        if (!b.returning) {
-          const rot = 0.055; // curve angle per frame
-          const nvx = b.vx * Math.cos(rot) - b.vy * Math.sin(rot);
-          const nvy = b.vx * Math.sin(rot) + b.vy * Math.cos(rot);
-          b.vx = nvx; b.vy = nvy;
-          if (b.life <= b.outboundLife) b.returning = true;
-        } else {
-          const bdx = p.x - b.x, bdy = p.y - b.y, bdist = Math.hypot(bdx, bdy);
-          if (bdist < 24) return false; // caught by player
-          const spd = Math.hypot(b.vx, b.vy);
-          b.vx = (bdx / bdist) * spd; b.vy = (bdy / bdist) * spd;
-        }
-      }
-      b.x += b.vx; b.y += b.vy; b.life--;
-      if (b.trail && frameCountRef.current % 2 === 0) addParticles(gs, b.x, b.y, b.color, 1);
-      for (const ob of (gs.obstacles || [])) {
-        const bounce = resolveObstacleBounce(b, ob);
-        if (bounce.bounced) {
-          Object.assign(b, {
-            x: bounce.x, y: bounce.y, vx: bounce.vx, vy: bounce.vy,
-            bouncesLeft: bounce.bouncesLeft, life: bounce.life,
-          });
-          addParticles(gs, b.x, b.y, "#FFFFFF", 4);
-          gs.screenShake = Math.max(gs.screenShake, 1);
-          break;
-        }
-        if (bounce.consumed) {
-          addParticles(gs, b.x, b.y, b.color, 3);
-          return false;
-        }
-        if (bounce.bounced || bounce.consumed) {
-          break;
-        }
-      }
-      return b.life > 0 && b.x > -10 && b.x < W + 10 && b.y > -10 && b.y < H + 10;
+    stepProjectileFrame({
+      gs,
+      player: p,
+      world: { W, H },
+      weaponIndex: wpnIdx,
+      frame: frameCountRef.current,
+      dashActive: dashRef.current.active > 0,
+      perkMods: perkModsRef.current,
+      stats: statsRef.current,
+      combo: comboRef.current,
+      lastHitSoundRef,
+      setHealth,
+      handlePlayerDeath,
+      drainEnemyDefeats: drainEnemyDefeatsRef.current,
+      addXp,
+      checkAchievements,
+      checkDailyMissions,
+      achievementCheckRef: achCheckRef,
     });
-
-    // ── Enemy bullet movement ──
-    gs.enemyBullets = stepAndCompactInPlace(gs.enemyBullets, eb => {
-      const _tdm = (gs.timeDilationTimer || 0) > 0 ? 0.2 : 1;
-      eb.x += eb.vx * _tdm; eb.y += eb.vy * _tdm; eb.life--;
-      const hitWall = (gs.obstacles || []).some(ob => eb.x >= ob.x && eb.x <= ob.x + ob.w && eb.y >= ob.y && eb.y <= ob.y + ob.h);
-      if (hitWall) return false;
-      return eb.life > 0 && eb.x > -10 && eb.x < W + 10 && eb.y > -10 && eb.y < H + 10;
-    });
-
-    // ── Enemy bullet hits player ──
-    if (dashRef.current.active <= 0) {
-      gs.enemyBullets.forEach(eb => {
-        const hit = resolveEnemyProjectilePlayerHit({
-          projectile: eb,
-          player: p,
-          dashActive: dashRef.current.active > 0,
-          glassjaw: !!gs.glassjaw,
-          glassjawMult: gs.glassjawMult || 2,
-          armorMult: gs._treeArmorMult || 1,
-        });
-        if (hit.hit) {
-          eb.life = hit.projectileLife;
-          applyObservedPlayerDamage(gs, { healthAfter: hit.health, frame: frameCountRef.current, kind: "projectile", sourceType: eb.sourceType, sourceName: eb.sourceName || "Enemy projectile" });
-          p.invincible = hit.invincibleFrames; gs.screenShake = hit.screenShake; gs.damageFlash = hit.damageFlash;
-          { const _kb = Math.hypot(eb.vx, eb.vy) || 1; gs.shakeDirX = (eb.vx / _kb) * 0.8; gs.shakeDirY = (eb.vy / _kb) * 0.8; }
-          gs.damageThisWave = (gs.damageThisWave || 0) + 1;
-          setHealth(Math.max(0, p.health));
-          addText(gs, p.x, p.y - 30, "-" + Math.floor(hit.damage), "#FF4444");
-          rumbleGamepad(0.3, 0.45, 100);
-          if (hit.dead) handlePlayerDeath(gs);
-        }
-      });
-    }
-
-    // ── Grenade logic ──
-    gs.grenades = stepAndCompactInPlace(gs.grenades, g => {
-      g.x += g.vx; g.y += g.vy; g.vx *= 0.96; g.vy *= 0.96; g.life--;
-      if (g.life <= 0) {
-        addParticles(gs, g.x, g.y, "#FF4500", 20);
-        addParticles(gs, g.x, g.y, "#FFD700", 12, undefined, "spark");
-        addParticles(gs, g.x, g.y, "#777777", 8, undefined, "smoke");
-        addParticles(gs, g.x, g.y, "#8A6A3A", 6, undefined, "debris");
-        addText(gs, g.x, g.y, "BOOM!", "#FF4500", true);
-        gs.screenShake = 15;
-        gs.explosionFlash = { x: g.x, y: g.y, life: 3 }; // brief light halo (drawGame)
-        // S155: persistent scorch stamped into the prerendered underlay
-        // (replaces the S145 terrain-stain push, which stopped rendering once
-        // terrain moved into the static background layer).
-        stampArenaDecal(gs, { kind: "scorch", x: g.x, y: g.y, size: 30, alpha: 0.4 });
-        gs.enemies.forEach(e => {
-          const _gradius = 130 * (gs.settGrenadeRadMult || 1);
-          const blast = resolveGrenadeEnemyDamage({
-            grenade: g,
-            enemy: e,
-            radius: _gradius,
-            damageMult: perkModsRef.current.grenadeDamageMult || 1,
-          });
-          if (blast.hit) {
-            const result = applyEnemyDamage(e, blast.damage, { source: "grenade", weaponName: "GRENADE" });
-            e.hitFlash = 10;
-            gs.totalDamage += result.applied;
-          }
-        });
-        return false;
-      }
-      return true;
-    });
-    drainEnemyDefeatsRef.current(gs);
-
-    // ── Railgun beam: instant hitscan damage ──
-    if (gs.pendingBeam) {
-      const { ox, oy, cos, sin, maxT, weaponIdx: pbWpn } = gs.pendingBeam;
-      gs.pendingBeam = null;
-      const pbWeapon = WEAPONS[pbWpn];
-      const pbDmgMult = (perkModsRef.current.damageMult || 1) * (1 + (gs.weaponUpgrades?.[pbWpn] || 0) * 0.25);
-      gs.enemies.forEach(e => {
-        if (e.health <= 0) return;
-        const ex = e.x - ox, ey = e.y - oy;
-        const proj = ex * cos + ey * sin;
-        const perp = Math.abs(ex * sin - ey * cos);
-        if (proj > 0 && proj < maxT && perp < e.size / 2 + 7) {
-          if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, e.x, e.y, "#8844FF", 3); return; }
-          const effectiveCrit = CRIT_CHANCE + (perkModsRef.current.critBonus || 0) + (gs.critBonus || 0);
-          const isCrit = getRunRng(gs, "combat")() < effectiveCrit;
-          const _pbRageMult = (gs.rageTimer || 0) > 0 ? 1.75 : 1.0;
-          const _pbJugMult = (e.typeIndex === 17 && (e.jugShield || 0) > 0) ? 0.15 : 1.0;
-          const dmg = pbWeapon.damage * pbDmgMult * pbComboMult * (isCrit ? CRIT_MULT + (gs.critMultBonus || 0) : 1) * (e.dmgMult || 1) * _pbRageMult * _pbJugMult;
-          const railDamage = applyEnemyDamage(e, dmg, {
-            source: "rail",
-            weaponIdx: pbWpn,
-            weaponName: pbWeapon.name,
-          });
-          e.hitFlash = isCrit ? 15 : 8;
-          gs.totalDamage += railDamage.applied;
-          if (perkModsRef.current.lifesteal) {
-            const _lsMult = (perkModsRef.current.comboVampireMult && comboRef.current.count > 0) ? 2 : 1;
-            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal * _lsMult);
-            setHealth(Math.floor(p.health));
-          }
-          if (isCrit) {
-            statsRef.current.crits++;
-            if (perkModsRef.current.critGrantsXp) addXp(10);
-          }
-          addParticles(gs, e.x, e.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
-          addText(gs, e.x, e.y - e.size / 2 - 8, isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(cosmeticRandom() * HITMARKERS.length)], isCrit ? "#FFD700" : "#FFF");
-        }
-      });
-      drainEnemyDefeatsRef.current(gs);
-      gs.screenShake = Math.max(gs.screenShake, 10);
-    }
-
-    // ── Bullet-enemy collision ──
-    gs.bullets.forEach(b => {
-      if (b.life <= 0) return;
-      gs.enemies.forEach(e => {
-        if (e.health <= 0) return;
-        if (bulletEnemyCollision(b, e).hit) {
-          if (!b.statHit) { b.statHit = true; statsRef.current.totalHits = (statsRef.current.totalHits || 0) + 1; }
-          // Shield pulse blocks all damage
-          if (e.shieldPulseActive) {
-            addParticles(gs, b.x, b.y, "#00BFFF", 4);
-            b.life = 0; return;
-          }
-          const { isCrit } = rollCrit({
-            baseCrit: CRIT_CHANCE,
-            perkCrit: perkModsRef.current.critBonus || 0,
-            runCrit: gs.critBonus || 0,
-            rng: getRunRng(gs, "combat"),
-          });
-          // Summoner invulnerability while summons alive
-          if (e.typeIndex === 18 && e.summonerInvuln) { addParticles(gs, b.x, b.y, "#8844FF", 3); b.life = 0; return; }
-          const { damage: dmg } = computeBulletDamage({
-            bullet: b,
-            enemy: e,
-            player: p,
-            comboCount: comboRef.current.count,
-            critMult: CRIT_MULT,
-            critMultBonus: gs.critMultBonus || 0,
-            isCrit,
-            lastResort: !!perkModsRef.current.lastResort,
-            rageActive: (gs.rageTimer || 0) > 0,
-          });
-          // Drain juggernaut shield if active
-          if (e.typeIndex === 17 && (e.jugShield || 0) > 0) {
-            const rawDmg = computeJuggernautShieldDamage({ bulletDamage: b.damage, comboCount: comboRef.current.count, isCrit, critMult: CRIT_MULT });
-            e.jugShield = Math.max(0, e.jugShield - rawDmg);
-            if (e.jugShield <= 0) {
-              e.jugShieldRegenDelay = 240;
-              addText(gs, e.x, e.y - 40, "🛡 SHIELD BROKEN!", "#FF6600");
-              addText(gs, W / 2, H / 3, "🦏 SHIELD SHATTERED!", "#FF6600", true);
-              gs.screenShake = Math.max(gs.screenShake, 14);
-              addParticles(gs, e.x, e.y, "#5599FF", 20);
-            }
-          }
-          const projectileDamage = applyEnemyDamage(e, dmg, {
-            source: "projectile",
-            weaponIdx: b.wpnIdx ?? wpnIdx,
-            weaponName: WEAPONS[b.wpnIdx ?? wpnIdx]?.name || "PROJECTILE",
-            beatEligible: true,
-          });
-          e.hitFlash = isCrit ? 15 : 8;
-          gs.totalDamage += projectileDamage.applied;
-          // Chain Lightning: 20% chance to arc to nearest enemy for 50% damage
-          if (gs.chainLightning && getRunRng(gs, "combat")() < 0.20) {
-            const arcTarget = findLightningChainTarget(gs.enemies, e, { range: 200 });
-            if (arcTarget) {
-              const arcDmg = dmg * 0.5;
-              const arcDamage = applyEnemyDamage(arcTarget, arcDmg, {
-                source: "chain-lightning",
-                weaponIdx: b.wpnIdx ?? wpnIdx,
-                weaponName: "CHAIN LIGHTNING",
-                beatEligible: true,
-              });
-              arcTarget.hitFlash = 8;
-              gs.totalDamage += arcDamage.applied;
-              gs.lightningArcs = gs.lightningArcs || [];
-              gs.lightningArcs.push({ x1: e.x, y1: e.y, x2: arcTarget.x, y2: arcTarget.y, life: 8, maxLife: 8 });
-            }
-          }
-          // Lifesteal
-          if (perkModsRef.current.lifesteal) {
-            const _lsMult2 = (perkModsRef.current.comboVampireMult && comboRef.current.count > 0) ? 2 : 1;
-            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.lifesteal * _lsMult2);
-            setHealth(Math.floor(p.health));
-          }
-          // Pierced lifesteal: Bloodlust + Penetrator synergy
-          if (perkModsRef.current.piercedLifesteal && b.pierceLeft > 0) {
-            p.health = Math.min(p.maxHealth, p.health + dmg * perkModsRef.current.piercedLifesteal);
-            setHealth(Math.floor(p.health));
-          }
-          if (isCrit) {
-            statsRef.current.crits++;
-            if (perkModsRef.current.critGrantsXp) addXp(10);
-          }
-          const _hn = performance.now();
-          if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); vibrate(isCrit ? "crit" : "hit"); }
-          addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5, undefined, "spark");
-          gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
-          addText(gs, e.x + (cosmeticRandom() - 0.5) * 20, e.y - e.size / 2 - cosmeticRandom() * 10,
-            isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(cosmeticRandom() * HITMARKERS.length)],
-            isCrit ? "#FFD700" : "#FFF");
-          // Precision hit bonus: bullet near enemy core → 1 💩 coin + streak multiplier
-          if (!e.isBossEnemy && isPrecisionHit(b, e)) {
-            gs.precisionStreak = (gs.precisionStreak || 0) + 1;
-            statsRef.current.bestPrecisionStreak = Math.max(statsRef.current.bestPrecisionStreak || 0, gs.precisionStreak);
-            if (gs.precisionStreak > (gs._precisionPeakStreak || 0)) {
-              gs._precisionPeakStreak = gs.precisionStreak;
-              gs._precisionPeakFrame = frameCountRef.current;
-            }
-            soundPrecisionClick(gs.precisionStreak);
-            if (gs.precisionStreak === 5) soundPrecisionLock();
-            gs.coins = (gs.coins || 0) + 1;
-            if (gs.precisionStreak === 3) {
-              gs.coins += 2;
-              addText(gs, e.x, e.y - e.size - 10, "🎯 PRECISION BURST! +3💩", "#FF88FF", true);
-              addParticles(gs, e.x, e.y, "#FF88FF", 8);
-            } else if (gs.precisionStreak > 3) {
-              addText(gs, e.x, e.y - e.size - 10, `🎯 ×${gs.precisionStreak} +1💩`, "#CC88FF");
-            } else {
-              addText(gs, e.x, e.y - e.size - 10, "🎯 +1💩", "#FFAAFF");
-            }
-            // Beat-precision bonus: precision hit during beat vulnerability window → +2💩
-            // Window widens with streak: base 8 frames + 1 extra per 5 streak (max +4 at streak≥20)
-            try {
-              const _bpBpm = getMusicBPM();
-              const _bpFpb = Math.round(60 / _bpBpm * 60);
-              const _bpPhase = frameCountRef.current % _bpFpb;
-              const _bpStreak = gs.precisionStreak || 0;
-              const _bpWindow = 8 + Math.min(4, Math.floor(_bpStreak / 5));
-              if (_bpPhase < _bpWindow) {
-                gs.coins = (gs.coins || 0) + 2;
-                addText(gs, e.x, e.y - e.size - 22, "🎵🎯 BEAT PRECISION! +2💩", "#00FFEE");
-                addParticles(gs, e.x, e.y, "#00FFEE", 5);
-                try {
-                  const _rmTotal = trackRhythmMasteryHit();
-                  if ([100, 500, 1000, 2500, 5000].includes(_rmTotal)) {
-                    addText(gs, e.x, e.y - e.size - 40, `🎵 RHYTHM MASTER ×${_rmTotal}!`, "#FFD700", true);
-                  }
-                } catch {}
-              }
-            } catch {}
-            // Flow state: streak ≥10 → 1.5s bullet-time (genre-first mechanical reward)
-            if (gs.precisionStreak >= 10 && !(gs._flowStateCooldown > 0)) {
-              gs.timeDilationTimer = Math.max(gs.timeDilationTimer || 0, 90);
-              gs._flowStateCooldown = 300;
-              gs._flowStateFiredCount = (gs._flowStateFiredCount || 0) + 1;
-              addText(gs, e.x, e.y - e.size - 30, "⚡ FLOW STATE", "#00FFEE", true);
-              addParticles(gs, e.x, e.y, "#00FFEE", 12);
-            }
-          } else if (!e.isBossEnemy) {
-            gs.precisionStreak = 0;
-          }
-          // Pierce logic
-          const pierce = resolvePierce({ pierceLeft: b.pierceLeft || 0 });
-          b.pierceLeft = pierce.nextPierceLeft;
-          if (pierce.consumeBullet) b.life = 0;
-
-        }
-      });
-    });
-    drainEnemyDefeatsRef.current(gs);
-    if (achCheckRef.current) { checkAchievements(gs); checkDailyMissions(gs); achCheckRef.current = false; }
 
     // ── Flow field rebuild (every 30 frames or on significant player movement) ──
     gs._ffTimer = (gs._ffTimer || 0) + 1;
@@ -4109,15 +3876,13 @@ export default function CallOfDoodie() {
     } else { gs._nearDeathActive = false; }
     if (gs.coinMultTimer > 0) { gs.coinMultTimer--; if (gs.coinMultTimer === 0) { gs.coinMultActive = false; } }
     if (gs.coinStreakTimer > 0) { gs.coinStreakTimer--; if (gs.coinStreakTimer === 0) { gs.coinStreakKills = 0; } }
-
-
     gs._deathSoundsThisFrame = 0; // reset death-sound throttle each frame
     frameCountRef.current++;
 
     // ────────────────── RENDER ──────────────────────────────────────────────
     drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
-  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
+  }, [shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, operationStateRef, resolveOperationWave, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
 
   // ── Start / stop animation ─────────────────────────────────────────────────
   useGameLoop(gameLoop, screen === "game", frameRef, {
@@ -4393,6 +4158,32 @@ export default function CallOfDoodie() {
     writePreference("cod-primary-weapon", String(next));
   }, []);
 
+  const returnFromOperationToMenu = useCallback(() => {
+    stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0);
+    releaseAllInputs("operation-menu");
+    pausedRef.current = false; setPaused(false); setPauseReason(null);
+    resetOperation();
+    setScreen("menu");
+  }, [releaseAllInputs, resetOperation]);
+
+  const rematchCompletedOperation = useCallback(() => {
+    const receipt = operationCompleteRef.current;
+    if (!receipt?.operationId) {
+      returnFromOperationToMenu();
+      return;
+    }
+    stopMusic(); stopAmbient(); stopDangerDrone(); setDangerIntensity(0);
+    pausedRef.current = false; setPaused(false); setPauseReason(null); setOperationCompleteReceipt(null);
+    operationCompleteRef.current = null;
+    // A completion rematch is an immediate authored action; bypass a second draft.
+    draftShownRef.current = true;
+    void startGame(receipt.seed, {
+      operationId: receipt.operationId,
+      operationMode: true,
+      operationRoute: receipt.route,
+    });
+  }, [operationCompleteRef, returnFromOperationToMenu, setOperationCompleteReceipt, startGame]);
+
   // ────────────────────────────────────────────────────────────────────────
   // RENDER
   // ────────────────────────────────────────────────────────────────────────
@@ -4562,8 +4353,12 @@ export default function CallOfDoodie() {
           filter: colorblindMode ? "saturate(0.65) contrast(1.35) brightness(1.08) hue-rotate(-15deg)" : "none" }}
       />
 
+      <OperationRuntimeLayer {...{
+        operationState, operationArenaState, operationDirective, operationCompleteReceipt, paused, gamepadConnected,
+        onInteract: applyOperationInteraction, onContinue: returnFromOperationToMenu, onRematch: rematchCompletedOperation,
+      }} />
       {/* Pause menu */}
-      {paused && (
+      {paused && !operationCompleteReceipt && (
         <AsyncPanelBoundary><PauseMenu
           wave={wave} timeSurvived={timeSurvived} score={score} isMobile={isMobile}
           achievementsUnlocked={achievementsUnlocked} fmtTime={fmtTime}

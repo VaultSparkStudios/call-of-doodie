@@ -1,28 +1,34 @@
-# Implementation Plan — Session 154
+# Implementation Plan — Session 155
 
-Source: `docs/AUDIT_2026-08-13_2.json`
+Source: `docs/AUDIT_2026-08-15.json`
 
-Status: **COMPLETE** — all five L2 items implemented; second-order innovation pack exhausted; protocol drift 42/42; full Vitest 196 files / 1,158 tests; isolated staging 7/7.
+Status: **IMPLEMENTED; STAGING VERIFIED; PRODUCTION PUBLICATION IN PROGRESS** — all buildable audit lanes are integrated and the corrected candidate passes local, hosted, and rendered-pixel courts. Participant-gated campaign progression and realtime co-op remain honestly gated.
 
-## Wave A — Restore executable foundations
+## Wave A — Preserve the existing game while opening an encounter seam
 
-1. **propagation-task-board-contract** — restore the shared task abstract syntax tree, section-checkbox, and reconciliation APIs so router, task-work, innovation-pack, and schema gates can load.
-2. **propagation-status-writer-composition** — combine schema/test-signal validation with locked atomic writes, file-targeted updates, and the canonical project-status schema.
-3. **secrets-universe-provenance** — restore local-first/sibling capability-map discovery, provenance, and fail-closed zero-universe audits while retaining action probes and status emission.
+1. **mode-rules-and-encounter-extraction** — move mode policy and encounter lifecycle decisions behind pure contracts; restore at least 250 lines of `App.jsx` headroom while retaining legacy mode/input/replay behavior.
+2. **operation-encounter-spine** — add one deterministic three-act Operation with BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS encounters, a route fork, checkpoints, mission score, and replay receipt.
 
-## Wave B — Restore founder-facing truth
+## Wave B — Make Operations spatial, readable, and adaptive
 
-4. **startup-brief-chronology-and-pressure** — merge addendum-aware SIL parsing with latest-session date resolution, canonical Human Pressure rendering, current testing-surface selection, and invariant-preserving status self-heal.
+3. **operation-map-state-and-interactables** — add deterministic doors, pumps, valves, barricades, turrets, extraction toilets, watchtower v0, three visible state transitions, multi-input affordances, and replay receipts.
+4. **deterministic-mission-director** — select reason-coded encounters and optional contracts locally from observed run state; no hosted inference or hidden rubber-banding.
+5. **operations-and-arcade-mode-taxonomy** — make Operations the primary front-door path while preserving all eight Arcade/Rivals modes and every replay identifier.
 
-## Wave C — Make the regression class executable
+## Wave C — Turn the vertical slice into a staged product path
 
-5. **protocol-import-compatibility-court** — extend protocol drift with named-export probes for task-board, project-status, and SIL contracts, then behavior-smoke router and secrets paths.
+6. **async-operation-rivals** — add bounded split/branch ghosts, rematch cartridges, and trust-separated Operation rivalry receipts.
+7. **three-operation-mini-campaign** — author three concise schema-reusing Operations with recurring comic antagonists and one prior-route consequence.
+8. **operation-playtest-decision-court** — collect only opt-in, aggregate paired Standard-vs-Operation evidence with explicit sample thresholds and no causal claims.
+9. **realtime-capacity-and-trust-gate** — check in the authoritative co-op capacity, abuse, reconnect, score-boundary, hard-cap, and kill-switch model plus a synthetic benchmark.
+10. **authoritative-two-player-operation-coop** — remain gated until the audit's participant threshold is honestly met; ship the executable capacity/trust prerequisite, never fabricate the missing participant evidence.
 
 ## Verification order
 
-- Focused helper and renderer courts after each item.
-- Router, innovation-pack, protocol drift, schema lint, strict lint, and Startup Brief regeneration.
-- Full test corpus and deployable build.
-- Isolated Cloudflare staging and release/security/sanitization gates before any direct-main push.
+- Focused Vitest courts after every foundation and integration boundary.
+- Strict lint, architecture/schema/runtime/public/security/dependency/assets and deployable build gates.
+- Real browser desktop/mobile captures in Porcelain Day and Sewer Night; inspect and hash-bind the touched Operation states.
+- Isolated staging deploy and full release gate before direct-to-`main` publication.
+- Exact-revision production deployment, immutable/custom-domain probes, continuous integration verification, and canonical Session 155 closeout.
 
-No player-facing feature, balance, or visual change is authorized by this audit; evidence-gated product items remain deferred.
+No SPARKED lifecycle promotion is implied: engineering publication and full deployment are authorized, while participant, physical-device, reply-as-mail, and Obelisk launch evidence remain independently gated.

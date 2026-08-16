@@ -1,6 +1,31 @@
+# Latest Handoff — Session 155
+
+Session Intent: Complete one continuous `/arc` from synchronized main through a premise-verified gameplay-direction audit, all repository-owned implementation, isolated staging, rendered-pixel QA, independent release review, canonical closeout, direct-main publication, and exact production verification. Preserve FORGE/public-unlaunched lifecycle truth.
+
+## Where We Left Off (Session 155)
+
+- Shipped: nine improvements across architecture, authored Operations, arena interaction, deterministic guidance, front-door/runtime UI, async rivalry, playtest evidence, realtime capacity trust, and public contracts.
+- Tests: 1,205/1,205 passing across 209 files · delta: +46 assertions and +13 files from Session 154.
+- Deploy: corrected isolated staging at `https://session-155-staging.call-of-doodie.pages.dev/` (immutable `https://51e02fe5.call-of-doodie.pages.dev/`); direct-main production publication follows canonical closeout.
+- Three authored Operations reuse one deterministic seven-encounter contract. Two selectable routes alter persistent arena state and final receipts; each wave resolves once and encounter seven forces BOSS.
+- Operation score/history/rematch/rival evidence is local and trust-separated from the standard leaderboard. All eight Arcade modes and replay identifiers remain intact behind ModeRules.
+- App architecture closes at 4,753/5,000 lines and 1,498/1,775 game-loop lines. Projectile and Operation orchestration are extracted and independently tested.
+- Broad staging visuals pass 1,020/1,020; focused live Operation and completion states pass 36/36 each. Direct pixel review found and fixed the mobile training-card overlap; 26 captures are hash-bound across both themes and 390/1440px.
+- Paired playtests collect no identity or free text and export aggregate-only evidence. Campaign progression is not live before 10 receipts; realtime co-op is not connected before 20 receipts plus a real-service capacity rerun.
+- Full Vitest, strict lint, deployable build, schema/architecture/public/dependency/assets/runtime/security, secrets scan, and npm audit zero are green. No dependency or variable-cost service was added.
+- Next: complete independent release gate, closeout/push, exact production deploy, immutable/custom-domain smoke, and workflow verification. Do not promote SPARKED.
+
+## Impact Summary
+
+**Headline.** Operations replace structural wave sameness with authored objectives, route consequences, and player-controlled arena state while retaining the mature comedy-combat, replay, Arcade, and trust spine.
+
+**Evidence.** 209 files / 1,205 tests; 1,092/1,092 hosted/focused pixel checks; 26 direct-reviewed captures; App headroom 247/277 lines; security audit zero; staging `51e02fe5`; campaign and realtime gates remain explicit.
+
+---
+
 # Latest Handoff — Session 154
 
-Session Intent: Complete the founder-authorized S154 `/arc` from synchronized `main` through propagation reconciliation, specialty review, premise-verified audit, complete repository-owned implementation, second-order saturation, isolated staging, closeout, direct-main publication, and exact production verification. Preserve FORGE/public-unlaunched lifecycle truth.
+Session Intent: Run `/start`, then perform a premise-verified game-loop and nine-axis audit focused on making the core gameplay dramatically more fun and less repetitive. Compare and score a revamped wave mode, a Call-of-Duty-style single-player campaign, conventional multiplayer, hybrid combinations, and multiplayer battle royale against the game and systems already built; recommend the strongest route without changing FORGE/public-unlaunched lifecycle truth.
 
 ## Where We Left Off
 

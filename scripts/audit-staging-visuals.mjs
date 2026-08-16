@@ -41,7 +41,7 @@ async function ensurePrimaryAuditSurface(page, storage) {
     await page.evaluate((entries) => {
       for (const [key, value] of Object.entries(entries)) localStorage.setItem(key, value);
     }, storage);
-    await page.reload({ waitUntil: "networkidle" });
+    await page.reload({ waitUntil: "domcontentloaded" });
   }
   await action.waitFor({ state: "visible" });
 }
@@ -66,7 +66,7 @@ try {
     const page = await defaultContext.newPage();
     const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
     console.log(`Default-theme probe: ${route.id} -> ${url.href}`);
-    const response = await page.goto(url.href, { waitUntil: "networkidle" });
+    const response = await page.goto(url.href, { waitUntil: "domcontentloaded" });
     try {
       if (route.primary) await ensurePrimaryAuditSurface(page, defaultVisualAuditStorage());
       else await page.locator("main h1").waitFor({ state: "visible" });
@@ -107,7 +107,7 @@ try {
         const url = new URL(localTarget && route.localPath ? route.localPath : route.path, baseUrl);
         url.searchParams.set("theme", theme);
         console.log(`Capture: ${route.id} / ${theme} / ${width}`);
-        const response = await page.goto(url.href, { waitUntil: "networkidle" });
+        const response = await page.goto(url.href, { waitUntil: "domcontentloaded" });
         try {
           if (route.primary) await ensurePrimaryAuditSurface(page, {
             "cod-theme": theme,

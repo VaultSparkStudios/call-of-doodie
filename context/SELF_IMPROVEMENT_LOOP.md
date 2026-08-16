@@ -4,6 +4,37 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-16 — Session 155 | Total: 998/1000 | Velocity: 9 | Debt: ↓
+
+SIL 998/1000: Replaced the flat-wave-only product ceiling with a deterministic, authored Operation grammar that changes objectives, route consequences, arena state, scoring, completion, and rematch flow while keeping the mature arcade spine stable and refusing to fabricate participant or realtime-network evidence.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full 209-file / 1,205-test corpus, strict lint, schema, architecture, build, public, dependency, runtime, and security gates pass. |
+| Alignment | 100 | → | Authored toilet-war operations deepen the project's readable parody without copying another franchise or weakening guest-first play. |
+| Momentum | 100 | → | All nine ranked audit items reached implemented or implemented-evidence-pending truth in one continuous arc. |
+| Engagement | 99 | ↓ | Seven distinct encounter verbs, persistent route consequences, local mission direction, rivals, and rematch materially widen the loop; participant outcomes remain unmeasured. |
+| Process Qual | 100 | → | Premise review, isolated core contracts, full reconciliation, immutable staging, real-browser state capture, and direct pixel inspection form one falsifiable chain. |
+| Coherence | 100 | ↑ | Command deck, runtime, receipts, public contract, authored campaign, modal actions, and agent-readable pages share one Operation schema. |
+| Security | 100 | → | Operation authority stays local and bounded, aggregate evidence is opt-in, no dependency or secret scope changed, and security scans remain clear. |
+| Ecosystem | 99 | → | Human and agent surfaces agree and async trust is explicit; Obelisk, mail, participant, and realtime service evidence remain external gates. |
+| Capital | 100 | → | Deterministic local systems reuse the existing client and Cloudflare path with no new SaaS, dependency, or per-player compute cost. |
+| Automation | 100 | → | Director, arena, campaign, mission, capacity, rivalry, component, integration, visual-state, and broad hosted courts lock the new boundaries. |
+
+Rolling averages: 3-session 998.0 · 5-session 997.0 · 10-session 992.1 · sparkline `█████`.
+
+Top win: the game now has a schema-driven 12–18 minute authored mode whose routes leave visible, replay-stable consequences, and rendered pixels corrected the mobile arena overlay before release.
+Top gap: no real paired participant corpus exists yet, so campaign escalation and realtime co-op remain behind the declared 10/20 receipt gates.
+Intent outcome: Achieved through full repository implementation, regression saturation, isolated staging, and rendered-pixel proof; authorized direct-main publication and exact production verification complete the release follow-through.
+IGNIS refresh: 44,277 FORGE, down 931 from the stale prior score; the lifecycle remains FORGE and no engineering-release claim depends on this portfolio score.
+
+**Brainstorm**
+1. Build a participant Operation cohort importer/dashboard only after ten valid opt-in paired receipts exist.
+2. Expand finale consequences only when route and repeatedness evidence identifies a real authored-content gap.
+3. Require an authoritative two-client chaos harness before any realtime co-op service or public invitation flow is built.
+
+**Committed to TASK_BOARD:** preserve the 10/20 evidence gates and capacity court; no speculative repo-owned runway was invented.
+
 ## 2026-08-14 — Session 154 | Total: 998/1000 | Velocity: 5 | Debt: ↓
 
 SIL 998/1000: Turned a file-present-but-non-executable propagation event into a composed compatibility boundary, repaired every broad-suite regression it exposed, and proved the result through full local and isolated-hosted gates without inventing player evidence or lifecycle readiness.
@@ -566,11 +597,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 998.7 | 5: 999.0 | 10: 999.0 | 25: 999.6 | all: 964.5 [N=96 canonical parsed sessions]
+Avgs — 3: 998.0 | 5: 997.0 | 10: 992.1
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-08-01 | Session 136 | Total: 999/1000 | Velocity: 13 | protocolVelocity: 13
+Last session: 2026-08-16 | Session 155 | Total: 998/1000 | Velocity: 9 | protocolVelocity: 9
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 

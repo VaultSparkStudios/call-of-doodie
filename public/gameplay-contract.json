@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "gameplay-contract-v2",
+  "schemaVersion": "gameplay-contract-v3",
   "canonicalUrl": "https://callofdoodie.wtf/",
   "publisher": "VaultSpark Studios LLC",
   "rights": "Proprietary — All Rights Reserved, VaultSpark Studios LLC",
@@ -69,8 +69,10 @@
     "dash",
     "grenade",
     "switch_weapon",
+    "interact",
     "choose_perk",
     "choose_route",
+    "resolve_operation_encounter",
     "survive_wave",
     "review_debrief"
   ],
@@ -94,6 +96,83 @@
       "id": "surge",
       "label": "Surge",
       "counterplay": "Kite the center rush, then punish its recovery gap."
+    }
+  ],
+  "operations": [
+    {
+      "id": "blacksite-flush",
+      "title": "BLACKSITE FLUSH",
+      "seed": 3101,
+      "durationMinutes": [
+        12,
+        18
+      ],
+      "encounterVerbs": [
+        "BREACH",
+        "HOLD",
+        "ESCORT",
+        "HUNT",
+        "SABOTAGE",
+        "ESCAPE",
+        "BOSS"
+      ],
+      "routeOptions": [
+        "service-tunnel",
+        "executive-washroom"
+      ],
+      "scoring": "Objectives + tempo + extraction",
+      "campaignProgression": "local-operation-checkpoint",
+      "realtimeCoop": "gated-not-live"
+    },
+    {
+      "id": "porcelain-siege",
+      "title": "PORCELAIN SIEGE",
+      "seed": 4102,
+      "durationMinutes": [
+        12,
+        18
+      ],
+      "encounterVerbs": [
+        "BREACH",
+        "HOLD",
+        "ESCORT",
+        "HUNT",
+        "SABOTAGE",
+        "ESCAPE",
+        "BOSS"
+      ],
+      "routeOptions": [
+        "laundry-annex",
+        "boiler-room"
+      ],
+      "scoring": "Objectives + tempo + extraction",
+      "campaignProgression": "local-operation-checkpoint",
+      "realtimeCoop": "gated-not-live"
+    },
+    {
+      "id": "final-notice",
+      "title": "FINAL NOTICE",
+      "seed": 5103,
+      "durationMinutes": [
+        12,
+        18
+      ],
+      "encounterVerbs": [
+        "BREACH",
+        "HOLD",
+        "ESCORT",
+        "HUNT",
+        "SABOTAGE",
+        "ESCAPE",
+        "BOSS"
+      ],
+      "routeOptions": [
+        "records-office",
+        "executive-penthouse"
+      ],
+      "scoring": "Objectives + tempo + extraction",
+      "campaignProgression": "local-operation-checkpoint",
+      "realtimeCoop": "gated-not-live"
     }
   ],
   "modes": [

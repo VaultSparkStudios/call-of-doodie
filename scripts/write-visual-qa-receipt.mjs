@@ -74,6 +74,54 @@ if (playtestStateDirArg) {
   }
 }
 
+const operationStateDirArg = valueAfter("--operation-state-dir", null);
+let operationStateReceipt = null;
+if (operationStateDirArg) {
+  const operationStateDir = path.resolve(root, operationStateDirArg);
+  operationStateReceipt = JSON.parse(fs.readFileSync(path.join(operationStateDir, "operation-visual-receipt.json"), "utf8"));
+  if (!operationStateReceipt?.summary?.pass) throw new Error("Refusing visual receipt: Operation deck/arena state checks did not pass.");
+  for (const capture of operationStateReceipt.captures) {
+    for (const screenshot of capture.screenshots) {
+      selected.push({
+        source: path.join(operationStateDir, screenshot.file),
+        file: screenshot.file,
+        theme: capture.theme === "sewer-night" ? "dark" : "light",
+        projectTheme: capture.theme,
+        width: capture.width,
+        height: 1000,
+        page: screenshot.file.includes("deck")
+          ? "Authored Operation command deck"
+          : screenshot.file.includes("complete")
+            ? "Operation arena interaction completed"
+            : "Live Operation arena command overlay",
+      });
+    }
+  }
+}
+
+const operationModalDirArg = valueAfter("--operation-modal-dir", null);
+let operationModalReceipt = null;
+if (operationModalDirArg) {
+  const operationModalDir = path.resolve(root, operationModalDirArg);
+  operationModalReceipt = JSON.parse(fs.readFileSync(path.join(operationModalDir, "operation-modal-visual-receipt.json"), "utf8"));
+  if (!operationModalReceipt?.summary?.pass) throw new Error("Refusing visual receipt: Operation completion state checks did not pass.");
+  for (const capture of operationModalReceipt.captures) {
+    for (const screenshot of capture.screenshots) {
+      selected.push({
+        source: path.join(operationModalDir, screenshot.file),
+        file: screenshot.file,
+        theme: capture.theme === "sewer-night" ? "dark" : "light",
+        projectTheme: capture.theme,
+        width: capture.width,
+        height: 1000,
+        page: screenshot.file.includes("command-post")
+          ? "Expanded opt-in paired Operation playtest command post"
+          : "Operation completion receipt and honest gates",
+      });
+    }
+  }
+}
+
 for (const capturePath of reviewedCapturePaths) {
   const source = path.resolve(root, capturePath);
   if (!fs.existsSync(source)) throw new Error(`Reviewed capture missing: ${capturePath}`);
@@ -130,10 +178,11 @@ const receipt = {
     surface: "Expanded Replay Coverage Passport in Run History",
     checks: stateReceipt.summary,
   } : null,
-  additionalTouchedStates: playtestStateReceipt ? [{
-    surface: "Playtest Flight Receipt and aggregate Playtest Command Post",
-    checks: playtestStateReceipt.summary,
-  }] : [],
+  additionalTouchedStates: [
+    ...(playtestStateReceipt ? [{ surface: "Playtest Flight Receipt and aggregate Playtest Command Post", checks: playtestStateReceipt.summary }] : []),
+    ...(operationStateReceipt ? [{ surface: "Operation command deck and live arena interaction", checks: operationStateReceipt.summary }] : []),
+    ...(operationModalReceipt ? [{ surface: "Operation completion receipt and opt-in paired playtest command post", checks: operationModalReceipt.summary }] : []),
+  ],
   themes: ["dark", "light"],
   captures,
   inspection: {
@@ -150,6 +199,8 @@ const receipt = {
       ...(reviewedCapturePaths.some((capturePath) => !path.basename(capturePath).includes("mastery") && !path.basename(capturePath).includes("drill-outcome")) ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
       ...(stateReceipt ? [`The expanded Replay Coverage Passport passed ${stateReceipt.summary.passed}/${stateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
       ...(playtestStateReceipt ? [`The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed ${playtestStateReceipt.summary.passed}/${playtestStateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
+      ...(operationStateReceipt ? [`The hosted authored Operation deck and live arena interaction passed ${operationStateReceipt.summary.passed}/${operationStateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),
+      ...(operationModalReceipt ? [`The Operation completion receipt and expanded opt-in paired playtest command post passed ${operationModalReceipt.summary.passed}/${operationModalReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),
     ],
     fixesApplied: fixNotes.length ? fixNotes : ["No fix narrative supplied; the source matrix is authoritative."],
     blockingDefectsOpen: 0,

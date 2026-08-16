@@ -11,6 +11,7 @@ import { REPLAY_DIFFICULTIES, REPLAY_MODES, REPLAY_STARTERS } from "../../src/ut
 import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
 import { killsRequiredForAccountLevel, PRESTIGE_REQUIRED_LEVEL } from "../../src/utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../../src/utils/replayCoverage.js";
+import { OPERATIONS } from "../../src/systems/operationCampaign.js";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
@@ -19,7 +20,7 @@ function label(id) {
 export function buildPublicGameplayContract() {
   const bossTypes = new Set(BOSS_ROTATION);
   return {
-    schemaVersion: "gameplay-contract-v2",
+    schemaVersion: "gameplay-contract-v3",
     canonicalUrl: "https://callofdoodie.wtf/",
     publisher: "VaultSpark Studios LLC",
     rights: "Proprietary — All Rights Reserved, VaultSpark Studios LLC",
@@ -30,8 +31,19 @@ export function buildPublicGameplayContract() {
       replayCoverage: buildReplayCoveragePassport(),
       publicWriteActions: "not-offered",
     },
-    loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "choose_perk", "choose_route", "survive_wave", "review_debrief"],
+    loop: ["move", "shoot", "dash", "grenade", "switch_weapon", "interact", "choose_perk", "choose_route", "resolve_operation_encounter", "survive_wave", "review_debrief"],
     formations: Object.entries(FORMATION_COUNTERPLAY).map(([id, formation]) => ({ id, label: formation.label, counterplay: formation.drill })),
+    operations: OPERATIONS.map((operation) => ({
+      id: operation.id,
+      title: operation.title,
+      seed: operation.seed,
+      durationMinutes: operation.durationMinutes,
+      encounterVerbs: operation.encounters.map((encounter) => encounter.verb),
+      routeOptions: operation.routeOptions,
+      scoring: operation.scoring.summary,
+      campaignProgression: "local-operation-checkpoint",
+      realtimeCoop: "gated-not-live",
+    })),
     modes: REPLAY_MODES.map((id) => ({ id, label: label(id), seededReplayCode: true })),
     difficulties: Object.entries(DIFFICULTIES).map(([id, difficulty]) => ({
       id,

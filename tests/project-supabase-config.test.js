@@ -3,6 +3,7 @@ import {
   PROJECT_SUPABASE_REF,
   PROJECT_SUPABASE_URL,
   extractExpectedSupabaseConfig,
+  extractProjectAnonKeyFromManagement,
   isProjectAnonKey,
 } from "../scripts/lib/project-supabase-config.mjs";
 
@@ -24,5 +25,13 @@ describe("project Supabase public config", () => {
     expect(extractExpectedSupabaseConfig(`x=${JSON.stringify(PROJECT_SUPABASE_URL)};k=${JSON.stringify(expected)}`))
       .toEqual({ supabaseUrl: PROJECT_SUPABASE_URL, anonKey: expected });
     expect(extractExpectedSupabaseConfig(`x="https://other.supabase.co";k="${expected}"`)).toBeNull();
+  });
+
+  it("accepts only this project's anon identity from management API shapes", () => {
+    const expected = token({ ref: PROJECT_SUPABASE_REF, role: "anon" });
+    const service = token({ ref: PROJECT_SUPABASE_REF, role: "service_role" });
+    expect(extractProjectAnonKeyFromManagement([{ name: "service_role", api_key: service }, { name: "anon", api_key: expected }])).toBe(expected);
+    expect(extractProjectAnonKeyFromManagement({ api_keys: [{ value: expected }] })).toBe(expected);
+    expect(extractProjectAnonKeyFromManagement([{ api_key: service }])).toBeNull();
   });
 });

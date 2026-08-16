@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-13T07:37:20.117Z",
-  "stagingUrl": "https://session-153-staging.call-of-doodie.pages.dev/",
-  "workingTreeUiSha256": "43d1adbcb44e55df257c44b2b16bab8915259696ef92aa20950a9aa1bc704035",
+  "capturedAt": "2026-08-16T05:57:27.570Z",
+  "stagingUrl": "https://session-155-staging.call-of-doodie.pages.dev",
+  "workingTreeUiSha256": "33c27d89d09b1e4aba28dd83f30b4ee0ce142110c6eb839ef2d815efaf313c9b",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-153-staging/visual-audit-receipt.json",
-    "sha256": "b609de296d8cee1bece751b06e06a9e83633117756e8cf61e4c2e6a1e8fda866",
+    "receipt": "output/playwright/session-155-staging/visual-audit-receipt.json",
+    "sha256": "513e0594fac08c43cdaedf70ab9bca066fc95c8e3dd7ade4b5458680ee7dec2f",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -13,23 +13,24 @@
       "failures": []
     }
   },
-  "touchedState": {
-    "surface": "Expanded Replay Coverage Passport in Run History",
-    "checks": {
-      "pass": true,
-      "captures": 4,
-      "checks": 32,
-      "passed": 32
-    }
-  },
+  "touchedState": null,
   "additionalTouchedStates": [
     {
-      "surface": "Playtest Flight Receipt and aggregate Playtest Command Post",
+      "surface": "Operation command deck and live arena interaction",
       "checks": {
         "pass": true,
-        "captures": 8,
-        "checks": 44,
-        "passed": 44
+        "checks": 36,
+        "passed": 36,
+        "failures": []
+      }
+    },
+    {
+      "surface": "Operation completion receipt and opt-in paired playtest command post",
+      "checks": {
+        "pass": true,
+        "checks": 36,
+        "passed": 36,
+        "failures": []
       }
     }
   ],
@@ -40,7 +41,7 @@
   "captures": [
     {
       "file": "home-dark-mobile.png",
-      "sha256": "b00966afb6a792b5e538d3e14eb472e6f9ca141cad886435621a08316c4d25a3",
+      "sha256": "4e8c36d86b6e99bc17b279a05601c51a9f2f0b79835794aeaec78cf3cf4fd6c7",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -51,7 +52,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "ed5ad633ea28b6f79fdadd2284df571b2ec982eee8b9b555e49401526aac79c8",
+      "sha256": "fee2c73ac1c70ab07fb4f8bf06fce9d60b4cc7ad9e456f11b48f484cb8324f92",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -84,7 +85,7 @@
     },
     {
       "file": "modes-dark-desktop.png",
-      "sha256": "43b68e5c2c15493bb9595c4bf29f42b68988c18c441aafd2cbdb78b4e1deb3f3",
+      "sha256": "569729072993ffa64860eb963c6ae7f75de46e1db89180873a4dba1b6b448aed",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -95,7 +96,7 @@
     },
     {
       "file": "leaderboard-light-mobile.png",
-      "sha256": "4ea6e72891c9cc51f261c9b395e98eac6cbee02f47275e2143cdb3300e0a6b3c",
+      "sha256": "b0d07f24470d3dffdd6bbf8726fbaab18a92ca27d218e5f3ad36f870774f33ce",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -105,136 +106,224 @@
       "page": "Leaderboard surface"
     },
     {
-      "file": "replay-passport--sewer-night--390.png",
-      "sha256": "4c9e2d6e022f4f5f2a3749402dec488d5fe7d48c75c64b979333f5e6eb7b76ab",
+      "file": "operation-deck--sewer-night--390.png",
+      "sha256": "b4ec16dea025a472d5e5f8e5b646216a9c4443d8bb2d6c7b0c27d1950496d82a",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 1000
       },
-      "page": "Expanded Replay Coverage Passport in Run History"
+      "page": "Authored Operation command deck"
     },
     {
-      "file": "replay-passport--sewer-night--1440.png",
-      "sha256": "44acd2c4d91eaa477e7f45023180fabcd2613697ec33aab6ac4474083966faf6",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
-    },
-    {
-      "file": "replay-passport--porcelain-day--390.png",
-      "sha256": "8008009857a794619a0fa28f40769afde37450e582412c28fc7583c9affc3a78",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
-    },
-    {
-      "file": "replay-passport--porcelain-day--1440.png",
-      "sha256": "af51dccfb43018ac9dbb9cd89634a6268912ab9c7564d95acca0e32359c3a627",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded Replay Coverage Passport in Run History"
-    },
-    {
-      "file": "playtest-flight--sewer-night--390.png",
-      "sha256": "7ae81d967e30567ccc5ab65fc2bc60132a3b20b644f872fd65fcd8827668aacd",
+      "file": "operation-arena--sewer-night--390.png",
+      "sha256": "1ac5e6d74416315cbf6462a19547036901613c1bf7e58eca4a8dfe11171c251e",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 1000
       },
-      "page": "Structured Playtest Flight Receipt after an observed run"
+      "page": "Live Operation arena command overlay"
     },
     {
-      "file": "playtest-pulse--sewer-night--390.png",
-      "sha256": "9a148fc0d7cad1dda37d454d10bdfbe38896f63472b697c50f3adf5ed7da34cd",
+      "file": "operation-arena-complete--sewer-night--390.png",
+      "sha256": "e253833df452deee09fe46c1bae7c4c703df229c755ddec5bfd6bdf5b1c154e9",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 1000
       },
-      "page": "Expanded aggregate Playtest Command Post on Home"
+      "page": "Operation arena interaction completed"
     },
     {
-      "file": "playtest-flight--sewer-night--1440.png",
-      "sha256": "19b427eabe11fb12cadd44cbc34f37d574753e4258de228db7bdd583cea7a1a5",
+      "file": "operation-deck--sewer-night--1440.png",
+      "sha256": "12f8eeb60d83edc6db88b8a4f4a10b60ccea62cc5986fb7be7db71598f641dd2",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Structured Playtest Flight Receipt after an observed run"
+      "page": "Authored Operation command deck"
     },
     {
-      "file": "playtest-pulse--sewer-night--1440.png",
-      "sha256": "337b4d4ecf25f7c51919f32f50d7f04cd4eca95fdc506d3f14f608b49651e872",
+      "file": "operation-arena--sewer-night--1440.png",
+      "sha256": "8b4885341bbbcd251e4c0f9a146b2ad64c51e5f98a8206142dc053486d89acfc",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Expanded aggregate Playtest Command Post on Home"
+      "page": "Live Operation arena command overlay"
     },
     {
-      "file": "playtest-flight--porcelain-day--390.png",
-      "sha256": "02f1c6d39f203a40853312cba41c5e0e9b047bc6064ca3f302e82b0be354acea",
+      "file": "operation-arena-complete--sewer-night--1440.png",
+      "sha256": "a83dee1dac3fab2ee148e8f8a1e409a71f58153c0f00e00766db0f7d1c316a65",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Operation arena interaction completed"
+    },
+    {
+      "file": "operation-deck--porcelain-day--390.png",
+      "sha256": "42e71575655b875a9de734de8971444fa313969af23e1e4e34046284c3fe28b4",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 1000
       },
-      "page": "Structured Playtest Flight Receipt after an observed run"
+      "page": "Authored Operation command deck"
     },
     {
-      "file": "playtest-pulse--porcelain-day--390.png",
-      "sha256": "0fa9e0e1f64ea0e6fdbe643833ebd6ff4480153189df92355bfac67e66d8ed8c",
+      "file": "operation-arena--porcelain-day--390.png",
+      "sha256": "00af8853adc3f612849cd8f5d0dd35c592ad4ffffc6011f14d3ba0f49a3a5ad4",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 1000
       },
-      "page": "Expanded aggregate Playtest Command Post on Home"
+      "page": "Live Operation arena command overlay"
     },
     {
-      "file": "playtest-flight--porcelain-day--1440.png",
-      "sha256": "e5ad8d3e9d394eae32a6cb9e4aaf1943da30901f3b032184122c7e7e5de85382",
+      "file": "operation-arena-complete--porcelain-day--390.png",
+      "sha256": "bc9defe62aba8776385b96478aa7f81f58046bcd2bf3461973fe4e70e8c49012",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Operation arena interaction completed"
+    },
+    {
+      "file": "operation-deck--porcelain-day--1440.png",
+      "sha256": "21e85b3a3856d01f5cadb5e3b9f69a70749b8f1bf2129ff13944deb45e58d006",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Structured Playtest Flight Receipt after an observed run"
+      "page": "Authored Operation command deck"
     },
     {
-      "file": "playtest-pulse--porcelain-day--1440.png",
-      "sha256": "5f646a71f21668f1d36c7ecd1b5f81dd40b4c99cb1647d7de9d9e9008feecf8a",
+      "file": "operation-arena--porcelain-day--1440.png",
+      "sha256": "b8114190bf875d4da8f917672e1275248af6fe13b71e0e4995bc6f036b91f38d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Expanded aggregate Playtest Command Post on Home"
+      "page": "Live Operation arena command overlay"
+    },
+    {
+      "file": "operation-arena-complete--porcelain-day--1440.png",
+      "sha256": "fee201aa979091d6b9175ee499416a556c3aebd2e170dafcda116fcaa459cbb2",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Operation arena interaction completed"
+    },
+    {
+      "file": "operation-complete--sewer-night--390.png",
+      "sha256": "f04cc2a6c063bd8d07f3d47eb4da66ea2e616665dd88ffb518e6f7411e8d3161",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Operation completion receipt and honest gates"
+    },
+    {
+      "file": "operation-command-post--sewer-night--390.png",
+      "sha256": "f6cab8ccb9b2d55e0a6a97881886ec1dfb18de8ad4c80201a3cc4d9971e8749a",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Expanded opt-in paired Operation playtest command post"
+    },
+    {
+      "file": "operation-complete--sewer-night--1440.png",
+      "sha256": "e644d47e4d984e141f5f261c1b42264b5de692716184510e5be020d8b64cb14f",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Operation completion receipt and honest gates"
+    },
+    {
+      "file": "operation-command-post--sewer-night--1440.png",
+      "sha256": "58ffedcf2847a39c09aa7092557951c48f01cc491b2aa01ed93e3c101a004241",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Expanded opt-in paired Operation playtest command post"
+    },
+    {
+      "file": "operation-complete--porcelain-day--390.png",
+      "sha256": "f04cc2a6c063bd8d07f3d47eb4da66ea2e616665dd88ffb518e6f7411e8d3161",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Operation completion receipt and honest gates"
+    },
+    {
+      "file": "operation-command-post--porcelain-day--390.png",
+      "sha256": "d8a332560255428cb50335997bd59204db0b345b7793b4fda91045241379ff77",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "page": "Expanded opt-in paired Operation playtest command post"
+    },
+    {
+      "file": "operation-complete--porcelain-day--1440.png",
+      "sha256": "e644d47e4d984e141f5f261c1b42264b5de692716184510e5be020d8b64cb14f",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Operation completion receipt and honest gates"
+    },
+    {
+      "file": "operation-command-post--porcelain-day--1440.png",
+      "sha256": "a7fed095146ca8c02315831943e9be31114af92e9446c9620ea937bbeefb20a4",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Expanded opt-in paired Operation playtest command post"
     }
   ],
   "inspection": {
@@ -244,12 +333,12 @@
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The expanded Replay Coverage Passport passed 32/32 focused state checks at mobile and desktop in both themes.",
-      "The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed 44/44 focused state checks at mobile and desktop in both themes."
+      "The hosted authored Operation deck and live arena interaction passed 36/36 focused checks at 390px and 1440px in both project themes.",
+      "The Operation completion receipt and expanded opt-in paired playtest command post passed 36/36 focused checks at 390px and 1440px in both project themes."
     ],
     "fixesApplied": [
-      "Repaired stale Replay Passport harness locators and enabled the operator query before recapture.",
-      "Direct pixel review found no blocking layout, contrast, clipping, or hierarchy defect in the Playtest Flight Receipt, Command Post, or fourth replay lane."
+      "Moved the Operation overlay below the first-run training and HUD band after direct mobile pixel inspection.",
+      "Added safe command-deck scroll clearance and verified authored route controls in both project themes."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

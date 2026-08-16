@@ -2,6 +2,20 @@
 
 Public-safe launch roadmap summary.
 
+## Session 155 — Operation mode, authored missions, and evidence-gated expansion
+
+- [x] [SIL:3] **DONE S155** ModeRules and encounter/projectile orchestration preserve all eight legacy modes while restoring App architecture headroom.
+- [x] [SIL:3] **DONE S155** Three deterministic Operations execute the BREACH → HOLD → ESCORT → HUNT → SABOTAGE → ESCAPE → BOSS spine with two authored routes and persistent arena consequences.
+- [x] [SIL:3] **DONE S155** Doors, pumps, valves, barricades, turrets, extraction toilets, and watchtower v0 expose bounded keyboard/controller/touch interactions with replay-stable receipts.
+- [x] [SIL:2] **DONE S155** Operation-first command deck, live arena overlay, completion receipt, deterministic rematch, local history, and async rival evidence are integrated without changing Arcade identifiers or standard leaderboard authority.
+- [x] [SIL:2] **DONE S155** Deterministic Mission Director explains reason-coded guidance and keeps difficulty changes player-opt-in.
+- [x] [SIL:2] **DONE S155** Paired Standard-vs-Operation playtest evidence is explicit opt-in, bounded, aggregate-only, and gated at 10/20 receipts without causal or representative claims.
+- [x] [SIL:2] **DONE S155** Realtime capacity/trust contract defines authoritative two-player limits, reconnect/rate/score boundaries, hard caps, hibernation, benchmark, and kill switch; realtime co-op itself remains gated and unimplemented.
+- [x] [SIL:2] **DONE S155** Public gameplay contract v3, human routes, field manual, modes, press, changelog, and agent discovery expose Operations with consistent scope and rights language.
+- [x] [SIL:2] **DONE S155** Hosted rendered-pixel court passes 1,092/1,092 objective checks; direct inspection found and fixed the mobile training/Operation overlay collision; 26 captures are hash-bound.
+
+**Runway exception:** the repository-owned Operation foundation is complete. Campaign progression remains gated until 10 opt-in paired receipts exist; invite-only authoritative co-op remains gated until 20 paired receipts plus a real service capacity rerun. SPARKED evidence remains independently incomplete.
+
 ## Session 154 — Propagation compatibility and protocol truth
 
 - [x] [SIL:3] **DONE S154** Capability discovery is provenance-aware and fails closed on a false-green empty universe while preserving private-map isolation in public continuous integration.
@@ -54,9 +68,9 @@ Public-safe launch roadmap summary.
 - [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
-## Current Session Intent: Session 152
+## Current Session Intent: Session 155
 
-Recover and independently prove Session 151, then complete one continuous autonomous `/arc` from synchronized main: canonical startup, specialty game-loop and release review, a fresh premise-verified nine-axis audit, implementation of every accepted repository-owned item plus viable second-order innovations, isolated staging and CANON-053 rendered-pixel proof for any UI changes, canonical closeout, direct-main publication, and production verification. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
+Complete one continuous autonomous `/arc` from synchronized main: premise-verified game-loop and nine-axis audit, implement the strongest repository-owned route for reducing structural repetition, preserve every legacy mode and trust boundary, prove touched pixels on isolated staging, close out canonically, publish directly to `main`, and verify production. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
 
 ## Session 152 — Closed-loop coaching and mastery command
 

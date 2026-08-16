@@ -206,7 +206,7 @@ queue("field-manual.json", JSON.stringify({
   claims: {
     price: { value: "free-to-play", source: "/terms/" },
     progress: { value: "browser-local-no-cloud-sync-claim", source: "/privacy/" },
-    roster: { value: { weapons: liveGameplay.weapons.length, enemies: liveGameplay.enemies.length, modes: liveGameplay.modes.length }, source: "/gameplay-contract.json" },
+    roster: { value: { weapons: liveGameplay.weapons.length, enemies: liveGameplay.enemies.length, operations: liveGameplay.operations.length, modes: liveGameplay.modes.length }, source: "/gameplay-contract.json" },
     replayProof: { value: liveGameplay.trust.replayEvidence, excludedClaim: liveGameplay.trust.excludedClaim, coverage: liveGameplay.trust.replayCoverage, source: "/gameplay-contract.json" },
     identity: { value: "guest-first-optional-local-porcelain-passport", source: "/privacy/" },
   },
