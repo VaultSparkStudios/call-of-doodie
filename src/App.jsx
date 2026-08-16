@@ -45,6 +45,9 @@ import {
   setMusicVibe, startAmbient, stopAmbient,
   setDangerIntensity, stopDangerDrone, setMusicTier,
   getMusicBPM,
+  setBusVolume, setMusicLowpass,
+  soundPlayerHurt, soundEmptyMag, soundWeaponSwap, soundWaveAnnounce,
+  soundCoinAt, soundShopPurchase, soundBossPhase2,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes, getArchetypeProgress } from "./utils/buildArchetypes.js";
@@ -65,6 +68,10 @@ import { resolveHomeVersion } from "./utils/homeVersion.js";
 import { useGameLoop } from "./hooks/useGameLoop.js";
 import { useShellLifecycle } from "./hooks/useShellLifecycle.js";
 import HUD from "./components/HUD.jsx";
+// Per-weapon camera recoil magnitude (index-aligned with WEAPONS). Heavy
+// weapons (≥5) also kick the camera opposite the muzzle direction.
+const WEAPON_RECOIL = [3, 12, 2, 4, 18, 2, 6, 4, 7, 14, 4, 8];
+
 const HomeV2 = lazy(() => import("./components/HomeV2.jsx"));
 import { DesktopWeaponDock, MobileWeaponDock } from "./components/WeaponDock.jsx";
 const DisplayNameScreen = lazy(() => import("./components/DisplayNameScreen.jsx"));
@@ -89,6 +96,7 @@ import { acceptMutation as _acceptMutation } from "./systems/mutationResolution.
 import { spawnPickup as _spawnPickup } from "./systems/pickupSpawning.js";
 import { getBossRangedBurstCount, triggerBossPhaseTwoTransition } from "./systems/bossPhases.js";
 import { applyPlayerMovement, buildPointerAimSweepReport, computePointerAimAngle, resolveAimFrame, resolveMovementVector } from "./systems/gameStep.js";
+import { stampArenaDecal } from "./systems/backgroundLayer.js";
 import { buildInputCalibrationRecord, loadInputCalibration, saveInputCalibration, summarizeInputCalibration } from "./utils/inputCalibration.js";
 import { markTutorialAction, normalizeTutorialEvidence, shouldShowTutorial, TUTORIAL_ACTIONS } from "./utils/tutorialProgress.js";
 import { isPlaytestMode, recordActivePlaytestMilestone, startActivePlaytestFlight } from "./utils/playtestFlightRecorder.js";
@@ -381,6 +389,15 @@ export default function CallOfDoodie() {
 
   // ── Sync rumble flag from settings ────────────────────────────────────────
   useEffect(() => { setHapticsEnabled(gameSettings.rumble !== false); }, [gameSettings.rumble]);
+
+  // ── Apply audio submix volumes to the bus graph ───────────────────────────
+  useEffect(() => {
+    setBusVolume("master", gameSettings.masterVolume ?? 1);
+    setBusVolume("sfx", gameSettings.sfxVolume ?? 1);
+    setBusVolume("music", gameSettings.musicVolume ?? 0.8);
+    setBusVolume("ambient", gameSettings.ambientVolume ?? 0.7);
+    setBusVolume("ui", gameSettings.uiVolume ?? 1);
+  }, [gameSettings.masterVolume, gameSettings.sfxVolume, gameSettings.musicVolume, gameSettings.ambientVolume, gameSettings.uiVolume]);
   const hudFlagsMemo = useMemo(() => hudFlags(gameSettings.hudDensity || "standard"), [gameSettings.hudDensity]);
 
   // ── Gamepad connect/disconnect sounds ─────────────────────────────────────
@@ -1171,6 +1188,7 @@ export default function CallOfDoodie() {
     if (resolution.shopHistoryEntry) {
       setShopHistory(h => [...h, resolution.shopHistoryEntry]);
     }
+    soundShopPurchase();
     recordCommandTrace("shop", optionId);
     track("shop_buy", { itemId: optionId, wave: gs.currentWave, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), difficulty: difficultyRef.current });
   }, [recordCommandTrace]);
@@ -1204,7 +1222,7 @@ export default function CallOfDoodie() {
       extraLivesRef.current = resolution.extraLives;
       setExtraLives(extraLivesRef.current);
     }
-    soundPerkSelect();
+    soundShopPurchase();
     recordCommandTrace("shop", `coin-${optionId}`);
     track("coin_shop_buy", { itemId: optionId, cost, wave: gs.currentWave, coinsAfter: resolution.coins, mode: resolveMode(scoreAttackRef.current, dailyChallengeRef.current, cursedRunRef.current, bossRushRef.current, speedrunRef.current, gauntletRef.current, zombiesRef.current), difficulty: difficultyRef.current });
   }, [recordCommandTrace]);
@@ -1349,7 +1367,15 @@ export default function CallOfDoodie() {
     const upgLevel = gs.weaponUpgrades?.[weaponIdx] || 0;
     const _wpnMod = gs.weaponMods?.[weaponIdx] || {};
     const fireRateMult = (1 - upgLevel * 0.10) * (perkModsRef.current.fireRateMult || 1) * (gs.synergyFireRateMult || 1) * (_wpnMod.fireRateMult || 1);
-    if (now - lastShotRef.current < weapon.fireRate * fireRateMult || gs.ammoCount <= 0 || isReloadingRef.current) return;
+    if (now - lastShotRef.current < weapon.fireRate * fireRateMult) return;
+    if (gs.ammoCount <= 0 || isReloadingRef.current) {
+      // Dry-fire click on a truly empty mag (not while a reload is running)
+      if (gs.ammoCount <= 0 && !isReloadingRef.current && now - (gs._emptyClickAt || 0) > 250) {
+        gs._emptyClickAt = now;
+        soundEmptyMag();
+      }
+      return;
+    }
     lastShotRef.current = now; gs.ammoCount--; gs.weaponAmmos[weaponIdx] = gs.ammoCount; setAmmo(gs.ammoCount);
     recordCommandTrace("shoot", `w${weaponIdx}`);
     // Overclocked perk: track shots, force reload every 20
@@ -1438,7 +1464,19 @@ export default function CallOfDoodie() {
       gs.bullets.push(makeBullet(a));
     }
     gs.muzzleFlash = 4;
-    gs.screenShake = Math.max(gs.screenShake, weaponIdx === 1 ? 12 : weaponIdx === 4 ? 18 : 3);
+    gs.muzzleFlashAngle = angle;
+    // S155: ballistic weapons eject a shell casing sideways from the muzzle.
+    if ([0, 2, 4, 10].includes(weaponIdx)) {
+      addParticles(gs, p.x + Math.cos(angle) * 22, p.y + Math.sin(angle) * 22, "#D8B84A", 1, undefined, "casing");
+    }
+    // Per-weapon recoil (S155): magnitude table + directional kick opposite
+    // the muzzle so heavy weapons punch the camera backward, not just jitter.
+    const _recoil = WEAPON_RECOIL[weaponIdx] ?? 3;
+    gs.screenShake = Math.max(gs.screenShake, _recoil);
+    if (_recoil >= 5) {
+      gs.shakeDirX = -Math.cos(angle);
+      gs.shakeDirY = -Math.sin(angle);
+    }
     if (gs.ammoCount <= 0) doReload(weaponIdx);
   }, [doReload, recordCommandTrace]);
 
@@ -1818,6 +1856,7 @@ export default function CallOfDoodie() {
           setCoins(gs.coins);
           addText(gs, e.x, e.y - e.size - 20, "🎵 BEAT KILL! +1💩", "#FF44FF");
           addParticles(gs, e.x, e.y, "#FF44FF", 4);
+          soundCoinAt(e.x, GW());
         }
       } catch {}
     }
@@ -1916,6 +1955,10 @@ export default function CallOfDoodie() {
         gs._deathSoundsThisFrame = (gs._deathSoundsThisFrame || 0) + 1;
         soundEnemyDeathAt(e.typeIndex, e.x, W, comboRef.current.count);
         vibrate("kill");
+      }
+      // S155: big enemies leave a persistent splat on the arena floor.
+      if (e.size >= 34) {
+        stampArenaDecal(gs, { kind: "splat", x: e.x, y: e.y, size: e.size * 0.35, alpha: 0.22, color: "rgba(80,52,26,0.55)", seed: (e.x + e.y) % 6, rot: (e.x * 7 + e.y) % 3 });
       }
     }
 
@@ -2128,6 +2171,7 @@ export default function CallOfDoodie() {
     currentWeaponRef.current = starterWeapon; isReloadingRef.current = false;
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
+    setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
     setTimeout(() => {
       startMusic(false);
       startAmbient(gsRef.current?.mapTheme ?? 0);
@@ -2194,6 +2238,7 @@ export default function CallOfDoodie() {
       setAmmo(savedAmmo);
     }
     const prevIdx = currentWeaponRef.current;
+    if (idx !== prevIdx) soundWeaponSwap(idx);
     setCurrentWeapon(idx); currentWeaponRef.current = idx;
     setIsReloading(false); isReloadingRef.current = false;
     recordCommandTrace("swap", `w${idx}`);
@@ -2546,11 +2591,13 @@ export default function CallOfDoodie() {
         criticalHealthVisualRef.current = true;
         gs.criticalHealthVisualActive = true;
         soundLastStand();
+        setMusicLowpass(true); // muffle the soundtrack while on the brink
         addText(gs, GW() / 2, GH() / 2 - 80, "ON THE BRINK!!", "#FF2222", true);
         heartbeatCounterRef.current = 30;
       } else if (!_isCriticalHealth && criticalHealthVisualRef.current) {
         criticalHealthVisualRef.current = false;
         gs.criticalHealthVisualActive = false;
+        setMusicLowpass(false);
       }
       setDangerIntensity(_isCriticalHealth ? 1.0 : _dangerLevel);
       // Synergy charge: ready when active synergies exist AND both weapons above 50% ammo
@@ -2574,6 +2621,16 @@ export default function CallOfDoodie() {
           soundBossFinale();
         }
       }
+    }
+
+    // ── Player-hurt audio: any health drop this frame fires the (throttled) cue ──
+    {
+      const _hpNow = gs.player?.health ?? 0;
+      if (gs._lastAudioHp != null && _hpNow < gs._lastAudioHp && _hpNow > 0) {
+        const _frac = (gs._lastAudioHp - _hpNow) / (gs.player?.maxHealth || 100);
+        soundPlayerHurt(0.6 + Math.min(1.2, _frac * 4));
+      }
+      gs._lastAudioHp = _hpNow;
     }
 
     // ── Per-frame heartbeat while in last stand ──
@@ -3008,6 +3065,7 @@ export default function CallOfDoodie() {
         const _evtMap = { fast_round: "⚡ FAST ROUND", elite_only: "⭐ ELITE SURGE", siege: "🏰 SIEGE MODE", fog_of_war: "🌫 FOG OF WAR" };
         if (!nextIsBoss) {
           waveAnnouncePendingRef.current = true;
+          soundWaveAnnounce(gs.currentWave);
           const _fmtDescriptors = { FLANK: "pressure from the sides", PINCER: "split attack", SURGE: "overwhelming force" };
           setWaveAnnounce({
             waveNum: gs.currentWave,
@@ -3127,6 +3185,7 @@ export default function CallOfDoodie() {
           eb.life = hit.projectileLife;
           applyObservedPlayerDamage(gs, { healthAfter: hit.health, frame: frameCountRef.current, kind: "projectile", sourceType: eb.sourceType, sourceName: eb.sourceName || "Enemy projectile" });
           p.invincible = hit.invincibleFrames; gs.screenShake = hit.screenShake; gs.damageFlash = hit.damageFlash;
+          { const _kb = Math.hypot(eb.vx, eb.vy) || 1; gs.shakeDirX = (eb.vx / _kb) * 0.8; gs.shakeDirY = (eb.vy / _kb) * 0.8; }
           gs.damageThisWave = (gs.damageThisWave || 0) + 1;
           setHealth(Math.max(0, p.health));
           addText(gs, p.x, p.y - 30, "-" + Math.floor(hit.damage), "#FF4444");
@@ -3140,12 +3199,17 @@ export default function CallOfDoodie() {
     gs.grenades = stepAndCompactInPlace(gs.grenades, g => {
       g.x += g.vx; g.y += g.vy; g.vx *= 0.96; g.vy *= 0.96; g.life--;
       if (g.life <= 0) {
-        addParticles(gs, g.x, g.y, "#FF4500", 30);
-        addParticles(gs, g.x, g.y, "#FFD700", 20);
+        addParticles(gs, g.x, g.y, "#FF4500", 20);
+        addParticles(gs, g.x, g.y, "#FFD700", 12, undefined, "spark");
+        addParticles(gs, g.x, g.y, "#777777", 8, undefined, "smoke");
+        addParticles(gs, g.x, g.y, "#8A6A3A", 6, undefined, "debris");
         addText(gs, g.x, g.y, "BOOM!", "#FF4500", true);
         gs.screenShake = 15;
-        // S145: bounded persistent scorch decal (reuses the terrain stain renderer).
-        if (gs.terrain) { gs.terrain.push({ x: g.x, y: g.y, type: 0, size: 26, rot: (g.x + g.y) % 3 }); if (gs.terrain.length > 44) gs.terrain.shift(); }
+        gs.explosionFlash = { x: g.x, y: g.y, life: 3 }; // brief light halo (drawGame)
+        // S155: persistent scorch stamped into the prerendered underlay
+        // (replaces the S145 terrain-stain push, which stopped rendering once
+        // terrain moved into the static background layer).
+        stampArenaDecal(gs, { kind: "scorch", x: g.x, y: g.y, size: 30, alpha: 0.4 });
         gs.enemies.forEach(e => {
           const _gradius = 130 * (gs.settGrenadeRadMult || 1);
           const blast = resolveGrenadeEnemyDamage({
@@ -3293,7 +3357,7 @@ export default function CallOfDoodie() {
           }
           const _hn = performance.now();
           if (_hn - lastHitSoundRef.current > 50) { soundHitAt(isCrit, e.x, W); lastHitSoundRef.current = _hn; rumbleGamepad(isCrit ? 0.25 : 0.05, isCrit ? 0.35 : 0.1, isCrit ? 80 : 40); vibrate(isCrit ? "crit" : "hit"); }
-          addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5);
+          addParticles(gs, b.x, b.y, isCrit ? "#FFD700" : e.color, isCrit ? 10 : 5, undefined, "spark");
           gs.screenShake = Math.max(gs.screenShake, isCrit ? 6 : 2);
           addText(gs, e.x + (cosmeticRandom() - 0.5) * 20, e.y - e.size / 2 - cosmeticRandom() * 10,
             isCrit ? "💥 CRIT!" : HITMARKERS[Math.floor(cosmeticRandom() * HITMARKERS.length)],
@@ -3819,7 +3883,7 @@ export default function CallOfDoodie() {
         }
       }
       // ── Universal boss phase 2 at 50% HP ─────────────────────────────────
-      if (triggerBossPhaseTwoTransition({ enemy: e, gs, addText, addParticles, soundWaveClear })) vibrate("bossPhase2");
+      if (triggerBossPhaseTwoTransition({ enemy: e, gs, addText, addParticles, soundPhaseTwo: soundBossPhase2 })) vibrate("bossPhase2");
       // ── Kamikaze (ti=12) ──
       if (e.typeIndex === 12 && dashRef.current.active <= 0) {
         const kd = Math.hypot(p.x - e.x, p.y - e.y);
@@ -4016,7 +4080,11 @@ export default function CallOfDoodie() {
 
 
     if (gs.screenShake > 0) gs.screenShake *= 0.85;
+    // Directional shake bias decays faster than magnitude so a kick settles
+    // back into neutral jitter within a few frames.
+    if (gs.shakeDirX || gs.shakeDirY) { gs.shakeDirX *= 0.75; gs.shakeDirY *= 0.75; if (Math.abs(gs.shakeDirX) < 0.02 && Math.abs(gs.shakeDirY) < 0.02) { gs.shakeDirX = 0; gs.shakeDirY = 0; } }
     if (gs.muzzleFlash > 0) gs.muzzleFlash--;
+    if (gs.explosionFlash && --gs.explosionFlash.life <= 0) gs.explosionFlash = null;
     if (gs.damageFlash > 0) gs.damageFlash--;
     if (gs.killFlash > 0) gs.killFlash--;
     if ((gs.bossKillFlash || 0) > 0) gs.bossKillFlash--;
@@ -4108,6 +4176,7 @@ export default function CallOfDoodie() {
       if (e.key === "q" || e.key === "g") throwGrenade();
       if (e.key === " " || e.key === "Shift") doDash();
       if (e.key === "e") fireSynergyCharge();
+      if (e.key.toLowerCase() === "m") toggleMusicMuted();
       const num = parseInt(e.key);
       if (num >= 1 && num <= 9 && num <= WEAPONS.length) switchWeapon(num - 1);
       if (e.key === "0" && WEAPONS.length >= 10) switchWeapon(9);
@@ -4142,7 +4211,7 @@ export default function CallOfDoodie() {
       window.removeEventListener("mousemove", mm); window.removeEventListener("mousedown", md); window.removeEventListener("mouseup", mu);
       releaseAllInputs("keyboard-listener-cleanup", ["keyboard", "mouse"]);
     };
-  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, markInputActivity, releaseAllInputs, screen, transitionPause]);
+  }, [doReload, throwGrenade, doDash, switchWeapon, fireSynergyCharge, markInputActivity, releaseAllInputs, screen, transitionPause, toggleMusicMuted]);
 
   // ── Touch controls ────────────────────────────────────────────────────────
   useEffect(() => {

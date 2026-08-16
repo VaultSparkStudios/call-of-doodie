@@ -12,9 +12,9 @@ describe("bossPhases", () => {
     const gs = { screenShake: 0 };
     const addText = vi.fn();
     const addParticles = vi.fn();
-    const soundWaveClear = vi.fn();
+    const soundPhaseTwo = vi.fn();
 
-    const changed = triggerBossPhaseTwoTransition({ enemy, gs, addText, addParticles, soundWaveClear });
+    const changed = triggerBossPhaseTwoTransition({ enemy, gs, addText, addParticles, soundPhaseTwo });
 
     expect(changed).toBe(true);
     expect(enemy.bossPhase2).toBe(true);
@@ -24,7 +24,7 @@ describe("bossPhases", () => {
     expect(addText).toHaveBeenCalledTimes(2);
     expect(addText.mock.calls[1][3]).toContain("phase");
     expect(addParticles).toHaveBeenCalledTimes(2);
-    expect(soundWaveClear).toHaveBeenCalledTimes(1);
+    expect(soundPhaseTwo).toHaveBeenCalledTimes(1);
   });
 
   test("returns concrete phase-two warnings for known bosses", () => {

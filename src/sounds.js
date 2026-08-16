@@ -1,8 +1,26 @@
 // ===== WEB AUDIO SYNTHESIS — zero dependencies, no files needed =====
+import {
+  initBusGraph, busDest, setBusVolume, setMasterMuted, duckMusic, setMusicLowpass,
+} from "./audio/audioBus.js";
+
+export { setBusVolume, duckMusic, setMusicLowpass };
+
 let audioCtx = null;
 let muted = false;
 
-export function setMuted(val) { muted = val; }
+export function setMuted(val) {
+  muted = val;
+  setMasterMuted(val);
+  // Muted sessions shouldn't burn the audio thread: suspend the context and
+  // let the next getCtx()/unmute resume it (context exists from a gesture, so
+  // resume is allowed).
+  try {
+    if (audioCtx) {
+      if (val && audioCtx.state === "running") audioCtx.suspend();
+      else if (!val && audioCtx.state === "suspended") audioCtx.resume();
+    }
+  } catch { /* ignore */ }
+}
 export function getMuted() { return muted; }
 
 function _rand(min, max) {
@@ -26,7 +44,57 @@ function _detune(freq, cents) {
 function _createAudioContext() {
   if (audioCtx) return audioCtx;
   try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch { /* ignore */ }
+  if (audioCtx) {
+    initBusGraph(audioCtx);
+    _prewarmNoiseBuffers(audioCtx);
+  }
   return audioCtx;
+}
+
+// ===== BUS ROUTING =====
+// Voices default onto the sfx submix; music/ambient/UI code temporarily
+// switches the default with _withBus so every primitive lands on the right
+// category without threading a dest through all ~60 call sites.
+let _activeBus = "sfx";
+
+// Extra scheduling delay (seconds) applied to every primitive — set by the
+// music lookahead scheduler so beat functions land on absolute audio-clock
+// times without every tone()/noise() call site knowing about it.
+let _scheduleOffset = 0;
+
+function _withBus(kind, fn) {
+  const prev = _activeBus;
+  _activeBus = kind;
+  try { fn(); } finally { _activeBus = prev; }
+}
+
+function _defaultDest(ctx) {
+  return busDest(_activeBus) || ctx.destination;
+}
+
+// ===== CACHED NOISE BUFFERS =====
+// Three 1-second buffers of differently-colored noise, rendered once at
+// prewarm. noise() plays a random slice instead of synthesizing samples on the
+// main thread per event (previously a GC/jank source on kill waves).
+const _noiseBuffers = [];
+
+function _prewarmNoiseBuffers(ctx) {
+  if (_noiseBuffers.length) return;
+  try {
+    for (const color of [0.45, 0.85, 1.25]) {
+      const samples = Math.floor(ctx.sampleRate * 1.0);
+      const buf = ctx.createBuffer(1, samples, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      let last = 0;
+      for (let i = 0; i < samples; i++) {
+        const white = Math.random() * 2 - 1;
+        // color < 1 → brighter (mostly white); color > 1 → darker (one-pole lowpassed)
+        last = last + Math.min(0.9, color * 0.45) * (white - last);
+        data[i] = color > 0.8 ? last * 1.6 : white;
+      }
+      _noiseBuffers.push(buf);
+    }
+  } catch { /* ignore */ }
 }
 
 function _unlockAudio() {
@@ -67,18 +135,29 @@ function _pan(x, W) {
   return Math.max(-0.85, Math.min(0.85, ((x - W / 2) / (W / 2)) * 0.8));
 }
 
-// Creates a StereoPannerNode → destination chain and returns it as a sink node.
-// Falls back to ctx.destination if StereoPannerNode is unsupported.
+// Round-robin pool of StereoPannerNodes permanently connected to the sfx bus.
+// Reusing 8 panners (instead of allocating one per event and leaking it into
+// the graph) bounds node count; two overlapping sounds occasionally sharing a
+// pan position is inaudible in practice.
+const _pannerPool = [];
+let _pannerIdx = 0;
+const PANNER_POOL_SIZE = 8;
+
 function _destAt(pan) {
   const ctx = getCtx();
   if (!ctx) return null;
   try {
-    const p = ctx.createStereoPanner();
-    p.pan.value = pan;
-    p.connect(ctx.destination);
+    if (_pannerPool.length < PANNER_POOL_SIZE) {
+      const p = ctx.createStereoPanner();
+      p.connect(busDest("sfx") || ctx.destination);
+      _pannerPool.push(p);
+    }
+    const p = _pannerPool[_pannerIdx % _pannerPool.length];
+    _pannerIdx++;
+    p.pan.setValueAtTime(pan, ctx.currentTime);
     return p;
   } catch {
-    return ctx.destination;
+    return busDest("sfx") || ctx.destination;
   }
 }
 
@@ -89,9 +168,9 @@ function tone(freq, duration, type = "square", vol = 0.08, freqEnd = null, start
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);
-    gain.connect(dest || ctx.destination);
+    gain.connect(dest || _defaultDest(ctx));
     osc.type = type;
-    const t = ctx.currentTime + startDelay;
+    const t = ctx.currentTime + startDelay + _scheduleOffset;
     const cents = duration <= 0.45 ? _rand(-9, 9) : _rand(-3, 3);
     const startFreq = _detune(freq, cents);
     const endFreq = freqEnd !== null ? _detune(freqEnd, cents * 0.6) : null;
@@ -108,24 +187,19 @@ function noise(duration, vol = 0.15, startDelay = 0, dest = null) {
   const ctx = getCtx();
   if (!ctx) return;
   try {
-    const sampleRate = ctx.sampleRate;
-    const samples = Math.floor(sampleRate * duration);
-    const buf = ctx.createBuffer(1, samples, sampleRate);
-    const data = buf.getChannelData(0);
-    const color = _rand(0.4, 1.3);
-    for (let i = 0; i < samples; i++) {
-      const fade = Math.max(0, 1 - (i / samples) * (2.0 + color));
-      data[i] = (Math.random() * 2 - 1) * fade;
-    }
+    _prewarmNoiseBuffers(ctx);
+    if (!_noiseBuffers.length) return;
+    const buf = _pick(_noiseBuffers);
     const src = ctx.createBufferSource();
     const gain = ctx.createGain();
     src.buffer = buf;
     src.connect(gain);
-    gain.connect(dest || ctx.destination);
-    const t = ctx.currentTime + startDelay;
+    gain.connect(dest || _defaultDest(ctx));
+    const t = ctx.currentTime + startDelay + _scheduleOffset;
     gain.gain.setValueAtTime(vol, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
-    src.start(t);
+    const maxOffset = Math.max(0, buf.duration - duration - 0.01);
+    src.start(t, _rand(0, maxOffset), duration + 0.02);
   } catch {}
 }
 
@@ -272,6 +346,7 @@ export function soundBossWave() {
   tone(120, 0.6, "square",   0.08, 90, 0.35);
   tone(_pick([180, 200, 240]), 0.4, "triangle", 0.06, 140, 0.7);
   noise(0.22, 0.055, 0.18);
+  duckMusic(0.4, 600);
 }
 
 export function soundAchievement() {
@@ -292,10 +367,12 @@ export function soundDash() {
 export function soundBossKill() {
   noise(0.34, 0.13);
   chirp(_pick([[300, 400, 500, 700, 1000], [247, 330, 494, 740, 988], [392, 523, 659, 880, 1175]]), 0.18, "triangle", 0.078, 0.06);
+  duckMusic(0.35, 550);
 }
 
 export function soundWaveClear() {
   chirp(_pick([[440, 550, 660], [494, 622, 740], [392, 523, 784]]), 0.15, "triangle", 0.068, 0.1);
+  duckMusic(0.6, 260);
 }
 
 // Rising pitch click for each precision streak hit. streakLevel 1–N raises pitch.
@@ -366,13 +443,43 @@ export function soundPerkSelect() {
 }
 
 export function soundUIOpen() {
-  tone(_pick([760, 800, 880]), 0.055, "square", 0.036, 1000);
-  tone(_pick([1120, 1200, 1320]), 0.045, "triangle", 0.028, null, 0.048);
+  _withBus("ui", () => {
+    tone(_pick([760, 800, 880]), 0.055, "square", 0.036, 1000);
+    tone(_pick([1120, 1200, 1320]), 0.045, "triangle", 0.028, null, 0.048);
+  });
 }
 
 export function soundUIClose() {
-  tone(_pick([940, 1000, 1080]), 0.05, "square", 0.036, 680);
-  if (_maybe(0.3)) tone(520, 0.035, "triangle", 0.018, 380, 0.045);
+  _withBus("ui", () => {
+    tone(_pick([940, 1000, 1080]), 0.05, "square", 0.036, 680);
+    if (_maybe(0.3)) tone(520, 0.035, "triangle", 0.018, 380, 0.045);
+  });
+}
+
+// Menu navigation blips — subtle, routed through the ui submix so the UI
+// volume slider governs them independently of combat.
+export function soundUIHover() {
+  _withBus("ui", () => tone(_pick([1180, 1240, 1320]), 0.03, "sine", 0.018, 1050));
+}
+
+export function soundUISelect() {
+  _withBus("ui", () => {
+    tone(_pick([680, 720, 760]), 0.045, "triangle", 0.032, 900);
+    tone(1360, 0.035, "sine", 0.018, null, 0.035);
+  });
+}
+
+export function soundUIConfirm() {
+  _withBus("ui", () => {
+    chirp(_pick([[520, 780], [560, 840], [490, 735]]), 0.06, "triangle", 0.032, 0.05);
+  });
+}
+
+export function soundUIDeny() {
+  _withBus("ui", () => {
+    tone(220, 0.07, "square", 0.032, 180);
+    tone(165, 0.09, "square", 0.026, 140, 0.06);
+  });
 }
 
 
@@ -410,6 +517,89 @@ export function soundBossFinale() {
 
 export function soundGamepadDisconnect() {
   chirp(_pick([[880, 600, 360], [740, 494, 294], [988, 660, 392]]), 0.08, "triangle", 0.045, 0.075);
+}
+
+// ── Combat coverage (S155 audio overhaul) ──
+
+// Player took damage — filtered thump + descending blip. Throttled internally
+// so contact-damage swarms don't machine-gun the cue; music ducks briefly so
+// the hit always reads through a busy mix.
+let _lastPlayerHurtAt = 0;
+export function soundPlayerHurt(severity = 1) {
+  const now = Date.now();
+  if (now - _lastPlayerHurtAt < 200) return;
+  _lastPlayerHurtAt = now;
+  const s = Math.max(0.4, Math.min(2, severity));
+  noise(0.09 * s, 0.11 * s);
+  tone(_pick([180, 200, 220]), 0.12 * s, "sawtooth", 0.09 * s, 70);
+  tone(90, 0.10 * s, "sine", 0.06 * s, 55, 0.02);
+  duckMusic(0.45, 260);
+}
+
+export function soundLowAmmo() {
+  tone(_pick([1300, 1400]), 0.03, "square", 0.03, 1100);
+}
+
+export function soundEmptyMag() {
+  // Dry mechanical click — unmistakably "nothing happened".
+  tone(2400, 0.014, "square", 0.035, 1800);
+  tone(320, 0.03, "square", 0.028, 260, 0.018);
+}
+
+export function soundWeaponSwap(weaponIdx = 0) {
+  // Racking chunk pitched slightly by weapon index so swaps feel distinct.
+  const base = 340 + (weaponIdx % 6) * 40;
+  noise(0.03, 0.03);
+  tone(base, 0.05, "square", 0.045, base * 1.5);
+  tone(base * 1.8, 0.04, "square", 0.032, null, 0.06);
+}
+
+export function soundEnemyShootAt(x, W) {
+  const d = _destAt(_pan(x, W));
+  tone(_pick([420, 460, 500]), 0.035, "sawtooth", 0.028, 300, 0, d);
+}
+
+export function soundEnemyTelegraph(x, W) {
+  // Short rising warble marking a wind-up — spatialized toward the threat.
+  const d = _destAt(_pan(x, W));
+  tone(280, 0.09, "triangle", 0.035, 420, 0, d);
+  tone(560, 0.06, "sine", 0.022, 700, 0.07, d);
+}
+
+export function soundWaveAnnounce(waveNum = 1) {
+  // Riser into the wave banner; every 5th wave gets a heavier tail.
+  tone(196, 0.22, "sawtooth", 0.05, 392);
+  tone(294, 0.16, "triangle", 0.04, 440, 0.10);
+  if (waveNum % 5 === 0) tone(98, 0.30, "sawtooth", 0.06, 65, 0.16);
+  duckMusic(0.6, 220);
+}
+
+export function soundCoinAt(x, W) {
+  const d = _destAt(_pan(x, W));
+  tone(_pick([1568, 1760]), 0.05, "triangle", 0.038, null, 0, d);
+  tone(2093, 0.06, "sine", 0.026, null, 0.035, d);
+}
+
+export function soundShopPurchase() {
+  _withBus("ui", () => {
+    chirp([784, 988, 1319], 0.07, "triangle", 0.045, 0.05);
+    tone(1568, 0.09, "sine", 0.03, null, 0.16);
+  });
+}
+
+export function soundShopDeny() {
+  soundUIDeny();
+}
+
+// Boss phase-2 escalation sting — descending minor-second saw stack over a sub
+// drop. Replaces the celebratory wave-clear chirp that previously (and
+// confusingly) played on this threat escalation.
+export function soundBossPhase2() {
+  tone(466, 0.16, "sawtooth", 0.07, 440);
+  tone(440, 0.22, "sawtooth", 0.06, 415, 0.10);
+  tone(78, 0.5, "sine", 0.11, 40, 0.06);
+  noise(0.18, 0.07, 0.10);
+  duckMusic(0.4, 420);
 }
 
 // ===== AMBIENT ROOM TONE =====
@@ -492,6 +682,17 @@ export function stopDangerDrone() {
       const ctx = getCtx();
       if (ctx) _dangerGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.3);
     }
+    // Actually release the oscillator after the fade instead of letting it run
+    // (and dangle) for the rest of the page's life.
+    const drone = _dangerDrone;
+    const gain = _dangerGain;
+    _dangerDrone = null;
+    _dangerGain = null;
+    if (drone) {
+      setTimeout(() => {
+        try { drone.stop(); drone.disconnect(); if (gain) gain.disconnect(); } catch { /* ignore */ }
+      }, 350);
+    }
   } catch { /* ignore */ }
 }
 
@@ -505,7 +706,7 @@ export function setDangerIntensity(level) {
       _dangerDrone.type = "sine";
       _dangerDrone.frequency.value = 55;
       _dangerDrone.connect(_dangerGain);
-      _dangerGain.connect(ctx.destination);
+      _dangerGain.connect(busDest("ambient") || ctx.destination);
       _dangerGain.gain.value = 0;
       _dangerDrone.start();
     }
@@ -516,7 +717,7 @@ export function setDangerIntensity(level) {
 
 function _tickAmbient() {
   if (!_ambientActive) return;
-  _playAmbientTick(_ambientTheme, _ambientBeat);
+  if (!muted) _withBus("ambient", () => _playAmbientTick(_ambientTheme, _ambientBeat));
   _ambientBeat++;
   _ambientTimer = setTimeout(_tickAmbient, _AMBIENT_TICK[_ambientTheme] ?? 900);
 }
@@ -532,14 +733,18 @@ let _musicVibe = "action";
 let _musicComboTier = 0;
 
 /**
- * Drive the music energy tier from combo count.
+ * Drive the music energy tier from the heat meter (heatTier 0/1/2).
  * tier 0 = use player's chosen vibe as-is
- * tier 1 = boost chill→action (combo 2-4)
- * tier 2 = force intense     (combo 5+)
+ * tier 1 = escalate chill → action
+ * tier 2 = escalate chill/action → intense
  * retro / spooky / boss are never overridden.
+ * Changes are quantized to the next bar boundary by the scheduler so the
+ * escalation lands musically instead of cutting mid-phrase.
  */
 export function setMusicTier(tier) {
-  _musicComboTier = Math.max(0, Math.min(2, tier));
+  const t = Math.max(0, Math.min(2, tier));
+  if (t === _musicComboTier) { _pendingTier = null; return; }
+  _pendingTier = t;
 }
 
 export const MUSIC_VIBES = [
@@ -623,39 +828,56 @@ function _beatBoss(ctx, beat, bar) {
 }
 
 export function getMusicVibe() { return _musicVibe; }
-export function setMusicVibe(vibe) { _musicVibe = vibe; }
+export function setMusicVibe(vibe) {
+  if (_musicActive) _pendingVibe = vibe; // land it on the next bar boundary
+  else _musicVibe = vibe;
+}
 export function getMusicBeat() { return _musicBeat; }
 export function getMusicBPM() {
   const vibe = _musicBoss ? "boss" : (_musicVibe || "action");
   return _BPM[vibe] || 108;
 }
 
+// ===== LOOKAHEAD SCHEDULER =====
+// Two-clock pattern: a coarse setInterval tick schedules every beat whose
+// AudioContext-clock time falls inside the lookahead window, using absolute
+// times. The old setTimeout(beat*1000 - 8) chain drifted under load, which
+// desynced beat-kill coin rewards and beat visuals from the audible pulse.
+const _MUSIC_TICK_MS = 25;
+const _MUSIC_LOOKAHEAD_S = 0.12;
+let _nextBeatTime = 0;
+let _pendingVibe = null;
+let _pendingTier = null;
+let _pendingBoss = null;
+
 export function startMusic(isBossWave = false) {
   if (_musicActive) return;
   _musicActive = true;
   _musicBoss = isBossWave;
   _musicBeat = 0;
-  _scheduleMusicBeat();
+  _pendingVibe = _pendingTier = _pendingBoss = null;
+  const ctx = getCtx();
+  _nextBeatTime = ctx ? ctx.currentTime + 0.05 : 0;
+  _musicTimer = setInterval(_schedulerTick, _MUSIC_TICK_MS);
 }
 
 export function stopMusic() {
   _musicActive = false;
-  if (_musicTimer) { clearTimeout(_musicTimer); _musicTimer = null; }
+  if (_musicTimer) { clearInterval(_musicTimer); _musicTimer = null; }
 }
 
+// Boss transitions are quantized to the next beat (a full-bar wait is too slow
+// for a boss entrance); a short duck softens the swap into a pseudo-crossfade.
 export function setMusicIntensity(isBossWave) {
-  _musicBoss = isBossWave;
+  if (!_musicActive) { _musicBoss = isBossWave; return; }
+  if (isBossWave === _musicBoss) { _pendingBoss = null; return; }
+  _pendingBoss = isBossWave;
 }
 
 const _BPM = { chill: 72, action: 108, intense: 150, retro: 120, spooky: 82, boss: 138 };
 
-function _scheduleMusicBeat() {
-  if (!_musicActive) return;
-  const ctx = getCtx();
+function _resolveVibe() {
   let vibe = _musicBoss ? "boss" : (_musicVibe || "action");
-  // Reactive: boost energy based on combo streak — never override retro/spooky/boss.
-  // Tier 1 (8+ combo): escalate chill → action.
-  // Tier 2 (15+ combo): escalate chill/action → intense.
   if (!_musicBoss && vibe !== "retro" && vibe !== "spooky") {
     if (_musicComboTier >= 2) {
       if (vibe === "chill" || vibe === "action") vibe = "intense";
@@ -663,19 +885,51 @@ function _scheduleMusicBeat() {
       vibe = "action";
     }
   }
-  const beat = 60 / (_BPM[vibe] || 108);
-  const bar = _musicBeat % 8;
-  if (ctx) {
-    switch (vibe) {
-      case "chill":   _beatChill(ctx, beat, bar);   break;
-      case "action":  _beatAction(ctx, beat, bar);  break;
-      case "intense": _beatIntense(ctx, beat, bar); break;
-      case "retro":   _beatRetro(ctx, beat, bar);   break;
-      case "spooky":  _beatSpooky(ctx, beat, bar);  break;
-      case "boss":    _beatBoss(ctx, beat, bar);    break;
-      default:        _beatAction(ctx, beat, bar);
-    }
+  return vibe;
+}
+
+function _playBeat(ctx, vibe, beat, bar) {
+  switch (vibe) {
+    case "chill":   _beatChill(ctx, beat, bar);   break;
+    case "action":  _beatAction(ctx, beat, bar);  break;
+    case "intense": _beatIntense(ctx, beat, bar); break;
+    case "retro":   _beatRetro(ctx, beat, bar);   break;
+    case "spooky":  _beatSpooky(ctx, beat, bar);  break;
+    case "boss":    _beatBoss(ctx, beat, bar);    break;
+    default:        _beatAction(ctx, beat, bar);
   }
-  _musicBeat++;
-  _musicTimer = setTimeout(_scheduleMusicBeat, beat * 1000 - 8);
+}
+
+function _schedulerTick() {
+  if (!_musicActive) return;
+  const ctx = getCtx();
+  if (!ctx) return; // muted/suspended — recovery clause below re-anchors on resume
+  if (_nextBeatTime < ctx.currentTime - 0.25) {
+    // Tab throttling or a long suspend left us behind; re-anchor instead of
+    // burst-scheduling a backlog of beats.
+    _nextBeatTime = ctx.currentTime + 0.02;
+  }
+  while (_nextBeatTime < ctx.currentTime + _MUSIC_LOOKAHEAD_S) {
+    const bar = _musicBeat % 8;
+    if (bar === 0) {
+      if (_pendingVibe != null) { _musicVibe = _pendingVibe; _pendingVibe = null; }
+      if (_pendingTier != null) { _musicComboTier = _pendingTier; _pendingTier = null; }
+    }
+    if (_pendingBoss != null) {
+      _musicBoss = _pendingBoss;
+      _pendingBoss = null;
+      duckMusic(0.5, 320);
+    }
+    const vibe = _resolveVibe();
+    const beat = 60 / (_BPM[vibe] || 108);
+    const delay = Math.max(0, _nextBeatTime - ctx.currentTime);
+    _scheduleOffset = delay;
+    try {
+      _withBus("music", () => _playBeat(ctx, vibe, beat, bar));
+    } finally {
+      _scheduleOffset = 0;
+    }
+    _musicBeat++;
+    _nextBeatTime += beat;
+  }
 }

@@ -37,8 +37,18 @@ export function stepTransientEffectsInPlace(gs = {}) {
   gs.particles = stepAndCompactInPlace(gs.particles || [], (particle) => {
     particle.x += particle.vx;
     particle.y += particle.vy;
-    particle.vx *= 0.95;
-    particle.vy *= 0.95;
+    if (particle.gravity) {
+      // debris / casing: gravity pull with mild horizontal drag
+      particle.vy += particle.gravity;
+      particle.vx *= 0.97;
+      if (particle.rotVel) particle.rot += particle.rotVel;
+    } else if (particle.kind === "smoke") {
+      particle.vx *= 0.98;
+      particle.vy *= 0.98;
+    } else {
+      particle.vx *= 0.95;
+      particle.vy *= 0.95;
+    }
     particle.life -= 1;
     return particle.life > 0;
   });

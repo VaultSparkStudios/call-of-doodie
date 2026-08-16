@@ -8,7 +8,11 @@ function unitRandom(rng) {
   return Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : 0.5;
 }
 
-export function addParticles(gs, x, y, color, count = 8, rng = cosmeticRandom) {
+// Particle kinds (S155): "glow" (default shrinking circle), "spark" (line
+// segment along velocity), "smoke" (growing, fading, drifts up), "debris"
+// (rotating chip with gravity), "casing" (small ejected rect with gravity).
+// Physics per kind lives in transientLifecycle.js; rendering in drawGame.js.
+export function addParticles(gs, x, y, color, count = 8, rng = cosmeticRandom, kind = "glow") {
   if (!Array.isArray(gs?.particles)) return 0;
   const space = MAX_PARTICLES - gs.particles.length;
   if (space <= 0) return 0;
@@ -16,8 +20,8 @@ export function addParticles(gs, x, y, color, count = 8, rng = cosmeticRandom) {
   const amount = Math.min(scaledCount, space);
   for (let index = 0; index < amount; index++) {
     const angle = unitRandom(rng) * Math.PI * 2;
-    const speed = 1 + unitRandom(rng) * 4;
-    gs.particles.push({
+    const speed = kind === "smoke" ? 0.3 + unitRandom(rng) * 1.2 : 1 + unitRandom(rng) * 4;
+    const particle = {
       x, y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
@@ -25,7 +29,24 @@ export function addParticles(gs, x, y, color, count = 8, rng = cosmeticRandom) {
       maxLife: 50,
       color,
       size: 2 + unitRandom(rng) * 4,
-    });
+      kind,
+    };
+    if (kind === "smoke") {
+      particle.vy -= 0.4 + unitRandom(rng) * 0.5; // drifts upward
+      particle.life = 40 + unitRandom(rng) * 25;
+      particle.maxLife = 65;
+    } else if (kind === "debris" || kind === "casing") {
+      particle.rot = unitRandom(rng) * Math.PI * 2;
+      particle.rotVel = (unitRandom(rng) - 0.5) * 0.5;
+      particle.gravity = 0.18;
+      particle.vy -= 1.5 + unitRandom(rng) * 1.5; // pop upward, then fall
+      if (kind === "casing") {
+        particle.size = 1.5 + unitRandom(rng) * 1.2;
+        particle.life = 22 + unitRandom(rng) * 10;
+        particle.maxLife = 32;
+      }
+    }
+    gs.particles.push(particle);
   }
   return amount;
 }

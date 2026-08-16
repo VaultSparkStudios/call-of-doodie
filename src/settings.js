@@ -28,6 +28,15 @@ export const SETTINGS_DEFAULTS = {
   hudDensity:          "standard",
   // Character art pack: Modern is the default; Retro restores the first playable's circle-and-emoji cast.
   visualPack:          "modern",
+
+  // Audio submix volumes (0–1), applied to the Web Audio bus graph.
+  // Mute + music vibe stay on their pre-existing preference keys
+  // (cod-music-muted / cod-music-vibe) for back-compat.
+  masterVolume:        1.0,
+  sfxVolume:           1.0,
+  musicVolume:         0.8,
+  ambientVolume:       0.7,
+  uiVolume:            1.0,
 };
 
 // HUD widget visibility derived from density preset.

@@ -27,7 +27,7 @@ export function triggerBossPhaseTwoTransition({
   gs,
   addText,
   addParticles,
-  soundWaveClear,
+  soundPhaseTwo,
 }) {
   if (!enemy?.isBossEnemy || enemy.bossPhase2 || enemy.health <= 0 || enemy.health >= enemy.maxHealth * 0.5) {
     return false;
@@ -44,6 +44,6 @@ export function triggerBossPhaseTwoTransition({
   gs.screenShake = Math.max(gs.screenShake, 18);
   addParticles(gs, enemy.x, enemy.y, "#FF2200", 35);
   addParticles(gs, enemy.x, enemy.y, "#FF8800", 20);
-  soundWaveClear();
+  soundPhaseTwo();
   return true;
 }

@@ -1,11 +1,12 @@
 import { WEAPONS } from "./constants.js";
 import { getMusicBPM } from "./sounds.js";
 import { buildWeaponAccent, drawShadedOrb, drawWeaponBarrel } from "./utils/visualPrimitives.js";
-import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getRuntimeZombieSprite, getWeaponSprite, getWorldObjectSprite, getThemePropSprite } from "./utils/visualAssetLibrary.js";
+import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getRuntimeZombieSprite, getWeaponSprite, getWorldObjectSprite } from "./utils/visualAssetLibrary.js";
 import { motionPhaseSeed, resolveSpriteDeath, resolveSpriteMotion } from "./systems/spriteMotion.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
 import { getOffscreenThreatArrows } from "./utils/offscreenIndicators.js";
+import { getArenaLayers } from "./systems/backgroundLayer.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
 // these were re-allocated as fresh array literals for every enemy, every
@@ -15,6 +16,25 @@ const CROC_SCALE_DOTS = [[-0.38, 0], [0, -0.38], [0.38, 0], [0, 0.38], [0, 0]];
 const CLIPBOARD_ROW_OFFSETS = [-0.18, 0.03, 0.24];
 const CRYPTO_ZIGZAG_POINTS = [[-0.44, -0.08], [-0.22, 0.22], [0, -0.24], [0.22, 0.08], [0.44, -0.28]];
 const KAREN_CHEVRON_ROWS = [0.36, 0.1];
+
+// S155 — per-weapon projectile identity (index-aligned with WEAPONS).
+// shape: orb (default) | bolt (velocity-aligned capsule) | pellet (small hot
+// core) | rocket (finned body + exhaust) | spark (4-point star) | note
+// (kazoo eighth-note). trailMult scales the shared tracer length.
+const WEAPON_PROJECTILE = [
+  { shape: "orb",    trailMult: 1.0 },  // 0 Banana Blaster
+  { shape: "rocket", trailMult: 2.2 },  // 1 RPG
+  { shape: "pellet", trailMult: 0.7 },  // 2 Minigun
+  { shape: "bolt",   trailMult: 1.0 },  // 3 Plunger
+  { shape: "bolt",   trailMult: 3.0, stretch: 3.2 }, // 4 Sniper-ator
+  { shape: "pellet", trailMult: 1.4 },  // 5 Squirt Gun
+  { shape: "orb",    trailMult: 1.0, confetti: true }, // 6 Confetti Cannon
+  { shape: "spark",  trailMult: 0.8 },  // 7 Shock Zapper
+  null,                                  // 8 Boomerang (dedicated path)
+  { shape: "bolt",   trailMult: 2.6, stretch: 4 }, // 9 Railgun
+  { shape: "pellet", trailMult: 1.0, ring: true }, // 10 Ricochet Pistol
+  { shape: "note",   trailMult: 1.2 },  // 11 Nuclear Kazoo
+];
 
 // S145 — one identity table per arena theme (was seven parallel arrays
 // re-allocated inside the frame function). Order: office, bunker, factory,
@@ -171,7 +191,17 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.__codShadowKill = false;
   }
   ctx.save();
-  if (!_rm && gs.screenShake > 0.5) { const _sm = gs.settScreenShakeMult ?? 1; ctx.translate((Math.random() - 0.5) * gs.screenShake * 2 * _sm, (Math.random() - 0.5) * gs.screenShake * 2 * _sm); }
+  if (!_rm && gs.screenShake > 0.5) {
+    // Trauma-style shake: a directional bias (recoil kick / impact push)
+    // blends with random jitter, then decays back to pure noise (S155).
+    const _sm = gs.settScreenShakeMult ?? 1;
+    const _mag = gs.screenShake * 2 * _sm;
+    const _sdx = gs.shakeDirX || 0, _sdy = gs.shakeDirY || 0;
+    ctx.translate(
+      (_sdx * 0.6 + (Math.random() - 0.5) * (1 - Math.abs(_sdx) * 0.5)) * _mag,
+      (_sdy * 0.6 + (Math.random() - 0.5) * (1 - Math.abs(_sdy) * 0.5)) * _mag,
+    );
+  }
   // ADS zoom: scale 1.28× centered on player for aim-down-sights effect
   if (gs.adsZoom && p) {
     ctx.translate(p.x, p.y);
@@ -179,40 +209,13 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.translate(-p.x, -p.y);
   }
 
-  // Background — per-theme gradient (identity table at module scope, S145)
+  // Background — prerendered static arena layers (S155). Gradient, floor
+  // zones, terrain, props, grid, and vignette are painted once per run into an
+  // offscreen canvas (systems/backgroundLayer.js) and blitted here; combat
+  // decals persist by stamping straight into that canvas.
   const _theme = ARENA_THEMES[gs.mapTheme] || ARENA_THEMES[0];
-  const [bgC0, bgC1] = gs.bossWave ? ["#1a0000","#0e0000"] : _theme.bg;
-  const _bgKey = `${bgC0}:${bgC1}:${W}:${H}`;
-  if (!gs._bgGradStyle || gs._bgGradKey !== _bgKey) {
-    const _bg = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
-    _bg.addColorStop(0, bgC0);
-    _bg.addColorStop(1, bgC1);
-    gs._bgGradStyle = _bg;
-    gs._bgGradKey = _bgKey;
-  }
-  ctx.fillStyle = gs._bgGradStyle; ctx.fillRect(0, 0, W, H);
-
-  // ── Floor zone panels (room sections with tile grid, themed per run) ──
-  const fzFill = gs.bossWave ? "rgba(82,22,22," : _theme.fzFill;
-  const fzTile = gs.bossWave ? "rgba(112,30,30," : _theme.fzTile;
-  (gs.floorZones || []).forEach(fz => {
-    ctx.save(); ctx.translate(fz.x, fz.y); ctx.rotate(fz.rot);
-    const ba = fz.alpha * 3.35 * (gs.bossWave ? 0.75 : 1);
-    // Panel fill
-    ctx.globalAlpha = ba;
-    ctx.fillStyle = fzFill + "1)";
-    ctx.beginPath(); ctx.roundRect(-fz.rx, -fz.ry, fz.rx * 2, fz.ry * 2, 5); ctx.fill();
-    // Internal tile grid
-    ctx.globalAlpha = ba * 0.5;
-    ctx.strokeStyle = fzTile + "1)"; ctx.lineWidth = 0.7;
-    const TS = 26;
-    for (let tx = -fz.rx + TS; tx < fz.rx; tx += TS) { ctx.beginPath(); ctx.moveTo(tx, -fz.ry); ctx.lineTo(tx, fz.ry); ctx.stroke(); }
-    for (let ty = -fz.ry + TS; ty < fz.ry; ty += TS) { ctx.beginPath(); ctx.moveTo(-fz.rx, ty); ctx.lineTo(fz.rx, ty); ctx.stroke(); }
-    // Panel border
-    ctx.globalAlpha = ba * 0.65; ctx.strokeStyle = fzTile + "1)"; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.roundRect(-fz.rx, -fz.ry, fz.rx * 2, fz.ry * 2, 5); ctx.stroke();
-    ctx.globalAlpha = 1; ctx.restore();
-  });
+  const _arenaLayers = getArenaLayers(gs, W, H, _dpr, { theme: _theme, perfStep: _perfStep, retroCharacters });
+  ctx.drawImage(_arenaLayers.underlay.canvas, 0, 0, W, H);
 
   // ── Active dynamic objective (Hot Zone / Lockdown / Escort / Sniper / Bounty) ──
   const _obj = gs.activeObjective;
@@ -272,63 +275,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   }
 
-  // ── Terrain decorations (floor level, below grid) ──
-  const TC = gs.bossWave ? { s:"#3a0808",c:"rgba(90,20,20,0.30)",r:"#4a2020",t:"#2a0a0a" } : _theme.tc;
-  (gs.terrain || []).forEach(t => {
-    ctx.save();
-    ctx.translate(t.x, t.y);
-    if (t.type === 0) { // stain / puddle
-      ctx.globalAlpha = 0.09;
-      ctx.fillStyle = TC.s;
-      ctx.beginPath(); ctx.ellipse(0, 0, t.size, t.size * 0.55, t.rot, 0, Math.PI * 2); ctx.fill();
-    } else if (t.type === 1) { // floor cracks
-      ctx.strokeStyle = TC.c;
-      ctx.lineWidth = 1;
-      [[t.rot, t.size * 0.9], [t.rot + 2.1, t.size * 0.6], [t.rot + 3.9, t.size * 0.45]].forEach(([a, l]) => {
-        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a) * l, Math.sin(a) * l); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(Math.cos(a) * l * 0.5, Math.sin(a) * l * 0.5);
-        ctx.lineTo(Math.cos(a + 0.55) * l * 0.3, Math.sin(a + 0.55) * l * 0.3); ctx.stroke();
-      });
-    } else if (t.type === 2) { // rubble / debris dots
-      ctx.globalAlpha = 0.18;
-      ctx.fillStyle = TC.r;
-      for (let di = 0; di < 5; di++) {
-        const da = t.rot + di * 1.26, dr = t.size * (0.28 + Math.abs(Math.sin(di * 2.3)) * 0.25);
-        const ds = 1.5 + Math.abs(Math.sin(di + t.rot)) * 3;
-        ctx.beginPath(); ctx.arc(Math.cos(da) * dr, Math.sin(da) * dr, ds, 0, Math.PI * 2); ctx.fill();
-      }
-    } else { // worn tile / scuff mark
-      ctx.globalAlpha = 0.07;
-      ctx.fillStyle = TC.t;
-      ctx.save(); ctx.rotate(t.rot);
-      ctx.fillRect(-t.size * 0.5, -t.size * 0.3, t.size, t.size * 0.6);
-      ctx.restore();
-    }
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  });
-
-  // ── Props (themed decorative furniture — no collision) ──
-  // S147: the 2 highest-visibility props per theme render as an atlas
-  // sprite (visualPackRetroContract.test.js keeps Retro on the emoji-only
-  // path); the remaining props stay on the emoji fillText fallback.
-  (gs.props || []).forEach(pr => {
-    ctx.save(); ctx.translate(pr.x, pr.y);
-    ctx.globalAlpha = gs.bossWave ? 0.24 : 0.42;
-    const _prSprite = (!retroCharacters && pr.spriteKey) ? getThemePropSprite(pr.spriteKey) : null;
-    if (_prSprite) {
-      const _prSize = 28 * (pr.scale || 1);
-      ctx.rotate(pr.rot || 0);
-      ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(_prSprite.image, _prSprite.x, _prSprite.y, _prSprite.width, _prSprite.height, -_prSize / 2, -_prSize / 2, _prSize, _prSize);
-    } else {
-      ctx.font = `${Math.floor(14 * (pr.scale || 1))}px serif`;
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText(pr.emoji, 0, 0);
-    }
-    ctx.globalAlpha = 1; ctx.restore();
-  });
-
   // ── Hazard tiles ──────────────────────────────────────────────────────────
   for (const hz of (gs.hazards || [])) {
     const _pulse = 0.5 + Math.sin((hz.pulseTimer || 0) / 120 * Math.PI * 2) * 0.25;
@@ -372,14 +318,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   }
 
-  const GRID_CLR = gs.bossWave ? "rgba(180,50,50,0.08)" : _theme.grid;
+  // Arena border (kept live — it pulses)
   const BORDER_CLR = gs.bossWave ? null : _theme.border;
-  ctx.strokeStyle = GRID_CLR;
-  ctx.lineWidth = 1;
-  for (let gx = 0; gx < W; gx += 50) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
-  for (let gy = 0; gy < H; gy += 50) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
-
-  // Arena border
   const bPulse = 0.25 + Math.sin(Date.now() / 900) * 0.12;
   ctx.strokeStyle = gs.bossWave ? `rgba(255,60,60,${bPulse})` : `${BORDER_CLR}${bPulse})`;
   ctx.lineWidth = 3; ctx.strokeRect(4, 4, W - 8, H - 8); ctx.lineWidth = 1;
@@ -387,20 +327,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   [[4,4,1,1],[W-4,4,-1,1],[4,H-4,1,-1],[W-4,H-4,-1,-1]].forEach(([cx,cy,sx,sy]) => {
     ctx.beginPath(); ctx.moveTo(cx + sx*cSz, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy*cSz); ctx.stroke();
   });
-
-  // Theme atmosphere — radial vignette overlay tinted per map theme
-  if (!gs.bossWave) {
-    const vc = _theme.vignette;
-    const _vigKey = `${vc}:${W}:${H}`;
-    if (!gs._themeVignetteStyle || gs._themeVignetteKey !== _vigKey) {
-      const _vig = ctx.createRadialGradient(W / 2, H / 2, W * 0.28, W / 2, H / 2, W * 0.72);
-      _vig.addColorStop(0, `rgba(${vc},0)`);
-      _vig.addColorStop(1, `rgba(${vc},0.22)`);
-      gs._themeVignetteStyle = _vig;
-      gs._themeVignetteKey = _vigKey;
-    }
-    ctx.fillStyle = gs._themeVignetteStyle; ctx.fillRect(0, 0, W, H);
-  }
 
   // S145 ambient theme signature — stateless drifting motes (snow, dust,
   // stars, embers…) derived from time + index; no arrays, no allocation.
@@ -491,37 +417,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.beginPath(); ctx.arc(0, 0, eb.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   });
 
-  // Obstacles — themed, floor shadow + 3D top-left highlight + internal stripes
-  const wt = gs.bossWave
-    ? ["rgba(76,20,20,0.95)", "rgba(165,45,45,0.75)", "#CC3030", [135,32,32]]
-    : _theme.wall;
-  (gs.obstacles || []).forEach(ob => {
-    // Cast shadow
-    ctx.fillStyle = "rgba(0,0,0,0.32)"; ctx.fillRect(ob.x + 5, ob.y + 5, ob.w, ob.h);
-    // Main fill
-    ctx.fillStyle = wt[0]; ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
-    // Internal stripe detail
-    const [sr, sg, sb] = wt[3];
-    // S145: lit top face gives every wall real depth at zero texture cost.
-    ctx.fillStyle = `rgba(${Math.min(255, sr + 46)},${Math.min(255, sg + 46)},${Math.min(255, sb + 46)},0.5)`;
-    ctx.fillRect(ob.x, ob.y, ob.w, Math.min(6, ob.h * 0.18));
-    ctx.fillStyle = "rgba(0,0,0,0.28)";
-    ctx.fillRect(ob.x, ob.y + ob.h - Math.min(4, ob.h * 0.12), ob.w, Math.min(4, ob.h * 0.12));
-    ctx.strokeStyle = `rgba(${sr},${sg},${sb},0.22)`; ctx.lineWidth = 1;
-    const isH = ob.w > ob.h;
-    const step = isH ? Math.max(6, Math.floor(ob.h / 3)) : Math.max(6, Math.floor(ob.w / 3));
-    if (isH) { for (let sy = ob.y + step; sy < ob.y + ob.h - 1; sy += step) { ctx.beginPath(); ctx.moveTo(ob.x + 2, sy); ctx.lineTo(ob.x + ob.w - 2, sy); ctx.stroke(); } }
-    else      { for (let sx = ob.x + step; sx < ob.x + ob.w - 1; sx += step) { ctx.beginPath(); ctx.moveTo(sx, ob.y + 2); ctx.lineTo(sx, ob.y + ob.h - 2); ctx.stroke(); } }
-    // Top-left 3D highlight edge
-    ctx.globalAlpha = 0.38;
-    ctx.strokeStyle = `rgba(${Math.min(255,sr+50)},${Math.min(255,sg+50)},${Math.min(255,sb+50)},0.85)`;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(ob.x, ob.y + ob.h); ctx.lineTo(ob.x, ob.y); ctx.lineTo(ob.x + ob.w, ob.y); ctx.stroke();
-    ctx.globalAlpha = 1;
-    // Glow outline
-    ctx.strokeStyle = wt[1]; ctx.lineWidth = 2; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h);
-    ctx.shadowColor = wt[2]; ctx.shadowBlur = 8; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
-  });
+  // Obstacles — prerendered layer (systems/backgroundLayer.js), single blit
+  ctx.drawImage(_arenaLayers.obstacles.canvas, 0, 0, W, H);
 
   // Fog of War overlay (wave event): draw dark fog, punch holes around player and near enemies
   if (gs.fogOfWar) {
@@ -1073,7 +970,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     gs.bullets.forEach(b => {
       const _bvx = b.dx ?? b.vx ?? 0, _bvy = b.dy ?? b.vy ?? 0;
       if (!_bvx && !_bvy) return;
-      const _tl = Math.min(4.5, 2.5 + (b.size || 4) * 0.25);
+      const _wpj = WEAPON_PROJECTILE[b.wpnIdx];
+      const _tl = Math.min(4.5, 2.5 + (b.size || 4) * 0.25) * (_wpj?.trailMult || 1);
       const grad = ctx.createLinearGradient(b.x, b.y, b.x - _bvx * _tl, b.y - _bvy * _tl);
       grad.addColorStop(0, b.color || "#FFD700");
       grad.addColorStop(1, "rgba(0,0,0,0)");
@@ -1096,11 +994,70 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.strokeStyle = "#FFF"; ctx.lineWidth = 1; ctx.globalAlpha = 0.4;
       ctx.beginPath(); ctx.ellipse(0, 0, b.size * 1.4, b.size * 0.5, 0, 0, Math.PI * 2); ctx.stroke();
     } else {
+      // S155 — weapon-specific projectile shapes; unknown weapons keep the orb.
+      const _wpj = WEAPON_PROJECTILE[b.wpnIdx];
+      const _bvx = b.vx || 0, _bvy = b.vy || 0;
+      const _shape = _wpj?.shape || "orb";
       ctx.fillStyle = b.color; ctx.shadowColor = b.color; ctx.shadowBlur = 10;
-      ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill();
+      if (_shape === "bolt" && (_bvx || _bvy)) {
+        ctx.rotate(Math.atan2(_bvy, _bvx));
+        const _st = _wpj.stretch || 2.2;
+        ctx.beginPath(); ctx.ellipse(0, 0, b.size * _st * 0.6, b.size * 0.55, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.85)";
+        ctx.beginPath(); ctx.ellipse(b.size * _st * 0.18, 0, b.size * _st * 0.28, b.size * 0.28, 0, 0, Math.PI * 2); ctx.fill();
+      } else if (_shape === "rocket" && (_bvx || _bvy)) {
+        ctx.rotate(Math.atan2(_bvy, _bvx));
+        ctx.beginPath(); ctx.ellipse(0, 0, b.size * 1.5, b.size * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#802020"; // fins
+        ctx.beginPath(); ctx.moveTo(-b.size * 1.2, 0); ctx.lineTo(-b.size * 1.9, -b.size * 0.8); ctx.lineTo(-b.size * 1.9, b.size * 0.8); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "#FFC24D"; // exhaust flicker
+        ctx.globalAlpha = 0.75 + Math.random() * 0.25;
+        ctx.beginPath(); ctx.arc(-b.size * 1.9, 0, b.size * (0.5 + Math.random() * 0.3), 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+      } else if (_shape === "pellet") {
+        ctx.beginPath(); ctx.arc(0, 0, b.size * 0.85, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.9)";
+        ctx.beginPath(); ctx.arc(0, 0, b.size * 0.38, 0, Math.PI * 2); ctx.fill();
+        if (_wpj.ring) {
+          ctx.strokeStyle = b.color; ctx.lineWidth = 1; ctx.globalAlpha = 0.5;
+          ctx.beginPath(); ctx.arc(0, 0, b.size * 1.5, 0, Math.PI * 2); ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      } else if (_shape === "spark") {
+        ctx.rotate(Date.now() / 60 + (b.life || 0));
+        ctx.beginPath();
+        for (let _si = 0; _si < 8; _si++) {
+          const _sr = _si % 2 === 0 ? b.size * 1.5 : b.size * 0.5;
+          const _sa = (_si / 8) * Math.PI * 2;
+          if (_si === 0) ctx.moveTo(Math.cos(_sa) * _sr, Math.sin(_sa) * _sr);
+          else ctx.lineTo(Math.cos(_sa) * _sr, Math.sin(_sa) * _sr);
+        }
+        ctx.closePath(); ctx.fill();
+      } else if (_shape === "note") {
+        ctx.rotate(0.35);
+        ctx.beginPath(); ctx.ellipse(0, b.size * 0.5, b.size * 0.8, b.size * 0.55, -0.4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillRect(b.size * 0.55, -b.size * 1.3, Math.max(1.2, b.size * 0.24), b.size * 1.8);
+      } else {
+        if (_wpj?.confetti) ctx.fillStyle = `hsl(${(Date.now() / 4 + (b.life || 0) * 31) % 360},95%,65%)`;
+        ctx.beginPath(); ctx.arc(0, 0, b.size, 0, Math.PI * 2); ctx.fill();
+      }
     }
     ctx.restore();
   });
+
+  // S155: brief explosion light halo (additive), same treatment as the muzzle
+  if (gs.explosionFlash && !_rm && _perfStep < 2) {
+    const _ef = gs.explosionFlash;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    const _efR = 90 + _ef.life * 30;
+    const _efG = ctx.createRadialGradient(_ef.x, _ef.y, 0, _ef.x, _ef.y, _efR);
+    _efG.addColorStop(0, `rgba(255,190,80,${0.14 * _ef.life / 3})`);
+    _efG.addColorStop(1, "rgba(255,190,80,0)");
+    ctx.fillStyle = _efG;
+    ctx.beginPath(); ctx.arc(_ef.x, _ef.y, _efR, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
 
   // Particles — additive glow (S145); when frame budget is hot, render only
   // every other particle, and drop the blend mode entirely at step ≥2.
@@ -1109,8 +1066,23 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   if (_perfStep < 2) ctx.globalCompositeOperation = "lighter";
   for (let i = 0; i < gs.particles.length; i += _pStride) {
     const pt = gs.particles[i];
-    ctx.globalAlpha = pt.life / pt.maxLife; ctx.fillStyle = pt.color;
-    ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (pt.life / pt.maxLife), 0, Math.PI * 2); ctx.fill();
+    const _lf = pt.life / pt.maxLife;
+    ctx.globalAlpha = _lf; ctx.fillStyle = pt.color;
+    // S155 kinds — collapse to the classic circle at perf step ≥2.
+    if (_perfStep < 2 && pt.kind === "spark" && (pt.vx || pt.vy)) {
+      ctx.strokeStyle = pt.color; ctx.lineWidth = Math.max(1, pt.size * 0.4);
+      ctx.beginPath(); ctx.moveTo(pt.x, pt.y); ctx.lineTo(pt.x - pt.vx * 3, pt.y - pt.vy * 3); ctx.stroke();
+    } else if (_perfStep < 2 && pt.kind === "smoke") {
+      ctx.globalAlpha = _lf * 0.35;
+      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * (1.6 - _lf * 0.8), 0, Math.PI * 2); ctx.fill();
+    } else if (_perfStep < 2 && (pt.kind === "debris" || pt.kind === "casing")) {
+      ctx.save(); ctx.translate(pt.x, pt.y); ctx.rotate(pt.rot || 0);
+      const _pw = pt.size * (pt.kind === "casing" ? 1.8 : 1.2);
+      ctx.fillRect(-_pw / 2, -pt.size / 2, _pw, pt.size);
+      ctx.restore();
+    } else {
+      ctx.beginPath(); ctx.arc(pt.x, pt.y, pt.size * _lf, 0, Math.PI * 2); ctx.fill();
+    }
   }
   ctx.globalCompositeOperation = "source-over";
   ctx.globalAlpha = 1;
@@ -1325,6 +1297,19 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.lineTo(_mfX + 2 + Math.cos(_ma) * _mfLen, Math.sin(_ma) * _mfLen); ctx.stroke();
     }
     ctx.lineCap = "butt"; ctx.shadowBlur = 0;
+    // S155: additive light halo — the flash "illuminates" the floor around
+    // the muzzle. Off under reduced motion (flash suppression) and perf ≥2.
+    if (!_rm && _perfStep < 2) {
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      const _mfR = 55 + gs.muzzleFlash * 16;
+      const _halo = ctx.createRadialGradient(_mfX, 0, 0, _mfX, 0, _mfR);
+      _halo.addColorStop(0, `rgba(255,214,96,${0.12 * (gs.muzzleFlash / 4)})`);
+      _halo.addColorStop(1, "rgba(255,214,96,0)");
+      ctx.fillStyle = _halo;
+      ctx.beginPath(); ctx.arc(_mfX, 0, _mfR, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
   }
   ctx.restore();
   }

@@ -15,6 +15,8 @@ const META = {
   particlesMult:       { label: "Particles",               desc: "Explosion & death particle density — lower for better FPS", tab: "Visual",   quick: true, type: "options", options: [{v:0.25,l:"Low"},{v:0.5,l:"Med"},{v:1,l:"High"},{v:2,l:"Ultra"}] },
   screenShakeMult:     { label: "Screen Shake",            desc: "Camera shake intensity on hits & explosions",              tab: "Visual",   quick: true, type: "slider",  min: 0.0,  max: 2.0,  step: 0.25, fmt: v => v === 0 ? "Off" : v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   reducedMotion:       { label: "Reduced Motion",           desc: "Disables screen shake, flashes & other intense effects",    tab: "Visual",   quick: true, type: "toggle" },
+  masterVolume:        { label: "Master Volume",           desc: "Overall audio level — sound effects, music, ambience & interface together", tab: "Audio", quick: true, type: "slider", min: 0, max: 1, step: 0.1, fmt: v => v === 0 ? "Off" : `${Math.round(v*100)}%` },
+  musicVolume:         { label: "Music Volume",            desc: "Procedural soundtrack level",                              tab: "Audio",    quick: true, type: "slider",  min: 0,    max: 1,    step: 0.1,  fmt: v => v === 0 ? "Off" : `${Math.round(v*100)}%` },
   autoReload:          { label: "Auto Reload on Empty",    desc: "Automatically reload when magazine hits zero",             tab: "Controls", quick: true, type: "toggle" },
   rumble:              { label: "Haptic Feedback",         desc: "Vibration on gamepad rumble or mobile touch — hits, kills, boss phase 2, low HP", tab: "Controls", quick: true, type: "toggle" },
   controlHandedness:   { label: "Touch Control Side",       desc: "Which side of the screen moves vs. aims/shoots on touch devices", tab: "Controls", quick: true, type: "options", options: [{v:"right",l:"Move Left / Aim Right"},{v:"left",l:"Move Right / Aim Left"}] },
@@ -31,6 +33,9 @@ const META = {
   grenadeRadiusMult:   { label: "Grenade Blast Radius",    desc: "Explosion size — bigger = more enemies hit",               tab: "Controls", type: "slider",  min: 0.5,  max: 2.0,  step: 0.25, fmt: v => v === 1 ? "Normal" : `${Math.round(v*100)}%` },
   controllerDeadZone:  { label: "Controller Dead Zone",   desc: "Analog stick dead zone — increase if your stick drifts",   tab: "Controls", type: "slider",  min: 0.05, max: 0.40, step: 0.05, fmt: v => v.toFixed(2) },
   aimAssist:           { label: "Aim Assist (Controller)", desc: "Gently snaps aim toward the nearest enemy when using RT to shoot", tab: "Controls", type: "toggle" },
+  sfxVolume:           { label: "Sound Effects Volume",    desc: "Weapons, hits, pickups & explosions",                      tab: "Audio",    type: "slider",  min: 0,    max: 1,    step: 0.1,  fmt: v => v === 0 ? "Off" : `${Math.round(v*100)}%` },
+  ambientVolume:       { label: "Ambience Volume",         desc: "Arena room tone & danger drone",                           tab: "Audio",    type: "slider",  min: 0,    max: 1,    step: 0.1,  fmt: v => v === 0 ? "Off" : `${Math.round(v*100)}%` },
+  uiVolume:            { label: "Interface Volume",        desc: "Menu clicks & confirmation sounds",                        tab: "Audio",    type: "slider",  min: 0,    max: 1,    step: 0.1,  fmt: v => v === 0 ? "Off" : `${Math.round(v*100)}%` },
 };
 
 export default function SettingsPanel({ settings, onSave, onClose }) {
