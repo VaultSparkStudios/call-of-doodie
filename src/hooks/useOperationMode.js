@@ -2,7 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { track } from "../utils/analytics.js";
 import { saveRunToHistory, saveStudioGameEvent } from "../storage.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
-import { getMusicVibe, setMusicVibe, soundWaveClear } from "../sounds.js";
+import { setMusicVibe, soundWaveClear } from "../sounds.js";
+import { readPreference } from "../utils/gamePreferences.js";
 import { addText } from "../systems/transientPresentation.js";
 import { getRunIntegrityReceipt, recordRunIntegrityFault } from "../systems/runIntegrity.js";
 import { RUN_PHASE } from "../systems/runTermination.js";
@@ -26,10 +27,16 @@ export const OPERATION_ENCOUNTER_MUSIC = Object.freeze({
   BOSS:     null,       // handled by App.jsx boss-wave setMusicIntensity(true)
 });
 
+function _restorePlayerMusicVibe() {
+  const saved = readPreference("cod-music-vibe");
+  if (saved) setMusicVibe(saved);
+}
+
 function _applyEncounterMusicVibe(verb) {
   const targetVibe = OPERATION_ENCOUNTER_MUSIC[verb];
   if (!targetVibe) return; // BOSS or unknown — let App.jsx handle it
-  if (getMusicVibe() === "retro") return; // respect the visual-mode choice
+  // readPreference is authoritative: it covers both committed and queued-but-pending retro
+  if (readPreference("cod-music-vibe") === "retro") return;
   setMusicVibe(targetVibe);
 }
 
@@ -49,6 +56,7 @@ export function useOperationMode({
     stateRef.current = null;
     arenaRef.current = null;
     completeRef.current = null;
+    _restorePlayerMusicVibe();
     setState(null); setArenaState(null); setDirective(null); setCompleteReceipt(null);
   }, []);
 
@@ -131,7 +139,7 @@ export function useOperationMode({
     const receipt = { ...buildOperationReceipt(nextState), arenaReceipt, rivalReceipt, rematchCartridge: buildOperationRematchCartridge(rivalReceipt), durationSeconds: Math.floor(durationMs / 1000), runScore: gs.score, routeSource: gs.operationRouteSource };
     Object.assign(gs, { operationReceipt: receipt, runPhase: RUN_PHASE.ENDED, runEndCause: "operation_complete" });
     completeRef.current = receipt; setCompleteReceipt(receipt);
-    setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear();
+    setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear(); _restorePlayerMusicVibe();
     const historyEntry = createRunHistoryEntry({
       score: gs.score, kills: gs.kills, wave: gs.currentWave,
       timeSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000), difficulty: difficultyRef.current,

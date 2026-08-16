@@ -4,10 +4,12 @@ import { OPERATION_ENCOUNTER_MUSIC } from "./useOperationMode.js";
 
 // Mock sounds.js so the module loads without an AudioContext.
 vi.mock("../sounds.js", () => ({
-  getMusicVibe: vi.fn(() => "action"),
   setMusicVibe: vi.fn(),
   soundWaveClear: vi.fn(),
 }));
+
+// readPreference is used to check the player's saved vibe (covers pending retro too).
+vi.mock("../utils/gamePreferences.js", () => ({ readPreference: vi.fn(() => "action") }));
 
 // Other dependencies needed by useOperationMode.js (not exercised here).
 vi.mock("../utils/analytics.js", () => ({ track: vi.fn() }));
