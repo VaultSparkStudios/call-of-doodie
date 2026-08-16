@@ -1,6 +1,6 @@
 {
   "schemaVersion": "public-service-status-v1",
-  "effectiveDate": "2026-08-15",
+  "effectiveDate": "2026-08-16",
   "overall": "operational",
   "surfaces": {
     "browserGame": {
