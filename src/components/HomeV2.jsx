@@ -11,6 +11,7 @@ import {
 } from "../storage.js";
 import { MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import { QUICK_RULES } from "../config/quickRules.js";
+import { isOpsDebug } from "../utils/debugFlags.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { getAnalyticsStatus, track } from "../utils/analytics.js";
@@ -33,7 +34,7 @@ import { resetTutorialProgress } from "../utils/tutorialProgress.js";
 import { buildScenarioCartridge, buildSewerRelayUrl, decodeScenarioCartridge } from "../utils/scenarioCartridge.js";
 import { buildNemesisChronicle } from "../utils/nemesisChronicle.js";
 import { buildFieldManualTruth } from "../utils/fieldManualTruth.js";
-import { isPlaytestMode, loadPlaytestPulse, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
+import { isPlaytestMode, loadPlaytestPulse } from "../utils/playtestFlightRecorder.js";
 import { buildFirstRunsJourney } from "../utils/firstRunsJourney.js";
 import { buildCommandersOrder } from "../utils/commandersOrders.js";
 import { PrimaryWeaponSelector } from "./WeaponDock.jsx";
@@ -158,18 +159,14 @@ export default function HomeV2(props) {
   const [replayCopied, setReplayCopied] = useState(false);
   const [scenarioInput, setScenarioInput] = useState("");
   const [scenarioNotice, setScenarioNotice] = useState("");
-  const [playtestPulseEnabled, setPlaytestPulseState] = useState(() => isPlaytestMode());
-  const [playtestPulse, setPlaytestPulse] = useState(() => loadPlaytestPulse());
+  const [playtestPulseEnabled] = useState(() => isPlaytestMode());
+  const [playtestPulse] = useState(() => loadPlaytestPulse());
   const [inputDebugEnabled] = useState(() => {
     if (typeof window === "undefined") return false;
     return new URLSearchParams(window.location.search).get("debug") === "input"
       || readPreference("cod-debug-input", "0", "local", "home") === "1";
   });
-  const [opsDebugEnabled] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("debug") === "ops"
-      || readPreference("cod-debug-ops", "0", "local", "home") === "1";
-  });
+  const [opsDebugEnabled] = useState(() => isOpsDebug());
   const [inputCalibration, setInputCalibration] = useState(() => loadInputCalibration());
   const [controllerProfile] = useState(() => loadControllerProfile());
   const [pwaInstallAttempt] = useState(() => loadPwaInstallAttempt());
@@ -907,6 +904,10 @@ export default function HomeV2(props) {
               📲 INSTALL APP
             </button>
           )}
+          {/* S155: device diagnostics are operator/debug detail — shown to
+              players only when storage is actually degraded (they need the
+              warning), otherwise behind ?debug=ops. */}
+          {(storageHealth.status === "degraded" || opsDebugEnabled) && (
           <details style={{ flexBasis: "100%", maxWidth: 560, margin: "2px auto 0", padding: "8px 10px", borderRadius: 8, border: `1px solid ${themePalette.line}`, background: themePalette.panel, textAlign: "left" }}>
             <summary style={{ cursor: "pointer", color: themePalette.ink, fontSize: 10, fontWeight: 900, letterSpacing: 1.5 }}>DEVICE &amp; SAVE STATUS</summary>
             <div style={{ display: "grid", gap: 8, marginTop: 10, fontSize: 11, lineHeight: 1.45 }}>
@@ -927,6 +928,7 @@ export default function HomeV2(props) {
               <button type="button" onClick={() => setStorageHealth(probeLocalStorage().receipt)} style={{ ...quickBtn, justifySelf: "start", padding: "6px 10px", fontSize: 10 }}>TEST LOCAL SAVE</button>
             </div>
           </details>
+          )}
           {trainingNotice && <div role="status" style={{ flexBasis: "100%", color: "#9BFFBD", fontSize: 10, textAlign: "center" }}>{trainingNotice}</div>}
           {inputDebugEnabled && (
             <button
@@ -955,7 +957,7 @@ export default function HomeV2(props) {
               OPEN AIM DIAGNOSTICS · {aimCheck.status.toUpperCase()}
             </button>
           )}
-          {(inputCalibration || controllerProfile) && (
+          {opsDebugEnabled && (inputCalibration || controllerProfile) && (
             <span
               style={{
                 ...quickBtn,
@@ -970,19 +972,10 @@ export default function HomeV2(props) {
               {inputQaReceipt.deviceIndex != null ? ` · #${inputQaReceipt.deviceIndex}` : ""}
             </span>
           )}
-          <button
-            type="button"
-            aria-pressed={playtestPulseEnabled}
-            style={{ ...quickBtn, borderColor: playtestPulseEnabled ? "rgba(180,140,255,0.55)" : themePalette.line, color: playtestPulseEnabled ? "#D5C2FF" : themePalette.muted }}
-            onClick={() => {
-              const next = !playtestPulseEnabled;
-              setPlaytestPulseEnabled(next);
-              setPlaytestPulseState(next);
-              setPlaytestPulse(loadPlaytestPulse());
-            }}
-          >🫀 PLAYTEST PULSE {playtestPulseEnabled ? "ON" : "OFF"} · {playtestPulse?.sampleSize || 0} LOCAL</button>
         </div>
-        {playtestPulseEnabled && <PlaytestPulsePanel pulse={playtestPulse} palette={themePalette} />}
+        {/* S155 (founder decision): the Playtest Pulse opt-in toggle moved to
+            Settings; the raw sample readout is operator detail (?debug=ops). */}
+        {playtestPulseEnabled && opsDebugEnabled && <PlaytestPulsePanel pulse={playtestPulse} palette={themePalette} />}
 
         {/* Progress and reference systems stay one layer below the play loop. */}
         <div id="player-tools" style={{ marginTop: 18, padding: "14px", borderRadius: 10, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.08)", scrollMarginTop: 86 }}>

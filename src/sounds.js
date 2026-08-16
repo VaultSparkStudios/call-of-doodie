@@ -101,7 +101,7 @@ function _unlockAudio() {
   if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
   if (!audioCtx) _createAudioContext();
 }
-document.addEventListener("pointerdown", _unlockAudio, { once: true });
+if (typeof document !== "undefined") document.addEventListener("pointerdown", _unlockAudio, { once: true });
 
 // Construct the context during an idle slice so the first meaningful mobile
 // interaction does not pay device/audio-backend initialization synchronously.
@@ -121,7 +121,7 @@ function getCtx() {
 }
 
 // Re-unlock on visibility change (iOS suspends AudioContext when app backgrounds)
-document.addEventListener("visibilitychange", () => {
+if (typeof document !== "undefined") document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && audioCtx && audioCtx.state === "suspended") {
     audioCtx.resume();
   }

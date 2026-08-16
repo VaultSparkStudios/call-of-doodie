@@ -21,6 +21,7 @@ import {
 } from "./lib/public-route-registry.mjs";
 import { copyrightYear } from "./lib/build-date.mjs";
 import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
+import { ENEMY_ATLAS_CONTRACT } from "../src/utils/enemyAtlasContract.js";
 
 const root = path.resolve("public");
 const checkOnly = process.argv.includes("--check");
@@ -56,26 +57,37 @@ function card([title, body]) {
 }
 
 function renderArt() {
+  // S155: atlas filenames come from the runtime contract (a version bump in
+  // enemyAtlasContract.js used to leave this page pointing at a dead file).
+  const atlasImg = (atlas, alt) => `<img src="../${atlas.runtimePath.replace(/^public\//, "")}" alt="${alt}">`;
   return `
     <figure class="roster-art card">
-      <img src="../visual-assets/enemy-atlas-core-v3.webp" alt="Core enemy roster atlas">
-      <img src="../visual-assets/enemy-atlas-specialists.webp" alt="Specialist enemy roster atlas">
-      <img src="../visual-assets/enemy-atlas-bosses.webp" alt="Signature encounter roster atlas">
+      ${atlasImg(ENEMY_ATLAS_CONTRACT.core, "Core enemy roster atlas")}
+      ${atlasImg(ENEMY_ATLAS_CONTRACT.specialists, "Specialist enemy roster atlas")}
+      ${atlasImg(ENEMY_ATLAS_CONTRACT.bosses, "Signature encounter roster atlas")}
       <figcaption>Production character art shown at high resolution; in-game silhouettes are optimized for combat scale. Gameplay classifications come from the live contract below.</figcaption>
     </figure>`;
 }
 
+// S155: fallback numbers come from the committed snapshot
+// (data/community-stats-snapshot.json, refreshed via `npm run stats:snapshot`)
+// and carry their snapshot date, so a stale fallback reads as dated history
+// instead of masquerading as live truth.
+const statsSnapshot = JSON.parse(fs.readFileSync(path.resolve("data", "community-stats-snapshot.json"), "utf8"));
+const fmtInt = (value) => Number(value || 0).toLocaleString("en-US");
+
 function renderLiveCommunityStats(page) {
   if (page.id !== "stats") return "";
+  const snap = statsSnapshot.stats;
   const metrics = [
-    ["runs", "Runs", "12"],
-    ["runners", "Runners", "5"],
-    ["hours", "Hours played", "0.2 h"],
-    ["kills", "Enemies terminated", "259"],
-    ["score", "Total score", "119,223"],
-    ["damage", "Damage dealt", "21,628"],
+    ["runs", "Runs", fmtInt(snap.runs)],
+    ["runners", "Runners", fmtInt(snap.runners)],
+    ["hours", "Hours played", `${snap.hours} h`],
+    ["kills", "Enemies terminated", fmtInt(snap.kills)],
+    ["score", "Total score", fmtInt(snap.score)],
+    ["damage", "Damage dealt", fmtInt(snap.damage)],
     ["accuracy", "Measured accuracy", "—"],
-    ["bosses", "Bosses terminated", "0"],
+    ["bosses", "Bosses terminated", fmtInt(snap.bosses)],
   ];
   return `
       <section class="live-stats" aria-labelledby="live-community-heading">
@@ -96,15 +108,40 @@ function renderLiveCommunityStats(page) {
           <div class="live-feedback-bar" aria-hidden="true"><i data-feedback-seg="too_easy"></i><i data-feedback-seg="dialed_in"></i><i data-feedback-seg="brutal"></i></div>
           <span data-feedback-legend></span>
         </div>
-        <p class="live-coverage" data-community-coverage>All 12 supported runs · 0 full-detail · 12 legacy · oldest supported record March 12, 2026.</p>
+        <p class="live-coverage" data-community-coverage>As of ${escapeHtml(statsSnapshot.snapshotDate)}: all ${fmtInt(snap.runs)} supported runs · ${fmtInt(statsSnapshot.coverage.richRuns)} full-detail · ${fmtInt(statsSnapshot.coverage.legacyRuns)} legacy${statsSnapshot.coverage.oldestSupportedAt ? ` · oldest supported record ${new Date(statsSnapshot.coverage.oldestSupportedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}` : ""}. Live totals replace this snapshot when connected.</p>
         <p class="live-caveat">This includes every recoverable server record. Runs never submitted before telemetry existed cannot be reconstructed; unavailable legacy fields remain unknown instead of being estimated.</p>
+      </section>`;
+}
+
+// S155 — the /leaderboard/ page previously explained the leaderboard without
+// showing a single score (a dead end for the visitor's intent). It now
+// renders a live top-10 from /api/top-scores with a graceful offline state.
+function renderLiveLeaderboard(page) {
+  if (page.id !== "leaderboard") return "";
+  return `
+      <section class="live-stats" aria-labelledby="live-board-heading">
+        <div class="live-stats-head">
+          <div><p class="eyebrow">Verified global board</p><h2 id="live-board-heading">Top 10 right now</h2></div>
+          <span class="status" data-top-scores-status data-state="connecting" aria-live="polite">Connecting to the live board…</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table data-top-scores hidden style="width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums">
+            <thead><tr style="text-align:left"><th>#</th><th>Callsign</th><th>Score</th><th>Wave</th><th>Kills</th><th>Mode</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="live-caveat">Scores carry trust checks; runs with modified gameplay settings are badged in game. Play as a guest and submit with any callsign.</p>
       </section>`;
 }
 
 function renderPage(page) {
   const art = page.art ? renderArt() : "";
-  const liveStats = renderLiveCommunityStats(page);
-  const liveStatsScript = page.id === "stats" ? '<script src="../community-stats-live.js" defer></script>' : "";
+  const liveStats = renderLiveCommunityStats(page) + renderLiveLeaderboard(page);
+  const liveStatsScript = page.id === "stats"
+    ? '<script src="../community-stats-live.js" defer></script>'
+    : page.id === "leaderboard"
+      ? '<script src="../leaderboard-live.js" defer></script>'
+      : "";
   const cta = page.cta
     ? `<a class="primary-cta" href="${escapeHtml(page.cta[1])}">${escapeHtml(page.cta[0])} <span aria-hidden="true">→</span></a>`
     : "";
@@ -174,6 +211,57 @@ queue("field-manual.json", JSON.stringify({
     identity: { value: "guest-first-optional-local-porcelain-passport", source: "/privacy/" },
   },
 }, null, 2));
+// S155 — stats-surface.json is now generated from the committed snapshot with
+// count-scaled interpretation copy. The hand-maintained version hardcoded
+// prose like "twelve runs are too few…" that would read as false the moment
+// traffic grew.
+{
+  const snap = statsSnapshot.stats;
+  const period = `All supported production history through ${statsSnapshot.snapshotDate}`;
+  const metric = (id, label, value, unitOrDenominator, interpretation) => ({
+    id, label, value, period, computedAt: statsSnapshot.snapshotDate, unitOrDenominator, interpretation,
+  });
+  const runsNote = snap.runs < 50
+    ? `The production fact pipeline is live, but ${fmtInt(snap.runs)} runs are too few for broad retention or balance conclusions.`
+    : snap.runs < 500
+      ? `${fmtInt(snap.runs)} verified runs form an early corpus — directional signals, not conclusions.`
+      : `${fmtInt(snap.runs)} verified runs form a substantial corpus for aggregate analysis.`;
+  const runnersNote = snap.runners < 20
+    ? `${fmtInt(snap.runners)} runners establish real multi-player coverage without supporting a mass-audience claim.`
+    : `${fmtInt(snap.runners)} distinct runners provide meaningful audience coverage.`;
+  queue("stats-surface.json", JSON.stringify({
+    schemaVersion: "1.1",
+    title: "Call of Doodie verified game statistics",
+    page: "https://callofdoodie.wtf/stats/",
+    machineReadable: "https://callofdoodie.wtf/stats-surface.json",
+    liveMachineReadable: "https://callofdoodie.wtf/api/community-stats",
+    feedVersion: "analytica-feed-v1",
+    refreshSeconds: 15,
+    refreshMechanism: "poll",
+    showcase: ["verified_runs", "distinct_runners", "enemies_terminated", "total_score"],
+    precomputed: true,
+    source: statsSnapshot.source,
+    scope: "All recoverable server history; automated health checks, practice, and quarantined rows excluded",
+    freshness: `Verified fallback snapshot from ${statsSnapshot.snapshotDate}; the live endpoint and visible Community Stats surfaces refresh every 15 seconds`,
+    coverage: {
+      history: "all_available_server_history",
+      oldestSupportedAt: statsSnapshot.coverage.oldestSupportedAt,
+      richRuns: statsSnapshot.coverage.richRuns,
+      legacyRuns: statsSnapshot.coverage.legacyRuns,
+      unrecoverablePreTelemetryRuns: "not_measurable",
+      unknownLegacyMetrics: ["shots", "hits", "criticals", "bosses", "feedback"],
+    },
+    metrics: [
+      metric("verified_runs", "Verified public runs", snap.runs, "completed non-synthetic runs", runsNote),
+      metric("distinct_runners", "Distinct runners", snap.runners, "privacy-safe distinct public runner identifiers", runnersNote),
+      metric("enemies_terminated", "Enemies terminated", snap.kills, "kills across verified completed runs", "Combat activity is present across the verified corpus; this total is not a per-player average."),
+      metric("total_score", "Total score", snap.score, "score points across verified completed runs", "The total proves score ingestion coverage, while mode and difficulty mix still limit direct comparisons."),
+      metric("total_damage", "Total damage", snap.damage, "damage points across verified completed runs", "Damage is available for current rich run facts; unsupported legacy detail is not reconstructed."),
+      metric("excluded_health_checks", "Excluded health checks", snap.excludedHealthChecks, "server-identified synthetic rows", "Automation remains queryable for operations but cannot inflate public player, score, or combat totals."),
+    ],
+  }, null, 2));
+}
+
 queue("status.json", JSON.stringify({
   schemaVersion: "public-service-status-v1",
   effectiveDate: PUBLIC_CONTENT_VERSION_DATE,

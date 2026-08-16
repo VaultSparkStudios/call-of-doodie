@@ -23,7 +23,7 @@
     "test:coverage": "vitest run --coverage && node scripts/validate-coverage-contract.mjs",
     "coverage:check": "node scripts/validate-coverage-contract.mjs",
     "launch:smoke": "vitest run src/App.launch.test.jsx",
-    "public:contract": "node scripts/validate-public-contract.mjs",
+    "public:contract": "node scripts/validate-public-contract.mjs && node scripts/check-public-claims.mjs",
     "gameplay:contract": "node scripts/generate-public-gameplay-contract.mjs",
     "health:check": "node scripts/health-check.mjs",
     "live:site-check": "node scripts/live-site-check.mjs",
@@ -73,9 +73,11 @@
     "migration:apply": "node scripts/apply-supabase-migration.mjs --apply",
     "functions:deploy": "node scripts/deploy-supabase-functions.mjs",
     "replay:state-stepper": "node scripts/validate-replay-state-stepper-fixtures.mjs",
-    "progression:audit": "node scripts/progression-curve-audit.mjs"
-    ,"context:hot": "node scripts/render-hot-context.mjs"
-    ,"context:hot:check": "node scripts/render-hot-context.mjs --check"
+    "progression:audit": "node scripts/progression-curve-audit.mjs",
+    "context:hot": "node scripts/render-hot-context.mjs",
+    "context:hot:check": "node scripts/render-hot-context.mjs --check",
+    "stats:snapshot": "node scripts/refresh-community-stats-snapshot.mjs",
+    "claims:check": "node scripts/check-public-claims.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.2",

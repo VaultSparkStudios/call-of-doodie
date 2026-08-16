@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback, useRef, lazy } from "react";
 import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import SiteFooter from "./SiteFooter.jsx";
-import { WEAPONS, ENEMY_TYPES, DIFFICULTIES, ACHIEVEMENTS, META_UPGRADES, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
-import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, saveMetaProgress, purchaseMetaUpgrade, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, loadCustomLoadouts, requestStudioEventSync, saveCustomLoadout, loadRivalryHistory, saveStudioGameEvent, countIncompleteMissions, isMissionCompleted } from "../storage.js";
+import { WEAPONS, DIFFICULTIES, ACHIEVEMENTS, STARTER_LOADOUTS, NEW_FEATURES, getWeeklyMutation, getWeeklyGauntlet } from "../constants.js";
+import { loadCareerStats, getDailyMissions, loadMissionProgress, loadMetaProgress, prestigeAccount, getAccountLevel, getDailyChallengeSeed, hasDailyChallengeSubmitted, loadRunHistory, requestStudioEventSync, loadRivalryHistory, saveStudioGameEvent, countIncompleteMissions } from "../storage.js";
 import { getSupabaseClient } from "../supabase.js";
-import { encodeLoadout, decodeLoadout, isValidLoadoutCode } from "../utils/loadoutCode.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { track } from "../utils/analytics.js";
@@ -33,16 +32,8 @@ function LazyPanel({ children }) {
   return <AsyncPanelBoundary>{children}</AsyncPanelBoundary>;
 }
 
-const TIER_LABELS = ["", "Ⅰ", "Ⅱ", "Ⅲ"];
-const TIER_COLORS = ["#555", "#CD7F32", "#C0C0C0", "#FFD700"];
-const PLAYER_SKINS = [
-  { emoji: "",   label: "Soldier",  required: 0 },
-  { emoji: "🤖", label: "Robot",    required: 1 },
-  { emoji: "👾", label: "Alien",    required: 2 },
-  { emoji: "🐸", label: "Frog",     required: 3 },
-  { emoji: "🦊", label: "Fox",      required: 4 },
-  { emoji: "🐉", label: "Dragon",   required: 5 },
-];
+// (S155: tier/skin lookup tables removed with the dead modal JSX that
+// consumed them — the live implementations render via MenuPanels.jsx.)
 
 function canUseRealtimePresence() {
   if (typeof window === "undefined") return false;
@@ -70,15 +61,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const [showMetaTree, setShowMetaTree] = useState(false);
   const [showSupporter, setShowSupporter] = useState(false);
   const [showCommandCenter, setShowCommandCenter] = useState(false);
-  const [loadoutCodeInput, setLoadoutCodeInput] = useState("");
-  const [loadoutCodeError, setLoadoutCodeError] = useState("");
-  const [customLoadouts, setCustomLoadouts] = useState(() => loadCustomLoadouts());
   const [runHistory, setRunHistory] = useState(() => loadRunHistory());
   const [rivalryHistory, setRivalryHistory] = useState(() => loadRivalryHistory());
-  const [editingSlot, setEditingSlot] = useState(null); // null or slot index 0-2
-  const [editName, setEditName] = useState("");
-  const [editWeaponIdx, setEditWeaponIdx] = useState(0);
-  const [editStarterLoadout, setEditStarterLoadout] = useState("standard");
   const [customSeed, setCustomSeed] = useState("");
   const [career, setCareer] = useState(null);
   const [missions, setMissions] = useState([]);
@@ -277,8 +261,6 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
 
   const accountLevel = career ? getAccountLevel(career.totalKills) : 1;
   const prestige = meta?.prestige || 0;
-  const PRESTIGE_REQUIRED_LEVEL = 25;
-  const canPrestige = accountLevel >= PRESTIGE_REQUIRED_LEVEL;
   const weeklyMutation = getWeeklyMutation();
   const selectedLoadout = STARTER_LOADOUTS.find(loadout => loadout.id === starterLoadout) || STARTER_LOADOUTS[0];
   // S155: shared mode catalog fixes the legacy omission where Zombies mode
@@ -580,315 +562,14 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Rules Modal */}
-      {false && showRules && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>📜 RULES OF ENGAGEMENT</h3>
-            <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2 }}>
-              <div>🎯 <strong style={{ color: "#FF6B35" }}>Objective:</strong> Survive as many waves as possible</div>
-              <div>👾 <strong style={{ color: "#FF6B35" }}>Enemies:</strong> Spawn in waves, each harder than the last</div>
-              <div>⚠️ <strong style={{ color: "#FF6B35" }}>Boss Waves:</strong> Every 5th wave spawns a powerful boss!</div>
-              <div>⚡ <strong style={{ color: "#FF6B35" }}>Combos:</strong> Kill quickly for score multipliers (2s window)</div>
-              <div>🔥 <strong style={{ color: "#FF6B35" }}>Killstreaks:</strong> Every 5 kills triggers a bonus attack</div>
-              <div>💥 <strong style={{ color: "#FF6B35" }}>Critical Hits:</strong> 15% chance for 2x damage (gold text)</div>
-              <div>💊 <strong style={{ color: "#FF6B35" }}>Pickups:</strong> Enemies drop health, ammo, speed, nukes & upgrades</div>
-              <div>🔧 <strong style={{ color: "#FF6B35" }}>Weapon Upgrades:</strong> Rare drops — boost damage, fire rate & ammo!</div>
-              <div>😇 <strong style={{ color: "#FF6B35" }}>Guardian Angel:</strong> Super rare boss drop — grants 1 extra life!</div>
-              <div>✨ <strong style={{ color: "#FF6B35" }}>Perks:</strong> Pick one on every level-up. They stack!</div>
-              <div>⚠️ <strong style={{ color: "#FF6B35" }}>Ranged Foes:</strong> Glowing ring enemies shoot at you!</div>
-              <div>💨 <strong style={{ color: "#FF6B35" }}>Dash:</strong> Brief invincibility to dodge through danger</div>
-              <div>⬆ <strong style={{ color: "#FF6B35" }}>XP & Levels:</strong> Level up from kills — choose a perk each time</div>
-              <div>🏆 <strong style={{ color: "#FF6B35" }}>Leaderboard:</strong> Submit your score with famous last words</div>
-              <div>🌱 <strong style={{ color: "#FF6B35" }}>Seeds:</strong> Each run uses a unique seed (0–999998) controlling map layout, walls, terrain, and theme. Enter a custom seed on the menu to replay any run!</div>
-              <div>🔄 <strong style={{ color: "#FF6B35" }}>Replay:</strong> After death, hit 🔄 REPLAY to rerun the exact same map with the same seed</div>
-            </div>
-            <button onClick={() => setShowRules(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
-          </div>
-        </div>
-      )}
 
       {/* Controls Modal */}
-      {false && showControls && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>⌨ CONTROLS</h3>
-            {isMobile ? (
-              <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
-                <div>👆 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left thumb</span> — Move soldier</div>
-                <div>👆 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right thumb</span> — Aim & auto-fire</div>
-                <div>🎯 <span style={{ color: "#EEE" }}>Move only → auto-aims nearest enemy</span></div>
-                <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>DASH button</span> — Invincible dodge</div>
-                <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>GRENADE button</span> — AOE explosion</div>
-                <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>Weapon buttons</span> — Tap to swap</div>
-                <div>⟳ <span style={{ color: "#FFD700", fontWeight: 800 }}>R button</span> — Manual reload</div>
-                <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Pause button</span> — Pause menu</div>
-              </div>
-            ) : (
-              <div style={{ fontSize: 13, color: "#EEE", lineHeight: 2.2 }}>
-                <div>🏃 <span style={{ color: "#FF6B35", fontWeight: 800 }}>W/A/S/D</span> — Move</div>
-                <div>🖱 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Mouse</span> — Aim</div>
-                <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Click</span> — Shoot</div>
-                <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>R</span> — Reload</div>
-                <div>🔢 <span style={{ color: "#FFD700", fontWeight: 800 }}>1 / 2 / 3 / 4</span> — Switch weapons</div>
-                <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>5 / Q / G</span> — Throw grenade</div>
-                <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>Space / Shift</span> — Dash</div>
-                <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Escape</span> — Pause / Resume</div>
-              </div>
-            )}
-            {/* Controller section */}
-            <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-              <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                🎮 CONTROLLER
-                {controllerType === "xbox" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(16,124,16,0.2)", border: "1px solid #107C10", color: "#4DBD61", fontWeight: 900 }}>Xbox</span>}
-                {controllerType === "ps" && <span style={{ fontSize: 9, padding: "1px 5px", borderRadius: 3, background: "rgba(0,55,145,0.22)", border: "1px solid #2255BB", color: "#6699FF", fontWeight: 900 }}>PS</span>}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 12px", fontSize: 12, color: "#EEE", lineHeight: 2 }}>
-                <div>🕹️ <span style={{ color: "#FF6B35", fontWeight: 800 }}>Left Stick</span> — Move</div>
-                <div>🎯 <span style={{ color: "#FF6B35", fontWeight: 800 }}>Right Stick</span> — Aim</div>
-                <div>🔫 <span style={{ color: "#FF6B35", fontWeight: 800 }}>RT / R2</span> — Shoot</div>
-                <div>💨 <span style={{ color: "#00E5FF", fontWeight: 800 }}>R3 (click stick)</span> — Dash</div>
-                <div>💣 <span style={{ color: "#FF4500", fontWeight: 800 }}>B / Circle</span> — Grenade</div>
-                <div>🔄 <span style={{ color: "#FFD700", fontWeight: 800 }}>X / Square</span> — Reload</div>
-                <div>◀ <span style={{ color: "#FFD700", fontWeight: 800 }}>LB / L1</span> — Prev weapon</div>
-                <div>▶ <span style={{ color: "#FFD700", fontWeight: 800 }}>RB / R1</span> — Next weapon</div>
-                <div>⏸ <span style={{ color: "#FFD700", fontWeight: 800 }}>Start / Options</span> — Pause</div>
-                <div>✅ <span style={{ color: "#AAA", fontWeight: 800 }}>A / Cross</span> — Confirm (menus)</div>
-                <div>❌ <span style={{ color: "#AAA", fontWeight: 800 }}>B / Circle</span> — Back (menus)</div>
-                <div>⬆ <span style={{ color: "#AAA", fontWeight: 800 }}>D-pad</span> — Navigate menus</div>
-              </div>
-            </div>
-            <div style={{ marginTop: 14 }}>
-              <div style={{ fontSize: 12, color: "#FFD700", fontWeight: 700, marginBottom: 6 }}>WEAPONS</div>
-              {WEAPONS.map((w, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", fontSize: 12, color: "#EEE" }}>
-                  <span style={{ fontSize: 16 }}>{w.emoji}</span>
-                  <span style={{ color: w.color, fontWeight: 700, minWidth: 140 }}>[{i + 1}] {w.name}</span>
-                  <span style={{ color: "#CCC", fontSize: 11 }}>{w.desc}</span>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => setShowControls(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
-          </div>
-        </div>
-      )}
 
       {/* Most Wanted List Modal */}
-      {false && showBestiary && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.25)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ color: "#FFD700", margin: "0 0 12px", fontSize: 18 }}>👾 MOST WANTED LIST</h3>
-            {ENEMY_TYPES.map((e, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 6px", borderRadius: 6, marginBottom: 4, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <span style={{ fontSize: 24 }}>{e.emoji}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: e.color }}>{e.name}</div>
-                  <div style={{ fontSize: 10, color: "#CCC" }}>HP: {e.health} · Speed: {e.speed} · Points: {e.points}{e.ranged ? " · RANGED ⚡" : ""}</div>
-                  <div style={{ fontSize: 10, color: "#FF69B4", fontStyle: "italic" }}>"{Array.isArray(e.deathQuotes) ? e.deathQuotes[Math.floor(Math.random() * e.deathQuotes.length)] : (e.deathQuote || "...")}"</div>
-                </div>
-              </div>
-            ))}
-            <button onClick={() => setShowBestiary(false)} style={{ ...btnP, marginTop: 16, width: "100%", maxWidth: 300 }}>← BACK</button>
-          </div>
-        </div>
-      )}
 
       {/* Run History Modal */}
-      {false && showRunHistory && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 480, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <button onClick={() => setShowRunHistory(false)} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
-            <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>📜 RUN HISTORY</h3>
-            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>Last 10 runs — saved locally on your device</p>
-            {(() => {
-              const history = loadRunHistory();
-              if (history.length === 0) {
-                return <p style={{ color: "#aaa", fontSize: 13, textAlign: "center", marginTop: 20 }}>No runs yet — get out there!</p>;
-              }
-              const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR" };
-              const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
-              return (
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {history.map((run, i) => {
-                    const date = new Date(run.ts);
-                    const dateStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
-                    const timeFmt = run.time != null ? (run.time >= 3600 ? `${Math.floor(run.time/3600)}h${Math.floor((run.time%3600)/60)}m` : `${Math.floor(run.time/60)}:${String(run.time%60).padStart(2,"0")}`) : "--:--";
-                    const modeLabel = run.mode ? MODE_LABELS[run.mode] : null;
-                    const diffColor = DIFF_COLORS[run.difficulty] || "#AAA";
-                    return (
-                      <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                        <div style={{ background: "rgba(255,107,53,0.18)", border: "1px solid rgba(255,107,53,0.4)", borderRadius: 6, padding: "4px 8px", textAlign: "center", flexShrink: 0, minWidth: 38 }}>
-                          <div style={{ fontSize: 9, color: "#FF6B35", fontWeight: 700 }}>W</div>
-                          <div style={{ fontSize: 16, fontWeight: 900, color: "#FF6B35", lineHeight: 1 }}>{run.wave ?? "?"}</div>
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
-                            <span style={{ fontSize: 13, fontWeight: 900, color: "#FFD700" }}>{(run.score || 0).toLocaleString()}</span>
-                            <span style={{ fontSize: 11, color: "#00FF88" }}>☠ {run.kills ?? 0}</span>
-                            {modeLabel && <span style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(255,51,51,0.18)", border: "1px solid rgba(255,51,51,0.4)", color: "#FF6666", fontWeight: 900 }}>{modeLabel}</span>}
-                            <span style={{ fontSize: 9, fontWeight: 700, color: diffColor }}>{(run.difficulty || "normal").toUpperCase()}</span>
-                            {run.integrityReceipt?.onlineEligible === false && (
-                              <span title={`Recovered stages: ${run.integrityReceipt.stages?.join(", ") || "runtime"}`} style={{ fontSize: 8, padding: "1px 4px", borderRadius: 3, background: "rgba(255,128,0,0.16)", border: "1px solid rgba(255,160,72,0.5)", color: "#FFB06B", fontWeight: 900 }}>⚠ LOCAL ONLY</span>
-                            )}
-                          </div>
-                          <div style={{ display: "flex", gap: 8, marginTop: 3, fontSize: 9, color: "#888" }}>
-                            <span>⏱ {timeFmt}</span>
-                            {run.modifier && <span>🎲 {run.modifier}</span>}
-                            <span style={{ marginLeft: "auto" }}>{dateStr}</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })()}
-            <button onClick={() => setShowRunHistory(false)} style={{ ...btnP, marginTop: 16, width: "100%" }}>← CLOSE</button>
-          </div>
-        </div>
-      )}
 
       {/* Custom Loadout Builder Modal */}
-      {false && showLoadoutBuilder && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 500, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.35)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <button onClick={() => { setShowLoadoutBuilder(false); setEditingSlot(null); }} style={{ position: "absolute", top: 10, right: 14, background: "none", border: "none", color: "#CCC", fontSize: 20, cursor: "pointer", fontFamily: "monospace" }}>X</button>
-            <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18, letterSpacing: 2 }}>⚙️ CUSTOM LOADOUTS</h3>
-            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 16px" }}>Save up to 3 custom weapon + loadout presets.</p>
-
-            {editingSlot !== null ? (
-              /* ── Create/Edit form ── */
-              <div>
-                <div style={{ fontSize: 11, color: "#FFD700", marginBottom: 12, fontWeight: 900 }}>SLOT {editingSlot + 1} — CONFIGURE</div>
-                {/* Name */}
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: 10, color: "#888", marginBottom: 4, letterSpacing: 1 }}>LOADOUT NAME (max 20 chars)</div>
-                  <input
-                    value={editName} maxLength={20}
-                    onChange={e => setEditName(e.target.value)}
-                    style={{ width: "100%", boxSizing: "border-box", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,107,53,0.4)", borderRadius: 6, padding: "8px 10px", color: "#fff", fontFamily: "'Courier New',monospace", fontSize: 13, outline: "none" }}
-                    placeholder="e.g. Glass Cannon Speedrun"
-                  />
-                </div>
-                {/* Weapon selector */}
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ fontSize: 10, color: "#888", marginBottom: 6, letterSpacing: 1 }}>STARTING WEAPON</div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {WEAPONS.map((w, i) => (
-                      <button key={i} onClick={() => setEditWeaponIdx(i)} style={{
-                        padding: "6px 10px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6,
-                        background: editWeaponIdx === i ? "rgba(255,107,53,0.25)" : "rgba(255,255,255,0.05)",
-                        border: editWeaponIdx === i ? "1px solid #FF6B35" : "1px solid rgba(255,255,255,0.1)",
-                        color: editWeaponIdx === i ? "#FF6B35" : "#CCC",
-                      }}>
-                        {w.emoji} {w.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                {/* Starter loadout selector */}
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontSize: 10, color: "#888", marginBottom: 6, letterSpacing: 1 }}>STARTER LOADOUT</div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {STARTER_LOADOUTS.map(lo => (
-                      <button key={lo.id} onClick={() => setEditStarterLoadout(lo.id)} style={{
-                        padding: "6px 10px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6,
-                        background: editStarterLoadout === lo.id ? "rgba(255,215,0,0.18)" : "rgba(255,255,255,0.05)",
-                        border: editStarterLoadout === lo.id ? "1px solid #FFD700" : "1px solid rgba(255,255,255,0.1)",
-                        color: editStarterLoadout === lo.id ? "#FFD700" : "#CCC",
-                      }}>
-                        {lo.emoji} {lo.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={() => {
-                    if (!editName.trim()) return;
-                    const lo = { name: editName.trim(), weaponIdx: editWeaponIdx, starterLoadout: editStarterLoadout };
-                    saveCustomLoadout(editingSlot, lo);
-                    setCustomLoadouts(loadCustomLoadouts());
-                    setEditingSlot(null);
-                  }} style={{ ...btnP, flex: 1, fontSize: 13, padding: "10px 16px" }}>
-                    💾 SAVE
-                  </button>
-                  <button onClick={() => setEditingSlot(null)} style={{ ...btnS, flex: 1, fontSize: 13, padding: "10px 16px" }}>
-                    ✕ CANCEL
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* ── Slot list + Code I/O ── */
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {/* Loadout Code import/export */}
-                <div style={{ padding: "10px 12px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,215,0,0.2)" }}>
-                  <div style={{ fontSize: 10, color: "#FFD700", letterSpacing: 1, fontWeight: 700, marginBottom: 8 }}>LOADOUT CODE SHARE</div>
-                  <div style={{ fontSize: 9, color: "#888", marginBottom: 8 }}>Share a 3-char code to export your current weapon + starter selection.</div>
-                  <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 6 }}>
-                    <input
-                      value={loadoutCodeInput}
-                      onChange={e => { setLoadoutCodeInput(e.target.value.toUpperCase()); setLoadoutCodeError(""); }}
-                      placeholder="e.g. 02B"
-                      maxLength={3}
-                      style={{ flex: 1, background: "rgba(255,255,255,0.06)", border: `1px solid ${loadoutCodeError ? "#FF6666" : "rgba(255,215,0,0.35)"}`, borderRadius: 6, padding: "6px 10px", color: "#fff", fontFamily: "'Courier New',monospace", fontSize: 14, outline: "none", textTransform: "uppercase", letterSpacing: 3 }}
-                    />
-                    <button onClick={() => {
-                      if (!isValidLoadoutCode(loadoutCodeInput)) { setLoadoutCodeError("Invalid code"); return; }
-                      const decoded = decodeLoadout(loadoutCodeInput);
-                      setEditWeaponIdx(decoded.weaponIdx);
-                      setEditStarterLoadout(decoded.starterLoadout);
-                      setLoadoutCodeError("");
-                      setLoadoutCodeInput("");
-                    }} style={{ padding: "6px 12px", fontSize: 11, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 6, background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.4)", color: "#FFD700", whiteSpace: "nowrap" }}>
-                      IMPORT
-                    </button>
-                  </div>
-                  {loadoutCodeError && <div style={{ fontSize: 10, color: "#FF6666", marginBottom: 4 }}>{loadoutCodeError}</div>}
-                  <div style={{ fontSize: 10, color: "#888" }}>
-                    Your current: <span style={{ color: "#FFD700", letterSpacing: 2, fontFamily: "monospace" }}>{encodeLoadout({ weaponIdx: editWeaponIdx, starterLoadout: editStarterLoadout })}</span>
-                  </div>
-                </div>
-                {customLoadouts.map((lo, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.04)", border: lo ? "1px solid rgba(255,107,53,0.25)" : "1px solid rgba(255,255,255,0.07)" }}>
-                    <div style={{ background: "rgba(255,107,53,0.16)", border: "1px solid rgba(255,107,53,0.35)", borderRadius: 6, padding: "4px 8px", textAlign: "center", flexShrink: 0, minWidth: 32 }}>
-                      <div style={{ fontSize: 9, color: "#FF6B35", fontWeight: 700 }}>#{i + 1}</div>
-                    </div>
-                    {lo ? (
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 13, fontWeight: 900, color: "#FF6B35", marginBottom: 2 }}>{lo.name}</div>
-                        <div style={{ fontSize: 10, color: "#AAA" }}>
-                          {WEAPONS[lo.weaponIdx]?.emoji} {WEAPONS[lo.weaponIdx]?.name}
-                          {" · "}
-                          {STARTER_LOADOUTS.find(sl => sl.id === lo.starterLoadout)?.emoji} {STARTER_LOADOUTS.find(sl => sl.id === lo.starterLoadout)?.name}
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{ flex: 1, fontSize: 12, color: "#555", fontStyle: "italic" }}>Empty slot</div>
-                    )}
-                    <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
-                      {lo && (
-                        <button onClick={() => {
-                          saveCustomLoadout(i, null);
-                          setCustomLoadouts(loadCustomLoadouts());
-                        }} style={{ padding: "4px 10px", fontSize: 10, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 5, background: "rgba(255,60,60,0.12)", border: "1px solid rgba(255,60,60,0.3)", color: "#FF6666" }}>
-                          DEL
-                        </button>
-                      )}
-                      <button onClick={() => {
-                        setEditingSlot(i);
-                        setEditName(lo?.name || "");
-                        setEditWeaponIdx(lo?.weaponIdx ?? 0);
-                        setEditStarterLoadout(lo?.starterLoadout || "standard");
-                      }} style={{ padding: "4px 10px", fontSize: 10, fontFamily: "'Courier New',monospace", cursor: "pointer", borderRadius: 5, background: "rgba(255,107,53,0.12)", border: "1px solid rgba(255,107,53,0.3)", color: "#FF6B35" }}>
-                        {lo ? "EDIT" : "CREATE"}
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Career Stats Modal */}
       {showCareer && career && (
@@ -955,46 +636,6 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Daily Missions Modal */}
-      {false && showMissions && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 460, width: "100%", position: "relative", border: "1px solid rgba(255,215,0,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ color: "#FFD700", margin: "0 0 4px", fontSize: 18 }}>📋 DAILY MISSIONS</h3>
-            <p style={{ color: "#bbb", fontSize: 11, margin: "0 0 14px" }}>
-              {(() => {
-                const now = new Date();
-                const midnight = new Date(now); midnight.setHours(24, 0, 0, 0);
-                const msLeft = midnight - now;
-                const h = Math.floor(msLeft / 3600000);
-                const m = Math.floor((msLeft % 3600000) / 60000);
-                return `Resets in ${h}h ${m}m · Complete for career point bonuses`;
-              })()}
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {missions.map((m, i) => {
-                const done = isMissionCompleted(missionProgress, m, i);
-                return (
-                  <div key={i} style={{
-                    display: "flex", alignItems: "center", gap: 12, padding: "12px 14px",
-                    borderRadius: 8, background: done ? "rgba(0,255,136,0.07)" : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${done ? "rgba(0,255,136,0.35)" : "rgba(255,255,255,0.1)"}`,
-                  }}>
-                    <span style={{ fontSize: 26, flexShrink: 0 }}>{m.icon}</span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: done ? "#00FF88" : "#FFF" }}>{m.text}</div>
-                      <div style={{ fontSize: 10, color: "#bbb", marginTop: 2 }}>Reward: +{m.goal} career pts on completion</div>
-                    </div>
-                    <div style={{ fontSize: 20, flexShrink: 0 }}>{done ? "✅" : "⬜"}</div>
-                  </div>
-                );
-              })}
-            </div>
-            <div style={{ marginTop: 14, padding: "10px 14px", borderRadius: 8, background: "rgba(255,215,0,0.06)", border: "1px solid rgba(255,215,0,0.2)", fontSize: 12, color: "#CCC" }}>
-              💡 Missions are tracked automatically in-game. Progress saves on run end.
-            </div>
-            <button onClick={() => setShowMissions(false)} style={{ ...btnP, marginTop: 16, width: "100%" }}>← BACK</button>
-          </div>
-        </div>
-      )}
 
       {/* Prestige Confirm Modal */}
       {showPrestigeConfirm && (
@@ -1024,202 +665,8 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
       )}
 
       {/* Meta Upgrades Modal */}
-      {false && showUpgrades && meta && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12, backdropFilter: "blur(4px)" }}>
-          <div data-gamepad-scroll="" style={{ ...card, maxWidth: 520, width: "100%", position: "relative", border: "1px solid rgba(255,107,53,0.3)", padding: "20px 16px", color: "#fff", maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ color: "#FF6B35", margin: "0 0 4px", fontSize: 18 }}>🎖️ META UPGRADES</h3>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-              <p style={{ color: "#bbb", fontSize: 11, margin: 0 }}>Permanent bonuses · 3 tiers each · sequential purchase required</p>
-              <div style={{ background: "rgba(255,215,0,0.12)", border: "1px solid rgba(255,215,0,0.4)", borderRadius: 6, padding: "4px 10px", fontSize: 13, fontWeight: 900, color: "#FFD700", flexShrink: 0 }}>
-                ⭐ {(meta.careerPoints || 0).toLocaleString()}
-              </div>
-            </div>
-
-            {/* Prestige section */}
-            <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: prestige > 0 ? "rgba(255,215,0,0.07)" : "rgba(255,255,255,0.03)", border: `1px solid ${prestige > 0 ? "rgba(255,215,0,0.35)" : "rgba(255,255,255,0.1)"}` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 22, flexShrink: 0 }}>⭐</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: prestige > 0 ? "#FFD700" : "#FFF" }}>
-                    PRESTIGE {prestige > 0 ? `${prestige} — Reach P${prestige + 1}` : "— Reset & Rise"}
-                  </div>
-                  <div style={{ fontSize: 10, color: "#bbb", marginTop: 2 }}>
-                    {prestige > 0
-                      ? `Active: enemies +${prestige * 10}% health & speed on all difficulties.`
-                      : "Resets all upgrades & points. Permanently raises difficulty. Earn prestige badge."}
-                  </div>
-                  {!canPrestige && (
-                    <div style={{ fontSize: 10, color: "#FF6B35", marginTop: 2 }}>
-                      Requires Account Level {PRESTIGE_REQUIRED_LEVEL} · You are Level {accountLevel}
-                    </div>
-                  )}
-                </div>
-                <button
-                  disabled={!canPrestige}
-                  onClick={() => setShowPrestigeConfirm(true)}
-                  style={{
-                    padding: "7px 12px", borderRadius: 6, flexShrink: 0,
-                    cursor: canPrestige ? "pointer" : "not-allowed",
-                    background: canPrestige ? "linear-gradient(180deg,#FFD700,#AA7700)" : "rgba(255,255,255,0.05)",
-                    color: canPrestige ? "#000" : "#aaa", border: "none",
-                    fontFamily: "'Courier New',monospace", fontSize: 11, fontWeight: 900,
-                  }}
-                >
-                  PRESTIGE ★
-                </button>
-              </div>
-            </div>
-
-            {/* Player Skin selector */}
-            <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#EEE", marginBottom: 8 }}>🎨 PLAYER SKIN</div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {PLAYER_SKINS.map(s => {
-                  const unlocked = prestige >= s.required;
-                  const selected = (meta.playerSkin || "") === s.emoji;
-                  return (
-                    <button
-                      key={s.emoji || "default"}
-                      disabled={!unlocked}
-                      onClick={() => {
-                        if (!unlocked) return;
-                        const updated = { ...meta, playerSkin: s.emoji };
-                        saveMetaProgress(updated);
-                        setMeta(updated);
-                      }}
-                      title={unlocked ? s.label : `Requires Prestige ${s.required}`}
-                      style={{ padding: "8px 14px", borderRadius: 8, cursor: unlocked ? "pointer" : "not-allowed",
-                        background: selected ? "rgba(255,215,0,0.15)" : unlocked ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)",
-                        border: selected ? "2px solid #FFD700" : unlocked ? "1px solid rgba(255,255,255,0.18)" : "1px solid rgba(255,255,255,0.06)",
-                        color: unlocked ? "#FFF" : "#444", fontFamily: "'Courier New',monospace" }}>
-                      <div style={{ fontSize: 20, marginBottom: 3 }}>{s.emoji || "🪖"}</div>
-                      <div style={{ fontSize: 9, color: unlocked ? "#AAA" : "#444" }}>
-                        {unlocked ? s.label : `P${s.required}`}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-              {META_UPGRADES.map((u) => {
-                const ownedTier = (meta.upgradeTiers || {})[u.id] || 0;
-                const nextTier = ownedTier + 1;
-                const isMaxed = ownedTier >= u.tiers.length;
-                const nextCost = isMaxed ? 0 : u.tiers[nextTier - 1].cost;
-                const canAfford = !isMaxed && (meta.careerPoints || 0) >= nextCost;
-                const activeTierDesc = ownedTier > 0 ? u.tiers[ownedTier - 1].desc : null;
-                return (
-                  <div key={u.id} style={{
-                    display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", borderRadius: 8,
-                    background: isMaxed ? "rgba(255,215,0,0.05)" : ownedTier > 0 ? "rgba(255,107,53,0.05)" : "rgba(255,255,255,0.025)",
-                    border: `1px solid ${isMaxed ? "rgba(255,215,0,0.35)" : ownedTier > 0 ? "rgba(255,107,53,0.3)" : "rgba(255,255,255,0.07)"}`,
-                  }}>
-                    <span style={{ fontSize: 20, flexShrink: 0 }}>{u.emoji}</span>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: isMaxed ? "#FFD700" : ownedTier > 0 ? "#FF6B35" : "#EEE" }}>{u.name}</span>
-                        {/* Tier pips */}
-                        <div style={{ display: "flex", gap: 3 }}>
-                          {u.tiers.map((_, ti) => (
-                            <div key={ti} style={{
-                              width: 10, height: 10, borderRadius: 2,
-                              background: ti < ownedTier ? TIER_COLORS[ti + 1] : "rgba(255,255,255,0.1)",
-                              border: `1px solid ${ti < ownedTier ? TIER_COLORS[ti + 1] : "rgba(255,255,255,0.18)"}`,
-                            }} />
-                          ))}
-                        </div>
-                        {isMaxed && <span style={{ fontSize: 9, color: "#FFD700", fontWeight: 900 }}>MAX</span>}
-                      </div>
-                      <div style={{ fontSize: 10, color: "#AAA", lineHeight: 1.4 }}>
-                        {activeTierDesc
-                          ? <span style={{ color: "#CCC" }}>{activeTierDesc}</span>
-                          : <span style={{ color: "#bbb" }}>{u.tiers[0].desc}</span>
-                        }
-                      </div>
-                      {!isMaxed && ownedTier > 0 && (
-                        <div style={{ fontSize: 9, color: "#bbb", marginTop: 1 }}>▲ Next: {u.tiers[nextTier - 1].desc}</div>
-                      )}
-                    </div>
-                    {isMaxed ? (
-                      <div style={{ fontSize: 14, color: "#FFD700", flexShrink: 0 }}>★★★</div>
-                    ) : (
-                      <button
-                        disabled={!canAfford}
-                        onClick={() => {
-                          const result = purchaseMetaUpgrade(u.id, nextTier, nextCost);
-                          if (result.success) setMeta(result.meta);
-                        }}
-                        style={{
-                          padding: "5px 9px", borderRadius: 6, flexShrink: 0,
-                          cursor: canAfford ? "pointer" : "not-allowed",
-                          background: canAfford ? "linear-gradient(180deg,#FF6B35,#CC4400)" : "rgba(255,255,255,0.04)",
-                          color: canAfford ? "#FFF" : "#444", border: "none",
-                          fontFamily: "'Courier New',monospace", fontSize: 10, fontWeight: 700, whiteSpace: "nowrap",
-                        }}
-                      >
-                        {TIER_LABELS[nextTier]} ⭐{nextCost.toLocaleString()}
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div style={{ marginTop: 12, padding: "9px 12px", borderRadius: 8, background: "rgba(255,107,53,0.05)", border: "1px solid rgba(255,107,53,0.18)", fontSize: 10, color: "#AAA" }}>
-              💡 Earn 1 career pt per kill · Daily missions grant bonus pts · Upgrades persist between runs (reset on prestige)
-            </div>
-            <button onClick={() => setShowUpgrades(false)} style={{ ...btnP, marginTop: 14, width: "100%" }}>← BACK</button>
-          </div>
-        </div>
-      )}
 
       {/* New Features Modal */}
-      {false && showNewFeatures && (
-        <>
-          <style>{`.wnscroll::-webkit-scrollbar{width:5px}.wnscroll::-webkit-scrollbar-track{background:rgba(255,255,255,0.04);border-radius:3px}.wnscroll::-webkit-scrollbar-thumb{background:rgba(255,107,53,0.55);border-radius:3px}.wnscroll{scrollbar-width:thin;scrollbar-color:rgba(255,107,53,0.55) rgba(255,255,255,0.04)}`}</style>
-          <div
-            onClick={e => { if (e.target === e.currentTarget) setShowNewFeatures(false); }}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: "12px 12px env(safe-area-inset-bottom,12px)", backdropFilter: "blur(4px)" }}
-          >
-            <div style={{ ...card, maxWidth: 460, width: "100%", border: "1px solid rgba(255,107,53,0.4)", padding: 0, color: "#fff", display: "flex", flexDirection: "column", maxHeight: "90dvh", overflow: "hidden" }}>
-              {/* Sticky header */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
-                <h3 style={{ color: "#FF6B35", margin: 0, fontSize: 17, letterSpacing: 2 }}>✦ WHAT'S NEW</h3>
-                <button
-                  onClick={() => setShowNewFeatures(false)}
-                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)", color: "#CCC", fontSize: 16, cursor: "pointer", fontFamily: "monospace", lineHeight: 1, borderRadius: 6, width: 44, height: 44, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
-                  aria-label="Close"
-                >✕</button>
-              </div>
-
-              {/* Scrollable list */}
-              <div data-gamepad-scroll="" className="wnscroll" style={{ flex: 1, minHeight: 0, overflowY: "auto", WebkitOverflowScrolling: "touch", padding: "12px 16px" }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingBottom: 4 }}>
-                  {NEW_FEATURES.map((f, i) => (
-                    <div key={i} style={{ fontSize: 13, color: "#EEE", padding: "9px 12px", borderRadius: 6, background: "rgba(255,107,53,0.06)", border: "1px solid rgba(255,107,53,0.14)", lineHeight: 1.4, flexShrink: 0 }}>
-                      {f}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sticky footer */}
-              <div style={{ padding: "12px 16px", borderTop: "1px solid rgba(255,107,53,0.2)", flexShrink: 0 }}>
-                <button
-                  onClick={handleShareFeatures}
-                  disabled={sharing}
-                  style={{ ...btnP, width: "100%", fontSize: 14, padding: "12px 20px", background: sharing ? "rgba(255,255,255,0.05)" : "linear-gradient(180deg,#FF6B35,#CC4400)", color: sharing ? "#aaa" : "#FFF" }}
-                >
-                  {sharing ? "GENERATING..." : "📤 SHARE THIS UPDATE"}
-                </button>
-                <div style={{ fontSize: 10, color: "#aaa", textAlign: "center", marginTop: 8 }}>Generates a shareable image card · no login required</div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
 
       {/* Settings Panel */}
       {showSettings && gameSettings && (

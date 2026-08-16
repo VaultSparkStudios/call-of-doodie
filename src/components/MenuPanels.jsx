@@ -24,6 +24,7 @@ import {
 } from "../utils/studioEventOps.js";
 import { buildPrestigeRunway, PRESTIGE_REQUIRED_LEVEL } from "../utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../utils/replayCoverage.js";
+import { isOpsDebug } from "../utils/debugFlags.js";
 import { COSMETICS, isCosmeticOwned, equipCosmetic } from "../utils/cosmeticTrack.js";
 
 const OVERLAY = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
@@ -215,8 +216,7 @@ export function RunHistoryPanel({
   const history = Array.isArray(runHistory) ? runHistory : loadRunHistory();
   const rivalry = Array.isArray(rivalryHistory) ? rivalryHistory : loadRivalryHistory();
   const events = Array.isArray(studioEvents) ? studioEvents : loadStudioGameEvents();
-  const opsDebugEnabled = typeof window !== "undefined"
-    && new URLSearchParams(window.location.search).get("debug") === "ops";
+  const opsDebugEnabled = isOpsDebug();
   const MODE_LABELS = { score_attack: "⏱ SA", daily_challenge: "📅 DC", cursed: "☠ CU", boss_rush: "☠ BR", speedrun: "🏃 SR", gauntlet: "🏋 GT", zombies: "🧟 Z" };
   const DIFF_COLORS = { easy: "#44CC44", normal: "#FFD700", hard: "#FF4444", insane: "#FF00FF" };
   const rivalrySummary = summarizeRivalryHistory(rivalry);

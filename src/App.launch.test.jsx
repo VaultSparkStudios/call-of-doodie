@@ -1,4 +1,3 @@
-import * as React from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -130,17 +129,6 @@ vi.mock("./storage.js", () => ({
   saveRunHistory: vi.fn(),
   loadRunHistory: vi.fn(() => []),
 }));
-
-vi.mock("./components/UsernameScreen.jsx", () => {
-  return {
-    default: function UsernameScreenMock({ setUsername, onContinue }) {
-      React.useEffect(() => {
-        setUsername("LaunchTester");
-      }, [setUsername]);
-      return <button onClick={onContinue}>continue</button>;
-    },
-  };
-});
 
 vi.mock("./components/MenuScreen.jsx", () => ({
   default: function MenuScreenMock({ onStart }) {

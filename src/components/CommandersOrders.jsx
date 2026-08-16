@@ -1,3 +1,5 @@
+import { isOpsDebug } from "../utils/debugFlags.js";
+
 export default function CommandersOrders({
   order,
   onAction,
@@ -74,7 +76,14 @@ export default function CommandersOrders({
             {String(order.action.cta).toUpperCase()}
           </button>
         )}
-        <span aria-live="polite" style={{ color: palette.muted, fontSize: 12 }}>
+        {/* S155: raw evidence/reason codes are operator telemetry, not player
+            copy — visible only under ?debug=ops. The data attribute stays for
+            tests and automation. */}
+        <span
+          aria-live="polite"
+          data-reason-code={order.reasonCode}
+          style={{ color: palette.muted, fontSize: 12, display: isOpsDebug() ? undefined : "none" }}
+        >
           Evidence: {order.evidence?.kind || "local-state"} · {order.reasonCode}
         </span>
         {order.briefLines?.length > 0 && (

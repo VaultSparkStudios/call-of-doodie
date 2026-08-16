@@ -7,7 +7,12 @@
   "feedVersion": "analytica-feed-v1",
   "refreshSeconds": 15,
   "refreshMechanism": "poll",
-  "showcase": ["verified_runs", "distinct_runners", "enemies_terminated", "total_score"],
+  "showcase": [
+    "verified_runs",
+    "distinct_runners",
+    "enemies_terminated",
+    "total_score"
+  ],
   "precomputed": true,
   "source": "Production get_cod_community_stats verification receipt",
   "scope": "All recoverable server history; automated health checks, practice, and quarantined rows excluded",
@@ -18,7 +23,13 @@
     "richRuns": 0,
     "legacyRuns": 12,
     "unrecoverablePreTelemetryRuns": "not_measurable",
-    "unknownLegacyMetrics": ["shots", "hits", "criticals", "bosses", "feedback"]
+    "unknownLegacyMetrics": [
+      "shots",
+      "hits",
+      "criticals",
+      "bosses",
+      "feedback"
+    ]
   },
   "metrics": [
     {
@@ -28,7 +39,7 @@
       "period": "All supported production history through 2026-08-08",
       "computedAt": "2026-08-08",
       "unitOrDenominator": "completed non-synthetic runs",
-      "interpretation": "The production fact pipeline is live, but twelve runs are too few for broad retention or balance conclusions."
+      "interpretation": "The production fact pipeline is live, but 12 runs are too few for broad retention or balance conclusions."
     },
     {
       "id": "distinct_runners",
@@ -37,7 +48,7 @@
       "period": "All supported production history through 2026-08-08",
       "computedAt": "2026-08-08",
       "unitOrDenominator": "privacy-safe distinct public runner identifiers",
-      "interpretation": "Five runners establish real multi-player coverage without supporting a mass-audience claim."
+      "interpretation": "5 runners establish real multi-player coverage without supporting a mass-audience claim."
     },
     {
       "id": "enemies_terminated",

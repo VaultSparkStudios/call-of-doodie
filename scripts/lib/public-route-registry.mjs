@@ -3,6 +3,7 @@ import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
 import { PRIMARY_PUBLIC_NAV } from "../../src/config/publicNavigation.js";
 import { CHANGELOG_ENTRIES } from "../../src/config/changelog.js";
 import { deriveContentVersionDate } from "./build-date.mjs";
+import { ENEMY_ATLAS_CONTRACT } from "../../src/utils/enemyAtlasContract.js";
 
 export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
 // S155: derived from the newest git commit touching content-bearing sources
@@ -18,9 +19,11 @@ export function formatPublicContentDate() {
 // S155: disclaimer truth lives in publicNavigation.js (shared with SiteFooter).
 export { PARODY_DISCLAIMER } from "../../src/config/publicNavigation.js";
 
-const CORE_ATLAS_INDICES = [0, 1, 2, 3, 5, 6, 7, 8];
-const SPECIALIST_ATLAS_INDICES = [9, 10, 11, 12, 13, 14, 15, 16];
-const SIGNATURE_ATLAS_INDICES = [4, 17, 18, 19, 20, 21];
+// S155: cohorts derive from the runtime atlas contract instead of hardcoded
+// index arrays that silently dropped any enemy added past index 21.
+const CORE_ATLAS_INDICES = ENEMY_ATLAS_CONTRACT.core.typeIndices;
+const SPECIALIST_ATLAS_INDICES = ENEMY_ATLAS_CONTRACT.specialists.typeIndices;
+const SIGNATURE_ATLAS_INDICES = ENEMY_ATLAS_CONTRACT.bosses.typeIndices;
 
 function titleCase(value) {
   return String(value).replaceAll("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
@@ -44,6 +47,14 @@ function enemiesAt(gameplay, indices) {
 }
 
 function buildEnemySections(gameplay) {
+  // Build fails loudly if the three atlas cohorts stop exactly partitioning
+  // the live roster (e.g. a 23rd enemy without an atlas slot) — previously it
+  // silently dropped the newcomer from every cohort card.
+  const covered = [...CORE_ATLAS_INDICES, ...SPECIALIST_ATLAS_INDICES, ...SIGNATURE_ATLAS_INDICES].sort((a, b) => a - b);
+  const roster = gameplay.enemies.map((enemy) => enemy.index).sort((a, b) => a - b);
+  if (JSON.stringify(covered) !== JSON.stringify(roster)) {
+    throw new Error(`enemy atlas cohorts [${covered}] no longer partition the live roster [${roster}] — update enemyAtlasContract.js`);
+  }
   const bossRotation = gameplay.enemies.filter((enemy) => enemy.boss);
   return [
     ["Core threat atlas", listNames(enemiesAt(gameplay, CORE_ATLAS_INDICES))],
@@ -91,7 +102,7 @@ const ROUTE_DEFINITIONS = [
     id: "play", path: "/play/", label: "Play", rel: "play", priority: 0.8, generated: true,
     eyebrow: "Play in your browser", title: "No install. No account wall. Start the run.",
     description: "Play Call of Doodie free in a modern desktop or mobile browser.",
-    lede: "The game opens directly on the main menu. A display name is optional and only matters for shared challenges and leaderboard identity.",
+    lede: "The game loads a lightweight launcher, then the full command-center menu — no install and no sign-up gate. A display name is optional and only matters for shared challenges and leaderboard identity.",
     cta: ["Start Call of Doodie", "../"],
     sections: [
       ["Desktop", "Use a keyboard and mouse or a supported gamepad. A current version of Chrome, Edge, Firefox, or Safari is recommended."],
@@ -151,7 +162,7 @@ const ROUTE_DEFINITIONS = [
     lede: "Community Stats refresh every 15 seconds and include every recoverable server record, from legacy public scores through full-detail completed-run facts. The verified snapshot remains visible whenever the live service is temporarily unreachable.",
     sections: [
       ["How to read this page", "Every number above is a live total across verified completed runs — never a per-player claim. The small corpus means trends are directional, not statistical. Community records show the single best verified wave, score, and kill count anyone has posted."],
-      ["What is excluded", "Automated health-check rows remain available to operators but are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated."],
+      ["What is excluded", "Automated health-check rows are excluded from every public total. Runs never submitted before telemetry existed cannot be recovered, and unavailable legacy detail stays unknown rather than being estimated."],
       ["Live view", "This page, the Home screen, leaderboard, and post-game debrief all refresh Community Stats every 15 seconds while visible and recover immediately after reconnect, focus, or visibility changes. Sparklines chart the totals this browser has observed changing."],
     ],
     cta: ["Play with Community Stats", "../"],
@@ -164,7 +175,7 @@ const ROUTE_DEFINITIONS = [
     sections: [
       ["Visual readability", "Enemy silhouettes, warning rings, aim telegraphs, health states, and elite markers provide redundant signals. Dark and light themes are available on public pages."],
       ["Motion and effects", "Reduced-motion preferences are respected by the website. Game settings provide control over visual and audio presentation where supported."],
-      ["Touch and focus", "Primary mobile actions use at least 48-pixel targets. Website controls expose visible keyboard focus, semantic headings, and readable contrast."],
+      ["Touch and focus", "Primary mobile actions use at least 48-pixel targets; all interactive targets are at least 44 pixels. Website controls expose visible keyboard focus, semantic headings, and readable contrast."],
       ["Feedback welcome", "Accessibility is ongoing work. Send a specific barrier, device, browser, and desired outcome through the support page."],
     ],
   },

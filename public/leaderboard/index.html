@@ -9,6 +9,7 @@
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../legal.css">
   <script src="../theme.js" defer></script>
+  <script src="../leaderboard-live.js" defer></script>
   <title>A score means more when its rules are visible. | Call of Doodie</title>
 </head>
 <body>
@@ -27,6 +28,19 @@
       <h1>A score means more when its rules are visible.</h1>
       <p class="lede">Public score comparison is optional. You can play as Guest; a display name is only requested when identity adds value.</p>
       
+      <section class="live-stats" aria-labelledby="live-board-heading">
+        <div class="live-stats-head">
+          <div><p class="eyebrow">Verified global board</p><h2 id="live-board-heading">Top 10 right now</h2></div>
+          <span class="status" data-top-scores-status data-state="connecting" aria-live="polite">Connecting to the live board…</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table data-top-scores hidden style="width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums">
+            <thead><tr style="text-align:left"><th>#</th><th>Callsign</th><th>Score</th><th>Wave</th><th>Kills</th><th>Mode</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="live-caveat">Scores carry trust checks; runs with modified gameplay settings are badged in game. Play as a guest and submit with any callsign.</p>
+      </section>
       <div class="card-grid"><section class="card"><h2>Shared conditions</h2><p>Daily and Gauntlet modes use shared seeds so players can compare results under common starting conditions.</p></section><section class="card"><h2>Run receipts</h2><p>Replay proof is advisory deterministic evidence, not a promise of full physics resimulation. Integrity indicators explain when a run is local-only or has unusual conditions.</p></section><section class="card"><h2>Respectful identity</h2><p>Use a display name that is safe to publish. Do not include an email address, phone number, real-world address, or other private information.</p></section></div>
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong><a href="../modes/">Modes</a><a href="../arsenal/">Arsenal</a><a href="../accessibility/">Accessibility</a><a href="../support/">Support</a></aside>
     </main>

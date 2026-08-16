@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { SETTINGS_DEFAULTS, saveSettings, loadPresets, savePresets } from "../settings.js";
 import { soundUIClose } from "../sounds.js";
+import { isPlaytestMode, setPlaytestPulseEnabled } from "../utils/playtestFlightRecorder.js";
 
 const TABS = ["Quick", "Advanced"];
 
@@ -42,6 +43,7 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
   const [w, setW]         = useState({ ...settings });
   const [tab, setTab]     = useState("Quick");
   const [presets, setPresets] = useState(() => loadPresets());
+  const [pulseOn, setPulseOn] = useState(() => isPlaytestMode());
   const [nameInput, setNameInput] = useState("");
   const [showSave, setShowSave]   = useState(false);
 
@@ -274,6 +276,23 @@ export default function SettingsPanel({ settings, onSave, onClose }) {
                 </div>
               );
             })}
+            {tab === "Advanced" && (
+              <div>
+                {/* S155 (founder decision): Playtest Pulse opt-in lives here
+                    instead of on the public front door. Its state persists via
+                    playtestFlightRecorder, outside the settings object. */}
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 12, color: "#CCC" }}>
+                  <span>🫀 Playtest Pulse</span>
+                </div>
+                <div style={{ fontSize: 10, color: "#aaa", marginBottom: 7, lineHeight: 1.3 }}>
+                  Opt-in local playtest evidence — records anonymous run milestones on this device to help tune the game. Nothing leaves your browser without a submitted run.
+                </div>
+                <button onClick={() => setPulseOn(prev => { setPlaytestPulseEnabled(!prev); return !prev; })}
+                  style={{ ...base, fontSize: 11, padding: "8px 18px", background: pulseOn ? "rgba(0,255,136,0.12)" : "rgba(255,255,255,0.04)", border: pulseOn ? "1px solid rgba(0,255,136,0.4)" : "1px solid rgba(255,255,255,0.1)", color: pulseOn ? "#00FF88" : "#aaa" }}>
+                  {pulseOn ? "✓ ON" : "OFF"}
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

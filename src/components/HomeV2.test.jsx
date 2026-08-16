@@ -397,6 +397,8 @@ describe("HomeV2", () => {
   });
 
   it("turns Aim Check into a local controls-verified receipt", async () => {
+    // S155: the resulting INPUT QA chip is ops-gated.
+    window.history.pushState({}, "", "/?debug=ops");
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -431,6 +433,8 @@ describe("HomeV2", () => {
   });
 
   it("surfaces remembered input calibration and controller profile status", async () => {
+    // S155: input-QA receipts are operator telemetry — visible under ?debug=ops.
+    window.history.pushState({}, "", "/?debug=ops");
     saveVerifiedInput();
     localStorage.setItem("cod-controller-profile", JSON.stringify({
       version: 1,
@@ -454,6 +458,8 @@ describe("HomeV2", () => {
   });
 
   it("surfaces PWA install readiness without claiming physical acceptance", async () => {
+    // S155: the install receipt lives in the ops-gated DEVICE & SAVE panel.
+    window.history.pushState({}, "", "/?debug=ops");
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
@@ -468,6 +474,8 @@ describe("HomeV2", () => {
   });
 
   it("renders stored PWA prompt acceptance as install QA evidence", async () => {
+    // S155: install QA evidence lives in the ops-gated DEVICE & SAVE panel.
+    window.history.pushState({}, "", "/?debug=ops");
     localStorage.setItem("cod-pwa-install-attempt", JSON.stringify({ version: 1, outcome: "accepted", timestamp: 123 }));
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -497,6 +505,9 @@ describe("HomeV2", () => {
   });
 
   it("keeps internal art cards off the homepage and makes local-save status actionable", async () => {
+    // S155: healthy-storage detail is ops-gated; degraded storage still
+    // surfaces to players (covered by the visibility logic in HomeV2).
+    window.history.pushState({}, "", "/?debug=ops");
     container = document.createElement("div");
     document.body.appendChild(container);
     await act(async () => {
