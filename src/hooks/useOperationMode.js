@@ -2,7 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { track } from "../utils/analytics.js";
 import { saveRunToHistory, saveStudioGameEvent } from "../storage.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
-import { soundWaveClear } from "../sounds.js";
+import { setMusicVibe, soundWaveClear } from "../sounds.js";
+import { readPreference } from "../utils/gamePreferences.js";
 import { addText } from "../systems/transientPresentation.js";
 import { getRunIntegrityReceipt, recordRunIntegrityFault } from "../systems/runIntegrity.js";
 import { RUN_PHASE } from "../systems/runTermination.js";
@@ -11,6 +12,33 @@ import { chooseMissionDirective } from "../systems/missionDirector.js";
 import { buildOperationReceipt, chooseOperationRoute, createOperationState, getCurrentEncounter, resolveOperationEncounter } from "../systems/operationDirector.js";
 import { applyOperationArenaTransition, buildOperationArenaReceipt, createOperationArenaState } from "../systems/operationArenaState.js";
 import { buildOperationRematchCartridge, buildOperationReplayReceipt } from "../utils/operationRivals.js";
+
+// Maps each encounter verb to a music vibe that suits its narrative role.
+// BOSS is null — the existing boss-wave transition in App.jsx handles it via
+// setMusicIntensity(true), so we leave that beat-quantized swap untouched.
+// Retro players keep their vibe (it's tied to a visual aesthetic choice).
+export const OPERATION_ENCOUNTER_MUSIC = Object.freeze({
+  BREACH:   "intense",  // assault entrance — 150 BPM aggression
+  HOLD:     "action",   // defend position — 108 BPM steady pulse
+  ESCORT:   "chill",    // protect convoy — 72 BPM suspense contrast
+  HUNT:     "spooky",   // eliminate target — 82 BPM stalker dread
+  SABOTAGE: "intense",  // destroy objective — 150 BPM time pressure
+  ESCAPE:   "intense",  // extraction sprint — 150 BPM survival adrenaline
+  BOSS:     null,       // handled by App.jsx boss-wave setMusicIntensity(true)
+});
+
+function _restorePlayerMusicVibe() {
+  const saved = readPreference("cod-music-vibe");
+  if (saved) setMusicVibe(saved);
+}
+
+function _applyEncounterMusicVibe(verb) {
+  const targetVibe = OPERATION_ENCOUNTER_MUSIC[verb];
+  if (!targetVibe) return; // BOSS or unknown — let App.jsx handle it
+  // readPreference is authoritative: it covers both committed and queued-but-pending retro
+  if (readPreference("cod-music-vibe") === "retro") return;
+  setMusicVibe(targetVibe);
+}
 
 export function useOperationMode({
   gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, modeRefs,
@@ -28,6 +56,7 @@ export function useOperationMode({
     stateRef.current = null;
     arenaRef.current = null;
     completeRef.current = null;
+    _restorePlayerMusicVibe();
     setState(null); setArenaState(null); setDirective(null); setCompleteReceipt(null);
   }, []);
 
@@ -46,6 +75,7 @@ export function useOperationMode({
     const nextDirective = chooseMissionDirective({ encounter, healthRatio: 1, routeChosen: true, routeChoice: route, routeConsequence: nextState.routeConsequence?.id, interactionComplete: false, scorePace: 1 });
     stateRef.current = nextState; arenaRef.current = nextArena; completeRef.current = null;
     setState(nextState); setArenaState(nextArena); setDirective(nextDirective); setCompleteReceipt(null);
+    if (encounter?.verb) _applyEncounterMusicVibe(encounter.verb);
     return {
       operationMode: true, operationId: operation.id, operationRoute: route, operationRouteSource: routeSource,
       operationEncounterIndex: 0, operationEncounterVerb: encounter?.verb || null,
@@ -95,6 +125,7 @@ export function useOperationMode({
     track("operation_encounter_clear", { operationId: nextState.operationId, encounterId: encounter.id, encounterVerb: encounter.verb, encounterIndex: currentState.currentEncounterIndex, operationScore: nextState.score, route: nextState.route, arenaFingerprint: arenaReceipt.stateFingerprint, directorReason: director.reasonCode });
     if (nextState.status !== "complete") {
       const nextEncounter = getCurrentEncounter(nextState);
+      if (nextEncounter?.verb) _applyEncounterMusicVibe(nextEncounter.verb);
       setDirective(chooseMissionDirective({ encounter: nextEncounter, healthRatio: player.health / Math.max(1, player.maxHealth), routeChosen: true, routeChoice: nextState.route, routeConsequence: nextState.routeConsequence?.id, interactionComplete: false, scorePace: 1 }));
       return { handled: true, completed: false, nextState };
     }
@@ -108,7 +139,7 @@ export function useOperationMode({
     const receipt = { ...buildOperationReceipt(nextState), arenaReceipt, rivalReceipt, rematchCartridge: buildOperationRematchCartridge(rivalReceipt), durationSeconds: Math.floor(durationMs / 1000), runScore: gs.score, routeSource: gs.operationRouteSource };
     Object.assign(gs, { operationReceipt: receipt, runPhase: RUN_PHASE.ENDED, runEndCause: "operation_complete" });
     completeRef.current = receipt; setCompleteReceipt(receipt);
-    setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear();
+    setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear(); _restorePlayerMusicVibe();
     const historyEntry = createRunHistoryEntry({
       score: gs.score, kills: gs.kills, wave: gs.currentWave,
       timeSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000), difficulty: difficultyRef.current,
