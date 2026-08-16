@@ -4,14 +4,20 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 155 Operation mode is implemented and fully proven on isolated staging; authorized direct-main publication and exact production verification are in progress while SPARKED remains independently gated.",
-  "nextMilestone": "Publish the exact committed Operation build, verify immutable and custom-domain production plus CI, then keep campaign expansion and realtime co-op behind their 10/20 evidence gates.",
+  "currentFocus": "Session 155 Operation mode is exact-main published and production-verified at application source 7e613d4; SPARKED remains independently gated.",
+  "nextMilestone": "Collect real opt-in Operation evidence before campaign escalation, and keep realtime co-op behind the 20-receipt plus authoritative-capacity court.",
   "testingSurfaces": [
+    {
+      "status": "green",
+      "url": "https://e1017435.call-of-doodie.pages.dev/",
+      "type": "production-verifier",
+      "command": "application source 7e613d4e6854 · workflow 31931957413 quality/build/deploy green · immutable/custom health exact · live shell 7/7 · cutover 5/5"
+    },
     {
       "status": "green",
       "url": "https://session-155-staging.call-of-doodie.pages.dev/",
       "type": "staging-preview",
-      "command": "immutable https://51e02fe5.call-of-doodie.pages.dev/ · hosted matrix 1020/1020 · Operation state/modal matrices 72/72 · 26 hash-bound captures directly reviewed"
+      "command": "immutable https://213212ad.call-of-doodie.pages.dev/ · exact source 7e613d4e6854 · hosted matrix 1020/1020 · Operation state/modal matrices 72/72 · 26 hash-bound captures directly reviewed"
     },
     {
       "status": "green",
@@ -543,7 +549,7 @@
     "total": 181,
     "score": 74
   },
-  "lastSessionSummary": "Session 155 Operation mode is implemented and fully proven on isolated staging; authorized direct-main publication and exact production verification are in progress while SPARKED remains independently gated.",
+  "lastSessionSummary": "Session 155 Operation mode is exact-main published and production-verified at application source 7e613d4; SPARKED remains independently gated.",
   "testsAssertionsPassing": 1158,
   "testsAssertionsTotal": 1158,
   "testsAssertionsFiles": 196,

@@ -4,7 +4,7 @@
   "session": 155,
   "project": "Call-Of-Doodie",
   "intent": "run one continuous arc through startup, game-loop review, premise-verified audit, complete implementation, saturation, isolated staging, rendered-pixel review, closeout, direct-main publication, and exact production verification",
-  "outcome": "implemented-and-staging-verified-production-followthrough-in-progress",
+  "outcome": "achieved-and-production-verified",
   "shipped": [
     "deterministic seven-verb Operation encounter grammar with exactly one director resolution per cleared wave",
     "persistent route-specific arena state and bounded readable interactables",
@@ -18,8 +18,11 @@
     "strict lint, schema, deployable build, public contract, assets, dependency/runtime boundaries, and security release pass",
     "App.jsx 4753/5000 lines and game-loop span 1498/1775",
     "npm audit zero vulnerabilities and full working-tree secret scan clear",
-    "isolated staging session-155-staging and immutable 51e02fe5 pass 1020 hosted checks plus 72 Operation state/modal checks",
-    "26 hash-bound captures directly reviewed across both themes and 390/1440 widths; mobile overlay collision corrected and recaptured"
+    "isolated staging session-155-staging and immutable 213212ad pass 1020 hosted checks plus 72 Operation state/modal checks",
+    "26 hash-bound captures directly reviewed across both themes and 390/1440 widths; mobile overlay collision corrected and recaptured",
+    "application source 7e613d4e6854b0f9fd960143976e31277fbda79e passes clean Linux quality/build/deploy workflow 31931957413",
+    "immutable production e1017435 and custom domain report deploy prefix 7e613d4e6854; live shell 7/7 and cutover 5/5 pass",
+    "Supabase CLI probes are explicitly transport-degraded on this host and are not represented as current passes"
   ],
   "deferred": [
     "campaign escalation until at least 10 valid opt-in paired receipts",

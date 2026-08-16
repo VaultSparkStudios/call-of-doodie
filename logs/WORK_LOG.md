@@ -10,10 +10,13 @@
 - Added deterministic reason-coded Mission Director guidance, bounded async rivalry/rematch receipts, aggregate-only paired playtest evidence, and a checked authoritative two-player capacity/trust design. Campaign progression and realtime co-op remain honestly gated.
 - Reframed the front door around Operations before Arcade & Rivals, published gameplay-contract v3 and matching human/agent surfaces, and added an honest completion receipt with Continue/Rematch/Menu actions.
 - Full Vitest passes 209/209 files and 1,205/1,205 tests; strict lint, schema/architecture/runtime/public/security/dependency/assets, deployable build, secret scan, and npm audit zero pass.
-- Deployed corrected isolated staging at `session-155-staging` / immutable `51e02fe5`; broad pixels pass 1,020/1,020 and focused Operation/completion states pass 72/72.
+- Deployed corrected isolated staging at `session-155-staging` / immutable `213212ad`; broad pixels pass 1,020/1,020 and focused Operation/completion states pass 72/72.
 - Direct mobile pixel inspection found the first-run training card covering the Operation title/progress. Moved the overlay below the HUD/training band, redeployed, recaptured, and hash-bound 26 dark/light mobile/desktop states with zero open blocking defects.
+- Published implementation source `fd7fcf5`; its clean Linux court correctly rejected five generated public files that had not been refreshed after the route-graph change. Regenerated only those deterministic artifacts and published corrected source `7e613d4e6854b0f9fd960143976e31277fbda79e`.
+- Corrected exact staging is immutable `213212ad`; production workflow `31931957413` passes quality, all 1,205 tests, build, and deploy to immutable `e1017435`. Staging/production typed health report `7e613d4e6854`; live shell 7/7 and cutover 5/5 pass.
+- Supabase CLI health/replay probes encountered a repeatable host transport close (`UND_ERR_SOCKET`) after DNS/TCP reachability succeeded. No Operation feature depends on those functions, and no backend pass is claimed for this closeout.
 
-Intent outcome: achieved through implementation and staging. Independent release gate, canonical closeout, authorized direct-main publication, exact production deployment, and live verification complete the follow-through; SPARKED remains separately NO-GO.
+Intent outcome: achieved through implementation, exact-main publication, exact-SHA continuous integration, production deployment, and live verification; SPARKED remains separately NO-GO.
 
 ## 2026-08-14 (Session 154 — propagation compatibility and protocol truth)
 

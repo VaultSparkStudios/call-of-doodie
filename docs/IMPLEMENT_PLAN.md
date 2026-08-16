@@ -2,7 +2,7 @@
 
 Source: `docs/AUDIT_2026-08-15.json`
 
-Status: **IMPLEMENTED; STAGING VERIFIED; PRODUCTION PUBLICATION IN PROGRESS** — all buildable audit lanes are integrated and the corrected candidate passes local, hosted, and rendered-pixel courts. Participant-gated campaign progression and realtime co-op remain honestly gated.
+Status: **IMPLEMENTED; EXACT-MAIN PUBLISHED; PRODUCTION VERIFIED** — all buildable audit lanes are integrated and the corrected candidate passes local, clean-Linux CI, hosted, rendered-pixel, immutable-production, and custom-domain courts. Participant-gated campaign progression and realtime co-op remain honestly gated.
 
 ## Wave A — Preserve the existing game while opening an encounter seam
 

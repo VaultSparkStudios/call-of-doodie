@@ -391,7 +391,7 @@
         "focused Operation/App courts green",
         "architecture court green at App.jsx 4753/5000 and game-loop span 1498/1775",
         "full Vitest green: 209 files and 1205 tests; strict lint, deployable build, public contract, asset, dependency, runtime, security, and zero-vulnerability courts pass",
-        "isolated staging immutable 51e02fe5 passes the 1020-check hosted matrix plus 72 Operation-state checks; 26 hash-bound captures were directly reviewed across both themes and 390/1440 widths"
+        "isolated staging immutable 213212ad passes the 1020-check hosted matrix plus 72 Operation-state checks; 26 hash-bound captures were directly reviewed across both themes and 390/1440 widths"
       ]
     }
   ]

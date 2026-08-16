@@ -6,7 +6,7 @@ Session Intent: Complete one continuous `/arc` from synchronized main through a 
 
 - Shipped: nine improvements across architecture, authored Operations, arena interaction, deterministic guidance, front-door/runtime UI, async rivalry, playtest evidence, realtime capacity trust, and public contracts.
 - Tests: 1,205/1,205 passing across 209 files · delta: +46 assertions and +13 files from Session 154.
-- Deploy: corrected isolated staging at `https://session-155-staging.call-of-doodie.pages.dev/` (immutable `https://51e02fe5.call-of-doodie.pages.dev/`); direct-main production publication follows canonical closeout.
+- Deploy: application source `7e613d4e6854b0f9fd960143976e31277fbda79e` is synchronized to main, exact staging is `https://213212ad.call-of-doodie.pages.dev/`, and production is `https://e1017435.call-of-doodie.pages.dev/`; alias, immutable, and custom-domain health report `7e613d4e6854`.
 - Three authored Operations reuse one deterministic seven-encounter contract. Two selectable routes alter persistent arena state and final receipts; each wave resolves once and encounter seven forces BOSS.
 - Operation score/history/rematch/rival evidence is local and trust-separated from the standard leaderboard. All eight Arcade modes and replay identifiers remain intact behind ModeRules.
 - App architecture closes at 4,753/5,000 lines and 1,498/1,775 game-loop lines. Projectile and Operation orchestration are extracted and independently tested.
@@ -19,7 +19,7 @@ Session Intent: Complete one continuous `/arc` from synchronized main through a 
 
 **Headline.** Operations replace structural wave sameness with authored objectives, route consequences, and player-controlled arena state while retaining the mature comedy-combat, replay, Arcade, and trust spine.
 
-**Evidence.** 209 files / 1,205 tests; 1,092/1,092 hosted/focused pixel checks; 26 direct-reviewed captures; App headroom 247/277 lines; security audit zero; staging `51e02fe5`; campaign and realtime gates remain explicit.
+**Evidence.** 209 files / 1,205 tests locally and in clean Linux CI; workflow `31931957413` quality/build/deploy green; production shell 7/7 and cutover 5/5; 1,092/1,092 hosted/focused pixel checks; 26 direct-reviewed captures; App headroom 247/277 lines; security audit zero; campaign and realtime gates remain explicit. Supabase CLI probes are currently host-transport-degraded and are not claimed green.
 
 ---
 

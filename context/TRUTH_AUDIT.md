@@ -8,10 +8,12 @@
 - Evidence truth — paired playtest receipts are explicit opt-in, locally bounded, identity/free-text-free in aggregate export, and truthfully gated at 10/20. Authored mission availability is not represented as live campaign progression; capacity design is not represented as connected co-op.
 - Validation truth — 209/209 Vitest files and 1,205/1,205 assertions pass; strict lint, deployable build, schema/public/dependency/assets/runtime/security, full working-tree secret scan, and npm audit zero pass.
 - Visual truth — corrected staging passes 1,020/1,020 broad checks plus 72/72 focused Operation/completion checks. Twenty-six hash-bound captures received direct pixel review across both themes and 390/1440px; the discovered training/Operation overlap is fixed.
-- Staging truth — alias `session-155-staging.call-of-doodie.pages.dev` and immutable `51e02fe5.call-of-doodie.pages.dev` serve the corrected candidate with typed edge health.
+- Staging truth — alias `session-155-staging.call-of-doodie.pages.dev` and immutable `213212ad.call-of-doodie.pages.dev` serve exact source `7e613d4e6854b0f9fd960143976e31277fbda79e` with typed edge health and live Operation markers.
+- Production truth — clean Linux workflow `31931957413` passes quality, 209/209 files and 1,205/1,205 tests, build, and deploy. Immutable `e1017435.call-of-doodie.pages.dev` plus the custom domain report `7e613d4e6854`; shell passes 7/7 and cutover 5/5.
+- Failure truth — the preceding workflow caught five stale generated public outputs and stopped before deployment. Canonical regeneration plus commit corrected the defect. Current Supabase function smokes fail at the host transport boundary (`UND_ERR_SOCKET other side closed`) and remain an explicit warning, not a fabricated pass.
 - Lifecycle truth — founder authorization covers the cost-neutral FORGE engineering commit/push/deploy. SPARKED remains NO-GO behind current physical-device, Zoho reply-as, project-scoped observability, Obelisk, participant/publication, and explicit lifecycle evidence.
 
-Overall status: S155 repository-owned implementation and staging are green; direct-main production follow-through is authorized and pending exact-revision verification. SPARKED remains NO-GO.
+Overall status: S155 repository-owned implementation is exact-main published and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-16
 
 ## 2026-08-14 — Session 154 — Propagation compatibility and release truth

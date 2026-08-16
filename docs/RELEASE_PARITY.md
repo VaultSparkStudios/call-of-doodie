@@ -1,8 +1,22 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-08-13 (Session 153 production verification)
+Last reviewed: 2026-08-16 (Session 155 production verification)
 
-## Release candidate
+## Session 155 verified release
+
+- Application source: `7e613d4e6854b0f9fd960143976e31277fbda79e`; synchronized with `origin/main` before this documentation-only evidence seal.
+- Exact staging: `https://session-155-staging.call-of-doodie.pages.dev/`; immutable `https://213212ad.call-of-doodie.pages.dev/`. Both typed health endpoints report `7e613d4e6854`, and hosted chunks contain `BLACKSITE FLUSH` plus `operation-state-v1`.
+- Production: `https://callofdoodie.wtf/`; immutable `https://e1017435.call-of-doodie.pages.dev/`. Both typed health endpoints report `7e613d4e6854`.
+- Continuous integration: corrective quality/build/deploy workflow `31931957413` passed after clean Linux CI caught and the repository corrected five deterministic generated public artifacts.
+- Local and CI corpus: 209/209 files and 1,205/1,205 tests; strict lint, schema/architecture, public 28/28, dependency/runtime/assets/security, deployable build, staged secret scan, supply-chain incident scan, and npm audit zero pass.
+- Browser evidence: exact staging broad matrix 1,020/1,020 and Operation runtime 36/36 pass; the canonical receipt additionally covers completion/command-post states 36/36 and hash-binds 26 directly reviewed captures across both themes and 390/1440px.
+- Live evidence: production shell/edge/manifest/service-worker/social-card 7/7 and domain cutover 5/5 pass. Supabase function smokes are separately transport-degraded on this host (`UND_ERR_SOCKET other side closed`) and are not represented as current passes; the Operation runtime is local-first and does not depend on those functions.
+- Scope: cost-neutral FORGE engineering update. This is not a SPARKED lifecycle transition, campaign-progression activation, realtime co-op launch, or launch announcement.
+- Rollback: Cloudflare retains immutable `e1017435`; the previous production `a4be8e57` remains available, and `docs/DEPLOY_ROLLBACK.md` provides the non-force-push revert path.
+
+Engineering release evidence is complete for the solo Operation increment. SPARKED remains NO-GO behind the separately listed lifecycle, provider, participant, physical-device, performance, and founder-approval gates.
+
+## Session 153 release record
 
 - Immutable staging origin: `https://d7ec86f1.call-of-doodie.pages.dev/`
 - Stable staging alias: `https://session-153-staging.call-of-doodie.pages.dev/`

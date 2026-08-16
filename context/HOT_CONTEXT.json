@@ -1,7 +1,7 @@
 {
   "schemaVersion": "hot-context-v1",
   "generatedAt": "2026-08-16T00:00:00.000Z",
-  "sourceFingerprint": "50da82b879ece7fa7ea0d07f1d0a2b80297cf20406be3d6ff10a15503b6f8515",
+  "sourceFingerprint": "47273628fed500e831ac5d41135d83d305402469dc39896bf4f9931ab234e43a",
   "purpose": "Bounded startup projection; full append-only artifacts remain authoritative and discoverable by source hash.",
   "budgets": {
     "maximumBytes": 24000,
@@ -11,8 +11,8 @@
   "sources": {
     "currentState": {
       "file": "context/CURRENT_STATE.md",
-      "sha256": "904757b810732748237edefb71f8275598575f7748d3dec87ee97862dd5748f4",
-      "bytes": 191367
+      "sha256": "7877bf6e4c1b59fcf33612c6043cff551e21d5d54440dc10ae764268e99be5bb",
+      "bytes": 192010
     },
     "taskBoard": {
       "file": "context/TASK_BOARD.md",
@@ -26,7 +26,7 @@
     },
     "audit": {
       "file": "docs/AUDIT_2026-08-15.json",
-      "sha256": "5df5b0f55aeb178437ead884c8a4c6e04fdcb7eb67ccd375cb73715d203babfd",
+      "sha256": "0bef39051e6c5f385f56802129968499d4400e6dad7a7d32b6679fbc360848b8",
       "bytes": 29252
     }
   },

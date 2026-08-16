@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-16",
-  "generatedAtMs": 1786861424561,
+  "generatedAtMs": 1786863244003,
   "session": 155,
-  "vectorHash": "8d7607589084d431",
+  "vectorHash": "0dfdf97c849108b5",
   "silTotal": 998,
   "silAvg3": 998,
   "velocity": 9,
@@ -24,7 +24,7 @@
     "[SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — th"
   ],
   "health": "green",
-  "truthStatus": "S155 repository-owned implementation and staging are green; direct-main production follow-through is authorized and pending exact-revision verification. SPARKED remains NO-GO.",
+  "truthStatus": "S155 repository-owned implementation is exact-main published and production-verified. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 44277,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish the exact committed Operation build, verify immutable and custom-domain production plus CI, then keep campaign expansion and realtime co-op behind their 10/20 evidence gates.",
-  "currentFocus": "Session 155 Operation mode is implemented and fully proven on isolated staging; authorized direct-main publication and exact production verification are in progress while SPARKED remains independently gated.",
+  "nextMilestone": "Collect real opt-in Operation evidence before campaign escalation, and keep realtime co-op behind the 20-receipt plus authoritative-capacity court.",
+  "currentFocus": "Session 155 Operation mode is exact-main published and production-verified at application source 7e613d4; SPARKED remains independently gated.",
   "lastShipped": "nine improvements across architecture, authored Operations, arena interaction, deterministic guidance, front-door/runtime UI, async rivalry, playtest evidence, realtime capacity trust, and public contracts.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",
