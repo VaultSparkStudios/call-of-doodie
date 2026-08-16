@@ -17,7 +17,9 @@ import {
   renderFooterLinks,
   renderHeaderNav,
   PARODY_DISCLAIMER,
+  PUBLIC_CONTENT_VERSION_DATE,
 } from "./lib/public-route-registry.mjs";
+import { copyrightYear } from "./lib/build-date.mjs";
 import { buildPublicGameplayContract } from "./lib/public-gameplay-contract.mjs";
 
 const root = path.resolve("public");
@@ -132,7 +134,7 @@ ${renderHeaderNav("../")}
       <div class="card-grid">${page.sections.map(card).join("")}</div>
       <aside class="next-links card" aria-label="Explore more"><strong>Keep exploring</strong>${buildExploreLinks(page)}</aside>
     </main>
-    <footer><div class="footer-links">${renderFooterLinks("../")}</div><p class="parody-note">${escapeHtml(PARODY_DISCLAIMER)}</p><div>© 2026 <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
+    <footer><div class="footer-links">${renderFooterLinks("../")}</div><p class="parody-note">${escapeHtml(PARODY_DISCLAIMER)}</p><div>© ${copyrightYear()} <a href="https://vaultsparkstudios.com/">VaultSpark Studios LLC</a>. All rights reserved.</div></footer>
   </div>
 </body>
 </html>`;
@@ -162,7 +164,7 @@ queue(path.join(".well-known", "llms.txt"), buildLlmsText());
 const liveGameplay = buildPublicGameplayContract();
 queue("field-manual.json", JSON.stringify({
   schemaVersion: "field-manual-truth-v1",
-  effectiveDate: "2026-08-03",
+  effectiveDate: PUBLIC_CONTENT_VERSION_DATE,
   canonicalUrl: "https://callofdoodie.wtf/field-manual.json",
   claims: {
     price: { value: "free-to-play", source: "/terms/" },
@@ -174,7 +176,7 @@ queue("field-manual.json", JSON.stringify({
 }, null, 2));
 queue("status.json", JSON.stringify({
   schemaVersion: "public-service-status-v1",
-  effectiveDate: "2026-08-03",
+  effectiveDate: PUBLIC_CONTENT_VERSION_DATE,
   overall: "operational",
   surfaces: {
     browserGame: { status: "operational", fallback: "local-play" },

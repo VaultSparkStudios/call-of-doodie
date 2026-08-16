@@ -39,27 +39,11 @@ const MissionsPanel = lazy(() => import("./MenuPanels.jsx").then((module) => ({ 
 const UpgradesPanel = lazy(() => import("./MenuPanels.jsx").then((module) => ({ default: module.UpgradesPanel })));
 const NewsPanel = lazy(() => import("./MenuPanels.jsx").then((module) => ({ default: module.NewFeaturesPanel })));
 
-const MODES = [
-  { id: "standard", label: "Standard Run", short: "Standard", description: "Survive escalating waves and build a powerful loadout.", icon: "▶" },
-  { id: "daily_challenge", label: "Daily Challenge", short: "Daily", description: "The same seeded run for every player today.", icon: "◈" },
-  { id: "gauntlet", label: "Weekly Gauntlet", short: "Gauntlet", description: "A fixed weekly opening kit with no shop.", icon: "◆" },
-  { id: "boss_rush", label: "Boss Rush", short: "Boss Rush", description: "Face boss pressure on every wave.", icon: "⚠" },
-  { id: "score_attack", label: "Score Attack", short: "Score", description: "Five minutes, faster spawns, maximum score.", icon: "⌁" },
-  { id: "speedrun", label: "Speed Run", short: "Speed", description: "Race the clock with a live timer.", icon: "»" },
-  { id: "cursed", label: "Cursed Run", short: "Cursed", description: "Hard modifiers with a three-times score multiplier.", icon: "✦" },
-  { id: "zombies", label: "Sewer Zombies", short: "Zombies", description: "Escalating undead hordes with a surge every third wave.", icon: "🧟" },
-];
-
-function currentMode(props) {
-  if (props.zombiesMode) return "zombies";
-  if (props.bossRushMode) return "boss_rush";
-  if (props.cursedRunMode) return "cursed";
-  if (props.scoreAttackMode) return "score_attack";
-  if (props.dailyChallengeMode) return "daily_challenge";
-  if (props.speedrunMode) return "speedrun";
-  if (props.gauntletMode) return "gauntlet";
-  return "standard";
-}
+// Mode identity comes from the shared catalog (S155). This view's original
+// hand-ordered list led with Daily/Gauntlet; catalog order (replay-contract
+// order) is used now so all front doors agree.
+const MODES = MODE_CATALOG.map((m) => ({ id: m.id, label: m.label, short: m.short, description: m.description, icon: m.icon }));
+const currentMode = resolveSelectedModeId;
 
 export default function HomeV3(props) {
   const {

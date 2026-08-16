@@ -1,10 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { toVitestCoverageConfig } from "./scripts/lib/coverage-contract.mjs";
+import { copyrightYear, deriveContentVersionDate } from "./scripts/lib/build-date.mjs";
 
 export default defineConfig({
   plugins: [react()],
   base: process.env.VITE_BASE_PATH || "/",
+  define: {
+    // S155: content dates derive from git at build time (see build-date.mjs)
+    // so browser code (SiteFooter ©, Field Manual effective date) can't drift.
+    __COD_CONTENT_DATE__: JSON.stringify(deriveContentVersionDate()),
+    __COD_COPYRIGHT_YEAR__: JSON.stringify(String(copyrightYear())),
+  },
   build: {
     rollupOptions: {
       output: {

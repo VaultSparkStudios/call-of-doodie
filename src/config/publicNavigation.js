@@ -23,3 +23,21 @@ export const FOOTER_PUBLIC_NAV = Object.freeze([
   { id: "press-kit", href: "/press-kit/", label: "Press Kit" },
   { id: "status", href: "/status/", label: "Status" },
 ]);
+
+// S155: legal/agent link truth and the parody disclaimer moved here from
+// SiteFooter.jsx (and a duplicate disclaimer string in the route registry) so
+// the React footer, the generated static footers, and footer-manifest.json
+// all draw from one module.
+export const LEGAL_PUBLIC_NAV = Object.freeze([
+  { id: "privacy", href: "/privacy/", label: "Privacy" },
+  { id: "terms", href: "/terms/", label: "Terms" },
+  { id: "ip", href: "/ip/", label: "Rights & IP" },
+]);
+
+export const AGENT_PUBLIC_NAV = Object.freeze([
+  { id: "agents", href: "/agents.json", label: "Agents" },
+  { id: "llms", href: "/.well-known/llms.txt", label: "LLMS" },
+]);
+
+export const PARODY_DISCLAIMER =
+  "Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.";

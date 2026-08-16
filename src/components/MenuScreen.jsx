@@ -11,6 +11,7 @@ import { track } from "../utils/analytics.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { isSupporter } from "../utils/supporter.js";
 import { CANONICAL_SITE_URL } from "../config/site.js";
+import { getMode, resolveSelectedModeId } from "../config/modeCatalog.js";
 import {
   ControlsPanel,
   LoadoutBuilderPanel,
@@ -280,20 +281,17 @@ export default function MenuScreen({ username, difficulty, setDifficulty, isMobi
   const canPrestige = accountLevel >= PRESTIGE_REQUIRED_LEVEL;
   const weeklyMutation = getWeeklyMutation();
   const selectedLoadout = STARTER_LOADOUTS.find(loadout => loadout.id === starterLoadout) || STARTER_LOADOUTS[0];
-  const currentModeLabel = bossRushMode ? "Boss Rush" : cursedRunMode ? "Cursed" : scoreAttackMode ? "Score Attack" : dailyChallengeMode ? "Daily Challenge" : speedrunMode ? "Speedrun" : gauntletMode ? "Gauntlet" : "Standard";
+  // S155: shared mode catalog fixes the legacy omission where Zombies mode
+  // read as "Standard" on this screen.
+  const _selectedModeId = resolveSelectedModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode });
+  const currentModeLabel = getMode(_selectedModeId).label;
   const deployArgs = {
     seed: dailyChallengeMode ? String(getDailyChallengeSeed()) : (customSeed || undefined),
     challenge: challengeMode?.vs ? { vs: challengeMode.vs, vsName: challengeMode.vsName } : {},
   };
   const todaySeedStr = String(getDailyChallengeSeed());
   const dailyAlreadyPlayed = hasDailyChallengeSubmitted();
-  const modeId = bossRushMode ? "boss_rush"
-    : cursedRunMode ? "cursed"
-      : scoreAttackMode ? "score_attack"
-        : dailyChallengeMode ? "daily_challenge"
-          : speedrunMode ? "speedrun"
-            : gauntletMode ? "gauntlet"
-              : "standard";
+  const modeId = _selectedModeId;
   const commandBrief = buildCommandBrief({
     mode: modeId,
     selectedLoadout,

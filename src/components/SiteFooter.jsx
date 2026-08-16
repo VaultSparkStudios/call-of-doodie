@@ -1,20 +1,12 @@
-import { FOOTER_PUBLIC_NAV } from "../config/publicNavigation.js";
+/* global __COD_COPYRIGHT_YEAR__ */
+import { AGENT_PUBLIC_NAV, FOOTER_PUBLIC_NAV, LEGAL_PUBLIC_NAV, PARODY_DISCLAIMER } from "../config/publicNavigation.js";
 
-// Shared footer consumed by every game home.
+// Shared footer consumed by every game home. Link truth lives in
+// publicNavigation.js (S155); the © year is injected at build time.
 
-const LEGAL_LINKS = [
-  { href: "/privacy/", label: "Privacy" },
-  { href: "/terms/", label: "Terms" },
-  { href: "/ip/", label: "Rights & IP" },
-];
-
-const AGENT_LINKS = [
-  { href: "/agents.json", label: "Agents" },
-  { href: "/.well-known/llms.txt", label: "LLMS" },
-];
-
-const PARODY_DISCLAIMER =
-  "Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.";
+const LEGAL_LINKS = LEGAL_PUBLIC_NAV;
+const AGENT_LINKS = AGENT_PUBLIC_NAV;
+const COPYRIGHT_YEAR = typeof __COD_COPYRIGHT_YEAR__ !== "undefined" ? __COD_COPYRIGHT_YEAR__ : String(new Date().getFullYear());
 
 /**
  * @param {object} props
@@ -67,7 +59,7 @@ export default function SiteFooter({
       {FOOTER_PUBLIC_NAV.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label}</a>)}
       {LEGAL_LINKS.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label.toUpperCase()}</a>)}
       {AGENT_LINKS.map((item) => <a key={item.href} href={item.href} style={linkStyle}>{item.label.toUpperCase()}</a>)}
-      <span style={{ fontSize: 13, color: quiet }}>© 2026 VaultSpark Studios LLC. All rights reserved.</span>
+      <span style={{ fontSize: 13, color: quiet }}>© {COPYRIGHT_YEAR} VaultSpark Studios LLC. All rights reserved.</span>
       <p style={{
         flexBasis: "100%", margin: "6px 0 0", padding: "0 8px", fontSize: 12, lineHeight: 1.6,
         color: "#666", textAlign: "center", maxWidth: 720, marginLeft: "auto", marginRight: "auto",

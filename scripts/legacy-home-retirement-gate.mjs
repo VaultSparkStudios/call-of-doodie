@@ -38,7 +38,9 @@ const checks = [
   },
   {
     id: "homev2-launch-critical-tabs",
-    ok: ["CAREER", "CODEX", "SETTINGS", "SUPPORT"].every((label) => home.includes(label)),
+    // S155: tab labels renamed since this gate was written (CODEX → FIELD
+    // MANUAL; SETTINGS is now the ⚙ affordance backed by showSettings state).
+    ok: ["CAREER", "FIELD MANUAL", "showSettings", "SUPPORT"].every((label) => home.includes(label)),
     detail: "HomeV2 exposes launch-critical player panels",
   },
   {

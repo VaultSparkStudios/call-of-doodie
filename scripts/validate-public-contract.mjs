@@ -164,15 +164,45 @@ if (contentByFile[relative("public", ".well-known", "llms.txt")] !== buildLlmsTe
 // S146: HomeV2/HomeV3/MenuScreen consolidated their three drifted inline footers into one
 // shared SiteFooter.jsx component (CANON — single source of truth for legal/agent links).
 // Verify the shared component carries the required destinations, and that each home wires it in.
-const siteFooterFile = relative("src", "components", "SiteFooter.jsx");
-requireIncludes(siteFooterFile, read(siteFooterFile), [
+// S155: link truth moved from SiteFooter.jsx into publicNavigation.js — the
+// destination pins now check the shared module, and the footer component is
+// checked for consuming it plus the stable © suffix (year injected at build).
+const publicNavFile = relative("src", "config", "publicNavigation.js");
+requireIncludes(publicNavFile, read(publicNavFile), [
   "/privacy/",
   "/terms/",
   "/ip/",
   "/agents.json",
   "/.well-known/llms.txt",
-  "© 2026 VaultSpark Studios LLC. All rights reserved.",
 ]);
+const siteFooterFile = relative("src", "components", "SiteFooter.jsx");
+requireIncludes(siteFooterFile, read(siteFooterFile), [
+  "LEGAL_PUBLIC_NAV",
+  "AGENT_PUBLIC_NAV",
+  "PARODY_DISCLAIMER",
+  "VaultSpark Studios LLC. All rights reserved.",
+]);
+
+// S155: the React footer's membership list (FOOTER_PUBLIC_NAV) and the
+// registry's route.footer flags are two spellings of the same truth — assert
+// they agree so they can't drift apart again.
+{
+  const { FOOTER_PUBLIC_NAV } = await import("../src/config/publicNavigation.js");
+  const navHrefs = new Set(FOOTER_PUBLIC_NAV.map((item) => item.href.replace("/#deploy", "/")));
+  const registryFooterHrefs = new Set(routeRegistry.filter((route) => route.footer).map((route) => route.path));
+  for (const href of registryFooterHrefs) {
+    // /play/ is footer-listed on static pages; the in-app footer's Play entry
+    // is the /#deploy anchor instead, so it is exempt here.
+    if (!navHrefs.has(href) && !["/privacy/", "/terms/", "/contact/", "/ip/", "/", "/play/"].includes(href)) {
+      errors.push(`registry footer route ${href} missing from FOOTER_PUBLIC_NAV`);
+    }
+  }
+  for (const href of navHrefs) {
+    if (!registryFooterHrefs.has(href) && href !== "/") {
+      errors.push(`FOOTER_PUBLIC_NAV href ${href} not flagged footer in the route registry`);
+    }
+  }
+}
 for (const file of [
   relative("src", "components", "HomeV2.jsx"),
   relative("src", "components", "MenuScreen.jsx"),

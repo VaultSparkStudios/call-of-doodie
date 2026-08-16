@@ -9,6 +9,8 @@ import {
   loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion, getMissionStreak,
   countIncompleteMissions,
 } from "../storage.js";
+import { MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
+import { QUICK_RULES } from "../config/quickRules.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
 import { buildMenuIntelligence, buildStudioGameEvent } from "../utils/runIntelligence.js";
 import { getAnalyticsStatus, track } from "../utils/analytics.js";
@@ -60,27 +62,10 @@ const MP_NewFeatures    = lazy(() => import("./MenuPanels.jsx").then(m => ({ def
 
 const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIndex: 100, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom))", overflowY: "auto", WebkitOverflowScrolling: "touch", backdropFilter: "blur(4px)" };
 
-const MODE_DEFS = [
-  { id: "standard",        label: "NORMAL",        emoji: "🎯", color: "#FFD700", blurb: "Survive as long as you can" },
-  { id: "score_attack",    label: "SCORE ATTACK",  emoji: "⏱",  color: "#FF6600", blurb: "5 min · faster spawns · max score" },
-  { id: "daily_challenge", label: "DAILY",         emoji: "📅", color: "#00E5FF", blurb: "Same seed · global ranking" },
-  { id: "cursed",          label: "CURSED",        emoji: "☠",  color: "#CC00FF", blurb: "All cursed perks · 3× score" },
-  { id: "boss_rush",       label: "BOSS RUSH",     emoji: "☠",  color: "#FF3333", blurb: "Every wave is a boss" },
-  { id: "speedrun",        label: "SPEEDRUN",      emoji: "⏱",  color: "#00FF80", blurb: "Race the clock · live timer" },
-  { id: "gauntlet",        label: "GAUNTLET",      emoji: "🏆", color: "#FFC800", blurb: "Weekly fixed opening kit · no shop" },
-  { id: "zombies",         label: "SEWER ZOMBIES", emoji: "🧟", color: "#8DFF67", blurb: "Escalating hordes · surge every 3 waves" },
-];
-
-function currentModeId({ scoreAttackMode, dailyChallengeMode, cursedRunMode, bossRushMode, speedrunMode, gauntletMode, zombiesMode }) {
-  if (zombiesMode) return "zombies";
-  if (bossRushMode) return "boss_rush";
-  if (cursedRunMode) return "cursed";
-  if (scoreAttackMode) return "score_attack";
-  if (dailyChallengeMode) return "daily_challenge";
-  if (speedrunMode) return "speedrun";
-  if (gauntletMode) return "gauntlet";
-  return "standard";
-}
+// Mode identity comes from the shared catalog (S155) — this view uses the
+// arcade-caps label variant.
+const MODE_DEFS = MODE_CATALOG.map(m => ({ id: m.id, label: m.arcadeLabel, emoji: m.emoji, color: m.color, blurb: m.blurb }));
+const currentModeId = resolveSelectedModeId;
 
 export default function HomeV2(props) {
   const {
@@ -1429,11 +1414,9 @@ function CodexTab({ truthGraph }) {
       )}
       {section === "rules" && (
         <div style={{ fontSize: 12, color: "#CCC", lineHeight: 1.7, maxWidth: 560, margin: "0 auto" }}>
-          <p>🎯 <strong>Move</strong> with WASD / left stick · <strong>Aim</strong> with mouse / right stick.</p>
-          <p>💨 <strong>Dash</strong> (Shift / A button) — Invincible dodge. <strong>Grenade</strong> (Space / B) — AOE.</p>
-          <p>🔢 <strong>Weapon keys 1–9</strong> swap · <strong>R</strong> reloads · <strong>Esc</strong> pauses.</p>
-          <p>⚠️ Boss every 5 waves. Perks unlock on level-up. Wave shop between waves.</p>
-          <p>💩 Earn Doodie Coins for streaks — spend in the wave shop.</p>
+          {QUICK_RULES.map(([emoji, strong1, mid, strong2, tail], i) => (
+            <p key={i}>{emoji} <strong>{strong1}</strong>{mid}{strong2 && <strong>{strong2}</strong>}{tail}</p>
+          ))}
         </div>
       )}
       {section === "news" && (

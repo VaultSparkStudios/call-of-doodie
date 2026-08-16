@@ -1,9 +1,13 @@
 import crypto from "node:crypto";
 import { buildPublicGameplayContract } from "./public-gameplay-contract.mjs";
 import { PRIMARY_PUBLIC_NAV } from "../../src/config/publicNavigation.js";
+import { CHANGELOG_ENTRIES } from "../../src/config/changelog.js";
+import { deriveContentVersionDate } from "./build-date.mjs";
 
 export const PUBLIC_CANONICAL_ORIGIN = "https://callofdoodie.wtf";
-export const PUBLIC_CONTENT_VERSION_DATE = "2026-08-09";
+// S155: derived from the newest git commit touching content-bearing sources
+// (deterministic per commit) instead of a hand-frozen string that drifted.
+export const PUBLIC_CONTENT_VERSION_DATE = deriveContentVersionDate();
 
 export function formatPublicContentDate() {
   const [year, month, day] = PUBLIC_CONTENT_VERSION_DATE.split("-").map(Number);
@@ -11,8 +15,8 @@ export function formatPublicContentDate() {
   return `${months[month - 1]} ${day}, ${year}`;
 }
 
-export const PARODY_DISCLAIMER =
-  "Call of Doodie is a parody game and is not affiliated with, endorsed by, or associated with Activision, the Call of Duty franchise, or any related entity.";
+// S155: disclaimer truth lives in publicNavigation.js (shared with SiteFooter).
+export { PARODY_DISCLAIMER } from "../../src/config/publicNavigation.js";
 
 const CORE_ATLAS_INDICES = [0, 1, 2, 3, 5, 6, 7, 8];
 const SPECIALIST_ATLAS_INDICES = [9, 10, 11, 12, 13, 14, 15, 16];
@@ -204,16 +208,8 @@ const ROUTE_DEFINITIONS = [
     eyebrow: "Changelog", title: "What changed—and why it feels better.",
     description: "Recent player-facing Call of Doodie changes.",
     lede: "This log highlights meaningful player-facing releases rather than every internal code change.",
-    sections: [
-      ["August 9, 2026 · Sharper, richer, more honest", "Refreshed player-facing facts across every page, expanded Community Stats presentation, and continued the in-game visual overhaul with crisper rendering and upgraded combat feedback."],
-      ["August 8, 2026 · Doctrine Archive and mobile feel", "Added a permanent Doctrine Archive collection for every build doctrine ever forged, mobile haptic feedback for hits, kills, bosses, and low health, and off-screen threat-direction arrows."],
-      ["August 7, 2026 · Live Community Stats and Sewer Zombies", "Launched verified live Community Stats on the Home screen, debrief, leaderboard, and a public stats page; added the seeded Sewer Zombies outbreak mode with four undead variants; introduced TOO EASY / DIALED IN / BRUTAL run feedback."],
-      ["August 3, 2026 · Command center and deeper runs", "Recomposed the Home screen into Orders, Operations, Player Progress, and a live Field Manual; added Scenario Cartridges, account-free Sewer Relay links, a three-chapter Nemesis Chronicle, and opt-in local Playtest Pulse receipts."],
-      ["August 3, 2026 · Trust, speed, and debrief intelligence", "Deferred the heavy arena runtime behind a lightweight command center, reduced initial JavaScript by about 73%, made debriefs lead with one evidence-backed verdict, and activated origin, quota, and reversible leaderboard trust controls."],
-      ["July 25, 2026 · Play-first interface", "Removed the mandatory first-visit display-name gate, rebuilt the main menu around Start Run, simplified language, added a mobile navigation dock, and preserved optional profile identity."],
-      ["July 25, 2026 · Combat clarity", "Introduced a compact responsive heads-up display, larger action targets, contextual action-observed training, and distinct production art for all 22 enemies and bosses."],
-      ["July 25, 2026 · Expanded website", "Added the player guide, enemy codex, arsenal, modes, accessibility, support, press, status, changelog, and missing public standard files."],
-    ],
+    // Entries live in src/config/changelog.js (S155 single changelog source).
+    sections: CHANGELOG_ENTRIES,
   },
   { id: "privacy", path: "/privacy/", label: "Privacy", rel: "privacy", priority: 0.6, generated: false },
   { id: "terms", path: "/terms/", label: "Terms", rel: "terms", priority: 0.6, generated: false },
