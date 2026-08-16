@@ -1210,3 +1210,9 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Decision:** Position the Operation command overlay below the shared first-run training/HUD band and preserve an explicit scroll margin on the Operations deck.
 
 **Why:** The 1,092 automated visual checks were green, but direct 390px pixel inspection showed the training card covering the Operation title and progress. The corrected staging capture shows both surfaces readable simultaneously; mechanical selector visibility alone was insufficient.
+
+## 2026-08-16 — Session 156 — Post-closeout production seals require their own recovery anchor
+
+**Decision:** When an exact-production verifier or documentation seal lands after the session's Self-Improvement Loop entry, record it in a new recovery boundary instead of silently treating the earlier closeout as current. Do not reopen or relabel the completed product session.
+
+**Why:** Session 155's implementation and production release were real, but the final `b37da9c` deployment receipt and `a4549a4` documentation seal postdated its append-only closeout anchor. A bounded S156 recovery preserves both Git chronology and lifecycle honesty.

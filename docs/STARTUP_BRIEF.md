@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-16 (Session 155 closeout) -->
-<!-- semantic-freshness: hash=804f9fe8d9f87be9 next=156 silSession=155 silScore=998 handoff=155 tests=- -->
+<!-- generated-at: 2026-08-16 (Session 156 closeout) -->
+<!-- semantic-freshness: hash=8191119ce2ba317f next=157 silSession=156 silScore=998 handoff=156 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 155 closeout · 2026-08-16.
+> **Fast-boot brief** — generated at Session 156 closeout · 2026-08-16.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 156 · 2026-08-16 · FOUNDER MODE                         ║
+║  Session 157 · 2026-08-16 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S155) - WHAT SHIPPED ══════════════════════════╗
-║  Session 155 Operation mode is implemented and fully proven on   ║
+╔══ LAST SESSION (S156) - WHAT SHIPPED ══════════════════════════╗
+║  Session 156 recovered the Session 155 post-closeout verifier s  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -43,16 +43,16 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    998/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998  ·  Velocity 9↑                        ║
+║    SIL v3.0  ·  Avg3: 998  ·  Velocity 2↑                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  ▄▄▄▄▇  ↑  (last 5 sessions)                            ║
+║    Trend  ▄▄▄▇▂  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
-║    Dev Health       100    ██████████  ▇█▇▇████ →                ║
+║    Dev Health       100    ██████████  █▇▇█████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
-║    Momentum         100    ██████████  █▇▇▇████ →                ║
-║    Engagement        99    ██████████  ▇██████▇ →                ║
+║    Momentum         100    ██████████  ▇▇▇█████ →                ║
+║    Engagement        99    ██████████  ██████▇▇ →                ║
 ║    Process Qual     100    ██████████  █████▇▇▇ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
@@ -62,25 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 155 ═══════════════════════════╗
-║  Shipped:  nine improvements across architecture, authored Oper  ║
+╔══ WHERE WE LEFT OFF  ·  Session 156 ═══════════════════════════╗
+║  Shipped:  see LATEST_HANDOFF.md                                 ║
 ║  Tests:    1205/1205 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████░░░░░░░░░░░░░░░░░░░   20% used                          ║
-║     54,000 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~27,000 tok/turn  ·  cache 50%  ·  7 turns to compact        ║
+║  ✓  █████░░░░░░░░░░░░░░░░░░░   21% used                          ║
+║     57,181 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~28,591 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         1205/1205 passing (2026-08-16)                 ║
-║  ✓  Velocity      9 ↑  ·  Debt: ↓                                ║
+║  ✓  Velocity      2 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         44277 FORGE  ·  0d old                         ║
-║  ⛔  Truth         S155 repository-owned implementation and…      ║
+║  ⛔  Truth         S156 closes the post-closeout evidence gap…    ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.171  (healthy)                               ║
@@ -115,7 +115,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▄▄▇  9↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▄▇▂  2↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -144,5 +144,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 155 closeout · 2026-08-16*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 156 closeout · 2026-08-16*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

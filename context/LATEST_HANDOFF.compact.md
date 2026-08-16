@@ -1,44 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: b348256f95b9 -->
-<!-- generated-at: 2026-08-16T03:32:16.028Z -->
+<!-- source-hash: d0ed5c571004 -->
+<!-- generated-at: 2026-08-16T18:43:31.442Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 154
+SESSION 155 HANDOFF SUMMARY
 
-Session: 154 (last completed). Resume as Session 155.
+Status
+- Session 155 complete; resume from synchronized clean main.
+- Lifecycle: FORGE / public-unlaunched. SPARKED remains NO-GO.
 
-Status: FORGE / public-unlaunched. No SPARKED promotion. S154 changed no player-facing pixels; CANON-053 correctly not re-claimed.
-
-What Shipped (S154)
-- All 5 items from AUDIT_2026-08-13_2.json implemented at L2: capability-map provenance/fail-closed discovery, task-board contract composition, atomic schema-bound status writes, truthful startup chronology/pressure, executable compatibility court.
-- Restored: execution-budget receipts, Unicode-safe transport/handoff smoke, provider-first blocker precedence, fail-closed SIL forecasting, honest session saturation, Codex plan-mode behavior, committed closeout/staging/memory evidence.
-- Made secrets fixtures hermetic (CI=false) after deploy run failed on ambient GitHub CI=true; isolated-CI court kept explicit.
+Shipped
+- Nine improvements: architecture, authored Operations, arena interaction, deterministic guidance, front-door/runtime UI, async rivalry, playtest evidence, realtime capacity trust, public contracts.
+- Three authored Operations reuse one deterministic seven-encounter contract; two routes alter persistent arena state and receipts; encounter seven forces BOSS.
+- Operation score/history/rematch/rival evidence is local, trust-separated from standard leaderboard. Eight Arcade modes and replay IDs intact behind ModeRules.
+- Projectile and Operation orchestration extracted and independently tested.
 
 Verification
-- Protocol 42/42; focused regression 53/53; full and exact-CI Vitest 196 files / 1,158 tests.
-- Strict lint, schema, deployable build, public/asset/dependency/runtime/security gates, npm audit zero, supply-chain scan pass.
-- Staging: session-154-staging (immutable 5da63921) 7/7.
-- Production: verifier source 5b8b704 serving 11c3148b, custom shell 7/7, cutover 5/5, replay 3/3, backend 5/5, leaderboard isolation pass.
-- Release gate: GO for cost-neutral FORGE engineering update; NO-GO for SPARKED.
+- Tests 1,205/1,205 across 209 files (+46 assertions, +13 files vs S154).
+- App 4,753/5,000 lines; game loop 1,498/1,775 lines.
+- Broad staging visuals 1,020/1,020; live Operation and completion states 36/36 each; 26 hash-bound captures across both themes at 390/1440px; mobile training-card overlap fixed.
+- Full Vitest, strict lint, deployable build, schema/architecture/public/dependency/assets/runtime/security, secrets scan, npm audit zero all green. No new dependency or variable-cost service.
 
-Current Intent (was S154)
-- Nine-axis audit focused on making core gameplay more fun / less repetitive; score revamped wave mode, CoD-style campaign, conventional multiplayer, hybrids, and battle royale against existing systems; recommend strongest route without altering FORGE lifecycle truth.
+Deploy
+- App source 7e613d4e6854b0f9fd960143976e31277fbda79e synchronized to main.
+- Staging https://213212ad.call-of-doodie.pages.dev/
+- Production https://e1017435.call-of-doodie.pages.dev/
+- Alias, immutable, custom-domain health report 7e613d4e6854.
 
-Now Bucket (top 3 for S155)
-- Begin S155 from synchronized clean main.
-- Preserve executable propagation court and hermetic secrets fixtures.
-- Preserve FORGE/SPARKED evidence boundary.
+Now (top 3)
+- Complete independent release gate.
+- Closeout and push; exact production deploy.
+- Immutable/custom-domain smoke plus workflow verification.
 
 Blockers (top 3)
-- Innovation pack has no executable repo-local candidates remaining.
-- Deploy path depends on hermetic fixtures; ambient CI=true previously broke it.
-- No new player-facing changes possible without content/mode work (audit-dependent).
+- Supabase CLI probes host-transport-degraded; not claimed green.
+- Campaign progression not live before 10 playtest receipts.
+- Realtime co-op not connected before 20 receipts plus real-service capacity rerun.
 
-Human-Blocked / Gated (age unspecified in handoff)
-- SPARKED promotion: requires founder approval.
-- Physical-device proof + participant evidence: external.
-- Provider/mail/identity work: requires credentials.
-- Also gated: mobile density, progression tuning, content expansion.
+Human-Blocked (gated, age unspecified)
+- SPARKED promotion: founder approval, physical-device proof, participant/publication evidence, scoped provider, current performance measurement.
 
-Next: Start Session 155 from clean main; run the fun-focused game-mode audit and recommend strongest route.
+Next session: begin from synchronized main; complete release gate, closeout, production deploy, and domain smoke without promoting SPARKED.

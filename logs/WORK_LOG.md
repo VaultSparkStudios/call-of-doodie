@@ -1,5 +1,15 @@
 # Work Log
 
+## 2026-08-16 (Session 156 — production-evidence recovery)
+
+- Detected that Session 155's code and primary closeout were complete, but production-evidence source `b37da9c` and final documentation seal `a4549a4` landed after the SIL anchor.
+- Reconstructed the exact scope from Git history and `docs/RELEASE_PARITY.md`; no product implementation, dependency, secret, or lifecycle mutation was missing.
+- Re-ran the synchronized tree directly: 209/209 Vitest files and 1,205/1,205 assertions pass in 268.27 seconds.
+- Reconciled CURRENT_STATE, TASK_BOARD, LATEST_HANDOFF, WORK_LOG, DECISIONS, SIL, TRUTH_AUDIT, PROJECT_STATUS, and the closeout audit around the already-published verifier seal.
+- Preserved FORGE/public-unlaunched truth and the independent SPARKED NO-GO.
+
+Intent outcome: achieved as a recovery-only checkpoint; fresh product work begins in Session 157.
+
 ## 2026-08-16 (Session 155 — Operation mode and evidence-gated campaign path)
 
 - Began from synchronized `main` at `8df346e`; recovered the in-progress Session 155 tree after Windows secure-store instability and verified no partial patch corruption.

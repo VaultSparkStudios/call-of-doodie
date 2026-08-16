@@ -17,6 +17,7 @@
 ## Open Work
 
 # Task Board
+## Session 156 - Production-evidence recovery
 ## Session 155 — Operation mode, authored missions, and evidence-gated expansion
 ## Session 154 — Propagation compatibility and protocol truth
 ## Session 153 — Playtest signal, replay plans, and release trust
@@ -52,13 +53,6 @@
 
 ## Recent Decisions
 
-## 2026-08-12 — Session 151 — Revenge action precedes analysis
-
-**Decision:** Render ONE VERDICT / RUN THE FIX immediately after death and any challenge result, with build/stat/evidence analysis under one disclosure; do not autofocus the later Famous Last Words field.
-
-**Why:** The loop promises humiliation → lesson → rematch. Direct staging pixels proved autofocus scrolled the entire primary action 854–1,207px above the viewport; source order alone could not reveal it. The corrected screen opens at scrollTop 0 with the action visible at both 390px and 1440px.
-
-
 ## 2026-08-12 — Session 151 — Stats liveness is one contract
 
 **Decision:** Treat `analytica-feed-v1`, the four showcase metric IDs, and the 15-second poll cadence as one shared source contract across the homepage, store, and public descriptor.
@@ -80,9 +74,16 @@
 
 **Why:** The 1,092 automated visual checks were green, but direct 390px pixel inspection showed the training card covering the Operation title and progress. The corrected staging capture shows both surfaces readable simultaneously; mechanical selector visibility alone was insufficient.
 
+
+## 2026-08-16 — Session 156 — Post-closeout production seals require their own recovery anchor
+
+**Decision:** When an exact-production verifier or documentation seal lands after the session's Self-Improvement Loop entry, record it in a new recovery boundary instead of silently treating the earlier closeout as current. Do not reopen or relabel the completed product session.
+
+**Why:** Session 155's implementation and production release were real, but the final `b37da9c` deployment receipt and `a4549a4` documentation seal postdated its append-only closeout anchor. A bounded S156 recovery preserves both Git chronology and lifecycle honesty.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 192,010 bytes · SHA-256 `7877bf6e4c1b…`
-- `context/TASK_BOARD.md` · 124,350 bytes · SHA-256 `0a2ca5fb3b67…`
-- `context/DECISIONS.md` · 122,101 bytes · SHA-256 `6590bd0ea7aa…`
+- `context/CURRENT_STATE.md` · 192,971 bytes · SHA-256 `505222733b30…`
+- `context/TASK_BOARD.md` · 124,838 bytes · SHA-256 `83df7e71306f…`
+- `context/DECISIONS.md` · 122,751 bytes · SHA-256 `792caa9c09ac…`
 - `docs/AUDIT_2026-08-15.json` · 29,252 bytes · SHA-256 `0bef39051e6c…`

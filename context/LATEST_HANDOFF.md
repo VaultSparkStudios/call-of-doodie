@@ -1,3 +1,22 @@
+# Latest Handoff — Session 156
+
+Session Intent: Recover the post-closeout Session 155 production-evidence seal with a complete, evidence-bound ledger and checkpoint it before beginning a fresh autonomous arc.
+
+## Where We Left Off (Session 156)
+
+- Recovery scope: no product code changed. S156 records the already-published Operation production-evidence source `b37da9c`, final documentation seal `a4549a4`, green brief workflow `31932656756`, green quality/build/deploy workflow `31932656740`, and immutable deployment `https://068d27b2.call-of-doodie.pages.dev/`.
+- Tests: the synchronized recovery tree passes 209/209 Vitest files and 1,205/1,205 assertions in 268.27 seconds under direct serialized execution.
+- Lifecycle: Call of Doodie remains cost-neutral, FORGE, deployed, and public-unlaunched. SPARKED remains NO-GO; no external, physical, participant, provider, mail, identity, performance, sitemap, publication, or lifecycle evidence was fabricated.
+- Next: begin Session 157 from the recovery checkpoint; run the full game/product arc, stage and pixel-review any player-facing changes, then independently release-gate, commit directly to `main`, deploy, and verify the exact production revision.
+
+## Impact Summary
+
+**Headline.** The final Operation deployment receipt is now anchored in the canonical session ledger instead of living only in a post-closeout release note.
+
+**Evidence.** Source `b37da9c`; documentation seal `a4549a4`; workflows `31932656756` and `31932656740`; immutable `068d27b2`; local 209/209 files and 1,205/1,205 assertions.
+
+---
+
 # Latest Handoff — Session 155
 
 Session Intent: Complete one continuous `/arc` from synchronized main through a premise-verified gameplay-direction audit, all repository-owned implementation, isolated staging, rendered-pixel QA, independent release review, canonical closeout, direct-main publication, and exact production verification. Preserve FORGE/public-unlaunched lifecycle truth.

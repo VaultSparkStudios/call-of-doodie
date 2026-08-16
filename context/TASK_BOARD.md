@@ -2,6 +2,13 @@
 
 Public-safe launch roadmap summary.
 
+## Session 156 - Production-evidence recovery
+
+- [x] [SIL:1] **DONE S156** Reconciled the post-closeout Operation verifier deployment and final documentation seal into every canonical write-back surface.
+- [x] [SIL:1] **DONE S156** Re-ran the exact synchronized tree as a serialized court: 209/209 files and 1,205/1,205 assertions pass.
+
+**Runway exception:** S156 is a recovery-only boundary. It creates no new gameplay runway and does not change the FORGE/SPARKED evidence separation.
+
 ## Session 155 — Operation mode, authored missions, and evidence-gated expansion
 
 - [x] [SIL:3] **DONE S155** ModeRules and encounter/projectile orchestration preserve all eight legacy modes while restoring App architecture headroom.

@@ -1,4 +1,15 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-16 — Session 156 — Post-closeout production-evidence recovery
+
+- Chronology truth — Session 155's append-only SIL anchor preceded production-evidence source `b37da9c` and documentation seal `a4549a4`; S156 records that follow-through without rewriting S155.
+- Scope truth — no gameplay, dependency, secret, cost, or lifecycle behavior changed in recovery.
+- Verification truth — the synchronized tree passes 209/209 Vitest files and 1,205/1,205 assertions in 268.27 seconds.
+- Deployment truth — source `b37da9c` passed brief `31932656756` and quality/build/deploy `31932656740`, serving immutable `068d27b2.call-of-doodie.pages.dev`.
+- Lifecycle truth — engineering FORGE remains deployed and public-unlaunched; SPARKED remains independently NO-GO.
+
+Overall status: S156 closes the post-closeout evidence gap and authorizes no lifecycle promotion.
+Last reviewed: 2026-08-16
+
 ## 2026-08-16 — Session 155 — Operation runtime, evidence gates, and staging truth
 
 - Source truth — S155 begins at synchronized `8df346e`; the release candidate contains only repository-owned Operation/runtime/public-contract/QA/write-back changes and no dependency or private credential.
