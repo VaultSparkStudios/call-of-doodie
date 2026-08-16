@@ -478,11 +478,27 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
 
     // Boss: under-body glow pool
     if (e.isBossEnemy) {
-      const rgb = e.enrageTriggered ? "255,80,0" : "220,0,0";
+      const rgb = e.enrageTriggered ? "255,80,0" : e.bossPhase2 ? "255,40,110" : "220,0,0";
       ctx.globalAlpha = 0.18 + Math.sin(dn / 200) * 0.06;
       ctx.fillStyle = `rgba(${rgb},1)`;
       ctx.beginPath(); ctx.arc(0, 0, r + 22, 0, Math.PI * 2); ctx.fill();
       ctx.globalAlpha = 1;
+      // S155 phase-2 language: beat-synced additive aura ring — the lookahead
+      // scheduler keeps getMusicBeat() honest, so the pulse sits on the music.
+      if (e.bossPhase2 && !_rm && _perfStep < 2) {
+        let _bt = 0;
+        try {
+          const _fpb = Math.max(1, Math.round(60 / getMusicBPM() * 60));
+          _bt = 1 - ((frameCountRef?.current || 0) % _fpb) / _fpb;
+        } catch { /* ignore */ }
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = 0.10 + _bt * 0.16;
+        ctx.strokeStyle = "rgba(255,60,130,0.9)";
+        ctx.lineWidth = 2.5 + _bt * 2;
+        ctx.beginPath(); ctx.arc(0, 0, r + 14 + _bt * 8, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
     }
 
     // S145 single-layer policy: when the atlas sprite is decoded it IS the
@@ -1228,11 +1244,25 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
       ctx.fillText(gs.playerSkin, 0, 0);
     }
   } else {
-  // Legs (unrotated — bob south)
-  const _lb = Math.sin(frameCountRef.current * 0.28) * 3.5;
-  ctx.fillStyle = "#284A28";
-  ctx.beginPath(); ctx.ellipse(-5 + _lb * 0.5, 11, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(4 - _lb * 0.5, 11, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+  // Legs — S155 walk cycle: stride phase accumulates from actual distance
+  // traveled (not wall-clock), so steps land with movement speed and stop
+  // when the player stops. Legs alternate along the movement direction;
+  // idle keeps a subtle breathing shuffle. Frozen at perf step 3.
+  {
+    const _pdx = p.x - (gs._lastPlayerX ?? p.x);
+    const _pdy = p.y - (gs._lastPlayerY ?? p.y);
+    gs._lastPlayerX = p.x; gs._lastPlayerY = p.y;
+    const _step = Math.hypot(_pdx, _pdy);
+    const _moving = _step > 0.3 && _perfStep < 3;
+    if (_moving) gs._strideDist = (gs._strideDist || 0) + _step;
+    const _phase = ((gs._strideDist || 0) / 13) * Math.PI; // full cycle ≈ 26px
+    const _lb = _moving ? Math.sin(_phase) * 5 : Math.sin(frameCountRef.current * 0.08) * 1.2;
+    const _mvLen = _moving ? _step : 1;
+    const _ux = _moving ? _pdx / _mvLen : 0.8, _uy = _moving ? _pdy / _mvLen : 0;
+    ctx.fillStyle = "#284A28";
+    ctx.beginPath(); ctx.ellipse(-5 + _ux * _lb, 11 + _uy * _lb * 0.55, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(4 - _ux * _lb, 11 - _uy * _lb * 0.55, 4.5, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+  }
   // The operative is an upright world character. Only the weapon pivots toward
   // aim; rotating the whole body made southward aim flip the soldier upside down.
   const operativeSprite = getRuntimeCharacterSprite("player");

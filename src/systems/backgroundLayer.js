@@ -152,7 +152,101 @@ function paintObstacles(ctx, gs, theme, perfStep) {
     if (perfStep < 2) {
       ctx.shadowColor = wt[2]; ctx.shadowBlur = 8; ctx.strokeRect(ob.x, ob.y, ob.w, ob.h); ctx.shadowBlur = 0;
     }
+    if (!gs.bossWave) paintObstacleThemeSkin(ctx, ob, theme, wt);
   });
+}
+
+// Deterministic 0–1 hash from obstacle coordinates — theme skins must never
+// consume the seeded RNG stream (replay contract), so any visual variation
+// derives from the rect itself.
+function obHash(ob, salt = 0) {
+  const n = Math.sin(ob.x * 127.1 + ob.y * 311.7 + salt * 74.7) * 43758.5453;
+  return n - Math.floor(n);
+}
+
+// S155: per-theme obstacle garnish. Themes previously shared one wall look
+// (color swap only); each now gets a small signature detail. Painted once
+// into the prerendered layer, so cost per frame is zero.
+function paintObstacleThemeSkin(ctx, ob, theme, wt) {
+  const [sr, sg, sb] = wt[3];
+  ctx.save();
+  switch (theme?.name) {
+    case "bunker": { // corner rivets
+      ctx.fillStyle = `rgba(${Math.min(255, sr + 70)},${Math.min(255, sg + 70)},${Math.min(255, sb + 70)},0.75)`;
+      const inset = 5;
+      for (const [rx, ry] of [[inset, inset], [ob.w - inset, inset], [inset, ob.h - inset], [ob.w - inset, ob.h - inset]]) {
+        ctx.beginPath(); ctx.arc(ob.x + rx, ob.y + ry, 1.8, 0, Math.PI * 2); ctx.fill();
+      }
+      break;
+    }
+    case "factory": { // hazard chevrons on the top face
+      ctx.globalAlpha = 0.5;
+      ctx.strokeStyle = "#E8C33A"; ctx.lineWidth = 2;
+      const step = 12;
+      for (let hx = ob.x + 4 + obHash(ob) * step; hx < ob.x + ob.w - 6; hx += step) {
+        ctx.beginPath(); ctx.moveTo(hx, ob.y + 5); ctx.lineTo(hx + 5, ob.y + 1); ctx.stroke();
+      }
+      break;
+    }
+    case "ruins": { // crumbled corner chips
+      ctx.fillStyle = "rgba(0,0,0,0.30)";
+      const chips = 2 + Math.floor(obHash(ob) * 3);
+      for (let ci = 0; ci < chips; ci++) {
+        const edge = obHash(ob, ci + 1);
+        const cx = ob.x + (edge < 0.5 ? edge * 2 * ob.w : (obHash(ob, ci + 9) < 0.5 ? 0 : ob.w));
+        const cy = ob.y + (edge < 0.5 ? (obHash(ob, ci + 5) < 0.5 ? 0 : ob.h) : (edge - 0.5) * 2 * ob.h);
+        ctx.beginPath(); ctx.arc(cx, cy, 2 + obHash(ob, ci + 13) * 3, 0, Math.PI * 2); ctx.fill();
+      }
+      break;
+    }
+    case "desert": { // wind-worn sand drift along the base
+      ctx.globalAlpha = 0.35;
+      ctx.fillStyle = `rgba(${Math.min(255, sr + 60)},${Math.min(255, sg + 52)},${Math.min(255, sb + 30)},1)`;
+      ctx.beginPath();
+      ctx.ellipse(ob.x + ob.w * (0.3 + obHash(ob) * 0.4), ob.y + ob.h + 2, ob.w * 0.4, 3.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+      break;
+    }
+    case "forest": { // moss patches
+      ctx.globalAlpha = 0.4;
+      ctx.fillStyle = "rgba(70,140,60,0.8)";
+      for (let mi = 0; mi < 3; mi++) {
+        const mx = ob.x + obHash(ob, mi + 2) * ob.w;
+        const my = ob.y + (mi % 2 === 0 ? 2 : ob.h - 3);
+        ctx.beginPath(); ctx.ellipse(mx, my, 4 + obHash(ob, mi + 7) * 4, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+      }
+      break;
+    }
+    case "space": { // glowing energy seam
+      ctx.globalAlpha = 0.55;
+      ctx.strokeStyle = "rgba(160,90,255,0.85)"; ctx.lineWidth = 1;
+      const seamY = ob.y + ob.h * (0.35 + obHash(ob) * 0.3);
+      ctx.beginPath(); ctx.moveTo(ob.x + 3, seamY); ctx.lineTo(ob.x + ob.w - 3, seamY); ctx.stroke();
+      break;
+    }
+    case "arctic": { // ice sheen diagonal
+      ctx.globalAlpha = 0.30;
+      ctx.strokeStyle = "rgba(220,240,255,0.9)"; ctx.lineWidth = 2.5;
+      const off = obHash(ob) * ob.w * 0.4;
+      ctx.beginPath();
+      ctx.moveTo(ob.x + off, ob.y + ob.h - 2);
+      ctx.lineTo(ob.x + off + Math.min(ob.w * 0.5, 18), ob.y + 2);
+      ctx.stroke();
+      break;
+    }
+    case "office": { // taped-on paper sheet
+      if (ob.w > 30 && ob.h > 18) {
+        ctx.globalAlpha = 0.28;
+        ctx.fillStyle = "#E8E8F0";
+        const px = ob.x + 6 + obHash(ob) * Math.max(1, ob.w - 20);
+        ctx.fillRect(px, ob.y + ob.h * 0.3, 8, 10);
+      }
+      break;
+    }
+    default:
+      break;
+  }
+  ctx.restore();
 }
 
 function paintDecal(ctx, d) {

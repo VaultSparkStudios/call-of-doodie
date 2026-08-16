@@ -11,7 +11,7 @@ import {
 } from "./constants.js";
 import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, trackRhythmMasteryHit, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
-import { preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
+import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
 import { buildArenaEnvironment } from "./systems/arenaEnvironment.js";
 import { applyRunSettings, loadSettings, saveSettings, SETTINGS_DEFAULTS, hudFlags } from "./settings.js";
@@ -47,7 +47,7 @@ import {
   getMusicBPM,
   setBusVolume, setMusicLowpass,
   soundPlayerHurt, soundEmptyMag, soundWeaponSwap, soundWaveAnnounce,
-  soundCoinAt, soundShopPurchase, soundBossPhase2,
+  soundCoinAt, soundShopPurchase, soundShopDeny, soundBossPhase2,
 } from "./sounds.js";
 import { analyticsInit, track, identify, gameCtx, resolveMode } from "./utils/analytics.js";
 import { getDominantArchetype, getNewlyUnlockedArchetypes, getArchetypeProgress } from "./utils/buildArchetypes.js";
@@ -1196,7 +1196,8 @@ export default function CallOfDoodie() {
   // ── Coin shop apply ───────────────────────────────────────────────────────
   const applyCoinShopItem = useCallback((optionId, cost) => {
     const gs = gsRef.current;
-    if (!gs?.player || (gs.coins || 0) < cost) return;
+    if (!gs?.player) return;
+    if ((gs.coins || 0) < cost) { soundShopDeny(); return; }
     const resolution = applyCoinShopEffect({
       optionId,
       cost,
@@ -2172,6 +2173,7 @@ export default function CallOfDoodie() {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => { if (!pausedRef.current && !perkPendingRef.current && !shopPendingRef.current && !routePendingRef.current && !bossCutsceneRef.current && !waveAnnouncePendingRef.current && !mutationPendingRef.current) setTimeSurvived(t => t + 1); }, 1000);
     setMusicLowpass(false); // clear any lingering last-stand muffle from the previous run
+    preloadBossAtlas(); // warm boss sprites before the first boss wave (S155)
     setTimeout(() => {
       startMusic(false);
       startAmbient(gsRef.current?.mapTheme ?? 0);

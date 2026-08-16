@@ -48,10 +48,11 @@ export const WORLD_OBJECT_ATLAS_CONTRACT = Object.freeze({
   maxBytes: 220000,
 });
 
-// S147 — the two highest-visibility decorative props per THEME_PROPS pool
-// (App.jsx) get a real sprite; the remaining ~10 per theme stay on the
-// existing emoji fillText fallback. Cell order matches THEME_PROPS theme
-// index (0=office .. 7=arctic), two cells per theme.
+// S147 seeded two sprite props per theme; S155 expands coverage to six per
+// theme (47 cells), demoting emoji fillText to a fallback for the remaining
+// pool tail. Cell order matches THEME_PROPS theme index (0=office .. 7=arctic).
+// The original 16 cells keep their indices (new cells append), so the v1→v2
+// migration is grid growth only — 4 columns, 4 rows → 12 rows.
 export const THEME_PROP_CELLS = Object.freeze([
   "office:chair", "office:monitor",
   "bunker:crate", "bunker:helmet",
@@ -61,19 +62,28 @@ export const THEME_PROP_CELLS = Object.freeze([
   "forest:pine", "forest:mushroom",
   "space:rocket", "space:ufo",
   "arctic:snowflake", "arctic:peak",
+  // ── S155 expansion (indices 16+) ──
+  "office:coffee", "office:bin", "office:printer", "office:clipboard",
+  "bunker:flashlight", "bunker:bricks", "bunker:bomb", "bunker:ladder",
+  "factory:wrench", "factory:battery", "factory:flask", "factory:bolt",
+  "ruins:log", "ruins:coffin", "ruins:candle", "ruins:bone",
+  "desert:tent", "desert:snake", "desert:grass", "desert:lizard",
+  "forest:tree", "forest:sprout", "forest:frog", "forest:leaves",
+  "space:planet", "space:star", "space:satellite", "space:invader",
+  "arctic:ice", "arctic:penguin", "arctic:skis", "arctic:antler",
 ]);
 
 export const THEME_PROP_ATLAS_CONTRACT = Object.freeze({
   id: "theme-prop-atlas",
-  runtimePath: "public/visual-assets/theme-prop-atlas-v1.webp",
+  runtimePath: "public/visual-assets/theme-prop-atlas-v2.webp",
   sourcePath: "assets/source/weapon-pack/theme-prop-atlas-source.svg",
   columns: 4,
-  rows: 4,
-  slots: 16,
+  rows: 12,
+  slots: 48,
   usedSlots: THEME_PROP_CELLS.length,
   width: 1024,
-  height: 1024,
-  maxBytes: 200000,
+  height: 3072,
+  maxBytes: 320000,
 });
 
 function integerGridRect(index, contract) {
@@ -115,4 +125,15 @@ export const THEME_PROP_EMOJI_TO_CELL = Object.freeze({
   "🌲": "forest:pine", "🍄": "forest:mushroom",
   "🚀": "space:rocket", "🛸": "space:ufo",
   "❄️": "arctic:snowflake", "🏔️": "arctic:peak",
+  // ── S155 expansion. Emoji shared across theme pools resolve to one cell
+  // (e.g. 🪵 in ruins AND forest both draw ruins:log) — visually acceptable
+  // and it keeps this map collision-free.
+  "☕": "office:coffee", "🗑️": "office:bin", "🖨️": "office:printer", "📋": "office:clipboard",
+  "🔦": "bunker:flashlight", "🧱": "bunker:bricks", "💣": "bunker:bomb", "🪜": "bunker:ladder",
+  "🔧": "factory:wrench", "🔋": "factory:battery", "⚗️": "factory:flask", "🔩": "factory:bolt",
+  "🪵": "ruins:log", "⚰️": "ruins:coffin", "🕯️": "ruins:candle", "🦴": "ruins:bone",
+  "⛺": "desert:tent", "🐍": "desert:snake", "🌾": "desert:grass", "🦎": "desert:lizard",
+  "🌳": "forest:tree", "🌱": "forest:sprout", "🐸": "forest:frog", "🍃": "forest:leaves",
+  "🪐": "space:planet", "⭐": "space:star", "🛰️": "space:satellite", "👾": "space:invader",
+  "🧊": "arctic:ice", "🐧": "arctic:penguin", "🎿": "arctic:skis", "🦌": "arctic:antler",
 });

@@ -755,76 +755,144 @@ export const MUSIC_VIBES = [
   { id: "spooky",  name: "Spooky",  emoji: "👻" },
 ];
 
-// Per-vibe beat functions — each has a genuinely distinct feel
-function _beatChill(ctx, beat, bar) {
-  // 72 BPM · sine-only · no snare · deep drone bass · chord pads
-  if (bar === 0 || bar === 4) tone(50, beat * 0.65, "sine", 0.07, 32);
-  if (bar === 2 || bar === 6) noise(beat * 0.08, 0.018); // whisper brush
-  const bass = [41,41,44,41,37,37,44,41];
-  tone(bass[bar], beat * 0.75, "sine", 0.055, bass[bar] * 0.93);
-  if (bar === 0) { tone(220, beat * 3.8, "sine", 0.011); tone(277, beat * 3.8, "sine", 0.008); tone(330, beat * 3.8, "sine", 0.006); }
-  if (bar === 4) { tone(196, beat * 3.8, "sine", 0.011); tone(247, beat * 3.8, "sine", 0.008); }
+// ===== MUSIC DEPTH (S155) =====
+// Each vibe now plays a 4-bar cycle (A · A · B · A-with-fill) over a chord
+// progression instead of a single looping bar, which stretches the perceived
+// loop from ~3–4s to ~25–30s. `chord` is a frequency ratio applied to bass and
+// melody voices; `section` is 0 = A, 1 = B (variation), 2 = fill bar.
+// Progressions are i–i–bVI–bVII style minor loops, voiced in the low octave.
+const _PROGRESSIONS = {
+  chill:   [1, 1, 0.8909, 0.7937],   // i · i · bVII · bVI
+  action:  [1, 0.7937, 0.8909, 1],   // i · bVI · bVII · i
+  intense: [1, 1.1892, 0.8909, 1],   // i · bIII · bVII · i
+  retro:   [1, 0.8909, 0.7937, 0.8909], // i · bVII · bVI · bVII
+  spooky:  [1, 1, 1.0595, 1],        // i · i · bii (dissonant lean) · i
+  boss:    [1, 0.7937, 1.1892, 0.8909], // i · bVI · bIII · bVII
+};
+
+// Shared fill: bars 6–7 of the fill section get a drum roll + pitch run.
+function _drumFill(beat, bar, chord, base = 220, punch = 1) {
+  if (bar === 6) {
+    noise(beat * 0.08, 0.06 * punch);
+    noise(beat * 0.08, 0.05 * punch, beat * 0.5);
+  } else if (bar === 7) {
+    noise(beat * 0.06, 0.07 * punch);
+    noise(beat * 0.06, 0.06 * punch, beat * 0.33);
+    noise(beat * 0.06, 0.05 * punch, beat * 0.66);
+    tone(base * chord, beat * 0.3, "triangle", 0.03 * punch, base * chord * 1.5);
+  }
 }
 
-function _beatAction(ctx, beat, bar) {
-  // 108 BPM · original default — unchanged
+// Heat-tier energy overlay — layered on top of EVERY vibe (including retro/
+// spooky/boss, which previously had zero adaptivity). Tier 1 adds an offbeat
+// hat + soft pulse; tier 2 adds a driving eighth-note bass and extra kick.
+function _tierOverlay(beat, bar, tier, chord, type) {
+  if (tier >= 1) {
+    tone(6800, beat * 0.03, type, 0.008, 5200, beat * 0.5);
+  }
+  if (tier >= 2) {
+    tone(110 * chord, beat * 0.14, type === "sine" ? "triangle" : "sawtooth", 0.028, 104 * chord);
+    tone(110 * chord, beat * 0.14, type === "sine" ? "triangle" : "sawtooth", 0.022, 104 * chord, beat * 0.5);
+    if (bar % 2 === 0) { tone(60, beat * 0.2, "sine", 0.05, 34); }
+  }
+}
+
+function _beatChill(ctx, beat, bar, chord = 1, section = 0) {
+  // 72 BPM · sine-only · no snare · deep drone bass · chord pads
+  if (bar === 0 || bar === 4) tone(50 * chord, beat * 0.65, "sine", 0.07, 32 * chord);
+  if (bar === 2 || bar === 6) noise(beat * 0.08, 0.018); // whisper brush
+  const bass = [41,41,44,41,37,37,44,41];
+  tone(bass[bar] * chord, beat * 0.75, "sine", 0.055, bass[bar] * chord * 0.93);
+  if (bar === 0) { tone(220 * chord, beat * 3.8, "sine", 0.011); tone(277 * chord, beat * 3.8, "sine", 0.008); tone(330 * chord, beat * 3.8, "sine", 0.006); }
+  if (bar === 4) { tone(196 * chord, beat * 3.8, "sine", 0.011); tone(247 * chord, beat * 3.8, "sine", 0.008); }
+  if (section === 1) {
+    // B section: gentle 2-note answer melody over the pads
+    const answer = [0, 330, 0, 392, 0, 330, 294, 0];
+    if (answer[bar]) tone(answer[bar] * chord, beat * 1.4, "sine", 0.012, answer[bar] * chord * 0.97);
+  }
+  if (section === 2) _drumFill(beat, bar, chord, 165, 0.4);
+}
+
+function _beatAction(ctx, beat, bar, chord = 1, section = 0) {
+  // 108 BPM · original default groove, now progression-aware
   const vol = 1.0;
   if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
   if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
   if (bar % 2 === 1) tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
   tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
   const bass = [55, 55, 65, 55, 49, 55, 58, 55];
-  tone(bass[bar], beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * 0.88);
+  tone(bass[bar] * chord, beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * chord * 0.88);
+  if (section === 1) {
+    // B section: syncopated extra kick + call-response stab
+    if (bar === 3 || bar === 7) tone(75, beat * 0.3, "sine", 0.07, 40);
+    if (bar === 1 || bar === 5) tone(262 * chord, beat * 0.12, "square", 0.02, 220 * chord);
+  }
+  if (section === 2) _drumFill(beat, bar, chord, 220, 0.8);
 }
 
-function _beatIntense(ctx, beat, bar) {
+function _beatIntense(ctx, beat, bar, chord = 1, section = 0) {
   // 150 BPM · kick every beat · sawtooth everything · synth stab · lead riff
   tone(62, beat * 0.32, "sine", 0.14, 28); noise(beat * 0.10, 0.10); // kick every beat
   if (bar === 2 || bar === 6) { noise(beat * 0.20, 0.13); tone(180, beat * 0.09, "sawtooth", 0.04, 110); }
   if (bar % 2 === 1) { noise(beat * 0.07, 0.05); tone(8000, beat * 0.025, "square", 0.011, 5500); }
   tone(10000, beat * 0.02, "square", 0.009, 7000);
   const bass = [55, 73, 82, 73, 49, 65, 82, 65];
-  tone(bass[bar], beat * 0.30, "sawtooth", 0.095, bass[bar] * 0.84);
-  if (bar === 0) { tone(330, beat * 0.07, "sawtooth", 0.04, 260); tone(415, beat * 0.07, "sawtooth", 0.03, 330); }
-  const riff = [0, 392, 0, 466, 0, 392, 349, 0];
-  if (riff[bar]) tone(riff[bar], beat * 0.11, "sawtooth", 0.026, riff[bar] * 0.9);
+  tone(bass[bar] * chord, beat * 0.30, "sawtooth", 0.095, bass[bar] * chord * 0.84);
+  if (bar === 0) { tone(330 * chord, beat * 0.07, "sawtooth", 0.04, 260 * chord); tone(415 * chord, beat * 0.07, "sawtooth", 0.03, 330 * chord); }
+  const riff = section === 1
+    ? [466, 0, 392, 0, 523, 0, 466, 392]  // B: inverted, busier riff
+    : [0, 392, 0, 466, 0, 392, 349, 0];
+  if (riff[bar]) tone(riff[bar] * chord, beat * 0.11, "sawtooth", 0.026, riff[bar] * chord * 0.9);
+  if (section === 2) _drumFill(beat, bar, chord, 330, 1.1);
 }
 
-function _beatRetro(ctx, beat, bar) {
+function _beatRetro(ctx, beat, bar, chord = 1, section = 0) {
   // 120 BPM · square waves ONLY · chiptune percussion · arpeggio melody
   if (bar === 0 || bar === 4) { tone(120, beat * 0.10, "square", 0.10, 38); noise(beat * 0.05, 0.08); }
   if (bar === 2 || bar === 6) { noise(beat * 0.09, 0.10); tone(440, beat * 0.07, "square", 0.025, 220); }
   if (bar % 2 === 1) tone(6500, beat * 0.035, "square", 0.01, 4200);
   const bass = [110,110,131,110,98,110,131,147];
-  tone(bass[bar], beat * 0.26, "square", 0.052, bass[bar] * 0.91);
-  const arp  = [330, 392, 440, 392, 330, 294, 330, 392];
+  tone(bass[bar] * chord, beat * 0.26, "square", 0.052, bass[bar] * chord * 0.91);
+  const arp  = section === 1
+    ? [440, 523, 587, 523, 440, 392, 440, 523]  // B: arpeggio up a fourth
+    : [330, 392, 440, 392, 330, 294, 330, 392];
   const arp2 = [262, 330, 349, 330, 262, 247, 262, 330];
-  tone(arp[bar],  beat * 0.17, "square", 0.022, arp[bar]  * 0.95);
-  tone(arp2[bar] * 2, beat * 0.09, "square", 0.011);
+  tone(arp[bar] * chord,  beat * 0.17, "square", 0.022, arp[bar] * chord * 0.95);
+  tone(arp2[bar] * chord * 2, beat * 0.09, "square", 0.011);
+  if (section === 2) _drumFill(beat, bar, chord, 262, 0.9);
 }
 
-function _beatSpooky(ctx, beat, bar) {
+function _beatSpooky(ctx, beat, bar, chord = 1, section = 0) {
   // 82 BPM · NO kick · minor key drone · eerie descending sine melody · dissonance
   if (bar === 0) { tone(28, beat * 0.9, "sine", 0.09, 22); noise(beat * 0.45, 0.028); }
   if (bar === 2 || bar === 6) noise(beat * 0.12, 0.020);
   const drone = [41,41,41,44,37,37,41,41];
-  tone(drone[bar], beat * 0.92, "sine", 0.052, drone[bar] * 0.96);
-  const mel = [440, 415, 392, 415, 370, 370, 392, 415];
-  if (bar % 2 === 0) tone(mel[bar], beat * 1.7, "sine", 0.017, mel[bar] * 0.93);
-  if (bar === 4) tone(466, beat * 0.55, "sine", 0.012, 415); // tritone tension
+  tone(drone[bar] * chord, beat * 0.92, "sine", 0.052, drone[bar] * chord * 0.96);
+  const mel = section === 1
+    ? [370, 392, 415, 392, 440, 415, 392, 370]  // B: rising unease
+    : [440, 415, 392, 415, 370, 370, 392, 415];
+  if (bar % 2 === 0) tone(mel[bar] * chord, beat * 1.7, "sine", 0.017, mel[bar] * chord * 0.93);
+  if (bar === 4) tone(466 * chord, beat * 0.55, "sine", 0.012, 415 * chord); // tritone tension
   if (bar === 0) tone(1760, beat * 0.28, "sine", 0.007, 1320); // ethereal ping
+  if (section === 2 && bar === 7) tone(233 * chord, beat * 1.2, "sine", 0.02, 220 * chord); // fill: low moan
 }
 
-function _beatBoss(ctx, beat, bar) {
-  // Boss override — original boss mode, vol boosted
+function _beatBoss(ctx, beat, bar, chord = 1, section = 0) {
+  // Boss override — original boss mode, vol boosted, progression-aware
   const vol = 1.4;
   if (bar === 0 || bar === 4) { tone(75, beat * 0.45, "sine", 0.10 * vol, 38); noise(beat * 0.18, 0.07 * vol); }
   if (bar === 2 || bar === 6) { noise(beat * 0.22, 0.08 * vol); tone(220, beat * 0.15, "square", 0.03 * vol, 160); }
   if (bar % 2 === 1) tone(7500, beat * 0.06, "square", 0.012 * vol, 5000);
   tone(9000, beat * 0.03, "square", 0.008 * vol, 7000);
   const bass = [55, 65, 73, 65, 49, 58, 73, 58];
-  tone(bass[bar], beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * 0.88);
-  if (bar === 0) tone(330, beat * 0.12, "square", 0.025, 280);
+  tone(bass[bar] * chord, beat * 0.38, "sawtooth", 0.065 * vol, bass[bar] * chord * 0.88);
+  if (bar === 0) tone(330 * chord, beat * 0.12, "square", 0.025, 280 * chord);
+  if (section === 1 && (bar === 1 || bar === 5)) {
+    // B section: menacing brass-ish stab pair
+    tone(196 * chord, beat * 0.2, "sawtooth", 0.035, 185 * chord);
+    tone(247 * chord, beat * 0.2, "sawtooth", 0.028, 233 * chord);
+  }
+  if (section === 2) _drumFill(beat, bar, chord, 196, 1.3);
 }
 
 export function getMusicVibe() { return _musicVibe; }
@@ -889,14 +957,23 @@ function _resolveVibe() {
 }
 
 function _playBeat(ctx, vibe, beat, bar) {
+  // 4-bar cycle: A · A · B · A+fill, over the vibe's chord progression.
+  const cycleBar = Math.floor(_musicBeat / 8) % 4;
+  const chord = (_PROGRESSIONS[vibe] || _PROGRESSIONS.action)[cycleBar] ?? 1;
+  const section = cycleBar === 2 ? 1 : cycleBar === 3 ? 2 : 0;
   switch (vibe) {
-    case "chill":   _beatChill(ctx, beat, bar);   break;
-    case "action":  _beatAction(ctx, beat, bar);  break;
-    case "intense": _beatIntense(ctx, beat, bar); break;
-    case "retro":   _beatRetro(ctx, beat, bar);   break;
-    case "spooky":  _beatSpooky(ctx, beat, bar);  break;
-    case "boss":    _beatBoss(ctx, beat, bar);    break;
-    default:        _beatAction(ctx, beat, bar);
+    case "chill":   _beatChill(ctx, beat, bar, chord, section);   break;
+    case "action":  _beatAction(ctx, beat, bar, chord, section);  break;
+    case "intense": _beatIntense(ctx, beat, bar, chord, section); break;
+    case "retro":   _beatRetro(ctx, beat, bar, chord, section);   break;
+    case "spooky":  _beatSpooky(ctx, beat, bar, chord, section);  break;
+    case "boss":    _beatBoss(ctx, beat, bar, chord, section);    break;
+    default:        _beatAction(ctx, beat, bar, chord, section);
+  }
+  // Heat adaptivity for every vibe — including retro/spooky/boss, whose core
+  // pattern identity stays untouched (the escalation is additive layers).
+  if (_musicComboTier > 0) {
+    _tierOverlay(beat, bar, _musicComboTier, chord, vibe === "chill" || vibe === "spooky" ? "sine" : "square");
   }
 }
 

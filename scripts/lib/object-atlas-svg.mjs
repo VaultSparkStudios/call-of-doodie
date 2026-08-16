@@ -360,6 +360,198 @@ const THEME_PROP_BODIES = {
     <ellipse cx="0" cy="44" rx="52" ry="9" fill="#000" opacity="0.2"/>
     <path d="M-50 40 L-14 -34 L10 -6 L24 -30 L50 40 Z" fill="#8FA8C0" stroke="#425A72" stroke-width="4"/>
     <path d="M-14 -34 L-2 -10 L10 -6 M24 -30 L14 -8 L26 4" fill="#F3F7FF" stroke="#8FA8C0" stroke-width="3"/>`,
+
+  // ── S155 expansion — four more props per theme (three for desert). Same
+  // flat-silhouette treatment: these render at 28px and 0.24–0.42 alpha.
+  "office:coffee": `
+    <ellipse cx="0" cy="40" rx="28" ry="7" fill="#000" opacity="0.2"/>
+    <path d="M-24 -14 h48 v34 q0 16 -24 16 q-24 0 -24 -16 Z" fill="#F3E7D0" stroke="#8A7A5C" stroke-width="4"/>
+    <path d="M24 -6 q20 0 20 14 q0 14 -18 12" fill="none" stroke="#8A7A5C" stroke-width="6"/>
+    <path d="M-10 -24 q4 -8 0 -14 M6 -24 q4 -8 0 -14" fill="none" stroke="#B9AA8C" stroke-width="4" stroke-linecap="round"/>`,
+  "office:bin": `
+    <ellipse cx="0" cy="46" rx="30" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-26 -30 L-18 44 H18 L26 -30 Z" fill="url(#darkmetal)" stroke="#14171C" stroke-width="4"/>
+    <path d="M-14 -20 L-10 34 M0 -20 V34 M14 -20 L10 34" stroke="#14171C" stroke-width="3" opacity="0.5"/>
+    <path d="M-14 -34 l6 -8 14 4 -3 8" fill="#E8E8F0" stroke="#8A8A98" stroke-width="3"/>`,
+  "office:printer": `
+    <ellipse cx="0" cy="42" rx="40" ry="9" fill="#000" opacity="0.2"/>
+    <rect x="-40" y="-8" width="80" height="40" rx="8" fill="url(#darkmetal)" stroke="#14171C" stroke-width="4"/>
+    <rect x="-24" y="-30" width="48" height="24" rx="4" fill="#E8E8F0" stroke="#8A8A98" stroke-width="3"/>
+    <rect x="-28" y="10" width="56" height="8" rx="3" fill="#E8E8F0"/>
+    <circle cx="30" cy="2" r="4" fill="#46F06E"/>`,
+  "office:clipboard": `
+    <ellipse cx="0" cy="46" rx="30" ry="7" fill="#000" opacity="0.2"/>
+    <rect x="-28" y="-42" width="56" height="86" rx="6" fill="#8F6A38" stroke="#4A3600" stroke-width="4"/>
+    <rect x="-22" y="-32" width="44" height="70" rx="3" fill="#F3EFE2"/>
+    <rect x="-12" y="-48" width="24" height="14" rx="5" fill="url(#metal)"/>
+    <path d="M-14 -16 h28 M-14 -2 h28 M-14 12 h18" stroke="#8A8570" stroke-width="4" stroke-linecap="round"/>`,
+  "bunker:flashlight": `
+    <ellipse cx="0" cy="30" rx="36" ry="8" fill="#000" opacity="0.2"/>
+    <rect x="-38" y="-8" width="52" height="22" rx="9" fill="url(#darkmetal)" stroke="#14171C" stroke-width="4"/>
+    <path d="M14 -14 h16 v34 h-16 Z" fill="url(#metal)" stroke="#14171C" stroke-width="4"/>
+    <path d="M30 -12 L52 -24 V28 L30 18 Z" fill="#FFE13C" opacity="0.55"/>`,
+  "bunker:bricks": `
+    <ellipse cx="0" cy="44" rx="44" ry="9" fill="#000" opacity="0.2"/>
+    <g fill="#8A4A32" stroke="#4A2416" stroke-width="4">
+      <rect x="-44" y="14" width="42" height="24" rx="3"/><rect x="2" y="14" width="42" height="24" rx="3"/>
+      <rect x="-22" y="-12" width="42" height="24" rx="3"/>
+      <rect x="-2" y="-38" width="34" height="24" rx="3"/>
+    </g>`,
+  "bunker:bomb": `
+    <ellipse cx="0" cy="40" rx="32" ry="8" fill="#000" opacity="0.2"/>
+    <circle cx="0" cy="8" r="34" fill="url(#darkmetal)" stroke="#14171C" stroke-width="4"/>
+    <rect x="-10" y="-34" width="20" height="12" rx="4" fill="url(#metal)"/>
+    <path d="M0 -34 q6 -16 20 -14" fill="none" stroke="#8F6A00" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="22" cy="-50" r="6" fill="#FFB13C"/>
+    <ellipse cx="-12" cy="-4" rx="10" ry="6" fill="#FFF" opacity="0.18"/>`,
+  "bunker:ladder": `
+    <ellipse cx="0" cy="52" rx="30" ry="8" fill="#000" opacity="0.2"/>
+    <g stroke="url(#wood)" stroke-width="9" stroke-linecap="round">
+      <path d="M-18 -50 V50 M18 -50 V50"/>
+    </g>
+    <g stroke="#8F6A38" stroke-width="6" stroke-linecap="round">
+      <path d="M-18 -34 H18 M-18 -12 H18 M-18 10 H18 M-18 32 H18"/>
+    </g>`,
+  "factory:wrench": `
+    <ellipse cx="0" cy="40" rx="38" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-34 34 L18 -18" stroke="url(#metal)" stroke-width="14" stroke-linecap="round"/>
+    <path d="M14 -40 a20 20 0 0 1 28 4 l-14 12 4 12 12 -4 a20 20 0 0 1 -26 12 Z" fill="url(#metal)" stroke="#14171C" stroke-width="4"/>
+    <circle cx="-34" cy="34" r="10" fill="url(#darkmetal)"/>`,
+  "factory:battery": `
+    <ellipse cx="0" cy="48" rx="28" ry="7" fill="#000" opacity="0.2"/>
+    <rect x="-24" y="-38" width="48" height="82" rx="8" fill="url(#darkmetal)" stroke="#14171C" stroke-width="4"/>
+    <rect x="-10" y="-48" width="20" height="12" rx="4" fill="url(#metal)"/>
+    <path d="M6 -26 L-10 4 h10 L-4 30 L14 -2 h-10 Z" fill="#FFE13C" stroke="#8F6A00" stroke-width="3"/>`,
+  "factory:flask": `
+    <ellipse cx="0" cy="46" rx="30" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-10 -44 h20 v28 l22 40 q6 16 -10 16 h-44 q-16 0 -10 -16 Z" fill="#D8EFF3" opacity="0.85" stroke="#31536B" stroke-width="4"/>
+    <path d="M-20 14 l10 16 h20 l10 -16 q-20 -10 -40 0" fill="#46F06E" opacity="0.7"/>
+    <circle cx="6" cy="24" r="3" fill="#B6FF3C"/>`,
+  "factory:bolt": `
+    <ellipse cx="0" cy="36" rx="30" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-26 -14 L0 -28 L26 -14 V14 L0 28 L-26 14 Z" fill="url(#metal)" stroke="#14171C" stroke-width="4"/>
+    <circle cx="0" cy="0" r="12" fill="url(#darkmetal)"/>
+    <circle cx="0" cy="0" r="5" fill="#14171C"/>`,
+  "ruins:log": `
+    <ellipse cx="0" cy="30" rx="46" ry="9" fill="#000" opacity="0.2"/>
+    <rect x="-46" y="-14" width="82" height="36" rx="16" fill="url(#wood)" stroke="#2A1608" stroke-width="4"/>
+    <ellipse cx="38" cy="4" rx="12" ry="18" fill="#C9A06A" stroke="#2A1608" stroke-width="4"/>
+    <ellipse cx="38" cy="4" rx="6" ry="9" fill="none" stroke="#8F6A38" stroke-width="3"/>
+    <path d="M-38 -6 h30 M-30 10 h40" stroke="#2A1608" stroke-width="3" opacity="0.5"/>`,
+  "ruins:coffin": `
+    <ellipse cx="0" cy="50" rx="34" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-16 -48 H16 L28 -18 L18 48 H-18 L-28 -18 Z" fill="url(#wood)" stroke="#2A1608" stroke-width="4"/>
+    <path d="M0 -34 v24 M-10 -22 h20" stroke="#2A1608" stroke-width="5" stroke-linecap="round"/>`,
+  "ruins:candle": `
+    <ellipse cx="0" cy="44" rx="24" ry="7" fill="#000" opacity="0.2"/>
+    <rect x="-14" y="-18" width="28" height="58" rx="6" fill="#F3EAD0" stroke="#B9A87C" stroke-width="4"/>
+    <path d="M-14 -14 q6 8 10 -2 q6 10 10 0 q4 8 8 2" fill="none" stroke="#B9A87C" stroke-width="3"/>
+    <path d="M0 -26 q10 -14 0 -24 q-10 10 0 24" fill="#FFB13C" stroke="#E85A1E" stroke-width="3"/>`,
+  "ruins:bone": `
+    <ellipse cx="0" cy="28" rx="42" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-30 22 L26 -22" stroke="#E8E4D8" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="-36" cy="12" r="9" fill="#E8E4D8"/><circle cx="-26" cy="28" r="9" fill="#E8E4D8"/>
+    <circle cx="32" cy="-28" r="9" fill="#E8E4D8"/><circle cx="20" cy="-14" r="9" fill="#E8E4D8"/>
+    <path d="M-30 22 L26 -22" stroke="#B9B29A" stroke-width="4" stroke-linecap="round" opacity="0.4"/>`,
+  "desert:tent": `
+    <ellipse cx="0" cy="42" rx="48" ry="9" fill="#000" opacity="0.2"/>
+    <path d="M-48 38 L0 -40 L48 38 Z" fill="#C9873A" stroke="#7A4E16" stroke-width="4"/>
+    <path d="M0 -40 V38 M-14 38 L0 6 L14 38" fill="none" stroke="#7A4E16" stroke-width="4"/>
+    <path d="M-14 38 L0 6 L14 38 Z" fill="#4A2E0C" opacity="0.8"/>`,
+  "desert:snake": `
+    <ellipse cx="0" cy="30" rx="40" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M-38 22 q-12 -18 8 -22 q26 -4 30 -16 q4 -14 -12 -14 q-10 0 -12 8" fill="none" stroke="#3E9B4F" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="-24" cy="-28" r="10" fill="#3E9B4F" stroke="#215A2A" stroke-width="3"/>
+    <circle cx="-27" cy="-30" r="2.5" fill="#14171C"/>
+    <path d="M-34 -28 l-10 -2 m10 6 l-9 3" stroke="#E33D2E" stroke-width="3" stroke-linecap="round"/>`,
+  "desert:grass": `
+    <ellipse cx="0" cy="42" rx="30" ry="7" fill="#000" opacity="0.2"/>
+    <g fill="none" stroke="#C9B96A" stroke-width="6" stroke-linecap="round">
+      <path d="M0 40 V-24 M-14 40 q-6 -34 -22 -48 M14 40 q6 -34 22 -48 M-6 40 q-8 -26 -4 -52 M6 40 q8 -26 4 -52"/>
+    </g>`,
+  "desert:lizard": `
+    <ellipse cx="0" cy="28" rx="40" ry="8" fill="#000" opacity="0.2"/>
+    <ellipse cx="0" cy="8" rx="26" ry="12" fill="#C9873A" stroke="#7A4E16" stroke-width="4"/>
+    <circle cx="-30" cy="2" r="10" fill="#C9873A" stroke="#7A4E16" stroke-width="3"/>
+    <circle cx="-33" cy="-1" r="2.5" fill="#14171C"/>
+    <path d="M24 6 q22 2 30 -14" fill="none" stroke="#C9873A" stroke-width="7" stroke-linecap="round"/>
+    <path d="M-16 18 l-8 10 M14 18 l8 10 M-14 -2 l-8 -8 M12 -2 l8 -8" stroke="#7A4E16" stroke-width="4" stroke-linecap="round"/>`,
+  "forest:tree": `
+    <ellipse cx="0" cy="54" rx="38" ry="9" fill="#000" opacity="0.2"/>
+    <rect x="-8" y="16" width="16" height="34" fill="#5C3317"/>
+    <circle cx="0" cy="-16" r="36" fill="#3B9457" stroke="#164A28" stroke-width="4"/>
+    <circle cx="-22" cy="0" r="22" fill="#2E7D46"/>
+    <circle cx="22" cy="-2" r="20" fill="#2E7D46"/>
+    <circle cx="-8" cy="-30" r="8" fill="#5FBF7A" opacity="0.7"/>`,
+  "forest:sprout": `
+    <ellipse cx="0" cy="38" rx="24" ry="7" fill="#000" opacity="0.2"/>
+    <path d="M0 36 V-4" stroke="#3B9457" stroke-width="6" stroke-linecap="round"/>
+    <path d="M0 -4 q-28 -4 -30 -30 q26 -2 30 30 Z" fill="#3B9457" stroke="#164A28" stroke-width="3"/>
+    <path d="M0 -4 q28 -4 30 -30 q-26 -2 -30 30 Z" fill="#5FBF7A" stroke="#164A28" stroke-width="3"/>`,
+  "forest:frog": `
+    <ellipse cx="0" cy="34" rx="36" ry="8" fill="#000" opacity="0.2"/>
+    <ellipse cx="0" cy="10" rx="34" ry="24" fill="#3E9B4F" stroke="#215A2A" stroke-width="4"/>
+    <circle cx="-16" cy="-16" r="11" fill="#3E9B4F" stroke="#215A2A" stroke-width="3"/>
+    <circle cx="16" cy="-16" r="11" fill="#3E9B4F" stroke="#215A2A" stroke-width="3"/>
+    <circle cx="-16" cy="-18" r="4" fill="#14171C"/><circle cx="16" cy="-18" r="4" fill="#14171C"/>
+    <path d="M-12 16 q12 8 24 0" fill="none" stroke="#215A2A" stroke-width="3" stroke-linecap="round"/>`,
+  "forest:leaves": `
+    <ellipse cx="0" cy="34" rx="34" ry="8" fill="#000" opacity="0.2"/>
+    <g stroke="#164A28" stroke-width="3">
+      <path d="M-24 20 q-18 -14 -6 -34 q20 4 12 30 Z" fill="#3B9457"/>
+      <path d="M18 24 q22 -6 20 -30 q-24 -4 -26 24 Z" fill="#5FBF7A"/>
+      <path d="M-4 30 q-6 -22 12 -36 q14 16 -4 38 Z" fill="#2E7D46"/>
+    </g>`,
+  "space:planet": `
+    <ellipse cx="0" cy="44" rx="36" ry="8" fill="#000" opacity="0.2"/>
+    <circle cx="0" cy="0" r="32" fill="#C98A4A" stroke="#7A4E16" stroke-width="4"/>
+    <path d="M-30 -8 q30 14 60 2" fill="none" stroke="#E8C99A" stroke-width="5" opacity="0.6"/>
+    <ellipse cx="0" cy="4" rx="52" ry="12" fill="none" stroke="#B9A0E8" stroke-width="6" transform="rotate(-16)"/>`,
+  "space:star": `
+    <path d="M0 -44 L11 -12 H44 L17 8 L27 40 L0 20 L-27 40 L-17 8 L-44 -12 H-11 Z" fill="#FFE13C" stroke="#B98F00" stroke-width="4"/>
+    <circle cx="0" cy="0" r="9" fill="#FFF7CC" opacity="0.8"/>`,
+  "space:satellite": `
+    <ellipse cx="0" cy="40" rx="40" ry="8" fill="#000" opacity="0.2"/>
+    <rect x="-14" y="-16" width="28" height="32" rx="6" fill="url(#metal)" stroke="#14171C" stroke-width="4"/>
+    <g fill="#2E5AA8" stroke="#14171C" stroke-width="3">
+      <rect x="-52" y="-10" width="30" height="20" rx="3"/><rect x="22" y="-10" width="30" height="20" rx="3"/>
+    </g>
+    <path d="M-22 0 h8 M14 0 h8" stroke="#14171C" stroke-width="4"/>
+    <path d="M0 -16 v-12 m0 0 a10 10 0 0 1 10 -8" fill="none" stroke="url(#metal)" stroke-width="4"/>`,
+  "space:invader": `
+    <ellipse cx="0" cy="38" rx="38" ry="8" fill="#000" opacity="0.2"/>
+    <g fill="#B6FF3C" stroke="#4E7A34" stroke-width="3">
+      <rect x="-32" y="-20" width="64" height="28" rx="6"/>
+      <rect x="-40" y="-4" width="10" height="22" rx="3"/><rect x="30" y="-4" width="10" height="22" rx="3"/>
+      <rect x="-20" y="8" width="12" height="16" rx="3"/><rect x="8" y="8" width="12" height="16" rx="3"/>
+      <rect x="-20" y="-34" width="8" height="14" rx="3"/><rect x="12" y="-34" width="8" height="14" rx="3"/>
+    </g>
+    <circle cx="-14" cy="-8" r="5" fill="#14171C"/><circle cx="14" cy="-8" r="5" fill="#14171C"/>`,
+  "arctic:ice": `
+    <ellipse cx="0" cy="40" rx="38" ry="9" fill="#000" opacity="0.2"/>
+    <path d="M-34 34 L-30 -26 L4 -36 L34 -20 L32 34 Z" fill="#B9E7FF" opacity="0.85" stroke="#5A9EC8" stroke-width="4"/>
+    <path d="M-30 -26 L0 -8 L32 -18 M0 -8 L-2 34" fill="none" stroke="#E8F7FF" stroke-width="3" opacity="0.8"/>`,
+  "arctic:penguin": `
+    <ellipse cx="0" cy="46" rx="30" ry="8" fill="#000" opacity="0.2"/>
+    <path d="M0 -44 q30 4 26 52 q-2 34 -26 36 q-24 -2 -26 -36 q-4 -48 26 -52 Z" fill="#22303C" stroke="#0C141C" stroke-width="4"/>
+    <path d="M0 -18 q18 2 16 32 q-2 26 -16 28 q-14 -2 -16 -28 q-2 -30 16 -32 Z" fill="#F3F7FF"/>
+    <circle cx="-8" cy="-28" r="4" fill="#F3F7FF"/><circle cx="8" cy="-28" r="4" fill="#F3F7FF"/>
+    <circle cx="-8" cy="-28" r="2" fill="#0C141C"/><circle cx="8" cy="-28" r="2" fill="#0C141C"/>
+    <path d="M-5 -20 L0 -12 L5 -20 Z" fill="#FFB13C"/>
+    <path d="M-16 40 h10 M6 40 h10" stroke="#FFB13C" stroke-width="5" stroke-linecap="round"/>`,
+  "arctic:skis": `
+    <ellipse cx="0" cy="44" rx="40" ry="8" fill="#000" opacity="0.2"/>
+    <g stroke-linecap="round">
+      <path d="M-20 44 V-36 q0 -10 8 -10" fill="none" stroke="#E33D2E" stroke-width="9"/>
+      <path d="M12 44 V-36 q0 -10 8 -10" fill="none" stroke="#2E5AA8" stroke-width="9"/>
+      <path d="M-34 -10 L-6 34 M34 -10 L6 34" stroke="url(#metal)" stroke-width="4"/>
+    </g>`,
+  "arctic:antler": `
+    <ellipse cx="0" cy="38" rx="34" ry="8" fill="#000" opacity="0.2"/>
+    <g fill="none" stroke="#C9B394" stroke-width="8" stroke-linecap="round">
+      <path d="M-8 38 q-4 -40 -22 -58 M-14 6 q-14 -4 -20 -18 M-16 -18 q-12 -2 -18 -12"/>
+      <path d="M8 38 q4 -40 22 -58 M14 6 q14 -4 20 -18 M16 -18 q12 -2 18 -12"/>
+    </g>`,
 };
 
 export function buildThemePropAtlasSvg({ width = 1024, height = 1024, columns = 4, cells }) {

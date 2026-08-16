@@ -163,8 +163,8 @@
         "width": 512,
         "height": 512
       },
-      "status": "production-ready",
-      "notes": "Signature 3D-styled protagonist sprite exported from the proprietary internal asset pack."
+      "status": "retired",
+      "notes": "Superseded by cod-doodie-operative-v3; runtime file removed from the deploy (S155 stale-asset sweep). Source SVG retained for provenance."
     },
     {
       "id": "cod-karen-nemesis",
@@ -177,8 +177,8 @@
         "width": 512,
         "height": 512
       },
-      "status": "production-ready",
-      "notes": "Signature 3D-styled boss sprite exported from the proprietary internal asset pack."
+      "status": "retired",
+      "notes": "Superseded by cod-karen-nemesis-v2; runtime file removed from the deploy (S155 stale-asset sweep). Source SVG retained for provenance."
     },
     {
       "id": "cod-doodie-operative-v2",
@@ -191,8 +191,8 @@
         "width": 384,
         "height": 384
       },
-      "status": "production-ready",
-      "notes": "Transparent high-realization operative art consumed by the live canvas renderer; procedural character art remains the load/failure fallback."
+      "status": "retired",
+      "notes": "Superseded by cod-doodie-operative-v3; runtime file removed from the deploy (S155 stale-asset sweep). Source PNG retained for provenance."
     },
     {
       "id": "cod-doodie-operative-v3",
@@ -340,16 +340,16 @@
       "sourceType": "repo-authored-svg",
       "license": "Proprietary",
       "sourcePath": "assets/source/weapon-pack/theme-prop-atlas-source.svg",
-      "runtimePath": "public/visual-assets/theme-prop-atlas-v1.webp",
+      "runtimePath": "public/visual-assets/theme-prop-atlas-v2.webp",
       "runtimeFormat": "webp",
       "dimensions": {
         "width": 1024,
-        "height": 1024
+        "height": 3072
       },
-      "grid": { "columns": 4, "rows": 4, "slots": 16 },
-      "maxBytes": 200000,
+      "grid": { "columns": 4, "rows": 12, "slots": 48 },
+      "maxBytes": 320000,
       "status": "production-ready",
-      "notes": "S147 — the two highest-visibility ambient decorative props per arena theme (office/bunker/factory/ruins/desert/forest/space/arctic); the remaining ~10 props per theme keep the original emoji fillText fallback (also the Retro-pack path) given the low collision-free, low-alpha visual return of full 96-prop coverage."
+      "notes": "S155 expansion — six sprite props per arena theme (48 cells; the original S147 sixteen keep their indices). The remaining pool tail keeps the emoji fillText fallback (also the Retro-pack path)."
     },
     {
       "id": "zombie-atlas",

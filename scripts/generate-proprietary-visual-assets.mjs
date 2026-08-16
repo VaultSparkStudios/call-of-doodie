@@ -91,54 +91,9 @@ const assets = [
     <path d="M302 105 C363 118 414 160 438 220" stroke="#FF7A30" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
   </g>`
   },
-  {
-    id: "cod-doodie-operative",
-    title: "OPERATIVE",
-    subtitle: "PLAYER SILHOUETTE",
-    bg0: "#24472A",
-    bg1: "#060B07",
-    fg: "#D8FFE4",
-    accent: "#5EE68A",
-    body: `
-  <g filter="url(#cod-doodie-operative-shadow)">
-    <ellipse cx="254" cy="350" rx="106" ry="30" fill="#000" opacity="0.28"/>
-    <path d="M216 206 C216 156 244 128 280 128 C318 128 344 158 338 206 L332 276 C328 330 294 358 250 350 C212 342 194 312 200 272 Z" fill="#3A6A3A"/>
-    <path d="M218 223 C246 240 292 238 328 218" stroke="#1A351D" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.8"/>
-    <circle cx="278" cy="136" r="54" fill="#2A5A2A"/>
-    <path d="M236 130 C252 94 306 84 334 122" fill="none" stroke="#75A875" stroke-width="14" stroke-linecap="round" opacity="0.5"/>
-    <ellipse cx="312" cy="140" rx="32" ry="13" fill="#46F06E" opacity="0.62"/>
-    <rect x="304" y="200" width="112" height="34" rx="11" fill="#343A3F"/>
-    <rect x="392" y="192" width="40" height="50" rx="8" fill="#202429"/>
-    <rect x="425" y="203" width="40" height="29" rx="8" fill="#FFD740"/>
-    <path d="M212 342 L174 390 M292 346 L332 392" stroke="#274C2A" stroke-width="24" stroke-linecap="round"/>
-    <path d="M205 336 L169 382 M286 342 L326 386" stroke="#5B8A5E" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
-  </g>`
-  },
-  {
-    id: "cod-karen-nemesis",
-    title: "NEMESIS",
-    subtitle: "MANAGER DEMANDER",
-    bg0: "#682642",
-    bg1: "#12040B",
-    fg: "#FFE0EF",
-    accent: "#FF69B4",
-    body: `
-  <g filter="url(#cod-karen-nemesis-shadow)">
-    <ellipse cx="258" cy="354" rx="110" ry="32" fill="#000" opacity="0.28"/>
-    <circle cx="256" cy="220" r="98" fill="#FF69B4"/>
-    <path d="M166 196 C192 116 290 86 350 158 C326 142 300 150 274 174 C236 132 188 146 166 196 Z" fill="#FFD740"/>
-    <path d="M160 202 C178 128 226 91 288 100 C250 132 232 176 228 224 Z" fill="#FFE36B"/>
-    <path d="M206 238 C236 262 284 262 314 238" fill="none" stroke="#781B4C" stroke-width="12" stroke-linecap="round"/>
-    <ellipse cx="220" cy="200" rx="28" ry="18" fill="#FFFFFF" opacity="0.9"/>
-    <ellipse cx="292" cy="200" rx="28" ry="18" fill="#FFFFFF" opacity="0.9"/>
-    <circle cx="232" cy="201" r="8" fill="#111"/>
-    <circle cx="304" cy="201" r="8" fill="#111"/>
-    <path d="M176 172 L224 184 M336 172 L292 184" stroke="#2A0818" stroke-width="10" stroke-linecap="round"/>
-    <path d="M176 318 C214 360 304 360 340 318 L354 392 L158 392 Z" fill="#C41467"/>
-    <path d="M196 332 C236 352 282 352 322 332" stroke="#FFB0D4" stroke-width="7" stroke-linecap="round" opacity="0.72"/>
-    <text x="256" y="386" text-anchor="middle" fill="#fff" font-family="Courier New, monospace" font-size="28" font-weight="900">1★</text>
-  </g>`
-  },
+  // cod-doodie-operative and cod-karen-nemesis (plain signature exports) were
+  // retired in S155 — superseded by the v3/v2 runtime sprites below. Their
+  // source SVGs remain in assets/source/signature-pack/ for provenance.
 ];
 
 for (const asset of assets) {
@@ -151,7 +106,7 @@ for (const asset of assets) {
 }
 
 const runtimeSprites = [
-  ["cod-doodie-operative-v2-source.png", "cod-doodie-operative-v2.png", false],
+  // cod-doodie-operative-v2 retired in S155 (superseded by v3)
   ["cod-doodie-operative-v3-source.png", "cod-doodie-operative-v3.png", true],
   ["cod-karen-nemesis-v2-source.png", "cod-karen-nemesis-v2.png", false],
 ];

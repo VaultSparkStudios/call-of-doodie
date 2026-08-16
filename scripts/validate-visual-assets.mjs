@@ -55,7 +55,9 @@ for (const asset of assets) {
   if (!allowedStatuses.has(asset.status)) fail(`${label} has unsupported status ${asset.status}.`);
   if (!asset.license || String(asset.license).toLowerCase().includes("unknown")) fail(`${label} has unknown license.`);
   if (!existsProjectPath(asset.sourcePath)) fail(`${label} sourcePath not found: ${asset.sourcePath}`);
-  if (!existsProjectPath(asset.runtimePath)) fail(`${label} runtimePath not found: ${asset.runtimePath}`);
+  // Retired assets keep their provenance entry but no longer ship a runtime
+  // file (S155 stale-asset sweep) — skip the runtime existence check.
+  if (asset.status !== "retired" && !existsProjectPath(asset.runtimePath)) fail(`${label} runtimePath not found: ${asset.runtimePath}`);
   const dims = asset.dimensions || {};
   if (!Number.isFinite(Number(dims.width)) || !Number.isFinite(Number(dims.height))) {
     fail(`${label} dimensions must include numeric width and height.`);

@@ -30,7 +30,12 @@ describe("buildArenaEnvironment", () => {
       .update(JSON.stringify(environment))
       .digest("hex");
 
-    expect(digest).toBe("31cdf0422f0378fdaf4138edd8ff59ef3690635f65eff7db09fbe1cc903ab4fc");
+    // Digest covers the full environment JSON, including each prop's
+    // spriteKey — a pure THEME_PROP_EMOJI_TO_CELL lookup, not RNG output.
+    // S155 expanded sprite coverage (16 → 48 cells), changing spriteKey for
+    // previously-uncovered emoji; positions and PRNG call order are pinned
+    // unchanged by the determinism test above.
+    expect(digest).toBe("6cc2bc8ecc6bfd2332da2ee7b57fb8fa295f86af28e965bbc3735172650b350a");
     expect(environment).toMatchObject({
       layoutName: "Corridors",
       mapTheme: 2,

@@ -3,7 +3,7 @@ import AsyncPanelBoundary from "./AsyncPanelBoundary.jsx";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { getControllerLabels } from "../utils/gamepad.js";
-import { MUSIC_VIBES, soundUIOpen } from "../sounds.js";
+import { MUSIC_VIBES, soundUIOpen, soundUISelect } from "../sounds.js";
 
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
@@ -19,15 +19,15 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
   // ── Gamepad nav (main view only) ─────────────────────────────────────────
   const mainItems = [
     { key: "resume",      action: onResume },
-    { key: "build",       action: () => setView("build") },
-    { key: "rules",       action: () => setView("rules") },
-    { key: "controls",    action: () => setView("controls") },
-    { key: "bestiary",    action: () => setView("bestiary") },
-    { key: "achievements",action: () => setShowAch(true) },
-    { key: "leaderboard", action: () => { onRefreshLeaderboard?.(); setShowLb(true); } },
+    { key: "build",       action: () => { soundUISelect(); setView("build"); } },
+    { key: "rules",       action: () => { soundUISelect(); setView("rules"); } },
+    { key: "controls",    action: () => { soundUISelect(); setView("controls"); } },
+    { key: "bestiary",    action: () => { soundUISelect(); setView("bestiary"); } },
+    { key: "achievements",action: () => { soundUISelect(); setShowAch(true); } },
+    { key: "leaderboard", action: () => { soundUISelect(); onRefreshLeaderboard?.(); setShowLb(true); } },
     { key: "settings",    action: () => { soundUIOpen(); setShowSettings(true); } },
     { key: "music",       action: onToggleMute },
-    ...(musicMuted ? [] : MUSIC_VIBES.map(v => ({ key: `vibe_${v.id}`, action: () => onSetMusicVibe(v.id) }))),
+    ...(musicMuted ? [] : MUSIC_VIBES.map(v => ({ key: `vibe_${v.id}`, action: () => { soundUISelect(); onSetMusicVibe(v.id); } }))),
     { key: "colorblind",  action: onToggleColorblind },
     { key: "ragequit",    action: onLeave },
   ];

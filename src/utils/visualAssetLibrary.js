@@ -73,6 +73,14 @@ export function preloadEnemyAtlasesForTypes(typeIndices, ImageCtor = globalThis.
   };
 }
 
+// S155: the bosses atlas used to pop in mid-run (fallback orb → sprite swap on
+// the first boss wave) because the 2-atlas preload cap never reached it. Every
+// run meets a boss, so warm it explicitly at run start.
+export function preloadBossAtlas(ImageCtor = globalThis.Image) {
+  const bosses = ENEMY_ATLASES.bosses;
+  if (bosses) getCachedImage(bosses.src, ImageCtor);
+}
+
 export function getRuntimeEnemySprite(typeIndex, ImageCtor = globalThis.Image) {
   const slot = getEnemyAtlasSlot(typeIndex);
   if (!slot) return null;
@@ -86,7 +94,7 @@ export function getRuntimeEnemySprite(typeIndex, ImageCtor = globalThis.Image) {
 // ── S145 object atlases ────────────────────────────────────────────────────
 const WEAPON_ATLAS_SRC = "/visual-assets/weapon-atlas-v1.webp";
 const WORLD_OBJECT_ATLAS_SRC = "/visual-assets/world-object-atlas-v1.webp";
-const THEME_PROP_ATLAS_SRC = "/visual-assets/theme-prop-atlas-v1.webp";
+const THEME_PROP_ATLAS_SRC = "/visual-assets/theme-prop-atlas-v2.webp";
 
 export function preloadObjectAtlases(ImageCtor = globalThis.Image) {
   getCachedImage(WEAPON_ATLAS_SRC, ImageCtor);
