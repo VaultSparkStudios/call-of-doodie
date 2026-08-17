@@ -8,8 +8,9 @@
 - Validation truth — 215/215 files and 1,229/1,229 assertions pass with strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, npm audit zero, and browser E2E 19 pass/1 intentional skip.
 - Visual truth — staging `session-158-staging` / immutable `09d33af3` passes hosted shell 7/7, broad pixels 1,020/1,020, focused Operation pixels 36/36, and direct review of 18 hash-bound dark/light mobile/desktop captures with zero blockers.
 - Release truth — public sanitization has zero findings; project cost gates are cost-neutral ALLOW; footer completeness is 18/18; synthetic staging INP is 48ms at both widths. Engineering FORGE is GO; SPARKED remains NO-GO.
+- Production truth — source `bdbf396c0148f1388a44e1eed95d51b30369824f` passed brief `31986725453` and quality/build/deploy `31986725436`, serving immutable `ee00b749`. Immutable and custom health report `bdbf396c0148`; shell passes 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and Operation pixels 36/36 pass.
 
-Overall status: all repository-owned S158 audit items are implemented and staged; direct-main publication and exact production verification are pending. SPARKED remains NO-GO.
+Overall status: all repository-owned S158 audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-16
 
 ## 2026-08-16 — Session 157 — Objective, campaign, evidence, and pixel truth

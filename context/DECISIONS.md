@@ -1240,4 +1240,4 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 
 **Invariant:** Legacy modes never call the Operation director. Objective sounds use the sound-effects bus and mute controls. A success motif, announcement, arena effect, or transition may occur only after exact action evidence is accepted; wrong, malformed, or duplicate actions remain inert.
 
-**Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker returned a parse/error result and CANON-055 remains open until production follow-through; both stay explicit rather than being represented as green.
+**Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker still emits a parse/error detail without producing an aggregate gap; CANON-055 became conformed after exact production follow-through. Neither condition is overstated.

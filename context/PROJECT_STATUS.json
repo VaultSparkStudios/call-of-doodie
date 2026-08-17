@@ -4,9 +4,16 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 158 gives Operations a preference-safe encounter score arc and exact-action objective audio feedback; implementation, isolated staging, pixels, and the FORGE engineering release gate pass.",
-  "nextMilestone": "Publish the exact Session 158 candidate to main, verify continuous integration and production health, then preserve player preference authority until real participant evidence supports tuning; SPARKED remains independently gated.",
+  "currentFocus": "Session 158 gives Operations a preference-safe encounter score arc and exact-action objective audio feedback; exact-main publication, continuous integration, production deployment, and live verification pass.",
+  "nextMilestone": "Preserve explicit player music authority and exact-action feedback until real participant evidence supports tuning or new campaign breadth; SPARKED remains independently gated.",
   "testingSurfaces": [
+    {
+      "session": 158,
+      "status": "green",
+      "url": "https://ee00b749.call-of-doodie.pages.dev/",
+      "type": "production-verifier",
+      "command": "source bdbf396c0148 · brief 31986725453 · quality/build/deploy 31986725436 · immutable/custom health exact · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard, launch surfaces, and Operation pixels 36/36 pass"
+    },
     {
       "session": 158,
       "status": "green",
@@ -596,7 +603,7 @@
     "total": 181,
     "score": 74
   },
-  "lastSessionSummary": "Session 158 shipped preference-safe Operation encounter scoring and exact-action objective audio, passed 215/215 files and 1229/1229 assertions plus browser/staging/direct-pixel release courts, and is ready for authorized exact-main production follow-through; SPARKED remains independently gated.",
+  "lastSessionSummary": "Session 158 shipped preference-safe Operation encounter scoring and exact-action objective audio, passed 215/215 files and 1229/1229 assertions plus browser/staging/direct-pixel release courts, and deployed exact source bdbf396c0148 to immutable production ee00b749 with complete live verification; SPARKED remains independently gated.",
   "testsAssertionsPassing": 1229,
   "testsAssertionsTotal": 1229,
   "testsAssertionsFiles": 215,

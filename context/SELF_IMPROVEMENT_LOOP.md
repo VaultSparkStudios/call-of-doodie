@@ -25,7 +25,9 @@ Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `████�
 
 Top win: fresh players receive an authored seven-chapter score without overriding an explicit music preference.
 Top gap: the repository still has no participant corpus or physical-device audio-comprehension evidence, so tuning and expansion remain gated.
-Intent outcome: Achieved through implementation, isolated staging, rendered-pixel review, and engineering release readiness; direct-main publication and exact production verification remain the authorized follow-through.
+Intent outcome: Achieved — repository-owned implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, exact-SHA continuous integration, production deployment, and live verification are complete; SPARKED remains independently gated.
+
+Production follow-through: source `bdbf396c0148f1388a44e1eed95d51b30369824f` passed brief workflow `31986725453` and quality/build/deploy workflow `31986725436`, published immutable `ee00b749`, and passed exact immutable/custom health, shell 7/7 on both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and focused production Operation pixels 36/36.
 
 **Brainstorm**
 1. Measure whether players understand objective motifs only after consented runs exist; never tune by intuition alone.

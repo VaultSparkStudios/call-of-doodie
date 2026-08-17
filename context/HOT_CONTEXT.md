@@ -87,11 +87,11 @@
 
 **Invariant:** Legacy modes never call the Operation director. Objective sounds use the sound-effects bus and mute controls. A success motif, announcement, arena effect, or transition may occur only after exact action evidence is accepted; wrong, malformed, or duplicate actions remain inert.
 
-**Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker returned a parse/error result and CANON-055 remains open until production follow-through; both stay explicit rather than being represented as green.
+**Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker still emits a parse/error detail without producing an aggregate gap; CANON-055 became conformed after exact production follow-through. Neither condition is overstated.
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 197,014 bytes · SHA-256 `54f1b3b0f8fa…`
+- `context/CURRENT_STATE.md` · 197,454 bytes · SHA-256 `8907a2b27930…`
 - `context/TASK_BOARD.md` · 127,110 bytes · SHA-256 `60e71eb8efd9…`
-- `context/DECISIONS.md` · 125,700 bytes · SHA-256 `4b208029a332…`
+- `context/DECISIONS.md` · 125,719 bytes · SHA-256 `e31ca7af5b58…`
 - `docs/AUDIT_2026-08-16_2.json` · 9,885 bytes · SHA-256 `ecbea762ca9d…`

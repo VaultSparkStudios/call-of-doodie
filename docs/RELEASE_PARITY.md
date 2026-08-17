@@ -2,6 +2,19 @@
 
 Last reviewed: 2026-08-16 (Session 157 production verification)
 
+## Session 158 verified release
+
+- Application source: `bdbf396c0148f1388a44e1eed95d51b30369824f`; synchronized with `origin/main` before the final evidence seal.
+- Exact staging: `https://session-158-staging.call-of-doodie.pages.dev/`; immutable `https://09d33af3.call-of-doodie.pages.dev/`. Broad hosted pixels pass 1,020/1,020 and focused Operation pixels pass 36/36; 18 hash-bound captures received direct review.
+- Production: `https://callofdoodie.wtf/`; immutable `https://ee00b749.call-of-doodie.pages.dev/`. Both typed health endpoints report `bdbf396c0148`.
+- Continuous integration: brief-format workflow `31986725453` and quality/build/deploy workflow `31986725436` passed the exact application source.
+- Local and continuous-integration corpus: 215/215 files and 1,229/1,229 tests; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, staged secret scan, supply-chain incident scan, and npm audit zero pass. Browser E2E passes 19 cases with one intentional mobile-only skip.
+- Live evidence: shell/edge/manifest/service-worker/social-card checks pass 7/7 on immutable and custom origins; cutover passes 5/5; backend passes 5/5; replay trust passes 3/3; shared-leaderboard isolation, Studio launch surfaces, and production Operation pixels 36/36 pass.
+- Scope: cost-neutral FORGE engineering update. This is not a SPARKED lifecycle transition, participant conclusion, audio-tuning claim, campaign expansion, realtime co-op launch, or launch announcement.
+- Rollback: Cloudflare retains immutable `09d33af3` staging plus previous production revisions; `docs/DEPLOY_ROLLBACK.md` provides the non-force-push revert path.
+
+Engineering release evidence is complete for Session 158. SPARKED remains NO-GO behind the separately listed lifecycle, provider, participant, physical-device, performance, identity, publication, sitemap, and founder-approval gates.
+
 ## Session 157 verified release
 
 - Application source: `5ce42226349b2c3998745d33dd8d4115382885b4`; synchronized with `origin/main`.

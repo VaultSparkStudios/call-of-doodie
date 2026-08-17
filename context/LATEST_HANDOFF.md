@@ -10,14 +10,16 @@ Session Intent: Complete one continuous autonomous arc from synchronized main th
 - Staging: `https://session-158-staging.call-of-doodie.pages.dev/` and immutable `https://09d33af3.call-of-doodie.pages.dev/` pass hosted shell 7/7.
 - Pixels: the hosted broad matrix passes 1,020/1,020 and focused Operation states pass 36/36; 18 hash-bound captures received direct dark/light, 390/1440px review with zero blocking defects.
 - Release: strict public sanitization has zero findings; project cost gates are cost-neutral ALLOW; footer completeness passes 18/18; staging synthetic INP is 48ms at both target widths. The engineering gate is GO and SPARKED remains NO-GO.
-- Publication: direct-main commit/push and exact production follow-through are the remaining authorized steps. No SPARKED promotion or launch announcement is authorized.
+- Production: application source `bdbf396c0148f1388a44e1eed95d51b30369824f` is synchronized to `origin/main`; brief workflow `31986725453` and quality/build/deploy workflow `31986725436` passed, publishing immutable `https://ee00b749.call-of-doodie.pages.dev/`.
+- Live verification: immutable and custom-domain health report `bdbf396c0148`; shell checks pass 7/7 on both, cutover 5/5, backend 5/5, replay trust 3/3, leaderboard isolation, launch surfaces, and production Operation pixels 36/36 pass.
+- Lifecycle: the authorized cost-neutral FORGE engineering release is deployed and verified. No SPARKED promotion or launch announcement is authorized.
 - Next: preserve explicit player music authority and exact-action feedback; collect real participant evidence before tuning audio, balance, or campaign breadth.
 
 ## Impact Summary
 
 **Headline.** Operations now sound authored without confiscating the player's music choice: the default score follows the mission verb, exact actions answer with distinct motifs, and every override boundary is executable.
 
-**Evidence.** 215 files / 1,229 tests; 19 browser passes; 1,056 hosted pixel checks; 18 directly reviewed captures; 48ms synthetic staging INP; immutable staging `09d33af3`; zero new dependencies, audio files, hosted calls, identity surfaces, or variable-cost services.
+**Evidence.** 215 files / 1,229 tests; 19 browser passes; 1,056 staging pixel checks plus 36/36 production Operation checks; 18 directly reviewed captures; 48ms synthetic staging INP; immutable staging `09d33af3`; immutable production `ee00b749`; exact health `bdbf396c0148`; zero new dependencies, audio files, hosted calls, identity surfaces, or variable-cost services.
 
 ---
 

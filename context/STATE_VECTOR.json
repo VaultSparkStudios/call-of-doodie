@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-17",
-  "generatedAtMs": 1786931652064,
+  "generatedAtMs": 1786932681733,
   "session": 158,
-  "vectorHash": "358afb55d3704a6c",
+  "vectorHash": "d064690bc4ba9d68",
   "silTotal": 998,
   "silAvg3": 998,
   "velocity": 9,
@@ -24,7 +24,7 @@
     "[SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — th"
   ],
   "health": "green",
-  "truthStatus": "all repository-owned S158 audit items are implemented and staged; direct-main publication and exact production verification are pending. SPARKED remains NO-GO.",
+  "truthStatus": "all repository-owned S158 audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 44277,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish the exact Session 158 candidate to main, verify continuous integration and production health, then preserve player preference authority until real participant evidence supports tuning; SPARKED remains independently gated.",
-  "currentFocus": "Session 158 gives Operations a preference-safe encounter score arc and exact-action objective audio feedback; implementation, isolated staging, pixels, and the FORGE engineering release gate pass.",
+  "nextMilestone": "Preserve explicit player music authority and exact-action feedback until real participant evidence supports tuning or new campaign breadth; SPARKED remains independently gated.",
+  "currentFocus": "Session 158 gives Operations a preference-safe encounter score arc and exact-action objective audio feedback; exact-main publication, continuous integration, production deployment, and live verification pass.",
   "lastShipped": "a pure seven-verb Operation audio director maps the default Action preference across the authored encounter arc, preserves every explicit non-default player choice, leaves BOSS to the existing boss runtime, and restores the saved preference on completion/reset.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",
