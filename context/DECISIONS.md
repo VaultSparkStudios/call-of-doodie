@@ -1232,3 +1232,12 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** Cross-mission consequence is valuable only if it is truthful and reversible, while paired feedback is meaningful only when both sides identify real runs. Local bounded storage supplies continuity without inventing accounts, server authority, participant conclusions, or a network dependency.
 
 **Boundaries:** The ledger retains at most 12 completions, does not lock Operations, and exports no raw run or identity data. Campaign expansion and realtime co-op remain behind their existing participant and capacity gates.
+## 2026-08-16 — Session 158 — Operation scoring adapts only the default, never explicit player taste
+
+**Decision:** Let the default Action preference follow the authored non-boss Operation arc, leave BOSS to the existing boss runtime, and preserve every explicit Chill, Intense, Retro, or Spooky choice. Restore the currently saved preference after completion or active reset, using Action only when storage is absent or malformed.
+
+**Why:** Encounter-aware music strengthens the seven-chapter mission shape, but a preference menu is a player contract rather than a suggestion. Restricting adaptation to the default gives fresh players authored pacing without silently confiscating an intentional choice.
+
+**Invariant:** Legacy modes never call the Operation director. Objective sounds use the sound-effects bus and mute controls. A success motif, announcement, arena effect, or transition may occur only after exact action evidence is accepted; wrong, malformed, or duplicate actions remain inert.
+
+**Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker returned a parse/error result and CANON-055 remains open until production follow-through; both stay explicit rather than being represented as green.

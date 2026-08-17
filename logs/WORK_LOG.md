@@ -1430,3 +1430,13 @@ Intent outcome: achieved through implementation, isolated staging, pixel proof, 
 - Production shell 7/7, cutover 5/5, launch surfaces, and the real death → four answers → aggregate transaction 11/11 pass.
 - The raw backend CLIs initially failed because generic gateway keys belonged to another project. Root-fixed with a project-ref-validating public-config resolver; direct `.env` reads remain absent. Full seal corpus passes 196 files / 1,155 assertions; lint, deployable build, runtime/security, backend 5/5, replay 3/3, and leaderboard isolation pass.
 - Published verifier seal `10c05add70f4dadbc9b3fc25f215bad2c1797392`; brief `31745229611` and Cloudflare `31745229701` are green. Immutable `ce9e4ae3` and custom-domain health report the exact seal; all production probes remain green.
+## 2026-08-16 — Session 158 — Preference-safe Operation score arc and objective audio
+
+- Recovered synchronized `main`, ran canonical startup/canon/Ark checks, reviewed the mature game loop, and generated the premise-verified two-item audit `docs/AUDIT_2026-08-16_2.md` plus its machine sidecar.
+- Shipped a pure seven-verb Operation audio director, default-Action-only encounter score transitions, explicit non-default preference preservation, BOSS-runtime ownership, and saved-preference restoration with an Action fallback.
+- Shipped seven fixed procedural objective motifs, a bounded reinforcement warning, exact-action gating before any effect/transition/feedback, duplicate suppression, sound-effects-bus routing, and precise live-region confirmation.
+- Updated the generated public gameplay contract and changelog from source authorities without adding a dependency, audio asset, hosted call, identity/persistence boundary, or variable player cost.
+- Verified 20/20 focused tests, then 215/215 files and 1,229/1,229 full assertions; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime, npm audit zero, and 19 browser cases with one intentional mobile-only skip pass.
+- Deployed isolated staging at `session-158-staging` / immutable `09d33af3`; hosted shell passes 7/7, broad pixels 1,020/1,020, focused Operation pixels 36/36, direct review covers 18 hash-bound captures, and synthetic staging INP is 48ms at both widths.
+- Independent gate: engineering FORGE GO; SPARKED NO-GO. Direct-main publication and exact production verification remain the authorized follow-through.
+- Creative Direction Record reviewed — no new creative-direction entry this session; the founder's request was operational authorization to execute the existing arc, direct-main push, and deployment.

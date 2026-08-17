@@ -1,26 +1,23 @@
-# Implementation Plan - Session 157
+# Implementation Plan - Session 158
 
-Source: `docs/AUDIT_2026-08-16.json`
+Source: `docs/AUDIT_2026-08-16_2.json`
 
-Status: **IMPLEMENTED — VERIFICATION IN PROGRESS** - all three verified L2 items shipped; staging and production courts remain.
+Status: **IMPLEMENTED AND VERIFIED** - both premise-verified L2 items and the exact-action guard are shipped; the full regression, browser, isolated-staging, rendered-pixel, security, and engineering-release courts pass.
 
-## Wave A - Make encounter verbs authoritative
+## Wave A - Establish the pure audio contract
 
-1. [x] **operation-verb-objective-authority** - centralized seven action contracts; exact interaction plus arena clear is authoritative; incomplete encounters emit reason-coded reinforcement pressure; effects and receipts are distinct and bounded.
+1. [x] **operation-encounter-score-arc** - centralized all seven verb-to-score mappings, preserved explicit non-default preferences, and defined completion/reset restoration.
+2. [x] **operation-objective-audio-feedback** - centralized all seven success motifs plus the bounded reinforcement warning in the same dependency-free contract.
 
-## Wave B - Carry choices across Operations
+## Wave B - Integrate the Operation lifecycle
 
-2. [x] **operation-campaign-consequence-ledger** - typed route consequences, bounded idempotent local completions, declared carry-ins, deterministic arena transitions, and visible guest-open command-deck state are implemented.
+3. [x] Applied score transitions at Operation start and encounter advance, restored the current preference on complete/active reset, and left BOSS to the existing boss-intensity path.
+4. [x] Emit the exact success motif only after objective evidence is accepted, emit one warning per blocked clear, and announce the authored action plus benefit.
 
-## Wave C - Upgrade expansion evidence
+## Wave C - Prove follow-through
 
-3. [x] **operation-paired-evidence-binding** - real eligible Standard history selection, identifier-free references, schema-v2 provenance, legacy exclusion, and aggregate-only export are implemented.
+5. [x] Added pure and hook-level regression coverage for mapping completeness, player-authority rules, malformed-action rejection, duplicate suppression, blocked warnings, and restoration.
+6. [x] Updated the player changelog and public gameplay contract from their source authorities; regenerated derived artifacts.
+7. [x] Ran focused tests, 1,229/1,229 full assertions, strict lint/security/build/public-contract gates, 19-case browser E2E, isolated staging, 1,020/1,020 broad visual checks, 36/36 focused Operation checks, direct rendered-pixel review, cost/footer/canon/sanitization courts, and the FORGE engineering-release gate.
 
-## Verification order
-
-- Focused pure-contract and component tests after each wave.
-- Integrated Operation/App tests, strict lint, schema/architecture/runtime/public/security/dependency gates, and deployable build.
-- Real Chromium keyboard and mobile/touch Operation flows; both themes at 390px and 1440px for every touched state.
-- Isolated `session-157-staging` deploy, hosted visual/health courts, direct pixel inspection, release gate, direct-main publication, exact-production deployment, and live verification.
-
-No SPARKED lifecycle promotion is implied. This implementation remains cost-neutral, guest-first, local-deterministic, and trust-separated from standard leaderboard authority.
+No SPARKED lifecycle promotion is implied. The implementation adds no dependency, audio file, hosted call, persistence, identity surface, or variable per-player cost.

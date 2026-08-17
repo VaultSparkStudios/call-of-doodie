@@ -2,6 +2,14 @@
 
 Public-safe launch roadmap summary.
 
+## Session 158 - Preference-safe Operation audio direction
+
+- [x] [SIL:3] **DONE S158** All seven Operation verbs share one pure audio-director contract; the default Action score adapts by encounter while explicit Chill, Intense, Retro, and Spooky choices remain authoritative and BOSS stays on the existing boss runtime.
+- [x] [SIL:2] **DONE S158** Exact accepted objectives emit verb-specific procedural motifs and precise live announcements; wrong/malformed/duplicate actions stay silent and blocked clears emit one bounded reinforcement warning.
+- [x] [SIL:2] **DONE S158** Completion/reset restoration, public gameplay/changelog follow-through, 1,229/1,229 assertions, strict release/security/build courts, browser E2E, isolated staging, 1,056 hosted visual checks, and 18 directly reviewed captures pass.
+
+**Runway exception:** audio tuning, balance, further Operation breadth, participant comprehension claims, physical-device proof, and SPARKED promotion remain evidence-gated; the default-only adaptation policy does not override explicit player preference.
+
 ## Session 157 - Objective-authoritative Operations and evidence truth
 
 - [x] [SIL:3] **DONE S157** All seven Operation verbs now require their exact authored interaction plus arena clear; incomplete rooms retain the encounter and add bounded, reason-coded reinforcement pressure.

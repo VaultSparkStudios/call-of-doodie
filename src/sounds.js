@@ -2,6 +2,7 @@
 import {
   initBusGraph, busDest, setBusVolume, setMasterMuted, duckMusic, setMusicLowpass,
 } from "./audio/audioBus.js";
+import { buildOperationReinforcementCue, getOperationObjectiveMotif } from "./systems/operationAudioDirector.js";
 
 export { setBusVolume, duckMusic, setMusicLowpass };
 
@@ -373,6 +374,28 @@ export function soundBossKill() {
 export function soundWaveClear() {
   chirp(_pick([[440, 550, 660], [494, 622, 740], [392, 523, 784]]), 0.15, "triangle", 0.068, 0.1);
   duckMusic(0.6, 260);
+}
+
+export function soundOperationObjective(verb) {
+  const motif = getOperationObjectiveMotif(verb);
+  if (!motif) return false;
+  _withBus("sfx", () => {
+    chirp(motif.notes, motif.duration, motif.type, motif.volume, motif.gap);
+    if (motif.accentNoise > 0) noise(0.045, motif.accentNoise, motif.duration);
+  });
+  duckMusic(0.72, 180);
+  return true;
+}
+
+export function soundOperationReinforcement(reinforcementCount = 1) {
+  const cue = buildOperationReinforcementCue(reinforcementCount);
+  _withBus("sfx", () => {
+    tone(cue.startFrequency, cue.duration, "square", cue.volume, cue.endFrequency);
+    tone(cue.endFrequency * 1.5, cue.duration * 0.75, "sawtooth", cue.volume * 0.58, cue.endFrequency, 0.08);
+    noise(0.08, cue.volume * 0.42, 0.03);
+  });
+  duckMusic(0.58, 220);
+  return cue;
 }
 
 // Rising pitch click for each precision streak hit. streakLevel 1–N raises pitch.

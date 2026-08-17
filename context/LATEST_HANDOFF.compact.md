@@ -1,44 +1,41 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: d0ed5c571004 -->
-<!-- generated-at: 2026-08-16T18:43:31.442Z -->
+<!-- source-hash: 5319ed1fc499 -->
+<!-- generated-at: 2026-08-17T01:51:51.961Z -->
 
 # LATEST_HANDOFF (compact)
 
-SESSION 155 HANDOFF SUMMARY
+HANDOFF SUMMARY — SESSION 158
 
-Status
-- Session 155 complete; resume from synchronized clean main.
-- Lifecycle: FORGE / public-unlaunched. SPARKED remains NO-GO.
+Session
+- S158; project Call of Doodie; FORGE, deployed, public-unlaunched; SPARKED NO-GO.
 
-Shipped
-- Nine improvements: architecture, authored Operations, arena interaction, deterministic guidance, front-door/runtime UI, async rivalry, playtest evidence, realtime capacity trust, public contracts.
-- Three authored Operations reuse one deterministic seven-encounter contract; two routes alter persistent arena state and receipts; encounter seven forces BOSS.
-- Operation score/history/rematch/rival evidence is local, trust-separated from standard leaderboard. Eight Arcade modes and replay IDs intact behind ModeRules.
-- Projectile and Operation orchestration extracted and independently tested.
+Shipped (S158)
+- Pure seven-verb Operation audio director: default Action score follows mission verb, preserves explicit player music choices, BOSS handled by boss runtime, restores saved preference on completion/reset.
+- Exact accepted objectives emit distinct procedural motifs plus authored label/benefit; wrong/malformed/duplicate actions cannot emit success; blocked clears emit one bounded warning.
 
-Verification
-- Tests 1,205/1,205 across 209 files (+46 assertions, +13 files vs S154).
-- App 4,753/5,000 lines; game loop 1,498/1,775 lines.
-- Broad staging visuals 1,020/1,020; live Operation and completion states 36/36 each; 26 hash-bound captures across both themes at 390/1440px; mobile training-card overlap fixed.
-- Full Vitest, strict lint, deployable build, schema/architecture/public/dependency/assets/runtime/security, secrets scan, npm audit zero all green. No new dependency or variable-cost service.
+Validation
+- Vitest 215/215 files, 1,229/1,229 assertions; strict lint, deployable build, all gates (schema/public/security/dependency/assets/media/runtime), npm audit zero pass.
+- Browser E2E 19 cases (one intentional mobile-only skip). Hosted shell 7/7.
+- Pixels: broad matrix 1,020/1,020; focused Operation 36/36; 18 hash-bound captures reviewed dark/light at 390/1440px, zero blocking defects.
+- Staging synthetic INP 48ms both widths.
 
-Deploy
-- App source 7e613d4e6854b0f9fd960143976e31277fbda79e synchronized to main.
-- Staging https://213212ad.call-of-doodie.pages.dev/
-- Production https://e1017435.call-of-doodie.pages.dev/
-- Alias, immutable, custom-domain health report 7e613d4e6854.
+Current Intent
+- Complete authorized publication: direct-main commit/push and exact production verification. No SPARKED promotion, no launch announcement.
 
 Now (top 3)
-- Complete independent release gate.
-- Closeout and push; exact production deploy.
-- Immutable/custom-domain smoke plus workflow verification.
+- Direct-main commit and push of S158 audio-director work.
+- Exact-revision production deployment.
+- Immutable/custom-domain production verification (shell, cutover, backend, replay, Operation pixels).
 
 Blockers (top 3)
-- Supabase CLI probes host-transport-degraded; not claimed green.
-- Campaign progression not live before 10 playtest receipts.
-- Realtime co-op not connected before 20 receipts plus real-service capacity rerun.
+- None technical; engineering gate is GO. Publication steps remain the only authorized open work.
 
-Human-Blocked (gated, age unspecified)
-- SPARKED promotion: founder approval, physical-device proof, participant/publication evidence, scoped provider, current performance measurement.
+Human-Blocked (with age)
+- SPARKED promotion: founder approval outstanding, ongoing multi-session (since ≤S151).
+- Real participant evidence: required before tuning audio/balance/campaign breadth; ongoing.
+- Physical-device/PWA/controller, reply-capable mail, scoped provider, current performance proof: gated, ongoing multi-session.
 
-Next session: begin from synchronized main; complete release gate, closeout, production deploy, and domain smoke without promoting SPARKED.
+Preserve
+- Explicit player music authority; exact-action feedback contract; objective/campaign/evidence contracts; FORGE/public-unlaunched vs SPARKED boundary.
+
+Next session: begin from synchronized main after confirming S158 production verification, or complete publication if still pending.

@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S158)",
+  "generatedAt": "2026-08-16",
+  "session": 158,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-operation-audio-depth-and-player-authority",
+  "meta": {
+    "generatedAt": "2026-08-16",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-operation-audio-depth-and-player-authority",
+    "candidateCount": 31,
+    "promotedCount": 2,
+    "combinedPriority": 45.7,
+    "top3": [
+      "operation-encounter-score-arc",
+      "operation-objective-audio-feedback"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle, direct source inspection, and the focused 24/24 Operation court confirm that useOperationMode owns no music transition or objective sound path; App changes music only through the player preference, heat tier, and boss intensity; sounds.js already owns five procedural bar-quantized vibes and a routed sound-effects bus. No participant corpus exists for balance or scope expansion.",
+    "recommendation": {
+      "firstBuild": "Give the mechanically authoritative Operation chapters an equally authored, preference-safe audio arc.",
+      "productDestination": "A seven-chapter Operation whose score and objective confirmation reinforce each verb without overriding player choice.",
+      "keep": "Preserve guest-first play, every legacy mode, player music authority, mute and bus controls, deterministic local behavior, replay truth, and FORGE/SPARKED separation.",
+      "rejectNow": "New Operations, balance retuning, campaign breadth, realtime co-op, hosted music generation, audio assets, or another dependency.",
+      "reason": "The mature game already owns the required procedural music and sound infrastructure. A small orchestration contract adds session shape and feedback while remaining cost-neutral, reversible, and testable."
+    },
+    "gameLoopReview": {
+      "source": "docs/GAME_LOOP_REVIEW_2026-08-16_2.md",
+      "loopTightness": 9.5,
+      "progressionCurve": 9.3,
+      "sessionEngagement": 9.1,
+      "retentionHooks": 9,
+      "soulFidelity": 9.8,
+      "overall": 9.3,
+      "evidenceBoundary": "No participant playtest corpus exists. Scores measure executable design structure, not fun, balance, retention, or satisfaction."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Complete the new Operation grammar with chapter-aware score orchestration and authored objective feedback.",
+    "innovation": "Reuse one procedural score as a deterministic seven-chapter mission language instead of adding audio files or generated content.",
+    "ui / ux / user-experience": "Preserve explicit non-default music choices and pair each sonic cue with exact live-region feedback rather than a hidden override.",
+    "feedback loop": "Confirm the correct authored action sonically and warn when reinforcement pressure follows an incomplete objective.",
+    "gamification / engagement / immersion": "Give BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS distinct pacing while keeping the 12–18 minute arc readable.",
+    "ai / intelligence integration": "Keep orchestration as a pure reason-coded local director; hosted inference would weaken determinism and cost discipline.",
+    "security": "No network, identity, persistence, secret, or untrusted-data boundary changes; sound descriptors are fixed allowlisted data.",
+    "speed / organization / efficiency": "Centralize score and motif policy in one pure Operation audio contract rather than scattering verb conditionals through App and the hook.",
+    "token / api cost reduction": "Use the existing Web Audio graph with zero files, packages, hosted calls, or per-player cost."
+  },
+  "items": [
+    {
+      "slug": "operation-encounter-score-arc",
+      "tier": "FIRE",
+      "axis": "engagement / immersion / UX / efficiency",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 24,
+      "status": "complete",
+      "why": "The seven Operation verbs now change play, but all non-boss chapters keep the same score even though five procedural vibes and bar-quantized transitions already exist.",
+      "recipe": "Create one pure Operation audio-director contract covering every canonical verb. Apply it at Operation start and encounter advance; leave BOSS to existing boss intensity; adapt only the default Action preference; preserve explicit non-default choices including Retro; restore the current preference with an Action fallback on completion and active-run reset; add contract and hook-level regression coverage.",
+      "measurement": "All seven verbs are covered; the six non-boss chapters form at least three distinct score phases; BOSS produces no vibe override; default Action adapts; Chill, Intense, Retro, and Spooky remain unchanged; completion and active reset restore the saved preference or Action fallback; legacy modes never call the Operation director.",
+      "ladder": {
+        "L1": {
+          "effortHours": 3,
+          "recipe": "Map non-boss verbs to existing vibes and restore Action after an Operation."
+        },
+        "L2": {
+          "effortHours": 6,
+          "recipe": "Add a pure preference-aware director, start/advance/complete/reset lifecycle wiring, public contract/changelog follow-through, and focused tests."
+        },
+        "L3": {
+          "effortHours": 12,
+          "recipe": "Add participant-tested transition timing only after real playtest evidence identifies a pacing problem."
+        }
+      }
+    },
+    {
+      "slug": "operation-objective-audio-feedback",
+      "tier": "FIRE",
+      "axis": "feedback / accessibility / immersion",
+      "effortHours": 4,
+      "impact": 8,
+      "innovation": 7,
+      "priority": 21.7,
+      "status": "complete",
+      "why": "Each objective now has a distinct action and consequence, but successful interactions share one generic transient message and incomplete clears add reinforcement pressure without a sonic warning.",
+      "recipe": "Define fixed compact success motifs per verb plus a bounded reinforcement warning in the pure Operation audio contract. Render them through the existing sound-effects bus, call the success cue only after exact objective evidence is accepted, call the warning once per blocked clear, and announce the authored label and benefit through the existing live region.",
+      "measurement": "Every canonical verb owns one allowlisted motif; success fires only for the exact valid action and never on duplicate or malformed interactions; blocked clears emit one warning keyed to bounded reinforcement count; mute and bus controls remain authoritative; live-region copy names the action and benefit; no audio asset or dependency is added.",
+      "ladder": {
+        "L1": {
+          "effortHours": 2,
+          "recipe": "Add one shared success cue and one reinforcement warning at the correct lifecycle points."
+        },
+        "L2": {
+          "effortHours": 4,
+          "recipe": "Add verb-specific pure motifs, routed synthesis, precise live-region confirmation, duplicate suppression, and focused tests."
+        },
+        "L3": {
+          "effortHours": 9,
+          "recipe": "Tune motifs with participant comprehension tests and accessible alternatives only after real evidence exists."
+        }
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "slug": "new-operation-content",
+      "reason": "DATA-GATED - three Operations and campaign continuity exist; no participant corpus supports more breadth."
+    },
+    {
+      "slug": "numeric-balance-retune",
+      "reason": "DATA-BLOCKED - no participant corpus supports enemy, reward, duration, or progression tuning."
+    },
+    {
+      "slug": "realtime-coop",
+      "reason": "GATED - preserve the existing 20-receipt plus authoritative-capacity requirement."
+    },
+    {
+      "slug": "operation-route-history-map",
+      "reason": "CULL FOR NOW - the bounded ledger exists, but real completion volume should prove that a map is more useful than current command-deck continuity."
+    },
+    {
+      "slug": "offscreen-arrow-ads-correction",
+      "reason": "CULL - the recorded cosmetic drift has no player report, and the existing decision explicitly gates it on observed evidence."
+    },
+    {
+      "slug": "visual-restyle",
+      "reason": "FALSE PREMISE / CULL - S157 directly reviewed 26 Operation captures with zero blocking defect; this audit found no new pixel problem."
+    },
+    {
+      "slug": "hosted-ai-mission-or-music",
+      "reason": "CULL - deterministic local direction and procedural audio preserve replay truth and zero variable cost."
+    },
+    {
+      "slug": "dependency-or-framework-change",
+      "reason": "CULL - the work uses existing React and Web Audio infrastructure."
+    },
+    {
+      "slug": "identity-observability-mail-or-physical-qa",
+      "reason": "EXTERNAL GATES - these remain valid SPARKED requirements but are not substitutes for repo-owned implementation."
+    }
+  ],
+  "executionLog": [
+    {
+      "slug": "operation-encounter-score-arc",
+      "status": "complete",
+      "rung": "L2",
+      "outcome": "Pure seven-verb score director, default-Action-only adaptation, explicit non-default preservation, BOSS ownership, completion/reset restoration, public contract and changelog follow-through.",
+      "verification": "Pure and lifecycle boundary courts pass in the 20/20 focused corpus."
+    },
+    {
+      "slug": "operation-objective-audio-feedback",
+      "status": "complete",
+      "rung": "L2",
+      "outcome": "Seven distinct objective motifs, bounded reinforcement warning, exact-action guard, duplicate suppression, routed sound-effects playback, and precise live announcements.",
+      "verification": "Pure, hook integration, contract, public, and App launch courts pass in the 20/20 focused corpus."
+    }
+  ]
+}

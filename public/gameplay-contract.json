@@ -121,6 +121,40 @@
         "executive-washroom"
       ],
       "scoring": "Objectives + tempo + extraction",
+      "adaptiveScore": {
+        "policy": "default-action-vibe-only",
+        "explicitNonDefaultPreferences": "preserved",
+        "chapters": [
+          {
+            "verb": "BREACH",
+            "vibe": "intense"
+          },
+          {
+            "verb": "HOLD",
+            "vibe": "action"
+          },
+          {
+            "verb": "ESCORT",
+            "vibe": "chill"
+          },
+          {
+            "verb": "HUNT",
+            "vibe": "spooky"
+          },
+          {
+            "verb": "SABOTAGE",
+            "vibe": "intense"
+          },
+          {
+            "verb": "ESCAPE",
+            "vibe": "intense"
+          },
+          {
+            "verb": "BOSS",
+            "vibe": "boss-runtime"
+          }
+        ]
+      },
       "campaignProgression": "local-operation-checkpoint",
       "realtimeCoop": "gated-not-live"
     },
@@ -146,6 +180,40 @@
         "boiler-room"
       ],
       "scoring": "Objectives + tempo + extraction",
+      "adaptiveScore": {
+        "policy": "default-action-vibe-only",
+        "explicitNonDefaultPreferences": "preserved",
+        "chapters": [
+          {
+            "verb": "BREACH",
+            "vibe": "intense"
+          },
+          {
+            "verb": "HOLD",
+            "vibe": "action"
+          },
+          {
+            "verb": "ESCORT",
+            "vibe": "chill"
+          },
+          {
+            "verb": "HUNT",
+            "vibe": "spooky"
+          },
+          {
+            "verb": "SABOTAGE",
+            "vibe": "intense"
+          },
+          {
+            "verb": "ESCAPE",
+            "vibe": "intense"
+          },
+          {
+            "verb": "BOSS",
+            "vibe": "boss-runtime"
+          }
+        ]
+      },
       "campaignProgression": "local-operation-checkpoint",
       "realtimeCoop": "gated-not-live"
     },
@@ -171,6 +239,40 @@
         "executive-penthouse"
       ],
       "scoring": "Objectives + tempo + extraction",
+      "adaptiveScore": {
+        "policy": "default-action-vibe-only",
+        "explicitNonDefaultPreferences": "preserved",
+        "chapters": [
+          {
+            "verb": "BREACH",
+            "vibe": "intense"
+          },
+          {
+            "verb": "HOLD",
+            "vibe": "action"
+          },
+          {
+            "verb": "ESCORT",
+            "vibe": "chill"
+          },
+          {
+            "verb": "HUNT",
+            "vibe": "spooky"
+          },
+          {
+            "verb": "SABOTAGE",
+            "vibe": "intense"
+          },
+          {
+            "verb": "ESCAPE",
+            "vibe": "intense"
+          },
+          {
+            "verb": "BOSS",
+            "vibe": "boss-runtime"
+          }
+        ]
+      },
       "campaignProgression": "local-operation-checkpoint",
       "realtimeCoop": "gated-not-live"
     }

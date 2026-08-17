@@ -3,6 +3,7 @@ import {
   createOperationObjectiveState,
   evaluateOperationObjectiveClear,
   getOperationEncounterAction,
+  isOperationEncounterActionMatch,
   recordOperationObjectiveAction,
 } from "./operationEncounterContract.js";
 
@@ -31,5 +32,12 @@ describe("Operation encounter objective contract", () => {
     const verbs = ["BREACH", "HOLD", "ESCORT", "HUNT", "SABOTAGE", "ESCAPE", "BOSS"];
     const effects = verbs.map((verb) => getOperationEncounterAction({ verb }).effect.id);
     expect(new Set(effects).size).toBe(7);
+  });
+
+  it("matches only the exact authored target and command", () => {
+    expect(isOperationEncounterActionMatch(encounter, { targetId: "door-north", command: "OPEN" })).toBe(true);
+    expect(isOperationEncounterActionMatch(encounter, { targetId: "door-north", command: "flood" })).toBe(false);
+    expect(isOperationEncounterActionMatch(encounter, { targetId: "pump-west", command: "open" })).toBe(false);
+    expect(isOperationEncounterActionMatch({ verb: "unknown" }, { targetId: "door-north", command: "open" })).toBe(false);
   });
 });

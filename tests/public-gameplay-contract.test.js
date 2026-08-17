@@ -10,6 +10,9 @@ describe("public gameplay contract", () => {
     expect(contract.schemaVersion).toBe("gameplay-contract-v3");
     expect(contract.operations).toHaveLength(3);
     expect(contract.operations.every((operation) => operation.encounterVerbs.length === 7)).toBe(true);
+    expect(contract.operations.every((operation) => operation.adaptiveScore.policy === "default-action-vibe-only")).toBe(true);
+    expect(contract.operations.every((operation) => operation.adaptiveScore.explicitNonDefaultPreferences === "preserved")).toBe(true);
+    expect(contract.operations.every((operation) => operation.adaptiveScore.chapters.at(-1).vibe === "boss-runtime")).toBe(true);
     expect(contract.operations.every((operation) => operation.realtimeCoop === "gated-not-live")).toBe(true);
     expect(contract.weapons.every((weapon) => weapon.availableAtStart)).toBe(true);
     expect(contract.weapons.every((weapon) => Number.isInteger(weapon.arsenalMilestoneLevel))).toBe(true);

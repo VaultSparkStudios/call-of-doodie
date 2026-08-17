@@ -1,6 +1,25 @@
-# Latest Handoff — Session 157
+# Latest Handoff — Session 158
 
 Session Intent: Complete one continuous autonomous arc from synchronized main through a premise-verified game-loop and nine-axis audit, all repository-owned implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, and exact production verification while preserving FORGE/public-unlaunched lifecycle truth.
+
+## Where We Left Off (Session 158)
+
+- Shipped: a pure seven-verb Operation audio director maps the default Action preference across the authored encounter arc, preserves every explicit non-default player choice, leaves BOSS to the existing boss runtime, and restores the saved preference on completion/reset.
+- Feedback: exact accepted objectives emit distinct procedural motifs through the sound-effects bus and announce the authored label plus benefit; wrong, malformed, and duplicate actions cannot emit success, while blocked clears emit one bounded reinforcement warning.
+- Validation: full Vitest passes 215/215 files and 1,229/1,229 assertions; strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, and npm audit zero pass. Browser E2E passes 19 cases with one intentional mobile-only skip.
+- Staging: `https://session-158-staging.call-of-doodie.pages.dev/` and immutable `https://09d33af3.call-of-doodie.pages.dev/` pass hosted shell 7/7.
+- Pixels: the hosted broad matrix passes 1,020/1,020 and focused Operation states pass 36/36; 18 hash-bound captures received direct dark/light, 390/1440px review with zero blocking defects.
+- Release: strict public sanitization has zero findings; project cost gates are cost-neutral ALLOW; footer completeness passes 18/18; staging synthetic INP is 48ms at both target widths. The engineering gate is GO and SPARKED remains NO-GO.
+- Publication: direct-main commit/push and exact production follow-through are the remaining authorized steps. No SPARKED promotion or launch announcement is authorized.
+- Next: preserve explicit player music authority and exact-action feedback; collect real participant evidence before tuning audio, balance, or campaign breadth.
+
+## Impact Summary
+
+**Headline.** Operations now sound authored without confiscating the player's music choice: the default score follows the mission verb, exact actions answer with distinct motifs, and every override boundary is executable.
+
+**Evidence.** 215 files / 1,229 tests; 19 browser passes; 1,056 hosted pixel checks; 18 directly reviewed captures; 48ms synthetic staging INP; immutable staging `09d33af3`; zero new dependencies, audio files, hosted calls, identity surfaces, or variable-cost services.
+
+---
 
 ## Where We Left Off (Session 157)
 

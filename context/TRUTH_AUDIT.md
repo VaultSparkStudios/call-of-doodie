@@ -1,4 +1,17 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-16 — Session 158 — Audio authority, objective feedback, and release truth
+
+- Score truth — only the default Action preference adapts across non-boss Operation encounters; explicit Chill, Intense, Retro, and Spooky choices remain authoritative, and BOSS stays owned by the existing boss-intensity runtime.
+- Restoration truth — completion and active reset reread the saved preference and use Action only when it is absent or malformed. Legacy modes never call the Operation audio director.
+- Feedback truth — each canonical verb owns one fixed procedural motif. Success feedback, arena effects, and progression occur only after exact action evidence is accepted; duplicate, wrong, and malformed actions remain inert.
+- Accessibility truth — successful objectives announce their authored label and benefit; blocked clears emit one bounded reinforcement warning through the existing sound-effects/mute authority.
+- Validation truth — 215/215 files and 1,229/1,229 assertions pass with strict lint, deployable build, schema/public/security/dependency/assets/media/runtime gates, npm audit zero, and browser E2E 19 pass/1 intentional skip.
+- Visual truth — staging `session-158-staging` / immutable `09d33af3` passes hosted shell 7/7, broad pixels 1,020/1,020, focused Operation pixels 36/36, and direct review of 18 hash-bound dark/light mobile/desktop captures with zero blockers.
+- Release truth — public sanitization has zero findings; project cost gates are cost-neutral ALLOW; footer completeness is 18/18; synthetic staging INP is 48ms at both widths. Engineering FORGE is GO; SPARKED remains NO-GO.
+
+Overall status: all repository-owned S158 audit items are implemented and staged; direct-main publication and exact production verification are pending. SPARKED remains NO-GO.
+Last reviewed: 2026-08-16
+
 ## 2026-08-16 — Session 157 — Objective, campaign, evidence, and pixel truth
 
 - Objective truth — clearing enemies is necessary but insufficient. The exact authored action must be confirmed; otherwise the encounter remains active and bounded reinforcement pressure is recorded.

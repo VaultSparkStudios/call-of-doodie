@@ -17,6 +17,7 @@
 ## Open Work
 
 # Task Board
+## Session 158 - Preference-safe Operation audio direction
 ## Session 157 - Objective-authoritative Operations and evidence truth
 ## Session 156 - Production-evidence recovery
 ## Session 155 — Operation mode, authored missions, and evidence-gated expansion
@@ -54,13 +55,6 @@
 
 ## Recent Decisions
 
-## 2026-08-16 — Session 155 — Rendered pixels own overlay placement
-
-**Decision:** Position the Operation command overlay below the shared first-run training/HUD band and preserve an explicit scroll margin on the Operations deck.
-
-**Why:** The 1,092 automated visual checks were green, but direct 390px pixel inspection showed the training card covering the Operation title and progress. The corrected staging capture shows both surfaces readable simultaneously; mechanical selector visibility alone was insufficient.
-
-
 ## 2026-08-16 — Session 156 — Post-closeout production seals require their own recovery anchor
 
 **Decision:** When an exact-production verifier or documentation seal lands after the session's Self-Improvement Loop entry, record it in a new recovery boundary instead of silently treating the earlier closeout as current. Do not reopen or relabel the completed product session.
@@ -85,9 +79,19 @@
 
 **Boundaries:** The ledger retains at most 12 completions, does not lock Operations, and exports no raw run or identity data. Campaign expansion and realtime co-op remain behind their existing participant and capacity gates.
 
+## 2026-08-16 — Session 158 — Operation scoring adapts only the default, never explicit player taste
+
+**Decision:** Let the default Action preference follow the authored non-boss Operation arc, leave BOSS to the existing boss runtime, and preserve every explicit Chill, Intense, Retro, or Spooky choice. Restore the currently saved preference after completion or active reset, using Action only when storage is absent or malformed.
+
+**Why:** Encounter-aware music strengthens the seven-chapter mission shape, but a preference menu is a player contract rather than a suggestion. Restricting adaptation to the default gives fresh players authored pacing without silently confiscating an intentional choice.
+
+**Invariant:** Legacy modes never call the Operation director. Objective sounds use the sound-effects bus and mute controls. A success motif, announcement, arena effect, or transition may occur only after exact action evidence is accepted; wrong, malformed, or duplicate actions remain inert.
+
+**Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker returned a parse/error result and CANON-055 remains open until production follow-through; both stay explicit rather than being represented as green.
+
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 195,036 bytes · SHA-256 `aa5c3a161b99…`
-- `context/TASK_BOARD.md` · 126,042 bytes · SHA-256 `151776432f69…`
-- `context/DECISIONS.md` · 124,455 bytes · SHA-256 `b8e29daf5188…`
-- `docs/AUDIT_2026-08-16.json` · 11,186 bytes · SHA-256 `fb0b2b28f3d3…`
+- `context/CURRENT_STATE.md` · 197,014 bytes · SHA-256 `54f1b3b0f8fa…`
+- `context/TASK_BOARD.md` · 127,110 bytes · SHA-256 `60e71eb8efd9…`
+- `context/DECISIONS.md` · 125,700 bytes · SHA-256 `4b208029a332…`
+- `docs/AUDIT_2026-08-16_2.json` · 9,885 bytes · SHA-256 `ecbea762ca9d…`

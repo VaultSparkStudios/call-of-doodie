@@ -12,6 +12,7 @@ import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
 import { killsRequiredForAccountLevel, PRESTIGE_REQUIRED_LEVEL } from "../../src/utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../../src/utils/replayCoverage.js";
 import { OPERATIONS } from "../../src/systems/operationCampaign.js";
+import { OPERATION_ENCOUNTER_SCORE } from "../../src/systems/operationAudioDirector.js";
 
 function label(id) {
   return String(id).split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
@@ -41,6 +42,14 @@ export function buildPublicGameplayContract() {
       encounterVerbs: operation.encounters.map((encounter) => encounter.verb),
       routeOptions: operation.routeOptions,
       scoring: operation.scoring.summary,
+      adaptiveScore: {
+        policy: "default-action-vibe-only",
+        explicitNonDefaultPreferences: "preserved",
+        chapters: operation.encounters.map((encounter) => ({
+          verb: encounter.verb,
+          vibe: OPERATION_ENCOUNTER_SCORE[encounter.verb] || "boss-runtime",
+        })),
+      },
       campaignProgression: "local-operation-checkpoint",
       realtimeCoop: "gated-not-live",
     })),

@@ -1,0 +1,123 @@
+import { act } from "react";
+import { createRoot } from "react-dom/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { OPERATIONS } from "../systems/operationCampaign.js";
+import { getCurrentEncounter } from "../systems/operationDirector.js";
+import { getOperationEncounterAction } from "../systems/operationEncounterContract.js";
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
+const mocks = vi.hoisted(() => ({
+  addText: vi.fn(),
+  setMusicVibe: vi.fn(),
+  soundOperationObjective: vi.fn(),
+  soundOperationReinforcement: vi.fn(),
+  readPreference: vi.fn(() => "action"),
+}));
+
+vi.mock("../sounds.js", () => ({
+  setMusicVibe: mocks.setMusicVibe,
+  soundOperationObjective: mocks.soundOperationObjective,
+  soundOperationReinforcement: mocks.soundOperationReinforcement,
+  soundWaveClear: vi.fn(),
+}));
+vi.mock("../utils/gamePreferences.js", () => ({ readPreference: mocks.readPreference }));
+vi.mock("../utils/analytics.js", () => ({ track: vi.fn() }));
+vi.mock("../storage.js", () => ({ saveRunToHistory: vi.fn(), saveStudioGameEvent: vi.fn() }));
+vi.mock("../utils/runIntelligence.js", () => ({ buildStudioGameEvent: vi.fn(() => ({})) }));
+vi.mock("../systems/transientPresentation.js", () => ({ addText: mocks.addText }));
+vi.mock("../systems/runIntegrity.js", () => ({ getRunIntegrityReceipt: vi.fn(() => null), recordRunIntegrityFault: vi.fn() }));
+vi.mock("../systems/runSession.js", () => ({ createRunHistoryEntry: vi.fn(() => ({})), readRunModeFlags: vi.fn(() => ({})) }));
+vi.mock("../utils/operationCampaignProgress.js", () => ({
+  deriveOperationCampaignCarryIn: vi.fn(() => null),
+  loadOperationCampaignProgress: vi.fn(() => ({ completions: [] })),
+  recordOperationCompletion: vi.fn((state) => state),
+  saveOperationCampaignProgress: vi.fn(),
+}));
+
+import { useOperationMode } from "./useOperationMode.js";
+
+let root;
+let host;
+let operationApi;
+
+function Harness({ hookProps }) {
+  operationApi = useOperationMode(hookProps);
+  return null;
+}
+
+function mountOperation() {
+  const gsRef = { current: null };
+  const hookProps = {
+    gsRef,
+    sizeRef: { current: { w: 960, h: 540 } },
+    frameMonitorRef: { current: null },
+    startTimeRef: { current: Date.now() },
+    difficultyRef: { current: "normal" },
+    statsRef: { current: {} },
+    modeRefs: [],
+    setScore: vi.fn(),
+    setHealth: vi.fn(),
+    setPaused: vi.fn(),
+    setPauseReason: vi.fn(),
+    setLiveAnnounce: vi.fn(),
+  };
+  host = document.createElement("div");
+  root = createRoot(host);
+  act(() => root.render(<Harness hookProps={hookProps} />));
+  let modeState;
+  act(() => {
+    modeState = operationApi.start({ operation: OPERATIONS[0], seed: OPERATIONS[0].seed });
+  });
+  gsRef.current = {
+    ...modeState,
+    score: 0,
+    currentWave: 1,
+    enemies: [],
+    player: { x: 200, y: 200, health: 100, maxHealth: 100 },
+    _waveTransitDone: false,
+    _respiteLock: false,
+  };
+  return { gsRef, hookProps };
+}
+
+beforeEach(() => {
+  for (const mock of Object.values(mocks)) if (typeof mock.mockClear === "function") mock.mockClear();
+  mocks.readPreference.mockReturnValue("action");
+});
+
+afterEach(() => {
+  if (root) act(() => root.unmount());
+  root = null;
+  host = null;
+  operationApi = null;
+});
+
+describe("Operation objective audio integration", () => {
+  it("rejects malformed actions and cues the exact accepted action only once", () => {
+    const { hookProps } = mountOperation();
+    const encounter = getCurrentEncounter(operationApi.stateRef.current);
+    const action = getOperationEncounterAction(encounter);
+
+    act(() => operationApi.interact({ ...action, targetId: "pump-west", inputSource: "keyboard" }));
+    expect(mocks.soundOperationObjective).not.toHaveBeenCalled();
+    expect(hookProps.setLiveAnnounce).not.toHaveBeenCalled();
+
+    act(() => operationApi.interact({ ...action, inputSource: "keyboard" }));
+    act(() => operationApi.interact({ ...action, inputSource: "keyboard" }));
+    expect(mocks.soundOperationObjective).toHaveBeenCalledExactlyOnceWith(encounter.verb);
+    expect(hookProps.setLiveAnnounce).toHaveBeenCalledExactlyOnceWith(`${action.label} confirmed. ${action.benefit}`);
+  });
+
+  it("emits one bounded warning for an arena clear before the authored action", () => {
+    const { gsRef, hookProps } = mountOperation();
+    const encounter = getCurrentEncounter(operationApi.stateRef.current);
+    const action = getOperationEncounterAction(encounter);
+
+    let result;
+    act(() => { result = operationApi.resolveWave({ player: gsRef.current.player }); });
+    expect(result).toMatchObject({ handled: true, completed: false, blocked: true });
+    expect(mocks.soundOperationReinforcement).toHaveBeenCalledExactlyOnceWith(1);
+    expect(hookProps.setLiveAnnounce).toHaveBeenCalledWith(`${action.label} required. Reinforcements 1.`);
+  });
+});

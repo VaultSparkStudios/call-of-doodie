@@ -28,6 +28,8 @@ vi.mock("./sounds.js", () => ({
   soundDash: vi.fn(),
   soundBossKill: vi.fn(),
   soundWaveClear: vi.fn(),
+  soundOperationObjective: vi.fn(),
+  soundOperationReinforcement: vi.fn(),
   soundPerkSelect: vi.fn(),
   soundSummonDismissed: vi.fn(),
   soundGamepadConnect: vi.fn(),

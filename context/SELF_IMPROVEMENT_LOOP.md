@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-16 — Session 158 | Total: 998/1000 | Velocity: 3 | Debt: →
+
+SIL 998/1000: Completed the two premise-verified Operation audio gaps and the discovered exact-action guard while preserving player authority, deterministic local play, guest-first access, replay truth, and the independent SPARKED gate.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | The candidate passes 215/215 files, 1,229/1,229 assertions, strict lint, deployable build, runtime, schema, public, security, and dependency courts. |
+| Alignment | 100 | → | The authored audio arc deepens the solo Operation grammar without replacing the comedy-combat, player-choice, or legacy-mode spine. |
+| Momentum | 100 | → | Both promoted L2 items and the exact-action safety discovery closed in one continuous arc. |
+| Engagement | 99 | → | Encounter pacing and verb-specific confirmation strengthen session shape; participant fun, comprehension, and balance outcomes remain unclaimed. |
+| Process Qual | 100 | → | Pure contracts, hook integration, full regression, real-browser E2E, isolated staging, direct pixel review, and independent release review agree. |
+| Coherence | 100 | → | Director, hook, sound bus, exact-action contract, public gameplay schema, and changelog share one allowlisted vocabulary. |
+| Security | 100 | → | No dependency, asset, hosted call, identity, persistence, secret, or untrusted-data boundary was added; npm audit remains zero. |
+| Ecosystem | 99 | → | Human-visible and machine-readable Operation surfaces agree; Obelisk, mail, participant, and lifecycle gates remain external and explicit. |
+| Capital | 100 | → | Existing procedural Web Audio and Cloudflare paths deliver the change with zero variable per-player cost. |
+| Automation | 100 | → | Mapping, lifecycle, duplicate, malformed-action, browser, hosted visual, and release courts make the behavior falsifiable. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `█████`.
+
+Top win: fresh players receive an authored seven-chapter score without overriding an explicit music preference.
+Top gap: the repository still has no participant corpus or physical-device audio-comprehension evidence, so tuning and expansion remain gated.
+Intent outcome: Achieved through implementation, isolated staging, rendered-pixel review, and engineering release readiness; direct-main publication and exact production verification remain the authorized follow-through.
+
+**Brainstorm**
+1. Measure whether players understand objective motifs only after consented runs exist; never tune by intuition alone.
+2. Keep future Operation verbs inside the pure director and exact-action contracts so public and runtime vocabulary cannot drift.
+3. Preserve separate music and sound-effects authority if any future accessibility cue is added.
+
+**Committed to TASK_BOARD:** all S158 repository-owned audit work is complete; participant, provider, physical, and SPARKED work remains explicitly gated.
+
 ## 2026-08-16 — Session 157 | Total: 998/1000 | Velocity: 4 | Debt: ↓
 
 SIL 998/1000: Closed the three highest-value Operation truth gaps—objective authority, route continuity, and evidence provenance—while preserving every legacy mode, guest-first play, cost neutrality, and the independent SPARKED gate.

@@ -18,6 +18,13 @@ export function getOperationEncounterAction(encounter) {
   return OPERATION_ENCOUNTER_ACTIONS[verbOf(encounter)] || null;
 }
 
+export function isOperationEncounterActionMatch(encounter, action = {}) {
+  const required = getOperationEncounterAction(encounter);
+  if (!required) return false;
+  return String(action.targetId || "") === required.targetId
+    && String(action.command || "").toLowerCase() === required.command;
+}
+
 export function createOperationObjectiveState(encounter) {
   const action = getOperationEncounterAction(encounter);
   if (!encounter?.id || !action) return null;

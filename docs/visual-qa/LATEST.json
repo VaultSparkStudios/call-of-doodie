@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-16T19:46:38.805Z",
-  "stagingUrl": "https://session-157-staging.call-of-doodie.pages.dev",
-  "workingTreeUiSha256": "90c7297f232044b19f32453fc0b4bf5f945422ea9e389fa7f2c40eae1a6b51fd",
+  "capturedAt": "2026-08-17T00:29:11.507Z",
+  "stagingUrl": "https://session-158-staging.call-of-doodie.pages.dev/",
+  "workingTreeUiSha256": "d2ccce7586a484ccb7cab97a9ebc5680f85384aa55afaa41279c92b6f341ab6f",
   "sourceMatrix": {
-    "receipt": "output/playwright/s157-staging-final/visual-audit-receipt.json",
-    "sha256": "a33e21e4e57057313af51d9bc3332046260977506a81cded254ddd0c494842ef",
+    "receipt": "output/playwright/session-158-staging-visuals/visual-audit-receipt.json",
+    "sha256": "f7f0fffda4217ab9258d59a7054bf2ae9003a379c919999d2aa0cafd0efdf759",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -17,15 +17,6 @@
   "additionalTouchedStates": [
     {
       "surface": "Operation command deck and live arena interaction",
-      "checks": {
-        "pass": true,
-        "checks": 36,
-        "passed": 36,
-        "failures": []
-      }
-    },
-    {
-      "surface": "Operation completion receipt and opt-in paired playtest command post",
       "checks": {
         "pass": true,
         "checks": 36,
@@ -118,7 +109,7 @@
     },
     {
       "file": "operation-arena--sewer-night--390.png",
-      "sha256": "d1880751015cc66e01d988ed952446e126d0fa2883f90d32cc070f9700aa677a",
+      "sha256": "b8eb5d068c18c701449ef8fe27cd8942c2064fd49eaae1333e34a4463e0711e7",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -129,7 +120,7 @@
     },
     {
       "file": "operation-arena-complete--sewer-night--390.png",
-      "sha256": "f13d0498f1a6bf902d974d7193bbed0689d743d0d6bf71829dee7695dc158d12",
+      "sha256": "0e01bd4a04344700d9be64497b47833b4ee114f6416cefddb23e1d4a9a317c70",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -151,7 +142,7 @@
     },
     {
       "file": "operation-arena--sewer-night--1440.png",
-      "sha256": "0d892fca2ba66fc04907bb2fa37854522071a587a63111632692d26bd1fa2312",
+      "sha256": "365cee3f6826a9157428af3223be5589671d02a295e8a333ca0e785a4935e8cb",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -162,7 +153,7 @@
     },
     {
       "file": "operation-arena-complete--sewer-night--1440.png",
-      "sha256": "a410583699b8245218bb0288b47ffb9f2e0d80c8d5f903eebf9d4531272f6e05",
+      "sha256": "d2f4be02ce2ce31cc6e466c31d49e0cb8940609eb4c6bcc78442a462c1b407ac",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
@@ -184,7 +175,7 @@
     },
     {
       "file": "operation-arena--porcelain-day--390.png",
-      "sha256": "2a8a72b5cae3623d168b439a5eb5dddad06652a3392511a6bad97f1fd272b3f2",
+      "sha256": "347cabec368f81e8e9eb7406825713bb251c547b8324c5fbf55297abf70884fc",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -195,7 +186,7 @@
     },
     {
       "file": "operation-arena-complete--porcelain-day--390.png",
-      "sha256": "f4b1c20903f574e8c8d64bc69e2edd14bf1eabe6c549d50e0cab1688f2711782",
+      "sha256": "c58a3d1d499239b01e89fb345ecc22fa6b0284057d5e4bb19fa0b180d7f3c818",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -217,7 +208,7 @@
     },
     {
       "file": "operation-arena--porcelain-day--1440.png",
-      "sha256": "16ea3a4f4d1322e59da0925854451eb5bcf6b9ec9ab156267a6cf0c2ae71c0ed",
+      "sha256": "d97273076be178dd1888659df5338337fa83feee5ade57922a6e132e9cca4fbc",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -228,7 +219,7 @@
     },
     {
       "file": "operation-arena-complete--porcelain-day--1440.png",
-      "sha256": "674129acefe5c01e2e1972223d37ad1e079024e7ef661978c6e00b92980f1a66",
+      "sha256": "324e57f016cc1830836f6ad4d0ca147fe0cee41629c33a9dad10854b4819582d",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -236,94 +227,6 @@
         "height": 1000
       },
       "page": "Operation arena interaction completed"
-    },
-    {
-      "file": "operation-complete--sewer-night--390.png",
-      "sha256": "f04cc2a6c063bd8d07f3d47eb4da66ea2e616665dd88ffb518e6f7411e8d3161",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Operation completion receipt and honest gates"
-    },
-    {
-      "file": "operation-command-post--sewer-night--390.png",
-      "sha256": "f8ce7f922ad04ff1de61b3d2ce4acc1bd0e000a9c944631ff8a3cb76a3c913a1",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Expanded opt-in paired Operation playtest command post"
-    },
-    {
-      "file": "operation-complete--sewer-night--1440.png",
-      "sha256": "e644d47e4d984e141f5f261c1b42264b5de692716184510e5be020d8b64cb14f",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Operation completion receipt and honest gates"
-    },
-    {
-      "file": "operation-command-post--sewer-night--1440.png",
-      "sha256": "be1ec88e196bf13164e45539bca6d748cee85807b6763012b16b5307d9be5719",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded opt-in paired Operation playtest command post"
-    },
-    {
-      "file": "operation-complete--porcelain-day--390.png",
-      "sha256": "f04cc2a6c063bd8d07f3d47eb4da66ea2e616665dd88ffb518e6f7411e8d3161",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Operation completion receipt and honest gates"
-    },
-    {
-      "file": "operation-command-post--porcelain-day--390.png",
-      "sha256": "1210069e9b0296ae89ebcf974ba572ac2c60902f7321560bd8ad5c87f33b15ae",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Expanded opt-in paired Operation playtest command post"
-    },
-    {
-      "file": "operation-complete--porcelain-day--1440.png",
-      "sha256": "e644d47e4d984e141f5f261c1b42264b5de692716184510e5be020d8b64cb14f",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Operation completion receipt and honest gates"
-    },
-    {
-      "file": "operation-command-post--porcelain-day--1440.png",
-      "sha256": "c42d37ff06baffda284441e446886a1c63e219f62b6304c367c6139b5375de9a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded opt-in paired Operation playtest command post"
     }
   ],
   "inspection": {
@@ -333,11 +236,10 @@
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The hosted authored Operation deck and live arena interaction passed 36/36 focused checks at 390px and 1440px in both project themes.",
-      "The Operation completion receipt and expanded opt-in paired playtest command post passed 36/36 focused checks at 390px and 1440px in both project themes."
+      "The hosted authored Operation deck and live arena interaction passed 36/36 focused checks at 390px and 1440px in both project themes."
     ],
     "fixesApplied": [
-      "No blocking visual defect remained after direct review; required and confirmed objective states, campaign deck, completion modal, and evidence-empty state are readable in both themes at 390px and 1440px."
+      "Direct review found no blocking visual defect: the Operation deck, live objective confirmation, and encounter HUD remained readable in both themes at 390px and 1440px; explicit focus, touch targets, and hierarchy were preserved."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

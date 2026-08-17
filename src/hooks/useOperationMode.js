@@ -2,7 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { track } from "../utils/analytics.js";
 import { saveRunToHistory, saveStudioGameEvent } from "../storage.js";
 import { buildStudioGameEvent } from "../utils/runIntelligence.js";
-import { soundWaveClear } from "../sounds.js";
+import { setMusicVibe, soundOperationObjective, soundOperationReinforcement, soundWaveClear } from "../sounds.js";
+import { readPreference } from "../utils/gamePreferences.js";
 import { addText } from "../systems/transientPresentation.js";
 import { getRunIntegrityReceipt, recordRunIntegrityFault } from "../systems/runIntegrity.js";
 import { RUN_PHASE } from "../systems/runTermination.js";
@@ -11,8 +12,22 @@ import { chooseMissionDirective } from "../systems/missionDirector.js";
 import { buildOperationReceipt, chooseOperationRoute, createOperationState, getCurrentEncounter, resolveOperationEncounter } from "../systems/operationDirector.js";
 import { applyOperationArenaTransition, buildOperationArenaReceipt, createOperationArenaState } from "../systems/operationArenaState.js";
 import { buildOperationRematchCartridge, buildOperationReplayReceipt } from "../utils/operationRivals.js";
-import { createOperationObjectiveState, evaluateOperationObjectiveClear, getOperationEncounterAction, recordOperationObjectiveAction } from "../systems/operationEncounterContract.js";
+import { createOperationObjectiveState, evaluateOperationObjectiveClear, getOperationEncounterAction, isOperationEncounterActionMatch, recordOperationObjectiveAction } from "../systems/operationEncounterContract.js";
 import { deriveOperationCampaignCarryIn, loadOperationCampaignProgress, recordOperationCompletion, saveOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
+import { normalizePlayerMusicVibe, resolveOperationEncounterScore } from "../systems/operationAudioDirector.js";
+
+export function applyOperationEncounterScore(verb) {
+  const playerVibe = normalizePlayerMusicVibe(readPreference("cod-music-vibe", "action"));
+  const decision = resolveOperationEncounterScore(verb, playerVibe);
+  if (decision.targetVibe) setMusicVibe(decision.targetVibe);
+  return decision;
+}
+
+export function restoreOperationPlayerScore() {
+  const playerVibe = normalizePlayerMusicVibe(readPreference("cod-music-vibe", "action"));
+  setMusicVibe(playerVibe);
+  return playerVibe;
+}
 
 export function useOperationMode({
   gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, modeRefs,
@@ -29,11 +44,13 @@ export function useOperationMode({
   const [objectiveState, setObjectiveState] = useState(null);
 
   const reset = useCallback(() => {
+    const hadActiveOperation = Boolean(stateRef.current);
     stateRef.current = null;
     arenaRef.current = null;
     completeRef.current = null;
     objectiveRef.current = null;
     setState(null); setArenaState(null); setObjectiveState(null); setDirective(null); setCompleteReceipt(null);
+    if (hadActiveOperation) restoreOperationPlayerScore();
   }, []);
 
   const start = useCallback(({ operation, challenge = {}, seed }) => {
@@ -57,6 +74,7 @@ export function useOperationMode({
     const nextDirective = chooseMissionDirective({ encounter, healthRatio: 1, routeChosen: true, routeChoice: route, routeConsequence: nextState.routeConsequence?.id, interactionComplete: false, scorePace: 1 });
     stateRef.current = nextState; arenaRef.current = nextArena; objectiveRef.current = nextObjective; completeRef.current = null;
     setState(nextState); setArenaState(nextArena); setObjectiveState(nextObjective); setDirective(nextDirective); setCompleteReceipt(null);
+    if (encounter?.verb) applyOperationEncounterScore(encounter.verb);
     return {
       operationMode: true, operationId: operation.id, operationRoute: route, operationRouteSource: routeSource,
       operationEncounterIndex: 0, operationEncounterVerb: encounter?.verb || null,
@@ -73,6 +91,7 @@ export function useOperationMode({
     const encounter = getCurrentEncounter(currentState);
     const contract = getOperationEncounterAction(encounter);
     if (!gs?.operationMode || !currentArena || !encounter || completeRef.current || gs._waveTransitDone || gs._respiteLock) return;
+    if (!isOperationEncounterActionMatch(encounter, action)) return;
     const key = `${encounter.id}:${action?.targetId}:${action?.command}`;
     const used = gs._operationInteractionKeys || (gs._operationInteractionKeys = new Set());
     if (used.has(key)) return;
@@ -100,12 +119,14 @@ export function useOperationMode({
       }
       setScore(gs.score); setHealth(Math.floor(gs.player.health));
       addText(gs, gs.player.x, gs.player.y - 48, `OBJECTIVE LINKED · ${String(effect.id || "confirmed").toUpperCase()}`, "#72E8FF", true);
+      soundOperationObjective(encounter.verb);
+      setLiveAnnounce(`${contract.label} confirmed. ${contract.benefit}`);
       setDirective(chooseMissionDirective({ encounter, healthRatio: gs.player.health / Math.max(1, gs.player.maxHealth), routeChosen: Boolean(currentState.route), routeChoice: currentState.route, routeConsequence: currentState.routeConsequence?.id, interactionComplete: true, scorePace: 1 }));
       track("operation_arena_interaction", { operationId: currentState.operationId, encounterId: encounter.id, encounterVerb: encounter.verb, targetId: action.targetId, command: action.command, sequence: nextArena.sequence });
     } catch (error) {
       recordRunIntegrityFault(gs, { stage: "operation_arena_interaction", error, wave: gs.currentWave });
     }
-  }, [gsRef, setHealth, setScore]);
+  }, [gsRef, setHealth, setLiveAnnounce, setScore]);
 
   const resolveWave = useCallback(({ player }) => {
     const gs = gsRef.current;
@@ -122,6 +143,9 @@ export function useOperationMode({
       const blockedDirector = chooseMissionDirective({ encounter, healthRatio: player.health / Math.max(1, player.maxHealth), routeChosen: Boolean(currentState.route), routeChoice: currentState.route, routeConsequence: currentState.routeConsequence?.id, interactionComplete: false, scorePace: 1 });
       setDirective(blockedDirector);
       addText(gs, gs.player.x, gs.player.y - 64, "OBJECTIVE INCOMPLETE · REINFORCEMENTS", "#FFD57B", true);
+      soundOperationReinforcement(objectiveResult.objectiveState.reinforcementCount);
+      const requiredAction = getOperationEncounterAction(encounter);
+      setLiveAnnounce(`${requiredAction?.label || "Objective action"} required. Reinforcements ${objectiveResult.objectiveState.reinforcementCount}.`);
       track("operation_objective_blocked", { operationId: currentState.operationId, encounterId: encounter.id, encounterVerb: encounter.verb, reasonCode: objectiveResult.reasonCode, reinforcementCount: objectiveResult.objectiveState.reinforcementCount });
       return { handled: true, completed: false, blocked: true, reasonCode: objectiveResult.reasonCode, nextState: currentState };
     }
@@ -136,6 +160,7 @@ export function useOperationMode({
       const nextObjective = createOperationObjectiveState(nextEncounter);
       objectiveRef.current = nextObjective; setObjectiveState(nextObjective);
       gs._operationPressureMultiplier = Number(nextState.routeConsequence?.pressureMultiplier) || 1;
+      if (nextEncounter?.verb) applyOperationEncounterScore(nextEncounter.verb);
       setDirective(chooseMissionDirective({ encounter: nextEncounter, healthRatio: player.health / Math.max(1, player.maxHealth), routeChosen: true, routeChoice: nextState.route, routeConsequence: nextState.routeConsequence?.id, interactionComplete: false, scorePace: 1 }));
       return { handled: true, completed: false, nextState };
     }
@@ -150,7 +175,7 @@ export function useOperationMode({
     saveOperationCampaignProgress(recordOperationCompletion(loadOperationCampaignProgress(), receipt));
     Object.assign(gs, { operationReceipt: receipt, runPhase: RUN_PHASE.ENDED, runEndCause: "operation_complete" });
     completeRef.current = receipt; setCompleteReceipt(receipt);
-    setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear();
+    setPaused(true); setPauseReason("operation_complete"); setLiveAnnounce(`${receipt.mission} complete. Score ${receipt.score}.`); soundWaveClear(); restoreOperationPlayerScore();
     const historyEntry = createRunHistoryEntry({
       score: gs.score, kills: gs.kills, wave: gs.currentWave,
       timeSeconds: Math.floor((Date.now() - startTimeRef.current) / 1000), difficulty: difficultyRef.current,
