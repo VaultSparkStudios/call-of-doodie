@@ -582,26 +582,28 @@
   "testsLastRun": "2026-08-16",
   "sanitizationLastCleared": "2026-08-16",
   "sessionShellHygiene": {
-    "session": 154,
+    "session": 158,
     "started": 1,
     "closed": 1,
     "running": 0,
-    "enumeratedAt": "2026-08-14T00:00:46.1198032-04:00",
-    "scope": "Session-owned command shell enumerated after all bounded verification jobs completed; unrelated host services excluded."
+    "enumeratedAt": "2026-08-16T22:18:59.3513288-04:00",
+    "scope": "Session-owned command shell enumerated after all bounded verification, closeout, publication, and production jobs completed; unrelated host services excluded."
   },
   "doctorScore": {
-    "date": "2026-08-13",
-    "ranAt": "2026-08-13T20:46:14.088Z",
+    "date": "2026-08-17",
+    "ranAt": "2026-08-16T22:18:59.3513288-04:00",
     "overallPass": true,
-    "passing": 132,
-    "warning": 46,
+    "passing": 141,
+    "green": 135,
+    "advisoryPass": 6,
+    "warning": 41,
     "failing": 0,
     "blockingFailing": 0,
     "advisoryFailing": 0,
     "skipped": 3,
-    "ran": 178,
-    "total": 181,
-    "score": 74
+    "ran": 182,
+    "total": 185,
+    "score": 77
   },
   "lastSessionSummary": "Session 158 shipped preference-safe Operation encounter scoring and exact-action objective audio, passed 215/215 files and 1229/1229 assertions plus browser/staging/direct-pixel release courts, and deployed exact source bdbf396c0148 to immutable production ee00b749 with complete live verification; SPARKED remains independently gated.",
   "testsAssertionsPassing": 1229,

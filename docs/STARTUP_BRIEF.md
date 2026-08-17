@@ -88,7 +88,7 @@
 ║  ✓  Templates     v3.3 aligned                                   ║
 ║  ⛔  Revenue sig.  not found  ⚠ stale                             ║
 ║  ✓  Deploy gaps   no gaps (run: ops deploy-gaps)                 ║
-║  ⚠  Doctor        132/181 (74%)  ·  46 warn                      ║
+║  ⚠  Doctor        141/185 (77%)  ·  41 warn                      ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
 ║  ✓  Cost          real $0.24/7d · 7d notional $1.44…             ║

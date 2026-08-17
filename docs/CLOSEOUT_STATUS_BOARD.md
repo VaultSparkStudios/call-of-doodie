@@ -1,19 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-16 (Session 156 closeout) -->
+<!-- generated-at: 2026-08-17 (Session 158 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S156 ════════════════════╗
-║  Date: 2026-08-16  ·  SIL: 998/1000  ·  Velocity: 2 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S158 ════════════════════╗
+║  Date: 2026-08-17  ·  SIL: 998/1000  ·  Velocity: 3 flat         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Recovery scope: no product code changed. S156 records the al  ║
-║  ✓ Tests: the synchronized recovery tree passes 209/209 Vitest   ║
-║  ✓ Lifecycle: Call of Doodie remains cost-neutral, FORGE, deplo  ║
-║  ✓ Next: begin Session 157 from the recovery checkpoint; run th  ║
+║  ✓ Shipped: a pure seven-verb Operation audio director maps the  ║
+║  ✓ Feedback: exact accepted objectives emit distinct procedural  ║
+║  ✓ Validation: full Vitest passes 215/215 files and 1,229/1,229  ║
+║  ✓ Staging: `https://session-158-staging.call-of-doodie.pages.d  ║
+║  ✓ Pixels: the hosted broad matrix passes 1,020/1,020 and focus  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -34,29 +35,29 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (Claude/Codex project memory)                    ║
+║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 16 files  ·  M:14 A:0 D:0 ?:2                          ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
+║  Ahead: 1  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-155-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-158-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        132/181                                          ║
+║  Doctor:        141/185                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1205/1205                                        ║
+║  Tests:         1229/1229                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         1d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  1d ago                                           ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  shells:        1 started · 1 closed · 0 running                 ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
