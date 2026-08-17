@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { WEAPONS } from "../constants.js";
+import { HEAT_THRESHOLD_WARM, HEAT_THRESHOLD_OVERDRIVE } from "../systems/heatMeter.js";
 import { buildResponsiveHudModel } from "../utils/responsiveHudModel.js";
 
 const TONE_COLOR = {
@@ -17,6 +18,7 @@ export default function MobileHUD({
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
   combo, killstreak, experimentMatched, reducedEffects,
+  heat = 0,
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const weapon = WEAPONS[currentWeapon];
@@ -44,6 +46,21 @@ export default function MobileHUD({
           <div style={{ minWidth: 62, textAlign: "right" }}>
             <div style={{ color: "#93A3B3", fontSize: 9, fontWeight: 800, letterSpacing: 1 }}>SCORE</div>
             <div style={{ marginTop: 2, color: cursedHideScore ? "#D764FF" : "#FFD44D", fontSize: 13, fontWeight: 950 }}>{cursedHideScore ? "???" : score.toLocaleString()}</div>
+            {heat > 5 && (
+              <div
+                data-testid="hud-heat-badge"
+                aria-label={`Heat ${Math.round(heat)}${heat >= HEAT_THRESHOLD_OVERDRIVE ? " overdrive" : heat >= HEAT_THRESHOLD_WARM ? " warm" : ""}`}
+                style={{
+                  marginTop: 2,
+                  fontSize: 7,
+                  fontWeight: 900,
+                  letterSpacing: 0.4,
+                  color: heat >= HEAT_THRESHOLD_OVERDRIVE ? "#FF3300" : heat >= HEAT_THRESHOLD_WARM ? "#FF8800" : "#FFC800",
+                }}
+              >
+                {heat >= HEAT_THRESHOLD_OVERDRIVE ? "🔥 OVERDRIVE" : `🔥 ${Math.round(heat)}`}
+              </div>
+            )}
           </div>
           <button onClick={onPause} aria-label="Pause game" style={{ width: 48, height: 48, display: "grid", placeItems: "center", pointerEvents: "all", border: "1px solid rgba(255,255,255,.18)", borderRadius: 11, color: "#FFF", background: "rgba(255,255,255,.08)", fontSize: 16 }}>Ⅱ</button>
         </div>
