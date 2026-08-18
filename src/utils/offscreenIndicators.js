@@ -41,6 +41,11 @@ const ELITE_ARROW_COLORS = {
 
 /**
  * Builds render-ready arrow descriptors for every off-screen enemy.
+ *
+ * Positions use CSS-pixel canvas coordinates (W×H). Callers must draw these
+ * arrows in screen space — outside any active camera zoom (e.g. ADS) — so the
+ * arrows land at the visual canvas edge rather than inheriting the zoom offset.
+ *
  * @returns {{x:number,y:number,angle:number,color:string,alpha:number}[]}
  */
 export function getOffscreenThreatArrows(enemies, W, H, { margin = 18, fogOfWar = false } = {}) {
