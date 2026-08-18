@@ -76,4 +76,21 @@ describe("getOffscreenThreatArrows", () => {
     );
     expect(arrows).toEqual([]);
   });
+
+  it("returns positions within the inset margin boundary for rendering in screen space", () => {
+    const margin = 18;
+    const arrows = getOffscreenThreatArrows([
+      { x: -200, y: 300 },
+      { x: 1000, y: 300 },
+      { x: 400, y: -200 },
+      { x: 400, y: 900 },
+    ], W, H, { margin });
+    expect(arrows).toHaveLength(4);
+    for (const arrow of arrows) {
+      expect(arrow.x).toBeGreaterThanOrEqual(margin - 0.01);
+      expect(arrow.x).toBeLessThanOrEqual(W - margin + 0.01);
+      expect(arrow.y).toBeGreaterThanOrEqual(margin - 0.01);
+      expect(arrow.y).toBeLessThanOrEqual(H - margin + 0.01);
+    }
+  });
 });
