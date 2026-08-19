@@ -63,3 +63,12 @@ export function saveOperationCampaignProgress(progress, storage = globalThis.loc
   try { storage?.setItem(OPERATION_CAMPAIGN_PROGRESS_KEY, JSON.stringify(safe)); } catch {}
   return safe;
 }
+
+export function bestOperationScore(progress, operationId) {
+  const id = String(operationId || "");
+  const relevant = normalizeOperationCampaignProgress(progress).completions.filter(
+    (entry) => entry.operationId === id,
+  );
+  if (!relevant.length) return null;
+  return Math.max(...relevant.map((entry) => entry.score || 0));
+}

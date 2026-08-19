@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { OPERATIONS, getOperation } from "../systems/operationCampaign.js";
-import { deriveOperationCampaignCarryIn, loadOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
+import { bestOperationScore, deriveOperationCampaignCarryIn, loadOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
 
 const FALLBACK_PALETTE = Object.freeze({
   accent: "#FF7A38",
@@ -108,7 +108,9 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
           const seed = operationSeed(operation);
           const routes = routeOptions(operation);
           const completion = campaignProgress.completions.findLast((entry) => entry.operationId === operationId);
+          const best = bestOperationScore(campaignProgress, operationId);
           const carryIn = deriveOperationCampaignCarryIn(campaignProgress, operationId);
+          const encounters = Array.isArray(operation.encounters) ? operation.encounters : [];
           return (
             <article
               key={operationId}
@@ -124,7 +126,10 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
               }}
             >
               <div style={{ color: colors.accent, fontSize: 9, fontWeight: 900, letterSpacing: 1.6 }}>
-                OP {String(index + 1).padStart(2, "0")} · 7 ENCOUNTERS · {completion ? "CLEARED" : "READY"}
+                OP {String(index + 1).padStart(2, "0")} · 7 ENCOUNTERS
+                {completion
+                  ? <> · <span data-testid={`operation-status-${operationId}`}>CLEARED</span>{best != null && <> · <span data-testid={`operation-best-score-${operationId}`}>BEST {best.toLocaleString()}</span></>}</>
+                  : <> · <span data-testid={`operation-status-${operationId}`}>READY</span></>}
               </div>
               <h3 style={{ color: colors.ink, fontSize: 16, margin: "6px 0 8px" }}>{title}</h3>
               <p style={{ color: colors.muted, fontSize: 10, lineHeight: 1.45, margin: "0 0 9px" }}>
@@ -133,6 +138,37 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
                   "Secure the route and reach extraction.",
                 )}
               </p>
+              {encounters.length > 0 && (
+                <div
+                  aria-label="Encounter spine"
+                  data-testid={`operation-encounter-spine-${operationId}`}
+                  style={{ display: "flex", flexWrap: "wrap", gap: 4, margin: "0 0 10px" }}
+                >
+                  {encounters.map((enc, encIndex) => {
+                    const isBoss = enc.verb === "BOSS";
+                    return (
+                      <span
+                        key={enc.id || encIndex}
+                        title={readable(enc.title, enc.verb)}
+                        style={{
+                          padding: "2px 5px",
+                          borderRadius: 4,
+                          border: `1px solid ${isBoss ? colors.accent : colors.line}`,
+                          background: isBoss ? `${colors.accent}22` : "transparent",
+                          color: isBoss ? colors.accent : colors.muted,
+                          fontSize: 8,
+                          fontWeight: 900,
+                          letterSpacing: 0.8,
+                          cursor: "default",
+                          userSelect: "none",
+                        }}
+                      >
+                        {enc.verb}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
               <dl style={{ display: "grid", gridTemplateColumns: "58px 1fr", gap: "6px 8px", margin: "auto 0 12px", fontSize: 10 }}>
                 <dt style={{ color: colors.muted }}>ROUTE</dt>
                 <dd style={{ color: colors.ink, margin: 0 }}>{routeLabel(operation)}</dd>
