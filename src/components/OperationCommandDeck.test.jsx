@@ -5,7 +5,8 @@ import { resolve } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import OperationCommandDeck from "./OperationCommandDeck.jsx";
-import { OPERATIONS } from "../systems/operationCampaign.js";
+import { OPERATIONS, ENCOUNTER_VERBS } from "../systems/operationCampaign.js";
+import { recordOperationCompletion, createOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -74,6 +75,49 @@ describe("OperationCommandDeck", () => {
       operationMode: true,
       operationRoute: OPERATIONS[1].routeOptions[0],
     });
+  });
+
+  it("renders an encounter spine with all 7 authored verb pills per operation", async () => {
+    await render();
+
+    for (const operation of OPERATIONS) {
+      const spine = container.querySelector(`[data-testid="operation-encounter-spine-${operation.id}"]`);
+      expect(spine).not.toBeNull();
+      const pills = [...spine.querySelectorAll("span")];
+      expect(pills).toHaveLength(7);
+      for (const [i, pill] of pills.entries()) {
+        expect(pill.textContent).toBe(ENCOUNTER_VERBS[i]);
+        const title = operation.encounters[i]?.title;
+        if (title) expect(pill.getAttribute("title")).toBe(title);
+      }
+    }
+  });
+
+  it("shows CLEARED + best score for completed operations and READY for fresh ones", async () => {
+    const progress = recordOperationCompletion(
+      recordOperationCompletion(createOperationCampaignProgress(), {
+        operationId: "blacksite-flush", route: "service-tunnel", fingerprint: "AA001122", score: 1500,
+      }),
+      { operationId: "blacksite-flush", route: "executive-washroom", fingerprint: "BB334455", score: 4700 },
+    );
+    const storage = { getItem: (key) => key.includes("operation-campaign-progress") ? JSON.stringify(progress) : null };
+    const storageDescriptor = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+    Object.defineProperty(globalThis, "localStorage", { value: storage, configurable: true });
+    try {
+      await render();
+      const clearedStatus = container.querySelector('[data-testid="operation-status-blacksite-flush"]');
+      expect(clearedStatus?.textContent).toBe("CLEARED");
+      const bestScore = container.querySelector('[data-testid="operation-best-score-blacksite-flush"]');
+      expect(bestScore).not.toBeNull();
+      expect(bestScore.textContent).toContain("4,700");
+
+      const readyStatus = container.querySelector('[data-testid="operation-status-porcelain-siege"]');
+      expect(readyStatus?.textContent).toBe("READY");
+      expect(container.querySelector('[data-testid="operation-best-score-porcelain-siege"]')).toBeNull();
+    } finally {
+      if (storageDescriptor) Object.defineProperty(globalThis, "localStorage", storageDescriptor);
+      else delete globalThis.localStorage;
+    }
   });
 
   it("is integrated above the explicitly preserved Arcade and Rivals front door", () => {
