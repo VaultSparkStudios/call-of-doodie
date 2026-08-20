@@ -64,6 +64,7 @@
 .home-more-menu__grid { display:grid; gap:8px; }
 .home-more-menu__grid :where(a,button) { min-height:54px; display:flex; align-items:center; justify-content:space-between; width:100%; padding:10px 14px; border:1px solid rgba(255,160,60,.22); border-radius:10px; background:rgba(255,255,255,.04); color:inherit; font:inherit; font-size:16px!important; font-weight:800; text-align:left; text-decoration:none; cursor:pointer; }
 .home-section-label { margin:24px 0 10px; color:#b8a89d; font-size:13px!important; font-weight:900; letter-spacing:.12em; text-align:left; }
+.home-more-menu__section-label { margin-top:18px; }
 .home-tool-groups { display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px!important; }
 .home-tool-group { display:grid; align-content:start; gap:7px; padding:12px; border:1px solid rgba(255,255,255,.09); border-radius:10px; background:rgba(255,255,255,.025); }
 .home-tool-group h3 { margin:0 0 3px; color:#f3ede8; font-size:15px; }

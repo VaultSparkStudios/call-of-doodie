@@ -22,16 +22,38 @@ describe("PrimaryNavigation", () => {
       root.render(<PrimaryNavigation onOpenProgress={onOpenProgress} />);
     });
 
+    // Desktop nav always renders these; tests below verify More drawer parity.
     expect(container.querySelector('a[href="/stats/"]')).toBeTruthy();
     expect(container.querySelector('a[href="/leaderboard/"]')).toBeTruthy();
     const more = [...container.querySelectorAll("button")].find((button) => button.textContent === "More");
     more.focus();
     await act(async () => { more.click(); });
-    expect(container.querySelector('[role="dialog"]')).toBeTruthy();
+    const dialog = container.querySelector('[role="dialog"]');
+    expect(dialog).toBeTruthy();
     expect(document.activeElement?.getAttribute("aria-label")).toBe("Close navigation");
     await act(async () => { document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true })); });
     expect(container.querySelector('[role="dialog"]')).toBeNull();
     expect(document.activeElement).toBe(more);
+  });
+
+  it("More drawer exposes primary pages absent from the mobile bottom bar (CANON-041 parity)", async () => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    await act(async () => {
+      root = createRoot(container);
+      root.render(<PrimaryNavigation />);
+    });
+    const moreBtn = [...container.querySelectorAll("button")].find((b) => b.textContent === "More");
+    await act(async () => { moreBtn.click(); });
+    const dialog = container.querySelector('[role="dialog"]');
+    // Primary pages that are only accessible via desktop nav on narrow viewports
+    // must also appear in the More drawer so mobile users reach them.
+    expect(dialog.querySelector('a[href="/modes/"]')).toBeTruthy();
+    expect(dialog.querySelector('a[href="/leaderboard/"]')).toBeTruthy();
+    expect(dialog.querySelector('a[href="/arsenal/"]')).toBeTruthy();
+    expect(dialog.querySelector('a[href="/stats/"]')).toBeTruthy();
+    // Explore links remain present too.
+    expect(dialog.querySelector('a[href="/how-to-play/"]')).toBeTruthy();
   });
 
   it("routes mobile Progress and Loadout actions without adding a page layer", async () => {
