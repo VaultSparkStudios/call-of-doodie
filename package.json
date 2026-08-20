@@ -82,7 +82,7 @@
     "claims:check": "node scripts/check-public-claims.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.2",
+    "@supabase/supabase-js": "^2.112.3",
     "gifenc": "^1.0.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
