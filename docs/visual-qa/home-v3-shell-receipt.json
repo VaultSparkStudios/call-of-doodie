@@ -1,0 +1,199 @@
+{
+  "schemaVersion": "1.1",
+  "surface": "home-v3-shell",
+  "description": "CANON-053 evidence for CANON-041 scrollable 100dvh app-shell (PR #120)",
+  "generatedAt": "2026-08-21T11:42:03.502Z",
+  "pass": true,
+  "captures": [
+    {
+      "label": "home-v3--sewer-night--390",
+      "file": "home-v3--sewer-night--390.png",
+      "hash": "543d06ac3cb1ec8e",
+      "theme": "sewer-night",
+      "width": 390,
+      "checks": [
+        {
+          "id": "home-v3-rendered",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "deploy-button-visible",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-js-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "layout-scrollable",
+          "ok": true,
+          "actual": "auto"
+        },
+        {
+          "id": "footer-hidden",
+          "ok": true,
+          "actual": "none"
+        },
+        {
+          "id": "mobile-nav-visible",
+          "ok": true,
+          "actual": "grid"
+        },
+        {
+          "id": "mobile-nav-fixed",
+          "ok": true,
+          "actual": "fixed"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "label": "home-v3--sewer-night--1280",
+      "file": "home-v3--sewer-night--1280.png",
+      "hash": "d7d065d54a2efe2e",
+      "theme": "sewer-night",
+      "width": 1280,
+      "checks": [
+        {
+          "id": "home-v3-rendered",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "deploy-button-visible",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1280/1280"
+        },
+        {
+          "id": "no-js-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "layout-not-scroll-locked",
+          "ok": true,
+          "actual": "visible"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "label": "home-v3--porcelain-day--390",
+      "file": "home-v3--porcelain-day--390.png",
+      "hash": "f575f5f766ab888e",
+      "theme": "porcelain-day",
+      "width": 390,
+      "checks": [
+        {
+          "id": "home-v3-rendered",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "deploy-button-visible",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-js-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "layout-scrollable",
+          "ok": true,
+          "actual": "auto"
+        },
+        {
+          "id": "footer-hidden",
+          "ok": true,
+          "actual": "none"
+        },
+        {
+          "id": "mobile-nav-visible",
+          "ok": true,
+          "actual": "grid"
+        },
+        {
+          "id": "mobile-nav-fixed",
+          "ok": true,
+          "actual": "fixed"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "label": "home-v3--porcelain-day--1280",
+      "file": "home-v3--porcelain-day--1280.png",
+      "hash": "eb8a1b849a7d5e78",
+      "theme": "porcelain-day",
+      "width": 1280,
+      "checks": [
+        {
+          "id": "home-v3-rendered",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "deploy-button-visible",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1280/1280"
+        },
+        {
+          "id": "no-js-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "layout-not-scroll-locked",
+          "ok": true,
+          "actual": "visible"
+        }
+      ],
+      "pass": true
+    }
+  ]
+}
