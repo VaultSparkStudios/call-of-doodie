@@ -337,12 +337,12 @@
 }
 
 @media (max-width: 620px) {
-  .home3 { padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
-  .home3__header { min-height: 64px; padding: max(8px, env(safe-area-inset-top)) 14px 8px; }
+  .home3 { height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+  .home3__header { flex-shrink: 0; min-height: 64px; padding: max(8px, env(safe-area-inset-top)) 14px 8px; }
   .home3__studio span:last-child { display: none; }
   .home3__profile-button { max-width: 156px; }
   .home3__profile-button strong { max-width: 86px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .home3__layout { width: calc(100% - 24px); margin-top: 8px; display: block; }
+  .home3__layout { flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; width: calc(100% - 24px); margin-top: 8px; display: block; padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
   .home3__play, .home3__progress, .home3__section { display: none; border-radius: 18px; }
   .home3__play.is-active, .home3__progress.is-active, .home3__section.is-active { display: block; }
   .home3__play { padding: 24px 18px; }
@@ -392,6 +392,7 @@
   .home3__mobile-nav button strong { margin-top: 3px; font-size: 11px; }
   .home3__mobile-nav button.is-active { color: var(--h3-ink); background: color-mix(in srgb, var(--h3-accent) 14%, transparent); }
   .home3__footer { width: calc(100% - 28px); padding-bottom: 16px; }
+  .home3 > footer { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
