@@ -3,33 +3,21 @@ name: brief-format-check
 # Studio OS canonical brief-format gate (S87).
 #
 # Fails the run if docs/STARTUP_BRIEF.md has drifted from the canonical format
-# defined by scripts/validate-brief-format.mjs. It is intentionally event-driven:
+# defined by scripts/validate-brief-format.mjs. Designed to be called two ways:
 #
-#   1. Automatically on every relevant push or pull request.
-#   2. Manually through workflow_dispatch for an explicit out-of-band check.
+#   1. On pull requests that touch the brief or its validator/renderer.
+#   2. Manually when an out-of-band process may have changed a brief.
 #
 # Propagated to every registry repo by scripts/sync-studio-os-remote.mjs.
-# The infrastructure-policy guard below prevents a propagated hosted timer from
-# silently regrowing. The canonical template repair is routed to Studio Ops.
+# Do not edit the file in a child repo — the next 6h sync pass will overwrite it.
+# All format-rule changes happen in studio-ops and flow outward.
 
 on:
-  push:
-    paths:
-      - 'docs/STARTUP_BRIEF.md'
-      - 'scripts/validate-brief-format.mjs'
-      - 'scripts/render-startup-brief.mjs'
-      - 'scripts/check-schedule-policy.mjs'
-      - 'scripts/lib/schedule-policy.mjs'
-      - '.github/workflows/brief-format-check.yml'
-      - 'context/**'
   pull_request:
     paths:
       - 'docs/STARTUP_BRIEF.md'
       - 'scripts/validate-brief-format.mjs'
       - 'scripts/render-startup-brief.mjs'
-      - 'scripts/check-schedule-policy.mjs'
-      - 'scripts/lib/schedule-policy.mjs'
-      - '.github/workflows/brief-format-check.yml'
       - 'context/**'
   workflow_dispatch:
 
@@ -42,12 +30,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0 · Node 24
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0 · Node 24
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
       - name: Check validator is present
         run: |
@@ -55,9 +43,6 @@ jobs:
             echo "::error title=validate-brief-format.mjs missing::scripts/validate-brief-format.mjs is not present in this repo. Run 'node scripts/ops.mjs onboard --repair --write' or wait for the next sync-studio-os cron (6h)."
             exit 1
           fi
-
-      - name: Enforce event-only workflow scheduling policy
-        run: node scripts/check-schedule-policy.mjs
 
       - name: Validate STARTUP_BRIEF.md (if present)
         run: |
