@@ -76,4 +76,41 @@ describe("build archetypes", () => {
     expect(gs.statusLabel).toBe("DOCTRINE FORGED");
     expect(gs.doctrineForged).toBe(true);
   });
+
+  test("spectre archetype detects fast_learner + glass_mind + chain_lightning as unlocked", () => {
+    const perks = [{ id: "fast_learner" }, { id: "glass_mind" }, { id: "chain_lightning" }];
+    const dominant = getDominantArchetype(perks);
+    expect(dominant?.id).toBe("spectre");
+    expect(dominant?.unlocked).toBe(true);
+    expect(dominant?.statusLabel).toBe("CAPSTONE ONLINE");
+    expect(dominant?.capstoneName).toBe("Fractured Mind");
+  });
+
+  test("spectre archetype marks doctrine forged at 5 perks", () => {
+    const perks = [
+      { id: "fast_learner" }, { id: "glass_mind" }, { id: "chain_lightning" },
+      { id: "combo_lifesteal" }, { id: "deep_pockets" },
+    ];
+    const progress = getArchetypeProgress(perks);
+    const sp = progress.find(a => a.id === "spectre");
+    expect(sp.statusLabel).toBe("DOCTRINE FORGED");
+    expect(sp.doctrineForged).toBe(true);
+    expect(sp.doctrineName).toBe("Glass Brain Protocol");
+  });
+
+  test("getPerkArchetypeMatches flags glass_mind as spectre perk", () => {
+    const matches = getPerkArchetypeMatches({ id: "glass_mind" });
+    expect(matches.some(m => m.id === "spectre")).toBe(true);
+  });
+
+  test("spectre has 6 milestone perkIds and correct unlockAt", () => {
+    const perks = [
+      { id: "fast_learner" }, { id: "glass_mind" }, { id: "chain_lightning" },
+      { id: "combo_lifesteal" }, { id: "deep_pockets" }, { id: "crit_cascade" },
+    ];
+    const progress = getArchetypeProgress(perks);
+    const sp = progress.find(a => a.id === "spectre");
+    expect(sp.statusLabel).toBe("MASTERED");
+    expect(sp.count).toBe(6);
+  });
 });

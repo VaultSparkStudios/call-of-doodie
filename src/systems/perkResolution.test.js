@@ -48,4 +48,18 @@ describe("perkResolution", () => {
     expect(gameState._treeArmorMult).toBeCloseTo(0.92);
     expect(gameState.player.speed).toBeCloseTo(10.8);
   });
+
+  test("spectre capstone applies xpMult and critBonus", () => {
+    const perkMods = { xpMult: 1.0, critBonus: 0.0 };
+    applyArchetypeCapstone("spectre", perkMods, null);
+    expect(perkMods.xpMult).toBeCloseTo(1.15);
+    expect(perkMods.critBonus).toBeCloseTo(0.08);
+  });
+
+  test("spectre capstone stacks correctly with existing bonuses", () => {
+    const perkMods = { xpMult: 1.3, critBonus: 0.1 };
+    applyArchetypeCapstone("spectre", perkMods, null);
+    expect(perkMods.xpMult).toBeCloseTo(1.495);
+    expect(perkMods.critBonus).toBeCloseTo(0.18);
+  });
 });
