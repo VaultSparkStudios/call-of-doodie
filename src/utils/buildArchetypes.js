@@ -51,6 +51,19 @@ export const BUILD_ARCHETYPES = [
     doctrineName: "Perpetual Motion Doctrine",
     doctrineDesc: "You never stop moving. Combo timers don't drop below 50% on dash. Speed is your armor — stopping is death.",
   },
+  {
+    id: "spectre",
+    name: "Spectre",
+    emoji: "👻",
+    color: "#B47FFF",
+    perkIds: ["fast_learner", "glass_mind", "chain_lightning", "combo_lifesteal", "deep_pockets", "crit_cascade"],
+    unlockAt: 3,
+    capstoneName: "Fractured Mind",
+    capstoneDesc: "+15% XP gain and +8% crit chance. The glass sharpens to a lethal point.",
+    doctrineForgeAt: 5,
+    doctrineName: "Glass Brain Protocol",
+    doctrineDesc: "Knowledge is your only armor. XP surges with every kill chain. Crits cascade into the chain lightning. You barely survive — but your score transcends.",
+  },
 ];
 
 function perksById(activePerks = []) {
@@ -162,6 +175,8 @@ export function getShopRecommendation(archetypeId, optionId, currentWeapon) {
       return optionId === "damage" || optionId === "ammo" || optionId === "cs_grenade" || optionId === "cs_nuke";
     case "tempo":
       return optionId === "speed" || optionId === "health" || optionId === "cs_timedil";
+    case "spectre":
+      return optionId === "upgrade" || optionId === "ammo" || optionId.startsWith("bless_");
     default:
       return optionId === "upgrade" && currentWeapon >= 0;
   }
@@ -177,6 +192,8 @@ export function getRouteRecommendation(archetypeId, routeId) {
       return routeId === "mutation";
     case "tempo":
       return routeId === "standard" || routeId === "mutation";
+    case "spectre":
+      return routeId === "boss_fork" || routeId === "mutation";
     default:
       return routeId === "standard";
   }

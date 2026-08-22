@@ -174,6 +174,10 @@ export function applyArchetypeCapstone(archetypeId, perkMods, gameState) {
       perkMods.pickupRange = Math.max(perkMods.pickupRange || 30, Math.round((perkMods.pickupRange || 30) * 1.2));
       if (gameState?.player) gameState.player.speed *= 1.08;
       break;
+    case "spectre":
+      perkMods.xpMult = (perkMods.xpMult || 1) * 1.15;
+      perkMods.critBonus = (perkMods.critBonus || 0) + 0.08;
+      break;
     default:
       break;
   }

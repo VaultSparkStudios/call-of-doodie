@@ -9,6 +9,7 @@
 //    and the share card (constants.js re-exports it for back-compat)
 
 export const CHANGELOG_ENTRIES = [
+  ["August 22, 2026 · Spectre doctrine", "Added the Spectre build archetype — a fifth doctrine lane built around Glass Mind, Chain Lightning, and XP mastery. Unlock the Fractured Mind capstone (+15% XP gain, +8% crit chance) and forge the Glass Brain Protocol doctrine by committing to the glass-brain, chain-reaction playstyle."],
   ["August 16, 2026 · Operations deploy", "Added three authored 12–18 minute Operations with seven distinct encounter verbs, deterministic route and scoring receipts, interactive arena systems, mission-director guidance, an Operation-first command deck, a preference-safe chapter score, and distinct objective/reinforcement audio cues. Arcade & Rivals modes remain available. Real-time co-op remains gated and is not represented as live."],
   ["August 15, 2026 · Sound and fury", "Full audio overhaul: submix volume sliders, a sample-accurate music scheduler with bar-quantized transitions, chord progressions and section variation in every soundtrack vibe, music that ducks under big combat moments and muffles at critical health, plus new hit, dry-fire, wave, and shop sound effects. Visually: per-weapon projectiles and recoil, persistent scorch and splat decals, themed wall details, triple the sprite prop coverage, and a real walk cycle."],
   ["August 9, 2026 · Sharper, richer, more honest", "Refreshed player-facing facts across every page, expanded Community Stats presentation, and continued the in-game visual overhaul with crisper rendering and upgraded combat feedback."],
@@ -22,6 +23,7 @@ export const CHANGELOG_ENTRIES = [
 ];
 
 export const NEW_FEATURES = [
+  "👻 Spectre archetype — glass-brain XP/crit/chain doctrine with Fractured Mind capstone and Glass Brain Protocol",
   "🚽 Operations — three authored 7-encounter deployments with route choices, adaptive chapter score, objective cues & deterministic receipts",
   "🔊 Full Audio Overhaul — volume sliders, adaptive layered soundtrack with real progressions, music ducking & new combat sound effects",
   "🎨 Combat Feel Pass — per-weapon projectiles & recoil, persistent battle decals, themed arena details, walk cycle & light halos",
