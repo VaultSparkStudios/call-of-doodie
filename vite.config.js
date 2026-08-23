@@ -15,14 +15,19 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // React runtime in its own chunk — cached across deploys
-          "vendor-react": ["react", "react-dom"],
+        manualChunks(id) {
+          // React runtime in its own chunk — cached across deploys.
+          if (/node_modules\/(react|react-dom)\//.test(id)) return "vendor-react";
+          // Keep the new deterministic Operation authority receipts isolated
+          // from the long-lived App shell and independently budgeted.
+          if (/\/src\/systems\/operation(?:MissionSnapshot|Proximity|Score)\.js$/.test(id)) {
+            return "operation-authority";
+          }
           // Keep optional data clients on their natural dynamic-import graph.
           // Forcing Supabase into a manual chunk turns it into an entry preload,
           // paying the data-plane cost before a player opens an online surface.
-          // gifenc only loaded when GIF encoding triggers (dynamic import in App.jsx)
-          // already split automatically; this keeps it explicit
+          // gifenc already splits when GIF encoding triggers.
+          return undefined;
         },
       },
     },

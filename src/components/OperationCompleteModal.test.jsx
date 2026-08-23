@@ -104,4 +104,31 @@ describe("OperationCompleteModal", () => {
     expect(container.textContent).toContain("Act II is awaiting campaign save support.");
     expect(container.textContent).toContain("Squad routing is planned, not active.");
   });
+
+  it("shows the exact versioned score evidence without upgrading its trust claim", async () => {
+    await render({
+      receipt: {
+        ...receipt,
+        scoreBreakdown: {
+          schemaVersion: "operation-score-v2",
+          objective: 9800,
+          interaction: 315,
+          tempo: 420,
+          extraction: 500,
+          pressurePenalty: 200,
+          awarded: 10835,
+        },
+      },
+    });
+
+    expect(container.textContent).toContain("OPERATION SCORE BREAKDOWN");
+    expect(container.textContent).toContain("OBJECTIVES+9,800");
+    expect(container.textContent).toContain("REINFORCEMENT PRESSURE−200");
+    expect(container.textContent).toContain("not server-authoritative");
+  });
+
+  it("keeps legacy receipts readable without fabricating a breakdown", async () => {
+    await render();
+    expect(container.textContent).not.toContain("OPERATION SCORE BREAKDOWN");
+  });
 });

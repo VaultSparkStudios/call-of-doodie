@@ -12,7 +12,7 @@ const CAMPAIGN_GATE = Object.freeze({
 });
 
 export default function OperationRuntimeLayer({
-  operationState, operationArenaState, operationObjectiveState, operationDirective, operationCompleteReceipt,
+  operationState, operationArenaState, operationObjectiveState, operationProximitySnapshot, operationDirective, operationCompleteReceipt,
   paused, gamepadConnected, onInteract, onContinue, onRematch,
 }) {
   const encounter = getCurrentEncounter(operationState);
@@ -22,6 +22,7 @@ export default function OperationRuntimeLayer({
         arenaState={operationArenaState}
         encounter={encounter}
         objectiveState={operationObjectiveState}
+        proximitySnapshot={operationProximitySnapshot}
         progress={{ encounterNumber: operationState.currentEncounterIndex + 1, encounterTotal: getOperation(operationState.operationId)?.encounters.length || 7, act: encounter.act }}
         missionScore={operationState.score}
         directorReason={operationDirective?.directive || operationDirective?.reasonCode || ""}

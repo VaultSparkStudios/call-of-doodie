@@ -1,4 +1,10 @@
-# Latest Handoff — Session 158
+# Latest Handoff — Session 159 (in progress)
+
+Session Intent: Run the complete autonomous `/arc`; recover and root-fix any stale-session signal, complete a premise-verified game-loop and nine-axis audit, implement every repository-owned item at the deepest honest rung, verify isolated staging and rendered pixels, pass the release gate, deploy production, then complete canonical closeout and push synchronized `main` under the founder's explicit authorization.
+
+---
+
+# Session 158
 
 Session Intent: Complete one continuous autonomous arc from synchronized main through a premise-verified game-loop and nine-axis audit, all repository-owned implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, and exact production verification while preserving FORGE/public-unlaunched lifecycle truth.
 

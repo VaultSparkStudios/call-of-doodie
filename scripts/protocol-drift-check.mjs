@@ -57,7 +57,7 @@ const protocolAnchors = [
   { rel: "docs/SESSION_PROTOCOL.md#§1", contains: "## §1 — `/start` protocol", purpose: "keeps /start canonical steps locally reachable" },
   { rel: "docs/SESSION_PROTOCOL.md#§2B", contains: "## §2B — `/audit` protocol", purpose: "keeps /audit canonical steps locally reachable" },
   { rel: "docs/SESSION_PROTOCOL.md#§2C", contains: "## §2C — `/implement` protocol", purpose: "keeps /implement canonical steps locally reachable" },
-  { rel: "docs/SESSION_PROTOCOL.md#§3", contains: "## §3 — /closeout protocol", purpose: "keeps /closeout canonical steps locally reachable" },
+  { rel: "docs/SESSION_PROTOCOL.md#§3", contains: "## §3 — `/closeout` protocol", purpose: "keeps /closeout canonical steps locally reachable" },
 ];
 
 const checks = helpers.map((helper) => {

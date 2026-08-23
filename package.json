@@ -46,6 +46,7 @@
     "visual:home-nav": "node scripts/capture-home-navigation-visuals.mjs",
     "visual:operation": "node scripts/capture-operation-visuals.mjs",
     "visual:operation-modal": "node scripts/capture-operation-modal-visuals.mjs",
+    "visual:operation-modal:build": "vite build --config visual-harness/vite.config.js",
     "deploy:staging": "node scripts/deploy-staging-preview.mjs",
     "launch:media-check": "node scripts/validate-launch-media.mjs",
     "home:retirement-gate": "node scripts/legacy-home-retirement-gate.mjs",

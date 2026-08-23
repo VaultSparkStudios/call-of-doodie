@@ -46,7 +46,30 @@ export const WRITE_BACK_ANCHOR = 'context/SELF_IMPROVEMENT_LOOP.md';
 // (receipt capture, rebased-surface regeneration) and legitimately land after
 // the SIL anchor. Counting them as debt would make every clean closeout dirty.
 export const AUTOMATION_SUBJECT_RE =
-  /^(?:chore\((?:routine-[\w-]+|closeout|ledgers?|proof|deps|release-please)\)|Merge (?:branch|pull request|remote-tracking)|Revert ")/i;
+  /^(?:chore\((?:routine-[\w-]+|closeout|ledgers?|proof|deps(?:-[\w-]+)?|release-please)\)|Merge (?:branch|pull request|remote-tracking)|Revert ")/i;
+
+/**
+ * The SIL entry is intentionally the closeout anchor, but the closeout
+ * renderer can seal its derived status surfaces in one or more immediately
+ * following commits. Recognize only the canonical seal subjects and only when
+ * every touched path belongs to that derived surface set. This path boundary
+ * prevents a misleading closeout-looking subject from hiding real work.
+ */
+export const POST_CLOSEOUT_SEAL_SUBJECT_RE =
+  /^docs:\s+(?:publish|finalize)\s+session\s+\d+\s+closeout\s+board$/i;
+
+export const POST_CLOSEOUT_SEAL_PATHS = new Set([
+  'context/PROJECT_STATUS.json',
+  'docs/STARTUP_BRIEF.md',
+  'docs/CLOSEOUT_STATUS_BOARD.md',
+]);
+
+export function isPostCloseoutSealCommit(commit = {}) {
+  if (!POST_CLOSEOUT_SEAL_SUBJECT_RE.test(String(commit.subject || ''))) return false;
+  const files = Array.isArray(commit.files) ? commit.files : [];
+  if (!files.length) return false;
+  return files.every((file) => POST_CLOSEOUT_SEAL_PATHS.has(String(file).replace(/\\/g, '/')));
+}
 
 /**
  * Paths that are generated, appended by tooling, or pure receipts. A commit that
@@ -74,6 +97,7 @@ export function isGeneratedPath(file = '') {
  */
 export function isSubstantiveCommit(commit = {}) {
   if (AUTOMATION_SUBJECT_RE.test(String(commit.subject || ''))) return false;
+  if (isPostCloseoutSealCommit(commit)) return false;
   const files = Array.isArray(commit.files) ? commit.files : [];
   if (!files.length) return false; // empty/merge commit — nothing to write back
   return files.some((f) => !isGeneratedPath(f));

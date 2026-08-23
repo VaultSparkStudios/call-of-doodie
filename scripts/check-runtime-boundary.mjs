@@ -15,6 +15,7 @@ if (!fs.existsSync(htmlPath)) issues.push("dist/index.html missing; run npm run 
 
 let entryBytes = null;
 let runtimeBytes = null;
+let operationAuthorityBytes = null;
 if (fs.existsSync(htmlPath)) {
   const html = fs.readFileSync(htmlPath, "utf8");
   const entryHref = html.match(/<script[^>]+type="module"[^>]+src="([^"]+)"/)?.[1];
@@ -31,8 +32,21 @@ if (fs.existsSync(htmlPath)) {
     runtimeBytes = fs.statSync(path.join(root, "dist", "assets", runtime)).size;
     if (runtimeBytes > 560_000) issues.push(`runtime bundle ${runtimeBytes} exceeds 560000 bytes`);
   }
+  const operationAuthority = assets.find((name) => /^operation-authority-.*\.js$/.test(name));
+  if (!operationAuthority) issues.push("bounded Operation authority chunk missing");
+  else {
+    operationAuthorityBytes = fs.statSync(path.join(root, "dist", "assets", operationAuthority)).size;
+    if (operationAuthorityBytes > 16_000) issues.push(`Operation authority bundle ${operationAuthorityBytes} exceeds 16000 bytes`);
+  }
 }
 
-const receipt = { schemaVersion: "runtime-boundary-v1", ok: issues.length === 0, entryBytes, runtimeBytes, issues };
+const receipt = {
+  schemaVersion: "runtime-boundary-v2",
+  ok: issues.length === 0,
+  entryBytes,
+  runtimeBytes,
+  operationAuthorityBytes,
+  issues,
+};
 console.log(JSON.stringify(receipt, null, 2));
 process.exit(receipt.ok ? 0 : 1);

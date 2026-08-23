@@ -70,4 +70,25 @@ describe("asynchronous Operation rivals", () => {
     expect(first).not.toHaveProperty("result");
     expect(first).not.toHaveProperty("ghostPath");
   });
+
+  it("carries the versioned v2 scoring contract while legacy v1 receipts remain readable", () => {
+    const modern = buildOperationReplayReceipt({
+      operationId: "blacksite-flush",
+      seed: 159,
+      scoringContract: "operation-score-v2",
+      finalScore: 10835,
+      completed: true,
+    });
+    const legacy = buildOperationReplayReceipt({
+      operationId: "blacksite-flush",
+      seed: 158,
+      scoringContract: "operation-score-v1",
+      finalScore: 12065,
+      completed: true,
+    });
+    expect(modern.scoringContract).toBe("operation-score-v2");
+    expect(legacy.scoringContract).toBe("operation-score-v1");
+    expect(buildOperationRematchCartridge(modern).scoringContract).toBe("operation-score-v2");
+    expect(buildOperationRematchCartridge(legacy).scoringContract).toBe("operation-score-v1");
+  });
 });

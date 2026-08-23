@@ -12,6 +12,7 @@ import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
 import { killsRequiredForAccountLevel, PRESTIGE_REQUIRED_LEVEL } from "../../src/utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../../src/utils/replayCoverage.js";
 import { OPERATIONS } from "../../src/systems/operationCampaign.js";
+import { getOperationRouteIntel } from "../../src/systems/operationDirector.js";
 import { OPERATION_ENCOUNTER_SCORE } from "../../src/systems/operationAudioDirector.js";
 
 function label(id) {
@@ -41,6 +42,7 @@ export function buildPublicGameplayContract() {
       durationMinutes: operation.durationMinutes,
       encounterVerbs: operation.encounters.map((encounter) => encounter.verb),
       routeOptions: operation.routeOptions,
+      routeIntel: operation.routeOptions.map((routeId) => getOperationRouteIntel(operation.id, routeId)),
       scoring: operation.scoring.summary,
       adaptiveScore: {
         policy: "default-action-vibe-only",

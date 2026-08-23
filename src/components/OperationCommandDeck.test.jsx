@@ -76,6 +76,40 @@ describe("OperationCommandDeck", () => {
     });
   });
 
+  it("shows the immediate bargain, eligible echo, and screen-reader route copy before commitment", async () => {
+    const onStart = await render();
+    const radios = [...container.querySelectorAll('input[type="radio"]')];
+    expect(radios).toHaveLength(6);
+    expect(radios[0].closest("label").parentElement.style.gridTemplateColumns).toBe("minmax(0,1fr)");
+    expect(radios.every((radio) => radio.closest("label").style.minWidth === "0")).toBe(true);
+    for (const radio of radios) {
+      const intelId = radio.getAttribute("aria-describedby");
+      const accessibleIntel = container.querySelector(`#${intelId}`);
+      expect(accessibleIntel).not.toBeNull();
+      expect(accessibleIntel.textContent).toMatch(/reinforcement pressure/);
+      expect(accessibleIntel.textContent).toMatch(/Operation score/);
+    }
+
+    const firstOperation = container.querySelector('[data-operation-id="blacksite-flush"]');
+    const preview = firstOperation.querySelector('[data-testid="operation-route-preview-blacksite-flush"]');
+    expect(preview.getAttribute("role")).toBe("status");
+    expect(preview.getAttribute("aria-live")).toBe("polite");
+    expect(preview.textContent).toContain("10% less reinforcement pressure");
+    expect(preview.textContent).toContain("NEXT OPERATION ECHO · PORCELAIN SIEGE");
+
+    const washroom = firstOperation.querySelector('input[value="executive-washroom"]');
+    await act(async () => washroom.click());
+    expect(preview.textContent).toContain("10% Operation score premium");
+    expect(preview.textContent).not.toContain("NEXT OPERATION ECHO");
+
+    await act(async () => firstOperation.querySelector("button").click());
+    expect(onStart).toHaveBeenCalledWith(OPERATIONS[0].seed, {
+      operationId: "blacksite-flush",
+      operationMode: true,
+      operationRoute: "executive-washroom",
+    });
+  });
+
   it("is integrated above the explicitly preserved Arcade and Rivals front door", () => {
     const source = readFileSync(resolve(process.cwd(), "src/components/HomeV2.jsx"), "utf8");
     const operationIndex = source.indexOf("<OperationCommandDeck");

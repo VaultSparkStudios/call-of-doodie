@@ -1,23 +1,21 @@
-# Implementation Plan - Session 158
+# Implement Plan — Session 159
 
-Source: `docs/AUDIT_2026-08-16_2.json`
+Source: `docs/AUDIT_2026-08-22.json`
 
-Status: **IMPLEMENTED AND VERIFIED** - both premise-verified L2 items and the exact-action guard are shipped; the full regression, browser, isolated-staging, rendered-pixel, security, and engineering-release courts pass.
+The five promoted items are sequenced by dependency and release risk, not raw priority.
 
-## Wave A - Establish the pure audio contract
+| Wave | Audit item | Rung | Why this order | Verification gate |
+|---|---|---|---|---|
+| 1 | `protocol-release-truth-repair` | L2 | Restores trustworthy CI, audit rendering, generated public contracts, and recovery classification before feature work relies on them. | Exact six failing CI checks reproduced and green; recovery regression proves S158 seal clean and real debt red. |
+| 2 | `operation-spatial-interaction-authority` | L2 | Establishes the authoritative player/target evidence used by score and director receipts. | Pure boundary, hook, overlay, all-input, accessibility, and focused pixel courts. |
+| 3 | `operation-route-consequence-intel` | L2 | Centralizes route truth before score v2 consumes the multiplier and echo contract. | Runtime/UI values match; unknown routes fail closed; Command Deck tests and pixels pass. |
+| 4 | `operation-director-live-signal-wiring` | L2 | Builds one honest live snapshot after objective and route evidence are stable. | Every advertised reason branch is reachable from real hook fixtures; no difficulty mutation. |
+| 5 | `operation-score-v2` | L2 | Measures the settled objective, pressure, route, pace, and extraction contracts last. | Component sum exact; skill variance real; v1 compatibility preserved; receipt/rival/UI tests pass. |
 
-1. [x] **operation-encounter-score-arc** - centralized all seven verb-to-score mappings, preserved explicit non-default preferences, and defined completion/reset restoration.
-2. [x] **operation-objective-audio-feedback** - centralized all seven success motifs plus the bounded reinforcement warning in the same dependency-free contract.
+## Session-wide gates
 
-## Wave B - Integrate the Operation lifecycle
-
-3. [x] Applied score transitions at Operation start and encounter advance, restored the current preference on complete/active reset, and left BOSS to the existing boss-intensity path.
-4. [x] Emit the exact success motif only after objective evidence is accepted, emit one warning per blocked clear, and announce the authored action plus benefit.
-
-## Wave C - Prove follow-through
-
-5. [x] Added pure and hook-level regression coverage for mapping completeness, player-authority rules, malformed-action rejection, duplicate suppression, blocked warnings, and restoration.
-6. [x] Updated the player changelog and public gameplay contract from their source authorities; regenerated derived artifacts.
-7. [x] Ran focused tests, 1,229/1,229 full assertions, strict lint/security/build/public-contract gates, 19-case browser E2E, isolated staging, 1,020/1,020 broad visual checks, 36/36 focused Operation checks, direct rendered-pixel review, cost/footer/canon/sanitization courts, and the FORGE engineering-release gate.
-
-No SPARKED lifecycle promotion is implied. The implementation adds no dependency, audio file, hosted call, persistence, identity surface, or variable per-player cost.
+- Keyboard, controller, and touch paths remain playable and equivalent.
+- Player-facing copy expands acronyms on first use.
+- No dependency, hosted inference, identity boundary, or variable per-player cost is added.
+- `/start`, `/audit`, `/implement`, and `/closeout` remain executable.
+- Any rendered change receives desktop/mobile and dark/light browser review before release.

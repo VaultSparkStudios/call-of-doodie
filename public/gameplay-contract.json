@@ -120,6 +120,59 @@
         "service-tunnel",
         "executive-washroom"
       ],
+      "routeIntel": [
+        {
+          "schemaVersion": "operation-route-intel-v1",
+          "operationId": "blacksite-flush",
+          "routeId": "service-tunnel",
+          "routeLabel": "Service Tunnel",
+          "consequence": {
+            "id": "tempo_bonus",
+            "label": "TEMPO RELIEF",
+            "pressureMultiplier": 0.9,
+            "scoreMultiplier": 1
+          },
+          "immediate": {
+            "pressureMultiplier": 0.9,
+            "scoreMultiplier": 1,
+            "pressurePercent": 90,
+            "scorePercent": 100,
+            "summary": "10% less reinforcement pressure · Base Operation score",
+            "accessibleSummary": "10 percent less reinforcement pressure; base Operation score."
+          },
+          "nextOperationEcho": {
+            "eligibility": "eligible-on-completion",
+            "targetOperationId": "porcelain-siege",
+            "targetOperationTitle": "PORCELAIN SIEGE",
+            "consequenceId": "tunnel-debt",
+            "description": "The prior tunnel route powers clean pressure for the opening siege.",
+            "condition": "Complete BLACKSITE FLUSH via Service Tunnel"
+          },
+          "accessibleSummary": "Service Tunnel immediate bargain: 10 percent less reinforcement pressure; base Operation score. Eligible next Operation echo in PORCELAIN SIEGE: The prior tunnel route powers clean pressure for the opening siege."
+        },
+        {
+          "schemaVersion": "operation-route-intel-v1",
+          "operationId": "blacksite-flush",
+          "routeId": "executive-washroom",
+          "routeLabel": "Executive Washroom",
+          "consequence": {
+            "id": "score_bonus",
+            "label": "SCORE PREMIUM",
+            "pressureMultiplier": 1,
+            "scoreMultiplier": 1.1
+          },
+          "immediate": {
+            "pressureMultiplier": 1,
+            "scoreMultiplier": 1.1,
+            "pressurePercent": 100,
+            "scorePercent": 110,
+            "summary": "Standard reinforcement pressure · 10% Operation score premium",
+            "accessibleSummary": "standard reinforcement pressure; 10 percent Operation score premium."
+          },
+          "nextOperationEcho": null,
+          "accessibleSummary": "Executive Washroom immediate bargain: standard reinforcement pressure; 10 percent Operation score premium. No authored next Operation echo."
+        }
+      ],
       "scoring": "Objectives + tempo + extraction",
       "adaptiveScore": {
         "policy": "default-action-vibe-only",
@@ -179,6 +232,59 @@
         "laundry-annex",
         "boiler-room"
       ],
+      "routeIntel": [
+        {
+          "schemaVersion": "operation-route-intel-v1",
+          "operationId": "porcelain-siege",
+          "routeId": "laundry-annex",
+          "routeLabel": "Laundry Annex",
+          "consequence": {
+            "id": "tempo_bonus",
+            "label": "TEMPO RELIEF",
+            "pressureMultiplier": 0.9,
+            "scoreMultiplier": 1
+          },
+          "immediate": {
+            "pressureMultiplier": 0.9,
+            "scoreMultiplier": 1,
+            "pressurePercent": 90,
+            "scorePercent": 100,
+            "summary": "10% less reinforcement pressure · Base Operation score",
+            "accessibleSummary": "10 percent less reinforcement pressure; base Operation score."
+          },
+          "nextOperationEcho": null,
+          "accessibleSummary": "Laundry Annex immediate bargain: 10 percent less reinforcement pressure; base Operation score. No authored next Operation echo."
+        },
+        {
+          "schemaVersion": "operation-route-intel-v1",
+          "operationId": "porcelain-siege",
+          "routeId": "boiler-room",
+          "routeLabel": "Boiler Room",
+          "consequence": {
+            "id": "score_bonus",
+            "label": "SCORE PREMIUM",
+            "pressureMultiplier": 1,
+            "scoreMultiplier": 1.1
+          },
+          "immediate": {
+            "pressureMultiplier": 1,
+            "scoreMultiplier": 1.1,
+            "pressurePercent": 100,
+            "scorePercent": 110,
+            "summary": "Standard reinforcement pressure · 10% Operation score premium",
+            "accessibleSummary": "standard reinforcement pressure; 10 percent Operation score premium."
+          },
+          "nextOperationEcho": {
+            "eligibility": "eligible-on-completion",
+            "targetOperationId": "final-notice",
+            "targetOperationTitle": "FINAL NOTICE",
+            "consequenceId": "boiler-paper-trail",
+            "description": "The prior boiler route opens a rear records lane.",
+            "condition": "Complete PORCELAIN SIEGE via Boiler Room"
+          },
+          "accessibleSummary": "Boiler Room immediate bargain: standard reinforcement pressure; 10 percent Operation score premium. Eligible next Operation echo in FINAL NOTICE: The prior boiler route opens a rear records lane."
+        }
+      ],
       "scoring": "Objectives + tempo + extraction",
       "adaptiveScore": {
         "policy": "default-action-vibe-only",
@@ -237,6 +343,52 @@
       "routeOptions": [
         "records-office",
         "executive-penthouse"
+      ],
+      "routeIntel": [
+        {
+          "schemaVersion": "operation-route-intel-v1",
+          "operationId": "final-notice",
+          "routeId": "records-office",
+          "routeLabel": "Records Office",
+          "consequence": {
+            "id": "tempo_bonus",
+            "label": "TEMPO RELIEF",
+            "pressureMultiplier": 0.9,
+            "scoreMultiplier": 1
+          },
+          "immediate": {
+            "pressureMultiplier": 0.9,
+            "scoreMultiplier": 1,
+            "pressurePercent": 90,
+            "scorePercent": 100,
+            "summary": "10% less reinforcement pressure · Base Operation score",
+            "accessibleSummary": "10 percent less reinforcement pressure; base Operation score."
+          },
+          "nextOperationEcho": null,
+          "accessibleSummary": "Records Office immediate bargain: 10 percent less reinforcement pressure; base Operation score. No authored next Operation echo."
+        },
+        {
+          "schemaVersion": "operation-route-intel-v1",
+          "operationId": "final-notice",
+          "routeId": "executive-penthouse",
+          "routeLabel": "Executive Penthouse",
+          "consequence": {
+            "id": "score_bonus",
+            "label": "SCORE PREMIUM",
+            "pressureMultiplier": 1,
+            "scoreMultiplier": 1.1
+          },
+          "immediate": {
+            "pressureMultiplier": 1,
+            "scoreMultiplier": 1.1,
+            "pressurePercent": 100,
+            "scorePercent": 110,
+            "summary": "Standard reinforcement pressure · 10% Operation score premium",
+            "accessibleSummary": "standard reinforcement pressure; 10 percent Operation score premium."
+          },
+          "nextOperationEcho": null,
+          "accessibleSummary": "Executive Penthouse immediate bargain: standard reinforcement pressure; 10 percent Operation score premium. No authored next Operation echo."
+        }
       ],
       "scoring": "Objectives + tempo + extraction",
       "adaptiveScore": {

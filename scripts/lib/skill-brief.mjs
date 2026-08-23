@@ -25,6 +25,8 @@
  * Spec: docs/SKILL_BRIEF_SPEC.md
  */
 
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { lintInsight } from './insight-voice-linter.mjs';
 import { BRIEF_REQUIRED_ITEM_FIELDS, BRIEF_REQUIRED_TOP_FIELDS } from './shared-policies.mjs';
 
@@ -197,9 +199,7 @@ export function render(brief, opts = {}) {
  */
 export function renderAndArchive(brief, opts = {}) {
   const text = render(brief, opts);
-  const { writeFileSync, existsSync, mkdirSync } = require('node:fs');
-  const { join } = require('node:path');
-  const docsDir = join(process.cwd(), 'docs');
+  const docsDir = join(process.cwd(), opts.docsDir || 'docs');
   if (!existsSync(docsDir)) mkdirSync(docsDir, { recursive: true });
   const kindLabel = brief.kind.toUpperCase();
   const path = join(docsDir, `${kindLabel}_BRIEF_${brief.session}_${brief.date}.md`);

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildPublicGameplayContract } from "../scripts/lib/public-gameplay-contract.mjs";
 import { BOSS_ROTATION } from "../src/gameHelpers.js";
 import { META_UPGRADES, WEAPONS } from "../src/constants.js";
+import { getOperationRouteIntel } from "../src/systems/operationDirector.js";
 
 describe("public gameplay contract", () => {
   it("derives mechanics from source and keeps trust scope explicit", () => {
@@ -10,6 +11,16 @@ describe("public gameplay contract", () => {
     expect(contract.schemaVersion).toBe("gameplay-contract-v3");
     expect(contract.operations).toHaveLength(3);
     expect(contract.operations.every((operation) => operation.encounterVerbs.length === 7)).toBe(true);
+    for (const operation of contract.operations) {
+      expect(operation.routeIntel).toHaveLength(operation.routeOptions.length);
+      for (const route of operation.routeIntel) {
+        expect(route).toEqual(getOperationRouteIntel(operation.id, route.routeId));
+        expect(route.immediate).toMatchObject({
+          pressureMultiplier: route.consequence.pressureMultiplier,
+          scoreMultiplier: route.consequence.scoreMultiplier,
+        });
+      }
+    }
     expect(contract.operations.every((operation) => operation.adaptiveScore.policy === "default-action-vibe-only")).toBe(true);
     expect(contract.operations.every((operation) => operation.adaptiveScore.explicitNonDefaultPreferences === "preserved")).toBe(true);
     expect(contract.operations.every((operation) => operation.adaptiveScore.chapters.at(-1).vibe === "boss-runtime")).toBe(true);

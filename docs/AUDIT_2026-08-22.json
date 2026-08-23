@@ -1,0 +1,192 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S159)",
+  "generatedAt": "2026-08-22",
+  "session": 159,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-operation-authority-and-release-truth",
+  "meta": {
+    "generatedAt": "2026-08-22",
+    "project": "call-of-doodie",
+    "type": "game-app",
+    "rubric": "nine-axis-operation-authority-and-release-truth",
+    "candidateCount": 34,
+    "promotedCount": 5,
+    "combinedPriority": 128.2,
+    "top3": [
+      "protocol-release-truth-repair",
+      "operation-spatial-interaction-authority",
+      "operation-score-v2"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Studio Oracle, direct source inspection, GitHub Actions evidence, local release probes, and the Session 159 game-loop review prove five repo-owned gaps. No participant corpus exists, so content breadth, balance, and outcome claims remain gated.",
+    "recommendation": {
+      "firstBuild": "Restore exact release truth, then make the authored Operation targets and score mechanically honest.",
+      "productDestination": "A seven-chapter Operation where the player must reach the objective, understands the route bargain, earns a visible skill-expressive score, and receives deterministic reason-coded direction.",
+      "keep": "Preserve guest-first play, every legacy mode, explicit music authority, input parity, local advisory trust, replay labels, cost neutrality, and FORGE versus SPARKED separation.",
+      "rejectNow": "New Operations, numeric balance tuning, hosted inference, broad restyling, realtime co-op, identity expansion, or participant-outcome claims.",
+      "reason": "All promoted items deepen existing authoritative contracts with deterministic local evidence and no dependency, hosted service, or variable per-player cost."
+    },
+    "gameLoopReview": {
+      "source": "docs/GAME_LOOP_REVIEW_2026-08-22.md",
+      "loopTightness": 8.6,
+      "progressionCurve": 8.7,
+      "sessionEngagement": 8.2,
+      "retentionHooks": 8.3,
+      "soulFidelity": 9.1,
+      "overall": 8.6,
+      "evidenceBoundary": "No participant playtest corpus exists. Scores measure executable design structure, not fun, balance, retention, or satisfaction."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Make authored target position and score evidence mechanically authoritative.",
+    "innovation": "Turn the existing local Operation grammar into a spatial, reason-coded, receipt-versioned mission contract without hosted inference.",
+    "ui / ux / user-experience": "Show range, direction, score components, and route tradeoffs before the player acts.",
+    "feedback loop": "Make every refusal and score component explainable from bounded local evidence.",
+    "gamification / engagement / immersion": "Reward tempo, clean objectives, controlled pressure, and extraction rather than a predetermined route total.",
+    "ai / intelligence integration": "Activate the deterministic Mission Director inputs already present in code and tests.",
+    "security": "Keep all new evidence local, allowlisted, bounded, and explicitly non-authoritative.",
+    "speed / organization / efficiency": "Centralize proximity, director snapshot, score, and route-intel policy in pure testable contracts.",
+    "token / api cost reduction": "Use existing game state and UI paths with zero packages, hosted calls, or per-player cost."
+  },
+  "items": [
+    {
+      "slug": "protocol-release-truth-repair",
+      "tier": "FIRE",
+      "axis": "dev health / release truth / process quality",
+      "effortHours": 4,
+      "impact": 10,
+      "innovation": 6,
+      "priority": 30,
+      "status": "implemented",
+      "why": "Remote main currently fails six checks after a protocol propagation: the brief workflow uses Node 20 below the Node 22 floor, generated route and sitemap artifacts drift, the protocol anchor expects stale Markdown, and the write-back currency probe misclassifies post-closeout board sealing as an unfinished session.",
+      "recipe": "Repair the Node and protocol anchors, regenerate public artifacts, and teach write-back currency to distinguish bounded post-closeout proof/board commits from substantive unfinished work. Add regression coverage and re-run the exact failing courts.",
+      "measurement": "Node runtime, protocol drift, public contract, sitemap, brief validation, and focused currency fixtures pass; the known S158 seal commits classify clean while a real substantive post-SIL commit still reports debt.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Patch the known CI anchors and regenerate drifted artifacts." },
+        "L2": { "effortHours": 4, "recipe": "Also root-fix the false recovery classifier with regression fixtures and exact failure reproduction." },
+        "L3": { "effortHours": 8, "recipe": "Generalize propagation compatibility across every phase-critical anchor and classify automation-only sealing by changed paths plus commit intent." }
+      }
+    },
+    {
+      "slug": "operation-spatial-interaction-authority",
+      "tier": "FIRE",
+      "axis": "feature depth / UX / immersion / trust",
+      "effortHours": 8,
+      "impact": 10,
+      "innovation": 9,
+      "priority": 27.1,
+      "status": "implemented",
+      "why": "Operation targets define world positions and interaction radii, but the live hook accepts the exact E/A/USE action from anywhere.",
+      "recipe": "Create a pure proximity contract, enforce it against the live player before objective acceptance, expose a bounded proximity snapshot to the overlay, render distance and direction with disabled/out-of-range feedback, and preserve keyboard/controller/touch parity.",
+      "measurement": "No receipt or bonus is accepted outside the target radius; the boundary distance is deterministic across input sources; inside-range exact actions advance; wrong, duplicate, and stale actions still fail closed; focused pixels and accessibility assertions pass.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Enforce a pure player-to-target distance contract in the live hook and add boundary tests." },
+        "L2": { "effortHours": 8, "recipe": "Add the shared proximity snapshot, range/direction UI, live-region refusal, all-input parity, tests, and pixels." },
+        "L3": { "effortHours": 14, "recipe": "Add target-specific sensory cues only after participant comprehension evidence exists." }
+      }
+    },
+    {
+      "slug": "operation-score-v2",
+      "tier": "FIRE",
+      "axis": "engagement / progression / feedback / replay trust",
+      "effortHours": 8,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 24.1,
+      "status": "implemented",
+      "why": "Fixed encounter values and a fixed route multiplier make completed Operation scores effectively predetermined while the UI promises objectives, tempo, and extraction.",
+      "recipe": "Define operation-score-v2 as a pure visible breakdown of objective value, bounded tempo, reinforcement control, extraction, and route multiplier. Record the component evidence in local receipts and rivals while keeping the trust label advisory and versioned.",
+      "measurement": "Two runs on one route can earn different totals from bounded evidence; component sum exactly equals the receipt score; slower or reinforcement-heavy runs cannot outperform an otherwise identical clean run; legacy v1 receipts remain readable and never gain authority.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Correct copy and add an objective/reinforcement breakdown without changing the v1 total." },
+        "L2": { "effortHours": 8, "recipe": "Ship versioned skill-expressive scoring, receipt migration, visible breakdown, rival compatibility, and tests." },
+        "L3": { "effortHours": 16, "recipe": "Tune weights only after paired participant receipts prove comprehension and variance." }
+      }
+    },
+    {
+      "slug": "operation-director-live-signal-wiring",
+      "tier": "FIRE",
+      "axis": "local intelligence / feedback / immersion",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 24,
+      "status": "implemented",
+      "why": "The pure Mission Director supports build archetype, recent damage source, objective history, and score pace, but live Operation callers omit those signals or hardcode score pace.",
+      "recipe": "Create one pure live snapshot builder from bounded game and Operation state, route every director call through it, expose the reason receipt, and verify that every advertised reason code is reachable without changing difficulty.",
+      "measurement": "Real hook fixtures reach build, damage, route, history, pace, health, and default reasons deterministically; identical snapshots return identical guidance; no directive mutates enemy difficulty or player settings.",
+      "ladder": {
+        "L1": { "effortHours": 3, "recipe": "Pass recent damage kind and objective history to existing live calls." },
+        "L2": { "effortHours": 6, "recipe": "Centralize the full bounded snapshot including doctrine and honest pace, with hook and pure tests." },
+        "L3": { "effortHours": 11, "recipe": "Tune priorities only after participant receipts show which explanations help." }
+      }
+    },
+    {
+      "slug": "operation-route-consequence-intel",
+      "tier": "FIRE",
+      "axis": "choice clarity / feature depth / accessibility",
+      "effortHours": 4,
+      "impact": 9,
+      "innovation": 7,
+      "priority": 23,
+      "status": "implemented",
+      "why": "The runtime applies fixed pressure or score consequences after route selection, while the Command Deck presents only route names.",
+      "recipe": "Define a pure route-intel contract from the same route consequence authority, render the immediate bargain and eligible next-Operation echo before commitment, add selected-route preview and screen-reader copy, and fail closed for unknown routes.",
+      "measurement": "Displayed multipliers and echo conditions exactly match runtime values; every authored route has concise human and machine-readable intel; unknown routes show no fabricated benefit; keyboard, controller, touch, and 390px layouts remain usable.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Show fixed immediate pressure/score tradeoffs under each route choice." },
+        "L2": { "effortHours": 4, "recipe": "Add shared route intel, future echo eligibility, selected preview, public contract coverage, accessibility, and pixels." },
+        "L3": { "effortHours": 8, "recipe": "Compare election and completion only after real receipt volume; do not tune yet." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "operation-objectives-not-authoritative", "reason": "FALSE PREMISE — exact target/command, duplicate suppression, and reinforcement gating are live; only spatial authority is missing." },
+    { "slug": "operation-audio-is-generic", "reason": "FALSE PREMISE — Session 158 shipped seven procedural motifs plus preference-safe score direction." },
+    { "slug": "new-operation-or-balance-retune", "reason": "DATA-BLOCKED — no consented participant corpus supports breadth or numeric tuning." },
+    { "slug": "hosted-ai-director", "reason": "CULLED — the deterministic local director already exists and is the higher-trust, zero-cost path." },
+    { "slug": "realtime-coop-or-auth", "reason": "GATED — capacity, identity, and product decisions remain independent of this gameplay audit." },
+    { "slug": "global-visual-restyle", "reason": "FALSE PREMISE / CULL — the last hash-bound visual court found no blocking defect and no new broad pixel evidence contradicts it." },
+    { "slug": "perk-doctrine-delta-preview", "reason": "DEFERRED — valuable but lower priority than spatial authority, score truth, live director wiring, and route clarity." },
+    { "slug": "replay-physics-parity", "reason": "DEFERRED PROGRAM — high-value architecture work, but larger than the five tighter release-critical contracts promoted here." }
+  ],
+  "executionLog": [
+    {
+      "slug": "protocol-release-truth-repair",
+      "status": "implemented",
+      "completedAt": "2026-08-23",
+      "notes": "Raised every CI workflow to the Node 22 floor, corrected the closeout protocol anchor, made recovery currency distinguish exact board/proof seals from substantive debt, fixed the ESM skill-brief renderer, and made generated release truth deterministic in shallow CI by checking out full history.",
+      "verification": "Node runtime 5/5; protocol drift 42/42; public contract 28 files; route graph 25 surfaces; focused currency/deploy regressions green; full suite effective 1254/1254 after locked dependency reconciliation."
+    },
+    {
+      "slug": "operation-spatial-interaction-authority",
+      "status": "implemented",
+      "completedAt": "2026-08-23",
+      "notes": "Added one pure proximity authority, enforced it before objective acceptance, exposed bounded range/direction receipts across touch, keyboard, and controller, and corrected reach to include the runtime player's 16px collision body after real-browser movement found wall targets could stop six pixels short.",
+      "verification": "Focused proximity/hook/overlay courts green; real movement reaches the target; Operation browser matrix 48/48 across 390px/1440px and both themes."
+    },
+    {
+      "slug": "operation-score-v2",
+      "status": "implemented",
+      "completedAt": "2026-08-23",
+      "notes": "Shipped versioned objective, exact-interaction, tempo, extraction, reinforcement-pressure, and route evidence; aggregate receipts and rival cartridges remain locally advisory; legacy v1 receipts remain readable.",
+      "verification": "Score/director/rival/modal courts green; completion browser matrix 36/36; direct mobile/desktop inspection confirms the complete breakdown and honesty copy fit."
+    },
+    {
+      "slug": "operation-director-live-signal-wiring",
+      "status": "implemented",
+      "completedAt": "2026-08-23",
+      "notes": "Centralized one bounded live mission snapshot from health, route, objective history, build archetype, recent damage, and honest authored-duration score pace, then routed every live directive call through it without changing difficulty.",
+      "verification": "Mission snapshot, director, and live-hook fixtures are deterministic and green; identical inputs return identical reason-coded guidance."
+    },
+    {
+      "slug": "operation-route-consequence-intel",
+      "status": "implemented",
+      "completedAt": "2026-08-23",
+      "notes": "Centralized route bargain and eligible next-Operation echo truth, exposed it in the Command Deck and public gameplay contract, failed unknown routes closed, and repaired desktop/mobile route-card wrapping through direct pixel review.",
+      "verification": "Director, Command Deck, public-contract, accessibility, and rendered-pixel courts green; route values match the runtime consequence object."
+    }
+  ]
+}

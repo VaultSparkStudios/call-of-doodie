@@ -46,7 +46,7 @@ function Harness({ hookProps }) {
   return null;
 }
 
-function mountOperation() {
+function mountOperation(overrides = {}) {
   const gsRef = { current: null };
   const hookProps = {
     gsRef,
@@ -55,12 +55,14 @@ function mountOperation() {
     startTimeRef: { current: Date.now() },
     difficultyRef: { current: "normal" },
     statsRef: { current: {} },
+    activePerksRef: { current: [] },
     modeRefs: [],
     setScore: vi.fn(),
     setHealth: vi.fn(),
     setPaused: vi.fn(),
     setPauseReason: vi.fn(),
     setLiveAnnounce: vi.fn(),
+    ...overrides,
   };
   host = document.createElement("div");
   root = createRoot(host);
@@ -95,7 +97,7 @@ afterEach(() => {
 
 describe("Operation objective audio integration", () => {
   it("rejects malformed actions and cues the exact accepted action only once", () => {
-    const { hookProps } = mountOperation();
+    const { gsRef, hookProps } = mountOperation();
     const encounter = getCurrentEncounter(operationApi.stateRef.current);
     const action = getOperationEncounterAction(encounter);
 
@@ -103,10 +105,51 @@ describe("Operation objective audio integration", () => {
     expect(mocks.soundOperationObjective).not.toHaveBeenCalled();
     expect(hookProps.setLiveAnnounce).not.toHaveBeenCalled();
 
-    act(() => operationApi.interact({ ...action, inputSource: "keyboard" }));
-    act(() => operationApi.interact({ ...action, inputSource: "keyboard" }));
+    const target = operationApi.arenaRef.current.interactables.find((item) => item.id === action.targetId);
+    Object.assign(gsRef.current.player, target.position);
+    let accepted;
+    let duplicate;
+    act(() => { accepted = operationApi.interact({ ...action, inputSource: "keyboard" }); });
+    act(() => { duplicate = operationApi.interact({ ...action, inputSource: "keyboard" }); });
+    expect(accepted).toMatchObject({ accepted: true, reasonCode: "INTERACTION_ACCEPTED", proximity: { inRange: true } });
+    expect(duplicate).toMatchObject({ accepted: false, reasonCode: "INTERACTION_DUPLICATE", proximity: { inRange: true } });
     expect(mocks.soundOperationObjective).toHaveBeenCalledExactlyOnceWith(encounter.verb);
     expect(hookProps.setLiveAnnounce).toHaveBeenCalledExactlyOnceWith(`${action.label} confirmed. ${action.benefit}`);
+  });
+
+  it("rejects a correct action outside its live radius with a bounded navigation snapshot", () => {
+    const { hookProps } = mountOperation();
+    const encounter = getCurrentEncounter(operationApi.stateRef.current);
+    const action = getOperationEncounterAction(encounter);
+    let result;
+
+    act(() => { result = operationApi.interact({ ...action, inputSource: "touch" }); });
+
+    expect(result).toMatchObject({
+      accepted: false,
+      reasonCode: "TARGET_OUT_OF_RANGE",
+      proximity: { available: true, inRange: false, direction: "NORTH-EAST" },
+    });
+    expect(result.proximity.distanceToRangePx).toBeGreaterThan(0);
+    expect(operationApi.objectiveRef.current.actionComplete).toBe(false);
+    expect(mocks.soundOperationObjective).not.toHaveBeenCalled();
+    expect(hookProps.setLiveAnnounce).toHaveBeenCalledWith(expect.stringContaining("out of range"));
+  });
+
+  it("fails closed for stale transit state before proximity or objective mutation", () => {
+    const { gsRef } = mountOperation();
+    const encounter = getCurrentEncounter(operationApi.stateRef.current);
+    const action = getOperationEncounterAction(encounter);
+    const target = operationApi.arenaRef.current.interactables.find((item) => item.id === action.targetId);
+    Object.assign(gsRef.current.player, target.position);
+    gsRef.current._waveTransitDone = true;
+    let result;
+
+    act(() => { result = operationApi.interact({ ...action, inputSource: "controller" }); });
+
+    expect(result).toEqual({ accepted: false, reasonCode: "INTERACTION_STALE", proximity: null });
+    expect(operationApi.objectiveRef.current.actionComplete).toBe(false);
+    expect(mocks.soundOperationObjective).not.toHaveBeenCalled();
   });
 
   it("emits one bounded warning for an arena clear before the authored action", () => {
@@ -119,5 +162,26 @@ describe("Operation objective audio integration", () => {
     expect(result).toMatchObject({ handled: true, completed: false, blocked: true });
     expect(mocks.soundOperationReinforcement).toHaveBeenCalledExactlyOnceWith(1);
     expect(hookProps.setLiveAnnounce).toHaveBeenCalledWith(`${action.label} required. Reinforcements 1.`);
+  });
+
+  it("feeds bounded build and recent-damage evidence into the live Mission Director", () => {
+    const { gsRef } = mountOperation({
+      activePerksRef: { current: [{ id: "eagle_eye" }, { id: "penetrator" }, { id: "overclocked" }] },
+    });
+    const encounter = getCurrentEncounter(operationApi.stateRef.current);
+    const action = getOperationEncounterAction(encounter);
+    const target = operationApi.arenaRef.current.interactables.find((item) => item.id === action.targetId);
+    Object.assign(gsRef.current.player, target.position);
+    gsRef.current.damageSequence = {
+      schemaVersion: "damage-sequence-v1",
+      events: [{ kind: "projectile", sourceName: "Hall Monitor" }],
+    };
+
+    act(() => operationApi.interact({ ...action, inputSource: "controller" }));
+
+    expect(operationApi.directive).toMatchObject({
+      reasonCode: "DIRECTOR_DAMAGE_RESPONSE",
+      difficultyChange: "none-player-opt-in-only",
+    });
   });
 });

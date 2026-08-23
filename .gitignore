@@ -21,6 +21,7 @@ docs/RIGHTS_PROVENANCE.md
 docs/cache-ledger.ndjson
 test-results/
 output/playwright/
+output/visual-harness-build/
 coverage/
 
 # Private surfaces — never commit (sanitization 2026-06-03)

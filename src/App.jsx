@@ -359,9 +359,9 @@ export default function CallOfDoodie() {
   const [synergyChargeReady, setSynergyChargeReady] = useState(false);
   const [liveAnnounce, setLiveAnnounce]         = useState(""); // aria-live region for screen readers
   const operationModeRefs = useMemo(() => [scoreAttackRef, dailyChallengeRef, cursedRunRef, bossRushRef, speedrunRef, gauntletRef, zombiesRef], []);
-  const operationRuntime = useOperationMode({ gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, modeRefs: operationModeRefs, setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce });
+  const operationRuntime = useOperationMode({ gsRef, sizeRef, frameMonitorRef, startTimeRef, difficultyRef, statsRef, activePerksRef, modeRefs: operationModeRefs, setScore, setHealth, setPaused, setPauseReason, setLiveAnnounce });
   const {
-    stateRef: operationStateRef, completeRef: operationCompleteRef, state: operationState, arenaState: operationArenaState, objectiveState: operationObjectiveState,
+    stateRef: operationStateRef, completeRef: operationCompleteRef, state: operationState, arenaState: operationArenaState, objectiveState: operationObjectiveState, proximitySnapshot: operationProximitySnapshot,
     directive: operationDirective, completeReceipt: operationCompleteReceipt, start: startOperation, reset: resetOperation,
     interact: applyOperationInteraction, resolveWave: resolveOperationWave, setCompleteReceipt: setOperationCompleteReceipt,
   } = operationRuntime;
@@ -4355,7 +4355,7 @@ export default function CallOfDoodie() {
 
       <AsyncPanelBoundary label="Operation interface">
         <OperationRuntimeLayer {...{
-          operationState, operationArenaState, operationObjectiveState, operationDirective, operationCompleteReceipt, paused, gamepadConnected,
+          operationState, operationArenaState, operationObjectiveState, operationProximitySnapshot, operationDirective, operationCompleteReceipt, paused, gamepadConnected,
           onInteract: applyOperationInteraction, onContinue: returnFromOperationToMenu, onRematch: rematchCompletedOperation,
         }} />
       </AsyncPanelBoundary>

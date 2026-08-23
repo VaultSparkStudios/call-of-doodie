@@ -85,6 +85,9 @@ export default function OperationCompleteModal({
   const fingerprint = receipt?.fingerprint
     ?? receipt?.stateFingerprint
     ?? receipt?.transitionFingerprint;
+  const scoreBreakdown = receipt?.scoreBreakdown?.schemaVersion === "operation-score-v2"
+    ? receipt.scoreBreakdown
+    : null;
 
   return (
     <div style={overlayStyle}>
@@ -121,6 +124,27 @@ export default function OperationCompleteModal({
             {safeText(fingerprint, "UNAVAILABLE")}
           </dd>
         </dl>
+
+        {scoreBreakdown && (
+          <section
+            aria-labelledby="operation-score-breakdown-title"
+            style={{ margin: "18px 0 0", padding: 12, border: "1px solid rgba(0, 229, 255, 0.35)", borderRadius: 8 }}
+          >
+            <h3 id="operation-score-breakdown-title" style={{ margin: "0 0 9px", color: "#7FE6FF", fontSize: 12, letterSpacing: 1.5 }}>
+              OPERATION SCORE BREAKDOWN
+            </h3>
+            <dl style={{ display: "grid", gridTemplateColumns: "1fr max-content", gap: "5px 12px", margin: 0, fontSize: 11 }}>
+              <dt>OBJECTIVES</dt><dd style={{ margin: 0 }}>+{scoreBreakdown.objective.toLocaleString()}</dd>
+              <dt>EXACT INTERACTIONS</dt><dd style={{ margin: 0 }}>+{scoreBreakdown.interaction.toLocaleString()}</dd>
+              <dt>TEMPO</dt><dd style={{ margin: 0 }}>+{scoreBreakdown.tempo.toLocaleString()}</dd>
+              <dt>EXTRACTION</dt><dd style={{ margin: 0 }}>+{scoreBreakdown.extraction.toLocaleString()}</dd>
+              <dt>REINFORCEMENT PRESSURE</dt><dd style={{ margin: 0 }}>−{scoreBreakdown.pressurePenalty.toLocaleString()}</dd>
+            </dl>
+            <p style={{ margin: "9px 0 0", color: "#AAB7C4", fontSize: 9, lineHeight: 1.4 }}>
+              Local deterministic evidence · advisory rivalry receipt · not server-authoritative
+            </p>
+          </section>
+        )}
 
         <aside
           aria-label="Campaign and co-op availability"

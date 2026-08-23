@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { OPERATIONS, getOperation } from "../systems/operationCampaign.js";
+import { getOperationRouteIntel } from "../systems/operationDirector.js";
 import { deriveOperationCampaignCarryIn, loadOperationCampaignProgress } from "../utils/operationCampaignProgress.js";
 
 const FALLBACK_PALETTE = Object.freeze({
@@ -8,6 +9,18 @@ const FALLBACK_PALETTE = Object.freeze({
   muted: "#B7B2AA",
   panel: "rgba(255,255,255,0.04)",
   line: "rgba(255,255,255,0.16)",
+});
+
+const SCREEN_READER_ONLY = Object.freeze({
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
 });
 
 function readable(value, fallback) {
@@ -69,7 +82,10 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
   const colors = { ...FALLBACK_PALETTE, ...palette };
   const operations = OPERATIONS.slice(0, 3).map((entry) => getOperation(entry.id) || entry);
   const [selectedRoutes, setSelectedRoutes] = useState(() => Object.fromEntries(
-    OPERATIONS.map((operation) => [operation.id, routeOptions(operation)[0]?.id || ""]),
+    OPERATIONS.map((operation) => [
+      operation.id,
+      routeOptions(operation).find((route) => getOperationRouteIntel(operation.id, route.id))?.id || "",
+    ]),
   ));
   const campaignProgress = useMemo(() => loadOperationCampaignProgress(), []);
 
@@ -107,6 +123,12 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
           const operationId = readable(operation.id, `operation-${index + 1}`);
           const seed = operationSeed(operation);
           const routes = routeOptions(operation);
+          const routeEntries = routes.map((route) => ({
+            ...route,
+            intel: getOperationRouteIntel(operationId, route.id),
+          }));
+          const selectedIntel = getOperationRouteIntel(operationId, selectedRoutes[operationId]);
+          const selectedPreviewId = `operation-route-preview-${operationId}`;
           const completion = campaignProgress.completions.findLast((entry) => entry.operationId === operationId);
           const carryIn = deriveOperationCampaignCarryIn(campaignProgress, operationId);
           return (
@@ -146,16 +168,64 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
               </p>}
               <fieldset aria-label={`Choose route for ${title}`} style={{ margin: "5px 0 8px", padding: 0, border: 0 }}>
                 <legend style={{ color: colors.muted, fontSize: 9, fontWeight: 900, letterSpacing: 1 }}>CHOOSE ROUTE</legend>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}>
-                  {routes.map((route) => <label key={route.id} style={{ minHeight: 44, display: "flex", alignItems: "center", gap: 5, padding: 6, border: `1px solid ${selectedRoutes[operationId] === route.id ? colors.accent : colors.line}`, borderRadius: 7, color: colors.ink, fontSize: 9, cursor: "pointer" }}>
-                    <input type="radio" name={`operation-route-${operationId}`} value={route.id} checked={selectedRoutes[operationId] === route.id} onChange={(event) => setSelectedRoutes((current) => ({ ...current, [operationId]: event.target.value }))} />
-                    {route.label || route.id}
-                  </label>)}
+                <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr)", gap: 5 }}>
+                  {routeEntries.map((route) => {
+                    const intelId = `operation-route-intel-${operationId}-${route.id}`;
+                    const selectable = Boolean(route.intel);
+                    return <label key={route.id} style={{ minWidth: 0, minHeight: 58, display: "flex", alignItems: "flex-start", gap: 5, padding: 6, border: `1px solid ${selectedRoutes[operationId] === route.id ? colors.accent : colors.line}`, borderRadius: 7, color: colors.ink, fontSize: 9, cursor: selectable ? "pointer" : "not-allowed", opacity: selectable ? 1 : 0.65 }}>
+                      <input
+                        type="radio"
+                        name={`operation-route-${operationId}`}
+                        value={route.id}
+                        checked={selectedRoutes[operationId] === route.id}
+                        disabled={!selectable}
+                        style={{ flex: "0 0 auto" }}
+                        aria-describedby={intelId}
+                        onChange={(event) => {
+                          if (!getOperationRouteIntel(operationId, event.target.value)) return;
+                          setSelectedRoutes((current) => ({ ...current, [operationId]: event.target.value }));
+                        }}
+                      />
+                      <span style={{ display: "grid", minWidth: 0, gap: 3, overflowWrap: "anywhere" }}>
+                        <strong style={{ lineHeight: 1.2 }}>{route.label || route.id}</strong>
+                        <span aria-hidden="true" style={{ color: colors.muted, fontSize: 8, lineHeight: 1.3 }}>
+                          {route.intel?.immediate.summary || "Route intel unavailable — selection blocked"}
+                        </span>
+                        <span id={intelId} style={SCREEN_READER_ONLY}>
+                          {route.intel?.accessibleSummary || `${route.label || route.id}. Route intel unavailable; selection blocked.`}
+                        </span>
+                      </span>
+                    </label>;
+                  })}
                 </div>
               </fieldset>
+              <div
+                id={selectedPreviewId}
+                data-testid={`operation-route-preview-${operationId}`}
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                style={{ minHeight: 64, margin: "0 0 9px", padding: 7, border: `1px solid ${selectedIntel ? colors.accent : colors.line}`, borderRadius: 7, color: colors.ink, fontSize: 8, lineHeight: 1.35 }}
+              >
+                {selectedIntel ? <>
+                  <span aria-hidden="true" style={{ display: "grid", gap: 3 }}>
+                    <strong style={{ color: colors.accent, letterSpacing: 0.8 }}>SELECTED · {selectedIntel.routeLabel.toUpperCase()}</strong>
+                    <span>IMMEDIATE · {selectedIntel.immediate.summary}</span>
+                    {selectedIntel.nextOperationEcho && <span>
+                      NEXT OPERATION ECHO · {selectedIntel.nextOperationEcho.targetOperationTitle} · {selectedIntel.nextOperationEcho.description}
+                    </span>}
+                  </span>
+                  <span style={SCREEN_READER_ONLY}>Selected route. {selectedIntel.accessibleSummary}</span>
+                </> : "ROUTE INTEL UNAVAILABLE — SELECT A VERIFIED ROUTE"}
+              </div>
               <button
                 aria-label={`Start operation ${title}`}
-                onClick={() => onStart?.(seed, { operationId, operationMode: true, operationRoute: selectedRoutes[operationId] || routes[0]?.id })}
+                aria-describedby={selectedPreviewId}
+                disabled={!selectedIntel}
+                onClick={() => {
+                  if (!selectedIntel) return;
+                  onStart?.(seed, { operationId, operationMode: true, operationRoute: selectedIntel.routeId });
+                }}
                 style={{
                   minHeight: 48,
                   width: "100%",
@@ -164,7 +234,8 @@ export default function OperationCommandDeck({ onStart, palette = FALLBACK_PALET
                   borderRadius: 8,
                   background: index === 0 ? colors.accent : "transparent",
                   color: index === 0 ? "#FFFFFF" : colors.ink,
-                  cursor: "pointer",
+                  cursor: selectedIntel ? "pointer" : "not-allowed",
+                  opacity: selectedIntel ? 1 : 0.65,
                   font: "900 12px 'Courier New', monospace",
                   letterSpacing: 1,
                   touchAction: "manipulation",

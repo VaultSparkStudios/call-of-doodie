@@ -30,6 +30,45 @@ const matrix = [
 const hash = (file) => crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
 fs.mkdirSync(outputDir, { recursive: true });
 
+const movementKeys = {
+  EAST: ["KeyD"],
+  "SOUTH-EAST": ["KeyS", "KeyD"],
+  SOUTH: ["KeyS"],
+  "SOUTH-WEST": ["KeyS", "KeyA"],
+  WEST: ["KeyA"],
+  "NORTH-WEST": ["KeyW", "KeyA"],
+  NORTH: ["KeyW"],
+  "NORTH-EAST": ["KeyW", "KeyD"],
+};
+
+async function moveIntoInteractionRange(page, interaction, proximity) {
+  const trace = [];
+  for (let step = 0; step < 48; step += 1) {
+    const state = await page.evaluate(() => {
+      const button = document.querySelector('[data-testid="operation-interact"]');
+      const guidance = document.querySelector('[data-testid="operation-proximity-status"]');
+      return { exists: Boolean(button), disabled: button?.disabled ?? true, guidance: guidance?.textContent || "" };
+    });
+    trace.push(state.guidance);
+    if (!state.exists || !state.disabled) return { ...state, trace };
+    const guidance = state.guidance;
+    const distance = Number(guidance.match(/(\d+) PX TO RANGE/)?.[1] || 0);
+    const direction = guidance.match(/MOVE ([A-Z-]+)/)?.[1];
+    const keys = movementKeys[direction] || [];
+    if (!keys.length) break;
+    for (const key of keys) await page.keyboard.down(key);
+    await page.waitForTimeout(distance > 160 ? 160 : distance > 60 ? 100 : distance > 20 ? 60 : 30);
+    for (const key of keys) await page.keyboard.up(key);
+    await page.waitForTimeout(80);
+  }
+  const finalState = await page.evaluate(() => {
+    const button = document.querySelector('[data-testid="operation-interact"]');
+    const guidance = document.querySelector('[data-testid="operation-proximity-status"]');
+    return { exists: Boolean(button), disabled: button?.disabled ?? true, guidance: guidance?.textContent || "" };
+  });
+  return { ...finalState, trace };
+}
+
 const receipt = {
   schemaVersion: "operation-rendered-pixel-v1",
   generatedAt: new Date().toISOString(),
@@ -70,7 +109,7 @@ try {
     const start = firstCard.getByRole("button", { name: /start operation/i });
     const startBox = await start.boundingBox();
     const deckFile = `operation-deck--${entry.theme}--${entry.width}.png`;
-    await deck.screenshot({ path: path.join(outputDir, deckFile) });
+    await (entry.width <= 430 ? firstCard : deck).screenshot({ path: path.join(outputDir, deckFile) });
 
     await start.click();
     const skipDraft = page.getByRole("button", { name: /skip.*go in clean/i });
@@ -92,12 +131,21 @@ try {
       throw new Error(`Operation did not enter the arena: ${JSON.stringify({ diagnostic, pageErrors, consoleErrors, diagnosticFile })}`, { cause: error });
     }
     const interaction = overlay.locator('[data-testid="operation-interact"]');
+    const proximity = overlay.locator('[data-testid="operation-proximity-status"]');
     await page.locator("#game-canvas").waitFor({ state: "visible", timeout: 30000 });
     await page.getByRole("status", { name: /loading game panel/i }).waitFor({ state: "hidden", timeout: 30000 }).catch(() => {});
     await page.waitForTimeout(500);
     const interactionBox = await interaction.boundingBox();
+    const lockedInitially = await interaction.isDisabled();
+    const initialGuidance = await proximity.innerText();
     const overlayFile = `operation-arena--${entry.theme}--${entry.width}.png`;
     await page.screenshot({ path: path.join(outputDir, overlayFile), fullPage: false });
+
+    const movementResult = await moveIntoInteractionRange(page, interaction, proximity);
+    const reachable = movementResult.exists && !movementResult.disabled;
+    const inRangeFile = `operation-arena-in-range--${entry.theme}--${entry.width}.png`;
+    await page.screenshot({ path: path.join(outputDir, inRangeFile), fullPage: false });
+    if (!reachable) throw new Error(`Operation target could not be reached by player movement: ${JSON.stringify(movementResult)}`);
     await interaction.click();
     const completedFile = `operation-arena-complete--${entry.theme}--${entry.width}.png`;
     await page.screenshot({ path: path.join(outputDir, completedFile), fullPage: false });
@@ -114,6 +162,9 @@ try {
       { id: "route-selectable", ok: Boolean(selectedRoute), actual: selectedRoute },
       { id: "start-touch-target", ok: (startBox?.height || 0) >= 48, actual: startBox?.height || 0 },
       { id: "interaction-touch-target", ok: (interactionBox?.height || 0) >= 48, actual: interactionBox?.height || 0 },
+      { id: "spatial-lock-rendered", ok: lockedInitially, actual: { lockedInitially, initialGuidance } },
+      { id: "proximity-guidance-rendered", ok: /(?:PX TO RANGE|IN RANGE)/.test(initialGuidance), actual: initialGuidance },
+      { id: "interaction-reachable-by-movement", ok: reachable, actual: movementResult },
       { id: "no-horizontal-overflow", ok: dimensions.scroll <= dimensions.viewport + 1, actual: `${dimensions.scroll}/${dimensions.viewport}` },
       { id: "no-page-errors", ok: pageErrors.length === 0, actual: pageErrors },
       { id: "no-console-errors", ok: consoleErrors.length === 0, actual: consoleErrors },
@@ -129,7 +180,7 @@ try {
     receipt.captures.push({
       ...entry,
       selectedRoute,
-      screenshots: [deckFile, overlayFile, completedFile].map((file) => ({ file, sha256: hash(path.join(outputDir, file)) })),
+      screenshots: [deckFile, overlayFile, inRangeFile, completedFile].map((file) => ({ file, sha256: hash(path.join(outputDir, file)) })),
       checks,
     });
     await context.close();
