@@ -9,16 +9,18 @@ Session Intent: Complete one continuous autonomous `/arc` from synchronized reco
 - Director and route truth: health, damage, objective, route, build, authored duration, and recent history now reach the Mission Director; route cards preview typed next-mission consequences before commitment.
 - Architecture: the new Operation authority boundary is a 10,825-byte lazy chunk; entry is 14,908 bytes and App is 550,962/560,000 bytes.
 - Validation: full Vitest passes 219/219 files and 1,254/1,254 assertions; strict lint, deployable build, schema/public/security/dependency/runtime courts and npm audit zero pass. Browser E2E passes 19 cases with one intentional mobile skip.
-- Staging: `https://session-159-staging.call-of-doodie.pages.dev/` and immutable `https://d77b1656.call-of-doodie.pages.dev/` serve candidate `cf4e1a961df4`; broad hosted pixels pass 1,020/1,020, focused Operation pixels 48/48, and modal pixels 36/36.
+- Staging: `https://session-159-staging.call-of-doodie.pages.dev/` and immutable `https://9499adda.call-of-doodie.pages.dev/` serve exact closeout source `0864686b6b4f`; broad hosted pixels pass 1,020/1,020, focused Operation pixels 48/48, and modal pixels 36/36.
 - Pixels: 30 hash-bound captures received direct review across dark/light and mobile/desktop. That loop caught and fixed collision-radius interaction denial and route-card overlap/wrapping; zero blocking defects remain.
 - Release: strict sanitization and secret scans are clean. Engineering FORGE is GO; SPARKED remains NO-GO behind current performance, participant, physical-device, provider/mail, identity, publication, and explicit lifecycle evidence.
-- Next: restage the exact closeout commit, push synchronized `main`, verify continuous integration and production at the exact revision, then seal production evidence without changing lifecycle.
+- Production: source `0864686b6b4f499276f7626a588d66f266db2c52` is synchronized to `origin/main`; workflow `32626881275` passed quality/build/deploy and published immutable `https://017af042.call-of-doodie.pages.dev/`. Immutable/custom health, shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and Operation pixels 48/48 pass.
+- Deploy: deployed to production and verified at the exact source. No SPARKED promotion or launch announcement was made.
+- Next: preserve the spatial authority and versioned score evidence until real participant data supports tuning; pursue the separately gated provider, physical-device, identity, mail, publication, and lifecycle evidence independently.
 
 ## Impact Summary
 
 **Headline.** Operations now make players physically earn authored actions and expose how a run was scored, turning descriptive mission verbs into evidence-bearing play.
 
-**Evidence.** Five audit items; 219 files / 1,254 assertions; 19 browser passes; 1,104 staging pixel checks; 30 directly reviewed captures; 14,908-byte entry, 550,962-byte App, and 10,825-byte authority chunk; zero new dependencies or variable-cost services.
+**Evidence.** Five audit items; 219 files / 1,254 assertions; 19 browser passes; 1,104 staging pixel checks plus 48/48 production Operation checks; 30 directly reviewed captures; workflow `32626881275`; immutable production `017af042`; exact health `0864686b6b4f`; zero new dependencies or variable-cost services.
 
 ---
 

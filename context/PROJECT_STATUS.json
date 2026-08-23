@@ -4,15 +4,22 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 159 makes Operation actions spatial and scoring evidence-bearing; implementation, full verification, isolated staging, direct pixel review, and engineering release gating pass; exact-main production follow-through is authorized.",
-  "nextMilestone": "Publish and verify the exact Session 159 engineering revision, then preserve the score/proximity contracts until participant evidence supports tuning; SPARKED remains independently gated.",
+  "currentFocus": "Session 159 makes Operation actions spatial and scoring evidence-bearing; implementation, full verification, isolated staging, direct pixel review, exact-main publication, continuous integration, production deployment, and live verification pass.",
+  "nextMilestone": "Preserve the spatial authority and versioned score evidence until participant data supports tuning; complete the separately gated provider, physical-device, identity, mail, publication, and SPARKED evidence.",
   "testingSurfaces": [
     {
       "session": 159,
       "status": "green",
-      "url": "https://d77b1656.call-of-doodie.pages.dev/",
+      "url": "https://017af042.call-of-doodie.pages.dev/",
+      "type": "production-verifier",
+      "command": "source 0864686b6b4f · quality/build/deploy 32626881275 · Dependabot 32626942358 · immutable/custom health exact · shell 7/7 both · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard, launch surfaces, and Operation pixels 48/48 pass"
+    },
+    {
+      "session": 159,
+      "status": "green",
+      "url": "https://9499adda.call-of-doodie.pages.dev/",
       "type": "staging-preview",
-      "command": "alias https://session-159-staging.call-of-doodie.pages.dev/ · source cf4e1a961df4 · broad 1020/1020 · focused Operation 48/48 · modal 36/36 · 30 hash-bound captures directly reviewed"
+      "command": "alias https://session-159-staging.call-of-doodie.pages.dev/ · exact closeout source 0864686b6b4f · broad 1020/1020 · focused Operation 48/48 · modal 36/36 · 30 hash-bound captures directly reviewed"
     },
     {
       "session": 159,
@@ -601,30 +608,30 @@
   "testsLastRun": "2026-08-23",
   "sanitizationLastCleared": "2026-08-23",
   "sessionShellHygiene": {
-    "session": 158,
-    "started": 1,
-    "closed": 1,
+    "session": 159,
+    "started": 11,
+    "closed": 11,
     "running": 0,
-    "enumeratedAt": "2026-08-16T22:18:59.3513288-04:00",
-    "scope": "Session-owned command shell enumerated after all bounded verification, closeout, publication, and production jobs completed; unrelated host services excluded."
+    "enumeratedAt": "2026-08-23T08:05:04.158Z",
+    "scope": "Eleven yielded closeout, deploy, push, workflow-watch, and production-verification command sessions were explicitly reconciled; all closed. Earlier bounded verification completed before compaction; unrelated host services excluded."
   },
   "doctorScore": {
-    "date": "2026-08-17",
-    "ranAt": "2026-08-16T22:18:59.3513288-04:00",
-    "overallPass": true,
-    "passing": 141,
-    "green": 135,
-    "advisoryPass": 6,
-    "warning": 41,
-    "failing": 0,
-    "blockingFailing": 0,
-    "advisoryFailing": 0,
+    "date": "2026-08-23",
+    "ranAt": "2026-08-23T07:37:00.000Z",
+    "overallPass": false,
+    "passing": 148,
+    "green": 141,
+    "advisoryPass": 7,
+    "warning": 50,
+    "failing": 2,
+    "blockingFailing": 1,
+    "advisoryFailing": 1,
     "skipped": 3,
-    "ran": 182,
-    "total": 185,
-    "score": 77
+    "ran": 200,
+    "total": 203,
+    "score": 74
   },
-  "lastSessionSummary": "Session 159 shipped proximity-authoritative Operation actions, explainable score v2, live Director signals, route consequence previews, and release-protocol repairs; 219/219 files and 1254/1254 assertions plus browser and rendered-pixel staging courts pass; exact production publication is pending and SPARKED remains independently gated.",
+  "lastSessionSummary": "Session 159 shipped proximity-authoritative Operation actions, explainable score v2, live Director signals, route consequence previews, and release-protocol repairs; 219/219 files and 1254/1254 assertions plus browser and rendered-pixel courts pass; exact source 0864686b6b4f is production-verified at immutable 017af042 and SPARKED remains independently gated.",
   "testsAssertionsPassing": 1254,
   "testsAssertionsTotal": 1254,
   "testsAssertionsFiles": 219,

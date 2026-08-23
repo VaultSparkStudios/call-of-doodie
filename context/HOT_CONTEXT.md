@@ -10,8 +10,9 @@
 - Director truth — every Mission Director call receives the current health, damage, objective, route, build, and authored-duration signals instead of placeholders; route cards expose their typed next-mission consequences before selection.
 - Architecture truth — the Operation authority modules live in a dedicated 10,825-byte lazy chunk; the entry is 14,908 bytes and App is 550,962/560,000 bytes. The authority boundary is budgeted at 16,000 bytes.
 - Validation truth — full Vitest passes 219/219 files and 1,254/1,254 assertions; strict lint, deployable build, schema, public-contract, dependency, runtime, security, npm-audit-zero, and supply-chain courts pass. Browser E2E passes 19 cases with one intentional mobile-only skip.
-- Visual truth — staging `https://session-159-staging.call-of-doodie.pages.dev/` (immutable `https://d77b1656.call-of-doodie.pages.dev/`) passes broad hosted pixels 1,020/1,020, focused Operation pixels 48/48, and completion-modal pixels 36/36. Thirty hash-bound captures were reviewed across both themes and mobile/desktop; inspection found and fixed target-radius and route-card defects, with zero blocking defects open.
+- Visual truth — staging `https://session-159-staging.call-of-doodie.pages.dev/` (immutable `https://9499adda.call-of-doodie.pages.dev/`) serves exact closeout source `0864686b6b4f` and passes broad hosted pixels 1,020/1,020, focused Operation pixels 48/48, and completion-modal pixels 36/36. Thirty hash-bound captures were reviewed across both themes and mobile/desktop; inspection found and fixed target-radius and route-card defects, with zero blocking defects open.
 - Lifecycle truth — the cost-neutral FORGE engineering candidate is GO. SPARKED remains NO-GO behind current Core Web Vitals, physical PWA/controller proof, participant evidence, Zoho reply-as, project-scoped PostHog/Sentry, Obelisk identity, Itch publication, and explicit lifecycle approval.
+- Production truth — source `0864686b6b4f499276f7626a588d66f266db2c52` is synchronized to `origin/main`; workflow `32626881275` passed Linux quality, build, and deploy, publishing immutable `https://017af042.call-of-doodie.pages.dev/`. Immutable and custom health report `0864686b6b4f`; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and production Operation pixels 48/48 pass.
 
 ## Open Work
 
@@ -92,7 +93,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 199,854 bytes · SHA-256 `82b14852b896…`
+- `context/CURRENT_STATE.md` · 200,329 bytes · SHA-256 `d161c3bc4daa…`
 - `context/TASK_BOARD.md` · 128,577 bytes · SHA-256 `03fe5c2b96c0…`
 - `context/DECISIONS.md` · 127,467 bytes · SHA-256 `574b2fa2ccb0…`
 - `docs/AUDIT_2026-08-22.json` · 15,032 bytes · SHA-256 `623365e8d87b…`

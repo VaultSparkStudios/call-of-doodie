@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-23",
-  "generatedAtMs": 1787470031237,
+  "generatedAtMs": 1787472310312,
   "session": 159,
-  "vectorHash": "c27a72720989f964",
+  "vectorHash": "0f77be5b7da0669b",
   "silTotal": 998,
   "silAvg3": 998,
   "velocity": 5,
@@ -24,7 +24,7 @@
     "[SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — th"
   ],
   "health": "green",
-  "truthStatus": "all repository-owned S159 audit items are implemented and staged; exact-main publication and production verification are pending. SPARKED remains NO-GO.",
+  "truthStatus": "all repository-owned S159 audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 43723,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish and verify the exact Session 159 engineering revision, then preserve the score/proximity contracts until participant evidence supports tuning; SPARKED remains independently gated.",
-  "currentFocus": "Session 159 makes Operation actions spatial and scoring evidence-bearing; implementation, full verification, isolated staging, direct pixel review, and engineering release gating pass; exact-main production follow-through is authorized.",
+  "nextMilestone": "Preserve the spatial authority and versioned score evidence until participant data supports tuning; complete the separately gated provider, physical-device, identity, mail, publication, and SPARKED evidence.",
+  "currentFocus": "Session 159 makes Operation actions spatial and scoring evidence-bearing; implementation, full verification, isolated staging, direct pixel review, exact-main publication, continuous integration, production deployment, and live verification pass.",
   "lastShipped": "proximity-authoritative Operation interactions across keyboard, controller, and touch; reason-coded rejection protects exact target, live distance, active encounter, and duplicate boundaries.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

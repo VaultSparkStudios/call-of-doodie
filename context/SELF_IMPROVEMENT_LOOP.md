@@ -25,7 +25,9 @@ Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `████�
 
 Top win: every authored Operation action now requires physical commitment and produces inspectable score evidence.
 Top gap: the repository still has no participant corpus or physical-device evidence, so balance, comprehension, and SPARKED claims remain gated.
-Intent outcome: In authorized follow-through — repository-owned implementation, isolated staging, rendered-pixel review, and engineering gate are complete; exact-main publication and production verification remain.
+Intent outcome: Achieved — repository-owned implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, exact-SHA continuous integration, production deployment, and live verification are complete; SPARKED remains independently gated.
+
+Production follow-through: source `0864686b6b4f499276f7626a588d66f266db2c52` passed quality/build/deploy workflow `32626881275` and Dependabot workflow `32626942358`, published immutable `017af042`, and passed exact immutable/custom health, shell 7/7 on both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and focused production Operation pixels 48/48.
 
 **Brainstorm**
 1. Measure whether spatial objectives improve comprehension only after consented participant runs exist.

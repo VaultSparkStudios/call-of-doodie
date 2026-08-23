@@ -636,7 +636,7 @@
       "session": 159,
       "total": 0,
       "maxTotal": 25,
-      "overallStatus": "all repository-owned S159 audit items are implemented and staged; exact-main publication and production verification are pending. SPARKED remains NO-GO.",
+      "overallStatus": "all repository-owned S159 audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.",
       "lastReviewed": "2026-08-23",
       "dimensions": {
         "schema_alignment": 0,

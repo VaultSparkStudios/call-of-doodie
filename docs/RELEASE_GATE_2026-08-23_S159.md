@@ -6,6 +6,13 @@
 
 **NO-GO** for a SPARKED lifecycle promotion or public launch announcement.
 
+## Production verification
+
+- Exact source: `0864686b6b4f499276f7626a588d66f266db2c52`, synchronized to `origin/main`.
+- Continuous integration and deployment: workflow `32626881275` passed quality, build, and Cloudflare deploy; Dependabot workflow `32626942358` also passed.
+- Immutable production: `https://017af042.call-of-doodie.pages.dev/`; custom production: `https://callofdoodie.wtf/`. Both typed health endpoints report `0864686b6b4f`.
+- Live evidence: shell checks 7/7 on both origins, cutover 5/5, backend 5/5, replay trust 3/3, shared-leaderboard isolation, Studio launch surfaces, and focused Operation pixels 48/48 pass.
+
 ## Engineering evidence
 
 - Full Vitest: 219/219 files and 1,254/1,254 assertions.

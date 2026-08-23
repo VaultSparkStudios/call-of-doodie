@@ -7,10 +7,11 @@
 - Route truth — route cards preview typed next-mission consequences before selection; no unavailable campaign breadth or network progression is implied.
 - Architecture truth — entry is 14,908 bytes, App is 550,962/560,000 bytes, and the isolated Operation authority chunk is 10,825/16,000 bytes.
 - Validation truth — 219/219 files and 1,254/1,254 assertions pass with strict lint, deployable build, schema/public/security/dependency/runtime gates, npm audit zero, and browser E2E 19 pass/1 intentional skip.
-- Visual truth — staging `session-159-staging` / immutable `d77b1656` passes broad pixels 1,020/1,020, focused Operation pixels 48/48, completion pixels 36/36, and direct review of 30 hash-bound dark/light mobile/desktop captures with zero blockers.
+- Visual truth — exact staging `session-159-staging` / immutable `9499adda` serves source `0864686b6b4f` and passes broad pixels 1,020/1,020, focused Operation pixels 48/48, completion pixels 36/36, and direct review of 30 hash-bound dark/light mobile/desktop captures with zero blockers.
 - Release truth — strict public sanitization and secret scans have zero findings. Engineering FORGE is GO; SPARKED remains NO-GO behind participant, physical, provider/mail, identity, performance, publication, and explicit lifecycle evidence.
+- Production truth — source `0864686b6b4f499276f7626a588d66f266db2c52` passed quality/build/deploy workflow `32626881275` and Dependabot workflow `32626942358`, serving immutable `017af042`. Immutable and custom health report `0864686b6b4f`; shell passes 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and focused Operation pixels 48/48 pass.
 
-Overall status: all repository-owned S159 audit items are implemented and staged; exact-main publication and production verification are pending. SPARKED remains NO-GO.
+Overall status: all repository-owned S159 audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-23
 
 ## 2026-08-16 — Session 158 — Audio authority, objective feedback, and release truth

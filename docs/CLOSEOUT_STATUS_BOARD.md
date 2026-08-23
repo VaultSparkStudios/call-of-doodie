@@ -38,11 +38,11 @@
 ║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  · agent memory (Claude/Codex project memory)                    ║
+║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 46 files  ·  M:39 A:0 D:0 ?:7                          ║
-║  Ahead: 2  ·  Behind: 0                                          ║
+║  Changes: 15 files  ·  M:15 A:0 D:0 ?:0                          ║
+║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
@@ -50,14 +50,14 @@
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
-║  Doctor:        141/185                                          ║
+║  Doctor:        148/203                                          ║
 ║  Compliance:    —                                                ║
 ║  Tests:         1254/1254                                        ║
 ║  Validation:    full-fresh                                       ║
 ║  IGNIS:         0d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
 ║  Sanitization:  0d ago                                           ║
-║  shells:        unknown · missing/stale enumeration              ║
+║  shells:        11 started · 11 closed · 0 running               ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║
