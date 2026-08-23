@@ -941,22 +941,10 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   }
 
-  // Off-screen threat direction arrows — legibility for enemies past the viewport edge
-  // (spawn bursts, Siege events, formation flanks). Suppressed during Fog of War.
+  // Off-screen threat direction arrows — computed here before enemy list changes.
+  // Drawn below in screen space (after ctx.restore) so the ADS zoom transform
+  // cannot push the edge-anchored positions outside the visible canvas.
   const _offscreenArrows = getOffscreenThreatArrows(_enemiesDraw, W, H, { fogOfWar: Boolean(gs.fogOfWar) });
-  for (let _ai = 0; _ai < _offscreenArrows.length; _ai++) {
-    const arrow = _offscreenArrows[_ai];
-    ctx.save();
-    ctx.translate(arrow.x, arrow.y);
-    ctx.rotate(arrow.angle);
-    ctx.globalAlpha = arrow.alpha;
-    ctx.fillStyle = arrow.color;
-    ctx.beginPath();
-    ctx.moveTo(9, 0); ctx.lineTo(-6, -6); ctx.lineTo(-6, 6); ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-  ctx.globalAlpha = 1;
 
   // Railgun beams
   if (gs.beams && gs.beams.length > 0) {
@@ -1643,6 +1631,22 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
   }
 
   ctx.restore();
+
+  // Off-screen threat arrows — drawn in screen space so ADS zoom cannot displace
+  // the edge anchors. Positions were computed above from game-space enemy coords.
+  for (let _ai = 0; _ai < _offscreenArrows.length; _ai++) {
+    const arrow = _offscreenArrows[_ai];
+    ctx.save();
+    ctx.translate(arrow.x, arrow.y);
+    ctx.rotate(arrow.angle);
+    ctx.globalAlpha = arrow.alpha;
+    ctx.fillStyle = arrow.color;
+    ctx.beginPath();
+    ctx.moveTo(9, 0); ctx.lineTo(-6, -6); ctx.lineTo(-6, 6); ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
 
   // ── ADS scope overlay (drawn in screen space, outside zoom) ──
   if (gs.adsZoom) {
