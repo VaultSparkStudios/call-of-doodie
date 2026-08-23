@@ -1441,3 +1441,15 @@ Intent outcome: achieved through implementation, isolated staging, pixel proof, 
 - Independent gate: engineering FORGE GO; SPARKED NO-GO. Direct-main publication and exact production verification remain the authorized follow-through.
 - Creative Direction Record reviewed — no new creative-direction entry this session; the founder's request was operational authorization to execute the existing arc, direct-main push, and deployment.
 - Production follow-through: pushed application source `bdbf396c0148f1388a44e1eed95d51b30369824f` directly to `main`; brief `31986725453` and Cloudflare quality/build/deploy `31986725436` passed. Immutable `ee00b749` and the custom domain report the exact deploy prefix; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, launch surfaces, and production Operation pixels 36/36 pass.
+## 2026-08-23 — Session 159 — Spatial Operations and evidence-bearing score
+
+- Recovered the remote-forward Session 158 seal, repaired its six-check continuous-integration regression, ran canonical startup/canon/Ark checks, reviewed the mature game loop, and generated the premise-verified five-item audit `docs/AUDIT_2026-08-22.md` plus its machine sidecar.
+- Shipped one proximity authority for keyboard, controller, and touch Operation actions. It validates the active encounter, exact target, live player distance, interaction radius, and one-shot evidence with reason-coded rejection.
+- Shipped `operation-score-v2`: objective execution, interaction quality, tempo, pressure, extraction, route multiplier, and awarded total derive from the real mission snapshot and render in the completion receipt with an explicit local/advisory boundary.
+- Routed live health, recent damage, objective, route, build, authored duration, and history into every Mission Director call; added typed route-consequence previews to the command deck.
+- Repaired Node 22/full-history workflow assumptions, writeback-currency classification, ESM brief rendering, and visual-receipt range hashing; added regression courts for each protocol boundary.
+- Split the authority code into a 10,825-byte lazy chunk while holding entry at 14,908 bytes and App at 550,962/560,000 bytes.
+- Verified 219/219 files and 1,254/1,254 assertions, strict lint, deployable build, schema/public/security/dependency/runtime, npm audit zero, supply-chain incident scans, and browser E2E 19 pass/1 intentional skip.
+- Deployed isolated staging at `session-159-staging` / immutable `d77b1656`; broad pixels pass 1,020/1,020, focused Operation pixels 48/48, modal pixels 36/36, and 30 hash-bound captures received direct review. The pixel loop found and fixed player-radius denial plus route-card overlap/wrapping.
+- Independent gate: engineering FORGE GO; SPARKED NO-GO. Direct-main publication and exact production verification remain the authorized follow-through.
+- Creative Direction Record reviewed — no new creative-direction entry this session; the founder's request was operational authorization to run the existing arc, push `main`, and deploy.

@@ -1,4 +1,18 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-23 — Session 159 — Spatial authority, score evidence, and staging truth
+
+- Interaction truth — the same pure proximity authority governs keyboard, controller, and touch. It requires the active encounter's exact target and live collision-aware distance; stale, mismatched, remote, and duplicate attempts remain inert.
+- Score truth — `operation-score-v2` is computed from objective, interaction, tempo, pressure, extraction, and route evidence in the live mission snapshot. The receipt exposes the components and states that they are local/advisory, not server-authoritative.
+- Director truth — all Mission Director calls receive current health, damage, objective, route, build, authored-duration, and recent-history values; placeholders no longer decide guidance.
+- Route truth — route cards preview typed next-mission consequences before selection; no unavailable campaign breadth or network progression is implied.
+- Architecture truth — entry is 14,908 bytes, App is 550,962/560,000 bytes, and the isolated Operation authority chunk is 10,825/16,000 bytes.
+- Validation truth — 219/219 files and 1,254/1,254 assertions pass with strict lint, deployable build, schema/public/security/dependency/runtime gates, npm audit zero, and browser E2E 19 pass/1 intentional skip.
+- Visual truth — staging `session-159-staging` / immutable `d77b1656` passes broad pixels 1,020/1,020, focused Operation pixels 48/48, completion pixels 36/36, and direct review of 30 hash-bound dark/light mobile/desktop captures with zero blockers.
+- Release truth — strict public sanitization and secret scans have zero findings. Engineering FORGE is GO; SPARKED remains NO-GO behind participant, physical, provider/mail, identity, performance, publication, and explicit lifecycle evidence.
+
+Overall status: all repository-owned S159 audit items are implemented and staged; exact-main publication and production verification are pending. SPARKED remains NO-GO.
+Last reviewed: 2026-08-23
+
 ## 2026-08-16 — Session 158 — Audio authority, objective feedback, and release truth
 
 - Score truth — only the default Action preference adapts across non-boss Operation encounters; explicit Chill, Intense, Retro, and Spooky choices remain authoritative, and BOSS stays owned by the existing boss-intensity runtime.

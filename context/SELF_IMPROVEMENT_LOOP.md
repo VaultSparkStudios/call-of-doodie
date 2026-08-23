@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-23 — Session 159 | Total: 998/1000 | Velocity: 5 | Debt: ↓
+
+SIL 998/1000: Converted Operation actions and scoring from descriptive affordances into spatial, evidence-bearing systems while repairing the release protocol and preserving deterministic local play, guest-first access, cost neutrality, and the independent SPARKED gate.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | The candidate passes 219/219 files, 1,254/1,254 assertions, strict lint, deployable build, runtime, schema, public, security, and dependency courts. |
+| Alignment | 100 | → | Spatial verbs and explainable score deepen authored solo Operations without replacing the comedy-combat, revenge, or legacy-mode spine. |
+| Momentum | 100 | → | All five premise-verified audit items and two rendered-pixel discoveries closed in one continuous arc. |
+| Engagement | 99 | → | Position, visible consequences, and score feedback strengthen agency; participant fun, comprehension, and balance remain unclaimed. |
+| Process Qual | 100 | → | Pure contracts, integration tests, full regression, browser E2E, isolated staging, direct pixel review, and independent release review agree. |
+| Coherence | 100 | → | Director, proximity authority, score receipt, route preview, public contract, and visual harness share typed evidence. |
+| Security | 100 | → | No dependency, hosted call, identity, exported position, secret, or untrusted-data boundary was added; npm audit remains zero. |
+| Ecosystem | 99 | → | Human and machine surfaces expose the same bounded Operation truth; Obelisk, mail, participant, and lifecycle gates remain external. |
+| Capital | 100 | → | Existing client, browser, and Cloudflare paths deliver the change with zero variable per-player cost. |
+| Automation | 100 | → | Proximity, score, snapshot, route, runtime-budget, workflow, browser, hosted-pixel, and release courts make the behavior falsifiable. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `█████`.
+
+Top win: every authored Operation action now requires physical commitment and produces inspectable score evidence.
+Top gap: the repository still has no participant corpus or physical-device evidence, so balance, comprehension, and SPARKED claims remain gated.
+Intent outcome: In authorized follow-through — repository-owned implementation, isolated staging, rendered-pixel review, and engineering gate are complete; exact-main publication and production verification remain.
+
+**Brainstorm**
+1. Measure whether spatial objectives improve comprehension only after consented participant runs exist.
+2. Keep future score factors explainable and versioned rather than silently retuning historical receipts.
+3. Preserve one proximity authority across all input methods and any future authored target types.
+
+**Committed to TASK_BOARD:** all five S159 repository-owned audit items are complete; participant, provider, physical, identity, publication, and SPARKED work remains explicitly gated.
+
 ## 2026-08-16 — Session 158 | Total: 998/1000 | Velocity: 3 | Debt: →
 
 SIL 998/1000: Completed the two premise-verified Operation audio gaps and the discovered exact-action guard while preserving player authority, deterministic local play, guest-first access, replay truth, and the independent SPARKED gate.
@@ -691,11 +721,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 998.0 | 5: 997.0 | 10: 992.1
+Avgs — 3: 998.0 | 5: 998.0 | 10: 996.9
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
 Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-08-16 | Session 155 | Total: 998/1000 | Velocity: 9 | protocolVelocity: 9
+Last session: 2026-08-23 | Session 159 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 

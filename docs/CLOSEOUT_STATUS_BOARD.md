@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-17 (Session 158 closeout) -->
+<!-- generated-at: 2026-08-23 (Session 159 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S158 ════════════════════╗
-║  Date: 2026-08-17  ·  SIL: 998/1000  ·  Velocity: 3 flat         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S159 ════════════════════╗
+║  Date: 2026-08-23  ·  SIL: 998/1000  ·  Velocity: 5 down         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: a pure seven-verb Operation audio director maps the  ║
-║  ✓ Feedback: exact accepted objectives emit distinct procedural  ║
-║  ✓ Validation: full Vitest passes 215/215 files and 1,229/1,229  ║
-║  ✓ Staging: `https://session-158-staging.call-of-doodie.pages.d  ║
-║  ✓ Pixels: the hosted broad matrix passes 1,020/1,020 and focus  ║
+║  ✓ Shipped: proximity-authoritative Operation interactions acro  ║
+║  ✓ Score: `operation-score-v2` turns the live mission snapshot   ║
+║  ✓ Director and route truth: health, damage, objective, route,   ║
+║  ✓ Architecture: the new Operation authority boundary is a 10,8  ║
+║  ✓ Validation: full Vitest passes 219/219 files and 1,254/1,254  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -35,29 +35,29 @@
 ║  ✓ logs/WORK_LOG.md                                              ║
 ║  ✓ context/DECISIONS.md                                          ║
 ║  ✓ context/SELF_IMPROVEMENT_LOOP.md                              ║
-║  ✓ docs/CREATIVE_DIRECTION_RECORD.md                             ║
+║  · docs/CREATIVE_DIRECTION_RECORD.md                             ║
 ║  ✓ context/TRUTH_AUDIT.md                                        ║
 ║  ✓ context/PROJECT_STATUS.json                                   ║
-║  ✓ agent memory (Claude/Codex project memory)                    ║
+║  · agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 0 files  ·  M:0 A:0 D:0 ?:0                            ║
-║  Ahead: 0  ·  Behind: 0                                          ║
+║  Changes: 46 files  ·  M:39 A:0 D:0 ?:7                          ║
+║  Ahead: 2  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ DEPLOYMENT ══════════════════════════════════════════════════╗
-║  Staging:  https://session-158-staging.call-of-doodie.pages.dev  ║
+║  Staging:  https://session-159-staging.call-of-doodie.pages.dev  ║
 ║  Live:     https://callofdoodie.wtf/  ·  preview/FORGE (not yet  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        141/185                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1229/1229                                        ║
+║  Tests:         1254/1254                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         1d ago                                           ║
+║  IGNIS:         0d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  1d ago                                           ║
-║  shells:        1 started · 1 closed · 0 running                 ║
+║  Sanitization:  0d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

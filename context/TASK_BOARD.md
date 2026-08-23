@@ -2,6 +2,16 @@
 
 Public-safe launch roadmap summary.
 
+## Session 159 - Spatial Operations and evidence-bearing score
+
+- [x] [SIL:3] **DONE S159** Operation interactions require the player to be in range of the exact live authored target; keyboard, controller, and touch share reason-coded acceptance while stale, mismatched, remote, and duplicate attempts remain inert.
+- [x] [SIL:3] **DONE S159** `operation-score-v2` computes and displays objective, interaction, tempo, pressure, extraction, and route evidence from the real mission snapshot without claiming server authority.
+- [x] [SIL:2] **DONE S159** The Mission Director receives live health, damage, objective, route, build, and timing signals, and route choices preview their typed next-mission consequences.
+- [x] [SIL:2] **DONE S159** Protocol/release truth is repaired: Node 22 CI, full-history deploy checkouts, bounded writeback classification, audit/brief rendering, and regression courts pass.
+- [x] [SIL:2] **DONE S159** Full Vitest passes 219/219 files and 1,254/1,254 assertions; strict release/security/build courts, browser E2E 19 pass/1 intentional skip, isolated staging, 1,020/1,020 broad pixels, 48/48 focused Operation pixels, 36/36 completion pixels, and 30 directly reviewed captures pass.
+
+**Runway exception:** participant fun/balance conclusions, physical-device proof, provider/mail/identity evidence, publication, and SPARKED promotion remain independently gated. The local score is advisory and no realtime/server authority is claimed.
+
 ## Session 158 - Preference-safe Operation audio direction
 
 - [x] [SIL:3] **DONE S158** All seven Operation verbs share one pure audio-director contract; the default Action score adapts by encounter while explicit Chill, Intense, Retro, and Spooky choices remain authoritative and BOSS stays on the existing boss runtime.

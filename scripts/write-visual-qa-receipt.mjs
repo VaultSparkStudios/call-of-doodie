@@ -8,7 +8,7 @@ import { selectRepresentativeCaptures } from "./lib/visual-qa-receipt.mjs";
 
 const root = process.cwd();
 if (process.argv.includes("--help")) {
-  console.log("Usage: node scripts/write-visual-qa-receipt.mjs [--audit-dir <matrix-directory>]");
+  console.log("Usage: node scripts/write-visual-qa-receipt.mjs [--audit-dir <matrix-directory>] [--since <session-base-ref>]");
   process.exit(0);
 }
 const valueAfter = (name, fallback) => {
@@ -160,15 +160,25 @@ const captures = selected.map((entry) => {
   };
 });
 
-const git = spawnSync("git", ["diff", "--binary", "HEAD", "--", "src", "public", "vite.config.js"], {
+const uiBaseRef = valueAfter("--since", null);
+const committedGit = uiBaseRef
+  ? spawnSync("git", ["diff", "--binary", `${uiBaseRef}..HEAD`, "--", "src", "public", "vite.config.js"], {
+    cwd: root, encoding: "utf8", windowsHide: true,
+  })
+  : { status: 0, stdout: "", stderr: "" };
+const workingGit = spawnSync("git", ["diff", "--binary", "HEAD", "--", "src", "public", "vite.config.js"], {
   cwd: root, encoding: "utf8", windowsHide: true,
 });
-if (git.status !== 0) throw new Error(git.stderr || "Unable to hash the UI working tree.");
+if (committedGit.status !== 0) throw new Error(committedGit.stderr || "Unable to hash the committed UI range.");
+if (workingGit.status !== 0) throw new Error(workingGit.stderr || "Unable to hash the UI working tree.");
+const uiEvidence = `${committedGit.stdout}\n--working-tree--\n${workingGit.stdout}`;
 const receipt = {
   schemaVersion: 1,
   capturedAt: audit.generatedAt,
   stagingUrl: audit.baseUrl,
-  workingTreeUiSha256: crypto.createHash("sha256").update(git.stdout).digest("hex"),
+  uiBaseRef,
+  uiHeadRef: "HEAD",
+  workingTreeUiSha256: crypto.createHash("sha256").update(uiEvidence).digest("hex"),
   sourceMatrix: {
     receipt: path.relative(root, auditPath).replaceAll("\\", "/"),
     sha256: sha256(auditPath),

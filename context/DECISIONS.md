@@ -1241,3 +1241,18 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Invariant:** Legacy modes never call the Operation director. Objective sounds use the sound-effects bus and mute controls. A success motif, announcement, arena effect, or transition may occur only after exact action evidence is accepted; wrong, malformed, or duplicate actions remain inert.
 
 **Canon posture:** The S158 conformance run has no ABSOLUTE gap. CANON-045's STRONG checker still emits a parse/error detail without producing an aggregate gap; CANON-055 became conformed after exact production follow-through. Neither condition is overstated.
+## 2026-08-23 — Session 159 — Authored Operation verbs require spatial evidence
+
+**Decision:** Accept an Operation interaction only when it targets the current encounter's exact live object and the player's current collision-aware distance is within the authored interaction radius. Keyboard, controller, and touch use the same pure authority and rejection vocabulary.
+
+**Why:** A named BREACH, HOLD, ESCORT, HUNT, SABOTAGE, or ESCAPE action is gameplay only if position matters. Remote button presses made the mission layer descriptive and allowed the most important authored verbs to bypass the arena.
+
+**Boundaries:** The authority is deterministic and local, adds no location export or server claim, retains every legacy-mode input path, and counts accepted evidence once. The player's collision radius is part of reachable distance so wall-mounted targets cannot become geometrically impossible.
+
+## 2026-08-23 — Session 159 — Operation score is explainable local evidence
+
+**Decision:** Version the Operation receipt as `operation-score-v2` and derive its total from explicit objective, interaction, tempo, pressure, extraction, and route components captured from the live mission snapshot. Surface the breakdown to the player and retain v1 readability, but aggregate v2 only with other v2 receipts.
+
+**Why:** A predetermined score cannot teach, validate mastery, or support honest comparison. A bounded breakdown connects authored play to the revenge loop while remaining auditable and backwards-compatible.
+
+**Boundaries:** The score is local and advisory, never server-authoritative or leaderboard-compatible. No participant balance or fun claim follows from the formula; weights remain stable until real evidence supports tuning.
