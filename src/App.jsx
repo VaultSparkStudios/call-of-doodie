@@ -4447,7 +4447,7 @@ export default function CallOfDoodie() {
       {/* Perk selection modal */}
       {perkPending && (
         <AsyncPanelBoundary>
-          <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} />
+          <PerkModal options={perkOptions} level={level} onSelect={applyPerk} buildArchetype={dominantArchetype} unlockedArchetypes={unlockedArchetypes} activePerks={activePerks} />
         </AsyncPanelBoundary>
       )}
 

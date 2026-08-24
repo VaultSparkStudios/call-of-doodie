@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { PERK_TIER_COLORS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
-import { getPerkArchetypeMatches } from "../utils/buildArchetypes.js";
+import { getPerkArchetypeMatches, getPerkArchetypeDelta } from "../utils/buildArchetypes.js";
 
-export default function PerkModal({ options, level, onSelect, buildArchetype, unlockedArchetypes = [] }) {
+export default function PerkModal({ options, level, onSelect, buildArchetype, unlockedArchetypes = [], activePerks = [] }) {
   const tierLabel = { common: "COMMON", uncommon: "UNCOMMON", rare: "RARE", legendary: "LEGENDARY", cursed: "⚠ CURSED" };
 
   // Gamepad nav: up/down through options, A to confirm
@@ -57,6 +57,7 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
             const isFocused  = focusIdx === i;
             const archetypeMatches = getPerkArchetypeMatches(perk);
             const favoredMatch = buildArchetype ? archetypeMatches.find(match => match.id === buildArchetype.id) : null;
+            const doctrineDelta = !isCursed ? getPerkArchetypeDelta(perk, activePerks) : null;
             const baseBg     = isCursed ? "rgba(255,30,60,0.08)"  : "rgba(255,255,255,0.05)";
             const focusBg    = isCursed ? "rgba(255,30,60,0.22)"  : "rgba(255,255,255,0.14)";
             return (
@@ -95,6 +96,17 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
                           {match.emoji} {favoredMatch?.id === match.id ? "FITS BUILD" : match.name.toUpperCase()}
                         </span>
                       ))}
+                    </div>
+                  )}
+                  {doctrineDelta && (
+                    <div
+                      aria-label={doctrineDelta.isMilestoneCrossed ? `${doctrineDelta.name}: ${doctrineDelta.milestoneLabel}` : `${doctrineDelta.name}: ${doctrineDelta.countAfter} of ${doctrineDelta.nextMilestoneAt ?? doctrineDelta.countAfter}`}
+                      style={{ marginTop: 6, display: "inline-flex", alignItems: "center", gap: 4, fontSize: 9, fontWeight: 900, letterSpacing: 0.6, color: doctrineDelta.isMilestoneCrossed ? "#FFF" : doctrineDelta.color, background: doctrineDelta.isMilestoneCrossed ? `${doctrineDelta.color}44` : `${doctrineDelta.color}18`, border: `1px solid ${doctrineDelta.color}${doctrineDelta.isMilestoneCrossed ? "99" : "44"}`, borderRadius: 4, padding: "2px 6px" }}
+                    >
+                      {doctrineDelta.emoji}
+                      {doctrineDelta.isMilestoneCrossed
+                        ? ` → ${doctrineDelta.milestoneLabel}!`
+                        : ` → ${doctrineDelta.countAfter}${doctrineDelta.nextMilestoneAt ? `/${doctrineDelta.nextMilestoneAt} ${doctrineDelta.nextMilestoneLabel}` : ""}`}
                     </div>
                   )}
                 </div>
