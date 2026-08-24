@@ -5,6 +5,7 @@ import {
   getNewlyUnlockedArchetypes,
   getPerkArchetypeMatches,
   getDoctrineMilestones,
+  getPerkArchetypeDelta,
 } from "./buildArchetypes.js";
 
 describe("build archetypes", () => {
@@ -75,5 +76,54 @@ describe("build archetypes", () => {
     const gs = progress.find(a => a.id === "gunslinger");
     expect(gs.statusLabel).toBe("DOCTRINE FORGED");
     expect(gs.doctrineForged).toBe(true);
+  });
+});
+
+describe("getPerkArchetypeDelta", () => {
+  test("returns null for a perk that belongs to no archetype", () => {
+    const delta = getPerkArchetypeDelta({ id: "not_real_perk" }, []);
+    expect(delta).toBeNull();
+  });
+
+  test("returns null for a null or empty perk", () => {
+    expect(getPerkArchetypeDelta(null, [])).toBeNull();
+    expect(getPerkArchetypeDelta({}, [])).toBeNull();
+  });
+
+  test("reports a milestone crossing when capstone threshold is reached", () => {
+    // vanguard unlockAt=3: two owned perks + one more = CAPSTONE ONLINE
+    const existing = [{ id: "iron_gut" }, { id: "vampire" }];
+    const candidate = { id: "bloodlust" };
+    const delta = getPerkArchetypeDelta(candidate, existing);
+    expect(delta).not.toBeNull();
+    expect(delta.archetypeId).toBe("vanguard");
+    expect(delta.isMilestoneCrossed).toBe(true);
+    expect(delta.milestoneLabel).toBe("CAPSTONE ONLINE");
+    expect(delta.countBefore).toBe(2);
+    expect(delta.countAfter).toBe(3);
+  });
+
+  test("reports a non-milestone count advance without crossing a boundary", () => {
+    // vanguard capstone already online (3 perks), adding a 4th before doctrineForgeAt=5
+    const existing = [{ id: "iron_gut" }, { id: "vampire" }, { id: "bloodlust" }];
+    const candidate = { id: "parkour_pro" };
+    const delta = getPerkArchetypeDelta(candidate, existing);
+    expect(delta).not.toBeNull();
+    expect(delta.archetypeId).toBe("vanguard");
+    expect(delta.isMilestoneCrossed).toBe(false);
+    expect(delta.milestoneLabel).toBeNull();
+    expect(delta.countBefore).toBe(3);
+    expect(delta.countAfter).toBe(4);
+  });
+
+  test("reports doctrine forge milestone when the threshold is hit exactly", () => {
+    // demolitionist doctrineForgeAt=4; unlockAt=3; give it 3 perks then add the 4th
+    const existing = [{ id: "grenadier" }, { id: "grenade_chain" }, { id: "pyromaniac" }];
+    const candidate = { id: "dead_mans_hand" };
+    const delta = getPerkArchetypeDelta(candidate, existing);
+    expect(delta).not.toBeNull();
+    expect(delta.archetypeId).toBe("demolitionist");
+    expect(delta.isMilestoneCrossed).toBe(true);
+    expect(delta.milestoneLabel).toBe("DOCTRINE FORGED");
   });
 });

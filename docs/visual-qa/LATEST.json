@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-23T06:56:23.091Z",
+  "capturedAt": "2026-08-24T11:40:00.000Z",
   "stagingUrl": "https://session-159-staging.call-of-doodie.pages.dev",
   "uiBaseRef": "72ef510",
-  "uiHeadRef": "HEAD",
+  "uiHeadRef": "d6adc00",
   "workingTreeUiSha256": "5a76c733db1436aa36bbdd649d62466a9e830fec1bbbbdde2346be80f07aacd9",
   "sourceMatrix": {
     "receipt": "output/playwright/session-159-staging-visuals/visual-audit-receipt.json",
@@ -15,7 +15,15 @@
       "failures": []
     }
   },
-  "touchedState": null,
+  "touchedState": {
+    "surface": "PerkModal doctrine delta badge (S160 feat/perk-doctrine-delta-preview)",
+    "note": "PerkModal is only reachable via in-game level-up event; no URL param or harness shortcut exists. Hash-bound screenshots require a human QA pass with a live run on the staging URL above. Verify: badge legibility at 390px and 1440px in both themes, no card overflow, milestone-crossing high-contrast style, count-advance muted style.",
+    "checks": {
+      "pass": false,
+      "humanQARequired": true,
+      "failures": ["Automated screenshot not feasible for in-game modal — requires physical gameplay to reach level-up state"]
+    }
+  },
   "additionalTouchedStates": [
     {
       "surface": "Operation command deck and live arena interaction",
@@ -380,12 +388,13 @@
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
       "The hosted authored Operation deck and live arena interaction passed 48/48 focused checks at 390px and 1440px in both project themes.",
+      "S160 added PerkModal doctrine delta badge (feat/perk-doctrine-delta-preview). The PerkModal is only reachable via an in-game level-up event; no static URL or harness shortcut exists to force-show it. Hash-bound captures require a human QA pass: play a run on staging, trigger a level-up, and verify badge legibility at 390px and 1440px in both themes with no card overflow."
       "The Operation completion receipt and expanded opt-in paired playtest command post passed 36/36 focused checks at 390px and 1440px in both project themes."
     ],
     "fixesApplied": [
       "Direct pixel review found and fixed unreachable wall-mounted targets by including the player's collision radius, then fixed route-card overlap and mid-word wrapping by stacking readable route bargains; recaptured hosted mobile and desktop states in both themes with no blocking defect."
     ],
-    "blockingDefectsOpen": 0,
+    "blockingDefectsOpen": 1,
     "subjectiveVisualReviewClaimed": true,
     "subjectiveVisualReviewStatus": "completed"
   }

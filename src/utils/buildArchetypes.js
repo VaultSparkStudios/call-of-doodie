@@ -152,6 +152,53 @@ export function getPerkArchetypeMatches(perk) {
   return BUILD_ARCHETYPES.filter(archetype => archetype.perkIds.includes(perk.id));
 }
 
+/**
+ * Returns the most significant archetype progression delta that would result
+ * from adding candidatePerk to activePerks. Returns null if the perk is
+ * already owned, belongs to no archetype, or produces no count change.
+ *
+ * isMilestoneCrossed=true: a status label boundary was crossed (FORMING,
+ * CAPSTONE ONLINE, DOCTRINE FORGED, MASTERED).
+ * milestoneLabel: the new statusLabel when crossed, null otherwise.
+ */
+export function getPerkArchetypeDelta(candidatePerk, activePerks = []) {
+  if (!candidatePerk?.id) return null;
+  const perkArchetypes = getPerkArchetypeMatches(candidatePerk);
+  if (!perkArchetypes.length) return null;
+
+  const before = getArchetypeProgress(activePerks);
+  const after = getArchetypeProgress([...activePerks, candidatePerk]);
+
+  let bestDelta = null;
+
+  for (const perkArch of perkArchetypes) {
+    const beforeArch = before.find((a) => a.id === perkArch.id);
+    const afterArch = after.find((a) => a.id === perkArch.id);
+    if (!beforeArch || !afterArch) continue;
+    if (afterArch.count === beforeArch.count) continue;
+
+    const isMilestoneCrossed = afterArch.statusLabel !== beforeArch.statusLabel;
+    const delta = {
+      archetypeId: afterArch.id,
+      emoji: afterArch.emoji,
+      color: afterArch.color,
+      name: afterArch.name,
+      countBefore: beforeArch.count,
+      countAfter: afterArch.count,
+      nextMilestoneAt: afterArch.nextMilestoneAt,
+      nextMilestoneLabel: afterArch.nextMilestoneLabel,
+      isMilestoneCrossed,
+      milestoneLabel: isMilestoneCrossed ? afterArch.statusLabel : null,
+    };
+
+    if (!bestDelta || (isMilestoneCrossed && !bestDelta.isMilestoneCrossed)) {
+      bestDelta = delta;
+    }
+  }
+
+  return bestDelta;
+}
+
 export function getShopRecommendation(archetypeId, optionId, currentWeapon) {
   switch (archetypeId) {
     case "vanguard":
