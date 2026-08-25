@@ -25,7 +25,9 @@ Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `████�
 
 Top win: zoom no longer moves threat guidance out from under the player, and perk cards expose the doctrine boundary they will cross before the choice is irreversible.
 Top gap: real participants have not yet established whether threat density, doctrine pacing, or Operation breadth needs tuning.
-Intent outcome: Achieved through implementation, isolated staging, rendered-pixel review, and engineering release gating; exact-main production follow-through remains active.
+Intent outcome: Achieved — implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, exact-source continuous integration, production deployment, and live verification are complete; SPARKED remains independently gated.
+
+Production follow-through: source `6cc76130d23fbd5b80bfd408029e007fd92b4000` passed workflow `32894266704`, published immutable `39696138`, and passed exact immutable/custom health, shell 7/7 on both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and Studio launch surfaces.
 
 **Brainstorm**
 1. Measure compass group comprehension only after consented participant runs exist; keep the eight-sector cap until evidence supports a change.

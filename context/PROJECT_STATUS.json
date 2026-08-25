@@ -4,9 +4,16 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 161 makes off-screen threat direction player-relative under zoom, previews prospective perk doctrine milestones, and synchronizes Standard/Operation Game Loop truth with complete staging and rendered-pixel evidence.",
-  "nextMilestone": "Publish the authorized S161 candidate directly to main, verify exact-source continuous integration and Cloudflare production, then preserve FORGE while collecting independently gated participant and lifecycle evidence.",
+  "currentFocus": "Session 161 is exact-main published and production-verified: player-relative zoom-safe threats, prospective perk doctrine milestones, and synchronized Standard/Operation Game Loop truth are live at source 6cc7613.",
+  "nextMilestone": "Preserve the deterministic threat/doctrine authorities and collect independently gated participant, physical-device, provider/mail, observability, identity, publication, and SPARKED evidence.",
   "testingSurfaces": [
+    {
+      "session": 161,
+      "status": "green",
+      "url": "https://39696138.call-of-doodie.pages.dev/",
+      "type": "production-verifier",
+      "command": "source 6cc76130d23f · workflow 32894266704 · Linux lint and 1267 assertions · build/deploy green · immutable/custom exact health and shell 7/7 each · cutover 5/5 · backend 5/5 · replay 3/3 · leaderboard isolation and Studio launch surfaces pass"
+    },
     {
       "session": 161,
       "status": "green",
@@ -657,7 +664,7 @@
     "total": 203,
     "score": 74
   },
-  "lastSessionSummary": "Session 161 implemented a player-relative zoom-safe threat compass, prospective perk doctrine milestone previews, and synchronized Standard/Operation Game Loop truth; 220 files / 1267 assertions, serial browser 19/1 skip, staging 7/7, hosted pixels 1020/1020 plus focused 96/96, and engineering release gates pass while SPARKED remains independently gated.",
+  "lastSessionSummary": "Session 161 implemented a player-relative zoom-safe threat compass, prospective perk doctrine milestone previews, and synchronized Standard/Operation Game Loop truth; source 6cc7613 passes workflow 32894266704 and immutable/custom production verification while SPARKED remains independently gated.",
   "testsAssertionsPassing": 1267,
   "testsAssertionsTotal": 1267,
   "testsAssertionsFiles": 220,

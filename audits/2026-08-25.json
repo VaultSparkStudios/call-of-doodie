@@ -4,7 +4,7 @@
   "session": 161,
   "project": "Call-Of-Doodie",
   "intent": "complete one continuous arc through fresh game-loop review, premise-verified audit, all repository-owned implementation, isolated staging, rendered-pixel review, closeout, direct-main publication, and exact production verification",
-  "outcome": "implemented-staged-release-follow-through-active",
+  "outcome": "achieved-and-production-verified",
   "shipped": [
     "player-relative zoom-aware screen-space threat compass with bounded grouping and priority",
     "prospective perk doctrine counts and authored milestone crossings",
@@ -21,7 +21,9 @@
     "hosted route/theme/viewport matrix 1020/1020 and focused before-after matrix 96/96",
     "14 hash-bound captures directly reviewed across both themes and complementary mobile/desktop widths with zero blocking defects",
     "branding compliance, footer 18/18, mobile-parity attestation, Cloudflare deploy readiness, rollback, and cost-neutral release ALLOW",
-    "engineering FORGE release gate GO; SPARKED independently NO-GO"
+    "engineering FORGE release gate GO; SPARKED independently NO-GO",
+    "source 6cc76130d23f passed workflow 32894266704 with Linux lint, 1267 assertions, build, and Cloudflare deploy",
+    "immutable production 39696138 and the custom domain report exact health; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces pass"
   ],
   "deferred": [
     "participant fun, comprehension, retention, and balance conclusions",

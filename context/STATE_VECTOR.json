@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-25",
-  "generatedAtMs": 1787688181800,
+  "generatedAtMs": 1787689224387,
   "session": 161,
-  "vectorHash": "4ecc74c6aa1d7288",
+  "vectorHash": "5810790a5f18955c",
   "silTotal": 998,
   "silAvg3": 998,
   "velocity": 5,
@@ -24,7 +24,7 @@
     "[SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — th"
   ],
   "health": "green",
-  "truthStatus": "all three S161 repository-owned audit items are implemented and staged with direct pixel proof; direct-main production follow-through is active. SPARKED remains NO-GO.",
+  "truthStatus": "all three S161 repository-owned audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 43723,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish the authorized S161 candidate directly to main, verify exact-source continuous integration and Cloudflare production, then preserve FORGE while collecting independently gated participant and lifecycle evidence.",
-  "currentFocus": "Session 161 makes off-screen threat direction player-relative under zoom, previews prospective perk doctrine milestones, and synchronizes Standard/Operation Game Loop truth with complete staging and rendered-pixel evidence.",
+  "nextMilestone": "Preserve the deterministic threat/doctrine authorities and collect independently gated participant, physical-device, provider/mail, observability, identity, publication, and SPARKED evidence.",
+  "currentFocus": "Session 161 is exact-main published and production-verified: player-relative zoom-safe threats, prospective perk doctrine milestones, and synchronized Standard/Operation Game Loop truth are live at source 6cc7613.",
   "lastShipped": "a player-relative, zoom-aware, bounded eight-sector threat compass rendered in authoritative screen space with boss/elite priority and Fog-of-War suppression.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

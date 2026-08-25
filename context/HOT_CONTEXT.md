@@ -11,6 +11,7 @@
 - Validation truth — full Vitest passes 220/220 files and 1,267/1,267 assertions; strict lint, deployable build, schema, public contract, dependency/runtime/assets/media/security, npm audit zero, supply-chain, and protocol courts pass. Browser E2E passes 19 with one intentional mobile Scenario Cartridge skip when run serially; the eight-worker diagnostic exposed host-timing saturation and is not represented as the authoritative result.
 - Visual truth — staging `https://session-161-staging.call-of-doodie.pages.dev/` (immutable `https://36b0643f.call-of-doodie.pages.dev/`) passes 7/7 live checks, the hosted route/theme/viewport matrix 1,020/1,020, and the focused before/after matrix 96/96. Fourteen hash-bound captures received direct review with zero blocking defects.
 - Release truth — branding, proprietary/public contract, footer 18/18, Cloudflare credential readiness, cost-neutral ALLOW, mobile-parity attestation, rollback, secrets scan, and founder authorization pass. Engineering FORGE is GO; SPARKED remains NO-GO.
+- Production truth — exact source `6cc76130d23fbd5b80bfd408029e007fd92b4000` passed GitHub Actions workflow `32894266704` with Linux lint, all 1,267 assertions, build, and Cloudflare deploy. Immutable `https://39696138.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` report deploy `6cc76130d23f` and pass 7/7 live checks each; cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and Studio launch surfaces pass.
 
 ## Open Work
 
@@ -94,7 +95,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 203,556 bytes · SHA-256 `eb4958057b69…`
+- `context/CURRENT_STATE.md` · 204,000 bytes · SHA-256 `b49af9f9aaaa…`
 - `context/TASK_BOARD.md` · 130,389 bytes · SHA-256 `c35acb8b4abf…`
 - `context/DECISIONS.md` · 129,983 bytes · SHA-256 `06dea5bbaff5…`
-- `docs/AUDIT_2026-08-25.json` · 6,883 bytes · SHA-256 `ab3c3562b6b6…`
+- `docs/AUDIT_2026-08-25.json` · 7,180 bytes · SHA-256 `73b6126e110f…`

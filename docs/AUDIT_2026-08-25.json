@@ -108,6 +108,11 @@
       "court": "rendered-pixel-and-staging",
       "result": "pass",
       "evidence": "Focused before/after matrix 96/96; hosted route/theme/viewport matrix 1020/1020; staging alias and immutable deployment each pass 7/7 live checks; CANON-053 passes with 14 hash-bound captures."
+    },
+    {
+      "court": "production",
+      "result": "pass",
+      "evidence": "Source 6cc76130d23f passed workflow 32894266704 and deployed as immutable 39696138; immutable/custom shell 7/7 each, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and Studio launch surfaces pass."
     }
   ]
 }

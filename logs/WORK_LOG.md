@@ -12,8 +12,10 @@
 - Passed strict lint, deployable build, schema/public/security/dependency/runtime/assets/media/protocol, npm audit zero, supply-chain, branding, footer 18/18, cost, mobile-parity, rollback, and working-tree secret gates.
 - The eight-worker browser diagnostic produced seven timing failures under shared-host saturation; authoritative serial execution passed 19 with one intentional mobile Scenario Cartridge skip. No parallel result was relabelled green.
 - Reviewed the Creative Direction Record and found no new creative direction. The founder's request authorizes the execution/release path but does not change the game's SOUL or SPARKED evidence boundary.
+- Published exact implementation source `6cc76130d23fbd5b80bfd408029e007fd92b4000` directly to `main`. GitHub Actions workflow `32894266704` passed Linux lint, all 1,267 assertions, build, and Cloudflare deployment.
+- Verified immutable production `https://39696138.call-of-doodie.pages.dev/` and `https://callofdoodie.wtf/` at exact deploy `6cc76130d23f`: shell 7/7 each, cutover 5/5, backend 5/5, replay 3/3, shared-leaderboard isolation, and Studio launch surfaces pass.
 
-Intent outcome: achieved through implementation, staging, rendered-pixel review, and release gating; direct-main continuous integration, production deployment, and exact live verification remain the active follow-through.
+Intent outcome: achieved through implementation, staging, rendered-pixel review, canonical closeout, direct-main publication, exact-source continuous integration, production deployment, and live verification. SPARKED remains independently NO-GO.
 
 ## 2026-08-25 (Session 160 — post-S159 release-evidence recovery)
 

@@ -9,8 +9,9 @@
 - Visual truth — stable staging `session-161-staging` and immutable `36b0643f` pass 7/7 live checks; hosted pixels pass 1,020/1,020 and focused before/after pixels pass 96/96. Fourteen hash-bound captures were directly reviewed with zero blockers.
 - Release truth — branding, footer 18/18, public/legal contract, mobile parity, Cloudflare credential readiness, cost-neutral ALLOW, rollback, working-tree secrets, supply-chain, and founder authorization pass. Engineering FORGE is GO; SPARKED is NO-GO.
 - Protocol truth — the propagated closeout checklist and IGNIS touched-rescore executables are absent locally; the full canonical protocol is the fallback and the ownership defect is routed through Ark rather than hidden or repaired in a sibling repository.
+- Production truth — source `6cc76130d23fbd5b80bfd408029e007fd92b4000` passed workflow `32894266704` and published immutable `39696138`. Immutable and canonical health report `6cc76130d23f`; shell 7/7 on both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and Studio launch surfaces pass.
 
-Overall status: all three S161 repository-owned audit items are implemented and staged with direct pixel proof; direct-main production follow-through is active. SPARKED remains NO-GO.
+Overall status: all three S161 repository-owned audit items are implemented, exact-main published, and production-verified. SPARKED remains NO-GO.
 Last reviewed: 2026-08-25
 
 ## 2026-08-25 — Session 160 — Propagation and production-evidence recovery

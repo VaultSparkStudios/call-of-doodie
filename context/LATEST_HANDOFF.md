@@ -11,14 +11,14 @@ Session Intent: Run one complete `/arc` from the synchronized S160 recovery chec
 - Staging: `https://session-161-staging.call-of-doodie.pages.dev/` and immutable `https://36b0643f.call-of-doodie.pages.dev/` pass 7/7 live checks; broad pixels pass 1,020/1,020 and focused before/after pixels pass 96/96.
 - Pixels: 14 hash-bound captures across both themes and complementary mobile/desktop widths received direct review; the old ADS-transformed marker disappears while the new compass stays edge-anchored, and doctrine deltas remain readable without mobile clipping.
 - Release: engineering FORGE GO; branding, footer 18/18, cost-neutrality, deploy credentials, rollback, mobile parity, and secret/supply-chain gates pass. SPARKED remains NO-GO behind its independent external evidence.
-- Deploy: pending automatic production deployment from the authorized direct-main closeout push; exact workflow/SHA/immutable verification will be appended before the mission is declared complete.
+- Deploy: exact source `6cc76130d23fbd5b80bfd408029e007fd92b4000` passed workflow `32894266704` and published immutable `https://39696138.call-of-doodie.pages.dev/`. Immutable and custom health report `6cc76130d23f`; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and Studio launch surfaces pass.
 - Next: preserve deterministic player agency and collect consented participant evidence before tuning threat density, doctrine balance, or Operation breadth.
 
 ## Impact Summary
 
 **Headline.** The game now keeps danger readable under zoom and tells players what doctrine a perk will actually create before they commit.
 
-**Evidence.** Three audit items; 220 files / 1,267 assertions; browser 19 pass / one intentional skip; staging 7/7; 1,020/1,020 broad and 96/96 focused pixels; 14 directly reviewed captures; zero new dependencies, hosted calls, identity surfaces, or variable-cost services.
+**Evidence.** Three audit items; 220 files / 1,267 assertions; browser 19 pass / one intentional skip; staging 7/7; 1,020/1,020 broad and 96/96 focused pixels; 14 directly reviewed captures; workflow `32894266704`; immutable production `39696138`; exact health `6cc76130d23f`; zero new dependencies, hosted calls, identity surfaces, or variable-cost services.
 
 ---
 

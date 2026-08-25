@@ -21,7 +21,7 @@ Headline: Danger stays readable under zoom, and perk choices now reveal the doct
 
 - Collect consented participant evidence before tuning compass density or doctrine pacing.
 - Keep future threat and archetype surfaces on the shared pure authorities.
-- Complete exact-main continuous integration, production deployment, and custom-domain verification.
+- Preserve the exact-source release receipt while independently collecting the evidence required for SPARKED.
 
 ## Blockers
 

@@ -23,6 +23,13 @@
 
 The staging artifact was built from this exact working tree with the same `build:deployable` path, Cloudflare Pages project, Functions bundle, `_headers`, public route graph, and environment contract used by the production workflow. The alias and immutable origin return the same typed health and asset contract.
 
+## Production verification
+
+- Exact implementation source: `6cc76130d23fbd5b80bfd408029e007fd92b4000`, synchronized to `origin/main`.
+- GitHub Actions workflow `32894266704` passed Linux lint, 220/220 files and 1,267/1,267 assertions, build, and Cloudflare deployment.
+- Immutable production: `https://39696138.call-of-doodie.pages.dev/`; canonical production: `https://callofdoodie.wtf/`. Both typed health endpoints report `6cc76130d23f`.
+- Live evidence: shell 7/7 on both origins, cutover 5/5, backend 5/5, replay trust 3/3, shared-leaderboard isolation, and Studio launch surfaces pass.
+
 ## SPARKED gates still open
 
 Current Core Web Vitals, physical PWA/controller/full-run media evidence, reply-as-domain Zoho evidence, project-scoped analytics/error-monitoring evidence, functioning Obelisk relying-party verification, participant fun/balance/comprehension evidence, publication evidence, and explicit SPARKED approval remain open. The engineering deployment does not satisfy or waive them.
