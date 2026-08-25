@@ -76,4 +76,24 @@ describe("getOffscreenThreatArrows", () => {
     );
     expect(arrows).toEqual([]);
   });
+
+  it("returns positions anchored within the canvas bounds (screen-space contract)", () => {
+    // Arrow positions are screen-space edge coordinates. drawGame.js renders them
+    // with ctx.setTransform(_dpr,0,0,_dpr,0,0) so ADS zoom and screen-shake never
+    // displace them from the actual canvas edge.
+    const margin = 18;
+    const arrows = getOffscreenThreatArrows([
+      { x: -100, y: 300 },
+      { x: 900, y: 300 },
+      { x: 400, y: -100 },
+      { x: 400, y: 700 },
+    ], W, H, { margin });
+    expect(arrows).toHaveLength(4);
+    for (const arrow of arrows) {
+      expect(arrow.x).toBeGreaterThanOrEqual(margin - 0.01);
+      expect(arrow.x).toBeLessThanOrEqual(W - margin + 0.01);
+      expect(arrow.y).toBeGreaterThanOrEqual(margin - 0.01);
+      expect(arrow.y).toBeLessThanOrEqual(H - margin + 0.01);
+    }
+  });
 });
