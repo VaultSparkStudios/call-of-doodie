@@ -1256,3 +1256,11 @@ CANON-054 gap justification: the checker emitted malformed evidence while the da
 **Why:** A predetermined score cannot teach, validate mastery, or support honest comparison. A bounded breakdown connects authored play to the revenge loop while remaining auditable and backwards-compatible.
 
 **Boundaries:** The score is local and advisory, never server-authoritative or leaderboard-compatible. No participant balance or fun claim follows from the formula; weights remain stable until real evidence supports tuning.
+
+## 2026-08-25 — Session 160 — Project runtime floors survive propagation
+
+**Decision:** Every propagated GitHub Actions workflow must honor the receiving repository's declared Node floor. A bounded project-local repair may restore an authorized exact release, but the canonical template and its regression court remain owned by `studio-ops` and must be corrected through Ark.
+
+**Why:** Propagation selected Node 20 for the brief validator while Call of Doodie declares Node 22. The application and all 1,255 assertions were healthy; only the runtime-floor contract failed. Repair source `f76850a` and run `32883766091` prove Node 22 restores the exact release path.
+
+**Boundaries:** Do not lower the repository runtime contract, retry a known-bad tree, edit a sibling repository directly, or reinterpret this infrastructure repair as gameplay or SPARKED progress.

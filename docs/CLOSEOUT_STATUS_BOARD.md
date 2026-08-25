@@ -1,20 +1,20 @@
 <!-- generated-by: scripts/render-closeout-board.mjs v1.1 -->
-<!-- generated-at: 2026-08-23 (Session 159 closeout) -->
+<!-- generated-at: 2026-08-25 (Session 160 closeout) -->
 
 # Closeout Status Board — Call-Of-Doodie
 
 ```
-╔══ SESSION CLOSEOUT · Call-Of-Doodie · S159 ════════════════════╗
-║  Date: 2026-08-23  ·  SIL: 998/1000  ·  Velocity: 5 down         ║
+╔══ SESSION CLOSEOUT · Call-Of-Doodie · S160 ════════════════════╗
+║  Date: 2026-08-25  ·  SIL: 998/1000  ·  Velocity: 3 down         ║
 ║  Mode: FOUNDER  ·  Agent: codex                                  ║
 ║  Live:  preview  →  https://callofdoodie.wtf/                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ WHAT SHIPPED ════════════════════════════════════════════════╗
-║  ✓ Shipped: proximity-authoritative Operation interactions acro  ║
-║  ✓ Score: `operation-score-v2` turns the live mission snapshot   ║
-║  ✓ Director and route truth: health, damage, objective, route,   ║
-║  ✓ Architecture: the new Operation authority boundary is a 10,8  ║
-║  ✓ Validation: full Vitest passes 219/219 files and 1,254/1,254  ║
+║  ✓ Recovery scope: no gameplay, dependency, account, cost, secr  ║
+║  ✓ CI: run `32883766091` passes 219/219 test files, 1,255/1,255  ║
+║  ✓ Production: immutable `https://950cc1ed.call-of-doodie.pages  ║
+║  ✓ Ownership: a signed Ark question with the failing/green run   ║
+║  ✓ Lifecycle: the game remains cost-neutral, deployed, FORGE, a  ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ SCORES · SIL 998/1000 ═══════════════════════════════════════╗
 ║    Dev Health         100  ██████████                            ║
@@ -41,7 +41,7 @@
 ║  ✓ agent memory (Claude/Codex project memory)                    ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ GIT STATUS ══════════════════════════════════════════════════╗
-║  Changes: 15 files  ·  M:15 A:0 D:0 ?:0                          ║
+║  Changes: 12 files  ·  M:11 A:0 D:0 ?:1                          ║
 ║  Ahead: 0  ·  Behind: 0                                          ║
 ║  Branch: main                                                    ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -52,12 +52,12 @@
 ╔══ POST-SESSION SIGNALS ════════════════════════════════════════╗
 ║  Doctor:        148/203                                          ║
 ║  Compliance:    —                                                ║
-║  Tests:         1254/1254                                        ║
+║  Tests:         1255/1255                                        ║
 ║  Validation:    full-fresh                                       ║
-║  IGNIS:         0d ago                                           ║
+║  IGNIS:         3d ago                                           ║
 ║  Truth:         engineering-ready-sparked-no-go                  ║
-║  Sanitization:  0d ago                                           ║
-║  shells:        11 started · 11 closed · 0 running               ║
+║  Sanitization:  3d ago                                           ║
+║  shells:        unknown · missing/stale enumeration              ║
 ╚════════════════════════════════════════════════════════════════╝
 ╔══ NEXT SESSION ════════════════════════════════════════════════╗
 ║  (no genius cache — run `node scripts/cache-genius-list.mjs`)    ║

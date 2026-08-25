@@ -1,5 +1,18 @@
 # Work Log
 
+## 2026-08-25 (Session 160 — post-S159 release-evidence recovery)
+
+- Classified the session as CUT OFF because three substantive commits landed after the S159 Self-Improvement Loop anchor while canonical write-back surfaces remained on S159.
+- Fast-forwarded local `main` to exact remote source `f76850a58ecb6a2a9e8c78fa5cd4c4c5c6b6c71e`; no reset, force-push, or unrelated branch integration was used.
+- Reconciled the propagated Session Protocol and agent-DNA schema updates plus the bounded brief-workflow Node 22 repair. No gameplay, dependency, account, secret, cost, or lifecycle code changed.
+- Recorded exact GitHub Actions run `32883766091`: 219/219 files and 1,255/1,255 assertions pass, followed by build and Cloudflare production deploy.
+- Independently verified immutable `https://950cc1ed.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` at 7/7 each, plus the five-surface post-cutover smoke at 5/5.
+- Queued a signed Ark `repo-question` to `studio-ops` requesting a canonical Node 22 propagation fix and a regression court; the public project did not directly mutate its sibling owner.
+- Reviewed the creative-direction ledger and found no new founder creative direction to record; the request authorized execution/release scope, not a change to the game's SOUL or product direction.
+- Preserved cost-neutral deployed FORGE/public-unlaunched truth and the independent SPARKED NO-GO.
+
+Intent outcome: achieved as a recovery-only checkpoint; fresh product work begins in Session 161 after the recovery commit is synchronized.
+
 ## 2026-08-16 (Session 157 — objective-authoritative Operations and evidence truth)
 
 - Ran the game-loop review and combined nine-axis audit against the shipped Operation foundation; promoted three premise-verified repository-owned gaps.

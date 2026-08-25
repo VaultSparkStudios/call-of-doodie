@@ -4,6 +4,38 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-25 — Session 160 | Total: 998/1000 | Velocity: 3 | Debt: ↓
+
+SIL 998/1000: Recovered the post-S159 propagation and exact deployment evidence, restored the project runtime floor, routed canonical ownership through Ark, and preserved product/lifecycle truth.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Exact run 32883766091 passes 219 files, 1,255 assertions, build, and deploy under the declared Node 22 floor. |
+| Alignment | 100 | → | Recovery changes no game behavior and preserves the authored Operation and revenge-loop direction. |
+| Momentum | 100 | → | Three stale post-closeout commits, live verification, and upstream ownership routing were reconciled in one bounded checkpoint. |
+| Engagement | 99 | → | No player-facing change is claimed; participant fun and comprehension remain evidence-gated. |
+| Process Qual | 100 | → | Git chronology, exact CI, immutable/custom live checks, cutover checks, and the append-only recovery boundary agree. |
+| Coherence | 100 | → | Repository runtime policy, workflow execution, release evidence, and ownership boundaries now tell one story. |
+| Security | 100 | → | No dependency, credential, identity, or data boundary changed; Ark carried only public-safe evidence. |
+| Ecosystem | 99 | → | The project repaired its exact release and routed the canonical propagation defect to its owning repository. |
+| Capital | 100 | → | Existing GitHub Actions and Cloudflare paths closed the gap with zero variable per-player cost. |
+| Automation | 100 | → | The runtime-floor contract, full CI corpus, dual-origin live court, cutover court, and write-back probe make the recovery falsifiable. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `█████`.
+
+Top win: exact production is green and the propagation regression is visible to its canonical owner.
+Top gap: provider, physical-device, identity, mail, participant, publication, and SPARKED evidence remain external and unfulfilled.
+Intent outcome: Achieved as a recovery-only checkpoint; no product or lifecycle advancement is claimed.
+
+Production follow-through: source `f76850a58ecb6a2a9e8c78fa5cd4c4c5c6b6c71e` passed workflow `32883766091`, published immutable `950cc1ed`, and passed immutable/custom shell 7/7 each plus cutover 5/5.
+
+**Brainstorm**
+1. Make propagated workflows derive and assert the receiving project's runtime floor.
+2. Preserve one recovery session per post-closeout evidence boundary instead of rewriting product history.
+3. Keep project-local emergency repairs small and route canonical ownership through Ark.
+
+**Committed to TASK_BOARD:** all three S160 recovery items are complete; fresh product work begins in S161.
+
 ## 2026-08-23 — Session 159 | Total: 998/1000 | Velocity: 5 | Debt: ↓
 
 SIL 998/1000: Converted Operation actions and scoring from descriptive affordances into spatial, evidence-bearing systems while repairing the release protocol and preserving deterministic local play, guest-first access, cost neutrality, and the independent SPARKED gate.

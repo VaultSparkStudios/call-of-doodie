@@ -2,6 +2,14 @@
 
 Public-safe launch roadmap summary.
 
+## Session 160 - Propagation and release-evidence recovery
+
+- [x] [SIL:1] **DONE S160** Reconciled the three substantive post-S159 commits into the canonical write-back ledger without reopening or relabelling Session 159.
+- [x] [SIL:1] **DONE S160** Restored the brief-format workflow to the repository's declared Node 22 floor; exact run `32883766091` passes 219/219 files, 1,255/1,255 assertions, build, and deploy at source `f76850a`.
+- [x] [SIL:1] **DONE S160** Verified immutable production `950cc1ed` and the canonical domain at 7/7 each plus 5/5 cutover surfaces; routed the canonical propagation repair to `studio-ops` through Ark.
+
+**Runway exception:** S160 is recovery-only and changes no game behavior or lifecycle state. Participant, physical-device, provider/mail/identity, publication, and SPARKED evidence remain independently gated.
+
 ## Session 159 - Spatial Operations and evidence-bearing score
 
 - [x] [SIL:3] **DONE S159** Operation interactions require the player to be in range of the exact live authored target; keyboard, controller, and touch share reason-coded acceptance while stale, mismatched, remote, and duplicate attempts remain inert.
@@ -102,9 +110,9 @@ Public-safe launch roadmap summary.
 - [x] Set `KOFI_VERIFICATION_TOKEN` as a Supabase function secret and paste the webhook URL into Ko-fi → More → Settings → API & Webhooks — secret set 2026-04-21 via `supabase secrets set`; webhook URL `https://fjnpzjjyhnpmunfoycrp.supabase.co/functions/v1/kofi-webhook` pasted into Ko-fi; end-to-end verified with a simulated POST returning `HTTP 200 {"ok":true,"supporterUpdated":true}` + audit row written + supporter flag flipped on `callsign_claims`
 - [x] Ko-fi webhook `callsign_claims.uid` NOT NULL gotcha — the Edge Function runs as service role where `auth.uid()` is NULL, so the upsert failed with a silent 500. Fixed 2026-04-21 via migration `2026-04-21_callsign_claims_uid_nullable.sql` (`ALTER TABLE callsign_claims ALTER COLUMN uid DROP NOT NULL;`). Supporters who tip before they log in are now recorded as `{ name, supporter: true, uid: NULL }`; `uid` fills in on first login
 
-## Current Session Intent: Session 157
+## Current Session Intent: Session 160 recovery → Session 161 product arc
 
-Complete one continuous autonomous `/arc` from synchronized main: premise-verified game-loop and nine-axis audit, make authored Operation objectives authoritative, persist bounded route consequences, bind paired feedback to real local run evidence, preserve every legacy mode and trust boundary, prove touched pixels on isolated staging, close out canonically, publish directly to `main`, and verify production. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
+First checkpoint the bounded post-S159 propagation/CI/deploy recovery. Then begin a fresh synchronized Session 161 `/arc`: premise-verified game-loop and nine-axis audit, implement every repository-owned item, prove player-facing changes on isolated staging with rendered pixels, release-gate independently, publish directly to `main`, and verify the exact production revision. Keep the project FORGE/public-unlaunched; SPARKED promotion is not implied.
 
 ## Session 152 — Closed-loop coaching and mastery command
 

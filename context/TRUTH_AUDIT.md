@@ -1,4 +1,16 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-25 — Session 160 — Propagation and production-evidence recovery
+
+- Chronology truth — three substantive commits postdated the S159 SIL anchor, so S160 records them as a separate recovery boundary instead of silently treating S159 as current.
+- Scope truth — the recovered delta is Studio protocol/schema propagation plus a Node 22 workflow repair; no gameplay, dependency, identity, secret, cost, or lifecycle behavior changed.
+- CI truth — exact source `f76850a58ecb6a2a9e8c78fa5cd4c4c5c6b6c71e` passed workflow `32883766091` with 219/219 files, 1,255/1,255 assertions, build, and deploy. The prior red run was isolated to Node 20 being below the repository floor.
+- Production truth — immutable `950cc1ed.call-of-doodie.pages.dev` and `callofdoodie.wtf` each pass 7/7 live checks; the apex/Pages/www/backup cutover court passes 5/5.
+- Ownership truth — the canonical workflow defect was routed to `studio-ops` via signed Ark cargo; no direct sibling-repository write was made.
+- Lifecycle truth — engineering FORGE remains deployed and public-unlaunched. SPARKED remains independently NO-GO.
+
+Overall status: S160 closes the post-S159 write-back gap and proves the latest production revision without claiming product progress or lifecycle promotion.
+Last reviewed: 2026-08-25
+
 ## 2026-08-23 — Session 159 — Spatial authority, score evidence, and staging truth
 
 - Interaction truth — the same pure proximity authority governs keyboard, controller, and touch. It requires the active encounter's exact target and live collision-aware distance; stale, mismatched, remote, and duplicate attempts remain inert.

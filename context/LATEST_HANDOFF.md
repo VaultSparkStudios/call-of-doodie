@@ -1,3 +1,24 @@
+# Latest Handoff — Session 160
+
+Session Intent: Recover the post-S159 propagation, continuous-integration repair, and exact deployment evidence into every canonical write-back surface; checkpoint recovery before beginning a fresh Session 161 product arc.
+
+## Where We Left Off (Session 160)
+
+- Recovery scope: no gameplay, dependency, account, cost, secret, or lifecycle behavior changed. S160 records the propagated protocol/schema commits and bounded workflow repair at source `f76850a58ecb6a2a9e8c78fa5cd4c4c5c6b6c71e`.
+- CI: run `32883766091` passes 219/219 test files, 1,255/1,255 assertions, build, and deploy under Node 22. The prior failure was only the propagated workflow selecting Node 20 below the project floor.
+- Production: immutable `https://950cc1ed.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` pass 7/7 live checks each; the five-surface cutover smoke passes 5/5.
+- Ownership: a signed Ark question with the failing/green run and repair evidence is queued to `studio-ops` so the canonical propagated workflow and its regression court can be root-fixed there.
+- Lifecycle: the game remains cost-neutral, deployed, FORGE, and public-unlaunched. SPARKED remains independently NO-GO.
+- Next: begin Session 161 from the committed recovery checkpoint, run the fresh game/product arc, stage and pixel-review any player-facing change, then release-gate, publish directly to `main`, and verify production.
+
+## Impact Summary
+
+**Headline.** The latest exact deployment is green and its post-closeout evidence is now reconciled without laundering a propagation regression or overstating product progress.
+
+**Evidence.** Source `f76850a`; workflow `32883766091`; 219 files / 1,255 assertions; immutable `950cc1ed` 7/7; canonical 7/7; cutover 5/5; Ark root-fix request queued; zero product-code or lifecycle change.
+
+---
+
 # Latest Handoff — Session 159
 
 Session Intent: Complete one continuous autonomous `/arc` from synchronized recovery through a premise-verified game-loop and nine-axis audit, all repository-owned implementation, isolated staging, rendered-pixel review, independent release gating, direct-main publication, and exact production verification under the founder's explicit authorization.
