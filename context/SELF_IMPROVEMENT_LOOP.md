@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-25 — Session 161 | Total: 998/1000 | Velocity: 3 | Debt: ↓
+
+SIL 998/1000: Made high-pressure direction authoritative under zoom and made doctrine consequences visible before commitment, while keeping the mature loop deterministic, guest-first, cost-neutral, and honestly separated from participant/SPARKED evidence.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full Vitest passes 220 files and 1,267 assertions; strict lint, deployable build, schema, public, security, dependency, runtime, and browser courts are green. |
+| Creative Alignment | 100 | → | Player-relative danger serves readable chaos; prospective doctrine receipts serve improvised doctrine without prescribing a build. |
+| Momentum | 100 | → | All three premise-verified audit items, focused pixels, staging, and the release gate closed in one continuous arc. |
+| Engagement | 99 | → | Threat clarity and meaningful perk consequences strengthen moment-to-moment agency, but no participant fun, balance, or retention outcome is claimed. |
+| Process Quality | 100 | → | Pure contracts, focused tests, full regression, serial browser proof, isolated staging, direct pixel review, and explicit diagnostic failures agree. |
+| Cross-Repo Coherence | 100 | → | Public/protocol loop sources, release receipts, mobile attestation, and Studio gates share the same bounded claims; no sibling file was edited. |
+| Security Posture | 100 | → | No dependency, secret, identity, network, export, or untrusted-data boundary was added; npm audit and secret scans are clean. |
+| Ecosystem Integration | 99 | → | Human UI and agent-readable Game Loop truth agree; Obelisk, mail, observability, participant, and lifecycle evidence remain external. |
+| Capital Efficiency | 100 | → | Existing deterministic browser state and Cloudflare Pages deliver the change with zero hosted inference or variable per-player cost. |
+| Automation Coverage | 100 | → | Geometry, grouping, priority, milestone, component, full-unit, browser, hosted-matrix, and hash-bound visual courts make the behavior falsifiable. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `█████`.
+
+Top win: zoom no longer moves threat guidance out from under the player, and perk cards expose the doctrine boundary they will cross before the choice is irreversible.
+Top gap: real participants have not yet established whether threat density, doctrine pacing, or Operation breadth needs tuning.
+Intent outcome: Achieved through implementation, isolated staging, rendered-pixel review, and engineering release gating; exact-main production follow-through remains active.
+
+**Brainstorm**
+1. Measure compass group comprehension only after consented participant runs exist; keep the eight-sector cap until evidence supports a change.
+2. Use the same prospective-delta contract in shop/route surfaces only if players demonstrate a real decision gap there.
+3. Preserve Standard and Operation evidence as separate grammars while sharing one defeat-to-revenge recovery spine.
+
+**Committed to TASK_BOARD:** all three S161 audit items are complete; participant, provider, physical-device, publication, and SPARKED work remains explicitly gated.
+
 ## 2026-08-25 — Session 160 | Total: 998/1000 | Velocity: 3 | Debt: ↓
 
 SIL 998/1000: Recovered the post-S159 propagation and exact deployment evidence, restored the project runtime floor, routed canonical ownership through Ark, and preserved product/lifecycle truth.

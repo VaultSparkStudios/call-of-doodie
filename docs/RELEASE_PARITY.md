@@ -1,6 +1,16 @@
 # Release Parity — Call of Doodie
 
-Last reviewed: 2026-08-23 (Session 159 production verification)
+Last reviewed: 2026-08-25 (Session 161 staging gate)
+
+## Session 161 staged release
+
+- Application source: synchronized working tree based on `2e35f3d6a35933a91eabf2487dda0d790c7b045e`; exact production SHA is recorded after direct-main closeout.
+- Exact staging: `https://session-161-staging.call-of-doodie.pages.dev/`; immutable `https://36b0643f.call-of-doodie.pages.dev/`. Both pass 7/7 live checks.
+- Local corpus: 220/220 files and 1,267/1,267 assertions; strict lint, deployable build, schema/public/security/dependency/assets/runtime gates, and npm audit zero pass.
+- Browser parity: the hosted matrix passes 1,020/1,020 across 20 routes, both themes, and 390/768/1440px. The focused threat/perk before-after court passes 96/96; 14 hash-bound captures received direct rendered-pixel review.
+- Platform scope: desktop and mobile browsers are at feature parity. No native app is shipped. Physical PWA/controller/full-run media and current Core Web Vitals remain manual SPARKED gates.
+- Rollback: prior immutable production `https://950cc1ed.call-of-doodie.pages.dev/` remains available and `docs/DEPLOY_ROLLBACK.md` defines the non-force-push revert path.
+- Verdict: engineering release GO; SPARKED/public-launch announcement NO-GO.
 
 ## Session 159 verified release
 

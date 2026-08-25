@@ -1,0 +1,725 @@
+{
+  "schemaVersion": "s161-readable-chaos-rendered-pixel-v1",
+  "generatedAt": "2026-08-25T19:23:31.230Z",
+  "baseUrl": "http://127.0.0.1:4174/operation.html",
+  "captures": [
+    {
+      "surface": "perk-before",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "perk-before--sewer-night--390.png",
+        "sha256": "72ce24c2dd754661d2271b73def9b0efe436611dd9e7e80ab3e9faef99415845"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "baseline-has-no-delta",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "perk-after",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "perk-after--sewer-night--390.png",
+        "sha256": "5766f8ba7a45d28590e6ccb4b48103697ecaef6ad5b0c0acc38abb92870ca3de"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "doctrine-deltas-rendered",
+          "ok": true,
+          "actual": 3
+        },
+        {
+          "id": "mobile-modal-scroll-contained",
+          "ok": true,
+          "actual": {
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 844,
+            "theme": "sewer-night"
+          }
+        }
+      ]
+    },
+    {
+      "surface": "threat-before",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "threat-before--sewer-night--390.png",
+        "sha256": "c8ad6f973a8f8f77d4536f1d6f8e812f1a13669d620863e539ed73b3a0870cfe"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        }
+      ]
+    },
+    {
+      "surface": "threat-after",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "threat-after--sewer-night--390.png",
+        "sha256": "453d5808153e6da22a2d8d0fdc1ce62682f9842360cf45f7f11c0fbeabd7bf91"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "bounded-threat-compass",
+          "ok": true,
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "surface": "perk-before",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "perk-before--sewer-night--1440.png",
+        "sha256": "154f4cc1ec86bb614f9a75b32b2e203d48fc5976920f6cf057e25a7fff5a2998"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "baseline-has-no-delta",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "perk-after",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "perk-after--sewer-night--1440.png",
+        "sha256": "ecfa458493b7c26f3394b833a50c7d77e6c719ba1030d77b8d9f1a8b8bdb1a4c"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "doctrine-deltas-rendered",
+          "ok": true,
+          "actual": 3
+        },
+        {
+          "id": "mobile-modal-scroll-contained",
+          "ok": true,
+          "actual": {
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "theme": "sewer-night"
+          }
+        }
+      ]
+    },
+    {
+      "surface": "threat-before",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "threat-before--sewer-night--1440.png",
+        "sha256": "f02e4b2bc8adb10e55b7d1d6c48484e18a92d4a0c1c53640b49d7c6899eba1f3"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        }
+      ]
+    },
+    {
+      "surface": "threat-after",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "threat-after--sewer-night--1440.png",
+        "sha256": "11de7cb655d5ac897bd3831cb3ac9df90937fd0fdbabdbece154418e667a9358"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "bounded-threat-compass",
+          "ok": true,
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "surface": "perk-before",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "perk-before--porcelain-day--390.png",
+        "sha256": "72ce24c2dd754661d2271b73def9b0efe436611dd9e7e80ab3e9faef99415845"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "baseline-has-no-delta",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "perk-after",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "perk-after--porcelain-day--390.png",
+        "sha256": "5766f8ba7a45d28590e6ccb4b48103697ecaef6ad5b0c0acc38abb92870ca3de"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "doctrine-deltas-rendered",
+          "ok": true,
+          "actual": 3
+        },
+        {
+          "id": "mobile-modal-scroll-contained",
+          "ok": true,
+          "actual": {
+            "viewportWidth": 390,
+            "viewportHeight": 844,
+            "scrollWidth": 390,
+            "scrollHeight": 844,
+            "theme": "porcelain-day"
+          }
+        }
+      ]
+    },
+    {
+      "surface": "threat-before",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "threat-before--porcelain-day--390.png",
+        "sha256": "c8ad6f973a8f8f77d4536f1d6f8e812f1a13669d620863e539ed73b3a0870cfe"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        }
+      ]
+    },
+    {
+      "surface": "threat-after",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "threat-after--porcelain-day--390.png",
+        "sha256": "453d5808153e6da22a2d8d0fdc1ce62682f9842360cf45f7f11c0fbeabd7bf91"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "bounded-threat-compass",
+          "ok": true,
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "surface": "perk-before",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "perk-before--porcelain-day--1440.png",
+        "sha256": "154f4cc1ec86bb614f9a75b32b2e203d48fc5976920f6cf057e25a7fff5a2998"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "baseline-has-no-delta",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "perk-after",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "perk-after--porcelain-day--1440.png",
+        "sha256": "ecfa458493b7c26f3394b833a50c7d77e6c719ba1030d77b8d9f1a8b8bdb1a4c"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "doctrine-deltas-rendered",
+          "ok": true,
+          "actual": 3
+        },
+        {
+          "id": "mobile-modal-scroll-contained",
+          "ok": true,
+          "actual": {
+            "viewportWidth": 1440,
+            "viewportHeight": 1000,
+            "scrollWidth": 1440,
+            "scrollHeight": 1000,
+            "theme": "porcelain-day"
+          }
+        }
+      ]
+    },
+    {
+      "surface": "threat-before",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "threat-before--porcelain-day--1440.png",
+        "sha256": "f02e4b2bc8adb10e55b7d1d6c48484e18a92d4a0c1c53640b49d7c6899eba1f3"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        }
+      ]
+    },
+    {
+      "surface": "threat-after",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "threat-after--porcelain-day--1440.png",
+        "sha256": "11de7cb655d5ac897bd3831cb3ac9df90937fd0fdbabdbece154418e667a9358"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "bounded-threat-compass",
+          "ok": true,
+          "actual": 1
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "checks": 96,
+    "passed": 96,
+    "failures": []
+  }
+}

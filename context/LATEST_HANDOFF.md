@@ -1,3 +1,27 @@
+# Latest Handoff — Session 161
+
+Session Intent: Run one complete `/arc` from the synchronized S160 recovery checkpoint through fresh game-loop review, premise-verified audit, complete implementation, isolated staging, rendered-pixel proof, independent release gating, canonical closeout, direct-main publication, and exact production verification.
+
+## Where We Left Off (Session 161)
+
+- Shipped: a player-relative, zoom-aware, bounded eight-sector threat compass rendered in authoritative screen space with boss/elite priority and Fog-of-War suppression.
+- Shipped: prospective perk doctrine deltas derived from the active build, including exact authored capstone/doctrine/mastery crossings and bounded next-milestone progress.
+- Truth sources: protocol and public Game Loop documents now share Standard and Operation grammars, defeat/rematch paths, current evidence, and unavailable-evidence boundaries.
+- Validation: full Vitest 220/220 files and 1,267/1,267 assertions; strict lint/build/schema/public/security/dependency/assets/media/runtime/protocol/supply-chain gates; browser E2E 19 pass / one intentional mobile skip in authoritative serial execution.
+- Staging: `https://session-161-staging.call-of-doodie.pages.dev/` and immutable `https://36b0643f.call-of-doodie.pages.dev/` pass 7/7 live checks; broad pixels pass 1,020/1,020 and focused before/after pixels pass 96/96.
+- Pixels: 14 hash-bound captures across both themes and complementary mobile/desktop widths received direct review; the old ADS-transformed marker disappears while the new compass stays edge-anchored, and doctrine deltas remain readable without mobile clipping.
+- Release: engineering FORGE GO; branding, footer 18/18, cost-neutrality, deploy credentials, rollback, mobile parity, and secret/supply-chain gates pass. SPARKED remains NO-GO behind its independent external evidence.
+- Deploy: pending automatic production deployment from the authorized direct-main closeout push; exact workflow/SHA/immutable verification will be appended before the mission is declared complete.
+- Next: preserve deterministic player agency and collect consented participant evidence before tuning threat density, doctrine balance, or Operation breadth.
+
+## Impact Summary
+
+**Headline.** The game now keeps danger readable under zoom and tells players what doctrine a perk will actually create before they commit.
+
+**Evidence.** Three audit items; 220 files / 1,267 assertions; browser 19 pass / one intentional skip; staging 7/7; 1,020/1,020 broad and 96/96 focused pixels; 14 directly reviewed captures; zero new dependencies, hosted calls, identity surfaces, or variable-cost services.
+
+---
+
 # Latest Handoff — Session 160
 
 Session Intent: Recover the post-S159 propagation, continuous-integration repair, and exact deployment evidence into every canonical write-back surface; checkpoint recovery before beginning a fresh Session 161 product arc.

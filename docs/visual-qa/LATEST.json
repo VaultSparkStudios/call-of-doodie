@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-23T06:56:23.091Z",
-  "stagingUrl": "https://session-159-staging.call-of-doodie.pages.dev",
-  "uiBaseRef": "72ef510",
+  "capturedAt": "2026-08-25T19:39:28.038Z",
+  "stagingUrl": "https://session-161-staging.call-of-doodie.pages.dev/",
+  "uiBaseRef": "2e35f3d",
   "uiHeadRef": "HEAD",
-  "workingTreeUiSha256": "5a76c733db1436aa36bbdd649d62466a9e830fec1bbbbdde2346be80f07aacd9",
+  "workingTreeUiSha256": "9f459a02ccdff5c5361aa3d07759d189b41d0d44afc2a38dc9297d94ff1921af",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-159-staging-visuals/visual-audit-receipt.json",
-    "sha256": "9d1125de1c89b7adae5c9a00b2248cd786c49ef48e584a89377d92e602cdeeb4",
+    "receipt": "output/playwright/session-161-staging-visuals/visual-audit-receipt.json",
+    "sha256": "9ad688966cd2c5cd6f9a0a1077c8cb99f0b40984667e5383ff4c58ffa2e4bc39",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -15,27 +15,18 @@
       "failures": []
     }
   },
-  "touchedState": null,
-  "additionalTouchedStates": [
-    {
-      "surface": "Operation command deck and live arena interaction",
-      "checks": {
-        "pass": true,
-        "checks": 48,
-        "passed": 48,
-        "failures": []
-      }
-    },
-    {
-      "surface": "Operation completion receipt and opt-in paired playtest command post",
-      "checks": {
-        "pass": true,
-        "checks": 36,
-        "passed": 36,
-        "failures": []
-      }
+  "touchedState": {
+    "surface": "Player-relative threat compass and prospective perk doctrine deltas",
+    "receipt": "docs/visual-qa/session-161/receipt.json",
+    "sha256": "177a0784edbbfcfd002f08023433cb955ad611a976f258ba8745134bc64986ff",
+    "checks": {
+      "pass": true,
+      "checks": 96,
+      "passed": 96,
+      "failures": []
     }
-  ],
+  },
+  "additionalTouchedStates": [],
   "themes": [
     "dark",
     "light"
@@ -54,7 +45,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "6946c688e681640ad116f23ed62fe7db53d05c00bae1304a43579eb6a992deb1",
+      "sha256": "66eb12013defa3bd8663be8e73b01ed107ce4298bc3c63eaf9fa96db9a94c2d1",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -98,7 +89,7 @@
     },
     {
       "file": "leaderboard-light-mobile.png",
-      "sha256": "08019e864a35d3cb870dec48b9de613ee7c052a8f9e8e7ba637eb0bd498a2d31",
+      "sha256": "b0d07f24470d3dffdd6bbf8726fbaab18a92ca27d218e5f3ad36f870774f33ce",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -108,268 +99,92 @@
       "page": "Leaderboard surface"
     },
     {
-      "file": "operation-deck--sewer-night--390.png",
-      "sha256": "c79c6372f939c18811db39197a5fbea35c5c5a005c05fe3e6b059d4bc0a649c3",
+      "file": "session-161/perk-before--sewer-night--390.png",
+      "sha256": "72ce24c2dd754661d2271b73def9b0efe436611dd9e7e80ab3e9faef99415845",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 1000
+        "height": 844
       },
-      "page": "Authored Operation command deck"
+      "page": "Perk selection baseline before doctrine-delta preview"
     },
     {
-      "file": "operation-arena--sewer-night--390.png",
-      "sha256": "2511f8c96f1cfb0a5cc5a6184a573591b7b8f47792791af7d5ff1b47a7c2af8a",
+      "file": "session-161/perk-after--sewer-night--390.png",
+      "sha256": "5766f8ba7a45d28590e6ccb4b48103697ecaef6ad5b0c0acc38abb92870ca3de",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
-        "height": 1000
+        "height": 844
       },
-      "page": "Live Operation arena command overlay"
+      "page": "Perk selection with doctrine-delta preview"
     },
     {
-      "file": "operation-arena-in-range--sewer-night--390.png",
-      "sha256": "7a8b805d8674c2a8c224120be33862ad1d13a37781b8094a06054209c0e0c3ee",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Live Operation arena command overlay"
-    },
-    {
-      "file": "operation-arena-complete--sewer-night--390.png",
-      "sha256": "60cf4d6b3ccc90ca99c21148e786c27b1bd9bc1b6ffcb1ed92aac0b4a99692c9",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Operation arena interaction completed"
-    },
-    {
-      "file": "operation-deck--sewer-night--1440.png",
-      "sha256": "6bab195726b13ccaace1183e358982f2feb59a669e30b10a5b02ed4979b53db9",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Authored Operation command deck"
-    },
-    {
-      "file": "operation-arena--sewer-night--1440.png",
-      "sha256": "794dfb5285abdf0b22b764864f92c551903bd1e67f83498799515ae73f74449e",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Live Operation arena command overlay"
-    },
-    {
-      "file": "operation-arena-in-range--sewer-night--1440.png",
-      "sha256": "08fea84392a68ad9e617a741a22fe4df7b0a461106c17b61a674ee670aac3e8a",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Live Operation arena command overlay"
-    },
-    {
-      "file": "operation-arena-complete--sewer-night--1440.png",
-      "sha256": "dd685c73f7457a80cb19d70e29bff2864f6b69f562da8ee587afc6b07c6ffd48",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Operation arena interaction completed"
-    },
-    {
-      "file": "operation-deck--porcelain-day--390.png",
-      "sha256": "17c66cd29baaff6696e8def853d623edaf02f9b37d5117c2f7f05827c63dd981",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Authored Operation command deck"
-    },
-    {
-      "file": "operation-arena--porcelain-day--390.png",
-      "sha256": "d591f17a27d2bb359b11660c245fccaddc66c08b68183bdad61f01a832b1c345",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Live Operation arena command overlay"
-    },
-    {
-      "file": "operation-arena-in-range--porcelain-day--390.png",
-      "sha256": "9093999e7965a615ea14023ab9a602b9efd608594657414d99c5faadb5314b04",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Live Operation arena command overlay"
-    },
-    {
-      "file": "operation-arena-complete--porcelain-day--390.png",
-      "sha256": "e08fea0f2aeba15583efdd40852b5bd55388093775307f551dc512698f1dcb42",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Operation arena interaction completed"
-    },
-    {
-      "file": "operation-deck--porcelain-day--1440.png",
-      "sha256": "82c8e0f33ff3b8db21ddd4e894cee44f7dcb7a886eb54664e380c9cc0afd59d9",
+      "file": "session-161/perk-before--porcelain-day--1440.png",
+      "sha256": "154f4cc1ec86bb614f9a75b32b2e203d48fc5976920f6cf057e25a7fff5a2998",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Authored Operation command deck"
+      "page": "Perk selection baseline before doctrine-delta preview"
     },
     {
-      "file": "operation-arena--porcelain-day--1440.png",
-      "sha256": "52d05e234302809e3657f6f6dcc8f866688a6830c193c0271ba10f6dcf511569",
+      "file": "session-161/perk-after--porcelain-day--1440.png",
+      "sha256": "ecfa458493b7c26f3394b833a50c7d77e6c719ba1030d77b8d9f1a8b8bdb1a4c",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Live Operation arena command overlay"
+      "page": "Perk selection with doctrine-delta preview"
     },
     {
-      "file": "operation-arena-in-range--porcelain-day--1440.png",
-      "sha256": "6685276984008727fce066569f8ceef89b77745ae4dc50343729573e5c3eab7a",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Live Operation arena command overlay"
-    },
-    {
-      "file": "operation-arena-complete--porcelain-day--1440.png",
-      "sha256": "8c963a6ac7779932c646881813885460bfa485f7715c0d8b40341f3318076b32",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Operation arena interaction completed"
-    },
-    {
-      "file": "operation-complete--sewer-night--390.png",
-      "sha256": "97ae221658e4f3d8dbac05606e83c556109f9e466bfdb86d16186620e8139873",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Operation completion receipt and honest gates"
-    },
-    {
-      "file": "operation-command-post--sewer-night--390.png",
-      "sha256": "a76ed665b0999d6f46331687a7da0ea97a7390d5e8a19d0f314575dbed20eaed",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Expanded opt-in paired Operation playtest command post"
-    },
-    {
-      "file": "operation-complete--sewer-night--1440.png",
-      "sha256": "c9d0e0a96d639b14671200e287a3633805637a650c45dd5224a7052ab83c6922",
+      "file": "session-161/threat-before--sewer-night--1440.png",
+      "sha256": "f02e4b2bc8adb10e55b7d1d6c48484e18a92d4a0c1c53640b49d7c6899eba1f3",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Operation completion receipt and honest gates"
+      "page": "ADS threat-marker baseline inside the world transform"
     },
     {
-      "file": "operation-command-post--sewer-night--1440.png",
-      "sha256": "c5a77e72071b9a0b94baba8d65fafa45ff2478aca4889af8d555e18b576b56de",
+      "file": "session-161/threat-after--sewer-night--1440.png",
+      "sha256": "11de7cb655d5ac897bd3831cb3ac9df90937fd0fdbabdbece154418e667a9358",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Expanded opt-in paired Operation playtest command post"
+      "page": "Player-relative threat compass outside the world transform"
     },
     {
-      "file": "operation-complete--porcelain-day--390.png",
-      "sha256": "97ae221658e4f3d8dbac05606e83c556109f9e466bfdb86d16186620e8139873",
+      "file": "session-161/threat-before--porcelain-day--390.png",
+      "sha256": "c8ad6f973a8f8f77d4536f1d6f8e812f1a13669d620863e539ed73b3a0870cfe",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 1000
+        "height": 844
       },
-      "page": "Operation completion receipt and honest gates"
+      "page": "ADS threat-marker baseline inside the world transform"
     },
     {
-      "file": "operation-command-post--porcelain-day--390.png",
-      "sha256": "57d7aa47b89e758241c8a888046ee936d59c17dc2ba06f99550ea64de1497baa",
+      "file": "session-161/threat-after--porcelain-day--390.png",
+      "sha256": "453d5808153e6da22a2d8d0fdc1ce62682f9842360cf45f7f11c0fbeabd7bf91",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
-        "height": 1000
+        "height": 844
       },
-      "page": "Expanded opt-in paired Operation playtest command post"
-    },
-    {
-      "file": "operation-complete--porcelain-day--1440.png",
-      "sha256": "c9d0e0a96d639b14671200e287a3633805637a650c45dd5224a7052ab83c6922",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Operation completion receipt and honest gates"
-    },
-    {
-      "file": "operation-command-post--porcelain-day--1440.png",
-      "sha256": "54c9a1989d7f75e03c09ed351efcb28b79796b1e96814f53bb181d6508023738",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Expanded opt-in paired Operation playtest command post"
+      "page": "Player-relative threat compass outside the world transform"
     }
   ],
   "inspection": {
@@ -379,11 +194,11 @@
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The hosted authored Operation deck and live arena interaction passed 48/48 focused checks at 390px and 1440px in both project themes.",
-      "The Operation completion receipt and expanded opt-in paired playtest command post passed 36/36 focused checks at 390px and 1440px in both project themes."
+      "The focused before/after matrix passed 96/96 checks across perk and threat-compass states, both project themes, and 390px/1440px viewports.",
+      "Direct pixel review confirmed doctrine milestones remain compact and readable on mobile, while the player-relative threat compass stays edge-anchored after the world-transformed baseline marker disappears under ADS."
     ],
     "fixesApplied": [
-      "Direct pixel review found and fixed unreachable wall-mounted targets by including the player's collision radius, then fixed route-card overlap and mid-word wrapping by stacking readable route bargains; recaptured hosted mobile and desktop states in both themes with no blocking defect."
+      "Direct rendered-pixel review confirmed the perk doctrine deltas remain readable without mobile clipping and the ADS threat compass remains anchored after the old world-transform marker disappears; no blocking defect remained."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

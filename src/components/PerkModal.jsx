@@ -1,9 +1,17 @@
 import { useRef } from "react";
 import { PERK_TIER_COLORS } from "../constants.js";
 import { useGamepadNav } from "../hooks/useGamepadNav.js";
-import { getPerkArchetypeMatches } from "../utils/buildArchetypes.js";
+import { getPerkArchetypeMatches, getPrimaryPerkArchetypeDelta } from "../utils/buildArchetypes.js";
 
-export default function PerkModal({ options, level, onSelect, buildArchetype, unlockedArchetypes = [] }) {
+export default function PerkModal({
+  options,
+  level,
+  onSelect,
+  buildArchetype,
+  unlockedArchetypes = [],
+  activePerks = [],
+  previewDoctrineDeltas = true,
+}) {
   const tierLabel = { common: "COMMON", uncommon: "UNCOMMON", rare: "RARE", legendary: "LEGENDARY", cursed: "⚠ CURSED" };
 
   // Gamepad nav: up/down through options, A to confirm
@@ -25,7 +33,7 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
       display: "flex", alignItems: "center", justifyContent: "center",
       padding: 16, backdropFilter: "blur(8px)",
     }}>
-      <div style={{ maxWidth: 480, width: "100%", textAlign: "center", color: "#fff", fontFamily: "'Courier New',monospace" }}>
+      <div style={{ maxWidth: 480, width: "100%", maxHeight: "calc(100dvh - 32px)", overflowY: "auto", padding: 4, textAlign: "center", color: "#fff", fontFamily: "'Courier New',monospace" }}>
         <div style={{ fontSize: 32, marginBottom: 4 }}>✨</div>
         <h2 style={{ fontSize: "clamp(18px,5vw,28px)", fontWeight: 900, margin: "0 0 4px", color: "#00FF88", letterSpacing: 2 }}>
           LEVEL {level} — PERK SELECT
@@ -57,6 +65,7 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
             const isFocused  = focusIdx === i;
             const archetypeMatches = getPerkArchetypeMatches(perk);
             const favoredMatch = buildArchetype ? archetypeMatches.find(match => match.id === buildArchetype.id) : null;
+            const doctrineDelta = previewDoctrineDeltas ? getPrimaryPerkArchetypeDelta(perk, activePerks) : null;
             const baseBg     = isCursed ? "rgba(255,30,60,0.08)"  : "rgba(255,255,255,0.05)";
             const focusBg    = isCursed ? "rgba(255,30,60,0.22)"  : "rgba(255,255,255,0.14)";
             return (
@@ -95,6 +104,34 @@ export default function PerkModal({ options, level, onSelect, buildArchetype, un
                           {match.emoji} {favoredMatch?.id === match.id ? "FITS BUILD" : match.name.toUpperCase()}
                         </span>
                       ))}
+                    </div>
+                  )}
+                  {doctrineDelta && (
+                    <div
+                      data-testid={`doctrine-delta-${perk.id}`}
+                      aria-label={doctrineDelta.milestoneCrossed
+                        ? `${doctrineDelta.name}: selecting this perk reaches ${doctrineDelta.milestoneLabel}`
+                        : `${doctrineDelta.name}: selecting this perk advances to ${doctrineDelta.countAfter} of ${doctrineDelta.nextMilestoneAt ?? doctrineDelta.countAfter}`}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        marginTop: 6,
+                        padding: "3px 7px",
+                        borderRadius: 5,
+                        border: `1px solid ${doctrineDelta.color}${doctrineDelta.milestoneCrossed ? "aa" : "55"}`,
+                        background: `${doctrineDelta.color}${doctrineDelta.milestoneCrossed ? "38" : "18"}`,
+                        color: doctrineDelta.milestoneCrossed ? "#FFF" : doctrineDelta.color,
+                        fontSize: 9,
+                        fontWeight: 900,
+                        letterSpacing: 0.5,
+                        lineHeight: 1.25,
+                      }}
+                    >
+                      <span aria-hidden="true">{doctrineDelta.emoji}</span>
+                      {doctrineDelta.milestoneCrossed
+                        ? `PICK → ${doctrineDelta.milestoneLabel.toUpperCase()}`
+                        : `PICK → ${doctrineDelta.name.toUpperCase()} ${doctrineDelta.countAfter}/${doctrineDelta.nextMilestoneAt ?? doctrineDelta.countAfter} · ${doctrineDelta.nextMilestoneLabel.toUpperCase()}`}
                     </div>
                   )}
                 </div>

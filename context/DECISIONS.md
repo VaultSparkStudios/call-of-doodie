@@ -2,6 +2,18 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-25 — Session 161 — Threat direction belongs to player-relative screen space
+
+**Decision:** Off-screen threat geometry transforms enemy positions around the live player focus with the active zoom, projects from that player to an inset viewport rectangle, aggregates into at most eight angular sectors, and is painted only after the world transform is restored. Group priority remains boss over elite over regular, and Fog of War suppresses the entire compass.
+
+**Rationale:** The previous viewport-center projection was drawn inside the aim-down-sights transform, so the marker could drift or leave the visible edge precisely when the player needed it. Player-relative screen-space authority makes the cue stable, keeps burst pressure bounded, and preserves existing gameplay policy rather than inventing a second threat system.
+
+## 2026-08-25 — Session 161 — Perk previews explain doctrine consequence without prescribing choice
+
+**Decision:** Perk selection derives every candidate's prospective archetype count from the active perk set, selects the most significant authored crossing deterministically, and shows either the exact capstone/doctrine/mastery milestone or bounded progress toward the next milestone. Duplicate and unknown perks fail closed; the preview never changes availability, ordering, or selection authority.
+
+**Rationale:** Static affinity labels say where a perk belongs but not what this pick will accomplish. Reusing the existing archetype authority gives players an inspectable consequence at the commitment point while preserving improvised builds and avoiding a “correct choice” recommendation.
+
 ## 2026-08-14 — Session 154 — Propagation compatibility is an executable contract, not file presence
 
 **Decision:** A propagated protocol bundle must compose with the repository's live named exports and behavior. Phase-critical task-board, project-status, SIL, secrets, and execution-budget modules are dynamically imported by protocol drift, and bounded router/secrets behavior is smoked before a phase is considered executable. Additive Studio features do not authorize removal of stronger project-local safety contracts.

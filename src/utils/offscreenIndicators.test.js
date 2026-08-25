@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { isOffscreen, projectToEdge, getOffscreenThreatArrows } from "./offscreenIndicators.js";
+import {
+  drawOffscreenThreatArrows,
+  getOffscreenThreatArrows,
+  isOffscreen,
+  projectToEdge,
+  worldToThreatScreenPoint,
+} from "./offscreenIndicators.js";
 
 describe("isOffscreen", () => {
   it("treats points inside the viewport as onscreen", () => {
@@ -38,6 +44,20 @@ describe("projectToEdge", () => {
     expect(edge.x).toBeLessThanOrEqual(800 - 18 + 0.01);
     expect(edge.y).toBeLessThanOrEqual(600 - 18 + 0.01);
   });
+
+  it("projects from the live player rather than the viewport center", () => {
+    const edge = projectToEdge(900, 500, 800, 600, 18, { originX: 100, originY: 100 });
+    expect(edge.x).toBeCloseTo(782, 5);
+    expect(edge.angle).toBeCloseTo(Math.atan2(400, 800), 5);
+    expect(edge.y).toBeGreaterThan(400);
+  });
+});
+
+describe("worldToThreatScreenPoint", () => {
+  it("matches the aim-down-sights transform around the player focus", () => {
+    expect(worldToThreatScreenPoint(700, 300, { focusX: 400, focusY: 300, zoom: 1.28 }))
+      .toEqual({ x: 784, y: 300 });
+  });
 });
 
 describe("getOffscreenThreatArrows", () => {
@@ -53,14 +73,15 @@ describe("getOffscreenThreatArrows", () => {
     expect(arrows).toEqual([]);
   });
 
-  it("produces one arrow per offscreen enemy with priority styling for bosses", () => {
+  it("preserves boss priority while grouping one occupied direction", () => {
     const arrows = getOffscreenThreatArrows([
       { x: -50, y: 300, isBossEnemy: true },
-      { x: 850, y: 300 },
+      { x: -80, y: 300 },
     ], W, H);
-    expect(arrows).toHaveLength(2);
+    expect(arrows).toHaveLength(1);
     expect(arrows[0].color).toBe("#FF4D4D");
-    expect(arrows[0].alpha).toBeGreaterThan(arrows[1].alpha);
+    expect(arrows[0].priority).toBe(3);
+    expect(arrows[0].count).toBe(2);
   });
 
   it("colors elite-type arrows distinctly from regular threats", () => {
@@ -75,5 +96,53 @@ describe("getOffscreenThreatArrows", () => {
       W, H, { fogOfWar: true },
     );
     expect(arrows).toEqual([]);
+  });
+
+  it("uses zoomed screen coordinates to detect newly offscreen threats", () => {
+    const unzoomed = getOffscreenThreatArrows([{ x: 730, y: 300 }], W, H, {
+      focusX: 400,
+      focusY: 300,
+      zoom: 1,
+    });
+    const zoomed = getOffscreenThreatArrows([{ x: 730, y: 300 }], W, H, {
+      focusX: 400,
+      focusY: 300,
+      zoom: 1.28,
+    });
+    expect(unzoomed).toEqual([]);
+    expect(zoomed).toHaveLength(1);
+    expect(zoomed[0].x).toBeCloseTo(782, 5);
+  });
+
+  it("bounds burst pressure to eight directional groups", () => {
+    const enemies = Array.from({ length: 48 }, (_, index) => {
+      const angle = (index / 48) * Math.PI * 2;
+      return { x: 400 + Math.cos(angle) * 900, y: 300 + Math.sin(angle) * 900 };
+    });
+    const arrows = getOffscreenThreatArrows(enemies, W, H);
+    expect(arrows.length).toBeLessThanOrEqual(8);
+    expect(arrows.reduce((sum, arrow) => sum + arrow.count, 0)).toBe(48);
+  });
+});
+
+describe("drawOffscreenThreatArrows", () => {
+  it("draws a screen-space marker and a bounded group count", () => {
+    const calls = [];
+    const ctx = new Proxy({}, {
+      get(target, key) {
+        if (!(key in target)) target[key] = (...args) => calls.push([key, ...args]);
+        return target[key];
+      },
+      set(target, key, value) {
+        calls.push([key, value]);
+        target[key] = value;
+        return true;
+      },
+    });
+    drawOffscreenThreatArrows(ctx, [{
+      x: 782, y: 300, angle: 0, color: "#FF4D4D", alpha: 0.9, count: 12, priority: 3,
+    }]);
+    expect(calls).toContainEqual(["translate", 782, 300]);
+    expect(calls).toContainEqual(["fillText", "9+", 767, 300.5]);
   });
 });

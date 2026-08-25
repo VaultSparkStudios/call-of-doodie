@@ -152,6 +152,59 @@ export function getPerkArchetypeMatches(perk) {
   return BUILD_ARCHETYPES.filter(archetype => archetype.perkIds.includes(perk.id));
 }
 
+export function getPerkArchetypeDeltas(candidatePerk, activePerks = []) {
+  if (!candidatePerk?.id) return [];
+  const owned = perksById(activePerks);
+  if (owned.has(candidatePerk.id)) return [];
+
+  const beforeById = new Map(getArchetypeProgress(activePerks).map(archetype => [archetype.id, archetype]));
+  const afterById = new Map(
+    getArchetypeProgress([...activePerks, candidatePerk]).map(archetype => [archetype.id, archetype]),
+  );
+
+  return getPerkArchetypeMatches(candidatePerk)
+    .map((archetype, order) => {
+      const before = beforeById.get(archetype.id);
+      const after = afterById.get(archetype.id);
+      if (!before || !after || after.count === before.count) return null;
+
+      const forgeAt = archetype.doctrineForgeAt ?? archetype.unlockAt + 2;
+      const milestone = after.count === archetype.perkIds.length
+        ? { kind: "mastery", label: "Full Mastery" }
+        : after.count === forgeAt
+          ? { kind: "doctrine", label: archetype.doctrineName }
+          : after.count === archetype.unlockAt
+            ? { kind: "capstone", label: archetype.capstoneName }
+            : null;
+
+      return {
+        archetypeId: archetype.id,
+        name: archetype.name,
+        emoji: archetype.emoji,
+        color: archetype.color,
+        countBefore: before.count,
+        countAfter: after.count,
+        nextMilestoneAt: after.nextMilestoneAt,
+        nextMilestoneLabel: after.nextMilestoneLabel,
+        milestoneKind: milestone?.kind ?? null,
+        milestoneLabel: milestone?.label ?? null,
+        milestoneCrossed: Boolean(milestone),
+        order,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => (
+      Number(b.milestoneCrossed) - Number(a.milestoneCrossed)
+      || b.countBefore - a.countBefore
+      || a.order - b.order
+    ))
+    .map(({ order: _order, ...delta }) => delta);
+}
+
+export function getPrimaryPerkArchetypeDelta(candidatePerk, activePerks = []) {
+  return getPerkArchetypeDeltas(candidatePerk, activePerks)[0] ?? null;
+}
+
 export function getShopRecommendation(archetypeId, optionId, currentWeapon) {
   switch (archetypeId) {
     case "vanguard":

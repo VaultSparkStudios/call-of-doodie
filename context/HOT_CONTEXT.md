@@ -4,15 +4,18 @@
 
 ## Current Session
 
-- Session 160 (2026-08-25) is a recovery-only checkpoint for three substantive post-S159 commits: synchronized Studio protocol/schema propagation plus the bounded Node 22 workflow repair at `f76850a58ecb6a2a9e8c78fa5cd4c4c5c6b6c71e`. No gameplay, dependency, account, cost, or lifecycle behavior changed.
-- CI truth — GitHub Actions run `32883766091` passed the exact repaired source with 219/219 files and 1,255/1,255 assertions, then built and deployed it. The preceding failure was isolated to the propagated brief workflow selecting Node 20 below the repository's declared Node 22 floor.
-- Production truth — immutable `https://950cc1ed.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` each pass 7/7 live checks; post-cutover verification passes 5/5 surfaces.
-- Propagation truth — a signed Ark `repo-question` was queued to `studio-ops` so the canonical workflow and its regression court can be fixed by its owning repository.
-- Lifecycle truth — Call of Doodie remains deployed, cost-neutral, FORGE, and public-unlaunched. SPARKED remains NO-GO.
+- Session 161 (2026-08-25) completed the repository-owned `/arc` through fresh game-loop review, a three-item premise-verified audit, full implementation, isolated staging, rendered-pixel review, and the independent engineering release gate; direct-main publication and exact production verification are the remaining authorized follow-through.
+- Threat truth — off-screen enemies are transformed around the live player focus, projected into screen space after aim-down-sights zoom, grouped into at most eight angular sectors, and rendered after the world transform. Boss/elite priority and Fog of War remain authoritative.
+- Doctrine truth — each perk choice now derives prospective archetype counts from the active build and exposes the most significant authored capstone, doctrine, or mastery crossing before commitment. Unknown and duplicate perks fail closed; no choice is locked or prescribed.
+- Loop-source truth — protocol and public Game Loop sources now share the Standard/Operation run grammars, defeat/rematch paths, current evidence sources, and explicit unavailable-evidence boundaries.
+- Validation truth — full Vitest passes 220/220 files and 1,267/1,267 assertions; strict lint, deployable build, schema, public contract, dependency/runtime/assets/media/security, npm audit zero, supply-chain, and protocol courts pass. Browser E2E passes 19 with one intentional mobile Scenario Cartridge skip when run serially; the eight-worker diagnostic exposed host-timing saturation and is not represented as the authoritative result.
+- Visual truth — staging `https://session-161-staging.call-of-doodie.pages.dev/` (immutable `https://36b0643f.call-of-doodie.pages.dev/`) passes 7/7 live checks, the hosted route/theme/viewport matrix 1,020/1,020, and the focused before/after matrix 96/96. Fourteen hash-bound captures received direct review with zero blocking defects.
+- Release truth — branding, proprietary/public contract, footer 18/18, Cloudflare credential readiness, cost-neutral ALLOW, mobile-parity attestation, rollback, secrets scan, and founder authorization pass. Engineering FORGE is GO; SPARKED remains NO-GO.
 
 ## Open Work
 
 # Task Board
+## Session 161 - Readable threat compass and prospective doctrine choice
 ## Session 160 - Propagation and release-evidence recovery
 ## Session 159 - Spatial Operations and evidence-bearing score
 ## Session 158 - Preference-safe Operation audio direction
@@ -91,7 +94,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 201,410 bytes · SHA-256 `a8c0f4480094…`
-- `context/TASK_BOARD.md` · 129,431 bytes · SHA-256 `010d6f8b69a5…`
-- `context/DECISIONS.md` · 128,336 bytes · SHA-256 `ff1747f448ae…`
-- `docs/AUDIT_2026-08-22.json` · 15,032 bytes · SHA-256 `623365e8d87b…`
+- `context/CURRENT_STATE.md` · 203,556 bytes · SHA-256 `eb4958057b69…`
+- `context/TASK_BOARD.md` · 130,389 bytes · SHA-256 `c35acb8b4abf…`
+- `context/DECISIONS.md` · 129,983 bytes · SHA-256 `06dea5bbaff5…`
+- `docs/AUDIT_2026-08-25.json` · 6,883 bytes · SHA-256 `ab3c3562b6b6…`

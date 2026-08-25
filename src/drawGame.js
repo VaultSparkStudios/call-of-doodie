@@ -5,7 +5,7 @@ import { getRuntimeCharacterSprite, getRuntimeEnemySprite, getRuntimeZombieSprit
 import { motionPhaseSeed, resolveSpriteDeath, resolveSpriteMotion } from "./systems/spriteMotion.js";
 import { getPlayerRenderPose } from "./utils/playerRenderPose.js";
 import { drawRetroEnemyCharacter, drawRetroPlayerCharacter, VISUAL_PACKS } from "./utils/visualPack.js";
-import { getOffscreenThreatArrows } from "./utils/offscreenIndicators.js";
+import { drawOffscreenThreatArrows, getOffscreenThreatArrows } from "./utils/offscreenIndicators.js";
 import { getArenaLayers } from "./systems/backgroundLayer.js";
 
 // Per-enemy body-shape coordinate tables (hoisted out of the draw loop —
@@ -941,23 +941,6 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.restore();
   }
 
-  // Off-screen threat direction arrows — legibility for enemies past the viewport edge
-  // (spawn bursts, Siege events, formation flanks). Suppressed during Fog of War.
-  const _offscreenArrows = getOffscreenThreatArrows(_enemiesDraw, W, H, { fogOfWar: Boolean(gs.fogOfWar) });
-  for (let _ai = 0; _ai < _offscreenArrows.length; _ai++) {
-    const arrow = _offscreenArrows[_ai];
-    ctx.save();
-    ctx.translate(arrow.x, arrow.y);
-    ctx.rotate(arrow.angle);
-    ctx.globalAlpha = arrow.alpha;
-    ctx.fillStyle = arrow.color;
-    ctx.beginPath();
-    ctx.moveTo(9, 0); ctx.lineTo(-6, -6); ctx.lineTo(-6, 6); ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-  ctx.globalAlpha = 1;
-
   // Railgun beams
   if (gs.beams && gs.beams.length > 0) {
     gs.beams.forEach(bm => {
@@ -1669,4 +1652,15 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.textAlign = "center"; ctx.fillText("ADS", W / 2, H / 2 + sr + 18);
     ctx.restore();
   }
+
+  // Player-relative threat compass — screen-space by contract. Enemy world
+  // positions are transformed around the same ADS focus as the arena, then
+  // bounded/aggregated after the world transform has been restored.
+  const _offscreenArrows = getOffscreenThreatArrows(_enemiesDraw, W, H, {
+    fogOfWar: Boolean(gs.fogOfWar),
+    focusX: p?.x ?? W / 2,
+    focusY: p?.y ?? H / 2,
+    zoom: gs.adsZoom ? 1.28 : 1,
+  });
+  drawOffscreenThreatArrows(ctx, _offscreenArrows);
 }

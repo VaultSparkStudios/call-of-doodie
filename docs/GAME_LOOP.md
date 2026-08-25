@@ -1,30 +1,32 @@
 # Game Loop
 
-## Core loop
+Call of Doodie has two guest-first run grammars.
 
-- player action: move, shoot, dash, grenade, weapon-switch, and choose perks or shop rewards
-- system response: enemies spawn, pressure escalates, bosses rotate, pickups and shop choices alter survival strategy
-- reward: bigger scores, deeper builds, challenge completion, leaderboard placement, funny emergent moments
-- repeat hook: new loadouts, cursed perks, daily seeds, challenge links, and mastery chasing make each run worth another try
+## Operations
 
-## Session rhythm
+- Pick an authored mission and a disclosed route bargain.
+- Fight through BREACH, HOLD, ESCORT, HUNT, SABOTAGE, ESCAPE, and BOSS encounters.
+- Reach the live objective and perform its exact action; enemy clearance alone is not completion.
+- Carry bounded route consequences into later Operations.
+- Finish with an inspectable local score for objectives, interactions, tempo, pressure, extraction, and route evidence.
+- Continue, rematch the same mission state, compare local rival evidence, or return to the command deck.
 
-- Start run
-- Survive escalating waves
-- Hit perk thresholds
-- Clear non-boss waves and choose free shop rewards
-- Beat boss waves every fifth wave
-- Chase score, wave count, missions, and share-worthy moments
-- Die, compare, improve, or remix into a challenge run
+## Arcade and rivals
 
-## Meta loop
+- Pick a mode, difficulty, loadout, seed, and optional challenge.
+- Move, aim, shoot, dash, throw grenades, switch weapons, and survive escalating pressure.
+- Choose perks, routes, mutations, and free shop rewards to improvise named build doctrines.
+- Resolve bosses, timers, or mode goals with explicit replay and leaderboard eligibility labels.
+- On defeat, read one observed correction, run the fix immediately, rematch, or share a bounded challenge.
 
-- unlock and spend career points
-- experiment with starter loadouts and build combinations
-- pursue achievements and daily missions
-- share challenge links and scorecards to create rivalry loops
+## Progression and trust
 
-## Failure states
+- Career points, achievements, daily missions, weapon mastery, doctrines, local ghosts, shared seeds, and bounded history reward experimentation without selling power.
+- Standard leaderboard evidence and local Operation evidence remain separate.
+- Operation scoring, campaign continuity, rivals, coaching, and playtest receipts are local and advisory unless a surface explicitly says otherwise.
+- Replay evidence does not claim full physics resimulation parity.
+- Participant outcomes, physical-device behavior, provider delivery, and launch readiness require their own real evidence.
 
-- fail state: run ends through death or mode-specific timer resolution
-- recovery: immediate replay, build experimentation, mission progress, and social challenge hooks keep momentum high
+## Failure and recovery
+
+A run ends through death, mission resolution, or a mode timer. The recovery loop turns the result into an observed verdict and one immediate next action while preserving menu, rematch, and challenge routes.

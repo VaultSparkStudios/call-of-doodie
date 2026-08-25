@@ -46,7 +46,7 @@
     "staging": [
       {
         "label": "cloudflare-pages",
-        "url": "https://session-157-staging.call-of-doodie.pages.dev/"
+        "url": "https://session-161-staging.call-of-doodie.pages.dev/"
       }
     ],
     "production": [
@@ -117,7 +117,7 @@
   "hosting": {
     "hostingProvider": "cloudflare-pages",
     "liveUrl": "https://callofdoodie.wtf/",
-    "stagingUrl": "https://session-157-staging.call-of-doodie.pages.dev/",
+    "stagingUrl": "https://session-161-staging.call-of-doodie.pages.dev/",
     "privatePreviewUrl": "https://call-of-doodie.pages.dev/",
     "localDevUrl": null,
     "deployStatus": "deployed-unannounced",
@@ -141,7 +141,7 @@
     "brandingCompliant": true,
     "footerAttribution": "A VaultSpark Studios Game",
     "websiteListingRequired": true,
-    "sanitizationEvidence": "2026-08-16"
+    "sanitizationEvidence": "2026-08-23"
   },
   "automation": {
     "safeActions": [
@@ -173,6 +173,6 @@
   "releaseProjection": {
     "schemaVersion": "release-manifest-projection-v1",
     "source": "context/PROJECT_STATUS.json",
-    "sourceFingerprint": "700d1b20c1a2658cb1498776d6914e44b623aac8720a4faa95fc777ec5489dd4"
+    "sourceFingerprint": "be8178297baad6605ac1ee3784e124ff40c8bc14a534fe513ea205230016a449"
   }
 }

@@ -664,6 +664,23 @@
       },
       "delta": 0,
       "cause": "Session 160 recovered post-S159 propagation and release evidence: source f76850a passes exact Node 22 CI, deploy, immuta"
+    },
+    {
+      "date": "2026-08-25",
+      "session": 161,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "all three S161 repository-owned audit items are implemented and staged with direct pixel proof; direct-main production follow-through is active. SPARKED remains NO-GO.",
+      "lastReviewed": "2026-08-25",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 161 makes off-screen threat direction player-relative under zoom, previews prospective perk doctrine milestones,"
     }
   ]
 }

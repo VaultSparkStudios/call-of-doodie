@@ -1,4 +1,18 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-25 — Session 161 — Threat, doctrine, loop-source, and staging truth
+
+- Threat truth — live player focus and active zoom own off-screen projection; at most eight angular sectors render after the world transform. Boss/elite priority and Fog-of-War suppression remain unchanged.
+- Doctrine truth — perk cards expose prospective counts and exact authored capstone/doctrine/mastery crossings from active-perk evidence. Unknown/duplicate candidates fail closed, and no selection is prescribed or locked.
+- Source truth — protocol and public Game Loop documents name the same Standard/Operation grammars, defeat/rematch path, current evidence, and unavailable-evidence boundaries.
+- Validation truth — 220/220 Vitest files and 1,267/1,267 assertions pass. Strict lint, deployable build, schema/public/security/dependency/runtime/assets/media/protocol/supply-chain courts, npm audit zero, and serial browser 19 pass/one intentional skip are green.
+- Diagnostic truth — the eight-worker browser run produced seven timing failures under shared-host saturation. The same cases pass serially; the parallel receipt remains recorded as diagnostic rather than being relabelled green.
+- Visual truth — stable staging `session-161-staging` and immutable `36b0643f` pass 7/7 live checks; hosted pixels pass 1,020/1,020 and focused before/after pixels pass 96/96. Fourteen hash-bound captures were directly reviewed with zero blockers.
+- Release truth — branding, footer 18/18, public/legal contract, mobile parity, Cloudflare credential readiness, cost-neutral ALLOW, rollback, working-tree secrets, supply-chain, and founder authorization pass. Engineering FORGE is GO; SPARKED is NO-GO.
+- Protocol truth — the propagated closeout checklist and IGNIS touched-rescore executables are absent locally; the full canonical protocol is the fallback and the ownership defect is routed through Ark rather than hidden or repaired in a sibling repository.
+
+Overall status: all three S161 repository-owned audit items are implemented and staged with direct pixel proof; direct-main production follow-through is active. SPARKED remains NO-GO.
+Last reviewed: 2026-08-25
+
 ## 2026-08-25 — Session 160 — Propagation and production-evidence recovery
 
 - Chronology truth — three substantive commits postdated the S159 SIL anchor, so S160 records them as a separate recovery boundary instead of silently treating S159 as current.

@@ -5,6 +5,8 @@ import {
   getNewlyUnlockedArchetypes,
   getPerkArchetypeMatches,
   getDoctrineMilestones,
+  getPerkArchetypeDeltas,
+  getPrimaryPerkArchetypeDelta,
 } from "./buildArchetypes.js";
 
 describe("build archetypes", () => {
@@ -75,5 +77,59 @@ describe("build archetypes", () => {
     const gs = progress.find(a => a.id === "gunslinger");
     expect(gs.statusLabel).toBe("DOCTRINE FORGED");
     expect(gs.doctrineForged).toBe(true);
+  });
+
+  test("previews an exact capstone crossing before perk commitment", () => {
+    const delta = getPrimaryPerkArchetypeDelta(
+      { id: "bloodlust" },
+      [{ id: "iron_gut" }, { id: "vampire" }],
+    );
+    expect(delta).toMatchObject({
+      archetypeId: "vanguard",
+      countBefore: 2,
+      countAfter: 3,
+      milestoneKind: "capstone",
+      milestoneLabel: "Frontline Doctrine",
+      milestoneCrossed: true,
+    });
+  });
+
+  test("previews doctrine and mastery boundaries by their authored names", () => {
+    const doctrine = getPrimaryPerkArchetypeDelta(
+      { id: "dead_mans_hand" },
+      [{ id: "grenadier" }, { id: "grenade_chain" }, { id: "pyromaniac" }],
+    );
+    const mastery = getPrimaryPerkArchetypeDelta(
+      { id: "scavenger" },
+      [{ id: "grenadier" }, { id: "grenade_chain" }, { id: "pyromaniac" }, { id: "dead_mans_hand" }],
+    );
+    expect(doctrine).toMatchObject({
+      milestoneKind: "doctrine",
+      milestoneLabel: "Scorched Earth Compact",
+    });
+    expect(mastery).toMatchObject({
+      milestoneKind: "mastery",
+      milestoneLabel: "Full Mastery",
+    });
+  });
+
+  test("shows bounded progress when no milestone is crossed", () => {
+    const delta = getPrimaryPerkArchetypeDelta(
+      { id: "parkour_pro" },
+      [{ id: "iron_gut" }, { id: "vampire" }, { id: "bloodlust" }],
+    );
+    expect(delta).toMatchObject({
+      countBefore: 3,
+      countAfter: 4,
+      nextMilestoneAt: 5,
+      nextMilestoneLabel: "Wall of Flesh",
+      milestoneCrossed: false,
+    });
+  });
+
+  test("fails closed for unknown and already-owned perks", () => {
+    expect(getPerkArchetypeDeltas({ id: "not_real" }, [])).toEqual([]);
+    expect(getPerkArchetypeDeltas({ id: "iron_gut" }, [{ id: "iron_gut" }])).toEqual([]);
+    expect(getPrimaryPerkArchetypeDelta(null, [])).toBeNull();
   });
 });

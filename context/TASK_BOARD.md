@@ -2,6 +2,14 @@
 
 Public-safe launch roadmap summary.
 
+## Session 161 - Readable threat compass and prospective doctrine choice
+
+- [x] [SIL:3] **DONE S161** Off-screen threat direction is player-relative and screen-space authoritative under aim-down-sights zoom; burst spawns collapse into a bounded eight-sector compass while boss/elite priority and Fog of War remain authoritative.
+- [x] [SIL:3] **DONE S161** Perk choices preview the exact prospective doctrine count or capstone/doctrine/mastery crossing from active-perk evidence with deterministic accessible copy.
+- [x] [SIL:2] **DONE S161** Public and protocol-readable Game Loop sources now share Standard and Operation run grammars, evidence boundaries, and defeat/rematch paths.
+
+**Runway exception:** participant fun/balance outcomes, further Operation breadth, realtime co-op, physical-device proof, provider/mail/identity evidence, publication, and SPARKED promotion remain independently gated; no local implementation substitutes for those proofs.
+
 ## Session 160 - Propagation and release-evidence recovery
 
 - [x] [SIL:1] **DONE S160** Reconciled the three substantive post-S159 commits into the canonical write-back ledger without reopening or relabelling Session 159.

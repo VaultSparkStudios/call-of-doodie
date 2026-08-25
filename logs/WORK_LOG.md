@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-08-25 (Session 161 — readable threat compass and prospective doctrine choice)
+
+- Ran the fresh game-loop review and nine-axis audit from the synchronized S160 recovery checkpoint; promoted three repository-owned gaps and rejected unsupported balance, participant, hosted-AI, realtime, identity, and broad-restyle scope.
+- Rebuilt off-screen threat projection around the live player focus and current zoom, grouped burst enemies into at most eight angular sectors, preserved boss/elite and Fog-of-War policy, and moved drawing outside the world transform.
+- Added pure prospective archetype deltas and deterministic capstone/doctrine/mastery preview copy to the perk modal without locking or recommending a choice.
+- Synchronized the protocol and public Game Loop sources around Standard and Operation run grammars, defeat/rematch, current evidence, and unavailable-evidence boundaries.
+- Added focused geometry, render, archetype, component, and launch regressions. Full Vitest passes 220/220 files and 1,267/1,267 assertions.
+- Built and directly reviewed a two-theme, mobile/desktop before-after matrix: 96/96 checks. The old ADS-transformed marker disappears; the new screen-space compass remains edge-anchored; doctrine previews remain readable without clipping.
+- Deployed isolated staging at `session-161-staging` / immutable `36b0643f`; both pass 7/7 live checks and the hosted 20-route, two-theme, three-width matrix passes 1,020/1,020.
+- Passed strict lint, deployable build, schema/public/security/dependency/runtime/assets/media/protocol, npm audit zero, supply-chain, branding, footer 18/18, cost, mobile-parity, rollback, and working-tree secret gates.
+- The eight-worker browser diagnostic produced seven timing failures under shared-host saturation; authoritative serial execution passed 19 with one intentional mobile Scenario Cartridge skip. No parallel result was relabelled green.
+- Reviewed the Creative Direction Record and found no new creative direction. The founder's request authorizes the execution/release path but does not change the game's SOUL or SPARKED evidence boundary.
+
+Intent outcome: achieved through implementation, staging, rendered-pixel review, and release gating; direct-main continuous integration, production deployment, and exact live verification remain the active follow-through.
+
 ## 2026-08-25 (Session 160 — post-S159 release-evidence recovery)
 
 - Classified the session as CUT OFF because three substantive commits landed after the S159 Self-Improvement Loop anchor while canonical write-back surfaces remained on S159.

@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S161)",
+  "generatedAt": "2026-08-25",
+  "session": 161,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-readable-chaos-and-doctrine-choice",
+  "meta": {
+    "candidateCount": 26,
+    "promotedCount": 3,
+    "combinedPriority": 72.4,
+    "top3": [
+      "player-relative-screen-space-threat-compass",
+      "perk-doctrine-delta-preview",
+      "operation-aware-game-loop-source"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Synchronized source 2e35f3d, current SOUL/Game Loop files, current draw/perk/archetype code, managed-agent branch review, and S159 release evidence prove three bounded repository-owned gaps.",
+    "gameLoopReview": {
+      "source": "docs/GAME_LOOP_REVIEW_2026-08-25.md",
+      "loopTightness": 9.1,
+      "progressionCurve": 8.9,
+      "sessionEngagement": 8.8,
+      "retentionHooks": 8.7,
+      "soulFidelity": 9.3,
+      "overall": 9.0,
+      "evidenceBoundary": "Structural scores only; no participant fun, balance, satisfaction, or retention claim."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Make the existing threat and doctrine systems authoritative at the player decision point.",
+    "innovation": "Project local state into a bounded player-relative compass and prospective doctrine receipt.",
+    "ui / ux / user-experience": "Preserve edge readability under zoom and preview perk consequences before commitment.",
+    "feedback loop": "Expose grouped threat priority and exact doctrine milestone deltas.",
+    "gamification / engagement / immersion": "Strengthen readable chaos and improvised doctrine without adding grind.",
+    "ai / intelligence integration": "Use deterministic pure projections with reasoned evidence rather than hosted inference.",
+    "security": "Add no identity, network, export, secret, or untrusted-data boundary.",
+    "speed / organization / efficiency": "Centralize geometry and delta policy and refresh protocol-readable loop truth.",
+    "token / api cost reduction": "Use existing runtime/UI paths with zero dependency or per-player cost."
+  },
+  "items": [
+    {
+      "slug": "player-relative-screen-space-threat-compass",
+      "tier": "FIRE",
+      "axis": "readability / input trust / immersion",
+      "effortHours": 7,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 26.4,
+      "status": "implemented",
+      "why": "Threat arrows are projected from viewport center, emitted one-per-enemy, and painted inside the world/aim-down-sights transform, so zoom and burst spawns can defeat their readability contract.",
+      "recipe": "Transform enemies around the live player focus, project rays from that player to an inset screen rectangle, aggregate bounded direction groups, preserve boss/elite/Fog-of-War policy, and render after world transforms with visible counts.",
+      "measurement": "Zoomed and unzoomed fixtures agree on direction; arrows remain within inset bounds; a burst emits at most eight groups; boss/elite priority survives grouping; draw order is screen-space; focused pixels pass at 390 and 1440."
+    },
+    {
+      "slug": "perk-doctrine-delta-preview",
+      "tier": "FIRE",
+      "axis": "progression / choice clarity / feedback",
+      "effortHours": 6,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 24,
+      "status": "implemented",
+      "why": "Perk choices show static archetype affinity but not the count or capstone/doctrine/mastery boundary the selection will cross.",
+      "recipe": "Compute all candidate deltas from active perks with one pure contract, choose the most significant visible delta deterministically, render concise accessible progress/milestone copy, and preserve all input paths.",
+      "measurement": "Duplicate/unknown perks fail closed; shared perks resolve deterministically; forming, capstone, doctrine, and mastery crossings are tested; component and mobile/desktop pixels pass."
+    },
+    {
+      "slug": "operation-aware-game-loop-source",
+      "tier": "EMBER",
+      "axis": "coherence / audit efficiency / proof",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 4,
+      "priority": 22,
+      "status": "implemented",
+      "why": "Protocol and public Game Loop sources still describe only standard waves and omit authored Operations, proximity, route consequences, local score evidence, and current replay boundaries.",
+      "recipe": "Synchronize both files around the standard/Operation split, defeat/rematch loop, current evidence paths, and explicit unavailable evidence.",
+      "measurement": "Both sources name the same two run grammars, evidence boundaries, and failure/recovery paths; public wording remains acronym-safe and proprietary-safe."
+    }
+  ],
+  "skipped": [
+    { "slug": "new-operation-or-balance-retune", "reason": "DATA-BLOCKED — no consented participant corpus supports breadth or numeric tuning." },
+    { "slug": "hosted-ai-director", "reason": "CULLED — the deterministic local director is the higher-trust zero-cost path." },
+    { "slug": "realtime-coop-auth-mail-publication", "reason": "GATED — provider, identity, physical, publication, and lifecycle evidence are independent." },
+    { "slug": "global-visual-restyle", "reason": "FALSE PREMISE — no broad visual defect is evidenced; only the touched states require new pixel proof." },
+    { "slug": "replay-physics-parity", "reason": "DEFERRED PROGRAM — important but broader than this bounded arc." },
+    { "slug": "s159-operation-authority-gaps", "reason": "FALSE PREMISE — spatial action, score v2, live Director signals, and route consequence preview are already production-verified." }
+  ],
+  "executionLog": [
+    {
+      "item": "player-relative-screen-space-threat-compass",
+      "result": "implemented",
+      "evidence": "Screen-space draw order, player-focus projection, zoom-aware coordinates, eight-sector burst grouping, threat priority, Fog-of-War suppression, and focused geometry/render tests pass."
+    },
+    {
+      "item": "perk-doctrine-delta-preview",
+      "result": "implemented",
+      "evidence": "Pure prospective archetype deltas, deterministic milestone selection, accessible modal copy, fail-closed tests, and mobile-contained rendered pixels pass."
+    },
+    {
+      "item": "operation-aware-game-loop-source",
+      "result": "implemented",
+      "evidence": "Protocol and public Game Loop sources now share Standard/Operation grammars, defeat/rematch paths, current evidence, and explicit unavailable-evidence boundaries."
+    },
+    {
+      "court": "rendered-pixel-and-staging",
+      "result": "pass",
+      "evidence": "Focused before/after matrix 96/96; hosted route/theme/viewport matrix 1020/1020; staging alias and immutable deployment each pass 7/7 live checks; CANON-053 passes with 14 hash-bound captures."
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-25 (Session 160 closeout) -->
-<!-- semantic-freshness: hash=26db66cde0979b76 next=161 silSession=160 silScore=998 handoff=160 tests=- -->
+<!-- generated-at: 2026-08-25 (Session 161 closeout) -->
+<!-- semantic-freshness: hash=fd64333752b0589b next=162 silSession=161 silScore=998 handoff=161 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 160 closeout · 2026-08-25.
+> **Fast-boot brief** — generated at Session 161 closeout · 2026-08-25.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 161 · 2026-08-25 · FOUNDER MODE                         ║
+║  Session 162 · 2026-08-25 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S160) - WHAT SHIPPED ══════════════════════════╗
-║  Session 160 recovered the post-S159 propagation and exact depl  ║
+╔══ LAST SESSION (S161) - WHAT SHIPPED ══════════════════════════╗
+║  Session 161 implemented a player-relative zoom-safe threat com  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -30,7 +30,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://d7ec86f1.call-of-doodie.pages.dev ✓   ║
-║  Unit tests    → npm test — 1255/1255 passing ✓                  ║
+║  Unit tests    → npm test — 1267/1267 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
 ║  production-smoke → Session 141 — live 7/7 · cutover 5/5 · r ✓   ║
@@ -45,15 +45,15 @@
 ║    998/1000   ███████████████████████░   100%                    ║
 ║    SIL v3.0  ·  Avg3: 998  ·  Velocity 3↑                        ║
 ║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  ▂▄▄▄▄  ↑  (last 5 sessions)                            ║
+║    Trend  ▄▄▄▄▄  ↑  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement        99    ██████████  ██▇▇▇▇▇▇ →                ║
-║    Process Qual     100    ██████████  █████▇▇▇ →                ║
+║    Engagement        99    ██████████  █▇▇▇▇▇▇▇ →                ║
+║    Process Qual     100    ██████████  ████▇▇▇█ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
@@ -62,25 +62,25 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 160 ═══════════════════════════╗
-║  Shipped:  see LATEST_HANDOFF.md                                 ║
-║  Tests:    1255/1255 passing  ·  Deploy: N/A                     ║
+╔══ WHERE WE LEFT OFF  ·  Session 161 ═══════════════════════════╗
+║  Shipped:  a player-relative, zoom-aware, bounded eight-sector   ║
+║  Tests:    1267/1267 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
 ║  ✓  █████░░░░░░░░░░░░░░░░░░░   22% used                          ║
-║     60,949 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~30,475 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
+║     58,625 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~29,313 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
 ║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1255/1255 passing (2026-08-25)                 ║
+║  ✓  Tests         1267/1267 passing (2026-08-25)                 ║
 ║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
 ║  ✓  IGNIS         43723 FORGE  ·  2d old                         ║
-║  ⛔  Truth         S160 closes the post-S159 write-back gap…      ║
+║  ⛔  Truth         all three S161 repository-owned audit items…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.197  (healthy)                               ║
@@ -115,9 +115,15 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▂▄▄▄▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▄▄▄  3↑  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
+╚════════════════════════════════════════════════════════════════╝
+
+╔══ SIL FORECAST (next session) ═════════════════════════════════╗
+║  Projected:  997/1000  (↓1 vs current 998)                       ║
+║  All categories forecast stable or rising.                       ║
+║  Calibration: MAE 2.7 over last 10 forecasts                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ GENIUS HIT LIST ═════════════════════════════════════════════╗
@@ -144,5 +150,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 160 closeout · 2026-08-25*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 161 closeout · 2026-08-25*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*
