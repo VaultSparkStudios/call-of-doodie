@@ -1,40 +1,44 @@
 <!-- generated-by: scripts/compact-handoff.mjs v3.1 -->
-<!-- source-hash: 68df2bbeebbb -->
-<!-- generated-at: 2026-08-25T18:50:45.085Z -->
+<!-- source-hash: f023f46a9567 -->
+<!-- generated-at: 2026-08-25T22:33:29.618Z -->
 
 # LATEST_HANDOFF (compact)
 
-# Handoff Summary — Session 160
+SESSION 161 HANDOFF SUMMARY
 
 Session
-- S160: post-S159 recovery/propagation checkpoint. No product, gameplay, dependency, account, cost, secret, or lifecycle change.
+- Session 161 complete. Full /arc from S160 recovery checkpoint through production verification.
 
-Shipped (S160)
-- Recorded propagated protocol/schema commits and bounded CI workflow repair at source f76850a.
-- CI run 32883766091 green: 219/219 files, 1,255/1,255 assertions, build + deploy under Node 22. Prior failure was only propagated workflow selecting Node 20 (below project floor).
-- Production verified: immutable 950cc1ed and canonical callofdoodie.wtf both 7/7; five-surface cutover 5/5.
+What Shipped
+- Player-relative, zoom-aware, bounded eight-sector threat compass in authoritative screen space; boss/elite priority; Fog-of-War suppression.
+- Prospective perk doctrine deltas from active build: authored capstone/doctrine/mastery crossings, bounded next-milestone progress.
+- Protocol and public Game Loop docs unified: shared Standard/Operation grammars, defeat/rematch paths, evidence boundaries.
 
 Current Intent
-- Checkpoint recovery, then begin fresh Session 161 product arc from committed recovery checkpoint.
+- Preserve deterministic player agency; collect consented participant evidence before tuning threat density, doctrine balance, or Operation breadth.
 
-Lifecycle State
-- Cost-neutral, deployed, FORGE, public-unlaunched. SPARKED independently NO-GO.
+Validation/Deploy State
+- Vitest 220/220 files, 1,267/1,267 assertions. Strict gates all pass. Browser E2E 19 pass / 1 intentional mobile skip.
+- Exact source 6cc76130d23fbd5b80bfd408029e007fd92b4000, workflow 32894266704, immutable production 39696138. Health 6cc76130d23f. Shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3.
+- Zero new dependencies, hosted calls, identity surfaces, variable-cost services.
 
-Now Bucket (top 3)
-- Begin S161 from committed recovery checkpoint; run fresh game/product arc.
-- Stage and pixel-review any player-facing change, then release-gate.
-- Publish directly to main, deploy, and verify exact production revision.
+Now Bucket (Top 3)
+- Collect consented participant evidence (gating condition for all tuning work).
+- Hold threat density / doctrine balance / Operation breadth until participant data supports it.
+- Preserve deterministic player agency contracts across future changes.
 
-Blockers (top 3)
-- SPARKED NO-GO: requires performance, participant, physical-device, provider/mail, identity, publication, and explicit lifecycle evidence.
-- No repo-local executable innovation candidates remain (per S154+); remaining work requires external/credentialed/physical/participant inputs.
-- Supabase CLI probes previously host-transport-degraded (S155); not claimed green.
+Blockers (Top 3)
+- SPARKED remains NO-GO: awaiting independent external evidence.
+- Participant evidence absent; blocks balance/content tuning.
+- Physical-device, provider/mail, identity, and publication evidence tracked separately and still open.
 
-Human-Blocked / Ownership Escalations
-- studio-ops Ark question queued: root-fix canonical propagated workflow + its regression court there (S160, current).
-- studio-ops Doctor blocking probes: wallet-court freshness + studio-ops canon/visual receipts; signed Ark repo-question filed for owner refresh (from S151, ~9 sessions old, unresolved).
+Human-Blocked Items
+- SPARKED promotion: blocked on founder authorization + external evidence (open since S154+, ~7 sessions).
+- Provider/mail/identity/publication evidence: blocked pending external credentials/action (multi-session, S154+).
+- Studio Ops root-fix of propagated Node-version workflow: signed Ark question queued to studio-ops in S160; awaiting owner.
 
-Reference Evidence
-- Source f76850a; workflow 32883766091; 219 files / 1,255 assertions; immutable 950cc1ed 7/7; canonical 7/7; cutover 5/5.
+Lifecycle
+- Cost-neutral, FORGE, deployed, public-unlaunched.
 
-Next: Start Session 161 from the committed recovery checkpoint and run a full autonomous product arc through verified production.
+Next Session Pointer
+- Begin S162 from synchronized main; do not tune balance/content until consented participant evidence exists.

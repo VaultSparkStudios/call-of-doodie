@@ -13,7 +13,7 @@ export default function MobileHUD({
   isMobile = false,
   wave, timeSurvived, score, kills, deaths, health, maxHealth, level,
   currentWeapon, ammo, isReloading, extraLives, fmtTime, onPause,
-  activeDrill, drillProgress, practiceMastery, runIntegrity, runModifier, rivalPace,
+  activeDrill, drillProgress, practiceEvidence, runIntegrity, runModifier, rivalPace,
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
   combo, killstreak, experimentMatched, reducedEffects,
@@ -22,7 +22,7 @@ export default function MobileHUD({
   const weapon = WEAPONS[currentWeapon];
   const model = buildResponsiveHudModel({
     score, combo, killstreak, grenadeReady, dashReady, isReloading,
-    activeWaveContract, activeDrill, drillProgress, practiceMastery,
+    activeWaveContract, activeDrill, drillProgress, practiceEvidence,
     runIntegrity, runModifier, rivalPace, vsScore, vsName,
     topGhosts, weeklyRival, experimentMatched, reducedEffects,
   });

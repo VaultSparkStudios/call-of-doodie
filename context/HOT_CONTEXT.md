@@ -4,18 +4,19 @@
 
 ## Current Session
 
-- Session 161 (2026-08-25) completed the repository-owned `/arc` through fresh game-loop review, a three-item premise-verified audit, full implementation, isolated staging, rendered-pixel review, and the independent engineering release gate; direct-main publication and exact production verification are the remaining authorized follow-through.
-- Threat truth — off-screen enemies are transformed around the live player focus, projected into screen space after aim-down-sights zoom, grouped into at most eight angular sectors, and rendered after the world transform. Boss/elite priority and Fog of War remain authoritative.
-- Doctrine truth — each perk choice now derives prospective archetype counts from the active build and exposes the most significant authored capstone, doctrine, or mastery crossing before commitment. Unknown and duplicate perks fail closed; no choice is locked or prescribed.
-- Loop-source truth — protocol and public Game Loop sources now share the Standard/Operation run grammars, defeat/rematch paths, current evidence sources, and explicit unavailable-evidence boundaries.
-- Validation truth — full Vitest passes 220/220 files and 1,267/1,267 assertions; strict lint, deployable build, schema, public contract, dependency/runtime/assets/media/security, npm audit zero, supply-chain, and protocol courts pass. Browser E2E passes 19 with one intentional mobile Scenario Cartridge skip when run serially; the eight-worker diagnostic exposed host-timing saturation and is not represented as the authoritative result.
-- Visual truth — staging `https://session-161-staging.call-of-doodie.pages.dev/` (immutable `https://36b0643f.call-of-doodie.pages.dev/`) passes 7/7 live checks, the hosted route/theme/viewport matrix 1,020/1,020, and the focused before/after matrix 96/96. Fourteen hash-bound captures received direct review with zero blocking defects.
-- Release truth — branding, proprietary/public contract, footer 18/18, Cloudflare credential readiness, cost-neutral ALLOW, mobile-parity attestation, rollback, secrets scan, and founder authorization pass. Engineering FORGE is GO; SPARKED remains NO-GO.
-- Production truth — exact source `6cc76130d23fbd5b80bfd408029e007fd92b4000` passed GitHub Actions workflow `32894266704` with Linux lint, all 1,267 assertions, build, and Cloudflare deploy. Immutable `https://39696138.call-of-doodie.pages.dev/` and canonical `https://callofdoodie.wtf/` report deploy `6cc76130d23f` and pass 7/7 live checks each; cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and Studio launch surfaces pass.
+- Session 162 (2026-08-25/26) completed the repository-owned `/arc` through fresh game-loop review, a three-item premise-verified audit, full implementation, isolated staging, rendered-pixel review, and an independent engineering release gate; direct-main publication and exact production verification are the authorized remaining follow-through.
+- Corrective-order truth — normalized drill outcomes are grouped by exact drill, malformed and duplicate receipts fail closed, the live HUD carries prior evidence instead of resetting a mastery badge, and Run History exposes at most four newest-first local order ledgers.
+- Evidence boundary — repeatability means at least two observed improvements within the latest three receipts for that order. The archive is device-local, advisory, and explicitly not proof that the order caused an outcome or that the player mastered it.
+- Loop-source truth — protocol and public Game Loop sources share the accepted-order → live-progress → outcome → bounded-archive lifecycle and the same unavailable causal/mastery claims.
+- Validation truth — full Vitest passes 220/220 files and 1,270/1,270 assertions; strict lint, deployable build, schema, public contract, dependency/runtime/assets/media/security, npm audit zero, supply-chain, and protocol courts pass. Serial browser interaction passes 17 with one intentional mobile Scenario Cartridge skip; the eight-worker run is retained only as a host-contention diagnostic.
+- Visual truth — staging `https://session-162-staging.call-of-doodie.pages.dev/` (immutable `https://1b86fbd2.call-of-doodie.pages.dev/`) passes 7/7 live checks, the hosted route/theme/viewport matrix 1,020/1,020, and the focused before/after matrix 128/128. Fourteen hash-bound captures received direct review with zero blocking defects.
+- Release truth — branding, proprietary/public contract, footer 18/18, Cloudflare credential readiness, cost-neutral ALLOW, mobile-parity attestation, rollback, npm audit, supply-chain, and founder authorization pass. Engineering FORGE is GO; SPARKED remains NO-GO.
+- Production truth — pending the canonical closeout commit, direct-main push, CI-on-push Cloudflare deployment, and exact-source live verification required by CANON-036.
 
 ## Open Work
 
 # Task Board
+## Session 162 - Corrective-order evidence across runs
 ## Session 161 - Readable threat compass and prospective doctrine choice
 ## Session 160 - Propagation and release-evidence recovery
 ## Session 159 - Spatial Operations and evidence-bearing score
@@ -95,7 +96,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 204,000 bytes · SHA-256 `b49af9f9aaaa…`
-- `context/TASK_BOARD.md` · 130,389 bytes · SHA-256 `c35acb8b4abf…`
-- `context/DECISIONS.md` · 129,983 bytes · SHA-256 `06dea5bbaff5…`
-- `docs/AUDIT_2026-08-25.json` · 7,180 bytes · SHA-256 `73b6126e110f…`
+- `context/CURRENT_STATE.md` · 206,254 bytes · SHA-256 `3a14b8f9893e…`
+- `context/TASK_BOARD.md` · 131,340 bytes · SHA-256 `c0874f9f65d4…`
+- `context/DECISIONS.md` · 130,875 bytes · SHA-256 `923a5b99fc42…`
+- `docs/AUDIT_2026-08-25_2.json` · 8,287 bytes · SHA-256 `5a1f6c723acd…`

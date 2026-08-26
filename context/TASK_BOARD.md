@@ -2,6 +2,14 @@
 
 Public-safe launch roadmap summary.
 
+## Session 162 - Corrective-order evidence across runs
+
+- [x] [SIL:3] **DONE S162** Drill-specific persisted outcomes initialize the desktop/mobile live HUD through one normalized evidence authority; malformed, duplicate, and cross-drill receipts fail closed.
+- [x] [SIL:3] **DONE S162** Run History exposes a bounded newest-first Order Evidence archive with at most four drills, the latest three receipts per drill, observed deltas, and explicit device-local/non-causal language.
+- [x] [SIL:2] **DONE S162** Protocol and public Game Loop sources share the accepted-order, live-progress, outcome, evidence-ledger, and archive lifecycle without causal or mastery claims.
+
+**Runway exception:** participant fun/balance outcomes, further Operation breadth, realtime co-op, physical-device proof, provider/mail/identity evidence, publication, and SPARKED promotion remain independently gated; no local repeatability receipt substitutes for those proofs.
+
 ## Session 161 - Readable threat compass and prospective doctrine choice
 
 - [x] [SIL:3] **DONE S161** Off-screen threat direction is player-relative and screen-space authoritative under aim-down-sights zoom; burst spawns collapse into a bounded eight-sector compass while boss/elite priority and Fog of War remain authoritative.

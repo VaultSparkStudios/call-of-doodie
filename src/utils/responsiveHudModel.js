@@ -12,7 +12,7 @@ export function buildResponsiveHudModel({
   activeWaveContract = null,
   activeDrill = null,
   drillProgress = null,
-  practiceMastery = null,
+  practiceEvidence = null,
   runIntegrity = null,
   runModifier = null,
   rivalPace = null,
@@ -33,8 +33,8 @@ export function buildResponsiveHudModel({
     activeDrill
       ? row(88, activeDrill.title, drillProgress?.label || activeDrill.detail, "info", "drill")
       : null,
-    practiceMastery?.label
-      ? row(84, "Practice mastery", practiceMastery.label, practiceMastery.complete ? "success" : "gold", "mastery")
+    practiceEvidence?.label
+      ? row(84, "Order evidence", practiceEvidence.label, practiceEvidence.repeatable ? "success" : "gold", "drill-evidence")
       : null,
     isReloading
       ? row(82, "Reload in progress", "Weapon unavailable until the magazine is ready.", "warning", "reload")

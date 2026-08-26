@@ -1,32 +1,28 @@
 {
   "schemaVersion": "1.3",
   "date": "2026-08-25",
-  "session": 161,
+  "session": 162,
   "project": "Call-Of-Doodie",
   "intent": "complete one continuous arc through fresh game-loop review, premise-verified audit, all repository-owned implementation, isolated staging, rendered-pixel review, closeout, direct-main publication, and exact production verification",
-  "outcome": "achieved-and-production-verified",
+  "outcome": "implemented-staged-and-release-gated-production-follow-through-active",
   "shipped": [
-    "player-relative zoom-aware screen-space threat compass with bounded grouping and priority",
-    "prospective perk doctrine counts and authored milestone crossings",
-    "operation-aware protocol and public Game Loop sources",
-    "focused before-after visual harness and durable CANON-053 receipt",
-    "mobile-parity and independent FORGE engineering release evidence"
+    "evidence-backed rematch HUD using normalized persisted drill-specific receipts",
+    "bounded newest-first player Order Evidence archive in Run History",
+    "synchronized protocol/public Game Loop evidence lifecycle plus its focused visual receipt"
   ],
   "validation": [
-    "full Vitest 220 files and 1267 assertions",
-    "focused implementation court 34/34",
-    "strict lint, deployable build, schema, public, dependency, runtime, assets, media, protocol, security, npm audit zero, secret scan, and supply-chain courts",
-    "browser E2E 19 pass with one intentional mobile Scenario Cartridge skip under authoritative serial execution",
-    "isolated staging session-161-staging and immutable 36b0643f each pass 7/7 live checks",
-    "hosted route/theme/viewport matrix 1020/1020 and focused before-after matrix 96/96",
-    "14 hash-bound captures directly reviewed across both themes and complementary mobile/desktop widths with zero blocking defects",
+    "full Vitest 220 files and 1270 assertions",
+    "focused implementation court 27/27",
+    "strict lint, deployable build, schema, public, dependency, runtime, assets, media, protocol, security, npm audit zero, settings sanitization, and supply-chain courts",
+    "browser interaction 17 pass with one intentional mobile Scenario Cartridge skip under authoritative serial execution",
+    "isolated staging session-162-staging and immutable 1b86fbd2 each pass 7/7 live checks",
+    "hosted route/theme/viewport matrix 1020/1020 and focused before-after matrix 128/128",
+    "14 hash-bound captures directly reviewed across both themes and mobile/desktop widths with zero blocking defects",
     "branding compliance, footer 18/18, mobile-parity attestation, Cloudflare deploy readiness, rollback, and cost-neutral release ALLOW",
-    "engineering FORGE release gate GO; SPARKED independently NO-GO",
-    "source 6cc76130d23f passed workflow 32894266704 with Linux lint, 1267 assertions, build, and Cloudflare deploy",
-    "immutable production 39696138 and the custom domain report exact health; shell 7/7 both, cutover 5/5, backend 5/5, replay 3/3, leaderboard isolation, and launch surfaces pass"
+    "engineering FORGE release gate GO; SPARKED independently NO-GO"
   ],
   "deferred": [
-    "participant fun, comprehension, retention, and balance conclusions",
+    "participant fun, comprehension, retention, balance, causal, and mastery conclusions",
     "physical PWA/controller/full-run media and current production Core Web Vitals",
     "Zoho reply-as, project-scoped observability, Obelisk relying-party, and publication evidence",
     "further Operation/realtime expansion and explicit founder SPARKED lifecycle approval"
@@ -36,30 +32,30 @@
     "velocity": 3,
     "debt": "down"
   },
-  "headline": "Kept danger readable under zoom and made doctrine consequences visible before commitment",
+  "headline": "Carried corrective-order evidence into the next run without turning observation into causality",
   "items": [
     {
-      "title": "Player-relative screen-space threat compass",
-      "projectImpact": 9,
-      "ecosystemImpact": 5,
-      "evidence": "zoom-aware focus projection, eight-sector grouping, priority/Fog policy, unit and pixel courts"
-    },
-    {
-      "title": "Prospective doctrine delta preview",
+      "title": "Evidence-backed rematch HUD",
       "projectImpact": 8,
-      "ecosystemImpact": 5,
-      "evidence": "active-build counts, exact milestone crossings, fail-closed contract, component and pixel courts"
+      "ecosystemImpact": 4,
+      "evidence": "drill-specific normalized receipts, responsive desktop/mobile propagation, malformed/duplicate/cross-drill courts"
     },
     {
-      "title": "Operation-aware Game Loop truth",
+      "title": "Player order evidence archive",
+      "projectImpact": 8,
+      "ecosystemImpact": 4,
+      "evidence": "four-order newest-first archive, latest-three repeatability, explicit local/non-causal copy, component and pixel courts"
+    },
+    {
+      "title": "Run/drill loop contract refresh",
       "projectImpact": 6,
       "ecosystemImpact": 4,
-      "evidence": "synchronized Standard/Operation grammars, evidence boundaries, and defeat/rematch path"
+      "evidence": "synchronized accepted-order, live-progress, outcome, archive, and unavailable-evidence sources"
     }
   ],
   "followUps": [
-    "collect consented participant evidence before tuning compass density or doctrine pacing",
-    "preserve one threat authority and one archetype-delta authority across future surfaces",
+    "collect consented participant evidence before tuning order selection or repeatability thresholds",
+    "preserve one normalized drill-evidence authority across future HUD, debrief, and history surfaces",
     "keep the FORGE/SPARKED evidence boundary explicit until every external lifecycle gate is current"
   ],
   "blockers": []

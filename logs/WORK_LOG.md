@@ -1,5 +1,20 @@
 # Work Log
 
+## 2026-08-25/26 (Session 162 — corrective-order evidence across runs)
+
+- Ran the fresh game-loop review and nine-axis audit from synchronized exact production; promoted three repository-owned evidence-propagation gaps and rejected the false premise that drill outcomes were not already persisted.
+- Added one normalized drill-outcome authority with malformed-record rejection, receipt deduplication, drill-specific grouping, latest-three repeatability, and a four-order newest-first archive.
+- Replaced the live desktop/mobile reset-only mastery badge with saved drill-specific evidence and added ordinary-player Order Evidence to Run History with bounded deltas and explicit device-local/non-causal copy.
+- Synchronized protocol and public Game Loop sources around accepted order, live progress, deduplicated outcome, bounded archive, and unavailable causal/mastery claims.
+- Full Vitest passes 220/220 files and 1,270/1,270 assertions after the first run correctly caught stale Hot Context references and regeneration root-fixed them.
+- Built and directly reviewed a two-theme, mobile/desktop before-after matrix at 128/128; the hosted 20-route, two-theme, three-width staging court passes 1,020/1,020 and the canonical receipt binds 14 captures.
+- Deployed isolated staging at `session-162-staging` / immutable `1b86fbd2`; both pass 7/7 shell, edge, manifest, service-worker, and social-card checks.
+- Passed strict lint, deployable build, schema/public/security/dependency/runtime/assets/media/protocol, npm audit zero, supply-chain, branding, footer 18/18, cost, mobile-parity, rollback, and visual-receipt gates.
+- The default eight-worker browser run exposed host contention and dev-only runtime-boundary noise; authoritative serial interaction execution passes 9/9 desktop and 8/8 mobile with one intentional mobile Scenario Cartridge skip.
+- Reviewed the Creative Direction Record and found no new creative direction. The founder's `/arc` and direct-main/full-deploy authorization governs execution scope but does not change the SOUL or SPARKED evidence boundary.
+
+Intent outcome: achieved through implementation, isolated staging, rendered-pixel review, and engineering release readiness; canonical closeout, direct-main publication, CI deployment, and exact production verification are the authorized remaining follow-through.
+
 ## 2026-08-25 (Session 161 — readable threat compass and prospective doctrine choice)
 
 - Ran the fresh game-loop review and nine-axis audit from the synchronized S160 recovery checkpoint; promoted three repository-owned gaps and rejected unsupported balance, participant, hosted-AI, realtime, identity, and broad-restyle scope.

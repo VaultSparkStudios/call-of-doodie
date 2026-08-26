@@ -1,4 +1,19 @@
 <!-- truth-audit-version: 1.1 -->
+## 2026-08-25 — Session 162 — Corrective-order, evidence-boundary, and staging truth
+
+- Persistence truth — `run_drill_outcome` events were already stored. S162 closes propagation, not persistence: normalized outcomes now initialize the exact drill's live HUD and feed ordinary Run History.
+- Evidence truth — malformed receipts fail closed, receipt identifiers deduplicate, grouping is drill-specific, archive breadth is four newest-first orders, and repeatability is two observed improvements within the latest three receipts.
+- Claim truth — local outcomes can show an observed repeatable pattern. They do not prove the order caused improvement, establish mastery, or generalize to another device or player.
+- Source truth — protocol and public Game Loop documents name the same accepted-order, live-progress, outcome, archive, and unavailable-evidence lifecycle.
+- Validation truth — 220/220 Vitest files and 1,270/1,270 assertions pass. Strict lint, deployable build, schema/public/security/dependency/runtime/assets/media/protocol/supply-chain courts and npm audit zero are green.
+- Diagnostic truth — the default eight-worker browser run saturated the shared dev host and produced boot/screenshot/trace timing failures. Serial interaction execution passes 17 runnable cases with one intentional mobile Scenario Cartridge skip; the parallel result is not relabelled green.
+- Visual truth — stable staging `session-162-staging` and immutable `1b86fbd2` pass 7/7 live checks; hosted pixels pass 1,020/1,020 and focused before/after pixels pass 128/128. Fourteen hash-bound captures were directly reviewed with zero blockers.
+- Release truth — branding, footer 18/18, public/legal contract, mobile parity, Cloudflare credential readiness, cost-neutral ALLOW, rollback, npm audit, supply-chain, and founder authorization pass. Engineering FORGE is GO; SPARKED is NO-GO.
+- Production truth — pending canonical closeout, direct-main push, exact CI-on-push deployment, and immutable/custom-domain verification.
+
+Overall status: all three S162 repository-owned audit items are implemented and staging-verified. Engineering FORGE is GO; production currency is in progress and SPARKED remains NO-GO.
+Last reviewed: 2026-08-25
+
 ## 2026-08-25 — Session 161 — Threat, doctrine, loop-source, and staging truth
 
 - Threat truth — live player focus and active zoom own off-screen projection; at most eight angular sectors render after the world transform. Boss/elite priority and Fog-of-War suppression remain unchanged.

@@ -681,6 +681,23 @@
       },
       "delta": 0,
       "cause": "Session 161 makes off-screen threat direction player-relative under zoom, previews prospective perk doctrine milestones,"
+    },
+    {
+      "date": "2026-08-26",
+      "session": 162,
+      "total": 0,
+      "maxTotal": 25,
+      "overallStatus": "all three S162 repository-owned audit items are implemented and staging-verified. Engineering FORGE is GO; production currency is in progress and SPARKED remains NO-GO.",
+      "lastReviewed": "2026-08-25",
+      "dimensions": {
+        "schema_alignment": 0,
+        "prompt_template_alignment": 0,
+        "derived_view_freshness": 0,
+        "handoff_continuity": 0,
+        "contradiction_density": 0
+      },
+      "delta": 0,
+      "cause": "Session 162 is staging-verified and release-gated: corrective-order outcomes now carry through the live HUD and a bounde"
     }
   ]
 }

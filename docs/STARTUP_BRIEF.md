@@ -1,12 +1,12 @@
 <!-- generated-by: scripts/render-startup-brief.mjs v3.1 -->
-<!-- generated-at: 2026-08-25 (Session 161 closeout) -->
-<!-- semantic-freshness: hash=fd64333752b0589b next=162 silSession=161 silScore=998 handoff=161 tests=- -->
+<!-- generated-at: 2026-08-26 (Session 162 closeout) -->
+<!-- semantic-freshness: hash=6631a937a64fe6cf next=163 silSession=162 silScore=998 handoff=162 tests=- -->
 <!-- fast-boot-valid-until: next session if within 24h -->
 <!-- brief-coherent: true -->
 
 # Startup Brief — Call-Of-Doodie
 
-> **Fast-boot brief** — generated at Session 161 closeout · 2026-08-25.
+> **Fast-boot brief** — generated at Session 162 closeout · 2026-08-26.
 > Valid for next session if started within 24h. For sessions >24h later, load context files fresh (start.md §3).
 
 ---
@@ -15,12 +15,12 @@
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 CALL-OF-DOODIE                                               ║
 ║  project · deployed/public-unlaunched · FORGE                    ║
-║  Session 162 · 2026-08-25 · FOUNDER MODE                         ║
+║  Session 163 · 2026-08-26 · FOUNDER MODE                         ║
 ║  Owner: VaultSpark Studios                                       ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ LAST SESSION (S161) - WHAT SHIPPED ══════════════════════════╗
-║  Session 161 implemented a player-relative zoom-safe threat com  ║
+╔══ LAST SESSION (S162) - WHAT SHIPPED ══════════════════════════╗
+║  Session 162 carries normalized corrective-order evidence throu  ║
 ║  Tests  -                                                        ║
 ║  Deploy -                                                        ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -43,17 +43,17 @@
 ╔══ SCORE ═══════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║    998/1000   ███████████████████████░   100%                    ║
-║    SIL v3.0  ·  Avg3: 998  ·  Velocity 3↑                        ║
-║    Last active: 0d  ·  Last closeout: 0d  ·  (active = newest…   ║
-║    Trend  ▄▄▄▄▄  ↑  (last 5 sessions)                            ║
+║    SIL v3.0  ·  Avg3: 998  ·  Velocity 3→                        ║
+║    Last active: 0d  ·  Last closeout: 1d  ·  (active = newest…   ║
+║    Trend  ▄▄▄▄▄  →  (last 5 sessions)                            ║
 ║                                                                  ║
 ║    Category         Score  Bar        Spark   Δ                  ║
 ║    ─────────────── ────── ────────── ──────── ─                  ║
 ║    Dev Health       100    ██████████  ████████ →                ║
 ║    Alignment        100    ██████████  ████████ →                ║
 ║    Momentum         100    ██████████  ████████ →                ║
-║    Engagement        99    ██████████  █▇▇▇▇▇▇▇ →                ║
-║    Process Qual     100    ██████████  ████▇▇▇█ →                ║
+║    Engagement        99    ██████████  ▇▇▇▇▇▇▇▇ →                ║
+║    Process Qual     100    ██████████  ███▇▇▇██ →                ║
 ║    Coherence        100    ██████████  ········ →                ║
 ║    Security         100    ██████████  ········ →                ║
 ║    Ecosystem         99    ██████████  ········ →                ║
@@ -62,25 +62,24 @@
 ║                                                                  ║
 ╚════════════════════════════════════════════════════════════════╝
 
-╔══ WHERE WE LEFT OFF  ·  Session 161 ═══════════════════════════╗
-║  Shipped:  a player-relative, zoom-aware, bounded eight-sector   ║
+╔══ WHERE WE LEFT OFF  ·  Session 162 ═══════════════════════════╗
+║  Shipped:  one normalized corrective-order evidence authority t  ║
 ║  Tests:    1267/1267 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ✓  █████░░░░░░░░░░░░░░░░░░░   22% used                          ║
-║     58,625 / 272,000 tok  ·  codex/codex-272k  · …               ║
-║     ~29,313 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
-║     Verdict: CONTINUE                                            ║
+║  ⚠  ███████████████████████░   94% used                          ║
+║     256,134 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
+║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
 ║  ✓  Tests         1267/1267 passing (2026-08-25)                 ║
-║  ✓  Velocity      3 ↑  ·  Debt: ↓                                ║
+║  ✓  Velocity      3 →  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
-║  ✓  IGNIS         43723 FORGE  ·  2d old                         ║
-║  ⛔  Truth         all three S161 repository-owned audit items…   ║
+║  ✓  IGNIS         43723 FORGE  ·  3d old                         ║
+║  ⛔  Truth         all three S162 repository-owned audit items…   ║
 ║  ⚠  Compliance   not tracked — run: node scripts/ops.mjs…        ║
 ║  ✓  Genome dims   all stable  (0/25)                             ║
 ║  ✓  Entropy       0.197  (healthy)                               ║
@@ -92,13 +91,13 @@
 ║  ⛔  Doctor        148/203 (74%)  ·  2 failing                    ║
 ║  ⚠  Codex trust   local hooks/config not trusted                 ║
 ║  ✓  Canon adopt.  0/54 pending review                            ║
-║  ✓  Cost          real $0.01/7d · 7d notional $0.08…             ║
+║  ✓  Cost          real $0.06/7d · 7d notional $0.35…             ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ FOUNDER UNLOCKS ═════════════════════════════════════════════╗
 ║  Single founder actions that reopen sprint surface:              ║
-║   103d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
-║   125d · Physical launch QA                                      ║
+║   104d · [S60] Rotate or narrow the broad Cloudflare `cloud      ║
+║   126d · Physical launch QA                                      ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ ORCHESTRATOR ════════════════════════════════════════════════╗
@@ -115,7 +114,7 @@
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ MOMENTUM METER ══════════════════════════════════════════════╗
-║  Velocity:   ▄▄▄▄▄  3↑  (last 5 sessions)                        ║
+║  Velocity:   ▄▄▄▄▄  3→  (last 5 sessions)                        ║
 ║  Intent:     100% achieved last 5                                ║
 ║  Streak:     ✓ 10 consecutive achieved-intent sessions           ║
 ╚════════════════════════════════════════════════════════════════╝
@@ -150,5 +149,5 @@
 
 ---
 
-*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 161 closeout · 2026-08-25*
+*Generated by `scripts/render-startup-brief.mjs v3.1` · Session 162 closeout · 2026-08-26*
 *Run `node scripts/ops.mjs doctor` for live health check · `node scripts/ops.mjs genius-list` to refresh hit list*

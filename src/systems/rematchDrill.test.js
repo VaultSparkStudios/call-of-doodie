@@ -7,7 +7,6 @@ import {
   estimateNonBossWaveCount,
   buildRematchKit,
   buildRematchDrillBrief,
-  buildRematchMasteryReceipt,
 } from "./rematchDrill.js";
 
 describe("resolveRematchStartWave", () => {
@@ -108,21 +107,5 @@ describe("buildRematchDrillBrief", () => {
     expect(brief.title).toBe("Wave 5 correction");
     expect(brief.label).toBe("REMATCH W4");
     expect(brief.detail).toContain("Practice the exact failure point");
-  });
-});
-
-describe("buildRematchMasteryReceipt", () => {
-  it("summarizes best-of-3 mastery progress", () => {
-    expect(buildRematchMasteryReceipt({ attempts: 1, wins: 1 })).toMatchObject({
-      attempts: 1,
-      wins: 1,
-      targetWins: 2,
-      complete: false,
-      label: "BEST-OF-3 1/2",
-    });
-    expect(buildRematchMasteryReceipt({ attempts: 3, wins: 2 })).toMatchObject({
-      complete: true,
-      label: "BEST-OF-3 MASTERED",
-    });
   });
 });

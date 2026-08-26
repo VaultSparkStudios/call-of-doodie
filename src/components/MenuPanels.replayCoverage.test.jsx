@@ -37,4 +37,23 @@ describe("Run History replay coverage passport", () => {
     expect(html).not.toContain("TRUST OPS");
     expect(html).not.toContain("REPLAY COVERAGE PASSPORT");
   });
+
+  it("shows bounded corrective-order evidence to ordinary players without a causal claim", () => {
+    const html = renderToStaticMarkup(
+      <RunHistoryPanel
+        runHistory={[]}
+        rivalryHistory={[]}
+        studioEvents={[
+          { type: "run_drill_outcome", payload: { receiptId: "r-1", drillId: "spacing", title: "Hold the lane", status: "improved", endedAt: 10, baseline: { wave: 3, score: 100 }, observed: { wave: 4, score: 180 }, scoreDelta: 80 } },
+          { type: "run_drill_outcome", payload: { receiptId: "r-2", drillId: "spacing", title: "Hold the lane", status: "improved", endedAt: 20, baseline: { wave: 4, score: 180 }, observed: { wave: 6, score: 310 }, scoreDelta: 130 } },
+        ]}
+        onClose={() => {}}
+      />,
+    );
+    expect(html).toContain("ORDER EVIDENCE · THIS DEVICE");
+    expect(html).toContain("Hold the lane");
+    expect(html).toContain("REPEATABLE IMPROVEMENT");
+    expect(html).toContain("not proof that the order caused it");
+    expect(html).not.toContain("TRUST OPS");
+  });
 });

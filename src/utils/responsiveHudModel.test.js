@@ -25,4 +25,17 @@ describe("responsive HUD model", () => {
     expect(model.capabilityReceipt.alwaysVisible).toEqual(expect.arrayContaining(["health", "weapon", "ability-readiness"]));
     expect(model.capabilityReceipt.actionIds).toEqual(["dash", "grenade", "reload"]);
   });
+
+  it("carries persisted order evidence without claiming practice mastery", () => {
+    const model = buildResponsiveHudModel({
+      activeDrill: { title: "Hold the lane", detail: "Keep one exit open." },
+      drillProgress: { label: "BASELINE PASSED · W6" },
+      practiceEvidence: { label: "EVIDENCE 1/2", repeatable: false },
+      dashReady: true,
+      grenadeReady: true,
+    });
+    expect(model.detailRows.map((item) => item.id)).toEqual(["drill", "drill-evidence"]);
+    expect(model.detailRows[1]).toMatchObject({ label: "Order evidence", detail: "EVIDENCE 1/2", tone: "gold" });
+    expect(JSON.stringify(model)).not.toContain("mastery");
+  });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildActiveRunDrill, buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillLiveProgress, buildRunDrillOutcomeReceipt, sanitizeCarriedRunDrill } from "./runDrill.js";
+import { buildActiveRunDrill, buildDrillEvidenceArchive, buildDrillEvidenceLedger, buildDrillLaunchPayload, buildRunDrillLiveProgress, buildRunDrillOutcomeReceipt, sanitizeCarriedRunDrill } from "./runDrill.js";
 
 describe("next-run drill continuity", () => {
   const drill = { id: "strafe", title: "Strafe the burst", detail: "Move perpendicular." };
@@ -127,5 +127,36 @@ describe("next-run drill continuity", () => {
     expect(buildRunDrillLiveProgress(active, { wave: 9, score: 99999 })).toMatchObject({
       status: "before", scoreDelta: null,
     });
+  });
+});
+
+describe("drill evidence archive", () => {
+  it("groups normalized receipts newest-first without leaking malformed or duplicate rows", () => {
+    const receipts = [
+      { receiptId: "a-1", drillId: "spacing", title: "Hold the lane", status: "improved", endedAt: 100, baseline: { wave: 4, score: 100 }, observed: { wave: 5, score: 140 } },
+      { receiptId: "a-2", drillId: "spacing", title: "Hold the lane", status: "improved", endedAt: 300, baseline: { wave: 5, score: 140 }, observed: { wave: 7, score: 260 } },
+      { receiptId: "b-1", drillId: "reload", title: "Reload behind cover", status: "held", endedAt: 200, baseline: { wave: 3, score: 90 }, observed: { wave: 3, score: 90 } },
+      { receiptId: "a-2", drillId: "spacing", title: "duplicate", status: "regressed", endedAt: 50, baseline: { wave: 9 }, observed: { wave: 1 } },
+      { receiptId: "bad", drillId: "", status: "improved" },
+    ];
+    const archive = buildDrillEvidenceArchive(receipts);
+    expect(archive.map((item) => item.drillId)).toEqual(["spacing", "reload"]);
+    expect(archive[0]).toMatchObject({ title: "Hold the lane", attempts: 2, improvements: 2, repeatable: true, label: "REPEATABLE IMPROVEMENT" });
+    expect(archive[0].latest.waveDelta).toBe(2);
+    expect(archive[1]).toMatchObject({ attempts: 1, improvements: 0, repeatable: false, label: "EVIDENCE 0/2" });
+  });
+
+  it("is bounded and returns no speculative empty cards", () => {
+    expect(buildDrillEvidenceArchive([null, {}, { receiptId: "x" }])).toEqual([]);
+    const rows = Array.from({ length: 10 }, (_, index) => ({
+      receiptId: `r-${index}`,
+      drillId: `d-${index}`,
+      title: `Order ${index}`,
+      status: "held",
+      endedAt: index + 1,
+      baseline: { wave: 2 },
+      observed: { wave: 2 },
+    }));
+    expect(buildDrillEvidenceArchive(rows, { limit: 3 })).toHaveLength(3);
   });
 });

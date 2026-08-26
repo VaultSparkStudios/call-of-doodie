@@ -126,10 +126,18 @@ for (const capturePath of reviewedCapturePaths) {
   const source = path.resolve(root, capturePath);
   if (!fs.existsSync(source)) throw new Error(`Reviewed capture missing: ${capturePath}`);
   const basename = path.basename(source);
-  const theme = /(?:^|[-_])light(?:[-_.]|$)/i.test(basename) ? "light" : "dark";
-  const width = /(?:^|[-_])mobile(?:[-_.]|$)/i.test(basename) ? 390 : 1440;
+  const theme = /(?:^|[-_])(?:light|porcelain-day)(?:[-_.]|$)/i.test(basename) ? "light" : "dark";
+  const width = /(?:^|[-_])(?:mobile|390)(?:[-_.]|$)/i.test(basename)
+    ? 390
+    : /(?:^|[-_])(?:tablet|768)(?:[-_.]|$)/i.test(basename)
+      ? 768
+      : 1440;
   const state = basename.includes("mastery")
     ? { file: `mastery-command-${theme}-${width}.png`, page: "Commander's Orders weapon-mastery projection" }
+    : basename.includes("order-hud")
+      ? { file: `order-evidence-hud-${theme}-${width}.png`, page: "Persisted corrective-order evidence in the live HUD" }
+      : basename.includes("order-history")
+        ? { file: `order-evidence-archive-${theme}-${width}.png`, page: "Bounded corrective-order evidence archive in Run History" }
     : basename.includes("drill-outcome")
       ? { file: `drill-outcome-${theme}-${width}.png`, page: "Death-screen prior drill outcome before next verdict" }
       : { file: `death-brief-${theme}-${width}.png`, page: "Death-screen revenge brief first viewport" };
@@ -206,7 +214,12 @@ const receipt = {
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
       ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("mastery")) ? ["The compact weapon-mastery projection is readable in Commander's Orders at 390px and 1440px across both project themes without colliding with the mobile dock."] : []),
       ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("drill-outcome")) ? ["The prior drill's observed result appears before ONE VERDICT at 390px and 1440px; its wave, comparable score, repeatability evidence, and non-causal boundary remain readable."] : []),
-      ...(reviewedCapturePaths.some((capturePath) => !path.basename(capturePath).includes("mastery") && !path.basename(capturePath).includes("drill-outcome")) ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
+      ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("order-hud")) ? ["The live HUD carries persisted drill-specific evidence at 390px and 1440px without reviving the reset-only mastery claim."] : []),
+      ...(reviewedCapturePaths.some((capturePath) => path.basename(capturePath).includes("order-history")) ? ["The bounded Run History archive remains readable at 390px and 1440px, including its local, observed, non-causal evidence boundary."] : []),
+      ...(reviewedCapturePaths.some((capturePath) => {
+        const basename = path.basename(capturePath);
+        return !basename.includes("mastery") && !basename.includes("drill-outcome") && !basename.includes("order-hud") && !basename.includes("order-history");
+      }) ? ["The death-screen revenge brief is visible with its RUN THE FIX action in the first viewport at 390px and 1440px; secondary analysis remains collapsed and reachable."] : []),
       ...(stateReceipt ? [`The expanded Replay Coverage Passport passed ${stateReceipt.summary.passed}/${stateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
       ...(playtestStateReceipt ? [`The real deploy-to-defeat Playtest Flight Receipt and aggregate Command Post passed ${playtestStateReceipt.summary.passed}/${playtestStateReceipt.summary.checks} focused state checks at mobile and desktop in both themes.`] : []),
       ...(operationStateReceipt ? [`The hosted authored Operation deck and live arena interaction passed ${operationStateReceipt.summary.passed}/${operationStateReceipt.summary.checks} focused checks at 390px and 1440px in both project themes.`] : []),

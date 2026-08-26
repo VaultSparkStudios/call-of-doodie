@@ -24,6 +24,7 @@ import {
 } from "../utils/studioEventOps.js";
 import { buildPrestigeRunway, PRESTIGE_REQUIRED_LEVEL } from "../utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../utils/replayCoverage.js";
+import { buildDrillEvidenceArchive } from "../systems/runDrill.js";
 import { isOpsDebug } from "../utils/debugFlags.js";
 import { COSMETICS, isCosmeticOwned, equipCosmetic } from "../utils/cosmeticTrack.js";
 
@@ -227,6 +228,9 @@ export function RunHistoryPanel({
   const bountyBoard = buildBountyBoard(history, rivalry, dailyChampion);
   const trustRecommendations = buildTrustRecommendations(trustSummary);
   const replayCoverage = buildReplayCoveragePassport();
+  const drillArchive = buildDrillEvidenceArchive(
+    events.filter((event) => event.type === "run_drill_outcome").map((event) => event.payload),
+  );
   const launchSeed = (seed, challenge = null) => {
     if (!seed || typeof onLaunchSeed !== "function") return;
     onLaunchSeed(seed, challenge || {});
@@ -263,6 +267,28 @@ export function RunHistoryPanel({
             </div>
           )}
         </div>
+        {drillArchive.length > 0 && (
+          <div data-testid="order-evidence-archive" style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(124,255,184,0.05)", border: "1px solid rgba(124,255,184,0.2)" }}>
+            <div style={{ color: "#7CFFB8", fontSize: 11, fontWeight: 900, letterSpacing: 1 }}>ORDER EVIDENCE · THIS DEVICE</div>
+            <div style={{ color: "#AEB9C3", fontSize: 9, lineHeight: 1.45, marginTop: 4 }}>
+              Recent corrective runs are grouped by order. Repeated improvement is observed local evidence, not proof that the order caused it.
+            </div>
+            <div style={{ display: "grid", gap: 7, marginTop: 9 }}>
+              {drillArchive.map((order) => (
+                <div key={order.drillId} style={{ padding: "8px 9px", borderRadius: 7, background: "rgba(0,0,0,0.2)", border: `1px solid ${order.repeatable ? "rgba(124,255,184,0.34)" : "rgba(255,209,102,0.25)"}` }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "baseline", flexWrap: "wrap" }}>
+                    <strong style={{ color: "#FFF", fontSize: 11 }}>{order.title}</strong>
+                    <span style={{ color: order.repeatable ? "#7CFFB8" : "#FFD166", fontSize: 9, fontWeight: 900 }}>{order.label}</span>
+                  </div>
+                  <div style={{ color: "#B8C2CC", fontSize: 9, marginTop: 4 }}>
+                    {order.attempts} recent attempt{order.attempts === 1 ? "" : "s"} · latest W{order.latest.baseline.wave} → W{order.latest.observed.wave}
+                    {order.latest.scoreDelta != null ? ` · score ${order.latest.scoreDelta >= 0 ? "+" : ""}${order.latest.scoreDelta.toLocaleString()}` : ""}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <div style={{ marginBottom: 12, padding: "10px 12px", borderRadius: 8, background: "rgba(0,229,255,0.04)", border: "1px solid rgba(0,229,255,0.18)" }}>
           <div style={{ color: "#7FE6FF", fontSize: 11, fontWeight: 900, letterSpacing: 1, marginBottom: 8 }}>⚔️ RIVALRY NETWORK</div>
           {bountyBoard.length > 0 && (

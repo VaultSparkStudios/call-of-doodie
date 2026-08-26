@@ -9,7 +9,7 @@ import {
   WAVE_CHALLENGE_MUTATIONS, WEAPON_ARSENAL_MILESTONE_LEVELS, BOSS_GRUDGE_QUOTES,
   getWeeklyGauntlet,
 } from "./constants.js";
-import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
+import { loadLeaderboard, saveToLeaderboard, updateCareerStats, loadCareerStats, getDailyMissions, loadMissionProgress, saveMissionProgress, advanceMissionStreak, loadMetaProgress, getLockedCallsign, lockCallsign, claimCallsign, getAccountLevel, markDailyChallengeSubmitted, getPlayerGlobalRank, saveRunToHistory, loadMetaTree, issueRunToken, saveStudioGameEvent, loadStudioGameEvents, recordDeathByEnemy, loadRivalryHistory, loadTopGhosts, loadWeeklyTopGhost, loadExperimentIntent, getBossKillRecord, saveBossKillRecord, isNemesis, getAdaptiveSpawnMods, getProximityRivals, getWaveDeathCounts, getWeaponEvolutionState, getCommunityChokePoints, updateEnemyCareerStatsBatch, recordDoctrineForge } from "./storage.js";
 import { spawnEnemy as _spawnEnemy, spawnBoss as _spawnBoss, BOSS_ROTATION, applyEliteType, getRandomEliteType, getWaveSpawnRng } from "./gameHelpers.js";
 import { preloadBossAtlas, preloadEnemyAtlasesForTypes, preloadObjectAtlases, preloadZombieAtlas } from "./utils/visualAssetLibrary.js";
 import { cosmeticRandom, createNamedRunRng, getRunRng, shuffleWithRng } from "./systems/runRng.js";
@@ -125,8 +125,8 @@ import {
 } from "./systems/waveDirector.js";
 import { buildWavePlanReceipt, recordWavePlanSnapshot } from "./systems/wavePlanReceipt.js";
 import { createBossWavePlan } from "./systems/bossWaveFlow.js";
-import { buildRematchKit, buildRematchDrillBrief, buildRematchMasteryReceipt, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
-import { buildActiveRunDrill, sanitizeCarriedRunDrill } from "./systems/runDrill.js";
+import { buildRematchKit, buildRematchDrillBrief, getMaxEnemiesForWave, estimateNonBossWaveCount } from "./systems/rematchDrill.js";
+import { buildActiveRunDrill, buildDrillEvidenceLedger, sanitizeCarriedRunDrill } from "./systems/runDrill.js";
 import {
   createDeathStudioEvents,
   createRunHistoryEntry,
@@ -624,7 +624,12 @@ export default function CallOfDoodie() {
       const gs0 = gsRef.current;
       gs0.practiceRun = true;
       gs0.practiceDrill = buildRematchDrillBrief({ drill: practiceDrill, deathWave: practiceDrill?.deathWave || _rematchKit.startWave, startWave: _rematchKit.startWave });
-      gs0.practiceMastery = buildRematchMasteryReceipt({ attempts: 1, wins: 0 });
+      const priorDrillOutcomes = loadStudioGameEvents()
+        .filter((event) => event.type === "run_drill_outcome")
+        .map((event) => event.payload);
+      gs0.practiceEvidence = practiceDrill?.id
+        ? buildDrillEvidenceLedger(priorDrillOutcomes, { drillId: practiceDrill.id })
+        : null;
       gs0.currentWave = _rematchKit.startWave;
       gs0.maxEnemiesThisWave = getMaxEnemiesForWave(_rematchKit.startWave);
       gs0._nonBossWaveCount = estimateNonBossWaveCount(_rematchKit.startWave);
@@ -4729,7 +4734,7 @@ export default function CallOfDoodie() {
         practiceDrill={gsRef.current?.practiceDrill || null}
         runDrill={gsRef.current?.activeRunDrill || null}
         runIntegrity={getRunIntegrityReceipt(gsRef.current)}
-        practiceMastery={gsRef.current?.practiceMastery || null}
+        practiceEvidence={gsRef.current?.practiceEvidence || null}
       />
 
       {/* Mobile action bar */}

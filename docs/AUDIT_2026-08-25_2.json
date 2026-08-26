@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "1.0",
+  "generatedBy": "/audit skill (S162)",
+  "generatedAt": "2026-08-25",
+  "session": 162,
+  "project": "call-of-doodie",
+  "type": "game-app",
+  "rubric": "nine-axis-humiliation-to-evidence-loop",
+  "meta": {
+    "generatedAt": "2026-08-25",
+    "project": "call-of-doodie",
+    "type": "game",
+    "candidateCount": 27,
+    "promotedCount": 3,
+    "combinedPriority": 65.1,
+    "top3": [
+      "evidence-backed-rematch-hud",
+      "player-order-evidence-archive",
+      "run-drill-loop-contract-refresh"
+    ],
+    "livePremiseVerification": true,
+    "premiseEvidence": "Current App, HUD, DeathScreen, Run History, storage, run-drill tests, Game Loop sources, and the S161 production baseline prove one truth-propagation gap across an otherwise persisted corrective-order loop.",
+    "gameLoopReview": {
+      "source": "docs/GAME_LOOP_REVIEW_2026-08-25_S162.md",
+      "loopTightness": 9.2,
+      "progressionCurve": 8.9,
+      "sessionEngagement": 8.9,
+      "retentionHooks": 8.7,
+      "soulFidelity": 9.4,
+      "overall": 9.0,
+      "evidenceBoundary": "Structural scores only; no participant fun, balance, satisfaction, or retention claim."
+    }
+  },
+  "axisCoverage": {
+    "feature depth & refinement": "Carry the existing corrective-order evidence through active play and history instead of creating another progression system.",
+    "innovation": "Turn a death recommendation into a local evidence chord spanning acceptance, live execution, observed result, and bounded repeatability.",
+    "ui / ux / user-experience": "Replace a reset-only mastery badge with the exact saved evidence state on desktop/mobile and add a concise archive surface.",
+    "feedback loop": "Make prior attempts visible before, during, and after the next correction run.",
+    "gamification / engagement / immersion": "Let humiliation become evidence-backed revenge without manufacturing streaks or grind.",
+    "ai / intelligence integration": "Preserve deterministic local coaching and evidence ranking; add no hosted inference or causal claim.",
+    "security": "Read only the existing bounded normalized Studio-event payloads; add no identity, network, secret, or untrusted-rendering boundary.",
+    "speed / organization / efficiency": "Centralize drill aggregation in one pure utility shared by HUD initialization, DeathScreen, and Run History.",
+    "token / api cost reduction": "Reuse existing local receipts and components with zero dependency and zero per-player API cost."
+  },
+  "items": [
+    {
+      "slug": "evidence-backed-rematch-hud",
+      "tier": "FIRE",
+      "axis": "feedback / trust / revenge loop",
+      "effortHours": 5,
+      "impact": 10,
+      "innovation": 8,
+      "priority": 28.5,
+      "status": "complete",
+      "why": "Every rematch initializes `practiceMastery` to one attempt and zero wins even when drill-specific outcomes already exist, so the live HUD contradicts saved evidence.",
+      "recipe": "Add a pure drill-evidence aggregator, derive a prior-evidence snapshot from normalized `run_drill_outcome` events at run start, replace the mastery claim with an evidence receipt, and propagate it through responsive desktop/mobile HUD models.",
+      "measurement": "Duplicate/malformed events fail closed; grouping is drill-specific and bounded; prior improvements render identically on desktop/mobile; no mastery or causal claim is introduced.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Remove the reset-only label and render no evidence claim." },
+        "L2": { "effortHours": 5, "recipe": "Derive, test, and render persisted drill-specific evidence across both HUD paths." },
+        "L3": { "effortHours": 8, "recipe": "Add the L2 contract plus live transition announcements and richer visual states after evidence thresholds change." }
+      }
+    },
+    {
+      "slug": "player-order-evidence-archive",
+      "tier": "FIRE",
+      "axis": "retention / progression / discovery",
+      "effortHours": 5,
+      "impact": 9,
+      "innovation": 8,
+      "priority": 25.7,
+      "status": "complete",
+      "why": "Run History already receives the normalized Studio-event ledger, but ordinary players cannot revisit their corrective-order outcomes or repeatability evidence after leaving the death screen.",
+      "recipe": "Use the shared aggregator to render a bounded Order Evidence section in Run History with drill title, attempts, observed improvements, latest wave delta, and explicit local/non-causal copy; cover empty, malformed, duplicate, and multi-drill cases.",
+      "measurement": "At most four grouped orders render newest-first; raw payload/free text is never injected; the empty state stays quiet; desktop/mobile static rendering and focused pixels pass.",
+      "ladder": {
+        "L1": { "effortHours": 2, "recipe": "Render only the latest normalized drill outcome." },
+        "L2": { "effortHours": 5, "recipe": "Render a bounded grouped archive with repeatability evidence and tests." },
+        "L3": { "effortHours": 8, "recipe": "Add L2 plus one-click same-seed relaunch when a valid bounded seed remains available." }
+      }
+    },
+    {
+      "slug": "run-drill-loop-contract-refresh",
+      "tier": "EMBER",
+      "axis": "coherence / audit efficiency / proof",
+      "effortHours": 2,
+      "impact": 7,
+      "innovation": 4,
+      "priority": 10.9,
+      "status": "complete",
+      "why": "The current Game Loop sources mention corrective drills and rematches but omit the persisted multi-attempt ledger and its observed-outcome-only ceiling.",
+      "recipe": "Synchronize protocol and public Game Loop sources with the accepted-order, live-progress, outcome, evidence-ledger, and archive paths while preserving the local/advisory and non-causal boundary.",
+      "measurement": "Both sources name the same evidence lifecycle, persistence boundary, and unavailable claims; public wording remains acronym-safe and proprietary-safe.",
+      "ladder": {
+        "L1": { "effortHours": 1, "recipe": "Add the missing evidence-ledger sentence to both sources." },
+        "L2": { "effortHours": 2, "recipe": "Reconcile the full drill lifecycle and evidence boundaries in both sources." },
+        "L3": { "effortHours": 3, "recipe": "Add L2 plus a compact source-to-runtime evidence map for future audits." }
+      }
+    }
+  ],
+  "skipped": [
+    { "slug": "missing-drill-persistence", "reason": "FALSE PREMISE — normalized `run_drill_outcome` events are already persisted, deduplicated, and optionally mirrored." },
+    { "slug": "drill-causes-mastery", "reason": "CULLED — outcomes can show repeatable improvement, never causal mastery." },
+    { "slug": "balance-or-progression-retune", "reason": "DATA-BLOCKED — no consented participant corpus supports numeric tuning." },
+    { "slug": "hosted-ai-coach", "reason": "CULLED — deterministic local coaching is higher-trust and cost-neutral." },
+    { "slug": "full-replay-physics", "reason": "DEFERRED PROGRAM — the existing passport correctly marks enemy/projectile parity unavailable." },
+    { "slug": "new-operation-content", "reason": "DATA-BLOCKED — current authored breadth has no participant evidence requiring expansion." },
+    { "slug": "identity-mail-observability-publication", "reason": "GATED — provider, physical, lifecycle, and publication evidence remain independent of repository-owned loop work." }
+  ],
+  "executionLog": [
+    {
+      "slug": "evidence-backed-rematch-hud",
+      "status": "complete",
+      "level": "L2",
+      "session": 162,
+      "evidence": "Persisted drill-specific receipts now initialize the desktop and mobile HUD; malformed, duplicate, and cross-drill evidence fails closed."
+    },
+    {
+      "slug": "player-order-evidence-archive",
+      "status": "complete",
+      "level": "L2",
+      "session": 162,
+      "evidence": "Run History now exposes a newest-first, four-order local archive using normalized receipts and explicit non-causal wording."
+    },
+    {
+      "slug": "run-drill-loop-contract-refresh",
+      "status": "complete",
+      "level": "L2",
+      "session": 162,
+      "evidence": "Protocol and public Game Loop sources now describe the same accepted-order, live-progress, outcome, archive, and evidence-ceiling contract."
+    }
+  ]
+}

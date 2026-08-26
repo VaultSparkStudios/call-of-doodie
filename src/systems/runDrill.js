@@ -88,6 +88,35 @@ export function buildRunDrillOutcomeReceipt(activeDrill, {
   };
 }
 
+function normalizeRunDrillOutcomeReceipt(receipt) {
+  if (!receipt || typeof receipt !== "object" || Array.isArray(receipt)) return null;
+  const receiptId = boundedText(receipt.receiptId, 120);
+  const drillId = boundedText(receipt.drillId, 48);
+  const status = ["improved", "held", "regressed"].includes(receipt.status) ? receipt.status : null;
+  if (!receiptId || !drillId || !status) return null;
+  const endedAt = Number(receipt.endedAt);
+  const baselineWave = Math.max(1, whole(receipt.baseline?.wave, 1));
+  const observedWave = Math.max(1, whole(receipt.observed?.wave, 1));
+  const scoreDelta = receipt.scoreDelta == null || !Number.isFinite(Number(receipt.scoreDelta))
+    ? null
+    : Math.trunc(Number(receipt.scoreDelta));
+  return {
+    version: 1,
+    receiptId,
+    drillId,
+    title: boundedText(receipt.title, 120, "Corrective order"),
+    launchKind: ["new_run", "replay_seed", "rematch"].includes(receipt.launchKind) ? receipt.launchKind : "new_run",
+    baseline: { wave: baselineWave, score: whole(receipt.baseline?.score, 0) },
+    observed: { wave: observedWave, score: whole(receipt.observed?.score, 0) },
+    waveDelta: observedWave - baselineWave,
+    scoreDelta,
+    status,
+    masteryClaim: "observed-outcome-only",
+    label: status === "improved" ? "IMPROVEMENT OBSERVED" : status === "held" ? "BASELINE HELD" : "MORE PRACTICE NEEDED",
+    endedAt: Number.isFinite(endedAt) && endedAt > 0 ? Math.floor(endedAt) : 0,
+  };
+}
+
 export function buildDrillEvidenceLedger(receipts = [], {
   drillId = null,
   targetImprovements = 2,
@@ -96,8 +125,9 @@ export function buildDrillEvidenceLedger(receipts = [], {
   const target = Math.max(1, whole(targetImprovements, 2));
   const window = Math.max(target, whole(windowSize, 3));
   const seen = new Set();
-  const relevant = receipts
-    .filter((receipt) => receipt?.receiptId && (!drillId || receipt.drillId === drillId))
+  const relevant = (Array.isArray(receipts) ? receipts : [])
+    .map(normalizeRunDrillOutcomeReceipt)
+    .filter((receipt) => receipt && (!drillId || receipt.drillId === drillId))
     .sort((a, b) => Number(b.endedAt || 0) - Number(a.endedAt || 0))
     .filter((receipt) => {
       if (seen.has(receipt.receiptId)) return false;
@@ -117,6 +147,37 @@ export function buildDrillEvidenceLedger(receipts = [], {
     claim: "repeatability-evidence-not-causality",
     label: repeatable ? "REPEATABLE IMPROVEMENT" : `EVIDENCE ${improvements}/${target}`,
   };
+}
+
+export function buildDrillEvidenceArchive(receipts = [], {
+  limit = 4,
+  targetImprovements = 2,
+  windowSize = 3,
+} = {}) {
+  const boundedLimit = Math.max(1, Math.min(8, whole(limit, 4)));
+  const normalized = (Array.isArray(receipts) ? receipts : [])
+    .map(normalizeRunDrillOutcomeReceipt)
+    .filter(Boolean)
+    .sort((a, b) => b.endedAt - a.endedAt);
+  const grouped = new Map();
+  for (const receipt of normalized) {
+    if (!grouped.has(receipt.drillId)) grouped.set(receipt.drillId, []);
+    grouped.get(receipt.drillId).push(receipt);
+  }
+  return [...grouped.entries()]
+    .map(([drillId, drillReceipts]) => {
+      const latest = drillReceipts[0];
+      const evidence = buildDrillEvidenceLedger(drillReceipts, { drillId, targetImprovements, windowSize });
+      return {
+        drillId,
+        title: latest.title,
+        latest,
+        ...evidence,
+        claim: "local-observed-outcomes-not-causality",
+      };
+    })
+    .sort((a, b) => b.latest.endedAt - a.latest.endedAt)
+    .slice(0, boundedLimit);
 }
 export function buildDrillLaunchPayload(drill, contract, {
   baselineWave = 1,

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-25T19:39:28.038Z",
-  "stagingUrl": "https://session-161-staging.call-of-doodie.pages.dev/",
-  "uiBaseRef": "2e35f3d",
+  "capturedAt": "2026-08-26T01:38:38.057Z",
+  "stagingUrl": "https://session-162-staging.call-of-doodie.pages.dev/",
+  "uiBaseRef": "917a3cf",
   "uiHeadRef": "HEAD",
-  "workingTreeUiSha256": "9f459a02ccdff5c5361aa3d07759d189b41d0d44afc2a38dc9297d94ff1921af",
+  "workingTreeUiSha256": "493a4737e93c29902bbc6095eda96c6da172a21bd076a1a5e7def9f955a11d8b",
   "sourceMatrix": {
-    "receipt": "output/playwright/session-161-staging-visuals/visual-audit-receipt.json",
-    "sha256": "9ad688966cd2c5cd6f9a0a1077c8cb99f0b40984667e5383ff4c58ffa2e4bc39",
+    "receipt": "output/playwright/session-162-staging-visuals/visual-audit-receipt.json",
+    "sha256": "3997cd1804cf33ec5701cbd0cad04b340697b1787317f08370dc3b61df126a23",
     "checks": {
       "pass": true,
       "total": 1020,
@@ -15,17 +15,7 @@
       "failures": []
     }
   },
-  "touchedState": {
-    "surface": "Player-relative threat compass and prospective perk doctrine deltas",
-    "receipt": "docs/visual-qa/session-161/receipt.json",
-    "sha256": "177a0784edbbfcfd002f08023433cb955ad611a976f258ba8745134bc64986ff",
-    "checks": {
-      "pass": true,
-      "checks": 96,
-      "passed": 96,
-      "failures": []
-    }
-  },
+  "touchedState": null,
   "additionalTouchedStates": [],
   "themes": [
     "dark",
@@ -45,7 +35,7 @@
     },
     {
       "file": "home-light-desktop.png",
-      "sha256": "66eb12013defa3bd8663be8e73b01ed107ce4298bc3c63eaf9fa96db9a94c2d1",
+      "sha256": "1faea70470bcdabcd44aeb2ca36a8e3d122d1cfc98fe1231aaf917f6c7a83cca",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
@@ -99,92 +89,92 @@
       "page": "Leaderboard surface"
     },
     {
-      "file": "session-161/perk-before--sewer-night--390.png",
-      "sha256": "72ce24c2dd754661d2271b73def9b0efe436611dd9e7e80ab3e9faef99415845",
+      "file": "order-evidence-hud-dark-390.png",
+      "sha256": "52d78eb9471d9f1e4a7e02201f0d86602580ffc10892a603e31bae2e003d3a17",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Perk selection baseline before doctrine-delta preview"
+      "page": "Persisted corrective-order evidence in the live HUD"
     },
     {
-      "file": "session-161/perk-after--sewer-night--390.png",
-      "sha256": "5766f8ba7a45d28590e6ccb4b48103697ecaef6ad5b0c0acc38abb92870ca3de",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 844
-      },
-      "page": "Perk selection with doctrine-delta preview"
-    },
-    {
-      "file": "session-161/perk-before--porcelain-day--1440.png",
-      "sha256": "154f4cc1ec86bb614f9a75b32b2e203d48fc5976920f6cf057e25a7fff5a2998",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Perk selection baseline before doctrine-delta preview"
-    },
-    {
-      "file": "session-161/perk-after--porcelain-day--1440.png",
-      "sha256": "ecfa458493b7c26f3394b833a50c7d77e6c719ba1030d77b8d9f1a8b8bdb1a4c",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Perk selection with doctrine-delta preview"
-    },
-    {
-      "file": "session-161/threat-before--sewer-night--1440.png",
-      "sha256": "f02e4b2bc8adb10e55b7d1d6c48484e18a92d4a0c1c53640b49d7c6899eba1f3",
+      "file": "order-evidence-hud-dark-1440.png",
+      "sha256": "79a1aa2440c46eae624bfd3e5485a51f03989e82666b3c6e24696ef61d60e976",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "ADS threat-marker baseline inside the world transform"
+      "page": "Persisted corrective-order evidence in the live HUD"
     },
     {
-      "file": "session-161/threat-after--sewer-night--1440.png",
-      "sha256": "11de7cb655d5ac897bd3831cb3ac9df90937fd0fdbabdbece154418e667a9358",
+      "file": "order-evidence-hud-light-390.png",
+      "sha256": "52d78eb9471d9f1e4a7e02201f0d86602580ffc10892a603e31bae2e003d3a17",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Persisted corrective-order evidence in the live HUD"
+    },
+    {
+      "file": "order-evidence-hud-light-1440.png",
+      "sha256": "79a1aa2440c46eae624bfd3e5485a51f03989e82666b3c6e24696ef61d60e976",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "Persisted corrective-order evidence in the live HUD"
+    },
+    {
+      "file": "order-evidence-archive-dark-390.png",
+      "sha256": "b4023a1398162e30b7f3972bc82d34ec22345b99df2a38368cc0229aebfe3040",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "Bounded corrective-order evidence archive in Run History"
+    },
+    {
+      "file": "order-evidence-archive-dark-1440.png",
+      "sha256": "47d1f22edb1ed9a0e3d7e5bbc1a758d38828715dd2ee90eebcadb673c9b61efc",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Player-relative threat compass outside the world transform"
+      "page": "Bounded corrective-order evidence archive in Run History"
     },
     {
-      "file": "session-161/threat-before--porcelain-day--390.png",
-      "sha256": "c8ad6f973a8f8f77d4536f1d6f8e812f1a13669d620863e539ed73b3a0870cfe",
+      "file": "order-evidence-archive-light-390.png",
+      "sha256": "b4023a1398162e30b7f3972bc82d34ec22345b99df2a38368cc0229aebfe3040",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "ADS threat-marker baseline inside the world transform"
+      "page": "Bounded corrective-order evidence archive in Run History"
     },
     {
-      "file": "session-161/threat-after--porcelain-day--390.png",
-      "sha256": "453d5808153e6da22a2d8d0fdc1ce62682f9842360cf45f7f11c0fbeabd7bf91",
+      "file": "order-evidence-archive-light-1440.png",
+      "sha256": "47d1f22edb1ed9a0e3d7e5bbc1a758d38828715dd2ee90eebcadb673c9b61efc",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
-        "width": 390,
-        "height": 844
+        "width": 1440,
+        "height": 1000
       },
-      "page": "Player-relative threat compass outside the world transform"
+      "page": "Bounded corrective-order evidence archive in Run History"
     }
   ],
   "inspection": {
@@ -194,11 +184,11 @@
       "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
       "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
       "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The focused before/after matrix passed 96/96 checks across perk and threat-compass states, both project themes, and 390px/1440px viewports.",
-      "Direct pixel review confirmed doctrine milestones remain compact and readable on mobile, while the player-relative threat compass stays edge-anchored after the world-transformed baseline marker disappears under ADS."
+      "The live HUD carries persisted drill-specific evidence at 390px and 1440px without reviving the reset-only mastery claim.",
+      "The bounded Run History archive remains readable at 390px and 1440px, including its local, observed, non-causal evidence boundary."
     ],
     "fixesApplied": [
-      "Direct rendered-pixel review confirmed the perk doctrine deltas remain readable without mobile clipping and the ADS threat compass remains anchored after the old world-transform marker disappears; no blocking defect remained."
+      "Direct rendered-pixel review confirmed the persisted evidence HUD and bounded Run History archive are readable at 390px and 1440px in both project themes; no clipping, overlap, contrast, or causal-claim defect remained."
     ],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,

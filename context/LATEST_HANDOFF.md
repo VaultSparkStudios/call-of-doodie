@@ -1,3 +1,28 @@
+# Latest Handoff — Session 162
+
+Session Intent: Run one complete `/arc` from synchronized production through fresh game-loop review, premise-verified audit, complete implementation, isolated staging, rendered-pixel proof, independent release gating, canonical closeout, direct-main publication, and exact production verification.
+
+## Where We Left Off (Session 162)
+
+- Shipped: one normalized corrective-order evidence authority that deduplicates receipts, fails closed on malformed records, groups by exact drill, and bounds the archive to four newest-first orders with three receipts each.
+- Shipped: desktop/mobile HUD paths now carry saved drill-specific evidence instead of resetting to `BEST-OF-3 0/2`; Run History gives ordinary players a concise Order Evidence archive.
+- Evidence boundary: repeatable improvement requires at least two observed improvements in the latest three receipts. Every surface states or inherits the device-local, advisory, non-causal ceiling; no mastery claim is made.
+- Truth sources: protocol and public Game Loop documents now share the accepted-order → live-progress → outcome → bounded-archive lifecycle.
+- Validation: full Vitest 220/220 files and 1,270/1,270 assertions; strict lint/build/schema/public/security/dependency/assets/media/runtime/protocol/supply-chain gates; serial browser interaction 17 pass / one intentional mobile skip.
+- Staging: `https://session-162-staging.call-of-doodie.pages.dev/` and immutable `https://1b86fbd2.call-of-doodie.pages.dev/` pass 7/7 live checks; broad pixels pass 1,020/1,020 and focused before/after pixels pass 128/128.
+- Pixels: 14 hash-bound captures across both themes and mobile/desktop widths received direct review; the evidence HUD and archive stay readable without clipping, overlap, contrast failure, or causal overclaim.
+- Release: engineering FORGE GO; branding, footer 18/18, cost-neutrality, deploy credentials, rollback, mobile parity, npm audit, and secret/supply-chain gates pass. SPARKED remains NO-GO behind independent external evidence.
+- Deploy: pending canonical closeout commit, direct-main push, CI-on-push Cloudflare deployment, and exact-source immutable/custom-domain verification.
+- Next: preserve deterministic local coaching and wait for consented participant evidence before tuning drills, balance, threat density, or Operation breadth.
+
+## Impact Summary
+
+**Headline.** A corrective order now survives the next run: the HUD remembers its evidence, and Run History shows whether the improvement repeated without pretending the order caused it.
+
+**Evidence.** Three audit items; 220 files / 1,270 assertions; browser 17 pass / one intentional skip; staging 7/7; 1,020/1,020 broad and 128/128 focused pixels; 14 directly reviewed captures; zero new dependencies, hosted calls, identity surfaces, or variable-cost services.
+
+---
+
 # Latest Handoff — Session 161
 
 Session Intent: Run one complete `/arc` from the synchronized S160 recovery checkpoint through fresh game-loop review, premise-verified audit, complete implementation, isolated staging, rendered-pixel proof, independent release gating, canonical closeout, direct-main publication, and exact production verification.

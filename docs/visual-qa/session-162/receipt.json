@@ -1,0 +1,798 @@
+{
+  "schemaVersion": 1,
+  "session": 162,
+  "generatedAt": "2026-08-26T00:30:56.818Z",
+  "baseUrl": "http://127.0.0.1:4179/",
+  "captures": [
+    {
+      "surface": "order-hud-before",
+      "theme": "sewer-night",
+      "width": 390,
+      "screenshot": "order-hud-before--sewer-night--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "BEST-OF-3 0/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-before",
+      "theme": "sewer-night",
+      "width": 1440,
+      "screenshot": "order-hud-before--sewer-night--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "BEST-OF-3 0/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-before",
+      "theme": "porcelain-day",
+      "width": 390,
+      "screenshot": "order-hud-before--porcelain-day--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "BEST-OF-3 0/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-before",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "screenshot": "order-hud-before--porcelain-day--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "BEST-OF-3 0/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-after",
+      "theme": "sewer-night",
+      "width": 390,
+      "screenshot": "order-hud-after--sewer-night--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "EVIDENCE 1/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-after",
+      "theme": "sewer-night",
+      "width": 1440,
+      "screenshot": "order-hud-after--sewer-night--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "EVIDENCE 1/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-after",
+      "theme": "porcelain-day",
+      "width": 390,
+      "screenshot": "order-hud-after--porcelain-day--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "EVIDENCE 1/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-hud-after",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "screenshot": "order-hud-after--porcelain-day--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "EVIDENCE 1/2"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-before",
+      "theme": "sewer-night",
+      "width": 390,
+      "screenshot": "order-history-before--sewer-night--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": "ORDER EVIDENCE"
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-before",
+      "theme": "sewer-night",
+      "width": 1440,
+      "screenshot": "order-history-before--sewer-night--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": "ORDER EVIDENCE"
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-before",
+      "theme": "porcelain-day",
+      "width": 390,
+      "screenshot": "order-history-before--porcelain-day--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": "ORDER EVIDENCE"
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-before",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "screenshot": "order-history-before--porcelain-day--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": "ORDER EVIDENCE"
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-after",
+      "theme": "sewer-night",
+      "width": 390,
+      "screenshot": "order-history-after--sewer-night--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "REPEATABLE IMPROVEMENT"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-after",
+      "theme": "sewer-night",
+      "width": 1440,
+      "screenshot": "order-history-after--sewer-night--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "REPEATABLE IMPROVEMENT"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-after",
+      "theme": "porcelain-day",
+      "width": 390,
+      "screenshot": "order-history-after--porcelain-day--390.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "REPEATABLE IMPROVEMENT"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    },
+    {
+      "surface": "order-history-after",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "screenshot": "order-history-after--porcelain-day--1440.png",
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "expected-visible",
+          "ok": true,
+          "actual": "REPEATABLE IMPROVEMENT"
+        },
+        {
+          "id": "baseline-absence",
+          "ok": true,
+          "actual": null
+        },
+        {
+          "id": "panel-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "document-no-horizontal-overflow",
+          "ok": true,
+          "actual": true
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "captures": 16,
+    "checks": 128,
+    "passed": 128
+  }
+}

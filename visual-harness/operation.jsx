@@ -2,6 +2,8 @@ import { StrictMode, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import OperationCompleteModal from "../src/components/OperationCompleteModal.jsx";
 import PerkModal from "../src/components/PerkModal.jsx";
+import HUD from "../src/components/HUD.jsx";
+import { RunHistoryPanel } from "../src/components/MenuPanels.jsx";
 import { drawOffscreenThreatArrows, getOffscreenThreatArrows } from "../src/utils/offscreenIndicators.js";
 import { applyTheme, readTheme } from "../src/utils/theme.js";
 
@@ -33,6 +35,43 @@ const perkOptions = Object.freeze([
   { id: "parkour_pro", name: "Parkour Pro", emoji: "🏃", tier: "uncommon", desc: "Move faster and keep the flank readable." },
   { id: "eagle_eye", name: "Eagle Eye", emoji: "🎯", tier: "common", desc: "Raise critical-hit chance." },
 ]);
+
+const drillEvents = Object.freeze([
+  { type: "run_drill_outcome", payload: { receiptId: "visual-2", drillId: "hold-lane", title: "Keep one exit lane open", status: "improved", endedAt: 200, baseline: { wave: 5, score: 1400 }, observed: { wave: 7, score: 2200 }, scoreDelta: 800 } },
+  { type: "run_drill_outcome", payload: { receiptId: "visual-1", drillId: "hold-lane", title: "Keep one exit lane open", status: "improved", endedAt: 100, baseline: { wave: 4, score: 900 }, observed: { wave: 5, score: 1400 }, scoreDelta: 500 } },
+]);
+
+function EvidenceHudStage({ baseline = false }) {
+  const isMobile = matchMedia("(max-width: 600px)").matches;
+  return (
+    <main style={{ minHeight: "100dvh", position: "relative", overflow: "hidden", background: "radial-gradient(circle at 50% 45%, #17382e, #050a08 62%)" }}>
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, opacity: 0.38, backgroundImage: "linear-gradient(rgba(124,255,184,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(124,255,184,.1) 1px,transparent 1px)", backgroundSize: "48px 48px" }} />
+      <HUD
+        wave={6} timeSurvived={102} score={1960} kills={48} deaths={0} health={82} ammo={18}
+        isReloading={false} currentWeapon={0} combo={4} comboTimer={20} killstreak={6} level={8}
+        xp={40} xpNeeded={100} killFeed={[]} username="VISUAL-QA" grenadeReady dashReady extraLives={0}
+        bankedPerkChoices={0} nextPerkLevel={10} difficulty="normal" isMobile={isMobile}
+        weaponUpgrades={[]} activePerks={[]} weaponEvolutions={[]} unlockedArchetypes={[]}
+        onPause={() => {}} fmtTime={() => "1:42"} mapTheme={1} missions={[]} missionDoneSet={new Set()}
+        practiceDrill={{ id: "hold-lane", label: "REMATCH DRILL", title: "Keep one exit lane open", detail: "Practice the exact failure point.", baseline: { wave: 5, score: 1400 }, launchKind: "rematch", receiptId: "visual-live" }}
+        practiceEvidence={baseline ? { label: "BEST-OF-3 0/2", repeatable: false } : { label: "EVIDENCE 1/2", repeatable: false }}
+        hud={{ useCompactDesktop: isMobile }}
+      />
+    </main>
+  );
+}
+
+function OrderHistoryStage({ baseline = false }) {
+  return (
+    <RunHistoryPanel
+      onClose={() => {}}
+      runHistory={[]}
+      rivalryHistory={[]}
+      studioEvents={baseline ? [] : drillEvents}
+      username="VISUAL-QA"
+    />
+  );
+}
 
 function ThreatStage({ baseline = false }) {
   const canvasRef = useRef(null);
@@ -103,8 +142,16 @@ const visualSurface = surface === "perk-before"
     ? <PerkModal options={perkOptions} level={7} activePerks={activePerks} onSelect={() => {}} />
     : surface === "threat-before"
       ? <ThreatStage baseline />
-      : surface === "threat-after"
-        ? <ThreatStage />
+    : surface === "threat-after"
+      ? <ThreatStage />
+      : surface === "order-hud-before"
+        ? <EvidenceHudStage baseline />
+        : surface === "order-hud-after"
+          ? <EvidenceHudStage />
+          : surface === "order-history-before"
+            ? <OrderHistoryStage baseline />
+            : surface === "order-history-after"
+              ? <OrderHistoryStage />
         : (
           <OperationCompleteModal
             receipt={receipt}

@@ -2,6 +2,12 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-08-25 — Session 162 — Corrective orders carry observed evidence, never mastery or causality
+
+**Decision:** Persisted `run_drill_outcome` receipts are normalized once, deduplicated by bounded receipt identifier, grouped only by exact drill, and summarized from the latest three receipts. The live HUD carries that drill-specific evidence into a rematch; Run History shows at most four newest-first order ledgers. “Repeatable improvement” requires at least two observed improvements in the latest three receipts.
+
+**Rationale:** The outcome was already stored, but the next run reset its display to `BEST-OF-3 0/2` and ordinary history hid it. Carrying the existing evidence closes the humiliation-to-revenge loop without inventing another progression system. Local outcomes can establish an observed pattern, not that the order caused it or that the player mastered anything.
+
 ## 2026-08-25 — Session 161 — Threat direction belongs to player-relative screen space
 
 **Decision:** Off-screen threat geometry transforms enemy positions around the live player focus with the active zoom, projects from that player to an inset viewport rectangle, aggregates into at most eight angular sectors, and is painted only after the world transform is restored. Group priority remains boss over elite over regular, and Fog of War suppresses the entire compass.

@@ -4,6 +4,36 @@ pm run launch:qa and full suite before closeout.\n
 
 Detailed internal scoring, audit trends, and brainstorming are maintained privately.
 
+## 2026-08-25 — Session 162 | Total: 998/1000 | Velocity: 3 | Debt: ↓
+
+SIL 998/1000: Carried corrective-order evidence across death, rematch, live HUD, and Run History while preserving deterministic coaching, guest-first storage, cost neutrality, and an explicit non-causal evidence ceiling.
+
+| Category | Score | Δ | Rationale |
+|---|---:|---|---|
+| Dev Health | 100 | → | Full Vitest passes 220 files and 1,270 assertions; strict lint, deployable build, schema, public, security, dependency, runtime, and serial browser courts are green. |
+| Creative Alignment | 100 | → | Humiliation now becomes evidence-backed revenge, and the copy keeps improvised doctrine observational rather than prescriptive. |
+| Momentum | 100 | → | All three premise-verified audit items, focused pixels, staging, and the engineering release gate closed in one continuous arc. |
+| Engagement | 99 | → | Saved evidence gives a stronger reason to run the fix again, but no participant fun, balance, retention, or causal outcome is claimed. |
+| Process Quality | 100 | → | The audit rejected a false missing-persistence premise; stale Hot Context and parallel-browser contention were surfaced and resolved honestly. |
+| Cross-Repo Coherence | 100 | → | Public/protocol loop sources, release receipts, mobile attestation, and Studio gates share the same evidence ceiling; no sibling file was edited. |
+| Security Posture | 100 | → | Receipts remain normalized, bounded, local-first, and free of raw text; no dependency, secret, identity, or new network boundary was added. |
+| Ecosystem Integration | 99 | → | Human HUD/history and agent-readable Game Loop truth agree; Obelisk, mail, observability, participant, and lifecycle evidence remain external. |
+| Capital Efficiency | 100 | → | Existing browser storage and Cloudflare Pages deliver the change with zero hosted inference or variable per-player cost. |
+| Automation Coverage | 100 | → | Normalization, grouping, responsive-model, component, full-unit, serial-browser, hosted-matrix, and hash-bound visual courts make the behavior falsifiable. |
+
+Rolling averages: 3-session 998.0 · 5-session 998.0 · sparkline `█████`.
+
+Top win: the game now remembers whether a corrective order helped across attempts, shows that evidence during the next run, and makes it revisitable afterward without laundering correlation into causality.
+Top gap: real participants have not established whether corrective-order comprehension, drill selection, balance, or Operation breadth needs tuning.
+Intent outcome: Achieved through implementation, isolated staging, rendered-pixel review, and engineering release readiness; direct-main publication and exact production verification remain the active CANON-036 follow-through.
+
+**Brainstorm**
+1. Same-seed relaunch — expose a bounded relaunch only if the normalized receipt still carries a valid seed and participant evidence shows archive-to-action friction.
+2. Evidence threshold study — keep two-of-three fixed until consented runs provide a defensible reason to change the repeatability window.
+3. Cross-device order continuity — consider only through Obelisk after consent, deletion, recovery, and guest-first downgrade paths are proven.
+
+**Committed to TASK_BOARD:** all three S162 audit items are complete; participant, provider, physical-device, publication, and SPARKED work remains explicitly gated.
+
 ## 2026-08-25 — Session 161 | Total: 998/1000 | Velocity: 3 | Debt: ↓
 
 SIL 998/1000: Made high-pressure direction authoritative under zoom and made doctrine consequences visible before commitment, while keeping the mature loop deterministic, guest-first, cost-neutral, and honestly separated from participant/SPARKED evidence.
@@ -787,11 +817,11 @@ SIL +10: Closed five founder-visible defects and all four fresh audit items: Ene
 <!-- rolling-status-start -->
 ## Rolling Status (auto-updated each closeout)
 Sparkline (last 5 totals): █████
-Avgs — 3: 998.0 | 5: 998.0 | 10: 996.9
+Avgs — 3: 998.0 | 5: 998.0 | 10: 997.2
   └ 3-session: Dev 100.0 | Align 100.0 | Momentum 100.0 | Engage 99.0 | Process 100.0 [N=3]
-Velocity trend: ↑  |  Protocol velocity: →  |  Debt: ↓
+Velocity trend: →  |  Protocol velocity: →  |  Debt: ↓
 Momentum runway: 0 repo-owned items — evidence-gated frontier exhausted  |  Intent rate: 100% (last 5 tracked)
-Last session: 2026-08-23 | Session 159 | Total: 998/1000 | Velocity: 5 | protocolVelocity: 5
+Last session: 2026-08-25 | Session 162 | Total: 998/1000 | Velocity: 3 | protocolVelocity: 3
 ─────────────────────────────────────────────────────────────────────
 <!-- rolling-status-end -->
 

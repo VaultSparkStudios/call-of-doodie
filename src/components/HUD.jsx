@@ -39,7 +39,7 @@ export default function HUD({
   practiceDrill = null,
   runDrill = null,
   runIntegrity = null,
-  practiceMastery = null,
+  practiceEvidence = null,
 }) {
   // Default to standard if missing (e.g. when called from older callers/tests).
   const HUD_FLAGS = hud || {
@@ -85,7 +85,7 @@ export default function HUD({
         health={health} maxHealth={diff.playerHP} level={level}
         currentWeapon={currentWeapon} ammo={ammo} isReloading={isReloading} extraLives={extraLives}
         fmtTime={fmtTime} onPause={onPause}
-        activeDrill={activeDrill} drillProgress={drillProgress} practiceMastery={practiceMastery} runIntegrity={runIntegrity}
+        activeDrill={activeDrill} drillProgress={drillProgress} practiceEvidence={practiceEvidence} runIntegrity={runIntegrity}
         runModifier={runModifier} rivalPace={rivalPace} vsScore={vsScore} vsName={vsName}
         topGhosts={topGhosts} weeklyRival={weeklyRival}
         bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
@@ -173,7 +173,7 @@ export default function HUD({
           <strong>{activeDrill.label}</strong>{" "}
           <span style={{ color: "#FFF" }}>{activeDrill.title}</span>
           {drillProgress?.label && <span style={{ color: drillProgress.color }}> · {drillProgress.label}</span>}
-          {practiceMastery?.label && <span style={{ color: practiceMastery.complete ? "#00FF88" : "#FFD166" }}> · {practiceMastery.label}</span>}
+          {practiceEvidence?.label && <span style={{ color: practiceEvidence.repeatable ? "#00FF88" : "#FFD166" }}> · {practiceEvidence.label}</span>}
         </div>
       )}
 

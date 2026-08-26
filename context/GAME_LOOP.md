@@ -29,12 +29,13 @@ Drop into a browser arena in seconds, read the pressure, improvise a ridiculous 
 
 - Runtime feedback: redundant threat telegraphs, player-relative edge compass, objective state, reason-coded Mission Director guidance, performance state, and input-aware controls.
 - Build feedback: prospective perk doctrine milestones, active capstones/doctrines, weapon mastery, and free reversible experimentation.
-- Post-run feedback: observed run evidence is separated from coaching hypotheses; standard and Operation receipts keep separate authority.
-- Meta loop: career points, achievements, daily missions, weapon mastery, Doctrine Archive, local ghosts, shared seeds, and bounded run history.
+- Post-run feedback: observed run evidence is separated from coaching hypotheses; accepted corrective orders carry a baseline into the next run, report live progress, and write one deduplicated outcome receipt at defeat.
+- Meta loop: career points, achievements, daily missions, weapon mastery, Doctrine Archive, local ghosts, shared seeds, bounded run history, and a four-order evidence archive built from the latest three attempts per drill.
 
 ## Evidence boundaries
 
-- Operation scores, campaign continuity, rivals, playtest receipts, and coaching are local/advisory unless explicitly labelled otherwise.
+- Operation scores, campaign continuity, rivals, playtest receipts, coaching, and corrective-order evidence are local/advisory unless explicitly labelled otherwise.
+- A repeated-improvement label means two improved outcomes inside the latest three valid receipts for the same drill. It is not a causal or mastery claim, and malformed or duplicate receipts add no evidence.
 - Standard leaderboard submissions use their existing signed eligibility path; Operation score never mints that authority.
 - Replay coverage remains advisory until enemy/projectile state and physics resimulation parity are proven.
 - Real participant outcomes, physical-device behavior, provider delivery, and lifecycle readiness are never inferred from source or synthetic checks.
@@ -44,7 +45,7 @@ Drop into a browser arena in seconds, read the pressure, improvise a ridiculous 
 - Runtime: `src/App.jsx`, `src/drawGame.js`, `src/systems/waveDirector.js`, `src/hooks/useOperationMode.js`.
 - Operations: `src/systems/operationEncounterContract.js`, `operationProximity.js`, `operationScore.js`, `operationMissionSnapshot.js`, and `operationCampaign.js`.
 - Build doctrine: `src/utils/buildArchetypes.js`, `src/components/PerkModal.jsx`, `src/components/PauseMenu.jsx`.
-- Defeat/rematch: `src/components/DeathScreen.jsx`, `src/systems/deathFlow.js`, `src/utils/runBrain.js`, `src/utils/runDebrief.js`.
+- Defeat/rematch: `src/components/DeathScreen.jsx`, `src/systems/deathFlow.js`, `src/systems/runDrill.js`, `src/components/HUD.jsx`, and `src/components/MenuPanels.jsx`.
 - Trust: `src/utils/replayCommandTrace.js`, `src/utils/replayResim.js`, `src/utils/studioEventOps.js`.
 
 ## Open risks

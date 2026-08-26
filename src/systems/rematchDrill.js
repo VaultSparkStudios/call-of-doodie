@@ -69,21 +69,3 @@ export function buildRematchDrillBrief({
     label: `REMATCH W${drillWave}`,
   };
 }
-
-export function buildRematchMasteryReceipt({
-  attempts = 0,
-  wins = 0,
-  targetWins = 2,
-} = {}) {
-  const played = Math.max(0, Math.floor(Number(attempts) || 0));
-  const needed = Math.max(1, Math.floor(Number(targetWins) || 2));
-  const cleared = Math.max(0, Math.min(needed, Math.floor(Number(wins) || 0)));
-  const complete = cleared >= needed;
-  return {
-    attempts: played,
-    wins: cleared,
-    targetWins: needed,
-    complete,
-    label: complete ? "BEST-OF-3 MASTERED" : `BEST-OF-3 ${cleared}/${needed}`,
-  };
-}

@@ -1,21 +1,19 @@
-# Implement Plan — Session 159
+# Implement Plan — Session 162
 
-Source: `docs/AUDIT_2026-08-22.json`
+Source: `docs/AUDIT_2026-08-25_2.json`
 
-The five promoted items are sequenced by dependency and release risk, not raw priority.
+The three promoted items are sequenced by truth dependency: centralize the evidence contract first, consume it in player history second, then update documentation from shipped behavior.
 
 | Wave | Audit item | Rung | Why this order | Verification gate |
 |---|---|---|---|---|
-| 1 | `protocol-release-truth-repair` | L2 | Restores trustworthy CI, audit rendering, generated public contracts, and recovery classification before feature work relies on them. | Exact six failing CI checks reproduced and green; recovery regression proves S158 seal clean and real debt red. |
-| 2 | `operation-spatial-interaction-authority` | L2 | Establishes the authoritative player/target evidence used by score and director receipts. | Pure boundary, hook, overlay, all-input, accessibility, and focused pixel courts. |
-| 3 | `operation-route-consequence-intel` | L2 | Centralizes route truth before score v2 consumes the multiplier and echo contract. | Runtime/UI values match; unknown routes fail closed; Command Deck tests and pixels pass. |
-| 4 | `operation-director-live-signal-wiring` | L2 | Builds one honest live snapshot after objective and route evidence are stable. | Every advertised reason branch is reachable from real hook fixtures; no difficulty mutation. |
-| 5 | `operation-score-v2` | L2 | Measures the settled objective, pressure, route, pace, and extraction contracts last. | Component sum exact; skill variance real; v1 compatibility preserved; receipt/rival/UI tests pass. |
+| 1 | `evidence-backed-rematch-hud` | L2 | Establishes one normalized, drill-specific evidence authority before any surface renders it. | Malformed/duplicate/multi-drill fixtures; desktop and compact HUD models show the persisted label without mastery or causality language. |
+| 2 | `player-order-evidence-archive` | L2 | Reuses the settled authority to make recent corrective work discoverable without leaking raw event payloads. | Bounded newest-first archive; player-visible static component coverage; empty state remains quiet. |
+| 3 | `run-drill-loop-contract-refresh` | L2 | Records only behavior that already exists after Waves 1–2. | Protocol/public Game Loop sources name the same lifecycle and evidence ceiling. |
 
 ## Session-wide gates
 
-- Keyboard, controller, and touch paths remain playable and equivalent.
-- Player-facing copy expands acronyms on first use.
+- Keyboard, mouse, controller, and touch paths remain playable and equivalent.
+- Player-facing copy expands acronyms on first use and avoids causal/mastery overclaiming.
 - No dependency, hosted inference, identity boundary, or variable per-player cost is added.
 - `/start`, `/audit`, `/implement`, and `/closeout` remain executable.
-- Any rendered change receives desktop/mobile and dark/light browser review before release.
+- Every rendered change receives desktop/mobile and dark/light browser review before release.
