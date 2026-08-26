@@ -30,7 +30,7 @@
 ║  Production    → https://playcallofdoodie.com/ ✓                 ║
 ║  CF Pages      → https://call-of-doodie.pages.dev/ ✓             ║
 ║  staging-preview → https://d7ec86f1.call-of-doodie.pages.dev ✓   ║
-║  Unit tests    → npm test — 1267/1267 passing ✓                  ║
+║  Unit tests    → npm test — 1270/1270 passing ✓                  ║
 ║  local-browser-capture → Five real Chromium desktop/mobile c ✓   ║
 ║  production-smoke → Session 129 — live 7/7; post-cutover 5/5 ✓   ║
 ║  production-smoke → Session 141 — live 7/7 · cutover 5/5 · r ✓   ║
@@ -64,17 +64,18 @@
 
 ╔══ WHERE WE LEFT OFF  ·  Session 162 ═══════════════════════════╗
 ║  Shipped:  one normalized corrective-order evidence authority t  ║
-║  Tests:    1267/1267 passing  ·  Deploy: N/A                     ║
+║  Tests:    1270/1270 passing  ·  Deploy: N/A                     ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ CONTEXT METER ═══════════════════════════════════════════════╗
-║  ⚠  ███████████████████████░   94% used                          ║
-║     256,284 / 272,000 tok  ·  codex  ·  heuristic-stale          ║
-║     Verdict: CONSIDER_CLOSEOUT  ← act now                        ║
+║  ✓  █████░░░░░░░░░░░░░░░░░░░   22% used                          ║
+║     59,586 / 272,000 tok  ·  codex/codex-272k  · …               ║
+║     ~29,793 tok/turn  ·  cache 50%  ·  6 turns to compact        ║
+║     Verdict: CONTINUE                                            ║
 ╚════════════════════════════════════════════════════════════════╝
 
 ╔══ SIGNALS ═════════════════════════════════════════════════════╗
-║  ✓  Tests         1267/1267 passing (2026-08-25)                 ║
+║  ✓  Tests         1270/1270 passing (2026-08-25)                 ║
 ║  ✓  Velocity      3 →  ·  Debt: ↓                                ║
 ║  ✓  Runway        0 repo-owned items — evidence-gated…           ║
 ║  ⛔  Context age   ?d                                             ║
