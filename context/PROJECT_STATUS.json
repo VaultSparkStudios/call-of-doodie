@@ -4,9 +4,16 @@
   "name": "Call-Of-Doodie",
   "status": "active",
   "health": "green",
-  "currentFocus": "Session 162 is staging-verified and release-gated: corrective-order outcomes now carry through the live HUD and a bounded player-facing evidence archive without causal or mastery claims; exact-main production follow-through is in progress.",
-  "nextMilestone": "Publish the exact S162 closeout source through CI-on-push, verify immutable and canonical production, then preserve the deterministic evidence boundary pending consented participant data.",
+  "currentFocus": "Session 162 is exact-main published and production-verified: corrective-order outcomes carry through the live HUD and bounded player-facing evidence archive without causal or mastery claims.",
+  "nextMilestone": "Preserve the deterministic evidence boundary and wait for consented participant data before tuning drill selection, balance, threat density, or Operation breadth.",
   "testingSurfaces": [
+    {
+      "session": 162,
+      "status": "green",
+      "url": "https://d9e689b6.call-of-doodie.pages.dev/",
+      "type": "production-verifier",
+      "command": "source 5d54f90bde9b · workflow 32924884085 · Linux lint and 1270 assertions · build/deploy green · immutable/custom exact health and shell 7/7 each · cutover 5/5 · replay 3/3 · leaderboard isolation and Studio launch surfaces pass"
+    },
     {
       "session": 162,
       "status": "green",
@@ -661,11 +668,11 @@
   "sanitizationLastCleared": "2026-08-23",
   "sessionShellHygiene": {
     "session": 162,
-    "started": 16,
-    "closed": 16,
+    "started": 25,
+    "closed": 25,
     "running": 0,
-    "enumeratedAt": "2026-08-25T22:37:01.0150866-04:00",
-    "scope": "Every identifiable S162 yielded command session retained across the active and compacted turn was reconciled. Staging, visual-audit, security, dependency, supply-chain, browser, Vite, Doctor, and patch helper sessions exited; repo-scoped node/cmd/pwsh processes and ports 4174, 4179, and 53173 were rechecked with zero listeners. Non-yielded foreground commands are not counted as background shells."
+    "enumeratedAt": "2026-08-26T03:11:58.961Z",
+    "scope": "Every identifiable S162 yielded command session retained across the active, compacted, and production-follow-through turn was reconciled. Staging, visual-audit, security, dependency, supply-chain, browser, Vite, Doctor, closeout, Git transport, CI-watch, production-smoke, and patch-helper sessions exited; repo-scoped node/cmd/pwsh/git/ssh processes and ports 4174, 4179, and 53173 were rechecked with zero listeners. Non-yielded foreground commands are not counted as background shells."
   },
   "doctorScore": {
     "date": "2026-08-23",
@@ -683,7 +690,7 @@
     "total": 203,
     "score": 74
   },
-  "lastSessionSummary": "Session 162 carries normalized corrective-order evidence through desktop/mobile HUD and bounded Run History, synchronizes Game Loop truth, and passes isolated staging plus the engineering release gate while exact production follow-through remains active.",
+  "lastSessionSummary": "Session 162 carries normalized corrective-order evidence through desktop/mobile HUD and bounded Run History, synchronizes Game Loop truth, passes isolated staging and the engineering release gate, and is exact-main production-verified.",
   "testsAssertionsPassing": 1270,
   "testsAssertionsTotal": 1270,
   "testsAssertionsFiles": 220,

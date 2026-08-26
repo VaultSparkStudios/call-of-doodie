@@ -15,6 +15,7 @@ Headline: Corrective orders now carry their observed evidence into the next run 
 - Full Vitest: 220/220 files and 1,270/1,270 assertions; strict lint, deployable build, schema, public, runtime, asset, protocol, security, npm-audit-zero, and supply-chain gates pass.
 - Serial browser interaction: 9/9 desktop and 8/8 mobile pass with one intentional mobile Scenario Cartridge skip.
 - Staging shell: 7/7; hosted route/theme/viewport matrix: 1,020/1,020; focused before/after matrix: 128/128; 14 hash-bound captures directly reviewed.
+- Exact-head production: workflow `32924884085` passed source `5d54f90bde9b`; immutable `d9e689b6` and canonical shell pass 7/7 each, with cutover 5/5, replay trust 3/3, leaderboard isolation, and launch surfaces green.
 - Engineering FORGE release gate: GO. SPARKED remains independently NO-GO.
 
 ## Remaining

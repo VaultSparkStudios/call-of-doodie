@@ -9,9 +9,9 @@
 - Diagnostic truth — the default eight-worker browser run saturated the shared dev host and produced boot/screenshot/trace timing failures. Serial interaction execution passes 17 runnable cases with one intentional mobile Scenario Cartridge skip; the parallel result is not relabelled green.
 - Visual truth — stable staging `session-162-staging` and immutable `1b86fbd2` pass 7/7 live checks; hosted pixels pass 1,020/1,020 and focused before/after pixels pass 128/128. Fourteen hash-bound captures were directly reviewed with zero blockers.
 - Release truth — branding, footer 18/18, public/legal contract, mobile parity, Cloudflare credential readiness, cost-neutral ALLOW, rollback, npm audit, supply-chain, and founder authorization pass. Engineering FORGE is GO; SPARKED is NO-GO.
-- Production truth — pending canonical closeout, direct-main push, exact CI-on-push deployment, and immutable/custom-domain verification.
+- Production truth — source `5d54f90bde9ba1768925a9e024d9fcd48b8d52ae` passed exact-head GitHub Actions workflow `32924884085` and published immutable `d9e689b6`. Immutable and canonical health report `5d54f90bde9b`; both pass shell 7/7, with cutover 5/5, replay trust 3/3, leaderboard isolation, and Studio launch surfaces green.
 
-Overall status: all three S162 repository-owned audit items are implemented and staging-verified. Engineering FORGE is GO; production currency is in progress and SPARKED remains NO-GO.
+Overall status: all three S162 repository-owned audit items are implemented, exact-main published, and production-verified. Engineering FORGE is GO; SPARKED remains NO-GO.
 Last reviewed: 2026-08-25
 
 ## 2026-08-25 — Session 161 — Threat, doctrine, loop-source, and staging truth

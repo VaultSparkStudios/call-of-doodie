@@ -1,9 +1,9 @@
 {
   "vectorVersion": "1.0",
   "generatedAt": "2026-08-26",
-  "generatedAtMs": 1787711486557,
+  "generatedAtMs": 1787713946501,
   "session": 162,
-  "vectorHash": "ba368bf698bfcdef",
+  "vectorHash": "92a5e6a093d1a7fd",
   "silTotal": 998,
   "silAvg3": 998,
   "velocity": 3,
@@ -24,7 +24,7 @@
     "[SIL:1] [DATA-BLOCKED S154] [S144] Mobile touch button-size/density control — th"
   ],
   "health": "green",
-  "truthStatus": "all three S162 repository-owned audit items are implemented and staging-verified. Engineering FORGE is GO; production currency is in progress and SPARKED remains NO-GO.",
+  "truthStatus": "all three S162 repository-owned audit items are implemented, exact-main published, and production-verified. Engineering FORGE is GO; SPARKED remains NO-GO.",
   "genome": null,
   "ignisScore": 43723,
   "ignisGrade": "FORGE",
@@ -33,8 +33,8 @@
   "slug": "call-of-doodie",
   "type": null,
   "lifecycle": "deployed",
-  "nextMilestone": "Publish the exact S162 closeout source through CI-on-push, verify immutable and canonical production, then preserve the deterministic evidence boundary pending consented participant data.",
-  "currentFocus": "Session 162 is staging-verified and release-gated: corrective-order outcomes now carry through the live HUD and a bounded player-facing evidence archive without causal or mastery claims; exact-main production follow-through is in progress.",
+  "nextMilestone": "Preserve the deterministic evidence boundary and wait for consented participant data before tuning drill selection, balance, threat density, or Operation breadth.",
+  "currentFocus": "Session 162 is exact-main published and production-verified: corrective-order outcomes carry through the live HUD and bounded player-facing evidence archive without causal or mastery claims.",
   "lastShipped": "one normalized corrective-order evidence authority that deduplicates receipts, fails closed on malformed records, groups by exact drill, and bounds the archive to four newest-first orders with three receipts each.",
   "blockers": [
     "PostHog and project-scoped Sentry evidence remain unavailable; provider readiness is not represented as verified telemetry.",

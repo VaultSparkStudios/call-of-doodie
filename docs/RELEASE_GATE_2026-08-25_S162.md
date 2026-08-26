@@ -7,7 +7,7 @@ Verdict: **GO for the cost-neutral FORGE engineering release; NO-GO for SPARKED.
 
 ## Gate evidence
 
-- CI health: the latest four push/deploy runs before this candidate are green; the exact S162 push must pass before production is called current.
+- CI health: exact source `5d54f90bde9ba1768925a9e024d9fcd48b8d52ae` passed GitHub Actions workflow `32924884085` with Linux lint, all 1,270 assertions, build, and Cloudflare deployment.
 - Tests: 220/220 Vitest files and 1,270/1,270 assertions pass. Authoritative serial browser interaction passes 17 runnable cases with one intentional mobile Scenario Cartridge skip.
 - Staging: `https://session-162-staging.call-of-doodie.pages.dev/` and immutable `https://1b86fbd2.call-of-doodie.pages.dev/` pass the 7/7 live-site court.
 - Visuals: the hosted 20-route × 2-theme × 3-viewport matrix passes 1,020/1,020; the focused evidence-HUD/archive matrix passes 128/128. Fourteen hash-bound captures were directly reviewed with zero blocking defects.
@@ -26,4 +26,4 @@ Verdict: **GO for the cost-neutral FORGE engineering release; NO-GO for SPARKED.
 
 ## Release path
 
-Deploy staging first (complete), produce the canonical closeout commit, push directly to `main`, require the exact GitHub Actions quality/build/Cloudflare workflow to pass, then verify the immutable deployment and `https://callofdoodie.wtf/` report the exact source revision.
+Complete. Staging passed first; the canonical closeout source was pushed directly to `main`; workflow `32924884085` passed; immutable `https://d9e689b6.call-of-doodie.pages.dev/` and `https://callofdoodie.wtf/` report deploy `5d54f90bde9b` and pass 7/7 live checks each. Cutover 5/5, replay trust 3/3, leaderboard isolation, and Studio launch surfaces also pass.

@@ -12,7 +12,7 @@ Session Intent: Run one complete `/arc` from synchronized production through fre
 - Staging: `https://session-162-staging.call-of-doodie.pages.dev/` and immutable `https://1b86fbd2.call-of-doodie.pages.dev/` pass 7/7 live checks; broad pixels pass 1,020/1,020 and focused before/after pixels pass 128/128.
 - Pixels: 14 hash-bound captures across both themes and mobile/desktop widths received direct review; the evidence HUD and archive stay readable without clipping, overlap, contrast failure, or causal overclaim.
 - Release: engineering FORGE GO; branding, footer 18/18, cost-neutrality, deploy credentials, rollback, mobile parity, npm audit, and secret/supply-chain gates pass. SPARKED remains NO-GO behind independent external evidence.
-- Deploy: pending canonical closeout commit, direct-main push, CI-on-push Cloudflare deployment, and exact-source immutable/custom-domain verification.
+- Deploy: source `5d54f90bde9ba1768925a9e024d9fcd48b8d52ae` passed exact-head workflow `32924884085` and deployed to immutable `https://d9e689b6.call-of-doodie.pages.dev/`. Immutable and canonical health report `5d54f90bde9b`; both pass 7/7 live checks, with cutover 5/5, replay trust 3/3, leaderboard isolation, and Studio launch surfaces green.
 - Next: preserve deterministic local coaching and wait for consented participant evidence before tuning drills, balance, threat density, or Operation breadth.
 
 ## Impact Summary

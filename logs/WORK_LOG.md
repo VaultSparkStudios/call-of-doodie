@@ -12,8 +12,10 @@
 - Passed strict lint, deployable build, schema/public/security/dependency/runtime/assets/media/protocol, npm audit zero, supply-chain, branding, footer 18/18, cost, mobile-parity, rollback, and visual-receipt gates.
 - The default eight-worker browser run exposed host contention and dev-only runtime-boundary noise; authoritative serial interaction execution passes 9/9 desktop and 8/8 mobile with one intentional mobile Scenario Cartridge skip.
 - Reviewed the Creative Direction Record and found no new creative direction. The founder's `/arc` and direct-main/full-deploy authorization governs execution scope but does not change the SOUL or SPARKED evidence boundary.
+- Published source `5d54f90bde9ba1768925a9e024d9fcd48b8d52ae`; exact-head workflow `32924884085` passed Linux lint, all 1,270 assertions, build, and Cloudflare deployment to immutable `https://d9e689b6.call-of-doodie.pages.dev/`.
+- Verified immutable and canonical health at deploy `5d54f90bde9b`: shell 7/7 on both, cutover 5/5, replay trust 3/3, shared-leaderboard isolation, and Studio launch surfaces pass.
 
-Intent outcome: achieved through implementation, isolated staging, rendered-pixel review, and engineering release readiness; canonical closeout, direct-main publication, CI deployment, and exact production verification are the authorized remaining follow-through.
+Intent outcome: achieved through implementation, isolated staging, rendered-pixel review, canonical closeout, direct-main publication, exact-source continuous integration, production deployment, and live verification. SPARKED remains independently NO-GO.
 
 ## 2026-08-25 (Session 161 — readable threat compass and prospective doctrine choice)
 

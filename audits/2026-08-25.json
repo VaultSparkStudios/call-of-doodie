@@ -4,7 +4,7 @@
   "session": 162,
   "project": "Call-Of-Doodie",
   "intent": "complete one continuous arc through fresh game-loop review, premise-verified audit, all repository-owned implementation, isolated staging, rendered-pixel review, closeout, direct-main publication, and exact production verification",
-  "outcome": "implemented-staged-and-release-gated-production-follow-through-active",
+  "outcome": "achieved-and-exact-production-verified",
   "shipped": [
     "evidence-backed rematch HUD using normalized persisted drill-specific receipts",
     "bounded newest-first player Order Evidence archive in Run History",
@@ -19,7 +19,10 @@
     "hosted route/theme/viewport matrix 1020/1020 and focused before-after matrix 128/128",
     "14 hash-bound captures directly reviewed across both themes and mobile/desktop widths with zero blocking defects",
     "branding compliance, footer 18/18, mobile-parity attestation, Cloudflare deploy readiness, rollback, and cost-neutral release ALLOW",
-    "engineering FORGE release gate GO; SPARKED independently NO-GO"
+    "engineering FORGE release gate GO; SPARKED independently NO-GO",
+    "exact source 5d54f90bde9ba1768925a9e024d9fcd48b8d52ae passed GitHub Actions workflow 32924884085 and deployed to immutable d9e689b6",
+    "immutable and canonical health report 5d54f90bde9b; both pass live shell 7/7",
+    "post-cutover 5/5, replay trust 3/3, shared-leaderboard isolation, and Studio launch surfaces pass"
   ],
   "deferred": [
     "participant fun, comprehension, retention, balance, causal, and mastery conclusions",
