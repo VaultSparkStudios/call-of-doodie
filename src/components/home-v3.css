@@ -35,13 +35,24 @@
 .home3__atmosphere {
   position: fixed;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
   background:
     radial-gradient(circle at 10% 10%, rgba(255, 107, 44, 0.14), transparent 32rem),
-    radial-gradient(circle at 90% 20%, rgba(255, 201, 60, 0.08), transparent 26rem),
+    radial-gradient(circle at 90% 20%, rgba(255, 201, 60, 0.08), transparent 26rem);
+}
+
+/* Grid on its own layer so transform animation is compositor-only (no repaint) */
+.home3__atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: -64px;
+  pointer-events: none;
+  background:
     linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-  background-size: auto, auto, 64px 64px, 64px 64px;
+  background-size: 64px 64px, 64px 64px;
+  will-change: transform;
   animation: h3-atm-grid 80s linear infinite;
 }
 
@@ -62,8 +73,8 @@
 }
 
 @keyframes h3-atm-grid {
-  from { background-position: 0 0, 0 0, 0 0, 0 0; }
-  to   { background-position: 0 0, 0 0, 64px 64px, 64px 0; }
+  from { transform: translate(0, 0); }
+  to   { transform: translate(64px, 64px); }
 }
 
 .home3__header {
