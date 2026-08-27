@@ -35,13 +35,46 @@
 .home3__atmosphere {
   position: fixed;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
   background:
     radial-gradient(circle at 10% 10%, rgba(255, 107, 44, 0.14), transparent 32rem),
-    radial-gradient(circle at 90% 20%, rgba(255, 201, 60, 0.08), transparent 26rem),
+    radial-gradient(circle at 90% 20%, rgba(255, 201, 60, 0.08), transparent 26rem);
+}
+
+/* Grid on its own layer so transform animation is compositor-only (no repaint) */
+.home3__atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: -64px;
+  pointer-events: none;
+  background:
     linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
-  background-size: auto, auto, 64px 64px, 64px 64px;
+  background-size: 64px 64px, 64px 64px;
+  will-change: transform;
+  animation: h3-atm-grid 80s linear infinite;
+}
+
+.home3__atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 76% 70%, rgba(255, 107, 44, 0.09), transparent 28rem),
+    radial-gradient(circle at 18% 80%, rgba(255, 201, 60, 0.055), transparent 22rem);
+  animation: h3-atm-pulse 16s ease-in-out infinite alternate;
+}
+
+@keyframes h3-atm-pulse {
+  from { opacity: 0.25; }
+  to   { opacity: 1; }
+}
+
+@keyframes h3-atm-grid {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(64px, 64px); }
 }
 
 .home3__header {
@@ -344,7 +377,15 @@
   .home3__profile-button strong { max-width: 86px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .home3__layout { width: calc(100% - 24px); margin-top: 8px; display: block; }
   .home3__play, .home3__progress, .home3__section { display: none; border-radius: 18px; }
-  .home3__play.is-active, .home3__progress.is-active, .home3__section.is-active { display: block; }
+  .home3__play.is-active,
+  .home3__progress.is-active,
+  .home3__section.is-active {
+    display: block;
+    max-height: calc(100dvh - 64px - 8px - 82px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+  }
   .home3__play { padding: 24px 18px; }
   .home3 h1 { font-size: clamp(43px, 15vw, 64px); }
   .home3__lede { font-size: 16px; }
