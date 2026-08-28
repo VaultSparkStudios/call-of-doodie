@@ -2535,8 +2535,9 @@ export default function CallOfDoodie() {
         comboRef.current.count = 0; setCombo(0); setComboTimer(0);
         if (_breakCount >= 5) try { soundComboBreak(_breakCount); } catch {}
       } else {
-        if (frameCountRef.current % 6 === 0) setComboTimer(comboRef.current.timer);
-        if (comboRef.current.timer <= 30 && comboRef.current.count >= 10 && frameCountRef.current % 4 === 0) {
+        const _inDanger = comboRef.current.timer <= 30;
+        if (frameCountRef.current % (_inDanger ? 3 : 6) === 0) setComboTimer(comboRef.current.timer);
+        if (_inDanger && comboRef.current.count >= 5 && frameCountRef.current % 4 === 0) {
           try { soundComboTick(comboRef.current.timer); } catch {}
         }
       }
