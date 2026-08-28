@@ -16,7 +16,7 @@ export default function MobileHUD({
   activeDrill, drillProgress, practiceEvidence, runIntegrity, runModifier, rivalPace,
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
-  combo, killstreak, experimentMatched, reducedEffects,
+  combo, comboTimer = 0, killstreak, experimentMatched, reducedEffects,
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const weapon = WEAPONS[currentWeapon];
@@ -91,6 +91,11 @@ export default function MobileHUD({
       </div>
 
       {health < maxHealth * .3 && <div style={{ position: "absolute", inset: 0, boxShadow: `inset 0 0 ${Math.max(35, 110 - health)}px rgba(255,0,0,.34)` }} />}
+      {combo >= 2 && comboTimer > 0 && comboTimer <= 30 && (
+        <div aria-live="polite" style={{ position: "absolute", top: "calc(max(6px, env(safe-area-inset-top)) + 60px)", left: "50%", transform: "translateX(-50%)", padding: "3px 10px", borderRadius: 999, border: "1px solid rgba(255,34,34,.55)", background: "rgba(30,0,0,.88)", color: reducedEffects ? "#FF7777" : (comboTimer % 6 < 3 ? "#FF2222" : "#FF7777"), fontSize: 10, fontWeight: 900, whiteSpace: "nowrap", pointerEvents: "none" }}>
+          ×{combo} COMBO — ACT NOW
+        </div>
+      )}
       <div aria-hidden="true" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden" }}>Kills {kills}, deaths {deaths}, next perk level {nextPerkLevel}</div>
     </div>
   );

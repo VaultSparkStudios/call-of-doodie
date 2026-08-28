@@ -53,7 +53,7 @@ export default function HUD({
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
   const comboDanger = comboTimer > 0 && comboTimer <= 30;
-  const comboPulse = comboDanger && (comboTimer % 6 < 3);
+  const comboPulse = comboDanger && !reducedEffects && (comboTimer % 6 < 3);
   const comboBarColor = comboDanger ? (comboPulse ? "#FF2222" : "#FF7777") : comboColor;
   const upgStars = (idx) => "⭐".repeat(weaponUpgrades?.[idx] || 0);
 
@@ -94,7 +94,7 @@ export default function HUD({
         bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
         cursedHideScore={cursedHideScore}
         activeWaveContract={activeWaveContract} grenadeReady={grenadeReady} dashReady={dashReady}
-        combo={combo} killstreak={killstreak} experimentMatched={experimentMatched}
+        combo={combo} comboTimer={comboTimer} killstreak={killstreak} experimentMatched={experimentMatched}
         reducedEffects={Boolean(reducedEffects)}
       />
     );
