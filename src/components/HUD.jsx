@@ -52,6 +52,9 @@ export default function HUD({
   const weapon = WEAPONS[currentWeapon];
   const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
   const comboColor = combo >= 10 ? "#FF0000" : combo >= 5 ? "#FF4500" : combo >= 3 ? "#FFD700" : "#FFF";
+  const comboDanger = comboTimer > 0 && comboTimer <= 30;
+  const comboPulse = comboDanger && !reducedEffects && (comboTimer % 6 < 3);
+  const comboBarColor = comboDanger ? (comboPulse ? "#FF2222" : "#FF7777") : comboColor;
   const upgStars = (idx) => "⭐".repeat(weaponUpgrades?.[idx] || 0);
 
   // Tick state for speedrun timer re-rendering
@@ -91,7 +94,7 @@ export default function HUD({
         bankedPerkChoices={bankedPerkChoices} nextPerkLevel={nextPerkLevel}
         cursedHideScore={cursedHideScore}
         activeWaveContract={activeWaveContract} grenadeReady={grenadeReady} dashReady={dashReady}
-        combo={combo} killstreak={killstreak} experimentMatched={experimentMatched}
+        combo={combo} comboTimer={comboTimer} killstreak={killstreak} experimentMatched={experimentMatched}
         reducedEffects={Boolean(reducedEffects)}
       />
     );
@@ -295,9 +298,9 @@ export default function HUD({
       {/* Combo */}
       {combo >= 2 && (
         <div style={{ position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)", textAlign: "center" }}>
-          <div style={{ fontSize: 18, fontWeight: 900, color: comboColor, textShadow: "0 0 10px " + comboColor }}>x{combo} COMBO</div>
+          <div style={{ fontSize: 18, fontWeight: 900, color: comboDanger ? comboBarColor : comboColor, textShadow: `0 0 ${comboDanger ? 18 : 10}px ${comboDanger ? comboBarColor : comboColor}` }}>x{combo} COMBO</div>
           <div style={{ width: 80, height: 3, background: "rgba(255,255,255,0.15)", borderRadius: 2, margin: "3px auto", overflow: "hidden" }}>
-            <div style={{ width: (comboTimer / 120) * 100 + "%", height: "100%", background: comboColor, transition: "width 0.05s" }} />
+            <div style={{ width: (comboTimer / 120) * 100 + "%", height: "100%", background: comboBarColor, transition: comboDanger ? "none" : "width 0.05s" }} />
           </div>
         </div>
       )}
