@@ -4,6 +4,7 @@ import { useGamepadNav } from "../hooks/useGamepadNav.js";
 import { WEAPONS, ENEMY_TYPES, ACHIEVEMENTS } from "../constants.js";
 import { getControllerLabels } from "../utils/gamepad.js";
 import { MUSIC_VIBES, soundUIOpen, soundUISelect } from "../sounds.js";
+import { getArchetypeProgress, getDoctrineMilestones } from "../utils/buildArchetypes.js";
 
 const AchievementsPanel = lazy(() => import("./AchievementsPanel.jsx"));
 const SettingsPanel = lazy(() => import("./SettingsPanel.jsx"));
@@ -215,11 +216,67 @@ export default function PauseMenu({ wave, timeSurvived, score, isMobile, achieve
     if ((pm.pickupRange || 0) > 30)       stats.push({ label: "Pickup Range",val: `${pm.pickupRange}px`,               color: "#00FFCC" });
     if (pm.bounces > 0)                   stats.push({ label: "Bounces",     val: `+${pm.bounces} extra`,              color: "#7FFF00" });
     if (pm.extraPellets > 0)              stats.push({ label: "Pellets",     val: `+${pm.extraPellets} per shot`,      color: "#FF69B4" });
+    const doctrineProgress = perks.length > 0 ? getArchetypeProgress(perks).filter(a => a.count > 0) : [];
+    const dominantDoc = doctrineProgress[0] ?? null;
+    const secondaryDocs = doctrineProgress.slice(1);
     return (
       <div style={overlay}>
         <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, border: "1px solid rgba(255,215,0,0.25)", padding: "24px 20px", maxWidth: 480, width: "100%", color: "#fff", overflowY: "visible", margin: "auto 0" }}>
           <h3 style={{ color: "#FF88FF", margin: "0 0 4px", fontSize: 18, fontFamily: "'Courier New',monospace", letterSpacing: 2 }}>🔧 YOUR BUILD</h3>
           <p style={{ fontSize: 10, color: "#888", margin: "0 0 16px", letterSpacing: 1 }}>Active perks, synergies & stat bonuses this run</p>
+
+          {/* Doctrine status — renders the getDoctrineMilestones roadmap designed for this view */}
+          {dominantDoc ? (
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 10, color: "#CCC", letterSpacing: 2, marginBottom: 8, fontFamily: "'Courier New',monospace" }}>── DOCTRINE STATUS ──</div>
+              <div style={{ background: `${dominantDoc.color}14`, borderRadius: 8, padding: "10px 12px", border: `1px solid ${dominantDoc.color}44`, marginBottom: secondaryDocs.length > 0 ? 8 : 0 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 900, color: dominantDoc.color, fontFamily: "'Courier New',monospace" }}>
+                    {dominantDoc.emoji} {dominantDoc.name.toUpperCase()}
+                  </span>
+                  <span style={{ fontSize: 9, fontWeight: 900, color: dominantDoc.doctrineForged ? "#FFD700" : dominantDoc.color, background: "rgba(0,0,0,0.35)", padding: "2px 6px", borderRadius: 4, letterSpacing: 0.5 }}>
+                    {dominantDoc.statusLabel}
+                  </span>
+                </div>
+                {/* Milestone track — 4 dots: forming → capstone → doctrine → mastered */}
+                <div style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
+                  {getDoctrineMilestones(dominantDoc).map((ms, i, arr) => {
+                    const reached = dominantDoc.count >= ms.at;
+                    const isLast = i === arr.length - 1;
+                    return (
+                      <div key={ms.tier} style={{ display: "flex", alignItems: "center", flex: isLast ? 0 : 1 }}>
+                        <div title={ms.label} style={{ width: 10, height: 10, borderRadius: "50%", flexShrink: 0, background: reached ? dominantDoc.color : "rgba(255,255,255,0.12)", border: `1px solid ${reached ? dominantDoc.color : "rgba(255,255,255,0.2)"}`, boxShadow: reached ? `0 0 6px ${dominantDoc.color}88` : "none" }} />
+                        {!isLast && <div style={{ flex: 1, height: 2, background: dominantDoc.count >= arr[i + 1]?.at ? dominantDoc.color : "rgba(255,255,255,0.1)", margin: "0 2px" }} />}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ fontSize: 10, color: "#CCC", lineHeight: 1.4 }}>{dominantDoc.statusDetail}</div>
+                {!dominantDoc.doctrineForged && dominantDoc.nextMilestoneLabel && (
+                  <div style={{ fontSize: 9, color: dominantDoc.color, marginTop: 4, opacity: 0.8 }}>
+                    Next: {dominantDoc.nextMilestoneLabel} at {dominantDoc.nextMilestoneAt} perks
+                  </div>
+                )}
+              </div>
+              {secondaryDocs.length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {secondaryDocs.map(a => (
+                    <div key={a.id} style={{ fontSize: 9, display: "flex", alignItems: "center", gap: 4, background: `${a.color}14`, border: `1px solid ${a.color}33`, borderRadius: 5, padding: "3px 7px", color: a.color }}>
+                      <span>{a.emoji}</span>
+                      <span style={{ fontWeight: 900 }}>{a.name.toUpperCase()}</span>
+                      <span style={{ color: "#888" }}>{a.count}/{a.perkIds.length}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            perks.length > 0 && (
+              <div style={{ marginBottom: 16, fontSize: 10, color: "#666", fontStyle: "italic" }}>
+                No aligned perks yet — pick themed perks to unlock build doctrines.
+              </div>
+            )
+          )}
 
           {/* Active perks */}
           {perks.length > 0 ? (
