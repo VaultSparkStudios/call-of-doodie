@@ -1,0 +1,51 @@
+{
+  "captures": [
+    {
+      "file": "doctrine-status--sewer-night--390.png",
+      "sha256": "5fdc874d4e5662e77579663e440fa0827498939371b9e9c3e4311902e0fbf52e",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "BUILD SUMMARY — doctrine status track"
+    },
+    {
+      "file": "doctrine-status--porcelain-day--390.png",
+      "sha256": "3d7cd2d61891a560ac6d2bc82beb9fe0dc58c32df0928a957563c5c21565e8a4",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "page": "BUILD SUMMARY — doctrine status track"
+    },
+    {
+      "file": "doctrine-status--sewer-night--1440.png",
+      "sha256": "95d505b9b0aae770436ffac85671c01ced2e850e1f22bc716f5fbe040c219b1b",
+      "theme": "dark",
+      "projectTheme": "sewer-night",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "BUILD SUMMARY — doctrine status track"
+    },
+    {
+      "file": "doctrine-status--porcelain-day--1440.png",
+      "sha256": "5ae1dd78a6989218d132a7111ea102fd594c2be12d4a42ef7d22857a8c864289",
+      "theme": "light",
+      "projectTheme": "porcelain-day",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "page": "BUILD SUMMARY — doctrine status track"
+    }
+  ],
+  "capturedAt": "2026-08-29T11:25:05.484Z",
+  "fixture": "doctrine-status-fixture.html",
+  "commit": "7aacb46"
+}
