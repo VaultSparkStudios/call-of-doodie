@@ -51,6 +51,19 @@ export const BUILD_ARCHETYPES = [
     doctrineName: "Perpetual Motion Doctrine",
     doctrineDesc: "You never stop moving. Combo timers don't drop below 50% on dash. Speed is your armor — stopping is death.",
   },
+  {
+    id: "researcher",
+    name: "Researcher",
+    emoji: "🧬",
+    color: "#C8AAFF",
+    perkIds: ["fast_learner", "glass_mind", "chain_lightning", "hollow_points", "deep_pockets"],
+    unlockAt: 3,
+    capstoneName: "Applied Methodology",
+    capstoneDesc: "Damage and XP efficiency compound — each kill accelerates the next level.",
+    doctrineForgeAt: 4,
+    doctrineName: "Cascading Hypothesis",
+    doctrineDesc: "You've solved the equation. Chain effects cascade into faster leveling; sustained ammo gives you the time to prove it.",
+  },
 ];
 
 function perksById(activePerks = []) {
@@ -215,6 +228,8 @@ export function getShopRecommendation(archetypeId, optionId, currentWeapon) {
       return optionId === "damage" || optionId === "ammo" || optionId === "cs_grenade" || optionId === "cs_nuke";
     case "tempo":
       return optionId === "speed" || optionId === "health" || optionId === "cs_timedil";
+    case "researcher":
+      return optionId === "upgrade" || optionId === "ammo" || optionId.startsWith("bless_");
     default:
       return optionId === "upgrade" && currentWeapon >= 0;
   }
@@ -230,6 +245,8 @@ export function getRouteRecommendation(archetypeId, routeId) {
       return routeId === "mutation";
     case "tempo":
       return routeId === "standard" || routeId === "mutation";
+    case "researcher":
+      return routeId === "boss_fork" || routeId === "standard";
     default:
       return routeId === "standard";
   }
