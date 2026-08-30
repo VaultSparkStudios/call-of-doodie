@@ -48,4 +48,11 @@ describe("perkResolution", () => {
     expect(gameState._treeArmorMult).toBeCloseTo(0.92);
     expect(gameState.player.speed).toBeCloseTo(10.8);
   });
+
+  test("applies researcher capstone: +10% damage and +15% XP gain", () => {
+    const perkMods = {};
+    applyArchetypeCapstone("researcher", perkMods, null);
+    expect(perkMods.damageMult).toBeCloseTo(1.10);
+    expect(perkMods.xpMult).toBeCloseTo(1.15);
+  });
 });
