@@ -132,4 +132,73 @@ describe("build archetypes", () => {
     expect(getPerkArchetypeDeltas({ id: "iron_gut" }, [{ id: "iron_gut" }])).toEqual([]);
     expect(getPrimaryPerkArchetypeDelta(null, [])).toBeNull();
   });
+
+  test("researcher archetype activates on three aligned perks", () => {
+    const perks = [{ id: "fast_learner" }, { id: "glass_mind" }, { id: "chain_lightning" }];
+    const dominant = getDominantArchetype(perks);
+    expect(dominant?.id).toBe("researcher");
+    expect(dominant?.unlocked).toBe(true);
+    expect(dominant?.statusLabel).toBe("CAPSTONE ONLINE");
+  });
+
+  test("researcher doctrine forges at four aligned perks", () => {
+    const perks = [
+      { id: "fast_learner" }, { id: "glass_mind" },
+      { id: "chain_lightning" }, { id: "hollow_points" },
+    ];
+    const progress = getArchetypeProgress(perks);
+    const researcher = progress.find(a => a.id === "researcher");
+    expect(researcher?.doctrineForged).toBe(true);
+    expect(researcher?.statusLabel).toBe("DOCTRINE FORGED");
+  });
+
+  test("researcher reaches mastery at all five perks", () => {
+    const perks = [
+      { id: "fast_learner" }, { id: "glass_mind" }, { id: "chain_lightning" },
+      { id: "hollow_points" }, { id: "deep_pockets" },
+    ];
+    const progress = getArchetypeProgress(perks);
+    const researcher = progress.find(a => a.id === "researcher");
+    expect(researcher?.statusLabel).toBe("MASTERED");
+    expect(researcher?.count).toBe(5);
+  });
+
+  test("getPerkArchetypeMatches identifies fast_learner as researcher perk", () => {
+    const matches = getPerkArchetypeMatches({ id: "fast_learner" });
+    expect(matches.some(m => m.id === "researcher")).toBe(true);
+  });
+
+  test("previews researcher capstone crossing when adding third aligned perk", () => {
+    const delta = getPrimaryPerkArchetypeDelta(
+      { id: "chain_lightning" },
+      [{ id: "fast_learner" }, { id: "glass_mind" }],
+    );
+    expect(delta).toMatchObject({
+      archetypeId: "researcher",
+      countBefore: 2,
+      countAfter: 3,
+      milestoneKind: "capstone",
+      milestoneLabel: "Applied Methodology",
+      milestoneCrossed: true,
+    });
+  });
+
+  test("previews researcher doctrine crossing when adding fourth aligned perk", () => {
+    const delta = getPrimaryPerkArchetypeDelta(
+      { id: "hollow_points" },
+      [{ id: "fast_learner" }, { id: "glass_mind" }, { id: "chain_lightning" }],
+    );
+    expect(delta).toMatchObject({
+      archetypeId: "researcher",
+      milestoneKind: "doctrine",
+      milestoneLabel: "Cascading Hypothesis",
+      milestoneCrossed: true,
+    });
+  });
+
+  test("researcher getNewlyUnlockedArchetypes fires on capstone threshold", () => {
+    const perks = [{ id: "fast_learner" }, { id: "glass_mind" }, { id: "hollow_points" }];
+    const unlocked = getNewlyUnlockedArchetypes(perks, []);
+    expect(unlocked.some(a => a.id === "researcher")).toBe(true);
+  });
 });
