@@ -167,6 +167,13 @@ function drawRangedAimTelegraph(ctx, enemy, player, radius, timeNow) {
   ctx.restore();
 }
 
+// Pure helper — testable without canvas. Returns 0‥1 fade factor for idle
+// joystick position hints shown to new mobile players on their first 5 kills.
+export function getMobileJoystickHintAlpha(killCount, isBossWave, isReducedMotion) {
+  if (isReducedMotion || isBossWave || killCount >= 5) return 0;
+  return 1 - killCount / 5;
+}
+
 export function drawGame(ctx, canvas, W, H, gs, refs) {
   const { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx } = refs;
   const p = gs.player;
@@ -1519,6 +1526,59 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.globalAlpha = 1;
   };
   drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+
+  // Mobile idle joystick position hints — visible to new players (kills 0‥4)
+  // so they know where to place each thumb; fade to invisible at kill #5.
+  if (isMobile) {
+    const _hAlpha = getMobileJoystickHintAlpha(gs.kills || 0, gs.bossWave, _rm);
+    if (_hAlpha > 0.01) {
+      const _pulse = 0.72 + Math.sin(dn / 900) * 0.28;
+      const _ha = _hAlpha * _pulse;
+      const mx = W * 0.22, my = H * 0.72; // move thumb — lower-left
+      const ax = W * 0.78, ay = H * 0.72; // aim thumb  — lower-right
+      ctx.save();
+      ctx.textAlign = "center";
+
+      // Move hint (left)
+      if (!joystickRef.current.active) {
+        ctx.globalAlpha = _ha * 0.18;
+        ctx.fillStyle = "#8BBBFF";
+        ctx.beginPath(); ctx.arc(mx, my, 52, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = _ha * 0.38;
+        ctx.strokeStyle = "#AACCFF"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(mx, my, 52, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = "#AACCFF";
+        ctx.beginPath(); ctx.arc(mx, my, 18, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = _ha * 0.65;
+        ctx.fillStyle = "#CCDEFF";
+        ctx.font = "bold 9px monospace"; ctx.fillText("MOVE", mx, my + 68);
+        ctx.font = "12px monospace";
+        ctx.fillText("▲", mx, my - 38); ctx.fillText("▼", mx, my + 46);
+        ctx.fillText("◀", mx - 42, my + 4); ctx.fillText("▶", mx + 42, my + 4);
+      }
+
+      // Aim + fire hint (right)
+      if (!shootStickRef.current.active) {
+        ctx.globalAlpha = _ha * 0.15;
+        ctx.fillStyle = "#FF8888";
+        ctx.beginPath(); ctx.arc(ax, ay, 52, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = _ha * 0.32;
+        ctx.strokeStyle = "#FFAAAA"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(ax, ay, 52, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = "#FFBBBB";
+        ctx.beginPath(); ctx.arc(ax, ay, 18, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = _ha * 0.60;
+        ctx.fillStyle = "#FFCCCC";
+        ctx.font = "bold 9px monospace"; ctx.fillText("AIM+FIRE", ax, ay + 68);
+        ctx.font = "12px monospace";
+        ctx.fillText("▲", ax, ay - 38); ctx.fillText("▼", ax, ay + 46);
+        ctx.fillText("◀", ax - 42, ay + 4); ctx.fillText("▶", ax + 42, ay + 4);
+      }
+
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+  }
 
   // Wave kill attribution card (shows top-3 killed types after each wave)
   if (!_rm && (gs._waveKillFeed?.framesLeft || 0) > 0) {
