@@ -446,7 +446,7 @@ export default function DeathScreen({
     for (let i = 1; i < wk.length; i++) if ((wk[i] || 0) > (wk[bi] || 0)) bi = i;
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
-  const _topWpnForNarrative = _topWpn ? { name: _topWpn.weapon?.label || _topWpn.weapon?.name || "weapon", kills: _topWpn.kills, share: _topWpn.share } : null;
+  const _topWpnForNarrative = _topWpn ? { name: _topWpn.weapon?.label || _topWpn.weapon?.name || "weapon", kills: _topWpn.kills, share: kills > 0 ? _topWpn.kills / kills : 0 } : null;
   const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived, noHitWaves, grenadeKills, topWeapon: _topWpnForNarrative });
   const runHistory = loadRunHistory();
   const pressureSummary = describePressureArc(runHistory[0]?.pressureReceipt);
