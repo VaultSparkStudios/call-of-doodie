@@ -38,4 +38,26 @@ describe("MobileHUD", () => {
     expect(html).toContain('data-action-state="cooldown"');
     expect(html).toContain("GRENADE · COOL");
   });
+
+  it("shows heat badge when heat is in warm range", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} heat={45} />);
+    expect(html).toContain('data-testid="hud-heat-badge"');
+    expect(html).toContain("🔥 45");
+  });
+
+  it("shows overdrive label when heat reaches overdrive threshold", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} heat={72} />);
+    expect(html).toContain('data-testid="hud-heat-badge"');
+    expect(html).toContain("OVERDRIVE");
+  });
+
+  it("hides heat badge when heat is cold (≤5)", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} heat={3} />);
+    expect(html).not.toContain('data-testid="hud-heat-badge"');
+  });
+
+  it("hides heat badge when heat prop is omitted", () => {
+    const html = renderToStaticMarkup(<MobileHUD {...baseProps} />);
+    expect(html).not.toContain('data-testid="hud-heat-badge"');
+  });
 });
