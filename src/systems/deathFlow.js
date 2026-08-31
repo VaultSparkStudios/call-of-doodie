@@ -120,6 +120,8 @@ export function buildDeathScreenProps({
     totalDamage,
     crits: stats.crits,
     grenades: stats.grenades,
+    noHitWaves: stats.noHitWaves || 0,
+    grenadeKills: stats.grenadeKills || 0,
     deathMessage,
     difficulty,
     runSeed,
