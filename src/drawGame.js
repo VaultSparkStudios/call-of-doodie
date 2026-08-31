@@ -1504,21 +1504,77 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     ctx.fillRect(0, 0, W, H);
   }
 
-  // Touch joysticks
-  const drawStick = (ref, baseColor) => {
+  // Touch joysticks — elite polished rendering (CANON-041 mobile parity)
+  const drawStick = (ref, rimColor) => {
     if (!ref.current.active) return;
     const j = ref.current, rect = canvas.getBoundingClientRect();
     const sx = W / rect.width, sy = H / rect.height;
     const cx = (j.startX - rect.left) * sx, cy = (j.startY - rect.top) * sy;
-    ctx.globalAlpha = 0.15; ctx.fillStyle = baseColor;
-    ctx.beginPath(); ctx.arc(cx, cy, 60, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 0.45;
-    const clampD = Math.min(Math.hypot(j.dx, j.dy), 50);
+    const BASE_R = 60, THUMB_R = 20, MAX_TRAVEL = 40;
+    const clampDist = Math.min(Math.hypot(j.dx * sx, j.dy * sy), MAX_TRAVEL);
     const ang = Math.atan2(j.dy, j.dx);
-    ctx.beginPath(); ctx.arc(cx + Math.cos(ang) * clampD * sx, cy + Math.sin(ang) * clampD * sy, 22, 0, Math.PI * 2); ctx.fill();
-    ctx.globalAlpha = 1;
+    const tx = cx + Math.cos(ang) * clampDist;
+    const ty = cy + Math.sin(ang) * clampDist;
+    ctx.save();
+    // Outer guide ring
+    ctx.globalAlpha = 0.30; ctx.strokeStyle = rimColor; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(cx, cy, BASE_R, 0, Math.PI * 2); ctx.stroke();
+    // Subtle fill
+    ctx.globalAlpha = 0.05; ctx.fillStyle = rimColor;
+    ctx.beginPath(); ctx.arc(cx, cy, BASE_R, 0, Math.PI * 2); ctx.fill();
+    // Cardinal direction ticks
+    ctx.globalAlpha = 0.18; ctx.strokeStyle = rimColor; ctx.lineWidth = 1.5;
+    for (let a = 0; a < 4; a++) {
+      const ta = a * Math.PI / 2;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(ta) * (BASE_R - 14), cy + Math.sin(ta) * (BASE_R - 14));
+      ctx.lineTo(cx + Math.cos(ta) * (BASE_R - 4), cy + Math.sin(ta) * (BASE_R - 4));
+      ctx.stroke();
+    }
+    // Dead-zone center ring
+    ctx.globalAlpha = 0.15; ctx.strokeStyle = rimColor; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, 8, 0, Math.PI * 2); ctx.stroke();
+    // Thumb glow halo
+    ctx.globalAlpha = 0.18; ctx.fillStyle = rimColor;
+    ctx.beginPath(); ctx.arc(tx, ty, THUMB_R + 7, 0, Math.PI * 2); ctx.fill();
+    // Thumb body
+    ctx.globalAlpha = 0.72; ctx.fillStyle = rimColor;
+    ctx.beginPath(); ctx.arc(tx, ty, THUMB_R, 0, Math.PI * 2); ctx.fill();
+    // Thumb rim
+    ctx.globalAlpha = 0.55; ctx.strokeStyle = "#FFFFFF"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(tx, ty, THUMB_R, 0, Math.PI * 2); ctx.stroke();
+    // Specular arc
+    ctx.globalAlpha = 0.35; ctx.strokeStyle = "#FFFFFF"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(tx - 3, ty - 3, THUMB_R * 0.55, Math.PI * 1.1, Math.PI * 1.7); ctx.stroke();
+    // Center dot
+    ctx.globalAlpha = 0.65; ctx.fillStyle = "#FFFFFF";
+    ctx.beginPath(); ctx.arc(tx, ty, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
   };
-  drawStick(joystickRef, "#FFF"); drawStick(shootStickRef, "#F66");
+  drawStick(joystickRef, "#80D8FF");
+  drawStick(shootStickRef, "#FF7733");
+  // Weapon-colored aim indicator from player when shoot stick is deflected
+  if (isMobile && p && shootStickRef.current.active) {
+    const ss = shootStickRef.current;
+    if (Math.hypot(ss.dx, ss.dy) > 12) {
+      const aimAng = Math.atan2(ss.dy, ss.dx);
+      const wpnColor = WEAPONS[wpnIdx]?.color || "#FF9966";
+      const x1 = p.x + Math.cos(aimAng) * 22, y1 = p.y + Math.sin(aimAng) * 22;
+      const x2 = p.x + Math.cos(aimAng) * 70, y2 = p.y + Math.sin(aimAng) * 70;
+      ctx.save();
+      ctx.globalAlpha = 0.45; ctx.strokeStyle = wpnColor; ctx.lineWidth = 1.5;
+      ctx.setLineDash([6, 5]);
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha = 0.55; ctx.fillStyle = wpnColor;
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - Math.cos(aimAng - 0.4) * 8, y2 - Math.sin(aimAng - 0.4) * 8);
+      ctx.lineTo(x2 - Math.cos(aimAng + 0.4) * 8, y2 - Math.sin(aimAng + 0.4) * 8);
+      ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
+  }
 
   // Wave kill attribution card (shows top-3 killed types after each wave)
   if (!_rm && (gs._waveKillFeed?.framesLeft || 0) > 0) {
