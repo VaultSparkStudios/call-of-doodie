@@ -136,10 +136,11 @@ export default function VirtualKeyboard({
       position: "fixed", inset: 0, zIndex: 400,
       background: "rgba(5,5,10,0.96)", backdropFilter: "blur(10px)",
       display: "flex", flexDirection: "column", alignItems: "center",
-      justifyContent: "center", padding: 16,
+      justifyContent: "flex-start", overflowY: "auto",
+      padding: "max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom))",
       fontFamily: "'Courier New', monospace",
     }}>
-      <div style={{ width: "100%", maxWidth: numericOnly ? 250 : 560 }}>
+      <div style={{ width: "100%", maxWidth: numericOnly ? 250 : 560, margin: "auto" }}>
 
         {/* Title */}
         <div style={{ fontSize: 10, color: "#FF6B35", letterSpacing: 4, fontWeight: 900, textAlign: "center", marginBottom: 12 }}>
