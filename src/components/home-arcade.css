@@ -55,7 +55,7 @@
 .home-nav__desktop :where(a,button):hover { border-color:rgba(255,160,60,.35); background:rgba(255,107,34,.09); }
 .home-mobile-nav { display:none; }
 .home-more-backdrop { position:fixed; inset:0; z-index:120; display:flex; justify-content:flex-end; background:rgba(0,0,0,.72); backdrop-filter:blur(6px); }
-.home-more-menu { width:min(430px,100%); min-height:100dvh; padding:max(24px,env(safe-area-inset-top)) 22px max(24px,env(safe-area-inset-bottom)); overflow:auto; color:#f9f3e9; background:linear-gradient(180deg,#15100d,#07090d); border-left:1px solid rgba(255,160,60,.3); box-shadow:-25px 0 70px rgba(0,0,0,.45); }
+.home-more-menu { width:min(430px,100%); min-height:100dvh; max-height:100dvh; padding:max(24px,env(safe-area-inset-top)) 22px max(24px,env(safe-area-inset-bottom)); overflow:auto; color:#f9f3e9; background:linear-gradient(180deg,#15100d,#07090d); border-left:1px solid rgba(255,160,60,.3); box-shadow:-25px 0 70px rgba(0,0,0,.45); }
 .home-more-menu[data-color-scheme="light"] { color:#26170f; background:linear-gradient(180deg,#fff8eb,#e9ded0); }
 .home-more-menu__head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
 .home-more-menu__head span { color:var(--arcade-orange); font-size:12px!important; font-weight:900; letter-spacing:.14em; }
@@ -64,6 +64,7 @@
 .home-more-menu__grid { display:grid; gap:8px; }
 .home-more-menu__grid :where(a,button) { min-height:54px; display:flex; align-items:center; justify-content:space-between; width:100%; padding:10px 14px; border:1px solid rgba(255,160,60,.22); border-radius:10px; background:rgba(255,255,255,.04); color:inherit; font:inherit; font-size:16px!important; font-weight:800; text-align:left; text-decoration:none; cursor:pointer; }
 .home-section-label { margin:24px 0 10px; color:#b8a89d; font-size:13px!important; font-weight:900; letter-spacing:.12em; text-align:left; }
+.home-more-menu__section-label { margin-top:18px; }
 .home-tool-groups { display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px!important; }
 .home-tool-group { display:grid; align-content:start; gap:7px; padding:12px; border:1px solid rgba(255,255,255,.09); border-radius:10px; background:rgba(255,255,255,.025); }
 .home-tool-group h3 { margin:0 0 3px; color:#f3ede8; font-size:15px; }
