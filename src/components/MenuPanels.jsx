@@ -50,6 +50,23 @@ const PLAYER_SKINS = [
 // them; equipCosmetic() only updates the Doodie Pass's own "last equipped" record.
 const COSMETIC_SKINS = COSMETICS.filter(c => c.type === "skin");
 
+const PRESTIGE_MILESTONES = [
+  { min: 0,  label: "Civilian",         icon: "🪖", color: "#AAA",    bg: "rgba(255,255,255,0.04)", border: "rgba(255,255,255,0.12)" },
+  { min: 1,  label: "Toilet Warrior",   icon: "🚽", color: "#CD7F32", bg: "rgba(205,127,50,0.09)", border: "rgba(205,127,50,0.4)"  },
+  { min: 3,  label: "Sewer Veteran",    icon: "🦠", color: "#C0C0C0", bg: "rgba(180,180,180,0.07)", border: "rgba(192,192,192,0.35)" },
+  { min: 6,  label: "Doodie Overlord",  icon: "💩", color: "#FFD700", bg: "rgba(255,215,0,0.09)",  border: "rgba(255,215,0,0.45)"  },
+  { min: 10, label: "Immortal Tryhard", icon: "💀", color: "#FF5555", bg: "rgba(255,60,60,0.09)",  border: "rgba(255,80,80,0.45)"  },
+];
+
+function getPrestigeTier(p) {
+  for (let i = PRESTIGE_MILESTONES.length - 1; i >= 0; i--) {
+    if (p >= PRESTIGE_MILESTONES[i].min) {
+      return { ...PRESTIGE_MILESTONES[i], index: i, next: PRESTIGE_MILESTONES[i + 1] || null };
+    }
+  }
+  return { ...PRESTIGE_MILESTONES[0], index: 0, next: PRESTIGE_MILESTONES[1] };
+}
+
 function fmtTime(s) {
   if (!s) return "0:00";
   const h = Math.floor(s / 3600);
@@ -767,6 +784,38 @@ export function UpgradesPanel({ meta: initMeta, accountLevel, onClose }) {
             ⭐ {(meta.careerPoints || 0).toLocaleString()}
           </div>
         </div>
+
+        {/* Prestige milestone banner */}
+        {(() => {
+          const tier = getPrestigeTier(prestige);
+          const progressFrac = tier.next
+            ? Math.min((prestige - tier.min) / (tier.next.min - tier.min), 1)
+            : 1;
+          return (
+            <div style={{ marginBottom: 12, padding: "14px 16px", borderRadius: 10, background: tier.bg, border: `1px solid ${tier.border}`, textAlign: "center" }}>
+              <div style={{ fontSize: 34, lineHeight: 1, marginBottom: 4 }}>{tier.icon}</div>
+              <div style={{ fontSize: 14, fontWeight: 900, color: tier.color, letterSpacing: "0.06em" }}>{tier.label.toUpperCase()}</div>
+              <div style={{ fontSize: 10, color: "#888", marginTop: 3 }}>
+                {prestige === 0
+                  ? "Complete a prestige to earn your title"
+                  : `P${prestige} · Active buff: +${prestige * 10}% enemy health & speed`}
+              </div>
+              {tier.next ? (
+                <div style={{ marginTop: 10 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "#666", marginBottom: 4 }}>
+                    <span>{tier.icon} {tier.label}</span>
+                    <span>{tier.next.icon} P{tier.next.min}: {tier.next.label}</span>
+                  </div>
+                  <div style={{ height: 5, borderRadius: 3, background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                    <div style={{ width: `${Math.round(progressFrac * 100)}%`, height: "100%", background: tier.color, borderRadius: 3 }} />
+                  </div>
+                </div>
+              ) : (
+                <div style={{ fontSize: 10, color: tier.color, marginTop: 8, fontWeight: 900, letterSpacing: "0.05em" }}>MAX PRESTIGE TIER REACHED</div>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Prestige */}
         <div style={{ marginBottom: 12, padding: "12px 14px", borderRadius: 8, background: prestige > 0 ? "rgba(255,215,0,0.07)" : "rgba(255,255,255,0.03)", border: `1px solid ${prestige > 0 ? "rgba(255,215,0,0.35)" : "rgba(255,255,255,0.1)"}` }}>
