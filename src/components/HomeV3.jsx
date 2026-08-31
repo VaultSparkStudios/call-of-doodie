@@ -22,6 +22,7 @@ import { buildWeeklyGauntletLaunch } from "../utils/gauntletLaunch.js";
 import { applyTheme, nextTheme, readTheme, THEMES } from "../utils/theme.js";
 import { track } from "../utils/analytics.js";
 import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
+import { MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import "./home-v3.css";
 
 const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
