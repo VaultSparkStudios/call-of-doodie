@@ -21,18 +21,24 @@ export function buildRunNarrative({
   bossKillCount = 0,
   flowStateFired = 0,
   timeSurvived: _timeSurvived = 0,
-}) {
+  noHitWaves = 0,
+  grenadeKills = 0,
+  topWeapon = null,
+} = {}) {
   const { act, desc: actDesc } = classifyAct(wave);
   const moments = [];
+  const safeNearDeathEvents = Array.isArray(nearDeathEvents) ? nearDeathEvents : [];
 
-  if (nearDeathEvents.length >= 1) {
-    const first = nearDeathEvents[0];
+  // 1. Near-death survival — highest narrative weight
+  if (safeNearDeathEvents.length >= 1) {
+    const first = safeNearDeathEvents[0];
     moments.push({
       label: "LAST STAND",
-      desc: `Dropped to ${first.hpLeft} HP on wave ${first.wave}${nearDeathEvents.length > 1 ? ` (${nearDeathEvents.length}× total near-deaths)` : ""}.`,
+      desc: `Dropped to ${first.hpLeft} HP on wave ${first.wave}${safeNearDeathEvents.length > 1 ? ` (${safeNearDeathEvents.length}× total near-deaths)` : ""}.`,
     });
   }
 
+  // 2. Precision / aim mastery
   if (precisionPeakStreak >= 5) {
     const flowNote = flowStateFired > 0 ? ` — triggered FLOW STATE ${flowStateFired}×` : "";
     moments.push({
@@ -41,6 +47,7 @@ export function buildRunNarrative({
     });
   }
 
+  // 3. Boss kills — shows run depth
   if (bossKillCount >= 1) {
     moments.push({
       label: bossKillCount >= 3 ? "BOSS HUNTER" : "BOSS SLAYER",
@@ -48,7 +55,32 @@ export function buildRunNarrative({
     });
   }
 
-  if (bestStreak >= 20 && moments.length < 3) {
+  // 4. Perfect waves — no damage taken on at least 2 waves
+  if (moments.length < 3 && noHitWaves >= 2) {
+    moments.push({
+      label: "FLAWLESS",
+      desc: `${noHitWaves} wave${noHitWaves === 1 ? "" : "s"} survived without taking damage.`,
+    });
+  }
+
+  // 5. Weapon dominance — one weapon accounts for ≥60% of kills with meaningful sample
+  if (moments.length < 3 && topWeapon && topWeapon.kills >= 5 && topWeapon.share >= 0.6) {
+    moments.push({
+      label: "WEAPON SPECIALIST",
+      desc: `${String(topWeapon.name).toUpperCase()} responsible for ${topWeapon.kills} kills (${Math.round(topWeapon.share * 100)}% of run).`,
+    });
+  }
+
+  // 6. Grenade mastery — high grenade kill contribution
+  if (moments.length < 3 && grenadeKills >= 4) {
+    moments.push({
+      label: "DEMOLITION",
+      desc: `${grenadeKills} kills via grenades — explosive output paid off.`,
+    });
+  }
+
+  // 7. Streak fallback — fills the card when higher-priority moments leave room
+  if (moments.length < 3 && bestStreak >= 20) {
     moments.push({
       label: "CHAIN REACTION",
       desc: `${bestStreak}-kill streak at peak momentum.`,

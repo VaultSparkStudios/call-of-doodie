@@ -37,7 +37,7 @@ const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", leg
 
 export default function DeathScreen({
   score, kills, deaths: _deaths, wave, level, bestStreak, timeSurvived, totalDamage,
-  crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
+  crits, grenades, noHitWaves = 0, grenadeKills = 0, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
   leaderboard, lbLoading, lbHasMore, onLoadMore, username, DIFFICULTIES,
   onStartGame, onMenu, onRefreshLeaderboard, onSubmitScore,
@@ -438,7 +438,6 @@ export default function DeathScreen({
     vsScore,
     runSeed,
   });
-  const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived });
   const _topWpn = (() => {
     const wk = weaponKills || [];
     const total = wk.reduce((s, v) => s + (v || 0), 0);
@@ -447,6 +446,8 @@ export default function DeathScreen({
     for (let i = 1; i < wk.length; i++) if ((wk[i] || 0) > (wk[bi] || 0)) bi = i;
     return { weapon: WEAPONS[bi], kills: wk[bi], share: (wk[bi] || 0) / total };
   })();
+  const _topWpnForNarrative = _topWpn ? { name: _topWpn.weapon?.label || _topWpn.weapon?.name || "weapon", kills: _topWpn.kills, share: kills > 0 ? _topWpn.kills / kills : 0 } : null;
+  const runNarrative = buildRunNarrative({ wave, score, kills, bestStreak, nearDeathEvents, precisionPeakStreak, bossKillCount, flowStateFired, timeSurvived, noHitWaves, grenadeKills, topWeapon: _topWpnForNarrative });
   const runHistory = loadRunHistory();
   const pressureSummary = describePressureArc(runHistory[0]?.pressureReceipt);
   const formationSummary = describeFormationPressure(runHistory[0]?.pressureReceipt);
