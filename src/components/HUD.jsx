@@ -423,6 +423,15 @@ export default function HUD({
 
       {/* Ammo / weapon */}
       <div style={{ position: "absolute", bottom: 8, right: isMobile ? 8 : 56, textAlign: "right" }}>
+        {/* Grenade / Dash cooldown chips — parity with compact HUD ability-readiness row */}
+        <div aria-label="Ability readiness" style={{ display: "flex", gap: 4, justifyContent: "flex-end", marginBottom: 5 }}>
+          <span data-action-state={dashReady ? "ready" : "cooldown"} style={{ fontSize: 8, fontWeight: 900, padding: "2px 6px", borderRadius: 4, border: `1px solid ${dashReady ? "rgba(124,255,184,.32)" : "rgba(255,192,120,.24)"}`, color: dashReady ? "#7CFFB8" : "#FFC078", background: "rgba(0,0,0,.22)", letterSpacing: 0.3, whiteSpace: "nowrap" }}>
+            DASH [⇧] · {dashReady ? "READY" : "COOL"}
+          </span>
+          <span data-action-state={grenadeReady ? "ready" : "cooldown"} style={{ fontSize: 8, fontWeight: 900, padding: "2px 6px", borderRadius: 4, border: `1px solid ${grenadeReady ? "rgba(124,255,184,.32)" : "rgba(255,192,120,.24)"}`, color: grenadeReady ? "#7CFFB8" : "#FFC078", background: "rgba(0,0,0,.22)", letterSpacing: 0.3, whiteSpace: "nowrap" }}>
+            GRENADE [Q] · {grenadeReady ? "READY" : "COOL"}
+          </span>
+        </div>
         <div style={{ fontSize: 11, color: weaponUpgrades?.[currentWeapon] >= 3 && weapon.upgradedName ? "#FFD700" : weapon.color, marginBottom: 1, fontWeight: 600 }}>
           {weapon.emoji} {weaponEvolutions?.[currentWeapon]?.evolved
             ? <span style={{ color: "#FF6B35", textShadow: "0 0 8px rgba(255,107,53,0.7)" }}>🔥 {weaponEvolutions[currentWeapon].name}</span>
