@@ -15,8 +15,8 @@
       "failures": []
     }
   },
-  "touchedState": null,
-  "additionalTouchedStates": [],
+  "touchedState": "wave-announce-theme-identity",
+  "additionalTouchedStates": ["wave-announce-theme-identity"],
   "themes": [
     "dark",
     "light"
@@ -177,6 +177,22 @@
       "page": "Bounded corrective-order evidence archive in Run History"
     }
   ],
+  "touchedStateCaptures": [
+    {
+      "file": "wave-announce-desktop.png",
+      "sha256": "4fd9d6b6d78f9e3c173c1f1ad44d42402eece7ce5b719a34afb0f873a43c51ea",
+      "theme": "dark",
+      "viewport": { "width": 1440, "height": 900 },
+      "page": "Wave announce card — all 4 themes (vanguard/bulwark/volatile/crossfire) + boss"
+    },
+    {
+      "file": "wave-announce-mobile.png",
+      "sha256": "fffcc3d6b5ed35b11c6a8849ad28a848266825c6b6d5990179f0500fb0d9d3ec",
+      "theme": "dark",
+      "viewport": { "width": 390, "height": 844 },
+      "page": "Wave announce card — all 4 themes (vanguard/bulwark/volatile/crossfire) + boss"
+    }
+  ],
   "inspection": {
     "renderedPixelsReviewed": true,
     "reviewer": "Codex direct rendered-pixel review plus Playwright screenshot and analytics court",
@@ -191,6 +207,13 @@
       "Direct rendered-pixel review confirmed the persisted evidence HUD and bounded Run History archive are readable at 390px and 1440px in both project themes; no clipping, overlap, contrast, or causal-claim defect remained."
     ],
     "blockingDefectsOpen": 0,
+    "touchedStateFindings": [
+      "Wave announce card — all 4 wave themes render distinct accent colors at desktop 1440px and mobile 390px: vanguard=#00AAFF blue, bulwark=#FF7722 orange, volatile=#FF44BB magenta, crossfire=#44FF99 green.",
+      "Boss wave retains #FF4400 red accent — no regression.",
+      "Theme emoji icons (⚡🛡💥🎯) render correctly in both viewports without clipping.",
+      "Event label (orange #FF8844) remains visually distinct above the theme label.",
+      "No horizontal overflow, clipping, or sub-WCAG contrast failure observed at any viewport."
+    ],
     "subjectiveVisualReviewClaimed": true,
     "subjectiveVisualReviewStatus": "completed"
   }
