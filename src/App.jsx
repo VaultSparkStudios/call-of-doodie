@@ -3131,6 +3131,7 @@ export default function CallOfDoodie() {
             eventLabel: gs.waveEvent ? (_evtMap[gs.waveEvent] || gs.waveEvent) : null,
             estimatedCount: gs.maxEnemiesThisWave,
             tempoLabel: gs.waveDirector?.label,
+            themeId: gs.waveDirector?.themeId,
             threatHint: gs.waveDirector?.hint,
             telemetryBand: gs.waveTelemetryBand,
             formationHint: gs._lastFormationLabel ? `${gs._lastFormationLabel} — ${_fmtDescriptors[gs._lastFormationLabel] || ""}` : null,
@@ -4499,7 +4500,14 @@ export default function CallOfDoodie() {
       {waveAnnounce && !paused && (() => {
         const wa = waveAnnounce;
         const isBoss = wa.isBoss;
-        const accentColor = isBoss ? "#FF4400" : "#FFD700";
+        const THEME_META = {
+          vanguard: { color: "#00AAFF", icon: "⚡" },
+          bulwark:  { color: "#FF7722", icon: "🛡" },
+          volatile: { color: "#FF44BB", icon: "💥" },
+          crossfire: { color: "#44FF99", icon: "🎯" },
+        };
+        const themeMeta = (!isBoss && wa.themeId && THEME_META[wa.themeId]) || null;
+        const accentColor = isBoss ? "#FF4400" : (themeMeta?.color ?? "#FFD700");
         return (
           <div style={{
             position: "absolute", top: "30%", left: "50%", transform: "translate(-50%,-50%)",
@@ -4521,8 +4529,8 @@ export default function CallOfDoodie() {
               </div>
             )}
             {wa.tempoLabel && (
-              <div style={{ fontSize: 12, color: "#8bd3ff", fontFamily: "'Courier New',monospace", marginTop: 6, fontWeight: 700 }}>
-                {wa.tempoLabel}
+              <div style={{ fontSize: 12, color: accentColor, fontFamily: "'Courier New',monospace", marginTop: 6, fontWeight: 700, letterSpacing: 1 }}>
+                {themeMeta ? `${themeMeta.icon} ` : ""}{wa.tempoLabel}
               </div>
             )}
             {wa.threatHint && (
