@@ -1,0 +1,20 @@
+[
+  {
+    "file": "wave-announce-desktop.png",
+    "sha256": "4fd9d6b6d78f9e3c173c1f1ad44d42402eece7ce5b719a34afb0f873a43c51ea",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "page": "Wave announce card — all 4 themes + boss"
+  },
+  {
+    "file": "wave-announce-mobile.png",
+    "sha256": "fffcc3d6b5ed35b11c6a8849ad28a848266825c6b6d5990179f0500fb0d9d3ec",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "page": "Wave announce card — all 4 themes + boss"
+  }
+]
