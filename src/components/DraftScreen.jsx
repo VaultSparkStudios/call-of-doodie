@@ -60,7 +60,7 @@ export default function DraftScreen({ options, onSelect }) {
                 <div style={{ fontSize: 9, color: "#666", letterSpacing: 1, marginBottom: 10, textTransform: "uppercase" }}>{perk.tier}</div>
                 <div style={{ fontSize: 11, color: isHov ? "#DDD" : "#777", lineHeight: 1.5 }}>{perk.desc}</div>
                 {archetypeSeeds.length > 0 && (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 10, justifyContent: "center" }}>
+                  <div data-testid="draft-archetype-seeds" style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 10, justifyContent: "center" }}>
                     {archetypeSeeds.map(arch => (
                       <span
                         key={arch.id}

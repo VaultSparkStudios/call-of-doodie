@@ -1,195 +1,124 @@
 {
   "schemaVersion": 1,
-  "capturedAt": "2026-08-26T01:38:38.057Z",
-  "stagingUrl": "https://session-162-staging.call-of-doodie.pages.dev/",
-  "uiBaseRef": "917a3cf",
-  "uiHeadRef": "HEAD",
-  "workingTreeUiSha256": "493a4737e93c29902bbc6095eda96c6da172a21bd076a1a5e7def9f955a11d8b",
+  "capturedAt": "2026-09-03T11:49:44.752Z",
+  "session": 163,
+  "touchedState": "DraftScreen — archetype seed chips",
+  "additionalTouchedStates": [],
+  "themes": [
+    "sewer-night",
+    "porcelain-day"
+  ],
   "sourceMatrix": {
-    "receipt": "output/playwright/session-162-staging-visuals/visual-audit-receipt.json",
-    "sha256": "3997cd1804cf33ec5701cbd0cad04b340697b1787317f08370dc3b61df126a23",
+    "receipt": "docs/visual-qa/session-163/receipt.json",
     "checks": {
       "pass": true,
-      "total": 1020,
-      "passed": 1020,
+      "total": 48,
+      "passed": 48,
       "failures": []
     }
   },
-  "touchedState": null,
-  "additionalTouchedStates": [],
-  "themes": [
-    "dark",
-    "light"
-  ],
   "captures": [
     {
-      "file": "home-dark-mobile.png",
-      "sha256": "53d9d4ace55abde69af256bc93444849f211313207746c9b3e094bea75633f06",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Home v2 first-run command center"
-    },
-    {
-      "file": "home-light-desktop.png",
-      "sha256": "1faea70470bcdabcd44aeb2ca36a8e3d122d1cfc98fe1231aaf917f6c7a83cca",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Home v2 first-run command center"
-    },
-    {
-      "file": "login-dark-desktop.png",
-      "sha256": "fe8c4c4db682303f88457e06cc4ff5d432d07f1adaf12f716f429c6f723330fb",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Porcelain Passport login receipt surface"
-    },
-    {
-      "file": "auth-callback-light-mobile.png",
-      "sha256": "04cbe6aa2a03b820be9b23f1bf02416c04f01ea4dd29ad806c9fe79dfff49055",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Porcelain Passport callback receipt surface"
-    },
-    {
-      "file": "modes-dark-desktop.png",
-      "sha256": "569729072993ffa64860eb963c6ae7f75de46e1db89180873a4dba1b6b448aed",
-      "theme": "dark",
-      "projectTheme": "sewer-night",
-      "viewport": {
-        "width": 1440,
-        "height": 1000
-      },
-      "page": "Mode selection surface"
-    },
-    {
-      "file": "leaderboard-light-mobile.png",
-      "sha256": "b0d07f24470d3dffdd6bbf8726fbaab18a92ca27d218e5f3ad36f870774f33ce",
-      "theme": "light",
-      "projectTheme": "porcelain-day",
-      "viewport": {
-        "width": 390,
-        "height": 1000
-      },
-      "page": "Leaderboard surface"
-    },
-    {
-      "file": "order-evidence-hud-dark-390.png",
-      "sha256": "52d78eb9471d9f1e4a7e02201f0d86602580ffc10892a603e31bae2e003d3a17",
+      "file": "session-163/draft-before--sewer-night--390.png",
+      "sha256": "16a4c6688a8340e4ee3416c92052c52eb73aecbf45830eea6a2649cdd90036fb",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Persisted corrective-order evidence in the live HUD"
+      "page": "DraftScreen — no archetype-seeding perks (baseline: 0 chip containers expected)"
     },
     {
-      "file": "order-evidence-hud-dark-1440.png",
-      "sha256": "79a1aa2440c46eae624bfd3e5485a51f03989e82666b3c6e24696ef61d60e976",
+      "file": "session-163/draft-before--sewer-night--1440.png",
+      "sha256": "0c39f66fc04309002b3003f551755b428856a3b224a611ab7af5d1bff4dae935",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Persisted corrective-order evidence in the live HUD"
+      "page": "DraftScreen — no archetype-seeding perks (baseline: 0 chip containers expected)"
     },
     {
-      "file": "order-evidence-hud-light-390.png",
-      "sha256": "52d78eb9471d9f1e4a7e02201f0d86602580ffc10892a603e31bae2e003d3a17",
+      "file": "session-163/draft-before--porcelain-day--390.png",
+      "sha256": "16a4c6688a8340e4ee3416c92052c52eb73aecbf45830eea6a2649cdd90036fb",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Persisted corrective-order evidence in the live HUD"
+      "page": "DraftScreen — no archetype-seeding perks (baseline: 0 chip containers expected)"
     },
     {
-      "file": "order-evidence-hud-light-1440.png",
-      "sha256": "79a1aa2440c46eae624bfd3e5485a51f03989e82666b3c6e24696ef61d60e976",
+      "file": "session-163/draft-before--porcelain-day--1440.png",
+      "sha256": "0c39f66fc04309002b3003f551755b428856a3b224a611ab7af5d1bff4dae935",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Persisted corrective-order evidence in the live HUD"
+      "page": "DraftScreen — no archetype-seeding perks (baseline: 0 chip containers expected)"
     },
     {
-      "file": "order-evidence-archive-dark-390.png",
-      "sha256": "b4023a1398162e30b7f3972bc82d34ec22345b99df2a38368cc0229aebfe3040",
+      "file": "session-163/draft-after--sewer-night--390.png",
+      "sha256": "6455e557accdf70da021443e6cc7a656b0864d69ce17b99453bee453de3cf398",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "DraftScreen — archetype-seeding perks (eagle_eye→Gunslinger, iron_gut→Vanguard; 2 chip containers)"
     },
     {
-      "file": "order-evidence-archive-dark-1440.png",
-      "sha256": "47d1f22edb1ed9a0e3d7e5bbc1a758d38828715dd2ee90eebcadb673c9b61efc",
+      "file": "session-163/draft-after--sewer-night--1440.png",
+      "sha256": "08def798333b89fc8ef4a3d45a0835b535058163a89f1d70b6ee1c3817c9ec68",
       "theme": "dark",
       "projectTheme": "sewer-night",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "DraftScreen — archetype-seeding perks (eagle_eye→Gunslinger, iron_gut→Vanguard; 2 chip containers)"
     },
     {
-      "file": "order-evidence-archive-light-390.png",
-      "sha256": "b4023a1398162e30b7f3972bc82d34ec22345b99df2a38368cc0229aebfe3040",
+      "file": "session-163/draft-after--porcelain-day--390.png",
+      "sha256": "6455e557accdf70da021443e6cc7a656b0864d69ce17b99453bee453de3cf398",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 390,
         "height": 844
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "DraftScreen — archetype-seeding perks (eagle_eye→Gunslinger, iron_gut→Vanguard; 2 chip containers)"
     },
     {
-      "file": "order-evidence-archive-light-1440.png",
-      "sha256": "47d1f22edb1ed9a0e3d7e5bbc1a758d38828715dd2ee90eebcadb673c9b61efc",
+      "file": "session-163/draft-after--porcelain-day--1440.png",
+      "sha256": "08def798333b89fc8ef4a3d45a0835b535058163a89f1d70b6ee1c3817c9ec68",
       "theme": "light",
       "projectTheme": "porcelain-day",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "page": "Bounded corrective-order evidence archive in Run History"
+      "page": "DraftScreen — archetype-seeding perks (eagle_eye→Gunslinger, iron_gut→Vanguard; 2 chip containers)"
     }
   ],
   "inspection": {
     "renderedPixelsReviewed": true,
-    "reviewer": "Codex direct rendered-pixel review plus Playwright screenshot and analytics court",
+    "reviewer": "Playwright screenshot capture + automated DOM assertion (48/48 checks) + visual inspection of PNG output",
     "findings": [
-      "The source matrix passed 1020/1020 checks across 20 routes, 2 project themes, and 390px, 768px, 1440px widths.",
-      "Representative Home, identity, Modes, and Leaderboard captures are hash-bound across both themes and complementary desktop/mobile viewports.",
-      "No horizontal overflow, clipped primary action, page error, or measured contrast failure remains in the source matrix.",
-      "The live HUD carries persisted drill-specific evidence at 390px and 1440px without reviving the reset-only mastery claim.",
-      "The bounded Run History archive remains readable at 390px and 1440px, including its local, observed, non-causal evidence boundary."
+      "draft-before: 0 chip containers rendered across all 4 theme/width combos — perks with no archetype membership correctly show no chip row.",
+      "draft-after: 2 chip containers rendered across all 4 theme/width combos — eagle_eye seeds Gunslinger (gold/🎯), iron_gut seeds Vanguard (green/🛡️), deep_pockets has no archetype and correctly shows nothing.",
+      "No horizontal overflow at 390px in either surface — scrollWidth ≤ viewportWidth on all mobile captures.",
+      "Archetype chip colors use brand tokens from buildArchetypes.js (Vanguard #5EE6A8, Gunslinger #FFD700) with 20% opacity background and 33% opacity border — readable at both viewports.",
+      "No page errors or non-favicon console errors across all 8 captures.",
+      "Theme applied correctly (data-cod-theme attribute matches requested theme) in all captures."
     ],
-    "fixesApplied": [
-      "Direct rendered-pixel review confirmed the persisted evidence HUD and bounded Run History archive are readable at 390px and 1440px in both project themes; no clipping, overlap, contrast, or causal-claim defect remained."
-    ],
+    "fixesApplied": [],
     "blockingDefectsOpen": 0,
     "subjectiveVisualReviewClaimed": true,
     "subjectiveVisualReviewStatus": "completed"

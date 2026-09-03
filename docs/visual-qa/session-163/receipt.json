@@ -1,0 +1,358 @@
+{
+  "schemaVersion": 1,
+  "session": 163,
+  "generatedAt": "2026-09-03T11:49:44.752Z",
+  "baseUrl": "http://127.0.0.1:4175/",
+  "captures": [
+    {
+      "surface": "draft-before",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "draft-before--sewer-night--390.png",
+        "sha256": "16a4c6688a8340e4ee3416c92052c52eb73aecbf45830eea6a2649cdd90036fb"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "draft-before",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "draft-before--sewer-night--1440.png",
+        "sha256": "0c39f66fc04309002b3003f551755b428856a3b224a611ab7af5d1bff4dae935"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "draft-before",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "draft-before--porcelain-day--390.png",
+        "sha256": "16a4c6688a8340e4ee3416c92052c52eb73aecbf45830eea6a2649cdd90036fb"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "draft-before",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "draft-before--porcelain-day--1440.png",
+        "sha256": "0c39f66fc04309002b3003f551755b428856a3b224a611ab7af5d1bff4dae935"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "surface": "draft-after",
+      "theme": "sewer-night",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "draft-after--sewer-night--390.png",
+        "sha256": "6455e557accdf70da021443e6cc7a656b0864d69ce17b99453bee453de3cf398"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 2
+        }
+      ]
+    },
+    {
+      "surface": "draft-after",
+      "theme": "sewer-night",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "dark",
+      "screenshot": {
+        "file": "draft-after--sewer-night--1440.png",
+        "sha256": "08def798333b89fc8ef4a3d45a0835b535058163a89f1d70b6ee1c3817c9ec68"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "sewer-night"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 2
+        }
+      ]
+    },
+    {
+      "surface": "draft-after",
+      "theme": "porcelain-day",
+      "width": 390,
+      "height": 844,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "draft-after--porcelain-day--390.png",
+        "sha256": "6455e557accdf70da021443e6cc7a656b0864d69ce17b99453bee453de3cf398"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "390/390"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 2
+        }
+      ]
+    },
+    {
+      "surface": "draft-after",
+      "theme": "porcelain-day",
+      "width": 1440,
+      "height": 1000,
+      "colorScheme": "light",
+      "screenshot": {
+        "file": "draft-after--porcelain-day--1440.png",
+        "sha256": "08def798333b89fc8ef4a3d45a0835b535058163a89f1d70b6ee1c3817c9ec68"
+      },
+      "checks": [
+        {
+          "id": "http-ok",
+          "ok": true,
+          "actual": 200
+        },
+        {
+          "id": "theme-applied",
+          "ok": true,
+          "actual": "porcelain-day"
+        },
+        {
+          "id": "no-horizontal-overflow",
+          "ok": true,
+          "actual": "1440/1440"
+        },
+        {
+          "id": "no-page-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "no-console-errors",
+          "ok": true,
+          "actual": []
+        },
+        {
+          "id": "archetype-chip-containers",
+          "ok": true,
+          "actual": 2
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "checks": 48,
+    "passed": 48,
+    "failures": []
+  }
+}
