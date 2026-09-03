@@ -11,6 +11,8 @@
 - Retired `/play/` with a 301, added `/roadmap/` from `src/content/roadmap.js`, moved the co-op negative claim there, grouped the footer from one `FOOTER_GROUPS` source, generated README claims from constants with a build check, added a changelog-age warning, corrected supporter copy, hid the cosmetic track.
 - Full Vitest 221/221 files and 1,286/1,286 assertions; strict lint; build; public contract 29 files; claims; security release gate; architecture budget; token drift; Playwright 19 pass / 1 skip; browser mode smoke; 14 theme captures directly reviewed (`docs/visual-qa/s163-theme/`).
 
+- Closeout push was rejected because origin carried six unpulled commits (dependabot dev bumps, protocol doc sync, a workflow sync). Rebased cleanly, reinstalled dependencies after killing two zombie preview processes that held the rollup binary, and re-ran every gate. The synced `brief-format-check.yml` had regressed to Node 20 again (the S160 regression); restored the Node 22 floor as a bounded repair.
+
 Intent outcome: achieved — the founder's three complaints (identical modes, no teammates, theme jumps) each have shipped, verified fixes; the remaining plan is ordered in the audit.
 
 ## 2026-08-25/26 (Session 162 — corrective-order evidence across runs)

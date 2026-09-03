@@ -13,6 +13,7 @@
 - Site truth — `/play/` is retired with a 301 to the in-app deploy anchor; `/roadmap/` publishes shipped/next/later from `src/content/roadmap.js` and carries the honest "real-time co-op is not live" claim that left the changelog; the footer is three labelled groups shared by React and static pages from one `FOOTER_GROUPS` source; README feature claims regenerate from runtime constants and are checked at build; the cosmetic drop track is hidden until its art is complete and "early access" copy is gone.
 - Validation truth — full Vitest passes 221/221 files and 1,286/1,286 assertions; strict lint, deployable build, public contract and claims, security release gate, architecture budget, and token-drift checks pass. Playwright passes 19 with one intentional mobile skip. A real-browser smoke deploys both new modes and reads their HUD banners; fourteen theme captures across both schemes and mobile were directly reviewed.
 - Review truth — a code review found the ally-kill discount was unreachable (fixed by threading the owner through defeat metadata) and self-review found Boss Gauntlet never applied its ruleset so the boss rotation slot went negative on waves 1–4 (fixed by applying the mode definition's ruleset at run start).
+- Propagation truth — the synced `brief-format-check.yml` regressed to Node 20 a second time; the Node 22 floor was restored locally and the root-fix remains owned by studio-ops.
 - Lifecycle truth — cost-neutral, deployed, FORGE, public-unlaunched; SPARKED remains NO-GO. App chunk is 584 KB against the 493 KB S145 budget; the bundle diet is a scheduled follow-up.
 
 ## Open Work
@@ -103,7 +104,7 @@
 
 ## Source Index
 
-- `context/CURRENT_STATE.md` · 210,097 bytes · SHA-256 `6a7d6e6e0d71…`
+- `context/CURRENT_STATE.md` · 210,278 bytes · SHA-256 `e7cf058cdd22…`
 - `context/TASK_BOARD.md` · 133,375 bytes · SHA-256 `3b72468cd287…`
 - `context/DECISIONS.md` · 133,822 bytes · SHA-256 `ad4a33a01c21…`
 - `docs/AUDIT_2026-09-03.json` · 3,485 bytes · SHA-256 `ca3a8e698c1c…`
