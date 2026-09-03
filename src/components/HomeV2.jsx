@@ -9,7 +9,7 @@ import {
   loadRunHistory, loadRivalryHistory, loadStudioGameEvents, getDailyChampion, getMissionStreak,
   countIncompleteMissions,
 } from "../storage.js";
-import { MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
+import { FULL_MODE_CATALOG as MODE_CATALOG, resolveSelectedModeId } from "../config/modeCatalog.js";
 import { QUICK_RULES } from "../config/quickRules.js";
 import { isOpsDebug } from "../utils/debugFlags.js";
 import { buildCommandBrief, buildFrontDoorActionStack } from "../utils/menuGuidance.js";
@@ -66,7 +66,7 @@ const PANEL = { position: "fixed", inset: 0, background: "rgba(0,0,0,0.92)", zIn
 
 // Mode identity comes from the shared catalog (S155) — this view uses the
 // arcade-caps label variant.
-const MODE_DEFS = MODE_CATALOG.map(m => ({ id: m.id, label: m.arcadeLabel, emoji: m.emoji, color: m.color, blurb: m.blurb }));
+const MODE_DEFS = MODE_CATALOG.map(m => ({ id: m.id, label: m.arcadeLabel, emoji: m.emoji, color: m.color, blurb: m.blurb, kind: m.kind, isNew: !!m.isNew }));
 const currentModeId = resolveSelectedModeId;
 
 export default function HomeV2(props) {
@@ -83,6 +83,7 @@ export default function HomeV2(props) {
     speedrunMode, onSetSpeedrunMode,
     gauntletMode, onSetGauntletMode,
     zombiesMode, onSetZombiesMode,
+    gameModeId: _gameModeId = "standard", onSetGameModeId,
     assistAvailable, onApplyAssist,
     onInstallApp,
     onReplayTraining,
@@ -378,8 +379,9 @@ export default function HomeV2(props) {
     };
     // Mode changes fan out to App-level state; keep the select interaction
     // responsive on narrow viewports (S142 INP evidence) by deferring the fan-out.
-    startTransition(() => { (setters[id] || setters.standard)(); });
-  }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode, onSetZombiesMode]);
+    // S163: new modes clear every legacy ruleset flag and select by id.
+    startTransition(() => { (setters[id] || setters.standard)(); onSetGameModeId?.(id); });
+  }, [onSetScoreAttackMode, onSetDailyChallengeMode, onSetCursedRunMode, onSetBossRushMode, onSetSpeedrunMode, onSetGauntletMode, onSetZombiesMode, onSetGameModeId]);
 
   const deploy = useCallback(() => {
     const carriedDrill = sanitizeCarriedRunDrill(pendingNextRunContract);
@@ -753,7 +755,7 @@ export default function HomeV2(props) {
             <div style={modeGrid}>
               {MODE_DEFS.map(m => (
                 <button key={m.id} onClick={() => selectMode(m.id)} style={modeCell(modeId === m.id, m.color)}>
-                  <div style={{ fontSize: 12, fontWeight: 900, color: m.color }}>{m.emoji} {m.label}</div>
+                  <div style={{ fontSize: 12, fontWeight: 900, color: m.color }}>{m.emoji} {m.label}{m.isNew && <span style={{ marginLeft: 6, fontSize: 8, padding: "1px 5px", borderRadius: 6, background: m.color, color: "#111", letterSpacing: 1 }}>NEW</span>}</div>
                   <div style={{ fontSize: 9, color: "#AAA", marginTop: 2 }}>{m.blurb}</div>
                 </button>
               ))}

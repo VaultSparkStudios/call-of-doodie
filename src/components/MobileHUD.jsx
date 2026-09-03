@@ -17,6 +17,7 @@ export default function MobileHUD({
   vsScore, vsName, topGhosts, weeklyRival, bankedPerkChoices,
   nextPerkLevel, cursedHideScore, activeWaveContract, grenadeReady, dashReady,
   combo, killstreak, experimentMatched, reducedEffects,
+  modeHud = null,
 }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const weapon = WEAPONS[currentWeapon];
@@ -69,6 +70,35 @@ export default function MobileHUD({
         </div>
       )}
 
+      {modeHud && (modeHud.banner || modeHud.squad?.length > 0) && (
+        <div data-testid="hud-mode-panel" style={{ position: "absolute", left: 8, bottom: isMobile ? 92 : 104, maxWidth: isMobile ? 210 : 260, display: "flex", flexDirection: "column", gap: 3, pointerEvents: "none" }}>
+          {modeHud.banner && (
+            <div data-testid="hud-mode-banner" style={{ padding: "4px 8px", border: "1px solid rgba(255,211,79,.35)", borderRadius: 8, background: "rgba(4,7,10,.82)", color: "#FFD34F", fontSize: 9, fontWeight: 900, letterSpacing: .6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {modeHud.banner}
+              {modeHud.progress && (
+                <span style={{ display: "block", marginTop: 3, height: 4, background: "rgba(255,255,255,.12)", borderRadius: 2, overflow: "hidden" }}>
+                  <span style={{ display: "block", height: "100%", width: `${Math.round(Math.max(0, Math.min(1, modeHud.progress.pct)) * 100)}%`, background: modeHud.progress.pressure > 0.5 ? "#FF4F46" : "#FFD34F" }} />
+                </span>
+              )}
+            </div>
+          )}
+          {modeHud.squad?.length > 0 && (
+            <div data-testid="hud-squad" style={{ padding: "4px 6px", border: "1px solid rgba(255,255,255,.14)", borderRadius: 8, background: "rgba(4,7,10,.78)" }}>
+              {modeHud.squad.map((s) => (
+                <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 9, color: s.downed ? "#FF6666" : "#DDE6EE", lineHeight: 1.5 }}>
+                  <span>{s.emoji}</span>
+                  <span style={{ flex: 1, fontWeight: 800, color: s.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.name}</span>
+                  <span style={{ width: 44, height: 4, background: "rgba(255,255,255,.12)", borderRadius: 2, overflow: "hidden" }}>
+                    <span style={{ display: "block", height: "100%", width: `${Math.round((s.downed ? s.revivePct : s.healthPct) * 100)}%`, background: s.downed ? "#61DDFF" : s.healthPct < 0.3 ? "#FF4F46" : "#7CFFB8" }} />
+                  </span>
+                  <span style={{ fontSize: 8, color: "#7D98A4", minWidth: 34, textAlign: "right" }}>{s.downed ? "DOWN" : s.order.toUpperCase()}</span>
+                </div>
+              ))}
+              {!isMobile && <div style={{ fontSize: 8, color: "#5F7683", marginTop: 2 }}>Z follow · X hold · C attack</div>}
+            </div>
+          )}
+        </div>
+      )}
       <div style={{ position: "absolute", bottom: isMobile ? 8 : 18, left: isMobile ? 8 : "50%", right: isMobile ? 8 : "auto", width: isMobile ? "auto" : "min(680px, calc(100vw - 32px))", transform: isMobile ? "none" : "translateX(-50%)", display: "grid", gridTemplateColumns: "minmax(105px, 1fr) auto", alignItems: "end", gap: 8 }}>
         <div style={{ padding: "8px 10px", border: "1px solid rgba(255,255,255,.14)", borderRadius: 11, background: "rgba(4,7,10,.78)", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 10, fontWeight: 850 }}><span>HEALTH{extraLives > 0 ? " · EXTRA LIFE" : ""}</span><span>{health}/{maxHealth}</span></div>

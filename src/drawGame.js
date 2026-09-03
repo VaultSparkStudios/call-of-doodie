@@ -440,6 +440,8 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     _beatVulnActive = _bvPhase < _beatVulnWindow;
   } catch {}
 
+  drawModeLayer(ctx, gs, refs);
+
   // Enemies
   const _enemiesDraw = gs.enemies || [];
   for (let _ei = 0; _ei < _enemiesDraw.length; _ei++) {
@@ -1663,4 +1665,112 @@ export function drawGame(ctx, canvas, W, H, gs, refs) {
     zoom: gs.adsZoom ? 1.28 : 1,
   });
   drawOffscreenThreatArrows(ctx, _offscreenArrows);
+}
+
+
+// ── S163 mode layer: zones, structures, allies ───────────────────────────
+function drawModeLayer(ctx, gs, refs) {
+  const frame = refs?.frameCountRef?.current || 0;
+  const zones = gs.zones || [];
+  for (let i = 0; i < zones.length; i += 1) {
+    const z = zones[i];
+    if (!z || !z.active) continue;
+    const captured = z.state === "captured";
+    const lost = z.state === "lost";
+    const contested = z.state === "contested";
+    const pulse = 0.5 + 0.5 * Math.sin(frame * 0.08);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(z.x, z.y, z.radius, 0, Math.PI * 2);
+    ctx.fillStyle = captured ? "rgba(255,211,79,0.10)" : lost ? "rgba(255,68,68,0.10)" : contested ? `rgba(255,120,0,${0.10 + pulse * 0.08})` : "rgba(136,204,255,0.08)";
+    ctx.fill();
+    ctx.lineWidth = contested ? 3 : 2;
+    ctx.strokeStyle = captured ? "#FFD34F" : lost ? "#FF4444" : contested ? "#FF8800" : "#88CCFF";
+    ctx.setLineDash(captured ? [] : [10, 8]);
+    ctx.lineDashOffset = -frame * 0.6;
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Progress arc
+    const pct = z.captureFrames ? Math.min(1, z.progress / z.captureFrames) : 0;
+    if (pct > 0 && !captured) {
+      ctx.beginPath();
+      ctx.arc(z.x, z.y, z.radius + 8, -Math.PI / 2, -Math.PI / 2 + pct * Math.PI * 2);
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#FFD34F";
+      ctx.stroke();
+    }
+    if (z.pressure > 0 && !captured) {
+      ctx.beginPath();
+      ctx.arc(z.x, z.y, z.radius + 16, -Math.PI / 2, -Math.PI / 2 + (z.pressure / 100) * Math.PI * 2);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = "#FF4444";
+      ctx.stroke();
+    }
+    ctx.font = "bold 12px 'Courier New', monospace";
+    ctx.textAlign = "center";
+    ctx.fillStyle = captured ? "#FFD34F" : "#FFF";
+    ctx.fillText((captured ? "👑 " : "") + (z.label || "ZONE"), z.x, z.y - z.radius - 12);
+    ctx.font = "bold 22px 'Courier New', monospace";
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.fillText(captured ? "✓" : `${Math.floor(z.progress / 60)}s`, z.x, z.y + 8);
+    ctx.restore();
+  }
+  const structures = gs.structures || [];
+  for (let i = 0; i < structures.length; i += 1) {
+    const s = structures[i];
+    if (!s || s.alive === false) continue;
+    ctx.save();
+    const w = s.w || 40, h = s.h || 40;
+    ctx.fillStyle = s.kind === "door" ? "#6B4A2B" : s.kind === "exit" ? "rgba(255,211,79,0.25)" : "#3A4A5A";
+    ctx.strokeStyle = s.kind === "exit" ? "#FFD34F" : "#DDD";
+    ctx.lineWidth = 2;
+    ctx.fillRect(s.x - w / 2, s.y - h / 2, w, h);
+    ctx.strokeRect(s.x - w / 2, s.y - h / 2, w, h);
+    ctx.font = "22px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#FFF";
+    ctx.fillText(s.kind === "door" ? "🚪" : s.kind === "exit" ? "🚽" : s.kind === "pump" ? "🔧" : "▣", s.x, s.y + 8);
+    if (Number.isFinite(s.hp) && s.maxHp) {
+      ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(s.x - 30, s.y - h / 2 - 14, 60, 6);
+      ctx.fillStyle = "#FFB347"; ctx.fillRect(s.x - 30, s.y - h / 2 - 14, 60 * Math.max(0, s.hp / s.maxHp), 6);
+    }
+    if (Number.isFinite(s.channel) && s.channelFrames) {
+      ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(s.x - 30, s.y - h / 2 - 14, 60, 6);
+      ctx.fillStyle = "#FF6600"; ctx.fillRect(s.x - 30, s.y - h / 2 - 14, 60 * Math.min(1, s.channel / s.channelFrames), 6);
+    }
+    ctx.restore();
+  }
+  const allies = gs.allies || [];
+  for (let i = 0; i < allies.length; i += 1) {
+    const a = allies[i];
+    if (!a) continue;
+    ctx.save();
+    const r = a.size / 2;
+    if (a.downed) {
+      ctx.globalAlpha = 0.75;
+      ctx.beginPath(); ctx.arc(a.x, a.y, r + 10, 0, Math.PI * 2);
+      ctx.strokeStyle = "#FF4444"; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([]);
+      if (a.reviveProgress > 0) {
+        ctx.beginPath(); ctx.arc(a.x, a.y, r + 10, -Math.PI / 2, -Math.PI / 2 + (a.reviveProgress / 90) * Math.PI * 2);
+        ctx.strokeStyle = "#00E5FF"; ctx.lineWidth = 4; ctx.stroke();
+      }
+    } else {
+      ctx.beginPath(); ctx.arc(a.x, a.y, r + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = a.hitFlash > 0 ? "#FFF" : (a.color || "#9CFF8A"); ctx.lineWidth = 2; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(a.x, a.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = a.hitFlash > 0 ? "#FFFFFF" : "rgba(20,30,20,0.9)"; ctx.fill();
+    ctx.font = `${Math.round(a.size * 0.8)}px sans-serif`;
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#FFF";
+    ctx.fillText(a.emoji || "🙂", a.x, a.y + a.size * 0.3);
+    if (!a.downed && a.maxHealth) {
+      ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(a.x - r, a.y - r - 10, a.size, 4);
+      ctx.fillStyle = a.health / a.maxHealth < 0.3 ? "#FF4444" : "#9CFF8A"; ctx.fillRect(a.x - r, a.y - r - 10, a.size * Math.max(0, a.health / a.maxHealth), 4);
+    }
+    ctx.font = "bold 9px 'Courier New', monospace";
+    ctx.fillStyle = a.color || "#9CFF8A";
+    ctx.fillText(a.name || "ALLY", a.x, a.y - r - 14);
+    ctx.restore();
+  }
 }

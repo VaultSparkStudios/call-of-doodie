@@ -17,6 +17,7 @@
 //   - on objective complete: callback fires bonus payout
 
 import { pointInCircle } from "./combatResolution.js";
+import { cosmeticRandom } from "./runRng.js";
 
 const OBJECTIVE_DEFS = {
   hot_zone: {
@@ -69,7 +70,7 @@ export function getObjectiveWeights(weakness) {
   }
 }
 
-function rand(rng) { return typeof rng === "function" ? rng() : Math.random(); }
+function rand(rng) { return typeof rng === "function" ? rng() : cosmeticRandom(); }
 
 function weightedPick(weights, rng) {
   const entries = Object.entries(weights);

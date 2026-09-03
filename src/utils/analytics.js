@@ -2,7 +2,7 @@
 // Degrades gracefully: all calls are no-ops until VITE_POSTHOG_KEY is set in .env.local
 // To enable: add VITE_POSTHOG_KEY=phc_YOUR_KEY to .env.local, then npm run dev
 
-const KEY = import.meta.env.VITE_POSTHOG_KEY;
+const KEY = import.meta.env?.VITE_POSTHOG_KEY;
 let _loaded = false;
 
 function _ph() {

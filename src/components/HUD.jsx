@@ -34,6 +34,7 @@ export default function HUD({
   speedrunMode, startTime,
   missions, missionDoneSet,
   hud, heat, topGhosts, weeklyRival,
+  modeHud = null,
   experimentMatched = null,
   careerBestWave = 0,
   practiceDrill = null,
@@ -93,6 +94,7 @@ export default function HUD({
         activeWaveContract={activeWaveContract} grenadeReady={grenadeReady} dashReady={dashReady}
         combo={combo} killstreak={killstreak} experimentMatched={experimentMatched}
         reducedEffects={Boolean(reducedEffects)}
+        modeHud={modeHud}
       />
     );
   }
@@ -127,6 +129,31 @@ export default function HUD({
         {difficulty !== "normal" && <span style={{ color: diff.color, fontSize: 9 }}>{diff.emoji}</span>}
       </div>
 
+      {modeHud && (modeHud.banner || modeHud.progress) && (
+        <div data-testid="hud-mode-banner" style={{ position: "absolute", top: 30, left: "50%", transform: "translateX(-50%)", fontSize: 10, color: "#FFD34F", background: "rgba(0,0,0,0.55)", padding: "2px 10px", borderRadius: 8, fontWeight: 800, letterSpacing: 1, whiteSpace: "nowrap", border: "1px solid rgba(255,211,79,0.35)", fontFamily: "'Courier New',monospace" }}>
+          {modeHud.banner}
+          {modeHud.progress && (
+            <span style={{ display: "inline-block", marginLeft: 8, width: 90, height: 6, verticalAlign: "middle", background: "rgba(255,255,255,0.12)", borderRadius: 3, overflow: "hidden" }}>
+              <span style={{ display: "block", height: "100%", width: `${Math.round(Math.max(0, Math.min(1, modeHud.progress.pct)) * 100)}%`, background: modeHud.progress.pressure > 0.5 ? "#FF4444" : "#FFD34F" }} />
+            </span>
+          )}
+        </div>
+      )}
+      {modeHud?.squad?.length > 0 && (
+        <div data-testid="hud-squad" style={{ position: "absolute", left: 8, bottom: isMobile ? 70 : 96, display: "flex", flexDirection: "column", gap: 3, fontFamily: "'Courier New',monospace" }}>
+          {modeHud.squad.map((s) => (
+            <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 10, color: s.downed ? "#FF6666" : "#DDD", background: "rgba(0,0,0,0.5)", padding: "2px 8px", borderRadius: 8 }}>
+              <span>{s.emoji}</span>
+              <span style={{ minWidth: 92, fontWeight: 700, color: s.color }}>{s.name}</span>
+              <span style={{ width: 60, height: 5, background: "rgba(255,255,255,0.12)", borderRadius: 3, overflow: "hidden" }}>
+                <span style={{ display: "block", height: "100%", width: `${Math.round((s.downed ? s.revivePct : s.healthPct) * 100)}%`, background: s.downed ? "#00E5FF" : s.healthPct < 0.3 ? "#FF4444" : "#9CFF8A" }} />
+              </span>
+              <span style={{ fontSize: 9, color: "#999" }}>{s.downed ? "DOWN · revive" : s.order.toUpperCase()}</span>
+            </div>
+          ))}
+          <div style={{ fontSize: 8, color: "#777", paddingLeft: 8 }}>Z follow · X hold · C attack</div>
+        </div>
+      )}
       {runIntegrity?.onlineEligible === false && (
         <div
           data-testid="run-integrity-warning"

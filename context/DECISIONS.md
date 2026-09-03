@@ -2,6 +2,24 @@
 
 Public-safe decisions only. Detailed internal decision history is maintained privately.
 
+## 2026-09-03 — Session 163 — Modes must change what the player does; evidence gating no longer blocks content
+
+**Decision:** The founder-directed audit confirmed six of eight modes were the same survival loop with a flag flipped and Operation verbs were labels. The "hold all content until consented participant evidence" posture (S154–S162) is retired. Modes ship through a mode-definition layer (`src/systems/modeDefinition.js`) on top of the unchanged eight-id ruleset/replay contract: allies, zones, structures, behavioral objective verbs, win conditions. New modes are local-only for scoring until the leaderboard mode enum accepts them.
+
+**Rationale:** Evidence language stays honest, but withholding gameplay differentiation produced high self-scores and no player-facing evolution. BOSS GAUNTLET and HOLD THE THRONE are the first two definitions; a CPU squad (Intern, Plunger Sergeant, Roomba) is the reusable teammate primitive.
+
+## 2026-09-03 — Session 163 — Simulation runs at a fixed 60Hz step and has a headless kernel
+
+**Decision:** `useGameLoop` advances the sim in whole 60Hz steps with a clamped accumulator (max four catch-up steps); enemy AI lives in `src/systems/enemyFrame.js`; `src/sim/stepSim.js` composes the extracted systems into a Node-runnable deterministic step with a presentation-stripped state hash. Sim modules may not call `Math.random()` directly (guarded by test).
+
+**Rationale:** Refresh-rate-bound physics ran the game at double speed on 120Hz screens and made lockstep or server resimulation impossible. The kernel is the prerequisite for async duels, Bot Royale, Durable Object co-op, and true replay validation.
+
+## 2026-09-03 — Session 163 — Arcade CRT is the single brand; async multiplayer before Durable Objects
+
+**Decision:** Founder chose the HomeV2 arcade/CRT language as the brand for every surface (HomeV3 and MenuScreen to be deleted in the site-unification tranche), and the multiplayer order: async (ghost races, seed duels, squads, offline Bot Royale) first, Cloudflare Durable Object co-op second, networked royale only after co-op telemetry.
+
+**Rationale:** Five unrelated visual languages shipped in production; zero-variable-cost multiplayer proves demand before paid real-time infrastructure.
+
 ## 2026-08-25 — Session 162 — Corrective orders carry observed evidence, never mastery or causality
 
 **Decision:** Persisted `run_drill_outcome` receipts are normalized once, deduplicated by bounded receipt identifier, grouped only by exact drill, and summarized from the latest three receipts. The live HUD carries that drill-specific evidence into a rematch; Run History shows at most four newest-first order ledgers. “Repeatable improvement” requires at least two observed improvements in the latest three receipts.

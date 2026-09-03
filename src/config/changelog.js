@@ -9,6 +9,7 @@
 //    and the share card (constants.js re-exports it for back-compat)
 
 export const CHANGELOG_ENTRIES = [
+  ["September 3, 2026 · Real modes, real teammates", "Two new game modes that play differently: BOSS GAUNTLET (six bosses back to back, no filler, a par timer, and a real victory screen) and HOLD THE THRONE (king-of-the-hill with a CPU squad: The Intern, the Plunger Sergeant, and The Roomba; enemies attack the throne, revive downed teammates, issue Z/X/C squad orders). Under the hood: a fixed 60Hz simulation step so 120Hz screens no longer run the game at double speed, a headless deterministic sim kernel, and behavioral objective verbs (breach, hold, escort, hunt, sabotage, escape). New modes score locally until the global leaderboard accepts them."],
   ["August 16, 2026 · Operations deploy", "Added three authored 12–18 minute Operations with seven distinct encounter verbs, deterministic route and scoring receipts, interactive arena systems, mission-director guidance, an Operation-first command deck, a preference-safe chapter score, and distinct objective/reinforcement audio cues. Arcade & Rivals modes remain available. Real-time co-op remains gated and is not represented as live."],
   ["August 15, 2026 · Sound and fury", "Full audio overhaul: submix volume sliders, a sample-accurate music scheduler with bar-quantized transitions, chord progressions and section variation in every soundtrack vibe, music that ducks under big combat moments and muffles at critical health, plus new hit, dry-fire, wave, and shop sound effects. Visually: per-weapon projectiles and recoil, persistent scorch and splat decals, themed wall details, triple the sprite prop coverage, and a real walk cycle."],
   ["August 9, 2026 · Sharper, richer, more honest", "Refreshed player-facing facts across every page, expanded Community Stats presentation, and continued the in-game visual overhaul with crisper rendering and upgraded combat feedback."],
@@ -22,6 +23,8 @@ export const CHANGELOG_ENTRIES = [
 ];
 
 export const NEW_FEATURES = [
+  "👑 BOSS GAUNTLET — six bosses back to back, no trash, par timer, real victory screen",
+  "🪑 HOLD THE THRONE — capture three thrones with a CPU squad; Z/X/C orders; revive downed teammates",
   "🚽 Operations — three authored 7-encounter deployments with route choices, adaptive chapter score, objective cues & deterministic receipts",
   "🔊 Full Audio Overhaul — volume sliders, adaptive layered soundtrack with real progressions, music ducking & new combat sound effects",
   "🎨 Combat Feel Pass — per-weapon projectiles & recoil, persistent battle decals, themed arena details, walk cycle & light halos",

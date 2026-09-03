@@ -30,6 +30,7 @@ describe("source-neutral enemy defeat lifecycle", () => {
       weaponIdx: 3,
       weaponName: "RAILGUN",
       beatEligible: false,
+      owner: "player",
     });
     expect(enemy).toMatchObject({ health: -999, _defeatResolved: true });
     expect(takeQueuedEnemyDefeat(enemy)).toBeNull();
@@ -45,6 +46,7 @@ describe("source-neutral enemy defeat lifecycle", () => {
       weaponIdx: null,
       weaponName: "ENVIRONMENT",
       beatEligible: false,
+      owner: "player",
     });
   });
 

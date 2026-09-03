@@ -177,6 +177,32 @@ export function runFrameSafely(callback, onError) {
   }
 }
 
+
+// ── S163 fixed-step clock ────────────────────────────────────────────────
+// Pure accumulator: given rAF timestamps, returns how many 60Hz simulation
+// steps to run. Long gaps (tab hidden, debugger) are clamped so the loop
+// never spirals; the remainder carries over so 120Hz displays run exactly
+// half as many steps per frame.
+export const SIM_STEP_MS = 1000 / 60;
+export const MAX_CATCHUP_STEPS = 4;
+export const MAX_FRAME_GAP_MS = 250;
+export function createFixedStepClock({ stepMs = SIM_STEP_MS, maxSteps = MAX_CATCHUP_STEPS, maxGapMs = MAX_FRAME_GAP_MS } = {}) {
+  let last = null;
+  let acc = 0;
+  return {
+    advance(now) {
+      const t = Number.isFinite(now) ? now : (typeof performance !== "undefined" ? performance.now() : Date.now());
+      if (last === null) { last = t; acc = stepMs; }
+      else { acc += Math.min(maxGapMs, Math.max(0, t - last)); last = t; }
+      let steps = 0;
+      while (acc >= stepMs - 1e-6 && steps < maxSteps) { acc -= stepMs; steps += 1; }
+      if (steps === maxSteps && acc > stepMs) acc = 0; // drop backlog after a hitch
+      return steps;
+    },
+    reset() { last = null; acc = 0; },
+  };
+}
+
 export function useGameLoop(callback, active, rafRef, {
   monitorRef = null,
   onSnapshot = null,
@@ -205,14 +231,22 @@ export function useGameLoop(callback, active, rafRef, {
     }
     monRef.current.reset();
     let handle;
-    const loop = () => {
+    const clock = createFixedStepClock();
+    const loop = (timestamp) => {
       const sample = typeof measureRef.current === "function"
         ? measureRef.current()
         : measureRef.current !== false;
-      runFrameSafely(
-        () => runMeasuredFrame(() => cbRef.current(), monRef.current, { shouldMeasure: sample }),
-        (error) => errorRef.current?.(error),
-      );
+      // S163 fixed timestep: the simulation advances in whole 60Hz steps
+      // regardless of display refresh rate (120Hz screens no longer run the
+      // game at double speed; a hitch catches up with at most MAX_CATCHUP steps).
+      const steps = clock.advance(timestamp);
+      for (let i = 0; i < steps; i += 1) {
+        const result = runFrameSafely(
+          () => runMeasuredFrame(() => cbRef.current(), monRef.current, { shouldMeasure: sample && i === 0 }),
+          (error) => errorRef.current?.(error),
+        );
+        if (!result.ok) break;
+      }
       handle = requestAnimationFrame(loop);
       if (rafRef) rafRef.current = handle;
     };

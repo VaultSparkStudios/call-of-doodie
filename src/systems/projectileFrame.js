@@ -286,6 +286,7 @@ export function stepProjectileFrame({
         weaponIdx: bullet.wpnIdx ?? weaponIndex,
         weaponName: WEAPONS[bullet.wpnIdx ?? weaponIndex]?.name || "PROJECTILE",
         beatEligible: true,
+        owner: bullet.owner === "ally" ? "ally" : "player",
       });
       enemy.hitFlash = isCrit ? 15 : 8;
       gs.totalDamage += result.applied;

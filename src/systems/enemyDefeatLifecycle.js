@@ -17,6 +17,7 @@ export function sanitizeEnemyDefeatMeta(meta = {}) {
     weaponIdx: optionalWeaponIndex(meta.weaponIdx),
     weaponName: boundedLabel(meta.weaponName, "ENVIRONMENT", MAX_LABEL_LENGTH),
     beatEligible: meta.beatEligible === true,
+    owner: meta.owner === "ally" ? "ally" : "player",
   };
 }
 

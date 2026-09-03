@@ -36,6 +36,7 @@ const LeaderboardPanel = lazy(() => import("./LeaderboardPanel.jsx"));
 const TIER_COLORS = { bronze: "#CD7F32", silver: "#C0C0C0", gold: "#FFD700", legendary: "#FF6B35" };
 
 export default function DeathScreen({
+  victory = false, modeLabel = null,
   score, kills, deaths: _deaths, wave, level, bestStreak, timeSurvived, totalDamage,
   crits, grenades, deathMessage, difficulty, runSeed, runModifier, achievementsUnlocked,
   activePerks, missionsSummary,
@@ -747,8 +748,9 @@ export default function DeathScreen({
       )}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minHeight: "100%", padding: "20px 16px", paddingBottom: "max(56px, env(safe-area-inset-bottom, 24px))", boxSizing: "border-box" }}>
       <div style={{ textAlign: "center", maxWidth: 460, width: "100%", margin: "auto" }}>
-        <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>💀</div>
-        <h2 style={{ fontSize: "clamp(24px,7vw,38px)", color: "#FF2222", margin: "4px 0", letterSpacing: 3 }}>YOU DIED</h2>
+        <div style={{ fontSize: 52, lineHeight: 1, paddingTop: 4 }}>{victory ? "🏆" : "💀"}</div>
+        <h2 data-testid="death-title" style={{ fontSize: "clamp(24px,7vw,38px)", color: victory ? "#FFD34F" : "#FF2222", margin: "4px 0", letterSpacing: 3 }}>{victory ? "VICTORY" : "YOU DIED"}</h2>
+        {modeLabel && <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 4, borderRadius: 10, border: "1px solid rgba(255,211,79,0.45)", color: "#FFD34F", fontSize: 11, fontWeight: 800, letterSpacing: 1 }}>{modeLabel}</div>}
         <p style={{ color: "#FF6666", fontSize: 14, fontStyle: "italic", margin: "4px 0 8px" }}>"{deathMessage}"</p>
         {practiceRun && (
           <div style={{ display: "inline-block", padding: "2px 10px", marginBottom: 6, borderRadius: 10, border: "1px solid rgba(0,229,255,0.45)", color: "#00E5FF", fontSize: 11, fontWeight: 700, letterSpacing: 1 }}>🔁 DRILL RUN</div>

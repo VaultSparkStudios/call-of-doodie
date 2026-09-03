@@ -433,42 +433,74 @@
     {
       "id": "standard",
       "label": "Standard",
-      "seededReplayCode": true
+      "kind": "mode",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "score_attack",
       "label": "Score Attack",
-      "seededReplayCode": true
+      "kind": "ruleset",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "daily_challenge",
       "label": "Daily Challenge",
-      "seededReplayCode": true
+      "kind": "ruleset",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "cursed",
       "label": "Cursed",
-      "seededReplayCode": true
+      "kind": "ruleset",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "boss_rush",
       "label": "Boss Rush",
-      "seededReplayCode": true
+      "kind": "ruleset",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "speedrun",
       "label": "Speedrun",
-      "seededReplayCode": true
+      "kind": "ruleset",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "gauntlet",
       "label": "Gauntlet",
-      "seededReplayCode": true
+      "kind": "ruleset",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
     },
     {
       "id": "zombies",
       "label": "Zombies",
-      "seededReplayCode": true
+      "kind": "mode",
+      "seededReplayCode": true,
+      "scoring": "global-leaderboard-eligible"
+    },
+    {
+      "id": "boss_gauntlet",
+      "label": "Boss Gauntlet",
+      "kind": "mode",
+      "objective": "Six bosses back to back, no filler. Clear all six to win.",
+      "seededReplayCode": false,
+      "scoring": "local-only"
+    },
+    {
+      "id": "hold_the_throne",
+      "label": "Hold the Throne",
+      "kind": "mode",
+      "objective": "King of the hill with a squad. Hold three thrones for thirty seconds each to win.",
+      "seededReplayCode": false,
+      "scoring": "local-only"
     }
   ],
   "difficulties": [

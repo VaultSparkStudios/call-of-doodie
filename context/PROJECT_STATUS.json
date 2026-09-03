@@ -615,7 +615,7 @@
     "Broad Cloudflare studio-access token should be rotated or narrowed after domain stabilization.",
     "CANON-045 and CANON-055 remain STRONG external/checker findings; no ABSOLUTE canon gap is present."
   ],
-  "lastUpdated": "2026-08-26",
+  "lastUpdated": "2026-09-03",
   "lifecycle": "deployed",
   "audience": "public-unlaunched",
   "truthAuditStatus": "engineering-ready-sparked-no-go",

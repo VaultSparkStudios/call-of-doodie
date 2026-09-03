@@ -51,6 +51,8 @@ export function buildRunTheFixContract({
 }
 
 export function buildDeathScreenProps({
+  victory = false,
+  modeLabel = null,
   score,
   kills,
   deaths,
@@ -110,6 +112,8 @@ export function buildDeathScreenProps({
   communityChokeWaves,
 } = {}) {
   return {
+    victory: !!victory,
+    modeLabel: modeLabel || null,
     score,
     kills,
     deaths,

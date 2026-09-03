@@ -16,7 +16,7 @@
         "weapons": 12,
         "enemies": 22,
         "operations": 3,
-        "modes": 8
+        "modes": 10
       },
       "source": "/gameplay-contract.json"
     },

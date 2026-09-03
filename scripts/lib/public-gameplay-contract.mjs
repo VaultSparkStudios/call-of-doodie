@@ -12,6 +12,7 @@ import { FORMATION_COUNTERPLAY } from "../../src/systems/pressureArc.js";
 import { killsRequiredForAccountLevel, PRESTIGE_REQUIRED_LEVEL } from "../../src/utils/progressionCurve.js";
 import { buildReplayCoveragePassport } from "../../src/utils/replayCoverage.js";
 import { OPERATIONS } from "../../src/systems/operationCampaign.js";
+import { MODE_CATALOG, NEW_MODE_CATALOG } from "../../src/config/modeCatalog.js";
 import { getOperationRouteIntel } from "../../src/systems/operationDirector.js";
 import { OPERATION_ENCOUNTER_SCORE } from "../../src/systems/operationAudioDirector.js";
 
@@ -55,7 +56,10 @@ export function buildPublicGameplayContract() {
       campaignProgression: "local-operation-checkpoint",
       realtimeCoop: "gated-not-live",
     })),
-    modes: REPLAY_MODES.map((id) => ({ id, label: label(id), seededReplayCode: true })),
+    modes: [
+      ...REPLAY_MODES.map((id) => ({ id, label: label(id), kind: MODE_CATALOG.find((m) => m.id === id)?.kind || "mode", seededReplayCode: true, scoring: "global-leaderboard-eligible" })),
+      ...NEW_MODE_CATALOG.map((mode) => ({ id: mode.id, label: mode.label, kind: mode.kind, objective: mode.description, seededReplayCode: false, scoring: "local-only" })),
+    ],
     difficulties: Object.entries(DIFFICULTIES).map(([id, difficulty]) => ({
       id,
       label: difficulty.label || label(id),

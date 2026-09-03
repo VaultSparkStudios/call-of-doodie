@@ -80,7 +80,8 @@
     "context:hot": "node scripts/render-hot-context.mjs",
     "context:hot:check": "node scripts/render-hot-context.mjs --check",
     "stats:snapshot": "node scripts/refresh-community-stats-snapshot.mjs",
-    "claims:check": "node scripts/check-public-claims.mjs"
+    "claims:check": "node scripts/check-public-claims.mjs",
+    "smoke:modes": "node scripts/smoke-new-modes.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

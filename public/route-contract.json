@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "source": "scripts/lib/public-route-registry.mjs",
   "contentVersion": "2026-08-23",
-  "fingerprint": "2385bfb40f2baa55fab5061cd25a74a8e1032effcc57b8190573c462c0d0fc34",
+  "fingerprint": "e659c36d7741f8840d5a25f39854b016614d898589df3a1e7c57f30fb8070b43",
   "coverage": {
     "routes": 18,
     "headerRoutes": 6,
@@ -13,7 +13,7 @@
   "gameplay": {
     "enemies": 22,
     "weapons": 12,
-    "modes": 8,
+    "modes": 10,
     "difficulties": 4
   },
   "routeIds": [

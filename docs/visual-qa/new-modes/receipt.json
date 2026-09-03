@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-03T07:39:03.118Z",
+  "url": "http://localhost:4781/",
+  "ok": true,
+  "results": [
+    {
+      "label": "BOSS GAUNTLET",
+      "banner": "0/6 DOWN · NEXT: Mega Karen",
+      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\bo- gauntlet.png"
+    },
+    {
+      "label": "HOLD THE THRONE",
+      "banner": "0/3 THRONES · WEST THRONE 0s/30s",
+      "screenshot": "C:\\Users\\p4cka\\documents\\development\\call-of-doodie\\docs\\visual-qa\\new-modes\\hold the throne.png"
+    },
+    {
+      "label": "squad-strip",
+      "present": true
+    }
+  ]
+}

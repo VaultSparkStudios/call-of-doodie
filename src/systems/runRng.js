@@ -4,6 +4,10 @@ export const RUN_RNG_STREAMS = Object.freeze([
   "loot",
   "choices",
   "hazards",
+  // S163 additive streams: allied units, mode director, royale ring/loot.
+  "allies",
+  "director",
+  "royale",
 ]);
 
 const STREAM_SET = new Set(RUN_RNG_STREAMS);
