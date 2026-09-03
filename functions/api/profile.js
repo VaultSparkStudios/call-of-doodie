@@ -67,12 +67,12 @@ async function verifySubject(env, request, subject) {
 
 async function supabaseRest(env, path, init = {}) {
   const url = `${env.SUPABASE_URL}/rest/v1/${path}`;
-  const serviceRole = env.SUPABASE_SERVICE_ROLE_KEY;
+  const svc = env.SUPABASE_SERVICE_ROLE_KEY;
   return fetch(url, {
     ...init,
     headers: {
-      apikey: serviceRole,
-      authorization: `Bearer ${serviceRole}`,
+      apikey: svc,
+      authorization: `Bearer ${svc}`,
       "content-type": "application/json",
       ...(init.headers || {}),
     },
