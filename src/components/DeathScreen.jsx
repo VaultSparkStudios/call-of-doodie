@@ -293,7 +293,7 @@ export default function DeathScreen({
     // ── Match HUD: left side stat pills ───────────────────────────────────────
     const _pillY = 120, _pillH = 36, _pillGap = 8;
     const _pills = [
-      { label: "WAVE", val: String(wave), color: "var(--cod-danger)" },
+      { label: "WAVE", val: String(wave), color: "#ff3b3b" },
       { label: "KILLS", val: String(kills), color: "#00FF88" },
       { label: "STREAK", val: String(bestStreak), color: "#FF8800" },
     ];
@@ -330,10 +330,10 @@ export default function DeathScreen({
 
     // ── Stats row ─────────────────────────────────────────────────────────────
     const _stats = [
-      { val: "LV " + level, label: "LEVEL", color: "var(--cod-cyan)" },
+      { val: "LV " + level, label: "LEVEL", color: "#33e6ff" },
       { val: kills, label: "ELIMINATED", color: "#00FF88" },
-      { val: "WAVE " + wave, label: "REACHED", color: "var(--cod-danger)" },
-      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "var(--cod-cyan)" },
+      { val: "WAVE " + wave, label: "REACHED", color: "#ff3b3b" },
+      { val: fmtTime(timeSurvived), label: "SURVIVED", color: "#33e6ff" },
     ];
     const _sw = W / _stats.length;
     _stats.forEach((s, i) => {

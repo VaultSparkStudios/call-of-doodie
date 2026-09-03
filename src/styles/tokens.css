@@ -64,6 +64,29 @@
   color-scheme: light;
 }
 
+/* Game surfaces (arena, HUD, pause, perks, debrief) always sit on a dark canvas; keep the dark palette there even under Porcelain Day. */
+[data-cod-surface="game"] {
+  --cod-bg: #070b10;
+  --cod-bg-deep: #020305;
+  --cod-page: linear-gradient(180deg,#070b10 0%,#020305 72%,#070402 100%);
+  --cod-ink: #f4f0e8;
+  --cod-muted: #b7b2aa;
+  --cod-quiet: #8f8a83;
+  --cod-panel: rgba(255,255,255,0.035);
+  --cod-panel-strong: rgba(15,10,5,0.98);
+  --cod-panel-soft: rgba(0,0,0,0.32);
+  --cod-line: rgba(255,255,255,0.14);
+  --cod-line-warm: rgba(255,160,60,0.28);
+  --cod-shadow: rgba(0,0,0,0.60);
+  --cod-orange: #ff6b22;
+  --cod-orange-ink: #1c0900;
+  --cod-gold: #ffd34f;
+  --cod-cyan: #33e6ff;
+  --cod-green: #7cffb8;
+  --cod-danger: #ff3b3b;
+  --cod-focus: #33e6ff;
+}
+
 /* CRT effects are opt-in utilities; off in light scheme and reduced motion. */
 .fx-scanlines { position: relative; isolation: isolate; }
 .fx-scanlines::before { content: ""; position: fixed; inset: 0; z-index: 4; pointer-events: none; opacity: .16; background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.55) 4px); mix-blend-mode: multiply; }

@@ -4,10 +4,10 @@ import CommunityStatsPanel from "./CommunityStatsPanel.jsx";
 
 const MODE_TABS = [
   { key: null,              label: "ALL",          color: "#AAA" },
-  { key: "normal",          label: "🎯 NORMAL",     color: "var(--cod-gold)" },
-  { key: "score_attack",    label: "⏱ SCORE ATK",  color: "var(--cod-orange)" },
-  { key: "daily_challenge", label: "📅 DAILY",      color: "var(--cod-cyan)" },
-  { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "var(--cod-danger)" },
+  { key: "normal",          label: "🎯 NORMAL",     color: "#ffd34f" },
+  { key: "score_attack",    label: "⏱ SCORE ATK",  color: "#ff6b22" },
+  { key: "daily_challenge", label: "📅 DAILY",      color: "#33e6ff" },
+  { key: "boss_rush",       label: "☠ BOSS RUSH",  color: "#ff3b3b" },
   { key: "cursed",          label: "☠ CURSED",      color: "#CC00FF" },
   { key: "speedrun",        label: "🏃 SPEEDRUN",   color: "#00FF88" },
   { key: "gauntlet",        label: "🏋️ GAUNTLET",   color: "#AA44FF" },
@@ -39,7 +39,7 @@ function InputDeviceBadge({ device }) {
 // ── Account level badge ───────────────────────────────────────────────────────
 const LEVEL_TIERS = [
   { min: 100, color: "#CC44FF", bg: "rgba(160,0,255,0.18)", border: "#AA22FF", label: "👑" },
-  { min: 50,  color: "var(--cod-gold)", bg: "rgba(255,215,0,0.18)",  border: "#CC9900", label: "★" },
+  { min: 50,  color: "#ffd34f", bg: "rgba(255,215,0,0.18)",  border: "#CC9900", label: "★" },
   { min: 25,  color: "#C0C0C0", bg: "rgba(200,200,200,0.15)", border: "#A0A0A0", label: "◈" },
   { min: 10,  color: "#CD7F32", bg: "rgba(160,90,40,0.2)",   border: "#A05820", label: "◆" },
   { min: 1,   color: "#888888", bg: "rgba(120,120,120,0.12)", border: "#555",   label: "·" },
@@ -82,8 +82,8 @@ function AccountLevelBadge({ level }) {
 const DIFF_TABS = [
   { key: null,     label: "ALL",    emoji: "🌐", color: "#AAA" },
   { key: "easy",   label: "EASY",   emoji: "🟢", color: "#44CC44" },
-  { key: "normal", label: "NORMAL", emoji: "🟡", color: "var(--cod-gold)" },
-  { key: "hard",   label: "HARD",   emoji: "🔴", color: "var(--cod-danger)" },
+  { key: "normal", label: "NORMAL", emoji: "🟡", color: "#ffd34f" },
+  { key: "hard",   label: "HARD",   emoji: "🔴", color: "#ff3b3b" },
   { key: "insane", label: "INSANE", emoji: "💀", color: "#FF00FF" },
 ];
 

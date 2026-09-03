@@ -2416,7 +2416,7 @@ export default function CallOfDoodie() {
   }), []);
 
   // ── GAME LOOP ─────────────────────────────────────────────────────────────
-  const gameLoop = useCallback(() => {
+  const gameLoop = useCallback(({ render = true } = {}) => {
     const gs = gsRef.current;
     if (!gs) return;
     if ((gs.runPhase || RUN_PHASE.PLAYING) !== RUN_PHASE.PLAYING) return;
@@ -3384,7 +3384,8 @@ export default function CallOfDoodie() {
     frameCountRef.current++;
 
     // ────────────────── RENDER ──────────────────────────────────────────────
-    drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
+    // S163 fixed step: catch-up steps simulate only; the last step of the frame renders.
+    if (render) drawGame(ctx, canvas, W, H, gs, { dashRef, mouseRef, joystickRef, shootStickRef, startTimeRef, frameCountRef, isMobile, tip, wpnIdx });
 
   }, [handleModeVictory, shoot, spawnEnemy, spawnBoss, doReload, isMobile, checkAchievements, checkDailyMissions, tip, handlePlayerDeath, addXp, openQueuedPerkSelection, operationStateRef, resolveOperationWave, sampleCommandTrace, inputDebugEnabled, dashReady, grenadeReady]);
 
@@ -3846,7 +3847,9 @@ export default function CallOfDoodie() {
     });
     return (
       <AsyncPanelBoundary>
-        <DeathScreen {...deathScreenProps} />
+        <div data-cod-surface="game">
+          <DeathScreen {...deathScreenProps} />
+        </div>
       </AsyncPanelBoundary>
     );
   }
@@ -3855,7 +3858,7 @@ export default function CallOfDoodie() {
   const xpNeeded = getLevelXpNeeded(level);
   const nextPerkLevel = getNextPerkLevel(level);
   return (
-    <div ref={containerRef} style={base}>
+    <div ref={containerRef} style={base} data-cod-surface="game">
       {/* Accessibility: skip-to-game link for keyboard users */}
       <a href="#game-canvas" className="skip-link">Skip to game</a>
       {/* Accessibility: aria-live region announces wave/boss events to screen readers */}

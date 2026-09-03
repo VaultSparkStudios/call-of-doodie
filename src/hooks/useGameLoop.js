@@ -242,7 +242,7 @@ export function useGameLoop(callback, active, rafRef, {
       const steps = clock.advance(timestamp);
       for (let i = 0; i < steps; i += 1) {
         const result = runFrameSafely(
-          () => runMeasuredFrame(() => cbRef.current(), monRef.current, { shouldMeasure: sample && i === 0 }),
+          () => runMeasuredFrame(() => cbRef.current({ render: i === steps - 1 }), monRef.current, { shouldMeasure: sample && i === 0 }),
           (error) => errorRef.current?.(error),
         );
         if (!result.ok) break;

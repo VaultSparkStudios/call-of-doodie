@@ -13,6 +13,8 @@
 
 - Closeout push was rejected because origin carried six unpulled commits (dependabot dev bumps, protocol doc sync, a workflow sync). Rebased cleanly, reinstalled dependencies after killing two zombie preview processes that held the rollup binary, and re-ran every gate. The synced `brief-format-check.yml` had regressed to Node 20 again (the S160 regression); restored the Node 22 floor as a bounded repair.
 
+- Post-closeout review (founder-requested): scoped the dark palette to game surfaces (`data-cod-surface="game"`) so Porcelain Day cannot darken the HUD, pause, perks, or debrief on the dark arena; reverted tokens in data objects that feed `hexToRgb` (leaderboard tabs/tiers) and the off-DOM score-card canvas (death-screen pills); catch-up simulation steps no longer redraw the canvas — only the last step of a frame renders.
+
 Intent outcome: achieved — the founder's three complaints (identical modes, no teammates, theme jumps) each have shipped, verified fixes; the remaining plan is ordered in the audit.
 
 ## 2026-08-25/26 (Session 162 — corrective-order evidence across runs)
